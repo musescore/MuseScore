@@ -42,11 +42,7 @@
 #include "log.h"
 
 using namespace mu;
-
-namespace mu::engraving {
-//---------------------------------------------------------
-//   Arpeggio
-//---------------------------------------------------------
+using namespace mu::engraving;
 
 Arpeggio::Arpeggio(Chord* parent)
     : EngravingItem(ElementType::ARPEGGIO, parent, ElementFlag::MOVABLE)
@@ -83,12 +79,9 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     TRACE_ITEM_DRAW;
     using namespace mu::draw;
 
-    double _spatium = spatium();
-
-    double y1 = _bbox.top();
-    double y2 = _bbox.bottom();
-
-    double lineWidth = style().styleMM(Sid::ArpeggioLineWidth);
+    const double y1 = _bbox.top();
+    const double y2 = _bbox.bottom();
+    const double lineWidth = style().styleMM(Sid::ArpeggioLineWidth);
 
     painter->setPen(Pen(curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->save();
@@ -97,49 +90,43 @@ void Arpeggio::draw(mu::draw::Painter* painter) const
     case ArpeggioType::NORMAL:
     case ArpeggioType::UP:
     {
-        RectF r(symBbox(m_symbols));
+        const RectF& r = m_layoutData.symsBBox;
         painter->rotate(-90.0);
-        score()->engravingFont()->draw(m_symbols, painter, magS(), PointF(-r.right() - y1, -r.bottom() + r.height()));
-    }
-    break;
+        drawSymbols(m_layoutData.symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
+    } break;
 
     case ArpeggioType::DOWN:
     {
-        RectF r(symBbox(m_symbols));
+        const RectF& r = m_layoutData.symsBBox;
         painter->rotate(90.0);
-        score()->engravingFont()->draw(m_symbols, painter, magS(), PointF(-r.left() + y1, -r.top() - r.height()));
-    }
-    break;
+        drawSymbols(m_layoutData.symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
+    } break;
 
     case ArpeggioType::UP_STRAIGHT:
     {
-        RectF r(symBbox(SymId::arrowheadBlackUp));
-        double x1 = _spatium * .5;
-        drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * .5, y1 - r.top()));
-        y1 -= r.top() * .5;
-        painter->drawLine(LineF(x1, y1, x1, y2));
-    }
-    break;
+        const RectF& r = m_layoutData.symsBBox;
+        double x1 = spatium() * 0.5;
+        drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * 0.5, y1 - r.top()));
+        double ny1 = y1 - r.top() * 0.5;
+        painter->drawLine(LineF(x1, ny1, x1, y2));
+    } break;
 
     case ArpeggioType::DOWN_STRAIGHT:
     {
-        RectF r(symBbox(SymId::arrowheadBlackDown));
-        double x1 = _spatium * .5;
-
-        drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * .5, y2 - r.bottom()));
-        y2 += r.top() * .5;
-        painter->drawLine(LineF(x1, y1, x1, y2));
-    }
-    break;
+        const RectF& r = m_layoutData.symsBBox;
+        double x1 = spatium() * 0.5;
+        drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * 0.5, y2 - r.bottom()));
+        double ny2 = y2 + r.top() * 0.5;
+        painter->drawLine(LineF(x1, y1, x1, ny2));
+    } break;
 
     case ArpeggioType::BRACKET:
     {
-        double w = style().styleS(Sid::ArpeggioHookLen).val() * _spatium;
+        double w = style().styleS(Sid::ArpeggioHookLen).val() * spatium();
         painter->drawLine(LineF(0.0, y1, w, y1));
         painter->drawLine(LineF(0.0, y2, w, y2));
         painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
-    }
-    break;
+    } break;
     }
     painter->restore();
 }
@@ -444,6 +431,10 @@ double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag
         }
     }
 
+    IF_ASSERT_FAILED(furthestAccidental) {
+        return 0.0;
+    }
+
     // this cutout means the vertical lines for a ♯, ♭, and ♮ are in the same position
     // if an accidental does not have a cutout (e.g., ♭), this value is 0
     double accidentalCutOutX = symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutNW).x() * mag_;
@@ -552,4 +543,11 @@ engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
     }
     return EngravingItem::propertyDefault(propertyId);
 }
+
+void Arpeggio::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+
+    setMag(data.mag);
+    setbbox(data.bbox);
 }

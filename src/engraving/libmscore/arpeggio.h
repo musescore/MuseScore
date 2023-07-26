@@ -77,9 +77,6 @@ public:
     double Stretch() const { return m_stretch; }
     void setStretch(double val) { m_stretch = val; }
 
-    void setSymbols(const SymIdList& sl) { m_symbols = sl; }
-    const SymIdList& symbols() { return m_symbols; }
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
@@ -90,6 +87,27 @@ public:
     Grip initialEditModeGrip() const override { return Grip::END; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
+
+    struct LayoutData {
+        // cache
+        double top = 0.0;
+        double bottom = 0.0;
+        double magS = 0.0;
+
+        // out
+        double mag = 1.0;
+        SymIdList symbols;
+        RectF symsBBox;
+        RectF bbox;
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! -- Old interface --
+    void setSymbols(const SymIdList& sl) { m_layoutData.symbols = sl; }
+    const SymIdList& symbols() { return m_layoutData.symbols; }
+    //! -------------------
 
 private:
 
@@ -111,10 +129,11 @@ private:
     double m_userLen2 = 0.0;
     double m_height = 0.0;
     int m_span = 1;                // spanning staves
-    SymIdList m_symbols;
     bool m_playArpeggio = true;
 
     double m_stretch = 1.0;
+
+    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 

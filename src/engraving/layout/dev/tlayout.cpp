@@ -600,7 +600,9 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 
 void TLayout::layout(Arpeggio* item, LayoutContext& ctx)
 {
-    ArpeggioLayout::layout(item, ctx);
+    Arpeggio::LayoutData data;
+    ArpeggioLayout::layout(item, ctx, data);
+    item->setLayoutData(data);
 }
 
 void TLayout::layout(Articulation* item, LayoutContext& ctx)
