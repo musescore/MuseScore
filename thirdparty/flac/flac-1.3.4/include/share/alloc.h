@@ -57,7 +57,7 @@
 #    define SIZE_T_MAX 0xffffffff
 #   endif
 #  else
-#   define SIZE_T_MAX 0xffffffff
+#   error
 #  endif
 # endif
 # define SIZE_MAX SIZE_T_MAX

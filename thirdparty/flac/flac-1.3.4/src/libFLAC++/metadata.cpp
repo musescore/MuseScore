@@ -695,11 +695,7 @@ namespace FLAC {
 
 			clear_field_name();
 
-#if defined _MSC_VER || defined __MINGW32__
-			if(0 == (field_name_ = _strdup(field_name))) {
-#else
 			if(0 == (field_name_ = strdup(field_name))) {
-#endif
 				is_valid_ = false;
 			}
 			else {

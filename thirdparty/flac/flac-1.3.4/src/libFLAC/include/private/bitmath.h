@@ -82,7 +82,7 @@ static inline uint32_t FLAC__clz_uint32(FLAC__uint32 v)
 	return __builtin_clz(v);
 #elif defined(_MSC_VER)
 	{
-		DWORD idx;
+		uint32_t idx;
 		_BitScanReverse(&idx, v);
 		return idx ^ 31U;
 	}
@@ -106,7 +106,7 @@ static inline uint32_t FLAC__clz_uint64(FLAC__uint64 v)
 	return __builtin_clzll(v);
 #elif (defined(__INTEL_COMPILER) || defined(_MSC_VER)) && (defined(_M_IA64) || defined(_M_X64))
 	{
-		DWORD idx;
+		uint32_t idx;
 		_BitScanReverse64(&idx, v);
 		return idx ^ 63U;
 	}
@@ -160,7 +160,7 @@ static inline uint32_t FLAC__bitmath_ilog2(FLAC__uint32 v)
 	return _bit_scan_reverse(v);
 #elif defined(_MSC_VER)
 	{
-		DWORD idx;
+		uint32_t idx;
 		_BitScanReverse(&idx, v);
 		return idx;
 	}
@@ -177,7 +177,7 @@ static inline uint32_t FLAC__bitmath_ilog2_wide(FLAC__uint64 v)
 /* Sorry, only supported in x64/Itanium.. and both have fast FPU which makes integer-only encoder pointless */
 #elif (defined(__INTEL_COMPILER) || defined(_MSC_VER)) && (defined(_M_IA64) || defined(_M_X64))
 	{
-		DWORD idx;
+		uint32_t idx;
 		_BitScanReverse64(&idx, v);
 		return idx;
 	}

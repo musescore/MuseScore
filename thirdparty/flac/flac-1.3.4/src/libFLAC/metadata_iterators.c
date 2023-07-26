@@ -489,19 +489,11 @@ FLAC_API FLAC__bool FLAC__metadata_simple_iterator_init(FLAC__Metadata_SimpleIte
 	if(!read_only && preserve_file_stats)
 		iterator->has_stats = get_file_stats_(filename, &iterator->stats);
 
-#if defined _MSC_VER || defined __MINGW32__
-	if(0 == (iterator->filename = _strdup(filename))) {
-#else
 	if(0 == (iterator->filename = strdup(filename))) {
-#endif
 		iterator->status = FLAC__METADATA_SIMPLE_ITERATOR_STATUS_MEMORY_ALLOCATION_ERROR;
 		return false;
 	}
-#if defined _MSC_VER || defined __MINGW32__
-	if(0 != tempfile_path_prefix && 0 == (iterator->tempfile_path_prefix = _strdup(tempfile_path_prefix))) {
-#else
 	if(0 != tempfile_path_prefix && 0 == (iterator->tempfile_path_prefix = strdup(tempfile_path_prefix))) {
-#endif
 		iterator->status = FLAC__METADATA_SIMPLE_ITERATOR_STATUS_MEMORY_ALLOCATION_ERROR;
 		return false;
 	}
@@ -1551,11 +1543,7 @@ static FLAC__bool chain_read_(FLAC__Metadata_Chain *chain, const char *filename,
 
 	chain_clear_(chain);
 
-#if defined _MSC_VER || defined __MINGW32__
-	if(0 == (chain->filename = _strdup(filename))) {
-#else
 	if(0 == (chain->filename = strdup(filename))) {
-#endif
 		chain->status = FLAC__METADATA_CHAIN_STATUS_MEMORY_ALLOCATION_ERROR;
 		return false;
 	}

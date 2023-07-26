@@ -114,11 +114,7 @@ static FLAC__bool ensure_null_terminated_(FLAC__byte **entry, uint32_t length)
  */
 static FLAC__bool copy_cstring_(char **to, const char *from)
 {
-#if defined _MSC_VER || defined __MINGW32__
-	char *copy = _strdup(from);
-#else
 	char *copy = strdup(from);
-#endif
 	FLAC__ASSERT(to != NULL);
 	if (copy) {
 		free(*to);
