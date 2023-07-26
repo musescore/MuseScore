@@ -386,7 +386,7 @@ void PaletteLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
     SymId headsym = SymId::noteheadBlack;
     SymId flagsym = SymId::flag32ndUp;
 
-    noteList nl = item->getNoteList();
+    BagpipeNoteList nl = item->resolveNoteList();
     BagpipeEmbellishment::BEDrawingDataX dx(headsym, flagsym, item->magS(), ctx.style().spatium(), static_cast<int>(nl.size()));
 
     item->setbbox(RectF());
@@ -396,7 +396,7 @@ void PaletteLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
     // draw the notes including stem, (optional) flag and (optional) ledger line
     double x = dx.xl;
     for (int note : nl) {
-        int line = BagpipeEmbellishment::BagpipeNoteInfoList[note].line;
+        int line = BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[note].line;
         BagpipeEmbellishment::BEDrawingDataY dy(line, ctx.style().spatium());
 
         // head
