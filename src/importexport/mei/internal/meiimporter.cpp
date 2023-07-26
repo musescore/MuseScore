@@ -465,7 +465,7 @@ ChordRest* MeiImporter::findStart(const libmei::Element& meiElement, Measure* me
  * If there is not @endid but a @tstamp2 (MEI not written by MuseScore), try to find the corresponding ChordRest
  */
 
-ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, Measure *startMeasure)
+ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, Measure* startMeasure)
 {
     libmei::InstStartEndId startEndIdAtt;
     startEndIdAtt.ReadStartEndId(controlNode);

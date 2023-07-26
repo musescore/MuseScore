@@ -48,8 +48,15 @@ mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Option
         forceMode = (!val.isNull() && val.toBool());
     }
 
-    // Unused for now
-    UNUSED(forceMode);
+    bool hasWarnings = (Convert::logs.size() > 0);
+
+    if (!forceMode && !MScore::noGui && hasWarnings) {
+        const String text
+            = qtrc("iex_mei", "%n problem(s) occured and the import may be incomplete.", nullptr, static_cast<int>(Convert::logs.size()));
+        if (!this->askToLoadDespiteWarnings(text, Convert::logs.join(u"\n"))) {
+            return make_ret(Err::FileBadFormat, path);
+        }
+    }
 
     return make_ok();
 }
