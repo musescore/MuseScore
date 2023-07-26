@@ -112,7 +112,7 @@ public:
 
     double mag() const override;
 
-    SymId symId() const { return _symId; }
+    SymId symId() const { return m_symId; }
     void setSymId(SymId id);
     int subtype() const override;
     void setTextType(ArticulationTextType textType);
@@ -135,10 +135,10 @@ public:
     void resetProperty(Pid id) override;
     Sid getPropertyStyle(Pid id) const override;
 
-    bool up() const { return _up; }
+    bool up() const { return m_up; }
     void setUp(bool val);
-    void setDirection(DirectionV d) { _direction = d; }
-    DirectionV direction() const { return _direction; }
+    void setDirection(DirectionV d) { m_direction = d; }
+    DirectionV direction() const { return m_direction; }
 
     ChordRest* chordRest() const;
     Segment* segment() const;
@@ -146,17 +146,17 @@ public:
     System* system() const;
     Page* page() const;
 
-    ArticulationAnchor anchor() const { return _anchor; }
-    void setAnchor(ArticulationAnchor v) { _anchor = v; }
+    ArticulationAnchor anchor() const { return m_anchor; }
+    void setAnchor(ArticulationAnchor v) { m_anchor = v; }
 
-    OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
-    void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
+    OrnamentStyle ornamentStyle() const { return m_ornamentStyle; }
+    void setOrnamentStyle(OrnamentStyle val) { m_ornamentStyle = val; }
 
-    bool playArticulation() const { return _playArticulation; }
-    void setPlayArticulation(bool val) { _playArticulation = val; }
+    bool playArticulation() const { return m_playArticulation; }
+    void setPlayArticulation(bool val) { m_playArticulation = val; }
 
-    String channelName() const { return _channelName; }
-    void setChannelName(const String& s) { _channelName = s; }
+    String channelName() const { return m_channelName; }
+    void setChannelName(const String& s) { m_channelName = s; }
 
     String accessibleInfo() const override;
 
@@ -192,21 +192,22 @@ private:
     };
     static AnchorGroup anchorGroup(SymId);
 
-    ArticulationCategories m_categories = ArticulationCategory::NONE;
     void computeCategories();
 
-    SymId _symId;
-    DirectionV _direction;
-    String _channelName;
+    ArticulationCategories m_categories = ArticulationCategory::NONE;
+
+    SymId m_symId = SymId::noSym;
+    DirectionV m_direction = DirectionV::AUTO;
+    String m_channelName;
 
     ArticulationTextType m_textType = ArticulationTextType::NO_TEXT;
     draw::Font m_font; // used for drawing text type articulations
 
-    ArticulationAnchor _anchor;
+    ArticulationAnchor m_anchor = ArticulationAnchor::AUTO;
 
-    bool _up;
-    OrnamentStyle _ornamentStyle;       // for use in ornaments such as trill
-    bool _playArticulation;
+    bool m_up = true;
+    OrnamentStyle m_ornamentStyle = OrnamentStyle::DEFAULT;       // for use in ornaments such as trill
+    bool m_playArticulation = true;
 
     std::pair<Sid, Sid> m_showOnTabStyles = { Sid::NOSTYLE, Sid::NOSTYLE };
 };
