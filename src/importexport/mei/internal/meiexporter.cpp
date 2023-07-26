@@ -1402,6 +1402,7 @@ bool MeiExporter::writeSlur(const Slur* slur, const std::string& startid)
 
     meiSlur.Write(slurNode, this->getMeasureXmlIdFor(SLUR_M));
 
+    // Add the node to the map of open control events
     m_openControlEventMap[slur] = slurNode;
 
     return true;

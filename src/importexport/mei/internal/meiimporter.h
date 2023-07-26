@@ -102,6 +102,7 @@ private:
     bool readFermata(pugi::xml_node fermataNode, engraving::Measure* measure);
     bool readHarm(pugi::xml_node harmNode, engraving::Measure* measure);
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
+    bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
 
     /**
@@ -124,6 +125,7 @@ private:
     void addEndBarLineToMeasure(engraving::Measure* measure, engraving::BarLineType barLineType);
     void addLayoutBreakToMeasure(engraving::Measure* measure, engraving::LayoutBreakType layoutBreakType);
     void addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleType textStyleType);
+    void addSpannerEnds();
 
     /**
      * Helper methods
@@ -136,6 +138,8 @@ private:
                                        bool isRest);
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, Measure* measure);
+    engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
+    engraving::ChordRest* findEnd(pugi::xml_node controlNode, engraving::Measure *startMeasure);
     void clearGraceNotes();
 
     /** The Score pointer */
@@ -161,6 +165,10 @@ private:
 
     /* A map for startId and corresponding engraving::Segment */
     std::map<std::string, engraving::ChordRest*> m_startIdChordRests;
+    /* A map for endId and corresponding engraving::Segment */
+    std::map<std::string, engraving::ChordRest*> m_endIdChordRests;
+    /* A map for open spanners that needs to be ended */
+    std::map<engraving::Spanner*, pugi::xml_node> m_openSpannerMap;
 
     engraving::Tuplet* m_tuplet;
     engraving::BeamMode m_beamBeginMode;
