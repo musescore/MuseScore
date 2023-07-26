@@ -44,7 +44,6 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   articulationStyle
 //---------------------------------------------------------
@@ -170,13 +169,13 @@ void Articulation::draw(mu::draw::Painter* painter) const
 
     painter->setPen(curColor());
 
-    if (m_textType != ArticulationTextType::NO_TEXT) {
+    if (m_textType == ArticulationTextType::NO_TEXT) {
+        drawSymbol(symId(), painter, PointF(-0.5 * width(), 0.0));
+    } else {
         mu::draw::Font scaledFont(m_font);
         scaledFont.setPointSizeF(m_font.pointSizeF() * magS() * MScore::pixelRatio);
         painter->setFont(scaledFont);
         painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, TConv::text(m_textType));
-    } else {
-        drawSymbol(symId(), painter, PointF(-0.5 * width(), 0.0));
     }
 }
 
@@ -734,6 +733,12 @@ bool Articulation::isOnCrossBeamSide() const
     return chord->beam() && (chord->beam()->cross() || chord->staffMove() != 0) && (up() == chord->up());
 }
 
+void Articulation::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+    setbbox(data.bbox);
+}
+
 struct ArticulationGroup
 {
     SymId first;
@@ -754,6 +759,7 @@ struct ArticulationGroup
     }
 };
 
+namespace mu::engraving {
 static const std::map<SymId, ArticulationGroup> ARTICULATION_ABOVE_SPLIT_GROUPS = {
     { SymId::articAccentStaccatoAbove, { SymId::articStaccatoAbove, SymId::articAccentAbove } },
     { SymId::articTenutoAccentAbove, { SymId::articTenutoAbove, SymId::articAccentAbove } },
