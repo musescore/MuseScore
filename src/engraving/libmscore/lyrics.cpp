@@ -329,10 +329,10 @@ void Lyrics::adjustPrevious()
                 } else {
                     prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(1));
                 }
+                prev->setIsRemoveInvalidSegments();
+                prev->triggerLayout();
             }
         }
-        prev->setIsRemoveInvalidSegments();
-        prev->triggerLayout();
     }
 }
 
