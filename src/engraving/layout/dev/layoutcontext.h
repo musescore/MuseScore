@@ -102,6 +102,7 @@ public:
 
     double spatium() const { return styleD(Sid::spatium); }
     double point(const Spatium sp) const { return sp.val() * spatium(); }
+    double magS(double mag) const { return mag * (spatium() / SPATIUM20); }
 
     double loWidth() const { return styleD(Sid::pageWidth) * DPI; }
     double loHeight() const { return styleD(Sid::pageHeight) * DPI; }

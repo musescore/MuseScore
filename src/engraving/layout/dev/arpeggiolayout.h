@@ -23,17 +23,14 @@
 #define MU_ENGRAVING_ARPEGGIOLAYOUT_H
 
 #include "layoutcontext.h"
-
-namespace mu::engraving {
-class Arpeggio;
-}
+#include "libmscore/arpeggio.h"
 
 namespace mu::engraving::layout::dev {
 class ArpeggioLayout
 {
 public:
 
-    static void layout(Arpeggio* item, LayoutContext& ctx);
+    static void layout(const Arpeggio* item, const LayoutContext& ctx, Arpeggio::LayoutData& data);
 
     static void layoutArpeggio2(Arpeggio* item, LayoutContext& ctx);
     static void computeHeight(Arpeggio* item, bool includeCrossStaffHeight = false);
@@ -42,9 +39,9 @@ public:
     static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);
 
 private:
-    static void symbolLine(Arpeggio* item, LayoutContext& ctx, SymId end, SymId fill);
-    static double calcTop(Arpeggio* item, LayoutContext& ctx);
-    static double calcBottom(Arpeggio* item, LayoutContext& ctx);
+    static void symbolLine(const IEngravingFontPtr& f, Arpeggio::LayoutData& data, SymId end, SymId fill);
+    static double calcTop(const Arpeggio* item, const LayoutContext& ctx);
+    static double calcBottom(const Arpeggio* item, const LayoutContext& ctx);
 };
 }
 
