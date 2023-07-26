@@ -1,0 +1,95 @@
+METADATA block #0
+  type: 0 (STREAMINFO)
+  is last: false
+  length: 34
+  minimum blocksize: 1152 samples
+  maximum blocksize: 1152 samples
+  minimum framesize: 11 bytes
+  maximum framesize: 11 bytes
+  sample_rate: 44100 Hz
+  channels: 1
+  bits-per-sample: 8
+  total samples: 1
+  MD5 signature: 8d39dd7eef115ea6975446ef4082951f
+METADATA block #1
+  type: 126 (UNKNOWN)
+  is last: false
+  length: 4
+  data contents:
+    00000000: AA 55 A5 5A 00 00 00 00 00 00 00 00 00 00 00 00 .U.Z            
+METADATA block #2
+  type: 5 (CUESHEET)
+  is last: false
+  length: 480
+  media catalog number: 
+  lead-in: 88200
+  is CD: true
+  number of tracks: 2
+    track[0]
+      offset: 0
+      number: 1
+      ISRC: 
+      type: AUDIO
+      pre-emphasis: false
+      number of index points: 1
+        index[0]
+          offset: 0
+          number: 1
+    track[1]
+      offset: 1
+      number: 170 (LEAD-OUT)
+METADATA block #3
+  type: 2 (APPLICATION)
+  is last: false
+  length: 12
+  application ID: 61626364
+  data contents:
+calfflacMETADATA block #4
+  type: 3 (SEEKTABLE)
+  is last: false
+  length: 18
+  seek points: 1
+    point 0: sample_number=0, stream_offset=0, frame_samples=1
+METADATA block #5
+  type: 4 (VORBIS_COMMENT)
+  is last: false
+  length: 46
+  vendor string: reference libFLAC 1.0.5_beta2 20030114
+  comments: 0
+METADATA block #6
+  type: 126 (UNKNOWN)
+  is last: false
+  length: 4
+  data contents:
+    00000000: AA 55 A5 5A 00 00 00 00 00 00 00 00 00 00 00 00 .U.Z            
+METADATA block #7
+  type: 5 (CUESHEET)
+  is last: false
+  length: 480
+  media catalog number: 
+  lead-in: 88200
+  is CD: true
+  number of tracks: 2
+    track[0]
+      offset: 0
+      number: 1
+      ISRC: 
+      type: AUDIO
+      pre-emphasis: false
+      number of index points: 1
+        index[0]
+          offset: 0
+          number: 1
+    track[1]
+      offset: 1
+      number: 170 (LEAD-OUT)
+METADATA block #8
+  type: 2 (APPLICATION)
+  is last: false
+  length: 12
+  application ID: 61626364
+  data contents:
+calfflacMETADATA block #9
+  type: 1 (PADDING)
+  is last: true
+  length: 28
