@@ -771,6 +771,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeFermata(dynamic_cast<const Fermata*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
             success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isSlur()) {
+            success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTempoText()) {
             success = success && this->writeTempo(dynamic_cast<const TempoText*>(controlEvent.first), controlEvent.second);
         }
@@ -784,6 +786,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
         }
     }
     m_tstampControlEventMap.clear();
+
+    this->addEndidToControlEvents();
 
     // This will preprend the scoreDef
     if (!isFirst) {
@@ -1383,6 +1387,28 @@ bool MeiExporter::writeRepeatMark(const Marker* marker, const Measure* measure)
 }
 
 /**
+ * Write a slur.
+ */
+
+bool MeiExporter::writeSlur(const Slur* slur, const std::string& startid)
+{
+    IF_ASSERT_FAILED(slur) {
+        return false;
+    }
+
+    pugi::xml_node slurNode = m_currentNode.append_child();
+    libmei::Slur meiSlur;// = Convert::slurToMEI(slur);
+    meiSlur.SetStartid(startid);
+
+    meiSlur.Write(slurNode, this->getMeasureXmlIdFor(SLUR_M));
+
+    // Add the node to the map of open control events
+    m_openControlEventMap[slur] = slurNode;
+
+    return true;
+}
+
+/**
  * Write a tempo and its text content.
  */
 
@@ -1519,6 +1545,20 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving:
     const Breath* breath = chordRest->hasBreathMark();
     if (breath) {
         m_startingControlEventMap[breath] = "#" + xmlId;
+    }
+    // Slurs
+    std::vector<Slur*> result;
+    SpannerMap& smap = m_score->spannerMap();
+    auto spanners = smap.findOverlapping(chordRest->tick().ticks(), chordRest->tick().ticks());
+    for (auto interval : spanners) {
+        Spanner* spanner = interval.value;
+        if (spanner && spanner->isSlur()) {
+            if (spanner->startCR() == chordRest) {
+                m_startingControlEventMap[spanner] = "#" + xmlId;
+            } else if (spanner->endCR() == chordRest) {
+                m_endingControlEventMap[spanner] = "#" + xmlId;
+            }
+        }
     }
 }
 
@@ -1668,6 +1708,37 @@ pugi::xml_node MeiExporter::getLastChordRest(pugi::xml_node node)
         }
     }
     return chordRest;
+}
+
+/**
+ * Go trough the list of control event maps and add endid when the end element has be written.
+ */
+
+void MeiExporter::addEndidToControlEvents()
+{
+    std::list<const EngravingItem*> closedEvents;
+
+    // Go through the list of open control events and see if the end element has been written
+    for (auto controlEvent : m_openControlEventMap) {
+        // Convenience variable
+        const EngravingItem* item = controlEvent.first;
+        // Check if we have both:
+        // * the end @xml:id (in m_endingControlEventMap)
+        // * the control event node (in m_openControlEventMap)
+        if (m_endingControlEventMap.count(item) && m_openControlEventMap.count(item)) {
+            // Create an attribute class instance to add the @endid
+            libmei::InstStartEndId startEndId;
+            startEndId.SetEndid(m_endingControlEventMap.at(item));
+            startEndId.WriteStartEndId(m_openControlEventMap.at(item));
+            // Add it to the list of closed events we can remove from the maps (below)
+            closedEvents.push_back(item);
+        }
+    }
+
+    for (auto item : closedEvents) {
+        m_openControlEventMap.erase(item);
+        m_endingControlEventMap.erase(item);
+    }
 }
 
 //---------------------------------------------------------
