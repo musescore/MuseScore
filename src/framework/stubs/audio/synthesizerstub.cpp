@@ -74,6 +74,16 @@ async::Channel<AudioInputParams> SynthesizerStub::paramsChanged() const
     return ch;
 }
 
+TrackId SynthesizerStub::trackId() const
+{
+    return m_trackId;
+}
+
+void SynthesizerStub::setTrackId(TrackId trackId)
+{
+    m_trackId = trackId;
+}
+
 msecs_t SynthesizerStub::playbackPosition() const
 {
     return 0;

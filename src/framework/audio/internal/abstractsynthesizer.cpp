@@ -54,6 +54,16 @@ async::Channel<AudioInputParams> AbstractSynthesizer::paramsChanged() const
     return m_paramsChanges;
 }
 
+TrackId AbstractSynthesizer::trackId() const
+{
+    return m_trackId;
+}
+
+void AbstractSynthesizer::setTrackId(TrackId trackId)
+{
+    m_trackId = trackId;
+}
+
 void AbstractSynthesizer::setup(const mpe::PlaybackData& playbackData)
 {
     ONLY_AUDIO_WORKER_THREAD;
