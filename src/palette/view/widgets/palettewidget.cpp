@@ -635,7 +635,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     PaletteCellIconEngine::PaintContext ctx;
     ctx.painter = &painter;
 
-    element->scanElements(&ctx, PaletteCellIconEngine::paintPaletteElement);
+    element->scanElements(&ctx, PaletteCellIconEngine::paintPaletteItem);
 
     element->setPos(pos);
     return pm;
@@ -1112,7 +1112,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         ctx.useElementColors = m_paintOptions.useElementColors;
         ctx.colorsInversionEnabled = m_paintOptions.colorsInverionsEnabled;
 
-        el->scanElements(&ctx, PaletteCellIconEngine::paintPaletteElement);
+        el->scanElements(&ctx, PaletteCellIconEngine::paintPaletteItem);
         painter.restore();
     }
 }

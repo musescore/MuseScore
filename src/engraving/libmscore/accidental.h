@@ -123,6 +123,7 @@ public:
                 : sym(_sym), x(_x), y(_y) {}
         };
 
+        bool isSkipDraw = false;
         std::vector<Sym> syms;
         RectF bbox;
         PointF pos;

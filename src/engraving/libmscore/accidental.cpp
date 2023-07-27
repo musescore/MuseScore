@@ -371,22 +371,14 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
 void Accidental::setLayoutData(const LayoutData& data)
 {
     m_layoutData = data;
+    setSkipDraw(data.isSkipDraw);
     setbbox(data.bbox);
     setPos(data.pos);
 }
 
-void Accidental::draw(mu::draw::Painter* painter) const
+void Accidental::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    // don't show accidentals for tab or slash notation
-    if (onTabStaff() || (note() && note()->fixed())) {
-        return;
-    }
-
-    painter->setPen(curColor());
-    for (const LayoutData::Sym& e : m_layoutData.syms) {
-        score()->engravingFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

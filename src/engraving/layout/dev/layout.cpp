@@ -27,6 +27,7 @@
 #include "libmscore/harmony.h"
 #include "libmscore/chord.h"
 
+#include "tdraw.h"
 #include "tlayout.h"
 #include "chordlayout.h"
 #include "layoutcontext.h"
@@ -48,6 +49,11 @@ void Layout::doLayoutItem(EngravingItem* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layoutItem(item, ctx);
+}
+
+void Layout::doDrawItem(const EngravingItem* item, draw::Painter* p)
+{
+    TDraw::drawItem(item, p);
 }
 
 void Layout::layoutText1(TextBase* item, bool base)
