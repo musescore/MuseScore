@@ -1,6 +1,8 @@
 
 
 set(LAYOUT_DEV_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/tdraw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tdraw.h
     ${CMAKE_CURRENT_LIST_DIR}/tlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/layout.cpp

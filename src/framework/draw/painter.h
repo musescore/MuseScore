@@ -293,17 +293,21 @@ public:
 private:
     Painter* m_painter = nullptr;
 };
+}
 
 #ifdef MUE_ENABLE_DRAW_TRACE
     #define TRACE_ITEM_DRAW \
     mu::draw::PainterItemMarker __drawItemMarker(painter, typeName())
 
+    #define TRACE_DRAW_ITEM \
+    mu::draw::PainterItemMarker __drawItemMarker(painter, item->typeName())
+
     #define TRACE_ITEM_DRAW_C(painter, itemName) \
     mu::draw::PainterItemMarker __drawItemMarker(painter, itemName)
 #else
     #define TRACE_ITEM_DRAW
+    #define TRACE_DRAW_ITEM
     #define TRACE_ITEM_DRAW_C(painter, objName)
 #endif
-}
 
 #endif // MU_DRAW_PAINTER_H

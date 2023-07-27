@@ -52,7 +52,7 @@ public:
         bool colorsInversionEnabled = false;
     };
 
-    static void paintPaletteElement(void* context, mu::engraving::EngravingItem* element);
+    static void paintPaletteItem(void* context, mu::engraving::EngravingItem* element);
 
 private:
     void paintCell(draw::Painter& painter, const RectF& rect, bool selected, bool current, qreal dpi) const;

@@ -398,6 +398,7 @@ static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, A
     // TODO: remove Accidental in layout
     // don't show accidentals for tab or slash notation
     if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
+        data.isSkipDraw = true;
         return;
     }
 

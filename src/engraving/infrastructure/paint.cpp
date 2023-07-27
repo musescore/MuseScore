@@ -136,7 +136,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
             }
 
             std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
-            paintElements(*painter, elements, opt.isPrinting);
+            paintItems(*painter, elements, opt.isPrinting);
 
             if (disableClipping) {
                 painter->setClipping(false);
@@ -207,38 +207,38 @@ SizeF Paint::pageSizeInch(const Score* score, const Options& opt)
     return pageRect.size() / mu::engraving::DPI;
 }
 
-void Paint::paintElement(mu::draw::Painter& painter, const EngravingItem* element)
+void Paint::paintItem(mu::draw::Painter& painter, const EngravingItem* item)
 {
     TRACEFUNC;
-    if (element->skipDraw()) {
+    if (item->skipDraw()) {
         return;
     }
-    element->itemDiscovered = false;
-    PointF elementPosition(element->pagePos());
+    item->itemDiscovered = false;
+    PointF itemPosition(item->pagePos());
 
-    painter.translate(elementPosition);
-    element->draw(&painter);
-    painter.translate(-elementPosition);
+    painter.translate(itemPosition);
+    EngravingItem::layout()->drawItem(item, &painter);
+    painter.translate(-itemPosition);
 }
 
-void Paint::paintElements(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements, bool isPrinting)
+void Paint::paintItems(mu::draw::Painter& painter, const std::vector<EngravingItem*>& items, bool isPrinting)
 {
     TRACEFUNC;
-    std::vector<EngravingItem*> sortedElements(elements.begin(), elements.end());
+    std::vector<EngravingItem*> sortedItems(items.begin(), items.end());
 
-    std::sort(sortedElements.begin(), sortedElements.end(), mu::engraving::elementLessThan);
+    std::sort(sortedItems.begin(), sortedItems.end(), mu::engraving::elementLessThan);
 
-    for (const EngravingItem* element : sortedElements) {
-        if (!element->isInteractionAvailable()) {
+    for (const EngravingItem* item : sortedItems) {
+        if (!item->isInteractionAvailable()) {
             continue;
         }
 
-        paintElement(painter, element);
+        paintItem(painter, item);
     }
 
 #ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
     if (!isPrinting) {
-        DebugPaint::paintElementsDebug(painter, sortedElements);
+        DebugPaint::paintElementsDebug(painter, sortedItems);
     }
 #else
     UNUSED(isPrinting);

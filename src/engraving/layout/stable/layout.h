@@ -55,6 +55,8 @@ public:
 private:
     // Layout Single Item
     void doLayoutItem(EngravingItem* item) override;
+
+    void doDrawItem(const EngravingItem* item, draw::Painter* p) override;
 };
 }
 

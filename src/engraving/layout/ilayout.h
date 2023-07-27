@@ -28,6 +28,10 @@
 
 #include "types/fraction.h"
 
+namespace mu::draw {
+class Painter;
+}
+
 namespace mu::engraving {
 class Score;
 class EngravingItem;
@@ -157,9 +161,17 @@ public:
     // Layout Text 1
     virtual void layoutText1(TextBase* item, bool base = false) = 0;
 
+    //! --- DRAW ---
+    void drawItem(const EngravingItem* item, draw::Painter* p)
+    {
+        doDrawItem(item, p);
+    }
+
 private:
     // Layout Single Item
     virtual void doLayoutItem(EngravingItem* item) = 0;
+
+    virtual void doDrawItem(const EngravingItem* item, draw::Painter* p) = 0;
 };
 }
 
