@@ -138,7 +138,7 @@ bool TieSegment::edit(EditData& ed)
 
     if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
-        layout()->layoutItem(sl);
+        rendering()->layoutItem(sl);
         triggerLayout();
         return true;
     }
@@ -172,7 +172,7 @@ void TieSegment::changeAnchor(EditData& ed, EngravingItem* element)
 
     const size_t segments  = spanner()->spannerSegments().size();
     ups(ed.curGrip).off = PointF();
-    layout()->layoutItem(spanner());
+    rendering()->layoutItem(spanner());
     if (spanner()->spannerSegments().size() != segments) {
         const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
 

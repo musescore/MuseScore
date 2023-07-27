@@ -98,6 +98,6 @@ void LedgerLine::spatiumChanged(double oldValue, double newValue)
 {
     _width = (_width / oldValue) * newValue;
     _len   = (_len / oldValue) * newValue;
-    layout()->layoutItem(this);
+    rendering()->layoutItem(this);
 }
 }

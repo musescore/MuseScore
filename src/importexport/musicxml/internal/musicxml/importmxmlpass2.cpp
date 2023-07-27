@@ -1674,7 +1674,7 @@ static void addBarlineToMeasure(Measure* measure, const Fraction tick, std::uniq
         st = SegmentType::BeginBarLine;
     }
     const auto segment = measure->getSegment(st, tick);
-    EngravingItem::layout()->layoutItem(barline.get());
+    EngravingItem::rendering()->layoutItem(barline.get());
     segment->add(barline.release());
 }
 

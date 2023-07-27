@@ -111,7 +111,7 @@ void TextBase::startEdit(EditData& ed)
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
     if (m_layoutInvalid) {
-        layout()->layoutItem(this);
+        rendering()->layoutItem(this);
     }
     if (!ted->cursor()->set(ed.startMove)) {
         resetFormatting();
@@ -205,7 +205,7 @@ void TextBase::endEdit(EditData& ed)
             Lyrics* prev = prevLyrics(toLyrics(this));
             if (prev) {
                 prev->setIsRemoveInvalidSegments();
-                layout()->layoutItem(prev);
+                rendering()->layoutItem(prev);
             }
         }
         return;
@@ -217,7 +217,7 @@ void TextBase::endEdit(EditData& ed)
         resetFormatting();
         undoChangeProperty(Pid::TEXT, actualXmlText);       // change property to set text to actual value again
                                                             // this also changes text of linked elements
-        layout()->layoutText1(this);
+        rendering()->layoutText1(this);
         triggerLayout();                                    // force relayout even if text did not change
     } else {
         triggerLayout();
@@ -1051,7 +1051,7 @@ void ChangeTextProperties::undo(EditData*)
     cursor().text()->resetFormatting();
     cursor().text()->setXmlText(xmlText);
     restoreSelection();
-    EngravingItem::layout()->layoutText1(cursor().text());
+    EngravingItem::rendering()->layoutText1(cursor().text());
 }
 
 void ChangeTextProperties::redo(EditData*)

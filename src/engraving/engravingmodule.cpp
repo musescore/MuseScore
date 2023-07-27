@@ -42,8 +42,8 @@
 #include "engraving/libmscore/mscore.h"
 #include "engraving/libmscore/masterscore.h"
 
-#include "layout/dev/layout.h"
-#include "layout/stable/layout.h"
+#include "rendering/dev/layout.h"
+#include "rendering/stable/layout.h"
 
 #include "compat/scoreaccess.h"
 
@@ -84,8 +84,8 @@ Versions:
 *
 * see layout/README.h
 */
-    ioc()->registerExport<layout::ILayout>(moduleName(), new layout::dev::Layout());
-    //ioc()->registerExport<layout::ILayout>(moduleName(), new layout::stable::Layout());
+    ioc()->registerExport<rendering::IRendering>(moduleName(), new rendering::dev::Layout());
+    //ioc()->registerExport<rendering::ILayout>(moduleName(), new layout::stable::Layout());
 }
 
 void EngravingModule::resolveImports()

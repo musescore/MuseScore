@@ -23,8 +23,8 @@ set(MODULE_QRC engraving.qrc)
 
 include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/layout/dev/layout.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/layout/stable/layout.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
 
 set(MODULE_SRC
 
@@ -173,14 +173,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/layout/README.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/ilayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutoptions.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/paddingtable.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/paddingtable.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/README.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/ilayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
 
-    ${LAYOUT_DEV_SRC}
-    ${LAYOUT_STABLE_SRC}
+    ${RENDERING_DEV_SRC}
+    ${RENDERING_STABLE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp

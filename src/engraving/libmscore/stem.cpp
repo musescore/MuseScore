@@ -69,13 +69,13 @@ bool Stem::up() const
 void Stem::setBaseLength(Millimetre baseLength)
 {
     m_baseLength = Millimetre(std::abs(baseLength.val()));
-    layout()->layoutItem(this);
+    rendering()->layoutItem(this);
 }
 
 void Stem::spatiumChanged(double oldValue, double newValue)
 {
     m_userLength = (m_userLength / oldValue) * newValue;
-    layout()->layoutItem(this);
+    rendering()->layoutItem(this);
 }
 
 //! In chord coordinates
@@ -179,7 +179,7 @@ void Stem::editDrag(EditData& ed)
 {
     double yDelta = ed.delta.y();
     m_userLength += up() ? Millimetre(-yDelta) : Millimetre(yDelta);
-    layout()->layoutItem(this);
+    rendering()->layoutItem(this);
     Chord* c = chord();
     if (c->hook()) {
         c->hook()->move(PointF(0.0, yDelta));

@@ -158,7 +158,7 @@ public:
     const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
 
-    std::shared_ptr<layout::dev::BeamTremoloLayout> layoutInfo;
+    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
 private:
     friend class Factory;
