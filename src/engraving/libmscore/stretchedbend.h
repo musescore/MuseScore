@@ -57,8 +57,9 @@ public:
     void fillStretchedSegments(bool untilNextSegment);
     mu::RectF calculateBoundingRect() const;
 
+    static std::vector<Note*> notesWithStretchedBend(Chord* chord);
     static void prepareBends(std::vector<StretchedBend*>& bends);
-    void updateHeights();
+    void adjustBendInChord();
 
     void setPitchValues(const PitchValues& p) { m_pitchValues = p; }
     const PitchValues& pitchValues() const { return m_pitchValues; }
@@ -85,13 +86,14 @@ private:
     };
 
     struct BendSegment {
+        constexpr static int NO_TONE = -1;
         BendSegment();
         BendSegment(BendSegmentType bendType, int tone);
-        void setup(PointF src, PointF dest, bool visible = true);
+        void setupCoords(PointF src, PointF dest);
         PointF src;
         PointF dest;
         BendSegmentType type = BendSegmentType::NO_TYPE;
-        int tone = -1;
+        int tone = NO_TONE;
         bool visible = true;
     };
 
@@ -103,10 +105,9 @@ private:
     double bendHeight(int bendIdx) const;
     bool firstPointShouldBeSkipped() const;
     StretchedBend* backTiedStretchedBend() const;
-    bool bendSegmentShouldBeHidden(StretchedBend* bendSegment) const;
+    static bool equalBendTypes(const StretchedBend* bend1, const StretchedBend* bend2);
 
     PitchValues m_pitchValues;
-
     std::vector<BendSegment> m_bendSegments; // filled during note layout (when all coords are not known yet)
     std::vector<BendSegment> m_bendSegmentsStretched; // filled during system layout (final coords used for drawing)
 
@@ -118,7 +119,8 @@ private:
     } m_arrows;
 
     Note* m_note = nullptr;
-    Chord* m_chord = nullptr;
+    bool m_needsHeightAdjust = false;
+    Note* m_noteToAdjust = nullptr;
 };
 }     // namespace mu::engraving
 #endif

@@ -28,6 +28,7 @@
 #include "note.h"
 #include "score.h"
 #include "segment.h"
+#include "staff.h"
 #include "tie.h"
 
 #include "log.h"
@@ -77,7 +78,7 @@ static constexpr double BEND_HEIGHT_MULTIPLIER = .2; /// how much height differs
 //---------------------------------------------------------
 
 StretchedBend::StretchedBend(Chord* parent)
-    : EngravingItem(ElementType::STRETCHED_BEND, parent, ElementFlag::MOVABLE), m_chord(parent)
+    : EngravingItem(ElementType::STRETCHED_BEND, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&stretchedBendStyle);
 }
@@ -150,15 +151,15 @@ StretchedBend::BendSegment::BendSegment()
 {
 }
 
-StretchedBend::BendSegment::BendSegment(BendSegmentType bendType, int bendTone) : type(bendType), tone(bendTone)
+StretchedBend::BendSegment::BendSegment(BendSegmentType bendType, int bendTone)
+    : type(bendType), tone(bendTone)
 {
 }
 
-void StretchedBend::BendSegment::setup(PointF s, PointF d, bool v)
+void StretchedBend::BendSegment::setupCoords(PointF s, PointF d)
 {
     src = s;
     dest = d;
-    visible = v;
 }
 
 void StretchedBend::addSegment(std::vector<StretchedBend::BendSegment>& bendSegments, StretchedBend::BendSegmentType type, int tone) const
@@ -272,24 +273,15 @@ void StretchedBend::fillSegments()
         if (bendSegment.type == BendSegmentType::LINE_UP) {
             double minY = std::min(.0, src.y());
             dest = PointF(src.x(), minY - bendHeight(bendSegment.tone) - baseBendHeight);
-            bendSegment.setup(src, dest);
+            bendSegment.setupCoords(src, dest);
             src.setY(dest.y());
             continue;
         }
-
-        bool visible = true;
 
         if (bendSegment.type == BendSegmentType::CURVE_UP) {
             double minY = std::min(.0, src.y());
             dest.setY(minY - bendHeight(bendSegment.tone) - baseBendHeight);
         } else if (bendSegment.type == BendSegmentType::CURVE_DOWN) {
-            // skipping extra curves down of bend-release in a chord
-            if (false) { /// condition todo
-                if (bendSegmentShouldBeHidden(this)) {
-                    visible = false;
-                }
-            }
-
             if (releasedToInitial) {
                 dest.setY(notePos.y());
             } else {
@@ -298,25 +290,83 @@ void StretchedBend::fillSegments()
             }
         }
 
-        bendSegment.setup(src, dest, visible);
+        bendSegment.setupCoords(src, dest);
 
         src = dest;
     }
 }
 
 //---------------------------------------------------------
-//   updateHeights
+//   adjustBendInChord
 //---------------------------------------------------------
 
-void StretchedBend::updateHeights()
+void StretchedBend::adjustBendInChord()
 {
     IF_ASSERT_FAILED(!m_bendSegments.empty()) {
         LOGE() << "invalid bend data";
         return;
     }
 
-    for (size_t i = 0; i < m_bendSegments.size(); i++) {
+    if (!m_needsHeightAdjust) {
+        return;
+    }
 
+    std::vector<Note*> bendNotes = notesWithStretchedBend(toChord(parent()));
+    if (bendNotes.size() < 2) {
+        return;
+    }
+
+    bool isTab = staff()->isTabStaff(tick());
+    const auto [min, max] = std::minmax_element(bendNotes.begin(), bendNotes.end(), [isTab](Note* l, Note* r) {
+        if (isTab) {
+            return l->string() > r->string();
+        }
+
+        return l->pitch() < r->pitch();
+    });
+
+    Note* lowestNote = *min;
+    m_noteToAdjust = *max;
+
+    StretchedBend* upStretchedBend = m_noteToAdjust->stretchedBend();
+    IF_ASSERT_FAILED(upStretchedBend) {
+        LOGE() << "unable to adjust stretched bends heights: note to adjust is not found";
+        return;
+    }
+
+    const std::vector<BendSegment>& upBendSegments = upStretchedBend->m_bendSegments;
+    IF_ASSERT_FAILED(m_bendSegments.size() == upBendSegments.size()) {
+        LOGE() << "unable to adjust stretched bends heights: bends of the chord are not of same type";
+        return;
+    }
+
+    for (size_t i = 0; i < m_bendSegments.size(); i++) {
+        BendSegment& bendSegment = m_bendSegments.at(i);
+        const BendSegment& upBendSegment = upBendSegments.at(i);
+        switch (bendSegment.type) {
+        case BendSegmentType::LINE_UP:
+            bendSegment.src = upBendSegment.src;
+            bendSegment.dest = upBendSegment.dest;
+            break;
+        case BendSegmentType::CURVE_UP:
+            if (m_pitchValues.at(0).pitch > 0) {
+                bendSegment.src = upBendSegment.src;
+            }
+
+            bendSegment.dest = upBendSegment.dest;
+            break;
+        case BendSegmentType::CURVE_DOWN:
+            bendSegment.src = upBendSegment.src;
+            bendSegment.visible = lowestNote == m_note;
+            break;
+        case BendSegmentType::LINE_STROKED:
+            bendSegment.src = upBendSegment.src;
+            bendSegment.dest = upBendSegment.dest;
+            break;
+        case BendSegmentType::NO_TYPE:
+        default:
+            break;
+        }
     }
 }
 
@@ -331,13 +381,14 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
     }
 
     double sp = spatium();
-    double bendStart = m_bendSegments.at(0).src.x();
+
+    StretchedBend* beginCoordBend = this;
+    if (m_noteToAdjust) {
+        beginCoordBend = m_noteToAdjust->stretchedBend();
+    }
+
+    double bendStart = beginCoordBend->m_bendSegments.at(0).src.x();
     double bendEnd = untilNextSegment ? nextSegmentX() : sp * 6;
-
-    double upNotePos = m_chord->upNote()->pageX() + m_chord->upNote()->width();
-    double curNotePos = m_note->pageX() + m_note->width();
-
-    bendEnd += upNotePos - curNotePos;
 
     if (bendStart > bendEnd) {
         return;
@@ -358,6 +409,19 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
             bendEnd -= step;
             lastSeg.src.setX(bendEnd);
             prevSeg.dest.setX(bendEnd);
+        }
+    }
+
+    /// adjust coordinate to bend of tied back note
+    StretchedBend* backTiedBend = backTiedStretchedBend();
+    if (backTiedBend) {
+        auto getSystem = [](Chord* ch) { return ch->measure()->system(); };
+        auto getPageX = [](Chord* ch) { return ch->segment()->pageX(); };
+        Chord* currentChord = toChord(parent());
+        Chord* tiedBackChord = toChord(backTiedBend->parent());
+        if (getSystem(currentChord) == getSystem(tiedBackChord)) {
+            PointF& tiedBendEndPoint = backTiedBend->m_bendSegmentsStretched.back().dest;
+            tiedBendEndPoint.setX(getPageX(currentChord) - getPageX(tiedBackChord));
         }
     }
 }
@@ -432,14 +496,6 @@ void StretchedBend::draw(mu::draw::Painter* painter) const
             break;
         }
     }
-}
-
-bool StretchedBend::bendSegmentShouldBeHidden(StretchedBend* bendSegment) const
-{
-    /// TODO: если пофикшу определение верхней ноты, возможно уйдет необходимость доп фиксов
-    Note* currentNote = bendSegment->m_note;
-    Note* upNote = bendSegment->m_chord->upNote();
-    return (currentNote->pitch() != upNote->pitch()) || (currentNote->string() != upNote->string());
 }
 
 mu::RectF StretchedBend::calculateBoundingRect() const
@@ -608,14 +664,88 @@ double StretchedBend::bendHeight(int bendIdx) const
 }
 
 //---------------------------------------------------------
+//   notesWithStretchedBend
+//---------------------------------------------------------
+
+std::vector<Note*> StretchedBend::notesWithStretchedBend(Chord* chord)
+{
+    std::vector<Note*> bendNotes;
+
+    const std::vector<Note*>& allNotes = chord->notes();
+    std::copy_if(allNotes.begin(), allNotes.end(), std::back_inserter(bendNotes),
+                 [](Note* note) { return note->stretchedBend(); });
+
+    return bendNotes;
+}
+
+bool StretchedBend::equalBendTypes(const StretchedBend* bend1, const StretchedBend* bend2)
+{
+    const std::vector<BendSegment>& bendSegments1 = bend1->m_bendSegments;
+    const std::vector<BendSegment>& bendSegments2 = bend2->m_bendSegments;
+
+    if (bendSegments1.size() != bendSegments2.size()) {
+        return false;
+    }
+
+    for (size_t i = 0; i < bendSegments1.size(); i++) {
+        if (bendSegments1.at(i).type != bendSegments2.at(i).type) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+//---------------------------------------------------------
 //   prepareBends
 //---------------------------------------------------------
 
 void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
 {
+    std::unordered_map<Chord*, std::vector<StretchedBend*> > bendsInChords;
     for (StretchedBend* bend : bends) {
         // filling segments after all ties are connected
         bend->createBendSegments();
+        bendsInChords[toChord(bend->parent())].push_back(bend);
+    }
+
+    /// checking if height adjust is needed for bends in chords
+    for (auto&[chord, bends] : bendsInChords) {
+        std::vector<Note*> bendNotes = notesWithStretchedBend(chord);
+        if (bendNotes.size() < 2) {
+            continue;
+        }
+
+        Note* compareNote = bendNotes.at(0);
+
+        bool updateHeightsNeeded = true;
+
+        for (StretchedBend* bend : bends) {
+            if (!equalBendTypes(compareNote->stretchedBend(), bend)) {
+                updateHeightsNeeded = false;
+                break;
+            }
+        }
+
+        if (updateHeightsNeeded) {
+            for (StretchedBend* bend : bends) {
+                bend->m_needsHeightAdjust = true;
+            }
+
+            /// here to adjust the tone of particular segment
+            for (size_t segIdx = 0; segIdx < bends.at(0)->m_bendSegments.size(); segIdx++) {
+                int maxTone = BendSegment::NO_TONE;
+                for (size_t bendIdx = 0; bendIdx < bends.size(); bendIdx++) {
+                    const BendSegment& bendSegment = bends.at(bendIdx)->m_bendSegments.at(segIdx);
+                    maxTone = std::max(bendSegment.tone, maxTone);
+                }
+
+                for (size_t bendIdx = 0; bendIdx < bends.size(); bendIdx++) {
+                    BendSegment& bendSegment = bends.at(bendIdx)->m_bendSegments.at(segIdx);
+                    bendSegment.tone = maxTone;
+                }
+            }
+        }
     }
 }
 
