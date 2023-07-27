@@ -23,6 +23,8 @@
 #ifndef MU_APP_APP_H
 #define MU_APP_APP_H
 
+#include <optional>
+
 #include <QList>
 
 #include "modularity/imodulesetup.h"
@@ -72,16 +74,18 @@ public:
 
     void addModule(modularity::IModuleSetup* module);
 
-    int run(int argc, char** argv);
+    Ret run(int argc, char** argv);
 
 private:
     void applyCommandLineOptions(const CommandLineParser::Options& options, framework::IApplication::RunMode runMode);
-    int processConverter(const CommandLineParser::ConverterTask& task);
-    int processDiagnostic(const CommandLineParser::Diagnostic& task);
-    int processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task);
+    Ret processConverter(const CommandLineParser::ConverterTask& task);
+    Ret processDiagnostic(const CommandLineParser::Diagnostic& task);
+    Ret processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task);
     void processAutobot(const CommandLineParser::Autobot& task);
 
     QList<modularity::IModuleSetup*> m_modules;
+
+    std::optional<Ret> m_ret;
 };
 }
 

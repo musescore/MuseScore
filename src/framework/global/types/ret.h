@@ -127,6 +127,7 @@ public:
     inline bool operator!() const { return !success(); }
 
     std::string toString() const;
+    std::string toJson() const;
 
 private:
     int m_code = int(Code::Undefined);

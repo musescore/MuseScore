@@ -340,7 +340,13 @@ int main(int argc, char** argv)
 
 #endif
 
-    int code = app.run(argcFinal, argvFinal);
-    LOGI() << "Goodbye!! code: " << code;
-    return code;
+    mu::Ret ret = app.run(argcFinal, argvFinal);
+    LOGI() << "Goodbye!! code: " << ret.code();
+
+    if (!ret) {
+        std::cerr << ret.toJson();
+        return 1;
+    }
+
+    return 0;
 }

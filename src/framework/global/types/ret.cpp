@@ -22,6 +22,8 @@
 
 #include "types/ret.h"
 
+#include "serialization/json.h"
+
 using namespace mu;
 
 Ret::Ret(bool arg)
@@ -88,4 +90,12 @@ std::any Ret::data(const std::string& key) const
 std::string Ret::toString() const
 {
     return "[" + std::to_string(m_code) + "] " + m_text;
+}
+
+std::string Ret::toJson() const
+{
+    JsonObject rootObj;
+    rootObj["code"] = m_code;
+    rootObj["message"] = m_text;
+    return JsonDocument(rootObj).toJson().constChar();
 }
