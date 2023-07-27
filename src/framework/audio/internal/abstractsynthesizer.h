@@ -45,6 +45,9 @@ public:
     const audio::AudioInputParams& params() const override;
     async::Channel<audio::AudioInputParams> paramsChanged() const override;
 
+    TrackId trackId() const override;
+    void setTrackId(TrackId trackId) override;
+
     void setup(const mpe::PlaybackData& playbackData) override;
     void revokePlayingNotes() override;
 
@@ -65,6 +68,8 @@ protected:
     async::Channel<audio::AudioInputParams> m_paramsChanges;
 
     samples_t m_sampleRate = 0;
+
+    TrackId m_trackId = -1;
 };
 }
 
