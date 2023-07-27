@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+trap 'echo Build failed; exit 1' ERR
+
 BUILD_TOOLS=$HOME/build_tools
 ARTIFACTS_DIR=build.artifacts
 BUILD_DIR=build.release

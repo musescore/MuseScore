@@ -19,14 +19,16 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
+trap 'echo Generate PNGs failed; exit 1' ERR
+
 REF_BIN=./musescore_reference/app/bin/mscore4portable
 CUR_BIN=./musescore_current/app/bin/mscore4portable
 
 chmod +x $REF_BIN
-chmod +x ./musescore_reference/app/bin/crashpad_handler
+# chmod +x ./musescore_reference/app/bin/crashpad_handler
 
 chmod +x $CUR_BIN
-chmod +x ./musescore_current/app/bin/crashpad_handler
+# chmod +x ./musescore_current/app/bin/crashpad_handler
 
 echo reference version:
 $REF_BIN --long-version
