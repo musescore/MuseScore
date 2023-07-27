@@ -169,7 +169,7 @@ samples_t MixerChannel::process(float* buffer, samples_t samplesPerChannel)
 
     samples_t processedSamplesCount = samplesPerChannel;
 
-    if (m_audioSource) {
+    if (m_audioSource && !m_params.muted) {
         processedSamplesCount = m_audioSource->process(buffer, samplesPerChannel);
     }
 
