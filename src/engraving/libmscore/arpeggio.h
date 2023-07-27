@@ -99,6 +99,8 @@ public:
         SymIdList symbols;
         RectF symsBBox;
         RectF bbox;
+
+        bool isValid() const { return bbox.isValid(); }
     };
 
     const LayoutData& layoutData() const { return m_layoutData; }
@@ -107,6 +109,7 @@ public:
     //! -- Old interface --
     void setSymbols(const SymIdList& sl) { m_layoutData.symbols = sl; }
     const SymIdList& symbols() { return m_layoutData.symbols; }
+    void oldDraw(mu::draw::Painter* painter) const;
     //! -------------------
 
 private:
