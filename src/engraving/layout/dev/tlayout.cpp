@@ -673,9 +673,9 @@ static void layoutBagpipeEmbellishment(const BagpipeEmbellishment* item, const L
 
     // draw the notes including stem, (optional) flag and (optional) ledger line
     double x = xl;
-    for (int note : nl) {
-        BagpipeEmbellishment::LayoutData::NoteData& noteData = data.notesData[note];
-        const int line = BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[note].line;
+    for (size_t i = 0; i < nl.size(); ++i) {
+        BagpipeEmbellishment::LayoutData::NoteData& noteData = data.notesData[i];
+        const int line = BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[nl.at(i)].line;
         const double y1f = ((line - 6) * spatium / 2);      // top of stem for note with flag
         const double y2 = (line * spatium / 2);             // bottom of stem
         const double ycorr = (0.8 * spatium);               // correction to align flag with top of stem

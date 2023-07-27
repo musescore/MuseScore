@@ -97,7 +97,7 @@ public:
         SymId headsym = SymId::noSym;   // grace note head symbol
         SymId flagsym = SymId::noSym;   // grace note flag symbol
         double stemLineW = 0.0;         // line width for stem
-        std::map<int /*note*/, NoteData> notesData;
+        std::map<size_t /*note index*/, NoteData> notesData;
         BeamData beamData;
 
         RectF bbox;
