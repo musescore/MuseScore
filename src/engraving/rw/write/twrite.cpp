@@ -3000,7 +3000,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                     keySigWritten = true;
                 }
                 // we will miss a time sig!
-                Fraction tsf = score->sigmap()->timesig(segment->tick()).timesig();
+                Fraction tsf = score->sigmap()->timesig(segment->tick()).nominal();
                 TimeSig* ts = Factory::createTimeSig(score->dummy()->segment());
                 ts->setSig(tsf);
                 TWrite::write(ts, xml, ctx);
