@@ -4208,7 +4208,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                         }
                         EngravingItem* e = s->element(staffIdx * VOICES);
                         // if it's a clef, we only add if it's a header clef
-                        bool moveClef = s->isHeaderClefType() && e && e->isClef();
+                        bool moveClef = s->isHeaderClefType() && e && e->isClef() && !toClef(e)->forInstrumentChange();
                         // otherwise, we only add if e exists and is generated
                         bool moveOther = e && !e->isClef() && (!e->generated() || tick.isZero());
                         bool specialCase = false;
