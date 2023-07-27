@@ -180,7 +180,7 @@ bool SlurSegment::edit(EditData& ed)
 
     if (ed.key == Key_Home && !ed.modifiers) {
         ups(ed.curGrip).off = PointF();
-        layout()->layoutItem(sl);
+        rendering()->layoutItem(sl);
         triggerLayout();
         return true;
     }
@@ -288,13 +288,13 @@ void SlurSegment::changeAnchor(EditData& ed, EngravingItem* element)
                 }
             }
             score()->undo(new ChangeStartEndSpanner(sp, se, ee));
-            layout()->layoutItem(sp);
+            rendering()->layoutItem(sp);
         }
     }
 
     const size_t segments  = spanner()->spannerSegments().size();
     ups(ed.curGrip).off = PointF();
-    layout()->layoutItem(spanner());
+    rendering()->layoutItem(spanner());
     if (spanner()->spannerSegments().size() != segments) {
         const std::vector<SpannerSegment*>& ss = spanner()->spannerSegments();
         const bool moveEnd = ed.curGrip == Grip::END || ed.curGrip == Grip::DRAG;
@@ -310,7 +310,7 @@ void SlurSegment::editDrag(EditData& ed)
     System* startSys = slur()->startCR()->measure()->system();
     System* endSys = slur()->endCR()->measure()->system();
     if (startSys && endSys && startSys == endSys) {
-        layout()->layoutItem(slur());
+        rendering()->layoutItem(slur());
     }
 }
 

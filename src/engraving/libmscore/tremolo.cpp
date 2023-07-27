@@ -31,7 +31,7 @@
 
 #include "style/style.h"
 
-#include "layout/dev/beamtremololayout.h"
+#include "rendering/dev/beamtremololayout.h"
 
 #include "beam.h"
 #include "chord.h"

@@ -28,7 +28,7 @@
 #include "engravingitem.h"
 #include "property.h"
 
-namespace mu::engraving::layout::dev {
+namespace mu::engraving::rendering::dev {
 class BeamTremoloLayout;
 }
 
@@ -232,7 +232,7 @@ public:
 
     const Chord* findChordWithCustomStemDirection() const;
 
-    std::shared_ptr<layout::dev::BeamTremoloLayout> layoutInfo;
+    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
 private:
 

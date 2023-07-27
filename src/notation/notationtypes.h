@@ -58,7 +58,7 @@
 #include "libmscore/system.h"
 #include "libmscore/timesig.h"
 
-#include "engraving/layout/layoutoptions.h"
+#include "engraving/rendering/layoutoptions.h"
 
 namespace mu::notation {
 using Page = mu::engraving::Page;

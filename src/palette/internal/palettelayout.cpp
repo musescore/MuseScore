@@ -85,16 +85,16 @@
 
 #include "engraving/libmscore/utils.h"
 
-#include "engraving/layout/dev/tlayout.h"
-#include "engraving/layout/dev/tremololayout.h"
-#include "engraving/layout/dev/arpeggiolayout.h"
-#include "engraving/layout/dev/chordlayout.h"
+#include "engraving/rendering/dev/tlayout.h"
+#include "engraving/rendering/dev/tremololayout.h"
+#include "engraving/rendering/dev/arpeggiolayout.h"
+#include "engraving/rendering/dev/chordlayout.h"
 
 #include "log.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
-using namespace mu::engraving::layout::dev;
+using namespace mu::engraving::rendering::dev;
 using namespace mu::palette;
 
 void PaletteLayout::layoutItem(EngravingItem* item)

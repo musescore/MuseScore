@@ -227,7 +227,7 @@ void Arpeggio::editDrag(EditData& ed)
         m_userLen2 += d;
     }
 
-    layout()->layoutItem(this);
+    rendering()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -324,7 +324,7 @@ bool Arpeggio::edit(EditData& ed)
         }
     }
 
-    layout()->layoutOnEdit(this);
+    rendering()->layoutOnEdit(this);
 
     return true;
 }

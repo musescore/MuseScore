@@ -28,7 +28,7 @@
 
 #include "types/typesconv.h"
 
-#include "layout/dev/tlayout.h"
+#include "rendering/dev/tlayout.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -2260,8 +2260,8 @@ void Segment::createShape(staff_idx_t staffIdx)
         setVisible(true);
         BarLine* bl = toBarLine(element(staffIdx * VOICES));
         if (bl) {
-            layout::dev::LayoutContext lctx(score());
-            RectF r = layout::dev::TLayout::layoutRect(bl, lctx);
+            rendering::dev::LayoutContext lctx(score());
+            RectF r = rendering::dev::TLayout::layoutRect(bl, lctx);
             s.add(r.translated(bl->pos()), bl);
         }
         s.addHorizontalSpacing(bl, 0, 0);
@@ -2313,7 +2313,7 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
-            layout()->layoutItem(toHarmony(e));
+            rendering()->layoutItem(toHarmony(e));
 
             double x1 = e->bbox().x() + e->pos().x();
             double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();

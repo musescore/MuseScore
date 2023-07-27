@@ -409,7 +409,7 @@ void Image::editDrag(EditData& ed)
         }
     }
 
-    layout()->layoutItem(this);
+    rendering()->layoutItem(this);
 }
 
 //---------------------------------------------------------
