@@ -23,11 +23,11 @@
 #define MU_NOTATION_NOTATIONPAINTING_H
 
 #include "../inotationpainting.h"
-#include "igetscore.h"
 
 #include "modularity/ioc.h"
 #include "../inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
+#include "engraving/rendering/iscorerendering.h"
 #include "ui/iuiconfiguration.h"
 
 namespace mu::engraving {
@@ -41,6 +41,7 @@ class NotationPainting : public INotationPainting
 {
     INJECT(INotationConfiguration, configuration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(engraving::rendering::IScoreRendering, scoreRender)
     INJECT(ui::IUiConfiguration, uiConfiguration)
 
 public:

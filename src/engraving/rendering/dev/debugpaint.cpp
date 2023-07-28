@@ -35,6 +35,7 @@
 
 using namespace mu::draw;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
 static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 

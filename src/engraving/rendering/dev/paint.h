@@ -25,39 +25,25 @@
 #include <functional>
 #include <vector>
 #include "draw/painter.h"
+#include "../iscorerendering.h"
 
 namespace mu::engraving {
 class EngravingItem;
 class Page;
 class Score;
+}
 
+namespace mu::engraving::rendering::dev {
 class Paint
 {
 public:
 
-    struct Options
-    {
-        bool isSetViewport = true;
-        bool isPrinting = false;
-        bool isMultiPage = false;
-        bool printPageBackground = true;
-        RectF frameRect;
-        int fromPage = -1; // 0 is first
-        int toPage = -1;
-        int copyCount = 1;
-        int trimMarginPixelSize = -1;
-        int deviceDpi = -1;
-
-        std::function<void(draw::Painter* painter, const Page* page, const RectF& pageRect)> onPaintPageSheet;
-        std::function<void()> onNewPage;
-    };
-
-    static void paintScore(draw::Painter* painter, Score* score, const Options& opt);
+    static void paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt);
     static void paintItem(draw::Painter& painter, const EngravingItem* item);
     static void paintItems(draw::Painter& painter, const std::vector<EngravingItem*>& items, bool isPrinting);
 
     static SizeF pageSizeInch(const Score* score);
-    static SizeF pageSizeInch(const Score* score, const Options& opt);
+    static SizeF pageSizeInch(const Score* score, const IScoreRendering::Options& opt);
 
 private:
 };

@@ -31,8 +31,9 @@
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
-void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
+void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt)
 {
     TRACEFUNC;
     if (!score) {
@@ -144,7 +145,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const Options& opt)
 
 #ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
             if (!opt.isPrinting) {
-                engraving::DebugPaint::paintPageDebug(*painter, page);
+                DebugPaint::paintPageDebug(*painter, page);
             }
 #endif
 
@@ -183,7 +184,7 @@ SizeF Paint::pageSizeInch(const Score* score)
     return SizeF(score->style().styleD(Sid::pageWidth), score->style().styleD(Sid::pageHeight));
 }
 
-SizeF Paint::pageSizeInch(const Score* score, const Options& opt)
+SizeF Paint::pageSizeInch(const Score* score, const IScoreRendering::Options& opt)
 {
     if (!score) {
         return SizeF();

@@ -22,18 +22,17 @@
 
 #include "svgwriter.h"
 
-#include "svggenerator.h"
-
-#include "engraving/infrastructure/paint.h"
+#include "draw/painter.h"
 
 #include "libmscore/measure.h"
-#include "libmscore/note.h"
 #include "libmscore/page.h"
-#include "libmscore/repeatlist.h"
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafflines.h"
 #include "libmscore/system.h"
+#include "libmscore/repeatlist.h"
+
+#include "svggenerator.h"
 
 #include "log.h"
 
@@ -147,7 +146,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                     if (measure->isMeasure() && mu::engraving::toMeasure(measure)->visible(staffIndex)) {
                         mu::engraving::StaffLines* sl = mu::engraving::toMeasure(measure)->staffLines(static_cast<int>(staffIndex));
                         printer.setElement(sl);
-                        engraving::Paint::paintItem(painter, sl);
+                        scoreRender()->paintItem(painter, sl);
                     }
                 }
             } else {   // Draw staff lines once per system
@@ -164,7 +163,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                 firstSL->setLines(lines);
 
                 printer.setElement(firstSL);
-                engraving::Paint::paintItem(painter, firstSL);
+                scoreRender()->paintItem(painter, firstSL);
             }
         }
     }
@@ -224,7 +223,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
         printer.setElement(element);
 
         // Paint it
-        engraving::Paint::paintItem(painter, element);
+        scoreRender()->paintItem(painter, element);
     }
 
     painter.endDraw(); // Writes MuseScore SVG file to disk, finally

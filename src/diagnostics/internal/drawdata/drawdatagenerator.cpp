@@ -29,7 +29,6 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
-#include "engraving/infrastructure/paint.h"
 #include "engraving/rw/mscloader.h"
 #include "engraving/libmscore/masterscore.h"
 
@@ -120,7 +119,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const Ge
     {
         TRACEFUNC_C("Paint");
         Painter painter(pd, "DrawData");
-        Paint::Options option;
+        rendering::IScoreRendering::Options option;
         //option.fromPage = 0;
         //option.toPage = 0;
         option.isMultiPage = true;
@@ -129,7 +128,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const Ge
         option.isSetViewport = true;
         option.isPrinting = true;
 
-        Paint::paintScore(&painter, score, option);
+        scoreRender()->paintScore(&painter, score, option);
     }
 
     delete score;
@@ -154,7 +153,7 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
 
     LOGD() << "success loaded: " << scorePath;
 
-    const SizeF pageSizeInch = Paint::pageSizeInch(score);
+    const SizeF pageSizeInch = scoreRender()->pageSizeInch(score);
 
     int width = std::lrint(pageSizeInch.width() * DrawData::CANVAS_DPI);
     int height = std::lrint(pageSizeInch.height() * DrawData::CANVAS_DPI);
@@ -167,7 +166,7 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
     {
         Painter painter(&image, "DrawData");
 
-        Paint::Options opt;
+        rendering::IScoreRendering::Options opt;
         opt.fromPage = 0;
         opt.toPage = 0;
         opt.deviceDpi = DrawData::CANVAS_DPI;
@@ -176,7 +175,7 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
         opt.isMultiPage = false;
         opt.isPrinting = true;
 
-        Paint::paintScore(&painter, score, opt);
+        scoreRender()->paintScore(&painter, score, opt);
     }
 
     return Pixmap::fromQImage(image);

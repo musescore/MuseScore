@@ -35,14 +35,36 @@
 #include "arpeggiolayout.h"
 #include "horizontalspacing.h"
 
+#include "paint.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;
 
-void ScoreRendering::layoutRange(Score* score, const Fraction& st, const Fraction& et)
+void ScoreRendering::layoutScore(Score* score, const Fraction& st, const Fraction& et) const
 {
     ScoreLayout::layoutRange(score, st, et);
+}
+
+SizeF ScoreRendering::pageSizeInch(const Score* score) const
+{
+    return Paint::pageSizeInch(score);
+}
+
+SizeF ScoreRendering::pageSizeInch(const Score* score, const Options& opt) const
+{
+    return Paint::pageSizeInch(score, opt);
+}
+
+void ScoreRendering::paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt) const
+{
+    Paint::paintScore(painter, score, opt);
+}
+
+void ScoreRendering::paintItem(draw::Painter& painter, const EngravingItem* item) const
+{
+    Paint::paintItem(painter, item);
 }
 
 void ScoreRendering::doLayoutItem(EngravingItem* item)
