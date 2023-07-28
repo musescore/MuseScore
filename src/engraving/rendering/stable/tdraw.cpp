@@ -24,6 +24,7 @@
 #include "libmscore/accidental.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/ambitus.h"
+#include "libmscore/arpeggio.h"
 
 #include "libmscore/note.h"
 
@@ -44,6 +45,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::ACTION_ICON:  draw(item_cast<const ActionIcon*>(item), painter);
         break;
     case ElementType::AMBITUS:      draw(item_cast<const Ambitus*>(item), painter);
+        break;
+    case ElementType::ARPEGGIO:     draw(item_cast<const Arpeggio*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -115,4 +118,70 @@ void TDraw::draw(const Ambitus* item, draw::Painter* painter)
             }
         }
     }
+}
+
+void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    using namespace mu::draw;
+
+    double _spatium = item->spatium();
+
+    double y1 = item->bbox().top();
+    double y2 = item->bbox().bottom();
+
+    double lineWidth = item->style().styleMM(Sid::ArpeggioLineWidth);
+
+    painter->setPen(Pen(item->curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->save();
+
+    switch (item->arpeggioType()) {
+    case ArpeggioType::NORMAL:
+    case ArpeggioType::UP:
+    {
+        RectF r(item->symBbox(item->layoutData().symbols));
+        painter->rotate(-90.0);
+        item->drawSymbols(item->layoutData().symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
+    }
+    break;
+
+    case ArpeggioType::DOWN:
+    {
+        RectF r(item->symBbox(item->layoutData().symbols));
+        painter->rotate(90.0);
+        item->drawSymbols(item->layoutData().symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
+    }
+    break;
+
+    case ArpeggioType::UP_STRAIGHT:
+    {
+        RectF r(item->symBbox(SymId::arrowheadBlackUp));
+        double x1 = _spatium * .5;
+        item->drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * .5, y1 - r.top()));
+        y1 -= r.top() * .5;
+        painter->drawLine(LineF(x1, y1, x1, y2));
+    }
+    break;
+
+    case ArpeggioType::DOWN_STRAIGHT:
+    {
+        RectF r(item->symBbox(SymId::arrowheadBlackDown));
+        double x1 = _spatium * .5;
+
+        item->drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * .5, y2 - r.bottom()));
+        y2 += r.top() * .5;
+        painter->drawLine(LineF(x1, y1, x1, y2));
+    }
+    break;
+
+    case ArpeggioType::BRACKET:
+    {
+        double w = item->style().styleS(Sid::ArpeggioHookLen).val() * _spatium;
+        painter->drawLine(LineF(0.0, y1, w, y1));
+        painter->drawLine(LineF(0.0, y2, w, y2));
+        painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
+    }
+    break;
+    }
+    painter->restore();
 }

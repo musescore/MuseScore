@@ -23,15 +23,19 @@
 
 #include "draw/painter.h"
 
+#include "style/style.h"
+
 #include "libmscore/accidental.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/ambitus.h"
+#include "libmscore/arpeggio.h"
 
 #include "infrastructure/rtti.h"
 
 using namespace mu::engraving::rendering::single;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
+using namespace mu::draw;
 
 void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 {
@@ -41,6 +45,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::ACTION_ICON:  draw(item_cast<const ActionIcon*>(item), painter);
         break;
     case ElementType::AMBITUS:      draw(item_cast<const Ambitus*>(item), painter);
+        break;
+    case ElementType::ARPEGGIO:     draw(item_cast<const Arpeggio*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -77,4 +83,62 @@ void SingleDraw::draw(const Ambitus* item, draw::Painter* painter)
     if (item->hasLine()) {
         painter->drawLine(layoutData.line);
     }
+}
+
+void SingleDraw::draw(const Arpeggio* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    const Arpeggio::LayoutData& layoutData = item->layoutData();
+
+    const double y1 = layoutData.bbox.top();
+    const double y2 = layoutData.bbox.bottom();
+    const double lineWidth = item->style().styleMM(Sid::ArpeggioLineWidth);
+
+    painter->setPen(Pen(item->curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->save();
+
+    switch (item->arpeggioType()) {
+    case ArpeggioType::NORMAL:
+    case ArpeggioType::UP:
+    {
+        const RectF& r = layoutData.symsBBox;
+        painter->rotate(-90.0);
+        item->drawSymbols(layoutData.symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
+    } break;
+
+    case ArpeggioType::DOWN:
+    {
+        const RectF& r = layoutData.symsBBox;
+        painter->rotate(90.0);
+        item->drawSymbols(layoutData.symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
+    } break;
+
+    case ArpeggioType::UP_STRAIGHT:
+    {
+        const RectF& r = layoutData.symsBBox;
+        double x1 = item->spatium() * 0.5;
+        item->drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * 0.5, y1 - r.top()));
+        double ny1 = y1 - r.top() * 0.5;
+        painter->drawLine(LineF(x1, ny1, x1, y2));
+    } break;
+
+    case ArpeggioType::DOWN_STRAIGHT:
+    {
+        const RectF& r = layoutData.symsBBox;
+        double x1 = item->spatium() * 0.5;
+        item->drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * 0.5, y2 - r.bottom()));
+        double ny2 = y2 + r.top() * 0.5;
+        painter->drawLine(LineF(x1, y1, x1, ny2));
+    } break;
+
+    case ArpeggioType::BRACKET:
+    {
+        double w = item->style().styleS(Sid::ArpeggioHookLen).val() * item->spatium();
+        painter->drawLine(LineF(0.0, y1, w, y1));
+        painter->drawLine(LineF(0.0, y2, w, y2));
+        painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
+    } break;
+    }
+    painter->restore();
 }
