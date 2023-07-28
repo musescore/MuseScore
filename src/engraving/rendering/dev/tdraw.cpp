@@ -30,6 +30,8 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
 
+#include "libmscore/bagpembell.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/score.h"
@@ -54,6 +56,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::ARPEGGIO:     draw(item_cast<const Arpeggio*>(item), painter);
         break;
     case ElementType::ARTICULATION: draw(item_cast<const Articulation*>(item), painter);
+        break;
+    case ElementType::BAGPIPE_EMBELLISHMENT: draw(item_cast<const BagpipeEmbellishment*>(item), painter);
         break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -205,4 +209,57 @@ void TDraw::draw(const Articulation* item, draw::Painter* painter)
 void TDraw::draw(const Ornament* item, draw::Painter* painter)
 {
     draw(static_cast<const Articulation*>(item), painter);
+}
+
+void TDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    const BagpipeEmbellishment::LayoutData& data = item->layoutData();
+    const BagpipeEmbellishment::LayoutData::BeamData& dataBeam = data.beamData;
+
+    Pen pen(item->curColor(), data.stemLineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    painter->setPen(pen);
+
+    // draw the notes including stem, (optional) flag and (optional) ledger line
+    for (const auto& p : data.notesData) {
+        const BagpipeEmbellishment::LayoutData::NoteData& noteData = p.second;
+
+        // Draw Grace Note
+        {
+            // draw head
+            item->drawSymbol(data.headsym, painter, noteData.headXY);
+
+            // draw stem
+            painter->drawLine(noteData.stemLine);
+
+            if (data.isDrawFlag) {
+                // draw flag
+                item->drawSymbol(data.flagsym, painter, noteData.flagXY);
+            }
+        }
+
+        // draw the ledger line for high A
+        if (!noteData.ledgerLine.isNull()) {
+            painter->drawLine(noteData.ledgerLine);
+        }
+    }
+
+    if (data.isDrawBeam) {
+        Pen beamPen(item->curColor(), dataBeam.width, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(beamPen);
+        // draw the beams
+        auto drawBeams = [](mu::draw::Painter* painter, const double spatium,
+                            const double x1, const double x2, double y)
+        {
+            // draw the beams
+            painter->drawLine(mu::LineF(x1, y, x2, y));
+            y += spatium / 1.5;
+            painter->drawLine(mu::LineF(x1, y, x2, y));
+            y += spatium / 1.5;
+            painter->drawLine(mu::LineF(x1, y, x2, y));
+        };
+
+        drawBeams(painter, data.spatium, dataBeam.x1, dataBeam.x2, dataBeam.y);
+    }
 }

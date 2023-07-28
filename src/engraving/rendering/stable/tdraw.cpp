@@ -30,6 +30,8 @@
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
 
+#include "libmscore/bagpembell.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/note.h"
@@ -56,6 +58,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::ARPEGGIO:     draw(item_cast<const Arpeggio*>(item), painter);
         break;
     case ElementType::ARTICULATION: draw(item_cast<const Articulation*>(item), painter);
+        break;
+    case ElementType::BAGPIPE_EMBELLISHMENT: draw(item_cast<const BagpipeEmbellishment*>(item), painter);
         break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -215,4 +219,73 @@ void TDraw::draw(const Articulation* item, draw::Painter* painter)
 void TDraw::draw(const Ornament* item, draw::Painter* painter)
 {
     draw(static_cast<const Articulation*>(item), painter);
+}
+
+void TDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    using namespace mu::draw;
+    SymId headsym = SymId::noteheadBlack;
+    SymId flagsym = SymId::flag32ndUp;
+
+    BagpipeNoteList nl = item->resolveNoteList();
+    BagpipeEmbellishment::BEDrawingDataX dx(headsym, flagsym, item->magS(), item->style().spatium(), static_cast<int>(nl.size()));
+
+    Pen pen(item->curColor(), dx.lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    painter->setPen(pen);
+
+    bool drawBeam = nl.size() > 1;
+    bool drawFlag = nl.size() == 1;
+
+    auto drawGraceNote = [item](mu::draw::Painter* painter,
+                                const BagpipeEmbellishment::BEDrawingDataX& dx,
+                                const BagpipeEmbellishment::BEDrawingDataY& dy,
+                                SymId flagsym, const double x, const bool drawFlag)
+    {
+        // draw head
+        item->drawSymbol(dx.headsym, painter, mu::PointF(x - dx.headw, dy.y2));
+        // draw stem
+        double y1 =  drawFlag ? dy.y1f : dy.y1b;            // top of stems actually used
+        painter->drawLine(mu::LineF(x - dx.lw * .5, y1, x - dx.lw * .5, dy.y2));
+        if (drawFlag) {
+            // draw flag
+            item->drawSymbol(flagsym, painter, mu::PointF(x - dx.lw * .5 + dx.xcorr, y1 + dy.ycorr));
+        }
+    };
+
+    // draw the notes including stem, (optional) flag and (optional) ledger line
+    double x = dx.xl;
+    for (int note : nl) {
+        int line = BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[note].line;
+        BagpipeEmbellishment::BEDrawingDataY dy(line, item->style().spatium());
+        drawGraceNote(painter, dx, dy, flagsym, x, drawFlag);
+
+        // draw the ledger line for high A
+        if (line == -2) {
+            painter->drawLine(mu::LineF(x - dx.headw * 1.5 - dx.lw * .5, dy.y2, x + dx.headw * .5 - dx.lw * .5, dy.y2));
+        }
+
+        // move x to next note x position
+        x += dx.headp;
+    }
+
+    if (drawBeam) {
+        // beam drawing setup
+        BagpipeEmbellishment::BEDrawingDataY dy(0, item->style().spatium());
+        Pen beamPen(item->curColor(), dy.bw, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(beamPen);
+        // draw the beams
+        auto drawBeams = [](mu::draw::Painter* painter, const double spatium,
+                            const double x1, const double x2, double y)
+        {
+            // draw the beams
+            painter->drawLine(mu::LineF(x1, y, x2, y));
+            y += spatium / 1.5;
+            painter->drawLine(mu::LineF(x1, y, x2, y));
+            y += spatium / 1.5;
+            painter->drawLine(mu::LineF(x1, y, x2, y));
+        };
+
+        drawBeams(painter, dx.spatium, dx.xl - dx.lw * .5, x - dx.headp - dx.lw * .5, dy.y1b);
+    }
 }
