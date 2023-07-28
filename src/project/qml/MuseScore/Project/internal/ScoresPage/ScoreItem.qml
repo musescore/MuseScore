@@ -249,10 +249,32 @@ FocusScope {
                 text: root.name
 
                 wrapMode: Text.WrapAnywhere
-                maximumLineCount: 1
+                maximumLineCount: 2
                 width: parent.width
 
                 font: ui.theme.largeBodyFont
+
+                MouseArea {
+                    anchors.fill: parent
+
+                    hoverEnabled: true
+
+                    onHoveredChanged: {
+                        if (root.isAdd || root.isNoResultFound || (isCloud && !parent.truncated)) {
+                            return
+                        }
+
+                        if (containsMouse) {
+                            ui.tooltip.show(timeSinceModified,
+                                            isCloud ? root.name : root.path,
+                                            "",
+                                            "",
+                                            QmlToolTip.FileToolTip)
+                        } else {
+                            ui.tooltip.hide(timeSinceModified)
+                        }
+                    }
+                }
             }
 
             StyledTextLabel {
