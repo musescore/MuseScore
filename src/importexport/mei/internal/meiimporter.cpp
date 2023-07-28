@@ -395,10 +395,46 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         item = Factory::createHarmony(chordRest->segment());
     } else if (meiElement.m_name == "tempo") {
         item = Factory::createTempoText(chordRest->segment());
+    } else {
+        return nullptr;
     }
 
     item->setTrack(chordRest->track());
     segment->add(item);
+
+    return item;
+}
+
+/**
+ * Create a spanner (MEI control event with @startid end @endid).
+ * Create the Spanner according to the MEI element name (e.g., "slur", "tie").
+ * Add the corresponding pugixml::node to the m_openSpannerMap to be closed later
+ * Return nullptr if the lookup fails.
+ */
+
+Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* measure, pugi::xml_node node)
+{
+    ChordRest* chordRest = this->findStart(meiElement, measure);
+    if (!chordRest) {
+        return nullptr;
+    }
+
+    Spanner* item = nullptr;
+
+    if (meiElement.m_name == "slur") {
+        item = Factory::createSlur(chordRest->segment());
+    } else {
+        return nullptr;
+    }
+
+    m_score->addElement(item);
+
+    item->setTick(chordRest->tick());
+    item->setStartElement(chordRest);
+    item->setTrack(chordRest->track());
+
+    // Add it to the map for setting slur end in MeiImporter::addSpannerEnds
+    m_openSpannerMap[item] = node;
 
     return item;
 }
@@ -1723,21 +1759,11 @@ bool MeiImporter::readSlur(pugi::xml_node slurNode, engraving::Measure* measure)
     libmei::Slur meiSlur;
     meiSlur.Read(slurNode);
 
-    ChordRest* chordRest = this->findStart(meiSlur, measure);
-    if (!chordRest) {
+    Slur* slur = static_cast<Slur*>(this->addSpanner(meiSlur, measure, slurNode));
+    if (!slur) {
+        // Warning message given in MeiExpoter::addSpanner
         return true;
     }
-
-    Slur* slur = Factory::createSlur(chordRest->segment());
-
-    m_score->addElement(slur);
-
-    slur->setTick(chordRest->tick());
-    slur->setStartElement(chordRest);
-    slur->setTrack(chordRest->track());
-
-    // Add it to the map for setting slur end in MeiImporter::addSpannerEnds
-    m_openSpannerMap[slur] = slurNode;
 
     Convert::slurFromMEI(slur, meiSlur, warning);
 
