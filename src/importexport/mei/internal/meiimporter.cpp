@@ -503,7 +503,7 @@ ChordRest* MeiImporter::findStart(const libmei::Element& meiElement, Measure* me
  * If there is not @endid but a @tstamp2 (MEI not written by MuseScore), try to find the corresponding ChordRest
  */
 
-ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, Measure* startMeasure)
+ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, const ChordRest* startChordRest)
 {
     libmei::InstStartEndId startEndIdAtt;
     startEndIdAtt.ReadStartEndId(controlNode);
@@ -525,29 +525,45 @@ ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, Measure* startMeasur
         }
         chordRest = m_endIdChordRests.at(endId);
     } else {
-        /*
-        // No @end, try a lookup based on the @tstamp2. This is only for files not written via MuseScore
-        const libmei::AttTimestamp2Log* timestamp2LogAtt = dynamic_cast<const libmei::AttTimestamp2Log*>(&meiElement);
-        const libmei::AttStaffIdent* staffIdentAtt = dynamic_cast<const libmei::AttStaffIdent*>(&meiElement);
-        const libmei::AttLayerIdent* layerIdentAtt = dynamic_cast<const libmei::AttLayerIdent*>(&meiElement);
+        // No @endid, try a lookup based on the @tstamp2. This is only for files not written via MuseScore
+        libmei::InstTimestamp2Log timestamp2LogAtt;
+        timestamp2LogAtt.ReadTimestamp2Log(controlNode);
+        libmei::InstStaffIdent staffIdentAtt;
+        staffIdentAtt.ReadStaffIdent(controlNode);
+        libmei::InstLayerIdent layerIdentAtt;
+        layerIdentAtt.ReadLayerIdent(controlNode);
 
-        IF_ASSERT_FAILED(timestamp2LogAtt && staffIdentAtt && layerIdentAtt) {
+        // We need at least a @tstamp2 and a startChordRest with its Measure
+        if (!timestamp2LogAtt.HasTstamp2() || !startChordRest || !startChordRest->measure()) {
             return nullptr;
         }
 
-        // If no @tstamp (invalid), put it on 1.0;
-        double tstampValue = timestamp2LogAtt->HasTstamp2() ? timestamp2LogAtt->GetTstamp2() : 1.0;
-        Fraction tstampFraction = Convert::tstampToFraction(tstampValue, measure->timesig());
-        int staffIdx = (staffIdentAtt->HasStaff() && staffIdentAtt->GetStaff().size() > 0) ? this->getStaffIndex(
-                                                                                                                 staffIdentAtt->GetStaff().at(0)) : 0;
-        int layer = (layerIdentAtt->HasLayer()) ? this->getVoiceIndex(staffIdx, layerIdentAtt->GetLayer()) : 0;
+        libmei::data_MEASUREBEAT tstamp2Value = timestamp2LogAtt.GetTstamp2();
+
+        // Find the end Measure
+        Measure* measure = startChordRest->measure();
+        for (int i = tstamp2Value.first; i > 0; --i) {
+            if (!measure->next() || !measure->next()->isMeasure()) {
+                return nullptr;
+            }
+            measure = toMeasure(measure->next());
+        }
+
+        Fraction tstampFraction = Convert::tstampToFraction(tstamp2Value.second, measure->timesig());
+        // Use the startChordRest staffIdx unless given in @staff
+        staff_idx_t staffIdx = (staffIdentAtt.HasStaff() && staffIdentAtt.GetStaff().size() > 0) ? this->getStaffIndex(
+            staffIdentAtt.GetStaff().at(0)) : startChordRest->staffIdx();
+        // Use the startChordRest voice unless given in @layer
+        track_idx_t layer
+            = (layerIdentAtt.HasLayer()) ? this->getVoiceIndex(static_cast<int>(staffIdx),
+                                                               layerIdentAtt.GetLayer()) : startChordRest->voice();
 
         chordRest = measure->findChordRest(measure->tick() + tstampFraction, staffIdx * VOICES + layer);
         if (!chordRest) {
-            Convert::logs.push_back(String("Could not find element corresponding to @tstamp '%1'").arg(timestampLogAtt->GetTstamp()));
+            Convert::logs.push_back(String("Could not find element corresponding to @tstamp2 '%1m+%2'").arg(tstamp2Value.first).arg(
+                                        tstamp2Value.second));
             return nullptr;
         }
-        */
     }
 
     return chordRest;
@@ -2121,7 +2137,11 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 void MeiImporter::addSpannerEnds()
 {
     for (auto spanner : m_openSpannerMap) {
-        ChordRest* chordRest = this->findEnd(spanner.second, nullptr);
+        if (!spanner.first->startCR()) {
+            continue;
+        }
+
+        ChordRest* chordRest = this->findEnd(spanner.second, spanner.first->startCR());
         if (!chordRest) {
             continue;
         }
