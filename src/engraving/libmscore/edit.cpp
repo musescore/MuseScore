@@ -6953,6 +6953,50 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
         }
     }
 
+    // clefs
+    bool first = startTick.isZero();
+    Segment* clefSeg = m2->findSegment(SegmentType::Clef, endTick);
+    if (clefSeg || first) {
+        for (Staff* staff : score()->staves()) {
+            track_idx_t track = staff->idx() * VOICES;
+            EngravingItem* oldClefElement = nullptr;
+            if (clefSeg) {
+                oldClefElement = clefSeg->element(track);
+            }
+
+            // if no clef change for next measure, get initial clef
+            if (!oldClefElement && first) {
+                clefSeg = m1->findSegment(SegmentType::HeaderClef, startTick);
+                if (clefSeg) {
+                    oldClefElement = clefSeg->element(track);
+                }
+            }
+
+            if (oldClefElement) {
+                Clef* oldClef = toClef(oldClefElement);
+                undo(new RemoveElement(oldClefElement));
+                if (clefSeg->empty()) {
+                    undoRemoveElement(clefSeg);
+                }
+
+                // restore clefs (on the end of the previous measure, or on the begining of "to be first" measure
+                Measure* m = first ? m2->nextMeasure() : m1->prevMeasure();
+                if (m) { // should never be null, but for safety
+                    Fraction tick = first ? endTick : startTick;
+                    Segment* s  = first ? m->undoGetSegment(SegmentType::HeaderClef, tick) : m->undoGetSegment(SegmentType::Clef, tick);
+                    EngravingItem* newClefElement = s->element(track);
+                    if (!newClefElement) {
+                        Clef* nClef = Factory::copyClef(*oldClef);
+                        nClef->setParent(s);
+                        undoAddElement(nClef);
+                    } else {
+                        undoChangeClef(staff, newClefElement, oldClef->concertClef(), oldClef->transposingClef(), oldClef->forInstrumentChange());
+                    }
+                }
+            }
+        }
+    }
+
     for (Spanner* s : spannersToRemove) {
         undoRemoveElement(s);
     }
