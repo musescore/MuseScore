@@ -67,6 +67,7 @@ void NotationStyle::setStyleValue(const StyleId& styleId, const PropertyValue& n
 void NotationStyle::resetStyleValue(const StyleId& styleId)
 {
     score()->resetStyleValue(styleId);
+    score()->update();
     m_styleChanged.notify();
 }
 
