@@ -21,10 +21,16 @@
  */
 #include "tdraw.h"
 
+#include "style/style.h"
+#include "types/typesconv.h"
+
 #include "libmscore/accidental.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/ambitus.h"
 #include "libmscore/arpeggio.h"
+#include "libmscore/articulation.h"
+
+#include "libmscore/ornament.h"
 
 #include "libmscore/note.h"
 
@@ -36,6 +42,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
 using namespace mu::engraving::rendering::stable;
+using namespace mu::draw;
 
 void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 {
@@ -47,6 +54,10 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::AMBITUS:      draw(item_cast<const Ambitus*>(item), painter);
         break;
     case ElementType::ARPEGGIO:     draw(item_cast<const Arpeggio*>(item), painter);
+        break;
+    case ElementType::ARTICULATION: draw(item_cast<const Articulation*>(item), painter);
+        break;
+    case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -77,7 +88,7 @@ void TDraw::draw(const ActionIcon* item, draw::Painter* painter)
 void TDraw::draw(const Ambitus* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    using namespace mu::draw;
+
     double spatium = item->spatium();
     double lw = item->lineWidth().val() * spatium;
     painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
@@ -123,7 +134,6 @@ void TDraw::draw(const Ambitus* item, draw::Painter* painter)
 void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    using namespace mu::draw;
 
     double _spatium = item->spatium();
 
@@ -184,4 +194,25 @@ void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
     break;
     }
     painter->restore();
+}
+
+void TDraw::draw(const Articulation* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    painter->setPen(item->curColor());
+
+    if (item->textType() == ArticulationTextType::NO_TEXT) {
+        item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+    } else {
+        mu::draw::Font scaledFont(item->font());
+        scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->magS() * MScore::pixelRatio);
+        painter->setFont(scaledFont);
+        painter->drawText(item->bbox(), TextDontClip | AlignLeft | AlignTop, TConv::text(item->textType()));
+    }
+}
+
+void TDraw::draw(const Ornament* item, draw::Painter* painter)
+{
+    draw(static_cast<const Articulation*>(item), painter);
 }
