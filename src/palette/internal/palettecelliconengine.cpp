@@ -117,7 +117,7 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
     engravingRendering()->layoutItem(action);
 
     painter.translate(rect.center() - action->bbox().center());
-    action->draw(&painter);
+    engravingRendering()->drawItem(action, &painter);
     painter.restore();
 }
 
