@@ -1,12 +1,12 @@
 
 
 set(RENDERING_STABLE_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/scorerendering.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/scorerendering.h
     ${CMAKE_CURRENT_LIST_DIR}/tdraw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tdraw.h
     ${CMAKE_CURRENT_LIST_DIR}/tlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tlayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout.h
     ${CMAKE_CURRENT_LIST_DIR}/layoutcontext.cpp
     ${CMAKE_CURRENT_LIST_DIR}/layoutcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/scorelayout.cpp

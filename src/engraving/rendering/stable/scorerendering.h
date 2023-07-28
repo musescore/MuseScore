@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LAYOUT_STABLE_H
-#define MU_ENGRAVING_LAYOUT_STABLE_H
+#ifndef MU_ENGRAVING_SCORERENDERING_STABLE_H
+#define MU_ENGRAVING_SCORERENDERING_STABLE_H
 
-#include "../ilayout.h"
+#include "../iscorerendering.h"
 
 namespace mu::engraving {
 class Score;
 }
 
 namespace mu::engraving::rendering::stable  {
-class Layout : public IRendering
+class ScoreRendering : public IScoreRendering
 {
 public:
 
@@ -60,4 +60,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_LAYOUT_STABLE_H
+#endif // MU_ENGRAVING_SCORERENDERING_STABLE_H

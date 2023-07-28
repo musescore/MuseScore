@@ -26,7 +26,8 @@
 
 #include "palettecell.h"
 
-#include "libmscore/engravingitem.h"
+#include "engraving/rendering/isinglerendering.h"
+#include "engraving/libmscore/engravingitem.h"
 
 #include "types/translatablestring.h"
 #include "actions/actiontypes.h"
@@ -51,6 +52,7 @@ class Palette : public QObject
 
     INJECT_STATIC(IPaletteConfiguration, configuration)
     INJECT_STATIC(ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(engraving::rendering::ISingleRendering, engravingRendering)
     INJECT(framework::IInteractive, interactive)
 
 public:

@@ -46,7 +46,6 @@
 #include "keycanvas.h"
 #include "palettewidget.h"
 #include "internal/palettecreator.h"
-#include "internal/palettelayout.h"
 
 #include "log.h"
 
@@ -153,7 +152,7 @@ void KeyCanvas::paintEvent(QPaintEvent*)
     }
     clef->setPos(0.0, 0.0);
 
-    PaletteLayout::layoutItem(clef);
+    engravingRendering()->layoutItem(clef);
 
     painter.translate(clef->pagePos());
     clef->draw(&painter);
@@ -231,7 +230,7 @@ void KeyCanvas::dragEnterEvent(QDragEnterEvent* event)
         dragElement->resetExplicitParent();
 
         rw::RWRegister::reader()->readItem(dragElement, e);
-        PaletteLayout::layoutItem(dragElement);
+        engravingRendering()->layoutItem(dragElement);
     } else {
         if (MScore::debugMode) {
             LOGD("KeyCanvas::dragEnterEvent: formats:");

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "layout.h"
+#include "scorerendering.h"
 
 #include "libmscore/arpeggio.h"
 #include "libmscore/beam.h"
@@ -40,23 +40,23 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;
 
-void Layout::layoutRange(Score* score, const Fraction& st, const Fraction& et)
+void ScoreRendering::layoutRange(Score* score, const Fraction& st, const Fraction& et)
 {
     ScoreLayout::layoutRange(score, st, et);
 }
 
-void Layout::doLayoutItem(EngravingItem* item)
+void ScoreRendering::doLayoutItem(EngravingItem* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layoutItem(item, ctx);
 }
 
-void Layout::doDrawItem(const EngravingItem* item, draw::Painter* p)
+void ScoreRendering::doDrawItem(const EngravingItem* item, draw::Painter* p)
 {
     TDraw::drawItem(item, p);
 }
 
-void Layout::layoutText1(TextBase* item, bool base)
+void ScoreRendering::layoutText1(TextBase* item, bool base)
 {
     LayoutContext ctx(item->score());
     if (base) {
@@ -71,35 +71,35 @@ void Layout::layoutText1(TextBase* item, bool base)
 // ===============================================================
 // Layout Elements on Edit
 // ===============================================================
-void Layout::layoutOnEdit(Arpeggio* item)
+void ScoreRendering::layoutOnEdit(Arpeggio* item)
 {
     LayoutContext ctx(item->score());
     ArpeggioLayout::layoutOnEdit(item, ctx);
 }
 
-double Layout::computePadding(const EngravingItem* item1, const EngravingItem* item2)
+double ScoreRendering::computePadding(const EngravingItem* item1, const EngravingItem* item2)
 {
     return HorizontalSpacing::computePadding(item1, item2);
 }
 
-KerningType Layout::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
+KerningType ScoreRendering::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
 {
     return HorizontalSpacing::computeKerning(item1, item2);
 }
 
-void Layout::layoutTextLineBaseSegment(TextLineBaseSegment* item)
+void ScoreRendering::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layoutTextLineBaseSegment(item, ctx);
 }
 
-void Layout::layoutBeam1(Beam* item)
+void ScoreRendering::layoutBeam1(Beam* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layout1(item, ctx);
 }
 
-void Layout::layoutStem(Chord* item)
+void ScoreRendering::layoutStem(Chord* item)
 {
     LayoutContext ctx(item->score());
     ChordLayout::layoutStem(item, ctx);

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "palettedraw.h"
+#include "singledraw.h"
 
 #include "draw/painter.h"
 
@@ -29,11 +29,11 @@
 
 #include "infrastructure/rtti.h"
 
-using namespace mu::palette;
+using namespace mu::engraving::rendering::single;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
 
-void PaletteDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
+void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 {
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter);
@@ -43,7 +43,7 @@ void PaletteDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     }
 }
 
-void PaletteDraw::draw(const Accidental* item, draw::Painter* painter)
+void SingleDraw::draw(const Accidental* item, draw::Painter* painter)
 {
     // don't show accidentals for tab or slash notation
     if (item->onTabStaff() || (item->note() && item->note()->fixed())) {

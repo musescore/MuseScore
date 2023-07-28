@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_IRENDERING_H
-#define MU_ENGRAVING_IRENDERING_H
+#ifndef MU_ENGRAVING_ISCORERENDERING_H
+#define MU_ENGRAVING_ISCORERENDERING_H
 
 #include <variant>
 
@@ -84,12 +84,12 @@ class TimeSig;
 }
 
 namespace mu::engraving::rendering {
-class IRendering : MODULE_INTERNAL_INTERFACE
+class IScoreRendering : MODULE_INTERNAL_INTERFACE
 {
     INTERFACE_ID(IEngravingRendering)
 
 public:
-    virtual ~IRendering() = default;
+    virtual ~IScoreRendering() = default;
 
     // Layout Score
     virtual void layoutRange(Score* score, const Fraction& st, const Fraction& et) = 0;
@@ -175,4 +175,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_IRENDERING_H
+#endif // MU_ENGRAVING_ISCORERENDERING_H
