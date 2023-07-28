@@ -581,6 +581,27 @@ engraving::ClefType Convert::clefFromMEI(const libmei::StaffDef& meiStaffDef, bo
     return Convert::clefFromMEI(meiClef, warning);
 }
 
+engraving::DirectionV Convert::curvedirFromMEI(const libmei::curvature_CURVEDIR meiCurvedir, bool& warning)
+{
+    warning = false;
+    switch (meiCurvedir) {
+    case (libmei::curvature_CURVEDIR_above): return engraving::DirectionV::UP;
+    case (libmei::curvature_CURVEDIR_below): return engraving::DirectionV::DOWN;
+    default:
+        return engraving::DirectionV::AUTO;
+    }
+}
+
+libmei::curvature_CURVEDIR Convert::curvedirToMEI(engraving::DirectionV curvedir)
+{
+    switch (curvedir) {
+    case (engraving::DirectionV::UP): return libmei::curvature_CURVEDIR_above;
+    case (engraving::DirectionV::DOWN): return libmei::curvature_CURVEDIR_below;
+    default:
+        return libmei::curvature_CURVEDIR_NONE;
+    }
+}
+
 engraving::DurationType Convert::durFromMEI(const libmei::data_DURATION meiDuration, bool& warning)
 {
     warning = false;
@@ -1438,6 +1459,68 @@ libmei::data_STAFFREL Convert::placeToMEI(engraving::PlacementV place)
     switch (place) {
     case (engraving::PlacementV::ABOVE): return libmei::STAFFREL_above;
     case (engraving::PlacementV::BELOW): return libmei::STAFFREL_below;
+    }
+}
+
+void Convert::slurFromMEI(engraving::Slur* slur, const libmei::Slur& meiSlur, bool& warning)
+{
+    warning = false;
+
+    // @place
+    if (meiSlur.HasCurvedir()) {
+        slur->setSlurDirection(Convert::curvedirFromMEI(meiSlur.GetCurvedir(), warning));
+        //slur->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+
+    // @lform
+    if (meiSlur.HasLform()) {
+        bool typeWarning = false;
+        slur->setStyleType(Convert::slurstyleFromMEI(meiSlur.GetLform(), typeWarning));
+        warning = (warning || typeWarning);
+    }
+}
+
+libmei::Slur Convert::slurToMEI(const engraving::Slur* slur)
+{
+    libmei::Slur meiSlur;
+
+    // @place
+    if (slur->slurDirection() != engraving::DirectionV::AUTO) {
+        meiSlur.SetCurvedir(Convert::curvedirToMEI(slur->slurDirection()));
+    }
+
+    // @lform
+    if (slur->styleType() != engraving::SlurStyleType::Solid) {
+        meiSlur.SetLform(Convert::slurstyleToMEI(slur->styleType()));
+    }
+
+    return meiSlur;
+}
+
+engraving::SlurStyleType Convert::slurstyleFromMEI(const libmei::data_LINEFORM meiLine, bool& warning)
+{
+    warning = false;
+    switch (meiLine) {
+    case (libmei::LINEFORM_solid): return engraving::SlurStyleType::Solid;
+    case (libmei::LINEFORM_dashed): return engraving::SlurStyleType::Dashed;
+    case (libmei::LINEFORM_dotted): return engraving::SlurStyleType::Dotted;
+    case (libmei::LINEFORM_wavy):
+        warning = true;
+        return engraving::SlurStyleType::Solid;
+    default:
+        return engraving::SlurStyleType::Solid;
+    }
+}
+
+libmei::data_LINEFORM Convert::slurstyleToMEI(engraving::SlurStyleType slurstyle)
+{
+    switch (slurstyle) {
+    case (engraving::SlurStyleType::Solid): return libmei::LINEFORM_solid;
+    case (engraving::SlurStyleType::Dashed): return libmei::LINEFORM_dashed;
+    case (engraving::SlurStyleType::WideDashed): return libmei::LINEFORM_dashed;
+    case (engraving::SlurStyleType::Dotted): return libmei::LINEFORM_dotted;
+    default:
+        return libmei::LINEFORM_NONE;
     }
 }
 
