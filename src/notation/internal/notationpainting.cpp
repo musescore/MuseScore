@@ -24,8 +24,6 @@
 #include <QScreen>
 
 #include "engraving/libmscore/score.h"
-#include "engraving/infrastructure/paint.h"
-#include "engraving/infrastructure/debugpaint.h"
 
 #include "notation.h"
 #include "notationinteraction.h"
@@ -83,12 +81,12 @@ int NotationPainting::pageCount() const
 
 SizeF NotationPainting::pageSizeInch() const
 {
-    return engraving::Paint::pageSizeInch(score());
+    return scoreRender()->pageSizeInch(score());
 }
 
 SizeF NotationPainting::pageSizeInch(const Options& opt) const
 {
-    return engraving::Paint::pageSizeInch(score(), opt);
+    return scoreRender()->pageSizeInch(score(), opt);
 }
 
 bool NotationPainting::isPaintPageBorder() const
@@ -119,7 +117,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
         paintPageSheet(painter, page, pageRect, printPageBackground);
     };
 
-    engraving::Paint::paintScore(painter, score(), myopt);
+    scoreRender()->paintScore(painter, score(), myopt);
 
     if (!myopt.isPrinting) {
         static_cast<NotationInteraction*>(m_notation->interaction().get())->paint(painter);

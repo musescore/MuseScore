@@ -24,7 +24,7 @@
 
 #include "draw/ipaintprovider.h"
 
-namespace mu::engraving {
+namespace mu::engraving::rendering::dev {
 class PaintDebugger : public draw::IPaintProvider
 {
 public:

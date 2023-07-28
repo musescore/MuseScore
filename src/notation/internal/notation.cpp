@@ -24,11 +24,8 @@
 #include <QGuiApplication>
 #include <QScreen>
 
-#include "log.h"
-
 #include "libmscore/masterscore.h"
 #include "libmscore/page.h"
-#include "engraving/infrastructure/paint.h"
 
 #include "notationpainting.h"
 #include "notationviewstate.h"
@@ -42,6 +39,8 @@
 #include "notationparts.h"
 #include "notationtypes.h"
 #include "draw/types/pen.h"
+
+#include "log.h"
 
 using namespace mu::notation;
 

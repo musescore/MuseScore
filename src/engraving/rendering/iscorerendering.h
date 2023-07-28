@@ -25,7 +25,7 @@
 #include <variant>
 
 #include "modularity/imoduleinterface.h"
-
+#include "draw/types/geometry.h"
 #include "types/fraction.h"
 
 namespace mu::draw {
@@ -35,6 +35,7 @@ class Painter;
 namespace mu::engraving {
 class Score;
 class EngravingItem;
+class Page;
 
 class Accidental;
 class ActionIcon;
@@ -84,17 +85,40 @@ class TimeSig;
 }
 
 namespace mu::engraving::rendering {
-class IScoreRendering : MODULE_INTERNAL_INTERFACE
+class IScoreRendering : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IEngravingRendering)
+    INTERFACE_ID(IScoreRendering)
 
 public:
     virtual ~IScoreRendering() = default;
 
-    // Layout Score
-    virtual void layoutRange(Score* score, const Fraction& st, const Fraction& et) = 0;
+    // Main interface
 
-    // Layout Item
+    virtual void layoutScore(Score* score, const Fraction& st, const Fraction& et) const = 0;
+
+    struct Options
+    {
+        bool isSetViewport = true;
+        bool isPrinting = false;
+        bool isMultiPage = false;
+        bool printPageBackground = true;
+        RectF frameRect;
+        int fromPage = -1; // 0 is first
+        int toPage = -1;
+        int copyCount = 1;
+        int trimMarginPixelSize = -1;
+        int deviceDpi = -1;
+
+        std::function<void(draw::Painter* painter, const Page* page, const RectF& pageRect)> onPaintPageSheet;
+        std::function<void()> onNewPage;
+    };
+
+    virtual SizeF pageSizeInch(const Score* score) const = 0;
+    virtual SizeF pageSizeInch(const Score* score, const Options& opt) const = 0;
+    virtual void paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt) const = 0;
+    virtual void paintItem(draw::Painter& painter, const EngravingItem* item) const = 0;
+
+    // Temporary compatibility interface
     using Supported = std::variant<std::monostate,
                                    Accidental*,
                                    ActionIcon*,
@@ -161,7 +185,6 @@ public:
     // Layout Text 1
     virtual void layoutText1(TextBase* item, bool base = false) = 0;
 
-    //! --- DRAW ---
     void drawItem(const EngravingItem* item, draw::Painter* p)
     {
         doDrawItem(item, p);

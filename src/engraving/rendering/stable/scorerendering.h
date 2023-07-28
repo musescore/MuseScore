@@ -33,10 +33,15 @@ class ScoreRendering : public IScoreRendering
 {
 public:
 
-    // Layout Score
-    void layoutRange(Score* score, const Fraction& st, const Fraction& et) override;
+    // Main interface
+    void layoutScore(Score* score, const Fraction& st, const Fraction& et) const override;
 
-    // Layout Elements on Edit
+    SizeF pageSizeInch(const Score* score) const override;
+    SizeF pageSizeInch(const Score* score, const Options& opt) const override;
+    void paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt) const override;
+    void paintItem(draw::Painter& painter, const EngravingItem* item) const override;
+
+    // Temporary compatibility interface
     void layoutOnEdit(Arpeggio* item) override;
 
     // Horizontal spacing

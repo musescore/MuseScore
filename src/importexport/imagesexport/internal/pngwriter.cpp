@@ -25,10 +25,6 @@
 #include <cmath>
 #include <QImage>
 
-#include "libmscore/masterscore.h"
-#include "libmscore/page.h"
-#include "engraving/infrastructure/paint.h"
-
 #include "log.h"
 
 using namespace mu::iex::imagesexport;
