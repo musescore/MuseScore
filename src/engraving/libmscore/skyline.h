@@ -43,10 +43,9 @@ struct SkylineSegment {
     double x;
     double y;
     double w;
-    int staffSpan;
 
-    SkylineSegment(double _x, double _y, double _w, int _staffSpan = 0)
-        : x(_x), y(_y), w(_w), staffSpan(_staffSpan) {}
+    SkylineSegment(double _x, double _y, double _w)
+        : x(_x), y(_y), w(_w) {}
 };
 
 //---------------------------------------------------------
@@ -60,8 +59,8 @@ class SkylineLine
     typedef std::vector<SkylineSegment>::iterator SegIter;
     typedef std::vector<SkylineSegment>::const_iterator SegConstIter;
 
-    SegIter insert(SegIter i, double x, double y, double w, int span);
-    void append(double x, double y, double w, int span);
+    SegIter insert(SegIter i, double x, double y, double w);
+    void append(double x, double y, double w);
     SegIter find(double x);
     SegConstIter find(double x) const;
 
@@ -70,7 +69,7 @@ public:
         : north(n) {}
     void add(const Shape& s);
     void add(const ShapeElement& r);
-    void add(double x, double y, double w, int span = 0);
+    void add(double x, double y, double w);
     void add(const RectF& r) { add(ShapeElement(r)); }
 
     void clear() { seg.clear(); }

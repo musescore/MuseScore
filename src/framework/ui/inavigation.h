@@ -92,6 +92,7 @@ public:
     virtual QString name() const = 0;
 
     virtual const Index& index() const = 0;
+    virtual void setIndex(const Index& index) = 0;
     virtual async::Channel<Index> indexChanged() const = 0;
 
     virtual bool enabled() const = 0;

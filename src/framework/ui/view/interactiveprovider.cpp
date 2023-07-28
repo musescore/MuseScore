@@ -131,6 +131,40 @@ RetVal<Val> InteractiveProvider::error(const std::string& title, const framework
     return openStandardDialog("ERROR", title, text, detailedText, buttons, defBtn, options);
 }
 
+Ret InteractiveProvider::showProgress(const std::string& title, framework::Progress* progress)
+{
+    IF_ASSERT_FAILED(progress) {
+        return false;
+    }
+
+    QVariantMap params;
+    params["title"] = QString::fromStdString(title);
+    params["progress"] = QVariant::fromValue(progress);
+
+    QmlLaunchData* data = new QmlLaunchData();
+    data->setValue("params", params);
+
+    emit fireOpenProgressDialog(data);
+
+    Ret ret = toRet(data->value("ret"));
+    QString objectId = data->value("objectId").toString();
+
+    delete data;
+
+    if (!ret) {
+        return ret;
+    }
+
+    if (!objectId.isEmpty()) {
+        RetVal<Val> rv = m_retvals.take(objectId);
+        if (rv.ret.valid()) {
+            return rv.ret;
+        }
+    }
+
+    return make_ok();
+}
+
 RetVal<io::path_t> InteractiveProvider::selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                           const std::vector<std::string>& filter)
 {
@@ -409,6 +443,11 @@ ValCh<Uri> InteractiveProvider::currentUri() const
     return v;
 }
 
+async::Notification InteractiveProvider::currentUriAboutToBeChanged() const
+{
+    return m_currentUriAboutToBeChanged;
+}
+
 std::vector<Uri> InteractiveProvider::stack() const
 {
     std::vector<Uri> uris;
@@ -510,6 +549,8 @@ RetVal<Val> InteractiveProvider::toRetVal(const QVariant& jsrv) const
 
 RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(const UriQuery& q)
 {
+    notifyAboutCurrentUriWillBeChanged();
+
     RetVal<OpenData> result;
 
     ContainerMeta meta = uriRegister()->meta(q.uri());
@@ -566,6 +607,8 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
 RetVal<InteractiveProvider::OpenData> InteractiveProvider::openQml(const UriQuery& q)
 {
+    notifyAboutCurrentUriWillBeChanged();
+
     QmlLaunchData* data = new QmlLaunchData();
     fillData(data, q);
 
@@ -586,6 +629,8 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const s
                                                     const IInteractive::ButtonDatas& buttons, int defBtn,
                                                     const IInteractive::Options& options)
 {
+    notifyAboutCurrentUriWillBeChanged();
+
     QmlLaunchData* data = new QmlLaunchData();
     fillStandardDialogData(data, type, title, text, detailedText, buttons, defBtn, options);
 
@@ -615,6 +660,8 @@ RetVal<Val> InteractiveProvider::openStandardDialog(const QString& type, const s
 RetVal<io::path_t> InteractiveProvider::openFileDialog(FileDialogType type, const std::string& title, const io::path_t& path,
                                                        const std::vector<std::string>& filter, bool confirmOverwrite)
 {
+    notifyAboutCurrentUriWillBeChanged();
+
     RetVal<io::path_t> result;
 
     QmlLaunchData* data = new QmlLaunchData();
@@ -729,6 +776,11 @@ std::vector<InteractiveProvider::ObjectInfo> InteractiveProvider::allOpenObjects
 void InteractiveProvider::notifyAboutCurrentUriChanged()
 {
     m_currentUriChanged.send(currentUri().val);
+}
+
+void InteractiveProvider::notifyAboutCurrentUriWillBeChanged()
+{
+    m_currentUriAboutToBeChanged.notify();
 }
 
 // === QmlLaunchData ===

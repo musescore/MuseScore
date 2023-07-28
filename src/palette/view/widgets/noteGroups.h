@@ -40,7 +40,7 @@ class NoteGroups : public QGroupBox, Ui::NoteGroups
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteConfiguration, paletteConfiguration)
+    INJECT(IPaletteConfiguration, paletteConfiguration)
 
     std::vector<engraving::Chord*> chords8;
     std::vector<engraving::Chord*> chords16;

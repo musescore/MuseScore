@@ -34,8 +34,8 @@ class PalettesPanelContextMenuModel : public uicomponents::AbstractMenuModel, pu
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteConfiguration, configuration)
-    INJECT(palette, actions::IActionsDispatcher, dispatcher)
+    INJECT(IPaletteConfiguration, configuration)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
 public:
     explicit PalettesPanelContextMenuModel(QObject* parent = nullptr);

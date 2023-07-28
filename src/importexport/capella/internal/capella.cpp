@@ -303,7 +303,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
 
             text->setPlainText(st->text());
             QPointF p(st->pos());
-            p = p / 32.0 * score->spatium();
+            p = p / 32.0 * score->style().spatium();
             // text->setUserOff(st->pos());
             text->setOffset(mu::PointF::fromQPointF(p));
             // LOGD("setText %s (%f %f)(%f %f) <%s>",
@@ -804,7 +804,7 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                 l->setTrack(track);
                 l->setPlainText(v.text);
                 if (v.hyphen) {
-                    l->setSyllabic(Lyrics::Syllabic::BEGIN);
+                    l->setSyllabic(LyricsSyllabic::BEGIN);
                 }
                 l->setNo(v.num);
                 chord->add(l);
@@ -866,8 +866,20 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
             LOGD("   <Key>");
             CapKey* o = static_cast<CapKey*>(no);
             KeySigEvent key = score->staff(staffIdx)->keySigEvent(tick);
-            KeySigEvent okey;
-            okey.setKey(Key(o->signature));
+            KeySigEvent okey = key;
+            Key tKey = Key(o->signature);
+            Key cKey = tKey;
+            Interval v = score->staff(staffIdx)->part()->instrument(tick)->transpose();
+            if (!v.isZero() && !score->style().styleB(mu::engraving::Sid::concertPitch)) {
+                cKey = transposeKey(tKey, v);
+                // if there are more than 6 accidentals in transposing key, it cannot be PreferSharpFlat::AUTO
+                Part* part = score->staff(staffIdx)->part();
+                if ((tKey > 6 || tKey < -6) && part->preferSharpFlat() == PreferSharpFlat::AUTO) {
+                    part->setPreferSharpFlat(PreferSharpFlat::NONE);
+                }
+            }
+            okey.setConcertKey(cKey);
+            okey.setKey(tKey);
             if (!(key == okey)) {
                 score->staff(staffIdx)->setKey(tick, okey);
                 Measure* m = score->getCreateMeasure(tick);
@@ -1165,7 +1177,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
     }
 
     score->style().set(Sid::measureSpacing, 1.0);
-    score->setSpatium(cap->normalLineDist * DPMM);
+    score->style().setSpatium(cap->normalLineDist * DPMM);
     score->style().set(Sid::smallStaffMag, cap->smallLineDist / cap->normalLineDist);
     score->style().set(Sid::minSystemDistance, Spatium(8));
     score->style().set(Sid::maxSystemDistance, Spatium(12));
@@ -1347,10 +1359,8 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
 
             LOGD("  ReadCapStaff %d/%d", cstaff->numerator, 1 << cstaff->log2Denom);
             int staffIdx = cstaff->iLayout;
-            int voice = 0;
             for (CapVoice* cvoice : cstaff->voices) {
                 Fraction tick = readCapVoice(score, cvoice, staffIdx, systemTick, capxMode);
-                ++voice;
                 if (tick > mtick) {
                     mtick = tick;
                 }

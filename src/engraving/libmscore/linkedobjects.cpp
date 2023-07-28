@@ -115,7 +115,7 @@ EngravingObject* LinkedObjects::mainElement()
 
                     // MM rests may be generated but not written (e.g. if
                     // saving a file right after disabling MM rests)
-                    const bool mmRestsWritten = e1->score()->styleB(Sid::createMultiMeasureRests);
+                    const bool mmRestsWritten = e1->style().styleB(Sid::createMultiMeasureRests);
 
                     if (m1->isMMRest()) {
                         // m1 is earlier if m2 is *not* the first MM rest measure

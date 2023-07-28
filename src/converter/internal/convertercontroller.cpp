@@ -27,8 +27,10 @@
 #include <QJsonArray>
 #include <QJsonParseError>
 
-#include "convertercodes.h"
+#include "io/dir.h"
 #include "stringutils.h"
+
+#include "convertercodes.h"
 #include "compat/backendapi.h"
 
 #include "log.h"
@@ -92,6 +94,8 @@ mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t&
         ret = convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
     }
 
+    globalContext()->setCurrentProject(nullptr);
+
     return make_ret(Ret::Code::Ok);
 }
 
@@ -149,12 +153,16 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
 
     QJsonArray arr = doc.array();
 
+    auto correctUserInputPath = [](const QString& path) -> QString {
+        return io::Dir::fromNativeSeparators(path).toQString();
+    };
+
     for (const QJsonValue v : arr) {
         QJsonObject obj = v.toObject();
 
         Job job;
-        job.in = obj["in"].toString();
-        job.out = obj["out"].toString();
+        job.in = correctUserInputPath(obj["in"].toString());
+        job.out = correctUserInputPath(obj["out"].toString());
 
         if (!job.in.empty() && !job.out.empty()) {
             rv.val.push_back(std::move(job));
@@ -179,7 +187,8 @@ mu::Ret ConverterController::convertPageByPage(INotationWriterPtr writer, INotat
     TRACEFUNC;
 
     for (size_t i = 0; i < notation->elements()->pages().size(); i++) {
-        const QString filePath = io::path_t(io::dirpath(out) + "/" + io::basename(out) + "-%1." + io::suffix(out)).toQString().arg(i + 1);
+        const QString filePath
+            = io::path_t(io::dirpath(out) + "/" + io::completeBasename(out) + "-%1." + io::suffix(out)).toQString().arg(i + 1);
 
         QFile file(filePath);
         if (!file.open(QFile::WriteOnly)) {
@@ -270,7 +279,7 @@ mu::Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, 
         excerpts.push_back(e->notation());
     }
 
-    io::path_t pngFilePath = io::dirpath(out) + "/" + io::path_t(io::basename(out) + "-excerpt.png");
+    io::path_t pngFilePath = io::dirpath(out) + "/" + io::path_t(io::completeBasename(out) + "-excerpt.png");
 
     for (size_t i = 0; i < excerpts.size(); i++) {
         Ret ret = convertPageByPage(writer, excerpts[i], pngFilePath);

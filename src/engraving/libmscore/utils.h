@@ -30,7 +30,9 @@
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
+class Chord;
 class Note;
+class Rest;
 class Segment;
 class System;
 class Tuplet;
@@ -82,5 +84,10 @@ extern double yStaffDifference(const System* system1, staff_idx_t staffIdx1, con
 
 extern bool allowRemoveWhenRemovingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff = 0);
 extern bool moveDownWhenAddingStaves(EngravingItem* item, staff_idx_t startStaff, staff_idx_t endStaff = 0);
+
+extern void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords, std::vector<Rest*>& rests);
+extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords);
+
+extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 } // namespace mu::engraving
 #endif

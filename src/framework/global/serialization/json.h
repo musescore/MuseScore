@@ -139,9 +139,9 @@ public:
     JsonValueRef operator [](size_t i);
 
 private:
-
     friend class JsonValue;
     friend class JsonObject;
+    friend class JsonDocument;
 
     void detach();
     std::shared_ptr<JsonData> m_data;
@@ -187,6 +187,7 @@ class JsonDocument
 public:
     JsonDocument(std::shared_ptr<JsonData> d = nullptr);
     JsonDocument(JsonObject o);
+    JsonDocument(JsonArray a);
 
     enum class Format {
         Indented,

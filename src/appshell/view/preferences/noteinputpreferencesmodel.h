@@ -34,9 +34,9 @@ class NoteInputPreferencesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(appshell, shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
-    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
-    INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
+    INJECT(shortcuts::IShortcutsConfiguration, shortcutsConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
 
     Q_PROPERTY(
         bool advanceToNextNoteOnKeyRelease READ advanceToNextNoteOnKeyRelease WRITE setAdvanceToNextNoteOnKeyRelease NOTIFY advanceToNextNoteOnKeyReleaseChanged)

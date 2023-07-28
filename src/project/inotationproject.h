@@ -42,6 +42,7 @@ public:
     virtual async::Notification pathChanged() const = 0;
 
     virtual QString displayName() const = 0;
+    virtual async::Notification displayNameChanged() const = 0;
 
     virtual Ret load(const io::path_t& path,
                      const io::path_t& stylePath = io::path_t(), bool forceMode = false, const std::string& format = "") = 0;

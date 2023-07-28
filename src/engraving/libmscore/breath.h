@@ -46,14 +46,7 @@ struct BreathType {
 class Breath final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Breath)
-
-    double _pause;
-    SymId _symId;
-
-    friend class Factory;
-    Breath(Segment* parent);
-
-    bool sameVoiceKerningLimited() const override { return true; }
+    DECLARE_CLASSOF(ElementType::BREATH)
 
 public:
 
@@ -69,9 +62,7 @@ public:
     Segment* segment() const { return (Segment*)explicitParent(); }
 
     void draw(mu::draw::Painter*) const override;
-    void layout() override;
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
+
     mu::PointF pagePos() const override;        ///< position in page coordinates
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -89,6 +80,14 @@ public:
 protected:
     void added() override;
     void removed() override;
+
+private:
+
+    friend class Factory;
+    Breath(Segment* parent);
+
+    double _pause;
+    SymId _symId;
 };
 } // namespace mu::engraving
 #endif

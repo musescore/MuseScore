@@ -22,7 +22,7 @@
 #ifndef MU_LANGUAGES_ILANGUAGESSERVICE_H
 #define MU_LANGUAGES_ILANGUAGESSERVICE_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 #include "progress.h"
 

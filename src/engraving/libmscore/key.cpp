@@ -22,8 +22,6 @@
 
 #include "key.h"
 
-#include "rw/xml.h"
-
 #include "accidental.h"
 #include "part.h"
 #include "pitchspelling.h"
@@ -147,13 +145,25 @@ const SymId accTable[] = {
 //   see KeySig::layout()
 //---------------------------------------------------------
 
-void KeySigEvent::enforceLimits()
+void KeySigEvent::enforceLimits(bool transposing)
 {
     if (_key < Key::MIN) {
         _key = Key::MIN;
         LOGD("key < -7");
     } else if (_key > Key::MAX) {
         _key = Key::MAX;
+        LOGD("key > 7");
+    }
+
+    if (transposing) {
+        return;
+    }
+
+    if (_concertKey < Key::MIN) {
+        _concertKey = Key::MIN;
+        LOGD("key < -7");
+    } else if (_concertKey > Key::MAX) {
+        _concertKey = Key::MAX;
         LOGD("key > 7");
     }
 }
@@ -184,8 +194,32 @@ void KeySigEvent::print() const
 
 void KeySigEvent::setKey(Key v)
 {
-    _key    = v;
+    _key = v;
+    enforceLimits(true);
+}
+
+//---------------------------------------------------------
+//   setConcertKey
+//---------------------------------------------------------
+
+void KeySigEvent::setConcertKey(Key v)
+{
+    _key = v;
+    _concertKey = v;
     enforceLimits();
+}
+
+//---------------------------------------------------------
+//   setCustom
+//---------------------------------------------------------
+
+void KeySigEvent::setCustom(bool val)
+{
+    _custom = val;
+    if (_key == Key::INVALID) {
+        _concertKey = Key::C;
+        _key = Key::C;
+    }
 }
 
 //---------------------------------------------------------
@@ -210,7 +244,7 @@ bool KeySigEvent::operator==(const KeySigEvent& e) const
         }
         return true;
     }
-    return e._key == _key;
+    return e._concertKey == _concertKey && e._key == _key;
 }
 
 //---------------------------------------------------------
@@ -222,17 +256,28 @@ Key transposeKey(Key key, const Interval& interval, PreferSharpFlat prefer)
     int tpc = int(key) + 14;
     tpc     = transposeTpc(tpc, interval, false);
 
-    // change between 5/6/7 sharps and 7/6/5 flats
-    // other key signatures cannot be changed enharmonically
-    // without causing double-sharp/flat
-    // (-7 <=) tpc-14 <= -5, which has Cb, Gb, Db
-    if (tpc <= 9 && prefer == PreferSharpFlat::SHARPS) {
-        tpc += 12;
-    }
+    // ignore prefer for octave transposing instruments
+    if (interval.chromatic % 12 != 0 || interval.diatonic % 7 != 0) {
+        // prefer key with less accidentals
+        if (tpc < 8 && prefer == PreferSharpFlat::AUTO) {
+            tpc += 12;
+        }
+        if (tpc > 20 && prefer == PreferSharpFlat::AUTO) {
+            tpc -= 12;
+        }
 
-    // 5 <= tpc-14 <= 7, which has B, F#, C#, enharmonic with Cb, Gb, Db respectively
-    if (tpc >= 19 && tpc <= 21 && prefer == PreferSharpFlat::FLATS) {
-        tpc -= 12;
+        // change between 5/6/7 sharps and 7/6/5 flats
+        // other key signatures cannot be changed enharmonically
+        // without causing double-sharp/flat
+        // (-7 <=) tpc-14 <= -5, which has Cb, Gb, Db
+        if (tpc <= 9 && prefer == PreferSharpFlat::SHARPS) {
+            tpc += 12;
+        }
+
+        // 5 <= tpc-14 <= 7, which has B, F#, C#, enharmonic with Cb, Gb, Db respectively
+        if (tpc >= 19 && tpc <= 21 && prefer == PreferSharpFlat::FLATS) {
+            tpc -= 12;
+        }
     }
 
     // check for valid key sigs
@@ -285,6 +330,7 @@ void KeySigEvent::initFromSubtype(int st)
     //end of legacy code
 
     _key            = Key(a._key);
+    _concertKey     = _key;
 //      _customType     = a._customType;
     _custom         = a._custom;
     if (a._invalid) {
@@ -367,6 +413,7 @@ void AccidentalState::init(const KeySigEvent& keySig)
             }
         }
     }
+    m_forceRestateAccidental.fill(false);
 }
 
 //---------------------------------------------------------
@@ -377,6 +424,12 @@ AccidentalVal AccidentalState::accidentalVal(int line) const
 {
     assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
     return AccidentalVal((state[line] & 0x0f) + int(AccidentalVal::MIN));
+}
+
+bool AccidentalState::forceRestateAccidental(int line) const
+{
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    return m_forceRestateAccidental[line];
 }
 
 //---------------------------------------------------------
@@ -399,6 +452,12 @@ void AccidentalState::setAccidentalVal(int line, AccidentalVal val, bool tieCont
     // casts needed to work around a bug in Xcode 4.2 on Mac, see #25910
     assert(int(val) >= int(AccidentalVal::MIN) && int(val) <= int(AccidentalVal::MAX));
     state[line] = (int(val) - int(AccidentalVal::MIN)) | (tieContext ? TIE_CONTEXT : 0);
+}
+
+void AccidentalState::setForceRestateAccidental(int line, bool forceRestate)
+{
+    assert(line >= MIN_ACC_STATE && line < MAX_ACC_STATE);
+    m_forceRestateAccidental[line] = forceRestate;
 }
 
 //---------------------------------------------------------

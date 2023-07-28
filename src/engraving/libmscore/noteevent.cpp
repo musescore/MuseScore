@@ -22,44 +22,9 @@
 
 #include "noteevent.h"
 
-#include "rw/xml.h"
-
 using namespace mu;
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void NoteEvent::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "pitch") {
-            m_pitch = e.readInt();
-        } else if (tag == "ontime") {
-            m_ontime = e.readInt();
-        } else if (tag == "len") {
-            m_len = e.readInt();
-        } else {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void NoteEvent::write(XmlWriter& xml) const
-{
-    xml.startElement("Event");
-    xml.tag("pitch", m_pitch, 0);
-    xml.tag("ontime", m_ontime, 0);
-    xml.tag("len", m_len, NOTE_LENGTH);
-    xml.endElement();
-}
-
 //---------------------------------------------------------
 //   NoteEventList
 //---------------------------------------------------------

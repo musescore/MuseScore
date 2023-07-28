@@ -22,9 +22,10 @@
 #ifndef MU_UI_IINTERACTIVEPROVIDER_H
 #define MU_UI_IINTERACTIVEPROVIDER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/uri.h"
 #include "types/retval.h"
+#include "progress.h"
 
 #include "iinteractive.h"
 
@@ -58,6 +59,8 @@ public:
                               int defBtn = int(framework::IInteractive::Button::NoButton),
                               const framework::IInteractive::Options& options = {}) = 0;
 
+    virtual Ret showProgress(const std::string& title, framework::Progress* progress) = 0;
+
     virtual RetVal<io::path_t> selectOpeningFile(const std::string& title, const io::path_t& dir,
                                                  const std::vector<std::string>& filter) = 0;
     virtual RetVal<io::path_t> selectSavingFile(const std::string& title, const io::path_t& path, const std::vector<std::string>& filter,
@@ -76,6 +79,7 @@ public:
     virtual void closeAllDialogs() = 0;
 
     virtual ValCh<Uri> currentUri() const = 0;
+    virtual async::Notification currentUriAboutToBeChanged() const = 0;
     virtual std::vector<Uri> stack() const = 0;
 
     virtual QWindow* topWindow() const = 0;

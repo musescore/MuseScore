@@ -39,14 +39,14 @@
 namespace mu::appshell {
 class AppShellConfiguration : public IAppShellConfiguration, public async::Asyncable
 {
-    INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(appshell, io::IFileSystem, fileSystem)
-    INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(appshell, ui::IUiConfiguration, uiConfiguration)
-    INJECT(appshell, project::IProjectConfiguration, projectConfiguration)
-    INJECT(appshell, notation::INotationConfiguration, notationConfiguration)
-    INJECT(appshell, playback::IPlaybackConfiguration, playbackConfiguration)
-    INJECT(appshell, languages::ILanguagesConfiguration, languagesConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(project::IProjectConfiguration, projectConfiguration)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(playback::IPlaybackConfiguration, playbackConfiguration)
+    INJECT(languages::ILanguagesConfiguration, languagesConfiguration)
 
 public:
     void init();
@@ -64,7 +64,6 @@ public:
 
     std::string handbookUrl() const override;
     std::string askForHelpUrl() const override;
-    std::string bugReportUrl() const override;
     std::string museScoreUrl() const override;
     std::string museScoreForumUrl() const override;
     std::string museScoreContributionUrl() const override;
@@ -92,7 +91,6 @@ public:
 
 private:
     std::string utmParameters(const std::string& utmMedium) const;
-    std::string sha() const;
 
     std::string currentLanguageCode() const;
 

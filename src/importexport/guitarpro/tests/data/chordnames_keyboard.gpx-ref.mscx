@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -24,7 +22,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="0"/>
+        <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>2</barLineSpan>
         </Staff>
       <Staff id="2">
@@ -39,6 +37,16 @@
         <shortName>A-Piano</shortName>
         <trackName></trackName>
         <instrumentId>keyboard.piano</instrumentId>
+        <singleNoteDynamics>0</singleNoteDynamics>
+        <StringData>
+          <frets>24</frets>
+          <string>40</string>
+          <string>45</string>
+          <string>50</string>
+          <string>55</string>
+          <string>59</string>
+          <string>64</string>
+          </StringData>
         <Articulation name="staccatissimo">
           <velocity>100</velocity>
           <gateTime>30</gateTime>
@@ -55,12 +63,16 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Articulation name="marcato">
+        <Articulation name="accent">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
-          <velocity>120</velocity>
+          <velocity>169</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
@@ -75,7 +87,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -94,6 +106,8 @@
             <Note>
               <pitch>67</pitch>
               <tpc>15</tpc>
+              <fret>3</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </voice>
@@ -105,6 +119,8 @@
             <Note>
               <pitch>69</pitch>
               <tpc>17</tpc>
+              <fret>5</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </voice>
@@ -116,6 +132,8 @@
             <Note>
               <pitch>71</pitch>
               <tpc>19</tpc>
+              <fret>7</fret>
+              <string>0</string>
               </Note>
             </Chord>
           </voice>
@@ -127,12 +145,10 @@
             <Note>
               <pitch>72</pitch>
               <tpc>14</tpc>
+              <fret>8</fret>
+              <string>0</string>
               </Note>
             </Chord>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -140,7 +156,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -174,10 +190,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            <span>1</span>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

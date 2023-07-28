@@ -297,7 +297,7 @@ TEST_F(Engraving_NoteTests, grace)
     Note* note = chord->upNote();
 
     // create
-    score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::division / 2);
+    score->setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
     Chord* gc = chord->graceNotes().front();
     Note* gn = gc->notes().front();
 //      Note* n = toNote(ScoreRW::writeReadElement(gn));

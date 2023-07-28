@@ -31,9 +31,9 @@
 namespace mu::workspace {
 class WorkspaceActionController : public actions::Actionable
 {
-    INJECT(workspace, actions::IActionsDispatcher, dispatcher)
-    INJECT(workspace, IWorkspaceConfiguration, configuration)
-    INJECT(workspace, framework::IInteractive, interactive)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(IWorkspaceConfiguration, configuration)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     void init();

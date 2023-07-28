@@ -22,11 +22,12 @@
 
 #include "jump.h"
 
-#include "rw/xml.h"
 #include "types/typesconv.h"
 
 #include "measure.h"
 #include "score.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -59,8 +60,6 @@ const std::vector<JumpTypeTableItem> jumpTypeTable {
     { JumpType::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab" },
     { JumpType::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab" },
     { JumpType::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "" },
-    { JumpType::DCODA,          "Da Coda",               "coda", "end",  "" },
-    { JumpType::DDBLCODA,       "Da Double Coda",        "varcoda", "end",  "" }
 };
 
 //---------------------------------------------------------
@@ -110,53 +109,6 @@ JumpType Jump::jumpType() const
 String Jump::jumpTypeUserName() const
 {
     return TConv::translatedUserName(jumpType());
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Jump::layout()
-{
-    TextBase::layout();
-    autoplaceMeasureElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Jump::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "jumpTo") {
-            _jumpTo = e.readText();
-        } else if (tag == "playUntil") {
-            _playUntil = e.readText();
-        } else if (tag == "continueAt") {
-            _continueAt = e.readText();
-        } else if (tag == "playRepeats") {
-            _playRepeats = e.readBool();
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Jump::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.tag("jumpTo", _jumpTo);
-    xml.tag("playUntil", _playUntil);
-    xml.tag("continueAt", _continueAt);
-    writeProperty(xml, Pid::PLAY_REPEATS);
-    xml.endElement();
 }
 
 //---------------------------------------------------------

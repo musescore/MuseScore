@@ -623,6 +623,12 @@ void PaletteProvider::setSearching(bool searching)
         return;
     }
 
+    if (!searching) {
+        if (m_searchFilterModel) {
+            m_searchFilterModel->setFilterFixedString("");
+        }
+    }
+
     m_isSearching = searching;
 
     m_mainPalette = nullptr;
@@ -892,11 +898,11 @@ QString PaletteProvider::getPaletteFilename(bool open, const QString& name) cons
                  .arg(QCoreApplication::applicationName());
 #endif
     if (open) {
-        title  = mu::qtrc("palette", "Load Palette");
-        filter = { mu::trc("palette", "MuseScore Palette") + " (*.mpal)" };
+        title  = mu::qtrc("palette", "Load palette");
+        filter = { mu::trc("palette", "MuseScore palette") + " (*.mpal)" };
     } else {
-        title  = mu::qtrc("palette", "Save Palette");
-        filter = { mu::trc("palette", "MuseScore Palette") + " (*.mpal)" };
+        title  = mu::qtrc("palette", "Save palette");
+        filter = { mu::trc("palette", "MuseScore palette") + " (*.mpal)" };
     }
 
     QFileInfo myPalettes(wd);
@@ -982,20 +988,20 @@ mu::async::Channel<ElementPtr> PaletteProvider::addCustomItemRequested() const
     return m_addCustomItemRequested;
 }
 
-void PaletteProvider::write(XmlWriter& xml) const
+void PaletteProvider::write(XmlWriter& xml, bool pasteMode) const
 {
     if (!m_userPaletteModel) {
         return;
     }
     if (const PaletteTree* tree = m_userPaletteModel->paletteTree()) {
-        tree->write(xml);
+        tree->write(xml, pasteMode);
     }
 }
 
-bool PaletteProvider::read(XmlReader& e)
+bool PaletteProvider::read(XmlReader& e, bool pasteMode)
 {
     PaletteTreePtr tree = std::make_shared<PaletteTree>();
-    if (!tree->read(e)) {
+    if (!tree->read(e, pasteMode)) {
         return false;
     }
 

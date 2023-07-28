@@ -33,6 +33,10 @@ if (MUE_BUILD_AUTOBOT_MODULE)
     add_subdirectory(autobot)
 endif()
 
+if (MUE_BUILD_BRAILLE_MODULE)
+    add_subdirectory(braille)
+endif()
+
 if (MUE_BUILD_CLOUD_MODULE)
     add_subdirectory(cloud)
 endif()
@@ -50,9 +54,7 @@ endif()
 
 add_subdirectory(engraving)
 
-if (MUE_BUILD_IMPORTEXPORT_MODULE)
-    add_subdirectory(importexport)
-endif()
+add_subdirectory(importexport)
 
 if (MUE_BUILD_INSPECTOR_MODULE)
     add_subdirectory(inspector)

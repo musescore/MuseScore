@@ -1,0 +1,21 @@
+# Source this file in Bash scripts to determine where to enforce the coding style.
+
+# Files with these extensions follow the coding style.
+readonly TIDY_EXTENSIONS=(
+    # Alphabetical order please!
+    c
+    cpp
+    h
+    hpp
+    m
+    mm
+)
+
+# Files in these directories follow the coding style.
+readonly TIDY_DIRS=(
+    # Alphabetical order please!
+    src
+)
+
+# Files in containing directory and subdirs don't follow coding style.
+readonly UNTIDY_FILE='.untidy'

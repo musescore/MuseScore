@@ -589,7 +589,7 @@ Transform& Transform::translate(double dx, double dy)
         return *this;
     }
 #ifdef MUE_ENABLE_DRAW_TRACE
-    if (std::isnan(dx) | std::isnan(dy)) {
+    if (std::isnan(dx) || std::isnan(dy)) {
         nanWarning("translate");
         return *this;
     }
@@ -628,7 +628,7 @@ Transform& Transform::scale(double sx, double sy)
         return *this;
     }
 #ifdef MUE_ENABLE_DRAW_TRACE
-    if (std::isnan(sx) | std::isnan(sy)) {
+    if (std::isnan(sx) || std::isnan(sy)) {
         nanWarning("scale");
         return *this;
     }
@@ -665,7 +665,7 @@ Transform& Transform::shear(double sh, double sv)
         return *this;
     }
 #ifdef MUE_ENABLE_DRAW_TRACE
-    if (std::isnan(sh) | std::isnan(sv)) {
+    if (std::isnan(sh) || std::isnan(sv)) {
         nanWarning("shear");
         return *this;
     }

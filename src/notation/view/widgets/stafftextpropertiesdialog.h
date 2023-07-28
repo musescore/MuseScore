@@ -36,7 +36,7 @@ class StaffTextPropertiesDialog : public QDialog, public Ui::StaffTextProperties
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     StaffTextPropertiesDialog(QWidget* parent = nullptr);

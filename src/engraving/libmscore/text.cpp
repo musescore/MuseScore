@@ -21,9 +21,11 @@
  */
 
 #include "text.h"
-#include "rw/xml.h"
-#include "types/typesconv.h"
+
+#include "rw/rwregister.h"
 #include "score.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -42,29 +44,10 @@ static const ElementStyle defaultStyle {
 //---------------------------------------------------------
 
 Text::Text(EngravingItem* parent, TextStyleType tid)
-    : TextBase(ElementType::TEXT, parent, tid)
+    : TextBase(ElementType::TEXT, parent, tid,
+               tid == TextStyleType::HEADER || tid == TextStyleType::FOOTER ? ElementFlag::NOT_SELECTABLE : ElementFlag::NOTHING)
 {
     initElementStyle(&defaultStyle);
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Text::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "style") {
-            TextStyleType s = TConv::fromXml(e.readAsciiText(), TextStyleType::DEFAULT);
-            if (TextStyleType::TUPLET == s) {  // ugly hack for compatibility
-                continue;
-            }
-            initTextStyleType(s);
-        } else if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -81,10 +64,10 @@ engraving::PropertyValue Text::propertyDefault(Pid id) const
     }
 }
 
-String Text::readXmlText(XmlReader& r, Score* score)
+String Text::readXmlText(XmlReader& xml, Score* score)
 {
     Text t(score->dummy());
-    t.read(r);
+    rw::RWRegister::reader()->readItem(&t, xml);
     return t.xmlText();
 }
 }

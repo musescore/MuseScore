@@ -37,6 +37,8 @@ public:
     async::NotifyList<const Part*> partList() const override;
     async::NotifyList<const Staff*> staffList(const ID& partId) const override;
 
+    bool hasParts() const override;
+
     const Part* part(const ID& partId) const override;
     bool partExists(const ID& partId) const override;
 
@@ -88,6 +90,8 @@ protected:
     virtual void onPartsRemoved(const std::vector<Part*>& parts);
 
 private:
+    friend class MasterNotationParts;
+
     void doSetScoreOrder(const ScoreOrder& order);
     void doRemoveParts(const std::vector<Part*>& parts);
     void doAppendStaff(Staff* staff, Part* destinationPart);
@@ -106,9 +110,9 @@ private:
     void initStaff(Staff* staff, const InstrumentTemplate& templ, const mu::engraving::StaffType* staffType, size_t cleffIndex);
 
     void removeMissingParts(const PartInstrumentList& newParts);
-    void appendNewParts(const PartInstrumentList& parts);
+    void insertNewParts(const PartInstrumentList& parts);
     void updateSoloist(const PartInstrumentList& parts);
-    void sortParts(const PartInstrumentList& parts, const std::vector<mu::engraving::Staff*>& originalStaves);
+    void sortParts(const PartInstrumentList& parts);
 
     int resolveNewInstrumentNumber(const InstrumentTemplate& instrument, const PartInstrumentList& allNewInstruments) const;
 

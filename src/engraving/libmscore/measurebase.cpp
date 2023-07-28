@@ -22,8 +22,6 @@
 
 #include "measurebase.h"
 
-#include "rw/xml.h"
-
 #include "factory.h"
 #include "layoutbreak.h"
 #include "measure.h"
@@ -37,7 +35,6 @@
 using namespace mu;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   MeasureBase
 //---------------------------------------------------------
@@ -51,13 +48,13 @@ MeasureBase::MeasureBase(const ElementType& type, System* system)
 MeasureBase::MeasureBase(const MeasureBase& m)
     : EngravingItem(m)
 {
-    _next     = m._next;
-    _prev     = m._prev;
-    _tick     = m._tick;
-    _no       = m._no;
-    _noOffset = m._noOffset;
+    m_next     = m.m_next;
+    m_prev     = m.m_prev;
+    m_tick     = m.m_tick;
+    m_no       = m.m_no;
+    m_noOffset = m.m_noOffset;
 
-    for (EngravingItem* e : m._el) {
+    for (EngravingItem* e : m.m_el) {
         add(e->clone());
     }
 }
@@ -68,8 +65,8 @@ MeasureBase::MeasureBase(const MeasureBase& m)
 
 void MeasureBase::clearElements()
 {
-    DeleteAll(_el);
-    _el.clear();
+    DeleteAll(m_el);
+    m_el.clear();
 }
 
 //---------------------------------------------------------
@@ -78,8 +75,8 @@ void MeasureBase::clearElements()
 
 ElementList MeasureBase::takeElements()
 {
-    ElementList l = _el;
-    _el.clear();
+    ElementList l = m_el;
+    m_el.clear();
     return l;
 }
 
@@ -90,7 +87,7 @@ ElementList MeasureBase::takeElements()
 void MeasureBase::setScore(Score* score)
 {
     EngravingItem::setScore(score);
-    for (EngravingItem* e : _el) {
+    for (EngravingItem* e : m_el) {
         e->setScore(score);
     }
 }
@@ -101,7 +98,7 @@ void MeasureBase::setScore(Score* score)
 
 MeasureBase::~MeasureBase()
 {
-    DeleteAll(_el);
+    DeleteAll(m_el);
 }
 
 //---------------------------------------------------------
@@ -149,7 +146,7 @@ void MeasureBase::add(EngravingItem* e)
 //            triggerLayoutAll();     // TODO
     }
     triggerLayout();
-    _el.push_back(e);
+    m_el.push_back(e);
     e->added();
 }
 
@@ -179,7 +176,7 @@ void MeasureBase::remove(EngravingItem* el)
             break;
         }
     }
-    if (!_el.remove(el)) {
+    if (!m_el.remove(el)) {
         LOGD("MeasureBase(%p)::remove(%s,%p) not found", this, el->typeName(), el);
     } else {
         el->removed();
@@ -192,12 +189,12 @@ void MeasureBase::remove(EngravingItem* el)
 
 Measure* MeasureBase::nextMeasure() const
 {
-    MeasureBase* m = _next;
+    MeasureBase* m = m_next;
     for (;;) {
         if (m == 0 || m->isMeasure()) {
             break;
         }
-        m = m->_next;
+        m = m->m_next;
     }
     return toMeasure(m);
 }
@@ -209,7 +206,7 @@ Measure* MeasureBase::nextMeasure() const
 Measure* MeasureBase::nextMeasureMM() const
 {
     Measure* mm = nextMeasure();
-    if (mm && score()->styleB(Sid::createMultiMeasureRests) && mm->hasMMRest()) {
+    if (mm && style().styleB(Sid::createMultiMeasureRests) && mm->hasMMRest()) {
         return mm->mmRest();
     }
     return mm;
@@ -241,7 +238,7 @@ Measure* MeasureBase::prevMeasureMM() const
     while (m) {
         if (m->isMeasure()) {
             Measure* mm = toMeasure(m);
-            if (score()->styleB(Sid::createMultiMeasureRests)) {
+            if (style().styleB(Sid::createMultiMeasureRests)) {
                 if (mm->mmRestCount() >= 0) {
                     if (mm->hasMMRest()) {
                         return mm->mmRest();
@@ -285,38 +282,6 @@ double MeasureBase::pause() const
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void MeasureBase::layout()
-{
-    int breakCount = 0;
-
-    for (EngravingItem* element : _el) {
-        if (!score()->tagIsValid(element->tag())) {
-            continue;
-        }
-        if (element->isLayoutBreak()) {
-            double _spatium = spatium();
-            double x;
-            double y;
-            if (toLayoutBreak(element)->isNoBreak()) {
-                x = width() + score()->styleMM(Sid::barWidth) - element->width() * .5;
-            } else {
-                x = width() + score()->styleMM(Sid::barWidth) - element->width()
-                    - breakCount * (element->width() + _spatium * .5);
-                breakCount++;
-            }
-            y = -2.5 * _spatium - element->height();
-            element->setPos(x, y);
-        } else if (element->isMarker() || element->isJump()) {
-        } else {
-            element->layout();
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   top
 //---------------------------------------------------------
 
@@ -340,12 +305,12 @@ MeasureBase* MeasureBase::top() const
 Fraction MeasureBase::tick() const
 {
     const MeasureBase* mb = top();
-    return mb ? mb->_tick : Fraction(-1, 1);
+    return mb ? mb->m_tick : Fraction(-1, 1);
 }
 
 void MeasureBase::setTick(const Fraction& f)
 {
-    _tick = f;
+    m_tick = f;
 }
 
 //---------------------------------------------------------
@@ -369,22 +334,18 @@ void MeasureBase::triggerLayout() const
 void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (isMeasure()) {
-        for (EngravingItem* e : _el) {
-            if (score()->tagIsValid(e->tag())) {
-                staff_idx_t staffIdx = e->staffIdx();
-                if (staffIdx != mu::nidx && staffIdx >= score()->staves().size()) {
-                    LOGD("MeasureBase::scanElements: bad staffIdx %zu in element %s", staffIdx, e->typeName());
-                }
-                if ((e->track() == mu::nidx) || e->systemFlag() || toMeasure(this)->visible(staffIdx)) {
-                    e->scanElements(data, func, all);
-                }
+        for (EngravingItem* e : m_el) {
+            staff_idx_t staffIdx = e->staffIdx();
+            if (staffIdx != mu::nidx && staffIdx >= score()->staves().size()) {
+                LOGD("MeasureBase::scanElements: bad staffIdx %zu in element %s", staffIdx, e->typeName());
+            }
+            if ((e->track() == mu::nidx) || e->systemFlag() || toMeasure(this)->visible(staffIdx)) {
+                e->scanElements(data, func, all);
             }
         }
     } else {
-        for (EngravingItem* e : _el) {
-            if (score()->tagIsValid(e->tag())) {
-                e->scanElements(data, func, all);
-            }
+        for (EngravingItem* e : m_el) {
+            e->scanElements(data, func, all);
         }
     }
     if (isBox()) {
@@ -398,7 +359,7 @@ void MeasureBase::scanElements(void* data, void (* func)(void*, EngravingItem*),
 
 MeasureBase* Score::first() const
 {
-    return _measures.first();
+    return m_measures.first();
 }
 
 //---------------------------------------------------------
@@ -407,7 +368,7 @@ MeasureBase* Score::first() const
 
 MeasureBase* Score::last()  const
 {
-    return _measures.last();
+    return m_measures.last();
 }
 
 //---------------------------------------------------------
@@ -575,7 +536,7 @@ void MeasureBase::cleanupLayoutBreaks(bool undo)
         if (undo) {
             score()->undoRemoveElement(e);
         } else {
-            _el.remove(e);
+            m_el.remove(e);
         }
     }
 }
@@ -586,13 +547,13 @@ void MeasureBase::cleanupLayoutBreaks(bool undo)
 
 MeasureBase* MeasureBase::nextMM() const
 {
-    if (_next
-        && _next->isMeasure()
-        && score()->styleB(Sid::createMultiMeasureRests)
-        && toMeasure(_next)->hasMMRest()) {
-        return toMeasure(_next)->mmRest();
+    if (m_next
+        && m_next->isMeasure()
+        && style().styleB(Sid::createMultiMeasureRests)
+        && toMeasure(m_next)->hasMMRest()) {
+        return toMeasure(m_next)->mmRest();
     }
-    return _next;
+    return m_next;
 }
 
 //---------------------------------------------------------
@@ -601,76 +562,12 @@ MeasureBase* MeasureBase::nextMM() const
 
 MeasureBase* MeasureBase::prevMM() const
 {
-    if (_prev
-        && _prev->isMeasure()
-        && score()->styleB(Sid::createMultiMeasureRests)) {
-        return const_cast<Measure*>(toMeasure(_prev)->mmRest1());
+    if (m_prev
+        && m_prev->isMeasure()
+        && style().styleB(Sid::createMultiMeasureRests)) {
+        return const_cast<Measure*>(toMeasure(m_prev)->coveringMMRestOrThis());
     }
-    return _prev;
-}
-
-//---------------------------------------------------------
-//   writeProperties
-//---------------------------------------------------------
-
-void MeasureBase::writeProperties(XmlWriter& xml) const
-{
-    EngravingItem::writeProperties(xml);
-    for (const EngravingItem* e : el()) {
-        e->write(xml);
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool MeasureBase::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "LayoutBreak") {
-        LayoutBreak* lb = Factory::createLayoutBreak(this);
-        lb->read(e);
-        bool doAdd = true;
-        switch (lb->layoutBreakType()) {
-        case LayoutBreakType::LINE:
-            if (lineBreak()) {
-                doAdd = false;
-            }
-            break;
-        case LayoutBreakType::PAGE:
-            if (pageBreak()) {
-                doAdd = false;
-            }
-            break;
-        case LayoutBreakType::SECTION:
-            if (sectionBreak()) {
-                doAdd = false;
-            }
-            break;
-        case LayoutBreakType::NOBREAK:
-            if (noBreak()) {
-                doAdd = false;
-            }
-            break;
-        }
-        if (doAdd) {
-            add(lb);
-            cleanupLayoutBreaks(false);
-        } else {
-            delete lb;
-        }
-    } else if (tag == "StaffTypeChange") {
-        StaffTypeChange* stc = Factory::createStaffTypeChange(this);
-        stc->setTrack(e.context()->track());
-        stc->setParent(this);
-        stc->read(e);
-        add(stc);
-    } else if (EngravingItem::readProperties(e)) {
-    } else {
-        return false;
-    }
-    return true;
+    return m_prev;
 }
 
 //---------------------------------------------------------
@@ -705,8 +602,12 @@ int MeasureBase::measureIndex() const
 {
     int idx = 0;
     MeasureBase* m = score()->firstMeasure();
+    Measure* mmRestFirst = nullptr;
+    if (isMeasure() && toMeasure(this)->isMMRest()) {
+        mmRestFirst = toMeasure(this)->mmRestFirst();
+    }
     while (m) {
-        if (m == this) {
+        if (m == this || m == mmRestFirst) {
             return idx;
         }
         m = m->next();
@@ -733,4 +634,170 @@ LayoutBreak* MeasureBase::sectionBreakElement() const
 
     return nullptr;
 }
+
+//---------------------------------------------------------
+//   MeasureBaseList
+//---------------------------------------------------------
+
+MeasureBaseList::MeasureBaseList()
+{
+    m_first = 0;
+    m_last  = 0;
+    m_size  = 0;
+}
+
+//---------------------------------------------------------
+//   push_back
+//---------------------------------------------------------
+
+void MeasureBaseList::push_back(MeasureBase* e)
+{
+    ++m_size;
+    if (m_last) {
+        m_last->setNext(e);
+        e->setPrev(m_last);
+        e->setNext(0);
+    } else {
+        m_first = e;
+        e->setPrev(0);
+        e->setNext(0);
+    }
+    m_last = e;
+}
+
+//---------------------------------------------------------
+//   push_front
+//---------------------------------------------------------
+
+void MeasureBaseList::push_front(MeasureBase* e)
+{
+    ++m_size;
+    if (m_first) {
+        m_first->setPrev(e);
+        e->setNext(m_first);
+        e->setPrev(0);
+    } else {
+        m_last = e;
+        e->setPrev(0);
+        e->setNext(0);
+    }
+    m_first = e;
+}
+
+//---------------------------------------------------------
+//   add
+//    insert e before e->next()
+//---------------------------------------------------------
+
+void MeasureBaseList::add(MeasureBase* e)
+{
+    MeasureBase* el = e->next();
+    if (el == 0) {
+        push_back(e);
+        return;
+    }
+    if (el == m_first) {
+        push_front(e);
+        return;
+    }
+    ++m_size;
+    e->setPrev(el->prev());
+    el->prev()->setNext(e);
+    el->setPrev(e);
+}
+
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void MeasureBaseList::remove(MeasureBase* el)
+{
+    --m_size;
+    if (el->prev()) {
+        el->prev()->setNext(el->next());
+    } else {
+        m_first = el->next();
+    }
+    if (el->next()) {
+        el->next()->setPrev(el->prev());
+    } else {
+        m_last = el->prev();
+    }
+}
+
+//---------------------------------------------------------
+//   insert
+//---------------------------------------------------------
+
+void MeasureBaseList::insert(MeasureBase* fm, MeasureBase* lm)
+{
+    ++m_size;
+    for (MeasureBase* m = fm; m != lm; m = m->next()) {
+        ++m_size;
+    }
+    MeasureBase* pm = fm->prev();
+    if (pm) {
+        pm->setNext(fm);
+    } else {
+        m_first = fm;
+    }
+    MeasureBase* nm = lm->next();
+    if (nm) {
+        nm->setPrev(lm);
+    } else {
+        m_last = lm;
+    }
+}
+
+//---------------------------------------------------------
+//   remove
+//---------------------------------------------------------
+
+void MeasureBaseList::remove(MeasureBase* fm, MeasureBase* lm)
+{
+    --m_size;
+    for (MeasureBase* m = fm; m != lm; m = m->next()) {
+        --m_size;
+    }
+    MeasureBase* pm = fm->prev();
+    MeasureBase* nm = lm->next();
+    if (pm) {
+        pm->setNext(nm);
+    } else {
+        m_first = nm;
+    }
+    if (nm) {
+        nm->setPrev(pm);
+    } else {
+        m_last = pm;
+    }
+}
+
+//---------------------------------------------------------
+//   change
+//---------------------------------------------------------
+
+void MeasureBaseList::change(MeasureBase* ob, MeasureBase* nb)
+{
+    nb->setPrev(ob->prev());
+    nb->setNext(ob->next());
+    if (ob->prev()) {
+        ob->prev()->setNext(nb);
+    }
+    if (ob->next()) {
+        ob->next()->setPrev(nb);
+    }
+    if (ob == m_last) {
+        m_last = nb;
+    }
+    if (ob == m_first) {
+        m_first = nb;
+    }
+    if (nb->type() == ElementType::HBOX || nb->type() == ElementType::VBOX
+        || nb->type() == ElementType::TBOX || nb->type() == ElementType::FBOX) {
+        nb->setParent(ob->system());
+    }
+    for (EngravingItem* e : nb->el()) {
+        e->setParent(nb);
+    }
 }

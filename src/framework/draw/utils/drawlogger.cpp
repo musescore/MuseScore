@@ -27,14 +27,13 @@ using namespace mu::draw;
 
 static const std::string DRAW_OBJ_TAG("DRAW_OBJ");
 
-void DrawObjectsLogger::beginObject(const std::string& name, const PointF& pagePos)
+void DrawObjectsLogger::beginObject(const std::string& name)
 {
     m_objects.push(name);
     std::string gap;
     gap.resize(m_objects.size());
 #ifdef LOG_STREAM
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG,
-               "")() << "Begin: " << gap << name << "{" << pagePos.x() << "," << pagePos.y() << "}";
+    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG, "", haw::logger::None)() << "Begin: " << gap << name;
 #else
     UNUSED(pagePos);
 #endif
@@ -49,7 +48,7 @@ void DrawObjectsLogger::endObject()
     std::string gap;
     gap.resize(m_objects.size());
 #ifdef LOG_STREAM
-    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG, "")() << "End:   " << gap << m_objects.top();
+    LOG_STREAM(haw::logger::Logger::DEBG, DRAW_OBJ_TAG, "", haw::logger::None)() << "End:   " << gap << m_objects.top();
 #endif
 
     m_objects.pop();

@@ -22,7 +22,7 @@
 #ifndef MU_FRAMEWORK_IAPPLICATION_H
 #define MU_FRAMEWORK_IAPPLICATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 class QObject;
 class QEvent;
@@ -36,8 +36,9 @@ public:
     virtual ~IApplication() = default;
 
     enum class RunMode {
-        Editor,
-        Converter
+        GuiApp,
+        ConsoleApp,
+        AudioPluginRegistration,
     };
 
     virtual void setRunMode(const RunMode& mode) = 0;

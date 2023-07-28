@@ -36,9 +36,9 @@ class AboutModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, update::IUpdateConfiguration, updateConfiguration)
-    INJECT(appshell, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(IAppShellConfiguration, configuration)
+    INJECT(update::IUpdateConfiguration, updateConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     explicit AboutModel(QObject* parent = nullptr);

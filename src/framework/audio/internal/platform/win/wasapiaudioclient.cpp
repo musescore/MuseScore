@@ -26,8 +26,6 @@
 
 using namespace winrt;
 using namespace winrt::Windows::Foundation;
-using namespace winrt::Windows::Media::Devices;
-using namespace winrt::Windows::Devices::Enumeration;
 
 WasapiAudioClient::WasapiAudioClient(HANDLE clientStartedEvent, HANDLE clientFailedToStartEvent, HANDLE clientStoppedEvent)
     : m_clientStartedEvent(clientStartedEvent), m_clientFailedToStartEvent(clientFailedToStartEvent), m_clientStoppedEvent(
@@ -98,31 +96,12 @@ unsigned int WasapiAudioClient::channelCount() const
     return m_mixFormat.get()->nChannels;
 }
 
-DeviceInformationCollection WasapiAudioClient::availableDevices() const
+void WasapiAudioClient::setFallbackDevice(const hstring& deviceId)
 {
-    // Get the string identifier of the audio renderer
-    hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
-
-    IAsyncOperation<DeviceInformationCollection> deviceRequest
-        = DeviceInformation::FindAllAsync(AudioSelector, {});
-
-    DeviceInformationCollection deviceInfoCollection = nullptr;
-
-    try {
-        deviceInfoCollection = deviceRequest.get();
-    } catch (...) {
-        LOGE() << to_string(hresult_error(to_hresult()).message());
-    }
-
-    return deviceInfoCollection;
+    m_fallbackDeviceIdString = deviceId;
 }
 
-hstring WasapiAudioClient::defaultDeviceId() const
-{
-    return MediaDevice::GetDefaultAudioRenderId(AudioDeviceRole::Default);
-}
-
-void WasapiAudioClient::asyncInitializeAudioDevice(const hstring& deviceId) noexcept
+void WasapiAudioClient::asyncInitializeAudioDevice(const hstring& deviceId, bool useClosestSupportedFormat) noexcept
 {
     try {
         // This call can be made safely from a background thread because we are asking for the IAudioClient3
@@ -130,11 +109,25 @@ void WasapiAudioClient::asyncInitializeAudioDevice(const hstring& deviceId) noex
         // IActivateAudioInterfaceCompletionHandler::ActivateCompleted, which must be an agile interface implementation
         m_deviceIdString = deviceId;
 
+        m_useClosestSupportedFormat = useClosestSupportedFormat;
+        m_deviceState = DeviceState::Uninitialized;
+
         com_ptr<IActivateAudioInterfaceAsyncOperation> asyncOp;
         check_hresult(ActivateAudioInterfaceAsync(m_deviceIdString.c_str(), __uuidof(IAudioClient3), nullptr, this, asyncOp.put()));
     } catch (...) {
         setStateAndNotify(DeviceState::Error, to_hresult());
     }
+}
+
+static void logWAVEFORMATEX(WAVEFORMATEX* format)
+{
+    LOGI() << "Format tag: " << format->wFormatTag;
+    LOGI() << "Channels: " << format->nChannels;
+    LOGI() << "Sample rate: " << format->nSamplesPerSec;
+    LOGI() << "Average bytes per second: " << format->nAvgBytesPerSec;
+    LOGI() << "Block align: " << format->nBlockAlign;
+    LOGI() << "Bits per sample: " << format->wBitsPerSample;
+    LOGI() << "cbSize: " << format->cbSize;
 }
 
 //
@@ -181,12 +174,7 @@ HRESULT WasapiAudioClient::ActivateCompleted(IActivateAudioInterfaceAsyncOperati
         }
 
         LOGI() << "Initialized WASAPI audio endpoint with: ";
-        LOGI() << "Sample rate: " << m_mixFormat->nSamplesPerSec;
-        LOGI() << "Channels: " << m_mixFormat->nChannels;
-        LOGI() << "Average bytes per second: " << m_mixFormat->nAvgBytesPerSec;
-        LOGI() << "Block align: " << m_mixFormat->nBlockAlign;
-        LOGI() << "Bits per sample: " << m_mixFormat->wBitsPerSample;
-        LOGI() << "cbSize: " << m_mixFormat->cbSize;
+        logWAVEFORMATEX(m_mixFormat.get());
         LOGI() << "HnsBufferDuration: " << m_hnsBufferDuration;
         LOGI() << "Minimal period in frames: " << m_minPeriodInFrames;
         LOGI() << "Default period in frames: " << m_defaultPeriodInFrames;
@@ -297,6 +285,27 @@ HRESULT WasapiAudioClient::configureDeviceInternal() noexcept
         LOGI() << "WASAPI: Getting device mix format";
         check_hresult(m_audioClient->GetMixFormat(m_mixFormat.put()));
 
+        LOGI() << "WASAPI: Mix format after getting from audio client:";
+        logWAVEFORMATEX(m_mixFormat.get());
+
+        m_mixFormat->wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
+        m_mixFormat->nChannels = 2;
+        m_mixFormat->wBitsPerSample = 32;
+        m_mixFormat->nAvgBytesPerSec = m_mixFormat->nSamplesPerSec * m_mixFormat->nChannels * sizeof(float);
+        m_mixFormat->nBlockAlign = (m_mixFormat->nChannels * m_mixFormat->wBitsPerSample) / 8;
+        m_mixFormat->cbSize = 0;
+
+        LOGI() << "WASAPI: Modified mix format:";
+        logWAVEFORMATEX(m_mixFormat.get());
+
+        if (m_useClosestSupportedFormat) {
+            unique_cotaskmem_ptr<WAVEFORMATEX> closestSupported;
+            m_audioClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, m_mixFormat.get(), closestSupported.put());
+
+            logWAVEFORMATEX(closestSupported.get());
+            m_mixFormat = std::move(closestSupported);
+        }
+
         if (!audioProps.bIsOffload) {
             LOGI() << "WASAPI: Getting shared mode engine period";
             // The wfx parameter below is optional (Its needed only for MATCH_FORMAT clients). Otherwise, wfx will be assumed
@@ -305,13 +314,6 @@ HRESULT WasapiAudioClient::configureDeviceInternal() noexcept
                                                                    &m_fundamentalPeriodInFrames,
                                                                    &m_minPeriodInFrames, &m_maxPeriodInFrames));
         }
-
-        m_mixFormat->wFormatTag = WAVE_FORMAT_IEEE_FLOAT;
-        m_mixFormat->nChannels = 2;
-        m_mixFormat->wBitsPerSample = 32;
-        m_mixFormat->nAvgBytesPerSec = m_mixFormat->nSamplesPerSec * m_mixFormat->nChannels * sizeof(float);
-        m_mixFormat->nBlockAlign = (m_mixFormat->nChannels * m_mixFormat->wBitsPerSample) / 8;
-        m_mixFormat->cbSize = 0;
 
         LOGI() << "WASAPI: Device successfully configured";
 
@@ -535,7 +537,7 @@ void WasapiAudioClient::onAudioSampleRequested(bool IsSilence)
         m_audioRenderClient = nullptr;
         m_sampleReadyAsyncResult = nullptr;
 
-        asyncInitializeAudioDevice(defaultDeviceId());
+        asyncInitializeAudioDevice(m_fallbackDeviceIdString);
     }
 }
 
@@ -571,19 +573,90 @@ void WasapiAudioClient::setStateAndNotify(const DeviceState newState, hresult re
     std::string errMsg;
 
     switch (resultCode) {
-    case AUDCLNT_E_ENDPOINT_OFFLOAD_NOT_CAPABLE:
-        errMsg = "ERROR: Endpoint Does Not Support HW Offload";
+    case AUDCLNT_E_NOT_INITIALIZED: errMsg = "AUDCLNT_E_NOT_INITIALIZED";
         break;
-
-    case AUDCLNT_E_RESOURCES_INVALIDATED:
-        errMsg = "ERROR: Endpoint Lost Access To Resources";
+    case AUDCLNT_E_ALREADY_INITIALIZED: errMsg = "AUDCLNT_E_ALREADY_INITIALIZED";
+        break;
+    case AUDCLNT_E_WRONG_ENDPOINT_TYPE: errMsg = "AUDCLNT_E_WRONG_ENDPOINT_TYPE";
+        break;
+    case AUDCLNT_E_DEVICE_INVALIDATED: errMsg = "AUDCLNT_E_DEVICE_INVALIDATED";
+        break;
+    case AUDCLNT_E_NOT_STOPPED: errMsg = "AUDCLNT_E_NOT_STOPPED";
+        break;
+    case AUDCLNT_E_BUFFER_TOO_LARGE: errMsg = "AUDCLNT_E_BUFFER_TOO_LARGE";
+        break;
+    case AUDCLNT_E_OUT_OF_ORDER: errMsg = "AUDCLNT_E_OUT_OF_ORDER";
+        break;
+    case AUDCLNT_E_UNSUPPORTED_FORMAT: errMsg = "AUDCLNT_E_UNSUPPORTED_FORMAT";
+        break;
+    case AUDCLNT_E_INVALID_SIZE: errMsg = "AUDCLNT_E_INVALID_SIZE";
+        break;
+    case AUDCLNT_E_DEVICE_IN_USE: errMsg = "AUDCLNT_E_DEVICE_IN_USE";
+        break;
+    case AUDCLNT_E_BUFFER_OPERATION_PENDING: errMsg = "AUDCLNT_E_BUFFER_OPERATION_PENDING";
+        break;
+    case AUDCLNT_E_THREAD_NOT_REGISTERED: errMsg = "AUDCLNT_E_THREAD_NOT_REGISTERED";
+        break;
+    case AUDCLNT_E_EXCLUSIVE_MODE_NOT_ALLOWED: errMsg = "AUDCLNT_E_EXCLUSIVE_MODE_NOT_ALLOWED";
+        break;
+    case AUDCLNT_E_ENDPOINT_CREATE_FAILED: errMsg = "AUDCLNT_E_ENDPOINT_CREATE_FAILED";
+        break;
+    case AUDCLNT_E_SERVICE_NOT_RUNNING: errMsg = "AUDCLNT_E_SERVICE_NOT_RUNNING";
+        break;
+    case AUDCLNT_E_EVENTHANDLE_NOT_EXPECTED: errMsg = "AUDCLNT_E_EVENTHANDLE_NOT_EXPECTED";
+        break;
+    case AUDCLNT_E_EXCLUSIVE_MODE_ONLY: errMsg = "AUDCLNT_E_EXCLUSIVE_MODE_ONLY";
+        break;
+    case AUDCLNT_E_BUFDURATION_PERIOD_NOT_EQUAL: errMsg = "AUDCLNT_E_BUFDURATION_PERIOD_NOT_EQUAL";
+        break;
+    case AUDCLNT_E_EVENTHANDLE_NOT_SET: errMsg = "AUDCLNT_E_EVENTHANDLE_NOT_SET";
+        break;
+    case AUDCLNT_E_INCORRECT_BUFFER_SIZE: errMsg = "AUDCLNT_E_INCORRECT_BUFFER_SIZE";
+        break;
+    case AUDCLNT_E_BUFFER_SIZE_ERROR: errMsg = "AUDCLNT_E_BUFFER_SIZE_ERROR";
+        break;
+    case AUDCLNT_E_CPUUSAGE_EXCEEDED: errMsg = "AUDCLNT_E_CPUUSAGE_EXCEEDED";
+        break;
+    case AUDCLNT_E_BUFFER_ERROR: errMsg = "AUDCLNT_E_BUFFER_ERROR";
+        break;
+    case AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED: errMsg = "AUDCLNT_E_BUFFER_SIZE_NOT_ALIGNED";
+        break;
+    case AUDCLNT_E_INVALID_DEVICE_PERIOD: errMsg = "AUDCLNT_E_INVALID_DEVICE_PERIOD";
+        break;
+    case AUDCLNT_E_INVALID_STREAM_FLAG: errMsg = "AUDCLNT_E_INVALID_STREAM_FLAG";
+        break;
+    case AUDCLNT_E_ENDPOINT_OFFLOAD_NOT_CAPABLE: errMsg = "AUDCLNT_E_ENDPOINT_OFFLOAD_NOT_CAPABLE";
+        break;
+    case AUDCLNT_E_OUT_OF_OFFLOAD_RESOURCES: errMsg = "AUDCLNT_E_OUT_OF_OFFLOAD_RESOURCES";
+        break;
+    case AUDCLNT_E_OFFLOAD_MODE_ONLY: errMsg = "AUDCLNT_E_OFFLOAD_MODE_ONLY";
+        break;
+    case AUDCLNT_E_NONOFFLOAD_MODE_ONLY: errMsg = "AUDCLNT_E_NONOFFLOAD_MODE_ONLY";
+        break;
+    case AUDCLNT_E_RESOURCES_INVALIDATED: errMsg = "AUDCLNT_E_RESOURCES_INVALIDATED";
+        break;
+    case AUDCLNT_E_RAW_MODE_UNSUPPORTED: errMsg = "AUDCLNT_E_RAW_MODE_UNSUPPORTED";
+        break;
+    case AUDCLNT_E_ENGINE_PERIODICITY_LOCKED: errMsg = "AUDCLNT_E_ENGINE_PERIODICITY_LOCKED";
+        break;
+    case AUDCLNT_E_ENGINE_FORMAT_LOCKED: errMsg = "AUDCLNT_E_ENGINE_FORMAT_LOCKED";
+        break;
+    case AUDCLNT_E_HEADTRACKING_ENABLED: errMsg = "AUDCLNT_E_HEADTRACKING_ENABLED";
+        break;
+    case AUDCLNT_E_HEADTRACKING_UNSUPPORTED: errMsg = "AUDCLNT_E_HEADTRACKING_UNSUPPORTED";
+        break;
+    case AUDCLNT_S_BUFFER_EMPTY: errMsg = "AUDCLNT_S_BUFFER_EMPTY";
+        break;
+    case AUDCLNT_S_THREAD_ALREADY_REGISTERED: errMsg = "AUDCLNT_S_THREAD_ALREADY_REGISTERED";
+        break;
+    case AUDCLNT_S_POSITION_STALLED: errMsg = "AUDCLNT_S_POSITION_STALLED";
         break;
 
     case S_OK:
         break;
 
     default:
-        errMsg = "ERROR: " + to_string(hresult_error(resultCode).message());
+        errMsg = "ERROR: " + std::to_string(resultCode) + " " + to_string(hresult_error(resultCode).message());
         break;
     }
 

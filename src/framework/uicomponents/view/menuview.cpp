@@ -65,7 +65,7 @@ void MenuView::componentComplete()
     PopupView::componentComplete();
 }
 
-void MenuView::updatePosition()
+void MenuView::updateGeometry()
 {
     const QQuickItem* parent = parentItem();
     IF_ASSERT_FAILED(parent) {

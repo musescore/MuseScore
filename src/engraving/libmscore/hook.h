@@ -33,6 +33,8 @@ class Chord;
 class Hook final : public Symbol
 {
     OBJECT_ALLOCATOR(engraving, Hook)
+    DECLARE_CLASSOF(ElementType::HOOK)
+
 public:
     Hook(Chord* parent = 0);
 
@@ -42,7 +44,7 @@ public:
 
     void setHookType(int v);
     int hookType() const { return _hookType; }
-    void layout() override;
+
     void draw(mu::draw::Painter*) const override;
     Chord* chord() const { return toChord(explicitParent()); }
     mu::PointF smuflAnchor() const;

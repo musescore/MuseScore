@@ -38,28 +38,34 @@ class StaffLines final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StaffLines)
 
-    double lw { 0.0 };
-    std::vector<mu::LineF> lines;
-
-    friend class Factory;
-    StaffLines(Measure* parent);
-
 public:
 
     StaffLines* clone() const override { return new StaffLines(*this); }
 
-    void layout() override;
     void draw(mu::draw::Painter*) const override;
     mu::PointF pagePos() const override;      ///< position in page coordinates
     mu::PointF canvasPos() const override;    ///< position in page coordinates
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    std::vector<mu::LineF>& getLines() { return lines; }
+    const std::vector<mu::LineF>& lines() { return m_lines; }
+    void setLines(const std::vector<mu::LineF>& l) { m_lines = l; }
+
     Measure* measure() const { return (Measure*)explicitParent(); }
     double y1() const;
-    void layoutForWidth(double width);
-    void layoutPartialWidth(double w, double wPartial, bool alignLeft);
+
+    double lw() const { return m_lw; }
+    void setLw(double w) { m_lw = w; }
+
+    RectF hitBBox() const override;
+    Shape hitShape() const override;
+
+private:
+    friend class Factory;
+    StaffLines(Measure* parent);
+
+    double m_lw = 0.0;
+    std::vector<mu::LineF> m_lines;
 };
 }
 

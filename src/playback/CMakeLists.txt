@@ -54,6 +54,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/outputresourceitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/inputresourceitem.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/inputresourceitem.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/auxsenditem.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/internal/auxsenditem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/mixerpanelcontextmenumodel.cpp

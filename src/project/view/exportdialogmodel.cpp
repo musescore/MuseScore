@@ -82,7 +82,7 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSuffixes({ "ogg" },
                                      qtrc("project/export", "OGG audio"),
                                      qtrc("project/export", "OGG audio files"),
-                                     "AudioSettingsPage.qml"),
+                                     "OggSettingsPage.qml"),
         ExportType::makeWithSuffixes({ "flac" },
                                      qtrc("project/export", "FLAC audio"),
                                      qtrc("project/export", "FLAC audio files"),
@@ -95,10 +95,21 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
                                      qtrc("project/export", "MusicXML")),
         ExportType::makeWithSuffixes({ "brf" },
                                      qtrc("project/export", "Braille"),
-                                     qtrc("project/export", "Braille files"))
+                                     qtrc("project/export", "Braille files")),
+        ExportType::makeWithSuffixes({ "mei" },
+                                     qtrc("project/export", "MEI"),
+                                     qtrc("project/export", "MEI files"),
+                                     "MeiSettingsPage.qml")
     };
 
-    m_selectedExportType = m_exportTypeList.front();
+    ExportInfo info = exportProjectScenario()->exportInfo();
+    if (info.id == "") {
+        setExportType(m_exportTypeList.front());
+    } else {
+        selectExportTypeById(info.id);
+    }
+    m_exportPath = info.exportPath;
+    setUnitType(info.unitType);
 }
 
 ExportDialogModel::~ExportDialogModel()
@@ -133,6 +144,7 @@ void ExportDialogModel::load()
     endResetModel();
 
     selectCurrentNotation();
+    selectSavedNotations();
 }
 
 QVariant ExportDialogModel::data(const QModelIndex& index, int role) const
@@ -197,6 +209,17 @@ void ExportDialogModel::selectCurrentNotation()
     }
 }
 
+void ExportDialogModel::selectSavedNotations()
+{
+    ExportInfo info = exportProjectScenario()->exportInfo();
+    for (INotationPtr notation : info.notations) {
+        auto it = std::find(m_notations.begin(), m_notations.end(), notation);
+        if (it != m_notations.end()) {
+            setSelected(std::distance(m_notations.begin(), it), true);
+        }
+    }
+}
+
 IMasterNotationPtr ExportDialogModel::masterNotation() const
 {
     return context()->currentMasterNotation();
@@ -234,6 +257,7 @@ void ExportDialogModel::setExportType(const ExportType& type)
     }
 
     m_selectedExportType = type;
+
     emit selectedExportTypeChanged(type.toMap());
 
     std::vector<UnitType> unitTypes = exportProjectScenario()->supportedUnitTypes(type);
@@ -306,6 +330,17 @@ void ExportDialogModel::setUnitType(UnitType unitType)
         return;
     }
 
+    bool found = false;
+    for (QVariant availabeUnitType : availableUnitTypes()) {
+        if (availabeUnitType.value<QVariantMap>()["value"].toInt() == static_cast<int>(unitType)) {
+            found = true;
+        }
+    }
+
+    if (!found) {
+        return;
+    }
+
     m_selectedUnitType = unitType;
     emit selectedUnitTypeChanged(unitType);
 }
@@ -322,28 +357,31 @@ bool ExportDialogModel::exportScores()
         return false;
     }
 
-    RetVal<io::path_t> exportPath = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType);
+    INotationProjectPtr project = context()->currentProject();
+    io::path_t filename = io::filename(project->path());
+    // TODO: only restore filename if exactly the same notations are selected and the same unit type.
+    // These settings may namely cause extra things to be added to the name, but these extra things
+    // are not applicable to other values of these settings.
+    //if (project && project->path() == exportProjectScenario()->exportInfo().projectPath) {
+    //    filename = io::filename(m_exportPath);
+    //}
+    io::path_t defaultPath;
+    if (m_exportPath != "" && filename != "") {
+        defaultPath = io::absoluteDirpath(m_exportPath)
+                      .appendingComponent(io::filename(filename, false))
+                      .appendingSuffix(m_selectedExportType.suffixes[0]);
+    }
+
+    RetVal<io::path_t> exportPath
+        = exportProjectScenario()->askExportPath(notations, m_selectedExportType, m_selectedUnitType, defaultPath);
     if (!exportPath.ret) {
         return false;
     }
 
-    ExcerptNotationList excerptsToInit;
-    ExcerptNotationList potentialExcerpts = masterNotation()->potentialExcerpts();
+    m_exportPath = exportPath.val;
 
-    for (const INotationPtr& notation : notations) {
-        auto it = std::find_if(potentialExcerpts.cbegin(), potentialExcerpts.cend(), [notation](const IExcerptNotationPtr& excerpt) {
-            return excerpt->notation() == notation;
-        });
-
-        if (it != potentialExcerpts.cend()) {
-            excerptsToInit.push_back(*it);
-        }
-    }
-
-    masterNotation()->initExcerpts(excerptsToInit);
-
-    QMetaObject::invokeMethod(qApp, [this, notations, exportPath]() {
-        exportProjectScenario()->exportScores(notations, exportPath.val, m_selectedUnitType,
+    QMetaObject::invokeMethod(qApp, [this, notations]() {
+        exportProjectScenario()->exportScores(notations, m_exportPath, m_selectedUnitType,
                                               shouldDestinationFolderBeOpenedOnExport());
     }, Qt::QueuedConnection);
 
@@ -439,8 +477,7 @@ void ExportDialogModel::setBitRate(int rate)
 
 bool ExportDialogModel::midiExpandRepeats() const
 {
-    NOT_IMPLEMENTED;
-    return true;
+    return midiImportExportConfiguration()->isExpandRepeats();
 }
 
 void ExportDialogModel::setMidiExpandRepeats(bool expandRepeats)
@@ -449,7 +486,7 @@ void ExportDialogModel::setMidiExpandRepeats(bool expandRepeats)
         return;
     }
 
-    NOT_IMPLEMENTED;
+    midiImportExportConfiguration()->setExpandRepeats(expandRepeats);
     emit midiExpandRepeatsChanged(expandRepeats);
 }
 
@@ -466,6 +503,21 @@ void ExportDialogModel::setMidiExportRpns(bool exportRpns)
 
     midiImportExportConfiguration()->setIsMidiExportRpns(exportRpns);
     emit midiExportRpnsChanged(exportRpns);
+}
+
+bool ExportDialogModel::meiExportLayout() const
+{
+    return meiConfiguration()->meiExportLayout();
+}
+
+void ExportDialogModel::setMeiExportLayout(bool exportLayout)
+{
+    if (exportLayout == meiExportLayout()) {
+        return;
+    }
+
+    meiConfiguration()->setMeiExportLayout(exportLayout);
+    emit meiExportLayoutChanged(exportLayout);
 }
 
 QVariantList ExportDialogModel::musicXmlLayoutTypes() const
@@ -548,4 +600,23 @@ void ExportDialogModel::setShouldDestinationFolderBeOpenedOnExport(bool enabled)
 
     configuration()->setShouldDestinationFolderBeOpenedOnExport(enabled);
     emit shouldDestinationFolderBeOpenedOnExportChanged(enabled);
+}
+
+void ExportDialogModel::updateExportInfo()
+{
+    ExportInfo info;
+    info.id = m_selectedExportType.id;
+    info.exportPath = m_exportPath;
+    info.unitType = m_selectedUnitType;
+
+    INotationProjectPtr project = context()->currentProject();
+    info.projectPath = project ? project->path() : "";
+
+    std::vector<INotationPtr> notations;
+    for (QModelIndex index : m_selectionModel->selectedIndexes()) {
+        notations.emplace_back(m_notations[index.row()]);
+    }
+    info.notations = notations;
+
+    exportProjectScenario()->setExportInfo(info);
 }

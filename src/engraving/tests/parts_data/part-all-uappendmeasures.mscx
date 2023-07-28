@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <Spatium>1.76389</Spatium>
@@ -119,6 +117,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             <linkedMain/>
             </Clef>
           <TimeSig>
@@ -677,6 +676,7 @@
           <Clef>
             <concertClefType>G8vb</concertClefType>
             <transposingClefType>G8vb</transposingClefType>
+            <isHeader>1</isHeader>
             <linkedMain/>
             </Clef>
           <TimeSig>
@@ -1060,8 +1060,6 @@
         </Measure>
       </Staff>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1132,6 +1130,7 @@
             <Clef>
               <concertClefType>G</concertClefType>
               <transposingClefType>G</transposingClefType>
+              <isHeader>1</isHeader>
               <linked>
                 </linked>
               </Clef>
@@ -1249,7 +1248,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <offset x="1.06662" y="-4.71271"/>
+                  <offset x="1.05809" y="-4.67501"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>67</pitch>
@@ -1765,8 +1764,6 @@
       <name>Alto</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1841,6 +1838,7 @@
             <Clef>
               <concertClefType>G8vb</concertClefType>
               <transposingClefType>G8vb</transposingClefType>
+              <isHeader>1</isHeader>
               <linked>
                 </linked>
               </Clef>

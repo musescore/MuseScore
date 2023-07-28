@@ -174,33 +174,49 @@ RetVal<ByteArray> FileSystem::readFile(const io::path_t& filePath) const
     return result;
 }
 
-bool FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
+Ret FileSystem::readFile(const io::path_t& filePath, ByteArray& data) const
 {
+    Ret ret = make_ok();
+
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::ReadOnly)) {
-        return false;
+        ret = make_ret(Err::FSReadError);
+        ret.setText(file.errorString().toStdString());
+        return ret;
     }
 
     qint64 size = file.size();
     data.resize(static_cast<size_t>(size));
 
-    file.read(reinterpret_cast<char*>(data.data()), size);
+    if (file.read(reinterpret_cast<char*>(data.data()), size) == -1) {
+        ret = make_ret(Err::FSReadError);
+        ret.setText(file.errorString().toStdString());
+    }
+
     file.close();
 
-    return make_ret(Err::NoError);
+    return ret;
 }
 
 Ret FileSystem::writeFile(const io::path_t& filePath, const ByteArray& data) const
 {
+    Ret ret = make_ok();
+
     QFile file(filePath.toQString());
     if (!file.open(QIODevice::WriteOnly)) {
-        return make_ret(Err::FSWriteError);
+        ret = make_ret(Err::FSWriteError);
+        ret.setText(file.errorString().toStdString());
+        return ret;
     }
 
-    file.write(reinterpret_cast<const char*>(data.constData()), static_cast<qint64>(data.size()));
+    if (file.write(reinterpret_cast<const char*>(data.constData()), static_cast<qint64>(data.size())) == -1) {
+        ret = make_ret(Err::FSWriteError);
+        ret.setText(file.errorString().toStdString());
+    }
+
     file.close();
 
-    return true;
+    return ret;
 }
 
 Ret FileSystem::makePath(const io::path_t& path) const
@@ -247,7 +263,7 @@ RetVal<io::paths_t> FileSystem::scanFiles(const io::path_t& rootDir, const std::
     }
 
     QDirIterator::IteratorFlags flags = QDirIterator::NoIteratorFlags;
-    QDir::Filters filters = QDir::NoDotAndDotDot | QDir::NoSymLinks | QDir::Readable;
+    QDir::Filters filters = QDir::NoDotAndDotDot | QDir::Readable;
 
     switch (mode) {
     case ScanMode::FilesInCurrentDir:
@@ -381,7 +397,31 @@ DateTime FileSystem::lastModified(const io::path_t& filePath) const
     return DateTime::fromQDateTime(QFileInfo(filePath.toQString()).lastModified());
 }
 
-bool FileSystem::isWritable(const io::path_t& filePath) const
+Ret FileSystem::isWritable(const io::path_t& filePath) const
 {
-    return QFileInfo(filePath.toQString()).isWritable();
+    Ret ret = make_ok();
+
+    QFileInfo fileInfo(filePath.toQString());
+
+    if (!fileInfo.exists()) {
+        QFile file(filePath.toQString());
+
+        if (!file.open(QFile::WriteOnly)) {
+            ret = make_ret(Err::FSWriteError);
+            ret.setText(file.errorString().toStdString());
+        }
+
+        file.close();
+        file.remove();
+    } else if (!fileInfo.isWritable()) {
+        QFile file(filePath.toQString());
+        file.open(QFile::WriteOnly);
+
+        ret = make_ret(Err::FSWriteError);
+        ret.setText(file.errorString().toStdString());
+
+        file.close();
+    }
+
+    return ret;
 }

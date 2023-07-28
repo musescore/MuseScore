@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <pageWidth>8.27</pageWidth>
@@ -233,8 +231,8 @@
       <Measure>
         <voice>
           <Beam>
-            <l1>-8</l1>
-            <l2>-6</l2>
+            <l1>-6</l1>
+            <l2>-4</l2>
             </Beam>
           <Chord>
             <linkedMain/>
@@ -481,8 +479,6 @@
         </Measure>
       </Staff>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -657,8 +653,8 @@
         <Measure>
           <voice>
             <Beam>
-              <l1>-8</l1>
-              <l2>-6</l2>
+              <l1>-6</l1>
+              <l2>-4</l2>
               </Beam>
             <Chord>
               <linked>
@@ -768,8 +764,6 @@
       <name>Flute</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>

@@ -80,19 +80,19 @@ TEST_F(Diagnostics_DrawDataTests, Rw)
 
     mu::SetCompareRealPrecision(3);
 
-    EXPECT_EQ(origin->objects.size(), readed->objects.size());
+    EXPECT_EQ(origin->item.chilren.size(), readed->item.chilren.size());
 
-    for (size_t i = 0; i < origin->objects.size(); ++i) {
-        const DrawData::Object& originObj = origin->objects.at(i);
-        const DrawData::Object& readedObj = readed->objects.at(i);
+    for (size_t i = 0; i < origin->item.chilren.size(); ++i) {
+        const DrawData::Item& originObj = origin->item.chilren.at(i);
+        const DrawData::Item& readedObj = readed->item.chilren.at(i);
         EXPECT_EQ(originObj.datas.size(), readedObj.datas.size());
 
         for (size_t j = 0; j < originObj.datas.size(); ++j) {
             const DrawData::Data& originData = originObj.datas.at(j);
             const DrawData::Data& readedData = readedObj.datas.at(j);
             // state
-            const DrawData::State& originState = originData.state;
-            const DrawData::State& readedState = readedData.state;
+            const DrawData::State& originState = origin->states.at(originData.state);
+            const DrawData::State& readedState = readed->states.at(readedData.state);
 
             EXPECT_EQ(originState.pen, readedState.pen);
             EXPECT_EQ(originState.brush, readedState.brush);
@@ -119,20 +119,39 @@ TEST_F(Diagnostics_DrawDataTests, SimpleDraw)
 
         p.setViewport(RectF(0, 0, 450, 450));
 
+        p.setAntialiasing(true);
+        p.beginObject("page_1");
+
         PointF pos(120, 240);
         p.translate(pos);
 
         Pen pen(Color::GREEN);
         p.setPen(pen);
+        p.beginObject("line_1");
         p.drawLine(0, 0, 120, 0);
-        p.drawLine(0, 20, 120, 20);
+        p.endObject();
+
+        {
+            p.beginObject("line_2");
+            p.drawLine(0, 20, 120, 20);
+
+            {
+                p.beginObject("line_2.2");
+                p.drawLine(0, 40, 120, 40);
+                p.endObject();
+            }
+            p.endObject();
+        }
 
         p.translate(-pos);
 
+        p.endObject(); // page_1
         p.endDraw();
 
         data = prv->drawData();
     }
+
+    DrawDataRW::writeData("1_data.json", data);
 
     // convert
     {
@@ -149,6 +168,14 @@ TEST_F(Diagnostics_DrawDataTests, ScoreDraw)
         DrawDataGenerator g;
         originImage = g.genImage(VTEST_SCORES + "/accidental-1.mscx");
         io::File::writeFile("2_accidental-1.origin.png", originImage.data());
+    }
+
+    {
+        PainterItemMarker::enabled = false;
+        DrawDataGenerator g;
+        DrawDataPtr drawData = g.genDrawData(VTEST_SCORES + "/accidental-1.mscx");
+        DrawDataRW::writeData("2_accidental-1_no_objects.json", drawData);
+        PainterItemMarker::enabled = true;
     }
 
     DrawDataPtr drawData;
@@ -245,8 +272,8 @@ TEST_F(Diagnostics_DrawDataTests, DrawDiff)
     saveDiff("3_diff.png", origin, diff.dataAdded);
 
     const DrawDataPtr& dd = diff.dataAdded;
-    EXPECT_EQ(dd->objects.size(), 1);
-    const DrawData::Object& ddo = dd->objects.at(0);
+    EXPECT_EQ(dd->item.chilren.size(), 1);
+    const DrawData::Item& ddo = dd->item.chilren.at(0);
     EXPECT_EQ(ddo.datas.size(), 1);
     const DrawData::Data& ddd = ddo.datas.at(0);
     EXPECT_EQ(ddd.polygons.size(), 1);

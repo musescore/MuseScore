@@ -32,7 +32,7 @@ namespace mu::notation {
 class Notation;
 class NotationViewState : public INotationViewState, public async::Asyncable
 {
-    INJECT_STATIC(notation, INotationConfiguration, configuration)
+    INJECT_STATIC(INotationConfiguration, configuration)
 
 public:
     explicit NotationViewState(Notation* notation);
@@ -57,6 +57,7 @@ public:
 
     bool needSave() const override;
     async::Notification needSaveChanged() const override;
+    void markAsSaved() override;
 
     void makeDefault() override;
 

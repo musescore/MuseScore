@@ -56,7 +56,7 @@ InspectorPropertyView {
         isIndeterminate: root.propertyItem ? root.propertyItem.isUndefined : true
         currentValue: root.propertyItem ? root.propertyItem.value : 0
 
-        onValueEdited: function(newValue) {
+        onValueEditingFinished: function(newValue) {
             if (root.propertyItem) {
                 root.propertyItem.value = newValue
             }

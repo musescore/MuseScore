@@ -50,7 +50,7 @@ class RepeatList;
 
 class PlaybackModel : public async::Asyncable
 {
-    INJECT(engraving, mpe::IArticulationProfilesRepository, profilesRepository)
+    INJECT(mpe::IArticulationProfilesRepository, profilesRepository)
 
 public:
     void load(Score* score);
@@ -108,8 +108,10 @@ private:
     void updateEvents(const int tickFrom, const int tickTo, const track_idx_t trackFrom, const track_idx_t trackTo,
                       ChangedTrackIdSet* trackChanges = nullptr);
 
-    void processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& changedStaffIdSet,
-                        ChangedTrackIdSet* trackChanges);
+    void processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
+                        bool isFirstSegmentOfMeasure, ChangedTrackIdSet* trackChanges);
+    void processMeasureRepeat(const int tickPositionOffset, const MeasureRepeat* measureRepeat, const Measure* currentMeasure,
+                              const staff_idx_t staffIdx, ChangedTrackIdSet* trackChanges);
 
     bool hasToReloadTracks(const ScoreChangesRange& changesRange) const;
     bool hasToReloadScore(const std::unordered_set<ElementType>& changedTypes) const;

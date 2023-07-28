@@ -4,7 +4,7 @@
 
 #include "global/log.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNode* trackNode)
 {
     static const std::set<String> sUnusedNodes = {
@@ -57,8 +57,6 @@ std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNod
             readLyrics(trackChildNode, track.get());
         } else if (sUnusedNodes.find(nodeName) != sUnusedNodes.end()) {
             // these nodes are not used (see comment to the sUnusedNodes variable)
-        } else {
-            LOGW() << "unknown GP track tag" << nodeName << "\n";
         }
 
         trackChildNode = trackChildNode.nextSibling();
@@ -89,7 +87,8 @@ GPTrack::SoundAutomation GP6DomBuilder::readRsePickUp(XmlDomNode& bankChangesNod
 
     result.bar = bankChangesNode.attribute("barIndex").toInt();
     result.value = bankChangesNode.attribute("bankId");
+    result.position = bankChangesNode.attribute("tickOffset").toFloat();
 
     return result;
 }
-} //ebd Ms namespace
+} // namespace mu::iex::guitarpro

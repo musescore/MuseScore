@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -59,12 +57,16 @@
           <velocity>100</velocity>
           <gateTime>100</gateTime>
           </Articulation>
-        <Articulation name="marcato">
+        <Articulation name="accent">
           <velocity>120</velocity>
           <gateTime>67</gateTime>
           </Articulation>
+        <Articulation name="marcato">
+          <velocity>144</velocity>
+          <gateTime>67</gateTime>
+          </Articulation>
         <Articulation name="sforzato">
-          <velocity>120</velocity>
+          <velocity>169</velocity>
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
@@ -77,7 +79,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>0</accidental>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -97,29 +99,64 @@
               </Ottava>
             <next>
               <location>
-                <measures>2</measures>
+                <measures>1</measures>
+                <fractions>1/4</fractions>
                 </location>
               </next>
             </Spanner>
           <Chord>
-            <durationType>whole</durationType>
+            <durationType>quarter</durationType>
             <Note>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <fractions>1/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
               <pitch>40</pitch>
               <tpc>18</tpc>
               <fret>2</fret>
               <string>3</string>
               </Note>
             </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
           <Chord>
-            <durationType>whole</durationType>
+            <durationType>quarter</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <fractions>-1/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>40</pitch>
+              <tpc>18</tpc>
+              <fret>2</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
+          <Rest>
+            <durationType>quarter</durationType>
+            </Rest>
+          <Chord>
+            <durationType>quarter</durationType>
             <Note>
               <Accidental>
                 <subtype>accidentalSharp</subtype>
                 </Accidental>
+              <Spanner type="Tie">
+                <Tie>
+                  </Tie>
+                <next>
+                  <location>
+                    <measures>1</measures>
+                    <fractions>-3/4</fractions>
+                    </location>
+                  </next>
+                </Spanner>
               <pitch>42</pitch>
               <tpc>20</tpc>
               <fret>4</fret>
@@ -130,10 +167,95 @@
         </Measure>
       <Measure>
         <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <Spanner type="Tie">
+                <prev>
+                  <location>
+                    <measures>-1</measures>
+                    <fractions>3/4</fractions>
+                    </location>
+                  </prev>
+                </Spanner>
+              <pitch>42</pitch>
+              <tpc>20</tpc>
+              <fret>4</fret>
+              <string>3</string>
+              </Note>
+            </Chord>
           <Spanner type="Ottava">
             <prev>
               <location>
-                <measures>-2</measures>
+                <measures>-1</measures>
+                <fractions>-1/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              <fret>4</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              </Ottava>
+            <next>
+              <location>
+                <fractions>1/4</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              <fret>4</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <fractions>-1/4</fractions>
+                </location>
+              </prev>
+            </Spanner>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>15mb</subtype>
+              </Ottava>
+            <next>
+              <location>
+                <measures>1</measures>
+                <fractions>-3/4</fractions>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>83</pitch>
+              <tpc>19</tpc>
+              <fret>4</fret>
+              <string>2</string>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                <fractions>3/4</fractions>
                 </location>
               </prev>
             </Spanner>
@@ -274,9 +396,6 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
-          <BarLine>
-            <subtype>end</subtype>
-            </BarLine>
           </voice>
         </Measure>
       </Staff>

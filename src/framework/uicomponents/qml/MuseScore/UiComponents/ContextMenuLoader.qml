@@ -28,6 +28,8 @@ Item {
     property var items: []
 
     signal handleMenuItem(string itemId)
+    signal opened()
+    signal closed()
 
     //! NOTE: Height and width are equal to zero - the menu will appear exactly
     //  next(depending on the limitation) to the pressed position.
@@ -60,6 +62,14 @@ Item {
 
         onHandleMenuItem: function(itemId) {
             container.handleMenuItem(itemId)
+        }
+
+        onOpened: {
+            container.opened()
+        }
+
+        onClosed: {
+            container.closed()
         }
     }
 }

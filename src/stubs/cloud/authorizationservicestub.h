@@ -37,6 +37,8 @@ public:
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;
 
+    CloudInfo cloudInfo() const override;
+
     Ret checkCloudIsAvailable() const override;
 };
 }

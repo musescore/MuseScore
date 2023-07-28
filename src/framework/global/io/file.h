@@ -31,14 +31,8 @@
 namespace mu::io {
 class File : public IODevice
 {
-    INJECT_STATIC(io, IFileSystem, fileSystem)
+    INJECT_STATIC(IFileSystem, fileSystem)
 public:
-
-    enum Error {
-        NoError = 0,
-        ReadError = 1,
-        WriteError = 2
-    };
 
     File() = default;
     File(const path_t& filePath);
@@ -48,9 +42,6 @@ public:
 
     bool exists() const;
     bool remove();
-
-    Error error() const;
-    std::string errorString() const;
 
     static bool exists(const path_t& filePath);
     static bool remove(const path_t& filePath);
@@ -71,7 +62,6 @@ private:
 
     path_t m_filePath;
     ByteArray m_data;
-    Error m_error = Error::NoError;
 };
 }
 

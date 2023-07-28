@@ -44,6 +44,7 @@ public:
     QString name() const override;
 
     const Index& index() const override;
+    void setIndex(const INavigation::Index& index) override;
     async::Channel<Index> indexChanged() const override;
 
     bool enabled() const override;

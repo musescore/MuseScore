@@ -69,6 +69,10 @@
 #include "notation/tuplets/tupletsettingsmodel.h"
 #include "notation/instrumentname/instrumentnamesettingsmodel.h"
 #include "notation/lyrics/lyricssettingsmodel.h"
+#include "notation/rests/beams/restbeamsettingsmodel.h"
+#include "notation/rests/restsettingsproxymodel.h"
+#include "notation/dynamics/dynamicsettingsmodel.h"
+#include "notation/expressions/expressionsettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -178,9 +182,16 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new InstrumentNameSettingsModel(parent, repository);
     case InspectorModelType::TYPE_LYRICS:
         return new LyricsSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_REST:
+        return new RestSettingsProxyModel(parent, repository);
+    case InspectorModelType::TYPE_REST_BEAM:
+        return new RestBeamSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_DYNAMIC:
+        return new DynamicsSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_EXPRESSION:
+        return new ExpressionSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BREATH:
     case InspectorModelType::TYPE_ARPEGGIO:
-    case InspectorModelType::TYPE_DYNAMIC:
     case InspectorModelType::TYPE_UNDEFINED:
         break;
     }

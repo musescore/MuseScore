@@ -22,7 +22,7 @@
 #ifndef MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
 #define MU_LANGUAGES_ILANGUAGESCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "types/retval.h"
 #include "io/path.h"
 

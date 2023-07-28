@@ -72,6 +72,30 @@ const INavigation::Index& AbstractNavigation::index() const
     return m_index;
 }
 
+void AbstractNavigation::setIndex(const INavigation::Index& index)
+{
+    if (m_index == index) {
+        return;
+    }
+
+    bool _rowChanged = m_index.row != index.row;
+    bool _columnChanged = m_index.column != index.column;
+
+    m_index = index;
+
+    if (m_indexChanged.isConnected()) {
+        m_indexChanged.send(m_index);
+    }
+
+    if (_rowChanged) {
+        emit rowChanged(m_index.row);
+    }
+
+    if (_columnChanged) {
+        emit columnChanged(m_index.column);
+    }
+}
+
 mu::async::Channel<INavigation::Index> AbstractNavigation::indexChanged() const
 {
     return m_indexChanged;

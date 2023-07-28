@@ -36,7 +36,6 @@ using namespace mu;
 using namespace mu::audio;
 using namespace mu::audio::soundtrack;
 
-static constexpr int WRITE_STEPS = 2;
 static constexpr int PREPARE_STEP = 0;
 static constexpr int ENCODE_STEP = 1;
 

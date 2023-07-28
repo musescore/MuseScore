@@ -104,6 +104,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/barlines/barlinesettingsproxymodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/beams/beammodesmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/beams/beammodesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/bends/bendsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/bends/bendsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/brackets/bracketsettingsmodel.cpp
@@ -178,8 +180,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/notesettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/beamsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/beamsettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/internal/beammodesmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/beams/internal/beammodesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/chords/chordsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/chords/chordsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notes/hooks/hooksettingsmodel.cpp
@@ -198,6 +198,14 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/tuplets/tupletsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/instrumentname/instrumentnamesettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/beams/restbeamsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/beams/restbeamsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/restsettingsproxymodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/rests/restsettingsproxymodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/dynamics/dynamicsettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/dynamics/dynamicsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/expressions/expressionsettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/notation/expressions/expressionsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.cpp

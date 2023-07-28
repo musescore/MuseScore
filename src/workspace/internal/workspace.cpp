@@ -45,7 +45,7 @@ Workspace::Workspace(const io::path_t& filePath)
 
 std::string Workspace::name() const
 {
-    return io::basename(m_file.filePath()).toStdString();
+    return io::completeBasename(m_file.filePath()).toStdString();
 }
 
 std::string Workspace::title() const

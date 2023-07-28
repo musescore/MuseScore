@@ -63,7 +63,7 @@ TEST_F(Engraving_KeySigTests, keysig)
 
     // add a key signature (D major) in measure 2
     KeySigEvent ke2;
-    ke2.setKey(Key::D);
+    ke2.setConcertKey(Key::D);
     score->startCmd();
     score->undoChangeKeySig(score->staff(0), m2->tick(), ke2);
     score->endCmd();
@@ -71,7 +71,7 @@ TEST_F(Engraving_KeySigTests, keysig)
 
     // change key signature in measure 2 to E flat major
     KeySigEvent ke_3;
-    ke_3.setKey(Key(-3));
+    ke_3.setConcertKey(Key(-3));
     score->startCmd();
     score->undoChangeKeySig(score->staff(0), m2->tick(), ke_3);
     score->endCmd();

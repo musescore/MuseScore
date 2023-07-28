@@ -158,6 +158,23 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzipreader_p.h
         ${CMAKE_CURRENT_LIST_DIR}/deprecated/qzipwriter_p.h
         )
+
+    include(GetPlatformInfo)
+
+    if (OS_IS_MAC)
+        set(MODULE_SRC ${MODULE_SRC}
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.mm
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.h
+        )
+        set_source_files_properties(
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.mm
+            PROPERTIES
+            SKIP_UNITY_BUILD_INCLUSION ON
+            SKIP_PRECOMPILE_HEADERS ON
+        )
+        find_library(AppKit NAMES AppKit)
+        list(APPEND MODULE_LINK ${AppKit})
+    endif()
 endif()
 
 set(FS_LIB )
@@ -180,29 +197,14 @@ else ()
     set(Z_LIB z)
 endif ()
 
-set(MODULE_INCLUDE
+list(APPEND MODULE_INCLUDE
     ${Z_INCLUDE}
     )
 
-set(MODULE_LINK
+list(APPEND MODULE_LINK
     ${FS_LIB}
     ${Z_LIB}
 )
-
-if (OS_IS_MAC)
-    set(MODULE_SRC ${MODULE_SRC}
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.mm
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.h
-    )
-    set_source_files_properties(
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/macos/macosinteractivehelper.mm
-        PROPERTIES
-        SKIP_UNITY_BUILD_INCLUSION ON
-        SKIP_PRECOMPILE_HEADERS ON
-    )
-    find_library(AppKit NAMES AppKit)
-    set(MODULE_LINK ${MODULE_LINK} ${AppKit})
-endif()
 
 if (MUE_ENABLE_CUSTOM_ALLOCATOR)
     set(MODULE_DEF ${MODULE_DEF} -DMUE_ENABLE_CUSTOM_ALLOCATOR)

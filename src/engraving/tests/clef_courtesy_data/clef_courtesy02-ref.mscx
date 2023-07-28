@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <maxSystemDistance>20</maxSystemDistance>
       <frameSystemDistance>0</frameSystemDistance>
       <barWidth>0.2</barWidth>
       <endBarWidth>0.4</endBarWidth>
-      <bracketDistance>0.4</bracketDistance>
       <stemWidth>0.2</stemWidth>
       <staffLineWidth>0.15</staffLineWidth>
       <genCourtesyTimesig>0</genCourtesyTimesig>
@@ -79,6 +76,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>

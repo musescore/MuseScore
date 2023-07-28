@@ -32,7 +32,7 @@ namespace mu::autobot {
 class AbFilesModel : public QAbstractListModel, public async::Asyncable
 {
     Q_OBJECT
-    INJECT(autobot, IAutobot, autobot)
+    INJECT(IAutobot, autobot)
 
 public:
     explicit AbFilesModel(QObject* parent = nullptr);

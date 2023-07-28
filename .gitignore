@@ -4,11 +4,13 @@
 *.autosave
 .qped
 .directory
+.idea
 /builds
 /build_overrides.cmake
 build.release
 build.debug
 build.install
+build.tooldata
 build.qtc
 build-*
 win32build
@@ -49,7 +51,6 @@ vtest/LOG
 vtest/META-INF
 vtest/Thumbnails
 vtest/Pictures
-vtest/temp*
 .vs
 dependencies
 
@@ -65,3 +66,5 @@ VERSION
 
 # Backup Files created by Merging Softwares (Example: Meld)
 *.orig
+
+temp_*

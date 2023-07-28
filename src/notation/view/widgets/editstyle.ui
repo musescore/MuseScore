@@ -10,59 +10,16 @@
     <height>752</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>0</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Style</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_39">
-   <item row="1" column="0">
-    <layout class="QHBoxLayout">
-     <property name="spacing">
-      <number>6</number>
-     </property>
-     <property name="leftMargin">
-      <number>0</number>
-     </property>
-     <property name="topMargin">
-      <number>0</number>
-     </property>
-     <property name="rightMargin">
-      <number>0</number>
-     </property>
-     <property name="bottomMargin">
-      <number>0</number>
-     </property>
-     <item>
-      <widget class="QPushButton" name="buttonTogglePagelist">
-       <property name="maximumSize">
-        <size>
-         <width>30</width>
-         <height>16777215</height>
-        </size>
-       </property>
-       <property name="text">
-        <string/>
-       </property>
-       <property name="flat">
-        <bool>true</bool>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="resetStylesButton">
-       <property name="text">
-        <string>Reset All Styles to Default</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QDialogButtonBox" name="buttonBox">
-       <property name="standardButtons">
-        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
-   </item>
    <item row="0" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
@@ -249,6 +206,11 @@
       </item>
       <item>
        <property name="text">
+        <string>Expression</string>
+       </property>
+      </item>
+      <item>
+       <property name="text">
         <string>Rehearsal Marks</string>
        </property>
       </item>
@@ -315,8 +277,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>638</height>
+                <width>592</width>
+                <height>441</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -467,6 +429,9 @@
                  </item>
                  <item row="2" column="1">
                   <widget class="QDoubleSpinBox" name="staffLineWidth">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
                    <property name="suffix">
                     <string extracomment="spatium unit">sp</string>
                    </property>
@@ -527,6 +492,9 @@
                   </item>
                   <item>
                    <widget class="QDoubleSpinBox" name="indentationValue">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -703,6 +671,9 @@
                         <verstretch>0</verstretch>
                        </sizepolicy>
                       </property>
+                      <property name="keyboardTracking">
+                       <bool>false</bool>
+                      </property>
                       <property name="suffix">
                        <string>%</string>
                       </property>
@@ -755,6 +726,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string>sp</string>
@@ -899,8 +873,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>673</width>
-                <height>674</height>
+                <width>408</width>
+                <height>484</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -940,6 +914,9 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
                  </property>
                  <property name="suffix">
                   <string>sp</string>
@@ -1006,6 +983,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -1054,6 +1034,9 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
                  </property>
                  <property name="suffix">
                   <string>sp</string>
@@ -1163,6 +1146,9 @@
                    <verstretch>0</verstretch>
                   </sizepolicy>
                  </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -1187,6 +1173,9 @@
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
                  </property>
                  <property name="suffix">
                   <string notr="true">%</string>
@@ -1230,6 +1219,9 @@
                  <layout class="QGridLayout" name="gridLayout_50">
                   <item row="5" column="5">
                    <widget class="QDoubleSpinBox" name="maxPageFillSpread">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1258,6 +1250,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string>sp</string>
@@ -1304,6 +1299,9 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string/>
                     </property>
@@ -1336,6 +1334,9 @@
                   </item>
                   <item row="4" column="5">
                    <widget class="QDoubleSpinBox" name="maxAkkoladeDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1450,6 +1451,9 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1474,6 +1478,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string/>
@@ -1530,6 +1537,9 @@
                   </item>
                   <item row="1" column="5">
                    <widget class="QDoubleSpinBox" name="maxSystemSpread">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1559,6 +1569,9 @@
                   </item>
                   <item row="0" column="5">
                    <widget class="QDoubleSpinBox" name="minSystemSpread">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1600,6 +1613,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string/>
@@ -1679,6 +1695,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string>sp</string>
@@ -1786,6 +1805,9 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1843,6 +1865,9 @@
                       <verstretch>0</verstretch>
                      </sizepolicy>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -1896,6 +1921,9 @@
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
                     </property>
                     <property name="suffix">
                      <string>sp</string>
@@ -1975,6 +2003,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -2039,6 +2070,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -2090,6 +2124,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -2140,6 +2177,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string notr="true">%</string>
@@ -2213,8 +2253,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>737</width>
-             <height>674</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -2891,6 +2931,9 @@
              </item>
              <item>
               <widget class="QSpinBox" name="intervalMeasureNumber">
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="minimum">
                 <number>1</number>
                </property>
@@ -2961,7 +3004,11 @@
             </widget>
            </item>
            <item row="2" column="4" rowspan="2" colspan="2">
-            <widget class="mu::notation::OffsetSelect" name="measureNumberPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="measureNumberPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="1" column="6">
             <widget class="QToolButton" name="resetMeasureNumberHPlacement">
@@ -2974,7 +3021,11 @@
             </widget>
            </item>
            <item row="4" column="4" rowspan="2" colspan="2">
-            <widget class="mu::notation::OffsetSelect" name="measureNumberPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="measureNumberPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0">
             <widget class="QRadioButton" name="showEverySystemMeasureNumber">
@@ -3058,7 +3109,11 @@
             <widget class="QComboBox" name="mmRestRangeBracketType"/>
            </item>
            <item row="3" column="1">
-            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="3" column="2">
             <widget class="QToolButton" name="resetMMRestRangePosAbove">
@@ -3168,7 +3223,11 @@
             </widget>
            </item>
            <item row="4" column="1">
-            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="mmRestRangePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="4" column="2">
             <widget class="QToolButton" name="resetMMRestRangePosBelow">
@@ -3224,6 +3283,9 @@
           <layout class="QGridLayout" name="gridLayout_44">
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="bracketWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -3258,6 +3320,9 @@
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -3303,6 +3368,9 @@
                <height>0</height>
               </size>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -3331,6 +3399,9 @@
                <width>0</width>
                <height>0</height>
               </size>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -3454,6 +3525,9 @@
                   <height>20</height>
                  </size>
                 </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
                 <property name="suffix">
                  <string>sp</string>
                 </property>
@@ -3469,6 +3543,9 @@
                   <width>0</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
                 </property>
                 <property name="suffix">
                  <string>sp</string>
@@ -3570,6 +3647,9 @@
                   <height>20</height>
                  </size>
                 </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
                 <property name="suffix">
                  <string>sp</string>
                 </property>
@@ -3605,6 +3685,9 @@
                   <width>0</width>
                   <height>20</height>
                  </size>
+                </property>
+                <property name="keyboardTracking">
+                 <bool>false</bool>
                 </property>
                 <property name="suffix">
                  <string>sp</string>
@@ -3759,6 +3842,9 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="accessibleName">
               <string>Set value for padding inside parentheses around accidentals</string>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -3933,13 +4019,16 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>369</width>
-                <height>882</height>
+                <width>239</width>
+                <height>593</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
                <item row="1" column="1">
                 <widget class="QDoubleSpinBox" name="measureSpacing">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="decimals">
                   <number>3</number>
                  </property>
@@ -4038,6 +4127,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="13" column="1">
                    <widget class="QDoubleSpinBox" name="barGraceDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4061,6 +4153,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="12" column="1">
                    <widget class="QDoubleSpinBox" name="barAccidentalDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4124,6 +4219,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="21" column="1">
                    <widget class="QDoubleSpinBox" name="timesigLeftMargin">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4134,6 +4232,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="16" column="1">
                    <widget class="QDoubleSpinBox" name="clefBarlineDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4167,6 +4268,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="clefTimesigDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4210,6 +4314,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="clefKeyDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4266,6 +4373,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="15" column="1">
                    <widget class="QDoubleSpinBox" name="clefLeftMargin">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4289,6 +4399,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="4" column="1">
                    <widget class="QDoubleSpinBox" name="keyTimesigDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4319,6 +4432,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="10" column="1">
                    <widget class="QDoubleSpinBox" name="noteBarDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4329,6 +4445,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="5" column="1">
                    <widget class="QDoubleSpinBox" name="clefKeyRightMargin">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4372,6 +4491,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="22" column="1">
                    <widget class="QDoubleSpinBox" name="timesigBarlineDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4418,6 +4540,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="11" column="1">
                    <widget class="QDoubleSpinBox" name="barNoteDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4441,6 +4566,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="18" column="1">
                    <widget class="QDoubleSpinBox" name="keysigLeftMargin">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -4451,6 +4579,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="19" column="1">
                    <widget class="QDoubleSpinBox" name="keyBarlineDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4503,6 +4634,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="0" column="1">
                 <widget class="QDoubleSpinBox" name="minMeasureWidth_2">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string extracomment="spatium unit">sp</string>
                  </property>
@@ -4575,6 +4709,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="2" column="1">
                 <widget class="QDoubleSpinBox" name="minNoteDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -4624,6 +4761,9 @@ By default, they will be placed such as that their right end are at the same lev
                  <layout class="QGridLayout" name="gridLayout_59">
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="systemHeaderTimeSigDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4634,6 +4774,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="systemHeaderDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -4749,6 +4892,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="barWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4818,6 +4964,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="7" column="1">
             <widget class="QDoubleSpinBox" name="doubleBarWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4828,6 +4977,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="doubleBarDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4851,6 +5003,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="9" column="1">
             <widget class="QDoubleSpinBox" name="repeatBarlineDotSeparation">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4894,6 +5049,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="endBarDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -4960,6 +5118,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="5" column="1">
             <widget class="QDoubleSpinBox" name="endBarWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5112,6 +5273,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5138,6 +5302,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5153,6 +5320,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -5170,6 +5340,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5185,6 +5358,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -5202,6 +5378,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5217,6 +5396,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -5268,6 +5450,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QSpinBox" name="dotMag">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -5351,6 +5536,22 @@ By default, they will be placed such as that their right end are at the same lev
       <widget class="QWidget" name="PageRests">
        <layout class="QVBoxLayout" name="verticalLayout_8">
         <item>
+         <widget class="QGroupBox" name="groupBox_rests">
+          <property name="title">
+           <string>Rests (multiple voices)</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_36">
+           <item>
+            <widget class="QLabel" name="label_46">
+             <property name="text">
+              <string>Default vertical offset:</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <widget class="QGroupBox" name="multiMeasureRests">
           <property name="title">
            <string>Multimeasure Rests</string>
@@ -5380,6 +5581,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QSpinBox" name="minEmptyMeasures">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <number>1</number>
              </property>
@@ -5406,6 +5610,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="4">
             <widget class="QDoubleSpinBox" name="minMeasureWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5445,6 +5652,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="mmRestNumberPos">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5492,6 +5702,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="mmRestHBarThickness">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5525,6 +5738,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5555,6 +5771,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="mmRestHBarVStrokeThickness">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5582,6 +5801,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="4">
             <widget class="QDoubleSpinBox" name="mmRestHBarVStrokeHeight">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5640,10 +5862,17 @@ By default, they will be placed such as that their right end are at the same lev
                </widget>
               </item>
               <item row="0" column="1">
-               <widget class="QSpinBox" name="mmRestOldStyleMaxMeasures"/>
+               <widget class="QSpinBox" name="mmRestOldStyleMaxMeasures">
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+               </widget>
               </item>
               <item row="1" column="1">
                <widget class="QDoubleSpinBox" name="mmRestOldStyleSpacing">
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
                 <property name="suffix">
                  <string>sp</string>
                 </property>
@@ -5736,6 +5965,9 @@ By default, they will be placed such as that their right end are at the same lev
               </item>
               <item row="0" column="1">
                <widget class="QSpinBox" name="mrNumberEveryXMeasures">
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
                 <property name="minimum">
                  <number>1</number>
                 </property>
@@ -5817,6 +6049,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="measureRepeatNumberPos">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -5941,8 +6176,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>579</width>
-                <height>527</height>
+                <width>364</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -5983,6 +6218,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="0" column="1">
                    <widget class="QDoubleSpinBox" name="tupletMaxSlope">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -6028,6 +6266,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="tupletVHeadDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6076,6 +6317,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="tupletVStemDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6300,6 +6544,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="tupletBracketHookHeight">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6348,6 +6595,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="0" column="1">
                    <widget class="QDoubleSpinBox" name="tupletBracketWidth">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6421,6 +6671,9 @@ By default, they will be placed such as that their right end are at the same lev
                  <layout class="QGridLayout" name="gridLayout_17">
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="tupletNoteLeftDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6447,6 +6700,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="0" column="1">
                    <widget class="QDoubleSpinBox" name="tupletStemLeftDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6466,6 +6722,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="tupletStemRightDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6562,6 +6821,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="3" column="1">
                    <widget class="QDoubleSpinBox" name="tupletNoteRightDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -6672,6 +6934,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="arpeggioNoteDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6685,6 +6950,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="arpeggioHookLen">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6698,6 +6966,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="arpeggioLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6789,6 +7060,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6814,6 +7088,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -6845,6 +7122,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="minTieLength">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -6873,6 +7153,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -6909,6 +7192,9 @@ By default, they will be placed such as that their right end are at the same lev
                <horstretch>0</horstretch>
                <verstretch>0</verstretch>
               </sizepolicy>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -7030,6 +7316,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="5" column="1">
             <widget class="QDoubleSpinBox" name="hairpinHeight">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7127,6 +7416,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="hairpinContinueHeight">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7137,6 +7429,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="7" column="1">
             <widget class="QDoubleSpinBox" name="autoplaceHairpinDynamicsDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7237,10 +7532,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="hairpinPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="hairpinPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="hairpinPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="hairpinPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="8" column="2">
             <widget class="QToolButton" name="resetHairpinLineWidth">
@@ -7263,6 +7566,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="hairpinLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7347,7 +7653,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="mu::notation::OffsetSelect" name="voltaPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="voltaPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="5" column="2">
             <widget class="QToolButton" name="resetVoltaLineStyleDashSize">
@@ -7406,6 +7716,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="voltaHook">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -7442,6 +7755,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="voltaLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -7478,6 +7794,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="5" column="1">
             <widget class="QDoubleSpinBox" name="voltaLineStyleDashSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -7582,6 +7901,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="voltaLineStyleGapSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -7673,6 +7995,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="5">
             <widget class="QDoubleSpinBox" name="ottavaHookBelow">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7775,6 +8100,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="5">
             <widget class="QDoubleSpinBox" name="ottavaHookAbove">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -7881,7 +8209,11 @@ By default, they will be placed such as that their right end are at the same lev
             </spacer>
            </item>
            <item row="3" column="1">
-            <widget class="mu::notation::OffsetSelect" name="ottavaPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="ottavaPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="9" column="0">
             <widget class="QLabel" name="label_ottava_lineStyle_gapSize">
@@ -7933,16 +8265,26 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="ottavaLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="ottavaPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="ottavaPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="ottavaLineStyleDashSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -7956,6 +8298,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="9" column="1">
             <widget class="QDoubleSpinBox" name="ottavaLineStyleGapSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -8047,6 +8392,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="pedalLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -8135,7 +8483,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="pedalLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="pedalLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="5" column="1">
             <widget class="QComboBox" name="pedalLineStyle">
@@ -8236,7 +8588,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="pedalLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="pedalLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="7" column="0">
             <widget class="QLabel" name="label_pedalLine_lineStyle_gapSize">
@@ -8250,6 +8606,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="pedalLineStyleDashSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -8263,6 +8622,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="7" column="1">
             <widget class="QDoubleSpinBox" name="pedalLineStyleGapSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -8435,10 +8797,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="trillLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="trillLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="trillLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="trillLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -8563,10 +8933,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="vibratoLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="vibratoLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="vibratoLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="vibratoLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -8642,6 +9020,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="bendLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -8661,6 +9042,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="bendArrowWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -8826,10 +9210,18 @@ By default, they will be placed such as that their right end are at the same lev
             </spacer>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="textLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="textLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="textLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="textLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -8966,10 +9358,18 @@ By default, they will be placed such as that their right end are at the same lev
             </spacer>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="systemTextLinePosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="systemTextLinePosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="systemTextLinePosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="systemTextLinePosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -9009,6 +9409,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="1">
             <widget class="QDoubleSpinBox" name="articNoteHeadDist">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string comment="space unit">sp</string>
              </property>
@@ -9039,6 +9442,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="articStaffDist">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string comment="space unit">sp</string>
              </property>
@@ -9049,6 +9455,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="4" column="1">
             <widget class="QSpinBox" name="articulationMag">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -9065,6 +9474,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="articStemDist">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string comment="space unit">sp</string>
              </property>
@@ -9136,6 +9548,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="0" column="1">
             <widget class="QDoubleSpinBox" name="articMinVerticalDist">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -9148,6 +9563,91 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QToolButton" name="resetArticMinVerticalDist">
              <property name="text">
               <string/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_38">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_stemSideArticAlign">
+          <property name="title">
+           <string>Articulation alignment when positioned at the stem</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_42">
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignStem">
+             <property name="text">
+              <string>Align with stem</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignNoteHead">
+             <property name="text">
+              <string>Align with notehead</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAlignCenter">
+             <property name="text">
+              <string>Center between stem and notehead</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_41">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Fixed</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>10</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item>
+         <widget class="QGroupBox" name="groupBox_combinedArtic">
+          <property name="title">
+           <string>Combined articulation</string>
+          </property>
+          <layout class="QVBoxLayout" name="verticalLayout_43">
+           <item>
+            <widget class="QRadioButton" name="radioArticKeepTogether">
+             <property name="text">
+              <string>Always keep together</string>
+             </property>
+            </widget>
+           </item>
+           <item>
+            <widget class="QRadioButton" name="radioArticAllowSeparate">
+             <property name="text">
+              <string>Prefer closeness to notehead (combined articulations may become separated)</string>
              </property>
             </widget>
            </item>
@@ -9189,6 +9689,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="fermataMinDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -9207,7 +9710,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="fermataPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="fermataPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_168">
@@ -9233,7 +9740,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="0" column="1">
-            <widget class="mu::notation::OffsetSelect" name="fermataPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="fermataPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetFermataPosAbove">
@@ -9364,6 +9875,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -9392,7 +9906,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="staffTextPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="staffTextPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="2">
             <widget class="QToolButton" name="resetStaffTextPlacement">
@@ -9408,7 +9926,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="staffTextPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="staffTextPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="0">
             <widget class="QLabel" name="label_176">
@@ -9621,6 +10143,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -9649,10 +10174,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="tempoTextPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="tempoTextPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="tempoTextPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="tempoTextPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
           </layout>
          </widget>
@@ -9699,8 +10232,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>585</width>
-             <height>465</height>
+             <width>380</width>
+             <height>324</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -9725,6 +10258,9 @@ By default, they will be placed such as that their right end are at the same lev
               <layout class="QGridLayout" name="gridLayout_24">
                <item row="0" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashMinLength">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -9741,6 +10277,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="4" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashPad">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -9793,6 +10332,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="2" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashMaxDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -9824,10 +10366,17 @@ By default, they will be placed such as that their right end are at the same lev
                 </widget>
                </item>
                <item row="5" column="1">
-                <widget class="QDoubleSpinBox" name="lyricsDashYposRatio"/>
+                <widget class="QDoubleSpinBox" name="lyricsDashYposRatio">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
+                </widget>
                </item>
                <item row="3" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashLineThickness">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -9953,6 +10502,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="1" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsDashMaxLength">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -9981,6 +10533,9 @@ By default, they will be placed such as that their right end are at the same lev
               <layout class="QGridLayout" name="gridLayout_23">
                <item row="5" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsMinBottomDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10044,6 +10599,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="6" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsMinDistance">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10098,7 +10656,11 @@ By default, they will be placed such as that their right end are at the same lev
                 </widget>
                </item>
                <item row="2" column="1">
-                <widget class="mu::notation::OffsetSelect" name="lyricsPosBelow" native="true"/>
+                <widget class="mu::notation::OffsetSelect" name="lyricsPosBelow" native="true">
+                 <property name="focusPolicy">
+                  <enum>Qt::StrongFocus</enum>
+                 </property>
+                </widget>
                </item>
                <item row="5" column="2">
                 <widget class="QToolButton" name="resetLyricsMinBottomDistance">
@@ -10195,7 +10757,11 @@ By default, they will be placed such as that their right end are at the same lev
                 </widget>
                </item>
                <item row="1" column="1">
-                <widget class="mu::notation::OffsetSelect" name="lyricsPosAbove" native="true"/>
+                <widget class="mu::notation::OffsetSelect" name="lyricsPosAbove" native="true">
+                 <property name="focusPolicy">
+                  <enum>Qt::StrongFocus</enum>
+                 </property>
+                </widget>
                </item>
                <item row="4" column="0">
                 <widget class="QLabel" name="label_131">
@@ -10215,6 +10781,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="3" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsLineHeight">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>%</string>
                  </property>
@@ -10253,6 +10822,9 @@ By default, they will be placed such as that their right end are at the same lev
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
+                 </property>
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
                  </property>
                  <property name="suffix">
                   <string>sp</string>
@@ -10302,6 +10874,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="0" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsLineThickness">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10354,6 +10929,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="1" column="1">
                 <widget class="QDoubleSpinBox" name="lyricsMelismaPad">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="suffix">
                   <string>sp</string>
                  </property>
@@ -10405,7 +10983,23 @@ By default, they will be placed such as that their right end are at the same lev
            <string>Dynamics</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_22">
-           <item row="3" column="0">
+           <item row="2" column="1">
+            <widget class="QDoubleSpinBox" name="dynamicsSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
+             <property name="suffix">
+              <string>%</string>
+             </property>
+             <property name="decimals">
+              <number>0</number>
+             </property>
+             <property name="maximum">
+              <double>1000.000000000000000</double>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
             <widget class="QLabel" name="label_118">
              <property name="text">
               <string>Autoplace min. distance:</string>
@@ -10415,8 +11009,171 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
             </widget>
            </item>
-           <item row="3" column="1">
+           <item row="1" column="2">
+            <widget class="QToolButton" name="resetAvoidBarLines">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Avoid barlines' setting</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_138">
+             <property name="text">
+              <string>Position above:</string>
+             </property>
+             <property name="buddy">
+              <cstring>dynamicsPosAbove</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0" colspan="4">
+            <widget class="QGroupBox" name="dynamicsOverrideFont">
+             <property name="title">
+              <string>Override score font</string>
+             </property>
+             <property name="checkable">
+              <bool>true</bool>
+             </property>
+             <layout class="QHBoxLayout" name="horizontalLayout_9">
+              <item>
+               <widget class="QLabel" name="label_172">
+                <property name="text">
+                 <string>Font:</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="dynamicsFont">
+                <property name="minimumSize">
+                 <size>
+                  <width>0</width>
+                  <height>0</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="2" column="2">
+            <widget class="QToolButton" name="resetDynamicsSize">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Scale' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="mu::notation::OffsetSelect" name="dynamicsPosAbove" native="true"/>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_141">
+             <property name="text">
+              <string>Position below:</string>
+             </property>
+             <property name="buddy">
+              <cstring>dynamicsPosBelow</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="2">
+            <widget class="QToolButton" name="resetDynamicsPosBelow">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Position below' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <spacer name="horizontalSpacer_30">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="avoidBarLines">
+             <property name="text">
+              <string>Avoid barlines:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QToolButton" name="resetDynamicsPlacement">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Placement' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_126">
+             <property name="text">
+              <string>Placement:</string>
+             </property>
+             <property name="buddy">
+              <cstring>dynamicsPlacement</cstring>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1">
+            <widget class="mu::notation::OffsetSelect" name="dynamicsPosBelow" native="true"/>
+           </item>
+           <item row="6" column="2">
+            <widget class="QToolButton" name="resetDynamicsMinDistance">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Autoplace min. distance' value</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_62">
+             <property name="text">
+              <string>Scale:</string>
+             </property>
+             <property name="margin">
+              <number>0</number>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1">
             <widget class="QDoubleSpinBox" name="dynamicsMinDistance">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string extracomment="spatium unit">sp</string>
              </property>
@@ -10437,20 +11194,7 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
             </widget>
            </item>
-           <item row="3" column="2">
-            <widget class="QToolButton" name="resetDynamicsMinDistance">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Autoplace min. distance' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="2">
+           <item row="4" column="2">
             <widget class="QToolButton" name="resetDynamicsPosAbove">
              <property name="toolTip">
               <string>Reset to default</string>
@@ -10463,7 +11207,7 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
             </widget>
            </item>
-           <item row="0" column="1">
+           <item row="3" column="1">
             <widget class="QComboBox" name="dynamicsPlacement">
              <item>
               <property name="text">
@@ -10477,81 +11221,6 @@ By default, they will be placed such as that their right end are at the same lev
              </item>
             </widget>
            </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_126">
-             <property name="text">
-              <string>Placement:</string>
-             </property>
-             <property name="buddy">
-              <cstring>dynamicsPlacement</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="2">
-            <widget class="QToolButton" name="resetDynamicsPlacement">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Placement' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_138">
-             <property name="text">
-              <string>Position above:</string>
-             </property>
-             <property name="buddy">
-              <cstring>dynamicsPosAbove</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="0">
-            <widget class="QLabel" name="label_141">
-             <property name="text">
-              <string>Position below:</string>
-             </property>
-             <property name="buddy">
-              <cstring>dynamicsPosBelow</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="2" column="2">
-            <widget class="QToolButton" name="resetDynamicsPosBelow">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Position below' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="dynamicsPosAbove" native="true"/>
-           </item>
-           <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="dynamicsPosBelow" native="true"/>
-           </item>
-           <item row="0" column="3">
-            <spacer name="horizontalSpacer_30">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>0</width>
-               <height>0</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
           </layout>
          </widget>
         </item>
@@ -10564,6 +11233,65 @@ By default, they will be placed such as that their right end are at the same lev
            <size>
             <width>0</width>
             <height>0</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="PageExpression">
+       <layout class="QVBoxLayout" name="verticalLayout_37">
+        <item>
+         <widget class="QGroupBox" name="groupBox_expression">
+          <property name="title">
+           <string>Expression</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_62">
+           <item row="0" column="0">
+            <widget class="QCheckBox" name="snapExpression">
+             <property name="text">
+              <string>Snap to dynamics</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <spacer name="horizontalSpacer_65">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="1">
+            <widget class="QToolButton" name="resetSnapExpression">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Snap to dynamics' setting</string>
+             </property>
+             <property name="text">
+              <string notr="true"/>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
+         <spacer name="verticalSpacer_40">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
            </size>
           </property>
          </spacer>
@@ -10679,6 +11407,9 @@ By default, they will be placed such as that their right end are at the same lev
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -10707,10 +11438,18 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="1" column="1">
-            <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosAbove" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosAbove" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="2" column="1">
-            <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosBelow" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="rehearsalMarkPosBelow" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="0" column="3">
             <spacer name="horizontalSpacer_36">
@@ -10768,6 +11507,9 @@ By default, they will be placed such as that their right end are at the same lev
              </item>
              <item row="1" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinFBSize">
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="suffix">
                 <string>pt</string>
                </property>
@@ -10811,6 +11553,9 @@ By default, they will be placed such as that their right end are at the same lev
              </item>
              <item row="2" column="1">
               <widget class="QDoubleSpinBox" name="doubleSpinFBVertPos">
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="suffix">
                 <string>sp</string>
                </property>
@@ -10843,6 +11588,9 @@ By default, they will be placed such as that their right end are at the same lev
              </item>
              <item row="3" column="1">
               <widget class="QSpinBox" name="spinFBLineHeight">
+               <property name="keyboardTracking">
+                <bool>false</bool>
+               </property>
                <property name="suffix">
                 <string notr="true">%</string>
                </property>
@@ -10995,8 +11743,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>568</width>
-                <height>551</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -11012,6 +11760,9 @@ By default, they will be placed such as that their right end are at the same lev
                </item>
                <item row="2" column="2">
                 <widget class="QSpinBox" name="capoPosition">
+                 <property name="keyboardTracking">
+                  <bool>false</bool>
+                 </property>
                  <property name="maximum">
                   <number>11</number>
                  </property>
@@ -11040,6 +11791,9 @@ By default, they will be placed such as that their right end are at the same lev
                  <layout class="QGridLayout" name="gridLayout_45">
                   <item row="1" column="4">
                    <widget class="QDoubleSpinBox" name="modifierMag">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="singleStep">
                      <double>0.100000000000000</double>
                     </property>
@@ -11047,6 +11801,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="4">
                    <widget class="QDoubleSpinBox" name="modifierAdjust">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="minimum">
                      <double>-99.989999999999995</double>
                     </property>
@@ -11054,6 +11811,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="extensionMag">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="singleStep">
                      <double>0.100000000000000</double>
                     </property>
@@ -11061,6 +11821,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="extensionAdjust">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="minimum">
                      <double>-99.989999999999995</double>
                     </property>
@@ -11395,6 +12158,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="2" column="1">
                    <widget class="QDoubleSpinBox" name="maxHarmonyBarDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -11444,6 +12210,9 @@ By default, they will be placed such as that their right end are at the same lev
                     <property name="enabled">
                      <bool>true</bool>
                     </property>
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string extracomment="spatium unit">sp</string>
                     </property>
@@ -11463,6 +12232,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="1" column="1">
                    <widget class="QDoubleSpinBox" name="minHarmonyDistance">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -11482,6 +12254,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="4" column="1">
                    <widget class="QDoubleSpinBox" name="maxChordShiftBelow">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -11492,6 +12267,9 @@ By default, they will be placed such as that their right end are at the same lev
                   </item>
                   <item row="3" column="1">
                    <widget class="QDoubleSpinBox" name="maxChordShiftAbove">
+                    <property name="keyboardTracking">
+                     <bool>false</bool>
+                    </property>
                     <property name="suffix">
                      <string>sp</string>
                     </property>
@@ -11567,6 +12345,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="8" column="1">
             <widget class="QDoubleSpinBox" name="maxFretShiftAbove">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -11587,6 +12368,9 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>Fret number font size</string>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string notr="true">%</string>
              </property>
@@ -11605,6 +12389,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QDoubleSpinBox" name="fretFretSpacing">
              <property name="accessibleName">
               <string>Fret spacing</string>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -11648,6 +12435,9 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>Scale</string>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -11683,6 +12473,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QDoubleSpinBox" name="fretY">
              <property name="accessibleName">
               <string>Default vertical position</string>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="suffix">
               <string>sp</string>
@@ -11729,6 +12522,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="9" column="1">
             <widget class="QDoubleSpinBox" name="maxFretShiftBelow">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -11739,6 +12535,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="4" column="1">
             <widget class="QDoubleSpinBox" name="barreLineWidth">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="minimum">
               <double>0.100000000000000</double>
              </property>
@@ -11792,6 +12591,9 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="accessibleName">
               <string>String spacing</string>
              </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>sp</string>
              </property>
@@ -11826,6 +12628,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QDoubleSpinBox" name="fretDotSize">
              <property name="accessibleName">
               <string>Relative dot size</string>
+             </property>
+             <property name="keyboardTracking">
+              <bool>false</bool>
              </property>
              <property name="minimum">
               <double>0.100000000000000</double>
@@ -11916,8 +12721,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>531</width>
-                <height>481</height>
+                <width>354</width>
+                <height>385</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -12514,6 +13319,9 @@ By default, they will be placed such as that their right end are at the same lev
                  </item>
                  <item row="4" column="1">
                   <widget class="QDoubleSpinBox" name="textStyleFrameBorderRadius">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
                    <property name="decimals">
                     <number>0</number>
                    </property>
@@ -12548,7 +13356,7 @@ By default, they will be placed such as that their right end are at the same lev
                  <item row="3" column="0">
                   <widget class="QLabel" name="label_206">
                    <property name="text">
-                    <string>Margin:</string>
+                    <string>Padding:</string>
                    </property>
                    <property name="buddy">
                     <cstring>textStyleFramePadding</cstring>
@@ -12579,7 +13387,11 @@ By default, they will be placed such as that their right end are at the same lev
                   </widget>
                  </item>
                  <item row="3" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFramePadding"/>
+                  <widget class="QDoubleSpinBox" name="textStyleFramePadding">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
                  </item>
                  <item row="1" column="1">
                   <widget class="Awl::ColorLabel" name="textStyleFrameBackground"/>
@@ -12590,7 +13402,7 @@ By default, they will be placed such as that their right end are at the same lev
                     <string>Reset to default</string>
                    </property>
                    <property name="accessibleName">
-                    <string>Reset 'Margin' value</string>
+                    <string>Reset 'Padding' value</string>
                    </property>
                    <property name="text">
                     <string notr="true"/>
@@ -12598,7 +13410,11 @@ By default, they will be placed such as that their right end are at the same lev
                   </widget>
                  </item>
                  <item row="2" column="1">
-                  <widget class="QDoubleSpinBox" name="textStyleFrameBorder"/>
+                  <widget class="QDoubleSpinBox" name="textStyleFrameBorder">
+                   <property name="keyboardTracking">
+                    <bool>false</bool>
+                   </property>
+                  </widget>
                  </item>
                  <item row="0" column="0">
                   <widget class="QLabel" name="label_203">
@@ -12640,7 +13456,11 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item row="10" column="1">
-            <widget class="mu::notation::OffsetSelect" name="textStyleOffset" native="true"/>
+            <widget class="mu::notation::OffsetSelect" name="textStyleOffset" native="true">
+             <property name="focusPolicy">
+              <enum>Qt::StrongFocus</enum>
+             </property>
+            </widget>
            </item>
            <item row="9" column="1">
             <widget class="Awl::ColorLabel" name="textStyleColor"/>
@@ -12660,6 +13480,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="1">
             <widget class="QDoubleSpinBox" name="textStyleFontSize">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>pt</string>
              </property>
@@ -12857,6 +13680,9 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="1">
             <widget class="QDoubleSpinBox" name="textStyleLineSpacing">
+             <property name="keyboardTracking">
+              <bool>false</bool>
+             </property>
              <property name="suffix">
               <string>li</string>
              </property>
@@ -12914,6 +13740,55 @@ By default, they will be placed such as that their right end are at the same lev
       </widget>
      </widget>
     </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout">
+     <property name="spacing">
+      <number>6</number>
+     </property>
+     <property name="leftMargin">
+      <number>0</number>
+     </property>
+     <property name="topMargin">
+      <number>0</number>
+     </property>
+     <property name="rightMargin">
+      <number>0</number>
+     </property>
+     <property name="bottomMargin">
+      <number>0</number>
+     </property>
+     <item>
+      <widget class="QPushButton" name="buttonTogglePagelist">
+       <property name="maximumSize">
+        <size>
+         <width>30</width>
+         <height>16777215</height>
+        </size>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+       <property name="flat">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="resetStylesButton">
+       <property name="text">
+        <string>Reset All Styles to Default</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
@@ -13061,7 +13936,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetMeasureNumberVPlacement</tabstop>
   <tabstop>measureNumberHPlacement</tabstop>
   <tabstop>resetMeasureNumberHPlacement</tabstop>
+  <tabstop>measureNumberPosAbove</tabstop>
   <tabstop>resetMeasureNumberPosAbove</tabstop>
+  <tabstop>measureNumberPosBelow</tabstop>
   <tabstop>resetMeasureNumberPosBelow</tabstop>
   <tabstop>mmRestShowMeasureNumberRange</tabstop>
   <tabstop>mmRestRangeBracketType</tabstop>
@@ -13070,7 +13947,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetMmRestRangeVPlacement</tabstop>
   <tabstop>mmRestRangeHPlacement</tabstop>
   <tabstop>resetMmRestRangeHPlacement</tabstop>
+  <tabstop>mmRestRangePosAbove</tabstop>
   <tabstop>resetMMRestRangePosAbove</tabstop>
+  <tabstop>mmRestRangePosBelow</tabstop>
   <tabstop>resetMMRestRangePosBelow</tabstop>
   <tabstop>bracketWidth</tabstop>
   <tabstop>resetBracketThickness</tabstop>
@@ -13241,7 +14120,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetSlurMinDistance</tabstop>
   <tabstop>hairpinPlacement</tabstop>
   <tabstop>resetHairpinPlacement</tabstop>
+  <tabstop>hairpinPosAbove</tabstop>
   <tabstop>resetHairpinPosAbove</tabstop>
+  <tabstop>hairpinPosBelow</tabstop>
   <tabstop>resetHairpinPosBelow</tabstop>
   <tabstop>hairpinHeight</tabstop>
   <tabstop>resetHairpinHeight</tabstop>
@@ -13251,6 +14132,7 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetAutoplaceHairpinDynamicsDistance</tabstop>
   <tabstop>hairpinLineWidth</tabstop>
   <tabstop>resetHairpinLineWidth</tabstop>
+  <tabstop>voltaPosAbove</tabstop>
   <tabstop>resetVoltaPosAbove</tabstop>
   <tabstop>voltaHook</tabstop>
   <tabstop>resetVoltaHook</tabstop>
@@ -13264,7 +14146,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetVoltaLineStyleGapSize</tabstop>
   <tabstop>ottavaNumbersOnly</tabstop>
   <tabstop>resetOttavaNumbersOnly</tabstop>
+  <tabstop>ottavaPosAbove</tabstop>
   <tabstop>resetOttavaPosAbove</tabstop>
+  <tabstop>ottavaPosBelow</tabstop>
   <tabstop>resetOttavaPosBelow</tabstop>
   <tabstop>ottavaHookAbove</tabstop>
   <tabstop>resetOttavaHookAbove</tabstop>
@@ -13280,7 +14164,9 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetOttavaLineStyleGapSize</tabstop>
   <tabstop>pedalLinePlacement</tabstop>
   <tabstop>resetPedalLinePlacement</tabstop>
+  <tabstop>pedalLinePosAbove</tabstop>
   <tabstop>resetPedalLinePosAbove</tabstop>
+  <tabstop>pedalLinePosBelow</tabstop>
   <tabstop>resetPedalLinePosBelow</tabstop>
   <tabstop>pedalLineWidth</tabstop>
   <tabstop>resetPedalLineWidth</tabstop>
@@ -13292,11 +14178,15 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetPedalLineStyleGapSize</tabstop>
   <tabstop>trillLinePlacement</tabstop>
   <tabstop>resetTrillLinePlacement</tabstop>
+  <tabstop>trillLinePosAbove</tabstop>
   <tabstop>resetTrillLinePosAbove</tabstop>
+  <tabstop>trillLinePosBelow</tabstop>
   <tabstop>resetTrillLinePosBelow</tabstop>
   <tabstop>vibratoLinePlacement</tabstop>
   <tabstop>resetVibratoLinePlacement</tabstop>
+  <tabstop>vibratoLinePosAbove</tabstop>
   <tabstop>resetVibratoLinePosAbove</tabstop>
+  <tabstop>vibratoLinePosBelow</tabstop>
   <tabstop>resetVibratoLinePosBelow</tabstop>
   <tabstop>bendLineWidth</tabstop>
   <tabstop>resetBendLineWidth</tabstop>
@@ -13304,11 +14194,15 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetBendArrowWidth</tabstop>
   <tabstop>textLinePlacement</tabstop>
   <tabstop>resetTextLinePlacement</tabstop>
+  <tabstop>textLinePosAbove</tabstop>
   <tabstop>resetTextLinePosAbove</tabstop>
+  <tabstop>textLinePosBelow</tabstop>
   <tabstop>resetTextLinePosBelow</tabstop>
   <tabstop>systemTextLinePlacement</tabstop>
   <tabstop>resetSystemTextLinePlacement</tabstop>
+  <tabstop>systemTextLinePosAbove</tabstop>
   <tabstop>resetSystemTextLinePosAbove</tabstop>
+  <tabstop>systemTextLinePosBelow</tabstop>
   <tabstop>resetSystemTextLinePosBelow</tabstop>
   <tabstop>articMinVerticalDist</tabstop>
   <tabstop>resetArticMinVerticalDist</tabstop>
@@ -13320,26 +14214,34 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetArticStaffDist</tabstop>
   <tabstop>articulationMag</tabstop>
   <tabstop>resetArticulationMag</tabstop>
+  <tabstop>fermataPosAbove</tabstop>
   <tabstop>resetFermataPosAbove</tabstop>
+  <tabstop>fermataPosBelow</tabstop>
   <tabstop>resetFermataPosBelow</tabstop>
   <tabstop>fermataMinDistance</tabstop>
   <tabstop>resetFermataMinDistance</tabstop>
   <tabstop>staffTextPlacement</tabstop>
   <tabstop>resetStaffTextPlacement</tabstop>
+  <tabstop>staffTextPosAbove</tabstop>
   <tabstop>resetStaffTextPosAbove</tabstop>
+  <tabstop>staffTextPosBelow</tabstop>
   <tabstop>resetStaffTextPosBelow</tabstop>
   <tabstop>staffTextMinDistance</tabstop>
   <tabstop>resetStaffTextMinDistance</tabstop>
   <tabstop>tempoTextPlacement</tabstop>
   <tabstop>resetTempoTextPlacement</tabstop>
+  <tabstop>tempoTextPosAbove</tabstop>
   <tabstop>resetTempoTextPosAbove</tabstop>
+  <tabstop>tempoTextPosBelow</tabstop>
   <tabstop>resetTempoTextPosBelow</tabstop>
   <tabstop>tempoTextMinDistance</tabstop>
   <tabstop>resetTempoTextMinDistance</tabstop>
   <tabstop>scrollArea_lyrics</tabstop>
   <tabstop>lyricsPlacement</tabstop>
   <tabstop>resetLyricsPlacement</tabstop>
+  <tabstop>lyricsPosAbove</tabstop>
   <tabstop>resetLyricsPosAbove</tabstop>
+  <tabstop>lyricsPosBelow</tabstop>
   <tabstop>resetLyricsPosBelow</tabstop>
   <tabstop>lyricsLineHeight</tabstop>
   <tabstop>resetLyricsLineHeight</tabstop>
@@ -13372,13 +14274,17 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetLyricsMelismaAlign</tabstop>
   <tabstop>dynamicsPlacement</tabstop>
   <tabstop>resetDynamicsPlacement</tabstop>
+  <tabstop>dynamicsPosAbove</tabstop>
   <tabstop>resetDynamicsPosAbove</tabstop>
+  <tabstop>dynamicsPosBelow</tabstop>
   <tabstop>resetDynamicsPosBelow</tabstop>
   <tabstop>dynamicsMinDistance</tabstop>
   <tabstop>resetDynamicsMinDistance</tabstop>
   <tabstop>rehearsalMarkPlacement</tabstop>
   <tabstop>resetRehearsalMarkPlacement</tabstop>
+  <tabstop>rehearsalMarkPosAbove</tabstop>
   <tabstop>resetRehearsalMarkPosAbove</tabstop>
+  <tabstop>rehearsalMarkPosBelow</tabstop>
   <tabstop>resetRehearsalMarkPosBelow</tabstop>
   <tabstop>rehearsalMarkMinDistance</tabstop>
   <tabstop>resetRehearsalMarkMinDistance</tabstop>
@@ -13480,6 +14386,7 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetTextStyleAlign</tabstop>
   <tabstop>textStyleColor</tabstop>
   <tabstop>resetTextStyleColor</tabstop>
+  <tabstop>textStyleOffset</tabstop>
   <tabstop>resetTextStyleOffset</tabstop>
   <tabstop>textStyleFrameType</tabstop>
   <tabstop>resetTextStyleFrameType</tabstop>

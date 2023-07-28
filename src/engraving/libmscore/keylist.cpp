@@ -22,9 +22,6 @@
 
 #include "keylist.h"
 
-#include "rw/readcontext.h"
-#include "rw/xml.h"
-
 using namespace mu;
 
 namespace mu::engraving {
@@ -37,7 +34,7 @@ namespace mu::engraving {
 KeySigEvent KeyList::key(int tick) const
 {
     KeySigEvent ke;
-    ke.setKey(Key::C);
+    ke.setConcertKey(Key::C);
 
     if (empty()) {
         return ke;
@@ -88,7 +85,7 @@ int KeyList::nextKeyTick(int tick) const
 KeySigEvent KeyList::prevKey(int tick) const
 {
     KeySigEvent kc;
-    kc.setKey(Key::C);
+    kc.setConcertKey(Key::C);
 
     if (empty()) {
         return kc;
@@ -122,30 +119,5 @@ int KeyList::currentKeyTick(int tick) const
     }
     --i;
     return i->first;
-}
-
-//---------------------------------------------------------
-//   KeyList::read
-//---------------------------------------------------------
-
-void KeyList::read(XmlReader& e, const engraving::ReadContext& ctx)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "key") {
-            Key k;
-            int tick = e.intAttribute("tick", 0);
-            if (e.hasAttribute("custom")) {
-                k = Key::C;              // ke.setCustomType(e.intAttribute("custom"));
-            } else {
-                k = Key(e.intAttribute("idx"));
-            }
-            KeySigEvent ke;
-            ke.setKey(k);
-            (*this)[ctx.fileDivision(tick)] = ke;
-            e.readNext();
-        } else {
-            e.unknown();
-        }
-    }
 }
 }

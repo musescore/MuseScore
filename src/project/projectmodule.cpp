@@ -31,7 +31,6 @@
 #include "internal/projectconfiguration.h"
 #include "internal/saveprojectscenario.h"
 #include "internal/exportprojectscenario.h"
-#include "internal/recentprojectsprovider.h"
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
 #include "internal/projectmigrator.h"
@@ -42,8 +41,11 @@
 #include "internal/projectrwregister.h"
 
 #include "view/exportdialogmodel.h"
-#include "view/exportprogressmodel.h"
-#include "view/recentprojectsmodel.h"
+#include "view/scorespagemodel.h"
+#include "view/recentscoresmodel.h"
+#include "view/cloudscoresmodel.h"
+#include "view/cloudscorestatuswatcher.h"
+#include "view/scorethumbnailloader.h"
 #include "view/scorethumbnail.h"
 #include "view/templatesmodel.h"
 #include "view/templatepaintview.h"
@@ -57,7 +59,7 @@
 #elif defined (Q_OS_WIN)
 #include "internal/platform/windows/windowsrecentfilescontroller.h"
 #else
-#include "internal/platform/stub/stubrecentfilescontroller.h"
+#include "internal/recentfilescontroller.h"
 #endif
 
 #include "ui/iuiactionsregister.h"
@@ -65,11 +67,6 @@
 
 using namespace mu::project;
 using namespace mu::modularity;
-
-static std::shared_ptr<ProjectConfiguration> s_configuration = std::make_shared<ProjectConfiguration>();
-static std::shared_ptr<ProjectActionsController> s_actionsController = std::make_shared<ProjectActionsController>();
-static std::shared_ptr<RecentProjectsProvider> s_recentProjectsProvider = std::make_shared<RecentProjectsProvider>();
-static std::shared_ptr<ProjectAutoSaver> s_projectAutoSaver = std::make_shared<ProjectAutoSaver>();
 
 static void project_init_qrc()
 {
@@ -83,36 +80,40 @@ std::string ProjectModule::moduleName() const
 
 void ProjectModule::registerExports()
 {
-    ioc()->registerExport<IProjectConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<ProjectConfiguration>();
+    m_actionsController = std::make_shared<ProjectActionsController>();
+    m_projectAutoSaver = std::make_shared<ProjectAutoSaver>();
+
+#ifdef Q_OS_MAC
+    m_recentFilesController = std::make_shared<MacOSRecentFilesController>();
+#elif defined(Q_OS_WIN)
+    m_recentFilesController = std::make_shared<WindowsRecentFilesController>();
+#else
+    m_recentFilesController = std::make_shared<RecentFilesController>();
+#endif
+
+    ioc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
-    ioc()->registerExport<IProjectFilesController>(moduleName(), s_actionsController);
+    ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
     ioc()->registerExport<ISaveProjectScenario>(moduleName(), new SaveProjectScenario());
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
-    ioc()->registerExport<IRecentProjectsProvider>(moduleName(), s_recentProjectsProvider);
+    ioc()->registerExport<IRecentFilesController>(moduleName(), m_recentFilesController);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());
     ioc()->registerExport<ITemplatesRepository>(moduleName(), new TemplatesRepository());
     ioc()->registerExport<IProjectMigrator>(moduleName(), new ProjectMigrator());
-    ioc()->registerExport<IProjectAutoSaver>(moduleName(), s_projectAutoSaver);
+    ioc()->registerExport<IProjectAutoSaver>(moduleName(), m_projectAutoSaver);
 
     //! TODO Should be replace INotationReaders/WritersRegister with IProjectRWRegister
     ioc()->registerExport<INotationReadersRegister>(moduleName(), new NotationReadersRegister());
     ioc()->registerExport<INotationWritersRegister>(moduleName(), new NotationWritersRegister());
     ioc()->registerExport<IProjectRWRegister>(moduleName(), new ProjectRWRegister());
-
-#ifdef Q_OS_MAC
-    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new MacOSRecentFilesController());
-#elif defined (Q_OS_WIN)
-    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new WindowsRecentFilesController());
-#else
-    ioc()->registerExport<IPlatformRecentFilesController>(moduleName(), new StubRecentFilesController());
-#endif
 }
 
 void ProjectModule::resolveImports()
 {
     auto ar = ioc()->resolve<ui::IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(std::make_shared<ProjectUiActions>(s_actionsController));
+        ar->reg(std::make_shared<ProjectUiActions>(m_actionsController));
     }
 
     auto ir = ioc()->resolve<ui::IInteractiveUriRegister>(moduleName());
@@ -120,8 +121,8 @@ void ProjectModule::resolveImports()
         ir->registerQmlUri(Uri("musescore://project/newscore"), "MuseScore/Project/NewScoreDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/asksavelocationtype"), "MuseScore/Project/AskSaveLocationTypeDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/savetocloud"), "MuseScore/Project/SaveToCloudDialog.qml");
+        ir->registerQmlUri(Uri("musescore://project/shareonaudiocloud"), "MuseScore/Project/ShareOnAudioCloudDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/export"), "MuseScore/Project/ExportDialog.qml");
-        ir->registerQmlUri(Uri("musescore://project/export/progress"), "MuseScore/Project/ExportProgressDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/migration"), "MuseScore/Project/MigrationDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/properties"), "MuseScore/Project/ProjectPropertiesDialog.qml");
         ir->registerQmlUri(Uri("musescore://project/upload/progress"), "MuseScore/Project/UploadProgressDialog.qml");
@@ -138,14 +139,19 @@ void ProjectModule::registerResources()
 void ProjectModule::registerUiTypes()
 {
     qmlRegisterType<ExportDialogModel>("MuseScore.Project", 1, 0, "ExportDialogModel");
-    qmlRegisterType<ExportProgressModel>("MuseScore.Project", 1, 0, "ExportProgressModel");
 
-    qmlRegisterType<RecentProjectsModel>("MuseScore.Project", 1, 0, "RecentScoresModel");
+    qmlRegisterType<ScoresPageModel>("MuseScore.Project", 1, 0, "ScoresPageModel");
+    qmlRegisterUncreatableType<AbstractScoresModel>("MuseScore.Project", 1, 0, "AbstractScoresModel",
+                                                    "Not creatable as it is an abstract type");
+    qmlRegisterType<RecentScoresModel>("MuseScore.Project", 1, 0, "RecentScoresModel");
+    qmlRegisterType<CloudScoresModel>("MuseScore.Project", 1, 0, "CloudScoresModel");
+    qmlRegisterType<CloudScoreStatusWatcher>("MuseScore.Project", 1, 0, "CloudScoreStatusWatcher");
     qmlRegisterType<NewScoreModel>("MuseScore.Project", 1, 0, "NewScoreModel");
     qmlRegisterType<AdditionalInfoModel>("MuseScore.Project", 1, 0, "AdditionalInfoModel");
     qmlRegisterType<ProjectPropertiesModel>("MuseScore.Project", 1, 0, "ProjectPropertiesModel");
     qmlRegisterType<AudioGenerationSettingsModel>("MuseScore.Project", 1, 0, "AudioGenerationSettingsModel");
 
+    qmlRegisterType<ScoreThumbnailLoader>("MuseScore.Project", 1, 0, "ScoreThumbnailLoader");
     qmlRegisterType<ScoreThumbnail>("MuseScore.Project", 1, 0, "ScoreThumbnail");
     qmlRegisterType<TemplatesModel>("MuseScore.Project", 1, 0, "TemplatesModel");
     qmlRegisterType<TemplatePaintView>("MuseScore.Project", 1, 0, "TemplatePaintView");
@@ -165,12 +171,12 @@ void ProjectModule::registerUiTypes()
 
 void ProjectModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Editor != mode) {
+    if (framework::IApplication::RunMode::GuiApp != mode) {
         return;
     }
 
-    s_configuration->init();
-    s_actionsController->init();
-    s_recentProjectsProvider->init();
-    s_projectAutoSaver->init();
+    m_configuration->init();
+    m_actionsController->init();
+    m_recentFilesController->init();
+    m_projectAutoSaver->init();
 }

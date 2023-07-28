@@ -24,9 +24,9 @@
 
 #include <QObject>
 
-#include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "iinteractive.h"
+
+#include "modularity/ioc.h"
 #include "ilearnservice.h"
 
 namespace mu::learn {
@@ -37,8 +37,7 @@ class LearnPageModel : public QObject, public async::Asyncable
     Q_PROPERTY(QVariantList startedPlaylist READ startedPlaylist NOTIFY startedPlaylistChanged)
     Q_PROPERTY(QVariantList advancedPlaylist READ advancedPlaylist NOTIFY advancedPlaylistChanged)
 
-    INJECT(learn, framework::IInteractive, interactive)
-    INJECT(learn, ILearnService, learnService)
+    INJECT(ILearnService, learnService)
 
 public:
     explicit LearnPageModel(QObject* parent = nullptr);
@@ -47,11 +46,7 @@ public:
     QVariantList advancedPlaylist() const;
 
     Q_INVOKABLE void load();
-    Q_INVOKABLE void openVideo(const QString& videoId) const;
-    Q_INVOKABLE void openUrl(const QString& url) const;
-
     Q_INVOKABLE void setSearchText(const QString& text);
-
     Q_INVOKABLE QVariantMap classesAuthor() const;
 
 private slots:

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * SPDX-License-Identifier: GPL-3.0-only
  * MuseScore-CLA-applies
  *
@@ -64,44 +64,67 @@ QScreen* DialogView::resolveScreen() const
     return mainWindowScreen;
 }
 
-void DialogView::updatePosition()
+void DialogView::updateGeometry()
 {
-    QScreen* screen = resolveScreen();
+    const QScreen* screen = resolveScreen();
     QRect anchorRect = screen->availableGeometry();
 
-    QRect referenceRect = mainWindow()->qWindow()->geometry();
-    if (referenceRect.isEmpty()) {
+    const QWindow* qMainWindow = mainWindow()->qWindow();
+    bool mainWindowVisible = qMainWindow->isVisible();
+    QRect referenceRect = qMainWindow->geometry();
+
+    if (referenceRect.isEmpty() || !mainWindowVisible) {
         referenceRect = anchorRect;
     }
 
-    const QRect& dlgRect = geometry();
+    QRect dlgRect = viewGeometry();
 
-    m_globalPos.setX(referenceRect.x() + (referenceRect.width() - dlgRect.width()) / 2);
-    m_globalPos.setY(referenceRect.y() + (referenceRect.height() - dlgRect.height()) / 2 + DIALOG_WINDOW_FRAME_HEIGHT);
+    // position the dialog in the center of the main window
+    dlgRect.moveLeft(referenceRect.x() + (referenceRect.width() - dlgRect.width()) / 2);
+    dlgRect.moveTop(referenceRect.y() + (referenceRect.height() - dlgRect.height()) / 2 + DIALOG_WINDOW_FRAME_HEIGHT);
 
-    m_globalPos.setX(m_globalPos.x() + m_localPos.x());
-    m_globalPos.setY(m_globalPos.y() + m_localPos.y());
+    dlgRect.moveLeft(dlgRect.x() + m_localPos.x());
+    dlgRect.moveTop(dlgRect.y() + m_localPos.y());
+
+    // try to move the dialog if it doesn't fit on the screen
 
     int titleBarHeight = QApplication::style()->pixelMetric(QStyle::PM_TitleBarHeight);
 
-    if (m_globalPos.x() < anchorRect.x()) {
-        m_globalPos.setX(anchorRect.x() + DIALOG_WINDOW_FRAME_HEIGHT);
+    if (dlgRect.left() <= anchorRect.left()) {
+        dlgRect.moveLeft(anchorRect.left() + DIALOG_WINDOW_FRAME_HEIGHT);
     }
 
-    if (m_globalPos.y() - titleBarHeight < anchorRect.y()) {
-        m_globalPos.setY(anchorRect.y() + titleBarHeight + DIALOG_WINDOW_FRAME_HEIGHT);
+    if (dlgRect.top() - titleBarHeight <= anchorRect.top()) {
+        dlgRect.moveTop(anchorRect.top() + titleBarHeight + DIALOG_WINDOW_FRAME_HEIGHT);
     }
 
-    if (m_globalPos.x() + dlgRect.width() > anchorRect.right()) {
-        m_globalPos.setX(anchorRect.right() - dlgRect.width() - DIALOG_WINDOW_FRAME_HEIGHT);
+    if (dlgRect.right() >= anchorRect.right()) {
+        dlgRect.moveRight(anchorRect.right() - DIALOG_WINDOW_FRAME_HEIGHT);
     }
 
-    if (m_globalPos.y() + dlgRect.height() > anchorRect.bottom()) {
-        m_globalPos.setY(anchorRect.bottom() - dlgRect.height() - DIALOG_WINDOW_FRAME_HEIGHT);
+    if (dlgRect.bottom() >= anchorRect.bottom()) {
+        dlgRect.moveBottom(anchorRect.bottom() - DIALOG_WINDOW_FRAME_HEIGHT);
     }
+
+    // if after moving the dialog does not fit on the screen, then adjust the size of the dialog
+    if (!anchorRect.contains(dlgRect)) {
+        anchorRect -= QMargins(DIALOG_WINDOW_FRAME_HEIGHT, DIALOG_WINDOW_FRAME_HEIGHT + titleBarHeight,
+                               DIALOG_WINDOW_FRAME_HEIGHT, DIALOG_WINDOW_FRAME_HEIGHT);
+        dlgRect = anchorRect.intersected(dlgRect);
+    }
+
+    m_globalPos = dlgRect.topLeft();
+
+    setContentWidth(dlgRect.width());
+    setContentHeight(dlgRect.height());
 
     //! NOTE ok will be if they call accept
     setErrCode(Ret::Code::Cancel);
+}
+
+QRect DialogView::viewGeometry() const
+{
+    return QRect(m_globalPos.toPoint(), QSize(contentWidth(), contentHeight()));
 }
 
 void DialogView::exec()

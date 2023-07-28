@@ -33,8 +33,8 @@
 namespace mu::workspace {
 class WorkspaceManager : public IWorkspaceManager, public async::Asyncable
 {
-    INJECT(workspace, IWorkspaceConfiguration, configuration)
-    INJECT(workspace, io::IFileSystem, fileSystem)
+    INJECT(IWorkspaceConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
 

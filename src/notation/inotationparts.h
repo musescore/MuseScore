@@ -37,6 +37,8 @@ public:
     virtual async::NotifyList<const Part*> partList() const = 0;
     virtual async::NotifyList<const Staff*> staffList(const ID& partId) const = 0;
 
+    virtual bool hasParts() const = 0;
+
     virtual const Part* part(const ID& partId) const = 0;
     virtual bool partExists(const ID& partId) const = 0;
 

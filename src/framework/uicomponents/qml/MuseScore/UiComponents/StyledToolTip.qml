@@ -38,6 +38,9 @@ StyledPopupView {
 
     openPolicy: PopupView.NoActivateFocus
 
+    //! NOTE: No navigation needed for tooltip
+    navigationSection: null
+
     function calculateSize() {
         const MAX_WIDTH = toolTipType === QmlToolTip.Default ? 300 : 172 // Hardcoded from ScoreItem.qml
         contentWidth = Math.min(content.implicitWidth, MAX_WIDTH - margins * 2)

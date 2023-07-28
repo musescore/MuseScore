@@ -21,42 +21,11 @@
  */
 
 #include "audio.h"
-#include "rw/xml.h"
 
 using namespace mu;
 
 namespace mu::engraving {
-//---------------------------------------------------------
-//   Audio
-//---------------------------------------------------------
-
 Audio::Audio()
 {
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Audio::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (e.name() == "path") {
-            _path = e.readText();
-        } else {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Audio::write(XmlWriter& xml) const
-{
-    xml.startElement("Audio");
-    xml.tag("path", _path);
-    xml.endElement();
 }
 }

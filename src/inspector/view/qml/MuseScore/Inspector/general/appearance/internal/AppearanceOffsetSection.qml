@@ -33,6 +33,7 @@ Column {
     property alias offset: offsets.propertyItem
 
     property bool isSnappedToGrid: false
+    property alias isVerticalOffsetAvailable: offsets.isVerticalOffsetAvailable
 
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 0

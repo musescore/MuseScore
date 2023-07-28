@@ -26,6 +26,7 @@
 #include "translation.h"
 
 #include "wasapiaudioclient.h"
+#include "audiodeviceslistener.h"
 
 using namespace winrt;
 using namespace mu::audio;
@@ -58,12 +59,19 @@ WasapiAudioDriver::WasapiAudioDriver()
     s_data.clientFailedToStartEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Failed_To_Start");
     s_data.clientStoppedEvent = CreateEvent(NULL, FALSE, FALSE, L"WASAPI_Client_Stopped");
 
-    m_devicesListener.startWithCallback([this]() {
-        return availableOutputDevices();
+    m_devicesListener = std::make_unique<AudioDevicesListener>();
+    m_devicesListener->devicesChanged().onNotify(this, [this]() {
+        m_availableOutputDevicesChanged.notify();
     });
 
-    m_devicesListener.devicesChanged().onNotify(this, [this]() {
-        m_availableOutputDevicesChanged.notify();
+    m_devicesListener->defaultDeviceChanged().onNotify(this, [this]() {
+        if (s_data.wasapiClient.get()) {
+            s_data.wasapiClient->setFallbackDevice(to_hstring<std::string>(this->defaultDeviceId()));
+        }
+
+        if (m_deviceId == DEFAULT_DEVICE_ID) {
+            reopen();
+        }
     });
 }
 
@@ -96,13 +104,15 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
     LOGI() << "WASAPI: trying to open the audio end-point with the following samples per channel number - " << spec.samples;
 
     hstring deviceId;
+    hstring defaultDeviceId = to_hstring<std::string>(this->defaultDeviceId());
 
     if (m_deviceId.empty() || m_deviceId == DEFAULT_DEVICE_ID) {
-        deviceId = s_data.wasapiClient->defaultDeviceId();
+        deviceId = defaultDeviceId;
     } else {
         deviceId = to_hstring<std::string>(m_deviceId);
     }
 
+    s_data.wasapiClient->setFallbackDevice(defaultDeviceId);
     s_data.wasapiClient->asyncInitializeAudioDevice(deviceId);
 
     static constexpr DWORD handleCount = 2;
@@ -112,7 +122,16 @@ bool WasapiAudioDriver::open(const Spec& spec, Spec* activeSpec)
     if (waitResult != WAIT_OBJECT_0) {
         // Either the event was the second event (namely s_data.clientFailedToStartEvent)
         // Or some wait error occurred
-        return false;
+
+        LOGE() << "WASAPI: error open the device " << to_string(deviceId) << ", trying to use closest supported format";
+
+        static constexpr bool USE_CLOSEST_SUPPORTED_FORMAT = true;
+        s_data.wasapiClient->asyncInitializeAudioDevice(deviceId, USE_CLOSEST_SUPPORTED_FORMAT);
+
+        waitResult = WaitForMultipleObjects(handleCount, handles, false, INFINITE);
+        if (waitResult != WAIT_OBJECT_0) {
+            return false;
+        }
     }
 
     m_activeSpec = m_desiredSpec;
@@ -183,16 +202,26 @@ mu::async::Notification WasapiAudioDriver::outputDeviceChanged() const
 AudioDeviceList WasapiAudioDriver::availableOutputDevices() const
 {
     using namespace Windows::Devices::Enumeration;
-
-    if (!s_data.wasapiClient.get()) {
-        return {};
-    }
+    using namespace winrt::Windows::Media::Devices;
 
     AudioDeviceList result;
 
     result.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
 
-    DeviceInformationCollection devices = s_data.wasapiClient->availableDevices();
+    // Get the string identifier of the audio renderer
+    hstring AudioSelector = MediaDevice::GetAudioRenderSelector();
+
+    IAsyncOperation<DeviceInformationCollection> deviceRequest
+        = DeviceInformation::FindAllAsync(AudioSelector, {});
+
+    DeviceInformationCollection devices = nullptr;
+
+    try {
+        devices = deviceRequest.get();
+    } catch (...) {
+        LOGE() << to_string(hresult_error(to_hresult()).message());
+    }
+
     for (const auto& deviceInfo : devices) {
         AudioDevice device { to_string(deviceInfo.Id()), to_string(deviceInfo.Name()) };
         result.emplace_back(std::move(device));
@@ -253,4 +282,26 @@ void WasapiAudioDriver::resume()
 
 void WasapiAudioDriver::suspend()
 {
+}
+
+void WasapiAudioDriver::reopen()
+{
+    close();
+
+    open(m_activeSpec, &m_activeSpec);
+}
+
+AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
+{
+    using namespace winrt::Windows::Media::Devices;
+
+    AudioDeviceID result;
+
+    try {
+        result = to_string(MediaDevice::GetDefaultAudioRenderId(AudioDeviceRole::Default));
+    } catch (...) {
+        LOGE() << to_string(hresult_error(to_hresult()).message());
+    }
+
+    return result;
 }

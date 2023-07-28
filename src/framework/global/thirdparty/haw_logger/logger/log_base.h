@@ -24,18 +24,30 @@
 
 #define IF_LOGLEVEL(level)  if (haw::logger::Logger::instance()->isLevel(level))
 
-#define LOG_STREAM(type, tag, funcInfo) haw::logger::LogInput(type, tag, funcInfo).stream
-#define LOG(type, tag)  LOG_STREAM(type, tag, FUNCNAME(FUNC_INFO) + ": ")
+#define LOG_STREAM(type, tag, funcInfo, color) haw::logger::LogInput(type, tag, funcInfo, color).stream
+#define LOG(type, tag, color)  LOG_STREAM(type, tag, FUNCNAME(FUNC_INFO) + ": ", color)
 
-#define LOGE_T(tag) IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::ERRR, tag)
-#define LOGW_T(tag) IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::WARN, tag)
-#define LOGI_T(tag) IF_LOGLEVEL(haw::logger::Normal) LOG(haw::logger::Logger::INFO, tag)
-#define LOGD_T(tag) IF_LOGLEVEL(haw::logger::Debug) LOG(haw::logger::Logger::DEBG, tag)
+#define LOGE_T(tag) \
+    IF_LOGLEVEL(haw::logger::Normal) \
+    LOG(haw::logger::Logger::ERRR, tag, haw::logger::Logger::colorForType(haw::logger::Logger::ERRR))
+#define LOGW_T(tag) \
+    IF_LOGLEVEL(haw::logger::Normal) \
+    LOG(haw::logger::Logger::WARN, tag, haw::logger::Logger::colorForType(haw::logger::Logger::WARN))
+#define LOGI_T(tag) \
+    IF_LOGLEVEL(haw::logger::Normal) \
+    LOG(haw::logger::Logger::INFO, tag, haw::logger::Logger::colorForType(haw::logger::Logger::INFO))
+#define LOGD_T(tag) \
+    IF_LOGLEVEL(haw::logger::Debug) \
+    LOG(haw::logger::Logger::DEBG, tag, haw::logger::Logger::colorForType(haw::logger::Logger::DEBG))
+#define LOGDA_T(tag) \
+    IF_LOGLEVEL(haw::logger::Debug) \
+    LOG(haw::logger::Logger::DEBG, tag, haw::logger::Color::Cyan)
 
 #define LOGE LOGE_T(LOG_TAG)
 #define LOGW LOGW_T(LOG_TAG)
 #define LOGI LOGI_T(LOG_TAG)
 #define LOGD LOGD_T(LOG_TAG)
+#define LOGDA LOGDA_T(LOG_TAG)      // active debug
 #define LOGN if (0) LOGD_T(LOG_TAG) // compiling, but no output
 
 //! Helps

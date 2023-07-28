@@ -36,10 +36,14 @@
 namespace mu::project {
 class ProjectAudioSettings : public IProjectAudioSettings
 {
-    INJECT_STATIC(project, playback::IPlaybackConfiguration, playbackConfig)
+    INJECT_STATIC(playback::IPlaybackConfiguration, playbackConfig)
 public:
     audio::AudioOutputParams masterAudioOutputParams() const override;
     void setMasterAudioOutputParams(const audio::AudioOutputParams& params) override;
+
+    bool containsAuxOutputParams(audio::aux_channel_idx_t index) const override;
+    audio::AudioOutputParams auxOutputParams(audio::aux_channel_idx_t index) const override;
+    void setAuxOutputParams(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params) override;
 
     audio::AudioInputParams trackInputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackInputParams(const engraving::InstrumentTrackId& partId, const audio::AudioInputParams& params) override;
@@ -47,13 +51,18 @@ public:
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const audio::AudioOutputParams& params) override;
 
-    SoloMuteState soloMuteState(const engraving::InstrumentTrackId& trackId) const override;
-    void setSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& soloMuteState) override;
-    async::Channel<engraving::InstrumentTrackId, SoloMuteState> soloMuteStateChanged() const override;
+    SoloMuteState trackSoloMuteState(const engraving::InstrumentTrackId& trackId) const override;
+    void setTrackSoloMuteState(const engraving::InstrumentTrackId& trackId, const SoloMuteState& state) override;
+    async::Channel<engraving::InstrumentTrackId, SoloMuteState> trackSoloMuteStateChanged() const override;
+
+    SoloMuteState auxSoloMuteState(audio::aux_channel_idx_t index) const override;
+    void setAuxSoloMuteState(audio::aux_channel_idx_t index, const SoloMuteState& state) override;
+    async::Channel<audio::aux_channel_idx_t, SoloMuteState> auxSoloMuteStateChanged() const override;
 
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
     mu::ValNt<bool> needSave() const override;
+    void markAsSaved() override;
 
     const playback::SoundProfileName& activeSoundProfile() const override;
     void setActiveSoundProfile(const playback::SoundProfileName& profileName) override;
@@ -73,6 +82,8 @@ private:
     SoloMuteState soloMuteStateFromJson(const QJsonObject& object) const;
     audio::AudioFxChain fxChainFromJson(const QJsonObject& fxChainObject) const;
     audio::AudioFxParams fxParamsFromJson(const QJsonObject& object) const;
+    audio::AuxSendsParams auxSendsFromJson(const QJsonArray& objectList) const;
+    audio::AuxSendParams auxSendParamsFromJson(const QJsonObject& object) const;
     audio::AudioResourceMeta resourceMetaFromJson(const QJsonObject& object) const;
     audio::AudioUnitConfig unitConfigFromJson(const QJsonObject& object) const;
     audio::AudioResourceAttributes attributesFromJson(const QJsonObject& object) const;
@@ -82,6 +93,8 @@ private:
     QJsonObject soloMuteStateToJson(const SoloMuteState& state) const;
     QJsonObject fxChainToJson(const audio::AudioFxChain& fxChain) const;
     QJsonObject fxParamsToJson(const audio::AudioFxParams& fxParams) const;
+    QJsonArray auxSendsToJson(const audio::AuxSendsParams& auxSends) const;
+    QJsonObject auxSendParamsToJson(const audio::AuxSendParams& auxParams) const;
     QJsonObject resourceMetaToJson(const audio::AudioResourceMeta& meta) const;
     QJsonObject unitConfigToJson(const audio::AudioUnitConfig& config) const;
     QJsonObject attributesToJson(const audio::AudioResourceAttributes& attributes) const;
@@ -92,17 +105,21 @@ private:
     QString sourceTypeToString(const audio::AudioSourceType& type) const;
     QString resourceTypeToString(const audio::AudioResourceType& type) const;
 
+    QJsonObject buildAuxObject(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params) const;
     QJsonObject buildTrackObject(const engraving::InstrumentTrackId& id) const;
 
     void setNeedSave(bool needSave);
 
     audio::AudioOutputParams m_masterOutputParams;
 
+    std::map<audio::aux_channel_idx_t, audio::AudioOutputParams> m_auxOutputParams;
+    std::unordered_map<audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStatesMap;
+    async::Channel<audio::aux_channel_idx_t, SoloMuteState> m_auxSoloMuteStateChanged;
+
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioInputParams> m_trackInputParamsMap;
     std::unordered_map<engraving::InstrumentTrackId, audio::AudioOutputParams> m_trackOutputParamsMap;
-    std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStatesMap;
-
-    async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_soloMuteStateChanged;
+    std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStatesMap;
+    async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStateChanged;
 
     bool m_needSave = false;
     async::Notification m_needSaveNotification;

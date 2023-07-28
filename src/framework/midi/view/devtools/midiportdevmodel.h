@@ -35,8 +35,8 @@ class MidiPortDevModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(midi, IMidiOutPort, midiOutPort)
-    INJECT(midi, IMidiInPort, midiInPort)
+    INJECT(IMidiOutPort, midiOutPort)
+    INJECT(IMidiInPort, midiInPort)
 
     Q_PROPERTY(QVariantList outputDevices READ outputDevices NOTIFY outputDevicesChanged)
     Q_PROPERTY(QVariantList inputDevices READ inputDevices NOTIFY inputDevicesChanged)

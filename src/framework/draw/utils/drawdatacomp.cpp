@@ -38,26 +38,26 @@ struct Polygon;
 static bool isEqual(const Polygon& p1, const Polygon& p2, DrawDataComp::Tolerance tolerance);
 
 struct Path {
-    const DrawData::Object* obj = nullptr;
+    const DrawData::Item* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawPath* path = nullptr;
 };
 
 struct Polygon {
-    const DrawData::Object* obj = nullptr;
+    const DrawData::Item* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawPolygon* polygon = nullptr;
     bool operator==(const Polygon& o) const { return isEqual(*this, o, DrawDataComp::Tolerance()); }
 };
 
 struct Text {
-    const DrawData::Object* obj = nullptr;
+    const DrawData::Item* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawText* text = nullptr;
 };
 
 struct Pixmap {
-    const DrawData::Object* obj = nullptr;
+    const DrawData::Item* obj = nullptr;
     const DrawData::Data* data = nullptr;
     const DrawPixmap* pixmap = nullptr;
 };
@@ -556,26 +556,32 @@ static void difference(Data& diff, const Data& d1, const Data& d2, DrawDataComp:
     difference(diff.pixmaps, d1.pixmaps, d2.pixmaps, tolerance);
 }
 
-static Data toCompData(const DrawDataPtr& dd)
+static void toCompData(Data& cd, const DrawData::Item& item)
 {
-    Data cd;
-    for (const DrawData::Object& o : dd->objects) {
-        for (const DrawData::Data& d : o.datas) {
-            for (const DrawPath& p : d.paths) {
-                cd.paths.push_back(comp::Path { &o, &d, &p });
-            }
-            for (const DrawPolygon& p : d.polygons) {
-                cd.polygons.push_back(comp::Polygon { &o, &d, &p });
-            }
-            for (const DrawText& p : d.texts) {
-                cd.texts.push_back(comp::Text { &o, &d, &p });
-            }
-            for (const DrawPixmap& p : d.pixmaps) {
-                cd.pixmaps.push_back(comp::Pixmap { &o, &d, &p });
-            }
+    for (const DrawData::Data& d : item.datas) {
+        for (const DrawPath& p : d.paths) {
+            cd.paths.push_back(comp::Path { &item, &d, &p });
+        }
+        for (const DrawPolygon& p : d.polygons) {
+            cd.polygons.push_back(comp::Polygon { &item, &d, &p });
+        }
+        for (const DrawText& p : d.texts) {
+            cd.texts.push_back(comp::Text { &item, &d, &p });
+        }
+        for (const DrawPixmap& p : d.pixmaps) {
+            cd.pixmaps.push_back(comp::Pixmap { &item, &d, &p });
         }
     }
 
+    for (const DrawData::Item& ch : item.chilren) {
+        toCompData(cd, ch);
+    }
+}
+
+static Data toCompData(const DrawDataPtr& dd)
+{
+    Data cd;
+    toCompData(cd, dd->item);
     return cd;
 }
 
@@ -584,7 +590,7 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
     //! NOTE Not effective, but efficiency is not required yet
 
     // collect objects (save order)
-    std::vector<const DrawData::Object*> objs;
+    std::vector<const DrawData::Item*> objs;
     for (const comp::Path& p : cd.paths) {
         if (!mu::contains(objs, p.obj)) {
             objs.push_back(p.obj);
@@ -607,12 +613,11 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
     }
 
     // collect data
-    for (const DrawData::Object* o : objs) {
-        DrawData::Object dobj;
+    for (const DrawData::Item* o : objs) {
+        DrawData::Item dobj;
         dobj.name = o->name;
-        dobj.pagePos = o->pagePos;
 
-        auto findOrCreateDData = [](DrawData::Object& dobj, const DrawData::State& state) {
+        auto findOrCreateDData = [](DrawData::Item& dobj, int state) {
             DrawData::Data* ddata = nullptr;
 
             // find by state
@@ -652,7 +657,7 @@ static void fillDrawData(DrawDataPtr& dd, const comp::Data& cd)
             ddata->pixmaps.push_back(*p.pixmap);
         }
 
-        dd->objects.push_back(dobj);
+        dd->item.chilren.push_back(dobj);
     }
 }
 } // mu::draw::comp
@@ -680,11 +685,13 @@ Diff DrawDataComp::compare(const DrawDataPtr& data, const DrawDataPtr& origin, T
     diff.dataAdded = std::make_shared<DrawData>();
     diff.dataAdded->name = origin->name;
     diff.dataAdded->viewport = origin->viewport;
+    diff.dataAdded->states = origin->states;
     fillDrawData(diff.dataAdded, added);
 
     diff.dataRemoved = std::make_shared<DrawData>();
     diff.dataRemoved->name = origin->name;
     diff.dataRemoved->viewport = origin->viewport;
+    diff.dataRemoved->states = origin->states;
     fillDrawData(diff.dataRemoved, removed);
 
     return diff;

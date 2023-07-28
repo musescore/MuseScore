@@ -35,7 +35,7 @@ class FileSystemApi : public ApiObject
 {
     Q_OBJECT
 
-    INJECT(api, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 public:
     FileSystemApi(IApiEngine* e);
 

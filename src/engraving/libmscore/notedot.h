@@ -37,14 +37,14 @@ class Rest;
 class NoteDot final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, NoteDot)
+    DECLARE_CLASSOF(ElementType::NOTEDOT)
+
 public:
 
     NoteDot* clone() const override { return new NoteDot(*this); }
     double mag() const override;
 
     void draw(mu::draw::Painter*) const override;
-    void read(XmlReader&) override;
-    void layout() override;
 
     Note* note() const { return explicitParent()->isNote() ? toNote(explicitParent()) : 0; }
     Rest* rest() const { return explicitParent()->isRest() ? toRest(explicitParent()) : 0; }

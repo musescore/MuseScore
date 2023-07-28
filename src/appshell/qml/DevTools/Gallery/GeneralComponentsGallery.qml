@@ -30,6 +30,7 @@ Rectangle {
     id: root
 
     color: ui.theme.backgroundSecondaryColor
+    clip: true
 
     NavigationSection {
         id: navSec
@@ -71,6 +72,7 @@ Rectangle {
                     { textRole: "RoundedRadioButton", componentRole: roundedRadioButtonSample },
                     { textRole: "IncrementalPropertyControl (Hidden icon, Icon left, Icon right)", componentRole: incrementalPropertyControlSample },
                     { textRole: "FlatToggleButton", componentRole: flatToggleButtonSample },
+                    { textRole: "ToggleButton", componentRole: toggleButtonSample },
                     { textRole: "RoundedRectangle (which allows to round the particular corners)", componentRole: roundedRectangleSample },
                     { textRole: "TextInputField", componentRole: textInputFieldSample },
                     { textRole: "SearchField", componentRole: searchFieldSample },
@@ -82,7 +84,8 @@ Rectangle {
                     { textRole: "StyledSlider", componentRole: slidersSample },
                     { textRole: "NumberInputField", componentRole: numberInputFieldSample },
                     { textRole: "TimeInputField", componentRole: timeInputFieldSample },
-                    { textRole: "ValueList", componentRole: valueListSample }
+                    { textRole: "ValueList", componentRole: valueListSample },
+                    { textRole: "StyledBusyIndicator", componentRole: styledBusyIndicatorSample }
                 ]
 
                 delegate: Column {
@@ -600,6 +603,18 @@ Rectangle {
     }
 
     Component {
+        id: toggleButtonSample
+
+        ToggleButton {
+            id: toggleButton
+
+            onToggled: {
+                checked = !checked
+            }
+        }
+    }
+
+    Component {
         id: roundedRectangleSample
 
         GridLayout {
@@ -968,6 +983,17 @@ Rectangle {
                     valueType: "Int"
                 }
             }
+        }
+    }
+
+    Component {
+        id: styledBusyIndicatorSample
+
+        Item {
+            width: childrenRect.width
+            height: childrenRect.height
+
+            StyledBusyIndicator {}
         }
     }
 }

@@ -22,9 +22,9 @@
 
 #include "sticking.h"
 
-#include "rw/xml.h"
-
 #include "segment.h"
+
+#include "log.h"
 
 using namespace mu;
 
@@ -48,29 +48,6 @@ Sticking::Sticking(Segment* parent)
     initElementStyle(&stickingStyle);
 }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Sticking::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    TextBase::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Sticking::read(XmlReader& e)
-{
-    TextBase::read(e);
-}
-
 bool Sticking::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {
@@ -78,16 +55,6 @@ bool Sticking::isEditAllowed(EditData& ed) const
     }
 
     return TextBase::isEditAllowed(ed);
-}
-
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Sticking::layout()
-{
-    TextBase::layout();
-    autoplaceSegmentElement();
 }
 
 //---------------------------------------------------------

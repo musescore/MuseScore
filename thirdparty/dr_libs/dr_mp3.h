@@ -3151,9 +3151,11 @@ static drmp3_result drmp3_result_from_errno(int e)
     #ifdef ENOTUNIQ
         case ENOTUNIQ: return DRMP3_NOT_UNIQUE;
     #endif
+#ifndef __FreeBSD__
     #ifdef EBADFD
         case EBADFD: return DRMP3_ERROR;
     #endif
+#endif
     #ifdef EREMCHG
         case EREMCHG: return DRMP3_ERROR;
     #endif
@@ -3178,9 +3180,11 @@ static drmp3_result drmp3_result_from_errno(int e)
     #ifdef ERESTART
         case ERESTART: return DRMP3_ERROR;
     #endif
+#ifndef __FreeBSD__
     #ifdef ESTRPIPE
         case ESTRPIPE: return DRMP3_ERROR;
     #endif
+#endif
     #ifdef EUSERS
         case EUSERS: return DRMP3_ERROR;
     #endif

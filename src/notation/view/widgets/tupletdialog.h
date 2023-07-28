@@ -37,8 +37,8 @@ class TupletDialog : public QDialog, Ui::TupletDialog
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(actions::IActionsDispatcher, dispatcher)
 
     virtual void hideEvent(QHideEvent*);
 

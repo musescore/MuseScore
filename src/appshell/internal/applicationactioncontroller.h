@@ -44,17 +44,17 @@
 namespace mu::appshell {
 class ApplicationActionController : public QObject, public IApplicationActionController, public actions::Actionable, public async::Asyncable
 {
-    INJECT(appshell, actions::IActionsDispatcher, dispatcher)
-    INJECT(appshell, ui::IUiActionsRegister, actionsRegister)
-    INJECT(appshell, ui::IMainWindow, mainWindow)
-    INJECT(appshell, languages::ILanguagesService, languagesService)
-    INJECT(appshell, framework::IInteractive, interactive)
-    INJECT(appshell, IAppShellConfiguration, configuration)
-    INJECT(appshell, mi::IMultiInstancesProvider, multiInstancesProvider)
-    INJECT(appshell, project::IProjectFilesController, projectFilesController)
-    INJECT(appshell, audio::ISoundFontRepository, soundFontRepository)
-    INJECT(appshell, IStartupScenario, startupScenario)
-    INJECT(appshell, framework::IApplication, application)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(ui::IUiActionsRegister, actionsRegister)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(languages::ILanguagesService, languagesService)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IAppShellConfiguration, configuration)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(project::IProjectFilesController, projectFilesController)
+    INJECT(audio::ISoundFontRepository, soundFontRepository)
+    INJECT(IStartupScenario, startupScenario)
+    INJECT(framework::IApplication, application)
 
 public:
     void preInit();
@@ -81,14 +81,12 @@ private:
 
     void openOnlineHandbookPage();
     void openAskForHelpPage();
-    void openBugReportPage();
     void openPreferencesDialog();
 
     void revertToFactorySettings();
 
     bool m_quiting = false;
 
-    async::Channel<bool> m_fullScreenChannel;
     async::Channel<actions::ActionCodeList> m_actionsReceiveAvailableChanged;
 };
 }

@@ -39,8 +39,8 @@ class NavigationSection : public AbstractNavigation, public INavigationSection
     Q_OBJECT
     Q_PROPERTY(QmlType type READ type_property WRITE setType NOTIFY typeChanged)
 
-    INJECT(ui, framework::IApplication, application)
-    INJECT(ui, INavigationController, navigationController)
+    INJECT(framework::IApplication, application)
+    INJECT(INavigationController, navigationController)
 
 public:
     explicit NavigationSection(QObject* parent = nullptr);
@@ -58,6 +58,7 @@ public:
     QString name() const override;
 
     const Index& index() const override;
+    void setIndex(const INavigation::Index& index) override;
     async::Channel<Index> indexChanged() const override;
 
     bool enabled() const override;

@@ -13,7 +13,7 @@ import zipfile
 #needs to be equal or smaller than the cron
 period = 300
 outputDir = "share/locale/"
-s3Urls = ["s3://extensions.musescore.org/4.0/languages/"]
+s3Urls = ["s3://extensions.musescore.org/4.1/languages/"]
 
 def processTsFile(prefix, langCode, data):
     print("Processing " + langCode)
@@ -123,5 +123,3 @@ if translationChanged:
     for s3Url in s3Urls:
         push_json = subprocess.Popen(['s3cmd','put','--acl-public', '--guess-mime-type', outputDir + 'details.json', s3Url + 'details.json'])
         push_json.communicate()
-
-

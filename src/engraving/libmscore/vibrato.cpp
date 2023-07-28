@@ -24,7 +24,7 @@
 #include <cmath>
 
 #include "types/typesconv.h"
-#include "rw/xml.h"
+
 #include "iengravingfont.h"
 
 #include "score.h"
@@ -48,7 +48,7 @@ VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
 
 void VibratoSegment::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     painter->setPen(spanner()->curColor());
     drawSymbols(_symbols, painter);
 }
@@ -100,41 +100,6 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void VibratoSegment::layout()
-{
-    if (staff()) {
-        setMag(staff()->staffMag(tick()));
-    }
-    if (spanner()->placeBelow()) {
-        setPosY(staff() ? staff()->height() : 0.0);
-    }
-
-    switch (vibrato()->vibratoType()) {
-    case VibratoType::GUITAR_VIBRATO:
-        symbolLine(SymId::guitarVibratoStroke, SymId::guitarVibratoStroke);
-        break;
-    case VibratoType::GUITAR_VIBRATO_WIDE:
-        symbolLine(SymId::guitarWideVibratoStroke, SymId::guitarWideVibratoStroke);
-        break;
-    case VibratoType::VIBRATO_SAWTOOTH:
-        symbolLine(SymId::wiggleSawtooth, SymId::wiggleSawtooth);
-        break;
-    case VibratoType::VIBRATO_SAWTOOTH_WIDE:
-        symbolLine(SymId::wiggleSawtoothWide, SymId::wiggleSawtoothWide);
-        break;
-    }
-
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = vibrato()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-
-    autoplaceSpannerSegment();
-}
-
-//---------------------------------------------------------
 //   shape
 //---------------------------------------------------------
 
@@ -180,22 +145,6 @@ Vibrato::~Vibrato()
 {
 }
 
-//---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Vibrato::layout()
-{
-    SLine::layout();
-    if (score()->isPaletteScore()) {
-        return;
-    }
-    if (spannerSegments().empty()) {
-        LOGD("Vibrato: no segments");
-        return;
-    }
-}
-
 static const ElementStyle vibratoSegmentStyle {
     { Sid::vibratoPosAbove,       Pid::OFFSET },
     { Sid::vibratoMinDistance,    Pid::MIN_DISTANCE },
@@ -212,45 +161,6 @@ LineSegment* Vibrato::createLineSegment(System* parent)
     seg->setColor(color());
     seg->initElementStyle(&vibratoSegmentStyle);
     return seg;
-}
-
-//---------------------------------------------------------
-//   Vibrato::write
-//---------------------------------------------------------
-
-void Vibrato::write(XmlWriter& xml) const
-{
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    xml.tag("subtype", TConv::toXml(vibratoType()));
-    writeProperty(xml, Pid::PLAY);
-    for (const StyledProperty& spp : *styledProperties()) {
-        writeProperty(xml, spp.pid);
-    }
-    SLine::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   Vibrato::read
-//---------------------------------------------------------
-
-void Vibrato::read(XmlReader& e)
-{
-    eraseSpannerSegments();
-
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            setVibratoType(TConv::fromXml(e.readAsciiText(), VibratoType::GUITAR_VIBRATO));
-        } else if (tag == "play") {
-            setPlayArticulation(e.readBool());
-        } else if (!SLine::readProperties(e)) {
-            e.unknown();
-        }
-    }
 }
 
 //---------------------------------------------------------
@@ -337,7 +247,7 @@ PropertyValue Vibrato::propertyDefault(Pid propertyId) const
     case Pid::PLAY:
         return true;
     case Pid::PLACEMENT:
-        return score()->styleV(Sid::vibratoPlacement);
+        return style().styleV(Sid::vibratoPlacement);
     default:
         return SLine::propertyDefault(propertyId);
     }

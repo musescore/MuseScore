@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.00">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <minSystemDistance>9.2</minSystemDistance>
@@ -92,7 +90,7 @@ p, li { white-space: pre-wrap; }
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="-1" span="1" col="0"/>
+        <bracket type="-1" span="1" col="0" visible="1"/>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument>

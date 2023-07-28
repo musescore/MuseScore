@@ -109,7 +109,7 @@ RectF LoopMarker::resolveMarkerRectByTick(midi::tick_t _tick) const
     }
 
     double y = system->staffYpage(0) + system->page()->pos().y();
-    double _spatium = score->spatium();
+    double _spatium = score->style().spatium();
 
     qreal mag = _spatium / mu::engraving::SPATIUM20;
     double width = (_spatium * 2.0 + score->engravingFont()->width(mu::engraving::SymId::noteheadBlack, mag)) / 3;

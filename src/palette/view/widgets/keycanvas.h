@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
 #include "iengravingconfiguration.h"
+#include "engraving/rendering/isinglerendering.h"
 
 namespace mu::engraving {
 class Accidental;
@@ -43,8 +44,9 @@ class KeyCanvas : public QFrame
 {
     Q_OBJECT
 
-    INJECT(palette, IPaletteConfiguration, configuration)
-    INJECT(palette, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(IPaletteConfiguration, configuration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(engraving::rendering::ISingleRendering, engravingRendering)
 
     engraving::Accidental* dragElement = nullptr;
     engraving::Accidental* moveElement = nullptr;

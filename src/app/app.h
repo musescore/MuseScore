@@ -31,16 +31,41 @@
 #include "converter/iconvertercontroller.h"
 #include "diagnostics/idiagnosticdrawprovider.h"
 #include "autobot/iautobot.h"
+#include "audio/iregisteraudiopluginsscenario.h"
+#include "multiinstances/imultiinstancesprovider.h"
 
-#include "commandlinecontroller.h"
+#include "ui/iuiconfiguration.h"
+#include "notation/inotationconfiguration.h"
+#include "project/iprojectconfiguration.h"
+#include "appshell/iappshellconfiguration.h"
+#include "appshell/internal/istartupscenario.h"
+#include "importexport/imagesexport/iimagesexportconfiguration.h"
+#include "importexport/midi/imidiconfiguration.h"
+#include "importexport/audioexport/iaudioexportconfiguration.h"
+#include "importexport/videoexport/ivideoexportconfiguration.h"
+#include "importexport/guitarpro/iguitarproconfiguration.h"
+
+#include "commandlineparser.h"
 
 namespace mu::app {
 class App
 {
-    INJECT(app, framework::IApplication, muapplication)
-    INJECT(app, converter::IConverterController, converter)
-    INJECT(app, diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
-    INJECT(app, autobot::IAutobot, autobot)
+    INJECT(framework::IApplication, muapplication)
+    INJECT(converter::IConverterController, converter)
+    INJECT(diagnostics::IDiagnosticDrawProvider, diagnosticDrawProvider)
+    INJECT(autobot::IAutobot, autobot)
+    INJECT(audio::IRegisterAudioPluginsScenario, registerAudioPluginsScenario)
+    INJECT(mi::IMultiInstancesProvider, multiInstancesProvider)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(appshell::IAppShellConfiguration, appshellConfiguration)
+    INJECT(appshell::IStartupScenario, startupScenario)
+    INJECT(notation::INotationConfiguration, notationConfiguration)
+    INJECT(project::IProjectConfiguration, projectConfiguration)
+    INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
+    INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
+    INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)
+    INJECT(iex::videoexport::IVideoExportConfiguration, videoExportConfiguration)
+    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
 
 public:
     App();
@@ -50,10 +75,11 @@ public:
     int run(int argc, char** argv);
 
 private:
-
-    int processConverter(const CommandLineController::ConverterTask& task);
-    int processDiagnostic(const CommandLineController::Diagnostic& task);
-    void processAutobot(const CommandLineController::Autobot& task);
+    void applyCommandLineOptions(const CommandLineParser::Options& options, framework::IApplication::RunMode runMode);
+    int processConverter(const CommandLineParser::ConverterTask& task);
+    int processDiagnostic(const CommandLineParser::Diagnostic& task);
+    int processAudioPluginRegistration(const CommandLineParser::AudioPluginRegistration& task);
+    void processAutobot(const CommandLineParser::Autobot& task);
 
     QList<modularity::IModuleSetup*> m_modules;
 };

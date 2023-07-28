@@ -31,7 +31,7 @@
 namespace mu::uicomponents {
 class TopLevelDialog : public QDialog
 {
-    INJECT(uicomponents, ui::IMainWindow, mainWindow)
+    INJECT(ui::IMainWindow, mainWindow)
 
 public:
     explicit TopLevelDialog(QWidget* parent = nullptr);

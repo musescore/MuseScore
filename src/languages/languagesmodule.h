@@ -22,9 +22,13 @@
 #ifndef MU_LANGUAGES_LANGUAGESMODULE_H
 #define MU_LANGUAGES_LANGUAGESMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::languages {
+class LanguagesConfiguration;
+class LanguagesService;
 class LanguagesModule : public modularity::IModuleSetup
 {
 public:
@@ -32,6 +36,10 @@ public:
 
     void registerExports() override;
     void onPreInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<LanguagesConfiguration> m_languagesConfiguration;
+    std::shared_ptr<LanguagesService> m_languagesService;
 };
 }
 

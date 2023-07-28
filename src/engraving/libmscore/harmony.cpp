@@ -29,8 +29,6 @@
 #include "draw/fontmetrics.h"
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
-#include "rw/writecontext.h"
-#include "rw/xml.h"
 
 #include "chordlist.h"
 #include "fret.h"
@@ -63,23 +61,23 @@ String Harmony::harmonyName() const
     HChord hc = descr() ? descr()->chord : HChord();
     String s, r, e, b;
 
-    if (_leftParen) {
+    if (m_leftParen) {
         s = u"(";
     }
 
-    if (_rootTpc != Tpc::TPC_INVALID) {
-        r = tpc2name(_rootTpc, _rootSpelling, _rootCase);
-    } else if (_harmonyType != HarmonyType::STANDARD) {
-        r = _function;
+    if (m_rootTpc != Tpc::TPC_INVALID) {
+        r = tpc2name(m_rootTpc, m_rootSpelling, m_rootCase);
+    } else if (m_harmonyType != HarmonyType::STANDARD) {
+        r = m_function;
     }
 
-    if (_textName != "") {
-        e = _textName;
-        if (_harmonyType != HarmonyType::ROMAN) {
+    if (m_textName != "") {
+        e = m_textName;
+        if (m_harmonyType != HarmonyType::ROMAN) {
             e.remove(u'=');
         }
-    } else if (!_degreeList.empty()) {
-        hc.add(_degreeList);
+    } else if (!m_degreeList.empty()) {
+        hc.add(m_degreeList);
         // try to find the chord in chordList
         const ChordDescription* newExtension = 0;
         const ChordList* cl = score()->chordList();
@@ -95,18 +93,18 @@ String Harmony::harmonyName() const
             e = newExtension->names.front();
         } else {
             // not in table, fallback to using HChord.name()
-            r = hc.name(_rootTpc);
+            r = hc.name(m_rootTpc);
             e = u"";
         }
     }
 
-    if (_baseTpc != Tpc::TPC_INVALID) {
-        b = u"/" + tpc2name(_baseTpc, _baseSpelling, _baseCase);
+    if (m_baseTpc != Tpc::TPC_INVALID) {
+        b = u"/" + tpc2name(m_baseTpc, m_baseSpelling, m_baseCase);
     }
 
     s += r + e + b;
 
-    if (_rightParen) {
+    if (m_rightParen) {
         s += u")";
     }
 
@@ -120,7 +118,7 @@ String Harmony::harmonyName() const
 String Harmony::rootName()
 {
     determineRootBaseSpelling();
-    return tpc2name(_rootTpc, _rootSpelling, _rootCase);
+    return tpc2name(m_rootTpc, m_rootSpelling, m_rootCase);
 }
 
 //---------------------------------------------------------
@@ -130,16 +128,16 @@ String Harmony::rootName()
 String Harmony::baseName()
 {
     determineRootBaseSpelling();
-    if (_baseTpc == Tpc::TPC_INVALID) {
+    if (m_baseTpc == Tpc::TPC_INVALID) {
         return rootName();
     }
-    return tpc2name(_baseTpc, _baseSpelling, _baseCase);
+    return tpc2name(m_baseTpc, m_baseSpelling, m_baseCase);
 }
 
 bool Harmony::isRealizable() const
 {
-    return (_rootTpc != Tpc::TPC_INVALID)
-           || (_harmonyType == HarmonyType::NASHVILLE);        // unable to fully check at for nashville at the moment
+    return (m_rootTpc != Tpc::TPC_INVALID)
+           || (m_harmonyType == HarmonyType::NASHVILLE);        // unable to fully check at for nashville at the moment
 }
 
 //---------------------------------------------------------
@@ -150,13 +148,13 @@ bool Harmony::isRealizable() const
 
 void Harmony::resolveDegreeList()
 {
-    if (_degreeList.empty()) {
+    if (m_degreeList.empty()) {
         return;
     }
 
     HChord hc = descr() ? descr()->chord : HChord();
 
-    hc.add(_degreeList);
+    hc.add(m_degreeList);
 
 // LOGD("resolveDegreeList: <%s> <%s-%s>: ", _descr->name, _descr->xmlKind, _descr->xmlDegrees);
 // hc.print();
@@ -168,8 +166,8 @@ void Harmony::resolveDegreeList()
         const ChordDescription& cd = p.second;
         if ((cd.chord == hc) && !cd.names.empty()) {
             LOGD("ResolveDegreeList: found in table as %s", muPrintable(cd.names.front()));
-            _id = cd.id;
-            _degreeList.clear();
+            m_id = cd.id;
+            m_degreeList.clear();
             return;
         }
     }
@@ -195,51 +193,51 @@ const ElementStyle chordSymbolStyle {
 Harmony::Harmony(Segment* parent)
     : TextBase(ElementType::HARMONY, parent, TextStyleType::HARMONY_A, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    _rootTpc    = Tpc::TPC_INVALID;
-    _baseTpc    = Tpc::TPC_INVALID;
-    _rootSpelling = NoteSpellingType::STANDARD;
-    _baseSpelling = NoteSpellingType::STANDARD;
-    _rootCase   = NoteCaseType::CAPITAL;
-    _baseCase   = NoteCaseType::CAPITAL;
-    _rootRenderCase = NoteCaseType::CAPITAL;
-    _baseRenderCase = NoteCaseType::CAPITAL;
-    _id         = -1;
-    _parsedForm = 0;
-    _harmonyType = HarmonyType::STANDARD;
-    _leftParen  = false;
-    _rightParen = false;
-    _play = true;
-    _realizedHarmony = RealizedHarmony(this);
+    m_rootTpc    = Tpc::TPC_INVALID;
+    m_baseTpc    = Tpc::TPC_INVALID;
+    m_rootSpelling = NoteSpellingType::STANDARD;
+    m_baseSpelling = NoteSpellingType::STANDARD;
+    m_rootCase   = NoteCaseType::CAPITAL;
+    m_baseCase   = NoteCaseType::CAPITAL;
+    m_rootRenderCase = NoteCaseType::CAPITAL;
+    m_baseRenderCase = NoteCaseType::CAPITAL;
+    m_id         = -1;
+    m_parsedForm = 0;
+    m_harmonyType = HarmonyType::STANDARD;
+    m_leftParen  = false;
+    m_rightParen = false;
+    m_play = true;
+    m_realizedHarmony = RealizedHarmony(this);
     initElementStyle(&chordSymbolStyle);
 }
 
 Harmony::Harmony(const Harmony& h)
     : TextBase(h)
 {
-    _rootTpc    = h._rootTpc;
-    _baseTpc    = h._baseTpc;
-    _rootSpelling = h._rootSpelling;
-    _baseSpelling = h._baseSpelling;
-    _rootCase   = h._rootCase;
-    _baseCase   = h._baseCase;
-    _rootRenderCase = h._rootRenderCase;
-    _baseRenderCase = h._baseRenderCase;
-    _id         = h._id;
-    _leftParen  = h._leftParen;
-    _rightParen = h._rightParen;
-    _degreeList = h._degreeList;
-    _parsedForm = h._parsedForm ? new ParsedChord(*h._parsedForm) : 0;
-    _harmonyType = h._harmonyType;
-    _textName   = h._textName;
-    _userName   = h._userName;
-    _function   = h._function;
-    _play       = h._play;
-    _realizedHarmony = h._realizedHarmony;
-    _realizedHarmony.setHarmony(this);
-    for (const TextSegment* s : h.textList) {
+    m_rootTpc    = h.m_rootTpc;
+    m_baseTpc    = h.m_baseTpc;
+    m_rootSpelling = h.m_rootSpelling;
+    m_baseSpelling = h.m_baseSpelling;
+    m_rootCase   = h.m_rootCase;
+    m_baseCase   = h.m_baseCase;
+    m_rootRenderCase = h.m_rootRenderCase;
+    m_baseRenderCase = h.m_baseRenderCase;
+    m_id         = h.m_id;
+    m_leftParen  = h.m_leftParen;
+    m_rightParen = h.m_rightParen;
+    m_degreeList = h.m_degreeList;
+    m_parsedForm = h.m_parsedForm ? new ParsedChord(*h.m_parsedForm) : 0;
+    m_harmonyType = h.m_harmonyType;
+    m_textName   = h.m_textName;
+    m_userName   = h.m_userName;
+    m_function   = h.m_function;
+    m_play       = h.m_play;
+    m_realizedHarmony = h.m_realizedHarmony;
+    m_realizedHarmony.setHarmony(this);
+    for (const TextSegment* s : h.m_textList) {
         TextSegment* ns = new TextSegment();
         ns->set(s->text, s->m_font, s->x, s->y, s->offset);
-        textList.push_back(ns);
+        m_textList.push_back(ns);
     }
 }
 
@@ -249,180 +247,23 @@ Harmony::Harmony(const Harmony& h)
 
 Harmony::~Harmony()
 {
-    for (const TextSegment* ts : textList) {
+    for (const TextSegment* ts : m_textList) {
         delete ts;
     }
-    if (_parsedForm) {
-        delete _parsedForm;
+    if (m_parsedForm) {
+        delete m_parsedForm;
     }
 }
 
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Harmony::write(XmlWriter& xml) const
+void Harmony::afterRead()
 {
-    if (!xml.context()->canWrite(this)) {
-        return;
-    }
-    xml.startElement(this);
-    writeProperty(xml, Pid::HARMONY_TYPE);
-    writeProperty(xml, Pid::PLAY);
-    if (_leftParen) {
-        xml.tag("leftParen");
-    }
-    if (_rootTpc != Tpc::TPC_INVALID || _baseTpc != Tpc::TPC_INVALID) {
-        int rRootTpc = _rootTpc;
-        int rBaseTpc = _baseTpc;
-        if (staff()) {
-            // parent can be a fret diagram
-            Segment* segment = getParentSeg();
-            Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-            const Interval& interval = part()->instrument(tick)->transpose();
-            if (xml.context()->clipboardmode() && !score()->styleB(Sid::concertPitch) && interval.chromatic) {
-                rRootTpc = transposeTpc(_rootTpc, interval, true);
-                rBaseTpc = transposeTpc(_baseTpc, interval, true);
-            }
-        }
-        if (rRootTpc != Tpc::TPC_INVALID) {
-            xml.tag("root", rRootTpc);
-            if (_rootCase != NoteCaseType::CAPITAL) {
-                xml.tag("rootCase", static_cast<int>(_rootCase));
-            }
-        }
-        if (_id > 0) {
-            xml.tag("extension", _id);
-        }
-        // parser uses leading "=" as a hidden specifier for minor
-        // this may or may not currently be incorporated into _textName
-        String writeName = _textName;
-        if (_parsedForm && _parsedForm->name().startsWith(u'=') && !writeName.startsWith(u'=')) {
-            writeName = u"=" + writeName;
-        }
-        if (!writeName.isEmpty()) {
-            xml.tag("name", writeName);
-        }
-
-        if (rBaseTpc != Tpc::TPC_INVALID) {
-            xml.tag("base", rBaseTpc);
-            if (_baseCase != NoteCaseType::CAPITAL) {
-                xml.tag("baseCase", static_cast<int>(_baseCase));
-            }
-        }
-        for (const HDegree& hd : _degreeList) {
-            HDegreeType tp = hd.type();
-            if (tp == HDegreeType::ADD || tp == HDegreeType::ALTER || tp == HDegreeType::SUBTRACT) {
-                xml.startElement("degree");
-                xml.tag("degree-value", hd.value());
-                xml.tag("degree-alter", hd.alter());
-                switch (tp) {
-                case HDegreeType::ADD:
-                    xml.tag("degree-type", "add");
-                    break;
-                case HDegreeType::ALTER:
-                    xml.tag("degree-type", "alter");
-                    break;
-                case HDegreeType::SUBTRACT:
-                    xml.tag("degree-type", "subtract");
-                    break;
-                default:
-                    break;
-                }
-                xml.endElement();
-            }
-        }
-    } else {
-        xml.tag("name", _textName);
-    }
-    if (!_function.isEmpty()) {
-        xml.tag("function", _function);
-    }
-    TextBase::writeProperties(xml, false, true);
-    //Pid::HARMONY_VOICE_LITERAL, Pid::HARMONY_VOICING, Pid::HARMONY_DURATION
-    //written by the above function call because they are part of element style
-    if (_rightParen) {
-        xml.tag("rightParen");
-    }
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Harmony::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "base") {
-            setBaseTpc(e.readInt());
-        } else if (tag == "baseCase") {
-            _baseCase = static_cast<NoteCaseType>(e.readInt());
-        } else if (tag == "extension") {
-            setId(e.readInt());
-        } else if (tag == "name") {
-            _textName = e.readText();
-        } else if (tag == "root") {
-            setRootTpc(e.readInt());
-        } else if (tag == "rootCase") {
-            _rootCase = static_cast<NoteCaseType>(e.readInt());
-        } else if (tag == "function") {
-            _function = e.readText();
-        } else if (tag == "degree") {
-            int degreeValue = 0;
-            int degreeAlter = 0;
-            String degreeType;
-            while (e.readNextStartElement()) {
-                const AsciiStringView t(e.name());
-                if (t == "degree-value") {
-                    degreeValue = e.readInt();
-                } else if (t == "degree-alter") {
-                    degreeAlter = e.readInt();
-                } else if (t == "degree-type") {
-                    degreeType = e.readText();
-                } else {
-                    e.unknown();
-                }
-            }
-            if (degreeValue <= 0 || degreeValue > 13
-                || degreeAlter < -2 || degreeAlter > 2
-                || (degreeType != "add" && degreeType != "alter" && degreeType != "subtract")) {
-                LOGD("incorrect degree: degreeValue=%d degreeAlter=%d degreeType=%s",
-                     degreeValue, degreeAlter, muPrintable(degreeType));
-            } else {
-                if (degreeType == "add") {
-                    addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ADD));
-                } else if (degreeType == "alter") {
-                    addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::ALTER));
-                } else if (degreeType == "subtract") {
-                    addDegree(HDegree(degreeValue, degreeAlter, HDegreeType::SUBTRACT));
-                }
-            }
-        } else if (tag == "leftParen") {
-            _leftParen = true;
-            e.readNext();
-        } else if (tag == "rightParen") {
-            _rightParen = true;
-            e.readNext();
-        } else if (readProperty(tag, e, Pid::POS_ABOVE)) {
-        } else if (readProperty(tag, e, Pid::HARMONY_TYPE)) {
-        } else if (readProperty(tag, e, Pid::PLAY)) {
-        } else if (readProperty(tag, e, Pid::HARMONY_VOICE_LITERAL)) {
-        } else if (readProperty(tag, e, Pid::HARMONY_VOICING)) {
-        } else if (readProperty(tag, e, Pid::HARMONY_DURATION)) {
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-
     // TODO: now that we can render arbitrary chords,
     // we could try to construct a full representation from a degree list.
     // These will typically only exist for chords imported from MusicXML prior to MuseScore 2.0
     // or constructed in the Chord Symbol Properties dialog.
 
-    if (_rootTpc != Tpc::TPC_INVALID) {
-        if (_id > 0) {
+    if (m_rootTpc != Tpc::TPC_INVALID) {
+        if (m_id > 0) {
             // positive id will happen only for scores that were created with explicit chord lists
             // lookup id in chord list and generate new description if necessary
             getDescription();
@@ -430,15 +271,15 @@ void Harmony::read(XmlReader& e)
             // default case: look up by name
             // description will be found for any chord already read in this score
             // and we will generate a new one if necessary
-            getDescription(_textName);
+            getDescription(m_textName);
         }
-    } else if (_textName == "") {
+    } else if (m_textName == "") {
         // unrecognized chords prior to 2.0 were stored as text with markup
         // we need to strip away the markup
         // this removes any user-applied formatting,
         // but we no longer support user-applied formatting for chord symbols anyhow
         // with any luck, the resulting text will be parseable now, so give it a shot
-        createLayout();
+        createBlocks();
         String s = plainText();
         if (!s.isEmpty()) {
             setHarmony(s);
@@ -461,15 +302,15 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
                                         NoteSpellingType& baseSpelling, NoteCaseType& baseCase)
 {
     // spelling
-    if (score()->styleB(Sid::useStandardNoteNames)) {
+    if (style().styleB(Sid::useStandardNoteNames)) {
         rootSpelling = NoteSpellingType::STANDARD;
-    } else if (score()->styleB(Sid::useGermanNoteNames)) {
+    } else if (style().styleB(Sid::useGermanNoteNames)) {
         rootSpelling = NoteSpellingType::GERMAN;
-    } else if (score()->styleB(Sid::useFullGermanNoteNames)) {
+    } else if (style().styleB(Sid::useFullGermanNoteNames)) {
         rootSpelling = NoteSpellingType::GERMAN_PURE;
-    } else if (score()->styleB(Sid::useSolfeggioNoteNames)) {
+    } else if (style().styleB(Sid::useSolfeggioNoteNames)) {
         rootSpelling = NoteSpellingType::SOLFEGGIO;
-    } else if (score()->styleB(Sid::useFrenchNoteNames)) {
+    } else if (style().styleB(Sid::useFrenchNoteNames)) {
         rootSpelling = NoteSpellingType::FRENCH;
     }
     baseSpelling = rootSpelling;
@@ -477,14 +318,14 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
     // case
 
     // always use case as typed if automatic capitalization is off
-    if (!score()->styleB(Sid::automaticCapitalization)) {
-        rootCase = _rootCase;
-        baseCase = _baseCase;
+    if (!style().styleB(Sid::automaticCapitalization)) {
+        rootCase = m_rootCase;
+        baseCase = m_baseCase;
         return;
     }
 
     // set default
-    if (score()->styleB(Sid::allCapsNoteNames)) {
+    if (style().styleB(Sid::allCapsNoteNames)) {
         rootCase = NoteCaseType::UPPER;
         baseCase = NoteCaseType::UPPER;
     } else {
@@ -493,32 +334,32 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
     }
 
     // override for bass note
-    if (score()->styleB(Sid::lowerCaseBassNotes)) {
+    if (style().styleB(Sid::lowerCaseBassNotes)) {
         baseCase = NoteCaseType::LOWER;
     }
 
     // override for minor chords
-    if (score()->styleB(Sid::lowerCaseMinorChords)) {
+    if (style().styleB(Sid::lowerCaseMinorChords)) {
         const ChordDescription* cd = descr();
         String quality;
         if (cd) {
             // use chord description if possible
             // this is the usual case
             quality = cd->quality();
-        } else if (_parsedForm) {
+        } else if (m_parsedForm) {
             // this happens on load of new chord list
             // for chord symbols that were added/edited since the score was loaded
             // or read aloud with screenreader
             // parsed form is usable even if out of date with respect to chord list
-            quality = _parsedForm->quality();
+            quality = m_parsedForm->quality();
         } else {
             // this happens on load of new chord list
             // for chord symbols that have not been edited since the score was loaded
             // we need to parse this chord for now to determine quality
             // but don't keep the parsed form around as we're not ready for it yet
             quality = parsedForm()->quality();
-            delete _parsedForm;
-            _parsedForm = 0;
+            delete m_parsedForm;
+            m_parsedForm = 0;
         }
         if (quality == "minor" || quality == "diminished" || quality == "half-diminished") {
             rootCase = NoteCaseType::LOWER;
@@ -532,8 +373,8 @@ void Harmony::determineRootBaseSpelling(NoteSpellingType& rootSpelling, NoteCase
 
 void Harmony::determineRootBaseSpelling()
 {
-    determineRootBaseSpelling(_rootSpelling, _rootRenderCase,
-                              _baseSpelling, _baseRenderCase);
+    determineRootBaseSpelling(m_rootSpelling, m_rootRenderCase,
+                              m_baseSpelling, m_baseRenderCase);
 }
 
 //---------------------------------------------------------
@@ -701,20 +542,20 @@ static int convertNote(const String& s, NoteSpellingType noteSpelling, NoteCaseT
 
 const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* base, bool syntaxOnly)
 {
-    _id = -1;
-    if (_parsedForm) {
-        delete _parsedForm;
-        _parsedForm = 0;
+    m_id = -1;
+    if (m_parsedForm) {
+        delete m_parsedForm;
+        m_parsedForm = 0;
     }
-    _textName.clear();
+    m_textName.clear();
     bool useLiteral = false;
     if (ss.endsWith(' ')) {
         useLiteral = true;
     }
 
-    if (_harmonyType == HarmonyType::ROMAN) {
-        _userName = ss;
-        _textName = ss;
+    if (m_harmonyType == HarmonyType::ROMAN) {
+        m_userName = ss;
+        m_textName = ss;
         *root = Tpc::TPC_INVALID;
         *base = Tpc::TPC_INVALID;
         return 0;
@@ -722,13 +563,13 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
 
     // pre-process for parentheses
     String s = ss.simplified();
-    if ((_leftParen = s.startsWith('('))) {
+    if ((m_leftParen = s.startsWith('('))) {
         s.remove(0, 1);
     }
-    if ((_rightParen = (s.endsWith(')') && s.count('(') < s.count(')')))) {
+    if ((m_rightParen = (s.endsWith(')') && s.count('(') < s.count(')')))) {
         s.remove(s.size() - 1, 1);
     }
-    if (_leftParen || _rightParen) {
+    if (m_leftParen || m_rightParen) {
         s = s.simplified();         // in case of spaces inside parentheses
     }
     if (s.isEmpty()) {
@@ -737,34 +578,34 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
 
     // pre-process for lower case minor chords
     bool preferMinor;
-    if (score()->styleB(Sid::lowerCaseMinorChords) && s.at(0).isLower()) {
+    if (style().styleB(Sid::lowerCaseMinorChords) && s.at(0).isLower()) {
         preferMinor = true;
     } else {
         preferMinor = false;
     }
 
-    if (_harmonyType == HarmonyType::NASHVILLE) {
+    if (m_harmonyType == HarmonyType::NASHVILLE) {
         int n = 0;
         if (s.at(0).isDigit()) {
             n = 1;
         } else if (s.at(1).isDigit()) {
             n = 2;
         }
-        _function = s.mid(0, n);
+        m_function = s.mid(0, n);
         s = s.mid(n);
         *root = Tpc::TPC_INVALID;
         *base = Tpc::TPC_INVALID;
     } else {
         determineRootBaseSpelling();
         size_t idx;
-        int r = convertNote(s, _rootSpelling, _rootCase, idx);
+        int r = convertNote(s, m_rootSpelling, m_rootCase, idx);
         if (r == Tpc::TPC_INVALID) {
             if (s.at(0) == '/') {
                 idx = 0;
             } else {
                 LOGD("failed <%s>", muPrintable(ss));
-                _userName = s;
-                _textName = s;
+                m_userName = s;
+                m_textName = s;
                 return 0;
             }
         }
@@ -775,7 +616,7 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
             String bs = s.mid(slash + 1).simplified();
             s = s.mid(idx, slash - idx).simplified();
             size_t idx2;
-            *base = convertNote(bs, _baseSpelling, _baseCase, idx2);
+            *base = convertNote(bs, m_baseSpelling, m_baseCase, idx2);
             if (idx2 != bs.size()) {
                 *base = Tpc::TPC_INVALID;
             }
@@ -789,32 +630,32 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
         }
     }
 
-    _userName = s;
+    m_userName = s;
     const ChordList* cl = score()->chordList();
     const ChordDescription* cd = 0;
     if (useLiteral) {
         cd = descr(s);
     } else {
-        _parsedForm = new ParsedChord();
-        _parsedForm->parse(s, cl, syntaxOnly, preferMinor);
+        m_parsedForm = new ParsedChord();
+        m_parsedForm->parse(s, cl, syntaxOnly, preferMinor);
         // parser prepends "=" to name of implied minor chords
         // use this here as well
         if (preferMinor) {
-            s = _parsedForm->name();
+            s = m_parsedForm->name();
         }
         // look up to see if we already have a descriptor (chord has been used before)
-        cd = descr(s, _parsedForm);
+        cd = descr(s, m_parsedForm);
     }
     if (cd) {
         // descriptor found; use its information
-        _id = cd->id;
+        m_id = cd->id;
         if (!cd->names.empty()) {
-            _textName = cd->names.front();
+            m_textName = cd->names.front();
         }
     } else {
         // no descriptor yet; just set textname
         // we will generate descriptor later if necessary (when we are done editing this chord)
-        _textName = s;
+        m_textName = s;
     }
     return cd;
 }
@@ -825,18 +666,18 @@ const ChordDescription* Harmony::parseHarmony(const String& ss, int* root, int* 
 
 void Harmony::startEdit(EditData& ed)
 {
-    if (!textList.empty()) {
+    if (!m_textList.empty()) {
         // convert chord symbol to plain text
         setPlainText(harmonyName());
         // clear rendering
-        for (const TextSegment* t : textList) {
+        for (const TextSegment* t : m_textList) {
             delete t;
         }
-        textList.clear();
+        m_textList.clear();
     }
 
     // layout as text, without position reset
-    TextBase::layout1();
+    rendering()->layoutText1(this, true);
     triggerLayout();
 
     TextBase::startEdit(ed);
@@ -849,6 +690,10 @@ bool Harmony::isEditAllowed(EditData& ed) const
     }
 
     if (ed.key == Key_Semicolon || ed.key == Key_Colon) {
+        return false;
+    }
+
+    if ((ed.key == Key_Left || ed.key == Key_Right) && (ed.modifiers & ControlModifier)) {
         return false;
     }
 
@@ -873,18 +718,18 @@ bool Harmony::edit(EditData& ed)
     bool rv = TextBase::edit(ed);
 
     // layout as text, without position reset
-    TextBase::layout1();
+    rendering()->layoutText1(this, true);
     triggerLayout();
 
     // check spelling
     int root = TPC_INVALID;
     int base = TPC_INVALID;
     String str = xmlText();
-    _isMisspelled = !str.isEmpty()
-                    && !parseHarmony(str, &root, &base, true)
-                    && root == TPC_INVALID
-                    && _harmonyType == HarmonyType::STANDARD;
-    if (_isMisspelled) {
+    m_isMisspelled = !str.isEmpty()
+                     && !parseHarmony(str, &root, &base, true)
+                     && root == TPC_INVALID
+                     && m_harmonyType == HarmonyType::STANDARD;
+    if (m_isMisspelled) {
         LOGD("bad spell");
     }
 
@@ -925,13 +770,13 @@ void Harmony::endEdit(EditData& ed)
 
     //play chord on edit and set dirty
     score()->setPlayChord(true);
-    _realizedHarmony.setDirty(true);
+    m_realizedHarmony.setDirty(true);
 
     setHarmony(s);
     setPlainText(harmonyName());
 
     // disable spell check
-    _isMisspelled = false;
+    m_isMisspelled = false;
 
     if (links()) {
         for (EngravingObject* e : *links()) {
@@ -943,13 +788,13 @@ void Harmony::endEdit(EditData& ed)
             // at this point chord will already have been rendered in same key as original
             // (as a result of TextBase::endEdit() calling setText() for linked elements)
             // we may now need to change the TPC's and the text, and re-render
-            if (score()->styleB(Sid::concertPitch) != h->score()->styleB(Sid::concertPitch)) {
-                Part* partDest = h->part();
+            if (style().styleB(Sid::concertPitch) != h->style().styleB(Sid::concertPitch)) {
+                Staff* staffDest = h->staff();
                 Segment* segment = getParentSeg();
                 Fraction tick = segment ? segment->tick() : Fraction(-1, 1);
-                Interval interval = partDest->instrument(tick)->transpose();
+                Interval interval = staffDest->transpose(tick);
                 if (!interval.isZero()) {
-                    if (!h->score()->styleB(Sid::concertPitch)) {
+                    if (!h->style().styleB(Sid::concertPitch)) {
                         interval.flip();
                     }
                     int rootTpc = transposeTpc(h->rootTpc(), interval, true);
@@ -976,11 +821,11 @@ void Harmony::setHarmony(const String& s)
 {
     int r, b;
     const ChordDescription* cd = parseHarmony(s, &r, &b);
-    if (!cd && _parsedForm && _parsedForm->parseable()) {
+    if (!cd && m_parsedForm && m_parsedForm->parseable()) {
         // our first time encountering this chord
         // generate a descriptor and use it
         cd = generateDescription();
-        _id = cd->id;
+        m_id = cd->id;
     }
     if (cd) {
         setRootTpc(r);
@@ -988,13 +833,13 @@ void Harmony::setHarmony(const String& s)
         render();
     } else {
         // unparseable chord, render as plain text
-        for (const TextSegment* ts : textList) {
+        for (const TextSegment* ts : m_textList) {
             delete ts;
         }
-        textList.clear();
+        m_textList.clear();
         setRootTpc(Tpc::TPC_INVALID);
         setBaseTpc(Tpc::TPC_INVALID);
-        _id = -1;
+        m_id = -1;
         render();
     }
 }
@@ -1005,7 +850,7 @@ void Harmony::setHarmony(const String& s)
 
 double Harmony::baseLine() const
 {
-    return (textList.empty()) ? TextBase::baseLine() : 0.0;
+    return (m_textList.empty()) ? TextBase::baseLine() : 0.0;
 }
 
 //---------------------------------------------------------
@@ -1249,9 +1094,9 @@ const ChordDescription* Harmony::fromXml(const String& kind, const String& kindT
                                          const std::list<HDegree>& dl)
 {
     ParsedChord* pc = new ParsedChord;
-    _textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->chordList());
-    _parsedForm = pc;
-    const ChordDescription* cd = getDescription(_textName, pc);
+    m_textName = pc->fromXml(kind, kindText, symbols, parens, dl, score()->chordList());
+    m_parsedForm = pc;
+    const ChordDescription* cd = getDescription(m_textName, pc);
     return cd;
 }
 
@@ -1263,7 +1108,7 @@ const ChordDescription* Harmony::fromXml(const String& kind, const String& kindT
 
 const ChordDescription* Harmony::descr() const
 {
-    return score()->chordList()->description(_id);
+    return score()->chordList()->description(m_id);
 }
 
 //---------------------------------------------------------
@@ -1310,10 +1155,10 @@ const ChordDescription* Harmony::getDescription()
 {
     const ChordDescription* cd = descr();
     if (cd && !cd->names.empty()) {
-        _textName = cd->names.front();
-    } else if (_textName != "") {
+        m_textName = cd->names.front();
+    } else if (m_textName != "") {
         cd = generateDescription();
-        _id = cd->id;
+        m_id = cd->id;
     }
     return cd;
 }
@@ -1327,10 +1172,10 @@ const ChordDescription* Harmony::getDescription(const String& name, const Parsed
 {
     const ChordDescription* cd = descr(name, pc);
     if (cd) {
-        _id = cd->id;
+        m_id = cd->id;
     } else {
         cd = generateDescription();
-        _id = cd->id;
+        m_id = cd->id;
     }
     return cd;
 }
@@ -1346,34 +1191,43 @@ const ChordDescription* Harmony::getDescription(const String& name, const Parsed
 
 const RealizedHarmony& Harmony::getRealizedHarmony() const
 {
-    Staff* st = staff();
-    int capo = st->capo(tick()) - 1;
-    int offset = (capo < 0 ? 0 : capo);   //semitone offset for pitch adjustment
-    Interval interval = st->part()->instrument(tick())->transpose();
-    if (!score()->styleB(Sid::concertPitch)) {
+    Fraction tick = this->tick();
+    const Staff* st = staff();
+
+    const CapoParams& capo = st->capo(tick);
+
+    int offset = 0;
+    if (capo.active) {
+        offset = capo.fretPosition;
+    }
+
+    Interval interval = st->part()->instrument(tick)->transpose();
+    if (!style().styleB(Sid::concertPitch)) {
         offset += interval.chromatic;
     }
 
     //Adjust for Nashville Notation, might be temporary
     // TODO: set dirty on add/remove of keysig
-    if (_harmonyType == HarmonyType::NASHVILLE && !_realizedHarmony.valid()) {
-        Key key = staff()->key(tick());
+    if (m_harmonyType == HarmonyType::NASHVILLE && !m_realizedHarmony.valid()) {
+        Key key = staff()->key(tick);
+
         //parse root
-        int rootTpc = function2Tpc(_function, key);
+        int rootTpc = function2Tpc(m_function, key);
 
         //parse bass
-        size_t slash = _textName.lastIndexOf('/');
+        size_t slash = m_textName.lastIndexOf('/');
         int bassTpc;
         if (slash == mu::nidx) {
             bassTpc = Tpc::TPC_INVALID;
         } else {
-            bassTpc = function2Tpc(_textName.mid(slash + 1), key);
+            bassTpc = function2Tpc(m_textName.mid(slash + 1), key);
         }
-        _realizedHarmony.update(rootTpc, bassTpc, offset);
+        m_realizedHarmony.update(rootTpc, bassTpc, offset);
     } else {
-        _realizedHarmony.update(_rootTpc, _baseTpc, offset);
+        m_realizedHarmony.update(m_rootTpc, m_baseTpc, offset);
     }
-    return _realizedHarmony;
+
+    return m_realizedHarmony;
 }
 
 //---------------------------------------------------------
@@ -1384,7 +1238,7 @@ const RealizedHarmony& Harmony::getRealizedHarmony() const
 
 RealizedHarmony& Harmony::realizedHarmony()
 {
-    return _realizedHarmony;
+    return m_realizedHarmony;
 }
 
 //---------------------------------------------------------
@@ -1396,8 +1250,8 @@ RealizedHarmony& Harmony::realizedHarmony()
 const ChordDescription* Harmony::generateDescription()
 {
     ChordList* cl = score()->chordList();
-    ChordDescription cd(_textName);
-    cd.complete(_parsedForm, cl);
+    ChordDescription cd(m_textName);
+    cd.complete(m_parsedForm, cl);
     // remove parsed chord from description
     // so we will only match it literally in the future
     cd.parsedChords.clear();
@@ -1406,145 +1260,15 @@ const ChordDescription* Harmony::generateDescription()
 }
 
 //---------------------------------------------------------
-//   layout
-//---------------------------------------------------------
-
-void Harmony::layout()
-{
-    if (!explicitParent()) {
-        setPos(0.0, 0.0);
-        setOffset(0.0, 0.0);
-        layout1();
-        return;
-    }
-    //if (isStyled(Pid::OFFSET))
-    //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
-
-    layout1();
-    setPos(calculateBoundingRect());
-}
-
-//---------------------------------------------------------
-//   layout1
-//---------------------------------------------------------
-
-void Harmony::layout1()
-{
-    if (isLayoutInvalid()) {
-        createLayout();
-    }
-    if (textBlockList().empty()) {
-        textBlockList().push_back(TextBlock());
-    }
-    calculateBoundingRect();
-    if (hasFrame()) {
-        layoutFrame();
-    }
-    score()->addRefresh(canvasBoundingRect());
-}
-
-//---------------------------------------------------------
-//   calculateBoundingRect
-//---------------------------------------------------------
-
-PointF Harmony::calculateBoundingRect()
-{
-    const double ypos = (placeBelow() && staff()) ? staff()->height() : 0.0;
-    const FretDiagram* fd = (explicitParent() && explicitParent()->isFretDiagram()) ? toFretDiagram(explicitParent()) : nullptr;
-    const double cw = symWidth(SymId::noteheadBlack);
-
-    double newPosX = 0.0;
-    double newPosY = 0.0;
-
-    if (textList.empty()) {
-        TextBase::layout1();
-
-        if (fd) {
-            newPosY = this->ypos();
-        } else {
-            newPosY = ypos - ((align() == AlignV::BOTTOM) ? _harmonyHeight - bbox().height() : 0.0);
-        }
-    } else {
-        RectF bb;
-        for (TextSegment* ts : textList) {
-            bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
-        }
-
-        double xx = 0.0;
-        switch (align().horizontal) {
-        case AlignH::LEFT:
-            xx = -bb.left();
-            break;
-        case AlignH::HCENTER:
-            xx = -(bb.center().x());
-            break;
-        case AlignH::RIGHT:
-            xx = -bb.right();
-            break;
-        }
-
-        double yy = -bb.y();      // Align::TOP
-        if (align() == AlignV::VCENTER) {
-            yy = -bb.y() / 2.0;
-        } else if (align() == AlignV::BASELINE) {
-            yy = 0.0;
-        } else if (align() == AlignV::BOTTOM) {
-            yy = -bb.height() - bb.y();
-        }
-
-        if (fd) {
-            newPosY = ypos - yy - score()->styleMM(Sid::harmonyFretDist);
-        } else {
-            newPosY = ypos;
-        }
-
-        for (TextSegment* ts : textList) {
-            ts->offset = PointF(xx, yy);
-        }
-
-        setbbox(bb.translated(xx, yy));
-        _harmonyHeight = bbox().height();
-    }
-
-    if (fd) {
-        switch (align().horizontal) {
-        case AlignH::LEFT:
-            newPosX = 0.0;
-            break;
-        case AlignH::HCENTER:
-            newPosX = fd->centerX();
-            break;
-        case AlignH::RIGHT:
-            newPosX = fd->rightX();
-            break;
-        }
-    } else {
-        switch (align().horizontal) {
-        case AlignH::LEFT:
-            newPosX = 0.0;
-            break;
-        case AlignH::HCENTER:
-            newPosX = cw * 0.5;
-            break;
-        case AlignH::RIGHT:
-            newPosX = cw;
-            break;
-        }
-    }
-
-    return PointF(newPosX, newPosY);
-}
-
-//---------------------------------------------------------
 //   draw
 //---------------------------------------------------------
 
 void Harmony::draw(mu::draw::Painter* painter) const
 {
-    TRACE_OBJ_DRAW;
+    TRACE_ITEM_DRAW;
     using namespace mu::draw;
     // painter->setPen(curColor());
-    if (textList.empty()) {
+    if (m_textList.empty()) {
         TextBase::draw(painter);
         return;
     }
@@ -1560,19 +1284,19 @@ void Harmony::draw(mu::draw::Painter* painter) const
         Color bg(bgColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (circle()) {
-            painter->drawArc(frame, 0, 5760);
+            painter->drawArc(m_frame, 0, 5760);
         } else {
             int r2 = frameRound();
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(frame, frameRound(), r2);
+            painter->drawRoundedRect(m_frame, frameRound(), r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);
     Color color = textColor();
     painter->setPen(color);
-    for (const TextSegment* ts : textList) {
+    for (const TextSegment* ts : m_textList) {
         mu::draw::Font f(ts->m_font);
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
 #ifndef Q_OS_MACOS
@@ -1593,7 +1317,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentVie
     TextBase::drawEditMode(p, ed, currentViewScaling);
 
     mu::draw::Color originalColor = color();
-    if (_isMisspelled) {
+    if (m_isMisspelled) {
         setColor(engravingConfiguration()->criticalColor());
         setSelected(false);
     }
@@ -1601,7 +1325,7 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentVie
     p->translate(pos);
     TextBase::draw(p);
     p->translate(-pos);
-    if (_isMisspelled) {
+    if (m_isMisspelled) {
         setColor(originalColor);
         setSelected(true);
     }
@@ -1665,9 +1389,9 @@ void Harmony::render(const String& s, double& x, double& y)
 {
     int fontIdx = 0;
     if (!s.isEmpty()) {
-        mu::draw::Font f = _harmonyType != HarmonyType::ROMAN ? fontList[fontIdx] : font();
+        mu::draw::Font f = m_harmonyType != HarmonyType::ROMAN ? m_fontList[fontIdx] : font();
         TextSegment* ts = new TextSegment(s, f, x, y);
-        textList.push_back(ts);
+        m_textList.push_back(ts);
         x += ts->width();
     }
 }
@@ -1689,19 +1413,19 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
     for (const RenderAction& a : renderList) {
 // a.print();
         if (a.type == RenderAction::RenderActionType::SET) {
-            TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
+            TextSegment* ts = new TextSegment(m_fontList[fontIdx], x, y);
             ChordSymbol cs = chordList->symbol(a.text);
             if (cs.isValid()) {
-                ts->m_font = fontList[cs.fontIdx];
+                ts->m_font = m_fontList[cs.fontIdx];
                 ts->setText(cs.value);
             } else {
                 ts->setText(a.text);
             }
-            if (_harmonyType == HarmonyType::NASHVILLE) {
+            if (m_harmonyType == HarmonyType::NASHVILLE) {
                 double nmag = chordList->nominalMag();
                 ts->m_font.setPointSizeF(ts->m_font.pointSizeF() * nmag);
             }
-            textList.push_back(ts);
+            m_textList.push_back(ts);
             x += ts->width();
         } else if (a.type == RenderAction::RenderActionType::MOVE) {
             x += a.movex * mag * _spatium * .2;
@@ -1722,22 +1446,22 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             AccidentalVal acc;
             if (tpcIsValid(tpc)) {
                 tpc2name(tpc, noteSpelling, noteCase, c, acc);
-            } else if (_function.size() > 0) {
-                c = _function.at(_function.size() - 1);
+            } else if (m_function.size() > 0) {
+                c = m_function.at(m_function.size() - 1);
             }
-            TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
+            TextSegment* ts = new TextSegment(m_fontList[fontIdx], x, y);
             String lookup = u"note" + c;
             ChordSymbol cs = chordList->symbol(lookup);
             if (!cs.isValid()) {
                 cs = chordList->symbol(c);
             }
             if (cs.isValid()) {
-                ts->m_font = fontList[cs.fontIdx];
+                ts->m_font = m_fontList[cs.fontIdx];
                 ts->setText(cs.value);
             } else {
                 ts->setText(c);
             }
-            textList.push_back(ts);
+            m_textList.push_back(ts);
             x += ts->width();
         } else if (a.type == RenderAction::RenderActionType::ACCIDENTAL) {
             String c;
@@ -1745,8 +1469,8 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
             String context = u"accidental";
             if (tpcIsValid(tpc)) {
                 tpc2name(tpc, noteSpelling, noteCase, c, acc);
-            } else if (_function.size() > 1) {
-                acc = _function.at(0);
+            } else if (m_function.size() > 1) {
+                acc = m_function.at(0);
             }
             // German spelling - use special symbol for accidental in TPC_B_B
             // to allow it to be rendered as either Bb or B
@@ -1754,19 +1478,19 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
                 context = u"german_B";
             }
             if (acc != "") {
-                TextSegment* ts = new TextSegment(fontList[fontIdx], x, y);
+                TextSegment* ts = new TextSegment(m_fontList[fontIdx], x, y);
                 String lookup = context + acc;
                 ChordSymbol cs = chordList->symbol(lookup);
                 if (!cs.isValid()) {
                     cs = chordList->symbol(acc);
                 }
                 if (cs.isValid()) {
-                    ts->m_font = fontList[cs.fontIdx];
+                    ts->m_font = m_fontList[cs.fontIdx];
                     ts->setText(cs.value);
                 } else {
                     ts->setText(acc);
                 }
-                textList.push_back(ts);
+                m_textList.push_back(ts);
                 x += ts->width();
             }
         } else {
@@ -1782,46 +1506,46 @@ void Harmony::render(const std::list<RenderAction>& renderList, double& x, doubl
 
 void Harmony::render()
 {
-    int capo = score()->styleI(Sid::capoPosition);
+    int capo = style().styleI(Sid::capoPosition);
 
     ChordList* chordList = score()->chordList();
 
-    fontList.clear();
+    m_fontList.clear();
     for (const ChordFont& cf : chordList->fonts) {
         mu::draw::Font ff(font());
         ff.setPointSizeF(ff.pointSizeF() * cf.mag);
         if (!(cf.family.isEmpty() || cf.family == "default")) {
             ff.setFamily(cf.family, draw::Font::Type::Harmony);
         }
-        fontList.push_back(ff);
+        m_fontList.push_back(ff);
     }
-    if (fontList.empty()) {
-        fontList.push_back(font());
+    if (m_fontList.empty()) {
+        m_fontList.push_back(font());
     }
 
-    for (const TextSegment* s : textList) {
+    for (const TextSegment* s : m_textList) {
         delete s;
     }
-    textList.clear();
+    m_textList.clear();
     double x = 0.0, y = 0.0;
 
     determineRootBaseSpelling();
 
-    if (_leftParen) {
+    if (m_leftParen) {
         render(u"( ", x, y);
     }
 
-    if (_rootTpc != Tpc::TPC_INVALID) {
+    if (m_rootTpc != Tpc::TPC_INVALID) {
         // render root
-        render(chordList->renderListRoot, x, y, _rootTpc, _rootSpelling, _rootRenderCase);
+        render(chordList->renderListRoot, x, y, m_rootTpc, m_rootSpelling, m_rootRenderCase);
         // render extension
         const ChordDescription* cd = getDescription();
         if (cd) {
             render(cd->renderList, x, y, 0);
         }
-    } else if (_harmonyType == HarmonyType::NASHVILLE) {
+    } else if (m_harmonyType == HarmonyType::NASHVILLE) {
         // render function
-        render(chordList->renderListFunction, x, y, _rootTpc, _rootSpelling, _rootRenderCase);
+        render(chordList->renderListFunction, x, y, m_rootTpc, m_rootSpelling, m_rootRenderCase);
         double adjust = chordList->nominalAdjust();
         y += adjust * magS() * spatium() * .2;
         // render extension
@@ -1830,18 +1554,18 @@ void Harmony::render()
             render(cd->renderList, x, y, 0);
         }
     } else {
-        render(_textName, x, y);
+        render(m_textName, x, y);
     }
 
     // render bass
-    if (_baseTpc != Tpc::TPC_INVALID) {
-        render(chordList->renderListBase, x, y, _baseTpc, _baseSpelling, _baseRenderCase);
+    if (m_baseTpc != Tpc::TPC_INVALID) {
+        render(chordList->renderListBase, x, y, m_baseTpc, m_baseSpelling, m_baseRenderCase);
     }
 
-    if (_rootTpc != Tpc::TPC_INVALID && capo > 0 && capo < 12) {
+    if (m_rootTpc != Tpc::TPC_INVALID && capo > 0 && capo < 12) {
         int tpcOffset[] = { 0, 5, -2, 3, -4, 1, 6, -1, 4, -3, 2, -5 };
-        int capoRootTpc = _rootTpc + tpcOffset[capo];
-        int capoBassTpc = _baseTpc;
+        int capoRootTpc = m_rootTpc + tpcOffset[capo];
+        int capoBassTpc = m_baseTpc;
 
         if (capoBassTpc != Tpc::TPC_INVALID) {
             capoBassTpc += tpcOffset[capo];
@@ -1864,7 +1588,7 @@ void Harmony::render()
         }
 
         render(u"(", x, y);
-        render(chordList->renderListRoot, x, y, capoRootTpc, _rootSpelling, _rootRenderCase);
+        render(chordList->renderListRoot, x, y, capoRootTpc, m_rootSpelling, m_rootRenderCase);
 
         // render extension
         const ChordDescription* cd = getDescription();
@@ -1873,12 +1597,12 @@ void Harmony::render()
         }
 
         if (capoBassTpc != Tpc::TPC_INVALID) {
-            render(chordList->renderListBase, x, y, capoBassTpc, _baseSpelling, _baseRenderCase);
+            render(chordList->renderListBase, x, y, capoBassTpc, m_baseSpelling, m_baseRenderCase);
         }
         render(u")", x, y);
     }
 
-    if (_rightParen) {
+    if (m_rightParen) {
         render(u" )", x, y);
     }
 }
@@ -1909,7 +1633,7 @@ void Harmony::localSpatiumChanged(double oldValue, double newValue)
 
 const String& Harmony::extensionName() const
 {
-    return _textName;
+    return m_textName;
 }
 
 //---------------------------------------------------------
@@ -1968,7 +1692,7 @@ StringList Harmony::xmlDegrees() const
 
 HDegree Harmony::degree(int i) const
 {
-    return mu::value(_degreeList, i);
+    return mu::value(m_degreeList, i);
 }
 
 //---------------------------------------------------------
@@ -1977,7 +1701,7 @@ HDegree Harmony::degree(int i) const
 
 void Harmony::addDegree(const HDegree& d)
 {
-    _degreeList.push_back(d);
+    m_degreeList.push_back(d);
 }
 
 //---------------------------------------------------------
@@ -1986,7 +1710,7 @@ void Harmony::addDegree(const HDegree& d)
 
 size_t Harmony::numberOfDegrees() const
 {
-    return _degreeList.size();
+    return m_degreeList.size();
 }
 
 //---------------------------------------------------------
@@ -1995,7 +1719,7 @@ size_t Harmony::numberOfDegrees() const
 
 void Harmony::clearDegrees()
 {
-    _degreeList.clear();
+    m_degreeList.clear();
 }
 
 //---------------------------------------------------------
@@ -2004,21 +1728,21 @@ void Harmony::clearDegrees()
 
 const std::vector<HDegree>& Harmony::degreeList() const
 {
-    return _degreeList;
+    return m_degreeList;
 }
 
 //---------------------------------------------------------
 //   parsedForm
 //---------------------------------------------------------
 
-const ParsedChord* Harmony::parsedForm()
+const ParsedChord* Harmony::parsedForm() const
 {
-    if (!_parsedForm) {
+    if (!m_parsedForm) {
         ChordList* cl = score()->chordList();
-        _parsedForm = new ParsedChord();
-        _parsedForm->parse(_textName, cl, false);
+        m_parsedForm = new ParsedChord();
+        m_parsedForm->parse(m_textName, cl, false);
     }
-    return _parsedForm;
+    return m_parsedForm;
 }
 
 //---------------------------------------------------------
@@ -2027,9 +1751,9 @@ const ParsedChord* Harmony::parsedForm()
 
 void Harmony::setHarmonyType(HarmonyType val)
 {
-    _harmonyType = val;
+    m_harmonyType = val;
     setPlacement(propertyDefault(Pid::PLACEMENT).value<PlacementV>());
-    switch (_harmonyType) {
+    switch (m_harmonyType) {
     case HarmonyType::STANDARD:
         initTextStyleType(TextStyleType::HARMONY_A);
         break;
@@ -2049,7 +1773,7 @@ void Harmony::setHarmonyType(HarmonyType val)
 
 TranslatableString Harmony::typeUserName() const
 {
-    switch (_harmonyType) {
+    switch (m_harmonyType) {
     case HarmonyType::ROMAN:
         return TranslatableString("engraving", "Roman numeral");
     case HarmonyType::NASHVILLE:
@@ -2085,9 +1809,9 @@ String Harmony::screenReaderInfo() const
 String Harmony::generateScreenReaderInfo() const
 {
     String rez;
-    switch (_harmonyType) {
+    switch (m_harmonyType) {
     case HarmonyType::ROMAN: {
-        String aux = _textName;
+        String aux = m_textName;
         bool hasUpper = aux.contains(u'I') || aux.contains(u'V');
         bool hasLower = aux.contains(u'i') || aux.contains(u'v');
         if (hasLower && !hasUpper) {
@@ -2131,14 +1855,14 @@ String Harmony::generateScreenReaderInfo() const
     }
         return rez;
     case HarmonyType::NASHVILLE:
-        if (!_function.isEmpty()) {
-            rez = String(u"%1 %2").arg(rez, _function);
+        if (!m_function.isEmpty()) {
+            rez = String(u"%1 %2").arg(rez, m_function);
         }
         break;
     case HarmonyType::STANDARD:
     default:
-        if (_rootTpc != Tpc::TPC_INVALID) {
-            rez = String(u"%1 %2").arg(rez, tpc2name(_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+        if (m_rootTpc != Tpc::TPC_INVALID) {
+            rez = String(u"%1 %2").arg(rez, tpc2name(m_rootTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
         }
     }
 
@@ -2158,8 +1882,8 @@ String Harmony::generateScreenReaderInfo() const
         rez = String(u"%1 %2").arg(rez, hTextName());
     }
 
-    if (_baseTpc != Tpc::TPC_INVALID) {
-        rez = String(u"%1 / %2").arg(rez, tpc2name(_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
+    if (m_baseTpc != Tpc::TPC_INVALID) {
+        rez = String(u"%1 / %2").arg(rez, tpc2name(m_baseTpc, NoteSpellingType::STANDARD, NoteCaseType::AUTO, true));
     }
 
     return rez;
@@ -2199,7 +1923,7 @@ EngravingItem* Harmony::drop(EditData& data)
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {
         TextBase::drop(data);
-        layout1();
+        rendering()->layoutText1(this);
         e = 0;          // cannot select
     } else {
         LOGW("Harmony: cannot drop <%s>\n", e->typeName());
@@ -2217,19 +1941,19 @@ PropertyValue Harmony::getProperty(Pid pid) const
 {
     switch (pid) {
     case Pid::PLAY:
-        return PropertyValue(_play);
+        return PropertyValue(m_play);
         break;
     case Pid::HARMONY_TYPE:
-        return PropertyValue(int(_harmonyType));
+        return PropertyValue(int(m_harmonyType));
         break;
     case Pid::HARMONY_VOICE_LITERAL:
-        return _realizedHarmony.literal();
+        return m_realizedHarmony.literal();
         break;
     case Pid::HARMONY_VOICING:
-        return int(_realizedHarmony.voicing());
+        return int(m_realizedHarmony.voicing());
         break;
     case Pid::HARMONY_DURATION:
-        return int(_realizedHarmony.duration());
+        return int(m_realizedHarmony.duration());
         break;
     default:
         return TextBase::getProperty(pid);
@@ -2244,19 +1968,19 @@ bool Harmony::setProperty(Pid pid, const PropertyValue& v)
 {
     switch (pid) {
     case Pid::PLAY:
-        _play = v.toBool();
+        m_play = v.toBool();
         break;
     case Pid::HARMONY_TYPE:
         setHarmonyType(HarmonyType(v.toInt()));
         break;
     case Pid::HARMONY_VOICE_LITERAL:
-        _realizedHarmony.setLiteral(v.toBool());
+        m_realizedHarmony.setLiteral(v.toBool());
         break;
     case Pid::HARMONY_VOICING:
-        _realizedHarmony.setVoicing(Voicing(v.toInt()));
+        m_realizedHarmony.setVoicing(Voicing(v.toInt()));
         break;
     case Pid::HARMONY_DURATION:
-        _realizedHarmony.setDuration(HDuration(v.toInt()));
+        m_realizedHarmony.setDuration(HDuration(v.toInt()));
         break;
     default:
         if (TextBase::setProperty(pid, v)) {
@@ -2283,7 +2007,7 @@ PropertyValue Harmony::propertyDefault(Pid id) const
         v = int(HarmonyType::STANDARD);
         break;
     case Pid::TEXT_STYLE: {
-        switch (_harmonyType) {
+        switch (m_harmonyType) {
         case HarmonyType::STANDARD:
             v = TextStyleType::HARMONY_A;
             break;
@@ -2332,7 +2056,7 @@ Sid Harmony::getPropertyStyle(Pid pid) const
         }
     }
     if (pid == Pid::PLACEMENT) {
-        switch (_harmonyType) {
+        switch (m_harmonyType) {
         case HarmonyType::STANDARD:
             return Sid::harmonyPlacement;
         case HarmonyType::ROMAN:
@@ -2342,13 +2066,5 @@ Sid Harmony::getPropertyStyle(Pid pid) const
         }
     }
     return TextBase::getPropertyStyle(pid);
-}
-
-KerningType Harmony::doComputeKerningType(const EngravingItem* nextItem) const
-{
-    if (nextItem->isHarmony()) {
-        return KerningType::NON_KERNING;
-    }
-    return KerningType::KERNING;
 }
 }

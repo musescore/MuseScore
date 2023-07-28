@@ -1,12 +1,12 @@
-#ifndef GPMASTERTRACKS_H
-#define GPMASTERTRACKS_H
+#ifndef MU_IMPORTEXPORT_GPMASTERTRACKS_H
+#define MU_IMPORTEXPORT_GPMASTERTRACKS_H
 
 #include <stddef.h>
 #include <vector>
 
 #include "types/string.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 class GPMasterTracks
 {
 public:
@@ -40,6 +40,6 @@ private:
     std::vector<Automation> _tempoMap;
     size_t _tracksCount;
 };
-}
+} // namespace mu::iex::guitarpro
 
-#endif // GPMASTERTRACKS_H
+#endif // MU_IMPORTEXPORT_GPMASTERTRACKS_H

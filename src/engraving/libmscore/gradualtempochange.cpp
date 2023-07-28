@@ -22,52 +22,51 @@
 
 #include "gradualtempochange.h"
 
-#include "rw/xml.h"
-#include "log.h"
-
 #include "measure.h"
 #include "score.h"
 #include "segment.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
 
 static const ElementStyle tempoStyle {
-    { Sid::tempoSystemFlag, Pid::SYSTEM_FLAG },
-    { Sid::tempoPlacement, Pid::PLACEMENT },
-    { Sid::tempoMinDistance, Pid::MIN_DISTANCE },
-    { Sid::tempoLineSpacing, Pid::TEXT_LINE_SPACING },
+    { Sid::tempoChangeSystemFlag, Pid::SYSTEM_FLAG },
+    { Sid::tempoChangePlacement, Pid::PLACEMENT },
+    { Sid::tempoChangeMinDistance, Pid::MIN_DISTANCE },
+    { Sid::tempoChangeLineSpacing, Pid::TEXT_LINE_SPACING },
 
-    { Sid::tempoColor, Pid::COLOR },
-    { Sid::tempoPosAbove, Pid::OFFSET },
+    { Sid::tempoChangeColor, Pid::COLOR },
+    { Sid::tempoChangePosAbove, Pid::OFFSET },
 
-    { Sid::tempoFontFace, Pid::BEGIN_FONT_FACE },
-    { Sid::tempoFontFace, Pid::CONTINUE_FONT_FACE },
-    { Sid::tempoFontFace, Pid::END_FONT_FACE },
+    { Sid::tempoChangeFontFace, Pid::BEGIN_FONT_FACE },
+    { Sid::tempoChangeFontFace, Pid::CONTINUE_FONT_FACE },
+    { Sid::tempoChangeFontFace, Pid::END_FONT_FACE },
 
-    { Sid::tempoFontSize, Pid::BEGIN_FONT_SIZE },
-    { Sid::tempoFontSize, Pid::CONTINUE_FONT_SIZE },
-    { Sid::tempoFontSize, Pid::END_FONT_SIZE },
+    { Sid::tempoChangeFontSize, Pid::BEGIN_FONT_SIZE },
+    { Sid::tempoChangeFontSize, Pid::CONTINUE_FONT_SIZE },
+    { Sid::tempoChangeFontSize, Pid::END_FONT_SIZE },
 
-    { Sid::tempoFontStyle, Pid::BEGIN_FONT_STYLE },
-    { Sid::tempoFontStyle, Pid::CONTINUE_FONT_STYLE },
-    { Sid::tempoFontStyle, Pid::END_FONT_STYLE },
+    { Sid::tempoChangeFontStyle, Pid::BEGIN_FONT_STYLE },
+    { Sid::tempoChangeFontStyle, Pid::CONTINUE_FONT_STYLE },
+    { Sid::tempoChangeFontStyle, Pid::END_FONT_STYLE },
 
-    { Sid::tempoAlign, Pid::BEGIN_TEXT_ALIGN },
-    { Sid::tempoAlign, Pid::CONTINUE_TEXT_ALIGN },
-    { Sid::tempoAlign, Pid::END_TEXT_ALIGN },
+    { Sid::tempoChangeAlign, Pid::BEGIN_TEXT_ALIGN },
+    { Sid::tempoChangeAlign, Pid::CONTINUE_TEXT_ALIGN },
+    { Sid::tempoChangeAlign, Pid::END_TEXT_ALIGN },
 
-    { Sid::tempoFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
+    { Sid::tempoChangeFontSpatiumDependent, Pid::SIZE_SPATIUM_DEPENDENT },
     { Sid::tempoChangeLineWidth, Pid::LINE_WIDTH },
     { Sid::tempoChangeLineStyle, Pid::LINE_STYLE },
     { Sid::tempoChangeDashLineLen, Pid::DASH_LINE_LEN },
     { Sid::tempoChangeDashGapLen, Pid::DASH_GAP_LEN },
-    { Sid::tempoFontSpatiumDependent, Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
+    { Sid::tempoChangeFontSpatiumDependent, Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
 
 static const ElementStyle tempoSegmentStyle {
-    { Sid::tempoPosAbove, Pid::OFFSET },
-    { Sid::tempoMinDistance, Pid::MIN_DISTANCE }
+    { Sid::tempoChangePosAbove, Pid::OFFSET },
+    { Sid::tempoChangeMinDistance, Pid::MIN_DISTANCE }
 };
 
 static const std::unordered_map<GradualTempoChangeType, double> DEFAULT_FACTORS_MAP {
@@ -102,45 +101,6 @@ GradualTempoChange::GradualTempoChange(EngravingItem* parent)
 GradualTempoChange* GradualTempoChange::clone() const
 {
     return new GradualTempoChange(*this);
-}
-
-void GradualTempoChange::read(XmlReader& reader)
-{
-    while (reader.readNextStartElement()) {
-        const AsciiStringView tag(reader.name());
-
-        if (readProperty(tag, reader, Pid::LINE_WIDTH)) {
-            setPropertyFlags(Pid::LINE_WIDTH, PropertyFlags::UNSTYLED);
-            continue;
-        }
-
-        if (readProperty(tag, reader, Pid::TEMPO_CHANGE_TYPE)) {
-            continue;
-        }
-
-        if (readProperty(tag, reader, Pid::TEMPO_EASING_METHOD)) {
-            continue;
-        }
-
-        if (readProperty(tag, reader, Pid::TEMPO_CHANGE_FACTOR)) {
-            continue;
-        }
-
-        if (!TextLineBase::readProperties(reader)) {
-            reader.unknown();
-        }
-    }
-}
-
-void GradualTempoChange::write(XmlWriter& writer) const
-{
-    writer.startElement(this);
-    writeProperty(writer, Pid::TEMPO_CHANGE_TYPE);
-    writeProperty(writer, Pid::TEMPO_EASING_METHOD);
-    writeProperty(writer, Pid::TEMPO_CHANGE_FACTOR);
-    writeProperty(writer, Pid::PLACEMENT);
-    TextLineBase::writeProperties(writer);
-    writer.endElement();
 }
 
 LineSegment* GradualTempoChange::createLineSegment(System* parent)
@@ -215,12 +175,12 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::ALIGN:
-        return score()->styleV(Sid::tempoAlign);
+        return style().styleV(Sid::tempoChangeAlign);
 
     case Pid::LINE_WIDTH:
-        return score()->styleV(Sid::tempoChangeLineWidth);
+        return style().styleV(Sid::tempoChangeLineWidth);
     case Pid::LINE_STYLE:
-        return score()->styleV(Sid::tempoChangeLineStyle);
+        return style().styleV(Sid::tempoChangeLineStyle);
     case Pid::LINE_VISIBLE:
         return true;
 
@@ -229,7 +189,7 @@ PropertyValue GradualTempoChange::propertyDefault(Pid propertyId) const
         return PropertyValue::fromValue(PointF(0, 0));
 
     case Pid::BEGIN_FONT_STYLE:
-        return score()->styleV(Sid::tempoFontStyle);
+        return style().styleV(Sid::tempoChangeFontStyle);
 
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
@@ -260,30 +220,30 @@ Sid GradualTempoChange::getPropertyStyle(Pid id) const
 {
     switch (id) {
     case Pid::PLACEMENT:
-        return Sid::tempoPlacement;
+        return Sid::tempoChangePlacement;
     case Pid::BEGIN_FONT_FACE:
     case Pid::CONTINUE_FONT_FACE:
     case Pid::END_FONT_FACE:
-        return Sid::tempoFontFace;
+        return Sid::tempoChangeFontFace;
     case Pid::BEGIN_FONT_SIZE:
     case Pid::CONTINUE_FONT_SIZE:
     case Pid::END_FONT_SIZE:
-        return Sid::tempoFontSize;
+        return Sid::tempoChangeFontSize;
     case Pid::BEGIN_FONT_STYLE:
     case Pid::CONTINUE_FONT_STYLE:
     case Pid::END_FONT_STYLE:
-        return Sid::tempoFontStyle;
+        return Sid::tempoChangeFontStyle;
     case Pid::BEGIN_TEXT_ALIGN:
     case Pid::CONTINUE_TEXT_ALIGN:
     case Pid::END_TEXT_ALIGN:
-        return Sid::tempoAlign;
+        return Sid::tempoChangeAlign;
     case Pid::BEGIN_TEXT:
         return Sid::letRingText;
     case Pid::OFFSET:
         if (placeAbove()) {
-            return Sid::tempoPosAbove;
+            return Sid::tempoChangePosAbove;
         } else {
-            return Sid::tempoPosBelow;
+            return Sid::tempoChangePosBelow;
         }
     default:
         break;
@@ -337,16 +297,6 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
         }
     }
     return TextLineBaseSegment::getPropertyStyle(id);
-}
-
-void GradualTempoChangeSegment::layout()
-{
-    TextLineBaseSegment::layout();
-    movePosY(-tempoChange()->lineWidth() / 2); // correct y-pos for linewidth
-    if (isStyled(Pid::OFFSET)) {
-        roffset() = tempoChange()->propertyDefault(Pid::OFFSET).value<PointF>();
-    }
-    autoplaceSpannerSegment();
 }
 
 void GradualTempoChangeSegment::endEdit(EditData& editData)

@@ -27,6 +27,7 @@
 using namespace mu;
 using namespace mu::vst;
 using namespace mu::mpe;
+using namespace mu::audio;
 
 VstAudioClient::~VstAudioClient()
 {
@@ -36,12 +37,11 @@ VstAudioClient::~VstAudioClient()
 
     m_pluginComponent->setActive(false);
     m_pluginComponent->terminate();
-    m_pluginComponent->release();
 }
 
-void VstAudioClient::init(VstPluginType&& type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
+void VstAudioClient::init(AudioPluginType type, VstPluginPtr plugin, audio::audioch_t&& audioChannelsCount)
 {
-    IF_ASSERT_FAILED(plugin && type != VstPluginType::Undefined) {
+    IF_ASSERT_FAILED(plugin && type != AudioPluginType::Undefined) {
         return;
     }
 
@@ -63,7 +63,7 @@ bool VstAudioClient::handleEvent(const VstEvent& event)
 
 bool VstAudioClient::handleParamChange(const PluginParamInfo& param)
 {
-    IF_ASSERT_FAILED(m_pluginPtr && m_pluginPtr->provider()) {
+    IF_ASSERT_FAILED(m_pluginPtr) {
         return false;
     }
 
@@ -83,7 +83,7 @@ void VstAudioClient::setVolumeGain(const audio::gain_t newVolumeGain)
     m_volumeGain = newVolumeGain;
 }
 
-audio::samples_t VstAudioClient::process(float* output, audio::samples_t samplesPerChannel)
+audio::samples_t VstAudioClient::process(float* output, samples_t samplesPerChannel)
 {
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor || !output) {
@@ -105,7 +105,7 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
         setBlockSize(samplesPerChannel);
     }
 
-    if (m_type == VstPluginType::Fx) {
+    if (m_type == AudioPluginType::Fx) {
         extractInputSamples(samplesPerChannel, output);
     }
 
@@ -113,7 +113,7 @@ audio::samples_t VstAudioClient::process(float* output, audio::samples_t samples
         return 0;
     }
 
-    if (m_type == VstPluginType::Instrument) {
+    if (m_type == AudioPluginType::Instrument) {
         m_eventList.clear();
         m_paramChanges.clearQueue();
     }
@@ -162,18 +162,11 @@ ParamsMapping VstAudioClient::paramsMapping(const std::set<Steinberg::Vst::CtrlN
 {
     ParamsMapping result;
 
-    if (!m_pluginPtr || !m_pluginPtr->provider()) {
+    if (!m_pluginPtr) {
         return result;
     }
 
-    auto controller = m_pluginPtr->provider()->getController();
-    if (!controller) {
-        return result;
-    }
-
-    Steinberg::Vst::IMidiMapping* midiMapping = nullptr;
-    controller->queryInterface(Steinberg::Vst::IMidiMapping_iid, (void**)&midiMapping);
-
+    PluginMidiMappingPtr midiMapping = m_pluginPtr->midiMapping();
     if (!midiMapping) {
         return result;
     }
@@ -200,12 +193,12 @@ IAudioProcessorPtr VstAudioClient::pluginProcessor() const
 
 PluginComponentPtr VstAudioClient::pluginComponent() const
 {
-    if (!m_pluginPtr || !m_pluginPtr->provider()) {
-        return nullptr;
-    }
-
     if (!m_pluginComponent) {
-        m_pluginComponent = m_pluginPtr->provider()->getComponent();
+        if (!m_pluginPtr) {
+            return nullptr;
+        }
+
+        m_pluginComponent = m_pluginPtr->component();
     }
 
     return m_pluginComponent;
@@ -213,6 +206,11 @@ PluginComponentPtr VstAudioClient::pluginComponent() const
 
 void VstAudioClient::setUpProcessData()
 {
+    PluginComponentPtr component = pluginComponent();
+    if (!component) {
+        return;
+    }
+
     m_processContext.sampleRate = m_samplesInfo.sampleRate;
 
     m_processData.inputEvents = &m_eventList;
@@ -225,7 +223,7 @@ void VstAudioClient::setUpProcessData()
     }
 
     if (!m_processData.outputs || !m_processData.inputs) {
-        m_processData.prepare(*m_pluginComponent, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
+        m_processData.prepare(*component, m_samplesInfo.samplesPerBlock, Steinberg::Vst::kSample32);
     }
 
     if (!m_activeOutputBusses.empty() && !m_activeInputBusses.empty()) {
@@ -235,19 +233,19 @@ void VstAudioClient::setUpProcessData()
     BusInfo busInfo;
 
     for (int busIndex = 0; busIndex < m_processData.numInputs; ++busIndex) {
-        m_pluginComponent->getBusInfo(BusMediaType::kAudio, BusDirection::kInput, busIndex, busInfo);
+        component->getBusInfo(BusMediaType::kAudio, BusDirection::kInput, busIndex, busInfo);
 
         if (busInfo.busType == BusType::kMain && (busInfo.flags & BusInfo::kDefaultActive)) {
-            m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kInput, busIndex, true);
+            component->activateBus(BusMediaType::kAudio, BusDirection::kInput, busIndex, true);
             m_activeInputBusses.emplace_back(busIndex);
         }
     }
 
     for (int busIndex = 0; busIndex < m_processData.numOutputs; ++busIndex) {
-        m_pluginComponent->getBusInfo(BusMediaType::kAudio, BusDirection::kOutput, busIndex, busInfo);
+        component->getBusInfo(BusMediaType::kAudio, BusDirection::kOutput, busIndex, busInfo);
 
         if (busInfo.busType == BusType::kMain && (busInfo.flags & BusInfo::kDefaultActive)) {
-            m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kOutput, busIndex, true);
+            component->activateBus(BusMediaType::kAudio, BusDirection::kOutput, busIndex, true);
             m_activeOutputBusses.emplace_back(busIndex);
         }
 
@@ -268,13 +266,13 @@ void VstAudioClient::setUpProcessData()
 
     if (m_activeInputBusses.empty()) {
         LOGI() << "0 active input buses, activating default bus";
-        m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kInput, 0, true);
+        component->activateBus(BusMediaType::kAudio, BusDirection::kInput, 0, true);
         m_activeInputBusses.emplace_back(0);
     }
 
     if (m_activeOutputBusses.empty()) {
         LOGI() << "0 active output buses, activating default bus";
-        m_pluginComponent->activateBus(BusMediaType::kAudio, BusDirection::kOutput, 0, true);
+        component->activateBus(BusMediaType::kAudio, BusDirection::kOutput, 0, true);
         m_activeOutputBusses.emplace_back(0);
     }
 }
@@ -287,6 +285,11 @@ void VstAudioClient::updateProcessSetup()
 
     IAudioProcessorPtr processor = pluginProcessor();
     if (!processor) {
+        return;
+    }
+
+    PluginComponentPtr component = pluginComponent();
+    if (!component) {
         return;
     }
 
@@ -303,14 +306,14 @@ void VstAudioClient::updateProcessSetup()
     }
 
     processor->setProcessing(true);
-    m_pluginComponent->setActive(true);
+    component->setActive(true);
     m_isActive = true;
 
     setUpProcessData();
     flushBuffers();
 }
 
-void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, const float* sourceBuffer)
+void VstAudioClient::extractInputSamples(samples_t sampleCount, const float* sourceBuffer)
 {
     if (!m_processData.inputs || !sourceBuffer) {
         return;
@@ -318,14 +321,16 @@ void VstAudioClient::extractInputSamples(const audio::samples_t& sampleCount, co
 
     Steinberg::Vst::AudioBusBuffers& bus = m_processData.inputs[0];
 
-    for (unsigned int i = 0; i < sampleCount; ++i) {
-        for (audio::audioch_t s = 0; s < bus.numChannels; ++s) {
-            bus.channelBuffers32[s][i] = sourceBuffer[i * m_audioChannelsCount + s];
+    for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+        size_t offset = sampleIndex * m_audioChannelsCount;
+
+        for (audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
+            bus.channelBuffers32[audioChannelIndex][sampleIndex] = sourceBuffer[offset + audioChannelIndex];
         }
     }
 }
 
-bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
+bool VstAudioClient::fillOutputBuffer(samples_t sampleCount, float* output)
 {
     bool hasMeaningSamples = false;
 
@@ -333,24 +338,28 @@ bool VstAudioClient::fillOutputBuffer(unsigned int samples, float* output)
         return hasMeaningSamples;
     }
 
+    bool isInstrument = m_type == AudioPluginType::Instrument;
+
     for (const int busIndex : m_activeOutputBusses) {
         Steinberg::Vst::AudioBusBuffers bus = m_processData.outputs[busIndex];
 
-        for (audio::samples_t sampleIndex = 0; sampleIndex < samples; ++sampleIndex) {
-            for (audio::audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
+        for (samples_t sampleIndex = 0; sampleIndex < sampleCount; ++sampleIndex) {
+            size_t offset = sampleIndex * m_audioChannelsCount;
+
+            for (audioch_t audioChannelIndex = 0; audioChannelIndex < bus.numChannels; ++audioChannelIndex) {
                 float sample = bus.channelBuffers32[audioChannelIndex][sampleIndex];
 
-                if (m_type == VstPluginType::Instrument) {
-                    output[sampleIndex * m_audioChannelsCount + audioChannelIndex] += sample * m_volumeGain;
+                if (isInstrument) {
+                    output[offset + audioChannelIndex] += sample * m_volumeGain;
                 } else {
-                    output[sampleIndex * m_audioChannelsCount + audioChannelIndex] = sample * m_volumeGain;
+                    output[offset + audioChannelIndex] = sample * m_volumeGain;
                 }
 
                 if (hasMeaningSamples) {
                     continue;
                 }
 
-                if (!RealIsEqual(sample, 0)) {
+                if (!RealIsNull(sample)) {
                     hasMeaningSamples = true;
                 }
             }
@@ -380,8 +389,13 @@ void VstAudioClient::disableActivity()
         return;
     }
 
+    PluginComponentPtr component = pluginComponent();
+    if (!component) {
+        return;
+    }
+
     processor->setProcessing(false);
-    m_pluginComponent->setActive(false);
+    component->setActive(false);
 
     m_isActive = false;
 }

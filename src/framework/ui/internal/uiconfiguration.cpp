@@ -163,7 +163,7 @@ static const QMap<ThemeStyleKey, QVariant> HIGH_CONTRAST_WHITE_THEME_VALUES {
     { ITEM_OPACITY_DISABLED, 0.3 }
 };
 
-void UiConfiguration::initSettings()
+void UiConfiguration::init()
 {
     settings()->setDefaultValue(UI_CURRENT_THEME_CODE_KEY, Val(LIGHT_THEME_CODE));
     settings()->setDefaultValue(UI_FOLLOW_SYSTEM_THEME_KEY, Val(false));
@@ -212,6 +212,8 @@ void UiConfiguration::initSettings()
     m_uiArrangement.stateChanged(WINDOW_GEOMETRY_KEY).onNotify(this, [this]() {
         m_windowGeometryChanged.notify();
     });
+
+    initThemes();
 }
 
 void UiConfiguration::load()
@@ -646,9 +648,16 @@ double UiConfiguration::physicalDpi() const
         return m_customDPI.value();
     }
 
+    constexpr double DEFAULT_DPI = 96;
     const QScreen* screen = mainWindow() ? mainWindow()->screen() : nullptr;
     if (!screen) {
-        constexpr double DEFAULT_DPI = 96;
+        return DEFAULT_DPI;
+    }
+
+    auto physicalSize = screen->physicalSize();
+    // Work around xrandr reporting a 1x1mm size if
+    // the screen doesn't have a valid physical size
+    if (physicalSize.height() <= 1 && physicalSize.width() <= 1) {
         return DEFAULT_DPI;
     }
 

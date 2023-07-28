@@ -41,6 +41,8 @@
 #include "pluginterfaces/vst/ivstmidicontrollers.h"
 
 #include "framework/midi/miditypes.h"
+#include "io/path.h"
+#include "log.h"
 
 namespace mu::vst {
 class VstPlugin;
@@ -55,8 +57,6 @@ using PluginFactory = VST3::Hosting::PluginFactory;
 using PluginSubcategories = ClassInfo::SubCategories;
 using PluginContextFactory = Steinberg::Vst::PluginContextFactory;
 using PluginContext = Steinberg::Vst::HostApplication;
-using PluginProviderPtr = Steinberg::IPtr<Steinberg::Vst::PlugProvider>;
-using PluginProvider = Steinberg::Vst::PlugProvider;
 using PluginControllerPtr = Steinberg::IPtr<Steinberg::Vst::IEditController>;
 using PluginComponentPtr = Steinberg::IPtr<Steinberg::Vst::IComponent>;
 using PluginViewPtr = Steinberg::IPtr<Steinberg::IPlugView>;
@@ -74,13 +74,12 @@ using BusInfo = Steinberg::Vst::BusInfo;
 using BusDirection = Steinberg::Vst::BusDirections;
 using BusType = Steinberg::Vst::BusTypes;
 using BusMediaType = Steinberg::Vst::MediaTypes;
+using PluginMidiMappingPtr = Steinberg::IPtr<Steinberg::Vst::IMidiMapping>;
 using ParamsMapping = std::unordered_map<ControllIdx, PluginParamId>;
 
-enum class VstPluginType {
-    Undefined,
-    Instrument,
-    Fx
-};
+//@see https://developer.steinberg.help/pages/viewpage.action?pageId=9798275
+static const std::string VST3_PACKAGE_EXTENSION = "vst3";
+static const std::string VST3_PACKAGE_FILTER = "*." + VST3_PACKAGE_EXTENSION;
 
 /// @see https://steinbergmedia.github.io/vst3_doc/vstinterfaces/namespaceSteinberg_1_1Vst_1_1PlugType.html
 namespace PluginCategory {
@@ -117,6 +116,20 @@ using VstMemoryStream = Steinberg::MemoryStream;
 using VstBufferStream = Steinberg::Vst::BufferStream;
 
 namespace PluginEditorViewType = Steinberg::Vst::ViewType;
+
+inline PluginModulePtr createModule(const io::path_t& path)
+{
+    std::string errorString;
+    PluginModulePtr result = nullptr;
+
+    try {
+        result = PluginModule::create(path.toStdString(), errorString);
+    }  catch (...) {
+        LOGE() << "Unable to load a new VST Module, error string: " << errorString;
+    }
+
+    return result;
+}
 }
 
 template<>

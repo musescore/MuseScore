@@ -53,6 +53,7 @@ public:
     MOCK_METHOD(draw::Color, formattingMarksColor, (), (const, override));
     MOCK_METHOD(draw::Color, thumbnailBackgroundColor, (), (const, override));
     MOCK_METHOD(draw::Color, noteBackgroundColor, (), (const, override));
+    MOCK_METHOD(draw::Color, fontPrimaryColor, (), (const, override));
 
     MOCK_METHOD(double, guiScaling, (), (const, override));
 

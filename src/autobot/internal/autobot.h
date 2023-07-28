@@ -44,13 +44,13 @@
 namespace mu::autobot {
 class Autobot : public IAutobot, public async::Asyncable
 {
-    INJECT(autobot, framework::IApplication, application)
-    INJECT(autobot, IAutobotConfiguration, configuration)
-    INJECT(autobot, io::IFileSystem, fileSystem)
-    INJECT(autobot, ui::INavigationController, navigation)
-    INJECT(autobot, shortcuts::IShortcutsRegister, shortcutsRegister)
-    INJECT(autobot, framework::IInteractive, interactive)
-    INJECT(autobot, ui::IMainWindow, mainWindow)
+    INJECT(framework::IApplication, application)
+    INJECT(IAutobotConfiguration, configuration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(ui::INavigationController, navigation)
+    INJECT(shortcuts::IShortcutsRegister, shortcutsRegister)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(ui::IMainWindow, mainWindow)
 
 public:
     Autobot() = default;

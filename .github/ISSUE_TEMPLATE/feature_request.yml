@@ -1,0 +1,32 @@
+name: Feature request
+description: Request an existing feature to be made better, or a new feature
+labels: ["Feature Request"]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Your idea
+      description: Describe your idea in a few sentences.
+    validations:
+      required: true
+  - type: textarea
+    id: whatfor
+    attributes:
+      label: Problem to be solved
+      description: What problem would your idea solve?
+    validations:
+      required: true
+  - type: textarea
+    id: other
+    attributes:
+      label: Prior art
+      description: Have you run into this problem with other apps? How did they solve it? You can paste screenshots. 
+    validations:
+      required: false
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Anything else of note
+    validations:
+      required: false

@@ -24,7 +24,8 @@
 
 #include <QBuffer>
 
-#include "engraving/rw/xml.h"
+#include "engraving/rw/xmlreader.h"
+#include "engraving/rw/xmlwriter.h"
 
 using namespace mu::palette;
 
@@ -38,13 +39,13 @@ void PaletteTree::append(PalettePtr palette)
     palettes.emplace_back(palette);
 }
 
-bool PaletteTree::read(mu::engraving::XmlReader& e)
+bool PaletteTree::read(mu::engraving::XmlReader& e, bool pasteMode)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Palette") {
             PalettePtr p = std::make_shared<Palette>();
-            p->read(e);
+            p->read(e, pasteMode);
             palettes.push_back(p);
         } else {
             e.unknown();
@@ -54,12 +55,12 @@ bool PaletteTree::read(mu::engraving::XmlReader& e)
     return true;
 }
 
-void PaletteTree::write(mu::engraving::XmlWriter& xml) const
+void PaletteTree::write(mu::engraving::XmlWriter& xml, bool pasteMode) const
 {
     xml.startElement("PaletteBox"); // for compatibility with old palettes file format
 
     for (PalettePtr palette : palettes) {
-        palette->write(xml);
+        palette->write(xml, pasteMode);
     }
 
     xml.endElement();

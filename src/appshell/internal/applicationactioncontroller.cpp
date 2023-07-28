@@ -57,12 +57,11 @@ void ApplicationActionController::init()
 
     dispatcher()->reg(this, "fullscreen", this, &ApplicationActionController::toggleFullScreen);
 
-    dispatcher()->reg(this, "about", this, &ApplicationActionController::openAboutDialog);
+    dispatcher()->reg(this, "about-musescore", this, &ApplicationActionController::openAboutDialog);
     dispatcher()->reg(this, "about-qt", this, &ApplicationActionController::openAboutQtDialog);
     dispatcher()->reg(this, "about-musicxml", this, &ApplicationActionController::openAboutMusicXMLDialog);
     dispatcher()->reg(this, "online-handbook", this, &ApplicationActionController::openOnlineHandbookPage);
     dispatcher()->reg(this, "ask-help", this, &ApplicationActionController::openAskForHelpPage);
-    dispatcher()->reg(this, "report-bug", this, &ApplicationActionController::openBugReportPage);
     dispatcher()->reg(this, "preference-dialog", this, &ApplicationActionController::openPreferencesDialog);
 
     dispatcher()->reg(this, "revert-factory", this, &ApplicationActionController::revertToFactorySettings);
@@ -141,22 +140,13 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
         if (startupScenario()->startupCompleted()) {
             dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(filePath));
         } else {
-            startupScenario()->setStartupScorePath(filePath);
+            startupScenario()->setStartupScoreFile(project::ProjectFile { filePath });
         }
 
         return true;
     }
 
     return QObject::eventFilter(watched, event);
-}
-
-mu::ValCh<bool> ApplicationActionController::isFullScreen() const
-{
-    ValCh<bool> result;
-    result.ch = m_fullScreenChannel;
-    result.val = mainWindow()->isFullScreen();
-
-    return result;
 }
 
 bool ApplicationActionController::quit(bool isAllInstances, const io::path_t& installerPath)
@@ -210,8 +200,6 @@ void ApplicationActionController::restart()
 void ApplicationActionController::toggleFullScreen()
 {
     mainWindow()->toggleFullScreen();
-    bool isFullScreen = mainWindow()->isFullScreen();
-    m_fullScreenChannel.send(isFullScreen);
 }
 
 void ApplicationActionController::openAboutDialog()
@@ -239,12 +227,6 @@ void ApplicationActionController::openAskForHelpPage()
 {
     std::string askForHelpUrl = configuration()->askForHelpUrl();
     interactive()->openUrl(askForHelpUrl);
-}
-
-void ApplicationActionController::openBugReportPage()
-{
-    std::string bugReportUrl = configuration()->bugReportUrl();
-    interactive()->openUrl(bugReportUrl);
 }
 
 void ApplicationActionController::openPreferencesDialog()

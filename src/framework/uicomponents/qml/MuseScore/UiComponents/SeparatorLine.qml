@@ -35,7 +35,7 @@ Rectangle {
         id: privateProperties
 
         readonly property bool parentIsHorizontal: root.parent instanceof Row || root.parent instanceof RowLayout
-        readonly property bool parentIsLayout: root.parent instanceof ColumnLayout || root.parent instanceof RowLayout
+        readonly property bool parentIsLayout: root.parent instanceof ColumnLayout || root.parent instanceof RowLayout || root.parent instanceof GridLayout
     }
 
     states: [

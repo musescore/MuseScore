@@ -37,6 +37,7 @@ class Clef;
 class InstrumentChange final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, InstrumentChange)
+    DECLARE_CLASSOF(ElementType::INSTRUMENT_CHANGE)
 
     Instrument* _instrument;    // Staff holds ownership if part of score
     bool _init = false;   // Set if the instrument has been set by the user, as there is no other way to tell.
@@ -49,18 +50,13 @@ public:
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
 
-    void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
-
-    void layout() override;
-
     Instrument* instrument() const { return _instrument; }
     void setInstrument(Instrument* i) { _instrument = i; }
     void setInstrument(Instrument&& i) { *_instrument = i; }
     void setInstrument(const Instrument& i);
     void setupInstrument(const Instrument* instrument);
 
-    std::vector<KeySig*> keySigs() const;
+    std::vector<KeySig*> keySigs(bool all=false) const;
     std::vector<Clef*> clefs() const;
 
     bool init() const { return _init; }

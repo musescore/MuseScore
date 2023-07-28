@@ -21,12 +21,14 @@
  */
 
 #include "chordrest.h"
+#include "durationtype.h"
 #include "factory.h"
 #include "keysig.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "rest.h"
 #include "segment.h"
+#include "sig.h"
 #include "staff.h"
 #include "tuplet.h"
 #include "utils.h"
@@ -68,7 +70,7 @@ void Score::checkScore()
     }
 
     ChordRest* lcr = 0;
-    for (size_t staffIdx = 0; staffIdx < _staves.size(); ++staffIdx) {
+    for (size_t staffIdx = 0; staffIdx < m_staves.size(); ++staffIdx) {
         size_t track = staffIdx * VOICES;
         Fraction tick  = Fraction(0, 1);
         Staff* st = staff(staffIdx);
@@ -185,7 +187,7 @@ Ret Score::sanityCheckLocal()
             }
 
             if (!repeatsIsValid) {
-                errors << mtrc("engraving", u"<b>Corrupted measure</b>: %1, measure %2, staff %3.")
+                errors << mtrc("engraving", "<b>Corrupted measure</b>: %1, measure %2, staff %3.")
                     .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1);
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
@@ -194,7 +196,7 @@ Ret Score::sanityCheckLocal()
 
             if (voices[0] != mLen) {
                 //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
-                errors << mtrc("engraving", u"<b>Incomplete measure</b>: %1, measure %2, staff %3. Found: %4. Expected: %5.")
+                errors << mtrc("engraving", "<b>Incomplete measure</b>: %1, measure %2, staff %3. Found: %4. Expected: %5.")
                     .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(voices[0].toString(), mLen.toString());
 #ifndef NDEBUG
                 m->setCorrupted(staffIdx, true);
@@ -209,7 +211,7 @@ Ret Score::sanityCheckLocal()
             for (voice_idx_t v = 1; v < VOICES; ++v) {
                 if (voices[v] > mLen) {
                     //: %1 describes in which score the corruption is (either `Full score` or `"[part name]" part score`)
-                    errors << mtrc("engraving", u"<b>Voice too long</b>: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.")
+                    errors << mtrc("engraving", "<b>Voice too long</b>: %1, measure %2, staff %3, voice %4. Found: %5. Expected: %6.")
                         .arg(excerptInfo()).arg(mNumber).arg(staffIdx + 1).arg(v + 1).arg(voices[v].toString(), mLen.toString());
 #ifndef NDEBUG
                     m->setCorrupted(staffIdx, true);
@@ -268,15 +270,32 @@ void Measure::fillGap(const Fraction& pos, const Fraction& len, track_idx_t trac
          len.numerator(), len.denominator(),
          stretch.numerator(), stretch.denominator(),
          track);
-    TDuration d;
-    d.setVal(len.ticks());
-    if (d.isValid()) {
+
+    if (useGapRests) {
+        // fill this gap with a single gap rest, where the duration does not need to correspond to a valid DurationType
+        TDuration d;
+        d.setVal(len.ticks());
         Rest* rest = Factory::createRest(score()->dummy()->segment());
         rest->setTicks(len);
         rest->setDurationType(d);
         rest->setTrack(track);
         rest->setGap(useGapRests);
         score()->undoAddCR(rest, this, (pos / stretch) + tick());
+        return;
+    }
+
+    // break the gap into shorter durations if necessary
+    std::vector<TDuration> durationList = toRhythmicDurationList(len, true, pos, score()->sigmap()->timesig(tick()).nominal(), this, 0);
+
+    Fraction curTick = pos;
+    for (TDuration d : durationList) {
+        Rest* rest = Factory::createRest(score()->dummy()->segment());
+        rest->setTicks(d.fraction());
+        rest->setDurationType(d);
+        rest->setTrack(track);
+        rest->setGap(useGapRests);
+        score()->undoAddCR(rest, this, curTick + tick());
+        curTick += d.fraction();
     }
 }
 

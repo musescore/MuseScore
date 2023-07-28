@@ -23,7 +23,7 @@
 #ifndef MU_UI_IPLATFORMTHEME_H
 #define MU_UI_IPLATFORMTHEME_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/notification.h"
 #include "uitypes.h"
 

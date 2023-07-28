@@ -43,7 +43,7 @@ Column {
         followWrittenTempoCheckbox.navigation.requestActive()
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: followWrittenTempoCheckbox
         text: qsTrc("inspector", "Follow written tempo")
         propertyItem: root.model ? root.model.isDefaultTempoForced : null

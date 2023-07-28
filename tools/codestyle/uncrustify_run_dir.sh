@@ -18,16 +18,33 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-HERE="${BASH_SOURCE%/*}" # path to dir that contains this script
-
+HERE="$(dirname ${BASH_SOURCE[0]})"
 DIR="${1-.}" # use $1 or "." (current dir) if $1 is not defined
+
+source "${HERE}/globals.source"
+
+SCAN_BIN_DIR=""
+
+if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    SCAN_BIN_DIR="linux"
+elif [[ "$OSTYPE" == "darwin"* ]]; then
+    if [ "$(uname -m)" = "arm64" ]; then
+        SCAN_BIN_DIR="macosx/arm64"
+    else
+        SCAN_BIN_DIR="macosx/x86_64"
+    fi
+elif [[ "$OSTYPE" == "cygwin" ]]; then
+    SCAN_BIN_DIR="windows"
+elif [[ "$OSTYPE" == "msys" ]]; then
+    SCAN_BIN_DIR="windows"
+fi
+
+SCAN_BIN=$HERE/scan_files/bin/${SCAN_BIN_DIR}/scan_files
 
 START_TIME=$(date +%s)
 
-find $DIR -type f -regex '.*\.\(cpp\|h\|hpp\|cc\)$' | xargs -n 1 -P 16 \
-    uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l CPP
-find $DIR -type f -regex '.*\.\(mm\)$' | xargs -n 1 -P 16 \
-    uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l OC+
+$SCAN_BIN -d $DIR -i $UNTIDY_FILE -e cpp,c,cc,hpp,h | xargs -n 1 -P 16 uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l CPP
+$SCAN_BIN -d $DIR -i $UNTIDY_FILE -e mm | xargs -n 1 -P 16 uncrustify -c "${HERE}/uncrustify_musescore.cfg" --no-backup -l OC+
 
 END_TIME=$(date +%s)
 DIFF_TIME=$(( $END_TIME - $START_TIME ))

@@ -38,9 +38,9 @@ public:
     explicit IPopupWindow(QObject* parent = nullptr)
         : QObject(parent) {}
 
-    virtual void init(QQmlEngine* engine, bool isDialogMode) = 0;
+    virtual void init(QQmlEngine* engine, bool isDialogMode, bool isFrameless) = 0;
 
-    virtual void setContent(QQuickItem* item) = 0;
+    virtual void setContent(QQmlComponent* component, QQuickItem* item) = 0;
 
     virtual void show(QScreen* screen, QRect geometry, bool activateFocus) = 0;
     virtual void close() = 0;

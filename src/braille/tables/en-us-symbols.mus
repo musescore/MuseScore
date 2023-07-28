@@ -1,0 +1,217 @@
+include unicode.dis
+#include smufl-symbols.mus
+
+#undefined 34-123456-16
+numsign 3456
+capsletter 6
+begcapsword 6
+
+space \s 0 blank
+space \t 0 tab
+space \x000a 0 newline
+space \x000c 0
+space \x000d 0 carriage return
+space \x001b 0 escape character for html back-translation
+space \x00A0 0 NO-BREAK SPACE <noBreak> 0020 NON-BREAKING SPACE 
+
+# latin letters
+uplow Aa 1
+uplow Bb 12
+uplow Cc 14
+uplow Dd 145
+uplow Ee 15
+uplow Ff 124
+uplow Gg 1245
+uplow Hh 125
+uplow Ii 24
+uplow Jj 245
+uplow Kk 13
+uplow Ll 123
+uplow Mm 134
+uplow Nn 1345
+uplow Oo 135
+uplow Pp 1234
+uplow Qq 12345
+uplow Rr 1235
+uplow Ss 234
+uplow Tt 2345
+uplow Uu 136
+uplow Vv 1236
+uplow Ww 2456
+uplow Xx 1346
+uplow Yy 13456
+uplow Zz 1356
+
+#Italian letters, copied from IT LibLouis table.
+uplow	\x0104\x0105 16
+uplow \x0106\x0107 146
+uplow	\x0118\x0119 156
+uplow	\x0141\x0142 126
+uplow	\x0143\x0144 1456
+uplow \x00C0\x00E0 12356				# a with grave
+uplow \x00C8\x00E8 2346				# e with grave
+uplow \x00C9\x00E9 123456				# e with acute
+uplow \x00CC\x00EC 34				# i with grave above
+uplow \x00D2\x00F2 346			# o with grave above
+uplow \x00D9\x00F9 23456			# u with grave above
+
+#French letters, copied from fr-fu LibLouis table
+uplow \x00c7\x00e7  12346 # c cédille (Çç)
+uplow \x00c6\x00E6 345     #*ae
+uplow \x0152\x0153    246 # oe liés (Œœ)
+uplow \x00C3\x00E3 5-26-1		a tilde
+noback uplow \x00d1\x00f1 12456 # n tilde (Ññ)
+uplow \x00c0\x00e0  12356 # a accent grave (Àà)
+uplow \x00c8\x00e8   2346 # e accent grave (Èè)
+uplow \x00d9\x00f9  23456 # u accent grave (Ùù)
+#noback uplow \x00cc\x00ec  34 # i accent grave (Ìì)
+noback uplow \x00d2\x00f2 346 # o accent grave (Òò)
+
+uplow \x00c2\x00e2     16 # a accent circonflexe (Ââ)
+uplow \x00ca\x00ea    126 # e accent circonflexe (Êê)
+uplow \x00ce\x00ee    146 # i accent circonflexe (Îî)
+uplow \x00d4\x00f4   1456 # o accent circonflexe (Ôô)
+uplow \x00db\x00fb    156 # u accent circonflexe (Ûû)
+
+uplow \x00c1\x00e1  12356 # a accent aigu (Áá)
+uplow \x00c9\x00e9 123456 # e accent aigu (Éé)
+uplow \x00d3\x00f3    346 # o accent aigu (Óó)
+uplow \x00da\x00fa  23456 # u accent aigu (Úú)
+noback uplow \x00cd\x00ed 34 # i accent aigu (Íí)
+
+uplow \x00c4\x00e4    345 # a tréma (Ää)
+uplow \x00cb\x00eb   1246 # e tréma (Ëë)
+uplow \x00cf\x00ef  12456 # i tréma (Ïï)
+uplow \x00d6\x00f6    246 # o tréma (Öö)
+uplow \x00dc\x00fc   1256 # u tréma (Üü)
+uplow \x00C5\x00e5 5-1       #*latin capital letter a with ring above (unofficial)
+uplow \x00d8\x00f8 56-246 # o barré (non officiel)
+
+# numbers definition
+display 0 356
+display 1 2
+display 2 23
+display 3 25
+display 4 256
+display 5 26
+display 6 235
+display 7 2356
+display 8 236
+display 9 35
+digit 0 245
+digit 1 1
+digit 2 12
+digit 3 14
+digit 4 145
+digit 5 15
+digit 6 124
+digit 7 1245
+digit 8 125
+digit 9 24
+litdigit 0 245
+litdigit 1 1
+litdigit 2 12
+litdigit 3 14
+litdigit 4 145
+litdigit 5 15
+litdigit 6 124
+litdigit 7 1245
+litdigit 8 125
+litdigit 9 24
+
+# punctuations and signs
+display ! 2346
+punctuation ! 2346
+
+display " 5
+punctuation " 5
+#prepunc " 236
+#postpunc " 356
+
+display ? 1456
+punctuation ? 1456
+#match %[^_~]%<* " %[_.$]*%[a#] 236
+#match %[a#]%[_.$]* " %>*%[^_~] 356
+
+display # 3456
+sign # 3456
+display $ 1246
+sign $ 1246
+display % 146
+sign % 146
+display & 12346
+sign & 12346
+punctuation ' 3
+display ( 12356
+punctuation ( 2356
+display ) 23456
+punctuation ) 2356
+display * 16
+sign * 26-35
+display + 346
+sign + 346
+display , 6
+punctuation , 2
+punctuation - 36
+#display . 46
+punctuation . 3
+#decpoint . 3
+display / 34
+sign / 34
+
+display : 156
+punctuation : 156
+display ; 56
+punctuation ; 56
+display < 126
+sign < 126
+display = 123456
+sign = 123456
+display > 345
+sign > 345
+display @ 4
+sign @ 4
+
+display [ 246
+punctuation [ 246
+#display \\ 1256
+#sign \\ 1256
+display ] 12456
+punctuation ] 12456
+display ^ 45
+sign ^ 45
+display _ 456
+sign _ 456
+display ` 4
+sign ` 4
+
+display } 12456
+punctuation } 12456
+display | 1256
+sign | 1256
+display { 246
+punctuation { 246
+display ~ 45
+punctuation ~ 45
+#SMULF symbols definitions
+include smufl-symbols.mus
+
+#SM LibMuiscBraille sending following indicators for stand-alone or in-text SMUFL symbols.
+#SmuflOnly: words containing only SMUFL symbols
+#SmuflIntextBegin
+
+#Music text symbols
+#to change to something like NaturalAccidental to avoid normal "natural" word in text.
+always flat 126
+always sharp 146
+always natural 16
+always nochord 6-6-1345-14
+
+#process harmony classical analyst written with Roman I to VII.
+noback context `["vii"]~ @56-1236-24-24
+noback context `["vi"]~ @56-1236-24
+noback context `["v"]~ @56-1236
+noback context `["iv"]~ @56-24-1236
+noback context `["iii"]~ @56-24-24-24
+noback context `["ii"]~ @56-24-24
+noback context `["i"]~ @56-24

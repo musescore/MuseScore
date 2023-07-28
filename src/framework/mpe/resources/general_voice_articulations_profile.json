@@ -2383,6 +2383,111 @@
                 }
             }
         ],
+        "ContinuousGlissando": [
+            {
+                "arrangementPattern": {
+                    "durationFactor": 9900,
+                    "timestampOffset": 0
+                },
+                "expressionPattern": {
+                    "dynamicOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 5000
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 2500
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 1500
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 0
+                        }
+                    ]
+                },
+                "patternPosition": 0,
+                "pitchPattern": {
+                    "pitchOffsets": [
+                        {
+                            "offsetPosition": 0,
+                            "offsetValue": 0
+                        },
+                        {
+                            "offsetPosition": 1000,
+                            "offsetValue": 10
+                        },
+                        {
+                            "offsetPosition": 2000,
+                            "offsetValue": 20
+                        },
+                        {
+                            "offsetPosition": 3000,
+                            "offsetValue": 30
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 40
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 50
+                        },
+                        {
+                            "offsetPosition": 6000,
+                            "offsetValue": 60
+                        },
+                        {
+                            "offsetPosition": 7000,
+                            "offsetValue": 70
+                        },
+                        {
+                            "offsetPosition": 8000,
+                            "offsetValue": 80
+                        },
+                        {
+                            "offsetPosition": 9000,
+                            "offsetValue": 90
+                        },
+                        {
+                            "offsetPosition": 10000,
+                            "offsetValue": 100
+                        }
+                    ]
+                }
+            }
+        ],
         "DiscreteGlissando": [
             {
                 "arrangementPattern": {

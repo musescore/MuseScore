@@ -22,9 +22,12 @@
 #ifndef MU_INSTRUMENTSSCENE_INSTRUMENTSSCENEMODULE_H
 #define MU_INSTRUMENTSSCENE_INSTRUMENTSSCENEMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::instrumentsscene {
+class InstrumentsActionsController;
 class InstrumentsSceneModule : public modularity::IModuleSetup
 {
 public:
@@ -34,6 +37,9 @@ public:
     void registerResources() override;
     void registerUiTypes() override;
     void onInit(const framework::IApplication::RunMode& mode) override;
+
+private:
+    std::shared_ptr<InstrumentsActionsController> m_actionsController;
 };
 }
 

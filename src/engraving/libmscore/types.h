@@ -124,7 +124,6 @@ enum class CommandType {
     CloneVoice,
 
     // Excerpts
-    MapExcerptTracks,
     AddExcerpt,
     RemoveExcerpt,
     SwapExcerpt,

@@ -31,6 +31,7 @@
 #include "log.h"
 
 using namespace mu::plugins;
+using namespace mu::uicomponents;
 
 PluginView::PluginView(QObject* parent)
     : QObject(parent)
@@ -68,8 +69,8 @@ mu::Ret PluginView::load(const QUrl& url)
     }
 
     connect(m_qmlPlugin, &QmlPlugin::closeRequested, [this]() {
-        if (m_view && m_view->isVisible()) {
-            m_view->close();
+        if (m_dialogView && m_dialogView->isOpened()) {
+            m_dialogView->close();
         }
     });
 
@@ -78,9 +79,8 @@ mu::Ret PluginView::load(const QUrl& url)
 
 void PluginView::destroyView()
 {
-    if (m_view) {
-        m_view->close();
-        m_view->deleteLater();
+    if (m_dialogView) {
+        m_dialogView->close();
     }
 }
 
@@ -143,6 +143,15 @@ QString PluginView::categoryCode() const
     return m_qmlPlugin->categoryCode();
 }
 
+bool PluginView::requiresScore() const
+{
+    IF_ASSERT_FAILED(m_qmlPlugin) {
+        return false;
+    }
+
+    return m_qmlPlugin->requiresScore();
+}
+
 QmlPlugin* PluginView::qmlPlugin() const
 {
     return m_qmlPlugin;
@@ -160,20 +169,29 @@ void PluginView::run()
     }
 
     destroyView();
-    m_view = new QQuickView(engine(), nullptr);
-    m_view->setContent(QUrl(), m_component, m_qmlPlugin);
-    m_view->setTitle(name());
-    m_view->setColor(configuration()->viewBackgroundColor());
-    m_view->setResizeMode(QQuickView::SizeRootObjectToView);
+
+    m_dialogView = new DialogView();
+    m_dialogView->setEngine(engine());
+    m_dialogView->setComponent(m_component);
+
+    m_dialogView->setContentItem(m_qmlPlugin);
+    m_dialogView->setContentWidth(m_qmlPlugin->width());
+    m_qmlPlugin->setImplicitWidth(m_qmlPlugin->width());
+    m_dialogView->setContentHeight(m_qmlPlugin->height());
+    m_qmlPlugin->setImplicitHeight(m_qmlPlugin->height());
+
+    m_dialogView->setAlwaysOnTop(true);
+
+    m_dialogView->init();
 
     // TODO: Can't use new `connect` syntax because the QQuickView::closing
     // has a parameter of type QQuickCloseEvent, which is not public, so we
     // can't include any header for it and it will always be an incomplete
     // type, which is not allowed for the new `connect` syntax.
     //connect(m_view, &QQuickView::closing, this, &PluginView::finished);
-    connect(m_view, SIGNAL(closing(QQuickCloseEvent*)), this, SIGNAL(finished()));
+    connect(m_dialogView, SIGNAL(aboutToClose(QQuickCloseEvent*)), this, SIGNAL(finished()));
 
-    m_view->show();
+    m_dialogView->show();
 
     m_qmlPlugin->runPlugin();
 }

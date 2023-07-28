@@ -36,6 +36,8 @@ class Text;
 class TBox : public VBox
 {
     OBJECT_ALLOCATOR(engraving, TBox)
+    DECLARE_CLASSOF(ElementType::TBOX)
+
 public:
     TBox(System* parent);
     TBox(const TBox&);
@@ -50,14 +52,10 @@ public:
 
     TBox* clone() const override { return new TBox(*this); }
 
-    void write(XmlWriter&) const override;
-    using VBox::write;
-    void read(XmlReader&) override;
     EngravingItem* drop(EditData&) override;
     void add(EngravingItem* e) override;
     void remove(EngravingItem* el) override;
 
-    void layout() override;
     String accessibleExtraInfo() const override;
 
     int gripsCount() const override;

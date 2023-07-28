@@ -22,17 +22,14 @@
 
 #include "actionicon.h"
 
-#include "draw/fontmetrics.h"
-#include "rw/xml.h"
-
 #include "property.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
-namespace mu::engraving {
 ActionIcon::ActionIcon(EngravingItem* score)
     : EngravingItem(ElementType::ACTION_ICON, score)
 {
@@ -64,6 +61,7 @@ void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
 {
     m_actionCode = actionCode;
     m_icon = icon;
+    m_layoutData.invalidate();
 }
 
 double ActionIcon::fontSize() const
@@ -76,41 +74,9 @@ void ActionIcon::setFontSize(double size)
     m_iconFont.setPointSizeF(size);
 }
 
-void ActionIcon::write(XmlWriter& xml) const
+void ActionIcon::draw(Painter*) const
 {
-    xml.startElement(this);
-    xml.tag("subtype", int(m_actionType));
-    if (!m_actionCode.empty()) {
-        xml.tag("action", String::fromStdString(m_actionCode));
-    }
-    xml.endElement();
-}
-
-void ActionIcon::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "action") {
-            m_actionCode = e.readText().toStdString();
-        } else if (tag == "subtype") {
-            m_actionType = static_cast<ActionIconType>(e.readInt());
-        } else {
-            e.unknown();
-        }
-    }
-}
-
-void ActionIcon::layout()
-{
-    FontMetrics fontMetrics(m_iconFont);
-    setbbox(fontMetrics.boundingRect(Char(m_icon)));
-}
-
-void ActionIcon::draw(Painter* painter) const
-{
-    TRACE_OBJ_DRAW;
-    painter->setFont(m_iconFont);
-    painter->drawText(bbox(), draw::AlignCenter, Char(m_icon));
+    UNREACHABLE;
 }
 
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
@@ -136,4 +102,9 @@ bool ActionIcon::setProperty(Pid pid, const PropertyValue& v)
     }
     return true;
 }
+
+void ActionIcon::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+    setbbox(data.bbox);
 }

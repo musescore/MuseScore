@@ -86,9 +86,8 @@ MuseScore {
         }
     }
 
-    Rectangle {
+    Item {
         id: rect1
-        color: "transparent"
         anchors.fill: parent
 
         ColumnLayout {

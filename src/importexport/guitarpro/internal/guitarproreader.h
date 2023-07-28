@@ -29,11 +29,11 @@
 namespace mu::iex::guitarpro {
 class GuitarProReader : public project::INotationReader
 {
-    INJECT(iex_guitarpro, mu::iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
+    INJECT(mu::iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
 
 public:
     Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) override;
 };
-}
+} // namespace mu::iex::guitarpro
 
 #endif // MU_IMPORTEXPORT_GUITARPROREADER_H

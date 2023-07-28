@@ -75,8 +75,8 @@ class PluginAPI : public QmlPlugin
 {
     Q_OBJECT
 
-    INJECT(plugins, mu::actions::IActionsDispatcher, actionsDispatcher)
-    INJECT(plugins, mu::context::IGlobalContext, context)
+    INJECT(mu::actions::IActionsDispatcher, actionsDispatcher)
+    INJECT(mu::context::IGlobalContext, context)
 
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
@@ -114,7 +114,7 @@ class PluginAPI : public QmlPlugin
     /** (read-only) */
     Q_PROPERTY(qreal mscoreDPI READ mscoreDPI)
     /** Current score, if any (read only) */
-    Q_PROPERTY(mu::plugins::api::Score * curScore READ curScore)
+    Q_PROPERTY(mu::plugins::api::Score * curScore READ curScore CONSTANT)
     /** List of currently open scores (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QQmlListProperty<mu::plugins::api::Score> scores READ scores)
 

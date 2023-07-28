@@ -33,8 +33,6 @@
 using namespace mu::accessibility;
 using namespace mu::modularity;
 
-static std::shared_ptr<AccessibilityConfiguration> s_configuration = std::make_shared<AccessibilityConfiguration>();
-
 std::string AccessibilityModule::moduleName() const
 {
     return "accessibility";
@@ -42,7 +40,9 @@ std::string AccessibilityModule::moduleName() const
 
 void AccessibilityModule::registerExports()
 {
-    ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<AccessibilityConfiguration>();
+
+    ioc()->registerExport<IAccessibilityConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAccessibilityController>(moduleName(), std::make_shared<AccessibilityController>());
     ioc()->registerExport<IQAccessibleInterfaceRegister>(moduleName(), new QAccessibleInterfaceRegister());
 }
@@ -58,7 +58,11 @@ void AccessibilityModule::resolveImports()
     }
 }
 
-void AccessibilityModule::onInit(const framework::IApplication::RunMode&)
+void AccessibilityModule::onInit(const framework::IApplication::RunMode& mode)
 {
-    s_configuration->init();
+    if (mode != framework::IApplication::RunMode::GuiApp) {
+        return;
+    }
+
+    m_configuration->init();
 }

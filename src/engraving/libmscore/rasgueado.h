@@ -35,14 +35,14 @@ class Rasgueado;
 class RasgueadoSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, RasgueadoSegment)
+    DECLARE_CLASSOF(ElementType::RASGUEADO_SEGMENT)
+
 public:
     RasgueadoSegment(Rasgueado* sp, System* parent);
 
     RasgueadoSegment* clone() const override { return new RasgueadoSegment(*this); }
 
     Rasgueado* rasgueado() const { return (Rasgueado*)spanner(); }
-
-    void layout() override;
 
     friend class Rasgueado;
 };
@@ -54,6 +54,8 @@ public:
 class Rasgueado final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, Rasgueado)
+    DECLARE_CLASSOF(ElementType::RASGUEADO)
+
 public:
     Rasgueado(EngravingItem* parent);
 

@@ -31,9 +31,6 @@
 using namespace mu::languages;
 using namespace mu::modularity;
 
-static std::shared_ptr<LanguagesConfiguration> s_languagesConfiguration = std::make_shared<LanguagesConfiguration>();
-static std::shared_ptr<LanguagesService> s_languagesService = std::make_shared<LanguagesService>();
-
 std::string LanguagesModule::moduleName() const
 {
     return "languages";
@@ -41,24 +38,27 @@ std::string LanguagesModule::moduleName() const
 
 void LanguagesModule::registerExports()
 {
-    ioc()->registerExport<ILanguagesConfiguration>(moduleName(), s_languagesConfiguration);
-    ioc()->registerExport<ILanguagesService>(moduleName(), s_languagesService);
+    m_languagesConfiguration = std::make_shared<LanguagesConfiguration>();
+    m_languagesService = std::make_shared<LanguagesService>();
+
+    ioc()->registerExport<ILanguagesConfiguration>(moduleName(), m_languagesConfiguration);
+    ioc()->registerExport<ILanguagesService>(moduleName(), m_languagesService);
 }
 
 void LanguagesModule::onPreInit(const framework::IApplication::RunMode& mode)
 {
     //! NOTE: configurator must be initialized before any service that uses it
-    s_languagesConfiguration->init();
+    m_languagesConfiguration->init();
 
-    if (framework::IApplication::RunMode::Converter == mode) {
+    if (mode != framework::IApplication::RunMode::GuiApp) {
         return;
     }
 
-    s_languagesService->init();
+    m_languagesService->init();
 
     auto pr = modularity::ioc()->resolve<diagnostics::IDiagnosticsPathsRegister>(moduleName());
     if (pr) {
-        pr->reg("languagesAppDataPath", s_languagesConfiguration->languagesAppDataPath());
-        pr->reg("languagesUserAppDataPath", s_languagesConfiguration->languagesUserAppDataPath());
+        pr->reg("languagesAppDataPath", m_languagesConfiguration->languagesAppDataPath());
+        pr->reg("languagesUserAppDataPath", m_languagesConfiguration->languagesUserAppDataPath());
     }
 }

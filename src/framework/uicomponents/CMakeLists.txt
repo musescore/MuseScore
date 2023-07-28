@@ -35,6 +35,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/validators/intinputvalidator.h
     ${CMAKE_CURRENT_LIST_DIR}/view/iconview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/iconview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/modelutils.h
     ${CMAKE_CURRENT_LIST_DIR}/view/sortfilterproxymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/sortfilterproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/filtervalue.cpp

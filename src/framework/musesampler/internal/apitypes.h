@@ -64,11 +64,25 @@ typedef struct ms_DynamicsEvent
     double _value; // 0.0 - 1.0
 } ms_DynamicsEvent;
 
+// Added in v0.4
+typedef struct ms_DynamicsEvent_2
+{
+    long long _location_us;
+    double _value; // 0.0 - 1.0
+} ms_DynamicsEvent_2;
+
 typedef struct ms_PedalEvent
 {
     long _location_us;
     double _value; // 0.0 - 1.0
 } ms_PedalEvent;
+
+// Added in v0.4
+typedef struct ms_PedalEvent_2
+{
+    long long _location_us;
+    double _value; // 0.0 - 1.0
+} ms_PedalEvent_2;
 
 enum ms_NoteArticulation : uint64_t
 {
@@ -130,12 +144,45 @@ typedef struct ms_NoteEvent
     ms_NoteArticulation _articulation;
 } ms_NoteEvent;
 
+// Added in v0.3
+typedef struct ms_NoteEvent_2
+{
+    int _voice; // 0-3
+    long _location_us;
+    long _duration_us;
+    int _pitch; // MIDI pitch
+    double _tempo;
+    int _offset_cents;
+    ms_NoteArticulation _articulation;
+} ms_NoteEvent_2;
+
+// Added in v0.4
+typedef struct ms_NoteEvent_3
+{
+    int _voice; // 0-3
+    long long _location_us;
+    long long _duration_us;
+    int _pitch; // MIDI pitch
+    double _tempo;
+    int _offset_cents;
+    ms_NoteArticulation _articulation;
+} ms_NoteEvent_3;
+
 typedef struct ms_AuditionStartNoteEvent
 {
     int _pitch; // MIDI pitch
     ms_NoteArticulation _articulation;
     double _dynamics;
 } ms_AuditionStartNoteEvent;
+
+// Added in v0.3
+typedef struct ms_AuditionStartNoteEvent_2
+{
+    int _pitch; // MIDI pitch
+    int _offset_cents;
+    ms_NoteArticulation _articulation;
+    double _dynamics;
+} ms_AuditionStartNoteEvent_2;
 
 typedef struct ms_AuditionStopNoteEvent
 {
@@ -148,12 +195,21 @@ typedef struct ms_LivePlayStartNoteEvent
     double _dynamics;
 } ms_LivePlayStartNoteEvent;
 
+// Added in v0.3
+typedef struct ms_LivePlayStartNoteEvent_2
+{
+    int _pitch; // MIDI pitch
+    int _offset_cents;
+    double _dynamics;
+} ms_LivePlayStartNoteEvent_2;
+
 typedef struct ms_LivePlayStopNoteEvent
 {
     int _pitch; // MIDI pitch
 } ms_LivePlayStopNoteEvent;
 
 typedef ms_Result (* ms_init)();
+typedef ms_Result (* ms_disable_reverb)();
 typedef int (* ms_contains_instrument)(const char* mpe_id, const char* musicxml_id);
 typedef int (* ms_get_matching_instrument_id)(const char* pack, const char* name);
 typedef ms_InstrumentList (* ms_get_instrument_list)();
@@ -166,6 +222,7 @@ typedef const char*(* ms_Instrument_get_category)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_package)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_musicxml_sound)(ms_InstrumentInfo);
 typedef const char*(* ms_Instrument_get_mpe_sound)(ms_InstrumentInfo);
+typedef float (* ms_Instrument_get_reverb_level)(ms_InstrumentInfo);
 
 typedef ms_PresetList (* ms_Instrument_get_preset_list)(ms_InstrumentInfo);
 typedef const char*(* ms_PresetList_get_next)(ms_PresetList);
@@ -182,19 +239,31 @@ typedef ms_Result (* ms_MuseSampler_finalize_track)(ms_MuseSampler ms, ms_Track 
 typedef ms_Result (* ms_MuseSampler_clear_track)(ms_MuseSampler ms, ms_Track track);
 
 typedef ms_Result (* ms_MuseSampler_add_track_note_event)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent evt);
+// Added in 0.3
+typedef ms_Result (* ms_MuseSampler_add_track_note_event_2)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_2 evt);
+// Added in 0.4
+typedef ms_Result (* ms_MuseSampler_add_track_note_event_3)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_3 evt);
 typedef ms_Result (* ms_MuseSampler_add_track_dynamics_event)(ms_MuseSampler ms, ms_Track track, ms_DynamicsEvent evt);
+// Added in 0.4
+typedef ms_Result (* ms_MuseSampler_add_track_dynamics_event_2)(ms_MuseSampler ms, ms_Track track, ms_DynamicsEvent_2 evt);
 typedef ms_Result (* ms_MuseSampler_add_track_pedal_event)(ms_MuseSampler ms, ms_Track track, ms_PedalEvent evt);
+// Added in 0.4
+typedef ms_Result (* ms_MuseSampler_add_track_pedal_event_2)(ms_MuseSampler ms, ms_Track track, ms_PedalEvent_2 evt);
 
 typedef int (* ms_MuseSampler_is_ranged_articulation)(ms_NoteArticulation);
 typedef ms_Result (* ms_MuseSampler_add_track_event_range_start)(ms_MuseSampler, ms_Track, int voice, ms_NoteArticulation);
 typedef ms_Result (* ms_MuseSampler_add_track_event_range_end)(ms_MuseSampler, ms_Track, int voice, ms_NoteArticulation);
 
 typedef ms_Result (* ms_MuseSampler_start_audition_note)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent evt);
+// Added in 0.3
+typedef ms_Result (* ms_MuseSampler_start_audition_note_2)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_2 evt);
 typedef ms_Result (* ms_MuseSampler_stop_audition_note)(ms_MuseSampler ms, ms_Track track, ms_AuditionStopNoteEvent evt);
 
 typedef ms_Result (* ms_MuseSampler_start_liveplay_mode)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_stop_liveplay_mode)(ms_MuseSampler ms);
 typedef ms_Result (* ms_MuseSampler_start_liveplay_note)(ms_MuseSampler ms, ms_Track track, ms_LivePlayStartNoteEvent evt);
+// Added in 0.3
+typedef ms_Result (* ms_MuseSampler_start_liveplay_note_2)(ms_MuseSampler ms, ms_Track track, ms_LivePlayStartNoteEvent_2 evt);
 typedef ms_Result (* ms_MuseSampler_stop_liveplay_note)(ms_MuseSampler ms, ms_Track track, ms_LivePlayStopNoteEvent evt);
 
 typedef ms_Result (* ms_MuseSampler_start_offline_mode)(ms_MuseSampler ms, double sample_rate);

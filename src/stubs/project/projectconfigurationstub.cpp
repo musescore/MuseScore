@@ -24,19 +24,14 @@
 using namespace mu;
 using namespace mu::project;
 
-io::paths_t ProjectConfigurationStub::recentProjectPaths() const
+io::path_t ProjectConfigurationStub::recentFilesJsonPath() const
 {
-    return io::paths_t();
+    return io::path_t();
 }
 
-void ProjectConfigurationStub::setRecentProjectPaths(const io::paths_t&)
+ByteArray ProjectConfigurationStub::compatRecentFilesData() const
 {
-}
-
-async::Channel<io::paths_t> ProjectConfigurationStub::recentProjectPathsChanged() const
-{
-    static async::Channel<io::paths_t> ch;
-    return ch;
+    return ByteArray();
 }
 
 io::path_t ProjectConfigurationStub::myFirstProjectPath() const
@@ -67,15 +62,6 @@ async::Channel<io::path_t> ProjectConfigurationStub::userTemplatesPathChanged() 
 {
     static async::Channel<io::path_t> ch;
     return ch;
-}
-
-io::path_t ProjectConfigurationStub::defaultProjectsPath() const
-{
-    return io::path_t();
-}
-
-void ProjectConfigurationStub::setDefaultProjectsPath(const io::path_t&)
-{
 }
 
 io::path_t ProjectConfigurationStub::lastOpenedProjectsPath() const
@@ -109,6 +95,11 @@ async::Channel<io::path_t> ProjectConfigurationStub::userProjectsPathChanged() c
 {
     static async::Channel<io::path_t> ch;
     return ch;
+}
+
+io::path_t ProjectConfigurationStub::defaultUserProjectsPath() const
+{
+    return io::path_t();
 }
 
 bool ProjectConfigurationStub::shouldAskSaveLocationType() const
@@ -238,11 +229,6 @@ bool ProjectConfigurationStub::shouldDestinationFolderBeOpenedOnExport() const
 
 void ProjectConfigurationStub::setShouldDestinationFolderBeOpenedOnExport(bool)
 {
-}
-
-QUrl ProjectConfigurationStub::scoreManagerUrl() const
-{
-    return QUrl();
 }
 
 QUrl ProjectConfigurationStub::supportForumUrl() const

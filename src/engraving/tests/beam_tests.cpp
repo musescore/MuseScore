@@ -118,7 +118,10 @@ TEST_F(Engraving_BeamTests, wideBeams)
 
 TEST_F(Engraving_BeamTests, flatBeams)
 {
-    beam("flatBeams.mscx");
+    MasterScore* score = ScoreRW::readScore(BEAM_DATA_DIR + u"flatBeams.mscx");
+    EXPECT_TRUE(score);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"flatBeams.mscx", BEAM_DATA_DIR + u"flatBeams-ref.mscx"));
+    delete score;
 }
 
 // cross staff beaming is not yet supported

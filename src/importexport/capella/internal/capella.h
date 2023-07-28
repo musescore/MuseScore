@@ -25,10 +25,13 @@
 
 #include <QFont>
 
-#include "engraving/rw/xml.h"
 #include "engraving/types/types.h"
 
 class QFile;
+
+namespace mu::engraving {
+class XmlReader;
+}
 
 namespace mu::iex::capella {
 enum class TIMESTEP : char {

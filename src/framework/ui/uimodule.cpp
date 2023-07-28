@@ -27,6 +27,7 @@
 #include "modularity/ioc.h"
 
 #include "internal/uiengine.h"
+#include "internal/mainwindow.h"
 #include "internal/uiconfiguration.h"
 #include "internal/interactiveuriregister.h"
 #include "internal/uiactionsregister.h"
@@ -35,16 +36,16 @@
 
 #ifdef Q_OS_MAC
 #include "internal/platform/macos/macosplatformtheme.h"
-#include "view/platform/macos/macosmainwindowprovider.h"
+#include "view/platform/macos/macosmainwindowbridge.h"
 #elif defined(Q_OS_WIN)
 #include "internal/platform/windows/windowsplatformtheme.h"
-#include "view/mainwindowprovider.h"
+#include "view/mainwindowbridge.h"
 #elif defined(Q_OS_LINUX)
 #include "internal/platform/linux/linuxplatformtheme.h"
-#include "view/mainwindowprovider.h"
+#include "view/mainwindowbridge.h"
 #else
 #include "internal/platform/stub/stubplatformtheme.h"
-#include "view/mainwindowprovider.h"
+#include "view/mainwindowbridge.h"
 #endif
 
 #include "view/qmltooltip.h"
@@ -59,27 +60,13 @@
 #include "view/focuslistener.h"
 
 #include "view/internal/errordetailsmodel.h"
+#include "view/internal/progressdialogmodel.h"
 
 #include "dev/interactivetestsmodel.h"
 #include "dev/testdialog.h"
 
 using namespace mu::ui;
 using namespace mu::modularity;
-
-static std::shared_ptr<UiConfiguration> s_configuration = std::make_shared<UiConfiguration>();
-static std::shared_ptr<UiActionsRegister> s_uiactionsRegister = std::make_shared<UiActionsRegister>();
-static std::shared_ptr<NavigationController> s_keyNavigationController = std::make_shared<NavigationController>();
-static std::shared_ptr<NavigationUiActions> s_keyNavigationUiActions = std::make_shared<NavigationUiActions>();
-
-#ifdef Q_OS_MAC
-static std::shared_ptr<MacOSPlatformTheme> s_platformTheme = std::make_shared<MacOSPlatformTheme>();
-#elif defined(Q_OS_WIN)
-static std::shared_ptr<WindowsPlatformTheme> s_platformTheme = std::make_shared<WindowsPlatformTheme>();
-#elif defined(Q_OS_LINUX)
-static std::shared_ptr<LinuxPlatformTheme> s_platformTheme = std::make_shared<LinuxPlatformTheme>();
-#else
-static std::shared_ptr<StubPlatformTheme> s_platformTheme = std::make_shared<StubPlatformTheme>();
-#endif
 
 static void ui_init_qrc()
 {
@@ -93,20 +80,36 @@ std::string UiModule::moduleName() const
 
 void UiModule::registerExports()
 {
-    ioc()->registerExport<IUiConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<UiConfiguration>();
+    m_uiactionsRegister = std::make_shared<UiActionsRegister>();
+    m_keyNavigationController = std::make_shared<NavigationController>();
+    m_keyNavigationUiActions = std::make_shared<NavigationUiActions>();
+
+    #ifdef Q_OS_MAC
+    m_platformTheme = std::make_shared<MacOSPlatformTheme>();
+    #elif defined(Q_OS_WIN)
+    m_platformTheme = std::make_shared<WindowsPlatformTheme>();
+    #elif defined(Q_OS_LINUX)
+    m_platformTheme = std::make_shared<LinuxPlatformTheme>();
+    #else
+    m_platformTheme = std::make_shared<StubPlatformTheme>();
+    #endif
+
+    ioc()->registerExport<IUiConfiguration>(moduleName(), m_configuration);
     ioc()->registerExportNoDelete<IUiEngine>(moduleName(), UiEngine::instance());
+    ioc()->registerExport<IMainWindow>(moduleName(), new MainWindow());
     ioc()->registerExport<IInteractiveProvider>(moduleName(), UiEngine::instance()->interactiveProvider());
     ioc()->registerExport<IInteractiveUriRegister>(moduleName(), new InteractiveUriRegister());
-    ioc()->registerExport<IPlatformTheme>(moduleName(), s_platformTheme);
-    ioc()->registerExport<IUiActionsRegister>(moduleName(), s_uiactionsRegister);
-    ioc()->registerExport<INavigationController>(moduleName(), s_keyNavigationController);
+    ioc()->registerExport<IPlatformTheme>(moduleName(), m_platformTheme);
+    ioc()->registerExport<IUiActionsRegister>(moduleName(), m_uiactionsRegister);
+    ioc()->registerExport<INavigationController>(moduleName(), m_keyNavigationController);
 }
 
 void UiModule::resolveImports()
 {
     auto ar = ioc()->resolve<IUiActionsRegister>(moduleName());
     if (ar) {
-        ar->reg(s_keyNavigationUiActions);
+        ar->reg(m_keyNavigationUiActions);
     }
 
     auto ir = modularity::ioc()->resolve<IInteractiveUriRegister>(moduleName());
@@ -143,12 +146,13 @@ void UiModule::registerUiTypes()
     qmlRegisterType<FocusListener>("MuseScore.Ui", 1, 0, "FocusListener");
 
 #ifdef Q_OS_MAC
-    qmlRegisterType<MacOSMainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
+    qmlRegisterType<MacOSMainWindowBridge>("MuseScore.Ui", 1, 0, "MainWindowBridge");
 #else
-    qmlRegisterType<MainWindowProvider>("MuseScore.Ui", 1, 0, "MainWindowProvider");
+    qmlRegisterType<MainWindowBridge>("MuseScore.Ui", 1, 0, "MainWindowBridge");
 #endif
 
     qmlRegisterType<ErrorDetailsModel>("MuseScore.Ui", 1, 0, "ErrorDetailsModel");
+    qmlRegisterType<ProgressDialogModel>("MuseScore.Ui", 1, 0, "ProgressDialogModel");
 
     qmlRegisterType<InteractiveTestsModel>("MuseScore.Ui", 1, 0, "InteractiveTestsModel");
     qRegisterMetaType<TestDialog>("TestDialog");
@@ -156,37 +160,44 @@ void UiModule::registerUiTypes()
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(ui_QML_IMPORT);
 }
 
-void UiModule::onPreInit(const framework::IApplication::RunMode&)
+void UiModule::onPreInit(const framework::IApplication::RunMode& mode)
 {
-    s_configuration->initSettings();
+    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+        return;
+    }
+
+    m_configuration->init();
 }
 
-void UiModule::onInit(const framework::IApplication::RunMode&)
+void UiModule::onInit(const framework::IApplication::RunMode& mode)
 {
+    if (mode != framework::IApplication::RunMode::GuiApp) {
+        return;
+    }
+
     QFontDatabase::addApplicationFont(":/fonts/mscore/MusescoreIcon.ttf"); // icons
 
-    s_configuration->initThemes();
-    s_keyNavigationController->init();
+    m_keyNavigationController->init();
 }
 
 void UiModule::onAllInited(const framework::IApplication::RunMode& mode)
 {
-    if (framework::IApplication::RunMode::Editor != mode) {
+    if (framework::IApplication::RunMode::GuiApp != mode) {
         return;
     }
 
     //! NOTE Some of the settings are taken from the workspace,
     //! we need to be sure that the workspaces are initialized.
     //! So, we loads these settings on onStartApp
-    s_configuration->load();
+    m_configuration->load();
 
     //! NOTE UIActions are collected from many modules, and these modules determine the state of their UIActions.
     //! All modules need to be initialized in order to get the correct state of UIActions.
     //! So, we do init on onStartApp
-    s_uiactionsRegister->init();
+    m_uiactionsRegister->init();
 }
 
 void UiModule::onDeinit()
 {
-    s_configuration->deinit();
+    m_configuration->deinit();
 }

@@ -54,11 +54,11 @@ void AbPaintProvider::beforeEndTargetHook(draw::Painter* painter)
 
     draw::IPaintProviderPtr provider = painter->provider();
 
-    if (m_diff.dataRemoved && !m_diff.dataRemoved->objects.empty()) {
+    if (m_diff.dataRemoved && !m_diff.dataRemoved->empty()) {
         paintData(provider, m_diff.dataRemoved, REMOVED_COLOR);
     }
 
-    if (m_diff.dataAdded && !m_diff.dataAdded->objects.empty()) {
+    if (m_diff.dataAdded && !m_diff.dataAdded->empty()) {
         paintData(provider, m_diff.dataAdded, ADDED_COLOR);
     }
 }
@@ -67,51 +67,47 @@ void AbPaintProvider::paintData(draw::IPaintProviderPtr provider, const draw::Dr
 {
     using namespace mu::draw;
 
-    for (const DrawData::Object& obj : data->objects) {
-        if (obj.name == NOTATION_DEFAULT_OBJ) {
-            continue;
+    const DrawData::Item& obj = data->item;
+
+    for (const DrawData::Data& d : obj.datas) {
+        DrawData::State st = data->states.at(d.state);
+        st.pen.setColor(overcolor);
+        st.pen.setWidthF(10.);
+        st.brush.setColor(overcolor);
+
+        provider->setPen(st.pen);
+        provider->setBrush(st.brush);
+        provider->setFont(st.font);
+        provider->setTransform(st.transform);
+        provider->setAntialiasing(st.isAntialiasing);
+        provider->setCompositionMode(st.compositionMode);
+
+        for (const DrawPath& path : d.paths) {
+            provider->setPen(path.pen);
+            provider->setBrush(path.brush);
+            provider->drawPath(path.path);
         }
 
-        for (const DrawData::Data& d : obj.datas) {
-            DrawData::State st = d.state;
-            st.pen.setColor(overcolor);
-            st.pen.setWidthF(10.);
-            st.brush.setColor(overcolor);
-
-            provider->setPen(st.pen);
-            provider->setBrush(st.brush);
-            provider->setFont(st.font);
-            provider->setTransform(st.transform);
-            provider->setAntialiasing(st.isAntialiasing);
-            provider->setCompositionMode(st.compositionMode);
-
-            for (const DrawPath& path : d.paths) {
-                provider->setPen(path.pen);
-                provider->setBrush(path.brush);
-                provider->drawPath(path.path);
+        for (const DrawPolygon& pl : d.polygons) {
+            if (pl.polygon.empty()) {
+                continue;
             }
+            provider->drawPolygon(&pl.polygon[0], pl.polygon.size(), pl.mode);
+        }
 
-            for (const DrawPolygon& pl : d.polygons) {
-                if (pl.polygon.empty()) {
-                    continue;
-                }
-                provider->drawPolygon(&pl.polygon[0], pl.polygon.size(), pl.mode);
+        for (const DrawText& t : d.texts) {
+            if (t.mode == DrawText::Point) {
+                provider->drawText(t.rect.topLeft(), t.text);
+            } else {
+                provider->drawText(t.rect, t.flags, t.text);
             }
+        }
 
-            for (const DrawText& t : d.texts) {
-                if (t.mode == DrawText::Point) {
-                    provider->drawText(t.rect.topLeft(), t.text);
-                } else {
-                    provider->drawText(t.rect, t.flags, t.text);
-                }
-            }
-
-            for (const DrawPixmap& px : d.pixmaps) {
-                if (px.mode == DrawPixmap::Single) {
-                    provider->drawPixmap(px.rect.topLeft(), px.pm);
-                } else {
-                    provider->drawTiledPixmap(px.rect, px.pm, px.offset);
-                }
+        for (const DrawPixmap& px : d.pixmaps) {
+            if (px.mode == DrawPixmap::Single) {
+                provider->drawPixmap(px.rect.topLeft(), px.pm);
+            } else {
+                provider->drawTiledPixmap(px.rect, px.pm, px.offset);
             }
         }
     }

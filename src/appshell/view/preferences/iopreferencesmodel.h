@@ -36,10 +36,10 @@ class IOPreferencesModel : public QObject, public async::Asyncable
 {
     Q_OBJECT
 
-    INJECT(appshell, audio::IAudioConfiguration, audioConfiguration)
-    INJECT(appshell, midi::IMidiConfiguration, midiConfiguration)
-    INJECT(appshell, midi::IMidiOutPort, midiOutPort)
-    INJECT(appshell, midi::IMidiInPort, midiInPort)
+    INJECT(audio::IAudioConfiguration, audioConfiguration)
+    INJECT(midi::IMidiConfiguration, midiConfiguration)
+    INJECT(midi::IMidiOutPort, midiOutPort)
+    INJECT(midi::IMidiInPort, midiInPort)
 
     Q_PROPERTY(int currentAudioApiIndex READ currentAudioApiIndex WRITE setCurrentAudioApiIndex NOTIFY currentAudioApiIndexChanged)
 

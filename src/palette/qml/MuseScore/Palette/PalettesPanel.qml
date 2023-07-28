@@ -34,14 +34,14 @@ Item {
     id: root
 
     property NavigationSection navigationSection: null
+    property NavigationPanel navigationPanel: palettesPanelHeader.navigation // first panel
+
     property alias contextMenuModel: contextMenuModel
 
     readonly property PaletteProvider paletteProvider: paletteRootModel.paletteProvider
 
     implicitHeight: 4 * palettesPanelHeader.implicitHeight
     implicitWidth: paletteTree.implicitWidth
-
-    enabled: paletteRootModel.paletteEnabled
 
     function applyCurrentPaletteElement() {
         paletteTree.applyCurrentElement();
@@ -64,6 +64,9 @@ Item {
 
         onPaletteSearchRequested: {
             palettesPanelHeader.startSearch()
+        }
+        onApplyCurrentPaletteElementRequested: {
+            root.applyCurrentPaletteElement()
         }
     }
 
@@ -139,7 +142,7 @@ Item {
             paletteProvider: root.paletteProvider
 
             navigation.section: root.navigationSection
-            navigation.order: 5
+            navigation.order: palettesPanelHeader.navigation.order + 1
 
             filter: palettesPanelHeader.searchText
             enableAnimations: !palettesPanelHeader.isSearchFieldFocused

@@ -22,9 +22,13 @@
 #ifndef MU_LEARN_LEARNMODULE_H
 #define MU_LEARN_LEARNMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::learn {
+class LearnConfiguration;
+class LearnService;
 class LearnModule : public modularity::IModuleSetup
 {
 public:
@@ -32,7 +36,12 @@ public:
     void registerExports() override;
     void registerResources() override;
     void registerUiTypes() override;
+    void onInit(const framework::IApplication::RunMode& mode) override;
     void onDelayedInit() override;
+
+private:
+    std::shared_ptr<LearnConfiguration> m_learnConfiguration;
+    std::shared_ptr<LearnService> m_learnService;
 };
 }
 

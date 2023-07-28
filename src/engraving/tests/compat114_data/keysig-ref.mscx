@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <frameSystemDistance>7</frameSystemDistance>
@@ -29,7 +27,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           </StaffType>
-        <bracket type="-1" span="1" col="0"/>
+        <bracket type="-1" span="1" col="0" visible="1"/>
         </Staff>
       <trackName>Voice</trackName>
       <Instrument id="voice">
@@ -82,7 +80,11 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -120,7 +122,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -155,7 +157,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>2</accidental>
+            <concertKey>2</concertKey>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -190,7 +192,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <accidental>-3</accidental>
+            <concertKey>-3</concertKey>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>

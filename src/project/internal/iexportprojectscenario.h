@@ -22,10 +22,11 @@
 #ifndef MU_PROJECT_IEXPORTPROJECTSCENARIO_H
 #define MU_PROJECT_IEXPORTPROJECTSCENARIO_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "notation/inotation.h"
 #include "inotationwriter.h"
 #include "exporttype.h"
+#include "projecttypes.h"
 
 namespace mu::project {
 class IExportProjectScenario : MODULE_EXPORT_INTERFACE
@@ -36,15 +37,15 @@ public:
     virtual std::vector<INotationWriter::UnitType> supportedUnitTypes(const ExportType& exportType) const = 0;
 
     virtual RetVal<io::path_t> askExportPath(const notation::INotationPtrList& notations, const ExportType& exportType,
-                                             INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART) const = 0;
+                                             INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
+                                             io::path_t defaultPath = "") const = 0;
 
-    virtual bool exportScores(const notation::INotationPtrList& notations, const io::path_t& destinationPath,
+    virtual bool exportScores(const notation::INotationPtrList& notations, const io::path_t destinationPath,
                               INotationWriter::UnitType unitType = INotationWriter::UnitType::PER_PART,
                               bool openDestinationFolderOnExport = false) const = 0;
 
-    virtual framework::Progress progress() const = 0;
-
-    virtual void abort() = 0;
+    virtual const ExportInfo& exportInfo() const = 0;
+    virtual void setExportInfo(const ExportInfo& exportInfo) = 0;
 };
 }
 

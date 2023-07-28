@@ -54,6 +54,10 @@ using system_idx_t = size_t;
 using part_idx_t = size_t;
 using page_idx_t = size_t;
 
+using string_idx_t = size_t;
+
+using semitone_t = int8_t;
+
 //-------------------------------------------------------------------
 ///   The value of this enum determines the "stacking order"
 ///   of elements on the canvas.
@@ -93,10 +97,13 @@ enum class ElementType {
     MEASURE_REPEAT,
     TIE,
     ARTICULATION,
+    ORNAMENT,
     FERMATA,
     CHORDLINE,
     DYNAMIC,
+    EXPRESSION,
     BEAM,
+    BEAM_SEGMENT,
     HOOK,
     LYRICS,
     FIGURED_BASS,
@@ -108,12 +115,14 @@ enum class ElementType {
     STAFF_TEXT,
     SYSTEM_TEXT,
     PLAYTECH_ANNOTATION,
+    CAPO,
     TRIPLET_FEEL,
     REHEARSAL_MARK,
     INSTRUMENT_CHANGE,
     STAFFTYPE_CHANGE,
     HARMONY,
     FRET_DIAGRAM,
+    HARP_DIAGRAM,
     BEND,
     STRETCHED_BEND,
     TREMOLOBAR,
@@ -295,13 +304,18 @@ enum class Orientation : signed char {
 
 // P_TYPE::BEAM_MODE
 //! Note: for historical reasons, these have strange names
+//!
 enum class BeamMode : signed char {
     INVALID = -1,
     AUTO,
     NONE,
     BEGIN,
+    // TODO:
+    // strange names aside, mscx files refer to BEGIN16 and BEGIN32 as begin32/begin64, which would describe the 3rd and 4th beams,
+    // which is wildly incorrect.These enum names are CORRECT, but I haven't touched the mscx files yet.
+    // changing this for the save files would necessitate some serious file version / import work. -A
+    BEGIN16,
     BEGIN32,
-    BEGIN64,
     MID,
     END
 };
@@ -475,6 +489,9 @@ enum class NoteHeadGroup : signed char {
     HEAD_H,
     HEAD_H_SHARP,
 
+    HEAD_SWISS_RUDIMENTS_FLAM,
+    HEAD_SWISS_RUDIMENTS_DOUBLE,
+
     HEAD_CUSTOM,
     HEAD_GROUPS,
     HEAD_INVALID = -1
@@ -519,6 +536,12 @@ enum class ClefType : signed char {
     TAB_SERIF,
     TAB4_SERIF,
     MAX
+};
+
+enum class ClefToBarlinePosition : char {
+    AUTO,
+    BEFORE,
+    AFTER
 };
 
 // P_TYPE::DYNAMIC_TYPE
@@ -597,6 +620,63 @@ enum class ArpeggioType : unsigned char {
     NORMAL, UP, DOWN, BRACKET, UP_STRAIGHT, DOWN_STRAIGHT
 };
 
+enum class IntervalStep {
+    UNISON,
+    SECOND,
+    THIRD,
+    FOURTH,
+    FIFTH,
+    SIXTH,
+    SEVENTH,
+    OCTAVE
+};
+
+enum class IntervalType {
+    AUTO,
+    AUGMENTED,
+    MAJOR,
+    PERFECT,
+    MINOR,
+    DIMINISHED
+};
+
+struct OrnamentInterval
+{
+    IntervalStep step = IntervalStep::SECOND;
+    IntervalType type = IntervalType::AUTO;
+
+    OrnamentInterval() = default;
+    OrnamentInterval(IntervalStep s, IntervalType t)
+        : step(s), type(t) {}
+
+    inline bool operator ==(const OrnamentInterval& interval) const { return step == interval.step && type == interval.type; }
+    inline bool operator !=(const OrnamentInterval& interval) const { return !operator ==(interval); }
+
+    static bool isPerfectStep(IntervalStep step)
+    {
+        static const std::unordered_set<IntervalStep> perfectSteps {
+            IntervalStep::UNISON,
+            IntervalStep::FOURTH,
+            IntervalStep::FIFTH,
+            IntervalStep::OCTAVE
+        };
+        return mu::contains(perfectSteps, step);
+    }
+
+    bool isPerfect() const
+    {
+        return isPerfectStep(step);
+    }
+};
+
+static const OrnamentInterval DEFAULT_ORNAMENT_INTERVAL = OrnamentInterval(IntervalStep::SECOND, IntervalType::AUTO);
+
+enum class OrnamentShowAccidental {
+    DEFAULT,
+    ANY_ALTERATION,
+    ALWAYS,
+};
+
 //-------------------------------------------------------------------
 //   Tid
 ///   Enumerates the list of built-in text substyles
@@ -627,6 +707,7 @@ enum class TextStyleType {
 
     // System-level styles
     TEMPO,
+    TEMPO_CHANGE,
     METRONOME,
     REPEAT_LEFT,       // align to start of measure
     REPEAT_RIGHT,      // align to end of measure
@@ -652,6 +733,8 @@ enum class TextStyleType {
     LH_GUITAR_FINGERING,
     RH_GUITAR_FINGERING,
     STRING_NUMBER,
+    HARP_PEDAL_DIAGRAM,
+    HARP_PEDAL_TEXT_DIAGRAM,
 
     // Line-oriented styles
     TEXTLINE,
@@ -843,8 +926,6 @@ enum class JumpType : char {
     DSS_AL_CODA,
     DSS_AL_DBLCODA,
     DSS_AL_FINE,
-    DCODA,
-    DDBLCODA,
     USER
 };
 
@@ -857,6 +938,8 @@ enum class MarkerType : char {
     FINE,
     TOCODA,
     TOCODASYM,
+    DA_CODA,
+    DA_DBLCODA,
     USER
 };
 
@@ -871,6 +954,21 @@ enum class TrillType : char {
 
 enum class VibratoType : char {
     GUITAR_VIBRATO, GUITAR_VIBRATO_WIDE, VIBRATO_SAWTOOTH, VIBRATO_SAWTOOTH_WIDE
+};
+
+enum class ArticulationTextType {
+    NO_TEXT,
+    TAP,
+    SLAP,
+    POP
+};
+
+enum class LyricsSyllabic : char {
+    SINGLE, BEGIN, END, MIDDLE
+};
+
+enum class SpannerSegmentType {
+    SINGLE, BEGIN, MIDDLE, END
 };
 
 //---------------------------------------------------------
@@ -909,6 +1007,19 @@ static inline bool operator!=(const Key a, const Key b) { return static_cast<int
 static inline Key operator+=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) + static_cast<int>(b)); }
 static inline Key operator-=(Key& a, const Key& b) { return a = Key(static_cast<int>(a) - static_cast<int>(b)); }
 
+struct SwingParameters {
+    int swingUnit = 0;
+    int swingRatio = 0;
+
+    bool isOn() const { return swingUnit != 0; }
+};
+
+struct CapoParams {
+    bool active = false;
+    int fretPosition = 0;
+    std::unordered_set<string_idx_t> ignoredStrings;
+};
+
 struct PartAudioSettingsCompat {
     InstrumentTrackId instrumentId;
     bool mute = false;
@@ -919,6 +1030,33 @@ struct PartAudioSettingsCompat {
 struct SettingsCompat {
     std::map<ID /*partid*/, PartAudioSettingsCompat> audioSettings;
 };
+
+//---------------------------------------------------------
+//   UpdateMode
+//    There is an implied order from least invasive update
+//    to most invasive update. LayoutAll is fallback and
+//    recreates all.
+//---------------------------------------------------------
+
+enum class UpdateMode {
+    DoNothing,
+    Update,             // do screen refresh of RectF "refresh"
+    UpdateAll,          // do complete screen refresh
+    Layout,             // do partial layout for tick range
+};
+
+//---------------------------------------------------------
+//   LayoutFlag bits
+//---------------------------------------------------------
+
+enum class LayoutFlag : char {
+    NO_FLAGS       = 0,
+    FIX_PITCH_VELO = 1,
+    PLAY_EVENTS    = 2,
+    REBUILD_MIDI_MAPPING = 4,
+};
+
+typedef Flags<LayoutFlag> LayoutFlags;
 } // mu::engraving
 
 template<>

@@ -33,17 +33,16 @@ namespace mu::engraving {
 class SystemText : public StaffTextBase
 {
     OBJECT_ALLOCATOR(engraving, SystemText)
-
-    void layout() override;
-
-protected:
-    PropertyValue propertyDefault(Pid id) const override;
+    DECLARE_CLASSOF(ElementType::SYSTEM_TEXT)
 
 public:
     SystemText(Segment* parent, TextStyleType = TextStyleType::SYSTEM, ElementType type = ElementType::SYSTEM_TEXT);
 
     SystemText* clone() const override { return new SystemText(*this); }
     Segment* segment() const { return (Segment*)explicitParent(); }
+
+protected:
+    PropertyValue propertyDefault(Pid id) const override;
 };
 } // namespace mu::engraving
 #endif

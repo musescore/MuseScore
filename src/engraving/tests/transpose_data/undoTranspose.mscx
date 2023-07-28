@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.00">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <frameSystemDistance>1</frameSystemDistance>
       <minMeasureWidth>4</minMeasureWidth>
       <endBarDistance>0.3</endBarDistance>
       <bracketWidth>0.35</bracketWidth>
-      <bracketDistance>0.25</bracketDistance>
       <barNoteDistance>0.6</barNoteDistance>
       <beamWidth>0.48</beamWidth>
       <beamMinLen>1.25</beamMinLen>

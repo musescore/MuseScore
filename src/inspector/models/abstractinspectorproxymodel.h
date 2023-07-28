@@ -38,7 +38,7 @@ class AbstractInspectorProxyModel : public AbstractInspectorModel
 
     Q_PROPERTY(InspectorModelType defaultSubModelType READ defaultSubModelType NOTIFY defaultSubModelTypeChanged)
 
-    INJECT(inspector, IInspectorModelCreator, inspectorModelCreator)
+    INJECT(IInspectorModelCreator, inspectorModelCreator)
 
 public:
     explicit AbstractInspectorProxyModel(QObject* parent, IElementRepositoryService* repository);
@@ -62,6 +62,8 @@ public:
     bool isEmpty() const override;
 
     void updateModels(const ElementKeySet& newElementKeySet);
+
+    void onCurrentNotationChanged() override;
 
 public slots:
     void setDefaultSubModelType(mu::inspector::InspectorModelType modelType);

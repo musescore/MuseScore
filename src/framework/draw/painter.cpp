@@ -34,6 +34,7 @@ using namespace mu;
 using namespace mu::draw;
 
 IPaintProviderPtr Painter::extended;
+bool PainterItemMarker::enabled = true;
 
 Painter::Painter(IPaintProviderPtr provider, const std::string& name)
     : m_provider(provider), m_name(name)
@@ -65,6 +66,11 @@ Painter::~Painter()
 
 void Painter::init()
 {
+    m_provider->beginTarget(m_name);
+    if (extended) {
+        extended->beginTarget(m_name);
+    }
+
     State st;
     st.worldTransform = m_provider->transform();
     st.isWxF = true;
@@ -72,11 +78,6 @@ void Painter::init()
 
     m_states = std::stack<State>();
     m_states.push(std::move(st));
-
-    m_provider->beginTarget(m_name);
-    if (extended) {
-        extended->beginTarget(m_name);
-    }
 }
 
 IPaintProviderPtr Painter::provider() const
@@ -116,11 +117,11 @@ bool Painter::isActive() const
     return m_provider->isActive();
 }
 
-void Painter::beginObject(const std::string& name, const PointF& pagePos)
+void Painter::beginObject(const std::string& name)
 {
-    m_provider->beginObject(name, pagePos);
+    m_provider->beginObject(name);
     if (extended) {
-        extended->beginObject(name, pagePos);
+        extended->beginObject(name);
     }
 }
 
@@ -530,6 +531,11 @@ void Painter::updateMatrix()
     if (extended) {
         extended->setTransform(st.transform);
     }
+}
+
+bool Painter::hasClipping() const
+{
+    return m_provider->hasClipping();
 }
 
 void Painter::setClipRect(const RectF& rect)

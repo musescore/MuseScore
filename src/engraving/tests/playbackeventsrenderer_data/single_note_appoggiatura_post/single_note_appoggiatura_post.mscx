@@ -3,8 +3,6 @@
   <programVersion>4.0.0</programVersion>
   <programRevision></programRevision>
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <pageWidth>8.26772</pageWidth>
@@ -91,7 +89,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="2"/>
+        <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">

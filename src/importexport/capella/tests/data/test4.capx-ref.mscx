@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <minSystemDistance>8</minSystemDistance>
@@ -51,6 +49,7 @@
           <Clef>
             <concertClefType>G</concertClefType>
             <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -140,8 +139,8 @@
           </LayoutBreak>
         <voice>
           <Beam>
-            <l1>-6</l1>
-            <l2>-8</l2>
+            <l1>-4</l1>
+            <l2>-6</l2>
             </Beam>
           <Chord>
             <durationType>eighth</durationType>

@@ -35,6 +35,13 @@ elseif(OS_IS_LIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.h
     )
+elseif(OS_IS_FBSD)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/alsamidiinport.h
+    )
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidioutport.cpp

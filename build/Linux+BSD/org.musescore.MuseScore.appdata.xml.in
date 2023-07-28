@@ -69,7 +69,7 @@
         <control>touch</control>
         <internet>always</internet>
     </supports>
-    <project_license>GPL-3.0</project_license>
+    <project_license>GPL-3.0-only</project_license>
     <developer_name>MuseScore BVBA</developer_name>
     <screenshots>
         <screenshot type="default">

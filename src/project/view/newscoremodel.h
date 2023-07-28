@@ -37,10 +37,10 @@ class NewScoreModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(project, IProjectConfiguration, configuration)
-    INJECT(project, IProjectCreator, notationCreator)
-    INJECT(project, context::IGlobalContext, globalContext)
-    INJECT(project, notation::IInstrumentsRepository, instrumentsRepository)
+    INJECT(IProjectConfiguration, configuration)
+    INJECT(IProjectCreator, notationCreator)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(notation::IInstrumentsRepository, instrumentsRepository)
 
 public:
     explicit NewScoreModel(QObject* parent = nullptr);

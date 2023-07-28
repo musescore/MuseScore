@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <Spatium>1.74978</Spatium>
@@ -1365,8 +1363,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>6</l1>
-            <l2>6</l2>
+            <l1>4</l1>
+            <l2>4</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1449,8 +1447,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>-2</l1>
-            <l2>-2</l2>
+            <l1>-4</l1>
+            <l2>-4</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1491,8 +1489,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>-10</l1>
-            <l2>-10</l2>
+            <l1>-12</l1>
+            <l2>-12</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1533,8 +1531,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>50</l1>
-            <l2>50</l2>
+            <l1>52</l1>
+            <l2>52</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1578,8 +1576,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>42</l1>
-            <l2>42</l2>
+            <l1>44</l1>
+            <l2>44</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1620,8 +1618,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>34</l1>
-            <l2>34</l2>
+            <l1>36</l1>
+            <l2>36</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>
@@ -1708,8 +1706,8 @@
             <durationType>32nd</durationType>
             </Rest>
           <Beam>
-            <l1>26</l1>
-            <l2>26</l2>
+            <l1>28</l1>
+            <l2>28</l2>
             </Beam>
           <Chord>
             <durationType>64th</durationType>

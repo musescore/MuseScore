@@ -26,7 +26,8 @@
 
 #include "palettecell.h"
 
-#include "libmscore/engravingitem.h"
+#include "engraving/rendering/isinglerendering.h"
+#include "engraving/libmscore/engravingitem.h"
 
 #include "types/translatablestring.h"
 #include "actions/actiontypes.h"
@@ -49,9 +50,10 @@ class Palette : public QObject
 {
     Q_GADGET
 
-    INJECT_STATIC(palette, IPaletteConfiguration, configuration)
-    INJECT_STATIC(palette, ui::IUiActionsRegister, actionsRegister)
-    INJECT(palette, framework::IInteractive, interactive)
+    INJECT_STATIC(IPaletteConfiguration, configuration)
+    INJECT_STATIC(ui::IUiActionsRegister, actionsRegister)
+    INJECT_STATIC(engraving::rendering::ISingleRendering, engravingRendering)
+    INJECT(framework::IInteractive, interactive)
 
 public:
     enum class Type {
@@ -83,6 +85,7 @@ public:
         Guitar,
         Keyboard,
         Pitch,
+        Harp,
         Custom
     };
     Q_ENUM(Type)
@@ -159,8 +162,8 @@ public:
     bool isExpanded() const { return m_isExpanded; }
     void setExpanded(bool val) { m_isExpanded = val; }
 
-    bool read(engraving::XmlReader&);
-    void write(engraving::XmlWriter&) const;
+    bool read(engraving::XmlReader&, bool pasteMode);
+    void write(engraving::XmlWriter&, bool pasteMode) const;
     static PalettePtr fromMimeData(const QByteArray& data);
     QByteArray toMimeData() const;
 

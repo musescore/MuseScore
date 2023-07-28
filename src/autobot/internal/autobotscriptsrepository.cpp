@@ -51,7 +51,7 @@ Scripts AutobotScriptsRepository::scripts() const
         if (!engine.evaluate()) {
             LOGW() << "Bad script: " << p;
             s.type = ScriptType::Undefined;
-            s.title = io::basename(p).toQString();
+            s.title = io::completeBasename(p).toQString();
             scripts.push_back(std::move(s));
             continue;
         }
@@ -60,7 +60,7 @@ Scripts AutobotScriptsRepository::scripts() const
         TestCase tc(tcVal);
         if (!tc.isValid()) {
             s.type = ScriptType::Custom;
-            s.title = io::basename(p).toQString();
+            s.title = io::completeBasename(p).toQString();
             scripts.push_back(std::move(s));
             continue;
         }

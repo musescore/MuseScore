@@ -36,7 +36,7 @@ void MainWindowTitleProvider::load()
 
     context()->currentProjectChanged().onNotify(this, [this]() {
         if (auto currentProject = context()->currentProject()) {
-            currentProject->pathChanged().onNotify(this, [this]() {
+            currentProject->displayNameChanged().onNotify(this, [this]() {
                 update();
             });
 

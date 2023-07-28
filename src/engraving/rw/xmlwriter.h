@@ -32,7 +32,6 @@
 
 namespace mu::engraving {
 class EngravingObject;
-class WriteContext;
 class XmlWriter : public XmlStreamWriter
 {
 public:
@@ -64,9 +63,6 @@ public:
 
     void comment(const String& text);
 
-    WriteContext* context() const;
-    void setContext(WriteContext* context);
-
     static String xmlString(const String&);
 
 private:
@@ -74,9 +70,6 @@ private:
 
     std::vector<std::pair<const EngravingObject*, AsciiStringView> > _elements;
     bool _recordElements = false;
-
-    mutable WriteContext* m_context = nullptr;
-    mutable bool m_selfContext = false;
 };
 }
 

@@ -35,6 +35,8 @@ Rectangle {
     property alias notationView: popupController.notationView
 
     property NavigationSection navigationSection: null
+    property NavigationPanel navigationPanel: inspectorRepeater.count > 0 ? inspectorRepeater.itemAt(0).navigationPanel : null // first panel
+    property int navigationOrderStart: 0
 
     color: ui.theme.backgroundPrimaryColor
 
@@ -105,6 +107,8 @@ Rectangle {
 
                     spacing: contentColumn.spacing
 
+                    property var navigationPanel: _item.navigationPanel
+
                     SeparatorLine {
                         anchors.margins: -12
 
@@ -112,10 +116,17 @@ Rectangle {
                     }
 
                     InspectorSectionDelegate {
+                        id: _item
+
                         sectionModel: model.inspectorSectionModel
-                        index: model.index
                         anchorItem: root
-                        navigationSection: root.navigationSection
+                        navigationPanel.section: root.navigationSection
+                        navigationPanel.order: root.navigationOrderStart + model.index
+                        navigationPanel.onOrderChanged: {
+                            if (model.index === 0) {
+                                root.navigationOrderStart = navigationPanel.order
+                            }
+                        }
 
                         onReturnToBoundsRequested: {
                             flickableArea.returnToBounds()

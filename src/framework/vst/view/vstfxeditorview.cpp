@@ -22,11 +22,7 @@
 
 #include "vstfxeditorview.h"
 
-#include "vsttypes.h"
-#include "internal/vstplugin.h"
-
 using namespace mu::vst;
-using namespace Steinberg;
 
 VstFxEditorView::VstFxEditorView(QWidget* parent)
     : AbstractVstEditorView(parent)

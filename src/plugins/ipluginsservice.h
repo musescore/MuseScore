@@ -27,7 +27,7 @@
 #include "types/retval.h"
 #include "types/translatablestring.h"
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 namespace mu::plugins {
 class IPluginsService : MODULE_EXPORT_INTERFACE

@@ -3,8 +3,6 @@
   <programVersion>3.5.2</programVersion>
   <programRevision>465e7b6</programRevision>
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>

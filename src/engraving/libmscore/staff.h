@@ -49,21 +49,7 @@ class Score;
 class StaffType;
 class TimeSig;
 
-class XmlReader;
-class XmlWriter;
-
 enum class Key;
-
-//---------------------------------------------------------
-//   SwingParameters
-//---------------------------------------------------------
-
-struct SwingParameters {
-    int swingUnit = 0;
-    int swingRatio = 0;
-
-    bool isOn() const { return swingUnit != 0; }
-};
 
 //---------------------------------------------------------
 //    Staff
@@ -106,7 +92,7 @@ private:
 
     std::map<int, int> _channelList[VOICES];
     std::map<int, SwingParameters> _swingList;
-    std::map<int, int> _capoList;
+    std::map<int, CapoParams> _capoMap;
     bool _playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
 
@@ -125,7 +111,7 @@ private:
 
     friend class Excerpt;
     void setVoiceVisible(voice_idx_t voice, bool visible);
-    void updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks);
+    void updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks);
 
 public:
     Staff* clone() const override;
@@ -143,9 +129,7 @@ public:
     String partName() const;
     staff_idx_t rstaff() const;
     staff_idx_t idx() const;
-    void read(XmlReader&) override;
-    bool readProperties(XmlReader&) override;
-    void write(XmlWriter& xml) const override;
+
     Part* part() const { return _part; }
     void setPart(Part* p) { _part = p; }
 
@@ -153,6 +137,7 @@ public:
     size_t bracketSpan(size_t idx) const;
     void setBracketType(size_t idx, BracketType val);
     void setBracketSpan(size_t idx, size_t val);
+    void setBracketVisible(size_t idx, bool v);
     void swapBracket(size_t oldIdx, size_t newIdx);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
     void addBracket(BracketItem*);
@@ -186,8 +171,11 @@ public:
 
     const Groups& group(const Fraction&) const;
 
+    Interval transpose(const Fraction& tick) const;
+
     KeyList* keyList() { return &_keys; }
     Key key(const Fraction& tick) const { return keySigEvent(tick).key(); }
+    Key concertKey(const Fraction& tick) const { return keySigEvent(tick).concertKey(); }
     KeySigEvent keySigEvent(const Fraction&) const;
     Fraction nextKeyTick(const Fraction&) const;
     Fraction currentKeyTick(const Fraction&) const;
@@ -219,9 +207,6 @@ public:
 
     int channel(const Fraction&, voice_idx_t voice) const;
 
-    std::list<Note*> getNotes() const;
-    void addChord(std::list<Note*>& list, Chord* chord, voice_idx_t voice) const;
-
     void clearChannelList(voice_idx_t voice) { _channelList[voice].clear(); }
     void insertIntoChannelList(voice_idx_t voice, const Fraction& tick, int channelId)
     {
@@ -232,9 +217,9 @@ public:
     void clearSwingList() { _swingList.clear(); }
     void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { _swingList.insert({ tick.ticks(), sp }); }
 
-    int capo(const Fraction&) const;
-    void clearCapoList() { _capoList.clear(); }
-    void insertIntoCapoList(const Fraction& tick, int fretId) { _capoList.insert({ tick.ticks(), fretId }); }
+    const CapoParams& capo(const Fraction&) const;
+    void insertCapoParams(const Fraction& tick, const CapoParams& params);
+    void clearCapoParams();
 
     //==== staff type helper function
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
@@ -303,7 +288,7 @@ public:
     bool playbackVoice(int voice) const;
     void setPlaybackVoice(int voice, bool val);
 
-    std::array<bool, VOICES> visibilityVoices() const;
+    const std::array<bool, VOICES>& visibilityVoices() const;
     bool isVoiceVisible(voice_idx_t voice) const;
     bool canDisableVoice() const;
 

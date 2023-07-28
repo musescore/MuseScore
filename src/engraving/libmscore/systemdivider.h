@@ -33,6 +33,8 @@ namespace mu::engraving {
 class SystemDivider final : public Symbol
 {
     OBJECT_ALLOCATOR(engraving, SystemDivider)
+    DECLARE_CLASSOF(ElementType::SYSTEM_DIVIDER)
+
 public:
     enum class Type {
         LEFT, RIGHT
@@ -51,11 +53,6 @@ public:
     void setDividerType(Type v);
 
     mu::RectF drag(EditData&) override;
-
-    void write(XmlWriter&) const override;
-    void read(XmlReader&) override;
-
-    void layout() override;
 
     Segment* segment() const override { return nullptr; }
     System* system() const { return (System*)explicitParent(); }

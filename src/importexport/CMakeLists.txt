@@ -18,20 +18,29 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-add_subdirectory(bb)
-add_subdirectory(braille)
-add_subdirectory(bww)
-add_subdirectory(capella)
-add_subdirectory(midi)
-add_subdirectory(musedata)
-add_subdirectory(musicxml)
-add_subdirectory(ove)
-add_subdirectory(audioexport)
-add_subdirectory(imagesexport)
-add_subdirectory(guitarpro)
+if (MUE_BUILD_IMPORTEXPORT_MODULE)
+    add_subdirectory(bb)
 
-if (MUE_BUILD_VIDEOEXPORT_MODULE)
-    add_subdirectory(videoexport)
+    add_subdirectory(bww)
+    add_subdirectory(capella)
+    add_subdirectory(midi)
+    add_subdirectory(musedata)
+    add_subdirectory(musicxml)
+    add_subdirectory(ove)
+    add_subdirectory(audioexport)
+    add_subdirectory(imagesexport)
+    add_subdirectory(guitarpro)
+    add_subdirectory(mei)
+
+    if (MUE_BUILD_VIDEOEXPORT_MODULE)
+        add_subdirectory(videoexport)
+    endif()
+else()
+    if (MUE_BUILD_IMAGESEXPORT_MODULE)
+        add_subdirectory(imagesexport)
+    endif()
 endif()
+
+
 
 

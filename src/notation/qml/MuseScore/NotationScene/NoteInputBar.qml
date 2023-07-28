@@ -32,8 +32,6 @@ Item {
 
     property alias orientation: gridView.orientation
 
-    property alias navigation: keynavSub
-
     property bool floating: false
 
     property int maximumWidth: 0
@@ -42,8 +40,7 @@ Item {
     width: gridView.isHorizontal ? childrenRect.width : 76
     height: !gridView.isHorizontal ? childrenRect.height : 40
 
-    NavigationPanel {
-        id: keynavSub
+    property NavigationPanel navigationPanel: NavigationPanel {
         name: "NoteInputBar"
         enabled: root.enabled && root.visible
         accessible.name: qsTrc("notation", "Note input toolbar")
@@ -130,7 +127,7 @@ Item {
             toolTipDescription: Boolean(item) ? item.description : ""
             toolTipShortcut: Boolean(item) ? item.shortcuts : ""
 
-            navigation.panel: keynavSub
+            navigation.panel: root.navigationPanel
             navigation.name: Boolean(item) ? item.id : ""
             navigation.order: Boolean(itemModel) ? itemModel.order : 0
             isClickOnKeyNavTriggered: false
@@ -236,7 +233,7 @@ Item {
 
         enabled: noteInputModel.isInputAllowed
 
-        navigation.panel: keynavSub
+        navigation.panel: root.navigationPanel
         navigation.order: 100
         navigation.accessible.name: qsTrc("notation", "Customize toolbar")
 

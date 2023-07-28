@@ -29,8 +29,11 @@ using namespace mu::playback;
 using namespace mu::ui;
 using namespace mu::uicomponents;
 using namespace mu::actions;
+using namespace mu::audio;
 
 static const ActionCode TOGGLE_MIXER_SECTION_ACTION("toggle-mixer-section");
+static const ActionCode TOGGLE_AUX_SEND_ACTION("toggle-aux-send");
+static const ActionCode TOGGLE_AUX_CHANNEL_ACTION("toggle-aux-channel");
 
 static const QString VIEW_MENU_ID("view-menu");
 
@@ -51,6 +54,16 @@ static TranslatableString mixerSectionTitle(MixerSectionType type)
     return {};
 }
 
+static QString auxSendVisibleMenuItemId(aux_channel_idx_t index)
+{
+    return QString("aux-send-%1-visible").arg(index);
+}
+
+static QString auxChannelVisibleMenuItemId(aux_channel_idx_t index)
+{
+    return QString("aux-channel-%1-visible").arg(index);
+}
+
 MixerPanelContextMenuModel::MixerPanelContextMenuModel(QObject* parent)
     : AbstractMenuModel(parent)
 {
@@ -69,6 +82,17 @@ bool MixerPanelContextMenuModel::soundSectionVisible() const
 bool MixerPanelContextMenuModel::audioFxSectionVisible() const
 {
     return isSectionVisible(MixerSectionType::AudioFX);
+}
+
+bool MixerPanelContextMenuModel::auxSendsSectionVisible() const
+{
+    for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
+        if (configuration()->isAuxSendVisible(idx)) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool MixerPanelContextMenuModel::balanceSectionVisible() const
@@ -101,11 +125,28 @@ void MixerPanelContextMenuModel::load()
     AbstractMenuModel::load();
 
     dispatcher()->reg(this, TOGGLE_MIXER_SECTION_ACTION, this, &MixerPanelContextMenuModel::toggleMixerSection);
+    dispatcher()->reg(this, TOGGLE_AUX_SEND_ACTION, this, &MixerPanelContextMenuModel::toggleAuxSend);
+    dispatcher()->reg(this, TOGGLE_AUX_CHANNEL_ACTION, this, &MixerPanelContextMenuModel::toggleAuxChannel);
 
-    MenuItemList viewMenuItems;
-    for (const MixerSectionType& sectionType : allMixerSectionTypes()) {
-        viewMenuItems << buildViewMenuItem(sectionType);
+    MenuItemList viewMenuItems {
+        buildSectionVisibleItem(MixerSectionType::Labels),
+        buildSectionVisibleItem(MixerSectionType::Sound),
+        buildSectionVisibleItem(MixerSectionType::AudioFX),
+    };
+
+    for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
+        viewMenuItems.push_back(buildAuxSendVisibleItem(idx));
     }
+
+    for (aux_channel_idx_t idx = 0; idx < AUX_CHANNEL_NUM; ++idx) {
+        viewMenuItems.push_back(buildAuxChannelVisibleItem(idx));
+    }
+
+    viewMenuItems.push_back(buildSectionVisibleItem(MixerSectionType::Balance));
+    viewMenuItems.push_back(buildSectionVisibleItem(MixerSectionType::Volume));
+    viewMenuItems.push_back(buildSectionVisibleItem(MixerSectionType::Fader));
+    viewMenuItems.push_back(buildSectionVisibleItem(MixerSectionType::MuteAndSolo));
+    viewMenuItems.push_back(buildSectionVisibleItem(MixerSectionType::Title));
 
     MenuItemList items {
         makeMenuItem("playback-setup"),
@@ -120,7 +161,7 @@ bool MixerPanelContextMenuModel::isSectionVisible(MixerSectionType sectionType) 
     return configuration()->isMixerSectionVisible(sectionType);
 }
 
-MenuItem* MixerPanelContextMenuModel::buildViewMenuItem(MixerSectionType sectionType)
+MenuItem* MixerPanelContextMenuModel::buildSectionVisibleItem(MixerSectionType sectionType)
 {
     int sectionTypeInt = static_cast<int>(sectionType);
 
@@ -142,7 +183,47 @@ MenuItem* MixerPanelContextMenuModel::buildViewMenuItem(MixerSectionType section
     return item;
 }
 
-void MixerPanelContextMenuModel::toggleMixerSection(const actions::ActionData& args)
+MenuItem* MixerPanelContextMenuModel::buildAuxSendVisibleItem(aux_channel_idx_t index)
+{
+    MenuItem* item = new MenuItem(this);
+    item->setId(auxSendVisibleMenuItemId(index));
+    item->setArgs(ActionData::make_arg1<int>(index));
+
+    UiAction action;
+    action.title = TranslatableString("playback", String("Aux send %1").arg(index + 1));
+    action.code = TOGGLE_AUX_SEND_ACTION;
+    action.checkable = Checkable::Yes;
+    item->setAction(action);
+
+    UiActionState state;
+    state.enabled = true;
+    state.checked = configuration()->isAuxSendVisible(index);
+    item->setState(state);
+
+    return item;
+}
+
+MenuItem* MixerPanelContextMenuModel::buildAuxChannelVisibleItem(aux_channel_idx_t index)
+{
+    MenuItem* item = new MenuItem(this);
+    item->setId(auxChannelVisibleMenuItemId(index));
+    item->setArgs(ActionData::make_arg1<int>(index));
+
+    UiAction action;
+    action.title = TranslatableString("playback", String("Aux channel %1").arg(index + 1));
+    action.code = TOGGLE_AUX_CHANNEL_ACTION;
+    action.checkable = Checkable::Yes;
+    item->setAction(action);
+
+    UiActionState state;
+    state.enabled = true;
+    state.checked = configuration()->isAuxChannelVisible(index);
+    item->setState(state);
+
+    return item;
+}
+
+void MixerPanelContextMenuModel::toggleMixerSection(const ActionData& args)
 {
     if (args.empty()) {
         return;
@@ -183,15 +264,47 @@ void MixerPanelContextMenuModel::toggleMixerSection(const actions::ActionData& a
         break;
     }
 
-    QString sectionItemId = QString::number(sectionTypeInt);
+    setViewMenuItemChecked(QString::number(sectionTypeInt), newVisibilityValue);
+}
+
+void MixerPanelContextMenuModel::toggleAuxSend(const ActionData& args)
+{
+    if (args.empty()) {
+        return;
+    }
+
+    aux_channel_idx_t auxSendIndex = static_cast<aux_channel_idx_t>(args.arg<int>(0));
+    bool newVisibilityValue = !configuration()->isAuxSendVisible(auxSendIndex);
+
+    configuration()->setAuxSendVisible(auxSendIndex, newVisibilityValue);
+    setViewMenuItemChecked(auxSendVisibleMenuItemId(auxSendIndex), newVisibilityValue);
+
+    emit auxSendsSectionVisibleChanged();
+}
+
+void MixerPanelContextMenuModel::toggleAuxChannel(const actions::ActionData& args)
+{
+    if (args.empty()) {
+        return;
+    }
+
+    aux_channel_idx_t auxChannelIndex = static_cast<aux_channel_idx_t>(args.arg<int>(0));
+    bool newVisibilityValue = !configuration()->isAuxChannelVisible(auxChannelIndex);
+
+    configuration()->setAuxChannelVisible(auxChannelIndex, newVisibilityValue);
+    setViewMenuItemChecked(auxChannelVisibleMenuItemId(auxChannelIndex), newVisibilityValue);
+}
+
+void MixerPanelContextMenuModel::setViewMenuItemChecked(const QString& itemId, bool checked)
+{
     MenuItem& viewMenu = findMenu(VIEW_MENU_ID);
 
     for (MenuItem* item : viewMenu.subitems()) {
-        if (item->id() == sectionItemId) {
+        if (item->id() == itemId) {
             UiActionState state = item->state();
-            state.checked = newVisibilityValue;
+            state.checked = checked;
             item->setState(state);
-            break;
+            return;
         }
     }
 }

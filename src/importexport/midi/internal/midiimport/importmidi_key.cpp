@@ -31,6 +31,7 @@
 #include "libmscore/measure.h"
 #include "libmscore/staff.h"
 #include "libmscore/masterscore.h"
+#include "libmscore/part.h"
 #include "importmidi_operations.h"
 
 // This simple key detection algorithm is from thesis
@@ -75,7 +76,7 @@ void assignKeyListToStaff(const KeyList& kl, Staff* staff)
     for (auto it = kl.begin(); it != kl.end(); ++it) {
         const int tick = it->first;
         Key key  = it->second.key();
-        if ((key == Key::C) && (key == pkey)) {       // don’t insert unnecessary C key
+        if ((key == Key::C) && (key == pkey)) {       // don’t insert unnecessary C key // really?
             continue;
         }
         pkey = key;
@@ -175,7 +176,13 @@ void recognizeMainKeySig(QList<MTrack>& tracks)
 
         if (!track.hasKey || isHuman) {
             KeySigEvent ke;
-            ke.setKey(key);
+            Interval v = track.staff->part()->instrument()->transpose();
+            Score* score = track.staff->score();
+            ke.setConcertKey(key);
+            if (!v.isZero() && !score->style().styleB(Sid::concertPitch)) {
+                v.flip();
+                ke.setKey(transposeKey(key, v));
+            }
 
             KeyList& staffKeyList = *track.staff->keyList();
             staffKeyList[0] = ke;

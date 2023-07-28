@@ -260,7 +260,7 @@ void MsScWriter::beginMeasure(const Bww::MeasureBeginFlags mbf)
         s->add(clef);
         // keysig
         mu::engraving::KeySigEvent key;
-        key.setKey(mu::engraving::Key::D);
+        key.setConcertKey(mu::engraving::Key::D);
         s = currentMeasure->getSegment(mu::engraving::SegmentType::KeySig, tick);
         mu::engraving::KeySig* keysig = Factory::createKeySig(s);
         keysig->setKeySigEvent(key);
@@ -344,7 +344,7 @@ void MsScWriter::note(const QString pitch, const QVector<Bww::BeamType> beamList
     }
     StepAlterOct sao = stepAlterOctMap.value(pitch);
 
-    int ticks = 4 * mu::engraving::Constants::division / type.toInt();
+    int ticks = 4 * mu::engraving::Constants::DIVISION / type.toInt();
     if (dots) {
         ticks = 3 * ticks / 2;
     }

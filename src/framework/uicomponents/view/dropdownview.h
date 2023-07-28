@@ -45,7 +45,7 @@ signals:
     void focusItemYChanged();
 
 private:
-    void updatePosition() override;
+    void updateGeometry() override;
 
     int m_focusItemY = -1;
 };

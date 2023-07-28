@@ -48,5 +48,6 @@
         "qcombobox": "cpp"
     },
     "cmake.buildDirectory": "${workspaceRoot}/build.debug",
-    "cmake.configureOnOpen": true
+    "cmake.configureOnOpen": true,
+    "uncrustify.configPath.linux": "tools/codestyle/uncrustify_musescore.cfg"
 }

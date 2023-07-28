@@ -163,6 +163,11 @@ Val Settings::defaultValue(const Key& key) const
     return findItem(key).defaultValue;
 }
 
+std::string Settings::description(const Key& key) const
+{
+    return findItem(key).description;
+}
+
 void Settings::setSharedValue(const Key& key, const Val& value)
 {
     setLocalValue(key, value);
@@ -219,11 +224,21 @@ void Settings::setDefaultValue(const Key& key, const Val& value)
     Item& item = findItem(key);
 
     if (item.isNull()) {
-        m_items[key] = Item{ key, value, value, false, Val(), Val() };
+        m_items[key] = Item{ key, value, value, "", false, Val(), Val() };
     } else {
         item.defaultValue = value;
         item.value.setType(value.type());
     }
+}
+
+void Settings::setDescription(const Key& key, const std::string& value)
+{
+    Item& item = findItem(key);
+    if (item.isNull()) {
+        return;
+    }
+
+    item.description = value;
 }
 
 void Settings::setCanBeManuallyEdited(const Settings::Key& key, bool canBeManuallyEdited, const Val& minValue, const Val& maxValue)
@@ -231,7 +246,7 @@ void Settings::setCanBeManuallyEdited(const Settings::Key& key, bool canBeManual
     Item& item = findItem(key);
 
     if (item.isNull()) {
-        m_items[key] = Item{ key, Val(), Val(), canBeManuallyEdited, minValue, maxValue };
+        m_items[key] = Item{ key, Val(), Val(), "", canBeManuallyEdited, minValue, maxValue };
     } else {
         item.canBeManuallyEdited = canBeManuallyEdited;
         item.minValue = minValue;
@@ -241,7 +256,7 @@ void Settings::setCanBeManuallyEdited(const Settings::Key& key, bool canBeManual
 
 void Settings::insertNewItem(const Settings::Key& key, const Val& value)
 {
-    Item item = Item{ key, value, value, false, Val(), Val() };
+    Item item = Item{ key, value, value, "", false, Val(), Val() };
     if (m_isTransactionStarted) {
         m_localSettings[key] = item;
     } else {

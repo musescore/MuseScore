@@ -33,8 +33,12 @@ GeneralSettingsModel::GeneralSettingsModel(QObject* parent, IElementRepositorySe
 
     setTitle(qtrc("inspector", "General"));
     setSectionType(InspectorSectionType::SECTION_GENERAL);
-    setPlaybackProxyModel(new PlaybackProxyModel(this, repository));
-    setAppearanceSettingsModel(new AppearanceSettingsModel(this, repository));
+
+    m_playbackProxyModel = new PlaybackProxyModel(this, repository);
+    m_playbackProxyModel->init();
+
+    m_appearanceSettingsModel = new AppearanceSettingsModel(this, repository);
+    m_appearanceSettingsModel->init();
 }
 
 void GeneralSettingsModel::createProperties()
@@ -43,14 +47,36 @@ void GeneralSettingsModel::createProperties()
         onVisibleChanged(newValue.toBool());
     });
 
+    m_isSmall = buildPropertyItem(Pid::SMALL, [this](const mu::engraving::Pid, const QVariant& newValue) {
+        setPropertyValue(m_elementsForIsSmallProperty, Pid::SMALL, newValue.toBool());
+    });
+
     m_isAutoPlaceAllowed = buildPropertyItem(Pid::AUTOPLACE);
     m_isPlayable = buildPropertyItem(Pid::PLAY);
-    m_isSmall = buildPropertyItem(Pid::SMALL);
 }
 
 void GeneralSettingsModel::requestElements()
 {
     m_elementList = m_repository->takeAllElements();
+
+    QSet<EngravingItem*> elementsForIsSmallProperty;
+
+    for (EngravingItem* element : m_elementList) {
+        // Trill cue note is small by definition, so isSmall property does not apply
+        if (element->isNote() && toNote(element)->isTrillCueNote()) {
+            continue;
+        }
+
+        EngravingItem* chord = element->findAncestor(ElementType::CHORD);
+
+        if (chord) {
+            elementsForIsSmallProperty.insert(chord);
+        } else {
+            elementsForIsSmallProperty.insert(element);
+        }
+    }
+
+    m_elementsForIsSmallProperty = elementsForIsSmallProperty.values();
 }
 
 void GeneralSettingsModel::loadProperties()
@@ -98,8 +124,16 @@ void GeneralSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& pr
     }
 
     if (mu::contains(propertyIdSet, Pid::SMALL)) {
-        loadPropertyItem(m_isSmall);
+        loadPropertyItem(m_isSmall, m_elementsForIsSmallProperty);
     }
+}
+
+void GeneralSettingsModel::onCurrentNotationChanged()
+{
+    AbstractInspectorModel::onCurrentNotationChanged();
+
+    m_appearanceSettingsModel->onCurrentNotationChanged();
+    m_playbackProxyModel->onCurrentNotationChanged();
 }
 
 void GeneralSettingsModel::onVisibleChanged(bool visible)
@@ -144,16 +178,4 @@ QObject* GeneralSettingsModel::playbackProxyModel() const
 QObject* GeneralSettingsModel::appearanceSettingsModel() const
 {
     return m_appearanceSettingsModel;
-}
-
-void GeneralSettingsModel::setPlaybackProxyModel(PlaybackProxyModel* playbackProxyModel)
-{
-    m_playbackProxyModel = playbackProxyModel;
-    emit playbackProxyModelChanged(m_playbackProxyModel);
-}
-
-void GeneralSettingsModel::setAppearanceSettingsModel(AppearanceSettingsModel* appearanceSettingsModel)
-{
-    m_appearanceSettingsModel = appearanceSettingsModel;
-    emit appearanceSettingsModelChanged(m_appearanceSettingsModel);
 }

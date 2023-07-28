@@ -36,11 +36,6 @@ namespace mu::engraving {
 class SlurSegment final : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, SlurSegment)
-protected:
-    double _extraHeight = 0.0;
-    void changeAnchor(EditData&, EngravingItem*) override;
-    PointF _endPointOff1 = PointF(0.0, 0.0);
-    PointF _endPointOff2 = PointF(0.0, 0.0);
 
 public:
     SlurSegment(System* parent);
@@ -50,7 +45,8 @@ public:
     int subtype() const override { return static_cast<int>(spanner()->type()); }
     void draw(mu::draw::Painter*) const override;
 
-    void layoutSegment(const mu::PointF& p1, const mu::PointF& p2);
+    double extraHeight() const { return m_extraHeight; }
+    void setExtraHeight(double h) { m_extraHeight = h; }
 
     bool isEdited() const;
     bool isEndPointsEdited() const;
@@ -64,6 +60,12 @@ public:
     void computeBezier(mu::PointF so = mu::PointF()) override;
     Shape getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR);
     void avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, mu::draw::Transform& toSystemCoordinates, double& slurAngle);
+
+protected:
+    void changeAnchor(EditData&, EngravingItem*) override;
+    double m_extraHeight = 0.0;
+    PointF m_endPointOff1 = PointF(0.0, 0.0);
+    PointF m_endPointOff2 = PointF(0.0, 0.0);
 };
 
 //---------------------------------------------------------
@@ -73,9 +75,10 @@ public:
 class Slur final : public SlurTie
 {
     OBJECT_ALLOCATOR(engraving, Slur)
+    DECLARE_CLASSOF(ElementType::SLUR)
 
-    void slurPosChord(SlurPos*);
-    int _sourceStemArrangement = -1;
+public:
+
     struct StemFloated
     {
         bool left = false;
@@ -86,25 +89,15 @@ class Slur final : public SlurTie
             right = false;
         }
     };
-    StemFloated _stemFloated; // end point position is attached to stem but floated towards the note
 
-    friend class Factory;
-    Slur(EngravingItem* parent);
-    Slur(const Slur&);
-
-public:
     ~Slur() {}
 
     Slur* clone() const override { return new Slur(*this); }
 
-    void write(XmlWriter& xml) const override;
-    bool readProperties(XmlReader&) override;
-    void layout() override;
-    SpannerSegment* layoutSystem(System*) override;
     void setTrack(track_idx_t val) override;
-    void slurPos(SlurPos*) override;
-    void fixArticulations(PointF& pt, Chord* c, double up, bool stemSide);
-    void computeUp();
+
+    int sourceStemArrangement() const { return m_sourceStemArrangement; }
+    void setSourceStemArrangement(int v) { m_sourceStemArrangement = v; }
 
     SlurSegment* frontSegment() { return toSlurSegment(Spanner::frontSegment()); }
     const SlurSegment* frontSegment() const { return toSlurSegment(Spanner::frontSegment()); }
@@ -118,9 +111,25 @@ public:
     bool stemSideForBeam(bool start);
     bool stemSideStartForBeam() { return stemSideForBeam(true); }
     bool stemSideEndForBeam() { return stemSideForBeam(false); }
-    const StemFloated& stemFloated() const { return _stemFloated; }
+    const StemFloated& stemFloated() const { return m_stemFloated; }
+    StemFloated& stemFloated() { return m_stemFloated; }
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new SlurSegment(parent); }
+
+    static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
+    static bool isDirectionMixture(Chord* c1, Chord* c2);
+
+private:
+
+    friend class Factory;
+    Slur(EngravingItem* parent);
+    Slur(const Slur&);
+
+    void slurPosChord(SlurPos*);
+
+    int m_sourceStemArrangement = -1;
+
+    StemFloated m_stemFloated; // end point position is attached to stem but floated towards the note
 };
 } // namespace mu::engraving
 #endif

@@ -4,9 +4,9 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'Mode: stable, testing'
+        description: 'Mode: stable, testing(alpha, beta, rc)'
         required: true
-        default: 'stable'
+        default: 'testing'
 
 defaults:
   run:

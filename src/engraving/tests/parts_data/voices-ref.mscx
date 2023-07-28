@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -28,7 +26,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
-        <bracket type="1" span="2" col="0"/>
+        <bracket type="1" span="2" col="0" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="2">
@@ -157,7 +155,7 @@
         <voice>
           <KeySig>
             <linkedMain/>
-            <accidental>-4</accidental>
+            <concertKey>-4</concertKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -511,7 +509,7 @@
         <voice>
           <KeySig>
             <linkedMain/>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             </KeySig>
           <Rest>
             <linkedMain/>
@@ -564,7 +562,7 @@
         <voice>
           <KeySig>
             <linkedMain/>
-            <accidental>-3</accidental>
+            <concertKey>-3</concertKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -684,7 +682,7 @@
         <voice>
           <KeySig>
             <linkedMain/>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             </KeySig>
           <Rest>
             <linkedMain/>
@@ -697,7 +695,7 @@
         <voice>
           <KeySig>
             <linkedMain/>
-            <accidental>-3</accidental>
+            <concertKey>-3</concertKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -976,7 +974,7 @@
         <voice>
           <KeySig>
             <linkedMain/>
-            <accidental>1</accidental>
+            <concertKey>1</concertKey>
             </KeySig>
           <Rest>
             <linkedMain/>
@@ -1028,7 +1026,7 @@
         <voice>
           <KeySig>
             <linkedMain/>
-            <accidental>-3</accidental>
+            <concertKey>-3</concertKey>
             </KeySig>
           <TimeSig>
             <linkedMain/>
@@ -1065,8 +1063,6 @@
         </Measure>
       </Staff>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1082,7 +1078,7 @@
           <StaffType group="pitched">
             <name>stdNormal</name>
             </StaffType>
-          <bracket type="1" span="2" col="0"/>
+          <bracket type="1" span="2" col="0" visible="1"/>
           <barLineSpan>1</barLineSpan>
           </Staff>
         <Staff id="2">
@@ -1160,7 +1156,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>-4</accidental>
+              <concertKey>-4</concertKey>
               </KeySig>
             <TimeSig>
               <linked>
@@ -1335,7 +1331,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <offset x="1.06662" y="-4.71271"/>
+                  <offset x="1.05809" y="-4.67501"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>63</pitch>
@@ -1575,7 +1571,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>1</accidental>
+              <concertKey>1</concertKey>
               </KeySig>
             <Rest>
               <linked>
@@ -1635,7 +1631,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>-3</accidental>
+              <concertKey>-3</concertKey>
               </KeySig>
             <TimeSig>
               <linked>
@@ -1775,7 +1771,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>1</accidental>
+              <concertKey>1</concertKey>
               </KeySig>
             <Rest>
               <linked>
@@ -1790,7 +1786,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>-3</accidental>
+              <concertKey>-3</concertKey>
               </KeySig>
             <TimeSig>
               <linked>
@@ -1810,8 +1806,6 @@
       <name>Piano</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1999,7 +1993,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <offset x="1.06662" y="-4.71271"/>
+                  <offset x="1.05809" y="-4.67501"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>43</pitch>
@@ -2206,7 +2200,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>1</accidental>
+              <concertKey>1</concertKey>
               </KeySig>
             <Rest>
               <linked>
@@ -2265,7 +2259,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>-3</accidental>
+              <concertKey>-3</concertKey>
               </KeySig>
             <TimeSig>
               <linked>
@@ -2310,8 +2304,6 @@
       <name>Trombone</name>
       </Score>
     <Score>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -2499,7 +2491,7 @@
                 <Fingering>
                   <linked>
                     </linked>
-                  <offset x="1.06662" y="-4.71271"/>
+                  <offset x="1.05809" y="-4.67501"/>
                   <text>2</text>
                   </Fingering>
                 <pitch>43</pitch>
@@ -2706,7 +2698,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>1</accidental>
+              <concertKey>1</concertKey>
               </KeySig>
             <Rest>
               <linked>
@@ -2765,7 +2757,7 @@
             <KeySig>
               <linked>
                 </linked>
-              <accidental>-3</accidental>
+              <concertKey>-3</concertKey>
               </KeySig>
             <TimeSig>
               <linked>

@@ -30,13 +30,15 @@
 namespace mu::engraving {
 class LocalFileInfoProvider : public IFileInfoProvider
 {
-    INJECT(engraving, io::IFileSystem, fileSystem)
+    INJECT(io::IFileSystem, fileSystem)
 public:
     explicit LocalFileInfoProvider(const io::path_t& filePath);
 
     io::path_t path() const override;
     io::path_t fileName(bool includingExtension = true) const override;
     io::path_t absoluteDirPath() const override;
+
+    String displayName() const override;
 
     DateTime birthTime() const override;
     DateTime lastModified() const override;

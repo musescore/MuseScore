@@ -34,8 +34,8 @@ class NotationToolBarModel : public uicomponents::AbstractMenuModel
 {
     Q_OBJECT
 
-    INJECT(notation, context::IGlobalContext, context)
-    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
+    INJECT(context::IGlobalContext, context)
+    INJECT(ui::IUiActionsRegister, actionsRegister)
 
 public:
     Q_INVOKABLE void load() override;

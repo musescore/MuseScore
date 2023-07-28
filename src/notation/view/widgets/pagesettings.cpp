@@ -21,6 +21,7 @@
  */
 #include "pagesettings.h"
 
+#include <QKeyEvent>
 #include <QPageSize>
 
 #include "engraving/libmscore/page.h"
@@ -66,32 +67,32 @@ PageSettings::PageSettings(QWidget* parent)
     connect(landscapeButton, &QRadioButton::clicked, this, &PageSettings::orientationClicked);
     connect(twosided,        &QCheckBox::toggled,    this, &PageSettings::twosidedToggled);
 
-    connect(pageHeight,           QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(pageHeight,           QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::pageHeightChanged);
-    connect(pageWidth,            QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(pageWidth,            QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::pageWidthChanged);
-    connect(oddPageTopMargin,     QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(oddPageTopMargin,     QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::otmChanged);
-    connect(oddPageBottomMargin,  QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(oddPageBottomMargin,  QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::obmChanged);
-    connect(oddPageLeftMargin,    QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(oddPageLeftMargin,    QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::olmChanged);
-    connect(oddPageRightMargin,   QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(oddPageRightMargin,   QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::ormChanged);
-    connect(evenPageTopMargin,    QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(evenPageTopMargin,    QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::etmChanged);
-    connect(evenPageBottomMargin, QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(evenPageBottomMargin, QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::ebmChanged);
-    connect(evenPageRightMargin,  QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(evenPageRightMargin,  QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::ermChanged);
-    connect(evenPageLeftMargin,   QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(evenPageLeftMargin,   QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::elmChanged);
-    connect(spatiumEntry,         QOverload<>::of(&QDoubleSpinBox::editingFinished),
+    connect(spatiumEntry,         QOverload<double>::of(&QDoubleSpinBox::valueChanged),
             this,                 &PageSettings::spatiumChanged);
 
     connect(pageGroup,            QOverload<int>::of(&QComboBox::activated),
             this, &PageSettings::pageFormatSelected);
-    connect(pageOffsetEntry,      QOverload<>::of(&QSpinBox::editingFinished),
+    connect(pageOffsetEntry,      QOverload<int>::of(&QSpinBox::valueChanged),
             this, &PageSettings::pageOffsetChanged);
 }
 
@@ -204,7 +205,7 @@ void PageSettings::updateValues()
     pageWidth->setValue(w * f);
 
     double f1 = mm ? 1.0 / DPMM : 1.0 / DPI;
-    spatiumEntry->setValue(score()->spatium() * f1);
+    spatiumEntry->setValue(score()->style().spatium() * f1);
 
     bool _twosided = styleValueBool(Sid::pageTwosided);
     evenPageTopMargin->setEnabled(_twosided);
@@ -278,6 +279,14 @@ void PageSettings::twosidedToggled(bool flag)
     updateValues();
 }
 
+void PageSettings::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        return;
+    }
+    QDialog::keyPressEvent(event);
+}
+
 void PageSettings::buttonBoxClicked(QAbstractButton* button)
 {
     switch (buttonBox->buttonRole(button)) {
@@ -339,30 +348,30 @@ void PageSettings::applyToAllParts()
 void PageSettings::pageFormatSelected(int size)
 {
     if (size >= 0) {
+        bool landscape = landscapeButton->isChecked();
         int id = pageGroup->currentData().toInt();
         QSizeF sz = QPageSize::size(QPageSize::PageSizeId(id), QPageSize::Inch);
 
-        setStyleValue(Sid::pageWidth, sz.width());
-        setStyleValue(Sid::pageHeight, sz.height());
+        setStyleValue(Sid::pageWidth, landscape ? sz.height() : sz.width());
+        setStyleValue(Sid::pageHeight, landscape ? sz.width() : sz.height());
 
         double f  = mmUnit ? 1.0 / INCH : 1.0;
-        setStyleValue(Sid::pagePrintableWidth, sz.width() - (oddPageLeftMargin->value() + oddPageRightMargin->value()) * f);
+        setStyleValue(Sid::pagePrintableWidth,
+                      (landscape ? sz.height() : sz.width()) - (oddPageLeftMargin->value() + oddPageRightMargin->value()) * f);
         updateValues();
     }
 }
 
-void PageSettings::otmChanged()
+void PageSettings::otmChanged(double val)
 {
-    double val = oddPageTopMargin->value();
     if (mmUnit) {
         val /= INCH;
     }
     setStyleValue(Sid::pageOddTopMargin, val);
 }
 
-void PageSettings::olmChanged()
+void PageSettings::olmChanged(double val)
 {
-    double val = oddPageLeftMargin->value();
     if (mmUnit) {
         val /= INCH;
     }
@@ -381,9 +390,8 @@ void PageSettings::olmChanged()
     setStyleValue(Sid::pagePrintableWidth, styleValueDouble(Sid::pageWidth) - styleValueDouble(Sid::pageEvenLeftMargin) - val);
 }
 
-void PageSettings::ormChanged()
+void PageSettings::ormChanged(double val)
 {
-    double val = oddPageRightMargin->value();
     if (mmUnit) {
         val /= INCH;
     }
@@ -401,9 +409,8 @@ void PageSettings::ormChanged()
     setStyleValue(Sid::pagePrintableWidth, styleValueDouble(Sid::pageWidth) - styleValueDouble(Sid::pageOddLeftMargin) - val);
 }
 
-void PageSettings::obmChanged()
+void PageSettings::obmChanged(double val)
 {
-    double val = oddPageBottomMargin->value();
     if (mmUnit) {
         val /= INCH;
     }
@@ -411,9 +418,8 @@ void PageSettings::obmChanged()
     setStyleValue(Sid::pageOddBottomMargin, val);
 }
 
-void PageSettings::etmChanged()
+void PageSettings::etmChanged(double val)
 {
-    double val = evenPageTopMargin->value();
     if (mmUnit) {
         val /= INCH;
     }
@@ -421,9 +427,8 @@ void PageSettings::etmChanged()
     setStyleValue(Sid::pageEvenTopMargin, val);
 }
 
-void PageSettings::elmChanged()
+void PageSettings::elmChanged(double val)
 {
-    double val = evenPageLeftMargin->value();
     double f  = mmUnit ? 1.0 / INCH : 1.0;
     val *= f;
 
@@ -437,9 +442,8 @@ void PageSettings::elmChanged()
     setStyleValue(Sid::pagePrintableWidth, styleValueDouble(Sid::pageWidth) - evenPageRightMargin->value() * f - val);
 }
 
-void PageSettings::ermChanged()
+void PageSettings::ermChanged(double val)
 {
-    double val = evenPageRightMargin->value();
     if (mmUnit) {
         val /= INCH;
     }
@@ -454,9 +458,8 @@ void PageSettings::ermChanged()
     setStyleValue(Sid::pageOddLeftMargin, val);
 }
 
-void PageSettings::ebmChanged()
+void PageSettings::ebmChanged(double val)
 {
-    double val = evenPageBottomMargin->value();
     if (mmUnit) {
         val /= INCH;
     }
@@ -464,24 +467,20 @@ void PageSettings::ebmChanged()
     setStyleValue(Sid::pageEvenBottomMargin, val);
 }
 
-void PageSettings::spatiumChanged()
+void PageSettings::spatiumChanged(double val)
 {
-    double val = spatiumEntry->value();
     val *= mmUnit ? DPMM : DPI;
-    double oldVal = score()->spatium();
-    setStyleValue(Sid::spatium, val);
-    score()->spatiumChanged(oldVal, val);
+    setStyleValue(Sid::spatium, val); // this will also call Score::spatiumChanged()
 }
 
-void PageSettings::pageOffsetChanged()
+void PageSettings::pageOffsetChanged(int val)
 {
     // TODO: Cancel does not work when page offset is changed?
-    score()->setPageNumberOffset(pageOffsetEntry->value() - 1);
+    score()->setPageNumberOffset(val - 1);
 }
 
-void PageSettings::pageHeightChanged()
+void PageSettings::pageHeightChanged(double val)
 {
-    double val = pageHeight->value();
     double val2 = pageWidth->value();
     if (mmUnit) {
         val /= INCH;
@@ -493,9 +492,8 @@ void PageSettings::pageHeightChanged()
     setStyleValue(Sid::pageWidth, val2);
 }
 
-void PageSettings::pageWidthChanged()
+void PageSettings::pageWidthChanged(double val)
 {
-    double val = pageWidth->value();
     setMarginsMax(val);
 
     double f    = mmUnit ? 1.0 / INCH : 1.0;

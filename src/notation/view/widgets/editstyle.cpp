@@ -236,6 +236,15 @@ EditStyle::EditStyle(QWidget* parent)
     fbStyle->addButton(radioFBModern, 0);
     fbStyle->addButton(radioFBHistoric, 1);
 
+    QButtonGroup* articulationStemSide = new QButtonGroup(this);
+    articulationStemSide->addButton(radioArticAlignStem, int(ArticulationStemSideAlign::STEM));
+    articulationStemSide->addButton(radioArticAlignNoteHead, int(ArticulationStemSideAlign::NOTEHEAD));
+    articulationStemSide->addButton(radioArticAlignCenter, int(ArticulationStemSideAlign::AVERAGE));
+
+    QButtonGroup* articulationKeepTogether = new QButtonGroup(this);
+    articulationKeepTogether->addButton(radioArticKeepTogether, 1);
+    articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -408,6 +417,8 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::propertyDistanceHead,    false, articNoteHeadDist,       resetArticNoteHeadDist },
         { StyleId::propertyDistanceStem,    false, articStemDist,           resetArticStemDist },
         { StyleId::propertyDistance,        false, articStaffDist,          resetArticStaffDist },
+        { StyleId::articulationStemHAlign,  false, articulationStemSide,    0 },
+        { StyleId::articulationKeepTogether, false, articulationKeepTogether, 0 },
         { StyleId::voltaPosAbove,           false, voltaPosAbove,           resetVoltaPosAbove },
         { StyleId::voltaHook,               false, voltaHook,               resetVoltaHook },
         { StyleId::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth },
@@ -535,6 +546,11 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::dynamicsPosAbove,        false, dynamicsPosAbove,           resetDynamicsPosAbove },
         { StyleId::dynamicsPosBelow,        false, dynamicsPosBelow,           resetDynamicsPosBelow },
         { StyleId::dynamicsMinDistance,     false, dynamicsMinDistance,        resetDynamicsMinDistance },
+        { StyleId::avoidBarLines,           false, avoidBarLines,              resetAvoidBarLines },
+        { StyleId::snapToDynamics,          false, snapExpression,             resetSnapExpression },
+        { StyleId::dynamicsSize,            true,  dynamicsSize,               resetDynamicsSize },
+        { StyleId::dynamicsOverrideFont,    false, dynamicsOverrideFont,       0 },
+        { StyleId::dynamicsFont,            false, dynamicsFont,               0 },
 
         { StyleId::tempoPlacement,          false, tempoTextPlacement,          resetTempoTextPlacement },
         { StyleId::tempoPosAbove,           false, tempoTextPosAbove,           resetTempoTextPosAbove },
@@ -698,9 +714,10 @@ EditStyle::EditStyle(QWidget* parent)
     tupletBracketType->addItem(qtrc("notation/editstyle", "None", "no tuplet bracket type"), int(TupletBracketType::SHOW_NO_BRACKET));
 
     musicalSymbolFont->clear();
-
+    dynamicsFont->clear();
     for (auto i : engravingFonts()->fonts()) {
         musicalSymbolFont->addItem(QString::fromStdString(i->name()), QString::fromStdString(i->name()));
+        dynamicsFont->addItem(QString::fromStdString(i->name()), QString::fromStdString(i->name()));
     }
 
     static const SymId ids[] = {
@@ -725,6 +742,19 @@ EditStyle::EditStyle(QWidget* parent)
     noteFlagsTypeSelector->setMinimumSize(224, 70);
     noteFlagsTypeSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBox_noteFlags->layout()->addWidget(noteFlagsTypeSelector);
+
+    // ====================================================
+    // Rests (QML)
+    // ====================================================
+
+    QQuickWidget* restOffsetSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                        /*parent*/ groupBox_rests);
+    restOffsetSelector->setObjectName("restOffsetSelector_QQuickWidget");
+    restOffsetSelector->setSource(
+        QUrl(QString::fromUtf8("qrc:/qml/MuseScore/NotationScene/internal/EditStyle/RestOffsetSelector.qml")));
+    restOffsetSelector->setMinimumSize(224, 30);
+    restOffsetSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    groupBox_rests->layout()->addWidget(restOffsetSelector);
 
     // ====================================================
     // Notes (QML)
@@ -830,9 +860,9 @@ EditStyle::EditStyle(QWidget* parent)
         }
 
         if (auto spinBox = qobject_cast<QSpinBox*>(sw.widget)) {
-            connect(spinBox, QOverload<>::of(&QSpinBox::editingFinished), setSignalMapper, mapFunction);
+            connect(spinBox, QOverload<int>::of(&QSpinBox::valueChanged), setSignalMapper, mapFunction);
         } else if (auto doubleSpinBox = qobject_cast<QDoubleSpinBox*>(sw.widget)) {
-            connect(doubleSpinBox, QOverload<>::of(&QDoubleSpinBox::editingFinished), setSignalMapper, mapFunction);
+            connect(doubleSpinBox, QOverload<double>::of(&QDoubleSpinBox::valueChanged), setSignalMapper, mapFunction);
         } else if (auto fontComboBox = qobject_cast<QFontComboBox*>(sw.widget)) {
             connect(fontComboBox, &QFontComboBox::currentFontChanged, setSignalMapper, mapFunction);
         } else if (auto comboBox = qobject_cast<QComboBox*>(sw.widget)) {
@@ -866,7 +896,7 @@ EditStyle::EditStyle(QWidget* parent)
     Score* score = globalContext()->currentNotation()->elements()->msScore();
 
     textStyles->clear();
-    for (TextStyleType textStyleType : allTextStyles()) {
+    for (TextStyleType textStyleType : editableTextStyles()) {
         QListWidgetItem* item = new QListWidgetItem(score->getTextStyleUserName(textStyleType).qTranslated());
         item->setData(Qt::UserRole, int(textStyleType));
         textStyles->addItem(item);
@@ -896,7 +926,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFontSize, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::FontSize);
     });
-    connect(textStyleFontSize, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
+    connect(textStyleFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
         textStyleValueChanged(TextStylePropertyType::FontSize, QVariant(textStyleFontSize->value()));
     });
 
@@ -905,7 +935,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleLineSpacing, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::LineSpacing);
     });
-    connect(textStyleLineSpacing, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
+    connect(textStyleLineSpacing, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
         textStyleValueChanged(TextStylePropertyType::LineSpacing, QVariant(textStyleLineSpacing->value()));
     });
 
@@ -957,7 +987,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFramePadding, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::FramePadding);
     });
-    connect(textStyleFramePadding, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
+    connect(textStyleFramePadding, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
         textStyleValueChanged(TextStylePropertyType::FramePadding, textStyleFramePadding->value());
     });
 
@@ -965,7 +995,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFrameBorder, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::FrameWidth);
     });
-    connect(textStyleFrameBorder, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
+    connect(textStyleFrameBorder, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
         textStyleValueChanged(TextStylePropertyType::FrameWidth, textStyleFrameBorder->value());
     });
 
@@ -973,7 +1003,7 @@ EditStyle::EditStyle(QWidget* parent)
     connect(resetTextStyleFrameBorderRadius, &QToolButton::clicked, [=]() {
         resetTextStyle(TextStylePropertyType::FrameRound);
     });
-    connect(textStyleFrameBorderRadius, QOverload<>::of(&QDoubleSpinBox::editingFinished), [=]() {
+    connect(textStyleFrameBorderRadius, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
         textStyleValueChanged(TextStylePropertyType::FrameRound, textStyleFrameBorderRadius->value());
     });
 
@@ -1182,7 +1212,7 @@ void EditStyle::setHeaderFooterToolTip()
           + QString("</i></td></tr></table><p>")
           + qtrc("notation/editstyle", "Available metadata tags and their current values")
           + QString("<br />")
-          + qtrc("notation/editstyle", "(in File > Score properties…):")
+          + qtrc("notation/editstyle", "(in File > Project properties…):")
           + QString("</p><table>");
 
     // show all tags for current score/part
@@ -1326,6 +1356,8 @@ EditStyle::EditStylePage EditStyle::pageForElement(EngravingItem* e)
         return &EditStyle::PageLyrics;
     case ElementType::DYNAMIC:
         return &EditStyle::PageDynamics;
+    case ElementType::EXPRESSION:
+        return &EditStyle::PageExpression;
     case ElementType::REHEARSAL_MARK:
         return &EditStyle::PageRehearsalMarks;
     case ElementType::FIGURED_BASS:
@@ -1385,6 +1417,18 @@ void EditStyle::setCurrentSubPageCode(const QString& code)
 
     m_currentSubPageCode = code;
     emit currentSubPageChanged();
+}
+
+//---------------------------------------------------------
+//   keyPressEvent
+//---------------------------------------------------------
+
+void EditStyle::keyPressEvent(QKeyEvent* event)
+{
+    if (event->key() == Qt::Key_Enter || event->key() == Qt::Key_Return) {
+        return;
+    }
+    QDialog::keyPressEvent(event);
 }
 
 //---------------------------------------------------------
@@ -1522,6 +1566,9 @@ PropertyValue EditStyle::getValue(StyleId idx)
         if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
             QComboBox* cb = qobject_cast<QComboBox*>(sw.widget);
             v = cb->currentIndex();
+        } else if (sw.idx == StyleId::articulationKeepTogether) { // special case for bool represented by a two-item buttonGroup
+            QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
+            v = bool(bg->checkedId());
         } else {
             v = sw.widget->property("checked");
             if (!v.isValid()) {
@@ -1627,6 +1674,9 @@ void EditStyle::setValues()
             bool value = val.toBool();
             if (sw.idx == StyleId::harmonyVoiceLiteral) { // special case for bool represented by a two-item combobox
                 voicingSelectWidget->interpretBox->setCurrentIndex(value);
+            } else if (sw.idx == StyleId::articulationKeepTogether) { // special case for bool represented by a two-item buttonGroup
+                qobject_cast<QButtonGroup*>(sw.widget)->button(1)->setChecked(value);
+                qobject_cast<QButtonGroup*>(sw.widget)->button(0)->setChecked(!value);
             } else {
                 if (!sw.widget->setProperty("checked", value)) {
                     unhandledType(sw);
@@ -1762,6 +1812,17 @@ void EditStyle::setValues()
         }
         ++idx;
     }
+
+    QString dynFont(styleValue(StyleId::dynamicsFont).value<String>());
+    idx = 0;
+    for (const auto& i : engravingFonts()->fonts()) {
+        if (QString::fromStdString(i->name()).toLower() == dynFont.toLower()) {
+            dynamicsFont->setCurrentIndex(idx);
+            break;
+        }
+        ++idx;
+    }
+
     musicalTextFont->blockSignals(true);
     musicalTextFont->clear();
     // CAUTION: the second element, the itemdata, is a font family name!
@@ -2049,15 +2110,20 @@ void EditStyle::valueChanged(int i)
     StyleId idx       = (StyleId)i;
     PropertyValue val  = getValue(idx);
     bool setValue = false;
-    if (idx == StyleId::MusicalSymbolFont && optimizeStyleCheckbox->isChecked()) {
-        IEngravingFontPtr scoreFont = engravingFonts()->fontByName(val.value<String>().toStdString());
-        if (scoreFont) {
-            for (auto j : scoreFont->engravingDefaults()) {
-                setStyleValue(j.first, j.second);
-            }
+    if (idx == StyleId::MusicalSymbolFont) {
+        bool overrideDynamicsFont = getValue(StyleId::dynamicsOverrideFont).toBool();
+        if (!overrideDynamicsFont) {
+            setStyleValue(StyleId::dynamicsFont, val); // Match dynamics font
         }
-
-        setValue = true;
+        if (optimizeStyleCheckbox->isChecked()) {
+            IEngravingFontPtr scoreFont = engravingFonts()->fontByName(val.value<String>().toStdString());
+            if (scoreFont) {
+                for (auto j : scoreFont->engravingDefaults()) {
+                    setStyleValue(j.first, j.second);
+                }
+            }
+            setValue = true;
+        }
     }
 
     setStyleValue(idx, val);
@@ -2178,7 +2244,7 @@ void EditStyle::textStyleChanged(int row)
 
     styleName->setText(score->getTextStyleUserName(tid).qTranslated());
     styleName->setEnabled(int(tid) >= int(TextStyleType::USER1));
-    resetTextStyleName->setEnabled(false);
+    resetTextStyleName->setEnabled(styleName->text() != TConv::translatedUserName(tid));
 }
 
 //---------------------------------------------------------

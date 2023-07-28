@@ -146,10 +146,22 @@ bool WinFramelessWindowController::removeWindowFrame(MSG* message, long* result)
             GetMonitorInfoW(hMonitor, &m_monitorInfo);
         }
 
-        params.rgrc[0].left = m_monitorInfo.rcWork.left;
-        params.rgrc[0].top = m_monitorInfo.rcWork.top;
-        params.rgrc[0].right = m_monitorInfo.rcWork.right;
-        params.rgrc[0].bottom = m_monitorInfo.rcWork.bottom;
+        params.rgrc[0] = m_monitorInfo.rcWork;
+
+        if (isTaskbarInAutohideState()) {
+            std::optional<UINT> edge = taskbarEdge();
+            if (edge.has_value()) {
+                if (ABE_LEFT == edge.value()) {
+                    params.rgrc[0].left += 1;
+                } else if (ABE_RIGHT == edge.value()) {
+                    params.rgrc[0].right -= 1;
+                } else if (ABE_TOP == edge.value()) {
+                    params.rgrc[0].top += 1;
+                } else if (ABE_BOTTOM == edge.value()) {
+                    params.rgrc[0].bottom -= 1;
+                }
+            }
+        }
     }
 
     /// NOTE: remove window frame
@@ -342,6 +354,30 @@ bool WinFramelessWindowController::isWindowMaximized(HWND hWnd) const
     }
 
     return wp.showCmd == SW_MAXIMIZE;
+}
+
+bool WinFramelessWindowController::isTaskbarInAutohideState() const
+{
+    APPBARDATA appBarData;
+    appBarData.cbSize = sizeof(appBarData);
+
+    UINT taskbarState = SHAppBarMessage(ABM_GETSTATE, &appBarData);
+
+    return ABS_AUTOHIDE & taskbarState;
+}
+
+std::optional<UINT> WinFramelessWindowController::taskbarEdge() const
+{
+    APPBARDATA appBarData;
+    appBarData.cbSize = sizeof(appBarData);
+
+    appBarData.hWnd = FindWindow(L"Shell_TrayWnd", nullptr);
+    if (!appBarData.hWnd) {
+        return std::nullopt;
+    }
+
+    SHAppBarMessage(ABM_GETTASKBARPOS, &appBarData);
+    return appBarData.uEdge;
 }
 
 int WinFramelessWindowController::borderWidth() const

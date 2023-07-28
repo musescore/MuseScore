@@ -39,7 +39,7 @@ public:
     void beforeEndTargetHook(draw::Painter* painter) override;
     bool endTarget(bool endDraw = false) override;
 
-    void beginObject(const std::string& name, const PointF& pagePos) override;
+    void beginObject(const std::string& name) override;
     void endObject() override;
 
     void setAntialiasing(bool arg) override;
@@ -79,6 +79,8 @@ public:
     void drawPixmap(const PointF& point, const QPixmap& pm) override;
     void drawTiledPixmap(const RectF& rect, const QPixmap& pm, const PointF& offset = PointF()) override;
 #endif
+
+    bool hasClipping() const override;
 
     void setClipRect(const RectF& rect) override;
     void setClipping(bool enable) override;

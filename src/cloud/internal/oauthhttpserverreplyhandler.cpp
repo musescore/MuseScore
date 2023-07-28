@@ -44,7 +44,7 @@ using namespace mu::cloud;
 
 class OAuthHttpServerReplyHandler::Impl
 {
-    INJECT(cloud, ICloudConfiguration, configuration)
+    INJECT(ICloudConfiguration, configuration)
 
 public:
     explicit Impl(OAuthHttpServerReplyHandler* p);
@@ -53,6 +53,8 @@ public:
     QTcpServer m_httpServer;
     QHostAddress m_listenAddress = QHostAddress::LocalHost;
     QString m_path;
+
+    QUrl m_redirectUrl;
 
 private:
     void onClientConnected();
@@ -187,11 +189,9 @@ void OAuthHttpServerReplyHandler::Impl::answerClient(QTcpSocket* socket, const Q
                             + text.toUtf8()
                             + ("</body></html>");
 
-    const QUrl redirectUrl = configuration()->signInSuccessUrl();
-
     const QByteArray htmlSize = QByteArray::number(html.size());
     const QByteArray replyMessage = QByteArrayLiteral("HTTP/1.0 301 Moved Permanently \r\n"
-                                                      "Location: ") + redirectUrl.toString().toUtf8()
+                                                      "Location: ") + m_redirectUrl.toString().toUtf8()
                                     + QByteArrayLiteral("\r\nContent-Type: text/html; "
                                                         "charset=\"utf-8\"\r\n"
                                                         "Content-Length: ") + htmlSize
@@ -379,4 +379,9 @@ void OAuthHttpServerReplyHandler::close()
 bool OAuthHttpServerReplyHandler::isListening() const
 {
     return m_impl->m_httpServer.isListening();
+}
+
+void OAuthHttpServerReplyHandler::setRedirectUrl(const QUrl& url)
+{
+    m_impl->m_redirectUrl = url;
 }

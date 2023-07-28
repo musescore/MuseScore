@@ -24,6 +24,7 @@ import QtQuick 2.15
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Audio 1.0
+import MuseScore.Playback 1.0
 
 MixerPanelSection {
     id: root
@@ -76,6 +77,9 @@ MixerPanelSection {
 
                 icon: IconCode.SOLO
                 checked: channelItem.solo
+
+                enabled: channelItem.type !== MixerChannelItem.Aux && (!channelItem.mutedManually || channelItem.solo)
+                visible: channelItem.type !== MixerChannelItem.Master
 
                 navigation.name: "SoloButton"
                 navigation.panel: channelItem.panel

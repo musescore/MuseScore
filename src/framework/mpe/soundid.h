@@ -398,7 +398,7 @@ enum class SoundSubCategory
     Last
 };
 
-static const std::unordered_map<SoundId, String> ID_STRINGS
+inline const std::unordered_map<SoundId, String> ID_STRINGS
 {
     { SoundId::Accordion, String(u"accordion") },
     { SoundId::Bandoneon, String(u"bandoneon") },
@@ -615,7 +615,7 @@ inline SoundId soundIdFromString(const String& str)
     return search->first;
 }
 
-static const std::unordered_map<SoundCategory, String> CATEGORY_STRINGS
+inline const std::unordered_map<SoundCategory, String> CATEGORY_STRINGS
 {
     { SoundCategory::Keyboards, String(u"keyboards") },
     { SoundCategory::Strings, String(u"strings") },
@@ -649,7 +649,7 @@ inline SoundCategory soundCategoryFromString(const String& str)
     return search->first;
 }
 
-static const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
+inline const std::unordered_map<SoundSubCategory, String> SUBCATEGORY_STRINGS
 {
     { SoundSubCategory::English, String(u"english") },
     { SoundSubCategory::Armenian, String(u"armenian") },

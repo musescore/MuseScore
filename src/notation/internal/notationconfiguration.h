@@ -35,10 +35,10 @@
 namespace mu::notation {
 class NotationConfiguration : public INotationConfiguration, public async::Asyncable
 {
-    INJECT(notation, framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(notation, io::IFileSystem, fileSystem)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(io::IFileSystem, fileSystem)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     void init();
@@ -122,6 +122,9 @@ public:
     bool isAutomaticallyPanEnabled() const override;
     void setIsAutomaticallyPanEnabled(bool enabled) override;
 
+    bool isSmoothPanning() const override;
+    void setIsSmoothPanning(bool value) override;
+
     bool isPlayRepeatsEnabled() const override;
     void setIsPlayRepeatsEnabled(bool enabled) override;
     async::Notification isPlayRepeatsChanged() const override;
@@ -155,8 +158,8 @@ public:
     int notePlayDurationMilliseconds() const override;
     void setNotePlayDurationMilliseconds(int durationMs) override;
 
-    void setTemplateModeEnabled(bool enabled) override;
-    void setTestModeEnabled(bool enabled) override;
+    void setTemplateModeEnabled(std::optional<bool> enabled) override;
+    void setTestModeEnabled(std::optional<bool> enabled) override;
 
     io::path_t instrumentListPath() const override;
 

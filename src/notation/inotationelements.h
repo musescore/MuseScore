@@ -24,7 +24,7 @@
 
 #include <vector>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "notationtypes.h"
 
 namespace mu::notation {

@@ -30,8 +30,8 @@
 namespace mu::framework {
 class Interactive : public IInteractive
 {
-    INJECT(global, ui::IInteractiveProvider, provider)
-    INJECT(global, ui::IMainWindow, mainWindow)
+    INJECT(ui::IInteractiveProvider, provider)
+    INJECT(ui::IMainWindow, mainWindow)
 
 public:
     // question
@@ -69,6 +69,9 @@ public:
 
     Result error(const std::string& title, const Text& text, const std::string& detailedText, const ButtonDatas& buttons,
                  int defBtn = int(Button::NoButton), const Options& options = { WithIcon }) const override;
+
+    // progress
+    Ret showProgress(const std::string& title, framework::Progress* progress) const override;
 
     // files
     io::path_t selectOpeningFile(const QString& title, const io::path_t& dir, const std::vector<std::string>& filter) override;

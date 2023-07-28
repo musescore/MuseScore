@@ -58,15 +58,15 @@ mu::String MUVersion::revision()
 
 int MUVersion::majorVersion()
 {
-    return Version(version()).major();
+    return Version(version()).majorVersion();
 }
 
 int MUVersion::minorVersion()
 {
-    return Version(version()).minor();
+    return Version(version()).minorVersion();
 }
 
 int MUVersion::patchVersion()
 {
-    return Version(version()).patch();
+    return Version(version()).patchVersion();
 }

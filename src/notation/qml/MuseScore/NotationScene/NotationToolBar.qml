@@ -28,8 +28,6 @@ import MuseScore.UiComponents 1.0
 Item {
     id: root
 
-    property alias navigation: keynavSub
-
     signal activeFocusRequested()
 
     width: view.width
@@ -39,8 +37,7 @@ Item {
         toolbarModel.load()
     }
 
-    NavigationPanel {
-        id: keynavSub
+    property NavigationPanel navigationPanel: NavigationPanel {
         name: "NotationToolBar"
         enabled: root.enabled && root.visible
         accessible.name: qsTrc("notation", "Notation toolbar")
@@ -85,7 +82,7 @@ Item {
 
             textFont: ui.theme.largeBodyFont
 
-            navigation.panel: keynavSub
+            navigation.panel: root.navigationPanel
             navigation.name: toolTipTitle
             navigation.order: model.index
 

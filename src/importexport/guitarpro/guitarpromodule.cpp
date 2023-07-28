@@ -32,8 +32,6 @@
 using namespace mu::iex::guitarpro;
 using namespace mu::project;
 
-static std::shared_ptr<GuitarProConfiguration> s_configuration = std::make_shared<GuitarProConfiguration>();
-
 std::string GuitarProModule::moduleName() const
 {
     return "iex_guitarpro";
@@ -41,7 +39,9 @@ std::string GuitarProModule::moduleName() const
 
 void GuitarProModule::registerExports()
 {
-    modularity::ioc()->registerExport<IGuitarProConfiguration>(moduleName(), s_configuration);
+    m_configuration = std::make_shared<GuitarProConfiguration>();
+
+    modularity::ioc()->registerExport<IGuitarProConfiguration>(moduleName(), m_configuration);
 }
 
 void GuitarProModule::resolveImports()
@@ -50,8 +50,4 @@ void GuitarProModule::resolveImports()
     if (readers) {
         readers->reg({ "gtp", "gp3", "gp4", "gp5", "gpx", "gp", "ptb" }, std::make_shared<GuitarProReader>());
     }
-}
-
-void GuitarProModule::onInit(const framework::IApplication::RunMode&)
-{
 }

@@ -68,8 +68,12 @@ public:
     virtual bool isNoteEnterMode() const = 0;
     virtual void showShadowNote(const PointF& pos) = 0;
 
-    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus = false) = 0;
+    virtual void showContextMenu(const ElementType& elementType, const QPointF& pos) = 0;
     virtual void hideContextMenu() = 0;
+
+    virtual void showElementPopup(const ElementType& elementType, const RectF& elementRect) = 0;
+    virtual void hideElementPopup() = 0;
+    virtual void toggleElementPopup(const ElementType& elementType, const RectF& elementRect) = 0;
 
     virtual INotationInteractionPtr notationInteraction() const = 0;
     virtual INotationPlaybackPtr notationPlayback() const = 0;
@@ -79,10 +83,10 @@ public:
 
 class NotationViewInputController : public actions::Actionable, public async::Asyncable
 {
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, context::IGlobalContext, globalContext)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(context::IGlobalContext, globalContext)
 
 public:
     NotationViewInputController(IControlledView* view);
@@ -131,6 +135,8 @@ private:
     INotationInteractionPtr viewInteraction() const;
     const INotationInteraction::HitElementContext& hitElementContext() const;
 
+    void onNotationChanged();
+
     void zoomToPageWidth();
     void doZoomToPageWidth();
     void zoomToWholePage();
@@ -152,6 +158,8 @@ private:
     void setViewMode(const ViewMode& viewMode);
 
     void startDragElements(ElementType elementsType, const PointF& elementsOffset);
+
+    void togglePopupForItemIfSupports(const EngravingItem* item);
 
     float hitWidth() const;
 
@@ -181,6 +189,7 @@ private:
     PointF m_beginPoint;
 
     mu::engraving::EngravingItem* m_prevHitElement = nullptr;
+    bool m_shouldTogglePopupOnLeftClickRelease = false;
 };
 }
 

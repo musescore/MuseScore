@@ -37,17 +37,19 @@ class Part;
 class Score;
 class Staff;
 class Spanner;
-class XmlReader;
 
 class Excerpt
 {
 public:
     Excerpt(MasterScore* masterScore = nullptr) { m_masterScore = masterScore; }
-    Excerpt(const Excerpt& ex, bool copyPartScore = true);
+    Excerpt(const Excerpt& ex, bool copyContents = true);
 
     ~Excerpt();
 
     bool inited() const;
+
+    bool custom() const;
+    void markAsCustom();
 
     const ID& initialPartId() const;
     void setInitialPartId(const ID& id);
@@ -71,12 +73,10 @@ public:
     size_t nstaves() const;
     bool isEmpty() const;
 
-    TracksMap& tracksMapping();
+    const TracksMap& tracksMapping();
     void setTracksMapping(const TracksMap& tracksMapping);
 
-    void setVoiceVisible(Staff* staff, int voiceIndex, bool visible);
-
-    void read(XmlReader&);
+    void setVoiceVisible(Staff* staff, voice_idx_t voiceIndex, bool visible);
 
     static std::vector<Excerpt*> createExcerptsFromParts(const std::vector<Part*>& parts);
     static Excerpt* createExcerptFromPart(Part* part);
@@ -97,14 +97,13 @@ private:
     void setInited(bool inited);
     void writeNameToMetaTags();
 
-    void updateTracksMapping(bool voicesVisibilityChanged = false);
+    void updateTracksMapping();
 
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
     String m_name;
     async::Notification m_nameChanged;
     std::vector<Part*> m_parts;
-    std::vector<Staff*> m_cachedStaves;
     TracksMap m_tracksMapping;
     bool m_inited = false;
     ID m_initialPartId;

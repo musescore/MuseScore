@@ -46,7 +46,6 @@ Column {
 
     PlacementSection {
         id: placementOnStaffSection
-        titleText: qsTrc("inspector", "Placement on staff")
         propertyItem: root.model ? root.model.placementType : null
 
         navigationPanel: root.navigationPanel

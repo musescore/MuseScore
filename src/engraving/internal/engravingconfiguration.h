@@ -35,10 +35,10 @@
 namespace mu::engraving {
 class EngravingConfiguration : public IEngravingConfiguration, public async::Asyncable
 {
-    INJECT(engraving, mu::framework::IGlobalConfiguration, globalConfiguration)
-    INJECT(engraving, mu::ui::IUiConfiguration, uiConfiguration)
-    INJECT(engraving, mu::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
-    INJECT(engraving, iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
+    INJECT(mu::framework::IGlobalConfiguration, globalConfiguration)
+    INJECT(mu::ui::IUiConfiguration, uiConfiguration)
+    INJECT(mu::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
+    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
 
 public:
     EngravingConfiguration() = default;
@@ -68,6 +68,7 @@ public:
     draw::Color formattingMarksColor() const override;
     draw::Color thumbnailBackgroundColor() const override;
     draw::Color noteBackgroundColor() const override;
+    draw::Color fontPrimaryColor() const override;
 
     double guiScaling() const override;
 

@@ -38,11 +38,11 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
 {
     Q_OBJECT
 
-    INJECT(notation, mu::context::IGlobalContext, globalContext)
-    INJECT(notation, mu::notation::INotationConfiguration, configuration)
-    INJECT(notation, mu::framework::IInteractive, interactive)
-    INJECT(notation, mu::ui::IUiEngine, uiEngine)
-    INJECT(notation, mu::engraving::IEngravingFontsProvider, engravingFonts)
+    INJECT(mu::context::IGlobalContext, globalContext)
+    INJECT(mu::notation::INotationConfiguration, configuration)
+    INJECT(mu::framework::IInteractive, interactive)
+    INJECT(mu::ui::IUiEngine, uiEngine)
+    INJECT(mu::engraving::IEngravingFontsProvider, engravingFonts)
 
     Q_PROPERTY(QString currentPageCode READ currentPageCode WRITE setCurrentPageCode NOTIFY currentPageChanged)
     Q_PROPERTY(QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
@@ -69,6 +69,7 @@ private:
     void showEvent(QShowEvent*);
     void hideEvent(QHideEvent*);
     void changeEvent(QEvent*);
+    void keyPressEvent(QKeyEvent* event);
 
     void retranslate();
     void setHeaderFooterToolTip();

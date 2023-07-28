@@ -43,7 +43,7 @@ public:
 
 private:
 
-    RunMode m_runMode = RunMode::Editor;
+    RunMode m_runMode = RunMode::GuiApp;
 };
 }
 

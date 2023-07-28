@@ -41,18 +41,6 @@ class Box : public MeasureBase
 {
     OBJECT_ALLOCATOR(engraving, Box)
 
-    Spatium _boxWidth             { Spatium(0) };      // only valid for HBox
-    Spatium _boxHeight            { Spatium(0) };      // only valid for VBox
-    Millimetre _topGap            { Millimetre(0.0) }; // distance from previous system (left border for hbox)
-                                                       // initialized with Sid::systemFrameDistance
-    Millimetre _bottomGap         { Millimetre(0.0) }; // distance to next system (right border for hbox)
-                                                       // initialized with Sid::frameSystemDistance
-    double _leftMargin             { 0.0 };
-    double _rightMargin            { 0.0 };             // inner margins in metric mm
-    double _topMargin              { 0.0 };
-    double _bottomMargin           { 0.0 };
-    bool _isAutoSizeEnabled       { true };
-
 public:
     Box(const ElementType& type, System* parent);
 
@@ -65,12 +53,6 @@ public:
     virtual void editDrag(EditData&) override;
     virtual void endEdit(EditData&) override;
 
-    virtual void layout() override;
-    virtual void write(XmlWriter&) const override;
-    virtual void write(XmlWriter& xml, staff_idx_t, bool, bool) const override { write(xml); }
-    virtual void writeProperties(XmlWriter&) const override;
-    virtual bool readProperties(XmlReader&) override;
-    virtual void read(XmlReader&) override;
     virtual bool acceptDrop(EditData&) const override;
     virtual EngravingItem* drop(EditData&) override;
     virtual void add(EngravingItem* e) override;
@@ -108,6 +90,19 @@ public:
     Grip initialEditModeGrip() const override { return Grip::START; }
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overridden in descendants
+
+private:
+    Spatium _boxWidth             { Spatium(0) };      // only valid for HBox
+    Spatium _boxHeight            { Spatium(0) };      // only valid for VBox
+    Millimetre _topGap            { Millimetre(0.0) }; // distance from previous system (left border for hbox)
+                                                       // initialized with Sid::systemFrameDistance
+    Millimetre _bottomGap         { Millimetre(0.0) }; // distance to next system (right border for hbox)
+                                                       // initialized with Sid::frameSystemDistance
+    double _leftMargin             { 0.0 };
+    double _rightMargin            { 0.0 };             // inner margins in metric mm
+    double _topMargin              { 0.0 };
+    double _bottomMargin           { 0.0 };
+    bool _isAutoSizeEnabled       { true };
 };
 
 //---------------------------------------------------------
@@ -118,8 +113,7 @@ public:
 class HBox final : public Box
 {
     OBJECT_ALLOCATOR(engraving, HBox)
-
-    bool _createSystemHeader { true };
+    DECLARE_CLASSOF(ElementType::HBOX)
 
 public:
     HBox(System* parent);
@@ -127,12 +121,8 @@ public:
 
     HBox* clone() const override { return new HBox(*this); }
 
-    void layout() override;
-    void writeProperties(XmlWriter&) const override;
-    bool readProperties(XmlReader&) override;
-
     mu::RectF drag(EditData&) override;
-    void layout2();
+
     bool isMovable() const override;
     void computeMinWidth() override;
 
@@ -144,6 +134,10 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
+
+private:
+
+    bool _createSystemHeader { true };
 };
 
 //---------------------------------------------------------
@@ -154,6 +148,8 @@ public:
 class VBox : public Box
 {
     OBJECT_ALLOCATOR(engraving, VBox)
+    DECLARE_CLASSOF(ElementType::VBOX)
+
 public:
     VBox(const ElementType& type, System* parent);
     VBox(System* parent);
@@ -165,14 +161,10 @@ public:
     double maxHeight() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
-    void layout() override;
 
     void startEditDrag(EditData&) override;
 
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
-
-private:
-    void adjustLayoutWithoutImages();
 };
 
 //---------------------------------------------------------
@@ -183,6 +175,8 @@ private:
 class FBox : public VBox
 {
     OBJECT_ALLOCATOR(engraving, FBox)
+    DECLARE_CLASSOF(ElementType::FBOX)
+
 public:
     FBox(System* parent)
         : VBox(ElementType::FBOX, parent) {}
@@ -190,7 +184,6 @@ public:
 
     FBox* clone() const override { return new FBox(*this); }
 
-    void layout() override;
     void add(EngravingItem*) override;
 };
 } // namespace mu::engraving

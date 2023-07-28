@@ -74,7 +74,7 @@ public:
 
         String res = isTranslatable() ? mtrc(context, str, disambiguation, n) : str;
 
-        for (auto arg : args) {
+        for (const auto& arg : args) {
             arg->apply(res);
         }
 
@@ -90,7 +90,7 @@ public:
 
         QString res = isTranslatable() ? qtrc(context, str, disambiguation, n) : str.toQString();
 
-        for (auto arg : args) {
+        for (const auto& arg : args) {
             arg->apply(res);
         }
 

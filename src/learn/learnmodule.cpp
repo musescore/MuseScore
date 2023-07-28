@@ -34,9 +34,6 @@ using namespace mu::learn;
 using namespace mu::framework;
 using namespace mu::modularity;
 
-static std::shared_ptr<LearnConfiguration> s_learnConfiguration = std::make_shared<LearnConfiguration>();
-static std::shared_ptr<LearnService> s_learnService = std::make_shared<LearnService>();
-
 static void learn_init_qrc()
 {
     Q_INIT_RESOURCE(learn);
@@ -49,8 +46,11 @@ std::string LearnModule::moduleName() const
 
 void LearnModule::registerExports()
 {
-    ioc()->registerExport<ILearnConfiguration>(moduleName(), s_learnConfiguration);
-    ioc()->registerExport<ILearnService>(moduleName(), s_learnService);
+    m_learnConfiguration = std::make_shared<LearnConfiguration>();
+    m_learnService = std::make_shared<LearnService>();
+
+    ioc()->registerExport<ILearnConfiguration>(moduleName(), m_learnConfiguration);
+    ioc()->registerExport<ILearnService>(moduleName(), m_learnService);
 }
 
 void LearnModule::registerResources()
@@ -63,7 +63,12 @@ void LearnModule::registerUiTypes()
     qmlRegisterType<LearnPageModel>("MuseScore.Learn", 1, 0, "LearnPageModel");
 }
 
+void LearnModule::onInit(const framework::IApplication::RunMode&)
+{
+    m_learnConfiguration->init();
+}
+
 void LearnModule::onDelayedInit()
 {
-    s_learnService->refreshPlaylists();
+    m_learnService->refreshPlaylists();
 }

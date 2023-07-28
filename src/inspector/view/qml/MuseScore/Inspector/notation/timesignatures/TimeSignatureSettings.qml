@@ -89,7 +89,7 @@ Column {
                 measureUnitsSymbol: "%"
                 step: 1
                 decimals: 0
-                maxValue: 300
+                maxValue: 1000
                 minValue: 1
 
                 navigation.name: "HorizontalScale"
@@ -97,7 +97,7 @@ Column {
                 navigation.row: scaleSection.navigationRowStart + 2
                 navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Horizontal") + currentValue
 
-                onValueEdited: function(newValue) {
+                onValueEditingFinished: function(newValue) {
                     root.model.horizontalScale.value = newValue
                 }
             }
@@ -116,7 +116,7 @@ Column {
                 measureUnitsSymbol: "%"
                 step: 1
                 decimals: 0
-                maxValue: 300
+                maxValue: 1000
                 minValue: 1
 
                 navigation.name: "VerticalScale"
@@ -124,14 +124,14 @@ Column {
                 navigation.row: scaleSection.navigationRowStart + 3
                 navigation.accessible.name: scaleSection.titleText + " " + qsTrc("inspector", "Vertical") + currentValue
 
-                onValueEdited: function(newValue) {
+                onValueEditingFinished: function(newValue) {
                     root.model.verticalScale.value = newValue
                 }
             }
         }
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         text: qsTrc("inspector", "Show courtesy time signature on previous system")
         propertyItem: root.model ? root.model.shouldShowCourtesy : null
 

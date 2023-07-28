@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
+<museScore version="4.10">
   <Score>
-    <LayerTag id="0" tag="default"></LayerTag>
-    <currentLayer>0</currentLayer>
     <Division>480</Division>
     <Style>
       <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -525,7 +523,7 @@
             <durationType>quarter</durationType>
             </Rest>
           <Beam>
-            <l1>38</l1>
+            <l1>42</l1>
             <l2>44</l2>
             </Beam>
           <Chord>
@@ -557,8 +555,6 @@
       </Staff>
     <Score>
       <initialPartId>1</initialPartId>
-      <LayerTag id="0" tag="default"></LayerTag>
-      <currentLayer>0</currentLayer>
       <Division>480</Division>
       <Style>
         <lastSystemFillLimit>0</lastSystemFillLimit>
@@ -1160,7 +1156,7 @@
               <durationType>quarter</durationType>
               </Rest>
             <Beam>
-              <l1>38</l1>
+              <l1>42</l1>
               <l2>44</l2>
               </Beam>
             <Chord>

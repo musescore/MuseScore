@@ -83,18 +83,12 @@ int NotationPainting::pageCount() const
 
 SizeF NotationPainting::pageSizeInch() const
 {
-    if (!score()) {
-        return SizeF();
-    }
+    return engraving::Paint::pageSizeInch(score());
+}
 
-    //! NOTE If now it is not PAGE view mode,
-    //! then the page sizes will differ from the standard sizes (in PAGE view mode)
-    if (score()->npages() > 0) {
-        const mu::engraving::Page* page = score()->pages().front();
-        return SizeF(page->bbox().width() / mu::engraving::DPI, page->bbox().height() / mu::engraving::DPI);
-    }
-
-    return SizeF(score()->styleD(mu::engraving::Sid::pageWidth), score()->styleD(mu::engraving::Sid::pageHeight));
+SizeF NotationPainting::pageSizeInch(const Options& opt) const
+{
+    return engraving::Paint::pageSizeInch(score(), opt);
 }
 
 bool NotationPainting::isPaintPageBorder() const
@@ -121,9 +115,8 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
 
     Options myopt = opt;
     bool printPageBackground = myopt.printPageBackground;
-    myopt.onPaintPageSheet
-        = [this, printPageBackground](draw::Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd) {
-        paintPageSheet(painter, pageRect, pageContentRect, isOdd, printPageBackground);
+    myopt.onPaintPageSheet = [this, printPageBackground](draw::Painter* painter, const Page* page, const RectF& pageRect) {
+        paintPageSheet(painter, page, pageRect, printPageBackground);
     };
 
     engraving::Paint::paintScore(painter, score(), myopt);
@@ -133,8 +126,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
     }
 }
 
-void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, const RectF& pageContentRect, bool isOdd,
-                                      bool printPageBackground) const
+void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const RectF& pageRect, bool printPageBackground) const
 {
     TRACEFUNC;
     if (score()->printing()) {
@@ -171,11 +163,13 @@ void NotationPainting::paintPageSheet(Painter* painter, const RectF& pageRect, c
         return;
     }
 
+    RectF pageContentRect = page->bbox().adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
+
     painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(engravingConfiguration()->formattingMarksColor());
     painter->drawRect(pageContentRect);
 
-    if (!isOdd) {
+    if (!page->isOdd()) {
         painter->drawLine(pageContentRect.right(), 0.0, pageContentRect.right(), pageContentRect.bottom());
     }
 }

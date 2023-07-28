@@ -25,6 +25,9 @@
 
 #include "notation/view/widgets/exampleview.h"
 
+#include "modularity/ioc.h"
+#include "engraving/rendering/isinglerendering.h"
+
 namespace mu::engraving {
 class Note;
 class Chord;
@@ -35,6 +38,8 @@ namespace mu::palette {
 class NoteGroupsExampleView : public notation::ExampleView
 {
     Q_OBJECT
+
+    INJECT_STATIC(engraving::rendering::ISingleRendering, engravingRendering)
 
 public:
     NoteGroupsExampleView(QWidget* parent = 0);

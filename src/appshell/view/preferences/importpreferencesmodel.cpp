@@ -53,7 +53,7 @@ QVariantList ImportPreferencesModel::charsets() const
 
 QVariantList ImportPreferencesModel::shortestNotes() const
 {
-    constexpr int division =  engraving::Constants::division;
+    constexpr int division =  engraving::Constants::DIVISION;
 
     QVariantList result = {
         QVariantMap { { "title", qtrc("appshell/preferences", "Quarter") }, { "value", division } },
@@ -118,6 +118,11 @@ int ImportPreferencesModel::currentShortestNote() const
 bool ImportPreferencesModel::needAskAboutApplyingNewStyle() const
 {
     return musicXmlConfiguration()->needAskAboutApplyingNewStyle();
+}
+
+bool ImportPreferencesModel::meiImportLayout() const
+{
+    return meiConfiguration()->meiImportLayout();
 }
 
 void ImportPreferencesModel::setStyleFileImportPath(QString path)
@@ -188,4 +193,14 @@ void ImportPreferencesModel::setNeedAskAboutApplyingNewStyle(bool value)
 
     musicXmlConfiguration()->setNeedAskAboutApplyingNewStyle(value);
     emit needAskAboutApplyingNewStyleChanged(value);
+}
+
+void ImportPreferencesModel::setMeiImportLayout(bool import)
+{
+    if (import == meiImportLayout()) {
+        return;
+    }
+
+    meiConfiguration()->setMeiImportLayout(import);
+    emit meiImportLayoutChanged(import);
 }

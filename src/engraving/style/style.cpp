@@ -22,12 +22,15 @@
 
 #include "style.h"
 
+#include "types/constants.h"
 #include "compat/pageformat.h"
 #include "rw/compat/readchordlisthook.h"
-#include "rw/xml.h"
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
 #include "types/typesconv.h"
 
 #include "libmscore/mscore.h"
+#include "libmscore/types.h"
 
 #include "defaultstyle.h"
 
@@ -174,6 +177,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::LINE_TYPE:
                 set(idx, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
                 break;
+            case P_TYPE::CLEF_TO_BARLINE_POS:
+                set(idx, ClefToBarlinePosition(e.readInt()));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -260,17 +266,19 @@ bool MStyle::readTextStyleValCompat(XmlReader& e)
     return true;
 }
 
+void MStyle::readVersion(String versionTag)
+{
+    versionTag.remove(u".");
+    m_version = versionTag.toInt();
+}
+
 bool MStyle::read(IODevice* device, bool ign)
 {
+    UNUSED(ign);
     XmlReader e(device);
     while (e.readNextStartElement()) {
         if (e.name() == "museScore") {
-            String version = e.attribute("version");
-            StringList sl  = version.split('.');
-            int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
-            if (mscVersion != MSCVERSION && !ign) {
-                return false;
-            }
+            readVersion(e.attribute("version"));
             while (e.readNextStartElement()) {
                 if (e.name() == "Style") {
                     read(e, nullptr);
@@ -332,12 +340,17 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
                     || tag == "propertyDistanceHead"
                     || tag == "propertyDistanceStem"
                     || tag == "propertyDistance")
-                   && defaultStyleVersion() < 400) {
+                   && m_version < 400) {
             // Ignoring pre-4.0 articulation style settings. Using the new defaults instead
             e.skipCurrentElement();
         } else if ((tag == "bracketDistance")
-                   && defaultStyleVersion() < 400) {
+                   && m_version < 400) {
             // Ignoring pre-4.0 brackets distance settings. Using the new defaults instead.
+            e.skipCurrentElement();
+        } else if (tag == "pedalListStyle") { // pre-3.6.3/4.0 typo
+            set(Sid::pedalLineStyle, TConv::fromXml(e.readAsciiText(), LineType::SOLID));
+        } else if (tag == "chordlineThickness" && m_version < 410) {
+            // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
             e.skipCurrentElement();
         } else if (!readProperties(e)) {
             e.unknown();
@@ -353,7 +366,7 @@ bool MStyle::write(IODevice* device)
 {
     XmlWriter xml(device);
     xml.startDocument();
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
     save(xml, false);
     xml.endElement();
     return true;

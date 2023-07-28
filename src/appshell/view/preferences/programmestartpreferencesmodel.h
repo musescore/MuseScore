@@ -33,7 +33,7 @@ class ProgrammeStartPreferencesModel : public QObject
 {
     Q_OBJECT
 
-    INJECT(appshell, IAppShellConfiguration, configuration)
+    INJECT(IAppShellConfiguration, configuration)
 
     Q_PROPERTY(QVariantList startupModes READ startupModes NOTIFY startupModesChanged)
     Q_PROPERTY(QVariantList panels READ panels NOTIFY panelsChanged)

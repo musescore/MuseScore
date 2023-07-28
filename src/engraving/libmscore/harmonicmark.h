@@ -35,14 +35,14 @@ class HarmonicMark;
 class HarmonicMarkSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, HarmonicMarkSegment)
+    DECLARE_CLASSOF(ElementType::HARMONIC_MARK_SEGMENT)
+
 public:
     HarmonicMarkSegment(HarmonicMark* sp, System* parent);
 
     HarmonicMarkSegment* clone() const override { return new HarmonicMarkSegment(*this); }
 
     HarmonicMark* harmonicMark() const { return (HarmonicMark*)spanner(); }
-
-    void layout() override;
 
     friend class HarmonicMark;
 };
@@ -54,6 +54,8 @@ public:
 class HarmonicMark final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, HarmonicMark)
+    DECLARE_CLASSOF(ElementType::HARMONIC_MARK)
+
 public:
     HarmonicMark(EngravingItem* parent);
 

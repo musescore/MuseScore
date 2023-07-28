@@ -84,68 +84,29 @@ class HDegree;
 class Harmony final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, Harmony)
-
-    int _rootTpc;               // root note for chord
-    int _baseTpc;               // bass note or chord base; used for "slash" chords
-                                // or notation of base note in chord
-    int _id;                    // >0 = id of matched chord from chord list, if applicable
-                                // -1 = invalid chord
-                                // <-10000 = private id of generated chord or matched chord with no id
-    String _function;          // numeric representation of root for RNA or Nashville
-    String _userName;          // name as typed by user if applicable
-    String _textName;          // name recognized from chord list, read from score file, or constructed from imported source
-    ParsedChord* _parsedForm;   // parsed form of chord
-    bool _isMisspelled = false; // show spell check warning
-    HarmonyType _harmonyType;   // used to control rendering, transposition, export, etc.
-    double _harmonyHeight;       // used for calculating the height is frame while editing.
-
-    mutable RealizedHarmony _realizedHarmony; // the realized harmony used for playback
-
-    std::vector<HDegree> _degreeList;
-    std::vector<mu::draw::Font> fontList; // temp values used in render()
-    std::list<TextSegment*> textList;   // rendered chord
-
-    bool _leftParen, _rightParen;   // include opening and/or closing parenthesis
-    bool _play;                     // whether or not to play back the harmony
-
-    mutable mu::RectF _tbbox;
-
-    NoteSpellingType _rootSpelling, _baseSpelling;
-    NoteCaseType _rootCase, _baseCase;                // case as typed
-    NoteCaseType _rootRenderCase, _baseRenderCase;    // case to render
-
-    void determineRootBaseSpelling();
-    PointF calculateBoundingRect();
-    void draw(mu::draw::Painter*) const override;
-    void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
-    void render(const String&, double&, double&);
-    void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
-                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
-    Sid getPropertyStyle(Pid) const override;
-
-    Harmony* findInSeg(Segment* seg) const;
+    DECLARE_CLASSOF(ElementType::HARMONY)
 
 public:
     Harmony(Segment* parent = 0);
     Harmony(const Harmony&);
     ~Harmony();
 
-    KerningType doComputeKerningType(const EngravingItem* nextItem) const override;
-
     Harmony* clone() const override { return new Harmony(*this); }
 
-    void setId(int d) { _id = d; }
-    int id() const { return _id; }
+    void setId(int d) { m_id = d; }
+    int id() const { return m_id; }
 
-    bool play() const { return _play; }
+    bool play() const { return m_play; }
 
-    void setBaseCase(NoteCaseType c) { _baseCase = c; }
-    void setRootCase(NoteCaseType c) { _rootCase = c; }
+    void setBaseCase(NoteCaseType c) { m_baseCase = c; }
+    NoteCaseType baseCase() const { return m_baseCase; }
+    void setRootCase(NoteCaseType c) { m_rootCase = c; }
+    NoteCaseType rootCase() const { return m_rootCase; }
 
-    bool leftParen() const { return _leftParen; }
-    bool rightParen() const { return _rightParen; }
-    void setLeftParen(bool leftParen) { _leftParen = leftParen; }
-    void setRightParen(bool rightParen) { _rightParen = rightParen; }
+    bool leftParen() const { return m_leftParen; }
+    bool rightParen() const { return m_rightParen; }
+    void setLeftParen(bool leftParen) { m_leftParen = leftParen; }
+    void setRightParen(bool rightParen) { m_rightParen = rightParen; }
 
     Harmony* findNext() const;
     Harmony* findPrev() const;
@@ -165,8 +126,6 @@ public:
                                    NoteCaseType& baseCase);
 
     void textChanged();
-    void layout() override;
-    void layout1() override;
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
@@ -176,15 +135,15 @@ public:
 
     bool isRealizable() const;
 
-    String hFunction() const { return _function; }
-    String hUserName() const { return _userName; }
-    String hTextName() const { return _textName; }
-    int baseTpc() const { return _baseTpc; }
-    void setBaseTpc(int val) { _baseTpc = val; }
-    int rootTpc() const { return _rootTpc; }
-    void setRootTpc(int val) { _rootTpc = val; }
-    void setTextName(const String& s) { _textName = s; }
-    void setFunction(const String& s) { _function = s; }
+    String hFunction() const { return m_function; }
+    String hUserName() const { return m_userName; }
+    String hTextName() const { return m_textName; }
+    int baseTpc() const { return m_baseTpc; }
+    void setBaseTpc(int val) { m_baseTpc = val; }
+    int rootTpc() const { return m_rootTpc; }
+    void setRootTpc(int val) { m_rootTpc = val; }
+    void setTextName(const String& s) { m_textName = s; }
+    void setFunction(const String& s) { m_function = s; }
     String rootName();
     String baseName();
     void addDegree(const HDegree& d);
@@ -192,12 +151,16 @@ public:
     HDegree degree(int i) const;
     void clearDegrees();
     const std::vector<HDegree>& degreeList() const;
-    const ParsedChord* parsedForm();
-    HarmonyType harmonyType() const { return _harmonyType; }
+    const ParsedChord* parsedForm() const;
+    HarmonyType harmonyType() const { return m_harmonyType; }
     void setHarmonyType(HarmonyType val);
 
-    void write(XmlWriter& xml) const override;
-    void read(XmlReader&) override;
+    const std::vector<TextSegment*>& textList() const { return m_textList; }
+
+    double harmonyHeight() const { return m_harmonyHeight; }
+    void setHarmonyHeight(double h) { m_harmonyHeight = h; }
+
+    void afterRead();
     String harmonyName() const;
     void render();
 
@@ -233,6 +196,50 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
+
+private:
+
+    void determineRootBaseSpelling();
+
+    void draw(mu::draw::Painter*) const override;
+    void drawEditMode(mu::draw::Painter* p, EditData& ed, double currentViewScaling) override;
+    void render(const String&, double&, double&);
+    void render(const std::list<RenderAction>& renderList, double&, double&, int tpc,
+                NoteSpellingType noteSpelling = NoteSpellingType::STANDARD, NoteCaseType noteCase = NoteCaseType::AUTO);
+    Sid getPropertyStyle(Pid) const override;
+
+    Harmony* findInSeg(Segment* seg) const;
+
+    int m_rootTpc = Tpc::TPC_INVALID;               // root note for chord
+    int m_baseTpc = Tpc::TPC_INVALID;               // bass note or chord base; used for "slash" chords
+    // or notation of base note in chord
+    int m_id = -1;                    // >0 = id of matched chord from chord list, if applicable
+    // -1 = invalid chord
+    // <-10000 = private id of generated chord or matched chord with no id
+    String m_function;          // numeric representation of root for RNA or Nashville
+    String m_userName;          // name as typed by user if applicable
+    String m_textName;          // name recognized from chord list, read from score file, or constructed from imported source
+    mutable ParsedChord* m_parsedForm = nullptr;   // parsed form of chord
+    bool m_isMisspelled = false; // show spell check warning
+    HarmonyType m_harmonyType = HarmonyType::STANDARD;   // used to control rendering, transposition, export, etc.
+    double m_harmonyHeight = 0.0;       // used for calculating the height is frame while editing.
+
+    mutable RealizedHarmony m_realizedHarmony; // the realized harmony used for playback
+
+    std::vector<HDegree> m_degreeList;
+    std::vector<mu::draw::Font> m_fontList; // temp values used in render()
+    std::vector<TextSegment*> m_textList;   // rendered chord
+
+    bool m_leftParen = false;
+    bool m_rightParen = false;   // include opening and/or closing parenthesis
+    bool m_play = true;                     // whether or not to play back the harmony
+
+    NoteSpellingType m_rootSpelling = NoteSpellingType::STANDARD;
+    NoteSpellingType m_baseSpelling = NoteSpellingType::STANDARD;
+    NoteCaseType m_rootCase = NoteCaseType::AUTO;
+    NoteCaseType m_baseCase = NoteCaseType::AUTO;                // case as typed
+    NoteCaseType m_rootRenderCase = NoteCaseType::AUTO;
+    NoteCaseType m_baseRenderCase = NoteCaseType::AUTO;           // case to render
 };
 } // namespace mu::engraving
 #endif

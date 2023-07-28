@@ -22,7 +22,7 @@
 #ifndef MU_CLOUD_ILEARNCONFIGURATION_H
 #define MU_CLOUD_ILEARNCONFIGURATION_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "network/networktypes.h"
 
 namespace mu::learn {
@@ -37,9 +37,6 @@ public:
 
     virtual QUrl startedPlaylistUrl() const = 0;
     virtual QUrl advancedPlaylistUrl() const = 0;
-
-    virtual QUrl videosInfoUrl(const QStringList& videosIds) const = 0;
-    virtual QUrl videoOpenUrl(const QString& videoId) const = 0;
 };
 }
 

@@ -117,7 +117,7 @@ Item {
         navigation.panel: navPanel
         navigation.order: 1
 
-        text: qsTrc("palette", "Add Palettes")
+        text: qsTrc("palette", "Add palettes")
         visible: !root.isSearchOpened
         enabled: visible
 
@@ -157,7 +157,7 @@ Item {
         navigation.panel: navPanel
         navigation.order: 2
 
-        toolTipTitle: qsTrc("palette", "Search Palettes")
+        toolTipTitle: qsTrc("palette", "Search palettes")
 
         icon: IconCode.SEARCH
         visible: !root.isSearchOpened
@@ -190,5 +190,7 @@ Item {
         visible: root.isSearchOpened
 
         Keys.onEscapePressed: root.endSearch()
+
+        onAccepted: applyCurrentPaletteElement()
     }
 }

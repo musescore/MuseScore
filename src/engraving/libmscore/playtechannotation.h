@@ -30,6 +30,8 @@ namespace mu::engraving {
 class PlayTechAnnotation final : public StaffTextBase
 {
     OBJECT_ALLOCATOR(engraving, PlayTechAnnotation)
+    DECLARE_CLASSOF(ElementType::PLAYTECH_ANNOTATION)
+
 public:
     PlayTechAnnotation(Segment* parent = nullptr, PlayingTechniqueType techniqueType = PlayingTechniqueType::Natural,
                        TextStyleType tid = TextStyleType::STAFF);
@@ -38,11 +40,8 @@ public:
     void setTechniqueType(const PlayingTechniqueType techniqueType);
 
     PlayTechAnnotation* clone() const override;
-    void layout() override;
 
 private:
-    void write(XmlWriter& writer) const override;
-    void read(XmlReader& reader) override;
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& val) override;

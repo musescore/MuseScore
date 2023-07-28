@@ -44,6 +44,11 @@ io::path_t LocalFileInfoProvider::absoluteDirPath() const
     return io::absoluteDirpath(m_path);
 }
 
+String LocalFileInfoProvider::displayName() const
+{
+    return String::fromUtf8(fileName(/*includingExtension*/ false).c_str());
+}
+
 DateTime LocalFileInfoProvider::birthTime() const
 {
     return fileSystem()->birthTime(m_path);

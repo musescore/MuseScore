@@ -22,10 +22,14 @@
 
 #include "chordlist.h"
 
-#include "io/file.h"
-#include "io/fileinfo.h"
+#include "global/io/file.h"
+#include "global/io/fileinfo.h"
 
-#include "rw/xml.h"
+#include "types/constants.h"
+
+#include "rw/xmlreader.h"
+#include "rw/xmlwriter.h"
+
 #include "style/style.h"
 
 #include "mscore.h"
@@ -1889,7 +1893,7 @@ bool ChordList::write(IODevice* device) const
 {
     XmlWriter xml(device);
     xml.startDocument();
-    xml.startElement("museScore", { { "version", MSC_VERSION } });
+    xml.startElement("museScore", { { "version", Constants::MSC_VERSION_STR } });
 
     write(xml);
 

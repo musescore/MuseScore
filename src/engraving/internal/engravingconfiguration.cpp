@@ -31,6 +31,7 @@
 #include "global/settings.h"
 #include "draw/types/color.h"
 #include "libmscore/mscore.h"
+#include "translation.h"
 
 #include "log.h"
 
@@ -68,6 +69,7 @@ void EngravingConfiguration::init()
         Settings::Key key("engraving", "engraving/colors/voice" + std::to_string(voice + 1));
 
         settings()->setDefaultValue(key, Val(defaultVoiceColors[voice].toQColor()));
+        settings()->setDescription(key, qtrc("engraving", "Voice %1 color").arg(voice + 1).toStdString());
         settings()->setCanBeManuallyEdited(key, true);
         settings()->valueChanged(key).onReceive(this, [this, voice](const Val& val) {
             Color color = val.toQColor();
@@ -202,6 +204,11 @@ Color EngravingConfiguration::thumbnailBackgroundColor() const
 Color EngravingConfiguration::noteBackgroundColor() const
 {
     return Color::WHITE;
+}
+
+Color EngravingConfiguration::fontPrimaryColor() const
+{
+    return Color(uiConfiguration()->currentTheme().values[ui::ThemeStyleKey::FONT_PRIMARY_COLOR].toString());
 }
 
 double EngravingConfiguration::guiScaling() const

@@ -43,7 +43,7 @@ Column {
         showCourtesyClef.navigation.requestActive()
     }
 
-    CheckBoxPropertyView {
+    PropertyCheckBox {
         id: showCourtesyClef
 
         navigation.name: "ShowCourtesyClefCheckBox"
@@ -52,5 +52,23 @@ Column {
 
         text: qsTrc("inspector", "Show courtesy clef on previous system")
         propertyItem: root.model ? root.model.shouldShowCourtesy : null
+    }
+
+    FlatRadioButtonGroupPropertyView {
+        id: clefToBarlinePosition
+        enabled: root.model ? root.model.isClefToBarPosAvailable : false
+
+        titleText: qsTrc("inspector", "Position relative to barline")
+        propertyItem: root.model ? root.model.clefToBarlinePosition : null
+
+        navigationName: "ClefToBarlinePosition"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: showCourtesyClef.navigation.row + 1
+
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: 0, title: qsTrc("inspector", "Auto") },
+            { text: qsTrc("inspector", "Before"), value: 1, title: qsTrc("inspector", "Before") },
+            { text: qsTrc("inspector", "After"), value: 2, title: qsTrc("inspector", "After") }
+        ]
     }
 }

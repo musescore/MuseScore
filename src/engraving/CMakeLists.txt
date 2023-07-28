@@ -23,6 +23,9 @@ set(MODULE_QRC engraving.qrc)
 
 include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
 
 set(MODULE_SRC
 
@@ -56,35 +59,76 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/rtti.h
 
     ${LIBMSCORE_SRC}
 
-    ${CMAKE_CURRENT_LIST_DIR}/rw/xml.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/README.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/ireader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/iwriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/rwregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/rwregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/inoutdata.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlreader.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/xmlwriter.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/readcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writecontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/writecontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/linksindexer.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/scorereader.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read400.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/read400.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/staffrw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/staffrw.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/measurerw.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/measurerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/mscsaver.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/writer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/writer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/writecontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/writecontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/twrite.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/twrite.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/connectorinfowriter.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/connectorinfowriter.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/staffwrite.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/staffwrite.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/measurewrite.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/write/measurewrite.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read114/read114.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read114/read114.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read206/read206.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read206/read206.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read302/read302.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read302/read302.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/read400.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/read400.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/staffrw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/staffrw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/measurerw.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/measurerw.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/tread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/connectorinforeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read400/connectorinforeader.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/read410.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/read410.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/staffread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/staffread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/measureread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/measureread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/readcontext.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/readcontext.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/tread.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/tread.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rw/read410/connectorinforeader.h
+
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readstyle.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read114.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read114.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read206.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read206.h
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read302.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/read302.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/compatutils.cpp
@@ -130,31 +174,16 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.cpp
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
 
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layout.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutoptions.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutcontext.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutcontext.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutlyrics.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutlyrics.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutmeasure.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutmeasure.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutbeams.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutbeams.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layouttuplets.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layouttuplets.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutchords.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutchords.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/verticalgapdata.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/verticalgapdata.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutsystem.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutsystem.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutharmonies.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutharmonies.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layouttremolo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layouttremolo.h
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/layout/layoutpage.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/README.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerendering.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerendering.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
+
+    ${RENDERING_DEV_SRC}
+    ${RENDERING_STABLE_SRC}
+    ${RENDERING_SINGLE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp

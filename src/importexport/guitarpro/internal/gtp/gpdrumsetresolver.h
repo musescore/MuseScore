@@ -1,12 +1,12 @@
-#ifndef GPDRUMSETRESOLVER_H
-#define GPDRUMSETRESOLVER_H
+#ifndef MU_IMPORTEXPORT_GPDRUMSETRESOLVER_H
+#define MU_IMPORTEXPORT_GPDRUMSETRESOLVER_H
 
 #include <map>
 #include <list>
 
 #include "types/string.h"
 
-namespace mu::engraving {
+namespace mu::iex::guitarpro {
 struct GPDrum {
     int32_t pitch = -1;
     int32_t element = -1;
@@ -35,5 +35,5 @@ private:
 
     std::map<String, std::list<GPDrum> > _drum;
 };
-} // end mu::engraving namespace
-#endif // GPDRUMSETRESOLVER_H
+} // namespace mu::iex::guitarpro
+#endif // MU_IMPORTEXPORT_GPDRUMSETRESOLVER_H

@@ -25,7 +25,6 @@
 ###########################################
 # Common
 ###########################################
-
 set(EXECUTABLE_NAME mscore)
 
 ###########################################
@@ -108,6 +107,14 @@ elseif(OS_IS_WASM)
         -s ERROR_ON_UNDEFINED_SYMBOLS=0 \
         -O3 \
     ")
+elseif(OS_IS_FBSD)
+    set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -L /usr/local/lib -lasound -lpthread")
+    set(MSCORE_OUTPUT_NAME "${EXECUTABLE_NAME}")
+
+    set(CMAKE_INSTALL_RPATH "${QT_INSTALL_LIBS}")
+    if (BUILD_SHARED_LIBS)
+        set(CMAKE_INSTALL_RPATH "${CMAKE_INSTALL_RPATH};${SHARED_LIBS_INSTALL_DESTINATION}")
+    endif(BUILD_SHARED_LIBS)
 else()
     message(FATAL_ERROR "Unsupported Platform: ${CMAKE_HOST_SYSTEM_NAME}")
 endif()
@@ -122,6 +129,7 @@ set(LINK_LIB
     fonts
     network
 
+    braille
     diagnostics
     engraving
     actions
@@ -168,7 +176,6 @@ if (NOT CC_IS_EMSCRIPTEN)
         set(LINK_LIB ${LINK_LIB}
             iex_musicxml
             iex_bb
-            iex_braille
             iex_bww
             iex_capella
             iex_guitarpro
@@ -177,15 +184,19 @@ if (NOT CC_IS_EMSCRIPTEN)
             iex_ove
             iex_audioexport
             iex_imagesexport
+            iex_mei
         )
 
         if (MUE_BUILD_VIDEOEXPORT_MODULE)
             list(APPEND LINK_LIB iex_videoexport)
         endif()
+    else()
+        if (MUE_BUILD_IMAGESEXPORT_MODULE)
+            list(APPEND LINK_LIB iex_imagesexport)
+        endif()
     endif()
 
 endif()
-
 
 
 if (MUE_BUILD_AUTOBOT_MODULE) 
@@ -221,8 +232,8 @@ add_executable(${EXECUTABLE_NAME}
       main.cpp
       app.cpp
       app.h
-      commandlinecontroller.cpp
-      commandlinecontroller.h
+      commandlineparser.cpp
+      commandlineparser.h
       ${MSCORE_APPEND_SRC}
       )
 
@@ -394,6 +405,17 @@ elseif(OS_IS_LIN)
        add_custom_target(mscore_alias ALL COMMAND echo "No symlink aliases will be created." VERBATIM )
     endif (LN_EXECUTABLE)
 
+elseif(OS_IS_FBSD)
+###########################################
+# FreeBSD
+###########################################
+    install(TARGETS ${EXECUTABLE_NAME} RUNTIME DESTINATION bin )
+    add_custom_target(mscore_alias ALL
+           COMMAND echo "Creating symlink alias for mscore executable."
+           COMMAND ln -sfv "mscore" "musescore"
+           )
+   install(FILES ${PROJECT_BINARY_DIR}/src/app/musescore DESTINATION bin)
+
 ###########################################
 # MacOS
 ###########################################
@@ -428,15 +450,17 @@ elseif(OS_IS_MAC)
             DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}fonts
     )
 
-    install(DIRECTORY
-            ${QT_INSTALL_QML}
-            DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
-            REGEX ".*QtWebkit.*" EXCLUDE
-            REGEX ".*QtTest.*" EXCLUDE
-            REGEX ".*QtSensors.*" EXCLUDE
-            REGEX ".*QtMultimedia.*" EXCLUDE
-            REGEX ".*QtAudioEngine.*" EXCLUDE
-            REGEX ".*_debug\\.dylib" EXCLUDE)
+    if(MUE_COMPILE_INSTALL_QTQML_FILES)
+        install(DIRECTORY
+                ${QT_INSTALL_QML}
+                DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}
+                REGEX ".*QtWebkit.*" EXCLUDE
+                REGEX ".*QtTest.*" EXCLUDE
+                REGEX ".*QtSensors.*" EXCLUDE
+                REGEX ".*QtMultimedia.*" EXCLUDE
+                REGEX ".*QtAudioEngine.*" EXCLUDE
+                REGEX ".*_debug\\.dylib" EXCLUDE)
+    endif()
 
 ###########################################
 # Wasm

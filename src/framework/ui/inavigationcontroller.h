@@ -22,7 +22,7 @@
 #ifndef MU_UI_INAVIGATIONCONTROLLER_H
 #define MU_UI_INAVIGATIONCONTROLLER_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "inavigation.h"
 #include "async/notification.h"
 
@@ -41,6 +41,8 @@ public:
 
     virtual bool requestActivateByName(const std::string& section, const std::string& panel, const std::string& controlName) = 0;
     virtual bool requestActivateByIndex(const std::string& section, const std::string& panel, const INavigation::Index& controlIndex) = 0;
+
+    virtual void resetNavigation() = 0;
 
     virtual INavigationSection* activeSection() const = 0;
     virtual INavigationPanel* activePanel() const = 0;

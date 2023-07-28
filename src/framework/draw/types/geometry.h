@@ -26,7 +26,8 @@
 #include <cmath>
 #include <cassert>
 
-#include "realfn.h"
+#include "global/realfn.h"
+#include "global/logstream.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QPair>
@@ -167,6 +168,8 @@ public:
 
     inline LineX(T x1, T y1, T x2, T y2)
         : m_p1(PointX<T>(x1, y1)), m_p2(PointX<T>(x2, y2)) {}
+
+    inline bool isNull() const { return m_p1.isNull() && m_p2.isNull(); }
 
     inline const PointX<T>& p1() const { return m_p1; }
     inline const PointX<T>& p2() const { return m_p2; }
@@ -710,6 +713,20 @@ RectX<T> RectX<T>::normalized() const
     }
     return r;
 }
+}
+
+template<typename T>
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::RectX<T>& r)
+{
+    s << "{x: " << r.x() << ", y: " << r.y() << ", w: " << r.width() << ", h: " << r.height() << "}";
+    return s;
+}
+
+template<typename T>
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::PointX<T>& p)
+{
+    s << "{x: " << p.x() << ", y: " << p.y() << "}";
+    return s;
 }
 
 #endif // MU_DRAW_GEOMETRY_H

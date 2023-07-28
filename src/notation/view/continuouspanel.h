@@ -41,8 +41,8 @@ class Painter;
 namespace mu::notation {
 class ContinuousPanel
 {
-    INJECT(notation, INotationConfiguration, notationConfiguration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(INotationConfiguration, notationConfiguration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
 
 public:
     void setNotation(INotationPtr notation);

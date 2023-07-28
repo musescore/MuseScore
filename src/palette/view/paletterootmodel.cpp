@@ -29,20 +29,20 @@ PaletteRootModel::PaletteRootModel(QObject* parent)
     dispatcher()->reg(this, "palette-search", [this]() {
         emit paletteSearchRequested();
     });
+    dispatcher()->reg(this, "apply-current-palette-element", [this]() {
+        emit applyCurrentPaletteElementRequested();
+    });
 }
 
-bool PaletteRootModel::paletteEnabled() const
+PaletteRootModel::~PaletteRootModel()
 {
-    // TODO?
-    return true;
+    PaletteProvider* provider = paletteProvider_property();
+    if (provider) {
+        provider->setSearching(false);
+    }
 }
 
 PaletteProvider* PaletteRootModel::paletteProvider_property() const
 {
     return dynamic_cast<PaletteProvider*>(paletteProvider().get());
-}
-
-bool PaletteRootModel::needShowShadowOverlay() const
-{
-    return m_needShowShadowOverlay;
 }

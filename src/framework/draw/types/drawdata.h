@@ -126,36 +126,32 @@ struct DrawData
     };
 
     struct Data {
-        State state;
+        int state = 0;
 
         std::vector<DrawPath> paths;
         std::vector<DrawPolygon> polygons;
         std::vector<DrawText> texts;
         std::vector<DrawPixmap> pixmaps;
 
-        bool empty() const
-        {
-            return paths.empty() && polygons.empty() && texts.empty() && pixmaps.empty();
-        }
+        bool empty() const { return paths.empty() && polygons.empty() && texts.empty() && pixmaps.empty(); }
     };
 
-    struct Object {
+    struct Item {
         std::string name;
-        PointF pagePos;
         std::vector<Data> datas;
+        std::vector<Item> chilren;
 
-        Object() = default;
-        Object(const std::string& n, const PointF& p)
-            : name(n), pagePos(p)
-        {
-            //! NOTE Make data with default state
-            datas.push_back(DrawData::Data());
-        }
+        Item() = default;
+        Item(const std::string& n)
+            : name(n) {}
     };
 
     std::string name;
     RectF viewport;
-    std::vector<Object> objects;
+    Item item;
+    std::map<int, State> states;
+
+    bool empty() const { return item.datas.empty() && item.chilren.empty(); }
 };
 
 using DrawDataPtr = std::shared_ptr<DrawData>;
@@ -168,11 +164,11 @@ struct Diff {
     {
         bool ret = true;
         if (dataAdded) {
-            ret = dataAdded->objects.empty();
+            ret = dataAdded->empty();
         }
 
         if (ret && dataRemoved) {
-            ret = dataRemoved->objects.empty();
+            ret = dataRemoved->empty();
         }
 
         return ret;

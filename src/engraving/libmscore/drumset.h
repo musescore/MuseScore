@@ -28,11 +28,10 @@
 #include "types/types.h"
 
 namespace mu::engraving {
+class XmlWriter;
+class XmlReader;
 class Articulation;
 class Tremolo;
-
-class XmlReader;
-class XmlWriter;
 
 struct DrumInstrumentVariant {
     int pitch = INVALID_PITCH;
@@ -79,6 +78,7 @@ class Drumset
     DrumInstrument _drum[DRUM_INSTRUMENTS];
 
 public:
+
     bool isValid(int pitch) const { return !_drum[pitch].name.empty(); }
     NoteHeadGroup noteHead(int pitch) const { return _drum[pitch].notehead; }
     SymId noteHeads(int pitch, NoteHeadType t) const { return _drum[pitch].noteheads[int(t)]; }

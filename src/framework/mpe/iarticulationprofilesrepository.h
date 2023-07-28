@@ -23,7 +23,7 @@
 #ifndef MU_MPE_IARTICULATIONPROFILESREPOSITORY_H
 #define MU_MPE_IARTICULATIONPROFILESREPOSITORY_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "async/channel.h"
 #include "io/path.h"
 

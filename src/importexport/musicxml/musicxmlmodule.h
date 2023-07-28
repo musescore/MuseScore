@@ -22,9 +22,12 @@
 #ifndef MU_IMPORTEXPORT_MUSICXMLMODULE_H
 #define MU_IMPORTEXPORT_MUSICXMLMODULE_H
 
+#include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::musicxml {
+class MusicXmlConfiguration;
 class MusicXmlModule : public modularity::IModuleSetup
 {
 public:
@@ -33,6 +36,9 @@ public:
     void registerResources() override;
     void registerExports() override;
     void resolveImports() override;
+
+private:
+    std::shared_ptr<MusicXmlConfiguration> m_configuration;
 };
 }
 

@@ -39,7 +39,7 @@ class AccessibleItem : public accessibility::IAccessible, public std::enable_sha
 {
     OBJECT_ALLOCATOR(engraving, AccessibleItem)
 
-    INJECT_STATIC(engraving, accessibility::IAccessibilityController, accessibilityController)
+    INJECT_STATIC(accessibility::IAccessibilityController, accessibilityController)
 
 public:
     AccessibleItem(EngravingItem* e, Role role = Role::ElementOnScore);

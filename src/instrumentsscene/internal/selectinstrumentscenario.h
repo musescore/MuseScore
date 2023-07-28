@@ -30,8 +30,8 @@
 namespace mu::instrumentsscene {
 class SelectInstrumentsScenario : public notation::ISelectInstrumentsScenario
 {
-    INJECT(instruments, framework::IInteractive, interactive)
-    INJECT(instruments, notation::IInstrumentsRepository, instrumentsRepository)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(notation::IInstrumentsRepository, instrumentsRepository)
 
 public:
     RetVal<notation::PartInstrumentListScoreOrder> selectInstruments() const override;

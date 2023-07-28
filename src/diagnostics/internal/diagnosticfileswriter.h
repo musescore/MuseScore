@@ -36,8 +36,8 @@ class ZipWriter;
 namespace mu::diagnostics {
 class DiagnosticFilesWriter
 {
-    INJECT_STATIC(diagnostics, io::IFileSystem, fileSystem)
-    INJECT_STATIC(diagnostics, framework::IGlobalConfiguration, globalConfiguration)
+    INJECT_STATIC(io::IFileSystem, fileSystem)
+    INJECT_STATIC(framework::IGlobalConfiguration, globalConfiguration)
 
 public:
     static Ret writeDiagnosticFiles(const io::path_t& destinationZipPath);

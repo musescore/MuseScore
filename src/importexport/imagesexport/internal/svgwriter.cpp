@@ -49,6 +49,8 @@ std::vector<INotationWriter::UnitType> SvgWriter::supportedUnitTypes() const
 
 mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, const Options& options)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(notation) {
         return make_ret(Ret::Code::UnknownError);
     }
@@ -145,7 +147,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                     if (measure->isMeasure() && mu::engraving::toMeasure(measure)->visible(staffIndex)) {
                         mu::engraving::StaffLines* sl = mu::engraving::toMeasure(measure)->staffLines(static_cast<int>(staffIndex));
                         printer.setElement(sl);
-                        engraving::Paint::paintElement(painter, sl);
+                        engraving::Paint::paintItem(painter, sl);
                     }
                 }
             } else {   // Draw staff lines once per system
@@ -155,13 +157,14 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                 qreal lastX =  lastSL->bbox().right()
                               + lastSL->pagePos().x()
                               - firstSL->pagePos().x();
-                std::vector<mu::LineF>& lines = firstSL->getLines();
+                std::vector<mu::LineF> lines = firstSL->lines();
                 for (size_t l = 0, c = lines.size(); l < c; l++) {
                     lines[l].setP2(mu::PointF(lastX, lines[l].p2().y()));
                 }
+                firstSL->setLines(lines);
 
                 printer.setElement(firstSL);
-                engraving::Paint::paintElement(painter, firstSL);
+                engraving::Paint::paintItem(painter, firstSL);
             }
         }
     }
@@ -221,7 +224,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
         printer.setElement(element);
 
         // Paint it
-        engraving::Paint::paintElement(painter, element);
+        engraving::Paint::paintItem(painter, element);
     }
 
     painter.endDraw(); // Writes MuseScore SVG file to disk, finally

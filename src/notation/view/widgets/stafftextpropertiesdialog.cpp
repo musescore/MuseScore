@@ -54,7 +54,6 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     if (st->systemFlag()) {
         setWindowTitle(qtrc("notation/stafftextproperties", "System text properties"));
-        tabWidget->removeTab(tabWidget->indexOf(tabCapoSettings));     // Capos for staff text only
     } else {
         setWindowTitle(qtrc("notation/stafftextproperties", "Staff text properties"));
     }
@@ -64,11 +63,11 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
 
     if (m_staffText->swing()) {
         setSwingBox->setChecked(true);
-        if (m_staffText->swingParameters().swingUnit == Constants::division / 2) {
+        if (m_staffText->swingParameters().swingUnit == Constants::DIVISION / 2) {
             swingBox->setEnabled(true);
             swingEighth->setChecked(true);
             swingBox->setValue(m_staffText->swingParameters().swingRatio);
-        } else if (m_staffText->swingParameters().swingUnit == Constants::division / 4) {
+        } else if (m_staffText->swingParameters().swingUnit == Constants::DIVISION / 4) {
             swingBox->setEnabled(true);
             swingSixteenth->setChecked(true);
             swingBox->setValue(m_staffText->swingParameters().swingRatio);
@@ -82,18 +81,6 @@ StaffTextPropertiesDialog::StaffTextPropertiesDialog(QWidget* parent)
     connect(swingOff, &QRadioButton::toggled, this, &StaffTextPropertiesDialog::setSwingControls);
     connect(swingEighth, &QRadioButton::toggled, this, &StaffTextPropertiesDialog::setSwingControls);
     connect(swingSixteenth, &QRadioButton::toggled, this, &StaffTextPropertiesDialog::setSwingControls);
-
-    //---------------------------------------------------
-    //    setup capo
-    //      Note that capo is stored as an int, where 0 = no change,
-    //      1 = remove capo, and everyother number (n) = pitch increase
-    //      of n-1 semitones.
-    //---------------------------------------------------
-
-    if (m_staffText->capo() != 0) {
-        setCapoBox->setChecked(true);
-        fretList->setCurrentIndex(m_staffText->capo() - 1);
-    }
 
     connect(this, &QDialog::accepted, this, &StaffTextPropertiesDialog::saveValues);
 
@@ -147,18 +134,12 @@ void StaffTextPropertiesDialog::saveValues()
             m_staffText->setSwingParameters(0, swingBox->value());
             swingBox->setEnabled(false);
         } else if (swingEighth->isChecked()) {
-            m_staffText->setSwingParameters(Constants::division / 2, swingBox->value());
+            m_staffText->setSwingParameters(Constants::DIVISION / 2, swingBox->value());
             swingBox->setEnabled(true);
         } else if (swingSixteenth->isChecked()) {
-            m_staffText->setSwingParameters(Constants::division / 4, swingBox->value());
+            m_staffText->setSwingParameters(Constants::DIVISION / 4, swingBox->value());
             swingBox->setEnabled(true);
         }
-    }
-
-    if (setCapoBox->isChecked()) {
-        m_staffText->setCapo(fretList->currentIndex() + 1);
-    } else {
-        m_staffText->setCapo(0);
     }
 
     INotationUndoStackPtr stack = undoStack();
@@ -173,7 +154,6 @@ void StaffTextPropertiesDialog::saveValues()
     stack->prepareChanges();
     score->undoChangeElement(m_originStaffText, nt);
     score->masterScore()->updateChannel();
-    score->updateCapo();
     score->updateSwing();
     score->setPlaylistDirty();
     stack->commitChanges();

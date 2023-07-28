@@ -33,6 +33,8 @@
 #include "types/propertyvalue.h"
 #include "types/types.h"
 
+#include "../infrastructure/rtti.h"
+
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
 
@@ -54,6 +56,7 @@ class BSymbol;
 class BagpipeEmbellishment;
 class BarLine;
 class Beam;
+class BeamSegment;
 class Bend;
 class Box;
 class Bracket;
@@ -63,10 +66,11 @@ class Chord;
 class ChordLine;
 class ChordRest;
 class Clef;
-class ConnectorInfoReader;
+class Capo;
 class DeadSlapped;
 class DurationElement;
 class Dynamic;
+class Expression;
 class EngravingItem;
 class EngravingObject;
 class FBox;
@@ -86,6 +90,7 @@ class HairpinSegment;
 class HarmonicMark;
 class HarmonicMarkSegment;
 class Harmony;
+class HarpPedalDiagram;
 class Hook;
 class Image;
 class InstrumentChange;
@@ -114,6 +119,7 @@ class Note;
 class NoteDot;
 class NoteHead;
 class NoteLine;
+class Ornament;
 class Ottava;
 class OttavaSegment;
 class Page;
@@ -177,9 +183,6 @@ class WhammyBar;
 class WhammyBarSegment;
 class FretCircle;
 
-class XmlReader;
-class XmlWriter;
-
 class LinkedObjects;
 
 enum class Pid : int;
@@ -195,7 +198,7 @@ public:
 
 class EngravingObject
 {
-    INJECT_STATIC(engraving, mu::diagnostics::IEngravingElementsProvider, elementsProvider)
+    INJECT_STATIC(mu::diagnostics::IEngravingElementsProvider, elementsProvider)
 
     ElementType m_type = ElementType::INVALID;
     EngravingObject* m_parent = nullptr;
@@ -252,7 +255,7 @@ public:
     Score* score() const;
     MasterScore* masterScore() const;
     bool onSameScore(const EngravingObject* other) const;
-    const MStyle* style() const;
+    const MStyle& style() const;
 
     virtual PropertyValue getProperty(Pid) const = 0;
     virtual bool setProperty(Pid, const PropertyValue&) = 0;
@@ -274,11 +277,6 @@ public:
     void setPropertyFlags(Pid, PropertyFlags);
 
     virtual Sid getPropertyStyle(Pid) const;
-    bool readProperty(const mu::AsciiStringView&, XmlReader&, Pid);
-    void readProperty(XmlReader&, Pid);
-    bool readStyledProperty(XmlReader& e, const mu::AsciiStringView& tag);
-
-    virtual void readAddConnector(ConnectorInfoReader* info, bool pasteMode);
 
     virtual void styleChanged();
 
@@ -287,8 +285,6 @@ public:
     void undoResetProperty(Pid id);
 
     void undoPushProperty(Pid);
-    void writeProperty(XmlWriter& xml, Pid id) const;
-    void writeStyledProperties(XmlWriter&) const;
 
     std::list<EngravingObject*> linkList() const;
 
@@ -299,7 +295,7 @@ public:
 
     virtual void undoUnlink();
     LinkedObjects* links() const { return _links; }
-    void setLinks(LinkedObjects* le) { _links = le; }
+    void setLinks(LinkedObjects* le);
 
     //---------------------------------------------------
     // check type
@@ -320,6 +316,7 @@ public:
     CONVERT(Chord,         CHORD)
     CONVERT(BarLine,       BAR_LINE)
     CONVERT(Articulation,  ARTICULATION)
+    CONVERT(Ornament,      ORNAMENT)
     CONVERT(Fermata,       FERMATA)
     CONVERT(Marker,        MARKER)
     CONVERT(Clef,          CLEF)
@@ -350,6 +347,7 @@ public:
     CONVERT(Lyrics,        LYRICS)
     CONVERT(Stem,          STEM)
     CONVERT(Beam,          BEAM)
+    CONVERT(BeamSegment,   BEAM_SEGMENT)
     CONVERT(Hook,          HOOK)
     CONVERT(StemSlash,     STEM_SLASH)
     CONVERT(SlurSegment,   SLUR_SEGMENT)
@@ -369,6 +367,7 @@ public:
     CONVERT(Tuplet,        TUPLET)
     CONVERT(NoteDot,       NOTEDOT)
     CONVERT(Dynamic,       DYNAMIC)
+    CONVERT(Expression,    EXPRESSION)
     CONVERT(InstrumentName, INSTRUMENT_NAME)
     CONVERT(Accidental,    ACCIDENTAL)
     CONVERT(TextLine,      TEXTLINE)
@@ -410,6 +409,7 @@ public:
     CONVERT(Image,         IMAGE)
     CONVERT(ChordLine,     CHORDLINE)
     CONVERT(FretDiagram,   FRET_DIAGRAM)
+    CONVERT(HarpPedalDiagram, HARP_DIAGRAM)
     CONVERT(Page,          PAGE)
     CONVERT(Text,          TEXT)
     CONVERT(MeasureNumber, MEASURE_NUMBER)
@@ -417,6 +417,7 @@ public:
     CONVERT(StaffText,     STAFF_TEXT)
     CONVERT(SystemText,    SYSTEM_TEXT)
     CONVERT(PlayTechAnnotation, PLAYTECH_ANNOTATION)
+    CONVERT(Capo,          CAPO)
     CONVERT(BracketItem,   BRACKET_ITEM)
     CONVERT(Score,         SCORE)
     CONVERT(Staff,         STAFF)
@@ -505,7 +506,12 @@ public:
 
     bool isStaffTextBase() const
     {
-        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation();
+        return isStaffText() || isSystemText() || isTripletFeel() || isPlayTechAnnotation() || isCapo();
+    }
+
+    bool isArticulationFamily() const
+    {
+        return isArticulation() || isOrnament();
     }
 };
 
@@ -649,6 +655,18 @@ static inline const Bend* toBend(const EngravingObject* e)
     return (const Bend*)e;
 }
 
+static inline Articulation* toArticulation(EngravingObject* e)
+{
+    assert(e == 0 || e->isArticulationFamily());
+    return (Articulation*)e;
+}
+
+static inline const Articulation* toArticulation(const EngravingObject* e)
+{
+    assert(e == 0 || e->isArticulationFamily());
+    return (const Articulation*)e;
+}
+
 #define CONVERT(a)  \
     static inline a* to##a(EngravingObject * e) { assert(e == 0 || e->is##a()); return (a*)e; } \
     static inline const a* to##a(const EngravingObject * e) { assert(e == 0 || e->is##a()); return (const a*)e; }
@@ -657,7 +675,7 @@ CONVERT(EngravingItem)
 CONVERT(Note)
 CONVERT(Chord)
 CONVERT(BarLine)
-CONVERT(Articulation)
+CONVERT(Ornament)
 CONVERT(Fermata)
 CONVERT(Marker)
 CONVERT(Clef)
@@ -683,6 +701,7 @@ CONVERT(Volta)
 CONVERT(Jump)
 CONVERT(StaffText)
 CONVERT(PlayTechAnnotation)
+CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
 CONVERT(Segment)
@@ -691,6 +710,7 @@ CONVERT(System)
 CONVERT(Lyrics)
 CONVERT(Stem)
 CONVERT(Beam)
+CONVERT(BeamSegment)
 CONVERT(Hook)
 CONVERT(StemSlash)
 CONVERT(LineSegment)
@@ -714,6 +734,7 @@ CONVERT(MMRest)
 CONVERT(Tuplet)
 CONVERT(NoteDot)
 CONVERT(Dynamic)
+CONVERT(Expression)
 CONVERT(InstrumentName)
 CONVERT(Accidental)
 CONVERT(TextLine)
@@ -755,6 +776,7 @@ CONVERT(Arpeggio)
 CONVERT(Image)
 CONVERT(ChordLine)
 CONVERT(FretDiagram)
+CONVERT(HarpPedalDiagram)
 CONVERT(Page)
 CONVERT(SystemText)
 CONVERT(BracketItem)

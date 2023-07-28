@@ -38,8 +38,8 @@ class AutobotScriptsModel : public QAbstractListModel, public async::Asyncable
     Q_PROPERTY(bool isRunAllTCMode READ isRunAllTCMode WRITE setIsRunAllTCMode NOTIFY isRunAllTCModeChanged)
     Q_PROPERTY(QString speedMode READ speedMode WRITE setSpeedMode NOTIFY speedModeChanged)
 
-    INJECT(autobot, IAutobotScriptsRepository, scriptsRepository)
-    INJECT(autobot, IAutobot, autobot)
+    INJECT(IAutobotScriptsRepository, scriptsRepository)
+    INJECT(IAutobot, autobot)
 
 public:
     explicit AutobotScriptsModel(QObject* parent = nullptr);

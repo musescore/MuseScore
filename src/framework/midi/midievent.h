@@ -104,14 +104,8 @@ struct Event {
             uint32_t full;
         } u;
         u.full = data;
-        if (
-            (u.byte[0] & 0x80)
-            || (u.byte[0] & 0x90)
-            || (u.byte[0] & 0xA0)
-            || (u.byte[0] & 0xB0)
-            || (u.byte[0] & 0xC0)
-            || (u.byte[0] & 0xD0)
-            || (u.byte[0] & 0xE0)
+        if ((u.byte[0] >= 0x80)
+            && (u.byte[0] < 0xF0)
             ) {
             e.m_data[0] = (u.byte[0] << 16) | (u.byte[1] << 8) | u.byte[2];
             e.setMessageType(MessageType::ChannelVoice10);
@@ -767,11 +761,13 @@ struct Event {
                 break;
             //D3.3
             case Opcode::ControlChange: {
-                std::set<uint8_t> skip = { 6, 38, 98, 99, 100, 101 };
-                if (skip.find(index()) == skip.end()) {
-                    break;
-                }
                 switch (index()) {
+                default:
+                    event.setIndex(index());
+                    event.setData(scaleUp(data(), 7, 32));
+                    break;
+                // RPN and NPRN controller messages are no ordenary conrollers
+                // and need special handling in MIDI 2.0
                 case 99:
                     event.setOpcode(Opcode::AssignableController);
                     event.setBank(static_cast<uint16_t>(data()));
@@ -792,9 +788,6 @@ struct Event {
                     event.m_data[0] &= 0xFE03FFFF;
                     event.m_data[0] |= (data() & 0x7F) << 18;
                     break;
-                default:
-                    event.setIndex(index());
-                    event.setData(scaleUp(data(), 7, 32));
                 }
                 break;
             }

@@ -38,6 +38,8 @@ public:
     explicit HairpinLineSettingsModel(QObject* parent, IElementRepositoryService* repository, HairpinLineType lineType);
 
 private:
+    engraving::HairpinType m_hairpinType = engraving::HairpinType::CRESC_LINE;
+
     void createProperties() override;
     void requestElements() override;
 };

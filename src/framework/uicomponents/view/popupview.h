@@ -47,7 +47,10 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
     Q_INTERFACES(QQmlParserStatus)
 
     Q_PROPERTY(QQuickItem * parent READ parentItem WRITE setParentItem NOTIFY parentItemChanged)
+
     Q_PROPERTY(QQuickItem * contentItem READ contentItem WRITE setContentItem NOTIFY contentItemChanged)
+    Q_PROPERTY(int contentWidth READ contentWidth WRITE setContentWidth NOTIFY contentWidthChanged)
+    Q_PROPERTY(int contentHeight READ contentHeight WRITE setContentHeight NOTIFY contentHeightChanged)
 
     Q_PROPERTY(QWindow * window READ window NOTIFY windowChanged)
 
@@ -75,14 +78,15 @@ class PopupView : public QObject, public QQmlParserStatus, async::Asyncable
     Q_PROPERTY(bool modal READ modal WRITE setModal NOTIFY modalChanged)
     Q_PROPERTY(bool frameless READ frameless WRITE setFrameless NOTIFY framelessChanged)
     Q_PROPERTY(bool resizable READ resizable WRITE setResizable NOTIFY resizableChanged)
+    Q_PROPERTY(bool alwaysOnTop READ alwaysOnTop WRITE setAlwaysOnTop NOTIFY alwaysOnTopChanged)
     Q_PROPERTY(QVariantMap ret READ ret WRITE setRet NOTIFY retChanged)
 
     Q_ENUMS(OpenPolicy)
     Q_ENUMS(ClosePolicy)
 
-    INJECT(uicomponents, ui::IMainWindow, mainWindow)
-    INJECT(uicomponents, ui::IUiConfiguration, uiConfiguration)
-    INJECT(uicomponents, ui::INavigationController, navigationController)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(ui::INavigationController, navigationController)
 
 public:
 
@@ -100,7 +104,10 @@ public:
     };
 
     QQuickItem* parentItem() const;
+
     QQuickItem* contentItem() const;
+    int contentWidth() const;
+    int contentHeight() const;
 
     QWindow* window() const;
 
@@ -110,11 +117,15 @@ public:
 
     Q_INVOKABLE void forceActiveFocus();
 
+    void init();
+
     Q_INVOKABLE void open();
     Q_INVOKABLE void close(bool force = false);
     Q_INVOKABLE void toggleOpened();
 
     Q_INVOKABLE void setParentWindow(QWindow* window);
+
+    Q_INVOKABLE QRectF anchorGeometry() const;
 
     OpenPolicy openPolicy() const;
     ClosePolicy closePolicy() const;
@@ -130,6 +141,7 @@ public:
     bool modal() const;
     bool frameless() const;
     bool resizable() const;
+    bool alwaysOnTop() const;
     QVariantMap ret() const;
 
     bool opensUpward() const;
@@ -140,17 +152,22 @@ public:
 
 public slots:
     void setParentItem(QQuickItem* parent);
+    void setEngine(QQmlEngine* engine);
+    void setComponent(QQmlComponent* component);
     void setContentItem(QQuickItem* content);
+    void setContentWidth(int contentWidth);
+    void setContentHeight(int contentHeight);
     void setLocalX(qreal x);
     void setLocalY(qreal y);
-    void setOpenPolicy(OpenPolicy openPolicy);
-    void setClosePolicy(ClosePolicy closePolicy);
+    void setOpenPolicy(mu::uicomponents::PopupView::OpenPolicy openPolicy);
+    void setClosePolicy(mu::uicomponents::PopupView::ClosePolicy closePolicy);
     void setNavigationParentControl(ui::INavigationControl* parentNavigationControl);
     void setObjectId(QString objectId);
     void setTitle(QString title);
     void setModal(bool modal);
     void setFrameless(bool frameless);
     void setResizable(bool resizable);
+    void setAlwaysOnTop(bool alwaysOnTop);
     void setRet(QVariantMap ret);
 
     void setOpensUpward(bool opensUpward);
@@ -164,17 +181,20 @@ public slots:
 signals:
     void parentItemChanged();
     void contentItemChanged();
+    void contentWidthChanged();
+    void contentHeightChanged();
     void windowChanged();
     void xChanged(qreal x);
     void yChanged(qreal y);
-    void openPolicyChanged(OpenPolicy openPolicy);
-    void closePolicyChanged(ClosePolicy closePolicy);
+    void openPolicyChanged(mu::uicomponents::PopupView::OpenPolicy openPolicy);
+    void closePolicyChanged(mu::uicomponents::PopupView::ClosePolicy closePolicy);
     void navigationParentControlChanged(ui::INavigationControl* navigationParentControl);
     void objectIdChanged(QString objectId);
     void titleChanged(QString title);
     void modalChanged(bool modal);
     void framelessChanged(bool frameless);
     void resizableChanged(bool resizable);
+    void alwaysOnTopChanged();
     void retChanged(QVariantMap ret);
 
     void isOpenedChanged();
@@ -196,6 +216,8 @@ protected:
     void componentComplete() override;
     bool eventFilter(QObject* watched, QEvent* event) override;
 
+    void initCloseController();
+
     void doFocusOut();
     void windowMoveEvent();
 
@@ -210,18 +232,24 @@ protected:
 
     virtual QScreen* resolveScreen() const;
     QRect currentScreenGeometry() const;
-    virtual void updatePosition();
+    virtual void updateGeometry();
     void updateContentPosition();
 
     virtual QRect viewGeometry() const;
-    QRectF anchorGeometry() const;
 
     void resolveNavigationParentControl();
     void activateNavigationParentControl();
 
+    QQmlEngine* engine() const;
+
     IPopupWindow* m_window = nullptr;
 
+    QQmlComponent* m_component = nullptr;
+    QQmlEngine* m_engine = nullptr;
+
     QQuickItem* m_contentItem = nullptr;
+    int m_contentWidth = 0;
+    int m_contentHeight = 0;
 
     QQuickItem* m_anchorItem = nullptr;
 
@@ -236,6 +264,7 @@ protected:
     bool m_modal = true;
     bool m_frameless = false;
     bool m_resizable = false;
+    bool m_alwaysOnTop = false;
     QVariantMap m_ret;
     bool m_opensUpward = false;
     int m_arrowX = 0;

@@ -40,19 +40,6 @@ using namespace mu::palette;
 using namespace mu::ui;
 using namespace mu::engraving;
 
-//---------------------------------------------------------
-//   keyPressEvent
-//---------------------------------------------------------
-
-void MasterPalette::keyPressEvent(QKeyEvent* event)
-{
-    if (event->key() == Qt::Key_Escape && event->modifiers() == Qt::NoModifier) {
-        close();
-        return;
-    }
-    QWidget::keyPressEvent(event);
-}
-
 void MasterPalette::setSelectedPaletteName(const QString& name)
 {
     for (int idx = 0; idx < treeWidget->topLevelItemCount(); ++idx) {

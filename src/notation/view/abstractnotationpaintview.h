@@ -45,6 +45,7 @@
 #include "playbackcursor.h"
 #include "loopmarker.h"
 #include "continuouspanel.h"
+#include "internal/abstractelementpopupmodel.h"
 
 namespace mu::notation {
 class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public IControlledView, public async::Asyncable,
@@ -52,15 +53,15 @@ class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public 
 {
     Q_OBJECT
 
-    INJECT(notation, INotationConfiguration, configuration)
-    INJECT(notation, engraving::IEngravingConfiguration, engravingConfiguration)
-    INJECT(notation, ui::IUiConfiguration, uiConfiguration)
-    INJECT(notation, actions::IActionsDispatcher, dispatcher)
-    INJECT(notation, context::IGlobalContext, globalContext)
-    INJECT(notation, playback::IPlaybackController, playbackController)
-    INJECT(notation, ui::IUiContextResolver, uiContextResolver)
-    INJECT(notation, ui::IMainWindow, mainWindow)
-    INJECT(notation, ui::IUiActionsRegister, actionsRegister)
+    INJECT(INotationConfiguration, configuration)
+    INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(ui::IUiConfiguration, uiConfiguration)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(context::IGlobalContext, globalContext)
+    INJECT(playback::IPlaybackController, playbackController)
+    INJECT(ui::IUiContextResolver, uiContextResolver)
+    INJECT(ui::IMainWindow, mainWindow)
+    INJECT(ui::IUiActionsRegister, actionsRegister)
 
     Q_PROPERTY(qreal startHorizontalScrollPosition READ startHorizontalScrollPosition NOTIFY horizontalScrollChanged)
     Q_PROPERTY(qreal horizontalScrollbarSize READ horizontalScrollbarSize NOTIFY horizontalScrollChanged)
@@ -89,6 +90,9 @@ public:
 
     Q_INVOKABLE void forceFocusIn();
 
+    Q_INVOKABLE void onContextMenuIsOpenChanged(bool open);
+    Q_INVOKABLE void onElementPopupIsOpenChanged(bool open);
+
     qreal width() const override;
     qreal height() const override;
 
@@ -112,8 +116,12 @@ public:
     bool isNoteEnterMode() const override;
     void showShadowNote(const PointF& pos) override;
 
-    void showContextMenu(const ElementType& elementType, const QPointF& pos, bool activateFocus = false) override;
+    void showContextMenu(const ElementType& elementType, const QPointF& pos) override;
     void hideContextMenu() override;
+
+    void showElementPopup(const ElementType& elementType, const RectF& elementRect) override;
+    void hideElementPopup() override;
+    void toggleElementPopup(const ElementType& elementType, const RectF& elementRect) override;
 
     INotationInteractionPtr notationInteraction() const override;
     INotationPlaybackPtr notationPlayback() const override;
@@ -138,6 +146,10 @@ public:
 signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
+
+    void showElementPopupRequested(mu::notation::PopupModelType modelType, const QRectF& elementRect);
+    void hideElementPopupRequested();
+    void isPopupOpenChanged(bool isPopupOpen);
 
     void horizontalScrollChanged();
     void verticalScrollChanged();
@@ -190,6 +202,9 @@ private:
 
     bool doMoveCanvas(qreal dx, qreal dy);
 
+    void redraw(const RectF& rect = RectF());
+    RectF correctDrawRect(const RectF& rect) const;
+
     // Input
     void wheelEvent(QWheelEvent* event) override;
     void mousePressEvent(QMouseEvent* event) override;
@@ -215,6 +230,7 @@ private:
     qreal verticalScrollableSize() const;
 
     bool adjustCanvasPosition(const RectF& logicRect, bool adjustVertically = true);
+    bool adjustCanvasPositionSmoothPan(const RectF& cursorRect);
 
     void onNoteInputStateChanged();
 
@@ -253,6 +269,9 @@ private:
 
     bool m_autoScrollEnabled = true;
     QTimer m_enableAutoScrollTimer;
+
+    bool m_isPopupOpen = false;
+    bool m_isContextMenuOpen = false;
 };
 }
 

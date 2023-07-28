@@ -7,7 +7,7 @@ on:
     
   schedule:
     - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for 4.0.2
+    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
       build_mode:
@@ -19,9 +19,12 @@ on:
         required: false
         default: 'off'
       sentry_project:
-        description: 'Upload symbols and dumps to Sentry (choose a project): editor, sandbox'
+        description: 'Upload symbols and dumps to Sentry (choose a project): mu4(default for stable build), sandbox'
         required: false
-        default: ''  
+        default: ''
+
+env:
+  CURRENT_RELEASE_BRANCH: 4.1.1
 
 jobs:
   build_mu4:
@@ -34,11 +37,11 @@ jobs:
     - name: Clone repository (default)
       uses: actions/checkout@v3
       if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
-    - name: Clone repository (4.0.2)
+    - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
       uses: actions/checkout@v3
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
-        ref: 4.0.2
+        ref: ${{ env.CURRENT_RELEASE_BRANCH }}
     - name: Ccache cache files
       uses: actions/cache@v3
       with:
@@ -93,9 +96,16 @@ jobs:
         DO_UPLOAD_SYMBOLS='false'
         SENTRY_PROJECT=${{ github.event.inputs.sentry_project }}
         SENTRY_URL=""
-        if [ "$SENTRY_PROJECT" == "editor" ] && [ ${{ secrets.SENTRY_SERVER_MU3_KEY }} != 0 ]; then 
-          DO_UPLOAD_SYMBOLS='true'
-          SENTRY_URL=https://sentry.musescore.org/api/2/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU3_KEY }}
+
+        if [ ${{ secrets.SENTRY_SERVER_MU4_KEY }} != 0 ]; then 
+          if [ -z "$SENTRY_PROJECT" ] && [ "$BUILD_MODE" == "stable_build" ]; then 
+            SENTRY_PROJECT="mu4"
+          fi
+
+          if [ "$SENTRY_PROJECT" == "mu4" ]; then 
+            DO_UPLOAD_SYMBOLS='true'
+            SENTRY_URL=https://sentry.musescore.org/api/4/minidump/?sentry_key=${{ secrets.SENTRY_SERVER_MU4_KEY }}
+          fi
         fi
 
         if [ "$SENTRY_PROJECT" == "sandbox" ] && [ ${{ secrets.SENTRY_SERVER_SANDBOX_KEY }} != 0 ]; then 
@@ -109,7 +119,7 @@ jobs:
         fi
 
         ADD_INFO="_${GITHUB_REF#refs/heads/}"
-        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_4.0.2"; fi
+        if [ "${{ github.event_name }}" == "schedule" ] && [ "${{ github.event.schedule }}" == "0 5 */1 */1 *" ]; then ADD_INFO="_${{ env.CURRENT_RELEASE_BRANCH }}"; fi
         if [ "${{ github.event_name }}" == "pull_request" ]; then ADD_INFO="_${{ github.event.pull_request.number }}_${pull_request_title}"; fi
         UPLOAD_ARTIFACT_NAME="$(tr '":<>|*?/\\' '_' <<<"MU4_${BUILD_NUMBER}_Lin${ADD_INFO}")"
 

@@ -32,7 +32,7 @@
 namespace mu::accessibility {
 class AccessibleItemInterface : public QAccessibleInterface, public QAccessibleValueInterface, public QAccessibleTextInterface
 {
-    INJECT(accessibility, ui::IInteractiveProvider, interactiveProvider)
+    INJECT(ui::IInteractiveProvider, interactiveProvider)
 
 public:
     AccessibleItemInterface(AccessibleObject* object);

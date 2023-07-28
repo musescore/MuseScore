@@ -41,7 +41,7 @@ namespace mu::audio::synth {
 struct Fluid;
 class FluidSynth : public AbstractSynthesizer
 {
-    INJECT(audio, midi::IMidiOutPort, midiOutPort)
+    INJECT(midi::IMidiOutPort, midiOutPort)
 public:
     FluidSynth(const audio::AudioSourceParams& params);
 

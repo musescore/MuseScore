@@ -27,7 +27,7 @@
 
 #include "iaudiodriver.h"
 
-#include "internal/audiodeviceslistener.h"
+#include "audiodeviceslistener.h"
 
 namespace mu::audio {
 class LinuxAudioDriver : public IAudioDriver, public async::Asyncable

@@ -21,7 +21,7 @@
  */
 
 #include "containers.h"
-#include "rw/xml.h"
+
 #include "types/typesconv.h"
 
 #include "barline.h"
@@ -218,6 +218,12 @@ void Staff::setBracketSpan(size_t idx, size_t val)
     _brackets[idx]->setBracketSpan(val);
 }
 
+void Staff::setBracketVisible(size_t idx, bool v)
+{
+    fillBrackets(idx);
+    _brackets[idx]->setVisible(v);
+}
+
 //---------------------------------------------------------
 //   addBracket
 //---------------------------------------------------------
@@ -281,7 +287,7 @@ void Staff::setPlaybackVoice(int voice, bool val)
     _playbackVoice[voice] = val;
 }
 
-std::array<bool, VOICES> Staff::visibilityVoices() const
+const std::array<bool, VOICES>& Staff::visibilityVoices() const
 {
     return _visibilityVoices;
 }
@@ -317,7 +323,7 @@ bool Staff::canDisableVoice() const
     return countOfVisibleVoices > 1;
 }
 
-void Staff::updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks)
+void Staff::updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks)
 {
     if (tracks.empty()) {
         _visibilityVoices = { true, true, true, true };
@@ -326,10 +332,13 @@ void Staff::updateVisibilityVoices(Staff* masterStaff, const TracksMap& tracks)
 
     std::array<bool, VOICES> voices{ false, false, false, false };
 
+    staff_idx_t masterStaffIdx = masterStaff->idx();
+    staff_idx_t staffIdx = idx();
+
     voice_idx_t voiceIndex = 0;
     for (voice_idx_t voice = 0; voice < VOICES; voice++) {
-        std::vector<track_idx_t> masterStaffTracks = mu::values(tracks, masterStaff->idx() * VOICES + voice % VOICES);
-        bool isVoiceVisible = mu::contains(masterStaffTracks, idx() * VOICES + voiceIndex % VOICES);
+        std::vector<track_idx_t> masterStaffTracks = mu::values(tracks, masterStaffIdx * VOICES + voice % VOICES);
+        bool isVoiceVisible = mu::contains(masterStaffTracks, staffIdx * VOICES + voiceIndex % VOICES);
         if (isVoiceVisible) {
             voices[voice] = true;
             voiceIndex++;
@@ -416,7 +425,7 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
         switch (staffGroup) {
         case StaffGroup::TAB:
         {
-            ClefType sct = ClefType(score()->styleI(Sid::tabClef));
+            ClefType sct = ClefType(style().styleI(Sid::tabClef));
             ct = staffType(tick)->lines() <= 4 ? ClefTypeList(sct == ClefType::TAB ? ClefType::TAB4 : ClefType::TAB4_SERIF) : ClefTypeList(
                 sct == ClefType::TAB ? ClefType::TAB : ClefType::TAB_SERIF);
         }
@@ -439,7 +448,7 @@ ClefTypeList Staff::clefType(const Fraction& tick) const
 ClefType Staff::clef(const Fraction& tick) const
 {
     ClefTypeList c = clefType(tick);
-    return score()->styleB(Sid::concertPitch) ? c._concertClef : c._transposingClef;
+    return style().styleB(Sid::concertPitch) ? c._concertClef : c._transposingClef;
 }
 
 //---------------------------------------------------------
@@ -678,6 +687,46 @@ void Staff::clearTimeSig()
 }
 
 //---------------------------------------------------------
+//   Staff::transpose
+//
+//    actual staff transposioton at tick
+//    (taking key into account)
+//---------------------------------------------------------
+
+Interval Staff::transpose(const Fraction& tick) const
+{
+    // get real transposition
+
+    Interval v = part()->instrument(tick)->transpose();
+    if (v.isZero()) {
+        return v;
+    }
+    Key cKey = concertKey(tick);
+    v.flip();
+    Key tKey = transposeKey(cKey, v, part()->preferSharpFlat());
+    v.flip();
+
+    int chromatic = (7 * (static_cast<int>(cKey) - static_cast<int>(tKey))) % 12;
+    if (chromatic < 0) {
+        chromatic += 12;
+    }
+    int diatonic = (4 * (static_cast<int>(cKey) - static_cast<int>(tKey))) % 7;
+    if (diatonic < 0) {
+        diatonic += 7;
+    }
+
+    if (v.chromatic < 0 || v.diatonic < 0) {
+        chromatic -= 12;
+        diatonic -= 7;
+    }
+
+    v.chromatic = v.chromatic - (v.chromatic % 12) + (chromatic % 12);
+    v.diatonic = v.diatonic - (v.diatonic % 7) + (diatonic % 7);
+
+    return v;
+}
+
+//---------------------------------------------------------
 //   Staff::keySigEvent
 //
 //    locates the key sig currently in effect at tick
@@ -742,197 +791,6 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 }
 
 //---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void Staff::write(XmlWriter& xml) const
-{
-    xml.startElement(this, { { "id", idx() + 1 } });
-
-    if (links()) {
-        Score* s = masterScore();
-        for (auto le : *links()) {
-            Staff* staff = toStaff(le);
-            if ((staff->score() == s) && (staff != this)) {
-                xml.tag("linkedTo", static_cast<int>(staff->idx() + 1));
-            }
-        }
-    }
-
-    // for copy/paste we need to know the actual transposition
-    if (xml.context()->clipboardmode()) {
-        Interval v = part()->instrument()->transpose();     // TODO: tick?
-        if (v.diatonic) {
-            xml.tag("transposeDiatonic", v.diatonic);
-        }
-        if (v.chromatic) {
-            xml.tag("transposeChromatic", v.chromatic);
-        }
-    }
-
-    staffType(Fraction(0, 1))->write(xml);
-    ClefTypeList ct = _defaultClefType;
-    if (ct._concertClef == ct._transposingClef) {
-        if (ct._concertClef != ClefType::G) {
-            xml.tag("defaultClef", TConv::toXml(ct._concertClef));
-        }
-    } else {
-        xml.tag("defaultConcertClef", TConv::toXml(ct._concertClef));
-        xml.tag("defaultTransposingClef", TConv::toXml(ct._transposingClef));
-    }
-
-    if (isLinesInvisible(Fraction(0, 1))) {
-        xml.tag("invisible", isLinesInvisible(Fraction(0, 1)));
-    }
-    if (hideWhenEmpty() != HideMode::AUTO) {
-        xml.tag("hideWhenEmpty", int(hideWhenEmpty()));
-    }
-    if (cutaway()) {
-        xml.tag("cutaway", cutaway());
-    }
-    if (showIfEmpty()) {
-        xml.tag("showIfSystemEmpty", showIfEmpty());
-    }
-    if (_hideSystemBarLine) {
-        xml.tag("hideSystemBarLine", _hideSystemBarLine);
-    }
-    if (_mergeMatchingRests) {
-        xml.tag("mergeMatchingRests", _mergeMatchingRests);
-    }
-    if (!visible()) {
-        xml.tag("isStaffVisible", visible());
-    }
-
-    for (const BracketItem* i : _brackets) {
-        BracketType a = i->bracketType();
-        size_t b = i->bracketSpan();
-        size_t c = i->column();
-        if (a != BracketType::NO_BRACKET || b > 0) {
-            xml.tag("bracket", { { "type", static_cast<int>(a) }, { "span", b }, { "col", c } });
-        }
-    }
-
-    writeProperty(xml, Pid::STAFF_BARLINE_SPAN);
-    writeProperty(xml, Pid::STAFF_BARLINE_SPAN_FROM);
-    writeProperty(xml, Pid::STAFF_BARLINE_SPAN_TO);
-    writeProperty(xml, Pid::STAFF_USERDIST);
-    writeProperty(xml, Pid::STAFF_COLOR);
-    writeProperty(xml, Pid::PLAYBACK_VOICE1);
-    writeProperty(xml, Pid::PLAYBACK_VOICE2);
-    writeProperty(xml, Pid::PLAYBACK_VOICE3);
-    writeProperty(xml, Pid::PLAYBACK_VOICE4);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void Staff::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        if (!readProperties(e)) {
-            e.unknown();
-        }
-    }
-}
-
-//---------------------------------------------------------
-//   readProperties
-//---------------------------------------------------------
-
-bool Staff::readProperties(XmlReader& e)
-{
-    const AsciiStringView tag(e.name());
-    if (tag == "StaffType") {
-        StaffType st;
-        st.read(e);
-        setStaffType(Fraction(0, 1), st);
-    } else if (tag == "defaultClef") {           // sets both default transposing and concert clef
-        ClefType ct = TConv::fromXml(e.readAsciiText(), ClefType::G);
-        setDefaultClefType(ClefTypeList(ct, ct));
-    } else if (tag == "defaultConcertClef") {
-        setDefaultClefType(ClefTypeList(TConv::fromXml(e.readAsciiText(), ClefType::G), defaultClefType()._transposingClef));
-    } else if (tag == "defaultTransposingClef") {
-        setDefaultClefType(ClefTypeList(defaultClefType()._concertClef, TConv::fromXml(e.readAsciiText(), ClefType::G)));
-    } else if (tag == "small") {                // obsolete
-        staffType(Fraction(0, 1))->setSmall(e.readInt());
-    } else if (tag == "invisible") {
-        staffType(Fraction(0, 1))->setInvisible(e.readInt());              // same as: setInvisible(Fraction(0,1)), e.readInt())
-    } else if (tag == "hideWhenEmpty") {
-        setHideWhenEmpty(HideMode(e.readInt()));
-    } else if (tag == "cutaway") {
-        setCutaway(e.readInt());
-    } else if (tag == "showIfSystemEmpty") {
-        setShowIfEmpty(e.readInt());
-    } else if (tag == "hideSystemBarLine") {
-        _hideSystemBarLine = e.readInt();
-    } else if (tag == "mergeMatchingRests") {
-        _mergeMatchingRests = e.readInt();
-    } else if (tag == "isStaffVisible") {
-        setVisible(e.readBool());
-    } else if (tag == "keylist") {
-        _keys.read(e, score());
-    } else if (tag == "bracket") {
-        int col = e.intAttribute("col", -1);
-        if (col == -1) {
-            col = static_cast<int>(_brackets.size());
-        }
-        setBracketType(col, BracketType(e.intAttribute("type", -1)));
-        setBracketSpan(col, e.intAttribute("span", 0));
-        e.readNext();
-    } else if (tag == "barLineSpan") {
-        _barLineSpan = e.readInt();
-    } else if (tag == "barLineSpanFrom") {
-        _barLineFrom = e.readInt();
-    } else if (tag == "barLineSpanTo") {
-        _barLineTo = e.readInt();
-    } else if (tag == "distOffset") {
-        _userDist = e.readDouble() * score()->spatium();
-    } else if (tag == "mag") {
-        /*_userMag =*/
-        e.readDouble(0.1, 10.0);
-    } else if (tag == "linkedTo") {
-        int v = e.readInt() - 1;
-        Staff* st = score()->masterScore()->staff(v);
-        if (_links) {
-            LOGD("Staff::readProperties: multiple <linkedTo> tags");
-            if (!st || isLinked(st)) {     // maybe we don't need actually to relink...
-                return true;
-            }
-            // not using unlink() here as it may delete _links
-            // a pointer to which is stored also in XmlReader.
-            _links->remove(this);
-            _links = nullptr;
-        }
-        if (st && st != this) {
-            linkTo(st);
-        } else if (!score()->isMaster() && !st) {
-            // if it is a master score it is OK not to find
-            // a staff which is going after the current one.
-            LOGD("staff %d not found in parent", v);
-        }
-    } else if (tag == "color") {
-        staffType(Fraction(0, 1))->setColor(e.readColor());
-    } else if (tag == "transposeDiatonic") {
-        e.context()->setTransposeDiatonic(static_cast<int8_t>(e.readInt()));
-    } else if (tag == "transposeChromatic") {
-        e.context()->setTransposeChromatic(static_cast<int8_t>(e.readInt()));
-    } else if (tag == "playbackVoice1") {
-        setPlaybackVoice(0, e.readInt());
-    } else if (tag == "playbackVoice2") {
-        setPlaybackVoice(1, e.readInt());
-    } else if (tag == "playbackVoice3") {
-        setPlaybackVoice(2, e.readInt());
-    } else if (tag == "playbackVoice4") {
-        setPlaybackVoice(3, e.readInt());
-    } else {
-        return false;
-    }
-    return true;
-}
-
-//---------------------------------------------------------
 //   height
 //---------------------------------------------------------
 
@@ -948,12 +806,12 @@ double Staff::height() const
 
 double Staff::spatium(const Fraction& tick) const
 {
-    return score()->spatium() * staffMag(tick);
+    return style().spatium() * staffMag(tick);
 }
 
 double Staff::spatium(const EngravingItem* e) const
 {
-    return score()->spatium() * staffMag(e);
+    return style().spatium() * staffMag(e);
 }
 
 //---------------------------------------------------------
@@ -962,7 +820,7 @@ double Staff::spatium(const EngravingItem* e) const
 
 double Staff::staffMag(const StaffType* stt) const
 {
-    return (stt->isSmall() ? score()->styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
+    return (stt->isSmall() ? style().styleD(Sid::smallStaffMag) : 1.0) * stt->userMag();
 }
 
 double Staff::staffMag(const Fraction& tick) const
@@ -983,13 +841,13 @@ SwingParameters Staff::swing(const Fraction& tick) const
 {
     SwingParameters sp;
     int swingUnit = 0;
-    ByteArray ba = score()->styleSt(Sid::swingUnit).toAscii();
+    ByteArray ba = style().styleSt(Sid::swingUnit).toAscii();
     DurationType unit = TConv::fromXml(ba.constChar(), DurationType::V_INVALID);
-    int swingRatio = score()->styleI(Sid::swingRatio);
+    int swingRatio = style().styleI(Sid::swingRatio);
     if (unit == DurationType::V_EIGHTH) {
-        swingUnit = Constants::division / 2;
+        swingUnit = Constants::DIVISION / 2;
     } else if (unit == DurationType::V_16TH) {
-        swingUnit = Constants::division / 4;
+        swingUnit = Constants::DIVISION / 4;
     } else if (unit == DurationType::V_ZERO) {
         swingUnit = 0;
     }
@@ -1008,64 +866,31 @@ SwingParameters Staff::swing(const Fraction& tick) const
     return _swingList.at(*it);
 }
 
-//---------------------------------------------------------
-//   capo
-//---------------------------------------------------------
-
-int Staff::capo(const Fraction& tick) const
+const CapoParams& Staff::capo(const Fraction& tick) const
 {
-    if (_capoList.empty()) {
-        return 0;
+    static const CapoParams dummy;
+
+    if (_capoMap.empty()) {
+        return dummy;
     }
 
-    std::vector<int> ticks = mu::keys(_capoList);
+    std::vector<int> ticks = mu::keys(_capoMap);
     auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick.ticks());
     if (it == ticks.cbegin()) {
-        return 0;
+        return dummy;
     }
     --it;
-    return _capoList.at(*it);
+    return _capoMap.at(*it);
 }
 
-//---------------------------------------------------------
-//   getNotes
-//---------------------------------------------------------
-
-std::list<Note*> Staff::getNotes() const
+void Staff::insertCapoParams(const Fraction& tick, const CapoParams& params)
 {
-    std::list<Note*> list;
-
-    staff_idx_t staffIdx = idx();
-
-    SegmentType st = SegmentType::ChordRest;
-    for (Segment* s = score()->firstSegment(st); s; s = s->next1(st)) {
-        for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-            track_idx_t track = voice + staffIdx * VOICES;
-            EngravingItem* e = s->element(track);
-            if (e && e->isChord()) {
-                addChord(list, toChord(e), voice);
-            }
-        }
-    }
-
-    return list;
+    _capoMap.insert_or_assign(tick.ticks(), params);
 }
 
-//---------------------------------------------------------
-//   addChord
-//---------------------------------------------------------
-
-void Staff::addChord(std::list<Note*>& list, Chord* chord, voice_idx_t voice) const
+void Staff::clearCapoParams()
 {
-    for (Chord* c : chord->graceNotes()) {
-        addChord(list, c, voice);
-    }
-    for (Note* note : chord->notes()) {
-        if (note->tieBack()) {
-            continue;
-        }
-        list.push_back(note);
-    }
+    _capoMap.clear();
 }
 
 //---------------------------------------------------------
@@ -1138,22 +963,31 @@ bool Staff::isPrimaryStaff() const
     if (!_links) {
         return true;
     }
-    std::list<Staff*> s;
-    std::list<Staff*> ss;
-    for (auto e : *_links) {
-        Staff* staff = toStaff(e);
+
+    std::vector<const Staff*> linkedStavesInThisScore;
+    std::vector<const Staff*> linkedNonTabStavesInThisScore;
+
+    for (const EngravingObject* linked : *_links) {
+        const Staff* staff = toStaff(linked);
+
         if (staff->score() == score()) {
-            s.push_back(staff);
+            linkedStavesInThisScore.push_back(staff);
+
             if (!staff->isTabStaff(Fraction(0, 1))) {
-                ss.push_back(staff);
+                linkedNonTabStavesInThisScore.push_back(staff);
             }
         }
     }
-    if (s.size() == 1) { // the linked staves are in different scores
-        return s.front() == this;
-    } else { // return a non tab linked staff in this score
-        return ss.front() == this;
+
+    IF_ASSERT_FAILED(!linkedStavesInThisScore.empty()) {
+        return true;
     }
+
+    if (!linkedNonTabStavesInThisScore.empty()) {
+        return linkedNonTabStavesInThisScore.front() == this;
+    }
+
+    return linkedStavesInThisScore.front() == this;
 }
 
 //---------------------------------------------------------

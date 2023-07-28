@@ -22,9 +22,11 @@
 
 #include <gtest/gtest.h>
 
+#include "libmscore/accidental.h"
 #include "libmscore/measure.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
+#include "libmscore/ornament.h"
 #include "libmscore/rest.h"
 #include "libmscore/stem.h"
 #include "libmscore/hook.h"
@@ -32,6 +34,8 @@
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -41,6 +45,17 @@ static const String CHANGEVISIBILITY_DATA_DIR(u"changevisibility_data/");
 class Engraving_ChangeVisibilityTests : public ::testing::Test
 {
 protected:
+    void SetUp() override
+    {
+        m_score = ScoreRW::readScore(CHANGEVISIBILITY_DATA_DIR + u"changevisibility.mscx");
+    }
+
+    void TearDown() override
+    {
+        delete m_score;
+        m_score = nullptr;
+    }
+
     std::vector<EngravingItem*> collectChildren(const Chord* chord) const
     {
         std::vector<EngravingItem*> children;
@@ -67,9 +82,13 @@ protected:
         return chords;
     }
 
-    Chord* findChord(const Score* score, int tick) const
+    Chord* findChord(int tick) const
     {
-        ChordRest* cr = score->findCR(Fraction::fromTicks(tick), 0);
+        IF_ASSERT_FAILED(m_score) {
+            return nullptr;
+        }
+
+        ChordRest* cr = m_score->findCR(Fraction::fromTicks(tick), 0);
         if (cr->isChord()) {
             return toChord(cr);
         }
@@ -77,24 +96,29 @@ protected:
         return nullptr;
     }
 
-    Rest* findRest(const Score* score, int tick) const
+    Rest* findRest(int tick) const
     {
-        ChordRest* cr = score->findCR(Fraction::fromTicks(tick), 0);
+        IF_ASSERT_FAILED(m_score) {
+            return nullptr;
+        }
+
+        ChordRest* cr = m_score->findCR(Fraction::fromTicks(tick), 0);
         if (cr->isRest()) {
             return toRest(cr);
         }
 
         return nullptr;
     }
+
+    MasterScore* m_score = nullptr;
 };
 
 TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_SingleNoteChord)
 {
-    MasterScore* score = ScoreRW::readScore(CHANGEVISIBILITY_DATA_DIR + u"changevisibility.mscx");
-    ASSERT_TRUE(score);
+    ASSERT_TRUE(m_score);
 
     // [GIVEN] Chord containing only one note
-    Chord* chord = findChord(score, 0);
+    Chord* chord = findChord(0);
     ASSERT_TRUE(chord);
 
     ASSERT_TRUE(chord->notes().size() == 1);
@@ -106,7 +130,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_SingleNoteChord)
     ASSERT_FALSE(children.empty());
 
     // [WHEN] Hide the note
-    score->undoChangeVisible(note, false);
+    m_score->undoChangeVisible(note, false);
 
     // [THEN] Everything in the chord is hidden
     for (EngravingItem* child : children) {
@@ -114,7 +138,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_SingleNoteChord)
     }
 
     // [WHEN] Show the note
-    score->undoChangeVisible(note, true);
+    m_score->undoChangeVisible(note, true);
 
     // [THEN] Everything in the chord is visible
     for (EngravingItem* child : children) {
@@ -129,8 +153,8 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_SingleNoteChord)
     ASSERT_TRUE(stem);
 
     // [WHEN] We can also hide the parts of the note
-    score->undoChangeVisible(dot, false);
-    score->undoChangeVisible(stem, false);
+    m_score->undoChangeVisible(dot, false);
+    m_score->undoChangeVisible(stem, false);
 
     // [THEN] Everything in the chord is visible, except the parts that were hidden manually
     for (EngravingItem* child : children) {
@@ -140,53 +164,117 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_SingleNoteChord)
             EXPECT_TRUE(child->visible());
         }
     }
-
-    delete score;
 }
 
 TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_RestWithDot)
 {
-    MasterScore* score = ScoreRW::readScore(CHANGEVISIBILITY_DATA_DIR + u"changevisibility.mscx");
-    ASSERT_TRUE(score);
+    ASSERT_TRUE(m_score);
 
     // [GIVEN] Rest with a dot
-    Rest* rest = findRest(score, 480);
+    Rest* rest = findRest(480);
     ASSERT_TRUE(rest);
 
     ASSERT_TRUE(!rest->dotList().empty());
     NoteDot* dot = rest->dotList().front();
 
     // [WHEN] Hide the rest
-    score->undoChangeVisible(rest, false);
+    m_score->undoChangeVisible(rest, false);
 
     // [THEN] Rest and its dot are hidden
     EXPECT_FALSE(rest->visible());
     EXPECT_FALSE(dot->visible());
 
     // [WHEN] Show the rest
-    score->undoChangeVisible(rest, true);
+    m_score->undoChangeVisible(rest, true);
 
     // [THEN] Rest and its dot are visible
     EXPECT_TRUE(rest->visible());
     EXPECT_TRUE(dot->visible());
 
     // [WHEN] We can also hide the dot
-    score->undoChangeVisible(dot, false);
+    m_score->undoChangeVisible(dot, false);
 
     // [THEN] Rest is visible, but the dot is not
     EXPECT_TRUE(rest->visible());
     EXPECT_FALSE(dot->visible());
+}
 
-    delete score;
+TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_IgnoredElements)
+{
+    ASSERT_TRUE(m_score);
+
+    // [GIVEN] Note with attached grace notes, lyrics and slur
+    Chord* chord = findChord(1200);
+    ASSERT_TRUE(chord);
+
+    const std::vector<Chord*>& graceNotes = chord->graceNotes();
+    ASSERT_TRUE(!graceNotes.empty());
+
+    ASSERT_TRUE(chord->notes().size() == 1);
+    Note* note = chord->notes().front();
+    ASSERT_TRUE(note);
+
+    // [WHEN] Hide the note
+    m_score->undoChangeVisible(note, false);
+
+    // [THEN] The note is hidden, but the grace notes, lyrics and slur are still visible
+    EXPECT_FALSE(note->visible());
+
+    const std::unordered_set<ElementType> IGNORED_TYPES {
+        ElementType::CHORD,
+        ElementType::SLUR,
+        ElementType::LYRICS,
+    };
+
+    for (EngravingObject* child : chord->scanChildren()) {
+        if (mu::contains(IGNORED_TYPES, child->type())) {
+            EngravingItem* item = toEngravingItem(child);
+            EXPECT_TRUE(item->visible());
+        }
+    }
+
+    for (const Chord* graceNote : graceNotes) {
+        EXPECT_TRUE(graceNote->visible());
+    }
+
+    // [WHEN] Show the note
+    m_score->undoChangeVisible(note, true);
+
+    // [THEN] Everything is visible
+    EXPECT_TRUE(note->visible());
+
+    for (EngravingObject* child : chord->scanChildren()) {
+        if (mu::contains(IGNORED_TYPES, child->type())) {
+            EngravingItem* item = toEngravingItem(child);
+            EXPECT_TRUE(item->visible());
+        }
+    }
+
+    for (const Chord* graceNote : graceNotes) {
+        EXPECT_TRUE(graceNote->visible());
+    }
+
+    // [WHEN] We can hide any grace note
+    m_score->undoChangeVisible(graceNotes[0], false);
+
+    // [THEN] Everything is visible except the previously hidden grace note
+    EXPECT_TRUE(note->visible());
+
+    for (size_t i = 0; i < graceNotes.size(); ++i) {
+        if (i == 0) {
+            EXPECT_FALSE(graceNotes[i]->visible());
+        } else {
+            EXPECT_TRUE(graceNotes[i]->visible());
+        }
+    }
 }
 
 TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordContainingSeveralNotes)
 {
-    MasterScore* score = ScoreRW::readScore(CHANGEVISIBILITY_DATA_DIR + u"changevisibility.mscx");
-    ASSERT_TRUE(score);
+    ASSERT_TRUE(m_score);
 
     // [GIVEN] Chord containing several notes
-    Chord* chord = findChord(score, 1920);
+    Chord* chord = findChord(1920);
     ASSERT_TRUE(chord);
     ASSERT_TRUE(chord->notes().size() > 2);
 
@@ -205,7 +293,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordContainingSeveral
     ASSERT_TRUE(firstNote);
 
     // [WHEN] Hide the first note
-    score->undoChangeVisible(firstNote, false);
+    m_score->undoChangeVisible(firstNote, false);
 
     // [THEN] Only the first note is hidden
     EXPECT_FALSE(firstNote->visible());
@@ -230,7 +318,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordContainingSeveral
     ASSERT_TRUE(secondNote);
 
     // [WHEN] Hide the second note
-    score->undoChangeVisible(firstNote, false);
+    m_score->undoChangeVisible(firstNote, false);
 
     // [THEN] Only the first and the second notes are hidden
     EXPECT_FALSE(firstNote->visible());
@@ -248,7 +336,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordContainingSeveral
 
     // [WHEN] Hide all notes
     for (Note* note : chord->notes()) {
-        score->undoChangeVisible(note, false);
+        m_score->undoChangeVisible(note, false);
     }
 
     // [GIVEN] All items attached to this chord
@@ -262,17 +350,14 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordContainingSeveral
 
     EXPECT_FALSE(stem->visible());
     EXPECT_FALSE(hook->visible());
-
-    delete score;
 }
 
 TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordsConnectedWithBeam)
 {
-    MasterScore* score = ScoreRW::readScore(CHANGEVISIBILITY_DATA_DIR + u"changevisibility.mscx");
-    ASSERT_TRUE(score);
+    ASSERT_TRUE(m_score);
 
     // [GIVEN] First chord under the beam
-    Chord* firstChord = findChord(score, 3840);
+    Chord* firstChord = findChord(3840);
     ASSERT_TRUE(firstChord);
     ASSERT_TRUE(!firstChord->notes().empty());
 
@@ -289,7 +374,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordsConnectedWithBea
 
     // [WHEN] Hide all notes in the first chord
     for (Note* note : firstChord->notes()) {
-        score->undoChangeVisible(note, false);
+        m_score->undoChangeVisible(note, false);
     }
 
     // [THEN] Beam/Steam is visible
@@ -322,7 +407,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordsConnectedWithBea
 
         for (EngravingItem* child : children) {
             if (child->isNote()) {
-                score->undoChangeVisible(child, false);
+                m_score->undoChangeVisible(child, false);
             }
         }
     }
@@ -343,7 +428,7 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordsConnectedWithBea
     Note* firstChordNote = firstChord->notes().front();
 
     // [WHEN] Show it
-    score->undoChangeVisible(firstChordNote, true);
+    m_score->undoChangeVisible(firstChordNote, true);
 
     // [THEN] All stems/beam are visible now
     EXPECT_TRUE(beam->visible());
@@ -377,17 +462,72 @@ TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_ChordsConnectedWithBea
             }
         }
     }
+}
 
-    delete score;
+TEST_F(Engraving_ChangeVisibilityTests, UndoChangeVisible_Ornaments)
+{
+    ASSERT_TRUE(m_score);
+
+    Measure* measure = m_score->tick2measure(Fraction(3, 1));
+    ASSERT_TRUE(measure);
+
+    Chord* chord = toChord(measure->first()->elementAt(0));
+    ASSERT_TRUE(chord);
+    Note* note = chord->upNote();
+    ASSERT_TRUE(note);
+    Ornament* ornament = toOrnament(chord->articulations().front());
+    ASSERT_TRUE(ornament);
+    Accidental* accidental = ornament->accidentalAbove();
+    ASSERT_TRUE(accidental);
+
+    // NOTE invisible makes ORNAMENT invisible
+    m_score->undoChangeVisible(note, false);
+    ASSERT_FALSE(ornament->visible());
+
+    // ORNAMENT visible, but note stays invisible
+    m_score->undoChangeVisible(ornament, true);
+    ASSERT_TRUE(ornament->visible());
+    ASSERT_FALSE(note->visible());
+
+    // Ornament accidental invisible, but ornament stays visible
+    m_score->undoChangeVisible(accidental, false);
+    ASSERT_FALSE(accidental->visible());
+    ASSERT_TRUE(ornament->visible());
+
+    chord = toChord(chord->segment()->next()->elementAt(0));
+    ASSERT_TRUE(chord);
+    note = chord->upNote();
+    ASSERT_TRUE(note);
+    ornament = toOrnament(chord->articulations().front());
+    ASSERT_TRUE(ornament);
+    Chord* cueNoteChord = ornament->cueNoteChord();
+    ASSERT_TRUE(cueNoteChord);
+    Note* cueNote = cueNoteChord->upNote();
+    ASSERT_TRUE(cueNote);
+
+    // ORNAMENT invisible, cue note also becomes invisible
+    m_score->undoChangeVisible(ornament, false);
+    ASSERT_FALSE(ornament->visible());
+    ASSERT_FALSE(cueNote->visible());
+    for (EngravingItem* el : cueNote->el()) {
+        ASSERT_FALSE(el->visible());
+    }
+
+    // CUE NOTE visible, but ornament stays invisible
+    m_score->undoChangeVisible(cueNote, true);
+    ASSERT_FALSE(ornament->visible());
+    ASSERT_TRUE(cueNote->visible());
+    for (EngravingItem* el : cueNote->el()) {
+        ASSERT_TRUE(el->visible());
+    }
 }
 
 TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
 {
-    MasterScore* score = ScoreRW::readScore(CHANGEVISIBILITY_DATA_DIR + u"changevisibility.mscx");
-    ASSERT_TRUE(score);
+    ASSERT_TRUE(m_score);
 
     // [GIVEN] First measure
-    Measure* measure = score->firstMeasure();
+    Measure* measure = m_score->firstMeasure();
     ASSERT_TRUE(measure);
 
     // [GIVEN] Items on the first measure
@@ -395,11 +535,11 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     ASSERT_FALSE(items.empty());
 
     // [WHEN] Select the first measure and call cmdToggleVisible()
-    score->select(measure);
+    m_score->select(measure);
 
-    score->startCmd();
-    score->cmdToggleVisible();
-    score->endCmd();
+    m_score->startCmd();
+    m_score->cmdToggleVisible();
+    m_score->endCmd();
 
     // [THEN] Everything on the first measure is hidden
     // (excluding these items)
@@ -419,9 +559,9 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     }
 
     // [WHEN] Call cmdToggleVisible() again
-    score->startCmd();
-    score->cmdToggleVisible();
-    score->endCmd();
+    m_score->startCmd();
+    m_score->cmdToggleVisible();
+    m_score->endCmd();
 
     // [THEN] Everything on the first measure is visible
     for (const EngravingItem* item : items) {
@@ -429,17 +569,17 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     }
 
     // [GIVEN] First chord
-    Chord* chord = findChord(score, 0);
+    Chord* chord = findChord(0);
     ASSERT_TRUE(chord);
 
     // [WHEN] Select notes in the first chord and call cmdToggleVisible()
     for (Note* note : chord->notes()) {
-        score->select(note, SelectType::ADD);
+        m_score->select(note, SelectType::ADD);
     }
 
-    score->startCmd();
-    score->cmdToggleVisible();
-    score->endCmd();
+    m_score->startCmd();
+    m_score->cmdToggleVisible();
+    m_score->endCmd();
 
     // [THEN] The notes are hidden
     for (Note* note : chord->notes()) {
@@ -447,11 +587,11 @@ TEST_F(Engraving_ChangeVisibilityTests, CmdToggleVisible)
     }
 
     // [WHEN] Select the first measure and call cmdToggleVisible() again
-    score->select(measure);
+    m_score->select(measure);
 
-    score->startCmd();
-    score->cmdToggleVisible();
-    score->endCmd();
+    m_score->startCmd();
+    m_score->cmdToggleVisible();
+    m_score->endCmd();
 
     // [THEN] Everything on the first measure is visible
     for (const EngravingItem* item : items) {

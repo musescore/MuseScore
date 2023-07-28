@@ -33,12 +33,26 @@ using ProgressResult = RetVal<Val>;
 
 struct Progress
 {
+    // Communication from the creator of the progress to the clients
     async::Notification started;
     async::Channel<int64_t /*current*/, int64_t /*total*/, std::string /*title*/> progressChanged;
     async::Channel<ProgressResult> finished;
+
+    // Communication from the clients to the creator of the progress that it should cancel its work
+    async::Notification cancelRequested;
+
+    void cancel()
+    {
+        cancelRequested.notify();
+        finished.send(make_ret(Ret::Code::Cancel));
+    }
 };
 
 using ProgressPtr = std::shared_ptr<Progress>;
 }
+
+#ifndef NO_QT_SUPPORT
+Q_DECLARE_METATYPE(mu::framework::Progress*)
+#endif
 
 #endif // MU_FRAMEWORK_PROGRESS_H

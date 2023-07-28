@@ -37,9 +37,9 @@
 namespace mu::ui {
 class NavigationController : public QObject, public INavigationController, public actions::Actionable, public async::Asyncable
 {
-    INJECT(ui, actions::IActionsDispatcher, dispatcher)
-    INJECT(ui, framework::IInteractive, interactive)
-    INJECT(ui, IMainWindow, mainWindow)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(IMainWindow, mainWindow)
 
 public:
     NavigationController() = default;
@@ -66,6 +66,8 @@ public:
     INavigationControl* activeControl() const override;
 
     void setDefaultNavigationControl(INavigationControl* control) override;
+
+    void resetNavigation() override;
 
     async::Notification navigationChanged() const override;
 
@@ -133,7 +135,6 @@ private:
     void doActivateLast();
 
     void resetIfNeed(QObject* watched);
-    void resetActive();
 
     std::set<INavigationSection*> m_sections;
     async::Notification m_navigationChanged;

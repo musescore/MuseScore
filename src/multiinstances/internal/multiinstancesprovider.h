@@ -40,10 +40,10 @@
 namespace mu::mi {
 class MultiInstancesProvider : public IMultiInstancesProvider, public actions::Actionable, public async::Asyncable
 {
-    INJECT(mi, actions::IActionsDispatcher, dispatcher)
-    INJECT(mi, framework::IInteractive, interactive)
-    INJECT(mi, project::IProjectFilesController, projectFilesController)
-    INJECT(mi, ui::IMainWindow, mainWindow)
+    INJECT(actions::IActionsDispatcher, dispatcher)
+    INJECT(framework::IInteractive, interactive)
+    INJECT(project::IProjectFilesController, projectFilesController)
+    INJECT(ui::IMainWindow, mainWindow)
 
 public:
     MultiInstancesProvider() = default;

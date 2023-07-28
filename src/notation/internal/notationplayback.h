@@ -40,7 +40,7 @@ class Score;
 namespace mu::notation {
 class NotationPlayback : public INotationPlayback, public async::Asyncable
 {
-    INJECT(notation, INotationConfiguration, configuration)
+    INJECT(INotationConfiguration, configuration)
 
 public:
     NotationPlayback(IGetScore* getScore, async::Notification notationChanged);

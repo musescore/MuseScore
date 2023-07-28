@@ -24,7 +24,9 @@
 
 #include <map>
 
-#include "rw/xml.h"
+#include "defer.h"
+
+#include "style/style.h"
 
 #include "chord.h"
 #include "note.h"
@@ -41,25 +43,31 @@ namespace mu::engraving {
 
 bool StringData::bFretting = false;
 
-StringData::StringData(int numFrets, int numStrings, int strings[])
+StringData::StringData(int numFrets, int numStrings, int strings[], bool useFlats)
 {
     instrString strg = { 0, false, 0 };
-    _frets = numFrets;
+    m_frets = numFrets;
 
     for (int i = 0; i < numStrings; i++) {
         strg.pitch = strings[i];
-        stringTable.push_back(strg);
+        m_stringTable.push_back(strg);
     }
+    m_useFlats = useFlats;
 }
 
 StringData::StringData(int numFrets, std::vector<instrString>& strings)
 {
-    _frets = numFrets;
+    m_frets = numFrets;
 
-    stringTable.clear();
+    m_stringTable.clear();
     for (const instrString& i : strings) {
-        stringTable.push_back(i);
+        m_stringTable.push_back(i);
     }
+}
+
+bool StringData::isNull() const
+{
+    return *this == StringData();
 }
 
 // called from import (musicxml/guitarpro/...)
@@ -69,49 +77,6 @@ void StringData::set(const StringData& src)
     if (isFiveStringBanjo()) {
         configBanjo5thString();
     }
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void StringData::read(XmlReader& e)
-{
-    stringTable.clear();
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "frets") {
-            _frets = e.readInt();
-        } else if (tag == "string") {
-            instrString strg;
-            strg.open  = e.intAttribute("open", 0);
-            strg.pitch = e.readInt();
-            stringTable.push_back(strg);
-        } else {
-            e.unknown();
-        }
-    }
-    if (isFiveStringBanjo()) {
-        configBanjo5thString();
-    }
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void StringData::write(XmlWriter& xml) const
-{
-    xml.startElement("StringData");
-    xml.tag("frets", _frets);
-    for (const instrString& strg : stringTable) {
-        if (strg.open) {
-            xml.tag("string open=\"1\"", strg.pitch);
-        } else {
-            xml.tag("string", strg.pitch);
-        }
-    }
-    xml.endElement();
 }
 
 //---------------------------------------------------------
@@ -170,26 +135,17 @@ int StringData::fret(int pitch, int string, Staff* staff) const
 
 void StringData::fretChords(Chord* chord) const
 {
-    int nFret, minFret, maxFret, nNewFret, nTempFret;
-    int nString, nNewString, nTempString;
-
     if (bFretting) {
         return;
     }
     bFretting = true;
+    DEFER {
+        bFretting = false;
+    };
 
-    // we need to keep track of string allocation
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    int bUsed[strings()];                      // initially all strings are available
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
-    std::vector<int> bUsed(strings());
-#endif
-    for (nString = 0; nString < static_cast<int>(strings()); nString++) {
-        bUsed[nString] = 0;
-    }
-    // we also need the notes sorted in order of string (from highest to lowest) and then pitch
+    int strings = static_cast<int>(this->strings());
+
+    // we need the notes sorted in order of string (from highest to lowest) and then pitch
     std::map<int, Note*> sortedNotes;
     int count = 0;
     // store staff pitch offset at this tick, to speed up actual note pitch calculations
@@ -212,10 +168,35 @@ void StringData::fretChords(Chord* chord) const
             }
         }
     }
+
+    for (const auto& p : sortedNotes) {
+        Note* note = p.second;
+        if (note->string() >= strings) {
+            note->undoChangeProperty(Pid::STRING, INVALID_STRING_INDEX);
+            note->undoChangeProperty(Pid::FRET, INVALID_FRET_INDEX);
+        }
+    }
+
+    if (!strings) {
+        return;
+    }
+
+    // we need to keep track of string allocation
+#if (!defined (_MSCVER) && !defined (_MSC_VER))
+    int bUsed[strings];                      // initially all strings are available
+    for (int nString = 0; nString < strings; ++nString) {
+        bUsed[nString] = 0;
+    }
+#else
+    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
+    //    heap allocation is slow, an optimization might be used.
+    std::vector<int> bUsed(strings);
+#endif
+
     // determine used range of frets
-    minFret = INT32_MAX;
-    maxFret = INT32_MIN;
-    for (auto& p : sortedNotes) {
+    int minFret = INT32_MAX;
+    int maxFret = INT32_MIN;
+    for (const auto& p : sortedNotes) {
         Note* note = p.second;
         if (note->string() != INVALID_STRING_INDEX && note->displayFret() == Note::DisplayFretOption::NoHarmonic) {
             bUsed[note->string()]++;
@@ -229,10 +210,13 @@ void StringData::fretChords(Chord* chord) const
     }
 
     // scan chord notes from highest, matching with strings from the highest
-    for (auto& p : sortedNotes) {
+    for (const auto& p : sortedNotes) {
         Note* note = p.second;
-        nString     = nNewString    = note->string();
-        nFret       = nNewFret      = note->fret();
+        int nString, nNewString;
+        int nFret,   nNewFret,   nTempFret;
+
+        nString = nNewString = note->string();
+        nFret   = nNewFret   = note->fret();
         note->setFretConflict(false);           // assume no conflicts on this note
         // if no fretting (any invalid fretting has been erased by sortChordNotes() )
         if (nString == INVALID_STRING_INDEX /*|| nFret == INVALID_FRET_INDEX || getPitch(nString, nFret) != note->pitch()*/) {
@@ -260,7 +244,7 @@ void StringData::fretChords(Chord* chord) const
         // if the note string (either original or newly assigned) is also used by another note
         if (note->displayFret() == Note::DisplayFretOption::NoHarmonic && bUsed[nNewString] > 1) {
             // attempt to find a suitable string, from topmost
-            for (nTempString=0; nTempString < static_cast<int>(strings()); nTempString++) {
+            for (int nTempString = 0; nTempString < strings; nTempString++) {
                 if (bUsed[nTempString] < 1
                     && (nTempFret=fret(note->pitch(), nTempString, pitchOffset)) != INVALID_FRET_INDEX) {
                     bUsed[nNewString]--;              // free previous string
@@ -290,8 +274,6 @@ void StringData::fretChords(Chord* chord) const
             note->setFretConflict(true);
         }
     }
-
-    bFretting = false;
 }
 
 //---------------------------------------------------------
@@ -302,7 +284,7 @@ void StringData::fretChords(Chord* chord) const
 int StringData::frettedStrings() const
 {
     int num = 0;
-    for (auto s : stringTable) {
+    for (auto s : m_stringTable) {
         if (!s.open) {
             num++;
         }
@@ -345,7 +327,7 @@ int StringData::pitchOffsetAt(Staff* staff)
 
 bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret) const
 {
-    int strings = static_cast<int>(stringTable.size());
+    int strings = static_cast<int>(m_stringTable.size());
     if (strings < 1) {
         return false;
     }
@@ -353,7 +335,7 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
     pitch += pitchOffset;
 
     // if above max fret on highest string, fret on first string, but return failure
-    if (pitch > stringTable.at(strings - 1).pitch + _frets) {
+    if (pitch > m_stringTable.at(strings - 1).pitch + m_frets) {
         *string = 0;
         *fret   = 0;
         return false;
@@ -361,14 +343,14 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
 
     if (isFiveStringBanjo()) {
         // special case: open banjo 5th string
-        if (pitch == stringTable.at(0).pitch) {
+        if (pitch == m_stringTable.at(0).pitch) {
             *string = 4;
             *fret = 0;
             return true;
         }
         // test remaining 4 strings from highest to lowest
         for (int i = 4; i > 0; i--) {
-            instrString strg = stringTable.at(i);
+            instrString strg = m_stringTable.at(i);
             if (pitch >= strg.pitch) {
                 *string = strings - i - 1;
                 *fret = pitch - strg.pitch;
@@ -380,7 +362,7 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
         // NOTE: this assumes there are always enough frets to fill
         // the interval between any fretted string and the next
         for (int i = strings - 1; i >= 0; i--) {
-            instrString strg = stringTable.at(i);
+            instrString strg = m_stringTable.at(i);
             if (pitch >= strg.pitch) {
                 if (pitch == strg.pitch || !strg.open) {
                     *string = strings - i - 1;
@@ -407,11 +389,11 @@ bool StringData::convertPitch(int pitch, int pitchOffset, int* string, int* fret
 
 int StringData::getPitch(int string, int fret, int pitchOffset) const
 {
-    size_t strings = stringTable.size();
+    size_t strings = m_stringTable.size();
     if (string < 0 || string >= static_cast<int>(strings)) {
         return INVALID_PITCH;
     }
-    instrString strg = stringTable.at(strings - string - 1);
+    instrString strg = m_stringTable.at(strings - string - 1);
     int pitch = strg.pitch - pitchOffset + (strg.open ? 0 : fret);
     if (strg.startFret > 0 && fret >= strg.startFret) {
         pitch -= strg.startFret; // banjo 5th string adjustment
@@ -427,7 +409,7 @@ int StringData::getPitch(int string, int fret, int pitchOffset) const
 
 int StringData::fret(int pitch, int string, int pitchOffset) const
 {
-    int strings = static_cast<int>(stringTable.size());
+    int strings = static_cast<int>(m_stringTable.size());
     if (strings < 1) {                          // no strings at all!
         return INVALID_FRET_INDEX;
     }
@@ -438,17 +420,61 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 
     pitch += pitchOffset;
 
-    const instrString& strg = stringTable[strings - string - 1];
+    const instrString& strg = m_stringTable[strings - string - 1];
     int fret = pitch - strg.pitch;
     if (fret > 0 && strg.startFret > 0) {
         fret += strg.startFret;  // banjo 5th string adjustment
     }
 
     // fret number is invalid or string cannot be fretted
-    if (fret < 0 || fret > _frets || (fret > 0 && strg.open)) {
+    if (fret < 0 || fret > m_frets || (fret > 0 && strg.open)) {
         return INVALID_FRET_INDEX;
     }
     return fret;
+}
+
+void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset) const
+{
+    int capoFret = chord->staff()->part()->capoFret();
+    std::unordered_map<size_t, Note*> usedStrings;
+    std::unordered_map<int, std::vector<int> > fretTable;
+
+    for (auto note: chord->notes()) {
+        usedStrings[note->string()] = note;
+        int pitch = note->pitch() - capoFret;
+        fretTable.insert_or_assign(pitch, std::vector<int>());
+        for (size_t i = 0; i < usedStrings.size(); ++i) {
+            fretTable[pitch].push_back(fret(pitch, (int)i, pitchOffset));
+        }
+    }
+
+    auto fixFretting = [&](const std::vector<Note*>& notes) {
+        size_t notesCount = notes.size();
+        for (int i = static_cast<int>(notesCount) - 1; i >= 0; --i) {
+            if (notes.at(i)->fret() < 0) {
+                for (size_t indx = usedStrings.size() - 1; indx > 0; --indx) {
+                    if (usedStrings[indx - 1] && !usedStrings[indx]) {
+                        usedStrings[indx] = usedStrings[indx - 1];
+                        usedStrings[indx - 1] = nullptr;
+                        Note* n = usedStrings[indx];
+                        int pitch = n->pitch() - capoFret;
+                        n->setFret(fretTable[pitch].at(n->string() + 1));
+                        n->setString(n->string() + 1);
+                    }
+                }
+            }
+        }
+    };
+
+    for (Note* note : chord->notes()) {
+        if (note->displayFret() != Note::DisplayFretOption::NoHarmonic) {
+            continue;
+        }
+        int pitch = getPitch(note->string(), note->fret() + capoFret, pitchOffset);
+        int newFret = note->fret() + note->pitch() - pitch;
+        note->setFret(newFret);
+    }
+    fixFretting(chord->notes());
 }
 
 //---------------------------------------------------------
@@ -465,6 +491,12 @@ int StringData::fret(int pitch, int string, int pitchOffset) const
 void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* chord, int pitchOffset, int* count) const
 {
     int capoFret = chord->staff()->part()->capoFret();
+    bool useSameString = chord->style().styleB(Sid::preferSameStringForTranspose);
+
+    if (useSameString) {
+        sortChordNotesUseSameString(chord, pitchOffset);
+        return;
+    }
 
     for (Note* note : chord->notes()) {
         if (note->displayFret() != Note::DisplayFretOption::NoHarmonic) {
@@ -472,16 +504,16 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
         }
 
         int string = note->string();
-        int fret = note->fret();
+        int noteFret = note->fret();
 
+        int pitch = getPitch(string, noteFret + capoFret, pitchOffset);
         // if note not fretted yet or current fretting no longer valid,
         // use most convenient string as key
-        int pitch = getPitch(string, fret + capoFret, pitchOffset);
-        if (!note->negativeFretUsed() && (string <= INVALID_STRING_INDEX || fret <= INVALID_FRET_INDEX
+        if (!note->negativeFretUsed() && (string <= INVALID_STRING_INDEX || noteFret <= INVALID_FRET_INDEX
                                           || (pitchIsValid(pitch) && pitch != note->pitch()))) {
             note->setString(INVALID_STRING_INDEX);
             note->setFret(INVALID_FRET_INDEX);
-            convertPitch(note->pitch(), pitchOffset, &string, &fret);
+            convertPitch(note->pitch(), pitchOffset, &string, &noteFret);
         }
 
         int key = string * 100000;
@@ -501,9 +533,9 @@ void StringData::sortChordNotes(std::map<int, Note*>& sortedNotes, const Chord* 
 void StringData::configBanjo5thString()
 {
     // banjo 5th string (pitch 67 == G)
-    instrString& strg5 = stringTable[0];
+    instrString& strg5 = m_stringTable[0];
 
-    _frets = 24; // not needed after bug #316931 is fixed
+    m_frets = 24; // not needed after bug #316931 is fixed
 
     // adjust startFret if using a 5th string capo (6..12)
     if (strg5.pitch > 67 && strg5.pitch < 74) {
@@ -522,7 +554,7 @@ void StringData::configBanjo5thString()
 
 int StringData::adjustBanjo5thFret(int fret) const
 {
-    return (fret > 0 && isFiveStringBanjo()) ? fret + stringTable[0].startFret : fret;
+    return (fret > 0 && isFiveStringBanjo()) ? fret + m_stringTable[0].startFret : fret;
 }
 
 //---------------------------------------------------------
@@ -534,6 +566,6 @@ int StringData::adjustBanjo5thFret(int fret) const
 
 bool StringData::isFiveStringBanjo() const
 {
-    return stringTable.size() == 5 && stringTable[0].pitch > stringTable[1].pitch;
+    return m_stringTable.size() == 5 && m_stringTable[0].pitch > m_stringTable[1].pitch;
 }
 }

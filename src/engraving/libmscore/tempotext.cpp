@@ -26,13 +26,15 @@
 
 #include "containers.h"
 #include "translation.h"
-#include "rw/xml.h"
+
 #include "types/typesconv.h"
 #include "types/constants.h"
 
 #include "score.h"
 #include "segment.h"
 #include "tempotext.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -65,44 +67,6 @@ TempoText::TempoText(Segment* parent)
     _followText = false;
     _relative   = 1.0;
     _isRelative = false;
-}
-
-//---------------------------------------------------------
-//   write
-//---------------------------------------------------------
-
-void TempoText::write(XmlWriter& xml) const
-{
-    xml.startElement(this);
-    xml.tag("tempo", TConv::toXml(_tempo));
-    if (_followText) {
-        xml.tag("followText", _followText);
-    }
-    TextBase::writeProperties(xml);
-    xml.endElement();
-}
-
-//---------------------------------------------------------
-//   read
-//---------------------------------------------------------
-
-void TempoText::read(XmlReader& e)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "tempo") {
-            setTempo(TConv::fromXml(e.readAsciiText(), Constants::defaultTempo));
-        } else if (tag == "followText") {
-            _followText = e.readInt();
-        } else if (!TextBase::readProperties(e)) {
-            e.unknown();
-        }
-    }
-    // check sanity
-    if (xmlText().isEmpty()) {
-        setXmlText(String(u"<sym>metNoteQuarterUp</sym> = %1").arg(int(lrint(_tempo.toBPM().val))));
-        setVisible(false);
-    }
 }
 
 double TempoText::tempoBpm() const
@@ -426,35 +390,6 @@ PropertyValue TempoText::propertyDefault(Pid id) const
     default:
         return TextBase::propertyDefault(id);
     }
-}
-
-//---------------------------------------------------------
-//   layout
-//    called after Measure->stretchMeasure()
-//---------------------------------------------------------
-
-void TempoText::layout()
-{
-    TextBase::layout();
-
-    Segment* s = segment();
-    if (!s) {                       // for use in palette
-        return;
-    }
-
-    // tempo text on first chordrest of measure should align over time sig if present
-    //
-    if (autoplace() && s->rtick().isZero()) {
-        Segment* p = segment()->prev(SegmentType::TimeSig);
-        if (p) {
-            movePosX(-(s->x() - p->x()));
-            EngravingItem* e = p->element(staffIdx() * VOICES);
-            if (e) {
-                movePosX(e->x());
-            }
-        }
-    }
-    autoplaceSegmentElement();
 }
 
 //---------------------------------------------------------

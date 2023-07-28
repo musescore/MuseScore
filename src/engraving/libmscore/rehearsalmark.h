@@ -33,6 +33,8 @@ namespace mu::engraving {
 class RehearsalMark final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, RehearsalMark)
+    DECLARE_CLASSOF(ElementType::REHEARSAL_MARK)
+
 public:
     enum class Type {
         Main = 0,
@@ -44,7 +46,7 @@ public:
     RehearsalMark* clone() const override { return new RehearsalMark(*this); }
 
     Segment* segment() const { return (Segment*)explicitParent(); }
-    void layout() override;
+
     PropertyValue propertyDefault(Pid id) const override;
 
     void setType(Type type);

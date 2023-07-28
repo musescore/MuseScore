@@ -24,7 +24,7 @@
 
 #include <QByteArray>
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 #include "workspacetypes.h"
 #include "types/retval.h"
 #include "async/notification.h"

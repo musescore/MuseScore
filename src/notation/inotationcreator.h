@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_INOTATIONCREATOR_H
 #define MU_NOTATION_INOTATIONCREATOR_H
 
-#include "modularity/imoduleexport.h"
+#include "modularity/imoduleinterface.h"
 
 #include "imasternotation.h"
 
