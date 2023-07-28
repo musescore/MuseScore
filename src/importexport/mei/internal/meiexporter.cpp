@@ -1216,7 +1216,9 @@ bool MeiExporter::writeTuplet(const Tuplet* tuplet, const EngravingItem* item, b
         libmei::Tuplet meiTuplet = Convert::tupletToMEI(tuplet);
         m_currentNode = m_currentNode.append_child();
         meiTuplet.Write(m_currentNode, this->getLayerXmlIdFor(TUPLET_L));
-    } else if (tuplet->elements().back() == item) {
+    }
+
+    if (tuplet->elements().back() == item) {
         closing = true;
     }
 
