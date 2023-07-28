@@ -332,7 +332,7 @@ FocusScope {
                 Component {
                     id: scoreThumbnailComp
 
-                    ScoreThumbnail {
+                    PixmapScoreThumbnailView {
                         anchors.fill: parent
                         thumbnail: thumbnailLoader.thumbnail
                     }

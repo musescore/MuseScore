@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,28 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scorethumbnail.h"
+#include "pixmapscorethumbnailview.h"
 
 using namespace mu::project;
 
-ScoreThumbnail::ScoreThumbnail(QQuickItem* parent)
+PixmapScoreThumbnailView::PixmapScoreThumbnailView(QQuickItem* parent)
     : uicomponents::QuickPaintedView(parent)
 {
 }
 
-QPixmap ScoreThumbnail::thumbnail() const
+QPixmap PixmapScoreThumbnailView::thumbnail() const
 {
     return m_thumbnail;
 }
 
-void ScoreThumbnail::setThumbnail(QPixmap pixmap)
+void PixmapScoreThumbnailView::setThumbnail(QPixmap pixmap)
 {
     m_thumbnail = std::move(pixmap);
     emit thumbnailChanged();
     update();
 }
 
-void ScoreThumbnail::paint(QPainter* painter)
+void PixmapScoreThumbnailView::paint(QPainter* painter)
 {
     painter->drawPixmap(0, 0, width(), height(), m_thumbnail);
 }

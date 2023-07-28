@@ -122,12 +122,12 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/cloudscorestatuswatcher.h
     ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnailloader.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/pixmapscorethumbnailview.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/pixmapscorethumbnailview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/newscoremodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/additionalinfomodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/additionalinfomodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnail.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/scorethumbnail.h
     ${CMAKE_CURRENT_LIST_DIR}/view/templatesmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/templatesmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/templatepaintview.cpp
