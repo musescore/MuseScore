@@ -42,7 +42,10 @@ ScoresView {
     Component {
         id: gridComp
 
-        ScoresView.Grid {}
+        ScoresView.Grid {
+            navigation.name: "RecentScoresGrid"
+            navigation.accessible.name: qsTrc("project", "Recent scores grid")
+        }
     }
 
     Component {

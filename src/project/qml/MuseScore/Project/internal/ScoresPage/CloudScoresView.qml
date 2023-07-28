@@ -88,6 +88,9 @@ ScoresView {
                 })
             }
 
+            navigation.name: "OnlineScoresGrid"
+            navigation.accessible.name: qsTrc("project", "Online scores grid")
+
             view.footer: cloudScoresModel.state === CloudScoresModel.Loading
                          ? busyIndicatorComp : null
 

@@ -61,9 +61,9 @@ Item {
 
     NavigationPanel {
         id: navPanel
-        name: "RecentScores"
+        name: "ScoresGridView"
         direction: NavigationPanel.Both
-        accessible.name: qsTrc("project", "Recent scores grid")
+        accessible.name: qsTrc("project", "Scores grid")
     }
 
     Rectangle {
