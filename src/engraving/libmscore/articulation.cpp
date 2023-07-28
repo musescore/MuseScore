@@ -22,8 +22,7 @@
 
 #include "articulation.h"
 
-#include "draw/fontmetrics.h"
-
+#include "style/style.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
 #include "types/translatablestring.h"
@@ -31,10 +30,8 @@
 #include "beam.h"
 #include "chord.h"
 #include "chordrest.h"
-#include "masterscore.h"
 #include "measure.h"
 #include "page.h"
-#include "score.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "system.h"
@@ -163,20 +160,9 @@ String Articulation::translatedTypeUserName() const
 //   Symbol::draw
 //---------------------------------------------------------
 
-void Articulation::draw(mu::draw::Painter* painter) const
+void Articulation::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-
-    painter->setPen(curColor());
-
-    if (m_textType == ArticulationTextType::NO_TEXT) {
-        drawSymbol(symId(), painter, PointF(-0.5 * width(), 0.0));
-    } else {
-        mu::draw::Font scaledFont(m_font);
-        scaledFont.setPointSizeF(m_font.pointSizeF() * magS() * MScore::pixelRatio);
-        painter->setFont(scaledFont);
-        painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, TConv::text(m_textType));
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
