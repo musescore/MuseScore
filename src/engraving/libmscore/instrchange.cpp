@@ -228,11 +228,11 @@ std::vector<KeySig*> InstrumentChange::keySigs(bool all) const
 std::vector<Clef*> InstrumentChange::clefs() const
 {
     std::vector<Clef*> clefs;
-    Segment* seg = segment()->prev1(SegmentType::Clef);
+    Fraction t = tick();
+    Segment* seg = t.isZero() ? segment()->prev(SegmentType::HeaderClef) : segment()->prev1(SegmentType::Clef);
     if (seg) {
         voice_idx_t startVoice = part()->staff(0)->idx() * VOICES;
         voice_idx_t endVoice = part()->staff(part()->nstaves() - 1)->idx() * VOICES;
-        Fraction t = tick();
         for (voice_idx_t i = startVoice; i <= endVoice; i += VOICES) {
             Clef* clef = toClef(seg->element(i));
             if (clef && clef->forInstrumentChange() && clef->tick() == t) {
