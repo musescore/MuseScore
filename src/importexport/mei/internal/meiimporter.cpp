@@ -1741,7 +1741,7 @@ bool MeiImporter::readSlur(pugi::xml_node slurNode, engraving::Measure* measure)
     // Add it to the map for setting slur end in MeiImporter::addSpannerEnds
     m_openSpannerMap[slur] = slurNode;
 
-    //Convert::tempoFromMEI(tempoText, meiLines, meiSlur, warning);
+    Convert::slurFromMEI(slur, meiSlur, warning);
 
     return true;
 }

@@ -1397,7 +1397,7 @@ bool MeiExporter::writeSlur(const Slur* slur, const std::string& startid)
     }
 
     pugi::xml_node slurNode = m_currentNode.append_child();
-    libmei::Slur meiSlur;// = Convert::slurToMEI(slur);
+    libmei::Slur meiSlur = Convert::slurToMEI(slur);
     meiSlur.SetStartid(startid);
 
     meiSlur.Write(slurNode, this->getMeasureXmlIdFor(SLUR_M));
