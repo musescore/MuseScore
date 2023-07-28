@@ -115,6 +115,9 @@ public:
 
     static engraving::ClefType clefFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
 
+    static engraving::DirectionV curvedirFromMEI(const libmei::curvature_CURVEDIR meiCurvedir, bool& warning);
+    static libmei::curvature_CURVEDIR curvedirToMEI(engraving::DirectionV curvedir);
+
     static engraving::DurationType durFromMEI(const libmei::data_DURATION meiDuration, bool& warning);
     static libmei::data_DURATION durToMEI(const engraving::DurationType duration);
 
@@ -177,6 +180,12 @@ public:
 
     static engraving::PlacementV placeFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
     static libmei::data_STAFFREL placeToMEI(engraving::PlacementV place);
+
+    static void slurFromMEI(engraving::Slur* slur, const libmei::Slur& meiSlur, bool& warning);
+    static libmei::Slur slurToMEI(const engraving::Slur* slur);
+
+    static engraving::SlurStyleType slurstyleFromMEI(const libmei::data_LINEFORM meiLine, bool& warning);
+    static libmei::data_LINEFORM slurstyleToMEI(engraving::SlurStyleType slurstyle);
 
     struct StaffStruct {
         int lines;
