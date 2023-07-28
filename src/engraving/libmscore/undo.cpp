@@ -2128,24 +2128,26 @@ void InsertRemoveMeasures::removeMeasures()
     Fraction tick1 = fm->tick();
     Fraction tick2 = lm->endTick();
 
-    // remove beams from chordrests in affected area, they will be rebuilt later but we need
-    // to avoid situations where notes from deleted measures remain in beams
-    // when undoing, we need to check the previous measure as well as there could be notes in there
-    // that need to have their beams recalculated (esp. when adding time signature)
-    MeasureBase* prev = fm->prev();
-    Segment* first = toMeasure(prev && prev->isMeasure() ? prev : fm)->first();
-    for (Segment* s = first; s && s != toMeasure(lm)->last(); s = s->next1()) {
-        if (!s) {
-            break;
-        }
-        if (!s->isChordRestType()) {
-            continue;
-        }
+    if (fm->isMeasure() && lm->isMeasure()) {
+        // remove beams from chordrests in affected area, they will be rebuilt later but we need
+        // to avoid situations where notes from deleted measures remain in beams
+        // when undoing, we need to check the previous measure as well as there could be notes in there
+        // that need to have their beams recalculated (esp. when adding time signature)
+        MeasureBase* prev = fm->prev();
+        Segment* first = toMeasure(prev && prev->isMeasure() ? prev : fm)->first();
+        for (Segment* s = first; s && s != toMeasure(lm)->last(); s = s->next1()) {
+            if (!s) {
+                break;
+            }
+            if (!s->isChordRestType()) {
+                continue;
+            }
 
-        for (track_idx_t track = 0; track < score->ntracks(); ++track) {
-            EngravingItem* e = s->element(track);
-            if (e && e->isChordRest()) {
-                toChordRest(e)->removeDeleteBeam(false);
+            for (track_idx_t track = 0; track < score->ntracks(); ++track) {
+                EngravingItem* e = s->element(track);
+                if (e && e->isChordRest()) {
+                    toChordRest(e)->removeDeleteBeam(false);
+                }
             }
         }
     }
@@ -2181,8 +2183,8 @@ void InsertRemoveMeasures::removeMeasures()
 
     score->measures()->remove(fm, lm);
 
-    score->setUpTempoMap();
     if (fm->isMeasure()) {
+        score->setUpTempoMap();
         score->setPlaylistDirty();
 
         // check if there is a clef at the end of last measure
@@ -2461,7 +2463,7 @@ void ChangeClefType::flip(EditData*)
     concertClef     = ocl;
     transposingClef = otc;
     // layout the clef to align the currentClefType with the actual one immediately
-    EngravingItem::layout()->layoutItem(clef);
+    EngravingItem::rendering()->layoutItem(clef);
 }
 
 //---------------------------------------------------------

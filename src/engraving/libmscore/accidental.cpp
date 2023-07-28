@@ -51,7 +51,7 @@ struct Acc {
 };
 
 // NOTE: keep this in sync with AccidentalType enum in types.h, watch out for isMicrotonal()
-static Acc accList[] = {
+static const Acc ACC_LIST[] = {
     Acc(AccidentalVal::NATURAL,    0,   SymId::noSym),                  // NONE
     Acc(AccidentalVal::FLAT,       0,   SymId::accidentalFlat),         // FLAT
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalNatural),      // NATURAL
@@ -232,7 +232,7 @@ static Acc accList[] = {
 
 AccidentalVal sym2accidentalVal(SymId id)
 {
-    for (const Acc& a : accList) {
+    for (const Acc& a : ACC_LIST) {
         if (a.sym == id) {
             return a.offset;
         }
@@ -264,7 +264,7 @@ TranslatableString Accidental::subtypeUserName() const
 
 SymId Accidental::symId() const
 {
-    return accList[int(accidentalType())].sym;
+    return ACC_LIST[int(accidentalType())].sym;
 }
 
 bool Accidental::parentNoteHasParentheses() const
@@ -279,7 +279,7 @@ bool Accidental::parentNoteHasParentheses() const
 
 AccidentalVal Accidental::subtype2value(AccidentalType st)
 {
-    return accList[int(st)].offset;
+    return ACC_LIST[int(st)].offset;
 }
 
 //---------------------------------------------------------
@@ -288,7 +288,7 @@ AccidentalVal Accidental::subtype2value(AccidentalType st)
 
 AsciiStringView Accidental::subtype2name(AccidentalType st)
 {
-    return SymNames::nameForSymId(accList[int(st)].sym);
+    return SymNames::nameForSymId(ACC_LIST[int(st)].sym);
 }
 
 //---------------------------------------------------------
@@ -297,7 +297,7 @@ AsciiStringView Accidental::subtype2name(AccidentalType st)
 
 SymId Accidental::subtype2symbol(AccidentalType st)
 {
-    return accList[int(st)].sym;
+    return ACC_LIST[int(st)].sym;
 }
 
 //---------------------------------------------------------
@@ -306,7 +306,7 @@ SymId Accidental::subtype2symbol(AccidentalType st)
 
 double Accidental::subtype2centOffset(AccidentalType st)
 {
-    return accList[int(st)].centOffset;
+    return ACC_LIST[int(st)].centOffset;
 }
 
 //---------------------------------------------------------
@@ -320,7 +320,7 @@ AccidentalType Accidental::name2subtype(const AsciiStringView& tag)
         // LOGD("no symbol found");
     } else {
         int i = 0;
-        for (const Acc& acc : accList) {
+        for (const Acc& acc : ACC_LIST) {
             if (acc.sym == symId) {
                 return AccidentalType(i);
             }
@@ -368,22 +368,17 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
     return AccidentalType::NONE;
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Accidental::draw(mu::draw::Painter* painter) const
+void Accidental::setLayoutData(const LayoutData& data)
 {
-    TRACE_ITEM_DRAW;
-    // don't show accidentals for tab or slash notation
-    if (onTabStaff() || (note() && note()->fixed())) {
-        return;
-    }
+    m_layoutData = data;
+    setSkipDraw(data.isSkipDraw);
+    setbbox(data.bbox);
+    setPos(data.pos);
+}
 
-    painter->setPen(curColor());
-    for (const SymElement& e : el) {
-        score()->engravingFont()->draw(e.sym, painter, magS(), PointF(e.x, e.y));
-    }
+void Accidental::draw(mu::draw::Painter*) const
+{
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
@@ -454,7 +449,7 @@ void Accidental::undoSetSmall(bool val)
 PropertyValue Accidental::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::ACCIDENTAL_TYPE:    return int(_accidentalType);
+    case Pid::ACCIDENTAL_TYPE:    return int(m_accidentalType);
     case Pid::SMALL:              return m_isSmall;
     case Pid::ACCIDENTAL_BRACKET: return int(bracket());
     case Pid::ACCIDENTAL_ROLE:    return role();
@@ -493,10 +488,10 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
         m_isSmall = v.toBool();
         break;
     case Pid::ACCIDENTAL_BRACKET:
-        _bracket = AccidentalBracket(v.toInt());
+        m_bracket = AccidentalBracket(v.toInt());
         break;
     case Pid::ACCIDENTAL_ROLE:
-        _role = v.value<AccidentalRole>();
+        m_role = v.value<AccidentalRole>();
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);

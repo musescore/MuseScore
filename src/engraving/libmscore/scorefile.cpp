@@ -174,7 +174,7 @@ void Score::print(mu::draw::Painter* painter, int pageNo)
         }
         painter->save();
         painter->translate(e->pagePos());
-        e->draw(painter);
+        EngravingItem::rendering()->drawItem(e, painter);
         painter->restore();
     }
     MScore::pdfPrinting = false;

@@ -32,7 +32,7 @@
 
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
-#include "layout/ilayout.h"
+#include "rendering/iscorerendering.h"
 
 #include "types/fraction.h"
 #include "types/symid.h"
@@ -135,7 +135,7 @@ public:
 class EngravingItem : public EngravingObject
 {
     INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
-    INJECT_STATIC(layout::ILayout, layout)
+    INJECT_STATIC(rendering::IScoreRendering, rendering)
 
     mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
     double _mag;                     ///< standard magnification (derived value)

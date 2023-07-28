@@ -34,8 +34,6 @@
 
 #include "commonscene/commonscenetypes.h"
 
-#include "internal/palettelayout.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -68,7 +66,7 @@ void NoteGroupsExampleView::dragEnterEvent(QDragEnterEvent* event)
         if (m_dragElement) {
             m_dragElement->resetExplicitParent();
             rw::RWRegister::reader()->readItem(m_dragElement, e);
-            PaletteLayout::layoutItem(m_dragElement);
+            engravingRendering()->layoutItem(m_dragElement);
         }
         return;
     }

@@ -83,7 +83,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::layout::dev;
+using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -1401,7 +1401,7 @@ EngravingItem* Measure::drop(EditData& data)
         e->setParent(seg);
         e->setTrack(staffIdx * VOICES);
 
-        layout()->layoutItem(e);
+        rendering()->layoutItem(e);
 
         {
             PointF uo(data.pos - e->canvasPos() - data.dragOffset);

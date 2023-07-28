@@ -34,8 +34,6 @@
 #include "engraving/libmscore/timesig.h"
 #include "engraving/compat/dummyelement.h"
 
-#include "internal/palettelayout.h"
-
 using namespace mu::palette;
 using namespace mu::engraving;
 
@@ -83,7 +81,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     ElementPtr el = sp->elementForCellAt(2);
 
-    PaletteLayout::layoutItem(el.get());
+    engravingRendering()->layoutItem(el.get());
 
     sp->setSelected(2);
     paletteChanged(2);

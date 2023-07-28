@@ -329,10 +329,10 @@ void Lyrics::adjustPrevious()
                 } else {
                     prev->undoChangeProperty(Pid::LYRIC_TICKS, Fraction::fromTicks(1));
                 }
+                prev->setIsRemoveInvalidSegments();
+                prev->triggerLayout();
             }
         }
-        prev->setIsRemoveInvalidSegments();
-        prev->triggerLayout();
     }
 }
 
@@ -426,7 +426,7 @@ bool Lyrics::setProperty(Pid propertyId, const PropertyValue& v)
         if (scr && m_ticks <= scr->ticks()) {
             // if no ticks, we have to relayout in order to remove invalid melisma segments
             setIsRemoveInvalidSegments();
-            layout()->layoutItem(this);
+            rendering()->layoutItem(this);
         }
         break;
     case Pid::VERSE:

@@ -32,10 +32,10 @@
 #include "log.h"
 
 using namespace mu;
+using namespace mu::engraving;
 
-namespace mu::engraving {
 // Staff line and pitch for every bagpipe note
-BagpipeNoteInfo BagpipeEmbellishment::BagpipeNoteInfoList[] = {
+const BagpipeNoteInfo BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[] = {
     { "LG",  6,  65 },
     { "LA",  5,  67 },
     { "B",   4,  69 },
@@ -48,20 +48,20 @@ BagpipeNoteInfo BagpipeEmbellishment::BagpipeNoteInfoList[] = {
 };
 
 //---------------------------------------------------------
-//   getNoteList
+//   resolveNoteList
 //     return notes as list of indices in BagpipeNoteInfoList
 //---------------------------------------------------------
 
-noteList BagpipeEmbellishment::getNoteList() const
+BagpipeNoteList BagpipeEmbellishment::resolveNoteList() const
 {
-    noteList nl;
+    BagpipeNoteList nl;
 
-    StringList notes = TConv::embellishmentNotes(_embelType);
-    int noteInfoSize = sizeof(BagpipeNoteInfoList) / sizeof(*BagpipeNoteInfoList);
+    StringList notes = TConv::embellishmentNotes(m_embelType);
+    int noteInfoSize = sizeof(BAGPIPE_NOTEINFO_LIST) / sizeof(*BAGPIPE_NOTEINFO_LIST);
     for (const String& note : notes) {
         // search for note in BagpipeNoteInfoList
         for (int i = 0; i < noteInfoSize; ++i) {
-            if (String::fromAscii(BagpipeNoteInfoList[i].name.ascii()) == note) {
+            if (String::fromAscii(BAGPIPE_NOTEINFO_LIST[i].name.ascii()) == note) {
                 // found it, append to list
                 nl.push_back(i);
                 break;
@@ -99,35 +99,6 @@ BagpipeEmbellishment::BEDrawingDataY::BEDrawingDataY(const int l, const double s
     y2(l * s / 2),
     ycorr(0.8 * s),
     bw(0.3 * s) {}
-
-//---------------------------------------------------------
-//   debug support (disabled)
-//---------------------------------------------------------
-
-/*
-static void printBBox(const char* name, const RectF b)
-      {
-      LOGD("bbox%s left %f bot %f right %f top %f",
-             name,
-             b.left(),
-             b.bottom(),
-             b.right(),
-             b.top());
-      }
-
-static void symMetrics(const char* name, const Sym& headsym)
-      {
-      LOGD("%s", name);
-      LOGD("bbox left %f bot %f right %f top %f",
-             headsym.getBbox().left(),
-             headsym.getBbox().bottom(),
-             headsym.getBbox().right(),
-             headsym.getBbox().top());
-      LOGD("attach x %f y %f",
-             headsym.getAttach().x(),
-             headsym.getAttach().y());
-      }
-*/
 
 //---------------------------------------------------------
 //   mag
@@ -180,21 +151,14 @@ void BagpipeEmbellishment::drawGraceNote(mu::draw::Painter* painter,
     }
 }
 
-//---------------------------------------------------------
-//   draw
-//      draw the embellishment centered in a palette cell
-//      x = 0 is horizontal cell center
-//      y = 0 is the top staff line
-//---------------------------------------------------------
-
-void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
+void BagpipeEmbellishment::oldDraw(mu::draw::Painter* painter) const
 {
     TRACE_ITEM_DRAW;
     using namespace mu::draw;
     SymId headsym = SymId::noteheadBlack;
     SymId flagsym = SymId::flag32ndUp;
 
-    noteList nl = getNoteList();
+    BagpipeNoteList nl = resolveNoteList();
     BEDrawingDataX dx(headsym, flagsym, magS(), style().spatium(), static_cast<int>(nl.size()));
 
     Pen pen(curColor(), dx.lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
@@ -206,7 +170,7 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
     // draw the notes including stem, (optional) flag and (optional) ledger line
     double x = dx.xl;
     for (int note : nl) {
-        int line = BagpipeNoteInfoList[note].line;
+        int line = BAGPIPE_NOTEINFO_LIST[note].line;
         BEDrawingDataY dy(line, style().spatium());
         drawGraceNote(painter, dx, dy, flagsym, x, drawFlag);
 
@@ -228,4 +192,58 @@ void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
         drawBeams(painter, dx.spatium, dx.xl - dx.lw * .5, x - dx.headp - dx.lw * .5, dy.y1b);
     }
 }
+
+void BagpipeEmbellishment::draw(mu::draw::Painter* painter) const
+{
+    TRACE_ITEM_DRAW;
+    using namespace mu::draw;
+
+    //! NOTE Temporarily compatibility with the old layout
+    if (!m_layoutData.isValid()) {
+        oldDraw(painter);
+        return;
+    }
+
+    const LayoutData& data = m_layoutData;
+    const LayoutData::BeamData& dataBeam = m_layoutData.beamData;
+
+    Pen pen(curColor(), data.stemLineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    painter->setPen(pen);
+
+    // draw the notes including stem, (optional) flag and (optional) ledger line
+    for (const auto& p : m_layoutData.notesData) {
+        const LayoutData::NoteData& noteData = p.second;
+
+        // Draw Grace Note
+        {
+            // draw head
+            drawSymbol(data.headsym, painter, noteData.headXY);
+
+            // draw stem
+            painter->drawLine(noteData.stemLine);
+
+            if (data.isDrawFlag) {
+                // draw flag
+                drawSymbol(data.flagsym, painter, noteData.flagXY);
+            }
+        }
+
+        // draw the ledger line for high A
+        if (!noteData.ledgerLine.isNull()) {
+            painter->drawLine(noteData.ledgerLine);
+        }
+    }
+
+    if (data.isDrawBeam) {
+        Pen beamPen(curColor(), dataBeam.width, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(beamPen);
+        // draw the beams
+        drawBeams(painter, data.spatium, dataBeam.x1, dataBeam.x2, dataBeam.y);
+    }
+}
+
+void BagpipeEmbellishment::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+    setbbox(data.bbox);
 }

@@ -56,6 +56,12 @@ const UiActionList PaletteUiActions::m_actions = {
              TranslatableString("action", "Edit drumset…"),
              TranslatableString("action", "Edit drumset…")
              ),
+    UiAction("apply-current-palette-element",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Apply current palette element"),
+             TranslatableString("action", "Apply current palette element")
+             ),
     UiAction("show-keys",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_TEXT_EDITING,

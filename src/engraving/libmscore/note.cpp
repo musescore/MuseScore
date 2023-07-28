@@ -1840,11 +1840,11 @@ EngravingItem* Note::drop(EditData& data)
     case ElementType::BAGPIPE_EMBELLISHMENT:
     {
         BagpipeEmbellishment* b = toBagpipeEmbellishment(e);
-        noteList nl = b->getNoteList();
+        BagpipeNoteList nl = b->resolveNoteList();
         // add grace notes in reverse order, as setGraceNote adds a grace note
         // before the current note
         for (int i = static_cast<int>(nl.size()) - 1; i >= 0; --i) {
-            int p = BagpipeEmbellishment::BagpipeNoteInfoList[nl.at(i)].pitch;
+            int p = BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[nl.at(i)].pitch;
             score()->setGraceNote(ch, p, NoteType::GRACE32, Constants::DIVISION / 8);
         }
     }
@@ -2039,7 +2039,7 @@ void Note::setDotRelativeLine(int dotMove)
     }
 
     for (NoteDot* dot : m_dots) {
-        layout()->layoutItem(dot);
+        rendering()->layoutItem(dot);
         dot->setPosY(y);
     }
 }

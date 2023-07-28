@@ -28,7 +28,7 @@
 #include "engravingitem.h"
 
 namespace mu::engraving {
-typedef std::vector<int> noteList;
+using BagpipeNoteList = std::vector<int>;
 
 //---------------------------------------------------------
 //   BagpipeEmbellishmentInfo
@@ -36,7 +36,7 @@ typedef std::vector<int> noteList;
 //---------------------------------------------------------
 
 struct BagpipeEmbellishmentInfo {
-    const char* name;
+    const char* name = 0;
     AsciiStringView notes;
 };
 
@@ -47,8 +47,8 @@ struct BagpipeEmbellishmentInfo {
 
 struct BagpipeNoteInfo {
     AsciiStringView name;
-    int line;
-    int pitch;
+    int line = 0;
+    int pitch = 0;
 };
 
 //---------------------------------------------------------
@@ -63,18 +63,52 @@ class BagpipeEmbellishment final : public EngravingItem
 
 public:
     BagpipeEmbellishment(EngravingItem* parent)
-        : EngravingItem(ElementType::BAGPIPE_EMBELLISHMENT, parent), _embelType(EmbellishmentType(0)) { }
+        : EngravingItem(ElementType::BAGPIPE_EMBELLISHMENT, parent), m_embelType(EmbellishmentType(0)) { }
 
     BagpipeEmbellishment* clone() const override { return new BagpipeEmbellishment(*this); }
 
-    EmbellishmentType embelType() const { return _embelType; }
-    void setEmbelType(EmbellishmentType val) { _embelType = val; }
+    EmbellishmentType embelType() const { return m_embelType; }
+    void setEmbelType(EmbellishmentType val) { m_embelType = val; }
     double mag() const override;
 
     void draw(mu::draw::Painter*) const override;
-    static BagpipeNoteInfo BagpipeNoteInfoList[];
-    noteList getNoteList() const;
 
+    static const BagpipeNoteInfo BAGPIPE_NOTEINFO_LIST[];
+    BagpipeNoteList resolveNoteList() const;
+
+    struct LayoutData {
+        struct NoteData {
+            PointF headXY;
+            LineF stemLine;
+            PointF flagXY;
+            LineF ledgerLine;
+        };
+
+        struct BeamData {
+            double width = 0.0;         // line width for beam
+            double y = 0.0;
+            double x1 = 0.0;
+            double x2 = 0.0;
+        };
+
+        bool isDrawBeam = false;
+        bool isDrawFlag = false;
+        double spatium = 1.0;           // spatium
+        SymId headsym = SymId::noSym;   // grace note head symbol
+        SymId flagsym = SymId::noSym;   // grace note flag symbol
+        double stemLineW = 0.0;         // line width for stem
+        std::map<size_t /*note index*/, NoteData> notesData;
+        BeamData beamData;
+
+        RectF bbox;
+
+        bool isValid() const { return bbox.isValid(); }
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! -- Old interface --
     //---------------------------------------------------------
     //   BEDrawingDataX
     //      BagpipeEmbellishment drawing data in the x direction
@@ -82,15 +116,15 @@ public:
     //---------------------------------------------------------
 
     struct BEDrawingDataX {
-        const SymId headsym;      // grace note head symbol
-        const SymId flagsym;      // grace note flag symbol
-        const double mags;         // grace head magnification
-        double headw;              // grace head width
-        double headp;              // horizontal head pitch
-        const double spatium;      // spatium
-        const double lw;           // line width for stem
-        double xl;                 // calc x for stem of leftmost note
-        const double xcorr;        // correction to align flag with top of stem
+        const SymId headsym = SymId::noSym; // grace note head symbol
+        const SymId flagsym = SymId::noSym; // grace note flag symbol
+        const double mags = 1.0;            // grace head magnification
+        double headw = 0.0;                 // grace head width
+        double headp = 0.0;                 // horizontal head pitch
+        const double spatium = 1.0;         // spatium
+        const double lw = 0.0;              // line width for stem
+        double xl = 0.0;                    // calc x for stem of leftmost note
+        const double xcorr = 0.0;           // correction to align flag with top of stem
 
         BEDrawingDataX(SymId hs, SymId fs, const double m, const double s, const int nn);
     };
@@ -111,11 +145,15 @@ public:
         BEDrawingDataY(const int l, const double s);
     };
 
+    void oldDraw(mu::draw::Painter* painter) const;
+    void drawGraceNote(mu::draw::Painter* painter, const BEDrawingDataX& dx, const BEDrawingDataY& dy, SymId flagsym, const double x,
+                       const bool drawFlag) const;
+    //! -------------------
+
 private:
 
-    EmbellishmentType _embelType;
-    void drawGraceNote(mu::draw::Painter*, const BagpipeEmbellishment::BEDrawingDataX&, const BagpipeEmbellishment::BEDrawingDataY&, SymId,
-                       const double x, const bool drawFlag) const;
+    EmbellishmentType m_embelType;
+    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 

@@ -107,12 +107,12 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: subscriptOptionsButtonList.navigationRowEnd + 1
 
-        frameTypePropertyItem: root.model ? root.model.frameType : null
-        frameBorderColorPropertyItem: root.model ? root.model.frameBorderColor : null
-        frameFillColorPropertyItem: root.model ? root.model.frameFillColor : null
-        frameThicknessPropertyItem: root.model ? root.model.frameThickness : null
-        frameMarginPropertyItem: root.model ? root.model.frameMargin : null
-        frameCornerRadiusPropertyItem: root.model ? root.model.frameCornerRadius : null
+        frameType: root.model ? root.model.frameType : null
+        frameBorderColor: root.model ? root.model.frameBorderColor : null
+        frameFillColor: root.model ? root.model.frameFillColor : null
+        frameThickness: root.model ? root.model.frameThickness : null
+        frameMargin: root.model ? root.model.frameMargin : null
+        frameCornerRadius: root.model ? root.model.frameCornerRadius : null
     }
 
     SeparatorLine { anchors.margins: -12 }

@@ -96,31 +96,17 @@ void ExcerptNotation::fillWithDefaultInfo()
         topVerticalFrame->undoUnlink();
     }
 
-    auto setText = [&score](TextStyleType textType, const QString& text) {
-        TextBase* textItem = score->getText(textType);
-
-        if (!textItem) {
-            textItem = score->addText(textType, nullptr /*destinationElement*/, false /*addToAllScores*/);
-        }
-
+    auto unlinkText = [&score](TextStyleType textType) {
+        engraving::Text* textItem = score->getText(textType);
         if (textItem) {
             textItem->undoUnlink();
-            textItem->setPlainText(text);
         }
     };
 
-    auto getText = [&score](TextStyleType textType, const QString& defaultText) {
-        if (mu::engraving::Text* t = score->getText(textType)) {
-            return t->plainText().toQString();
-        } else {
-            return defaultText;
-        }
-    };
-
-    setText(TextStyleType::TITLE, getText(TextStyleType::TITLE, ""));
-    setText(TextStyleType::COMPOSER, getText(TextStyleType::COMPOSER, ""));
-    setText(TextStyleType::SUBTITLE, getText(TextStyleType::SUBTITLE, ""));
-    setText(TextStyleType::POET, getText(TextStyleType::POET, ""));
+    unlinkText(TextStyleType::TITLE);
+    unlinkText(TextStyleType::SUBTITLE);
+    unlinkText(TextStyleType::COMPOSER);
+    unlinkText(TextStyleType::POET);
 }
 
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const

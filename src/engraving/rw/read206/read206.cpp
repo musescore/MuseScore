@@ -2513,7 +2513,7 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
             }
             segment = m->getSegment(st, ctx.tick());
             segment->add(bl);
-            EngravingItem::layout()->layoutItem(bl);
+            EngravingItem::rendering()->layoutItem(bl);
             if (fermataAbove) {
                 segment->add(fermataAbove);
             }

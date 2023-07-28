@@ -68,7 +68,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::layout::dev;
+using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -979,7 +979,7 @@ void Chord::addLedgerLines()
     }
 
     for (LedgerLine* ll = m_ledgerLines; ll; ll = ll->next()) {
-        layout()->layoutItem(ll);
+        rendering()->layoutItem(ll);
     }
 }
 

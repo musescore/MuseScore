@@ -31,8 +31,6 @@
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/style/defaultstyle.h"
 
-#include "palettelayout.h"
-
 #include "log.h"
 
 using namespace mu::palette;
@@ -116,7 +114,7 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
     ActionIcon* action = toActionIcon(element);
     action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag);
 
-    PaletteLayout::layoutItem(action);
+    engravingRendering()->layoutItem(action);
 
     painter.translate(rect.center() - action->bbox().center());
     action->draw(&painter);
@@ -173,7 +171,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* i
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
     // calculate bbox
-    PaletteLayout::layoutItem(item);
+    engravingRendering()->layoutItem(item);
 
     PointF origin = item->bbox().center();
 
@@ -189,35 +187,35 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* i
     PaintContext ctx;
     ctx.painter = &painter;
 
-    item->scanElements(&ctx, paintPaletteElement);
+    item->scanElements(&ctx, paintPaletteItem);
     painter.restore();
 }
 
-void PaletteCellIconEngine::paintPaletteElement(void* context, EngravingItem* element)
+void PaletteCellIconEngine::paintPaletteItem(void* context, EngravingItem* item)
 {
     PaintContext* ctx = static_cast<PaintContext*>(context);
     Painter* painter = ctx->painter;
 
     painter->save();
-    painter->translate(element->pos()); // necessary for drawing child elements
+    painter->translate(item->pos()); // necessary for drawing child elements
 
-    Color colorBackup = element->getProperty(Pid::COLOR).value<Color>();
-    Color frameColorBackup = element->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
-    bool colorsInversionEnabledBackup = element->colorsInversionEnabled();
+    Color colorBackup = item->getProperty(Pid::COLOR).value<Color>();
+    Color frameColorBackup = item->getProperty(Pid::FRAME_FG_COLOR).value<Color>();
+    bool colorsInversionEnabledBackup = item->colorsInversionEnabled();
 
-    element->setColorsInverionEnabled(ctx->colorsInversionEnabled);
+    item->setColorsInverionEnabled(ctx->colorsInversionEnabled);
 
     if (!ctx->useElementColors) {
         Color color = configuration()->elementsColor();
-        element->setProperty(Pid::COLOR, color);
-        element->setProperty(Pid::FRAME_FG_COLOR, color);
+        item->setProperty(Pid::COLOR, color);
+        item->setProperty(Pid::FRAME_FG_COLOR, color);
     }
 
-    element->draw(painter);
+    engravingRendering()->drawItem(item, painter);
 
-    element->setColorsInverionEnabled(colorsInversionEnabledBackup);
-    element->setProperty(Pid::COLOR, colorBackup);
-    element->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
+    item->setColorsInverionEnabled(colorsInversionEnabledBackup);
+    item->setProperty(Pid::COLOR, colorBackup);
+    item->setProperty(Pid::FRAME_FG_COLOR, frameColorBackup);
 
     painter->restore();
 }
