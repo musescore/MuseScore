@@ -144,10 +144,6 @@ public:
 
         BEDrawingDataY(const int l, const double s);
     };
-
-    void oldDraw(mu::draw::Painter* painter) const;
-    void drawGraceNote(mu::draw::Painter* painter, const BEDrawingDataX& dx, const BEDrawingDataY& dy, SymId flagsym, const double x,
-                       const bool drawFlag) const;
     //! -------------------
 
 private:
