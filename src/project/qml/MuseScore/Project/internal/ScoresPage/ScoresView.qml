@@ -35,7 +35,6 @@ Loader {
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
-    property real topMargin: 24
 
     property NavigationSection navigationSection
     property int navigationOrder
@@ -50,7 +49,6 @@ Loader {
 
     component Grid : ScoresGridView {
         anchors.fill: parent
-        anchors.topMargin: root.topMargin
 
         model: root.model
         searchText: root.searchText

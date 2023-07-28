@@ -194,6 +194,7 @@ FocusScope {
         id: contentLoader
 
         anchors.top: controlsRow.bottom
+        anchors.topMargin: 24
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: buttonsPanel.top
@@ -217,7 +218,6 @@ FocusScope {
 
             backgroundColor: background.color
             sideMargin: prv.sideMargin
-            topMargin: 24
 
             navigationSection: navSec
             navigationOrder: 4
@@ -243,7 +243,6 @@ FocusScope {
 
             backgroundColor: background.color
             sideMargin: prv.sideMargin
-            topMargin: 24
 
             navigationSection: navSec
             navigationOrder: 4
