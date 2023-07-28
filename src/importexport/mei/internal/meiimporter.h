@@ -138,6 +138,7 @@ private:
                                        bool isRest);
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, Measure* measure);
+    engraving::Spanner* addSpanner(const libmei::Element& meiElement, Measure* measure, pugi::xml_node node);
     engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, engraving::Measure* startMeasure);
     void clearGraceNotes();
