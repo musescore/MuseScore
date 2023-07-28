@@ -25,7 +25,7 @@
 #include <functional>
 #include <vector>
 #include "draw/painter.h"
-#include "../iscorerendering.h"
+#include "../iscorerenderer.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -38,12 +38,12 @@ class Paint
 {
 public:
 
-    static void paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt);
+    static void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt);
     static void paintItem(draw::Painter& painter, const EngravingItem* item);
     static void paintItems(draw::Painter& painter, const std::vector<EngravingItem*>& items, bool isPrinting);
 
     static SizeF pageSizeInch(const Score* score);
-    static SizeF pageSizeInch(const Score* score, const IScoreRendering::Options& opt);
+    static SizeF pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions& opt);
 
 private:
 };

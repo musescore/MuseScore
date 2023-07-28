@@ -27,13 +27,13 @@
 
 #include "modularity/ioc.h"
 #include "../iimagesexportconfiguration.h"
-#include "engraving/rendering/iscorerendering.h"
+#include "engraving/rendering/iscorerenderer.h"
 
 namespace mu::iex::imagesexport {
 class SvgWriter : public AbstractImageWriter
 {
     INJECT(IImagesExportConfiguration, configuration)
-    INJECT(engraving::rendering::IScoreRendering, scoreRender)
+    INJECT(engraving::rendering::IScoreRenderer, scoreRender)
 
 public:
     std::vector<project::INotationWriter::UnitType> supportedUnitTypes() const override;

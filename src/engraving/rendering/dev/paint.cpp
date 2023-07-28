@@ -33,7 +33,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
-void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt)
+void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt)
 {
     TRACEFUNC;
     if (!score) {
@@ -184,7 +184,7 @@ SizeF Paint::pageSizeInch(const Score* score)
     return SizeF(score->style().styleD(Sid::pageWidth), score->style().styleD(Sid::pageHeight));
 }
 
-SizeF Paint::pageSizeInch(const Score* score, const IScoreRendering::Options& opt)
+SizeF Paint::pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions& opt)
 {
     if (!score) {
         return SizeF();

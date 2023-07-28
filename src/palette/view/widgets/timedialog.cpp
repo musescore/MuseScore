@@ -81,7 +81,7 @@ TimeDialog::TimeDialog(QWidget* parent)
 
     ElementPtr el = sp->elementForCellAt(2);
 
-    engravingRendering()->layoutItem(el.get());
+    engravingRender()->layoutItem(el.get());
 
     sp->setSelected(2);
     paletteChanged(2);

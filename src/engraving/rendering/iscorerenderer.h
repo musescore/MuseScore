@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ISCORERENDERING_H
-#define MU_ENGRAVING_ISCORERENDERING_H
+#ifndef MU_ENGRAVING_ISCORERENDERER_H
+#define MU_ENGRAVING_ISCORERENDERER_H
 
 #include <variant>
 
@@ -85,18 +85,18 @@ class TimeSig;
 }
 
 namespace mu::engraving::rendering {
-class IScoreRendering : MODULE_EXPORT_INTERFACE
+class IScoreRenderer : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(IScoreRendering)
+    INTERFACE_ID(IScoreRenderer)
 
 public:
-    virtual ~IScoreRendering() = default;
+    virtual ~IScoreRenderer() = default;
 
     // Main interface
 
     virtual void layoutScore(Score* score, const Fraction& st, const Fraction& et) const = 0;
 
-    struct Options
+    struct PaintOptions
     {
         bool isSetViewport = true;
         bool isPrinting = false;
@@ -114,8 +114,8 @@ public:
     };
 
     virtual SizeF pageSizeInch(const Score* score) const = 0;
-    virtual SizeF pageSizeInch(const Score* score, const Options& opt) const = 0;
-    virtual void paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt) const = 0;
+    virtual SizeF pageSizeInch(const Score* score, const PaintOptions& opt) const = 0;
+    virtual void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const = 0;
     virtual void paintItem(draw::Painter& painter, const EngravingItem* item) const = 0;
 
     // Temporary compatibility interface
@@ -198,4 +198,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_ISCORERENDERING_H
+#endif // MU_ENGRAVING_ISCORERENDERER_H

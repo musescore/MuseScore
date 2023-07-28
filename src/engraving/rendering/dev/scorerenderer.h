@@ -19,17 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCORERENDERING_DEV_H
-#define MU_ENGRAVING_SCORERENDERING_DEV_H
+#ifndef MU_ENGRAVING_SCORERENDERER_DEV_H
+#define MU_ENGRAVING_SCORERENDERER_DEV_H
 
-#include "../iscorerendering.h"
+#include "../iscorerenderer.h"
 
 namespace mu::engraving {
 class Score;
 }
 
 namespace mu::engraving::rendering::dev  {
-class ScoreRendering : public IScoreRendering
+class ScoreRenderer : public IScoreRenderer
 {
 public:
 
@@ -37,8 +37,8 @@ public:
     void layoutScore(Score* score, const Fraction& st, const Fraction& et) const override;
 
     SizeF pageSizeInch(const Score* score) const override;
-    SizeF pageSizeInch(const Score* score, const Options& opt) const override;
-    void paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt) const override;
+    SizeF pageSizeInch(const Score* score, const PaintOptions& opt) const override;
+    void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const override;
     void paintItem(draw::Painter& painter, const EngravingItem* item) const override;
 
     // Temporary compatibility interface
@@ -66,4 +66,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_SCORERENDERING_DEV_H
+#endif // MU_ENGRAVING_SCORERENDERER_DEV_H

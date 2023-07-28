@@ -29,7 +29,7 @@
 #include "../../internal/palette.h"
 
 #include "engraving/libmscore/engravingitem.h"
-#include "engraving/rendering/isinglerendering.h"
+#include "engraving/rendering/isinglerenderer.h"
 
 #include "modularity/ioc.h"
 #include "../../ipaletteconfiguration.h"
@@ -72,7 +72,7 @@ class PaletteWidget : public QWidget
     INJECT_STATIC(IPaletteConfiguration, configuration)
     INJECT_STATIC(ui::IUiActionsRegister, actionsRegister)
     INJECT_STATIC(context::IGlobalContext, globalContext)
-    INJECT_STATIC(engraving::rendering::ISingleRendering, engravingRendering)
+    INJECT_STATIC(engraving::rendering::ISingleRenderer, engravingRender)
     INJECT(framework::IInteractive, interactive)
     INJECT(ui::IUiConfiguration, uiConfiguration)
 

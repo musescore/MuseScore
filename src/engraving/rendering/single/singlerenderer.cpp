@@ -19,21 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SINGLERENDERING_H
-#define MU_ENGRAVING_SINGLERENDERING_H
+#include "singlerenderer.h"
 
-#include "../isinglerendering.h"
+#include "singlelayout.h"
+#include "singledraw.h"
 
-namespace mu::engraving::rendering::single {
-class SingleRendering : public ISingleRendering
+using namespace mu::engraving::rendering::single;
+
+void SingleRenderer::doLayoutItem(EngravingItem* item)
 {
-public:
-    SingleRendering() = default;
-
-protected:
-    void doLayoutItem(EngravingItem* item) override;
-    void doDrawItem(const EngravingItem* item, draw::Painter* p) override;
-};
+    SingleLayout::layoutItem(item);
 }
 
-#endif // MU_ENGRAVING_SINGLERENDERING_H
+void SingleRenderer::doDrawItem(const EngravingItem* item, draw::Painter* p)
+{
+    SingleDraw::drawItem(item, p);
+}

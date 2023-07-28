@@ -119,7 +119,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const Ge
     {
         TRACEFUNC_C("Paint");
         Painter painter(pd, "DrawData");
-        rendering::IScoreRendering::Options option;
+        rendering::IScoreRenderer::PaintOptions option;
         //option.fromPage = 0;
         //option.toPage = 0;
         option.isMultiPage = true;
@@ -166,7 +166,7 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
     {
         Painter painter(&image, "DrawData");
 
-        rendering::IScoreRendering::Options opt;
+        rendering::IScoreRenderer::PaintOptions opt;
         opt.fromPage = 0;
         opt.toPage = 0;
         opt.deviceDpi = DrawData::CANVAS_DPI;
