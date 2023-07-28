@@ -61,7 +61,6 @@
 #include "engraving/compat/dummyelement.h"
 
 #include "internal/palettecelliconengine.h"
-#include "internal/palettelayout.h"
 
 #include "log.h"
 
@@ -595,7 +594,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
         cellMag = 1.0;
     }
 
-    PaletteLayout::layoutItem(element.get());
+    engravingRendering()->layoutItem(element.get());
 
     RectF r = element->bbox();
     int w = lrint(r.width() * cellMag);
@@ -1058,7 +1057,7 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
             cellMag = 1.0;
         }
 
-        PaletteLayout::layoutItem(el.get());
+        engravingRendering()->layoutItem(el.get());
 
         if (drawStaff) {
             qreal y = r.y() + vgridM * .5 - dy + yOffset() * _spatium * cellMag;

@@ -25,6 +25,7 @@ include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
 
 set(MODULE_SRC
 
@@ -174,13 +175,15 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rendering/README.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/ilayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerendering.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerendering.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
 
     ${RENDERING_DEV_SRC}
     ${RENDERING_STABLE_SRC}
+    ${RENDERING_SINGLE_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/playback/renderingcontext.h
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext.cpp

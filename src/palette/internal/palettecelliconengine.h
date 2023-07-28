@@ -28,6 +28,7 @@
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
+#include "engraving/rendering/isinglerendering.h"
 
 namespace mu::draw {
 class Painter;
@@ -37,6 +38,7 @@ namespace mu::palette {
 class PaletteCellIconEngine : public QIconEngine
 {
     INJECT_STATIC(IPaletteConfiguration, configuration)
+    INJECT_STATIC(engraving::rendering::ISingleRendering, engravingRendering)
 
 public:
     explicit PaletteCellIconEngine(PaletteCellConstPtr cell, qreal extraMag = 1.0);

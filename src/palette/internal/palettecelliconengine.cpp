@@ -31,9 +31,6 @@
 #include "engraving/libmscore/masterscore.h"
 #include "engraving/style/defaultstyle.h"
 
-#include "palettelayout.h"
-#include "palettedraw.h"
-
 #include "log.h"
 
 using namespace mu::palette;
@@ -117,7 +114,7 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
     ActionIcon* action = toActionIcon(element);
     action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag);
 
-    PaletteLayout::layoutItem(action);
+    engravingRendering()->layoutItem(action);
 
     painter.translate(rect.center() - action->bbox().center());
     action->draw(&painter);
@@ -174,7 +171,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* i
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
     // calculate bbox
-    PaletteLayout::layoutItem(item);
+    engravingRendering()->layoutItem(item);
 
     PointF origin = item->bbox().center();
 
@@ -214,7 +211,7 @@ void PaletteCellIconEngine::paintPaletteItem(void* context, EngravingItem* item)
         item->setProperty(Pid::FRAME_FG_COLOR, color);
     }
 
-    PaletteDraw::drawItem(item, painter);
+    engravingRendering()->drawItem(item, painter);
 
     item->setColorsInverionEnabled(colorsInversionEnabledBackup);
     item->setProperty(Pid::COLOR, colorBackup);

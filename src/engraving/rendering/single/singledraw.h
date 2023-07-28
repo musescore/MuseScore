@@ -19,15 +19,18 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PALETTE_PALETTEDRAW_H
-#define MU_PALETTE_PALETTEDRAW_H
+#ifndef MU_ENGRAVING_SINGLEDRAW_H
+#define MU_ENGRAVING_SINGLEDRAW_H
 
-#include "libmscore/engravingitem.h"
+namespace mu::draw {
+class Painter;
+}
 
 namespace mu::engraving {
 class MStyle;
 class IEngravingFont;
 class Score;
+class EngravingItem;
 
 class Accidental;
 class ActionIcon;
@@ -119,16 +122,16 @@ class Volta;
 class VoltaSegment;
 }
 
-namespace mu::palette {
-class PaletteDraw
+namespace mu::engraving::rendering::single {
+class SingleDraw
 {
 public:
 
-    static void drawItem(const engraving::EngravingItem* item, draw::Painter* p);      // factory
+    static void drawItem(const EngravingItem* item, draw::Painter* p);      // factory
 
 private:
-    static void draw(const engraving::Accidental* item, draw::Painter* p);
+    static void draw(const Accidental* item, draw::Painter* p);
 };
 }
 
-#endif // MU_PALETTE_PALETTEDRAW_H
+#endif // MU_ENGRAVING_SINGLEDRAW_H
