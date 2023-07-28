@@ -25,6 +25,7 @@
 
 #include "libmscore/accidental.h"
 #include "libmscore/actionicon.h"
+#include "libmscore/ambitus.h"
 
 #include "infrastructure/rtti.h"
 
@@ -38,6 +39,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter);
         break;
     case ElementType::ACTION_ICON:  draw(item_cast<const ActionIcon*>(item), painter);
+        break;
+    case ElementType::AMBITUS:      draw(item_cast<const Ambitus*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -57,4 +60,21 @@ void SingleDraw::draw(const ActionIcon* item, draw::Painter* painter)
     TRACE_DRAW_ITEM;
     painter->setFont(item->iconFont());
     painter->drawText(item->bbox(), draw::AlignCenter, Char(item->icon()));
+}
+
+void SingleDraw::draw(const Ambitus* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    using namespace mu::draw;
+    double spatium = item->spatium();
+    double lw = item->lineWidth().val() * spatium;
+    painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
+
+    const Ambitus::LayoutData& layoutData = item->layoutData();
+
+    item->drawSymbol(item->noteHead(), painter, layoutData.topPos);
+    item->drawSymbol(item->noteHead(), painter, layoutData.bottomPos);
+    if (item->hasLine()) {
+        painter->drawLine(layoutData.line);
+    }
 }

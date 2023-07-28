@@ -174,6 +174,7 @@ public:
 private:
     static void draw(const Accidental* item, draw::Painter* painter);
     static void draw(const ActionIcon* item, draw::Painter* painter);
+    static void draw(const Ambitus* item, draw::Painter* painter);
 };
 }
 
