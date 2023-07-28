@@ -134,7 +134,7 @@ Item {
             // TODO: when an item is invisible, there is still visual space allocated for it
             visible: score.isNoResultFound ? view.count === root.model.nonScoreItemIndices.length && Boolean(root.searchText) : true
 
-            ScoreItem {
+            ScoreGridItem {
                 anchors.centerIn: parent
 
                 width: view.actualCellWidth

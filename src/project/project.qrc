@@ -5,7 +5,7 @@
         <file>qml/MuseScore/Project/ScoresPage.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/ScoresView.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/ScoresGridView.qml</file>
-        <file>qml/MuseScore/Project/internal/ScoresPage/ScoreItem.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml</file>
