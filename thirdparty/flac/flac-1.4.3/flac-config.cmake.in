@@ -1,0 +1,17 @@
+@PACKAGE_INIT@
+
+include(CMakeFindDependencyMacro)
+if(NOT TARGET Ogg::ogg)
+    find_dependency(Ogg)
+endif()
+
+include("${CMAKE_CURRENT_LIST_DIR}/targets.cmake")
+
+if(TARGET FLAC::FLAC)
+    set(FLAC_FLAC_FOUND 1)
+endif()
+if(TARGET FLAC::FLAC++)
+    set(FLAC_FLAC++_FOUND 1)
+endif()
+
+check_required_components(FLAC)

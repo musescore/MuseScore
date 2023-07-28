@@ -4,8 +4,10 @@ include(GetPlatformInfo)
 include(GetCompilerInfo)
 include(GetBuildType)
 
-set(FLAC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/flac-1.3.4)
+set(FLAC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/flac-1.4.3)
 set(FLAC_SRC ${FLAC_DIR}/src)
+
+include(GetFlacCompileInfo.cmake)
 
 list(APPEND FLAC_DEFS
     -DHAVE_CONFIG_H
@@ -35,32 +37,34 @@ set (MODULE_SRC
     ${FLAC_SRC}/libFLAC/cpu.c
     ${FLAC_SRC}/libFLAC/crc.c
     ${FLAC_SRC}/libFLAC/fixed.c
+    ${FLAC_SRC}/libFLAC/fixed_intrin_avx2.c
     ${FLAC_SRC}/libFLAC/fixed_intrin_sse2.c
+    ${FLAC_SRC}/libFLAC/fixed_intrin_sse42.c
     ${FLAC_SRC}/libFLAC/fixed_intrin_ssse3.c
     ${FLAC_SRC}/libFLAC/float.c
     ${FLAC_SRC}/libFLAC/format.c
     ${FLAC_SRC}/libFLAC/lpc.c
-    ${FLAC_SRC}/libFLAC/lpc_intrin_sse.c
+    ${FLAC_SRC}/libFLAC/lpc_intrin_avx2.c
+    ${FLAC_SRC}/libFLAC/lpc_intrin_fma.c
+    ${FLAC_SRC}/libFLAC/lpc_intrin_neon.c
     ${FLAC_SRC}/libFLAC/lpc_intrin_sse2.c
     ${FLAC_SRC}/libFLAC/lpc_intrin_sse41.c
-    ${FLAC_SRC}/libFLAC/lpc_intrin_avx2.c
-    ${FLAC_SRC}/libFLAC/lpc_intrin_vsx.c
     ${FLAC_SRC}/libFLAC/md5.c
     ${FLAC_SRC}/libFLAC/memory.c
     ${FLAC_SRC}/libFLAC/metadata_iterators.c
     ${FLAC_SRC}/libFLAC/metadata_object.c
     ${FLAC_SRC}/libFLAC/stream_decoder.c
     ${FLAC_SRC}/libFLAC/stream_encoder.c
+    ${FLAC_SRC}/libFLAC/stream_encoder_framing.c
+    ${FLAC_SRC}/libFLAC/stream_encoder_intrin_avx2.c
     ${FLAC_SRC}/libFLAC/stream_encoder_intrin_sse2.c
     ${FLAC_SRC}/libFLAC/stream_encoder_intrin_ssse3.c
-    ${FLAC_SRC}/libFLAC/stream_encoder_intrin_avx2.c
-    ${FLAC_SRC}/libFLAC/stream_encoder_framing.c
     ${FLAC_SRC}/libFLAC/window.c
     ${FLAC_SRC}/libFLAC++/metadata.cpp
     ${FLAC_SRC}/libFLAC++/stream_decoder.cpp
     ${FLAC_SRC}/libFLAC++/stream_encoder.cpp
-    $<$<BOOL:${OS_IS_WIN}>:${FLAC_DIR}/include/share/windows_unicode_filenames.h>
-    $<$<BOOL:${OS_IS_WIN}>:${FLAC_SRC}/libFLAC/windows_unicode_filenames.c>
+    $<$<BOOL:${OS_IS_WIN}>:${FLAC_DIR}/include/share/win_utf8_io.h>
+    $<$<BOOL:${OS_IS_WIN}>:${FLAC_SRC}/share/win_utf8_io/win_utf8_io.c>
     )
 
 set(MODULE_USE_PCH_NONE ON)
