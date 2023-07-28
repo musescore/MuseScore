@@ -28,7 +28,7 @@
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"
 #include "internal/ipaletteprovider.h"
-#include "engraving/rendering/isinglerendering.h"
+#include "engraving/rendering/isinglerenderer.h"
 
 namespace mu::palette {
 class PaletteWidget;
@@ -42,7 +42,7 @@ class TimeDialog : public QWidget, Ui::TimeDialogBase
 
     INJECT(IPaletteConfiguration, configuration)
     INJECT(IPaletteProvider, paletteProvider)
-    INJECT(engraving::rendering::ISingleRendering, engravingRendering)
+    INJECT(engraving::rendering::ISingleRenderer, engravingRender)
 
 public:
     TimeDialog(QWidget* parent = 0);

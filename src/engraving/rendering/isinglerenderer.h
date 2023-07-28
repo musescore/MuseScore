@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ISINGLERENDERING_H
-#define MU_ENGRAVING_ISINGLERENDERING_H
+#ifndef MU_ENGRAVING_ISINGLERENDERER_H
+#define MU_ENGRAVING_ISINGLERENDERER_H
 
 #include "modularity/imoduleinterface.h"
 
@@ -31,12 +31,12 @@ class EngravingItem;
 }
 
 namespace mu::engraving::rendering {
-class ISingleRendering : MODULE_EXPORT_INTERFACE
+class ISingleRenderer : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ISingleRendering)
+    INTERFACE_ID(ISingleRenderer)
 
 public:
-    virtual ~ISingleRendering() = default;
+    virtual ~ISingleRenderer() = default;
 
     void layoutItem(EngravingItem* item)
     {
@@ -55,4 +55,4 @@ protected:
 };
 }
 
-#endif // MU_ENGRAVING_ISINGLERENDERING_H
+#endif // MU_ENGRAVING_ISINGLERENDERER_H

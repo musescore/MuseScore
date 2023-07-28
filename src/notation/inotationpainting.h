@@ -26,7 +26,7 @@
 #include "notationtypes.h"
 
 #include "draw/painter.h"
-#include "engraving/rendering/iscorerendering.h"
+#include "engraving/rendering/iscorerenderer.h"
 
 namespace mu::notation {
 class INotationPainting
@@ -34,7 +34,7 @@ class INotationPainting
 public:
     virtual ~INotationPainting() = default;
 
-    using Options = engraving::rendering::IScoreRendering::Options;
+    using Options = engraving::rendering::IScoreRenderer::PaintOptions;
 
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;

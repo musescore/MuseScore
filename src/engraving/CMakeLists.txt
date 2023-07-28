@@ -169,8 +169,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rendering/README.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerendering.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerendering.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h

@@ -19,7 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scorerendering.h"
+#include "scorerenderer.h"
 
 #include "libmscore/arpeggio.h"
 #include "libmscore/beam.h"
@@ -42,43 +42,43 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
-void ScoreRendering::layoutScore(Score* score, const Fraction& st, const Fraction& et) const
+void ScoreRenderer::layoutScore(Score* score, const Fraction& st, const Fraction& et) const
 {
     ScoreLayout::layoutRange(score, st, et);
 }
 
-SizeF ScoreRendering::pageSizeInch(const Score* score) const
+SizeF ScoreRenderer::pageSizeInch(const Score* score) const
 {
     return Paint::pageSizeInch(score);
 }
 
-SizeF ScoreRendering::pageSizeInch(const Score* score, const Options& opt) const
+SizeF ScoreRenderer::pageSizeInch(const Score* score, const PaintOptions& opt) const
 {
     return Paint::pageSizeInch(score, opt);
 }
 
-void ScoreRendering::paintScore(draw::Painter* painter, Score* score, const IScoreRendering::Options& opt) const
+void ScoreRenderer::paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const
 {
     Paint::paintScore(painter, score, opt);
 }
 
-void ScoreRendering::paintItem(draw::Painter& painter, const EngravingItem* item) const
+void ScoreRenderer::paintItem(draw::Painter& painter, const EngravingItem* item) const
 {
     Paint::paintItem(painter, item);
 }
 
-void ScoreRendering::doLayoutItem(EngravingItem* item)
+void ScoreRenderer::doLayoutItem(EngravingItem* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layoutItem(item, ctx);
 }
 
-void ScoreRendering::doDrawItem(const EngravingItem* item, draw::Painter* p)
+void ScoreRenderer::doDrawItem(const EngravingItem* item, draw::Painter* p)
 {
     TDraw::drawItem(item, p);
 }
 
-void ScoreRendering::layoutText1(TextBase* item, bool base)
+void ScoreRenderer::layoutText1(TextBase* item, bool base)
 {
     LayoutContext ctx(item->score());
     if (base) {
@@ -93,35 +93,35 @@ void ScoreRendering::layoutText1(TextBase* item, bool base)
 // ===============================================================
 // Layout Elements on Edit
 // ===============================================================
-void ScoreRendering::layoutOnEdit(Arpeggio* item)
+void ScoreRenderer::layoutOnEdit(Arpeggio* item)
 {
     LayoutContext ctx(item->score());
     ArpeggioLayout::layoutOnEdit(item, ctx);
 }
 
-double ScoreRendering::computePadding(const EngravingItem* item1, const EngravingItem* item2)
+double ScoreRenderer::computePadding(const EngravingItem* item1, const EngravingItem* item2)
 {
     return HorizontalSpacing::computePadding(item1, item2);
 }
 
-KerningType ScoreRendering::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
+KerningType ScoreRenderer::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
 {
     return HorizontalSpacing::computeKerning(item1, item2);
 }
 
-void ScoreRendering::layoutTextLineBaseSegment(TextLineBaseSegment* item)
+void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layoutTextLineBaseSegment(item, ctx);
 }
 
-void ScoreRendering::layoutBeam1(Beam* item)
+void ScoreRenderer::layoutBeam1(Beam* item)
 {
     LayoutContext ctx(item->score());
     TLayout::layout1(item, ctx);
 }
 
-void ScoreRendering::layoutStem(Chord* item)
+void ScoreRenderer::layoutStem(Chord* item)
 {
     LayoutContext ctx(item->score());
     ChordLayout::layoutStem(item, ctx);

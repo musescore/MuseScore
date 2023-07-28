@@ -41,7 +41,7 @@
 
 #include "types/constants.h"
 
-#include "rendering/iscorerendering.h"
+#include "rendering/iscorerenderer.h"
 #include "rendering/layoutoptions.h"
 #include "rendering/paddingtable.h"
 
@@ -242,7 +242,7 @@ class Score : public EngravingObject
     INJECT(IEngravingFontsProvider, engravingFonts)
 
     // internal
-    INJECT(rendering::IScoreRendering, rendering)
+    INJECT(rendering::IScoreRenderer, rendering)
 
 public:
     Score(const Score&) = delete;
