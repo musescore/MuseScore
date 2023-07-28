@@ -24,8 +24,7 @@
 #include "draw/painter.h"
 
 #include "libmscore/accidental.h"
-
-#include "libmscore/note.h"
+#include "libmscore/actionicon.h"
 
 #include "infrastructure/rtti.h"
 
@@ -38,6 +37,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter);
         break;
+    case ElementType::ACTION_ICON:  draw(item_cast<const ActionIcon*>(item), painter);
+        break;
     default:
         item->draw(painter);
     }
@@ -45,13 +46,15 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 
 void SingleDraw::draw(const Accidental* item, draw::Painter* painter)
 {
-    // don't show accidentals for tab or slash notation
-    if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
-        return;
-    }
-
     painter->setPen(item->curColor());
     for (const Accidental::LayoutData::Sym& e : item->layoutData().syms) {
         item->drawSymbol(e.sym, painter, PointF(e.x, e.y));
     }
+}
+
+void SingleDraw::draw(const ActionIcon* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setFont(item->iconFont());
+    painter->drawText(item->bbox(), draw::AlignCenter, Char(item->icon()));
 }

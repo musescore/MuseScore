@@ -74,11 +74,9 @@ void ActionIcon::setFontSize(double size)
     m_iconFont.setPointSizeF(size);
 }
 
-void ActionIcon::draw(Painter* painter) const
+void ActionIcon::draw(Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    painter->setFont(m_iconFont);
-    painter->drawText(bbox(), draw::AlignCenter, Char(m_icon));
+    UNREACHABLE;
 }
 
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const

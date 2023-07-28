@@ -22,8 +22,7 @@
 #include "tdraw.h"
 
 #include "libmscore/accidental.h"
-
-#include "libmscore/note.h"
+#include "libmscore/actionicon.h"
 
 #include "infrastructure/rtti.h"
 
@@ -35,6 +34,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 {
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter);
+        break;
+    case ElementType::ACTION_ICON:  draw(item_cast<const ActionIcon*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -52,4 +53,11 @@ void TDraw::draw(const Accidental* item, draw::Painter* painter)
     for (const Accidental::LayoutData::Sym& e : item->layoutData().syms) {
         item->drawSymbol(e.sym, painter, PointF(e.x, e.y));
     }
+}
+
+void TDraw::draw(const ActionIcon* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setFont(item->iconFont());
+    painter->drawText(item->bbox(), draw::AlignCenter, Char(item->icon()));
 }
