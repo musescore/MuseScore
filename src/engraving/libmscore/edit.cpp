@@ -4221,14 +4221,14 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             //
             // remove clef, time and key signatures
             //
-            if (options.moveSignaturesClef && measureInsert) {
+            if (measureInsert) {
                 for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-                    Measure* pm = measureInsert->prevMeasure();
+                    Measure* pm = newMeasure->prevMeasure();
                     if (pm) {
                         Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                         if (ps && ps->enabled()) {
                             EngravingItem* pc = ps->element(staffIdx * VOICES);
-                            if (pc) {
+                            if (pc && (!options.moveSignaturesClef || toClef(pc)->forInstrumentChange())) {
                                 previousClefList.push_back(toClef(pc));
                                 undo(new RemoveElement(pc));
                                 if (ps->empty()) {
@@ -4237,62 +4237,64 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                             }
                         }
                     }
-                    for (Segment* s = measureInsert->first(); s && s->rtick().isZero(); s = s->next()) {
-                        if (!s->enabled()) {
-                            continue;
-                        }
-                        EngravingItem* e = s->element(staffIdx * VOICES);
-                        // if it's a clef, we only add if it's a header clef
-                        bool moveClef = s->isHeaderClefType() && e && e->isClef() && !toClef(e)->forInstrumentChange();
-                        // otherwise, we only add if e exists and is generated
-                        bool moveOther = e && !e->isClef() && (!e->generated() || tick.isZero());
-                        bool specialCase = false;
-                        if (e && e->isClef() && !moveClef && isBeginning
-                            && toClef(e)->clefToBarlinePosition() != ClefToBarlinePosition::AFTER) {
-                            // special case:
-                            // there is a non-header clef at global tick 0, and we are inserting at the beginning of the score.
-                            // this clef will be moved with the measure it accompanies, but it will be moved before the barline.
-                            specialCase = true;
-                            moveClef = true;
-                        }
-                        if (!moveClef && !moveOther) {
-                            continue; // this item will remain with the old measure
-                        }
-                        // otherwise, this item is moved back to the new measure
-                        EngravingItem* ee = 0;
-                        if (e->isKeySig()) {
-                            KeySig* ks = toKeySig(e);
-                            if (ks->forInstrumentChange()) {
+                    if (options.moveSignaturesClef) {
+                        for (Segment* s = measureInsert->first(); s && s->rtick().isZero(); s = s->next()) {
+                            if (!s->enabled()) {
                                 continue;
                             }
-                            keySigList.push_back(ks);
-                            // if instrument change on that place, set correct key signature for instrument change
-                            bool ic = s->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                                                      e->part()->startTrack(), e->part()->endTrack() - 1);
-                            if (ic) {
-                                KeySigEvent ke = ks->keySigEvent();
-                                ke.setForInstrumentChange(true);
-                                undoChangeKeySig(ks->staff(), e->tick(), ke, true);
-                            } else {
+                            EngravingItem* e = s->element(staffIdx * VOICES);
+                            // if it's a clef, we only add if it's a header clef
+                            bool moveClef = s->isHeaderClefType() && e && e->isClef() && !toClef(e)->forInstrumentChange();
+                            // otherwise, we only add if e exists and is generated
+                            bool moveOther = e && !e->isClef() && (!e->generated() || tick.isZero());
+                            bool specialCase = false;
+                            if (e && e->isClef() && !moveClef && isBeginning
+                                && toClef(e)->clefToBarlinePosition() != ClefToBarlinePosition::AFTER) {
+                                // special case:
+                                // there is a non-header clef at global tick 0, and we are inserting at the beginning of the score.
+                                // this clef will be moved with the measure it accompanies, but it will be moved before the barline.
+                                specialCase = true;
+                                moveClef = true;
+                            }
+                            if (!moveClef && !moveOther) {
+                                continue; // this item will remain with the old measure
+                            }
+                            // otherwise, this item is moved back to the new measure
+                            EngravingItem* ee = 0;
+                            if (e->isKeySig()) {
+                                KeySig* ks = toKeySig(e);
+                                if (ks->forInstrumentChange()) {
+                                    continue;
+                                }
+                                keySigList.push_back(ks);
+                                // if instrument change on that place, set correct key signature for instrument change
+                                bool ic = s->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
+                                                                                          e->part()->startTrack(), e->part()->endTrack() - 1);
+                                if (ic) {
+                                    KeySigEvent ke = ks->keySigEvent();
+                                    ke.setForInstrumentChange(true);
+                                    undoChangeKeySig(ks->staff(), e->tick(), ke, true);
+                                } else {
+                                    ee = e;
+                                }
+                            } else if (e->isTimeSig()) {
+                                TimeSig* ts = toTimeSig(e);
+                                timeSigList.push_back(ts);
                                 ee = e;
                             }
-                        } else if (e->isTimeSig()) {
-                            TimeSig* ts = toTimeSig(e);
-                            timeSigList.push_back(ts);
-                            ee = e;
-                        }
-                        if (specialCase) {
-                            specialCaseClefs.push_back(toClef(e));
-                            ee = e;
-                        } else if (tick.isZero() && e->isClef()) {
-                            Clef* clef = toClef(e);
-                            clefList.push_back(clef);
-                            ee = e;
-                        }
-                        if (ee) {
-                            undo(new RemoveElement(ee));
-                            if (s->empty()) {
-                                undoRemoveElement(s);
+                            if (specialCase) {
+                                specialCaseClefs.push_back(toClef(e));
+                                ee = e;
+                            } else if (tick.isZero() && e->isClef()) {
+                                Clef* clef = toClef(e);
+                                clefList.push_back(clef);
+                                ee = e;
+                            }
+                            if (ee) {
+                                undo(new RemoveElement(ee));
+                                if (s->empty()) {
+                                    undoRemoveElement(s);
+                                }
                             }
                         }
                     }
@@ -4326,10 +4328,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 nClef->setParent(s);
                 undoAddElement(nClef);
             }
-            Measure* pm = newMeasure->prevMeasure();
+            Measure* pm = newMeasure;
             for (Clef* clef : previousClefList) {
                 Clef* nClef = Factory::copyClef(*clef);
-                Segment* s  = pm->undoGetSegment(SegmentType::Clef, tick);
+                Segment* s  = pm->undoGetSegmentR(SegmentType::Clef, pm->ticks());
                 nClef->setParent(s);
                 undoAddElement(nClef);
             }
