@@ -118,8 +118,50 @@ ScoresView {
         id: listComp
 
         ScoresView.List {
+            id: list
+
+            readonly property int minimumInitialItems: (view.height / view.rowHeight) * 2
+            readonly property bool almostAtEnd: view.contentHeight - (view.contentY + view.height) < 20 * view.rowHeight
+
+            Component.onCompleted: {
+                updateDesiredRowCount()
+            }
+
+            onMinimumInitialItemsChanged: {
+                updateDesiredRowCount()
+            }
+
+            onAlmostAtEndChanged: {
+                updateDesiredRowCount()
+            }
+
+            function updateDesiredRowCount() {
+                Qt.callLater(function() {
+                    cloudScoresModel.desiredRowCount = Math.max(minimumInitialItems,
+                                                                almostAtEnd ? cloudScoresModel.rowCount + 20 : cloudScoresModel.rowCount)
+                })
+            }
+
             navigation.name: "OnlineScoresList"
             navigation.accessible.name: qsTrc("project", "Online scores list")
+
+            view.footer: cloudScoresModel.state === CloudScoresModel.Loading
+                         ? busyIndicatorComp : null
+
+            Component {
+                id: busyIndicatorComp
+
+                Item {
+                    width: ListView.view ? ListView.view.width : 0
+                    height: view.rowHeight
+
+                    StyledBusyIndicator {
+                        id: indicator
+
+                        anchors.centerIn: parent
+                    }
+                }
+            }
         }
     }
 

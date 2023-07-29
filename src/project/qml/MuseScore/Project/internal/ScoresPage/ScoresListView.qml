@@ -172,6 +172,8 @@ Item {
 
                     bottomMargin: bottomGradient.height
 
+                    readonly property real rowHeight: prv.rowHeight
+
                     ScrollBar.vertical: StyledScrollBar {
                         parent: root
 
