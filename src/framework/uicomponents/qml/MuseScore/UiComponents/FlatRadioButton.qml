@@ -52,9 +52,9 @@ RadioDelegate {
 
     ButtonGroup.group: ListView.view && ListView.view instanceof RadioButtonGroup ? ListView.view.radioButtonGroup : null
 
-    implicitHeight: ListView.view ? ListView.view.height : 30
+    implicitHeight: ListView.view ? ListView.view.height : ui.theme.defaultButtonSize
     implicitWidth: ListView.view ? (ListView.view.width - (ListView.view.spacing * (ListView.view.count - 1))) / ListView.view.count
-                                 : 30
+                                 : ui.theme.defaultButtonSize
     hoverEnabled: true
 
     function ensureActiveFocus() {

@@ -188,6 +188,39 @@ FocusScope {
             text: qsTrc("project", "Refresh")
             orientation: Qt.Horizontal
         }
+
+        RadioButtonGroup {
+            id: viewTypeRadioButtons
+
+            property int navigationOrderStart: refreshButton.navigation.order + 1
+
+            implicitHeight: ui.theme.defaultButtonSize
+
+            model: [
+                { "icon": IconCode.GRID, "title": qsTrc("project", "Grid view"), "value": ScoresPageModel.Grid },
+                { "icon": IconCode.LIST, "title": qsTrc("project", "List view"), "value": ScoresPageModel.List }
+            ]
+
+            delegate: FlatRadioButton {
+                implicitWidth: ui.theme.defaultButtonSize
+                implicitHeight: ui.theme.defaultButtonSize
+
+                checked: scoresPageModel.viewType === modelData.value
+
+                iconCode: modelData.icon
+                transparent: true
+                checkedColor: ui.theme.buttonColor
+
+                navigation.name: "ViewType_" + modelData.title
+                navigation.panel: viewButtonsNavPanel
+                navigation.order: viewTypeRadioButtons.navigationOrderStart + model.index
+                navigation.accessible.name: modelData.title
+
+                onToggled: {
+                    scoresPageModel.viewType = modelData.value
+                }
+            }
+        }
     }
 
     Loader {
@@ -214,6 +247,7 @@ FocusScope {
         RecentScoresView {
             anchors.fill: parent
 
+            viewType: scoresPageModel.viewType
             searchText: searchField.searchText
 
             backgroundColor: background.color
@@ -239,6 +273,7 @@ FocusScope {
             id: cloudScoresView
             anchors.fill: parent
 
+            viewType: scoresPageModel.viewType
             searchText: searchField.searchText
 
             backgroundColor: background.color

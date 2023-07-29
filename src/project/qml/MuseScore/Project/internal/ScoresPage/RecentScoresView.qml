@@ -37,7 +37,7 @@ ScoresView {
         recentScoresModel.load()
     }
 
-    sourceComponent: root.viewType === ScoresView.ViewType_List ? listComp : gridComp
+    sourceComponent: root.viewType === ScoresPageModel.List ? listComp : gridComp
 
     Component {
         id: gridComp

@@ -32,6 +32,9 @@ using namespace mu::actions;
 ScoresPageModel::ScoresPageModel(QObject* parent)
     : QObject(parent)
 {
+    // NOTE: we intentionally don't listen for changes from other instances, because changing the
+    // view type in one instance should not immediately change the view type in other instances.
+    m_viewType = ViewType(configuration()->homeScoresPageViewType());
 }
 
 void ScoresPageModel::createNewScore()
@@ -67,4 +70,21 @@ void ScoresPageModel::setTabIndex(int index)
 
     configuration()->setHomeScoresPageTabIndex(index);
     emit tabIndexChanged();
+}
+
+ScoresPageModel::ViewType ScoresPageModel::viewType() const
+{
+    return m_viewType;
+}
+
+void ScoresPageModel::setViewType(ViewType type)
+{
+    if (m_viewType == type) {
+        return;
+    }
+
+    configuration()->setHomeScoresPageViewType(IProjectConfiguration::HomeScoresPageViewType(type));
+
+    m_viewType = type;
+    emit viewTypeChanged();
 }

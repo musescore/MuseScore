@@ -308,7 +308,11 @@ public:
 
         TOOLBAR_GRIP = 0xF3A2,
 
+        GRID = 0xF3A4,
+
         PAGE = 0xF3A5,
+
+        LIST = 0xF3AA,
 
         CAMERA = 0xF3AE,
 

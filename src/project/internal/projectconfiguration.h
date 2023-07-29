@@ -95,6 +95,9 @@ public:
     int homeScoresPageTabIndex() const override;
     void setHomeScoresPageTabIndex(int index) override;
 
+    HomeScoresPageViewType homeScoresPageViewType() const override;
+    void setHomeScoresPageViewType(HomeScoresPageViewType type) override;
+
     QColor templatePreviewBackgroundColor() const override;
     async::Notification templatePreviewBackgroundChanged() const override;
 

@@ -57,7 +57,7 @@ ScoresView {
             return emptyComp
         }
 
-        return root.viewType === ScoresView.ViewType_List ? listComp : gridComp
+        return root.viewType === ScoresPageModel.List ? listComp : gridComp
     }
 
     Component {

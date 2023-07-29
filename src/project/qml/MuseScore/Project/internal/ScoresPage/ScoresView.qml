@@ -31,7 +31,7 @@ Loader {
     property AbstractScoresModel model
     property string searchText
 
-    property int viewType: ScoresView.ViewType_Grid
+    property int viewType: ScoresPageModel.Grid
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
@@ -41,11 +41,6 @@ Loader {
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
-
-    enum ViewType {
-        ViewType_Grid,
-        ViewType_List
-    }
 
     component Grid : ScoresGridView {
         anchors.fill: parent
