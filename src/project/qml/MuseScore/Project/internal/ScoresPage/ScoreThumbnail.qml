@@ -77,8 +77,8 @@ Item {
                 Image {
                     anchors.centerIn: parent
 
-                    width: 80
-                    height: 110
+                    width: 80/172 * parent.width
+                    height: 110/80 * width
 
                     source: {
                         switch (root.suffix) {

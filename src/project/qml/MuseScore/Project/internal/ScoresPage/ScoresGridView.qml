@@ -145,7 +145,7 @@ Item {
                 navigation.column: (model.index - (navigation.row * view.columns)) * 3 // * 3 because of controls inside ScoreItem
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.positionViewAtIndex(index, ListView.Contain)
+                        view.positionViewAtIndex(index, GridView.Contain)
                     }
                 }
 

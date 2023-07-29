@@ -51,6 +51,11 @@ ScoresView {
     Component {
         id: listComp
 
-        ScoresView.List {}
+        ScoresView.List {
+            showNewScoreItem: true
+
+            navigation.name: "RecentScoresList"
+            navigation.accessible.name: qsTrc("project", "Recent scores list")
+        }
     }
 }

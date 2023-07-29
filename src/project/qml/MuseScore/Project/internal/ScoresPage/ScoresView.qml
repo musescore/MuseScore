@@ -63,8 +63,24 @@ Loader {
         }
     }
 
-    component List : StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Not yet implemented"
+    component List : ScoresListView {
+        anchors.fill: parent
+
+        model: root.model
+        searchText: root.searchText
+
+        backgroundColor: root.backgroundColor
+        sideMargin: root.sideMargin
+
+        navigation.section: root.navigationSection
+        navigation.order: root.navigationOrder
+
+        onCreateNewScoreRequested: {
+            root.createNewScoreRequested()
+        }
+
+        onOpenScoreRequested: function(scorePath, displayName) {
+            root.openScoreRequested(scorePath, displayName)
+        }
     }
 }

@@ -117,7 +117,10 @@ ScoresView {
     Component {
         id: listComp
 
-        ScoresView.List {}
+        ScoresView.List {
+            navigation.name: "OnlineScoresList"
+            navigation.accessible.name: qsTrc("project", "Online scores list")
+        }
     }
 
     component Message : Column {

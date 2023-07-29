@@ -197,7 +197,7 @@ FocusScope {
                     }
 
                     Component.onCompleted: {
-                        cloudScoreStatusWatcher.load(cloudScoreId)
+                        cloudScoreStatusWatcher.load(root.cloudScoreId)
                     }
 
                     ProgressBar {
