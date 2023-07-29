@@ -1656,10 +1656,8 @@ EngravingItem* Measure::drop(EditData& data)
             score()->insertMeasure(ElementType::MEASURE, this);
             break;
         case ActionIconType::STAFF_TYPE_CHANGE: {
-            EngravingItem* stc = Factory::createStaffTypeChange(this);
-            stc->setParent(this);
-            stc->setTrack(staffIdx * VOICES);
-            score()->undoAddElement(stc);
+            data.dropElement = toEngravingItem(Factory::createStaffTypeChange(this));
+            drop(data);
             break;
         }
         default:
@@ -1669,9 +1667,26 @@ EngravingItem* Measure::drop(EditData& data)
 
     case ElementType::STAFFTYPE_CHANGE:
     {
-        e->setParent(this);
-        e->setTrack(staffIdx * VOICES);
-        score()->undoAddElement(e);
+        track_idx_t track = staffIdx * VOICES;
+        // do not add, if already there (if forInstrumentChange there, replace it by standard one)
+        if (staff->isStaffTypeStartFrom(tick())) {
+            for (EngravingItem* oldEl : el()) {
+                if (oldEl->isStaffTypeChange() && oldEl->track() == track) {
+                    if (toStaffTypeChange(oldEl)->forInstrumentChange()) {
+                        score()->deleteItem(oldEl);
+                    } else {
+                        delete e;
+                        e = nullptr;
+                    }
+                    break;
+                }
+            }
+        }
+        if (e) {
+            e->setParent(this);
+            e->setTrack(track);
+            score()->undoAddElement(e);
+        }
     }
     break;
 
