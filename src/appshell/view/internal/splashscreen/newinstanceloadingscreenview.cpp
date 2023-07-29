@@ -24,8 +24,11 @@
 
 #include <QApplication>
 #include <QPainter>
+#include <QPainterPath>
 #include <QScreen>
+#include <QGraphicsDropShadowEffect>
 
+#include "log.h"
 #include "translation.h"
 
 using namespace mu::appshell;
@@ -34,6 +37,12 @@ NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(const QString& openin
     : QWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
+
+    QGraphicsDropShadowEffect* shadow = new QGraphicsDropShadowEffect();
+    shadow->setBlurRadius(12);
+    shadow->setColor("#40000000");
+    shadow->setOffset(0, 8);
+    setGraphicsEffect(shadow);
 
     if (openingFileName.isEmpty()) {
         m_message = qtrc("appshell", "Loading new score…\u200e");
@@ -61,20 +70,20 @@ void NewInstanceLoadingScreenView::draw(QPainter* painter)
 {
     painter->setRenderHints(QPainter::Antialiasing | QPainter::TextAntialiasing | QPainter::SmoothPixmapTransform);
 
-    // Draw background
-    QString bgColorStr = uiConfiguration()->currentTheme().values.value(ui::BACKGROUND_PRIMARY_COLOR).toString();
-    painter->fillRect(0, 0, width(), height(), QColor(bgColorStr));
+    QBrush brush(QColor(uiConfiguration()->currentTheme().values.value(ui::BACKGROUND_PRIMARY_COLOR).toString()));
+    QPen pen(m_uiConfiguration->currentTheme().values.value(ui::STROKE_COLOR).toString());
+    drawRoundedRect(painter, rect(), 4, brush, pen);
 
     // Draw message
     QFont font(QString::fromStdString(uiConfiguration()->fontFamily()));
     font.setPixelSize(uiConfiguration()->fontSize(ui::FontSizeType::BODY_LARGE));
-    font.setBold(true);
+    font.setWeight(QFont::DemiBold);
 
     painter->setFont(font);
 
     QString messageColorStr = uiConfiguration()->currentTheme().values.value(ui::FONT_PRIMARY_COLOR).toString();
-    QPen pen(messageColorStr);
-    painter->setPen(pen);
+    QPen messagePen(messageColorStr);
+    painter->setPen(messagePen);
 
     QFontMetrics fontMetrics(font);
     QRectF messageRectangle(0, 0, m_dialogSize.width(), m_dialogSize.height());
@@ -82,4 +91,24 @@ void NewInstanceLoadingScreenView::draw(QPainter* painter)
 
     QString elidedText = fontMetrics.elidedText(m_message, Qt::ElideMiddle, messageRectangle.width());
     painter->drawText(messageRectangle, Qt::AlignCenter | Qt::TextDontClip, elidedText);
+}
+
+void NewInstanceLoadingScreenView::drawRoundedRect(QPainter* painter, const QRectF& rect, const qreal radius,
+                                                   const QBrush& brush, const QPen& pen)
+{
+    painter->save();
+    painter->setPen(QPen(Qt::transparent, 0));
+    painter->setBrush(brush);
+
+    QPainterPath path;
+    path.addRoundedRect(rect, radius, radius);
+    painter->fillPath(path, brush);
+
+    const qreal corr = 0.5 * pen.width();
+    painter->setPen(pen);
+    painter->setBrush(QBrush(Qt::transparent));
+    painter->drawRoundedRect(rect.adjusted(corr, corr, -corr, -corr), radius - corr, radius - corr);
+    painter->restore();
+
+    return;
 }

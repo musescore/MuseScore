@@ -45,6 +45,7 @@ public:
 private:
     bool event(QEvent* event) override;
     void draw(QPainter* painter);
+    void drawRoundedRect(QPainter* painter, const QRectF& rect, const qreal radius, const QBrush& brush, const QPen& pen);
 
     QString m_message;
 
