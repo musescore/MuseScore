@@ -48,7 +48,7 @@ Item {
         id: searchFilterModel
         sourceModel: root.model
 
-        excludeIndexes: root.model.nonScoreItemIndices
+        alwaysIncludeIndices: root.model.nonScoreItemIndices
 
         filters: [
             FilterValue {

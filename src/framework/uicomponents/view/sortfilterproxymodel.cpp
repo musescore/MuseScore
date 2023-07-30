@@ -68,19 +68,38 @@ QQmlListProperty<SorterValue> SortFilterProxyModel::sorters()
     return m_sorters.property();
 }
 
-QList<int> SortFilterProxyModel::excludeIndexes()
+QList<int> SortFilterProxyModel::alwaysIncludeIndices() const
 {
-    return m_excludeIndexes;
+    return m_alwaysIncludeIndices;
 }
 
-void SortFilterProxyModel::setExcludeIndexes(QList<int> excludeIndexes)
+void SortFilterProxyModel::setAlwaysIncludeIndices(const QList<int>& indices)
 {
-    if (excludeIndexes == m_excludeIndexes) {
+    if (m_alwaysIncludeIndices == indices) {
         return;
     }
 
-    m_excludeIndexes = excludeIndexes;
-    emit excludeIndexesChanged(m_excludeIndexes);
+    m_alwaysIncludeIndices = indices;
+    emit alwaysIncludeIndicesChanged();
+
+    invalidateFilter();
+}
+
+QList<int> SortFilterProxyModel::alwaysExcludeIndices() const
+{
+    return m_alwaysExcludeIndices;
+}
+
+void SortFilterProxyModel::setAlwaysExcludeIndices(const QList<int>& indices)
+{
+    if (m_alwaysExcludeIndices == indices) {
+        return;
+    }
+
+    m_alwaysExcludeIndices = indices;
+    emit alwaysExcludeIndicesChanged();
+
+    invalidateFilter();
 }
 
 void SortFilterProxyModel::refresh()
@@ -91,8 +110,12 @@ void SortFilterProxyModel::refresh()
 
 bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
-    if (m_excludeIndexes.contains(sourceRow)) {
+    if (m_alwaysIncludeIndices.contains(sourceRow)) {
         return true;
+    }
+
+    if (m_alwaysExcludeIndices.contains(sourceRow)) {
+        return false;
     }
 
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);

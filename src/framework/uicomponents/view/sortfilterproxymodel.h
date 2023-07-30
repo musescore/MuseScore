@@ -37,7 +37,8 @@ class SortFilterProxyModel : public QSortFilterProxyModel
 
     Q_PROPERTY(QQmlListProperty<mu::uicomponents::FilterValue> filters READ filters CONSTANT)
     Q_PROPERTY(QQmlListProperty<mu::uicomponents::SorterValue> sorters READ sorters CONSTANT)
-    Q_PROPERTY(QList<int> excludeIndexes READ excludeIndexes WRITE setExcludeIndexes NOTIFY excludeIndexesChanged)
+    Q_PROPERTY(QList<int> alwaysIncludeIndices READ alwaysIncludeIndices WRITE setAlwaysIncludeIndices NOTIFY alwaysIncludeIndicesChanged)
+    Q_PROPERTY(QList<int> alwaysExcludeIndices READ alwaysExcludeIndices WRITE setAlwaysExcludeIndices NOTIFY alwaysExcludeIndicesChanged)
 
 public:
     explicit SortFilterProxyModel(QObject* parent = nullptr);
@@ -45,18 +46,21 @@ public:
     QQmlListProperty<FilterValue> filters();
     QQmlListProperty<SorterValue> sorters();
 
-    QList<int> excludeIndexes();
+    QList<int> alwaysIncludeIndices() const;
+    void setAlwaysIncludeIndices(const QList<int>& indices);
+
+    QList<int> alwaysExcludeIndices() const;
+    void setAlwaysExcludeIndices(const QList<int>& indices);
 
     Q_INVOKABLE void refresh();
-
-public slots:
-    void setExcludeIndexes(QList<int> excludeIndexes);
 
 signals:
     void rowCountChanged();
 
     void filtersChanged(QQmlListProperty<mu::uicomponents::FilterValue> filters);
-    void excludeIndexesChanged(QList<int> excludeIndexes);
+
+    void alwaysIncludeIndicesChanged();
+    void alwaysExcludeIndicesChanged();
 
 protected:
     bool filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const;
@@ -71,9 +75,11 @@ private:
 
     QmlListProperty<FilterValue> m_filters;
     QHash<int, FilterValue*> m_roleIdToFilterValueHash;
-    QList<int> m_excludeIndexes;
 
     QmlListProperty<SorterValue> m_sorters;
+
+    QList<int> m_alwaysIncludeIndices;
+    QList<int> m_alwaysExcludeIndices;
 };
 }
 
