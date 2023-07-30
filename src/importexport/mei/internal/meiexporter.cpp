@@ -281,8 +281,6 @@ bool MeiExporter::writeScoreDef()
         this->writePgHead(toVBox(mBase));
     }
 
-    m_currentNode = m_currentNode.append_child("staffGrp");
-
     // Number of staffGrp closing at each staff
     std::vector<int> staffGrpEnds(m_score->staves().size(), 0);
 
@@ -298,6 +296,15 @@ bool MeiExporter::writeScoreDef()
             break;
         }
     }
+    
+    // Probably no music in the file (see vtest/scores/frametext.mscx)
+    if (!measure) {
+        // pop the scoreDef
+        m_currentNode = m_currentNode.parent();
+        return true;
+    }
+    
+    m_currentNode = m_currentNode.append_child("staffGrp");
 
     for (Part* part : m_score->parts()) {
         // For parts with more than one staff, write the label in the staffGrp
@@ -312,8 +319,10 @@ bool MeiExporter::writeScoreDef()
             staffGrpPart = nullptr;
         }
     }
-
+    
+    // pop the staffGrp
     m_currentNode = m_currentNode.parent();
+    // pop the scoreDef
     m_currentNode = m_currentNode.parent();
 
     return true;
