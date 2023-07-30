@@ -66,26 +66,15 @@ Item {
         accessible.name: qsTrc("project", "Recent scores grid")
     }
 
-    Rectangle {
+    GradientRectangle {
         id: topGradient
 
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
 
-        height: 8
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: root.backgroundColor
-            }
-            GradientStop {
-                position: 1.0
-                color: "transparent"
-            }
-        }
+        startColor: root.backgroundColor
+        stopColor: "transparent"
     }
 
     StyledGridView {
@@ -170,25 +159,13 @@ Item {
         }
     }
 
-    Rectangle {
+    GradientRectangle {
         id: bottomGradient
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.bottom: parent.bottom
 
-        height: 8
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-
-            GradientStop {
-                position: 1.0
-                color: root.backgroundColor
-            }
-        }
+        startColor: "transparent"
+        stopColor: root.backgroundColor
     }
 }

@@ -34,6 +34,7 @@ Rectangle {
         GradientStop {
             id: startGradient
             position: 0.0
+            color: "transparent"
 
         }
         GradientStop {

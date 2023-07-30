@@ -85,7 +85,7 @@ Rectangle {
         }
     }
 
-    Rectangle {
+    GradientRectangle {
         id: topGradient
         visible: flickable.isScrollable
 
@@ -96,19 +96,11 @@ Rectangle {
 
         height: root.sideMargin
 
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: root.color
-            }
-            GradientStop {
-                position: 1.0
-                color: "transparent"
-            }
-        }
+        startColor: root.color
+        stopColor: "transparent"
     }
 
-    Rectangle {
+    GradientRectangle {
         id: bottomGradient
         visible: flickable.isScrollable
 
@@ -119,15 +111,7 @@ Rectangle {
 
         height: root.sideMargin
 
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: "transparent"
-            }
-            GradientStop {
-                position: 1.0
-                color: root.color
-            }
-        }
+        startColor: "transparent"
+        stopColor: root.color
     }
 }
