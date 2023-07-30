@@ -98,6 +98,7 @@ private:
     bool readControlEvents(pugi::xml_node parentNode, engraving::Measure* measure);
     bool readBreath(pugi::xml_node breathNode, engraving::Measure* measure);
     bool readCaesura(pugi::xml_node caesuraNode, engraving::Measure* measure);
+    bool readDir(pugi::xml_node dirNote, engraving::Measure* measure);
     bool readDynam(pugi::xml_node dynamNode, engraving::Measure* measure);
     bool readFermata(pugi::xml_node fermataNode, engraving::Measure* measure);
     bool readHarm(pugi::xml_node harmNode, engraving::Measure* measure);

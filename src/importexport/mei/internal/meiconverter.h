@@ -53,6 +53,8 @@ enum TextCell {
 #define BREAK_TYPE "mscore-manual"
 // The @type attribute prefix for indicating beam in <chord>, <note> or <rest>
 #define BEAM_ELEMENT_TYPE "mscore-beam"
+// The @type attribute prefix for expression and playtechannotation type in <dir>
+#define DIR_TYPE "mscore-"
 // The @type attribute prefix for volta repeat ending in <ending>
 #define ENDING_REPEAT_TYPE "mscore-ending-"
 // The @type attribute prefix for harmony type in <harm>
@@ -75,6 +77,7 @@ public:
     /**
      * Methods for checking which element to create depending on some attribute values of the MuseScore or MEI element
      */
+    static engraving::ElementType elementTypeForDir(const libmei::Element& meiElement);
     static engraving::ElementType elementTypeFor(const libmei::RepeatMark& meiRepeatMark);
 
     /**
@@ -114,6 +117,9 @@ public:
     static libmei::Clef clefToMEI(engraving::ClefType clef);
 
     static engraving::ClefType clefFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
+
+    static void dirFromMEI(engraving::TextBase* textBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning);
+    static libmei::Dir dirToMEI(const engraving::TextBase* textBase, StringList& meiLines);
 
     static engraving::DirectionV curvedirFromMEI(const libmei::curvature_CURVEDIR meiCurvedir, bool& warning);
     static libmei::curvature_CURVEDIR curvedirToMEI(engraving::DirectionV curvedir);

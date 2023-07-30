@@ -779,6 +779,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
     for (auto controlEvent : m_startingControlEventMap) {
         if (controlEvent.first->isBreath()) {
             success = success && this->writeBreath(dynamic_cast<const Breath*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isExpression() || controlEvent.first->isPlayTechAnnotation() || controlEvent.first->isStaffText()) {
+            success = success && this->writeDir(dynamic_cast<const TextBase*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isDynamic()) {
             success = success && this->writeDynam(dynamic_cast<const Dynamic*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFermata()) {
@@ -1184,7 +1186,9 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
     if (rest->durationType() == DurationType::V_MEASURE) {
         pugi::xml_node mRestNode = m_currentNode.append_child();
         libmei::MRest meiMRest;
-        meiMRest.Write(mRestNode, this->getLayerXmlIdFor(UNSPECIFIED_L));
+        std::string xmlId = this->getLayerXmlIdFor(UNSPECIFIED_L, rest->segment());
+        meiMRest.Write(mRestNode, xmlId);
+        this->fillControlEventMap(xmlId, rest);
     } else {
         bool closingBeam = false;
         bool closingTuplet = false;
@@ -1268,6 +1272,28 @@ bool MeiExporter::writeBreath(const Breath* breath, const std::string& startid)
         meiBreath.SetStartid(startid);
         meiBreath.Write(breathNode, this->getMeasureXmlIdFor(BREATH_M));
     }
+
+    return true;
+}
+
+/**
+ * Write a dir and its text content.
+ */
+
+bool MeiExporter::writeDir(const TextBase* dir, const std::string& startid)
+{
+    IF_ASSERT_FAILED(dir) {
+        return false;
+    }
+
+    StringList meiLines;
+
+    pugi::xml_node dirNode = m_currentNode.append_child();
+    libmei::Dir meiDir = Convert::dirToMEI(dir, meiLines);
+    meiDir.SetStartid(startid);
+    meiDir.Write(dirNode, this->getMeasureXmlIdFor(DIR_M));
+
+    this->writeLines(dirNode, meiLines);
 
     return true;
 }

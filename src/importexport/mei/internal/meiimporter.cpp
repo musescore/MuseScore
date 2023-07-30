@@ -30,6 +30,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/clef.h"
 #include "libmscore/dynamic.h"
+#include "libmscore/expression.h"
 #include "libmscore/factory.h"
 #include "libmscore/key.h"
 #include "libmscore/keysig.h"
@@ -39,11 +40,13 @@
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
 #include "libmscore/part.h"
+#include "libmscore/playtechannotation.h"
 #include "libmscore/rest.h"
 #include "libmscore/segment.h"
 #include "libmscore/sig.h"
 #include "libmscore/slur.h"
 #include "libmscore/staff.h"
+#include "libmscore/stafftext.h"
 #include "libmscore/text.h"
 #include "libmscore/timesig.h"
 #include "libmscore/timesig.h"
@@ -389,6 +392,17 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         // For Breath we need to add a specific segment and add the breath to it (and not to the ChordRest one)
         segment = measure->getSegment(SegmentType::Breath, segment->tick() + chordRest->actualTicks());
         item = Factory::createBreath(segment);
+    } else if (meiElement.m_name == "dir") {
+        ElementType elementType = Convert::elementTypeForDir(meiElement);
+        switch (elementType) {
+        case (ElementType::PLAYTECH_ANNOTATION): item = Factory::createPlayTechAnnotation(
+                chordRest->segment(), PlayingTechniqueType::Natural, TextStyleType::STAFF);
+            break;
+        case (ElementType::STAFF_TEXT): item = Factory::createStaffText(chordRest->segment());
+            break;
+        default:
+            item = Factory::createExpression(chordRest->segment());
+        }
     } else if (meiElement.m_name == "dynam") {
         item = Factory::createDynamic(chordRest->segment());
     } else if (meiElement.m_name == "fermata") {
@@ -1458,6 +1472,14 @@ bool MeiImporter::readMRest(pugi::xml_node mRestNode, engraving::Measure* measur
     rest->setTrack(track);
     segment->add(rest);
 
+    // Also add mRest as @startid / @endid
+    if (m_startIdChordRests.count(meiMRest.m_xmlId)) {
+        m_startIdChordRests[meiMRest.m_xmlId] = rest;
+    }
+    if (m_endIdChordRests.count(meiMRest.m_xmlId)) {
+        m_endIdChordRests[meiMRest.m_xmlId] = rest;
+    }
+
     // The duration is the duration according to the timesig
     ticks += rest->ticks().ticks();
 
@@ -1622,6 +1644,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readBreath(xpathNode.node(), measure);
         } else if (elementName == "caesura") {
             success = success && this->readCaesura(xpathNode.node(), measure);
+        } else if (elementName == "dir") {
+            success = success && this->readDir(xpathNode.node(), measure);
         } else if (elementName == "dynam") {
             success = success && this->readDynam(xpathNode.node(), measure);
         } else if (elementName == "fermata") {
@@ -1687,6 +1711,34 @@ bool MeiImporter::readCaesura(pugi::xml_node caesuraNode, engraving::Measure* me
     }
 
     Convert::caesuraFromMEI(breath, meiCaesura, warning);
+
+    return true;
+}
+
+/**
+ * Read a dir.
+ */
+
+bool MeiImporter::readDir(pugi::xml_node dirNode, engraving::Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Dir meiDir;
+    meiDir.Read(dirNode);
+
+    TextBase* textBase = static_cast<TextBase*>(this->addAnnotation(meiDir, measure));
+    if (!textBase) {
+        // Warning message given in MeiExpoter::addAnnotation
+        return true;
+    }
+
+    StringList meiLines;
+    this->readLines(dirNode, meiLines);
+
+    Convert::dirFromMEI(textBase, meiLines, meiDir, warning);
 
     return true;
 }

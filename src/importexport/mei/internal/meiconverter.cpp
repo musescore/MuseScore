@@ -38,6 +38,7 @@
 #include "libmscore/utils.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
+#include "libmscore/textbase.h"
 #include "libmscore/tie.h"
 #include "libmscore/tuplet.h"
 #include "engraving/types/typesconv.h"
@@ -52,6 +53,20 @@ using namespace mu::iex::mei;
 using namespace mu;
 
 StringList Convert::logs;
+
+engraving::ElementType Convert::elementTypeForDir(const libmei::Element& meiElement)
+{
+    engraving::ElementType dirType = engraving::ElementType::EXPRESSION;
+    const libmei::AttTyped* typedAtt = dynamic_cast<const libmei::AttTyped*>(&meiElement);
+    if (typedAtt) {
+        if (Convert::hasTypeValue(typedAtt->GetType(), std::string(DIR_TYPE) + "playtech-annotation")) {
+            dirType = engraving::ElementType::PLAYTECH_ANNOTATION;
+        } else if (Convert::hasTypeValue(typedAtt->GetType(), std::string(DIR_TYPE) + "staff-text")) {
+            dirType = engraving::ElementType::STAFF_TEXT;
+        }
+    }
+    return dirType;
+}
 
 engraving::ElementType Convert::elementTypeFor(const libmei::RepeatMark& meiRepeatMark)
 {
@@ -601,6 +616,60 @@ libmei::curvature_CURVEDIR Convert::curvedirToMEI(engraving::DirectionV curvedir
     default:
         return libmei::curvature_CURVEDIR_NONE;
     }
+}
+
+void Convert::dirFromMEI(engraving::TextBase* textBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning)
+{
+    IF_ASSERT_FAILED(textBase) {
+        return;
+    }
+
+    warning = false;
+
+    // @place
+    if (meiDir.HasPlace()) {
+        textBase->setPlacement(meiDir.GetPlace()
+                               == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        textBase->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+
+    // @type
+    // already process in Convert::elementTypeFor called for determining the factory to call in MeiImporter
+
+    // text
+    textBase->setXmlText(meiLines.join(u"\n"));
+
+    return;
+}
+
+libmei::Dir Convert::dirToMEI(const engraving::TextBase* textBase, StringList& meiLines)
+{
+    libmei::Dir meiDir;
+
+    // @place
+    if (textBase->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        meiDir.SetPlace(Convert::placeToMEI(textBase->placement()));
+    }
+
+    // @type
+    if (textBase->type() != engraving::ElementType::EXPRESSION) {
+        std::string dirType = DIR_TYPE;
+        switch (textBase->type()) {
+        case (engraving::ElementType::PLAYTECH_ANNOTATION):
+            dirType = std::string(HARMONY_TYPE) + "playtech-annotation";
+            break;
+        case (engraving::ElementType::STAFF_TEXT):
+            dirType = std::string(HARMONY_TYPE) + "staff-text";
+            break;
+        default: break;
+        }
+        meiDir.SetType(dirType);
+    }
+
+    // text content - only split lines
+    meiLines = String(textBase->plainText()).split(u"\n");
+
+    return meiDir;
 }
 
 engraving::DurationType Convert::durFromMEI(const libmei::data_DURATION meiDuration, bool& warning)

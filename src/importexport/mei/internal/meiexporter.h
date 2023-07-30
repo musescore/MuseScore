@@ -41,6 +41,7 @@ namespace mu::iex::mei {
 enum measureElementCounter {
     BREATH_M = 0,
     CAESURA_M,
+    DIR_M,
     DYNAM_M,
     FERMATA_M,
     HARM_M,
@@ -109,6 +110,7 @@ private:
      * Methods for writing MEI control events (within <measure>)
      */
     bool writeBreath(const engraving::Breath* breath, const std::string& startid);
+    bool writeDir(const engraving::TextBase* dir, const std::string& startid);
     bool writeDynam(const engraving::Dynamic* dynamic, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp);
@@ -199,6 +201,7 @@ private:
     inline static std::map<measureElementCounter, String> s_measureXmlIdMap = {
         { BREATH_M, u"bt" },
         { CAESURA_M, u"cs" },
+        { DIR_M, u"dr" },
         { DYNAM_M, u"dn" },
         { FERMATA_M, u"fm" },
         { HARM_M, u"hr" },
