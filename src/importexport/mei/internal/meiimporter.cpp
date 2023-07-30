@@ -442,6 +442,20 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
 }
 
 /**
+ * Basic helper that removes the '#' characther from a dataURI reference to \@xml:id.
+ */
+
+std::string MeiImporter::xmlIdFrom(std::string dataURI)
+{
+    // Basic check for the @stardid validity
+    if (dataURI.size() < 1 || dataURI.at(0) != '#') {
+        Convert::logs.push_back(String("Could not convert the data.URI '%1'").arg(String::fromStdString(dataURI)));
+        return "";
+    }
+    return dataURI.erase(0, 1);
+}
+
+/**
  * Look for the ChordRest for an MEI element with @startid.
  * Do a lookup in the m_startIdChordRests map with the @startid value to retrieve the ChordRest to which the annotation points to.
  * If there is not @startid but a @tstamp (MEI not written by MuseScore), try to find the corresponding ChordRest
@@ -456,14 +470,7 @@ ChordRest* MeiImporter::findStart(const libmei::Element& meiElement, Measure* me
 
     ChordRest* chordRest = nullptr;
     if (startIdAtt->HasStartid()) {
-        std::string startId = startIdAtt->GetStartid();
-        // Basic check for the @stardid validity
-        if (startId.size() < 1 || startId.at(0) != '#') {
-            Convert::logs.push_back(String("Could not find element for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
-            return nullptr;
-        }
-        startId.erase(0, 1);
-
+        std::string startId = this->xmlIdFrom(startIdAtt->GetStartid());
         // The startid corresponding ChordRest should have been added to the m_startIdChordRests previously
         if (!m_startIdChordRests.count(startId) || !m_startIdChordRests.at(startId)) {
             Convert::logs.push_back(String("Could not find element for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
@@ -510,14 +517,7 @@ ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, const ChordRest* sta
 
     ChordRest* chordRest = nullptr;
     if (startEndIdAtt.HasEndid()) {
-        std::string endId = startEndIdAtt.GetEndid();
-        // Basic check for the @stardid validity
-        if (endId.size() < 1 || endId.at(0) != '#') {
-            Convert::logs.push_back(String("Could not find element for @endid '%1'").arg(String::fromStdString(startEndIdAtt.GetEndid())));
-            return nullptr;
-        }
-        endId.erase(0, 1);
-
+        std::string endId = this->xmlIdFrom(startEndIdAtt.GetEndid());
         // The startid corresponding ChordRest should have been added to the m_startIdChordRests previously
         if (!m_endIdChordRests.count(endId) || !m_endIdChordRests.at(endId)) {
             Convert::logs.push_back(String("Could not find element for @endid '%1'").arg(String::fromStdString(startEndIdAtt.GetEndid())));
