@@ -2574,6 +2574,8 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
             l->setLengthX(e.readInt());
         } else if (tag == "lengthY") {
             l->setLengthY(e.readInt());
+        } else if (tag == "play") {
+            l->setPlayChordLine(e.readBool());
         } else if (tag == "offset" && l->score()->mscVersion() < 400) { // default positions has changed in 4.0 so ignore previous offset
             e.skipCurrentElement();
         } else if (!readItemProperties(l, e, ctx)) {

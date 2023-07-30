@@ -189,7 +189,7 @@ void ChordArticulationsParser::parseChordLine(const Chord* chord, const Renderin
 {
     const ChordLine* chordLine = chord->chordLine();
 
-    if (!chordLine) {
+    if (!chordLine || !chordLine->playChordLine()) {
         return;
     }
 

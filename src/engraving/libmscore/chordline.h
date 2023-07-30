@@ -91,6 +91,9 @@ public:
     bool isToTheLeft() const { return m_chordLineType == ChordLineType::PLOP || m_chordLineType == ChordLineType::SCOOP; }
     bool isBelow() const { return m_chordLineType == ChordLineType::SCOOP || m_chordLineType == ChordLineType::FALL; }
 
+    bool playChordLine() const { return m_playChordLine; }
+    void setPlayChordLine(bool val) { m_playChordLine = val; }
+
     void setNote(Note* note);
     Note* note() const { return m_note; }
 
@@ -109,6 +112,7 @@ private:
     bool m_modified = false;
     double m_lengthX = 0.0;
     double m_lengthY = 0.0;
+    bool m_playChordLine = true;
     Note* m_note = nullptr;
 };
 } // namespace mu::engraving
