@@ -47,6 +47,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
+#include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
@@ -296,14 +297,14 @@ bool MeiExporter::writeScoreDef()
             break;
         }
     }
-    
+
     // Probably no music in the file (see vtest/scores/frametext.mscx)
     if (!measure) {
         // pop the scoreDef
         m_currentNode = m_currentNode.parent();
         return true;
     }
-    
+
     m_currentNode = m_currentNode.append_child("staffGrp");
 
     for (Part* part : m_score->parts()) {
@@ -319,7 +320,7 @@ bool MeiExporter::writeScoreDef()
             staffGrpPart = nullptr;
         }
     }
-    
+
     // pop the staffGrp
     m_currentNode = m_currentNode.parent();
     // pop the scoreDef
@@ -788,6 +789,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTempoText()) {
             success = success && this->writeTempo(dynamic_cast<const TempoText*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isTie()) {
+            success = success && this->writeTie(dynamic_cast<const Tie*>(controlEvent.first), controlEvent.second);
         }
     }
     m_startingControlEventMap.clear();
@@ -1152,6 +1155,13 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->fillControlEventMap(xmlId, chord);
     }
 
+    if (note->tieFor()) {
+        m_startingControlEventMap[note->tieFor()] = "#" + xmlId;
+    }
+    if (note->tieBack()) {
+        m_endingControlEventMap[note->tieBack()] = "#" + xmlId;
+    }
+
     if (meiAccid.HasAccid() || meiAccid.HasAccidGes()) {
         pugi::xml_node accidNode = noteNode.append_child();
         meiAccid.Write(accidNode, this->getLayerXmlIdFor(ACCID_L));
@@ -1441,6 +1451,28 @@ bool MeiExporter::writeTempo(const TempoText* tempoText, const std::string& star
     meiTempo.Write(tempoNode, this->getMeasureXmlIdFor(DYNAM_M));
 
     this->writeLinesWithSMuFL(tempoNode, meiLines);
+
+    return true;
+}
+
+/**
+ * Write a tie.
+ */
+
+bool MeiExporter::writeTie(const Tie* tie, const std::string& startid)
+{
+    IF_ASSERT_FAILED(tie) {
+        return false;
+    }
+
+    pugi::xml_node tieNode = m_currentNode.append_child();
+    libmei::Tie meiTie = Convert::tieToMEI(tie);
+    meiTie.SetStartid(startid);
+
+    meiTie.Write(tieNode, this->getMeasureXmlIdFor(TIE_M));
+
+    // Add the node to the map of open control events
+    m_openControlEventMap[tie] = tieNode;
 
     return true;
 }

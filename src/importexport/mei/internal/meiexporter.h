@@ -47,6 +47,7 @@ enum measureElementCounter {
     REPEATMARK_M,
     SLUR_M,
     TEMPO_M,
+    TIE_M,
     UNSPECIFIED_M
 };
 
@@ -116,6 +117,7 @@ private:
     bool writeRepeatMark(const engraving::Marker* marker, const engraving::Measure* measure);
     bool writeSlur(const engraving::Slur* slur, const std::string& startid);
     bool writeTempo(const engraving::TempoText* tempoText, const std::string& startid);
+    bool writeTie(const engraving::Tie* tie, const std::string& startid);
 
     /**
      * Methods for writing specific MEI attribute classes within elements
@@ -203,6 +205,7 @@ private:
         { REPEATMARK_M, u"rp" },
         { SLUR_M, u"sl" },
         { TEMPO_M, u"tp" },
+        { TIE_M, u"ti" },
         { UNSPECIFIED_M, u"z" }
     };
 
