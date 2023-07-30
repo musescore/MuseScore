@@ -34,6 +34,7 @@ public:
     enum Type
     {
         Equal,
+        NotEqual,
         Contains
     };
     Q_ENUM(Type)
@@ -48,6 +49,9 @@ class FilterValue : public QObject
     Q_PROPERTY(mu::uicomponents::CompareType::Type compareType READ compareType WRITE setCompareType NOTIFY dataChanged)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY dataChanged)
 
+    /// Determines whether the SortFilterProxyModel should react asynchronously to the `dataChanged` signal.
+    Q_PROPERTY(bool async READ async WRITE setAsync NOTIFY dataChanged)
+
 public:
     explicit FilterValue(QObject* parent = nullptr);
 
@@ -55,6 +59,9 @@ public:
     QVariant roleValue() const;
     CompareType::Type compareType() const;
     bool enabled() const;
+
+    bool async() const;
+    void setAsync(bool async);
 
 public slots:
     void setRoleName(QString roleName);
@@ -70,6 +77,7 @@ private:
     QVariant m_roleValue;
     CompareType::Type m_compareType = CompareType::Equal;
     bool m_enabled = true;
+    bool m_async = false;
 };
 }
 

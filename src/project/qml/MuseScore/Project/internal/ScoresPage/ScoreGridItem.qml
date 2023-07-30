@@ -36,7 +36,7 @@ FocusScope {
     property alias timeSinceModified: timeSinceModified.text
     property string thumbnailUrl: ""
     property bool isCreateNew: false
-    property bool isNoResultFound: false
+    property bool isNoResultsFound: false
     property bool isCloud: false
     property int cloudScoreId: 0
 
@@ -101,7 +101,7 @@ FocusScope {
                             return addComp
                         }
 
-                        if (root.isNoResultFound) {
+                        if (root.isNoResultsFound) {
                             return noResultFoundComp
                         }
 
@@ -262,7 +262,7 @@ FocusScope {
 
                 font.capitalization: Font.AllUppercase
 
-                visible: !root.isCreateNew && !root.isNoResultFound
+                visible: !root.isCreateNew && !root.isNoResultsFound
             }
         }
     }

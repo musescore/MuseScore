@@ -49,6 +49,7 @@ signals:
 protected:
     enum Roles {
         NameRole = Qt::UserRole + 1,
+        IsNoResultsFoundRole,
         ScoreRole
     };
 
@@ -58,7 +59,7 @@ protected:
     static const QString THUMBNAIL_URL_KEY;
     static const QString TIME_SINCE_MODIFIED_KEY;
     static const QString IS_CREATE_NEW_KEY;
-    static const QString IS_NO_RESULT_FOUND_KEY;
+    static const QString IS_NO_RESULTS_FOUND_KEY;
     static const QString IS_CLOUD_KEY;
     static const QString CLOUD_SCORE_ID_KEY;
 

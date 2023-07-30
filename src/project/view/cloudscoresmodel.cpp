@@ -131,7 +131,7 @@ void CloudScoresModel::loadItemsIfNecessary()
                     obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(Date::fromQDate(item.lastModified.date())).toQString();
                     obj[THUMBNAIL_URL_KEY] = item.thumbnailUrl;
                     obj[IS_CREATE_NEW_KEY] = false;
-                    obj[IS_NO_RESULT_FOUND_KEY] = false;
+                    obj[IS_NO_RESULTS_FOUND_KEY] = false;
 
                     m_items.push_back(obj);
                 }

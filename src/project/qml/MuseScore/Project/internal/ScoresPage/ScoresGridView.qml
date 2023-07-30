@@ -59,6 +59,21 @@ Item {
         ]
     }
 
+    SortFilterProxyModel {
+        id: itemTypeFilterModel
+        sourceModel: searchFilterModel
+
+        filters: [
+            FilterValue {
+                roleName: "isNoResultsFound"
+                roleValue: true
+                compareType: CompareType.NotEqual
+                enabled: !Boolean(root.searchText) || searchFilterModel.rowCount > root.model.nonScoreItemIndices.length
+                async: true
+            }
+        ]
+    }
+
     NavigationPanel {
         id: navPanel
         name: "ScoresGridView"
@@ -125,14 +140,11 @@ Item {
             z: 2
         }
 
-        model: searchFilterModel
+        model: itemTypeFilterModel
 
         delegate: Item {
             width: view.cellWidth
             height: view.cellHeight
-
-            // TODO: when an item is invisible, there is still visual space allocated for it
-            visible: score.isNoResultFound ? view.count === root.model.nonScoreItemIndices.length && Boolean(root.searchText) : true
 
             ScoreGridItem {
                 anchors.centerIn: parent
@@ -154,7 +166,7 @@ Item {
                 suffix: score.suffix ?? ""
                 thumbnailUrl: score.thumbnailUrl ?? ""
                 isCreateNew: score.isCreateNew
-                isNoResultFound: score.isNoResultFound
+                isNoResultsFound: score.isNoResultsFound
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
@@ -162,7 +174,7 @@ Item {
                 onClicked: {
                     if (isCreateNew) {
                         root.createNewScoreRequested()
-                    } else if (!isNoResultFound) {
+                    } else if (!isNoResultsFound) {
                         root.openScoreRequested(score.path, score.name)
                     }
                 }

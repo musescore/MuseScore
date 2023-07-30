@@ -87,3 +87,18 @@ void FilterValue::setEnabled(bool enabled)
     m_enabled = enabled;
     emit dataChanged();
 }
+
+bool FilterValue::async() const
+{
+    return m_async;
+}
+
+void FilterValue::setAsync(bool async)
+{
+    if (m_async == async) {
+        return;
+    }
+
+    m_async = async;
+    emit dataChanged();
+}
