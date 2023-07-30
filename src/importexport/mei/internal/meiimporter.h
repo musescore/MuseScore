@@ -143,6 +143,8 @@ private:
     std::string xmlIdFrom(std::string dataURI);
     engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, const engraving::ChordRest* startChordRest);
+    engraving::Note* findStartNote(const libmei::Element& meiElement);
+    engraving::Note* findEndNote(pugi::xml_node controlNode);
     void clearGraceNotes();
 
     /** The Score pointer */
@@ -166,10 +168,14 @@ private:
     /* A map for original staffN and MuseScore parts */
     std::map<int, engraving::Part*> m_staffParts;
 
-    /* A map for startId and corresponding engraving::Segment */
+    /* A map for startId and corresponding engraving::ChordRest */
     std::map<std::string, engraving::ChordRest*> m_startIdChordRests;
-    /* A map for endId and corresponding engraving::Segment */
+    /* A map for endId and corresponding engraving::ChordRest */
     std::map<std::string, engraving::ChordRest*> m_endIdChordRests;
+    /* A map for startId and corresponding engraving::Note */
+    std::map<std::string, engraving::Note*> m_startIdNotes;
+    /* A map for endId and corresponding engraving::Note */
+    std::map<std::string, engraving::Note*> m_endIdNotes;
     /* A map for open spanners that needs to be ended */
     std::map<engraving::Spanner*, pugi::xml_node> m_openSpannerMap;
 
