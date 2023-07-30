@@ -104,6 +104,7 @@ private:
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
     bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
+    bool readTie(pugi::xml_node tieNode, engraving::Measure* measure);
 
     /**
      * Methods for parsing specific MEI attribute classes within elements
@@ -139,6 +140,7 @@ private:
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, Measure* measure);
     engraving::Spanner* addSpanner(const libmei::Element& meiElement, Measure* measure, pugi::xml_node node);
+    std::string xmlIdFrom(std::string dataURI);
     engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, const engraving::ChordRest* startChordRest);
     void clearGraceNotes();
