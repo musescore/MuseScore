@@ -38,6 +38,7 @@
 #include "libmscore/utils.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
+#include "libmscore/tie.h"
 #include "libmscore/tuplet.h"
 #include "engraving/types/typesconv.h"
 #include "types/symnames.h"
@@ -1462,7 +1463,7 @@ libmei::data_STAFFREL Convert::placeToMEI(engraving::PlacementV place)
     }
 }
 
-void Convert::slurFromMEI(engraving::Slur* slur, const libmei::Slur& meiSlur, bool& warning)
+void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur, bool& warning)
 {
     warning = false;
 
@@ -1480,7 +1481,7 @@ void Convert::slurFromMEI(engraving::Slur* slur, const libmei::Slur& meiSlur, bo
     }
 }
 
-libmei::Slur Convert::slurToMEI(const engraving::Slur* slur)
+libmei::Slur Convert::slurToMEI(const engraving::SlurTie* slur)
 {
     libmei::Slur meiSlur;
 
@@ -1798,6 +1799,23 @@ void Convert::textToMEI(textWithSmufl& textBlocks, const String& text)
     if (smuflBlock.size() > 0) {
         textBlocks.push_back(std::make_pair(true, smuflBlock));
     }
+}
+
+void Convert::tieFromMEI(engraving::SlurTie* tie, const libmei::Tie& meiTie, bool& warning)
+{
+    libmei::Slur meiSlur;
+    meiSlur.SetCurvedir(meiTie.GetCurvedir());
+    meiSlur.SetLform(meiTie.GetLform());
+    Convert::slurFromMEI(tie, meiSlur, warning);
+}
+
+libmei::Tie Convert::tieToMEI(const engraving::SlurTie* tie)
+{
+    libmei::Slur meiSlur = Convert::slurToMEI(tie);
+    libmei::Tie meiTie;
+    meiTie.SetCurvedir(meiSlur.GetCurvedir());
+    meiTie.SetLform(meiSlur.GetLform());
+    return meiTie;
 }
 
 void Convert::tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& meiTuplet, bool& warning)

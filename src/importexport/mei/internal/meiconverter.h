@@ -181,8 +181,8 @@ public:
     static engraving::PlacementV placeFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
     static libmei::data_STAFFREL placeToMEI(engraving::PlacementV place);
 
-    static void slurFromMEI(engraving::Slur* slur, const libmei::Slur& meiSlur, bool& warning);
-    static libmei::Slur slurToMEI(const engraving::Slur* slur);
+    static void slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur, bool& warning);
+    static libmei::Slur slurToMEI(const engraving::SlurTie* slur);
 
     static engraving::SlurStyleType slurstyleFromMEI(const libmei::data_LINEFORM meiLine, bool& warning);
     static libmei::data_LINEFORM slurstyleToMEI(engraving::SlurStyleType slurstyle);
@@ -208,6 +208,9 @@ public:
 
     static void textFromMEI(String& text, const textWithSmufl& textBlocks);
     static void textToMEI(textWithSmufl& textBlocks, const String& text);
+
+    static void tieFromMEI(engraving::SlurTie* tie, const libmei::Tie& meiTie, bool& warning);
+    static libmei::Tie tieToMEI(const engraving::SlurTie* tie);
 
     static void tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& meiTuplet, bool& warning);
     static libmei::Tuplet tupletToMEI(const engraving::Tuplet* tuplet);
