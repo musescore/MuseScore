@@ -203,4 +203,23 @@ Item {
             }
         }
     }
+
+    Item {
+        id: noResultsMessage
+        anchors.fill: parent
+
+        // This will become visible if a "No results found" item is not provided by the model.
+        visible: Boolean(root.searchText) && itemTypeFilterModel.rowCount === 0
+
+        Message {
+            anchors.top: parent.top
+            anchors.topMargin: Math.max(parent.height / 3 - height / 2, 0)
+            anchors.left: parent.left
+            anchors.leftMargin: root.sideMargin
+            anchors.right: parent.right
+            anchors.rightMargin: root.sideMargin
+
+            title: qsTrc("project", "No results found")
+        }
+    }
 }

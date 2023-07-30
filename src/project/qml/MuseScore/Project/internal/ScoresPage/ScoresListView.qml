@@ -118,8 +118,12 @@ Item {
         }
 
         Item {
+            id: listViewContainer
+
             Layout.fillWidth: true
             Layout.fillHeight: true
+
+            visible: view.count > 0
 
             ColumnLayout {
                 id: listViewColumn
@@ -234,6 +238,26 @@ Item {
                         color: root.backgroundColor
                     }
                 }
+            }
+        }
+
+        Item {
+            id: noResultsMessage
+
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+
+            visible: Boolean(root.searchText) && !listViewColumn.visible
+
+            Message {
+                anchors.top: parent.top
+                anchors.topMargin: Math.max(parent.height / 3 - height / 2, 0)
+                anchors.left: parent.left
+                anchors.leftMargin: root.sideMargin
+                anchors.right: parent.right
+                anchors.rightMargin: root.sideMargin
+
+                title: qsTrc("project", "No results found")
             }
         }
     }

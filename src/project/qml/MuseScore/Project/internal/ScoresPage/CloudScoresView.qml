@@ -165,24 +165,6 @@ ScoresView {
         }
     }
 
-    component Message : Column {
-        property alias title: titleLabel.text
-        property alias body: bodyLabel.text
-
-        spacing: 16
-
-        StyledTextLabel {
-            id: titleLabel
-            width: parent.width
-            font: ui.theme.tabBoldFont
-        }
-
-        StyledTextLabel {
-            id: bodyLabel
-            width: parent.width
-        }
-    }
-
     Component {
         id: emptyComp
 

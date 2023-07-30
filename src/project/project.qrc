@@ -12,6 +12,7 @@
         <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/ScoreThumbnail.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/Message.qml</file>
         <file>qml/MuseScore/Project/AskSaveLocationTypeDialog.qml</file>
         <file>qml/MuseScore/Project/SaveToCloudDialog.qml</file>
         <file>qml/MuseScore/Project/ExportDialog.qml</file>
