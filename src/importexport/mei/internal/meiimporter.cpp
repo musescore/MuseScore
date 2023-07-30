@@ -506,7 +506,7 @@ ChordRest* MeiImporter::findStart(const libmei::Element& meiElement, Measure* me
 
 /**
  * Look for the ChordRest for an MEI element with @endid.
- * Do a lookup in the m_startIdChordRests map with the @endid value to retrieve the ChordRest to which the annotation points to.
+ * Do a lookup in the m_endIdChordRests map with the @endid value to retrieve the ChordRest to which the annotation points to.
  * If there is not @endid but a @tstamp2 (MEI not written by MuseScore), try to find the corresponding ChordRest
  */
 
@@ -518,7 +518,7 @@ ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, const ChordRest* sta
     ChordRest* chordRest = nullptr;
     if (startEndIdAtt.HasEndid()) {
         std::string endId = this->xmlIdFrom(startEndIdAtt.GetEndid());
-        // The startid corresponding ChordRest should have been added to the m_startIdChordRests previously
+        // The endid corresponding ChordRest should have been added to the m_endIdChordRests previously
         if (!m_endIdChordRests.count(endId) || !m_endIdChordRests.at(endId)) {
             Convert::logs.push_back(String("Could not find element for @endid '%1'").arg(String::fromStdString(startEndIdAtt.GetEndid())));
             return nullptr;
@@ -567,6 +567,51 @@ ChordRest* MeiImporter::findEnd(pugi::xml_node controlNode, const ChordRest* sta
     }
 
     return chordRest;
+}
+
+/**
+ * Look for the Note for an MEI element with @startid.
+ * Do a lookup in the m_startIdNotes map with the @startid value to retrieve the Note to which the element points to.
+ */
+
+Note* MeiImporter::findStartNote(const libmei::Element& meiElement)
+{
+    const libmei::AttStartId* startIdAtt = dynamic_cast<const libmei::AttStartId*>(&meiElement);
+    IF_ASSERT_FAILED(startIdAtt && startIdAtt->HasStartid()) {
+        return nullptr;
+    }
+
+    std::string startId = this->xmlIdFrom(startIdAtt->GetStartid());
+    // The startid corresponding Note should have been added to the m_startIdNotes previously
+    if (!m_startIdNotes.count(startId) || !m_startIdNotes.at(startId)) {
+        Convert::logs.push_back(String("Could not find note for @startid '%1'").arg(String::fromStdString(startIdAtt->GetStartid())));
+        return nullptr;
+    }
+    return m_startIdNotes.at(startId);
+}
+
+/**
+ * Look for the Note for an MEI element with @endid.
+ * Do a lookup in the m_endIdNotes map with the @endid value to retrieve the Note to which the element points to.
+ */
+
+Note* MeiImporter::findEndNote(pugi::xml_node controlNode)
+{
+    libmei::InstStartEndId startEndIdAtt;
+    startEndIdAtt.ReadStartEndId(controlNode);
+
+    // This should not happend because an element without and @endid will not have been added to the map
+    if (!startEndIdAtt.HasEndid()) {
+        return nullptr;
+    }
+
+    std::string endId = this->xmlIdFrom(startEndIdAtt.GetEndid());
+    // The endid corresponding Note should have been added to the m_endIdNotes previously
+    if (!m_endIdNotes.count(endId) || !m_endIdNotes.at(endId)) {
+        Convert::logs.push_back(String("Could not find note for @endid '%1'").arg(String::fromStdString(startEndIdAtt.GetEndid())));
+        return nullptr;
+    }
+    return m_endIdNotes.at(endId);
 }
 
 /**
@@ -1463,6 +1508,14 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, engraving::Measure* measure,
 
     Note* note = Factory::createNote(chord);
 
+    // If there is a reference to the note in the MEI, add it the maps (e.g., for ties)
+    if (m_startIdChordRests.count(meiNote.m_xmlId)) {
+        m_startIdNotes[meiNote.m_xmlId] = note;
+    }
+    if (m_endIdChordRests.count(meiNote.m_xmlId)) {
+        m_endIdNotes[meiNote.m_xmlId] = note;
+    }
+
     int tpc1 = mu::engraving::transposeTpc(pitchSt.tpc2, interval, true);
     note->setPitch(pitchSt.pitch, tpc1, pitchSt.tpc2);
 
@@ -1581,6 +1634,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readSlur(xpathNode.node(), measure);
         } else if (elementName == "tempo") {
             success = success && this->readTempo(xpathNode.node(), measure);
+        } else if (elementName == "tie") {
+            success = success && this->readTie(xpathNode.node(), measure);
         }
     }
     return success;
@@ -1812,6 +1867,41 @@ bool MeiImporter::readTempo(pugi::xml_node tempoNode, engraving::Measure* measur
     this->readLinesWithSmufl(tempoNode, meiLines);
 
     Convert::tempoFromMEI(tempoText, meiLines, meiTempo, warning);
+
+    return true;
+}
+
+/**
+ * Read a tie.
+ */
+
+bool MeiImporter::readTie(pugi::xml_node tieNode, engraving::Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Tie meiTie;
+    meiTie.Read(tieNode);
+
+    // We do not use addSpanner here because Tie object are added directy to the start and end Note objects
+    Note* startNote = this->findStartNote(meiTie);
+    if (!startNote) {
+        // Here we could detect if a if its a tied chord (for files not exported from MuseScore)
+        // We would need a dedicated list and tie each note once the second chord has been found.
+        return true;
+    }
+
+    Tie* tie = new Tie(m_score->dummy());
+    startNote->setTieFor(tie);
+    tie->setStartNote(startNote);
+    tie->setTrack(startNote->track());
+
+    // Still add the Tie to the open Spanner map, which will handle ties differently as appropriate
+    m_openSpannerMap[tie] = tieNode;
+
+    Convert::tieFromMEI(tie, meiTie, warning);
 
     return true;
 }
@@ -2137,16 +2227,24 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 void MeiImporter::addSpannerEnds()
 {
     for (auto spanner : m_openSpannerMap) {
-        if (!spanner.first->startCR()) {
-            continue;
+        // Ties are added directly to the notes
+        if (spanner.first->isTie()) {
+            Note* endNote = this->findEndNote(spanner.second);
+            if (!endNote) {
+                continue;
+            }
+            Tie* tie = toTie(spanner.first);
+            endNote->setTieBack(tie);
+            tie->setEndNote(endNote);
+            // All other Spanners
+        } else if (spanner.first->startCR()) {
+            ChordRest* chordRest = this->findEnd(spanner.second, spanner.first->startCR());
+            if (!chordRest) {
+                continue;
+            }
+            spanner.first->setTick2(chordRest->tick());
+            spanner.first->setEndElement(chordRest);
+            spanner.first->setTrack2(chordRest->track());
         }
-
-        ChordRest* chordRest = this->findEnd(spanner.second, spanner.first->startCR());
-        if (!chordRest) {
-            continue;
-        }
-        spanner.first->setTick2(chordRest->tick());
-        spanner.first->setEndElement(chordRest);
-        spanner.first->setTrack2(chordRest->track());
     }
 }
