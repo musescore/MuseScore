@@ -54,3 +54,4 @@ StyledListView 1.0 StyledListView.qml
 StyledGridView 1.0 StyledGridView.qml
 SelectMultipleDirectoriesDialog 1.0 SelectMultipleDirectoriesDialog.qml
 StyledBusyIndicator 1.0 StyledBusyIndicator.qml
+GradientRectangle 1.0 GradientRectangle.qml

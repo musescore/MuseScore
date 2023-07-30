@@ -245,6 +245,8 @@ FocusScope {
             authorOrganizationName: author.organizationName
             authorOrganizationUrl: author.organizationUrl
 
+            backgroundColor: root.color
+
             navigation.section: navSec
             navigation.order: 5
             navigation.name: "LearnClasses"
