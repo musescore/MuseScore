@@ -2886,6 +2886,27 @@ void Score::deleteItem(EngravingItem* el)
     }
     break;
 
+    case ElementType::STAFFTYPE_CHANGE:
+    {
+        undoRemoveElement(el);
+
+        // if instrument change there, restore instrument's default staffType
+        Staff* staff = el->staff();
+        Part* part = el->part();
+        Measure* m = el->findMeasure();
+        Fraction tick = el->tick();
+        if (part && part->instruments().find(tick.ticks()) != part->instruments().end()) {
+            StaffType* tempStaffType = new StaffType(part->instrument(tick)->defaultStaffType());
+            StaffTypeChange* stc = Factory::createStaffTypeChange(m);
+            stc->setParent(m);
+            stc->setTrack(staff->idx() * VOICES);
+            stc->setStaffType(tempStaffType, true);
+            stc->setForInstrumentChange(true);
+            score()->undoAddElement(stc);
+        }
+    }
+    break;
+
     default:
         undoRemoveElement(el);
         break;
