@@ -48,14 +48,9 @@ FretCircle::~FretCircle()
 //   draw
 //---------------------------------------------------------
 
-void FretCircle::draw(mu::draw::Painter* painter) const
+void FretCircle::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    painter->save();
-    painter->setPen(mu::draw::Pen(curColor(), spatium() * FretCircle::CIRCLE_WIDTH));
-    painter->setBrush(mu::draw::BrushStyle::NoBrush);
-    painter->drawEllipse(m_rect);
-    painter->restore();
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
