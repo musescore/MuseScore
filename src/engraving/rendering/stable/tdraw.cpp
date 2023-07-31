@@ -41,6 +41,8 @@
 #include "libmscore/bracket.h"
 #include "libmscore/breath.h"
 
+#include "libmscore/chordline.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/note.h"
@@ -68,6 +70,7 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::ARTICULATION: draw(item_cast<const Articulation*>(item), painter);
         break;
+
     case ElementType::BAGPIPE_EMBELLISHMENT: draw(item_cast<const BagpipeEmbellishment*>(item), painter);
         break;
     case ElementType::BAR_LINE:     draw(item_cast<const BarLine*>(item), painter);
@@ -88,6 +91,10 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::BREATH:       draw(item_cast<const Breath*>(item), painter);
         break;
+
+    case ElementType::CHORDLINE:    draw(item_cast<const ChordLine*>(item), painter);
+        break;
+
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
     default:
@@ -783,4 +790,19 @@ void TDraw::draw(const Breath* item, Painter* painter)
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor());
     item->drawSymbol(item->symId(), painter);
+}
+
+void TDraw::draw(const ChordLine* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (!item->isWavy()) {
+        painter->setPen(Pen(item->curColor(), item->style().styleMM(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
+        painter->setBrush(BrushStyle::NoBrush);
+        painter->drawPath(item->path());
+    } else {
+        painter->save();
+        painter->rotate((item->chordLineType() == ChordLineType::FALL ? 1 : -1) * ChordLine::WAVE_ANGEL);
+        item->drawSymbols(ChordLine::WAVE_SYMBOLS, painter);
+        painter->restore();
+    }
 }
