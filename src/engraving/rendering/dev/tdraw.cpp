@@ -55,6 +55,7 @@
 #include "libmscore/figuredbass.h"
 #include "libmscore/fingering.h"
 #include "libmscore/fret.h"
+#include "libmscore/fretcircle.h"
 
 #include "libmscore/ornament.h"
 
@@ -127,6 +128,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::FINGERING:    draw(item_cast<const Fingering*>(item), painter);
         break;
     case ElementType::FRET_DIAGRAM: draw(item_cast<const FretDiagram*>(item), painter);
+        break;
+    case ElementType::FRET_CIRCLE:  draw(item_cast<const FretCircle*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1057,6 +1060,16 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     if (item->orientation() == Orientation::HORIZONTAL) {
         painter->restore();
     }
+}
+
+void TDraw::draw(const FretCircle* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->save();
+    painter->setPen(mu::draw::Pen(item->curColor(), item->spatium() * FretCircle::CIRCLE_WIDTH));
+    painter->setBrush(mu::draw::BrushStyle::NoBrush);
+    painter->drawEllipse(item->rect());
+    painter->restore();
 }
 
 void TDraw::drawTextBase(const TextBase* item, Painter* painter)

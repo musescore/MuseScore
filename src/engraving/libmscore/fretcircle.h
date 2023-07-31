@@ -31,6 +31,7 @@ class Chord;
 class FretCircle final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, FretCircle)
+    DECLARE_CLASSOF(ElementType::FRET_CIRCLE)
 
 public:
 
