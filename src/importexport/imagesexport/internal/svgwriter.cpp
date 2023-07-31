@@ -146,7 +146,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                     if (measure->isMeasure() && mu::engraving::toMeasure(measure)->visible(staffIndex)) {
                         mu::engraving::StaffLines* sl = mu::engraving::toMeasure(measure)->staffLines(static_cast<int>(staffIndex));
                         printer.setElement(sl);
-                        scoreRender()->paintItem(painter, sl);
+                        scoreRenderer()->paintItem(painter, sl);
                     }
                 }
             } else {   // Draw staff lines once per system
@@ -163,7 +163,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                 firstSL->setLines(lines);
 
                 printer.setElement(firstSL);
-                scoreRender()->paintItem(painter, firstSL);
+                scoreRenderer()->paintItem(painter, firstSL);
             }
         }
     }
@@ -223,7 +223,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
         printer.setElement(element);
 
         // Paint it
-        scoreRender()->paintItem(painter, element);
+        scoreRenderer()->paintItem(painter, element);
     }
 
     painter.endDraw(); // Writes MuseScore SVG file to disk, finally

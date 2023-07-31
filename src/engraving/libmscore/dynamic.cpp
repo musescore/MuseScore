@@ -235,7 +235,7 @@ double Dynamic::customTextOffset()
 
     Dynamic referenceDynamic(*this);
     referenceDynamic.setXmlText(referenceString);
-    rendering()->layoutItem(toTextBase(&referenceDynamic));
+    renderer()->layoutItem(toTextBase(&referenceDynamic));
 
     TextFragment referenceFragment;
     if (!referenceDynamic.textBlockList().empty()) {
@@ -508,7 +508,7 @@ mu::RectF Dynamic::drag(EditData& ed)
             score()->undo(new ChangeParent(this, seg, si));
             setOffset(PointF());
 
-            rendering()->layoutItem(this);
+            renderer()->layoutItem(this);
 
             PointF pos2(canvasPos());
             const PointF newOffset = pos1 - pos2;

@@ -204,7 +204,7 @@ Text* Page::layoutHeaderFooter(int area, const String& ss) const
     }
     text->setAlign(align);
     text->setXmlText(s);
-    rendering()->layoutItem(text);
+    renderer()->layoutItem(text);
     return text;
 }
 

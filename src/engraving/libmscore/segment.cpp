@@ -2313,7 +2313,7 @@ void Segment::createShape(staff_idx_t staffIdx)
 
         if (e->isHarmony()) {
             // use same spacing calculation as for chordrest
-            rendering()->layoutItem(toHarmony(e));
+            renderer()->layoutItem(toHarmony(e));
 
             double x1 = e->bbox().x() + e->pos().x();
             double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();

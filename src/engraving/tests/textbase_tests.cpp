@@ -139,7 +139,7 @@ TEST_F(Engraving_TextBaseTests, undoChangeFontStyleProperty)
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     StaffText* staffText = addStaffText(score);
     staffText->setXmlText(u"normal <b>bold</b> <u>underline</u> <i>italic</i>");
-    EngravingItem::rendering()->layoutItem(staffText);
+    EngravingItem::renderer()->layoutItem(staffText);
     score->startCmd();
     staffText->undoChangeProperty(Pid::FONT_STYLE, PropertyValue::fromValue(0), PropertyFlags::UNSTYLED);
     score->endCmd();
@@ -177,7 +177,7 @@ TEST_F(Engraving_TextBaseTests, musicalSymbolsNotBold)
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     StaffText* staffText = addStaffText(score);
     staffText->setXmlText(u"<b>Allegro <sym>metNoteQuarterUp</sym> = 120</b>");
-    EngravingItem::rendering()->layoutItem(staffText);
+    EngravingItem::renderer()->layoutItem(staffText);
     auto fragmentList = staffText->fragmentList();
     EXPECT_TRUE(fragmentList.front().font(staffText).bold());
     EXPECT_TRUE(!std::next(fragmentList.begin())->font(staffText).bold());
@@ -188,7 +188,7 @@ TEST_F(Engraving_TextBaseTests, musicalSymbolsNotItalic)
     MasterScore* score = ScoreRW::readScore(u"test.mscx");
     Dynamic* dynamic = addDynamic(score);
     dynamic->setXmlText(u"molto <sym>dynamicForte</sym>");
-    EngravingItem::rendering()->layoutItem(dynamic);
+    EngravingItem::renderer()->layoutItem(dynamic);
     auto fragmentList = dynamic->fragmentList();
     EXPECT_TRUE(fragmentList.front().font(dynamic).italic());
     EXPECT_TRUE(!std::next(fragmentList.begin())->font(dynamic).italic());

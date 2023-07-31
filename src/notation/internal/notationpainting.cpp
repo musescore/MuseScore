@@ -81,12 +81,12 @@ int NotationPainting::pageCount() const
 
 SizeF NotationPainting::pageSizeInch() const
 {
-    return scoreRender()->pageSizeInch(score());
+    return scoreRenderer()->pageSizeInch(score());
 }
 
 SizeF NotationPainting::pageSizeInch(const Options& opt) const
 {
-    return scoreRender()->pageSizeInch(score(), opt);
+    return scoreRenderer()->pageSizeInch(score(), opt);
 }
 
 bool NotationPainting::isPaintPageBorder() const
@@ -117,7 +117,7 @@ void NotationPainting::doPaint(draw::Painter* painter, const Options& opt)
         paintPageSheet(painter, page, pageRect, printPageBackground);
     };
 
-    scoreRender()->paintScore(painter, score(), myopt);
+    scoreRenderer()->paintScore(painter, score(), myopt);
 
     if (!myopt.isPrinting) {
         static_cast<NotationInteraction*>(m_notation->interaction().get())->paint(painter);

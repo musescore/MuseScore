@@ -170,7 +170,7 @@ mu::RectF Rest::drag(EditData& ed)
     }
     setOffset(PointF(s.x(), s.y()));
 
-    rendering()->layoutItem(this);
+    renderer()->layoutItem(this);
 
     score()->rebuildBspTree();
     return abbox().united(r);
@@ -896,7 +896,7 @@ bool Rest::setProperty(Pid propertyId, const PropertyValue& v)
         score()->addRefresh(canvasBoundingRect());
         setOffset(v.value<PointF>());
 
-        rendering()->layoutItem(this);
+        renderer()->layoutItem(this);
 
         score()->addRefresh(canvasBoundingRect());
         if (measure() && durationType().type() == DurationType::V_MEASURE) {

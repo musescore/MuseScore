@@ -128,7 +128,7 @@ DrawDataPtr DrawDataGenerator::genDrawData(const io::path_t& scorePath, const Ge
         option.isSetViewport = true;
         option.isPrinting = true;
 
-        scoreRender()->paintScore(&painter, score, option);
+        scoreRenderer()->paintScore(&painter, score, option);
     }
 
     delete score;
@@ -153,7 +153,7 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
 
     LOGD() << "success loaded: " << scorePath;
 
-    const SizeF pageSizeInch = scoreRender()->pageSizeInch(score);
+    const SizeF pageSizeInch = scoreRenderer()->pageSizeInch(score);
 
     int width = std::lrint(pageSizeInch.width() * DrawData::CANVAS_DPI);
     int height = std::lrint(pageSizeInch.height() * DrawData::CANVAS_DPI);
@@ -175,7 +175,7 @@ Pixmap DrawDataGenerator::genImage(const io::path_t& scorePath) const
         opt.isMultiPage = false;
         opt.isPrinting = true;
 
-        scoreRender()->paintScore(&painter, score, opt);
+        scoreRenderer()->paintScore(&painter, score, opt);
     }
 
     return Pixmap::fromQImage(image);

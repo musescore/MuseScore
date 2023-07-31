@@ -242,7 +242,7 @@ class Score : public EngravingObject
     INJECT(IEngravingFontsProvider, engravingFonts)
 
     // internal
-    INJECT(rendering::IScoreRenderer, rendering)
+    INJECT(rendering::IScoreRenderer, renderer)
 
 public:
     Score(const Score&) = delete;

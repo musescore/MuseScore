@@ -26,7 +26,6 @@
 
 #include "containers.h"
 
-#include "iengravingfont.h"
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -104,7 +103,7 @@ void Arpeggio::editDrag(EditData& ed)
         m_userLen2 += d;
     }
 
-    rendering()->layoutItem(this);
+    renderer()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -201,7 +200,7 @@ bool Arpeggio::edit(EditData& ed)
         }
     }
 
-    rendering()->layoutOnEdit(this);
+    renderer()->layoutOnEdit(this);
 
     return true;
 }

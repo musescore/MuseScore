@@ -1401,7 +1401,7 @@ EngravingItem* Measure::drop(EditData& data)
         e->setParent(seg);
         e->setTrack(staffIdx * VOICES);
 
-        rendering()->layoutItem(e);
+        renderer()->layoutItem(e);
 
         {
             PointF uo(data.pos - e->canvasPos() - data.dragOffset);

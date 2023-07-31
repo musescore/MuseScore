@@ -218,7 +218,7 @@ void Paint::paintItem(mu::draw::Painter& painter, const EngravingItem* item)
     PointF itemPosition(item->pagePos());
 
     painter.translate(itemPosition);
-    EngravingItem::rendering()->drawItem(item, &painter);
+    EngravingItem::renderer()->drawItem(item, &painter);
     painter.translate(-itemPosition);
 }
 

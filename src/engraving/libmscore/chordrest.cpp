@@ -195,7 +195,7 @@ EngravingItem* ChordRest::drop(EditData& data)
                 l->setParent(seg);
                 score->undoAddElement(l);
 
-                rendering()->layoutItem(l);
+                renderer()->layoutItem(l);
             }
         }
         delete e;
@@ -594,11 +594,11 @@ void ChordRest::removeDeleteBeam(bool beamed)
         if (b->empty()) {
             score()->undoRemoveElement(b);
         } else {
-            rendering()->layoutBeam1(b);
+            renderer()->layoutBeam1(b);
         }
     }
     if (!beamed && isChord()) {
-        rendering()->layoutStem(toChord(this));
+        renderer()->layoutStem(toChord(this));
     }
 }
 
