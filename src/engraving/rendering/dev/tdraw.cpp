@@ -39,6 +39,7 @@
 #include "libmscore/box.h"
 #include "libmscore/textframe.h"
 #include "libmscore/bracket.h"
+#include "libmscore/breath.h"
 
 #include "libmscore/ornament.h"
 
@@ -82,6 +83,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TBOX:         draw(item_cast<const TBox*>(item), painter);
         break;
     case ElementType::BRACKET:      draw(item_cast<const Bracket*>(item), painter);
+        break;
+    case ElementType::BREATH:       draw(item_cast<const Breath*>(item), painter);
         break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -747,4 +750,11 @@ void TDraw::draw(const Bracket* item, Painter* painter)
     case BracketType::NO_BRACKET:
         break;
     }
+}
+
+void TDraw::draw(const Breath* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->symId(), painter);
 }
