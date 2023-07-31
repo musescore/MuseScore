@@ -77,70 +77,9 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 //   draw
 //---------------------------------------------------------
 
-void GlissandoSegment::draw(mu::draw::Painter* painter) const
+void GlissandoSegment::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-
-    if (pos2().x() <= 0) {
-        return;
-    }
-
-    painter->save();
-    double _spatium = spatium();
-
-    Pen pen(curColor(visible(), glissando()->lineColor()));
-    pen.setWidthF(glissando()->lineWidth());
-    pen.setCapStyle(PenCapStyle::RoundCap);
-    painter->setPen(pen);
-
-    // rotate painter so that the line become horizontal
-    double w     = pos2().x();
-    double h     = pos2().y();
-    double l     = sqrt(w * w + h * h);
-    double wi    = asin(-h / l) * 180.0 / M_PI;
-    painter->rotate(-wi);
-
-    if (glissando()->glissandoType() == GlissandoType::STRAIGHT) {
-        painter->drawLine(LineF(0.0, 0.0, l, 0.0));
-    } else if (glissando()->glissandoType() == GlissandoType::WAVY) {
-        RectF b = symBbox(SymId::wiggleTrill);
-        double a  = symAdvance(SymId::wiggleTrill);
-        int n    = static_cast<int>(l / a);          // always round down (truncate) to avoid overlap
-        double x  = (l - n * a) * 0.5;     // centre line in available space
-        SymIdList ids;
-        for (int i = 0; i < n; ++i) {
-            ids.push_back(SymId::wiggleTrill);
-        }
-
-        score()->engravingFont()->draw(ids, painter, magS(), PointF(x, -(b.y() + b.height() * 0.5)));
-    }
-
-    if (glissando()->showText()) {
-        mu::draw::Font f(glissando()->fontFace(), draw::Font::Type::Unknown);
-        f.setPointSizeF(glissando()->fontSize() * _spatium / SPATIUM20);
-        f.setBold(glissando()->fontStyle() & FontStyle::Bold);
-        f.setItalic(glissando()->fontStyle() & FontStyle::Italic);
-        f.setUnderline(glissando()->fontStyle() & FontStyle::Underline);
-        f.setStrike(glissando()->fontStyle() & FontStyle::Strike);
-        mu::draw::FontMetrics fm(f);
-        RectF r = fm.boundingRect(glissando()->text());
-
-        // if text longer than available space, skip it
-        if (r.width() < l) {
-            double yOffset = r.height() + r.y();             // find text descender height
-            // raise text slightly above line and slightly more with WAVY than with STRAIGHT
-            yOffset += _spatium * (glissando()->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
-
-            mu::draw::Font scaledFont(f);
-            scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-            painter->setFont(scaledFont);
-
-            double x = (l - r.width()) * 0.5;
-            painter->drawText(PointF(x, -yOffset), glissando()->text());
-        }
-    }
-    painter->restore();
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
