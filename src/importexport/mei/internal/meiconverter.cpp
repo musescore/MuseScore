@@ -1529,6 +1529,8 @@ libmei::data_STAFFREL Convert::placeToMEI(engraving::PlacementV place)
     switch (place) {
     case (engraving::PlacementV::ABOVE): return libmei::STAFFREL_above;
     case (engraving::PlacementV::BELOW): return libmei::STAFFREL_below;
+    default:
+        return libmei::STAFFREL_above;
     }
 }
 
