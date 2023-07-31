@@ -46,6 +46,8 @@
 #include "libmscore/clef.h"
 #include "libmscore/capo.h"
 
+#include "libmscore/deadslapped.h"
+
 #include "libmscore/note.h"
 
 #include "libmscore/ornament.h"
@@ -102,6 +104,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::CLEF:         draw(item_cast<const Clef*>(item), painter);
         break;
     case ElementType::CAPO:         draw(item_cast<const Capo*>(item), painter);
+        break;
+
+    case ElementType::DEAD_SLAPPED: draw(item_cast<const DeadSlapped*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -829,6 +834,15 @@ void TDraw::draw(const Clef* item, Painter* painter)
 void TDraw::draw(const Capo* item, Painter* painter)
 {
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const DeadSlapped* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(draw::PenStyle::NoPen);
+    painter->setBrush(item->curColor());
+    painter->drawPath(item->path1());
+    painter->drawPath(item->path2());
 }
 
 void TDraw::drawTextBase(const TextBase* item, Painter* painter)

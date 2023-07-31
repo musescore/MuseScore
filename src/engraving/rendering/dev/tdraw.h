@@ -194,6 +194,8 @@ private:
     static void draw(const Clef* item, draw::Painter* painter);
     static void draw(const Capo* item, draw::Painter* painter);
 
+    static void draw(const DeadSlapped* item, draw::Painter* painter);
+
     static void draw(const Ornament* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
