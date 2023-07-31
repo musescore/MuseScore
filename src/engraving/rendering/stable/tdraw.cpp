@@ -47,6 +47,7 @@
 #include "libmscore/capo.h"
 
 #include "libmscore/deadslapped.h"
+#include "libmscore/dynamic.h"
 
 #include "libmscore/note.h"
 
@@ -107,6 +108,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::DEAD_SLAPPED: draw(item_cast<const DeadSlapped*>(item), painter);
+        break;
+    case ElementType::DYNAMIC:      draw(item_cast<const Dynamic*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -843,6 +846,11 @@ void TDraw::draw(const DeadSlapped* item, Painter* painter)
     painter->setBrush(item->curColor());
     painter->drawPath(item->path1());
     painter->drawPath(item->path2());
+}
+
+void TDraw::draw(const Dynamic* item, Painter* painter)
+{
+    drawTextBase(item, painter);
 }
 
 void TDraw::drawTextBase(const TextBase* item, Painter* painter)

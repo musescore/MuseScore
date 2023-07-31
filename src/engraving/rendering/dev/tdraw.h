@@ -195,6 +195,7 @@ private:
     static void draw(const Capo* item, draw::Painter* painter);
 
     static void draw(const DeadSlapped* item, draw::Painter* painter);
+    static void draw(const Dynamic* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 
