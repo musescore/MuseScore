@@ -57,6 +57,8 @@
 #include "libmscore/fret.h"
 #include "libmscore/fretcircle.h"
 
+#include "libmscore/glissando.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/textbase.h"
@@ -130,6 +132,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::FRET_DIAGRAM: draw(item_cast<const FretDiagram*>(item), painter);
         break;
     case ElementType::FRET_CIRCLE:  draw(item_cast<const FretCircle*>(item), painter);
+        break;
+
+    case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1069,6 +1074,72 @@ void TDraw::draw(const FretCircle* item, Painter* painter)
     painter->setPen(mu::draw::Pen(item->curColor(), item->spatium() * FretCircle::CIRCLE_WIDTH));
     painter->setBrush(mu::draw::BrushStyle::NoBrush);
     painter->drawEllipse(item->rect());
+    painter->restore();
+}
+
+void TDraw::draw(const GlissandoSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->pos2().x() <= 0) {
+        return;
+    }
+
+    painter->save();
+    double _spatium = item->spatium();
+    const Glissando* glissando = item->glissando();
+
+    Pen pen(item->curColor(item->visible(), glissando->lineColor()));
+    pen.setWidthF(glissando->lineWidth());
+    pen.setCapStyle(PenCapStyle::RoundCap);
+    painter->setPen(pen);
+
+    // rotate painter so that the line become horizontal
+    double w     = item->pos2().x();
+    double h     = item->pos2().y();
+    double l     = sqrt(w * w + h * h);
+    double wi    = asin(-h / l) * 180.0 / M_PI;
+    painter->rotate(-wi);
+
+    if (glissando->glissandoType() == GlissandoType::STRAIGHT) {
+        painter->drawLine(LineF(0.0, 0.0, l, 0.0));
+    } else if (glissando->glissandoType() == GlissandoType::WAVY) {
+        RectF b = item->symBbox(SymId::wiggleTrill);
+        double a  = item->symAdvance(SymId::wiggleTrill);
+        int n    = static_cast<int>(l / a);          // always round down (truncate) to avoid overlap
+        double x  = (l - n * a) * 0.5;     // centre line in available space
+        SymIdList ids;
+        for (int i = 0; i < n; ++i) {
+            ids.push_back(SymId::wiggleTrill);
+        }
+
+        item->score()->engravingFont()->draw(ids, painter, item->magS(), PointF(x, -(b.y() + b.height() * 0.5)));
+    }
+
+    if (glissando->showText()) {
+        mu::draw::Font f(glissando->fontFace(), draw::Font::Type::Unknown);
+        f.setPointSizeF(glissando->fontSize() * _spatium / SPATIUM20);
+        f.setBold(glissando->fontStyle() & FontStyle::Bold);
+        f.setItalic(glissando->fontStyle() & FontStyle::Italic);
+        f.setUnderline(glissando->fontStyle() & FontStyle::Underline);
+        f.setStrike(glissando->fontStyle() & FontStyle::Strike);
+        mu::draw::FontMetrics fm(f);
+        RectF r = fm.boundingRect(glissando->text());
+
+        // if text longer than available space, skip it
+        if (r.width() < l) {
+            double yOffset = r.height() + r.y();             // find text descender height
+            // raise text slightly above line and slightly more with WAVY than with STRAIGHT
+            yOffset += _spatium * (glissando->glissandoType() == GlissandoType::WAVY ? 0.4 : 0.1);
+
+            mu::draw::Font scaledFont(f);
+            scaledFont.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+            painter->setFont(scaledFont);
+
+            double x = (l - r.width()) * 0.5;
+            painter->drawText(PointF(x, -yOffset), glissando->text());
+        }
+    }
     painter->restore();
 }
 
