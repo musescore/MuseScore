@@ -240,7 +240,7 @@ ClefType Clef::clefType() const
 void Clef::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
-    rendering()->layoutItem(this);
+    renderer()->layoutItem(this);
 }
 
 //---------------------------------------------------------

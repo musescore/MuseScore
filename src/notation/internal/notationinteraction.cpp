@@ -402,7 +402,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
         shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY);
     }
 
-    EngravingItem::rendering()->layoutItem(&shadowNote);
+    EngravingItem::renderer()->layoutItem(&shadowNote);
 
     shadowNote.setPos(position.pos);
 }
@@ -1161,7 +1161,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
 
         rw::RWRegister::reader()->readItem(m_dropData.ed.dropElement, e);
 
-        EngravingItem::rendering()->layoutItem(m_dropData.ed.dropElement);
+        EngravingItem::renderer()->layoutItem(m_dropData.ed.dropElement);
     }
 }
 
@@ -1182,7 +1182,7 @@ bool NotationInteraction::startDrop(const QUrl& url)
     m_dropData.ed.dragOffset = QPointF();
     m_dropData.ed.dropElement->setParent(nullptr);
 
-    mu::engraving::EngravingItem::rendering()->layoutItem(m_dropData.ed.dropElement);
+    mu::engraving::EngravingItem::renderer()->layoutItem(m_dropData.ed.dropElement);
 
     return true;
 }
@@ -2828,7 +2828,7 @@ void NotationInteraction::editText(QInputMethodEvent* event)
             cursor->updateCursorFormat();
             text->editInsertText(cursor, preeditString);
             text->setTextInvalid();
-            EngravingItem::rendering()->layoutText1(text);
+            EngravingItem::renderer()->layoutText1(text);
             score()->update();
         }
     }

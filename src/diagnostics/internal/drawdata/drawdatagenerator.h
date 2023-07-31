@@ -37,7 +37,7 @@ class MasterScore;
 namespace mu::diagnostics {
 class DrawDataGenerator
 {
-    INJECT(engraving::rendering::IScoreRenderer, scoreRender)
+    INJECT(engraving::rendering::IScoreRenderer, scoreRenderer)
 public:
     DrawDataGenerator() = default;
 

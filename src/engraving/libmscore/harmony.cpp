@@ -677,7 +677,7 @@ void Harmony::startEdit(EditData& ed)
     }
 
     // layout as text, without position reset
-    rendering()->layoutText1(this, true);
+    renderer()->layoutText1(this, true);
     triggerLayout();
 
     TextBase::startEdit(ed);
@@ -718,7 +718,7 @@ bool Harmony::edit(EditData& ed)
     bool rv = TextBase::edit(ed);
 
     // layout as text, without position reset
-    rendering()->layoutText1(this, true);
+    renderer()->layoutText1(this, true);
     triggerLayout();
 
     // check spelling
@@ -1923,7 +1923,7 @@ EngravingItem* Harmony::drop(EditData& data)
         score()->undoAddElement(fd);
     } else if (e->isSymbol() || e->isFSymbol()) {
         TextBase::drop(data);
-        rendering()->layoutText1(this);
+        renderer()->layoutText1(this);
         e = 0;          // cannot select
     } else {
         LOGW("Harmony: cannot drop <%s>\n", e->typeName());

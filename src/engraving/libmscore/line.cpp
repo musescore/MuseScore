@@ -381,7 +381,7 @@ bool LineSegment::edit(EditData& ed)
     }
     triggerLayout();
     // recompute segment list, segment type may change
-    rendering()->layoutItem(l);
+    renderer()->layoutItem(l);
 
     LineSegment* nls = 0;
     if (st == SpannerSegmentType::SINGLE) {
@@ -540,7 +540,7 @@ LineSegment* LineSegment::rebaseAnchor(Grip grip, Segment* newSeg)
     }
 
     if (newSeg->system() != oldSystem) {
-        rendering()->layoutItem(l);
+        renderer()->layoutItem(l);
         return left ? l->frontSegment() : l->backSegment();
     } else if (anchorChanged) {
         const PointF delta = left ? deltaRebaseLeft(oldSeg, newSeg) : deltaRebaseRight(oldSeg, newSeg, track2staff(l->effectiveTrack2()));

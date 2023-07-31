@@ -2039,7 +2039,7 @@ void Note::setDotRelativeLine(int dotMove)
     }
 
     for (NoteDot* dot : m_dots) {
-        rendering()->layoutItem(dot);
+        renderer()->layoutItem(dot);
         dot->setPosY(y);
     }
 }

@@ -979,7 +979,7 @@ void Chord::addLedgerLines()
     }
 
     for (LedgerLine* ll = m_ledgerLines; ll; ll = ll->next()) {
-        rendering()->layoutItem(ll);
+        renderer()->layoutItem(ll);
     }
 }
 

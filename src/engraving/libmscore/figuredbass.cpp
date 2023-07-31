@@ -628,7 +628,7 @@ PropertyValue FiguredBassItem::propertyDefault(Pid id) const
 void FiguredBassItem::regenerateDisplayText()
 {
     // re-generate displayText
-    rendering()->layoutItem(this);
+    renderer()->layoutItem(this);
 }
 
 //---------------------------------------------------------
@@ -822,7 +822,7 @@ void FiguredBass::startEdit(EditData& ed)
 {
     DeleteAll(m_items);
     m_items.clear();
-    rendering()->layoutText1(this);   // re-layout without F.B.-specific formatting.
+    renderer()->layoutText1(this);   // re-layout without F.B.-specific formatting.
     TextBase::startEdit(ed);
 }
 

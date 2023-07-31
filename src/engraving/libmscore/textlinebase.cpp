@@ -60,7 +60,7 @@ TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
     m_text->setParent(this);
     m_endText->setParent(this);
     // set the right _text
-    rendering()->layoutTextLineBaseSegment(this);
+    renderer()->layoutTextLineBaseSegment(this);
 }
 
 TextLineBaseSegment::~TextLineBaseSegment()

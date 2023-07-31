@@ -319,7 +319,7 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
         }
     }
 
-    EngravingItem::rendering()->layoutText1(_text);
+    EngravingItem::renderer()->layoutText1(_text);
 }
 
 const CharFormat TextCursor::selectedFragmentsFormat() const
