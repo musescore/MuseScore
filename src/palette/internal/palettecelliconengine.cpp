@@ -114,10 +114,10 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
     ActionIcon* action = toActionIcon(element);
     action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag);
 
-    engravingRendering()->layoutItem(action);
+    engravingRender()->layoutItem(action);
 
     painter.translate(rect.center() - action->bbox().center());
-    action->draw(&painter);
+    engravingRender()->drawItem(action, &painter);
     painter.restore();
 }
 
@@ -171,7 +171,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* i
     painter.scale(sizeRatio, sizeRatio); // scale coordinates so element is drawn at correct size
 
     // calculate bbox
-    engravingRendering()->layoutItem(item);
+    engravingRender()->layoutItem(item);
 
     PointF origin = item->bbox().center();
 
@@ -211,7 +211,7 @@ void PaletteCellIconEngine::paintPaletteItem(void* context, EngravingItem* item)
         item->setProperty(Pid::FRAME_FG_COLOR, color);
     }
 
-    engravingRendering()->drawItem(item, painter);
+    engravingRender()->drawItem(item, painter);
 
     item->setColorsInverionEnabled(colorsInversionEnabledBackup);
     item->setProperty(Pid::COLOR, colorBackup);

@@ -1,8 +1,14 @@
 
 
 set(RENDERING_STABLE_SRC
-    ${CMAKE_CURRENT_LIST_DIR}/scorerendering.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/scorerendering.h
+    ${CMAKE_CURRENT_LIST_DIR}/scorerenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/scorerenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/paint.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/paint.h
+    ${CMAKE_CURRENT_LIST_DIR}/debugpaint.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/debugpaint.h
+    ${CMAKE_CURRENT_LIST_DIR}/paintdebugger.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/paintdebugger.h
     ${CMAKE_CURRENT_LIST_DIR}/tdraw.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tdraw.h
     ${CMAKE_CURRENT_LIST_DIR}/tlayout.cpp

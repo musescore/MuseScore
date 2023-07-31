@@ -251,47 +251,9 @@ void Ambitus::setBottomTpc(int val, bool applyLogic)
 //   draw
 //---------------------------------------------------------
 
-void Ambitus::draw(mu::draw::Painter* painter) const
+void Ambitus::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    double _spatium = spatium();
-    double lw = lineWidth().val() * _spatium;
-    painter->setPen(Pen(curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
-    drawSymbol(noteHead(), painter, m_layoutData.topPos);
-    drawSymbol(noteHead(), painter, m_layoutData.bottomPos);
-    if (m_hasLine) {
-        painter->drawLine(m_layoutData.line);
-    }
-
-    // draw ledger lines (if not in a palette)
-    if (segment() && track() != mu::nidx) {
-        Fraction tick = segment()->tick();
-        Staff* staff = score()->staff(staffIdx());
-        double lineDist = staff->lineDistance(tick);
-        int numOfLines = staff->lines(tick);
-        double step = lineDist * _spatium;
-        double stepTolerance = step * 0.1;
-        double ledgerLineLength = style().styleS(Sid::ledgerLineLength).val() * _spatium;
-        double ledgerLineWidth = style().styleS(Sid::ledgerLineWidth).val() * _spatium;
-        painter->setPen(Pen(curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
-
-        if (m_layoutData.topPos.y() - stepTolerance <= -step) {
-            double xMin = m_layoutData.topPos.x() - ledgerLineLength;
-            double xMax = m_layoutData.topPos.x() + headWidth() + ledgerLineLength;
-            for (double y = -step; y >= m_layoutData.topPos.y() - stepTolerance; y -= step) {
-                painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
-            }
-        }
-
-        if (m_layoutData.bottomPos.y() + stepTolerance >= numOfLines * step) {
-            double xMin = m_layoutData.bottomPos.x() - ledgerLineLength;
-            double xMax = m_layoutData.bottomPos.x() + headWidth() + ledgerLineLength;
-            for (double y = numOfLines * step; y <= m_layoutData.bottomPos.y() + stepTolerance; y += step) {
-                painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
-            }
-        }
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

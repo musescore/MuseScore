@@ -1,0 +1,201 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2023 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
+#ifndef MU_ENGRAVING_ISCORERENDERER_H
+#define MU_ENGRAVING_ISCORERENDERER_H
+
+#include <variant>
+
+#include "modularity/imoduleinterface.h"
+#include "draw/types/geometry.h"
+#include "types/fraction.h"
+
+namespace mu::draw {
+class Painter;
+}
+
+namespace mu::engraving {
+class Score;
+class EngravingItem;
+class Page;
+
+class Accidental;
+class ActionIcon;
+class Arpeggio;
+
+class BarLine;
+class Beam;
+class Box;
+class Bracket;
+
+class Chord;
+class Clef;
+
+class Dynamic;
+
+class EngravingItem;
+
+class FiguredBassItem;
+
+class Harmony;
+
+class Image;
+
+enum class KerningType;
+class KeySig;
+
+class LedgerLine;
+class SLine;
+class LineSegment;
+class Lyrics;
+
+class NoteDot;
+
+class Rest;
+
+class ShadowNote;
+class Spanner;
+class Slur;
+class SlurTie;
+class StaffText;
+class Stem;
+
+class TextBase;
+class Text;
+class TextLineBaseSegment;
+class TimeSig;
+}
+
+namespace mu::engraving::rendering {
+class IScoreRenderer : MODULE_EXPORT_INTERFACE
+{
+    INTERFACE_ID(IScoreRenderer)
+
+public:
+    virtual ~IScoreRenderer() = default;
+
+    // Main interface
+
+    virtual void layoutScore(Score* score, const Fraction& st, const Fraction& et) const = 0;
+
+    struct PaintOptions
+    {
+        bool isSetViewport = true;
+        bool isPrinting = false;
+        bool isMultiPage = false;
+        bool printPageBackground = true;
+        RectF frameRect;
+        int fromPage = -1; // 0 is first
+        int toPage = -1;
+        int copyCount = 1;
+        int trimMarginPixelSize = -1;
+        int deviceDpi = -1;
+
+        std::function<void(draw::Painter* painter, const Page* page, const RectF& pageRect)> onPaintPageSheet;
+        std::function<void()> onNewPage;
+    };
+
+    virtual SizeF pageSizeInch(const Score* score) const = 0;
+    virtual SizeF pageSizeInch(const Score* score, const PaintOptions& opt) const = 0;
+    virtual void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const = 0;
+    virtual void paintItem(draw::Painter& painter, const EngravingItem* item) const = 0;
+
+    // Temporary compatibility interface
+    using Supported = std::variant<std::monostate,
+                                   Accidental*,
+                                   ActionIcon*,
+                                   Arpeggio*,
+                                   BarLine*,
+                                   Box*,
+                                   Bracket*,
+                                   Clef*,
+                                   Dynamic*,
+                                   FiguredBassItem*,
+                                   Harmony*,
+                                   Image*,
+                                   KeySig*,
+                                   LedgerLine*,
+                                   SLine*,
+                                   LineSegment*,
+                                   Lyrics*,
+                                   NoteDot*,
+                                   Rest*,
+                                   ShadowNote*,
+                                   Spanner*,
+                                   Slur*,
+                                   SlurTie*,
+                                   StaffText*,
+                                   Stem*,
+                                   TextBase*,
+                                   Text*,
+                                   TimeSig*
+                                   >;
+
+    template<typename T>
+    static void check_supported_static(T item)
+    {
+        if constexpr (std::is_same<T, EngravingItem*>::value) {
+            // supported
+        } else {
+            Supported check(item);
+            (void)check;
+        }
+    }
+
+    template<typename T>
+    void layoutItem(T item)
+    {
+#ifndef NDEBUG
+        check_supported_static(item);
+#endif
+        doLayoutItem(static_cast<EngravingItem*>(item));
+    }
+
+    // Layout Elements on Edit
+    virtual void layoutOnEdit(Arpeggio* item) = 0;
+
+    // Horizontal spacing
+    virtual double computePadding(const EngravingItem* item1, const EngravingItem* item2) = 0;
+    virtual KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2) = 0;
+
+    //! TODO Investigation is required, probably these functions or their calls should not be.
+    // Other
+    virtual void layoutTextLineBaseSegment(TextLineBaseSegment* item) = 0;
+    virtual void layoutBeam1(Beam* item) = 0;
+    virtual void layoutStem(Chord* item) = 0;
+
+    // Layout Text 1
+    virtual void layoutText1(TextBase* item, bool base = false) = 0;
+
+    void drawItem(const EngravingItem* item, draw::Painter* p)
+    {
+        doDrawItem(item, p);
+    }
+
+private:
+    // Layout Single Item
+    virtual void doLayoutItem(EngravingItem* item) = 0;
+
+    virtual void doDrawItem(const EngravingItem* item, draw::Painter* p) = 0;
+};
+}
+
+#endif // MU_ENGRAVING_ISCORERENDERER_H

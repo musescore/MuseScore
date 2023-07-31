@@ -27,6 +27,9 @@
 #include "draw/types/drawdata.h"
 #include "../../diagnosticstypes.h"
 
+#include "modularity/ioc.h"
+#include "engraving/rendering/iscorerenderer.h"
+
 namespace mu::engraving {
 class MasterScore;
 }
@@ -34,6 +37,7 @@ class MasterScore;
 namespace mu::diagnostics {
 class DrawDataGenerator
 {
+    INJECT(engraving::rendering::IScoreRenderer, scoreRender)
 public:
     DrawDataGenerator() = default;
 

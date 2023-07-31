@@ -6903,7 +6903,13 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/palette/internal/paletteuiactions.cpp" line="62"/>
         <location filename="../../src/palette/internal/paletteuiactions.cpp" line="63"/>
+        <source>Apply current palette element</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/palette/internal/paletteuiactions.cpp" line="69"/>
         <source>Insert special characters…</source>
         <translation type="unfinished"></translation>
     </message>
@@ -8873,7 +8879,7 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/paletteuiactions.cpp" line="62"/>
+        <location filename="../../src/palette/internal/paletteuiactions.cpp" line="68"/>
         <source>Insert special characters</source>
         <translation type="unfinished"></translation>
     </message>
@@ -10971,37 +10977,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="388"/>
+        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="383"/>
         <source>Invalid request</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="389"/>
+        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="384"/>
         <source>Authorization required</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="390"/>
+        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="385"/>
         <source>Forbidden. User is not owner of the score.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="391"/>
+        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="386"/>
         <source>Validation failed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="392"/>
+        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="387"/>
         <source>Internal server error</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="395"/>
+        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="390"/>
         <source>Error %1: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="397"/>
+        <location filename="../../src/cloud/internal/abstractcloudservice.cpp" line="392"/>
         <source>Unknown error</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11134,12 +11140,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3199"/>
+        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3204"/>
         <source>Current contents of measures will be replaced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3200"/>
+        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3205"/>
         <source>Continue with inserting measure repeat?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12905,7 +12911,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/ambitus.cpp" line="611"/>
+        <location filename="../../src/engraving/libmscore/ambitus.cpp" line="564"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17552,7 +17558,7 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_mei</name>
     <message>
-        <location filename="../../src/importexport/mei/internal/meireader.cpp" line="63"/>
+        <location filename="../../src/importexport/mei/internal/meireader.cpp" line="65"/>
         <source>Do you want to try to load this MEI file anyway?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -20999,164 +21005,164 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="95"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="96"/>
         <source>D flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="95"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="96"/>
         <source>D natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="95"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="96"/>
         <source>D sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="96"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="97"/>
         <source>C flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="96"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="97"/>
         <source>C natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="96"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="97"/>
         <source>C sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="97"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="98"/>
         <source>B flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="97"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="98"/>
         <source>B natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="97"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="98"/>
         <source>B sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="98"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="99"/>
         <source>E flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="98"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="99"/>
         <source>E natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="98"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="99"/>
         <source>E sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="99"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="100"/>
         <source>F flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="99"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="100"/>
         <source>F natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="99"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="100"/>
         <source>F sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="100"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="101"/>
         <source>G flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="100"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="101"/>
         <source>G natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="100"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="101"/>
         <source>G sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="101"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="102"/>
         <source>A flat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="101"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="102"/>
         <source>A natural</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="101"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="102"/>
         <source>A sharp</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="124"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="125"/>
         <source>Pedal settings buttons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="144"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="145"/>
         <source>D</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="145"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="146"/>
         <source>C</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="146"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="147"/>
         <source>B</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="147"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="148"/>
         <source>E</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="148"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="149"/>
         <source>F</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="149"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="150"/>
         <source>G</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="150"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="151"/>
         <source>A</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="269"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="270"/>
         <source>Diagram type buttons</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="284"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="289"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="285"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="290"/>
         <source>Diagram</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="307"/>
-        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="312"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="308"/>
+        <location filename="../../src/notation/qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml" line="313"/>
         <location filename="../../src/notation/view/noteinputbarmodel.cpp" line="636"/>
         <source>Text</source>
         <translation type="unfinished"></translation>
@@ -21364,204 +21370,204 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="51"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="52"/>
         <source>No note selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="52"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="53"/>
         <source>Please select a note and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="55"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="56"/>
         <source>No chord/rest selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="56"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="57"/>
         <source>Please select a chord or rest and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="59"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="60"/>
         <source>No note or lyrics selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="60"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="61"/>
         <source>Please select a note or lyrics and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="63"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="64"/>
         <location filename="../../src/notation/notationerrors.h" line="51"/>
         <source>No note or rest selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="64"/>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="97"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="65"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="98"/>
         <location filename="../../src/notation/notationerrors.h" line="52"/>
         <source>Please select a note or rest and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="67"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="68"/>
         <source>No flippable element selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="68"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="69"/>
         <source>Please select an element that can be flipped and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="71"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="72"/>
         <source>No staff selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="72"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="73"/>
         <source>Please select one or more staves and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="75"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="76"/>
         <location filename="../../src/notation/notationerrors.h" line="55"/>
         <source>No note or figured bass selected</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="76"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="77"/>
         <location filename="../../src/notation/notationerrors.h" line="56"/>
         <source>Please select a note or figured bass and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="79"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="80"/>
         <source>Cannot insert chord/rest in tuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="82"/>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="89"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="83"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="90"/>
         <source>Cannot split tuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="85"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="86"/>
         <source>Cannot split measure at the first beat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="88"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="89"/>
         <source>Cannot split measure here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="92"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="93"/>
         <source>Cannot create measure repeat here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="93"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="94"/>
         <source>Insufficient or unequal measures</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="96"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="97"/>
         <source>Cannot split measure repeat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="100"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="101"/>
         <source>This measure is too short to be split</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="103"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="104"/>
         <source>Cannot remove time from tuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="104"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="105"/>
         <source>Please select the complete tuplet and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="107"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="108"/>
         <source>Cannot remove time from measure repeat</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="108"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="109"/>
         <source>Please select the complete measure repeat and retry</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="111"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="112"/>
         <source>No destination to paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="114"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="115"/>
         <source>Cannot paste into tuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="117"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="118"/>
         <source>Tuplet cannot cross barlines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="120"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="121"/>
         <source>Cannot paste in local time signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="123"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="124"/>
         <source>Cannot paste in tremolo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="126"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="127"/>
         <source>Nothing to paste</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="129"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="130"/>
         <source>Destination is not a chord or rest</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="132"/>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="136"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="133"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="137"/>
         <source>Cannot change local time signature</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="133"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="134"/>
         <source>Measure is not empty</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="137"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="138"/>
         <source>This score already has part scores. Changing local time signatures while part scores are present is not yet supported.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="141"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="142"/>
         <source>Cannot change time signature in front of a corrupted measure</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="144"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="145"/>
         <source>This key signature cannot be deleted</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="145"/>
+        <location filename="../../src/notation/internal/mscoreerrorscontroller.cpp" line="146"/>
         <source>Please replace it with a key signature from the palettes instead.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21764,6 +21770,11 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/notation/view/internal/caposettingsmodel.cpp" line="141"/>
         <source>Below</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/internal/notationconfiguration.cpp" line="169"/>
+        <source>Smooth panning</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -22371,18 +22382,18 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/Palette.qml" line="616"/>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1132"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1131"/>
         <source>Delete</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/internal/Palette.qml" line="617"/>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1133"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1132"/>
         <source>Properties…</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="410"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="411"/>
         <source>%1, contains %n matching element(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -22390,13 +22401,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         </translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="411"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="412"/>
         <source>%1 expanded</source>
         <comment>tree item not collapsed</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="546"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/PaletteTree.qml" line="547"/>
         <location filename="../../src/palette/view/palettemodel.cpp" line="836"/>
         <source>Untitled palette</source>
         <translation type="unfinished"></translation>
@@ -22515,12 +22526,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="108"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="111"/>
         <source>Start typing to search all palettes</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="123"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="126"/>
         <source>No results found</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22566,7 +22577,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="278"/>
-        <location filename="../../src/palette/view/widgets/keyedit.cpp" line="308"/>
+        <location filename="../../src/palette/view/widgets/keyedit.cpp" line="307"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="173"/>
         <source>Key signatures</source>
         <translation type="unfinished"></translation>
@@ -23289,7 +23300,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1681"/>
         <location filename="../../src/palette/view/widgets/masterpalette.cpp" line="174"/>
-        <location filename="../../src/palette/view/widgets/timedialog.cpp" line="46"/>
+        <location filename="../../src/palette/view/widgets/timedialog.cpp" line="44"/>
         <source>Time signatures</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23460,12 +23471,12 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1150"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1149"/>
         <source>Delete palette cell</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1152"/>
+        <location filename="../../src/palette/view/widgets/palettewidget.cpp" line="1151"/>
         <source>Are you sure you want to delete palette cell &quot;%1&quot;?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23512,12 +23523,12 @@ failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palette.cpp" line="518"/>
+        <location filename="../../src/palette/internal/palette.cpp" line="516"/>
         <source>Writing palette file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palette.cpp" line="519"/>
+        <location filename="../../src/palette/internal/palette.cpp" line="517"/>
         <source>Writing palette file
 %1
 failed.</source>

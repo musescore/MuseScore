@@ -127,10 +127,18 @@ class SingleDraw
 {
 public:
 
-    static void drawItem(const EngravingItem* item, draw::Painter* p);      // factory
+    static void drawItem(const EngravingItem* item, draw::Painter* painter);      // factory
 
 private:
-    static void draw(const Accidental* item, draw::Painter* p);
+    static void draw(const Accidental* item, draw::Painter* painter);
+    static void draw(const ActionIcon* item, draw::Painter* painter);
+    static void draw(const Ambitus* item, draw::Painter* painter);
+    static void draw(const Arpeggio* item, draw::Painter* painter);
+    static void draw(const Articulation* item, draw::Painter* painter);
+
+    static void draw(const BagpipeEmbellishment* item, draw::Painter* painter);
+
+    static void draw(const Ornament* item, draw::Painter* painter);
 };
 }
 

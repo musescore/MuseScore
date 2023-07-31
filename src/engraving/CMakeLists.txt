@@ -51,12 +51,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/ifileinfoprovider.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/localfileinfoprovider.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/localfileinfoprovider.h
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paint.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paint.h
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/debugpaint.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/debugpaint.h
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/paintdebugger.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/rtti.h
@@ -175,8 +169,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/style/defaultstyle.h
 
     ${CMAKE_CURRENT_LIST_DIR}/rendering/README.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerendering.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerendering.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/iscorerenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/rendering/isinglerenderer.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h

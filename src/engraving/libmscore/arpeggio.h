@@ -109,7 +109,6 @@ public:
     //! -- Old interface --
     void setSymbols(const SymIdList& sl) { m_layoutData.symbols = sl; }
     const SymIdList& symbols() { return m_layoutData.symbols; }
-    void oldDraw(mu::draw::Painter* painter) const;
     //! -------------------
 
 private:
