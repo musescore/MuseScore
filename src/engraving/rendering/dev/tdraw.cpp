@@ -51,6 +51,9 @@
 
 #include "libmscore/expression.h"
 
+#include "libmscore/fermata.h"
+#include "libmscore/figuredbass.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/textbase.h"
@@ -113,6 +116,11 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::EXPRESSION:   draw(item_cast<const Expression*>(item), painter);
+        break;
+
+    case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter);
+        break;
+    case ElementType::FIGURED_BASS: draw(item_cast<const FiguredBass*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -835,6 +843,36 @@ void TDraw::draw(const Dynamic* item, Painter* painter)
 void TDraw::draw(const Expression* item, Painter* painter)
 {
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const Fermata* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+}
+
+void TDraw::draw(const FiguredBass* item, Painter* painter)
+{
+    // if not printing, draw duration line(s)
+    if (!item->score()->printing() && item->score()->showUnprintable()) {
+        for (double len : item->lineLengths()) {
+            if (len > 0) {
+                painter->setPen(Pen(FiguredBass::engravingConfiguration()->formattingMarksColor(), 3));
+                painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
+            }
+        }
+    }
+
+    if (item->items().size() < 1) {                                 // if not parseable into f.b. items
+        drawTextBase(item, painter);                                // draw as standard text
+    } else {
+        for (FiguredBassItem* item : item->items()) {               // if parseable into f.b. items
+            painter->translate(item->pos());                // draw each item in its proper position
+            item->draw(painter);
+            painter->translate(-item->pos());
+        }
+    }
 }
 
 void TDraw::drawTextBase(const TextBase* item, Painter* painter)

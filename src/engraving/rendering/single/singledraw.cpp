@@ -48,6 +48,8 @@
 
 #include "libmscore/expression.h"
 
+#include "libmscore/fermata.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/textbase.h"
@@ -97,6 +99,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::EXPRESSION:   draw(item_cast<const Expression*>(item), painter);
+        break;
+
+    case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -686,6 +691,13 @@ void SingleDraw::draw(const Dynamic* item, Painter* painter)
 void SingleDraw::draw(const Expression* item, Painter* painter)
 {
     drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const Fermata* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
 }
 
 void SingleDraw::drawTextBase(const TextBase* item, Painter* painter)

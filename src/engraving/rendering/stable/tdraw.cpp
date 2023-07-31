@@ -51,6 +51,9 @@
 
 #include "libmscore/expression.h"
 
+#include "libmscore/fermata.h"
+#include "libmscore/figuredbass.h"
+
 #include "libmscore/note.h"
 
 #include "libmscore/ornament.h"
@@ -67,7 +70,7 @@ using namespace mu::engraving::rtti;
 using namespace mu::engraving::rendering::stable;
 using namespace mu::draw;
 
-void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
+void TDraw::drawItem(const EngravingItem* item, Painter* painter)
 {
     switch (item->type()) {
     case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter);
@@ -117,6 +120,11 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::EXPRESSION:   draw(item_cast<const Expression*>(item), painter);
         break;
 
+    case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter);
+        break;
+    case ElementType::FIGURED_BASS: draw(item_cast<const FiguredBass*>(item), painter);
+        break;
+
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
     default:
@@ -124,7 +132,7 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     }
 }
 
-void TDraw::draw(const Accidental* item, draw::Painter* painter)
+void TDraw::draw(const Accidental* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     // don't show accidentals for tab or slash notation
@@ -138,14 +146,14 @@ void TDraw::draw(const Accidental* item, draw::Painter* painter)
     }
 }
 
-void TDraw::draw(const ActionIcon* item, draw::Painter* painter)
+void TDraw::draw(const ActionIcon* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     painter->setFont(item->iconFont());
     painter->drawText(item->bbox(), draw::AlignCenter, Char(item->icon()));
 }
 
-void TDraw::draw(const Ambitus* item, draw::Painter* painter)
+void TDraw::draw(const Ambitus* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -191,7 +199,7 @@ void TDraw::draw(const Ambitus* item, draw::Painter* painter)
     }
 }
 
-void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
+void TDraw::draw(const Arpeggio* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -256,7 +264,7 @@ void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
     painter->restore();
 }
 
-void TDraw::draw(const Articulation* item, draw::Painter* painter)
+void TDraw::draw(const Articulation* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
@@ -272,12 +280,12 @@ void TDraw::draw(const Articulation* item, draw::Painter* painter)
     }
 }
 
-void TDraw::draw(const Ornament* item, draw::Painter* painter)
+void TDraw::draw(const Ornament* item, Painter* painter)
 {
     draw(static_cast<const Articulation*>(item), painter);
 }
 
-void TDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
+void TDraw::draw(const BagpipeEmbellishment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     using namespace mu::draw;
@@ -293,7 +301,7 @@ void TDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
     bool drawBeam = nl.size() > 1;
     bool drawFlag = nl.size() == 1;
 
-    auto drawGraceNote = [item](mu::draw::Painter* painter,
+    auto drawGraceNote = [item](Painter* painter,
                                 const BagpipeEmbellishment::BEDrawingDataX& dx,
                                 const BagpipeEmbellishment::BEDrawingDataY& dy,
                                 SymId flagsym, const double x, const bool drawFlag)
@@ -331,7 +339,7 @@ void TDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
         Pen beamPen(item->curColor(), dy.bw, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(beamPen);
         // draw the beams
-        auto drawBeams = [](mu::draw::Painter* painter, const double spatium,
+        auto drawBeams = [](Painter* painter, const double spatium,
                             const double x1, const double x2, double y)
         {
             // draw the beams
@@ -724,22 +732,22 @@ void TDraw::drawBox(const Box* item, Painter* painter)
     }
 }
 
-void TDraw::draw(const HBox* item, draw::Painter* painter)
+void TDraw::draw(const HBox* item, Painter* painter)
 {
     drawBox(static_cast<const Box*>(item), painter);
 }
 
-void TDraw::draw(const VBox* item, draw::Painter* painter)
+void TDraw::draw(const VBox* item, Painter* painter)
 {
     drawBox(static_cast<const Box*>(item), painter);
 }
 
-void TDraw::draw(const FBox* item, draw::Painter* painter)
+void TDraw::draw(const FBox* item, Painter* painter)
 {
     drawBox(static_cast<const Box*>(item), painter);
 }
 
-void TDraw::draw(const TBox* item, draw::Painter* painter)
+void TDraw::draw(const TBox* item, Painter* painter)
 {
     drawBox(static_cast<const Box*>(item), painter);
 }
@@ -861,6 +869,36 @@ void TDraw::draw(const Dynamic* item, Painter* painter)
 void TDraw::draw(const Expression* item, Painter* painter)
 {
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const Fermata* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+}
+
+void TDraw::draw(const FiguredBass* item, Painter* painter)
+{
+    // if not printing, draw duration line(s)
+    if (!item->score()->printing() && item->score()->showUnprintable()) {
+        for (double len : item->lineLengths()) {
+            if (len > 0) {
+                painter->setPen(Pen(FiguredBass::engravingConfiguration()->formattingMarksColor(), 3));
+                painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
+            }
+        }
+    }
+
+    if (item->items().size() < 1) {                                 // if not parseable into f.b. items
+        drawTextBase(item, painter);                                // draw as standard text
+    } else {
+        for (FiguredBassItem* item : item->items()) {               // if parseable into f.b. items
+            painter->translate(item->pos());                // draw each item in its proper position
+            item->draw(painter);
+            painter->translate(-item->pos());
+        }
+    }
 }
 
 void TDraw::drawTextBase(const TextBase* item, Painter* painter)

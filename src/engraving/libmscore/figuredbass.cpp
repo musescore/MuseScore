@@ -784,34 +784,9 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
 //   draw
 //---------------------------------------------------------
 
-void FiguredBass::draw(mu::draw::Painter* painter) const
+void FiguredBass::draw(mu::draw::Painter*) const
 {
-    using namespace mu::draw;
-    // if not printing, draw duration line(s)
-    if (!score()->printing() && score()->showUnprintable()) {
-        for (double len : m_lineLengths) {
-            if (len > 0) {
-                painter->setPen(Pen(engravingConfiguration()->formattingMarksColor(), 3));
-                painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
-            }
-        }
-    }
-    // if in edit mode or with custom style, use standard text drawing
-//      if (editMode() || subStyle() != ElementStyle::FIGURED_BASS)
-//      if (tid() != TextStyleName::FIGURED_BASS)
-//            TextBase::draw(painter);
-//      else
-    {                                                        // not edit mode:
-        if (m_items.size() < 1) {                             // if not parseable into f.b. items
-            TextBase::draw(painter);                            // draw as standard text
-        } else {
-            for (FiguredBassItem* item : m_items) {           // if parseable into f.b. items
-                painter->translate(item->pos());            // draw each item in its proper position
-                item->draw(painter);
-                painter->translate(-item->pos());
-            }
-        }
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

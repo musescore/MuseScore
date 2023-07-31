@@ -90,11 +90,9 @@ TranslatableString Fermata::typeUserName() const
 //   Symbol::draw
 //---------------------------------------------------------
 
-void Fermata::draw(mu::draw::Painter* painter) const
+void Fermata::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    painter->setPen(curColor());
-    drawSymbol(m_symId, painter, PointF(-0.5 * width(), 0.0));
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
