@@ -149,8 +149,6 @@ public:
 
         EventSequence result;
 
-        result.clear();
-
         if (!m_isActive) {
             handleOffStream(result, nextMsecs);
             return result;

@@ -107,8 +107,8 @@ samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPer
 
     if (!active) {
         msecs_t nextMicros = samplesToMsecs(samplesPerChannel, m_sampleRate);
+        MuseSamplerSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMicros);
 
-        const MuseSamplerSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMicros);
         for (const MuseSamplerSequencer::EventType& event : sequence) {
             handleAuditionEvents(event);
         }

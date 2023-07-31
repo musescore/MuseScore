@@ -181,8 +181,7 @@ audio::samples_t VstSynthesiser::process(float* buffer, audio::samples_t samples
     }
 
     audio::msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
-
-    const VstSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMsecs);
+    VstSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMsecs);
 
     for (const VstSequencer::EventType& event : sequence) {
         if (std::holds_alternative<VstEvent>(event)) {

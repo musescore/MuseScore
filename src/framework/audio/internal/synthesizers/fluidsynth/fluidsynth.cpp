@@ -48,7 +48,8 @@ static constexpr msecs_t MIN_NOTE_LENGTH = 10;
 /// @note
 ///  Fluid does not support MONO, so they start counting audio channels from 1, which means "1 pair of audio channels"
 /// @see https://www.fluidsynth.org/api/settings_synth.html
-static const audioch_t FLUID_AUDIO_CHANNELS_PAIR = 1;
+static constexpr unsigned int FLUID_AUDIO_CHANNELS_PAIR = 1;
+static constexpr unsigned int FLUID_AUDIO_CHANNELS_COUNT = FLUID_AUDIO_CHANNELS_PAIR * 2;
 
 struct mu::audio::synth::Fluid {
     fluid_settings_t* settings = nullptr;
@@ -321,7 +322,7 @@ void FluidSynth::setPlaybackPosition(const msecs_t newPosition)
 
 unsigned int FluidSynth::audioChannelsCount() const
 {
-    return FLUID_AUDIO_CHANNELS_PAIR * 2;
+    return FLUID_AUDIO_CHANNELS_COUNT;
 }
 
 samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
@@ -331,8 +332,7 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
     }
 
     msecs_t nextMsecs = samplesToMsecs(samplesPerChannel, m_sampleRate);
-
-    const FluidSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMsecs);
+    FluidSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMsecs);
 
     if (!sequence.empty()) {
         m_tuning.reset();
@@ -344,11 +344,9 @@ samples_t FluidSynth::process(float* buffer, samples_t samplesPerChannel)
 
     fluid_synth_tune_notes(m_fluid->synth, 0, 0, m_tuning.size(), m_tuning.keys.data(), m_tuning.pitches.data(), true);
 
-    unsigned int channelCount = audioChannelsCount();
-
     int result = fluid_synth_write_float(m_fluid->synth, samplesPerChannel,
-                                         buffer, 0, channelCount,
-                                         buffer, 1, channelCount);
+                                         buffer, 0, FLUID_AUDIO_CHANNELS_COUNT,
+                                         buffer, 1, FLUID_AUDIO_CHANNELS_COUNT);
 
     if (result != FLUID_OK) {
         return 0;
