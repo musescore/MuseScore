@@ -150,6 +150,8 @@ private:
 
     static void draw(const Dynamic* item, draw::Painter* painter);
 
+    static void draw(const Expression* item, draw::Painter* painter);
+
     static void draw(const Ornament* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);

@@ -49,6 +49,8 @@
 #include "libmscore/deadslapped.h"
 #include "libmscore/dynamic.h"
 
+#include "libmscore/expression.h"
+
 #include "libmscore/note.h"
 
 #include "libmscore/ornament.h"
@@ -110,6 +112,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::DEAD_SLAPPED: draw(item_cast<const DeadSlapped*>(item), painter);
         break;
     case ElementType::DYNAMIC:      draw(item_cast<const Dynamic*>(item), painter);
+        break;
+
+    case ElementType::EXPRESSION:   draw(item_cast<const Expression*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -849,6 +854,11 @@ void TDraw::draw(const DeadSlapped* item, Painter* painter)
 }
 
 void TDraw::draw(const Dynamic* item, Painter* painter)
+{
+    drawTextBase(item, painter);
+}
+
+void TDraw::draw(const Expression* item, Painter* painter)
 {
     drawTextBase(item, painter);
 }
