@@ -53,6 +53,7 @@
 
 #include "libmscore/fermata.h"
 #include "libmscore/figuredbass.h"
+#include "libmscore/fingering.h"
 
 #include "libmscore/note.h"
 
@@ -123,6 +124,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter);
         break;
     case ElementType::FIGURED_BASS: draw(item_cast<const FiguredBass*>(item), painter);
+        break;
+    case ElementType::FINGERING:    draw(item_cast<const Fingering*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -706,7 +709,6 @@ void TDraw::draw(const Bend* item, Painter* painter)
 
 void TDraw::drawBox(const Box* item, Painter* painter)
 {
-    TRACE_DRAW_ITEM;
     if (item->score() && item->score()->printing()) {
         return;
     }
@@ -734,21 +736,25 @@ void TDraw::drawBox(const Box* item, Painter* painter)
 
 void TDraw::draw(const HBox* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
     drawBox(static_cast<const Box*>(item), painter);
 }
 
 void TDraw::draw(const VBox* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
     drawBox(static_cast<const Box*>(item), painter);
 }
 
 void TDraw::draw(const FBox* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
     drawBox(static_cast<const Box*>(item), painter);
 }
 
 void TDraw::draw(const TBox* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
     drawBox(static_cast<const Box*>(item), painter);
 }
 
@@ -849,6 +855,7 @@ void TDraw::draw(const Clef* item, Painter* painter)
 
 void TDraw::draw(const Capo* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
 }
 
@@ -863,11 +870,13 @@ void TDraw::draw(const DeadSlapped* item, Painter* painter)
 
 void TDraw::draw(const Dynamic* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
 }
 
 void TDraw::draw(const Expression* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
 }
 
@@ -880,6 +889,8 @@ void TDraw::draw(const Fermata* item, Painter* painter)
 
 void TDraw::draw(const FiguredBass* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
+
     // if not printing, draw duration line(s)
     if (!item->score()->printing() && item->score()->showUnprintable()) {
         for (double len : item->lineLengths()) {
@@ -901,10 +912,14 @@ void TDraw::draw(const FiguredBass* item, Painter* painter)
     }
 }
 
-void TDraw::drawTextBase(const TextBase* item, Painter* painter)
+void TDraw::draw(const Fingering* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
 
+void TDraw::drawTextBase(const TextBase* item, Painter* painter)
+{
     if (item->hasFrame()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
         if (item->frameWidth().val() != 0.0) {

@@ -153,6 +153,7 @@ private:
     static void draw(const Expression* item, draw::Painter* painter);
 
     static void draw(const Fermata* item, draw::Painter* painter);
+    static void draw(const Fingering* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 

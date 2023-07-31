@@ -49,6 +49,7 @@
 #include "libmscore/expression.h"
 
 #include "libmscore/fermata.h"
+#include "libmscore/fingering.h"
 
 #include "libmscore/ornament.h"
 
@@ -102,6 +103,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter);
+        break;
+    case ElementType::FINGERING:    draw(item_cast<const Fingering*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -698,6 +701,12 @@ void SingleDraw::draw(const Fermata* item, Painter* painter)
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor());
     item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+}
+
+void SingleDraw::draw(const Fingering* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
 
 void SingleDraw::drawTextBase(const TextBase* item, Painter* painter)
