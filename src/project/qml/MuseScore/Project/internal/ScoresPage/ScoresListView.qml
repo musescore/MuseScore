@@ -146,9 +146,17 @@ Item {
 
                         text: qsTrc("project", "Name")
 
-                        font: ui.theme.bodyBoldFont
-                        Component.onCompleted: { font.capitalization = Font.AllUppercase }
-
+                        // It is not possible to set the `font` and `font.capitalization` properties at the same time.
+                        // The following alternatives do not work:
+                        // - font: { let f = ui.theme.bodyBoldFont; f.capitalization = Font.AllUppercase; return f }
+                        //
+                        // - font: ui.theme.bodyBoldFont
+                        //   Component.onCompleted: { font.capitalization = Font.AllUppercase }
+                        //   (breaks updating the font when changed in Preferences > Appearance
+                        //
+                        // - Qt.font(Object.assign(ui.theme.bodyBoldFont, { capitalization: Font.AllUppercase }))
+                        //   (complains that ui.theme.bodyBoldFont is const and cannot be modified)
+                        font: Qt.font(Object.assign({}, ui.theme.bodyBoldFont, { capitalization: Font.AllUppercase }))
                         horizontalAlignment: Text.AlignLeft
                     }
 
@@ -160,9 +168,7 @@ Item {
 
                             text: modelData.header
 
-                            font: ui.theme.bodyBoldFont
-                            Component.onCompleted: { font.capitalization = Font.AllUppercase }
-
+                            font: Qt.font(Object.assign({}, ui.theme.bodyBoldFont, { capitalization: Font.AllUppercase }))
                             horizontalAlignment: Text.AlignLeft
                         }
                     }
