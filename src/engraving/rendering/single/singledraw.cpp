@@ -44,6 +44,8 @@
 #include "libmscore/clef.h"
 #include "libmscore/capo.h"
 
+#include "libmscore/dynamic.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/textbase.h"
@@ -87,6 +89,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::CLEF:         draw(item_cast<const Clef*>(item), painter);
         break;
     case ElementType::CAPO:         draw(item_cast<const Capo*>(item), painter);
+        break;
+
+    case ElementType::DYNAMIC:      draw(item_cast<const Dynamic*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -664,6 +669,11 @@ void SingleDraw::draw(const Clef* item, Painter* painter)
 }
 
 void SingleDraw::draw(const Capo* item, Painter* painter)
+{
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const Dynamic* item, Painter* painter)
 {
     drawTextBase(item, painter);
 }
