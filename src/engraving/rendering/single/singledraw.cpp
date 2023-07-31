@@ -46,6 +46,8 @@
 
 #include "libmscore/dynamic.h"
 
+#include "libmscore/expression.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/textbase.h"
@@ -92,6 +94,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::DYNAMIC:      draw(item_cast<const Dynamic*>(item), painter);
+        break;
+
+    case ElementType::EXPRESSION:   draw(item_cast<const Expression*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -674,6 +679,11 @@ void SingleDraw::draw(const Capo* item, Painter* painter)
 }
 
 void SingleDraw::draw(const Dynamic* item, Painter* painter)
+{
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const Expression* item, Painter* painter)
 {
     drawTextBase(item, painter);
 }
