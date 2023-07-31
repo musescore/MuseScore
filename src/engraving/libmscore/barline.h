@@ -134,8 +134,6 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
     using EngravingObject::undoChangeProperty;
 
-    mu::RectF layoutRect() const;
-
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
 
@@ -157,9 +155,6 @@ private:
     friend class Factory;
     BarLine(Segment* parent);
     BarLine(const BarLine&);
-
-    void drawDots(mu::draw::Painter* painter, double x) const;
-    void drawTips(mu::draw::Painter* painter, bool reversed, double x) const;
 
     void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
 
