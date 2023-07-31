@@ -26,7 +26,6 @@
 #include <map>
 #include <mutex>
 
-#include "synthtypes.h"
 #include "isynthresolver.h"
 
 namespace mu::audio::synth {

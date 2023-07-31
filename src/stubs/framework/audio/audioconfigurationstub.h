@@ -50,15 +50,11 @@ public:
 
     // synthesizers
     AudioInputParams defaultAudioInputParams() const override;
+
     io::paths_t soundFontDirectories() const override;
     io::paths_t userSoundFontDirectories() const override;
     void setUserSoundFontDirectories(const io::paths_t& paths) override;
     async::Channel<io::paths_t> soundFontDirectoriesChanged() const override;
-
-    const synth::SynthesizerState& synthesizerState() const override;
-    Ret saveSynthesizerState(const synth::SynthesizerState& state) override;
-    async::Notification synthesizerStateChanged() const override;
-    async::Notification synthesizerStateGroupChanged(const std::string& groupName) const override;
 
     io::path_t knownAudioPluginsFilePath() const override;
 };

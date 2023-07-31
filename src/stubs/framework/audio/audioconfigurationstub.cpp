@@ -90,6 +90,7 @@ async::Notification AudioConfigurationStub::sampleRateChanged() const
     return async::Notification();
 }
 
+// synthesizers
 AudioInputParams AudioConfigurationStub::defaultAudioInputParams() const
 {
     return {};
@@ -112,28 +113,6 @@ void AudioConfigurationStub::setUserSoundFontDirectories(const io::paths_t&)
 async::Channel<io::paths_t> AudioConfigurationStub::soundFontDirectoriesChanged() const
 {
     return async::Channel<io::paths_t>();
-}
-
-// synthesizers
-const synth::SynthesizerState& AudioConfigurationStub::synthesizerState() const
-{
-    static synth::SynthesizerState s;
-    return s;
-}
-
-Ret AudioConfigurationStub::saveSynthesizerState(const synth::SynthesizerState&)
-{
-    return make_ret(Ret::Code::NotImplemented);
-}
-
-async::Notification AudioConfigurationStub::synthesizerStateChanged() const
-{
-    return async::Notification();
-}
-
-async::Notification AudioConfigurationStub::synthesizerStateGroupChanged(const std::string&) const
-{
-    return async::Notification();
 }
 
 io::path_t AudioConfigurationStub::knownAudioPluginsFilePath() const

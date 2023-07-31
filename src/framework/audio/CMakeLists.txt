@@ -83,7 +83,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/ifxprocessor.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiodriver.h
     ${CMAKE_CURRENT_LIST_DIR}/iaudiosource.h
-    ${CMAKE_CURRENT_LIST_DIR}/synthtypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/soundfonttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/audiotypes.h
     ${CMAKE_CURRENT_LIST_DIR}/audioutils.h
     ${CMAKE_CURRENT_LIST_DIR}/iplayer.h

@@ -29,7 +29,6 @@
 #include "async/notification.h"
 
 #include "audiotypes.h"
-#include "synthtypes.h"
 
 namespace mu::audio {
 class IAudioConfiguration : MODULE_EXPORT_INTERFACE
@@ -60,15 +59,11 @@ public:
 
     // synthesizers
     virtual AudioInputParams defaultAudioInputParams() const = 0;
+
     virtual io::paths_t soundFontDirectories() const = 0;
     virtual io::paths_t userSoundFontDirectories() const = 0;
     virtual void setUserSoundFontDirectories(const io::paths_t& paths) = 0;
     virtual async::Channel<io::paths_t> soundFontDirectoriesChanged() const = 0;
-
-    virtual const synth::SynthesizerState& synthesizerState() const = 0;
-    virtual Ret saveSynthesizerState(const synth::SynthesizerState& state) = 0;
-    virtual async::Notification synthesizerStateChanged() const = 0;
-    virtual async::Notification synthesizerStateGroupChanged(const std::string& groupName) const = 0;
 
     virtual io::path_t knownAudioPluginsFilePath() const = 0;
 };

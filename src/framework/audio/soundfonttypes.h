@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,29 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_ISOUNDFONTREPOSITORY_H
-#define MU_AUDIO_ISOUNDFONTREPOSITORY_H
+#ifndef MU_AUDIO_SOUNDFONTTYPES_H
+#define MU_AUDIO_SOUNDFONTTYPES_H
 
-#include "modularity/imoduleinterface.h"
+#include <string>
+#include <vector>
 
-#include "types/ret.h"
-#include "async/notification.h"
+#include "io/path.h"
 
-#include "soundfonttypes.h"
+namespace mu::audio::synth {
+using SoundFontPath = io::path_t;
+using SoundFontPaths = std::vector<SoundFontPath>;
 
-namespace mu::audio {
-class ISoundFontRepository : MODULE_EXPORT_INTERFACE
+inline bool isSoundFont(const io::path_t& filePath)
 {
-    INTERFACE_ID(ISoundFontRepository)
-
-public:
-    virtual ~ISoundFontRepository() = default;
-
-    virtual synth::SoundFontPaths soundFontPaths() const = 0;
-    virtual async::Notification soundFontPathsChanged() const = 0;
-
-    virtual mu::Ret addSoundFont(const synth::SoundFontPath& path) = 0;
-};
+    std::string ext = io::suffix(filePath);
+    return ext == "sf2" || ext == "sf3";
+}
 }
 
-#endif // MU_AUDIO_ISOUNDFONTREPOSITORY_H
+#endif // MU_AUDIO_SOUNDFONTTYPES_H
