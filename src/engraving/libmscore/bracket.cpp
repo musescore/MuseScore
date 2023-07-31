@@ -160,67 +160,9 @@ void Bracket::setStaffSpan(size_t a, size_t b)
 //   draw
 //---------------------------------------------------------
 
-void Bracket::draw(mu::draw::Painter* painter) const
+void Bracket::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (m_h2 == 0.0) {
-        return;
-    }
-    switch (bracketType()) {
-    case BracketType::BRACE: {
-        if (m_braceSymbol == SymId::noSym) {
-            painter->setNoPen();
-            painter->setBrush(Brush(curColor()));
-            painter->drawPath(m_path);
-        } else {
-            double h        = 2 * m_h2;
-            double mag      = h / (100 * magS());
-            painter->setPen(curColor());
-            painter->save();
-            painter->scale(m_magx, mag);
-            drawSymbol(m_braceSymbol, painter, PointF(0, 100 * magS()));
-            painter->restore();
-        }
-    }
-    break;
-    case BracketType::NORMAL: {
-        double h        = 2 * m_h2;
-        double _spatium = spatium();
-        double w        = style().styleMM(Sid::bracketWidth);
-        double bd       = (style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
-        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
-        painter->setPen(pen);
-        painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
-        double x    =  -w * .5;
-        double y1   = -bd;
-        double y2   = h + bd;
-        drawSymbol(SymId::bracketTop, painter, PointF(x, y1));
-        drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
-    }
-    break;
-    case BracketType::SQUARE: {
-        double h = 2 * m_h2;
-        double lineW = style().styleMM(Sid::staffLineWidth);
-        double bracketWidth = width() - lineW / 2;
-        Pen pen(curColor(), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
-        painter->setPen(pen);
-        painter->drawLine(LineF(0.0, 0.0, 0.0, h));
-        painter->drawLine(LineF(-lineW / 2, 0.0, lineW / 2 + bracketWidth, 0.0));
-        painter->drawLine(LineF(-lineW / 2, h, lineW / 2 + bracketWidth, h));
-    }
-    break;
-    case BracketType::LINE: {
-        double h = 2 * m_h2;
-        double w = 0.67 * style().styleMM(Sid::bracketWidth);
-        Pen pen(curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
-        painter->setPen(pen);
-        double bd = style().styleMM(Sid::staffLineWidth) * 0.5;
-        painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
-    }
-    break;
-    case BracketType::NO_BRACKET:
-        break;
-    }
+    UNREACHABLE;
 }
 
 bool Bracket::isEditable() const

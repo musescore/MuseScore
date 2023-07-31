@@ -75,7 +75,7 @@ public:
     void setShape(const Shape& sh) { m_shape = sh; }
     Shape shape() const override { return m_shape; }
 
-    draw::PainterPath path() const { return m_path; }
+    const draw::PainterPath& path() const { return m_path; }
     void setPath(const draw::PainterPath& p) { m_path = p; }
 
     double h2() const { return m_h2; }
