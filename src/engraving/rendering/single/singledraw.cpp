@@ -36,6 +36,7 @@
 #include "libmscore/barline.h"
 #include "libmscore/beam.h"
 #include "libmscore/bend.h"
+#include "libmscore/bracket.h"
 
 #include "libmscore/ornament.h"
 
@@ -66,6 +67,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::BEAM:         draw(item_cast<const Beam*>(item), painter);
         break;
     case ElementType::BEND:         draw(item_cast<const Bend*>(item), painter);
+        break;
+    case ElementType::BRACKET:      draw(item_cast<const Bracket*>(item), painter);
         break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -543,5 +546,68 @@ void SingleDraw::draw(const Bend* item, Painter* painter)
         }
         x = x2;
         y = y2;
+    }
+}
+
+void SingleDraw::draw(const Bracket* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (RealIsNull(item->h2())) {
+        return;
+    }
+    switch (item->bracketType()) {
+    case BracketType::BRACE: {
+        if (item->braceSymbol() == SymId::noSym) {
+            painter->setNoPen();
+            painter->setBrush(Brush(item->curColor()));
+            painter->drawPath(item->path());
+        } else {
+            double h        = 2 * item->h2();
+            double mag      = h / (100 * item->magS());
+            painter->setPen(item->curColor());
+            painter->save();
+            painter->scale(item->magx(), mag);
+            item->drawSymbol(item->braceSymbol(), painter, PointF(0, 100 * item->magS()));
+            painter->restore();
+        }
+    }
+    break;
+    case BracketType::NORMAL: {
+        double h        = 2 * item->h2();
+        double _spatium = item->spatium();
+        double w        = item->style().styleMM(Sid::bracketWidth);
+        double bd       = (item->style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
+        Pen pen(item->curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(pen);
+        painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
+        double x    =  -w * .5;
+        double y1   = -bd;
+        double y2   = h + bd;
+        item->drawSymbol(SymId::bracketTop, painter, PointF(x, y1));
+        item->drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
+    }
+    break;
+    case BracketType::SQUARE: {
+        double h = 2 * item->h2();
+        double lineW = item->style().styleMM(Sid::staffLineWidth);
+        double bracketWidth = item->width() - lineW / 2;
+        Pen pen(item->curColor(), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(pen);
+        painter->drawLine(LineF(0.0, 0.0, 0.0, h));
+        painter->drawLine(LineF(-lineW / 2, 0.0, lineW / 2 + bracketWidth, 0.0));
+        painter->drawLine(LineF(-lineW / 2, h, lineW / 2 + bracketWidth, h));
+    }
+    break;
+    case BracketType::LINE: {
+        double h = 2 * item->h2();
+        double w = 0.67 * item->style().styleMM(Sid::bracketWidth);
+        Pen pen(item->curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
+        painter->setPen(pen);
+        double bd = item->style().styleMM(Sid::staffLineWidth) * 0.5;
+        painter->drawLine(LineF(0.0, -bd, 0.0, h + bd));
+    }
+    break;
+    case BracketType::NO_BRACKET:
+        break;
     }
 }
