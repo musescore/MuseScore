@@ -56,12 +56,15 @@ protected:
     static const QString NAME_KEY;
     static const QString PATH_KEY;
     static const QString SUFFIX_KEY;
+    static const QString FILE_SIZE_KEY;
     static const QString THUMBNAIL_URL_KEY;
     static const QString TIME_SINCE_MODIFIED_KEY;
     static const QString IS_CREATE_NEW_KEY;
     static const QString IS_NO_RESULTS_FOUND_KEY;
     static const QString IS_CLOUD_KEY;
     static const QString CLOUD_SCORE_ID_KEY;
+    static const QString CLOUD_VISIBILITY_KEY;
+    static const QString CLOUD_VIEW_COUNT_KEY;
 
     std::vector<QVariantMap> m_items;
 };

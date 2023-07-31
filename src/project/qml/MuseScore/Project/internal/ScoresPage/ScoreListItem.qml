@@ -31,7 +31,7 @@ ListItemBlank {
     id: root
 
     required property var score
-    property var columns: columnsRepeater.model
+    property alias columns: columnsRepeater.model
 
     property alias thumbnailComponent: thumbnailLoader.sourceComponent
 

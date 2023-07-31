@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -145,6 +146,77 @@ ScoresView {
             navigation.name: "OnlineScoresList"
             navigation.accessible.name: qsTrc("project", "Online scores list")
 
+            columns: [
+                // TODO: visbility column
+
+                ScoresListView.ColumnItem {
+                    //: Stands for "Last time that this score was modified".
+                    //: Used as the header of this column in the scores list.
+                    header: qsTrc("project", "Modified")
+
+                    width: function (parentWidth) {
+                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
+                        return 0.18 * parentWidthExclusingSpacing
+                    }
+
+                    delegate: StyledTextLabel {
+                        // TODO: accessibility
+                        text: score.timeSinceModified ?? ""
+
+                        font.capitalization: Font.AllUppercase
+                        horizontalAlignment: Text.AlignLeft
+                    }
+                },
+
+                ScoresListView.ColumnItem {
+                    header: qsTrc("project", "Size", "file size")
+
+                    width: function (parentWidth) {
+                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
+                        return 0.18 * parentWidthExclusingSpacing
+                    }
+
+                    delegate: StyledTextLabel {
+                        // TODO: accessibility
+                        text: score.fileSize ?? ""
+
+                        font.capitalization: Font.AllUppercase
+                        horizontalAlignment: Text.AlignLeft
+                    }
+                },
+
+                ScoresListView.ColumnItem {
+                    //: Stands for "The number of times this score was viewed on MuseScore.com".
+                    //: Used as the header of this column in the scores list.
+                    header: qsTrc("project", "Views", "number of views")
+
+                    width: function (parentWidth) {
+                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
+                        return Math.max(0.10 * parentWidthExclusingSpacing, 76)
+                    }
+
+                    delegate: RowLayout {
+                        visible: !label.isEmpty
+                        spacing: 8
+
+                        StyledIconLabel {
+                            iconCode: IconCode.EYE_OPEN
+                        }
+
+                        StyledTextLabel {
+                            id: label
+                            Layout.fillWidth: true
+
+                            // TODO: accessibility
+                            text: score.cloudViewCount ?? ""
+
+                            font.capitalization: Font.AllUppercase
+                            horizontalAlignment: Text.AlignLeft
+                        }
+                    }
+                }
+            ]
+
             view.footer: cloudScoresModel.state === CloudScoresModel.Loading
                          ? busyIndicatorComp : null
 
@@ -153,7 +225,7 @@ ScoresView {
 
                 Item {
                     width: ListView.view ? ListView.view.width : 0
-                    height: view.rowHeight
+                    height: list.view.rowHeight
 
                     StyledBusyIndicator {
                         id: indicator

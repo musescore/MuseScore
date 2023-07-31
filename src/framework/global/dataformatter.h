@@ -32,6 +32,7 @@ public:
     static double roundDouble(const double& val, const int decimals = 2);
     static String formatReal(double val, int prec = 2);
     static String formatTimeSince(const Date& date);
+    static String formatFileSize(size_t size);
 };
 }
 

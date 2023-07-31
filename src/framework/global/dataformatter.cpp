@@ -78,3 +78,27 @@ String DataFormatter::formatTimeSince(const Date& date)
 
     return mtrc("global", "%n year(s) ago", nullptr, years);
 }
+
+String DataFormatter::formatFileSize(size_t size)
+{
+    if (size >= 1024 * 1024 * 1024) {
+        double gb = double(size) / (1024 * 1024 * 1024);
+        //: Abbreviation of "gigabyte", used to indicate file size
+        return mtrc("global", "%1 GB", "gigabyte").arg(formatReal(gb, 2));
+    }
+
+    if (size >= 1024 * 1024) {
+        double mb = double(size) / (1024 * 1024);
+        //: Abbreviation of "megabyte", used to indicate file size
+        return mtrc("global", "%1 MB", "megabyte").arg(formatReal(mb, 1));
+    }
+
+    if (size >= 1024) {
+        double kb = double(size) / 1024;
+        //: Abbreviation of "kilobyte", used to indicate file size
+        return mtrc("global", "%1 KB", "kilobyte").arg(formatReal(kb, 0));
+    }
+
+    //: Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.
+    return mtrc("global", "%n bytes", "", size);
+}

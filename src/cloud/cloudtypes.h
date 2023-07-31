@@ -123,7 +123,9 @@ struct ScoresList {
         int id = 0;
         QString title;
         QDateTime lastModified;
+        size_t fileSize = 0;
         QString thumbnailUrl;
+        int viewCount = 0;
     };
 
     std::vector<Item> items;

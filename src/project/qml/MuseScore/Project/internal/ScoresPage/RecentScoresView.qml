@@ -52,10 +52,50 @@ ScoresView {
         id: listComp
 
         ScoresView.List {
+            id: list
+
             showNewScoreItem: true
 
             navigation.name: "RecentScoresList"
             navigation.accessible.name: qsTrc("project", "Recent scores list")
+
+            columns: [
+                ScoresListView.ColumnItem {
+                    //: Stands for "Last time that this score was modified".
+                    //: Used as the header of this column in the scores list.
+                    header: qsTrc("project", "Modified")
+
+                    width: function (parentWidth) {
+                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
+                        return 0.25 * parentWidthExclusingSpacing
+                    }
+
+                    delegate: StyledTextLabel {
+                        // TODO: accessibility
+                        text: score.timeSinceModified ?? ""
+
+                        font.capitalization: Font.AllUppercase
+                        horizontalAlignment: Text.AlignLeft
+                    }
+                },
+
+                ScoresListView.ColumnItem {
+                    header: qsTrc("project", "Size", "file size")
+
+                    width: function (parentWidth) {
+                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
+                        return 0.15 * parentWidthExclusingSpacing
+                    }
+
+                    delegate: StyledTextLabel {
+                        // TODO: accessibility
+                        text: score.fileSize ?? ""
+
+                        font.capitalization: Font.AllUppercase
+                        horizontalAlignment: Text.AlignLeft
+                    }
+                }
+            ]
         }
     }
 }

@@ -31,7 +31,7 @@ Item {
     id: root
 
     property AbstractScoresModel model
-    property var columns: []
+    property list<ColumnItem> columns
     property alias showNewScoreItem: newScoreItem.visible
     property string searchText
 
@@ -45,12 +45,14 @@ Item {
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
 
-    QtObject {
-        id: prv
+    component ColumnItem : QtObject {
+        property string header
 
-        readonly property real itemInset: 12
-        readonly property real rowHeight: 64
-        readonly property real columnSpacing: 44
+        property var width: function (parentWidth) {
+            return parentWidth / 5
+        }
+
+        property Component delegate
     }
 
     SortFilterProxyModel {
@@ -86,10 +88,10 @@ Item {
             id: newScoreItem
 
             Layout.fillWidth: true
-            implicitHeight: prv.rowHeight
+            implicitHeight: view.rowHeight
 
             visible: false
-            itemInset: prv.itemInset
+            itemInset: view.itemInset
             showBottomBorder: false
 
             navigation.panel: navPanel
@@ -123,7 +125,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            visible: view.count > 0
+            visible: view.count > 0 || view.header || view.footer
 
             ColumnLayout {
                 id: listViewColumn
@@ -134,10 +136,10 @@ Item {
                 // Column headers
                 RowLayout {
                     Layout.preferredHeight: 44
-                    Layout.leftMargin: prv.itemInset
-                    Layout.rightMargin: prv.itemInset
+                    Layout.leftMargin: view.itemInset
+                    Layout.rightMargin: view.itemInset
 
-                    spacing: prv.columnSpacing
+                    spacing: view.columnSpacing
 
                     StyledTextLabel {
                         Layout.fillWidth: true
@@ -176,7 +178,9 @@ Item {
 
                     bottomMargin: bottomGradient.height
 
-                    readonly property real rowHeight: prv.rowHeight
+                    readonly property real itemInset: 12
+                    readonly property real rowHeight: 64
+                    readonly property real columnSpacing: 44
 
                     ScrollBar.vertical: StyledScrollBar {
                         parent: root
@@ -196,9 +200,9 @@ Item {
 
                         columns: root.columns
 
-                        itemInset: prv.itemInset
-                        implicitHeight: prv.rowHeight
-                        columnSpacing: prv.columnSpacing
+                        itemInset: view.itemInset
+                        implicitHeight: view.rowHeight
+                        columnSpacing: view.columnSpacing
 
                         navigation.panel: navPanel
                         navigation.row: index + 1

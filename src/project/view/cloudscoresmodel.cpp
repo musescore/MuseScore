@@ -126,12 +126,15 @@ void CloudScoresModel::loadItemsIfNecessary()
                     obj[NAME_KEY] = item.title;
                     obj[PATH_KEY] = configuration()->cloudProjectPath(item.id).toQString();
                     obj[SUFFIX_KEY] = "";
+                    obj[FILE_SIZE_KEY] = (item.fileSize > 0) ? DataFormatter::formatFileSize(item.fileSize).toQString() : QString();
                     obj[IS_CLOUD_KEY] = true;
                     obj[CLOUD_SCORE_ID_KEY] = item.id;
                     obj[TIME_SINCE_MODIFIED_KEY] = DataFormatter::formatTimeSince(Date::fromQDate(item.lastModified.date())).toQString();
                     obj[THUMBNAIL_URL_KEY] = item.thumbnailUrl;
                     obj[IS_CREATE_NEW_KEY] = false;
                     obj[IS_NO_RESULTS_FOUND_KEY] = false;
+                    //obj[CLOUD_VISIBILITY_KEY] = item.; TODO
+                    obj[CLOUD_VIEW_COUNT_KEY] = item.viewCount;
 
                     m_items.push_back(obj);
                 }
