@@ -2022,7 +2022,7 @@ engraving::Fraction Convert::tstampToFraction(double tstamp, const engraving::Fr
 
     std::valarray<double> vec_1{ double((int)tstamp), 1 }, vec_2{ 1, 0 }, temporary;
 
-    while (decimal_part > precision & counter < cycles) {
+    while (decimal_part > precision && counter < cycles) {
         new_number = 1 / decimal_part;
         whole_part = (int)new_number;
 
