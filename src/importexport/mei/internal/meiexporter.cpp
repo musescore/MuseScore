@@ -133,6 +133,7 @@ bool MeiExporter::write(QIODevice& destinationDevice)
         out << String::fromStdString(strStream.str());
     }
     catch (char* str) {
+        UNUSED(str);
         // Do something with the error message
         return false;
     }
