@@ -23,7 +23,6 @@
 #include "deadslapped.h"
 
 #include "rest.h"
-#include "staff.h"
 #include "log.h"
 
 using namespace mu;
@@ -38,11 +37,7 @@ DeadSlapped::DeadSlapped(Rest* rest)
 {
 }
 
-void DeadSlapped::draw(mu::draw::Painter* painter) const
+void DeadSlapped::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    painter->setPen(draw::PenStyle::NoPen);
-    painter->setBrush(curColor());
-    painter->drawPath(m_path1);
-    painter->drawPath(m_path2);
+    UNREACHABLE;
 }
