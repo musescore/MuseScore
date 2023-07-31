@@ -68,12 +68,7 @@ bool VstAudioClient::handleParamChange(const PluginParamInfo& param)
     }
 
     ensureActivity();
-
-    Steinberg::int32 dummyIdx = 0;
-    Steinberg::Vst::IParamValueQueue* queue = m_paramChanges.addParameterData(param.id, dummyIdx);
-    if (queue) {
-        queue->addPoint(0, param.defaultNormalizedValue, dummyIdx);
-    }
+    addParamChange(param);
 
     return true;
 }
@@ -133,6 +128,10 @@ void VstAudioClient::flush()
 
     m_eventList.clear();
     m_paramChanges.clearQueue();
+
+    if (m_allNotesOffParam.has_value()) {
+        addParamChange(m_allNotesOffParam.value());
+    }
 }
 
 void VstAudioClient::setBlockSize(unsigned int samples)
@@ -311,6 +310,7 @@ void VstAudioClient::updateProcessSetup()
 
     setUpProcessData();
     flushBuffers();
+    loadAllNotesOffParam();
 }
 
 void VstAudioClient::extractInputSamples(samples_t sampleCount, const float* sourceBuffer)
@@ -418,5 +418,32 @@ void VstAudioClient::flushBuffers()
                 output.channelBuffers32[audioChannel][i] = 0.f;
             }
         }
+    }
+}
+
+void VstAudioClient::loadAllNotesOffParam()
+{
+    if (m_allNotesOffParam.has_value()) {
+        return;
+    }
+
+    ParamsMapping mapping = paramsMapping({ Steinberg::Vst::kCtrlAllNotesOff });
+    if (mapping.empty()) {
+        return;
+    }
+
+    PluginParamInfo allNotesOff;
+    allNotesOff.id = mapping.begin()->second;
+    allNotesOff.defaultNormalizedValue = 1;
+
+    m_allNotesOffParam = std::move(allNotesOff);
+}
+
+void VstAudioClient::addParamChange(const PluginParamInfo& param)
+{
+    Steinberg::int32 dummyIdx = 0;
+    Steinberg::Vst::IParamValueQueue* queue = m_paramChanges.addParameterData(param.id, dummyIdx);
+    if (queue) {
+        queue->addPoint(0, param.defaultNormalizedValue, dummyIdx);
     }
 }

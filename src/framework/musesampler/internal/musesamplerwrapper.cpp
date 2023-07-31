@@ -41,7 +41,7 @@ MuseSamplerWrapper::MuseSamplerWrapper(MuseSamplerLibHandlerPtr samplerLib, cons
 
     m_samplerLib->initLib();
 
-    m_sequencer.flushedOffStreamEvents().onNotify(this, [this]() {
+    m_sequencer.setOnOffStreamFlushed([this]() {
         revokePlayingNotes();
     });
 }
@@ -107,8 +107,8 @@ samples_t MuseSamplerWrapper::process(float* buffer, audio::samples_t samplesPer
 
     if (!active) {
         msecs_t nextMicros = samplesToMsecs(samplesPerChannel, m_sampleRate);
+        MuseSamplerSequencer::EventSequence sequence = m_sequencer.eventsToBePlayed(nextMicros);
 
-        const MuseSamplerSequencer::EventSequence& sequence = m_sequencer.eventsToBePlayed(nextMicros);
         for (const MuseSamplerSequencer::EventType& event : sequence) {
             handleAuditionEvents(event);
         }
@@ -279,7 +279,8 @@ void MuseSamplerWrapper::setIsActive(bool arg)
     m_samplerLib->setPlaying(m_sampler, arg);
 
     if (!isActive()) {
-        setCurrentPosition(m_currentPosition);
+        //! NOTE: restore the current position because setPlaying(m_sampler, false) resets it
+        m_samplerLib->setPosition(m_sampler, m_currentPosition);
     }
 
     LOGD() << "Toggled playing status, isPlaying: " << arg;
@@ -305,6 +306,10 @@ void MuseSamplerWrapper::handleAuditionEvents(const MuseSamplerSequencer::EventT
 void MuseSamplerWrapper::setCurrentPosition(const audio::samples_t samples)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
+        return;
+    }
+
+    if (m_currentPosition == samples) {
         return;
     }
 

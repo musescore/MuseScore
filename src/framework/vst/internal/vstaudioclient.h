@@ -73,6 +73,9 @@ private:
 
     void flushBuffers();
 
+    void loadAllNotesOffParam();
+    void addParamChange(const PluginParamInfo& param);
+
     bool m_isActive = false;
     audio::gain_t m_volumeGain = 1.f; // 0.0 - 1.0
 
@@ -93,6 +96,8 @@ private:
 
     audio::AudioPluginType m_type = audio::AudioPluginType::Undefined;
     audio::audioch_t m_audioChannelsCount = 0;
+
+    std::optional<PluginParamInfo> m_allNotesOffParam;
 };
 }
 

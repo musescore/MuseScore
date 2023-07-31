@@ -27,7 +27,6 @@
 #include <set>
 
 #include "async/asyncable.h"
-#include "async/notification.h"
 #include "mpe/events.h"
 
 #include "audiosanitizer.h"
@@ -85,16 +84,6 @@ public:
     virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) = 0;
     virtual void updateDynamicChanges(const mpe::DynamicLevelMap& changes) = 0;
 
-    async::Notification flushedOffStreamEvents() const
-    {
-        return m_offStreamFlushed;
-    }
-
-    async::Notification flushedMainStreamEvents() const
-    {
-        return m_mainStreamFlushed;
-    }
-
     void setActive(const bool active)
     {
         m_isActive = active;
@@ -120,6 +109,22 @@ public:
         return m_playbackPosition;
     }
 
+    using OnFlushedCallback = std::function<void ()>;
+
+    void setOnOffStreamFlushed(OnFlushedCallback flushed)
+    {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        m_onOffStreamFlushed = flushed;
+    }
+
+    void setOnMainStreamFlushed(OnFlushedCallback flushed)
+    {
+        ONLY_AUDIO_WORKER_THREAD;
+
+        m_onMainStreamFlushed = flushed;
+    }
+
     mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
     {
         if (m_dynamicLevelMap.empty()) {
@@ -143,8 +148,6 @@ public:
         ONLY_AUDIO_WORKER_THREAD;
 
         EventSequence result;
-
-        result.clear();
 
         if (!m_isActive) {
             handleOffStream(result, nextMsecs);
@@ -240,14 +243,14 @@ protected:
     mpe::DynamicLevelMap m_dynamicLevelMap;
     mpe::PlaybackEventsMap m_playbackEventsMap;
 
-    async::Notification m_offStreamFlushed;
-    async::Notification m_mainStreamFlushed;
-
     bool m_isActive = false;
 
     mpe::PlaybackEventsChanges m_mainStreamChanges;
     mpe::PlaybackEventsChanges m_offStreamChanges;
     mpe::DynamicLevelChanges m_dynamicLevelChanges;
+
+    OnFlushedCallback m_onOffStreamFlushed;
+    OnFlushedCallback m_onMainStreamFlushed;
 };
 }
 
