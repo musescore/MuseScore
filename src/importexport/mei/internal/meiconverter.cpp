@@ -1439,7 +1439,7 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
 
     int step = meiNote.HasPname() ? meiNote.GetPname() - 1 : 0;
     // It should never be necessay, but just in case
-    std::clamp(step, 0, 6);
+    step = std::clamp(step, 0, 6);
 
     int oct = meiNote.HasOct() ? meiNote.GetOct() : 3;
 
