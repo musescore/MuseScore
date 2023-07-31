@@ -203,9 +203,9 @@ public:
     FretItem::Marker marker(int s) const;
     FretItem::Barre barre(int fret) const;
 
-    BarreMap barres() const { return m_barres; }
-    DotMap dots() const { return m_dots; }
-    MarkerMap markers() const { return m_markers; }
+    const BarreMap& barres() const { return m_barres; }
+    const DotMap& dots() const { return m_dots; }
+    const MarkerMap& markers() const { return m_markers; }
 
     const mu::draw::Font& font() const { return m_font; }
 
