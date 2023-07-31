@@ -53,6 +53,7 @@
 
 #include "libmscore/fermata.h"
 #include "libmscore/figuredbass.h"
+#include "libmscore/fingering.h"
 
 #include "libmscore/ornament.h"
 
@@ -121,6 +122,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter);
         break;
     case ElementType::FIGURED_BASS: draw(item_cast<const FiguredBass*>(item), painter);
+        break;
+    case ElementType::FINGERING:    draw(item_cast<const Fingering*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -854,6 +857,7 @@ void TDraw::draw(const Fermata* item, Painter* painter)
 
 void TDraw::draw(const FiguredBass* item, Painter* painter)
 {
+    TRACE_DRAW_ITEM;
     // if not printing, draw duration line(s)
     if (!item->score()->printing() && item->score()->showUnprintable()) {
         for (double len : item->lineLengths()) {
@@ -873,6 +877,12 @@ void TDraw::draw(const FiguredBass* item, Painter* painter)
             painter->translate(-item->pos());
         }
     }
+}
+
+void TDraw::draw(const Fingering* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
 
 void TDraw::drawTextBase(const TextBase* item, Painter* painter)

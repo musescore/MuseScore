@@ -102,10 +102,9 @@ PlacementV Fingering::calculatePlacement() const
 //   draw
 //---------------------------------------------------------
 
-void Fingering::draw(mu::draw::Painter* painter) const
+void Fingering::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    TextBase::draw(painter);
+    UNREACHABLE;
 }
 
 bool Fingering::isEditAllowed(EditData& ed) const
