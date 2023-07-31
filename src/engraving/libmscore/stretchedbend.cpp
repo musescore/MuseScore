@@ -24,6 +24,7 @@
 
 #include "draw/fontmetrics.h"
 
+#include "accidental.h"
 #include "chord.h"
 #include "note.h"
 #include "score.h"
@@ -66,6 +67,7 @@ static void drawText(mu::draw::Painter* painter, const PointF& pos, const String
 static RectF textBoundingRect(const mu::draw::FontMetrics& fm, const PointF& pos, const String& text);
 static PainterPath bendCurveFromPoints(const PointF& p1, const PointF& p2);
 static int bendTone(int notePitch);
+static std::pair<Note*, Note*> getLowestAndHighestNote(const std::vector<Note*>& notes);
 
 //---------------------------------------------------------
 //   static values
@@ -253,13 +255,24 @@ void StretchedBend::fillSegments()
     double noteHeight = m_note->height();
     PointF notePos = m_note->pos();
     double sp = spatium();
+    Staff* st = staff();
+    PointF upBendDefaultOffset = PointF(noteWidth + sp * .8, 0);
+    if (!m_note->dots().empty() && st && !st->isTabStaff(tick())) {
+        /// moving bend to the right from dot
+        size_t dotsSize = m_note->dots().size();
+        upBendDefaultOffset
+            += PointF(style().styleS(Sid::dotDotDistance).val() * sp + symWidth(SymId::augmentationDot) + style().styleS(
+                          Sid::dotDotDistance).val() * sp * (dotsSize - 1), 0);
+    }
+
+    PointF downBendDefaultOffset = PointF(noteWidth * .5, -noteHeight * .5 - sp * .2);
     PointF src;
 
     if (StretchedBend* tiedBend = backTiedStretchedBend()) {
         src = PointF(.0, tiedBend->m_bendSegments.back().dest.y());
     } else {
-        PointF upBendDefaultSrc = PointF(noteWidth + sp * .8, 0) + notePos;
-        PointF downBendDefaultSrc = PointF(noteWidth * .5, -noteHeight * .5 - sp * .2) + notePos;
+        PointF upBendDefaultSrc = upBendDefaultOffset + notePos;
+        PointF downBendDefaultSrc = downBendDefaultOffset + notePos;
         src = m_pitchValues.at(0).pitch == 0 ? upBendDefaultSrc : downBendDefaultSrc;
     }
 
@@ -271,8 +284,25 @@ void StretchedBend::fillSegments()
         BendSegment& bendSegment = m_bendSegments.at(i);
 
         if (bendSegment.type == BendSegmentType::LINE_UP) {
+            /// rewriting the source position for prebend, should go from highest note
+            Chord* chord = toChord(parent());
+            auto [lowestNote, highestNote] = getLowestAndHighestNote(chord->notes());
+            src = highestNote->pos() + PointF(highestNote->width() / 2, -highestNote->height());
+
             double minY = std::min(.0, src.y());
             dest = PointF(src.x(), minY - bendHeight(bendSegment.tone) - baseBendHeight);
+
+            /// shortening length of prebend on standard staff if chord has staccato
+            Staff* st = staff();
+            if (st && !st->isTabStaff(tick())) {
+                for (Articulation* art : chord->articulations()) {
+                    if (art->isStaccato()) {
+                        src.setY(src.y() - symWidth(art->symId()) - style().styleS(Sid::articulationMinDistance).val() * sp);
+                        break;
+                    }
+                }
+            }
+
             bendSegment.setupCoords(src, dest);
             src.setY(dest.y());
             continue;
@@ -297,6 +327,29 @@ void StretchedBend::fillSegments()
 }
 
 //---------------------------------------------------------
+//   getLowestAndHighestNote
+//---------------------------------------------------------
+
+std::pair<Note*, Note*> getLowestAndHighestNote(const std::vector<Note*>& notes)
+{
+    IF_ASSERT_FAILED(!notes.empty()) {
+        return { nullptr, nullptr };
+    }
+
+    Note* note = notes.at(0);
+    bool isTab = note->staff()->isTabStaff(note->tick());
+    const auto [min, max] = std::minmax_element(notes.begin(), notes.end(), [isTab](Note* l, Note* r) {
+        if (isTab) {
+            return l->string() > r->string();
+        }
+
+        return l->pitch() < r->pitch();
+    });
+
+    return { *min, *max };
+}
+
+//---------------------------------------------------------
 //   adjustBendInChord
 //---------------------------------------------------------
 
@@ -316,17 +369,8 @@ void StretchedBend::adjustBendInChord()
         return;
     }
 
-    bool isTab = staff()->isTabStaff(tick());
-    const auto [min, max] = std::minmax_element(bendNotes.begin(), bendNotes.end(), [isTab](Note* l, Note* r) {
-        if (isTab) {
-            return l->string() > r->string();
-        }
-
-        return l->pitch() < r->pitch();
-    });
-
-    Note* lowestNote = *min;
-    m_noteToAdjust = *max;
+    auto [lowestNote, highestNote] = getLowestAndHighestNote(bendNotes);
+    m_noteToAdjust = highestNote;
 
     StretchedBend* upStretchedBend = m_noteToAdjust->stretchedBend();
     IF_ASSERT_FAILED(upStretchedBend) {
@@ -420,8 +464,14 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
         Chord* currentChord = toChord(parent());
         Chord* tiedBackChord = toChord(backTiedBend->parent());
         if (getSystem(currentChord) == getSystem(tiedBackChord)) {
-            PointF& tiedBendEndPoint = backTiedBend->m_bendSegmentsStretched.back().dest;
-            tiedBendEndPoint.setX(getPageX(currentChord) - getPageX(tiedBackChord));
+            double newX = getPageX(currentChord) - getPageX(tiedBackChord);
+            for (EngravingItem* item : tiedBackChord->el()) {
+                if (item->isStretchedBend()) {
+                    StretchedBend* bendToAdjust = toStretchedBend(item);
+                    PointF& tiedBendEndPoint = bendToAdjust->m_bendSegmentsStretched.back().dest;
+                    tiedBendEndPoint.setX(newX);
+                }
+            }
         }
     }
 }
@@ -642,7 +692,23 @@ double StretchedBend::nextSegmentX() const
         return 0;
     }
 
-    return nextSeg->pagePos().x() - pagePos().x() - spatium();
+    double resultPosX = nextSeg->pagePos().x() - pagePos().x() - spatium();
+
+    /// adjusting to accidentals
+    if (nextSeg->segmentType() == SegmentType::ChordRest) {
+        EngravingItem* item = nextSeg->element(track());
+        if (item && item->isChord()) {
+            Chord* chord = toChord(item);
+            for (Note* note : chord->notes()) {
+                if (Accidental* ac = note->accidental()) {
+                    resultPosX -= (ac->width() + spatium());
+                    break;
+                }
+            }
+        }
+    }
+
+    return resultPosX;
 }
 
 //---------------------------------------------------------

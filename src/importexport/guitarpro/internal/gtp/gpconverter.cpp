@@ -1967,6 +1967,19 @@ void GPConverter::addBend(const GPNote* gpnote, Note* note)
         }
     }
 
+    if (pitchValues.size() < 2) {
+        return;
+    }
+
+    /// not adding "hold" on 0 pitch
+    int maxPitch = (std::max_element(pitchValues.begin(), pitchValues.end(), [](const PitchValue& l, const PitchValue& r) {
+        return l.pitch < r.pitch;
+    }))->pitch;
+
+    if (maxPitch == 0) {
+        return;
+    }
+
     if (engravingConfiguration()->guitarProImportExperimental()) {
         Chord* chord = toChord(note->parent());
         StretchedBend* stretchedBend = Factory::createStretchedBend(chord);

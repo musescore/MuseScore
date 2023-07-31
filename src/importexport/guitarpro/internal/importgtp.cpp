@@ -716,7 +716,16 @@ std::vector<PitchValue> GuitarPro::readBendDataFromFile()
 
 void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
 {
-    if (bendData.empty()) {
+    if (bendData.size() < 2) {
+        return;
+    }
+
+    /// not adding "hold" on 0 pitch
+    int maxPitch = (std::max_element(bendData.begin(), bendData.end(), [](const PitchValue& l, const PitchValue& r) {
+        return l.pitch < r.pitch;
+    }))->pitch;
+
+    if (maxPitch == 0) {
         return;
     }
 

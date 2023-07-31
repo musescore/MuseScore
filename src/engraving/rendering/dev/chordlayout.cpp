@@ -3316,7 +3316,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         if (e->isSymbol()) {
             e->setMag(item->mag());
             Shape noteShape = item->shape();
-            mu::remove_if(noteShape, [e](ShapeElement& s) { return s.toItem == e || s.toItem->isBend() || s.toItem->isStretchedBend(); });
+            mu::remove_if(noteShape, [e](ShapeElement& s) { return s.toItem == e || s.toItem->isBend(); });
             LedgerLine* ledger = item->line() < -1 || item->line() > item->staff()->lines(item->tick())
                                  ? item->chord()->ledgerLines() : nullptr;
             if (ledger) {
