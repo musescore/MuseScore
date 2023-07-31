@@ -180,6 +180,7 @@ private:
 
     static void draw(const BagpipeEmbellishment* item, draw::Painter* painter);
     static void draw(const BarLine* item, draw::Painter* painter);
+    static void draw(const Beam* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 };

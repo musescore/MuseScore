@@ -218,35 +218,9 @@ const Chord* Beam::findChordWithCustomStemDirection() const
 //   draw
 //---------------------------------------------------------
 
-void Beam::draw(mu::draw::Painter* painter) const
+void Beam::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (m_beamSegments.empty()) {
-        return;
-    }
-    painter->setBrush(mu::draw::Brush(curColor()));
-    painter->setNoPen();
-
-    // make beam thickness independent of slant
-    // (expression can be simplified?)
-
-    const LineF bs = m_beamSegments.front()->line;
-    double d  = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
-    if (m_beamSegments.size() > 1 && d > M_PI / 6.0) {
-        d = M_PI / 6.0;
-    }
-    double ww = (m_beamWidth / 2.0) / sin(M_PI_2 - atan(d));
-
-    for (const BeamSegment* bs1 : m_beamSegments) {
-        painter->drawPolygon(
-            PolygonF({
-                PointF(bs1->line.x1(), bs1->line.y1() - ww),
-                PointF(bs1->line.x2(), bs1->line.y2() - ww),
-                PointF(bs1->line.x2(), bs1->line.y2() + ww),
-                PointF(bs1->line.x1(), bs1->line.y1() + ww),
-            }),
-            draw::FillRule::OddEvenFill);
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
