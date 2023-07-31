@@ -152,97 +152,9 @@ void Bend::updatePointsByBendType(const BendType bendType)
 //   draw
 //---------------------------------------------------------
 
-void Bend::draw(mu::draw::Painter* painter) const
+void Bend::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    double _spatium = spatium();
-    double _lw = _lineWidth;
-
-    Pen pen(curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
-    painter->setPen(pen);
-    painter->setBrush(Brush(curColor()));
-
-    mu::draw::Font f = font(_spatium * MScore::pixelRatio);
-    painter->setFont(f);
-
-    double x  = m_noteWidth + _spatium * .2;
-    double y  = -_spatium * .8;
-    double x2, y2;
-
-    double aw = style().styleMM(Sid::bendArrowWidth);
-    PolygonF arrowUp;
-    arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
-    PolygonF arrowDown;
-    arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
-
-    size_t n = m_points.size();
-    for (size_t pt = 0; pt < n - 1; ++pt) {
-        int pitch = m_points[pt].pitch;
-        if (pt == 0 && pitch) {
-            y2 = -m_notePos.y() - _spatium * 2;
-            x2 = x;
-            painter->drawLine(LineF(x, y, x2, y2));
-
-            painter->setBrush(curColor());
-            painter->drawPolygon(arrowUp.translated(x2, y2));
-
-            int idx = (pitch + 12) / 25;
-            const char* l = label[idx];
-            painter->drawText(RectF(x2, y2, .0, .0),
-                              draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
-                              String::fromAscii(l));
-
-            y = y2;
-        }
-        if (pitch == m_points[pt + 1].pitch) {
-            if (pt == (n - 2)) {
-                break;
-            }
-            x2 = x + _spatium;
-            y2 = y;
-            painter->drawLine(LineF(x, y, x2, y2));
-        } else if (pitch < m_points[pt + 1].pitch) {
-            // up
-            x2 = x + _spatium * .5;
-            y2 = -m_notePos.y() - _spatium * 2;
-            double dx = x2 - x;
-            double dy = y2 - y;
-
-            PainterPath path;
-            path.moveTo(x, y);
-            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            painter->setBrush(BrushStyle::NoBrush);
-            painter->drawPath(path);
-
-            painter->setBrush(curColor());
-            painter->drawPolygon(arrowUp.translated(x2, y2));
-
-            int idx = (m_points[pt + 1].pitch + 12) / 25;
-            const char* l = label[idx];
-            double ty = y2;       // - _spatium;
-            painter->drawText(RectF(x2, ty, .0, .0),
-                              draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
-                              String::fromAscii(l));
-        } else {
-            // down
-            x2 = x + _spatium * .5;
-            y2 = y + _spatium * 3;
-            double dx = x2 - x;
-            double dy = y2 - y;
-
-            PainterPath path;
-            path.moveTo(x, y);
-            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
-            painter->setBrush(BrushStyle::NoBrush);
-            painter->drawPath(path);
-
-            painter->setBrush(curColor());
-            painter->drawPolygon(arrowDown.translated(x2, y2));
-        }
-        x = x2;
-        y = y2;
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

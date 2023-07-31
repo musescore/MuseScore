@@ -35,6 +35,7 @@
 #include "libmscore/bagpembell.h"
 #include "libmscore/barline.h"
 #include "libmscore/beam.h"
+#include "libmscore/bend.h"
 
 #include "libmscore/ornament.h"
 
@@ -66,6 +67,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::BAR_LINE:     draw(item_cast<const BarLine*>(item), painter);
         break;
     case ElementType::BEAM:         draw(item_cast<const Beam*>(item), painter);
+        break;
+    case ElementType::BEND:         draw(item_cast<const Bend*>(item), painter);
         break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -526,5 +529,98 @@ void TDraw::draw(const Beam* item, Painter* painter)
             PointF(bs1->line.x1(), bs1->line.y1() + ww),
         }),
             draw::FillRule::OddEvenFill);
+    }
+}
+
+void TDraw::draw(const Bend* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    double _spatium = item->spatium();
+    double _lw = item->lineWidth();
+
+    Pen pen(item->curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    painter->setPen(pen);
+    painter->setBrush(Brush(item->curColor()));
+
+    mu::draw::Font f = item->font(_spatium * MScore::pixelRatio);
+    painter->setFont(f);
+
+    double x  = item->noteWidth() + _spatium * .2;
+    double y  = -_spatium * .8;
+    double x2, y2;
+
+    double aw = item->style().styleMM(Sid::bendArrowWidth);
+    PolygonF arrowUp;
+    arrowUp << PointF(0, 0) << PointF(aw * .5, aw) << PointF(-aw * .5, aw);
+    PolygonF arrowDown;
+    arrowDown << PointF(0, 0) << PointF(aw * .5, -aw) << PointF(-aw * .5, -aw);
+
+    size_t n = item->points().size();
+    for (size_t pt = 0; pt < n - 1; ++pt) {
+        int pitch = item->points()[pt].pitch;
+        if (pt == 0 && pitch) {
+            y2 = -item->notePos().y() - _spatium * 2;
+            x2 = x;
+            painter->drawLine(LineF(x, y, x2, y2));
+
+            painter->setBrush(item->curColor());
+            painter->drawPolygon(arrowUp.translated(x2, y2));
+
+            int idx = (pitch + 12) / 25;
+            const char* l = item->label[idx];
+            painter->drawText(RectF(x2, y2, .0, .0),
+                              draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
+                              String::fromAscii(l));
+
+            y = y2;
+        }
+        if (pitch == item->points()[pt + 1].pitch) {
+            if (pt == (n - 2)) {
+                break;
+            }
+            x2 = x + _spatium;
+            y2 = y;
+            painter->drawLine(LineF(x, y, x2, y2));
+        } else if (pitch < item->points()[pt + 1].pitch) {
+            // up
+            x2 = x + _spatium * .5;
+            y2 = -item->notePos().y() - _spatium * 2;
+            double dx = x2 - x;
+            double dy = y2 - y;
+
+            PainterPath path;
+            path.moveTo(x, y);
+            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
+            painter->setBrush(BrushStyle::NoBrush);
+            painter->drawPath(path);
+
+            painter->setBrush(item->curColor());
+            painter->drawPolygon(arrowUp.translated(x2, y2));
+
+            int idx = (item->points()[pt + 1].pitch + 12) / 25;
+            const char* l = item->label[idx];
+            double ty = y2;       // - _spatium;
+            painter->drawText(RectF(x2, ty, .0, .0),
+                              draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip,
+                              String::fromAscii(l));
+        } else {
+            // down
+            x2 = x + _spatium * .5;
+            y2 = y + _spatium * 3;
+            double dx = x2 - x;
+            double dy = y2 - y;
+
+            PainterPath path;
+            path.moveTo(x, y);
+            path.cubicTo(x + dx / 2, y, x2, y + dy / 4, x2, y2);
+            painter->setBrush(BrushStyle::NoBrush);
+            painter->drawPath(path);
+
+            painter->setBrush(item->curColor());
+            painter->drawPolygon(arrowDown.translated(x2, y2));
+        }
+        x = x2;
+        y = y2;
     }
 }
