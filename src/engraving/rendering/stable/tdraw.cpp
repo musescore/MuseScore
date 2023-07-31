@@ -36,6 +36,8 @@
 #include "libmscore/barline.h"
 #include "libmscore/beam.h"
 #include "libmscore/bend.h"
+#include "libmscore/box.h"
+#include "libmscore/textframe.h"
 
 #include "libmscore/ornament.h"
 
@@ -71,6 +73,14 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::BEAM:         draw(item_cast<const Beam*>(item), painter);
         break;
     case ElementType::BEND:         draw(item_cast<const Bend*>(item), painter);
+        break;
+    case ElementType::HBOX:         draw(item_cast<const HBox*>(item), painter);
+        break;
+    case ElementType::VBOX:         draw(item_cast<const VBox*>(item), painter);
+        break;
+    case ElementType::FBOX:         draw(item_cast<const FBox*>(item), painter);
+        break;
+    case ElementType::TBOX:         draw(item_cast<const TBox*>(item), painter);
         break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -649,4 +659,52 @@ void TDraw::draw(const Bend* item, Painter* painter)
         x = x2;
         y = y2;
     }
+}
+
+void TDraw::draw(const Box* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->score() && item->score()->printing()) {
+        return;
+    }
+
+    const bool showHighlightedFrame = item->selected() || item->dropTarget();
+    const bool showFrame = showHighlightedFrame || (item->score() ? item->score()->showFrames() : false);
+
+    if (showFrame) {
+        double lineWidth = item->spatium() * .15;
+        Pen pen;
+        pen.setWidthF(lineWidth);
+        pen.setJoinStyle(PenJoinStyle::MiterJoin);
+        pen.setCapStyle(PenCapStyle::SquareCap);
+        pen.setColor(showHighlightedFrame
+                     ? Box::engravingConfiguration()->selectionColor()
+                     : Box::engravingConfiguration()->formattingMarksColor());
+        pen.setDashPattern({ 1, 3 });
+
+        painter->setBrush(BrushStyle::NoBrush);
+        painter->setPen(pen);
+        lineWidth *= 0.5;
+        painter->drawRect(item->bbox().adjusted(lineWidth, lineWidth, -lineWidth, -lineWidth));
+    }
+}
+
+void TDraw::draw(const HBox* item, draw::Painter* painter)
+{
+    draw(static_cast<const Box*>(item), painter);
+}
+
+void TDraw::draw(const VBox* item, draw::Painter* painter)
+{
+    draw(static_cast<const Box*>(item), painter);
+}
+
+void TDraw::draw(const FBox* item, draw::Painter* painter)
+{
+    draw(static_cast<const Box*>(item), painter);
+}
+
+void TDraw::draw(const TBox* item, draw::Painter* painter)
+{
+    draw(static_cast<const Box*>(item), painter);
 }

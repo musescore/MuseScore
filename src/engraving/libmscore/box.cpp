@@ -67,30 +67,9 @@ void HBox::computeMinWidth()
 //   draw
 //---------------------------------------------------------
 
-void Box::draw(mu::draw::Painter* painter) const
+void Box::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (score() && score()->printing()) {
-        return;
-    }
-
-    const bool showHighlightedFrame = selected() || dropTarget();
-    const bool showFrame = showHighlightedFrame || (score() ? score()->showFrames() : false);
-
-    if (showFrame) {
-        double lineWidth = spatium() * .15;
-        Pen pen;
-        pen.setWidthF(lineWidth);
-        pen.setJoinStyle(PenJoinStyle::MiterJoin);
-        pen.setCapStyle(PenCapStyle::SquareCap);
-        pen.setColor(showHighlightedFrame ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
-        pen.setDashPattern({ 1, 3 });
-
-        painter->setBrush(BrushStyle::NoBrush);
-        painter->setPen(pen);
-        lineWidth *= 0.5;
-        painter->drawRect(bbox().adjusted(lineWidth, lineWidth, -lineWidth, -lineWidth));
-    }
+    UNREACHABLE;
 }
 
 bool Box::isEditAllowed(EditData&) const
