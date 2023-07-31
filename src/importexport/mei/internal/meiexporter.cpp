@@ -1173,7 +1173,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
 }
 
 /**
- * Write a rest (rest and mRest).
+ * Write a rest (rest, mRest, and space).
  */
 
 bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
@@ -1208,6 +1208,11 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
         this->fillControlEventMap(xmlId, rest);
 
         this->writeBeamAndTupletEnd(closingBeam, closingTuplet, closingBeamInTuplet);
+
+        // Change invisible rests to space by simply adjusting the element name
+        if (!rest->visible()) {
+            restNode.set_name("space");
+        }
     }
 
     return true;
