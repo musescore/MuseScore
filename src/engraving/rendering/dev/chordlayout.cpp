@@ -62,6 +62,8 @@
 #include "slurtielayout.h"
 #include "beamlayout.h"
 
+#include "accidentalrenderer.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -2304,7 +2306,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
             prevLine = note->line();
             prevSubtype = ac->subtype();
             ac->computeMag();
-            TLayout::layout(ac, ctx);
+            AccidentalRenderer::layoutAccidental(ac, ctx);
             if (!ac->visible() || note->fixed()) {
                 ac->setPos(ac->bbox().x() - ac->width(), 0.0);
             } else {

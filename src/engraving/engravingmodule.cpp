@@ -85,7 +85,9 @@ Versions:
 *
 * see layout/README.h
 */
-    ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::dev::ScoreRenderer());
+    auto devRenderer = std::make_shared<rendering::dev::ScoreRenderer>();
+    devRenderer->setup();
+    ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), devRenderer);
     //ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new layout::stable::ScoreRenderer());
 
     ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());

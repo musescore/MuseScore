@@ -173,7 +173,6 @@ public:
 
     static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
 
-    static void layout(Accidental* item, LayoutContext& ctx);
     static void layout(ActionIcon* item, LayoutContext& ctx);
     static void layout(Ambitus* item, LayoutContext& ctx);
     static void layout(Arpeggio* item, LayoutContext& ctx);

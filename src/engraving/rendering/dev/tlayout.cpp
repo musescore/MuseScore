@@ -156,6 +156,8 @@
 #include "tremololayout.h"
 #include "tupletlayout.h"
 
+#include "accidentalrenderer.h"
+
 using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
@@ -165,8 +167,6 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
     //DO_ASSERT(!ctx.conf().isPaletteMode());
     switch (item->type()) {
-    case ElementType::ACCIDENTAL:       layout(item_cast<Accidental*>(item), ctx);
-        break;
     case ElementType::ACTION_ICON:      layout(item_cast<ActionIcon*>(item), ctx);
         break;
     case ElementType::AMBITUS:          layout(item_cast<Ambitus*>(item), ctx);
@@ -363,103 +363,6 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     }
 }
 
-static SymId accidentalSingleSym(const Accidental* item)
-{
-    // if the accidental is standard (doubleflat, flat, natural, sharp or double sharp)
-    // and it has either no bracket or parentheses, then we have glyphs straight from smufl.
-
-    if (item->bracket() == AccidentalBracket::PARENTHESIS && !item->parentNoteHasParentheses()) {
-        switch (item->accidentalType()) {
-        case AccidentalType::FLAT:      return SymId::accidentalFlatParens;
-        case AccidentalType::FLAT2:     return SymId::accidentalDoubleFlatParens;
-        case AccidentalType::NATURAL:   return SymId::accidentalNaturalParens;
-        case AccidentalType::SHARP:     return SymId::accidentalSharpParens;
-        case AccidentalType::SHARP2:    return SymId::accidentalDoubleSharpParens;
-        default:
-            break;
-        }
-    }
-    return SymId::noSym;
-}
-
-static std::pair<SymId, SymId> accidentalBracketSyms(AccidentalBracket type)
-{
-    switch (type) {
-    case AccidentalBracket::PARENTHESIS: return { SymId::accidentalParensLeft, SymId::accidentalParensRight };
-    case AccidentalBracket::BRACKET: return { SymId::accidentalBracketLeft, SymId::accidentalBracketRight };
-    case AccidentalBracket::BRACE: return { SymId::accidentalCombiningOpenCurlyBrace, SymId::accidentalCombiningCloseCurlyBrace };
-    case AccidentalBracket::NONE: return { SymId::noSym, SymId::noSym };
-    }
-    return { SymId::noSym, SymId::noSym };
-}
-
-static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, Accidental::LayoutData& data)
-{
-    // TODO: remove Accidental in layout
-    // don't show accidentals for tab or slash notation
-    if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
-        data.isSkipDraw = true;
-        return;
-    }
-
-    if (item->accidentalType() == AccidentalType::NONE) {
-        return;
-    }
-
-    // Single?
-    SymId singleSym = accidentalSingleSym(item);
-    if (singleSym != SymId::noSym && ctx.engravingFont()->isValid(singleSym)) {
-        Accidental::LayoutData::Sym s(singleSym, 0.0, 0.0);
-        data.syms.push_back(s);
-
-        data.bbox.unite(item->symBbox(singleSym));
-    }
-    // Multi
-    else {
-        double margin = ctx.conf().styleMM(Sid::bracketedAccidentalPadding);
-        double x = 0.0;
-
-        std::pair<SymId, SymId> bracketSyms;
-        bool isNeedBracket = item->bracket() != AccidentalBracket::NONE && !item->parentNoteHasParentheses();
-        if (isNeedBracket) {
-            bracketSyms = accidentalBracketSyms(item->bracket());
-        }
-
-        // Left
-        if (bracketSyms.first != SymId::noSym) {
-            Accidental::LayoutData::Sym ls(bracketSyms.first, 0.0,
-                                           item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
-            data.syms.push_back(ls);
-            data.bbox.unite(item->symBbox(bracketSyms.first));
-
-            x += item->symAdvance(bracketSyms.first) + margin;
-        }
-
-        // Main
-        SymId mainSym = item->symId();
-        Accidental::LayoutData::Sym ms(mainSym, x, 0.0);
-        data.syms.push_back(ms);
-        data.bbox.unite(item->symBbox(mainSym).translated(x, 0.0));
-
-        // Right
-        if (bracketSyms.second != SymId::noSym) {
-            x += item->symAdvance(mainSym) + margin;
-
-            Accidental::LayoutData::Sym rs(bracketSyms.second, x,
-                                           item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
-            data.syms.push_back(rs);
-            data.bbox.unite(item->symBbox(bracketSyms.second).translated(x, 0.0));
-        }
-    }
-}
-
-void TLayout::layout(Accidental* item, LayoutContext& ctx)
-{
-    Accidental::LayoutData data;
-    layoutAccidental(item, ctx, data);
-    item->setLayoutData(data);
-}
-
 void TLayout::layout(ActionIcon* item, LayoutContext&)
 {
     if (!item->layoutData().isValid()) {
@@ -494,7 +397,7 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->topTpc(), key);
             item->topAccidental()->setAccidentalType(accidType);
-            layoutAccidental(item->topAccidental(), ctx, data.topAcc);
+            AccidentalRenderer::layoutAccidental(item->topAccidental(), ctx, data.topAcc);
             data.topAcc.pos.setY(data.topPos.y());
         }
 
@@ -508,7 +411,7 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->bottomTpc(), key);
             item->bottomAccidental()->setAccidentalType(accidType);
-            layoutAccidental(item->bottomAccidental(), ctx, data.bottomAcc);
+            AccidentalRenderer::layoutAccidental(item->bottomAccidental(), ctx, data.bottomAcc);
             data.bottomAcc.pos.setY(data.bottomPos.y());
         }
     }
@@ -3729,7 +3632,7 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
         }
         accidental->computeMag();
         accidental->setMag(accidental->mag() * ornamentAccidentalMag);
-        layout(accidental, ctx);
+        AccidentalRenderer::layoutAccidental(accidental, ctx);
         Shape accidentalShape = accidental->shape();
         double minVertDist = above ? accidentalShape.minVerticalDistance(item->bbox()) : Shape(item->bbox()).minVerticalDistance(
             accidentalShape);

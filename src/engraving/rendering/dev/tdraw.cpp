@@ -24,7 +24,6 @@
 #include "style/style.h"
 #include "types/typesconv.h"
 
-#include "libmscore/accidental.h"
 #include "libmscore/actionicon.h"
 #include "libmscore/ambitus.h"
 #include "libmscore/arpeggio.h"
@@ -47,8 +46,6 @@ using namespace mu::draw;
 void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 {
     switch (item->type()) {
-    case ElementType::ACCIDENTAL:   draw(item_cast<const Accidental*>(item), painter);
-        break;
     case ElementType::ACTION_ICON:  draw(item_cast<const ActionIcon*>(item), painter);
         break;
     case ElementType::AMBITUS:      draw(item_cast<const Ambitus*>(item), painter);
@@ -63,19 +60,6 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     default:
         item->draw(painter);
-    }
-}
-
-void TDraw::draw(const Accidental* item, draw::Painter* painter)
-{
-    TRACE_DRAW_ITEM;
-    if (item->layoutData().isSkipDraw) {
-        return;
-    }
-
-    painter->setPen(item->curColor());
-    for (const Accidental::LayoutData::Sym& e : item->layoutData().syms) {
-        item->drawSymbol(e.sym, painter, PointF(e.x, e.y));
     }
 }
 

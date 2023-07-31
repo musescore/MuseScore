@@ -33,6 +33,8 @@ class ScoreRenderer : public IScoreRenderer
 {
 public:
 
+    void setup();
+
     // Main interface
     void layoutScore(Score* score, const Fraction& st, const Fraction& et) const override;
 

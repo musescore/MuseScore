@@ -37,10 +37,19 @@
 
 #include "paint.h"
 
+#include "itemrenderersregister.h"
+#include "accidentalrenderer.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
+
+void ScoreRenderer::setup()
+{
+    ItemRenderersRegister* r = ItemRenderersRegister::instance();
+    r->reg(ElementType::ACCIDENTAL, std::make_shared<AccidentalRenderer>());
+}
 
 void ScoreRenderer::layoutScore(Score* score, const Fraction& st, const Fraction& et) const
 {
@@ -70,12 +79,23 @@ void ScoreRenderer::paintItem(draw::Painter& painter, const EngravingItem* item)
 void ScoreRenderer::doLayoutItem(EngravingItem* item)
 {
     LayoutContext ctx(item->score());
-    TLayout::layoutItem(item, ctx);
+
+    auto renderer = ItemRenderersRegister::instance()->renderer(item->type());
+    if (renderer) {
+        renderer->layout(item, ctx);
+    } else {
+        TLayout::layoutItem(item, ctx);
+    }
 }
 
 void ScoreRenderer::doDrawItem(const EngravingItem* item, draw::Painter* p)
 {
-    TDraw::drawItem(item, p);
+    auto renderer = ItemRenderersRegister::instance()->renderer(item->type());
+    if (renderer) {
+        renderer->draw(item, p);
+    } else {
+        TDraw::drawItem(item, p);
+    }
 }
 
 void ScoreRenderer::layoutText1(TextBase* item, bool base)

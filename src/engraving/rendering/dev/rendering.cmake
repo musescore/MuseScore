@@ -45,4 +45,10 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/arpeggiolayout.h
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.cpp
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/iitemrenderer.h
+    ${CMAKE_CURRENT_LIST_DIR}/itemrenderersregister.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/itemrenderersregister.h
+    ${CMAKE_CURRENT_LIST_DIR}/accidentalrenderer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/accidentalrenderer.h
 )
