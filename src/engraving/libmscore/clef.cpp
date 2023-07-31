@@ -119,14 +119,9 @@ double Clef::mag() const
 //   draw
 //---------------------------------------------------------
 
-void Clef::draw(mu::draw::Painter* painter) const
+void Clef::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (m_symId == SymId::noSym || (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genClef())) {
-        return;
-    }
-    painter->setPen(curColor());
-    drawSymbol(m_symId, painter);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

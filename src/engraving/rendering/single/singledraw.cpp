@@ -40,6 +40,7 @@
 #include "libmscore/breath.h"
 
 #include "libmscore/chordline.h"
+#include "libmscore/clef.h"
 
 #include "libmscore/ornament.h"
 
@@ -78,6 +79,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::CHORDLINE:    draw(item_cast<const ChordLine*>(item), painter);
+        break;
+    case ElementType::CLEF:         draw(item_cast<const Clef*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -642,4 +645,14 @@ void SingleDraw::draw(const ChordLine* item, Painter* painter)
         item->drawSymbols(ChordLine::WAVE_SYMBOLS, painter);
         painter->restore();
     }
+}
+
+void SingleDraw::draw(const Clef* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->symId() == SymId::noSym) {
+        return;
+    }
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->symId(), painter);
 }
