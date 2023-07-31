@@ -1321,6 +1321,8 @@ bool MeiImporter::readElements(pugi::xml_node parentNode, Measure* measure, int 
             success = success && this->readNote(xpathNode.node(), measure, track, ticks);
         } else if (elementName == "rest" && !m_readingGraceNotes) {
             success = success && this->readRest(xpathNode.node(), measure, track, ticks);
+        } else if (elementName == "space" && !m_readingGraceNotes) {
+            success = success && this->readSpace(xpathNode.node(), measure, track, ticks);
         } else if (elementName == "tuplet" && !m_readingGraceNotes) {
             success = success && this->readTuplet(xpathNode.node(), measure, track, ticks);
         } else {
@@ -1569,7 +1571,25 @@ bool MeiImporter::readRest(pugi::xml_node restNode, engraving::Measure* measure,
     Rest* rest = static_cast<Rest*>(addChordRest(restNode, measure, track, meiRest, ticks, true));
 
     UNUSED(rest);
-    //ticks += rest->ticks().ticks();
+
+    return true;
+}
+
+/**
+ * Read a space.
+ */
+
+bool MeiImporter::readSpace(pugi::xml_node spaceNode, engraving::Measure* measure, int track, int& ticks)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    libmei::Space meiSpace;
+    meiSpace.Read(spaceNode);
+
+    Rest* space = static_cast<Rest*>(addChordRest(spaceNode, measure, track, meiSpace, ticks, true));
+    space->setVisible(false);
 
     return true;
 }

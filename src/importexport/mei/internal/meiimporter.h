@@ -90,6 +90,7 @@ private:
     bool readMRest(pugi::xml_node mRestNode, engraving::Measure* measure, int track, int& ticks);
     bool readNote(pugi::xml_node noteNode, engraving::Measure* measure, int track, int& ticks, engraving::Chord* chord = nullptr);
     bool readRest(pugi::xml_node restNode, engraving::Measure* measure, int track, int& ticks);
+    bool readSpace(pugi::xml_node spaceNode, engraving::Measure* measure, int track, int& ticks);
     bool readTuplet(pugi::xml_node tupletNode, engraving::Measure* measure, int track, int& ticks);
 
     /**
