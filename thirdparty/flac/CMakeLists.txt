@@ -71,6 +71,7 @@ set(MODULE_USE_PCH_NONE ON)
 set(MODULE_USE_UNITY_NONE ON)
 include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 
+target_no_warning(${MODULE} -Wno-deprecated)
 target_no_warning(${MODULE} -Wno-unused-parameter)
 target_no_warning(${MODULE} -Wno-unused-variable)
 target_no_warning(${MODULE} -Wno-type-limits)
