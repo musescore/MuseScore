@@ -37,6 +37,7 @@
 #include "libmscore/beam.h"
 #include "libmscore/bend.h"
 #include "libmscore/bracket.h"
+#include "libmscore/breath.h"
 
 #include "libmscore/ornament.h"
 
@@ -69,6 +70,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::BEND:         draw(item_cast<const Bend*>(item), painter);
         break;
     case ElementType::BRACKET:      draw(item_cast<const Bracket*>(item), painter);
+        break;
+    case ElementType::BREATH:       draw(item_cast<const Breath*>(item), painter);
         break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -610,4 +613,11 @@ void SingleDraw::draw(const Bracket* item, Painter* painter)
     case BracketType::NO_BRACKET:
         break;
     }
+}
+
+void SingleDraw::draw(const Breath* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->symId(), painter);
 }

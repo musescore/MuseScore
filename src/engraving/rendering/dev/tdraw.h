@@ -190,6 +190,7 @@ private:
     static void draw(const TBox* item, draw::Painter* painter);
 
     static void draw(const Bracket* item, draw::Painter* painter);
+    static void draw(const Breath* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 };

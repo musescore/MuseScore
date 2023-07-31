@@ -87,11 +87,9 @@ double Breath::mag() const
 //   draw
 //---------------------------------------------------------
 
-void Breath::draw(mu::draw::Painter* painter) const
+void Breath::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    painter->setPen(curColor());
-    drawSymbol(_symId, painter);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
