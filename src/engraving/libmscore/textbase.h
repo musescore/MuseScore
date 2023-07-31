@@ -389,6 +389,7 @@ public:
     const TextBlock& textBlock(int line) const { return m_blocks[line]; }
     TextBlock& textBlock(int line) { return m_blocks[line]; }
     std::vector<TextBlock>& textBlockList() { return m_blocks; }
+    const std::vector<TextBlock>& blocks() const { return m_blocks; }
     size_t rows() const { return m_blocks.size(); }
 
     void setTextInvalid() { m_textInvalid = true; }
@@ -436,13 +437,16 @@ public:
     void createBlocks();
     void layoutFrame();
 
+    const mu::RectF& frame() const { return m_frame; }
+
+    mu::draw::Color textColor() const;
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
     TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
     TextBase(const TextBase&);
 
-    mu::draw::Color textColor() const;
     mu::RectF m_frame;             // calculated in layout()
 
     void insertSym(EditData& ed, SymId id);
