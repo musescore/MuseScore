@@ -23,8 +23,9 @@
 
 #include "draw/fontmetrics.h"
 
-#include "style/style.h"
 #include "types/typesconv.h"
+#include "style/style.h"
+#include "style/defaultstyle.h"
 
 #include "libmscore/accidental.h"
 #include "libmscore/actionicon.h"
@@ -43,10 +44,13 @@
 
 #include "libmscore/chordline.h"
 #include "libmscore/clef.h"
+#include "libmscore/capo.h"
+
+#include "libmscore/note.h"
 
 #include "libmscore/ornament.h"
 
-#include "libmscore/note.h"
+#include "libmscore/textbase.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
@@ -96,6 +100,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::CHORDLINE:    draw(item_cast<const ChordLine*>(item), painter);
         break;
     case ElementType::CLEF:         draw(item_cast<const Clef*>(item), painter);
+        break;
+    case ElementType::CAPO:         draw(item_cast<const Capo*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -677,7 +683,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
     }
 }
 
-void TDraw::draw(const Box* item, Painter* painter)
+void TDraw::drawBox(const Box* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     if (item->score() && item->score()->printing()) {
@@ -707,22 +713,22 @@ void TDraw::draw(const Box* item, Painter* painter)
 
 void TDraw::draw(const HBox* item, draw::Painter* painter)
 {
-    draw(static_cast<const Box*>(item), painter);
+    drawBox(static_cast<const Box*>(item), painter);
 }
 
 void TDraw::draw(const VBox* item, draw::Painter* painter)
 {
-    draw(static_cast<const Box*>(item), painter);
+    drawBox(static_cast<const Box*>(item), painter);
 }
 
 void TDraw::draw(const FBox* item, draw::Painter* painter)
 {
-    draw(static_cast<const Box*>(item), painter);
+    drawBox(static_cast<const Box*>(item), painter);
 }
 
 void TDraw::draw(const TBox* item, draw::Painter* painter)
 {
-    draw(static_cast<const Box*>(item), painter);
+    drawBox(static_cast<const Box*>(item), painter);
 }
 
 void TDraw::draw(const Bracket* item, Painter* painter)
@@ -818,4 +824,45 @@ void TDraw::draw(const Clef* item, Painter* painter)
     }
     painter->setPen(item->curColor());
     item->drawSymbol(item->symId(), painter);
+}
+
+void TDraw::draw(const Capo* item, Painter* painter)
+{
+    drawTextBase(item, painter);
+}
+
+void TDraw::drawTextBase(const TextBase* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->hasFrame()) {
+        double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
+        if (item->frameWidth().val() != 0.0) {
+            Color fColor = item->curColor(item->visible(), item->frameColor());
+            double frameWidthVal = item->frameWidth().val() * (item->sizeIsSpatiumDependent() ? item->spatium() : baseSpatium);
+
+            Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
+            painter->setPen(pen);
+        } else {
+            painter->setNoPen();
+        }
+        Color bg(item->bgColor());
+        painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
+        if (item->circle()) {
+            painter->drawEllipse(item->frame());
+        } else {
+            double frameRoundFactor = (item->sizeIsSpatiumDependent() ? (item->spatium() / baseSpatium) / 2 : 0.5f);
+
+            int r2 = item->frameRound() * frameRoundFactor;
+            if (r2 > 99) {
+                r2 = 99;
+            }
+            painter->drawRoundedRect(item->frame(), item->frameRound() * frameRoundFactor, r2);
+        }
+    }
+    painter->setBrush(BrushStyle::NoBrush);
+    painter->setPen(item->textColor());
+    for (const TextBlock& t : item->blocks()) {
+        t.draw(painter, item);
+    }
 }

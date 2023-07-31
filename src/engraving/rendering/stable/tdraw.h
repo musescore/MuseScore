@@ -182,7 +182,7 @@ private:
     static void draw(const BarLine* item, draw::Painter* painter);
     static void draw(const Beam* item, draw::Painter* painter);
     static void draw(const Bend* item, draw::Painter* painter);
-    static void draw(const Box* item, draw::Painter* painter);
+    static void drawBox(const Box* item, draw::Painter* painter);
     static void draw(const HBox* item, draw::Painter* painter);
     static void draw(const VBox* item, draw::Painter* painter);
     static void draw(const FBox* item, draw::Painter* painter);
@@ -192,8 +192,11 @@ private:
 
     static void draw(const ChordLine* item, draw::Painter* painter);
     static void draw(const Clef* item, draw::Painter* painter);
+    static void draw(const Capo* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
+
+    static void drawTextBase(const TextBase* item, draw::Painter* painter);
 };
 }
 
