@@ -34,6 +34,7 @@
 
 #include "libmscore/bagpembell.h"
 #include "libmscore/barline.h"
+#include "libmscore/beam.h"
 
 #include "libmscore/ornament.h"
 
@@ -62,9 +63,11 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::ARTICULATION: draw(item_cast<const Articulation*>(item), painter);
         break;
+    case ElementType::BAGPIPE_EMBELLISHMENT: draw(item_cast<const BagpipeEmbellishment*>(item), painter);
+        break;
     case ElementType::BAR_LINE:     draw(item_cast<const BarLine*>(item), painter);
         break;
-    case ElementType::BAGPIPE_EMBELLISHMENT: draw(item_cast<const BagpipeEmbellishment*>(item), painter);
+    case ElementType::BEAM:         draw(item_cast<const Beam*>(item), painter);
         break;
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -518,5 +521,36 @@ void TDraw::draw(const BarLine* item, Painter* painter)
 
             painter->drawText(-r.width(), 0.0, ch);
         }
+    }
+}
+
+void TDraw::draw(const Beam* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->beamSegments().empty()) {
+        return;
+    }
+    painter->setBrush(mu::draw::Brush(item->curColor()));
+    painter->setNoPen();
+
+    // make beam thickness independent of slant
+    // (expression can be simplified?)
+
+    const LineF bs = item->beamSegments().front()->line;
+    double d  = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
+    if (item->beamSegments().size() > 1 && d > M_PI / 6.0) {
+        d = M_PI / 6.0;
+    }
+    double ww = (item->beamWidth() / 2.0) / sin(M_PI_2 - atan(d));
+
+    for (const BeamSegment* bs1 : item->beamSegments()) {
+        painter->drawPolygon(
+            PolygonF({
+            PointF(bs1->line.x1(), bs1->line.y1() - ww),
+            PointF(bs1->line.x2(), bs1->line.y2() - ww),
+            PointF(bs1->line.x2(), bs1->line.y2() + ww),
+            PointF(bs1->line.x1(), bs1->line.y1() + ww),
+        }),
+            draw::FillRule::OddEvenFill);
     }
 }
