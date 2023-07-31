@@ -91,7 +91,7 @@ ScoresView {
                         // TODO: accessibility
                         text: score.fileSize ?? ""
 
-                        font.capitalization: Font.AllUppercase
+                        font: ui.theme.largeBodyFont
                         horizontalAlignment: Text.AlignLeft
                     }
                 }

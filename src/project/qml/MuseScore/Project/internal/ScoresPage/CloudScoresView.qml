@@ -180,7 +180,7 @@ ScoresView {
                         // TODO: accessibility
                         text: score.fileSize ?? ""
 
-                        font.capitalization: Font.AllUppercase
+                        font: ui.theme.largeBodyFont
                         horizontalAlignment: Text.AlignLeft
                     }
                 },
@@ -210,7 +210,7 @@ ScoresView {
                             // TODO: accessibility
                             text: score.cloudViewCount ?? ""
 
-                            font.capitalization: Font.AllUppercase
+                            font: ui.theme.largeBodyFont
                             horizontalAlignment: Text.AlignLeft
                         }
                     }
