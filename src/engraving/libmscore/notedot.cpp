@@ -22,6 +22,8 @@
 
 #include "notedot.h"
 
+#include "style/style.h"
+
 #include "note.h"
 #include "rest.h"
 

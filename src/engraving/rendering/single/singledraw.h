@@ -194,6 +194,7 @@ private:
     static void draw(const MeasureRepeat* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
+    static void draw(const OttavaSegment* item, draw::Painter* painter);
 
     static void draw(const StretchedBend* item, draw::Painter* painter);
 

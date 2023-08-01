@@ -81,6 +81,7 @@
 #include "libmscore/measurerepeat.h"
 
 #include "libmscore/ornament.h"
+#include "libmscore/ottava.h"
 
 #include "libmscore/stretchedbend.h"
 
@@ -194,6 +195,10 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 
     case ElementType::STRETCHED_BEND: draw(item_cast<const StretchedBend*>(item), painter);
         break;
+
+    case ElementType::OTTAVA_SEGMENT: draw(item_cast<const OttavaSegment*>(item), painter);
+        break;
+
     default:
         item->draw(painter);
     }
@@ -1541,4 +1546,10 @@ void SingleDraw::draw(const MeasureRepeat* item, Painter* painter)
 
     painter->setPen(item->curColor());
     item->drawSymbol(item->symId(), painter);
+}
+
+void SingleDraw::draw(const OttavaSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
 }
