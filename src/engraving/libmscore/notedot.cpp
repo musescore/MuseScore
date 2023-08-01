@@ -22,11 +22,8 @@
 
 #include "notedot.h"
 
-#include "chord.h"
 #include "note.h"
 #include "rest.h"
-#include "score.h"
-#include "staff.h"
 
 #include "log.h"
 
@@ -53,24 +50,9 @@ NoteDot::NoteDot(Rest* parent)
 //   NoteDot::draw
 //---------------------------------------------------------
 
-void NoteDot::draw(mu::draw::Painter* painter) const
+void NoteDot::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (note() && note()->dotsHidden()) {     // don't draw dot if note is hidden
-        return;
-    } else if (rest() && rest()->isGap()) {  // don't draw dot for gap rests
-        return;
-    }
-    Note* n = note();
-    Fraction tick = n ? n->chord()->tick() : rest()->tick();
-    // always draw dot for non-tab
-    // for tab, draw if on a note and stems through staff or on a rest and rests shown
-    if (!staff()->isTabStaff(tick)
-        || (n && staff()->staffType(tick)->stemThrough())
-        || (!n && staff()->staffType(tick)->showRests())) {
-        painter->setPen(curColor());
-        drawSymbol(SymId::augmentationDot, painter);
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

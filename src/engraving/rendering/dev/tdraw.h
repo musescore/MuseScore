@@ -235,6 +235,7 @@ private:
     static void draw(const MMRestRange* item, draw::Painter* painter);
 
     static void draw(const Note* item, draw::Painter* painter);
+    static void draw(const NoteDot* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 

@@ -88,6 +88,7 @@
 #include "libmscore/mmrestrange.h"
 
 #include "libmscore/note.h"
+#include "libmscore/notedot.h"
 
 #include "libmscore/ornament.h"
 
@@ -225,6 +226,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::NOTE:         draw(item_cast<const Note*>(item), painter);
+        break;
+    case ElementType::NOTEDOT:      draw(item_cast<const NoteDot*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1972,5 +1975,25 @@ void TDraw::draw(const Note* item, Painter* painter)
             painter->restore();
         }
         item->drawSymbol(item->cachedNoteheadSym(), painter);
+    }
+}
+
+void TDraw::draw(const NoteDot* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->note() && item->note()->dotsHidden()) {     // don't draw dot if note is hidden
+        return;
+    } else if (item->rest() && item->rest()->isGap()) {  // don't draw dot for gap rests
+        return;
+    }
+    const Note* n = item->note();
+    Fraction tick = n ? n->chord()->tick() : item->rest()->tick();
+    // always draw dot for non-tab
+    // for tab, draw if on a note and stems through staff or on a rest and rests shown
+    if (!item->staff()->isTabStaff(tick)
+        || (n && item->staff()->staffType(tick)->stemThrough())
+        || (!n && item->staff()->staffType(tick)->showRests())) {
+        painter->setPen(item->curColor());
+        item->drawSymbol(SymId::augmentationDot, painter);
     }
 }
