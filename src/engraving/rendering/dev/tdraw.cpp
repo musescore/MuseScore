@@ -74,6 +74,8 @@
 
 #include "libmscore/jump.h"
 
+#include "libmscore/keysig.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/text.h"
@@ -176,6 +178,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::JUMP:         draw(item_cast<const Jump*>(item), painter);
+        break;
+
+    case ElementType::KEYSIG:       draw(item_cast<const KeySig*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1593,4 +1598,39 @@ void TDraw::draw(const Jump* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const KeySig* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    painter->setPen(item->curColor());
+    double _spatium = item->spatium();
+    double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
+    int lines = item->staff() ? item->staff()->staffTypeForElement(item)->lines() : 5;
+    double ledgerLineWidth = item->style().styleMM(Sid::ledgerLineWidth) * item->mag();
+    double ledgerExtraLen = item->style().styleS(Sid::ledgerLineLength).val() * _spatium;
+    for (const KeySym& ks : item->keySymbols()) {
+        double x = ks.xPos * _spatium;
+        double y = ks.line * step;
+        item->drawSymbol(ks.sym, painter, PointF(x, y));
+        // ledger lines
+        double _symWidth = item->symWidth(ks.sym);
+        double x1 = x - ledgerExtraLen;
+        double x2 = x + _symWidth + ledgerExtraLen;
+        painter->setPen(Pen(item->curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+        for (int i = -2; i >= ks.line; i -= 2) { // above
+            y = i * step;
+            painter->drawLine(LineF(x1, y, x2, y));
+        }
+        for (int i = lines * 2; i <= ks.line; i += 2) { // below
+            y = i * step;
+            painter->drawLine(LineF(x1, y, x2, y));
+        }
+    }
+    if (!item->explicitParent() && (item->isAtonal() || item->isCustom()) && item->keySymbols().empty()) {
+        // empty custom or atonal key signature - draw something for palette
+        painter->setPen(item->engravingConfiguration()->formattingMarksColor());
+        item->drawSymbol(SymId::timeSigX, painter, PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
+    }
 }

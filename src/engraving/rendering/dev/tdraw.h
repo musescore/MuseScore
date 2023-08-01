@@ -220,6 +220,8 @@ private:
 
     static void draw(const Jump* item, draw::Painter* painter);
 
+    static void draw(const KeySig* item, draw::Painter* painter);
+
     static void draw(const Ornament* item, draw::Painter* painter);
 
     static void draw(const StretchedBend* item, draw::Painter* painter);
