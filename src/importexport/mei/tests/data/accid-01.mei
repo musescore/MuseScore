@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0.0-dev+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Untitled score</title>
+            <respStmt>
+               <persName role="composer">Composer / arranger</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-07-30T14:58:33" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Untitled score</rend>
+                        <lb />
+                        <rend type="subtitle" fontsize="large">Subtitle</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Composer / arranger</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" keysig="3s" meter.count="4" meter.unit="4">
+                        <label>Voice</label>
+                        <labelAbbr>Vo.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m1" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="s1l1_t0_1" dur="4" pname="a" oct="4" />
+                           <note xml:id="s1l1_t1_4" dur="4" pname="a" oct="4" />
+                           <note xml:id="s1l1_t1_2" dur="4" pname="a" oct="4" />
+                           <note xml:id="s1l1_t3_4" dur="4" pname="b" oct="4" />
+                        </layer>
+                        <layer xml:id="m1s1l2" n="2">
+                           <note xml:id="s1l2_t0_1" dur="4" pname="f" oct="4">
+                              <accid xml:id="m1s1l2a1" accid.ges="s" />
+                           </note>
+                           <note xml:id="s1l2_t1_4" dur="4" pname="e" oct="4" />
+                           <note xml:id="s1l2_t1_2" dur="4" pname="f" oct="4">
+                              <accid xml:id="m1s1l2a2" accid.ges="s" />
+                           </note>
+                           <note xml:id="s1l2_t3_4" dur="4" pname="f" oct="4">
+                              <accid xml:id="m1s1l2a3" accid.ges="s" />
+                           </note>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m2" right="end" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="s1l1_t1_1" dur="4" pname="g" oct="4">
+                              <accid xml:id="m2s1l1a1" accid="n" />
+                           </note>
+                           <note xml:id="s1l1_t5_4" dur="4" pname="f" oct="4">
+                              <accid xml:id="m2s1l1a2" accid.ges="s" />
+                           </note>
+                           <note xml:id="s1l1_t3_2" dur="4" pname="e" oct="4" />
+                           <note xml:id="s1l1_t7_4" dur="4" pname="b" oct="4" />
+                        </layer>
+                        <layer xml:id="m2s1l2" n="2">
+                           <note xml:id="s1l2_t1_1" dur="4" pname="e" oct="4" />
+                           <note xml:id="s1l2_t5_4" dur="4" pname="d" oct="4">
+                              <accid xml:id="m2s1l2a1" accid="s" />
+                           </note>
+                           <note xml:id="s1l2_t3_2" dur="4" pname="b" oct="3" />
+                           <note xml:id="s1l2_t7_4" dur="4" pname="g" oct="4">
+                              <accid xml:id="m2s1l2a2" accid="s" />
+                           </note>
+                        </layer>
+                     </staff>
+                     <slur xml:id="m2sl1" startid="#s1l1_t1_1" endid="#s1l1_t5_4" />
+                     <fermata xml:id="m2fm1" startid="#s1l1_t3_2" />
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>
