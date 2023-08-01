@@ -72,6 +72,10 @@ public:
 
     void layout0();
 
+    double lw() const { return m_lw; }
+    const RectF& iconBorderRect() const { return m_iconBorderRect; }
+    const draw::PainterPath& iconPath() const { return m_iconPath; }
+
 protected:
     void added() override;
     void removed() override;
@@ -86,7 +90,7 @@ private:
 
     void spatiumChanged(double oldValue, double newValue) override;
 
-    double lw;
+    double m_lw;
     mu::RectF m_iconBorderRect;
     mu::draw::PainterPath m_iconPath;
     double _pause;
