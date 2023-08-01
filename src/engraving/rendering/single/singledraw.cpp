@@ -68,6 +68,8 @@
 #include "libmscore/instrchange.h"
 #include "libmscore/instrumentname.h"
 
+#include "libmscore/jump.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/stretchedbend.h"
@@ -155,6 +157,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::INSTRUMENT_CHANGE: draw(item_cast<const InstrumentChange*>(item), painter);
         break;
     case ElementType::INSTRUMENT_NAME: draw(item_cast<const InstrumentName*>(item), painter);
+        break;
+
+    case ElementType::JUMP:         draw(item_cast<const Jump*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1404,6 +1409,12 @@ void SingleDraw::draw(const InstrumentChange* item, Painter* painter)
 }
 
 void SingleDraw::draw(const InstrumentName* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const Jump* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
