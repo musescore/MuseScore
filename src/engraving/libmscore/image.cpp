@@ -26,7 +26,6 @@
 #include "io/fileinfo.h"
 
 #include "draw/types/pixmap.h"
-#include "draw/types/transform.h"
 #include "draw/svgrenderer.h"
 
 #include "imageStore.h"
@@ -143,62 +142,9 @@ SizeF Image::imageSize() const
 //   draw
 //---------------------------------------------------------
 
-void Image::draw(mu::draw::Painter* painter) const
+void Image::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    bool emptyImage = false;
-    if (m_imageType == ImageType::SVG) {
-        if (!m_svgDoc) {
-            emptyImage = true;
-        } else {
-            m_svgDoc->render(painter, bbox());
-        }
-    } else if (m_imageType == ImageType::RASTER) {
-        if (m_rasterDoc == nullptr) {
-            emptyImage = true;
-        } else {
-            painter->save();
-            SizeF s;
-            if (m_sizeIsSpatium) {
-                s = m_size * spatium();
-            } else {
-                s = m_size * DPMM;
-            }
-            if (score() && score()->printing() && !MScore::svgPrinting) {
-                // use original image size for printing, but not for svg for reasonable file size.
-                painter->scale(s.width() / m_rasterDoc->width(), s.height() / m_rasterDoc->height());
-                painter->drawPixmap(PointF(0, 0), *m_rasterDoc);
-            } else {
-                Transform t = painter->worldTransform();
-                Size ss = Size(s.width() * t.m11(), s.height() * t.m22());
-                t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
-                painter->setWorldTransform(t);
-                if ((m_buffer.size() != ss || m_dirty) && m_rasterDoc && !m_rasterDoc->isNull()) {
-                    m_buffer = imageProvider()->scaled(*m_rasterDoc, ss);
-                    m_dirty = false;
-                }
-                if (m_buffer.isNull()) {
-                    emptyImage = true;
-                } else {
-                    painter->drawPixmap(PointF(0.0, 0.0), m_buffer);
-                }
-            }
-            painter->restore();
-        }
-    }
-
-    if (emptyImage) {
-        painter->setBrush(mu::draw::BrushStyle::NoBrush);
-        painter->setPen(engravingConfiguration()->defaultColor());
-        painter->drawRect(bbox());
-        painter->drawLine(0.0, 0.0, bbox().width(), bbox().height());
-        painter->drawLine(bbox().width(), 0.0, 0.0, bbox().height());
-    }
-    if (selected() && !(score() && score()->printing())) {
-        painter->setBrush(mu::draw::BrushStyle::NoBrush);
-        painter->setPen(engravingConfiguration()->selectionColor());
-        painter->drawRect(bbox());
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

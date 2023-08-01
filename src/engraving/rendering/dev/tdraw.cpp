@@ -22,6 +22,7 @@
 #include "tdraw.h"
 
 #include "draw/fontmetrics.h"
+#include "draw/svgrenderer.h"
 
 #include "types/typesconv.h"
 #include "style/style.h"
@@ -66,6 +67,8 @@
 #include "libmscore/harmonicmark.h"
 #include "libmscore/harmony.h"
 #include "libmscore/hook.h"
+
+#include "libmscore/image.h"
 
 #include "libmscore/ornament.h"
 
@@ -159,6 +162,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::HARMONY:      draw(item_cast<const Harmony*>(item), painter);
         break;
     case ElementType::HOOK:         draw(item_cast<const Hook*>(item), painter);
+        break;
+
+    case ElementType::IMAGE:        draw(item_cast<const Image*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1500,4 +1506,62 @@ void TDraw::draw(const Hook* item, Painter* painter)
 
     painter->setPen(item->curColor());
     item->drawSymbol(item->sym(), painter);
+}
+
+void TDraw::draw(const Image* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    bool emptyImage = false;
+    if (item->imageType() == ImageType::SVG) {
+        if (!item->svgRenderer()) {
+            emptyImage = true;
+        } else {
+            item->svgRenderer()->render(painter, item->bbox());
+        }
+    } else if (item->imageType() == ImageType::RASTER) {
+        if (item->rasterImage() == nullptr) {
+            emptyImage = true;
+        } else {
+            painter->save();
+            SizeF s;
+            if (item->sizeIsSpatium()) {
+                s = item->size() * item->spatium();
+            } else {
+                s = item->size() * DPMM;
+            }
+            if (item->score() && item->score()->printing() && !MScore::svgPrinting) {
+                // use original image size for printing, but not for svg for reasonable file size.
+                painter->scale(s.width() / item->rasterImage()->width(), s.height() / item->rasterImage()->height());
+                painter->drawPixmap(PointF(0, 0), *item->rasterImage());
+            } else {
+                Transform t = painter->worldTransform();
+                Size ss = Size(s.width() * t.m11(), s.height() * t.m22());
+                t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
+                painter->setWorldTransform(t);
+                if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
+                    item->setBuffer(item->imageProvider()->scaled(*item->rasterImage(), ss));
+                    item->setDirty(false);
+                }
+                if (item->buffer().isNull()) {
+                    emptyImage = true;
+                } else {
+                    painter->drawPixmap(PointF(0.0, 0.0), item->buffer());
+                }
+            }
+            painter->restore();
+        }
+    }
+
+    if (emptyImage) {
+        painter->setBrush(mu::draw::BrushStyle::NoBrush);
+        painter->setPen(item->engravingConfiguration()->defaultColor());
+        painter->drawRect(item->bbox());
+        painter->drawLine(0.0, 0.0, item->bbox().width(), item->bbox().height());
+        painter->drawLine(item->bbox().width(), 0.0, 0.0, item->bbox().height());
+    }
+    if (item->selected() && !(item->score() && item->score()->printing())) {
+        painter->setBrush(mu::draw::BrushStyle::NoBrush);
+        painter->setPen(item->engravingConfiguration()->selectionColor());
+        painter->drawRect(item->bbox());
+    }
 }

@@ -69,7 +69,7 @@ public:
     bool isImageFramed() const;
     double imageAspectRatio() const;
     void setSize(const mu::SizeF& s) { m_size = s; }
-    mu::SizeF size() const { return m_size; }
+    const mu::SizeF& size() const { return m_size; }
     void updateImageHeight(const double& height);
     void updateImageWidth(const double& width);
     double imageHeight() const;
@@ -95,8 +95,11 @@ public:
     mu::SizeF imageSize() const;
 
     void setImageType(ImageType);
-    ImageType getImageType() const { return m_imageType; }
+    ImageType imageType() const { return m_imageType; }
     bool isValid() const { return m_rasterDoc || m_svgDoc; }
+
+    mu::draw::SvgRenderer* svgRenderer() const { return m_svgDoc; }
+    const std::shared_ptr<mu::draw::Pixmap>& rasterImage() const { return m_rasterDoc; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
@@ -106,6 +109,11 @@ public:
 
     mu::SizeF pixel2size(const mu::SizeF& s) const;
     mu::SizeF size2pixel(const mu::SizeF& s) const;
+
+    const mu::draw::Pixmap& buffer() const { return m_buffer; }
+    void setBuffer(const mu::draw::Pixmap& p) const { m_buffer = p; }
+    bool dirty() const { return m_dirty; }
+    void setDirty(bool val) const { m_dirty = val; }
 
 private:
 
