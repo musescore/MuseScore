@@ -150,22 +150,22 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
             track_idx_t track = staff->idx() * VOICES;
             Measure* m = segment()->measure(); //findMeasure();
             StaffType staffType = instrument->defaultStaffType();
-            StaffTypeChange* stc = nullptr;
-            // if staffTypeChange already there, change it, only if deafaults differ
+            // if staffTypeChange already there, preserve customised staffType if both instruments have same defaults
             if (staff->isStaffTypeStartFrom(tickStart)) {
                 StaffType oldStafftype = oldInstrument->defaultStaffType();
-                if (!(staffType == oldStafftype)) {
-                    for (EngravingItem* e : m->el()) {
-                        if (e->isStaffTypeChange() && e->track() == track) {
-                            score()->deleteItem(e);
-                        }
-                    }
-                } else {
-                    break;
+                if (staffType == oldStafftype) {
+                    staffType = *staff->staffType(tickStart);
                 }
+                for (EngravingItem* e : m->el()) {
+                    if (e->isStaffTypeChange() && e->track() == track) {
+                        score()->deleteItem(e);
+                        break;
+                    }
+                }
+
             }
             StaffType* tmpStaffType = new StaffType(staffType);
-            stc = Factory::createStaffTypeChange(m);
+            StaffTypeChange* stc = Factory::createStaffTypeChange(m);
             stc->setParent(m);
             stc->setTrack(track);
             stc->setForInstrumentChange(true);
