@@ -36,16 +36,15 @@ class Score;
 class PlaybackContext
 {
 public:
-    mpe::dynamic_level_t appliableDynamicLevel(const int nominalPositionTick) const;
-    mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
-
     void update(const ID partId, const Score* score);
     void clear();
 
     mpe::DynamicLevelLayers dynamicLevelLayers(const Score* score) const;
+    mpe::dynamic_level_t appliableDynamicLevel(const voice_idx_t voiceId, const int nominalPositionTick) const;
+    mpe::ArticulationType persistentArticulationType(const int nominalPositionTick) const;
 
 private:
-    mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
+    mpe::dynamic_level_t nominalDynamicLevel(const voice_idx_t voiceIdx, const int positionTick) const;
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
     void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);

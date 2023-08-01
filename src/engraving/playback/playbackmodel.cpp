@@ -404,7 +404,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             continue;
         }
 
-        m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(segmentStartTick + tickPositionOffset),
+        m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(item->voice(), segmentStartTick + tickPositionOffset),
                           ctx.persistentArticulationType(segmentStartTick + tickPositionOffset), std::move(profile),
                           m_playbackDataMap[trackId].originEvents);
 

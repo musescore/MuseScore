@@ -39,26 +39,6 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-dynamic_level_t PlaybackContext::appliableDynamicLevel(const int nominalPositionTick) const
-{
-    auto it = findLessOrEqual(m_dynamicsMap, nominalPositionTick);
-    if (it == m_dynamicsMap.cend()) {
-        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
-    }
-
-    return it->second;
-}
-
-ArticulationType PlaybackContext::persistentArticulationType(const int nominalPositionTick) const
-{
-    auto it = findLessOrEqual(m_playTechniquesMap, nominalPositionTick);
-    if (it == m_playTechniquesMap.cend()) {
-        return mpe::ArticulationType::Standard;
-    }
-
-    return it->second;
-}
-
 void PlaybackContext::update(const ID partId, const Score* score)
 {
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
@@ -102,8 +82,32 @@ DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const Score* score) const
     return layers;
 }
 
-dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) const
+dynamic_level_t PlaybackContext::appliableDynamicLevel(const voice_idx_t voiceIdx, const int nominalPositionTick) const
 {
+    UNUSED(voiceIdx);
+
+    auto it = findLessOrEqual(m_dynamicsMap, nominalPositionTick);
+    if (it == m_dynamicsMap.cend()) {
+        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    }
+
+    return it->second;
+}
+
+ArticulationType PlaybackContext::persistentArticulationType(const int nominalPositionTick) const
+{
+    auto it = findLessOrEqual(m_playTechniquesMap, nominalPositionTick);
+    if (it == m_playTechniquesMap.cend()) {
+        return mpe::ArticulationType::Standard;
+    }
+
+    return it->second;
+}
+
+dynamic_level_t PlaybackContext::nominalDynamicLevel(const voice_idx_t voiceIdx, const int positionTick) const
+{
+    UNUSED(voiceIdx);
+
     auto search = m_dynamicsMap.find(positionTick);
 
     if (search == m_dynamicsMap.cend()) {
@@ -125,8 +129,7 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
     }
 
     if (isSingleNoteDynamicType(type)) {
-        mpe::dynamic_level_t prevDynamicLevel = appliableDynamicLevel(segmentPositionTick);
-
+        mpe::dynamic_level_t prevDynamicLevel = appliableDynamicLevel(voiceIdx, segmentPositionTick);
         m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);
 
         if (!segment->next()) {
@@ -233,8 +236,11 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
         DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
         DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
 
-        dynamic_level_t nominalLevelFrom = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(spannerFrom + tickPositionOffset));
-        dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(spannerTo + tickPositionOffset));
+        voice_idx_t voiceIdx = hairpin->voice();
+
+        dynamic_level_t nominalLevelFrom
+            = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(voiceIdx, spannerFrom + tickPositionOffset));
+        dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(voiceIdx, spannerTo + tickPositionOffset));
 
         dynamic_level_t overallDynamicRange = dynamicLevelRangeByTypes(dynamicTypeFrom,
                                                                        dynamicTypeTo,

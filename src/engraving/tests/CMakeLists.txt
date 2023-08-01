@@ -63,6 +63,7 @@ set(MODULE_TEST_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrender_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackeventsrendering_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/playback/playbackmodel_tests.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/playback/playbackcontext_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/readwriteundoreset_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/remove_tests.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeat_tests.cpp
