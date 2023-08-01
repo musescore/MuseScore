@@ -91,6 +91,7 @@
 #include "libmscore/notedot.h"
 
 #include "libmscore/ornament.h"
+#include "libmscore/ottava.h"
 
 #include "libmscore/part.h"
 
@@ -235,6 +236,10 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 
     case ElementType::STRETCHED_BEND: draw(item_cast<const StretchedBend*>(item), painter);
         break;
+
+    case ElementType::OTTAVA_SEGMENT: draw(item_cast<const OttavaSegment*>(item), painter);
+        break;
+
     default:
         item->draw(painter);
     }
@@ -1996,4 +2001,10 @@ void TDraw::draw(const NoteDot* item, Painter* painter)
         painter->setPen(item->curColor());
         item->drawSymbol(SymId::augmentationDot, painter);
     }
+}
+
+void TDraw::draw(const OttavaSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
 }
