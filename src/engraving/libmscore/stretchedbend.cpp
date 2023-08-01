@@ -686,10 +686,10 @@ bool StretchedBend::equalBendTypes(const StretchedBend* bend1, const StretchedBe
 //   prepareBends
 //---------------------------------------------------------
 
-void StretchedBend::prepareBends(std::vector<StretchedBend*>& bends)
+void StretchedBend::prepareBends(std::vector<StretchedBend*>& strechedBends)
 {
     std::unordered_map<Chord*, std::vector<StretchedBend*> > bendsInChords;
-    for (StretchedBend* bend : bends) {
+    for (StretchedBend* bend : strechedBends) {
         // filling segments after all ties are connected
         bend->createBendSegments();
         bendsInChords[toChord(bend->parent())].push_back(bend);
