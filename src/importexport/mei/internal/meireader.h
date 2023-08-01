@@ -26,6 +26,7 @@
 #include "project/inotationreader.h"
 #include "iinteractive.h"
 #include "io/ifilesystem.h"
+#include "engravingerrors.h"
 
 namespace mu::iex::mei {
 class MeiReader : public project::INotationReader
@@ -35,6 +36,7 @@ class MeiReader : public project::INotationReader
 
 public:
     Ret read(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options()) override;
+    mu::engraving::Err import(mu::engraving::MasterScore* score, const io::path_t& path, const Options& options = Options());
 private:
     bool askToLoadDespiteWarnings(const String& text, const String& detailedText);
 };

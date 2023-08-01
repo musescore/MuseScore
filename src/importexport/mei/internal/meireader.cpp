@@ -34,13 +34,19 @@ using namespace mu::engraving;
 
 mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Options& options)
 {
+    Err result = this->import(score, path, options);
+    return (result == Err::NoError) ? make_ok() : make_ret(result, path);
+}
+
+Err MeiReader::import(MasterScore* score, const io::path_t& path, const Options& options)
+{
     if (!fileSystem()->exists(path)) {
-        return make_ret(Err::FileNotFound, path);
+        return Err::FileNotFound;
     }
 
     MeiImporter importer(score);
     if (!importer.read(path)) {
-        return make_ret(Err::FileCriticallyCorrupted, path);
+        return Err::FileCriticallyCorrupted;
     }
 
     bool forceMode = false;
@@ -55,11 +61,11 @@ mu::Ret MeiReader::read(MasterScore* score, const io::path_t& path, const Option
         const String text
             = qtrc("iex_mei", "%n problem(s) occured and the import may be incomplete.", nullptr, static_cast<int>(Convert::logs.size()));
         if (!this->askToLoadDespiteWarnings(text, Convert::logs.join(u"\n"))) {
-            return make_ret(Err::FileBadFormat, path);
+            return Err::FileBadFormat;
         }
     }
 
-    return make_ok();
+    return Err::NoError;
 }
 
 /**
