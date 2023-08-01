@@ -228,6 +228,8 @@ private:
     static void draw(const Lyrics* item, draw::Painter* painter);
     static void draw(const LyricsLineSegment* item, draw::Painter* painter);
 
+    static void draw(const Marker* item, draw::Painter* painter);
+
     static void draw(const Ornament* item, draw::Painter* painter);
 
     static void draw(const StretchedBend* item, draw::Painter* painter);
