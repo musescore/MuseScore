@@ -84,6 +84,7 @@
 #include "libmscore/marker.h"
 #include "libmscore/measurenumber.h"
 #include "libmscore/measurerepeat.h"
+#include "libmscore/mmrest.h"
 
 #include "libmscore/ornament.h"
 
@@ -208,6 +209,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::MEASURE_NUMBER: draw(item_cast<const MeasureNumber*>(item), painter);
         break;
     case ElementType::MEASURE_REPEAT: draw(item_cast<const MeasureRepeat*>(item), painter);
+        break;
+    case ElementType::MMREST:       draw(item_cast<const MMRest*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1782,6 +1785,71 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter)
                 painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
                 painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
             }
+        }
+    }
+}
+
+void TDraw::draw(const MMRest* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->shouldNotBeDrawn() || (item->track() % VOICES)) {     //only on voice 1
+        return;
+    }
+
+    double _spatium = item->spatium();
+
+    // draw number
+    painter->setPen(item->curColor());
+    RectF numberBox = item->symBbox(item->numberSym());
+    PointF numberPos = item->numberPosition(numberBox);
+    if (item->numberVisible()) {
+        item->drawSymbols(item->numberSym(), painter, numberPos);
+    }
+
+    numberBox.translate(numberPos);
+
+    if (item->style().styleB(Sid::oldStyleMultiMeasureRests)
+        && item->number() <= item->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
+        // draw rest symbols
+        double x = (item->width() - item->symsWidth()) * 0.5;
+        double spacing = item->style().styleMM(Sid::mmRestOldStyleSpacing);
+        for (SymId sym : item->restSyms()) {
+            double y = (sym == SymId::restWhole ? -_spatium : 0);
+            item->drawSymbol(sym, painter, PointF(x, y));
+            x += item->symBbox(sym).width() + spacing;
+        }
+    } else {
+        double mag = item->staff()->staffMag(item->tick());
+        mu::draw::Pen pen(painter->pen());
+        pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
+
+        // draw horizontal line
+        double hBarThickness = item->style().styleMM(Sid::mmRestHBarThickness) * mag;
+        if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
+            pen.setWidthF(hBarThickness);
+            painter->setPen(pen);
+            double halfHBarThickness = hBarThickness * .5;
+            if (item->numberVisible() // avoid painting line through number
+                && item->style().styleB(Sid::mmRestNumberMaskHBar)
+                && numberBox.bottom() >= -halfHBarThickness
+                && numberBox.top() <= halfHBarThickness) {
+                double gapDistance = (numberBox.width() + _spatium) * .5;
+                double midpoint = item->width() * .5;
+                painter->drawLine(LineF(0.0, 0.0, midpoint - gapDistance, 0.0));
+                painter->drawLine(LineF(midpoint + gapDistance, 0.0, item->width(), 0.0));
+            } else {
+                painter->drawLine(LineF(0.0, 0.0, item->width(), 0.0));
+            }
+        }
+
+        // draw vertical lines
+        double vStrokeThickness = item->style().styleMM(Sid::mmRestHBarVStrokeThickness) * mag;
+        if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
+            pen.setWidthF(vStrokeThickness);
+            painter->setPen(pen);
+            double halfVStrokeHeight = item->style().styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;
+            painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
+            painter->drawLine(LineF(item->width(), -halfVStrokeHeight, item->width(), halfVStrokeHeight));
         }
     }
 }
