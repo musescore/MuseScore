@@ -97,6 +97,7 @@
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
 #include "libmscore/pickscrape.h"
+#include "libmscore/playtechannotation.h"
 
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
@@ -249,6 +250,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::PEDAL_SEGMENT: draw(item_cast<const PedalSegment*>(item), painter);
         break;
     case ElementType::PICK_SCRAPE_SEGMENT: draw(item_cast<const PickScrapeSegment*>(item), painter);
+        break;
+    case ElementType::PLAYTECH_ANNOTATION: draw(item_cast<const PlayTechAnnotation*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2035,4 +2038,10 @@ void TDraw::draw(const PickScrapeSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::draw(const PlayTechAnnotation* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
