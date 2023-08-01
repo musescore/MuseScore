@@ -44,7 +44,7 @@ using namespace mu::engraving;
 using namespace mu::mpe;
 using namespace mu;
 
-static const String PLAYBACK_MODEL_TEST_FILES_DIR("playbackmodel_data/");
+static const String PLAYBACK_MODEL_TEST_FILES_DIR("playback/playbackmodel_data/");
 static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
 
 class Engraving_PlaybackModelTests : public ::testing::Test, public async::Asyncable

@@ -35,7 +35,7 @@ using namespace mu;
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-static const String PLAYBACK_EVENTS_RENDERING_DIR("playbackeventsrenderer_data/");
+static const String PLAYBACK_EVENTS_RENDERING_DIR("playback/playbackeventsrenderer_data/");
 static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
 static constexpr duration_t QUAVER_NOTE_DURATION = QUARTER_NOTE_DURATION / 2; // duration in microseconds for 4/4 120BPM
 static constexpr duration_t SEMI_QUAVER_NOTE_DURATION = QUAVER_NOTE_DURATION / 2; // duration in microseconds for 4/4 120BPM
