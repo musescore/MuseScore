@@ -75,19 +75,9 @@ double LedgerLine::measureXPos() const
 //   draw
 //---------------------------------------------------------
 
-void LedgerLine::draw(mu::draw::Painter* painter) const
+void LedgerLine::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    if (chord()->crossMeasure() == CrossMeasure::SECOND) {
-        return;
-    }
-    painter->setPen(Pen(curColor(), _width, PenStyle::SolidLine, PenCapStyle::FlatCap));
-    if (m_vertical) {
-        painter->drawLine(LineF(0.0, 0.0, 0.0, _len));
-    } else {
-        painter->drawLine(LineF(0.0, 0.0, _len, 0.0));
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
