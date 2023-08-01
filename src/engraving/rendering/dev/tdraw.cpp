@@ -85,16 +85,25 @@
 #include "libmscore/measurenumber.h"
 #include "libmscore/measurerepeat.h"
 #include "libmscore/mmrest.h"
+#include "libmscore/mmrestrange.h"
+
+#include "libmscore/note.h"
 
 #include "libmscore/ornament.h"
+
+#include "libmscore/part.h"
 
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
 #include "libmscore/textlinebase.h"
 
+#include "libmscore/tie.h"
+
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/stretchedbend.h"
+
+#include "libmscore/mscoreview.h"
 
 #include "infrastructure/rtti.h"
 
@@ -211,6 +220,11 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::MEASURE_REPEAT: draw(item_cast<const MeasureRepeat*>(item), painter);
         break;
     case ElementType::MMREST:       draw(item_cast<const MMRest*>(item), painter);
+        break;
+    case ElementType::MMREST_RANGE: draw(item_cast<const MMRestRange*>(item), painter);
+        break;
+
+    case ElementType::NOTE:         draw(item_cast<const Note*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1851,5 +1865,112 @@ void TDraw::draw(const MMRest* item, Painter* painter)
             painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
             painter->drawLine(LineF(item->width(), -halfVStrokeHeight, item->width(), halfVStrokeHeight));
         }
+    }
+}
+
+void TDraw::draw(const MMRestRange* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void TDraw::draw(const Note* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->hidden()) {
+        return;
+    }
+
+    auto config = item->engravingConfiguration();
+
+    bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
+
+    Color c(negativeFret ? config->criticalColor() : item->curColor());
+    painter->setPen(c);
+    bool tablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
+
+    // tablature
+    if (tablature) {
+        if (item->displayFret() == Note::DisplayFretOption::Hide) {
+            return;
+        }
+        const Staff* st = item->staff();
+        const StaffType* tab = st->staffTypeForElement(item);
+        if (item->tieBack() && !tab->showBackTied()) {
+            if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system() && item->el().empty()) {
+                // fret should be hidden, so return without drawing it
+                return;
+            }
+        }
+        // draw background, if required (to hide a segment of string line or to show a fretting conflict)
+        if (!tab->linesThrough() || item->fretConflict()) {
+            double d  = item->spatium() * .1;
+            RectF bb
+                = RectF(item->bbox().x() - d, tab->fretMaskY() * item->magS(), item->bbox().width() + 2 * d,
+                        tab->fretMaskH() * item->magS());
+            // we do not know which viewer did this draw() call
+            // so update all:
+            if (!item->score()->getViewer().empty()) {
+                for (MuseScoreView* view : item->score()->getViewer()) {
+                    view->drawBackground(painter, bb);
+                }
+            } else {
+                painter->fillRect(bb, config->noteBackgroundColor());
+            }
+
+            if (item->fretConflict() && !item->score()->printing() && item->score()->showUnprintable()) {                //on fret conflict, draw on red background
+                painter->save();
+                painter->setPen(config->criticalColor());
+                painter->setBrush(config->criticalColor());
+                painter->drawRect(bb);
+                painter->restore();
+            }
+        }
+        mu::draw::Font f(tab->fretFont());
+        f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
+        painter->setFont(f);
+        painter->setPen(c);
+        double startPosX = item->bbox().x();
+        if (item->ghost() && config->tablatureParenthesesZIndexWorkaround()) {
+            startPosX += item->symWidth(SymId::noteheadParenthesisLeft);
+        }
+
+        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * item->magS()), item->fretString());
+    }
+    // NOT tablature
+    else {
+        // skip drawing, if second note of a cross-measure value
+        if (item->chord() && item->chord()->crossMeasure() == CrossMeasure::SECOND) {
+            return;
+        }
+        // warn if pitch extends usable range of instrument
+        // by coloring the notehead
+        if (item->chord() && item->chord()->segment() && item->staff()
+            && !item->score()->printing() && MScore::warnPitchRange && !item->staff()->isDrumStaff(item->chord()->tick())) {
+            const Instrument* in = item->part()->instrument(item->chord()->tick());
+            int i = item->ppitch();
+            if (i < in->minPitchP() || i > in->maxPitchP()) {
+                painter->setPen(
+                    item->selected() ? config->criticalSelectedColor() : config->criticalColor());
+            } else if (i < in->minPitchA() || i > in->maxPitchA()) {
+                painter->setPen(item->selected() ? config->warningSelectedColor() : config->warningColor());
+            }
+        }
+        // Warn if notes are unplayable based on previous harp diagram setting
+        if (item->chord() && item->chord()->segment() && item->staff() && !item->score()->printing()
+            && !item->staff()->isDrumStaff(item->chord()->tick())) {
+            HarpPedalDiagram* prevDiagram = item->part()->currentHarpDiagram(item->chord()->segment()->tick());
+            if (prevDiagram && !prevDiagram->isPitchPlayable(item->ppitch())) {
+                painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
+            }
+        }
+        // draw blank notehead to avoid staff and ledger lines
+        if (item->cachedSymNull() != SymId::noSym) {
+            painter->save();
+            painter->setPen(config->noteBackgroundColor());
+            item->drawSymbol(item->cachedSymNull(), painter);
+            painter->restore();
+        }
+        item->drawSymbol(item->cachedNoteheadSym(), painter);
     }
 }

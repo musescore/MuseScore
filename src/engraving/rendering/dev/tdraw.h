@@ -232,6 +232,9 @@ private:
     static void draw(const MeasureNumber* item, draw::Painter* painter);
     static void draw(const MeasureRepeat* item, draw::Painter* painter);
     static void draw(const MMRest* item, draw::Painter* painter);
+    static void draw(const MMRestRange* item, draw::Painter* painter);
+
+    static void draw(const Note* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 

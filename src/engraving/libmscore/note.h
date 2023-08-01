@@ -190,8 +190,10 @@ public:
     EngravingItem* elementBase() const override;
 
     //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
+    SymId cachedNoteheadSym() const { return m_cachedNoteheadSym; }
     void setCachedNoteheadSym(SymId i) { m_cachedNoteheadSym = i; }
 
+    SymId cachedSymNull() const { return m_cachedSymNull; }
     void setCachedSymNull(SymId s) { m_cachedSymNull = s; }
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
