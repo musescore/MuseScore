@@ -58,12 +58,15 @@
 #include "libmscore/fretcircle.h"
 
 #include "libmscore/glissando.h"
+#include "libmscore/gradualtempochange.h"
 
 #include "libmscore/note.h"
 
 #include "libmscore/ornament.h"
 
+#include "libmscore/text.h"
 #include "libmscore/textbase.h"
+#include "libmscore/textlinebase.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
@@ -138,6 +141,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter);
+        break;
+    case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1290,4 +1295,133 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter)
     for (const TextBlock& t : item->blocks()) {
         t.draw(painter, item);
     }
+}
+
+void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* painter)
+{
+    const TextLineBase* tl = item->textLineBase();
+
+    if (!item->text()->empty()) {
+        painter->translate(item->text()->pos());
+        item->text()->setVisible(tl->visible());
+        item->text()->draw(painter);
+        painter->translate(-item->text()->pos());
+    }
+
+    if (!item->endText()->empty()) {
+        painter->translate(item->endText()->pos());
+        item->endText()->setVisible(tl->visible());
+        item->endText()->draw(painter);
+        painter->translate(-item->endText()->pos());
+    }
+
+    if ((item->npoints() == 0)
+        || (item->score() && (item->score()->printing() || !item->score()->isShowInvisible()) && !tl->lineVisible())) {
+        return;
+    }
+
+    // color for line (text color comes from the text properties)
+    Color color = item->curColor(tl->visible() && tl->lineVisible(), tl->lineColor());
+
+    double lineWidth = tl->lineWidth() * item->mag();
+
+    const Pen solidPen(color, lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap, PenJoinStyle::MiterJoin);
+    Pen pen(solidPen);
+
+    double dash = 0;
+    double gap = 0;
+
+    switch (tl->lineStyle()) {
+    case LineType::SOLID:
+        break;
+    case LineType::DASHED:
+        dash = tl->dashLineLen(), gap = tl->dashGapLen();
+        break;
+    case LineType::DOTTED:
+        dash = 0.01, gap = 1.99;
+        pen.setCapStyle(PenCapStyle::RoundCap); // round dots
+        break;
+    }
+
+    const bool isNonSolid = tl->lineStyle() != LineType::SOLID;
+
+    // Draw lines
+    if (item->twoLines()) { // hairpins
+        if (isNonSolid) {
+            pen.setDashPattern({ dash, gap });
+        }
+
+        pen.setJoinStyle(PenJoinStyle::BevelJoin);
+        painter->setPen(pen);
+        if (!item->joinedHairpin().empty() && !isNonSolid) {
+            painter->drawPolyline(item->joinedHairpin());
+        } else {
+            painter->drawLines(&item->points()[0], 2);
+        }
+        return;
+    }
+
+    auto distributedDashPattern = [](double dash, double gap, double lineLength) -> std::vector<double>
+    {
+        int numPairs = std::max(1.0, lineLength / (dash + gap));
+        double newGap = (lineLength - dash * (numPairs + 1)) / numPairs;
+
+        return { dash, newGap };
+    };
+
+    int start = 0, end = item->npoints();
+
+    // Draw begin hook, if it needs to be drawn separately
+    if (item->isSingleBeginType() && tl->beginHookType() != HookType::NONE) {
+        bool isTHook = tl->beginHookType() == HookType::HOOK_90T;
+
+        if (isNonSolid || isTHook) {
+            const PointF& p1 = item->points()[start++];
+            const PointF& p2 = item->points()[start++];
+
+            if (isTHook) {
+                painter->setPen(solidPen);
+            } else {
+                double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
+                pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
+                painter->setPen(pen);
+            }
+
+            painter->drawLine(p1, p2);
+        }
+    }
+
+    // Draw end hook, if it needs to be drawn separately
+    if (item->isSingleEndType() && tl->endHookType() != HookType::NONE) {
+        bool isTHook = tl->endHookType() == HookType::HOOK_90T;
+
+        if (isNonSolid || isTHook) {
+            const PointF& p1 = item->points()[--end];
+            const PointF& p2 = item->points()[--end];
+
+            if (isTHook) {
+                painter->setPen(solidPen);
+            } else {
+                double hookLength = sqrt(PointF::dotProduct(p2 - p1, p2 - p1));
+                pen.setDashPattern(distributedDashPattern(dash, gap, hookLength / lineWidth));
+                painter->setPen(pen);
+            }
+
+            painter->drawLine(p1, p2);
+        }
+    }
+
+    // Draw the rest
+    if (isNonSolid) {
+        pen.setDashPattern(distributedDashPattern(dash, gap, item->lineLength() / lineWidth));
+    }
+
+    painter->setPen(pen);
+    painter->drawPolyline(&item->points()[start], end - start);
+}
+
+void TDraw::draw(const GradualTempoChangeSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
 }

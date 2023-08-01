@@ -2692,12 +2692,12 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
         item->pointsRef()[3] = l2.p2();
         item->npointsRef()   = 4;
 
-        item->polygonRef().clear();
+        item->joinedHairpinRef().clear();
         if (item->spannerSegmentType() != SpannerSegmentType::MIDDLE) {
             if (type == HairpinType::DECRESC_HAIRPIN && item->spannerSegmentType() != SpannerSegmentType::BEGIN) {
-                item->polygonRef() << item->pointsRef()[0] << item->pointsRef()[1] << item->pointsRef()[2]; // [top-left, joint, bottom-left]
+                item->joinedHairpinRef() << item->pointsRef()[0] << item->pointsRef()[1] << item->pointsRef()[2]; // [top-left, joint, bottom-left]
             } else if (type == HairpinType::CRESC_HAIRPIN && item->spannerSegmentType() != SpannerSegmentType::END) {
-                item->polygonRef() << item->pointsRef()[1] << item->pointsRef()[0] << item->pointsRef()[3]; // [top-right, joint, bottom-right]
+                item->joinedHairpinRef() << item->pointsRef()[1] << item->pointsRef()[0] << item->pointsRef()[3]; // [top-right, joint, bottom-right]
             }
         }
 

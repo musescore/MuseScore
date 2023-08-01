@@ -206,12 +206,14 @@ private:
     static void draw(const FretCircle* item, draw::Painter* painter);
 
     static void draw(const GlissandoSegment* item, draw::Painter* painter);
+    static void draw(const GradualTempoChangeSegment* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 
     static void draw(const StretchedBend* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
+    static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
 };
 }
 
