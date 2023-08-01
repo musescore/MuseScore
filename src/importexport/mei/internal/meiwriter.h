@@ -34,7 +34,7 @@ public:
 
     Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
     Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
-    mu::engraving::Err writeScore(mu::engraving::MasterScore* score, const io::path_t& path);
+    mu::engraving::Err writeScore(mu::engraving::Score* score, const io::path_t& path);
 };
 } // namespace
 
