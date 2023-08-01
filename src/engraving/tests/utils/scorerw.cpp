@@ -105,6 +105,29 @@ bool ScoreRW::saveScore(Score* score, const String& name)
     return rw::RWRegister::writer()->writeScore(score, &file, false);
 }
 
+bool ScoreRW::saveScore(Score* score, const String& name, ExportFunc exportFunc)
+{
+    File file(name);
+    if (file.exists()) {
+        file.remove();
+    }
+
+    if (!file.open(IODevice::ReadWrite)) {
+        return false;
+    }
+
+    io::path_t path =  name;
+    Err rv = exportFunc(score, path);
+
+    if (rv != Err::NoError) {
+        LOGE() << "can't load score, path: " << path;
+        return false;
+    }
+    else {
+        return true;
+    }
+}
+
 EngravingItem* ScoreRW::writeReadElement(EngravingItem* element)
 {
     //
