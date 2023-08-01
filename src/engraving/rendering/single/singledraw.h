@@ -190,6 +190,8 @@ private:
     static void draw(const LetRingSegment* item, draw::Painter* painter);
 
     static void draw(const Marker* item, draw::Painter* painter);
+    static void draw(const MeasureNumber* item, draw::Painter* painter);
+    static void draw(const MeasureRepeat* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 

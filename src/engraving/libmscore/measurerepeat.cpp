@@ -99,39 +99,9 @@ const Measure* MeasureRepeat::referringMeasure(const Measure* measure) const
 //   draw
 //---------------------------------------------------------
 
-void MeasureRepeat::draw(mu::draw::Painter* painter) const
+void MeasureRepeat::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-
-    painter->setPen(curColor());
-    drawSymbol(symId(), painter);
-
-    if (track() != mu::nidx) { // in score rather than palette
-        if (!m_numberSym.empty()) {
-            PointF numberPos = numberPosition(symBbox(m_numberSym));
-            drawSymbols(numberSym(), painter, numberPos);
-        }
-
-        if (style().styleB(Sid::fourMeasureRepeatShowExtenders) && numMeasures() == 4) {
-            // TODO: add style settings specific to measure repeats
-            // for now, using thickness and margin same as mmrests
-            double hBarThickness = style().styleMM(Sid::mmRestHBarThickness);
-            if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
-                Pen pen(painter->pen());
-                pen.setCapStyle(PenCapStyle::FlatCap);
-                pen.setWidthF(hBarThickness);
-                painter->setPen(pen);
-
-                double twoMeasuresWidth = 2 * measure()->width();
-                double margin = style().styleMM(Sid::multiMeasureRestMargin);
-                double xOffset = symBbox(symId()).width() * .5;
-                double gapDistance = (symBbox(symId()).width() + spatium()) * .5;
-                painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
-                painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
-            }
-        }
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
