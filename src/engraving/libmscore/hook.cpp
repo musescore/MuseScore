@@ -22,8 +22,9 @@
 
 #include "hook.h"
 
+#include "style/style.h"
+
 #include "chord.h"
-#include "score.h"
 
 #include "log.h"
 
@@ -48,16 +49,9 @@ void Hook::setHookType(int i)
     setSym(symIdForHookIndex(i, straight));
 }
 
-void Hook::draw(mu::draw::Painter* painter) const
+void Hook::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    // hide if belonging to the second chord of a cross-measure pair
-    if (chord() && chord()->crossMeasure() == CrossMeasure::SECOND) {
-        return;
-    }
-
-    painter->setPen(curColor());
-    drawSymbol(_sym, painter);
+    UNREACHABLE;
 }
 
 mu::PointF Hook::smuflAnchor() const
