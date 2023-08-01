@@ -50,12 +50,14 @@ class Chord;
 class ChordLine;
 class Clef;
 
+class DeadSlapped;
 class Dynamic;
 
 class Expression;
 
 class Fermata;
 class Fingering;
+class FiguredBass;
 class FretDiagram;
 class FSymbol;
 
@@ -148,11 +150,13 @@ private:
     static void draw(const Clef* item, draw::Painter* painter);
     static void draw(const Capo* item, draw::Painter* painter);
 
+    static void draw(const DeadSlapped* item, draw::Painter* painter);
     static void draw(const Dynamic* item, draw::Painter* painter);
 
     static void draw(const Expression* item, draw::Painter* painter);
 
     static void draw(const Fermata* item, draw::Painter* painter);
+    static void draw(const FiguredBass* item, draw::Painter* painter);
     static void draw(const Fingering* item, draw::Painter* painter);
     static void draw(const FretDiagram* item, draw::Painter* painter);
 
