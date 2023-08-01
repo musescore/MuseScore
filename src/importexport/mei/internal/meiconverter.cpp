@@ -966,6 +966,7 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
         break;
     case (engraving::SymId::fermataShortBelow): meiFermata.SetShape(libmei::fermataVis_SHAPE_angular);
         below = true;
+        break;
     case (engraving::SymId::fermataLongHenzeAbove):
     case (engraving::SymId::fermataVeryLongAbove):
     case (engraving::SymId::fermataShortHenzeAbove):
