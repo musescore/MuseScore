@@ -76,11 +76,11 @@ public:
 
     mu::RectF numberRect() const override;
 
+    mu::PointF numberPosition(const mu::RectF& numberBbox) const;
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
-
-    mu::PointF numberPosition(const mu::RectF& numberBbox) const;
 
     int m_numMeasures = 0;
     SymIdList m_numberSym;

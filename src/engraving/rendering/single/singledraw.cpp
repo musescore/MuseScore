@@ -77,6 +77,8 @@
 #include "libmscore/letring.h"
 
 #include "libmscore/marker.h"
+#include "libmscore/measurenumber.h"
+#include "libmscore/measurerepeat.h"
 
 #include "libmscore/ornament.h"
 
@@ -181,6 +183,10 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::MARKER:       draw(item_cast<const Marker*>(item), painter);
+        break;
+    case ElementType::MEASURE_NUMBER: draw(item_cast<const MeasureNumber*>(item), painter);
+        break;
+    case ElementType::MEASURE_REPEAT: draw(item_cast<const MeasureRepeat*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1521,4 +1527,18 @@ void SingleDraw::draw(const Marker* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const MeasureNumber* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const MeasureRepeat* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->symId(), painter);
 }
