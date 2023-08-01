@@ -176,6 +176,7 @@ private:
     static void draw(const Hook* item, draw::Painter* painter);
 
     static void draw(const Image* item, draw::Painter* painter);
+    static void draw(const InstrumentChange* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 

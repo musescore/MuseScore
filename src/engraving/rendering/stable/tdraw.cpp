@@ -69,6 +69,7 @@
 #include "libmscore/hook.h"
 
 #include "libmscore/image.h"
+#include "libmscore/instrchange.h"
 
 #include "libmscore/note.h"
 
@@ -167,6 +168,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::IMAGE:        draw(item_cast<const Image*>(item), painter);
+        break;
+    case ElementType::INSTRUMENT_CHANGE: draw(item_cast<const InstrumentChange*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1595,4 +1598,10 @@ void TDraw::draw(const Image* item, Painter* painter)
         painter->setPen(item->engravingConfiguration()->selectionColor());
         painter->drawRect(item->bbox());
     }
+}
+
+void TDraw::draw(const InstrumentChange* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }

@@ -65,6 +65,7 @@
 #include "libmscore/hook.h"
 
 #include "libmscore/image.h"
+#include "libmscore/instrchange.h"
 
 #include "libmscore/ornament.h"
 
@@ -149,6 +150,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::IMAGE:        draw(item_cast<const Image*>(item), painter);
+        break;
+    case ElementType::INSTRUMENT_CHANGE: draw(item_cast<const InstrumentChange*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1389,4 +1392,10 @@ void SingleDraw::draw(const Image* item, Painter* painter)
         painter->drawLine(0.0, 0.0, item->bbox().width(), item->bbox().height());
         painter->drawLine(item->bbox().width(), 0.0, 0.0, item->bbox().height());
     }
+}
+
+void SingleDraw::draw(const InstrumentChange* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
