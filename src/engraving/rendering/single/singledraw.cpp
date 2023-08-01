@@ -76,6 +76,8 @@
 #include "libmscore/ledgerline.h"
 #include "libmscore/letring.h"
 
+#include "libmscore/marker.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/stretchedbend.h"
@@ -176,6 +178,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::LEDGER_LINE:  draw(item_cast<const LedgerLine*>(item), painter);
         break;
     case ElementType::LET_RING_SEGMENT: draw(item_cast<const LetRingSegment*>(item), painter);
+        break;
+
+    case ElementType::MARKER:       draw(item_cast<const Marker*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1510,4 +1515,10 @@ void SingleDraw::draw(const LetRingSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const Marker* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }

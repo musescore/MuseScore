@@ -81,6 +81,8 @@
 #include "libmscore/letring.h"
 #include "libmscore/lyrics.h"
 
+#include "libmscore/marker.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/text.h"
@@ -197,6 +199,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::LYRICS:       draw(item_cast<const Lyrics*>(item), painter);
         break;
     case ElementType::LYRICSLINE_SEGMENT: draw(item_cast<const LyricsLineSegment*>(item), painter);
+        break;
+
+    case ElementType::MARKER:       draw(item_cast<const Marker*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1727,4 +1732,10 @@ void TDraw::draw(const LyricsLineSegment* item, Painter* painter)
             painter->drawLine(PointF(x, 0.0), PointF(x + item->dashLength(), 0.0));
         }
     }
+}
+
+void TDraw::draw(const Marker* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
