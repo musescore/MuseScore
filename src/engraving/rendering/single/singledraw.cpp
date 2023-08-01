@@ -57,6 +57,8 @@
 #include "libmscore/glissando.h"
 #include "libmscore/gradualtempochange.h"
 
+#include "libmscore/hairpin.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/stretchedbend.h"
@@ -126,6 +128,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter);
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter);
+        break;
+
+    case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1233,4 +1238,24 @@ void SingleDraw::draw(const GradualTempoChangeSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const HairpinSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    drawTextLineBaseSegment(item, painter);
+
+    if (item->drawCircledTip()) {
+        Color color = item->curColor(item->hairpin()->visible(), item->hairpin()->lineColor());
+        double w = item->hairpin()->lineWidth();
+        if (item->staff()) {
+            w *= item->staff()->staffMag(item->hairpin()->tick());
+        }
+
+        Pen pen(color, w);
+        painter->setPen(pen);
+        painter->setBrush(BrushStyle::NoBrush);
+        painter->drawEllipse(item->circledTip(), item->circledTipRadius(), item->circledTipRadius());
+    }
 }
