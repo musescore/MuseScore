@@ -73,7 +73,7 @@ class MeiExporter
 
 public:
     MeiExporter(engraving::Score* s) { m_score = s; }
-    bool write(QIODevice& destinationDevice);
+    bool write(std::string& meiData);
 
 private:
     bool writeHeader();
