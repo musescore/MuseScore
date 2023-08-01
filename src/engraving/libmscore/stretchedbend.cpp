@@ -50,8 +50,6 @@ static const char* label[] = {
     "3"                                        /// 3
 };
 
-static int textFlags = draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip;
-
 static const ElementStyle stretchedBendStyle {
     { Sid::bendFontFace,  Pid::FONT_FACE },
     { Sid::bendFontSize,  Pid::FONT_SIZE },
@@ -63,9 +61,7 @@ static const ElementStyle stretchedBendStyle {
 //   forward declarations of static functions
 //---------------------------------------------------------
 
-static void drawText(mu::draw::Painter* painter, const PointF& pos, const String& text);
 static RectF textBoundingRect(const mu::draw::FontMetrics& fm, const PointF& pos, const String& text);
-static PainterPath bendCurveFromPoints(const PointF& p1, const PointF& p2);
 static int bendTone(int notePitch);
 static std::pair<Note*, Note*> getLowestAndHighestNote(const std::vector<Note*>& notes);
 
@@ -101,6 +97,16 @@ mu::draw::Font StretchedBend::font(double sp) const
 
     f.setPointSizeF(m);
     return f;
+}
+
+int StretchedBend::textFlags()
+{
+    return draw::AlignHCenter | draw::AlignBottom | draw::TextDontClip;
+}
+
+String StretchedBend::toneToLabel(int tone)
+{
+    return String::fromUtf8(label[tone]);
 }
 
 //---------------------------------------------------------
@@ -482,70 +488,7 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
 
 void StretchedBend::draw(mu::draw::Painter* painter) const
 {
-    TRACE_ITEM_DRAW;
-
-    setupPainter(painter);
-    double sp = spatium();
-    bool isTextDrawn = false;
-
-    for (const BendSegment& bendSegment : m_bendSegmentsStretched) {
-        if (!bendSegment.visible) {
-            continue;
-        }
-
-        const PointF& src = bendSegment.src;
-        const PointF& dest = bendSegment.dest;
-        const String& text = String::fromUtf8(label[bendSegment.tone]);
-
-        switch (bendSegment.type) {
-        case BendSegmentType::LINE_UP:
-        {
-            painter->drawLine(LineF(src, dest));
-            painter->setBrush(curColor());
-            painter->drawPolygon(m_arrows.up.translated(dest));
-            /// TODO: remove substraction after fixing bRect
-            drawText(painter, dest - PointF(0, sp * 0.5), text);
-            break;
-        }
-
-        case BendSegmentType::CURVE_UP:
-        case BendSegmentType::CURVE_DOWN:
-        {
-            bool bendUp = (bendSegment.type == BendSegmentType::CURVE_UP);
-            double endY = dest.y() + m_arrows.width * (bendUp ? 1 : -1);
-
-            PainterPath path = bendCurveFromPoints(src, PointF(dest.x(), endY));
-            const auto& arrowPath = (bendUp ? m_arrows.up : m_arrows.down);
-
-            painter->setBrush(BrushStyle::NoBrush);
-            painter->drawPath(path);
-            painter->setBrush(curColor());
-            painter->drawPolygon(arrowPath.translated(dest));
-
-            if (bendUp && !isTextDrawn) {
-                /// TODO: remove subtraction after fixing bRect
-                drawText(painter, dest - PointF(0, sp * 0.5), text);
-                isTextDrawn = true;
-            }
-
-            break;
-        }
-
-        case BendSegmentType::LINE_STROKED:
-        {
-            PainterPath path;
-            path.moveTo(src + PointF(m_arrows.width, 0));
-            path.lineTo(dest);
-            Pen p(painter->pen());
-            p.setStyle(PenStyle::DashLine);
-            painter->strokePath(path, p);
-            break;
-        }
-
-        default:
-            break;
-        }
-    }
+    UNREACHABLE;
 }
 
 mu::RectF StretchedBend::calculateBoundingRect() const
@@ -615,20 +558,6 @@ mu::RectF StretchedBend::calculateBoundingRect() const
 }
 
 //---------------------------------------------------------
-//   setupPainter
-//---------------------------------------------------------
-
-void StretchedBend::setupPainter(mu::draw::Painter* painter) const
-{
-    Pen pen(curColor(), lineWidth(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
-    painter->setPen(pen);
-    painter->setBrush(Brush(curColor()));
-
-    mu::draw::Font f = font(spatium() * MScore::pixelRatio);
-    painter->setFont(f);
-}
-
-//---------------------------------------------------------
 //   fillArrows
 //---------------------------------------------------------
 
@@ -649,28 +578,19 @@ void StretchedBend::fillArrows(double width)
 }
 
 //---------------------------------------------------------
-//   drawText
-//---------------------------------------------------------
-
-void drawText(mu::draw::Painter* painter, const PointF& pos, const String& text)
-{
-    painter->drawText(RectF(pos.x(), pos.y(), .0, .0), textFlags, text);
-}
-
-//---------------------------------------------------------
 //   textBoundingRect
 //---------------------------------------------------------
 
 RectF textBoundingRect(const mu::draw::FontMetrics& fm, const PointF& pos, const String& text)
 {
-    return fm.boundingRect(RectF(pos.x(), pos.y(), 0, 0), textFlags, text);
+    return fm.boundingRect(RectF(pos.x(), pos.y(), 0, 0), StretchedBend::textFlags(), text);
 }
 
 //---------------------------------------------------------
 //   bendCurveFromPoints
 //---------------------------------------------------------
 
-PainterPath bendCurveFromPoints(const PointF& p1, const PointF& p2)
+PainterPath StretchedBend::bendCurveFromPoints(const PointF& p1, const PointF& p2)
 {
     PainterPath path;
 

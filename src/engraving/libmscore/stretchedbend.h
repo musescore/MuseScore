@@ -45,6 +45,34 @@ class StretchedBend final : public EngravingItem
     M_PROPERTY(Millimetre, lineWidth, setLineWidth)
 
 public:
+
+    struct Arrows
+    {
+        PolygonF up;
+        PolygonF down;
+        double width = 0;
+    };
+
+    enum class BendSegmentType {
+        NO_TYPE = -1,
+        LINE_UP,
+        CURVE_UP,
+        CURVE_DOWN,
+        LINE_STROKED
+    };
+
+    struct BendSegment {
+        constexpr static int NO_TONE = -1;
+        BendSegment();
+        BendSegment(BendSegmentType bendType, int tone);
+        void setupCoords(PointF src, PointF dest);
+        PointF src;
+        PointF dest;
+        BendSegmentType type = BendSegmentType::NO_TYPE;
+        int tone = NO_TONE;
+        bool visible = true;
+    };
+
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 
     mu::draw::Font font(double sp) const;
@@ -67,6 +95,12 @@ public:
     void setNote(Note* note) { m_note = note; }
     Note* note() const { return m_note; }
 
+    static String toneToLabel(int tone);
+    const Arrows& arrows() const { return m_arrows; }
+    const std::vector<BendSegment>& bendSegmentsStretched() const { return m_bendSegmentsStretched; }
+    static PainterPath bendCurveFromPoints(const PointF& p1, const PointF& p2);
+    static int textFlags();
+
     // property methods
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -77,30 +111,9 @@ private:
 
     StretchedBend(Chord* parent);
 
-    enum class BendSegmentType {
-        NO_TYPE = -1,
-        LINE_UP,
-        CURVE_UP,
-        CURVE_DOWN,
-        LINE_STROKED
-    };
-
-    struct BendSegment {
-        constexpr static int NO_TONE = -1;
-        BendSegment();
-        BendSegment(BendSegmentType bendType, int tone);
-        void setupCoords(PointF src, PointF dest);
-        PointF src;
-        PointF dest;
-        BendSegmentType type = BendSegmentType::NO_TYPE;
-        int tone = NO_TONE;
-        bool visible = true;
-    };
-
     void addSegment(std::vector<BendSegment>& bendSegments, BendSegmentType type, int tone) const;
     // creating bend segments with the information about their types
     void createBendSegments();
-    void setupPainter(mu::draw::Painter* painter) const;
     double nextSegmentX() const;
     double bendHeight(int bendIdx) const;
     bool firstPointShouldBeSkipped() const;
@@ -111,13 +124,7 @@ private:
     std::vector<BendSegment> m_bendSegments; // filled during note layout (when all coords are not known yet)
     std::vector<BendSegment> m_bendSegmentsStretched; // filled during system layout (final coords used for drawing)
 
-    struct Arrows
-    {
-        PolygonF up;
-        PolygonF down;
-        double width = 0;
-    } m_arrows;
-
+    Arrows m_arrows;
     Note* m_note = nullptr;
     bool m_needsHeightAdjust = false;
     Note* m_noteToAdjust = nullptr;
