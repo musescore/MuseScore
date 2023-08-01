@@ -61,6 +61,7 @@
 #include "libmscore/gradualtempochange.h"
 
 #include "libmscore/hairpin.h"
+#include "libmscore/harppedaldiagram.h"
 
 #include "libmscore/note.h"
 
@@ -148,6 +149,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
+        break;
+    case ElementType::HARP_DIAGRAM: draw(item_cast<const HarpPedalDiagram*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1449,4 +1452,10 @@ void TDraw::draw(const HairpinSegment* item, Painter* painter)
         painter->setBrush(BrushStyle::NoBrush);
         painter->drawEllipse(item->circledTip(), item->circledTipRadius(), item->circledTipRadius());
     }
+}
+
+void TDraw::draw(const HarpPedalDiagram* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
