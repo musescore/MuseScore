@@ -245,6 +245,7 @@ private:
     static void draw(const PalmMuteSegment* item, draw::Painter* painter);
     static void draw(const PedalSegment* item, draw::Painter* painter);
     static void draw(const PickScrapeSegment* item, draw::Painter* painter);
+    static void draw(const PlayTechAnnotation* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
