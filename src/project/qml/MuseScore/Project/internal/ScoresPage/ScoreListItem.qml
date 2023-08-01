@@ -42,6 +42,11 @@ ListItemBlank {
     implicitHeight: 64
 
     navigation.accessible.name: root.score.name ?? ""
+    navigation.onActiveChanged: {
+        if (navigation.active) {
+            root.scrollIntoView()
+        }
+    }
 
     focusBorder.anchors.bottomMargin: bottomBorder.visible ? bottomBorder.height : 0
 
@@ -114,6 +119,11 @@ ListItemBlank {
                         navigation.panel: root.navigation.panel
                         navigation.row: root.navigation.row
                         navigation.column: 2
+                        navigation.onActiveChanged: {
+                            if (navigation.active) {
+                                root.scrollIntoView()
+                            }
+                        }
                     }
 
                     CloudScoreIndicatorButton {
@@ -125,6 +135,11 @@ ListItemBlank {
                         navigation.panel: root.navigation.panel
                         navigation.row: root.navigation.row
                         navigation.column: 3
+                        navigation.onActiveChanged: {
+                            if (navigation.active) {
+                                root.scrollIntoView()
+                            }
+                        }
 
                         onClicked: {
                             if (isProgress) {
@@ -145,10 +160,11 @@ ListItemBlank {
                 Layout.preferredWidth: modelData.width(parent.width)
 
                 // These properties are here to give the delegate access to them
-                property var score: root.score
-                property NavigationPanel navigationPanel: root.navigation.panel
-                property int navigationRow: root.navigation.row
-                property int navigationColumnStart: 100 * (model.index + 1)
+                readonly property ScoreListItem listItem: root
+                readonly property var score: root.score
+                readonly property NavigationPanel navigationPanel: root.navigation.panel
+                readonly property int navigationRow: root.navigation.row
+                readonly property int navigationColumnStart: 100 * (model.index + 1)
 
                 sourceComponent: modelData.delegate
             }

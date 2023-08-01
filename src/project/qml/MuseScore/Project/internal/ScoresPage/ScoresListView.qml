@@ -213,11 +213,6 @@ Item {
                         navigation.panel: navPanel
                         navigation.row: index + 1
                         navigation.column: 0
-                        navigation.onActiveChanged: {
-                            if (navigation.active) {
-                                view.positionViewAtIndex(index, ListView.Contain)
-                            }
-                        }
 
                         onClicked: {
                             root.openScoreRequested(score.path, score.name)

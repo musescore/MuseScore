@@ -61,6 +61,8 @@ ScoresView {
 
             columns: [
                 ScoresListView.ColumnItem {
+                    id: modifiedColumn
+
                     //: Stands for "Last time that this score was modified".
                     //: Used as the header of this column in the scores list.
                     header: qsTrc("project", "Modified")
@@ -71,15 +73,37 @@ ScoresView {
                     }
 
                     delegate: StyledTextLabel {
-                        // TODO: accessibility
+                        id: modifiedLabel
                         text: score.timeSinceModified ?? ""
 
                         font.capitalization: Font.AllUppercase
                         horizontalAlignment: Text.AlignLeft
+
+                        NavigationFocusBorder {
+                            navigationCtrl: NavigationControl {
+                                name: "ModifiedLabel"
+                                panel: navigationPanel
+                                row: navigationRow
+                                column: navigationColumnStart
+                                enabled: modifiedLabel.visible && modifiedLabel.enabled && !modifiedLabel.isEmpty
+                                accessible.name: modifiedColumn.header + ": " + modifiedLabel.text
+                                accessible.role: MUAccessible.StaticText
+
+                                onActiveChanged: {
+                                    if (active) {
+                                        listItem.scrollIntoView()
+                                    }
+                                }
+                            }
+
+                            anchors.margins: -radius
+                            radius: 2 + border.width
+                        }
                     }
                 },
 
                 ScoresListView.ColumnItem {
+                    id: sizeColumn
                     header: qsTrc("project", "Size", "file size")
 
                     width: function (parentWidth) {
@@ -88,11 +112,32 @@ ScoresView {
                     }
 
                     delegate: StyledTextLabel {
-                        // TODO: accessibility
+                        id: sizeLabel
                         text: score.fileSize ?? ""
 
                         font: ui.theme.largeBodyFont
                         horizontalAlignment: Text.AlignLeft
+
+                        NavigationFocusBorder {
+                            navigationCtrl: NavigationControl {
+                                name: "SizeLabel"
+                                panel: navigationPanel
+                                row: navigationRow
+                                column: navigationColumnStart
+                                enabled: sizeLabel.visible && sizeLabel.enabled && !sizeLabel.isEmpty
+                                accessible.name: sizeColumn.header + ": " + sizeLabel.text
+                                accessible.role: MUAccessible.StaticText
+
+                                onActiveChanged: {
+                                    if (active) {
+                                        listItem.scrollIntoView()
+                                    }
+                                }
+                            }
+
+                            anchors.margins: -radius
+                            radius: 2 + border.width
+                        }
                     }
                 }
             ]

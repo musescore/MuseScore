@@ -148,6 +148,7 @@ ScoresView {
 
             columns: [
                 ScoresListView.ColumnItem {
+                    id: visibilityColumn
                     header: qsTrc("project/cloud", "Visibility")
 
                     width: function (parentWidth) {
@@ -155,11 +156,13 @@ ScoresView {
                         return 0.16 * parentWidthExclusingSpacing
                     }
 
-                    delegate: RowLayout {
-                        id: row
+                    delegate: Item {
+                        id: visibilityContainer
 
-                        visible: !label.isEmpty
-                        spacing: 8
+                        implicitWidth: visibilityRow.implicitWidth
+                        implicitHeight: visibilityRow.implicitHeight
+
+                        visible: !visibilityLabel.isEmpty
 
                         readonly property var iconAndText: {
                             switch (score.cloudVisibility ?? 0) {
@@ -173,24 +176,51 @@ ScoresView {
                             return { "iconCode": IconCode.NONE, "text": "" }
                         }
 
-                        StyledIconLabel {
-                            iconCode: row.iconAndText.iconCode
+                        NavigationFocusBorder {
+                            navigationCtrl: NavigationControl {
+                                name: "VisibilityLabel"
+                                panel: navigationPanel
+                                row: navigationRow
+                                column: navigationColumnStart
+                                enabled: visibilityContainer.visible && visibilityContainer.enabled && !visibilityLabel.isEmpty
+                                accessible.name: visibilityColumn.header + ": " + visibilityContainer.iconAndText.text
+                                accessible.role: MUAccessible.StaticText
+
+                                onActiveChanged: {
+                                    if (active) {
+                                        listItem.scrollIntoView()
+                                    }
+                                }
+                            }
+
+                            anchors.margins: -radius
+                            radius: 2 + border.width
                         }
 
-                        StyledTextLabel {
-                            id: label
-                            Layout.fillWidth: true
+                        RowLayout {
+                            id: visibilityRow
+                            spacing: 8
 
-                            // TODO: accessibility
-                            text: row.iconAndText.text
+                            StyledIconLabel {
+                                iconCode: visibilityContainer.iconAndText.iconCode
+                            }
 
-                            font: ui.theme.largeBodyFont
-                            horizontalAlignment: Text.AlignLeft
+                            StyledTextLabel {
+                                id: visibilityLabel
+                                Layout.fillWidth: true
+
+                                text: visibilityContainer.iconAndText.text
+
+                                font: ui.theme.largeBodyFont
+                                horizontalAlignment: Text.AlignLeft
+                            }
                         }
                     }
                 },
 
                 ScoresListView.ColumnItem {
+                    id: modifiedColumn
+
                     //: Stands for "Last time that this score was modified".
                     //: Used as the header of this column in the scores list.
                     header: qsTrc("project", "Modified")
@@ -201,15 +231,37 @@ ScoresView {
                     }
 
                     delegate: StyledTextLabel {
-                        // TODO: accessibility
+                        id: modifiedLabel
                         text: score.timeSinceModified ?? ""
 
                         font.capitalization: Font.AllUppercase
                         horizontalAlignment: Text.AlignLeft
+
+                        NavigationFocusBorder {
+                            navigationCtrl: NavigationControl {
+                                name: "ModifiedLabel"
+                                panel: navigationPanel
+                                row: navigationRow
+                                column: navigationColumnStart
+                                enabled: modifiedLabel.visible && modifiedLabel.enabled && !modifiedLabel.isEmpty
+                                accessible.name: modifiedColumn.header + ": " + modifiedLabel.text
+                                accessible.role: MUAccessible.StaticText
+
+                                onActiveChanged: {
+                                    if (active) {
+                                        listItem.scrollIntoView()
+                                    }
+                                }
+                            }
+
+                            anchors.margins: -radius
+                            radius: 2 + border.width
+                        }
                     }
                 },
 
                 ScoresListView.ColumnItem {
+                    id: sizeColumn
                     header: qsTrc("project", "Size", "file size")
 
                     width: function (parentWidth) {
@@ -218,15 +270,38 @@ ScoresView {
                     }
 
                     delegate: StyledTextLabel {
-                        // TODO: accessibility
+                        id: sizeLabel
                         text: score.fileSize ?? ""
 
                         font: ui.theme.largeBodyFont
                         horizontalAlignment: Text.AlignLeft
+
+                        NavigationFocusBorder {
+                            navigationCtrl: NavigationControl {
+                                name: "SizeLabel"
+                                panel: navigationPanel
+                                row: navigationRow
+                                column: navigationColumnStart
+                                enabled: sizeLabel.visible && sizeLabel.enabled && !sizeLabel.isEmpty
+                                accessible.name: sizeColumn.header + ": " + sizeLabel.text
+                                accessible.role: MUAccessible.StaticText
+
+                                onActiveChanged: {
+                                    if (active) {
+                                        listItem.scrollIntoView()
+                                    }
+                                }
+                            }
+
+                            anchors.margins: -radius
+                            radius: 2 + border.width
+                        }
                     }
                 },
 
                 ScoresListView.ColumnItem {
+                    id: viewsColumn
+
                     //: Stands for "The number of times this score was viewed on MuseScore.com".
                     //: Used as the header of this column in the scores list.
                     header: qsTrc("project", "Views", "number of views")
@@ -236,23 +311,52 @@ ScoresView {
                         return Math.max(0.08 * parentWidthExclusingSpacing, 76)
                     }
 
-                    delegate: RowLayout {
-                        visible: !label.isEmpty
-                        spacing: 8
+                    delegate: Item {
+                        id: viewsContainer
 
-                        StyledIconLabel {
-                            iconCode: IconCode.EYE_OPEN
+                        implicitWidth: viewsRow.implicitWidth
+                        implicitHeight: viewsRow.implicitHeight
+
+                        visible: !viewsLabel.isEmpty
+
+                        NavigationFocusBorder {
+                            navigationCtrl: NavigationControl {
+                                name: "ViewsLabel"
+                                panel: navigationPanel
+                                row: navigationRow
+                                column: navigationColumnStart
+                                enabled: viewsContainer.visible && viewsContainer.enabled
+                                accessible.name: viewsColumn.header + ": " + viewsLabel.text
+                                accessible.role: MUAccessible.StaticText
+
+                                onActiveChanged: {
+                                    if (active) {
+                                        listItem.scrollIntoView()
+                                    }
+                                }
+                            }
+
+                            anchors.margins: -radius
+                            radius: 2 + border.width
                         }
 
-                        StyledTextLabel {
-                            id: label
-                            Layout.fillWidth: true
+                        RowLayout {
+                            id: viewsRow
+                            spacing: 8
 
-                            // TODO: accessibility
-                            text: score.cloudViewCount ?? ""
+                            StyledIconLabel {
+                                iconCode: IconCode.EYE_OPEN
+                            }
 
-                            font: ui.theme.largeBodyFont
-                            horizontalAlignment: Text.AlignLeft
+                            StyledTextLabel {
+                                id: viewsLabel
+                                Layout.fillWidth: true
+
+                                text: score.cloudViewCount ?? ""
+
+                                font: ui.theme.largeBodyFont
+                                horizontalAlignment: Text.AlignLeft
+                            }
                         }
                     }
                 }
