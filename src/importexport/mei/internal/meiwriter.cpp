@@ -70,11 +70,11 @@ mu::Ret MeiWriter::write(notation::INotationPtr notation, QIODevice& destination
     }
 }
 
-Err MeiWriter::writeScore(mu::engraving::MasterScore* score, const io::path_t& path)
+Err MeiWriter::writeScore(mu::engraving::Score* score, const io::path_t& path)
 {
     MeiExporter exporter(score);
     std::string meiData;
-    if (exporter.write(meiData) && !io::File::writeFile(path, ByteArray(meiData.c_str(), meiData.size()))) {
+    if (exporter.write(meiData) && (io::File::writeFile(path, ByteArray(meiData.c_str(), meiData.size())) == make_ok())) {
         return Err::NoError;
     } else {
         return Err::UnknownError;
