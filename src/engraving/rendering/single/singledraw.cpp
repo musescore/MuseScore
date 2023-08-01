@@ -61,6 +61,7 @@
 #include "libmscore/harppedaldiagram.h"
 #include "libmscore/harmonicmark.h"
 #include "libmscore/harmony.h"
+#include "libmscore/hook.h"
 
 #include "libmscore/ornament.h"
 
@@ -140,6 +141,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::HARMONIC_MARK_SEGMENT: draw(item_cast<const HarmonicMarkSegment*>(item), painter);
         break;
     case ElementType::HARMONY:      draw(item_cast<const Harmony*>(item), painter);
+        break;
+    case ElementType::HOOK:         draw(item_cast<const Hook*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1324,4 +1327,11 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
         painter->drawText(ts->pos(), ts->text);
 #endif
     }
+}
+
+void SingleDraw::draw(const Hook* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->sym(), painter);
 }

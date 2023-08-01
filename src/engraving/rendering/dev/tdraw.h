@@ -212,6 +212,7 @@ private:
     static void draw(const HarpPedalDiagram* item, draw::Painter* painter);
     static void draw(const HarmonicMarkSegment* item, draw::Painter* painter);
     static void draw(const Harmony* item, draw::Painter* painter);
+    static void draw(const Hook* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 
