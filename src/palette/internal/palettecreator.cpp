@@ -1921,6 +1921,11 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     jazzTone->setTechniqueType(PlayingTechniqueType::JazzTone);
     sp->appendElement(jazzTone, QT_TRANSLATE_NOOP("palette", "Jazz tone"), 0.8)->setElementTranslated(true);
 
+    auto normal = makeElement<PlayTechAnnotation>(gpaletteScore);
+    normal->setXmlText(QT_TRANSLATE_NOOP("palette", "normal"));
+    normal->setTechniqueType(PlayingTechniqueType::Natural);
+    sp->appendElement(normal, QT_TRANSLATE_NOOP("palette", "Normal"), 0.8)->setElementTranslated(true);
+
     return sp;
 }
 
