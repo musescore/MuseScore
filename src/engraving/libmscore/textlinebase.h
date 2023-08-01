@@ -66,8 +66,11 @@ public:
     Text* text() const { return m_text; }
     Text* endText() const { return m_endText; }
 
+    const mu::PointF* points() const { return &m_points[0]; }
     mu::PointF* pointsRef() { return &m_points[0]; }
-    mu::PolygonF& polygonRef() { return m_joinedHairpin; }
+    const mu::PolygonF& joinedHairpin() const { return m_joinedHairpin; }
+    mu::PolygonF& joinedHairpinRef() { return m_joinedHairpin; }
+    int npoints() const { return m_npoints; }
     int& npointsRef() { return m_npoints; }
 
     double lineLength() const { return m_lineLength; }
