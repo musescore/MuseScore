@@ -67,25 +67,34 @@ ScoresView {
         ScoresView.Grid {
             id: grid
 
-            readonly property int fittingItems: view.columns * (view.rows + 1)
-            readonly property bool almostAtEnd: view.contentHeight - (view.contentY + view.height) < 2 * view.cellHeight
+            readonly property int remainingFullRowsBelowViewport:
+                Math.floor(cloudScoresModel.rowCount / view.columns) - Math.ceil((view.contentY + view.height) / view.cellHeight)
 
             Component.onCompleted: {
                 updateDesiredRowCount()
             }
 
-            onFittingItemsChanged: {
+            onRemainingFullRowsBelowViewportChanged: {
                 updateDesiredRowCount()
             }
 
-            onAlmostAtEndChanged: {
-                updateDesiredRowCount()
-            }
+            property bool updateDesiredRowCountScheduled: false
 
             function updateDesiredRowCount() {
+                if (updateDesiredRowCountScheduled) {
+                    return
+                }
+
+                updateDesiredRowCountScheduled = true
+
                 Qt.callLater(function() {
-                    cloudScoresModel.desiredRowCount = Math.max(fittingItems,
-                                                                almostAtEnd ? cloudScoresModel.rowCount + view.columns : cloudScoresModel.rowCount)
+                    let newDesiredRowCount = cloudScoresModel.rowCount + (3 - remainingFullRowsBelowViewport) * view.columns
+
+                    if (cloudScoresModel.desiredRowCount < newDesiredRowCount) {
+                        cloudScoresModel.desiredRowCount = newDesiredRowCount
+                    }
+
+                    updateDesiredRowCountScheduled = false
                 })
             }
 
@@ -121,25 +130,34 @@ ScoresView {
         ScoresView.List {
             id: list
 
-            readonly property int minimumInitialItems: (view.height / view.rowHeight) * 2
-            readonly property bool almostAtEnd: view.contentHeight - (view.contentY + view.height) < 20 * view.rowHeight
+            readonly property int remainingScoresBelowViewport:
+                cloudScoresModel.rowCount - Math.ceil((view.contentY + view.height) / view.rowHeight)
 
             Component.onCompleted: {
                 updateDesiredRowCount()
             }
 
-            onMinimumInitialItemsChanged: {
+            onRemainingScoresBelowViewportChanged: {
                 updateDesiredRowCount()
             }
 
-            onAlmostAtEndChanged: {
-                updateDesiredRowCount()
-            }
+            property bool updateDesiredRowCountScheduled: false
 
             function updateDesiredRowCount() {
+                if (updateDesiredRowCountScheduled) {
+                    return
+                }
+
+                updateDesiredRowCountScheduled = true
+
                 Qt.callLater(function() {
-                    cloudScoresModel.desiredRowCount = Math.max(minimumInitialItems,
-                                                                almostAtEnd ? cloudScoresModel.rowCount + 20 : cloudScoresModel.rowCount)
+                    let newDesiredRowCount = cloudScoresModel.rowCount + (20 - remainingScoresBelowViewport)
+
+                    if (cloudScoresModel.desiredRowCount < newDesiredRowCount) {
+                        cloudScoresModel.desiredRowCount = newDesiredRowCount
+                    }
+
+                    updateDesiredRowCountScheduled = false
                 })
             }
 

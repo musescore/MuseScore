@@ -57,11 +57,17 @@ void CloudScoresModel::load()
 void CloudScoresModel::reload()
 {
     beginResetModel();
+
     m_items.clear();
+    m_totalItems = mu::nidx;
+    m_desiredRowCount = 0;
+
     endResetModel();
 
+    emit hasMoreChanged();
+    emit desiredRowCountChanged();
+
     setState(State::Loading);
-    loadItemsIfNecessary();
 }
 
 CloudScoresModel::State CloudScoresModel::state() const
