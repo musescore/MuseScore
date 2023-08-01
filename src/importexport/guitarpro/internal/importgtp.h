@@ -265,7 +265,6 @@ protected:
     int slide = 0;
     int voltaSequence = 0;
     mu::engraving::Slur** slurs = nullptr;
-    std::vector<mu::engraving::Bend*> m_bends;
     std::vector<mu::engraving::StretchedBend*> m_stretchedBends;
 
     void skip(int64_t len);

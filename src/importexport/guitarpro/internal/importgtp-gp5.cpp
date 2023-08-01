@@ -1044,6 +1044,7 @@ bool GuitarPro5::read(IODevice* io)
 
     m_continiousElementsBuilder->addElementsToScore();
     StretchedBend::prepareBends(m_stretchedBends);
+
     return true;
 }
 

@@ -23,7 +23,9 @@
 #ifndef __STRETCHED_BEND_H__
 #define __STRETCHED_BEND_H__
 
-#include "bend.h"
+#include "engravingitem.h"
+#include "draw/types/font.h"
+#include "types.h"
 
 namespace mu::engraving {
 class Factory;
@@ -32,40 +34,48 @@ class Factory;
 //   @@ StretchedBend
 //---------------------------------------------------------
 
-class StretchedBend final : public Bend
+class StretchedBend final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StretchedBend)
     DECLARE_CLASSOF(ElementType::STRETCHED_BEND)
 
+    M_PROPERTY(String,     fontFace,  setFontFace)
+    M_PROPERTY(double,     fontSize,  setFontSize)
+    M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
+    M_PROPERTY(Millimetre, lineWidth, setLineWidth)
+
 public:
     StretchedBend* clone() const override { return new StretchedBend(*this); }
 
+    mu::draw::Font font(double sp) const;
+
     void draw(mu::draw::Painter*) const override;
 
-    bool stretchedMode() const { return m_stretchedMode; }
-    void setStretchedMode(bool val) { m_stretchedMode = val; }
-
-    void fillArrows();
+    void fillArrows(double width);
     void fillSegments();    // converting points from file to bend segments
-    void stretchSegments(); // stretching until end of chord duration
 
+    void fillStretchedSegments(bool untilNextSegment);
     mu::RectF calculateBoundingRect() const;
 
+    static std::vector<Note*> notesWithStretchedBend(Chord* chord);
     static void prepareBends(std::vector<StretchedBend*>& bends);
+    void adjustBendInChord();
+
+    void setPitchValues(const PitchValues& p) { m_pitchValues = p; }
+    const PitchValues& pitchValues() const { return m_pitchValues; }
+
+    void setNote(Note* note) { m_note = note; }
+    Note* note() const { return m_note; }
+
+    // property methods
+    PropertyValue getProperty(Pid propertyId) const override;
+    bool setProperty(Pid propertyId, const PropertyValue&) override;
 
 private:
 
     friend class Factory;
 
-    StretchedBend(Note* parent);
-
-    void fillDrawPoints(); // filling the points which specify how bend will be drawn
-
-    void setupPainter(mu::draw::Painter* painter) const;
-
-    double nextSegmentX() const;
-    double bendHeight(int bendIdx) const;
-    bool firstPointShouldBeSkipped() const;
+    StretchedBend(Chord* parent);
 
     enum class BendSegmentType {
         NO_TYPE = -1,
@@ -76,23 +86,41 @@ private:
     };
 
     struct BendSegment {
+        constexpr static int NO_TONE = -1;
+        BendSegment();
+        BendSegment(BendSegmentType bendType, int tone);
+        void setupCoords(PointF src, PointF dest);
         PointF src;
         PointF dest;
         BendSegmentType type = BendSegmentType::NO_TYPE;
-        int tone = -1;
+        int tone = NO_TONE;
+        bool visible = true;
     };
 
-    bool m_stretchedMode = false; // layout with fixed size or stretched to next segment
+    void addSegment(std::vector<BendSegment>& bendSegments, BendSegmentType type, int tone) const;
+    // creating bend segments with the information about their types
+    void createBendSegments();
+    void setupPainter(mu::draw::Painter* painter) const;
+    double nextSegmentX() const;
+    double bendHeight(int bendIdx) const;
+    bool firstPointShouldBeSkipped() const;
+    StretchedBend* backTiedStretchedBend() const;
+    static bool equalBendTypes(const StretchedBend* bend1, const StretchedBend* bend2);
 
-    std::vector<int> m_drawPoints;
-    Note* m_endNote = nullptr;
-    std::vector<BendSegment> m_bendSegments;
+    PitchValues m_pitchValues;
+    std::vector<BendSegment> m_bendSegments; // filled during note layout (when all coords are not known yet)
+    std::vector<BendSegment> m_bendSegmentsStretched; // filled during system layout (final coords used for drawing)
 
-    PolygonF m_arrowUp;
-    PolygonF m_arrowDown;
-    double m_bendArrowWidth = 0;
-    bool m_releasedToInitial = false;
-    bool m_skipFirstPoint = false;
+    struct Arrows
+    {
+        PolygonF up;
+        PolygonF down;
+        double width = 0;
+    } m_arrows;
+
+    Note* m_note = nullptr;
+    bool m_needsHeightAdjust = false;
+    Note* m_noteToAdjust = nullptr;
 };
 }     // namespace mu::engraving
 #endif

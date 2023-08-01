@@ -170,9 +170,13 @@ static Fraction getPlayTicksForBend(const Note* note)
     while (tie) {
         nextNote = tie->endNote();
         for (EngravingItem* e : nextNote->el()) {
-            if (e && (e->type() == ElementType::BEND || e->type() == ElementType::STRETCHED_BEND)) {
+            if (e && (e->type() == ElementType::BEND)) {
                 return nextNote->chord()->tick() - stick;
             }
+        }
+
+        if (nextNote->stretchedBend()) {
+            return nextNote->chord()->tick() - stick;
         }
 
         tie = nextNote->tieFor();
@@ -268,20 +272,19 @@ static void collectVibrato(int channel,
     pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
-static void collectBend(const Bend* bend,
+static void collectBend(const PitchValues& playData, staff_idx_t staffIdx,
                         int channel,
                         int onTime, int offTime,
                         PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
 {
-    const PitchValues& points = bend->points();
-    size_t pitchSize = points.size();
+    size_t pitchSize = playData.size();
 
     const float scale = 2 * (float)wheelSpec.mLimit / wheelSpec.mAmplitude / PitchValue::PITCH_FOR_SEMITONE;
     uint32_t duration = offTime - onTime;
 
     for (size_t i = 0; i < pitchSize - 1; i++) {
-        PitchValue curValue = points[i];
-        PitchValue nextValue = points[i + 1];
+        PitchValue curValue = playData.at(i);
+        PitchValue nextValue = playData.at(i + 1);
 
         //! y = a x^2 + b - curve
         float curTick = (float)curValue.time * duration / PitchValue::MAX_TIME;
@@ -306,10 +309,10 @@ static void collectBend(const Bend* bend,
             return y * scale;
         };
         func.func = bendFunc;
-        pitchWheelRenderer.addPitchWheelFunction(func, channel, bend->staffIdx(), effect);
+        pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
     }
     PitchWheelRenderer::PitchWheelFunction func;
-    func.mStartTick = onTime + points[pitchSize - 1].time * duration / PitchValue::MAX_TIME;
+    func.mStartTick = onTime + playData.at(pitchSize - 1).time * duration / PitchValue::MAX_TIME;
     func.mEndTick = offTime;
 
     if (func.mEndTick == func.mStartTick) {
@@ -317,13 +320,13 @@ static void collectBend(const Bend* bend,
     }
 
     //! y = releaseValue linear curve
-    uint32_t releaseValue = points[pitchSize - 1].pitch * scale;
+    uint32_t releaseValue = playData.at(pitchSize - 1).pitch * scale;
     auto bendFunc = [releaseValue] (uint32_t tick) {
         UNUSED(tick)
         return releaseValue;
     };
     func.func = bendFunc;
-    pitchWheelRenderer.addPitchWheelFunction(func, channel, bend->staffIdx(), effect);
+    pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
 //---------------------------------------------------------
@@ -427,14 +430,22 @@ static void collectNote(EventMap* events, const Note* note, const CollectNotePar
 
     // Bends
     for (EngravingItem* e : note->el()) {
-        if (e == 0 || (e->type() != ElementType::BEND && e->type() != ElementType::STRETCHED_BEND)) {
+        if (!e || (e->type() != ElementType::BEND)) {
             continue;
         }
+
         Bend* bend = toBend(e);
         if (!bend->playBend()) {
             break;
         }
-        collectBend(bend, noteParams.channel, tick1, tick1 + getPlayTicksForBend(note).ticks(), pitchWheelRenderer, noteParams.effect);
+
+        collectBend(bend->points(), bend->staffIdx(), noteParams.channel, tick1, tick1 + getPlayTicksForBend(
+                        note).ticks(), pitchWheelRenderer, noteParams.effect);
+    }
+
+    if (StretchedBend* stretchedBend = note->stretchedBend()) {
+        collectBend(stretchedBend->pitchValues(), stretchedBend->staffIdx(), noteParams.channel, tick1, tick1 + getPlayTicksForBend(
+                        note).ticks(), pitchWheelRenderer, noteParams.effect);
     }
 }
 

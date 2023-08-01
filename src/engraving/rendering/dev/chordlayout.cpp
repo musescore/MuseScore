@@ -50,6 +50,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stem.h"
 #include "libmscore/stemslash.h"
+#include "libmscore/stretchedbend.h"
 #include "libmscore/system.h"
 #include "libmscore/tie.h"
 #include "libmscore/slur.h"
@@ -3192,6 +3193,25 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
     }
 }
 
+void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
+{
+    if (!Note::engravingConfiguration()->guitarProImportExperimental()) {
+        return;
+    }
+
+    for (EngravingItem* item : chord->el()) {
+        if (item && item->isStretchedBend()) {
+            toStretchedBend(item)->adjustBendInChord();
+        }
+    }
+
+    for (EngravingItem* item : chord->el()) {
+        if (item && item->isStretchedBend()) {
+            rendering::dev::TLayout::layoutStretched(toStretchedBend(item), ctx);
+        }
+    }
+}
+
 void ChordLayout::crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx)
 {
     if (!on) {
@@ -3296,7 +3316,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         if (e->isSymbol()) {
             e->setMag(item->mag());
             Shape noteShape = item->shape();
-            mu::remove_if(noteShape, [e](ShapeElement& s) { return s.toItem == e || s.toItem->isBend() || s.toItem->isStretchedBend(); });
+            mu::remove_if(noteShape, [e](ShapeElement& s) { return s.toItem == e || s.toItem->isBend(); });
             LedgerLine* ledger = item->line() < -1 || item->line() > item->staff()->lines(item->tick())
                                  ? item->chord()->ledgerLines() : nullptr;
             if (ledger) {

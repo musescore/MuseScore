@@ -1967,7 +1967,7 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(StretchedBend* b, XmlReader& xml, ReadContext& ctx)
 {
-    read(static_cast<Bend*>(b), xml, ctx);
+    // not implemented
 }
 
 void TRead::read(Box* b, XmlReader& e, ReadContext& ctx)

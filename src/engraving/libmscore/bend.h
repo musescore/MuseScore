@@ -44,7 +44,7 @@ enum class BendType {
     CUSTOM
 };
 
-class Bend : public EngravingItem // TODO: bring back "final" keyword
+class Bend final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Bend)
     DECLARE_CLASSOF(ElementType::BEND)
@@ -82,10 +82,10 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-protected: /// TODO: bring back "private" keyword after removing StretchedBend class
+private:
     friend class Factory;
 
-    Bend(Note* parent, ElementType type = ElementType::BEND);
+    Bend(Note* parent);
 
     BendType parseBendTypeFromCurve() const;
     void updatePointsByBendType(const BendType bendType);

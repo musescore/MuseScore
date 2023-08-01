@@ -36,7 +36,6 @@
 
 #include "arpeggio.h"
 #include "articulation.h"
-#include "bend.h"
 #include "changeMap.h"
 #include "chord.h"
 #include "durationtype.h"
@@ -59,7 +58,6 @@
 #include "slur.h"
 #include "staff.h"
 #include "stafftextbase.h"
-#include "stretchedbend.h"
 #include "swing.h"
 #include "synthesizerstate.h"
 #include "tempo.h"

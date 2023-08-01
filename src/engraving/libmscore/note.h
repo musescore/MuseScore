@@ -44,12 +44,12 @@ class Tie;
 class Chord;
 class Text;
 class Score;
-class Bend;
 class AccidentalState;
 class Accidental;
 class NoteDot;
 class Spanner;
 class StaffType;
+class StretchedBend;
 class NoteEditData;
 enum class AccidentalType;
 
@@ -425,8 +425,8 @@ public:
     SlideType slideToType() const { return m_slideToType; }
     SlideType slideFromType() const { return m_slideFromType; }
 
-    Bend* bend() const { return m_bend; }
-
+    void setStretchedBend(StretchedBend* s) { m_stretchedBend = s; }
+    StretchedBend* stretchedBend() const { return m_stretchedBend; }
     bool isHammerOn() const { return m_isHammerOn; }
     void setIsHammerOn(bool hammerOn) { m_isHammerOn = hammerOn; }
 
@@ -490,7 +490,7 @@ private:
     bool m_play = true;           // note is not played if false
     mutable bool m_mark = false;  // for use in sequencer
     bool m_fixed = false;         // for slash notation
-    Bend* m_bend = nullptr;
+    StretchedBend* m_stretchedBend = nullptr;
     SlideType m_slideToType = SlideType::Undefined;
     SlideType m_slideFromType = SlideType::Undefined;
 

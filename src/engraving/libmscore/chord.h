@@ -49,6 +49,7 @@ class Note;
 class NoteEventList;
 class Stem;
 class StemSlash;
+class StretchedBend;
 class Tremolo;
 
 enum class TremoloChordType : char {

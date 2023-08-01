@@ -32,55 +32,56 @@
 #include "types/typesconv.h"
 #include "rw/xmlwriter.h"
 
-#include <libmscore/factory.h>
-#include <libmscore/measurebase.h>
-#include <libmscore/text.h>
-#include <libmscore/box.h>
-#include <libmscore/staff.h>
-#include <libmscore/part.h>
-#include <libmscore/measure.h>
-#include <libmscore/timesig.h>
-#include <libmscore/tremolo.h>
-#include <libmscore/rest.h>
-#include <libmscore/chord.h>
-#include <libmscore/note.h>
-#include <libmscore/stringdata.h>
-#include <libmscore/clef.h>
-#include <libmscore/lyrics.h>
-#include <libmscore/tempotext.h>
-#include <libmscore/slur.h>
-#include <libmscore/tie.h>
-#include <libmscore/tuplet.h>
-#include <libmscore/barline.h>
-#include <libmscore/excerpt.h>
-#include <libmscore/stafftype.h>
-#include <libmscore/bracket.h>
-#include <libmscore/articulation.h>
-#include <libmscore/keysig.h>
-#include <libmscore/harmony.h>
-#include "libmscore/stretchedbend.h"
-#include <libmscore/tremolobar.h>
-#include <libmscore/segment.h>
-#include <libmscore/rehearsalmark.h>
-#include <libmscore/dynamic.h>
 #include <libmscore/arpeggio.h>
-#include <libmscore/volta.h>
-#include <libmscore/fret.h>
-#include <libmscore/instrtemplate.h>
-#include <libmscore/glissando.h>
+#include <libmscore/articulation.h>
+#include <libmscore/barline.h>
+#include <libmscore/bend.h>
+#include <libmscore/box.h>
+#include <libmscore/bracket.h>
+#include <libmscore/chord.h>
 #include <libmscore/chordline.h>
-#include <libmscore/instrtemplate.h>
-#include <libmscore/instrchange.h>
+#include <libmscore/clef.h>
+#include <libmscore/dynamic.h>
+#include <libmscore/excerpt.h>
+#include <libmscore/factory.h>
+#include <libmscore/fret.h>
+#include <libmscore/glissando.h>
 #include <libmscore/hairpin.h>
-#include <libmscore/ottava.h>
-#include <libmscore/notedot.h>
-#include <libmscore/stafftext.h>
-#include <types/symid.h>
-#include <libmscore/textline.h>
+#include <libmscore/harmony.h>
+#include <libmscore/instrchange.h>
+#include <libmscore/instrtemplate.h>
+#include <libmscore/keysig.h>
 #include <libmscore/letring.h>
-#include <libmscore/palmmute.h>
-#include <libmscore/vibrato.h>
+#include <libmscore/lyrics.h>
 #include <libmscore/masterscore.h>
+#include <libmscore/measure.h>
+#include <libmscore/measurebase.h>
+#include <libmscore/note.h>
+#include <libmscore/notedot.h>
+#include <libmscore/ottava.h>
+#include <libmscore/palmmute.h>
+#include <libmscore/part.h>
+#include <libmscore/rehearsalmark.h>
+#include <libmscore/rest.h>
+#include <libmscore/segment.h>
+#include <libmscore/slur.h>
+#include <libmscore/staff.h>
+#include <libmscore/stafftext.h>
+#include <libmscore/stafftype.h>
+#include "libmscore/stretchedbend.h"
+#include <libmscore/stringdata.h>
+#include <libmscore/tempotext.h>
+#include <libmscore/text.h>
+#include <libmscore/textline.h>
+#include <libmscore/tie.h>
+#include <libmscore/timesig.h>
+#include <libmscore/tuplet.h>
+#include <libmscore/tremolo.h>
+#include <libmscore/tremolobar.h>
+#include <libmscore/volta.h>
+#include <libmscore/vibrato.h>
+
+#include <types/symid.h>
 
 #include "log.h"
 
@@ -715,20 +716,35 @@ std::vector<PitchValue> GuitarPro::readBendDataFromFile()
 
 void GuitarPro::createBend(Note* note, std::vector<PitchValue>& bendData)
 {
-    if (bendData.empty()) {
+    if (bendData.size() < 2) {
+        return;
+    }
+
+    /// not adding "hold" on 0 pitch
+    int maxPitch = (std::max_element(bendData.begin(), bendData.end(), [](const PitchValue& l, const PitchValue& r) {
+        return l.pitch < r.pitch;
+    }))->pitch;
+
+    if (maxPitch == 0) {
         return;
     }
 
     bool useStretchedBends = engravingConfiguration()->guitarProImportExperimental();
-    Bend* bend = useStretchedBends ? Factory::createStretchedBend(note) : Factory::createBend(note);
 
-    bend->points() = std::move(bendData);
-    bend->setTrack(note->track());
-    note->add(bend);
     if (useStretchedBends) {
-        m_stretchedBends.push_back(toStretchedBend(bend));
+        Chord* chord = toChord(note->parent());
+        StretchedBend* stretchedBend = Factory::createStretchedBend(chord);
+        stretchedBend->setPitchValues(bendData);
+        stretchedBend->setTrack(note->track());
+        stretchedBend->setNote(note);
+        note->setStretchedBend(stretchedBend);
+        chord->add(stretchedBend);
+        m_stretchedBends.push_back(stretchedBend);
     } else {
-        m_bends.push_back(bend);
+        Bend* bend = Factory::createBend(note);
+        bend->setPoints(bendData);
+        bend->setTrack(note->track());
+        note->add(bend);
     }
 }
 
@@ -2721,6 +2737,7 @@ bool GuitarPro3::read(IODevice* io)
 
     m_continiousElementsBuilder->addElementsToScore();
     StretchedBend::prepareBends(m_stretchedBends);
+
     return true;
 }
 

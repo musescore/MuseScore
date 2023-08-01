@@ -1167,6 +1167,7 @@ bool GuitarPro4::read(IODevice* io)
 
     m_continiousElementsBuilder->addElementsToScore();
     StretchedBend::prepareBends(m_stretchedBends);
+
     return true;
 }
 } // namespace mu::iex::guitarpro
