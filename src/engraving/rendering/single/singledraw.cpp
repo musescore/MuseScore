@@ -60,6 +60,7 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/harppedaldiagram.h"
 #include "libmscore/harmonicmark.h"
+#include "libmscore/harmony.h"
 
 #include "libmscore/ornament.h"
 
@@ -137,6 +138,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::HARP_DIAGRAM: draw(item_cast<const HarpPedalDiagram*>(item), painter);
         break;
     case ElementType::HARMONIC_MARK_SEGMENT: draw(item_cast<const HarmonicMarkSegment*>(item), painter);
+        break;
+    case ElementType::HARMONY:      draw(item_cast<const Harmony*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1276,4 +1279,49 @@ void SingleDraw::draw(const HarmonicMarkSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const Harmony* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->textList().empty()) {
+        drawTextBase(item, painter);
+        return;
+    }
+
+    if (item->hasFrame()) {
+        if (item->frameWidth().val() != 0.0) {
+            Color color = item->frameColor();
+            Pen pen(color, item->frameWidth().val() * item->spatium(), PenStyle::SolidLine,
+                    PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
+            painter->setPen(pen);
+        } else {
+            painter->setNoPen();
+        }
+        Color bg(item->bgColor());
+        painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
+        if (item->circle()) {
+            painter->drawArc(item->frame(), 0, 5760);
+        } else {
+            int r2 = item->frameRound();
+            if (r2 > 99) {
+                r2 = 99;
+            }
+            painter->drawRoundedRect(item->frame(), item->frameRound(), r2);
+        }
+    }
+    painter->setBrush(BrushStyle::NoBrush);
+    Color color = item->textColor();
+    painter->setPen(color);
+    for (const TextSegment* ts : item->textList()) {
+        mu::draw::Font f(ts->m_font);
+        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+#ifndef Q_OS_MACOS
+        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
+#else
+        painter->setFont(f);
+        painter->drawText(ts->pos(), ts->text);
+#endif
+    }
 }

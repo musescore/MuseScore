@@ -1263,49 +1263,9 @@ const ChordDescription* Harmony::generateDescription()
 //   draw
 //---------------------------------------------------------
 
-void Harmony::draw(mu::draw::Painter* painter) const
+void Harmony::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    // painter->setPen(curColor());
-    if (m_textList.empty()) {
-        TextBase::draw(painter);
-        return;
-    }
-    if (hasFrame()) {
-        if (frameWidth().val() != 0.0) {
-            Color color = frameColor();
-            Pen pen(color, frameWidth().val() * spatium(), PenStyle::SolidLine,
-                    PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
-            painter->setPen(pen);
-        } else {
-            painter->setNoPen();
-        }
-        Color bg(bgColor());
-        painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
-        if (circle()) {
-            painter->drawArc(m_frame, 0, 5760);
-        } else {
-            int r2 = frameRound();
-            if (r2 > 99) {
-                r2 = 99;
-            }
-            painter->drawRoundedRect(m_frame, frameRound(), r2);
-        }
-    }
-    painter->setBrush(BrushStyle::NoBrush);
-    Color color = textColor();
-    painter->setPen(color);
-    for (const TextSegment* ts : m_textList) {
-        mu::draw::Font f(ts->m_font);
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-#ifndef Q_OS_MACOS
-        TextBase::drawTextWorkaround(painter, f, ts->pos(), ts->text);
-#else
-        painter->setFont(f);
-        painter->drawText(ts->pos(), ts->text);
-#endif
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
