@@ -49,6 +49,7 @@ public:
     int number() const { return m_number; }
     void setNumber(int n) { m_number = n; }
 
+    const SymIdList& numberSym() const { return m_numberSym; }
     void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(String::number(n)); }
 
     const SymIdList& restSyms() const { return m_restSyms; }
@@ -67,11 +68,11 @@ public:
 
     mu::RectF numberRect() const override;
 
+    mu::PointF numberPosition(const mu::RectF& numberBbox) const;
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
-
-    mu::PointF numberPosition(const mu::RectF& numberBbox) const;
 
     double m_width = 0.0;           // width of multimeasure rest
     int m_number = 0;               // number of measures represented

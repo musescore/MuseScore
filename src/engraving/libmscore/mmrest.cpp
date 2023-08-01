@@ -70,69 +70,9 @@ MMRest::MMRest(const MMRest& r, bool link)
 //   MMRest::draw
 //---------------------------------------------------------
 
-void MMRest::draw(mu::draw::Painter* painter) const
+void MMRest::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (shouldNotBeDrawn() || (track() % VOICES)) {     //only on voice 1
-        return;
-    }
-
-    double _spatium = spatium();
-
-    // draw number
-    painter->setPen(curColor());
-    RectF numberBox = symBbox(m_numberSym);
-    PointF numberPos = numberPosition(numberBox);
-    if (m_numberVisible) {
-        drawSymbols(m_numberSym, painter, numberPos);
-    }
-
-    numberBox.translate(numberPos);
-
-    if (style().styleB(Sid::oldStyleMultiMeasureRests)
-        && m_number <= style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
-        // draw rest symbols
-        double x = (m_width - m_symsWidth) * 0.5;
-        double spacing = style().styleMM(Sid::mmRestOldStyleSpacing);
-        for (SymId sym : m_restSyms) {
-            double y = (sym == SymId::restWhole ? -spatium() : 0);
-            drawSymbol(sym, painter, PointF(x, y));
-            x += symBbox(sym).width() + spacing;
-        }
-    } else {
-        double mag = staff()->staffMag(tick());
-        mu::draw::Pen pen(painter->pen());
-        pen.setCapStyle(mu::draw::PenCapStyle::FlatCap);
-
-        // draw horizontal line
-        double hBarThickness = style().styleMM(Sid::mmRestHBarThickness) * mag;
-        if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
-            pen.setWidthF(hBarThickness);
-            painter->setPen(pen);
-            double halfHBarThickness = hBarThickness * .5;
-            if (m_numberVisible // avoid painting line through number
-                && style().styleB(Sid::mmRestNumberMaskHBar)
-                && numberBox.bottom() >= -halfHBarThickness
-                && numberBox.top() <= halfHBarThickness) {
-                double gapDistance = (numberBox.width() + _spatium) * .5;
-                double midpoint = m_width * .5;
-                painter->drawLine(LineF(0.0, 0.0, midpoint - gapDistance, 0.0));
-                painter->drawLine(LineF(midpoint + gapDistance, 0.0, m_width, 0.0));
-            } else {
-                painter->drawLine(LineF(0.0, 0.0, m_width, 0.0));
-            }
-        }
-
-        // draw vertical lines
-        double vStrokeThickness = style().styleMM(Sid::mmRestHBarVStrokeThickness) * mag;
-        if (vStrokeThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
-            pen.setWidthF(vStrokeThickness);
-            painter->setPen(pen);
-            double halfVStrokeHeight = style().styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;
-            painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
-            painter->drawLine(LineF(m_width, -halfVStrokeHeight, m_width, halfVStrokeHeight));
-        }
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
