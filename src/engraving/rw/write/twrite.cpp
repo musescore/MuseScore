@@ -558,6 +558,9 @@ void TWrite::write(const Bend* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const StretchedBend* item, XmlWriter& xml, WriteContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(xml);
+    UNUSED(ctx);
     // not implemented
 }
 

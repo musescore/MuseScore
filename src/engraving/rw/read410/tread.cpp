@@ -1967,6 +1967,9 @@ void TRead::read(Bend* b, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(StretchedBend* b, XmlReader& xml, ReadContext& ctx)
 {
+    UNUSED(b);
+    UNUSED(xml);
+    UNUSED(ctx);
     // not implemented
 }
 
