@@ -882,10 +882,10 @@ void TDraw::draw(const FiguredBass* item, Painter* painter)
     if (item->items().size() < 1) {                                 // if not parseable into f.b. items
         drawTextBase(item, painter);                                // draw as standard text
     } else {
-        for (FiguredBassItem* item : item->items()) {               // if parseable into f.b. items
-            painter->translate(item->pos());                // draw each item in its proper position
-            item->draw(painter);
-            painter->translate(-item->pos());
+        for (FiguredBassItem* fi : item->items()) {               // if parseable into f.b. items
+            painter->translate(fi->pos());                // draw each item in its proper position
+            fi->draw(painter);
+            painter->translate(-fi->pos());
         }
     }
 }

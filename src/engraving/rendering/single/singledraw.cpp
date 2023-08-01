@@ -44,11 +44,13 @@
 #include "libmscore/clef.h"
 #include "libmscore/capo.h"
 
+#include "libmscore/deadslapped.h"
 #include "libmscore/dynamic.h"
 
 #include "libmscore/expression.h"
 
 #include "libmscore/fermata.h"
+#include "libmscore/figuredbass.h"
 #include "libmscore/fingering.h"
 #include "libmscore/fret.h"
 
@@ -99,6 +101,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::CAPO:         draw(item_cast<const Capo*>(item), painter);
         break;
 
+    case ElementType::DEAD_SLAPPED: draw(item_cast<const DeadSlapped*>(item), painter);
+        break;
     case ElementType::DYNAMIC:      draw(item_cast<const Dynamic*>(item), painter);
         break;
 
@@ -106,6 +110,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::FERMATA:      draw(item_cast<const Fermata*>(item), painter);
+        break;
+    case ElementType::FIGURED_BASS: draw(item_cast<const FiguredBass*>(item), painter);
         break;
     case ElementType::FINGERING:    draw(item_cast<const Fingering*>(item), painter);
         break;
@@ -694,6 +700,15 @@ void SingleDraw::draw(const Capo* item, Painter* painter)
     drawTextBase(item, painter);
 }
 
+void SingleDraw::draw(const DeadSlapped* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(draw::PenStyle::NoPen);
+    painter->setBrush(item->curColor());
+    painter->drawPath(item->path1());
+    painter->drawPath(item->path2());
+}
+
 void SingleDraw::draw(const Dynamic* item, Painter* painter)
 {
     drawTextBase(item, painter);
@@ -709,6 +724,20 @@ void SingleDraw::draw(const Fermata* item, Painter* painter)
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor());
     item->drawSymbol(item->symId(), painter, PointF(-0.5 * item->width(), 0.0));
+}
+
+void SingleDraw::draw(const FiguredBass* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->items().size() < 1) {                                 // if not parseable into f.b. items
+        drawTextBase(item, painter);                                // draw as standard text
+    } else {
+        for (FiguredBassItem* fi : item->items()) {               // if parseable into f.b. items
+            painter->translate(fi->pos());                // draw each item in its proper position
+            fi->draw(painter);
+            painter->translate(-fi->pos());
+        }
+    }
 }
 
 void SingleDraw::draw(const Fingering* item, Painter* painter)
