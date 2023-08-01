@@ -73,6 +73,7 @@
 #include "libmscore/keysig.h"
 
 #include "libmscore/layoutbreak.h"
+#include "libmscore/ledgerline.h"
 
 #include "libmscore/ornament.h"
 
@@ -170,6 +171,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::LAYOUT_BREAK: draw(item_cast<const LayoutBreak*>(item), painter);
+        break;
+    case ElementType::LEDGER_LINE:  draw(item_cast<const LedgerLine*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1486,4 +1489,16 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter)
 
     painter->setPen(pen);
     painter->drawPath(item->iconPath());
+}
+
+void SingleDraw::draw(const LedgerLine* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    painter->setPen(Pen(item->curColor(), item->lineWidth(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+    if (item->vertical()) {
+        painter->drawLine(LineF(0.0, 0.0, 0.0, item->len()));
+    } else {
+        painter->drawLine(LineF(0.0, 0.0, item->len(), 0.0));
+    }
 }
