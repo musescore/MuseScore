@@ -122,8 +122,7 @@ bool ScoreRW::saveScore(Score* score, const String& name, ExportFunc exportFunc)
     if (rv != Err::NoError) {
         LOGE() << "can't load score, path: " << path;
         return false;
-    }
-    else {
+    } else {
         return true;
     }
 }
