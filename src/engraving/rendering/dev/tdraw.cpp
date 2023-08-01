@@ -76,6 +76,8 @@
 
 #include "libmscore/keysig.h"
 
+#include "libmscore/layoutbreak.h"
+
 #include "libmscore/ornament.h"
 
 #include "libmscore/text.h"
@@ -181,6 +183,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::KEYSIG:       draw(item_cast<const KeySig*>(item), painter);
+        break;
+
+    case ElementType::LAYOUT_BREAK: draw(item_cast<const LayoutBreak*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1633,4 +1638,32 @@ void TDraw::draw(const KeySig* item, Painter* painter)
         painter->setPen(item->engravingConfiguration()->formattingMarksColor());
         item->drawSymbol(SymId::timeSigX, painter, PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
     }
+}
+
+void TDraw::draw(const LayoutBreak* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->score()->printing() || !item->score()->showUnprintable()) {
+        return;
+    }
+
+    Pen pen(item->selected() ? item->engravingConfiguration()->selectionColor() : item->engravingConfiguration()->formattingMarksColor());
+    if (item->score()->isPaletteScore()) {
+        pen.setColor(item->engravingConfiguration()->fontPrimaryColor());
+    }
+    pen.setWidthF(item->lw() / 2);
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    pen.setCapStyle(PenCapStyle::SquareCap);
+    pen.setDashPattern({ 1, 3 });
+
+    painter->setPen(pen);
+    painter->setBrush(BrushStyle::NoBrush);
+    painter->drawRect(item->iconBorderRect());
+
+    pen.setWidthF(item->lw());
+    pen.setStyle(PenStyle::SolidLine);
+
+    painter->setPen(pen);
+    painter->drawPath(item->iconPath());
 }

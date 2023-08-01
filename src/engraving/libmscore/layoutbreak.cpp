@@ -58,14 +58,14 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
     resetProperty(Pid::START_WITH_LONG_NAMES);
     resetProperty(Pid::START_WITH_MEASURE_ONE);
     resetProperty(Pid::FIRST_SYSTEM_INDENTATION);
-    lw = spatium() * 0.3;
+    m_lw = spatium() * 0.3;
 }
 
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     : EngravingItem(lb)
 {
     _layoutBreakType        = lb._layoutBreakType;
-    lw                      = lb.lw;
+    m_lw                      = lb.m_lw;
     _pause                  = lb._pause;
     _startWithLongNames     = lb._startWithLongNames;
     _startWithMeasureOne    = lb._startWithMeasureOne;
@@ -82,32 +82,9 @@ void LayoutBreak::setParent(MeasureBase* parent)
 //   draw
 //---------------------------------------------------------
 
-void LayoutBreak::draw(mu::draw::Painter* painter) const
+void LayoutBreak::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    if (score()->printing() || !score()->showUnprintable()) {
-        return;
-    }
-
-    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor());
-    if (score()->isPaletteScore()) {
-        pen.setColor(engravingConfiguration()->fontPrimaryColor());
-    }
-    pen.setWidthF(lw / 2);
-    pen.setJoinStyle(PenJoinStyle::MiterJoin);
-    pen.setCapStyle(PenCapStyle::SquareCap);
-    pen.setDashPattern({ 1, 3 });
-
-    painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawRect(m_iconBorderRect);
-
-    pen.setWidthF(lw);
-    pen.setStyle(PenStyle::SolidLine);
-
-    painter->setPen(pen);
-    painter->drawPath(m_iconPath);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
@@ -178,7 +155,7 @@ void LayoutBreak::layout0()
         break;
     }
 
-    setbbox(m_iconBorderRect.adjusted(-lw, -lw, lw, lw));
+    setbbox(m_iconBorderRect.adjusted(-m_lw, -m_lw, m_lw, m_lw));
 }
 
 //---------------------------------------------------------
@@ -197,7 +174,7 @@ void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 
 void LayoutBreak::spatiumChanged(double, double)
 {
-    lw = spatium() * 0.3;
+    m_lw = spatium() * 0.3;
     layout0();
 }
 
