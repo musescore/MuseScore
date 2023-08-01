@@ -22,7 +22,10 @@
 #ifndef MU_CLOUD_CLOUDTYPES_H
 #define MU_CLOUD_CLOUDTYPES_H
 
+#include <vector>
+
 #include <QDate>
+#include <QString>
 #include <QUrl>
 
 namespace mu::cloud {
@@ -78,6 +81,7 @@ struct ScoreOwnerInfo {
     }
 };
 
+//! Note: these values are currently supposed to be in sync with the MuseScore.com API!
 enum class Visibility {
     Public = 0,
     Unlisted = 1,
@@ -125,6 +129,7 @@ struct ScoresList {
         QDateTime lastModified;
         size_t fileSize = 0;
         QString thumbnailUrl;
+        Visibility visibility = Visibility::Private;
         int viewCount = 0;
     };
 

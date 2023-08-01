@@ -66,7 +66,7 @@ ScoresView {
                     header: qsTrc("project", "Modified")
 
                     width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
+                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
                         return 0.25 * parentWidthExclusingSpacing
                     }
 
@@ -83,7 +83,7 @@ ScoresView {
                     header: qsTrc("project", "Size", "file size")
 
                     width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
+                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
                         return 0.15 * parentWidthExclusingSpacing
                     }
 

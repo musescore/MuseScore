@@ -147,7 +147,48 @@ ScoresView {
             navigation.accessible.name: qsTrc("project", "Online scores list")
 
             columns: [
-                // TODO: visbility column
+                ScoresListView.ColumnItem {
+                    header: qsTrc("project/cloud", "Visibility")
+
+                    width: function (parentWidth) {
+                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
+                        return 0.16 * parentWidthExclusingSpacing
+                    }
+
+                    delegate: RowLayout {
+                        id: row
+
+                        visible: !label.isEmpty
+                        spacing: 8
+
+                        readonly property var iconAndText: {
+                            switch (score.cloudVisibility ?? 0) {
+                            case CloudVisibility.Private:
+                                return { "iconCode": IconCode.LOCK_CLOSED, "text": qsTrc("project/cloud", "Private") }
+                            case CloudVisibility.Unlisted:
+                                return { "iconCode": IconCode.LOCK_OPEN, "text": qsTrc("project/cloud", "Unlisted") }
+                            case CloudVisibility.Public:
+                                return { "iconCode": IconCode.GLOBE, "text": qsTrc("project/cloud", "Public") }
+                            }
+                            return { "iconCode": IconCode.NONE, "text": "" }
+                        }
+
+                        StyledIconLabel {
+                            iconCode: row.iconAndText.iconCode
+                        }
+
+                        StyledTextLabel {
+                            id: label
+                            Layout.fillWidth: true
+
+                            // TODO: accessibility
+                            text: row.iconAndText.text
+
+                            font: ui.theme.largeBodyFont
+                            horizontalAlignment: Text.AlignLeft
+                        }
+                    }
+                },
 
                 ScoresListView.ColumnItem {
                     //: Stands for "Last time that this score was modified".
@@ -155,8 +196,8 @@ ScoresView {
                     header: qsTrc("project", "Modified")
 
                     width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
-                        return 0.18 * parentWidthExclusingSpacing
+                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
+                        return 0.16 * parentWidthExclusingSpacing
                     }
 
                     delegate: StyledTextLabel {
@@ -172,8 +213,8 @@ ScoresView {
                     header: qsTrc("project", "Size", "file size")
 
                     width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
-                        return 0.18 * parentWidthExclusingSpacing
+                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
+                        return 0.13 * parentWidthExclusingSpacing
                     }
 
                     delegate: StyledTextLabel {
@@ -191,8 +232,8 @@ ScoresView {
                     header: qsTrc("project", "Views", "number of views")
 
                     width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - (list.columns.length - 1) * list.view.columnSpacing;
-                        return Math.max(0.10 * parentWidthExclusingSpacing, 76)
+                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
+                        return Math.max(0.08 * parentWidthExclusingSpacing, 76)
                     }
 
                     delegate: RowLayout {

@@ -290,6 +290,7 @@ mu::async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int score
             item.lastModified = QDateTime::fromSecsSinceEpoch(itemObj.value("date_updated").toInt());
             item.fileSize = itemObj.value("current_revision").toObject().value("file_size").toInt();
             item.thumbnailUrl = itemObj.value("thumbnails").toObject().value("small").toString();
+            item.visibility = static_cast<Visibility>(itemObj.value("privacy").toInt());
             item.viewCount = itemObj.value("view_count").toInt();
 
             result.items.push_back(item);

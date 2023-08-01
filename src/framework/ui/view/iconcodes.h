@@ -321,6 +321,7 @@ public:
         PAN_SCORE = 0xF3B0,
         COUNT_IN = 0xF3B1,
 
+        GLOBE = 0xF3B6,
         PRINT = 0xF3B7,
 
         DOWN = 0xF3C1,

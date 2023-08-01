@@ -133,7 +133,7 @@ void CloudScoresModel::loadItemsIfNecessary()
                     obj[THUMBNAIL_URL_KEY] = item.thumbnailUrl;
                     obj[IS_CREATE_NEW_KEY] = false;
                     obj[IS_NO_RESULTS_FOUND_KEY] = false;
-                    //obj[CLOUD_VISIBILITY_KEY] = item.; TODO
+                    obj[CLOUD_VISIBILITY_KEY] = static_cast<int>(item.visibility);
                     obj[CLOUD_VIEW_COUNT_KEY] = item.viewCount;
 
                     m_items.push_back(obj);
