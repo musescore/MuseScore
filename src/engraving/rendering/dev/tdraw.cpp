@@ -62,6 +62,7 @@
 
 #include "libmscore/hairpin.h"
 #include "libmscore/harppedaldiagram.h"
+#include "libmscore/harmonicmark.h"
 
 #include "libmscore/ornament.h"
 
@@ -149,6 +150,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
         break;
     case ElementType::HARP_DIAGRAM: draw(item_cast<const HarpPedalDiagram*>(item), painter);
+        break;
+    case ElementType::HARMONIC_MARK_SEGMENT: draw(item_cast<const HarmonicMarkSegment*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1427,4 +1430,10 @@ void TDraw::draw(const HarpPedalDiagram* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const HarmonicMarkSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
 }

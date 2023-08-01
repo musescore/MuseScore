@@ -69,6 +69,7 @@ class GradualTempoChangeSegment;
 class Hairpin;
 class HairpinSegment;
 class HarpPedalDiagram;
+class HarmonicMarkSegment;
 
 class InstrumentChange;
 
@@ -166,6 +167,7 @@ private:
 
     static void draw(const HairpinSegment* item, draw::Painter* painter);
     static void draw(const HarpPedalDiagram* item, draw::Painter* painter);
+    static void draw(const HarmonicMarkSegment* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 
