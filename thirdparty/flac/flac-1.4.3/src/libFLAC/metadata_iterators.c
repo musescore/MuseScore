@@ -2722,7 +2722,7 @@ FLAC__bool write_metadata_block_data_streaminfo_cb_(FLAC__IOHandle handle, FLAC_
 	pack_uint32_(block->max_framesize, buffer+7, 3);
 	buffer[10] = (block->sample_rate >> 12) & 0xff;
 	buffer[11] = (block->sample_rate >> 4) & 0xff;
-	buffer[12] = ((block->sample_rate & 0x0f) << 4) | (channels1 << 1) | (bps1 >> 4);
+	buffer[12] = (FLAC__byte)(((block->sample_rate & 0x0f) << 4) | (channels1 << 1) | (bps1 >> 4));
 	buffer[13] = (FLAC__byte)(((bps1 & 0x0f) << 4) | ((block->total_samples >> 32) & 0x0f));
 	pack_uint32_((FLAC__uint32)block->total_samples, buffer+14, 4);
 	memcpy(buffer+18, block->md5sum, 16);
@@ -2874,7 +2874,7 @@ FLAC__bool write_metadata_block_data_cuesheet_cb_(FLAC__IOHandle handle, FLAC__I
 		FLAC__ASSERT((FLAC__STREAM_METADATA_CUESHEET_TRACK_TYPE_LEN + FLAC__STREAM_METADATA_CUESHEET_TRACK_PRE_EMPHASIS_LEN + FLAC__STREAM_METADATA_CUESHEET_TRACK_RESERVED_LEN) % 8 == 0);
 		len = (FLAC__STREAM_METADATA_CUESHEET_TRACK_TYPE_LEN + FLAC__STREAM_METADATA_CUESHEET_TRACK_PRE_EMPHASIS_LEN + FLAC__STREAM_METADATA_CUESHEET_TRACK_RESERVED_LEN) / 8;
 		memset(buffer, 0, len);
-		buffer[0] = (track->type << 7) | (track->pre_emphasis << 6);
+		buffer[0] = (FLAC__byte)((track->type << 7) | (track->pre_emphasis << 6));
 		if(write_cb(buffer, 1, len, handle) != len)
 			return false;
 
