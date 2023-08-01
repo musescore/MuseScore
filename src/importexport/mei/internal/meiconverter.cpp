@@ -1741,7 +1741,7 @@ engraving::TextStyleType Convert::textFromMEI(const libmei::Rend& meiRend, bool&
 {
     warning = false;
 
-    AsciiStringView rendType(meiRend.GetType());
+    std::string rendType = meiRend.GetType();
     engraving::TextStyleType textStyle = engraving::TextStyleType::DEFAULT;
     if (rendType.size() > 0) {
         textStyle = engraving::TConv::fromXml(rendType, engraving::TextStyleType::DEFAULT);
