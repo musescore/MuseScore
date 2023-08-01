@@ -79,6 +79,7 @@
 #include "libmscore/layoutbreak.h"
 #include "libmscore/ledgerline.h"
 #include "libmscore/letring.h"
+#include "libmscore/lyrics.h"
 
 #include "libmscore/ornament.h"
 
@@ -192,6 +193,10 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::LEDGER_LINE:  draw(item_cast<const LedgerLine*>(item), painter);
         break;
     case ElementType::LET_RING_SEGMENT: draw(item_cast<const LetRingSegment*>(item), painter);
+        break;
+    case ElementType::LYRICS:       draw(item_cast<const Lyrics*>(item), painter);
+        break;
+    case ElementType::LYRICSLINE_SEGMENT: draw(item_cast<const LyricsLineSegment*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1693,4 +1698,33 @@ void TDraw::draw(const LetRingSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::draw(const Lyrics* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void TDraw::draw(const LyricsLineSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->numOfDashes() < 1) {               // nothing to draw
+        return;
+    }
+
+    Pen pen(item->lyricsLine()->lyrics()->curColor());
+    pen.setWidthF(item->lyricsLine()->lineWidth());
+    pen.setCapStyle(PenCapStyle::FlatCap);
+    painter->setPen(pen);
+    if (item->lyricsLine()->isEndMelisma()) {               // melisma
+        painter->drawLine(PointF(), item->pos2());
+    } else {                                          // dash(es)
+        double step  = item->pos2().x() / item->numOfDashes();
+        double x     = step * .5 - item->dashLength() * .5;
+        for (int i = 0; i < item->numOfDashes(); i++, x += step) {
+            painter->drawLine(PointF(x, 0.0), PointF(x + item->dashLength(), 0.0));
+        }
+    }
 }
