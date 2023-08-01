@@ -22,6 +22,7 @@
 #include "singledraw.h"
 
 #include "draw/painter.h"
+#include "draw/svgrenderer.h"
 
 #include "types/typesconv.h"
 #include "style/style.h"
@@ -62,6 +63,8 @@
 #include "libmscore/harmonicmark.h"
 #include "libmscore/harmony.h"
 #include "libmscore/hook.h"
+
+#include "libmscore/image.h"
 
 #include "libmscore/ornament.h"
 
@@ -143,6 +146,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::HARMONY:      draw(item_cast<const Harmony*>(item), painter);
         break;
     case ElementType::HOOK:         draw(item_cast<const Hook*>(item), painter);
+        break;
+
+    case ElementType::IMAGE:        draw(item_cast<const Image*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1334,4 +1340,53 @@ void SingleDraw::draw(const Hook* item, Painter* painter)
     TRACE_DRAW_ITEM;
     painter->setPen(item->curColor());
     item->drawSymbol(item->sym(), painter);
+}
+
+void SingleDraw::draw(const Image* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    bool emptyImage = false;
+    if (item->imageType() == ImageType::SVG) {
+        if (!item->svgRenderer()) {
+            emptyImage = true;
+        } else {
+            item->svgRenderer()->render(painter, item->bbox());
+        }
+    } else if (item->imageType() == ImageType::RASTER) {
+        if (item->rasterImage() == nullptr) {
+            emptyImage = true;
+        } else {
+            painter->save();
+            SizeF s;
+            if (item->sizeIsSpatium()) {
+                s = item->size() * item->spatium();
+            } else {
+                s = item->size() * DPMM;
+            }
+
+            Transform t = painter->worldTransform();
+            Size ss = Size(s.width() * t.m11(), s.height() * t.m22());
+            t.setMatrix(1.0, t.m12(), t.m13(), t.m21(), 1.0, t.m23(), t.m31(), t.m32(), t.m33());
+            painter->setWorldTransform(t);
+            if ((item->buffer().size() != ss || item->dirty()) && item->rasterImage() && !item->rasterImage()->isNull()) {
+                item->setBuffer(item->imageProvider()->scaled(*item->rasterImage(), ss));
+                item->setDirty(false);
+            }
+            if (item->buffer().isNull()) {
+                emptyImage = true;
+            } else {
+                painter->drawPixmap(PointF(0.0, 0.0), item->buffer());
+            }
+
+            painter->restore();
+        }
+    }
+
+    if (emptyImage) {
+        painter->setBrush(mu::draw::BrushStyle::NoBrush);
+        painter->setPen(item->engravingConfiguration()->defaultColor());
+        painter->drawRect(item->bbox());
+        painter->drawLine(0.0, 0.0, item->bbox().width(), item->bbox().height());
+        painter->drawLine(item->bbox().width(), 0.0, 0.0, item->bbox().height());
+    }
 }

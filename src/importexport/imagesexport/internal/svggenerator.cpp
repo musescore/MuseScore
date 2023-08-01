@@ -1120,7 +1120,7 @@ void SvgPaintEngine::drawImage(const QRectF& r, const QImage& image,
 
         const mu::engraving::Image* img = mu::engraving::toImage(_element);
         const mu::engraving::ImageStoreItem* storeItem = img->storeItem(); // holds the original image file content
-        if (img->getImageType() == mu::engraving::ImageType::RASTER && storeItem) {
+        if (img->imageType() == mu::engraving::ImageType::RASTER && storeItem) {
             const mu::ByteArray& imgBa = storeItem->buffer();
             QByteArray imgData = imgBa.toQByteArrayNoCopy();
             const QMimeType type = QMimeDatabase().mimeTypeForData(imgData);
