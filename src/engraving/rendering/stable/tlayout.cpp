@@ -4306,6 +4306,7 @@ void TLayout::layout(StretchedBend* item, LayoutContext& ctx)
 
 void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
 {
+    UNUSED(ctx);
     item->fillStretchedSegments(true);
     item->setbbox(item->calculateBoundingRect());
     item->setPos(0.0, 0.0);
