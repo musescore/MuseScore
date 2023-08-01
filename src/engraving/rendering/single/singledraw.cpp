@@ -83,11 +83,10 @@
 #include "libmscore/ornament.h"
 #include "libmscore/ottava.h"
 
-    << << << < HEAD
 #include "libmscore/stretchedbend.h"
-== == ===
+
 #include "libmscore/palmmute.h"
-    >> >> >> > cbd756e469([engraving] moved PalmMute draw)
+#include "libmscore/pedal.h"
 
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
@@ -95,7 +94,7 @@
 
 #include "infrastructure/rtti.h"
 
-    using namespace mu::engraving::rendering::single;
+using namespace mu::engraving::rendering::single;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
 using namespace mu::draw;
@@ -204,6 +203,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::PALM_MUTE_SEGMENT: draw(item_cast<const PalmMuteSegment*>(item), painter);
+        break;
+    case ElementType::PEDAL_SEGMENT: draw(item_cast<const PedalSegment*>(item), painter);
         break;
 
     default:
@@ -1562,6 +1563,12 @@ void SingleDraw::draw(const OttavaSegment* item, Painter* painter)
 }
 
 void SingleDraw::draw(const PalmMuteSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const PedalSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);

@@ -95,6 +95,7 @@
 
 #include "libmscore/palmmute.h"
 #include "libmscore/part.h"
+#include "libmscore/pedal.h"
 
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
@@ -242,6 +243,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::PALM_MUTE_SEGMENT: draw(item_cast<const PalmMuteSegment*>(item), painter);
+        break;
+
+    case ElementType::PEDAL_SEGMENT: draw(item_cast<const PedalSegment*>(item), painter);
         break;
 
     default:
@@ -2014,6 +2018,12 @@ void TDraw::draw(const OttavaSegment* item, Painter* painter)
 }
 
 void TDraw::draw(const PalmMuteSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::draw(const PedalSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
