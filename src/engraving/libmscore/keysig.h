@@ -69,7 +69,7 @@ public:
     bool isCustom() const { return m_sig.custom(); }
     bool isAtonal() const { return m_sig.isAtonal(); }
     bool isChange() const;
-    KeySigEvent keySigEvent() const { return m_sig; }
+    const KeySigEvent& keySigEvent() const { return m_sig; }
     bool operator==(const KeySig&) const;
     void changeKeySigEvent(const KeySigEvent&);
     void setKeySigEvent(const KeySigEvent& e) { m_sig = e; }
@@ -82,6 +82,7 @@ public:
     void setMode(KeyMode v) { m_sig.setMode(v); }
     void undoSetMode(KeyMode v);
 
+    const std::vector<KeySym>& keySymbols() const { return m_sig.keySymbols(); }
     std::vector<KeySym>& keySymbols() { return m_sig.keySymbols(); }
 
     bool hideNaturals() const { return m_hideNaturals; }
