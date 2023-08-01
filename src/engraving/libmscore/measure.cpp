@@ -942,6 +942,8 @@ void Measure::remove(EngravingItem* e)
             StaffType* st = new StaffType(*stc->staffType());
             if (!tick().isZero()) {
                 staff->removeStaffType(tick());
+            } else {
+                staff->setStaffType(tick(), staff->part()->instrument()->defaultStaffType());
             }
             stc->setStaffType(st, true);
         }
