@@ -70,6 +70,7 @@
 
 #include "libmscore/image.h"
 #include "libmscore/instrchange.h"
+#include "libmscore/instrumentname.h"
 
 #include "libmscore/note.h"
 
@@ -170,6 +171,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::IMAGE:        draw(item_cast<const Image*>(item), painter);
         break;
     case ElementType::INSTRUMENT_CHANGE: draw(item_cast<const InstrumentChange*>(item), painter);
+        break;
+    case ElementType::INSTRUMENT_NAME: draw(item_cast<const InstrumentName*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1601,6 +1604,12 @@ void TDraw::draw(const Image* item, Painter* painter)
 }
 
 void TDraw::draw(const InstrumentChange* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void TDraw::draw(const InstrumentName* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);

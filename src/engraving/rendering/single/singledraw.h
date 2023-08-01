@@ -76,6 +76,7 @@ class Hook;
 class Image;
 
 class InstrumentChange;
+class InstrumentName;
 
 class Jump;
 
@@ -177,6 +178,7 @@ private:
 
     static void draw(const Image* item, draw::Painter* painter);
     static void draw(const InstrumentChange* item, draw::Painter* painter);
+    static void draw(const InstrumentName* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 

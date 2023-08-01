@@ -40,6 +40,7 @@ class SysStaff;
 class InstrumentName final : public TextBase
 {
     OBJECT_ALLOCATOR(engraving, InstrumentName)
+    DECLARE_CLASSOF(ElementType::INSTRUMENT_NAME)
 
     InstrumentNameType _instrumentNameType;
     int _layoutPos { 0 };
