@@ -40,7 +40,7 @@ public:
 
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateDynamicChanges(const mpe::DynamicLevelMap& changes) override;
+    void updateDynamicChanges(const mpe::DynamicLevelLayers& changes) override;
 
     async::Channel<midi::channel_t, midi::Program> channelAdded() const;
 

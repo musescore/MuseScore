@@ -45,8 +45,8 @@ EventAudioSource::EventAudioSource(const TrackId trackId, const mpe::PlaybackDat
         m_playbackData.originEvents = events;
     });
 
-    m_playbackData.dynamicLevelChanges.onReceive(this, [this](const DynamicLevelMap& changes) {
-        m_playbackData.dynamicLevelMap = changes;
+    m_playbackData.dynamicLevelChanges.onReceive(this, [this](const DynamicLevelLayers& changes) {
+        m_playbackData.dynamicLevelLayers = changes;
     });
 }
 

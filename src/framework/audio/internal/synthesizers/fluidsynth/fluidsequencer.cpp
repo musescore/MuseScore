@@ -66,16 +66,19 @@ void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& change
     updateMainSequenceIterator();
 }
 
-void FluidSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
+void FluidSequencer::updateDynamicChanges(const mpe::DynamicLevelLayers& changes)
 {
     m_dynamicEvents.clear();
 
-    for (const auto& pair : changes) {
-        midi::Event event(midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
-        event.setIndex(midi::EXPRESSION_CONTROLLER);
-        event.setData(expressionLevel(pair.second));
+    for (const auto& layer : changes) {
+        for (const auto& pair : layer.second) {
+            midi::Event event(midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
+            event.setIndex(midi::EXPRESSION_CONTROLLER);
+            event.setData(expressionLevel(pair.second));
 
-        m_dynamicEvents[pair.first].emplace(std::move(event));
+            //! TODO: use voice
+            m_dynamicEvents[pair.first].emplace(std::move(event));
+        }
     }
 
     updateDynamicChangesIterator();

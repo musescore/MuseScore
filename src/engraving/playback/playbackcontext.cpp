@@ -83,19 +83,23 @@ void PlaybackContext::clear()
     m_playTechniquesMap.clear();
 }
 
-DynamicLevelMap PlaybackContext::dynamicLevelMap(const Score* score) const
+DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const Score* score) const
 {
-    DynamicLevelMap result;
+    DynamicLevelMap dynamics;
 
+    //! TODO: use voice
     for (const auto& pair : m_dynamicsMap) {
-        result.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);
+        dynamics.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);
     }
 
-    if (result.empty()) {
-        result.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+    if (dynamics.empty()) {
+        dynamics.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
     }
 
-    return result;
+    DynamicLevelLayers layers;
+    layers.emplace(0, std::move(dynamics));
+
+    return layers;
 }
 
 dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) const

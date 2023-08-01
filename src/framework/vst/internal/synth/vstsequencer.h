@@ -61,7 +61,7 @@ public:
 
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateDynamicChanges(const mpe::DynamicLevelMap& changes) override;
+    void updateDynamicChanges(const mpe::DynamicLevelLayers& changes) override;
 
     audio::gain_t currentGain() const;
 

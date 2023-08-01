@@ -65,13 +65,13 @@ public:
 
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateDynamicChanges(const mpe::DynamicLevelMap& changes) override;
+    void updateDynamicChanges(const mpe::DynamicLevelLayers& changes) override;
 
 private:
     void reloadTrack();
 
     void loadNoteEvents(const mpe::PlaybackEventsMap& changes);
-    void loadDynamicEvents(const mpe::DynamicLevelMap& changes);
+    void loadDynamicEvents(const mpe::DynamicLevelLayers& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
     void pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const;

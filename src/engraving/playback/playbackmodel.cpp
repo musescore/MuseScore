@@ -321,7 +321,7 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
     ctx.update(trackId.partId, m_score);
 
     PlaybackData& trackData = m_playbackDataMap[trackId];
-    trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
+    trackData.dynamicLevelLayers = ctx.dynamicLevelLayers(m_score);
 }
 
 void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
@@ -689,7 +689,7 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
         }
 
         search->second.mainStream.send(search->second.originEvents);
-        search->second.dynamicLevelChanges.send(search->second.dynamicLevelMap);
+        search->second.dynamicLevelChanges.send(search->second.dynamicLevelLayers);
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {

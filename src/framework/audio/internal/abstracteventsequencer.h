@@ -60,7 +60,7 @@ public:
         m_dynamicLevelChanges = data.dynamicLevelChanges;
 
         m_playbackEventsMap = data.originEvents;
-        m_dynamicLevelMap = data.dynamicLevelMap;
+        m_dynamicLevelLayers = data.dynamicLevelLayers;
 
         m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& changes) {
             updateOffStreamEvents(changes);
@@ -71,18 +71,18 @@ public:
             updateMainStreamEvents(changes);
         });
 
-        m_dynamicLevelChanges.onReceive(this, [this](const mpe::DynamicLevelMap& changes) {
-            m_dynamicLevelMap = changes;
+        m_dynamicLevelChanges.onReceive(this, [this](const mpe::DynamicLevelLayers& changes) {
+            m_dynamicLevelLayers = changes;
             updateDynamicChanges(changes);
         });
 
         updateMainStreamEvents(data.originEvents);
-        updateDynamicChanges(data.dynamicLevelMap);
+        updateDynamicChanges(data.dynamicLevelLayers);
     }
 
     virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) = 0;
     virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) = 0;
-    virtual void updateDynamicChanges(const mpe::DynamicLevelMap& changes) = 0;
+    virtual void updateDynamicChanges(const mpe::DynamicLevelLayers& changes) = 0;
 
     void setActive(const bool active)
     {
@@ -127,16 +127,23 @@ public:
 
     mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
     {
-        if (m_dynamicLevelMap.empty()) {
+        if (m_dynamicLevelLayers.empty()) {
             return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
         }
 
-        if (m_dynamicLevelMap.size() == 1) {
-            return m_dynamicLevelMap.cbegin()->second;
+        //! TODO: use voice
+        const mpe::DynamicLevelMap& dynamics = m_dynamicLevelLayers.at(0);
+
+        if (dynamics.empty()) {
+            return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
         }
 
-        auto upper = m_dynamicLevelMap.upper_bound(position);
-        if (upper == m_dynamicLevelMap.cbegin()) {
+        if (dynamics.size() == 1) {
+            return dynamics.cbegin()->second;
+        }
+
+        auto upper = dynamics.upper_bound(position);
+        if (upper == dynamics.cbegin()) {
             return upper->second;
         }
 
@@ -240,7 +247,7 @@ protected:
     EventSequenceMap m_offStreamEvents;
     EventSequenceMap m_dynamicEvents;
 
-    mpe::DynamicLevelMap m_dynamicLevelMap;
+    mpe::DynamicLevelLayers m_dynamicLevelLayers;
     mpe::PlaybackEventsMap m_playbackEventsMap;
 
     bool m_isActive = false;

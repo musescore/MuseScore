@@ -33,9 +33,6 @@ class Dynamic;
 class PlayTechAnnotation;
 class Score;
 
-using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
-using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
-
 class PlaybackContext
 {
 public:
@@ -45,7 +42,7 @@ public:
     void update(const ID partId, const Score* score);
     void clear();
 
-    mpe::DynamicLevelMap dynamicLevelMap(const Score* score) const;
+    mpe::DynamicLevelLayers dynamicLevelLayers(const Score* score) const;
 
 private:
     mpe::dynamic_level_t nominalDynamicLevel(const int positionTick) const;
@@ -60,6 +57,9 @@ private:
 
     void removeDynamicData(const int from, const int to);
     void removePlayTechniqueData(const int from, const int to);
+
+    using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
+    using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
 
     DynamicMap m_dynamicsMap;
     PlayTechniquesMap m_playTechniquesMap;

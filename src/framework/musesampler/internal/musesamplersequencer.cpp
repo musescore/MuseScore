@@ -127,9 +127,9 @@ void MuseSamplerSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& 
     reloadTrack();
 }
 
-void MuseSamplerSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
+void MuseSamplerSequencer::updateDynamicChanges(const mpe::DynamicLevelLayers& changes)
 {
-    m_dynamicLevelMap = changes;
+    m_dynamicLevelLayers = changes;
 
     reloadTrack();
 }
@@ -144,7 +144,7 @@ void MuseSamplerSequencer::reloadTrack()
     LOGN() << "Requested to clear track";
 
     loadNoteEvents(m_eventsMap);
-    loadDynamicEvents(m_dynamicLevelMap);
+    loadDynamicEvents(m_dynamicLevelLayers);
 
     m_samplerLib->finalizeTrack(m_sampler, m_track);
     LOGN() << "Requested to finalize track";
@@ -169,10 +169,13 @@ void MuseSamplerSequencer::loadNoteEvents(const mpe::PlaybackEventsMap& changes)
     }
 }
 
-void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelMap& changes)
+void MuseSamplerSequencer::loadDynamicEvents(const mpe::DynamicLevelLayers& changes)
 {
-    for (const auto& pair : changes) {
-        m_samplerLib->addDynamicsEvent(m_sampler, m_track, pair.first, dynamicLevelRatio(pair.second));
+    for (const auto& layer : changes) {
+        for (const auto& pair : layer.second) {
+            //! TODO: use voice
+            m_samplerLib->addDynamicsEvent(m_sampler, m_track, pair.first, dynamicLevelRatio(pair.second));
+        }
     }
 }
 
