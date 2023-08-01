@@ -227,24 +227,9 @@ void HairpinSegment::editDrag(EditData& ed)
 //   draw
 //---------------------------------------------------------
 
-void HairpinSegment::draw(mu::draw::Painter* painter) const
+void HairpinSegment::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    TextLineBaseSegment::draw(painter);
-
-    if (m_drawCircledTip) {
-        Color color = curColor(hairpin()->visible(), hairpin()->lineColor());
-        double w = hairpin()->lineWidth();
-        if (staff()) {
-            w *= staff()->staffMag(hairpin()->tick());
-        }
-
-        Pen pen(color, w);
-        painter->setPen(pen);
-        painter->setBrush(BrushStyle::NoBrush);
-        painter->drawEllipse(m_circledTip, m_circledTipRadius, m_circledTipRadius);
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
