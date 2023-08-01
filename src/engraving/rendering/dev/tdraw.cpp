@@ -78,6 +78,7 @@
 
 #include "libmscore/layoutbreak.h"
 #include "libmscore/ledgerline.h"
+#include "libmscore/letring.h"
 
 #include "libmscore/ornament.h"
 
@@ -189,6 +190,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::LAYOUT_BREAK: draw(item_cast<const LayoutBreak*>(item), painter);
         break;
     case ElementType::LEDGER_LINE:  draw(item_cast<const LedgerLine*>(item), painter);
+        break;
+    case ElementType::LET_RING_SEGMENT: draw(item_cast<const LetRingSegment*>(item), painter);
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
@@ -1684,4 +1687,10 @@ void TDraw::draw(const LedgerLine* item, Painter* painter)
     } else {
         painter->drawLine(LineF(0.0, 0.0, item->len(), 0.0));
     }
+}
+
+void TDraw::draw(const LetRingSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
 }

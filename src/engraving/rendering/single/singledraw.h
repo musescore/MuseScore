@@ -187,6 +187,7 @@ private:
 
     static void draw(const LayoutBreak* item, draw::Painter* painter);
     static void draw(const LedgerLine* item, draw::Painter* painter);
+    static void draw(const LetRingSegment* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
 
