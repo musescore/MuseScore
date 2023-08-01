@@ -130,26 +130,8 @@ LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
 //   draw
 //---------------------------------------------------------
 
-void LyricsLineSegment::draw(mu::draw::Painter* painter) const
+void LyricsLineSegment::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    if (m_numOfDashes < 1) {               // nothing to draw
-        return;
-    }
-
-    Pen pen(lyricsLine()->lyrics()->curColor());
-    pen.setWidthF(lyricsLine()->lineWidth());
-    pen.setCapStyle(PenCapStyle::FlatCap);
-    painter->setPen(pen);
-    if (lyricsLine()->isEndMelisma()) {               // melisma
-        painter->drawLine(PointF(), pos2());
-    } else {                                          // dash(es)
-        double step  = pos2().x() / m_numOfDashes;
-        double x     = step * .5 - m_dashLength * .5;
-        for (int i = 0; i < m_numOfDashes; i++, x += step) {
-            painter->drawLine(PointF(x, 0.0), PointF(x + m_dashLength, 0.0));
-        }
-    }
+    UNREACHABLE;
 }
 }
