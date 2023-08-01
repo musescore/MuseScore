@@ -23,6 +23,7 @@
 #define MU_IMPORTEXPORT_MEIWRITER_H
 
 #include "project/inotationwriter.h"
+#include "engravingerrors.h"
 
 namespace mu::iex::mei {
 class MeiWriter : public project::INotationWriter
@@ -33,6 +34,7 @@ public:
 
     Ret write(notation::INotationPtr notation, QIODevice& destinationDevice, const Options& options = Options()) override;
     Ret writeList(const notation::INotationPtrList& notations, QIODevice& destinationDevice, const Options& options = Options()) override;
+    mu::engraving::Err writeScore(mu::engraving::MasterScore* score, const io::path_t& path);
 };
 } // namespace
 

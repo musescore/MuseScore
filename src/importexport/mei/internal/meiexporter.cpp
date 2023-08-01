@@ -72,11 +72,8 @@ using namespace mu::engraving;
  * Return false on error.
  */
 
-bool MeiExporter::write(QIODevice& destinationDevice)
+bool MeiExporter::write(std::string& meiData)
 {
-    // Still using QTextStream since we have a QIODevice
-    QTextStream out(&destinationDevice);
-
     m_hasSections = false;
 
     m_sectionCounter = 0;
@@ -130,7 +127,7 @@ bool MeiExporter::write(QIODevice& destinationDevice)
         std::string indent = MEI_INDENT ? std::string(MEI_INDENT, ' ') : "\t";
         std::stringstream strStream;
         meiDoc.save(strStream, indent.c_str(), output_flags);
-        out << String::fromStdString(strStream.str());
+        meiData = strStream.str();
     }
     catch (char* str) {
         UNUSED(str);
@@ -138,7 +135,6 @@ bool MeiExporter::write(QIODevice& destinationDevice)
         return false;
     }
 
-    out.flush();
     return true;
 }
 

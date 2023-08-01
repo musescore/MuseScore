@@ -28,6 +28,7 @@
 
 #include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
+#include "io/file.h"
 
 using namespace mu;
 using namespace mu::iex::mei;
@@ -57,7 +58,27 @@ mu::Ret MeiWriter::write(notation::INotationPtr notation, QIODevice& destination
     }
 
     MeiExporter exporter(score);
-    return exporter.write(destinationDevice);
+    std::string meiData;
+    if (exporter.write(meiData)) {
+        // Still using QTextStream since we have a QIODevice
+        QTextStream out(&destinationDevice);
+        out << String::fromStdString(meiData);
+        out.flush();
+        return make_ok();
+    } else {
+        return make_ret(Ret::Code::UnknownError);
+    }
+}
+
+Err MeiWriter::writeScore(mu::engraving::MasterScore* score, const io::path_t& path)
+{
+    MeiExporter exporter(score);
+    std::string meiData;
+    if (exporter.write(meiData) && !io::File::writeFile(path, ByteArray(meiData.c_str(), meiData.size()))) {
+        return Err::NoError;
+    } else {
+        return Err::UnknownError;
+    }
 }
 
 mu::Ret MeiWriter::writeList(const notation::INotationPtrList&, QIODevice&, const Options&)
