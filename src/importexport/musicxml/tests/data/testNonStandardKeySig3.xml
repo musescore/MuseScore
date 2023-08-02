@@ -41,19 +41,19 @@
           <key-alter>0.5</key-alter>
           <key-accidental>quarter-sharp</key-accidental>
           <key-step>D</key-step>
-          <key-alter>0</key-alter>
+          <key-alter>0.56</key-alter>
           <key-accidental>slash-quarter-sharp</key-accidental>
           <key-step>E</key-step>
-          <key-alter>0</key-alter>
+          <key-alter>0.89</key-alter>
           <key-accidental>slash-sharp</key-accidental>
           <key-step>F</key-step>
           <key-alter>-0.5</key-alter>
           <key-accidental>quarter-flat</key-accidental>
           <key-step>G</key-step>
-          <key-alter>0</key-alter>
+          <key-alter>-0.44</key-alter>
           <key-accidental>slash-flat</key-accidental>
           <key-step>A</key-step>
-          <key-alter>0</key-alter>
+          <key-alter>-0.89</key-alter>
           <key-accidental>double-slash-flat</key-accidental>
           </key>
         <time>
