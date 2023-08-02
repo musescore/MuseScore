@@ -94,6 +94,7 @@
 
 #include "libmscore/score.h"
 #include "libmscore/shadownote.h"
+#include "libmscore/slur.h"
 #include "libmscore/stretchedbend.h"
 
 #include "libmscore/text.h"
@@ -223,6 +224,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::SHADOW_NOTE:          draw(item_cast<const ShadowNote*>(item), painter);
+        break;
+    case ElementType::SLUR_SEGMENT:         draw(item_cast<const SlurSegment*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
@@ -1721,4 +1724,46 @@ void SingleDraw::draw(const ShadowNote* item, Painter* painter)
     item->drawArticulations(painter);
 
     painter->translate(-ap);
+}
+
+void SingleDraw::draw(const SlurSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    Pen pen(item->curColor());
+    double mag = item->staff() ? item->staff()->staffMag(item->slur()->tick()) : 1.0;
+
+    //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with tie.cpp)
+    std::vector<double> dotted     = { 0.01, 1.99 };   // tighter than Qt PenStyle::DotLine equivalent - would be { 0.01, 2.99 }
+    std::vector<double> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
+    std::vector<double> wideDashed = { 5.00, 6.00 };
+
+    switch (item->slurTie()->styleType()) {
+    case SlurStyleType::Solid:
+        painter->setBrush(Brush(pen.color()));
+        pen.setCapStyle(PenCapStyle::RoundCap);
+        pen.setJoinStyle(PenJoinStyle::RoundJoin);
+        pen.setWidthF(item->style().styleMM(Sid::SlurEndWidth) * mag);
+        break;
+    case SlurStyleType::Dotted:
+        painter->setBrush(BrushStyle::NoBrush);
+        pen.setCapStyle(PenCapStyle::RoundCap);           // round dots
+        pen.setDashPattern(dotted);
+        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        break;
+    case SlurStyleType::Dashed:
+        painter->setBrush(BrushStyle::NoBrush);
+        pen.setDashPattern(dashed);
+        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        break;
+    case SlurStyleType::WideDashed:
+        painter->setBrush(BrushStyle::NoBrush);
+        pen.setDashPattern(wideDashed);
+        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        break;
+    case SlurStyleType::Undefined:
+        break;
+    }
+    painter->setPen(pen);
+    painter->drawPath(item->path());
 }
