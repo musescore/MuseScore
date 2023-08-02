@@ -212,6 +212,7 @@ private:
 
     static void draw(const ShadowNote* item, draw::Painter* painter);
     static void draw(const SlurSegment* item, draw::Painter* painter);
+    static void draw(const Spacer* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);

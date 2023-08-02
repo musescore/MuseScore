@@ -49,7 +49,7 @@ Spacer::Spacer(const Spacer& s)
     : EngravingItem(s)
 {
     _gap        = s._gap;
-    path        = s.path;
+    m_path        = s.m_path;
     _spacerType = s._spacerType;
 }
 
@@ -57,21 +57,9 @@ Spacer::Spacer(const Spacer& s)
 //   draw
 //---------------------------------------------------------
 
-void Spacer::draw(mu::draw::Painter* painter) const
+void Spacer::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (score()->printing() || !score()->showUnprintable()) {
-        return;
-    }
-
-    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(), spatium() * 0.3);
-    if (score()->isPaletteScore()) {
-        pen.setColor(engravingConfiguration()->fontPrimaryColor());
-    }
-
-    painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(path);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
@@ -82,36 +70,36 @@ void Spacer::layout0()
 {
     double _spatium = spatium();
 
-    path    = PainterPath();
+    m_path    = PainterPath();
     double w = _spatium;
     double b = w * .5;
     double h = explicitParent() ? _gap : std::min(_gap.val(), spatium() * 4.0);      // limit length for palette
 
     switch (spacerType()) {
     case SpacerType::DOWN:
-        path.lineTo(w, 0.0);
-        path.moveTo(b, 0.0);
-        path.lineTo(b, h);
-        path.lineTo(0.0, h - b);
-        path.moveTo(b, h);
-        path.lineTo(w, h - b);
+        m_path.lineTo(w, 0.0);
+        m_path.moveTo(b, 0.0);
+        m_path.lineTo(b, h);
+        m_path.lineTo(0.0, h - b);
+        m_path.moveTo(b, h);
+        m_path.lineTo(w, h - b);
         break;
     case SpacerType::UP:
-        path.moveTo(b, 0.0);
-        path.lineTo(0.0, b);
-        path.moveTo(b, 0.0);
-        path.lineTo(w, b);
-        path.moveTo(b, 0.0);
-        path.lineTo(b, h);
-        path.moveTo(0.0, h);
-        path.lineTo(w, h);
+        m_path.moveTo(b, 0.0);
+        m_path.lineTo(0.0, b);
+        m_path.moveTo(b, 0.0);
+        m_path.lineTo(w, b);
+        m_path.moveTo(b, 0.0);
+        m_path.lineTo(b, h);
+        m_path.moveTo(0.0, h);
+        m_path.lineTo(w, h);
         break;
     case SpacerType::FIXED:
-        path.lineTo(w, 0.0);
-        path.moveTo(b, 0.0);
-        path.lineTo(b, h);
-        path.moveTo(0.0, h);
-        path.lineTo(w, h);
+        m_path.lineTo(w, 0.0);
+        m_path.moveTo(b, 0.0);
+        m_path.lineTo(b, h);
+        m_path.moveTo(0.0, h);
+        m_path.lineTo(w, h);
         break;
     }
     double lw = _spatium * 0.4;

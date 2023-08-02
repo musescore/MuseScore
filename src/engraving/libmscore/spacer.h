@@ -50,7 +50,7 @@ class Spacer final : public EngravingItem
     SpacerType _spacerType;
     Millimetre _gap;
 
-    mu::draw::PainterPath path;
+    mu::draw::PainterPath m_path;
 
     friend class Factory;
     Spacer(Measure* parent);
@@ -73,6 +73,8 @@ public:
 
     void setGap(Millimetre sp);
     Millimetre gap() const { return _gap; }
+
+    const draw::PainterPath& path() const { return m_path; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 1; }

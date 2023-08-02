@@ -95,6 +95,7 @@
 #include "libmscore/score.h"
 #include "libmscore/shadownote.h"
 #include "libmscore/slur.h"
+#include "libmscore/spacer.h"
 #include "libmscore/stretchedbend.h"
 
 #include "libmscore/text.h"
@@ -226,6 +227,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::SHADOW_NOTE:          draw(item_cast<const ShadowNote*>(item), painter);
         break;
     case ElementType::SLUR_SEGMENT:         draw(item_cast<const SlurSegment*>(item), painter);
+        break;
+    case ElementType::SPACER:               draw(item_cast<const Spacer*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
@@ -1765,5 +1768,18 @@ void SingleDraw::draw(const SlurSegment* item, Painter* painter)
         break;
     }
     painter->setPen(pen);
+    painter->drawPath(item->path());
+}
+
+void SingleDraw::draw(const Spacer* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    auto conf = item->engravingConfiguration();
+
+    Pen pen(conf->fontPrimaryColor(), item->spatium() * 0.3);
+
+    painter->setPen(pen);
+    painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(item->path());
 }
