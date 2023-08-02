@@ -44,13 +44,13 @@ namespace mu::iex::mei {
 class Mei_Tests : public ::testing::Test
 {
 public:
-    void meiReadTest(const char* file,  const char* ext);
+    void meiReadTest(const char* file);
 
     // Change this to true to re-generate reference files
     inline static bool s_generateReferenceFile = false;
 };
 
-void Mei_Tests::meiReadTest(const char* file, const char* ext)
+void Mei_Tests::meiReadTest(const char* file)
 {
     String fileName = String::fromUtf8(file);
 
@@ -65,7 +65,7 @@ void Mei_Tests::meiReadTest(const char* file, const char* ext)
     };
 
     // Load the .mei file
-    MasterScore* score = ScoreRW::readScore(MEI_DIR + fileName + u"." + String::fromUtf8(ext), false, importFunc);
+    MasterScore* score = ScoreRW::readScore(MEI_DIR + fileName + u".mei", false, importFunc);
     EXPECT_TRUE(score);
 
     // Flag to be turned on to generate the test reference .mscx files from the .mei
@@ -98,154 +98,154 @@ void Mei_Tests::meiReadTest(const char* file, const char* ext)
 }
 
 TEST_F(Mei_Tests, mei_accid_01) {
-    meiReadTest("accid-01", "mei");
+    meiReadTest("accid-01");
 }
 
 TEST_F(Mei_Tests, mei_accid_02) {
-    meiReadTest("accid-02", "mei");
+    meiReadTest("accid-02");
 }
 
 TEST_F(Mei_Tests, mei_beam_01) {
-    meiReadTest("beam-01", "mei");
+    meiReadTest("beam-01");
 }
 
 TEST_F(Mei_Tests, mei_beam_02) {
-    meiReadTest("beam-02", "mei");
+    meiReadTest("beam-02");
 }
 
 TEST_F(Mei_Tests, mei_beam_03) {
-    meiReadTest("beam-03", "mei");
+    meiReadTest("beam-03");
 }
 
 TEST_F(Mei_Tests, mei_breaks_01) {
-    meiReadTest("breaks-01", "mei");
+    meiReadTest("breaks-01");
 }
 
 TEST_F(Mei_Tests, mei_breath_01) {
-    meiReadTest("breath-01", "mei");
+    meiReadTest("breath-01");
 }
 
 TEST_F(Mei_Tests, mei_chord_label_01) {
-    meiReadTest("chord-label-01", "mei");
+    meiReadTest("chord-label-01");
 }
 
 TEST_F(Mei_Tests, mei_clef_01) {
-    meiReadTest("clef-01", "mei");
+    meiReadTest("clef-01");
 }
 
 TEST_F(Mei_Tests, mei_cross_staff_01) {
-    meiReadTest("cross-staff-01", "mei");
+    meiReadTest("cross-staff-01");
 }
 
 TEST_F(Mei_Tests, mei_dir_01) {
-    meiReadTest("dir-01", "mei");
+    meiReadTest("dir-01");
 }
 
 TEST_F(Mei_Tests, mei_dynamic_01) {
-    meiReadTest("dynamic-01", "mei");
+    meiReadTest("dynamic-01");
 }
 
 TEST_F(Mei_Tests, mei_ending_01) {
-    meiReadTest("ending-01", "mei");
+    meiReadTest("ending-01");
 }
 
 TEST_F(Mei_Tests, mei_fermata_01) {
-    meiReadTest("fermata-01", "mei");
+    meiReadTest("fermata-01");
 }
 
 TEST_F(Mei_Tests, mei_gracenote_01) {
-    meiReadTest("gracenote-01", "mei");
+    meiReadTest("gracenote-01");
 }
 
 TEST_F(Mei_Tests, mei_gracenote_02) {
-    meiReadTest("gracenote-02", "mei");
+    meiReadTest("gracenote-02");
 }
 
 TEST_F(Mei_Tests, mei_jump_01) {
-    meiReadTest("jump-01", "mei");
+    meiReadTest("jump-01");
 }
 
 TEST_F(Mei_Tests, mei_jump_02) {
-    meiReadTest("jump-02", "mei");
+    meiReadTest("jump-02");
 }
 
 TEST_F(Mei_Tests, mei_key_signature_01) {
-    meiReadTest("key-signature-01", "mei");
+    meiReadTest("key-signature-01");
 }
 
 TEST_F(Mei_Tests, mei_measure_01) {
-    meiReadTest("measure-01", "mei");
+    meiReadTest("measure-01");
 }
 
 TEST_F(Mei_Tests, mei_measure_02) {
-    meiReadTest("measure-02", "mei");
+    meiReadTest("measure-02");
 }
 
 TEST_F(Mei_Tests, mei_metadata_01) {
-    meiReadTest("metadata-01", "mei");
+    meiReadTest("metadata-01");
 }
 
 TEST_F(Mei_Tests, mei_page_head_01) {
-    meiReadTest("page-head-01", "mei");
+    meiReadTest("page-head-01");
 }
 
 TEST_F(Mei_Tests, mei_page_head_02) {
-    meiReadTest("page-head-02", "mei");
+    meiReadTest("page-head-02");
 }
 
 TEST_F(Mei_Tests, mei_roman_numeral_01) {
-    meiReadTest("roman-numeral-01", "mei");
+    meiReadTest("roman-numeral-01");
 }
 
 TEST_F(Mei_Tests, mei_score_01) {
-    meiReadTest("score-01", "mei");
+    meiReadTest("score-01");
 }
 
 TEST_F(Mei_Tests, mei_score_02) {
-    meiReadTest("score-02", "mei");
+    meiReadTest("score-02");
 }
 
 TEST_F(Mei_Tests, mei_slur_01) {
-    meiReadTest("slur-01", "mei");
+    meiReadTest("slur-01");
 }
 
 TEST_F(Mei_Tests, mei_slur_02) {
-    meiReadTest("slur-02", "mei");
+    meiReadTest("slur-02");
 }
 
 TEST_F(Mei_Tests, mei_stem_01) {
-    meiReadTest("stem-01", "mei");
+    meiReadTest("stem-01");
 }
 
 TEST_F(Mei_Tests, mei_tempo_01) {
-    meiReadTest("tempo-01", "mei");
+    meiReadTest("tempo-01");
 }
 
 TEST_F(Mei_Tests, mei_tie_01) {
-    meiReadTest("tie-01", "mei");
+    meiReadTest("tie-01");
 }
 
 TEST_F(Mei_Tests, mei_time_signature_01) {
-    meiReadTest("time-signature-01", "mei");
+    meiReadTest("time-signature-01");
 }
 
 TEST_F(Mei_Tests, mei_time_signature_02) {
-    meiReadTest("time-signature-02", "mei");
+    meiReadTest("time-signature-02");
 }
 
 TEST_F(Mei_Tests, mei_transpose_01) {
-    meiReadTest("transpose-01", "mei");
+    meiReadTest("transpose-01");
 }
 
 TEST_F(Mei_Tests, mei_tuplet_01) {
-    meiReadTest("tuplet-01", "mei");
+    meiReadTest("tuplet-01");
 }
 
 TEST_F(Mei_Tests, mei_tuplet_02) {
-    meiReadTest("tuplet-02", "mei");
+    meiReadTest("tuplet-02");
 }
 
 TEST_F(Mei_Tests, mei_tuplet_03) {
-    meiReadTest("tuplet-03", "mei");
+    meiReadTest("tuplet-03");
 }
 }
