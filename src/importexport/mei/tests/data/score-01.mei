@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0.0-dev+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Untitled score</title>
+            <respStmt>
+               <persName role="composer">Composer / arranger</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-08-02T11:10:14" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Untitled score</rend>
+                        <lb />
+                        <rend type="subtitle" fontsize="large">Subtitle</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Composer / arranger</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffGrp bar.thru="true" symbol="bracket">
+                        <staffDef n="1" lines="5" keysig="1s" meter.count="4" meter.unit="4" trans.diat="-4" trans.semi="-7">
+                           <label>Horn in F</label>
+                           <labelAbbr>Hn. in F</labelAbbr>
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="2" lines="5" keysig="2s" meter.count="4" meter.unit="4" trans.diat="-1" trans.semi="-2">
+                           <label>Trumpet in B♭</label>
+                           <labelAbbr>Tpt. in B♭</labelAbbr>
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="3" lines="5" keysig="3s" meter.count="4" meter.unit="4" trans.diat="-5" trans.semi="-9">
+                           <label>Bass Trumpet in E♭</label>
+                           <labelAbbr>B. Tpt. in E♭</labelAbbr>
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="4" lines="5" meter.count="4" meter.unit="4">
+                           <label>Alto Trombone</label>
+                           <labelAbbr>A. Tbn.</labelAbbr>
+                           <clef shape="C" line="3" />
+                        </staffDef>
+                        <staffDef n="5" lines="5" meter.count="4" meter.unit="4">
+                           <label>Trombone</label>
+                           <labelAbbr>Tbn.</labelAbbr>
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                        <staffDef n="6" lines="5" meter.count="4" meter.unit="4">
+                           <label>Contrabass Trombone</label>
+                           <labelAbbr>Cb. Tbn.</labelAbbr>
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                        <staffDef n="7" lines="5" meter.count="4" meter.unit="4">
+                           <label>Bass Trombone</label>
+                           <labelAbbr>B. Tbn.</labelAbbr>
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                        <staffDef n="8" lines="5" meter.count="4" meter.unit="4">
+                           <label>Tuba</label>
+                           <labelAbbr>Tba.</labelAbbr>
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                        <staffDef n="9" lines="5" meter.count="4" meter.unit="4">
+                           <label>B♭ Contrabass Tuba</label>
+                           <labelAbbr>B♭ Cb. Tb.</labelAbbr>
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                     </staffGrp>
+                     <staffGrp bar.thru="true" symbol="brace">
+                        <label>Celesta</label>
+                        <labelAbbr>Cel.</labelAbbr>
+                        <staffDef n="10" lines="5" meter.count="4" meter.unit="4" trans.diat="7" trans.semi="12">
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="11" lines="5" meter.count="4" meter.unit="4" trans.diat="7" trans.semi="12">
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                     </staffGrp>
+                     <staffGrp bar.thru="true" symbol="bracket">
+                        <staffDef n="12" lines="5" meter.count="4" meter.unit="4">
+                           <label>Violins</label>
+                           <labelAbbr>Vlns.</labelAbbr>
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="13" lines="5" meter.count="4" meter.unit="4">
+                           <label>Viola</label>
+                           <labelAbbr>Vla.</labelAbbr>
+                           <clef shape="C" line="3" />
+                        </staffDef>
+                        <staffDef n="14" lines="5" meter.count="4" meter.unit="4">
+                           <label>Violoncello</label>
+                           <labelAbbr>Vc.</labelAbbr>
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                        <staffDef n="15" lines="5" meter.count="4" meter.unit="4" trans.diat="-7" trans.semi="-12">
+                           <label>Contrabass</label>
+                           <labelAbbr>Cb.</labelAbbr>
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                     </staffGrp>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m1" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <mRest xml:id="s1l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s2" n="2">
+                        <layer xml:id="m1s2l1" n="1">
+                           <mRest xml:id="s2l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s3" n="3">
+                        <layer xml:id="m1s3l1" n="1">
+                           <mRest xml:id="s3l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s4" n="4">
+                        <layer xml:id="m1s4l1" n="1">
+                           <mRest xml:id="s4l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s5" n="5">
+                        <layer xml:id="m1s5l1" n="1">
+                           <mRest xml:id="s5l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s6" n="6">
+                        <layer xml:id="m1s6l1" n="1">
+                           <mRest xml:id="s6l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s7" n="7">
+                        <layer xml:id="m1s7l1" n="1">
+                           <mRest xml:id="s7l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s8" n="8">
+                        <layer xml:id="m1s8l1" n="1">
+                           <mRest xml:id="s8l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s9" n="9">
+                        <layer xml:id="m1s9l1" n="1">
+                           <mRest xml:id="s9l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s10" n="10">
+                        <layer xml:id="m1s10l1" n="1">
+                           <mRest xml:id="s10l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s11" n="11">
+                        <layer xml:id="m1s11l1" n="1">
+                           <mRest xml:id="s11l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s12" n="12">
+                        <layer xml:id="m1s12l1" n="1">
+                           <mRest xml:id="s12l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s13" n="13">
+                        <layer xml:id="m1s13l1" n="1">
+                           <mRest xml:id="s13l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s14" n="14">
+                        <layer xml:id="m1s14l1" n="1">
+                           <mRest xml:id="s14l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s15" n="15">
+                        <layer xml:id="m1s15l1" n="1">
+                           <mRest xml:id="s15l1_t0_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m2" right="end" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <mRest xml:id="s1l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s2" n="2">
+                        <layer xml:id="m2s2l1" n="1">
+                           <mRest xml:id="s2l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s3" n="3">
+                        <layer xml:id="m2s3l1" n="1">
+                           <mRest xml:id="s3l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s4" n="4">
+                        <layer xml:id="m2s4l1" n="1">
+                           <mRest xml:id="s4l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s5" n="5">
+                        <layer xml:id="m2s5l1" n="1">
+                           <mRest xml:id="s5l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s6" n="6">
+                        <layer xml:id="m2s6l1" n="1">
+                           <mRest xml:id="s6l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s7" n="7">
+                        <layer xml:id="m2s7l1" n="1">
+                           <mRest xml:id="s7l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s8" n="8">
+                        <layer xml:id="m2s8l1" n="1">
+                           <mRest xml:id="s8l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s9" n="9">
+                        <layer xml:id="m2s9l1" n="1">
+                           <mRest xml:id="s9l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s10" n="10">
+                        <layer xml:id="m2s10l1" n="1">
+                           <mRest xml:id="s10l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s11" n="11">
+                        <layer xml:id="m2s11l1" n="1">
+                           <mRest xml:id="s11l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s12" n="12">
+                        <layer xml:id="m2s12l1" n="1">
+                           <mRest xml:id="s12l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s13" n="13">
+                        <layer xml:id="m2s13l1" n="1">
+                           <mRest xml:id="s13l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s14" n="14">
+                        <layer xml:id="m2s14l1" n="1">
+                           <mRest xml:id="s14l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s15" n="15">
+                        <layer xml:id="m2s15l1" n="1">
+                           <mRest xml:id="s15l1_t1_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

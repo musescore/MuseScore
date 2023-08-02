@@ -13,7 +13,7 @@
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title&gt;Untitled score&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;composer&quot;&gt;Composer / arranger&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2023-08-02T11:09:48&quot;/&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
+    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title&gt;Untitled score&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;composer&quot;&gt;Composer / arranger&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2023-08-02T11:46:42&quot;/&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="poet"></metaTag>
@@ -58,7 +58,7 @@
         <height>10</height>
         <Text>
           <style>title</style>
-          <text>Breaths and caesuras</text>
+          <text>Fermatas </text>
           </Text>
         <Text>
           <style>subtitle</style>
@@ -84,6 +84,10 @@
             <BeamMode>auto</BeamMode>
             <durationType>quarter</durationType>
             </Rest>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
           </voice>
         </Measure>
       <Measure>
@@ -95,10 +99,10 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>breathMarkComma</symbol>
-            <placement>below</placement>
-            </Breath>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -120,14 +124,14 @@
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>breathMarkUpbow</symbol>
-            <placement>below</placement>
-            </Breath>
           </voice>
         </Measure>
       <Measure>
         <voice>
+          <Fermata>
+            <subtype>fermataShortAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -135,10 +139,10 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>caesuraCurved</symbol>
-            <placement>below</placement>
-            </Breath>
+          <Fermata>
+            <subtype>fermataLongAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -146,10 +150,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>caesura</symbol>
-            <placement>below</placement>
-            </Breath>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -164,10 +164,56 @@
               <tpc>19</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>caesuraShort</symbol>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <timeStretch>-1</timeStretch>
             <placement>below</placement>
-            </Breath>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <timeStretch>-1</timeStretch>
+            <placement>below</placement>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <Measure>
@@ -186,10 +232,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>chantCaesura</symbol>
-            <placement>below</placement>
-            </Breath>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -204,6 +246,90 @@
               <tpc>19</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataLongHenzeAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataShortHenzeAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataShortAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataVeryShortAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>59</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
           </voice>
         </Measure>
       <Measure>
@@ -219,10 +345,10 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>chantCaesura</symbol>
-            <placement>below</placement>
-            </Breath>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -230,10 +356,6 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>caesuraThick</symbol>
-            <placement>below</placement>
-            </Breath>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -241,10 +363,6 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>caesuraThick</symbol>
-            <placement>below</placement>
-            </Breath>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
@@ -252,10 +370,50 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>caesuraThick</symbol>
-            <placement>below</placement>
-            </Breath>
+          <Fermata>
+            <subtype>fermataLongAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Note>
+              <pitch>55</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>
@@ -289,32 +447,10 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>breathMarkComma</symbol>
-            <placement>below</placement>
-            </Breath>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>43</pitch>
-              <tpc>15</tpc>
-              </Note>
-            </Chord>
-          </voice>
-        </Measure>
-      <Measure>
-        <voice>
-          <Chord>
-            <durationType>half</durationType>
-            <Note>
-              <pitch>48</pitch>
-              <tpc>14</tpc>
-              </Note>
-            </Chord>
-          <Breath>
-            <symbol>caesura</symbol>
-            <placement>below</placement>
-            </Breath>
+          <Fermata>
+            <subtype>fermataAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
           <Chord>
             <durationType>half</durationType>
             <Note>
@@ -340,6 +476,92 @@
               <tpc>15</tpc>
               </Note>
             </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>43</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Fermata>
+            <subtype>fermataShortBelow</subtype>
+            <timeStretch>-1</timeStretch>
+            <placement>below</placement>
+            </Fermata>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>43</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataShortHenzeAbove</subtype>
+            <timeStretch>-1</timeStretch>
+            </Fermata>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>43</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>half</durationType>
+            <Note>
+              <pitch>43</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          <Fermata>
+            <subtype>fermataBelow</subtype>
+            <timeStretch>-1</timeStretch>
+            <placement>below</placement>
+            </Fermata>
           </voice>
         </Measure>
       <Measure>
@@ -356,10 +578,26 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
-          <Breath>
-            <symbol>caesuraThick</symbol>
-            <placement>below</placement>
-            </Breath>
+          <Chord>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>43</pitch>
+              <tpc>15</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <dots>1</dots>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>48</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
           <Chord>
             <dots>1</dots>
             <durationType>quarter</durationType>

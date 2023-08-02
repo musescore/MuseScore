@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0.0-dev+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Untitled score</title>
+            <respStmt>
+               <persName role="composer">Composer / arranger</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-08-02T11:09:57" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Dynamics</rend>
+                        <lb />
+                        <rend type="subtitle" fontsize="large">Subtitle</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Composer / arranger</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <label>Oboe</label>
+                        <labelAbbr>Ob.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m1" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="s1l1_t0_1" dur="2" pname="c" oct="5" />
+                           <beam xml:id="m1s1l1b1">
+                              <note xml:id="s1l1_t1_2" dur="8" pname="d" oct="5" />
+                              <note xml:id="s1l1_t5_8" dur="8" pname="e" oct="5" />
+                              <note xml:id="s1l1_t3_4" dur="8" pname="f" oct="5" />
+                              <note xml:id="s1l1_t7_8" dur="8" pname="e" oct="5" />
+                           </beam>
+                        </layer>
+                        <layer xml:id="m1s1l2" n="2">
+                           <note xml:id="s1l2_t0_1" dur="1" pname="c" oct="4" />
+                        </layer>
+                     </staff>
+                     <dynam xml:id="m1dn1" label="p" startid="#s1l1_t0_1" place="above">p</dynam>
+                     <dynam xml:id="m1dn2" label="mp" startid="#s1l1_t1_2">mp</dynam>
+                     <dynam xml:id="m1dn3" label="sffz" startid="#s1l1_t5_8">sffz</dynam>
+                     <dynam xml:id="m1dn4" label="sfz" startid="#s1l1_t3_4">sfz</dynam>
+                     <dynam xml:id="m1dn5" label="pp" startid="#s1l2_t0_1">pp</dynam>
+                  </measure>
+                  <measure xml:id="m2" right="end" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="s1l1_t1_1" dur="4" pname="d" oct="5" />
+                           <chord xml:id="s1l1_t5_4" dur="4">
+                              <note xml:id="m2s1l1n1" pname="f" oct="4" />
+                              <note xml:id="m2s1l1n2" pname="c" oct="5" />
+                              <note xml:id="m2s1l1n3" pname="f" oct="5" />
+                           </chord>
+                           <chord xml:id="s1l1_t3_2" dur="2">
+                              <note xml:id="m2s1l1n4" pname="b" oct="4" />
+                              <note xml:id="m2s1l1n5" pname="d" oct="5" />
+                              <note xml:id="m2s1l1n6" pname="f" oct="5" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <dynam xml:id="m2dn1" label="mp" startid="#s1l1_t1_1">sempre mp e <lb />dolce</dynam>
+                     <dynam xml:id="m2dn2" label="p" startid="#s1l1_t5_4">p e sempre<lb />dolce</dynam>
+                     <dynam xml:id="m2dn3" label="ff" startid="#s1l1_t3_2">molto ff</dynam>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>
