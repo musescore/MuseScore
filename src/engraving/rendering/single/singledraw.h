@@ -199,6 +199,8 @@ private:
     static void draw(const MeasureNumber* item, draw::Painter* painter);
     static void draw(const MeasureRepeat* item, draw::Painter* painter);
 
+    static void draw(const NoteHead* item, draw::Painter* painter);
+
     static void draw(const Ornament* item, draw::Painter* painter);
     static void draw(const OttavaSegment* item, draw::Painter* painter);
 
@@ -218,6 +220,7 @@ private:
     static void draw(const StaffText* item, draw::Painter* painter);
     static void draw(const StaffTypeChange* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
+    static void draw(const Symbol* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
