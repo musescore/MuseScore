@@ -39,7 +39,6 @@ using namespace mu;
 using namespace mu::engraving;
 
 static const String MEI_DIR(u"data/");
-static const String TMP_DIR(u"tmp/");
 
 namespace mu::iex::mei {
 class Mei_Tests : public ::testing::Test
@@ -87,7 +86,7 @@ void Mei_Tests::meiReadTest(const char* file, const char* ext)
     // Potentially directly compare the mei files
     // This currently passes inconsitently because of some order differences in the xml elements
     // If this can be fixed, we can used that for testing and not re-import the mei file again
-    // EXPECT_TRUE(ScoreComp::compareFiles(fileName + u".test.mei", ScoreRW::rootPath() + u"/" + MEI_DIR + fileName + u".mei"))
+    // EXPECT_TRUE(ScoreComp::compareFiles(fileName + u".test.mei", ScoreRW::rootPath() + u"/" + MEI_DIR + fileName + u".mei"));
 
     // Reload the generated .mei file
     MasterScore* score2 = ScoreRW::readScore(fileName + u".test.mei", true, importFunc);
@@ -100,5 +99,8 @@ void Mei_Tests::meiReadTest(const char* file, const char* ext)
 
 TEST_F(Mei_Tests, meiAccid01) {
     meiReadTest("accid-01", "mei");
+}
+TEST_F(Mei_Tests, meiBreath01) {
+    meiReadTest("breath-01", "mei");
 }
 }
