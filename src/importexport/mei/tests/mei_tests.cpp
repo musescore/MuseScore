@@ -85,16 +85,6 @@ void Mei_Tests::meiReadTest(const char* file)
 
     // Compare the mei files
     EXPECT_TRUE(ScoreComp::compareFiles(fileName + u".test.mei", ScoreRW::rootPath() + u"/" + MEI_DIR + fileName + u".mei"));
-
-    /*
-    // Reload the generated .mei file
-    MasterScore* score2 = ScoreRW::readScore(fileName + u".test.mei", true, importFunc);
-    EXPECT_TRUE(score2);
-
-    // Compare with the reference MuseScore file
-    EXPECT_TRUE(ScoreComp::saveCompareScore(score2, fileName + u".mscx", MEI_DIR + fileName + u".mscx"));
-    delete score2;
-    */
 }
 
 TEST_F(Mei_Tests, mei_accid_01) {
