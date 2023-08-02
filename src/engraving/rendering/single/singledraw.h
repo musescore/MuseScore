@@ -108,6 +108,7 @@ class PlayTechAnnotation;
 
 class RasgueadoSegment;
 class RehearsalMark;
+class Rest;
 
 class Slur;
 class Spacer;
@@ -207,6 +208,7 @@ private:
 
     static void draw(const StretchedBend* item, draw::Painter* painter);
     static void draw(const RehearsalMark* item, draw::Painter* painter);
+    static void draw(const Rest* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
