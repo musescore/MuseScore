@@ -101,6 +101,7 @@
 
 #include "libmscore/rasgueado.h"
 #include "libmscore/rehearsalmark.h"
+#include "libmscore/rest.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
@@ -239,21 +240,23 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
-    case ElementType::OTTAVA_SEGMENT: draw(item_cast<const OttavaSegment*>(item), painter);
+    case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter);
         break;
 
-    case ElementType::PALM_MUTE_SEGMENT: draw(item_cast<const PalmMuteSegment*>(item), painter);
+    case ElementType::PALM_MUTE_SEGMENT:    draw(item_cast<const PalmMuteSegment*>(item), painter);
         break;
-    case ElementType::PEDAL_SEGMENT: draw(item_cast<const PedalSegment*>(item), painter);
+    case ElementType::PEDAL_SEGMENT:        draw(item_cast<const PedalSegment*>(item), painter);
         break;
-    case ElementType::PICK_SCRAPE_SEGMENT: draw(item_cast<const PickScrapeSegment*>(item), painter);
+    case ElementType::PICK_SCRAPE_SEGMENT:  draw(item_cast<const PickScrapeSegment*>(item), painter);
         break;
-    case ElementType::PLAYTECH_ANNOTATION: draw(item_cast<const PlayTechAnnotation*>(item), painter);
+    case ElementType::PLAYTECH_ANNOTATION:  draw(item_cast<const PlayTechAnnotation*>(item), painter);
         break;
 
-    case ElementType::RASGUEADO_SEGMENT: draw(item_cast<const RasgueadoSegment*>(item), painter);
+    case ElementType::RASGUEADO_SEGMENT:    draw(item_cast<const RasgueadoSegment*>(item), painter);
         break;
-    case ElementType::REHEARSAL_MARK: draw(item_cast<const RehearsalMark*>(item), painter);
+    case ElementType::REHEARSAL_MARK:       draw(item_cast<const RehearsalMark*>(item), painter);
+        break;
+    case ElementType::REST:                 draw(item_cast<const Rest*>(item), painter);
         break;
 
     case ElementType::STRETCHED_BEND: draw(item_cast<const StretchedBend*>(item), painter);
@@ -2054,4 +2057,14 @@ void TDraw::draw(const RehearsalMark* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const Rest* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->shouldNotBeDrawn()) {
+        return;
+    }
+    painter->setPen(item->curColor());
+    item->drawSymbol(item->sym(), painter);
 }

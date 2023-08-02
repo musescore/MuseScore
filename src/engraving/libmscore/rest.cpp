@@ -34,7 +34,6 @@
 #include "chord.h"
 #include "deadslapped.h"
 #include "factory.h"
-#include "image.h"
 #include "measure.h"
 #include "measurerepeat.h"
 #include "note.h"
@@ -114,14 +113,9 @@ void Rest::hack_toRestType()
 //   Rest::draw
 //---------------------------------------------------------
 
-void Rest::draw(mu::draw::Painter* painter) const
+void Rest::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (shouldNotBeDrawn()) {
-        return;
-    }
-    painter->setPen(curColor());
-    drawSymbol(m_sym, painter);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
