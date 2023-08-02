@@ -85,43 +85,9 @@ void StaffTypeChange::spatiumChanged(double, double)
 //   draw
 //---------------------------------------------------------
 
-void StaffTypeChange::draw(mu::draw::Painter* painter) const
+void StaffTypeChange::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    if (score()->printing() || !score()->showUnprintable()) {
-        return;
-    }
-    double _spatium = style().spatium();
-    double h  = _spatium * 2.5;
-    double w  = _spatium * 2.5;
-    double lineDist = 0.35;           // line distance for the icon 'staff lines'
-    // draw icon rectangle
-    painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
-                        m_lw, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawRect(0, 0, w, h);
-
-    // draw icon contents
-    int lines = 5;
-    if (staffType()) {
-        if (staffType()->stemless()) {       // a single notehead represents a stemless staff
-            drawSymbol(SymId::noteheadBlack, painter, PointF(w * 0.5 - 0.33 * _spatium, h * 0.5), 0.5);
-        }
-        if (staffType()->invisible()) {      // no lines needed. It's done.
-            return;
-        }
-        // show up to 6 lines
-        lines = std::min(staffType()->lines(), 6);
-    }
-    // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
-    double startY = 1.25 - (lines - 1) * lineDist * 0.5;
-    painter->setPen(Pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
-                        2.5, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
-    for (int i=0; i < lines; i++) {
-        int y = (startY + i * lineDist) * _spatium;
-        painter->drawLine(0, y, w, y);
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

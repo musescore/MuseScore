@@ -110,6 +110,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/stafftypechange.h"
 #include "libmscore/stretchedbend.h"
 
 #include "libmscore/text.h"
@@ -274,6 +275,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter);
         break;
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter);
+        break;
+    case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
@@ -2289,4 +2292,46 @@ void TDraw::draw(const StaffText* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const StaffTypeChange* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->score()->printing() || !item->score()->showUnprintable()) {
+        return;
+    }
+
+    auto conf = item->engravingConfiguration();
+
+    double _spatium = item->style().spatium();
+    double h  = _spatium * 2.5;
+    double w  = _spatium * 2.5;
+    double lineDist = 0.35;           // line distance for the icon 'staff lines'
+    // draw icon rectangle
+    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+                        item->lw(), PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
+    painter->setBrush(BrushStyle::NoBrush);
+    painter->drawRect(0, 0, w, h);
+
+    // draw icon contents
+    int lines = 5;
+    if (item->staffType()) {
+        if (item->staffType()->stemless()) {       // a single notehead represents a stemless staff
+            item->drawSymbol(SymId::noteheadBlack, painter, PointF(w * 0.5 - 0.33 * _spatium, h * 0.5), 0.5);
+        }
+        if (item->staffType()->invisible()) {      // no lines needed. It's done.
+            return;
+        }
+        // show up to 6 lines
+        lines = std::min(item->staffType()->lines(), 6);
+    }
+    // calculate starting point Y for the lines from half the icon height (2.5) so staff lines appear vertically centered
+    double startY = 1.25 - (lines - 1) * lineDist * 0.5;
+    painter->setPen(Pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
+                        2.5, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin));
+    for (int i=0; i < lines; i++) {
+        int y = (startY + i * lineDist) * _spatium;
+        painter->drawLine(0, y, w, y);
+    }
 }
