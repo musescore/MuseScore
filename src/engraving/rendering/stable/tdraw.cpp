@@ -109,6 +109,7 @@
 #include "libmscore/spacer.h"
 #include "libmscore/staff.h"
 #include "libmscore/staffstate.h"
+#include "libmscore/stafftext.h"
 #include "libmscore/stretchedbend.h"
 
 #include "libmscore/text.h"
@@ -271,6 +272,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::SPACER:               draw(item_cast<const Spacer*>(item), painter);
         break;
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter);
+        break;
+    case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
@@ -2280,4 +2283,10 @@ void TDraw::draw(const StaffState* item, Painter* painter)
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(item->path());
+}
+
+void TDraw::draw(const StaffText* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
