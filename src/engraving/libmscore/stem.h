@@ -73,6 +73,7 @@ public:
     void setLineWidth(Millimetre lineWidth) { m_lineWidth = lineWidth; }
 
     void setLine(const LineF& l) { m_line = l; }
+    const LineF& line() const { return m_line; }
     PointF p2() const { return m_line.p2(); }
     PointF flagPosition() const;
     double length() const { return m_baseLength + m_userLength; }
