@@ -22,14 +22,9 @@
 
 #include "stemslash.h"
 
-#include "beam.h"
 #include "chord.h"
-#include "hook.h"
-#include "note.h"
-#include "score.h"
-#include "stem.h"
 
-#include "draw/types/pen.h"
+#include "log.h"
 
 using namespace mu;
 
@@ -43,11 +38,8 @@ StemSlash::StemSlash(Chord* parent)
 //   draw
 //---------------------------------------------------------
 
-void StemSlash::draw(mu::draw::Painter* painter) const
+void StemSlash::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    painter->setPen(Pen(curColor(), m_width, PenStyle::SolidLine, PenCapStyle::FlatCap));
-    painter->drawLine(m_line);
+    UNREACHABLE;
 }
 } // namespace mu::engraving

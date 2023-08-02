@@ -112,6 +112,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftypechange.h"
 #include "libmscore/stem.h"
+#include "libmscore/stemslash.h"
 #include "libmscore/stretchedbend.h"
 
 #include "libmscore/text.h"
@@ -279,6 +280,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter);
         break;
     case ElementType::STEM:                 draw(item_cast<const Stem*>(item), painter);
+        break;
+    case ElementType::STEM_SLASH:           draw(item_cast<const StemSlash*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
@@ -2379,4 +2382,12 @@ void TDraw::draw(const Stem* item, Painter* painter)
             item->drawSymbol(SymId::augmentationDot, painter, PointF(x, y));
         }
     }
+}
+
+void TDraw::draw(const StemSlash* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    painter->setPen(Pen(item->curColor(), item->stemWidth(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->drawLine(item->line());
 }
