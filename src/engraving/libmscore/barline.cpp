@@ -536,7 +536,7 @@ void BarLine::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
     m_y2 += bed->yoff2;
     PointF pos(canvasPos());
     p->translate(pos);
-    BarLine::draw(p);
+    EngravingItem::renderer()->drawItem(this, p);
     p->translate(-pos);
     m_y1 -= bed->yoff1;
     m_y2 -= bed->yoff2;
