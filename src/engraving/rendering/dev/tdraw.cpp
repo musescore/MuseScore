@@ -100,6 +100,7 @@
 #include "libmscore/playtechannotation.h"
 
 #include "libmscore/rasgueado.h"
+#include "libmscore/rehearsalmark.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
@@ -251,6 +252,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::RASGUEADO_SEGMENT: draw(item_cast<const RasgueadoSegment*>(item), painter);
+        break;
+    case ElementType::REHEARSAL_MARK: draw(item_cast<const RehearsalMark*>(item), painter);
         break;
 
     case ElementType::STRETCHED_BEND: draw(item_cast<const StretchedBend*>(item), painter);
@@ -2045,4 +2048,10 @@ void TDraw::draw(const RasgueadoSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::draw(const RehearsalMark* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }

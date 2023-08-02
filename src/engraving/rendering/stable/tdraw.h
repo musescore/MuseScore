@@ -246,6 +246,7 @@ private:
     static void draw(const PlayTechAnnotation* item, draw::Painter* painter);
 
     static void draw(const RasgueadoSegment* item, draw::Painter* painter);
+    static void draw(const RehearsalMark* item, draw::Painter* painter);
 
     static void draw(const StretchedBend* item, draw::Painter* painter);
 
