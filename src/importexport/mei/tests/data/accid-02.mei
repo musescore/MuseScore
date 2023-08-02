@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-08-02T11:09:39" />
+            <date isodate="2023-08-02T11:09:40" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -42,21 +42,17 @@
                   <measure xml:id="m1" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <note xml:id="s1l1_t0_1" dur="4" pname="a" oct="4" />
-                           <note xml:id="s1l1_t1_4" dur="4" pname="a" oct="4" />
-                           <note xml:id="s1l1_t1_2" dur="4" pname="a" oct="4" />
-                           <note xml:id="s1l1_t3_4" dur="4" pname="b" oct="4" />
-                        </layer>
-                        <layer xml:id="m1s1l2" n="2">
-                           <note xml:id="s1l2_t0_1" dur="4" pname="f" oct="4">
-                              <accid xml:id="m1s1l2a1" accid.ges="s" />
+                           <note xml:id="s1l1_t0_1" dur="4" pname="f" oct="4">
+                              <accid xml:id="m1s1l1a1" accid.ges="s" />
                            </note>
-                           <note xml:id="s1l2_t1_4" dur="4" pname="e" oct="4" />
-                           <note xml:id="s1l2_t1_2" dur="4" pname="f" oct="4">
-                              <accid xml:id="m1s1l2a2" accid.ges="s" />
+                           <note xml:id="s1l1_t1_4" dur="4" pname="f" oct="4">
+                              <accid xml:id="m1s1l1a2" accid="s" />
                            </note>
-                           <note xml:id="s1l2_t3_4" dur="4" pname="f" oct="4">
-                              <accid xml:id="m1s1l2a3" accid.ges="s" />
+                           <note xml:id="s1l1_t1_2" dur="4" pname="f" oct="4">
+                              <accid xml:id="m1s1l1a3" accid="x" />
+                           </note>
+                           <note xml:id="s1l1_t3_4" dur="4" pname="f" oct="4">
+                              <accid xml:id="m1s1l1a4" accid="ss" />
                            </note>
                         </layer>
                      </staff>
@@ -64,28 +60,20 @@
                   <measure xml:id="m2" right="end" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <note xml:id="s1l1_t1_1" dur="4" pname="g" oct="4">
+                           <note xml:id="s1l1_t1_1" dur="4" pname="a" oct="4">
                               <accid xml:id="m2s1l1a1" accid="n" />
                            </note>
-                           <note xml:id="s1l1_t5_4" dur="4" pname="f" oct="4">
-                              <accid xml:id="m2s1l1a2" accid.ges="s" />
+                           <note xml:id="s1l1_t5_4" dur="4" pname="a" oct="4">
+                              <accid xml:id="m2s1l1a2" accid="f" />
                            </note>
-                           <note xml:id="s1l1_t3_2" dur="4" pname="e" oct="4" />
-                           <note xml:id="s1l1_t7_4" dur="4" pname="b" oct="4" />
-                        </layer>
-                        <layer xml:id="m2s1l2" n="2">
-                           <note xml:id="s1l2_t1_1" dur="4" pname="e" oct="4" />
-                           <note xml:id="s1l2_t5_4" dur="4" pname="d" oct="4">
-                              <accid xml:id="m2s1l2a1" accid="s" />
+                           <note xml:id="s1l1_t3_2" dur="4" pname="a" oct="4">
+                              <accid xml:id="m2s1l1a3" accid="nf" />
                            </note>
-                           <note xml:id="s1l2_t3_2" dur="4" pname="b" oct="3" />
-                           <note xml:id="s1l2_t7_4" dur="4" pname="g" oct="4">
-                              <accid xml:id="m2s1l2a2" accid="s" />
+                           <note xml:id="s1l1_t7_4" dur="4" pname="a" oct="4">
+                              <accid xml:id="m2s1l1a4" accid="ff" />
                            </note>
                         </layer>
                      </staff>
-                     <slur xml:id="m2sl1" startid="#s1l1_t1_1" endid="#s1l1_t5_4" />
-                     <fermata xml:id="m2fm1" startid="#s1l1_t3_2" />
                   </measure>
                </section>
             </score>

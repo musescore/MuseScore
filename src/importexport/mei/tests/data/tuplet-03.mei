@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0.0-dev+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title />
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-08-02T11:10:28" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Tuplet with custom styles</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m1" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <beam xml:id="m1s1l1b1">
+                              <tuplet xml:id="m1s1l1t1" num="3" numbase="2" bracket.place="below" num.format="ratio" num.place="below">
+                                 <note xml:id="s1l1_t0_1" dur="8" pname="c" oct="5" />
+                                 <note xml:id="s1l1_t1_12" dur="8" pname="d" oct="5" />
+                                 <note xml:id="s1l1_t1_6" dur="8" pname="b" oct="4" />
+                              </tuplet>
+                           </beam>
+                           <beam xml:id="m1s1l1b2">
+                              <tuplet xml:id="m1s1l1t2" num="3" numbase="2" bracket.place="above" num.place="above">
+                                 <note xml:id="s1l1_t1_4" dur="8" pname="c" oct="5" />
+                                 <note xml:id="s1l1_t1_3" dur="8" pname="d" oct="5" />
+                                 <note xml:id="s1l1_t5_12" dur="8" pname="b" oct="4" />
+                              </tuplet>
+                           </beam>
+                           <beam xml:id="m1s1l1b3">
+                              <tuplet xml:id="m1s1l1t3" num="3" numbase="2" bracket.visible="true">
+                                 <note xml:id="s1l1_t1_2" dur="8" pname="c" oct="5" />
+                                 <note xml:id="s1l1_t7_12" dur="8" pname="d" oct="5" />
+                                 <note xml:id="s1l1_t2_3" dur="8" pname="b" oct="4" />
+                              </tuplet>
+                           </beam>
+                           <tuplet xml:id="m1s1l1t4" num="3" numbase="2" bracket.visible="false">
+                              <note xml:id="s1l1_t3_4" type="mscore-beam-none" dur="8" pname="c" oct="5" />
+                              <note xml:id="s1l1_t5_6" type="mscore-beam-none" dur="8" pname="d" oct="5" />
+                              <note xml:id="s1l1_t11_12" dur="8" pname="b" oct="4" />
+                           </tuplet>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m2" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <beam xml:id="m2s1l1b1">
+                              <tuplet xml:id="m2s1l1t1" num="6" numbase="4" bracket.visible="true">
+                                 <note xml:id="s1l1_t1_1" dur="32" pname="a" oct="4" />
+                                 <note xml:id="s1l1_t49_48" dur="32" pname="g" oct="4" />
+                                 <note xml:id="s1l1_t25_24" dur="32" pname="a" oct="4" />
+                                 <note xml:id="s1l1_t17_16" dur="32" pname="b" oct="4" />
+                                 <note xml:id="s1l1_t13_12" dur="32" pname="c" oct="5" />
+                                 <note xml:id="s1l1_t53_48" dur="32" pname="b" oct="4" />
+                              </tuplet>
+                              <tuplet xml:id="m2s1l1t2" num="6" numbase="4" bracket.place="below" bracket.visible="true" num.place="below" num.visible="false">
+                                 <note xml:id="s1l1_t9_8" dur="32" pname="a" oct="4" />
+                                 <note xml:id="s1l1_t55_48" dur="32" pname="g" oct="4" />
+                                 <note xml:id="s1l1_t7_6" dur="32" pname="a" oct="4" />
+                                 <note xml:id="s1l1_t19_16" dur="32" pname="b" oct="4" />
+                                 <note xml:id="s1l1_t29_24" dur="32" pname="c" oct="5" />
+                                 <note xml:id="s1l1_t59_48" dur="32" pname="b" oct="4" />
+                              </tuplet>
+                           </beam>
+                           <tuplet xml:id="m2s1l1t3" num="6" numbase="4" num.format="ratio">
+                              <beam xml:id="m2s1l1b2">
+                                 <note xml:id="s1l1_t5_4" dur="32" pname="a" oct="4" />
+                                 <note xml:id="s1l1_t61_48" dur="32" pname="g" oct="4" />
+                                 <note xml:id="s1l1_t31_24" dur="32" pname="a" oct="4" />
+                              </beam>
+                              <beam xml:id="m2s1l1b3">
+                                 <note xml:id="s1l1_t21_16" type="mscore-beam-begin" dur="32" pname="b" oct="4" />
+                                 <note xml:id="s1l1_t4_3" dur="32" pname="c" oct="5" />
+                                 <note xml:id="s1l1_t65_48" dur="32" pname="b" oct="4" />
+                              </beam>
+                           </tuplet>
+                           <tuplet xml:id="m2s1l1t4" num="6" numbase="4" bracket.place="below" bracket.visible="false" num.place="below" num.visible="false">
+                              <beam xml:id="m2s1l1b4">
+                                 <note xml:id="s1l1_t11_8" type="mscore-beam-begin" dur="32" pname="a" oct="4" />
+                                 <note xml:id="s1l1_t67_48" dur="32" pname="g" oct="4" />
+                                 <note xml:id="s1l1_t17_12" dur="32" pname="a" oct="4" />
+                              </beam>
+                              <beam xml:id="m2s1l1b5">
+                                 <note xml:id="s1l1_t23_16" type="mscore-beam-begin" dur="32" pname="b" oct="4" />
+                                 <note xml:id="s1l1_t35_24" dur="32" pname="c" oct="5" />
+                                 <note xml:id="s1l1_t71_48" dur="32" pname="b" oct="4" />
+                              </beam>
+                           </tuplet>
+                           <tuplet xml:id="m2s1l1t5" num="3" numbase="2" bracket.place="above" num.format="ratio" num.place="above">
+                              <note xml:id="s1l1_t3_2" dur="4" pname="c" oct="5" />
+                              <rest xml:id="s1l1_t5_3" dur="4" />
+                              <beam xml:id="m2s1l1b6">
+                                 <note xml:id="s1l1_t11_6" dur="8" pname="c" oct="5" />
+                                 <note xml:id="s1l1_t23_12" dur="8" pname="b" oct="4" />
+                              </beam>
+                           </tuplet>
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m3" right="end" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <note xml:id="s1l1_t2_1" dur="2" pname="c" oct="5" />
+                           <rest xml:id="s1l1_t5_2" dur="2" />
+                        </layer>
+                     </staff>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

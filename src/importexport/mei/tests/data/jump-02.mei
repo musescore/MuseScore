@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0.0-dev+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Untitled score</title>
+            <respStmt>
+               <persName role="composer">Composer / arranger</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-08-02T11:10:04" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Jumps</rend>
+                        <lb />
+                        <rend type="subtitle" fontsize="large">Subtitle</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Composer / arranger</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <label>Flute</label>
+                        <labelAbbr>Fl.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m1" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <mRest xml:id="s1l1_t0_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m2" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <mRest xml:id="s1l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m2rp1" func="segno" tstamp="0.000000" />
+                  </measure>
+                  <measure xml:id="m3" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <mRest xml:id="s1l1_t2_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m3rp1" func="coda" tstamp="0.000000" />
+                  </measure>
+                  <measure xml:id="m4" n="4">
+                     <staff xml:id="m4s1" n="1">
+                        <layer xml:id="m4s1l1" n="1">
+                           <mRest xml:id="s1l1_t3_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m4rp1" func="fine" tstamp="0.000000" />
+                  </measure>
+                  <measure xml:id="m5" n="5">
+                     <staff xml:id="m5s1" n="1">
+                        <layer xml:id="m5s1l1" n="1">
+                           <mRest xml:id="s1l1_t4_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m6" n="6">
+                     <staff xml:id="m6s1" n="1">
+                        <layer xml:id="m6s1l1" n="1">
+                           <mRest xml:id="s1l1_t5_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m6rp1" type="mscore-marker-to-coda" func="coda" tstamp="0.000000">To Coda</repeatMark>
+                  </measure>
+                  <measure xml:id="m7" n="7">
+                     <staff xml:id="m7s1" n="1">
+                        <layer xml:id="m7s1l1" n="1">
+                           <mRest xml:id="s1l1_t6_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m8" n="8">
+                     <staff xml:id="m8s1" n="1">
+                        <layer xml:id="m8s1l1" n="1">
+                           <mRest xml:id="s1l1_t7_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m8rp1" func="daCapo" tstamp="0.000000" />
+                  </measure>
+                  <measure xml:id="m9" n="9">
+                     <staff xml:id="m9s1" n="1">
+                        <layer xml:id="m9s1l1" n="1">
+                           <mRest xml:id="s1l1_t8_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m10" n="10">
+                     <staff xml:id="m10s1" n="1">
+                        <layer xml:id="m10s1l1" n="1">
+                           <mRest xml:id="s1l1_t9_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m10rp1" type="mscore-jump-dc-al-fine" func="daCapo" tstamp="0.000000">D.C. al Fine</repeatMark>
+                  </measure>
+                  <measure xml:id="m11" n="11">
+                     <staff xml:id="m11s1" n="1">
+                        <layer xml:id="m11s1l1" n="1">
+                           <mRest xml:id="s1l1_t10_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m12" n="12">
+                     <staff xml:id="m12s1" n="1">
+                        <layer xml:id="m12s1l1" n="1">
+                           <mRest xml:id="s1l1_t11_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m13" n="13">
+                     <staff xml:id="m13s1" n="1">
+                        <layer xml:id="m13s1l1" n="1">
+                           <mRest xml:id="s1l1_t12_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m13rp1" type="mscore-jump-dc-al-coda" func="daCapo" tstamp="0.000000">D.C. al Coda</repeatMark>
+                  </measure>
+                  <measure xml:id="m14" n="14">
+                     <staff xml:id="m14s1" n="1">
+                        <layer xml:id="m14s1l1" n="1">
+                           <mRest xml:id="s1l1_t13_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m15" n="15">
+                     <staff xml:id="m15s1" n="1">
+                        <layer xml:id="m15s1l1" n="1">
+                           <mRest xml:id="s1l1_t14_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m15rp1" type="mscore-jump-ds-al-coda" func="dalSegno" tstamp="0.000000">D.S. al Coda</repeatMark>
+                  </measure>
+                  <measure xml:id="m16" n="16">
+                     <staff xml:id="m16s1" n="1">
+                        <layer xml:id="m16s1l1" n="1">
+                           <mRest xml:id="s1l1_t15_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m17" n="17">
+                     <staff xml:id="m17s1" n="1">
+                        <layer xml:id="m17s1l1" n="1">
+                           <mRest xml:id="s1l1_t16_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m17rp1" type="mscore-jump-ds-al-fine" func="dalSegno" tstamp="0.000000">D.S. al Fine</repeatMark>
+                  </measure>
+                  <measure xml:id="m18" n="18">
+                     <staff xml:id="m18s1" n="1">
+                        <layer xml:id="m18s1l1" n="1">
+                           <mRest xml:id="s1l1_t17_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m19" n="19">
+                     <staff xml:id="m19s1" n="1">
+                        <layer xml:id="m19s1l1" n="1">
+                           <mRest xml:id="s1l1_t18_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m19rp1" func="dalSegno" tstamp="0.000000" />
+                  </measure>
+                  <measure xml:id="m20" n="20">
+                     <staff xml:id="m20s1" n="1">
+                        <layer xml:id="m20s1l1" n="1">
+                           <mRest xml:id="s1l1_t19_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m21" n="21">
+                     <staff xml:id="m21s1" n="1">
+                        <layer xml:id="m21s1l1" n="1">
+                           <mRest xml:id="s1l1_t20_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m21rp1" type="mscore-marker-segno-variation" func="segno" tstamp="0.000000" />
+                  </measure>
+                  <measure xml:id="m22" n="22">
+                     <staff xml:id="m22s1" n="1">
+                        <layer xml:id="m22s1l1" n="1">
+                           <mRest xml:id="s1l1_t21_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m22rp1" type="mscore-marker-varied-coda" func="coda" tstamp="0.000000" />
+                  </measure>
+                  <measure xml:id="m23" n="23">
+                     <staff xml:id="m23s1" n="1">
+                        <layer xml:id="m23s1l1" n="1">
+                           <mRest xml:id="s1l1_t22_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m24" n="24">
+                     <staff xml:id="m24s1" n="1">
+                        <layer xml:id="m24s1l1" n="1">
+                           <mRest xml:id="s1l1_t23_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m25" n="25">
+                     <staff xml:id="m25s1" n="1">
+                        <layer xml:id="m25s1l1" n="1">
+                           <mRest xml:id="s1l1_t24_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m25rp1" type="mscore-jump-dc-al-double-coda" func="daCapo" tstamp="0.000000">D.C. al Double Coda</repeatMark>
+                  </measure>
+                  <measure xml:id="m26" n="26">
+                     <staff xml:id="m26s1" n="1">
+                        <layer xml:id="m26s1l1" n="1">
+                           <mRest xml:id="s1l1_t25_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m27" n="27">
+                     <staff xml:id="m27s1" n="1">
+                        <layer xml:id="m27s1l1" n="1">
+                           <mRest xml:id="s1l1_t26_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m28" n="28">
+                     <staff xml:id="m28s1" n="1">
+                        <layer xml:id="m28s1l1" n="1">
+                           <mRest xml:id="s1l1_t27_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m28rp1" type="mscore-jump-ds-al-double-coda" func="dalSegno" tstamp="0.000000">D.S. al Double Coda</repeatMark>
+                  </measure>
+                  <measure xml:id="m29" n="29">
+                     <staff xml:id="m29s1" n="1">
+                        <layer xml:id="m29s1l1" n="1">
+                           <mRest xml:id="s1l1_t28_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m30" n="30">
+                     <staff xml:id="m30s1" n="1">
+                        <layer xml:id="m30s1l1" n="1">
+                           <mRest xml:id="s1l1_t29_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m31" n="31">
+                     <staff xml:id="m31s1" n="1">
+                        <layer xml:id="m31s1l1" n="1">
+                           <mRest xml:id="s1l1_t30_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m31rp1" type="mscore-jump-dal-segno-segno" func="dalSegno" tstamp="0.000000">Dal Segno Segno</repeatMark>
+                  </measure>
+                  <measure xml:id="m32" n="32">
+                     <staff xml:id="m32s1" n="1">
+                        <layer xml:id="m32s1l1" n="1">
+                           <mRest xml:id="s1l1_t31_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m33" n="33">
+                     <staff xml:id="m33s1" n="1">
+                        <layer xml:id="m33s1l1" n="1">
+                           <mRest xml:id="s1l1_t32_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m34" n="34">
+                     <staff xml:id="m34s1" n="1">
+                        <layer xml:id="m34s1l1" n="1">
+                           <mRest xml:id="s1l1_t33_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m34rp1" type="mscore-jump-dss-al-coda" func="dalSegno" tstamp="0.000000">D.S.S. al Coda</repeatMark>
+                  </measure>
+                  <measure xml:id="m35" n="35">
+                     <staff xml:id="m35s1" n="1">
+                        <layer xml:id="m35s1l1" n="1">
+                           <mRest xml:id="s1l1_t34_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m36" n="36">
+                     <staff xml:id="m36s1" n="1">
+                        <layer xml:id="m36s1l1" n="1">
+                           <mRest xml:id="s1l1_t35_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m36rp1" type="mscore-jump-dss-al-double-coda" func="dalSegno" tstamp="0.000000">D.S.S. al Double Coda</repeatMark>
+                  </measure>
+                  <measure xml:id="m37" n="37">
+                     <staff xml:id="m37s1" n="1">
+                        <layer xml:id="m37s1l1" n="1">
+                           <mRest xml:id="s1l1_t36_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m38" n="38">
+                     <staff xml:id="m38s1" n="1">
+                        <layer xml:id="m38s1l1" n="1">
+                           <mRest xml:id="s1l1_t37_1" />
+                        </layer>
+                     </staff>
+                     <repeatMark xml:id="m38rp1" type="mscore-jump-dss-al-fine" func="dalSegno" tstamp="0.000000">D.S.S. al Fine</repeatMark>
+                  </measure>
+                  <measure xml:id="m39" right="end" n="39">
+                     <staff xml:id="m39s1" n="1">
+                        <layer xml:id="m39s1l1" n="1">
+                           <mRest xml:id="s1l1_t38_1" />
+                        </layer>
+                     </staff>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0.0-dev+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Untitled score</title>
+            <respStmt>
+               <persName role="composer">Composer / arranger</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-08-02T11:10:21" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Ties</rend>
+                        <lb />
+                        <rend type="subtitle" fontsize="large">Subtitle</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Composer / arranger</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffGrp bar.thru="true" symbol="brace">
+                        <label>Piano</label>
+                        <labelAbbr>Pno.</labelAbbr>
+                        <staffDef n="1" lines="5" meter.count="2" meter.unit="4">
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="2" lines="5" meter.count="2" meter.unit="4">
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                     </staffGrp>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m1" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <rest xml:id="s1l1_t0_1" dur="16" />
+                           <beam xml:id="m1s1l1b1">
+                              <note xml:id="s1l1_t1_16" dur="16" pname="c" oct="5" />
+                              <note xml:id="s1l1_t1_8" dur="16" pname="g" oct="4" />
+                              <note xml:id="s1l1_t3_16" dur="16" pname="e" oct="4" />
+                           </beam>
+                           <chord xml:id="s1l1_t1_4" dur="4">
+                              <note xml:id="m1s1l1n1" pname="c" oct="4" />
+                              <note xml:id="m1s1l1n2" pname="e" oct="4" />
+                              <note xml:id="m1s1l1n3" pname="g" oct="4" />
+                              <note xml:id="m1s1l1n4" pname="c" oct="5" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s2" n="2">
+                        <layer xml:id="m1s2l1" n="1">
+                           <mRest xml:id="s2l1_t0_1" />
+                        </layer>
+                     </staff>
+                     <tie xml:id="m1ti1" startid="#s1l1_t1_16" curvedir="above" endid="#m1s1l1n4" />
+                     <tie xml:id="m1ti2" startid="#s1l1_t1_8" curvedir="above" endid="#m1s1l1n3" />
+                     <tie xml:id="m1ti3" startid="#s1l1_t3_16" lform="dotted" endid="#m1s1l1n2" />
+                     <tie xml:id="m1ti4" startid="#m1s1l1n1" lform="dashed" endid="#m2s1l1n1" />
+                     <tie xml:id="m1ti5" startid="#m1s1l1n2" lform="dotted" endid="#m2s1l1n2" />
+                     <tie xml:id="m1ti6" startid="#m1s1l1n3" endid="#m2s1l1n3" />
+                     <tie xml:id="m1ti7" startid="#m1s1l1n4" endid="#m2s1l1n4" />
+                  </measure>
+                  <measure xml:id="m2" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <chord xml:id="s1l1_t1_2" dur="4">
+                              <note xml:id="m2s1l1n1" pname="c" oct="4" />
+                              <note xml:id="m2s1l1n2" pname="e" oct="4" />
+                              <note xml:id="m2s1l1n3" pname="g" oct="4" />
+                              <note xml:id="m2s1l1n4" pname="c" oct="5" />
+                           </chord>
+                           <chord xml:id="s1l1_t3_4" dur="4">
+                              <note xml:id="m2s1l1n5" pname="c" oct="4" />
+                              <note xml:id="m2s1l1n6" pname="e" oct="4" />
+                              <note xml:id="m2s1l1n7" pname="g" oct="4" />
+                              <note xml:id="m2s1l1n8" pname="c" oct="5" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s2" n="2">
+                        <layer xml:id="m2s2l1" n="1">
+                           <mRest xml:id="s2l1_t1_2" />
+                        </layer>
+                     </staff>
+                     <tie xml:id="m2ti1" startid="#m2s1l1n5" lform="dashed" endid="#m3s1l1n1" />
+                     <tie xml:id="m2ti2" startid="#m2s1l1n6" lform="dotted" endid="#m3s1l1n2" />
+                     <tie xml:id="m2ti3" startid="#m2s1l1n7" endid="#m3s1l1n3" />
+                     <tie xml:id="m2ti4" startid="#m2s1l1n8" endid="#m3s1l1n4" />
+                  </measure>
+                  <measure xml:id="m3" right="end" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <chord xml:id="s1l1_t1_1" dur="4">
+                              <note xml:id="m3s1l1n1" pname="c" oct="4" />
+                              <note xml:id="m3s1l1n2" pname="e" oct="4" />
+                              <note xml:id="m3s1l1n3" pname="g" oct="4" />
+                              <note xml:id="m3s1l1n4" pname="c" oct="5" />
+                           </chord>
+                           <beam xml:id="m3s1l1b1">
+                              <note xml:id="s1l1_t5_4" dur="16" pname="e" oct="4" />
+                              <note xml:id="s1l1_t21_16" dur="16" pname="g" oct="4" />
+                              <note xml:id="s1l1_t11_8" dur="16" pname="c" oct="5" />
+                           </beam>
+                           <rest xml:id="s1l1_t23_16" dur="16" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m3s2" n="2">
+                        <layer xml:id="m3s2l1" n="1">
+                           <mRest xml:id="s2l1_t1_1" />
+                        </layer>
+                     </staff>
+                     <tie xml:id="m3ti1" startid="#m3s1l1n2" lform="dotted" endid="#s1l1_t5_4" />
+                     <tie xml:id="m3ti2" startid="#m3s1l1n3" curvedir="above" endid="#s1l1_t21_16" />
+                     <tie xml:id="m3ti3" startid="#m3s1l1n4" endid="#s1l1_t11_8" />
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>

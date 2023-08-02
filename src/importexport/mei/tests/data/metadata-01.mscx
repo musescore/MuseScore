@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.10">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.74978</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="arranger">Arranger of the piece</metaTag>
+    <metaTag name="composer">Composer of the piece</metaTag>
+    <metaTag name="copyright">Public domain</metaTag>
+    <metaTag name="lyricist">Metastasio</metaTag>
+    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title&gt;Metadata test (title)&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;arranger&quot;&gt;Arranger of the piece&lt;/persName&gt;&lt;persName role=&quot;composer&quot;&gt;Composer of the piece&lt;/persName&gt;&lt;persName role=&quot;lyricist&quot;&gt;Metastasio&lt;/persName&gt;&lt;persName role=&quot;translator&quot;&gt;Deepl&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2023-08-02T11:10:10&quot;/&gt;&lt;availability&gt;&lt;distributor&gt;Public domain&lt;/distributor&gt;&lt;/availability&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
+    <metaTag name="movementNumber"></metaTag>
+    <metaTag name="movementTitle"></metaTag>
+    <metaTag name="poet"></metaTag>
+    <metaTag name="source"></metaTag>
+    <metaTag name="translator">Deepl</metaTag>
+    <metaTag name="workNumber"></metaTag>
+    <metaTag name="workTitle">Metadata test (title)</metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName></trackName>
+      <Instrument>
+        <longName>Oboe</longName>
+        <shortName>Ob.</shortName>
+        <trackName></trackName>
+        <Channel>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <Text>
+          <style>title</style>
+          <text>Metadata test</text>
+          </Text>
+        <Text>
+          <style>subtitle</style>
+          <text>Subtitle</text>
+          </Text>
+        <Text>
+          <style>composer</style>
+          <text>Composer / arranger</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <isHeader>1</isHeader>
+            </Clef>
+          <TimeSig>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
+          </voice>
+        </Measure>
+      </Staff>
+    </Score>
+  </museScore>
