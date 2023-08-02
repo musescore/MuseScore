@@ -36,6 +36,7 @@ namespace mu::engraving {
 class SlurSegment final : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, SlurSegment)
+    DECLARE_CLASSOF(ElementType::SLUR_SEGMENT)
 
 public:
     SlurSegment(System* parent);
