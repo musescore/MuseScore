@@ -676,6 +676,20 @@ inline bool isVerticalBoxTextStyle(TextStyleType type)
 
     return mu::contains(types, type);
 }
+
+struct StringTuningPreset
+{
+    std::string name;
+    std::vector<int> value;
+};
+
+struct StringTuningsInfo
+{
+    int number = 0;
+    std::vector<StringTuningPreset> presets;
+};
+
+using InstrumentStringTuningsMap = std::map<std::string, std::vector<StringTuningsInfo>>;
 }
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

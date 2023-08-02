@@ -4977,6 +4977,7 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
 
 void TLayout::layout(StringTunings* item, LayoutContext& ctx)
 {
+    item->updateText();
     layoutTextBase(item, ctx);
     Autoplace::autoplaceSegmentElement(item, item->mutldata());
 }

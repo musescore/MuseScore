@@ -33,16 +33,24 @@ Item {
 
     property alias isIndeterminate: textInputField.isIndeterminate
     property alias currentValue: textInputField.currentText
+
     property real step: 0.5
     property int decimals: 2
     property real maxValue: 999
     property real minValue: -999
     property alias validator: textInputField.validator
+
     property alias measureUnitsSymbol: textInputField.measureUnitsSymbol
 
     property alias navigation: textInputField.navigation
 
     readonly property int spacing: 8
+
+    property bool canIncrease: root.currentValue < root.maxValue
+    property var onIncrement: null
+
+    property bool canDecrease: root.currentValue > root.minValue
+    property var onDecrement: null
 
     signal valueEdited(var newValue)
     signal valueEditingFinished(var newValue)
@@ -53,27 +61,39 @@ Item {
     navigation.name: Boolean(root.objectName) ? root.objectName : "IncrementalControl"
 
     function increment() {
-        var value = root.isIndeterminate ? 0.0 : currentValue
-        var newValue = Math.min(value + step, root.maxValue)
+        var newValue
+        if (Boolean(onIncrement)) {
+            newValue = onIncrement()
+        } else {
+            var value = root.isIndeterminate ? 0.0 : currentValue
+            newValue = Math.min(value + step, root.maxValue)
 
-        if (newValue === value) {
-            return
+            if (newValue === value) {
+                return
+            }
+
+            newValue = +newValue.toFixed(decimals)
         }
 
-        newValue = +newValue.toFixed(decimals)
         root.valueEdited(newValue)
         root.valueEditingFinished(newValue)
     }
 
     function decrement() {
-        var value = root.isIndeterminate ? 0.0 : currentValue
-        var newValue = Math.max(value - step, root.minValue)
+        var newValue
+        if (Boolean(onDecrement)) {
+            newValue = onDecrement()
+        } else {
+            var value = root.isIndeterminate ? 0.0 : currentValue
+            newValue = Math.max(value - step, root.minValue)
 
-        if (newValue === value) {
-            return
+            if (newValue === value) {
+                return
+            }
+
+            newValue = +newValue.toFixed(decimals)
         }
 
-        newValue = +newValue.toFixed(decimals)
         root.valueEdited(newValue)
         root.valueEditingFinished(newValue)
     }
@@ -82,6 +102,12 @@ Item {
         Hidden,
         Left,
         Right
+    }
+
+    QtObject {
+        id: prv
+
+        property bool isCustom: Boolean(onIncrement) && Boolean(onDecrement)
     }
 
     Rectangle {
@@ -137,7 +163,7 @@ Item {
             bottom: root.minValue
         }
 
-        validator: root.decimals > 0 ? doubleInputValidator : intInputValidator
+        validator: !prv.isCustom ? (root.decimals > 0 ? doubleInputValidator : intInputValidator) : null
 
         containsMouse: mouseArea.containsMouse || valueAdjustControl.containsMouse
 
@@ -151,8 +177,8 @@ Item {
 
             radius: textInputField.background.radius - anchors.margins
 
-            canIncrease: root.currentValue < root.maxValue
-            canDecrease: root.currentValue > root.minValue
+            canIncrease: root.canIncrease
+            canDecrease: root.canDecrease
 
             onIncreaseButtonClicked: { root.increment() }
             onDecreaseButtonClicked: { root.decrement() }
@@ -194,6 +220,11 @@ Item {
         }
 
         onTextChanged: function(newTextValue) {
+            if (prv.isCustom) {
+                root.valueEdited(newTextValue)
+                return
+            }
+
             var newVal = parseFloat(newTextValue)
 
             if (isNaN(newVal)) {
@@ -204,6 +235,11 @@ Item {
         }
 
         onTextEditingFinished: function(newTextValue) {
+            if (prv.isCustom) {
+                root.valueEditingFinished(newTextValue)
+                return
+            }
+
             var newVal = parseFloat(newTextValue)
 
             if (isNaN(newVal)) {

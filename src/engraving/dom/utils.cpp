@@ -538,6 +538,46 @@ String pitch2string(int v)
 }
 
 /*!
+ * Returns the pitch number of the given string.
+ *
+ * @param s
+ *  The string representation of the note.
+ *
+ * @return
+ *  The pitch number of the note.
+ */
+int string2pitch(const String& s)
+{
+    if (s == String(u"----")) {
+        return -1;
+    }
+
+    String origin = s;
+
+    bool negative = s.contains(u'-');
+    int octave = String(s[s.size() - 1]).toInt() * (negative ? -1 : 1);
+    if (octave < -1 || octave > 9) {
+        return -1;
+    }
+
+    origin = origin.mid(0, origin.size() - (negative ? 2 : 1));
+
+    int pitchIndex = -1;
+    for (int i = 0; i < 12; ++i) {
+        if (origin.toLower() == String(octave < 0 ? valu[i] : vall[i]).toLower()) {
+            pitchIndex = i;
+            break;
+        }
+    }
+
+    if (pitchIndex == -1) {
+        return -1;
+    }
+
+    return (octave + 1) * 12 + pitchIndex;
+}
+
+/*!
  * An array of all supported interval sorted by size.
  *
  * Because intervals can be spelled differently, this array

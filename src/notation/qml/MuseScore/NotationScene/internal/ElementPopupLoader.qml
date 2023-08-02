@@ -53,6 +53,7 @@ Item {
             switch (type) {
             case Notation.TYPE_HARP_DIAGRAM: return harpPedalComp
             case Notation.TYPE_CAPO: return capoComp
+            case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
             }
 
             return null
@@ -126,6 +127,16 @@ Item {
     Component {
         id: capoComp
         CapoPopup {
+            onClosed: {
+                prv.resetOpenedPopup()
+                loader.sourceComponent = null
+            }
+        }
+    }
+
+    Component {
+        id: stringTuningsComp
+        StringTuningsPopup {
             onClosed: {
                 prv.resetOpenedPopup()
                 loader.sourceComponent = null

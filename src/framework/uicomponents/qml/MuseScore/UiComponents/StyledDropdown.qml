@@ -69,6 +69,34 @@ Item {
         return -1
     }
 
+    function indexOfText(text) {
+        if (!root.model) {
+            return -1
+        }
+
+        for (var i = 0; i < root.count; ++i) {
+            if (Utils.getItemValue(root.model, i, root.textRole) === text) {
+                return i
+            }
+        }
+
+        return -1
+    }
+
+    function textOfValue(value) {
+        if (!root.model) {
+            return ""
+        }
+
+        for (var i = 0; i < root.count; ++i) {
+            if (Utils.getItemValue(root.model, i, root.valueRole) === value) {
+                return Utils.getItemValue(model, i, textRole, indeterminateText)
+            }
+        }
+
+        return ""
+    }
+
     function ensureActiveFocus() {
         if (mainItem.navigation) {
             mainItem.navigation.requestActive()

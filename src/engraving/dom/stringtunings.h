@@ -32,22 +32,29 @@ class StringTunings final : public StaffTextBase
     OBJECT_ALLOCATOR(engraving, StringTunings)
     DECLARE_CLASSOF(ElementType::STRING_TUNINGS)
 
-    StringData* m_stringData = nullptr;
+    String m_preset;
 
 public:
     explicit StringTunings(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF);
     StringTunings(const StringTunings& s);
 
     StringTunings* clone() const override;
+    bool isEditable() const override;
 
     PropertyValue getProperty(Pid id) const override;
     PropertyValue propertyDefault(Pid id) const override;
     bool setProperty(Pid id, const PropertyValue& val) override;
 
-    StringData* stringData() const;
-    void setStringData(StringData* stringData);
+    const StringData* stringData() const;
+    void setStringData(const StringData& stringData);
+
+    String preset() const;
+    void setPreset(const String& preset);
 
     void updateText();
+
+private:
+    String generateText() const;
 };
 }
 
