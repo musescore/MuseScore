@@ -5395,9 +5395,9 @@ int Score::visiblePartCount() const
     return count;
 }
 
-ShadowNote& Score::shadowNote() const
+ShadowNote* Score::shadowNote() const
 {
-    return *m_shadowNote;
+    return m_shadowNote;
 }
 
 void Score::rebuildBspTree()
