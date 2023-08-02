@@ -104,6 +104,7 @@
 #include "libmscore/rest.h"
 
 #include "libmscore/score.h"
+#include "libmscore/shadownote.h"
 #include "libmscore/staff.h"
 #include "libmscore/stretchedbend.h"
 
@@ -260,6 +261,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::REST:                 draw(item_cast<const Rest*>(item), painter);
         break;
 
+    case ElementType::SHADOW_NOTE:          draw(item_cast<const ShadowNote*>(item), painter);
+        break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
     default:
@@ -2097,4 +2100,101 @@ void TDraw::draw(const Rest* item, Painter* painter)
     }
     painter->setPen(item->curColor());
     item->drawSymbol(item->sym(), painter);
+}
+
+//! NOTE Can be removed later (should be only single mode)
+void TDraw::draw(const ShadowNote* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (!item->visible() || !item->isValid()) {
+        return;
+    }
+
+    PointF ap(item->pagePos());
+    painter->translate(ap);
+    double lw = item->style().styleMM(Sid::stemWidth) * item->mag();
+    Pen pen(item->engravingConfiguration()->highlightSelectionColor(item->voice()), lw, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    painter->setPen(pen);
+
+    bool up = item->computeUp();
+
+    // Draw the accidental
+    SymId acc = Accidental::subtype2symbol(item->score()->inputState().accidentalType());
+    if (acc != SymId::noSym) {
+        PointF posAcc;
+        posAcc.rx() -= item->symWidth(acc) + item->style().styleMM(Sid::accidentalNoteDistance) * item->mag();
+        item->drawSymbol(acc, painter, posAcc);
+    }
+
+    // Draw the notehead
+    item->drawSymbol(item->noteheadSymbol(), painter);
+
+    // Draw the dots
+    double sp = item->spatium();
+    double sp2 = sp / 2;
+    double noteheadWidth = item->symWidth(item->noteheadSymbol());
+
+    PointF posDot;
+    if (item->duration().dots() > 0) {
+        double d  = item->style().styleMM(Sid::dotNoteDistance) * item->mag();
+        double dd = item->style().styleMM(Sid::dotDotDistance) * item->mag();
+        posDot.rx() += (noteheadWidth + d);
+
+        if (item->isRest()) {
+            posDot.ry() += Rest::getDotline(item->duration().type()) * sp2;
+        } else {
+            posDot.ry() -= (item->lineIndex() % 2 == 0 ? sp2 : 0);
+        }
+
+        if (item->hasFlag() && up) {
+            posDot.rx() = std::max(posDot.rx(), noteheadWidth + item->symBbox(item->flagSym()).right());
+        }
+
+        for (int i = 0; i < item->duration().dots(); i++) {
+            posDot.rx() += dd * i;
+            item->drawSymbol(SymId::augmentationDot, painter, posDot);
+            posDot.rx() -= dd * i;
+        }
+    }
+
+    // Draw stem and flag
+    if (item->hasStem()) {
+        double x = up ? (noteheadWidth - (lw / 2)) : lw / 2;
+        double y1 = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
+        double y2 = (up ? -3.5 : 3.5) * sp;
+
+        if (item->hasFlag()) {
+            SymId flag = item->flagSym();
+            item->drawSymbol(flag, painter, PointF(x - (lw / 2), y2));
+            y2 += item->symSmuflAnchor(flag, up ? SmuflAnchorId::stemUpNW : SmuflAnchorId::stemDownSW).y();
+        }
+        painter->drawLine(LineF(x, y1, x, y2));
+    }
+
+    // Draw ledger lines if needed
+    if (!item->isRest() && item->lineIndex() < 100 && item->lineIndex() > -100) {
+        double extraLen = item->style().styleS(Sid::ledgerLineLength).val() * sp;
+        double x1 = -extraLen;
+        double x2 = noteheadWidth + extraLen;
+        double step = sp2 * item->staffType()->lineDistance().val();
+
+        lw = item->style().styleMM(Sid::ledgerLineWidth) * item->mag();
+        pen.setWidthF(lw);
+        painter->setPen(pen);
+
+        for (int i = -2; i >= item->lineIndex(); i -= 2) {
+            double y = step * (i - item->lineIndex());
+            painter->drawLine(LineF(x1, y, x2, y));
+        }
+        int l = item->staffType()->lines() * 2; // first ledger line below staff
+        for (int i = l; i <= item->lineIndex(); i += 2) {
+            double y = step * (i - item->lineIndex());
+            painter->drawLine(LineF(x1, y, x2, y));
+        }
+    }
+
+    item->drawArticulations(painter);
+
+    painter->translate(-ap);
 }

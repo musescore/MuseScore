@@ -268,7 +268,7 @@ public:
     RootItem* rootItem() const { return m_rootItem; }
     compat::DummyElement* dummy() const { return m_rootItem->dummy(); }
 
-    ShadowNote& shadowNote() const;
+    ShadowNote* shadowNote() const;
 
     mu::async::Channel<POS, unsigned> posChanged() const;
     void notifyPosChanged(POS pos, unsigned ticks);

@@ -302,7 +302,7 @@ void NotationInteraction::notifyAboutNoteInputStateChanged()
 
 void NotationInteraction::paint(mu::draw::Painter* painter)
 {
-    score()->shadowNote().draw(painter);
+    EngravingItem::renderer()->drawItem(score()->shadowNote(), painter);
 
     drawAnchorLines(painter);
     drawTextEditMode(painter);
@@ -326,7 +326,7 @@ INotationNoteInputPtr NotationInteraction::noteInput() const
 void NotationInteraction::showShadowNote(const PointF& pos)
 {
     const mu::engraving::InputState& inputState = score()->inputState();
-    mu::engraving::ShadowNote& shadowNote = score()->shadowNote();
+    mu::engraving::ShadowNote& shadowNote = *score()->shadowNote();
 
     mu::engraving::Position position;
     if (!score()->getPosition(&position, pos, inputState.voice())) {
@@ -409,7 +409,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
 
 void NotationInteraction::hideShadowNote()
 {
-    score()->shadowNote().setVisible(false);
+    score()->shadowNote()->setVisible(false);
 }
 
 void NotationInteraction::toggleVisible()
