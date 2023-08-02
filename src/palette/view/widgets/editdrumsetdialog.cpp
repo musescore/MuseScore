@@ -429,6 +429,15 @@ void EditDrumsetDialog::bboxClicked(QAbstractButton* button)
 void EditDrumsetDialog::apply()
 {
     valueChanged();    //save last changes in name
+
+    //! NOTE: The note input state changes inside valueChanged,
+    //! so to update the state of the drumset panel view, need to notify the change
+    notifyAboutNoteInputStateChanged();
+}
+
+void EditDrumsetDialog::notifyAboutNoteInputStateChanged()
+{
+    m_notation->interaction()->noteInput()->stateChanged().notify();
 }
 
 void EditDrumsetDialog::cancel()
