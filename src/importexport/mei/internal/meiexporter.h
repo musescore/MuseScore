@@ -180,9 +180,9 @@ private:
     /** A flag indicating that we have mulitple sections in the file */
     bool m_hasSections;
 
-    std::map<const engraving::EngravingItem*, std::string> m_startingControlEventMap;
+    std::list<std::pair<const engraving::EngravingItem*, std::string> > m_startingControlEventMap;
     std::map<const engraving::EngravingItem*, std::string> m_endingControlEventMap;
-    std::map<const engraving::EngravingItem*, std::pair<libmei::xsdPositiveInteger_List, double> > m_tstampControlEventMap;
+    std::list<std::pair<const engraving::EngravingItem*, std::pair<libmei::xsdPositiveInteger_List, double> > > m_tstampControlEventMap;
     std::map<const engraving::EngravingItem*, pugi::xml_node> m_openControlEventMap;
 
     std::list<MeiExporter::RepeatMark> m_repeatMarks;
