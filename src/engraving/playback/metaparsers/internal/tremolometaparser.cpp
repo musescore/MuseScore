@@ -82,9 +82,14 @@ void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContex
         overallDurationTicks = tremolo->chord1()->actualTicks().ticks() + tremolo->chord2()->actualTicks().ticks();
     }
 
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
+    if (pattern.empty()) {
+        return;
+    }
+
     mpe::ArticulationMeta articulationMeta;
     articulationMeta.type = type;
-    articulationMeta.pattern = ctx.profile->pattern(type);
+    articulationMeta.pattern = pattern;
     articulationMeta.timestamp = ctx.nominalTimestamp;
     articulationMeta.overallDuration = durationFromTicks(ctx.beatsPerSecond.val, overallDurationTicks);
 
