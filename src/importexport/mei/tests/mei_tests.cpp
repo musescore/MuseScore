@@ -76,13 +76,21 @@ void Mei_Tests::meiReadTest(const char* file, const char* ext)
         return;
     }
 
-    // Save the .mei file to the ./tmp directory for round trip testing
-    bool output = ScoreRW::saveScore(score, ScoreRW::rootPath() + u"/" + TMP_DIR + fileName + u".mei", exportFunc);
+    // Compare with the reference MuseScore file
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, fileName + u".mscx", MEI_DIR + fileName + u".mscx"));
+
+    // Save the .mei file for round trip testing
+    bool output = ScoreRW::saveScore(score,  fileName + u".test.mei", exportFunc);
     EXPECT_TRUE(output);
     delete score;
 
+    // Potentially directly compare the mei files
+    // This currently passes inconsitently because of some order differences in the xml elements
+    // If this can be fixed, we can used that for testing and not re-import the mei file again
+    // EXPECT_TRUE(ScoreComp::compareFiles(fileName + u".test.mei", ScoreRW::rootPath() + u"/" + MEI_DIR + fileName + u".mei"))
+
     // Reload the generated .mei file
-    MasterScore* score2 = ScoreRW::readScore(TMP_DIR + fileName + u".mei", false, importFunc);
+    MasterScore* score2 = ScoreRW::readScore(fileName + u".test.mei", true, importFunc);
     EXPECT_TRUE(score2);
 
     // Compare with the reference MuseScore file
