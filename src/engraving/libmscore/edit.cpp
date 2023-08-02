@@ -5731,10 +5731,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || (et == ElementType::TEMPO_TEXT)
         || isSystemLine
         ) {
-        std::vector<Staff* > staffList;
+        std::list<Staff* > staffList;
 
         if (!addToLinkedStaves || (ctrlModifier && isSystemLine)) {
-            staffList.push_back(element->staff());
+            staffList = ostaff->staffList();
             if (ctrlModifier && isSystemLine) {
                 element->setSystemFlag(false);
             }
