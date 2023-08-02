@@ -99,15 +99,16 @@
 #include "libmscore/pickscrape.h"
 #include "libmscore/playtechannotation.h"
 
-#include "libmscore/text.h"
-#include "libmscore/textbase.h"
-#include "libmscore/textlinebase.h"
-
-#include "libmscore/tie.h"
+#include "libmscore/rasgueado.h"
 
 #include "libmscore/score.h"
 #include "libmscore/staff.h"
 #include "libmscore/stretchedbend.h"
+
+#include "libmscore/text.h"
+#include "libmscore/textbase.h"
+#include "libmscore/textlinebase.h"
+#include "libmscore/tie.h"
 
 #include "libmscore/mscoreview.h"
 
@@ -237,21 +238,22 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
-
-    case ElementType::STRETCHED_BEND: draw(item_cast<const StretchedBend*>(item), painter);
-        break;
-
     case ElementType::OTTAVA_SEGMENT: draw(item_cast<const OttavaSegment*>(item), painter);
         break;
 
     case ElementType::PALM_MUTE_SEGMENT: draw(item_cast<const PalmMuteSegment*>(item), painter);
         break;
-
     case ElementType::PEDAL_SEGMENT: draw(item_cast<const PedalSegment*>(item), painter);
         break;
     case ElementType::PICK_SCRAPE_SEGMENT: draw(item_cast<const PickScrapeSegment*>(item), painter);
         break;
     case ElementType::PLAYTECH_ANNOTATION: draw(item_cast<const PlayTechAnnotation*>(item), painter);
+        break;
+
+    case ElementType::RASGUEADO_SEGMENT: draw(item_cast<const RasgueadoSegment*>(item), painter);
+        break;
+
+    case ElementType::STRETCHED_BEND: draw(item_cast<const StretchedBend*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2037,4 +2039,10 @@ void TDraw::draw(const PlayTechAnnotation* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const RasgueadoSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
 }
