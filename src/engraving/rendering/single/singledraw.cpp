@@ -58,6 +58,8 @@
 
 #include "libmscore/ornament.h"
 
+#include "libmscore/stretchedbend.h"
+
 #include "libmscore/textbase.h"
 
 #include "infrastructure/rtti.h"
@@ -122,6 +124,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
+        break;
+
+    case ElementType::STRETCHED_BEND: draw(item_cast<const StretchedBend*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -981,6 +986,84 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter)
         }
     }
     painter->restore();
+}
+
+void SingleDraw::draw(const StretchedBend* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    double sp = item->spatium();
+    const mu::draw::Color& color = item->curColor();
+    const int textFlags = item->textFlags();
+
+    Pen pen(color, item->lineWidth(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    painter->setPen(pen);
+    painter->setBrush(Brush(color));
+    mu::draw::Font f = item->font(sp * MScore::pixelRatio);
+    painter->setFont(f);
+
+    bool isTextDrawn = false;
+
+    for (const StretchedBend::BendSegment& bendSegment : item->bendSegmentsStretched()) {
+        if (!bendSegment.visible) {
+            continue;
+        }
+
+        const PointF& src = bendSegment.src;
+        const PointF& dest = bendSegment.dest;
+        const String& text = item->toneToLabel(bendSegment.tone);
+
+        switch (bendSegment.type) {
+        case StretchedBend::BendSegmentType::LINE_UP:
+        {
+            painter->drawLine(LineF(src, dest));
+            painter->setBrush(color);
+            painter->drawPolygon(item->arrows().up.translated(dest));
+            /// TODO: remove substraction after fixing bRect
+            PointF pos = dest - PointF(0, sp * 0.5);
+            painter->drawText(RectF(pos.x(), pos.y(), .0, .0), textFlags, text);
+            break;
+        }
+
+        case StretchedBend::BendSegmentType::CURVE_UP:
+        case StretchedBend::BendSegmentType::CURVE_DOWN:
+        {
+            bool bendUp = (bendSegment.type == StretchedBend::BendSegmentType::CURVE_UP);
+            double endY = dest.y() + item->arrows().width * (bendUp ? 1 : -1);
+
+            PainterPath path = item->bendCurveFromPoints(src, PointF(dest.x(), endY));
+            const auto& arrowPath = (bendUp ? item->arrows().up : item->arrows().down);
+
+            painter->setBrush(BrushStyle::NoBrush);
+            painter->drawPath(path);
+            painter->setBrush(color);
+            painter->drawPolygon(arrowPath.translated(dest));
+
+            if (bendUp && !isTextDrawn) {
+                /// TODO: remove subtraction after fixing bRect
+                PointF pos = dest - PointF(0, sp * 0.5);
+                painter->drawText(RectF(pos.x(), pos.y(), .0, .0), textFlags, text);
+                isTextDrawn = true;
+            }
+
+            break;
+        }
+
+        case StretchedBend::BendSegmentType::LINE_STROKED:
+        {
+            PainterPath path;
+            path.moveTo(src + PointF(item->arrows().width, 0));
+            path.lineTo(dest);
+            Pen p(painter->pen());
+            p.setStyle(PenStyle::DashLine);
+            painter->strokePath(path, p);
+            break;
+        }
+
+        default:
+            break;
+        }
+    }
 }
 
 void SingleDraw::drawTextBase(const TextBase* item, Painter* painter)
