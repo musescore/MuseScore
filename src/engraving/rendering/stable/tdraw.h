@@ -236,6 +236,7 @@ private:
 
     static void draw(const Note* item, draw::Painter* painter);
     static void draw(const NoteDot* item, draw::Painter* painter);
+    static void draw(const NoteHead* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
     static void draw(const OttavaSegment* item, draw::Painter* painter);
@@ -259,6 +260,7 @@ private:
     static void draw(const StemSlash* item, draw::Painter* painter);
     static void draw(const Sticking* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
+    static void draw(const Symbol* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);

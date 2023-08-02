@@ -115,6 +115,7 @@
 #include "libmscore/stemslash.h"
 #include "libmscore/sticking.h"
 #include "libmscore/stretchedbend.h"
+#include "libmscore/symbol.h"
 
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
@@ -246,6 +247,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::NOTEDOT:      draw(item_cast<const NoteDot*>(item), painter);
         break;
+    case ElementType::NOTEHEAD:     draw(item_cast<const NoteHead*>(item), painter);
+        break;
 
     case ElementType::ORNAMENT:     draw(item_cast<const Ornament*>(item), painter);
         break;
@@ -287,6 +290,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::STICKING:             draw(item_cast<const Sticking*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
+        break;
+    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2044,6 +2049,11 @@ void TDraw::draw(const NoteDot* item, Painter* painter)
     }
 }
 
+void TDraw::draw(const NoteHead* item, Painter* painter)
+{
+    draw(static_cast<const Symbol*>(item), painter);
+}
+
 void TDraw::draw(const OttavaSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -2399,4 +2409,17 @@ void TDraw::draw(const Sticking* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const Symbol* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (!item->isNoteDot() || !item->staff()->isTabStaff(item->tick())) {
+        painter->setPen(item->curColor());
+        if (item->scoreFont()) {
+            item->scoreFont()->draw(item->sym(), painter, item->magS(), PointF());
+        } else {
+            item->drawSymbol(item->sym(), painter);
+        }
+    }
 }

@@ -80,6 +80,8 @@
 #include "libmscore/measurenumber.h"
 #include "libmscore/measurerepeat.h"
 
+#include "libmscore/note.h";
+
 #include "libmscore/ornament.h"
 #include "libmscore/ottava.h"
 
@@ -100,6 +102,7 @@
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftypechange.h"
 #include "libmscore/stretchedbend.h"
+#include "libmscore/symbol.h"
 
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
@@ -206,6 +209,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::MEASURE_REPEAT:       draw(item_cast<const MeasureRepeat*>(item), painter);
         break;
 
+    case ElementType::NOTEHEAD:             draw(item_cast<const NoteHead*>(item), painter);
+        break;
+
     case ElementType::ORNAMENT:             draw(item_cast<const Ornament*>(item), painter);
         break;
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter);
@@ -241,7 +247,10 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
+    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
+        break;
     default:
+        LOGD() << item->typeName();
         item->draw(painter);
     }
 }
@@ -350,6 +359,11 @@ void SingleDraw::draw(const Articulation* item, draw::Painter* painter)
         painter->setFont(scaledFont);
         painter->drawText(item->bbox(), TextDontClip | AlignLeft | AlignTop, TConv::text(item->textType()));
     }
+}
+
+void SingleDraw::draw(const NoteHead* item, Painter* painter)
+{
+    draw(static_cast<const Symbol*>(item), painter);
 }
 
 void SingleDraw::draw(const Ornament* item, draw::Painter* painter)
@@ -1847,5 +1861,18 @@ void SingleDraw::draw(const StaffTypeChange* item, Painter* painter)
     for (int i=0; i < lines; i++) {
         int y = (startY + i * lineDist) * _spatium;
         painter->drawLine(0, y, w, y);
+    }
+}
+
+void SingleDraw::draw(const Symbol* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (!item->isNoteDot() || !item->staff()->isTabStaff(item->tick())) {
+        painter->setPen(item->curColor());
+        if (item->scoreFont()) {
+            item->scoreFont()->draw(item->sym(), painter, item->magS(), PointF());
+        } else {
+            item->drawSymbol(item->sym(), painter);
+        }
     }
 }
