@@ -43,6 +43,7 @@
 #include "capo.h"
 #include "engravingitem.h"
 #include "excerpt.h"
+#include "factory.h"
 #include "fret.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
@@ -2177,7 +2178,19 @@ void InsertRemoveMeasures::removeMeasures()
                         toStaffTypeChange(el)->setStaffType(staff->staffType(fm->tick()), false);
                     }
                 }
-            }
+            } /*else {
+                StaffTypeList staffTypeList = staff->staffTypeList();
+                Fraction staffTypeStart = Fraction::fromTicks(staffTypeList.staffTypeRange(tick2 - Fraction::eps()).first);
+                if (staffTypeStart >= tick1) {
+                    for (auto el : score->tick2measure(staffTypeStart)->el()) {
+                        if (el && el->isStaffTypeChange()) {
+
+                        }
+                    }
+                    StaffTypeChange* stc = mu::engraving::Factory::createStaffTypeChange(lm);
+                    stc->setTrack()
+                }
+            }*/
         }
     }
 

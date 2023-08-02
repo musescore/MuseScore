@@ -222,6 +222,7 @@ public:
     void clearCapoParams();
 
     //==== staff type helper function
+    //const StaffTypeList staffTypeList() const { return _staffTypeList; }
     const StaffType* staffType(const Fraction& = Fraction(0, 1)) const;
     const StaffType* constStaffType(const Fraction&) const;
     const StaffType* staffTypeForElement(const EngravingItem*) const;
