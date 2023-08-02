@@ -97,6 +97,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/spacer.h"
 #include "libmscore/staffstate.h"
+#include "libmscore/stafftext.h"
 #include "libmscore/stretchedbend.h"
 
 #include "libmscore/text.h"
@@ -232,6 +233,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::SPACER:               draw(item_cast<const Spacer*>(item), painter);
         break;
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter);
+        break;
+    case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
@@ -1798,4 +1801,10 @@ void SingleDraw::draw(const StaffState* item, Painter* painter)
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(item->path());
+}
+
+void SingleDraw::draw(const StaffText* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
