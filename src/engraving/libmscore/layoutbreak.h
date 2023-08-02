@@ -72,7 +72,7 @@ public:
 
     void layout0();
 
-    double lw() const { return m_lw; }
+    double lineWidth() const { return m_lw; }
     const RectF& iconBorderRect() const { return m_iconBorderRect; }
     const draw::PainterPath& iconPath() const { return m_iconPath; }
 

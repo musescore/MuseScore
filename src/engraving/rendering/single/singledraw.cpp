@@ -1507,7 +1507,7 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter)
 
     Pen pen;
     pen.setColor(item->engravingConfiguration()->fontPrimaryColor());
-    pen.setWidthF(item->lw() / 2);
+    pen.setWidthF(item->lineWidth() / 2);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     pen.setCapStyle(PenCapStyle::SquareCap);
     pen.setDashPattern({ 1, 3 });
@@ -1516,7 +1516,7 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(item->iconBorderRect());
 
-    pen.setWidthF(item->lw());
+    pen.setWidthF(item->lineWidth());
     pen.setStyle(PenStyle::SolidLine);
 
     painter->setPen(pen);
