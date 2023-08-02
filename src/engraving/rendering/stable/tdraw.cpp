@@ -1722,11 +1722,6 @@ void TDraw::draw(const KeySig* item, Painter* painter)
             painter->drawLine(LineF(x1, y, x2, y));
         }
     }
-    if (!item->explicitParent() && (item->isAtonal() || item->isCustom()) && item->keySymbols().empty()) {
-        // empty custom or atonal key signature - draw something for palette
-        painter->setPen(item->engravingConfiguration()->formattingMarksColor());
-        item->drawSymbol(SymId::timeSigX, painter, PointF(item->symWidth(SymId::timeSigX) * -0.5, 2.0 * item->spatium()));
-    }
 }
 
 void TDraw::draw(const LayoutBreak* item, Painter* painter)
@@ -1741,7 +1736,7 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter)
     if (item->score()->isPaletteScore()) {
         pen.setColor(item->engravingConfiguration()->fontPrimaryColor());
     }
-    pen.setWidthF(item->lw() / 2);
+    pen.setWidthF(item->lineWidth() / 2);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
     pen.setCapStyle(PenCapStyle::SquareCap);
     pen.setDashPattern({ 1, 3 });
@@ -1750,7 +1745,7 @@ void TDraw::draw(const LayoutBreak* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawRect(item->iconBorderRect());
 
-    pen.setWidthF(item->lw());
+    pen.setWidthF(item->lineWidth());
     pen.setStyle(PenStyle::SolidLine);
 
     painter->setPen(pen);
@@ -1826,29 +1821,27 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter)
     painter->setPen(item->curColor());
     item->drawSymbol(item->symId(), painter);
 
-    if (item->track() != mu::nidx) { // in score rather than palette
-        if (!item->numberSym().empty()) {
-            PointF numberPos = item->numberPosition(item->symBbox(item->numberSym()));
-            item->drawSymbols(item->numberSym(), painter, numberPos);
-        }
+    if (!item->numberSym().empty()) {
+        PointF numberPos = item->numberPosition(item->symBbox(item->numberSym()));
+        item->drawSymbols(item->numberSym(), painter, numberPos);
+    }
 
-        if (item->style().styleB(Sid::fourMeasureRepeatShowExtenders) && item->numMeasures() == 4) {
-            // TODO: add style settings specific to measure repeats
-            // for now, using thickness and margin same as mmrests
-            double hBarThickness = item->style().styleMM(Sid::mmRestHBarThickness);
-            if (hBarThickness) { // don't draw at all if 0, QPainter interprets 0 pen width differently
-                Pen pen(painter->pen());
-                pen.setCapStyle(PenCapStyle::FlatCap);
-                pen.setWidthF(hBarThickness);
-                painter->setPen(pen);
+    if (item->style().styleB(Sid::fourMeasureRepeatShowExtenders) && item->numMeasures() == 4) {
+        // TODO: add style settings specific to measure repeats
+        // for now, using thickness and margin same as mmrests
+        double hBarThickness = item->style().styleMM(Sid::mmRestHBarThickness);
+        if (hBarThickness) {     // don't draw at all if 0, QPainter interprets 0 pen width differently
+            Pen pen(painter->pen());
+            pen.setCapStyle(PenCapStyle::FlatCap);
+            pen.setWidthF(hBarThickness);
+            painter->setPen(pen);
 
-                double twoMeasuresWidth = 2 * item->measure()->width();
-                double margin = item->style().styleMM(Sid::multiMeasureRestMargin);
-                double xOffset = item->symBbox(item->symId()).width() * .5;
-                double gapDistance = (item->symBbox(item->symId()).width() + item->spatium()) * .5;
-                painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
-                painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
-            }
+            double twoMeasuresWidth = 2 * item->measure()->width();
+            double margin = item->style().styleMM(Sid::multiMeasureRestMargin);
+            double xOffset = item->symBbox(item->symId()).width() * .5;
+            double gapDistance = (item->symBbox(item->symId()).width() + item->spatium()) * .5;
+            painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
+            painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
         }
     }
 }
