@@ -64,8 +64,29 @@ ScoresView {
     Component {
         id: gridComp
 
-        ScoresView.Grid {
+        ScoresGridView {
             id: grid
+
+            anchors.fill: parent
+
+            model: root.model
+            searchText: root.searchText
+
+            backgroundColor: root.backgroundColor
+            sideMargin: root.sideMargin
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrder
+            navigation.name: "OnlineScoresGrid"
+            navigation.accessible.name: qsTrc("project", "Online scores grid")
+
+            onCreateNewScoreRequested: {
+                root.createNewScoreRequested()
+            }
+
+            onOpenScoreRequested: function(scorePath, displayName) {
+                root.openScoreRequested(scorePath, displayName)
+            }
 
             readonly property int remainingFullRowsBelowViewport:
                 Math.floor(cloudScoresModel.rowCount / view.columns) - Math.ceil((view.contentY + view.height) / view.cellHeight)
@@ -98,9 +119,6 @@ ScoresView {
                 })
             }
 
-            navigation.name: "OnlineScoresGrid"
-            navigation.accessible.name: qsTrc("project", "Online scores grid")
-
             view.footer: cloudScoresModel.state === CloudScoresModel.Loading
                          ? busyIndicatorComp : null
 
@@ -127,8 +145,29 @@ ScoresView {
     Component {
         id: listComp
 
-        ScoresView.List {
+        ScoresListView {
             id: list
+
+            anchors.fill: parent
+
+            model: root.model
+            searchText: root.searchText
+
+            backgroundColor: root.backgroundColor
+            sideMargin: root.sideMargin
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrder
+            navigation.name: "OnlineScoresList"
+            navigation.accessible.name: qsTrc("project", "Online scores list")
+
+            onCreateNewScoreRequested: {
+                root.createNewScoreRequested()
+            }
+
+            onOpenScoreRequested: function(scorePath, displayName) {
+                root.openScoreRequested(scorePath, displayName)
+            }
 
             readonly property int remainingScoresBelowViewport:
                 cloudScoresModel.rowCount - Math.ceil((view.contentY + view.height) / view.rowHeight)
@@ -160,9 +199,6 @@ ScoresView {
                     updateDesiredRowCountScheduled = false
                 })
             }
-
-            navigation.name: "OnlineScoresList"
-            navigation.accessible.name: qsTrc("project", "Online scores list")
 
             columns: [
                 ScoresListView.ColumnItem {

@@ -42,22 +42,58 @@ ScoresView {
     Component {
         id: gridComp
 
-        ScoresView.Grid {
+        ScoresGridView {
+            anchors.fill: parent
+
+            model: root.model
+            searchText: root.searchText
+
+            backgroundColor: root.backgroundColor
+            sideMargin: root.sideMargin
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrder
             navigation.name: "RecentScoresGrid"
             navigation.accessible.name: qsTrc("project", "Recent scores grid")
+
+            onCreateNewScoreRequested: {
+                root.createNewScoreRequested()
+            }
+
+            onOpenScoreRequested: function(scorePath, displayName) {
+                root.openScoreRequested(scorePath, displayName)
+            }
         }
     }
 
     Component {
         id: listComp
 
-        ScoresView.List {
+        ScoresListView {
             id: list
+
+            anchors.fill: parent
+
+            model: root.model
+            searchText: root.searchText
+
+            backgroundColor: root.backgroundColor
+            sideMargin: root.sideMargin
 
             showNewScoreItem: true
 
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrder
             navigation.name: "RecentScoresList"
             navigation.accessible.name: qsTrc("project", "Recent scores list")
+
+            onCreateNewScoreRequested: {
+                root.createNewScoreRequested()
+            }
+
+            onOpenScoreRequested: function(scorePath, displayName) {
+                root.openScoreRequested(scorePath, displayName)
+            }
 
             columns: [
                 ScoresListView.ColumnItem {
