@@ -1392,6 +1392,7 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
     case ElementType::FRET_DIAGRAM:
+    case ElementType::STRING_TUNINGS:
         e->setParent(seg);
         e->setTrack(staffIdx * VOICES);
         score()->undoAddElement(e);

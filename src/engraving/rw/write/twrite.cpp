@@ -2550,7 +2550,7 @@ void TWrite::write(const StringData* item, XmlWriter& xml)
     xml.tag("frets", item->frets());
     for (const instrString& strg : item->stringList()) {
         if (strg.open) {
-            xml.tag("string open=\"1\"", strg.pitch);
+            xml.tag("string", { { "open", "1" } }, strg.pitch);
         } else {
             xml.tag("string", strg.pitch);
         }
@@ -2561,22 +2561,9 @@ void TWrite::write(const StringData* item, XmlWriter& xml)
 void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
-//    writeProperty(item, xml, Pid::ACTIVE);
-//    writeProperty(item, xml, Pid::CAPO_FRET_POSITION);
-//    writeProperty(item, xml, Pid::CAPO_GENERATE_TEXT);
-//
-//    std::set<string_idx_t> orderedStrings;
-//    for (string_idx_t idx : item->params().ignoredStrings) {
-//        orderedStrings.insert(idx);
-//    }
-//
-//    for (string_idx_t idx : orderedStrings) {
-//        xml.startElement("string", { { "no", idx } });
-//        xml.tag("apply", false);
-//        xml.endElement();
-//    }
 
-    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
+    writeProperty(item, xml, Pid::STRINGTUNINGS_PRESET);
+
     xml.endElement();
 }
 

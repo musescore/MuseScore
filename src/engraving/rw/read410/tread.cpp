@@ -3873,7 +3873,9 @@ void TRead::read(StringTunings* s, XmlReader& xml, ReadContext& ctx)
     while (xml.readNextStartElement()) {
         const AsciiStringView tag(xml.name());
 
-        if (!readProperties(static_cast<StaffTextBase*>(s), xml, ctx)) {
+        if (tag == "preset") {
+            s->setPreset(xml.readText());
+        } else if (!readProperties(static_cast<StaffTextBase*>(s), xml, ctx)) {
             xml.unknown();
         }
     }

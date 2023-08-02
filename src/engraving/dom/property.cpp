@@ -406,6 +406,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "ignored strings") },
     { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "automatically generate text") },
 
+    { Pid::STRINGTUNINGS_STRINGS_COUNT, true,  "stringsCount",      P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "strings count") },
+    { Pid::STRINGTUNINGS_PRESET,    true,  "preset",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "strings preset") },
+
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
 /* *INDENT-ON* */

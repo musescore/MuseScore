@@ -27,12 +27,14 @@
 #include "async/channel.h"
 #include "async/asyncable.h"
 
+#include "io/ifilesystem.h"
 #include "iinstrumentsrepository.h"
 #include "inotationconfiguration.h"
 
 namespace mu::notation {
 class InstrumentsRepository : public IInstrumentsRepository, public async::Asyncable
 {
+    INJECT(io::IFileSystem, fileSystem)
     INJECT(INotationConfiguration, configuration)
 
 public:
@@ -47,13 +49,18 @@ public:
     const InstrumentGenreList& genres() const override;
     const InstrumentGroupList& groups() const override;
 
+    const InstrumentStringTuningsMap& stringTuningsPresets() const override;
+
 private:
     void load();
     void clear();
 
+    bool loadStringTuningsPresets(const io::path_t& path);
+
     InstrumentTemplateList m_instrumentTemplates;
     InstrumentGroupList m_groups;
     InstrumentGenreList m_genres;
+    InstrumentStringTuningsMap m_stringTuningsPresets;
 };
 }
 

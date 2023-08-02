@@ -21,6 +21,8 @@
  */
 #include "instrumentsrepository.h"
 
+#include "global/serialization/json.h"
+
 #include "log.h"
 #include "translation.h"
 
@@ -90,6 +92,11 @@ const InstrumentGroupList& InstrumentsRepository::groups() const
     return m_groups;
 }
 
+const InstrumentStringTuningsMap& InstrumentsRepository::stringTuningsPresets() const
+{
+    return m_stringTuningsPresets;
+}
+
 void InstrumentsRepository::load()
 {
     TRACEFUNC;
@@ -126,4 +133,76 @@ void InstrumentsRepository::load()
             m_instrumentTemplates << templ;
         }
     }
+
+    io::path_t stringTuningsPresetsPath = configuration()->stringTuningsPresetsPath();
+    if (!loadStringTuningsPresets(stringTuningsPresetsPath)) { // todo
+        LOGE() << "Could not load string tunings presets from " << stringTuningsPresetsPath << "!";
+    }
+}
+
+bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
+{
+    Ret ret = fileSystem()->exists(path);
+    if (!ret) {
+        LOGE() << ret.toString();
+        return false;
+    }
+
+    RetVal<ByteArray> retVal = fileSystem()->readFile(path);
+    if (!retVal.ret) {
+        LOGE() << retVal.ret.toString();
+        return false;
+    }
+
+    std::string err;
+    JsonArray arr = JsonDocument::fromJson(retVal.val, &err).rootArray();
+    if (!err.empty()) {
+        LOGE() << "failed parse string tunings presets, err: " << err;
+        return false;
+    }
+
+    for (size_t i = 0; i < arr.size(); ++i) {
+        const JsonValue& familyOrInstrumentVal = arr.at(i);
+        JsonObject familyOrInstrumentObj = familyOrInstrumentVal.toObject();
+
+        std::vector<StringTuningsInfo> strings;
+
+        JsonArray stringsArr = familyOrInstrumentObj.value("strings").toArray();
+        for (size_t j = 0; j < stringsArr.size(); ++j) {
+            StringTuningsInfo info;
+
+            const JsonValue& stringVal = stringsArr.at(j);
+            JsonObject stringObj = stringVal.toObject();
+
+            info.number = stringObj.value("number").toInt();
+
+            JsonArray presetsArr = stringObj.value("presets").toArray();
+            for (size_t k = 0; k < presetsArr.size(); ++k) {
+                const JsonValue& presetVal = presetsArr.at(k);
+                JsonObject presetObj = presetVal.toObject();
+
+                StringTuningPreset preset;
+                preset.name = trc("instruments/stringTunings", presetObj.value("name").toStdString().c_str()); // todo
+
+                JsonArray valuesArr = presetObj.value("value").toArray();
+                for (size_t l = 0; l < valuesArr.size(); ++l) {
+                    const JsonValue& valueVal = valuesArr.at(l);
+                    preset.value.push_back(valueVal.toInt());
+                }
+
+                if (info.number != static_cast<int>(preset.value.size())) {
+                    LOGE() << "Invalid preset " << preset.name;
+                    continue;
+                }
+
+                info.presets.push_back(preset);
+            }
+
+            strings.push_back(info);
+        }
+
+        m_stringTuningsPresets.emplace(familyOrInstrumentObj.value("familyOrInstrumentId").toStdString(), strings);
+    }
+
+    return true;
 }

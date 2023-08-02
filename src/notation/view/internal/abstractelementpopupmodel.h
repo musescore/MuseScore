@@ -47,6 +47,7 @@ public:
         TYPE_UNDEFINED = -1,
         TYPE_HARP_DIAGRAM,
         TYPE_CAPO,
+        TYPE_STRING_TUNINGS
     };
     Q_ENUM(PopupModelType)
 

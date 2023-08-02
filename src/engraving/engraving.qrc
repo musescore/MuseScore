@@ -2,6 +2,7 @@
     <qresource prefix="/">
         <file alias="data/instruments.xml">../../share/instruments/instruments.xml</file>
         <file alias="data/orders.xml">../../share/instruments/orders.xml</file>
+        <file alias="data/string_tunings_presets.json">../../share/instruments/string_tunings_presets.json</file>
         <file alias="engraving/styles/legacy-style-defaults-v1.mss">data/styles/legacy-style-defaults-v1.mss</file>
         <file alias="engraving/styles/legacy-style-defaults-v2.mss">data/styles/legacy-style-defaults-v2.mss</file>
         <file alias="engraving/styles/legacy-style-defaults-v3.mss">data/styles/legacy-style-defaults-v3.mss</file>
