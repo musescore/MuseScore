@@ -1155,7 +1155,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
     }
 
     if (note->tieFor()) {
-        m_startingControlEventMap[note->tieFor()] = "#" + xmlId;
+        m_startingControlEventMap.push_back(std::make_pair(note->tieFor(), "#" + xmlId));
     }
     if (note->tieBack()) {
         m_endingControlEventMap[note->tieBack()] = "#" + xmlId;
@@ -1613,13 +1613,13 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving:
 
     for (const EngravingItem* element : chordRest->segment()->annotations()) {
         if (element->track() == trackIdx) {
-            m_startingControlEventMap[element] = "#" + xmlId;
+            m_startingControlEventMap.push_back(std::make_pair(element, "#" + xmlId));
         }
     }
     // Breath a handled differently
     const Breath* breath = chordRest->hasBreathMark();
     if (breath) {
-        m_startingControlEventMap[breath] = "#" + xmlId;
+        m_startingControlEventMap.push_back(std::make_pair(breath, "#" + xmlId));
     }
     // Slurs
     SpannerMap& smap = m_score->spannerMap();
@@ -1628,7 +1628,7 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving:
         Spanner* spanner = interval.value;
         if (spanner && spanner->isSlur()) {
             if (spanner->startCR() == chordRest) {
-                m_startingControlEventMap[spanner] = "#" + xmlId;
+                m_startingControlEventMap.push_back(std::make_pair(spanner, "#" + xmlId));
             } else if (spanner->endCR() == chordRest) {
                 m_endingControlEventMap[spanner] = "#" + xmlId;
             }
@@ -1644,8 +1644,12 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving:
 std::string MeiExporter::findStartIdFor(const engraving::EngravingItem* item)
 {
     std::string xmlId;
-    if (m_startingControlEventMap.count(item)) {
-        xmlId = m_startingControlEventMap.at(item);
+
+    auto result = std::find_if(m_startingControlEventMap.begin(), m_startingControlEventMap.end(),
+                               [item](const auto& entry) { return entry.first == item; });
+
+    if (result != m_startingControlEventMap.end()) {
+        xmlId = result->second;
     }
     return xmlId;
 }
@@ -1747,7 +1751,7 @@ bool MeiExporter::addFermataToMap(const track_idx_t track, const Segment* segmen
             libmei::xsdPositiveInteger_List staffNs;
             staffNs.push_back(static_cast<int>(staffN));
             double tstamp = Convert::tstampFromFraction(measure->ticks(), measure->timesig());
-            m_tstampControlEventMap[toFermata(annotation)] = std::make_pair(staffNs, tstamp);
+            m_tstampControlEventMap.push_back(std::make_pair(toFermata(annotation), std::make_pair(staffNs, tstamp)));
         }
     }
 
@@ -1915,8 +1919,10 @@ std::string MeiExporter::getLayerXmlIdFor(layerElementCounter elementType, const
     // If we have a segment, generate a track and time-based xml:id
     if (segment) {
         //return String("m%1s%2l%3t-%4-%5").arg(m_measureCounter).arg(m_staffCounter).arg(m_layerCounter).arg(segment->tick().numerator()).arg(segment->tick().denominator()).toStdString();
-        return String("s%1l%2_t%3_%4").arg(m_staffCounter).arg(m_layerCounter).arg(segment->tick().numerator()).arg(
-            segment->tick().denominator()).toStdString();
+        Fraction f = segment->tick();
+        f.reduce();
+        return String("s%1l%2_t%3_%4").arg(m_staffCounter).arg(m_layerCounter).arg(f.numerator()).arg(
+            f.denominator()).toStdString();
     }
     // m (Measure) / s (Staff) / l (Layer) / ? Layer element type
     // The layer element abbreviation is given in the MeiExporter::s_layerXmlIdMap
