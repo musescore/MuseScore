@@ -73,8 +73,10 @@ mu::Ret MeiWriter::write(notation::INotationPtr notation, QIODevice& destination
 Err MeiWriter::writeScore(mu::engraving::Score* score, const io::path_t& path)
 {
     MeiExporter exporter(score);
+    // Force no layout option in this case
+    exporter.configuration()->setMeiExportLayout(false);
     std::string meiData;
-    if (exporter.write(meiData) && (io::File::writeFile(path, ByteArray(meiData.c_str(), meiData.size())) == make_ok())) {
+    if (exporter.write(meiData) && io::File::writeFile(path, ByteArray(meiData.c_str(), meiData.size()))) {
         return Err::NoError;
     } else {
         return Err::UnknownError;
