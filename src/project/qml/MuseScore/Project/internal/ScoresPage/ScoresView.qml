@@ -28,7 +28,6 @@ import MuseScore.Project 1.0
 Loader {
     id: root
 
-    property AbstractScoresModel model
     property string searchText
 
     property int viewType: ScoresPageModel.Grid

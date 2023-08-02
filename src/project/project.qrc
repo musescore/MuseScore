@@ -10,6 +10,8 @@
         <file>qml/MuseScore/Project/internal/ScoresPage/ScoreListItem.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/RecentScoresView.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoresGridView.qml</file>
+        <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoresListView.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/CloudScoreIndicatorButton.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/ScoreThumbnail.qml</file>
         <file>qml/MuseScore/Project/internal/ScoresPage/Message.qml</file>

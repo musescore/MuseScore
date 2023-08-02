@@ -31,7 +31,7 @@ import MuseScore.Cloud 1.0
 ScoresView {
     id: root
 
-    model: CloudScoresModel {
+    CloudScoresModel {
         id: cloudScoresModel
     }
 
@@ -64,12 +64,10 @@ ScoresView {
     Component {
         id: gridComp
 
-        ScoresGridView {
-            id: grid
-
+        CloudScoresGridView {
             anchors.fill: parent
 
-            model: root.model
+            model: cloudScoresModel
             searchText: root.searchText
 
             backgroundColor: root.backgroundColor
@@ -77,8 +75,6 @@ ScoresView {
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrder
-            navigation.name: "OnlineScoresGrid"
-            navigation.accessible.name: qsTrc("project", "Online scores grid")
 
             onCreateNewScoreRequested: {
                 root.createNewScoreRequested()
@@ -86,58 +82,6 @@ ScoresView {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
-            }
-
-            readonly property int remainingFullRowsBelowViewport:
-                Math.floor(cloudScoresModel.rowCount / view.columns) - Math.ceil((view.contentY + view.height) / view.cellHeight)
-
-            Component.onCompleted: {
-                updateDesiredRowCount()
-            }
-
-            onRemainingFullRowsBelowViewportChanged: {
-                updateDesiredRowCount()
-            }
-
-            property bool updateDesiredRowCountScheduled: false
-
-            function updateDesiredRowCount() {
-                if (updateDesiredRowCountScheduled) {
-                    return
-                }
-
-                updateDesiredRowCountScheduled = true
-
-                Qt.callLater(function() {
-                    let newDesiredRowCount = cloudScoresModel.rowCount + (3 - remainingFullRowsBelowViewport) * view.columns
-
-                    if (cloudScoresModel.desiredRowCount < newDesiredRowCount) {
-                        cloudScoresModel.desiredRowCount = newDesiredRowCount
-                    }
-
-                    updateDesiredRowCountScheduled = false
-                })
-            }
-
-            view.footer: cloudScoresModel.state === CloudScoresModel.Loading
-                         ? busyIndicatorComp : null
-
-            Component {
-                id: busyIndicatorComp
-
-                Item {
-                    width: GridView.view ? GridView.view.width : 0
-                    height: indicator.implicitHeight + indicator.anchors.topMargin + indicator.anchors.bottomMargin
-
-                    StyledBusyIndicator {
-                        id: indicator
-
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.top: parent.top
-                        anchors.topMargin: grid.view.spacingBetweenRows / 2
-                        anchors.bottomMargin: grid.view.spacingBetweenRows / 2
-                    }
-                }
             }
         }
     }
@@ -145,12 +89,10 @@ ScoresView {
     Component {
         id: listComp
 
-        ScoresListView {
-            id: list
-
+        CloudScoresListView {
             anchors.fill: parent
 
-            model: root.model
+            model: cloudScoresModel
             searchText: root.searchText
 
             backgroundColor: root.backgroundColor
@@ -158,8 +100,6 @@ ScoresView {
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrder
-            navigation.name: "OnlineScoresList"
-            navigation.accessible.name: qsTrc("project", "Online scores list")
 
             onCreateNewScoreRequested: {
                 root.createNewScoreRequested()
@@ -167,271 +107,6 @@ ScoresView {
 
             onOpenScoreRequested: function(scorePath, displayName) {
                 root.openScoreRequested(scorePath, displayName)
-            }
-
-            readonly property int remainingScoresBelowViewport:
-                cloudScoresModel.rowCount - Math.ceil((view.contentY + view.height) / view.rowHeight)
-
-            Component.onCompleted: {
-                updateDesiredRowCount()
-            }
-
-            onRemainingScoresBelowViewportChanged: {
-                updateDesiredRowCount()
-            }
-
-            property bool updateDesiredRowCountScheduled: false
-
-            function updateDesiredRowCount() {
-                if (updateDesiredRowCountScheduled) {
-                    return
-                }
-
-                updateDesiredRowCountScheduled = true
-
-                Qt.callLater(function() {
-                    let newDesiredRowCount = cloudScoresModel.rowCount + (20 - remainingScoresBelowViewport)
-
-                    if (cloudScoresModel.desiredRowCount < newDesiredRowCount) {
-                        cloudScoresModel.desiredRowCount = newDesiredRowCount
-                    }
-
-                    updateDesiredRowCountScheduled = false
-                })
-            }
-
-            columns: [
-                ScoresListView.ColumnItem {
-                    id: visibilityColumn
-                    header: qsTrc("project/cloud", "Visibility")
-
-                    width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
-                        return 0.16 * parentWidthExclusingSpacing
-                    }
-
-                    delegate: Item {
-                        id: visibilityContainer
-
-                        implicitWidth: visibilityRow.implicitWidth
-                        implicitHeight: visibilityRow.implicitHeight
-
-                        visible: !visibilityLabel.isEmpty
-
-                        readonly property var iconAndText: {
-                            switch (score.cloudVisibility ?? 0) {
-                            case CloudVisibility.Private:
-                                return { "iconCode": IconCode.LOCK_CLOSED, "text": qsTrc("project/cloud", "Private") }
-                            case CloudVisibility.Unlisted:
-                                return { "iconCode": IconCode.LOCK_OPEN, "text": qsTrc("project/cloud", "Unlisted") }
-                            case CloudVisibility.Public:
-                                return { "iconCode": IconCode.GLOBE, "text": qsTrc("project/cloud", "Public") }
-                            }
-                            return { "iconCode": IconCode.NONE, "text": "" }
-                        }
-
-                        NavigationFocusBorder {
-                            navigationCtrl: NavigationControl {
-                                name: "VisibilityLabel"
-                                panel: navigationPanel
-                                row: navigationRow
-                                column: navigationColumnStart
-                                enabled: visibilityContainer.visible && visibilityContainer.enabled && !visibilityLabel.isEmpty
-                                accessible.name: visibilityColumn.header + ": " + visibilityContainer.iconAndText.text
-                                accessible.role: MUAccessible.StaticText
-
-                                onActiveChanged: {
-                                    if (active) {
-                                        listItem.scrollIntoView()
-                                    }
-                                }
-                            }
-
-                            anchors.margins: -radius
-                            radius: 2 + border.width
-                        }
-
-                        RowLayout {
-                            id: visibilityRow
-                            spacing: 8
-
-                            StyledIconLabel {
-                                iconCode: visibilityContainer.iconAndText.iconCode
-                            }
-
-                            StyledTextLabel {
-                                id: visibilityLabel
-                                Layout.fillWidth: true
-
-                                text: visibilityContainer.iconAndText.text
-
-                                font: ui.theme.largeBodyFont
-                                horizontalAlignment: Text.AlignLeft
-                            }
-                        }
-                    }
-                },
-
-                ScoresListView.ColumnItem {
-                    id: modifiedColumn
-
-                    //: Stands for "Last time that this score was modified".
-                    //: Used as the header of this column in the scores list.
-                    header: qsTrc("project", "Modified")
-
-                    width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
-                        return 0.16 * parentWidthExclusingSpacing
-                    }
-
-                    delegate: StyledTextLabel {
-                        id: modifiedLabel
-                        text: score.timeSinceModified ?? ""
-
-                        font.capitalization: Font.AllUppercase
-                        horizontalAlignment: Text.AlignLeft
-
-                        NavigationFocusBorder {
-                            navigationCtrl: NavigationControl {
-                                name: "ModifiedLabel"
-                                panel: navigationPanel
-                                row: navigationRow
-                                column: navigationColumnStart
-                                enabled: modifiedLabel.visible && modifiedLabel.enabled && !modifiedLabel.isEmpty
-                                accessible.name: modifiedColumn.header + ": " + modifiedLabel.text
-                                accessible.role: MUAccessible.StaticText
-
-                                onActiveChanged: {
-                                    if (active) {
-                                        listItem.scrollIntoView()
-                                    }
-                                }
-                            }
-
-                            anchors.margins: -radius
-                            radius: 2 + border.width
-                        }
-                    }
-                },
-
-                ScoresListView.ColumnItem {
-                    id: sizeColumn
-                    header: qsTrc("global", "Size", "file size")
-
-                    width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
-                        return 0.13 * parentWidthExclusingSpacing
-                    }
-
-                    delegate: StyledTextLabel {
-                        id: sizeLabel
-                        text: score.fileSize ?? ""
-
-                        font: ui.theme.largeBodyFont
-                        horizontalAlignment: Text.AlignLeft
-
-                        NavigationFocusBorder {
-                            navigationCtrl: NavigationControl {
-                                name: "SizeLabel"
-                                panel: navigationPanel
-                                row: navigationRow
-                                column: navigationColumnStart
-                                enabled: sizeLabel.visible && sizeLabel.enabled && !sizeLabel.isEmpty
-                                accessible.name: sizeColumn.header + ": " + sizeLabel.text
-                                accessible.role: MUAccessible.StaticText
-
-                                onActiveChanged: {
-                                    if (active) {
-                                        listItem.scrollIntoView()
-                                    }
-                                }
-                            }
-
-                            anchors.margins: -radius
-                            radius: 2 + border.width
-                        }
-                    }
-                },
-
-                ScoresListView.ColumnItem {
-                    id: viewsColumn
-
-                    //: Stands for "The number of times this score was viewed on MuseScore.com".
-                    //: Used as the header of this column in the scores list.
-                    header: qsTrc("project", "Views", "number of views")
-
-                    width: function (parentWidth) {
-                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
-                        return Math.max(0.08 * parentWidthExclusingSpacing, 76)
-                    }
-
-                    delegate: Item {
-                        id: viewsContainer
-
-                        implicitWidth: viewsRow.implicitWidth
-                        implicitHeight: viewsRow.implicitHeight
-
-                        visible: !viewsLabel.isEmpty
-
-                        NavigationFocusBorder {
-                            navigationCtrl: NavigationControl {
-                                name: "ViewsLabel"
-                                panel: navigationPanel
-                                row: navigationRow
-                                column: navigationColumnStart
-                                enabled: viewsContainer.visible && viewsContainer.enabled
-                                accessible.name: viewsColumn.header + ": " + viewsLabel.text
-                                accessible.role: MUAccessible.StaticText
-
-                                onActiveChanged: {
-                                    if (active) {
-                                        listItem.scrollIntoView()
-                                    }
-                                }
-                            }
-
-                            anchors.margins: -radius
-                            radius: 2 + border.width
-                        }
-
-                        RowLayout {
-                            id: viewsRow
-                            spacing: 8
-
-                            StyledIconLabel {
-                                iconCode: IconCode.EYE_OPEN
-                            }
-
-                            StyledTextLabel {
-                                id: viewsLabel
-                                Layout.fillWidth: true
-
-                                text: score.cloudViewCount ?? ""
-
-                                font: ui.theme.largeBodyFont
-                                horizontalAlignment: Text.AlignLeft
-                            }
-                        }
-                    }
-                }
-            ]
-
-            view.footer: cloudScoresModel.state === CloudScoresModel.Loading
-                         ? busyIndicatorComp : null
-
-            Component {
-                id: busyIndicatorComp
-
-                Item {
-                    width: ListView.view ? ListView.view.width : 0
-                    height: list.view.rowHeight
-
-                    StyledBusyIndicator {
-                        id: indicator
-
-                        anchors.centerIn: parent
-                    }
-                }
             }
         }
     }

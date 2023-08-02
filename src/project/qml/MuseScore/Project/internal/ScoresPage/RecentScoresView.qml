@@ -29,7 +29,7 @@ import MuseScore.Project 1.0
 ScoresView {
     id: root
 
-    model: RecentScoresModel {
+    RecentScoresModel {
         id: recentScoresModel
     }
 
@@ -45,7 +45,7 @@ ScoresView {
         ScoresGridView {
             anchors.fill: parent
 
-            model: root.model
+            model: recentScoresModel
             searchText: root.searchText
 
             backgroundColor: root.backgroundColor
@@ -74,7 +74,7 @@ ScoresView {
 
             anchors.fill: parent
 
-            model: root.model
+            model: recentScoresModel
             searchText: root.searchText
 
             backgroundColor: root.backgroundColor
