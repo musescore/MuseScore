@@ -219,7 +219,7 @@ Item {
             anchors.right: parent.right
             anchors.rightMargin: root.sideMargin
 
-            title: qsTrc("project", "No results found")
+            title: qsTrc("global", "No results found")
         }
     }
 }

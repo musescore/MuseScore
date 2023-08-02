@@ -22,6 +22,8 @@
 
 #include "scorespagemodel.h"
 
+#include <QString>
+
 #include "actions/actiontypes.h"
 
 #include "projecttypes.h"

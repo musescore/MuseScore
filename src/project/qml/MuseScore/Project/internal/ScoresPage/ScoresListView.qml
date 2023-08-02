@@ -252,7 +252,7 @@ Item {
             Layout.fillWidth: true
             Layout.fillHeight: true
 
-            visible: Boolean(root.searchText) && !listViewColumn.visible
+            visible: Boolean(root.searchText) && !listViewContainer.visible
 
             Message {
                 anchors.top: parent.top
@@ -262,7 +262,7 @@ Item {
                 anchors.right: parent.right
                 anchors.rightMargin: root.sideMargin
 
-                title: qsTrc("project", "No results found")
+                title: qsTrc("global", "No results found")
             }
         }
     }

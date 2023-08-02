@@ -294,7 +294,7 @@ FocusScope {
 
             StyledTextLabel {
                 anchors.fill: parent
-                text: qsTrc("project", "No results found")
+                text: qsTrc("global", "No results found")
             }
         }
     }

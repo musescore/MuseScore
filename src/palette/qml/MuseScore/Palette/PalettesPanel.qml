@@ -123,7 +123,7 @@ Item {
             Layout.leftMargin: 8
             Layout.rightMargin: 8
 
-            text: qsTrc("palette", "No results found")
+            text: qsTrc("global", "No results found")
             verticalAlignment: Qt.AlignTop
             wrapMode: Text.WordWrap
 

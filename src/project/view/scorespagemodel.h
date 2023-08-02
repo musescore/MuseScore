@@ -23,13 +23,14 @@
 #define MU_PROJECT_SCORESPAGEMODEL_H
 
 #include <QObject>
-#include <QString>
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
 #include "actions/iactionsdispatcher.h"
 #include "iinteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
+
+class QString;
 
 namespace mu::project {
 class ScoresPageModel : public QObject
@@ -69,7 +70,7 @@ signals:
     void viewTypeChanged();
 
 private:
-    ViewType m_viewType;
+    ViewType m_viewType = ViewType::Grid;
 };
 }
 

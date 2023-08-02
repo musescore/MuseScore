@@ -280,7 +280,7 @@ ScoresView {
 
                 ScoresListView.ColumnItem {
                     id: sizeColumn
-                    header: qsTrc("project", "Size", "file size")
+                    header: qsTrc("global", "Size", "file size")
 
                     width: function (parentWidth) {
                         let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
