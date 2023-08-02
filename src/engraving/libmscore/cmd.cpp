@@ -555,7 +555,7 @@ void Score::cmdAddSpanner(Spanner* spanner, const PointF& pos, bool systemStaves
 //    used when applying a spanner to a selection
 //---------------------------------------------------------
 
-void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment)
+void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment, bool ctrlModifier)
 {
     track_idx_t track = staffIdx * VOICES;
     spanner->setTrack(track);
@@ -573,7 +573,7 @@ void Score::cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* start
         tick2 = endSegment->tick();
     }
     spanner->setTick2(tick2);
-    undoAddElement(spanner);
+    undoAddElement(spanner, true, ctrlModifier);
 }
 
 //---------------------------------------------------------
