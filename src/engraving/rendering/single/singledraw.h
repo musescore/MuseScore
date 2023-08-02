@@ -216,6 +216,7 @@ private:
     static void draw(const Spacer* item, draw::Painter* painter);
     static void draw(const StaffState* item, draw::Painter* painter);
     static void draw(const StaffText* item, draw::Painter* painter);
+    static void draw(const StaffTypeChange* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
