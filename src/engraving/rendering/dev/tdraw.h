@@ -257,6 +257,7 @@ private:
     static void draw(const StaffTypeChange* item, draw::Painter* painter);
     static void draw(const Stem* item, draw::Painter* painter);
     static void draw(const StemSlash* item, draw::Painter* painter);
+    static void draw(const Sticking* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
