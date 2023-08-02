@@ -21,6 +21,18 @@
  */
 #include "soundfontrepository.h"
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#include <sfloader/fluid_sfont.h>
+#include <sfloader/fluid_defsfont.h>
+
+#ifdef __cplusplus
+}
+#endif
+
+#include "defer.h"
 #include "translation.h"
 
 #include "log.h"
@@ -32,17 +44,20 @@ using namespace mu::async;
 
 void SoundFontRepository::init()
 {
-    loadSoundFontPaths();
+    loadSoundFonts();
     configuration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {
-        loadSoundFontPaths();
+        loadSoundFonts();
     });
 }
 
-void SoundFontRepository::loadSoundFontPaths()
+void SoundFontRepository::loadSoundFonts()
 {
     TRACEFUNC;
 
     m_soundFontPaths.clear();
+
+    SoundFontsMap oldSoundFonts;
+    m_soundFonts.swap(oldSoundFonts);
 
     static const std::vector<std::string> filters = { "*.sf2",  "*.sf3" };
     io::paths_t dirs = configuration()->soundFontDirectories();
@@ -54,8 +69,73 @@ void SoundFontRepository::loadSoundFontPaths()
             continue;
         }
 
-        m_soundFontPaths.insert(m_soundFontPaths.end(), soundFonts.val.begin(), soundFonts.val.end());
+        for (const SoundFontPath& soundFont : soundFonts.val) {
+            loadSoundFont(soundFont, oldSoundFonts);
+        }
     }
+}
+
+void SoundFontRepository::loadSoundFont(const SoundFontPath& path, const SoundFontsMap& oldSoundFonts)
+{
+    m_soundFontPaths.push_back(path);
+
+    auto it = oldSoundFonts.find(path);
+    if (it != oldSoundFonts.cend()) {
+        m_soundFonts.insert(*it);
+        return;
+    }
+
+    fluid_settings_t* settings = nullptr;
+    fluid_sfloader_t* loader = nullptr;
+    fluid_sfont_t* sfont = nullptr;
+
+    DEFER {
+        if (sfont) {
+            fluid_defsfont_sfont_delete(sfont);
+        }
+        if (loader) {
+            delete_fluid_sfloader(loader);
+        }
+        if (settings) {
+            delete_fluid_settings(settings);
+        }
+    };
+
+    settings = new_fluid_settings();
+    if (!settings) {
+        return;
+    }
+
+    fluid_settings_setint(settings, "synth.dynamic-sample-loading", 1);
+
+    loader = new_fluid_defsfloader(settings);
+    if (!loader) {
+        return;
+    }
+
+    sfont = fluid_defsfloader_load(loader, path.c_str());
+    if (!sfont) {
+        return;
+    }
+
+    SoundFontMeta meta;
+    meta.path = path;
+
+    fluid_defsfont_sfont_iteration_start(sfont);
+
+    fluid_preset_t* fluid_preset;
+    while ((fluid_preset = fluid_defsfont_sfont_iteration_next(sfont))) {
+        int bank = fluid_defpreset_preset_get_banknum(fluid_preset);
+        int program = fluid_defpreset_preset_get_num(fluid_preset);
+        const char* name = fluid_defpreset_preset_get_name(fluid_preset);
+
+        SoundFontPreset preset;
+        preset.program = midi::Program(bank, program);
+        preset.name = name;
+        meta.presets.push_back(preset);
+    }
+
+    m_soundFonts.insert_or_assign(path, meta);
 }
 
 SoundFontPaths SoundFontRepository::soundFontPaths() const
@@ -63,9 +143,14 @@ SoundFontPaths SoundFontRepository::soundFontPaths() const
     return m_soundFontPaths;
 }
 
-Notification SoundFontRepository::soundFontPathsChanged() const
+SoundFontsMap SoundFontRepository::soundFonts() const
 {
-    return m_soundFontPathsChanged;
+    return m_soundFonts;
+}
+
+Notification SoundFontRepository::soundFontsChanged() const
+{
+    return m_soundFontsChanged;
 }
 
 mu::Ret SoundFontRepository::addSoundFont(const SoundFontPath& path)
@@ -106,8 +191,8 @@ mu::Ret SoundFontRepository::addSoundFont(const SoundFontPath& path)
     Ret ret = fileSystem()->copy(path, newPath.val, true /* replace */);
 
     if (ret) {
-        m_soundFontPaths.push_back(newPath.val);
-        m_soundFontPathsChanged.notify();
+        loadSoundFont(newPath.val);
+        m_soundFontsChanged.notify();
 
         interactive()->info(trc("audio", "SoundFont installed"),
                             trc("audio", "You can assign soundfonts to instruments using the mixer panel."),

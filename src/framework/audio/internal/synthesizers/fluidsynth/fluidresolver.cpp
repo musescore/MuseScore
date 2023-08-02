@@ -36,7 +36,7 @@ FluidResolver::FluidResolver()
     ONLY_AUDIO_WORKER_THREAD;
 
     refresh();
-    soundFontRepository()->soundFontPathsChanged().onNotify(this, [this]() {
+    soundFontRepository()->soundFontsChanged().onNotify(this, [this]() {
         refresh();
     });
 }

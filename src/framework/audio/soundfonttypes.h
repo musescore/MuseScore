@@ -22,14 +22,30 @@
 #ifndef MU_AUDIO_SOUNDFONTTYPES_H
 #define MU_AUDIO_SOUNDFONTTYPES_H
 
+#include <map>
 #include <string>
 #include <vector>
 
 #include "io/path.h"
+#include "midi/miditypes.h"
 
 namespace mu::audio::synth {
 using SoundFontPath = io::path_t;
 using SoundFontPaths = std::vector<SoundFontPath>;
+
+struct SoundFontPreset
+{
+    midi::Program program;
+    std::string name;
+};
+
+struct SoundFontMeta
+{
+    SoundFontPath path;
+    std::vector<SoundFontPreset> presets;
+};
+
+using SoundFontsMap = std::map<SoundFontPath, SoundFontMeta>;
 
 inline bool isSoundFont(const io::path_t& filePath)
 {
