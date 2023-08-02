@@ -59,17 +59,9 @@ StaffState::~StaffState()
 //   draw
 //---------------------------------------------------------
 
-void StaffState::draw(mu::draw::Painter* painter) const
+void StaffState::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (score()->printing() || !score()->showUnprintable()) {
-        return;
-    }
-    Pen pen(selected() ? engravingConfiguration()->selectionColor() : engravingConfiguration()->formattingMarksColor(),
-            m_lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
-    painter->setPen(pen);
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(m_path);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
