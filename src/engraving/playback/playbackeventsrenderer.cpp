@@ -277,7 +277,7 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                                                   const mpe::ArticulationType persistentArticulationApplied,
                                                   const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const
 {
-    ArticulationMap articulations = makeArticulations(persistentArticulationApplied, profile, actualDuration, actualTimestamp);
+    ArticulationMap articulations = makeArticulations(persistentArticulationApplied, profile, actualTimestamp, actualDuration);
 
     result.emplace_back(buildFixedNoteEvent(note, actualTimestamp, actualDuration, actualDynamicLevel, articulations));
 }
