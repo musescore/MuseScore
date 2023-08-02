@@ -36,7 +36,8 @@ void PublishToolBarModel::load()
         "print",
         "file-publish",
         "file-share-audio",
-        "file-export"
+        "file-export",
+        "file-save"
     };
 
     ToolBarItemList items;
