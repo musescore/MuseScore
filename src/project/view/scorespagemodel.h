@@ -68,9 +68,6 @@ public:
 signals:
     void tabIndexChanged();
     void viewTypeChanged();
-
-private:
-    ViewType m_viewType = ViewType::Grid;
 };
 }
 

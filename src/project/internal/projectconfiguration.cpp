@@ -375,7 +375,9 @@ IProjectConfiguration::HomeScoresPageViewType ProjectConfiguration::homeScoresPa
 
 void ProjectConfiguration::setHomeScoresPageViewType(HomeScoresPageViewType type)
 {
-    settings()->setSharedValue(HOME_SCORES_PAGE_VIEW_TYPE, Val(type));
+    // Intentionally not directly synced between instances
+    // (it would be weird if you switch the view in one instance, and the others suddenly switch too)
+    settings()->setLocalValue(HOME_SCORES_PAGE_VIEW_TYPE, Val(type));
 }
 
 QColor ProjectConfiguration::templatePreviewBackgroundColor() const
