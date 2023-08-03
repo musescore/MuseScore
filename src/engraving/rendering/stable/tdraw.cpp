@@ -131,6 +131,7 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/tremolobar.h"
 #include "libmscore/trill.h"
+#include "libmscore/tripletfeel.h"
 
 #include "libmscore/mscoreview.h"
 
@@ -326,6 +327,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
         break;
     case ElementType::TRILL_SEGMENT:        draw(item_cast<const TrillSegment*>(item), painter);
+        break;
+    case ElementType::TRIPLET_FEEL:         draw(item_cast<const TripletFeel*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2692,4 +2695,10 @@ void TDraw::draw(const TrillSegment* item, Painter* painter)
     TRACE_DRAW_ITEM;
     painter->setPen(item->spanner()->curColor());
     item->drawSymbols(item->symbols(), painter);
+}
+
+void TDraw::draw(const TripletFeel* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
