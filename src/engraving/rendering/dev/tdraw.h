@@ -271,6 +271,7 @@ private:
     static void draw(const TieSegment* item, draw::Painter* painter);
     static void draw(const TimeSig* item, draw::Painter* painter);
     static void draw(const Tremolo* item, draw::Painter* painter);
+    static void draw(const TremoloBar* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);

@@ -129,6 +129,7 @@
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
+#include "libmscore/tremolobar.h"
 
 #include "libmscore/mscoreview.h"
 
@@ -319,6 +320,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
     case ElementType::TREMOLO:              draw(item_cast<const Tremolo*>(item), painter);
+        break;
+    case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2640,4 +2643,13 @@ void TDraw::draw(const Tremolo* item, Painter* painter)
                 draw::FillRule::OddEvenFill);
         }
     }
+}
+
+void TDraw::draw(const TremoloBar* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    Pen pen(item->curColor(), item->lineWidth().val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    painter->setPen(pen);
+    painter->drawPolyline(item->polygon());
 }

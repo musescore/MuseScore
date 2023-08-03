@@ -74,13 +74,9 @@ TremoloBar::TremoloBar(EngravingItem* parent)
 //   draw
 //---------------------------------------------------------
 
-void TremoloBar::draw(mu::draw::Painter* painter) const
+void TremoloBar::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    Pen pen(curColor(), m_lw.val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
-    painter->setPen(pen);
-    painter->drawPolyline(m_polygon);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
