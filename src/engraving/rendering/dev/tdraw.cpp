@@ -132,6 +132,9 @@
 #include "libmscore/tremolobar.h"
 #include "libmscore/trill.h"
 #include "libmscore/tripletfeel.h"
+#include "libmscore/tuplet.h"
+
+#include "libmscore/vibrato.h"
 
 #include "libmscore/mscoreview.h"
 
@@ -328,6 +331,11 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TRILL_SEGMENT:        draw(item_cast<const TrillSegment*>(item), painter);
         break;
     case ElementType::TRIPLET_FEEL:         draw(item_cast<const TripletFeel*>(item), painter);
+        break;
+    case ElementType::TUPLET:               draw(item_cast<const Tuplet*>(item), painter);
+        break;
+
+    case ElementType::VIBRATO_SEGMENT:      draw(item_cast<const VibratoSegment*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2671,4 +2679,40 @@ void TDraw::draw(const TripletFeel* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const Tuplet* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    // if in a TAB without stems, tuplets are not shown
+    const StaffType* stt = item->staffType();
+    if (stt && stt->isTabStaff() && stt->stemless()) {
+        return;
+    }
+
+    Color color(item->curColor());
+    if (item->number()) {
+        painter->setPen(color);
+        PointF pos(item->number()->pos());
+        painter->translate(pos);
+        draw(item->number(), painter);
+        painter->translate(-pos);
+    }
+    if (item->hasBracket()) {
+        painter->setPen(Pen(color, item->bracketWidth().val() * item->mag()));
+        if (!item->number()) {
+            painter->drawPolyline(item->bracketL, 4);
+        } else {
+            painter->drawPolyline(item->bracketL, 3);
+            painter->drawPolyline(item->bracketR, 3);
+        }
+    }
+}
+
+void TDraw::draw(const VibratoSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->spanner()->curColor());
+    item->drawSymbols(item->symbols(), painter);
 }
