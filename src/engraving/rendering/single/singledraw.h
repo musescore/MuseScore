@@ -143,6 +143,8 @@ class Vibrato;
 class VibratoSegment;
 class Volta;
 class VoltaSegment;
+
+class WhammyBarSegment;
 }
 
 namespace mu::engraving::rendering::single {
@@ -243,6 +245,8 @@ private:
 
     static void draw(const VibratoSegment* item, draw::Painter* painter);
     static void draw(const VoltaSegment* item, draw::Painter* painter);
+
+    static void draw(const WhammyBarSegment* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
