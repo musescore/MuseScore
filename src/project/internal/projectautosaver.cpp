@@ -121,6 +121,8 @@ INotationProjectPtr ProjectAutoSaver::currentProject() const
 
 void ProjectAutoSaver::update()
 {
+    TRACEFUNC;
+
     io::path_t newProjectPath;
 
     auto project = currentProject();
@@ -138,6 +140,8 @@ void ProjectAutoSaver::update()
 
 void ProjectAutoSaver::onTrySave()
 {
+    TRACEFUNC;
+
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
         LOGD() << "[autosave] no project";

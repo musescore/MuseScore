@@ -123,6 +123,8 @@ NotationProject::~NotationProject()
 
 void NotationProject::setupProject()
 {
+    TRACEFUNC;
+
     m_engravingProject = EngravingProject::create();
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
 
@@ -468,6 +470,7 @@ void NotationProject::setCloudInfo(const CloudProjectInfo& info)
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
 {
     TRACEFUNC;
+
     switch (saveMode) {
     case SaveMode::SaveSelection:
         return saveSelectionOnScore(path);
@@ -513,6 +516,8 @@ mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
 
 mu::Ret NotationProject::writeToDevice(QIODevice* device)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(!m_path.empty()) {
         return make_ret(notation::Err::UnknownError);
     }
@@ -562,6 +567,8 @@ mu::Ret NotationProject::saveScore(const io::path_t& path, const std::string& fi
 
 mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, engraving::MscIoMode ioMode)
 {
+    TRACEFUNC;
+
     QString targetContainerPath = engraving::containerPath(path).toQString();
     io::path_t targetMainFilePath = engraving::mainFilePath(path);
     io::path_t targetMainFileName = engraving::mainFileName(path);
@@ -660,6 +667,8 @@ mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, eng
 
 mu::Ret NotationProject::makeCurrentFileAsBackup()
 {
+    TRACEFUNC;
+
     if (isNewlyCreated()) {
         LOGD() << "project just created";
         return make_ret(Ret::Code::Ok);
@@ -700,6 +709,8 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
 
 mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
 {
+    TRACEFUNC;
+
     // Create MsczWriter
     Ret ret = msczWriter.open();
     if (!ret) {
@@ -732,6 +743,8 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
 
 mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path_t& path)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(path != m_path) {
         return make_ret(notation::Err::UnknownError);
     }
@@ -768,6 +781,8 @@ mu::Ret NotationProject::saveSelectionOnScore(const mu::io::path_t& path)
 
 mu::Ret NotationProject::exportProject(const io::path_t& path, const std::string& suffix)
 {
+    TRACEFUNC;
+
     QFile file(path.toQString());
     file.open(QFile::WriteOnly);
 
@@ -818,6 +833,8 @@ void NotationProject::markAsUnsaved()
 
 void NotationProject::markAsSaved(const io::path_t& path)
 {
+    TRACEFUNC;
+
     //! NOTE: order is important
     m_isNewlyCreated = false;
 

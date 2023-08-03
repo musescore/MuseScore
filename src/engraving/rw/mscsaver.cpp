@@ -39,6 +39,8 @@ using namespace mu::engraving::rw;
 
 bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail)
 {
+    TRACEFUNC;
+
     IF_ASSERT_FAILED(mscWriter.isOpened()) {
         return false;
     }
