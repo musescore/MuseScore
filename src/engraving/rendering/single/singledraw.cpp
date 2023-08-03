@@ -107,6 +107,7 @@
 #include "libmscore/systemdivider.h"
 #include "libmscore/systemtext.h"
 
+#include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
 #include "libmscore/textlinebase.h"
@@ -257,6 +258,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::SYSTEM_DIVIDER:       draw(item_cast<const SystemDivider*>(item), painter);
         break;
     case ElementType::SYSTEM_TEXT:          draw(item_cast<const SystemText*>(item), painter);
+        break;
+
+    case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter);
         break;
 
     default:
@@ -1899,6 +1903,12 @@ void SingleDraw::draw(const SystemDivider* item, Painter* painter)
 }
 
 void SingleDraw::draw(const SystemText* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const TempoText* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);

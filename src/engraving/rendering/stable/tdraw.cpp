@@ -121,6 +121,7 @@
 #include "libmscore/systemdivider.h"
 #include "libmscore/systemtext.h"
 
+#include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
 #include "libmscore/textlinebase.h"
@@ -304,6 +305,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::TAB_DURATION_SYMBOL:  draw(item_cast<const TabDurationSymbol*>(item), painter);
+        break;
+    case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2532,4 +2535,10 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
         }
     }
     painter->scale(imag, imag);
+}
+
+void TDraw::draw(const TempoText* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
