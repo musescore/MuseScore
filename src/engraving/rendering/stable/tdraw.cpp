@@ -124,6 +124,7 @@
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
+#include "libmscore/textline.h"
 #include "libmscore/textlinebase.h"
 #include "libmscore/tie.h"
 
@@ -309,6 +310,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter);
         break;
     case ElementType::TEXT:                 draw(item_cast<const Text*>(item), painter);
+        break;
+    case ElementType::TEXTLINE_SEGMENT:     draw(item_cast<const TextLineSegment*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2549,4 +2552,10 @@ void TDraw::draw(const Text* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const TextLineSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
 }

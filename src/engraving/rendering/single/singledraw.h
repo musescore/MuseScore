@@ -230,6 +230,7 @@ private:
 
     static void draw(const TempoText* item, draw::Painter* painter);
     static void draw(const Text* item, draw::Painter* painter);
+    static void draw(const TextLineSegment* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
