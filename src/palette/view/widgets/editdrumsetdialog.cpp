@@ -160,6 +160,7 @@ EditDrumsetDialog::EditDrumsetDialog(QWidget* parent)
         const Staff* staff = m_notation->elements()->msScore()->staff(track2staff(state.currentTrack));
         m_instrumentKey.instrumentId = staff ? staff->part()->instrumentId().toQString() : QString();
         m_instrumentKey.partId = staff ? staff->part()->id() : ID();
+        m_instrumentKey.tick = state.segment ? state.segment->tick() : Fraction(-1, 1);
         m_originDrumset = state.drumset ? *state.drumset : Drumset();
     }
 
@@ -428,6 +429,15 @@ void EditDrumsetDialog::bboxClicked(QAbstractButton* button)
 void EditDrumsetDialog::apply()
 {
     valueChanged();    //save last changes in name
+
+    //! NOTE: The note input state changes inside valueChanged,
+    //! so to update the state of the drumset panel view, need to notify the change
+    notifyAboutNoteInputStateChanged();
+}
+
+void EditDrumsetDialog::notifyAboutNoteInputStateChanged()
+{
+    m_notation->interaction()->noteInput()->stateChanged().notify();
 }
 
 void EditDrumsetDialog::cancel()
