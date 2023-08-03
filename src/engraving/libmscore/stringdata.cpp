@@ -458,8 +458,13 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
                         usedStrings[indx - 1] = nullptr;
                         Note* n = usedStrings[indx];
                         int pitch = n->pitch() - capoFret;
-                        n->setFret(fretTable[pitch].at(n->string() + 1));
-                        n->setString(n->string() + 1);
+                        int newString = n->string() + 1;
+                        if (fretTable[pitch].size() <= static_cast<size_t>(newString)) {
+                            return;
+                        }
+
+                        n->setFret(fretTable[pitch].at(newString));
+                        n->setString(newString);
                     }
                 }
             }
