@@ -118,6 +118,7 @@ class StaffState;
 class StaffText;
 class StaffTypeChange;
 class StretchedBend;
+class Sticking;
 class Symbol;
 class SystemText;
 
@@ -219,6 +220,7 @@ private:
     static void draw(const StaffState* item, draw::Painter* painter);
     static void draw(const StaffText* item, draw::Painter* painter);
     static void draw(const StaffTypeChange* item, draw::Painter* painter);
+    static void draw(const Sticking* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
     static void draw(const Symbol* item, draw::Painter* painter);
 

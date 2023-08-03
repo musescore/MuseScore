@@ -80,7 +80,7 @@
 #include "libmscore/measurenumber.h"
 #include "libmscore/measurerepeat.h"
 
-#include "libmscore/note.h";
+#include "libmscore/note.h"
 
 #include "libmscore/ornament.h"
 #include "libmscore/ottava.h"
@@ -101,6 +101,7 @@
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftypechange.h"
+#include "libmscore/sticking.h"
 #include "libmscore/stretchedbend.h"
 #include "libmscore/symbol.h"
 
@@ -245,10 +246,12 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter);
         break;
+    case ElementType::STICKING:             draw(item_cast<const Sticking*>(item), painter);
+        break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
-    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
-        break;
+//    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
+//        break;
     default:
         LOGD() << item->typeName();
         item->draw(painter);
@@ -1113,6 +1116,12 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter)
         }
     }
     painter->restore();
+}
+
+void SingleDraw::draw(const Sticking* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
 }
 
 void SingleDraw::draw(const StretchedBend* item, Painter* painter)

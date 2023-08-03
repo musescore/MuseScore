@@ -486,7 +486,7 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
 //   draw
 //---------------------------------------------------------
 
-void StretchedBend::draw(mu::draw::Painter* painter) const
+void StretchedBend::draw(mu::draw::Painter*) const
 {
     UNREACHABLE;
 }
