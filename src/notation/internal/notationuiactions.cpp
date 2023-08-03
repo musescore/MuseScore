@@ -2695,6 +2695,15 @@ const mu::ui::ToolConfig& NotationUiActions::defaultNoteInputBarConfig()
     static ToolConfig config;
     if (!config.isValid()) {
         config.items = {
+            { "file-new", false },
+            { "file-open", false },
+            //{ "file-export", false }, // not in Mu3's file operations toolbar
+            { "file-save", false },
+            { "file-publish", false },
+            { "print", false },
+            //{ "undo", false }, // needs more work, to enable/disable as appropriate
+            //{ "redo", false }, // needs more work, to enable/disable as appropriate
+            { "", true },
             { "note-input", true },
             { "pad-note-1024", false },
             { "pad-note-512", false },
