@@ -135,6 +135,7 @@
 #include "libmscore/tuplet.h"
 
 #include "libmscore/vibrato.h"
+#include "libmscore/volta.h"
 
 #include "libmscore/mscoreview.h"
 
@@ -337,6 +338,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
         break;
 
     case ElementType::VIBRATO_SEGMENT:      draw(item_cast<const VibratoSegment*>(item), painter);
+        break;
+    case ElementType::VOLTA_SEGMENT:        draw(item_cast<const VoltaSegment*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2745,4 +2748,10 @@ void TDraw::draw(const VibratoSegment* item, Painter* painter)
     TRACE_DRAW_ITEM;
     painter->setPen(item->spanner()->curColor());
     item->drawSymbols(item->symbols(), painter);
+}
+
+void TDraw::draw(const VoltaSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
 }
