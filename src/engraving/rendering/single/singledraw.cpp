@@ -122,6 +122,8 @@
 #include "libmscore/vibrato.h"
 #include "libmscore/volta.h"
 
+#include "libmscore/whammybar.h"
+
 #include "infrastructure/rtti.h"
 
 using namespace mu::engraving::rendering::single;
@@ -292,6 +294,9 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::VIBRATO_SEGMENT:      draw(item_cast<const VibratoSegment*>(item), painter);
         break;
     case ElementType::VOLTA_SEGMENT:        draw(item_cast<const VoltaSegment*>(item), painter);
+        break;
+
+    case ElementType::WHAMMY_BAR_SEGMENT:   draw(item_cast<const WhammyBarSegment*>(item), painter);
         break;
     default:
         LOGD() << item->typeName();
@@ -2084,6 +2089,12 @@ void SingleDraw::draw(const VibratoSegment* item, Painter* painter)
 }
 
 void SingleDraw::draw(const VoltaSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const WhammyBarSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);

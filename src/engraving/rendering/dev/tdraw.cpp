@@ -137,6 +137,8 @@
 #include "libmscore/vibrato.h"
 #include "libmscore/volta.h"
 
+#include "libmscore/whammybar.h"
+
 #include "libmscore/mscoreview.h"
 
 #include "infrastructure/rtti.h"
@@ -339,6 +341,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::VIBRATO_SEGMENT:      draw(item_cast<const VibratoSegment*>(item), painter);
         break;
     case ElementType::VOLTA_SEGMENT:        draw(item_cast<const VoltaSegment*>(item), painter);
+        break;
+
+    case ElementType::WHAMMY_BAR_SEGMENT:   draw(item_cast<const WhammyBarSegment*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2721,6 +2726,12 @@ void TDraw::draw(const VibratoSegment* item, Painter* painter)
 }
 
 void TDraw::draw(const VoltaSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextLineBaseSegment(item, painter);
+}
+
+void TDraw::draw(const WhammyBarSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
