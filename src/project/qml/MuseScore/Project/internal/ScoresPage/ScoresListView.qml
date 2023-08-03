@@ -88,6 +88,7 @@ Item {
             id: newScoreItem
 
             Layout.fillWidth: true
+            Layout.alignment: Qt.AlignTop | Qt.AlignHCenter
             implicitHeight: view.rowHeight
 
             visible: false
