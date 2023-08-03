@@ -115,6 +115,7 @@
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/tremolobar.h"
+#include "libmscore/trill.h"
 
 #include "infrastructure/rtti.h"
 
@@ -275,6 +276,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TREMOLO:              draw(item_cast<const Tremolo*>(item), painter);
         break;
     case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
+        break;
+    case ElementType::TRILL_SEGMENT:        draw(item_cast<const TrillSegment*>(item), painter);
         break;
 
     default:
@@ -2016,4 +2019,11 @@ void SingleDraw::draw(const TremoloBar* item, Painter* painter)
     Pen pen(item->curColor(), item->lineWidth().val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(item->polygon());
+}
+
+void SingleDraw::draw(const TrillSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->spanner()->curColor());
+    item->drawSymbols(item->symbols(), painter);
 }

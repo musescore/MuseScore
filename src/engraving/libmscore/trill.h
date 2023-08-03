@@ -54,7 +54,7 @@ public:
     void remove(EngravingItem*) override;
     Shape shape() const override;
 
-    SymIdList symbols() const { return _symbols; }
+    const SymIdList& symbols() const { return _symbols; }
     void setSymbols(const SymIdList& s) { _symbols = s; }
 
     void symbolLine(SymId start, SymId fill);

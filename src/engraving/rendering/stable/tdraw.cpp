@@ -130,6 +130,7 @@
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/tremolobar.h"
+#include "libmscore/trill.h"
 
 #include "libmscore/mscoreview.h"
 
@@ -323,6 +324,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::TREMOLO:              draw(item_cast<const Tremolo*>(item), painter);
         break;
     case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
+        break;
+    case ElementType::TRILL_SEGMENT:        draw(item_cast<const TrillSegment*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2682,4 +2685,11 @@ void TDraw::draw(const TremoloBar* item, Painter* painter)
     Pen pen(item->curColor(), item->lineWidth().val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(item->polygon());
+}
+
+void TDraw::draw(const TrillSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(item->spanner()->curColor());
+    item->drawSymbols(item->symbols(), painter);
 }

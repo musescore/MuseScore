@@ -31,10 +31,8 @@
 #include "accidental.h"
 #include "chord.h"
 #include "factory.h"
-#include "note.h"
 #include "ornament.h"
 #include "score.h"
-#include "staff.h"
 #include "system.h"
 #include "undo.h"
 
@@ -67,11 +65,9 @@ TrillSegment::TrillSegment(System* parent)
 //   draw
 //---------------------------------------------------------
 
-void TrillSegment::draw(mu::draw::Painter* painter) const
+void TrillSegment::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    painter->setPen(spanner()->curColor());
-    drawSymbols(_symbols, painter);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
