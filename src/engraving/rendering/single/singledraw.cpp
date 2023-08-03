@@ -112,6 +112,7 @@
 #include "libmscore/textbase.h"
 #include "libmscore/textline.h"
 #include "libmscore/textlinebase.h"
+#include "libmscore/tie.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
 #include "libmscore/tremolobar.h"
@@ -277,6 +278,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TEXT:                 draw(item_cast<const Text*>(item), painter);
         break;
     case ElementType::TEXTLINE_SEGMENT:     draw(item_cast<const TextLineSegment*>(item), painter);
+        break;
+    case ElementType::TIE_SEGMENT:          draw(item_cast<const TieSegment*>(item), painter);
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
@@ -1959,6 +1962,53 @@ void SingleDraw::draw(const TextLineSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const TieSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    // hide tie toward the second chord of a cross-measure value
+    if (item->tie()->endNote() && item->tie()->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND) {
+        return;
+    }
+
+    Pen pen(item->curColor());
+    double mag = item->staff() ? item->staff()->staffMag(item->tie()->tick()) : 1.0;
+
+    //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with slur.cpp)
+    std::vector<double> dotted     = { 0.01, 1.99 };   // tighter than Qt PenStyle::DotLine equivalent - would be { 0.01, 2.99 }
+    std::vector<double> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
+    std::vector<double> wideDashed = { 5.00, 6.00 };
+
+    switch (item->slurTie()->styleType()) {
+    case SlurStyleType::Solid:
+        painter->setBrush(Brush(pen.color()));
+        pen.setCapStyle(PenCapStyle::RoundCap);
+        pen.setJoinStyle(PenJoinStyle::RoundJoin);
+        pen.setWidthF(item->style().styleMM(Sid::SlurEndWidth) * mag);
+        break;
+    case SlurStyleType::Dotted:
+        painter->setBrush(BrushStyle::NoBrush);
+        pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
+        pen.setDashPattern(dotted);
+        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        break;
+    case SlurStyleType::Dashed:
+        painter->setBrush(BrushStyle::NoBrush);
+        pen.setDashPattern(dashed);
+        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        break;
+    case SlurStyleType::WideDashed:
+        painter->setBrush(BrushStyle::NoBrush);
+        pen.setDashPattern(wideDashed);
+        pen.setWidthF(item->style().styleMM(Sid::SlurDottedWidth) * mag);
+        break;
+    case SlurStyleType::Undefined:
+        break;
+    }
+    painter->setPen(pen);
+    painter->drawPath(item->path());
 }
 
 void SingleDraw::draw(const TimeSig* item, Painter* painter)
