@@ -262,6 +262,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 
     case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter);
         break;
+    case ElementType::TEXT:                 draw(item_cast<const Text*>(item), painter);
+        break;
 
     default:
         LOGD() << item->typeName();
@@ -1909,6 +1911,12 @@ void SingleDraw::draw(const SystemText* item, Painter* painter)
 }
 
 void SingleDraw::draw(const TempoText* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const Text* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);

@@ -307,6 +307,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::TEMPO_TEXT:           draw(item_cast<const TempoText*>(item), painter);
         break;
+    case ElementType::TEXT:                 draw(item_cast<const Text*>(item), painter);
+        break;
     default:
         item->draw(painter);
     }
@@ -2508,6 +2510,12 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
 }
 
 void TDraw::draw(const TempoText* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void TDraw::draw(const Text* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
