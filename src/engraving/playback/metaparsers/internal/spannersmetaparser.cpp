@@ -136,9 +136,14 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         return;
     }
 
+    const mpe::ArticulationPattern& pattern = spannerCtx.profile->pattern(type);
+    if (pattern.empty()) {
+        return;
+    }
+
     mpe::ArticulationMeta articulationMeta;
     articulationMeta.type = type;
-    articulationMeta.pattern = spannerCtx.profile->pattern(type);
+    articulationMeta.pattern = pattern;
     articulationMeta.timestamp = spannerCtx.nominalTimestamp;
     articulationMeta.overallPitchChangesRange = overallPitchRange;
     articulationMeta.overallDynamicChangesRange = overallDynamicRange;

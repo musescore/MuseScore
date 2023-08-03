@@ -65,5 +65,10 @@ void GraceNotesMetaParser::doParse(const EngravingItem* item, const RenderingCon
         return;
     }
 
-    appendArticulationData(mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration), result);
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
+    if (pattern.empty()) {
+        return;
+    }
+
+    appendArticulationData(mpe::ArticulationMeta(type, pattern, ctx.nominalTimestamp, ctx.nominalDuration), result);
 }

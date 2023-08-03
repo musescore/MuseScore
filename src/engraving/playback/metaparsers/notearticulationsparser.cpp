@@ -100,8 +100,13 @@ void NoteArticulationsParser::parsePersistentMeta(const RenderingContext& ctx, m
         return;
     }
 
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(ctx.persistentArticulation);
+    if (pattern.empty()) {
+        return;
+    }
+
     appendArticulationData({ ctx.persistentArticulation,
-                             ctx.profile->pattern(ctx.persistentArticulation),
+                             pattern,
                              ctx.nominalTimestamp,
                              ctx.nominalDuration,
                              0,
@@ -114,8 +119,13 @@ void NoteArticulationsParser::parseGhostNote(const Note* note, const RenderingCo
         return;
     }
 
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(mpe::ArticulationType::GhostNote);
+    if (pattern.empty()) {
+        return;
+    }
+
     appendArticulationData(mpe::ArticulationMeta(mpe::ArticulationType::GhostNote,
-                                                 ctx.profile->pattern(mpe::ArticulationType::GhostNote),
+                                                 pattern,
                                                  ctx.nominalTimestamp,
                                                  ctx.nominalDuration), result);
 }
@@ -128,8 +138,13 @@ void NoteArticulationsParser::parseNoteHead(const Note* note, const RenderingCon
         return;
     }
 
+    const mpe::ArticulationPattern& pattern = ctx.profile->pattern(typeByNoteHead);
+    if (pattern.empty()) {
+        return;
+    }
+
     appendArticulationData(mpe::ArticulationMeta(typeByNoteHead,
-                                                 ctx.profile->pattern(typeByNoteHead),
+                                                 pattern,
                                                  ctx.nominalTimestamp,
                                                  ctx.nominalDuration), result);
 }

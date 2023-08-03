@@ -62,6 +62,18 @@ protected:
         m_repositoryMock = std::make_shared<NiceMock<ArticulationProfilesRepositoryMock> >();
     }
 
+    ArticulationPattern buildTestArticulationPattern() const
+    {
+        ArticulationPatternSegment blankSegment(ArrangementPattern(HUNDRED_PERCENT /*durationFactor*/, 0 /*timestampOffset*/),
+                                                PitchPattern(EXPECTED_SIZE, TEN_PERCENT, 0),
+                                                ExpressionPattern(EXPECTED_SIZE, TEN_PERCENT, 0));
+
+        ArticulationPattern pattern;
+        pattern.emplace(0, std::move(blankSegment));
+
+        return pattern;
+    }
+
     ArticulationsProfilePtr m_defaultProfile = nullptr;
 
     ArticulationPattern m_dummyPattern;
@@ -281,7 +293,7 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Coda)
 }
 
 /**
- * @brief PlaybackModelTests_Da_Capo_Al_Coda
+ * @brief PlaybackModelTests_Pizz_To_Arco_Technique
  * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 1 measure
  *          Additionally, the first note is marked by "pizzicato" + "stacattissimo". The 3-rd note is marked by "arco"
  *          We'll be playing 4 events overall
@@ -302,6 +314,10 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
     int expectedSize = 4;
 
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    m_defaultProfile->setPattern(ArticulationType::Pizzicato, buildTestArticulationPattern());
+    m_defaultProfile->setPattern(ArticulationType::Staccatissimo, buildTestArticulationPattern());
+
     EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
 
     // [WHEN] The playback model requested to be loaded
@@ -334,6 +350,83 @@ TEST_F(Engraving_PlaybackModelTests, Pizz_To_Arco_Technique)
     const mu::mpe::NoteEvent& fourthNoteEvent = std::get<mu::mpe::NoteEvent>(result.at(1500000).at(0));
     EXPECT_EQ(fourthNoteEvent.expressionCtx().articulations.size(), 1);
     EXPECT_TRUE(fourthNoteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+}
+
+/**
+ * @brief PlaybackModelTests_FallbackToStandardArticulation
+ * @details In this case we're building up a playback model of a simple score - Winds + Voice, 4/4, 120bpm, Treble Cleff, 2 measures
+ *          The user added a bunch of articulations that are not supported by these instruments. These include:
+ *          * pizz, detache for Winds
+ *          * Fall/Doit/Plop/Scoop and notes with crosshead for Voice
+ *          Make sure that we will fallback to the Standard articulation
+ */
+TEST_F(Engraving_PlaybackModelTests, FallbackToStandardArticulation)
+{
+    // [GIVEN] Simple piece of score (Winds + Voice, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "wrong_articulations/wrong_articulations.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 2);
+
+    const Part* windsPart = score->parts().at(0);
+    ASSERT_EQ(windsPart->instrumentId(), "winds");
+
+    const Part* voicePart = score->parts().at(1);
+    ASSERT_EQ(voicePart->instrumentId(), "voice");
+
+    constexpr int NOTE_COUNT = 8;
+
+    // [WHEN] The articulation profiles repository will be returning profiles for Winds/Voices families
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model;
+    model.setprofilesRepository(m_repositoryMock);
+    model.load(score);
+
+    // [WHEN] Request events for Winds
+    const PlaybackEventsMap& windsResult
+        = model.resolveTrackPlaybackData(windsPart->id(), windsPart->instrumentId().toStdString()).originEvents;
+
+    // [THEN] Amount of events does match expectations
+    EXPECT_EQ(windsResult.size(), NOTE_COUNT);
+
+    for (auto pair : windsResult) {
+        const mpe::PlaybackEventList& events = pair.second;
+
+        for (const PlaybackEvent& event : events) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] Use the Standard articulation instead of the one added by the user
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+            EXPECT_GT(noteEvent.arrangementCtx().actualDuration, 0);
+        }
+    }
+
+    // [WHEN] Request events for Voice
+    const PlaybackEventsMap& voiceResult
+        = model.resolveTrackPlaybackData(voicePart->id(), voicePart->instrumentId().toStdString()).originEvents;
+
+    // [THEN] Amount of events does match expectations
+    EXPECT_EQ(voiceResult.size(), NOTE_COUNT);
+
+    for (auto pair : voiceResult) {
+        const mpe::PlaybackEventList& events = pair.second;
+
+        for (const PlaybackEvent& event : events) {
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            // [THEN] Use the Standard articulation instead of the one added by the user
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Standard));
+            EXPECT_GT(noteEvent.arrangementCtx().actualDuration, 0);
+        }
+    }
 }
 
 /**

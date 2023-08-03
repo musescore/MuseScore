@@ -42,11 +42,11 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-static ArticulationMap makeArticulations(ArticulationType persistentArticulationApplied, ArticulationsProfilePtr profile,
+static ArticulationMap makeArticulations(ArticulationType persistentArticulationApplied, const ArticulationPattern& pattern,
                                          timestamp_t timestamp, duration_t duration)
 {
     ArticulationMeta meta(persistentArticulationApplied,
-                          profile->pattern(persistentArticulationApplied),
+                          pattern,
                           timestamp,
                           duration,
                           0,
@@ -132,7 +132,8 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
     Key key = chordSymbol->staff()->key(chordSymbol->tick());
 
-    ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile, eventTimestamp, duration);
+    ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile->pattern(mpe::ArticulationType::Standard),
+                                                      eventTimestamp, duration);
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
@@ -166,7 +167,8 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
     voice_layer_idx_t voiceIdx = static_cast<voice_layer_idx_t>(chordSymbol->voice());
     Key key = chordSymbol->staff()->key(chordSymbol->tick());
 
-    ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile, actualTimestamp, actualDuration);
+    ArticulationMap articulations = makeArticulations(mpe::ArticulationType::Standard, profile->pattern(mpe::ArticulationType::Standard),
+                                                      actualTimestamp, actualDuration);
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
@@ -277,7 +279,15 @@ void PlaybackEventsRenderer::renderFixedNoteEvent(const Note* note, const mpe::t
                                                   const mpe::ArticulationType persistentArticulationApplied,
                                                   const mpe::ArticulationsProfilePtr profile, mpe::PlaybackEventList& result) const
 {
-    ArticulationMap articulations = makeArticulations(persistentArticulationApplied, profile, actualDuration, actualTimestamp);
+    const ArticulationPattern& pattern = profile->pattern(persistentArticulationApplied);
+    ArticulationMap articulations;
+
+    if (pattern.empty()) {
+        articulations = makeArticulations(mpe::ArticulationType::Standard, profile->pattern(mpe::ArticulationType::Standard),
+                                          actualTimestamp, actualDuration);
+    } else {
+        articulations = makeArticulations(persistentArticulationApplied, pattern, actualTimestamp, actualDuration);
+    }
 
     result.emplace_back(buildFixedNoteEvent(note, actualTimestamp, actualDuration, actualDynamicLevel, articulations));
 }

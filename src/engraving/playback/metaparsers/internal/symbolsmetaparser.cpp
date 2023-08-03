@@ -386,7 +386,12 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
         break;
     }
 
-    for (const auto& type : types) {
-        appendArticulationData(mpe::ArticulationMeta(type, ctx.profile->pattern(type), ctx.nominalTimestamp, ctx.nominalDuration), result);
+    for (mpe::ArticulationType type : types) {
+        const mpe::ArticulationPattern& pattern = ctx.profile->pattern(type);
+        if (pattern.empty()) {
+            continue;
+        }
+
+        appendArticulationData(mpe::ArticulationMeta(type, pattern, ctx.nominalTimestamp, ctx.nominalDuration), result);
     }
 }
