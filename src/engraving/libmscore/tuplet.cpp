@@ -254,33 +254,9 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 //   draw
 //---------------------------------------------------------
 
-void Tuplet::draw(mu::draw::Painter* painter) const
+void Tuplet::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    // if in a TAB without stems, tuplets are not shown
-    const StaffType* stt = staffType();
-    if (stt && stt->isTabStaff() && stt->stemless()) {
-        return;
-    }
-
-    Color color(curColor());
-    if (m_number) {
-        painter->setPen(color);
-        PointF pos(m_number->pos());
-        painter->translate(pos);
-        m_number->draw(painter);
-        painter->translate(-pos);
-    }
-    if (m_hasBracket) {
-        painter->setPen(Pen(color, m_bracketWidth.val() * mag()));
-        if (!m_number) {
-            painter->drawPolyline(bracketL, 4);
-        } else {
-            painter->drawPolyline(bracketL, 3);
-            painter->drawPolyline(bracketR, 3);
-        }
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

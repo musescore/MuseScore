@@ -46,11 +46,9 @@ VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
 //   draw
 //---------------------------------------------------------
 
-void VibratoSegment::draw(mu::draw::Painter* painter) const
+void VibratoSegment::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    painter->setPen(spanner()->curColor());
-    drawSymbols(_symbols, painter);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

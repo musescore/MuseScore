@@ -137,6 +137,7 @@ class TremoloBar;
 class Trill;
 class TrillSegment;
 class TripletFeel;
+class Tuplet;
 
 class Vibrato;
 class VibratoSegment;
@@ -238,6 +239,8 @@ private:
     static void draw(const TremoloBar* item, draw::Painter* painter);
     static void draw(const TrillSegment* item, draw::Painter* painter);
     static void draw(const TripletFeel* item, draw::Painter* painter);
+    static void draw(const Tuplet* item, draw::Painter* painter);
+    static void draw(const VibratoSegment* item, draw::Painter* painter);
 
     static void drawTextBase(const TextBase* item, draw::Painter* painter);
     static void drawTextLineBaseSegment(const TextLineBaseSegment* item, draw::Painter* painter);
