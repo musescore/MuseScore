@@ -130,6 +130,7 @@ class TextBase;
 class TextLine;
 class TextLineSegment;
 class TextLineBaseSegment;
+class TieSegment;
 class TimeSig;
 class Tremolo;
 class TremoloBar;
