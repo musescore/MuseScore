@@ -161,53 +161,9 @@ RectF Tremolo::drag(EditData& ed)
 //   draw
 //---------------------------------------------------------
 
-void Tremolo::draw(mu::draw::Painter* painter) const
+void Tremolo::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    if (isBuzzRoll()) {
-        painter->setPen(curColor());
-        drawSymbol(SymId::buzzRoll, painter);
-    } else if (!twoNotes() || !explicitParent()) {
-        painter->setBrush(Brush(curColor()));
-        painter->setNoPen();
-        painter->drawPath(m_path);
-    } else if (twoNotes() && !m_beamSegments.empty()) {
-        // two-note trems act like beams
-
-        // make beam thickness independent of slant
-        // (expression can be simplified?)
-        const LineF bs = m_beamSegments.front()->line;
-        double d = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
-        if (m_beamSegments.size() > 1 && d > M_PI / 6.0) {
-            d = M_PI / 6.0;
-        }
-        double ww = (style().styleMM(Sid::beamWidth).val() / 2.0) / sin(M_PI_2 - atan(d));
-        painter->setBrush(Brush(curColor()));
-        painter->setNoPen();
-        for (const BeamSegment* bs1 : m_beamSegments) {
-            painter->drawPolygon(
-                PolygonF({
-                    PointF(bs1->line.x1(), bs1->line.y1() - ww),
-                    PointF(bs1->line.x2(), bs1->line.y2() - ww),
-                    PointF(bs1->line.x2(), bs1->line.y2() + ww),
-                    PointF(bs1->line.x1(), bs1->line.y1() + ww),
-                }),
-                draw::FillRule::OddEvenFill);
-        }
-    }
-    // for palette
-    if (!explicitParent() && !twoNotes()) {
-        double x = 0.0;     // bbox().width() * .25;
-        Pen pen(curColor(), point(style().styleS(Sid::stemWidth)));
-        painter->setPen(pen);
-        const double sp = spatium();
-        if (isBuzzRoll()) {
-            painter->drawLine(LineF(x, -sp, x, bbox().bottom() + sp));
-        } else {
-            painter->drawLine(LineF(x, -sp * .5, x, m_path.boundingRect().height() + sp));
-        }
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

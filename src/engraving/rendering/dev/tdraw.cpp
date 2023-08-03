@@ -128,6 +128,7 @@
 #include "libmscore/textlinebase.h"
 #include "libmscore/tie.h"
 #include "libmscore/timesig.h"
+#include "libmscore/tremolo.h"
 
 #include "libmscore/mscoreview.h"
 
@@ -316,6 +317,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TIE_SEGMENT:          draw(item_cast<const TieSegment*>(item), painter);
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
+        break;
+    case ElementType::TREMOLO:              draw(item_cast<const Tremolo*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2599,5 +2602,42 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     if (item->largeParentheses()) {
         item->drawSymbol(SymId::timeSigParensLeft,  painter, drawArgs.pointLargeLeftParen,  item->scale().width());
         item->drawSymbol(SymId::timeSigParensRight, painter, drawArgs.pointLargeRightParen, item->scale().width());
+    }
+}
+
+void TDraw::draw(const Tremolo* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->isBuzzRoll()) {
+        painter->setPen(item->curColor());
+        item->drawSymbol(SymId::buzzRoll, painter);
+    } else if (!item->twoNotes() || !item->explicitParent()) {
+        painter->setBrush(Brush(item->curColor()));
+        painter->setNoPen();
+        painter->drawPath(item->path());
+    } else if (item->twoNotes() && !item->beamSegments().empty()) {
+        // two-note trems act like beams
+
+        // make beam thickness independent of slant
+        // (expression can be simplified?)
+        const LineF bs = item->beamSegments().front()->line;
+        double d = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
+        if (item->beamSegments().size() > 1 && d > M_PI / 6.0) {
+            d = M_PI / 6.0;
+        }
+        double ww = (item->style().styleMM(Sid::beamWidth).val() / 2.0) / sin(M_PI_2 - atan(d));
+        painter->setBrush(Brush(item->curColor()));
+        painter->setNoPen();
+        for (const BeamSegment* bs1 : item->beamSegments()) {
+            painter->drawPolygon(
+                PolygonF({
+                PointF(bs1->line.x1(), bs1->line.y1() - ww),
+                PointF(bs1->line.x2(), bs1->line.y2() - ww),
+                PointF(bs1->line.x2(), bs1->line.y2() + ww),
+                PointF(bs1->line.x1(), bs1->line.y1() + ww),
+            }),
+                draw::FillRule::OddEvenFill);
+        }
     }
 }
