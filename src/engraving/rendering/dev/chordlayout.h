@@ -87,6 +87,8 @@ private:
     static void layoutNote2(Note* note, LayoutContext& ctx);
 
     static void placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes);
+
+    static void skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack);
 };
 }
 
