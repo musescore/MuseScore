@@ -445,6 +445,7 @@ enum class TabBeamGrid : char {
 class TabDurationSymbol final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TabDurationSymbol)
+    DECLARE_CLASSOF(ElementType::TAB_DURATION_SYMBOL)
 
 public:
     TabDurationSymbol(ChordRest* parent);
@@ -454,7 +455,7 @@ public:
     void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return false; }
 
-    TabBeamGrid beamGrid() { return m_beamGrid; }
+    TabBeamGrid beamGrid() const { return m_beamGrid; }
     void setBeamGrid(TabBeamGrid g) { m_beamGrid = g; }
 
     double beamLength() const { return m_beamLength; }

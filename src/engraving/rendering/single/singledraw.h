@@ -123,6 +123,7 @@ class Symbol;
 class SystemText;
 class SystemDivider;
 
+class TabDurationSymbol;
 class TempoText;
 class Text;
 class TextBase;

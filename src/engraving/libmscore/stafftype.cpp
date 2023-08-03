@@ -855,62 +855,9 @@ void TabDurationSymbol::layout2()
 //   draw
 //---------------------------------------------------------
 
-void TabDurationSymbol::draw(mu::draw::Painter* painter) const
+void TabDurationSymbol::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    if (!m_tab) {
-        return;
-    }
-
-    if (m_repeat && (m_tab->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
-        Chord* chord = toChord(explicitParent());
-        ChordRest* prevCR = prevChordRest(chord);
-        if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
-            return;
-        }
-    }
-
-    double mag = magS();
-    double imag = 1.0 / mag;
-
-    Pen pen(curColor());
-    painter->setPen(pen);
-    painter->scale(mag, mag);
-    if (m_beamGrid == TabBeamGrid::NONE) {
-        // if no beam grid, draw symbol
-        mu::draw::Font f(m_tab->durationFont());
-        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-        painter->setFont(f);
-        painter->drawText(PointF(0.0, 0.0), m_text);
-    } else {
-        // if beam grid, draw stem line
-        TablatureDurationFont& font = m_tab->_durationFonts[m_tab->_durationFontIdx];
-        double _spatium = spatium();
-        pen.setCapStyle(PenCapStyle::FlatCap);
-        pen.setWidthF(font.gridStemWidth * _spatium);
-        painter->setPen(pen);
-        // take stem height from bbox, but de-magnify it, as drawing is already magnified
-        double h     = bbox().y() / mag;
-        painter->drawLine(PointF(0.0, h), PointF(0.0, 0.0));
-        // if beam grid is medial/final, draw beam lines too: lines go from mid of
-        // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
-        if (m_beamGrid == TabBeamGrid::MEDIALFINAL) {
-            pen.setWidthF(font.gridBeamWidth * _spatium);
-            painter->setPen(pen);
-            // lower height available to beams by half a beam width,
-            // so that top beam upper border aligns with stem top
-            h += (font.gridBeamWidth * _spatium) * 0.5;
-            // draw beams equally spaced within the stem height (this is
-            // different from modern engraving, but common in historic prints)
-            double step  = -h / m_beamLevel;
-            double y     = h;
-            for (int i = 0; i < m_beamLevel; i++, y += step) {
-                painter->drawLine(PointF(m_beamLength, y), PointF(0.0, y));
-            }
-        }
-    }
-    painter->scale(imag, imag);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
