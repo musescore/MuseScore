@@ -2863,7 +2863,7 @@ void TRead::read(HarpPedalDiagram* h, XmlReader& xml, ReadContext& ctx)
                     xml.unknown();
                 }
             }
-            h->setPlayablePitches();
+            h->setPlayableTpcs();
         } else if (!readProperties(h, xml, ctx)) {
             xml.unknown();
         }
