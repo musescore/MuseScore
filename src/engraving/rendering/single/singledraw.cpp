@@ -104,6 +104,7 @@
 #include "libmscore/sticking.h"
 #include "libmscore/stretchedbend.h"
 #include "libmscore/symbol.h"
+#include "libmscore/systemdivider.h"
 
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
@@ -252,6 +253,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 //    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
 //        break;
+    case ElementType::SYSTEM_DIVIDER:       draw(item_cast<const SystemDivider*>(item), painter);
+        break;
     default:
         LOGD() << item->typeName();
         item->draw(painter);
@@ -1884,4 +1887,9 @@ void SingleDraw::draw(const Symbol* item, Painter* painter)
             item->drawSymbol(item->sym(), painter);
         }
     }
+}
+
+void SingleDraw::draw(const SystemDivider* item, Painter* painter)
+{
+    draw(static_cast<const Symbol*>(item), painter);
 }
