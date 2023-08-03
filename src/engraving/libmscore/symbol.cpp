@@ -80,9 +80,17 @@ String Symbol::accessibleInfo() const
 //   Symbol::draw
 //---------------------------------------------------------
 
-void Symbol::draw(mu::draw::Painter*) const
+void Symbol::draw(mu::draw::Painter* painter) const
 {
-    UNREACHABLE;
+    TRACE_ITEM_DRAW;
+    if (!isNoteDot() || !staff()->isTabStaff(tick())) {
+        painter->setPen(curColor());
+        if (_scoreFont) {
+            _scoreFont->draw(_sym, painter, magS(), PointF());
+        } else {
+            drawSymbol(_sym, painter);
+        }
+    }
 }
 
 //---------------------------------------------------------

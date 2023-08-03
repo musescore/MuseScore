@@ -291,8 +291,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
-    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
-        break;
+//    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
+//        break;
     default:
         item->draw(painter);
     }
