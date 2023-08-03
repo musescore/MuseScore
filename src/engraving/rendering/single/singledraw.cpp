@@ -258,6 +258,7 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::SYSTEM_TEXT:          draw(item_cast<const SystemText*>(item), painter);
         break;
+
     default:
         LOGD() << item->typeName();
         item->draw(painter);

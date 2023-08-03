@@ -87,6 +87,7 @@
 #include "libmscore/mmrest.h"
 #include "libmscore/mmrestrange.h"
 
+#include "libmscore/navigate.h"
 #include "libmscore/note.h"
 #include "libmscore/notedot.h"
 
@@ -110,6 +111,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
+#include "libmscore/stafftype.h"
 #include "libmscore/stafftypechange.h"
 #include "libmscore/stem.h"
 #include "libmscore/stemslash.h"
@@ -298,6 +300,9 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::SYSTEM_DIVIDER:       draw(item_cast<const SystemDivider*>(item), painter);
         break;
     case ElementType::SYSTEM_TEXT:          draw(item_cast<const SystemText*>(item), painter);
+        break;
+
+    case ElementType::TAB_DURATION_SYMBOL:  draw(item_cast<const TabDurationSymbol*>(item), painter);
         break;
     default:
         item->draw(painter);
@@ -2439,4 +2444,62 @@ void TDraw::draw(const SystemText* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (!item->tab()) {
+        return;
+    }
+
+    if (item->isRepeat() && (item->tab()->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
+        Chord* chord = toChord(item->explicitParent());
+        ChordRest* prevCR = prevChordRest(chord);
+        if (prevCR && (chord->measure()->system() == prevCR->measure()->system())) {
+            return;
+        }
+    }
+
+    double mag = item->magS();
+    double imag = 1.0 / mag;
+
+    Pen pen(item->curColor());
+    painter->setPen(pen);
+    painter->scale(mag, mag);
+    if (item->beamGrid() == TabBeamGrid::NONE) {
+        // if no beam grid, draw symbol
+        mu::draw::Font f(item->tab()->durationFont());
+        f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+        painter->setFont(f);
+        painter->drawText(PointF(0.0, 0.0), item->text());
+    } else {
+        // if beam grid, draw stem line
+        TablatureDurationFont& font = item->tab()->_durationFonts[item->tab()->_durationFontIdx];
+        double _spatium = item->spatium();
+        pen.setCapStyle(PenCapStyle::FlatCap);
+        pen.setWidthF(font.gridStemWidth * _spatium);
+        painter->setPen(pen);
+        // take stem height from bbox, but de-magnify it, as drawing is already magnified
+        double h = item->bbox().y() / mag;
+        painter->drawLine(PointF(0.0, h), PointF(0.0, 0.0));
+        // if beam grid is medial/final, draw beam lines too: lines go from mid of
+        // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
+        if (item->beamGrid() == TabBeamGrid::MEDIALFINAL) {
+            pen.setWidthF(font.gridBeamWidth * _spatium);
+            painter->setPen(pen);
+            // lower height available to beams by half a beam width,
+            // so that top beam upper border aligns with stem top
+            h += (font.gridBeamWidth * _spatium) * 0.5;
+            // draw beams equally spaced within the stem height (this is
+            // different from modern engraving, but common in historic prints)
+            double step  = -h / item->beamLevel();
+            double y     = h;
+            for (int i = 0; i < item->beamLevel(); i++, y += step) {
+                painter->drawLine(PointF(item->beamLength(), y), PointF(0.0, y));
+            }
+        }
+    }
+    painter->scale(imag, imag);
 }
