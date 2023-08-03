@@ -22,8 +22,9 @@
 #ifndef MU_AUDIO_OSXAUDIODRIVER_H
 #define MU_AUDIO_OSXAUDIODRIVER_H
 
-#include <memory>
 #include <map>
+#include <memory>
+#include <mutex>
 
 #include <MacTypes.h>
 
@@ -83,6 +84,7 @@ private:
 
     std::shared_ptr<Data> m_data = nullptr;
     std::map<unsigned int, std::string> m_outputDevices = {}, m_inputDevices = {};
+    mutable std::mutex m_devicesMutex;
     async::Notification m_outputDeviceChanged;
     async::Notification m_availableOutputDevicesChanged;
     AudioDeviceID m_deviceId;

@@ -186,6 +186,8 @@ bool OSXAudioDriver::isOpened() const
 
 AudioDeviceList OSXAudioDriver::availableOutputDevices() const
 {
+    std::lock_guard lock(m_devicesMutex);
+
     AudioDeviceList deviceList;
     deviceList.push_back({ DEFAULT_DEVICE_ID, trc("audio", "System default") });
 
@@ -212,6 +214,8 @@ mu::audio::AudioDeviceID OSXAudioDriver::outputDevice() const
 
 void OSXAudioDriver::updateDeviceMap()
 {
+    std::lock_guard lock(m_devicesMutex);
+
     UInt32 propertySize;
     OSStatus result;
     std::vector<AudioObjectID> audioObjects = {};
@@ -363,6 +367,8 @@ bool OSXAudioDriver::audioQueueSetDeviceName(const AudioDeviceID& deviceId)
     if (deviceId.empty() || deviceId == DEFAULT_DEVICE_ID) {
         return true; //default device used
     }
+
+    std::lock_guard lock(m_devicesMutex);
 
     uint deviceIdInt = QString::fromStdString(deviceId).toInt();
     auto index = std::find_if(m_outputDevices.begin(), m_outputDevices.end(), [&deviceIdInt](auto& d) {
