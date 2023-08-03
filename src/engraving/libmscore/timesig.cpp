@@ -24,13 +24,10 @@
 
 #include "style/style.h"
 #include "translation.h"
-#include "iengravingfont.h"
 
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "stafftype.h"
-#include "utils.h"
 
 #include "log.h"
 
@@ -145,21 +142,9 @@ void TimeSig::setDenominatorString(const String& a)
 //   draw
 //---------------------------------------------------------
 
-void TimeSig::draw(mu::draw::Painter* painter) const
+void TimeSig::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (staff() && !const_cast<const Staff*>(staff())->staffType(tick())->genTimesig()) {
-        return;
-    }
-    painter->setPen(curColor());
-
-    drawSymbols(m_drawArgs.ns, painter, m_drawArgs.pz, m_scale);
-    drawSymbols(m_drawArgs.ds, painter, m_drawArgs.pn, m_scale);
-
-    if (m_largeParentheses) {
-        drawSymbol(SymId::timeSigParensLeft,  painter, m_drawArgs.pointLargeLeftParen,  m_scale.width());
-        drawSymbol(SymId::timeSigParensRight, painter, m_drawArgs.pointLargeRightParen, m_scale.width());
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

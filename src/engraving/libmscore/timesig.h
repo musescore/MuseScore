@@ -127,7 +127,7 @@ public:
         mu::PointF pointLargeRightParen;
     };
 
-    const DrawArgs& drawArgs() { return m_drawArgs; }
+    const DrawArgs& drawArgs() const { return m_drawArgs; }
     void setDrawArgs(const DrawArgs& args) { m_drawArgs = args; }
 
 protected:

@@ -112,6 +112,7 @@
 #include "libmscore/textbase.h"
 #include "libmscore/textline.h"
 #include "libmscore/textlinebase.h"
+#include "libmscore/timesig.h"
 
 #include "infrastructure/rtti.h"
 
@@ -266,6 +267,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TEXT:                 draw(item_cast<const Text*>(item), painter);
         break;
     case ElementType::TEXTLINE_SEGMENT:     draw(item_cast<const TextLineSegment*>(item), painter);
+        break;
+    case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
 
     default:
@@ -1929,4 +1932,24 @@ void SingleDraw::draw(const TextLineSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const TimeSig* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genTimesig()) {
+        return;
+    }
+    painter->setPen(item->curColor());
+
+    const TimeSig::DrawArgs& drawArgs = item->drawArgs();
+
+    item->drawSymbols(drawArgs.ns, painter, drawArgs.pz, item->scale());
+    item->drawSymbols(drawArgs.ds, painter, drawArgs.pn, item->scale());
+
+    if (item->largeParentheses()) {
+        item->drawSymbol(SymId::timeSigParensLeft,  painter, drawArgs.pointLargeLeftParen,  item->scale().width());
+        item->drawSymbol(SymId::timeSigParensRight, painter, drawArgs.pointLargeRightParen, item->scale().width());
+    }
 }
