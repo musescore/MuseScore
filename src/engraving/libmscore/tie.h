@@ -34,6 +34,7 @@ namespace mu::engraving {
 class TieSegment final : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, TieSegment)
+    DECLARE_CLASSOF(ElementType::TIE_SEGMENT)
 
     PointF autoAdjustOffset;
     double shoulderHeightMin = 0.4;

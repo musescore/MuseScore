@@ -67,51 +67,9 @@ TieSegment::TieSegment(const TieSegment& s)
 //   draw
 //---------------------------------------------------------
 
-void TieSegment::draw(mu::draw::Painter* painter) const
+void TieSegment::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    // hide tie toward the second chord of a cross-measure value
-    if (tie()->endNote() && tie()->endNote()->chord()->crossMeasure() == CrossMeasure::SECOND) {
-        return;
-    }
-
-    Pen pen(curColor());
-    double mag = staff() ? staff()->staffMag(tie()->tick()) : 1.0;
-
-    //Replace generic Qt dash patterns with improved equivalents to show true dots (keep in sync with slur.cpp)
-    std::vector<double> dotted     = { 0.01, 1.99 };   // tighter than Qt PenStyle::DotLine equivalent - would be { 0.01, 2.99 }
-    std::vector<double> dashed     = { 3.00, 3.00 };   // Compensating for caps. Qt default PenStyle::DashLine is { 4.0, 2.0 }
-    std::vector<double> wideDashed = { 5.00, 6.00 };
-
-    switch (slurTie()->styleType()) {
-    case SlurStyleType::Solid:
-        painter->setBrush(Brush(pen.color()));
-        pen.setCapStyle(PenCapStyle::RoundCap);
-        pen.setJoinStyle(PenJoinStyle::RoundJoin);
-        pen.setWidthF(style().styleMM(Sid::SlurEndWidth) * mag);
-        break;
-    case SlurStyleType::Dotted:
-        painter->setBrush(BrushStyle::NoBrush);
-        pen.setCapStyle(PenCapStyle::RoundCap);           // True dots
-        pen.setDashPattern(dotted);
-        pen.setWidthF(style().styleMM(Sid::SlurDottedWidth) * mag);
-        break;
-    case SlurStyleType::Dashed:
-        painter->setBrush(BrushStyle::NoBrush);
-        pen.setDashPattern(dashed);
-        pen.setWidthF(style().styleMM(Sid::SlurDottedWidth) * mag);
-        break;
-    case SlurStyleType::WideDashed:
-        painter->setBrush(BrushStyle::NoBrush);
-        pen.setDashPattern(wideDashed);
-        pen.setWidthF(style().styleMM(Sid::SlurDottedWidth) * mag);
-        break;
-    case SlurStyleType::Undefined:
-        break;
-    }
-    painter->setPen(pen);
-    painter->drawPath(m_path);
+    UNREACHABLE;
 }
 
 bool TieSegment::isEditAllowed(EditData& ed) const
