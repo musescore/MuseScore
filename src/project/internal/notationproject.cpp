@@ -508,7 +508,7 @@ mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
             suffix = engraving::MSCX;
         }
 
-        return saveScore(path, suffix, false /*createThumbnail*/);
+        return saveScore(path, suffix, false /*generateBackup*/, false /*createThumbnail*/);
     }
 
     return make_ret(notation::Err::UnknownError);
@@ -554,7 +554,7 @@ mu::Ret NotationProject::writeToDevice(QIODevice* device)
     return ret;
 }
 
-mu::Ret NotationProject::saveScore(const io::path_t& path, const std::string& fileSuffix, bool createThumbnail)
+mu::Ret NotationProject::saveScore(const io::path_t& path, const std::string& fileSuffix, bool generateBackup, bool createThumbnail)
 {
     if (!isMuseScoreFile(fileSuffix) && !fileSuffix.empty()) {
         return exportProject(path, fileSuffix);
@@ -562,7 +562,7 @@ mu::Ret NotationProject::saveScore(const io::path_t& path, const std::string& fi
 
     MscIoMode ioMode = mscIoModeBySuffix(fileSuffix);
 
-    return doSave(path, ioMode, true /*generateBackup*/, createThumbnail);
+    return doSave(path, ioMode, generateBackup, createThumbnail);
 }
 
 mu::Ret NotationProject::doSave(const io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup, bool createThumbnail)

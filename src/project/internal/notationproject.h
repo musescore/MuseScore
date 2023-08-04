@@ -100,10 +100,10 @@ private:
     Ret doLoad(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format);
     Ret doImport(const io::path_t& path, const io::path_t& stylePath, bool forceMode);
 
-    Ret saveScore(const io::path_t& path, const std::string& fileSuffix, bool createThumbnail = true);
+    Ret saveScore(const io::path_t& path, const std::string& fileSuffix, bool generateBackup = true, bool createThumbnail = true);
     Ret saveSelectionOnScore(const io::path_t& path = io::path_t());
     Ret exportProject(const io::path_t& path, const std::string& suffix);
-    Ret doSave(const io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup, bool createThumbnail = true);
+    Ret doSave(const io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup = true, bool createThumbnail = true);
     Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection, bool createThumbnail = true);
 
