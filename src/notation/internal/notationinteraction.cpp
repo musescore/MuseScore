@@ -310,7 +310,7 @@ void NotationInteraction::paint(mu::draw::Painter* painter)
     drawGripPoints(painter);
 
     if (m_lasso && !m_lasso->isEmpty()) {
-        m_lasso->draw(painter);
+        EngravingItem::renderer()->drawItem(m_lasso, painter);
     }
 
     if (m_dropData.dropRect.isValid()) {

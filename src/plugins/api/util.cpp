@@ -197,7 +197,7 @@ void ScoreView::paint(QPainter* qp)
     foreach (const mu::engraving::EngravingItem* e, el) {
         PointF pos(e->pagePos());
         p.translate(pos);
-        e->draw(&p);
+        mu::engraving::EngravingItem::renderer()->drawItem(e, &p);
         p.translate(-pos);
     }
 }

@@ -37,6 +37,7 @@ namespace mu::engraving {
 class StaffLines final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StaffLines)
+    DECLARE_CLASSOF(ElementType::STAFF_LINES)
 
 public:
 
@@ -48,7 +49,7 @@ public:
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    const std::vector<mu::LineF>& lines() { return m_lines; }
+    const std::vector<mu::LineF>& lines() const { return m_lines; }
     void setLines(const std::vector<mu::LineF>& l) { m_lines = l; }
 
     Measure* measure() const { return (Measure*)explicitParent(); }

@@ -162,7 +162,7 @@ void ExampleView::drawElements(mu::draw::Painter& painter, const std::vector<Eng
         e->itemDiscovered = 0;
         PointF pos(e->pagePos());
         painter.translate(pos);
-        e->draw(&painter);
+        EngravingItem::renderer()->drawItem(e, &painter);
         painter.translate(-pos);
     }
 }

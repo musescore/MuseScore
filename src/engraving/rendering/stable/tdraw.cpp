@@ -95,6 +95,7 @@
 #include "libmscore/ornament.h"
 #include "libmscore/ottava.h"
 
+#include "libmscore/page.h"
 #include "libmscore/palmmute.h"
 #include "libmscore/part.h"
 #include "libmscore/pedal.h"
@@ -110,6 +111,7 @@
 #include "libmscore/slur.h"
 #include "libmscore/spacer.h"
 #include "libmscore/staff.h"
+#include "libmscore/stafflines.h"
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftype.h"
@@ -275,9 +277,10 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::OTTAVA_SEGMENT:       draw(item_cast<const OttavaSegment*>(item), painter);
         break;
 
+    case ElementType::PAGE:                 draw(item_cast<const Page*>(item), painter);
+        break;
     case ElementType::PALM_MUTE_SEGMENT:    draw(item_cast<const PalmMuteSegment*>(item), painter);
         break;
-
     case ElementType::PEDAL_SEGMENT:        draw(item_cast<const PedalSegment*>(item), painter);
         break;
     case ElementType::PICK_SCRAPE_SEGMENT:  draw(item_cast<const PickScrapeSegment*>(item), painter);
@@ -297,6 +300,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::SLUR_SEGMENT:         draw(item_cast<const SlurSegment*>(item), painter);
         break;
     case ElementType::SPACER:               draw(item_cast<const Spacer*>(item), painter);
+        break;
+    case ElementType::STAFF_LINES:          draw(item_cast<const StaffLines*>(item), painter);
         break;
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter);
         break;
@@ -350,7 +355,8 @@ void TDraw::drawItem(const EngravingItem* item, Painter* painter)
     case ElementType::WHAMMY_BAR_SEGMENT:   draw(item_cast<const WhammyBarSegment*>(item), painter);
         break;
     default:
-        item->draw(painter);
+        NOT_IMPLEMENTED << item->typeName();
+        UNREACHABLE;
     }
 }
 
@@ -2226,6 +2232,68 @@ void TDraw::draw(const OttavaSegment* item, Painter* painter)
     drawTextLineBaseSegment(item, painter);
 }
 
+void TDraw::draw(const Page* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (!item->score()->isLayoutMode(LayoutMode::PAGE)) {
+        return;
+    }
+    //
+    // draw header/footer
+    //
+
+    page_idx_t n = item->no() + 1 + item->score()->pageNumberOffset();
+    painter->setPen(item->curColor());
+
+    auto drawHeaderFooter = [item](mu::draw::Painter* p, int area, const String& ss)
+    {
+        Text* text = item->layoutHeaderFooter(area, ss);
+        if (!text) {
+            return;
+        }
+        p->translate(text->pos());
+        draw(text, p);
+        p->translate(-text->pos());
+        text->resetExplicitParent();
+    };
+
+    String s1, s2, s3;
+
+    if (item->style().styleB(Sid::showHeader) && (item->no() || item->style().styleB(Sid::headerFirstPage))) {
+        bool odd = (n & 1) || !item->style().styleB(Sid::headerOddEven);
+        if (odd) {
+            s1 = item->style().styleSt(Sid::oddHeaderL);
+            s2 = item->style().styleSt(Sid::oddHeaderC);
+            s3 = item->style().styleSt(Sid::oddHeaderR);
+        } else {
+            s1 = item->style().styleSt(Sid::evenHeaderL);
+            s2 = item->style().styleSt(Sid::evenHeaderC);
+            s3 = item->style().styleSt(Sid::evenHeaderR);
+        }
+
+        drawHeaderFooter(painter, 0, s1);
+        drawHeaderFooter(painter, 1, s2);
+        drawHeaderFooter(painter, 2, s3);
+    }
+
+    if (item->style().styleB(Sid::showFooter) && (item->no() || item->style().styleB(Sid::footerFirstPage))) {
+        bool odd = (n & 1) || !item->style().styleB(Sid::footerOddEven);
+        if (odd) {
+            s1 = item->style().styleSt(Sid::oddFooterL);
+            s2 = item->style().styleSt(Sid::oddFooterC);
+            s3 = item->style().styleSt(Sid::oddFooterR);
+        } else {
+            s1 = item->style().styleSt(Sid::evenFooterL);
+            s2 = item->style().styleSt(Sid::evenFooterC);
+            s3 = item->style().styleSt(Sid::evenFooterR);
+        }
+
+        drawHeaderFooter(painter, 3, s1);
+        drawHeaderFooter(painter, 4, s2);
+        drawHeaderFooter(painter, 5, s3);
+    }
+}
+
 void TDraw::draw(const PalmMuteSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
@@ -2425,6 +2493,13 @@ void TDraw::draw(const Spacer* item, Painter* painter)
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(item->path());
+}
+
+void TDraw::draw(const StaffLines* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(Pen(item->curColor(), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->drawLines(item->lines());
 }
 
 void TDraw::draw(const StaffState* item, Painter* painter)

@@ -25,7 +25,6 @@
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
-#include "stafftype.h"
 #include "system.h"
 
 using namespace mu;
@@ -101,12 +100,9 @@ Shape StaffLines::hitShape() const
 //   draw
 //---------------------------------------------------------
 
-void StaffLines::draw(mu::draw::Painter* painter) const
+void StaffLines::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    painter->setPen(Pen(curColor(), m_lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
-    painter->drawLines(m_lines);
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------
