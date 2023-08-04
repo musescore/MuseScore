@@ -7653,7 +7653,7 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
             if (outFileName.isEmpty())
                   parser.showHelp(EXIT_FAILURE);
             }
-      if ((converterMode = parser.isSet("u"))) {
+      if ((unrollRepeats = parser.isSet("u"))) {
             MScore::noGui = true;
             outFileName = parser.value("u");
             if (outFileName.isEmpty())
