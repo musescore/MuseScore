@@ -98,15 +98,6 @@ PlacementV Fingering::calculatePlacement() const
     return below ? PlacementV::BELOW : PlacementV::ABOVE;
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Fingering::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 bool Fingering::isEditAllowed(EditData& ed) const
 {
     if (isTextNavigationKey(ed.key, ed.modifiers)) {

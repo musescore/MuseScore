@@ -83,8 +83,6 @@ public:
     double fontSize() const;
     void setFontSize(double size);
 
-    void draw(mu::draw::Painter*) const override;
-
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
 

@@ -852,15 +852,6 @@ void TabDurationSymbol::layout2()
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void TabDurationSymbol::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   STATIC FUNCTIONS FOR FONT CONFIGURATION MANAGEMENT
 //---------------------------------------------------------
 

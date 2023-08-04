@@ -110,11 +110,6 @@ double BagpipeEmbellishment::mag() const
     return 0.7;
 }
 
-void BagpipeEmbellishment::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 void BagpipeEmbellishment::setLayoutData(const LayoutData& data)
 {
     m_layoutData = data;

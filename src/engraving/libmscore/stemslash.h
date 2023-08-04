@@ -43,7 +43,6 @@ public:
     double mag() const override { return parentItem()->mag(); }
 
     StemSlash* clone() const override { return new StemSlash(*this); }
-    void draw(mu::draw::Painter*) const override;
 
     Chord* chord() const { return (Chord*)explicitParent(); }
 

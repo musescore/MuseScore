@@ -452,7 +452,7 @@ public:
     TabDurationSymbol(ChordRest* parent, const StaffType* tab, DurationType type, int dots);
     TabDurationSymbol(const TabDurationSymbol&);
     TabDurationSymbol* clone() const override { return new TabDurationSymbol(*this); }
-    void draw(mu::draw::Painter*) const override;
+
     bool isEditable() const override { return false; }
 
     TabBeamGrid beamGrid() const { return m_beamGrid; }

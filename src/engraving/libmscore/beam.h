@@ -130,7 +130,6 @@ public:
     void remove(EngravingItem*) override;
 
     void move(const mu::PointF&) override;
-    void draw(mu::draw::Painter*) const override;
 
     bool up() const { return m_up; }
     void setUp(bool v) { m_up = v; }

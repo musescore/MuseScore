@@ -45,7 +45,6 @@ public:
     Trill* trill() const { return (Trill*)spanner(); }
 
     TrillSegment* clone() const override { return new TrillSegment(*this); }
-    void draw(mu::draw::Painter*) const override;
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all) override;
 

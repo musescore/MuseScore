@@ -285,15 +285,6 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
     }
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void FretDiagram::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 double FretDiagram::centerX() const
 {
     // Keep in sync with how bbox is calculated in layout().

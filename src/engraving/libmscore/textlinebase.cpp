@@ -80,14 +80,6 @@ void TextLineBaseSegment::setSelected(bool f)
     m_endText->setSelected(f);
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-void TextLineBaseSegment::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 RectF TextLineBaseSegment::boundingBoxOfLine(const PointF& p1, const PointF& p2, double lw2, bool isDottedLine)
 {
     if (isDottedLine) {

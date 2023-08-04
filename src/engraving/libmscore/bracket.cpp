@@ -156,15 +156,6 @@ void Bracket::setStaffSpan(size_t a, size_t b)
     }
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Bracket::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 bool Bracket::isEditable() const
 {
     return true;

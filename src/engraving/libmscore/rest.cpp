@@ -110,15 +110,6 @@ void Rest::hack_toRestType()
 }
 
 //---------------------------------------------------------
-//   Rest::draw
-//---------------------------------------------------------
-
-void Rest::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   setOffset, overridden from EngravingItem
 //    (- raster vertical position in spatium units) -> no
 //    - half rests and whole rests outside the staff are

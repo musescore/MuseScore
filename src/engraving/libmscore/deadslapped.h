@@ -42,8 +42,6 @@ public:
 
     DeadSlapped* clone() const override { return new DeadSlapped(*this); }
 
-    void draw(mu::draw::Painter*) const override;
-
     const mu::draw::PainterPath& path1() const { return m_path1; }
     void setPath1(const mu::draw::PainterPath& p) { m_path1 = p; }
 

@@ -46,7 +46,6 @@ public:
 
     bool isEmpty() const { return bbox().isEmpty(); }
 
-    void draw(mu::draw::Painter*) const override;
     bool isEditable() const override { return true; }
     void editDrag(EditData&) override;
     void endDrag(EditData&) override {}

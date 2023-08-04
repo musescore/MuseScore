@@ -60,7 +60,6 @@ private:
     StaffTypeChange(const StaffTypeChange&);
 
     void spatiumChanged(double oldValue, double newValue) override;
-    void draw(mu::draw::Painter*) const override;
 
     StaffType* m_staffType = nullptr;
     bool m_ownsStaffType = false;

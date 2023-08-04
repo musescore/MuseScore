@@ -3041,15 +3041,6 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void TextBase::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   drawEditMode
 //    draw edit mode decorations
 //---------------------------------------------------------

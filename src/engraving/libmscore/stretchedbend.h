@@ -77,8 +77,6 @@ public:
 
     mu::draw::Font font(double sp) const;
 
-    void draw(mu::draw::Painter*) const override;
-
     void fillArrows(double width);
     void fillSegments();    // converting points from file to bend segments
 

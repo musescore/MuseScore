@@ -28,7 +28,6 @@
 #include "iengravingfont.h"
 
 #include "score.h"
-#include "staff.h"
 #include "system.h"
 
 #include "log.h"
@@ -40,15 +39,6 @@ namespace mu::engraving {
 VibratoSegment::VibratoSegment(Vibrato* sp, System* parent)
     : LineSegment(ElementType::VIBRATO_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-}
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void VibratoSegment::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
 }
 
 //---------------------------------------------------------

@@ -51,7 +51,6 @@ public:
     Glissando* glissando() const { return toGlissando(spanner()); }
 
     GlissandoSegment* clone() const override { return new GlissandoSegment(*this); }
-    void draw(mu::draw::Painter*) const override;
 
     EngravingItem* propertyDelegate(Pid) override;
 };

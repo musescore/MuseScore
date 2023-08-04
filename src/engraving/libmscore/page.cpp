@@ -85,16 +85,6 @@ void Page::appendSystem(System* s)
 }
 
 //---------------------------------------------------------
-//   draw
-//    bounding rectangle fr is relative to page PointF
-//---------------------------------------------------------
-
-void Page::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   layoutHeaderFooter
 //---------------------------------------------------------
 

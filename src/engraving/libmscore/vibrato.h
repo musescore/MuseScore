@@ -44,8 +44,6 @@ public:
 
     Vibrato* vibrato() const { return toVibrato(spanner()); }
 
-    void draw(mu::draw::Painter*) const override;
-
     EngravingItem* propertyDelegate(Pid) override;
 
     Shape shape() const override;

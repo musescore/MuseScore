@@ -49,8 +49,6 @@ public:
     ElementType layoutType() const;
     PlacementV calculatePlacement() const;
 
-    void draw(mu::draw::Painter*) const override;
-
     bool isEditAllowed(EditData&) const override;
 
     PropertyValue propertyDefault(Pid id) const override;

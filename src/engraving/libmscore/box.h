@@ -44,7 +44,6 @@ class Box : public MeasureBase
 public:
     Box(const ElementType& type, System* parent);
 
-    virtual void draw(mu::draw::Painter*) const override;
     virtual bool isEditable() const override { return true; }
 
     virtual bool isEditAllowed(EditData&) const override;

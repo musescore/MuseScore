@@ -316,8 +316,12 @@ public:
 
     virtual int subtype() const { return -1; }                    // for select gui
 
-    virtual void draw(mu::draw::Painter*) const {}
-    void drawAt(mu::draw::Painter* p, const PointF& pt) const { p->translate(pt); draw(p); p->translate(-pt); }
+    void drawAt(mu::draw::Painter* p, const PointF& pt) const
+    {
+        p->translate(pt);
+        renderer()->drawItem(this, p);
+        p->translate(-pt);
+    }
 
 //       virtual ElementGroup getElementGroup() { return SingleElementGroup(this); }
     virtual std::unique_ptr<ElementGroup> getDragGroup(std::function<bool(const EngravingItem*)> /*isDragged*/)

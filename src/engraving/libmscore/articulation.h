@@ -186,8 +186,6 @@ protected:
     friend class mu::engraving::Factory;
     Articulation(ChordRest* parent, ElementType type = ElementType::ARTICULATION);
 
-    void draw(mu::draw::Painter*) const override;
-
 private:
 
     void setupShowOnTabStyles();

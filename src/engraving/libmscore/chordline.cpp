@@ -76,15 +76,6 @@ const TranslatableString& ChordLine::chordLineTypeName() const
 }
 
 //---------------------------------------------------------
-//   Symbol::draw
-//---------------------------------------------------------
-
-void ChordLine::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   startEditDrag
 //---------------------------------------------------------
 

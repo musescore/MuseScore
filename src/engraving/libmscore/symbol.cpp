@@ -77,23 +77,6 @@ String Symbol::accessibleInfo() const
 }
 
 //---------------------------------------------------------
-//   Symbol::draw
-//---------------------------------------------------------
-
-void Symbol::draw(mu::draw::Painter* painter) const
-{
-    TRACE_ITEM_DRAW;
-    if (!isNoteDot() || !staff()->isTabStaff(tick())) {
-        painter->setPen(curColor());
-        if (_scoreFont) {
-            _scoreFont->draw(_sym, painter, magS(), PointF());
-        } else {
-            drawSymbol(_sym, painter);
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   Symbol::getProperty
 //---------------------------------------------------------
 PropertyValue Symbol::getProperty(Pid propertyId) const
@@ -163,20 +146,6 @@ String FSymbol::toString() const
 String FSymbol::accessibleInfo() const
 {
     return toString();
-}
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void FSymbol::draw(mu::draw::Painter* painter) const
-{
-    String s;
-    mu::draw::Font f(_font);
-    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
-    painter->setFont(f);
-    painter->setPen(curColor());
-    painter->drawText(PointF(0, 0), toString());
 }
 
 //---------------------------------------------------------

@@ -376,11 +376,6 @@ void Accidental::setLayoutData(const LayoutData& data)
     setPos(data.pos);
 }
 
-void Accidental::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 //---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------

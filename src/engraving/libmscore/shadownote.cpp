@@ -103,15 +103,6 @@ bool ShadowNote::computeUp() const
     }
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void ShadowNote::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
 {
     double noteheadWidth = symWidth(m_noteheadSymbol);

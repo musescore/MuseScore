@@ -90,7 +90,6 @@ private:
     friend class Factory;
     Fermata(EngravingItem* parent);
 
-    void draw(mu::draw::Painter*) const override;
     Sid getPropertyStyle(Pid) const override;
 
     SymId m_symId = SymId::noSym;

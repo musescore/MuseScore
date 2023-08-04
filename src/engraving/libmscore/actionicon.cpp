@@ -74,11 +74,6 @@ void ActionIcon::setFontSize(double size)
     m_iconFont.setPointSizeF(size);
 }
 
-void ActionIcon::draw(Painter*) const
-{
-    UNREACHABLE;
-}
-
 engraving::PropertyValue ActionIcon::getProperty(Pid pid) const
 {
     switch (pid) {

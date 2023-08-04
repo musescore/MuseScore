@@ -77,7 +77,6 @@ private:
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
 
-    void draw(mu::draw::Painter*) const override;
     Sid getPropertyStyle(Pid) const override;
 
     bool acceptDrop(EditData&) const override;
