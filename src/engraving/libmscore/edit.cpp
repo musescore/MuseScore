@@ -3269,7 +3269,7 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
             }
             Fraction f;
             Fraction tick  = Fraction(-1, 1);
-            Tuplet* tuplet = 0;
+            Tuplet* currentTuplet = 0;
             for (Segment* s = s1; s && (s->tick() < stick2); s = s->next1()) {
                 if (s->element(track) && s->isBreathType()) {
                     deleteItem(s->element(track));
@@ -3300,20 +3300,21 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
                         f = offset;
                         tick = s->measure()->tick();
                     } else {
+                        f = Fraction(0, 1);
                         tick = s->tick();
-                        f    = Fraction(0, 1);
                     }
-                    tuplet = cr1->tuplet();
-                    if (tuplet && (tuplet->tick() == tick) && ((tuplet->tick() + tuplet->actualTicks()) <= tick2)) {
-                        // remove complete top level tuplet
-
+                    currentTuplet = cr1->tuplet();
+                    if (currentTuplet && ((currentTuplet->tick()) >= stick1)
+                        && ((currentTuplet->tick() + currentTuplet->actualTicks()) <= tick2)) {
+                        // Find highest-level complete tuplet contained in range
                         Tuplet* t = cr1->tuplet();
-                        while (t->tuplet()) {
+                        while (t->tuplet() && ((t->tuplet()->tick()) >= stick1)
+                               && ((t->tuplet()->tick() + t->tuplet()->actualTicks()) <= tick2)) {
                             t = t->tuplet();
                         }
                         cmdDeleteTuplet(t, false);
                         f += t->ticks();
-                        tuplet = 0;
+                        currentTuplet = t->tuplet();
                         continue;
                     }
                 }
@@ -3321,24 +3322,27 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
                     deleteItem(e);
                     continue;
                 }
-                if (tuplet != cr1->tuplet()) {
-                    Tuplet* t = cr1->tuplet();
-                    if (t && (((t->tick() + t->actualTicks()) <= tick2) || fullMeasure)) {
-                        // remove complete top level tuplet
 
-                        while (t->tuplet()) {
+                if (currentTuplet != cr1->tuplet()) {
+                    if (f.isValid()) { // Set rests for the previous tuplet we were dealing with
+                        setRest(tick, track, f, false, currentTuplet);
+                    }
+                    Tuplet* t = cr1->tuplet();
+                    if (t && ((t->tick()) >= stick1) && (((t->tick() + t->actualTicks()) <= tick2) || fullMeasure)) { // If deleting a complete tuplet
+                        // Find highest-level complete tuplet contained in range
+                        while (t->tuplet() && ((t->tuplet()->tick()) >= stick1)
+                               && ((t->tuplet()->tick() + t->tuplet()->actualTicks()) <= tick2)) {
                             t = t->tuplet();
                         }
                         cmdDeleteTuplet(t, false);
-                        f += t->ticks();
-                        tuplet = 0;
+                        tick = t->tick();
+                        f = t->ticks();
+                        currentTuplet = t->tuplet();
                         continue;
                     }
-                    if (f.isValid()) {
-                        setRest(tick, track, f, false, tuplet);
-                    }
+                    // Not deleting a complete tuplet
                     tick = cr1->tick();
-                    tuplet = cr1->tuplet();
+                    currentTuplet = cr1->tuplet();
                     removeChordRest(cr1, true);
                     f = cr1->ticks();
                 } else {
@@ -3363,7 +3367,7 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
                         }
                     }
                 } else {
-                    Rest* r = setRest(tick, track, f, false, tuplet);
+                    Rest* r = setRest(tick, track, f, false, currentTuplet);
                     if (!cr) {
                         cr = r;
                     }
