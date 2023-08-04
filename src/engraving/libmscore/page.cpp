@@ -150,7 +150,7 @@ void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const String& ss) co
         return;
     }
     p->translate(text->pos());
-    text->draw(p);
+    renderer()->drawItem(text, p);
     p->translate(-text->pos());
     text->resetExplicitParent();
 }

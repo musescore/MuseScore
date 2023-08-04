@@ -76,6 +76,7 @@
 
 #include "libmscore/keysig.h"
 
+#include "libmscore/lasso.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/ledgerline.h"
 #include "libmscore/letring.h"
@@ -238,6 +239,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::KEYSIG:       draw(item_cast<const KeySig*>(item), painter);
         break;
 
+    case ElementType::LASSO:        draw(item_cast<const Lasso*>(item), painter);
+        break;
     case ElementType::LAYOUT_BREAK: draw(item_cast<const LayoutBreak*>(item), painter);
         break;
     case ElementType::LEDGER_LINE:  draw(item_cast<const LedgerLine*>(item), painter);
@@ -308,8 +311,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
-//    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
-//        break;
+    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
+        break;
     case ElementType::SYSTEM_DIVIDER:       draw(item_cast<const SystemDivider*>(item), painter);
         break;
     case ElementType::SYSTEM_TEXT:          draw(item_cast<const SystemText*>(item), painter);
@@ -1470,14 +1473,14 @@ void TDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painter* pa
     if (!item->text()->empty()) {
         painter->translate(item->text()->pos());
         item->text()->setVisible(tl->visible());
-        item->text()->draw(painter);
+        draw(item->text(), painter);
         painter->translate(-item->text()->pos());
     }
 
     if (!item->endText()->empty()) {
         painter->translate(item->endText()->pos());
         item->endText()->setVisible(tl->visible());
-        item->endText()->draw(painter);
+        draw(item->endText(), painter);
         painter->translate(-item->endText()->pos());
     }
 
@@ -1627,6 +1630,11 @@ void TDraw::draw(const HarmonicMarkSegment* item, Painter* painter)
 void TDraw::draw(const Harmony* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+
+    if (item->isDrawEditMode()) {
+        drawTextBase(item, painter);
+        return;
+    }
 
     if (item->textList().empty()) {
         drawTextBase(item, painter);
@@ -1785,6 +1793,17 @@ void TDraw::draw(const KeySig* item, Painter* painter)
             painter->drawLine(LineF(x1, y, x2, y));
         }
     }
+}
+
+void TDraw::draw(const Lasso* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    painter->setBrush(Brush(item->engravingConfiguration()->lassoColor()));
+    // always 2 pixel width
+    double w = 2.0 / painter->worldTransform().m11() * item->engravingConfiguration()->guiScaling();
+    painter->setPen(Pen(item->engravingConfiguration()->selectionColor(), w));
+    painter->drawRect(item->bbox());
 }
 
 void TDraw::draw(const LayoutBreak* item, Painter* painter)

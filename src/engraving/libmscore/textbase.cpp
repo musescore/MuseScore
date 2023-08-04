@@ -3044,40 +3044,9 @@ TextCursor* TextBase::cursorFromEditData(const EditData& ed)
 //   draw
 //---------------------------------------------------------
 
-void TextBase::draw(mu::draw::Painter* painter) const
+void TextBase::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    if (hasFrame()) {
-        double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
-        if (frameWidth().val() != 0.0) {
-            Color fColor = curColor(visible(), frameColor());
-            double frameWidthVal = frameWidth().val() * (sizeIsSpatiumDependent() ? spatium() : baseSpatium);
-
-            Pen pen(fColor, frameWidthVal, PenStyle::SolidLine, PenCapStyle::SquareCap, PenJoinStyle::MiterJoin);
-            painter->setPen(pen);
-        } else {
-            painter->setNoPen();
-        }
-        Color bg(bgColor());
-        painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
-        if (circle()) {
-            painter->drawEllipse(m_frame);
-        } else {
-            double frameRoundFactor = (sizeIsSpatiumDependent() ? (spatium() / baseSpatium) / 2 : 0.5f);
-
-            int r2 = frameRound() * frameRoundFactor;
-            if (r2 > 99) {
-                r2 = 99;
-            }
-            painter->drawRoundedRect(m_frame, frameRound() * frameRoundFactor, r2);
-        }
-    }
-    painter->setBrush(BrushStyle::NoBrush);
-    painter->setPen(textColor());
-    for (const TextBlock& t : m_blocks) {
-        t.draw(painter, this);
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

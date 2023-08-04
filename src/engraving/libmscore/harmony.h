@@ -197,6 +197,10 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
 
+    //! HACK Temporary hack
+    bool isDrawEditMode() const { return m_isDrawEditMode; }
+    void setIsDrawEditMode(bool val) { m_isDrawEditMode = val; }
+
 private:
 
     void determineRootBaseSpelling();
@@ -240,6 +244,8 @@ private:
     NoteCaseType m_baseCase = NoteCaseType::AUTO;                // case as typed
     NoteCaseType m_rootRenderCase = NoteCaseType::AUTO;
     NoteCaseType m_baseRenderCase = NoteCaseType::AUTO;           // case to render
+
+    bool m_isDrawEditMode = false;
 };
 } // namespace mu::engraving
 #endif
