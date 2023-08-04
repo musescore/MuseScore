@@ -118,8 +118,9 @@ public:
     ClefType clefType() const;
     void setClefType(ClefType i);
 
-    void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
     bool forInstrumentChange() const { return _forInstrumentChange; }
+    void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
+    void undoSetForInstrumentChange(bool forInstrumentChange);
 
     ClefTypeList clefTypeList() const { return _clefTypes; }
     ClefType concertClef() const { return _clefTypes._concertClef; }

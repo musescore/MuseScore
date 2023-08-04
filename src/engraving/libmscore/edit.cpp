@@ -5229,7 +5229,7 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType cCt, ClefTy
             renderer()->layoutItem(clef);
         }
         if (forInstrumentChange) {
-            clef->setForInstrumentChange(true);
+            clef->undoSetForInstrumentChange(true);
         }
         clef->setSmall(isSmall);
     }

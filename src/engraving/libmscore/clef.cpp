@@ -277,6 +277,15 @@ Clef* Clef::otherClef()
 }
 
 //---------------------------------------------------------
+//   undoSetForInstrumentChange
+//---------------------------------------------------------
+
+void Clef::undoSetForInstrumentChange(bool forInstrumentChange)
+{
+    undoChangeProperty(Pid::FOR_INSTRUMENT_CHANGE, forInstrumentChange);
+}
+
+//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 
@@ -289,6 +298,7 @@ PropertyValue Clef::getProperty(Pid propertyId) const
     case Pid::SMALL:         return isSmall();
     case Pid::CLEF_TO_BARLINE_POS: return _clefToBarlinePosition;
     case Pid::IS_HEADER: return _isHeader;
+    case Pid::FOR_INSTRUMENT_CHANGE: return _forInstrumentChange;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -327,6 +337,9 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::IS_HEADER:
         setIsHeader(v.toBool());
+        break;
+    case Pid::FOR_INSTRUMENT_CHANGE:
+        setForInstrumentChange(v.toBool());
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -494,6 +507,7 @@ PropertyValue Clef::propertyDefault(Pid id) const
     case Pid::SMALL:         return false;
     case Pid::CLEF_TO_BARLINE_POS: return ClefToBarlinePosition::AUTO;
     case Pid::IS_HEADER: return false;
+    case Pid::FOR_INSTRUMENT_CHANGE: return false;
     default:              return EngravingItem::propertyDefault(id);
     }
 }

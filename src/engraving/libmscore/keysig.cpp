@@ -198,9 +198,11 @@ PropertyValue KeySig::getProperty(Pid propertyId) const
     case Pid::KEY_CONCERT:
         return int(concertKey());
     case Pid::SHOW_COURTESY:
-        return int(showCourtesy());
+        return showCourtesy();
     case Pid::KEYSIG_MODE:
         return int(mode());
+    case Pid::FOR_INSTRUMENT_CHANGE:
+        return forInstrumentChange();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -238,6 +240,12 @@ bool KeySig::setProperty(Pid propertyId, const PropertyValue& v)
         setMode(KeyMode(v.toInt()));
         staff()->setKey(tick(), keySigEvent());
         break;
+    case Pid::FOR_INSTRUMENT_CHANGE:
+        if (generated()) {
+            return false;
+        }
+        setForInstrumentChange(v.toBool());
+        break;
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
@@ -264,6 +272,8 @@ PropertyValue KeySig::propertyDefault(Pid id) const
         return true;
     case Pid::KEYSIG_MODE:
         return int(KeyMode::UNKNOWN);
+    case Pid::FOR_INSTRUMENT_CHANGE:
+        return false;
     default:
         return EngravingItem::propertyDefault(id);
     }

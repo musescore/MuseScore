@@ -368,6 +368,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::KEY,                     true,  "actualKey",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "key") },
     { Pid::ACTION,                  false, "action",                P_TYPE::STRING,         0 },
     { Pid::MIN_DISTANCE,            false, "minDistance",           P_TYPE::SPATIUM,        DUMMY_QT_TR_NOOP("propertyName", "autoplace minimum distance") },
+    { Pid::FOR_INSTRUMENT_CHANGE,   true,  "forInstrumentChange",   P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "for instrument change") },
 
     { Pid::ARPEGGIO_TYPE,           true,  "subtype",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "arpeggio type") },
     { Pid::CHORD_LINE_TYPE,         true,  "subtype",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "chord line type") },

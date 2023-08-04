@@ -379,6 +379,7 @@ enum class Pid {
     KEY,
     ACTION,   // for ActionIcon
     MIN_DISTANCE,
+    FOR_INSTRUMENT_CHANGE,
 
     ARPEGGIO_TYPE,
     CHORD_LINE_TYPE,
