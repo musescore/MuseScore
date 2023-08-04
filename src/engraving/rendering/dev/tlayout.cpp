@@ -401,6 +401,7 @@ static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, A
         data.isSkipDraw = true;
         return;
     }
+    data.isSkipDraw = false;
 
     if (item->accidentalType() == AccidentalType::NONE) {
         return;
