@@ -605,7 +605,7 @@ mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, eng
         msczWriter.close();
 
         if (!ret) {
-            LOGE() << "failed write project to buffer";
+            LOGE() << "failed write project to buffer: " << ret.toString();
             return ret;
         }
 
@@ -714,14 +714,14 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
     // Create MsczWriter
     Ret ret = msczWriter.open();
     if (!ret) {
-        LOGE() << "failed open writer";
+        LOGE() << "failed open writer: " << ret.toString();
         return ret;
     }
 
     // Write engraving project
     ret = m_engravingProject->writeMscz(msczWriter, onlySelection, true);
     if (!ret) {
-        LOGE() << "failed write engraving project to mscz";
+        LOGE() << "failed write engraving project to mscz: " << ret.toString();
         return make_ret(notation::Err::UnknownError);
     }
 
