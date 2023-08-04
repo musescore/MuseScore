@@ -93,6 +93,7 @@ class Marker;
 class MeasureNumber;
 class MeasureRepeat;
 
+class Note;
 class NoteHead;
 
 class Ornament;
@@ -117,6 +118,8 @@ class Spacer;
 class StaffState;
 class StaffText;
 class StaffTypeChange;
+class Stem;
+class StemSlash;
 class StretchedBend;
 class Sticking;
 class Symbol;
@@ -207,6 +210,7 @@ private:
     static void draw(const MeasureNumber* item, draw::Painter* painter);
     static void draw(const MeasureRepeat* item, draw::Painter* painter);
 
+    static void draw(const Note* item, draw::Painter* painter);
     static void draw(const NoteHead* item, draw::Painter* painter);
 
     static void draw(const Ornament* item, draw::Painter* painter);
@@ -227,6 +231,8 @@ private:
     static void draw(const StaffState* item, draw::Painter* painter);
     static void draw(const StaffText* item, draw::Painter* painter);
     static void draw(const StaffTypeChange* item, draw::Painter* painter);
+    static void draw(const Stem* item, draw::Painter* painter);
+    static void draw(const StemSlash* item, draw::Painter* painter);
     static void draw(const Sticking* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
     static void draw(const Symbol* item, draw::Painter* painter);

@@ -86,6 +86,7 @@
 #include "libmscore/ottava.h"
 
 #include "libmscore/palmmute.h"
+#include "libmscore/part.h"
 #include "libmscore/pedal.h"
 #include "libmscore/pickscrape.h"
 #include "libmscore/playtechannotation.h"
@@ -101,6 +102,8 @@
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftypechange.h"
+#include "libmscore/stem.h"
+#include "libmscore/stemslash.h"
 #include "libmscore/sticking.h"
 #include "libmscore/stretchedbend.h"
 #include "libmscore/symbol.h"
@@ -124,6 +127,8 @@
 #include "libmscore/volta.h"
 
 #include "libmscore/whammybar.h"
+
+#include "libmscore/mscoreview.h"
 
 #include "infrastructure/rtti.h"
 
@@ -226,6 +231,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::MEASURE_REPEAT:       draw(item_cast<const MeasureRepeat*>(item), painter);
         break;
 
+    case ElementType::NOTE:                 draw(item_cast<const Note*>(item), painter);
+        break;
     case ElementType::NOTEHEAD:             draw(item_cast<const NoteHead*>(item), painter);
         break;
 
@@ -261,6 +268,10 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::STAFF_TEXT:           draw(item_cast<const StaffText*>(item), painter);
         break;
     case ElementType::STAFFTYPE_CHANGE:     draw(item_cast<const StaffTypeChange*>(item), painter);
+        break;
+    case ElementType::STEM:                 draw(item_cast<const Stem*>(item), painter);
+        break;
+    case ElementType::STEM_SLASH:           draw(item_cast<const StemSlash*>(item), painter);
         break;
     case ElementType::STICKING:             draw(item_cast<const Sticking*>(item), painter);
         break;
@@ -410,6 +421,107 @@ void SingleDraw::draw(const Articulation* item, draw::Painter* painter)
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(scaledFont);
         painter->drawText(item->bbox(), TextDontClip | AlignLeft | AlignTop, TConv::text(item->textType()));
+    }
+}
+
+void SingleDraw::draw(const Note* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (item->hidden()) {
+        return;
+    }
+
+    auto config = item->engravingConfiguration();
+
+    bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
+
+    Color c(negativeFret ? config->criticalColor() : item->curColor());
+    painter->setPen(c);
+    bool tablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
+
+    // tablature
+    if (tablature) {
+        if (item->displayFret() == Note::DisplayFretOption::Hide) {
+            return;
+        }
+        const Staff* st = item->staff();
+        const StaffType* tab = st->staffTypeForElement(item);
+        if (item->tieBack() && !tab->showBackTied()) {
+            if (item->chord()->measure()->system() == item->tieBack()->startNote()->chord()->measure()->system() && item->el().empty()) {
+                // fret should be hidden, so return without drawing it
+                return;
+            }
+        }
+        // draw background, if required (to hide a segment of string line or to show a fretting conflict)
+        if (!tab->linesThrough() || item->fretConflict()) {
+            double d  = item->spatium() * .1;
+            RectF bb
+                = RectF(item->bbox().x() - d, tab->fretMaskY() * item->magS(), item->bbox().width() + 2 * d,
+                        tab->fretMaskH() * item->magS());
+            // we do not know which viewer did this draw() call
+            // so update all:
+            if (!item->score()->getViewer().empty()) {
+                for (MuseScoreView* view : item->score()->getViewer()) {
+                    view->drawBackground(painter, bb);
+                }
+            } else {
+                painter->fillRect(bb, config->noteBackgroundColor());
+            }
+
+            if (item->fretConflict() && !item->score()->printing() && item->score()->showUnprintable()) {                //on fret conflict, draw on red background
+                painter->save();
+                painter->setPen(config->criticalColor());
+                painter->setBrush(config->criticalColor());
+                painter->drawRect(bb);
+                painter->restore();
+            }
+        }
+        mu::draw::Font f(tab->fretFont());
+        f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
+        painter->setFont(f);
+        painter->setPen(c);
+        double startPosX = item->bbox().x();
+        if (item->ghost() && config->tablatureParenthesesZIndexWorkaround()) {
+            startPosX += item->symWidth(SymId::noteheadParenthesisLeft);
+        }
+
+        painter->drawText(PointF(startPosX, tab->fretFontYOffset() * item->magS()), item->fretString());
+    }
+    // NOT tablature
+    else {
+        // skip drawing, if second note of a cross-measure value
+        if (item->chord() && item->chord()->crossMeasure() == CrossMeasure::SECOND) {
+            return;
+        }
+        // warn if pitch extends usable range of instrument
+        // by coloring the notehead
+        if (item->chord() && item->chord()->segment() && item->staff()
+            && !item->score()->printing() && MScore::warnPitchRange && !item->staff()->isDrumStaff(item->chord()->tick())) {
+            const Instrument* in = item->part()->instrument(item->chord()->tick());
+            int i = item->ppitch();
+            if (i < in->minPitchP() || i > in->maxPitchP()) {
+                painter->setPen(
+                    item->selected() ? config->criticalSelectedColor() : config->criticalColor());
+            } else if (i < in->minPitchA() || i > in->maxPitchA()) {
+                painter->setPen(item->selected() ? config->warningSelectedColor() : config->warningColor());
+            }
+        }
+        // Warn if notes are unplayable based on previous harp diagram setting
+        if (item->chord() && item->chord()->segment() && item->staff() && !item->score()->printing()
+            && !item->staff()->isDrumStaff(item->chord()->tick())) {
+            HarpPedalDiagram* prevDiagram = item->part()->currentHarpDiagram(item->chord()->segment()->tick());
+            if (prevDiagram && !prevDiagram->isPitchPlayable(item->ppitch())) {
+                painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
+            }
+        }
+        // draw blank notehead to avoid staff and ledger lines
+        if (item->cachedSymNull() != SymId::noSym) {
+            painter->save();
+            painter->setPen(config->noteBackgroundColor());
+            item->drawSymbol(item->cachedSymNull(), painter);
+            painter->restore();
+        }
+        item->drawSymbol(item->cachedNoteheadSym(), painter);
     }
 }
 
@@ -1165,6 +1277,86 @@ void SingleDraw::draw(const GlissandoSegment* item, Painter* painter)
         }
     }
     painter->restore();
+}
+
+void SingleDraw::draw(const Stem* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    if (!item->chord()) { // may be need assert?
+        return;
+    }
+
+    // hide if second chord of a cross-measure pair
+    if (item->chord()->crossMeasure() == CrossMeasure::SECOND) {
+        return;
+    }
+
+    const Staff* staff = item->staff();
+    const StaffType* staffType = staff ? staff->staffTypeForElement(item->chord()) : nullptr;
+    const bool isTablature = staffType && staffType->isTabStaff();
+
+    painter->setPen(Pen(item->curColor(), item->lineWidthMag(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->drawLine(item->line());
+
+    if (!isTablature) {
+        return;
+    }
+
+    // TODO: adjust bounding rectangle in layout() for dots and for slash
+    double sp = item->spatium();
+    bool isUp = item->up();
+
+    // slashed half note stem
+    if (item->chord()->durationType().type() == DurationType::V_HALF
+        && staffType->minimStyle() == TablatureMinimStyle::SLASHED) {
+        // position slashes onto stem
+        double y = isUp ? -item->length() + STAFFTYPE_TAB_SLASH_2STARTY_UP * sp
+                   : item->length() - STAFFTYPE_TAB_SLASH_2STARTY_DN * sp;
+        // if stems through, try to align slashes within or across lines
+        if (staffType->stemThrough()) {
+            double halfLineDist = staffType->lineDistance().val() * sp * 0.5;
+            double halfSlashHgt = STAFFTYPE_TAB_SLASH_2TOTHEIGHT * sp * 0.5;
+            y = lrint((y + halfSlashHgt) / halfLineDist) * halfLineDist - halfSlashHgt;
+        }
+        // draw slashes
+        double hlfWdt= sp * STAFFTYPE_TAB_SLASH_WIDTH * 0.5;
+        double sln   = sp * STAFFTYPE_TAB_SLASH_SLANTY;
+        double thk   = sp * STAFFTYPE_TAB_SLASH_THICK;
+        double displ = sp * STAFFTYPE_TAB_SLASH_DISPL;
+        PainterPath path;
+        for (int i = 0; i < 2; ++i) {
+            path.moveTo(hlfWdt, y);                   // top-right corner
+            path.lineTo(hlfWdt, y + thk);             // bottom-right corner
+            path.lineTo(-hlfWdt, y + thk + sln);      // bottom-left corner
+            path.lineTo(-hlfWdt, y + sln);            // top-left corner
+            path.closeSubpath();
+            y += displ;
+        }
+        painter->setBrush(Brush(item->curColor()));
+        painter->setNoPen();
+        painter->drawPath(path);
+    }
+
+    // dots
+    // NOT THE BEST PLACE FOR THIS?
+    // with tablatures and stems beside staves, dots are not drawn near 'notes', but near stems
+    int nDots = item->chord()->dots();
+    if (nDots > 0 && !staffType->stemThrough()) {
+        double x     = item->chord()->dotPosX();
+        double y     = ((STAFFTYPE_TAB_DEFAULTSTEMLEN_DN * 0.2) * sp) * (isUp ? -1.0 : 1.0);
+        double step  = item->style().styleS(Sid::dotDotDistance).val() * sp;
+        for (int dot = 0; dot < nDots; dot++, x += step) {
+            item->drawSymbol(SymId::augmentationDot, painter, PointF(x, y));
+        }
+    }
+}
+
+void SingleDraw::draw(const StemSlash* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    painter->setPen(Pen(item->curColor(), item->stemWidth(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->drawLine(item->line());
 }
 
 void SingleDraw::draw(const Sticking* item, Painter* painter)
