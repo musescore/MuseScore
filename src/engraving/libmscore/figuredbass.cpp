@@ -70,12 +70,6 @@ static const ElementStyle figuredBassTextStyle {
     { Sid::figuredBassFontStyle,               Pid::FONT_STYLE },
 };
 
-static constexpr double FB_CONTLINE_HEIGHT            = 0.875;     // the % of font EM to raise the cont. line at
-                                                                   // (0 = top of font; 1 = bottom of font)
-static constexpr double FB_CONTLINE_LEFT_PADDING      = 0.1875;    // (3/16sp) the blank space at the left of a cont. line (in sp)
-static constexpr double FB_CONTLINE_OVERLAP           = 0.125;     // (1/8sp)  the overlap of an extended cont. line (in sp)
-static constexpr double FB_CONTLINE_THICKNESS         = 0.09375;   // (3/32sp) the thickness of a cont. line (in sp)
-
 //---------------------------------------------------------
 //   F I G U R E D   B A S S   I T E M
 //---------------------------------------------------------
@@ -452,69 +446,9 @@ String FiguredBassItem::normalizedText() const
 //   FiguredBassItem draw()
 //---------------------------------------------------------
 
-void FiguredBassItem::draw(mu::draw::Painter* painter) const
+void FiguredBassItem::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    using namespace mu::draw;
-    int font = 0;
-    double _spatium = spatium();
-    // set font from general style
-    mu::draw::Font f(g_FBFonts.at(font).family, draw::Font::Type::Tablature);
-
-    // (use the same font selection as used in layout() above)
-    double m = style().styleD(Sid::figuredBassFontSize) * spatium() / SPATIUM20;
-    f.setPointSizeF(m * MScore::pixelRatio);
-
-    painter->setFont(f);
-    painter->setBrush(BrushStyle::NoBrush);
-    Pen pen(figuredBass()->curColor(), FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
-    painter->setPen(pen);
-    painter->drawText(bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, displayText());
-
-    // continuation line
-    double lineEndX = 0.0;
-    if (m_contLine != ContLine::NONE) {
-        double lineStartX  = m_textWidth;                           // by default, line starts right after text
-        if (lineStartX > 0.0) {
-            lineStartX += _spatium * FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
-        }
-        lineEndX = figuredBass()->printedLineLength();            // by default, line ends with item duration
-        if (lineEndX - lineStartX < 1.0) {                         // if line length < 1 sp, ignore it
-            lineEndX = 0.0;
-        }
-
-        // if extended cont.line and no closing parenthesis: look at next FB element
-        if (m_contLine > ContLine::SIMPLE && m_parenth[4] == Parenthesis::NONE) {
-            FiguredBass* nextFB;
-            // if there is a contiguous FB element
-            if ((nextFB=figuredBass()->nextFiguredBass()) != 0) {
-                // retrieve the X position (in page coords) of a possible cont. line of nextFB
-                // on the same line of 'this'
-                PointF pgPos = pagePos();
-                double nextContPageX = nextFB->additionalContLineX(pgPos.y());
-                // if an additional cont. line has been found, extend up to its initial X coord
-                if (nextContPageX > 0) {
-                    lineEndX = nextContPageX - pgPos.x() + _spatium * FB_CONTLINE_OVERLAP;
-                }
-                // with a little bit of overlap
-                else {
-                    lineEndX = figuredBass()->lineLength(0);                  // if none found, draw to the duration end
-                }
-            }
-        }
-        // if some line, draw it
-        if (lineEndX > 0.0) {
-            double h = bbox().height() * FB_CONTLINE_HEIGHT;
-            painter->drawLine(lineStartX, h, lineEndX - ipos().x(), h);
-        }
-    }
-
-    // closing cont.line parenthesis
-    if (m_parenth[4] != Parenthesis::NONE) {
-        int x = lineEndX > 0.0 ? lineEndX : m_textWidth;
-        painter->drawText(RectF(x, 0, bbox().width(), bbox().height()), draw::AlignLeft | draw::AlignTop,
-                          Char(g_FBFonts.at(font).displayParenthesis[int(m_parenth[4])].unicode()));
-    }
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

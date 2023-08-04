@@ -254,6 +254,12 @@ class FiguredBass final : public TextBase
 
 public:
 
+    static constexpr double FB_CONTLINE_HEIGHT            = 0.875;         // the % of font EM to raise the cont. line at
+                                                                           // (0 = top of font; 1 = bottom of font)
+    static constexpr double FB_CONTLINE_LEFT_PADDING      = 0.1875;        // (3/16sp) the blank space at the left of a cont. line (in sp)
+    static constexpr double FB_CONTLINE_OVERLAP           = 0.125;         // (1/8sp)  the overlap of an extended cont. line (in sp)
+    static constexpr double FB_CONTLINE_THICKNESS         = 0.09375;       // (3/32sp) the thickness of a cont. line (in sp)
+
     ~FiguredBass();
 
     // a convenience static function to create/retrieve a new FiguredBass into/from its intended parent

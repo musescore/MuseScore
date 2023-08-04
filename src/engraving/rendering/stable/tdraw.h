@@ -201,6 +201,7 @@ private:
 
     static void draw(const Fermata* item, draw::Painter* painter);
     static void draw(const FiguredBass* item, draw::Painter* painter);
+    static void draw(const FiguredBassItem* item, draw::Painter* painter);
     static void draw(const Fingering* item, draw::Painter* painter);
     static void draw(const FretDiagram* item, draw::Painter* painter);
     static void draw(const FretCircle* item, draw::Painter* painter);
