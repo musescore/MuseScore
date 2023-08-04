@@ -277,8 +277,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
-//    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
-//        break;
+    case ElementType::SYMBOL:               draw(item_cast<const Symbol*>(item), painter);
+        break;
     case ElementType::SYSTEM_DIVIDER:       draw(item_cast<const SystemDivider*>(item), painter);
         break;
     case ElementType::SYSTEM_TEXT:          draw(item_cast<const SystemText*>(item), painter);
@@ -1486,14 +1486,14 @@ void SingleDraw::drawTextLineBaseSegment(const TextLineBaseSegment* item, Painte
     if (!item->text()->empty()) {
         painter->translate(item->text()->pos());
         item->text()->setVisible(tl->visible());
-        item->text()->draw(painter);
+        draw(item->text(), painter);
         painter->translate(-item->text()->pos());
     }
 
     if (!item->endText()->empty()) {
         painter->translate(item->endText()->pos());
         item->endText()->setVisible(tl->visible());
-        item->endText()->draw(painter);
+        draw(item->endText(), painter);
         painter->translate(-item->endText()->pos());
     }
 
@@ -1642,6 +1642,11 @@ void SingleDraw::draw(const HarmonicMarkSegment* item, Painter* painter)
 void SingleDraw::draw(const Harmony* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+
+    if (item->isDrawEditMode()) {
+        drawTextBase(item, painter);
+        return;
+    }
 
     if (item->textList().empty()) {
         drawTextBase(item, painter);

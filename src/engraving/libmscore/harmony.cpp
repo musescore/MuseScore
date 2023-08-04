@@ -1283,7 +1283,9 @@ void Harmony::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentVie
     }
     PointF pos(canvasPos());
     p->translate(pos);
-    TextBase::draw(p);
+    setIsDrawEditMode(true);
+    renderer()->drawItem(this, p);
+    setIsDrawEditMode(false);
     p->translate(-pos);
     if (m_isMisspelled) {
         setColor(originalColor);

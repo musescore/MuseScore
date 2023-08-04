@@ -862,7 +862,7 @@ void Compound::draw(mu::draw::Painter* painter) const
     for (EngravingItem* e : elements) {
         PointF pt(e->pos());
         painter->translate(pt);
-        e->draw(painter);
+        renderer()->drawItem(e, painter);
         painter->translate(-pt);
     }
 }
