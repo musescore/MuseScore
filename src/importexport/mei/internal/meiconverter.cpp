@@ -1432,6 +1432,41 @@ libmei::StaffDef Convert::meterToMEI(const engraving::Fraction& fraction, engrav
 void Convert::octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning)
 {
     warning = false;
+
+    engraving::OttavaType ottavaType;
+    if (meiOctave.GetDisPlace() == libmei::STAFFREL_basic_below) {
+        switch (meiOctave.GetDis()) {
+        case (libmei::OCTAVE_DIS_22): ottavaType = engraving::OttavaType::OTTAVA_22MB;
+            break;
+        case (libmei::OCTAVE_DIS_15): ottavaType = engraving::OttavaType::OTTAVA_15MB;
+            break;
+        default:
+            ottavaType = engraving::OttavaType::OTTAVA_8VB;
+        }
+    } else {
+        switch (meiOctave.GetDis()) {
+        case (libmei::OCTAVE_DIS_22): ottavaType = engraving::OttavaType::OTTAVA_22MA;
+            break;
+        case (libmei::OCTAVE_DIS_15): ottavaType = engraving::OttavaType::OTTAVA_15MA;
+            break;
+        default:
+            ottavaType = engraving::OttavaType::OTTAVA_8VA;
+        }
+    }
+    ottava->setOttavaType(ottavaType);
+
+    // @lform
+    if (meiOctave.HasLform()) {
+        bool lformWarning = false;
+        ottava->setLineStyle(Convert::lineFromMEI(meiOctave.GetLform(), lformWarning));
+        ottava->setPropertyFlags(engraving::Pid::LINE_STYLE, engraving::PropertyFlags::UNSTYLED);
+        warning = (warning || lformWarning);
+    }
+
+    // @lendsym
+    if (meiOctave.HasLendsym() && (meiOctave.GetLendsym() == libmei::LINESTARTENDSYMBOL_none)) {
+        ottava->setEndHookType(engraving::HookType::NONE);
+    }
 }
 
 libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
