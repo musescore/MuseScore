@@ -1409,6 +1409,21 @@ static void layoutSegmentElements(Segment* segment, track_idx_t startTrack, trac
     }
 }
 
+void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack)
+{
+    for (track_idx_t track = startTrack; track < endTrack; ++track) {
+        EngravingItem* item = segment->elementAt(track);
+        if (item && item->isChord()) {
+            for (Note* note : toChord(item)->notes()) {
+                Accidental* acc = note->accidental();
+                if (acc) {
+                    acc->setSkipDraw(true);
+                }
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   layoutChords1
 //    - layout upstem and downstem chords
@@ -1428,6 +1443,10 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
     const Part* part = staff->part();
     const track_idx_t partStartTrack = part ? part->startTrack() : startTrack;
     const track_idx_t partEndTrack = part ? part->endTrack() : endTrack;
+
+    if (isTab) {
+        skipAccidentals(segment, startTrack, endTrack);
+    }
 
     if (staff && staff->isTabStaff(tick) && (!staff->staffType() || !staff->staffType()->stemThrough())) {
         layoutSegmentElements(segment, startTrack, endTrack, staffIdx, ctx);
