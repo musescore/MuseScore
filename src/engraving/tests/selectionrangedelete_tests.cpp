@@ -22,8 +22,11 @@
 
 #include <gtest/gtest.h>
 
+#include "libmscore/chord.h"
 #include "libmscore/masterscore.h"
 #include "libmscore/measure.h"
+#include "libmscore/note.h"
+#include "libmscore/segment.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -199,4 +202,46 @@ TEST_F(Engraving_SelectionRangeDeleteTests, deleteSkipAnnotations)
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionrangedelete05.mscx"),
                                             SELRANGEDELETE_DATA_DIR + String(u"selectionrangedelete05-ref.mscx")));
     delete score;
+}
+
+TEST_F(Engraving_SelectionRangeDeleteTests, deletePartialNestedTuplets)
+{
+    // A score where each measure contains a tuplet with nested tuplets.
+    // In each measure, some notes have the 'x' notehead.
+    // We make a range selection consisting of those 'x' noteheads, and delete the selection.
+
+    MasterScore* score = ScoreRW::readScore(SELRANGEDELETE_DATA_DIR + String(u"selectionrangedelete06_partialnestedtuplets.mscx"));
+    ASSERT_TRUE(score);
+
+    for (Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        SCOPED_TRACE("Measure no " + std::to_string(measure->no()));
+
+        score->deselectAll();
+
+        for (Segment* segment = measure->first(SegmentType::ChordRest); segment; segment = segment->next(SegmentType::ChordRest)) {
+            mu::engraving::EngravingItem* element = segment->element(0);
+            if (!element || !element->isChord()) {
+                continue;
+            }
+
+            Chord* chord = toChord(element);
+            if (chord->notes().empty()) {
+                continue;
+            }
+
+            Note* note = chord->notes().front();
+            if (note->headGroup() == NoteHeadGroup::HEAD_CROSS) {
+                score->select(note, SelectType::RANGE);
+            }
+        }
+
+        if (score->selection().isRange()) {
+            score->cmdDeleteSelection();
+
+            EXPECT_TRUE(score->sanityCheck());
+        }
+    }
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String(u"selectionrangedelete06_partialnestedtuplets.mscx"),
+                                            SELRANGEDELETE_DATA_DIR + String(u"selectionrangedelete06_partialnestedtuplets-ref.mscx")));
 }
