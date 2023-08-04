@@ -211,6 +211,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::FRET_CIRCLE:  draw(item_cast<const FretCircle*>(item), painter);
         break;
+    case ElementType::FSYMBOL:      draw(item_cast<const FSymbol*>(item), painter);
+        break;
 
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter);
         break;
@@ -2634,6 +2636,17 @@ void TDraw::draw(const Symbol* item, Painter* painter)
             item->drawSymbol(item->sym(), painter);
         }
     }
+}
+
+void TDraw::draw(const FSymbol* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    mu::draw::Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
+    painter->setPen(item->curColor());
+    painter->drawText(PointF(0, 0), item->toString());
 }
 
 void TDraw::draw(const SystemDivider* item, Painter* painter)

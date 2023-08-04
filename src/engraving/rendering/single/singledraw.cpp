@@ -187,6 +187,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::FRET_DIAGRAM: draw(item_cast<const FretDiagram*>(item), painter);
         break;
+    case ElementType::FSYMBOL:      draw(item_cast<const FSymbol*>(item), painter);
+        break;
 
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter);
         break;
@@ -2195,6 +2197,17 @@ void SingleDraw::draw(const Symbol* item, Painter* painter)
             item->drawSymbol(item->sym(), painter);
         }
     }
+}
+
+void SingleDraw::draw(const FSymbol* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    mu::draw::Font f(item->font());
+    f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
+    painter->setFont(f);
+    painter->setPen(item->curColor());
+    painter->drawText(PointF(0, 0), item->toString());
 }
 
 void SingleDraw::draw(const SystemDivider* item, Painter* painter)
