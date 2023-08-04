@@ -353,7 +353,7 @@ void TieSegment::computeBezier(PointF shoulderOffset)
             tieWidthInSp = (minH - re.height()) * .5;
             re.adjust(0.0, -tieWidthInSp, 0.0, tieWidthInSp);
         }
-        m_shape.add(re);
+        m_shape.add(re, this);
         start = point;
     }
 }

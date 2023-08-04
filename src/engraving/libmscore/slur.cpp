@@ -329,6 +329,7 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
     staff_idx_t startStaffIdx = startCR->staffIdx();
     staff_idx_t endStaffIdx = endCR->staffIdx();
     Shape segShape = seg->staffShape(startStaffIdx).translated(seg->pos() + seg->measure()->pos());
+
     // If cross-staff, also add the shape of second staff
     if (slur()->isCrossStaff() && seg != startCR->segment()) {
         endStaffIdx = (endCR->staffIdx() != startStaffIdx) ? endCR->staffIdx() : endCR->vStaffIdx();
@@ -339,31 +340,7 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         secondStaffShape.translate(PointF(0.0, dist)); // translate vertically
         segShape.add(secondStaffShape);
     }
-    // Remove items that the slur shouldn't try to avoid
-    mu::remove_if(segShape, [&](ShapeElement& shapeEl) {
-        if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
-            return true;
-        }
-        const EngravingItem* item = shapeEl.toItem;
-        const EngravingItem* parent = item->parentItem();
-        // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
-        if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
-            || (item->isArticulationFamily() && parent == endCR) || item->isBend() || item->isStretchedBend()) {
-            return true;
-        }
-        // Items that are on the start segment but in a different voice
-        if ((item->tick() == startCR->tick() && item->track() != startCR->track())
-            || (item->tick() == endCR->tick() && item->track() != endCR->track())) {
-            return true;
-        }
-        // Edge-case: multiple voices and slur is on the inside
-        if (item->vStaffIdx() == startCR->staffIdx()
-            && ((!slur()->up() && item->track() > startCR->track()) // slur-down: ignore lower voices
-                || (slur()->up() && item->track() < startCR->track()))) { // slur-up: ignore higher voices
-            return true;
-        }
-        return false;
-    });
+
     for (track_idx_t track = staff2track(startStaffIdx); track < staff2track(endStaffIdx, VOICES); ++track) {
         EngravingItem* e = seg->elementAt(track);
         if (!e || !e->isChordRest()) {
@@ -389,6 +366,33 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
             }
         }
     }
+
+    // Remove items that the slur shouldn't try to avoid
+    mu::remove_if(segShape, [&](ShapeElement& shapeEl) {
+        if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
+            return true;
+        }
+        const EngravingItem* item = shapeEl.toItem;
+        const EngravingItem* parent = item->parentItem();
+        // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
+        if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
+            || (item->isArticulationFamily() && parent == endCR) || item->isBend() || item->isStretchedBend()) {
+            return true;
+        }
+        // Items that are on the start segment but in a different voice
+        if ((item->tick() == startCR->tick() && item->track() != startCR->track())
+            || (item->tick() == endCR->tick() && item->track() != endCR->track())) {
+            return true;
+        }
+        // Edge-case: multiple voices and slur is on the inside
+        if (item->vStaffIdx() == startCR->staffIdx()
+            && ((!slur()->up() && item->track() > startCR->track()) // slur-down: ignore lower voices
+                || (slur()->up() && item->track() < startCR->track()))) { // slur-up: ignore higher voices
+            return true;
+        }
+        return false;
+    });
+
     return segShape;
 }
 
@@ -791,7 +795,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
             double d1 = (minH - re.height()) * .5;
             re.adjust(0.0, -d1, 0.0, d1);
         }
-        m_shape.add(re);
+        m_shape.add(re, this);
         start = point;
     }
 }
