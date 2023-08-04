@@ -1030,9 +1030,74 @@ void SingleDraw::draw(const FiguredBass* item, Painter* painter)
     } else {
         for (FiguredBassItem* fi : item->items()) {               // if parseable into f.b. items
             painter->translate(fi->pos());                // draw each item in its proper position
-            fi->draw(painter);
+            draw(fi, painter);
             painter->translate(-fi->pos());
         }
+    }
+}
+
+void SingleDraw::draw(const FiguredBassItem* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    int font = 0;
+    double _spatium = item->spatium();
+    // set font from general style
+    mu::draw::Font f(FiguredBass::FBFonts().at(font).family, draw::Font::Type::Tablature);
+
+    // (use the same font selection as used in layout() above)
+    double m = item->style().styleD(Sid::figuredBassFontSize) * item->spatium() / SPATIUM20;
+    f.setPointSizeF(m * MScore::pixelRatio);
+
+    painter->setFont(f);
+    painter->setBrush(BrushStyle::NoBrush);
+    Pen pen(item->figuredBass()->curColor(), FiguredBass::FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
+    painter->setPen(pen);
+    painter->drawText(item->bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, item->displayText());
+
+    // continuation line
+    double lineEndX = 0.0;
+    if (item->contLine() != FiguredBassItem::ContLine::NONE) {
+        double lineStartX  = item->textWidth();                           // by default, line starts right after text
+        if (lineStartX > 0.0) {
+            lineStartX += _spatium * FiguredBass::FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
+        }
+        lineEndX = item->figuredBass()->printedLineLength();            // by default, line ends with item duration
+        if (lineEndX - lineStartX < 1.0) {                         // if line length < 1 sp, ignore it
+            lineEndX = 0.0;
+        }
+
+        // if extended cont.line and no closing parenthesis: look at next FB element
+        if (item->contLine() > FiguredBassItem::ContLine::SIMPLE && item->parenth5() == FiguredBassItem::Parenthesis::NONE) {
+            FiguredBass* nextFB;
+            // if there is a contiguous FB element
+            if ((nextFB = item->figuredBass()->nextFiguredBass()) != 0) {
+                // retrieve the X position (in page coords) of a possible cont. line of nextFB
+                // on the same line of 'this'
+                PointF pgPos = item->pagePos();
+                double nextContPageX = nextFB->additionalContLineX(pgPos.y());
+                // if an additional cont. line has been found, extend up to its initial X coord
+                if (nextContPageX > 0) {
+                    lineEndX = nextContPageX - pgPos.x() + _spatium * FiguredBass::FB_CONTLINE_OVERLAP;
+                }
+                // with a little bit of overlap
+                else {
+                    lineEndX = item->figuredBass()->lineLength(0);                  // if none found, draw to the duration end
+                }
+            }
+        }
+        // if some line, draw it
+        if (lineEndX > 0.0) {
+            double h = item->bbox().height() * FiguredBass::FB_CONTLINE_HEIGHT;
+            painter->drawLine(lineStartX, h, lineEndX - item->ipos().x(), h);
+        }
+    }
+
+    // closing cont.line parenthesis
+    if (item->parenth5() != FiguredBassItem::Parenthesis::NONE) {
+        int x = lineEndX > 0.0 ? lineEndX : item->textWidth();
+        painter->drawText(RectF(x, 0, item->bbox().width(), item->bbox().height()), draw::AlignLeft | draw::AlignTop,
+                          Char(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth5())].unicode()));
     }
 }
 
