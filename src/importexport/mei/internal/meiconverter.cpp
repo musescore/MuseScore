@@ -31,6 +31,7 @@
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
+#include "libmscore/ottava.h"
 #include "libmscore/part.h"
 #include "libmscore/pitchspelling.h"
 #include "libmscore/staff.h"
@@ -1428,6 +1429,58 @@ libmei::StaffDef Convert::meterToMEI(const engraving::Fraction& fraction, engrav
     return meiStaffDef;
 }
 
+void Convert::octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning)
+{
+    warning = false;
+}
+
+libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
+{
+    libmei::Octave meiOctave;
+
+    // @dis
+    switch (ottava->ottavaType()) {
+    case (engraving::OttavaType::OTTAVA_8VA):
+    case (engraving::OttavaType::OTTAVA_8VB):
+        meiOctave.SetDis(libmei::OCTAVE_DIS_8);
+        break;
+    case (engraving::OttavaType::OTTAVA_15MA):
+    case (engraving::OttavaType::OTTAVA_15MB):
+        meiOctave.SetDis(libmei::OCTAVE_DIS_15);
+        break;
+    case (engraving::OttavaType::OTTAVA_22MA):
+    case (engraving::OttavaType::OTTAVA_22MB):
+        meiOctave.SetDis(libmei::OCTAVE_DIS_22);
+        break;
+    }
+
+    // @dis.place
+    switch (ottava->ottavaType()) {
+    case (engraving::OttavaType::OTTAVA_8VA):
+    case (engraving::OttavaType::OTTAVA_15MA):
+    case (engraving::OttavaType::OTTAVA_22MA):
+        meiOctave.SetDisPlace(libmei::STAFFREL_basic_above);
+        break;
+    case (engraving::OttavaType::OTTAVA_8VB):
+    case (engraving::OttavaType::OTTAVA_15MB):
+    case (engraving::OttavaType::OTTAVA_22MB):
+        meiOctave.SetDisPlace(libmei::STAFFREL_basic_below);
+        break;
+    }
+
+    // @lform
+    if (ottava->lineStyle() != engraving::LineType::DASHED) {
+        meiOctave.SetLform(Convert::lineToMEI(ottava->lineStyle()));
+    }
+
+    // @lendsym
+    if (ottava->endHookType() == engraving::HookType::NONE) {
+        meiOctave.SetLendsym(libmei::LINESTARTENDSYMBOL_none);
+    }
+
+    return meiOctave;
+}
+
 Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
                                            bool& warning)
 {
@@ -1503,6 +1556,10 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
     // We need to ajusted the pitch to its transpossed value for the octave calculation
     int oct = ((pitch.pitch - interval.chromatic - alterInt) / 12) - 1;
     meiNote.SetOct(oct);
+    int octGes = ((note->ppitch() - interval.chromatic - alterInt) / 12) - 1;
+    if (octGes != oct) {
+        meiNote.SetOctGes(octGes);
+    }
 
     if (pitch.accidType != engraving::AccidentalType::NONE) {
         meiAccid.SetAccid(Convert::accidToMEI(pitch.accidType));
