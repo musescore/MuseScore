@@ -3084,32 +3084,67 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                     break;
                 }
             }
-            if (userCustomizedKeySig) {
-                continue;
+            if (!userCustomizedKeySig) {
+                bool concertPitch = score->style().styleB(Sid::concertPitch);
+                for (Staff* staff : score->staves()) {
+                    staff_idx_t staffIdx = staff->idx();
+                    Part* part = staff->part();
+                    KeySigEvent nkse = lastDeletedKeySigEvent;
+                    if (!concertPitch && !nkse.isAtonal()) {
+                        Interval v = part->instrument(Fraction(0, 1))->transpose();
+                        v.flip();
+                        nkse.setKey(transposeKey(nkse.concertKey(), v, part->preferSharpFlat()));
+                    }
+
+                    KeySig* nks = (KeySig*)s->elementAt(staff2track(staffIdx));
+                    if (!nks) {
+                        nks = Factory::createKeySig(s);
+                        nks->setTrack(staffIdx * VOICES);
+                        nks->setKey(nkse.key());
+                        score->undoAddElement(nks);
+                    }
+
+                    nks->setGenerated(false);
+                    nks->setKeySigEvent(nkse);
+                    staff->setKey(mAfterSel->tick(), nkse);
+                }
             }
+        }
 
-            bool concertPitch = score->style().styleB(Sid::concertPitch);
-            for (Staff* staff : score->staves()) {
-                staff_idx_t staffIdx = staff->idx();
-                Part* part = staff->part();
-                KeySigEvent nkse = lastDeletedKeySigEvent;
-                if (!concertPitch && !nkse.isAtonal()) {
-                    Interval v = part->instrument(Fraction(0, 1))->transpose();
-                    v.flip();
-                    nkse.setKey(transposeKey(nkse.concertKey(), v, part->preferSharpFlat()));
+        // insert instrument change clefs
+        for (Part* part : score->parts()) {
+            if (part->instruments().find(startTick.ticks()) == part->instruments().end()) {
+                break;
+            }
+            Instrument* instrument = part->instrument(startTick);
+            bool isFirstMeasure = !mBeforeSel;
+            Measure* measure = mBeforeSel ? mBeforeSel : mAfterSel;
+            SegmentType st = isFirstMeasure ? SegmentType::HeaderClef : SegmentType::Clef;
+            Segment* clefSeg = measure->undoGetSegment(st, startTick);
+            for (size_t i = 0; i < part->nstaves(); i++) {
+                track_idx_t track = part->startTrack() + i * VOICES;
+                Clef* clef = nullptr;
+                ClefTypeList clefType = instrument->clefType(i);
+                EngravingItem* el = clefSeg->element(track);
+                if (el && el->isClef()) {
+                    clef = toClef(el);
+                    if (clef->clefTypeList() != clefType) {
+                        score->undo(new ChangeClefType(clef, clefType._concertClef, clefType._transposingClef));
+                    }
+                    if (!clef->forInstrumentChange()) {
+                        clef->undoSetForInstrumentChange(true);
+                    }
+                } else {
+                    clef = Factory::createClef(clefSeg);
+                    clef->setTrack(track);
+                    clef->setParent(clefSeg);
+                    clef->setIsHeader(isFirstMeasure);
+                    clef->setConcertClef(clefType._concertClef);
+                    clef->setTransposingClef(clefType._transposingClef);
+                    clef->setForInstrumentChange(true);
+                    score->undo(new AddElement(clef));
+                    renderer()->layoutItem(clef);
                 }
-
-                KeySig* nks = (KeySig*)s->elementAt(staff2track(staffIdx));
-                if (!nks) {
-                    nks = Factory::createKeySig(s);
-                    nks->setTrack(staffIdx * VOICES);
-                    nks->setKey(nkse.key());
-                    score->undoAddElement(nks);
-                }
-
-                nks->setGenerated(false);
-                nks->setKeySigEvent(nkse);
-                staff->setKey(mAfterSel->tick(), nkse);
             }
         }
     }
