@@ -89,70 +89,9 @@ void Page::appendSystem(System* s)
 //    bounding rectangle fr is relative to page PointF
 //---------------------------------------------------------
 
-void Page::draw(mu::draw::Painter* painter) const
+void Page::draw(mu::draw::Painter*) const
 {
-    TRACE_ITEM_DRAW;
-    if (!score()->isLayoutMode(LayoutMode::PAGE)) {
-        return;
-    }
-    //
-    // draw header/footer
-    //
-
-    page_idx_t n = no() + 1 + score()->pageNumberOffset();
-    painter->setPen(curColor());
-
-    String s1, s2, s3;
-
-    if (style().styleB(Sid::showHeader) && (no() || style().styleB(Sid::headerFirstPage))) {
-        bool odd = (n & 1) || !style().styleB(Sid::headerOddEven);
-        if (odd) {
-            s1 = style().styleSt(Sid::oddHeaderL);
-            s2 = style().styleSt(Sid::oddHeaderC);
-            s3 = style().styleSt(Sid::oddHeaderR);
-        } else {
-            s1 = style().styleSt(Sid::evenHeaderL);
-            s2 = style().styleSt(Sid::evenHeaderC);
-            s3 = style().styleSt(Sid::evenHeaderR);
-        }
-
-        drawHeaderFooter(painter, 0, s1);
-        drawHeaderFooter(painter, 1, s2);
-        drawHeaderFooter(painter, 2, s3);
-    }
-
-    if (style().styleB(Sid::showFooter) && (no() || style().styleB(Sid::footerFirstPage))) {
-        bool odd = (n & 1) || !style().styleB(Sid::footerOddEven);
-        if (odd) {
-            s1 = style().styleSt(Sid::oddFooterL);
-            s2 = style().styleSt(Sid::oddFooterC);
-            s3 = style().styleSt(Sid::oddFooterR);
-        } else {
-            s1 = style().styleSt(Sid::evenFooterL);
-            s2 = style().styleSt(Sid::evenFooterC);
-            s3 = style().styleSt(Sid::evenFooterR);
-        }
-
-        drawHeaderFooter(painter, 3, s1);
-        drawHeaderFooter(painter, 4, s2);
-        drawHeaderFooter(painter, 5, s3);
-    }
-}
-
-//---------------------------------------------------------
-//   drawHeaderFooter
-//---------------------------------------------------------
-
-void Page::drawHeaderFooter(mu::draw::Painter* p, int area, const String& ss) const
-{
-    Text* text = layoutHeaderFooter(area, ss);
-    if (!text) {
-        return;
-    }
-    p->translate(text->pos());
-    renderer()->drawItem(text, p);
-    p->translate(-text->pos());
-    text->resetExplicitParent();
+    UNREACHABLE;
 }
 
 //---------------------------------------------------------

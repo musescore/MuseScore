@@ -60,8 +60,6 @@ class Page final : public EngravingItem
     Page(RootItem* parent);
 
     String replaceTextMacros(const String&) const;
-    void drawHeaderFooter(mu::draw::Painter*, int area, const String&) const;
-    Text* layoutHeaderFooter(int area, const String& ss) const;
 
 public:
     // Score Tree functions
@@ -100,6 +98,8 @@ public:
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     AccessibleItemPtr createAccessible() override;
 #endif
+
+    Text* layoutHeaderFooter(int area, const String& ss) const;
 };
 } // namespace mu::engraving
 #endif

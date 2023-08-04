@@ -313,8 +313,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::WHAMMY_BAR_SEGMENT:   draw(item_cast<const WhammyBarSegment*>(item), painter);
         break;
     default:
-        LOGD() << item->typeName();
-        item->draw(painter);
+        NOT_IMPLEMENTED << item->typeName();
+        UNREACHABLE;
     }
 }
 

@@ -243,6 +243,7 @@ private:
     static void draw(const Ornament* item, draw::Painter* painter);
     static void draw(const OttavaSegment* item, draw::Painter* painter);
 
+    static void draw(const Page* item, draw::Painter* painter);
     static void draw(const PalmMuteSegment* item, draw::Painter* painter);
     static void draw(const PedalSegment* item, draw::Painter* painter);
     static void draw(const PickScrapeSegment* item, draw::Painter* painter);
@@ -255,6 +256,7 @@ private:
     static void draw(const ShadowNote* item, draw::Painter* painter);
     static void draw(const SlurSegment* item, draw::Painter* painter);
     static void draw(const Spacer* item, draw::Painter* painter);
+    static void draw(const StaffLines* item, draw::Painter* painter);
     static void draw(const StaffState* item, draw::Painter* painter);
     static void draw(const StaffText* item, draw::Painter* painter);
     static void draw(const StaffTypeChange* item, draw::Painter* painter);

@@ -328,7 +328,8 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     EngravingItem::renderer()->layoutText1(newElement);
     pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, y + newElement->height());
     painter.translate(pos);
-    newElement->draw(&painter);
+    EngravingItem::renderer()->drawItem(newElement, &painter);
+
     pos += PointF(offsetPanel, 0);
     painter.translate(-pos);
     delete newElement;
@@ -371,7 +372,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             barLine->setSpanTo(currentStaff->barLineTo());
             mu::engraving::EngravingItem::renderer()->layoutItem(barLine);
             barLine->setColor(color);
-            barLine->draw(&painter);
+            EngravingItem::renderer()->drawItem(barLine, &painter);
 
             // Draw the current staff name
             const std::list<mu::engraving::StaffName>& staffNamesLong
@@ -398,7 +399,8 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
                 const double spatium = score->style().spatium();
                 pos = PointF(styleMM(mu::engraving::Sid::clefLeftMargin) + widthClef, -spatium * 2);
                 painter.translate(pos);
-                newName->draw(&painter);
+                EngravingItem::renderer()->drawItem(newName, &painter);
+
                 painter.translate(-pos);
             }
             delete newName;
