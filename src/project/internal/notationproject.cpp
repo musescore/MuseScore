@@ -508,7 +508,7 @@ mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
             suffix = engraving::MSCX;
         }
 
-        return saveScore(path, suffix);
+        return saveScore(path, suffix, false /*createThumbnail*/);
     }
 
     return make_ret(notation::Err::UnknownError);
@@ -554,7 +554,7 @@ mu::Ret NotationProject::writeToDevice(QIODevice* device)
     return ret;
 }
 
-mu::Ret NotationProject::saveScore(const io::path_t& path, const std::string& fileSuffix)
+mu::Ret NotationProject::saveScore(const io::path_t& path, const std::string& fileSuffix, bool createThumbnail)
 {
     if (!isMuseScoreFile(fileSuffix) && !fileSuffix.empty()) {
         return exportProject(path, fileSuffix);
@@ -562,10 +562,10 @@ mu::Ret NotationProject::saveScore(const io::path_t& path, const std::string& fi
 
     MscIoMode ioMode = mscIoModeBySuffix(fileSuffix);
 
-    return doSave(path, true, ioMode);
+    return doSave(path, ioMode, true /*generateBackup*/, createThumbnail);
 }
 
-mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, engraving::MscIoMode ioMode)
+mu::Ret NotationProject::doSave(const io::path_t& path, engraving::MscIoMode ioMode, bool generateBackup, bool createThumbnail)
 {
     TRACEFUNC;
 
@@ -601,7 +601,7 @@ mu::Ret NotationProject::doSave(const io::path_t& path, bool generateBackup, eng
         }
 
         MscWriter msczWriter(params);
-        Ret ret = writeProject(msczWriter, false);
+        Ret ret = writeProject(msczWriter, false /*onlySelection*/, createThumbnail);
         msczWriter.close();
 
         if (!ret) {
@@ -707,7 +707,7 @@ mu::Ret NotationProject::makeCurrentFileAsBackup()
     return ret;
 }
 
-mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
+mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection, bool createThumbnail)
 {
     TRACEFUNC;
 
@@ -719,7 +719,7 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection)
     }
 
     // Write engraving project
-    ret = m_engravingProject->writeMscz(msczWriter, onlySelection, true);
+    ret = m_engravingProject->writeMscz(msczWriter, onlySelection, createThumbnail);
     if (!ret) {
         LOGE() << "failed write engraving project to mscz: " << ret.toString();
         return make_ret(notation::Err::UnknownError);
