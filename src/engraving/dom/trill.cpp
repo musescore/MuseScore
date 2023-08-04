@@ -127,7 +127,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 Shape TrillSegment::shape() const
 {
     IEngravingFontPtr font = score()->engravingFont();
-    Shape s = font->shape(_symbols, EngravingItem::mag());
+    Shape s = font->shape(_symbols, magS());
     Accidental* accidental = trill()->accidental();
     if (accidental && accidental->visible() && isSingleBeginType()) {
         s.add(accidental->shape().translate(accidental->pos()));
