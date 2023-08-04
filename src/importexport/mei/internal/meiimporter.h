@@ -103,6 +103,7 @@ private:
     bool readDynam(pugi::xml_node dynamNode, engraving::Measure* measure);
     bool readFermata(pugi::xml_node fermataNode, engraving::Measure* measure);
     bool readHarm(pugi::xml_node harmNode, engraving::Measure* measure);
+    bool readOctave(pugi::xml_node octaveNode, engraving::Measure* measure);
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
     bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
