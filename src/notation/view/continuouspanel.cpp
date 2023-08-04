@@ -361,7 +361,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
                 mu::engraving::rendering::stable::TLayout::layoutForWidth(&newStaffLines, bg.width(), cntx);
             }
             newStaffLines.setColor(color);
-            newStaffLines.draw(&painter);
+            mu::engraving::EngravingItem::renderer()->drawItem(&newStaffLines, &painter);
 
             // Draw barline
             mu::engraving::BarLine* barLine = engraving::Factory::createBarLine(parent, ACCESSIBILITY_DISABLED);

@@ -63,15 +63,6 @@ void HBox::computeMinWidth()
     setWidth(point(boxWidth()) + topGap() + bottomGap());    // top/bottom is really left/right
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Box::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 bool Box::isEditAllowed(EditData&) const
 {
     return false;

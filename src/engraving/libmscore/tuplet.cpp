@@ -251,15 +251,6 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Tuplet::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   Rect
 //    helper class
 //---------------------------------------------------------

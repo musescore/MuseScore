@@ -67,15 +67,6 @@ MMRest::MMRest(const MMRest& r, bool link)
 }
 
 //---------------------------------------------------------
-//   MMRest::draw
-//---------------------------------------------------------
-
-void MMRest::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   numberRect
 ///   returns the mmrest number's bounding rectangle
 //---------------------------------------------------------

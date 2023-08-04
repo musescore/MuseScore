@@ -82,8 +82,6 @@ public:
 
     const BracketItem* bi() const { return m_bi; }
 
-    void draw(mu::draw::Painter*) const override;
-
     bool isEditable() const override;
     bool needStartEditingAfterSelecting() const override;
     void startEdit(EditData&) override;

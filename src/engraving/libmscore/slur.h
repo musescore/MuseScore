@@ -44,7 +44,6 @@ public:
 
     SlurSegment* clone() const override { return new SlurSegment(*this); }
     int subtype() const override { return static_cast<int>(spanner()->type()); }
-    void draw(mu::draw::Painter*) const override;
 
     double extraHeight() const { return m_extraHeight; }
     void setExtraHeight(double h) { m_extraHeight = h; }

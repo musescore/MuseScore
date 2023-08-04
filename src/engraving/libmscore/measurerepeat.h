@@ -59,8 +59,6 @@ public:
     Measure* firstMeasureOfGroup() const;
     const Measure* referringMeasure(const Measure* measure) const;
 
-    void draw(mu::draw::Painter*) const override;
-
     Fraction ticks() const override;
     Fraction actualTicks() const { return Rest::ticks(); }
 

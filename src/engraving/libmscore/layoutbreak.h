@@ -86,8 +86,6 @@ private:
     LayoutBreak(MeasureBase* parent = 0);
     LayoutBreak(const LayoutBreak&);
 
-    void draw(mu::draw::Painter*) const override;
-
     void spatiumChanged(double oldValue, double newValue) override;
 
     double m_lw;

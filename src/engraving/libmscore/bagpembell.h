@@ -71,8 +71,6 @@ public:
     void setEmbelType(EmbellishmentType val) { m_embelType = val; }
     double mag() const override;
 
-    void draw(mu::draw::Painter*) const override;
-
     static const BagpipeNoteInfo BAGPIPE_NOTEINFO_LIST[];
     BagpipeNoteList resolveNoteList() const;
 

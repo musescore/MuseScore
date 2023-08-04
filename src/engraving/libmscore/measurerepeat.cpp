@@ -96,15 +96,6 @@ const Measure* MeasureRepeat::referringMeasure(const Measure* measure) const
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void MeasureRepeat::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   numberRect
 ///   returns the measure repeat number's bounding rectangle
 //---------------------------------------------------------

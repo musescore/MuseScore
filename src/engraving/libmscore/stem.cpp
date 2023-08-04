@@ -84,11 +84,6 @@ PointF Stem::flagPosition() const
     return pos() + PointF(_bbox.left(), up() ? -length() : length());
 }
 
-void Stem::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 {
     return { pagePos() + m_line.p2() };

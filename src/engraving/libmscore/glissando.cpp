@@ -74,15 +74,6 @@ GlissandoSegment::GlissandoSegment(Glissando* sp, System* parent)
 }
 
 //---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void GlissandoSegment::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 

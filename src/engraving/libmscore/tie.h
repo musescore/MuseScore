@@ -54,7 +54,6 @@ public:
     TieSegment* clone() const override { return new TieSegment(*this); }
 
     int subtype() const override { return static_cast<int>(spanner()->type()); }
-    void draw(mu::draw::Painter*) const override;
 
     void adjustY(const PointF& p1, const PointF& p2);
     void adjustX();

@@ -62,8 +62,6 @@ public:
     bool load(const io::path_t& s);
     bool loadFromData(const io::path_t& name, const mu::ByteArray&);
 
-    void draw(mu::draw::Painter*) const override;
-
     void init();
 
     bool isImageFramed() const;

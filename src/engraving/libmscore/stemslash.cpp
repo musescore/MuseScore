@@ -33,13 +33,4 @@ StemSlash::StemSlash(Chord* parent)
     : EngravingItem(ElementType::STEM_SLASH, parent)
 {
 }
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void StemSlash::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
 } // namespace mu::engraving

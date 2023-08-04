@@ -1389,15 +1389,6 @@ bool Note::isNoteName() const
     return false;
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void Note::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
 {
     // ensure sane values:

@@ -308,8 +308,6 @@ public:
     void disconnectTiedNotes();
     void connectTiedNotes();
 
-    void draw(mu::draw::Painter*) const override;
-
     void setupAfterRead(const Fraction& tick, bool pasteMode);
 
     bool acceptDrop(EditData&) const override;

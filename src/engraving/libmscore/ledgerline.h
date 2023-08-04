@@ -59,8 +59,6 @@ public:
     void setVertical(bool v) { m_vertical = v; }
     bool vertical() const { return m_vertical; }
 
-    void draw(mu::draw::Painter*) const override;
-
     double measureXPos() const;
     LedgerLine* next() const { return _next; }
     void setNext(LedgerLine* l) { _next = l; }

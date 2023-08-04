@@ -75,8 +75,6 @@ private:
     StaffState(EngravingItem* parent);
     StaffState(const StaffState&);
 
-    void draw(mu::draw::Painter*) const override;
-
     StaffStateType m_staffStateType = StaffStateType::INVISIBLE;
     double m_lw = 0.0;
     mu::draw::PainterPath m_path;

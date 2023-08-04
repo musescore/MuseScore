@@ -482,15 +482,6 @@ void StretchedBend::fillStretchedSegments(bool untilNextSegment)
     }
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void StretchedBend::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 mu::RectF StretchedBend::calculateBoundingRect() const
 {
     RectF bRect;

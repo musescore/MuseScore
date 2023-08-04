@@ -23,6 +23,7 @@
 #include "deadslapped.h"
 
 #include "rest.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -35,9 +36,4 @@ using namespace mu::engraving;
 DeadSlapped::DeadSlapped(Rest* rest)
     : EngravingItem(ElementType::DEAD_SLAPPED, rest)
 {
-}
-
-void DeadSlapped::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
 }

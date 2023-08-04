@@ -64,8 +64,6 @@ public:
     SpacerType spacerType() const { return _spacerType; }
     void setSpacerType(SpacerType t) { _spacerType = t; }
 
-    void draw(mu::draw::Painter*) const override;
-
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;

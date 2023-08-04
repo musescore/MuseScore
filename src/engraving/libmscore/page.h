@@ -84,7 +84,6 @@ public:
     double headerExtension() const;
     double footerExtension() const;
 
-    void draw(mu::draw::Painter*) const override;
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
     std::vector<EngravingItem*> items(const mu::RectF& r);

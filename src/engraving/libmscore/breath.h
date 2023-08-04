@@ -61,8 +61,6 @@ public:
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 
-    void draw(mu::draw::Painter*) const override;
-
     mu::PointF pagePos() const override;        ///< position in page coordinates
 
     PropertyValue getProperty(Pid propertyId) const override;

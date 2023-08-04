@@ -63,15 +63,6 @@ TieSegment::TieSegment(const TieSegment& s)
     autoAdjustOffset = mu::PointF();
 }
 
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void TieSegment::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 bool TieSegment::isEditAllowed(EditData& ed) const
 {
     if (ed.key == Key_Home && !ed.modifiers) {

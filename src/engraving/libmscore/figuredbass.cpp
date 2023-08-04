@@ -443,15 +443,6 @@ String FiguredBassItem::normalizedText() const
 }
 
 //---------------------------------------------------------
-//   FiguredBassItem draw()
-//---------------------------------------------------------
-
-void FiguredBassItem::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
-//---------------------------------------------------------
 //   PROPERTY METHODS
 //---------------------------------------------------------
 
@@ -712,15 +703,6 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
         }
     }
     return EngravingItem::getPropertyStyle(id);
-}
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void FiguredBass::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
 }
 
 //---------------------------------------------------------

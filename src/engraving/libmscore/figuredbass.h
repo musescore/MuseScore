@@ -139,8 +139,6 @@ public:
     // standard re-implemented virtual functions
     FiguredBassItem* clone() const override { return new FiguredBassItem(*this); }
 
-    void draw(mu::draw::Painter* painter) const override;
-
     bool startsWithParenthesis() const;
 
     // specific API
@@ -274,8 +272,6 @@ public:
     FiguredBass* clone() const override { return new FiguredBass(*this); }
 
     FiguredBassItem* createItem(int line) { return new FiguredBassItem(this, line); }
-
-    void draw(mu::draw::Painter* painter) const override;
 
     void setSelected(bool f) override;
     void setVisible(bool f) override;

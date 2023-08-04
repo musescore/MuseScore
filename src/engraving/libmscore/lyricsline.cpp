@@ -125,13 +125,4 @@ LyricsLineSegment::LyricsLineSegment(LyricsLine* sp, System* parent)
 {
     setGenerated(true);
 }
-
-//---------------------------------------------------------
-//   draw
-//---------------------------------------------------------
-
-void LyricsLineSegment::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
 }

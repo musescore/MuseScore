@@ -49,11 +49,6 @@ void Hook::setHookType(int i)
     setSym(symIdForHookIndex(i, straight));
 }
 
-void Hook::draw(mu::draw::Painter*) const
-{
-    UNREACHABLE;
-}
-
 mu::PointF Hook::smuflAnchor() const
 {
     return symSmuflAnchor(_sym, chord()->up() ? SmuflAnchorId::stemUpNW : SmuflAnchorId::stemDownSW);

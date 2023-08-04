@@ -45,7 +45,6 @@ class KeySig final : public EngravingItem
 public:
 
     KeySig* clone() const override { return new KeySig(*this); }
-    void draw(mu::draw::Painter*) const override;
 
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;

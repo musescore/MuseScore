@@ -100,11 +100,6 @@ void Ornament::setTrack(track_idx_t val)
     _track = val;
 }
 
-void Ornament::draw(draw::Painter* painter) const
-{
-    Articulation::draw(painter);
-}
-
 void Ornament::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     func(data, this);

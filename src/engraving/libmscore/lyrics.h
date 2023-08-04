@@ -169,7 +169,6 @@ public:
     LyricsLineSegment(LyricsLine*, System* parent);
 
     LyricsLineSegment* clone() const override { return new LyricsLineSegment(*this); }
-    void draw(mu::draw::Painter*) const override;
 
     int numOfDashes() const { return m_numOfDashes; }
     void setNumOfDashes(int val) { m_numOfDashes = val; }

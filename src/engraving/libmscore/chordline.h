@@ -71,8 +71,6 @@ public:
 
     const TranslatableString& chordLineTypeName() const;
 
-    void draw(mu::draw::Painter*) const override;
-
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;
 

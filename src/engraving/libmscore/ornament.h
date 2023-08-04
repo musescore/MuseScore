@@ -41,8 +41,6 @@ public:
 
     static SymId fromTrillType(TrillType trillType);
 
-    void draw(mu::draw::Painter* painter) const override;
-
     PropertyValue getProperty(Pid propertyId) const override;
     Sid getPropertyStyle(Pid propertyId) const override;
     PropertyValue propertyDefault(Pid id) const override;

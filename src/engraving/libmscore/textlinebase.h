@@ -48,7 +48,6 @@ public:
     ~TextLineBaseSegment();
 
     TextLineBase* textLineBase() const { return (TextLineBase*)spanner(); }
-    void draw(mu::draw::Painter*) const override;
 
     void setSelected(bool f) override;
 

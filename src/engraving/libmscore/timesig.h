@@ -67,7 +67,6 @@ public:
     bool operator!=(const TimeSig& ts) const { return !(*this == ts); }
 
     double mag() const override;
-    void draw(mu::draw::Painter*) const override;
 
     Fraction sig() const { return m_sig; }
     void setSig(const Fraction& f, TimeSigType st = TimeSigType::NORMAL);

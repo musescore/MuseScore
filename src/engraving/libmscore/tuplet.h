@@ -104,7 +104,6 @@ public:
 
     void reset() override;
 
-    void draw(mu::draw::Painter*) const override;
     int id() const { return m_id; }
     void setId(int i) const { m_id = i; }
 
