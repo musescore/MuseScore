@@ -60,6 +60,10 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::audio::fx;
 
+#ifdef JACK_AUDIO
+#include "internal/platform/jack/jackaudiodriver.h"
+#endif
+
 #ifdef Q_OS_LINUX
 #include "internal/platform/lin/linuxaudiodriver.h"
 #endif
@@ -108,6 +112,10 @@ void AudioModule::registerExports()
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
     m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
+#if defined(JACK_AUDIO)
+    m_audioDriver = std::shared_ptr<IAudioDriver>(new JackAudioDriver());
+#else
+
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
 #endif
@@ -125,6 +133,8 @@ void AudioModule::registerExports()
 #ifdef Q_OS_WASM
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WebAudioDriver());
 #endif
+
+#endif // JACK_AUDIO
 
     ioc()->registerExport<IAudioConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IAudioThreadSecurer>(moduleName(), std::make_shared<AudioThreadSecurer>());

@@ -19,6 +19,9 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 set(MODULE_TEST audio_test)
+
+if (NOT MUE_ENABLE_AUDIO_JACK)
+
 if(OS_IS_FBSD)
 set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /usr/local/lib/libasound.so")
 endif()
@@ -39,3 +42,4 @@ set(MODULE_TEST_LINK audio)
 
 include(${PROJECT_SOURCE_DIR}/src/framework/testing/gtest.cmake)
 
+endif()
