@@ -36,20 +36,22 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
     )
-elseif(OS_IS_LIN)
-    set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
-    )
-elseif(OS_IS_FBSD)
-    set(DRIVER_SRC
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
-        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
-    )
+elseif(OS_IS_LIN OR OS_IS_FBSD)
+    if (MUE_ENABLE_AUDIO_JACK)
+        set(DRIVER_SRC
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.h
+        )
+    else (MUE_ENABLE_AUDIO_JACK)
+        set(DRIVER_SRC
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
+        )
+    endif()
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
@@ -287,16 +289,22 @@ else ()
         )
 endif()
 
-if (OS_IS_MAC)
-    find_library(AudioToolbox NAMES AudioToolbox)
-    find_library(CoreAudio NAMES CoreAudio)
-    set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox} ${CoreAudio})
-elseif (OS_IS_WIN)
-    set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
-elseif (OS_IS_LIN)
-    find_package(ALSA REQUIRED)
-    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
-    set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
+if (MUE_ENABLE_AUDIO_JACK)
+    find_package(Jack REQUIRED)
+    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${JACK_INCLUDE_DIRS} )
+    set(MODULE_LINK ${MODULE_LINK} ${JACK_LIBRARIES} pthread )
+else ()
+    if (OS_IS_MAC)
+        find_library(AudioToolbox NAMES AudioToolbox)
+        find_library(CoreAudio NAMES CoreAudio)
+        set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox} ${CoreAudio})
+    elseif (OS_IS_WIN)
+        set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
+    elseif (OS_IS_LIN)
+        find_package(ALSA REQUIRED)
+        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
+        set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
+    endif()
 endif()
 
 set(MODULE_QRC audio.qrc)
