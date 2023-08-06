@@ -59,6 +59,9 @@ public:
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
+    EngravingItem* nextElement() override;
+    EngravingItem* prevElement() override;
+
     Tuplet* clone() const override { return new Tuplet(*this); }
     void setTrack(track_idx_t val) override;
 

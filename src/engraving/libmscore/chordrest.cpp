@@ -914,6 +914,11 @@ EngravingItem* ChordRest::prevArticulationOrLyric(EngravingItem* e)
 
 EngravingItem* ChordRest::nextElement()
 {
+    ChordRest* nextCR = nextChordRest(this);
+    Tuplet* tuplet = nextCR ? nextCR->tuplet() : nullptr;
+    if (tuplet) {
+        return tuplet;
+    }
     EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
         e = score()->selection().elements().front();
@@ -949,6 +954,11 @@ EngravingItem* ChordRest::nextElement()
 
 EngravingItem* ChordRest::prevElement()
 {
+    ChordRest* prevCR = prevChordRest(this);
+    Tuplet* tuplet = prevCR ? prevCR->tuplet() : nullptr;
+    if (tuplet) {
+        return tuplet;
+    }
     EngravingItem* e = score()->selection().element();
     if (!e && !score()->selection().elements().empty()) {
         e = score()->selection().elements().back();
