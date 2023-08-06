@@ -189,7 +189,7 @@ Text* Page::layoutHeaderFooter(int area, const QString& ss) const
                   }
             text->setLayoutRelativeToBottom(score()->styleB(Sid::footerInsideMargins));
             }
-      text->setParent((Page*)this);
+      text->setParent(0);
       Align flags = Align::LEFT;
       switch (area) {
             case 0: flags = Align::LEFT    | Align::TOP;    break;
