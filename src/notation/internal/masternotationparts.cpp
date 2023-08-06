@@ -62,12 +62,14 @@ void MasterNotationParts::setParts(const PartInstrumentList& partList, const Sco
 {
     TRACEFUNC;
 
+    mu::engraving::KeyList keyList = score()->keyList();
+
     endInteractionWithScore();
     startGlobalEdit();
 
     doSetScoreOrder(order);
     removeMissingParts(partList);
-    insertNewParts(partList);
+    insertNewParts(partList, keyList);
     updateSoloist(partList);
     sortParts(partList);
     setBracketsAndBarlines();

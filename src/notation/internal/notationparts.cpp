@@ -1016,12 +1016,11 @@ void NotationParts::removeMissingParts(const PartInstrumentList& newParts)
     doRemoveParts(partsToRemove);
 }
 
-void NotationParts::insertNewParts(const PartInstrumentList& parts)
+void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::engraving::KeyList& keyList)
 {
     TRACEFUNC;
 
     size_t partIdx = 0;
-    mu::engraving::KeyList keyList = score()->keyList();
 
     for (const PartInstrument& pi: parts) {
         if (pi.isExistingPart) {
@@ -1054,6 +1053,12 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts)
 
         m_partChangedNotifier.itemAdded(part);
     }
+}
+
+void NotationParts::insertNewParts(const PartInstrumentList& parts)
+{
+    TRACEFUNC;
+    insertNewParts(parts, score()->keyList());
 }
 
 void NotationParts::updateSoloist(const PartInstrumentList& parts)
