@@ -97,7 +97,7 @@ Rectangle {
         height: root.sideMargin
 
         startColor: root.color
-        stopColor: "transparent"
+        endColor: "transparent"
     }
 
     GradientRectangle {
@@ -112,6 +112,6 @@ Rectangle {
         height: root.sideMargin
 
         startColor: "transparent"
-        stopColor: root.color
+        endColor: root.color
     }
 }

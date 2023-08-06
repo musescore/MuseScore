@@ -83,7 +83,7 @@ Item {
         anchors.top: flickable.top
 
         startColor: root.backgroundColor
-        stopColor: "transparent"
+        endColor: "transparent"
     }
 
     StyledFlickable {

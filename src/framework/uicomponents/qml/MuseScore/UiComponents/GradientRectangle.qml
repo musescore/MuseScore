@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-
 import QtQuick 2.15
+
 Rectangle {
     id: root
 
-    property alias startColor: startGradient.color
-    property alias stopColor: stopGradient.color
+    property alias startColor: startGradientStop.color
+    property alias endColor: endGradientStop.color
 
     height: 8
     z: 1
 
     gradient: Gradient {
         GradientStop {
-            id: startGradient
+            id: startGradientStop
             position: 0.0
             color: "transparent"
-
         }
         GradientStop {
-            id: stopGradient
+            id: endGradientStop
             position: 1.0
             color: "transparent"
         }

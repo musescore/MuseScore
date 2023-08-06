@@ -74,7 +74,7 @@ Item {
         anchors.top: parent.top
 
         startColor: root.backgroundColor
-        stopColor: "transparent"
+        endColor: "transparent"
     }
 
     StyledGridView {
@@ -166,6 +166,6 @@ Item {
         anchors.bottom: parent.bottom
 
         startColor: "transparent"
-        stopColor: root.backgroundColor
+        endColor: root.backgroundColor
     }
 }

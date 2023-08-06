@@ -30,8 +30,6 @@ import MuseScore.UiComponents 1.0
 Item {
     id: root
 
-    property color backgroundColor: ui.theme.backgroundSecondaryColor
-
     property string authorName: ""
     property string authorRole: ""
     property string authorPosition: ""
@@ -40,7 +38,9 @@ Item {
     property string authorAvatarUrl: ""
     property string authorOrganizationUrl: ""
 
+    property color backgroundColor: ui.theme.backgroundSecondaryColor
     property int sideMargin: 46
+
     property alias navigation: navPanel
 
     NavigationPanel {
@@ -70,15 +70,17 @@ Item {
         anchors.top: flickable.top
 
         startColor: root.backgroundColor
-        stopColor: "transparent"
+        endColor: "transparent"
     }
 
     StyledFlickable {
         id: flickable
 
         anchors.fill: parent
+
         contentWidth: parent.width
         contentHeight: authorInfo.height + sideMargin
+
         topMargin: topGradient.height
 
         Rectangle {

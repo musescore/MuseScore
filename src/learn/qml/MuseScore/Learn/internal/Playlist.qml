@@ -51,7 +51,7 @@ FocusScope {
         anchors.top: view.top
 
         startColor: root.backgroundColor
-        stopColor: "transparent"
+        endColor: "transparent"
     }
 
     StyledGridView {
