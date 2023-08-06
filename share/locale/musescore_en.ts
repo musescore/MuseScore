@@ -10917,7 +10917,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/framework/audio/internal/platform/lin/linuxaudiodriver.cpp" line="247"/>
-        <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="190"/>
+        <location filename="../../src/framework/audio/internal/platform/osx/osxaudiodriver.mm" line="192"/>
         <location filename="../../src/framework/audio/internal/platform/win/wasapiaudiodriver.cpp" line="209"/>
         <location filename="../../src/framework/audio/internal/platform/win/wincoreaudiodriver.cpp" line="457"/>
         <source>System default</source>
@@ -11160,45 +11160,45 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fingering.cpp" line="128"/>
+        <location filename="../../src/engraving/libmscore/fingering.cpp" line="118"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1029"/>
         <source>String number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="958"/>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1059"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="787"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="888"/>
         <source>with chord symbol %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="960"/>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1060"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="789"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="889"/>
         <source>without chord symbol</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="973"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="802"/>
         <source>string %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="979"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="808"/>
         <source>circle marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="982"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="811"/>
         <source>cross marker</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1014"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="843"/>
         <source>%1 and %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1022"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="851"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
         <translation type="unfinished">
@@ -11207,37 +11207,37 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         </translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1034"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="863"/>
         <source>fret %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1038"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="867"/>
         <source>barré %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1040"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="869"/>
         <source>beginning string %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1043"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="872"/>
         <source>and ending string %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1046"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="875"/>
         <source>partial barré %1 %2 %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1055"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="884"/>
         <source>no content</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1064"/>
+        <location filename="../../src/engraving/libmscore/fret.cpp" line="893"/>
         <source>%n string(s) total</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -11245,17 +11245,17 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         </translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="572"/>
+        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="548"/>
         <source>Crescendo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="575"/>
+        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="551"/>
         <source>Decrescendo</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="578"/>
+        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="554"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="559"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2281"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2305"/>
@@ -11264,18 +11264,18 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/harmony.cpp" line="1778"/>
+        <location filename="../../src/engraving/libmscore/harmony.cpp" line="1731"/>
         <source>Roman numeral</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/harmony.cpp" line="1780"/>
+        <location filename="../../src/engraving/libmscore/harmony.cpp" line="1733"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="1022"/>
         <source>Nashville number</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/harmony.cpp" line="1818"/>
+        <location filename="../../src/engraving/libmscore/harmony.cpp" line="1771"/>
         <source>lower case</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11291,108 +11291,108 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="884"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="883"/>
         <source>%1 (sounding as %2%3)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2173"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2067"/>
         <source>Acciaccatura</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2175"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2069"/>
         <source>Appoggiatura</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2179"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2073"/>
         <source>Grace note after</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2183"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2077"/>
         <source>Grace note before</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2185"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2079"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="156"/>
         <source>Note</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3005"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3043"/>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="747"/>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="759"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2899"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2937"/>
+        <location filename="../../src/engraving/libmscore/rest.cpp" line="732"/>
+        <location filename="../../src/engraving/libmscore/rest.cpp" line="744"/>
         <source>Voice: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3013"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2907"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3019"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3048"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2913"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2942"/>
         <source>Beat slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3019"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3048"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2913"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2942"/>
         <source>Rhythm slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3023"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3052"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2917"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2946"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3029"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2923"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3058"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2952"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3060"/>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="762"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2954"/>
+        <location filename="../../src/engraving/libmscore/rest.cpp" line="747"/>
         <source>Cross-staff above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3062"/>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="764"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2956"/>
+        <location filename="../../src/engraving/libmscore/rest.cpp" line="749"/>
         <source>Cross-staff below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3066"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2960"/>
         <source>too low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3068"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2962"/>
         <source>too high</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3070"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2964"/>
         <source>too low for amateurs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3072"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2966"/>
         <source>too high for amateurs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11443,7 +11443,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="748"/>
+        <location filename="../../src/engraving/libmscore/rest.cpp" line="733"/>
         <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11453,21 +11453,21 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/barline.cpp" line="1379"/>
+        <location filename="../../src/engraving/libmscore/barline.cpp" line="1140"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1073"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1084"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3098"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3110"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2992"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3004"/>
         <location filename="../../src/engraving/libmscore/segment.cpp" line="2206"/>
         <source>Start of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/barline.cpp" line="1382"/>
+        <location filename="../../src/engraving/libmscore/barline.cpp" line="1143"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1076"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1086"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3102"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3118"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="2996"/>
+        <location filename="../../src/engraving/libmscore/note.cpp" line="3012"/>
         <location filename="../../src/engraving/libmscore/segment.cpp" line="2221"/>
         <source>End of %1</source>
         <translation type="unfinished"></translation>
@@ -11483,132 +11483,132 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1253"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1191"/>
         <source>Standard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1254"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1192"/>
         <source>Perc. 1 line</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1255"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1193"/>
         <source>Perc. 3 lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1256"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1194"/>
         <source>Perc. 5 lines</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1259"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1197"/>
         <source>Tab. 6-str. simple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1260"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1198"/>
         <source>Tab. 6-str. common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1261"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1199"/>
         <source>Tab. 6-str. full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1262"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1200"/>
         <source>Tab. 4-str. simple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1263"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1201"/>
         <source>Tab. 4-str. common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1264"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1202"/>
         <source>Tab. 4-str. full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1265"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1203"/>
         <source>Tab. 5-str. simple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1266"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1204"/>
         <source>Tab. 5-str. common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1267"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1205"/>
         <source>Tab. 5-str. full</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1268"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1206"/>
         <source>Tab. ukulele</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1269"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1207"/>
         <source>Tab. balalaika</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1270"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1208"/>
         <source>Tab. dulcimer</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1271"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1209"/>
         <source>Tab. 6-str. Italian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1272"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1210"/>
         <source>Tab. 6-str. French</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1273"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1211"/>
         <source>Tab. 7-str. common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1274"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1212"/>
         <source>Tab. 8-str. common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1275"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1213"/>
         <source>Tab. 9-str. common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1276"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1214"/>
         <source>Tab. 10-str. common</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1277"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1215"/>
         <source>Tab. 7-str. simple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1278"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1216"/>
         <source>Tab. 8-str. simple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1279"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1217"/>
         <source>Tab. 9-str. simple</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1280"/>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1218"/>
         <source>Tab. 10-str. simple</source>
         <translation type="unfinished"></translation>
     </message>
@@ -12853,7 +12853,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/libmscore/measurerepeat.cpp" line="240"/>
+        <location filename="../../src/engraving/libmscore/measurerepeat.cpp" line="201"/>
         <source>%1; Duration: %n measure(s)</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -12911,7 +12911,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/ambitus.cpp" line="564"/>
+        <location filename="../../src/engraving/libmscore/ambitus.cpp" line="555"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -16737,33 +16737,33 @@ Fret %1 on strings %2</source>
 <context>
     <name>engraving/timesig</name>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="331"/>
+        <location filename="../../src/engraving/libmscore/timesig.cpp" line="307"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1699"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1718"/>
         <source>Common time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="334"/>
+        <location filename="../../src/engraving/libmscore/timesig.cpp" line="310"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1700"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1719"/>
         <source>Cut time</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="337"/>
+        <location filename="../../src/engraving/libmscore/timesig.cpp" line="313"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1723"/>
         <source>Cut time (Bach)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="340"/>
+        <location filename="../../src/engraving/libmscore/timesig.cpp" line="316"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1724"/>
         <source>Cut triple time (9/8)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="343"/>
+        <location filename="../../src/engraving/libmscore/timesig.cpp" line="319"/>
         <source>%1/%2 time</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17539,18 +17539,18 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_guitarpro</name>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="470"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="471"/>
         <source>Free time</source>
         <comment>time signature</comment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1030"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1031"/>
         <source>Music by %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1035"/>
+        <location filename="../../src/importexport/guitarpro/internal/gtp/gpconverter.cpp" line="1036"/>
         <source>Words by %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17558,7 +17558,7 @@ Fret %1 on strings %2</source>
 <context>
     <name>iex_mei</name>
     <message>
-        <location filename="../../src/importexport/mei/internal/meireader.cpp" line="65"/>
+        <location filename="../../src/importexport/mei/internal/meireader.cpp" line="78"/>
         <source>Do you want to try to load this MEI file anyway?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22787,73 +22787,73 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1221"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1998"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2003"/>
         <source>8va alta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1228"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2005"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2010"/>
         <source>8va bassa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1234"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2011"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2016"/>
         <source>15ma alta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1242"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2018"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2023"/>
         <source>15ma bassa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1248"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2025"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2030"/>
         <source>22ma alta</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1255"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2032"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2037"/>
         <source>22ma bassa</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1265"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1954"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1959"/>
         <source>Pedal (with ped and line)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1276"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1945"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1950"/>
         <source>Pedal (with ped and asterisk)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1282"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1960"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1965"/>
         <source>Pedal (straight hooks)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1289"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1966"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1971"/>
         <source>Pedal (angled end hook)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1295"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1972"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1977"/>
         <source>Pedal (both hooks angled)</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1301"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1978"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1983"/>
         <source>Pedal (angled start hook)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22876,12 +22876,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2049"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2054"/>
         <source>Harp pedal diagram</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2054"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2059"/>
         <source>Harp pedal text diagram</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22904,7 +22904,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1346"/>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2036"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2041"/>
         <source>Ambitus</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23213,11 +23213,13 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1623"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1925"/>
         <source>normal</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1625"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1927"/>
         <source>Normal</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23258,7 +23260,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="2043"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="2048"/>
         <source>Harp</source>
         <translation type="unfinished"></translation>
     </message>
@@ -23315,12 +23317,12 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1930"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1935"/>
         <source>Keyboard</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/internal/palettecreator.cpp" line="1987"/>
+        <location filename="../../src/palette/internal/palettecreator.cpp" line="1992"/>
         <source>Pitch</source>
         <extracomment>The name of a palette</extracomment>
         <translation type="unfinished"></translation>
@@ -23412,50 +23414,50 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="636"/>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="685"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="646"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="695"/>
         <source>MuseScore drumset file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="638"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="648"/>
         <source>Load drumset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="655"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="665"/>
         <source>Drumset file too old</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="656"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="666"/>
         <source>MuseScore may not be able to load this drumset file.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="687"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="697"/>
         <source>Save drumset</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="695"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="705"/>
         <source>Opening file
 %1
 failed: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="696"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="706"/>
         <source>Open file</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="706"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="716"/>
         <source>Writing file failed: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="707"/>
+        <location filename="../../src/palette/view/widgets/editdrumsetdialog.cpp" line="717"/>
         <source>Write drumset</source>
         <translation type="unfinished"></translation>
     </message>
