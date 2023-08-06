@@ -2323,6 +2323,8 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 /**
  * Add the end element / tick / track for spanner ends.
  * This is happening at the end of the import because we need to make sure spanning ends have been read.
+ * Different handing for ties since these are attached to the notes
+ * Additional handling for ottava to adjust end position tricker pitch offset calculation
  */
 
 void MeiImporter::addSpannerEnds()
@@ -2343,13 +2345,17 @@ void MeiImporter::addSpannerEnds()
             if (!chordRest) {
                 continue;
             }
-            Fraction tick2 = chordRest->tick();
-            if (spanner.first->isOttava()) {
-                tick2 += chordRest->ticks();
-            }
-            spanner.first->setTick2(tick2);
+            spanner.first->setTick2(chordRest->tick());
             spanner.first->setEndElement(chordRest);
             spanner.first->setTrack2(chordRest->track());
+            // Special handling of ottava
+            if (spanner.first->isOttava()) {
+                // Set the tick2 to include the duration of the ChordRest (not needed for others, i.e., slurs?)
+                spanner.first->setTick2(chordRest->tick() + chordRest->ticks());
+                Ottava* ottava = toOttava(spanner.first);
+                // Make the staff fill the pitch offsets accordingly since we use Note::ppitch in export
+                ottava->staff()->updateOttava();
+            }
         }
     }
 }
