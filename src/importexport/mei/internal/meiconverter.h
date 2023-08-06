@@ -171,6 +171,9 @@ public:
     static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef meterToMEI(const engraving::Fraction& fraction, engraving::TimeSigType tsType);
 
+    static void octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning);
+    static libmei::Octave octaveToMEI(const engraving::Ottava* ottava);
+
     struct PitchStruct {
         int pitch = 0;
         int tpc2 = 0;

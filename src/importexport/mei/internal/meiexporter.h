@@ -45,6 +45,7 @@ enum measureElementCounter {
     DYNAM_M,
     FERMATA_M,
     HARM_M,
+    OCTAVE_M,
     REPEATMARK_M,
     SLUR_M,
     TEMPO_M,
@@ -115,6 +116,7 @@ private:
     bool writeFermata(const engraving::Fermata* fermata, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp);
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
+    bool writeOctave(const engraving::Ottava* ottava, const std::string& startid);
     bool writeRepeatMark(const engraving::Jump* jump, const engraving::Measure* measure);
     bool writeRepeatMark(const engraving::Marker* marker, const engraving::Measure* measure);
     bool writeSlur(const engraving::Slur* slur, const std::string& startid);
@@ -205,6 +207,7 @@ private:
         { DYNAM_M, u"dn" },
         { FERMATA_M, u"fm" },
         { HARM_M, u"hr" },
+        { OCTAVE_M, u"ot" },
         { REPEATMARK_M, u"rp" },
         { SLUR_M, u"sl" },
         { TEMPO_M, u"tp" },

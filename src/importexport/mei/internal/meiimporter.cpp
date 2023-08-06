@@ -439,6 +439,8 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
 
     if (meiElement.m_name == "slur") {
         item = Factory::createSlur(chordRest->segment());
+    } else if (meiElement.m_name == "octave") {
+        item = Factory::createOttava(chordRest->segment());
     } else {
         return nullptr;
     }
@@ -449,7 +451,7 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
     item->setStartElement(chordRest);
     item->setTrack(chordRest->track());
 
-    // Add it to the map for setting slur end in MeiImporter::addSpannerEnds
+    // Add it to the map for setting spanner end in MeiImporter::addSpannerEnds
     m_openSpannerMap[item] = node;
 
     return item;
@@ -1672,6 +1674,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readFermata(xpathNode.node(), measure);
         } else if (elementName == "harm") {
             success = success && this->readHarm(xpathNode.node(), measure);
+        } else if (elementName == "octave") {
+            success = success && this->readOctave(xpathNode.node(), measure);
         } else if (elementName == "repeatMark") {
             success = success && this->readRepeatMark(xpathNode.node(), measure);
         } else if (elementName == "slur") {
@@ -1856,6 +1860,31 @@ bool MeiImporter::readHarm(pugi::xml_node harmNode, engraving::Measure* measure)
     this->readLines(harmNode, meiLines);
 
     Convert::harmFromMEI(harmony, meiLines, meiHarm, warning);
+
+    return true;
+}
+
+/**
+ * Read a octave.
+ */
+
+bool MeiImporter::readOctave(pugi::xml_node octaveNode, engraving::Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Octave meiOctave;
+    meiOctave.Read(octaveNode);
+
+    Ottava* ottava = static_cast<Ottava*>(this->addSpanner(meiOctave, measure, octaveNode));
+    if (!ottava) {
+        // Warning message given in MeiExpoter::addSpanner
+        return true;
+    }
+
+    Convert::octaveFromMEI(ottava, meiOctave, warning);
 
     return true;
 }
@@ -2294,6 +2323,8 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 /**
  * Add the end element / tick / track for spanner ends.
  * This is happening at the end of the import because we need to make sure spanning ends have been read.
+ * Different handing for ties since these are attached to the notes
+ * Additional handling for ottava to adjust end position tricker pitch offset calculation
  */
 
 void MeiImporter::addSpannerEnds()
@@ -2317,6 +2348,14 @@ void MeiImporter::addSpannerEnds()
             spanner.first->setTick2(chordRest->tick());
             spanner.first->setEndElement(chordRest);
             spanner.first->setTrack2(chordRest->track());
+            // Special handling of ottava
+            if (spanner.first->isOttava()) {
+                // Set the tick2 to include the duration of the ChordRest (not needed for others, i.e., slurs?)
+                spanner.first->setTick2(chordRest->tick() + chordRest->ticks());
+                Ottava* ottava = toOttava(spanner.first);
+                // Make the staff fill the pitch offsets accordingly since we use Note::ppitch in export
+                ottava->staff()->updateOttava();
+            }
         }
     }
 }

@@ -175,6 +175,10 @@ TEST_F(Mei_Tests, mei_metadata_01) {
     meiReadTest("metadata-01");
 }
 
+TEST_F(Mei_Tests, mei_octave_01) {
+    meiReadTest("octave-01");
+}
+
 TEST_F(Mei_Tests, mei_page_head_01) {
     meiReadTest("page-head-01");
 }

@@ -786,6 +786,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isSlur()) {
             success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isOttava()) {
+            success = success && this->writeOctave(dynamic_cast<const Ottava*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTempoText()) {
             success = success && this->writeTempo(dynamic_cast<const TempoText*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTie()) {
@@ -1373,12 +1375,34 @@ bool MeiExporter::writeHarm(const Harmony* harmony, const std::string& startid)
 
     StringList meiLines;
 
-    pugi::xml_node dynamNode = m_currentNode.append_child();
+    pugi::xml_node harmNode = m_currentNode.append_child();
     libmei::Harm meiHarm = Convert::harmToMEI(harmony, meiLines);
     meiHarm.SetStartid(startid);
-    meiHarm.Write(dynamNode, this->getMeasureXmlIdFor(HARM_M));
+    meiHarm.Write(harmNode, this->getMeasureXmlIdFor(HARM_M));
 
-    this->writeLines(dynamNode, meiLines);
+    this->writeLines(harmNode, meiLines);
+
+    return true;
+}
+
+/**
+ * Write a octave (ottava).
+ */
+
+bool MeiExporter::writeOctave(const Ottava* ottava, const std::string& startid)
+{
+    IF_ASSERT_FAILED(ottava) {
+        return false;
+    }
+
+    pugi::xml_node octaveNode = m_currentNode.append_child();
+    libmei::Octave meiOctave = Convert::octaveToMEI(ottava);
+    meiOctave.SetStartid(startid);
+
+    meiOctave.Write(octaveNode, this->getMeasureXmlIdFor(OCTAVE_M));
+
+    // Add the node to the map of open control events
+    m_openControlEventMap[ottava] = octaveNode;
 
     return true;
 }
@@ -1626,7 +1650,7 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving:
     auto spanners = smap.findOverlapping(chordRest->tick().ticks(), chordRest->tick().ticks());
     for (auto interval : spanners) {
         Spanner* spanner = interval.value;
-        if (spanner && spanner->isSlur()) {
+        if (spanner && (spanner->isSlur() || spanner->isOttava())) {
             if (spanner->startCR() == chordRest) {
                 m_startingControlEventMap.push_back(std::make_pair(spanner, "#" + xmlId));
             } else if (spanner->endCR() == chordRest) {
