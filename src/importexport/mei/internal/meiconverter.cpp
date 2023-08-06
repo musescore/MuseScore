@@ -1583,22 +1583,29 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
         // pitch.accidRole = accid->role();
     }
 
+    // @pname
     meiNote.SetPname(static_cast<libmei::data_PITCHNAME>(engraving::tpc2step(pitch.tpc2) + 1));
 
     int writtenAlterInt = static_cast<int>(engraving::Accidental::subtype2value(pitch.accidType));
     int alterInt  = tpc2alterByKey(pitch.tpc2, engraving::Key::C);
 
+    // @oct
     // We need to ajusted the pitch to its transpossed value for the octave calculation
     int oct = ((pitch.pitch - interval.chromatic - alterInt) / 12) - 1;
     meiNote.SetOct(oct);
+
+    // @oct.ges
     int octGes = ((note->ppitch() - interval.chromatic - alterInt) / 12) - 1;
     if (octGes != oct) {
         meiNote.SetOctGes(octGes);
     }
 
+    // @accid
     if (pitch.accidType != engraving::AccidentalType::NONE) {
         meiAccid.SetAccid(Convert::accidToMEI(pitch.accidType));
     }
+
+    // @accid.ges
     if (alterInt && (alterInt != writtenAlterInt)) {
         meiAccid.SetAccidGes(Convert::accidGesToMEI(static_cast<engraving::AccidentalVal>(alterInt)));
     }

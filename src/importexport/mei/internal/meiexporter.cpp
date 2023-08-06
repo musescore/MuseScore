@@ -1404,8 +1404,6 @@ bool MeiExporter::writeOctave(const Ottava* ottava, const std::string& startid)
     // Add the node to the map of open control events
     m_openControlEventMap[ottava] = octaveNode;
 
-    //this->writeLines(dynamNode, meiLines);
-
     return true;
 }
 
