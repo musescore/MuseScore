@@ -160,6 +160,11 @@
           <location>
             <fractions>1/4</fractions>
             </location>
+          <location>
+            <fractions>1/4</fractions>
+            </location>
+          <BarLine>
+            </BarLine>
           </voice>
         <voice>
           <Dynamic>
@@ -247,6 +252,8 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         <voice>
           <location>

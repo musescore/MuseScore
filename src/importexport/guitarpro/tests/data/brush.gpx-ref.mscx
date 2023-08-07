@@ -118,6 +118,8 @@
               <timeStretch>0.991667</timeStretch>
               </Arpeggio>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>

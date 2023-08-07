@@ -155,6 +155,8 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         <voice>
           <location>
@@ -287,6 +289,8 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         <voice>
           <location>

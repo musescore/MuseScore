@@ -177,6 +177,8 @@
               <string>1</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -192,6 +194,8 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -200,6 +204,8 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -272,6 +278,8 @@
               <string>2</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -280,6 +288,8 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -288,6 +298,8 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>

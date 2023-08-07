@@ -445,6 +445,12 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, int32_t ma
     size_t staves = _score->staves().size();
     bool lastMeasure = (masterBarIndex == _gpDom->masterBars().size() - 1);
 
+    if (!lastMeasure && mB->barlineType() == GPMasterBar::BarlineType::NORMAL) {
+        for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
+            measure->setEndBarLineType(mu::engraving::BarLineType::NORMAL, staffIdx * VOICES);
+        }
+    }
+
     if (!lastMeasure && mB->barlineType() == GPMasterBar::BarlineType::DOUBLE) {
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
             measure->setEndBarLineType(mu::engraving::BarLineType::DOUBLE, staffIdx * VOICES);

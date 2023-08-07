@@ -164,6 +164,8 @@
               <string>1</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         <voice>
           <Dynamic>
@@ -249,6 +251,8 @@
               <string>1</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         <voice>
           <Chord>

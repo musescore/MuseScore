@@ -136,6 +136,8 @@
           <Rest>
             <durationType>half</durationType>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -213,6 +215,8 @@
           <Rest>
             <durationType>half</durationType>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -312,6 +316,8 @@
           <Rest>
             <durationType>half</durationType>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>

@@ -138,6 +138,8 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -178,6 +180,8 @@
               <string>1</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
