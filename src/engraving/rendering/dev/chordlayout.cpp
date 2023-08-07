@@ -1517,7 +1517,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         }
     }
 
-    if (upVoices + downVoices) {
+    if (upVoices + downVoices && !isTab) {
         // TODO: use track as secondary sort criteria?
         // otherwise there might be issues with unisons between voices
         // in some corner cases
@@ -1612,7 +1612,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
 
         // handle conflict between upstem and downstem chords
 
-        if (upVoices && downVoices && !isTab) {
+        if (upVoices && downVoices) {
             Note* bottomUpNote = upStemNotes.front();
             Note* topDownNote  = downStemNotes.back();
             int separation;
@@ -1855,29 +1855,27 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         }
 
         // apply chord offsets
-        if (!isTab) {
-            for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
-                EngravingItem* e = segment->element(track);
-                if (e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx) {
-                    Chord* chord = toChord(e);
-                    if (chord->up()) {
-                        if (!RealIsNull(upOffset)) {
-                            chord->movePosX(upOffset + centerAdjustUp + oversizeUp);
-                            if (downDots && !upDots) {
-                                chord->movePosX(dotAdjust);
-                            }
-                        } else {
-                            chord->movePosX(centerUp);
+        for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
+            EngravingItem* e = segment->element(track);
+            if (e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx) {
+                Chord* chord = toChord(e);
+                if (chord->up()) {
+                    if (!RealIsNull(upOffset)) {
+                        chord->movePosX(upOffset + centerAdjustUp + oversizeUp);
+                        if (downDots && !upDots) {
+                            chord->movePosX(dotAdjust);
                         }
                     } else {
-                        if (!RealIsNull(downOffset)) {
-                            chord->movePosX(downOffset + centerAdjustDown);
-                            if (upDots && !downDots) {
-                                chord->movePosX(dotAdjust);
-                            }
-                        } else {
-                            chord->movePosX(centerDown);
+                        chord->movePosX(centerUp);
+                    }
+                } else {
+                    if (!RealIsNull(downOffset)) {
+                        chord->movePosX(downOffset + centerAdjustDown);
+                        if (upDots && !downDots) {
+                            chord->movePosX(dotAdjust);
                         }
+                    } else {
+                        chord->movePosX(centerDown);
                     }
                 }
             }
