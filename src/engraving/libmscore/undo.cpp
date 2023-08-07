@@ -2224,7 +2224,11 @@ void InsertRemoveMeasures::removeMeasures()
         // Restore clefs that were backed up. Events for them could be lost
         // as a result of the recent insertTime() call.
         for (Clef* clef : clefs) {
-            clef->staff()->setClef(clef);
+            if (clef->forInstrumentChange()) {
+                score->undo(new RemoveElement(clef));
+            } else {
+                clef->staff()->setClef(clef);
+            }
         }
 
         std::set<Spanner*> spannersCopy = score->unmanagedSpanners();
