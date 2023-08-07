@@ -1161,7 +1161,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
 
         rw::RWRegister::reader()->readItem(m_dropData.ed.dropElement, e);
 
-        EngravingItem::renderer()->layoutItem(m_dropData.ed.dropElement);
+        engravingRenderer()->layoutItem(m_dropData.ed.dropElement);
     }
 }
 

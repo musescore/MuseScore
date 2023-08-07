@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "iinteractive.h"
+#include "engraving/rendering/isinglerenderer.h"
 
 #include "inotationinteraction.h"
 #include "inotationconfiguration.h"
@@ -52,6 +53,7 @@ class NotationInteraction : public INotationInteraction, public async::Asyncable
     INJECT(INotationConfiguration, configuration)
     INJECT(ISelectInstrumentsScenario, selectInstrumentScenario)
     INJECT(framework::IInteractive, interactive)
+    INJECT(engraving::rendering::ISingleRenderer, engravingRenderer)
 
 public:
     NotationInteraction(Notation* notation, INotationUndoStackPtr undoStack);
