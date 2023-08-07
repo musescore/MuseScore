@@ -103,7 +103,7 @@ jobs:
         # At moment build and run mtests consume 13.4 Gb of the disk.
         # After left too little free space.
         # So, we remove unnecessary tools, for more free space
-        #sudo docker system prune -a -f
-        #sudo rm -rf /usr/local/lib/android
+        sudo docker system prune -a -f
+        sudo rm -rf /usr/local/lib/android
         #sudo bash ./build/ci/linux/runmtests.sh
         ./build/ci/linux/runmtests.sh
