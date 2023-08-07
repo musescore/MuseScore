@@ -1660,7 +1660,7 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
     }
 
     Dynamic* dynamic = toDynamic(segment->findAnnotation(ElementType::DYNAMIC, item->track(), item->track()));
-    if (!dynamic || dynamic->placeAbove() != item->placeAbove()) {
+    if (!dynamic || dynamic->placeAbove() != item->placeAbove() || !dynamic->visible()) {
         item->autoplaceSegmentElement();
         return;
     }
