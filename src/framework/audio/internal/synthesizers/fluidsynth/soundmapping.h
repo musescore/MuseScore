@@ -1018,8 +1018,13 @@ struct ChannelMap {
     using ChannelMapping = std::pair<midi::channel_t, midi::Program>;
     using VoiceMappings = std::map<mpe::ArticulationType, ChannelMapping>;
 
-    void init(const mpe::PlaybackSetupData& setupData)
+    void init(const mpe::PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride)
     {
+        m_programOverride = programOverride;
+        if (m_programOverride.has_value()) {
+            resolveChannel(0, mpe::ArticulationType::Standard, m_programOverride.value());
+        }
+
         m_standardPrograms = findPrograms(setupData);
         m_articulationMapping = articulationSounds(setupData);
 
@@ -1034,6 +1039,10 @@ struct ChannelMap {
 
     midi::channel_t resolveChannelForEvent(const mpe::NoteEvent& event)
     {
+        if (m_programOverride.has_value()) {
+            return resolveChannel(event.arrangementCtx().voiceLayerIndex, mpe::ArticulationType::Standard, m_programOverride.value());
+        }
+
         if (m_standardPrograms.empty()) {
             return 0;
         }
@@ -1102,6 +1111,7 @@ private:
 
     mutable std::map<mpe::voice_layer_idx_t, VoiceMappings> m_data;
 
+    std::optional<midi::Program> m_programOverride;
     midi::Programs m_standardPrograms;
     ArticulationMapping m_articulationMapping;
 };

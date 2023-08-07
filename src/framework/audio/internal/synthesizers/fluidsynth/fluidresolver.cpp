@@ -48,13 +48,13 @@ ISynthesizerPtr FluidResolver::resolveSynth(const TrackId /*trackId*/, const Aud
     FluidSynthPtr synth = std::make_shared<FluidSynth>(params);
 
     auto search = m_resourcesCache.find(params.resourceMeta.id);
-
     if (search == m_resourcesCache.end()) {
         LOGE() << "Not found: " << params.resourceMeta.id;
         return synth;
     }
 
-    synth->addSoundFonts({ search->second });
+    synth->addSoundFonts({ search->second.path });
+    synth->setPreset(search->second.preset);
 
     return synth;
 }
@@ -72,17 +72,15 @@ AudioResourceMetaList FluidResolver::resolveResources() const
     result.reserve(m_resourcesCache.size());
 
     for (const auto& pair : m_resourcesCache) {
-        AudioResourceMeta meta;
-        meta.id = pair.first;
-        meta.type = AudioResourceType::FluidSoundfont;
-        meta.vendor = FLUID_VENDOR_NAME;
-        meta.attributes = { { u"playbackSetupData", mpe::GENERIC_SETUP_DATA_STRING } };
-        meta.hasNativeEditorSupport = false;
-
-        result.push_back(std::move(meta));
+        result.push_back(pair.second.meta);
     }
 
     return result;
+}
+
+static std::string makeId(const std::string& name, int bank, int program)
+{
+    return name + "\\" + std::to_string(bank) + "\\" + std::to_string(program);
 }
 
 void FluidResolver::refresh()
@@ -91,8 +89,45 @@ void FluidResolver::refresh()
 
     m_resourcesCache.clear();
 
-    for (const SoundFontPath& path : soundFontRepository()->soundFontPaths()) {
-        m_resourcesCache.emplace(io::completeBasename(path).toStdString(), path);
+    for (const auto& pair : soundFontRepository()->soundFonts()) {
+        const SoundFontMeta& soundFont = pair.second;
+
+        std::string name = io::completeBasename(soundFont.path).toStdString();
+
+        {
+            AudioResourceId id = name;
+
+            AudioResourceMeta chooseAutomaticMeta;
+            chooseAutomaticMeta.id = id;
+            chooseAutomaticMeta.type = AudioResourceType::FluidSoundfont;
+            chooseAutomaticMeta.vendor = FLUID_VENDOR_NAME;
+            chooseAutomaticMeta.attributes = {
+                { u"playbackSetupData", mpe::GENERIC_SETUP_DATA_STRING },
+                { u"soundFontName", String::fromStdString(name) }
+            };
+            chooseAutomaticMeta.hasNativeEditorSupport = false;
+
+            m_resourcesCache.emplace(id, SoundFontResource { soundFont.path, std::nullopt, std::move(chooseAutomaticMeta) });
+        }
+
+        for (const SoundFontPreset& preset : soundFont.presets) {
+            AudioResourceId id = makeId(name, preset.program.bank, preset.program.program);
+
+            AudioResourceMeta meta;
+            meta.id = id;
+            meta.type = AudioResourceType::FluidSoundfont;
+            meta.vendor = FLUID_VENDOR_NAME;
+            meta.attributes = {
+                { u"playbackSetupData", mpe::GENERIC_SETUP_DATA_STRING },
+                { u"soundFontName", String::fromStdString(name) },
+                { u"presetName", String::fromStdString(preset.name) },
+                { u"presetBank", String::number(preset.program.bank) },
+                { u"presetProgram", String::number(preset.program.program) },
+            };
+            meta.hasNativeEditorSupport = false;
+
+            m_resourcesCache.emplace(id, SoundFontResource { soundFont.path, preset.program, std::move(meta) });
+        }
     }
 }
 
