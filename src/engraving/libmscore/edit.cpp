@@ -3029,9 +3029,10 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             v->adjustCanvasPosition(focusOn);
         }
 
-        // insert correct timesig after deletion
         Measure* mBeforeSel = startMeasure->prevMeasure();
         Measure* mAfterSel  = mBeforeSel ? mBeforeSel->nextMeasure() : score->firstMeasure();
+
+        // insert correct timesig after deletion
         if (mAfterSel) {
             Segment* s = mAfterSel->findSegment(SegmentType::TimeSig, mAfterSel->tick());
 
@@ -3111,39 +3112,53 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             }
         }
 
-        // insert instrument change clefs
+        // insert / remove instrument change clefs
         for (Part* part : score->parts()) {
             if (part->instruments().find(startTick.ticks()) == part->instruments().end()) {
-                break;
-            }
-            Instrument* instrument = part->instrument(startTick);
-            bool isFirstMeasure = !mBeforeSel;
-            Measure* measure = mBeforeSel ? mBeforeSel : mAfterSel;
-            SegmentType st = isFirstMeasure ? SegmentType::HeaderClef : SegmentType::Clef;
-            Segment* clefSeg = measure->undoGetSegment(st, startTick);
-            for (size_t i = 0; i < part->nstaves(); i++) {
-                track_idx_t track = part->startTrack() + i * VOICES;
-                Clef* clef = nullptr;
-                ClefTypeList clefType = instrument->clefType(i);
-                EngravingItem* el = clefSeg->element(track);
-                if (el && el->isClef()) {
-                    clef = toClef(el);
-                    if (clef->clefTypeList() != clefType) {
-                        score->undo(new ChangeClefType(clef, clefType._concertClef, clefType._transposingClef));
+                // no instrument change there - remove ic clefs
+                Segment* clefSeg = mBeforeSel ? mBeforeSel->findSegment(SegmentType::Clef, startTick) : nullptr;
+                if (clefSeg) {
+                    for (Staff* staff : part->staves()) {
+                        track_idx_t track = staff->idx() * VOICES;
+                        EngravingItem* el = clefSeg->element(track);
+                        if (el && el->isClef()) {
+                            Clef* clef = toClef(el);
+                            if (clef->forInstrumentChange()) {
+                                score->undo(new RemoveElement(el));
+                            }
+                        }
                     }
-                    if (!clef->forInstrumentChange()) {
-                        clef->undoSetForInstrumentChange(true);
+                }
+            } else { // instrument change there - restore ic clefs
+                bool isFirstMeasure = !mBeforeSel;
+                Instrument* instrument = part->instrument(startTick);
+                SegmentType st = isFirstMeasure ? SegmentType::HeaderClef : SegmentType::Clef;
+                Measure* measure = mBeforeSel ? mBeforeSel : mAfterSel;
+                Segment* clefSeg = measure->undoGetSegment(st, startTick);
+                for (size_t i = 0; i < part->nstaves(); i++) {
+                    track_idx_t track = part->startTrack() + i * VOICES;
+                    Clef* clef = nullptr;
+                    ClefTypeList clefType = instrument->clefType(i);
+                    EngravingItem* el = clefSeg->element(track);
+                    if (el && el->isClef()) {
+                        clef = toClef(el);
+                        if (clef->clefTypeList() != clefType) {
+                            score->undo(new ChangeClefType(clef, clefType._concertClef, clefType._transposingClef));
+                        }
+                        if (!clef->forInstrumentChange()) {
+                            clef->undoSetForInstrumentChange(true);
+                        }
+                    } else {
+                        clef = Factory::createClef(clefSeg);
+                        clef->setTrack(track);
+                        clef->setParent(clefSeg);
+                        clef->setIsHeader(isFirstMeasure);
+                        clef->setConcertClef(clefType._concertClef);
+                        clef->setTransposingClef(clefType._transposingClef);
+                        clef->setForInstrumentChange(true);
+                        score->undo(new AddElement(clef));
+                        renderer()->layoutItem(clef);
                     }
-                } else {
-                    clef = Factory::createClef(clefSeg);
-                    clef->setTrack(track);
-                    clef->setParent(clefSeg);
-                    clef->setIsHeader(isFirstMeasure);
-                    clef->setConcertClef(clefType._concertClef);
-                    clef->setTransposingClef(clefType._transposingClef);
-                    clef->setForInstrumentChange(true);
-                    score->undo(new AddElement(clef));
-                    renderer()->layoutItem(clef);
                 }
             }
         }
