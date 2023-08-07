@@ -129,6 +129,19 @@ QString InputResourceItem::title() const
     if (m_currentInputParams.type() == mu::audio::AudioSourceType::MuseSampler) {
         return m_currentInputParams.resourceMeta.attributeVal(u"museName").toQString();
     }
+
+    if (m_currentInputParams.resourceMeta.type == audio::AudioResourceType::FluidSoundfont) {
+        const String& presetName = m_currentInputParams.resourceMeta.attributeVal(u"presetName");
+        if (!presetName.empty()) {
+            return presetName.toQString();
+        }
+
+        const String& soundFontName = m_currentInputParams.resourceMeta.attributeVal(u"soundFontName");
+        if (!soundFontName.empty()) {
+            return soundFontName.toQString();
+        }
+    }
+
     return QString::fromStdString(m_currentInputParams.resourceMeta.id);
 }
 
