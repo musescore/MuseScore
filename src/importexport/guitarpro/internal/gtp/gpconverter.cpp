@@ -538,6 +538,9 @@ Fraction GPConverter::convertBeat(const GPBeat* beat, ChordRestContainer& graceC
     auto curSegment = lastMeasure->getSegment(SegmentType::ChordRest, ctx.curTick);
 
     ChordRest* cr = addChordRest(beat, ctx);
+    if (cr) {
+        curSegment->setTicks(cr->ticks());
+    }
     if (engravingConfiguration()->guitarProImportExperimental() && beat->deadSlapped() && cr->isRest()) {
         Rest* rest = toRest(cr);
         curSegment->add(rest);
