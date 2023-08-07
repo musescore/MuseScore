@@ -1719,6 +1719,14 @@ void MeasureLayout::removeSystemHeader(Measure* m)
         seg->setEnabled(false);
     }
     m->setHeader(false);
+    if (Segment* kSeg = m->findFirstR(SegmentType::KeySig, Fraction(0, 1))) {
+        Score* score = m->score();
+        for (EngravingItem* e : kSeg->elist()) {
+            if (e && e->isKeySig() && e->generated()) {
+                score->undo(new RemoveElement(e));
+            }
+        }
+    }
 }
 
 void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx)
