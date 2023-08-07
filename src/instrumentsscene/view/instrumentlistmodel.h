@@ -133,6 +133,7 @@ private:
     QString m_currentGenreId;
     QString m_savedGenreId;
     QString m_currentGroupId;
+    QString m_savedGroupId;
     QString m_searchText;
 
     Instruments m_instruments;
