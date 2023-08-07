@@ -94,11 +94,6 @@ public:
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
-    double y1() const { return m_y1; }
-    double y2() const { return m_y2; }
-    void setY1(double v) { m_y1 = v; }
-    void setY2(double v) { m_y2 = v; }
-
     void setSpanStaff(int val) { m_spanStaff = val; }
     void setSpanFrom(int val) { m_spanFrom = val; }
     void setSpanTo(int val) { m_spanTo = val; }
@@ -149,6 +144,25 @@ public:
 
     void calcY() const;
 
+    struct LayoutData {
+        bool isSkipDraw = false;
+        double y1 = 0.0;
+        double y2 = 0.0;
+        double mag = 1.0;
+        PointF pos;
+        RectF bbox;
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! --- Old Interface ---
+    double y1() const { return m_layoutData.y1; }
+    double y2() const { return m_layoutData.y2; }
+    void setY1(double v) { m_layoutData.y1 = v; }
+    void setY2(double v) { m_layoutData.y2 = v; }
+    //! ---------------------
+
 private:
 
     friend class Factory;
@@ -161,9 +175,10 @@ private:
     int m_spanFrom = 0;         // line number on start and end staves
     int m_spanTo = 0;
     BarLineType m_barLineType = BarLineType::NORMAL;
-    mutable double m_y1 = 0.0;
-    mutable double m_y2 = 0.0;
+
     ElementList m_el;          ///< fermata or other articulations
+
+    mutable LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 

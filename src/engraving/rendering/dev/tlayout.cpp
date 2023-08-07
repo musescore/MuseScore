@@ -719,118 +719,125 @@ void TLayout::layout(BagpipeEmbellishment* item, LayoutContext& ctx)
     item->setLayoutData(data);
 }
 
-void TLayout::layout(BarLine* item, LayoutContext& ctx)
+static double barLineWidth(const BarLine* item, const MStyle& style, double dotWidth)
 {
-    item->setPos(PointF());
+    double w = 0.0;
+    switch (item->barLineType()) {
+    case BarLineType::DOUBLE:
+        w = style.styleMM(Sid::doubleBarWidth) * 2.0
+            + style.styleMM(Sid::doubleBarDistance);
+        break;
+    case BarLineType::DOUBLE_HEAVY:
+        w = style.styleMM(Sid::endBarWidth) * 2.0
+            + style.styleMM(Sid::endBarDistance);
+        break;
+    case BarLineType::END_START_REPEAT:
+        w = style.styleMM(Sid::endBarWidth)
+            + style.styleMM(Sid::barWidth) * 2.0
+            + style.styleMM(Sid::endBarDistance) * 2.0
+            + style.styleMM(Sid::repeatBarlineDotSeparation) * 2.0
+            + dotWidth * 2;
+        break;
+    case BarLineType::START_REPEAT:
+    case BarLineType::END_REPEAT:
+        w = style.styleMM(Sid::endBarWidth)
+            + style.styleMM(Sid::barWidth)
+            + style.styleMM(Sid::endBarDistance)
+            + style.styleMM(Sid::repeatBarlineDotSeparation)
+            + dotWidth;
+        break;
+    case BarLineType::END:
+    case BarLineType::REVERSE_END:
+        w = style.styleMM(Sid::endBarWidth)
+            + style.styleMM(Sid::barWidth)
+            + style.styleMM(Sid::endBarDistance);
+        break;
+    case BarLineType::BROKEN:
+    case BarLineType::NORMAL:
+    case BarLineType::DOTTED:
+        w = style.styleMM(Sid::barWidth);
+        break;
+    case BarLineType::HEAVY:
+        w = style.styleMM(Sid::endBarWidth);
+        break;
+    }
+    return w;
+}
+
+static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::LayoutData& data)
+{
+    data.pos = PointF();
+
     // barlines hidden on this staff
     if (item->staff() && item->segment()) {
         if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
             || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
-            item->setbbox(RectF());
+            data.bbox = RectF();
+            data.isSkipDraw = true;
             return;
         }
     }
 
-    item->setMag(ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0);
+    data.isSkipDraw = false;
+
+    data.mag = ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;
     // Note: the true values of y1 and y2 are computed in layout2() (can be done only
     // after staff distances are known). This is a temporary layout.
-    double _spatium = item->spatium();
-    item->setY1(_spatium * .5 * item->spanFrom());
-    if (RealIsEqual(item->y2(), 0.0)) {
-        item->setY2(_spatium * .5 * (8.0 + item->spanTo()));
-    }
+    const double spatium = item->spatium();
 
-    double w = layoutWidth(item, ctx) * item->mag();
-    RectF r(0.0, item->y1(), w, item->y2() - item->y1());
+    data.y1 = spatium * .5 * item->spanFrom();
+    data.y2 = spatium * .5 * (8.0 + item->spanTo());
+
+    const IEngravingFontPtr font = ctx.engravingFont();
+    const double magS = ctx.conf().magS(data.mag);
+
+    double w = barLineWidth(item, ctx.conf().style(), font->width(SymId::repeatDot, magS)) * data.mag;
+    RectF r(0.0, data.y1, w, data.y2 - data.y1);
 
     if (ctx.conf().styleB(Sid::repeatBarTips)) {
         switch (item->barLineType()) {
-        case BarLineType::START_REPEAT:
-            r.unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
-            // r |= symBbox(SymId::bracketBottom).translated(0, y2);
-            break;
+        case BarLineType::START_REPEAT: {
+            r.unite(font->bbox(SymId::bracketTop, magS).translated(0, data.y1));
+        } break;
         case BarLineType::END_REPEAT: {
-            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            r.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
-            // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
-        }
-        break;
+            double w1 = 0.0;
+            r.unite(font->bbox(SymId::reversedBracketTop, magS).translated(-w1, data.y1));
+        } break;
         case BarLineType::END_START_REPEAT: {
-            double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            r.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
-            r.unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
-            // r |= symBbox(SymId::reversedBracketBottom).translated(0, y2);
-        }
-        break;
+            double w1 = 0.0;
+            r.unite(font->bbox(SymId::reversedBracketTop, magS).translated(-w1, data.y1));
+            r.unite(font->bbox(SymId::bracketTop, magS).translated(0, data.y1));
+        } break;
         default:
             break;
         }
     }
-    item->setbbox(r);
+
+    data.bbox = r;
 
     for (EngravingItem* e : *item->el()) {
-        layoutItem(e, ctx);
+        TLayout::layoutItem(e, ctx);
         if (e->isArticulationFamily()) {
-            Articulation* a  = toArticulation(e);
-            DirectionV dir    = a->direction();
-            double distance   = 0.5 * item->spatium();
-            double x          = item->width() * .5;
+            Articulation* a = toArticulation(e);
+            DirectionV dir = a->direction();
+            double distance = 0.5 * item->spatium();
+            double x = item->width() * .5;
             if (dir == DirectionV::DOWN) {
-                double botY = item->y2() + distance;
+                double botY = data.y2 + distance;
                 a->setPos(PointF(x, botY));
             } else {
-                double topY = item->y1() - distance;
+                double topY = data.y1 - distance;
                 a->setPos(PointF(x, topY));
             }
         }
     }
 }
 
-double TLayout::layoutWidth(const BarLine* item, LayoutContext& ctx)
+void TLayout::layout(BarLine* item, LayoutContext& ctx)
 {
-    const double dotWidth = item->symWidth(SymId::repeatDot);
-
-    double w { 0.0 };
-    switch (item->barLineType()) {
-    case BarLineType::DOUBLE:
-        w = ctx.conf().styleMM(Sid::doubleBarWidth) * 2.0
-            + ctx.conf().styleMM(Sid::doubleBarDistance);
-        break;
-    case BarLineType::DOUBLE_HEAVY:
-        w = ctx.conf().styleMM(Sid::endBarWidth) * 2.0
-            + ctx.conf().styleMM(Sid::endBarDistance);
-        break;
-    case BarLineType::END_START_REPEAT:
-        w = ctx.conf().styleMM(Sid::endBarWidth)
-            + ctx.conf().styleMM(Sid::barWidth) * 2.0
-            + ctx.conf().styleMM(Sid::endBarDistance) * 2.0
-            + ctx.conf().styleMM(Sid::repeatBarlineDotSeparation) * 2.0
-            + dotWidth * 2;
-        break;
-    case BarLineType::START_REPEAT:
-    case BarLineType::END_REPEAT:
-        w = ctx.conf().styleMM(Sid::endBarWidth)
-            + ctx.conf().styleMM(Sid::barWidth)
-            + ctx.conf().styleMM(Sid::endBarDistance)
-            + ctx.conf().styleMM(Sid::repeatBarlineDotSeparation)
-            + dotWidth;
-        break;
-    case BarLineType::END:
-    case BarLineType::REVERSE_END:
-        w = ctx.conf().styleMM(Sid::endBarWidth)
-            + ctx.conf().styleMM(Sid::barWidth)
-            + ctx.conf().styleMM(Sid::endBarDistance);
-        break;
-    case BarLineType::BROKEN:
-    case BarLineType::NORMAL:
-    case BarLineType::DOTTED:
-        w = ctx.conf().styleMM(Sid::barWidth);
-        break;
-    case BarLineType::HEAVY:
-        w = ctx.conf().styleMM(Sid::endBarWidth);
-        break;
-    }
-    return w;
+    BarLine::LayoutData data;
+    layoutBarLine(item, ctx, data);
+    item->setLayoutData(data);
 }
 
 RectF TLayout::layoutRect(const BarLine* item, LayoutContext& ctx)

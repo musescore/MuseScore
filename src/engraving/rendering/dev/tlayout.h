@@ -340,8 +340,6 @@ private:
 
     friend class SlurTieLayout;
 
-    static double layoutWidth(const BarLine* item, LayoutContext& ctx);
-
     static void adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx);
 
     static void layoutLines(FiguredBass* item, LayoutContext& ctx);
