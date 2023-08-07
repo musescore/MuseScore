@@ -286,24 +286,32 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
         options[INotationReader::OptionKey::ForceMode] = Val(forceMode);
     }
 
-    // Read(import) master score
+    // Setup engraving project
     mu::engraving::ScoreLoad sl;
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
     mu::engraving::MasterScore* score = m_engravingProject->masterScore();
+
+    // The order of the steps matches the order in MS3
+    // (see https://github.com/musescore/MuseScore/blob/2513676e512d29d554cb6c4d37d3efaf53ea2c5b/mscore/file.cpp#L2260)
+
+    // Load style if present
+    if (!stylePath.empty()) {
+        score->loadStyle(stylePath.toQString());
+    }
+
+    // Init ChordList
+    score->checkChordList();
+
+    // Read (import) master score
     Ret ret = scoreReader->read(score, path, options);
     if (!ret) {
         return ret;
     }
 
-    // Setup master score
+    // Setup master score post-reading
     ret = m_engravingProject->setupMasterScore(forceMode);
     if (!ret) {
         return ret;
-    }
-
-    // Load style if present
-    if (!stylePath.empty()) {
-        score->loadStyle(stylePath.toQString());
     }
 
     // Setup audio settings
