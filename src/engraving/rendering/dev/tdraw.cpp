@@ -820,18 +820,20 @@ void TDraw::draw(const Bend* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    double _spatium = item->spatium();
-    double _lw = item->lineWidth();
+    const Bend::LayoutData& data = item->layoutData();
 
-    Pen pen(item->curColor(), _lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+    double spatium = item->spatium();
+    double lw = item->lineWidth();
+
+    Pen pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(Brush(item->curColor()));
 
-    mu::draw::Font f = item->font(_spatium * MScore::pixelRatio);
+    mu::draw::Font f = item->font(spatium * MScore::pixelRatio);
     painter->setFont(f);
 
-    double x  = item->noteWidth() + _spatium * .2;
-    double y  = -_spatium * .8;
+    double x  = data.noteWidth + spatium * .2;
+    double y  = -spatium * .8;
     double x2, y2;
 
     double aw = item->style().styleMM(Sid::bendArrowWidth);
@@ -844,7 +846,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
     for (size_t pt = 0; pt < n - 1; ++pt) {
         int pitch = item->points()[pt].pitch;
         if (pt == 0 && pitch) {
-            y2 = -item->notePos().y() - _spatium * 2;
+            y2 = -item->notePos().y() - spatium * 2;
             x2 = x;
             painter->drawLine(LineF(x, y, x2, y2));
 
@@ -863,13 +865,13 @@ void TDraw::draw(const Bend* item, Painter* painter)
             if (pt == (n - 2)) {
                 break;
             }
-            x2 = x + _spatium;
+            x2 = x + spatium;
             y2 = y;
             painter->drawLine(LineF(x, y, x2, y2));
         } else if (pitch < item->points()[pt + 1].pitch) {
             // up
-            x2 = x + _spatium * .5;
-            y2 = -item->notePos().y() - _spatium * 2;
+            x2 = x + spatium * .5;
+            y2 = -data.notePos.y() - spatium * 2;
             double dx = x2 - x;
             double dy = y2 - y;
 
@@ -890,8 +892,8 @@ void TDraw::draw(const Bend* item, Painter* painter)
                               String::fromAscii(l));
         } else {
             // down
-            x2 = x + _spatium * .5;
-            y2 = y + _spatium * 3;
+            x2 = x + spatium * .5;
+            y2 = y + spatium * 3;
             double dx = x2 - x;
             double dy = y2 - y;
 

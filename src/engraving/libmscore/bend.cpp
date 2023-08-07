@@ -22,13 +22,7 @@
 
 #include "bend.h"
 
-#include "draw/types/pen.h"
-#include "draw/types/brush.h"
-#include "draw/fontmetrics.h"
-
 #include "note.h"
-#include "score.h"
-#include "staff.h"
 
 #include "log.h"
 
@@ -36,7 +30,6 @@ using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   label
 //---------------------------------------------------------
@@ -96,12 +89,12 @@ Bend::Bend(Note* parent)
 
 mu::draw::Font Bend::font(double sp) const
 {
-    mu::draw::Font f(_fontFace, Font::Type::Unknown);
-    f.setBold(_fontStyle & FontStyle::Bold);
-    f.setItalic(_fontStyle & FontStyle::Italic);
-    f.setUnderline(_fontStyle & FontStyle::Underline);
-    f.setStrike(_fontStyle & FontStyle::Strike);
-    double m = _fontSize;
+    mu::draw::Font f(m_fontFace, Font::Type::Unknown);
+    f.setBold(m_fontStyle & FontStyle::Bold);
+    f.setItalic(m_fontStyle & FontStyle::Italic);
+    f.setUnderline(m_fontStyle & FontStyle::Underline);
+    f.setStrike(m_fontStyle & FontStyle::Strike);
+    double m = m_fontSize;
     m *= sp / SPATIUM20;
 
     f.setPointSizeF(m);
@@ -156,15 +149,15 @@ PropertyValue Bend::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::FONT_FACE:
-        return _fontFace;
+        return m_fontFace;
     case Pid::FONT_SIZE:
-        return _fontSize;
+        return m_fontSize;
     case Pid::FONT_STYLE:
-        return int(_fontStyle);
+        return int(m_fontStyle);
     case Pid::PLAY:
         return bool(playBend());
     case Pid::LINE_WIDTH:
-        return _lineWidth;
+        return m_lineWidth;
     case Pid::BEND_TYPE:
         return static_cast<int>(parseBendTypeFromCurve());
     case Pid::BEND_CURVE:
@@ -182,19 +175,19 @@ bool Bend::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::FONT_FACE:
-        _fontFace = v.value<String>();
+        m_fontFace = v.value<String>();
         break;
     case Pid::FONT_SIZE:
-        _fontSize = v.toReal();
+        m_fontSize = v.toReal();
         break;
     case Pid::FONT_STYLE:
-        _fontStyle = FontStyle(v.toInt());
+        m_fontStyle = FontStyle(v.toInt());
         break;
     case Pid::PLAY:
         setPlayBend(v.toBool());
         break;
     case Pid::LINE_WIDTH:
-        _lineWidth = v.value<Millimetre>();
+        m_lineWidth = v.value<Millimetre>();
         break;
     case Pid::BEND_TYPE:
         updatePointsByBendType(static_cast<BendType>(v.toInt()));
@@ -226,4 +219,11 @@ PropertyValue Bend::propertyDefault(Pid id) const
         return EngravingItem::propertyDefault(id);
     }
 }
+
+void Bend::setLayoutData(const LayoutData& data)
+{
+    m_layoutData = data;
+
+    setPos(data.pos);
+    setbbox(data.bbox);
 }
