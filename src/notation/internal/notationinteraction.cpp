@@ -1619,7 +1619,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(engraving::Factory::createItem(type, score->dummy()));
             rw::RWRegister::reader()->readItem(spanner, e);
             spanner->styleChanged();
-            score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment);
+            score->cmdAddSpanner(spanner, cr1->staffIdx(), startSegment, endSegment, modifiers & Qt::ControlModifier);
             if (spanner->isVoiceSpecific()) {
                 spanner->setTrack(cr1->track());
             }
