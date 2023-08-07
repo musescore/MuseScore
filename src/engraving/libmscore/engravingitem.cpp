@@ -480,7 +480,7 @@ bool EngravingItem::isTopSystemObject() const
     if (!systemFlag()) {
         return false; // non system object
     }
-    if (isSpannerSegment() && systemFlag() && track() != 0) {
+    if ((isSpanner() || isSpannerSegment()) && track() != 0) {
         return false;
     }
     if (!_links) {
