@@ -1269,7 +1269,8 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
         }
         Chord* chord1 = slur->startCR()->isChord() ? toChord(slur->startCR()) : 0;
         Chord* chord2 = slur->endCR()->isChord() ? toChord(slur->endCR()) : 0;
-        if (chord2 && slur->startCR()->measure()->system() != slur->endCR()->measure()->system()) {
+        if (chord2 && !chord2->staff()->isDrumStaff(chord2->tick())
+            && slur->startCR()->measure()->system() != slur->endCR()->measure()->system()) {
             // HACK: if the end chord is in a different system, it may have never been laid out yet.
             // But we need to know its direction to decide slur direction, so need to compute it here.
             for (Note* note : chord2->notes()) {
