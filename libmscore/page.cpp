@@ -202,6 +202,7 @@ Text* Page::layoutHeaderFooter(int area, const QString& ss) const
       text->setAlign(flags);
       text->setXmlText(s);
       text->layout();
+      text->setParent(0);
       return text;
       }
 
