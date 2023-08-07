@@ -924,6 +924,8 @@ public:
     void undo(EditData*) override;
     void redo(EditData*) override;
 
+    std::vector<const EngravingObject*> objectItems() const override;
+
     UNDO_TYPE(CommandType::AddExcerpt)
     UNDO_NAME("AddExcerpt")
 };
@@ -942,6 +944,8 @@ public:
 
     void undo(EditData*) override;
     void redo(EditData*) override;
+
+    std::vector<const EngravingObject*> objectItems() const override;
 
     UNDO_TYPE(CommandType::RemoveExcerpt)
     UNDO_NAME("RemoveExcerpt")

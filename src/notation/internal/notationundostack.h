@@ -51,6 +51,8 @@ public:
     void rollbackChanges() override;
     void commitChanges() override;
 
+    bool isStackClean() const override;
+
     void lock() override;
     void unlock() override;
     bool isLocked() const override;
@@ -63,8 +65,6 @@ private:
     void notifyAboutStateChanged();
     void notifyAboutUndo();
     void notifyAboutRedo();
-
-    bool isStackClean() const;
 
     mu::engraving::Score* score() const;
     mu::engraving::MasterScore* masterScore() const;

@@ -107,7 +107,6 @@ class MasterScore : public Score
     IFileInfoProviderPtr m_fileInfoProvider;
 
     bool m_saved { false };
-    bool m_autosaveDirty { true };
 
     void reorderMidiMapping();
     void rebuildExcerptsMidiMapping();
@@ -221,9 +220,6 @@ public:
 
     bool saved() const;
     void setSaved(bool v);
-
-    bool autosaveDirty() const;
-    void setAutosaveDirty(bool v);
 
     String name() const override;
 

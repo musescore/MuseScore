@@ -163,22 +163,7 @@ void NotationViewState::setViewMode(const ViewMode& mode)
     }
 
     m_viewMode = mode;
-    setNeedSave(true);
-}
-
-bool NotationViewState::needSave() const
-{
-    return m_needSave;
-}
-
-async::Notification NotationViewState::needSaveChanged() const
-{
-    return m_needSaveNotification;
-}
-
-void NotationViewState::markAsSaved()
-{
-    setNeedSave(false);
+    m_stateChanged.notify();
 }
 
 void NotationViewState::makeDefault()
@@ -186,12 +171,7 @@ void NotationViewState::makeDefault()
     m_viewMode = ViewMode::PAGE;
 }
 
-void NotationViewState::setNeedSave(bool needSave)
+async::Notification NotationViewState::stateChanged() const
 {
-    if (m_needSave == needSave) {
-        return;
-    }
-
-    m_needSave = needSave;
-    m_needSaveNotification.notify();
+    return m_stateChanged;
 }

@@ -55,15 +55,11 @@ public:
     ViewMode viewMode() const override;
     void setViewMode(const ViewMode& mode) override;
 
-    bool needSave() const override;
-    async::Notification needSaveChanged() const override;
-    void markAsSaved() override;
+    async::Notification stateChanged() const override;
 
     void makeDefault() override;
 
 private:
-    void setNeedSave(bool needSave);
-
     bool m_isMatrixInited = false;
     draw::Transform m_matrix;
     async::Channel<draw::Transform, NotationPaintView*> m_matrixChanged;
@@ -72,8 +68,7 @@ private:
 
     notation::ViewMode m_viewMode = notation::ViewMode::PAGE;
 
-    bool m_needSave = false;
-    async::Notification m_needSaveNotification;
+    async::Notification m_stateChanged;
 };
 }
 

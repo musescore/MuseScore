@@ -128,7 +128,7 @@ void ProjectAutoSaver::update()
     io::path_t newProjectPath;
 
     auto project = currentProject();
-    if (project && project->needSave().val) {
+    if (project && project->needAutoSave()) {
         newProjectPath = projectPath(project);
     }
 
@@ -156,7 +156,7 @@ void ProjectAutoSaver::onTrySave()
         return;
     }
 
-    if (!project->needSave().val) {
+    if (!project->needAutoSave()) {
         LOGD() << "[autosave] project does not need save";
         return;
     }
@@ -174,6 +174,8 @@ void ProjectAutoSaver::onTrySave()
         LOGE() << "[autosave] failed to save project, err: " << ret.toString();
         return;
     }
+
+    project->setNeedAutoSave(false);
 
     LOGD() << "[autosave] successfully saved project";
 }

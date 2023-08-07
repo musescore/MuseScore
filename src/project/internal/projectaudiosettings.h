@@ -61,11 +61,10 @@ public:
 
     void removeTrackParams(const engraving::InstrumentTrackId& partId) override;
 
-    mu::ValNt<bool> needSave() const override;
-    void markAsSaved() override;
-
     const playback::SoundProfileName& activeSoundProfile() const override;
     void setActiveSoundProfile(const playback::SoundProfileName& profileName) override;
+
+    async::Notification settingsChanged() const override;
 
     Ret read(const engraving::MscReader& reader);
     Ret write(engraving::MscWriter& writer);
@@ -108,8 +107,6 @@ private:
     QJsonObject buildAuxObject(audio::aux_channel_idx_t index, const audio::AudioOutputParams& params) const;
     QJsonObject buildTrackObject(const engraving::InstrumentTrackId& id) const;
 
-    void setNeedSave(bool needSave);
-
     audio::AudioOutputParams m_masterOutputParams;
 
     std::map<audio::aux_channel_idx_t, audio::AudioOutputParams> m_auxOutputParams;
@@ -121,8 +118,7 @@ private:
     std::unordered_map<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStatesMap;
     async::Channel<engraving::InstrumentTrackId, SoloMuteState> m_trackSoloMuteStateChanged;
 
-    bool m_needSave = false;
-    async::Notification m_needSaveNotification;
+    async::Notification m_settingsChanged;
 
     mu::playback::SoundProfileName m_activeSoundProfileName;
 };

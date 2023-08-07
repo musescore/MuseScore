@@ -127,20 +127,8 @@ void NotationProject::setupProject()
 
     m_engravingProject = EngravingProject::create();
     m_engravingProject->setFileInfoProvider(std::make_shared<ProjectFileInfoProvider>(this));
-
     m_masterNotation = notationCreator()->newMasterNotationPtr();
-    m_masterNotation->needSave().notification.onNotify(this, [this]() {
-        if (!m_needSaveNotificationBlocked) {
-            m_needSaveNotification.notify();
-        }
-    });
-
     m_projectAudioSettings = std::shared_ptr<ProjectAudioSettings>(new ProjectAudioSettings());
-    m_projectAudioSettings->needSave().notification.onNotify(this, [this]() {
-        if (!m_needSaveNotificationBlocked) {
-            m_needSaveNotification.notify();
-        }
-    });
 }
 
 mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePath, bool forceMode, const std::string& format_)
@@ -155,7 +143,12 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
     setPath(path);
 
     if (!isMuseScoreFile(format)) {
-        return doImport(path, stylePath.empty() ? notationConfiguration()->styleFileImportPath() : stylePath, forceMode);
+        Ret ret = doImport(path, stylePath.empty() ? notationConfiguration()->styleFileImportPath() : stylePath, forceMode);
+        if (ret) {
+            listenIfNeedSaveChanges();
+        }
+
+        return ret;
     }
 
     Ret ret = doLoad(path, stylePath, forceMode, format);
@@ -166,7 +159,8 @@ mu::Ret NotationProject::load(const io::path_t& path, const io::path_t& stylePat
 
     bool treatAsImported = m_masterNotation->mscVersion() < 400;
 
-    m_masterNotation->setSaved(!treatAsImported);
+    listenIfNeedSaveChanges();
+    setNeedSave(treatAsImported);
 
     m_isNewlyCreated = treatAsImported;
     m_isImported = treatAsImported;
@@ -328,7 +322,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
     // Set current if all success
     m_masterNotation->setMasterScore(score);
     setPath(path);
-    score->setSaved(true);
+    setNeedSave(false);
     score->setMetaTag(u"originalFormat", QString::fromStdString(suffix));
 
     m_isNewlyCreated = true;
@@ -345,7 +339,12 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
     // Load template if present
     if (!projectOptions.templatePath.empty()) {
-        return loadTemplate(projectOptions);
+        Ret ret = loadTemplate(projectOptions);
+        if (ret) {
+            listenIfNeedSaveChanges();
+        }
+
+        return ret;
     }
 
     // Create new engraving project
@@ -370,7 +369,8 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
         excerpt->notation()->viewState()->makeDefault();
     }
 
-    masterScore->setSaved(false);
+    listenIfNeedSaveChanges();
+    markAsUnsaved();
 
     m_isNewlyCreated = true;
 
@@ -393,8 +393,7 @@ mu::Ret NotationProject::loadTemplate(const ProjectCreateOptions& projectOptions
         m_masterNotation->applyOptions(masterScore, projectOptions.scoreOptions, true /*createdFromTemplate*/);
         m_masterNotation->notation()->undoStack()->unlock();
 
-        masterScore->setSaved(true);
-
+        setNeedSave(false);
         m_isNewlyCreated = true;
     }
 
@@ -817,7 +816,8 @@ void NotationProject::markAsNewlyCreated()
     QString title = masterScore->metaTag(WORK_TITLE_TAG);
     setPath(!title.isEmpty() ? title : scoreDefaultTitle());
 
-    masterScore->setSaved(false);
+    markAsUnsaved();
+
     m_masterNotation->notation()->undoStack()->stackChanged().notify();
 }
 
@@ -828,7 +828,50 @@ bool NotationProject::isImported() const
 
 void NotationProject::markAsUnsaved()
 {
-    m_masterNotation->masterScore()->setSaved(false);
+    setNeedSave(true);
+}
+
+void NotationProject::listenIfNeedSaveChanges()
+{
+    m_masterNotation->notation()->undoStack()->changesChannel().onReceive(this, [this](const ScoreChangesRange&) {
+        bool isStackClean = m_masterNotation && m_masterNotation->notation()->undoStack()->isStackClean();
+
+        if (isStackClean && !m_hasNonUndoStackChanges) {
+            setNeedSave(false);
+        } else {
+            setNeedSave(true);
+        }
+    });
+
+    auto listenNonUndoStackChanges = [this](const INotationPtr& notation) {
+        notation->openChanged().onNotify(this, [this]() {
+            markAsUnsaved();
+            m_hasNonUndoStackChanges = true;
+        });
+
+        notation->viewState()->stateChanged().onNotify(this, [this]() {
+            markAsUnsaved();
+            m_hasNonUndoStackChanges = true;
+        });
+    };
+
+    listenNonUndoStackChanges(m_masterNotation->notation());
+
+    ValCh<ExcerptNotationList> excerptsValCh = m_masterNotation->excerpts();
+    for (const IExcerptNotationPtr& excerpt : excerptsValCh.val) {
+        listenNonUndoStackChanges(excerpt->notation());
+    }
+
+    excerptsValCh.ch.onReceive(this, [listenNonUndoStackChanges](const ExcerptNotationList& excerpts) {
+        for (const IExcerptNotationPtr& excerpt : excerpts) {
+            listenNonUndoStackChanges(excerpt->notation());
+        }
+    });
+
+    m_projectAudioSettings->settingsChanged().onNotify(this, [this]() {
+        markAsUnsaved();
+        m_hasNonUndoStackChanges = true;
+    });
 }
 
 void NotationProject::markAsSaved(const io::path_t& path)
@@ -838,33 +881,42 @@ void NotationProject::markAsSaved(const io::path_t& path)
     //! NOTE: order is important
     m_isNewlyCreated = false;
 
-    m_needSaveNotificationBlocked = true;
-
-    // Mark engraving project as saved
-    m_masterNotation->setSaved(true);
-
-    // Mark audio settings as saved
-    m_projectAudioSettings->markAsSaved();
-
-    // Mark view settings as saved
-    m_masterNotation->notation()->viewState()->markAsSaved();
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
-        excerpt->notation()->viewState()->markAsSaved();
-    }
-
-    m_needSaveNotificationBlocked = false;
-    m_needSaveNotification.notify();
+    setNeedSave(false);
 
     setPath(path);
 
     m_masterNotation->notation()->undoStack()->stackChanged().notify();
 }
 
+void NotationProject::setNeedSave(bool needSave)
+{
+    mu::engraving::MasterScore* score = m_masterNotation->masterScore();
+    if (!score) {
+        return;
+    }
+
+    setNeedAutoSave(needSave);
+
+    bool saved = !needSave;
+
+    if (saved) {
+        m_hasNonUndoStackChanges = false;
+    }
+
+    if (score->saved() == saved) {
+        return;
+    }
+
+    score->setSaved(saved);
+    m_needSaveNotification.notify();
+}
+
 mu::ValNt<bool> NotationProject::needSave() const
 {
+    const mu::engraving::MasterScore* score = m_masterNotation->masterScore();
+
     ValNt<bool> needSave;
-    needSave.val = m_masterNotation->needSave().val
-                   || m_projectAudioSettings->needSave().val;
+    needSave.val = score && !score->saved();
     needSave.notification = m_needSaveNotification;
 
     return needSave;
@@ -883,6 +935,16 @@ Ret NotationProject::canSave() const
     }
 
     return ret;
+}
+
+bool NotationProject::needAutoSave() const
+{
+    return m_needAutoSave;
+}
+
+void NotationProject::setNeedAutoSave(bool val)
+{
+    m_needAutoSave = val;
 }
 
 ProjectMeta NotationProject::metaInfo() const

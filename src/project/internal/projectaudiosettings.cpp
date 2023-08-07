@@ -60,7 +60,7 @@ void ProjectAudioSettings::setMasterAudioOutputParams(const AudioOutputParams& p
     }
 
     m_masterOutputParams = params;
-    setNeedSave(true);
+    m_settingsChanged.notify();
 }
 
 bool ProjectAudioSettings::containsAuxOutputParams(audio::aux_channel_idx_t index) const
@@ -81,7 +81,7 @@ void ProjectAudioSettings::setAuxOutputParams(audio::aux_channel_idx_t index, co
     }
 
     m_auxOutputParams.insert_or_assign(index, params);
-    setNeedSave(true);
+    m_settingsChanged.notify();
 }
 
 AudioInputParams ProjectAudioSettings::trackInputParams(const InstrumentTrackId& partId) const
@@ -103,7 +103,7 @@ void ProjectAudioSettings::setTrackInputParams(const InstrumentTrackId& partId, 
     }
 
     m_trackInputParamsMap.insert_or_assign(partId, params);
-    setNeedSave(true);
+    m_settingsChanged.notify();
 }
 
 AudioOutputParams ProjectAudioSettings::trackOutputParams(const InstrumentTrackId& partId) const
@@ -120,19 +120,19 @@ AudioOutputParams ProjectAudioSettings::trackOutputParams(const InstrumentTrackI
 void ProjectAudioSettings::setTrackOutputParams(const InstrumentTrackId& partId, const audio::AudioOutputParams& params)
 {
     auto it = m_trackOutputParamsMap.find(partId);
-    bool needSave = it == m_trackOutputParamsMap.cend();
+    bool paramsChanged = it == m_trackOutputParamsMap.cend();
 
-    if (!needSave) {
-        needSave |= !RealIsEqual(it->second.volume, params.volume);
-        needSave |= !RealIsEqual(it->second.balance, params.balance);
-        needSave |= (it->second.fxChain != params.fxChain);
-        needSave |= (it->second.auxSends != params.auxSends);
+    if (!paramsChanged) {
+        paramsChanged |= !RealIsEqual(it->second.volume, params.volume);
+        paramsChanged |= !RealIsEqual(it->second.balance, params.balance);
+        paramsChanged |= (it->second.fxChain != params.fxChain);
+        paramsChanged |= (it->second.auxSends != params.auxSends);
     }
 
     m_trackOutputParamsMap.insert_or_assign(partId, params);
 
-    if (needSave) {
-        setNeedSave(true);
+    if (paramsChanged) {
+        m_settingsChanged.notify();
     }
 }
 
@@ -156,7 +156,7 @@ void ProjectAudioSettings::setTrackSoloMuteState(const InstrumentTrackId& partId
 
     m_trackSoloMuteStatesMap.insert_or_assign(partId, state);
     m_trackSoloMuteStateChanged.send(partId, state);
-    setNeedSave(true);
+    m_settingsChanged.notify();
 }
 
 mu::async::Channel<InstrumentTrackId, ProjectAudioSettings::SoloMuteState> ProjectAudioSettings::trackSoloMuteStateChanged() const
@@ -183,7 +183,7 @@ void ProjectAudioSettings::setAuxSoloMuteState(aux_channel_idx_t index, const So
 
     m_auxSoloMuteStatesMap.insert_or_assign(index, state);
     m_auxSoloMuteStateChanged.send(index, state);
-    setNeedSave(true);
+    m_settingsChanged.notify();
 }
 
 mu::async::Channel<aux_channel_idx_t, ProjectAudioSettings::SoloMuteState> ProjectAudioSettings::auxSoloMuteStateChanged() const
@@ -196,34 +196,20 @@ void ProjectAudioSettings::removeTrackParams(const InstrumentTrackId& partId)
     auto inSearch = m_trackInputParamsMap.find(partId);
     if (inSearch != m_trackInputParamsMap.end()) {
         m_trackInputParamsMap.erase(inSearch);
-        setNeedSave(true);
+        m_settingsChanged.notify();
     }
 
     auto outSearch = m_trackOutputParamsMap.find(partId);
     if (outSearch != m_trackOutputParamsMap.end()) {
         m_trackOutputParamsMap.erase(outSearch);
-        setNeedSave(true);
+        m_settingsChanged.notify();
     }
 
     auto soloMuteSearch = m_trackSoloMuteStatesMap.find(partId);
     if (soloMuteSearch != m_trackSoloMuteStatesMap.end()) {
         m_trackSoloMuteStatesMap.erase(soloMuteSearch);
-        setNeedSave(true);
+        m_settingsChanged.notify();
     }
-}
-
-mu::ValNt<bool> ProjectAudioSettings::needSave() const
-{
-    ValNt<bool> needSave;
-    needSave.val = m_needSave;
-    needSave.notification = m_needSaveNotification;
-
-    return needSave;
-}
-
-void ProjectAudioSettings::markAsSaved()
-{
-    setNeedSave(false);
 }
 
 const SoundProfileName& ProjectAudioSettings::activeSoundProfile() const
@@ -233,8 +219,17 @@ const SoundProfileName& ProjectAudioSettings::activeSoundProfile() const
 
 void ProjectAudioSettings::setActiveSoundProfile(const playback::SoundProfileName& profileName)
 {
+    if (m_activeSoundProfileName == profileName) {
+        return;
+    }
+
     m_activeSoundProfileName = profileName;
-    setNeedSave(true);
+    m_settingsChanged.notify();
+}
+
+mu::async::Notification ProjectAudioSettings::settingsChanged() const
+{
+    return m_settingsChanged;
 }
 
 mu::Ret ProjectAudioSettings::read(const engraving::MscReader& reader)
@@ -616,14 +611,4 @@ QJsonObject ProjectAudioSettings::buildTrackObject(const InstrumentTrackId& id) 
     }
 
     return result;
-}
-
-void ProjectAudioSettings::setNeedSave(bool needSave)
-{
-    if (m_needSave == needSave) {
-        return;
-    }
-
-    m_needSave = needSave;
-    m_needSaveNotification.notify();
 }

@@ -83,6 +83,9 @@ public:
     ValNt<bool> needSave() const override;
     Ret canSave() const override;
 
+    bool needAutoSave() const override;
+    void setNeedAutoSave(bool val) override;
+
     Ret save(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
     Ret writeToDevice(QIODevice* device) override;
 
@@ -107,7 +110,9 @@ private:
     Ret makeCurrentFileAsBackup();
     Ret writeProject(engraving::MscWriter& msczWriter, bool onlySelection, bool createThumbnail = true);
 
+    void listenIfNeedSaveChanges();
     void markAsSaved(const io::path_t& path);
+    void setNeedSave(bool needSave);
 
     mu::engraving::EngravingProjectPtr m_engravingProject = nullptr;
     notation::IMasterNotationPtr m_masterNotation = nullptr;
@@ -119,10 +124,11 @@ private:
     async::Notification m_displayNameChanged;
 
     async::Notification m_needSaveNotification;
-    bool m_needSaveNotificationBlocked = false;
 
     bool m_isNewlyCreated = false; /// true if the file has never been saved yet
     bool m_isImported = false;
+    bool m_needAutoSave = false;
+    bool m_hasNonUndoStackChanges = false;
 };
 }
 

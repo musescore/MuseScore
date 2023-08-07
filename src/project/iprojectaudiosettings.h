@@ -70,11 +70,10 @@ public:
 
     virtual void removeTrackParams(const engraving::InstrumentTrackId& trackId) = 0;
 
-    virtual mu::ValNt<bool> needSave() const = 0;
-    virtual void markAsSaved() = 0;
-
     virtual const playback::SoundProfileName& activeSoundProfile() const = 0;
     virtual void setActiveSoundProfile(const playback::SoundProfileName& profileName) = 0;
+
+    virtual async::Notification settingsChanged() const = 0;
 };
 
 using IProjectAudioSettingsPtr = std::shared_ptr<IProjectAudioSettings>;
