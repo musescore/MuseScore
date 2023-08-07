@@ -49,11 +49,6 @@ class Bend final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Bend)
     DECLARE_CLASSOF(ElementType::BEND)
 
-    M_PROPERTY(String,     fontFace,  setFontFace)
-    M_PROPERTY(double,      fontSize,  setFontSize)
-    M_PROPERTY(FontStyle,  fontStyle, setFontStyle)
-    M_PROPERTY(Millimetre, lineWidth, setLineWidth)
-
 public:
     Bend* clone() const override { return new Bend(*this); }
 
@@ -66,12 +61,14 @@ public:
     bool playBend() const { return m_playBend; }
     void setPlayBend(bool v) { m_playBend = v; }
 
-    void setNoteWidth(double v) { m_noteWidth = v; }
-    double noteWidth() const { return m_noteWidth; }
-    void setNoteHeight(double v) { m_noteHeight = v; }
-    double noteHeight() const { return m_noteHeight; }
-    void setNotePos(const PointF& v) { m_notePos = v; }
-    const PointF& notePos() const { return m_notePos; }
+    String fontFace() const { return m_fontFace; }
+    void setFontFace(String f) { m_fontFace = f; }
+    double fontSize() const { return m_fontSize; }
+    void setFontSize(double s) { m_fontSize = s; }
+    FontStyle fontStyle() const { return m_fontStyle; }
+    void setFontStyle(FontStyle s) { m_fontStyle = s; }
+    Millimetre lineWidth() const { return m_lineWidth; }
+    void setLineWidth(Millimetre w) { m_lineWidth = w; }
 
     mu::draw::Font font(double) const;
 
@@ -79,6 +76,29 @@ public:
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+
+    struct LayoutData {
+        // cache
+        PointF notePos;
+        double noteWidth = 0.0;
+        double noteHeight = 0.0;
+
+        // out
+        PointF pos;
+        RectF bbox;
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! --- Old Interface ---
+    void setNoteWidth(double v) { m_layoutData.noteWidth = v; }
+    double noteWidth() const { return m_layoutData.noteWidth; }
+    void setNoteHeight(double v) { m_layoutData.noteHeight = v; }
+    double noteHeight() const { return m_layoutData.noteHeight; }
+    void setNotePos(const PointF& v) { m_layoutData.notePos = v; }
+    const PointF& notePos() const { return m_layoutData.notePos; }
+    //! ---------------------
 
 private:
     friend class Factory;
@@ -91,9 +111,12 @@ private:
     bool m_playBend = true;
     PitchValues m_points;
 
-    PointF m_notePos;
-    double m_noteWidth = 0.0;
-    double m_noteHeight = 0.0;
+    String m_fontFace;
+    double m_fontSize = 0.0;
+    FontStyle m_fontStyle = FontStyle::Undefined;
+    Millimetre m_lineWidth;
+
+    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 #endif
