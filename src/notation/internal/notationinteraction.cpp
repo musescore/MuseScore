@@ -1783,7 +1783,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                 mu::engraving::Spanner* spanner = static_cast<mu::engraving::Spanner*>(element->clone());
                 spanner->setScore(score);
                 spanner->styleChanged();
-                score->cmdAddSpanner(spanner, i, startSegment, endSegment);
+                score->cmdAddSpanner(spanner, i, startSegment, endSegment, modifiers & Qt::ControlModifier);
             }
         } else if (element->isTextBase() && !element->isFingering() && !element->isSticking()) {
             mu::engraving::Segment* firstSegment = sel.startSegment();

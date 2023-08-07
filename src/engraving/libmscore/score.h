@@ -852,7 +852,7 @@ public:
     void removeSpanner(Spanner*);
     void addSpanner(Spanner*);
     void cmdAddSpanner(Spanner* spanner, const mu::PointF& pos, bool systemStavesOnly = false);
-    void cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment);
+    void cmdAddSpanner(Spanner* spanner, staff_idx_t staffIdx, Segment* startSegment, Segment* endSegment, bool ctrlModifier = false);
     void checkSpanner(const Fraction& startTick, const Fraction& lastTick, bool removeOrphans = true);
     const std::set<Spanner*>& unmanagedSpanners() const { return m_unmanagedSpanner; }
     void addUnmanagedSpanner(Spanner*);
