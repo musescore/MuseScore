@@ -78,7 +78,9 @@ public:
      * Methods for checking which element to create depending on some attribute values of the MuseScore or MEI element
      */
     static engraving::ElementType elementTypeForDir(const libmei::Element& meiElement);
+    static engraving::ElementType elementTypeForDirWithExt(const libmei::Element& meiElement);
     static engraving::ElementType elementTypeFor(const libmei::RepeatMark& meiRepeatMark);
+    static bool isDirWithExt(const libmei::Dir& meiDir);
 
     /**
      * Methods for converting from and to MEI
@@ -119,7 +121,9 @@ public:
     static engraving::ClefType clefFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
 
     static void dirFromMEI(engraving::TextBase* textBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning);
+    static void dirFromMEI(engraving::TextLineBase* textLineBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning);
     static libmei::Dir dirToMEI(const engraving::TextBase* textBase, StringList& meiLines);
+    static libmei::Dir dirToMEI(const engraving::TextLineBase* textLineBase, StringList& meiLines);
 
     static engraving::DirectionV curvedirFromMEI(const libmei::curvature_CURVEDIR meiCurvedir, bool& warning);
     static libmei::curvature_CURVEDIR curvedirToMEI(engraving::DirectionV curvedir);
@@ -139,6 +143,9 @@ public:
     static std::pair<bool, engraving::NoteType> gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach,
                                                                 const libmei::data_GRACE meiGrace, bool& warning);
     static std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> gracegrpToMEI(bool isAfter, engraving::NoteType noteType);
+
+    static void hairpinFromMEI(engraving::Hairpin* haipin, const libmei::Hairpin& meiHairpin, bool& warning);
+    static libmei::Hairpin hairpinToMEI(const engraving::Hairpin* hairpin);
 
     static void harmFromMEI(engraving::Harmony* harmony, const StringList& meiLines, const libmei::Harm& meiHarm, bool& warning);
     static libmei::Harm harmToMEI(const engraving::Harmony* harmony, StringList& meiLines);

@@ -69,6 +69,18 @@ engraving::ElementType Convert::elementTypeForDir(const libmei::Element& meiElem
     return dirType;
 }
 
+engraving::ElementType Convert::elementTypeForDirWithExt(const libmei::Element& meiElement)
+{
+    engraving::ElementType dirType = engraving::ElementType::TEXTLINE;
+    const libmei::AttTyped* typedAtt = dynamic_cast<const libmei::AttTyped*>(&meiElement);
+    if (typedAtt) {
+        if (Convert::hasTypeValue(typedAtt->GetType(), std::string(DIR_TYPE) + "hairpin")) {
+            dirType = engraving::ElementType::HAIRPIN;
+        }
+    }
+    return dirType;
+}
+
 engraving::ElementType Convert::elementTypeFor(const libmei::RepeatMark& meiRepeatMark)
 {
     switch (meiRepeatMark.GetFunc()) {
@@ -78,6 +90,11 @@ engraving::ElementType Convert::elementTypeFor(const libmei::RepeatMark& meiRepe
     default:
         return engraving::ElementType::MARKER;
     }
+}
+
+bool Convert::isDirWithExt(const libmei::Dir& meiDir)
+{
+    return meiDir.HasExtender() && (meiDir.GetExtender() == libmei::BOOLEAN_true);
 }
 
 engraving::AccidentalType Convert::accidFromMEI(const libmei::data_ACCIDENTAL_WRITTEN meiAccid, bool& warning)
@@ -643,6 +660,46 @@ void Convert::dirFromMEI(engraving::TextBase* textBase, const StringList& meiLin
     return;
 }
 
+void Convert::dirFromMEI(engraving::TextLineBase* textLineBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning)
+{
+    IF_ASSERT_FAILED(textLineBase) {
+        return;
+    }
+
+    warning = false;
+
+    // @place
+    if (meiDir.HasPlace()) {
+        textLineBase->setPlacement(meiDir.GetPlace()
+                                   == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        textLineBase->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+
+    // @type
+    if (textLineBase->isHairpin()) {
+        engraving::Hairpin* hairpin = engraving::toHairpin(textLineBase);
+        engraving::HairpinType hairpinType = engraving::HairpinType::DECRESC_LINE;
+        if (Convert::hasTypeValue(meiDir.GetType(), std::string(DIR_TYPE) + "cresc")) {
+            hairpinType = engraving::HairpinType::CRESC_LINE;
+        }
+        hairpin->setHairpinType(hairpinType);
+    }
+
+    // @lform
+    if (meiDir.HasLform()) {
+        bool lformWarning = false;
+        textLineBase->setLineStyle(Convert::lineFromMEI(meiDir.GetLform(), lformWarning));
+        textLineBase->setPropertyFlags(engraving::Pid::LINE_STYLE, engraving::PropertyFlags::UNSTYLED);
+        warning = (warning || lformWarning);
+    }
+
+    // text
+    textLineBase->setBeginText(meiLines.join(u"\n"));
+    textLineBase->setPropertyFlags(engraving::Pid::BEGIN_TEXT, engraving::PropertyFlags::UNSTYLED);
+
+    return;
+}
+
 libmei::Dir Convert::dirToMEI(const engraving::TextBase* textBase, StringList& meiLines)
 {
     libmei::Dir meiDir;
@@ -657,10 +714,10 @@ libmei::Dir Convert::dirToMEI(const engraving::TextBase* textBase, StringList& m
         std::string dirType = DIR_TYPE;
         switch (textBase->type()) {
         case (engraving::ElementType::PLAYTECH_ANNOTATION):
-            dirType = std::string(HARMONY_TYPE) + "playtech-annotation";
+            dirType = std::string(DIR_TYPE) + "playtech-annotation";
             break;
         case (engraving::ElementType::STAFF_TEXT):
-            dirType = std::string(HARMONY_TYPE) + "staff-text";
+            dirType = std::string(DIR_TYPE) + "staff-text";
             break;
         default: break;
         }
@@ -669,6 +726,43 @@ libmei::Dir Convert::dirToMEI(const engraving::TextBase* textBase, StringList& m
 
     // text content - only split lines
     meiLines = String(textBase->plainText()).split(u"\n");
+
+    return meiDir;
+}
+
+libmei::Dir Convert::dirToMEI(const engraving::TextLineBase* textLineBase, StringList& meiLines)
+{
+    libmei::Dir meiDir;
+
+    // @place
+    if (textLineBase->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        meiDir.SetPlace(Convert::placeToMEI(textLineBase->placement()));
+    }
+
+    // @type
+    std::string dirType;
+    if (textLineBase->isHairpin()) {
+        // Two type values: one for hairpin, one for the hairpin type
+        dirType = std::string(DIR_TYPE) + "hairpin " + std::string(DIR_TYPE);
+        const engraving::Hairpin* hairpin = engraving::toHairpin(textLineBase);
+        if (hairpin->hairpinType() == engraving::HairpinType::CRESC_LINE) {
+            dirType += "cresc";
+        } else {
+            dirType += "decresc";
+        }
+    }
+    meiDir.SetType(dirType);
+
+    // @extender
+    meiDir.SetExtender(libmei::BOOLEAN_true);
+
+    // @lform
+    if (textLineBase->propertyFlags(engraving::Pid::LINE_STYLE) == engraving::PropertyFlags::UNSTYLED) {
+        meiDir.SetLform(Convert::lineToMEI(textLineBase->lineStyle()));
+    }
+
+    // text content - only split lines
+    meiLines = String(textLineBase->beginText()).split(u"\n");
 
     return meiDir;
 }
@@ -1024,6 +1118,57 @@ std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> Convert::gracegrpToMEI
     }
 
     return { meiAttach, meiGrace };
+}
+
+void Convert::hairpinFromMEI(engraving::Hairpin* hairpin, const libmei::Hairpin& meiHairpin, bool& warning)
+{
+    warning = false;
+
+    // @place
+    if (meiHairpin.HasPlace()) {
+        hairpin->setPlacement(meiHairpin.GetPlace()
+                              == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        hairpin->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+
+    // @form
+    if (meiHairpin.GetForm() == libmei::hairpinLog_FORM_cres) {
+        hairpin->setHairpinType(engraving::HairpinType::CRESC_HAIRPIN);
+    } else {
+        hairpin->setHairpinType(engraving::HairpinType::DECRESC_HAIRPIN);
+    }
+
+    // @lform
+    if (meiHairpin.HasLform()) {
+        bool lformWarning = false;
+        hairpin->setLineStyle(Convert::lineFromMEI(meiHairpin.GetLform(), lformWarning));
+        hairpin->setPropertyFlags(engraving::Pid::LINE_STYLE, engraving::PropertyFlags::UNSTYLED);
+        warning = (warning || lformWarning);
+    }
+}
+
+libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
+{
+    libmei::Hairpin meiHairpin;
+
+    // @place
+    if (hairpin->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        meiHairpin.SetPlace(Convert::placeToMEI(hairpin->placement()));
+    }
+
+    // @form
+    if (hairpin->hairpinType() == engraving::HairpinType::CRESC_HAIRPIN) {
+        meiHairpin.SetForm(libmei::hairpinLog_FORM_cres);
+    } else {
+        meiHairpin.SetForm(libmei::hairpinLog_FORM_dim);
+    }
+
+    // @lform
+    if (hairpin->lineStyle() != engraving::LineType::SOLID) {
+        meiHairpin.SetLform(Convert::lineToMEI(hairpin->lineStyle()));
+    }
+
+    return meiHairpin;
 }
 
 void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLines, const libmei::Harm& meiHarm, bool& warning)
