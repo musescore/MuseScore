@@ -48,6 +48,7 @@
 #include "libmscore/staff.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/text.h"
+#include "libmscore/textline.h"
 #include "libmscore/timesig.h"
 #include "libmscore/timesig.h"
 #include "libmscore/tuplet.h"
@@ -437,10 +438,21 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
 
     Spanner* item = nullptr;
 
-    if (meiElement.m_name == "slur") {
-        item = Factory::createSlur(chordRest->segment());
+    if (meiElement.m_name == "dir") {
+        ElementType elementType = Convert::elementTypeForDirWithExt(meiElement);
+        switch (elementType) {
+        case (ElementType::HAIRPIN): item = Factory::createHairpin(
+                chordRest->segment());
+            break;
+        default:
+            item = Factory::createTextLine(chordRest->segment());
+        }
+    } else if (meiElement.m_name == "hairpin") {
+        item = Factory::createHairpin(chordRest->segment());
     } else if (meiElement.m_name == "octave") {
         item = Factory::createOttava(chordRest->segment());
+    } else if (meiElement.m_name == "slur") {
+        item = Factory::createSlur(chordRest->segment());
     } else {
         return nullptr;
     }
@@ -1672,6 +1684,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readDynam(xpathNode.node(), measure);
         } else if (elementName == "fermata") {
             success = success && this->readFermata(xpathNode.node(), measure);
+        } else if (elementName == "hairpin") {
+            success = success && this->readHairpin(xpathNode.node(), measure);
         } else if (elementName == "harm") {
             success = success && this->readHarm(xpathNode.node(), measure);
         } else if (elementName == "octave") {
@@ -1753,16 +1767,24 @@ bool MeiImporter::readDir(pugi::xml_node dirNode, engraving::Measure* measure)
     libmei::Dir meiDir;
     meiDir.Read(dirNode);
 
-    TextBase* textBase = static_cast<TextBase*>(this->addAnnotation(meiDir, measure));
-    if (!textBase) {
-        // Warning message given in MeiExpoter::addAnnotation
-        return true;
-    }
-
     StringList meiLines;
     this->readLines(dirNode, meiLines);
 
-    Convert::dirFromMEI(textBase, meiLines, meiDir, warning);
+    if (Convert::isDirWithExt(meiDir)) {
+        TextLineBase* textLineBase = static_cast<TextLineBase*>(this->addSpanner(meiDir, measure, dirNode));
+        if (!textLineBase) {
+            // Warning message given in MeiExpoter::addSpanner
+            return true;
+        }
+        Convert::dirFromMEI(textLineBase, meiLines, meiDir, warning);
+    } else {
+        TextBase* textBase = static_cast<TextBase*>(this->addAnnotation(meiDir, measure));
+        if (!textBase) {
+            // Warning message given in MeiExpoter::addAnnotation
+            return true;
+        }
+        Convert::dirFromMEI(textBase, meiLines, meiDir, warning);
+    }
 
     return true;
 }
@@ -1832,6 +1854,31 @@ bool MeiImporter::readFermata(pugi::xml_node fermataNode, engraving::Measure* me
     }
 
     Convert::fermataFromMEI(fermata, meiFermata, warning);
+
+    return true;
+}
+
+/**
+ * Read a hairpin.
+ */
+
+bool MeiImporter::readHairpin(pugi::xml_node hairpinNode, engraving::Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Hairpin meiHairpin;
+    meiHairpin.Read(hairpinNode);
+
+    Hairpin* hairpin = static_cast<Hairpin*>(this->addSpanner(meiHairpin, measure, hairpinNode));
+    if (!hairpin) {
+        // Warning message given in MeiExpoter::addSpanner
+        return true;
+    }
+
+    Convert::hairpinFromMEI(hairpin, meiHairpin, warning);
 
     return true;
 }
@@ -2348,9 +2395,14 @@ void MeiImporter::addSpannerEnds()
             spanner.first->setTick2(chordRest->tick());
             spanner.first->setEndElement(chordRest);
             spanner.first->setTrack2(chordRest->track());
-            // Special handling of ottava
-            if (spanner.first->isOttava()) {
+            // Special handling of hairpin
+            if (spanner.first->isHairpin()) {
                 // Set the tick2 to include the duration of the ChordRest (not needed for others, i.e., slurs?)
+                spanner.first->setTick2(chordRest->tick() + chordRest->ticks());
+            }
+            // Special handling of ottava
+            else if (spanner.first->isOttava()) {
+                // Set the tick2 to include the duration of the ChordRest
                 spanner.first->setTick2(chordRest->tick() + chordRest->ticks());
                 Ottava* ottava = toOttava(spanner.first);
                 // Make the staff fill the pitch offsets accordingly since we use Note::ppitch in export
