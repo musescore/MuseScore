@@ -590,6 +590,8 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setChangeInVelocity(e.readInt());
         } else if (tag == "veloChangeSpeed") {
             d->setVelChangeSpeed(TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL));
+        } else if (tag == "play") {
+            d->setPlayDynamic(e.readBool());
         } else if (readProperty(d, tag, e, ctx, Pid::AVOID_BARLINES)) {
         } else if (readProperty(d, tag, e, ctx, Pid::DYNAMICS_SIZE)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {

@@ -111,6 +111,9 @@ dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) con
 
 void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick)
 {
+    if (!dynamic->playDynamic()) {
+        return;
+    }
     const DynamicType type = dynamic->dynamicType();
     if (isOrdinaryDynamicType(type)) {
         m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);

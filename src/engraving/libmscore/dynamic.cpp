@@ -558,6 +558,8 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
         return _dynamicsSize;
     case Pid::CENTER_ON_NOTEHEAD:
         return _centerOnNotehead;
+    case Pid::PLAY:
+        return playDynamic();
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -599,6 +601,9 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::CENTER_ON_NOTEHEAD:
         _centerOnNotehead = v.toBool();
         break;
+    case Pid::PLAY:
+        setPlayDynamic(v.toBool());
+        break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
             return false;
@@ -630,6 +635,8 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
         }
     case Pid::VELO_CHANGE_SPEED:
         return DynamicSpeed::NORMAL;
+    case Pid::PLAY:
+        return true;
     default:
         return TextBase::propertyDefault(id);
     }

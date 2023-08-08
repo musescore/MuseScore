@@ -108,6 +108,9 @@ public:
     void setSnappedExpression(Expression* e) { m_snappedExpression = e; }
     Expression* snappedExpression() const { return m_snappedExpression; }
 
+    bool playDynamic() const { return m_playDynamic; }
+    void setPlayDynamic(bool v) { m_playDynamic = v; }
+
     bool acceptDrop(EditData& ed) const override;
     EngravingItem* drop(EditData& ed) override;
 
@@ -121,6 +124,7 @@ private:
 
     DynamicType m_dynamicType = DynamicType::OTHER;
     Expression* m_snappedExpression = nullptr;
+    bool m_playDynamic = true;
 
     mutable mu::PointF m_dragOffset;
     int m_velocity = -1;           // associated midi velocity 0-127

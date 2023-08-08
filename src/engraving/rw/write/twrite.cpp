@@ -922,6 +922,7 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::AVOID_BARLINES);
     writeProperty(item, xml, Pid::DYNAMICS_SIZE);
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
+    writeProperty(item, xml, Pid::PLAY);
 
     if (item->isVelocityChangeAvailable()) {
         writeProperty(item, xml, Pid::VELO_CHANGE);
