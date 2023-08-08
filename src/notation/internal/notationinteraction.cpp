@@ -4054,6 +4054,7 @@ mu::Ret NotationInteraction::canAddTextToItem(TextStyleType type, const Engravin
         static const std::set<ElementType> requiredElementTypes {
             ElementType::NOTE,
             ElementType::REST,
+            ElementType::MMREST,
             ElementType::MEASURE_REPEAT,
             ElementType::CHORD,
         };
@@ -5376,6 +5377,20 @@ void NotationInteraction::startEditText(mu::engraving::TextBase* text)
 {
     doEndEditElement();
     select({ text }, SelectType::SINGLE);
+
+    //! NOTE: Copied from ScoreView::cmdAddText
+    Measure* measure = text->findMeasure();
+    if (measure && measure->hasMMRest() && text->links()) {
+        Measure* mmRest = measure->mmRest();
+        for (EngravingObject* link : *text->links()) {
+            TextBase* linkedText = toTextBase(link);
+            if (text != linkedText && linkedText->findMeasure() == mmRest) {
+                text = linkedText;
+                break;
+            }
+        }
+    }
+
     startEditText(text, PointF());
     text->cursor()->moveCursorToEnd();
 }
