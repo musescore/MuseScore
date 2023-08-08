@@ -220,6 +220,8 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -350,6 +352,8 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -476,6 +480,8 @@
               <string>4</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>

@@ -128,6 +128,8 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -167,6 +169,8 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
@@ -206,6 +210,8 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>

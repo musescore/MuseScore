@@ -203,6 +203,8 @@
               <string>0</string>
               </Note>
             </Chord>
+          <BarLine>
+            </BarLine>
           </voice>
         <voice>
           <location>
@@ -313,6 +315,8 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>

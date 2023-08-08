@@ -94,6 +94,8 @@
             <durationType>measure</durationType>
             <duration>12/8</duration>
             </Rest>
+          <BarLine>
+            </BarLine>
           </voice>
         </Measure>
       <Measure>
