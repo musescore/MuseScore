@@ -250,6 +250,11 @@ EngravingItem* ChordRest::drop(EditData& data)
 
     case ElementType::NOTE: {
         Note* note = toNote(e);
+        // calculate correct transposed tpc
+        Interval v = staff()->transpose(tick());
+        v.flip();
+        note->setTpc2(transposeTpc(note->tpc1(), v, true));
+
         Segment* seg = segment();
         score()->undoRemoveElement(this);
         Chord* chord = Factory::createChord(score()->dummy()->segment());
