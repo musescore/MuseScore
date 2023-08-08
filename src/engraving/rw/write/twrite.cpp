@@ -851,6 +851,7 @@ void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::CHORD_LINE_TYPE);
     writeProperty(item, xml, Pid::CHORD_LINE_STRAIGHT);
     writeProperty(item, xml, Pid::CHORD_LINE_WAVY);
+    writeProperty(item, xml, Pid::PLAY);
     xml.tag("lengthX", item->lengthX(), 0.0);
     xml.tag("lengthY", item->lengthY(), 0.0);
     writeItemProperties(item, xml, ctx);

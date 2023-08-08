@@ -269,6 +269,8 @@ PropertyValue ChordLine::getProperty(Pid propertyId) const
         return m_straight;
     case Pid::CHORD_LINE_WAVY:
         return m_wavy;
+    case Pid::PLAY:
+        return m_playChordLine;
     default:
         break;
     }
@@ -294,6 +296,9 @@ bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
     case Pid::CHORD_LINE_WAVY:
         setWavy(val.toBool());
         break;
+    case Pid::PLAY:
+        setPlayChordLine(val.toBool());
+        break;
     default:
         return EngravingItem::setProperty(propertyId, val);
     }
@@ -312,6 +317,8 @@ PropertyValue ChordLine::propertyDefault(Pid pid) const
         return false;
     case Pid::CHORD_LINE_WAVY:
         return false;
+    case Pid::PLAY:
+        return true;
     default:
         break;
     }
