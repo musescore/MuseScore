@@ -226,23 +226,18 @@ void DynamicNearHairpinsDragGroup::endDrag(EditData& ed)
 
 std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged)
 {
-    Segment* segment = d->segment();
-    Expression* expression = segment ? toExpression(segment->findAnnotation(ElementType::EXPRESSION, d->track(), d->track())) : nullptr;
-    if (expression && !isDragged(expression) && expression->snapToDynamics()) {
-        return std::unique_ptr<DynamicExpressionDragGroup>(new DynamicExpressionDragGroup(d, expression));
+    Expression* snappedExpression = d->snappedExpression();
+    if (snappedExpression && !isDragged(snappedExpression)) {
+        return std::unique_ptr<DynamicExpressionDragGroup>(new DynamicExpressionDragGroup(d, snappedExpression));
     }
     return nullptr;
 }
 
 std::unique_ptr<ElementGroup> DynamicExpressionDragGroup::detectFor(Expression* e, std::function<bool(const EngravingItem*)> isDragged)
 {
-    if (!e->snapToDynamics()) {
-        return nullptr;
-    }
-    Segment* segment = e->explicitParent() ? toSegment(e->explicitParent()) : nullptr;
-    Dynamic* dynamic = segment ? toDynamic(segment->findAnnotation(ElementType::DYNAMIC, e->track(), e->track())) : nullptr;
-    if (dynamic && !isDragged(dynamic)) {
-        return std::unique_ptr<DynamicExpressionDragGroup>(new DynamicExpressionDragGroup(dynamic, e));
+    Dynamic* snappedDynamic = e->snappedDynamic();
+    if (snappedDynamic && !isDragged(snappedDynamic)) {
+        return std::unique_ptr<DynamicExpressionDragGroup>(new DynamicExpressionDragGroup(snappedDynamic, e));
     }
     return nullptr;
 }
