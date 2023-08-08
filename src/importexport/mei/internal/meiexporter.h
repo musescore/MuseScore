@@ -44,6 +44,7 @@ enum measureElementCounter {
     DIR_M,
     DYNAM_M,
     FERMATA_M,
+    HAIRPIN_M,
     HARM_M,
     OCTAVE_M,
     REPEATMARK_M,
@@ -112,9 +113,11 @@ private:
      */
     bool writeBreath(const engraving::Breath* breath, const std::string& startid);
     bool writeDir(const engraving::TextBase* dir, const std::string& startid);
+    bool writeDir(const engraving::TextLineBase* dir, const std::string& startid);
     bool writeDynam(const engraving::Dynamic* dynamic, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp);
+    bool writeHairpin(const engraving::Hairpin* hairpin, const std::string& startid);
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
     bool writeOctave(const engraving::Ottava* ottava, const std::string& startid);
     bool writeRepeatMark(const engraving::Jump* jump, const engraving::Measure* measure);
@@ -206,6 +209,7 @@ private:
         { DIR_M, u"dr" },
         { DYNAM_M, u"dn" },
         { FERMATA_M, u"fm" },
+        { HAIRPIN_M, u"hp" },
         { HARM_M, u"hr" },
         { OCTAVE_M, u"ot" },
         { REPEATMARK_M, u"rp" },

@@ -31,6 +31,7 @@
 #include "libmscore/clef.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/factory.h"
+#include "libmscore/hairpin.h"
 #include "libmscore/jump.h"
 #include "libmscore/key.h"
 #include "libmscore/keysig.h"
@@ -782,6 +783,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeDynam(dynamic_cast<const Dynamic*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFermata()) {
             success = success && this->writeFermata(dynamic_cast<const Fermata*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isHairpin()) {
+            success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
             success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isSlur()) {
@@ -1303,6 +1306,31 @@ bool MeiExporter::writeDir(const TextBase* dir, const std::string& startid)
 }
 
 /**
+ * Write a dir (with extender) and its text content.
+ */
+
+bool MeiExporter::writeDir(const TextLineBase* dir, const std::string& startid)
+{
+    IF_ASSERT_FAILED(dir) {
+        return false;
+    }
+
+    StringList meiLines;
+
+    pugi::xml_node dirNode = m_currentNode.append_child();
+    libmei::Dir meiDir = Convert::dirToMEI(dir, meiLines);
+    meiDir.SetStartid(startid);
+    meiDir.Write(dirNode, this->getMeasureXmlIdFor(DIR_M));
+
+    this->writeLines(dirNode, meiLines);
+
+    // Add the node to the map of open control events
+    m_openControlEventMap[dir] = dirNode;
+
+    return true;
+}
+
+/**
  * Write a dynam and its text content.
  */
 
@@ -1359,6 +1387,31 @@ bool MeiExporter::writeFermata(const Fermata* fermata, const libmei::xsdPositive
     meiFermata.SetTstamp(tstamp);
 
     meiFermata.Write(fermataNode, this->getMeasureXmlIdFor(FERMATA_M));
+
+    return true;
+}
+
+/**
+ * Write a hairpin.
+ */
+
+bool MeiExporter::writeHairpin(const Hairpin* hairpin, const std::string& startid)
+{
+    IF_ASSERT_FAILED(hairpin) {
+        return false;
+    }
+
+    if (hairpin->isLineType()) {
+        return this->writeDir(dynamic_cast<const TextLineBase*>(hairpin), startid);
+    }
+
+    pugi::xml_node hairpinNode = m_currentNode.append_child();
+    libmei::Hairpin meiHairpin = Convert::hairpinToMEI(hairpin);
+    meiHairpin.SetStartid(startid);
+    meiHairpin.Write(hairpinNode, this->getMeasureXmlIdFor(HAIRPIN_M));
+
+    // Add the node to the map of open control events
+    m_openControlEventMap[hairpin] = hairpinNode;
 
     return true;
 }
@@ -1650,7 +1703,7 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving:
     auto spanners = smap.findOverlapping(chordRest->tick().ticks(), chordRest->tick().ticks());
     for (auto interval : spanners) {
         Spanner* spanner = interval.value;
-        if (spanner && (spanner->isSlur() || spanner->isOttava())) {
+        if (spanner && (spanner->isHairpin() || spanner->isOttava() || spanner->isSlur())) {
             if (spanner->startCR() == chordRest) {
                 m_startingControlEventMap.push_back(std::make_pair(spanner, "#" + xmlId));
             } else if (spanner->endCR() == chordRest) {
