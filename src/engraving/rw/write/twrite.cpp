@@ -2674,6 +2674,7 @@ void TWrite::write(const Tremolo* item, XmlWriter& xml, WriteContext& ctx)
     xml.startElement(item);
     writeProperty(item, xml, Pid::TREMOLO_TYPE);
     writeProperty(item, xml, Pid::TREMOLO_STYLE);
+    writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
     if (!item->twoNotes()) {
         xml.endElement();

@@ -156,7 +156,7 @@ void ChordArticulationsParser::parseTremolo(const Chord* chord, const RenderingC
 {
     const Tremolo* tremolo = chord->tremolo();
 
-    if (!tremolo) {
+    if (!tremolo || !tremolo->playTremolo()) {
         return;
     }
 

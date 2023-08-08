@@ -126,6 +126,9 @@ public:
     const BeamFragment& beamFragment() const { return m_beamFragment; }
     BeamFragment& beamFragment() { return m_beamFragment; }
 
+    bool playTremolo() const { return m_playTremolo; }
+    void setPlayTremolo(bool v) { m_playTremolo = v; }
+
     bool customStyleApplicable() const;
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -178,6 +181,7 @@ private:
     DirectionV m_direction = DirectionV::AUTO;
     mu::draw::PainterPath m_path;
     std::vector<BeamSegment*> m_beamSegments;
+    bool m_playTremolo = true;
 
     mu::PointF m_startAnchor;
     mu::PointF m_endAnchor;
