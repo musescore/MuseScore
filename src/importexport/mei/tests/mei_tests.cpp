@@ -151,6 +151,10 @@ TEST_F(Mei_Tests, mei_gracenote_02) {
     meiReadTest("gracenote-02");
 }
 
+TEST_F(Mei_Tests, mei_hairpin_01) {
+    meiReadTest("hairpin-01");
+}
+
 TEST_F(Mei_Tests, mei_jump_01) {
     meiReadTest("jump-01");
 }
