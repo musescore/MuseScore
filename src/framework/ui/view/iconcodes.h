@@ -121,8 +121,8 @@ public:
         TEXT_SUBSCRIPT = 0xEF4C,
         TEXT_SUPERSCRIPT = 0xEF4D,
         AUDIO = 0xEF4E,
-        VISIBILITY_ON = 0xEF53,
-        VISIBILITY_OFF = 0xEF54,
+        EYE_OPEN = 0xEF53,
+        EYE_CLOSED = 0xEF54,
         SETTINGS_COG = 0xEF55,
         BEAM_FEATHERING_RIGHT_HEIGHT = 0xEF56,
         BEAM_FEATHERING_LEFT_HEIGHT = 0xEF57,
@@ -308,7 +308,11 @@ public:
 
         TOOLBAR_GRIP = 0xF3A2,
 
+        GRID = 0xF3A4,
+
         PAGE = 0xF3A5,
+
+        LIST = 0xF3AA,
 
         CAMERA = 0xF3AE,
 
@@ -317,6 +321,7 @@ public:
         PAN_SCORE = 0xF3B0,
         COUNT_IN = 0xF3B1,
 
+        GLOBE = 0xF3B6,
         PRINT = 0xF3B7,
 
         DOWN = 0xF3C1,

@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,28 +19,25 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "scorethumbnail.h"
+import QtQuick 2.15
 
-using namespace mu::project;
+import MuseScore.UiComponents 1.0
 
-ScoreThumbnail::ScoreThumbnail(QQuickItem* parent)
-    : uicomponents::QuickPaintedView(parent)
-{
-}
+Column {
+    property alias title: titleLabel.text
+    property alias body: bodyLabel.text
 
-QPixmap ScoreThumbnail::thumbnail() const
-{
-    return m_thumbnail;
-}
+    spacing: 16
 
-void ScoreThumbnail::setThumbnail(QPixmap pixmap)
-{
-    m_thumbnail = std::move(pixmap);
-    emit thumbnailChanged();
-    update();
-}
+    StyledTextLabel {
+        id: titleLabel
+        width: parent.width
+        font: ui.theme.tabBoldFont
+    }
 
-void ScoreThumbnail::paint(QPainter* painter)
-{
-    painter->drawPixmap(0, 0, width(), height(), m_thumbnail);
+    StyledTextLabel {
+        id: bodyLabel
+        width: parent.width
+        visible: !isEmpty
+    }
 }

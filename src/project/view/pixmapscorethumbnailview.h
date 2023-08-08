@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,21 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_FRAMEWORK_DATAFORMATTER_H
-#define MU_FRAMEWORK_DATAFORMATTER_H
+#ifndef MU_PROJECT_PIXMAPSCORETHUMBNAILVIEW_H
+#define MU_PROJECT_PIXMAPSCORETHUMBNAILVIEW_H
 
-#include "types/string.h"
-#include "types/datetime.h"
+#include <QPainter>
 
-namespace mu {
-class DataFormatter
+#include "uicomponents/view/quickpaintedview.h"
+
+namespace mu::project {
+class PixmapScoreThumbnailView : public uicomponents::QuickPaintedView
 {
+    Q_OBJECT
+
+    Q_PROPERTY(QPixmap thumbnail READ thumbnail WRITE setThumbnail NOTIFY thumbnailChanged)
+
 public:
-    static double roundDouble(const double& val, const int decimals = 2);
-    static String formatReal(double val, int prec = 2);
-    static String formatTimeSince(const Date& date);
-    static String formatFileSize(size_t size);
+    PixmapScoreThumbnailView(QQuickItem* parent = nullptr);
+
+    QPixmap thumbnail() const;
+    void setThumbnail(QPixmap pixmap);
+
+signals:
+    void thumbnailChanged();
+
+protected:
+    void paint(QPainter* painter) override;
+
+private:
+    QPixmap m_thumbnail;
 };
 }
 
-#endif // MU_FRAMEWORK_DATAFORMATTER_H
+#endif // MU_PROJECT_PIXMAPSCORETHUMBNAILVIEW_H

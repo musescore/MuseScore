@@ -138,7 +138,7 @@ StyledDialogView {
                     StyledTextLabel {
                         Layout.fillWidth: true
                         //: visibility of a score on MuseScore.com: private, public or unlisted
-                        text: qsTrc("project/save", "Visibility")
+                        text: qsTrc("project/cloud", "Visibility")
                         horizontalAlignment: Text.AlignLeft
                     }
 
@@ -146,16 +146,16 @@ StyledDialogView {
                         Layout.fillWidth: true
 
                         model: [
-                            { value: CloudVisibility.Public, text: qsTrc("project/save", "Public") },
-                            { value: CloudVisibility.Unlisted, text: qsTrc("project/save", "Unlisted") },
-                            { value: CloudVisibility.Private, text: qsTrc("project/save", "Private") }
+                            { value: CloudVisibility.Public, text: qsTrc("project/cloud", "Public") },
+                            { value: CloudVisibility.Unlisted, text: qsTrc("project/cloud", "Unlisted") },
+                            { value: CloudVisibility.Private, text: qsTrc("project/cloud", "Private") }
                         ]
 
                         currentIndex: indexOfValue(root.visibility)
 
                         navigation.panel: optionsNavPanel
                         navigation.row: 2
-                        navigation.accessible.name: qsTrc("project/save", "Visibility") + ": " + currentText
+                        navigation.accessible.name: qsTrc("project/cloud", "Visibility") + ": " + currentText
 
                         onActivated: function(index, value) {
                             root.visibility = value

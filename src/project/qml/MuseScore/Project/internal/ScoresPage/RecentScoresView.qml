@@ -29,7 +29,7 @@ import MuseScore.Project 1.0
 ScoresView {
     id: root
 
-    model: RecentScoresModel {
+    RecentScoresModel {
         id: recentScoresModel
     }
 
@@ -37,17 +37,146 @@ ScoresView {
         recentScoresModel.load()
     }
 
-    sourceComponent: root.viewType === ScoresView.ViewType_List ? listComp : gridComp
+    sourceComponent: root.viewType === ScoresPageModel.List ? listComp : gridComp
 
     Component {
         id: gridComp
 
-        ScoresView.Grid {}
+        ScoresGridView {
+            anchors.fill: parent
+
+            model: recentScoresModel
+            searchText: root.searchText
+
+            backgroundColor: root.backgroundColor
+            sideMargin: root.sideMargin
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrder
+            navigation.name: "RecentScoresGrid"
+            navigation.accessible.name: qsTrc("project", "Recent scores grid")
+
+            onCreateNewScoreRequested: {
+                root.createNewScoreRequested()
+            }
+
+            onOpenScoreRequested: function(scorePath, displayName) {
+                root.openScoreRequested(scorePath, displayName)
+            }
+        }
     }
 
     Component {
         id: listComp
 
-        ScoresView.List {}
+        ScoresListView {
+            id: list
+
+            anchors.fill: parent
+
+            model: recentScoresModel
+            searchText: root.searchText
+
+            backgroundColor: root.backgroundColor
+            sideMargin: root.sideMargin
+
+            showNewScoreItem: true
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrder
+            navigation.name: "RecentScoresList"
+            navigation.accessible.name: qsTrc("project", "Recent scores list")
+
+            onCreateNewScoreRequested: {
+                root.createNewScoreRequested()
+            }
+
+            onOpenScoreRequested: function(scorePath, displayName) {
+                root.openScoreRequested(scorePath, displayName)
+            }
+
+            columns: [
+                ScoresListView.ColumnItem {
+                    id: modifiedColumn
+
+                    //: Stands for "Last time that this score was modified".
+                    //: Used as the header of this column in the scores list.
+                    header: qsTrc("project", "Modified")
+
+                    width: function (parentWidth) {
+                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
+                        return 0.25 * parentWidthExclusingSpacing
+                    }
+
+                    delegate: StyledTextLabel {
+                        id: modifiedLabel
+                        text: score.timeSinceModified ?? ""
+
+                        font.capitalization: Font.AllUppercase
+                        horizontalAlignment: Text.AlignLeft
+
+                        NavigationFocusBorder {
+                            navigationCtrl: NavigationControl {
+                                name: "ModifiedLabel"
+                                panel: navigationPanel
+                                row: navigationRow
+                                column: navigationColumnStart
+                                enabled: modifiedLabel.visible && modifiedLabel.enabled && !modifiedLabel.isEmpty
+                                accessible.name: modifiedColumn.header + ": " + modifiedLabel.text
+                                accessible.role: MUAccessible.StaticText
+
+                                onActiveChanged: {
+                                    if (active) {
+                                        listItem.scrollIntoView()
+                                    }
+                                }
+                            }
+
+                            anchors.margins: -radius
+                            radius: 2 + border.width
+                        }
+                    }
+                },
+
+                ScoresListView.ColumnItem {
+                    id: sizeColumn
+                    header: qsTrc("global", "Size", "file size")
+
+                    width: function (parentWidth) {
+                        let parentWidthExclusingSpacing = parentWidth - list.columns.length * list.view.columnSpacing;
+                        return 0.15 * parentWidthExclusingSpacing
+                    }
+
+                    delegate: StyledTextLabel {
+                        id: sizeLabel
+                        text: score.fileSize ?? ""
+
+                        font: ui.theme.largeBodyFont
+                        horizontalAlignment: Text.AlignLeft
+
+                        NavigationFocusBorder {
+                            navigationCtrl: NavigationControl {
+                                name: "SizeLabel"
+                                panel: navigationPanel
+                                row: navigationRow
+                                column: navigationColumnStart
+                                enabled: sizeLabel.visible && sizeLabel.enabled && !sizeLabel.isEmpty
+                                accessible.name: sizeColumn.header + ": " + sizeLabel.text
+                                accessible.role: MUAccessible.StaticText
+
+                                onActiveChanged: {
+                                    if (active) {
+                                        listItem.scrollIntoView()
+                                    }
+                                }
+                            }
+
+                            anchors.margins: -radius
+                            radius: 2 + border.width
+                        }
+                    }
+                }
+            ]
+        }
     }
 }

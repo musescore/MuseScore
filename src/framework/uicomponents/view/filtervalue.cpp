@@ -38,7 +38,7 @@ QVariant FilterValue::roleValue() const
     return m_roleValue;
 }
 
-QVariant FilterValue::compareType() const
+CompareType::Type FilterValue::compareType() const
 {
     return m_compareType;
 }
@@ -68,7 +68,7 @@ void FilterValue::setRoleValue(QVariant value)
     emit dataChanged();
 }
 
-void FilterValue::setCompareType(QVariant type)
+void FilterValue::setCompareType(CompareType::Type type)
 {
     if (m_compareType == type) {
         return;
@@ -85,5 +85,20 @@ void FilterValue::setEnabled(bool enabled)
     }
 
     m_enabled = enabled;
+    emit dataChanged();
+}
+
+bool FilterValue::async() const
+{
+    return m_async;
+}
+
+void FilterValue::setAsync(bool async)
+{
+    if (m_async == async) {
+        return;
+    }
+
+    m_async = async;
     emit dataChanged();
 }

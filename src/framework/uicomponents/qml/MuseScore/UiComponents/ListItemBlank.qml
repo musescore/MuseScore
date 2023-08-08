@@ -40,6 +40,14 @@ FocusableControl {
     signal hovered(var isHovered, real mouseX, real mouseY)
     signal removeSelectionRequested()
 
+    function scrollIntoView() {
+        if (!ListView.view) {
+            return
+        }
+
+        ListView.view.positionViewAtIndex(index, ListView.Contain)
+    }
+
     implicitHeight: 30
     implicitWidth: Boolean(ListView.view) ? ListView.view.width : 30
 

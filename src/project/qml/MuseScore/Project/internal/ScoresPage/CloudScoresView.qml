@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Controls 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -30,7 +31,7 @@ import MuseScore.Cloud 1.0
 ScoresView {
     id: root
 
-    model: CloudScoresModel {
+    CloudScoresModel {
         id: cloudScoresModel
     }
 
@@ -57,56 +58,30 @@ ScoresView {
             return emptyComp
         }
 
-        return root.viewType === ScoresView.ViewType_List ? listComp : gridComp
+        return root.viewType === ScoresPageModel.List ? listComp : gridComp
     }
 
     Component {
         id: gridComp
 
-        ScoresView.Grid {
-            id: grid
+        CloudScoresGridView {
+            anchors.fill: parent
 
-            readonly property int fittingItems: view.columns * (view.rows + 1)
-            readonly property bool almostAtEnd: view.contentHeight - (view.contentY + view.height) < 2 * view.cellHeight
+            model: cloudScoresModel
+            searchText: root.searchText
 
-            Component.onCompleted: {
-                updateDesiredRowCount()
+            backgroundColor: root.backgroundColor
+            sideMargin: root.sideMargin
+
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrder
+
+            onCreateNewScoreRequested: {
+                root.createNewScoreRequested()
             }
 
-            onFittingItemsChanged: {
-                updateDesiredRowCount()
-            }
-
-            onAlmostAtEndChanged: {
-                updateDesiredRowCount()
-            }
-
-            function updateDesiredRowCount() {
-                Qt.callLater(function() {
-                    cloudScoresModel.desiredRowCount = Math.max(fittingItems,
-                                                                almostAtEnd ? cloudScoresModel.rowCount + view.columns : cloudScoresModel.rowCount)
-                })
-            }
-
-            view.footer: cloudScoresModel.state === CloudScoresModel.Loading
-                         ? busyIndicatorComp : null
-
-            Component {
-                id: busyIndicatorComp
-
-                Item {
-                    width: GridView.view ? GridView.view.width : 0
-                    height: indicator.implicitHeight + indicator.anchors.topMargin + indicator.anchors.bottomMargin
-
-                    StyledBusyIndicator {
-                        id: indicator
-
-                        anchors.horizontalCenter: parent.horizontalCenter
-                        anchors.top: parent.top
-                        anchors.topMargin: grid.view.spacingBetweenRows / 2
-                        anchors.bottomMargin: grid.view.spacingBetweenRows / 2
-                    }
-                }
+            onOpenScoreRequested: function(scorePath, displayName) {
+                root.openScoreRequested(scorePath, displayName)
             }
         }
     }
@@ -114,24 +89,25 @@ ScoresView {
     Component {
         id: listComp
 
-        ScoresView.List {}
-    }
+        CloudScoresListView {
+            anchors.fill: parent
 
-    component Message : Column {
-        property alias title: titleLabel.text
-        property alias body: bodyLabel.text
+            model: cloudScoresModel
+            searchText: root.searchText
 
-        spacing: 16
+            backgroundColor: root.backgroundColor
+            sideMargin: root.sideMargin
 
-        StyledTextLabel {
-            id: titleLabel
-            width: parent.width
-            font: ui.theme.tabBoldFont
-        }
+            navigation.section: root.navigationSection
+            navigation.order: root.navigationOrder
 
-        StyledTextLabel {
-            id: bodyLabel
-            width: parent.width
+            onCreateNewScoreRequested: {
+                root.createNewScoreRequested()
+            }
+
+            onOpenScoreRequested: function(scorePath, displayName) {
+                root.openScoreRequested(scorePath, displayName)
+            }
         }
     }
 

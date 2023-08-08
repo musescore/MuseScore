@@ -21,6 +21,9 @@
  */
 #include "sortfilterproxymodel.h"
 
+#include <QTimer>
+
+#include "defer.h"
 #include "types/val.h"
 
 #include "modelutils.h"
@@ -34,27 +37,47 @@ SortFilterProxyModel::SortFilterProxyModel(QObject* parent)
 {
     ModelUtils::connectRowCountChangedSignal(this, &SortFilterProxyModel::rowCountChanged);
 
-    connect(m_filters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
-        connect(m_filters.at(index), &FilterValue::dataChanged, this, [this]() {
-            if (sourceModel()) {
+    auto onFilterChanged = [this](FilterValue* changedFilterValue) {
+        if (changedFilterValue->async()) {
+            QTimer::singleShot(0, [this](){
                 fillRoleIds();
-            }
-        });
+            });
+        } else {
+            fillRoleIds();
+        }
+    };
+
+    connect(m_filters.notifier(), &QmlListPropertyNotifier::appended, this, [this, onFilterChanged](int index) {
+        FilterValue* filter = m_filters.at(index);
+
+        if (filter->enabled()) {
+            onFilterChanged(filter);
+        }
+
+        connect(filter, &FilterValue::dataChanged, this, [onFilterChanged, filter] { onFilterChanged(filter); });
     });
 
-    connect(m_sorters.notifier(), &QmlListPropertyNotifier::appended, this, [this](int index) {
-        connect(m_sorters.at(index), &SorterValue::dataChanged, this, [this]() {
-            SorterValue* sorter = currentSorterValue();
-            invalidate();
+    auto onSortersChanged = [this] {
+        SorterValue* sorter = currentSorterValue();
+        invalidate();
 
-            if (!sorter) {
-                return;
-            }
+        if (!sorter) {
+            return;
+        }
 
-            if (sourceModel()) {
-                sort(0, sorter->sortOrder());
-            }
-        });
+        if (sourceModel()) {
+            sort(0, sorter->sortOrder());
+        }
+    };
+
+    connect(m_sorters.notifier(), &QmlListPropertyNotifier::appended, this, [this, onSortersChanged](int index) {
+        onSortersChanged();
+
+        connect(m_sorters.at(index), &SorterValue::dataChanged, this, onSortersChanged);
+    });
+
+    connect(this, &SortFilterProxyModel::sourceModelRoleNamesChanged, this, [this]() {
+        invalidate();
     });
 }
 
@@ -68,19 +91,63 @@ QQmlListProperty<SorterValue> SortFilterProxyModel::sorters()
     return m_sorters.property();
 }
 
-QList<int> SortFilterProxyModel::excludeIndexes()
+QList<int> SortFilterProxyModel::alwaysIncludeIndices() const
 {
-    return m_excludeIndexes;
+    return m_alwaysIncludeIndices;
 }
 
-void SortFilterProxyModel::setExcludeIndexes(QList<int> excludeIndexes)
+void SortFilterProxyModel::setAlwaysIncludeIndices(const QList<int>& indices)
 {
-    if (excludeIndexes == m_excludeIndexes) {
+    if (m_alwaysIncludeIndices == indices) {
         return;
     }
 
-    m_excludeIndexes = excludeIndexes;
-    emit excludeIndexesChanged(m_excludeIndexes);
+    m_alwaysIncludeIndices = indices;
+    emit alwaysIncludeIndicesChanged();
+
+    invalidateFilter();
+}
+
+QList<int> SortFilterProxyModel::alwaysExcludeIndices() const
+{
+    return m_alwaysExcludeIndices;
+}
+
+void SortFilterProxyModel::setAlwaysExcludeIndices(const QList<int>& indices)
+{
+    if (m_alwaysExcludeIndices == indices) {
+        return;
+    }
+
+    m_alwaysExcludeIndices = indices;
+    emit alwaysExcludeIndicesChanged();
+
+    invalidateFilter();
+}
+
+QHash<int, QByteArray> SortFilterProxyModel::roleNames() const
+{
+    if (!sourceModel()) {
+        return {};
+    }
+
+    return sourceModel()->roleNames();
+}
+
+void SortFilterProxyModel::setSourceModel(QAbstractItemModel* sourceModel)
+{
+    if (m_subSourceModelConnection) {
+        disconnect(m_subSourceModelConnection);
+    }
+
+    QSortFilterProxyModel::setSourceModel(sourceModel);
+
+    emit sourceModelRoleNamesChanged();
+
+    if (auto sourceSortFilterModel = qobject_cast<SortFilterProxyModel*>(sourceModel)) {
+        m_subSourceModelConnection = connect(sourceSortFilterModel, &SortFilterProxyModel::sourceModelRoleNamesChanged,
+                                             this, &SortFilterProxyModel::sourceModelRoleNamesChanged);
+    }
 }
 
 void SortFilterProxyModel::refresh()
@@ -91,8 +158,12 @@ void SortFilterProxyModel::refresh()
 
 bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& sourceParent) const
 {
-    if (m_excludeIndexes.contains(sourceRow)) {
+    if (m_alwaysIncludeIndices.contains(sourceRow)) {
         return true;
+    }
+
+    if (m_alwaysExcludeIndices.contains(sourceRow)) {
+        return false;
     }
 
     QModelIndex index = sourceModel()->index(sourceRow, 0, sourceParent);
@@ -108,16 +179,22 @@ bool SortFilterProxyModel::filterAcceptsRow(int sourceRow, const QModelIndex& so
             continue;
         }
 
-        CompareType::Type compareType = value->compareType().value<CompareType::Type>();
-
-        if (CompareType::Contains == compareType) {
-            if (!data.toString().contains(value->roleValue().toString(), Qt::CaseInsensitive)) {
-                return false;
-            }
-        } else if (CompareType::Equal == compareType) {
+        switch (value->compareType()) {
+        case CompareType::Equal:
             if (data != value->roleValue()) {
                 return false;
             }
+            break;
+        case CompareType::NotEqual:
+            if (data == value->roleValue()) {
+                return false;
+            }
+            break;
+        case CompareType::Contains:
+            if (!data.toString().contains(value->roleValue().toString(), Qt::CaseInsensitive)) {
+                return false;
+            }
+            break;
         }
     }
 
@@ -150,6 +227,10 @@ void SortFilterProxyModel::fillRoleIds()
 {
     m_roleIdToFilterValueHash.clear();
 
+    DEFER {
+        invalidateFilter();
+    };
+
     if (!sourceModel()) {
         return;
     }
@@ -168,8 +249,6 @@ void SortFilterProxyModel::fillRoleIds()
         }
         ++it;
     }
-
-    setFilterFixedString(filterRegularExpression().pattern());
 }
 
 SorterValue* SortFilterProxyModel::currentSorterValue() const

@@ -60,7 +60,7 @@ FocusScope {
             mouseArea.width: mouseAreaRect.width
             mouseArea.height: mouseAreaRect.height
 
-            icon: root.isVisible ? IconCode.VISIBILITY_ON : IconCode.VISIBILITY_OFF
+            icon: root.isVisible ? IconCode.EYE_OPEN : IconCode.EYE_CLOSED
             transparent: true
 
             accessible.name: (root.accessibleText ? root.accessibleText + ", " : "")

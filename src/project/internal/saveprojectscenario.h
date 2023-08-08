@@ -84,19 +84,6 @@ public:
     Q_ENUM(SaveLocationType);
 };
 
-class QMLCloudVisibility
-{
-    Q_GADGET
-
-public:
-    enum CloudVisibility {
-        Public = int(cloud::Visibility::Public),
-        Unlisted = int(cloud::Visibility::Unlisted),
-        Private = int(cloud::Visibility::Private)
-    };
-    Q_ENUM(CloudVisibility);
-};
-
 class QMLSaveToCloudResponse
 {
     Q_GADGET

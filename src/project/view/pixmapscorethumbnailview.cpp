@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,34 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_PROJECT_SCORETHUMBNAIL_H
-#define MU_PROJECT_SCORETHUMBNAIL_H
+#include "pixmapscorethumbnailview.h"
 
-#include <QPainter>
-#include "uicomponents/view/quickpaintedview.h"
+using namespace mu::project;
 
-namespace mu::project {
-class ScoreThumbnail : public uicomponents::QuickPaintedView
+PixmapScoreThumbnailView::PixmapScoreThumbnailView(QQuickItem* parent)
+    : uicomponents::QuickPaintedView(parent)
 {
-    Q_OBJECT
-
-    Q_PROPERTY(QPixmap thumbnail READ thumbnail WRITE setThumbnail NOTIFY thumbnailChanged)
-
-public:
-    ScoreThumbnail(QQuickItem* parent = nullptr);
-
-    QPixmap thumbnail() const;
-    void setThumbnail(QPixmap pixmap);
-
-signals:
-    void thumbnailChanged();
-
-protected:
-    void paint(QPainter* painter) override;
-
-private:
-    QPixmap m_thumbnail;
-};
 }
 
-#endif // MU_PROJECT_SCORETHUMBNAIL_H
+QPixmap PixmapScoreThumbnailView::thumbnail() const
+{
+    return m_thumbnail;
+}
+
+void PixmapScoreThumbnailView::setThumbnail(QPixmap pixmap)
+{
+    m_thumbnail = std::move(pixmap);
+    emit thumbnailChanged();
+    update();
+}
+
+void PixmapScoreThumbnailView::paint(QPainter* painter)
+{
+    painter->drawPixmap(0, 0, width(), height(), m_thumbnail);
+}

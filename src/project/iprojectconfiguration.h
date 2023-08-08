@@ -89,6 +89,14 @@ public:
     virtual int homeScoresPageTabIndex() const = 0;
     virtual void setHomeScoresPageTabIndex(int index) = 0;
 
+    enum class HomeScoresPageViewType {
+        Grid,
+        List
+    };
+
+    virtual HomeScoresPageViewType homeScoresPageViewType() const = 0;
+    virtual void setHomeScoresPageViewType(HomeScoresPageViewType type) = 0;
+
     virtual QColor templatePreviewBackgroundColor() const = 0;
     virtual async::Notification templatePreviewBackgroundChanged() const = 0;
 

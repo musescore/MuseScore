@@ -46,7 +46,7 @@ RadioButtonGroup {
         root.itemAtIndex(0).navigation.requestActive()
     }
 
-    implicitHeight: 30
+    implicitHeight: ui.theme.defaultButtonSize
 
     delegate: FlatRadioButton {
         checked: root.currentValue  === modelData.value

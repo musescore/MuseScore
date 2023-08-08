@@ -48,7 +48,7 @@ Item {
         id: searchFilterModel
         sourceModel: root.model
 
-        excludeIndexes: root.model.nonScoreItemIndices
+        alwaysIncludeIndices: root.model.nonScoreItemIndices
 
         filters: [
             FilterValue {
@@ -59,11 +59,26 @@ Item {
         ]
     }
 
+    SortFilterProxyModel {
+        id: itemTypeFilterModel
+        sourceModel: searchFilterModel
+
+        filters: [
+            FilterValue {
+                roleName: "isNoResultsFound"
+                roleValue: true
+                compareType: CompareType.NotEqual
+                enabled: !Boolean(root.searchText) || searchFilterModel.rowCount > root.model.nonScoreItemIndices.length
+                async: true
+            }
+        ]
+    }
+
     NavigationPanel {
         id: navPanel
-        name: "RecentScores"
+        name: "ScoresGridView"
         direction: NavigationPanel.Both
-        accessible.name: qsTrc("project", "Recent scores grid")
+        accessible.name: qsTrc("project", "Scores grid")
     }
 
     Rectangle {
@@ -125,16 +140,13 @@ Item {
             z: 2
         }
 
-        model: searchFilterModel
+        model: itemTypeFilterModel
 
         delegate: Item {
             width: view.cellWidth
             height: view.cellHeight
 
-            // TODO: when an item is invisible, there is still visual space allocated for it
-            visible: score.isNoResultFound ? view.count === root.model.nonScoreItemIndices.length && Boolean(root.searchText) : true
-
-            ScoreItem {
+            ScoreGridItem {
                 anchors.centerIn: parent
 
                 width: view.actualCellWidth
@@ -145,7 +157,7 @@ Item {
                 navigation.column: (model.index - (navigation.row * view.columns)) * 3 // * 3 because of controls inside ScoreItem
                 navigation.onActiveChanged: {
                     if (navigation.active) {
-                        root.positionViewAtIndex(index, ListView.Contain)
+                        view.positionViewAtIndex(index, GridView.Contain)
                     }
                 }
 
@@ -154,7 +166,7 @@ Item {
                 suffix: score.suffix ?? ""
                 thumbnailUrl: score.thumbnailUrl ?? ""
                 isCreateNew: score.isCreateNew
-                isNoResultFound: score.isNoResultFound
+                isNoResultsFound: score.isNoResultsFound
                 isCloud: score.isCloud
                 cloudScoreId: score.scoreId ?? 0
                 timeSinceModified: score.timeSinceModified ?? ""
@@ -162,7 +174,7 @@ Item {
                 onClicked: {
                     if (isCreateNew) {
                         root.createNewScoreRequested()
-                    } else if (!isNoResultFound) {
+                    } else if (!isNoResultsFound) {
                         root.openScoreRequested(score.path, score.name)
                     }
                 }
@@ -189,6 +201,25 @@ Item {
                 position: 1.0
                 color: root.backgroundColor
             }
+        }
+    }
+
+    Item {
+        id: noResultsMessage
+        anchors.fill: parent
+
+        // This will become visible if a "No results found" item is not provided by the model.
+        visible: Boolean(root.searchText) && itemTypeFilterModel.rowCount === 0
+
+        Message {
+            anchors.top: parent.top
+            anchors.topMargin: Math.max(parent.height / 3 - height / 2, 0)
+            anchors.left: parent.left
+            anchors.leftMargin: root.sideMargin
+            anchors.right: parent.right
+            anchors.rightMargin: root.sideMargin
+
+            title: qsTrc("global", "No results found")
         }
     }
 }

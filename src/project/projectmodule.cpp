@@ -46,7 +46,7 @@
 #include "view/cloudscoresmodel.h"
 #include "view/cloudscorestatuswatcher.h"
 #include "view/scorethumbnailloader.h"
-#include "view/scorethumbnail.h"
+#include "view/pixmapscorethumbnailview.h"
 #include "view/templatesmodel.h"
 #include "view/templatepaintview.h"
 #include "view/newscoremodel.h"
@@ -152,14 +152,12 @@ void ProjectModule::registerUiTypes()
     qmlRegisterType<AudioGenerationSettingsModel>("MuseScore.Project", 1, 0, "AudioGenerationSettingsModel");
 
     qmlRegisterType<ScoreThumbnailLoader>("MuseScore.Project", 1, 0, "ScoreThumbnailLoader");
-    qmlRegisterType<ScoreThumbnail>("MuseScore.Project", 1, 0, "ScoreThumbnail");
+    qmlRegisterType<PixmapScoreThumbnailView>("MuseScore.Project", 1, 0, "PixmapScoreThumbnailView");
     qmlRegisterType<TemplatesModel>("MuseScore.Project", 1, 0, "TemplatesModel");
     qmlRegisterType<TemplatePaintView>("MuseScore.Project", 1, 0, "TemplatePaintView");
 
     qmlRegisterUncreatableType<QMLSaveLocationType>("MuseScore.Project", 1, 0, "SaveLocationType",
                                                     "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<QMLCloudVisibility>("MuseScore.Project", 1, 0, "CloudVisibility",
-                                                   "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<QMLSaveToCloudResponse>("MuseScore.Project", 1, 0, "SaveToCloudResponse",
                                                        "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<GenerateAudioTimePeriod>("MuseScore.Project", 1, 0, "GenerateAudioTimePeriodType",

@@ -30,6 +30,8 @@
 #include "iinteractive.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 
+class QString;
+
 namespace mu::project {
 class ScoresPageModel : public QObject
 {
@@ -41,20 +43,31 @@ class ScoresPageModel : public QObject
     INJECT(cloud::IMuseScoreComService, museScoreComService)
 
     Q_PROPERTY(int tabIndex READ tabIndex WRITE setTabIndex NOTIFY tabIndexChanged)
+    Q_PROPERTY(ViewType viewType READ viewType WRITE setViewType NOTIFY viewTypeChanged)
 
 public:
     explicit ScoresPageModel(QObject* parent = nullptr);
+
+    int tabIndex() const;
+    void setTabIndex(int index);
+
+    enum ViewType {
+        Grid = int(IProjectConfiguration::HomeScoresPageViewType::Grid),
+        List = int(IProjectConfiguration::HomeScoresPageViewType::List),
+    };
+    Q_ENUM(ViewType);
+
+    ViewType viewType() const;
+    void setViewType(ViewType type);
 
     Q_INVOKABLE void createNewScore();
     Q_INVOKABLE void openOther();
     Q_INVOKABLE void openScore(const QString& scorePath, const QString& displayNameOverride);
     Q_INVOKABLE void openScoreManager();
 
-    int tabIndex() const;
-    void setTabIndex(int index);
-
 signals:
     void tabIndexChanged();
+    void viewTypeChanged();
 };
 }
 

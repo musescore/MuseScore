@@ -136,7 +136,7 @@ StyledDialogView {
                     StyledTextLabel {
                         Layout.fillWidth: true
                         //: visibility of a score on Audio.com: public or unlisted
-                        text: qsTrc("project/save", "Visibility")
+                        text: qsTrc("project/cloud", "Visibility")
                         horizontalAlignment: Text.AlignLeft
                     }
 
@@ -149,8 +149,8 @@ StyledDialogView {
                         orientation: ListView.Vertical
 
                         model: [
-                            { valueRole: CloudVisibility.Public, text: qsTrc("project/save", "Public"), description: qsTrc("project/save", "Anyone will be able to listen to this audio") },
-                            { valueRole: CloudVisibility.Unlisted, text: qsTrc("project/save", "Unlisted"), description: qsTrc("project/save", "Only people with a link can listen to this audio")  },
+                            { valueRole: CloudVisibility.Public, text: qsTrc("project/cloud", "Public"), description: qsTrc("project/share", "Anyone will be able to listen to this audio") },
+                            { valueRole: CloudVisibility.Unlisted, text: qsTrc("project/cloud", "Unlisted"), description: qsTrc("project/share", "Only people with a link can listen to this audio")  },
                         ]
 
                         delegate: RoundedRadioButton {
@@ -165,7 +165,7 @@ StyledDialogView {
                             implicitHeight: 40
 
                             contentComponent: Column {
-                                property string accessibleName: qsTrc("project/share", "Visibility") + ": " + textLabel.text + ", " +
+                                property string accessibleName: qsTrc("project/cloud", "Visibility") + ": " + textLabel.text + ", " +
                                                                 qsTrc("project/share", "Description") + descriptionLabel.text
 
                                 spacing: 8

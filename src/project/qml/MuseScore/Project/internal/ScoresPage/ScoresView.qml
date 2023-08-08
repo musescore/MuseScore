@@ -28,50 +28,16 @@ import MuseScore.Project 1.0
 Loader {
     id: root
 
-    property AbstractScoresModel model
     property string searchText
 
-    property int viewType: ScoresView.ViewType_Grid
+    property int viewType: ScoresPageModel.Grid
 
     property color backgroundColor: ui.theme.backgroundSecondaryColor
     property real sideMargin: 46
-    property real topMargin: 24
 
     property NavigationSection navigationSection
     property int navigationOrder
 
     signal createNewScoreRequested()
     signal openScoreRequested(var scorePath, var displayName)
-
-    enum ViewType {
-        ViewType_Grid,
-        ViewType_List
-    }
-
-    component Grid : ScoresGridView {
-        anchors.fill: parent
-        anchors.topMargin: root.topMargin
-
-        model: root.model
-        searchText: root.searchText
-
-        backgroundColor: root.backgroundColor
-        sideMargin: root.sideMargin
-
-        navigation.section: root.navigationSection
-        navigation.order: root.navigationOrder
-
-        onCreateNewScoreRequested: {
-            root.createNewScoreRequested()
-        }
-
-        onOpenScoreRequested: function(scorePath, displayName) {
-            root.openScoreRequested(scorePath, displayName)
-        }
-    }
-
-    component List : StyledTextLabel {
-        anchors.centerIn: parent
-        text: "Not yet implemented"
-    }
 }

@@ -22,6 +22,8 @@
 
 #include "scorespagemodel.h"
 
+#include <QString>
+
 #include "actions/actiontypes.h"
 
 #include "projecttypes.h"
@@ -67,4 +69,19 @@ void ScoresPageModel::setTabIndex(int index)
 
     configuration()->setHomeScoresPageTabIndex(index);
     emit tabIndexChanged();
+}
+
+ScoresPageModel::ViewType ScoresPageModel::viewType() const
+{
+    return static_cast<ViewType>(configuration()->homeScoresPageViewType());
+}
+
+void ScoresPageModel::setViewType(ViewType type)
+{
+    if (viewType() == type) {
+        return;
+    }
+
+    configuration()->setHomeScoresPageViewType(IProjectConfiguration::HomeScoresPageViewType(type));
+    emit viewTypeChanged();
 }

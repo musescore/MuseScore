@@ -28,6 +28,7 @@
 
 #include "iprojectconfiguration.h"
 #include "irecentfilescontroller.h"
+#include "io/ifilesystem.h"
 
 namespace mu::project {
 class RecentScoresModel : public AbstractScoresModel, public async::Asyncable
@@ -36,6 +37,7 @@ class RecentScoresModel : public AbstractScoresModel, public async::Asyncable
 
     INJECT(IProjectConfiguration, configuration)
     INJECT(IRecentFilesController, recentFilesController)
+    INJECT(io::IFileSystem, fileSystem)
 
 public:
     RecentScoresModel(QObject* parent = nullptr);
