@@ -149,7 +149,7 @@ ScoresView {
 
                     delegate: StyledTextLabel {
                         id: sizeLabel
-                        text: score.fileSize ?? ""
+                        text: Boolean(score.fileSize) ? score.fileSize : "-"
 
                         font: ui.theme.largeBodyFont
                         horizontalAlignment: Text.AlignLeft
@@ -161,7 +161,7 @@ ScoresView {
                                 row: navigationRow
                                 column: navigationColumnStart
                                 enabled: sizeLabel.visible && sizeLabel.enabled && !sizeLabel.isEmpty
-                                accessible.name: sizeColumn.header + ": " + sizeLabel.text
+                                accessible.name: sizeColumn.header + ": " + (Boolean(score.fileSize) ? score.fileSize : qsTrc("global", "Unknown"))
                                 accessible.role: MUAccessible.StaticText
 
                                 onActiveChanged: {
