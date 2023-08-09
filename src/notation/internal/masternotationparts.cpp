@@ -26,6 +26,7 @@
 #include "libmscore/scoreorder.h"
 #include "libmscore/excerpt.h"
 #include "libmscore/undo.h"
+#include "libmscore/utils.h"
 
 #include "log.h"
 
@@ -196,7 +197,12 @@ void MasterNotationParts::replaceInstrument(const InstrumentKey& instrumentKey, 
 
     if (isMainInstrument) {
         if (mu::engraving::Excerpt* excerpt = findExcerpt(part->id())) {
-            String newName = mu::engraving::Excerpt::formatName(part->partName(), score()->masterScore()->excerpts());
+            StringList allExcerptLowerNames;
+            for (const mu::engraving::Excerpt* excerpt : score()->masterScore()->excerpts()) {
+                allExcerptLowerNames.push_back(excerpt->name().toLower());
+            }
+
+            String newName = mu::engraving::formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
             excerpt->excerptScore()->undo(new mu::engraving::ChangeExcerptTitle(excerpt, newName));
         }
     }

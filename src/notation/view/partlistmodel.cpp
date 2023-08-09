@@ -27,31 +27,23 @@
 
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
+#include "engraving/libmscore/utils.h"
+
 using namespace mu::notation;
 using namespace mu::uicomponents;
 using namespace mu::framework;
 
-static bool nameExists(const QString& name, const QList<IExcerptNotationPtr>& allExcerpts)
+namespace mu::notation {
+static StringList collectExcerptLowerNames(const QList<IExcerptNotationPtr>& allExcerpts)
 {
+    StringList names;
+
     for (const IExcerptNotationPtr& excerpt : allExcerpts) {
-        if (excerpt->name() == name) {
-            return true;
-        }
+        names << String::fromQString(excerpt->name()).toLower();
     }
 
-    return false;
+    return names;
 }
-
-static QString formatUniqueExcerptName(const QString& baseName, const QList<IExcerptNotationPtr>& allExcerpts)
-{
-    QString name = baseName;
-    int num = 0;
-
-    while (nameExists(name, allExcerpts)) {
-        name = baseName + QString(" (%1)").arg(++num);
-    }
-
-    return name;
 }
 
 PartListModel::PartListModel(QObject* parent)
@@ -133,7 +125,7 @@ void PartListModel::createNewPart()
 {
     TRACEFUNC;
 
-    QString name = formatUniqueExcerptName(qtrc("notation", "Part"), m_excerpts);
+    QString name = mu::engraving::formatUniqueExcerptName(mtrc("notation", "Part"), collectExcerptLowerNames(m_excerpts)).toQString();
     IExcerptNotationPtr newExcerpt = masterNotation()->createEmptyExcerpt(name);
 
     int index = m_excerpts.size();
@@ -236,12 +228,14 @@ mu::Ret PartListModel::doValidatePartTitle(int partIndex, const QString& title) 
         return false;
     }
 
+    QString titleLower = title.toLower();
+
     for (int i = 0; i < m_excerpts.size(); ++i) {
         if (i == partIndex) {
             continue;
         }
 
-        if (m_excerpts[i]->name() == title) {
+        if (m_excerpts[i]->name().toLower() == titleLower) {
             return make_ret(Ret::Code::UnknownError, trc("notation", "Name already exists"));
         }
     }
@@ -285,7 +279,8 @@ void PartListModel::copyPart(int partIndex)
     }
 
     IExcerptNotationPtr copy = m_excerpts[partIndex]->clone();
-    copy->setName(formatUniqueExcerptName(copy->name() + " " + qtrc("notation", "(copy)"), m_excerpts));
+    String baseName = String::fromQString(copy->name()) + u" " + mtrc("notation", "(copy)");
+    copy->setName(mu::engraving::formatUniqueExcerptName(baseName, collectExcerptLowerNames(m_excerpts)));
 
     insertExcerpt(partIndex + 1, copy);
 }

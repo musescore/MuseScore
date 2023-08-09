@@ -1560,60 +1560,33 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
     }
 }
 
-std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>& parts)
+std::vector<Excerpt*> Excerpt::createExcerptsFromParts(const std::vector<Part*>& parts, MasterScore* score)
 {
+    StringList allExcerptLowerNames;
+    for (const Excerpt* e : score->excerpts()) {
+        allExcerptLowerNames.push_back(e->name().toLower());
+    }
+
     std::vector<Excerpt*> result;
 
     for (Part* part : parts) {
-        Excerpt* excerpt = new Excerpt(part->masterScore());
+        Excerpt* excerpt = new Excerpt(score);
         excerpt->parts().push_back(part);
 
-        for (track_idx_t i = part->startTrack(), j = 0; i < part->endTrack(); ++i, ++j) {
+        track_idx_t startTrack = part->startTrack();
+        track_idx_t endTrack = part->endTrack();
+
+        for (track_idx_t i = startTrack, j = 0; i < endTrack; ++i, ++j) {
             excerpt->m_tracksMapping.insert({ i, j });
         }
 
-        String name = formatName(part->partName(), result);
+        String name = formatUniqueExcerptName(part->partName(), allExcerptLowerNames);
         excerpt->setName(name);
         excerpt->setInitialPartId(part->id());
 
+        allExcerptLowerNames.push_back(name.toLower());
         result.push_back(excerpt);
     }
 
     return result;
-}
-
-Excerpt* Excerpt::createExcerptFromPart(Part* part)
-{
-    Excerpt* excerpt = createExcerptsFromParts({ part }).front();
-    excerpt->setName(part->partName());
-
-    return excerpt;
-}
-
-String Excerpt::formatName(const String& partName, const std::vector<Excerpt*>& allExcerpts)
-{
-    String name = partName.simplified();
-    int count = 0;      // no of occurrences of partName
-
-    for (Excerpt* e : allExcerpts) {
-        // if <partName> already exists, change <partName> to <partName 1>
-        String excName = e->name();
-        if (excName == name) {
-            e->setName(excName + u" 1");
-        }
-
-        std::string excNameU8 = excName.toStdString();
-        std::regex regex("^(.+)\\s\\d+$");
-        std::smatch match;
-        std::regex_search(excNameU8, match, regex);
-        if (!match.empty() && match[0].str() == name.toStdString()) {
-            count++;
-        }
-    }
-
-    if (count > 0) {
-        name += String(u" %1").arg(count + 1);
-    }
-
-    return name;
 }

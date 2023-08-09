@@ -721,7 +721,7 @@ void MasterNotation::updatePotentialExcerpts() const
         partsWithoutExcerpt.push_back(part);
     }
 
-    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt);
+    std::vector<mu::engraving::Excerpt*> excerpts = mu::engraving::Excerpt::createExcerptsFromParts(partsWithoutExcerpt, masterScore());
 
     for (mu::engraving::Excerpt* excerpt : excerpts) {
         auto excerptNotation = std::make_shared<ExcerptNotation>(excerpt);
