@@ -965,15 +965,18 @@ void TDraw::draw(const Bracket* item, Painter* painter)
     if (RealIsNull(item->h2())) {
         return;
     }
+
+    const Bracket::LayoutData& data = item->layoutData();
+
     switch (item->bracketType()) {
     case BracketType::BRACE: {
         if (item->braceSymbol() == SymId::noSym) {
             painter->setNoPen();
             painter->setBrush(Brush(item->curColor()));
-            painter->drawPath(item->path());
+            painter->drawPath(data.path);
         } else {
-            double h        = 2 * item->h2();
-            double mag      = h / (100 * item->magS());
+            double h = 2 * item->h2();
+            double mag = h / (100 * item->magS());
             painter->setPen(item->curColor());
             painter->save();
             painter->scale(item->magx(), mag);
@@ -983,16 +986,16 @@ void TDraw::draw(const Bracket* item, Painter* painter)
     }
     break;
     case BracketType::NORMAL: {
-        double h        = 2 * item->h2();
-        double _spatium = item->spatium();
-        double w        = item->style().styleMM(Sid::bracketWidth);
-        double bd       = (item->style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
+        double h = 2 * item->h2();
+        double spatium = item->spatium();
+        double w = item->style().styleMM(Sid::bracketWidth);
+        double bd = (item->style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
         Pen pen(item->curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, -bd - w * .5, 0.0, h + bd + w * .5));
-        double x    =  -w * .5;
-        double y1   = -bd;
-        double y2   = h + bd;
+        double x = -w * .5;
+        double y1 = -bd;
+        double y2 = h + bd;
         item->drawSymbol(SymId::bracketTop, painter, PointF(x, y1));
         item->drawSymbol(SymId::bracketBottom, painter, PointF(x, y2));
     }
