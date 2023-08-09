@@ -270,7 +270,7 @@ public:
     bool skipDraw() const { return _skipDraw; }
     void setSkipDraw(bool val) { _skipDraw = val; }
     const String& uid() const { return _uid; }
-    void setUid(String val) { _uid = val; }
+    void setUid(const String& val) { _uid = val; }
 
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
