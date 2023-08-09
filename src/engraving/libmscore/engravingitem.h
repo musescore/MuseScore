@@ -149,6 +149,7 @@ class EngravingItem : public EngravingObject
     ///< valid after call to layout()
 
     bool m_colorsInversionEnabled = true;
+    String _uid;    ///< Unique ID from MEI imported files, not copied in copy constructor
 
 protected:
     mutable int _z;
@@ -268,6 +269,8 @@ public:
     virtual void move(const PointF& s) { _pos += s; }
     bool skipDraw() const { return _skipDraw; }
     void setSkipDraw(bool val) { _skipDraw = val; }
+    const String& uid() const { return _uid; }
+    void setUid(String val) { _uid = val; }
 
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
