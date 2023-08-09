@@ -1120,7 +1120,7 @@ void Staff::init(const Staff* s)
     _showIfEmpty       = s->_showIfEmpty;
     _hideSystemBarLine = s->_hideSystemBarLine;
     _mergeMatchingRests = s->_mergeMatchingRests;
-    _color             = s->_color;
+    m_color             = s->m_color;
     _userDist          = s->_userDist;
     _visibilityVoices = s->_visibilityVoices;
 }

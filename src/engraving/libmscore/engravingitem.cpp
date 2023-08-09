@@ -82,28 +82,28 @@ EngravingItem* EngravingItemList::at(size_t i) const
 EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, ElementFlags f)
     : EngravingObject(type, se)
 {
-    _flags         = f;
-    _color         = engravingConfiguration()->defaultColor();
-    _mag           = 1.0;
-    _z             = -1;
-    _offsetChanged = OffsetChange::NONE;
-    _minDistance   = Spatium(0.0);
+    m_flags         = f;
+    m_color         = engravingConfiguration()->defaultColor();
+    m_mag           = 1.0;
+    m_z             = -1;
+    m_offsetChanged = OffsetChange::NONE;
+    m_minDistance   = Spatium(0.0);
 }
 
 EngravingItem::EngravingItem(const EngravingItem& e)
     : EngravingObject(e)
 {
-    _bbox       = e._bbox;
-    _mag        = e._mag;
-    _pos        = e._pos;
-    _offset     = e._offset;
-    _track      = e._track;
-    _flags      = e._flags;
+    m_bbox       = e.m_bbox;
+    m_mag        = e.m_mag;
+    m_pos        = e.m_pos;
+    m_offset     = e.m_offset;
+    m_track      = e.m_track;
+    m_flags      = e.m_flags;
     setFlag(ElementFlag::SELECTED, false);
-    _z          = e._z;
-    _color      = e._color;
-    _offsetChanged = e._offsetChanged;
-    _minDistance   = e._minDistance;
+    m_z          = e.m_z;
+    m_color      = e.m_color;
+    m_offsetChanged = e.m_offsetChanged;
+    m_minDistance   = e.m_minDistance;
     itemDiscovered = false;
 
     //! TODO Please don't remove (igor.korsukov@gmail.com)
@@ -195,7 +195,7 @@ void EngravingItem::notifyAboutNameChanged()
 void EngravingItem::spatiumChanged(double oldValue, double newValue)
 {
     if (offsetIsSpatiumDependent()) {
-        _offset *= (newValue / oldValue);
+        m_offset *= (newValue / oldValue);
     }
 }
 
@@ -207,7 +207,7 @@ void EngravingItem::spatiumChanged(double oldValue, double newValue)
 void EngravingItem::localSpatiumChanged(double oldValue, double newValue)
 {
     if (offsetIsSpatiumDependent()) {
-        _offset *= (newValue / oldValue);
+        m_offset *= (newValue / oldValue);
     }
 }
 
@@ -239,7 +239,7 @@ bool EngravingItem::isInteractionAvailable() const
 
 bool EngravingItem::offsetIsSpatiumDependent() const
 {
-    return sizeIsSpatiumDependent() || (_flags & ElementFlag::ON_STAFF);
+    return sizeIsSpatiumDependent() || (m_flags & ElementFlag::ON_STAFF);
 }
 
 //---------------------------------------------------------
@@ -347,7 +347,7 @@ Staff* EngravingItem::staff() const
 
 bool EngravingItem::hasStaff() const
 {
-    return _track != mu::nidx;
+    return m_track != mu::nidx;
 }
 
 //---------------------------------------------------------
@@ -377,12 +377,12 @@ bool EngravingItem::hasGrips() const
 
 track_idx_t EngravingItem::track() const
 {
-    return _track;
+    return m_track;
 }
 
 void EngravingItem::setTrack(track_idx_t val)
 {
-    _track = val;
+    m_track = val;
 }
 
 //---------------------------------------------------------
@@ -391,26 +391,26 @@ void EngravingItem::setTrack(track_idx_t val)
 
 int EngravingItem::z() const
 {
-    if (_z == -1) {
-        _z = int(type()) * 100;
+    if (m_z == -1) {
+        m_z = int(type()) * 100;
     }
-    return _z;
+    return m_z;
 }
 
 void EngravingItem::setZ(int val)
 {
-    _z = val;
+    m_z = val;
 }
 
 staff_idx_t EngravingItem::staffIdx() const
 {
-    return track2staff(_track);
+    return track2staff(m_track);
 }
 
 void EngravingItem::setStaffIdx(staff_idx_t val)
 {
     voice_idx_t voiceIdx = voice();
-    _track = staff2track(val, voiceIdx == mu::nidx ? 0 : voiceIdx);
+    m_track = staff2track(val, voiceIdx == mu::nidx ? 0 : voiceIdx);
 }
 
 staff_idx_t EngravingItem::staffIdxOrNextVisible() const
@@ -499,12 +499,12 @@ staff_idx_t EngravingItem::vStaffIdx() const
 
 voice_idx_t EngravingItem::voice() const
 {
-    return track2voice(_track);
+    return track2voice(m_track);
 }
 
 void EngravingItem::setVoice(voice_idx_t v)
 {
-    _track = (_track / VOICES) * VOICES + v;
+    m_track = (m_track / VOICES) * VOICES + v;
 }
 
 //---------------------------------------------------------
@@ -580,7 +580,7 @@ Part* EngravingItem::part() const
 
 draw::Color EngravingItem::color() const
 {
-    return _color;
+    return m_color;
 }
 
 //---------------------------------------------------------
@@ -653,7 +653,7 @@ PointF EngravingItem::pagePos() const
         idx = vStaffIdx();
     }
 
-    if (_flags & ElementFlag::ON_STAFF) {
+    if (m_flags & ElementFlag::ON_STAFF) {
         System* system = nullptr;
         Measure* measure = nullptr;
         if (explicitParent()->isSegment()) {
@@ -707,7 +707,7 @@ PointF EngravingItem::canvasPos() const
         idx = vStaffIdx();
     }
 
-    if (_flags & ElementFlag::ON_STAFF) {
+    if (m_flags & ElementFlag::ON_STAFF) {
         System* system = nullptr;
         Measure* measure = nullptr;
         if (explicitParent()->isSegment()) {
@@ -942,7 +942,7 @@ void EngravingItem::dump() const
          "\n   abox(%g,%g,%g,%g)"
          "\n  parent: %p",
          typeName(), ipos().x(), ipos().y(),
-         _bbox.x(), _bbox.y(), _bbox.width(), _bbox.height(),
+         m_bbox.x(), m_bbox.y(), m_bbox.width(), m_bbox.height(),
          abbox().x(), abbox().y(), abbox().width(), abbox().height(),
          explicitParent());
 }
@@ -1114,9 +1114,9 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
     case Pid::SELECTED:
         return selected();
     case Pid::OFFSET:
-        return PropertyValue::fromValue(_offset);
+        return PropertyValue::fromValue(m_offset);
     case Pid::MIN_DISTANCE:
-        return _minDistance;
+        return m_minDistance;
     case Pid::PLACEMENT:
         return placement();
     case Pid::AUTOPLACE:
@@ -1162,7 +1162,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
         setSelected(v.toBool());
         break;
     case Pid::OFFSET:
-        _offset = v.value<PointF>();
+        m_offset = v.value<PointF>();
         break;
     case Pid::MIN_DISTANCE:
         setMinDistance(v.value<Spatium>());
@@ -2112,11 +2112,11 @@ std::pair<int, float> EngravingItem::barbeat() const
 void EngravingItem::setOffsetChanged(bool v, bool absolute, const PointF& diff)
 {
     if (v) {
-        _offsetChanged = absolute ? OffsetChange::ABSOLUTE_OFFSET : OffsetChange::RELATIVE_OFFSET;
+        m_offsetChanged = absolute ? OffsetChange::ABSOLUTE_OFFSET : OffsetChange::RELATIVE_OFFSET;
     } else {
-        _offsetChanged = OffsetChange::NONE;
+        m_offsetChanged = OffsetChange::NONE;
     }
-    _changedPos = pos() + diff;
+    m_changedPos = pos() + diff;
 }
 
 //---------------------------------------------------------
@@ -2129,7 +2129,7 @@ void EngravingItem::setOffsetChanged(bool v, bool absolute, const PointF& diff)
 double EngravingItem::rebaseOffset(bool nox)
 {
     PointF off = offset();
-    PointF p = _changedPos - pos();
+    PointF p = m_changedPos - pos();
     if (nox) {
         p.rx() = 0.0;
     }
@@ -2141,7 +2141,7 @@ double EngravingItem::rebaseOffset(bool nox)
         // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
         // TODO: refactor to take advantage of existing cmdFlip() algorithms
         // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
-        RectF r = bbox().translated(_changedPos);
+        RectF r = bbox().translated(m_changedPos);
         double staffHeight = staff()->height();
         EngravingItem* e = isSpannerSegment() ? toSpannerSegment(this)->spanner() : this;
         bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;
@@ -2150,7 +2150,7 @@ double EngravingItem::rebaseOffset(bool nox)
         if (flipped && !multi) {
             off.ry() += above ? -staffHeight : staffHeight;
             undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(off + p));
-            _offsetChanged = OffsetChange::ABSOLUTE_OFFSET;             //saveChangedValue;
+            m_offsetChanged = OffsetChange::ABSOLUTE_OFFSET;             //saveChangedValue;
             movePosY(above ? staffHeight : -staffHeight);
             PropertyFlags pf = e->propertyFlags(Pid::PLACEMENT);
             if (pf == PropertyFlags::STYLED) {
@@ -2165,7 +2165,7 @@ double EngravingItem::rebaseOffset(bool nox)
 
     if (offsetChanged() == OffsetChange::ABSOLUTE_OFFSET) {
         undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(off + p));
-        _offsetChanged = OffsetChange::ABSOLUTE_OFFSET;                 //saveChangedValue;
+        m_offsetChanged = OffsetChange::ABSOLUTE_OFFSET;                 //saveChangedValue;
         // allow autoplace to manage min distance even when not needed
         undoResetProperty(Pid::MIN_DISTANCE);
         return 0.0;
@@ -2192,7 +2192,7 @@ bool EngravingItem::rebaseMinDistance(double& md, double& yd, double sp, double 
         pf = PropertyFlags::UNSTYLED;
     }
     double adjustedY = pos().y() + yd;
-    double diff = _changedPos.y() - adjustedY;
+    double diff = m_changedPos.y() - adjustedY;
     if (fix) {
         undoChangeProperty(Pid::MIN_DISTANCE, -999.0, pf);
         yd = 0.0;
@@ -2204,7 +2204,7 @@ bool EngravingItem::rebaseMinDistance(double& md, double& yd, double sp, double 
         // min distance still styled
         // user apparently moved element into skyline
         // but perhaps not really, if performing a relative adjustment
-        if (_offsetChanged == OffsetChange::RELATIVE_OFFSET) {
+        if (m_offsetChanged == OffsetChange::RELATIVE_OFFSET) {
             // relative movement (cursor): fix only if moving vertically into direction of skyline
             if ((above && diff > 0.0) || (!above && diff < 0.0)) {
                 // rebase offset
@@ -2246,15 +2246,15 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
-        _skipDraw = (si == mu::nidx);
-        setSelectable(!_skipDraw);
-        if (_skipDraw) {
+        m_skipDraw = (si == mu::nidx);
+        setSelectable(!m_skipDraw);
+        if (m_skipDraw) {
             return;
         }
 
         double mag = staff()->staffMag(this);
         sp *= mag;
-        double minDistance = _minDistance.val() * sp;
+        double minDistance = m_minDistance.val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
         RectF r = bbox().translated(m->pos() + s->pos() + pos());
@@ -2315,14 +2315,14 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
-        _skipDraw = (si == mu::nidx);
-        setSelectable(!_skipDraw);
-        if (_skipDraw) {
+        m_skipDraw = (si == mu::nidx);
+        setSelectable(!m_skipDraw);
+        if (m_skipDraw) {
             return;
         }
 
         double sp = style().spatium();
-        double minDistance = _minDistance.val() * sp;
+        double minDistance = m_minDistance.val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
         // shape rather than bbox is good for tuplets especially

@@ -137,42 +137,9 @@ class EngravingItem : public EngravingObject
     INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
     INJECT_STATIC(rendering::IScoreRenderer, renderer)
 
-    mutable mu::RectF _bbox;  ///< Bounding box relative to _pos + _offset
-    double _mag;                     ///< standard magnification (derived value)
-    PointF _pos;          ///< Reference position, relative to _parent, set by autoplace
-    PointF _offset;       ///< offset from reference position, set by autoplace or user
-    OffsetChange _offsetChanged;    ///< set by user actions that change offset, used by autoplace
-    PointF _changedPos;   ///< position set when changing offset
-    Spatium _minDistance;           ///< autoplace min distance
-    track_idx_t _track = mu::nidx; ///< staffIdx * VOICES + voice
-    mutable ElementFlags _flags;
-    ///< valid after call to layout()
-
-    bool m_colorsInversionEnabled = true;
-
-protected:
-    mutable int _z;
-    mu::draw::Color _color;                ///< element color attribute
-    bool _skipDraw{ false };
-
-    friend class Factory;
-    EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
-    EngravingItem(const EngravingItem&);
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    virtual AccessibleItemPtr createAccessible();
-    void notifyAboutNameChanged();
-#endif
-
 public:
 
     virtual ~EngravingItem();
-
-#ifndef ENGRAVING_NO_ACCESSIBILITY
-    virtual void setupAccessible();
-#endif
-    bool accessibleEnabled() const;
-    void setAccessibleEnabled(bool enabled);
 
     EngravingItem& operator=(const EngravingItem&) = delete;
     //@ create a copy of the element
@@ -203,22 +170,22 @@ public:
     inline void setFlag(ElementFlag f, bool v)
     {
         if (v) {
-            _flags |= f;
+            m_flags |= f;
         } else {
-            _flags &= ~ElementFlags(f);
+            m_flags &= ~ElementFlags(f);
         }
     }
 
     inline void setFlag(ElementFlag f, bool v) const
     {
         if (v) {
-            _flags |= f;
+            m_flags |= f;
         } else {
-            _flags &= ~ElementFlags(f);
+            m_flags &= ~ElementFlags(f);
         }
     }
 
-    inline bool flag(ElementFlag f) const { return _flags & f; }
+    inline bool flag(ElementFlag f) const { return m_flags & f; }
 
     bool selected() const;
     virtual void setSelected(bool f);
@@ -241,33 +208,33 @@ public:
     bool generated() const { return flag(ElementFlag::GENERATED); }
     void setGenerated(bool val) { setFlag(ElementFlag::GENERATED, val); }
 
-    Spatium minDistance() const { return _minDistance; }
-    void setMinDistance(Spatium v) { _minDistance = v; }
-    OffsetChange offsetChanged() const { return _offsetChanged; }
+    Spatium minDistance() const { return m_minDistance; }
+    void setMinDistance(Spatium v) { m_minDistance = v; }
+    OffsetChange offsetChanged() const { return m_offsetChanged; }
     void setOffsetChanged(bool v, bool absolute = true, const PointF& diff = PointF());
 
     inline void doSetPos(double x, double y)
     {
-        _pos.setX(x),
-        _pos.setY(y);
+        m_pos.setX(x),
+        m_pos.setY(y);
     }
 
-    const PointF& ipos() const { return _pos; }
-    virtual const PointF pos() const { return _pos + _offset; }
-    virtual double x() const { return _pos.x() + _offset.x(); }
-    virtual double y() const { return _pos.y() + _offset.y(); }
+    const PointF& ipos() const { return m_pos; }
+    virtual const PointF pos() const { return m_pos + m_offset; }
+    virtual double x() const { return m_pos.x() + m_offset.x(); }
+    virtual double y() const { return m_pos.y() + m_offset.y(); }
     virtual void setPos(double x, double y) { doSetPos(x, y); }
     virtual void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
-    void setPosX(double x) { doSetPos(x, _pos.y()); }
-    void setPosY(double y) { doSetPos(_pos.x(), y); }
-    void movePos(const PointF& p) { doSetPos(_pos.x() + p.x(), _pos.y() + p.y()); }
-    void movePosX(double x) { doSetPos(_pos.x() + x, _pos.y()); }
-    void movePosY(double y) { doSetPos(_pos.x(), _pos.y() + y); }
-    double xpos() { return _pos.x(); }
-    double ypos() { return _pos.y(); }
-    virtual void move(const PointF& s) { _pos += s; }
-    bool skipDraw() const { return _skipDraw; }
-    void setSkipDraw(bool val) { _skipDraw = val; }
+    void setPosX(double x) { doSetPos(x, m_pos.y()); }
+    void setPosY(double y) { doSetPos(m_pos.x(), y); }
+    void movePos(const PointF& p) { doSetPos(m_pos.x() + p.x(), m_pos.y() + p.y()); }
+    void movePosX(double x) { doSetPos(m_pos.x() + x, m_pos.y()); }
+    void movePosY(double y) { doSetPos(m_pos.x(), m_pos.y() + y); }
+    double xpos() { return m_pos.x(); }
+    double ypos() { return m_pos.y(); }
+    virtual void move(const PointF& s) { m_pos += s; }
+    bool skipDraw() const { return m_skipDraw; }
+    void setSkipDraw(bool val) { m_skipDraw = val; }
 
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
@@ -277,12 +244,12 @@ public:
     PointF mapFromCanvas(const PointF& p) const { return p - canvasPos(); }
     PointF mapToCanvas(const PointF& p) const { return p + canvasPos(); }
 
-    const PointF& offset() const { return _offset; }
-    virtual void setOffset(const PointF& o) { _offset = o; }
-    void setOffset(double x, double y) { _offset.setX(x), _offset.setY(y); }
-    PointF& roffset() { return _offset; }
-    double& rxoffset() { return _offset.rx(); }
-    double& ryoffset() { return _offset.ry(); }
+    const PointF& offset() const { return m_offset; }
+    virtual void setOffset(const PointF& o) { m_offset = o; }
+    void setOffset(double x, double y) { m_offset.setX(x), m_offset.setY(y); }
+    PointF& roffset() { return m_offset; }
+    double& rxoffset() { return m_offset.rx(); }
+    double& ryoffset() { return m_offset.ry(); }
 
     virtual Fraction tick() const;
     virtual Fraction rtick() const;
@@ -290,25 +257,25 @@ public:
 
     Fraction beat() const;
 
-    bool isNudged() const { return !_offset.isNull(); }
+    bool isNudged() const { return !m_offset.isNull(); }
 
-    virtual const mu::RectF& bbox() const { return _bbox; }
-    virtual mu::RectF& bbox() { return _bbox; }
+    virtual const mu::RectF& bbox() const { return m_bbox; }
+    virtual mu::RectF& bbox() { return m_bbox; }
     virtual double height() const { return bbox().height(); }
-    virtual void setHeight(double v) { _bbox.setHeight(v); }
+    virtual void setHeight(double v) { m_bbox.setHeight(v); }
     virtual double width() const { return bbox().width(); }
-    virtual void setWidth(double v) { _bbox.setWidth(v); }
+    virtual void setWidth(double v) { m_bbox.setWidth(v); }
     mu::RectF abbox() const { return bbox().translated(pagePos()); }
     mu::RectF pageBoundingRect() const { return bbox().translated(pagePos()); }
     mu::RectF canvasBoundingRect() const { return bbox().translated(canvasPos()); }
-    virtual void setbbox(const mu::RectF& r) const { _bbox = r; }
-    virtual void addbbox(const mu::RectF& r) const { _bbox.unite(r); }
+    virtual void setbbox(const mu::RectF& r) const { m_bbox = r; }
+    virtual void addbbox(const mu::RectF& r) const { m_bbox.unite(r); }
     bool contains(const PointF& p) const;
     bool intersects(const mu::RectF& r) const;
     virtual Shape shape() const { return Shape(bbox(), this); }
     virtual double baseLine() const { return -height(); }
 
-    virtual mu::RectF hitBBox() const { return _bbox; }
+    virtual mu::RectF hitBBox() const { return m_bbox; }
     virtual Shape hitShape() const { return shape(); }
     Shape canvasHitShape() const { return hitShape().translate(canvasPos()); }
     bool hitShapeContains(const PointF& p) const;
@@ -410,7 +377,7 @@ public:
     mu::draw::Color curColor() const;
     mu::draw::Color curColor(bool isVisible) const;
     mu::draw::Color curColor(bool isVisible, mu::draw::Color normalColor) const;
-    virtual void setColor(const mu::draw::Color& c) { _color = c; }
+    virtual void setColor(const mu::draw::Color& c) { m_color = c; }
 
     void undoSetColor(const mu::draw::Color& c);
     void undoSetVisible(bool v);
@@ -452,8 +419,8 @@ public:
 
     virtual void reset() override;           // reset all properties & position to default
 
-    virtual double mag() const { return _mag; }
-    void setMag(double val) { _mag = val; }
+    virtual double mag() const { return m_mag; }
+    void setMag(double val) { m_mag = val; }
     double magS() const;
 
     bool isPrintable() const;
@@ -485,7 +452,7 @@ public:
 
     bool autoplace() const;
     virtual void setAutoplace(bool v) { setFlag(ElementFlag::NO_AUTOPLACE, !v); }
-    bool addToSkyline() const { return !(_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)); }
+    bool addToSkyline() const { return !(m_flags & (ElementFlag::INVISIBLE | ElementFlag::NO_AUTOPLACE)); }
 
     PropertyValue getProperty(Pid) const override;
     bool setProperty(Pid, const PropertyValue&) override;
@@ -518,9 +485,13 @@ public:
     virtual EngravingItem* prevSegmentElement();    //< next-element and prev-element command
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
+    virtual void setupAccessible();
     AccessibleItemPtr accessible() const;
     void initAccessibleIfNeed();
 #endif
+
+    bool accessibleEnabled() const;
+    void setAccessibleEnabled(bool enabled);
 
     virtual String accessibleInfo() const;
     virtual String screenReaderInfo() const { return accessibleInfo(); }
@@ -548,13 +519,43 @@ public:
 
     std::pair<int, float> barbeat() const;
 
+protected:
+    EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
+    EngravingItem(const EngravingItem&);
+
+#ifndef ENGRAVING_NO_ACCESSIBILITY
+    virtual AccessibleItemPtr createAccessible();
+    void notifyAboutNameChanged();
+#endif
+
+    mutable mu::RectF m_bbox;               // Bounding box relative to _pos + _offset
+
+    mutable int m_z = 0;
+    mu::draw::Color m_color;                // element color attribute
+    bool m_skipDraw = false;
+
+    track_idx_t m_track = mu::nidx;         // staffIdx * VOICES + voice
+    double m_mag;                           // standard magnification (derived value)
+
 private:
+
+    friend class Factory;
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     void doInitAccessible();
     AccessibleItemPtr m_accessible;
 #endif
 
     bool m_accessibleEnabled = false;
+
+    PointF m_pos;                       // Reference position, relative to _parent, set by autoplace
+    PointF m_offset;                    // offset from reference position, set by autoplace or user
+    OffsetChange m_offsetChanged = OffsetChange::NONE; // set by user actions that change offset, used by autoplace
+    PointF m_changedPos;                // position set when changing offset
+    Spatium m_minDistance;              // autoplace min distance
+    mutable ElementFlags m_flags;
+
+    bool m_colorsInversionEnabled = true;
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;
