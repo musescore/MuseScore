@@ -960,14 +960,14 @@ void Staff::setSlashStyle(const Fraction& tick, bool val)
 
 bool Staff::isPrimaryStaff() const
 {
-    if (!_links) {
+    if (!m_links) {
         return true;
     }
 
     std::vector<const Staff*> linkedStavesInThisScore;
     std::vector<const Staff*> linkedNonTabStavesInThisScore;
 
-    for (const EngravingObject* linked : *_links) {
+    for (const EngravingObject* linked : *m_links) {
         const Staff* staff = toStaff(linked);
 
         if (staff->score() == score()) {
@@ -1316,8 +1316,8 @@ void Staff::insertTime(const Fraction& tick, const Fraction& len)
 std::list<Staff*> Staff::staffList() const
 {
     std::list<Staff*> staffList;
-    if (_links) {
-        for (EngravingObject* e : *_links) {
+    if (m_links) {
+        for (EngravingObject* e : *m_links) {
             staffList.push_back(toStaff(e));
         }
 //            staffList = _linkedStaves->staves();

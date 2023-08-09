@@ -200,31 +200,6 @@ class EngravingObject
 {
     INJECT_STATIC(mu::diagnostics::IEngravingElementsProvider, elementsProvider)
 
-    ElementType m_type = ElementType::INVALID;
-    EngravingObject* m_parent = nullptr;
-    bool m_isParentExplicitlySet = false;
-    EngravingObjectList m_children;
-
-    Score* m_score = nullptr;
-
-    static ElementStyle const emptyStyle;
-
-    void doSetParent(EngravingObject* p);
-    void doSetScore(Score* sc);
-    void moveToDummy();
-
-protected:
-    const ElementStyle* _elementStyle {& emptyStyle };
-    PropertyFlags* _propertyFlagsList { 0 };
-    LinkedObjects* _links            { 0 };
-    virtual int getPropertyFlagsIdx(Pid id) const;
-
-    //! NOTE For compatibility reasons, hope, we will remove the need for this method.
-    void hack_setType(const ElementType& t) { m_type = t; }
-
-    void addChild(EngravingObject* o);
-    void removeChild(EngravingObject* o);
-
 public:
     EngravingObject(const ElementType& type, EngravingObject* parent);
     EngravingObject(const EngravingObject& se);
@@ -241,6 +216,7 @@ public:
     void setParent(EngravingObject* p);
     EngravingObject* explicitParent() const;
     void resetExplicitParent();
+    void moveToDummy();
 
     const EngravingObjectList& children() const { return m_children; }
 
@@ -267,9 +243,9 @@ public:
     virtual void reset();                       // reset all properties & position to default
 
     virtual void initElementStyle(const ElementStyle*);
-    virtual const ElementStyle* styledProperties() const { return _elementStyle; }
+    virtual const ElementStyle* styledProperties() const { return m_elementStyle; }
 
-    virtual PropertyFlags* propertyFlagsList() const { return _propertyFlagsList; }
+    virtual PropertyFlags* propertyFlagsList() const { return m_propertyFlagsList; }
     virtual PropertyFlags propertyFlags(Pid) const;
     bool isStyled(Pid pid) const;
     PropertyValue styleValue(Pid, Sid) const;
@@ -294,8 +270,35 @@ public:
     EngravingObject* findLinkedInScore(Score* score) const;
 
     virtual void undoUnlink();
-    LinkedObjects* links() const { return _links; }
+    LinkedObjects* links() const { return m_links; }
     void setLinks(LinkedObjects* le);
+
+protected:
+    virtual int getPropertyFlagsIdx(Pid id) const;
+
+    //! NOTE For compatibility reasons, hope, we will remove the need for this method.
+    void hack_setType(const ElementType& t) { m_type = t; }
+
+    void addChild(EngravingObject* o);
+    void removeChild(EngravingObject* o);
+
+    const ElementStyle* m_elementStyle {& EMPTY_STYLE };
+    PropertyFlags* m_propertyFlagsList = nullptr;
+    LinkedObjects* m_links = nullptr;
+    Score* m_score = nullptr;
+
+private:
+    static ElementStyle const EMPTY_STYLE;
+
+    void doSetParent(EngravingObject* p);
+    void doSetScore(Score* sc);
+
+    ElementType m_type = ElementType::INVALID;
+    EngravingObject* m_parent = nullptr;
+    bool m_isParentExplicitlySet = false;
+    EngravingObjectList m_children;
+
+public:
 
     //---------------------------------------------------
     // check type

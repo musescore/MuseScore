@@ -1603,13 +1603,13 @@ TextBase::TextBase(const TextBase& st)
     _paddingWidth                = st._paddingWidth;
     _frameRound                  = st._frameRound;
 
-    size_t n = _elementStyle->size() + TEXT_STYLE_SIZE;
-    delete[] _propertyFlagsList;
-    _propertyFlagsList = new PropertyFlags[n];
+    size_t n = m_elementStyle->size() + TEXT_STYLE_SIZE;
+    delete[] m_propertyFlagsList;
+    m_propertyFlagsList = new PropertyFlags[n];
     for (size_t i = 0; i < n; ++i) {
-        _propertyFlagsList[i] = st._propertyFlagsList[i];
+        m_propertyFlagsList[i] = st.m_propertyFlagsList[i];
     }
-    _links = 0;
+    m_links = 0;
 }
 
 TextBase::~TextBase()
@@ -2735,7 +2735,7 @@ PropertyValue TextBase::propertyDefault(Pid id) const
 int TextBase::getPropertyFlagsIdx(Pid id) const
 {
     int i = 0;
-    for (const StyledProperty& p : *_elementStyle) {
+    for (const StyledProperty& p : *m_elementStyle) {
         if (p.pid == id) {
             return i;
         }
@@ -2907,7 +2907,7 @@ Sid TextBase::getPropertyStyle(Pid id) const
             return sid;
         }
     }
-    for (const StyledProperty& p : *_elementStyle) {
+    for (const StyledProperty& p : *m_elementStyle) {
         if (p.pid == id) {
             return p.sid;
         }
@@ -2931,15 +2931,15 @@ void TextBase::styleChanged()
         return;
     }
     int i = 0;
-    for (const StyledProperty& spp : *_elementStyle) {
-        PropertyFlags f = _propertyFlagsList[i];
+    for (const StyledProperty& spp : *m_elementStyle) {
+        PropertyFlags f = m_propertyFlagsList[i];
         if (f == PropertyFlags::STYLED) {
             setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
         }
         ++i;
     }
     for (const auto& spp : *textStyle(textStyleType())) {
-        PropertyFlags f = _propertyFlagsList[i];
+        PropertyFlags f = m_propertyFlagsList[i];
         if (f == PropertyFlags::STYLED) {
             setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
         }
@@ -2953,15 +2953,15 @@ void TextBase::styleChanged()
 
 void TextBase::initElementStyle(const ElementStyle* ss)
 {
-    _elementStyle = ss;
+    m_elementStyle = ss;
     size_t n      = ss->size() + TEXT_STYLE_SIZE;
 
-    delete[] _propertyFlagsList;
-    _propertyFlagsList = new PropertyFlags[n];
+    delete[] m_propertyFlagsList;
+    m_propertyFlagsList = new PropertyFlags[n];
     for (size_t i = 0; i < n; ++i) {
-        _propertyFlagsList[i] = PropertyFlags::STYLED;
+        m_propertyFlagsList[i] = PropertyFlags::STYLED;
     }
-    for (const StyledProperty& p : *_elementStyle) {
+    for (const StyledProperty& p : *m_elementStyle) {
         setProperty(p.pid, styleValue(p.pid, p.sid));
     }
     for (const auto& p : *textStyle(textStyleType())) {
