@@ -2281,3 +2281,13 @@ engraving::Fraction Convert::tstampToFraction(double tstamp, const engraving::Fr
 
     return engraving::Fraction(sign * vec_1[0], vec_1[1]) / timesig.denominator();
 }
+
+/**
+ * Return a static instance of the register.
+ */
+
+UIDRegister* UIDRegister::instance()
+{
+    static UIDRegister uidRegister;
+    return &uidRegister;
+}
