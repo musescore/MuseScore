@@ -483,11 +483,11 @@ bool EngravingItem::isTopSystemObject() const
     if ((isSpanner() || isSpannerSegment()) && track() != 0) {
         return false;
     }
-    if (!_links) {
+    if (!m_links) {
         return true; // a system object, but not one with any linked clones
     }
     // this is part of a link ecosystem, see if we're the main one
-    EngravingObject* mainElement = _links->mainElement();
+    EngravingObject* mainElement = m_links->mainElement();
     return track() == 0
            && (mainElement->score() != score() || !toEngravingItem(mainElement)->enabled());
 }

@@ -41,7 +41,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-ElementStyle const EngravingObject::emptyStyle;
+ElementStyle const EngravingObject::EMPTY_STYLE;
 
 EngravingObject* EngravingObjectList::at(size_t i) const
 {
@@ -79,15 +79,15 @@ EngravingObject::EngravingObject(const EngravingObject& se)
     doSetParent(se.m_parent);
     m_score = se.m_score;
     m_isParentExplicitlySet = se.m_isParentExplicitlySet;
-    _elementStyle = se._elementStyle;
-    if (_elementStyle) {
-        size_t n = _elementStyle->size();
-        _propertyFlagsList = new PropertyFlags[n];
+    m_elementStyle = se.m_elementStyle;
+    if (m_elementStyle) {
+        size_t n = m_elementStyle->size();
+        m_propertyFlagsList = new PropertyFlags[n];
         for (size_t i = 0; i < n; ++i) {
-            _propertyFlagsList[i] = se._propertyFlagsList[i];
+            m_propertyFlagsList[i] = se.m_propertyFlagsList[i];
         }
     }
-    _links = 0;
+    m_links = 0;
 
     if (elementsProvider()) {
         elementsProvider()->reg(this);
@@ -127,14 +127,14 @@ EngravingObject::~EngravingObject()
         elementsProvider()->unreg(this);
     }
 
-    if (_links) {
-        _links->remove(this);
-        if (_links->empty()) {
-            delete _links;
-            _links = 0;
+    if (m_links) {
+        m_links->remove(this);
+        if (m_links->empty()) {
+            delete m_links;
+            m_links = 0;
         }
     }
-    delete[] _propertyFlagsList;
+    delete[] m_propertyFlagsList;
 }
 
 void EngravingObject::doSetParent(EngravingObject* p)
@@ -312,14 +312,14 @@ PropertyValue EngravingObject::propertyDefault(Pid pid) const
 
 void EngravingObject::initElementStyle(const ElementStyle* ss)
 {
-    _elementStyle = ss;
-    size_t n      = _elementStyle->size();
-    delete[] _propertyFlagsList;
-    _propertyFlagsList = new PropertyFlags[n];
+    m_elementStyle = ss;
+    size_t n      = m_elementStyle->size();
+    delete[] m_propertyFlagsList;
+    m_propertyFlagsList = new PropertyFlags[n];
     for (size_t i = 0; i < n; ++i) {
-        _propertyFlagsList[i] = PropertyFlags::STYLED;
+        m_propertyFlagsList[i] = PropertyFlags::STYLED;
     }
-    for (const StyledProperty& spp : *_elementStyle) {
+    for (const StyledProperty& spp : *m_elementStyle) {
         //            setProperty(spp.pid, styleValue(spp.pid, spp.sid));
         setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
     }
@@ -481,22 +481,22 @@ void EngravingObject::reset()
 void EngravingObject::linkTo(EngravingObject* element)
 {
     assert(element != this);
-    assert(!_links);
+    assert(!m_links);
 
     if (element->links()) {
-        setLinks(element->_links);
-        assert(_links->contains(element));
+        setLinks(element->m_links);
+        assert(m_links->contains(element));
     } else {
         if (isStaff()) {
             setLinks(new LinkedObjects(score(), -1));       // don’t use lid
         } else {
             setLinks(new LinkedObjects(score()));
         }
-        _links->push_back(element);
-        element->setLinks(_links);
+        m_links->push_back(element);
+        element->setLinks(m_links);
     }
-    assert(!_links->contains(this));
-    _links->push_back(this);
+    assert(!m_links->contains(this));
+    m_links->push_back(this);
 }
 
 //---------------------------------------------------------
@@ -505,21 +505,21 @@ void EngravingObject::linkTo(EngravingObject* element)
 
 void EngravingObject::unlink()
 {
-    if (!_links) {
+    if (!m_links) {
         return;
     }
 
-    assert(_links->contains(this));
-    _links->remove(this);
+    assert(m_links->contains(this));
+    m_links->remove(this);
 
     // if link list is empty, remove list
-    if (_links->size() <= 1) {
-        if (!_links->empty()) {
-            _links->front()->_links = 0;
+    if (m_links->size() <= 1) {
+        if (!m_links->empty()) {
+            m_links->front()->m_links = nullptr;
         }
-        delete _links;
+        delete m_links;
     }
-    _links = 0;   // this element is not linked anymore
+    m_links = 0;   // this element is not linked anymore
 }
 
 //---------------------------------------------------------
@@ -530,15 +530,15 @@ void EngravingObject::unlink()
 
 bool EngravingObject::isLinked(EngravingObject* se) const
 {
-    if (se == this || !_links) {
+    if (se == this || !m_links) {
         return false;
     }
 
     if (se == nullptr) {
-        return !_links->empty() && _links->mainElement() != this;
+        return !m_links->empty() && m_links->mainElement() != this;
     }
 
-    return _links->contains(se);
+    return m_links->contains(se);
 }
 
 //---------------------------------------------------------
@@ -549,12 +549,12 @@ bool EngravingObject::isLinked(EngravingObject* se) const
 
 EngravingObject* EngravingObject::findLinkedInScore(Score* score) const
 {
-    if (score == this || !_links || _links->empty()) {
+    if (score == this || !m_links || m_links->empty()) {
         return nullptr;
     }
-    auto findElem = std::find_if(_links->begin(), _links->end(),
+    auto findElem = std::find_if(m_links->begin(), m_links->end(),
                                  [this, score](EngravingObject* engObj) { return engObj && engObj != this && engObj->score() == score; });
-    return findElem != _links->end() ? *findElem : nullptr;
+    return findElem != m_links->end() ? *findElem : nullptr;
 }
 
 //---------------------------------------------------------
@@ -563,14 +563,14 @@ EngravingObject* EngravingObject::findLinkedInScore(Score* score) const
 
 void EngravingObject::undoUnlink()
 {
-    if (_links) {
+    if (m_links) {
         score()->undo(new Unlink(this));
     }
 }
 
 void EngravingObject::setLinks(LinkedObjects* le)
 {
-    _links = le;
+    m_links = le;
 }
 
 //---------------------------------------------------------
@@ -580,8 +580,8 @@ void EngravingObject::setLinks(LinkedObjects* le)
 std::list<EngravingObject*> EngravingObject::linkList() const
 {
     std::list<EngravingObject*> el;
-    if (_links) {
-        el = *_links;
+    if (m_links) {
+        el = *m_links;
     } else {
         el.push_back(const_cast<EngravingObject*>(this));
     }
@@ -595,7 +595,7 @@ std::list<EngravingObject*> EngravingObject::linkList() const
 int EngravingObject::getPropertyFlagsIdx(Pid id) const
 {
     int i = 0;
-    for (const StyledProperty& p : *_elementStyle) {
+    for (const StyledProperty& p : *m_elementStyle) {
         if (p.pid == id) {
             return i;
         }
@@ -616,7 +616,7 @@ PropertyFlags EngravingObject::propertyFlags(Pid id) const
     if (i == -1) {
         return f;
     }
-    return _propertyFlagsList[i];
+    return m_propertyFlagsList[i];
 }
 
 //---------------------------------------------------------
@@ -629,7 +629,7 @@ void EngravingObject::setPropertyFlags(Pid id, PropertyFlags f)
     if (i == -1) {
         return;
     }
-    _propertyFlagsList[i] = f;
+    m_propertyFlagsList[i] = f;
 }
 
 //---------------------------------------------------------
@@ -638,7 +638,7 @@ void EngravingObject::setPropertyFlags(Pid id, PropertyFlags f)
 
 Sid EngravingObject::getPropertyStyle(Pid id) const
 {
-    for (const StyledProperty& p : *_elementStyle) {
+    for (const StyledProperty& p : *m_elementStyle) {
         if (p.pid == id) {
             return p.sid;
         }
@@ -652,7 +652,7 @@ Sid EngravingObject::getPropertyStyle(Pid id) const
 
 void EngravingObject::styleChanged()
 {
-    for (const StyledProperty& spp : *_elementStyle) {
+    for (const StyledProperty& spp : *m_elementStyle) {
         PropertyFlags f = propertyFlags(spp.pid);
         if (f == PropertyFlags::STYLED) {
             setProperty(spp.pid, styleValue(spp.pid, getPropertyStyle(spp.pid)));
