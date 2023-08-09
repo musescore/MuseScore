@@ -105,6 +105,7 @@ class Hairpin final : public TextLineBase
     DynamicRange _dynRange;
     bool _singleNoteDynamics;
     ChangeMethod _veloChangeMethod;
+    bool _playHairpin;
 
     Spatium _hairpinHeight;
     Spatium _hairpinContHeight;
@@ -147,6 +148,9 @@ public:
 
     ChangeMethod veloChangeMethod() const { return _veloChangeMethod; }
     void setVeloChangeMethod(ChangeMethod val) { _veloChangeMethod = val; }
+
+    bool playHairpin() const { return _playHairpin; }
+    void setPlayHairpin(bool val) { _playHairpin = val; }
 
     bool isCrescendo() const
     {

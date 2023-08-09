@@ -111,6 +111,9 @@ dynamic_level_t PlaybackContext::nominalDynamicLevel(const int positionTick) con
 
 void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick)
 {
+    if (!dynamic->playDynamic()) {
+        return;
+    }
     const DynamicType type = dynamic->dynamicType();
     if (isOrdinaryDynamicType(type)) {
         m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);
@@ -184,7 +187,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
 
-        if (!spanner->isHairpin()) {
+        if (!spanner->isHairpin() || !toHairpin(spanner)->playHairpin()) {
             continue;
         }
 

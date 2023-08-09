@@ -922,6 +922,7 @@ void TWrite::write(const Dynamic* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::AVOID_BARLINES);
     writeProperty(item, xml, Pid::DYNAMICS_SIZE);
     writeProperty(item, xml, Pid::CENTER_ON_NOTEHEAD);
+    writeProperty(item, xml, Pid::PLAY);
 
     if (item->isVelocityChangeAvailable()) {
         writeProperty(item, xml, Pid::VELO_CHANGE);
@@ -1367,6 +1368,7 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::LINE_VISIBLE);
     writeProperty(item, xml, Pid::SINGLE_NOTE_DYNAMICS);
     writeProperty(item, xml, Pid::VELO_CHANGE_METHOD);
+    writeProperty(item, xml, Pid::PLAY);
 
     for (const StyledProperty& spp : *item->styledProperties()) {
         if (!item->isStyled(spp.pid)) {

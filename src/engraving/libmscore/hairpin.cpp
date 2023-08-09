@@ -238,6 +238,7 @@ EngravingItem* HairpinSegment::propertyDelegate(Pid pid)
         || pid == Pid::HAIRPIN_CONT_HEIGHT
         || pid == Pid::DYNAMIC_RANGE
         || pid == Pid::LINE_STYLE
+        || pid == Pid::PLAY
         ) {
         return spanner();
     }
@@ -347,6 +348,7 @@ Hairpin::Hairpin(Segment* parent)
     _dynRange              = DynamicRange::PART;
     _singleNoteDynamics    = true;
     _veloChangeMethod      = ChangeMethod::NORMAL;
+    _playHairpin           = true;
 }
 
 int Hairpin::subtype() const
@@ -419,6 +421,8 @@ PropertyValue Hairpin::getProperty(Pid id) const
         return _singleNoteDynamics;
     case Pid::VELO_CHANGE_METHOD:
         return _veloChangeMethod;
+    case Pid::PLAY:
+        return _playHairpin;
     default:
         return TextLineBase::getProperty(id);
     }
@@ -454,6 +458,9 @@ bool Hairpin::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::VELO_CHANGE_METHOD:
         _veloChangeMethod = v.value<ChangeMethod>();
+        break;
+    case Pid::PLAY:
+        setPlayHairpin(v.toBool());
         break;
     default:
         return TextLineBase::setProperty(id, v);
@@ -530,6 +537,9 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::PLACEMENT:
         return style().styleV(Sid::hairpinPlacement);
+
+    case Pid::PLAY:
+        return true;
 
     default:
         return TextLineBase::propertyDefault(id);
