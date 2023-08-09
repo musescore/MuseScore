@@ -2767,10 +2767,13 @@ void Score::createBeams(LayoutContext& lc, Measure* measure)
                   // if chord has hooks and is 2nd element of a cross-measure value
                   // set beam mode to NONE (do not combine with following chord beam/hook, if any)
 
-                  if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND)
+                  TDuration durationType = cr->durationType();
+                  if (durationType.hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND)
                         bm = Beam::Mode::NONE;
 
-                  if ((cr->isChord() && cr->durationType().type() <= TDuration::DurationType::V_QUARTER) || (bm == Beam::Mode::NONE)) {
+                  // Rests of any duration can be beamed over, if required
+                  bool canBeBeamed = durationType.type() > TDuration::DurationType::V_QUARTER || cr->isRest();
+                  if (!canBeBeamed || (bm == Beam::Mode::NONE)) {
                         bool removeBeam = true;
                         if (beam) {
                               beam->layout1();
