@@ -299,11 +299,11 @@ void SpannerSegment::setColor(const mu::draw::Color& col)
 {
     if (m_spanner) {
         for (SpannerSegment* ss : m_spanner->spannerSegments()) {
-            ss->_color = col;
+            ss->m_color = col;
         }
-        m_spanner->_color = col;
+        m_spanner->m_color = col;
     } else {
-        _color = col;
+        m_color = col;
     }
 }
 
@@ -1062,7 +1062,7 @@ void Spanner::setColor(const mu::draw::Color& col)
     for (SpannerSegment* ss : spannerSegments()) {
         ss->setColor(col);
     }
-    _color = col;
+    m_color = col;
 }
 
 //---------------------------------------------------------
@@ -1413,10 +1413,10 @@ void SpannerSegment::autoplaceSpannerSegment()
         double yd = 0.0;
         staff_idx_t stfIdx = systemFlag() ? staffIdxOrNextVisible() : staffIdx();
         if (stfIdx == mu::nidx) {
-            _skipDraw = true;
+            m_skipDraw = true;
             return;
         } else {
-            _skipDraw = false;
+            m_skipDraw = false;
         }
         if (above) {
             double d  = system()->topDistance(stfIdx, sl);

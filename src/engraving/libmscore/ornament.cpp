@@ -97,7 +97,7 @@ void Ornament::setTrack(track_idx_t val)
     if (_cueNoteChord) {
         _cueNoteChord->setTrack(val);
     }
-    _track = val;
+    m_track = val;
 }
 
 void Ornament::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)

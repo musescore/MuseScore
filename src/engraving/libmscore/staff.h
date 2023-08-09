@@ -85,7 +85,7 @@ private:
     bool _mergeMatchingRests { false };         // merge matching rests in multiple voices
     HideMode _hideWhenEmpty  { HideMode::AUTO };      // hide empty staves
 
-    mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
+    mu::draw::Color m_color   { engravingConfiguration()->defaultColor() };
     Millimetre _userDist     { Millimetre(0.0) };           ///< user edited extra distance
 
     StaffTypeList _staffTypeList;
