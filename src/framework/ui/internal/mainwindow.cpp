@@ -79,6 +79,11 @@ bool MainWindow::isFullScreen() const
     return m_bridge ? m_bridge->isFullScreen() : false;
 }
 
+mu::async::Notification MainWindow::isFullScreenChanged() const
+{
+    return m_isFullScreenChanged;
+}
+
 void MainWindow::toggleFullScreen()
 {
     if (!m_bridge) {
@@ -91,9 +96,4 @@ void MainWindow::toggleFullScreen()
 QScreen* MainWindow::screen() const
 {
     return m_bridge ? m_bridge->screen() : nullptr;
-}
-
-mu::async::Notification MainWindow::isFullScreenChanged() const
-{
-    return m_isFullScreenChanged;
 }

@@ -35,7 +35,7 @@ using namespace mu::actions;
 using namespace mu::dock;
 
 static const ActionCode FULL_SCREEN_CODE("fullscreen");
-const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
+static const ActionCode TOGGLE_NAVIGATOR_ACTION_CODE("toggle-navigator");
 
 const UiActionList ApplicationUiActions::m_actions = {
     UiAction("quit",
@@ -144,7 +144,7 @@ const UiActionList ApplicationUiActions::m_actions = {
              ),
 
     // Navigator
-    UiAction("toggle-navigator",
+    UiAction(TOGGLE_NAVIGATOR_ACTION_CODE,
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
              TranslatableString("action", "&Navigator"),

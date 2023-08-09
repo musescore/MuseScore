@@ -57,6 +57,7 @@ public:
     bool isFullScreen() const;
     async::Notification isFullScreenChanged() const;
     void toggleFullScreen();
+
     QScreen* screen() const;
 
     Q_INVOKABLE void showMinimizedWithSavePreviousState();
@@ -79,6 +80,9 @@ private slots: // Should only be used from QML
     virtual void setFileModified(bool modified);
 
 private:
+    void updateFullScreen();
+
+    bool m_isFullScreen = false;
     async::Notification m_isFullScreenChanged;
 };
 }
