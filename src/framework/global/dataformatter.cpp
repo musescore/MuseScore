@@ -100,5 +100,5 @@ String DataFormatter::formatFileSize(size_t size)
     }
 
     //: Used to indicate file size. Ideally, keep the translation short; feel free to use an abbreviation.
-    return mtrc("global", "%n bytes", "", size);
+    return mtrc("global", "%n byte(s)", nullptr, int(size));
 }
