@@ -280,6 +280,7 @@ public:
     void reg(const engraving::EngravingItem* item, const std::string& meiUID) { m_uids[reinterpret_cast<uintptr_t>(item)] = meiUID; }
     bool hasUid(const engraving::EngravingItem* item) const { return m_uids.count(reinterpret_cast<uintptr_t>(item)) > 0; }
     std::string uid(const engraving::EngravingItem* item) const { return m_uids.at(reinterpret_cast<uintptr_t>(item)); }
+    void clear() { m_uids.clear(); }
 
 private:
     std::unordered_map<uintptr_t, std::string> m_uids;
