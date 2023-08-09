@@ -791,6 +791,33 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 }
 
 //---------------------------------------------------------
+//   Staff::addMissingInitKeyForTransposingInstrument
+//
+//    if there is no key signature at the begining
+//    of the score, add written C major
+//---------------------------------------------------------
+
+void Staff::addMissingInitKeyForTransposingInstrument()
+{
+    if (_keys.find(0) == _keys.end()) {
+        Instrument* instrument = _part->instrument();
+        Interval v = instrument->transpose();
+        if (v.chromatic % 12) {
+            KeySigEvent kse;
+            Key key = Key::C;
+            Key cKey = key;
+            Interval v = instrument->transpose();
+            if (!score()->style().styleB(Sid::concertPitch)) {
+                cKey = transposeKey(key, v);
+            }
+            kse.setConcertKey(cKey);
+            kse.setKey(key);
+            score()->undoChangeKeySig(this, Fraction(0, 1), kse);
+        }
+    }
+}
+
+//---------------------------------------------------------
 //   height
 //---------------------------------------------------------
 

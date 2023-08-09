@@ -3409,6 +3409,7 @@ Err Read206::readScore(Score* score, XmlReader& e, ReadInOutData* out)
 
     for (Staff* s : score->staves()) {
         s->updateOttava();
+        s->addMissingInitKeyForTransposingInstrument();
     }
 
     // fix segment span

@@ -270,6 +270,7 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
 
     for (Staff* staff : score->staves()) {
         staff->updateOttava();
+        staff->addMissingInitKeyForTransposingInstrument();
     }
     for (int idx : sysStaves) {
         score->addSystemObjectStaff(score->staff(idx));
