@@ -586,7 +586,4 @@ void Ambitus::setLayoutData(const LayoutData& data)
 {
     m_layoutData = data;
     setbbox(data.bbox);
-
-    m_topAccidental->setLayoutData(data.topAcc);
-    m_bottomAccidental->setLayoutData(data.bottomAcc);
 }

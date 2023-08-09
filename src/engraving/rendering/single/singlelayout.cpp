@@ -265,13 +265,12 @@ compat::DummyElement* SingleLayout::Context::dummyParent() const
 
 void SingleLayout::layout(Accidental* item, const Context&)
 {
-    if (!item->layoutData().isValid()) {
-        Accidental::LayoutData data;
+    if (!item->layoutData()) {
+        Accidental::LayoutData* data = item->mutLayoutData();
         SymId symId = item->symId();
         Accidental::LayoutData::Sym s(symId, 0.0, 0.0);
-        data.syms.push_back(s);
-        data.bbox = item->symBbox(symId);
-        item->setLayoutData(data);
+        data->syms.push_back(s);
+        data->bbox = item->symBbox(symId);
     }
 }
 
@@ -307,6 +306,10 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
     //
     // Note: manages colliding accidentals
     //
+
+    layout(item->topAccidental(), ctx);
+    layout(item->bottomAccidental(), ctx);
+
     double accNoteDist = item->point(ctx.style().styleS(Sid::accidentalNoteDistance));
     double xAccidOffTop = item->topAccidental()->width() + accNoteDist;
     double xAccidOffBottom = item->bottomAccidental()->width() + accNoteDist;

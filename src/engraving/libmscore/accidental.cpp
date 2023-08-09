@@ -22,11 +22,8 @@
 
 #include "accidental.h"
 
-#include "iengravingfont.h"
-
 #include "types/symnames.h"
 #include "types/translatablestring.h"
-#include "types/typesconv.h"
 
 #include "actionicon.h"
 #include "note.h"
@@ -368,14 +365,6 @@ AccidentalType Accidental::value2subtype(AccidentalVal v)
     return AccidentalType::NONE;
 }
 
-void Accidental::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-    setSkipDraw(data.isSkipDraw);
-    setbbox(data.bbox);
-    setPos(data.pos);
-}
-
 //---------------------------------------------------------
 //   acceptDrop
 //---------------------------------------------------------
@@ -502,5 +491,10 @@ bool Accidental::setProperty(Pid propertyId, const PropertyValue& v)
 String Accidental::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
+}
+
+Accidental::LayoutData* Accidental::createLayoutData() const
+{
+    return new Accidental::LayoutData();
 }
 }

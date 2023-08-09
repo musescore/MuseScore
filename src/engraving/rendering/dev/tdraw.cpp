@@ -365,8 +365,12 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 void TDraw::draw(const Accidental* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    IF_ASSERT_FAILED(item->layoutData()) {
+        return;
+    }
+
     painter->setPen(item->curColor());
-    for (const Accidental::LayoutData::Sym& e : item->layoutData().syms) {
+    for (const Accidental::LayoutData::Sym& e : item->layoutData()->syms) {
         item->drawSymbol(e.sym, painter, PointF(e.x, e.y));
     }
 }

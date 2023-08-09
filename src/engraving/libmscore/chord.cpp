@@ -2957,7 +2957,7 @@ GraceNotesGroup::GraceNotesGroup(Chord* c)
 
 void GraceNotesGroup::setPos(double x, double y)
 {
-    doSetPos(x, y);
+    EngravingItem::setPos(x, y);
     for (unsigned i = 0; i < this->size(); ++i) {
         Chord* chord = this->at(i);
         chord->movePos(PointF(x, y));

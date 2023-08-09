@@ -76,8 +76,8 @@ void Arpeggio::setHeight(double h)
 std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 {
     const PointF pp(pagePos());
-    PointF p1(m_bbox.width() / 2, m_bbox.top());
-    PointF p2(m_bbox.width() / 2, m_bbox.bottom());
+    PointF p1(bbox().width() / 2, bbox().top());
+    PointF p2(bbox().width() / 2, bbox().bottom());
     return { p1 + pp, p2 + pp };
 }
 

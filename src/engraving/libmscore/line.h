@@ -100,8 +100,6 @@ public:
 
     virtual LineSegment* createLineSegment(System* parent) = 0;
     void setLen(double l);
-    using EngravingItem::bbox;
-    const mu::RectF& bbox() const override;
 
     bool diagonal() const { return m_diagonal; }
     void setDiagonal(bool v) { m_diagonal = v; }

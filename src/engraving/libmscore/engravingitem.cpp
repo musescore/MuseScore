@@ -72,19 +72,16 @@ using namespace mu::io;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-// extern bool showInvisible;
-
 EngravingItem* EngravingItemList::at(size_t i) const
 {
     return *std::next(begin(), i);
 }
 
-EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, ElementFlags f)
-    : EngravingObject(type, se)
+EngravingItem::EngravingItem(const ElementType& type, EngravingObject* parent, ElementFlags f)
+    : EngravingObject(type, parent)
 {
     m_flags         = f;
     m_color         = engravingConfiguration()->defaultColor();
-    m_mag           = 1.0;
     m_z             = -1;
     m_offsetChanged = OffsetChange::NONE;
     m_minDistance   = Spatium(0.0);
@@ -93,9 +90,6 @@ EngravingItem::EngravingItem(const ElementType& type, EngravingObject* se, Eleme
 EngravingItem::EngravingItem(const EngravingItem& e)
     : EngravingObject(e)
 {
-    m_bbox       = e.m_bbox;
-    m_mag        = e.m_mag;
-    m_pos        = e.m_pos;
     m_offset     = e.m_offset;
     m_track      = e.m_track;
     m_flags      = e.m_flags;
@@ -106,14 +100,14 @@ EngravingItem::EngravingItem(const EngravingItem& e)
     m_minDistance   = e.m_minDistance;
     itemDiscovered = false;
 
-    //! TODO Please don't remove (igor.korsukov@gmail.com)
-    //m_accessible = e.m_accessible->clone(this);
     m_accessibleEnabled = e.m_accessibleEnabled;
 }
 
 EngravingItem::~EngravingItem()
 {
     Score::onElementDestruction(this);
+
+    delete m_layoutData;
 }
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -942,7 +936,7 @@ void EngravingItem::dump() const
          "\n   abox(%g,%g,%g,%g)"
          "\n  parent: %p",
          typeName(), ipos().x(), ipos().y(),
-         m_bbox.x(), m_bbox.y(), m_bbox.width(), m_bbox.height(),
+         bbox().x(), bbox().y(), bbox().width(), bbox().height(),
          abbox().x(), abbox().y(), abbox().width(), abbox().height(),
          explicitParent());
 }
@@ -2246,9 +2240,9 @@ void EngravingItem::autoplaceSegmentElement(bool above, bool add)
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
-        m_skipDraw = (si == mu::nidx);
-        setSelectable(!m_skipDraw);
-        if (m_skipDraw) {
+        setSkipDraw((si == mu::nidx));
+        setSelectable(!skipDraw());
+        if (skipDraw()) {
             return;
         }
 
@@ -2315,9 +2309,9 @@ void EngravingItem::autoplaceMeasureElement(bool above, bool add)
         staff_idx_t si = staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
-        m_skipDraw = (si == mu::nidx);
-        setSelectable(!m_skipDraw);
-        if (m_skipDraw) {
+        setSkipDraw(si == mu::nidx);
+        setSelectable(!skipDraw());
+        if (skipDraw()) {
             return;
         }
 
@@ -2417,5 +2411,52 @@ String EngravingItem::formatBarsAndBeats() const
     }
 
     return result;
+}
+
+EngravingItem::LayoutData* EngravingItem::createLayoutData() const
+{
+    return new EngravingItem::LayoutData();
+}
+
+const EngravingItem::LayoutData* EngravingItem::layoutData() const
+{
+    return m_layoutData;
+}
+
+EngravingItem::LayoutData* EngravingItem::mutLayoutData()
+{
+    if (!m_layoutData) {
+        m_layoutData = createLayoutData();
+    }
+    return m_layoutData;
+}
+
+const mu::RectF& EngravingItem::bbox() const
+{
+    if (!layoutData()) {
+        //LOGD() << "no layout data, will be returned dummy";
+        static mu::RectF dummy;
+        return dummy;
+    }
+    return layoutData()->bbox;
+}
+
+const PointF& EngravingItem::ipos() const
+{
+    if (!layoutData()) {
+        //LOGD() << "no layout data, will be returned dummy";
+        static mu::PointF dummy;
+        return dummy;
+    }
+    return layoutData()->pos;
+}
+
+double EngravingItem::mag() const
+{
+    if (!layoutData()) {
+        //LOGD() << "no layout data, will be returned default (1.0)";
+        return 1.0;
+    }
+    return layoutData()->mag;
 }
 }
