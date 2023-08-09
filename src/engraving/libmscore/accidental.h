@@ -113,7 +113,7 @@ public:
 
     void computeMag();
 
-    struct LayoutData {
+    struct LayoutData : public EngravingItem::LayoutData {
         struct Sym {
             SymId sym;
             double x;
@@ -122,20 +122,17 @@ public:
                 : sym(_sym), x(_x), y(_y) {}
         };
 
-        bool isSkipDraw = false;
         std::vector<Sym> syms;
-        RectF bbox;
-        PointF pos;
 
         bool isValid() const { return !syms.empty(); }
     };
 
-    const LayoutData& layoutData() const { return m_layoutData; }
-    void setLayoutData(const LayoutData& data);
+    const LayoutData* layoutData() const { return static_cast<const Accidental::LayoutData*>(EngravingItem::layoutData()); }
+    LayoutData* mutLayoutData() { return static_cast<Accidental::LayoutData*>(EngravingItem::mutLayoutData()); }
 
     //! -- Old interface --
-    void clearElements() { m_layoutData.syms.clear(); }
-    void addElement(const LayoutData::Sym& s) { m_layoutData.syms.push_back(s); }
+    void clearElements() { mutLayoutData()->syms.clear(); }
+    void addElement(const LayoutData::Sym& s) { mutLayoutData()->syms.push_back(s); }
     //! -----------
 
 private:
@@ -144,12 +141,12 @@ private:
 
     Accidental(EngravingItem* parent);
 
+    LayoutData* createLayoutData() const override;
+
     AccidentalType m_accidentalType = AccidentalType::NONE;
     AccidentalBracket m_bracket = AccidentalBracket::NONE;
     AccidentalRole m_role = AccidentalRole::AUTO;
     bool m_isSmall = false;
-
-    LayoutData m_layoutData;
 };
 
 extern AccidentalVal sym2accidentalVal(SymId id);

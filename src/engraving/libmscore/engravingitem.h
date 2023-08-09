@@ -213,29 +213,6 @@ public:
     OffsetChange offsetChanged() const { return m_offsetChanged; }
     void setOffsetChanged(bool v, bool absolute = true, const PointF& diff = PointF());
 
-    inline void doSetPos(double x, double y)
-    {
-        m_pos.setX(x),
-        m_pos.setY(y);
-    }
-
-    const PointF& ipos() const { return m_pos; }
-    virtual const PointF pos() const { return m_pos + m_offset; }
-    virtual double x() const { return m_pos.x() + m_offset.x(); }
-    virtual double y() const { return m_pos.y() + m_offset.y(); }
-    virtual void setPos(double x, double y) { doSetPos(x, y); }
-    virtual void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
-    void setPosX(double x) { doSetPos(x, m_pos.y()); }
-    void setPosY(double y) { doSetPos(m_pos.x(), y); }
-    void movePos(const PointF& p) { doSetPos(m_pos.x() + p.x(), m_pos.y() + p.y()); }
-    void movePosX(double x) { doSetPos(m_pos.x() + x, m_pos.y()); }
-    void movePosY(double y) { doSetPos(m_pos.x(), m_pos.y() + y); }
-    double xpos() { return m_pos.x(); }
-    double ypos() { return m_pos.y(); }
-    virtual void move(const PointF& s) { m_pos += s; }
-    bool skipDraw() const { return m_skipDraw; }
-    void setSkipDraw(bool val) { m_skipDraw = val; }
-
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
     double pageX() const;
@@ -259,23 +236,17 @@ public:
 
     bool isNudged() const { return !m_offset.isNull(); }
 
-    virtual const mu::RectF& bbox() const { return m_bbox; }
-    virtual mu::RectF& bbox() { return m_bbox; }
-    virtual double height() const { return bbox().height(); }
-    virtual void setHeight(double v) { m_bbox.setHeight(v); }
-    virtual double width() const { return bbox().width(); }
-    virtual void setWidth(double v) { m_bbox.setWidth(v); }
     mu::RectF abbox() const { return bbox().translated(pagePos()); }
     mu::RectF pageBoundingRect() const { return bbox().translated(pagePos()); }
     mu::RectF canvasBoundingRect() const { return bbox().translated(canvasPos()); }
-    virtual void setbbox(const mu::RectF& r) const { m_bbox = r; }
-    virtual void addbbox(const mu::RectF& r) const { m_bbox.unite(r); }
+    virtual void setbbox(const mu::RectF& r) { mutLayoutData()->bbox = r; }
+    virtual void addbbox(const mu::RectF& r) { mutLayoutData()->bbox.unite(r); }
     bool contains(const PointF& p) const;
     bool intersects(const mu::RectF& r) const;
     virtual Shape shape() const { return Shape(bbox(), this); }
     virtual double baseLine() const { return -height(); }
 
-    virtual mu::RectF hitBBox() const { return m_bbox; }
+    virtual mu::RectF hitBBox() const { return layoutData()->bbox; }
     virtual Shape hitShape() const { return shape(); }
     Shape canvasHitShape() const { return hitShape().translate(canvasPos()); }
     bool hitShapeContains(const PointF& p) const;
@@ -419,8 +390,6 @@ public:
 
     virtual void reset() override;           // reset all properties & position to default
 
-    virtual double mag() const { return m_mag; }
-    void setMag(double val) { m_mag = val; }
     double magS() const;
 
     bool isPrintable() const;
@@ -519,8 +488,53 @@ public:
 
     std::pair<int, float> barbeat() const;
 
+    struct LayoutData {
+        virtual ~LayoutData() = default;
+
+        bool isSkipDraw = false;
+        double mag = 1.0;           // standard magnification (derived value)
+        PointF pos;                 // Reference position, relative to _parent, set by autoplace
+        RectF bbox;                 // Bounding box relative to _pos + _offset
+    };
+
+    const LayoutData* layoutData() const;
+    LayoutData* mutLayoutData();
+
+    const mu::RectF& bbox() const;
+    const PointF& ipos() const;
+    virtual double mag() const;
+
+    //! --- Old Interface ---
+    bool skipDraw() const { return layoutData()->isSkipDraw; }
+    void setSkipDraw(bool val) { mutLayoutData()->isSkipDraw = val; }
+
+    mu::RectF& bbox() { return mutLayoutData()->bbox; }
+    virtual double height() const { return bbox().height(); }
+    virtual void setHeight(double v) { mutLayoutData()->bbox.setHeight(v); }
+    virtual double width() const { return bbox().width(); }
+    virtual void setWidth(double v) { mutLayoutData()->bbox.setWidth(v); }
+
+    double xpos() { return ipos().x(); }
+    double ypos() { return ipos().y(); }
+    virtual const PointF pos() const { return ipos() + m_offset; }
+    virtual double x() const { return ipos().x() + m_offset.x(); }
+    virtual double y() const { return ipos().y() + m_offset.y(); }
+    virtual void setPos(double x, double y) { doSetPos(x, y); }
+    virtual void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
+    void setPosX(double x) { doSetPos(x, mutLayoutData()->pos.y()); }
+    void setPosY(double y) { doSetPos(mutLayoutData()->pos.x(), y); }
+    void movePos(const PointF& p) { doSetPos(mutLayoutData()->pos.x() + p.x(), mutLayoutData()->pos.y() + p.y()); }
+    void movePosX(double x) { doSetPos(mutLayoutData()->pos.x() + x, mutLayoutData()->pos.y()); }
+    void movePosY(double y) { doSetPos(mutLayoutData()->pos.x(), mutLayoutData()->pos.y() + y); }
+
+    virtual void move(const PointF& s) { mutLayoutData()->pos += s; }
+
+    void setMag(double val) { mutLayoutData()->mag = val; }
+
+    //! ---------------------
+
 protected:
-    EngravingItem(const ElementType& type, EngravingObject* se = 0, ElementFlags = ElementFlag::NOTHING);
+    EngravingItem(const ElementType& type, EngravingObject* parent = nullptr, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
@@ -528,14 +542,12 @@ protected:
     void notifyAboutNameChanged();
 #endif
 
-    mutable mu::RectF m_bbox;               // Bounding box relative to _pos + _offset
+    virtual LayoutData* createLayoutData() const;
 
     mutable int m_z = 0;
     mu::draw::Color m_color;                // element color attribute
-    bool m_skipDraw = false;
 
     track_idx_t m_track = mu::nidx;         // staffIdx * VOICES + voice
-    double m_mag;                           // standard magnification (derived value)
 
 private:
 
@@ -546,9 +558,15 @@ private:
     AccessibleItemPtr m_accessible;
 #endif
 
+    inline void doSetPos(double x, double y)
+    {
+        LayoutData* d = mutLayoutData();
+        d->pos.setX(x),
+        d->pos.setY(y);
+    }
+
     bool m_accessibleEnabled = false;
 
-    PointF m_pos;                       // Reference position, relative to _parent, set by autoplace
     PointF m_offset;                    // offset from reference position, set by autoplace or user
     OffsetChange m_offsetChanged = OffsetChange::NONE; // set by user actions that change offset, used by autoplace
     PointF m_changedPos;                // position set when changing offset
@@ -556,6 +574,8 @@ private:
     mutable ElementFlags m_flags;
 
     bool m_colorsInversionEnabled = true;
+
+    mutable LayoutData* m_layoutData = nullptr;
 };
 
 using ElementPtr = std::shared_ptr<EngravingItem>;

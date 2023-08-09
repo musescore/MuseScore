@@ -393,15 +393,17 @@ static std::pair<SymId, SymId> accidentalBracketSyms(AccidentalBracket type)
     return { SymId::noSym, SymId::noSym };
 }
 
-static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, Accidental::LayoutData& data)
+static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, Accidental::LayoutData* data)
 {
+    data->syms.clear();
+
     // TODO: remove Accidental in layout
     // don't show accidentals for tab or slash notation
     if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
-        data.isSkipDraw = true;
+        data->isSkipDraw = true;
         return;
     }
-    data.isSkipDraw = false;
+    data->isSkipDraw = false;
 
     if (item->accidentalType() == AccidentalType::NONE) {
         return;
@@ -411,9 +413,9 @@ static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, A
     SymId singleSym = accidentalSingleSym(item);
     if (singleSym != SymId::noSym && ctx.engravingFont()->isValid(singleSym)) {
         Accidental::LayoutData::Sym s(singleSym, 0.0, 0.0);
-        data.syms.push_back(s);
+        data->syms.push_back(s);
 
-        data.bbox.unite(item->symBbox(singleSym));
+        data->bbox.unite(item->symBbox(singleSym));
     }
     // Multi
     else {
@@ -430,8 +432,8 @@ static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, A
         if (bracketSyms.first != SymId::noSym) {
             Accidental::LayoutData::Sym ls(bracketSyms.first, 0.0,
                                            item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
-            data.syms.push_back(ls);
-            data.bbox.unite(item->symBbox(bracketSyms.first));
+            data->syms.push_back(ls);
+            data->bbox.unite(item->symBbox(bracketSyms.first));
 
             x += item->symAdvance(bracketSyms.first) + margin;
         }
@@ -439,8 +441,8 @@ static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, A
         // Main
         SymId mainSym = item->symId();
         Accidental::LayoutData::Sym ms(mainSym, x, 0.0);
-        data.syms.push_back(ms);
-        data.bbox.unite(item->symBbox(mainSym).translated(x, 0.0));
+        data->syms.push_back(ms);
+        data->bbox.unite(item->symBbox(mainSym).translated(x, 0.0));
 
         // Right
         if (bracketSyms.second != SymId::noSym) {
@@ -448,17 +450,15 @@ static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, A
 
             Accidental::LayoutData::Sym rs(bracketSyms.second, x,
                                            item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
-            data.syms.push_back(rs);
-            data.bbox.unite(item->symBbox(bracketSyms.second).translated(x, 0.0));
+            data->syms.push_back(rs);
+            data->bbox.unite(item->symBbox(bracketSyms.second).translated(x, 0.0));
         }
     }
 }
 
 void TLayout::layout(Accidental* item, LayoutContext& ctx)
 {
-    Accidental::LayoutData data;
-    layoutAccidental(item, ctx, data);
-    item->setLayoutData(data);
+    layoutAccidental(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(ActionIcon* item, LayoutContext&)
@@ -475,6 +475,9 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
 {
     const double spatium = item->spatium();
     const double headWdt = item->headWidth();
+
+    Accidental::LayoutData* topAccData = item->topAccidental()->mutLayoutData();
+    Accidental::LayoutData* bottomAccData = item->bottomAccidental()->mutLayoutData();
 
     //
     // NOTEHEADS Y POS
@@ -495,8 +498,8 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->topTpc(), key);
             item->topAccidental()->setAccidentalType(accidType);
-            layoutAccidental(item->topAccidental(), ctx, data.topAcc);
-            data.topAcc.pos.setY(data.topPos.y());
+            layoutAccidental(item->topAccidental(), ctx, topAccData);
+            topAccData->pos.setY(data.topPos.y());
         }
 
         // bottom notehead
@@ -509,8 +512,8 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->bottomTpc(), key);
             item->bottomAccidental()->setAccidentalType(accidType);
-            layoutAccidental(item->bottomAccidental(), ctx, data.bottomAcc);
-            data.bottomAcc.pos.setY(data.bottomPos.y());
+            layoutAccidental(item->bottomAccidental(), ctx, bottomAccData);
+            bottomAccData->pos.setY(data.bottomPos.y());
         }
     }
 
@@ -521,21 +524,21 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
     //
     {
         double accNoteDist = item->point(ctx.conf().styleS(Sid::accidentalNoteDistance));
-        double xAccidOffTop = data.topAcc.bbox.width() + accNoteDist;
-        double xAccidOffBottom = data.bottomAcc.bbox.width() + accNoteDist;
+        double xAccidOffTop = topAccData->bbox.width() + accNoteDist;
+        double xAccidOffBottom = bottomAccData->bbox.width() + accNoteDist;
 
         // if top accidental extends down more than bottom accidental extends up,
         // AND ambitus is not leaning right, bottom accidental needs to be displaced
         bool collision = (item->direction() != DirectionH::RIGHT)
-                         && (data.topAcc.pos.y() + data.topAcc.bbox.y() + data.topAcc.bbox.height()
-                             > data.bottomAcc.pos.y() + data.bottomAcc.bbox.y());
+                         && (topAccData->pos.y() + topAccData->bbox.y() + topAccData->bbox.height()
+                             > bottomAccData->pos.y() + bottomAccData->bbox.y());
         if (collision) {
             // displace bottom accidental (also attempting to 'undercut' flats)
             AccidentalType bottomAccType = item->bottomAccidental()->accidentalType();
             xAccidOffBottom = xAccidOffTop + ((bottomAccType == AccidentalType::FLAT
                                                || bottomAccType == AccidentalType::FLAT2
                                                || bottomAccType == AccidentalType::NATURAL)
-                                              ? data.bottomAcc.bbox.width() * 0.5 : data.bottomAcc.bbox.width());
+                                              ? bottomAccData->bbox.width() * 0.5 : bottomAccData->bbox.width());
         }
 
         switch (item->direction()) {
@@ -543,24 +546,24 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
             // left align noteheads and right align accidentals 'hanging' on the left
             data.topPos.setX(0.0);
             data.bottomPos.setX(0.0);
-            data.topAcc.pos.setX(-xAccidOffTop);
-            data.bottomAcc.pos.setX(-xAccidOffBottom);
+            topAccData->pos.setX(-xAccidOffTop);
+            bottomAccData->pos.setX(-xAccidOffBottom);
             break;
         case DirectionH::LEFT:                   // top notehead at the left of bottom notehead
             // place top notehead at left margin; bottom notehead at right of top head;
             // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
             data.topPos.setX(0.0);
             data.bottomPos.setX(headWdt);
-            data.topAcc.pos.setX(-xAccidOffTop);
-            data.bottomAcc.pos.setX(collision ? -xAccidOffBottom : headWdt - xAccidOffBottom);
+            topAccData->pos.setX(-xAccidOffTop);
+            bottomAccData->pos.setX(collision ? -xAccidOffBottom : headWdt - xAccidOffBottom);
             break;
         case DirectionH::RIGHT:                  // top notehead at the right of bottom notehead
             // bottom notehead at left margin; top notehead at right of bottomnotehead
             // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
             data.topPos.setX(headWdt);
             data.bottomPos.setX(0.0);
-            data.topAcc.pos.setX(headWdt - xAccidOffTop);
-            data.bottomAcc.pos.setX(-xAccidOffBottom);
+            topAccData->pos.setX(headWdt - xAccidOffTop);
+            bottomAccData->pos.setX(-xAccidOffBottom);
             break;
         }
     }
@@ -588,8 +591,8 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
     {
         RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
         data.bbox = headRect.translated(data.topPos).united(headRect.translated(data.bottomPos))
-                    .united(data.topAcc.bbox.translated(data.topAcc.pos))
-                    .united(data.bottomAcc.bbox.translated(data.bottomAcc.pos));
+                    .united(topAccData->bbox.translated(topAccData->pos))
+                    .united(bottomAccData->bbox.translated(bottomAccData->pos));
     }
 }
 

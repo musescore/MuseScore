@@ -1413,10 +1413,10 @@ void SpannerSegment::autoplaceSpannerSegment()
         double yd = 0.0;
         staff_idx_t stfIdx = systemFlag() ? staffIdxOrNextVisible() : staffIdx();
         if (stfIdx == mu::nidx) {
-            m_skipDraw = true;
+            setSkipDraw(true);
             return;
         } else {
-            m_skipDraw = false;
+            setSkipDraw(false);
         }
         if (above) {
             double d  = system()->topDistance(stfIdx, sl);

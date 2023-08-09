@@ -1114,21 +1114,6 @@ void SLine::setLen(double l)
 }
 
 //---------------------------------------------------------
-//   bbox
-//    used by palette: only one segment
-//---------------------------------------------------------
-
-const mu::RectF& SLine::bbox() const
-{
-    if (spannerSegments().empty()) {
-        setbbox(RectF());
-    } else {
-        setbbox(segmentAt(0)->bbox());
-    }
-    return EngravingItem::bbox();
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

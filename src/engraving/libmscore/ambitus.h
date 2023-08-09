@@ -117,9 +117,6 @@ public:
     static int staffLine(int tpc, int pitch, ClefType clf);
 
     struct LayoutData {
-        Accidental::LayoutData topAcc;
-        Accidental::LayoutData bottomAcc;
-
         PointF topPos;          // position of top note symbol
         PointF bottomPos;       // position of bottom note symbol
         LineF line;             // the drawn line
