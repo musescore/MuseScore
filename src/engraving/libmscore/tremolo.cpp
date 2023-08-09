@@ -600,6 +600,8 @@ PropertyValue Tremolo::getProperty(Pid propertyId) const
         return int(m_tremoloType);
     case Pid::TREMOLO_STYLE:
         return int(m_style);
+    case Pid::PLAY:
+        return m_playTremolo;
     default:
         break;
     }
@@ -632,6 +634,9 @@ bool Tremolo::setProperty(Pid propertyId, const PropertyValue& val)
             setBeamPos(val.value<PairF>());
         }
         break;
+    case Pid::PLAY:
+        setPlayTremolo(val.toBool());
+        break;
     default:
         return EngravingItem::setProperty(propertyId, val);
     }
@@ -648,6 +653,8 @@ PropertyValue Tremolo::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::TREMOLO_STYLE:
         return style().styleI(Sid::tremoloStyle);
+    case Pid::PLAY:
+        return true;
     default:
         return EngravingItem::propertyDefault(propertyId);
     }

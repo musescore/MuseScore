@@ -4087,6 +4087,8 @@ void TRead::read(Tremolo* t, XmlReader& e, ReadContext& ctx)
                 }
             }
             t->setBeamFragment(f);
+        } else if (tag == "play") {
+            t->setPlayTremolo(e.readBool());
         } else if (TRead::readStyledProperty(t, tag, e, ctx)) {
         } else if (!readItemProperties(t, e, ctx)) {
             e.unknown();
