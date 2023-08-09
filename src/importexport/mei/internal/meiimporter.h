@@ -57,7 +57,6 @@ class MeiImporter
 public:
     MeiImporter(engraving::Score* s) { m_score = s; }
     bool read(const io::path_t& path);
-    void convert();
 
 private:
     /**
