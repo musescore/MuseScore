@@ -28,8 +28,9 @@ namespace mu::audio {
 class SoundFontRepositoryStub : public ISoundFontRepository
 {
 public:
-    synth::SoundFontPaths soundFontPaths() const override;
-    async::Notification soundFontPathsChanged() const override;
+    const synth::SoundFontPaths& soundFontPaths() const override;
+    const synth::SoundFontsMap& soundFonts() const override;
+    async::Notification soundFontsChanged() const override;
 
     mu::Ret addSoundFont(const synth::SoundFontPath& path) override;
 };
