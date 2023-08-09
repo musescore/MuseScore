@@ -72,12 +72,6 @@ public:
     void setHeight(double) override;
     double width() const override;
 
-    void setShape(const Shape& sh) { m_shape = sh; }
-    Shape shape() const override { return m_shape; }
-
-    const draw::PainterPath& path() const { return m_path; }
-    void setPath(const draw::PainterPath& p) { m_path = p; }
-
     double h2() const { return m_h2; }
 
     const BracketItem* bi() const { return m_bi; }
@@ -110,6 +104,27 @@ public:
 
     void setSelected(bool f) override;
 
+    struct LayoutData {
+        bool visible = true;
+        SymId braceSymbol = SymId::noSym;
+
+        PainterPath path;
+        Shape shape;
+
+        RectF bbox;
+    };
+
+    const LayoutData& layoutData() const { return m_layoutData; }
+    void setLayoutData(const LayoutData& data);
+
+    //! --- Old Interface ---
+    void setShape(const Shape& sh) { m_layoutData.shape = sh; }
+    Shape shape() const override { return m_layoutData.shape; }
+
+    const draw::PainterPath& path() const { return m_layoutData.path; }
+    void setPath(const draw::PainterPath& p) { m_layoutData.path = p; }
+    //! ---------------------
+
 private:
     friend class Factory;
 
@@ -122,14 +137,14 @@ private:
     size_t m_firstStaff = 0;
     size_t m_lastStaff = 0;
 
-    draw::PainterPath m_path;
     SymId m_braceSymbol = SymId::noSym;
-    Shape m_shape;
 
     // horizontal scaling factor for brace symbol. Cannot be equal to magY or depend on h
     // because layout needs width of brace before knowing height of system...
     double m_magx = 0.0;
     Measure* m_measure = nullptr;
+
+    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 #endif
