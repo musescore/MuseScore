@@ -264,6 +264,26 @@ private:
         { engraving::JumpType::DSS_AL_FINE, "dss-al-fine" }
     };
 };
+
+/**
+ * A class with a static instance for registering MEI xml:ids.
+ * When objects are created from the MeiImporter the mapping is registered there.
+ * It is re-used in the MeiExporter to preserved xml:ids for imported objects.
+ */
+
+class UIDRegister
+{
+public:
+
+    static UIDRegister* instance();
+
+    void reg(const engraving::EngravingItem* item, const std::string& meiUID) { m_uids[reinterpret_cast<uintptr_t>(item)] = meiUID; }
+    bool hasUid(const engraving::EngravingItem* item) const { return m_uids.count(reinterpret_cast<uintptr_t>(item)) > 0; }
+    std::string uid(const engraving::EngravingItem* item) const { return m_uids.at(reinterpret_cast<uintptr_t>(item)); }
+
+private:
+    std::unordered_map<uintptr_t, std::string> m_uids;
+};
 } // namespace
 
 #endif // MU_IMPORTEXPORT_MEICONVERTER_H
