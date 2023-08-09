@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,15 +23,17 @@
 #ifndef MU_PLAYBACK_INPUTRESOURCEITEM_H
 #define MU_PLAYBACK_INPUTRESOURCEITEM_H
 
+#include <map>
+#include <optional>
+
 #include <QObject>
 #include <QString>
-#include <map>
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"
-#include "audio/itracks.h"
 #include "audio/iplayback.h"
 #include "audio/audiotypes.h"
+#include "midi/miditypes.h"
 
 #include "abstractaudioresourceitem.h"
 
@@ -65,6 +67,8 @@ private:
     QVariantMap buildMuseMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
     QVariantMap buildVstMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
     QVariantMap buildSoundFontsMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
+    QVariantMap buildMsBasicMenuItem(const audio::AudioResourceMetaList& availableResources, bool isCurrentSoundFont,
+                                     const std::optional<midi::Program>& currentPreset) const;
 
     void updateCurrentParams(const audio::AudioResourceMeta& newMeta);
     void updateAvailableResources(const audio::AudioResourceMetaList& availableResources);

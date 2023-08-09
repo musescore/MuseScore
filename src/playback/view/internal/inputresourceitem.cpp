@@ -1,3 +1,24 @@
+/*
+ * SPDX-License-Identifier: GPL-3.0-only
+ * MuseScore-CLA-applies
+ *
+ * MuseScore
+ * Music Composition & Notation
+ *
+ * Copyright (C) 2023 MuseScore BVBA and others
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3 as
+ * published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
+ */
 #include "inputresourceitem.h"
 
 #include <optional>
@@ -7,15 +28,19 @@
 #include "log.h"
 #include "stringutils.h"
 #include "translation.h"
+#include "types/string.h"
 
-#include "midi/miditypes.h"
+#include "msbasicpresetscategories.h"
 
+using namespace mu;
 using namespace mu::playback;
 using namespace mu::audio;
 
 static const QString VST_MENU_ITEM_ID("VST3");
 static const QString SOUNDFONTS_MENU_ITEM_ID = mu::qtrc("playback", "SoundFonts");
 static const QString MUSE_MENU_ITEM_ID("Muse Sounds");
+
+static const String MS_BASIC_SOUNDFONT_NAME(u"MS Basic");
 
 InputResourceItem::InputResourceItem(QObject* parent)
     : AbstractAudioResourceItem(parent)
@@ -229,6 +254,11 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
     for (const String& soundFont : soundFonts) {
         bool isCurrentSoundFont = currentSoundFontName == soundFont;
 
+        if (soundFont == MS_BASIC_SOUNDFONT_NAME) {
+            soundFontItems << buildMsBasicMenuItem(resourcesBySoundFont[soundFont], isCurrentSoundFont, currentPreset);
+            continue;
+        }
+
         // Group resources by bank, and use this to sort them
         std::map<int, std::map<int, AudioResourceMeta> > resourcesByBank;
         AudioResourceMeta chooseAutomaticMeta;
@@ -282,6 +312,78 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
                          SOUNDFONTS_MENU_ITEM_ID,
                          m_currentInputParams.resourceMeta.type == AudioResourceType::FluidSoundfont,
                          soundFontItems);
+}
+
+QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList& availableResources, bool isCurrentSoundFont,
+                                                    const std::optional<midi::Program>& currentPreset) const
+{
+    std::map<midi::Program, AudioResourceMeta> resourcesByProgram;
+    AudioResourceMeta chooseAutomaticMeta;
+
+    for (const AudioResourceMeta& resourceMeta : availableResources) {
+        bool bankOk = false, programOk = false;
+        int presetBank = resourceMeta.attributeVal(u"presetBank").toInt(&bankOk);
+        int presetProgram = resourceMeta.attributeVal(u"presetProgram").toInt(&programOk);
+
+        if (bankOk && programOk) {
+            resourcesByProgram[midi::Program(presetBank, presetProgram)] = resourceMeta;
+        } else {
+            chooseAutomaticMeta = resourceMeta;
+        }
+    }
+
+    std::function<QVariantMap(const MsBasicItem&, bool&, const QString&)> buildMsBasicItem
+        = [&](const MsBasicItem& item, bool& isCurrent, const QString& parentMenuId) {
+        if (item.subItems.empty()) {
+            const AudioResourceMeta& resourceMeta = resourcesByProgram[item.preset];
+
+            isCurrent = isCurrentSoundFont && currentPreset.has_value() && currentPreset.value() == item.preset;
+
+            return buildMenuItem(QString::fromStdString(resourceMeta.id),
+                                 resourceMeta.attributeVal(u"presetName"),
+                                 isCurrent);
+        }
+
+        QString menuId = parentMenuId + "\\" + item.title + "\\menu";
+
+        QVariantList subItems;
+
+        for (const MsBasicItem& subItem : item.subItems) {
+            bool isSubItemCurrent = false;
+
+            subItems << buildMsBasicItem(subItem, isSubItemCurrent, parentMenuId);
+
+            if (isSubItemCurrent) {
+                isCurrent = true;
+            }
+        }
+
+        return buildMenuItem(menuId,
+                             item.title,
+                             isCurrent,
+                             subItems);
+    };
+
+    QString menuId = MS_BASIC_SOUNDFONT_NAME.toQString() + "\\menu";
+
+    QVariantList categoryItems;
+
+    for (const MsBasicItem& category : msBasicPresetCategories) {
+        bool isCurrent = false;
+
+        categoryItems << buildMsBasicItem(category, isCurrent, menuId);
+    }
+
+    // Prepend the "Choose automatically" item
+    categoryItems.prepend(buildSeparator());
+    categoryItems.prepend(buildMenuItem(QString::fromStdString(chooseAutomaticMeta.id),
+                                        qtrc("playback", "Choose automatically"),
+                                        isCurrentSoundFont && !currentPreset.has_value()));
+
+    return buildMenuItem(menuId,
+                         MS_BASIC_SOUNDFONT_NAME,
+                         isCurrentSoundFont,
+                         categoryItems);
 }
 
 void InputResourceItem::updateCurrentParams(const AudioResourceMeta& newMeta)
