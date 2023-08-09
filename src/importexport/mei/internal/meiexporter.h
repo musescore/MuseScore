@@ -38,30 +38,10 @@ class Staff;
 }
 
 namespace mu::iex::mei {
-enum measureElementCounter {
-    BREATH_M = 0,
-    CAESURA_M,
-    DIR_M,
-    DYNAM_M,
-    FERMATA_M,
-    HAIRPIN_M,
-    HARM_M,
-    OCTAVE_M,
-    REPEATMARK_M,
-    SLUR_M,
-    TEMPO_M,
-    TIE_M,
-    UNSPECIFIED_M
-};
-
 enum layerElementCounter {
     ACCID_L = 0,
     BEAM_L,
-    CHORD_L,
     GRACEGRP_L,
-    NOTE_L,
-    REST_L,
-    TUPLET_L,
     UNSPECIFIED_L,
 };
 
@@ -151,15 +131,16 @@ private:
     /**
      * Methods for generating @xml:ids
      */
-    void resetMeasureIDs();
+    uint32_t hash(uint32_t number, bool reverse);
+    std::string baseEncodeInt(uint32_t value, uint8_t base);
+    std::string generateHashID();
+    std::string getXmlIdFor(const engraving::EngravingItem* item, const char c);
     void resetLayerIDs();
     std::string getSectionXmlId();
-    std::string getEndingXmlId();
-    std::string getMeasureXmlId();
-    std::string getMeasureXmlIdFor(measureElementCounter elementType);
+    std::string getMeasureXmlId(const engraving::Measure* measure);
     std::string getStaffXmlId();
     std::string getLayerXmlId();
-    std::string getLayerXmlIdFor(layerElementCounter elementType, const engraving::Segment* segment = nullptr);
+    std::string getLayerXmlIdFor(layerElementCounter elementType);
 
     /** A structure of holding a list of repeat marks to be post-process in addJumpToRepeatMarks (currently unused) */
     struct RepeatMark {
@@ -172,6 +153,9 @@ private:
 
     /** The Score pointer */
     engraving::Score* m_score = nullptr;
+
+    /** The uid register */
+    UIDRegister* m_uids;
 
     /** MEI xml element */
     pugi::xml_node m_mei;
@@ -193,42 +177,20 @@ private:
     std::list<MeiExporter::RepeatMark> m_repeatMarks;
 
     /** Counters for generating xml:ids */
+    int m_xmlIDCounter;
     int m_sectionCounter;
-    int m_endingCounter;
     int m_measureCounter;
     int m_staffCounter;
     int m_layerCounter;
     /** Sub counters by elementType */
-    std::vector<int> m_measureCounterFor;
     std::vector<int> m_layerCounterFor;
-
-    /** map of abbreviations for control events within measure */
-    inline static std::map<measureElementCounter, String> s_measureXmlIdMap = {
-        { BREATH_M, u"bt" },
-        { CAESURA_M, u"cs" },
-        { DIR_M, u"dr" },
-        { DYNAM_M, u"dn" },
-        { FERMATA_M, u"fm" },
-        { HAIRPIN_M, u"hp" },
-        { HARM_M, u"hr" },
-        { OCTAVE_M, u"ot" },
-        { REPEATMARK_M, u"rp" },
-        { SLUR_M, u"sl" },
-        { TEMPO_M, u"tp" },
-        { TIE_M, u"ti" },
-        { UNSPECIFIED_M, u"z" }
-    };
 
     /** map of abbreviations for element within layers */
     inline static std::map<layerElementCounter, String> s_layerXmlIdMap = {
         { ACCID_L, u"a" },
         { BEAM_L, u"b" },
-        { CHORD_L, u"c" },
         { GRACEGRP_L, u"g" },
-        { NOTE_L, u"n" },
-        { REST_L, u"r" },
-        { TUPLET_L, u"t" },
-        { UNSPECIFIED_L, u"z" }
+        { UNSPECIFIED_L, u"x" }
     };
 };
 } // namespace
