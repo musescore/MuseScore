@@ -62,6 +62,8 @@
 #include "thirdparty/libmei/harmony.h"
 #include "thirdparty/libmei/shared.h"
 
+#include <random>
+
 using namespace mu::iex::mei;
 using namespace mu::engraving;
 
@@ -75,15 +77,15 @@ using namespace mu::engraving;
 
 bool MeiExporter::write(std::string& meiData)
 {
+    m_uids = UIDRegister::instance();
+    m_xmlIDCounter = 0;
+
     m_hasSections = false;
 
     m_sectionCounter = 0;
-    m_endingCounter = 0;
     m_measureCounter = 0;
     m_staffCounter = 0;
     m_layerCounter = 0;
-    m_measureCounterFor.resize(UNSPECIFIED_M + 1);
-    this->resetMeasureIDs();
     m_layerCounterFor.resize(UNSPECIFIED_L + 1);
     this->resetLayerIDs();
 
@@ -715,7 +717,7 @@ bool MeiExporter::writeEnding(const Measure* measure)
     if (voltaIter != voltas.end()) {
         libmei::Ending meiEnding = Convert::endingToMEI(*voltaIter);
         m_currentNode = m_currentNode.append_child();
-        meiEnding.Write(m_currentNode, this->getEndingXmlId());
+        meiEnding.Write(m_currentNode, this->getXmlIdFor(*voltaIter, 'e'));
     }
     return true;
 }
@@ -754,7 +756,7 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
 
     libmei::Measure meiMeasure = Convert::measureToMEI(measure, measureN, wasPreviousIrregular);
     m_currentNode = m_currentNode.append_child();
-    meiMeasure.Write(m_currentNode, this->getMeasureXmlId());
+    meiMeasure.Write(m_currentNode, this->getMeasureXmlId(measure));
 
     // Reset keySig and timeSig change
     m_keySig = nullptr;
@@ -1032,7 +1034,8 @@ bool MeiExporter::writeClef(const Clef* clef)
 
     pugi::xml_node clefNode = m_currentNode.append_child();
     libmei::Clef meiClef = Convert::clefToMEI(clef->clefType());
-    meiClef.Write(clefNode, this->getLayerXmlIdFor(UNSPECIFIED_L));
+    std::string xmlId = this->getXmlIdFor(clef, 'c');
+    meiClef.Write(clefNode, xmlId);
 
     return true;
 }
@@ -1070,7 +1073,7 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
         this->writeBeamTypeAtt(chord, meiChord);
         this->writeStaffIdenAtt(chord, staff, meiChord);
         this->writeStemAtt(chord, meiChord);
-        std::string xmlId = this->getLayerXmlIdFor(CHORD_L, (chord->isGrace() ? nullptr : chord->segment()));
+        std::string xmlId = this->getXmlIdFor(chord, 'c');
         meiChord.Write(m_currentNode, xmlId);
         this->fillControlEventMap(xmlId, chord);
     }
@@ -1153,7 +1156,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeStaffIdenAtt(chord, staff, meiNote);
         this->writeStemAtt(chord, meiNote);
     }
-    std::string xmlId = this->getLayerXmlIdFor(NOTE_L, (isChord || chord->isGrace() ? nullptr : chord->segment()));
+    std::string xmlId = this->getXmlIdFor(note, 'n');
     meiNote.Write(noteNode, xmlId);
     if (!isChord) {
         this->fillControlEventMap(xmlId, chord);
@@ -1188,7 +1191,7 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
     if (rest->durationType() == DurationType::V_MEASURE) {
         pugi::xml_node mRestNode = m_currentNode.append_child();
         libmei::MRest meiMRest;
-        std::string xmlId = this->getLayerXmlIdFor(UNSPECIFIED_L, rest->segment());
+        std::string xmlId = this->getXmlIdFor(rest, 'm');
         meiMRest.Write(mRestNode, xmlId);
         this->fillControlEventMap(xmlId, rest);
     } else {
@@ -1205,7 +1208,8 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
         }
         this->writeBeamTypeAtt(rest, meiRest);
         this->writeStaffIdenAtt(rest, staff, meiRest);
-        std::string xmlId = this->getLayerXmlIdFor(REST_L, rest->segment());
+        const char prefix = (rest->visible()) ? 'r' : 's';
+        std::string xmlId = this->getXmlIdFor(rest, prefix);
         meiRest.Write(restNode, xmlId);
         this->fillControlEventMap(xmlId, rest);
 
@@ -1245,7 +1249,8 @@ bool MeiExporter::writeTuplet(const Tuplet* tuplet, const EngravingItem* item, b
         */
         libmei::Tuplet meiTuplet = Convert::tupletToMEI(tuplet);
         m_currentNode = m_currentNode.append_child();
-        meiTuplet.Write(m_currentNode, this->getLayerXmlIdFor(TUPLET_L));
+        std::string xmlId = this->getXmlIdFor(tuplet, 't');
+        meiTuplet.Write(m_currentNode, xmlId);
     }
 
     if (tuplet->elements().back() == item) {
@@ -1273,11 +1278,11 @@ bool MeiExporter::writeBreath(const Breath* breath, const std::string& startid)
     if (breath->isCaesura()) {
         libmei::Caesura meiCaesura = Convert::caesuraToMEI(breath);
         meiCaesura.SetStartid(startid);
-        meiCaesura.Write(breathNode, this->getMeasureXmlIdFor(CAESURA_M));
+        meiCaesura.Write(breathNode, this->getXmlIdFor(breath, 'c'));
     } else {
         libmei::Breath meiBreath = Convert::breathToMEI(breath);
         meiBreath.SetStartid(startid);
-        meiBreath.Write(breathNode, this->getMeasureXmlIdFor(BREATH_M));
+        meiBreath.Write(breathNode, this->getXmlIdFor(breath, 'b'));
     }
 
     return true;
@@ -1298,7 +1303,7 @@ bool MeiExporter::writeDir(const TextBase* dir, const std::string& startid)
     pugi::xml_node dirNode = m_currentNode.append_child();
     libmei::Dir meiDir = Convert::dirToMEI(dir, meiLines);
     meiDir.SetStartid(startid);
-    meiDir.Write(dirNode, this->getMeasureXmlIdFor(DIR_M));
+    meiDir.Write(dirNode, this->getXmlIdFor(dir, 'd'));
 
     this->writeLines(dirNode, meiLines);
 
@@ -1320,7 +1325,7 @@ bool MeiExporter::writeDir(const TextLineBase* dir, const std::string& startid)
     pugi::xml_node dirNode = m_currentNode.append_child();
     libmei::Dir meiDir = Convert::dirToMEI(dir, meiLines);
     meiDir.SetStartid(startid);
-    meiDir.Write(dirNode, this->getMeasureXmlIdFor(DIR_M));
+    meiDir.Write(dirNode, this->getXmlIdFor(dir, 'd'));
 
     this->writeLines(dirNode, meiLines);
 
@@ -1345,7 +1350,7 @@ bool MeiExporter::writeDynam(const Dynamic* dynamic, const std::string& startid)
     pugi::xml_node dynamNode = m_currentNode.append_child();
     libmei::Dynam meiDynam = Convert::dynamToMEI(dynamic, meiLines);
     meiDynam.SetStartid(startid);
-    meiDynam.Write(dynamNode, this->getMeasureXmlIdFor(DYNAM_M));
+    meiDynam.Write(dynamNode, this->getXmlIdFor(dynamic, 'd'));
 
     this->writeLines(dynamNode, meiLines);
 
@@ -1366,7 +1371,7 @@ bool MeiExporter::writeFermata(const Fermata* fermata, const std::string& starti
     libmei::Fermata meiFermata = Convert::fermataToMEI(fermata);
     meiFermata.SetStartid(startid);
 
-    meiFermata.Write(fermataNode, this->getMeasureXmlIdFor(FERMATA_M));
+    meiFermata.Write(fermataNode, this->getXmlIdFor(fermata, 'f'));
 
     return true;
 }
@@ -1386,7 +1391,7 @@ bool MeiExporter::writeFermata(const Fermata* fermata, const libmei::xsdPositive
     meiFermata.SetStaff(staffNs);
     meiFermata.SetTstamp(tstamp);
 
-    meiFermata.Write(fermataNode, this->getMeasureXmlIdFor(FERMATA_M));
+    meiFermata.Write(fermataNode, this->getXmlIdFor(fermata, 'f'));
 
     return true;
 }
@@ -1408,7 +1413,7 @@ bool MeiExporter::writeHairpin(const Hairpin* hairpin, const std::string& starti
     pugi::xml_node hairpinNode = m_currentNode.append_child();
     libmei::Hairpin meiHairpin = Convert::hairpinToMEI(hairpin);
     meiHairpin.SetStartid(startid);
-    meiHairpin.Write(hairpinNode, this->getMeasureXmlIdFor(HAIRPIN_M));
+    meiHairpin.Write(hairpinNode, this->getXmlIdFor(hairpin, 'h'));
 
     // Add the node to the map of open control events
     m_openControlEventMap[hairpin] = hairpinNode;
@@ -1431,7 +1436,7 @@ bool MeiExporter::writeHarm(const Harmony* harmony, const std::string& startid)
     pugi::xml_node harmNode = m_currentNode.append_child();
     libmei::Harm meiHarm = Convert::harmToMEI(harmony, meiLines);
     meiHarm.SetStartid(startid);
-    meiHarm.Write(harmNode, this->getMeasureXmlIdFor(HARM_M));
+    meiHarm.Write(harmNode, this->getXmlIdFor(harmony, 'h'));
 
     this->writeLines(harmNode, meiLines);
 
@@ -1452,7 +1457,7 @@ bool MeiExporter::writeOctave(const Ottava* ottava, const std::string& startid)
     libmei::Octave meiOctave = Convert::octaveToMEI(ottava);
     meiOctave.SetStartid(startid);
 
-    meiOctave.Write(octaveNode, this->getMeasureXmlIdFor(OCTAVE_M));
+    meiOctave.Write(octaveNode, this->getXmlIdFor(ottava, 'o'));
 
     // Add the node to the map of open control events
     m_openControlEventMap[ottava] = octaveNode;
@@ -1479,7 +1484,7 @@ bool MeiExporter::writeRepeatMark(const Jump* jump, const Measure* measure)
     }
 
     meiRepeatMark.SetTstamp(0.0);
-    std::string xmlId = this->getMeasureXmlIdFor(REPEATMARK_M);
+    std::string xmlId = this->getXmlIdFor(jump, 'r');
     meiRepeatMark.Write(repeatMarkNode, xmlId);
 
     // Currently not used - builds a post-processing list to be processing in MeiExporter::addJumpToRepeatMarks
@@ -1507,7 +1512,7 @@ bool MeiExporter::writeRepeatMark(const Marker* marker, const Measure* measure)
     }
 
     meiRepeatMark.SetTstamp(0.0);
-    std::string xmlId = this->getMeasureXmlIdFor(REPEATMARK_M);
+    std::string xmlId = this->getXmlIdFor(marker, 'r');
     meiRepeatMark.Write(repeatMarkNode, xmlId);
 
     // Currently not used.
@@ -1530,7 +1535,7 @@ bool MeiExporter::writeSlur(const Slur* slur, const std::string& startid)
     libmei::Slur meiSlur = Convert::slurToMEI(slur);
     meiSlur.SetStartid(startid);
 
-    meiSlur.Write(slurNode, this->getMeasureXmlIdFor(SLUR_M));
+    meiSlur.Write(slurNode, this->getXmlIdFor(slur, 's'));
 
     // Add the node to the map of open control events
     m_openControlEventMap[slur] = slurNode;
@@ -1553,7 +1558,7 @@ bool MeiExporter::writeTempo(const TempoText* tempoText, const std::string& star
     pugi::xml_node tempoNode = m_currentNode.append_child();
     libmei::Tempo meiTempo = Convert::tempoToMEI(tempoText, meiLines);
     meiTempo.SetStartid(startid);
-    meiTempo.Write(tempoNode, this->getMeasureXmlIdFor(DYNAM_M));
+    meiTempo.Write(tempoNode, this->getXmlIdFor(tempoText, 't'));
 
     this->writeLinesWithSMuFL(tempoNode, meiLines);
 
@@ -1574,7 +1579,7 @@ bool MeiExporter::writeTie(const Tie* tie, const std::string& startid)
     libmei::Tie meiTie = Convert::tieToMEI(tie);
     meiTie.SetStartid(startid);
 
-    meiTie.Write(tieNode, this->getMeasureXmlIdFor(TIE_M));
+    meiTie.Write(tieNode, this->getXmlIdFor(tie, 't'));
 
     // Add the node to the map of open control events
     m_openControlEventMap[tie] = tieNode;
@@ -1901,12 +1906,76 @@ void MeiExporter::addEndidToControlEvents()
 //---------------------------------------------------------
 
 /**
- * Reset all the sub-counters for measure elements (i.e., control events).
+ * Integer hash methods used for ID generation
  */
 
-void MeiExporter::resetMeasureIDs()
+uint32_t MeiExporter::hash(uint32_t number, bool reverse)
 {
-    std::fill(m_measureCounterFor.begin(), m_measureCounterFor.end(), 0);
+    const uint32_t magicNumber = reverse ? 0x119de1f3 : 0x45d9f3b;
+    number = ((number >> 16) ^ number) * magicNumber;
+    number = ((number >> 16) ^ number) * magicNumber;
+    number = (number >> 16) ^ number;
+    return number;
+}
+
+/**
+ * Base encode a value into a std::string
+ */
+
+std::string MeiExporter::baseEncodeInt(uint32_t value, uint8_t base)
+{
+    if ((base < 11) || (base > 62)) {
+        return "";
+    }
+
+    static const std::string base62Chars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    std::string base62;
+    if (value < base) {
+        return std::string(1, base62Chars[value]);
+    }
+
+    while (value) {
+        base62 += base62Chars[value % base];
+        value /= base;
+    }
+
+    reverse(base62.begin(), base62.end());
+    return base62;
+}
+
+/**
+ * Generate an xml:id using the hash method and the m_xmlIdCounter.
+ */
+
+std::string MeiExporter::generateHashID()
+{
+    uint32_t nr = hash(++m_xmlIDCounter, false);
+
+    return this->baseEncodeInt(nr, 36);
+}
+
+/**
+ * Return the @xml:id for an element.
+ * First look in the UIDRegister if xml:id of the element has been registered and can be preserved.
+ * Otherwise generate a new hash xml:id.
+ * Init the m_xmlIdCounter when the method is called for the first time.
+ */
+
+std::string MeiExporter::getXmlIdFor(const EngravingItem* item, const char c)
+{
+    if (m_uids->hasUid(item)) {
+        return m_uids->uid(item);
+    }
+
+    // First ID to be generated
+    if (m_xmlIDCounter == 0) {
+        std::random_device rd;
+        std::mt19937 randomGenerator(rd());
+        m_xmlIDCounter = randomGenerator();
+    }
+
+    return c + this->generateHashID();
 }
 
 /**
@@ -1928,39 +1997,17 @@ std::string MeiExporter::getSectionXmlId()
 }
 
 /**
- * Return the current @xml:id for an ending.
- */
-
-std::string MeiExporter::getEndingXmlId()
-{
-    return String("e%1").arg(++m_endingCounter).toStdString();
-}
-
-/**
  * Return the current @xml:id for a measure.
  * Reset the staff counter and the measure sub-counters
  */
 
-std::string MeiExporter::getMeasureXmlId()
+std::string MeiExporter::getMeasureXmlId(const Measure* measure)
 {
     // Reset the staff counter when a new measure starts
     m_staffCounter = 0;
-    // Reset the measure sub-counters when a new measure starts
-    this->resetMeasureIDs();
-    return String("m%1").arg(++m_measureCounter).toStdString();
-}
-
-/**
- * Return the current @xml:id for a measure element (i.e., a control event).
- */
-
-std::string MeiExporter::getMeasureXmlIdFor(measureElementCounter elementType)
-{
-    // m (Measure) / ? Measure element type
-    // The measure element abbreviation is given in the MeiExporter::s_measureXmlIdMap
-    return String("m%1%2%3").arg(m_measureCounter).arg(MeiExporter::s_measureXmlIdMap.at(elementType)).arg(++(m_measureCounterFor.
-                                                                                                              at(elementType))).
-           toStdString();
+    m_measureCounter++;
+    // Get the map IDs for the measure
+    return this->getXmlIdFor(measure, 'm');
 }
 
 /**
@@ -1988,19 +2035,11 @@ std::string MeiExporter::getLayerXmlId()
 }
 
 /**
- * Return the current @xml:id for a layer element.
+ * Return the current counter-based @xml:id for a layer element.
  */
 
-std::string MeiExporter::getLayerXmlIdFor(layerElementCounter elementType, const Segment* segment)
+std::string MeiExporter::getLayerXmlIdFor(layerElementCounter elementType)
 {
-    // If we have a segment, generate a track and time-based xml:id
-    if (segment) {
-        //return String("m%1s%2l%3t-%4-%5").arg(m_measureCounter).arg(m_staffCounter).arg(m_layerCounter).arg(segment->tick().numerator()).arg(segment->tick().denominator()).toStdString();
-        Fraction f = segment->tick();
-        f.reduce();
-        return String("s%1l%2_t%3_%4").arg(m_staffCounter).arg(m_layerCounter).arg(f.numerator()).arg(
-            f.denominator()).toStdString();
-    }
     // m (Measure) / s (Staff) / l (Layer) / ? Layer element type
     // The layer element abbreviation is given in the MeiExporter::s_layerXmlIdMap
     return String("m%1s%2l%3%4%5").arg(m_measureCounter).arg(m_staffCounter).arg(m_layerCounter).arg(MeiExporter::s_layerXmlIdMap.at(
