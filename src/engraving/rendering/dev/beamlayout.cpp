@@ -737,12 +737,14 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 
             // if chord has hooks and is 2nd element of a cross-measure value
             // set beam mode to NONE (do not combine with following chord beam/hook, if any)
-
-            if (cr->durationType().hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND) {
+            TDuration durationType = cr->durationType();
+            if (durationType.hooks() > 0 && cr->crossMeasure() == CrossMeasure::SECOND) {
                 bm = BeamMode::NONE;
             }
 
-            if ((cr->durationType().type() <= DurationType::V_QUARTER) || (bm == BeamMode::NONE)) {
+            // Rests of any duration can be beamed over, if required
+            bool canBeBeamed = durationType.type() > DurationType::V_QUARTER || cr->isRest();
+            if (!canBeBeamed || (bm == BeamMode::NONE)) {
                 bool removeBeam = true;
                 if (beam) {
                     layout1(beam, ctx);
@@ -973,6 +975,10 @@ void BeamLayout::createBeamSegments(Beam* item, LayoutContext& ctx, const std::v
                 if (!startCr || (startCr->isRest() && startCr != item->elements().front())) {
                     startCr = chordRest;
                 }
+            } else if (level >= chordRest->beams() && chordRest->isRest() && !breakBeam) {
+                // This rest has duration longer than the beam value, but it may still go
+                // under the beam if the next chords or rests are beamed
+                continue;
             } else {
                 size_t beamletIndex = static_cast<size_t>(i) - 1;
                 if (lastChordIndex < item->elements().size() && (chordRest->isRest() || (endCr && endCr->isRest()))) {
