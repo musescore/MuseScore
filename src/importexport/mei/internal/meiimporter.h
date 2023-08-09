@@ -153,6 +153,9 @@ private:
     /** The Score pointer */
     engraving::Score* m_score = nullptr;
 
+    /** The uid register */
+    UIDRegister* m_uids;
+
     Fraction m_ticks;
     int m_lastMeasureN;
     engraving::Measure* m_lastMeasure;

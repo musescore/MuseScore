@@ -75,6 +75,9 @@ using namespace mu::engraving;
 
 bool MeiImporter::read(const io::path_t& path)
 {
+    m_uids = UIDRegister::instance();
+    m_uids->clear();
+
     m_lastMeasure = nullptr;
     m_tuplet = nullptr;
     m_beamBeginMode = BeamMode::AUTO;
@@ -228,6 +231,7 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
     } else {
         chordRest = Factory::createChord(segment);
     }
+    m_uids->reg(chordRest, meiElement.m_xmlId);
 
     if (m_startIdChordRests.count(meiElement.m_xmlId)) {
         m_startIdChordRests[meiElement.m_xmlId] = chordRest;
@@ -415,6 +419,7 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
     } else {
         return nullptr;
     }
+    m_uids->reg(item, meiElement.m_xmlId);
 
     item->setTrack(chordRest->track());
     segment->add(item);
@@ -456,6 +461,7 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
     } else {
         return nullptr;
     }
+    m_uids->reg(item, meiElement.m_xmlId);
 
     m_score->addElement(item);
 
@@ -1070,6 +1076,7 @@ bool MeiImporter::readEnding(pugi::xml_node endingNode)
     } else {
         Volta* volta = Factory::createVolta(m_score->dummy());
         Convert::endingFromMEI(volta, meiEnding, warning);
+        m_uids->reg(volta, meiEnding.m_xmlId);
         volta->setTrack(0);
         volta->setTrack2(0);
         volta->setTick(m_endingStart->tick());
@@ -1102,6 +1109,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
     Convert::MeasureStruct measureSt = Convert::measureFromMEI(meiMeasure, warning);
 
     Measure* measure = Factory::createMeasure(m_score->dummy()->system());
+    m_uids->reg(measure, meiMeasure.m_xmlId);
     measure->setTick(m_ticks);
     measure->setTimesig(m_currentTimeSig);
 
@@ -1418,6 +1426,7 @@ bool MeiImporter::readClef(pugi::xml_node clefNode, engraving::Measure* measure,
 
     Segment* segment = measure->getSegment(SegmentType::Clef, Fraction::fromTicks(ticks) + measure->tick());
     Clef* clef = Factory::createClef(segment);
+    m_uids->reg(clef, meiClef.m_xmlId);
     clef->setClefType(ClefTypeList(Convert::clefFromMEI(meiClef, warning)));
     if (warning) {
         this->addLog("clef", clefNode);
@@ -1483,6 +1492,7 @@ bool MeiImporter::readMRest(pugi::xml_node mRestNode, engraving::Measure* measur
 
     Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(ticks) + measure->tick());
     Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
+    m_uids->reg(rest, meiMRest.m_xmlId);
     rest->setTicks(m_currentTimeSig);
     rest->setDurationType(DurationType::V_MEASURE);
     rest->setTrack(track);
@@ -1545,6 +1555,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, engraving::Measure* measure,
     }
 
     Note* note = Factory::createNote(chord);
+    m_uids->reg(note, meiNote.m_xmlId);
 
     // If there is a reference to the note in the MEI, add it the maps (e.g., for ties)
     if (m_startIdChordRests.count(meiNote.m_xmlId)) {
@@ -1558,6 +1569,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, engraving::Measure* measure,
     note->setPitch(pitchSt.pitch, tpc1, pitchSt.tpc2);
 
     Accidental* accid = Factory::createAccidental(note);
+    m_uids->reg(accid, meiAccid.m_xmlId);
     accid->setAccidentalType(pitchSt.accidType);
     //accid->setBracket(AccidentalBracket::BRACKET); // Not supported in MEI-Basic
     accid->setRole(pitchSt.accidRole);
@@ -1631,6 +1643,7 @@ bool MeiImporter::readTuplet(pugi::xml_node tupletNode, engraving::Measure* meas
     meiTuplet.Read(tupletNode);
 
     m_tuplet = Factory::createTuplet(measure);
+    m_uids->reg(m_tuplet, meiTuplet.m_xmlId);
     Convert::tupletFromMEI(m_tuplet, meiTuplet, warning);
     if (warning) {
         this->addLog("tuplet", tupletNode);
@@ -1837,6 +1850,7 @@ bool MeiImporter::readFermata(pugi::xml_node fermataNode, engraving::Measure* me
         if (fermataPos == measure->ticks()) {
             Segment* segment = measure->getSegment(SegmentType::EndBarLine, measure->tick() + measure->ticks());
             fermata = Factory::createFermata(segment);
+            m_uids->reg(fermata, meiFermata.m_xmlId);
             const int staffIdx
                 = (meiFermata.HasStaff() && meiFermata.GetStaff().size() > 0) ? this->getStaffIndex(meiFermata.GetStaff().at(0)) : 0;
             fermata->setTrack(staffIdx * VOICES);
@@ -1960,6 +1974,7 @@ bool MeiImporter::readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measu
         item = Factory::createMarker(measure);
         Convert::markerFromMEI(dynamic_cast<Marker*>(item), meiRepeatMark, warning);
     }
+    m_uids->reg(item, meiRepeatMark.m_xmlId);
     item->setTrack(0);
     measure->add(item);
 
@@ -2042,6 +2057,7 @@ bool MeiImporter::readTie(pugi::xml_node tieNode, engraving::Measure* measure)
     }
 
     Tie* tie = new Tie(m_score->dummy());
+    m_uids->reg(tie, meiTie.m_xmlId);
     startNote->setTieFor(tie);
     tie->setStartNote(startNote);
     tie->setTrack(startNote->track());
