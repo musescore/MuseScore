@@ -23,6 +23,8 @@
 #define MU_SHORTCUTS_SHORTCUTSMODULE_H
 
 #include <memory>
+#include <string>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::shortcuts {

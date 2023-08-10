@@ -23,6 +23,7 @@
 #define MU_UI_IUICONTEXTRESOLVER_H
 
 #include <memory>
+
 #include "modularity/imoduleinterface.h"
 #include "uitypes.h"
 #include "async/notification.h"

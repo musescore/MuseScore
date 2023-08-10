@@ -23,6 +23,7 @@
 #define MU_MIDI_MIDIMODULE_H
 
 #include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::midi {

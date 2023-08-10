@@ -23,6 +23,7 @@
 #define MU_PROJECT_PROJECTRWREGISTER_H
 
 #include <map>
+
 #include "../iprojectrwregister.h"
 
 namespace mu::project {

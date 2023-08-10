@@ -23,6 +23,7 @@
 #define MU_NOTATION_CONTROLLEDVIEWMOCK_H
 
 #include <gmock/gmock.h>
+
 #include "notation/view/notationviewinputcontroller.h"
 
 namespace mu {

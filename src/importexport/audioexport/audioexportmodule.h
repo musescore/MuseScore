@@ -23,6 +23,8 @@
 #define MU_IMPORTEXPORT_AUDIOEXPORTMODULE_H
 
 #include <memory>
+#include <string>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::iex::audioexport {

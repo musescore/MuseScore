@@ -23,6 +23,7 @@
 #define MU_AUDIO_AUDIOMODULE_H
 
 #include <memory>
+
 #include "modularity/imodulesetup.h"
 #include "async/asyncable.h"
 

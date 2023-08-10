@@ -23,6 +23,7 @@
 #define MU_UI_IUIACTIONSREGISTER_H
 
 #include <memory>
+
 #include "modularity/imoduleinterface.h"
 #include "iuiactionsmodule.h"
 #include "uitypes.h"

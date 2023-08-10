@@ -22,8 +22,8 @@
 #ifndef MU_ENGRAVING_PAINT_STABLE_H
 #define MU_ENGRAVING_PAINT_STABLE_H
 
-#include <functional>
 #include <vector>
+
 #include "draw/painter.h"
 #include "../iscorerenderer.h"
 

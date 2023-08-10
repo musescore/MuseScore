@@ -23,7 +23,6 @@
 #ifndef __PITCH_H__
 #define __PITCH_H__
 
-#include <map>
 #include "global/allocator.h"
 
 namespace mu::engraving {

@@ -24,6 +24,8 @@
 #define MU_MODULARITY_IMODULEINTERFACE_H
 
 #include <memory>
+#include <string_view>
+
 #include "moduleinfo.h"
 
 namespace mu::modularity {

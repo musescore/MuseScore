@@ -23,6 +23,7 @@
 #define MU_UI_NAVIGATIONEVENT_H
 
 #include <QObject>
+
 #include "ui/inavigation.h"
 
 namespace mu::ui {

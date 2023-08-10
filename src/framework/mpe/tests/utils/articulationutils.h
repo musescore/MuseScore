@@ -23,7 +23,6 @@
 #ifndef MU_MPE_TESTS_ARTICULATIONSPROFILEEXAMPLE_H
 #define MU_MPE_TESTS_ARTICULATIONSPROFILEEXAMPLE_H
 
-#include <unordered_map>
 #include "mpe/mpetypes.h"
 
 namespace mu::mpe::tests {

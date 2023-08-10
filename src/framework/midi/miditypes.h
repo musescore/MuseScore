@@ -30,7 +30,7 @@
 #include <map>
 #include <functional>
 #include <set>
-#include <cassert>
+
 #include "async/channel.h"
 #include "types/retval.h"
 #include "midievent.h"
