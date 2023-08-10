@@ -4104,13 +4104,13 @@ QT_TRANSLATE_NOOP3("engraving/instruments", "Splash Cymbal", "splash-cymbal long
 //: shortName for Splash Cymbal; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Sp. Cym.", "splash-cymbal shortName"),
 
-//: description for Tam-Tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: description for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Large unpitched gong.", "tam-tam description"),
-//: trackName for Tam-Tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Tam-Tam", "tam-tam trackName"),
-//: longName for Tam-Tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
-QT_TRANSLATE_NOOP3("engraving/instruments", "Tam-Tam", "tam-tam longName"),
-//: shortName for Tam-Tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+//: trackName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tam-tam", "tam-tam trackName"),
+//: longName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
+QT_TRANSLATE_NOOP3("engraving/instruments", "Tam-tam", "tam-tam longName"),
+//: shortName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
 QT_TRANSLATE_NOOP3("engraving/instruments", "Tam", "tam-tam shortName"),
 
 //: description for Thundersheet; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names
