@@ -8016,10 +8016,10 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="tam-tam">
+            <Instrument id="Tam-tam">
                   <family>unpitched-metal-percussion</family>
-                  <trackName>Tam-Tam</trackName>
-                  <longName>Tam-Tam</longName>
+                  <trackName>Tam-tam</trackName>
+                  <longName>Tam-tam</longName>
                   <shortName>Tam</shortName>
                   <description>Large unpitched gong.</description>
                   <musicXMLid>metal.tamtam</musicXMLid>
