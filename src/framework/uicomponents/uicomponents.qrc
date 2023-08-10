@@ -58,6 +58,7 @@
         <file>qml/MuseScore/UiComponents/StyledListView.qml</file>
         <file>qml/MuseScore/UiComponents/StyledGridView.qml</file>
         <file>qml/MuseScore/UiComponents/StyledFlickable.qml</file>
+        <file>qml/MuseScore/UiComponents/GradientRectangle.qml</file>
         <file>qml/MuseScore/UiComponents/InfoPanel.qml</file>
         <file>qml/MuseScore/UiComponents/internal/ArrowScrollButton.qml</file>
         <file>qml/MuseScore/UiComponents/SelectMultipleDirectoriesDialog.qml</file>

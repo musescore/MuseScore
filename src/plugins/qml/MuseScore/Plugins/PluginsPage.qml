@@ -75,26 +75,15 @@ Item {
         pluginsModel.load()
     }
 
-    Rectangle {
+    GradientRectangle {
         id: topGradient
 
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: flickable.top
 
-        height: 8
-        z: 1
-
-        gradient: Gradient {
-            GradientStop {
-                position: 0.0
-                color: root.backgroundColor
-            }
-            GradientStop {
-                position: 1.0
-                color: "transparent"
-            }
-        }
+        startColor: root.backgroundColor
+        endColor: "transparent"
     }
 
     StyledFlickable {
