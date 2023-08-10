@@ -33,6 +33,7 @@
 #include "libmscore/chord.h"
 #include "libmscore/dynamic.h"
 #include "libmscore/factory.h"
+#include "libmscore/figuredbass.h"
 #include "libmscore/instrumentname.h"
 #include "libmscore/layoutbreak.h"
 #include "libmscore/measure.h"
@@ -965,36 +966,36 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     //-------------------------------------------------------------
-    // Dynamics
+    // Dynamics and figured bass
     //-------------------------------------------------------------
 
-    std::vector<Dynamic*> dynamics;
+    std::vector<EngravingItem*> dynamicsAndFigBass;
     for (Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
-            if (e->isDynamic()) {
-                Dynamic* d = toDynamic(e);
-                TLayout::layout(d, ctx);
-                if (d->autoplace()) {
-                    d->manageBarlineCollisions();
-                    d->autoplaceSegmentElement(false);
-                    dynamics.push_back(d);
-                }
-            } else if (e->isFiguredBass()) {
+            if (e->isDynamic() || e->isFiguredBass()) {
                 TLayout::layoutItem(e, ctx);
-                e->autoplaceSegmentElement();
+                if (e->autoplace()) {
+                    if (e->isDynamic()) {
+                        toDynamic(e)->manageBarlineCollisions();
+                    }
+                    e->autoplaceSegmentElement(false);
+                    dynamicsAndFigBass.push_back(e);
+                }
             }
         }
     }
 
     // add dynamics shape to skyline
-    for (Dynamic* d : dynamics) {
-        if (!d->addToSkyline()) {
+    for (EngravingItem* e : dynamicsAndFigBass) {
+        if (!e->addToSkyline()) {
             continue;
         }
-        staff_idx_t si = d->staffIdx();
-        Segment* s = d->segment();
+        staff_idx_t si = e->staffIdx();
+        EngravingItem* parent = e->parentItem(true);
+        IF_ASSERT_FAILED(parent && parent->isSegment());
+        Segment* s = toSegment(parent);
         Measure* m = s->measure();
-        system->staff(si)->skyline().add(d->shape().translate(d->pos() + s->pos() + m->pos()));
+        system->staff(si)->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
     }
 
     //-------------------------------------------------------------
