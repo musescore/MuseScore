@@ -24,6 +24,7 @@
 #define MU_MODULARITY_IOC_H
 
 #include <memory>
+
 #include "modulesioc.h"
 
 #define INJECT(Interface, getter) \

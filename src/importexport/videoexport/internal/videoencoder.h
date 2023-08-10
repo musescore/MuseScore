@@ -23,6 +23,7 @@
 #define MU_IMPORTEXPORT_VIDEOENCODER_H
 
 #include <QImage>
+
 #include "io/path.h"
 
 namespace mu::iex::videoexport {

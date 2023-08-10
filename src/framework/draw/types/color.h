@@ -24,6 +24,7 @@
 #define MU_DRAW_COLOR_H
 
 #include <string>
+
 #include "rgba.h"
 
 #ifndef NO_QT_SUPPORT

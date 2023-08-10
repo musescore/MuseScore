@@ -24,6 +24,7 @@
 #define MU_ACCESSIBILITY_ACCESSIBILITYMODULE_H
 
 #include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::accessibility {

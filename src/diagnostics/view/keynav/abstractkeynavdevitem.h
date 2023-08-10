@@ -23,6 +23,7 @@
 #define MU_DIAGNOSTICS_ABSTRACTKEYNAVDEVITEM_H
 
 #include <QObject>
+
 #include "ui/inavigation.h"
 #include "async/asyncable.h"
 

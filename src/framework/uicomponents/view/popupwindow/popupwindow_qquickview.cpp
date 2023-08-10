@@ -22,6 +22,7 @@
 #include "popupwindow_qquickview.h"
 
 #include <QTimer>
+
 #include "log.h"
 
 using namespace mu::uicomponents;

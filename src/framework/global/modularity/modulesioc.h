@@ -28,6 +28,7 @@
 #include <string>
 #include <cassert>
 #include <iostream>
+
 #include "imoduleinterface.h"
 
 namespace mu::modularity {

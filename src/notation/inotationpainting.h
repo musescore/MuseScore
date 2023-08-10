@@ -23,6 +23,7 @@
 #define MU_NOTATION_INOTATIONPAINTING_H
 
 #include <memory>
+
 #include "notationtypes.h"
 
 #include "draw/painter.h"

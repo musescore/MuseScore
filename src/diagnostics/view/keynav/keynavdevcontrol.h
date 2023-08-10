@@ -23,6 +23,7 @@
 #define MU_DIAGNOSTICS_KEYNAVDEVCONTROL_H
 
 #include <QObject>
+
 #include "abstractkeynavdevitem.h"
 
 namespace mu::diagnostics {

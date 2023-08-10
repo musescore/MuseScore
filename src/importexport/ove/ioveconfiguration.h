@@ -23,6 +23,7 @@
 #define MU_IMPORTEXPORT_IIMPORTEXPORTCONFIGURATION_H
 
 #include <string>
+
 #include "modularity/imoduleinterface.h"
 
 namespace mu::iex::ove {

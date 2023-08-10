@@ -23,6 +23,7 @@
 #define MU_API_APIOBJECT_H
 
 #include <QObject>
+
 #include "iapiengine.h"
 
 namespace mu::api {

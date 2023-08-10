@@ -23,6 +23,7 @@
 #define MU_DIAGNOSTICS_DIAGNOSTICSPATHSMODEL_H
 
 #include <QAbstractListModel>
+
 #include "modularity/ioc.h"
 #include "idiagnosticspathsregister.h"
 #include "iinteractive.h"

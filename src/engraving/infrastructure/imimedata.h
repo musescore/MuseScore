@@ -25,6 +25,7 @@
 #include <string>
 #include <vector>
 #include <memory>
+
 #include "types/bytearray.h"
 #include "draw/types/pixmap.h"
 

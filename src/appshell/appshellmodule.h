@@ -24,6 +24,7 @@
 #define MU_APPSHELL_APPSHELLMODULE_H
 
 #include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::appshell {

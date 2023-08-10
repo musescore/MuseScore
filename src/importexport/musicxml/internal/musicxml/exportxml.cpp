@@ -40,6 +40,7 @@
 #include "exportxml.h"
 
 #include <math.h>
+#include <QString>
 #include <QBuffer>
 #include <QDate>
 #include <QRegularExpression>

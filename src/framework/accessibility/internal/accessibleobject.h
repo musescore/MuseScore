@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QAccessibleInterface>
+
 #include "../iaccessible.h"
 
 namespace mu::accessibility {

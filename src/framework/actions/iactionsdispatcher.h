@@ -23,6 +23,7 @@
 #define MU_ACTIONS_IACTIONSDISPATCHER_H
 
 #include <functional>
+
 #include "modularity/imoduleinterface.h"
 #include "actiontypes.h"
 

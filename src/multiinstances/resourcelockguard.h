@@ -24,6 +24,7 @@
 
 #include <string>
 #include <memory>
+
 #include "imultiinstancesprovider.h"
 
 namespace mu::mi {

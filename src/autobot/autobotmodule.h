@@ -23,6 +23,7 @@
 #define MU_AUTOBOT_AUTOBOTMODULE_H
 
 #include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::autobot {

@@ -24,6 +24,7 @@
 #define MU_MODULARITY_IMODULESETUP_H
 
 #include <string>
+
 #include "../iapplication.h"
 
 namespace mu::modularity {

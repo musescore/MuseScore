@@ -23,6 +23,7 @@
 #define MU_CONTEXT_CONTEXTMODULE_H
 
 #include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::context {

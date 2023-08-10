@@ -21,6 +21,7 @@
  */
 
 #include <algorithm>
+
 #include "containers.h"
 
 #include "pitch.h"

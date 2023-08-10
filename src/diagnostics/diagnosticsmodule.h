@@ -23,6 +23,7 @@
 #define MU_DIAGNOSTICS_DIAGNOSTICSMODULE_H
 
 #include <memory>
+
 #include "modularity/imodulesetup.h"
 
 #include "modularity/ioc.h"

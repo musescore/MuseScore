@@ -23,6 +23,7 @@
 #define MU_PROJECT_NOTATIONREADERSREGISTER_H
 
 #include <map>
+
 #include "../inotationreadersregister.h"
 
 namespace mu::project {

@@ -24,6 +24,7 @@
 
 #include <QObject>
 #include <QTimer>
+
 #include "modularity/ioc.h"
 #include "ui/inavigationcontroller.h"
 #include "async/asyncable.h"
