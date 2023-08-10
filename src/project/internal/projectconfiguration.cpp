@@ -92,7 +92,7 @@ void ProjectConfiguration::init()
         m_autoSaveEnabledChanged.send(val.toBool());
     });
 
-    settings()->setDefaultValue(AUTOSAVE_INTERVAL_KEY, Val(3));
+    settings()->setDefaultValue(AUTOSAVE_INTERVAL_KEY, Val(5));
     settings()->valueChanged(AUTOSAVE_INTERVAL_KEY).onReceive(nullptr, [this](const Val& val) {
         m_autoSaveIntervalChanged.send(val.toInt());
     });

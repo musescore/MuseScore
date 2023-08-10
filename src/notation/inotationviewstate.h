@@ -59,9 +59,7 @@ public:
     virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(const ViewMode& mode) = 0;
 
-    virtual bool needSave() const = 0;
-    virtual async::Notification needSaveChanged() const = 0;
-    virtual void markAsSaved() = 0;
+    virtual async::Notification stateChanged() const = 0;
 
     virtual void makeDefault() = 0;
 };

@@ -40,6 +40,8 @@ using namespace mu::engraving::write;
 
 bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, rw::WriteInOutData* inout)
 {
+    TRACEFUNC;
+
     XmlWriter xml(device);
     WriteContext ctx;
     if (inout) {
@@ -76,6 +78,8 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
 
 void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selectionOnly, compat::WriteScoreHook& hook)
 {
+    TRACEFUNC;
+
     // if we have multi measure rests and some parts are hidden,
     // then some layout information is missing:
     // relayout with all parts set visible

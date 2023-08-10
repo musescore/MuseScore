@@ -229,9 +229,6 @@ mu::Ret MscLoader::readMasterScore(MasterScore* score, XmlReader& e, bool ignore
 
             score->setExcerptsChanged(false);
 
-            // don't autosave (as long as there's no change to the score)
-            score->setAutosaveDirty(false);
-
             return make_ret(err);
         } else {
             e.unknown();

@@ -51,7 +51,6 @@ void NotationUndoStack::undo(mu::engraving::EditData* editData)
     }
 
     score()->undoRedo(true, editData);
-    masterScore()->setSaved(isStackClean());
 
     notifyAboutNotationChanged();
     notifyAboutUndo();
@@ -79,7 +78,6 @@ void NotationUndoStack::redo(mu::engraving::EditData* editData)
     }
 
     score()->undoRedo(false, editData);
-    masterScore()->setSaved(isStackClean());
 
     notifyAboutNotationChanged();
     notifyAboutRedo();
@@ -115,7 +113,6 @@ void NotationUndoStack::rollbackChanges()
     }
 
     score()->endCmd(true);
-    masterScore()->setSaved(isStackClean());
 }
 
 void NotationUndoStack::commitChanges()
@@ -129,9 +126,17 @@ void NotationUndoStack::commitChanges()
     }
 
     score()->endCmd();
-    masterScore()->setSaved(isStackClean());
 
     notifyAboutStateChanged();
+}
+
+bool NotationUndoStack::isStackClean() const
+{
+    IF_ASSERT_FAILED(undoStack()) {
+        return false;
+    }
+
+    return undoStack()->isClean();
 }
 
 void NotationUndoStack::lock()
@@ -164,7 +169,11 @@ mu::async::Notification NotationUndoStack::stackChanged() const
 
 mu::async::Channel<ChangesRange> NotationUndoStack::changesChannel() const
 {
-    return score() ? score()->changesChannel() : async::Channel<ChangesRange>();
+    IF_ASSERT_FAILED(score()) {
+        return async::Channel<ChangesRange>();
+    }
+
+    return score()->changesChannel();
 }
 
 mu::engraving::Score* NotationUndoStack::score() const
@@ -200,13 +209,4 @@ void NotationUndoStack::notifyAboutUndo()
 void NotationUndoStack::notifyAboutRedo()
 {
     m_redoNotification.notify();
-}
-
-bool NotationUndoStack::isStackClean() const
-{
-    IF_ASSERT_FAILED(undoStack()) {
-        return false;
-    }
-
-    return undoStack()->isClean();
 }

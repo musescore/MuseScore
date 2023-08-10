@@ -143,16 +143,6 @@ void MasterScore::setSaved(bool v)
     m_saved = v;
 }
 
-bool MasterScore::autosaveDirty() const
-{
-    return m_autosaveDirty;
-}
-
-void MasterScore::setAutosaveDirty(bool v)
-{
-    m_autosaveDirty = v;
-}
-
 String MasterScore::name() const
 {
     return fileInfo()->displayName();

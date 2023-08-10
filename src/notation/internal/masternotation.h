@@ -72,9 +72,6 @@ public:
 
     INotationPlaybackPtr playback() const override;
 
-    void setSaved(bool arg) override;
-    mu::ValNt<bool> needSave() const override;
-
 private:
 
     friend class NotationCreator;
@@ -91,13 +88,8 @@ private:
 
     void onPartsChanged();
 
-    void notifyAboutNeedSaveChanged();
-
-    void markScoreAsNeedToSave();
-
     ValCh<ExcerptNotationList> m_excerpts;
     INotationPlaybackPtr m_notationPlayback = nullptr;
-    async::Notification m_needSaveNotification;
     async::Notification m_hasPartsChanged;
 
     mutable ExcerptNotationList m_potentialExcerpts;

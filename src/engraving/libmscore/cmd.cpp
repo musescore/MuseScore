@@ -328,9 +328,7 @@ void Score::undoRedo(bool undo, EditData* ed)
         range.changedStyleIdSet = std::move(changes.changedStyleIdSet);
     }
 
-    if (range.isValid()) {
-        changesChannel().send(range);
-    }
+    changesChannel().send(range);
 }
 
 //---------------------------------------------------------
@@ -370,12 +368,11 @@ void Score::endCmd(bool rollback, bool layoutAllParts)
 
     if (dirty()) {
         masterScore()->setPlaylistDirty(); // TODO: flag individual operations
-        masterScore()->setAutosaveDirty(true);
     }
 
     cmdState().reset();
 
-    if (!rollback && range.isValid()) {
+    if (!rollback) {
         changesChannel().send(range);
     }
 }

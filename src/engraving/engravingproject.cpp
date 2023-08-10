@@ -143,6 +143,7 @@ MasterScore* EngravingProject::masterScore() const
 Ret EngravingProject::loadMscz(const MscReader& msc, SettingsCompat& settingsCompat, bool ignoreVersionError)
 {
     TRACEFUNC;
+
     MScore::setError(MsError::MS_NO_ERROR);
     MscLoader loader;
     return loader.loadMscz(m_masterScore, msc, settingsCompat, ignoreVersionError);
@@ -151,13 +152,9 @@ Ret EngravingProject::loadMscz(const MscReader& msc, SettingsCompat& settingsCom
 bool EngravingProject::writeMscz(MscWriter& writer, bool onlySelection, bool createThumbnail)
 {
     TRACEFUNC;
-    MscSaver saver;
-    bool ok = saver.writeMscz(m_masterScore, writer, onlySelection, createThumbnail);
-    if (ok && !onlySelection) {
-        m_masterScore->update();
-    }
 
-    return ok;
+    MscSaver saver;
+    return saver.writeMscz(m_masterScore, writer, onlySelection, createThumbnail);
 }
 
 bool EngravingProject::isCorruptedUponLoading() const

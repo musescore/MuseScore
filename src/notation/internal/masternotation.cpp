@@ -90,11 +90,6 @@ MasterNotation::MasterNotation()
 
     undoStack()->stackChanged().onNotify(this, [this]() {
         updateExcerpts();
-        notifyAboutNeedSaveChanged();
-    });
-
-    viewState()->needSaveChanged().onNotify(this, [this]() {
-        notifyAboutNeedSaveChanged();
     });
 }
 
@@ -334,8 +329,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
         }
     }
 
-    score->setSaved(true);
-
     score->checkChordList();
 
     createMeasures(score, scoreOptions);
@@ -475,21 +468,6 @@ void MasterNotation::unloadExcerpts(ExcerptNotationList& excerpts)
     excerpts.clear();
 }
 
-mu::ValNt<bool> MasterNotation::needSave() const
-{
-    ValNt<bool> needSave;
-    needSave.val = masterScore() ? !masterScore()->saved() : false;
-
-    needSave.val |= viewState()->needSave();
-    for (IExcerptNotationPtr excerpt : excerpts().val) {
-        needSave.val |= excerpt->notation()->viewState()->needSave();
-    }
-
-    needSave.notification = m_needSaveNotification;
-
-    return needSave;
-}
-
 void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
 {
     for (IExcerptNotationPtr excerptNotation : excerpts) {
@@ -625,8 +603,6 @@ void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool o
     if (open) {
         excerptNotation->elements()->msScore()->doLayout();
     }
-
-    markScoreAsNeedToSave();
 }
 
 void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
@@ -639,11 +615,6 @@ void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
     for (auto excerpt : excerpts) {
         excerpt->notation()->undoStack()->stackChanged().onNotify(this, [this]() {
             updateExcerpts();
-            notifyAboutNeedSaveChanged();
-        });
-
-        excerpt->notation()->viewState()->needSaveChanged().onNotify(this, [this]() {
-            notifyAboutNeedSaveChanged();
         });
     }
 
@@ -749,17 +720,6 @@ void MasterNotation::onPartsChanged()
     m_potentialExcerptsForcedDirty = true;
 }
 
-void MasterNotation::notifyAboutNeedSaveChanged()
-{
-    m_needSaveNotification.notify();
-}
-
-void MasterNotation::markScoreAsNeedToSave()
-{
-    masterScore()->setSaved(false);
-    m_needSaveNotification.notify();
-}
-
 IExcerptNotationPtr MasterNotation::createEmptyExcerpt(const QString& name) const
 {
     auto excerptNotation = std::make_shared<ExcerptNotation>(new mu::engraving::Excerpt(masterScore()));
@@ -791,14 +751,6 @@ Notification MasterNotation::hasPartsChanged() const
 INotationPlaybackPtr MasterNotation::playback() const
 {
     return m_notationPlayback;
-}
-
-void MasterNotation::setSaved(bool arg)
-{
-    IF_ASSERT_FAILED(masterScore()) {
-        return;
-    }
-    masterScore()->setSaved(arg);
 }
 
 const ExcerptNotationList& MasterNotation::potentialExcerpts() const

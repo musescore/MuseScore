@@ -567,7 +567,6 @@ Err importBww(MasterScore* score, const QString& path)
     Bww::Parser p(lex, wrt);
     p.parse();
 
-    score->setSaved(false);
     score->connectTies();
     LOGD("Score::importBww() done");
     return engraving::Err::NoError; // OK

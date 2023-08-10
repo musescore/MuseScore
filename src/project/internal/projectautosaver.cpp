@@ -23,16 +23,18 @@
 
 #include "engraving/infrastructure/mscio.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu::project;
 
 void ProjectAutoSaver::init()
 {
-    QObject::connect(&m_timer, &QTimer::timeout, [this]() { onTrySave(); });
-    m_timer.setSingleShot(false);
+    m_timer.setSingleShot(true);
     m_timer.setTimerType(Qt::VeryCoarseTimer);
     m_timer.setInterval(configuration()->autoSaveIntervalMinutes() * 60000);
+
+    QObject::connect(&m_timer, &QTimer::timeout, [this]() { onTrySave(); });
 
     if (configuration()->isAutoSaveEnabled()) {
         m_timer.start();
@@ -121,10 +123,12 @@ INotationProjectPtr ProjectAutoSaver::currentProject() const
 
 void ProjectAutoSaver::update()
 {
+    TRACEFUNC;
+
     io::path_t newProjectPath;
 
     auto project = currentProject();
-    if (project && project->needSave().val) {
+    if (project && project->needAutoSave()) {
         newProjectPath = projectPath(project);
     }
 
@@ -138,13 +142,21 @@ void ProjectAutoSaver::update()
 
 void ProjectAutoSaver::onTrySave()
 {
+    TRACEFUNC;
+
+    DEFER {
+        if (configuration()->isAutoSaveEnabled()) {
+            m_timer.start();
+        }
+    };
+
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
         LOGD() << "[autosave] no project";
         return;
     }
 
-    if (!project->needSave().val) {
+    if (!project->needAutoSave()) {
         LOGD() << "[autosave] project does not need save";
         return;
     }
@@ -162,6 +174,8 @@ void ProjectAutoSaver::onTrySave()
         LOGE() << "[autosave] failed to save project, err: " << ret.toString();
         return;
     }
+
+    project->setNeedAutoSave(false);
 
     LOGD() << "[autosave] successfully saved project";
 }

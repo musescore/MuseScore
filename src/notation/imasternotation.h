@@ -62,9 +62,6 @@ public:
     virtual async::Notification hasPartsChanged() const = 0;
 
     virtual INotationPlaybackPtr playback() const = 0;
-
-    virtual void setSaved(bool arg) = 0;
-    virtual ValNt<bool> needSave() const = 0;
 };
 
 using IMasterNotationPtr = std::shared_ptr<IMasterNotation>;
