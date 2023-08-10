@@ -101,6 +101,24 @@ inline void swapItemsAt(std::vector<T>& vec, size_t idx1, size_t idx2)
 }
 
 template<typename T>
+inline bool moveItem(std::vector<T>& vec, size_t oldIdx, size_t newIdx)
+{
+    if (oldIdx == mu::nidx || oldIdx == newIdx) {
+        return false;
+    }
+
+    newIdx = std::min(vec.size() - 1, newIdx);
+
+    if (oldIdx > newIdx) {
+        std::rotate(vec.rend() - oldIdx - 1, vec.rend() - oldIdx, vec.rend() - newIdx);
+    } else {
+        std::rotate(vec.begin() + oldIdx, vec.begin() + oldIdx + 1, vec.begin() + newIdx + 1);
+    }
+
+    return true;
+}
+
+template<typename T>
 std::vector<T> mid(const std::vector<T>& c, size_t pos, int alength = -1)
 {
     if (c.empty()) {

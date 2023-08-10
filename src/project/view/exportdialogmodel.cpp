@@ -131,7 +131,7 @@ void ExportDialogModel::load()
 
     m_notations << masterNotation->notation();
 
-    ExcerptNotationList excerpts = masterNotation->excerpts().val;
+    ExcerptNotationList excerpts = masterNotation->excerpts();
     ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
     excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
 

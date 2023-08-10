@@ -72,7 +72,7 @@ void PartListModel::load()
         return;
     }
 
-    ExcerptNotationList excerpts = masterNotation->excerpts().val;
+    ExcerptNotationList excerpts = masterNotation->excerpts();
     ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
     excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
 
@@ -137,7 +137,7 @@ void PartListModel::createNewPart()
     IExcerptNotationPtr newExcerpt = masterNotation()->createEmptyExcerpt(name);
 
     int index = m_excerpts.size();
-    insertExcerpt(index, newExcerpt);
+    insertNewExcerpt(index, newExcerpt);
 }
 
 void PartListModel::selectPart(int partIndex)
@@ -211,13 +211,16 @@ void PartListModel::doRemovePart(int partIndex)
         return;
     }
 
-    bool isCurrentNotation = context()->currentNotation() == m_excerpts[partIndex]->notation();
+    bool isCurrentNotation = context()->currentNotation() == m_excerpts.at(partIndex)->notation();
 
     beginRemoveRows(QModelIndex(), partIndex, partIndex);
 
-    masterNotation()->removeExcerpts({ m_excerpts[partIndex] });
-    m_excerpts.removeAt(partIndex);
+    ExcerptNotationList excerpts = masterNotation()->excerpts();
+    if (mu::remove(excerpts, m_excerpts.at(partIndex))) {
+        masterNotation()->setExcerpts(excerpts);
+    }
 
+    m_excerpts.removeAt(partIndex);
     endRemoveRows();
 
     if (isCurrentNotation) {
@@ -287,14 +290,18 @@ void PartListModel::copyPart(int partIndex)
     IExcerptNotationPtr copy = m_excerpts[partIndex]->clone();
     copy->setName(formatUniqueExcerptName(copy->name() + " " + qtrc("notation", "(copy)"), m_excerpts));
 
-    insertExcerpt(partIndex + 1, copy);
+    insertNewExcerpt(partIndex + 1, copy);
 }
 
-void PartListModel::insertExcerpt(int destinationIndex, IExcerptNotationPtr excerpt)
+void PartListModel::insertNewExcerpt(int destinationIndex, IExcerptNotationPtr excerpt)
 {
     beginInsertRows(QModelIndex(), destinationIndex, destinationIndex);
     m_excerpts.insert(destinationIndex, excerpt);
-    masterNotation()->addExcerpts({ excerpt });
+
+    ExcerptNotationList excerpts = masterNotation()->excerpts();
+    excerpts.push_back(excerpt);
+    masterNotation()->setExcerpts(excerpts);
+
     endInsertRows();
 
     emit partAdded(destinationIndex);
@@ -306,7 +313,7 @@ void PartListModel::openSelectedParts()
     QList<int> rows = m_selectionModel->selectedRows();
     std::sort(rows.begin(), rows.end());
 
-    openNotations(rows);
+    openExcerpts(rows);
 }
 
 void PartListModel::openAllParts()
@@ -317,27 +324,39 @@ void PartListModel::openAllParts()
         rows << i;
     }
 
-    openNotations(rows);
+    openExcerpts(rows);
 }
 
-void PartListModel::openNotations(const QList<int>& rows) const
+void PartListModel::openExcerpts(const QList<int>& rows) const
 {
     if (rows.empty()) {
         return;
     }
 
-    ExcerptNotationList excerpts;
-    for (int index : rows) {
-        excerpts.push_back(m_excerpts[index]);
-    }
-
-    masterNotation()->addExcerpts(excerpts);
+    ExcerptNotationList newExcerpts = masterNotation()->excerpts();
 
     for (int index : rows) {
-        masterNotation()->setExcerptIsOpen(m_excerpts[index]->notation(), true);
+        const IExcerptNotationPtr& excerpt = m_excerpts.at(index);
+        if (excerpt->notation()->isOpen()) {
+            continue;
+        }
+
+        size_t idx = mu::indexOf(newExcerpts, excerpt);
+        if (idx == mu::nidx) {
+            newExcerpts.push_back(excerpt);
+        } else {
+            // Move to the end of the list if already exists
+            mu::moveItem(newExcerpts, idx, newExcerpts.size());
+        }
     }
 
-    context()->setCurrentNotation(m_excerpts[rows.last()]->notation());
+    masterNotation()->setExcerpts(newExcerpts);
+
+    for (int index : rows) {
+        masterNotation()->setExcerptIsOpen(m_excerpts.at(index)->notation(), true);
+    }
+
+    context()->setCurrentNotation(m_excerpts.at(rows.last())->notation());
 }
 
 bool PartListModel::isExcerptIndexValid(int index) const
