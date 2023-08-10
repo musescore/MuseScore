@@ -191,7 +191,7 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
         excerpt->setInitialPartId(initialPartId);
         assignedPartIdSet.insert(initialPartId);
     };
-
+    // Excerpt name is same as Part name (Violin - Violin)
     for (Excerpt* excerpt : excerpts) {
         for (const Part* part : excerpt->excerptScore()->parts()) {
             if (excerpt->name() == part->partName()) {
@@ -200,7 +200,7 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
             }
         }
     }
-
+    // Excerpt name contains Part name (Violin1 - Violin)
     for (Excerpt* excerpt : excerpts) {
         if (excerpt->initialPartId().isValid()) {
             continue;
@@ -211,10 +211,42 @@ void CompatUtils::assignInitialPartToExcerpts(const std::vector<Excerpt*>& excer
                 continue;
             }
 
-            if (excerpt->name().contains(part->partName()) || excerpt->excerptScore()->parts().size() == 1) {
+            if (excerpt->name().contains(part->partName())) {
                 assignInitialPartId(excerpt, part->id());
                 break;
             }
+        }
+    }
+    // Excerpt contains only single instrument
+    for (Excerpt* excerpt : excerpts) {
+        if (excerpt->initialPartId().isValid()) {
+            continue;
+        }
+
+        for (Part* part : excerpt->excerptScore()->parts()) {
+            if (mu::contains(assignedPartIdSet, part->id())) {
+                continue;
+            }
+
+            if (excerpt->excerptScore()->parts().size() == 1) {
+                assignInitialPartId(excerpt, part->id());
+                break;
+            }
+        }
+    }
+    // Excerpt contains instrument
+    for (Excerpt* excerpt : excerpts) {
+        if (excerpt->initialPartId().isValid()) {
+            continue;
+        }
+
+        for (Part* part : excerpt->excerptScore()->parts()) {
+            if (mu::contains(assignedPartIdSet, part->id())) {
+                continue;
+            }
+
+            assignInitialPartId(excerpt, part->id());
+            break;
         }
     }
 }
