@@ -39,7 +39,7 @@
         <longName>Tam-tam</longName>
         <shortName>Tam-tam</shortName>
         <trackName>Tam-tam</trackName>
-        <instrumentId>metal.brake-drums</instrumentId>
+        <instrumentId>tam-tam</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="52">
           <head>cross</head>
