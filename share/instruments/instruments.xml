@@ -8016,7 +8016,7 @@
                   <genre>concertband</genre>
                   <genre>marching</genre>
             </Instrument>
-            <Instrument id="Tam-tam">
+            <Instrument id="tam-tam">
                   <family>unpitched-metal-percussion</family>
                   <trackName>Tam-tam</trackName>
                   <longName>Tam-tam</longName>
