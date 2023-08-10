@@ -23,8 +23,10 @@
 #define MU_UICOMPONENTS_IPOPUPWINDOW_H
 
 #include <memory>
+
 #include <QQmlEngine>
 #include <QQuickItem>
+
 #include "ui/iuiconfiguration.h"
 
 class QQuickCloseEvent;

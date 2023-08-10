@@ -24,6 +24,7 @@
 #define __PALETTEWORKSPACE_H__
 
 #include <QAbstractItemModel>
+
 #include "view/palettemodel.h"
 
 #include "ipaletteprovider.h"

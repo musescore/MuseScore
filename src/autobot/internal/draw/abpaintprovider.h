@@ -23,6 +23,7 @@
 #define MU_AUTOBOT_ABPAINTPROVIDER_H
 
 #include <memory>
+
 #include "draw/bufferedpaintprovider.h"
 
 namespace mu::autobot {

@@ -23,6 +23,7 @@
 #define MU_PROJECT_IPROJECTRWREGISTER_H
 
 #include <string>
+
 #include "modularity/imoduleinterface.h"
 #include "iprojectwriter.h"
 

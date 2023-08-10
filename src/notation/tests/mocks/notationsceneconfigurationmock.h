@@ -23,6 +23,7 @@
 #define MU_NOTATION_NOTATIONSCENECONFIGURATIONMOCK_H
 
 #include <gmock/gmock.h>
+
 #include "notation/iscenenotationconfiguration.h"
 
 namespace mu {

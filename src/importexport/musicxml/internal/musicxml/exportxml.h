@@ -23,10 +23,10 @@
 #ifndef MU_IMPORTEXPORT_EXPORTXML_H
 #define MU_IMPORTEXPORT_EXPORTXML_H
 
-#include <QString>
 #include "io/iodevice.h"
 
 class QIODevice;
+class QString;
 
 namespace mu::engraving {
 class Score;

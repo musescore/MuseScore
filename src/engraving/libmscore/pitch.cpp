@@ -21,6 +21,7 @@
  */
 
 #include <algorithm>
+
 #include "containers.h"
 
 #include "pitch.h"
@@ -36,6 +37,7 @@ int PitchList::pitchOffset(int tick) const
     if (empty()) {
         return 0;
     }
+    // auto it = 
 
     std::vector<int> ticks = mu::keys(*this);
     auto it = std::upper_bound(ticks.cbegin(), ticks.cend(), tick);

@@ -23,6 +23,7 @@
 #define MU_AUDIO_AUDIOSTREAM_H
 
 #include <vector>
+
 #include "audio/iaudiostream.h"
 #include "samplerateconvertor.h"
 

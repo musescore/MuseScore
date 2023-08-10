@@ -23,6 +23,7 @@
 #define MU_CLOUD_CLOUDMODULE_H
 
 #include <memory>
+
 #include "modularity/imodulesetup.h"
 
 namespace mu::cloud {

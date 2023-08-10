@@ -24,6 +24,7 @@
 #define __EASEINOUT_H__
 
 #include <vector>
+
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {

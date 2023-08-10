@@ -24,6 +24,7 @@
 #define MU_ENGRAVING_WRITECONTEXT_H
 
 #include <map>
+
 #include "containers.h"
 #include "../linksindexer.h"
 #include "libmscore/select.h"

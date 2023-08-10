@@ -24,6 +24,7 @@
 #define __SPANNERMAP_H__
 
 #include <map>
+
 #include "thirdparty/intervaltree/IntervalTree.h"
 
 namespace mu::engraving {

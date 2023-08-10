@@ -23,6 +23,7 @@
 #define MU_DRAW_QIMAGEPAINTERPROVIDER_H
 
 #include <QImage>
+
 #include "qpainterprovider.h"
 #include "types/pixmap.h"
 

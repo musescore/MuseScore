@@ -22,7 +22,6 @@
 #ifndef MU_ENGRAVING_CHORDLIST_H
 #define MU_ENGRAVING_CHORDLIST_H
 
-#include <functional>
 #include "types/string.h"
 
 namespace mu::engraving {

@@ -23,6 +23,7 @@
 #define MU_API_JSRETVAL_H
 
 #include <QVariant>
+
 #include "types/retval.h"
 #include "io/path.h"
 

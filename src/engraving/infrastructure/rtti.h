@@ -22,7 +22,6 @@
 #ifndef MU_ENGRAVING_RTTI_H
 #define MU_ENGRAVING_RTTI_H
 
-#include <type_traits>
 #include "log.h"
 
 namespace mu::engraving::rtti {

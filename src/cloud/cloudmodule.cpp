@@ -22,6 +22,7 @@
 #include "cloudmodule.h"
 
 #include <QQmlEngine>
+
 #include "modularity/ioc.h"
 #include "ui/iinteractiveuriregister.h"
 #include "ui/iuiengine.h"

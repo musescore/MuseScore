@@ -23,6 +23,7 @@
 #define MU_UI_NAVIGATIONPOPUPPANEL_H
 
 #include <QObject>
+
 #include "navigationpanel.h"
 
 namespace mu::ui {

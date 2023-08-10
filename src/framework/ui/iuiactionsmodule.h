@@ -23,6 +23,7 @@
 #define MU_UI_IUIACTIONSMODULE_H
 
 #include <memory>
+
 #include "uitypes.h"
 #include "async/channel.h"
 
