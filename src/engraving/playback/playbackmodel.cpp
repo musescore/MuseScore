@@ -68,6 +68,10 @@ void PlaybackModel::load(Score* score)
     changesChannel.resetOnReceive(this);
 
     changesChannel.onReceive(this, [this](const ScoreChangesRange& range) {
+        if (!range.isValid()) {
+            return;
+        }
+
         TickBoundaries tickRange = tickBoundaries(range);
         TrackBoundaries trackRange = trackBoundaries(range);
 
