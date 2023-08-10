@@ -83,9 +83,9 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
         )
 
-    add_subdirectory(${THIRDPARTY_DIR}/freetype freetype)
-    set(MODULE_INCLUDE ${THIRDPARTY_DIR}/freetype/include)
-    set(MODULE_LINK freetype)
+    include(SetupFreeType)
+    set(MODULE_INCLUDE ${FREETYPE_INCLUDE_DIRS})
+    set(MODULE_LINK ${FREETYPE_LIBRARIES})
 
 endif()
 

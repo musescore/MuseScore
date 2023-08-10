@@ -122,6 +122,7 @@ option(MUE_COMPILE_USE_PCH "Use precompiled headers." ON)
 option(MUE_COMPILE_USE_UNITY "Use unity build." ON)
 option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
 option(MUE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
+option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF) # Important for the maintainer of Linux distributions
 
 # === Debug ===
 option(MUE_ENABLE_LOGGER_DEBUGLEVEL "Enable logging debug level" ON)
