@@ -35,11 +35,11 @@
         <barLineSpanTo>4</barLineSpanTo>
         </Staff>
       <trackName>Tam-tam</trackName>
-      <Instrument id="automobile-brake-drums">
+      <Instrument id="tam-tam">
         <longName>Tam-tam</longName>
         <shortName>Tam-tam</shortName>
         <trackName>Tam-tam</trackName>
-        <instrumentId>tam-tam</instrumentId>
+        <instrumentId>metal.tamtam</instrumentId>
         <useDrumset>1</useDrumset>
         <Drum pitch="52">
           <head>cross</head>
