@@ -155,7 +155,7 @@ void MainWindowBridge::toggleFullScreen()
 
 void MainWindowBridge::updateFullScreen()
 {
-    bool isFullScreen = m_window ? m_window->windowStates() & Qt::WindowFullScreen : false;
+    bool isFullScreen = m_window ? m_window->windowStates().testFlag(Qt::WindowFullScreen) : false;
     if (isFullScreen == m_isFullScreen) {
         return;
     }
