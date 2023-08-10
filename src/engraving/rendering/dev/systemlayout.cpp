@@ -990,9 +990,11 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
         if (!e->addToSkyline()) {
             continue;
         }
-        staff_idx_t si = e->staffIdx();
         EngravingItem* parent = e->parentItem(true);
-        IF_ASSERT_FAILED(parent && parent->isSegment());
+        IF_ASSERT_FAILED(parent && parent->isSegment()) {
+            continue;
+        }
+        staff_idx_t si = e->staffIdx();
         Segment* s = toSegment(parent);
         Measure* m = s->measure();
         system->staff(si)->skyline().add(e->shape().translate(e->pos() + s->pos() + m->pos()));
