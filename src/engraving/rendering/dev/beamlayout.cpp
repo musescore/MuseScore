@@ -119,7 +119,7 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
 
 void BeamLayout::layoutIfNeed(Beam* item, LayoutContext& ctx)
 {
-    if (!item->layoutInfo->isValid()) {
+    if (!(item->layoutInfo && item->layoutInfo->isValid())) {
         BeamLayout::layout(item, ctx);
     }
 }
