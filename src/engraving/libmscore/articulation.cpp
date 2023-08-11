@@ -710,12 +710,6 @@ bool Articulation::isOnCrossBeamSide() const
     return chord->beam() && (chord->beam()->cross() || chord->staffMove() != 0) && (up() == chord->up());
 }
 
-void Articulation::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-    setbbox(data.bbox);
-}
-
 struct ArticulationGroup
 {
     SymId first;

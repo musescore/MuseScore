@@ -615,7 +615,7 @@ void TLayout::layout(Articulation* item, LayoutContext& ctx)
     }
 }
 
-static void doLayoutArticulation(const Articulation* item, Articulation::LayoutData& data)
+void TLayout::layoutArticulation(Articulation* item, LayoutContext&)
 {
     RectF bRect;
 
@@ -628,14 +628,7 @@ static void doLayoutArticulation(const Articulation* item, Articulation::LayoutD
         bRect = fm.boundingRect(scaledFont, TConv::text(item->textType()));
     }
 
-    data.bbox = bRect.translated(-0.5 * bRect.width(), 0.0);
-}
-
-void TLayout::layoutArticulation(Articulation* item, LayoutContext&)
-{
-    Articulation::LayoutData data;
-    doLayoutArticulation(item, data);
-    item->setLayoutData(data);
+    item->mutLayoutData()->bbox = bRect.translated(-0.5 * bRect.width(), 0.0);
 }
 
 static void layoutBagpipeEmbellishment(const BagpipeEmbellishment* item, const LayoutContext& ctx, BagpipeEmbellishment::LayoutData& data)
