@@ -334,7 +334,7 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
 
     QVariantList categoryItems;
 
-    for (const MsBasicItem& category : msBasicPresetCategories) {
+    for (const MsBasicItem& category : MS_BASIC_PRESET_CATEGORIES) {
         bool isCurrent = false;
 
         categoryItems << buildMsBasicItem(category, isCurrent, menuId);
