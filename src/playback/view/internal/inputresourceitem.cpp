@@ -269,56 +269,9 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
 
         if (soundFont == MS_BASIC_SOUNDFONT_NAME) {
             soundFontItems << buildMsBasicMenuItem(resourcesBySoundFont[soundFont], isCurrentSoundFont, currentPreset);
-            continue;
+        } else {
+            soundFontItems << buildSoundFontMenuItem(soundFont, resourcesBySoundFont[soundFont], isCurrentSoundFont, currentPreset);
         }
-
-        // Group resources by bank, and use this to sort them
-        std::map<int, std::map<int, AudioResourceMeta> > resourcesByBank;
-        AudioResourceMeta chooseAutomaticMeta;
-
-        for (const AudioResourceMeta& resourceMeta : resourcesBySoundFont[soundFont]) {
-            bool bankOk = false, programOk = false;
-            int presetBank = resourceMeta.attributeVal(u"presetBank").toInt(&bankOk);
-            int presetProgram = resourceMeta.attributeVal(u"presetProgram").toInt(&programOk);
-
-            if (bankOk && programOk) {
-                resourcesByBank[presetBank][presetProgram] = resourceMeta;
-            } else {
-                chooseAutomaticMeta = resourceMeta;
-            }
-        }
-
-        QVariantList bankItems;
-
-        for (const auto& bankPair : resourcesByBank) {
-            bool isCurrentBank = isCurrentSoundFont && currentPreset.has_value() && currentPreset.value().bank == bankPair.first;
-
-            QVariantList presetItems;
-
-            for (const auto& presetPair : bankPair.second) {
-                bool isCurrentPreset = isCurrentBank && currentPreset.value().program == presetPair.first;
-
-                presetItems << buildMenuItem(QString::fromStdString(presetPair.second.id),
-                                             presetPair.second.attributeVal(u"presetName"),
-                                             isCurrentPreset);
-            }
-
-            bankItems << buildMenuItem(soundFont + u"\\" + String::number(bankPair.first),
-                                       qtrc("playback", "Bank %1").arg(bankPair.first),
-                                       isCurrentBank,
-                                       presetItems);
-        }
-
-        // Prepend the "Choose automatically" item
-        bankItems.prepend(buildSeparator());
-        bankItems.prepend(buildMenuItem(QString::fromStdString(chooseAutomaticMeta.id),
-                                        qtrc("playback", "Choose automatically"),
-                                        isCurrentSoundFont && !currentPreset.has_value()));
-
-        soundFontItems << buildMenuItem(soundFont + u"\\menu",
-                                        soundFont,
-                                        isCurrentSoundFont,
-                                        bankItems);
     }
 
     return buildMenuItem(SOUNDFONTS_MENU_ITEM_ID,
@@ -397,6 +350,58 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
                          MS_BASIC_SOUNDFONT_NAME,
                          isCurrentSoundFont,
                          categoryItems);
+}
+
+QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, const audio::AudioResourceMetaList& availableResources,
+                                                      bool isCurrentSoundFont, const std::optional<midi::Program>& currentPreset) const
+{
+    // Group resources by bank, and use this to sort them
+    std::map<int, std::map<int, AudioResourceMeta> > resourcesByBank;
+    AudioResourceMeta chooseAutomaticMeta;
+
+    for (const AudioResourceMeta& resourceMeta : availableResources) {
+        bool bankOk = false, programOk = false;
+        int presetBank = resourceMeta.attributeVal(u"presetBank").toInt(&bankOk);
+        int presetProgram = resourceMeta.attributeVal(u"presetProgram").toInt(&programOk);
+
+        if (bankOk && programOk) {
+            resourcesByBank[presetBank][presetProgram] = resourceMeta;
+        } else {
+            chooseAutomaticMeta = resourceMeta;
+        }
+    }
+
+    QVariantList bankItems;
+
+    for (const auto& bankPair : resourcesByBank) {
+        bool isCurrentBank = isCurrentSoundFont && currentPreset.has_value() && currentPreset.value().bank == bankPair.first;
+
+        QVariantList presetItems;
+
+        for (const auto& presetPair : bankPair.second) {
+            bool isCurrentPreset = isCurrentBank && currentPreset.value().program == presetPair.first;
+
+            presetItems << buildMenuItem(QString::fromStdString(presetPair.second.id),
+                                         presetPair.second.attributeVal(u"presetName"),
+                                         isCurrentPreset);
+        }
+
+        bankItems << buildMenuItem(soundFont + u"\\" + String::number(bankPair.first),
+                                   qtrc("playback", "Bank %1").arg(bankPair.first),
+                                   isCurrentBank,
+                                   presetItems);
+    }
+
+    // Prepend the "Choose automatically" item
+    bankItems.prepend(buildSeparator());
+    bankItems.prepend(buildMenuItem(QString::fromStdString(chooseAutomaticMeta.id),
+                                    qtrc("playback", "Choose automatically"),
+                                    isCurrentSoundFont && !currentPreset.has_value()));
+
+    return buildMenuItem(soundFont + u"\\menu",
+                         soundFont,
+                         isCurrentSoundFont,
+                         bankItems);
 }
 
 void InputResourceItem::updateCurrentParams(const AudioResourceMeta& newMeta)

@@ -69,6 +69,8 @@ private:
     QVariantMap buildSoundFontsMenuItem(const ResourceByVendorMap& resourcesByVendor) const;
     QVariantMap buildMsBasicMenuItem(const audio::AudioResourceMetaList& availableResources, bool isCurrentSoundFont,
                                      const std::optional<midi::Program>& currentPreset) const;
+    QVariantMap buildSoundFontMenuItem(const String& soundFont, const audio::AudioResourceMetaList& availableResources,
+                                       bool isCurrentSoundFont, const std::optional<midi::Program>& currentPreset) const;
 
     void updateCurrentParams(const audio::AudioResourceMeta& newMeta);
     void updateAvailableResources(const audio::AudioResourceMetaList& availableResources);
