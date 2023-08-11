@@ -175,13 +175,6 @@ public:
 
     bool isOnCrossBeamSide() const;
 
-    struct LayoutData {
-        RectF bbox;
-    };
-
-    const LayoutData& layoutData() const { return m_layoutData; }
-    void setLayoutData(const LayoutData& data);
-
 protected:
     friend class mu::engraving::Factory;
     Articulation(ChordRest* parent, ElementType type = ElementType::ARTICULATION);
@@ -215,8 +208,6 @@ private:
     bool m_playArticulation = true;
 
     std::pair<Sid, Sid> m_showOnTabStyles = { Sid::NOSTYLE, Sid::NOSTYLE };
-
-    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 
