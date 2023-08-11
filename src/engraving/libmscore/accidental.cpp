@@ -492,9 +492,4 @@ String Accidental::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
-
-Accidental::LayoutData* Accidental::createLayoutData() const
-{
-    return new Accidental::LayoutData();
-}
 }
