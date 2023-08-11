@@ -61,7 +61,6 @@ void ActionIcon::setAction(const std::string& actionCode, char16_t icon)
 {
     m_actionCode = actionCode;
     m_icon = icon;
-    m_layoutData.invalidate();
 }
 
 double ActionIcon::fontSize() const
@@ -96,10 +95,4 @@ bool ActionIcon::setProperty(Pid pid, const PropertyValue& v)
         return EngravingItem::setProperty(pid, v);
     }
     return true;
-}
-
-void ActionIcon::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-    setbbox(data.bbox);
 }
