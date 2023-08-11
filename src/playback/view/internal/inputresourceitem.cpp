@@ -305,8 +305,13 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
 
             isCurrent = isCurrentSoundFont && currentPreset.has_value() && currentPreset.value() == item.preset;
 
+            QString presetName = resourceMeta.attributeVal(u"presetName");
+            if (presetName.isEmpty()) {
+                presetName = qtrc("playback", "Bank %1, preset %2").arg(item.preset.bank).arg(item.preset.program);
+            }
+
             return buildMenuItem(QString::fromStdString(resourceMeta.id),
-                                 resourceMeta.attributeVal(u"presetName"),
+                                 presetName,
                                  isCurrent);
         }
 
@@ -381,8 +386,13 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, c
         for (const auto& presetPair : bankPair.second) {
             bool isCurrentPreset = isCurrentBank && currentPreset.value().program == presetPair.first;
 
+            QString presetName = presetPair.second.attributeVal(u"presetName");
+            if (presetName.isEmpty()) {
+                presetName = qtrc("playback", "Preset %1").arg(presetPair.first);
+            }
+
             presetItems << buildMenuItem(QString::fromStdString(presetPair.second.id),
-                                         presetPair.second.attributeVal(u"presetName"),
+                                         presetName,
                                          isCurrentPreset);
         }
 
