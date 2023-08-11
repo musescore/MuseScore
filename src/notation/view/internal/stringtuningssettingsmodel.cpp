@@ -129,8 +129,12 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
 
     item->setValue(value);
 
+    beginMultiCommands();
+
     updateCurrentPreset();
     saveStrings();
+
+    endMultiCommands();
 
     return true;
 }
@@ -221,6 +225,8 @@ void StringTuningsSettingsModel::setCurrentPreset(const QString& preset)
 {
     bool isCurrentCustom = currentPreset() == customPreset();
 
+    beginMultiCommands();
+
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_PRESET, String::fromQString(preset));
     emit currentPresetChanged();
 
@@ -232,6 +238,8 @@ void StringTuningsSettingsModel::setCurrentPreset(const QString& preset)
 
     updateStrings();
     saveStrings();
+
+    endMultiCommands();
 }
 
 QVariantList StringTuningsSettingsModel::stringNumbers() const
@@ -265,6 +273,8 @@ void StringTuningsSettingsModel::setCurrentStringNumber(int stringNumber)
         return;
     }
 
+    beginMultiCommands();
+
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_STRINGS_COUNT, stringNumber);
 
     emit currentStringNumberChanged();
@@ -273,6 +283,8 @@ void StringTuningsSettingsModel::setCurrentStringNumber(int stringNumber)
     setCurrentPreset(presets(false /*withCustom*/).first().toMap()["text"].toString());
 
     emit stringsChanged();
+
+    endMultiCommands();
 }
 
 QList<StringTuningsItem*> StringTuningsSettingsModel::strings() const
@@ -329,7 +341,7 @@ void StringTuningsSettingsModel::saveStrings()
     beginCommand();
 
     StringData newStringData(originStringData->frets(), stringList);
-    stringTunings->setStringData(newStringData);
+    stringTunings->undoStringData(newStringData);
 
     endCommand();
     updateNotation();

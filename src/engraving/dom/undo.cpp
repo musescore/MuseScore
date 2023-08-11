@@ -3013,3 +3013,13 @@ void ChangeSingleHarpPedal::flip(EditData*)
     diagram->triggerLayout();
 }
 }
+
+void ChangeStringData::flip(EditData*)
+{
+    int frets = m_instrument->stringData()->frets();
+    std::vector<mu::engraving::instrString> stringList = m_instrument->stringData()->stringList();
+
+    m_instrument->setStringData(m_stringData);
+
+    m_stringData.set(StringData(frets, stringList));
+}

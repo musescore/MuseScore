@@ -28,6 +28,7 @@
 #include "part.h"
 #include "score.h"
 #include "segment.h"
+#include "undo.h"
 
 #include "containers.h"
 
@@ -128,10 +129,9 @@ const StringData* StringTunings::stringData() const
     return part()->instrument(tick())->stringData();
 }
 
-void StringTunings::setStringData(const StringData& stringData)
+void StringTunings::undoStringData(const StringData& stringData)
 {
-    part()->instrument(tick())->setStringData(stringData);
-
+    score()->undo(new ChangeStringData(part()->instrument(tick()), stringData));
     triggerLayout();
 }
 

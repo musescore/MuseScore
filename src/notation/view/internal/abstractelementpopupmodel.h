@@ -71,7 +71,9 @@ protected:
 
     notation::INotationUndoStackPtr undoStack() const;
     void beginCommand();
+    void beginMultiCommands();
     void endCommand();
+    void endMultiCommands();
     void updateNotation();
     notation::INotationPtr currentNotation() const;
 

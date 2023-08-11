@@ -58,6 +58,7 @@
 #include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "stringdata.h"
 #include "synthesizerstate.h"
 #include "text.h"
 #include "tremolo.h"
@@ -1602,6 +1603,19 @@ public:
     void flip(EditData*) override;
     UNDO_NAME("ChangeSingleHarpPedal")
     UNDO_CHANGED_OBJECTS({ diagram });
+};
+
+class ChangeStringData : public UndoCommand
+{
+    Instrument* m_instrument = nullptr;
+    StringData m_stringData;
+
+public:
+    ChangeStringData(Instrument* instrument, const StringData& stringData)
+        : m_instrument(instrument), m_stringData(stringData) {}
+
+    void flip(EditData*) override;
+    UNDO_NAME("ChangeStringData")
 };
 } // namespace mu::engraving
 #endif
