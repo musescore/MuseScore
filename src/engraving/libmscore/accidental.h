@@ -127,8 +127,7 @@ public:
         bool isValid() const { return !syms.empty(); }
     };
 
-    const LayoutData* layoutData() const { return static_cast<const Accidental::LayoutData*>(EngravingItem::layoutData()); }
-    LayoutData* mutLayoutData() { return static_cast<Accidental::LayoutData*>(EngravingItem::mutLayoutData()); }
+    DECLARE_LAYOUTDATA_METHODS(Accidental);
 
     //! -- Old interface --
     void clearElements() { mutLayoutData()->syms.clear(); }
@@ -140,8 +139,6 @@ private:
     friend class Factory;
 
     Accidental(EngravingItem* parent);
-
-    LayoutData* createLayoutData() const override;
 
     AccidentalType m_accidentalType = AccidentalType::NONE;
     AccidentalBracket m_bracket = AccidentalBracket::NONE;

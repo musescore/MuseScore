@@ -41,6 +41,11 @@
 #include "shape.h"
 #include "editdata.h"
 
+#define DECLARE_LAYOUTDATA_METHODS(Class) \
+    const LayoutData* layoutData() const { return static_cast<const Class::LayoutData*>(EngravingItem::layoutData()); } \
+    LayoutData* mutLayoutData() { return static_cast<Class::LayoutData*>(EngravingItem::mutLayoutData()); } \
+    LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
+
 namespace mu::engraving {
 class Factory;
 class XmlReader;
