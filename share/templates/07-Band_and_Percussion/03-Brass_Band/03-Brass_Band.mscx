@@ -626,7 +626,7 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>1st Horn</trackName>
-     <Instrument id="eb-alto-horn">
+      <Instrument id="eb-alto-horn">
         <longName>1st Horn</longName>
         <shortName>1st Hn.</shortName>
         <trackName>Horn in E♭</trackName>
@@ -700,7 +700,7 @@
           </StaffType>
         </Staff>
       <trackName>2nd Horn</trackName>
-       <Instrument id="eb-alto-horn">
+      <Instrument id="eb-alto-horn">
         <longName>2nd Horn</longName>
         <shortName>2nd Hn.</shortName>
         <trackName>Horn in E♭</trackName>
