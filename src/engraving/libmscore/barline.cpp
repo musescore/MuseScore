@@ -420,13 +420,14 @@ static size_t nextVisibleSpannedStaff(const BarLine* bl)
 //   getY
 //---------------------------------------------------------
 
-void BarLine::calcY() const
+void BarLine::calcY()
 {
+    BarLine::LayoutData* data = mutLayoutData();
     double _spatium = spatium();
     if (!explicitParent()) {
         // for use in palette
-        m_layoutData.y1 = m_spanFrom * _spatium * .5;
-        m_layoutData.y2 = (8 - m_spanTo) * _spatium * .5;
+        data->y1 = m_spanFrom * _spatium * .5;
+        data->y2 = (8 - m_spanTo) * _spatium * .5;
         return;
     }
     staff_idx_t staffIdx1 = staffIdx();
@@ -468,11 +469,11 @@ void BarLine::calcY() const
     double d  = st1->lineDistance().val() * spatium1;
     double yy = measure->staffLines(staffIdx1)->y1() - yp;
     double lw = style().styleS(Sid::staffLineWidth).val() * spatium1 * .5;
-    m_layoutData.y1 = yy + from * d * .5 - lw;
+    data->y1 = yy + from * d * .5 - lw;
     if (staffIdx2 != staffIdx1) {
-        m_layoutData.y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
+        data->y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
     } else {
-        m_layoutData.y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
+        data->y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
     }
 }
 
@@ -515,14 +516,15 @@ void BarLine::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
 {
     EngravingItem::drawEditMode(p, ed, currentViewScaling);
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    m_layoutData.y1 += bed->yoff1;
-    m_layoutData.y2 += bed->yoff2;
+    BarLine::LayoutData* ldata = mutLayoutData();
+    ldata->y1 += bed->yoff1;
+    ldata->y2 += bed->yoff2;
     PointF pos(canvasPos());
     p->translate(pos);
     EngravingItem::renderer()->drawItem(this, p);
     p->translate(-pos);
-    m_layoutData.y1 -= bed->yoff1;
-    m_layoutData.y2 -= bed->yoff2;
+    ldata->y1 -= bed->yoff1;
+    ldata->y2 -= bed->yoff2;
 }
 
 //---------------------------------------------------------
@@ -673,13 +675,13 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
     const BarLineEditData* bed = static_cast<const BarLineEditData*>(ed.getData(this).get());
 
     double lw = style().styleMM(Sid::barWidth) * staff()->staffMag(tick());
-    calcY();
+    const_cast<BarLine*>(this)->calcY();
 
     const PointF pp = pagePos();
 
     return {
         //PointF(lw * .5, y1 + bed->yoff1) + pp,
-        PointF(lw * .5, m_layoutData.y2 + bed->yoff2) + pp
+        PointF(lw * .5, layoutData()->y2 + bed->yoff2) + pp
     };
 }
 
@@ -737,12 +739,12 @@ void BarLine::editDrag(EditData& ed)
         return;
     } else {
         // min for bottom grip is 1 line below top grip
-        const double min = m_layoutData.y1 - m_layoutData.y2 + lineDist;
+        const double min = layoutData()->y1 - layoutData()->y2 + lineDist;
         // max is the bottom of the system
         const System* system = segment() ? segment()->system() : nullptr;
         const staff_idx_t st = staffIdx();
         const double max = (system && st != mu::nidx)
-                           ? (system->height() - m_layoutData.y2 - system->staff(st)->y())
+                           ? (system->height() - layoutData()->y2 - system->staff(st)->y())
                            : std::numeric_limits<double>::max();
         // update yoff2 and bring it within limit
         bed->yoff2 += ed.delta.y();
@@ -764,11 +766,11 @@ void BarLine::endEditDrag(EditData& ed)
 {
     calcY();
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    m_layoutData.y1 += bed->yoff1;
-    m_layoutData.y2 += bed->yoff2;
+    mutLayoutData()->y1 += bed->yoff1;
+    mutLayoutData()->y2 += bed->yoff2;
 
     double ay0      = pagePos().y();
-    double ay2      = ay0 + m_layoutData.y2;                       // absolute (page-relative) bar line bottom coord
+    double ay2      = ay0 + mutLayoutData()->y2;                       // absolute (page-relative) bar line bottom coord
     staff_idx_t staffIdx1 = staffIdx();
     System* syst   = segment()->measure()->system();
     double systTopY = syst->pagePos().y();
@@ -1138,14 +1140,4 @@ String BarLine::accessibleExtraInfo() const
         }
     }
     return rez;
-}
-
-void BarLine::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-
-    setSkipDraw(data.isSkipDraw);
-    setMag(data.mag);
-    setPos(data.pos);
-    setbbox(data.bbox);
 }

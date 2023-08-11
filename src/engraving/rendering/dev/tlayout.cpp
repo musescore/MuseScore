@@ -744,56 +744,57 @@ static double barLineWidth(const BarLine* item, const MStyle& style, double dotW
     return w;
 }
 
-static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::LayoutData& data)
+void TLayout::layout(BarLine* item, LayoutContext& ctx)
 {
-    data.pos = PointF();
+    BarLine::LayoutData* data = item->mutLayoutData();
+    data->pos = PointF();
 
     // barlines hidden on this staff
     if (item->staff() && item->segment()) {
         if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
             || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
-            data.bbox = RectF();
-            data.isSkipDraw = true;
+            data->bbox = RectF();
+            data->isSkipDraw = true;
             return;
         }
     }
 
-    data.isSkipDraw = false;
+    data->isSkipDraw = false;
 
-    data.mag = ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;
+    data->mag = ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;
     // Note: the true values of y1 and y2 are computed in layout2() (can be done only
     // after staff distances are known). This is a temporary layout.
     const double spatium = item->spatium();
 
-    data.y1 = spatium * .5 * item->spanFrom();
-    data.y2 = spatium * .5 * (8.0 + item->spanTo());
+    data->y1 = spatium * .5 * item->spanFrom();
+    data->y2 = spatium * .5 * (8.0 + item->spanTo());
 
     const IEngravingFontPtr font = ctx.engravingFont();
-    const double magS = ctx.conf().magS(data.mag);
+    const double magS = ctx.conf().magS(data->mag);
 
-    double w = barLineWidth(item, ctx.conf().style(), font->width(SymId::repeatDot, magS)) * data.mag;
-    RectF r(0.0, data.y1, w, data.y2 - data.y1);
+    double w = barLineWidth(item, ctx.conf().style(), font->width(SymId::repeatDot, magS)) * data->mag;
+    RectF r(0.0, data->y1, w, data->y2 - data->y1);
 
     if (ctx.conf().styleB(Sid::repeatBarTips)) {
         switch (item->barLineType()) {
         case BarLineType::START_REPEAT: {
-            r.unite(font->bbox(SymId::bracketTop, magS).translated(0, data.y1));
+            r.unite(font->bbox(SymId::bracketTop, magS).translated(0, data->y1));
         } break;
         case BarLineType::END_REPEAT: {
             double w1 = 0.0;
-            r.unite(font->bbox(SymId::reversedBracketTop, magS).translated(-w1, data.y1));
+            r.unite(font->bbox(SymId::reversedBracketTop, magS).translated(-w1, data->y1));
         } break;
         case BarLineType::END_START_REPEAT: {
             double w1 = 0.0;
-            r.unite(font->bbox(SymId::reversedBracketTop, magS).translated(-w1, data.y1));
-            r.unite(font->bbox(SymId::bracketTop, magS).translated(0, data.y1));
+            r.unite(font->bbox(SymId::reversedBracketTop, magS).translated(-w1, data->y1));
+            r.unite(font->bbox(SymId::bracketTop, magS).translated(0, data->y1));
         } break;
         default:
             break;
         }
     }
 
-    data.bbox = r;
+    data->bbox = r;
 
     for (EngravingItem* e : *item->el()) {
         TLayout::layoutItem(e, ctx);
@@ -803,21 +804,14 @@ static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::Layo
             double distance = 0.5 * item->spatium();
             double x = item->width() * .5;
             if (dir == DirectionV::DOWN) {
-                double botY = data.y2 + distance;
+                double botY = data->y2 + distance;
                 a->setPos(PointF(x, botY));
             } else {
-                double topY = data.y1 - distance;
+                double topY = data->y1 - distance;
                 a->setPos(PointF(x, topY));
             }
         }
     }
-}
-
-void TLayout::layout(BarLine* item, LayoutContext& ctx)
-{
-    BarLine::LayoutData data;
-    layoutBarLine(item, ctx, data);
-    item->setLayoutData(data);
 }
 
 RectF TLayout::layoutRect(const BarLine* item, LayoutContext& ctx)

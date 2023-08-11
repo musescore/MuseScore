@@ -604,21 +604,21 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
     item->drawSymbol(SymId::repeatDot, painter, PointF(x, y2l));
 }
 
-static void drawTips(const BarLine* item, const BarLine::LayoutData& data, Painter* painter, bool reversed, double x)
+static void drawTips(const BarLine* item, const BarLine::LayoutData* data, Painter* painter, bool reversed, double x)
 {
     if (reversed) {
         if (item->isTop()) {
-            item->drawSymbol(SymId::reversedBracketTop, painter, PointF(x - item->symWidth(SymId::reversedBracketTop), data.y1));
+            item->drawSymbol(SymId::reversedBracketTop, painter, PointF(x - item->symWidth(SymId::reversedBracketTop), data->y1));
         }
         if (item->isBottom()) {
-            item->drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - item->symWidth(SymId::reversedBracketBottom), data.y2));
+            item->drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - item->symWidth(SymId::reversedBracketBottom), data->y2));
         }
     } else {
         if (item->isTop()) {
-            item->drawSymbol(SymId::bracketTop, painter, PointF(x, data.y1));
+            item->drawSymbol(SymId::bracketTop, painter, PointF(x, data->y1));
         }
         if (item->isBottom()) {
-            item->drawSymbol(SymId::bracketBottom, painter, PointF(x, data.y2));
+            item->drawSymbol(SymId::bracketBottom, painter, PointF(x, data->y2));
         }
     }
 }
@@ -627,27 +627,30 @@ void TDraw::draw(const BarLine* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const BarLine::LayoutData& data = item->layoutData();
+    const BarLine::LayoutData* data = item->layoutData();
+    IF_ASSERT_FAILED(data) {
+        return;
+    }
 
     switch (item->barLineType()) {
     case BarLineType::NORMAL: {
         double lw = item->style().styleMM(Sid::barWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
-        painter->drawLine(LineF(lw * .5, data.y1, lw * .5, data.y2));
+        painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
     }
     break;
 
     case BarLineType::BROKEN: {
         double lw = item->style().styleMM(Sid::barWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw, PenStyle::DashLine, PenCapStyle::FlatCap));
-        painter->drawLine(LineF(lw * .5, data.y1, lw * .5, data.y2));
+        painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
     }
     break;
 
     case BarLineType::DOTTED: {
         double lw = item->style().styleMM(Sid::barWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw, PenStyle::DotLine, PenCapStyle::FlatCap));
-        painter->drawLine(LineF(lw * .5, data.y1, lw * .5, data.y2));
+        painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
     }
     break;
 
@@ -655,12 +658,12 @@ void TDraw::draw(const BarLine* item, Painter* painter)
         double lw = item->style().styleMM(Sid::barWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
         double x  = lw * .5;
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         double lw2 = item->style().styleMM(Sid::endBarWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw2, PenStyle::SolidLine, PenCapStyle::FlatCap));
         x += ((lw * .5) + item->style().styleMM(Sid::endBarDistance) + (lw2 * .5)) * item->mag();
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
     }
     break;
 
@@ -668,9 +671,9 @@ void TDraw::draw(const BarLine* item, Painter* painter)
         double lw = item->style().styleMM(Sid::doubleBarWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
         double x = lw * .5;
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
         x += ((lw * .5) + item->style().styleMM(Sid::doubleBarDistance) + (lw * .5)) * item->mag();
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
     }
     break;
 
@@ -678,19 +681,19 @@ void TDraw::draw(const BarLine* item, Painter* painter)
         double lw = item->style().styleMM(Sid::endBarWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
         double x = lw * .5;
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         double lw2 = item->style().styleMM(Sid::barWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw2, PenStyle::SolidLine, PenCapStyle::FlatCap));
         x += ((lw * .5) + item->style().styleMM(Sid::endBarDistance) + (lw2 * .5)) * item->mag();
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
     }
     break;
 
     case BarLineType::HEAVY: {
         double lw = item->style().styleMM(Sid::endBarWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
-        painter->drawLine(LineF(lw * .5, data.y1, lw * .5, data.y2));
+        painter->drawLine(LineF(lw * .5, data->y1, lw * .5, data->y2));
     }
     break;
 
@@ -698,9 +701,9 @@ void TDraw::draw(const BarLine* item, Painter* painter)
         double lw2 = item->style().styleMM(Sid::endBarWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw2, PenStyle::SolidLine, PenCapStyle::FlatCap));
         double x = lw2 * .5;
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
         x += ((lw2 * .5) + item->style().styleMM(Sid::endBarDistance) + (lw2 * .5)) * item->mag();
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
     }
     break;
 
@@ -708,12 +711,12 @@ void TDraw::draw(const BarLine* item, Painter* painter)
         double lw2 = item->style().styleMM(Sid::endBarWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw2, PenStyle::SolidLine, PenCapStyle::FlatCap));
         double x = lw2 * .5;
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         double lw = item->style().styleMM(Sid::barWidth) * item->mag();
         painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
         x += ((lw2 * .5) + item->style().styleMM(Sid::endBarDistance) + (lw * .5)) * item->mag();
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         x += ((lw * .5) + item->style().styleMM(Sid::repeatBarlineDotSeparation)) * item->mag();
         drawDots(item, painter, x);
@@ -733,12 +736,12 @@ void TDraw::draw(const BarLine* item, Painter* painter)
 
         x += item->symBbox(SymId::repeatDot).width();
         x += (item->style().styleMM(Sid::repeatBarlineDotSeparation) + (lw * .5)) * item->mag();
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         double lw2 = item->style().styleMM(Sid::endBarWidth) * item->mag();
         x += ((lw * .5) + item->style().styleMM(Sid::endBarDistance) + (lw2 * .5)) * item->mag();
         painter->setPen(Pen(item->curColor(), lw2, PenStyle::SolidLine, PenCapStyle::FlatCap));
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         if (item->style().styleB(Sid::repeatBarTips)) {
             drawTips(item, data, painter, true, x + lw2 * .5);
@@ -754,12 +757,12 @@ void TDraw::draw(const BarLine* item, Painter* painter)
 
         x += item->symBbox(SymId::repeatDot).width();
         x += (item->style().styleMM(Sid::repeatBarlineDotSeparation) + (lw * .5)) * item->mag();
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         double lw2 = item->style().styleMM(Sid::endBarWidth) * item->mag();
         x += ((lw * .5) + item->style().styleMM(Sid::endBarDistance) + (lw2 * .5)) * item->mag();
         painter->setPen(Pen(item->curColor(), lw2, PenStyle::SolidLine, PenCapStyle::FlatCap));
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         if (item->style().styleB(Sid::repeatBarTips)) {
             drawTips(item, data, painter, true, x + lw2 * .5);
@@ -767,7 +770,7 @@ void TDraw::draw(const BarLine* item, Painter* painter)
 
         painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
         x  += ((lw2 * .5) + item->style().styleMM(Sid::endBarDistance) + (lw * .5)) * item->mag();
-        painter->drawLine(LineF(x, data.y1, x, data.y2));
+        painter->drawLine(LineF(x, data->y1, x, data->y2));
 
         x += ((lw * .5) + item->style().styleMM(Sid::repeatBarlineDotSeparation)) * item->mag();
         drawDots(item, painter, x);
