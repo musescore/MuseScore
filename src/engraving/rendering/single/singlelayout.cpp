@@ -366,9 +366,7 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
 void SingleLayout::layout(Arpeggio* item, const Context& ctx)
 {
     LayoutContext tctx(ctx.dontUseScore());
-    Arpeggio::LayoutData data;
-    ArpeggioLayout::layout(item, tctx, data);
-    item->setLayoutData(data);
+    ArpeggioLayout::layout(item, tctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(Articulation* item, const Context&)

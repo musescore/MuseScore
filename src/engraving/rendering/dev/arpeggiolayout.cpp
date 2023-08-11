@@ -32,65 +32,65 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
-void ArpeggioLayout::layout(const Arpeggio* item, const LayoutContext& ctx, Arpeggio::LayoutData& data)
+void ArpeggioLayout::layout(const Arpeggio* item, const LayoutContext& ctx, Arpeggio::LayoutData* data)
 {
     if (ctx.conf().styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
             for (Staff* s : item->staff()->staffList()) {
                 if (s->onSameScore(item) && s->isTabStaff(item->tick()) && s->visible()) {
-                    data.bbox = RectF();
+                    data->bbox = RectF();
                     return;
                 }
             }
         }
     }
 
-    data.top = calcTop(item, ctx);
-    data.bottom = calcBottom(item, ctx);
+    data->top = calcTop(item, ctx);
+    data->bottom = calcBottom(item, ctx);
 
-    data.mag = item->staff() ? item->staff()->staffMag(item->tick()) : item->mag();
-    data.magS = ctx.conf().magS(data.mag);
+    data->mag = item->staff() ? item->staff()->staffMag(item->tick()) : item->mag();
+    data->magS = ctx.conf().magS(data->mag);
 
     const IEngravingFontPtr font = ctx.engravingFont();
     switch (item->arpeggioType()) {
     case ArpeggioType::NORMAL: {
         ArpeggioLayout::symbolLine(font, data, SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
-        data.symsBBox = font->bbox(data.symbols, data.magS);
-        data.bbox = RectF(0.0, -data.symsBBox.x() + data.top, data.symsBBox.height(), data.symsBBox.width());
+        data->symsBBox = font->bbox(data->symbols, data->magS);
+        data->bbox = RectF(0.0, -data->symsBBox.x() + data->top, data->symsBBox.height(), data->symsBBox.width());
     } break;
 
     case ArpeggioType::UP: {
         ArpeggioLayout::symbolLine(font, data, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
-        data.symsBBox = font->bbox(data.symbols, data.magS);
-        data.bbox = RectF(0.0, -data.symsBBox.x() + data.top, data.symsBBox.height(), data.symsBBox.width());
+        data->symsBBox = font->bbox(data->symbols, data->magS);
+        data->bbox = RectF(0.0, -data->symsBBox.x() + data->top, data->symsBBox.height(), data->symsBBox.width());
     } break;
 
     case ArpeggioType::DOWN: {
         ArpeggioLayout::symbolLine(font, data, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
-        data.symsBBox = font->bbox(data.symbols, data.magS);
-        data.bbox = RectF(0.0, data.symsBBox.x() + data.top, data.symsBBox.height(), data.symsBBox.width());
+        data->symsBBox = font->bbox(data->symbols, data->magS);
+        data->bbox = RectF(0.0, data->symsBBox.x() + data->top, data->symsBBox.height(), data->symsBBox.width());
     } break;
 
     case ArpeggioType::UP_STRAIGHT: {
         double x1 = item->spatium() * 0.5;
-        data.symsBBox = font->bbox(SymId::arrowheadBlackUp, data.magS);
-        double w = data.symsBBox.width();
-        data.bbox = RectF(x1 - w * 0.5, data.top, w, data.bottom);
+        data->symsBBox = font->bbox(SymId::arrowheadBlackUp, data->magS);
+        double w = data->symsBBox.width();
+        data->bbox = RectF(x1 - w * 0.5, data->top, w, data->bottom);
     } break;
 
     case ArpeggioType::DOWN_STRAIGHT: {
         double x1 = item->spatium() * 0.5;
-        data.symsBBox = font->bbox(SymId::arrowheadBlackDown, data.magS);
-        double w = data.symsBBox.width();
-        data.bbox = RectF(x1 - w * 0.5, data.top, w, data.bottom);
+        data->symsBBox = font->bbox(SymId::arrowheadBlackDown, data->magS);
+        double w = data->symsBBox.width();
+        data->bbox = RectF(x1 - w * 0.5, data->top, w, data->bottom);
     } break;
 
     case ArpeggioType::BRACKET: {
         double w  = ctx.conf().styleS(Sid::ArpeggioHookLen).val() * item->spatium();
-        data.bbox = RectF(0.0, data.top, w, data.bottom);
+        data->bbox = RectF(0.0, data->top, w, data->bottom);
     } break;
     }
 }
@@ -129,16 +129,12 @@ void ArpeggioLayout::computeHeight(Arpeggio* item, bool includeCrossStaffHeight)
 
 void ArpeggioLayout::layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx)
 {
-    Arpeggio::LayoutData data;
-    ArpeggioLayout::layout(item, ctx, data);
-    item->setLayoutData(data);
+    ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
 }
 
 void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
 {
-    Arpeggio::LayoutData data;
-    ArpeggioLayout::layout(item, ctx, data);
-    item->setLayoutData(data);
+    ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
 
     Chord* c = item->chord();
     item->setPosX(-(item->width() + item->spatium() * .5));
@@ -153,16 +149,16 @@ void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
 //   symbolLine
 //    construct a string of symbols approximating width w
 //---------------------------------------------------------
-void ArpeggioLayout::symbolLine(const IEngravingFontPtr& f, Arpeggio::LayoutData& data, SymId end, SymId fill)
+void ArpeggioLayout::symbolLine(const IEngravingFontPtr& f, Arpeggio::LayoutData* data, SymId end, SymId fill)
 {
-    double w = data.bottom - data.top;
-    double w1 = f->advance(end, data.magS);
-    double w2 = f->advance(fill, data.magS);
+    double w = data->bottom - data->top;
+    double w1 = f->advance(end, data->magS);
+    double w2 = f->advance(fill, data->magS);
     int n = lrint((w - w1) / w2);
     for (int i = 0; i < n; ++i) {
-        data.symbols.push_back(fill);
+        data->symbols.push_back(fill);
     }
-    data.symbols.push_back(end);
+    data->symbols.push_back(end);
 }
 
 double ArpeggioLayout::calcTop(const Arpeggio* item, const LayoutContext& ctx)

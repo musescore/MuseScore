@@ -597,9 +597,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 
 void TLayout::layout(Arpeggio* item, LayoutContext& ctx)
 {
-    Arpeggio::LayoutData data;
-    ArpeggioLayout::layout(item, ctx, data);
-    item->setLayoutData(data);
+    ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Articulation* item, LayoutContext& ctx)
