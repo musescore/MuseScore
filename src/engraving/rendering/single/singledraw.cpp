@@ -363,10 +363,13 @@ void SingleDraw::draw(const Arpeggio* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Arpeggio::LayoutData& layoutData = item->layoutData();
+    const Arpeggio::LayoutData* layoutData = item->layoutData();
+    IF_ASSERT_FAILED(layoutData) {
+        return;
+    }
 
-    const double y1 = layoutData.bbox.top();
-    const double y2 = layoutData.bbox.bottom();
+    const double y1 = layoutData->bbox.top();
+    const double y2 = layoutData->bbox.bottom();
     const double lineWidth = item->style().styleMM(Sid::ArpeggioLineWidth);
 
     painter->setPen(Pen(item->curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
@@ -376,21 +379,21 @@ void SingleDraw::draw(const Arpeggio* item, draw::Painter* painter)
     case ArpeggioType::NORMAL:
     case ArpeggioType::UP:
     {
-        const RectF& r = layoutData.symsBBox;
+        const RectF& r = layoutData->symsBBox;
         painter->rotate(-90.0);
-        item->drawSymbols(layoutData.symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
+        item->drawSymbols(layoutData->symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
     } break;
 
     case ArpeggioType::DOWN:
     {
-        const RectF& r = layoutData.symsBBox;
+        const RectF& r = layoutData->symsBBox;
         painter->rotate(90.0);
-        item->drawSymbols(layoutData.symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
+        item->drawSymbols(layoutData->symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
     } break;
 
     case ArpeggioType::UP_STRAIGHT:
     {
-        const RectF& r = layoutData.symsBBox;
+        const RectF& r = layoutData->symsBBox;
         double x1 = item->spatium() * 0.5;
         item->drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * 0.5, y1 - r.top()));
         double ny1 = y1 - r.top() * 0.5;
@@ -399,7 +402,7 @@ void SingleDraw::draw(const Arpeggio* item, draw::Painter* painter)
 
     case ArpeggioType::DOWN_STRAIGHT:
     {
-        const RectF& r = layoutData.symsBBox;
+        const RectF& r = layoutData->symsBBox;
         double x1 = item->spatium() * 0.5;
         item->drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * 0.5, y2 - r.bottom()));
         double ny2 = y2 + r.top() * 0.5;

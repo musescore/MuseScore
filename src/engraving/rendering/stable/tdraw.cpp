@@ -453,17 +453,23 @@ void TDraw::draw(const Arpeggio* item, Painter* painter)
     case ArpeggioType::NORMAL:
     case ArpeggioType::UP:
     {
-        RectF r(item->symBbox(item->layoutData().symbols));
-        painter->rotate(-90.0);
-        item->drawSymbols(item->layoutData().symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
+        const Arpeggio::LayoutData* layoutData = item->layoutData();
+        if (layoutData) {
+            RectF r(item->symBbox(layoutData->symbols));
+            painter->rotate(-90.0);
+            item->drawSymbols(layoutData->symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
+        }
     }
     break;
 
     case ArpeggioType::DOWN:
     {
-        RectF r(item->symBbox(item->layoutData().symbols));
-        painter->rotate(90.0);
-        item->drawSymbols(item->layoutData().symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
+        const Arpeggio::LayoutData* layoutData = item->layoutData();
+        if (layoutData) {
+            RectF r(item->symBbox(layoutData->symbols));
+            painter->rotate(90.0);
+            item->drawSymbols(layoutData->symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
+        }
     }
     break;
 

@@ -481,11 +481,3 @@ engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
     }
     return EngravingItem::propertyDefault(propertyId);
 }
-
-void Arpeggio::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-
-    setMag(data.mag);
-    setbbox(data.bbox);
-}

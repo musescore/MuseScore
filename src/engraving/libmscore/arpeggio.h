@@ -87,27 +87,24 @@ public:
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;
 
-    struct LayoutData {
+    struct LayoutData : public EngravingItem::LayoutData {
         // cache
         double top = 0.0;
         double bottom = 0.0;
         double magS = 0.0;
 
         // out
-        double mag = 1.0;
         SymIdList symbols;
         RectF symsBBox;
-        RectF bbox;
 
         bool isValid() const { return bbox.isValid(); }
     };
 
-    const LayoutData& layoutData() const { return m_layoutData; }
-    void setLayoutData(const LayoutData& data);
+    DECLARE_LAYOUTDATA_METHODS(Arpeggio);
 
     //! -- Old interface --
-    void setSymbols(const SymIdList& sl) { m_layoutData.symbols = sl; }
-    const SymIdList& symbols() { return m_layoutData.symbols; }
+    void setSymbols(const SymIdList& sl) { mutLayoutData()->symbols = sl; }
+    const SymIdList& symbols() { return layoutData()->symbols; }
     //! -------------------
 
 private:
@@ -133,8 +130,6 @@ private:
     bool m_playArpeggio = true;
 
     double m_stretch = 1.0;
-
-    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 
