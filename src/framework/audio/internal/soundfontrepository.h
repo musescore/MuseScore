@@ -40,8 +40,8 @@ class SoundFontRepository : public ISoundFontRepository, public async::Asyncable
 public:
     void init();
 
-    synth::SoundFontPaths soundFontPaths() const override;
-    synth::SoundFontsMap soundFonts() const override;
+    const synth::SoundFontPaths& soundFontPaths() const override;
+    const synth::SoundFontsMap& soundFonts() const override;
     async::Notification soundFontsChanged() const override;
 
     Ret addSoundFont(const synth::SoundFontPath& path) override;

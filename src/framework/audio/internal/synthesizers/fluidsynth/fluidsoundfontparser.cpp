@@ -86,7 +86,7 @@ mu::RetVal<SoundFontMeta> FluidSoundFontParser::parseSoundFont(const SoundFontPa
         SoundFontPreset preset;
         preset.program = midi::Program(bank, program);
         preset.name = name;
-        meta.presets.push_back(preset);
+        meta.presets.emplace_back(std::move(preset));
     }
 
     return RetVal<SoundFontMeta>::make_ok(meta);

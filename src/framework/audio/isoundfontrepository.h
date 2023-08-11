@@ -37,8 +37,8 @@ class ISoundFontRepository : MODULE_EXPORT_INTERFACE
 public:
     virtual ~ISoundFontRepository() = default;
 
-    virtual synth::SoundFontPaths soundFontPaths() const = 0;
-    virtual synth::SoundFontsMap soundFonts() const = 0;
+    virtual const synth::SoundFontPaths& soundFontPaths() const = 0;
+    virtual const synth::SoundFontsMap& soundFonts() const = 0;
     virtual async::Notification soundFontsChanged() const = 0;
 
     virtual mu::Ret addSoundFont(const synth::SoundFontPath& path) = 0;

@@ -102,8 +102,8 @@ void FluidResolver::refresh()
             chooseAutomaticMeta.type = AudioResourceType::FluidSoundfont;
             chooseAutomaticMeta.vendor = FLUID_VENDOR_NAME;
             chooseAutomaticMeta.attributes = {
-                { u"playbackSetupData", mpe::GENERIC_SETUP_DATA_STRING },
-                { u"soundFontName", String::fromStdString(name) }
+                { PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING },
+                { SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(name) }
             };
             chooseAutomaticMeta.hasNativeEditorSupport = false;
 
@@ -118,11 +118,11 @@ void FluidResolver::refresh()
             meta.type = AudioResourceType::FluidSoundfont;
             meta.vendor = FLUID_VENDOR_NAME;
             meta.attributes = {
-                { u"playbackSetupData", mpe::GENERIC_SETUP_DATA_STRING },
-                { u"soundFontName", String::fromStdString(name) },
-                { u"presetName", String::fromStdString(preset.name) },
-                { u"presetBank", String::number(preset.program.bank) },
-                { u"presetProgram", String::number(preset.program.program) },
+                { PLAYBACK_SETUP_DATA_ATTRIBUTE, mpe::GENERIC_SETUP_DATA_STRING },
+                { SOUNDFONT_NAME_ATTRIBUTE, String::fromStdString(name) },
+                { PRESET_NAME_ATTRIBUTE, String::fromStdString(preset.name) },
+                { PRESET_BANK_ATTRIBUTE, String::number(preset.program.bank) },
+                { PRESET_PROGRAM_ATTRIBUTE, String::number(preset.program.program) },
             };
             meta.hasNativeEditorSupport = false;
 

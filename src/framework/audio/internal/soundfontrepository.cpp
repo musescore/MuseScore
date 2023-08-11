@@ -77,19 +77,19 @@ void SoundFontRepository::loadSoundFont(const SoundFontPath& path, const SoundFo
     RetVal<SoundFontMeta> meta = FluidSoundFontParser::parseSoundFont(path);
 
     if (!meta.ret) {
-        LOGW() << "Failed parse SoundFont presets for " << path << ": " << meta.ret.toString();
+        LOGE() << "Failed parse SoundFont presets for " << path << ": " << meta.ret.toString();
         return;
     }
 
-    m_soundFonts.insert_or_assign(path, meta.val);
+    m_soundFonts.insert_or_assign(path, std::move(meta.val));
 }
 
-SoundFontPaths SoundFontRepository::soundFontPaths() const
+const SoundFontPaths& SoundFontRepository::soundFontPaths() const
 {
     return m_soundFontPaths;
 }
 
-SoundFontsMap SoundFontRepository::soundFonts() const
+const SoundFontsMap& SoundFontRepository::soundFonts() const
 {
     return m_soundFonts;
 }

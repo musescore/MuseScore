@@ -30,11 +30,13 @@
 #include "translation.h"
 #include "types/string.h"
 
+#include "audio/soundfonttypes.h"
 #include "msbasicpresetscategories.h"
 
 using namespace mu;
 using namespace mu::playback;
 using namespace mu::audio;
+using namespace mu::audio::synth;
 
 static const QString VST_MENU_ITEM_ID("VST3");
 static const QString SOUNDFONTS_MENU_ITEM_ID = mu::qtrc("playback", "SoundFonts");
@@ -131,12 +133,12 @@ QString InputResourceItem::title() const
     }
 
     if (m_currentInputParams.resourceMeta.type == audio::AudioResourceType::FluidSoundfont) {
-        const String& presetName = m_currentInputParams.resourceMeta.attributeVal(u"presetName");
+        const String& presetName = m_currentInputParams.resourceMeta.attributeVal(PRESET_NAME_ATTRIBUTE);
         if (!presetName.empty()) {
             return presetName.toQString();
         }
 
-        const String& soundFontName = m_currentInputParams.resourceMeta.attributeVal(u"soundFontName");
+        const String& soundFontName = m_currentInputParams.resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE);
         if (!soundFontName.empty()) {
             return soundFontName.toQString();
         }
@@ -231,13 +233,13 @@ QVariantMap InputResourceItem::buildVstMenuItem(const ResourceByVendorMap& resou
 QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap& resourcesByVendor) const
 {
     // Get info about current resource
-    const String& currentSoundFontName = m_currentInputParams.resourceMeta.attributeVal(u"soundFontName");
+    const String& currentSoundFontName = m_currentInputParams.resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE);
     std::optional<midi::Program> currentPreset = std::nullopt;
     {
         if (!currentSoundFontName.empty()) {
             bool bankOk = false, programOk = false;
-            int currentPresetBank = m_currentInputParams.resourceMeta.attributeVal(u"presetBank").toInt(&bankOk);
-            int currentPresetProgram = m_currentInputParams.resourceMeta.attributeVal(u"presetProgram").toInt(&programOk);
+            int currentPresetBank = m_currentInputParams.resourceMeta.attributeVal(PRESET_BANK_ATTRIBUTE).toInt(&bankOk);
+            int currentPresetProgram = m_currentInputParams.resourceMeta.attributeVal(PRESET_PROGRAM_ATTRIBUTE).toInt(&programOk);
 
             if (bankOk && programOk) {
                 currentPreset = midi::Program(currentPresetBank, currentPresetProgram);
@@ -250,7 +252,7 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
 
     for (const auto& pair : resourcesByVendor) {
         for (const AudioResourceMeta& resourceMeta : pair.second) {
-            const String& soundFontName = resourceMeta.attributeVal(u"soundFontName");
+            const String& soundFontName = resourceMeta.attributeVal(SOUNDFONT_NAME_ATTRIBUTE);
 
             resourcesBySoundFont[soundFontName].push_back(resourceMeta);
         }
@@ -288,8 +290,8 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
 
     for (const AudioResourceMeta& resourceMeta : availableResources) {
         bool bankOk = false, programOk = false;
-        int presetBank = resourceMeta.attributeVal(u"presetBank").toInt(&bankOk);
-        int presetProgram = resourceMeta.attributeVal(u"presetProgram").toInt(&programOk);
+        int presetBank = resourceMeta.attributeVal(PRESET_BANK_ATTRIBUTE).toInt(&bankOk);
+        int presetProgram = resourceMeta.attributeVal(PRESET_PROGRAM_ATTRIBUTE).toInt(&programOk);
 
         if (bankOk && programOk) {
             resourcesByProgram[midi::Program(presetBank, presetProgram)] = resourceMeta;
@@ -315,7 +317,7 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
 
             isCurrent = isCurrentSoundFont && currentPreset.has_value() && currentPreset.value() == item.preset;
 
-            QString presetName = resourceMeta.attributeVal(u"presetName");
+            QString presetName = resourceMeta.attributeVal(PRESET_NAME_ATTRIBUTE);
             if (presetName.isEmpty()) {
                 presetName = qtrc("playback", "Bank %1, preset %2").arg(item.preset.bank).arg(item.preset.program);
             }
@@ -383,8 +385,8 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, c
 
     for (const AudioResourceMeta& resourceMeta : availableResources) {
         bool bankOk = false, programOk = false;
-        int presetBank = resourceMeta.attributeVal(u"presetBank").toInt(&bankOk);
-        int presetProgram = resourceMeta.attributeVal(u"presetProgram").toInt(&programOk);
+        int presetBank = resourceMeta.attributeVal(PRESET_BANK_ATTRIBUTE).toInt(&bankOk);
+        int presetProgram = resourceMeta.attributeVal(PRESET_PROGRAM_ATTRIBUTE).toInt(&programOk);
 
         if (bankOk && programOk) {
             resourcesByBank[presetBank][presetProgram] = resourceMeta;
@@ -403,7 +405,7 @@ QVariantMap InputResourceItem::buildSoundFontMenuItem(const String& soundFont, c
         for (const auto& presetPair : bankPair.second) {
             bool isCurrentPreset = isCurrentBank && currentPreset.value().program == presetPair.first;
 
-            QString presetName = presetPair.second.attributeVal(u"presetName");
+            QString presetName = presetPair.second.attributeVal(PRESET_NAME_ATTRIBUTE);
             if (presetName.isEmpty()) {
                 presetName = qtrc("playback", "Preset %1").arg(presetPair.first);
             }

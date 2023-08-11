@@ -33,6 +33,12 @@ namespace mu::audio::synth {
 using SoundFontPath = io::path_t;
 using SoundFontPaths = std::vector<SoundFontPath>;
 
+inline bool isSoundFont(const io::path_t& filePath)
+{
+    std::string ext = io::suffix(filePath);
+    return ext == "sf2" || ext == "sf3";
+}
+
 struct SoundFontPreset
 {
     midi::Program program;
@@ -47,11 +53,10 @@ struct SoundFontMeta
 
 using SoundFontsMap = std::map<SoundFontPath, SoundFontMeta>;
 
-inline bool isSoundFont(const io::path_t& filePath)
-{
-    std::string ext = io::suffix(filePath);
-    return ext == "sf2" || ext == "sf3";
-}
+inline const String SOUNDFONT_NAME_ATTRIBUTE(u"soundFontName");
+inline const String PRESET_NAME_ATTRIBUTE(u"presetName");
+inline const String PRESET_BANK_ATTRIBUTE(u"presetBank");
+inline const String PRESET_PROGRAM_ATTRIBUTE(u"presetProgram");
 }
 
 #endif // MU_AUDIO_SOUNDFONTTYPES_H
