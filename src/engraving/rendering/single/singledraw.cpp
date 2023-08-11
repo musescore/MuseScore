@@ -551,27 +551,30 @@ void SingleDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const BagpipeEmbellishment::LayoutData& data = item->layoutData();
-    const BagpipeEmbellishment::LayoutData::BeamData& dataBeam = data.beamData;
+    const BagpipeEmbellishment::LayoutData* data = item->layoutData();
+    IF_ASSERT_FAILED(data) {
+        return;
+    }
+    const BagpipeEmbellishment::LayoutData::BeamData& dataBeam = data->beamData;
 
-    Pen pen(item->curColor(), data.stemLineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
+    Pen pen(item->curColor(), data->stemLineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     // draw the notes including stem, (optional) flag and (optional) ledger line
-    for (const auto& p : data.notesData) {
+    for (const auto& p : data->notesData) {
         const BagpipeEmbellishment::LayoutData::NoteData& noteData = p.second;
 
         // Draw Grace Note
         {
             // draw head
-            item->drawSymbol(data.headsym, painter, noteData.headXY);
+            item->drawSymbol(data->headsym, painter, noteData.headXY);
 
             // draw stem
             painter->drawLine(noteData.stemLine);
 
-            if (data.isDrawFlag) {
+            if (data->isDrawFlag) {
                 // draw flag
-                item->drawSymbol(data.flagsym, painter, noteData.flagXY);
+                item->drawSymbol(data->flagsym, painter, noteData.flagXY);
             }
         }
 
@@ -581,7 +584,7 @@ void SingleDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
         }
     }
 
-    if (data.isDrawBeam) {
+    if (data->isDrawBeam) {
         Pen beamPen(item->curColor(), dataBeam.width, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(beamPen);
         // draw the beams
@@ -596,7 +599,7 @@ void SingleDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
             painter->drawLine(mu::LineF(x1, y, x2, y));
         };
 
-        drawBeams(painter, data.spatium, dataBeam.x1, dataBeam.x2, dataBeam.y);
+        drawBeams(painter, data->spatium, dataBeam.x1, dataBeam.x2, dataBeam.y);
     }
 }
 
