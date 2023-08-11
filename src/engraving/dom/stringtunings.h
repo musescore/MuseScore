@@ -46,7 +46,7 @@ public:
     bool setProperty(Pid id, const PropertyValue& val) override;
 
     const StringData* stringData() const;
-    void setStringData(const StringData& stringData);
+    void undoStringData(const StringData& stringData);
 
     String preset() const;
     void setPreset(const String& preset);

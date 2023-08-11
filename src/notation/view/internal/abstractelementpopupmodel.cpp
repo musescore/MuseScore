@@ -78,11 +78,29 @@ void AbstractElementPopupModel::beginCommand()
     }
 }
 
+void AbstractElementPopupModel::beginMultiCommands()
+{
+    beginCommand();
+
+    if (undoStack()) {
+        undoStack()->lock();
+    }
+}
+
 void AbstractElementPopupModel::endCommand()
 {
     if (undoStack()) {
         undoStack()->commitChanges();
     }
+}
+
+void AbstractElementPopupModel::endMultiCommands()
+{
+    if (undoStack()) {
+        undoStack()->unlock();
+    }
+
+    endCommand();
 }
 
 void AbstractElementPopupModel::updateNotation()
