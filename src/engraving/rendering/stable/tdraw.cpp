@@ -390,17 +390,19 @@ void TDraw::draw(const ActionIcon* item, Painter* painter)
 void TDraw::draw(const Ambitus* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    const Ambitus::LayoutData* layoutData = item->layoutData();
+    IF_ASSERT_FAILED(layoutData) {
+        return;
+    }
 
     double spatium = item->spatium();
     double lw = item->lineWidth().val() * spatium;
     painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
-    const Ambitus::LayoutData& layoutData = item->layoutData();
-
-    item->drawSymbol(item->noteHead(), painter, layoutData.topPos);
-    item->drawSymbol(item->noteHead(), painter, layoutData.bottomPos);
+    item->drawSymbol(item->noteHead(), painter, layoutData->topPos);
+    item->drawSymbol(item->noteHead(), painter, layoutData->bottomPos);
     if (item->hasLine()) {
-        painter->drawLine(layoutData.line);
+        painter->drawLine(layoutData->line);
     }
 
     // draw ledger lines (if not in a palette)
@@ -415,18 +417,18 @@ void TDraw::draw(const Ambitus* item, Painter* painter)
         double ledgerLineWidth = item->style().styleS(Sid::ledgerLineWidth).val() * spatium;
         painter->setPen(Pen(item->curColor(), ledgerLineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
-        if (layoutData.topPos.y() - stepTolerance <= -step) {
-            double xMin = layoutData.topPos.x() - ledgerLineLength;
-            double xMax = layoutData.topPos.x() + item->headWidth() + ledgerLineLength;
-            for (double y = -step; y >= layoutData.topPos.y() - stepTolerance; y -= step) {
+        if (layoutData->topPos.y() - stepTolerance <= -step) {
+            double xMin = layoutData->topPos.x() - ledgerLineLength;
+            double xMax = layoutData->topPos.x() + item->headWidth() + ledgerLineLength;
+            for (double y = -step; y >= layoutData->topPos.y() - stepTolerance; y -= step) {
                 painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }
 
-        if (layoutData.bottomPos.y() + stepTolerance >= numOfLines * step) {
-            double xMin = layoutData.bottomPos.x() - ledgerLineLength;
-            double xMax = layoutData.bottomPos.x() + item->headWidth() + ledgerLineLength;
-            for (double y = numOfLines * step; y <= layoutData.bottomPos.y() + stepTolerance; y += step) {
+        if (layoutData->bottomPos.y() + stepTolerance >= numOfLines * step) {
+            double xMin = layoutData->bottomPos.x() - ledgerLineLength;
+            double xMax = layoutData->bottomPos.x() + item->headWidth() + ledgerLineLength;
+            for (double y = numOfLines * step; y <= layoutData->bottomPos.y() + stepTolerance; y += step) {
                 painter->drawLine(mu::PointF(xMin, y), mu::PointF(xMax, y));
             }
         }

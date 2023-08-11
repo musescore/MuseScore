@@ -24,8 +24,6 @@
 
 #include "translation.h"
 
-#include "draw/types/pen.h"
-
 #include "accidental.h"
 #include "chord.h"
 #include "factory.h"
@@ -580,10 +578,4 @@ int Ambitus::staffLine(int tpc, int pitch, ClefType clf)
     int line = absStep(tpc, pitch);
     line = relStep(line, clf);
     return line;
-}
-
-void Ambitus::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-    setbbox(data.bbox);
 }

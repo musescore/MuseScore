@@ -342,17 +342,20 @@ void SingleDraw::draw(const ActionIcon* item, draw::Painter* painter)
 void SingleDraw::draw(const Ambitus* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    using namespace mu::draw;
+
+    const Ambitus::LayoutData* layoutData = item->layoutData();
+    IF_ASSERT_FAILED(layoutData) {
+        return;
+    }
+
     double spatium = item->spatium();
     double lw = item->lineWidth().val() * spatium;
     painter->setPen(Pen(item->curColor(), lw, PenStyle::SolidLine, PenCapStyle::FlatCap));
 
-    const Ambitus::LayoutData& layoutData = item->layoutData();
-
-    item->drawSymbol(item->noteHead(), painter, layoutData.topPos);
-    item->drawSymbol(item->noteHead(), painter, layoutData.bottomPos);
+    item->drawSymbol(item->noteHead(), painter, layoutData->topPos);
+    item->drawSymbol(item->noteHead(), painter, layoutData->bottomPos);
     if (item->hasLine()) {
-        painter->drawLine(layoutData.line);
+        painter->drawLine(layoutData->line);
     }
 }
 
