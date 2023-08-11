@@ -219,11 +219,3 @@ PropertyValue Bend::propertyDefault(Pid id) const
         return EngravingItem::propertyDefault(id);
     }
 }
-
-void Bend::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-
-    setPos(data.pos);
-    setbbox(data.bbox);
-}

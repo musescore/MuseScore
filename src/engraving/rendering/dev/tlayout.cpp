@@ -914,10 +914,11 @@ void TLayout::layout1(Beam* item, LayoutContext& ctx)
     BeamLayout::layout1(item, ctx);
 }
 
-static void layoutBend(const Bend* item, Bend::LayoutData& data)
+void TLayout::layout(Bend* item, LayoutContext&)
 {
     DO_ASSERT(item->explicitParent());
 
+    Bend::LayoutData* data = item->mutLayoutData();
     double spatium = item->spatium();
 
     double lw = item->lineWidth();
@@ -925,15 +926,15 @@ static void layoutBend(const Bend* item, Bend::LayoutData& data)
     PointF notePos = note->pos();
     notePos.ry() = std::max(notePos.y(), 0.0);
 
-    data.noteWidth = note->width();
-    data.notePos = notePos;
+    data->noteWidth = note->width();
+    data->notePos = notePos;
 
     RectF bb;
 
     mu::draw::FontMetrics fm(item->font(spatium));
 
     size_t n = item->points().size();
-    double x = data.noteWidth;
+    double x = data->noteWidth;
     double y = -spatium * .8;
     double x2 = 0.0, y2 = 0.0;
 
@@ -949,7 +950,7 @@ static void layoutBend(const Bend* item, Bend::LayoutData& data)
         }
         int pitch = item->points().at(pt).pitch;
         if (pt == 0 && pitch) {
-            y2 = -data.notePos.y() - spatium * 2;
+            y2 = -data->notePos.y() - spatium * 2;
             x2 = x;
             bb.unite(RectF(x, y, x2 - x, y2 - y));
 
@@ -1006,15 +1007,8 @@ static void layoutBend(const Bend* item, Bend::LayoutData& data)
     }
     bb.adjust(-lw, -lw, lw, lw);
 
-    data.bbox = bb;
-    data.pos = PointF();
-}
-
-void TLayout::layout(Bend* item, LayoutContext&)
-{
-    Bend::LayoutData data;
-    layoutBend(item, data);
-    item->setLayoutData(data);
+    data->bbox = bb;
+    data->pos = PointF();
 }
 
 using BoxTypes = rtti::TypeList<HBox, VBox, FBox, TBox>;

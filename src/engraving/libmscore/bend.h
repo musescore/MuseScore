@@ -77,27 +77,22 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    struct LayoutData {
+    struct LayoutData : public EngravingItem::LayoutData {
         // cache
         PointF notePos;
         double noteWidth = 0.0;
         double noteHeight = 0.0;
-
-        // out
-        PointF pos;
-        RectF bbox;
     };
 
-    const LayoutData& layoutData() const { return m_layoutData; }
-    void setLayoutData(const LayoutData& data);
+    DECLARE_LAYOUTDATA_METHODS(Bend)
 
     //! --- Old Interface ---
-    void setNoteWidth(double v) { m_layoutData.noteWidth = v; }
-    double noteWidth() const { return m_layoutData.noteWidth; }
-    void setNoteHeight(double v) { m_layoutData.noteHeight = v; }
-    double noteHeight() const { return m_layoutData.noteHeight; }
-    void setNotePos(const PointF& v) { m_layoutData.notePos = v; }
-    const PointF& notePos() const { return m_layoutData.notePos; }
+    void setNoteWidth(double v) { mutLayoutData()->noteWidth = v; }
+    double noteWidth() const { return layoutData()->noteWidth; }
+    void setNoteHeight(double v) { mutLayoutData()->noteHeight = v; }
+    double noteHeight() const { return layoutData()->noteHeight; }
+    void setNotePos(const PointF& v) { mutLayoutData()->notePos = v; }
+    const PointF& notePos() const { return layoutData()->notePos; }
     //! ---------------------
 
 private:
@@ -115,8 +110,6 @@ private:
     double m_fontSize = 0.0;
     FontStyle m_fontStyle = FontStyle::Undefined;
     Millimetre m_lineWidth;
-
-    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 #endif

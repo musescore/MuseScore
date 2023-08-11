@@ -836,7 +836,10 @@ void TDraw::draw(const Bend* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Bend::LayoutData& data = item->layoutData();
+    const Bend::LayoutData* data = item->layoutData();
+    IF_ASSERT_FAILED(data) {
+        return;
+    }
 
     double spatium = item->spatium();
     double lw = item->lineWidth();
@@ -848,7 +851,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
     mu::draw::Font f = item->font(spatium * MScore::pixelRatio);
     painter->setFont(f);
 
-    double x  = data.noteWidth + spatium * .2;
+    double x  = data->noteWidth + spatium * .2;
     double y  = -spatium * .8;
     double x2, y2;
 
@@ -862,7 +865,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
     for (size_t pt = 0; pt < n - 1; ++pt) {
         int pitch = item->points()[pt].pitch;
         if (pt == 0 && pitch) {
-            y2 = -item->notePos().y() - spatium * 2;
+            y2 = -data->notePos.y() - spatium * 2;
             x2 = x;
             painter->drawLine(LineF(x, y, x2, y2));
 
@@ -887,7 +890,7 @@ void TDraw::draw(const Bend* item, Painter* painter)
         } else if (pitch < item->points()[pt + 1].pitch) {
             // up
             x2 = x + spatium * .5;
-            y2 = -data.notePos.y() - spatium * 2;
+            y2 = -data->notePos.y() - spatium * 2;
             double dx = x2 - x;
             double dy = y2 - y;
 
