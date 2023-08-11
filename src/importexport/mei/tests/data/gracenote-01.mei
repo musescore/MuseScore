@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-08-02T11:10:00" />
+            <date isodate="2023-08-11T14:52:21" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -39,86 +39,86 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m1" n="1">
+                  <measure xml:id="mzonbws" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <graceGrp xml:id="m1s1l1g1" grace="unacc">
-                              <note xml:id="m1s1l1n1" dur="8" pname="d" oct="5" />
+                           <graceGrp grace="unacc">
+                              <note xml:id="nxlwdja" dur="8" pname="d" oct="5" />
                            </graceGrp>
-                           <note xml:id="s1l1_t0_1" dur="4" pname="c" oct="5" />
-                           <graceGrp xml:id="m1s1l1g2" grace="acc">
-                              <note xml:id="m1s1l1n2" dur="8" pname="d" oct="5" />
+                           <note xml:id="n1624qws" dur="4" pname="c" oct="5" />
+                           <graceGrp grace="acc">
+                              <note xml:id="nrqgo5w" dur="8" pname="d" oct="5" />
                            </graceGrp>
-                           <note xml:id="s1l1_t1_4" dur="4" pname="c" oct="5" />
-                           <graceGrp xml:id="m1s1l1g3" grace="acc">
-                              <note xml:id="m1s1l1n3" dur="4" pname="d" oct="5" />
+                           <note xml:id="nat0pjx" dur="4" pname="c" oct="5" />
+                           <graceGrp grace="acc">
+                              <note xml:id="n1o6k89a" dur="4" pname="d" oct="5" />
                            </graceGrp>
-                           <note xml:id="s1l1_t1_2" dur="4" pname="c" oct="5" />
-                           <graceGrp xml:id="m1s1l1g4" grace="acc">
-                              <note xml:id="m1s1l1n4" dur="16" pname="d" oct="5" />
+                           <note xml:id="n4yf2nw" dur="4" pname="c" oct="5" />
+                           <graceGrp grace="acc">
+                              <note xml:id="n1org7fe" dur="16" pname="d" oct="5" />
                            </graceGrp>
-                           <note xml:id="s1l1_t3_4" dur="4" pname="c" oct="5" />
+                           <note xml:id="nr9ysnf" dur="4" pname="c" oct="5" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m2" n="2">
+                  <measure xml:id="m94481w" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <graceGrp xml:id="m2s1l1g1" grace="acc">
-                              <note xml:id="m2s1l1n1" dur="32" pname="d" oct="5" />
+                           <graceGrp grace="acc">
+                              <note xml:id="ngolj96" dur="32" pname="d" oct="5" />
                            </graceGrp>
-                           <note xml:id="s1l1_t1_1" dur="4" pname="c" oct="5" />
-                           <graceGrp xml:id="m2s1l1g2" grace="unacc">
-                              <beam xml:id="m2s1l1b1">
-                                 <note xml:id="m2s1l1n2" dur="8" pname="e" oct="5" />
-                                 <note xml:id="m2s1l1n3" dur="8" pname="d" oct="5" />
+                           <note xml:id="nhd647y" dur="4" pname="c" oct="5" />
+                           <graceGrp grace="unacc">
+                              <beam>
+                                 <note xml:id="nuzoxq9" dur="8" pname="e" oct="5" />
+                                 <note xml:id="n3ks6ab" dur="8" pname="d" oct="5" />
                               </beam>
                            </graceGrp>
-                           <note xml:id="s1l1_t5_4" dur="4" pname="c" oct="5" />
-                           <graceGrp xml:id="m2s1l1g3" grace="unacc">
-                              <note xml:id="m2s1l1n4" dur="8" pname="e" oct="5" />
-                              <note xml:id="m2s1l1n5" type="mscore-beam-none" dur="8" pname="d" oct="5" />
+                           <note xml:id="ne8g66c" dur="4" pname="c" oct="5" />
+                           <graceGrp grace="unacc">
+                              <note xml:id="nmxiag2" dur="8" pname="e" oct="5" />
+                              <note xml:id="np34wj8" type="mscore-beam-none" dur="8" pname="d" oct="5" />
                            </graceGrp>
-                           <note xml:id="s1l1_t3_2" dur="4" pname="c" oct="5" />
-                           <graceGrp xml:id="m2s1l1g4" grace="acc">
-                              <beam xml:id="m2s1l1b2">
-                                 <note xml:id="m2s1l1n6" dur="8" pname="e" oct="5" />
-                                 <note xml:id="m2s1l1n7" dur="8" pname="d" oct="5" />
+                           <note xml:id="nbxxx9u" dur="4" pname="c" oct="5" />
+                           <graceGrp grace="acc">
+                              <beam>
+                                 <note xml:id="naosm2m" dur="8" pname="e" oct="5" />
+                                 <note xml:id="n14n1rtj" dur="8" pname="d" oct="5" />
                               </beam>
                            </graceGrp>
-                           <note xml:id="s1l1_t7_4" dur="4" pname="c" oct="5" />
+                           <note xml:id="njveceb" dur="4" pname="c" oct="5" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m3" right="end" n="3">
+                  <measure xml:id="m1790ud6" right="end" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <graceGrp xml:id="m3s1l1g1" grace="acc">
-                              <note xml:id="m3s1l1n1" dur="8" pname="d" oct="5" />
+                           <graceGrp grace="acc">
+                              <note xml:id="n1xx73pv" dur="8" pname="d" oct="5" />
                            </graceGrp>
-                           <beam xml:id="m3s1l1b1">
-                              <note xml:id="s1l1_t2_1" dur="8" pname="c" oct="5" />
-                              <graceGrp xml:id="m3s1l1g2" grace="acc">
-                                 <beam xml:id="m3s1l1b2">
-                                    <note xml:id="m3s1l1n2" dur="8" pname="e" oct="5" />
-                                    <note xml:id="m3s1l1n3" dur="8" pname="d" oct="5" />
+                           <beam>
+                              <note xml:id="n1fw9s0c" dur="8" pname="c" oct="5" />
+                              <graceGrp grace="acc">
+                                 <beam>
+                                    <note xml:id="nqm3z6o" dur="8" pname="e" oct="5" />
+                                    <note xml:id="n1rnmzub" dur="8" pname="d" oct="5" />
                                  </beam>
                               </graceGrp>
-                              <note xml:id="s1l1_t17_8" dur="8" pname="c" oct="5" />
-                              <graceGrp xml:id="m3s1l1g3" grace="acc">
-                                 <note xml:id="m3s1l1n4" dur="4" pname="d" oct="5" />
+                              <note xml:id="nrmqnai" dur="8" pname="c" oct="5" />
+                              <graceGrp grace="acc">
+                                 <note xml:id="ndb6dwe" dur="4" pname="d" oct="5" />
                               </graceGrp>
-                              <note xml:id="s1l1_t9_4" dur="8" pname="c" oct="5" />
-                              <graceGrp xml:id="m3s1l1g4" grace="acc">
-                                 <beam xml:id="m3s1l1b3">
-                                    <note xml:id="m3s1l1n5" dur="16" pname="f" oct="5" />
-                                    <note xml:id="m3s1l1n6" dur="16" pname="e" oct="5" />
+                              <note xml:id="nin0n2b" dur="8" pname="c" oct="5" />
+                              <graceGrp grace="acc">
+                                 <beam>
+                                    <note xml:id="n161x521" dur="16" pname="f" oct="5" />
+                                    <note xml:id="n4ps5k4" dur="16" pname="e" oct="5" />
                                  </beam>
-                                 <note xml:id="m3s1l1n7" dur="4" pname="d" oct="5" />
+                                 <note xml:id="n1b6sj26" dur="4" pname="d" oct="5" />
                               </graceGrp>
-                              <note xml:id="s1l1_t19_8" dur="8" pname="c" oct="5" />
+                              <note xml:id="n1u2j3yy" dur="8" pname="c" oct="5" />
                            </beam>
-                           <note xml:id="s1l1_t5_2" dur="2" pname="c" oct="5" />
+                           <note xml:id="ncdlzbi" dur="2" pname="c" oct="5" />
                         </layer>
                      </staff>
                   </measure>

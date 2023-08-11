@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-08-02T11:09:54" />
+            <date isodate="2023-08-11T14:51:50" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -44,77 +44,77 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m1" n="1">
+                  <measure xml:id="m11ee0h6" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <mRest xml:id="s1l1_t0_1" />
+                           <mRest xml:id="m1e641zh" />
                         </layer>
                      </staff>
                      <staff xml:id="m1s2" n="2">
                         <layer xml:id="m1s2l1" n="1">
-                           <beam xml:id="m1s2l1b1">
-                              <note xml:id="s2l1_t0_1" dur="16" staff="1" pname="b" oct="4" />
-                              <note xml:id="s2l1_t1_16" dur="16" pname="b" oct="2" />
-                              <note xml:id="s2l1_t1_8" dur="16" pname="b" oct="2" />
-                              <note xml:id="s2l1_t3_16" dur="16" staff="1" pname="d" oct="4" />
+                           <beam>
+                              <note xml:id="n1p18dci" dur="16" staff="1" pname="b" oct="4" />
+                              <note xml:id="n187uhng" dur="16" pname="b" oct="2" />
+                              <note xml:id="nzcgtxp" dur="16" pname="b" oct="2" />
+                              <note xml:id="nk6ops8" dur="16" staff="1" pname="d" oct="4" />
                            </beam>
-                           <beam xml:id="m1s2l1b2">
-                              <note xml:id="s2l1_t1_4" dur="16" staff="1" pname="b" oct="4" />
-                              <note xml:id="s2l1_t5_16" dur="16" pname="b" oct="2" />
-                              <note xml:id="s2l1_t3_8" dur="16" pname="b" oct="2" />
-                              <note xml:id="s2l1_t7_16" dur="16" staff="1" pname="d" oct="4" />
+                           <beam>
+                              <note xml:id="ntcjc22" dur="16" staff="1" pname="b" oct="4" />
+                              <note xml:id="n1mngjsa" dur="16" pname="b" oct="2" />
+                              <note xml:id="n1jcv1hh" dur="16" pname="b" oct="2" />
+                              <note xml:id="n7q5lbi" dur="16" staff="1" pname="d" oct="4" />
                            </beam>
-                           <beam xml:id="m1s2l1b3">
-                              <note xml:id="s2l1_t1_2" dur="16" staff="1" pname="b" oct="4" />
-                              <note xml:id="s2l1_t9_16" dur="16" pname="b" oct="2" />
-                              <note xml:id="s2l1_t5_8" dur="16" staff="1" pname="d" oct="4" />
+                           <beam>
+                              <note xml:id="nw10ccu" dur="16" staff="1" pname="b" oct="4" />
+                              <note xml:id="n19gk865" dur="16" pname="b" oct="2" />
+                              <note xml:id="n1272h95" dur="16" staff="1" pname="d" oct="4" />
                            </beam>
-                           <rest xml:id="s2l1_t11_16" type="mscore-beam-none" dur="16" staff="1" />
-                           <beam xml:id="m1s2l1b4">
-                              <note xml:id="s2l1_t3_4" dur="16" staff="1" pname="b" oct="4" />
-                              <note xml:id="s2l1_t13_16" dur="16" pname="b" oct="2" />
+                           <rest xml:id="rf4j9x2" type="mscore-beam-none" dur="16" staff="1" />
+                           <beam>
+                              <note xml:id="npacqi" dur="16" staff="1" pname="b" oct="4" />
+                              <note xml:id="nzntqhi" dur="16" pname="b" oct="2" />
                            </beam>
-                           <rest xml:id="s2l1_t7_8" type="mscore-beam-none" dur="16" staff="1" />
-                           <chord xml:id="s2l1_t15_16" dur="16" staff="1" stem.dir="up">
-                              <note xml:id="m1s2l1n1" pname="g" oct="3" />
-                              <note xml:id="m1s2l1n2" pname="b" oct="3" />
-                              <note xml:id="m1s2l1n3" pname="d" oct="4" />
+                           <rest xml:id="rnnqhfv" type="mscore-beam-none" dur="16" staff="1" />
+                           <chord xml:id="cddiqiv" dur="16" staff="1" stem.dir="up">
+                              <note xml:id="n5jfee8" pname="g" oct="3" />
+                              <note xml:id="nwpobph" pname="b" oct="3" />
+                              <note xml:id="n1vmxjaz" pname="d" oct="4" />
                            </chord>
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m2" right="end" n="2">
+                  <measure xml:id="mm4bewe" right="end" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <beam xml:id="m2s1l1b1">
-                              <note xml:id="s1l1_t1_1" dur="16" pname="b" oct="4" />
-                              <note xml:id="s1l1_t17_16" dur="16" staff="2" pname="b" oct="3" />
-                              <note xml:id="s1l1_t9_8" dur="16" pname="b" oct="4" />
-                              <note xml:id="s1l1_t19_16" dur="16" staff="2" pname="b" oct="3" />
+                           <beam>
+                              <note xml:id="n2fzn9a" dur="16" pname="b" oct="4" />
+                              <note xml:id="nypnlzd" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="n1jw2hju" dur="16" pname="b" oct="4" />
+                              <note xml:id="noh701w" dur="16" staff="2" pname="b" oct="3" />
                            </beam>
-                           <beam xml:id="m2s1l1b2">
-                              <note xml:id="s1l1_t5_4" dur="16" staff="2" pname="b" oct="3" />
-                              <note xml:id="s1l1_t21_16" dur="16" pname="b" oct="4" />
-                              <note xml:id="s1l1_t11_8" dur="16" staff="2" pname="b" oct="3" />
-                              <note xml:id="s1l1_t23_16" dur="16" pname="b" oct="4" />
+                           <beam>
+                              <note xml:id="n1z0w4uo" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="n6xgfx1" dur="16" pname="b" oct="4" />
+                              <note xml:id="nh9x4hc" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="n1cpwh79" dur="16" pname="b" oct="4" />
                            </beam>
-                           <beam xml:id="m2s1l1b3">
-                              <note xml:id="s1l1_t3_2" dur="16" pname="b" oct="4" />
-                              <note xml:id="s1l1_t25_16" dur="16" staff="2" pname="b" oct="3" />
-                              <note xml:id="s1l1_t13_8" dur="16" staff="2" pname="b" oct="3" />
-                              <note xml:id="s1l1_t27_16" dur="16" pname="b" oct="4" />
+                           <beam>
+                              <note xml:id="n1wvsk9i" dur="16" pname="b" oct="4" />
+                              <note xml:id="n131u565" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="nopzsd1" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="n1y26qk1" dur="16" pname="b" oct="4" />
                            </beam>
-                           <beam xml:id="m2s1l1b4">
-                              <note xml:id="s1l1_t7_4" dur="16" staff="2" pname="b" oct="3" />
-                              <note xml:id="s1l1_t29_16" dur="16" pname="b" oct="4" />
-                              <note xml:id="s1l1_t15_8" dur="16" pname="b" oct="4" />
-                              <note xml:id="s1l1_t31_16" dur="16" staff="2" pname="b" oct="3" />
+                           <beam>
+                              <note xml:id="n1o7whi1" dur="16" staff="2" pname="b" oct="3" />
+                              <note xml:id="neyzag0" dur="16" pname="b" oct="4" />
+                              <note xml:id="n1p8uc7d" dur="16" pname="b" oct="4" />
+                              <note xml:id="ni1ybvp" dur="16" staff="2" pname="b" oct="3" />
                            </beam>
                         </layer>
                      </staff>
                      <staff xml:id="m2s2" n="2">
                         <layer xml:id="m2s2l1" n="1">
-                           <mRest xml:id="s2l1_t1_1" />
+                           <mRest xml:id="m17y66iu" />
                         </layer>
                      </staff>
                   </measure>

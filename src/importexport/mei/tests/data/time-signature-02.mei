@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-08-02T11:10:24" />
+            <date isodate="2023-08-11T14:54:39" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -44,15 +44,15 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m1" n="1">
+                  <measure xml:id="m1udwisy" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <mRest xml:id="s1l1_t0_1" />
+                           <mRest xml:id="m1se76j6" />
                         </layer>
                      </staff>
                      <staff xml:id="m1s2" n="2">
                         <layer xml:id="m1s2l1" n="1">
-                           <mRest xml:id="s2l1_t0_1" />
+                           <mRest xml:id="m1w7x40x" />
                         </layer>
                      </staff>
                   </measure>
@@ -62,15 +62,15 @@
                         <staffDef n="2" meter.count="3" meter.unit="4" />
                      </staffGrp>
                   </scoreDef>
-                  <measure xml:id="m2" n="2">
+                  <measure xml:id="m15c4kr" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <mRest xml:id="s1l1_t3_4" />
+                           <mRest xml:id="m118ury3" />
                         </layer>
                      </staff>
                      <staff xml:id="m2s2" n="2">
                         <layer xml:id="m2s2l1" n="1">
-                           <mRest xml:id="s2l1_t3_4" />
+                           <mRest xml:id="m1dl6ejk" />
                         </layer>
                      </staff>
                   </measure>
@@ -80,28 +80,28 @@
                         <staffDef n="2" />
                      </staffGrp>
                   </scoreDef>
-                  <measure xml:id="m3" n="3">
+                  <measure xml:id="m1bp277z" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <mRest xml:id="s1l1_t3_2" />
+                           <mRest xml:id="mmr0oxr" />
                         </layer>
                      </staff>
                      <staff xml:id="m3s2" n="2">
                         <layer xml:id="m3s2l1" n="1">
-                           <mRest xml:id="s2l1_t3_2" />
+                           <mRest xml:id="mqazjtt" />
                         </layer>
                      </staff>
                   </measure>
                   <scoreDef meter.count="4" meter.unit="4" />
-                  <measure xml:id="m4" n="4">
+                  <measure xml:id="mv9pxxt" n="4">
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
-                           <mRest xml:id="s1l1_t9_4" />
+                           <mRest xml:id="m1n5jpbz" />
                         </layer>
                      </staff>
                      <staff xml:id="m4s2" n="2">
                         <layer xml:id="m4s2l1" n="1">
-                           <mRest xml:id="s2l1_t9_4" />
+                           <mRest xml:id="mszj461" />
                         </layer>
                      </staff>
                   </measure>
@@ -111,28 +111,28 @@
                         <staffDef n="2" meter.count="4" meter.unit="8" />
                      </staffGrp>
                   </scoreDef>
-                  <measure xml:id="m5" n="5">
+                  <measure xml:id="m1ke1zp2" n="5">
                      <staff xml:id="m5s1" n="1">
                         <layer xml:id="m5s1l1" n="1">
-                           <mRest xml:id="s1l1_t13_4" />
+                           <mRest xml:id="m1fnay8u" />
                         </layer>
                      </staff>
                      <staff xml:id="m5s2" n="2">
                         <layer xml:id="m5s2l1" n="1">
-                           <mRest xml:id="s2l1_t13_4" />
+                           <mRest xml:id="mgqolcz" />
                         </layer>
                      </staff>
                   </measure>
                   <scoreDef meter.count="3" meter.unit="4" />
-                  <measure xml:id="m6" right="end" n="6">
+                  <measure xml:id="m1ugj75w" right="end" n="6">
                      <staff xml:id="m6s1" n="1">
                         <layer xml:id="m6s1l1" n="1">
-                           <mRest xml:id="s1l1_t15_4" />
+                           <mRest xml:id="mnr71lf" />
                         </layer>
                      </staff>
                      <staff xml:id="m6s2" n="2">
                         <layer xml:id="m6s2l1" n="1">
-                           <mRest xml:id="s2l1_t15_4" />
+                           <mRest xml:id="m1msxel2" />
                         </layer>
                      </staff>
                   </measure>

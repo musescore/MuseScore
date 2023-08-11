@@ -71,7 +71,7 @@ using namespace mu::engraving;
 #define MEI_INDENT 3
 
 // Use counter-based IDs for layer elements
-#define MEI_COUNTER_BASED_IDS true
+#define MEI_COUNTER_BASED_IDS false
 
 /**
  * Write the Score to the destination file.

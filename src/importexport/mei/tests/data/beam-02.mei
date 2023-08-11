@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-08-02T11:09:45" />
+            <date isodate="2023-08-11T14:51:00" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -39,80 +39,80 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m1" n="1">
+                  <measure xml:id="m1cjrjkc" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <note xml:id="s1l1_t0_1" type="mscore-beam-none" dur="8" pname="c" oct="5" />
-                           <note xml:id="s1l1_t1_8" type="mscore-beam-none" dur="8" pname="d" oct="5" />
-                           <beam xml:id="m1s1l1b1">
-                              <note xml:id="s1l1_t1_4" dur="8" pname="c" oct="5" />
-                              <note xml:id="s1l1_t3_8" dur="8" pname="b" oct="4" />
-                              <note xml:id="s1l1_t1_2" type="mscore-beam-mid" dur="16" pname="c" oct="5" />
-                              <note xml:id="s1l1_t9_16" dur="16" pname="d" oct="5" />
+                           <note xml:id="nll6m9v" type="mscore-beam-none" dur="8" pname="c" oct="5" />
+                           <note xml:id="n8bki5z" type="mscore-beam-none" dur="8" pname="d" oct="5" />
+                           <beam>
+                              <note xml:id="n16x37ae" dur="8" pname="c" oct="5" />
+                              <note xml:id="n1ljghjy" dur="8" pname="b" oct="4" />
+                              <note xml:id="ny8r2yk" type="mscore-beam-mid" dur="16" pname="c" oct="5" />
+                              <note xml:id="n1gloyvp" dur="16" pname="d" oct="5" />
                            </beam>
-                           <beam xml:id="m1s1l1b2">
-                              <note xml:id="s1l1_t5_8" type="mscore-beam-begin" dur="16" pname="c" oct="5" />
-                              <note xml:id="s1l1_t11_16" dur="16" pname="b" oct="4" />
+                           <beam>
+                              <note xml:id="n1n92rml" type="mscore-beam-begin" dur="16" pname="c" oct="5" />
+                              <note xml:id="n1tfdo3n" dur="16" pname="b" oct="4" />
                            </beam>
-                           <beam xml:id="m1s1l1b3">
-                              <note xml:id="s1l1_t3_4" dur="16" pname="c" oct="5" />
-                              <note xml:id="s1l1_t13_16" dur="16" pname="d" oct="5" breaksec="1" />
-                              <note xml:id="s1l1_t7_8" dur="16" pname="c" oct="5" />
-                              <note xml:id="s1l1_t15_16" dur="16" pname="b" oct="4" />
+                           <beam>
+                              <note xml:id="naawzoa" dur="16" pname="c" oct="5" />
+                              <note xml:id="n1ee5stl" dur="16" pname="d" oct="5" breaksec="1" />
+                              <note xml:id="nwycje3" dur="16" pname="c" oct="5" />
+                              <note xml:id="nle968c" dur="16" pname="b" oct="4" />
                            </beam>
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m2" right="end" n="2">
+                  <measure xml:id="m14o08v9" right="end" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <beam xml:id="m2s1l1b1">
-                              <note xml:id="s1l1_t1_1" dur="32" pname="c" oct="5" />
-                              <note xml:id="s1l1_t33_32" dur="32" pname="d" oct="5" breaksec="1" />
-                              <note xml:id="s1l1_t17_16" dur="32" pname="c" oct="5" />
-                              <note xml:id="s1l1_t35_32" dur="32" pname="b" oct="4" />
-                              <note xml:id="s1l1_t9_8" dur="32" pname="c" oct="5" />
-                              <note xml:id="s1l1_t37_32" dur="32" pname="d" oct="5" breaksec="2" />
-                              <note xml:id="s1l1_t19_16" dur="32" pname="c" oct="5" />
-                              <note xml:id="s1l1_t39_32" dur="32" pname="b" oct="4" />
+                           <beam>
+                              <note xml:id="nucm59r" dur="32" pname="c" oct="5" />
+                              <note xml:id="nkb6lln" dur="32" pname="d" oct="5" breaksec="1" />
+                              <note xml:id="n1ihrfc2" dur="32" pname="c" oct="5" />
+                              <note xml:id="n5jh9sf" dur="32" pname="b" oct="4" />
+                              <note xml:id="nxnn9ad" dur="32" pname="c" oct="5" />
+                              <note xml:id="n1ctry5c" dur="32" pname="d" oct="5" breaksec="2" />
+                              <note xml:id="n1irtndi" dur="32" pname="c" oct="5" />
+                              <note xml:id="n1i3a4gi" dur="32" pname="b" oct="4" />
                            </beam>
-                           <beam xml:id="m2s1l1b2">
-                              <note xml:id="s1l1_t5_4" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t81_64" dur="64" pname="d" oct="5" />
-                              <note xml:id="s1l1_t41_32" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t83_64" dur="64" pname="b" oct="4" />
+                           <beam>
+                              <note xml:id="n18w82nd" dur="64" pname="c" oct="5" />
+                              <note xml:id="n1f59gvu" dur="64" pname="d" oct="5" />
+                              <note xml:id="nsghjbc" dur="64" pname="c" oct="5" />
+                              <note xml:id="n1m5t0zr" dur="64" pname="b" oct="4" />
                            </beam>
-                           <beam xml:id="m2s1l1b3">
-                              <note xml:id="s1l1_t21_16" type="mscore-beam-begin" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t85_64" dur="64" pname="d" oct="5" />
-                              <note xml:id="s1l1_t43_32" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t87_64" dur="64" pname="b" oct="4" />
+                           <beam>
+                              <note xml:id="n4ngt5a" type="mscore-beam-begin" dur="64" pname="c" oct="5" />
+                              <note xml:id="nlhuwyx" dur="64" pname="d" oct="5" />
+                              <note xml:id="n1tttu6q" dur="64" pname="c" oct="5" />
+                              <note xml:id="nr802n7" dur="64" pname="b" oct="4" />
                            </beam>
-                           <note xml:id="s1l1_t11_8" type="mscore-beam-none" dur="64" pname="c" oct="5" />
-                           <note xml:id="s1l1_t89_64" type="mscore-beam-none" dur="64" pname="d" oct="5" />
-                           <beam xml:id="m2s1l1b4">
-                              <note xml:id="s1l1_t45_32" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t91_64" dur="64" pname="b" oct="4" breaksec="2" />
-                              <note xml:id="s1l1_t23_16" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t93_64" dur="64" pname="d" oct="5" breaksec="1" />
-                              <note xml:id="s1l1_t47_32" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t95_64" dur="64" pname="b" oct="4" />
+                           <note xml:id="nesj8ir" type="mscore-beam-none" dur="64" pname="c" oct="5" />
+                           <note xml:id="nt1rs3z" type="mscore-beam-none" dur="64" pname="d" oct="5" />
+                           <beam>
+                              <note xml:id="nbvd3a1" dur="64" pname="c" oct="5" />
+                              <note xml:id="n10q5n1o" dur="64" pname="b" oct="4" breaksec="2" />
+                              <note xml:id="n143z9cp" dur="64" pname="c" oct="5" />
+                              <note xml:id="n1b4rd89" dur="64" pname="d" oct="5" breaksec="1" />
+                              <note xml:id="nlr0pi8" dur="64" pname="c" oct="5" />
+                              <note xml:id="n17n1kc" dur="64" pname="b" oct="4" />
                            </beam>
-                           <beam xml:id="m2s1l1b5">
-                              <note xml:id="s1l1_t3_2" dur="8" pname="c" oct="5" />
-                              <note xml:id="s1l1_t13_8" dur="8" pname="d" oct="5" />
-                              <note xml:id="s1l1_t7_4" type="mscore-beam-mid" dur="16" pname="c" oct="5" />
-                              <note xml:id="s1l1_t29_16" dur="16" pname="b" oct="4" />
+                           <beam>
+                              <note xml:id="n1ancyv8" dur="8" pname="c" oct="5" />
+                              <note xml:id="nvp9yz0" dur="8" pname="d" oct="5" />
+                              <note xml:id="n15x2mjd" type="mscore-beam-mid" dur="16" pname="c" oct="5" />
+                              <note xml:id="n19d0stc" dur="16" pname="b" oct="4" />
                            </beam>
-                           <beam xml:id="m2s1l1b6">
-                              <note xml:id="s1l1_t15_8" type="mscore-beam-begin" dur="32" pname="c" oct="5" />
-                              <note xml:id="s1l1_t61_32" dur="32" pname="d" oct="5" />
+                           <beam>
+                              <note xml:id="n1sfhyzp" type="mscore-beam-begin" dur="32" pname="c" oct="5" />
+                              <note xml:id="n13shkcn" dur="32" pname="d" oct="5" />
                            </beam>
-                           <beam xml:id="m2s1l1b7">
-                              <note xml:id="s1l1_t31_16" type="mscore-beam-begin" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t125_64" dur="64" pname="b" oct="4" />
-                              <note xml:id="s1l1_t63_32" dur="64" pname="c" oct="5" />
-                              <note xml:id="s1l1_t127_64" dur="64" pname="d" oct="5" />
+                           <beam>
+                              <note xml:id="nsug8aq" type="mscore-beam-begin" dur="64" pname="c" oct="5" />
+                              <note xml:id="n1mrmqvw" dur="64" pname="b" oct="4" />
+                              <note xml:id="ng9raad" dur="64" pname="c" oct="5" />
+                              <note xml:id="n1fnlr7z" dur="64" pname="d" oct="5" />
                            </beam>
                         </layer>
                      </staff>

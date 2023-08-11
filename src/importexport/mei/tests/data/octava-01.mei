@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/dev/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0.0-dev+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Untitled score</title>
+            <respStmt>
+               <persName role="composer">Composer / arranger</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-08-11T14:53:22" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Untitled score</rend>
+                        <lb />
+                        <rend type="subtitle" fontsize="large">Subtitle</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Composer / arranger</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffGrp bar.thru="true" symbol="brace">
+                        <label>Piano</label>
+                        <labelAbbr>Pno.</labelAbbr>
+                        <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                           <clef shape="G" line="2" />
+                        </staffDef>
+                        <staffDef n="2" lines="5" meter.count="4" meter.unit="4">
+                           <clef shape="F" line="4" />
+                        </staffDef>
+                     </staffGrp>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="mirc9t8" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="n1xoex0c" dur="4" pname="c" oct="6" />
+                           <note xml:id="nhemcqc" dur="4" pname="b" oct="5" />
+                           <note xml:id="n14afflk" dur="4" pname="a" oct="4" oct.ges="5" />
+                           <note xml:id="n1mr21jx" dur="4" pname="b" oct="4" oct.ges="5" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m1s2" n="2">
+                        <layer xml:id="m1s2l1" n="1">
+                           <mRest xml:id="mbmf4aa" />
+                        </layer>
+                     </staff>
+                     <octave xml:id="o1pqq9gw" dis="8" dis.place="above" startid="#n14afflk" endid="#nnn9bu2" />
+                  </measure>
+                  <measure xml:id="m1smpbur" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="n1fd24af" dur="4" pname="c" oct="5" oct.ges="6" />
+                           <note xml:id="nnn9bu2" dur="4" pname="d" oct="5" oct.ges="6" />
+                           <note xml:id="n16ncub5" dur="4" pname="e" oct="4" oct.ges="6" />
+                           <note xml:id="n1aco1r1" dur="4" pname="f" oct="4" oct.ges="6" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m2s2" n="2">
+                        <layer xml:id="m2s2l1" n="1">
+                           <mRest xml:id="m7fvait" />
+                        </layer>
+                     </staff>
+                     <octave xml:id="ozpgzyl" dis="15" dis.place="above" startid="#n16ncub5" lform="solid" endid="#nufwsna" />
+                  </measure>
+                  <measure xml:id="m1h5ai48" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <note xml:id="n1bny9cd" dur="4" pname="g" oct="4" oct.ges="6" />
+                           <note xml:id="n15uwza7" dur="4" pname="a" oct="4" oct.ges="6" />
+                           <note xml:id="nufwsna" dur="2" pname="b" oct="4" oct.ges="6" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m3s2" n="2">
+                        <layer xml:id="m3s2l1" n="1">
+                           <mRest xml:id="m1kivali" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="mk4kqwj" n="4">
+                     <staff xml:id="m4s1" n="1">
+                        <layer xml:id="m4s1l1" n="1">
+                           <mRest xml:id="mmdh4oi" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m4s2" n="2">
+                        <layer xml:id="m4s2l1" n="1">
+                           <note xml:id="nhdweke" dur="4" pname="c" oct="2" />
+                           <note xml:id="n2xx4oi" dur="4" pname="d" oct="2" />
+                           <note xml:id="ntbb9ux" dur="4" pname="e" oct="3" oct.ges="2" />
+                           <note xml:id="n12bhd0i" dur="4" pname="d" oct="3" oct.ges="2" />
+                        </layer>
+                     </staff>
+                     <octave xml:id="o1py2wsi" dis="8" dis.place="below" startid="#ntbb9ux" lform="dotted" endid="#n1e8igt" />
+                  </measure>
+                  <measure xml:id="m1ckqz7o" n="5">
+                     <staff xml:id="m5s1" n="1">
+                        <layer xml:id="m5s1l1" n="1">
+                           <mRest xml:id="m1mrvoty" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m5s2" n="2">
+                        <layer xml:id="m5s2l1" n="1">
+                           <note xml:id="na9pss1" dur="4" pname="c" oct="3" oct.ges="2" />
+                           <note xml:id="n1e8igt" dur="4" pname="b" oct="2" oct.ges="1" />
+                           <note xml:id="n1berik3" dur="4" pname="a" oct="3" oct.ges="1" />
+                           <note xml:id="n4dprro" dur="4" pname="g" oct="3" oct.ges="1" />
+                        </layer>
+                     </staff>
+                     <octave xml:id="o1xlny20" dis="15" dis.place="below" startid="#n1berik3" lendsym="none" endid="#n1vv9pku" />
+                  </measure>
+                  <measure xml:id="mzv8ba3" n="6">
+                     <staff xml:id="m6s1" n="1">
+                        <layer xml:id="m6s1l1" n="1">
+                           <mRest xml:id="m1l2y2ll" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m6s2" n="2">
+                        <layer xml:id="m6s2l1" n="1">
+                           <note xml:id="nuwkeif" dur="4" pname="f" oct="3" oct.ges="1" />
+                           <note xml:id="n9gl9bo" dur="4" pname="e" oct="3" oct.ges="1" />
+                           <note xml:id="n1vv9pku" dur="2" pname="d" oct="3" oct.ges="1" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m1kpsuxe" right="end" n="7">
+                     <staff xml:id="m7s1" n="1">
+                        <layer xml:id="m7s1l1" n="1">
+                           <note xml:id="nr6lxxg" dur="2" pname="c" oct="4" oct.ges="7" />
+                           <rest xml:id="r1xlox0x" dur="2" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m7s2" n="2">
+                        <layer xml:id="m7s2l1" n="1">
+                           <note xml:id="natazm8" dur="2" pname="c" oct="4" oct.ges="1" />
+                           <rest xml:id="r1ovcvak" dur="2" />
+                        </layer>
+                     </staff>
+                     <octave xml:id="o2dads4" dis="22" dis.place="above" startid="#nr6lxxg" endid="#r1xlox0x" />
+                     <octave xml:id="o8hvyqi" dis="22" dis.place="below" startid="#natazm8" endid="#r1ovcvak" />
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>
