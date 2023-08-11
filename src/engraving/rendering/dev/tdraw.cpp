@@ -985,21 +985,24 @@ void TDraw::draw(const Bracket* item, Painter* painter)
         return;
     }
 
-    const Bracket::LayoutData& data = item->layoutData();
+    const Bracket::LayoutData* data = item->layoutData();
+    IF_ASSERT_FAILED(data) {
+        return;
+    }
 
     switch (item->bracketType()) {
     case BracketType::BRACE: {
-        if (item->braceSymbol() == SymId::noSym) {
+        if (data->braceSymbol == SymId::noSym) {
             painter->setNoPen();
             painter->setBrush(Brush(item->curColor()));
-            painter->drawPath(data.path);
+            painter->drawPath(data->path);
         } else {
             double h = 2 * item->h2();
             double mag = h / (100 * item->magS());
             painter->setPen(item->curColor());
             painter->save();
             painter->scale(item->magx(), mag);
-            item->drawSymbol(item->braceSymbol(), painter, PointF(0, 100 * item->magS()));
+            item->drawSymbol(data->braceSymbol, painter, PointF(0, 100 * item->magS()));
             painter->restore();
         }
     }

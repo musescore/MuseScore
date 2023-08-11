@@ -104,25 +104,21 @@ public:
 
     void setSelected(bool f) override;
 
-    struct LayoutData {
-        bool visible = true;
+    struct LayoutData : public EngravingItem::LayoutData {
         SymId braceSymbol = SymId::noSym;
 
         PainterPath path;
         Shape shape;
-
-        RectF bbox;
     };
 
-    const LayoutData& layoutData() const { return m_layoutData; }
-    void setLayoutData(const LayoutData& data);
+    DECLARE_LAYOUTDATA_METHODS(Bracket);
 
     //! --- Old Interface ---
-    void setShape(const Shape& sh) { m_layoutData.shape = sh; }
-    Shape shape() const override { return m_layoutData.shape; }
+    void setShape(const Shape& sh) { mutLayoutData()->shape = sh; }
+    Shape shape() const override { return layoutData()->shape; }
 
-    const draw::PainterPath& path() const { return m_layoutData.path; }
-    void setPath(const draw::PainterPath& p) { m_layoutData.path = p; }
+    const draw::PainterPath& path() const { return layoutData()->path; }
+    void setPath(const draw::PainterPath& p) { mutLayoutData()->path = p; }
     //! ---------------------
 
 private:
@@ -143,8 +139,6 @@ private:
     // because layout needs width of brace before knowing height of system...
     double m_magx = 0.0;
     Measure* m_measure = nullptr;
-
-    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 #endif

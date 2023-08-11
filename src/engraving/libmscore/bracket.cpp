@@ -383,12 +383,3 @@ void Bracket::setSelected(bool f)
     m_bi->setSelected(f);
     EngravingItem::setSelected(f);
 }
-
-void Bracket::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-
-    setVisible(data.visible);
-    setbbox(data.bbox);
-    setBraceSymbol(data.braceSymbol);
-}
