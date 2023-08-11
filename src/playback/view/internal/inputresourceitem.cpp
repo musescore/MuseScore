@@ -298,10 +298,20 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
         }
     }
 
-    std::function<QVariantMap(const MsBasicItem&, bool&, const QString&)> buildMsBasicItem
-        = [&](const MsBasicItem& item, bool& isCurrent, const QString& parentMenuId) {
+    std::function<QVariantMap(const MsBasicItem&, const QString&, bool&, bool&)> buildMsBasicItem
+        = [&](const MsBasicItem& item, const QString& parentMenuId, bool& ok, bool& isCurrent) {
+        ok = true;
         if (item.subItems.empty()) {
-            const AudioResourceMeta& resourceMeta = resourcesByProgram[item.preset];
+            auto it = resourcesByProgram.find(item.preset);
+            if (it == resourcesByProgram.cend()) {
+                LOGW() << "Preset specified in MS_BASIC_PRESET_CATEGORIES not found in SoundFont: bank " << item.preset.bank
+                       << ", program " << item.preset.program;
+
+                ok = false;
+                return QVariantMap();
+            }
+
+            const AudioResourceMeta& resourceMeta = it->second;
 
             isCurrent = isCurrentSoundFont && currentPreset.has_value() && currentPreset.value() == item.preset;
 
@@ -320,9 +330,15 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
         QVariantList subItems;
 
         for (const MsBasicItem& subItem : item.subItems) {
+            bool ok = false;
             bool isSubItemCurrent = false;
 
-            subItems << buildMsBasicItem(subItem, isSubItemCurrent, parentMenuId);
+            QVariantMap menuItem = buildMsBasicItem(subItem, parentMenuId, ok, isSubItemCurrent);
+            if (!ok) {
+                continue;
+            }
+
+            subItems << menuItem;
 
             if (isSubItemCurrent) {
                 isCurrent = true;
@@ -340,9 +356,10 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
     QVariantList categoryItems;
 
     for (const MsBasicItem& category : MS_BASIC_PRESET_CATEGORIES) {
+        bool ok = false;
         bool isCurrent = false;
 
-        categoryItems << buildMsBasicItem(category, isCurrent, menuId);
+        categoryItems << buildMsBasicItem(category, menuId, ok, isCurrent);
     }
 
     // Prepend the "Choose automatically" item
