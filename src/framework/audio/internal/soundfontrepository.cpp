@@ -21,21 +21,10 @@
  */
 #include "soundfontrepository.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <sfloader/fluid_sfont.h>
-#include <sfloader/fluid_defsfont.h>
-
-#ifdef __cplusplus
-}
-#endif
-
-#include "defer.h"
+#include "log.h"
 #include "translation.h"
 
-#include "log.h"
+#include "synthesizers/fluidsynth/fluidsoundfontparser.h"
 
 using namespace mu::audio;
 using namespace mu::audio::synth;
@@ -85,57 +74,14 @@ void SoundFontRepository::loadSoundFont(const SoundFontPath& path, const SoundFo
         return;
     }
 
-    fluid_settings_t* settings = nullptr;
-    fluid_sfloader_t* loader = nullptr;
-    fluid_sfont_t* sfont = nullptr;
+    RetVal<SoundFontMeta> meta = FluidSoundFontParser::parseSoundFont(path);
 
-    DEFER {
-        if (sfont) {
-            fluid_defsfont_sfont_delete(sfont);
-        }
-        if (loader) {
-            delete_fluid_sfloader(loader);
-        }
-        if (settings) {
-            delete_fluid_settings(settings);
-        }
-    };
-
-    settings = new_fluid_settings();
-    if (!settings) {
+    if (!meta.ret) {
+        LOGW() << "Failed parse SoundFont presets for " << path << ": " << meta.ret.toString();
         return;
     }
 
-    fluid_settings_setint(settings, "synth.dynamic-sample-loading", 1);
-
-    loader = new_fluid_defsfloader(settings);
-    if (!loader) {
-        return;
-    }
-
-    sfont = fluid_defsfloader_load(loader, path.c_str());
-    if (!sfont) {
-        return;
-    }
-
-    SoundFontMeta meta;
-    meta.path = path;
-
-    fluid_defsfont_sfont_iteration_start(sfont);
-
-    fluid_preset_t* fluid_preset;
-    while ((fluid_preset = fluid_defsfont_sfont_iteration_next(sfont))) {
-        int bank = fluid_defpreset_preset_get_banknum(fluid_preset);
-        int program = fluid_defpreset_preset_get_num(fluid_preset);
-        const char* name = fluid_defpreset_preset_get_name(fluid_preset);
-
-        SoundFontPreset preset;
-        preset.program = midi::Program(bank, program);
-        preset.name = name;
-        meta.presets.push_back(preset);
-    }
-
-    m_soundFonts.insert_or_assign(path, meta);
+    m_soundFonts.insert_or_assign(path, meta.val);
 }
 
 SoundFontPaths SoundFontRepository::soundFontPaths() const
