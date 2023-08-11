@@ -1142,26 +1142,28 @@ void TLayout::layout(TBox* item, LayoutContext& ctx)
     layoutMeasureBase(item, ctx);   // layout LayoutBreak's
 }
 
-static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket::LayoutData& data)
+void TLayout::layout(Bracket* item, LayoutContext& ctx)
 {
     if (RealIsNull(item->h2())) {
         return;
     }
 
-    data.visible = item->bi()->visible();
-    data.braceSymbol = item->braceSymbol();
+    Bracket::LayoutData* data = item->mutLayoutData();
+
+    item->setVisible(item->bi()->visible());
+    data->braceSymbol = item->braceSymbol();
 
     switch (item->bracketType()) {
     case BracketType::BRACE: {
         String musicalSymbolFont = ctx.conf().styleSt(Sid::MusicalSymbolFont);
         if (musicalSymbolFont == "Emmentaler" || musicalSymbolFont == "Gonville") {
-            data.braceSymbol = SymId::noSym;
+            data->braceSymbol = SymId::noSym;
             double w = ctx.conf().styleMM(Sid::akkoladeWidth);
 
 #define XM(a) (a + 700) * w / 700
 #define YM(a) (a + 7100) * item->h2() / 7100
 
-            PainterPath& path = data.path;
+            PainterPath path;
             path.moveTo(XM(-8), YM(-2048));
             path.cubicTo(XM(-8), YM(-3192), XM(-360), YM(-4304), XM(-360), YM(-5400));                 // c 0
             path.cubicTo(XM(-360), YM(-5952), XM(-264), YM(-6488), XM(32), YM(-6968));                 // c 1
@@ -1183,16 +1185,17 @@ static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket
             path.cubicTo(XM(-360), YM(4304), XM(-8), YM(3192), XM(-8), YM(2048));                      // c 0
             path.cubicTo(XM(-8), YM(1320), XM(-136), YM(624), XM(-512), YM(0));                        // c 1
             path.cubicTo(XM(-136), YM(-624), XM(-8), YM(-1320), XM(-8), YM(-2048));                    // c 0*/
-            data.bbox = path.boundingRect();
-            data.shape.add(data.bbox);
+            data->path = path;
+            data->bbox = path.boundingRect();
+            data->shape.add(data->bbox);
         } else {
             if (item->braceSymbol() == SymId::noSym) {
-                data.braceSymbol = SymId::brace;
+                data->braceSymbol = SymId::brace;
             }
             double h = item->h2() * 2;
             double w = item->symWidth(item->braceSymbol()) * item->magx();
-            data.bbox = RectF(0, 0, w, h);
-            data.shape.add(data.bbox);
+            data->bbox = RectF(0, 0, w, h);
+            data->shape.add(data->bbox);
         }
     }
     break;
@@ -1202,14 +1205,14 @@ static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket
         double x = -w;
 
         double bd = (ctx.conf().styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
-        data.shape.add(RectF(x, -bd, w * 2, 2 * (item->h2() + bd)));
-        data.shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
-        data.shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * item->h2())));
+        data->shape.add(RectF(x, -bd, w * 2, 2 * (item->h2() + bd)));
+        data->shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
+        data->shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * item->h2())));
 
         w += item->symWidth(SymId::bracketTop);
         double y = -item->symHeight(SymId::bracketTop) - bd;
         double h = (-y + item->h2()) * 2;
-        data.bbox = RectF(x, y, w, h);
+        data->bbox = RectF(x, y, w, h);
     }
     break;
     case BracketType::SQUARE: {
@@ -1218,8 +1221,8 @@ static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket
         double y = -w;
         double h = (item->h2() + w) * 2;
         w += (.5 * item->spatium() + 3 * w);
-        data.bbox = RectF(x, y, w, h);
-        data.shape.add(data.bbox);
+        data->bbox = RectF(x, y, w, h);
+        data->shape.add(data->bbox);
     }
     break;
     case BracketType::LINE: {
@@ -1229,20 +1232,13 @@ static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket
         double bd = _spatium * .25;
         double y = -bd;
         double h = (-y + item->h2()) * 2;
-        data.bbox = RectF(x, y, w, h);
-        data.shape.add(data.bbox);
+        data->bbox = RectF(x, y, w, h);
+        data->shape.add(data->bbox);
     }
     break;
     case BracketType::NO_BRACKET:
         break;
     }
-}
-
-void TLayout::layout(Bracket* item, LayoutContext& ctx)
-{
-    Bracket::LayoutData data;
-    layoutBracket(item, ctx, data);
-    item->setLayoutData(data);
 }
 
 void TLayout::layout(Breath* item, LayoutContext& ctx)
