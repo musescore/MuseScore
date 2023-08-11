@@ -30,7 +30,7 @@
       <instrument id="c-cornet">
         <family id="cornets">Cornets</family>
         </instrument>
-      <instrument id="c-horn-alto">
+      <instrument id="eb-alto-horn">
         <family id="horns">Horns</family>
         </instrument>
       <instrument id="drumset">
@@ -556,9 +556,9 @@
         <shortName>Solo Hn.</shortName>
         <trackName>Horn in E♭</trackName>
         <minPitchP>45</minPitchP>
-        <maxPitchP>72</maxPitchP>
+        <maxPitchP>75</maxPitchP>
         <minPitchA>45</minPitchA>
-        <maxPitchA>75</maxPitchA>
+        <maxPitchA>72</maxPitchA>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
         <instrumentId>brass.alto-horn</instrumentId>
@@ -633,7 +633,7 @@
         <minPitchP>45</minPitchP>
         <maxPitchP>75</maxPitchP>
         <minPitchA>45</minPitchA>
-        <maxPitchA>75</maxPitchA>
+        <maxPitchA>72</maxPitchA>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
         <instrumentId>brass.alto-horn</instrumentId>
@@ -705,9 +705,9 @@
         <shortName>2nd Hn.</shortName>
         <trackName>Horn in E♭</trackName>
         <minPitchP>45</minPitchP>
-        <maxPitchP>72</maxPitchP>
+        <maxPitchP>75</maxPitchP>
         <minPitchA>45</minPitchA>
-        <maxPitchA>75</maxPitchA>
+        <maxPitchA>72</maxPitchA>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
         <instrumentId>brass.alto-horn</instrumentId>
