@@ -70,6 +70,9 @@ using namespace mu::engraving;
 // Number of spaces for the XML indentation. Set to 0 for tabs
 #define MEI_INDENT 3
 
+// Use counter-based IDs for layer elements
+#define MEI_COUNTER_BASED_IDS true
+
 /**
  * Write the Score to the destination file.
  * Return false on error.
@@ -2064,12 +2067,15 @@ std::string MeiExporter::getLayerXmlId()
 
 std::string MeiExporter::getLayerXmlIdFor(layerElementCounter elementType)
 {
-    // m (Measure) / s (Staff) / l (Layer) / ? Layer element type
-    // The layer element abbreviation is given in the MeiExporter::s_layerXmlIdMap
-    return String("m%1s%2l%3%4%5").arg(m_measureCounter).arg(m_staffCounter).arg(m_layerCounter).arg(MeiExporter::s_layerXmlIdMap.at(
-                                                                                                         elementType)).arg(++(
-                                                                                                                               m_layerCounterFor
-                                                                                                                               .at(
-                                                                                                                                   elementType)))
-           .toStdString();
+    String id;
+    if (MEI_COUNTER_BASED_IDS) {
+        // m (Measure) / s (Staff) / l (Layer) / ? Layer element type
+        // The layer element abbreviation is given in the MeiExporter::s_layerXmlIdMap
+        id = String("m%1s%2l%3%4%5").arg(m_measureCounter).arg(m_staffCounter).arg(m_layerCounter).arg(MeiExporter::s_layerXmlIdMap.at(
+                                                                                                           elementType)).arg(++(
+                                                                                                                                 m_layerCounterFor
+                                                                                                                                 .at(
+                                                                                                                                     elementType)));
+    }
+    return id.toStdString();
 }
