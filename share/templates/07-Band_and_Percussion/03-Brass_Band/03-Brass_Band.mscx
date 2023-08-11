@@ -551,17 +551,17 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>Solo Horn</trackName>
-      <Instrument id="c-horn-alto">
+      <Instrument id="eb-alto-horn">
         <longName>Solo Horn</longName>
         <shortName>Solo Hn.</shortName>
         <trackName>Horn in E♭</trackName>
-        <minPitchP>33</minPitchP>
-        <maxPitchP>75</maxPitchP>
-        <minPitchA>37</minPitchA>
-        <maxPitchA>70</maxPitchA>
+        <minPitchP>45</minPitchP>
+        <maxPitchP>72</maxPitchP>
+        <minPitchA>45</minPitchA>
+        <maxPitchA>75</maxPitchA>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
-        <instrumentId>brass.natural-horn</instrumentId>
+        <instrumentId>brass.alto-horn</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -626,17 +626,17 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName>1st Horn</trackName>
-      <Instrument id="c-horn-alto">
+     <Instrument id="eb-alto-horn">
         <longName>1st Horn</longName>
         <shortName>1st Hn.</shortName>
         <trackName>Horn in E♭</trackName>
-        <minPitchP>33</minPitchP>
+        <minPitchP>45</minPitchP>
         <maxPitchP>75</maxPitchP>
-        <minPitchA>37</minPitchA>
-        <maxPitchA>70</maxPitchA>
+        <minPitchA>45</minPitchA>
+        <maxPitchA>75</maxPitchA>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
-        <instrumentId>brass.natural-horn</instrumentId>
+        <instrumentId>brass.alto-horn</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -700,17 +700,17 @@
           </StaffType>
         </Staff>
       <trackName>2nd Horn</trackName>
-      <Instrument id="c-horn-alto">
+       <Instrument id="eb-alto-horn">
         <longName>2nd Horn</longName>
         <shortName>2nd Hn.</shortName>
         <trackName>Horn in E♭</trackName>
-        <minPitchP>33</minPitchP>
-        <maxPitchP>75</maxPitchP>
-        <minPitchA>37</minPitchA>
-        <maxPitchA>70</maxPitchA>
+        <minPitchP>45</minPitchP>
+        <maxPitchP>72</maxPitchP>
+        <minPitchA>45</minPitchA>
+        <maxPitchA>75</maxPitchA>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
-        <instrumentId>brass.natural-horn</instrumentId>
+        <instrumentId>brass.alto-horn</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
