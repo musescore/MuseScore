@@ -74,7 +74,7 @@ public:
     static const BagpipeNoteInfo BAGPIPE_NOTEINFO_LIST[];
     BagpipeNoteList resolveNoteList() const;
 
-    struct LayoutData {
+    struct LayoutData : public EngravingItem::LayoutData {
         struct NoteData {
             PointF headXY;
             LineF stemLine;
@@ -98,13 +98,10 @@ public:
         std::map<size_t /*note index*/, NoteData> notesData;
         BeamData beamData;
 
-        RectF bbox;
-
         bool isValid() const { return bbox.isValid(); }
     };
 
-    const LayoutData& layoutData() const { return m_layoutData; }
-    void setLayoutData(const LayoutData& data);
+    DECLARE_LAYOUTDATA_METHODS(BagpipeEmbellishment);
 
     //! -- Old interface --
     //---------------------------------------------------------
@@ -147,7 +144,6 @@ public:
 private:
 
     EmbellishmentType m_embelType;
-    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 

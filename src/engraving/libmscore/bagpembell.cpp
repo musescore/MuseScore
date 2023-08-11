@@ -109,9 +109,3 @@ double BagpipeEmbellishment::mag() const
 {
     return 0.7;
 }
-
-void BagpipeEmbellishment::setLayoutData(const LayoutData& data)
-{
-    m_layoutData = data;
-    setbbox(data.bbox);
-}

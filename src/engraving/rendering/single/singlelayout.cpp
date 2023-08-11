@@ -385,29 +385,28 @@ void SingleLayout::layout(Articulation* item, const Context&)
     item->setbbox(bbox.translated(-0.5 * bbox.width(), 0.0));
 }
 
-static void layoutBagpipeEmbellishment(const BagpipeEmbellishment* item,
-                                       const SingleLayout::Context& ctx,
-                                       BagpipeEmbellishment::LayoutData& data)
+void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
 {
+    BagpipeEmbellishment::LayoutData* data = item->mutLayoutData();
     const double mags = item->magS() * 0.75; // grace head magnification
     const double spatium = ctx.style().spatium();
 
     const BagpipeNoteList nl = item->resolveNoteList();
 
-    data.bbox = RectF();
-    data.isDrawBeam = nl.size() > 1;
-    data.isDrawFlag = nl.size() == 1;
-    data.spatium = spatium;
-    data.headsym = SymId::noteheadBlack;
-    data.flagsym = SymId::flag32ndUp;
-    data.stemLineW = data.spatium * 0.1;
+    data->bbox = RectF();
+    data->isDrawBeam = nl.size() > 1;
+    data->isDrawFlag = nl.size() == 1;
+    data->spatium = spatium;
+    data->headsym = SymId::noteheadBlack;
+    data->flagsym = SymId::flag32ndUp;
+    data->stemLineW = data->spatium * 0.1;
 
-    BagpipeEmbellishment::LayoutData::BeamData& dataBeam = data.beamData;
+    BagpipeEmbellishment::LayoutData::BeamData& dataBeam = data->beamData;
     dataBeam.y = (-8 * spatium / 2);
     dataBeam.width = (0.3 * spatium);
 
-    const RectF headBBox = ctx.engravingFont()->bbox(data.headsym, mags);
-    const RectF flagBBox = ctx.engravingFont()->bbox(data.flagsym, mags);
+    const RectF headBBox = ctx.engravingFont()->bbox(data->headsym, mags);
+    const RectF flagBBox = ctx.engravingFont()->bbox(data->flagsym, mags);
     const double xcorr = spatium * 0.1;     // correction to align flag with top of stem
 
     double headW = headBBox.width();
@@ -418,7 +417,7 @@ static void layoutBagpipeEmbellishment(const BagpipeEmbellishment* item,
     // draw the notes including stem, (optional) flag and (optional) ledger line
     double x = xl;
     for (size_t i = 0; i < nl.size(); ++i) {
-        BagpipeEmbellishment::LayoutData::NoteData& noteData = data.notesData[i];
+        BagpipeEmbellishment::LayoutData::NoteData& noteData = data->notesData[i];
         const int line = BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[nl.at(i)].line;
         const double y1f = ((line - 6) * spatium / 2);      // top of stem for note with flag
         const double y2 = (line * spatium / 2);             // bottom of stem
@@ -426,39 +425,32 @@ static void layoutBagpipeEmbellishment(const BagpipeEmbellishment* item,
 
         // head
         noteData.headXY = PointF(x - headw, y2);
-        data.bbox.unite(headBBox.translated(noteData.headXY));
+        data->bbox.unite(headBBox.translated(noteData.headXY));
 
         // stem
         // top of stems actually used
-        double y1 = data.isDrawFlag ? y1f : dataBeam.y;
-        noteData.stemLine = LineF(x - data.stemLineW * .5, y1, x - data.stemLineW * .5, y2);
-        data.bbox.unite(RectF(x - data.stemLineW * .5 - headw, y1, data.stemLineW, y2 - y1));
+        double y1 = data->isDrawFlag ? y1f : dataBeam.y;
+        noteData.stemLine = LineF(x - data->stemLineW * .5, y1, x - data->stemLineW * .5, y2);
+        data->bbox.unite(RectF(x - data->stemLineW * .5 - headw, y1, data->stemLineW, y2 - y1));
 
         // flag
-        if (data.isDrawFlag) {
-            noteData.flagXY = mu::PointF(x - data.stemLineW * .5 + xcorr, y1 + ycorr);
-            data.bbox.unite(flagBBox.translated(noteData.flagXY));
+        if (data->isDrawFlag) {
+            noteData.flagXY = mu::PointF(x - data->stemLineW * .5 + xcorr, y1 + ycorr);
+            data->bbox.unite(flagBBox.translated(noteData.flagXY));
         }
 
         // draw the ledger line for high A
         if (line == -2) {
-            noteData.ledgerLine = LineF(x - headw * 1.5 - data.stemLineW * .5, y2, x + headw * .5 - data.stemLineW * .5, y2);
-            data.bbox.unite(RectF(x - headw * 1.5 - data.stemLineW * .5, y2 - data.stemLineW * 2, headw * 2, data.stemLineW));
+            noteData.ledgerLine = LineF(x - headw * 1.5 - data->stemLineW * .5, y2, x + headw * .5 - data->stemLineW * .5, y2);
+            data->bbox.unite(RectF(x - headw * 1.5 - data->stemLineW * .5, y2 - data->stemLineW * 2, headw * 2, data->stemLineW));
         }
 
         // move x to next note x position
         x += headp;
     }
 
-    dataBeam.x1 = xl - data.stemLineW * .5;
-    dataBeam.x2 = x - headp - data.stemLineW * .5;
-}
-
-void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
-{
-    BagpipeEmbellishment::LayoutData data;
-    layoutBagpipeEmbellishment(item, ctx, data);
-    item->setLayoutData(data);
+    dataBeam.x1 = xl - data->stemLineW * .5;
+    dataBeam.x2 = x - headp - data->stemLineW * .5;
 }
 
 void SingleLayout::layout(BarLine* item, const Context& ctx)
