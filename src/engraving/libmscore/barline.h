@@ -142,25 +142,20 @@ public:
 
     static const std::vector<BarLineTableItem> barLineTable;
 
-    void calcY() const;
+    void calcY();
 
-    struct LayoutData {
-        bool isSkipDraw = false;
+    struct LayoutData : public EngravingItem::LayoutData {
         double y1 = 0.0;
         double y2 = 0.0;
-        double mag = 1.0;
-        PointF pos;
-        RectF bbox;
     };
 
-    const LayoutData& layoutData() const { return m_layoutData; }
-    void setLayoutData(const LayoutData& data);
+    DECLARE_LAYOUTDATA_METHODS(BarLine)
 
     //! --- Old Interface ---
-    double y1() const { return m_layoutData.y1; }
-    double y2() const { return m_layoutData.y2; }
-    void setY1(double v) { m_layoutData.y1 = v; }
-    void setY2(double v) { m_layoutData.y2 = v; }
+    double y1() const { return layoutData()->y1; }
+    double y2() const { return layoutData()->y2; }
+    void setY1(double v) { mutLayoutData()->y1 = v; }
+    void setY2(double v) { mutLayoutData()->y2 = v; }
     //! ---------------------
 
 private:
@@ -177,8 +172,6 @@ private:
     BarLineType m_barLineType = BarLineType::NORMAL;
 
     ElementList m_el;          ///< fermata or other articulations
-
-    mutable LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 
