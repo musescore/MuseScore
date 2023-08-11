@@ -2321,7 +2321,7 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
     pugi::xml_node staffGrpNode = scoreDefNode.select_node("./staffGrp").node();
 
     bool success = this->readStaffGrps(staffGrpNode, staffSpan, 0, idx);
-    
+
     // Update parts instruments IDs for playback
     for (const Part* part : m_score->parts()) {
         for (const auto& pair : part->instruments()) {
