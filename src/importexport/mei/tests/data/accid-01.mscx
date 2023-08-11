@@ -28,10 +28,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="voice">
         <longName>Voice</longName>
         <shortName>Vo.</shortName>
         <trackName></trackName>
+        <instrumentId>voice.vocals</instrumentId>
         <Channel>
           </Channel>
         </Instrument>

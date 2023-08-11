@@ -28,12 +28,13 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Clarinet in B♭</longName>
         <shortName>Cl. in B♭</shortName>
         <trackName></trackName>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -45,10 +46,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
         <trackName></trackName>
+        <instrumentId>brass.trombone</instrumentId>
         <Channel>
           </Channel>
         </Instrument>

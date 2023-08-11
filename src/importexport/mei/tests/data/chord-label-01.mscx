@@ -28,10 +28,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
         <trackName></trackName>
+        <instrumentId>brass.trombone</instrumentId>
         <Channel>
           </Channel>
         </Instrument>

@@ -30,10 +30,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.violin</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -46,10 +47,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Violin 2</longName>
         <shortName>Vln. 2</shortName>
         <trackName></trackName>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -62,10 +64,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Vla.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.viola</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -77,10 +80,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vc.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.cello</instrumentId>
         <Channel>
           </Channel>
         </Instrument>

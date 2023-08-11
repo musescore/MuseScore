@@ -30,10 +30,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
         <trackName></trackName>
+        <instrumentId>wind.reed.oboe</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -45,10 +46,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="bassoon">
         <longName>Bassoon</longName>
         <shortName>Bsn.</shortName>
         <trackName></trackName>
+        <instrumentId>wind.reed.bassoon</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
