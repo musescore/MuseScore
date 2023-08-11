@@ -140,6 +140,10 @@
       <Measure len="1/4">
         <irregular>1</irregular>
         <voice>
+          <KeySig>
+            <linkedMain/>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <linkedMain/>
             <sigN>4</sigN>
@@ -352,6 +356,8 @@
           <irregular>1</irregular>
           <voice>
             <KeySig>
+              <linked>
+                </linked>
               <concertKey>0</concertKey>
               <actualKey>2</actualKey>
               </KeySig>
