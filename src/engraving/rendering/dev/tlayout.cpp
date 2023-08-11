@@ -468,10 +468,12 @@ void TLayout::layout(ActionIcon* item, LayoutContext&)
     data->bbox = fontMetrics.boundingRect(Char(item->icon()));
 }
 
-static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus::LayoutData& data)
+void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 {
     const double spatium = item->spatium();
     const double headWdt = item->headWidth();
+
+    Ambitus::LayoutData* data = item->mutLayoutData();
 
     Accidental::LayoutData* topAccData = item->topAccidental()->mutLayoutData();
     Accidental::LayoutData* bottomAccData = item->bottomAccidental()->mutLayoutData();
@@ -488,29 +490,29 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
 
         // top notehead
         if (item->topPitch() == INVALID_PITCH || item->topTpc() == Tpc::TPC_INVALID) {
-            data.topPos.setY(0.0); // if uninitialized, set to top staff line
+            data->topPos.setY(0.0); // if uninitialized, set to top staff line
         } else {
             int topLine = Ambitus::staffLine(item->topTpc(), item->topPitch(), clf);
-            data.topPos.setY(topLine * lineDist * 0.5);
+            data->topPos.setY(topLine * lineDist * 0.5);
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->topTpc(), key);
             item->topAccidental()->setAccidentalType(accidType);
             layoutAccidental(item->topAccidental(), ctx, topAccData);
-            topAccData->pos.setY(data.topPos.y());
+            topAccData->pos.setY(data->topPos.y());
         }
 
         // bottom notehead
         if (item->bottomPitch() == INVALID_PITCH || item->bottomTpc() == Tpc::TPC_INVALID) {
             const int numOfLines = stf->lines(tick);
-            data.bottomPos.setY((numOfLines - 1) * lineDist);         // if uninitialized, set to last staff line
+            data->bottomPos.setY((numOfLines - 1) * lineDist);         // if uninitialized, set to last staff line
         } else {
             int bottomLine = Ambitus::staffLine(item->bottomTpc(), item->bottomPitch(), clf);
-            data.bottomPos.setY(bottomLine * lineDist * 0.5);
+            data->bottomPos.setY(bottomLine * lineDist * 0.5);
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->bottomTpc(), key);
             item->bottomAccidental()->setAccidentalType(accidType);
             layoutAccidental(item->bottomAccidental(), ctx, bottomAccData);
-            bottomAccData->pos.setY(data.bottomPos.y());
+            bottomAccData->pos.setY(data->bottomPos.y());
         }
     }
 
@@ -541,24 +543,24 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
         switch (item->direction()) {
         case DirectionH::AUTO:                   // noteheads one above the other
             // left align noteheads and right align accidentals 'hanging' on the left
-            data.topPos.setX(0.0);
-            data.bottomPos.setX(0.0);
+            data->topPos.setX(0.0);
+            data->bottomPos.setX(0.0);
             topAccData->pos.setX(-xAccidOffTop);
             bottomAccData->pos.setX(-xAccidOffBottom);
             break;
         case DirectionH::LEFT:                   // top notehead at the left of bottom notehead
             // place top notehead at left margin; bottom notehead at right of top head;
             // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
-            data.topPos.setX(0.0);
-            data.bottomPos.setX(headWdt);
+            data->topPos.setX(0.0);
+            data->bottomPos.setX(headWdt);
             topAccData->pos.setX(-xAccidOffTop);
             bottomAccData->pos.setX(collision ? -xAccidOffBottom : headWdt - xAccidOffBottom);
             break;
         case DirectionH::RIGHT:                  // top notehead at the right of bottom notehead
             // bottom notehead at left margin; top notehead at right of bottomnotehead
             // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
-            data.topPos.setX(headWdt);
-            data.bottomPos.setX(0.0);
+            data->topPos.setX(headWdt);
+            data->bottomPos.setX(0.0);
             topAccData->pos.setX(headWdt - xAccidOffTop);
             bottomAccData->pos.setX(-xAccidOffBottom);
             break;
@@ -568,36 +570,29 @@ static void layoutAmbitus(const Ambitus* item, const LayoutContext& ctx, Ambitus
     // LINE
     // compute line from top note centre to bottom note centre
     {
-        LineF fullLine(data.topPos.x() + headWdt * 0.5,
-                       data.topPos.y(),
-                       data.bottomPos.x() + headWdt * 0.5,
-                       data.bottomPos.y());
+        LineF fullLine(data->topPos.x() + headWdt * 0.5,
+                       data->topPos.y(),
+                       data->bottomPos.x() + headWdt * 0.5,
+                       data->bottomPos.y());
         // shorten line on each side by offsets
-        double yDelta = data.bottomPos.y() - data.topPos.y();
+        double yDelta = data->bottomPos.y() - data->topPos.y();
         if (!RealIsNull(yDelta)) {
             double off = spatium * Ambitus::LINEOFFSET_DEFAULT;
             PointF p1 = fullLine.pointAt(off / yDelta);
             PointF p2 = fullLine.pointAt(1 - (off / yDelta));
-            data.line = LineF(p1, p2);
+            data->line = LineF(p1, p2);
         } else {
-            data.line = fullLine;
+            data->line = fullLine;
         }
     }
 
     // BBOX
     {
         RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
-        data.bbox = headRect.translated(data.topPos).united(headRect.translated(data.bottomPos))
-                    .united(topAccData->bbox.translated(topAccData->pos))
-                    .united(bottomAccData->bbox.translated(bottomAccData->pos));
+        data->bbox = headRect.translated(data->topPos).united(headRect.translated(data->bottomPos))
+                     .united(topAccData->bbox.translated(topAccData->pos))
+                     .united(bottomAccData->bbox.translated(bottomAccData->pos));
     }
-}
-
-void TLayout::layout(Ambitus* item, LayoutContext& ctx)
-{
-    Ambitus::LayoutData data;
-    layoutAmbitus(item, ctx, data);
-    item->setLayoutData(data);
 }
 
 void TLayout::layout(Arpeggio* item, LayoutContext& ctx)

@@ -116,30 +116,27 @@ public:
     static AccidentalType accidentalType(int tpc, Key key);
     static int staffLine(int tpc, int pitch, ClefType clf);
 
-    struct LayoutData {
+    struct LayoutData : public EngravingItem::LayoutData {
         PointF topPos;          // position of top note symbol
         PointF bottomPos;       // position of bottom note symbol
         LineF line;             // the drawn line
-
-        RectF bbox;
     };
 
-    const LayoutData& layoutData() const { return m_layoutData; }
-    void setLayoutData(const LayoutData& data);
+    DECLARE_LAYOUTDATA_METHODS(Ambitus);
 
     //! -- Old interface --
-    PointF topPos() const { return m_layoutData.topPos; }
-    void setTopPos(const PointF& p) { m_layoutData.topPos = p; }
-    void setTopPosX(double p) { m_layoutData.topPos.setX(p); }
-    void setTopPosY(double p) { m_layoutData.topPos.setY(p); }
+    PointF topPos() const { return layoutData()->topPos; }
+    void setTopPos(const PointF& p) { mutLayoutData()->topPos = p; }
+    void setTopPosX(double p) { mutLayoutData()->topPos.setX(p); }
+    void setTopPosY(double p) { mutLayoutData()->topPos.setY(p); }
 
-    PointF bottomPos() const { return m_layoutData.bottomPos; }
-    void setBottomPos(const PointF& p) { m_layoutData.bottomPos = p; }
-    void setBottomPosX(double p) { m_layoutData.bottomPos.setX(p); }
-    void setBottomPosY(double p) { m_layoutData.bottomPos.setY(p); }
+    PointF bottomPos() const { return layoutData()->bottomPos; }
+    void setBottomPos(const PointF& p) { mutLayoutData()->bottomPos = p; }
+    void setBottomPosX(double p) { mutLayoutData()->bottomPos.setX(p); }
+    void setBottomPosY(double p) { mutLayoutData()->bottomPos.setY(p); }
 
-    LineF line() const { return m_layoutData.line; }
-    void setLine(const LineF& l) { m_layoutData.line = l; }
+    LineF line() const { return layoutData()->line; }
+    void setLine(const LineF& l) { mutLayoutData()->line = l; }
     //! -------------------
 
 private:
@@ -168,9 +165,6 @@ private:
     Accidental* m_bottomAccidental = nullptr;
     int m_topPitch = INVALID_PITCH, m_bottomPitch = INVALID_PITCH;
     int m_topTpc = Tpc::TPC_INVALID, m_bottomTpc = Tpc::TPC_INVALID;
-
-    // internally managed, to optimize layout / drawing
-    LayoutData m_layoutData;
 };
 } // namespace mu::engraving
 
