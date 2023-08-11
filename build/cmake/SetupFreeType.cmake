@@ -28,7 +28,6 @@ if (MUE_COMPILE_USE_SYSTEM_FREETYPE)
 endif()
 
 if (NOT FREETYPE_FOUND)
+    # sets FREETYPE_LIBRARIES and FREETYPE_INCLUDE_DIRS
     add_subdirectory(${THIRDPARTY_DIR}/freetype freetype)
-    set(FREETYPE_LIBRARIES freetype)
-    set(FREETYPE_INCLUDE_DIRS ${THIRDPARTY_DIR}/freetype/include)
 endif()
