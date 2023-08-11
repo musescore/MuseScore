@@ -78,6 +78,7 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
             pitches.push_back(0);
         }
         int prevPitch = _wheelSpec.mLimit;
+        bool forceUpdate = false;
         while (tick < end) {
             auto funcIt = functionsToProcess.begin();
             for (size_t i = 0; i < functionsToProcess.size(); ++i) {
@@ -86,6 +87,7 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
                     // don't need its value anymore
                     pitches.at(i) = 0;
                     ++funcIt;
+                    forceUpdate = true;
                     continue;
                 }
                 if (tick < funcIt->mStartTick) {
@@ -100,13 +102,14 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
             for (const auto& pitch : pitches) {
                 finalPitch += pitch;
             }
-            if (finalPitch != prevPitch || tick == start) {
+            if (forceUpdate || finalPitch != prevPitch || tick == start) {
                 NPlayEvent evb(ME_PITCHBEND, channel, finalPitch % 128, finalPitch / 128);
                 evb.setEffect(effect);
                 if (staffInfoValid) {
                     evb.setOriginatingStaff(staffIdx);
                 }
                 pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
+                forceUpdate = false;
             }
 
             prevPitch = finalPitch;
