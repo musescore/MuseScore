@@ -83,7 +83,7 @@ else()
         ${CMAKE_CURRENT_LIST_DIR}/internal/qimagepainterprovider.h
         )
 
-    include(SetupFreeType)
+    include(cmake/SetupFreeType.cmake)
     set(MODULE_INCLUDE ${FREETYPE_INCLUDE_DIRS})
     set(MODULE_LINK ${FREETYPE_LIBRARIES})
 
