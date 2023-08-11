@@ -28,10 +28,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.violin</instrumentId>
         <Channel>
           </Channel>
         </Instrument>

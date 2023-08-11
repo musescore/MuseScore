@@ -30,10 +30,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.violin</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -45,10 +46,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Vla.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.viola</instrumentId>
         <Channel>
           </Channel>
         </Instrument>

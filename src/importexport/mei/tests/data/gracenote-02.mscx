@@ -28,10 +28,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="oboe">
         <longName>Oboe</longName>
         <shortName>Ob.</shortName>
         <trackName></trackName>
+        <instrumentId>wind.reed.oboe</instrumentId>
         <Channel>
           </Channel>
         </Instrument>

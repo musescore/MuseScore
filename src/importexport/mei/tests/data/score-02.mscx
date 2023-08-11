@@ -29,10 +29,11 @@
         <bracket type="0" span="1" col="0" visible="1"/>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="soprano">
         <longName>Soprano</longName>
         <shortName>S.</shortName>
         <trackName></trackName>
+        <instrumentId>voice.soprano</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -53,10 +54,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Piano</longName>
         <shortName>Pno.</shortName>
         <trackName></trackName>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -82,10 +84,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="organ">
         <longName>Organ</longName>
         <shortName>Org.</shortName>
         <trackName></trackName>
+        <instrumentId>keyboard.organ</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -111,10 +114,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="organ">
         <longName>Organ</longName>
         <shortName>Org.</shortName>
         <trackName></trackName>
+        <instrumentId>keyboard.organ</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -126,10 +130,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="timpani">
         <longName>Timpani</longName>
         <shortName>Timp.</shortName>
         <trackName></trackName>
+        <instrumentId>drum.timpani</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -142,10 +147,11 @@
         <bracket type="0" span="2" col="0" visible="1"/>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="violin">
         <longName>Violin</longName>
         <shortName>Vln.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.violin</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -157,10 +163,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vc.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.cello</instrumentId>
         <Channel>
           </Channel>
         </Instrument>

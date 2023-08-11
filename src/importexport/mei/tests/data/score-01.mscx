@@ -30,12 +30,13 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Horn in F</longName>
         <shortName>Hn. in F</shortName>
         <trackName></trackName>
         <transposeDiatonic>-4</transposeDiatonic>
         <transposeChromatic>-7</transposeChromatic>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -48,12 +49,13 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Trumpet in B♭</longName>
         <shortName>Tpt. in B♭</shortName>
         <trackName></trackName>
         <transposeDiatonic>-1</transposeDiatonic>
         <transposeChromatic>-2</transposeChromatic>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -66,12 +68,13 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="piano">
         <longName>Bass Trumpet in E♭</longName>
         <shortName>B. Tpt. in E♭</shortName>
         <trackName></trackName>
         <transposeDiatonic>-5</transposeDiatonic>
         <transposeChromatic>-9</transposeChromatic>
+        <instrumentId>keyboard.piano</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -84,10 +87,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="alto-trombone">
         <longName>Alto Trombone</longName>
         <shortName>A. Tbn.</shortName>
         <trackName></trackName>
+        <instrumentId>brass.trombone.alto</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -100,10 +104,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="trombone">
         <longName>Trombone</longName>
         <shortName>Tbn.</shortName>
         <trackName></trackName>
+        <instrumentId>brass.trombone</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -116,10 +121,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="contrabass-trombone">
         <longName>Contrabass Trombone</longName>
         <shortName>Cb. Tbn.</shortName>
         <trackName></trackName>
+        <instrumentId>brass.trombone.contrabass</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -132,10 +138,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="bass-trombone">
         <longName>Bass Trombone</longName>
         <shortName>B. Tbn.</shortName>
         <trackName></trackName>
+        <instrumentId>brass.trombone.bass</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -148,10 +155,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="tuba">
         <longName>Tuba</longName>
         <shortName>Tba.</shortName>
         <trackName></trackName>
+        <instrumentId>brass.tuba</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -163,10 +171,11 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="tuba">
         <longName>B♭ Contrabass Tuba</longName>
         <shortName>B♭ Cb. Tb.</shortName>
         <trackName></trackName>
+        <instrumentId>brass.tuba</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -185,12 +194,13 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="celesta">
         <longName>Celesta</longName>
         <shortName>Cel.</shortName>
         <trackName></trackName>
         <transposeDiatonic>7</transposeDiatonic>
         <transposeChromatic>12</transposeChromatic>
+        <instrumentId>keyboard.celesta</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -204,10 +214,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="strings">
         <longName>Violins</longName>
         <shortName>Vlns.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.group</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -220,10 +231,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="viola">
         <longName>Viola</longName>
         <shortName>Vla.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.viola</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -236,10 +248,11 @@
         <barLineSpan>1</barLineSpan>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="violoncello">
         <longName>Violoncello</longName>
         <shortName>Vc.</shortName>
         <trackName></trackName>
+        <instrumentId>strings.cello</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
@@ -251,12 +264,13 @@
           </StaffType>
         </Staff>
       <trackName></trackName>
-      <Instrument>
+      <Instrument id="contrabass">
         <longName>Contrabass</longName>
         <shortName>Cb.</shortName>
         <trackName></trackName>
         <transposeDiatonic>-7</transposeDiatonic>
         <transposeChromatic>-12</transposeChromatic>
+        <instrumentId>strings.contrabass</instrumentId>
         <Channel>
           </Channel>
         </Instrument>
