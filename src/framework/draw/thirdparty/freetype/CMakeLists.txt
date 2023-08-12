@@ -167,3 +167,8 @@ include(${PROJECT_SOURCE_DIR}/build/module.cmake)
 # Export variables
 set(FREETYPE_LIBRARIES freetype PARENT_SCOPE)
 set(FREETYPE_INCLUDE_DIRS ${FREETYPE_DIR}/include PARENT_SCOPE)
+
+target_no_warning(${MODULE} -WMSVC-no-signed-unsigned-mismatch)
+target_no_warning(${MODULE} -Wno-float-conversion)
+target_no_warning(${MODULE} -Wno-conversion)
+target_no_warning(${MODULE} -WMSVC-no-assignment-within-conditional-expression)
