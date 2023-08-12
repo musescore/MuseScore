@@ -78,6 +78,7 @@ public:
     virtual void playElements(const std::vector<const notation::EngravingItem*>& elements) = 0;
     virtual void playMetronome(int tick) = 0;
     virtual void seekElement(const notation::EngravingItem* element) = 0;
+    virtual void seekBeat(int measureIndex, int beatIndex) = 0;
 
     virtual bool actionChecked(const muse::actions::ActionCode& actionCode) const = 0;
     virtual muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const = 0;

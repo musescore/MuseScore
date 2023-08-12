@@ -366,6 +366,12 @@ void PlaybackController::seekElement(const notation::EngravingItem* element)
     seek(tick.val);
 }
 
+void PlaybackController::seekBeat(int measureIndex, int beatIndex)
+{
+    secs_t targetSecs = beatToSecs(measureIndex, beatIndex);
+    seek(targetSecs);
+}
+
 void PlaybackController::seekListSelection()
 {
     const std::vector<EngravingItem*>& elements = selection()->elements();
@@ -1434,7 +1440,14 @@ MeasureBeat PlaybackController::currentBeat() const
 
 secs_t PlaybackController::beatToSecs(int measureIndex, int beatIndex) const
 {
-    return notationPlayback() ? tickToSecs(notationPlayback()->beatToTick(measureIndex, beatIndex)) : secs_t { 0 };
+    if (!notationPlayback()) {
+        return 0;
+    }
+
+    muse::midi::tick_t rawTick = notationPlayback()->beatToTick(measureIndex, beatIndex);
+    muse::midi::tick_t playedTick = notationPlayback()->playPositionTickByRawTick(rawTick).val;
+
+    return tickToSecs(playedTick);
 }
 
 double PlaybackController::tempoMultiplier() const
