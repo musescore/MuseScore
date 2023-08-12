@@ -87,6 +87,7 @@ public:
     void playElements(const std::vector<const notation::EngravingItem*>& elements) override;
     void playMetronome(int tick) override;
     void seekElement(const notation::EngravingItem* element) override;
+    void seekBeat(int measureIndex, int beatIndex) override;
 
     bool actionChecked(const muse::actions::ActionCode& actionCode) const override;
     muse::async::Channel<muse::actions::ActionCode> actionCheckedChanged() const override;
@@ -111,7 +112,6 @@ public:
     void setIsExportingAudio(bool exporting) override;
 
     bool canReceiveAction(const muse::actions::ActionCode& code) const override;
-
 private:
     muse::audio::IPlayerPtr currentPlayer() const;
 

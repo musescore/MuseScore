@@ -990,6 +990,35 @@ void NotationActionController::move(MoveDirection direction, bool quickly)
         break;
     case MoveDirection::Right:
     case MoveDirection::Left:
+        if (playbackController()->isPlaying()) {
+            MeasureBeat beat = playbackController()->currentBeat();
+            int targetBeatIdx = beat.beatIndex;
+            int targetMeasureIdx = beat.measureIndex;
+            int increment = (direction == MoveDirection::Right ? 1 : -1);
+
+            if (quickly) {
+                targetBeatIdx = 0;
+                targetMeasureIdx += increment;
+                if (targetMeasureIdx > beat.maxMeasureIndex) {
+                    targetMeasureIdx = beat.maxMeasureIndex;
+                } else if (targetMeasureIdx < 0) {
+                    targetMeasureIdx = 0;
+                }
+            } else {
+                targetBeatIdx += increment;
+                if (targetBeatIdx > beat.maxBeatIndex) {
+                    targetBeatIdx = 0;
+                    targetMeasureIdx += 1;
+                } else if (targetBeatIdx < 0) {
+                    targetBeatIdx = beat.maxBeatIndex;
+                    targetMeasureIdx -= 1;
+                }
+            }
+
+            playbackController()->seekBeat(targetMeasureIdx, targetBeatIdx);
+            return;
+        }
+
         if (interaction->isTextEditingStarted() && textNavigationAvailable()) {
             navigateToTextElementInNearMeasure(direction);
             return;

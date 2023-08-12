@@ -124,6 +124,10 @@ void PlaybackControllerStub::seekElement(const notation::EngravingItem*)
 {
 }
 
+void PlaybackControllerStub::seekBeat(int, int)
+{
+}
+
 bool PlaybackControllerStub::actionChecked(const ActionCode&) const
 {
     return false;
