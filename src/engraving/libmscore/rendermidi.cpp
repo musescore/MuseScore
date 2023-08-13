@@ -1228,7 +1228,17 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
         for (NoteEvent& e : *el) {
             e.setLen(e.len() * gateTime / 100);
         }
+
+        std::sort(el->begin(), el->end(), [](const NoteEvent& left, const NoteEvent& right) {
+            int l1 = left.ontime();
+            int l2 = -left.offset();
+            int r1 = right.ontime();
+            int r2 = -right.offset();
+
+            return std::tie(l1, l2) < std::tie(r1, r2);
+        });
     }
+
     return ell;
 }
 
@@ -1423,14 +1433,6 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
         Note* prevChordNote = prevChord->notes()[i];
         NoteEventList evList;
         NoteEventList prevEvents = prevChordNote->playEvents();
-        std::sort(prevEvents.begin(), prevEvents.end(), [](const NoteEvent& left, const NoteEvent& right) {
-            int l1 = left.ontime();
-            int l2 = -left.offset();
-            int r1 = right.ontime();
-            int r2 = -right.offset();
-
-            return std::tie(l1, l2) < std::tie(r1, r2);
-        });
 
         int curPos = prevEvents.front().ontime();
 
