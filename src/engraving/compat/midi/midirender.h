@@ -102,7 +102,7 @@ private:
         int endLetRingTick = 0;
     };
 
-    ChordParams collectChordParams(const Chord* chord) const;
+    ChordParams collectChordParams(const Chord* chord, int tickOffset) const;
     void collectGraceBeforeChordEvents(Chord* chord, EventMap* events, double veloMultiplier, Staff* st, int tickOffset,
                                        PitchWheelRenderer& pitchWheelRenderer,  MidiInstrumentEffect effect);
 
