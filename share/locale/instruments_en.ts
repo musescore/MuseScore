@@ -12250,28 +12250,14 @@
         <location filename="../instruments/instrumentsxml.h" line="4108"/>
         <source>Large unpitched gong.</source>
         <comment>tam-tam description</comment>
-        <extracomment>description for Tam-Tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4110"/>
-        <source>Tam-Tam</source>
-        <comment>tam-tam trackName</comment>
-        <extracomment>trackName for Tam-Tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../instruments/instrumentsxml.h" line="4112"/>
-        <source>Tam-Tam</source>
-        <comment>tam-tam longName</comment>
-        <extracomment>longName for Tam-Tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>description for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../instruments/instrumentsxml.h" line="4114"/>
         <source>Tam</source>
         <comment>tam-tam shortName</comment>
-        <extracomment>shortName for Tam-Tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <extracomment>shortName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -15485,6 +15471,20 @@
         <source>*B♭</source>
         <comment>bb-trumpet traitName</comment>
         <extracomment>traitName for Trumpet; transposition: B♭; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4110"/>
+        <source>Tam-tam</source>
+        <comment>tam-tam trackName</comment>
+        <extracomment>trackName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../instruments/instrumentsxml.h" line="4112"/>
+        <source>Tam-tam</source>
+        <comment>tam-tam longName</comment>
+        <extracomment>longName for Tam-tam; Please see https://github.com/musescore/MuseScore/wiki/Translating-instrument-names</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
