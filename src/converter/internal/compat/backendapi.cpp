@@ -756,7 +756,7 @@ void BackendApi::switchToPageView(IMasterNotationPtr masterNotation)
 {
     //! NOTE: All operations must be done in page view mode
     masterNotation->notation()->setViewMode(ViewMode::PAGE);
-    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts()) {
         excerpt->notation()->setViewMode(ViewMode::PAGE);
     }
 }
@@ -765,7 +765,7 @@ void BackendApi::renderExcerptsContents(IMasterNotationPtr masterNotation)
 {
     //! NOTE: Due to optimization, only the master score is layouted
     //!       Let's layout all the scores of the excerpts
-    for (IExcerptNotationPtr excerpt : masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr excerpt : masterNotation->excerpts()) {
         Score* score = excerpt->notation()->elements()->msScore();
         if (!score->autoLayoutEnabled()) {
             score->doLayout();
@@ -777,7 +777,7 @@ ExcerptNotationList BackendApi::allExcerpts(notation::IMasterNotationPtr masterN
 {
     initPotentialExcerpts(masterNotation);
 
-    ExcerptNotationList excerpts = masterNotation->excerpts().val;
+    ExcerptNotationList excerpts = masterNotation->excerpts();
     ExcerptNotationList potentialExcerpts = masterNotation->potentialExcerpts();
     excerpts.insert(excerpts.end(), potentialExcerpts.begin(), potentialExcerpts.end());
 

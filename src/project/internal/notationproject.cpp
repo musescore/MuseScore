@@ -258,7 +258,7 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
 
     // Load view settings (needs to be done after notations are created)
     m_masterNotation->notation()->viewState()->read(reader);
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
         excerpt->notation()->viewState()->read(reader, u"Excerpts/" + excerpt->name() + u"/");
     }
 
@@ -315,7 +315,7 @@ mu::Ret NotationProject::doImport(const io::path_t& path, const io::path_t& styl
 
     // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
         excerpt->notation()->viewState()->makeDefault();
     }
 
@@ -365,7 +365,7 @@ mu::Ret NotationProject::createNew(const ProjectCreateOptions& projectOptions)
 
     // Setup view state
     m_masterNotation->notation()->viewState()->makeDefault();
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
         excerpt->notation()->viewState()->makeDefault();
     }
 
@@ -733,7 +733,7 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection,
 
     // Write view settings
     m_masterNotation->notation()->viewState()->write(msczWriter);
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
         excerpt->notation()->viewState()->write(msczWriter, u"Excerpts/" + excerpt->name() + u"/");
     }
 
@@ -857,13 +857,12 @@ void NotationProject::listenIfNeedSaveChanges()
 
     listenNonUndoStackChanges(m_masterNotation->notation());
 
-    ValCh<ExcerptNotationList> excerptsValCh = m_masterNotation->excerpts();
-    for (const IExcerptNotationPtr& excerpt : excerptsValCh.val) {
+    for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
         listenNonUndoStackChanges(excerpt->notation());
     }
 
-    excerptsValCh.ch.onReceive(this, [listenNonUndoStackChanges](const ExcerptNotationList& excerpts) {
-        for (const IExcerptNotationPtr& excerpt : excerpts) {
+    m_masterNotation->excerptsChanged().onNotify(this, [this, listenNonUndoStackChanges]() {
+        for (const IExcerptNotationPtr& excerpt : m_masterNotation->excerpts()) {
             listenNonUndoStackChanges(excerpt->notation());
         }
     });

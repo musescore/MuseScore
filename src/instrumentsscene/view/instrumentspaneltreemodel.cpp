@@ -161,7 +161,7 @@ void InstrumentsPanelTreeModel::initPartOrders()
         return;
     }
 
-    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
         NotationKey key = notationToKey(excerpt->notation());
 
         for (const Part* part : excerpt->notation()->parts()->partList()) {
@@ -762,7 +762,7 @@ void InstrumentsPanelTreeModel::setItemsSelected(const QModelIndexList& indexes,
 bool InstrumentsPanelTreeModel::warnAboutRemovingInstrumentsIfNecessary(int count)
 {
     // Only warn if excerpts are existent
-    if (m_masterNotation->excerpts().val.empty()) {
+    if (m_masterNotation->excerpts().empty()) {
         return true;
     }
 

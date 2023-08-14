@@ -59,7 +59,7 @@ void NotationSwitchListModel::onCurrentProjectChanged()
         return;
     }
 
-    project->masterNotation()->excerpts().ch.onReceive(this, [this](ExcerptNotationList) {
+    project->masterNotation()->excerptsChanged().onNotify(this, [this]() {
         loadNotations();
     });
 
@@ -93,7 +93,7 @@ void NotationSwitchListModel::loadNotations()
     m_notations << masterNotation->notation();
     listenNotationOpeningStatus(masterNotation->notation());
 
-    for (IExcerptNotationPtr excerpt: masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr excerpt: masterNotation->excerpts()) {
         if (excerpt->notation()->isOpen()) {
             m_notations << excerpt->notation();
         }

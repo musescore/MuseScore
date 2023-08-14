@@ -68,7 +68,7 @@ signals:
     void partAdded(int index);
 
 private:
-    void openNotations(const QList<int>& rows) const;
+    void openExcerpts(const QList<int>& rows) const;
 
     Ret doValidatePartTitle(int partIndex, const QString& title) const;
 
@@ -79,7 +79,7 @@ private:
 
     IMasterNotationPtr masterNotation() const;
 
-    void insertExcerpt(int destinationIndex, IExcerptNotationPtr excerpt);
+    void insertNewExcerpt(int destinationIndex, IExcerptNotationPtr excerpt);
     void notifyAboutNotationChanged(int index);
 
     enum Roles {

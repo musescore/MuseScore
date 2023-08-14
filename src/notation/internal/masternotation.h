@@ -55,12 +55,12 @@ public:
 
     IExcerptNotationPtr createEmptyExcerpt(const QString& name = QString()) const override;
 
-    ValCh<ExcerptNotationList> excerpts() const override;
+    const ExcerptNotationList& excerpts() const override;
+    async::Notification excerptsChanged() const override;
     const ExcerptNotationList& potentialExcerpts() const override;
 
     void initExcerpts(const ExcerptNotationList& excerpts) override;
-    void addExcerpts(const ExcerptNotationList& excerpts) override;
-    void removeExcerpts(const ExcerptNotationList& excerpts) override;
+    void setExcerpts(const ExcerptNotationList& excerpts) override;
     void resetExcerpt(IExcerptNotationPtr excerptNotation) override;
     void sortExcerpts(ExcerptNotationList& excerpts) override;
 
@@ -79,7 +79,7 @@ private:
 
     void initExcerptNotations(const std::vector<engraving::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const std::vector<engraving::Excerpt*>& excerpts);
-    void doSetExcerpts(ExcerptNotationList excerpts);
+    void doSetExcerpts(const ExcerptNotationList& excerpts);
     void updateExcerpts();
     void updatePotentialExcerpts() const;
     void unloadExcerpts(ExcerptNotationList& excerpts);
@@ -88,7 +88,12 @@ private:
 
     void onPartsChanged();
 
-    ValCh<ExcerptNotationList> m_excerpts;
+    void notifyAboutNeedSaveChanged();
+
+    void markScoreAsNeedToSave();
+
+    ExcerptNotationList m_excerpts;
+    async::Notification m_excerptsChanged;
     INotationPlaybackPtr m_notationPlayback = nullptr;
     async::Notification m_hasPartsChanged;
 

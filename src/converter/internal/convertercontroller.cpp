@@ -240,7 +240,7 @@ mu::Ret ConverterController::convertScorePartsToPdf(INotationWriterPtr writer, I
     INotationPtrList notations;
     notations.push_back(masterNotation->notation());
 
-    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr e : masterNotation->excerpts()) {
         notations.push_back(e->notation());
     }
 
@@ -275,7 +275,7 @@ mu::Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, 
     }
 
     INotationPtrList excerpts;
-    for (IExcerptNotationPtr e : masterNotation->excerpts().val) {
+    for (IExcerptNotationPtr e : masterNotation->excerpts()) {
         excerpts.push_back(e->notation());
     }
 

@@ -87,10 +87,6 @@ MasterNotation::MasterNotation()
     partList.onItemRemoved(this, [this](const Part*) {
         onPartsChanged();
     });
-
-    undoStack()->stackChanged().onNotify(this, [this]() {
-        updateExcerpts();
-    });
 }
 
 MasterNotation::~MasterNotation()
@@ -123,8 +119,14 @@ void MasterNotation::setMasterScore(mu::engraving::MasterScore* score)
     TRACEFUNC;
 
     setScore(score);
+
     score->updateSwing();
     score->updateCapo();
+
+    score->changesChannel().onReceive(this, [this](const ScoreChangesRange&) {
+        updateExcerpts();
+    });
+
     m_notationPlayback->init(m_undoStack);
     initExcerptNotations(masterScore()->excerpts());
 }
@@ -478,63 +480,52 @@ void MasterNotation::initExcerpts(const ExcerptNotationList& excerpts)
     }
 }
 
-void MasterNotation::addExcerpts(const ExcerptNotationList& excerpts)
+void MasterNotation::setExcerpts(const ExcerptNotationList& excerpts)
 {
-    if (excerpts.empty()) {
+    TRACEFUNC;
+
+    if (m_excerpts == excerpts) {
         return;
     }
 
-    TRACEFUNC;
+    MasterScore* score = masterScore();
+    IF_ASSERT_FAILED(score) {
+        return;
+    }
 
     undoStack()->prepareChanges();
 
-    ExcerptNotationList result = m_excerpts.val;
-    for (IExcerptNotationPtr excerptNotation : excerpts) {
-        auto it = std::find(result.cbegin(), result.cend(), excerptNotation);
-        if (it != result.end()) {
+    // Delete old excerpts (that are not included in the new list)
+    for (IExcerptNotationPtr excerptNotation : m_excerpts) {
+        auto it = std::find(excerpts.begin(), excerpts.end(), excerptNotation);
+        if (it != excerpts.end()) {
             continue;
         }
 
+        score->deleteExcerpt(get_impl(excerptNotation)->excerpt());
+    }
+
+    // Init new excerpts
+    for (size_t i = 0; i < excerpts.size(); ++i) {
+        const IExcerptNotationPtr& excerptNotation = excerpts.at(i);
         ExcerptNotation* excerptNotationImpl = get_impl(excerptNotation);
-        masterScore()->initAndAddExcerpt(excerptNotationImpl->excerpt(), false);
-        excerptNotationImpl->init();
 
-        result.push_back(excerptNotation);
-    }
-
-    masterScore()->setExcerptsChanged(false);
-
-    undoStack()->commitChanges();
-
-    doSetExcerpts(result);
-}
-
-void MasterNotation::removeExcerpts(const ExcerptNotationList& excerpts)
-{
-    if (excerpts.empty()) {
-        return;
-    }
-
-    TRACEFUNC;
-
-    undoStack()->prepareChanges();
-
-    for (IExcerptNotationPtr excerptNotation : excerpts) {
-        auto it = std::find(m_excerpts.val.begin(), m_excerpts.val.end(), excerptNotation);
-        if (it == m_excerpts.val.end()) {
+        auto it = std::find(m_excerpts.cbegin(), m_excerpts.cend(), excerptNotation);
+        if (it != m_excerpts.end()) {
+            std::vector<Excerpt*>& msExcerpts = score->excerpts();
+            mu::moveItem(msExcerpts, mu::indexOf(msExcerpts, excerptNotationImpl->excerpt()), i);
             continue;
         }
 
-        mu::engraving::Excerpt* excerpt = get_impl(excerptNotation)->excerpt();
-        masterScore()->deleteExcerpt(excerpt);
-        m_excerpts.val.erase(it);
+        score->initAndAddExcerpt(excerptNotationImpl->excerpt(), false);
+        excerptNotationImpl->init();
     }
 
-    masterScore()->setExcerptsChanged(false);
+    score->setExcerptsChanged(false);
 
     undoStack()->commitChanges();
 
-    doSetExcerpts(m_excerpts.val);
+    doSetExcerpts(excerpts);
 }
 
 void MasterNotation::resetExcerpt(IExcerptNotationPtr excerptNotation)
@@ -605,18 +596,14 @@ void MasterNotation::setExcerptIsOpen(const INotationPtr excerptNotation, bool o
     }
 }
 
-void MasterNotation::doSetExcerpts(ExcerptNotationList excerpts)
+void MasterNotation::doSetExcerpts(const ExcerptNotationList& excerpts)
 {
     TRACEFUNC;
 
-    m_excerpts.set(excerpts);
-    static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
+    m_excerpts = excerpts;
+    m_excerptsChanged.notify();
 
-    for (auto excerpt : excerpts) {
-        excerpt->notation()->undoStack()->stackChanged().onNotify(this, [this]() {
-            updateExcerpts();
-        });
-    }
+    static_cast<MasterNotationParts*>(m_parts.get())->setExcerpts(excerpts);
 
     updatePotentialExcerpts();
 }
@@ -634,7 +621,7 @@ void MasterNotation::updateExcerpts()
     const std::vector<mu::engraving::Excerpt*>& excerpts = masterScore()->excerpts();
 
     // exclude notations for old excerpts
-    for (IExcerptNotationPtr excerptNotation : m_excerpts.val) {
+    for (IExcerptNotationPtr excerptNotation : m_excerpts) {
         ExcerptNotation* impl = get_impl(excerptNotation);
 
         if (mu::contains(excerpts, impl->excerpt())) {
@@ -677,7 +664,7 @@ void MasterNotation::updatePotentialExcerpts() const
     std::vector<Part*> partsWithoutExcerpt;
 
     for (Part* part : score()->parts()) {
-        if (findExcerptByPart(m_excerpts.val, part) != m_excerpts.val.end()) {
+        if (findExcerptByPart(m_excerpts, part) != m_excerpts.end()) {
             continue;
         }
 
@@ -705,7 +692,7 @@ void MasterNotation::updatePotentialExcerpts() const
 
 bool MasterNotation::containsExcerpt(const mu::engraving::Excerpt* excerpt) const
 {
-    for (IExcerptNotationPtr excerptNotation : m_excerpts.val) {
+    for (IExcerptNotationPtr excerptNotation : m_excerpts) {
         if (get_impl(excerptNotation)->excerpt() == excerpt) {
             return true;
         }
@@ -728,9 +715,14 @@ IExcerptNotationPtr MasterNotation::createEmptyExcerpt(const QString& name) cons
     return excerptNotation;
 }
 
-mu::ValCh<ExcerptNotationList> MasterNotation::excerpts() const
+const ExcerptNotationList& MasterNotation::excerpts() const
 {
     return m_excerpts;
+}
+
+async::Notification MasterNotation::excerptsChanged() const
+{
+    return m_excerptsChanged;
 }
 
 INotationPartsPtr MasterNotation::parts() const
