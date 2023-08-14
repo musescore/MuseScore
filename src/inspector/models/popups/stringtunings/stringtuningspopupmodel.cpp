@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "stringtuningssettingsmodel.h"
+#include "stringtuningspopupmodel.h"
 
 #include "engraving/dom/stringtunings.h"
 #include "engraving/dom/utils.h"
@@ -29,6 +29,7 @@
 
 using namespace mu;
 using namespace muse;
+using namespace mu::inspector;
 using namespace mu::notation;
 
 const QString customPreset()
@@ -36,12 +37,12 @@ const QString customPreset()
     return muse::qtrc("notation", "Custom");
 }
 
-StringTuningsSettingsModel::StringTuningsSettingsModel(QObject* parent)
+StringTuningsPopupModel::StringTuningsPopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_STRING_TUNINGS, parent)
 {
 }
 
-void StringTuningsSettingsModel::init()
+void StringTuningsPopupModel::init()
 {
     TRACEFUNC;
 
@@ -102,12 +103,12 @@ void StringTuningsSettingsModel::init()
     emit stringsChanged();
 }
 
-QString StringTuningsSettingsModel::pitchToString(int pitch)
+QString StringTuningsPopupModel::pitchToString(int pitch)
 {
     return engraving::pitch2string(pitch);
 }
 
-void StringTuningsSettingsModel::toggleString(int stringIndex)
+void StringTuningsPopupModel::toggleString(int stringIndex)
 {
     if (stringIndex >= m_strings.size()) {
         return;
@@ -119,7 +120,7 @@ void StringTuningsSettingsModel::toggleString(int stringIndex)
     saveStringsVisibleState();
 }
 
-bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& stringValue)
+bool StringTuningsPopupModel::setStringValue(int stringIndex, const QString& stringValue)
 {
     if (stringIndex >= m_strings.size()) {
         return false;
@@ -149,19 +150,19 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
     return true;
 }
 
-QString StringTuningsSettingsModel::increaseStringValue(const QString& stringValue)
+QString StringTuningsPopupModel::increaseStringValue(const QString& stringValue)
 {
     String value = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
     return engraving::pitch2string(engraving::string2pitch(value) + 1, false /* useFlats */);
 }
 
-QString StringTuningsSettingsModel::decreaseStringValue(const QString& stringValue)
+QString StringTuningsPopupModel::decreaseStringValue(const QString& stringValue)
 {
     String value = engraving::convertPitchStringFlatsAndSharpsToUnicode(stringValue);
     return engraving::pitch2string(engraving::string2pitch(value) - 1, true /* useFlats */);
 }
 
-QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
+QVariantList StringTuningsPopupModel::presets(bool withCustom) const
 {
     const InstrumentStringTuningsMap& stringTunings = instrumentsRepository()->stringTuningsPresets();
 
@@ -213,7 +214,7 @@ QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
     return presetsList;
 }
 
-QString StringTuningsSettingsModel::currentPreset() const
+QString StringTuningsPopupModel::currentPreset() const
 {
     QString preset
         = m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_PRESET).value<String>().toQString() : "";
@@ -225,7 +226,7 @@ QString StringTuningsSettingsModel::currentPreset() const
     return preset;
 }
 
-void StringTuningsSettingsModel::setCurrentPreset(const QString& preset)
+void StringTuningsPopupModel::setCurrentPreset(const QString& preset)
 {
     bool isCurrentCustom = currentPreset() == customPreset();
 
@@ -247,7 +248,7 @@ void StringTuningsSettingsModel::setCurrentPreset(const QString& preset)
     endMultiCommands();
 }
 
-QVariantList StringTuningsSettingsModel::numbersOfStrings() const
+QVariantList StringTuningsPopupModel::numbersOfStrings() const
 {
     const InstrumentStringTuningsMap& stringTunings = instrumentsRepository()->stringTuningsPresets();
 
@@ -270,12 +271,12 @@ QVariantList StringTuningsSettingsModel::numbersOfStrings() const
     return numbersList;
 }
 
-int StringTuningsSettingsModel::currentNumberOfStrings() const
+int StringTuningsPopupModel::currentNumberOfStrings() const
 {
     return m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_STRINGS_COUNT).toInt() : 0;
 }
 
-void StringTuningsSettingsModel::setCurrentNumberOfStrings(int number)
+void StringTuningsPopupModel::setCurrentNumberOfStrings(int number)
 {
     int currentNumber = currentNumberOfStrings();
     if (currentNumber == number) {
@@ -296,12 +297,12 @@ void StringTuningsSettingsModel::setCurrentNumberOfStrings(int number)
     endMultiCommands();
 }
 
-QList<StringTuningsItem*> StringTuningsSettingsModel::strings() const
+QList<StringTuningsItem*> StringTuningsPopupModel::strings() const
 {
     return m_strings;
 }
 
-void StringTuningsSettingsModel::updateStrings()
+void StringTuningsPopupModel::updateStrings()
 {
     const QVariantList presets = this->presets();
     QString currentPreset = this->currentPreset();
@@ -334,7 +335,7 @@ void StringTuningsSettingsModel::updateStrings()
     emit stringsChanged();
 }
 
-void StringTuningsSettingsModel::saveStrings()
+void StringTuningsPopupModel::saveStrings()
 {
     engraving::StringTunings* stringTunings = engraving::toStringTunings(m_item);
     IF_ASSERT_FAILED(stringTunings) {
@@ -362,7 +363,7 @@ void StringTuningsSettingsModel::saveStrings()
     updateNotation();
 }
 
-void StringTuningsSettingsModel::saveStringsVisibleState()
+void StringTuningsPopupModel::saveStringsVisibleState()
 {
     std::vector<int> visibleStrings;
     int numOfStrings = static_cast<int>(m_strings.size());
@@ -377,7 +378,7 @@ void StringTuningsSettingsModel::saveStringsVisibleState()
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_VISIBLE_STRINGS, visibleStrings);
 }
 
-void StringTuningsSettingsModel::updateCurrentPreset()
+void StringTuningsPopupModel::updateCurrentPreset()
 {
     QVariantList currentValueList;
     int numOfStrings = static_cast<int>(m_strings.size());
@@ -405,7 +406,7 @@ void StringTuningsSettingsModel::updateCurrentPreset()
     }
 }
 
-void StringTuningsSettingsModel::doSetCurrentPreset(const QString& preset)
+void StringTuningsPopupModel::doSetCurrentPreset(const QString& preset)
 {
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_PRESET, muse::String::fromQString(preset));
     emit currentPresetChanged();

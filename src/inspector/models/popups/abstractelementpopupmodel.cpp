@@ -23,6 +23,7 @@
 #include "abstractelementpopupmodel.h"
 #include "log.h"
 
+using namespace mu::inspector;
 using namespace mu::notation;
 
 static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPES = {
