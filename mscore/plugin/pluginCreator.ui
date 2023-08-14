@@ -48,6 +48,9 @@
          <property name="text">
           <string>Run</string>
          </property>
+         <property name="shortcut">
+          <string>F5</string>
+         </property>
         </widget>
        </item>
        <item>
@@ -60,6 +63,9 @@
          </property>
          <property name="text">
           <string>Stop</string>
+         </property>
+         <property name="shortcut">
+          <string>F7</string>
          </property>
         </widget>
        </item>
@@ -95,6 +101,8 @@
     <addaction name="actionSave"/>
     <addaction name="separator"/>
     <addaction name="actionSaveAs"/>
+    <addaction name="actionRun"/>
+    <addaction name="actionStop"/>
     <addaction name="actionQuit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
@@ -185,6 +193,16 @@
   <action name="actionSaveAs">
    <property name="text">
     <string>Save As…</string>
+   </property>
+  </action>
+  <action name="actionRun">
+   <property name="text">
+    <string>Run</string>
+   </property>
+  </action>
+  <action name="actionStop">
+   <property name="text">
+    <string>Stop</string>
    </property>
   </action>
  </widget>

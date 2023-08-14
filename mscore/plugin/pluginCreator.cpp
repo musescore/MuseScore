@@ -102,6 +102,8 @@ PluginCreator::PluginCreator(QWidget* parent)
       connect(actionSaveAs, SIGNAL(triggered()), SLOT(savePluginAs()));
       connect(actionNew,  SIGNAL(triggered()),   SLOT(newPlugin()));
       connect(actionQuit, SIGNAL(triggered()),   SLOT(close()));
+      connect(actionRun,  SIGNAL(triggered()),   SLOT(runClicked()));
+      connect(actionStop, SIGNAL(triggered()),   SLOT(stopClicked()));
       connect(actionManual, SIGNAL(triggered()), SLOT(showManual()));
       connect(actionUndo, SIGNAL(triggered()),         textEdit,   SLOT(undo()));
       connect(actionRedo, SIGNAL(triggered()),         textEdit,   SLOT(redo()));
@@ -279,6 +281,10 @@ static void qmlMsgHandler(QtMsgType type, const QMessageLogContext &, const QStr
 
 void PluginCreator::runClicked()
       {
+      if (state == PCState::DIRTY)
+            savePlugin();
+      else
+            load();
       log->clear();
       msg(tr("Running…\n"));
       QmlPluginEngine* qml = mscore->getPluginEngine();
