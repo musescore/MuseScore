@@ -1628,7 +1628,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
             }
         }
 
-        needKeysig = needKeysig && (keyIdx.key() != Key::C || keyIdx.custom() || keyIdx.isAtonal());
+        needKeysig = needKeysig && (keyIdx.key() != Key::C || keyIdx.concertKey() != Key::C || keyIdx.custom() || keyIdx.isAtonal());
         bool isPitchedStaff = staff->isPitchedStaff(m->tick());
 
         if (needKeysig && isPitchedStaff) {
