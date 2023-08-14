@@ -45,7 +45,7 @@
 #include "playbackcursor.h"
 #include "loopmarker.h"
 #include "continuouspanel.h"
-#include "internal/abstractelementpopupmodel.h"
+#include "inspector/iinspectorcontroller.h"
 
 namespace mu::notation {
 class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public IControlledView, public async::Asyncable,
@@ -55,6 +55,7 @@ class AbstractNotationPaintView : public uicomponents::QuickPaintedView, public 
 
     INJECT(INotationConfiguration, configuration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(inspector::IInspectorController, inspectorController)
     INJECT(ui::IUiConfiguration, uiConfiguration)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(context::IGlobalContext, globalContext)
@@ -147,7 +148,7 @@ signals:
     void showContextMenuRequested(int elementType, const QPointF& viewPos);
     void hideContextMenuRequested();
 
-    void showElementPopupRequested(mu::notation::PopupModelType modelType, const QRectF& elementRect);
+    void showElementPopupRequested(int modelType, const QRectF& elementRect);
     void hideElementPopupRequested();
     void isPopupOpenChanged(bool isPopupOpen);
 

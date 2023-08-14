@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,26 +19,19 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#ifndef MU_INSPECTOR_INSPECTORCONTROLLER_H
+#define MU_INSPECTOR_INSPECTORCONTROLLER_H
 
-#ifndef MU_NOTATION_TEXTSTYLEPOPUPMODEL_H
-#define MU_NOTATION_TEXTSTYLEPOPUPMODEL_H
+#include "inspector/iinspectorcontroller.h"
 
-#include "abstractelementpopupmodel.h"
-
-namespace mu::notation {
-class TextStylePopupModel : public AbstractElementPopupModel
+namespace mu::inspector {
+class InspectorController : public IInspectorController
 {
-    Q_OBJECT
-
-    INJECT(actions::IActionsDispatcher, dispatcher)
-
 public:
-    explicit TextStylePopupModel(QObject* parent = nullptr);
+    bool supportsPopup(engraving::ElementType elementType) const override;
 
-    Q_INVOKABLE void insertSpecialCharacters();
-
-    Q_INVOKABLE void init() override;
+    int popupModelTypeByElementType(engraving::ElementType elementType) const override;
 };
 }
 
-#endif // MU_NOTATION_TEXTSTYLEPOPUPMODEL_H
+#endif // MU_INSPECTOR_INSPECTORCONTROLLER_H

@@ -26,6 +26,7 @@
 #include "log.h"
 
 using namespace mu::notation;
+using namespace mu::inspector;
 
 HarpPedalPopupModel::HarpPedalPopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_HARP_DIAGRAM, parent)

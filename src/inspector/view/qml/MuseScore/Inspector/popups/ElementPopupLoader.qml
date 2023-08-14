@@ -24,7 +24,11 @@ import QtQuick.Controls 2.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.NotationScene 1.0
+import MuseScore.Inspector 1.0
+
+import "../popups/harppedal/"
+import "../popups/capo/"
+import "../popups/text/"
 
 Item {
     id: container
@@ -49,10 +53,10 @@ Item {
 
         function componentByType(type) {
             switch (type) {
-            case Notation.TYPE_HARP_DIAGRAM: return harpPedalComp
-            case Notation.TYPE_CAPO: return capoComp
             case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
-            case Notation.TYPE_TEXT: return textStyleComp
+            case AbstractElementPopupModel.TYPE_HARP_DIAGRAM: return harpPedalComp
+            case AbstractElementPopupModel.TYPE_CAPO: return capoComp
+            case AbstractElementPopupModel.TYPE_TEXT: return textStyleComp
             }
 
             return null

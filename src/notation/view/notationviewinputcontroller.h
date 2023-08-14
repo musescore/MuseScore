@@ -37,6 +37,7 @@
 #include "notation/inotationconfiguration.h"
 
 #include "playback/iplaybackcontroller.h"
+#include "inspector/iinspectorcontroller.h"
 
 class QQuickItem;
 
@@ -87,6 +88,7 @@ class NotationViewInputController : public actions::Actionable, public async::As
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(playback::IPlaybackController, playbackController)
     INJECT(context::IGlobalContext, globalContext)
+    INJECT(inspector::IInspectorController, inspectorController)
 
 public:
     NotationViewInputController(IControlledView* view);

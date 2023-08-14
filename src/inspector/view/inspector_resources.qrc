@@ -107,5 +107,9 @@
         <file>qml/MuseScore/Inspector/common/PropertyToggle.qml</file>
         <file>qml/MuseScore/Inspector/parts/PartsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml</file>
+        <file>qml/MuseScore/Inspector/popups/ElementPopupLoader.qml</file>
+        <file>qml/MuseScore/Inspector/popups/harppedal/HarpPedalPopup.qml</file>
+        <file>qml/MuseScore/Inspector/popups/capo/CapoPopup.qml</file>
+        <file>qml/MuseScore/Inspector/popups/text/TextStylePopup.qml</file>
     </qresource>
 </RCC>

@@ -24,7 +24,7 @@
 
 #include "engraving/dom/capo.h"
 
-using namespace mu::notation;
+using namespace mu::inspector;
 
 CapoSettingsModel::CapoSettingsModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_CAPO, parent)
