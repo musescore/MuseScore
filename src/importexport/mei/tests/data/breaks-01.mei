@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-08-02T11:09:47" />
+            <date isodate="2023-08-11T14:51:13" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -39,213 +39,213 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m1" n="1">
+                  <measure xml:id="mq9w44a" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <rest xml:id="s1l1_t0_1" dur="4" />
-                           <note xml:id="s1l1_t1_4" dur="4" pname="c" oct="5" />
-                           <note xml:id="s1l1_t1_2" dur="4" pname="b" oct="4" />
-                           <note xml:id="s1l1_t3_4" dur="4" pname="a" oct="4" />
+                           <rest xml:id="r1rcmlku" dur="4" />
+                           <note xml:id="n182hzs" dur="4" pname="c" oct="5" />
+                           <note xml:id="nrnz93w" dur="4" pname="b" oct="4" />
+                           <note xml:id="nknu120" dur="4" pname="a" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m1s2" n="2">
                         <layer xml:id="m1s2l1" n="1">
-                           <rest xml:id="s2l1_t0_1" dur="4" />
-                           <note xml:id="s2l1_t1_4" dur="4" pname="c" oct="3" />
-                           <note xml:id="s2l1_t1_2" dur="4" pname="g" oct="3" />
-                           <note xml:id="s2l1_t3_4" dur="4" pname="d" oct="3" />
+                           <rest xml:id="r1suv84g" dur="4" />
+                           <note xml:id="n1v7j2xt" dur="4" pname="c" oct="3" />
+                           <note xml:id="nem50yz" dur="4" pname="g" oct="3" />
+                           <note xml:id="n87rp3t" dur="4" pname="d" oct="3" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m2" n="2">
+                  <measure xml:id="m97nau9" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <note xml:id="s1l1_t1_1" dur="2" pname="g" oct="4" />
-                           <rest xml:id="s1l1_t3_2" dur="4" />
-                           <note xml:id="s1l1_t7_4" dur="4" pname="g" oct="4" />
+                           <note xml:id="n10w4mzw" dur="2" pname="g" oct="4" />
+                           <rest xml:id="rbdj4sv" dur="4" />
+                           <note xml:id="n114dm4h" dur="4" pname="g" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m2s2" n="2">
                         <layer xml:id="m2s2l1" n="1">
-                           <note xml:id="s2l1_t1_1" dur="2" pname="g" oct="2" />
-                           <rest xml:id="s2l1_t3_2" dur="4" />
-                           <note xml:id="s2l1_t7_4" dur="4" pname="c" oct="3" />
+                           <note xml:id="n1sgoj8j" dur="2" pname="g" oct="2" />
+                           <rest xml:id="r1jv68sp" dur="4" />
+                           <note xml:id="n1xira8g" dur="4" pname="c" oct="3" />
                         </layer>
                      </staff>
-                     <fermata xml:id="m2fm1" startid="#s1l1_t1_1" />
-                     <fermata xml:id="m2fm2" startid="#s2l1_t1_1" />
+                     <fermata xml:id="f44stdf" startid="#n10w4mzw" />
+                     <fermata xml:id="f1ury5cr" startid="#n1sgoj8j" />
                   </measure>
-                  <measure xml:id="m3" n="3">
+                  <measure xml:id="mgev384" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="s1l1_t2_1" dur="4" pname="a" oct="4" />
-                           <note xml:id="s1l1_t9_4" dur="4" pname="b" oct="4" />
-                           <note xml:id="s1l1_t5_2" dur="2" pname="c" oct="5" />
+                           <note xml:id="n1kyaz70" dur="4" pname="a" oct="4" />
+                           <note xml:id="naxfzvy" dur="4" pname="b" oct="4" />
+                           <note xml:id="njgcc2v" dur="2" pname="c" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m3s2" n="2">
                         <layer xml:id="m3s2l1" n="1">
-                           <beam xml:id="m3s2l1b1">
-                              <note xml:id="s2l1_t2_1" dur="8" pname="f" oct="3" />
-                              <note xml:id="s2l1_t17_8" dur="8" pname="e" oct="3" />
+                           <beam>
+                              <note xml:id="nmw1ywd" dur="8" pname="f" oct="3" />
+                              <note xml:id="nmkzejq" dur="8" pname="e" oct="3" />
                            </beam>
-                           <note xml:id="s2l1_t9_4" dur="4" pname="d" oct="3" />
-                           <note xml:id="s2l1_t5_2" dur="2" pname="c" oct="3" />
+                           <note xml:id="n18979ar" dur="4" pname="d" oct="3" />
+                           <note xml:id="nwmlg8j" dur="2" pname="c" oct="3" />
                         </layer>
                      </staff>
-                     <fermata xml:id="m3fm1" startid="#s1l1_t5_2" />
-                     <fermata xml:id="m3fm2" startid="#s2l1_t5_2" />
+                     <fermata xml:id="f1usjm8l" startid="#njgcc2v" />
+                     <fermata xml:id="f1l5i2px" startid="#nwmlg8j" />
                   </measure>
-                  <measure xml:id="m4" n="4">
+                  <measure xml:id="m1a5txm0" n="4">
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
-                           <rest xml:id="s1l1_t3_1" dur="4" />
-                           <note xml:id="s1l1_t13_4" dur="4" pname="d" oct="5" />
-                           <note xml:id="s1l1_t7_2" dur="4" pname="c" oct="5" />
-                           <note xml:id="s1l1_t15_4" dur="4" pname="b" oct="4" />
+                           <rest xml:id="rjizomp" dur="4" />
+                           <note xml:id="n1lk6gc0" dur="4" pname="d" oct="5" />
+                           <note xml:id="n95sj2g" dur="4" pname="c" oct="5" />
+                           <note xml:id="niga7pg" dur="4" pname="b" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m4s2" n="2">
                         <layer xml:id="m4s2l1" n="1">
-                           <rest xml:id="s2l1_t3_1" dur="4" />
-                           <note xml:id="s2l1_t13_4" dur="4" pname="g" oct="2" />
-                           <note xml:id="s2l1_t7_2" dur="4" pname="a" oct="2" />
-                           <beam xml:id="m4s2l1b1">
-                              <note xml:id="s2l1_t15_4" dur="8" pname="b" oct="2" />
-                              <note xml:id="s2l1_t31_8" dur="8" pname="c" oct="3" />
+                           <rest xml:id="rutko9y" dur="4" />
+                           <note xml:id="n193g4zm" dur="4" pname="g" oct="2" />
+                           <note xml:id="nzghu2u" dur="4" pname="a" oct="2" />
+                           <beam>
+                              <note xml:id="nntbky6" dur="8" pname="b" oct="2" />
+                              <note xml:id="nopqi4u" dur="8" pname="c" oct="3" />
                            </beam>
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m5" n="5">
+                  <measure xml:id="m1i46xoe" n="5">
                      <staff xml:id="m5s1" n="1">
                         <layer xml:id="m5s1l1" n="1">
-                           <note xml:id="s1l1_t4_1" dur="4" pname="a" oct="4" />
-                           <note xml:id="s1l1_t17_4" dur="4" pname="b" oct="4" />
-                           <note xml:id="s1l1_t9_2" dur="2" pname="a" oct="4" />
+                           <note xml:id="ni1brma" dur="4" pname="a" oct="4" />
+                           <note xml:id="nzk2nsn" dur="4" pname="b" oct="4" />
+                           <note xml:id="ng7dosx" dur="2" pname="a" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m5s2" n="2">
                         <layer xml:id="m5s2l1" n="1">
-                           <note xml:id="s2l1_t4_1" dur="4" pname="d" oct="3" />
-                           <note xml:id="s2l1_t17_4" dur="4" pname="g" oct="2" />
-                           <note xml:id="s2l1_t9_2" dur="4" pname="c" oct="3" />
-                           <note xml:id="s2l1_t19_4" dur="4" pname="d" oct="3" />
+                           <note xml:id="n1e6e5qh" dur="4" pname="d" oct="3" />
+                           <note xml:id="ns2deqq" dur="4" pname="g" oct="2" />
+                           <note xml:id="n11s100v" dur="4" pname="c" oct="3" />
+                           <note xml:id="n1bzmfi" dur="4" pname="d" oct="3" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m6" n="6">
+                  <measure xml:id="mmfkci1" n="6">
                      <staff xml:id="m6s1" n="1">
                         <layer xml:id="m6s1l1" n="1">
-                           <note xml:id="s1l1_t5_1" dur="2" pname="g" oct="4" />
-                           <rest xml:id="s1l1_t11_2" dur="4" />
-                           <note xml:id="s1l1_t23_4" dur="4" pname="c" oct="5" />
+                           <note xml:id="n1vw3dv4" dur="2" pname="g" oct="4" />
+                           <rest xml:id="r1wcshm" dur="4" />
+                           <note xml:id="nspc0k6" dur="4" pname="c" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m6s2" n="2">
                         <layer xml:id="m6s2l1" n="1">
-                           <note xml:id="s2l1_t5_1" dur="2" pname="g" oct="2" />
-                           <rest xml:id="s2l1_t11_2" dur="4" />
-                           <note xml:id="s2l1_t23_4" dur="4" pname="e" oct="3" />
+                           <note xml:id="n1qn2uip" dur="2" pname="g" oct="2" />
+                           <rest xml:id="r16sqyef" dur="4" />
+                           <note xml:id="n2p73dn" dur="4" pname="e" oct="3" />
                         </layer>
                      </staff>
-                     <fermata xml:id="m6fm1" startid="#s1l1_t5_1" />
-                     <fermata xml:id="m6fm2" startid="#s2l1_t5_1" />
+                     <fermata xml:id="fsgobdm" startid="#n1vw3dv4" />
+                     <fermata xml:id="fwta297" startid="#n1qn2uip" />
                   </measure>
-                  <measure xml:id="m7" n="7">
+                  <measure xml:id="m2lumdv" n="7">
                      <staff xml:id="m7s1" n="1">
                         <layer xml:id="m7s1l1" n="1">
-                           <note xml:id="s1l1_t6_1" dur="4" pname="b" oct="4" />
-                           <note xml:id="s1l1_t25_4" dur="4" pname="c" oct="5" />
-                           <note xml:id="s1l1_t13_2" dur="2" pname="d" oct="5" />
+                           <note xml:id="n1mi3y13" dur="4" pname="b" oct="4" />
+                           <note xml:id="nqwknb3" dur="4" pname="c" oct="5" />
+                           <note xml:id="n1x2jg1w" dur="2" pname="d" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m7s2" n="2">
                         <layer xml:id="m7s2l1" n="1">
-                           <note xml:id="s2l1_t6_1" dur="4" pname="d" oct="3" />
-                           <note xml:id="s2l1_t25_4" dur="4" pname="c" oct="3" />
-                           <note xml:id="s2l1_t13_2" dur="2" pname="g" oct="3" />
+                           <note xml:id="nqp2dgg" dur="4" pname="d" oct="3" />
+                           <note xml:id="n85ojyb" dur="4" pname="c" oct="3" />
+                           <note xml:id="n1qsigl8" dur="2" pname="g" oct="3" />
                         </layer>
                      </staff>
-                     <fermata xml:id="m7fm1" startid="#s1l1_t13_2" />
-                     <fermata xml:id="m7fm2" startid="#s2l1_t13_2" />
+                     <fermata xml:id="fm8vpg7" startid="#n1x2jg1w" />
+                     <fermata xml:id="f1bjixyt" startid="#n1qsigl8" />
                   </measure>
-                  <measure xml:id="m8" n="8">
+                  <measure xml:id="mzwij6m" n="8">
                      <staff xml:id="m8s1" n="1">
                         <layer xml:id="m8s1l1" n="1">
-                           <rest xml:id="s1l1_t7_1" dur="4" />
-                           <note xml:id="s1l1_t29_4" dur="4" pname="d" oct="5" />
-                           <beam xml:id="m8s1l1b1">
-                              <note xml:id="s1l1_t15_2" dur="8" pname="e" oct="5" />
-                              <note xml:id="s1l1_t61_8" dur="8" pname="d" oct="5" />
+                           <rest xml:id="rmoyo2" dur="4" />
+                           <note xml:id="n1q06doc" dur="4" pname="d" oct="5" />
+                           <beam>
+                              <note xml:id="n1l8yw5e" dur="8" pname="e" oct="5" />
+                              <note xml:id="nsourmg" dur="8" pname="d" oct="5" />
                            </beam>
-                           <note xml:id="s1l1_t31_4" dur="4" pname="c" oct="5" />
+                           <note xml:id="n1founj6" dur="4" pname="c" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m8s2" n="2">
                         <layer xml:id="m8s2l1" n="1">
-                           <rest xml:id="s2l1_t7_1" dur="4" />
-                           <note xml:id="s2l1_t29_4" dur="4" pname="g" oct="2" />
-                           <note xml:id="s2l1_t15_2" dur="4" pname="c" oct="3" />
-                           <beam xml:id="m8s2l1b1">
-                              <note xml:id="s2l1_t31_4" dur="8" pname="e" oct="3" />
-                              <note xml:id="s2l1_t63_8" dur="8" pname="c" oct="3" />
+                           <rest xml:id="rmu2uxz" dur="4" />
+                           <note xml:id="n10qscmx" dur="4" pname="g" oct="2" />
+                           <note xml:id="n1pqxxfb" dur="4" pname="c" oct="3" />
+                           <beam>
+                              <note xml:id="n1h5a7t" dur="8" pname="e" oct="3" />
+                              <note xml:id="n7ldqsj" dur="8" pname="c" oct="3" />
                            </beam>
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m9" n="9">
+                  <measure xml:id="m1ddinyu" n="9">
                      <staff xml:id="m9s1" n="1">
                         <layer xml:id="m9s1l1" n="1">
-                           <note xml:id="s1l1_t8_1" dur="2" pname="d" oct="5" />
-                           <rest xml:id="s1l1_t17_2" dur="4" />
-                           <note xml:id="s1l1_t35_4" dur="4" pname="g" oct="4" />
+                           <note xml:id="n1s7emil" dur="2" pname="d" oct="5" />
+                           <rest xml:id="r1gw6yli" dur="4" />
+                           <note xml:id="n1vzqg1s" dur="4" pname="g" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m9s2" n="2">
                         <layer xml:id="m9s2l1" n="1">
-                           <note xml:id="s2l1_t8_1" dur="2" pname="g" oct="3" />
-                           <rest xml:id="s2l1_t17_2" dur="4" />
-                           <note xml:id="s2l1_t35_4" dur="4" pname="c" oct="3" />
+                           <note xml:id="nx88dbt" dur="2" pname="g" oct="3" />
+                           <rest xml:id="r1a63kuk" dur="4" />
+                           <note xml:id="n3aj1lf" dur="4" pname="c" oct="3" />
                         </layer>
                      </staff>
-                     <fermata xml:id="m9fm1" startid="#s1l1_t8_1" />
-                     <fermata xml:id="m9fm2" startid="#s2l1_t8_1" />
+                     <fermata xml:id="f1xtc2l4" startid="#n1s7emil" />
+                     <fermata xml:id="f1qn0rq5" startid="#nx88dbt" />
                   </measure>
-                  <measure xml:id="m10" n="10">
+                  <measure xml:id="m14l0kjk" n="10">
                      <staff xml:id="m10s1" n="1">
                         <layer xml:id="m10s1l1" n="1">
-                           <note xml:id="s1l1_t9_1" dur="4" pname="a" oct="4" />
-                           <note xml:id="s1l1_t37_4" dur="4" pname="b" oct="4" />
-                           <note xml:id="s1l1_t19_2" dur="4" pname="c" oct="5" />
-                           <note xml:id="s1l1_t39_4" dur="4" pname="e" oct="5" />
+                           <note xml:id="nb9m7cg" dur="4" pname="a" oct="4" />
+                           <note xml:id="nrmg3u3" dur="4" pname="b" oct="4" />
+                           <note xml:id="nct14t1" dur="4" pname="c" oct="5" />
+                           <note xml:id="n1u100ct" dur="4" pname="e" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m10s2" n="2">
                         <layer xml:id="m10s2l1" n="1">
-                           <note xml:id="s2l1_t9_1" dur="4" pname="f" oct="3" />
-                           <note xml:id="s2l1_t37_4" dur="4" pname="d" oct="3" />
-                           <note xml:id="s2l1_t19_2" dur="4" pname="e" oct="3" />
-                           <note xml:id="s2l1_t39_4" dur="4" pname="c" oct="3" />
+                           <note xml:id="nux1zmb" dur="4" pname="f" oct="3" />
+                           <note xml:id="n3efwul" dur="4" pname="d" oct="3" />
+                           <note xml:id="nwaicl6" dur="4" pname="e" oct="3" />
+                           <note xml:id="nd6d2lw" dur="4" pname="c" oct="3" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m11" right="end" n="11">
+                  <measure xml:id="mcmnkze" right="end" n="11">
                      <staff xml:id="m11s1" n="1">
                         <layer xml:id="m11s1l1" n="1">
-                           <note xml:id="s1l1_t10_1" dur="2" pname="d" oct="5" />
-                           <note xml:id="s1l1_t21_2" dur="2" pname="c" oct="5" />
+                           <note xml:id="nqpb1zv" dur="2" pname="d" oct="5" />
+                           <note xml:id="n1m3rbb4" dur="2" pname="c" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m11s2" n="2">
                         <layer xml:id="m11s2l1" n="1">
-                           <note xml:id="s2l1_t10_1" dur="4" pname="f" oct="3" />
-                           <note xml:id="s2l1_t41_4" dur="4" pname="g" oct="3" />
-                           <note xml:id="s2l1_t21_2" dur="2" pname="c" oct="3" />
+                           <note xml:id="nmqy42z" dur="4" pname="f" oct="3" />
+                           <note xml:id="nybdybh" dur="4" pname="g" oct="3" />
+                           <note xml:id="n1ylj57c" dur="2" pname="c" oct="3" />
                         </layer>
                      </staff>
-                     <fermata xml:id="m11fm1" startid="#s1l1_t21_2" />
-                     <fermata xml:id="m11fm2" startid="#s2l1_t21_2" />
+                     <fermata xml:id="fvt9cd9" startid="#n1m3rbb4" />
+                     <fermata xml:id="f160ju5r" startid="#n1ylj57c" />
                   </measure>
                </section>
             </score>

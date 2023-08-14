@@ -8,7 +8,7 @@
             <title>Clefs</title>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-08-02T11:09:52" />
+            <date isodate="2023-08-11T14:51:37" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -30,146 +30,146 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m1" n="1">
+                  <measure xml:id="m10vi231" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <note xml:id="s1l1_t0_1" dur="1" pname="g" oct="4" />
-                           <clef xml:id="m1s1l1z1" shape="G" line="2" dis="8" dis.place="above" />
+                           <note xml:id="n1lavsmx" dur="1" pname="g" oct="4" />
+                           <clef xml:id="c1fepbps" shape="G" line="2" dis="8" dis.place="above" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m2" n="2">
+                  <measure xml:id="m99jjek" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <note xml:id="s1l1_t1_1" dur="1" pname="g" oct="5" />
-                           <clef xml:id="m2s1l1z1" shape="G" line="2" dis="15" dis.place="above" />
+                           <note xml:id="n10n4e7z" dur="1" pname="g" oct="5" />
+                           <clef xml:id="c1cv2kbh" shape="G" line="2" dis="15" dis.place="above" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m3" n="3">
+                  <measure xml:id="mxn0u1p" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="s1l1_t2_1" dur="1" pname="g" oct="6" />
-                           <clef xml:id="m3s1l1z1" shape="G" line="2" dis="8" dis.place="below" />
+                           <note xml:id="n1bf4pst" dur="1" pname="g" oct="6" />
+                           <clef xml:id="cod1oy7" shape="G" line="2" dis="8" dis.place="below" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m4" n="4">
+                  <measure xml:id="m13t4998" n="4">
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
-                           <note xml:id="s1l1_t3_1" dur="1" pname="g" oct="3" />
-                           <clef xml:id="m4s1l1z1" shape="G" line="1" />
+                           <note xml:id="n1rer54m" dur="1" pname="g" oct="3" />
+                           <clef xml:id="ck4sn4e" shape="G" line="1" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m5" n="5">
+                  <measure xml:id="m1ei7loh" n="5">
                      <staff xml:id="m5s1" n="1">
                         <layer xml:id="m5s1l1" n="1">
-                           <note xml:id="s1l1_t4_1" dur="1" pname="g" oct="4" />
-                           <clef xml:id="m5s1l1z1" shape="GG" line="2" />
+                           <note xml:id="nsc0ny6" dur="1" pname="g" oct="4" />
+                           <clef xml:id="c10htukn" shape="GG" line="2" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m6" n="6">
+                  <measure xml:id="mr72v07" n="6">
                      <staff xml:id="m6s1" n="1">
                         <layer xml:id="m6s1l1" n="1">
-                           <note xml:id="s1l1_t5_1" dur="1" pname="g" oct="3" />
-                           <clef xml:id="m6s1l1z1" shape="C" line="1" />
+                           <note xml:id="n1xk47u8" dur="1" pname="g" oct="3" />
+                           <clef xml:id="c1y2z7sj" shape="C" line="1" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m7" n="7">
+                  <measure xml:id="mrc6b72" n="7">
                      <staff xml:id="m7s1" n="1">
                         <layer xml:id="m7s1l1" n="1">
-                           <note xml:id="s1l1_t6_1" dur="1" pname="c" oct="4" />
-                           <clef xml:id="m7s1l1z1" shape="C" line="2" />
+                           <note xml:id="n1li70bq" dur="1" pname="c" oct="4" />
+                           <clef xml:id="c2v7qp7" shape="C" line="2" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m8" n="8">
+                  <measure xml:id="m19g834m" n="8">
                      <staff xml:id="m8s1" n="1">
                         <layer xml:id="m8s1l1" n="1">
-                           <note xml:id="s1l1_t7_1" dur="1" pname="c" oct="4" />
-                           <clef xml:id="m8s1l1z1" shape="C" line="3" />
+                           <note xml:id="nll9e96" dur="1" pname="c" oct="4" />
+                           <clef xml:id="cc9aphh" shape="C" line="3" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m9" n="9">
+                  <measure xml:id="m1f28c9j" n="9">
                      <staff xml:id="m9s1" n="1">
                         <layer xml:id="m9s1l1" n="1">
-                           <note xml:id="s1l1_t8_1" dur="1" pname="c" oct="4" />
-                           <clef xml:id="m9s1l1z1" shape="C" line="4" />
+                           <note xml:id="n12mvmi1" dur="1" pname="c" oct="4" />
+                           <clef xml:id="c1ucw6js" shape="C" line="4" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m10" n="10">
+                  <measure xml:id="m17d47f2" n="10">
                      <staff xml:id="m10s1" n="1">
                         <layer xml:id="m10s1l1" n="1">
-                           <note xml:id="s1l1_t9_1" dur="1" pname="c" oct="4" />
-                           <clef xml:id="m10s1l1z1" shape="C" line="5" />
+                           <note xml:id="ng0sd0b" dur="1" pname="c" oct="4" />
+                           <clef xml:id="c1wlo6v7" shape="C" line="5" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m11" n="11">
+                  <measure xml:id="mo8rl2h" n="11">
                      <staff xml:id="m11s1" n="1">
                         <layer xml:id="m11s1l1" n="1">
-                           <note xml:id="s1l1_t10_1" dur="1" pname="c" oct="4" />
-                           <clef xml:id="m11s1l1z1" shape="F" line="4" />
+                           <note xml:id="n1pl141h" dur="1" pname="c" oct="4" />
+                           <clef xml:id="cgpfgu2" shape="F" line="4" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m12" n="12">
+                  <measure xml:id="m1w3zyx" n="12">
                      <staff xml:id="m12s1" n="1">
                         <layer xml:id="m12s1l1" n="1">
-                           <note xml:id="s1l1_t11_1" dur="1" pname="f" oct="3" />
-                           <clef xml:id="m12s1l1z1" shape="F" line="4" dis="8" dis.place="above" />
+                           <note xml:id="no704j5" dur="1" pname="f" oct="3" />
+                           <clef xml:id="c32xlzz" shape="F" line="4" dis="8" dis.place="above" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m13" n="13">
+                  <measure xml:id="m1dk0ame" n="13">
                      <staff xml:id="m13s1" n="1">
                         <layer xml:id="m13s1l1" n="1">
-                           <note xml:id="s1l1_t12_1" dur="1" pname="f" oct="4" />
-                           <clef xml:id="m13s1l1z1" shape="F" line="4" dis="15" dis.place="above" />
+                           <note xml:id="n10nsveq" dur="1" pname="f" oct="4" />
+                           <clef xml:id="c1cflihm" shape="F" line="4" dis="15" dis.place="above" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m14" n="14">
+                  <measure xml:id="mgzyoy5" n="14">
                      <staff xml:id="m14s1" n="1">
                         <layer xml:id="m14s1l1" n="1">
-                           <note xml:id="s1l1_t13_1" dur="1" pname="f" oct="5" />
-                           <clef xml:id="m14s1l1z1" shape="F" line="4" dis="8" dis.place="below" />
+                           <note xml:id="nmrekih" dur="1" pname="f" oct="5" />
+                           <clef xml:id="cohw8zf" shape="F" line="4" dis="8" dis.place="below" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m15" n="15">
+                  <measure xml:id="m1q3zn8z" n="15">
                      <staff xml:id="m15s1" n="1">
                         <layer xml:id="m15s1l1" n="1">
-                           <note xml:id="s1l1_t14_1" dur="1" pname="f" oct="2" />
-                           <clef xml:id="m15s1l1z1" shape="F" line="4" dis="15" dis.place="below" />
+                           <note xml:id="nxv9tml" dur="1" pname="f" oct="2" />
+                           <clef xml:id="c1yq37iu" shape="F" line="4" dis="15" dis.place="below" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m16" n="16">
+                  <measure xml:id="mhsym8n" n="16">
                      <staff xml:id="m16s1" n="1">
                         <layer xml:id="m16s1l1" n="1">
-                           <note xml:id="s1l1_t15_1" dur="1" pname="f" oct="1" />
-                           <clef xml:id="m16s1l1z1" shape="F" line="3" />
+                           <note xml:id="n8vb82c" dur="1" pname="f" oct="1" />
+                           <clef xml:id="c1oviza9" shape="F" line="3" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m17" n="17">
+                  <measure xml:id="m1ana82i" n="17">
                      <staff xml:id="m17s1" n="1">
                         <layer xml:id="m17s1l1" n="1">
-                           <note xml:id="s1l1_t16_1" dur="1" pname="f" oct="3" />
-                           <clef xml:id="m17s1l1z1" shape="F" line="5" />
+                           <note xml:id="ncths4h" dur="1" pname="f" oct="3" />
+                           <clef xml:id="ckrpmha" shape="F" line="5" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m18" right="end" n="18">
+                  <measure xml:id="m1y0vz9p" right="end" n="18">
                      <staff xml:id="m18s1" n="1">
                         <layer xml:id="m18s1l1" n="1">
-                           <note xml:id="s1l1_t17_1" dur="1" pname="f" oct="3" />
+                           <note xml:id="n1gotq6n" dur="1" pname="f" oct="3" />
                         </layer>
                      </staff>
                   </measure>

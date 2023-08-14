@@ -70,6 +70,9 @@ using namespace mu::engraving;
 // Number of spaces for the XML indentation. Set to 0 for tabs
 #define MEI_INDENT 3
 
+// Use counter-based IDs for layer elements
+#define MEI_COUNTER_BASED_IDS false
+
 /**
  * Write the Score to the destination file.
  * Return false on error.
@@ -1330,7 +1333,7 @@ bool MeiExporter::writeDir(const TextLineBase* dir, const std::string& startid)
     this->writeLines(dirNode, meiLines);
 
     // Add the node to the map of open control events
-    m_openControlEventMap[dir] = dirNode;
+    this->addNodeToOpenControlEvents(dirNode, dir, startid);
 
     return true;
 }
@@ -1416,7 +1419,7 @@ bool MeiExporter::writeHairpin(const Hairpin* hairpin, const std::string& starti
     meiHairpin.Write(hairpinNode, this->getXmlIdFor(hairpin, 'h'));
 
     // Add the node to the map of open control events
-    m_openControlEventMap[hairpin] = hairpinNode;
+    this->addNodeToOpenControlEvents(hairpinNode, hairpin, startid);
 
     return true;
 }
@@ -1460,7 +1463,7 @@ bool MeiExporter::writeOctave(const Ottava* ottava, const std::string& startid)
     meiOctave.Write(octaveNode, this->getXmlIdFor(ottava, 'o'));
 
     // Add the node to the map of open control events
-    m_openControlEventMap[ottava] = octaveNode;
+    this->addNodeToOpenControlEvents(octaveNode, ottava, startid);
 
     return true;
 }
@@ -1538,7 +1541,7 @@ bool MeiExporter::writeSlur(const Slur* slur, const std::string& startid)
     meiSlur.Write(slurNode, this->getXmlIdFor(slur, 's'));
 
     // Add the node to the map of open control events
-    m_openControlEventMap[slur] = slurNode;
+    this->addNodeToOpenControlEvents(slurNode, slur, startid);
 
     return true;
 }
@@ -1582,7 +1585,7 @@ bool MeiExporter::writeTie(const Tie* tie, const std::string& startid)
     meiTie.Write(tieNode, this->getXmlIdFor(tie, 't'));
 
     // Add the node to the map of open control events
-    m_openControlEventMap[tie] = tieNode;
+    this->addNodeToOpenControlEvents(tieNode, tie, startid);
 
     return true;
 }
@@ -1871,6 +1874,30 @@ pugi::xml_node MeiExporter::getLastChordRest(pugi::xml_node node)
 }
 
 /**
+ * Add a spanner to the map of open control events to which a @endid needs to be added.
+ * For spanners starting and ending on the same element (hairpin, ottava), the @endid is added directly together with a @dur
+ */
+
+void MeiExporter::addNodeToOpenControlEvents(pugi::xml_node node, const Spanner* spanner, const std::string& startid)
+{
+    if (spanner->startElement() && (spanner->startElement() == spanner->endElement())) {
+        // Add a @endid
+        libmei::InstStartEndId startEndId;
+        startEndId.SetEndid(startid);
+        startEndId.WriteStartEndId(node);
+        // Add a @dur
+        if (spanner->startElement()->isChordRest()) {
+            const ChordRest* startCR = toChordRest(spanner->startElement());
+            libmei::InstDurationLog durationLog;
+            durationLog.SetDur(Convert::durToMEI(startCR->durationType().type()));
+            durationLog.WriteDurationLog(node);
+        }
+    } else {
+        m_openControlEventMap[spanner] = node;
+    }
+}
+
+/**
  * Go trough the list of control event maps and add endid when the end element has be written.
  */
 
@@ -2040,12 +2067,15 @@ std::string MeiExporter::getLayerXmlId()
 
 std::string MeiExporter::getLayerXmlIdFor(layerElementCounter elementType)
 {
-    // m (Measure) / s (Staff) / l (Layer) / ? Layer element type
-    // The layer element abbreviation is given in the MeiExporter::s_layerXmlIdMap
-    return String("m%1s%2l%3%4%5").arg(m_measureCounter).arg(m_staffCounter).arg(m_layerCounter).arg(MeiExporter::s_layerXmlIdMap.at(
-                                                                                                         elementType)).arg(++(
-                                                                                                                               m_layerCounterFor
-                                                                                                                               .at(
-                                                                                                                                   elementType)))
-           .toStdString();
+    String id;
+    if (MEI_COUNTER_BASED_IDS) {
+        // m (Measure) / s (Staff) / l (Layer) / ? Layer element type
+        // The layer element abbreviation is given in the MeiExporter::s_layerXmlIdMap
+        id = String("m%1s%2l%3%4%5").arg(m_measureCounter).arg(m_staffCounter).arg(m_layerCounter).arg(MeiExporter::s_layerXmlIdMap.at(
+                                                                                                           elementType)).arg(++(
+                                                                                                                                 m_layerCounterFor
+                                                                                                                                 .at(
+                                                                                                                                     elementType)));
+    }
+    return id.toStdString();
 }

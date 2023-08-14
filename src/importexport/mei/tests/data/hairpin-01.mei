@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-08-08T22:14:36" />
+            <date isodate="2023-08-11T14:52:33" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -44,217 +44,217 @@
                   </staffGrp>
                </scoreDef>
                <section xml:id="s1">
-                  <measure xml:id="m1" n="1">
+                  <measure xml:id="m13eggds" n="1">
                      <staff xml:id="m1s1" n="1">
                         <layer xml:id="m1s1l1" n="1">
-                           <note xml:id="s1l1_t0_1" dur="4" pname="c" oct="5" />
-                           <note xml:id="s1l1_t1_4" dur="4" pname="b" oct="4" />
-                           <note xml:id="s1l1_t1_2" dur="4" pname="a" oct="4" />
-                           <note xml:id="s1l1_t3_4" dur="4" pname="b" oct="4" />
+                           <note xml:id="n1ms8to4" dur="4" pname="c" oct="5" />
+                           <note xml:id="n1andpxj" dur="4" pname="b" oct="4" />
+                           <note xml:id="n1n2q0nd" dur="4" pname="a" oct="4" />
+                           <note xml:id="natuzn3" dur="4" pname="b" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m1s2" n="2">
                         <layer xml:id="m1s2l1" n="1">
-                           <mRest xml:id="s2l1_t0_1" />
+                           <mRest xml:id="mfs9r97" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="m1hp1" form="cres" startid="#s1l1_t1_2" endid="#s1l1_t5_4" />
+                     <hairpin xml:id="h1dor5os" form="cres" startid="#n1n2q0nd" endid="#n14xf1ls" />
                   </measure>
-                  <measure xml:id="m2" n="2">
+                  <measure xml:id="mcatpri" n="2">
                      <staff xml:id="m2s1" n="1">
                         <layer xml:id="m2s1l1" n="1">
-                           <note xml:id="s1l1_t1_1" dur="4" pname="c" oct="5" />
-                           <note xml:id="s1l1_t5_4" dur="4" pname="d" oct="5" />
-                           <note xml:id="s1l1_t3_2" dur="4" pname="e" oct="5" />
-                           <note xml:id="s1l1_t7_4" dur="4" pname="f" oct="5" />
+                           <note xml:id="n1hqbwq6" dur="4" pname="c" oct="5" />
+                           <note xml:id="n14xf1ls" dur="4" pname="d" oct="5" />
+                           <note xml:id="nspxw9k" dur="4" pname="e" oct="5" />
+                           <note xml:id="nqo32gg" dur="4" pname="f" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m2s2" n="2">
                         <layer xml:id="m2s2l1" n="1">
-                           <mRest xml:id="s2l1_t1_1" />
+                           <mRest xml:id="m1sz0e05" />
                         </layer>
                      </staff>
-                     <dynam xml:id="m2dn1" label="f" startid="#s1l1_t3_2">f</dynam>
-                     <hairpin xml:id="m2hp1" form="dim" startid="#s1l1_t3_2" endid="#s1l1_t9_4" />
+                     <dynam xml:id="d1eogas6" label="f" startid="#nspxw9k">f</dynam>
+                     <hairpin xml:id="hniw3gu" form="dim" startid="#nspxw9k" endid="#n1w9pjbk" />
                   </measure>
-                  <measure xml:id="m3" n="3">
+                  <measure xml:id="mzs8qux" n="3">
                      <staff xml:id="m3s1" n="1">
                         <layer xml:id="m3s1l1" n="1">
-                           <note xml:id="s1l1_t2_1" dur="4" pname="g" oct="5" />
-                           <note xml:id="s1l1_t9_4" dur="4" pname="a" oct="5" />
-                           <note xml:id="s1l1_t5_2" dur="2" pname="b" oct="5" />
+                           <note xml:id="nsksevx" dur="4" pname="g" oct="5" />
+                           <note xml:id="n1w9pjbk" dur="4" pname="a" oct="5" />
+                           <note xml:id="n1sgkp79" dur="2" pname="b" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m3s2" n="2">
                         <layer xml:id="m3s2l1" n="1">
-                           <mRest xml:id="s2l1_t2_1" />
+                           <mRest xml:id="m1uf1dp9" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m4" n="4">
+                  <measure xml:id="moduufb" n="4">
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
-                           <mRest xml:id="s1l1_t3_1" />
+                           <mRest xml:id="mtaf6eq" />
                         </layer>
                      </staff>
                      <staff xml:id="m4s2" n="2">
                         <layer xml:id="m4s2l1" n="1">
-                           <note xml:id="s2l1_t3_1" dur="4" pname="c" oct="3" />
-                           <note xml:id="s2l1_t13_4" dur="4" pname="d" oct="3" />
-                           <note xml:id="s2l1_t7_2" dur="4" pname="e" oct="3" />
-                           <note xml:id="s2l1_t15_4" dur="4" pname="d" oct="3" />
+                           <note xml:id="nldn980" dur="4" pname="c" oct="3" />
+                           <note xml:id="nnkw2h2" dur="4" pname="d" oct="3" />
+                           <note xml:id="n1ev5pao" dur="4" pname="e" oct="3" />
+                           <note xml:id="n1v5qqi1" dur="4" pname="d" oct="3" />
                         </layer>
                      </staff>
-                     <dir xml:id="m4dr1" type="mscore-hairpin mscore-cresc" startid="#s2l1_t7_2" extender="true" endid="#s2l1_t17_4">cresc.</dir>
+                     <dir xml:id="d1yivsdb" type="mscore-hairpin mscore-cresc" startid="#n1ev5pao" extender="true" endid="#n11epc2m">cresc.</dir>
                   </measure>
-                  <measure xml:id="m5" n="5">
+                  <measure xml:id="m1e50bnv" n="5">
                      <staff xml:id="m5s1" n="1">
                         <layer xml:id="m5s1l1" n="1">
-                           <mRest xml:id="s1l1_t4_1" />
+                           <mRest xml:id="mgxhdug" />
                         </layer>
                      </staff>
                      <staff xml:id="m5s2" n="2">
                         <layer xml:id="m5s2l1" n="1">
-                           <note xml:id="s2l1_t4_1" dur="4" pname="c" oct="3" />
-                           <note xml:id="s2l1_t17_4" dur="4" pname="b" oct="2" />
-                           <note xml:id="s2l1_t9_2" dur="4" pname="a" oct="2" />
-                           <note xml:id="s2l1_t19_4" dur="4" pname="g" oct="2" />
+                           <note xml:id="n18fdkqo" dur="4" pname="c" oct="3" />
+                           <note xml:id="n11epc2m" dur="4" pname="b" oct="2" />
+                           <note xml:id="n1h73eje" dur="4" pname="a" oct="2" />
+                           <note xml:id="naukxk7" dur="4" pname="g" oct="2" />
                         </layer>
                      </staff>
-                     <dynam xml:id="m5dn1" label="f" startid="#s2l1_t9_2">f</dynam>
-                     <dir xml:id="m5dr1" type="mscore-hairpin mscore-decresc" startid="#s2l1_t9_2" extender="true" endid="#s2l1_t21_4">dim.</dir>
+                     <dynam xml:id="d16couhq" label="f" startid="#n1h73eje">f</dynam>
+                     <dir xml:id="dxfp0cj" type="mscore-hairpin mscore-decresc" startid="#n1h73eje" extender="true" endid="#n4ihxav">dim.</dir>
                   </measure>
-                  <measure xml:id="m6" n="6">
+                  <measure xml:id="m1suce6e" n="6">
                      <staff xml:id="m6s1" n="1">
                         <layer xml:id="m6s1l1" n="1">
-                           <mRest xml:id="s1l1_t5_1" />
+                           <mRest xml:id="m1xxk5zx" />
                         </layer>
                      </staff>
                      <staff xml:id="m6s2" n="2">
                         <layer xml:id="m6s2l1" n="1">
-                           <note xml:id="s2l1_t5_1" dur="4" pname="f" oct="2" />
-                           <note xml:id="s2l1_t21_4" dur="4" pname="e" oct="2" />
-                           <note xml:id="s2l1_t11_2" dur="2" pname="d" oct="2" />
+                           <note xml:id="ng3pe1m" dur="4" pname="f" oct="2" />
+                           <note xml:id="n4ihxav" dur="4" pname="e" oct="2" />
+                           <note xml:id="n1ea84qe" dur="2" pname="d" oct="2" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m7" n="7">
+                  <measure xml:id="mdcd5z7" n="7">
                      <staff xml:id="m7s1" n="1">
                         <layer xml:id="m7s1l1" n="1">
-                           <note xml:id="s1l1_t6_1" dur="2" pname="c" oct="6" />
-                           <rest xml:id="s1l1_t13_2" dur="2" />
+                           <note xml:id="n1fam44t" dur="2" pname="c" oct="6" />
+                           <rest xml:id="rcvk6nd" dur="2" />
                         </layer>
                      </staff>
                      <staff xml:id="m7s2" n="2">
                         <layer xml:id="m7s2l1" n="1">
-                           <note xml:id="s2l1_t6_1" dur="2" pname="c" oct="2" />
-                           <rest xml:id="s2l1_t13_2" dur="2" />
+                           <note xml:id="n1gxiuud" dur="2" pname="c" oct="2" />
+                           <rest xml:id="rxyukb6" dur="2" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m8" n="8">
+                  <measure xml:id="me9cs80" n="8">
                      <staff xml:id="m8s1" n="1">
                         <layer xml:id="m8s1l1" n="1">
-                           <note xml:id="s1l1_t7_1" dur="4" pname="c" oct="5" />
-                           <note xml:id="s1l1_t29_4" dur="4" pname="b" oct="4" />
-                           <note xml:id="s1l1_t15_2" dur="4" pname="a" oct="4" />
-                           <note xml:id="s1l1_t31_4" dur="4" pname="b" oct="4" />
+                           <note xml:id="nrcwa43" dur="4" pname="c" oct="5" />
+                           <note xml:id="nmgjbnw" dur="4" pname="b" oct="4" />
+                           <note xml:id="n9ff3t1" dur="4" pname="a" oct="4" />
+                           <note xml:id="ndncteg" dur="4" pname="b" oct="4" />
                         </layer>
                      </staff>
                      <staff xml:id="m8s2" n="2">
                         <layer xml:id="m8s2l1" n="1">
-                           <mRest xml:id="s2l1_t7_1" />
+                           <mRest xml:id="mks294k" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="m8hp1" form="cres" startid="#s1l1_t15_2" lform="dashed" place="above" endid="#s1l1_t33_4" />
+                     <hairpin xml:id="hjs1sym" form="cres" startid="#n9ff3t1" lform="dashed" place="above" endid="#n2tj1jf" />
                   </measure>
-                  <measure xml:id="m9" n="9">
+                  <measure xml:id="moaa1gv" n="9">
                      <staff xml:id="m9s1" n="1">
                         <layer xml:id="m9s1l1" n="1">
-                           <note xml:id="s1l1_t8_1" dur="4" pname="c" oct="5" />
-                           <note xml:id="s1l1_t33_4" dur="4" pname="d" oct="5" />
-                           <note xml:id="s1l1_t17_2" dur="4" pname="e" oct="5" />
-                           <note xml:id="s1l1_t35_4" dur="4" pname="f" oct="5" />
+                           <note xml:id="nth4qu2" dur="4" pname="c" oct="5" />
+                           <note xml:id="n2tj1jf" dur="4" pname="d" oct="5" />
+                           <note xml:id="nq8sgb7" dur="4" pname="e" oct="5" />
+                           <note xml:id="n17b9s2c" dur="4" pname="f" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m9s2" n="2">
                         <layer xml:id="m9s2l1" n="1">
-                           <mRest xml:id="s2l1_t8_1" />
+                           <mRest xml:id="m1okzahl" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="m9hp1" form="dim" startid="#s1l1_t17_2" lform="dotted" place="above" endid="#s1l1_t37_4" />
+                     <hairpin xml:id="hhnn0kt" form="dim" startid="#nq8sgb7" lform="dotted" place="above" endid="#n19df3r8" />
                   </measure>
-                  <measure xml:id="m10" n="10">
+                  <measure xml:id="m1vhuhz5" n="10">
                      <staff xml:id="m10s1" n="1">
                         <layer xml:id="m10s1l1" n="1">
-                           <note xml:id="s1l1_t9_1" dur="4" pname="g" oct="5" />
-                           <note xml:id="s1l1_t37_4" dur="4" pname="a" oct="5" />
-                           <note xml:id="s1l1_t19_2" dur="2" pname="b" oct="5" />
+                           <note xml:id="n10xvfkz" dur="4" pname="g" oct="5" />
+                           <note xml:id="n19df3r8" dur="4" pname="a" oct="5" />
+                           <note xml:id="n1imuqfs" dur="2" pname="b" oct="5" />
                         </layer>
                      </staff>
                      <staff xml:id="m10s2" n="2">
                         <layer xml:id="m10s2l1" n="1">
-                           <mRest xml:id="s2l1_t9_1" />
+                           <mRest xml:id="m9962ud" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m11" n="11">
+                  <measure xml:id="m1o34upj" n="11">
                      <staff xml:id="m11s1" n="1">
                         <layer xml:id="m11s1l1" n="1">
-                           <mRest xml:id="s1l1_t10_1" />
+                           <mRest xml:id="m1tmp2q7" />
                         </layer>
                      </staff>
                      <staff xml:id="m11s2" n="2">
                         <layer xml:id="m11s2l1" n="1">
-                           <note xml:id="s2l1_t10_1" dur="4" pname="c" oct="3" />
-                           <note xml:id="s2l1_t41_4" dur="4" pname="d" oct="3" />
-                           <note xml:id="s2l1_t21_2" dur="4" pname="e" oct="3" />
-                           <note xml:id="s2l1_t43_4" dur="4" pname="d" oct="3" />
+                           <note xml:id="n1vp2iid" dur="4" pname="c" oct="3" />
+                           <note xml:id="noxyswc" dur="4" pname="d" oct="3" />
+                           <note xml:id="n1ahnf5i" dur="4" pname="e" oct="3" />
+                           <note xml:id="ntcvrux" dur="4" pname="d" oct="3" />
                         </layer>
                      </staff>
-                     <hairpin xml:id="m11hp1" form="cres" startid="#s2l1_t21_2" place="above" endid="#s2l1_t45_4" />
+                     <hairpin xml:id="heiz76k" form="cres" startid="#n1ahnf5i" place="above" endid="#nsqyndt" />
                   </measure>
-                  <measure xml:id="m12" n="12">
+                  <measure xml:id="mjmh4f6" n="12">
                      <staff xml:id="m12s1" n="1">
                         <layer xml:id="m12s1l1" n="1">
-                           <mRest xml:id="s1l1_t11_1" />
+                           <mRest xml:id="mkvaady" />
                         </layer>
                      </staff>
                      <staff xml:id="m12s2" n="2">
                         <layer xml:id="m12s2l1" n="1">
-                           <note xml:id="s2l1_t11_1" dur="4" pname="c" oct="3" />
-                           <note xml:id="s2l1_t45_4" dur="4" pname="b" oct="2" />
-                           <note xml:id="s2l1_t23_2" dur="4" pname="a" oct="2" />
-                           <note xml:id="s2l1_t47_4" dur="4" pname="g" oct="2" />
+                           <note xml:id="n11dbwm8" dur="4" pname="c" oct="3" />
+                           <note xml:id="nsqyndt" dur="4" pname="b" oct="2" />
+                           <note xml:id="n13xf9ul" dur="4" pname="a" oct="2" />
+                           <note xml:id="n3ccbzy" dur="4" pname="g" oct="2" />
                         </layer>
                      </staff>
-                     <dir xml:id="m12dr1" type="mscore-hairpin mscore-decresc" startid="#s2l1_t23_2" extender="true" lform="dotted" place="above" endid="#s2l1_t13_1">diminuendo</dir>
+                     <dir xml:id="d1h5zlat" type="mscore-hairpin mscore-decresc" startid="#n13xf9ul" extender="true" lform="dotted" place="above" endid="#nfbqb4p">diminuendo</dir>
                   </measure>
-                  <measure xml:id="m13" n="13">
+                  <measure xml:id="m15y798u" n="13">
                      <staff xml:id="m13s1" n="1">
                         <layer xml:id="m13s1l1" n="1">
-                           <mRest xml:id="s1l1_t12_1" />
+                           <mRest xml:id="m1tt4284" />
                         </layer>
                      </staff>
                      <staff xml:id="m13s2" n="2">
                         <layer xml:id="m13s2l1" n="1">
-                           <note xml:id="s2l1_t12_1" dur="4" pname="f" oct="2" />
-                           <note xml:id="s2l1_t49_4" dur="4" pname="e" oct="2" />
-                           <note xml:id="s2l1_t25_2" dur="2" pname="d" oct="2" />
+                           <note xml:id="nniyj35" dur="4" pname="f" oct="2" />
+                           <note xml:id="n18hrjtg" dur="4" pname="e" oct="2" />
+                           <note xml:id="n1dyffqv" dur="2" pname="d" oct="2" />
                         </layer>
                      </staff>
                   </measure>
-                  <measure xml:id="m14" right="end" n="14">
+                  <measure xml:id="m6hho9m" right="end" n="14">
                      <staff xml:id="m14s1" n="1">
                         <layer xml:id="m14s1l1" n="1">
-                           <note xml:id="s1l1_t13_1" dur="2" pname="c" oct="6" />
-                           <rest xml:id="s1l1_t27_2" dur="2" />
+                           <note xml:id="njvyk6n" dur="2" pname="c" oct="6" />
+                           <rest xml:id="ry8ar5n" dur="2" />
                         </layer>
                      </staff>
                      <staff xml:id="m14s2" n="2">
                         <layer xml:id="m14s2l1" n="1">
-                           <note xml:id="s2l1_t13_1" dur="2" pname="c" oct="2" />
-                           <rest xml:id="s2l1_t27_2" dur="2" />
+                           <note xml:id="nfbqb4p" dur="2" pname="c" oct="2" />
+                           <rest xml:id="r1o9geiq" dur="2" />
                         </layer>
                      </staff>
                   </measure>

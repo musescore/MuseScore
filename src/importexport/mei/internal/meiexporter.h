@@ -126,6 +126,7 @@ private:
     std::pair<libmei::xsdPositiveInteger_List, double> findTstampFor(const engraving::EngravingItem* item);
     bool isNode(pugi::xml_node node, const String& name);
     pugi::xml_node getLastChordRest(pugi::xml_node node);
+    void addNodeToOpenControlEvents(pugi::xml_node node, const engraving::Spanner* spanner, const std::string& startid);
     void addEndidToControlEvents();
 
     /**
