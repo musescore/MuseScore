@@ -19,8 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
-#define MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -32,7 +31,7 @@
 
 #include "engraving/dom/engravingitem.h"
 
-namespace mu::notation {
+namespace mu::inspector {
 class AbstractElementPopupModel : public QObject, public muse::Injectable, public muse::async::Asyncable, public muse::actions::Actionable
 {
     Q_OBJECT
@@ -81,14 +80,14 @@ protected:
     void updateNotation();
     notation::INotationPtr currentNotation() const;
 
-    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value);
-    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
+    void changeItemProperty(mu::engraving::Pid id, const engraving::PropertyValue& value);
+    void changeItemProperty(mu::engraving::Pid id, const engraving::PropertyValue& value, engraving::PropertyFlags flags);
 
-    EngravingItem* m_item = nullptr;
+    engraving::EngravingItem* m_item = nullptr;
 
 private:
-    INotationInteractionPtr interaction() const;
-    INotationSelectionPtr selection() const;
+    notation::INotationInteractionPtr interaction() const;
+    notation::INotationSelectionPtr selection() const;
 
     engraving::ElementType elementType() const;
     const engraving::ElementTypeSet& dependentElementTypes() const;
@@ -100,17 +99,16 @@ private:
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;
+
 #ifndef NO_QT_SUPPORT
-inline size_t qHash(mu::notation::PopupModelType key)
+inline size_t qHash(mu::inspector::PopupModelType key)
 {
     return ::qHash(int(key));
 }
 
 #endif
-} //namespace mu::notation
+}
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::notation::PopupModelType)
+Q_DECLARE_METATYPE(mu::inspector::PopupModelType)
 #endif
-
-#endif // MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H

@@ -20,18 +20,17 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_CAPOSETTINGSMODEL_H
-#define MU_NOTATION_CAPOSETTINGSMODEL_H
+#pragma once
 
 #include <QObject>
 
-#include "view/abstractelementpopupmodel.h"
+#include "models/popups/abstractelementpopupmodel.h"
 
 namespace mu::engraving {
 class Capo;
 }
 
-namespace mu::notation {
+namespace mu::inspector {
 class StringItem;
 class CapoSettingsModel : public AbstractElementPopupModel
 {
@@ -99,6 +98,4 @@ signals:
 private:
     bool m_applyCapo = false;
 };
-} //namespace mu::notation
-
-#endif // MU_NOTATION_CAPOSETTINGSMODEL_H
+}

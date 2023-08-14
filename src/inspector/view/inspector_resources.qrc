@@ -107,14 +107,19 @@
         <file>qml/MuseScore/Inspector/common/CheckBoxPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/PropertyResetButton.qml</file>
         <file>qml/MuseScore/Inspector/common/PropertyToggle.qml</file>
+        <file>qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml</file>
         <file>qml/MuseScore/Inspector/parts/PartsSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml</file>
-        <file>qml/MuseScore/Inspector/common/VoicesAndPositionSection.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/CrescDimLineStyleSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/HairpinLineSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/HairpinPositionSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/GradualTempoChangeSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangeStyleTab.qml</file>
+        <file>qml/MuseScore/Inspector/popups/ElementPopupLoader.qml</file>
+        <file>qml/MuseScore/Inspector/popups/harppedal/HarpPedalPopup.qml</file>
+        <file>qml/MuseScore/Inspector/popups/capo/CapoPopup.qml</file>
+        <file>qml/MuseScore/Inspector/popups/stringtunings/StringTuningsPopup.qml</file>
+        <file>qml/MuseScore/Inspector/popups/text/TextStylePopup.qml</file>
     </qresource>
 </RCC>
