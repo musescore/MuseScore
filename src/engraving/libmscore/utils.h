@@ -89,5 +89,7 @@ extern void collectChordsAndRest(Segment* segment, staff_idx_t staffIdx, std::ve
 extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::vector<Chord*>& chords);
 
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
+
+extern String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames);
 } // namespace mu::engraving
 #endif

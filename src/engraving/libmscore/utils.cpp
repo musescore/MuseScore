@@ -1280,4 +1280,16 @@ void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx, std::
         }
     }
 }
+
+String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames)
+{
+    String result = baseName;
+    int num = 0;
+
+    while (allExcerptLowerNames.contains(result.toLower())) {
+        result = baseName + String(u" (%1)").arg(++num);
+    }
+
+    return result;
+}
 }
