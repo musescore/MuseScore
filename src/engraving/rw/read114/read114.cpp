@@ -3092,7 +3092,6 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             staff->setBarLineSpan(static_cast<int>(n - idx));
         }
         staff->updateOttava();
-        staff->addMissingInitKeyForTransposingInstrument();
     }
 
     // adjust some styles

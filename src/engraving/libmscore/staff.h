@@ -182,7 +182,6 @@ public:
     KeySigEvent prevKey(const Fraction&) const;
     void setKey(const Fraction&, KeySigEvent);
     void removeKey(const Fraction&);
-    void addMissingInitKeyForTransposingInstrument();
 
     bool show() const;
     bool stemless(const Fraction&) const;

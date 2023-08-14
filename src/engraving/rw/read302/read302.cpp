@@ -244,7 +244,6 @@ bool Read302::readScore302(Score* score, XmlReader& e, ReadContext& ctx)
 
     for (Staff* staff : score->staves()) {
         staff->updateOttava();
-        staff->addMissingInitKeyForTransposingInstrument();
     }
 
     if (score->isMaster()) {
