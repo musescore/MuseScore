@@ -154,33 +154,15 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
         m_writeCacheBuff.resize(outBufferSize, 0.f);
     }
 
-    samples_t masterChannelSampleCount = 0;
-
-    std::map<TrackId, std::future<std::vector<float> > > futures;
-
-    for (const auto& pair : m_trackChannels) {
-        MixerChannelPtr channel = pair.second;
-        std::future<std::vector<float> > future = TaskScheduler::instance()->submit([outBufferSize, samplesPerChannel,
-                                                                                     channel]() -> std::vector<float> {
-            thread_local std::vector<float> buffer(outBufferSize, 0.f);
-            thread_local std::vector<float> silent_buffer(outBufferSize, 0.f);
-
-            buffer = silent_buffer;
-
-            if (channel) {
-                channel->process(buffer.data(), samplesPerChannel);
-            }
-
-            return buffer;
-        });
-
-        futures.emplace(pair.first, std::move(future));
-    }
+    TracksData tracksData;
+    processTrackChannels(outBufferSize, samplesPerChannel, tracksData);
 
     prepareAuxBuffers(outBufferSize);
 
-    for (auto& pair : futures) {
-        const std::vector<float>& trackBuffer = pair.second.get();
+    samples_t masterChannelSampleCount = 0;
+
+    for (auto& pair : tracksData) {
+        const std::vector<float>& trackBuffer = pair.second;
 
         bool outBufferIsSilent = false;
         mixOutputFromChannel(outBuffer, trackBuffer.data(), samplesPerChannel, outBufferIsSilent);
@@ -213,6 +195,41 @@ samples_t Mixer::process(float* outBuffer, samples_t samplesPerChannel)
     }
 
     return masterChannelSampleCount;
+}
+
+void Mixer::processTrackChannels(size_t outBufferSize, size_t samplesPerChannel, TracksData& outTracksData)
+{
+    auto processChannel = [outBufferSize, samplesPerChannel](MixerChannelPtr channel) -> std::vector<float> {
+        thread_local std::vector<float> buffer(outBufferSize, 0.f);
+        thread_local std::vector<float> silent_buffer(outBufferSize, 0.f);
+
+        buffer = silent_buffer;
+
+        if (channel) {
+            channel->process(buffer.data(), samplesPerChannel);
+        }
+
+        return buffer;
+    };
+
+    bool useMultithreading = m_trackChannels.size() > 2;
+
+    if (useMultithreading) {
+        std::map<TrackId, std::future<std::vector<float> > > futures;
+
+        for (const auto& pair : m_trackChannels) {
+            std::future<std::vector<float> > future = TaskScheduler::instance()->submit(processChannel, pair.second);
+            futures.emplace(pair.first, std::move(future));
+        }
+
+        for (auto& pair : futures) {
+            outTracksData.emplace(pair.first, pair.second.get());
+        }
+    } else {
+        for (const auto& pair : m_trackChannels) {
+            outTracksData.emplace(pair.first, processChannel(pair.second));
+        }
+    }
 }
 
 void Mixer::setIsActive(bool arg)
