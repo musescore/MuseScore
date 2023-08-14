@@ -418,6 +418,20 @@ TEST_F(MidiRenderer_Tests, trillOnHiddenStaff)
     checkEventInterval(events, 2340, 2399, 81, fVol, DEFAULT_CHANNEL + 1);
 }
 
+TEST_F(MidiRenderer_Tests, letRingRepeat)
+{
+    constexpr int defVol = 80; // mf
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"let_ring_repeat.mscx", true, false));
+
+    EXPECT_EQ(events.size(), 8);
+
+    checkEventInterval(events, 1920, 3840, 60, defVol, DEFAULT_CHANNEL);
+    checkEventInterval(events, 2880, 3840, 64, defVol, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 5760, 7680, 60, defVol, DEFAULT_CHANNEL);
+    checkEventInterval(events, 6720, 7680, 64, defVol, DEFAULT_CHANNEL + 1);
+}
+
 /*****************************************************************************
 
     DISABLED TESTS BELOW

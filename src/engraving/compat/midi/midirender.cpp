@@ -624,7 +624,7 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events,
     }
 }
 
-MidiRenderer::ChordParams MidiRenderer::collectChordParams(const Chord* chord) const
+MidiRenderer::ChordParams MidiRenderer::collectChordParams(const Chord* chord, int tickOffset) const
 {
     ChordParams chordParams;
 
@@ -638,7 +638,7 @@ MidiRenderer::ChordParams MidiRenderer::collectChordParams(const Chord* chord) c
         if (spanner->isLetRing()) {
             LetRing* letRing = toLetRing(spanner);
             chordParams.letRing = true;
-            chordParams.endLetRingTick = letRing->endCR()->tick().ticks() + letRing->endCR()->ticks().ticks();
+            chordParams.endLetRingTick = letRing->endCR()->tick().ticks() + letRing->endCR()->ticks().ticks() + tickOffset;
         } else if (spanner->isPalmMute()) {
             chordParams.palmMute = true;
         }
@@ -717,7 +717,7 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
             //
             // Add normal note events
             //
-            ChordParams chordParams = collectChordParams(chord);
+            ChordParams chordParams = collectChordParams(chord, tickOffset);
 
             MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
             if (chordParams.palmMute) {
