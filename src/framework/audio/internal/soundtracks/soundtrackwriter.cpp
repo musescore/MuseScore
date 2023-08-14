@@ -87,7 +87,7 @@ Ret SoundTrackWriter::write()
         m_isAborted = false;
     };
 
-    Ret ret = prepareInputBuffer();
+    Ret ret = generateAudioData();
     if (!ret) {
         return ret;
     }
@@ -122,12 +122,17 @@ encode::AbstractAudioEncoderPtr SoundTrackWriter::createEncoder(const SoundTrack
     case SoundTrackType::OGG: return std::make_unique<encode::OggEncoder>();
     case SoundTrackType::FLAC: return std::make_unique<encode::FlacEncoder>();
     case SoundTrackType::WAV: return std::make_unique<encode::WavEncoder>();
-    default: return nullptr;
+    case SoundTrackType::Undefined: break;
     }
+
+    UNREACHABLE;
+    return nullptr;
 }
 
-Ret SoundTrackWriter::prepareInputBuffer()
+Ret SoundTrackWriter::generateAudioData()
 {
+    TRACEFUNC;
+
     size_t inputBufferOffset = 0;
     size_t inputBufferMaxOffset = m_inputBuffer.size();
 

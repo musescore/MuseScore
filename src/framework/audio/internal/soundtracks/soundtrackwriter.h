@@ -48,7 +48,7 @@ public:
 
 private:
     encode::AbstractAudioEncoderPtr createEncoder(const SoundTrackType& type) const;
-    Ret prepareInputBuffer();
+    Ret generateAudioData();
 
     void sendStepProgress(int step, int64_t current, int64_t total);
 
