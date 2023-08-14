@@ -20,8 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_NOTATION_HARPPEDALPOPUPMODEL_H
-#define MU_NOTATION_HARPPEDALPOPUPMODEL_H
+#pragma once
 
 #include <QObject>
 
@@ -29,16 +28,16 @@
 
 #include "engraving/dom/harppedaldiagram.h"
 
-#include "view/abstractelementpopupmodel.h"
+#include "models/popups/abstractelementpopupmodel.h"
 
-namespace mu::notation {
+namespace mu::inspector {
 class HarpPedalPopupModel : public AbstractElementPopupModel
 {
     Q_OBJECT
 
     Q_PROPERTY(bool isDiagram READ isDiagram WRITE setIsDiagram NOTIFY isDiagramChanged)
     Q_PROPERTY(
-        QVector<mu::notation::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
+        QVector<mu::inspector::HarpPedalPopupModel::Position> pedalState READ pedalState WRITE setDiagramPedalState NOTIFY pedalStateChanged)
     Q_PROPERTY(QRectF staffPos READ staffPos CONSTANT)
 
     muse::Inject<context::IGlobalContext> globalContext = { this };
@@ -65,11 +64,11 @@ public:
 
 public slots:
     void setIsDiagram(bool isDiagram);
-    void setDiagramPedalState(QVector<mu::notation::HarpPedalPopupModel::Position> pedalState);
+    void setDiagramPedalState(QVector<mu::inspector::HarpPedalPopupModel::Position> pedalState);
 
 signals:
     void isDiagramChanged(bool isDiagram);
-    void pedalStateChanged(QVector<mu::notation::HarpPedalPopupModel::Position> pedalState);
+    void pedalStateChanged(QVector<mu::inspector::HarpPedalPopupModel::Position> pedalState);
 
 private:
     void load();
@@ -85,10 +84,8 @@ private:
 
     std::array<Position, mu::engraving::HARP_STRING_NO> m_pedalState;
 };
-} //namespace mu::notation
+}
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::notation::HarpPedalPopupModel::Position)
+Q_DECLARE_METATYPE(mu::inspector::HarpPedalPopupModel::Position)
 #endif
-
-#endif // MU_NOTATION_HARPPEDALPOPUPMODEL_H

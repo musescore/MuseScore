@@ -24,7 +24,8 @@ import QtQuick.Layouts 1.15
 
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
-import MuseScore.NotationScene 1.0
+
+import MuseScore.Inspector 1.0
 
 StyledPopupView {
     id: root
@@ -53,7 +54,7 @@ StyledPopupView {
 
         spacing: 12
 
-        StringTuningsSettingsModel {
+        StringTuningsPopupModel {
             id: stringTuningsModel
 
             onItemRectChanged: function(rect) {

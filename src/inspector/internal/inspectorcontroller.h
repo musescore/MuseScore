@@ -19,19 +19,16 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-import QtQuick 2.15
+#pragma once
 
-import Muse.Ui 1.0
-import Muse.UiComponents 1.0
+#include "inspector/iinspectorcontroller.h"
 
-import MuseScore.Inspector 1.0
+namespace mu::inspector {
+class InspectorController : public IInspectorController
+{
+public:
+    bool supportsPopup(engraving::ElementType elementType) const override;
 
-Column {
-    id: root
-
-    property QtObject model: null
-
-    width: parent.width
-
-    //TODO
+    int popupModelTypeByElementType(engraving::ElementType elementType) const override;
+};
 }

@@ -27,15 +27,17 @@
 #include <QTimer>
 #include <QtMath>
 
-#include "log.h"
 #include "commonscene/commonscenetypes.h"
-#include "abstractelementpopupmodel.h"
+#include "inspector/iinspectorcontroller.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::notation;
 using namespace mu::engraving;
 using namespace muse::actions;
 using namespace mu::commonscene;
+using namespace mu::inspector;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;
 
@@ -137,7 +139,7 @@ void NotationViewInputController::onNotationChanged()
         m_view->hideContextMenu();
         m_view->hideElementPopup();
 
-        if (AbstractElementPopupModel::supportsPopup(type)) {
+        if (inspectorController()->supportsPopup(type)) {
             m_view->showElementPopup(type, selectedItem->canvasBoundingRect());
         }
     });
@@ -1196,7 +1198,7 @@ void NotationViewInputController::togglePopupForItemIfSupports(const EngravingIt
 
     ElementType type = item->type();
 
-    if (AbstractElementPopupModel::supportsPopup(type)) {
+    if (inspectorController()->supportsPopup(type)) {
         m_view->toggleElementPopup(type, item->canvasBoundingRect());
     }
 }

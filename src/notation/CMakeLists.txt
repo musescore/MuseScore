@@ -144,16 +144,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/noteinputbarcustomiseitem.h
     ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/continuouspanel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/abstractelementpopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/internal/undoredomodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/harppedalpopupmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/caposettingsmodel.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/stringtuningssettingsmodel.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/internal/stringtuningssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/selectionfiltermodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/editgridsizedialogmodel.cpp

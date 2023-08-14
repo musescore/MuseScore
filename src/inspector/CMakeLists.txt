@@ -26,6 +26,7 @@ set(MODULE_QML_IMPORT ${CMAKE_CURRENT_LIST_DIR}/view/qml)
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/inspectormodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/inspectormodule.h
+    ${CMAKE_CURRENT_LIST_DIR}/iinspectorcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/types/accidentaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ambitustypes.h
     ${CMAKE_CURRENT_LIST_DIR}/types/articulationtypes.h
@@ -218,11 +219,23 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/expressions/expressionsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stringtunings/stringtuningssettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stringtunings/stringtuningssettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/abstractelementpopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/abstractelementpopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/harppedal/harppedalpopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/harppedal/harppedalpopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/capo/caposettingsmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/capo/caposettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/stringtunings/stringtuningspopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/stringtunings/stringtuningspopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/text/textstylepopupmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/text/textstylepopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/inspectorpopupcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/services/elementrepositoryservice.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/interfaces/ielementrepositoryservice.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/inspectorcontroller.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/inspectorcontroller.cpp
     )
 
 set(MODULE_UI ${inspector_UI} )

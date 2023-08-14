@@ -26,7 +26,6 @@ import QtQuick.Layouts 1.15
 import Muse.Ui 1.0
 import Muse.UiComponents 1.0
 
-import MuseScore.NotationScene 1.0
 import MuseScore.Inspector 1.0
 
 StyledPopupView {
@@ -85,10 +84,12 @@ StyledPopupView {
 
                 }
 
-                currentIndex: 0 //indexOfValue(/*TODO*/))
+                currentIndex: root.model.fontFamily && !root.model.fontFamily.isUndefined
+                              ? dropdownItem.indexOfValue(root.propertyItem.value)
+                              : -1
 
                 onActivated: function(index, value) {
-                    //TODO
+                    root.model.fontFamily.value = value
                 }
             }
 

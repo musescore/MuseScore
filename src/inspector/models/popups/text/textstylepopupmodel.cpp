@@ -23,6 +23,7 @@
 #include "textstylepopupmodel.h"
 
 using namespace mu::notation;
+using namespace mu::inspector;
 
 TextStylePopupModel::TextStylePopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_TEXT, parent)
@@ -32,6 +33,11 @@ TextStylePopupModel::TextStylePopupModel(QObject* parent)
 void TextStylePopupModel::init()
 {
     AbstractElementPopupModel::init();
+}
+
+TextSettingsModel* TextStylePopupModel::textSettingsModel() const
+{
+    return m_textSettingsModel;
 }
 
 void TextStylePopupModel::insertSpecialCharacters()

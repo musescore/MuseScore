@@ -24,12 +24,19 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
+#include "iinspectorcontroller.h"
+#include "internal/inspectorcontroller.h"
 #include "models/abstractinspectormodel.h"
 #include "models/inspectorlistmodel.h"
 #include "models/inspectormodelcreator.h"
 #include "models/measures/measuressettingsmodel.h"
 #include "models/notation/notes/noteheads/noteheadgroupsmodel.h"
 #include "models/inspectorpopupcontroller.h"
+#include "models/popups/abstractelementpopupmodel.h"
+#include "models/popups/harppedal/harppedalpopupmodel.h"
+#include "models/popups/capo/caposettingsmodel.h"
+#include "models/popups/stringtunings/stringtuningspopupmodel.h"
+#include "models/popups/text/textstylepopupmodel.h"
 
 #include "view/widgets/fretcanvas.h"
 #include "view/widgets/bendgridcanvas.h"
@@ -75,6 +82,7 @@ std::string InspectorModule::moduleName() const
 void InspectorModule::registerExports()
 {
     ioc()->registerExport<IInspectorModelCreator>(moduleName(), new InspectorModelCreator());
+    ioc()->registerExport<IInspectorController>(moduleName(), new InspectorController());
 }
 
 void InspectorModule::registerResources()
@@ -118,6 +126,13 @@ void InspectorModule::registerUiTypes()
     qmlRegisterUncreatableType<TremoloTypes>("MuseScore.Inspector", 1, 0, "TremoloTypes", "Not creatable as it is an enum type");
     qmlRegisterType<InspectorPopupController>("MuseScore.Inspector", 1, 0, "InspectorPopupController");
     qmlRegisterUncreatableType<VoiceTypes>("MuseScore.Inspector", 1, 0, "VoiceTypes", "Not creatable as it is an enum type");
+
+    qmlRegisterUncreatableType<AbstractElementPopupModel>("MuseScore.Inspector", 1, 0, "AbstractElementPopupModel",
+                                                          "Not creatable as it is an abstract type");
+    qmlRegisterType<HarpPedalPopupModel>("MuseScore.Inspector", 1, 0, "HarpPedalPopupModel");
+    qmlRegisterType<CapoSettingsModel>("MuseScore.Inspector", 1, 0, "CapoSettingsModel");
+    qmlRegisterType<StringTuningsPopupModel>("MuseScore.Inspector", 1, 0, "StringTuningsPopupModel");
+    qmlRegisterType<TextStylePopupModel>("MuseScore.Inspector", 1, 0, "TextStylePopupModel");
 
     ioc()->resolve<muse::ui::IUiEngine>(moduleName())->addSourceImportPath(inspector_QML_IMPORT);
 }
