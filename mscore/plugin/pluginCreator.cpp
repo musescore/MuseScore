@@ -65,6 +65,9 @@ PluginCreator::PluginCreator(QWidget* parent)
       actionSaveAs->setIcon(*icons[int(Icons::fileSaveAs_ICON)]);
       fileTools->addAction(actionSave);
 
+      actionRun->setShortcut(Qt::Key_F5);
+      actionStop->setShortcut(Qt::Key_F7);
+
       actionQuit->setShortcut(QKeySequence(QKeySequence::Close));
 
       actionManual->setIcon(QIcon(*icons[int(Icons::helpContents_ICON)]));

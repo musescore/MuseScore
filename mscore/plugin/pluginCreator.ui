@@ -48,9 +48,6 @@
          <property name="text">
           <string>Run</string>
          </property>
-         <property name="shortcut">
-          <string>F5</string>
-         </property>
         </widget>
        </item>
        <item>
@@ -63,9 +60,6 @@
          </property>
          <property name="text">
           <string>Stop</string>
-         </property>
-         <property name="shortcut">
-          <string>F7</string>
          </property>
         </widget>
        </item>
