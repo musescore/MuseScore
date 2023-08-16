@@ -132,4 +132,16 @@ Item {
             }
         }
     }
+
+    StyledTextLabel {
+        id: noResultsFoundHint
+
+        anchors.fill: parent
+
+        font: ui.theme.bodyBoldFont
+
+        text: qsTrc("global", "No results found")
+
+        visible: view.count < 1
+    }
 }
