@@ -55,6 +55,7 @@ private:
     uicomponents::MenuItemList makeChangeInstrumentItems();
     uicomponents::MenuItemList makeVerticalBoxItems();
     uicomponents::MenuItemList makeHorizontalBoxItems();
+    uicomponents::MenuItemList makeImageItems();
 
     bool isSingleSelection() const;
     bool canSelectSimilarInRange() const;

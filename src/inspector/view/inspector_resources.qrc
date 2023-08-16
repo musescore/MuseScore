@@ -82,6 +82,7 @@
         <file>qml/MuseScore/Inspector/notation/ornaments/OrnamentSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/ambituses/AmbitusSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/images/ImageSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/images/ReplaceImageSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/chordsymbols/ChordSymbolSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/brackets/BracketSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/timesignatures/TimeSignatureSettings.qml</file>

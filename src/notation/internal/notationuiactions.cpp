@@ -1227,6 +1227,16 @@ const UiActionList NotationUiActions::m_actions = {
              mu::context::CTX_NOTATION_FOCUSED,
              TranslatableString("action", "Image")
              ),
+    UiAction("replace-image-keep-size",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Keep current size")
+             ),
+    UiAction("replace-image-use-new-size",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_FOCUSED,
+             TranslatableString("action", "Use new image size")
+             ),
     UiAction("title-text",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,

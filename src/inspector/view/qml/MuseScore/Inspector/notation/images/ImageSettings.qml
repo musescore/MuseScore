@@ -125,4 +125,35 @@ Column {
         navigation.panel: root.navigationPanel
         navigation.row: imageWidthSection.navigationRowEnd + 2
     }
+
+    SeparatorLine {anchors.margins: -12 }
+
+    FlatButton {
+        id: replaceImageSettingsButton
+
+        width: root.width
+
+        navigation.panel: root.navigationPanel
+        navigation.name: "ReplaceImageSettingsButton"
+        navigation.row: staffSpaceUnitsCheckbox.navigation.row + 1
+
+        text: qsTrc("inspector", "Replace image…")
+
+        onClicked: replaceImagePopup.toggleOpened()
+
+        StyledPopupView {
+            id: replaceImagePopup
+
+            // TODO: Popup width is not the same as the button width
+            contentHeight: replaceImageSettings.childrenRect.height
+
+            ReplaceImageSettings {
+                id: replaceImageSettings
+
+                navigationPanel: replaceImageSettingsButton.navigation.panel
+
+                model: root.model
+            }
+        }
+    }
 }

@@ -36,6 +36,7 @@
 
 #include "libmscore/engravingitem.h"
 #include "libmscore/elementgroup.h"
+#include "libmscore/image.h"
 #include "scorecallbacks.h"
 
 namespace mu::engraving {
@@ -211,6 +212,8 @@ public:
     Ret canAddImageToItem(const EngravingItem* item) const override;
     void addImageToItem(const io::path_t& imagePath, EngravingItem* item) override;
 
+    void replaceImage(const io::path_t& imagePath, EngravingItem* previousItem, bool keepSize) override;
+
     Ret canAddFiguredBass() const override;
     void addFiguredBass() override;
 
@@ -323,6 +326,8 @@ private:
 
     void startEditText(mu::engraving::TextBase* text);
     bool needEndTextEdit() const;
+
+    Image* loadImage(const io::path_t& imagePath, EngravingItem* item);
 
     mu::engraving::Page* point2page(const PointF& p) const;
     std::vector<EngravingItem*> hitElements(const PointF& p_in, float w) const;

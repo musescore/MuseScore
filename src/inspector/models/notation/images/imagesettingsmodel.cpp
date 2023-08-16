@@ -178,3 +178,8 @@ void ImageSettingsModel::updateFrameScalingAvailability()
 
     m_shouldScaleToFrameSize->setIsEnabled(isAvailable);
 }
+
+void ImageSettingsModel::replaceImage(bool keepSize)
+{
+    dispatcher()->dispatch("replace-image", actions::ActionData::make_arg1(keepSize));
+}

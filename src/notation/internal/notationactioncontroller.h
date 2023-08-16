@@ -117,7 +117,9 @@ private:
     bool isElementsSelected(const std::vector<ElementType>& elementsTypes) const;
 
     void addText(TextStyleType type);
+    io::path_t getImagePath(const QString& dialogTitle = "") const;
     void addImage();
+    void replaceImage(bool keepSize);
     void addFiguredBass();
 
     void selectAllSimilarElements();

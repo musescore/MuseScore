@@ -46,6 +46,8 @@ public:
     PropertyItem* isSizeInSpatiums() const;
     PropertyItem* isImageFramed() const;
 
+    Q_INVOKABLE void replaceImage(bool keepSize);
+
 private:
     void createProperties() override;
     void requestElements() override;

@@ -58,6 +58,8 @@ MenuItemList NotationContextMenuModel::makeItemsByElementType(ElementType elemen
         return makeVerticalBoxItems();
     case ElementType::HBOX:
         return makeHorizontalBoxItems();
+    case ElementType::IMAGE:
+        return makeImageItems();
     default:
         break;
     }
@@ -252,6 +254,37 @@ MenuItemList NotationContextMenuModel::makeHorizontalBoxItems()
     MenuItemList items = makeElementItems();
     items << makeSeparator();
     items << makeMenu(TranslatableString("notation", "Add"), addMenuItems);
+
+    return items;
+}
+
+MenuItemList NotationContextMenuModel::makeImageItems()
+{
+    MenuItemList replaceMenuItems;
+    replaceMenuItems << makeMenuItem("replace-image-keep-size");
+    replaceMenuItems << makeMenuItem("replace-image-use-new-size");
+
+    MenuItemList items = {
+        makeMenuItem("notation-cut"),
+        makeMenuItem("notation-copy"),
+        makeMenuItem("notation-paste"),
+        makeMenuItem("notation-swap"),
+        makeMenu(TranslatableString("notation", "Replace image"), replaceMenuItems),
+        makeMenuItem("notation-delete"),
+    };
+
+    MenuItemList selectItems = makeSelectItems();
+
+    if (!selectItems.isEmpty()) {
+        items << makeMenu(TranslatableString("notation", "Select"), selectItems);
+    }
+
+    const EngravingItem* hitElement = hitElementContext().element;
+
+    if (hitElement && hitElement->isEditable()) {
+        items << makeSeparator();
+        items << makeMenuItem("edit-element");
+    }
 
     return items;
 }

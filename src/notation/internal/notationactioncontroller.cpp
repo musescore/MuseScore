@@ -313,6 +313,9 @@ void NotationActionController::init()
     registerAction("add-noteline", &Interaction::addAnchoredLineToSelectedNotes);
 
     registerAction("add-image", [this]() { addImage(); });
+    registerAction("replace-image", [this](const ActionData& actionData) { replaceImage(actionData.arg<bool>()); });
+    registerAction("replace-image-keep-size", [this]() { replaceImage(true); });
+    registerAction("replace-image-use-new-size", [this]() { replaceImage(false); });
 
     registerAction("title-text", [this]() { addText(TextStyleType::TITLE); });
     registerAction("subtitle-text", [this]() { addText(TextStyleType::SUBTITLE); });
@@ -1216,6 +1219,17 @@ void NotationActionController::addText(TextStyleType type)
     interaction->addTextToItem(type, item);
 }
 
+path_t NotationActionController::getImagePath(const QString& dialogTitle) const
+{
+    std::vector<std::string> filter = { trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png)",
+                                        trc("notation", "Scalable Vector Graphics") + " (*.svg)",
+                                        trc("notation", "JPEG") + " (*.jpg *.jpeg)",
+                                        trc("notation", "PNG Bitmap Graphic") + " (*.png)" };
+
+    io::path_t path = interactive()->selectOpeningFile(dialogTitle, "", filter);
+    return path;
+}
+
 void NotationActionController::addImage()
 {
     auto interaction = currentNotationInteraction();
@@ -1228,13 +1242,24 @@ void NotationActionController::addImage()
         return;
     }
 
-    std::vector<std::string> filter = { trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png)",
-                                        trc("notation", "Scalable Vector Graphics") + " (*.svg)",
-                                        trc("notation", "JPEG") + " (*.jpg *.jpeg)",
-                                        trc("notation", "PNG Bitmap Graphic") + " (*.png)" };
-
-    io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Insert Image"), "", filter);
+    io::path_t path = getImagePath(qtrc("notation", "Insert Image"));
     interaction->addImageToItem(path, item);
+}
+
+void NotationActionController::replaceImage(bool keepSize)
+{
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    EngravingItem* item = contextItem(interaction);
+    if (!item->isImage()) {
+        return;
+    }
+
+    io::path_t path = getImagePath(qtrc("notation", "Replace Image"));
+    interaction->replaceImage(path, item, keepSize);
 }
 
 void NotationActionController::addFiguredBass()

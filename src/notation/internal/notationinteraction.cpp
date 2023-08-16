@@ -50,7 +50,6 @@
 #include "libmscore/elementgroup.h"
 #include "libmscore/factory.h"
 #include "libmscore/figuredbass.h"
-#include "libmscore/image.h"
 #include "libmscore/instrchange.h"
 #include "libmscore/keysig.h"
 #include "libmscore/lasso.h"
@@ -4099,10 +4098,10 @@ mu::Ret NotationInteraction::canAddImageToItem(const EngravingItem* item) const
     return item && item->isMeasureBase();
 }
 
-void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingItem* item)
+Image* NotationInteraction::loadImage(const io::path_t& imagePath, EngravingItem* item)
 {
-    if (imagePath.empty() || !item) {
-        return;
+    if (imagePath.empty()) {
+        return nullptr;
     }
 
     static std::map<io::path_t, ImageType> suffixToType {
@@ -4116,7 +4115,7 @@ void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingI
 
     ImageType type = mu::value(suffixToType, suffix, ImageType::NONE);
     if (type == ImageType::NONE) {
-        return;
+        return nullptr;
     }
 
     Image* image = Factory::createImage(item);
@@ -4124,12 +4123,72 @@ void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingI
 
     if (!image->load(imagePath)) {
         delete image;
+        return nullptr;
+    }
+
+    return image;
+}
+
+void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingItem* item)
+{
+    Image* image = loadImage(imagePath, item);
+    if (image->getImageType() == ImageType::NONE) {
         return;
     }
 
     startEdit();
     score()->undoAddElement(image);
     apply();
+}
+
+void NotationInteraction::replaceImage(const io::path_t& imagePath, EngravingItem* previousItem, bool keepSize)
+{
+    // TODO: Make replace image work when frame is selected (requires to get the image on a frame and then continue the rest of this function)
+    // FIXME: Replace image does not work unless it is contained in a frame
+    // FIXME: Cancel operation in file dialog ends with segmentation fault
+
+    if (!previousItem) {
+        return;
+    }
+
+    LOGD() << previousItem->parent()->typeName();
+
+    EngravingItem* previousItemParent = static_cast<EngravingItem*>(previousItem->parent());
+
+    Image* newImage = loadImage(imagePath, previousItemParent);
+
+    if (newImage->getImageType() == ImageType::NONE) {
+        return;
+    }
+
+    Image* previousImage = static_cast<Image*>(previousItem);
+
+    LOGD() << "1";
+    startEdit();
+    LOGD() << "2";
+    // Crashes here
+    score()->undoChangeElement(previousImage, newImage);
+
+    // TODO: Set the new image's position to the old image's position
+    // image->setPos(previousImage->pos());
+
+    // TODO: Adjust the size lock setting
+    LOGD() << "3";
+    if (keepSize) {
+        newImage->setSize(previousImage->size());
+        newImage->setAutoScale(previousImage->autoScale());
+    } else {
+        newImage->setAutoScale(false);
+    }
+
+    newImage->setSizeIsSpatium(previousImage->sizeIsSpatium());
+
+    LOGD() << "4";
+    apply();
+
+    LOGD() << "5";
+    select({ newImage }, SelectType::SINGLE);
+    LOGD() << "6";
 }
 
 mu::Ret NotationInteraction::canAddFiguredBass() const

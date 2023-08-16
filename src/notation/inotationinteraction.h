@@ -205,6 +205,8 @@ public:
     virtual Ret canAddImageToItem(const EngravingItem* item) const = 0;
     virtual void addImageToItem(const io::path_t& imagePath, EngravingItem* item) = 0;
 
+    virtual void replaceImage(const io::path_t& imagePath, EngravingItem* previousItem, bool keepSize) = 0;
+
     virtual Ret canAddFiguredBass() const = 0;
     virtual void addFiguredBass() = 0;
 
