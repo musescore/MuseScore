@@ -116,6 +116,35 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     MeasureLayout::layoutCrossStaff(item, ctx);
 }
 
+static const std::unordered_set<ElementType> BREAK_TYPES {
+    ElementType::TEMPO_TEXT,
+    ElementType::REHEARSAL_MARK,
+    ElementType::HARMONY,
+    ElementType::STAFF_TEXT,
+    ElementType::EXPRESSION,
+    ElementType::SYSTEM_TEXT,
+    ElementType::TRIPLET_FEEL,
+    ElementType::PLAYTECH_ANNOTATION,
+    ElementType::CAPO,
+    ElementType::INSTRUMENT_CHANGE
+};
+
+static const std::unordered_set<ElementType> ALWAYS_BREAK_TYPES {
+    ElementType::TEMPO_TEXT,
+    ElementType::REHEARSAL_MARK
+};
+
+static const std::unordered_set<ElementType> CONDITIONAL_BREAK_TYPES {
+    ElementType::HARMONY,
+    ElementType::STAFF_TEXT,
+    ElementType::EXPRESSION,
+    ElementType::SYSTEM_TEXT,
+    ElementType::TRIPLET_FEEL,
+    ElementType::PLAYTECH_ANNOTATION,
+    ElementType::CAPO,
+    ElementType::INSTRUMENT_CHANGE
+};
+
 //---------------------------------------------------------
 //   createMMRest
 //    create a multimeasure rest
@@ -410,8 +439,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // clone elements from underlying measure to mmr
         for (EngravingItem* e : underlyingSeg->annotations()) {
             // look at elements in underlying measure
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
-                  || e->isPlayTechAnnotation() || e->isCapo() || e->isInstrumentChange())) {
+            if (!mu::contains(BREAK_TYPES, e->type())) {
                 continue;
             }
             // try to find a match in mmr
@@ -434,8 +462,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // this should not happen since the elements are linked?
         const auto annotations = s->annotations(); // make a copy since we alter the list
         for (EngravingItem* e : annotations) { // look at elements in mmr
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
-                  || e->isPlayTechAnnotation() || e->isCapo() || e->isInstrumentChange())) {
+            if (!mu::contains(BREAK_TYPES, e->type())) {
                 continue;
             }
             // try to find a match in underlying measure
@@ -476,8 +503,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
             if (!e->staff()->show()) {
                 continue;
             }
-            if (!(e->isRehearsalMark() || e->isTempoText() || e->isHarmony() || e->isStaffText() || e->isSystemText() || e->isTripletFeel()
-                  || e->isPlayTechAnnotation() || e->isCapo() || e->isInstrumentChange())) {
+            if (!mu::contains(BREAK_TYPES, e->type())) {
                 return false;
             }
         }
@@ -603,26 +629,12 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
         }
     }
 
-    static std::set<ElementType> alwaysBreakTypes {
-        ElementType::TEMPO_TEXT,
-        ElementType::REHEARSAL_MARK
-    };
-    static std::set<ElementType> conditionalBreakTypes {
-        ElementType::HARMONY,
-        ElementType::STAFF_TEXT,
-        ElementType::SYSTEM_TEXT,
-        ElementType::TRIPLET_FEEL,
-        ElementType::PLAYTECH_ANNOTATION,
-        ElementType::CAPO,
-        ElementType::INSTRUMENT_CHANGE
-    };
-
     auto breakForAnnotation = [&](EngravingItem* e) {
-        if (mu::contains(alwaysBreakTypes, e->type())) {
+        if (mu::contains(ALWAYS_BREAK_TYPES, e->type())) {
             return true;
         }
         bool breakForElement = e->systemFlag() || e->staff()->show();
-        if (mu::contains(conditionalBreakTypes, e->type()) && breakForElement) {
+        if (mu::contains(CONDITIONAL_BREAK_TYPES, e->type()) && breakForElement) {
             return true;
         }
         return false;
