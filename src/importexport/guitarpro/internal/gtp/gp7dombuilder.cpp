@@ -51,6 +51,11 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
                 staffCount++;
             }
             track->setStaffCount(staffCount);
+        } else if (nodeName == u"NotationPatch") {
+            auto innerNode = trackChildNode.firstChildElement("LineCount");
+            if (!innerNode.isNull()) {
+                track->setLineCount(innerNode.toElement().text().toInt());
+            }
         } else if (nodeName == u"Transpose") {
             auto octaveNode = trackChildNode.firstChildElement("Octave");
             int octave = octaveNode.toElement().text().toInt();

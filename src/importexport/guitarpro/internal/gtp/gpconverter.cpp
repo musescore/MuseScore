@@ -1088,16 +1088,36 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
     part->instrument()->channel(0)->setPan(std::clamp(pan_val, 0, 127));
 
     if (midiChannel == PERC_CHANNEL) {
-        part->instrument()->setDrumset(gpDrumset);
-
         String drumInstrName = tR->instrument();
         if (!drumInstrName.empty()) {
             part->setShortName(drumInstrName);
         }
 
         Staff* staff = part->staff(0);
-        staff->setStaffType(Fraction(0, 1), *StaffType::preset(StaffTypes::PERC_DEFAULT));
-        part->instrument()->setDrumset(gpDrumset);
+        StaffTypes type = StaffTypes::PERC_DEFAULT;
+        if (auto it = PERC_STAFF_LINES_FROM_INSTRUMENT.find(tR->name().toStdString());
+            it != PERC_STAFF_LINES_FROM_INSTRUMENT.end()) {
+            GuitarPro::initGuitarProPercussionSet(it->second);
+            GuitarPro::setInstrumentDrumset(part->instrument(), it->second);
+            switch (it->second.numLines) {
+            case 1:
+                type = StaffTypes::PERC_1LINE;
+                break;
+            case 2:
+                type = StaffTypes::PERC_2LINE;
+                break;
+            case 3:
+                type = StaffTypes::PERC_3LINE;
+                break;
+            default:
+                type = StaffTypes::PERC_DEFAULT;
+                break;
+            }
+        } else {
+            GuitarPro::initGuitarProDrumset();
+            part->instrument()->setDrumset(gpDrumset);
+        }
+        staff->setStaffType(Fraction(0, 1), *StaffType::preset(type));
     }
 
     std::vector<int> standartTuning = { 40, 45, 50, 55, 59, 64 };

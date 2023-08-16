@@ -211,6 +211,7 @@ StaffTypes StaffType::type() const
         { u"stdNormal", StaffTypes::STANDARD },
 
         { u"perc1Line", StaffTypes::PERC_1LINE },
+        { u"perc2Line", StaffTypes::PERC_2LINE },
         { u"perc3Line", StaffTypes::PERC_3LINE },
         { u"perc5Line", StaffTypes::PERC_5LINE },
 
@@ -1139,7 +1140,7 @@ bool StaffType::fontData(bool bDuration, size_t nIdx, String* pFamily, String* p
 
 static const int _defaultPreset[STAFF_GROUP_MAX] =
 { 0,                    // default pitched preset is "stdNormal"
-  3,                    // default percussion preset is "perc5lines"
+  4,                    // default percussion preset is "perc5lines"
   5                     // default tab preset is "tab6StrCommon"
 };
 
@@ -1190,6 +1191,7 @@ void StaffType::initStaffTypes()
 //                       group,              xml-name,  human-readable-name,          lin stpOff  dist clef   bars stmless time  key    ledger invis     color
         StaffType(StaffGroup::STANDARD,   u"stdNormal", mtrc("engraving", "Standard"),        5, 0,     1,   true,  true, false, true, true, true, false,  engravingConfiguration()->defaultColor()),
         StaffType(StaffGroup::PERCUSSION, u"perc1Line", mtrc("engraving", "Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true, false,  engravingConfiguration()->defaultColor()),
+        StaffType(StaffGroup::PERCUSSION, u"perc2Line", mtrc("engraving", "Perc. 2 lines"),   2, 0,     1,   true,  true, false, true, false, true, false,  engravingConfiguration()->defaultColor()),
         StaffType(StaffGroup::PERCUSSION, u"perc3Line", mtrc("engraving", "Perc. 3 lines"),   3, 0,     2,   true,  true, false, true, false, true, false,  engravingConfiguration()->defaultColor()),
         StaffType(StaffGroup::PERCUSSION, u"perc5Line", mtrc("engraving", "Perc. 5 lines"),   5, 0,     1,   true,  true, false, true, false, true, false,  engravingConfiguration()->defaultColor()),
 

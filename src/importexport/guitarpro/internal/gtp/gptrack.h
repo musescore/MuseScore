@@ -129,6 +129,9 @@ public:
     void setLyricsOffset(int n) { _lyricsOffset = n; }
     int lyricsOffset() const { return _lyricsOffset; }
 
+    void setLineCount(int n) { _lineCount = n; }
+    int lineCount() const { return _lineCount; }
+
     int idx() const { return _idx; }
 
 protected:
@@ -149,6 +152,7 @@ protected:
     std::unordered_map<int, Diagram> _diagrams;
     std::string _lyrics;
     int _lyricsOffset = { 0 };
+    int _lineCount{ 5 }; // for percussion lines
 };
 
 class GP6Track : public GPTrack

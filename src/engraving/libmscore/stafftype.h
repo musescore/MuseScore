@@ -164,11 +164,11 @@ struct TablatureDurationFont {
 };
 
 // ready-made staff types
-// keep in sync with the _presets initialization in StaffType::initStaffTypes()
+// keep in sync with the _presets initialization in StaffType::initStaffTypes() and _defaultPreset
 
 enum class StaffTypes : signed char {
     STANDARD,
-    PERC_1LINE, PERC_3LINE, PERC_5LINE,
+    PERC_1LINE, PERC_2LINE, PERC_3LINE, PERC_5LINE,
     TAB_6SIMPLE, TAB_6COMMON, TAB_6FULL,
     TAB_4SIMPLE, TAB_4COMMON, TAB_4FULL,
     TAB_5SIMPLE, TAB_5COMMON, TAB_5FULL,
