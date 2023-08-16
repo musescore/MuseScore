@@ -34,7 +34,7 @@ namespace mu::audio {
 class FluidSequencer : public AbstractEventSequencer<midi::Event>
 {
 public:
-    void init(const mpe::PlaybackSetupData& setupData);
+    void init(const mpe::PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride);
 
     int currentExpressionLevel() const;
 

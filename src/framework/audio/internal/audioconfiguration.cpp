@@ -20,16 +20,13 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "audioconfiguration.h"
-#include "settings.h"
-#include "stringutils.h"
-
-#include "global/deprecated/xmlreader.h"
-#include "global/deprecated/xmlwriter.h"
-
-#include "log.h"
 
 //TODO: remove with global clearing of Q_OS_*** defines
 #include <QtGlobal>
+
+#include "settings.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::framework;
@@ -161,6 +158,14 @@ async::Notification AudioConfiguration::sampleRateChanged() const
     return m_driverSampleRateChanged;
 }
 
+AudioInputParams AudioConfiguration::defaultAudioInputParams() const
+{
+    AudioInputParams result;
+    result.resourceMeta = DEFAULT_AUDIO_RESOURCE_META;
+
+    return result;
+}
+
 SoundFontPaths AudioConfiguration::soundFontDirectories() const
 {
     SoundFontPaths paths = userSoundFontDirectories();
@@ -185,166 +190,7 @@ async::Channel<io::paths_t> AudioConfiguration::soundFontDirectoriesChanged() co
     return m_soundFontDirsChanged;
 }
 
-AudioInputParams AudioConfiguration::defaultAudioInputParams() const
-{
-    AudioInputParams result;
-    result.resourceMeta = DEFAULT_AUDIO_RESOURCE_META;
-
-    return result;
-}
-
-const SynthesizerState& AudioConfiguration::defaultSynthesizerState() const
-{
-    static SynthesizerState state;
-    if (state.isNull()) {
-        SynthesizerState::Group gf;
-        gf.name = "Fluid";
-        gf.vals.push_back(SynthesizerState::Val(SynthesizerState::ValID::SoundFontID, DEFAULT_SOUND_FONT_NAME));
-        state.groups.insert({ gf.name, std::move(gf) });
-    }
-
-    return state;
-}
-
-const SynthesizerState& AudioConfiguration::synthesizerState() const
-{
-    if (!m_state.isNull()) {
-        return m_state;
-    }
-
-    bool ok = readState(stateFilePath(), m_state);
-    if (!ok) {
-        LOGW() << "failed read synthesizer state, file: " << stateFilePath();
-        m_state = defaultSynthesizerState();
-    }
-
-    return m_state;
-}
-
-Ret AudioConfiguration::saveSynthesizerState(const SynthesizerState& state)
-{
-    std::list<std::string> changedGroups;
-    for (auto it = m_state.groups.cbegin(); it != m_state.groups.cend(); ++it) {
-        auto nit = state.groups.find(it->first);
-        if (nit == state.groups.cend()) {
-            continue;
-        }
-
-        if (it->second != nit->second) {
-            changedGroups.push_back(it->first);
-        }
-    }
-
-    Ret ret = writeState(stateFilePath(), state);
-    if (!ret) {
-        LOGE() << "failed write synthesizer state, file: " << stateFilePath();
-        return ret;
-    }
-
-    m_state = state;
-    m_synthesizerStateChanged.notify();
-    for (const std::string& gname : changedGroups) {
-        m_synthesizerStateGroupChanged[gname].notify();
-    }
-
-    return make_ret(Ret::Code::Ok);
-}
-
-async::Notification AudioConfiguration::synthesizerStateChanged() const
-{
-    return m_synthesizerStateChanged;
-}
-
-async::Notification AudioConfiguration::synthesizerStateGroupChanged(const std::string& gname) const
-{
-    return m_synthesizerStateGroupChanged[gname];
-}
-
 io::path_t AudioConfiguration::knownAudioPluginsFilePath() const
 {
     return globalConfiguration()->userAppDataPath() + "/known_audio_plugins.json";
-}
-
-io::path_t AudioConfiguration::stateFilePath() const
-{
-    return globalConfiguration()->userAppDataPath() + "/synthesizer.xml";
-}
-
-bool AudioConfiguration::readState(const io::path_t& path, SynthesizerState& state) const
-{
-    XmlReader xml(path);
-
-    while (xml.canRead() && xml.success()) {
-        XmlReader::TokenType token = xml.readNext();
-        if (token == XmlReader::StartDocument) {
-            continue;
-        }
-
-        if (token == XmlReader::StartElement) {
-            if (xml.tagName() == "Synthesizer") {
-                continue;
-            }
-
-            while (xml.tokenType() != XmlReader::EndElement) {
-                SynthesizerState::Group group;
-                group.name = xml.tagName();
-
-                xml.readNext();
-
-                while (xml.tokenType() != XmlReader::EndElement) {
-                    if (xml.tokenType() == XmlReader::StartElement) {
-                        if (xml.tagName() == "val") {
-                            SynthesizerState::ValID id = static_cast<SynthesizerState::ValID>(xml.intAttribute("id"));
-                            group.vals.push_back(SynthesizerState::Val(id, xml.readString()));
-                        } else {
-                            xml.skipCurrentElement();
-                        }
-                    }
-                    xml.readNext();
-                }
-
-                state.groups.insert({ group.name, std::move(group) });
-            }
-        }
-    }
-
-    if (!xml.success()) {
-        LOGE() << "failed parse xml, error: " << xml.error() << ", path: " << path;
-    }
-
-    return xml.success();
-}
-
-bool AudioConfiguration::writeState(const io::path_t& path, const SynthesizerState& state)
-{
-    XmlWriter xml(path);
-    xml.writeStartDocument();
-
-    xml.writeStartElement("Synthesizer");
-
-    for (auto it = state.groups.cbegin(); it != state.groups.cend(); ++it) {
-        const SynthesizerState::Group& group = it->second;
-
-        if (group.name.empty()) {
-            continue;
-        }
-
-        xml.writeStartElement(group.name);
-        for (const SynthesizerState::Val& value : group.vals) {
-            xml.writeStartElement("val");
-            xml.writeAttribute("id", std::to_string(static_cast<int>(value.id)));
-            xml.writeCharacters(value.val);
-            xml.writeEndElement();
-        }
-        xml.writeEndElement();
-    }
-
-    xml.writeEndElement();
-    xml.writeEndDocument();
-
-    if (!xml.success()) {
-        LOGE() << "failed write xml";
-    }
-
-    return xml.success();
 }

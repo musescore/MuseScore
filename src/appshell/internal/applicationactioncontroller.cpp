@@ -28,7 +28,7 @@
 #include <QMimeData>
 
 #include "async/async.h"
-#include "audio/synthtypes.h"
+#include "audio/soundfonttypes.h"
 
 #include "defer.h"
 #include "translation.h"

@@ -23,12 +23,13 @@
 #ifndef MU_AUDIO_FLUIDSYNTH_H
 #define MU_AUDIO_FLUIDSYNTH_H
 
-#include <memory>
-#include <vector>
-#include <list>
 #include <cstdint>
 #include <functional>
+#include <list>
+#include <memory>
+#include <optional>
 #include <unordered_set>
+#include <vector>
 
 #include "modularity/ioc.h"
 #include "midi/imidioutport.h"
@@ -45,8 +46,8 @@ class FluidSynth : public AbstractSynthesizer
 public:
     FluidSynth(const audio::AudioSourceParams& params);
 
-    SoundFontFormats soundFontFormats() const;
     Ret addSoundFonts(const std::vector<io::path_t>& sfonts);
+    void setPreset(const std::optional<midi::Program>& preset);
 
     std::string name() const override;
     AudioSourceType type() const override;
@@ -113,6 +114,7 @@ private:
 
     FluidSequencer m_sequencer;
     std::set<io::path_t> m_sfontPaths;
+    std::optional<midi::Program> m_preset;
 
     KeyTuning m_tuning;
 };

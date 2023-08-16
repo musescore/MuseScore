@@ -50,16 +50,13 @@ public:
     MOCK_METHOD(void, setSampleRate, (unsigned int), (override));
     MOCK_METHOD(async::Notification, sampleRateChanged, (), (const, override));
 
+    // synthesizers
     MOCK_METHOD(AudioInputParams, defaultAudioInputParams, (), (const, override));
+
     MOCK_METHOD(io::paths_t, soundFontDirectories, (), (const, override));
     MOCK_METHOD(io::paths_t, userSoundFontDirectories, (), (const, override));
     MOCK_METHOD(void, setUserSoundFontDirectories, (const io::paths_t&), (override));
     MOCK_METHOD(async::Channel<io::paths_t>, soundFontDirectoriesChanged, (), (const, override));
-
-    MOCK_METHOD(const synth::SynthesizerState&, synthesizerState, (), (const, override));
-    MOCK_METHOD(Ret, saveSynthesizerState, (const synth::SynthesizerState&), (override));
-    MOCK_METHOD(async::Notification, synthesizerStateChanged, (), (const, override));
-    MOCK_METHOD(async::Notification, synthesizerStateGroupChanged, (const std::string&), (const, override));
 
     MOCK_METHOD(io::path_t, knownAudioPluginsFilePath, (), (const, override));
 };

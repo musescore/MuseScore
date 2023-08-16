@@ -75,11 +75,6 @@ bool FluidSynth::isValid() const
     return m_fluid->synth != nullptr;
 }
 
-SoundFontFormats FluidSynth::soundFontFormats() const
-{
-    return { SoundFontFormat::SF2, SoundFontFormat::SF3 };
-}
-
 Ret FluidSynth::init()
 {
     auto fluid_log_out = [](int level, const char* message, void*) {
@@ -228,6 +223,11 @@ Ret FluidSynth::addSoundFonts(const std::vector<io::path_t>& sfonts)
     return ok ? make_ret(Err::NoError) : make_ret(Err::SoundFontFailedLoad);
 }
 
+void FluidSynth::setPreset(const std::optional<midi::Program>& preset)
+{
+    m_preset = preset;
+}
+
 std::string FluidSynth::name() const
 {
     return "Fluid";
@@ -259,7 +259,7 @@ void FluidSynth::setupSound(const PlaybackSetupData& setupData)
     };
 
     m_sequencer.channelAdded().onReceive(this, setupChannel);
-    m_sequencer.init(setupData);
+    m_sequencer.init(setupData, m_preset);
 
     for (const auto& voice : m_sequencer.channels().data()) {
         for (const auto& pair : voice.second) {

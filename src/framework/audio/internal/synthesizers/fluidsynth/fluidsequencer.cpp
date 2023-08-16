@@ -32,9 +32,9 @@ static constexpr note_idx_t MIN_SUPPORTED_NOTE = 12; // MIDI equivalent for C0
 static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
 static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
 
-void FluidSequencer::init(const PlaybackSetupData& setupData)
+void FluidSequencer::init(const PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride)
 {
-    m_channels.init(setupData);
+    m_channels.init(setupData, programOverride);
 }
 
 int FluidSequencer::currentExpressionLevel() const

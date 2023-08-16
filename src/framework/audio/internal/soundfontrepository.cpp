@@ -21,9 +21,10 @@
  */
 #include "soundfontrepository.h"
 
+#include "log.h"
 #include "translation.h"
 
-#include "log.h"
+#include "synthesizers/fluidsynth/fluidsoundfontparser.h"
 
 using namespace mu::audio;
 using namespace mu::audio::synth;
@@ -32,17 +33,20 @@ using namespace mu::async;
 
 void SoundFontRepository::init()
 {
-    loadSoundFontPaths();
+    loadSoundFonts();
     configuration()->soundFontDirectoriesChanged().onReceive(this, [this](const io::paths_t&) {
-        loadSoundFontPaths();
+        loadSoundFonts();
     });
 }
 
-void SoundFontRepository::loadSoundFontPaths()
+void SoundFontRepository::loadSoundFonts()
 {
     TRACEFUNC;
 
     m_soundFontPaths.clear();
+
+    SoundFontsMap oldSoundFonts;
+    m_soundFonts.swap(oldSoundFonts);
 
     static const std::vector<std::string> filters = { "*.sf2",  "*.sf3" };
     io::paths_t dirs = configuration()->soundFontDirectories();
@@ -54,18 +58,45 @@ void SoundFontRepository::loadSoundFontPaths()
             continue;
         }
 
-        m_soundFontPaths.insert(m_soundFontPaths.end(), soundFonts.val.begin(), soundFonts.val.end());
+        for (const SoundFontPath& soundFont : soundFonts.val) {
+            loadSoundFont(soundFont, oldSoundFonts);
+        }
     }
 }
 
-SoundFontPaths SoundFontRepository::soundFontPaths() const
+void SoundFontRepository::loadSoundFont(const SoundFontPath& path, const SoundFontsMap& oldSoundFonts)
+{
+    m_soundFontPaths.push_back(path);
+
+    auto it = oldSoundFonts.find(path);
+    if (it != oldSoundFonts.cend()) {
+        m_soundFonts.insert(*it);
+        return;
+    }
+
+    RetVal<SoundFontMeta> meta = FluidSoundFontParser::parseSoundFont(path);
+
+    if (!meta.ret) {
+        LOGE() << "Failed parse SoundFont presets for " << path << ": " << meta.ret.toString();
+        return;
+    }
+
+    m_soundFonts.insert_or_assign(path, std::move(meta.val));
+}
+
+const SoundFontPaths& SoundFontRepository::soundFontPaths() const
 {
     return m_soundFontPaths;
 }
 
-Notification SoundFontRepository::soundFontPathsChanged() const
+const SoundFontsMap& SoundFontRepository::soundFonts() const
 {
-    return m_soundFontPathsChanged;
+    return m_soundFonts;
+}
+
+Notification SoundFontRepository::soundFontsChanged() const
+{
+    return m_soundFontsChanged;
 }
 
 mu::Ret SoundFontRepository::addSoundFont(const SoundFontPath& path)
@@ -106,8 +137,8 @@ mu::Ret SoundFontRepository::addSoundFont(const SoundFontPath& path)
     Ret ret = fileSystem()->copy(path, newPath.val, true /* replace */);
 
     if (ret) {
-        m_soundFontPaths.push_back(newPath.val);
-        m_soundFontPathsChanged.notify();
+        loadSoundFont(newPath.val);
+        m_soundFontsChanged.notify();
 
         interactive()->info(trc("audio", "SoundFont installed"),
                             trc("audio", "You can assign soundfonts to instruments using the mixer panel."),

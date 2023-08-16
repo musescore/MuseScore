@@ -28,7 +28,6 @@
 #include "mpe/events.h"
 #include "modularity/ioc.h"
 
-#include "../synthtypes.h"
 #include "../audiotypes.h"
 #include "../isynthesizer.h"
 #include "../iaudioconfiguration.h"

@@ -23,12 +23,19 @@
 
 using namespace mu::audio;
 
-synth::SoundFontPaths SoundFontRepositoryStub::soundFontPaths() const
+const synth::SoundFontPaths& SoundFontRepositoryStub::soundFontPaths() const
 {
-    return {};
+    static const synth::SoundFontPaths paths;
+    return paths;
 }
 
-mu::async::Notification SoundFontRepositoryStub::soundFontPathsChanged() const
+const synth::SoundFontsMap& SoundFontRepositoryStub::soundFonts() const
+{
+    static const synth::SoundFontsMap map;
+    return map;
+}
+
+mu::async::Notification SoundFontRepositoryStub::soundFontsChanged() const
 {
     return async::Notification();
 }

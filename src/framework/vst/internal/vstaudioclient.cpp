@@ -22,7 +22,6 @@
 #include "vstaudioclient.h"
 
 #include "log.h"
-#include "audio/synthtypes.h"
 
 using namespace mu;
 using namespace mu::vst;

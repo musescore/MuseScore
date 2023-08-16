@@ -40,18 +40,21 @@ class SoundFontRepository : public ISoundFontRepository, public async::Asyncable
 public:
     void init();
 
-    synth::SoundFontPaths soundFontPaths() const override;
-    async::Notification soundFontPathsChanged() const override;
+    const synth::SoundFontPaths& soundFontPaths() const override;
+    const synth::SoundFontsMap& soundFonts() const override;
+    async::Notification soundFontsChanged() const override;
 
-    mu::Ret addSoundFont(const synth::SoundFontPath& path) override;
+    Ret addSoundFont(const synth::SoundFontPath& path) override;
 
 private:
-    void loadSoundFontPaths();
+    void loadSoundFonts();
+    void loadSoundFont(const synth::SoundFontPath& path, const synth::SoundFontsMap& oldSoundFonts = {});
 
-    mu::RetVal<synth::SoundFontPath> resolveInstallationPath(const synth::SoundFontPath& path) const;
+    RetVal<synth::SoundFontPath> resolveInstallationPath(const synth::SoundFontPath& path) const;
 
     synth::SoundFontPaths m_soundFontPaths;
-    mu::async::Notification m_soundFontPathsChanged;
+    synth::SoundFontsMap m_soundFonts;
+    async::Notification m_soundFontsChanged;
 };
 }
 

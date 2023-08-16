@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,21 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H
-#define MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H
 
-#include "audio/isoundfontrepository.h"
+#ifndef MU_AUDIO_FLUIDSOUNDFONTPARSER_H
+#define MU_AUDIO_FLUIDSOUNDFONTPARSER_H
 
-namespace mu::audio {
-class SoundFontRepositoryStub : public ISoundFontRepository
+#include "types/retval.h"
+
+#include "soundfonttypes.h"
+
+namespace mu::audio::synth {
+class FluidSoundFontParser
 {
 public:
-    const synth::SoundFontPaths& soundFontPaths() const override;
-    const synth::SoundFontsMap& soundFonts() const override;
-    async::Notification soundFontsChanged() const override;
-
-    mu::Ret addSoundFont(const synth::SoundFontPath& path) override;
+    static RetVal<SoundFontMeta> parseSoundFont(const SoundFontPath& path);
 };
 }
 
-#endif // MU_AUDIO_SOUNDFONTREPOSITORYSTUB_H
+#endif // MU_AUDIO_FLUIDSOUNDFONTPARSER_H

@@ -26,6 +26,8 @@
 #include <vector>
 #include <sstream>
 
+#include "types/string.h"
+
 namespace mu::strings {
 bool replace(std::string& source, const std::string& what, const std::string& to);
 void split(const std::string& str, std::vector<std::string>& out, const std::string& delim);
@@ -51,6 +53,7 @@ std::string toString(const T& t)
 }
 
 bool lessThanCaseInsensitive(const std::string& lhs, const std::string& rhs);
+bool lessThanCaseInsensitive(const String& lhs, const String& rhs);
 }
 
 #endif // MU_FRAMEWORK_STRINGUTILS_H

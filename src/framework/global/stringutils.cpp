@@ -135,3 +135,13 @@ bool mu::strings::lessThanCaseInsensitive(const std::string& lhs, const std::str
 
     return cmp < 0;
 }
+
+bool mu::strings::lessThanCaseInsensitive(const String& lhs, const String& rhs)
+{
+    String lhsLower = lhs.toLower(), rhsLower = rhs.toLower();
+    if (lhsLower == rhsLower) {
+        return lhs < rhs;
+    }
+
+    return lhsLower < rhsLower;
+}

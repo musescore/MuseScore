@@ -5,19 +5,19 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
- * This midi::Program is free software: you can redistribute it and/or modify
+ * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
  * published by the Free Software Foundation.
  *
- * This midi::Program is distributed in the hope that it will be useful,
+ * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this midi::Program.  If not, see <https://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 #ifndef MU_AUDIO_SOUNDMAPPING_H
@@ -1018,8 +1018,13 @@ struct ChannelMap {
     using ChannelMapping = std::pair<midi::channel_t, midi::Program>;
     using VoiceMappings = std::map<mpe::ArticulationType, ChannelMapping>;
 
-    void init(const mpe::PlaybackSetupData& setupData)
+    void init(const mpe::PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride)
     {
+        m_programOverride = programOverride;
+        if (m_programOverride.has_value()) {
+            resolveChannel(0, mpe::ArticulationType::Standard, m_programOverride.value());
+        }
+
         m_standardPrograms = findPrograms(setupData);
         m_articulationMapping = articulationSounds(setupData);
 
@@ -1034,6 +1039,10 @@ struct ChannelMap {
 
     midi::channel_t resolveChannelForEvent(const mpe::NoteEvent& event)
     {
+        if (m_programOverride.has_value()) {
+            return resolveChannel(event.arrangementCtx().voiceLayerIndex, mpe::ArticulationType::Standard, m_programOverride.value());
+        }
+
         if (m_standardPrograms.empty()) {
             return 0;
         }
@@ -1102,6 +1111,7 @@ private:
 
     mutable std::map<mpe::voice_layer_idx_t, VoiceMappings> m_data;
 
+    std::optional<midi::Program> m_programOverride;
     midi::Programs m_standardPrograms;
     ArticulationMapping m_articulationMapping;
 };
