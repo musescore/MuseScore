@@ -89,10 +89,12 @@ StyledPopupView {
         StyledListView {
             id: palettesList
             height: Math.min(availableHeight, contentHeight)
-            width: parent.width
+            width: parent.width + root.margins
 
             readonly property int availableHeight:
                 root.maxHeight - header.height - createCustomPaletteButton.height - 2 * contentColumn.spacing
+
+            scrollBarThickness: 6
 
             spacing: 8
             visible: count > 0
@@ -100,7 +102,7 @@ StyledPopupView {
             delegate: Item {
                 id: morePalettesDelegate
 
-                width: parent.width
+                width: parent.width - root.margins
                 height: addButton.height
 
                 property bool added: false
