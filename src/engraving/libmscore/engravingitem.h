@@ -510,7 +510,7 @@ public:
     virtual double mag() const;
 
     //! --- Old Interface ---
-    bool skipDraw() const { return layoutData()->isSkipDraw; }
+    bool skipDraw() const { return layoutData() && layoutData()->isSkipDraw; }
     void setSkipDraw(bool val) { mutLayoutData()->isSkipDraw = val; }
 
     mu::RectF& bbox() { return mutLayoutData()->bbox; }
