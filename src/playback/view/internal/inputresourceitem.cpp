@@ -332,11 +332,11 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
         QVariantList subItems;
 
         for (const MsBasicItem& subItem : item.subItems) {
-            bool ok = false;
+            bool _ok = false;
             bool isSubItemCurrent = false;
 
-            QVariantMap menuItem = buildMsBasicItem(subItem, parentMenuId, ok, isSubItemCurrent);
-            if (!ok) {
+            QVariantMap menuItem = buildMsBasicItem(subItem, parentMenuId, _ok, isSubItemCurrent);
+            if (!_ok) {
                 continue;
             }
 
