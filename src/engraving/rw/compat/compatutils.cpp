@@ -95,6 +95,9 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
         resetStemLengthsForTwoNoteTrems(masterScore);
         replaceStaffTextWithCapo(masterScore);
     }
+    if (masterScore->mscVersion() < 420) {
+        addMissingInitKeyForTransposingInstrument(masterScore);
+    }
 }
 
 void CompatUtils::replaceStaffTextWithPlayTechniqueAnnotation(MasterScore* score)
@@ -656,5 +659,31 @@ void CompatUtils::replaceStaffTextWithCapo(MasterScore* score)
         parentSegment->removeAnnotation(oldCapo);
 
         delete oldCapo;
+    }
+}
+
+void CompatUtils::addMissingInitKeyForTransposingInstrument(MasterScore* score)
+{
+    TRACEFUNC;
+
+    for (Part* part : score->parts()) {
+        Instrument* instrument = part->instrument();
+        Interval v = instrument->transpose();
+        if (v.chromatic % 12) {
+            for (Staff* staff : part->staves()) {
+                KeyList* keys = staff->keyList();
+                if (keys->find(0) == keys->end()) {
+                    KeySigEvent kse;
+                    Key key = Key::C;
+                    Key cKey = key;
+                    if (!score->style().styleB(Sid::concertPitch)) {
+                        cKey = transposeKey(key, v);
+                    }
+                    kse.setConcertKey(cKey);
+                    kse.setKey(key);
+                    score->undoChangeKeySig(staff, Fraction(0, 1), kse);
+                }
+            }
+        }
     }
 }

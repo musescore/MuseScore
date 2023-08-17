@@ -803,6 +803,9 @@
     <Staff id="3">
       <Measure>
         <voice>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>

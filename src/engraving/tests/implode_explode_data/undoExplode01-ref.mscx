@@ -240,6 +240,9 @@
     <Staff id="1">
       <Measure>
         <voice>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -420,6 +423,9 @@
     <Staff id="2">
       <Measure>
         <voice>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -600,6 +606,9 @@
     <Staff id="3">
       <Measure>
         <voice>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -780,6 +789,9 @@
     <Staff id="4">
       <Measure>
         <voice>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>

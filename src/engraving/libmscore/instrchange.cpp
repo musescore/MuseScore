@@ -116,7 +116,7 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
                     // Check, if some key signature is already there, if no, mark new one "for instrument change"
                     Segment* seg = segment()->prev1(SegmentType::KeySig);
                     voice_idx_t voice = part->staff(i)->idx() * VOICES;
-                    KeySig* ksig = toKeySig(seg->element(voice));
+                    KeySig* ksig = seg ? toKeySig(seg->element(voice)) : nullptr;
                     bool forInstChange = !(ksig && ksig->tick() == tickStart && !ksig->generated());
                     ks.setForInstrumentChange(forInstChange);
                     Key cKey = part->staff(i)->concertKey(tickStart);

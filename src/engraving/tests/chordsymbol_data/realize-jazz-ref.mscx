@@ -101,6 +101,9 @@
         </VBox>
       <Measure>
         <voice>
+          <KeySig>
+            <concertKey>0</concertKey>
+            </KeySig>
           <Harmony>
             <root>13</root>
             <name>m7</name>
