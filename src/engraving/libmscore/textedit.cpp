@@ -690,7 +690,7 @@ bool TextBase::edit(EditData& ed)
             }
         }
         if (ctrlPressed && altPressed) {
-            if (ed.key == Key_Minus) {
+            if (ed.key == Key_Minus || ed.key == Key_Underscore) {
                 insertSym(ed, SymId::lyricsElision);
                 return true;
             }
