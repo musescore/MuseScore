@@ -59,7 +59,7 @@
           </Articulation>
         <Articulation name="accent">
           <velocity>120</velocity>
-          <gateTime>67</gateTime>
+          <gateTime>100</gateTime>
           </Articulation>
         <Articulation name="marcato">
           <velocity>144</velocity>
@@ -119,7 +119,7 @@
           </Articulation>
         <Articulation name="accent">
           <velocity>120</velocity>
-          <gateTime>67</gateTime>
+          <gateTime>100</gateTime>
           </Articulation>
         <Articulation name="marcato">
           <velocity>144</velocity>
@@ -185,7 +185,7 @@
           </Articulation>
         <Articulation name="accent">
           <velocity>120</velocity>
-          <gateTime>67</gateTime>
+          <gateTime>100</gateTime>
           </Articulation>
         <Articulation name="marcato">
           <velocity>144</velocity>
@@ -245,7 +245,7 @@
           </Articulation>
         <Articulation name="accent">
           <velocity>120</velocity>
-          <gateTime>67</gateTime>
+          <gateTime>100</gateTime>
           </Articulation>
         <Articulation name="marcato">
           <velocity>144</velocity>
