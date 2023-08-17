@@ -2344,7 +2344,7 @@ void Score::cmdResetTextStyleOverrides()
             }
 
             for (Pid propertyId : propertiesToReset) {
-                element->resetProperty(propertyId);
+                element->undoResetProperty(propertyId);
             }
         }
     }
