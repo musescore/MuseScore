@@ -10,7 +10,7 @@ public:
     GP6DomBuilder() = default;
 
 private:
-    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(XmlDomNode* trackNode);
+    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(XmlDomNode* trackNode, XmlDomNode* versionNode);
     void setUpInstrument(XmlDomNode* trackChildNode, GPTrack* track);
     GPTrack::SoundAutomation readRsePickUp(XmlDomNode& rseNode) const;
 };

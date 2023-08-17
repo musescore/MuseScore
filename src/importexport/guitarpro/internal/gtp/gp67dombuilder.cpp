@@ -19,7 +19,6 @@ void GP67DomBuilder::buildGPDomModel(XmlDomElement* domElem)
                masterBars,       bars,             voices,
                beats,            notes,            rhythms;
 
-    // Currently ignored
     XmlDomNode gpversion, encoding;
 
     std::map<String, XmlDomNode*> nodeMap =
@@ -61,7 +60,7 @@ void GP67DomBuilder::buildGPDomModel(XmlDomElement* domElem)
     buildGPScore(&scoreNode);
     buildGPMasterTracks(&masterTrack);
     buildGPAudioTracks(&audioTracks);
-    buildGPTracks(&eachTrack);
+    buildGPTracks(&eachTrack, &gpversion);
 }
 
 std::unique_ptr<GPDomModel> GP67DomBuilder::getGPDomModel()
@@ -142,12 +141,12 @@ void GP67DomBuilder::buildGPAudioTracks(XmlDomNode* audioTrack)
     }
 }
 
-void GP67DomBuilder::buildGPTracks(XmlDomNode* tracksNode)
+void GP67DomBuilder::buildGPTracks(XmlDomNode* tracksNode, XmlDomNode* versionNode)
 {
     std::map<int, std::unique_ptr<GPTrack> > tracks;
     XmlDomNode currentNode = tracksNode->firstChild();
     while (!currentNode.isNull()) {
-        tracks.insert(createGPTrack(&currentNode));
+        tracks.insert(createGPTrack(&currentNode, versionNode));
         currentNode = currentNode.nextSibling();
     }
 
@@ -1196,9 +1195,10 @@ void GP67DomBuilder::readBeatProperties(const XmlDomNode& propertiesNode, GPBeat
     }
 }
 
-void GP67DomBuilder::readTrackProperties(XmlDomNode* propertiesNode, GPTrack* track) const
+void GP67DomBuilder::readTrackProperties(XmlDomNode* propertiesNode, GPTrack* track, bool ignoreTuningFlats) const
 {
     GPTrack::StaffProperty property;
+    property.ignoreFlats = ignoreTuningFlats;
 
     auto propertyNode = propertiesNode->firstChild();
 

@@ -22,7 +22,7 @@ protected:
     void buildGPScore(XmlDomNode* scoreNode);
     void buildGPMasterTracks(XmlDomNode* masterTrack);
     void buildGPAudioTracks(XmlDomNode* audioTrack);
-    void buildGPTracks(XmlDomNode* tracksNode);
+    void buildGPTracks(XmlDomNode* tracksNode, XmlDomNode* versionNode);
     void buildGPMasterBars(XmlDomNode* masterBars);
     void buildGPBars(XmlDomNode* bars);
     void buildGPVoices(XmlDomNode* voicesNode);
@@ -33,7 +33,7 @@ protected:
     void breakLyricsOnBeatsIfNeed();
     bool isLyricsOnBeats() const;
 
-    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(XmlDomNode* trackNode) = 0;
+    virtual std::pair<int, std::unique_ptr<GPTrack> > createGPTrack(XmlDomNode* trackNode, XmlDomNode* versionNode) = 0;
 
     std::unique_ptr<GPMasterTracks> createGPMasterTrack(XmlDomNode* metadata);
     std::unique_ptr<GPMasterBar> createGPMasterBar(XmlDomNode* masterBarNode);
@@ -54,7 +54,7 @@ protected:
     GPMasterBar::KeySig readKeySig(XmlDomNode* keyNode) const;
     bool readUseFlats(XmlDomNode* keyNode) const;
     GPMasterBar::TimeSig readTimeSig(XmlDomNode* timeNode) const;
-    void readTrackProperties(XmlDomNode* propertiesNode, GPTrack* track) const;
+    void readTrackProperties(XmlDomNode* propertiesNode, GPTrack* track, bool ignoreTuningFlats) const;
     void readBeatProperties(const XmlDomNode& propertiesNode, GPBeat* beat) const;
     void readDiagram(const XmlDomNode& items, GPTrack* track) const;
     void readLyrics(const XmlDomNode& items, GPTrack* track) const;

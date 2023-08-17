@@ -1115,8 +1115,16 @@ void GPConverter::setUpTrack(const std::unique_ptr<GPTrack>& tR)
         part->staff(0)->insertCapoParams({ 0, 1 }, params);
         part->setCapoFret(capoFret);
         auto tunning = staffProperty[0].tunning;
+        bool usePresetTable = staffProperty[0].ignoreFlats;
 
-        bool useFlats = staffProperty[0].useFlats;
+        std::array<uint64_t, 3> flatPresets{ 0x3f3a36312c27, 0x3c37332e2924, 0x3f3a36312c25 };
+
+        uint64_t k = 0;
+        for (size_t i = 0; i < tunning.size(); ++i) {
+            k |= (uint64_t)tunning[i] << 8 * i;
+        }
+        bool useFlats
+            = usePresetTable ? std::find(flatPresets.begin(), flatPresets.end(), k) != flatPresets.end() : staffProperty[0].useFlats;
         auto fretCount = staffProperty[0].fretCount;
 
         if (tunning.empty()) {
