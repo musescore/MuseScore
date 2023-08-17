@@ -119,6 +119,8 @@ private:
     bool writeNote(const engraving::Note* note, const engraving::Chord* chord, const engraving::Staff* staff, bool isChord);
     bool writeRest(const engraving::Rest* rest, const engraving::Staff* staff);
     bool writeTuplet(const engraving::Tuplet* tuplet, const engraving::EngravingItem* item, bool& closing);
+    bool writeVerses(const engraving::ChordRest* chordRest);
+    bool writeVerse(const engraving::Lyrics* lyrics);
 
     /**
      * Methods for writing MEI control events (within <measure>)

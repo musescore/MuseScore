@@ -1078,6 +1078,7 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
         this->writeBeamTypeAtt(chord, meiChord);
         this->writeStaffIdenAtt(chord, staff, meiChord);
         this->writeStemAtt(chord, meiChord);
+        this->writeVerses(chord);
         std::string xmlId = this->getXmlIdFor(chord, 'c');
         meiChord.Write(m_currentNode, xmlId);
         this->fillControlEventMap(xmlId, chord);
@@ -1160,6 +1161,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeBeamTypeAtt(chord, meiNote);
         this->writeStaffIdenAtt(chord, staff, meiNote);
         this->writeStemAtt(chord, meiNote);
+        this->writeVerses(chord);
     }
     std::string xmlId = this->getXmlIdFor(note, 'n');
     meiNote.Write(noteNode, xmlId);
@@ -1213,6 +1215,7 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
         }
         this->writeBeamTypeAtt(rest, meiRest);
         this->writeStaffIdenAtt(rest, staff, meiRest);
+        this->writeVerses(rest);
         const char prefix = (rest->visible()) ? 'r' : 's';
         std::string xmlId = this->getXmlIdFor(rest, prefix);
         meiRest.Write(restNode, xmlId);
@@ -1261,6 +1264,38 @@ bool MeiExporter::writeTuplet(const Tuplet* tuplet, const EngravingItem* item, b
     if (tuplet->elements().back() == item) {
         closing = true;
     }
+
+    return true;
+}
+
+bool MeiExporter::writeVerses(const engraving::ChordRest* chordRest)
+{
+    IF_ASSERT_FAILED(chordRest) {
+        return false;
+    }
+
+    for (const Lyrics* lyrics : chordRest->lyrics()) {
+        this->writeVerse(lyrics);
+    }
+
+    return true;
+}
+
+bool MeiExporter::writeVerse(const engraving::Lyrics* lyrics)
+{
+    IF_ASSERT_FAILED(lyrics) {
+        return false;
+    }
+
+    /*
+    libmei::Verse meiVerse;
+    m_currentNode = m_currentNode.append_child();
+    meiVerse.Write(m_currentNode, this->getLayerXmlIdFor(VERSE_L));
+
+    // This is the end of the <verse> - non critical assert
+    assert(isCurrentNode(libmei::Verse()));
+    m_currentNode = m_currentNode.parent();
+    */
 
     return true;
 }
