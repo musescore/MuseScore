@@ -1422,8 +1422,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("reset-beammode",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_OPENED,
-             TranslatableString("action", "Reset &beams"),
-             TranslatableString("action", "Reset beams to default grouping")
+             TranslatableString("action", "Reset &beam properties"),
+             TranslatableString("action", "Reset all beam properties to default")
              ),
     UiAction("reset",
              mu::context::UiCtxNotationOpened,
