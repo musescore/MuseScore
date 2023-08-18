@@ -432,6 +432,21 @@ TEST_F(MidiRenderer_Tests, letRingRepeat)
     checkEventInterval(events, 6720, 7680, 64, defVol, DEFAULT_CHANNEL + 1);
 }
 
+TEST_F(MidiRenderer_Tests, slideToTiedNote)
+{
+    constexpr int defVol = 96; // f
+    constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_to_tied_note.mscx"));
+
+    EXPECT_EQ(events.size(), 8);
+
+    checkEventInterval(events, 240, 318, 66, glissVol);
+    checkEventInterval(events, 320, 398, 67, glissVol);
+    checkEventInterval(events, 400, 478, 68, glissVol);
+    checkEventInterval(events, 480, 1919, 69, defVol);
+}
+
 /*****************************************************************************
 
     DISABLED TESTS BELOW
