@@ -2995,10 +2995,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
         // insert correct keysig if necessary
         if (mAfterSel && !mBeforeSel) {
-            Segment* s = mAfterSel->findSegment(SegmentType::KeySig, mAfterSel->tick());
-            if (!s) {
-                s = mAfterSel->undoGetSegment(SegmentType::KeySig, mAfterSel->tick());
-            }
+            Segment* s = mAfterSel->undoGetSegment(SegmentType::KeySig, mAfterSel->tick());
 
             bool userCustomizedKeySig = false;
             for (EngravingItem* e : s->elist()) {
@@ -3025,14 +3022,15 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 KeySig* nks = (KeySig*)s->elementAt(staff2track(staffIdx));
                 if (!nks) {
                     nks = Factory::createKeySig(s);
+                    nks->setParent(s);
                     nks->setTrack(staffIdx * VOICES);
-                    nks->setKey(nkse.key());
+                    nks->setKeySigEvent(nkse);
                     score->undoAddElement(nks);
+                } else {
+                    nks->setGenerated(false);
+                    nks->setKeySigEvent(nkse);
+                    staff->setKey(mAfterSel->tick(), nkse);
                 }
-
-                nks->setGenerated(false);
-                nks->setKeySigEvent(nkse);
-                staff->setKey(mAfterSel->tick(), nkse);
             }
         }
     }
