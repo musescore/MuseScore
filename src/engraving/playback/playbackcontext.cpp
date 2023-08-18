@@ -41,6 +41,8 @@ using namespace mu::mpe;
 
 void PlaybackContext::update(const ID partId, const Score* score)
 {
+    TRACEFUNC;
+
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
@@ -59,35 +61,43 @@ void PlaybackContext::update(const ID partId, const Score* score)
 
 void PlaybackContext::clear()
 {
-    m_dynamicsMap.clear();
+    for (DynamicsMap& dynamics : m_dynamicsByVoice) {
+        dynamics.clear();
+    }
+
     m_playTechniquesMap.clear();
 }
 
 DynamicLevelLayers PlaybackContext::dynamicLevelLayers(const Score* score) const
 {
-    DynamicLevelMap dynamics;
-
-    //! TODO: use voice
-    for (const auto& pair : m_dynamicsMap) {
-        dynamics.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);
-    }
-
-    if (dynamics.empty()) {
-        dynamics.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
-    }
-
     DynamicLevelLayers layers;
-    layers.emplace(0, std::move(dynamics));
+
+    for (voice_layer_idx_t voiceIdx = 0; voiceIdx < m_dynamicsByVoice.size(); ++voiceIdx) {
+        DynamicLevelMap dynamicLevelMap;
+        dynamicLevelMap.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+
+        const DynamicsMap& dynamics = m_dynamicsByVoice.at(voiceIdx);
+        for (const auto& pair : dynamics) {
+            dynamicLevelMap.insert_or_assign(timestampFromTicks(score, pair.first), pair.second);
+        }
+
+        dynamic_layer_idx_t layerIdx = makeDynamicLayerIndex(voiceIdx);
+        layers.emplace(layerIdx, std::move(dynamicLevelMap));
+    }
 
     return layers;
 }
 
 dynamic_level_t PlaybackContext::appliableDynamicLevel(const voice_idx_t voiceIdx, const int nominalPositionTick) const
 {
-    UNUSED(voiceIdx);
+    IF_ASSERT_FAILED(voiceIdx < m_dynamicsByVoice.size()) {
+        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    }
 
-    auto it = findLessOrEqual(m_dynamicsMap, nominalPositionTick);
-    if (it == m_dynamicsMap.cend()) {
+    const DynamicsMap& dynamics = m_dynamicsByVoice.at(voiceIdx);
+
+    auto it = findLessOrEqual(dynamics, nominalPositionTick);
+    if (it == dynamics.cend()) {
         return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
     }
 
@@ -106,15 +116,18 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
 
 dynamic_level_t PlaybackContext::nominalDynamicLevel(const voice_idx_t voiceIdx, const int positionTick) const
 {
-    UNUSED(voiceIdx);
-
-    auto search = m_dynamicsMap.find(positionTick);
-
-    if (search == m_dynamicsMap.cend()) {
+    IF_ASSERT_FAILED(voiceIdx < m_dynamicsByVoice.size()) {
         return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
     }
 
-    return search->second;
+    const DynamicsMap& dynamics = m_dynamicsByVoice.at(voiceIdx);
+
+    auto it = dynamics.find(positionTick);
+    if (it == dynamics.cend()) {
+        return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+    }
+
+    return it->second;
 }
 
 void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick)
@@ -122,21 +135,31 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
     if (!dynamic->playDynamic()) {
         return;
     }
+
     const DynamicType type = dynamic->dynamicType();
+    voice_idx_t voiceIdx = dynamic->voice();
+    bool applyToAllVoices = dynamic->applyToAllVoices();
+
     if (isOrdinaryDynamicType(type)) {
-        m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);
+        if (applyToAllVoices) {
+            setDynamicLevelForAllVoices(segmentPositionTick, dynamicLevelFromType(type));
+        } else {
+            setDynamicLevel(voiceIdx, segmentPositionTick, dynamicLevelFromType(type));
+        }
+
         return;
     }
 
     if (isSingleNoteDynamicType(type)) {
         mpe::dynamic_level_t prevDynamicLevel = appliableDynamicLevel(voiceIdx, segmentPositionTick);
-        m_dynamicsMap[segmentPositionTick] = dynamicLevelFromType(type);
 
-        if (!segment->next()) {
-            return;
+        if (applyToAllVoices) {
+            setDynamicLevelForAllVoices(segmentPositionTick, dynamicLevelFromType(type));
+        } else {
+            setDynamicLevel(voiceIdx, segmentPositionTick, dynamicLevelFromType(type));
         }
 
-        applyDynamicToNextSegment(segment, segmentPositionTick, prevDynamicLevel);
+        applyDynamicToNextSegment(segment, voiceIdx, segmentPositionTick, prevDynamicLevel);
         return;
     }
 
@@ -153,8 +176,14 @@ void PlaybackContext::updateDynamicMap(const Dynamic* dynamic, const Segment* se
                                                                static_cast<int>(range),
                                                                ChangeMethod::NORMAL);
 
-    for (const auto& pair : dynamicsCurve) {
-        m_dynamicsMap[segmentPositionTick + pair.first] = levelFrom + pair.second;
+    if (applyToAllVoices) {
+        for (const auto& pair : dynamicsCurve) {
+            setDynamicLevelForAllVoices(segmentPositionTick + pair.first, levelFrom + pair.second);
+        }
+    } else {
+        for (const auto& pair : dynamicsCurve) {
+            setDynamicLevel(voiceIdx, segmentPositionTick + pair.first, levelFrom + pair.second);
+        }
     }
 }
 
@@ -169,17 +198,18 @@ void PlaybackContext::updatePlayTechMap(const PlayTechAnnotation* annotation, co
     m_playTechniquesMap[segmentPositionTick] = articulationFromPlayTechType(type);
 }
 
-void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick,
+void PlaybackContext::applyDynamicToNextSegment(const Segment* currentSegment, const voice_idx_t voiceIdx, const int segmentPositionTick,
                                                 const mpe::dynamic_level_t dynamicLevel)
 {
-    if (!currentSegment->next()) {
+    const Segment* nextSegment = currentSegment->next();
+    if (!nextSegment) {
         return;
     }
 
-    const int tickPositionOffset = segmentPositionTick - currentSegment->tick().ticks();
+    int tickPositionOffset = segmentPositionTick - currentSegment->tick().ticks();
+    int nextSegmentPositionTick = nextSegment->tick().ticks() + tickPositionOffset;
 
-    int nextSegmentPositionTick = currentSegment->next()->tick().ticks() + tickPositionOffset;
-    m_dynamicsMap[nextSegmentPositionTick] = dynamicLevel;
+    setDynamicLevel(voiceIdx, nextSegmentPositionTick, dynamicLevel);
 }
 
 void PlaybackContext::handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
@@ -253,8 +283,14 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
                                                                    static_cast<int>(overallDynamicRange),
                                                                    hairpin->veloChangeMethod());
 
-        for (const auto& pair : dynamicsCurve) {
-            m_dynamicsMap.insert_or_assign(spannerFrom + pair.first + tickPositionOffset, nominalLevelFrom + pair.second);
+        if (hairpin->applyToAllVoices()) {
+            for (const auto& pair : dynamicsCurve) {
+                setDynamicLevelForAllVoices(spannerFrom + pair.first + tickPositionOffset, nominalLevelFrom + pair.second);
+            }
+        } else {
+            for (const auto& pair : dynamicsCurve) {
+                setDynamicLevel(voiceIdx, spannerFrom + pair.first + tickPositionOffset, nominalLevelFrom + pair.second);
+            }
         }
     }
 }
@@ -281,27 +317,19 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
         }
     }
 
-    if (m_dynamicsMap.empty()) {
-        m_dynamicsMap.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+    if (m_dynamicsByVoice.empty()) {
+        setDynamicLevelForAllVoices(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
     }
 }
 
-void PlaybackContext::removeDynamicData(const int from, const int to)
+void PlaybackContext::setDynamicLevel(const voice_idx_t voiceIdx, const int positionTick, const dynamic_level_t lvl)
 {
-    auto lowerBound = m_dynamicsMap.lower_bound(from);
-    auto upperBound = m_dynamicsMap.upper_bound(to);
-
-    for (auto it = lowerBound; it != upperBound;) {
-        it = m_dynamicsMap.erase(it);
-    }
+    m_dynamicsByVoice[voiceIdx].insert_or_assign(positionTick, lvl);
 }
 
-void PlaybackContext::removePlayTechniqueData(const int from, const int to)
+void PlaybackContext::setDynamicLevelForAllVoices(const int positionTick, const dynamic_level_t lvl)
 {
-    auto lowerBound = m_playTechniquesMap.lower_bound(from);
-    auto upperBound = m_playTechniquesMap.upper_bound(to);
-
-    for (auto it = lowerBound; it != upperBound;) {
-        it = m_playTechniquesMap.erase(it);
+    for (voice_idx_t idx = 0; idx < m_dynamicsByVoice.size(); ++idx) {
+        setDynamicLevel(idx, positionTick, lvl);
     }
 }

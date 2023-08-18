@@ -412,6 +412,8 @@ PropertyValue Hairpin::getProperty(Pid id) const
         return _veloChangeMethod;
     case Pid::PLAY:
         return _playHairpin;
+    case Pid::APPLY_TO_ALL_VOICES:
+        return m_applyToAllVoices;
     default:
         return TextLineBase::getProperty(id);
     }
@@ -450,6 +452,9 @@ bool Hairpin::setProperty(Pid id, const PropertyValue& v)
         break;
     case Pid::PLAY:
         setPlayHairpin(v.toBool());
+        break;
+    case Pid::APPLY_TO_ALL_VOICES:
+        m_applyToAllVoices = v.toBool();
         break;
     default:
         return TextLineBase::setProperty(id, v);
@@ -529,6 +534,9 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
 
     case Pid::PLAY:
         return true;
+
+    case Pid::APPLY_TO_ALL_VOICES:
+        return false;
 
     default:
         return TextLineBase::propertyDefault(id);

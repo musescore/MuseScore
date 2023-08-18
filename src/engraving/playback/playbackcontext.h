@@ -27,6 +27,8 @@
 
 #include "types/types.h"
 
+#include "dom/mscore.h"
+
 namespace mu::engraving {
 class Segment;
 class Dynamic;
@@ -48,19 +50,22 @@ private:
 
     void updateDynamicMap(const Dynamic* dynamic, const Segment* segment, const int segmentPositionTick);
     void updatePlayTechMap(const PlayTechAnnotation* annotation, const int segmentPositionTick);
-    void applyDynamicToNextSegment(const Segment* currentSegment, const int segmentPositionTick, const mpe::dynamic_level_t dynamicLevel);
+    void applyDynamicToNextSegment(const Segment* currentSegment, const voice_idx_t voiceIdx, const int segmentPositionTick,
+                                   const mpe::dynamic_level_t dynamicLevel);
 
     void handleSpanners(const ID partId, const Score* score, const int segmentStartTick, const int segmentEndTick,
                         const int tickPositionOffset);
     void handleAnnotations(const ID partId, const Segment* segment, const int segmentPositionTick);
 
-    void removeDynamicData(const int from, const int to);
-    void removePlayTechniqueData(const int from, const int to);
+    void setDynamicLevel(const voice_idx_t voiceIdx, const int positionTick, const mpe::dynamic_level_t lvl);
+    void setDynamicLevelForAllVoices(const int positionTick, const mpe::dynamic_level_t lvl);
 
-    using DynamicMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
+    using DynamicsMap = std::map<int /*nominalPositionTick*/, mpe::dynamic_level_t>;
+    using DynamicsByVoice = std::array<DynamicsMap, mu::engraving::VOICES>;
+
     using PlayTechniquesMap = std::map<int /*nominalPositionTick*/, mpe::ArticulationType>;
 
-    DynamicMap m_dynamicsMap;
+    DynamicsByVoice m_dynamicsByVoice;
     PlayTechniquesMap m_playTechniquesMap;
 };
 }

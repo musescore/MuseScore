@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="4.20">
   <programVersion>4.2.0</programVersion>
-  <programRevision>7c017f0</programRevision>
+  <programRevision></programRevision>
   <Score>
     <Division>480</Division>
     <showInvisible>1</showInvisible>
@@ -427,6 +427,7 @@ is on</text>
           <Dynamic>
             <subtype>pppp</subtype>
             <velocity>10</velocity>
+            <applyToAllVoices>1</applyToAllVoices>
             <offset x="0.293255" y="2.5"/>
             </Dynamic>
           <Chord>

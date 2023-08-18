@@ -601,6 +601,8 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setVelChangeSpeed(TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL));
         } else if (tag == "play") {
             d->setPlayDynamic(e.readBool());
+        } else if (tag == "applyToAllVoices") {
+            d->setApplyToAllVoices(e.readBool());
         } else if (readProperty(d, tag, e, ctx, Pid::AVOID_BARLINES)) {
         } else if (readProperty(d, tag, e, ctx, Pid::DYNAMICS_SIZE)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
@@ -2820,6 +2822,8 @@ void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
             h->setVeloChangeMethod(TConv::fromXml(e.readAsciiText(), ChangeMethod::NORMAL));
         } else if (tag == "play") {
             h->setPlayHairpin(e.readBool());
+        } else if (tag == "applyToAllVoices") {
+            h->setApplyToAllVoices(e.readBool());
         } else if (!readProperties(static_cast<TextLineBase*>(h), e, ctx)) {
             e.unknown();
         }

@@ -420,6 +420,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::STRINGTUNINGS_PRESET,    true,  "preset",                P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "strings preset") },
     { Pid::STRINGTUNINGS_VISIBLE_STRINGS,   true,  "visibleStrings",P_TYPE::INT_VEC,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "visible strings") },
 
+    { Pid::APPLY_TO_ALL_VOICES,         true, "applyToAllVoices",          P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "apply to all voices") },
+
     { Pid::END,                     false, "++end++",               P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
 /* *INDENT-ON* */

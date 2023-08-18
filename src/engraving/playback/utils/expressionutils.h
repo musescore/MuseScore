@@ -101,7 +101,7 @@ inline mpe::dynamic_level_t dynamicLevelRangeByTypes(const DynamicType dynamicTy
 
 inline bool isOrdinaryDynamicType(const DynamicType type)
 {
-    static const std::set<DynamicType> ORDINARY_DYNAMIC_TYPES = {
+    static const std::unordered_set<DynamicType> ORDINARY_DYNAMIC_TYPES = {
         DynamicType::PPPPPP,
         DynamicType::PPPPP,
         DynamicType::PPPP,
@@ -123,7 +123,7 @@ inline bool isOrdinaryDynamicType(const DynamicType type)
 
 inline bool isSingleNoteDynamicType(const DynamicType type)
 {
-    static const std::set<DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
+    static const std::unordered_set<DynamicType> SINGLE_NOTE_DYNAMIC_TYPES = {
         DynamicType::SF,
         DynamicType::SFZ,
         DynamicType::SFFZ,
