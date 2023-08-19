@@ -3010,11 +3010,17 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
 
             bool concertPitch = score->style().styleB(Sid::concertPitch);
             for (Staff* staff : score->staves()) {
-                staff_idx_t staffIdx = staff->idx();
                 Part* part = staff->part();
+                Instrument* instrument = part->instrument(Fraction(0, 1));
+
+                if (instrument->useDrumset()) {
+                    continue;
+                }
+
+                staff_idx_t staffIdx = staff->idx();
                 KeySigEvent nkse = lastDeletedKeySigEvent;
                 if (!concertPitch && !nkse.isAtonal()) {
-                    Interval v = part->instrument(Fraction(0, 1))->transpose();
+                    Interval v = instrument->transpose();
                     v.flip();
                     nkse.setKey(transposeKey(nkse.concertKey(), v, part->preferSharpFlat()));
                 }
