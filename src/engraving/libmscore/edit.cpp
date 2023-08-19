@@ -2910,8 +2910,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
     // get the last deleted timesig & keysig in order to restore after deletion
     std::map<staff_idx_t, TimeSig*> lastDeletedTimeSigs;
 
-    KeySigEvent lastDeletedKeySigEvent = score()->keyList().key(mbEnd->tick().ticks());
-
     for (MeasureBase* mb = mbEnd;; mb = mb->prev()) {
         if (mb->isMeasure()) {
             Measure* m = toMeasure(mb);
@@ -2927,8 +2925,6 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 }
             }
 
-            sts = m->findSegment(SegmentType::KeySig, m->tick());
-
             if (lastDeletedTimeSigs.size() == nstaves()) {
                 break;
             }
@@ -2937,6 +2933,14 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             break;
         }
     }
+
+    std::vector<KeySigEvent> lastDeletedKeySigEvents;
+
+    for (Staff* staff : score()->staves()) {
+        KeySigEvent kse = staff->keySigEvent(mbEnd->tick());
+        lastDeletedKeySigEvents.push_back(kse);
+    }
+
     Fraction startTick = mbStart->tick();
     Fraction endTick   = mbEnd->tick();
 
@@ -3018,7 +3022,7 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
                 }
 
                 staff_idx_t staffIdx = staff->idx();
-                KeySigEvent nkse = lastDeletedKeySigEvent;
+                KeySigEvent nkse = lastDeletedKeySigEvents.at(staffIdx);
                 if (!concertPitch && !nkse.isAtonal()) {
                     Interval v = instrument->transpose();
                     v.flip();
