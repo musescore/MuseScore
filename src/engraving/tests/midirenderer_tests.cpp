@@ -189,14 +189,14 @@ TEST_F(MidiRenderer_Tests, simpleGlissando)
     constexpr int defVol = 96; // forte
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"simple_glissando.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"simple_glissando.mscx"));
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events.size(), 10);
 
-    checkEventInterval(events, 0, 599, 59, defVol);
-    checkEventInterval(events, 600, 719, 58, glissVol);
-    checkEventInterval(events, 720, 839, 57, glissVol);
-    checkEventInterval(events, 840, 959, 56, glissVol);
+    checkEventInterval(events, 0, 642, 59, defVol);
+    checkEventInterval(events, 643, 747, 58, glissVol);
+    checkEventInterval(events, 748, 852, 57, glissVol);
+    checkEventInterval(events, 854, 958, 56, glissVol);
     checkEventInterval(events, 960, 1439, 55, defVol);
 }
 
@@ -253,16 +253,16 @@ TEST_F(MidiRenderer_Tests, tremoloAndGlissando)
     constexpr int defVol = 96; // f
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"tremolo_and_glissando.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_glissando.mscx"));
 
-    EXPECT_EQ(events.size(), 20);
+    EXPECT_EQ(events.size(), 14);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 59, defVol);
-    checkEventInterval(events, 480, 599, 59, defVol);
-    checkEventInterval(events, 600, 719, 58, glissVol);
-    checkEventInterval(events, 720, 839, 57, glissVol);
-    checkEventInterval(events, 840, 959, 56, glissVol);
+    checkEventInterval(events, 480, 642, 59, defVol);
+    checkEventInterval(events, 643, 747, 58, glissVol);
+    checkEventInterval(events, 748, 852, 57, glissVol);
+    checkEventInterval(events, 854, 958, 56, glissVol);
     checkEventInterval(events, 960, 1439, 55, defVol);
 }
 
@@ -271,14 +271,14 @@ TEST_F(MidiRenderer_Tests, slideInFromBelow)
     constexpr int defVol = 80; // mf
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"slide_in_from_below.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_in_from_below.mscx"));
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events.size(), 10);
 
-    checkEventInterval(events, 0, 239, 60, defVol);
-    checkEventInterval(events, 240, 318, 57, glissVol);
-    checkEventInterval(events, 320, 398, 58, glissVol);
-    checkEventInterval(events, 400, 478, 59, glissVol);
+    checkEventInterval(events, 0, 419, 60, defVol);
+    checkEventInterval(events, 420, 438, 57, glissVol);
+    checkEventInterval(events, 440, 458, 58, glissVol);
+    checkEventInterval(events, 460, 478, 59, glissVol);
     checkEventInterval(events, 480, 959, 60, defVol);
 }
 
@@ -287,14 +287,14 @@ TEST_F(MidiRenderer_Tests, slideInFromAbove)
     constexpr int defVol = 80; // mf
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"slide_in_from_above.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_in_from_above.mscx"));
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events.size(), 10);
 
-    checkEventInterval(events, 0, 239, 60, defVol);
-    checkEventInterval(events, 240, 318, 63, glissVol);
-    checkEventInterval(events, 320, 398, 62, glissVol);
-    checkEventInterval(events, 400, 478, 61, glissVol);
+    checkEventInterval(events, 0, 419, 60, defVol);
+    checkEventInterval(events, 420, 438, 63, glissVol);
+    checkEventInterval(events, 440, 458, 62, glissVol);
+    checkEventInterval(events, 460, 478, 61, glissVol);
     checkEventInterval(events, 480, 959, 60, defVol);
 }
 
@@ -303,14 +303,14 @@ TEST_F(MidiRenderer_Tests, slideOutFromAbove)
     constexpr int defVol = 80; // mf
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"slide_out_from_above.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_out_from_above.mscx"));
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events.size(), 10);
 
-    checkEventInterval(events, 0, 239, 60, defVol);
-    checkEventInterval(events, 240, 318, 59, glissVol);
-    checkEventInterval(events, 319, 397, 58, glissVol);
-    checkEventInterval(events, 399, 477, 57, glissVol);
+    checkEventInterval(events, 0, 419, 60, defVol);
+    checkEventInterval(events, 420, 438, 59, glissVol);
+    checkEventInterval(events, 439, 457, 58, glissVol);
+    checkEventInterval(events, 459, 477, 57, glissVol);
     checkEventInterval(events, 480, 959, 60, defVol);
 }
 
@@ -319,14 +319,14 @@ TEST_F(MidiRenderer_Tests, slideOutFromBelow)
     constexpr int defVol = 80; // mf
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"slide_out_from_below.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_out_from_below.mscx"));
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events.size(), 10);
 
-    checkEventInterval(events, 0, 239, 60, defVol);
-    checkEventInterval(events, 240, 318, 61, glissVol);
-    checkEventInterval(events, 319, 397, 62, glissVol);
-    checkEventInterval(events, 399, 477, 63, glissVol);
+    checkEventInterval(events, 0, 419, 60, defVol);
+    checkEventInterval(events, 420, 438, 61, glissVol);
+    checkEventInterval(events, 439, 457, 62, glissVol);
+    checkEventInterval(events, 459, 477, 63, glissVol);
     checkEventInterval(events, 480, 959, 60, defVol);
 }
 
@@ -335,17 +335,17 @@ TEST_F(MidiRenderer_Tests, tremoloSlideIn)
     constexpr int defVol = 96; // f
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"tremolo_and_slide_in.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_slide_in.mscx"));
 
-    EXPECT_EQ(events.size(), 23);
+    EXPECT_EQ(events.size(), 16);
 
-    checkEventInterval(events, 0, 119, 59, defVol);
-    checkEventInterval(events, 120, 239, 59, defVol);
-    checkEventInterval(events, 240, 359, 59, defVol);
-    checkEventInterval(events, 360, 479, 59, defVol);
-    checkEventInterval(events, 480, 638, 56, glissVol);
-    checkEventInterval(events, 640, 798, 57, glissVol);
-    checkEventInterval(events, 800, 958, 58, glissVol);
+    checkEventInterval(events, 0, 223, 59, defVol);
+    checkEventInterval(events, 224, 447, 59, defVol);
+    checkEventInterval(events, 449, 672, 59, defVol);
+    checkEventInterval(events, 673, 896, 59, defVol);
+    checkEventInterval(events, 900, 918, 56, glissVol);
+    checkEventInterval(events, 920, 938, 57, glissVol);
+    checkEventInterval(events, 940, 958, 58, glissVol);
     checkEventInterval(events, 960, 1439, 59, defVol);
 }
 
@@ -354,17 +354,20 @@ TEST_F(MidiRenderer_Tests, tremoloSlideOut)
     constexpr int defVol = 96; // f
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"tremolo_and_slide_out.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_slide_out.mscx"));
 
     EXPECT_EQ(events.size(), 20);
 
-    checkEventInterval(events, 0, 239, 59, defVol);
-    checkEventInterval(events, 240, 479, 59, defVol);
-    checkEventInterval(events, 480, 719, 59, defVol);
-    checkEventInterval(events, 720, 959, 59, defVol);
-    checkEventInterval(events, 960, 1277, 58, glissVol);
-    checkEventInterval(events, 1278, 1595, 57, glissVol);
-    checkEventInterval(events, 1597, 1914, 56, glissVol);
+    checkEventInterval(events, 0, 263, 59, defVol);
+    checkEventInterval(events, 264, 527, 59, defVol);
+    checkEventInterval(events, 529, 792, 59, defVol);
+    checkEventInterval(events, 794, 1057, 59, defVol);
+    checkEventInterval(events, 1059, 1322, 59, defVol);
+    checkEventInterval(events, 1324, 1587, 59, defVol);
+    checkEventInterval(events, 1589, 1852, 59, defVol);
+    checkEventInterval(events, 1860, 1878, 58, glissVol);
+    checkEventInterval(events, 1879, 1897, 57, glissVol);
+    checkEventInterval(events, 1898, 1916, 56, glissVol);
 }
 
 TEST_F(MidiRenderer_Tests, slideInAndOut)
@@ -372,17 +375,17 @@ TEST_F(MidiRenderer_Tests, slideInAndOut)
     constexpr int defVol = 80; // mf
     constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"slide_in_and_out.mscx");
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_in_and_out.mscx"));
 
-    EXPECT_EQ(events.size(), 21);
+    EXPECT_EQ(events.size(), 14);
 
-    checkEventInterval(events, 240, 318, 57, glissVol);
-    checkEventInterval(events, 320, 398, 58, glissVol);
-    checkEventInterval(events, 400, 478, 59, glissVol);
-    checkEventInterval(events, 480, 719, 60, defVol);
-    checkEventInterval(events, 720, 798, 61, glissVol);
-    checkEventInterval(events, 799, 877, 62, glissVol);
-    checkEventInterval(events, 879, 957, 63, glissVol);
+    checkEventInterval(events, 420, 438, 57, glissVol);
+    checkEventInterval(events, 440, 458, 58, glissVol);
+    checkEventInterval(events, 460, 478, 59, glissVol);
+    checkEventInterval(events, 480, 899, 60, defVol);
+    checkEventInterval(events, 900, 918, 61, glissVol);
+    checkEventInterval(events, 919, 937, 62, glissVol);
+    checkEventInterval(events, 939, 957, 63, glissVol);
 }
 
 TEST_F(MidiRenderer_Tests, sameStringDifferentStaves)
@@ -441,10 +444,29 @@ TEST_F(MidiRenderer_Tests, slideToTiedNote)
 
     EXPECT_EQ(events.size(), 8);
 
-    checkEventInterval(events, 240, 318, 66, glissVol);
-    checkEventInterval(events, 320, 398, 67, glissVol);
-    checkEventInterval(events, 400, 478, 68, glissVol);
+    checkEventInterval(events, 420, 438, 66, glissVol);
+    checkEventInterval(events, 440, 458, 67, glissVol);
+    checkEventInterval(events, 460, 478, 68, glissVol);
     checkEventInterval(events, 480, 1919, 69, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, twoSlides)
+{
+    constexpr int defVol = 80; // f
+    constexpr int glissVol = defVol * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"two_slides.mscx"));
+
+    EXPECT_EQ(events.size(), 16);
+
+    checkEventInterval(events, 1860, 1878, 56, glissVol);
+    checkEventInterval(events, 1880, 1898, 57, glissVol);
+    checkEventInterval(events, 1900, 1918, 58, glissVol);
+    checkEventInterval(events, 1920, 2339, 59, defVol);
+    checkEventInterval(events, 2340, 2358, 59, glissVol);
+    checkEventInterval(events, 2360, 2378, 60, glissVol);
+    checkEventInterval(events, 2380, 2398, 61, glissVol);
+    checkEventInterval(events, 2400, 2879, 62, defVol);
 }
 
 /*****************************************************************************

@@ -57,6 +57,7 @@ public:
     void setOntime(int v) { m_ontime = v; }
     void setLen(int v) { m_len = v; }
     void setOffset(int v) { m_offset = v; }
+    void setVelocityMultiplier(double velocityMultiplier) { m_velocityMultiplier = velocityMultiplier; }
 
     bool operator==(const NoteEvent&) const;
 

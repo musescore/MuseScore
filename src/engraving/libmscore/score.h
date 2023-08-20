@@ -953,7 +953,7 @@ protected:
     int m_fileDivision = 0;   // division of current loading *.msc file
     SynthesizerState m_synthesizerState;
 
-    void createPlayEvents(Chord* chord, Chord* prevChord = nullptr);
+    void createPlayEvents(Chord* chord);
     void createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& ontime, int& trailtime);
     void cmdPitchUp();
     void cmdPitchDown();
