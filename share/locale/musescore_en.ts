@@ -10891,27 +10891,27 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
 <context>
     <name>audio</name>
     <message>
-        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="73"/>
+        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="104"/>
         <source>Do you want to add the SoundFont: %1?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="91"/>
+        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="122"/>
         <source>File already exists. Do you want to overwrite it?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="93"/>
+        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="124"/>
         <source>File path: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="112"/>
+        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="143"/>
         <source>SoundFont installed</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="113"/>
+        <location filename="../../src/framework/audio/internal/soundfontrepository.cpp" line="144"/>
         <source>You can assign soundfonts to instruments using the mixer panel.</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11453,7 +11453,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/barline.cpp" line="1133"/>
+        <location filename="../../src/engraving/libmscore/barline.cpp" line="1135"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1078"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1089"/>
         <location filename="../../src/engraving/libmscore/note.cpp" line="2992"/>
@@ -11463,7 +11463,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/barline.cpp" line="1136"/>
+        <location filename="../../src/engraving/libmscore/barline.cpp" line="1138"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1081"/>
         <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1091"/>
         <location filename="../../src/engraving/libmscore/note.cpp" line="2996"/>
@@ -12911,7 +12911,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/ambitus.cpp" line="555"/>
+        <location filename="../../src/engraving/libmscore/ambitus.cpp" line="553"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -17554,6 +17554,7 @@ Fret %1 on strings %2</source>
     </message>
     <message>
         <location filename="../../src/palette/qml/MuseScore/Palette/PalettesPanel.qml" line="126"/>
+        <location filename="../../src/project/qml/MuseScore/Project/internal/NewScore/TitleListView.qml" line="143"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoreGridItem.qml" line="297"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoresGridView.qml" line="199"/>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/ScoresListView.qml" line="266"/>
@@ -20843,7 +20844,7 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/partlistmodel.cpp" line="136"/>
+        <location filename="../../src/notation/view/partlistmodel.cpp" line="128"/>
         <source>Part</source>
         <translation type="unfinished"></translation>
     </message>
@@ -21224,22 +21225,22 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/partlistmodel.cpp" line="162"/>
+        <location filename="../../src/notation/view/partlistmodel.cpp" line="154"/>
         <source>Are you sure you want to reset this part?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/partlistmodel.cpp" line="194"/>
+        <location filename="../../src/notation/view/partlistmodel.cpp" line="186"/>
         <source>Are you sure you want to delete this part?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/partlistmodel.cpp" line="245"/>
+        <location filename="../../src/notation/view/partlistmodel.cpp" line="242"/>
         <source>Name already exists</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/partlistmodel.cpp" line="288"/>
+        <location filename="../../src/notation/view/partlistmodel.cpp" line="285"/>
         <source>(copy)</source>
         <translation type="unfinished"></translation>
     </message>
@@ -22376,17 +22377,17 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="132"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="134"/>
         <source>Add %1 palette</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="158"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="160"/>
         <source>%1 added</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="159"/>
+        <location filename="../../src/palette/qml/MuseScore/Palette/internal/AddPalettesPopup.qml" line="161"/>
         <source>%1 removed</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25228,8 +25229,29 @@ failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="13"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="42"/>
         <source>SoundFonts</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="322"/>
+        <source>Bank %1, preset %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="370"/>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="427"/>
+        <source>Choose automatically</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="410"/>
+        <source>Preset %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/playback/view/internal/inputresourceitem.cpp" line="419"/>
+        <source>Bank %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
