@@ -2455,7 +2455,7 @@ static constexpr std::array<TextStyleName, int(Tid::TEXT_STYLES)> textStyles { {
       { QT_TRANSLATE_NOOP("TextStyle", "Footer"),                  &footerTextStyle,            Tid::FOOTER },
 // Measure-oriented styles
       { QT_TRANSLATE_NOOP("TextStyle", "Measure Number"),          &measureNumberTextStyle,     Tid::MEASURE_NUMBER },
-      { QT_TRANSLATE_NOOP("TextStyle", "Multimeasure Rest Range"), &mmRestRangeTextStyle,      Tid::MMREST_RANGE },
+      { QT_TRANSLATE_NOOP("TextStyle", "Multimeasure Rest Range"), &mmRestRangeTextStyle,       Tid::MMREST_RANGE },
 // Sytem-level styles
       { QT_TRANSLATE_NOOP("TextStyle", "Tempo"),                   &tempoTextStyle,             Tid::TEMPO },
       { QT_TRANSLATE_NOOP("TextStyle", "Metronome"),               &metronomeTextStyle,         Tid::METRONOME },
@@ -2537,6 +2537,9 @@ Tid textStyleFromName(const QString& name)
             }
       if (name == "Technique")                  // compatibility
             return Tid::EXPRESSION;
+
+      if (name == "poet")                       // 4.x compatibility
+            return Tid::POET;
 
       qDebug("text style <%s> not known", qPrintable(name));
       return Tid::DEFAULT;
