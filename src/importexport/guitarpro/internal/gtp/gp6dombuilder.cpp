@@ -7,9 +7,10 @@
 namespace mu::iex::guitarpro {
 std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNode* trackNode, XmlDomNode* versionNode)
 {
+    UNUSED(versionNode);
     static const std::set<String> sUnusedNodes = {
-        u"Color",                                        // we dont use icon color for the tracks
-        u"SystemsDefaultLayout", u"SystemsLayout",        // we have our own layout algorithms
+        u"Color",                                        // we don't use icon color for the tracks
+        u"SystemsDefaultLayout", u"SystemsLayout",       // we have our own layout algorithms
         u"SystemsDefautLayout",                          // GP has a typo here :)
         u"PalmMute",                                     // currently our synthesizer is unable to simulate this feature
         u"AutoAccentuation",                             // currently our synthesizer is unable to simulate this feature
