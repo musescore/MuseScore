@@ -207,24 +207,30 @@ static void createMeasures(mu::engraving::Score* score, const ScoreCreateOptions
                     ts->setSig(timesig, scoreOptions.timesigType);
                     s->add(ts);
                     Part* part = staff->part();
-                    if (!part->instrument()->useDrumset()) {
+                    mu::engraving::KeySigEvent nKey;
+                    // use atonal keysig for drums
+                    if (part->instrument()->useDrumset()) {
+                        nKey.setConcertKey(Key::C);
+                        nKey.setCustom(true);
+                        nKey.setMode(KeyMode::NONE);
+                    } else {
                         //
                         // transpose key
                         //
-                        mu::engraving::KeySigEvent nKey = ks;
+                        nKey = ks;
                         mu::engraving::Interval v = part->instrument()->transpose();
                         if (!nKey.isAtonal() && !v.isZero() && !score->style().styleB(mu::engraving::Sid::concertPitch)) {
                             v.flip();
                             nKey.setKey(mu::engraving::transposeKey(nKey.concertKey(), v, part->preferSharpFlat()));
                         }
-                        staff->setKey(mu::engraving::Fraction(0, 1), nKey);
-                        mu::engraving::Segment* ss
-                            = measure->getSegment(mu::engraving::SegmentType::KeySig, mu::engraving::Fraction(0, 1));
-                        mu::engraving::KeySig* keysig = mu::engraving::Factory::createKeySig(ss);
-                        keysig->setTrack(staffIdx * mu::engraving::VOICES);
-                        keysig->setKeySigEvent(nKey);
-                        ss->add(keysig);
                     }
+                    staff->setKey(mu::engraving::Fraction(0, 1), nKey);
+                    mu::engraving::Segment* ss
+                        = measure->getSegment(mu::engraving::SegmentType::KeySig, mu::engraving::Fraction(0, 1));
+                    mu::engraving::KeySig* keysig = mu::engraving::Factory::createKeySig(ss);
+                    keysig->setTrack(staffIdx * mu::engraving::VOICES);
+                    keysig->setKeySigEvent(nKey);
+                    ss->add(keysig);
                 }
 
                 // determined if this staff is linked to previous so we can reuse rests
