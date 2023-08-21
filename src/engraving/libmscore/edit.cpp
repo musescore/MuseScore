@@ -3016,17 +3016,20 @@ void Score::deleteMeasures(MeasureBase* mbStart, MeasureBase* mbEnd, bool preser
             for (Staff* staff : score->staves()) {
                 Part* part = staff->part();
                 Instrument* instrument = part->instrument(Fraction(0, 1));
+                KeySigEvent nkse;
+                staff_idx_t staffIdx = staff->idx();
 
                 if (instrument->useDrumset()) {
-                    continue;
-                }
-
-                staff_idx_t staffIdx = staff->idx();
-                KeySigEvent nkse = lastDeletedKeySigEvents.at(staffIdx);
-                if (!concertPitch && !nkse.isAtonal()) {
-                    Interval v = instrument->transpose();
-                    v.flip();
-                    nkse.setKey(transposeKey(nkse.concertKey(), v, part->preferSharpFlat()));
+                    nkse.setConcertKey(Key::C);
+                    nkse.setCustom(true);
+                    nkse.setMode(KeyMode::NONE);
+                } else {
+                    nkse = lastDeletedKeySigEvents.at(staffIdx);
+                    if (!concertPitch && !nkse.isAtonal()) {
+                        Interval v = instrument->transpose();
+                        v.flip();
+                        nkse.setKey(transposeKey(nkse.concertKey(), v, part->preferSharpFlat()));
+                    }
                 }
 
                 KeySig* nks = (KeySig*)s->elementAt(staff2track(staffIdx));
