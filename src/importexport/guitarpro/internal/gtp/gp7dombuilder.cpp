@@ -5,7 +5,7 @@
 #include "global/log.h"
 
 namespace mu::iex::guitarpro {
-std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNode* trackNode)
+std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNode* trackNode, XmlDomNode* versionNode)
 {
     static const std::set<String> sUnused = {
         u"Color", u"SystemsDefautLayout", u"SystemsLayout", u"AutoBrush",
@@ -18,6 +18,7 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
     int trackIdx = trackNode->attribute("id").toInt();
     auto track = std::make_unique<GPTrack>(trackIdx);
     XmlDomNode trackChildNode = trackNode->firstChild();
+    String version = versionNode->toElement().text();
 
     while (!trackChildNode.isNull()) {
         String nodeName = trackChildNode.nodeName();
@@ -46,7 +47,11 @@ std::pair<int, std::unique_ptr<GPTrack> > GP7DomBuilder::createGPTrack(XmlDomNod
             int staffCount = 0;
             while (!staffNode.isNull()) {
                 auto propertyNode = staffNode.firstChild();
-                readTrackProperties(&propertyNode, track.get());
+                // there is a bug in gp v 7.0.0
+                // All parts marked to use flat for tuning string,
+                // but in real world gp uses tuning presets
+                // sp we have to ignore <Flats/> and <TuningFlat> props
+                readTrackProperties(&propertyNode, track.get(), version == "7");
                 staffNode = staffNode.nextSibling();
                 staffCount++;
             }

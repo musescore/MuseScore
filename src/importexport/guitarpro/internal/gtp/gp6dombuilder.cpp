@@ -5,7 +5,7 @@
 #include "global/log.h"
 
 namespace mu::iex::guitarpro {
-std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNode* trackNode)
+std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNode* trackNode, XmlDomNode* versionNode)
 {
     static const std::set<String> sUnusedNodes = {
         u"Color",                                        // we dont use icon color for the tracks
@@ -50,7 +50,7 @@ std::pair<int, std::unique_ptr<GPTrack> > GP6DomBuilder::createGPTrack(XmlDomNod
         } else if (nodeName == u"ShortName") {
             track->setShortName(trackChildNode.toElement().text());
         } else if (nodeName == u"Properties") {
-            readTrackProperties(&trackChildNode, track.get());
+            readTrackProperties(&trackChildNode, track.get(), false);
         } else if (nodeName == u"Instrument") {
             setUpInstrument(&trackChildNode, track.get());
         } else if (nodeName == u"Lyrics") {
