@@ -121,6 +121,8 @@ StyledDialogView {
 
                         Layout.fillWidth: true
 
+                        background.border.color: ui.theme.accentColor
+
                         hint: qsTrc("shortcuts", "Type to set shortcut")
                         readOnly: true
                         currentText: model.newSequence
