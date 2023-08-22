@@ -803,10 +803,18 @@ QString readRootFile(MQZipReader* uz, QList<QString>& images)
                         const QStringRef& tag(e.name());
 
                         if (tag == "rootfile") {
-                              if (rootfile.isEmpty()) {
-                                    rootfile = e.attribute("full-path");
-                                    e.skipCurrentElement();
+                              QString file = e.attribute("full-path");
+
+                              // pick first .mscx (or .xml, for workspaces) from a .mscz (resp. .workspace), works for Mu4 too.
+                              if (rootfile.isEmpty() && (file.endsWith(".mscx") || file.endsWith(".xml"))) {
+                                    rootfile = file;
                                     }
+
+                              // 4.x images are recorded as rootfile items, not as file items
+                              if (file.startsWith("Pictures/")) {
+                                    images.append(file);
+                                    }
+                              e.skipCurrentElement();
                               }
                         else if (tag == "file")
                               images.append(e.readElementText());
@@ -827,8 +835,8 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       {
       MQZipReader uz(io);
 
-      QList<QString> sl;
-      QString rootfile = readRootFile(&uz, sl);
+      QList<QString> images;
+      QString rootfile = readRootFile(&uz, images);
       if (rootfile.isEmpty())
             return FileError::FILE_NO_ROOTFILE;
 
@@ -836,7 +844,7 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       // load images
       //
       if (!MScore::noImages) {
-            foreach(const QString& s, sl) {
+            for (const QString& s : images) {
                   QByteArray dbuf = uz.fileData(s);
                   imageStore.add(s, dbuf);
                   }
@@ -845,7 +853,7 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       QByteArray dbuf = uz.fileData(rootfile);
       if (dbuf.isEmpty()) {
             QVector<MQZipReader::FileInfo> fil = uz.fileInfoList();
-            foreach(const MQZipReader::FileInfo& fi, fil) {
+            for (const MQZipReader::FileInfo& fi : fil) {
                   if (fi.filePath.endsWith(".mscx")) {
                         dbuf = uz.fileData(fi.filePath);
                         break;
@@ -857,6 +865,39 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
       FileError retval = read1(e, ignoreVersionError);
+
+      QByteArray sbuf = uz.fileData("score_style.mss"); // exists in Mu4 scores only
+      if (!sbuf.isEmpty()) {
+            XmlReader e(sbuf);
+            while (e.readNextStartElement()) {
+                  if (e.name() == "museScore") {
+                        while (e.readNextStartElement()) {
+                              if (e.name() == "Style")
+                                    masterScore()->style().load(e);
+                              else
+                                    e.unknown();
+                              }
+                        }
+                  }
+            }
+
+      QByteArray vbuf = uz.fileData("viewsettings.json");  // exists in Mu4 scores only
+      if (!vbuf.isEmpty()) {
+            QJsonDocument doc = QJsonDocument::fromJson(vbuf);
+            QJsonObject obj = doc.object();
+            QString viewMode = obj["notation"].toObject()["viewMode"].toString();
+
+            if (viewMode == "continuous_v")
+                  masterScore()->setLayoutMode(LayoutMode::LINE);
+            else if ( viewMode == "continuous_h")
+                  masterScore()->setLayoutMode(LayoutMode::SYSTEM);
+#if 0
+            else if (viewMode == "page") // not neeed, is the default anyhow
+                  masterScore()->setLayoutMode(LayoutMode::PAGE);
+            else // should never happen!
+                  masterScore()->setLayoutMode(LayoutMode::FLOAT);
+#endif
+            }
 
 #ifdef OMR
       //
