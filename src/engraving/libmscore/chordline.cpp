@@ -22,13 +22,11 @@
 
 #include "chordline.h"
 
-#include "iengravingfont.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
 
 #include "chord.h"
 #include "note.h"
-#include "score.h"
 
 #include "log.h"
 
@@ -51,7 +49,6 @@ ChordLine::ChordLine(Chord* parent)
 ChordLine::ChordLine(const ChordLine& cl)
     : EngravingItem(cl)
 {
-    m_path     = cl.m_path;
     m_modified = cl.m_modified;
     m_chordLineType = cl.m_chordLineType;
     m_straight = cl.m_straight;
@@ -93,7 +90,9 @@ void ChordLine::startEditDrag(EditData& ed)
 
 void ChordLine::editDrag(EditData& ed)
 {
-    auto n = m_path.elementCount();
+    const draw::PainterPath& path = mutLayoutData()->path;
+
+    auto n = path.elementCount();
     PainterPath p;
     m_lengthX += ed.delta.x();
     m_lengthY += ed.delta.y();
@@ -115,13 +114,13 @@ void ChordLine::editDrag(EditData& ed)
 
     bool curvative = !m_wavy && !m_straight;
     for (size_t i = 0; i < n; ++i) {
-        const PainterPath::Element& e = curvative ? m_path.elementAt(i) : m_path.elementAt(1);
+        const PainterPath::Element& e = curvative ? path.elementAt(i) : path.elementAt(1);
         if (!curvative) {
             if (i > 0) {
                 break;
             }
             // check the gradient of the line
-            const PainterPath::Element& startPoint = m_path.elementAt(0);
+            const PainterPath::Element& startPoint = path.elementAt(0);
             if ((m_chordLineType == ChordLineType::FALL && (e.x + dx < startPoint.x || e.y + dy < startPoint.y))
                 || (m_chordLineType == ChordLineType::DOIT && (e.x + dx < startPoint.x || e.y + dy > startPoint.y))
                 || (m_chordLineType == ChordLineType::SCOOP && (e.x + dx > startPoint.x || e.y + dy < startPoint.y))
@@ -147,10 +146,10 @@ void ChordLine::editDrag(EditData& ed)
             break;
         case PainterPath::ElementType::CurveToElement:
         {
-            double x2 = m_path.elementAt(i + 1).x;
-            double y2 = m_path.elementAt(i + 1).y;
-            double x3 = m_path.elementAt(i + 2).x;
-            double y3 = m_path.elementAt(i + 2).y;
+            double x2 = path.elementAt(i + 1).x;
+            double y2 = path.elementAt(i + 1).y;
+            double x3 = path.elementAt(i + 2).x;
+            double y3 = path.elementAt(i + 2).y;
             if (Grip(i + 1) == ed.curGrip) {
                 x2 += dx;
                 y2 += dy;
@@ -164,7 +163,7 @@ void ChordLine::editDrag(EditData& ed)
         break;
         }
     }
-    m_path = p;
+    mutLayoutData()->path = p;
     m_modified = true;
 }
 
@@ -179,7 +178,13 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         return {};
     }
 
-    auto n   = m_path.elementCount();
+    IF_ASSERT_FAILED(layoutData()) {
+        return {};
+    }
+
+    const draw::PainterPath& path = layoutData()->path;
+
+    size_t n = path.elementCount();
     PointF cp(pagePos());
     if (m_straight) {
         // limit the number of grips to one
@@ -197,12 +202,12 @@ std::vector<PointF> ChordLine::gripsPositions(const EditData&) const
         }
 
         // translate on the length and height - stops the grips from going past boundaries of slide
-        p += (cp + PointF(m_path.elementAt(1).x, m_path.elementAt(1).y));
+        p += (cp + PointF(path.elementAt(1).x, path.elementAt(1).y));
         return { p };
     } else {
         std::vector<PointF> grips(n);
         for (size_t i = 0; i < n; ++i) {
-            grips[i] = cp + PointF(m_path.elementAt(i).x, m_path.elementAt(i).y);
+            grips[i] = cp + PointF(path.elementAt(i).x, path.elementAt(i).y);
         }
         return grips;
     }
@@ -262,7 +267,7 @@ PropertyValue ChordLine::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::PATH:
-        return PropertyValue::fromValue(m_path);
+        return PropertyValue::fromValue(layoutData()->path);
     case Pid::CHORD_LINE_TYPE:
         return int(m_chordLineType);
     case Pid::CHORD_LINE_STRAIGHT:
@@ -285,7 +290,7 @@ bool ChordLine::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::PATH:
-        m_path = val.value<PainterPath>();
+        mutLayoutData()->path = val.value<PainterPath>();
         break;
     case Pid::CHORD_LINE_TYPE:
         setChordLineType(ChordLineType(val.toInt()));

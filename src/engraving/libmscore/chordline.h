@@ -64,8 +64,6 @@ public:
     double lengthX() const { return m_lengthX; }
     void setLengthY(double length) { m_lengthY = length; }
     double lengthY() const { return m_lengthY; }
-    void setPath(const draw::PainterPath& p) { m_path = p; }
-    const draw::PainterPath& path() const { return m_path; }
     void setModified(bool m) { m_modified = m; }
     bool modified() const { return m_modified; }
 
@@ -81,7 +79,7 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     bool needStartEditingAfterSelecting() const override { return true; }
-    int gripsCount() const override { return m_straight ? 1 : static_cast<int>(m_path.elementCount()); }
+    int gripsCount() const override { return m_straight ? 1 : static_cast<int>(layoutData()->path.elementCount()); }
     Grip initialEditModeGrip() const override { return Grip(gripsCount() - 1); }
     Grip defaultGrip() const override { return initialEditModeGrip(); }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override;
@@ -95,6 +93,17 @@ public:
     void setNote(Note* note);
     Note* note() const { return m_note; }
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        draw::PainterPath path;
+    };
+
+    DECLARE_LAYOUTDATA_METHODS(ChordLine);
+
+    //! --- Old Interface ---
+    void setPath(const draw::PainterPath& p) { mutLayoutData()->path = p; }
+    const draw::PainterPath& path() const { return layoutData()->path; }
+    //! ---------------------
+
 private:
 
     friend class Factory;
@@ -106,7 +115,6 @@ private:
     bool m_wavy = false;
 
     ChordLineType m_chordLineType = ChordLineType::NOTYPE;
-    draw::PainterPath m_path;
     bool m_modified = false;
     double m_lengthX = 0.0;
     double m_lengthY = 0.0;

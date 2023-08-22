@@ -536,8 +536,6 @@ public:
 
     void setMag(double val) { mutLayoutData()->mag = val; }
 
-    //! ---------------------
-
 protected:
     EngravingItem(const ElementType& type, EngravingObject* parent = nullptr, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);

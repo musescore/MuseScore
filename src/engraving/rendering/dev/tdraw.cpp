@@ -1057,10 +1057,15 @@ void TDraw::draw(const Breath* item, Painter* painter)
 void TDraw::draw(const ChordLine* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    const ChordLine::LayoutData* ldata = item->layoutData();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
     if (!item->isWavy()) {
         painter->setPen(Pen(item->curColor(), item->style().styleMM(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
         painter->setBrush(BrushStyle::NoBrush);
-        painter->drawPath(item->path());
+        painter->drawPath(ldata->path);
     } else {
         painter->save();
         painter->rotate((item->chordLineType() == ChordLineType::FALL ? 1 : -1) * ChordLine::WAVE_ANGEL);
@@ -1072,11 +1077,17 @@ void TDraw::draw(const ChordLine* item, Painter* painter)
 void TDraw::draw(const Clef* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    if (item->symId() == SymId::noSym || (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genClef())) {
+    const Clef::LayoutData* ldata = item->layoutData();
+    IF_ASSERT_FAILED(ldata) {
         return;
     }
+
+    if (ldata->symId == SymId::noSym || (item->staff() && !const_cast<const Staff*>(item->staff())->staffType(item->tick())->genClef())) {
+        return;
+    }
+
     painter->setPen(item->curColor());
-    item->drawSymbol(item->symId(), painter);
+    item->drawSymbol(ldata->symId, painter);
 }
 
 void TDraw::draw(const Capo* item, Painter* painter)

@@ -34,11 +34,9 @@
 #include "ambitus.h"
 #include "factory.h"
 #include "measure.h"
-#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
-#include "stafftype.h"
 #include "undo.h"
 
 #include "log.h"
@@ -96,10 +94,10 @@ const ClefInfo ClefInfo::clefTable[] = {
 //---------------------------------------------------------
 
 Clef::Clef(Segment* parent)
-    : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF), m_symId(SymId::noSym)
+    : EngravingItem(ElementType::CLEF, parent, ElementFlag::ON_STAFF)
 {
-    _clefToBarlinePosition = ClefToBarlinePosition::AUTO;
-    _isHeader = parent->isHeaderClefType();
+    m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
+    m_isHeader = parent->isHeaderClefType();
 }
 
 //---------------------------------------------------------
@@ -176,14 +174,14 @@ void Clef::setSmall(bool val)
 void Clef::setClefType(ClefType i)
 {
     if (concertPitch()) {
-        _clefTypes._concertClef = i;
-        if (_clefTypes._transposingClef == ClefType::INVALID) {
-            _clefTypes._transposingClef = i;
+        m_clefTypes._concertClef = i;
+        if (m_clefTypes._transposingClef == ClefType::INVALID) {
+            m_clefTypes._transposingClef = i;
         }
     } else {
-        _clefTypes._transposingClef = i;
-        if (_clefTypes._concertClef == ClefType::INVALID) {
-            _clefTypes._concertClef = i;
+        m_clefTypes._transposingClef = i;
+        if (m_clefTypes._concertClef == ClefType::INVALID) {
+            m_clefTypes._concertClef = i;
         }
     }
 }
@@ -194,7 +192,7 @@ void Clef::setClefType(ClefType i)
 
 void Clef::setConcertClef(ClefType val)
 {
-    _clefTypes._concertClef = val;
+    m_clefTypes._concertClef = val;
 }
 
 //---------------------------------------------------------
@@ -203,7 +201,7 @@ void Clef::setConcertClef(ClefType val)
 
 void Clef::setTransposingClef(ClefType val)
 {
-    _clefTypes._transposingClef = val;
+    m_clefTypes._transposingClef = val;
 }
 
 //---------------------------------------------------------
@@ -213,9 +211,9 @@ void Clef::setTransposingClef(ClefType val)
 ClefType Clef::clefType() const
 {
     if (concertPitch()) {
-        return _clefTypes._concertClef;
+        return m_clefTypes._concertClef;
     } else {
-        return _clefTypes._transposingClef;
+        return m_clefTypes._transposingClef;
     }
 }
 
@@ -283,12 +281,12 @@ Clef* Clef::otherClef()
 PropertyValue Clef::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::CLEF_TYPE_CONCERT:     return _clefTypes._concertClef;
-    case Pid::CLEF_TYPE_TRANSPOSING: return _clefTypes._transposingClef;
+    case Pid::CLEF_TYPE_CONCERT:     return m_clefTypes._concertClef;
+    case Pid::CLEF_TYPE_TRANSPOSING: return m_clefTypes._transposingClef;
     case Pid::SHOW_COURTESY: return showCourtesy();
     case Pid::SMALL:         return isSmall();
-    case Pid::CLEF_TO_BARLINE_POS: return _clefToBarlinePosition;
-    case Pid::IS_HEADER: return _isHeader;
+    case Pid::CLEF_TO_BARLINE_POS: return m_clefToBarlinePosition;
+    case Pid::IS_HEADER: return m_isHeader;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -308,8 +306,8 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
         setTransposingClef(v.value<ClefType>());
         break;
     case Pid::SHOW_COURTESY:
-        _showCourtesy = v.toBool();
-        if (_showCourtesy && isHeader() && selected()) {
+        m_showCourtesy = v.toBool();
+        if (m_showCourtesy && m_isHeader && selected()) {
             Clef* courtesyClef = otherClef();
             if (courtesyClef) {
                 score()->deselect(this);
@@ -321,12 +319,12 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
         setSmall(v.toBool());
         break;
     case Pid::CLEF_TO_BARLINE_POS:
-        if (v.value<ClefToBarlinePosition>() != _clefToBarlinePosition && !_isHeader) {
+        if (v.value<ClefToBarlinePosition>() != m_clefToBarlinePosition && !m_isHeader) {
             changeClefToBarlinePos(v.value<ClefToBarlinePosition>());
         }
         break;
     case Pid::IS_HEADER:
-        setIsHeader(v.toBool());
+        m_isHeader = v.toBool();
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);
@@ -337,7 +335,7 @@ bool Clef::setProperty(Pid propertyId, const PropertyValue& v)
 
 void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
 {
-    _clefToBarlinePosition = newPos;
+    m_clefToBarlinePosition = newPos;
 
     if (!explicitParent()) {
         return;
@@ -350,7 +348,7 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
     for (staff_idx_t staffIndex = 0; staffIndex < nStaves; ++staffIndex) {
         Clef* clef = static_cast<Clef*>(seg->elementAt(staffIndex * VOICES));
         if (clef) {
-            clef->setClefToBarlinePosition(newPos);
+            clef->m_clefToBarlinePosition = newPos;
         }
     }
 
@@ -466,7 +464,7 @@ void Clef::changeClefToBarlinePos(ClefToBarlinePosition newPos)
 void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
 {
     if (id == Pid::SHOW_COURTESY) {
-        if (v.toBool() != _showCourtesy) {
+        if (v.toBool() != m_showCourtesy) {
             score()->undo(new ChangeProperty(this, id, v, ps));
             Clef* pairedClef = otherClef();
             if (pairedClef) {
@@ -535,10 +533,11 @@ String Clef::accessibleInfo() const
 
 void Clef::clear()
 {
-    setbbox(RectF());
-    m_symId = SymId::noSym;
+    LayoutData* ldata = mutLayoutData();
+    ldata->bbox = RectF();
+    ldata->symId = SymId::noSym;
     Clef* pairedClef = otherClef();
-    if (selected() && !isHeader() && pairedClef) {
+    if (selected() && !m_isHeader && pairedClef) {
         score()->deselect(this);
         score()->select(pairedClef, SelectType::ADD, staffIdx());
     }

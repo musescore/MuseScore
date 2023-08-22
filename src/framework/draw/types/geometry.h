@@ -64,6 +64,7 @@ public:
 
     inline void setX(T x) { m_x = x; }
     inline void setY(T y) { m_y = y; }
+    inline void setXY(T x, T y) { m_x = x; m_y = y; }
     inline T x() const { return m_x; }
     inline T y() const { return m_y; }
 
