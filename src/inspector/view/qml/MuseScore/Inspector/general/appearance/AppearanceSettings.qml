@@ -93,6 +93,8 @@ Column {
     ArrangeSection {
         id: arrangeSection
 
+        arrangeOrderProperty: root.model ? root.model.arrangeOrder : null
+
         navigationPanel: root.navigationPanel
         navigationRowStart: offsetSection.navigationRowEnd
 
