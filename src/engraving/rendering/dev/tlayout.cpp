@@ -1491,11 +1491,11 @@ void TLayout::layout(Capo* item, LayoutContext& ctx)
     item->autoplaceSegmentElement();
 }
 
-void TLayout::layout(DeadSlapped* item, LayoutContext&)
+static void layoutDeadSlapped(const DeadSlapped* item, const LayoutContext&, DeadSlapped::LayoutData* data)
 {
     const double deadSlappedWidth = item->spatium() * 2;
     RectF rect = RectF(0, 0, deadSlappedWidth, item->staff()->height());
-    item->setbbox(rect);
+    data->bbox = rect;
 
     // fillPath
     {
@@ -1524,9 +1524,14 @@ void TLayout::layout(DeadSlapped* item, LayoutContext&)
         path2.lineTo(bottomLeft + offsetX);
         path2.lineTo(topRight);
 
-        item->setPath1(path1);
-        item->setPath2(path2);
+        data->path1 = path1;
+        data->path2 = path2;
     }
+}
+
+void TLayout::layout(DeadSlapped* item, LayoutContext& ctx)
+{
+    layoutDeadSlapped(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Dynamic* item, LayoutContext& ctx)

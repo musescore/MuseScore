@@ -42,20 +42,25 @@ public:
 
     DeadSlapped* clone() const override { return new DeadSlapped(*this); }
 
-    const mu::draw::PainterPath& path1() const { return m_path1; }
-    void setPath1(const mu::draw::PainterPath& p) { m_path1 = p; }
+    struct LayoutData : public EngravingItem::LayoutData {
+        mu::draw::PainterPath path1;
+        mu::draw::PainterPath path2;
+    };
 
-    const mu::draw::PainterPath& path2() const { return m_path2; }
-    void setPath2(const mu::draw::PainterPath& p) { m_path2 = p; }
+    DECLARE_LAYOUTDATA_METHODS(DeadSlapped);
+
+    //! --- Old Interface ---
+    const mu::draw::PainterPath& path1() const { return layoutData()->path1; }
+    void setPath1(const mu::draw::PainterPath& p) { mutLayoutData()->path1 = p; }
+    const mu::draw::PainterPath& path2() const { return layoutData()->path2; }
+    void setPath2(const mu::draw::PainterPath& p) { mutLayoutData()->path2 = p; }
+    //! ---------------------
 
 private:
 
     friend class Factory;
 
     DeadSlapped(Rest* parent);
-
-    mu::draw::PainterPath m_path1;
-    mu::draw::PainterPath m_path2;
 };
 } // namespace mu::engraving
 #endif
