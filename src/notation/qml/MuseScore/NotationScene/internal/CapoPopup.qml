@@ -95,7 +95,9 @@ StyledPopupView {
             currentValue: capoModel.capoIsOn
 
             model: [
+                //: as opposed to Off
                 { text: qsTrc("global", "On"), value: true },
+                //: as opposed to On
                 { text: qsTrc("global", "Off"), value: false }
             ]
 

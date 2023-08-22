@@ -93,6 +93,7 @@ MenuItem* PalettesPanelContextMenuModel::createIsSinglePaletteItem()
     item->setId(QString::fromStdString(TOGGLE_SINGLE_PALETTE_CODE));
 
     UiAction action;
+    //: This is the name of a setting that can be turned on or off. "Open" is a verb here.
     action.title = TranslatableString("palette", "Open only one palette at a time");
     action.code = TOGGLE_SINGLE_PALETTE_CODE;
     action.checkable = Checkable::Yes;
