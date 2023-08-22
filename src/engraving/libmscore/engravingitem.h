@@ -500,6 +500,16 @@ public:
         double mag = 1.0;           // standard magnification (derived value)
         PointF pos;                 // Reference position, relative to _parent, set by autoplace
         RectF bbox;                 // Bounding box relative to _pos + _offset
+
+        void movePosX(double x) { doSetPos(pos.x() + x, pos.y()); }
+        void movePosY(double y) { doSetPos(pos.x(), pos.y() + y); }
+
+    private:
+        inline void doSetPos(double x, double y)
+        {
+            pos.setX(x),
+            pos.setY(y);
+        }
     };
 
     const LayoutData* layoutData() const;
