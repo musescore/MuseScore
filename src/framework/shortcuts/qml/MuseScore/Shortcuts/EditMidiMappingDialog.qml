@@ -97,6 +97,8 @@ StyledDialogView {
 
                     Layout.fillWidth: true
 
+                    background.border.color: ui.theme.accentColor
+
                     readOnly: true
 
                     currentText: model.mappingTitle
