@@ -40,7 +40,7 @@ class NewInstanceLoadingScreenView : public QWidget
     INJECT(languages::ILanguagesService, languagesService)
 
 public:
-    explicit NewInstanceLoadingScreenView(const QString& openingFileName, QWidget* parent = nullptr);
+    explicit NewInstanceLoadingScreenView(bool forNewScore, const QString& openingFileName, QWidget* parent = nullptr);
 
 private:
     bool event(QEvent* event) override;

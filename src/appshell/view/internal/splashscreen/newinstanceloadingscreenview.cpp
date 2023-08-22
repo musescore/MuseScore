@@ -30,17 +30,20 @@
 
 using namespace mu::appshell;
 
-NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(const QString& openingFileName, QWidget* parent)
+NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(bool forNewScore, const QString& openingFileName, QWidget* parent)
     : QWidget(parent)
 {
     setAttribute(Qt::WA_TranslucentBackground);
 
-    if (openingFileName.isEmpty()) {
+    if (forNewScore) {
         m_message = qtrc("appshell", "Loading new score…\u200e");
         m_dialogSize = QSize(288, 80);
-    } else {
+    } else if (!openingFileName.isEmpty()) {
         m_message = qtrc("appshell", "Loading “%1”…\u200e").arg(openingFileName);
         m_dialogSize = QSize(360, 80);
+    } else {
+        m_message = qtrc("appshell", "Loading score…\u200e");
+        m_dialogSize = QSize(288, 80);
     }
 
     resize(m_dialogSize);

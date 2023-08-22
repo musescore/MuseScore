@@ -169,11 +169,15 @@ int App::run(int argc, char** argv)
         if (multiInstancesProvider()->isMainInstance()) {
             splashScreen = new SplashScreen(SplashScreen::Default);
         } else {
-            project::ProjectFile file = startupScenario()->startupScoreFile();
+            project::ProjectFileUrl file = startupScenario()->startupScoreFile();
             if (file.isValid()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, file.displayName(true /* includingExtension */));
+                if (file.hasDisplayName()) {
+                    splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
+                } else {
+                    splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
+                }
             } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance);
+                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
             } else {
                 splashScreen = new SplashScreen(SplashScreen::Default);
             }
