@@ -198,6 +198,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::GLISS_TEXT,              false, 0,                       P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "text") },
     { Pid::GLISS_SHOW_TEXT,         false, 0,                       P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "showing text") },
     { Pid::GLISS_STYLE,             true,  "glissandoStyle",        P_TYPE::GLISS_STYLE,    DUMMY_QT_TR_NOOP("propertyName", "glissando style") },
+    { Pid::GLISS_SHIFT,             false, "glissandoShift",        P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "glissando shift") },
     { Pid::GLISS_EASEIN,            false, "easeInSpin",            P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName","ease in") },
     { Pid::GLISS_EASEOUT,           false, "easeOutSpin",           P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "ease out") },
     { Pid::DIAGONAL,                false, 0,                       P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "diagonal") },

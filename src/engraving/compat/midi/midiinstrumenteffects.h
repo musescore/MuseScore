@@ -26,7 +26,8 @@
 namespace mu::engraving {
 enum class MidiInstrumentEffect {
     NONE = 0,
-    PALM_MUTE
+    PALM_MUTE,
+    SLIDE
 };
 }
 

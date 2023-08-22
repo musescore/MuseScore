@@ -971,7 +971,7 @@ bool GuitarPro5::read(IODevice* io)
                         if (br) {
                             break;
                         }
-                        Glissando* s = new Glissando(n);
+                        Glissando* s = mu::engraving::Factory::createGlissando(n);
                         s->setAnchor(Spanner::Anchor::NOTE);
                         s->setStartElement(n);
                         s->setTick(n->chord()->segment()->tick());

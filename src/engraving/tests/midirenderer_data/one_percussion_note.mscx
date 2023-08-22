@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.00">
-  <programVersion>4.1.0</programVersion>
+<museScore version="4.10">
+  <programVersion>4.2.0</programVersion>
   <programRevision></programRevision>
   <Score>
     <Division>480</Division>
@@ -20,6 +20,7 @@
     <metaTag name="platform">Apple Macintosh</metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>

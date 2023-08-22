@@ -84,6 +84,9 @@ public:
     void setEffect(MidiInstrumentEffect effect) { _effect = effect; }
     MidiInstrumentEffect effect() const { return _effect; }
 
+    void setSlide(bool slide) { m_slide = slide; }
+    bool slide() const { return m_slide; }
+
     size_t getOriginatingStaff() const { return _origin; }
     void setOriginatingStaff(size_t i) { _origin = i; }
     void setDiscard(size_t d) { _discard = d; }
@@ -105,6 +108,7 @@ private:
     size_t _origin = size_t(-1);
     size_t _discard = 0;
     bool _portamento = false;
+    bool m_slide = false;
     MidiInstrumentEffect _effect = MidiInstrumentEffect::NONE;
 };
 

@@ -1064,7 +1064,7 @@ bool GuitarPro4::read(IODevice* io)
                                 if (cr1) {
                                     for (auto n : cr1->notes()) {
                                         if (n->string() == last->string()) {
-                                            Glissando* s = new Glissando(n);
+                                            Glissando* s = mu::engraving::Factory::createGlissando(n);
                                             s->setAnchor(Spanner::Anchor::NOTE);
                                             s->setStartElement(n);
                                             s->setTick(seg->tick());

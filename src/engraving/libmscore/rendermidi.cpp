@@ -607,11 +607,10 @@ int totalTiedNoteTicks(Note* note)
 }
 
 //---------------------------------------------------------
-//   noteHasGlissando
-// true if note is the end of a glissando
+//   noteIsGlissandoStart
 //---------------------------------------------------------
 
-static bool noteHasGlissando(Note* note)
+static bool noteIsGlissandoStart(Note* note)
 {
     for (Spanner* spanner : note->spannerFor()) {
         if ((spanner->type() == ElementType::GLISSANDO)
@@ -621,6 +620,22 @@ static bool noteHasGlissando(Note* note)
         }
     }
     return false;
+}
+
+//---------------------------------------------------------
+//   backGlissando
+//---------------------------------------------------------
+
+static Glissando* backGlissando(Note* note)
+{
+    for (Spanner* spanner : note->spannerBack()) {
+        if ((spanner->type() == ElementType::GLISSANDO)
+            && spanner->startElement()
+            && (ElementType::NOTE == spanner->startElement()->type())) {
+            return toGlissando(spanner);
+        }
+    }
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -651,7 +666,7 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 
     ///@NOTE grace note + glissando combination is treated separetely, in this method grace notes for glissando are not added
     /// graceOnBeatProportion is used for calculating grace note "on beat" offset
-    int gnb = noteHasGlissando(note) ? 0 : int(note->chord()->graceNotesBefore().size());
+    int gnb = noteIsGlissandoStart(note) ? 0 : int(note->chord()->graceNotesBefore().size());
     int p = int(prefix.size());
     int b = int(body.size());
     int s = int(suffix.size());
@@ -777,7 +792,7 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
     }
     // render the graceNotesBefore
     ///@NOTE grace note + glissando combination is treated separetely
-    if (!noteHasGlissando(note)) {
+    if (!noteIsGlissandoStart(note)) {
         ontime = graceExtend(note->pitch(), note->chord()->graceNotesBefore(), ontime);
     }
 
@@ -821,7 +836,6 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
         }
         if (isGlissando) {
             const double defaultVelocityMultiplier = 1.0;
-            const double glissandoVelocityMultiplier = NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER;
 
             // render the body, i.e. the glissando
             if (onTimes.size() > 1) {
@@ -831,11 +845,13 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 
             for (int j = 1; j < b - 1; j++) {
                 makeEvent(body[j], onTimes[j], onTimes[j + 1] - onTimes[j],
-                          glissandoVelocityMultiplier);
+                          defaultVelocityMultiplier);
+                events->back().setSlide(true);
             }
 
             if (b > 1) {
-                makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, glissandoVelocityMultiplier);
+                makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, defaultVelocityMultiplier);
+                events->back().setSlide(true);
             }
         } else {
             // render the body, but not the final repetition
@@ -1065,7 +1081,7 @@ static void renderChordArticulation(Chord* chord, std::vector<NoteEventList>& el
         Note* note = chord->notes()[k];
         Trill* trill;
 
-        if (noteHasGlissando(note)) {
+        if (noteIsGlissandoStart(note)) {
             renderGlissando(events, note, graceOnBeatProportion, tremoloBefore);
         } else if (chord->staff()->isPitchedStaff(chord->tick()) && (trill = findFirstTrill(chord)) != nullptr) {
             renderNoteArticulation(events, note, false, trill->trillType(), trill->ornamentStyle());
@@ -1148,7 +1164,9 @@ static void createSlideInNotePlayEvents(Note* note, NoteEventList* el)
     int pitchOffset = note->slideToType() == Note::SlideType::UpToNote ? 1 : -1;
     int pitch = pitchOffset * slideNotes;
     for (int i = 0; i < slideNotes; ++i) {
-        el->push_back(NoteEvent(pitch, 0, slideDuration, NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER, true, totalSlideDuration - slideOn));
+        NoteEvent event { pitch, 0, slideDuration, 1.0, true, totalSlideDuration - slideOn };
+        event.setSlide(true);
+        el->push_back(std::move(event));
         slideOn += slideDuration;
         pitch -= pitchOffset;
     }
@@ -1174,7 +1192,9 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTi
     int pitchOffset = note->slideFromType() == Note::SlideType::UpFromNote ? 1 : -1;
     for (int i = 0; i < slideNotes; ++i) {
         pitch += pitchOffset;
-        el->push_back(NoteEvent(pitch, slideOn, slideDuration, velocity * NoteEvent::GLISSANDO_VELOCITY_MULTIPLIER));
+        NoteEvent event { pitch, slideOn, slideDuration, velocity };
+        event.setSlide(true);
+        el->push_back(std::move(event));
         slideOn += slideDuration;
     }
 }
@@ -1200,11 +1220,11 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
     /// when note has glissando or slide from note, tremolo should be shortened
     double tremoloLength = 1.0;
 
-    bool hasGlissando = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
-        return noteHasGlissando(note);
+    bool glissandoStart = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
+        return noteIsGlissandoStart(note);
     });
 
-    if (hasGlissando) {
+    if (glissandoStart) {
         tremoloLength = 0.5;
     } else {
         bool hasSlideOut = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
@@ -1244,6 +1264,11 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         if (el->empty() && chord->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
             el->push_back(NoteEvent(0, ontime, 1000 - trailtime,
                                     !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER));
+
+            Glissando* gl = backGlissando(note);
+            if (gl && !gl->glissandoShift()) {
+                el->back().setSlide(true);
+            }
         }
 
         createSlideInNotePlayEvents(note, el);
@@ -1466,6 +1491,7 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
             event.setPitch(prevEvent.pitch());
             event.setOffset(prevEvent.offset());
             event.setVelocityMultiplier(prevEvent.velocityMultiplier());
+            event.setSlide(prevEvent.slide());
             int prevLen = prevEvent.len();
 
             // not shortening events before beat
