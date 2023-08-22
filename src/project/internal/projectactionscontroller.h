@@ -98,7 +98,6 @@ private:
     void newProject();
 
     void openProject(const actions::ActionData& args);
-    void doOpenProject(const io::path_t& path, int scoreId);
     void downloadAndOpenCloudProject(int scoreId);
 
     void showScoreDownloadError(const Ret& ret);
@@ -165,7 +164,7 @@ private:
 
     void revertCorruptedScoreToLastSaved();
 
-    ProjectFile makeRecentFile(INotationProjectPtr project);
+    ProjectFilePath makeRecentFile(INotationProjectPtr project);
 
     void moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace);
 

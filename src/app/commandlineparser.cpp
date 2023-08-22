@@ -463,7 +463,7 @@ void CommandLineParser::parse(int argc, char** argv)
     // Startup
     if (m_runMode == IApplication::RunMode::GuiApp) {
         if (!scorefiles.isEmpty()) {
-            m_options.startup.scorePath = scorefiles[0].toStdString();
+            m_options.startup.scoreUrl = QUrl::fromUserInput(scorefiles[0]);
         }
 
         if (m_parser.isSet("score-display-name-override")) {

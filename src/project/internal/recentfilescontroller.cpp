@@ -52,7 +52,7 @@ void RecentFilesController::init()
     });
 }
 
-const ProjectFilesList& RecentFilesController::recentFilesList() const
+const ProjectFilePathsList& RecentFilesController::recentFilesList() const
 {
     TRACEFUNC;
 
@@ -70,7 +70,7 @@ Notification RecentFilesController::recentFilesListChanged() const
     return m_recentFilesListChanged;
 }
 
-void RecentFilesController::prependRecentFile(const ProjectFile& newFile)
+void RecentFilesController::prependRecentFile(const ProjectFilePath& newFile)
 {
     if (!newFile.isValid()) {
         return;
@@ -78,11 +78,11 @@ void RecentFilesController::prependRecentFile(const ProjectFile& newFile)
 
     TRACEFUNC;
 
-    ProjectFilesList newList;
+    ProjectFilePathsList newList;
     newList.reserve(m_recentFilesList.size() + 1);
     newList.push_back(newFile);
 
-    for (const ProjectFile& file : m_recentFilesList) {
+    for (const ProjectFilePath& file : m_recentFilesList) {
         if (file.path != newFile.path && fileSystem()->exists(file.path)) {
             newList.push_back(file);
         }
@@ -93,12 +93,12 @@ void RecentFilesController::prependRecentFile(const ProjectFile& newFile)
     prependPlatformRecentFile(newFile.path);
 }
 
-void RecentFilesController::moveRecentFile(const io::path_t& before, const ProjectFile& after)
+void RecentFilesController::moveRecentFile(const io::path_t& before, const ProjectFilePath& after)
 {
     bool moved = false;
-    ProjectFilesList newList = m_recentFilesList;
+    ProjectFilePathsList newList = m_recentFilesList;
 
-    for (ProjectFile& file : newList) {
+    for (ProjectFilePath& file : newList) {
         if (file.path == before) {
             file = after;
             moved = true;
@@ -124,7 +124,7 @@ void RecentFilesController::clearPlatformRecentFiles() {}
 
 void RecentFilesController::loadRecentFilesList()
 {
-    ProjectFilesList newList;
+    ProjectFilePathsList newList;
 
     DEFER {
         setRecentFilesList(newList, false);
@@ -163,7 +163,7 @@ void RecentFilesController::loadRecentFilesList()
             newList.emplace_back(io::path_t(val.toStdString()));
         } else if (val.isObject()) {
             const JsonObject obj = val.toObject();
-            ProjectFile file;
+            ProjectFilePath file;
             file.path = obj["path"].toStdString();
             file.displayNameOverride = QString::fromStdString(obj["displayName"].toStdString());
             newList.push_back(file);
@@ -177,10 +177,10 @@ void RecentFilesController::removeNonexistentFiles()
 {
     bool removed = false;
 
-    ProjectFilesList newList;
+    ProjectFilePathsList newList;
     newList.reserve(m_recentFilesList.size());
 
-    for (const ProjectFile& file : m_recentFilesList) {
+    for (const ProjectFilePath& file : m_recentFilesList) {
         if (fileSystem()->exists(file.path)) {
             newList.push_back(file);
         } else {
@@ -199,7 +199,7 @@ void RecentFilesController::removeNonexistentFiles()
     }
 }
 
-void RecentFilesController::setRecentFilesList(const ProjectFilesList& list, bool saveAndNotify)
+void RecentFilesController::setRecentFilesList(const ProjectFilePathsList& list, bool saveAndNotify)
 {
     if (m_recentFilesList == list) {
         return;
@@ -227,7 +227,7 @@ void RecentFilesController::saveRecentFilesList()
     };
 
     JsonArray jsonArray;
-    for (const ProjectFile& file : m_recentFilesList) {
+    for (const ProjectFilePath& file : m_recentFilesList) {
         if (!file.displayNameOverride.isEmpty()) {
             JsonObject obj;
             obj["path"] = file.path.toStdString();
@@ -281,7 +281,7 @@ Promise<QPixmap> RecentFilesController::thumbnail(const io::path_t& filePath) co
     }, Promise<QPixmap>::AsynchronyType::ProvidedByBody);
 }
 
-void RecentFilesController::cleanUpThumbnailCache(const ProjectFilesList& files)
+void RecentFilesController::cleanUpThumbnailCache(const ProjectFilePathsList& files)
 {
     QtConcurrent::run([this, files] {
         std::lock_guard lock(m_thumbnailCacheMutex);
@@ -291,7 +291,7 @@ void RecentFilesController::cleanUpThumbnailCache(const ProjectFilesList& files)
         } else {
             std::map<io::path_t, CachedThumbnail> cleanedCache;
 
-            for (const ProjectFile& file : files) {
+            for (const ProjectFilePath& file : files) {
                 auto it = m_thumbnailCache.find(file.path);
                 if (it != m_thumbnailCache.cend()) {
                     cleanedCache[file.path] = it->second;

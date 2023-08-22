@@ -48,7 +48,7 @@ void ScoresPageModel::openOther()
 
 void ScoresPageModel::openScore(const QString& scorePath, const QString& displayNameOverride)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg2<io::path_t, QString>(io::path_t(scorePath), displayNameOverride));
+    dispatcher()->dispatch("file-open", ActionData::make_arg2<QUrl, QString>(QUrl::fromLocalFile(scorePath), displayNameOverride));
 }
 
 void ScoresPageModel::openScoreManager()

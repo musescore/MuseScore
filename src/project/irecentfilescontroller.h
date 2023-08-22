@@ -39,11 +39,11 @@ class IRecentFilesController : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IRecentFilesController() = default;
 
-    virtual const ProjectFilesList& recentFilesList() const = 0;
+    virtual const ProjectFilePathsList& recentFilesList() const = 0;
     virtual async::Notification recentFilesListChanged() const = 0;
 
-    virtual void prependRecentFile(const ProjectFile& file) = 0;
-    virtual void moveRecentFile(const io::path_t& before, const ProjectFile& after) = 0;
+    virtual void prependRecentFile(const ProjectFilePath& file) = 0;
+    virtual void moveRecentFile(const io::path_t& before, const ProjectFilePath& after) = 0;
     virtual void clearRecentFiles() = 0;
 
     virtual async::Promise<QPixmap> thumbnail(const io::path_t& filePath) const = 0;

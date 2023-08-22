@@ -58,7 +58,7 @@ void RecentScoresModel::setRecentScores(const std::vector<QVariantMap>& items)
 
 void RecentScoresModel::updateRecentScores()
 {
-    const ProjectFilesList& recentScores = recentFilesController()->recentFilesList();
+    const ProjectFilePathsList& recentScores = recentFilesController()->recentFilesList();
 
     std::vector<QVariantMap> items;
     items.reserve(recentScores.size());
@@ -70,7 +70,7 @@ void RecentScoresModel::updateRecentScores()
     addItem[IS_CLOUD_KEY] = false;
     items.push_back(addItem);
 
-    for (const ProjectFile& file : recentScores) {
+    for (const ProjectFilePath& file : recentScores) {
         QVariantMap obj;
 
         std::string suffix = io::suffix(file.path);

@@ -64,7 +64,7 @@ void SessionsManager::restore()
     }
 
     for (const io::path_t& path : projects) {
-        dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<io::path_t>(path));
+        dispatcher()->dispatch("file-open", actions::ActionData::make_arg1<QUrl>(path.toQUrl()));
     }
 }
 

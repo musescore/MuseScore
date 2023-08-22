@@ -145,10 +145,10 @@ bool ProjectActionsController::isFileSupported(const io::path_t& path) const
 
 void ProjectActionsController::openProject(const actions::ActionData& args)
 {
-    io::path_t projectPath = !args.empty() ? args.arg<io::path_t>(0) : "";
+    QUrl url = !args.empty() ? args.arg<QUrl>(0) : QUrl();
     QString displayNameOverride = args.count() >= 2 ? args.arg<QString>(1) : QString();
 
-    openProject(ProjectFile(projectPath, displayNameOverride));
+    openProject(ProjectFileUrl(url, displayNameOverride));
 }
 
 Ret ProjectActionsController::openProject(const io::path_t& path)
@@ -1336,9 +1336,9 @@ void ProjectActionsController::revertCorruptedScoreToLastSaved()
     }
 }
 
-ProjectFile ProjectActionsController::makeRecentFile(INotationProjectPtr project)
+ProjectFilePath ProjectActionsController::makeRecentFile(INotationProjectPtr project)
 {
-    ProjectFile file;
+    ProjectFilePath file;
     file.path = project->path();
 
     if (project->isCloudProject()) {
@@ -1508,7 +1508,7 @@ void ProjectActionsController::clearRecentScores()
 
 void ProjectActionsController::continueLastSession()
 {
-    const ProjectFilesList& recentScorePaths = recentFilesController()->recentFilesList();
+    const ProjectFilePathsList& recentScorePaths = recentFilesController()->recentFilesList();
 
     if (recentScorePaths.empty()) {
         Ret ret = openPageIfNeed(HOME_PAGE_URI);

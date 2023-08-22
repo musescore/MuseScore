@@ -87,7 +87,7 @@ public:
 
         struct {
             std::optional<std::string> type;
-            std::optional<io::path_t> scorePath;
+            std::optional<QUrl> scoreUrl;
             std::optional<QString> scoreDisplayNameOverride;
         } startup;
     };
