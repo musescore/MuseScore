@@ -2850,7 +2850,7 @@ void TDraw::draw(const Tremolo* item, Painter* painter)
         if (item->beamSegments().size() > 1 && d > M_PI / 6.0) {
             d = M_PI / 6.0;
         }
-        double ww = (item->style().styleMM(Sid::beamWidth).val() / 2.0) / sin(M_PI_2 - atan(d));
+        double ww = (item->beamWidth() / 2.0) / sin(M_PI_2 - atan(d));
         painter->setBrush(Brush(item->curColor()));
         painter->setNoPen();
         for (const BeamSegment* bs1 : item->beamSegments()) {
