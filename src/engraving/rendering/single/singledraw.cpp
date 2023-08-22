@@ -984,10 +984,15 @@ void SingleDraw::draw(const Breath* item, Painter* painter)
 void SingleDraw::draw(const ChordLine* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    const ChordLine::LayoutData* ldata = item->layoutData();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
     if (!item->isWavy()) {
         painter->setPen(Pen(item->curColor(), item->style().styleMM(Sid::chordlineThickness) * item->mag(), PenStyle::SolidLine));
         painter->setBrush(BrushStyle::NoBrush);
-        painter->drawPath(item->path());
+        painter->drawPath(ldata->path);
     } else {
         painter->save();
         painter->rotate((item->chordLineType() == ChordLineType::FALL ? 1 : -1) * ChordLine::WAVE_ANGEL);
@@ -999,11 +1004,16 @@ void SingleDraw::draw(const ChordLine* item, Painter* painter)
 void SingleDraw::draw(const Clef* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    if (item->symId() == SymId::noSym) {
+    const Clef::LayoutData* ldata = item->layoutData();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
+    if (ldata->symId == SymId::noSym) {
         return;
     }
     painter->setPen(item->curColor());
-    item->drawSymbol(item->symId(), painter);
+    item->drawSymbol(ldata->symId, painter);
 }
 
 void SingleDraw::draw(const Capo* item, Painter* painter)

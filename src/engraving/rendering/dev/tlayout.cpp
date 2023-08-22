@@ -1263,13 +1263,18 @@ void TLayout::layout(Chord* item, LayoutContext& ctx)
     ChordLayout::layout(item, ctx);
 }
 
-void TLayout::layout(ChordLine* item, LayoutContext& ctx)
+static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, ChordLine::LayoutData* data)
 {
-    item->setMag(item->chord() ? item->chord()->mag() : 1);
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
+    }
+
+    data->mag = item->chord()->mag();
+
     if (!item->modified()) {
         double x2 = 0;
         double y2 = 0;
-        double baseLength = item->spatium() * (item->chord() ? item->chord()->intrinsicMag() : 1);
+        double baseLength = item->spatium() * item->chord()->intrinsicMag();
         double horBaseLength = 1.2 * baseLength;     // let the symbols extend a bit more horizontally
         x2 += item->isToTheLeft() ? -horBaseLength : horBaseLength;
         y2 += item->isBelow() ? baseLength : -baseLength;
@@ -1288,52 +1293,48 @@ void TLayout::layout(ChordLine* item, LayoutContext& ctx)
                     path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
                 }
             }
-            item->setPath(path);
+            data->path = path;
         }
     }
 
-    if (item->explicitParent()) {
-        Note* note = nullptr;
+    Note* note = nullptr;
 
-        if (item->note()) {
-            note = item->chord()->findNote(item->note()->pitch());
-        }
-
-        if (!note) {
-            note = item->chord()->upNote();
-        }
-
-        double x = 0.0;
-        double y = note->pos().y();
-        double horOffset = 0.33 * item->spatium();     // one third of a space away from the note
-        double vertOffset = 0.25 * item->spatium();     // one quarter of a space from the center line
-        // Get chord shape
-        Shape chordShape = item->chord()->shape();
-        // ...but remove from the shape items that the chordline shouldn't try to avoid
-        // (especially the chordline itself)
-        mu::remove_if(chordShape, [](ShapeElement& shapeEl){
-            if (!shapeEl.toItem) {
-                return true;
-            }
-            const EngravingItem* item = shapeEl.toItem;
-            if (item->isChordLine() || item->isHarmony() || item->isLyrics()) {
-                return true;
-            }
-            return false;
-        });
-        x += item->isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
-        y += item->isBelow() ? vertOffset : -vertOffset;
-
-        /// TODO: calculate properly the position for wavy type
-        if (item->isWavy()) {
-            bool upDir = item->chordLineType() == ChordLineType::DOIT;
-            y += note->height() * (upDir ? 0.8 : -0.3);
-        }
-
-        item->setPos(x, y);
-    } else {
-        item->setPos(0.0, 0.0);
+    if (item->note()) {
+        note = item->chord()->findNote(item->note()->pitch());
     }
+
+    if (!note) {
+        note = item->chord()->upNote();
+    }
+
+    double x = 0.0;
+    double y = note->pos().y();
+    double horOffset = 0.33 * item->spatium();         // one third of a space away from the note
+    double vertOffset = 0.25 * item->spatium();         // one quarter of a space from the center line
+    // Get chord shape
+    Shape chordShape = item->chord()->shape();
+    // ...but remove from the shape items that the chordline shouldn't try to avoid
+    // (especially the chordline itself)
+    mu::remove_if(chordShape, [](ShapeElement& shapeEl){
+        if (!shapeEl.toItem) {
+            return true;
+        }
+        const EngravingItem* item = shapeEl.toItem;
+        if (item->isChordLine() || item->isHarmony() || item->isLyrics()) {
+            return true;
+        }
+        return false;
+    });
+    x += item->isToTheLeft() ? -chordShape.left() - horOffset : chordShape.right() + horOffset;
+    y += item->isBelow() ? vertOffset : -vertOffset;
+
+    /// TODO: calculate properly the position for wavy type
+    if (item->isWavy()) {
+        bool upDir = item->chordLineType() == ChordLineType::DOIT;
+        y += note->height() * (upDir ? 0.8 : -0.3);
+    }
+
+    data->pos.setXY(x, y);
 
     if (!item->isWavy()) {
         RectF r = item->path().boundingRect();
@@ -1343,7 +1344,7 @@ void TLayout::layout(ChordLine* item, LayoutContext& ctx)
         y1 = r.y();
         width = r.width();
         height = r.height();
-        item->bbox().setRect(x1, y1, width, height);
+        data->bbox.setRect(x1, y1, width, height);
     } else {
         RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
         double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
@@ -1355,11 +1356,16 @@ void TLayout::layout(ChordLine* item, LayoutContext& ctx)
             r.setY(item->y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
         }
 
-        item->setbbox(r);
+        data->bbox = r;
     }
 }
 
-void TLayout::layout(Clef* item, LayoutContext&)
+void TLayout::layout(ChordLine* item, LayoutContext& ctx)
+{
+    layoutChordLine(item, ctx, item->mutLayoutData());
+}
+
+static void layoutClef(const Clef* item, const LayoutContext&, Clef::LayoutData* data)
 {
     // determine current number of lines and line distance
     int lines;
@@ -1386,14 +1392,14 @@ void TLayout::layout(Clef* item, LayoutContext&)
             } else {                            // if generated, replace with initial clef type
                 // TODO : instead of initial staff clef (which is assumed to be compatible)
                 // use the last compatible clef previously found in staff
-                item->setClefType(item->staff()->clefType(Fraction(0, 1)));
+                const_cast<Clef*>(item)->setClefType(item->staff()->clefType(Fraction(0, 1)));
             }
         }
 
         // if clef not to show or not compatible with staff group
         if (!show) {
-            item->setbbox(RectF());
-            item->setSymId(SymId::noSym);
+            data->bbox = RectF();
+            data->symId = SymId::noSym;
             LOGD("invisible clef at tick %d(%d) staff %zu",
                  item->segment()->tick().ticks(), item->segment()->tick().ticks() / 1920, item->staffIdx());
             return;
@@ -1410,10 +1416,10 @@ void TLayout::layout(Clef* item, LayoutContext&)
     double _spatium = item->spatium();
     double yoff     = 0.0;
     if (item->clefType() != ClefType::INVALID && item->clefType() != ClefType::MAX) {
-        item->setSymId(ClefInfo::symId(item->clefType()));
+        data->symId = ClefInfo::symId(item->clefType());
         yoff = lineDist * (5 - ClefInfo::line(item->clefType()));
     } else {
-        item->setSymId(SymId::noSym);
+        data->symId = SymId::noSym;
     }
 
     switch (item->clefType()) {
@@ -1457,11 +1463,15 @@ void TLayout::layout(Clef* item, LayoutContext&)
     }
     // clefs on palette or at start of system/measure are left aligned
     // other clefs are right aligned
-    RectF r(item->symBbox(item->symId()));
+    RectF r(item->symBbox(data->symId));
     double x = item->segment() && item->segment()->rtick().isNotZero() ? -r.right() : 0.0;
-    item->setPos(x, yoff * _spatium + (stepOffset * 0.5 * _spatium));
+    data->pos = PointF(x, yoff * _spatium + (stepOffset * 0.5 * _spatium));
+    data->bbox = r;
+}
 
-    item->setbbox(r);
+void TLayout::layout(Clef* item, LayoutContext& ctx)
+{
+    layoutClef(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Capo* item, LayoutContext& ctx)

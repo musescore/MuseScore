@@ -104,29 +104,26 @@ public:
 
     bool isEditable() const override { return false; }
 
-    SymId symId() const { return m_symId; }
-    void setSymId(SymId s) { m_symId = s; }
-
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val);
 
-    bool showCourtesy() const { return _showCourtesy; }
-    void setShowCourtesy(bool v) { _showCourtesy = v; }
+    bool showCourtesy() const { return m_showCourtesy; }
+    void setShowCourtesy(bool v) { m_showCourtesy = v; }
     void undoSetShowCourtesy(bool v);
     Clef* otherClef();
 
     ClefType clefType() const;
     void setClefType(ClefType i);
 
-    void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
-    bool forInstrumentChange() const { return _forInstrumentChange; }
+    void setForInstrumentChange(bool forInstrumentChange) { m_forInstrumentChange = forInstrumentChange; }
+    bool forInstrumentChange() const { return m_forInstrumentChange; }
 
-    ClefTypeList clefTypeList() const { return _clefTypes; }
-    ClefType concertClef() const { return _clefTypes._concertClef; }
-    ClefType transposingClef() const { return _clefTypes._transposingClef; }
+    ClefTypeList clefTypeList() const { return m_clefTypes; }
+    ClefType concertClef() const { return m_clefTypes._concertClef; }
+    ClefType transposingClef() const { return m_clefTypes._transposingClef; }
     void setConcertClef(ClefType val);
     void setTransposingClef(ClefType val);
-    void setClefType(const ClefTypeList& ctl) { _clefTypes = ctl; }
+    void setClefType(const ClefTypeList& ctl) { m_clefTypes = ctl; }
     void spatiumChanged(double oldValue, double newValue) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -143,19 +140,33 @@ public:
     void undoChangeProperty(Pid id, const PropertyValue& v) { EngravingObject::undoChangeProperty(id, v); }
     void undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps) override;
 
+    ClefToBarlinePosition clefToBarlinePosition() const { return m_clefToBarlinePosition; }
+    void setClefToBarlinePosition(ClefToBarlinePosition val) { m_clefToBarlinePosition = val; }
+    bool isHeader() const { return m_isHeader; }
+    void setIsHeader(bool val) { m_isHeader = val; }
+
+    struct LayoutData : public EngravingItem::LayoutData {
+        SymId symId = SymId::noSym;
+    };
+
+    DECLARE_LAYOUTDATA_METHODS(Clef);
+
+    //! --- Old Interface ---
+    SymId symId() const { return layoutData()->symId; }
+    void setSymId(SymId s) { mutLayoutData()->symId = s; }
+    //! ---------------------
+
 private:
 
     friend class Factory;
     Clef(Segment* parent);
 
-    SymId m_symId;
-    bool _showCourtesy = true;
+    bool m_showCourtesy = true;
     bool m_isSmall = false;
-    bool _forInstrumentChange = false;
-    M_PROPERTY(ClefToBarlinePosition, clefToBarlinePosition, setClefToBarlinePosition)
-    M_PROPERTY(bool, isHeader, setIsHeader)
-
-    ClefTypeList _clefTypes { ClefType::INVALID };
+    bool m_forInstrumentChange = false;
+    bool m_isHeader = false;
+    ClefToBarlinePosition m_clefToBarlinePosition = ClefToBarlinePosition::AUTO;
+    ClefTypeList m_clefTypes = ClefType::INVALID;
 };
 } // namespace mu::engraving
 #endif
