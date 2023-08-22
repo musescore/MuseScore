@@ -75,6 +75,7 @@ public:
 
     bool canReceiveAction(const actions::ActionCode& code) const override;
 
+    bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const io::path_t& path) const override;
     Ret openProject(const io::path_t& path) override;
     Ret openProject(const ProjectFile& file) override;

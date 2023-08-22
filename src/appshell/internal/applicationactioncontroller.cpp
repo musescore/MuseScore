@@ -77,10 +77,9 @@ void ApplicationActionController::onDragMoveEvent(QDragMoveEvent* event)
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
-        io::path_t filePath = io::path_t(urls.first().toLocalFile());
-        LOGD() << filePath;
-
-        if (projectFilesController()->isFileSupported(filePath) || audio::synth::isSoundFont(filePath)) {
+        const QUrl& url = urls.front();
+        if (projectFilesController()->isUrlSupported(url)
+            || (url.isLocalFile() && audio::synth::isSoundFont(io::path_t(url)))) {
             event->setDropAction(Qt::LinkAction);
             event->acceptProposedAction();
         }
@@ -92,27 +91,31 @@ void ApplicationActionController::onDropEvent(QDropEvent* event)
     const QMimeData* mime = event->mimeData();
     QList<QUrl> urls = mime->urls();
     if (urls.count() > 0) {
-        io::path_t filePath = io::path_t(urls.first().toLocalFile());
-        LOGD() << filePath;
+        const QUrl& url = urls.front();
+        LOGD() << url;
 
         bool shouldBeHandled = false;
 
-        if (projectFilesController()->isFileSupported(filePath)) {
-            async::Async::call(this, [this, filePath]() {
-                Ret ret = projectFilesController()->openProject(filePath);
+        if (projectFilesController()->isUrlSupported(url)) {
+            async::Async::call(this, [this, url]() {
+                Ret ret = projectFilesController()->openProject(url);
                 if (!ret) {
                     LOGE() << ret.toString();
                 }
             });
             shouldBeHandled = true;
-        } else if (audio::synth::isSoundFont(filePath)) {
-            async::Async::call(this, [this, filePath]() {
-                Ret ret = soundFontRepository()->addSoundFont(filePath);
-                if (!ret) {
-                    LOGE() << ret.toString();
-                }
-            });
-            shouldBeHandled = true;
+        } else if (url.isLocalFile()) {
+            io::path_t filePath { url };
+
+            if (audio::synth::isSoundFont(filePath)) {
+                async::Async::call(this, [this, filePath]() {
+                    Ret ret = soundFontRepository()->addSoundFont(filePath);
+                    if (!ret) {
+                        LOGE() << ret.toString();
+                    }
+                });
+                shouldBeHandled = true;
+            }
         }
 
         if (shouldBeHandled) {
@@ -135,15 +138,17 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
 
     if (event->type() == QEvent::FileOpen && watched == qApp) {
         const QFileOpenEvent* openEvent = static_cast<const QFileOpenEvent*>(event);
-        QString filePath = openEvent->file();
+        const QUrl url = openEvent->url();
 
-        if (startupScenario()->startupCompleted()) {
-            dispatcher()->dispatch("file-open", ActionData::make_arg1<io::path_t>(filePath));
-        } else {
-            startupScenario()->setStartupScoreFile(project::ProjectFile { filePath });
+        if (projectFilesController()->isUrlSupported(url)) {
+            if (startupScenario()->startupCompleted()) {
+                dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(url));
+            } else {
+                startupScenario()->setStartupScoreFile(project::ProjectFileUrl { url });
+            }
+
+            return true;
         }
-
-        return true;
     }
 
     return QObject::eventFilter(watched, event);

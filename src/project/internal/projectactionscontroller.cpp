@@ -44,11 +44,14 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::actions;
 
-static mu::Uri NOTATION_PAGE_URI("musescore://notation");
-static mu::Uri HOME_PAGE_URI("musescore://home");
-static mu::Uri NEW_SCORE_URI("musescore://project/newscore");
-static mu::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
-static mu::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
+static const mu::Uri NOTATION_PAGE_URI("musescore://notation");
+static const mu::Uri HOME_PAGE_URI("musescore://home");
+static const mu::Uri NEW_SCORE_URI("musescore://project/newscore");
+static const mu::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
+static const mu::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
+
+static const QString MUSESCORE_URL_SCHEME("musescore");
+static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 
 void ProjectActionsController::init()
 {
@@ -127,6 +130,21 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
     }
 
     return true;
+}
+
+bool ProjectActionsController::isUrlSupported(const QUrl& url) const
+{
+    if (url.isLocalFile()) {
+        return isFileSupported(io::path_t(url));
+    }
+
+    if (url.scheme() == MUSESCORE_URL_SCHEME) {
+        if (url.host() == OPEN_SCORE_URL_HOSTNAME) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool ProjectActionsController::isFileSupported(const io::path_t& path) const
