@@ -1024,10 +1024,15 @@ void SingleDraw::draw(const Capo* item, Painter* painter)
 void SingleDraw::draw(const DeadSlapped* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    const DeadSlapped::LayoutData* ldata = item->layoutData();
+    IF_ASSERT_FAILED(ldata) {
+        return;
+    }
+
     painter->setPen(draw::PenStyle::NoPen);
     painter->setBrush(item->curColor());
-    painter->drawPath(item->path1());
-    painter->drawPath(item->path2());
+    painter->drawPath(ldata->path1);
+    painter->drawPath(ldata->path2);
 }
 
 void SingleDraw::draw(const Dynamic* item, Painter* painter)
