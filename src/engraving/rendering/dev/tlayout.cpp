@@ -1241,21 +1241,24 @@ void TLayout::layout(Bracket* item, LayoutContext& ctx)
     }
 }
 
+static void layoutBreath(const Breath* item, const LayoutContext& ctx, Breath::LayoutData* data)
+{
+    int voiceOffset = item->placeBelow() * (item->staff()->lines(item->tick()) - 1) * item->spatium();
+    if (item->isCaesura()) {
+        data->pos = PointF(data->pos.x(), item->spatium() + voiceOffset);
+    } else if ((ctx.conf().styleSt(Sid::MusicalSymbolFont) == "Emmentaler")
+               && (item->symId() == SymId::breathMarkComma)) {
+        data->pos = PointF(data->pos.x(), 0.5 * item->spatium() + voiceOffset);
+    } else {
+        data->pos = PointF(data->pos.x(), -0.5 * item->spatium() + voiceOffset);
+    }
+
+    data->bbox = item->symBbox(item->symId());
+}
+
 void TLayout::layout(Breath* item, LayoutContext& ctx)
 {
-    bool palette = (!item->staff() || item->track() == mu::nidx);
-    if (!palette) {
-        int voiceOffset = item->placeBelow() * (item->staff()->lines(item->tick()) - 1) * item->spatium();
-        if (item->isCaesura()) {
-            item->setPos(item->xpos(), item->spatium() + voiceOffset);
-        } else if ((ctx.conf().styleSt(Sid::MusicalSymbolFont) == "Emmentaler")
-                   && (item->symId() == SymId::breathMarkComma)) {
-            item->setPos(item->xpos(), 0.5 * item->spatium() + voiceOffset);
-        } else {
-            item->setPos(item->xpos(), -0.5 * item->spatium() + voiceOffset);
-        }
-    }
-    item->setbbox(item->symBbox(item->symId()));
+    layoutBreath(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Chord* item, LayoutContext& ctx)
