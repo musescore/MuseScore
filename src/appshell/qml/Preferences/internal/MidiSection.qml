@@ -43,7 +43,6 @@ BaseSection {
 
         control.textRole: "title"
         control.valueRole: "value"
-        control.width: 132
 
         navigation.name: "ShortestNoteBox"
         navigation.panel: root.navigation
