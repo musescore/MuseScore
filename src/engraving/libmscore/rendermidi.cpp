@@ -798,16 +798,21 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 
                 // shifting glissando sounds to the second half of glissando duration
                 int totalDuration = millespernote * b;
+                constexpr double glissandoPart = 0.33;
 
-                int glissandoDuration = tremoloBefore ? totalDuration / 2 : totalDuration * (1 - graceOnBeatProportion) / 2;
-                easeInOut.timeList(b, glissandoDuration, &onTimes);
+                int glissandoDuration = tremoloBefore ? totalDuration * glissandoPart : totalDuration
+                                        * (1 - graceOnBeatProportion) * glissandoPart;
+                easeInOut.timeList(b - 1, glissandoDuration, &onTimes);
 
                 if (!onTimes.empty()) {
                     onTimes[0] += graceOnBeatProportion * totalDuration;
                 }
 
-                for (size_t i = 1; i < onTimes.size(); i++) {
-                    onTimes[i] += totalDuration - glissandoDuration;
+                if (onTimes.size() > 1) {
+                    int offset = onTimes[1];
+                    for (size_t i = 1; i < onTimes.size(); i++) {
+                        onTimes[i] += totalDuration - glissandoDuration - offset;
+                    }
                 }
 
                 isGlissando = true;
@@ -898,8 +903,9 @@ namespace {
 std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
 std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
 std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = Constants::DIVISION / 4;
-int _32nd = _16th / 2;
+constexpr int _16th = Constants::DIVISION / 4;
+constexpr int _32nd = _16th / 2;
+constexpr int SLIDE_DURATION = _32nd;
 
 std::vector<OrnamentExcursion> excursions = {
     //  articulation type            set of  duration       body         repeatp      suffix
@@ -1123,19 +1129,21 @@ static std::set<size_t> getNotesIndexesToRender(Chord* chord)
     return notesIndexesToRender;
 }
 
-static void createSlideInNotePlayEvents(Note* note, int prevChordTicks, NoteEventList* el)
+static int slideLength(Chord* chord)
+{
+    const int currentTicks = chord->ticks().ticks();
+    return NoteEvent::NOTE_LENGTH * SLIDE_DURATION / (double)currentTicks;
+}
+
+static void createSlideInNotePlayEvents(Note* note, NoteEventList* el)
 {
     if (!note->hasSlideToNote()) {
         return;
     }
 
     const int slideNotes = NoteEvent::SLIDE_AMOUNT;
-    const int currentTicks = note->chord()->ticks().ticks();
-    // if previous chord exists, slide takes its half length, otherwise - current chord's half length
-    const int slideTicks = (prevChordTicks == 0 ? currentTicks : prevChordTicks) / 2;
-    const int totalSlideDuration = NoteEvent::NOTE_LENGTH * slideTicks / currentTicks;
+    const int totalSlideDuration = slideLength(note->chord());
     const int slideDuration = totalSlideDuration / slideNotes;
-
     int slideOn = 0;
     int pitchOffset = note->slideToType() == Note::SlideType::UpToNote ? 1 : -1;
     int pitch = pitchOffset * slideNotes;
@@ -1153,9 +1161,10 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTi
     }
 
     const int slideNotes = NoteEvent::SLIDE_AMOUNT;
-    const int allSlidesDuration = NoteEvent::NOTE_LENGTH / 2;
-    const int slideDuration = allSlidesDuration / slideNotes;
-    int slideOn = NoteEvent::NOTE_LENGTH - allSlidesDuration;
+    const int totalSlideDuration = slideLength(note->chord());
+    const int slideDuration = totalSlideDuration / slideNotes;
+
+    int slideOn = NoteEvent::NOTE_LENGTH - totalSlideDuration;
     double velocity = !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER;
     if (!hasTremolo) {
         el->push_back(NoteEvent(0, onTime, slideOn, velocity, !note->tieBack()));
@@ -1177,7 +1186,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTi
 //    trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
 //---------------------------------------------------------
 
-static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, int gateTime, int ontime, int trailtime)
+static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, int trailtime)
 {
     const std::vector<Note*>& notes = chord->notes();
     if (notes.empty()) {
@@ -1188,10 +1197,24 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
 
     bool arpeggio = false;
 
-    /// when note has glissando or slide from note, half of chord is played tremolo, second half - glissando
-    bool shouldShortenTremolo = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
-        return noteHasGlissando(note) || note->hasSlideFromNote();
+    /// when note has glissando or slide from note, tremolo should be shortened
+    double tremoloLength = 1.0;
+
+    bool hasGlissando = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
+        return noteHasGlissando(note);
     });
+
+    if (hasGlissando) {
+        tremoloLength = 0.5;
+    } else {
+        bool hasSlideOut = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
+            return note->hasSlideFromNote();
+        });
+
+        if (hasSlideOut) {
+            tremoloLength = 1.0 - slideLength(chord) / (double)NoteEvent::NOTE_LENGTH;
+        }
+    }
 
     bool tremolo = false;
 
@@ -1200,7 +1223,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
         arpeggio = true;
     } else {
         if (chord->tremolo()) {
-            renderTremolo(chord, ell, ontime, shouldShortenTremolo ? 0.5 : 1);
+            renderTremolo(chord, ell, ontime, tremoloLength);
             tremolo = true;
         }
 
@@ -1223,7 +1246,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
                                     !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER));
         }
 
-        createSlideInNotePlayEvents(note, prevChord ? prevChord->ticks().ticks() : 0, el);
+        createSlideInNotePlayEvents(note, el);
 
         for (NoteEvent& e : *el) {
             e.setLen(e.len() * gateTime / 100);
@@ -1356,7 +1379,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 //    create default play events
 //---------------------------------------------------------
 
-void Score::createPlayEvents(Chord* chord, Chord* prevChord)
+void Score::createPlayEvents(Chord* chord)
 {
     int gateTime = 100;
 
@@ -1390,7 +1413,7 @@ void Score::createPlayEvents(Chord* chord, Chord* prevChord)
     //
     //    render normal (and articulated) chords
     //
-    std::vector<NoteEventList> el = renderChord(chord, prevChord, gateTime, ontime, trailtime);
+    std::vector<NoteEventList> el = renderChord(chord, gateTime, ontime, trailtime);
     if (chord->playEventType() == PlayEventType::Auto) {
         chord->setNoteEventLists(el);
     }
@@ -1422,7 +1445,7 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
             return;
         }
     } else if (anySlidesIn) {
-        reducedTicks = prevTicks / 2;
+        reducedTicks = SLIDE_DURATION;
     } else {
         return;
     }
@@ -1442,6 +1465,7 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
             event.setOntime(curPos);
             event.setPitch(prevEvent.pitch());
             event.setOffset(prevEvent.offset());
+            event.setVelocityMultiplier(prevEvent.velocityMultiplier());
             int prevLen = prevEvent.len();
 
             // not shortening events before beat
@@ -1511,7 +1535,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
                 }
 
                 Chord* chord = toChord(e);
-                createPlayEvents(chord, prevChord);
+                createPlayEvents(chord);
                 adjustPreviousChordLength(chord, prevChord);
                 prevChord = chord;
             }
