@@ -222,7 +222,7 @@ bool Dynamic::isVelocityChangeAvailable() const
     }
 }
 
-double Dynamic::customTextOffset()
+double Dynamic::customTextOffset() const
 {
     if (!_centerOnNotehead || m_dynamicType == DynamicType::OTHER) {
         return 0.0;
@@ -245,7 +245,11 @@ double Dynamic::customTextOffset()
         }
     }
 
-    for (const TextBlock& block : textBlockList()) {
+    const LayoutData* ldata = layoutData();
+    IF_ASSERT_FAILED(ldata) {
+        return 0.0;
+    }
+    for (const TextBlock& block : ldata->blocks) {
         for (const TextFragment& fragment : block.fragments()) {
             if (fragment.text == referenceFragment.text) {
                 return fragment.pos.x() - referenceFragment.pos.x();
