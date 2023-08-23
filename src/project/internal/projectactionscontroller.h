@@ -99,7 +99,7 @@ private:
 
     void openProject(const actions::ActionData& args);
     Ret openProject(const io::path_t& path, const QString& displayNameOverride = QString());
-    void downloadAndOpenCloudProject(int scoreId);
+    void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
     Ret openMuseScoreUrl(const QUrl& url);
     Ret openScoreFromMuseScoreCom(const QUrl& url);
 
@@ -184,7 +184,7 @@ private:
 
     RetVal<INotationProjectPtr> loadProject(const io::path_t& filePath);
     Ret doOpenProject(const io::path_t& filePath);
-    Ret doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info);
+    Ret doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info, bool isOwner = true);
 
     Ret openPageIfNeed(Uri pageUri);
 

@@ -311,7 +311,7 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
     return openPageIfNeed(NOTATION_PAGE_URI);
 }
 
-Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info)
+Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info, bool isOwner)
 {
     RetVal<INotationProjectPtr> rv = loadProject(filePath);
     if (!rv.ret) {
@@ -320,9 +320,15 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
 
     INotationProjectPtr project = rv.val;
 
-    project->setCloudInfo(info);
+    if (isOwner) {
+        project->setCloudInfo(info);
+    } else {
+        project->markAsNewlyCreated();
+        project->setCloudInfo(CloudProjectInfo());
+    }
 
-    bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
+    bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath)
+                          || !isOwner;
     if (!isNewlyCreated) {
         recentFilesController()->prependRecentFile(makeRecentFile(project));
     }
@@ -332,7 +338,7 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
     return openPageIfNeed(NOTATION_PAGE_URI);
 }
 
-void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
+void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QString& hash, const QString& secret, bool isOwner)
 {
     if (m_isProjectDownloading) {
         return;
@@ -383,9 +389,9 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
     }
 
     m_projectBeingDownloaded.scoreId = scoreId;
-    m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, *projectData);
+    m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, *projectData, hash, secret);
 
-    m_projectBeingDownloaded.progress->finished.onReceive(this, [this, localPath, info, projectData](const ProgressResult& res) {
+    m_projectBeingDownloaded.progress->finished.onReceive(this, [this, localPath, info, isOwner, projectData](const ProgressResult& res) {
         projectData->deleteLater();
 
         m_projectBeingDownloaded = {};
@@ -399,7 +405,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
             return;
         }
 
-        doOpenCloudProject(localPath, info);
+        doOpenCloudProject(localPath, info, isOwner);
     });
 
     m_projectBeingDownloadedChanged.notify();
@@ -417,10 +423,79 @@ Ret ProjectActionsController::openMuseScoreUrl(const QUrl& url)
 
 Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
 {
-    QUrlQuery query(url);
-    LOGDA() << query.toString();
+    //! NOTE See explanation in `openProject(const io::path_t& _path, const QString& displayNameOverride)`
+    if (m_isProjectProcessing || m_isProjectDownloading) {
+        // TODO: instead of ignoring the open request, queue it?
+        return make_ret(Ret::Code::InternalError);
+    }
+    m_isProjectProcessing = true;
 
-    return make_ret(Ret::Code::NotImplemented);
+    DEFER {
+        m_isProjectProcessing = false;
+    };
+
+    // Retrieve score id from URL
+    bool ok = false;
+    int scoreId = url.fileName().toInt(&ok);
+    if (!ok || scoreId <= 0) {
+        return make_ret(Err::MalformedOpenScoreUrl);
+    }
+
+    // Ensure logged in
+    Ret ret = museScoreComService()->authorization()->ensureAuthorization(
+        trc("project/save", "Login or create a free account on musescore.com to open this score."));
+    if (!ret) {
+        return ret;
+    }
+
+    // Check if user is owner
+    bool isOwner = true;
+    RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+    if (!scoreInfo.ret) {
+        std::any status = scoreInfo.ret.data("status");
+        if (status.has_value() && std::any_cast<int>(status) == 403) {
+            isOwner = false;
+        } else {
+            return scoreInfo.ret;
+        }
+    }
+
+    // If yes, score will be opened as regular cloud score; check if not yet opened
+    if (isOwner) {
+        io::path_t projectPath = configuration()->cloudProjectPath(scoreId);
+
+        // either in this instance
+        if (isProjectOpened(projectPath)) {
+            return openPageIfNeed(NOTATION_PAGE_URI);
+        }
+
+        // or in another one
+        if (multiInstancesProvider()->isProjectAlreadyOpened(projectPath)) {
+            multiInstancesProvider()->activateWindowWithProject(projectPath);
+            return make_ok();
+        }
+    }
+
+    // Check if this instance already has an open project
+    if (globalContext()->currentProject()) {
+        QStringList args;
+        args << url.toString();
+
+        if (!scoreInfo.val.title.isEmpty()) {
+            args << "--score-display-name-override" << scoreInfo.val.title;
+        }
+
+        multiInstancesProvider()->openNewAppInstance(args);
+        return make_ok();
+    }
+
+    QUrlQuery query(url);
+    QString hash = query.queryItemValue("hash");
+    QString secret = query.queryItemValue("secret");
+
+    downloadAndOpenCloudProject(scoreId, hash, secret, isOwner);
+
+    return make_ok();
 }
 
 const ProjectBeingDownloaded& ProjectActionsController::projectBeingDownloaded() const

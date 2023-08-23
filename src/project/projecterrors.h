@@ -39,6 +39,7 @@ enum class Err {
     InvalidCloudScoreId,
 
     UnsupportedUrl,
+    MalformedOpenScoreUrl,
 };
 
 inline Ret make_ret(Err e)

@@ -300,7 +300,7 @@ mu::async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int score
     });
 }
 
-ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData)
+ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData, const QString& hash, const QString& secret)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
@@ -309,12 +309,12 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
         progress->progressChanged.send(current, total, message);
     });
 
-    async::Async::call(this, [this, manager, scoreId, &scoreData, progress]() {
+    async::Async::call(this, [this, manager, scoreId, &scoreData, hash, secret, progress]() {
         progress->started.notify();
 
         ProgressResult result;
-        result.ret = executeRequest([this, manager, scoreId, &scoreData]() {
-            return doDownloadScore(manager, scoreId, scoreData);
+        result.ret = executeRequest([this, manager, scoreId, &scoreData, hash, secret]() {
+            return doDownloadScore(manager, scoreId, scoreData, hash, secret);
         });
 
         progress->finished.send(result);
@@ -323,12 +323,21 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
     return progress;
 }
 
-mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData)
+mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
+                                             const QString& hash, const QString& secret)
 {
     TRACEFUNC;
 
     QVariantMap params;
     params["score_id"] = scoreId;
+
+    if (!hash.isEmpty()) {
+        params["h"] = hash;
+    }
+
+    if (!secret.isEmpty()) {
+        params["secret"] = secret;
+    }
 
     RetVal<QUrl> downloadUrl = prepareUrlForRequest(MUSESCORECOM_DOWNLOAD_SCORE_API_URL, params);
     if (!downloadUrl.ret) {
