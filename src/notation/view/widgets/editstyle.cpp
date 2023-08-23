@@ -46,6 +46,7 @@
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetutils.h"
 
+#include "defer.h"
 #include "log.h"
 
 using namespace mu;
@@ -199,6 +200,12 @@ static void fillDirectionComboBox(QComboBox* comboBox)
 EditStyle::EditStyle(QWidget* parent)
     : QDialog(parent)
 {
+    //! NOTE: suppress all accessibility events causing a long delay when opening the dialog (massive spam from setupUi)
+    accessibilityController()->setIgnoreQtAccessibilityEvents(true);
+    DEFER {
+        accessibilityController()->setIgnoreQtAccessibilityEvents(false);
+    };
+
     setObjectName("EditStyle");
     setupUi(this);
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);

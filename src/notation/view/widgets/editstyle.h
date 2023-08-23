@@ -43,6 +43,7 @@ class EditStyle : public QDialog, private Ui::EditStyleBase
     INJECT(mu::framework::IInteractive, interactive)
     INJECT(mu::ui::IUiEngine, uiEngine)
     INJECT(mu::engraving::IEngravingFontsProvider, engravingFonts)
+    INJECT(mu::accessibility::IAccessibilityController, accessibilityController)
 
     Q_PROPERTY(QString currentPageCode READ currentPageCode WRITE setCurrentPageCode NOTIFY currentPageChanged)
     Q_PROPERTY(QString currentSubPageCode READ currentSubPageCode WRITE setCurrentSubPageCode NOTIFY currentSubPageChanged)
