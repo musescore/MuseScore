@@ -36,7 +36,9 @@ enum class Err {
     CorruptionUponOpenningError,
 
     FileOpenError,
-    InvalidCloudScoreId
+    InvalidCloudScoreId,
+
+    UnsupportedUrl,
 };
 
 inline Ret make_ret(Err e)

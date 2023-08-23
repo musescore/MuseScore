@@ -77,8 +77,7 @@ public:
 
     bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const io::path_t& path) const override;
-    Ret openProject(const io::path_t& path) override;
-    Ret openProject(const ProjectFile& file) override;
+    Ret openProject(const ProjectFileUrl& file) override;
     bool closeOpenedProject(bool quitApp = false) override;
     bool isProjectOpened(const io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
@@ -99,7 +98,10 @@ private:
     void newProject();
 
     void openProject(const actions::ActionData& args);
+    Ret openProject(const io::path_t& path, const QString& displayNameOverride = QString());
     void downloadAndOpenCloudProject(int scoreId);
+    Ret openMuseScoreUrl(const QUrl& url);
+    Ret openScoreFromMuseScoreCom(const QUrl& url);
 
     void showScoreDownloadError(const Ret& ret);
 

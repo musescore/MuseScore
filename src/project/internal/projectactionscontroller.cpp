@@ -25,6 +25,7 @@
 #include <QEventLoop>
 #include <QFileInfo>
 #include <QTemporaryFile>
+#include <QUrlQuery>
 
 #include "async/async.h"
 #include "defer.h"
@@ -169,12 +170,20 @@ void ProjectActionsController::openProject(const actions::ActionData& args)
     openProject(ProjectFileUrl(url, displayNameOverride));
 }
 
-Ret ProjectActionsController::openProject(const io::path_t& path)
+Ret ProjectActionsController::openProject(const ProjectFileUrl& file)
 {
-    return openProject(ProjectFile(path));
+    if (file.url.isLocalFile()) {
+        return openProject(file.path(), file.displayNameOverride);
+    }
+
+    if (file.url.scheme() == MUSESCORE_URL_SCHEME) {
+        return openMuseScoreUrl(file.url);
+    }
+
+    return make_ret(Err::UnsupportedUrl);
 }
 
-Ret ProjectActionsController::openProject(const ProjectFile& file)
+Ret ProjectActionsController::openProject(const io::path_t& _path, const QString& displayNameOverride)
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
@@ -192,7 +201,7 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
     };
 
     //! Step 1. If no path is specified, ask the user to select a project
-    io::path_t projectPath = fileSystem()->absoluteFilePath(file.path);
+    io::path_t projectPath = fileSystem()->absoluteFilePath(_path);
     if (projectPath.empty()) {
         projectPath = selectScoreOpeningFile();
 
@@ -218,8 +227,8 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
         QStringList args;
         args << projectPath.toQString();
 
-        if (!file.displayNameOverride.isEmpty()) {
-            args << "--score-display-name-override" << file.displayNameOverride;
+        if (!displayNameOverride.isEmpty()) {
+            args << "--score-display-name-override" << displayNameOverride;
         }
 
         multiInstancesProvider()->openNewAppInstance(args);
@@ -395,6 +404,23 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
 
     m_projectBeingDownloadedChanged.notify();
     isDownloadingFinished = false;
+}
+
+Ret ProjectActionsController::openMuseScoreUrl(const QUrl& url)
+{
+    if (url.host() == OPEN_SCORE_URL_HOSTNAME) {
+        return openScoreFromMuseScoreCom(url);
+    }
+
+    return make_ret(Err::UnsupportedUrl);
+}
+
+Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
+{
+    QUrlQuery query(url);
+    LOGDA() << query.toString();
+
+    return make_ret(Ret::Code::NotImplemented);
 }
 
 const ProjectBeingDownloaded& ProjectActionsController::projectBeingDownloaded() const
