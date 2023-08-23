@@ -120,24 +120,16 @@ Column {
             Component {
                 id: resetButtonComponent
 
-                FlatButton {
-                    width: 20
-                    height: width
-
+                PropertyResetButton {
                     navigation.name: root.navigationName + "Reset"
                     navigation.panel: root.navigationPanel
                     navigation.row: root.buttonNavigationRow
                     navigation.accessible.name: root.titleText ? qsTrc("inspector", "Reset \"%1\" to default value").arg(root.titleText)
                                                                : qsTrc("inspector", "Reset property to default value")
 
-                    icon: IconCode.UNDO
-                    toolTipTitle: qsTrc("inspector", "Reset")
-                    transparent: true
                     enabled: root.isModified
 
-                    onClicked: {
-                        root.requestResetToDefault()
-                    }
+                    propertyItem: root.propertyItem
                 }
             }
 
