@@ -501,6 +501,9 @@ public:
         PointF pos;                 // Reference position, relative to _parent, set by autoplace
         RectF bbox;                 // Bounding box relative to _pos + _offset
 
+        void setPosX(double x) { doSetPos(x, pos.y()); }
+        void setPosY(double y) { doSetPos(pos.x(), y); }
+        void movePos(const PointF& p) { doSetPos(pos.x() + p.x(), pos.y() + p.y()); }
         void movePosX(double x) { doSetPos(pos.x() + x, pos.y()); }
         void movePosY(double y) { doSetPos(pos.x(), pos.y() + y); }
 
@@ -536,11 +539,11 @@ public:
     virtual double y() const { return ipos().y() + m_offset.y(); }
     virtual void setPos(double x, double y) { doSetPos(x, y); }
     virtual void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
-    void setPosX(double x) { doSetPos(x, mutLayoutData()->pos.y()); }
-    void setPosY(double y) { doSetPos(mutLayoutData()->pos.x(), y); }
-    void movePos(const PointF& p) { doSetPos(mutLayoutData()->pos.x() + p.x(), mutLayoutData()->pos.y() + p.y()); }
-    void movePosX(double x) { doSetPos(mutLayoutData()->pos.x() + x, mutLayoutData()->pos.y()); }
-    void movePosY(double y) { doSetPos(mutLayoutData()->pos.x(), mutLayoutData()->pos.y() + y); }
+    void setPosX(double x) { mutLayoutData()->setPosX(x); }
+    void setPosY(double y) { mutLayoutData()->setPosY(y); }
+    void movePos(const PointF& p) { mutLayoutData()->movePos(p); }
+    void movePosX(double x) { mutLayoutData()->movePosX(x); }
+    void movePosY(double y) { mutLayoutData()->movePosY(y); }
 
     virtual void move(const PointF& s) { mutLayoutData()->pos += s; }
 

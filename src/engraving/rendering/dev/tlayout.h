@@ -24,6 +24,8 @@
 
 #include "layoutcontext.h"
 
+#include "libmscore/textbase.h"
+
 namespace mu::engraving {
 class EngravingItem;
 
@@ -143,7 +145,6 @@ class SystemText;
 
 class TabDurationSymbol;
 class TempoText;
-class TextBase;
 class Text;
 class TextLine;
 class TextLineSegment;
@@ -226,7 +227,7 @@ public:
     static void layout(HarpPedalDiagram* item, LayoutContext& ctx);
     static void layout(HarmonicMarkSegment* item, LayoutContext& ctx);
     static void layout(Harmony* item, LayoutContext& ctx);
-    static void layout1(Harmony* item, LayoutContext& ctx);
+    static void layout1(Harmony* item, const LayoutContext& ctx);
     static void layout(Hook* item, LayoutContext& ctx);
 
     static void layout(Image* item, LayoutContext& ctx);
@@ -301,10 +302,10 @@ public:
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);
     static void layout(TempoText* item, LayoutContext& ctx);
 
-    static void layout(TextBase* item, LayoutContext& ctx);          // factory
+    static void layout(TextBase* item, LayoutContext& ctx);                 // factory
+    static void layoutTextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data); // base class
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
-    static void layout1(TextBase* item, LayoutContext& ctx);         // factory
-    static void layout1TextBase(TextBase* item, LayoutContext& ctx); // base class
+    static void layout1TextBase(TextBase* item, const LayoutContext& ctx);  // base class
     static void layout(Text* item, LayoutContext& ctx);
 
     static void layout(TextLine* item, LayoutContext& ctx);
@@ -340,11 +341,13 @@ private:
 
     friend class SlurTieLayout;
 
+    static void layout1TextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data);
+
     static void adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx);
 
     static void layoutLines(FiguredBass* item, LayoutContext& ctx);
 
-    static PointF calculateBoundingRect(Harmony* item, LayoutContext& ctx);
+    static PointF calculateBoundingRect(Harmony* item, const LayoutContext& ctx);
 
     static void keySigAddLayout(KeySig* item, LayoutContext& ctx, SymId sym, int line);
 

@@ -1477,21 +1477,27 @@ void TLayout::layout(Clef* item, LayoutContext& ctx)
     layoutClef(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Capo* item, LayoutContext& ctx)
+static void layoutCapo(const Capo* item, const LayoutContext& ctx, Capo::LayoutData* data)
 {
+    //! NOTE Looks like it doesn't belong here
     if (item->shouldAutomaticallyGenerateText() || item->empty()) {
         if (const Part* part = item->part()) {
             if (const Instrument* instrument = part->instrument(item->tick())) {
                 if (const StringData* stringData = instrument->stringData()) {
                     String text = item->generateText(stringData->strings());
-                    item->setXmlText(text);
+                    const_cast<Capo*>(item)->setXmlText(text);
                 }
             }
         }
     }
 
-    layoutTextBase(item, ctx);
-    item->autoplaceSegmentElement();
+    TLayout::layoutTextBase(item, ctx, data);
+    const_cast<Capo*>(item)->autoplaceSegmentElement();
+}
+
+void TLayout::layout(Capo* item, LayoutContext& ctx)
+{
+    layoutCapo(item, ctx, item->mutLayoutData());
 }
 
 static void layoutDeadSlapped(const DeadSlapped* item, const LayoutContext&, DeadSlapped::LayoutData* data)
@@ -2861,7 +2867,7 @@ void TLayout::layout(Harmony* item, LayoutContext& ctx)
     layout1(item, ctx);
 }
 
-void TLayout::layout1(Harmony* item, LayoutContext& ctx)
+void TLayout::layout1(Harmony* item, const LayoutContext& ctx)
 {
     if (item->isLayoutInvalid()) {
         item->createBlocks();
@@ -2877,11 +2883,10 @@ void TLayout::layout1(Harmony* item, LayoutContext& ctx)
         item->layoutFrame();
     }
 
-    ctx.addRefresh(item->canvasBoundingRect());
     item->setPos(positionPoint);
 }
 
-PointF TLayout::calculateBoundingRect(Harmony* item, LayoutContext& ctx)
+PointF TLayout::calculateBoundingRect(Harmony* item, const LayoutContext& ctx)
 {
     const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->height() : 0.0;
     const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
@@ -4576,32 +4581,35 @@ void TLayout::layout(TextBase* item, LayoutContext& ctx)
     layoutItem(item, ctx);
 }
 
+void TLayout::layoutTextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data)
+{
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
+    }
+
+    data->pos = PointF();
+
+    if (item->placeBelow()) {
+        data->setPosY(item->staff() ? item->staff()->height() : 0.0);
+    }
+
+    if (Harmony::classof(item)) {
+        layout1(static_cast<Harmony*>(const_cast<TextBase*>(item)), ctx);
+    } else {
+        layout1TextBase(const_cast<TextBase*>(item), ctx);
+    }
+}
+
 void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
 {
-    item->setPos(PointF());
-    if (!item->explicitParent()) {
-        item->setOffset(0.0, 0.0);
-    }
-//      else if (isStyled(Pid::OFFSET))                                   // TODO: should be set already
-//            setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
-    if (item->placeBelow()) {
-        item->setPosY(item->staff() ? item->staff()->height() : 0.0);
-    }
-
-    layout1(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout1(TextBase* item, LayoutContext& ctx)
+void TLayout::layout1TextBase(const TextBase* _item, const LayoutContext&, TextBase::LayoutData*)
 {
-    if (Harmony::classof(item)) {
-        layout1(static_cast<Harmony*>(item), ctx);
-    } else {
-        layout1TextBase(item, ctx);
-    }
-}
+    //! NOTE Temporary
+    TextBase* item = const_cast<TextBase*>(_item);
 
-void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
-{
     if (item->isBlockNotCreated()) {
         item->createBlocks();
     }
@@ -4674,7 +4682,11 @@ void TLayout::layout1TextBase(TextBase* item, LayoutContext& ctx)
     if (item->hasFrame()) {
         item->layoutFrame();
     }
-    ctx.addRefresh(item->canvasBoundingRect());
+}
+
+void TLayout::layout1TextBase(TextBase* item, const LayoutContext& ctx)
+{
+    layout1TextBase(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Text* item, LayoutContext& ctx)
