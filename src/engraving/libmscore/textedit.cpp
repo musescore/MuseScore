@@ -68,7 +68,11 @@ TextCursor* TextEditData::cursor() const
 
 void TextBase::editInsertText(TextCursor* cursor, const String& s)
 {
-    assert(!m_layoutInvalid);
+    const LayoutData* ldata = layoutData();
+    IF_ASSERT_FAILED(ldata && !ldata->layoutInvalid) {
+        return;
+    }
+
     m_textInvalid = true;
 
     int col = 0;
@@ -78,7 +82,7 @@ void TextBase::editInsertText(TextCursor* cursor, const String& s)
         }
     }
 
-    TextBlock& block = m_blocks[cursor->row()];
+    const TextBlock& block = ldata->blocks.at(cursor->row());
     const CharFormat* previousFormat = block.formatAt(std::max(int(cursor->column()) - 1, 0));
     if (previousFormat && previousFormat->fontFamily() == "ScoreText" && s == " ") {
         // This space would be ignored by the xml parser (see #15629)
@@ -110,7 +114,8 @@ void TextBase::startEdit(EditData& ed)
     ted->oldXmlText = xmlText();
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
-    if (m_layoutInvalid) {
+    const LayoutData* ldata = layoutData();
+    if (!ldata || ldata->layoutInvalid) {
         renderer()->layoutItem(this);
     }
     if (!ted->cursor()->set(ed.startMove)) {
@@ -963,7 +968,7 @@ void TextBase::endHexState(EditData& ed)
             size_t c2 = cursor->column();
             size_t c1 = c2 - (m_hexState + 1);
 
-            TextBlock& t = m_blocks[cursor->row()];
+            TextBlock& t = mutLayoutData()->blocks[cursor->row()];
             String ss   = t.remove(static_cast<int>(c1), m_hexState + 1, cursor);
             bool ok;
             char16_t code = ss.mid(1).toInt(&ok, 16);

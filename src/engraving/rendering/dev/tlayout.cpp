@@ -4605,31 +4605,26 @@ void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
     layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout1TextBase(const TextBase* _item, const LayoutContext&, TextBase::LayoutData*)
+void TLayout::layout1TextBase(const TextBase* item, const LayoutContext&, TextBase::LayoutData* ldata)
 {
-    //! NOTE Temporary
-    TextBase* item = const_cast<TextBase*>(_item);
+    if (ldata->layoutInvalid) {
+        item->createBlocks(ldata);
+    }
 
-    if (item->isBlockNotCreated()) {
-        item->createBlocks();
-    }
-    if (item->blocksRef().empty()) {
-        item->blocksRef().push_back(TextBlock());
-    }
     RectF bb;
-    double y = 0;
+    double y = 0.0;
 
     // adjust the bounding box for the text item
-    for (size_t i = 0; i < item->rows(); ++i) {
-        TextBlock* t = &item->blocksRef()[i];
-        t->layout(item);
-        const RectF* r = &t->boundingRect();
+    for (size_t i = 0; i < ldata->blocks.size(); ++i) {
+        TextBlock& t = ldata->blocks[i];
+        t.layout(item);
+        const RectF* r = &t.boundingRect();
 
         if (r->height() == 0) {
-            r = &item->blocksRef()[i - i].boundingRect();
+            r = &ldata->blocks.at(0).boundingRect();
         }
-        y += t->lineSpacing();
-        t->setY(y);
+        y += t.lineSpacing();
+        t.setY(y);
         bb |= r->translated(0.0, y);
     }
     double yoff = 0;
@@ -4638,7 +4633,7 @@ void TLayout::layout1TextBase(const TextBase* _item, const LayoutContext&, TextB
         if (item->layoutToParentWidth()) {
             if (item->explicitParent()->isTBox()) {
                 // hack: vertical alignment is always TOP
-                item->setAlign({ item->align().horizontal, AlignV::TOP });
+                const_cast<TextBase*>(item)->setAlign({ item->align().horizontal, AlignV::TOP });
             } else if (item->explicitParent()->isBox()) {
                 // consider inner margins of frame
                 Box* b = toBox(item->explicitParent());
@@ -4659,7 +4654,7 @@ void TLayout::layout1TextBase(const TextBase* _item, const LayoutContext&, TextB
             }
         }
     } else {
-        item->setPos(PointF());
+        ldata->pos = PointF();
     }
 
     if (item->align() == AlignV::BOTTOM) {
@@ -4667,20 +4662,20 @@ void TLayout::layout1TextBase(const TextBase* _item, const LayoutContext&, TextB
     } else if (item->align() == AlignV::VCENTER) {
         yoff +=  (h - (bb.top() + bb.bottom())) * .5;
     } else if (item->align() == AlignV::BASELINE) {
-        yoff += h * .5 - item->blocksRef().front().lineSpacing();
+        yoff += h * .5 - ldata->blocks.front().lineSpacing();
     } else {
         yoff += -bb.top();
     }
 
-    for (TextBlock& t : item->blocksRef()) {
+    for (TextBlock& t : ldata->blocks) {
         t.setY(t.y() + yoff);
     }
 
     bb.translate(0.0, yoff);
 
-    item->setbbox(bb);
+    ldata->bbox = bb;
     if (item->hasFrame()) {
-        item->layoutFrame();
+        item->layoutFrame(ldata);
     }
 }
 

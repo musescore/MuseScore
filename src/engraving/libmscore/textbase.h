@@ -183,7 +183,9 @@ public:
     int currentPosition() const;
     Range selectionRange() const;
 
-    TextBlock& curLine() const;
+    const TextBlock& curLine() const;
+    TextBlock& curLine();
+
     mu::RectF cursorRect() const;
     bool movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode mode = TextCursor::MoveMode::MoveAnchor, int count = 1);
     void selectWord();
@@ -248,7 +250,7 @@ public:
     bool operator ==(const TextBlock& x) const { return _fragments == x._fragments; }
     bool operator !=(const TextBlock& x) const { return _fragments != x._fragments; }
     void draw(mu::draw::Painter*, const TextBase*) const;
-    void layout(TextBase*);
+    void layout(const TextBase*);
     const std::list<TextFragment>& fragments() const { return _fragments; }
     std::list<TextFragment>& fragments() { return _fragments; }
     std::list<TextFragment> fragmentsWithoutEmpty();
@@ -385,16 +387,9 @@ public:
 
     TextCursor* cursorFromEditData(const EditData&);
     TextCursor* cursor() const { return m_cursor; }
-    const TextBlock& textBlock(int line) const { return m_blocks[line]; }
-    TextBlock& textBlock(int line) { return m_blocks[line]; }
-    std::vector<TextBlock>& textBlockList() { return m_blocks; }
-    const std::vector<TextBlock>& blocks() const { return m_blocks; }
-    size_t rows() const { return m_blocks.size(); }
 
     void setTextInvalid() { m_textInvalid = true; }
     bool isTextInvalid() const { return m_textInvalid; }
-    void setLayoutInvalid() { m_layoutInvalid = true; }
-    bool isLayoutInvalid() const { return m_layoutInvalid; }
 
     // helper functions
     bool hasFrame() const { return m_frameType != FrameType::NO_FRAME; }
@@ -431,13 +426,6 @@ public:
     friend class TextCursor;
     using EngravingObject::undoChangeProperty;
 
-    bool isBlockNotCreated() const { return m_layoutInvalid; }
-    std::vector<TextBlock>& blocksRef() { return m_blocks; }
-    void createBlocks();
-    void layoutFrame();
-
-    const mu::RectF& frame() const { return m_frame; }
-
     mu::draw::Color textColor() const;
     FrameType frameType() const { return m_frameType; }
     void setFrameType(FrameType val) { m_frameType = val; }
@@ -454,6 +442,35 @@ public:
     int frameRound() const { return m_frameRound; }
     void setFrameRound(int val) { m_frameRound = val; }
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        std::vector<TextBlock> blocks;
+        bool layoutInvalid = true;
+
+        mu::RectF frame;
+    };
+    DECLARE_LAYOUTDATA_METHODS(TextBase);
+
+    void createBlocks();
+    void createBlocks(LayoutData* ldata) const;
+    void layoutFrame();
+    void layoutFrame(LayoutData* ldata) const;
+
+    //! --- Old Interface ---
+    const TextBlock& textBlock(int line) const { return layoutData()->blocks.at(line); }
+    TextBlock& textBlock(int line) { return mutLayoutData()->blocks[line]; }
+    std::vector<TextBlock>& textBlockList() { return mutLayoutData()->blocks; }
+    const std::vector<TextBlock>& blocks() const { return layoutData()->blocks; }
+    size_t rows() const { return layoutData()->blocks.size(); }
+
+    std::vector<TextBlock>& blocksRef() { return mutLayoutData()->blocks; }
+
+    void setLayoutInvalid() { mutLayoutData()->layoutInvalid = true; }
+    bool isLayoutInvalid() const { return layoutData()->layoutInvalid; }
+    bool isBlockNotCreated() const { return layoutData()->layoutInvalid; }
+
+    const mu::RectF& frame() const { return layoutData()->frame; }
+    //! ---------------------
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
@@ -466,12 +483,10 @@ protected:
 
     virtual void commitText();
 
-    mu::RectF m_frame;                 // calculated in layout()
-
 private:
 
     void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
-    void insert(TextCursor*, char32_t code);
+    void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
     void genText() const;
     virtual int getPropertyFlagsIdx(Pid id) const override;
     String stripText(bool, bool, bool) const;
@@ -504,8 +519,6 @@ private:
     mutable String m_text;                          // cached
     mutable bool m_textInvalid = true;
 
-    std::vector<TextBlock> m_blocks;
-    bool m_layoutInvalid = true;
     TextStyleType m_textStyleType = TextStyleType::DEFAULT;           // text style id
 
     bool m_layoutToParentWidth = false;
