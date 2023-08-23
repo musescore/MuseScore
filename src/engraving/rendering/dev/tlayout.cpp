@@ -1616,14 +1616,15 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
     layoutDynamic(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Expression* item, LayoutContext& ctx)
+static void layoutExpression(const Expression* item, const LayoutContext& ctx, Expression::LayoutData* ldata)
 {
-    layoutTextBase(item, ctx);
-
-    Segment* segment = item->explicitParent() ? toSegment(item->explicitParent()) : nullptr;
-    if (!segment) {
+    IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
+
+    TLayout::layoutTextBase(item, ctx, ldata);
+
+    Segment* segment = toSegment(item->explicitParent());
 
     if (item->align().horizontal != AlignH::LEFT) {
         Chord* chordToAlign = nullptr;
@@ -1642,48 +1643,53 @@ void TLayout::layout(Expression* item, LayoutContext& ctx)
             const Note* note = chordToAlign->notes().at(0);
             double headWidth = note->headWidth();
             bool center = item->align().horizontal == AlignH::HCENTER;
-            item->movePosX(headWidth * (center ? 0.5 : 1));
+            ldata->movePosX(headWidth * (center ? 0.5 : 1));
         }
     }
 
-    item->setSnappedDynamic(nullptr);
+    const_cast<Expression*>(item)->setSnappedDynamic(nullptr);
 
     if (!item->autoplace()) {
         return;
     }
 
     if (!item->snapToDynamics()) {
-        item->autoplaceSegmentElement();
+        const_cast<Expression*>(item)->autoplaceSegmentElement();
         return;
     }
 
     Dynamic* dynamic = toDynamic(segment->findAnnotation(ElementType::DYNAMIC, item->track(), item->track()));
     if (!dynamic || dynamic->placeAbove() != item->placeAbove() || !dynamic->visible()) {
-        item->autoplaceSegmentElement();
+        const_cast<Expression*>(item)->autoplaceSegmentElement();
         return;
     }
 
-    item->setSnappedDynamic(dynamic);
-    dynamic->setSnappedExpression(item);
+    const_cast<Expression*>(item)->setSnappedDynamic(dynamic);
+    dynamic->setSnappedExpression(const_cast<Expression*>(item));
 
     // If there is a dynamic on same segment and track, lock this expression to it
     double padding = item->computeDynamicExpressionDistance();
     double dynamicRight = dynamic->shape().translate(dynamic->pos()).right();
     double expressionLeft = item->bbox().translated(item->pos()).left();
     double difference = expressionLeft - dynamicRight - padding;
-    item->movePosX(-difference);
+    ldata->movePosX(-difference);
 
     // Keep expression and dynamic vertically aligned
-    item->autoplaceSegmentElement();
+    const_cast<Expression*>(item)->autoplaceSegmentElement();
     bool above = item->placeAbove();
     double yExpression = item->pos().y();
     double yDynamic = dynamic->pos().y();
     bool expressionIsOuter = above ? yExpression < yDynamic : yExpression > yDynamic;
     if (expressionIsOuter) {
-        dynamic->movePosY((yExpression - yDynamic));
+        dynamic->mutLayoutData()->movePosY((yExpression - yDynamic));
     } else {
-        item->movePosY((yDynamic - yExpression));
+        ldata->movePosY((yDynamic - yExpression));
     }
+}
+
+void TLayout::layout(Expression* item, LayoutContext& ctx)
+{
+    layoutExpression(item, ctx, item->mutLayoutData());
 }
 
 static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata::LayoutData* data)
