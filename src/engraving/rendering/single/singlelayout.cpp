@@ -668,7 +668,7 @@ void SingleLayout::layout(Breath* item, const Context&)
 
 void SingleLayout::layout(Capo* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(Chord* item, const Context& ctx)
@@ -772,7 +772,7 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
 
 void SingleLayout::layout(Expression* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(Fermata* item, const Context&)
@@ -785,7 +785,7 @@ void SingleLayout::layout(Fermata* item, const Context&)
 
 void SingleLayout::layout(Fingering* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(FretDiagram* item, const Context& ctx)
@@ -833,7 +833,7 @@ void SingleLayout::layout(FSymbol* item, const Context&)
 
 void SingleLayout::layout(Dynamic* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(Glissando* item, const Context& ctx)
@@ -997,17 +997,17 @@ void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
 void SingleLayout::layout(HarpPedalDiagram* item, const Context& ctx)
 {
     item->updateDiagramText();
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(InstrumentChange* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(Jump* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(KeySig* item, const Context& ctx)
@@ -1155,7 +1155,7 @@ void SingleLayout::layout(NoteHead* item, const Context& ctx)
 
 void SingleLayout::layout(Marker* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(MeasureNumber* item, const Context& ctx)
@@ -1163,7 +1163,7 @@ void SingleLayout::layout(MeasureNumber* item, const Context& ctx)
     item->setPos(PointF());
     item->setOffset(PointF());
 
-    layout1TextBase(item, ctx);
+    layout1TextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(MeasureRepeat* item, const Context& ctx)
@@ -1257,12 +1257,12 @@ void SingleLayout::layout(PedalSegment* item, const Context& ctx)
 
 void SingleLayout::layout(PlayTechAnnotation* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(RehearsalMark* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(Slur* item, const Context& ctx)
@@ -1297,7 +1297,7 @@ void SingleLayout::layout(Spacer* item, const Context&)
 
 void SingleLayout::layout(StaffText* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(StaffTypeChange* item, const Context& ctx)
@@ -1316,12 +1316,12 @@ void SingleLayout::layout(Symbol* item, const Context&)
 
 void SingleLayout::layout(SystemText* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(TempoText* item, const Context& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void SingleLayout::layout(TextLine* item, const Context& ctx)
@@ -1580,28 +1580,25 @@ void SingleLayout::layout(VoltaSegment* item, const Context& ctx)
 
 void SingleLayout::layout(Text* item, const Context& ctx)
 {
-    layoutTextBase(static_cast<TextBase*>(item), ctx);
+    layoutTextBase(static_cast<TextBase*>(item), ctx, item->mutLayoutData());
 }
 
-void SingleLayout::layoutTextBase(TextBase* item, const Context& ctx)
+void SingleLayout::layoutTextBase(const TextBase* item, const Context& ctx, TextBase::LayoutData* ldata)
 {
-    item->setPos(PointF());
-    item->setOffset(PointF());
+    ldata->pos = PointF();
+    const_cast<TextBase*>(item)->setOffset(PointF());
 
     if (item->placeBelow()) {
-        item->setPosY(0.0);
+        ldata->setPosY(0.0);
     }
 
-    layout1TextBase(item, ctx);
+    layout1TextBase(item, ctx, ldata);
 }
 
-void SingleLayout::layout1TextBase(TextBase* item, const Context&)
+void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBase::LayoutData* ldata)
 {
-    if (item->isBlockNotCreated()) {
-        item->createBlocks();
-    }
-    if (item->blocksRef().empty()) {
-        item->blocksRef().push_back(TextBlock());
+    if (ldata->layoutInvalid) {
+        item->createBlocks(ldata);
     }
 
     RectF bb;
@@ -1609,41 +1606,41 @@ void SingleLayout::layout1TextBase(TextBase* item, const Context&)
 
     // adjust the bounding box for the text item
     for (size_t i = 0; i < item->rows(); ++i) {
-        TextBlock* t = &item->blocksRef()[i];
-        t->layout(item);
-        const RectF* r = &t->boundingRect();
+        TextBlock& t = ldata->blocks[i];
+        t.layout(item);
+        const RectF* r = &t.boundingRect();
 
         if (r->height() == 0) {
-            r = &item->blocksRef()[i - i].boundingRect();
+            r = &ldata->blocks.at(0).boundingRect();
         }
-        y += t->lineSpacing();
-        t->setY(y);
+        y += t.lineSpacing();
+        t.setY(y);
         bb |= r->translated(0.0, y);
     }
     double yoff = 0;
     double h    = 0;
 
-    item->setPos(PointF());
+    ldata->pos = PointF();
 
     if (item->align() == AlignV::BOTTOM) {
         yoff += h - bb.bottom();
     } else if (item->align() == AlignV::VCENTER) {
         yoff +=  (h - (bb.top() + bb.bottom())) * .5;
     } else if (item->align() == AlignV::BASELINE) {
-        yoff += h * .5 - item->blocksRef().front().lineSpacing();
+        yoff += h * .5 - ldata->blocks.front().lineSpacing();
     } else {
         yoff += -bb.top();
     }
 
-    for (TextBlock& t : item->blocksRef()) {
+    for (TextBlock& t : ldata->blocks) {
         t.setY(t.y() + yoff);
     }
 
     bb.translate(0.0, yoff);
 
-    item->setbbox(bb);
+    ldata->bbox = bb;
     if (item->hasFrame()) {
-        item->layoutFrame();
+        item->layoutFrame(ldata);
     }
 }
 
