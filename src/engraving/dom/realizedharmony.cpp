@@ -92,16 +92,19 @@ const RealizedHarmony::PitchMap& RealizedHarmony::notes() const
 const RealizedHarmony::PitchMap RealizedHarmony::generateNotes(int rootTpc, int bassTpc,
                                                                bool literal, Voicing voicing, int transposeOffset) const
 {
+    //cut octaves from offset
+    transposeOffset %= PITCH_DELTA_OCTAVE;
+
     //The octave which to generate the body of the harmony, this is static const for now
     //but may be user controlled in the future
     static const int DEFAULT_OCTAVE = 5;   //octave above middle C
 
     PitchMap notes;
     int rootPitch = tpc2pitch(rootTpc) + transposeOffset;
-    //euclidian mod, we need to treat this new pitch as a pitch between
-    //0 and 11, so that voicing remains consistent across transposition
+    //we need to treat this new pitch as a pitch between 0 and 11,
+    //so that voicing remains consistent across transposition
     if (rootPitch < 0) {
-        rootPitch += PITCH_DELTA_OCTAVE;
+        rootPitch = (rootPitch % PITCH_DELTA_OCTAVE) + PITCH_DELTA_OCTAVE;
     } else {
         rootPitch %= PITCH_DELTA_OCTAVE;
     }
