@@ -29,7 +29,6 @@
 
 #include "iengravingfont.h"
 
-#include "style/defaultstyle.h"
 #include "style/textstyle.h"
 
 #include "rw/xmlreader.h"
@@ -59,7 +58,7 @@ using namespace mu::engraving;
 namespace mu::engraving {
 static constexpr double subScriptSize     = 0.6;
 static constexpr double subScriptOffset   = 0.5; // of x-height
-static constexpr double superScriptOffset = -.9; // of x-height
+static constexpr double superScriptOffset = -0.9; // of x-height
 
 static const char* FALLBACK_SYMBOL_FONT = "Bravura";
 static const char* FALLBACK_SYMBOLTEXT_FONT = "Bravura Text";
@@ -1561,15 +1560,15 @@ String TextBlock::text(int col1, int len, bool withFormat) const
 TextBase::TextBase(const ElementType& type, EngravingItem* parent, TextStyleType tid, ElementFlags f)
     : EngravingItem(type, parent, f | ElementFlag::MOVABLE)
 {
-    _textLineSpacing        = 1.0;
+    m_textLineSpacing        = 1.0;
     m_textStyleType          = tid;
-    _bgColor                = mu::draw::Color::transparent;
-    _frameColor             = mu::draw::Color::BLACK;
+    m_bgColor                = mu::draw::Color::transparent;
+    m_frameColor             = mu::draw::Color::BLACK;
     m_align                  = { AlignH::LEFT, AlignV::TOP };
-    _frameType              = FrameType::NO_FRAME;
-    _frameWidth             = Spatium(0.1);
-    _paddingWidth           = Spatium(0.2);
-    _frameRound             = 0;
+    m_frameType              = FrameType::NO_FRAME;
+    m_frameWidth             = Spatium(0.1);
+    m_paddingWidth           = Spatium(0.2);
+    m_frameRound             = 0;
 
     m_cursor                 = new TextCursor(this);
     m_cursor->init();
@@ -1594,14 +1593,14 @@ TextBase::TextBase(const TextBase& st)
     m_hexState                     = -1;
 
     m_textStyleType               = st.m_textStyleType;
-    _textLineSpacing             = st._textLineSpacing;
-    _bgColor                     = st._bgColor;
-    _frameColor                  = st._frameColor;
+    m_textLineSpacing             = st.m_textLineSpacing;
+    m_bgColor                     = st.m_bgColor;
+    m_frameColor                  = st.m_frameColor;
     m_align                       = st.m_align;
-    _frameType                   = st._frameType;
-    _frameWidth                  = st._frameWidth;
-    _paddingWidth                = st._paddingWidth;
-    _frameRound                  = st._frameRound;
+    m_frameType                   = st.m_frameType;
+    m_frameWidth                  = st.m_frameWidth;
+    m_paddingWidth                = st.m_paddingWidth;
+    m_frameRound                  = st.m_frameRound;
 
     size_t n = m_elementStyle->size() + TEXT_STYLE_SIZE;
     delete[] m_propertyFlagsList;
