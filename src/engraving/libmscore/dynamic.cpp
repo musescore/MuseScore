@@ -238,10 +238,10 @@ double Dynamic::customTextOffset() const
     renderer()->layoutItem(toTextBase(&referenceDynamic));
 
     TextFragment referenceFragment;
-    if (!referenceDynamic.textBlockList().empty()) {
-        TextBlock referenceBlock = referenceDynamic.textBlockList().front();
+    if (!referenceDynamic.blocksRef().empty()) {
+        TextBlock referenceBlock = referenceDynamic.blocksRef().front();
         if (!referenceBlock.fragments().empty()) {
-            referenceFragment = referenceDynamic.textBlockList().front().fragments().front();
+            referenceFragment = referenceDynamic.blocksRef().front().fragments().front();
         }
     }
 

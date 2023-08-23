@@ -784,7 +784,7 @@ void SplitJoinText::join(EditData* ed)
     }
     mu::join(t->textBlock(static_cast<int>(line) - 1).fragments(), fragmentsList);
 
-    t->textBlockList().erase(t->textBlockList().begin() + line);
+    t->blocksRef().erase(t->blocksRef().begin() + line);
 
     _cursor.setRow(line - 1);
     _cursor.curLine().setEol(eol);
@@ -807,8 +807,8 @@ void SplitJoinText::split(EditData* ed)
     t->triggerLayout();
 
     CharFormat* charFmt = _cursor.format();           // take current format
-    t->textBlockList().insert(t->textBlockList().begin() + line + 1,
-                              _cursor.curLine().split(static_cast<int>(_cursor.column()), t->cursorFromEditData(*ed)));
+    t->blocksRef().insert(t->blocksRef().begin() + line + 1,
+                          _cursor.curLine().split(static_cast<int>(_cursor.column()), t->cursorFromEditData(*ed)));
     _cursor.curLine().setEol(true);
 
     _cursor.setRow(line + 1);

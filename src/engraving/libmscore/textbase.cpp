@@ -2449,6 +2449,7 @@ String TextBase::xmlText() const
         // Create temporary text object to avoid side effects
         // of genText() call.
         tmpText.reset(toTextBase(this->clone()));
+        tmpText->mutLayoutData()->blocks = layoutData()->blocks;
         tmpText->genText();
         text = tmpText.get();
     }

@@ -458,15 +458,12 @@ public:
     //! --- Old Interface ---
     const TextBlock& textBlock(int line) const { return layoutData()->blocks.at(line); }
     TextBlock& textBlock(int line) { return mutLayoutData()->blocks[line]; }
-    std::vector<TextBlock>& textBlockList() { return mutLayoutData()->blocks; }
+    std::vector<TextBlock>& blocksRef() { return mutLayoutData()->blocks; }
     const std::vector<TextBlock>& blocks() const { return layoutData()->blocks; }
     size_t rows() const { return layoutData()->blocks.size(); }
 
-    std::vector<TextBlock>& blocksRef() { return mutLayoutData()->blocks; }
-
     void setLayoutInvalid() { mutLayoutData()->layoutInvalid = true; }
-    bool isLayoutInvalid() const { return layoutData()->layoutInvalid; }
-    bool isBlockNotCreated() const { return layoutData()->layoutInvalid; }
+    bool isBlockNotCreated() const { return !layoutData() || layoutData()->layoutInvalid; }
 
     const mu::RectF& frame() const { return layoutData()->frame; }
     //! ---------------------

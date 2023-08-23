@@ -2759,12 +2759,12 @@ void TLayout::layout(Harmony* item, LayoutContext& ctx)
 
 void TLayout::layout1(Harmony* item, LayoutContext& ctx)
 {
-    if (item->isLayoutInvalid()) {
+    if (item->isBlockNotCreated()) {
         item->createBlocks();
     }
 
-    if (item->textBlockList().empty()) {
-        item->textBlockList().push_back(TextBlock());
+    if (item->blocksRef().empty()) {
+        item->blocksRef().push_back(TextBlock());
     }
 
     auto positionPoint = calculateBoundingRect(item, ctx);
