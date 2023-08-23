@@ -1477,7 +1477,7 @@ void TLayout::layout(Clef* item, LayoutContext& ctx)
     layoutClef(item, ctx, item->mutLayoutData());
 }
 
-static void layoutCapo(const Capo* item, const LayoutContext& ctx, Capo::LayoutData* data)
+static void layoutCapo(const Capo* item, const LayoutContext& ctx, Capo::LayoutData* ldata)
 {
     //! NOTE Looks like it doesn't belong here
     if (item->shouldAutomaticallyGenerateText() || item->empty()) {
@@ -1491,7 +1491,7 @@ static void layoutCapo(const Capo* item, const LayoutContext& ctx, Capo::LayoutD
         }
     }
 
-    TLayout::layoutTextBase(item, ctx, data);
+    TLayout::layoutTextBase(item, ctx, ldata);
     const_cast<Capo*>(item)->autoplaceSegmentElement();
 }
 
@@ -1543,19 +1543,20 @@ void TLayout::layout(DeadSlapped* item, LayoutContext& ctx)
     layoutDeadSlapped(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Dynamic* item, LayoutContext& ctx)
+static void layoutDynamic(const Dynamic* item, const LayoutContext& ctx, Dynamic::LayoutData* ldata)
 {
-    item->setSnappedExpression(nullptr); // Here we reset it. It will become known again when we layout expression
+    const_cast<Dynamic*>(item)->setSnappedExpression(nullptr); // Here we reset it. It will become known again when we layout expression
 
     const StaffType* stType = item->staffType();
 
-    item->setSkipDraw(false);
     if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
-        item->setSkipDraw(true);
+        ldata->isSkipDraw = true;
         return;
     }
 
-    layoutTextBase(item, ctx);
+    ldata->isSkipDraw = false;
+
+    TLayout::layoutTextBase(item, ctx, ldata);
 
     Segment* s = item->segment();
     if (!s || (!item->centerOnNotehead() && item->align().horizontal == AlignH::LEFT)) {
@@ -1579,7 +1580,7 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
     }
 
     if (!itemToAlign->isChord()) {
-        item->movePosX(itemToAlign->width() * 0.5);
+        ldata->movePosX(itemToAlign->width() * 0.5);
         return;
     }
 
@@ -1589,7 +1590,7 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
     // Move to center of notehead width
     Note* note = chord->notes().at(0);
     double noteHeadWidth = note->headWidth();
-    item->movePosX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
+    ldata->movePosX(noteHeadWidth * (centerOnNote ? 0.5 : 1));
 
     if (!item->centerOnNotehead()) {
         return;
@@ -1603,11 +1604,16 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
         double offset = symWidth / 2 - opticalCenter + item->symBbox(symId).left();
         double spatiumScaling = item->spatium() / ctx.conf().spatium();
         offset *= spatiumScaling;
-        item->movePosX(offset);
+        ldata->movePosX(offset);
     }
 
     // If the dynamic contains custom text, keep it aligned
-    item->movePosX(-item->customTextOffset());
+    ldata->movePosX(-item->customTextOffset());
+}
+
+void TLayout::layout(Dynamic* item, LayoutContext& ctx)
+{
+    layoutDynamic(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Expression* item, LayoutContext& ctx)

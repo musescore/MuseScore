@@ -69,7 +69,7 @@ public:
     TranslatableString subtypeUserName() const override;
     String translatedSubtypeUserName() const override;
 
-    double customTextOffset();
+    double customTextOffset() const;
 
     bool isEditable() const override { return true; }
     void startEdit(EditData&) override;
