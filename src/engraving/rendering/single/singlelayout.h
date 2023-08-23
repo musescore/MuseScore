@@ -24,6 +24,8 @@
 
 #include <memory>
 
+#include "libmscore/textbase.h"
+
 namespace mu::engraving {
 class MStyle;
 class IEngravingFont;
@@ -104,7 +106,6 @@ class SystemText;
 
 class TempoText;
 class Text;
-class TextBase;
 class TextLine;
 class TextLineSegment;
 class TextLineBaseSegment;
@@ -234,8 +235,8 @@ private:
     static void layout(VoltaSegment* item, const Context& ctx);
 
     static void layout(Text* item, const Context& ctx);
-    static void layoutTextBase(TextBase* item, const Context& ctx);
-    static void layout1TextBase(TextBase* item, const Context& ctx);
+    static void layoutTextBase(const TextBase* item, const Context& ctx, TextBase::LayoutData* ldata);
+    static void layout1TextBase(const TextBase* item, const Context& ctx, TextBase::LayoutData* ldata);
 
     static void layoutLine(SLine* item, const Context& ctx);
     static void layoutLineSegment(LineSegment* item, const Context& ctx);
