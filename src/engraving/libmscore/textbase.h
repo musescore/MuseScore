@@ -397,9 +397,9 @@ public:
     bool isLayoutInvalid() const { return m_layoutInvalid; }
 
     // helper functions
-    bool hasFrame() const { return _frameType != FrameType::NO_FRAME; }
-    bool circle() const { return _frameType == FrameType::CIRCLE; }
-    bool square() const { return _frameType == FrameType::SQUARE; }
+    bool hasFrame() const { return m_frameType != FrameType::NO_FRAME; }
+    bool circle() const { return m_frameType == FrameType::CIRCLE; }
+    bool square() const { return m_frameType == FrameType::SQUARE; }
 
     TextStyleType textStyleType() const { return m_textStyleType; }
     void setTextStyleType(TextStyleType id) { m_textStyleType = id; }
@@ -439,6 +439,20 @@ public:
     const mu::RectF& frame() const { return m_frame; }
 
     mu::draw::Color textColor() const;
+    FrameType frameType() const { return m_frameType; }
+    void setFrameType(FrameType val) { m_frameType = val; }
+    double textLineSpacing() const { return m_textLineSpacing; }
+    void setTextLineSpacing(double val) { m_textLineSpacing = val; }
+    mu::draw::Color bgColor() const { return m_bgColor; }
+    void setBgColor(const mu::draw::Color& val) { m_bgColor = val; }
+    mu::draw::Color frameColor() const { return m_frameColor; }
+    void setFrameColor(const mu::draw::Color& val) { m_frameColor = val; }
+    Spatium frameWidth() const { return m_frameWidth; }
+    void setFrameWidth(Spatium val) { m_frameWidth = val; }
+    Spatium paddingWidth() const { return m_paddingWidth; }
+    void setPaddingWidth(Spatium val) { m_paddingWidth = val; }
+    int frameRound() const { return m_frameRound; }
+    void setFrameRound(int val) { m_frameRound = val; }
 
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
@@ -446,23 +460,15 @@ protected:
     TextBase(const ElementType& type, EngravingItem* parent, ElementFlags);
     TextBase(const TextBase&);
 
-    mu::RectF m_frame;             // calculated in layout()
-
     void insertSym(EditData& ed, SymId id);
     void prepareFormat(const String& token, TextCursor& cursor);
     bool prepareFormat(const String& token, CharFormat& format);
 
     virtual void commitText();
 
+    mu::RectF m_frame;                 // calculated in layout()
+
 private:
-    // sorted by size to allow for most compact memory layout
-    M_PROPERTY(FrameType,       frameType,              setFrameType)
-    M_PROPERTY(double,          textLineSpacing,        setTextLineSpacing)
-    M_PROPERTY(mu::draw::Color, bgColor,                setBgColor)
-    M_PROPERTY(mu::draw::Color, frameColor,             setFrameColor)
-    M_PROPERTY(Spatium,         frameWidth,             setFrameWidth)
-    M_PROPERTY(Spatium,         paddingWidth,           setPaddingWidth)
-    M_PROPERTY(int,             frameRound,             setFrameRound)
 
     void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
     void insert(TextCursor*, char32_t code);
@@ -483,6 +489,14 @@ private:
     void notifyAboutTextRemoved(int startPosition, int endPosition, const String& text);
 
     Align m_align;
+
+    FrameType m_frameType = FrameType::NO_FRAME;
+    double m_textLineSpacing = 1.0;
+    mu::draw::Color m_bgColor;
+    mu::draw::Color m_frameColor;
+    Spatium m_frameWidth;
+    Spatium m_paddingWidth;
+    int m_frameRound = 0;
 
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it
