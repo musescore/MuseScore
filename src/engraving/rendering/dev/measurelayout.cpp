@@ -172,12 +172,16 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
     if (mmrMeasure) {
         // reuse existing mmrest
         if (mmrMeasure->ticks() != len) {
-            Segment* s = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
+            Segment* bls = mmrMeasure->findSegmentR(SegmentType::EndBarLine, mmrMeasure->ticks());
+            Segment* cs = mmrMeasure->findSegment(SegmentType::Clef | SegmentType::HeaderClef, mmrMeasure->ticks());
             // adjust length
             mmrMeasure->setTicks(len);
-            // move existing end barline
-            if (s) {
-                s->setRtick(len);
+            // move existing end barline and clef
+            if (bls) {
+                bls->setRtick(len);
+            }
+            if (cs) {
+                cs->setRtick(len);
             }
         }
         MeasureLayout::removeSystemTrailer(mmrMeasure, ctx);
