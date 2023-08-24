@@ -2019,21 +2019,24 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
     layoutFiguredBass(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Fingering* item, LayoutContext& ctx)
+static void layoutFingering(const Fingering* item, const LayoutContext& ctx, Fingering::LayoutData* ldata)
 {
-    if (item->explicitParent()) {
-        Fraction tick = item->parentItem()->tick();
-        const Staff* st = item->staff();
-        item->setSkipDraw(false);
-        if (st && st->isTabStaff(tick)
-            && (!st->staffType(tick)->showTabFingering() || item->textStyleType() == TextStyleType::STRING_NUMBER)) {
-            item->setSkipDraw(true);
-            return;
-        }
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
     }
 
-    layoutTextBase(item, ctx);
-    item->setPosY(0.0);      // handle placement below
+    Fraction tick = item->parentItem()->tick();
+    const Staff* st = item->staff();
+
+    if (st && st->isTabStaff(tick)
+        && (!st->staffType(tick)->showTabFingering() || item->textStyleType() == TextStyleType::STRING_NUMBER)) {
+        ldata->isSkipDraw = true;
+        return;
+    }
+    ldata->isSkipDraw = false;
+
+    TLayout::layoutTextBase(item, ctx, ldata);
+    ldata->pos.setY(0.0); // handle placement below
 
     if (item->autoplace() && item->note()) {
         Note* n      = item->note();
@@ -2046,11 +2049,11 @@ void TLayout::layout(Fingering* item, LayoutContext& ctx)
         // update offset after drag
         double rebase = 0.0;
         if (item->offsetChanged() != OffsetChange::NONE && !tight) {
-            rebase = item->rebaseOffset();
+            rebase = const_cast<Fingering*>(item)->rebaseOffset();
         }
 
         // temporarily exclude self from chord shape
-        item->setAutoplace(false);
+        const_cast<Fingering*>(item)->setAutoplace(false);
 
         if (item->layoutType() == ElementType::CHORD) {
             bool above = item->placeAbove();
@@ -2063,15 +2066,15 @@ void TLayout::layout(Fingering* item, LayoutContext& ctx)
             Staff* vStaff = chord->staff();           // TODO: use current height at tick
 
             if (n->mirror()) {
-                item->movePosX(-n->ipos().x());
+                ldata->movePosX(-n->ipos().x());
             }
-            item->movePosX(headWidth * .5);
+            ldata->movePosX(headWidth * .5);
             if (above) {
                 if (tight) {
                     if (chord->stem()) {
-                        item->movePosX(-0.8 * sp);
+                        ldata->movePosX(-0.8 * sp);
                     }
-                    item->movePosY(-1.5 * sp);
+                    ldata->movePosY(-1.5 * sp);
                 } else {
                     RectF r = item->bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
                     SkylineLine sk(false);
@@ -2098,18 +2101,18 @@ void TLayout::layout(Fingering* item, LayoutContext& ctx)
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
                         bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
-                        item->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
+                        const_cast<Fingering*>(item)->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
                     }
-                    item->movePosY(yd);
+                    ldata->movePosY(yd);
                 }
             } else {
                 if (tight) {
                     if (chord->stem()) {
-                        item->movePosX(0.8 * sp);
+                        ldata->movePosX(0.8 * sp);
                     }
-                    item->movePosY(1.5 * sp);
+                    ldata->movePosY(1.5 * sp);
                 } else {
-                    RectF r = item->bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
+                    RectF r = ldata->bbox.translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
                     SkylineLine sk(true);
                     sk.add(r.x(), r.top(), r.width());
                     double d = ss->skyline().south().minDistance(sk);
@@ -2134,29 +2137,34 @@ void TLayout::layout(Fingering* item, LayoutContext& ctx)
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
                         bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
-                        item->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
+                        const_cast<Fingering*>(item)->rebaseMinDistance(md, yd, sp, rebase, above, inStaff);
                     }
-                    item->movePosY(yd);
+                    ldata->movePosY(yd);
                 }
             }
         } else if (item->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
             // place to left of note
             double left = n->shape().left();
             if (left - n->x() > 0.0) {
-                item->movePosX(-left);
+                ldata->movePosX(-left);
             } else {
-                item->movePosX(-n->x());
+                ldata->movePosX(-n->x());
             }
         }
         // for other fingering styles, do not autoplace
 
         // restore autoplace
-        item->setAutoplace(true);
+        const_cast<Fingering*>(item)->setAutoplace(true);
     } else if (item->offsetChanged() != OffsetChange::NONE) {
         // rebase horizontally too, as autoplace may have adjusted it
-        item->rebaseOffset(false);
+        const_cast<Fingering*>(item)->rebaseOffset(false);
     }
-    item->setOffsetChanged(false);
+    const_cast<Fingering*>(item)->setOffsetChanged(false);
+}
+
+void TLayout::layout(Fingering* item, LayoutContext& ctx)
+{
+    layoutFingering(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
