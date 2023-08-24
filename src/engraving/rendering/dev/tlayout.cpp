@@ -2279,17 +2279,17 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
     layoutFretDiagram(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(FretCircle* item, LayoutContext&)
+static void layoutFretCircle(const FretCircle* item, const LayoutContext&, FretCircle::LayoutData* ldata)
 {
-    item->setSkipDraw(false);
     if (!item->tabEllipseEnabled()) {
-        item->setSkipDraw(true);
-        item->setbbox(RectF());
+        ldata->isSkipDraw = true;
+        ldata->setbbox(RectF());
         return;
     }
+    ldata->isSkipDraw = false;
 
     double lw = item->spatium() * FretCircle::CIRCLE_WIDTH / 2;
-    item->setRect(item->ellipseRect());
+    ldata->rect = item->ellipseRect();
 
     RectF chordRect;
     double minWidth = item->chord()->upNote()->width();
@@ -2301,10 +2301,15 @@ void TLayout::layout(FretCircle* item, LayoutContext&)
     double offsetFromUpNote = (item->rect().height() - chordRect.height()
                                - (item->chord()->downNote()->pos().y() - item->chord()->upNote()->pos().y())
                                ) / 2;
-    item->setOffsetFromUpNote(offsetFromUpNote);
-    item->setSideOffset((item->rect().width() - minWidth) / 2);
+    ldata->offsetFromUpNote = offsetFromUpNote;
+    ldata->sideOffset = ((item->rect().width() - minWidth) / 2);
 
-    item->setbbox(item->rect().adjusted(-lw, -lw, lw, lw));
+    ldata->setbbox(item->rect().adjusted(-lw, -lw, lw, lw));
+}
+
+void TLayout::layout(FretCircle* item, LayoutContext& ctx)
+{
+    layoutFretCircle(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Glissando* item, LayoutContext& ctx)
