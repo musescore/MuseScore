@@ -1007,7 +1007,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
 PalettePtr PaletteCreator::newArpeggioPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Arpeggio);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Arpeggios & glissandi"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Arpeggios & glissandos"));
     sp->setGridSize(42, 44);
     sp->setDrawGrid(true);
     sp->setVisible(false);
