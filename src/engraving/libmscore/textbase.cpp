@@ -2081,15 +2081,13 @@ public:
 //---------------------------------------------------------
 //   genText
 //---------------------------------------------------------
-
-void TextBase::genText() const
+String TextBase::genText(const LayoutData* ldata) const
 {
-    const LayoutData* ldata = layoutData();
     if (!ldata) {
-        return;
+        return String();
     }
 
-    m_text.clear();
+    String text;
     bool bold_      = false;
     bool italic_    = false;
     bool underline_ = false;
@@ -2117,7 +2115,7 @@ void TextBase::genText() const
         }
     }
 
-    XmlNesting xmlNesting(&m_text);
+    XmlNesting xmlNesting(&text);
     if (bold_) {
         xmlNesting.pushB();
     }
@@ -2167,10 +2165,10 @@ void TextBase::genText() const
             }
 
             if (format.fontSize() != fmt.fontSize()) {
-                m_text += String(u"<font size=\"%1\"/>").arg(format.fontSize());
+                text += String(u"<font size=\"%1\"/>").arg(format.fontSize());
             }
             if (format.fontFamily() != "ScoreText" && format.fontFamily() != fmt.fontFamily()) {
-                m_text += String(u"<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
+                text += String(u"<font face=\"%1\"/>").arg(TextBase::escape(format.fontFamily()));
             }
 
             VerticalAlignment va = format.valign();
@@ -2192,20 +2190,27 @@ void TextBase::genText() const
             }
             if (format.fontFamily() == u"ScoreText") {
                 for (size_t i = 0; i < f.text.size(); ++i) {
-                    m_text += toSymbolXml(f.text.at(i));
+                    text += toSymbolXml(f.text.at(i));
                 }
             } else {
-                m_text += XmlWriter::xmlString(f.text);
+                text += XmlWriter::xmlString(f.text);
             }
             fmt = format;
         }
         if (block.eol()) {
-            m_text += Char::LineFeed;
+            text += Char::LineFeed;
         }
     }
     while (!xmlNesting.empty()) {
         xmlNesting.popToken();
     }
+
+    return text;
+}
+
+void TextBase::genText()
+{
+    m_text = genText(layoutData());
     m_textInvalid = false;
 }
 
@@ -2439,21 +2444,12 @@ String TextBase::plainText() const
 
 String TextBase::xmlText() const
 {
-    // this is way too expensive
-    // what side effects has genText() ?
-    // this method is const by design
-
-    const TextBase* text = this;
-    std::unique_ptr<TextBase> tmpText;
-    if (m_textInvalid) {
-        // Create temporary text object to avoid side effects
-        // of genText() call.
-        tmpText.reset(toTextBase(this->clone()));
-        tmpText->mutLayoutData()->blocks = layoutData()->blocks;
-        tmpText->genText();
-        text = tmpText.get();
+    if (!m_textInvalid) {
+        return m_text;
     }
-    return text->m_text;
+
+    QString text = genText(layoutData());
+    return text;
 }
 
 //---------------------------------------------------------

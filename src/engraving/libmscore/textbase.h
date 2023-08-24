@@ -484,7 +484,8 @@ private:
 
     void drawSelection(mu::draw::Painter*, const mu::RectF&) const;
     void insert(TextCursor*, char32_t code, LayoutData* ldata) const;
-    void genText() const;
+    String genText(const LayoutData* ldata) const;
+    void genText();
     virtual int getPropertyFlagsIdx(Pid id) const override;
     String stripText(bool, bool, bool) const;
     Sid offsetSid() const;
@@ -513,8 +514,8 @@ private:
     // there are two representations of text; only one
     // might be valid and the other can be constructed from it
 
-    mutable String m_text;                          // cached
-    mutable bool m_textInvalid = true;
+    String m_text;                          // cached
+    bool m_textInvalid = true;
 
     TextStyleType m_textStyleType = TextStyleType::DEFAULT;           // text style id
 
