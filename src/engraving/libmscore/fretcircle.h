@@ -39,18 +39,26 @@ public:
 
     ~FretCircle();
 
-    double offsetFromUpNote() const { return m_offsetFromUpNote; }
-    void setOffsetFromUpNote(double o) { m_offsetFromUpNote = o; }
-    double sideOffset() const { return m_sideOffset; }
-    void setSideOffset(double o) { m_sideOffset = o; }
-
-    const mu::RectF& rect() const { return m_rect; }
-    void setRect(const mu::RectF& r) { m_rect = r; }
-
     Chord* chord() const { return m_chord; }
 
     bool tabEllipseEnabled() const;
     RectF ellipseRect() const;
+
+    struct LayoutData : public EngravingItem::LayoutData {
+        mu::RectF rect;
+        double offsetFromUpNote = 0.0;
+        double sideOffset = 0.0;
+    };
+    DECLARE_LAYOUTDATA_METHODS(FretCircle);
+
+    //! --- Old Interface ---
+    const mu::RectF& rect() const { return layoutData()->rect; }
+    void setRect(const mu::RectF& r) { mutLayoutData()->rect = r; }
+    double offsetFromUpNote() const { return layoutData()->offsetFromUpNote; }
+    void setOffsetFromUpNote(double o) { mutLayoutData()->offsetFromUpNote = o; }
+    double sideOffset() const { return layoutData()->sideOffset; }
+    void setSideOffset(double o) { mutLayoutData()->sideOffset = o; }
+    //! ---------------------
 
 private:
 
@@ -60,10 +68,6 @@ private:
     FretCircle* clone() const override { return new FretCircle(*this); }
 
     Chord* m_chord = nullptr;
-    mu::RectF m_rect;
-
-    double m_offsetFromUpNote = 0;
-    double m_sideOffset = 0;
 };
 } // namespace mu::engraving
 #endif
