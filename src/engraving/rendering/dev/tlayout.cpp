@@ -2167,19 +2167,19 @@ void TLayout::layout(Fingering* item, LayoutContext& ctx)
     layoutFingering(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
+static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx, FretDiagram::LayoutData* ldata)
 {
     double _spatium  = item->spatium() * item->userMag();
-    item->setStringLw(_spatium * 0.08);
-    item->setNutLw((item->fretOffset() || !item->showNut()) ? item->stringLw() : _spatium * 0.2);
-    item->setStringDist(ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag());
-    item->setFretDist(ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag());
-    item->setMarkerSize(item->stringDist() * .8);
+    ldata->stringLw = _spatium * 0.08;
+    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? item->stringLw() : _spatium * 0.2);
+    ldata->stringDist = ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag();
+    ldata->fretDist = ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag();
+    ldata->markerSize = item->stringDist() * .8;
 
-    double w    = item->stringDist() * (item->strings() - 1) + item->markerSize();
-    double h    = (item->frets() + 1) * item->fretDist() + item->markerSize();
-    double y    = -(item->markerSize() * .5 + item->fretDist());
-    double x    = -(item->markerSize() * .5);
+    double w = item->stringDist() * (item->strings() - 1) + item->markerSize();
+    double h = (item->frets() + 1) * item->fretDist() + item->markerSize();
+    double y = -(item->markerSize() * .5 + item->fretDist());
+    double x = -(item->markerSize() * .5);
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
@@ -2205,14 +2205,14 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
     }
 
     // When changing how bbox is calculated, don't forget to update the centerX and rightX methods too.
-    item->bbox().setRect(x, y, w, h);
+    ldata->bbox.setRect(x, y, w, h);
 
-    if (!item->explicitParent() || !item->explicitParent()->isSegment()) {
-        item->setPos(PointF());
+    if (!item->explicitParent()->isSegment()) {
+        ldata->setPos(PointF());
         return;
     }
 
-    // We need to get the width of the notehead/rest in order to position the fret diagram correctly
+    // We need to get th)e width of the notehead/rest in order to position the fret diagram correctly
     Segment* pSeg = toSegment(item->explicitParent());
     double noteheadWidth = 0;
     if (pSeg->isChordRestType()) {
@@ -2236,9 +2236,9 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
     } else if (item->orientation() == Orientation::HORIZONTAL) {
         mainWidth = item->fretDist() * (item->frets() + 0.5);
     }
-    item->setPos((noteheadWidth - mainWidth) / 2, -(h + item->styleP(Sid::fretY)));
+    ldata->setPos((noteheadWidth - mainWidth) / 2, -(h + item->styleP(Sid::fretY)));
 
-    item->autoplaceSegmentElement();
+    const_cast<FretDiagram*>(item)->autoplaceSegmentElement();
 
     // don't display harmony in palette
     if (!item->explicitParent()) {
@@ -2247,7 +2247,7 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
 
     Harmony* harmony = item->harmony();
     if (harmony) {
-        layout(harmony, ctx);
+        TLayout::layout(harmony, const_cast<LayoutContext&>(ctx));
     }
 
     if (harmony && harmony->autoplace() && harmony->explicitParent()) {
@@ -2272,6 +2272,11 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
             ss->skyline().add(r);
         }
     }
+}
+
+void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
+{
+    layoutFretDiagram(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(FretCircle* item, LayoutContext&)
