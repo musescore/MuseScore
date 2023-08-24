@@ -1919,6 +1919,32 @@ void Score::setSelection(const Selection& s)
 }
 
 //---------------------------------------------------------
+//   selectElementsWithSameTypeOnSegment
+//---------------------------------------------------------
+
+void Score::selectElementsWithSameTypeOnSegment(ElementType elementType, Segment* segment)
+{
+    TRACEFUNC;
+
+    IF_ASSERT_FAILED(segment) {
+        return;
+    }
+
+    deselectAll();
+
+    std::vector<EngravingItem*> elementsToSelect;
+
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        EngravingItem* element = segment->element(staffIdx * VOICES);
+        if (element && element->type() == elementType) {
+            elementsToSelect.push_back(element);
+        }
+    }
+
+    select(elementsToSelect, SelectType::ADD);
+}
+
+//---------------------------------------------------------
 //   getText
 //---------------------------------------------------------
 

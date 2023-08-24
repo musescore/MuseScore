@@ -554,6 +554,7 @@ public:
     Selection& selection() { return m_selection; }
     SelectionFilter& selectionFilter() { return m_selectionFilter; }
     void setSelection(const Selection& s);
+    void selectElementsWithSameTypeOnSegment(ElementType elementType, Segment* segment);
 
     Fraction pos();
     Measure* tick2measure(const Fraction& tick) const;
