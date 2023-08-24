@@ -164,9 +164,6 @@ public:
     void setContLine(const ContLine& v) { m_contLine = v; }
     void undoSetContLine(ContLine val);
 
-    double textWidth() const { return m_textWidth; }
-    void setTextWidth(double w) { m_textWidth = w; }
-
     Parenthesis parenth1() const { return m_parenth[0]; }
     Parenthesis parenth2() const { return m_parenth[1]; }
     Parenthesis parenth3() const { return m_parenth[2]; }
@@ -186,12 +183,22 @@ public:
     void undoSetParenth5(Parenthesis par);
     String normalizedText() const;
 
-    String displayText() const { return m_displayText; }
-    void setDisplayText(const String& s) { m_displayText = s; }
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
+
+    struct LayoutData : public EngravingItem::LayoutData {
+        String displayText;                       // the constructed display text (read-only)
+        double textWidth = 0.0;                   // the text width (in raster units)
+    };
+    DECLARE_LAYOUTDATA_METHODS(FiguredBassItem)
+
+    //! --- Old Interface ---
+    String displayText() const { return layoutData()->displayText; }
+    void setDisplayText(const String& s) { mutLayoutData()->displayText = s; }
+    double textWidth() const { return layoutData()->textWidth; }
+    void setTextWidth(double w) { mutLayoutData()->textWidth = w; }
+    //! ---------------------
 
 private:
 
@@ -209,7 +216,6 @@ private:
 
     static const Char NORM_PARENTH_TO_CHAR[int(Parenthesis::NUMOF)];
 
-    String m_displayText;                       // the constructed display text (read-only)
     int m_ord = 0;                              // the line ordinal of this element in the FB stack
                                                 // the parts making a FiguredBassItem up
     Modifier m_prefix = Modifier::NONE;         // the accidental coming before the body
@@ -217,8 +223,6 @@ private:
     Modifier m_suffix = Modifier::NONE;         // the accidental coming after the body
     ContLine m_contLine = ContLine::NONE;       // whether the item has continuation line or not
     Parenthesis m_parenth[5];                   // each of the parenthesis: before, between and after parts
-    double m_textWidth = 0.0;                   // the text width (in raster units), set during layout()
-                                                //    used by draw()
 };
 
 //---------------------------------------------------------

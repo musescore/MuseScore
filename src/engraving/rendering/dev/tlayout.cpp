@@ -1750,8 +1750,7 @@ void TLayout::layout(Fermata* item, LayoutContext& ctx)
 //    creates the display text (set as element text) and computes
 //    the horiz. offset needed to align the right part as well as the vert. offset
 //---------------------------------------------------------
-
-void TLayout::layout(FiguredBassItem* item, LayoutContext& ctx)
+static void layoutFiguredBassItem(const FiguredBassItem* item, const LayoutContext& ctx, FiguredBassItem::LayoutData* ldata)
 {
     double h, w, x, x1, x2, y;
 
@@ -1845,7 +1844,8 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext& ctx)
         str.append(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth4())]);
     }
 
-    item->setDisplayText(str);                  // this text will be displayed
+    //! NOTE Look like, this text not layout data (not depends by position)
+    ldata->displayText = str;             // this text will be displayed
 
     if (str.size()) {                     // if some text
         x = x - (x1 + x2) * 0.5;          // position the text so that [x1<-->x2] is centered below the note
@@ -1860,17 +1860,22 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext& ctx)
     } else {                                                      // bottom alignment: stack up from last item
         y = -h * (item->figuredBass()->itemsCount() - item->ord());
     }
-    item->setPos(x, y);
+    ldata->pos.setXY(x, y);
     // determine bbox from text width
 //      w = fm.width(str);
     w = fm.width(str);
-    item->setTextWidth(w);
+    ldata->textWidth = w;
     // if there is a cont.line, extend width to cover the whole FB element duration line
     int lineLen;
     if (item->contLine() != FiguredBassItem::ContLine::NONE && (lineLen = item->figuredBass()->lineLength(0)) > w) {
         w = lineLen;
     }
-    item->bbox().setRect(0, 0, w, h);
+    ldata->bbox.setRect(0, 0, w, h);
+}
+
+void TLayout::layout(FiguredBassItem* item, LayoutContext& ctx)
+{
+    layoutFiguredBassItem(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
