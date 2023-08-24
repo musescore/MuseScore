@@ -180,16 +180,6 @@ public:
     void setShowNut(bool val) { m_showNut = val; }
     double userMag() const { return m_userMag; }
     void setUserMag(double m) { m_userMag = m; }
-    double stringLw() const { return m_stringLw; }
-    void setStringLw(double lw) { m_stringLw = lw; }
-    double nutLw() const { return m_nutLw; }
-    void setNutLw(double lw) { m_nutLw = lw; }
-    double stringDist() const { return m_stringDist; }
-    void setStringDist(double d) { m_stringDist = d; }
-    double fretDist() const { return m_fretDist; }
-    void setFretDist(double d) { m_fretDist = d; }
-    double markerSize() const { return m_markerSize; }
-    void setMarkerSize(double d) { m_markerSize = d; }
     int numPos() const { return m_numPos; }
 
     Orientation orientation() const { return m_orientation; }
@@ -227,6 +217,28 @@ public:
 
     friend class FretUndoData;
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        double stringLw = 0.0;
+        double nutLw = 0.0;
+        double stringDist = 0.0;
+        double fretDist = 0.0;
+        double markerSize = 0.0;
+    };
+    DECLARE_LAYOUTDATA_METHODS(FretDiagram);
+
+    //! --- Old Interface ---
+    double stringLw() const { return layoutData()->stringLw; }
+    void setStringLw(double lw) { mutLayoutData()->stringLw = lw; }
+    double nutLw() const { return layoutData()->nutLw; }
+    void setNutLw(double lw) { mutLayoutData()->nutLw = lw; }
+    double stringDist() const { return layoutData()->stringDist; }
+    void setStringDist(double d) { mutLayoutData()->stringDist = d; }
+    double fretDist() const { return layoutData()->fretDist; }
+    void setFretDist(double d) { mutLayoutData()->fretDist = d; }
+    double markerSize() const { return layoutData()->markerSize; }
+    void setMarkerSize(double d) { mutLayoutData()->markerSize = d; }
+    //! ---------------------
+
 private:
     friend class Factory;
 
@@ -257,13 +269,8 @@ private:
 
     Harmony* m_harmony = nullptr;
 
-    double m_stringLw = 0.0;
-    double m_nutLw = 0.0;
-    double m_stringDist = 0.0;
-    double m_fretDist = 0.0;
     mu::draw::Font m_font;
     double m_userMag = 1.0;                 // allowed 0.1 - 10.0
-    double m_markerSize = 0.0;
     int m_numPos = 0;
 };
 } // namespace mu::engraving

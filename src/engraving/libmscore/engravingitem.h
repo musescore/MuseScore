@@ -501,6 +501,8 @@ public:
         PointF pos;                 // Reference position, relative to _parent, set by autoplace
         RectF bbox;                 // Bounding box relative to _pos + _offset
 
+        void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
+        void setPos(double x, double y) { doSetPos(x, y); }
         void setPosX(double x) { doSetPos(x, pos.y()); }
         void setPosY(double y) { doSetPos(pos.x(), y); }
         void movePos(const PointF& p) { doSetPos(pos.x() + p.x(), pos.y() + p.y()); }

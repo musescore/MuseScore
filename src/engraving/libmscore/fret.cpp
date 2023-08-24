@@ -24,17 +24,11 @@
 
 #include "translation.h"
 
-#include "draw/fontmetrics.h"
-#include "draw/types/brush.h"
-#include "draw/types/pen.h"
-
 #include "chord.h"
 #include "factory.h"
 #include "harmony.h"
 #include "measure.h"
-#include "mscore.h"
 #include "note.h"
-#include "rest.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -288,13 +282,13 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 double FretDiagram::centerX() const
 {
     // Keep in sync with how bbox is calculated in layout().
-    return (bbox().right() - m_markerSize * .5) * .5;
+    return (bbox().right() - layoutData()->markerSize * .5) * .5;
 }
 
 double FretDiagram::rightX() const
 {
     // Keep in sync with how bbox is calculated in layout().
-    return bbox().right() - m_markerSize * .5;
+    return bbox().right() - layoutData()->markerSize * .5;
 }
 
 //---------------------------------------------------------
