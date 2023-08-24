@@ -2212,7 +2212,7 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
         return;
     }
 
-    // We need to get th)e width of the notehead/rest in order to position the fret diagram correctly
+    // We need to get the width of the notehead/rest in order to position the fret diagram correctly
     Segment* pSeg = toSegment(item->explicitParent());
     double noteheadWidth = 0;
     if (pSeg->isChordRestType()) {
@@ -2304,7 +2304,7 @@ static void layoutFretCircle(const FretCircle* item, const LayoutContext&, FretC
     ldata->offsetFromUpNote = offsetFromUpNote;
     ldata->sideOffset = ((item->rect().width() - minWidth) / 2);
 
-    ldata->setbbox(item->rect().adjusted(-lw, -lw, lw, lw));
+    ldata->setbbox(ldata->rect.adjusted(-lw, -lw, lw, lw));
 }
 
 void TLayout::layout(FretCircle* item, LayoutContext& ctx)
@@ -2868,7 +2868,7 @@ void TLayout::layout(Hairpin* item, LayoutContext& ctx)
 void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
 {
     item->updateDiagramText();
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
     item->autoplaceSegmentElement();
 }
 

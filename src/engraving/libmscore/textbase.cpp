@@ -2448,7 +2448,7 @@ String TextBase::xmlText() const
         return m_text;
     }
 
-    QString text = genText(layoutData());
+    String text = genText(layoutData());
     return text;
 }
 
