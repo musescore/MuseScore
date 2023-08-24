@@ -77,7 +77,6 @@ public:
     PointF chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const;
 
     double chordMag() const;
-    double mag() const override;
     RectF drag(EditData&) override;
 
     void layout2();
