@@ -26,8 +26,6 @@
 
 #include "rw/xmlreader.h"
 
-#include "draw/types/pen.h"
-
 #include "style/textstyle.h"
 
 #include "chord.h"
@@ -86,7 +84,6 @@ FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
     m_digit      = FBIDigitNone;
     m_parenth[0]  = m_parenth[1] = m_parenth[2] = m_parenth[3] = m_parenth[4] = Parenthesis::NONE;
     m_contLine   = ContLine::NONE;
-    m_textWidth   = 0;
 }
 
 FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
@@ -102,8 +99,6 @@ FiguredBassItem::FiguredBassItem(const FiguredBassItem& item)
     m_parenth[3]  = item.m_parenth[3];
     m_parenth[4]  = item.m_parenth[4];
     m_contLine   = item.m_contLine;
-    m_textWidth   = item.m_textWidth;
-    m_displayText= item.m_displayText;
 }
 
 FiguredBassItem::~FiguredBassItem()
