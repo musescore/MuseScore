@@ -124,8 +124,10 @@ Column {
                 ] : [
                     { text: qsTrc("inspector", "Auto (diatonic)"), value: OrnamentTypes.TYPE_AUTO},
                     { text: qsTrc("inspector", "Augmented"), value: OrnamentTypes.TYPE_AUGMENTED},
-                    { text: qsTrc("inspector", "Major"), value: OrnamentTypes.TYPE_MAJOR},
-                    { text: qsTrc("inspector", "Minor"), value: OrnamentTypes.TYPE_MINOR},
+                    //: Interval, not the mode of a key signature
+                    { text: qsTrc("inspector", "Major", "interval quality"), value: OrnamentTypes.TYPE_MAJOR},
+                    //: Interval, not the mode of a key signature
+                    { text: qsTrc("inspector", "Minor", "interval quality"), value: OrnamentTypes.TYPE_MINOR},
                     { text: qsTrc("inspector", "Diminished"), value: OrnamentTypes.TYPE_DIMINISHED},
                 ]
 
