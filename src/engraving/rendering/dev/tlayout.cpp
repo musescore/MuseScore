@@ -2312,33 +2312,24 @@ void TLayout::layout(FretCircle* item, LayoutContext& ctx)
     layoutFretCircle(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Glissando* item, LayoutContext& ctx)
+static void layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissando::LayoutData* ldata)
 {
     double _spatium = item->spatium();
 
-    if (ctx.conf().isPaletteMode() || !item->startElement() || !item->endElement()) {    // for use in palettes or while dragging
-        if (item->spannerSegments().empty()) {
-            item->add(item->createLineSegment(ctx.mutDom().dummyParent()->system()));
-        }
-        LineSegment* s = item->frontSegment();
-        s->setPos(PointF(-_spatium * Glissando::GLISS_PALETTE_WIDTH / 2, _spatium * Glissando::GLISS_PALETTE_HEIGHT / 2));
-        s->setPos2(PointF(_spatium * Glissando::GLISS_PALETTE_WIDTH, -_spatium * Glissando::GLISS_PALETTE_HEIGHT));
-        layout(s, ctx);
-        return;
-    }
-    layoutLine(item, ctx);
+    TLayout::layoutLine(const_cast<Glissando*>(item), ctx);
+
     if (item->spannerSegments().empty()) {
         LOGD("no segments");
         return;
     }
-    item->setPos(0.0, 0.0);
+    ldata->setPos(0.0, 0.0);
 
-    Note* anchor1     = toNote(item->startElement());
-    Note* anchor2     = toNote(item->endElement());
-    Chord* cr1         = anchor1->chord();
-    Chord* cr2         = anchor2->chord();
-    GlissandoSegment* segm1 = toGlissandoSegment(item->frontSegment());
-    GlissandoSegment* segm2 = toGlissandoSegment(item->backSegment());
+    Note* anchor1 = toNote(item->startElement());
+    Note* anchor2 = toNote(item->endElement());
+    Chord* cr1 = anchor1->chord();
+    Chord* cr2 = anchor2->chord();
+    GlissandoSegment* segm1 = toGlissandoSegment(const_cast<Glissando*>(item)->frontSegment());
+    GlissandoSegment* segm2 = toGlissandoSegment(const_cast<Glissando*>(item)->backSegment());
 
     // Note: line segments are defined by
     // initial point: ipos() (relative to system origin)
@@ -2413,12 +2404,12 @@ void TLayout::layout(Glissando* item, LayoutContext& ctx)
     double xCurr = 0.0;
     double yCurr;
     for (unsigned i = 0; i + 1 < item->spannerSegments().size(); i++) {
-        SpannerSegment* segm = item->segmentAt(i);
+        SpannerSegment* segm = const_cast<Glissando*>(item)->segmentAt(i);
         xCurr += segm->ipos2().x();
         yCurr = y0 + ratio * xCurr;
         segm->rypos2() = yCurr - segm->ipos().y();           // position segm. end point at yCurr
         // next segment shall start where this segment stopped, corrected for the staff y-difference
-        SpannerSegment* nextSeg = item->segmentAt(i + 1);
+        SpannerSegment* nextSeg = const_cast<Glissando*>(item)->segmentAt(i + 1);
         yCurr += yStaffDifference(nextSeg->system(), nextSeg->staffIdx(), segm->system(), segm->staffIdx());
         segm = nextSeg;
         segm->rypos2() += segm->ipos().y() - yCurr;          // adjust next segm. vertical length
@@ -2456,7 +2447,7 @@ void TLayout::layout(Glissando* item, LayoutContext& ctx)
     segm2->setPos2(segm2->ipos2() + offs2);
 
     for (SpannerSegment* segm : item->spannerSegments()) {
-        layoutItem(segm, ctx);
+        TLayout::layoutItem(segm, ctx);
     }
 
     // compute glissando bbox as the bbox of the last segment, relative to the end anchor note
@@ -2471,9 +2462,14 @@ void TLayout::layout(Glissando* item, LayoutContext& ctx)
     PointF anchor2SystPos = anchor2PagePos - system2PagePos;
     RectF r = RectF(anchor2SystPos - segm2->pos(), anchor2SystPos - segm2->pos() - segm2->pos2()).normalized();
     double lw = item->lineWidth() * .5;
-    item->setbbox(r.adjusted(-lw, -lw, lw, lw));
+    ldata->setbbox(r.adjusted(-lw, -lw, lw, lw));
 
-    item->addLineAttachPoints();
+    const_cast<Glissando*>(item)->addLineAttachPoints();
+}
+
+void TLayout::layout(Glissando* item, LayoutContext& ctx)
+{
+    layoutGlissando(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(GlissandoSegment* item, LayoutContext&)
@@ -4082,23 +4078,6 @@ void TLayout::layout(ShadowNote* item, LayoutContext& ctx)
 
 void TLayout::layoutLine(SLine* item, LayoutContext& ctx)
 {
-    if (ctx.conf().isPaletteMode() || (item->tick() == Fraction(-1, 1)) || (item->tick2() == Fraction::fromTicks(1))) {
-        //
-        // when used in a palette or while dragging from palette,
-        // SLine has no parent and
-        // tick and tick2 has no meaning so no layout is
-        // possible and needed
-        //
-        if (item->spannerSegments().empty()) {
-            item->setLen(ctx.conf().spatium() * 7);
-        }
-
-        LineSegment* lineSegm = item->frontSegment();
-        layout(lineSegm, ctx);
-        item->setbbox(lineSegm->bbox());
-        return;
-    }
-
     item->computeStartElement();
     item->computeEndElement();
 

@@ -151,6 +151,8 @@ void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
 //---------------------------------------------------------
 void ArpeggioLayout::symbolLine(const IEngravingFontPtr& f, Arpeggio::LayoutData* data, SymId end, SymId fill)
 {
+    data->symbols.clear();
+
     double w = data->bottom - data->top;
     double w1 = f->advance(end, data->magS);
     double w2 = f->advance(fill, data->magS);
