@@ -1878,38 +1878,16 @@ void TLayout::layout(FiguredBassItem* item, LayoutContext& ctx)
     layoutFiguredBassItem(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
-{
-    // VERTICAL POSITION:
-    const double y = ctx.conf().styleD(Sid::figuredBassYOffset) * item->spatium();
-    item->setPos(PointF(0.0, y));
-
-    // BOUNDING BOX and individual item layout (if required)
-    layout1TextBase(item, ctx);  // prepare structs and data expected by Text methods
-    // if element could be parsed into items, layout each element
-    // Items list will be empty in edit mode (see FiguredBass::startEdit).
-    // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
-    if (item->items().size() > 0) {
-        layoutLines(item, ctx);
-        item->bbox().setRect(0, 0, item->lineLength(0), 0);
-        // layout each item and enlarge bbox to include items bboxes
-        for (FiguredBassItem* fit : item->items()) {
-            layout(fit, ctx);
-            item->addbbox(fit->bbox().translated(fit->pos()));
-        }
-    }
-}
-
 //    lays out the duration indicator line(s), filling the _lineLengths array
 //    and the length of printed lines (used by continuation lines)
 
-void TLayout::layoutLines(FiguredBass* item, LayoutContext& ctx)
+static void layoutLines(const FiguredBass* item, const LayoutContext& ctx, FiguredBass::LayoutData* ldata)
 {
-    std::vector<double> lineLengths = item->lineLengths();
+    std::vector<double> lineLengths = ldata->lineLengths;
     if (item->ticks() <= Fraction(0, 1) || !item->segment()) {
         lineLengths.resize(1);                             // be sure to always have
         lineLengths[0] = 0;                                // at least 1 item in array
-        item->setLineLengths(lineLengths);
+        ldata->lineLengths = lineLengths;
         return;
     }
 
@@ -1953,14 +1931,14 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext& ctx)
         LOGD("FiguredBass layout: no segment found for tick %d", nextTick.ticks());
         lineLengths.resize(1);                             // be sure to always have
         lineLengths[0] = 0;                                // at least 1 item in array
-        item->setLineLengths(lineLengths);
+        ldata->lineLengths = lineLengths;
         return;
     }
 
     // get length of printed lines from horiz. page position of lastCR
     // (enter a bit 'into' the ChordRest for clarity)
     double printedLineLength = lastCR ? lastCR->pageX() - item->pageX() + 1.5 * item->spatium() : 3 * item->spatium();
-    item->setPrintedLineLength(printedLineLength);
+    ldata->printedLineLength = printedLineLength;
 
     // get duration indicator line(s) from page position of nextSegm
     const std::vector<System*>& systems = ctx.dom().systems();
@@ -2011,7 +1989,34 @@ void TLayout::layoutLines(FiguredBass* item, LayoutContext& ctx)
         lineLengths.resize(segIdx);
     }
 
-    item->setLineLengths(lineLengths);
+    ldata->lineLengths = lineLengths;
+}
+
+static void layoutFiguredBass(const FiguredBass* item, const LayoutContext& ctx, FiguredBass::LayoutData* ldata)
+{
+    // VERTICAL POSITION:
+    const double y = ctx.conf().styleD(Sid::figuredBassYOffset) * item->spatium();
+    ldata->pos = PointF(0.0, y);
+
+    // BOUNDING BOX and individual item layout (if required)
+    TLayout::layout1TextBase(item, ctx, ldata);  // prepare structs and data expected by Text methods
+    // if element could be parsed into items, layout each element
+    // Items list will be empty in edit mode (see FiguredBass::startEdit).
+    // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
+    if (item->items().size() > 0) {
+        layoutLines(item, ctx, ldata);
+        ldata->bbox.setRect(0, 0, item->lineLength(0), 0);
+        // layout each item and enlarge bbox to include items bboxes
+        for (FiguredBassItem* fit : item->items()) {
+            layoutFiguredBassItem(fit, ctx, fit->mutLayoutData());
+            ldata->addbbox(fit->bbox().translated(fit->pos()));
+        }
+    }
+}
+
+void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
+{
+    layoutFiguredBass(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Fingering* item, LayoutContext& ctx)
