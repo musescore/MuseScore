@@ -4922,7 +4922,7 @@ By default, they will be placed such as that their right end are at the same lev
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Show repeat barline tips (&quot;winged&quot; repeats)' value</string>
+              <string>Reset 'Show repeat barline tips (“winged” repeats)' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5030,7 +5030,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="0" column="0" colspan="2">
             <widget class="QCheckBox" name="showRepeatBarTips">
              <property name="text">
-              <string>Show repeat barline tips (&quot;winged&quot; repeats)</string>
+              <string>Show repeat barline tips (“winged” repeats)</string>
              </property>
             </widget>
            </item>
@@ -6043,7 +6043,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="2" column="0" colspan="2">
             <widget class="QCheckBox" name="oneMeasureRepeatShow1">
              <property name="text">
-              <string>Show &quot;1&quot; on 1-measure repeats</string>
+              <string>Show '1' on 1-measure repeats</string>
              </property>
             </widget>
            </item>

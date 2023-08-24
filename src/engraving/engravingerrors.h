@@ -61,7 +61,7 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
         text = mtrc("engraving", "Unknown error");
         break;
     case Err::FileNotFound:
-        text = mtrc("engraving", "File \"%1\" not found").arg(filePath.toString());
+        text = mtrc("engraving", "File “%1” not found").arg(filePath.toString());
         break;
     case Err::FileOpenError:
         text = mtrc("engraving", "File open error");
@@ -87,10 +87,10 @@ inline Ret make_ret(Err err, const io::path_t& filePath = "")
         text = mtrc("engraving", "This file was last saved in a development version of 3.0.");
         break;
     case Err::FileCorrupted:
-        text = mtrc("engraving", "File \"%1\" is corrupted.").arg(filePath.toString());
+        text = mtrc("engraving", "File “%1” is corrupted.").arg(filePath.toString());
         break;
     case Err::FileCriticallyCorrupted:
-        text = mtrc("engraving", "File \"%1\" is critically corrupted and cannot be processed.").arg(filePath.toString());
+        text = mtrc("engraving", "File “%1” is critically corrupted and cannot be processed.").arg(filePath.toString());
         break;
     case Err::Undefined:
     case Err::UnknownError:

@@ -124,7 +124,7 @@ Column {
                     navigation.name: root.navigationName + "Reset"
                     navigation.panel: root.navigationPanel
                     navigation.row: root.buttonNavigationRow
-                    navigation.accessible.name: root.titleText ? qsTrc("inspector", "Reset \"%1\" to default value").arg(root.titleText)
+                    navigation.accessible.name: root.titleText ? qsTrc("inspector", "Reset “%1” to default value").arg(root.titleText)
                                                                : qsTrc("inspector", "Reset property to default value")
 
                     enabled: root.isModified
