@@ -306,6 +306,8 @@ public:
     static void layoutTextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data); // base class
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
     static void layout1TextBase(TextBase* item, const LayoutContext& ctx);  // base class
+    static void layout1TextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data);
+
     static void layout(Text* item, LayoutContext& ctx);
 
     static void layout(TextLine* item, LayoutContext& ctx);
@@ -341,11 +343,7 @@ private:
 
     friend class SlurTieLayout;
 
-    static void layout1TextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data);
-
     static void adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx);
-
-    static void layoutLines(FiguredBass* item, LayoutContext& ctx);
 
     static PointF calculateBoundingRect(Harmony* item, const LayoutContext& ctx);
 

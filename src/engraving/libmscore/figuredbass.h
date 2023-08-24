@@ -283,19 +283,6 @@ public:
     bool isEditAllowed(EditData&) const override;
     void endEdit(EditData&) override;
 
-    void setLineLengths(const std::vector<double>& ll) { m_lineLengths = ll; }
-    const std::vector<double>& lineLengths() const { return m_lineLengths; }
-    double lineLength(size_t idx) const
-    {
-        if (idx < m_lineLengths.size()) {
-            return m_lineLengths.at(idx);
-        }
-        return 0;
-    }
-
-    void setPrintedLineLength(double l) { m_printedLineLength = l; }
-    double printedLineLength() const { return m_printedLineLength; }
-
     bool onNote() const { return m_onNote; }
     void setOnNote(bool val) { m_onNote = val; }
     Segment* segment() const { return (Segment*)(explicitParent()); }
@@ -318,6 +305,27 @@ public:
 
     bool hasParentheses() const;       // read / write MusicXML support
 
+    struct LayoutData : public TextBase::LayoutData {
+        std::vector<double> lineLengths;               // lengths of duration indicator lines (in raster units)
+        double printedLineLength = 0.0;                // the length of lines actually printed (i.e. continuation lines)
+    };
+    DECLARE_LAYOUTDATA_METHODS(FiguredBass);
+
+    //! --- Old Interface ---
+    void setLineLengths(const std::vector<double>& ll) { mutLayoutData()->lineLengths = ll; }
+    const std::vector<double>& lineLengths() const { return layoutData()->lineLengths; }
+    double lineLength(size_t idx) const
+    {
+        if (idx < lineLengths().size()) {
+            return lineLengths().at(idx);
+        }
+        return 0;
+    }
+
+    void setPrintedLineLength(double l) { mutLayoutData()->printedLineLength = l; }
+    double printedLineLength() const { return layoutData()->printedLineLength; }
+    //! ---------------------
+
 private:
 
     friend class Factory;
@@ -327,11 +335,10 @@ private:
     Sid getPropertyStyle(Pid) const override;
 
     std::vector<FiguredBassItem*> m_items;       // the individual lines of the F.B.
-    std::vector<double> m_lineLengths;           // lengths of duration indicator lines (in raster units)
+
     bool m_onNote = true;                        // true if this element is on a staff note | false if it is between notes
     Fraction m_ticks;                            // the duration (used for cont. lines and for multiple F.B.
                                                  // under the same note)
-    double m_printedLineLength = 0.0;            // the length of lines actually printed (i.e. continuation lines)
 };
 } // namespace mu::engraving
 

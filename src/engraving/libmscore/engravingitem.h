@@ -507,6 +507,9 @@ public:
         void movePosX(double x) { doSetPos(pos.x() + x, pos.y()); }
         void movePosY(double y) { doSetPos(pos.x(), pos.y() + y); }
 
+        void setbbox(const mu::RectF& r) { bbox = r; }
+        void addbbox(const mu::RectF& r) { bbox.unite(r); }
+
     private:
         inline void doSetPos(double x, double y)
         {
