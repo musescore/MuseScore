@@ -48,6 +48,10 @@ using namespace mu::accessibility;
 AccessibleObject* s_rootObject = nullptr;
 std::shared_ptr<IQAccessibleInterfaceRegister> accessibleInterfaceRegister = nullptr;
 
+static void updateHandlerNoop(QAccessibleEvent*)
+{
+}
+
 AccessibilityController::~AccessibilityController()
 {
     unreg(this);
@@ -168,6 +172,15 @@ QString AccessibilityController::currentPanelAccessibleName() const
 {
     const IAccessible* focusedItemPanel = panel(m_lastFocused);
     return focusedItemPanel ? focusedItemPanel->accessibleName() : "";
+}
+
+void AccessibilityController::setIgnoreQtAccessibilityEvents(bool ignore)
+{
+    if (ignore) {
+        QAccessible::installUpdateHandler(updateHandlerNoop);
+    } else {
+        QAccessible::installUpdateHandler(nullptr);
+    }
 }
 
 void AccessibilityController::propertyChanged(IAccessible* item, IAccessible::Property property, const Val& value)

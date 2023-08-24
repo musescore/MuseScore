@@ -69,6 +69,9 @@ public:
 
     bool needToVoicePanelInfo() const override;
     QString currentPanelAccessibleName() const override;
+
+    void setIgnoreQtAccessibilityEvents(bool ignore) override;
+
     // -----
 
     // IAccessibility (root)

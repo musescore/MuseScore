@@ -42,6 +42,8 @@ public:
 
     virtual bool needToVoicePanelInfo() const = 0;
     virtual QString currentPanelAccessibleName() const = 0;
+
+    virtual void setIgnoreQtAccessibilityEvents(bool ignore) = 0;
 };
 }
 
