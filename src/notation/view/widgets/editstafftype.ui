@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Edit Staff Type</string>
+   <string>Edit staff type</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_4">
    <item>
@@ -435,7 +435,7 @@
               </property>
               <widget class="QWidget" name="tab">
                <attribute name="title">
-                <string>Fret Marks</string>
+                <string>Fret marks</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_2">
                 <item>
@@ -714,7 +714,7 @@
               </widget>
               <widget class="QWidget" name="tab_2">
                <attribute name="title">
-                <string>Note Values</string>
+                <string>Note values</string>
                </attribute>
                <layout class="QVBoxLayout" name="verticalLayout_11">
                 <property name="spacing">
@@ -1335,7 +1335,7 @@
        <item>
         <widget class="QPushButton" name="templateReset">
          <property name="text">
-          <string>&lt; Reset to Template</string>
+          <string>&lt; Reset to template</string>
          </property>
         </widget>
        </item>
@@ -1361,7 +1361,7 @@
           <string>Create a new staff type of current group.</string>
          </property>
          <property name="text">
-          <string>Add to Templates</string>
+          <string>Add to templates</string>
          </property>
         </widget>
        </item>

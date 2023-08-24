@@ -35,7 +35,7 @@
        </sizepolicy>
       </property>
       <property name="title">
-       <string>Create Key Signature</string>
+       <string>Create key signature</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout">
        <property name="leftMargin">

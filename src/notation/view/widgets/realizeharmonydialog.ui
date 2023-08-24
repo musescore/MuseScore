@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Realize Chord Symbols</string>
+   <string>Realize chord symbols</string>
   </property>
   <property name="toolTip">
    <string>Convert chord symbols into notes</string>
@@ -92,7 +92,7 @@
          </sizepolicy>
         </property>
         <property name="title">
-         <string>Override With Custom Options</string>
+         <string>Override with custom options</string>
         </property>
         <property name="checkable">
          <bool>true</bool>

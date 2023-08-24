@@ -17,7 +17,7 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>Page Settings</string>
+   <string>Page settings</string>
   </property>
   <layout class="QGridLayout">
    <property name="leftMargin">
@@ -52,7 +52,7 @@
      <item>
       <widget class="QPushButton" name="resetPageStyleButton">
        <property name="text">
-        <string>Reset All Page Settings to Default</string>
+        <string>Reset all page settings to default</string>
        </property>
       </widget>
      </item>
@@ -72,7 +72,7 @@
      <item>
       <widget class="QPushButton" name="buttonApplyToAllParts">
        <property name="text">
-        <string>Apply to all Parts</string>
+        <string>Apply to all parts</string>
        </property>
       </widget>
      </item>
@@ -105,7 +105,7 @@
      <item>
       <widget class="QGroupBox" name="groupBox">
        <property name="title">
-        <string>Page Size</string>
+        <string>Page size</string>
        </property>
        <layout class="QGridLayout">
         <item row="3" column="0">
@@ -285,7 +285,7 @@
      <item>
       <widget class="QGroupBox" name="groupBox_3">
        <property name="title">
-        <string>Odd Page Margins</string>
+        <string>Odd page margins</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="1" column="0" colspan="2">
@@ -386,7 +386,7 @@
      <item>
       <widget class="QGroupBox" name="groupBox_4">
        <property name="title">
-        <string>Even Page Margins</string>
+        <string>Even page margins</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
         <item row="1" column="3" colspan="2">

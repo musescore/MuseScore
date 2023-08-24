@@ -24,13 +24,13 @@
      </property>
      <widget class="QWidget" name="tabSwingSettings">
       <attribute name="title">
-       <string>Swing Settings</string>
+       <string>Swing settings</string>
       </attribute>
       <layout class="QVBoxLayout" name="verticalLayout_4">
        <item>
         <widget class="QGroupBox" name="setSwingBox">
          <property name="title">
-          <string>Swing Settings</string>
+          <string>Swing settings</string>
          </property>
          <property name="checkable">
           <bool>true</bool>
