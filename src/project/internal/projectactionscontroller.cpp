@@ -172,6 +172,8 @@ void ProjectActionsController::openProject(const actions::ActionData& args)
 
 Ret ProjectActionsController::openProject(const ProjectFileUrl& file)
 {
+    LOGI() << "Try open project: url = " << file.url.toString() << ", displayNameOverride = " << file.displayNameOverride;
+
     if (file.url.isLocalFile()) {
         return openProject(file.path(), file.displayNameOverride);
     }
@@ -454,8 +456,12 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
     if (!scoreInfo.ret) {
         std::any status = scoreInfo.ret.data("status");
         if (status.has_value() && std::any_cast<int>(status) == 403) {
+            LOGI() << "Downloading score info returned 403, so not owner";
             isOwner = false;
         } else {
+            LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
+            showScoreDownloadError(scoreInfo.ret);
+
             return scoreInfo.ret;
         }
     }
@@ -1492,10 +1498,23 @@ void ProjectActionsController::showScoreDownloadError(const Ret& ret)
     case int(Err::FileOpenError):
         message = trc("project", "The file could not be downloaded to your disk.");
         break;
-    case int(network::Err::NetworkError):
-        message = trc("project", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
-                                 "Please check your internet connection or try again later.");
-        break;
+    case int(network::Err::NetworkError): {
+        std::any status = ret.data("status");
+        if (status.has_value()) {
+            int statusCode = std::any_cast<int>(status);
+            switch (statusCode) {
+            case 404:
+                message = trc("project", "The score could not be found, or cannot be accessed by your account.");
+                break;
+            default:
+                message = qtrc("project", "<a href=\"https://musescore.com\">musescore.com</a> returned error code %1.")
+                          .arg(statusCode).toStdString();
+            }
+        } else {
+            message = trc("project", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
+                                     "Please check your internet connection or try again later.");
+        }
+    } break;
     case int(cloud::Err::AccountNotActivated):
         message = trc("project", "Your musescore.com account needs to be verified first. "
                                  "Please activate your account via the link in the activation email.");
