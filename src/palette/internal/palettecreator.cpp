@@ -578,7 +578,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
 PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Fingering);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Fingering"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Fingerings"));
     sp->setMag(1.5);
     sp->setGridSize(28, 30);
     sp->setDrawGrid(true);
