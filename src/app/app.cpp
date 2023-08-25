@@ -169,7 +169,7 @@ int App::run(int argc, char** argv)
         if (multiInstancesProvider()->isMainInstance()) {
             splashScreen = new SplashScreen(SplashScreen::Default);
         } else {
-            project::ProjectFileUrl file = startupScenario()->startupScoreFile();
+            const project::ProjectFileUrl& file = startupScenario()->startupScoreFile();
             if (file.isValid()) {
                 if (file.hasDisplayName()) {
                     splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));

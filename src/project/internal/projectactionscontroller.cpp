@@ -25,6 +25,7 @@
 #include <QEventLoop>
 #include <QFileInfo>
 #include <QTemporaryFile>
+#include <QUrl>
 #include <QUrlQuery>
 
 #include "async/async.h"
@@ -185,7 +186,7 @@ Ret ProjectActionsController::openProject(const ProjectFileUrl& file)
     return make_ret(Err::UnsupportedUrl);
 }
 
-Ret ProjectActionsController::openProject(const io::path_t& _path, const QString& displayNameOverride)
+Ret ProjectActionsController::openProject(const io::path_t& givenPath, const QString& displayNameOverride)
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
@@ -203,23 +204,23 @@ Ret ProjectActionsController::openProject(const io::path_t& _path, const QString
     };
 
     //! Step 1. If no path is specified, ask the user to select a project
-    io::path_t projectPath = fileSystem()->absoluteFilePath(_path);
-    if (projectPath.empty()) {
-        projectPath = selectScoreOpeningFile();
+    io::path_t actualPath = fileSystem()->absoluteFilePath(givenPath);
+    if (actualPath.empty()) {
+        actualPath = selectScoreOpeningFile();
 
-        if (projectPath.empty()) {
+        if (actualPath.empty()) {
             return make_ret(Ret::Code::Cancel);
         }
     }
 
     //! Step 2. If the project is already open in the current window, then just switch to showing the notation
-    if (isProjectOpened(projectPath)) {
+    if (isProjectOpened(actualPath)) {
         return openPageIfNeed(NOTATION_PAGE_URI);
     }
 
     //! Step 3. Check, if the project already opened in another window, then activate the window with the project
-    if (multiInstancesProvider()->isProjectAlreadyOpened(projectPath)) {
-        multiInstancesProvider()->activateWindowWithProject(projectPath);
+    if (multiInstancesProvider()->isProjectAlreadyOpened(actualPath)) {
+        multiInstancesProvider()->activateWindowWithProject(actualPath);
         return make_ret(Ret::Code::Ok);
     }
 
@@ -227,7 +228,7 @@ Ret ProjectActionsController::openProject(const io::path_t& _path, const QString
     //! then create a new instance
     if (globalContext()->currentProject()) {
         QStringList args;
-        args << projectPath.toQString();
+        args << actualPath.toQString();
 
         if (!displayNameOverride.isEmpty()) {
             args << "--score-display-name-override" << displayNameOverride;
@@ -238,13 +239,13 @@ Ret ProjectActionsController::openProject(const io::path_t& _path, const QString
     }
 
     //! Step 5. If it's a cloud project, download the latest version
-    if (configuration()->isCloudProject(projectPath) && !configuration()->isLegacyCloudProject(projectPath)) {
-        downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(projectPath));
+    if (configuration()->isCloudProject(actualPath) && !configuration()->isLegacyCloudProject(actualPath)) {
+        downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath));
         return make_ret(Ret::Code::Ok);
     }
 
     //! Step 6. Open project in the current window
-    return doOpenProject(projectPath);
+    return doOpenProject(actualPath);
 }
 
 RetVal<INotationProjectPtr> ProjectActionsController::loadProject(const io::path_t& filePath)

@@ -22,13 +22,13 @@
 #ifndef MU_PROJECT_IPROJECTFILESCONTROLLER_H
 #define MU_PROJECT_IPROJECTFILESCONTROLLER_H
 
-#include <QUrl>
-
 #include "modularity/imoduleinterface.h"
 #include "types/ret.h"
 #include "io/path.h"
 
 #include "projecttypes.h"
+
+class QUrl;
 
 namespace mu::project {
 class IProjectFilesController : MODULE_EXPORT_INTERFACE

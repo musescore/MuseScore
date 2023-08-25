@@ -166,7 +166,7 @@ void RecentFilesController::loadRecentFilesList()
             ProjectFilePath file;
             file.path = obj["path"].toStdString();
             file.displayNameOverride = QString::fromStdString(obj["displayName"].toStdString());
-            newList.push_back(file);
+            newList.emplace_back(std::move(file));
         } else {
             continue;
         }
