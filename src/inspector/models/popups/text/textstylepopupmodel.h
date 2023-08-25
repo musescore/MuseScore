@@ -25,6 +25,7 @@
 
 #include "models/popups/abstractelementpopupmodel.h"
 #include "models/text/textsettingsmodel.h"
+#include "internal/services/elementrepositoryservice.h"
 
 namespace mu::inspector {
 class TextStylePopupModel : public AbstractElementPopupModel
@@ -40,12 +41,12 @@ public:
 
     TextSettingsModel* textSettingsModel() const;
 
-    Q_INVOKABLE void insertSpecialCharacters();
-
     Q_INVOKABLE void init() override;
 
 private:
     TextSettingsModel* m_textSettingsModel = nullptr;
+
+    ElementRepositoryService* m_elementRepositoryService = nullptr;
 };
 }
 
