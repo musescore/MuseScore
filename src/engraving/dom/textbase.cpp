@@ -43,6 +43,7 @@
 #endif
 
 #include "box.h"
+#include "instrumentname.h"
 #include "measure.h"
 #include "mscore.h"
 #include "page.h"
@@ -848,7 +849,13 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     mu::draw::Font font;
 
     double m = format.fontSize();
-    double spatiumScaling = t->spatium() / SPATIUM20;
+    double spatiumScaling = 0.0;
+
+    if (t->isInstrumentName()) {
+        spatiumScaling = toInstrumentName(t)->spatium() / SPATIUM20;
+    } else {
+        spatiumScaling = t->spatium() / SPATIUM20;
+    }
 
     if (t->sizeIsSpatiumDependent()) {
         m *= spatiumScaling;
