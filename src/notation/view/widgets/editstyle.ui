@@ -277,8 +277,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>692</width>
-                <height>595</height>
+                <width>592</width>
+                <height>441</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -873,8 +873,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>659</width>
-                <height>658</height>
+                <width>408</width>
+                <height>484</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2253,8 +2253,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>722</width>
-             <height>382</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -4019,8 +4019,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>379</width>
-                <height>798</height>
+                <width>239</width>
+                <height>593</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -6176,8 +6176,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>559</width>
-                <height>515</height>
+                <width>364</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -10238,8 +10238,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>594</width>
-             <height>440</height>
+             <width>380</width>
+             <height>324</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -11749,8 +11749,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>615</width>
-                <height>568</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -12727,8 +12727,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>584</width>
-                <height>536</height>
+                <width>354</width>
+                <height>385</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
