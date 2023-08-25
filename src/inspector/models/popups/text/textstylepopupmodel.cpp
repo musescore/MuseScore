@@ -28,19 +28,20 @@ using namespace mu::inspector;
 TextStylePopupModel::TextStylePopupModel(QObject* parent)
     : AbstractElementPopupModel(PopupModelType::TYPE_TEXT, parent)
 {
+    m_elementRepositoryService = new ElementRepositoryService(this);
+    m_textSettingsModel = new TextSettingsModel(this, m_elementRepositoryService);
+
+    m_textSettingsModel->init();
 }
 
 void TextStylePopupModel::init()
 {
     AbstractElementPopupModel::init();
+
+    m_elementRepositoryService->updateElementList(QList<mu::engraving::EngravingItem*> { m_item }, notation::SelectionState::LIST);
 }
 
 TextSettingsModel* TextStylePopupModel::textSettingsModel() const
 {
     return m_textSettingsModel;
-}
-
-void TextStylePopupModel::insertSpecialCharacters()
-{
-    dispatcher()->dispatch("show-keys");
 }
