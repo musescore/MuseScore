@@ -1753,6 +1753,20 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Format text: strikethrough"),
              Checkable::Yes
              ),
+    UiAction("text-sub",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Subscript"),
+             TranslatableString("action", "Format text: subscript"),
+             Checkable::Yes
+             ),
+    UiAction("text-sup",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED,
+             TranslatableString("action", "Superscript"),
+             TranslatableString("action", "Format text: superscript"),
+             Checkable::Yes
+             ),
     UiAction("pitch-up-diatonic",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,

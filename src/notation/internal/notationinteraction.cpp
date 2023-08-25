@@ -5420,6 +5420,23 @@ void NotationInteraction::toggleFontStyle(mu::engraving::FontStyle style)
     notifyAboutTextEditingChanged();
 }
 
+void NotationInteraction::toggleVerticalAlignment(VerticalAlignment align)
+{
+    if (!m_editData.element || !m_editData.element->isTextBase()) {
+        LOGW("toggleVerticalAlignment called with invalid current element");
+        return;
+    }
+    mu::engraving::TextBase* text = toTextBase(m_editData.element);
+    int ialign = static_cast<int>(align);
+    int currentAlign = text->getProperty(mu::engraving::Pid::TEXT_SCRIPT_ALIGN).toInt();
+    score()->startCmd();
+    text->undoChangeProperty(mu::engraving::Pid::TEXT_SCRIPT_ALIGN, PropertyValue::fromValue(
+                                 (currentAlign == ialign) ? static_cast<int>(VerticalAlignment::AlignNormal) : ialign),
+                             mu::engraving::PropertyFlags::UNSTYLED);
+    score()->endCmd();
+    notifyAboutTextEditingChanged();
+}
+
 void NotationInteraction::toggleBold()
 {
     toggleFontStyle(mu::engraving::FontStyle::Bold);
@@ -5438,6 +5455,16 @@ void NotationInteraction::toggleUnderline()
 void NotationInteraction::toggleStrike()
 {
     toggleFontStyle(mu::engraving::FontStyle::Strike);
+}
+
+void NotationInteraction::toggleSubScript()
+{
+    toggleVerticalAlignment(VerticalAlignment::AlignSubScript);
+}
+
+void NotationInteraction::toggleSuperScript()
+{
+    toggleVerticalAlignment(VerticalAlignment::AlignSuperScript);
 }
 
 template<typename P>

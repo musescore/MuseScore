@@ -266,6 +266,8 @@ public:
     void toggleItalic() override;
     void toggleUnderline() override;
     void toggleStrike() override;
+    void toggleSubScript() override;
+    void toggleSuperScript() override;
     void toggleArticulation(mu::engraving::SymId) override;
     void toggleAutoplace(bool) override;
 
@@ -313,6 +315,7 @@ private:
     void doDragLasso(const PointF& p);
     void endLasso();
     void toggleFontStyle(mu::engraving::FontStyle);
+    void toggleVerticalAlignment(mu::engraving::VerticalAlignment);
     void navigateToLyrics(bool, bool, bool);
 
     mu::engraving::Harmony* editedHarmony() const;

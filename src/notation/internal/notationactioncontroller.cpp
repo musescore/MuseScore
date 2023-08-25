@@ -395,6 +395,8 @@ void NotationActionController::init()
     registerAction("text-i", &Interaction::toggleItalic, &Controller::isEditingText);
     registerAction("text-u", &Interaction::toggleUnderline, &Controller::isEditingText);
     registerAction("text-s", &Interaction::toggleStrike, &Controller::isEditingText);
+    registerAction("text-sub", &Interaction::toggleSubScript, &Controller::isEditingText);
+    registerAction("text-sup", &Interaction::toggleSuperScript, &Controller::isEditingText);
 
     registerAction("select-next-measure", &Interaction::addToSelection, MoveDirection::Right, MoveSelectionType::Measure, PlayMode::NoPlay,
                    &Controller::isNotNoteInputMode);
