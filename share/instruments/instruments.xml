@@ -8289,9 +8289,9 @@
                         <shortcut>B</shortcut>
                   </Drum>
                   <Channel>
-                        <!--MIDI: Bank 128, Prog 48; MS General: Orchestra Kit-->
+                        <!--MIDI: Bank 128, Prog 0; MS General: Standard-->
                         <controller ctrl="0" value="1"/> <!--Bank MSB-->
-                        <program value="48"/> <!--Orchestra Kit-->
+                        <program value="0"/> <!--Standard Kit-->
                   </Channel>
                   <genre>common</genre>
                   <genre>orchestra</genre>
