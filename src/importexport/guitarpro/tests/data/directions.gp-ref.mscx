@@ -581,7 +581,7 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>repeat_left</style>
+          <style>repeat_right</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
           </Marker>
@@ -596,7 +596,7 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>repeat_left</style>
+          <style>repeat_right</style>
           <text><sym>codaSquare</sym></text>
           <label>varcoda</label>
           </Marker>
