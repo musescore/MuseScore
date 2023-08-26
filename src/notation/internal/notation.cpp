@@ -240,6 +240,11 @@ void Notation::setViewMode(const ViewMode& viewMode)
     m_painting->setViewMode(viewMode);
 }
 
+mu::async::Notification Notation::viewModeChanged() const
+{
+    return m_painting->viewModeChanged();
+}
+
 ViewMode Notation::viewMode() const
 {
     return m_painting->viewMode();

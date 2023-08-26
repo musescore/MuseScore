@@ -69,6 +69,7 @@ public:
     // draw
     virtual ViewMode viewMode() const = 0;
     virtual void setViewMode(const ViewMode& viewMode) = 0;
+    virtual async::Notification viewModeChanged() const = 0;
 
     virtual INotationPaintingPtr painting() const = 0;
     virtual INotationViewStatePtr viewState() const = 0;
