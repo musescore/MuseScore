@@ -88,11 +88,8 @@ Notation::Notation(mu::engraving::Score* score)
     });
 
     configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
-        if (m_score) {
+        if (m_score && m_score->autoLayoutEnabled()) {
             m_score->doLayout();
-            for (Score* score : m_score->scoreList()) {
-                score->doLayout();
-            }
         }
     });
 
