@@ -259,30 +259,39 @@ void InstrumentsPanelTreeModel::setupStavesConnections(const ID& stavesPartId)
 void InstrumentsPanelTreeModel::listenNotationSelectionChanged()
 {
     m_notation->interaction()->selectionChanged().onNotify(this, [this]() {
-        std::vector<EngravingItem*> selectedElements = m_notation->interaction()->selection()->elements();
-
-        if (selectedElements.empty()) {
-            m_selectionModel->clear();
-            return;
-        }
-
-        QSet<ID> selectedPartIdSet;
-        for (const EngravingItem* element : selectedElements) {
-            if (!element->part()) {
-                continue;
-            }
-
-            selectedPartIdSet << element->part()->id();
-        }
-
-        for (const ID& selectedPartId : selectedPartIdSet) {
-            AbstractInstrumentsPanelTreeItem* item = m_rootItem->childAtId(selectedPartId);
-
-            if (item) {
-                m_selectionModel->select(createIndex(item->row(), 0, item));
-            }
-        }
+        updateSelectedRows();
     });
+}
+
+void InstrumentsPanelTreeModel::updateSelectedRows()
+{
+    if (!m_instrumentsPanelVisible || !m_notation) {
+        return;
+    }
+
+    m_selectionModel->clear();
+
+    std::vector<EngravingItem*> selectedElements = m_notation->interaction()->selection()->elements();
+    if (selectedElements.empty()) {
+        return;
+    }
+
+    QSet<ID> selectedPartIdSet;
+    for (const EngravingItem* element : selectedElements) {
+        if (!element->part()) {
+            continue;
+        }
+
+        selectedPartIdSet << element->part()->id();
+    }
+
+    for (const ID& selectedPartId : selectedPartIdSet) {
+        AbstractInstrumentsPanelTreeItem* item = m_rootItem->childAtId(selectedPartId);
+
+        if (item) {
+            m_selectionModel->select(createIndex(item->row(), 0, item), QItemSelectionModel::Select);
+        }
+    }
 }
 
 void InstrumentsPanelTreeModel::clear()
@@ -357,6 +366,19 @@ void InstrumentsPanelTreeModel::sortParts(notation::PartList& parts)
 
         return index1 < index2;
     });
+}
+
+void InstrumentsPanelTreeModel::setInstrumentsPanelVisible(bool visible)
+{
+    if (m_instrumentsPanelVisible == visible) {
+        return;
+    }
+
+    m_instrumentsPanelVisible = visible;
+
+    if (visible) {
+        updateSelectedRows();
+    }
 }
 
 void InstrumentsPanelTreeModel::selectRow(const QModelIndex& rowIndex)

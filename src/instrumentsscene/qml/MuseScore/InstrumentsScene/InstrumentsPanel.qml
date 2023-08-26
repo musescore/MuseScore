@@ -39,6 +39,10 @@ Item {
     property NavigationPanel navigationPanel: controlPanel.navigation // first panel
     property alias contextMenuModel: contextMenuModel
 
+    onVisibleChanged: {
+        instrumentsTreeModel.setInstrumentsPanelVisible(root.visible)
+    }
+
     Rectangle {
         id: background
 
