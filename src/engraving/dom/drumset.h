@@ -98,7 +98,7 @@ public:
     int prevPitch(int) const;
     DrumInstrument& drum(int i) { return _drum[i]; }
     const DrumInstrument& drum(int i) const { return _drum[i]; }
-    DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*> articulations, Tremolo* tremolo) const;
+    DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*>& articulations, Tremolo* tremolo) const;
 };
 
 extern Drumset* smDrumset;

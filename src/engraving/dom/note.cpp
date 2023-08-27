@@ -2228,8 +2228,9 @@ int Note::ottaveCapoFret() const
 {
     const Chord* ch = chord();
     Fraction segmentTick = ch->segment()->tick();
+    const Staff* staff = this->staff();
 
-    const CapoParams& capo = staff()->capo(segmentTick);
+    const CapoParams& capo = staff->capo(segmentTick);
     int capoFret = 0;
 
     if (capo.active) {
@@ -2238,7 +2239,7 @@ int Note::ottaveCapoFret() const
         }
     }
 
-    return staff()->pitchOffset(segmentTick) + capoFret;
+    return staff->pitchOffset(segmentTick) + capoFret;
 }
 
 //---------------------------------------------------------
@@ -2248,15 +2249,21 @@ int Note::ottaveCapoFret() const
 
 int Note::ppitch() const
 {
-    Chord* ch = chord();
+    const Chord* ch = chord();
+
     // if staff is drum
     // match tremolo and articulation between variants and chord
-    if (play() && ch && ch->staff() && ch->staff()->isDrumStaff(ch->tick())) {
-        const Drumset* ds = ch->staff()->part()->instrument(ch->tick())->drumset();
-        if (ds) {
-            DrumInstrumentVariant div = ds->findVariant(m_pitch, ch->articulations(), ch->tremolo());
-            if (div.pitch != INVALID_PITCH) {
-                return div.pitch;
+    if (m_play && ch) {
+        const Staff* staff = ch->staff();
+        Fraction tick = ch->tick();
+
+        if (staff && staff->isDrumStaff(tick)) {
+            const Drumset* ds = staff->part()->instrument(tick)->drumset();
+            if (ds) {
+                DrumInstrumentVariant div = ds->findVariant(m_pitch, ch->articulations(), ch->tremolo());
+                if (div.pitch != INVALID_PITCH) {
+                    return div.pitch;
+                }
             }
         }
     }

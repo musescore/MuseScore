@@ -92,17 +92,20 @@ void PlaybackEventsRenderer::render(const EngravingItem* item, const mpe::timest
         return;
     }
 
-    if (item->type() == ElementType::CHORD) {
+    ElementType type = item->type();
+
+    if (type == ElementType::CHORD) {
         const Chord* chord = toChord(item);
+        mpe::PlaybackEventList& events = result[actualTimestamp];
 
         for (const Note* note : chord->notes()) {
             renderFixedNoteEvent(note, actualTimestamp, actualDuration,
-                                 actualDynamicLevel, persistentArticulationApplied, profile, result[actualTimestamp]);
+                                 actualDynamicLevel, persistentArticulationApplied, profile, events);
         }
-    } else if (item->type() == ElementType::NOTE) {
+    } else if (type == ElementType::NOTE) {
         renderFixedNoteEvent(toNote(item), actualTimestamp, actualDuration,
                              actualDynamicLevel, persistentArticulationApplied, profile, result[actualTimestamp]);
-    } else if (item->type() == ElementType::REST) {
+    } else if (type == ElementType::REST) {
         renderRestEvents(toRest(item), 0, result);
     }
 }

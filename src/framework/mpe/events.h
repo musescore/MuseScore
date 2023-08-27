@@ -189,15 +189,14 @@ private:
 
     void calculatePitchCurve(const ArticulationMap& articulationsApplied)
     {
-        const PitchPattern::PitchOffsetMap& appliedOffsetMap = articulationsApplied.averagePitchOffsetMap();
+        m_pitchCtx.pitchCurve = articulationsApplied.averagePitchOffsetMap();
 
-        m_pitchCtx.pitchCurve = appliedOffsetMap;
-
-        if (articulationsApplied.averagePitchRange() == 0 || articulationsApplied.averagePitchRange() == PITCH_LEVEL_STEP) {
+        pitch_level_t averagePitchRange = articulationsApplied.averagePitchRange();
+        if (averagePitchRange == 0 || averagePitchRange == PITCH_LEVEL_STEP) {
             return;
         }
 
-        float ratio = static_cast<float>(articulationsApplied.averagePitchRange()) / static_cast<float>(PITCH_LEVEL_STEP);
+        float ratio = static_cast<float>(averagePitchRange) / static_cast<float>(PITCH_LEVEL_STEP);
         float patternUnitRatio = PITCH_LEVEL_STEP / static_cast<float>(ONE_PERCENT);
 
         for (auto& pair : m_pitchCtx.pitchCurve) {

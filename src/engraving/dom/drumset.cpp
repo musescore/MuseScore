@@ -244,7 +244,7 @@ int Drumset::prevPitch(int ii) const
 /// find a variant for the given pitch with matching chord articulation and tremolo
 //---------------------------------------------------------
 
-DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation*> articulations, Tremolo* tremolo) const
+DrumInstrumentVariant Drumset::findVariant(int p, const std::vector<Articulation*>& articulations, Tremolo* tremolo) const
 {
     DrumInstrumentVariant div;
     auto vs = variants(p);

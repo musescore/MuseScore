@@ -257,7 +257,7 @@ public:
     ChangeMap& velocityMultiplications() { return _velocityMultiplications; }
     PitchList& pitchOffsets() { return _pitchOffsets; }
 
-    int pitchOffset(const Fraction& tick) { return _pitchOffsets.pitchOffset(tick.ticks()); }
+    int pitchOffset(const Fraction& tick) const { return _pitchOffsets.pitchOffset(tick.ticks()); }
     void updateOttava();
 
     std::list<Staff*> staffList() const;
