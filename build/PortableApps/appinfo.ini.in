@@ -1,6 +1,6 @@
 [Format]
 Type=PortableApps.comFormat
-Version=4.0
+Version=3.7 # Version of the PortableApps format, not of MuseScore
 
 [Details]
 Name=MuseScore Portable
@@ -28,6 +28,7 @@ Start=MuseScorePortable.exe
 
 [Associations]
 FileTypes=mscz, mscx, mscs
+Protocols=musescore
 
 [FileTypeIcons]
 mscz=custom
