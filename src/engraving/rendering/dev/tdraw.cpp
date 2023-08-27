@@ -2448,7 +2448,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
     }
 
     // Draw ledger lines if needed
-    if (!item->isRest() && item->lineIndex() < 100 && item->lineIndex() > -100) {
+    if (item->ledgerLinesVisible()) {
         double extraLen = item->style().styleS(Sid::ledgerLineLength).val() * sp;
         double x1 = -extraLen;
         double x2 = noteheadWidth + extraLen;

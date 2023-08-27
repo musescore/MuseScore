@@ -35,6 +35,11 @@ using namespace mu::notation;
 static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
 static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
 
+static void compensateFloatPart(RectF& rect)
+{
+    rect.adjust(-1, -1, 1, 1);
+}
+
 AbstractNotationPaintView::AbstractNotationPaintView(QQuickItem* parent)
     : uicomponents::QuickPaintedView(parent)
 {
@@ -232,6 +237,7 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
 
     m_notation->notationChanged().onNotify(this, [this, interaction]() {
         interaction->hideShadowNote();
+        m_shadowNoteRect = RectF();
         redraw();
     });
 
@@ -432,6 +438,7 @@ void AbstractNotationPaintView::onNoteInputStateChanged()
 
     if (INotationInteractionPtr interaction = notationInteraction()) {
         interaction->hideShadowNote();
+        m_shadowNoteRect = RectF();
         redraw();
     }
 }
@@ -468,8 +475,26 @@ bool AbstractNotationPaintView::isNoteEnterMode() const
 void AbstractNotationPaintView::showShadowNote(const PointF& pos)
 {
     TRACEFUNC;
-    notationInteraction()->showShadowNote(pos);
-    redraw();
+
+    bool visible = notationInteraction()->showShadowNote(pos);
+
+    if (m_shadowNoteRect.isValid()) {
+        redraw(m_shadowNoteRect);
+
+        if (!visible) {
+            m_shadowNoteRect = RectF();
+            return;
+        }
+    }
+
+    RectF shadowNoteRect = fromLogical(notationInteraction()->shadowNoteRect());
+
+    if (shadowNoteRect.isValid()) {
+        compensateFloatPart(shadowNoteRect);
+        redraw(shadowNoteRect);
+    }
+
+    m_shadowNoteRect = shadowNoteRect;
 }
 
 void AbstractNotationPaintView::showContextMenu(const ElementType& elementType, const QPointF& pos)

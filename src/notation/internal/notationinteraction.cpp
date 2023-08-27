@@ -323,7 +323,7 @@ INotationNoteInputPtr NotationInteraction::noteInput() const
     return m_noteInput;
 }
 
-void NotationInteraction::showShadowNote(const PointF& pos)
+bool NotationInteraction::showShadowNote(const PointF& pos)
 {
     const mu::engraving::InputState& inputState = score()->inputState();
     mu::engraving::ShadowNote& shadowNote = *score()->shadowNote();
@@ -331,7 +331,7 @@ void NotationInteraction::showShadowNote(const PointF& pos)
     mu::engraving::Position position;
     if (!score()->getPosition(&position, pos, inputState.voice())) {
         shadowNote.setVisible(false);
-        return;
+        return false;
     }
 
     Staff* staff = score()->staff(position.staffIdx);
@@ -399,17 +399,41 @@ void NotationInteraction::showShadowNote(const PointF& pos)
             symNotehead = Note::noteHead(0, noteheadGroup, noteHead);
         }
 
-        shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY);
+        shadowNote.setState(symNotehead, duration, false, segmentSkylineTopY, segmentSkylineBottomY,
+                            inputState.accidentalType(), inputState.articulationIds());
     }
 
     EngravingItem::renderer()->layoutItem(&shadowNote);
 
     shadowNote.setPos(position.pos);
+
+    return true;
 }
 
 void NotationInteraction::hideShadowNote()
 {
     score()->shadowNote()->setVisible(false);
+}
+
+RectF NotationInteraction::shadowNoteRect() const
+{
+    const ShadowNote* note = score()->shadowNote();
+    if (!note) {
+        return RectF();
+    }
+
+    RectF rect = note->canvasBoundingRect();
+
+    double penWidth = note->style().styleMM(Sid::stemWidth);
+    if (note->ledgerLinesVisible()) {
+        double w = note->style().styleMM(Sid::ledgerLineWidth);
+        penWidth = std::max(penWidth, w);
+    }
+
+    penWidth *= note->mag();
+    rect.adjust(-penWidth, -penWidth, penWidth, penWidth);
+
+    return rect;
 }
 
 void NotationInteraction::toggleVisible()

@@ -272,6 +272,8 @@ private:
 
     bool m_isPopupOpen = false;
     bool m_isContextMenuOpen = false;
+
+    RectF m_shadowNoteRect;
 };
 }
 

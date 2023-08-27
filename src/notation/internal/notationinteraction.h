@@ -64,8 +64,9 @@ public:
     INotationNoteInputPtr noteInput() const override;
 
     // Shadow note
-    void showShadowNote(const PointF& pos) override;
+    bool showShadowNote(const PointF& pos) override;
     void hideShadowNote() override;
+    RectF shadowNoteRect() const override;
 
     // Visibility
     void toggleVisible() override;
