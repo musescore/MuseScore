@@ -28,11 +28,10 @@ import Muse.UiComponents 1.0
 import MuseScore.Inspector 1.0
 import MuseScore.Playback 1.0
 
-import "../popups/harppedal/"
-import "../popups/capo/"
-import "../popups/stringtunings/"
-import "../popups/text/"
-
+import "popups/harppedal/"
+import "popups/capo/"
+import "popups/stringtunings/"
+import "popups/text/"
 
 Item {
     id: container
