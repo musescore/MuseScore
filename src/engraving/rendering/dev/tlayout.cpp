@@ -3019,10 +3019,10 @@ void TLayout::layout(Hook* item, LayoutContext&)
     ldata->setbbox(item->symBbox(item->sym()));
 }
 
-void TLayout::layout(Image* item, LayoutContext&)
+static void layoutImage(const Image* item, const LayoutContext&, Image::LayoutData* ldata)
 {
-    item->setPos(0.0, 0.0);
-    item->init();
+    ldata->setPos(0.0, 0.0);
+    const_cast<Image*>(item)->init();
 
     SizeF imageSize = item->size();
 
@@ -3048,10 +3048,15 @@ void TLayout::layout(Image* item, LayoutContext&)
         }
     }
 
-    item->setSize(imageSize);
+    const_cast<Image*>(item)->setSize(imageSize);
 
     // in any case, adjust position relative to parent
-    item->setbbox(RectF(PointF(), item->size2pixel(imageSize)));
+    ldata->setbbox(RectF(PointF(), item->size2pixel(imageSize)));
+}
+
+void TLayout::layout(Image* item, LayoutContext& ctx)
+{
+    layoutImage(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(InstrumentChange* item, LayoutContext& ctx)
