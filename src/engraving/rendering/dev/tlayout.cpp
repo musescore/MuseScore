@@ -3067,7 +3067,7 @@ void TLayout::layout(InstrumentChange* item, LayoutContext& ctx)
 
 void TLayout::layout(InstrumentName* item, LayoutContext& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Jump* item, LayoutContext& ctx)
