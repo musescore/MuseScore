@@ -43,14 +43,12 @@
 #include "part.h"
 #include "score.h"
 #include "segment.h"
-#include "select.h"
 #include "sig.h"
 #include "spacer.h"
 #include "spanner.h"
 #include "staff.h"
 #include "system.h"
 #include "systemdivider.h"
-#include "textframe.h"
 #include "tremolo.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
