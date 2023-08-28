@@ -23,22 +23,38 @@
 #ifndef MU_IMPORTEXPORT_MEIIMPORTER_H
 #define MU_IMPORTEXPORT_MEIIMPORTER_H
 
-#include "engraving/types/fraction.h"
+#include "engraving/types/types.h"
 
 #include "modularity/ioc.h"
 #include "imeiconfiguration.h"
 #include "io/ifilesystem.h"
 #include "io/path.h"
 
+#include "thirdparty/libmei/cmn.h"
+#include "thirdparty/libmei/element.h"
+#include "thirdparty/libmei/shared.h"
+
 #include "thirdparty/pugixml.hpp"
 
 namespace mu::engraving {
-class Fraction;
+class Chord;
+class ChordRest;
+class EngravingItem;
 class Measure;
+class Note;
+class Part;
 class Score;
+class Spanner;
+class Tuplet;
+class VBox;
+enum class NoteType;
+enum class TimeSigType : char;
+struct ClefTypeList;
 }
 
 namespace mu::iex::mei {
+class UIDRegister;
+
 enum GraceReading {
     GraceNone = 0,
     GraceAsGrp,
@@ -128,7 +144,7 @@ private:
      */
     void addEndBarLineToMeasure(engraving::Measure* measure, engraving::BarLineType barLineType);
     void addLayoutBreakToMeasure(engraving::Measure* measure, engraving::LayoutBreakType layoutBreakType);
-    void addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleType textStyleType);
+    void addTextToTitleFrame(engraving::VBox*& vBox, const String& str, engraving::TextStyleType textStyleType);
     void addSpannerEnds();
 
     /**
@@ -138,11 +154,11 @@ private:
     int getVoiceIndex(int staffIdx, int layerN);
     void addLog(const std::string& msg, pugi::xml_node node);
     bool isNode(pugi::xml_node node, const String& name);
-    engraving::ChordRest* addChordRest(pugi::xml_node node, Measure* measure, int track, const libmei::Element& meiElement, int& ticks,
-                                       bool isRest);
+    engraving::ChordRest* addChordRest(pugi::xml_node node, engraving::Measure* measure, int track, const libmei::Element& meiElement,
+                                       int& ticks, bool isRest);
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
-    engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, Measure* measure);
-    engraving::Spanner* addSpanner(const libmei::Element& meiElement, Measure* measure, pugi::xml_node node);
+    engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, engraving::Measure* measure);
+    engraving::Spanner* addSpanner(const libmei::Element& meiElement, engraving::Measure* measure, pugi::xml_node node);
     std::string xmlIdFrom(std::string dataURI);
     engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, const engraving::ChordRest* startChordRest);
@@ -156,7 +172,7 @@ private:
     /** The uid register */
     UIDRegister* m_uids;
 
-    Fraction m_ticks;
+    engraving::Fraction m_ticks;
     int m_lastMeasureN;
     engraving::Measure* m_lastMeasure;
 

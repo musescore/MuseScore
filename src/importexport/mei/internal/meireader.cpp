@@ -22,12 +22,13 @@
 
 #include "meireader.h"
 
-#include "iinteractive.h"
-#include "meiimporter.h"
-
-#include "libmscore/masterscore.h"
-#include "engraving/engravingerrors.h"
 #include "translation.h"
+
+#include "engraving/engravingerrors.h"
+#include "engraving/libmscore/masterscore.h"
+
+#include "meiimporter.h"
+#include "meiconverter.h"
 
 using namespace mu::iex::mei;
 using namespace mu::engraving;
