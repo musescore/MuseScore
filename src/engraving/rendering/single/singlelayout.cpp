@@ -192,6 +192,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::TEMPO_TEXT:   layout(toTempoText(item), ctx);
         break;
+    case ElementType::TEXT:         layout(toText(item), ctx);
+        break;
     case ElementType::TEXTLINE:     layout(toTextLine(item), ctx);
         break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);

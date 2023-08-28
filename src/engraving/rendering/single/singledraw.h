@@ -116,6 +116,7 @@ class ShadowNote;
 class Slur;
 class SlurSegment;
 class Spacer;
+class StaffLines;
 class StaffState;
 class StaffText;
 class StaffTypeChange;
@@ -230,6 +231,7 @@ private:
     static void draw(const ShadowNote* item, draw::Painter* painter);
     static void draw(const SlurSegment* item, draw::Painter* painter);
     static void draw(const Spacer* item, draw::Painter* painter);
+    static void draw(const StaffLines* item, draw::Painter* painter);
     static void draw(const StaffState* item, draw::Painter* painter);
     static void draw(const StaffText* item, draw::Painter* painter);
     static void draw(const StaffTypeChange* item, draw::Painter* painter);

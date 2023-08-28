@@ -26,6 +26,7 @@
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingconfiguration.h"
+#include "engraving/rendering/isinglerenderer.h"
 
 #include "draw/types/geometry.h"
 #include "notation/inotation.h"
@@ -43,6 +44,7 @@ class ContinuousPanel
 {
     INJECT(INotationConfiguration, notationConfiguration)
     INJECT(engraving::IEngravingConfiguration, engravingConfiguration)
+    INJECT(engraving::rendering::ISingleRenderer, engravingRender)
 
 public:
     void setNotation(INotationPtr notation);
