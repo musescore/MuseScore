@@ -26,9 +26,9 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
-import "../popups/harppedal/"
-import "../popups/capo/"
-import "../popups/text/"
+import "popups/harppedal/"
+import "popups/capo/"
+import "popups/text/"
 
 Item {
     id: container

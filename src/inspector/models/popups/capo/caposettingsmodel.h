@@ -99,6 +99,6 @@ signals:
 private:
     bool m_applyCapo = false;
 };
-} //namespace mu::notation
+}
 
 #endif // MU_INSPECTOR_CAPOSETTINGSMODEL_H

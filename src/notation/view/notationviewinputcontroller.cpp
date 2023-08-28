@@ -36,7 +36,6 @@ using namespace mu::notation;
 using namespace mu::engraving;
 using namespace mu::actions;
 using namespace mu::commonscene;
-using namespace mu::inspector;
 
 static constexpr int PIXELSSTEPSFACTOR = 5;
 

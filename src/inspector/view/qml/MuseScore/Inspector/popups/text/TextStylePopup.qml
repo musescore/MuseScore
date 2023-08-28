@@ -27,6 +27,8 @@ import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
+import "../../common"
+
 StyledPopupView {
     id: root
 
@@ -36,7 +38,6 @@ StyledPopupView {
     property int navigationOrderEnd: 0
 
     contentWidth: contentRow.width
-
     contentHeight: contentRow.height
 
     margins: 10
@@ -70,6 +71,9 @@ StyledPopupView {
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
 
+                textRole: "text"
+                valueRole: "text"
+
                 model: {
                     var resultList = []
 
@@ -83,16 +87,17 @@ StyledPopupView {
 
                 }
 
-                currentIndex: root.model.fontFamily && !root.model.fontFamily.isUndefined
-                              ? dropdownItem.indexOfValue(root.propertyItem.value)
-                              : -1
+                currentIndex: textStyleModel.textSettingsModel.fontFamily
+                                && !textStyleModel.textSettingsModel.fontFamily.isUndefined
+                                ? indexOfValue(textStyleModel.textSettingsModel.fontFamily.value)
+                                : -1
 
                 onActivated: function(index, value) {
-                    root.model.fontFamily.value = value
+                    textStyleModel.textSettingsModel.fontFamily.value = value
                 }
             }
 
-            RowLayout { //Column 1, Row 2
+            RowLayout {
                 RadioButtonGroup {
                     id: textStyleButtonGroup
 
@@ -127,10 +132,13 @@ StyledPopupView {
 
                         icon: modelData.iconCode
 
-                        checked: false //currentTextStyle(/*TODO*/)
+                        checked: !textStyleModel.textSettingsModel.fontStyle.value.isUndefined
+                                    && (textStyleModel.textSettingsModel.fontStyle.value & modelData.value)
 
                         onToggled: {
-                            //TODO
+                            textStyleModel.textSettingsModel.fontStyle.value = checked
+                                ? textStyleModel.textSettingsModel.fontStyle.value & ~modelData.value
+                                : textStyleModel.textSettingsModel.fontStyle.value | modelData.value
                         }
                     }
                 }
@@ -141,7 +149,7 @@ StyledPopupView {
                     height: 30
                     width: implicitWidth
 
-                    enabled: true //currentHorizontalAlignment(/*TODO*/)
+                    enabled: textStyleModel.textSettingsModel.isHorizontalAlignmentAvailable
 
                     model: [
                         {
@@ -174,27 +182,38 @@ StyledPopupView {
 
                         iconCode: modelData.iconRole
 
-                        checked: false //currentTextHAlign(/*TODO*/)
+                        checked: !textStyleModel.textSettingsModel.horizontalAlignment.isUndefined
+                                    && (textStyleModel.textSettingsModel.horizontalAlignment.value === modelData.typeRole)
 
                         onToggled: {
-                            //TODO
+                            textStyleModel.textSettingsModel.horizontalAlignment.value = modelData.typeRole
                         }
                     }
                 }
             }
         }
         ColumnLayout {
-            RowLayout { //Column 2, Row 1
+            RowLayout {
                 IncrementalPropertyControl {
-                    id: textStyleSpinBox
+                    id: fontSizeSpinBox
 
                     Layout.preferredWidth: 60
 
-                    isIndeterminate: false //TODO
-                    currentValue: 0 //TODO
+                    currentValue: textStyleModel.textSettingsModel
+                                    ? textStyleModel.textSettingsModel.fontSize.value
+                                    : null
+
+                    measureUnitsSymbol: qsTrc("global", "pt")
+
+                    decimals: 1
+                    step: 1
+                    minValue: 1
+                    maxValue: 99
 
                     onValueEditingFinished: function(newValue) {
-                        //TODO
+                        if (textStyleModel.textSettingsModel) {
+                            textStyleModel.textSettingsModel.fontSize.value = newValue
+                        }
                     }
                 }
 
@@ -241,16 +260,17 @@ StyledPopupView {
 
                         iconCode: modelData.iconRole
 
-                        checked: false //currentVerticalAlignment(/*TODO*/)
+                        checked: !textStyleModel.textSettingsModel.verticalAlignment.isUndefined
+                                    && (textStyleModel.textSettingsModel.verticalAlignment.value === modelData.typeRole)
 
                         onToggled: {
-                            //TODO
+                            textStyleModel.textSettingsModel.verticalAlignment.value = modelData.typeRole
                         }
                     }
                 }
             }
 
-            RowLayout { //Column 2, Row 2
+            RowLayout {
                 RadioButtonGroup {
                     id: subscriptOptionsButtonList
 
@@ -265,13 +285,20 @@ StyledPopupView {
                         width: 30
 
                         toolTipTitle: modelData.titleRole
+                        iconCode: modelData["iconRole"]
 
                         transparent: true
 
-                        iconCode: modelData["iconRole"]
-                        checked: false //currentSubscriptOption(/*TODO*)
+                        checked: !textStyleModel.textSettingsModel.textScriptAlignment.isUndefined
+                                    ? textStyleModel.textSettingsModel.textScriptAlignment.value === modelData["typeRole"]
+                                    : false
+
                         onClicked: {
-                            //TODO
+                            if (textStyleModel.textSettingsModel.textScriptAlignment.value === modelData["typeRole"]) {
+                                textStyleModel.textSettingsModel.textScriptAlignment.value = TextTypes.TEXT_SUBSCRIPT_NORMAL
+                            } else {
+                                textStyleModel.textSettingsModel.textScriptAlignment.value = modelData["typeRole"]
+                            }
                         }
                     }
                 }
@@ -285,11 +312,21 @@ StyledPopupView {
 
                     Layout.preferredWidth: 60
 
-                    isIndeterminate: false //TODO
-                    currentValue: 0 //TODO
+                    currentValue: textStyleModel.textSettingsModel
+                                    ? textStyleModel.textSettingsModel.textLineSpacing.value
+                                    : null
+
+                    measureUnitsSymbol: qsTrc("global", "li")
+
+                    decimals: 1
+                    step: 1
+                    minValue: 1
+                    maxValue: 99
 
                     onValueEditingFinished: function(newValue) {
-                        //TODO
+                        if (textStyleModel.textSettingsModel) {
+                            textStyleModel.textSettingsModel.textLineSpacing.value = newValue
+                        }
                     }
                 }
             }
@@ -303,8 +340,12 @@ StyledPopupView {
                 icon: IconCode.FLAT
                 text: qsTrc("inspector", "Add symbols")
 
+                visible: textStyleModel.textSettingsModel.isSpecialCharactersInsertionAvailable
+
                 onClicked: {
-                    root.model.insertSpecialCharacters()
+                    if (textStyleModel.textSettingsModel) {
+                        textStyleModel.textSettingsModel.insertSpecialCharacters()
+                    }
                 }
             }
 
@@ -313,12 +354,36 @@ StyledPopupView {
 
                 FlatButton {
                     Layout.fillWidth: true
+
                     text: qsTrc("inspector", "Text style")
+
+                    onClicked: {
+                        textStyleSubPopup.toggleOpened()
+                    }
+
+                    TextStyleSubPopup {
+                        id: textStyleSubPopup
+
+                        textSettingsModel: textStyleModel.textSettingsModel
+                    }
                 }
 
                 FlatButton {
                     Layout.fillWidth: true
+
+                    visible: !root.textSettingsModel.isDynamicSpecificSettings
+
                     text: qsTrc("inspector", "Frame")
+
+                    onClicked: {
+                        frameSubPopup.toggleOpened()
+                    }
+
+                    FrameSubPopup {
+                       id: frameSubPopup
+
+                       textSettingsModel: textStyleModel.textSettingsModel
+                    }
                 }
             }
         }
