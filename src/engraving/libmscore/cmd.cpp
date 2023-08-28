@@ -422,8 +422,10 @@ void Score::update(bool resetCmdState, bool layoutAllParts)
         ms->deletePostponed();
 
         if (cs.layoutRange()) {
-            for (Score* s : ms->scoreList()) {
-                if (s != this && !s->isOpen() && ms->scoreList().size() > 1 && !layoutAllParts) {
+            std::list<Score*> scores = ms->scoreList();
+            bool multiScores = scores.size() > 1;
+            for (Score* s : scores) {
+                if (s != this && !s->isOpen() && multiScores && !layoutAllParts) {
                     continue;
                 }
                 s->doLayoutRange(cs.startTick(), cs.endTick());
