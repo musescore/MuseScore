@@ -52,23 +52,32 @@ public:
     mu::PointF pagePos() const override;        ///< position in page coordinates
     Chord* chord() const { return toChord(explicitParent()); }
 
-    double len() const { return _len; }
-    double lineWidth() const { return _width; }
-    void setLen(double v) { _len = v; }
-    void setLineWidth(double v) { _width = v; }
+    double len() const { return m_len; }
+    void setLen(double v) { m_len = v; }
+
     void setVertical(bool v) { m_vertical = v; }
     bool vertical() const { return m_vertical; }
 
     double measureXPos() const;
-    LedgerLine* next() const { return _next; }
-    void setNext(LedgerLine* l) { _next = l; }
+    LedgerLine* next() const { return m_next; }
+    void setNext(LedgerLine* l) { m_next = l; }
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        double lineWidth = 0.0;
+    };
+    DECLARE_LAYOUTDATA_METHODS(LedgerLine);
+
+    //! --- Old Interafce ---
+    void setLineWidth(double v) { mutLayoutData()->lineWidth = v; }
+    double lineWidth() const { return layoutData()->lineWidth; }
+    //! ---------------------
+
 private:
-    double _width;
-    double _len;
-    LedgerLine* _next;
+
+    double m_len = 0.0;
+    LedgerLine* m_next = nullptr;
     bool m_vertical = false;
 };
 } // namespace mu::engraving
