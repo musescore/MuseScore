@@ -28,7 +28,6 @@
 #include "engraving/libmscore/repeatlist.h"
 #include "engraving/libmscore/masterscore.h"
 
-#include "engraving/infrastructure/paint.h"
 #include "notation/view/playbackcursor.h"
 
 #include "log.h"
