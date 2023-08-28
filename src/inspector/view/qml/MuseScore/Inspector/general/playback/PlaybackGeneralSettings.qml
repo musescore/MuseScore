@@ -49,6 +49,8 @@ Item {
 
         readonly property var fullModel: [
             { typeRole: Inspector.TYPE_NOTE, componentRole: noteSection },
+            { typeRole: Inspector.TYPE_DYNAMIC, componentRole: dynamicsSection },
+            { typeRole: Inspector.TYPE_HAIRPIN, componentRole: dynamicsSection },
             { typeRole: Inspector.TYPE_ARPEGGIO, componentRole: arpeggioSection },
             { typeRole: Inspector.TYPE_FERMATA, componentRole: fermataSection },
             { typeRole: Inspector.TYPE_BREATH, componentRole: pausesSection },
@@ -105,6 +107,12 @@ Item {
         id: noteSection
 
         NoteExpandableBlank {}
+    }
+
+    Component {
+        id: dynamicsSection
+
+        DynamicsExpandableBlank {}
     }
 
     Component {
