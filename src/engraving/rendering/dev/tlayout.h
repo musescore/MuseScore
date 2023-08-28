@@ -25,6 +25,7 @@
 #include "layoutcontext.h"
 
 #include "libmscore/textbase.h"
+#include "libmscore/measurenumberbase.h"
 
 namespace mu::engraving {
 class EngravingItem;
@@ -98,7 +99,6 @@ class LyricsLineSegment;
 class Marker;
 class MeasureBase;
 class MeasureNumber;
-class MeasureNumberBase;
 class MeasureRepeat;
 class MMRest;
 class MMRestRange;
@@ -251,7 +251,7 @@ public:
     static void layout(MeasureBase* item, LayoutContext& ctx); // factory
     static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // base class
     static void layout(MeasureNumber* item, LayoutContext& ctx);
-    static void layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx); // base class
+    static void layoutMeasureNumberBase(const MeasureNumberBase* item, const LayoutContext& ctx, TextBase::LayoutData* ldata); // base class
     static void layout(MeasureRepeat* item, LayoutContext& ctx);
     static void layout(MMRest* item, LayoutContext& ctx);
     static void layout(MMRestRange* item, LayoutContext& ctx);
