@@ -3361,24 +3361,29 @@ void TLayout::layout(LayoutBreak* item, LayoutContext&)
     UNUSED(item);
 }
 
-void TLayout::layout(LedgerLine* item, LayoutContext& ctx)
+static void layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, LedgerLine::LayoutData* ldata)
 {
-    item->setLineWidth(ctx.conf().styleMM(Sid::ledgerLineWidth) * item->chord()->mag());
+    ldata->lineWidth = ctx.conf().styleMM(Sid::ledgerLineWidth) * item->chord()->mag();
     if (item->staff()) {
-        item->setColor(item->staff()->staffType(item->tick())->color());
+        const_cast<LedgerLine*>(item)->setColor(item->staff()->staffType(item->tick())->color());
     }
     double w2 = item->lineWidth() * .5;
 
     //Adjust Y position to staffType offset
     if (item->staffType()) {
-        item->movePosY(item->staffType()->yoffset().val() * item->spatium());
+        ldata->movePosY(item->staffType()->yoffset().val() * item->spatium());
     }
 
     if (item->vertical()) {
-        item->bbox().setRect(-w2, 0, w2, item->len());
+        ldata->bbox.setRect(-w2, 0, w2, item->len());
     } else {
-        item->bbox().setRect(0, -w2, item->len(), w2);
+        ldata->bbox.setRect(0, -w2, item->len(), w2);
     }
+}
+
+void TLayout::layout(LedgerLine* item, LayoutContext& ctx)
+{
+    layoutLedgerLine(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(LetRing* item, LayoutContext& ctx)
