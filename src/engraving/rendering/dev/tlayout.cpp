@@ -3015,7 +3015,8 @@ PointF TLayout::calculateBoundingRect(Harmony* item, const LayoutContext& ctx)
 
 void TLayout::layout(Hook* item, LayoutContext&)
 {
-    item->setbbox(item->symBbox(item->sym()));
+    Hook::LayoutData* ldata = item->mutLayoutData();
+    ldata->setbbox(item->symBbox(item->sym()));
 }
 
 void TLayout::layout(Image* item, LayoutContext&)
