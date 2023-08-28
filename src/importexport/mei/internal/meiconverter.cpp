@@ -22,33 +22,35 @@
 
 #include "meiconverter.h"
 
+#include <iostream>
+#include <sstream>
+#include <string>
+#include <valarray>
+
+#include "engraving/types/symnames.h"
+#include "engraving/types/typesconv.h"
+
 #include "libmscore/accidental.h"
 #include "libmscore/breath.h"
 #include "libmscore/dynamic.h"
-#include "libmscore/jump.h"
 #include "libmscore/fermata.h"
+#include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
+#include "libmscore/jump.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
 #include "libmscore/ottava.h"
 #include "libmscore/part.h"
 #include "libmscore/pitchspelling.h"
+#include "libmscore/slurtie.h"
 #include "libmscore/staff.h"
 #include "libmscore/stafftype.h"
-#include "libmscore/utils.h"
 #include "libmscore/tempotext.h"
 #include "libmscore/text.h"
 #include "libmscore/textbase.h"
-#include "libmscore/tie.h"
 #include "libmscore/tuplet.h"
-#include "engraving/types/typesconv.h"
-#include "types/symnames.h"
-
-#include <iostream>
-#include <string>
-#include <sstream>
-#include <valarray>
+#include "libmscore/utils.h"
 
 using namespace mu::iex::mei;
 using namespace mu;

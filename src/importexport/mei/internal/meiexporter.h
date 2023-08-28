@@ -23,21 +23,53 @@
 #ifndef MU_IMPORTEXPORT_MEIEXPORTER_H
 #define MU_IMPORTEXPORT_MEIEXPORTER_H
 
-#include "engraving/types/fraction.h"
+#include "engraving/types/types.h"
 
 #include "modularity/ioc.h"
 #include "imeiconfiguration.h"
 
+#include "thirdparty/libmei/element.h"
+#include "thirdparty/libmei/shared.h"
+
 #include "thirdparty/pugixml.hpp"
 
 namespace mu::engraving {
+class Beam;
+class Breath;
+class Chord;
+class ChordRest;
+class Clef;
+class Dynamic;
+class EngravingItem;
+class Fermata;
+class Fermata;
 class Fraction;
+class Hairpin;
+class Harmony;
+class Jump;
+class Marker;
 class Measure;
+class Note;
+class Ottava;
+class Part;
+class Rest;
 class Score;
+class Segment;
+class Slur;
+class Spanner;
 class Staff;
+class TempoText;
+class TextBase;
+class TextLineBase;
+class Tie;
+class Tuplet;
+class VBox;
+class Volta;
 }
 
 namespace mu::iex::mei {
+class UIDRegister;
+
 enum layerElementCounter {
     ACCID_L = 0,
     BEAM_L,
@@ -187,7 +219,7 @@ private:
     std::vector<int> m_layerCounterFor;
 
     /** map of abbreviations for element within layers */
-    inline static std::map<layerElementCounter, String> s_layerXmlIdMap = {
+    inline static const std::map<layerElementCounter, String> s_layerXmlIdMap = {
         { ACCID_L, u"a" },
         { BEAM_L, u"b" },
         { GRACEGRP_L, u"g" },

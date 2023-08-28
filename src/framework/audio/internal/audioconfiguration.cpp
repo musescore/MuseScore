@@ -24,9 +24,10 @@
 //TODO: remove with global clearing of Q_OS_*** defines
 #include <QtGlobal>
 
+#include "log.h"
 #include "settings.h"
 
-#include "log.h"
+#include "soundfonttypes.h"
 
 using namespace mu;
 using namespace mu::framework;
@@ -43,7 +44,7 @@ static const Settings::Key AUDIO_SAMPLE_RATE_KEY("audio", "io/sampleRate");
 
 static const Settings::Key USER_SOUNDFONTS_PATHS("midi", "application/paths/mySoundfonts");
 
-static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";     // "GeneralUser GS v1.471.sf2"; // "MS Basic.sf3";
+static const AudioResourceId DEFAULT_SOUND_FONT_NAME = "MS Basic";
 static const AudioResourceMeta DEFAULT_AUDIO_RESOURCE_META
     = { DEFAULT_SOUND_FONT_NAME, AudioResourceType::FluidSoundfont, "Fluid", {}, false /*hasNativeEditor*/ };
 

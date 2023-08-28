@@ -24,15 +24,14 @@
 
 #include "meiexporter.h"
 
+#include "io/file.h"
 #include "log.h"
 
-#include "libmscore/masterscore.h"
 #include "engraving/engravingerrors.h"
-#include "io/file.h"
+#include "engraving/libmscore/score.h"
 
 using namespace mu;
 using namespace mu::iex::mei;
-using namespace mu::notation;
 using namespace mu::project;
 
 std::vector<INotationWriter::UnitType> MeiWriter::supportedUnitTypes() const
@@ -70,16 +69,16 @@ mu::Ret MeiWriter::write(notation::INotationPtr notation, QIODevice& destination
     }
 }
 
-Err MeiWriter::writeScore(mu::engraving::Score* score, const io::path_t& path)
+mu::engraving::Err MeiWriter::writeScore(mu::engraving::Score* score, const io::path_t& path)
 {
     MeiExporter exporter(score);
     // Force no layout option in this case
     exporter.configuration()->setMeiExportLayout(false);
     std::string meiData;
     if (exporter.write(meiData) && io::File::writeFile(path, ByteArray(meiData.c_str(), meiData.size()))) {
-        return Err::NoError;
+        return engraving::Err::NoError;
     } else {
-        return Err::UnknownError;
+        return engraving::Err::UnknownError;
     }
 }
 

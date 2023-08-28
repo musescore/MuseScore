@@ -24,7 +24,6 @@
 #define MU_IMPORTEXPORT_MEICONVERTER_H
 
 #include "libmscore/accidental.h"
-#include "libmscore/clef.h"
 #include "libmscore/interval.h"
 #include "libmscore/timesig.h"
 #include "libmscore/volta.h"

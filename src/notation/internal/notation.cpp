@@ -25,7 +25,6 @@
 #include <QScreen>
 
 #include "libmscore/masterscore.h"
-#include "libmscore/page.h"
 
 #include "notationpainting.h"
 #include "notationviewstate.h"
@@ -38,11 +37,11 @@
 #include "notationmidiinput.h"
 #include "notationparts.h"
 #include "notationtypes.h"
-#include "draw/types/pen.h"
 
 #include "log.h"
 
 using namespace mu::notation;
+using namespace mu::engraving;
 
 Notation::Notation(mu::engraving::Score* score)
 {
@@ -91,7 +90,7 @@ Notation::Notation(mu::engraving::Score* score)
     configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
         if (m_score) {
             m_score->doLayout();
-            for (mu::engraving::Score* score : m_score->scoreList()) {
+            for (Score* score : m_score->scoreList()) {
                 score->doLayout();
             }
         }
@@ -124,7 +123,7 @@ void Notation::init()
     mu::engraving::MScore::setVerticalOrientation(isVertical);
 }
 
-void Notation::setScore(mu::engraving::Score* score)
+void Notation::setScore(Score* score)
 {
     if (m_score == score) {
         return;
@@ -296,7 +295,7 @@ INotationPartsPtr Notation::parts() const
     return m_parts;
 }
 
-mu::engraving::Score* Notation::score() const
+Score* Notation::score() const
 {
     return m_score;
 }
