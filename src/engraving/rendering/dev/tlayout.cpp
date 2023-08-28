@@ -3425,18 +3425,23 @@ void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     LyricsLayout::layout(item, ctx);
 }
 
-void TLayout::layout(Marker* item, LayoutContext& ctx)
+static void layoutMarker(const Marker* item, const LayoutContext& ctx, Marker::LayoutData* ldata)
 {
-    layoutTextBase(item, ctx);
+    TLayout::layoutTextBase(item, ctx, ldata);
 
     // although normally laid out to parent (measure) width,
     // force to center over barline if left-aligned
 
     if (!ctx.conf().isPaletteMode() && item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
-        item->movePosX(-item->width() * 0.5);
+        ldata->movePosX(-item->width() * 0.5);
     }
 
-    item->autoplaceMeasureElement();
+    const_cast<Marker*>(item)->autoplaceMeasureElement();
+}
+
+void TLayout::layout(Marker* item, LayoutContext& ctx)
+{
+    layoutMarker(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(MeasureBase* item, LayoutContext& ctx)
@@ -3471,24 +3476,18 @@ void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
 
 void TLayout::layout(MeasureNumber* item, LayoutContext& ctx)
 {
-    layoutMeasureNumberBase(item, ctx);
+    layoutMeasureNumberBase(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ctx)
+void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, const LayoutContext& ctx, MeasureNumberBase::LayoutData* ldata)
 {
-    item->setPos(PointF());
-    if (!item->explicitParent()) {
-        item->setOffset(0.0, 0.0);
-    }
-
-    // TextBase::layout1() needs to be called even if there's no measure attached to it.
-    // This happens for example in the palettes.
-    layout1TextBase(item, ctx);
-    // this could be if (!measure()) but it is the same as current and slower
-    // See implementation of MeasureNumberBase::measure().
-    if (!item->explicitParent()) {
+    IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
+
+    ldata->setPos(PointF());
+
+    layout1TextBase(item, ctx, ldata);
 
     if (item->placeBelow()) {
         double yoff = item->bbox().height();
@@ -3500,7 +3499,7 @@ void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ct
             yoff += item->staff()->height();
         }
 
-        item->setPosY(yoff);
+        ldata->setPosY(yoff);
     } else {
         double yoff = 0.0;
 
@@ -3509,7 +3508,7 @@ void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ct
             yoff -= 2.0 * item->spatium();
         }
 
-        item->setPosY(yoff);
+        ldata->setPosY(yoff);
     }
 
     if (item->hPlacement() == PlacementH::CENTER) {
@@ -3552,9 +3551,9 @@ void TLayout::layoutMeasureNumberBase(MeasureNumberBase* item, LayoutContext& ct
         double x1 = s1 ? s1->x() + s1->minRight() : 0;
         double x2 = s2 ? s2->x() - s2->minLeft() : mea->width();
 
-        item->setPosX((x1 + x2) * 0.5);
+        ldata->setPosX((x1 + x2) * 0.5);
     } else if (item->hPlacement() == PlacementH::RIGHT) {
-        item->setPosX(item->measure()->width());
+        ldata->setPosX(item->measure()->width());
     }
 }
 
@@ -3684,7 +3683,7 @@ void TLayout::layout(MMRest* item, LayoutContext& ctx)
 
 void TLayout::layout(MMRestRange* item, LayoutContext& ctx)
 {
-    layoutMeasureNumberBase(item, ctx);
+    layoutMeasureNumberBase(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Note* item, LayoutContext&)
