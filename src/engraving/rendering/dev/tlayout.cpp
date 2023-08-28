@@ -3072,7 +3072,7 @@ void TLayout::layout(InstrumentName* item, LayoutContext& ctx)
 
 void TLayout::layout(Jump* item, LayoutContext& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
     item->autoplaceMeasureElement();
 }
 
