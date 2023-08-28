@@ -50,6 +50,11 @@ ValueList {
                 roleName: "searchKey"
                 roleValue: root.searchText
                 compareType: CompareType.Contains
+            },
+            FilterValue {
+                roleName: "title"
+                roleValue: ""
+                compareType: CompareType.NotEqual
             }
         ]
     }
