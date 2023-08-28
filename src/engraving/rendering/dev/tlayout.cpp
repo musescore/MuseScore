@@ -3697,7 +3697,7 @@ void TLayout::layout(MMRestRange* item, LayoutContext& ctx)
     layoutMeasureNumberBase(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Note* item, LayoutContext&)
+static void layoutNote(const Note* item, const LayoutContext&, Note::LayoutData* ldata)
 {
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
     if (useTablature) {
@@ -3710,59 +3710,64 @@ void TLayout::layout(Note* item, LayoutContext&)
         double mags = item->magS();
         // not complete but we need systems to be laid out to add parenthesis
         if (item->fixed()) {
-            item->setFretString(u"/");
+            const_cast<Note*>(item)->setFretString(u"/");
         } else {
-            item->setFretString(tab->fretString(fabs(item->fret()), item->string(), item->deadNote()));
+            const_cast<Note*>(item)->setFretString(tab->fretString(fabs(item->fret()), item->string(), item->deadNote()));
 
             if (item->negativeFretUsed()) {
-                item->setFretString(u"-" + item->fretString());
+                const_cast<Note*>(item)->setFretString(u"-" + item->fretString());
             }
 
             if (item->displayFret() == Note::DisplayFretOption::ArtificialHarmonic) {
-                item->setFretString(String(u"%1 <%2>").arg(item->fretString(), String::number(item->harmonicFret())));
+                const_cast<Note*>(item)->setFretString(String(u"%1 <%2>").arg(item->fretString(), String::number(item->harmonicFret())));
             } else if (item->displayFret() == Note::DisplayFretOption::NaturalHarmonic) {
-                item->setFretString(String(u"<%1>").arg(String::number(item->harmonicFret())));
+                const_cast<Note*>(item)->setFretString(String(u"<%1>").arg(String::number(item->harmonicFret())));
             }
         }
 
         if ((item->ghost() && !Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround())) {
-            item->setFretString(String(u"(%1)").arg(item->fretString()));
+            const_cast<Note*>(item)->setFretString(String(u"(%1)").arg(item->fretString()));
         }
 
         double w = item->tabHeadWidth(tab);     // !! use _fretString
-        item->bbox().setRect(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+        ldata->bbox.setRect(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
 
         if (item->ghost() && Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
-            item->bbox().setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));
+            ldata->bbox.setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));
         } else {
-            item->bbox().setWidth(w);
+            ldata->bbox.setWidth(w);
         }
     } else {
         if (item->deadNote()) {
-            item->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
+            const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_CROSS);
         } else if (item->harmonic()) {
-            item->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
+            const_cast<Note*>(item)->setHeadGroup(NoteHeadGroup::HEAD_DIAMOND);
         }
         SymId nh = item->noteHead();
         if (Note::engravingConfiguration()->crossNoteHeadAlwaysBlack() && ((nh == SymId::noteheadXHalf) || (nh == SymId::noteheadXWhole))) {
             nh = SymId::noteheadXBlack;
         }
 
-        item->setCachedNoteheadSym(nh);
+        ldata->cachedNoteheadSym = nh;
 
         if (item->isNoteName()) {
-            item->setCachedSymNull(SymId::noteEmptyBlack);
+            ldata->cachedSymNull = SymId::noteEmptyBlack;
             NoteHeadType ht = item->headType() == NoteHeadType::HEAD_AUTO ? item->chord()->durationType().headType() : item->headType();
             if (ht == NoteHeadType::HEAD_WHOLE) {
-                item->setCachedSymNull(SymId::noteEmptyWhole);
+                ldata->cachedSymNull = SymId::noteEmptyWhole;
             } else if (ht == NoteHeadType::HEAD_HALF) {
-                item->setCachedSymNull(SymId::noteEmptyHalf);
+                ldata->cachedSymNull = SymId::noteEmptyHalf;
             }
         } else {
-            item->setCachedSymNull(SymId::noSym);
+            ldata->cachedSymNull = SymId::noSym;
         }
-        item->setbbox(item->symBbox(nh));
+        ldata->setbbox(item->symBbox(nh));
     }
+}
+
+void TLayout::layout(Note* item, LayoutContext& ctx)
+{
+    layoutNote(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(NoteDot* item, LayoutContext&)

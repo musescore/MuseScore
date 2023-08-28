@@ -189,13 +189,6 @@ public:
     double mag() const override;
     EngravingItem* elementBase() const override;
 
-    //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
-    SymId cachedNoteheadSym() const { return m_cachedNoteheadSym; }
-    void setCachedNoteheadSym(SymId i) { m_cachedNoteheadSym = i; }
-
-    SymId cachedSymNull() const { return m_cachedSymNull; }
-    void setCachedSymNull(SymId s) { m_cachedSymNull = s; }
-
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
     void setTrack(track_idx_t val) override;
 
@@ -447,6 +440,20 @@ public:
     SymId noteHead() const;
     bool isNoteName() const;
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        SymId cachedNoteheadSym;      // use in draw to avoid recomputing at every update
+        SymId cachedSymNull;          // additional symbol for some transparent notehead
+    };
+    DECLARE_LAYOUTDATA_METHODS(Note);
+
+    //! --- Old Interface ---
+    //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
+    SymId cachedNoteheadSym() const { return layoutData()->cachedNoteheadSym; }
+    void setCachedNoteheadSym(SymId i) { mutLayoutData()->cachedNoteheadSym = i; }
+    SymId cachedSymNull() const { return layoutData()->cachedSymNull; }
+    void setCachedSymNull(SymId s) { mutLayoutData()->cachedSymNull = s; }
+    //! --------------------
+
 private:
 
     friend class Factory;
@@ -537,9 +544,6 @@ private:
     NoteEventList m_playEvents;
     std::vector<Spanner*> m_spannerFor;
     std::vector<Spanner*> m_spannerBack;
-
-    SymId m_cachedNoteheadSym;   // use in draw to avoid recomputing at every update
-    SymId m_cachedSymNull;   // additional symbol for some transparent notehead
 
     String m_fretString;
 
