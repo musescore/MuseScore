@@ -215,14 +215,14 @@ void EventMap::fixupMIDI()
     };
 
     /* track info for each channel (on the heap, 0-initialised) */
-    struct channelInfo* info = (struct channelInfo*)calloc(_lastIndex + 1, sizeof(struct channelInfo));
+    struct channelInfo* info = (struct channelInfo*)calloc(size(), sizeof(struct channelInfo));
 
     for (auto& mm : _channels) {
         auto it = mm.begin();
         while (it != mm.end()) {
             NPlayEvent& event = it->second;
             /* ME_NOTEOFF is never emitted, no need to check for it */
-            if (event.type() == ME_NOTEON && !event.isMuted()) {
+            if (event.type() == ME_NOTEON) {
                 uint8_t np = info[event.channel()].nowPlaying[event.pitch()];
                 if (event.velo() == 0) {
                     /* already off (should not happen) or still playing? */
@@ -252,12 +252,7 @@ void EventMap::fixupMIDI()
 EventMap::events_multimap_t& EventMap::operator[](std::size_t idx)
 {
     if (size() == 0) {
-        for (size_t i = 0; i <= _lastIndex; ++i) {
-            _channels.emplace_back();
-        }
-    }
-    if (idx > _lastIndex) {
-        _lastIndex = idx;
+        _channels.emplace_back();
     }
     if (idx >= size()) {
         auto diff = idx - size();
@@ -268,11 +263,11 @@ EventMap::events_multimap_t& EventMap::operator[](std::size_t idx)
     return _channels[idx];
 }
 
-const EventMap::events_multimap_t& EventMap::operator[](std::size_t idx) const
-{
-    assert(idx < size());
-    return _channels[idx];
-}
+//const EventMap::events_multimap_t& EventMap::operator[](std::size_t idx) const
+//{
+//    assert(idx < size());
+//    return _channels[idx];
+//}
 
 void EventMap::mergePitchWheelEvents(EventMap& pitchWheelEvents)
 {

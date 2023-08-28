@@ -181,12 +181,12 @@ class EventMap
     OBJECT_ALLOCATOR(engraving, EventMap)
 
     using events_multimap_t = std::multimap<int, NPlayEvent>;
-    size_t _lastIndex = 15;
+//    size_t _lastIndex = 15;
     std::vector<events_multimap_t> _channels;
 public:
     [[nodiscard]] size_t size() const { return _channels.size(); }
     events_multimap_t& operator[](std::size_t idx);
-    const events_multimap_t& operator[](std::size_t idx) const;
+//    const events_multimap_t& operator[](std::size_t idx) const;
     void fixupMIDI();
     void mergePitchWheelEvents(EventMap& pitchWheelEvents);
 };
