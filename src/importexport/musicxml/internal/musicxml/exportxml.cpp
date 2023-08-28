@@ -2337,9 +2337,8 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
     _attr.doAttr(_xml, true);
     _xml.startElement("key", attrs);
 
-    const KeySigEvent kse = ks->keySigEvent();
-    const std::vector<KeySym>& keysyms = kse.keySymbols();
-    if (kse.custom() && !kse.isAtonal() && keysyms.size() > 0) {
+    const std::vector<KeySym>& keysyms = ks->keySymbols();
+    if (ks->isCustom() && !ks->isAtonal() && keysyms.size() > 0) {
         // non-traditional key signature
         // MusicXML order is left-to-right order, while KeySims in keySymbols()
         // are in insertion order -> sorting required
@@ -2364,8 +2363,8 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
         }
     } else {
         // traditional key signature
-        _xml.tag("fifths", static_cast<int>(kse.key()));
-        switch (kse.mode()) {
+        _xml.tag("fifths", static_cast<int>(ks->key()));
+        switch (ks->mode()) {
         case KeyMode::NONE:       _xml.tag("mode", "none");
             break;
         case KeyMode::MAJOR:      _xml.tag("mode", "major");
@@ -2388,7 +2387,7 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
             break;
         case KeyMode::UNKNOWN:              // fall thru
         default:
-            if (kse.custom()) {
+            if (ks->isCustom()) {
                 _xml.tag("mode", "none");
             }
         }

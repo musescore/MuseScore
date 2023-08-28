@@ -81,9 +81,6 @@ public:
     void setMode(KeyMode v) { m_sig.setMode(v); }
     void undoSetMode(KeyMode v);
 
-    const std::vector<KeySym>& keySymbols() const { return m_sig.keySymbols(); }
-    std::vector<KeySym>& keySymbols() { return m_sig.keySymbols(); }
-
     bool hideNaturals() const { return m_hideNaturals; }
     void setHideNaturals(bool hide) { m_hideNaturals = hide; }
 
@@ -97,6 +94,16 @@ public:
     EngravingItem* nextSegmentElement() override;
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
+
+    struct LayoutData : public EngravingItem::LayoutData {
+        std::vector<KeySym> keySymbols;
+    };
+    DECLARE_LAYOUTDATA_METHODS(KeySig);
+
+    //! --- Old Interface ---
+    const std::vector<KeySym>& keySymbols() const { return layoutData()->keySymbols; }
+    std::vector<KeySym>& keySymbols() { return mutLayoutData()->keySymbols; }
+    //! ---------------------
 
 private:
     friend class Factory;

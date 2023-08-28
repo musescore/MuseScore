@@ -147,11 +147,11 @@ const SymId accTable[] = {
 
 void KeySigEvent::enforceLimits(bool transposing)
 {
-    if (_key < Key::MIN) {
-        _key = Key::MIN;
+    if (m_key < Key::MIN) {
+        m_key = Key::MIN;
         LOGD("key < -7");
-    } else if (_key > Key::MAX) {
-        _key = Key::MAX;
+    } else if (m_key > Key::MAX) {
+        m_key = Key::MAX;
         LOGD("key > 7");
     }
 
@@ -159,11 +159,11 @@ void KeySigEvent::enforceLimits(bool transposing)
         return;
     }
 
-    if (_concertKey < Key::MIN) {
-        _concertKey = Key::MIN;
+    if (m_concertKey < Key::MIN) {
+        m_concertKey = Key::MIN;
         LOGD("key < -7");
-    } else if (_concertKey > Key::MAX) {
-        _concertKey = Key::MAX;
+    } else if (m_concertKey > Key::MAX) {
+        m_concertKey = Key::MAX;
         LOGD("key > 7");
     }
 }
@@ -183,7 +183,7 @@ void KeySigEvent::print() const
         } else if (custom()) {
             LOGD("custom>");
         } else {
-            LOGD("accidental %d>", int(_key));
+            LOGD("accidental %d>", int(m_key));
         }
     }
 }
@@ -194,7 +194,7 @@ void KeySigEvent::print() const
 
 void KeySigEvent::setKey(Key v)
 {
-    _key = v;
+    m_key = v;
     enforceLimits(true);
 }
 
@@ -204,8 +204,8 @@ void KeySigEvent::setKey(Key v)
 
 void KeySigEvent::setConcertKey(Key v)
 {
-    _key = v;
-    _concertKey = v;
+    m_key = v;
+    m_concertKey = v;
     enforceLimits();
 }
 
@@ -215,10 +215,10 @@ void KeySigEvent::setConcertKey(Key v)
 
 void KeySigEvent::setCustom(bool val)
 {
-    _custom = val;
-    if (_key == Key::INVALID) {
-        _concertKey = Key::C;
-        _key = Key::C;
+    m_custom = val;
+    if (m_key == Key::INVALID) {
+        m_concertKey = Key::C;
+        m_key = Key::C;
     }
 }
 
@@ -228,23 +228,23 @@ void KeySigEvent::setCustom(bool val)
 
 bool KeySigEvent::operator==(const KeySigEvent& e) const
 {
-    if (e._custom != _custom || e._mode != _mode || e._forInstrumentChange != _forInstrumentChange) {
+    if (e.m_custom != m_custom || e.m_mode != m_mode || e.m_forInstrumentChange != m_forInstrumentChange) {
         return false;
     }
-    if (_custom && !isAtonal()) {
-        if (e._customKeyDefs.size() != _customKeyDefs.size()) {
+    if (m_custom && !isAtonal()) {
+        if (e.m_customKeyDefs.size() != m_customKeyDefs.size()) {
             return false;
         }
-        for (size_t i = 0; i < _customKeyDefs.size(); ++i) {
+        for (size_t i = 0; i < m_customKeyDefs.size(); ++i) {
             // check note and sym, don't care xAlt and octAlt
-            if (e._customKeyDefs[i].degree != _customKeyDefs[i].degree || e._customKeyDefs[i].sym != _customKeyDefs[i].sym) {
+            if (e.m_customKeyDefs[i].degree != m_customKeyDefs[i].degree || e.m_customKeyDefs[i].sym != m_customKeyDefs[i].sym) {
                 return false;
             }
             // TODO: position matters // does it?
         }
         return true;
     }
-    return e._concertKey == _concertKey && e._key == _key;
+    return e.m_concertKey == m_concertKey && e.m_key == m_key;
 }
 
 //---------------------------------------------------------
@@ -329,12 +329,12 @@ void KeySigEvent::initFromSubtype(int st)
     a._invalid     = (st >> 25) & 0x1;
     //end of legacy code
 
-    _key            = Key(a._key);
-    _concertKey     = _key;
+    m_key            = Key(a._key);
+    m_concertKey     = m_key;
 //      _customType     = a._customType;
-    _custom         = a._custom;
+    m_custom         = a._custom;
     if (a._invalid) {
-        _key = Key::INVALID;
+        m_key = Key::INVALID;
     }
     enforceLimits();
 }

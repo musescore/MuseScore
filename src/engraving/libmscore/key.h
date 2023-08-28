@@ -73,33 +73,31 @@ public:
     void setCustom(bool val);
     void print() const;
 
-    Key concertKey() const { return _concertKey; }
-    Key key() const { return _key; }
-    KeyMode mode() const { return _mode; }
-    void setMode(KeyMode m) { _mode = m; }
-    bool custom() const { return _custom; }
-    bool isValid() const { return _key != Key::INVALID; }
-    bool isAtonal() const { return _mode == KeyMode::NONE; }
-    void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
-    bool forInstrumentChange() const { return _forInstrumentChange; }
+    Key concertKey() const { return m_concertKey; }
+    Key key() const { return m_key; }
+    KeyMode mode() const { return m_mode; }
+    void setMode(KeyMode m) { m_mode = m; }
+    bool custom() const { return m_custom; }
+    bool isValid() const { return m_key != Key::INVALID; }
+    bool isAtonal() const { return m_mode == KeyMode::NONE; }
+    void setForInstrumentChange(bool forInstrumentChange) { m_forInstrumentChange = forInstrumentChange; }
+    bool forInstrumentChange() const { return m_forInstrumentChange; }
     void initFromSubtype(int);      // for backward compatibility
     int degInKey(int degree) const; // return "absolute degree"
     SymId symInKey(SymId sym, int degree) const;
-    std::vector<KeySym>& keySymbols() { return _keySymbols; }
-    const std::vector<KeySym>& keySymbols() const { return _keySymbols; }
-    std::vector<CustDef>& customKeyDefs() { return _customKeyDefs; }
-    const std::vector<CustDef>& customKeyDefs() const { return _customKeyDefs; }
+    std::vector<CustDef>& customKeyDefs() { return m_customKeyDefs; }
+    const std::vector<CustDef>& customKeyDefs() const { return m_customKeyDefs; }
 
 private:
-    Key _concertKey     { Key::INVALID };               // -7 -> +7
-    Key _key            { Key::INVALID };               // actual key, depends on staff transposition
-    KeyMode _mode       { KeyMode::UNKNOWN };
-    bool _custom        { false };
-    bool _forInstrumentChange{ false };
-    std::vector<CustDef> _customKeyDefs;
-    std::vector<KeySym> _keySymbols;
 
     void enforceLimits(bool transposing = false);       // if true, enforce only trnasposing, otherways both
+
+    Key m_concertKey = Key::INVALID;               // -7 -> +7
+    Key m_key = Key::INVALID;               // actual key, depends on staff transposition
+    KeyMode m_mode = KeyMode::UNKNOWN;
+    bool m_custom = false;
+    bool m_forInstrumentChange = false;
+    std::vector<CustDef> m_customKeyDefs;
 };
 
 //---------------------------------------------------------

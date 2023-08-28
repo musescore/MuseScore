@@ -3076,14 +3076,46 @@ void TLayout::layout(Jump* item, LayoutContext& ctx)
     item->autoplaceMeasureElement();
 }
 
-void TLayout::layout(KeySig* item, LayoutContext& ctx)
+static void keySigAddLayout(const KeySig* item, const LayoutContext& ctx, SymId sym, int line, KeySig::LayoutData* ldata)
+{
+    double _spatium = item->spatium();
+    double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
+    KeySym ks;
+    ks.sym = sym;
+    double x = 0.0;
+    if (ldata->keySymbols.size() > 0) {
+        const KeySym& previous = ldata->keySymbols.back();
+        double accidentalGap = ctx.conf().styleS(Sid::keysigAccidentalDistance).val();
+        if (previous.sym != sym) {
+            accidentalGap *= 2;
+        } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
+            accidentalGap = ctx.conf().styleS(Sid::keysigNaturalDistance).val();
+        }
+        double previousWidth = item->symWidth(previous.sym) / _spatium;
+        x = previous.xPos + previousWidth + accidentalGap;
+        bool isAscending = line < previous.line;
+        SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
+        SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
+        PointF cutout = item->symSmuflAnchor(sym, currentCutout);
+        double currentCutoutY = line * step + cutout.y();
+        double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
+        if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
+            x -= cutout.x() / _spatium;
+        }
+    }
+    ks.xPos = x;
+    ks.line = line;
+    ldata->keySymbols.push_back(ks);
+}
+
+static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::LayoutData* ldata)
 {
     double _spatium = item->spatium();
     double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
 
-    item->setbbox(RectF());
+    ldata->setbbox(RectF());
 
-    item->keySymbols().clear();
+    ldata->keySymbols.clear();
     if (item->staff() && !item->staff()->staffType(item->tick())->genKeysig()) {
         return;
     }
@@ -3129,14 +3161,14 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
                 ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
                 if (item->keySymbols().size() > 0) {
-                    KeySym& previous = item->keySymbols().back();
+                    const KeySym& previous = ldata->keySymbols.back();
                     double previousWidth = item->symWidth(previous.sym) / _spatium;
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
                 } else {
                     ks.xPos = 0;
                 }
                 // TODO octave metters?
-                item->keySymbols().push_back(ks);
+                ldata->keySymbols.push_back(ks);
             }
         }
         for (const CustDef& cd : item->customKeyDefs()) {
@@ -3148,7 +3180,7 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
             double xpos = cd.xAlt;
             if (item->keySymbols().size() > 0) {
-                KeySym& previous = item->keySymbols().back();
+                const KeySym& previous = ldata->keySymbols.back();
                 double previousWidth = item->symWidth(previous.sym) / _spatium;
                 xpos += previous.xPos + previousWidth + accidentalGap;
             }
@@ -3165,7 +3197,7 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
                     ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                     sym = cd.sym;
                 }
-                item->keySymbols().push_back(ks);
+                ldata->keySymbols.push_back(ks);
                 xpos += t1 < 0 ? 0.7 : 1; // flats closer
             }
             // create symbol; natural only if is user defined
@@ -3174,7 +3206,7 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
                 ks.sym = sym;
                 ks.line = line;
                 ks.xPos = xpos;
-                item->keySymbols().push_back(ks);
+                ldata->keySymbols.push_back(ks);
             }
         }
     } else {
@@ -3282,7 +3314,7 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
         if (prefixNaturals) {
             for (int i = 0; i < 7; ++i) {
                 if (naturals & (1 << i)) {
-                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset]);
+                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset], ldata);
                 }
             }
         }
@@ -3290,7 +3322,7 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
             SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
             int lineIndexOffset = t1 > 0 ? 0 : 7;
             for (int i = 0; i < abs(t1); ++i) {
-                keySigAddLayout(item, ctx, symbol, lines[lineIndexOffset + i]);
+                keySigAddLayout(item, ctx, symbol, lines[lineIndexOffset + i], ldata);
             }
         } else {
             LOGD("illegal t1 key %d", t1);
@@ -3300,14 +3332,14 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
         if (suffixNaturals) {
             for (int i = 0; i < 7; ++i) {
                 if (naturals & (1 << i)) {
-                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset]);
+                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset], ldata);
                 }
             }
         }
 
         // Follow stepOffset
         if (item->staffType()) {
-            item->setPosY(item->staffType()->stepOffset() * 0.5 * _spatium);
+            ldata->setPosY(item->staffType()->stepOffset() * 0.5 * _spatium);
         }
     }
 
@@ -3315,40 +3347,13 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
     for (const KeySym& ks : item->keySymbols()) {
         double x = ks.xPos * _spatium;
         double y = ks.line * step;
-        item->addbbox(item->symBbox(ks.sym).translated(x, y));
+        ldata->addbbox(item->symBbox(ks.sym).translated(x, y));
     }
 }
 
-void TLayout::keySigAddLayout(KeySig* item, LayoutContext& ctx, SymId sym, int line)
+void TLayout::layout(KeySig* item, LayoutContext& ctx)
 {
-    double _spatium = item->spatium();
-    double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
-    KeySym ks;
-    ks.sym = sym;
-    double x = 0.0;
-    if (item->keySymbols().size() > 0) {
-        KeySym& previous = item->keySymbols().back();
-        double accidentalGap = ctx.conf().styleS(Sid::keysigAccidentalDistance).val();
-        if (previous.sym != sym) {
-            accidentalGap *= 2;
-        } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
-            accidentalGap = ctx.conf().styleS(Sid::keysigNaturalDistance).val();
-        }
-        double previousWidth = item->symWidth(previous.sym) / _spatium;
-        x = previous.xPos + previousWidth + accidentalGap;
-        bool isAscending = line < previous.line;
-        SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
-        SmuflAnchorId previousCutout = isAscending ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE;
-        PointF cutout = item->symSmuflAnchor(sym, currentCutout);
-        double currentCutoutY = line * step + cutout.y();
-        double previousCutoutY = previous.line * step + item->symSmuflAnchor(previous.sym, previousCutout).y();
-        if ((isAscending && currentCutoutY < previousCutoutY) || (!isAscending && currentCutoutY > previousCutoutY)) {
-            x -= cutout.x() / _spatium;
-        }
-    }
-    ks.xPos = x;
-    ks.line = line;
-    item->keySymbols().push_back(ks);
+    layoutKeySig(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(LayoutBreak* item, LayoutContext&)
