@@ -3061,7 +3061,7 @@ void TLayout::layout(Image* item, LayoutContext& ctx)
 
 void TLayout::layout(InstrumentChange* item, LayoutContext& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
     item->autoplaceSegmentElement();
 }
 
