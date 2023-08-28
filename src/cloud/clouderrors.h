@@ -34,9 +34,16 @@ enum class Err {
     UnknownError    = int(Ret::Code::CloudFirst),
 
     AccessTokenIsEmpty,
-    AccountNotActivated,
-    Conflict,
-    NetworkError, /// < use cloudNetworkErrorUserDescription to retrieve user-readable description
+    Status400_InvalidRequest,
+    Status401_AuthorizationRequired,
+    Status403_AccountNotActivated,
+    Status403_NotOwner,
+    Status404_NotFound,
+    Status409_Conflict,
+    Status422_ValidationFailed,
+    Status500_InternalServerError,
+    UnknownStatusCode,
+    NetworkError,
     CouldNotReceiveSourceUrl,
 };
 
@@ -49,25 +56,21 @@ inline Ret make_ret(Err e)
     case Err::NoError: return Ret(retCode);
     case Err::UnknownError: return Ret(retCode);
     case Err::AccessTokenIsEmpty: return Ret(retCode, "Access token is empty");
-    case Err::AccountNotActivated: return Ret(retCode, "Account not activated");
-    case Err::Conflict: return Ret(retCode, "Conflict");
+    case Err::Status400_InvalidRequest: return Ret(retCode, "Status 400: invalid request");
+    case Err::Status401_AuthorizationRequired: return Ret(retCode, "Status 401: authorization required");
+    case Err::Status403_AccountNotActivated: return Ret(retCode, "Status 403: account not activated");
+    case Err::Status403_NotOwner: return Ret(retCode, "Status 403: not owner");
+    case Err::Status404_NotFound: return Ret(retCode, "Status 404: not found");
+    case Err::Status409_Conflict: return Ret(retCode, "Status 409: conflict");
+    case Err::Status422_ValidationFailed: return Ret(retCode, "Status 422: validation failed");
+    case Err::Status500_InternalServerError: return Ret(retCode, "Status 500: internal server error");
+    case Err::UnknownStatusCode: return Ret(retCode, "Unknown status code");
     case Err::NetworkError: return Ret(retCode, "Network error");
     case Err::CouldNotReceiveSourceUrl: return Ret(retCode, "Could not receive source url");
+        break;
     }
 
-    return Ret(static_cast<int>(e));
-}
-
-inline std::string cloudNetworkErrorUserDescription(const Ret& ret)
-{
-    assert(ret.code() == int(Err::NetworkError));
-
-    auto userDescription = ret.data(CLOUD_NETWORK_ERROR_USER_DESCRIPTION_KEY);
-    if (userDescription.has_value()) {
-        return std::any_cast<std::string>(userDescription);
-    }
-
-    return {};
+    return Ret(retCode);
 }
 }
 

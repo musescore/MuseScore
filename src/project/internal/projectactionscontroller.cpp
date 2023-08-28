@@ -455,8 +455,7 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
     bool isOwner = true;
     RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
     if (!scoreInfo.ret) {
-        std::any status = scoreInfo.ret.data("status");
-        if (status.has_value() && std::any_cast<int>(status) == 403) {
+        if (scoreInfo.ret.code() == int(cloud::Err::Status403_NotOwner)) {
             LOGI() << "Downloading score info returned 403, so not owner";
             isOwner = false;
         } else {
@@ -1497,38 +1496,60 @@ void ProjectActionsController::showScoreDownloadError(const Ret& ret)
         message = trc("project", "This score is invalid.");
         break;
     case int(Err::FileOpenError):
-        message = trc("project", "The file could not be downloaded to your disk.");
+        message = trc("project/cloud", "The file could not be downloaded to your disk.");
         break;
-    case int(network::Err::NetworkError): {
+    case int(cloud::Err::Status400_InvalidRequest):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("400 Invalid request").toStdString();
+        break;
+    case int(cloud::Err::Status401_AuthorizationRequired):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("401 Authorization required").toStdString();
+        break;
+    case int(cloud::Err::Status403_AccountNotActivated):
+        message = trc("project/cloud", "Your musescore.com account needs to be verified first. "
+                                       "Please activate your account via the link in the activation email.");
+        break;
+    case int(cloud::Err::Status403_NotOwner):
+        message = trc("project/cloud", "This score does not belong to this account. To access this score, make sure you are logged in "
+                                       "to the desktop app with the account to which this score belongs.");
+        break;
+    case int(cloud::Err::Status404_NotFound):
+        message = trc("project/cloud", "The score could not be found, or cannot be accessed by your account.");
+        break;
+    case int(cloud::Err::Status422_ValidationFailed):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("422 Validation failed").toStdString();
+        break;
+    case int(cloud::Err::Status500_InternalServerError):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("500 Internal server error").toStdString();
+        break;
+    case int(cloud::Err::UnknownStatusCode): {
         std::any status = ret.data("status");
         if (status.has_value()) {
-            int statusCode = std::any_cast<int>(status);
-            switch (statusCode) {
-            case 404:
-                message = trc("project", "The score could not be found, or cannot be accessed by your account.");
-                break;
-            default:
-                message = qtrc("project", "<a href=\"https://musescore.com\">musescore.com</a> returned error code %1.")
-                          .arg(statusCode).toStdString();
-            }
+            //: %1 will be replaced with the error code that MuseScore.com returned, which is a number.
+            message = qtrc("project/cloud", "MuseScore.com returned an unknown error code: %1.")
+                      .arg(std::any_cast<int>(status)).toStdString();
         } else {
-            message = trc("project", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
-                                     "Please check your internet connection or try again later.");
+            message = trc("project/cloud", "MuseScore.com returned an unknown error code.");
         }
     } break;
-    case int(cloud::Err::AccountNotActivated):
-        message = trc("project", "Your musescore.com account needs to be verified first. "
-                                 "Please activate your account via the link in the activation email.");
-        break;
+
     case int(cloud::Err::NetworkError):
-        message = cloud::cloudNetworkErrorUserDescription(ret);
-        if (!message.empty()) {
-            message += "\n\n" + trc("project/save", "Please try again later.");
-            break;
-        }
-    // FALLTHROUGH
+        message = trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
+                                       "Please check your internet connection or try again later.");
+        break;
     default:
-        message = trc("project/save", "Please try again later.");
+        message = trc("project/cloud", "Please try again later.");
         break;
     }
 

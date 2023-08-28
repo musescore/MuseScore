@@ -215,7 +215,7 @@ mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
 
     if (!ret) {
         printServerReply(receivedData);
-        result.ret = ret;
+        result.ret = uploadingDownloadingRetFromRawRet(ret);
         return result;
     }
 

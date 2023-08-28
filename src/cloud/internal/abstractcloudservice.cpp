@@ -366,37 +366,38 @@ Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, b
         return rawRet; // OK
     }
 
-    int code = statusCode(rawRet);
-    if (!code) {
-        return rawRet;
+    int status = statusCode(rawRet);
+    if (status) {
+        switch (status) {
+        case 400: return make_ret(Err::Status400_InvalidRequest);
+        case 401: return make_ret(Err::Status401_AuthorizationRequired);
+        case 403:
+            if (isAlreadyUploaded) {
+                return make_ret(Err::Status403_AccountNotActivated);
+            } else {
+                return make_ret(Err::Status403_NotOwner);
+            }
+        case 404: return make_ret(Err::Status404_NotFound);
+        case 409: return make_ret(Err::Status409_Conflict);
+        case 422: return make_ret(Err::Status422_ValidationFailed);
+        case 500: return make_ret(Err::Status500_InternalServerError);
+        default: break;
+        }
+
+        Ret ret = make_ret(Err::UnknownStatusCode);
+        ret.setText("Unknown status code: " + std::to_string(status));
+        ret.setData("status", status);
+        return ret;
     }
 
-    if (!isAlreadyUploaded && code == FORBIDDEN_CODE) {
-        return make_ret(cloud::Err::AccountNotActivated);
+    switch (rawRet.code()) {
+    case int(network::Err::NetworkError):
+    case int(network::Err::Timeout):
+    case int(network::Err::Abort):
+        return make_ret(Err::NetworkError);
     }
 
-    if (code == CONFLICT_STATUS_CODE) {
-        return make_ret(cloud::Err::Conflict);
-    }
-
-    static const std::map<int, mu::TranslatableString> codes {
-        { 400, mu::TranslatableString("cloud", "Invalid request") },
-        { 401, mu::TranslatableString("cloud", "Authorization required") },
-        { 403, mu::TranslatableString("cloud", "Forbidden. User is not owner of the score.") },
-        { 422, mu::TranslatableString("cloud", "Validation failed") },
-        { 500, mu::TranslatableString("cloud", "Internal server error") },
-    };
-
-    std::string userDescription = qtrc("cloud", "Error %1: %2")
-                                  .arg(code)
-                                  .arg(mu::value(codes, code, TranslatableString("cloud", "Unknown error")).qTranslated())
-                                  .toStdString();
-
-    Ret ret = make_ret(cloud::Err::NetworkError);
-    ret.setData(CLOUD_NETWORK_ERROR_USER_DESCRIPTION_KEY, userDescription);
-    ret.setData(STATUS_KEY, code);
-
-    return ret;
+    return rawRet;
 }
 
 int AbstractCloudService::statusCode(const mu::Ret& ret) const
