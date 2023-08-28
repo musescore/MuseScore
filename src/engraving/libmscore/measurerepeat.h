@@ -47,12 +47,7 @@ public:
 
     void setNumMeasures(int n);
     int numMeasures() const { return m_numMeasures; }
-    void setSymId(SymId id) { m_symId = id; }
-    SymId symId() const { return m_symId; }
-    void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(String::number(n)); }
-    void setNumberSym(const String& s) { m_numberSym = timeSigSymIdsFromString(s); }
-    const SymIdList& numberSym() const { return m_numberSym; }
-    void clearNumberSym() { m_numberSym.clear(); }
+
     void setNumberPos(double d) { m_numberPos = d; }
     double numberPos() const { return m_numberPos; }
 
@@ -76,14 +71,35 @@ public:
 
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        SymId symId = SymId::noSym;
+        SymIdList numberSym;
+
+        void setSymId(SymId id) { symId = id; }
+
+        void setNumberSym(int n) { numberSym = timeSigSymIdsFromString(String::number(n)); }
+        void setNumberSym(const String& s) { numberSym = timeSigSymIdsFromString(s); }
+        void clearNumberSym() { numberSym.clear(); }
+    };
+    DECLARE_LAYOUTDATA_METHODS(MeasureRepeat);
+
+    //! --- Old Interface ---
+    void setSymId(SymId id) { mutLayoutData()->symId = id; }
+    SymId symId() const { return layoutData()->symId; }
+
+    void setNumberSym(int n) { mutLayoutData()->setNumberSym(n); }
+    void setNumberSym(const String& s) { mutLayoutData()->setNumberSym(s); }
+    const SymIdList& numberSym() const { return layoutData()->numberSym; }
+    void clearNumberSym() { mutLayoutData()->clearNumberSym(); }
+    //! ---------------------
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
 
     int m_numMeasures = 0;
-    SymIdList m_numberSym;
+
     double m_numberPos = 0.0;
-    SymId m_symId = SymId::noSym;
 };
 } // namespace mu::engraving
 #endif

@@ -22,12 +22,11 @@
 
 #include "measurerepeat.h"
 
-#include "draw/types/pen.h"
-
 #include "translation.h"
 
+#include "style/style.h"
+
 #include "measure.h"
-#include "score.h"
 #include "staff.h"
 
 #include "log.h"
@@ -45,7 +44,7 @@ static const ElementStyle measureRepeatStyle {
 //---------------------------------------------------------
 
 MeasureRepeat::MeasureRepeat(Segment* parent)
-    : Rest(ElementType::MEASURE_REPEAT, parent), m_numMeasures(0), m_symId(SymId::noSym)
+    : Rest(ElementType::MEASURE_REPEAT, parent), m_numMeasures(0)
 {
     // however many measures the group, the element itself is always exactly the duration of its containing measure
     setDurationType(DurationType::V_MEASURE);
@@ -113,7 +112,7 @@ PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
 
 RectF MeasureRepeat::numberRect() const
 {
-    RectF r = symBbox(m_numberSym);
+    RectF r = symBbox(layoutData()->numberSym);
     r.translate(numberPosition(r));
     return r;
 }

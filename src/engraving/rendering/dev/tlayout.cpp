@@ -3557,16 +3557,12 @@ void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, const Layou
     }
 }
 
-void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
+static void layoutMeasureRepeat(const MeasureRepeat* item, const LayoutContext& ctx, MeasureRepeat::LayoutData* ldata)
 {
-    for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
-    }
-
     switch (item->numMeasures()) {
     case 1:
     {
-        item->setSymId(SymId::repeat1Bar);
+        ldata->setSymId(SymId::repeat1Bar);
         if (ctx.conf().styleB(Sid::mrNumberSeries) && item->track() != mu::nidx) {
             int placeInSeries = 2; // "1" would be the measure actually being repeated
             staff_idx_t staffIdx = item->staffIdx();
@@ -3577,31 +3573,31 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
             }
             if (placeInSeries % ctx.conf().styleI(Sid::mrNumberEveryXMeasures) == 0) {
                 if (ctx.conf().styleB(Sid::mrNumberSeriesWithParentheses)) {
-                    item->setNumberSym(String(u"(%1)").arg(placeInSeries));
+                    ldata->setNumberSym(String(u"(%1)").arg(placeInSeries));
                 } else {
-                    item->setNumberSym(placeInSeries);
+                    ldata->setNumberSym(placeInSeries);
                 }
             } else {
-                item->clearNumberSym();
+                ldata->clearNumberSym();
             }
         } else if (ctx.conf().styleB(Sid::oneMeasureRepeatShow1)) {
-            item->setNumberSym(1);
+            ldata->setNumberSym(1);
         } else {
-            item->clearNumberSym();
+            ldata->clearNumberSym();
         }
         break;
     }
     case 2:
-        item->setSymId(SymId::repeat2Bars);
-        item->setNumberSym(item->numMeasures());
+        ldata->setSymId(SymId::repeat2Bars);
+        ldata->setNumberSym(item->numMeasures());
         break;
     case 4:
-        item->setSymId(SymId::repeat4Bars);
-        item->setNumberSym(item->numMeasures());
+        ldata->setSymId(SymId::repeat4Bars);
+        ldata->setNumberSym(item->numMeasures());
         break;
     default:
-        item->setSymId(SymId::noSym); // should never happen
-        item->clearNumberSym();
+        ldata->setSymId(SymId::noSym); // should never happen
+        ldata->clearNumberSym();
         break;
     }
 
@@ -3615,14 +3611,23 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
         const StaffType* staffType = item->staffType();
 
         // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
-        item->setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium() + offset);
+        ldata->setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium() + offset);
     }
 
-    item->setbbox(bbox);
+    ldata->setbbox(bbox);
 
     if (item->track() != mu::nidx && !item->numberSym().empty()) {
-        item->addbbox(item->numberRect());
+        ldata->addbbox(item->numberRect());
     }
+}
+
+void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
+{
+    for (EngravingItem* e : item->el()) {
+        layoutItem(e, ctx);
+    }
+
+    layoutMeasureRepeat(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(MMRest* item, LayoutContext& ctx)
