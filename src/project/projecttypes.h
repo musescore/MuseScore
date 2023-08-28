@@ -180,57 +180,17 @@ struct SaveLocation
         : type(SaveLocationType::Cloud), data(cloudInfo) {}
 };
 
-struct ProjectFilePath {
-    io::path_t path;
-    QString displayNameOverride = {};
-
-    ProjectFilePath() = default;
-
-    ProjectFilePath(const io::path_t& path, const QString& displayNameOverride = {})
-        : path(path), displayNameOverride(displayNameOverride) {}
-
-    bool isValid() const
-    {
-        return !path.empty();
-    }
-
-    QString displayName(bool includingExtension) const
-    {
-        if (!displayNameOverride.isEmpty()) {
-            return displayNameOverride;
-        }
-
-        return io::filename(path, includingExtension).toQString();
-    }
-
-    bool operator ==(const ProjectFilePath& other) const
-    {
-        return path == other.path
-               && displayNameOverride == other.displayNameOverride;
-    }
-
-    bool operator !=(const ProjectFilePath& other) const
-    {
-        return !(*this == other);
-    }
-};
-
-using ProjectFilePathsList = std::vector<ProjectFilePath>;
-
-struct ProjectFileUrl {
+struct ProjectFile {
     QUrl url;
     QString displayNameOverride = {};
 
-    ProjectFileUrl() = default;
+    ProjectFile() = default;
 
-    ProjectFileUrl(const QUrl& url, const QString& displayNameOverride = {})
+    ProjectFile(const QUrl& url, const QString& displayNameOverride = {})
         : url(url), displayNameOverride(displayNameOverride) {}
 
-    ProjectFileUrl(const io::path_t& path, const QString& displayNameOverride = {})
+    ProjectFile(const io::path_t& path, const QString& displayNameOverride = {})
         : url(path.toQUrl()), displayNameOverride(displayNameOverride) {}
-
-    ProjectFileUrl(const ProjectFilePath& path, const QString& displayNameOverride = {})
-        : url(path.path.toQUrl()), displayNameOverride(displayNameOverride) {}
 
     bool isValid() const
     {
@@ -262,24 +222,66 @@ struct ProjectFileUrl {
         return io::path_t(url);
     }
 
-    ProjectFilePath toProjectFilePath() const
-    {
-        return ProjectFilePath { path(), displayNameOverride };
-    }
-
-    bool operator ==(const ProjectFileUrl& other) const
+    bool operator ==(const ProjectFile& other) const
     {
         return url == other.url
                && displayNameOverride == other.displayNameOverride;
     }
 
-    bool operator !=(const ProjectFileUrl& other) const
+    bool operator !=(const ProjectFile& other) const
     {
         return !(*this == other);
     }
 };
 
-using ProjectFileUrlsList = std::vector<ProjectFileUrl>;
+using ProjectFilesList = std::vector<ProjectFile>;
+
+struct RecentFile {
+    io::path_t path;
+    QString displayNameOverride = {};
+
+    RecentFile() = default;
+
+    RecentFile(const io::path_t& path, const QString& displayNameOverride = {})
+        : path(path), displayNameOverride(displayNameOverride) {}
+
+    static RecentFile fromProjectFile(const ProjectFile& projectFile)
+    {
+        return RecentFile(projectFile.path(), projectFile.displayNameOverride);
+    }
+
+    ProjectFile toProjectFile() const
+    {
+        return ProjectFile(path, displayNameOverride);
+    }
+
+    bool isValid() const
+    {
+        return !path.empty();
+    }
+
+    QString displayName(bool includingExtension) const
+    {
+        if (!displayNameOverride.isEmpty()) {
+            return displayNameOverride;
+        }
+
+        return io::filename(path, includingExtension).toQString();
+    }
+
+    bool operator ==(const RecentFile& other) const
+    {
+        return path == other.path
+               && displayNameOverride == other.displayNameOverride;
+    }
+
+    bool operator !=(const RecentFile& other) const
+    {
+        return !(*this == other);
+    }
+};
+
+using RecentFilesList = std::vector<RecentFile>;
 
 struct ProjectMeta
 {

@@ -77,7 +77,7 @@ public:
 
     bool isUrlSupported(const QUrl& url) const override;
     bool isFileSupported(const io::path_t& path) const override;
-    Ret openProject(const ProjectFileUrl& file) override;
+    Ret openProject(const ProjectFile& file) override;
     bool closeOpenedProject(bool quitApp = false) override;
     bool isProjectOpened(const io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
@@ -167,7 +167,7 @@ private:
 
     void revertCorruptedScoreToLastSaved();
 
-    ProjectFilePath makeRecentFile(INotationProjectPtr project);
+    RecentFile makeRecentFile(INotationProjectPtr project);
 
     void moveProject(INotationProjectPtr project, const io::path_t& newPath, bool replace);
 

@@ -50,8 +50,8 @@ public:
 
     bool isStartWithNewFileAsSecondaryInstance() const override;
 
-    const project::ProjectFileUrl& startupScoreFile() const override;
-    void setStartupScoreFile(const std::optional<project::ProjectFileUrl>& file) override;
+    const project::ProjectFile& startupScoreFile() const override;
+    void setStartupScoreFile(const std::optional<project::ProjectFile>& file) override;
 
     void run() override;
     bool startupCompleted() const override;
@@ -62,13 +62,13 @@ private:
     StartupModeType resolveStartupModeType() const;
     Uri startupPageUri(StartupModeType modeType) const;
 
-    void openScore(const project::ProjectFileUrl& file);
+    void openScore(const project::ProjectFile& file);
 
     void restoreLastSession();
     void removeProjectsUnsavedChanges(const io::paths_t& projectsPaths);
 
     std::string m_startupTypeStr;
-    project::ProjectFileUrl m_startupScoreFile;
+    project::ProjectFile m_startupScoreFile;
     bool m_startupCompleted = false;
 };
 }

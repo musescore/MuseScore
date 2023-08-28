@@ -169,7 +169,7 @@ int App::run(int argc, char** argv)
         if (multiInstancesProvider()->isMainInstance()) {
             splashScreen = new SplashScreen(SplashScreen::Default);
         } else {
-            const project::ProjectFileUrl& file = startupScenario()->startupScoreFile();
+            const project::ProjectFile& file = startupScenario()->startupScoreFile();
             if (file.isValid()) {
                 if (file.hasDisplayName()) {
                     splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
@@ -437,7 +437,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
         startupScenario()->setStartupType(options.startup.type);
 
         if (options.startup.scoreUrl.has_value()) {
-            project::ProjectFileUrl file { options.startup.scoreUrl.value() };
+            project::ProjectFile file { options.startup.scoreUrl.value() };
 
             if (options.startup.scoreDisplayNameOverride.has_value()) {
                 file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();

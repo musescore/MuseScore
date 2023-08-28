@@ -73,14 +73,14 @@ bool StartupScenario::isStartWithNewFileAsSecondaryInstance() const
     return false;
 }
 
-const mu::project::ProjectFileUrl& StartupScenario::startupScoreFile() const
+const mu::project::ProjectFile& StartupScenario::startupScoreFile() const
 {
     return m_startupScoreFile;
 }
 
-void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFileUrl>& file)
+void StartupScenario::setStartupScoreFile(const std::optional<project::ProjectFile>& file)
 {
-    m_startupScoreFile = file ? file.value() : project::ProjectFileUrl();
+    m_startupScoreFile = file ? file.value() : project::ProjectFile();
 }
 
 void StartupScenario::run()
@@ -154,8 +154,8 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
-        project::ProjectFileUrl file
-            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFileUrl(configuration()->startupScorePath());
+        project::ProjectFile file
+            = m_startupScoreFile.isValid() ? m_startupScoreFile : project::ProjectFile(configuration()->startupScorePath());
         openScore(file);
     } break;
     }
@@ -180,7 +180,7 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
     return HOME_URI;
 }
 
-void StartupScenario::openScore(const project::ProjectFileUrl& file)
+void StartupScenario::openScore(const project::ProjectFile& file)
 {
     dispatcher()->dispatch("file-open", ActionData::make_arg2<QUrl, QString>(file.url, file.displayNameOverride));
 }

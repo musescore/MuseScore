@@ -47,11 +47,11 @@ class RecentFilesController : public IRecentFilesController, public async::Async
 public:
     void init();
 
-    const ProjectFilePathsList& recentFilesList() const override;
+    const RecentFilesList& recentFilesList() const override;
     async::Notification recentFilesListChanged() const override;
 
-    void prependRecentFile(const ProjectFilePath& file) override;
-    void moveRecentFile(const io::path_t& before, const ProjectFilePath& after) override;
+    void prependRecentFile(const RecentFile& file) override;
+    void moveRecentFile(const io::path_t& before, const RecentFile& after) override;
     void clearRecentFiles() override;
 
     async::Promise<QPixmap> thumbnail(const io::path_t& file) const override;
@@ -63,13 +63,13 @@ protected:
 private:
     void loadRecentFilesList();
     void removeNonexistentFiles();
-    void setRecentFilesList(const ProjectFilePathsList& list, bool saveAndNotify);
+    void setRecentFilesList(const RecentFilesList& list, bool saveAndNotify);
     void saveRecentFilesList();
 
-    void cleanUpThumbnailCache(const ProjectFilePathsList& files);
+    void cleanUpThumbnailCache(const RecentFilesList& files);
 
     mutable bool m_dirty = true;
-    mutable ProjectFilePathsList m_recentFilesList;
+    mutable RecentFilesList m_recentFilesList;
     async::Notification m_recentFilesListChanged;
     mutable bool m_isSaving = false;
 

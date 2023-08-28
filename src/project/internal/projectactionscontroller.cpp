@@ -168,10 +168,10 @@ void ProjectActionsController::openProject(const actions::ActionData& args)
     QUrl url = !args.empty() ? args.arg<QUrl>(0) : QUrl();
     QString displayNameOverride = args.count() >= 2 ? args.arg<QString>(1) : QString();
 
-    openProject(ProjectFileUrl(url, displayNameOverride));
+    openProject(ProjectFile(url, displayNameOverride));
 }
 
-Ret ProjectActionsController::openProject(const ProjectFileUrl& file)
+Ret ProjectActionsController::openProject(const ProjectFile& file)
 {
     LOGI() << "Try open project: url = " << file.url.toString() << ", displayNameOverride = " << file.displayNameOverride;
 
@@ -1462,9 +1462,9 @@ void ProjectActionsController::revertCorruptedScoreToLastSaved()
     }
 }
 
-ProjectFilePath ProjectActionsController::makeRecentFile(INotationProjectPtr project)
+RecentFile ProjectActionsController::makeRecentFile(INotationProjectPtr project)
 {
-    ProjectFilePath file;
+    RecentFile file;
     file.path = project->path();
 
     if (project->isCloudProject()) {
@@ -1647,7 +1647,7 @@ void ProjectActionsController::clearRecentScores()
 
 void ProjectActionsController::continueLastSession()
 {
-    const ProjectFilePathsList& recentScorePaths = recentFilesController()->recentFilesList();
+    const RecentFilesList& recentScorePaths = recentFilesController()->recentFilesList();
 
     if (recentScorePaths.empty()) {
         Ret ret = openPageIfNeed(HOME_PAGE_URI);

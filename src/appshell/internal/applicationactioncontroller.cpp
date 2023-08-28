@@ -144,7 +144,7 @@ bool ApplicationActionController::eventFilter(QObject* watched, QEvent* event)
             if (startupScenario()->startupCompleted()) {
                 dispatcher()->dispatch("file-open", ActionData::make_arg1<QUrl>(url));
             } else {
-                startupScenario()->setStartupScoreFile(project::ProjectFileUrl { url });
+                startupScenario()->setStartupScoreFile(project::ProjectFile { url });
             }
 
             return true;

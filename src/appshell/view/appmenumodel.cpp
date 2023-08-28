@@ -397,10 +397,10 @@ MenuItem* AppMenuModel::makeDiagnosticMenu()
 MenuItemList AppMenuModel::makeRecentScoresItems()
 {
     MenuItemList items;
-    const ProjectFilePathsList& recentFiles = recentFilesController()->recentFilesList();
+    const RecentFilesList& recentFiles = recentFilesController()->recentFilesList();
 
     int index = 0;
-    for (const ProjectFilePath& file : recentFiles) {
+    for (const RecentFile& file : recentFiles) {
         MenuItem* item = new MenuItem(this);
 
         UiAction action;
