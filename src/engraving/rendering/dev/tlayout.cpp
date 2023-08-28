@@ -3772,7 +3772,8 @@ void TLayout::layout(Note* item, LayoutContext& ctx)
 
 void TLayout::layout(NoteDot* item, LayoutContext&)
 {
-    item->setbbox(item->symBbox(SymId::augmentationDot));
+    NoteDot::LayoutData* ldata = item->mutLayoutData();
+    ldata->setbbox(item->symBbox(SymId::augmentationDot));
 }
 
 void TLayout::layout(Ornament* item, LayoutContext& ctx)
