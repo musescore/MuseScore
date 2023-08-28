@@ -3630,14 +3630,11 @@ void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
     layoutMeasureRepeat(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(MMRest* item, LayoutContext& ctx)
+static void layoutMMRest(const MMRest* item, const LayoutContext& ctx, MMRest::LayoutData* ldata)
 {
-    item->setNumber(item->measure()->mmRestCount());
-    item->setNumberSym(item->number());
-
-    for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
-    }
+    //! NOTE This is not look like layout data, perhaps this is should be set not here
+    ldata->number = item->measure()->mmRestCount();
+    ldata->setNumberSym(item->number());
 
     if (ctx.conf().styleB(Sid::oldStyleMultiMeasureRests)) {
         SymIdList restSyms;
@@ -3667,23 +3664,32 @@ void TLayout::layout(MMRest* item, LayoutContext& ctx)
             }
         }
 
-        item->setRestSyms(restSyms);
-        item->setSymsWidth(symsWidth);
+        ldata->restSyms = restSyms;
+        ldata->symsWidth = symsWidth;
 
         double symHeight = item->symBbox(item->restSyms().at(0)).height();
-        item->setbbox(RectF((item->width() - item->symsWidth()) * .5, -item->spatium(), item->symsWidth(), symHeight));
+        ldata->setbbox(RectF((item->width() - item->symsWidth()) * .5, -item->spatium(), item->symsWidth(), symHeight));
     } else { // H-bar
         double vStrokeHeight = ctx.conf().styleMM(Sid::mmRestHBarVStrokeHeight);
-        item->setbbox(RectF(0.0, -(vStrokeHeight * .5), item->width(), vStrokeHeight));
+        ldata->setbbox(RectF(0.0, -(vStrokeHeight * .5), item->width(), vStrokeHeight));
     }
 
     // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
     const StaffType* staffType = item->staffType();
-    item->setPos(0, (staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium());
+    ldata->setPos(0, (staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium());
 
     if (item->numberVisible()) {
-        item->addbbox(item->numberRect());
+        ldata->addbbox(item->numberRect());
     }
+}
+
+void TLayout::layout(MMRest* item, LayoutContext& ctx)
+{
+    for (EngravingItem* e : item->el()) {
+        layoutItem(e, ctx);
+    }
+
+    layoutMMRest(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(MMRestRange* item, LayoutContext& ctx)
