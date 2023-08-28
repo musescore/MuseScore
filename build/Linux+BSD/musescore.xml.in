@@ -62,6 +62,12 @@
         </magic>
     </mime-type>
 
+    <!-- MuseScore URL Protocol -->
+
+    <mime-type type="x-scheme-handler/musescore">
+        <comment>MuseScore URL Protocol</comment>
+    </mime-type>
+
     <!-- MuseScore internal formats -->
 
     <mime-type type="application/x-musescore.drumset+xml">
