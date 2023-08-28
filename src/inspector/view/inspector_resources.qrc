@@ -116,10 +116,12 @@
         <file>qml/MuseScore/Inspector/notation/lines/GradualTempoChangeSettings.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangePositionSettingsTab.qml</file>
         <file>qml/MuseScore/Inspector/notation/lines/internal/GradualTempoChangeStyleTab.qml</file>
-        <file>qml/MuseScore/Inspector/popups/ElementPopupLoader.qml</file>
+        <file>qml/MuseScore/Inspector/ElementPopupLoader.qml</file>
         <file>qml/MuseScore/Inspector/popups/harppedal/HarpPedalPopup.qml</file>
         <file>qml/MuseScore/Inspector/popups/capo/CapoPopup.qml</file>
         <file>qml/MuseScore/Inspector/popups/stringtunings/StringTuningsPopup.qml</file>
         <file>qml/MuseScore/Inspector/popups/text/TextStylePopup.qml</file>
+        <file>qml/MuseScore/Inspector/popups/text/TextStyleSubPopup.qml</file>
+        <file>qml/MuseScore/Inspector/popups/text/FrameSubPopup.qml</file>
     </qresource>
 </RCC>
