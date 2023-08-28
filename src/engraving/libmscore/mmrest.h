@@ -44,18 +44,6 @@ public:
     void setWidth(double width) override { m_width = width; }
     double width() const override { return m_width; }
 
-    int number() const { return m_number; }
-    void setNumber(int n) { m_number = n; }
-
-    const SymIdList& numberSym() const { return m_numberSym; }
-    void setNumberSym(int n) { m_numberSym = timeSigSymIdsFromString(String::number(n)); }
-
-    const SymIdList& restSyms() const { return m_restSyms; }
-    void setRestSyms(const SymIdList& syms) { m_restSyms = syms; }
-
-    double symsWidth() const { return m_symsWidth; }
-    void setSymsWidth(double w) { m_symsWidth = w; }
-
     bool numberVisible() const { return m_numberVisible; }
 
     PropertyValue propertyDefault(Pid) const override;
@@ -68,17 +56,35 @@ public:
 
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        int number = 0;                     // number of measures represented
+        SymIdList numberSym;
+        SymIdList restSyms;                 // stores symbols when using old-style rests
+        double symsWidth = 0.0;             // width of symbols with spacing when using old-style
+
+        void setNumberSym(int n) { numberSym = timeSigSymIdsFromString(String::number(n)); }
+    };
+    DECLARE_LAYOUTDATA_METHODS(MMRest);
+
+    //! --- Old Interface ---
+    int number() const { return layoutData()->number; }
+    void setNumber(int n) { mutLayoutData()->number = n; }
+    const SymIdList& numberSym() const { return layoutData()->numberSym; }
+    void setNumberSym(int n) { mutLayoutData()->setNumberSym(n); }
+    const SymIdList& restSyms() const { return layoutData()->restSyms; }
+    void setRestSyms(const SymIdList& syms) { mutLayoutData()->restSyms = syms; }
+    double symsWidth() const { return layoutData()->symsWidth; }
+    void setSymsWidth(double w) { mutLayoutData()->symsWidth = w; }
+    //! ---------------------
+
 private:
 
     Sid getPropertyStyle(Pid) const override;
 
     double m_width = 0.0;           // width of multimeasure rest
-    int m_number = 0;               // number of measures represented
-    SymIdList m_numberSym;
+
     double m_numberPos = 0.0;       // vertical position of number relative to staff
     bool m_numberVisible = false;   // show or hide number
-    SymIdList m_restSyms;           // stores symbols when using old-style rests
-    double m_symsWidth = 0.0;       // width of symbols with spacing when using old-style
 };
 } // namespace mu::engraving
 #endif

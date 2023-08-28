@@ -22,12 +22,8 @@
 
 #include "mmrest.h"
 
-#include "draw/types/pen.h"
-
-#include "measure.h"
 #include "score.h"
 #include "undo.h"
-#include "utils.h"
 
 #include "log.h"
 
@@ -47,7 +43,6 @@ MMRest::MMRest(Segment* s)
     : Rest(ElementType::MMREST, s)
 {
     m_width = 0;
-    m_symsWidth = 0;
     m_numberVisible = true;
     if (score()) {
         initElementStyle(&mmRestStyle);
@@ -62,7 +57,6 @@ MMRest::MMRest(const MMRest& r, bool link)
         setAutoplace(true);
     }
     m_width = r.m_width;
-    m_symsWidth = r.m_symsWidth;
     m_numberVisible = r.m_numberVisible;
 }
 
@@ -84,7 +78,7 @@ PointF MMRest::numberPosition(const mu::RectF& numberBbox) const
 
 RectF MMRest::numberRect() const
 {
-    RectF r = symBbox(m_numberSym);
+    RectF r = symBbox(layoutData()->numberSym);
     r.translate(numberPosition(r));
     return r;
 }
