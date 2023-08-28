@@ -99,6 +99,7 @@
 #include "libmscore/shadownote.h"
 #include "libmscore/slur.h"
 #include "libmscore/spacer.h"
+#include "libmscore/stafflines.h"
 #include "libmscore/staffstate.h"
 #include "libmscore/stafftext.h"
 #include "libmscore/stafftypechange.h"
@@ -264,6 +265,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::SLUR_SEGMENT:         draw(item_cast<const SlurSegment*>(item), painter);
         break;
     case ElementType::SPACER:               draw(item_cast<const Spacer*>(item), painter);
+        break;
+    case ElementType::STAFF_LINES:          draw(item_cast<const StaffLines*>(item), painter);
         break;
     case ElementType::STAFF_STATE:          draw(item_cast<const StaffState*>(item), painter);
         break;
@@ -2155,6 +2158,13 @@ void SingleDraw::draw(const Spacer* item, Painter* painter)
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
     painter->drawPath(item->path());
+}
+
+void SingleDraw::draw(const StaffLines* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    painter->setPen(Pen(item->curColor(), item->lw(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->drawLines(item->lines());
 }
 
 void SingleDraw::draw(const StaffState* item, Painter* painter)
