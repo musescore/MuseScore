@@ -116,6 +116,21 @@ void NotationMidiInput::doProcessEvents()
     }
 
     std::vector<const Note*> notes;
+    bool isNoteInput = isNoteInputMode();
+
+    if (isNoteInput) {
+        m_undoStack->prepareChanges();
+    }
+
+    DEFER {
+        if (isNoteInput) {
+            m_undoStack->commitChanges();
+
+            if (!notes.empty()) {
+                m_notationInteraction->showItem(notes.back()->chord());
+            }
+        }
+    };
 
     for (size_t i = 0; i < m_eventsQueue.size(); ++i) {
         const midi::Event& event = m_eventsQueue.at(i);
@@ -167,12 +182,6 @@ Note* NotationMidiInput::addNoteToScore(const midi::Event& e)
         return nullptr;
     }
 
-    DEFER {
-        m_undoStack->commitChanges();
-    };
-
-    m_undoStack->prepareChanges();
-
     if (e.opcode() == midi::Event::Opcode::NoteOff) {
         if (isRealtime()) {
             const Chord* chord = is.cr()->isChord() ? engraving::toChord(is.cr()) : nullptr;
@@ -205,8 +214,6 @@ Note* NotationMidiInput::addNoteToScore(const midi::Event& e)
     mu::engraving::Note* note = sc->addMidiPitch(inputEv.pitch, inputEv.chord);
 
     sc->activeMidiPitches().push_back(inputEv);
-
-    m_notationInteraction->showItem(is.cr());
 
     return note;
 }
