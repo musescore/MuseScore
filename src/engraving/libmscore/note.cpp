@@ -29,8 +29,6 @@
 
 #include <assert.h>
 
-#include "draw/types/brush.h"
-
 #include "translation.h"
 #include "types/translatablestring.h"
 #include "types/typesconv.h"
@@ -42,9 +40,7 @@
 
 #include "bagpembell.h"
 #include "beam.h"
-#include "bend.h"
 
-#include "connector.h"
 #include "chord.h"
 #include "chordline.h"
 
@@ -52,11 +48,8 @@
 #include "factory.h"
 #include "fingering.h"
 #include "glissando.h"
-#include "hook.h"
-#include "image.h"
 #include "linkedobjects.h"
 #include "measure.h"
-#include "mscoreview.h"
 #include "notedot.h"
 #include "part.h"
 #include "pitchspelling.h"
@@ -566,8 +559,6 @@ Note::Note(Chord* ch)
     : EngravingItem(ElementType::NOTE, ch, ElementFlag::MOVABLE)
 {
     m_playEvents.push_back(NoteEvent());      // add default play event
-    m_cachedNoteheadSym = SymId::noSym;
-    m_cachedSymNull = SymId::noSym;
 }
 
 Note::~Note()
@@ -650,8 +641,6 @@ Note::Note(const Note& n, bool link)
     m_fixedLine         = n.m_fixedLine;
     m_accidental        = 0;
     m_harmonic          = n.m_harmonic;
-    m_cachedNoteheadSym = n.m_cachedNoteheadSym;
-    m_cachedSymNull     = n.m_cachedSymNull;
 
     if (n.m_accidental) {
         add(new Accidental(*(n.m_accidental)));
@@ -963,7 +952,7 @@ SymId Note::noteHead() const
                 }
             }
         } else {
-            return m_cachedNoteheadSym;
+            return layoutData()->cachedNoteheadSym;
         }
     }
 
