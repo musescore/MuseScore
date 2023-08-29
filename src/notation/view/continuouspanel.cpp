@@ -73,7 +73,6 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
     qreal panelRightPadding = 5;    // Extra space for the panel after last element
 
     mu::engraving::Measure* measure = score->firstMeasure();
-
     if (!measure) {
         return;
     }
@@ -196,39 +195,43 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
 
             mu::engraving::Text* newName = engraving::Factory::createText(parent, mu::engraving::TextStyleType::DEFAULT,
                                                                           ACCESSIBILITY_DISABLED);
+            newName->setParent(parent);
             newName->setXmlText(staffName);
             newName->setTrack(e->track());
             newName->setFamily(u"FreeSans");
             newName->setSizeIsSpatiumDependent(true);
-            engravingRender()->layoutItem(newName);
+            scoreRender()->layoutItem(newName);
             newName->setPlainText(newName->plainText());
-            engravingRender()->layoutItem(newName);
+            scoreRender()->layoutItem(newName);
 
             // Find maximum width for the current Clef
             mu::engraving::Clef* newClef = engraving::Factory::createClef(parent, ACCESSIBILITY_DISABLED);
+            newClef->setParent(parent);
             mu::engraving::ClefType currentClef = currentStaff->clef(mu::engraving::Fraction::fromTicks(tick));
             newClef->setClefType(currentClef);
             newClef->setTrack(e->track());
-            engravingRender()->layoutItem(newClef);
+            scoreRender()->layoutItem(newClef);
             if (newClef->width() > widthClef) {
                 widthClef = newClef->width();
             }
 
             // Find maximum width for the current KeySignature
             mu::engraving::KeySig* newKs = engraving::Factory::createKeySig(parent, ACCESSIBILITY_DISABLED);
+            newKs->setParent(parent);
             mu::engraving::KeySigEvent currentKeySigEvent = currentStaff->keySigEvent(mu::engraving::Fraction::fromTicks(tick));
             newKs->setKeySigEvent(currentKeySigEvent);
             // The Parent and the Track must be set to have the key signature layout adjusted to different clefs
             // This also adds naturals to the key signature (if set in the score style)
             newKs->setTrack(e->track());
             newKs->setHideNaturals(true);
-            engravingRender()->layoutItem(newKs);
+            scoreRender()->layoutItem(newKs);
             if (newKs->width() > widthKeySig) {
                 widthKeySig = newKs->width();
             }
 
             // Find maximum width for the current TimeSignature
             mu::engraving::TimeSig* newTs = engraving::Factory::createTimeSig(parent, ACCESSIBILITY_DISABLED);
+            newTs->setParent(parent);
 
             // Try to get local time signature, if not, get the current measure one
             mu::engraving::TimeSig* currentTimeSig = currentStaff->timeSig(mu::engraving::Fraction::fromTicks(tick));
@@ -238,7 +241,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
                 newTs->setSig(Fraction(currentTimeSigFraction.numerator(), currentTimeSigFraction.denominator()), TimeSigType::NORMAL);
             }
             newTs->setTrack(e->track());
-            engravingRender()->layoutItem(newTs);
+            scoreRender()->layoutItem(newTs);
 
             if ((newName->width() > lineWidthName) && (newName->xmlText() != "")) {
                 lineWidthName = newName->width();
@@ -361,16 +364,17 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
                 mu::engraving::rendering::stable::TLayout::layoutForWidth(&newStaffLines, bg.width(), cntx);
             }
             newStaffLines.setColor(color);
-            engravingRender()->drawItem(&newStaffLines, &painter);
+            scoreRender()->drawItem(&newStaffLines, &painter);
 
             // Draw barline
             mu::engraving::BarLine* barLine = engraving::Factory::createBarLine(parent, ACCESSIBILITY_DISABLED);
+            barLine->setParent(parent);
             barLine->setBarLineType(mu::engraving::BarLineType::NORMAL);
             barLine->setTrack(e->track());
             barLine->setSpanStaff(currentStaff->barLineSpan());
             barLine->setSpanFrom(currentStaff->barLineFrom());
             barLine->setSpanTo(currentStaff->barLineTo());
-            engravingRender()->layoutItem(barLine);
+            scoreRender()->layoutItem(barLine);
             barLine->setColor(color);
             EngravingItem::renderer()->drawItem(barLine, &painter);
 
@@ -386,14 +390,15 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
 
             mu::engraving::Text* newName = engraving::Factory::createText(parent, mu::engraving::TextStyleType::DEFAULT,
                                                                           ACCESSIBILITY_DISABLED);
+            newName->setParent(parent);
             newName->setXmlText(staffName);
             newName->setTrack(e->track());
             newName->setColor(color);
             newName->setFamily(u"FreeSans");
             newName->setSizeIsSpatiumDependent(true);
-            engravingRender()->layoutItem(newName);
+            scoreRender()->layoutItem(newName);
             newName->setPlainText(newName->plainText());
-            engravingRender()->layoutItem(newName);
+            scoreRender()->layoutItem(newName);
 
             if (currentStaff->part()->staff(0) == currentStaff) {
                 const double spatium = score->style().spatium();
@@ -409,16 +414,18 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
 
             // Draw the current Clef
             mu::engraving::Clef* clef = engraving::Factory::createClef(parent, ACCESSIBILITY_DISABLED);
+            clef->setParent(parent);
             clef->setClefType(currentStaff->clef(mu::engraving::Fraction::fromTicks(tick)));
             clef->setTrack(e->track());
             clef->setColor(color);
-            engravingRender()->layoutItem(clef);
+            scoreRender()->layoutItem(clef);
             posX += styleMM(mu::engraving::Sid::clefLeftMargin);
             clef->drawAt(&painter, PointF(posX, clef->pos().y()));
             posX += widthClef;
 
             // Draw the current KeySignature
             mu::engraving::KeySig* newKs = engraving::Factory::createKeySig(parent, ACCESSIBILITY_DISABLED);
+            newKs->setParent(parent);
             newKs->setKeySigEvent(currentStaff->keySigEvent(mu::engraving::Fraction::fromTicks(tick)));
 
             // The Parent and the track must be set to have the key signature layout adjusted to different clefs
@@ -426,7 +433,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             newKs->setTrack(e->track());
             newKs->setColor(color);
             newKs->setHideNaturals(true);
-            engravingRender()->layoutItem(newKs);
+            scoreRender()->layoutItem(newKs);
             posX += styleMM(mu::engraving::Sid::keysigLeftMargin);
             newKs->drawAt(&painter, PointF(posX, 0.0));
 
@@ -434,6 +441,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
 
             // Draw the current TimeSignature
             mu::engraving::TimeSig* newTs = engraving::Factory::createTimeSig(parent, ACCESSIBILITY_DISABLED);
+            newTs->setParent(parent);
 
             // Try to get local time signature, if not, get the current measure one
             mu::engraving::TimeSig* currentTimeSig = currentStaff->timeSig(mu::engraving::Fraction::fromTicks(tick));
@@ -441,7 +449,7 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
                 newTs->setFrom(currentTimeSig);
                 newTs->setTrack(e->track());
                 newTs->setColor(color);
-                engravingRender()->layoutItem(newTs);
+                scoreRender()->layoutItem(newTs);
                 posX += styleMM(mu::engraving::Sid::timesigLeftMargin);
                 newTs->drawAt(&painter, PointF(posX, 0.0));
             }
