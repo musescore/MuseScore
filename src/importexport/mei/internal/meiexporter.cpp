@@ -2089,7 +2089,7 @@ std::string MeiExporter::getXmlIdFor(const EngravingItem* item, const char c)
     if (m_xmlIDCounter == 0) {
         std::random_device rd;
         std::mt19937 randomGenerator(rd());
-        m_xmlIDCounter = randomGenerator();
+        //m_xmlIDCounter = randomGenerator();
     }
 
     return c + this->generateHashID();

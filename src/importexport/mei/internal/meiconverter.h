@@ -220,7 +220,7 @@ public:
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
     static std::pair<libmei::data_STEMDIRECTION, double> stemToMEI(const engraving::DirectionV direction, bool noStem);
 
-    static engraving::LyricsSyllabic sylFromMEI(const libmei::sylLog_WORDPOS meiWordpos, bool& warning);
+    static void sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, ElisionType elision, bool& warning);
     static libmei::Syl sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision);
 
     static void tempoFromMEI(engraving::TempoText* tempo, const StringList& meiLines, const libmei::Tempo& meiTempo, bool& warning);

@@ -1928,13 +1928,25 @@ std::pair<libmei::data_STEMDIRECTION, double> Convert::stemToMEI(const engraving
     return { meiStemDir, meiStemLen };
 }
 
-engraving::LyricsSyllabic Convert::sylFromMEI(const libmei::sylLog_WORDPOS meiWordpos, bool& warning)
+void Convert::sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, ElisionType elision, bool& warning)
 {
     warning = false;
 
-    engraving::LyricsSyllabic syllabic = engraving::LyricsSyllabic::SINGLE;
-
-    return syllabic;
+    if (elision == ElisionLast) {
+        if ((lyrics->syllabic() == engraving::LyricsSyllabic::END) && (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_i)) {
+            lyrics->setSyllabic(engraving::LyricsSyllabic::MIDDLE);
+        }
+    } else if ((elision == ElisionFirst) || (elision == ElisionNone)) {
+        switch (meiSyl.GetWordpos()) {
+        case (libmei::sylLog_WORDPOS_i): lyrics->setSyllabic(engraving::LyricsSyllabic::BEGIN);
+            break;
+        case (libmei::sylLog_WORDPOS_m): lyrics->setSyllabic(engraving::LyricsSyllabic::MIDDLE);
+            break;
+        case (libmei::sylLog_WORDPOS_t): lyrics->setSyllabic(engraving::LyricsSyllabic::END);
+            break;
+        default: break;
+        }
+    }
 }
 
 libmei::Syl Convert::sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision)

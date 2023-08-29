@@ -39,6 +39,7 @@
 #include "libmscore/key.h"
 #include "libmscore/keysig.h"
 #include "libmscore/layoutbreak.h"
+#include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
@@ -1559,6 +1560,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, engraving::Measure* measure,
     if (!chord) {
         chord = static_cast<Chord*>(addChordRest(noteNode, measure, track, meiNote, ticks, false));
         this->readStemsAtt(chord, meiNote);
+        this->readVerses(noteNode, chord);
     }
 
     Note* note = Factory::createNote(chord);
@@ -2014,6 +2016,27 @@ bool MeiImporter::readSlur(pugi::xml_node slurNode, engraving::Measure* measure)
 }
 
 /**
+ *
+ */
+
+bool MeiImporter::readSyl(pugi::xml_node sylNode, Lyrics* lyrics, Convert::textWithSmufl& textBlocks, ElisionType elision)
+{
+    IF_ASSERT_FAILED(lyrics) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Syl meiSyl;
+    meiSyl.Read(sylNode);
+
+    Convert::sylFromMEI(lyrics, meiSyl, elision, warning);
+
+    textBlocks.push_back(std::make_pair(false, String(sylNode.text().as_string())));
+
+    return true;
+}
+
+/**
  * Read a tempo.
  */
 
@@ -2075,6 +2098,79 @@ bool MeiImporter::readTie(pugi::xml_node tieNode, engraving::Measure* measure)
     Convert::tieFromMEI(tie, meiTie, warning);
 
     return true;
+}
+
+/**
+ * Loop through the content of the MEI <note> or <chord> and read the verses
+ */
+
+bool MeiImporter::readVerses(pugi::xml_node parentNode, Chord* chord)
+{
+    IF_ASSERT_FAILED(chord) {
+        return false;
+    }
+
+    bool success = true;
+
+    pugi::xpath_node_set elements = parentNode.select_nodes("./verse");
+    for (pugi::xpath_node xpathNode : elements) {
+        success = success && this->readVerse(xpathNode.node(), chord);
+    }
+    return success;
+}
+
+/**
+ * Read a verse.
+ */
+
+bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
+{
+    IF_ASSERT_FAILED(chord) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Verse meiVerse;
+    meiVerse.Read(verseNode);
+
+    int no = 0;
+    if (meiVerse.HasN()) {
+        no = std::stoi(meiVerse.GetN()) - 1;
+        // Make sure we have no verse number below 0;
+        no = std::max(0, no);
+    }
+
+    Lyrics* lyrics = Factory::createLyrics(chord);
+
+    bool success = true;
+
+    // Aggregate the syllable into line blocks
+    Convert::textWithSmufl textBlocks;
+    pugi::xpath_node_set elements = verseNode.select_nodes("./syl");
+
+    // If we have more than one syl we assume to have elision
+    ElisionType elision = (elements.size() > 1) ? ElisionFirst : ElisionNone;
+    size_t sylCount = 0;
+
+    for (pugi::xpath_node xpathNode : elements) {
+        if (sylCount > 0) {
+            textBlocks.push_back(std::make_pair(true, u"\uE551"));
+        }
+
+        success = success && this->readSyl(xpathNode.node(), lyrics, textBlocks, elision);
+        sylCount++;
+        elision = (sylCount == elements.size() - 1) ? ElisionLast : ElisionMiddle;
+    }
+
+    String syllable;
+    Convert::textFromMEI(syllable, textBlocks);
+
+    lyrics->setXmlText(syllable);
+    lyrics->setNo(no);
+    lyrics->setTrack(chord->track());
+    chord->add(lyrics);
+
+    return success;
 }
 
 //---------------------------------------------------------

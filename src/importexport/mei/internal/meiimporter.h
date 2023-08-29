@@ -122,8 +122,11 @@ private:
     bool readOctave(pugi::xml_node octaveNode, engraving::Measure* measure);
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
     bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
+    bool readSyl(pugi::xml_node sylNode, engraving::Lyrics* lyrics, Convert::textWithSmufl& textBlocks, ElisionType elision);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
     bool readTie(pugi::xml_node tieNode, engraving::Measure* measure);
+    bool readVerses(pugi::xml_node parentNode, engraving::Chord* chord);
+    bool readVerse(pugi::xml_node verseNode, engraving::Chord* chord);
 
     /**
      * Methods for parsing specific MEI attribute classes within elements
