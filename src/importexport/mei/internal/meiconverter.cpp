@@ -1929,6 +1929,15 @@ std::pair<libmei::data_STEMDIRECTION, double> Convert::stemToMEI(const engraving
     return { meiStemDir, meiStemLen };
 }
 
+engraving::LyricsSyllabic Convert::sylFromMEI(const libmei::sylLog_WORDPOS meiWordpos, bool& warning)
+{
+    warning = false;
+
+    engraving::LyricsSyllabic syllabic = engraving::LyricsSyllabic::SINGLE;
+
+    return syllabic;
+}
+
 libmei::Syl Convert::sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision)
 {
     libmei::Syl meiSyl;
