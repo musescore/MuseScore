@@ -47,62 +47,93 @@ Item {
 
         spacing: 12
 
-        NoteExpandableBlank {
-            id: noteSection
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart
+        readonly property var fullModel: [
+            { typeRole: Inspector.TYPE_NOTE, componentRole: noteSection },
+            { typeRole: Inspector.TYPE_ARPEGGIO, componentRole: arpeggioSection },
+            { typeRole: Inspector.TYPE_FERMATA, componentRole: fermataSection },
+            { typeRole: Inspector.TYPE_BREATH, componentRole: pausesSection },
+            { typeRole: Inspector.TYPE_GLISSANDO, componentRole: glissandoSection },
+            { typeRole: Inspector.TYPE_GRADUAL_TEMPO_CHANGE, componentRole: tempoChangeSection }
+        ]
 
-            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_NOTE) : null
+        function getVisibleModel() {
+            var visibleModel = []
+            for (let i = 0; i < fullModel.length; i++) {
+                var currentItemModel = root.proxyModel ? root.proxyModel.modelByType(fullModel[i].typeRole) : null
+                if (Boolean(currentItemModel) && !currentItemModel.isEmpty) {
+                     visibleModel.push({ componentRole: fullModel[i].componentRole, itemModel: currentItemModel })
+                }
+            }
+            return visibleModel
         }
 
-        SeparatorLine { anchors.margins: -12 }
+        Repeater {
+            id: repeater
 
-        ArpeggioExpandableBlank {
-            id:arpeggioSection
-            navigation.panel: root.navigationPanel
-            navigation.row: noteSection.navigationRowEnd + 1
+            model: contentColumn.getVisibleModel()
 
-            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_ARPEGGIO) : null
-        }
+            delegate: Column {
+                id: itemColumn
 
-        SeparatorLine { anchors.margins: -12 }
+                width: parent.width
 
-        FermataExpandableBlank {
-            id: fermataSection
-            navigation.panel: root.navigationPanel
-            navigation.row: arpeggioSection.navigationRowEnd + 1
+                spacing: contentColumn.spacing
 
-            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_FERMATA) : null
-        }
+                Loader {
+                    id: expandableLoader
 
-        SeparatorLine { anchors.margins: -12 }
+                    width: parent.width
 
-        PausesExpandableBlank {
-            id: pausesSection
-            navigation.panel: root.navigationPanel
-            navigation.row: fermataSection.navigationRowEnd + 1
+                    sourceComponent: modelData.componentRole
 
-            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_BREATH) : null
-        }
+                    onLoaded: {
+                        expandableLoader.item.model = modelData.itemModel
+                        expandableLoader.item.navigation.panel = root.navigationPanel
+                        expandableLoader.item.navigation.row = root.navigationRowStart + model.index * 1000
+                    }
+                }
 
-        SeparatorLine { anchors.margins: -12 }
-
-        GlissandoExpandableBlank {
-            id: glissandoSection
-            navigation.panel: root.navigationPanel
-            navigation.row: pausesSection.navigationRowEnd + 1
-
-            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_GLISSANDO) : null
-        }
-
-        SeparatorLine { anchors.margins: -12 }
-
-        GradualTempoChangeBlank {
-            navigation.panel: root.navigationPanel
-            navigation.row: glissandoSection.navigationRowEnd + 1
-
-            model: proxyModel ? proxyModel.modelByType(Inspector.TYPE_GRADUAL_TEMPO_CHANGE) : null
+                SeparatorLine {
+                    anchors.margins: -12
+                    visible: model.index < (repeater.count - 1)
+                }
+            }
         }
     }
-}
 
+    Component {
+        id: noteSection
+
+        NoteExpandableBlank {}
+    }
+
+    Component {
+        id: arpeggioSection
+
+        ArpeggioExpandableBlank {}
+    }
+
+    Component {
+        id: fermataSection
+
+        FermataExpandableBlank {}
+    }
+
+    Component {
+        id: pausesSection
+
+        PausesExpandableBlank {}
+    }
+
+    Component {
+        id: glissandoSection
+
+        GlissandoExpandableBlank {}
+    }
+
+    Component {
+        id: tempoChangeSection
+
+        GradualTempoChangeBlank {}
+    }
+}

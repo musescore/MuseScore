@@ -37,7 +37,6 @@ ExpandableBlank {
 
     title: model ? model.title : ""
 
-    height: implicitHeight
     width: parent.width
 
     contentItemComponent: Column {
