@@ -4455,32 +4455,32 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
     item->setPos(0.0, 0.0);
 }
 
-void TLayout::layoutBaseSymbol(BSymbol* item, LayoutContext& ctx)
+static void layoutBaseSymbol(const BSymbol* item, const LayoutContext& ctx, BSymbol::LayoutData* ldata)
 {
-    if (item->explicitParent() && item->parentItem()->isNote()) {
-        item->setMag(item->parentItem()->mag());
-    } else if (item->staff()) {
-        item->setMag(item->staff()->staffMag(item->tick()));
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
     }
 
-    if (!item->explicitParent()) {
-        item->setOffset(.0, .0);
-        item->setPos(.0, .0);
+    if (item->parentItem()->isNote()) {
+        ldata->setMag(item->parentItem()->mag());
+    } else if (item->staff()) {
+        ldata->setMag(item->staff()->staffMag(item->tick()));
     }
+
     for (EngravingItem* e : item->leafs()) {
-        layoutItem(e, ctx);
+        TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
     }
 }
 
-void TLayout::layout(Symbol* item, LayoutContext& ctx)
+static void layoutSymbol(const Symbol* item, const LayoutContext& ctx, Symbol::LayoutData* ldata)
 {
-    item->setbbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
-    double w = item->width();
+    ldata->setbbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
+    double w = ldata->bbox.width();
     PointF p;
     if (item->align() == AlignV::BOTTOM) {
-        p.setY(-item->height());
+        p.setY(-ldata->bbox.height());
     } else if (item->align() == AlignV::VCENTER) {
-        p.setY((-item->height()) * .5);
+        p.setY((-ldata->bbox.height()) * .5);
     } else if (item->align() == AlignV::BASELINE) {
         p.setY(-item->baseLine());
     }
@@ -4489,13 +4489,19 @@ void TLayout::layout(Symbol* item, LayoutContext& ctx)
     } else if (item->align() == AlignH::HCENTER) {
         p.setX(-(w * .5));
     }
-    item->setPos(p);
-    layoutBaseSymbol(item, ctx);
+    ldata->setPos(p);
+    layoutBaseSymbol(item, ctx, ldata);
+}
+
+void TLayout::layout(Symbol* item, LayoutContext& ctx)
+{
+    layoutSymbol(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(FSymbol* item, LayoutContext&)
 {
-    item->setbbox(mu::draw::FontMetrics::boundingRect(item->font(), item->toString()));
+    FSymbol::LayoutData* ldata = item->mutLayoutData();
+    ldata->setbbox(mu::draw::FontMetrics::boundingRect(item->font(), item->toString()));
 }
 
 void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
