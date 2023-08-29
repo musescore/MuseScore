@@ -4289,7 +4289,7 @@ void TLayout::layout(StaffTypeChange* item, LayoutContext& ctx)
     layoutStaffTypeChange(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Stem* item, LayoutContext& ctx)
+static void layoutStem(const Stem* item, const LayoutContext& ctx, Stem::LayoutData* ldata)
 {
     const bool up = item->up();
     const double _up = up ? -1.0 : 1.0;
@@ -4299,7 +4299,7 @@ void TLayout::layout(Stem* item, LayoutContext& ctx)
 
     bool isTabStaff = false;
     if (item->chord()) {
-        item->setMag(item->chord()->mag());
+        ldata->mag = item->chord()->mag();
 
         const Staff* staff = item->staff();
         const StaffType* staffType = staff ? staff->staffTypeForElement(item->chord()) : nullptr;
@@ -4329,7 +4329,7 @@ void TLayout::layout(Stem* item, LayoutContext& ctx)
                 y1 = note->stemDownNW().y();
             }
 
-            item->setPosY(note->ypos());
+            ldata->setPosY(note->ypos());
         }
 
         if (item->chord()->hook() && !item->chord()->beam()) {
@@ -4345,14 +4345,19 @@ void TLayout::layout(Stem* item, LayoutContext& ctx)
     double lineX = isTabStaff ? 0.0 : _up * lineWidthCorrection;
 
     LineF line = LineF(lineX, y1, lineX, y2);
-    item->setLine(line);
+    ldata->line = line;
 
     // HACK: if there is a beam, extend the bounding box of the stem (NOT the stem itself) by half beam width.
     // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
     double beamCorrection = (item->chord() && item->chord()->beam()) ? _up * ctx.conf().styleMM(Sid::beamWidth) * item->mag() / 2 : 0.0;
     // compute line and bounding rectangle
     RectF rect(line.p1(), line.p2() + PointF(0.0, beamCorrection));
-    item->setbbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
+    ldata->setbbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
+}
+
+void TLayout::layout(Stem* item, LayoutContext& ctx)
+{
+    layoutStem(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(StemSlash* item, LayoutContext& ctx)

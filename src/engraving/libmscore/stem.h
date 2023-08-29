@@ -71,9 +71,6 @@ public:
     double lineWidthMag() const { return m_lineWidth * mag(); }
     void setLineWidth(Millimetre lineWidth) { m_lineWidth = lineWidth; }
 
-    void setLine(const LineF& l) { m_line = l; }
-    const LineF& line() const { return m_line; }
-    PointF p2() const { return m_line.p2(); }
     PointF flagPosition() const;
     double length() const { return m_baseLength + m_userLength; }
 
@@ -83,11 +80,20 @@ public:
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<PointF> gripsPositions(const EditData&) const override;
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        LineF line;
+    };
+    DECLARE_LAYOUTDATA_METHODS(Stem);
+
+    //! --- Old Interface ---
+    void setLine(const LineF& l) { mutLayoutData()->line = l; }
+    const LineF& line() const { return layoutData()->line; }
+    PointF p2() const { return line().p2(); }
+    //! ---------------------
+
 private:
     friend class Factory;
     Stem(Chord* parent = 0);
-
-    LineF m_line;
 
     Millimetre m_baseLength = Millimetre(0.0);
     Millimetre m_userLength = Millimetre(0.0);

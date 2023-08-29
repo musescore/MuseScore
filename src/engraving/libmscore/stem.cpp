@@ -23,15 +23,8 @@
 
 #include <cmath>
 
-#include "draw/types/brush.h"
-
-#include "beam.h"
 #include "chord.h"
 #include "hook.h"
-#include "note.h"
-#include "score.h"
-#include "staff.h"
-#include "stafftype.h"
 #include "tremolo.h"
 
 #include "log.h"
@@ -86,7 +79,7 @@ PointF Stem::flagPosition() const
 
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 {
-    return { pagePos() + m_line.p2() };
+    return { pagePos() + layoutData()->line.p2() };
 }
 
 void Stem::startEdit(EditData& ed)
