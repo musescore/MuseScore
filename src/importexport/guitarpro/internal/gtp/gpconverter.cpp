@@ -845,7 +845,9 @@ void GPConverter::addDirection(const GPMasterBar* mB, Measure* measure)
         } else {
             Marker* marker = Factory::createMarker(measure);
             marker->setMarkerType(markerType(dir.name));
-            if (dir.name != "Segno" && dir.name != "SegnoSegno") {
+            if (dir.name != "Segno"
+                && dir.name != "SegnoSegno"
+                && dir.name != "Coda") {
                 marker->initTextStyleType(TextStyleType::REPEAT_RIGHT);
             }
             marker->setTrack(0);
