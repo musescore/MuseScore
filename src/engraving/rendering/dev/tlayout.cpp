@@ -3714,10 +3714,14 @@ void TLayout::layout(Note* item, LayoutContext& ctx)
     layoutNote(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(NoteDot* item, LayoutContext&)
+static void layoutNoteDot(const NoteDot* item, const LayoutContext&, NoteDot::LayoutData* ldata)
 {
-    NoteDot::LayoutData* ldata = item->mutLayoutData();
     ldata->setbbox(item->symBbox(SymId::augmentationDot));
+}
+
+void TLayout::layout(NoteDot* item, LayoutContext& ctx)
+{
+    layoutNoteDot(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Ornament* item, LayoutContext& ctx)
@@ -3891,24 +3895,31 @@ void TLayout::layout(RehearsalMark* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(Rest* item, LayoutContext& ctx)
+static void layoutRestDots(const Rest* item, const LayoutContext& ctx, Rest::LayoutData* ldata)
 {
-    if (item->isGap()) {
-        return;
+    const_cast<Rest*>(item)->checkDots();
+    double x = item->symWidthNoLedgerLines(ldata) + ctx.conf().styleMM(Sid::dotNoteDistance) * item->mag();
+    double dx = ctx.conf().styleMM(Sid::dotDotDistance) * item->mag();
+    double y = item->dotLine() * item->spatium() * .5;
+    for (NoteDot* dot : item->dotList()) {
+        NoteDot::LayoutData* dotldata = dot->mutLayoutData();
+        layoutNoteDot(dot, ctx, dotldata);
+        dotldata->setPos(x, y);
+        x += dx;
     }
-    for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
-    }
+}
 
-    item->setSkipDraw(false);
+static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutData* ldata)
+{
     if (item->deadSlapped()) {
-        item->setSkipDraw(true);
+        ldata->isSkipDraw = true;
         return;
     }
+    ldata->isSkipDraw = false;
 
     double _spatium = item->spatium();
 
-    item->setPosX(0.0);
+    ldata->setPosX(0.0);
     const StaffType* stt = item->staffType();
     if (stt && stt->isTabStaff()) {
         // if rests are shown and note values are shown as duration symbols
@@ -3924,15 +3935,15 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
             }
             // symbol needed; if not exist, create, if exists, update duration
             if (!item->tabDur()) {
-                item->setTabDur(new TabDurationSymbol(item, stt, type, dots));
+                const_cast<Rest*>(item)->setTabDur(new TabDurationSymbol(const_cast<Rest*>(item), stt, type, dots));
             } else {
                 item->tabDur()->setDuration(type, dots, stt);
             }
-            item->tabDur()->setParent(item);
+            item->tabDur()->setParent(const_cast<Rest*>(item));
 // needed?        _tabDur->setTrack(track());
-            layout(item->tabDur(), ctx);
-            item->setbbox(item->tabDur()->bbox());
-            item->setPos(0.0, 0.0);                   // no rest is drawn: reset any position might be set for it
+            TLayout::layout(item->tabDur(), const_cast<LayoutContext&>(ctx));
+            ldata->setbbox(item->tabDur()->bbox());
+            ldata->setPos(0.0, 0.0);                   // no rest is drawn: reset any position might be set for it
             return;
         }
         // if no rests or no duration symbols, delete any dur. symbol and chain into standard staff mngmt
@@ -3940,11 +3951,11 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
         // Rest::draw() will skip their drawing, if not needed
         if (item->tabDur()) {
             delete item->tabDur();
-            item->setTabDur(nullptr);
+            const_cast<Rest*>(item)->setTabDur(nullptr);
         }
     }
 
-    item->setDotLine(Rest::getDotline(item->durationType().type()));
+    const_cast<Rest*>(item)->setDotLine(Rest::getDotline(item->durationType().type()));
 
     double yOff = item->offset().y();
     const Staff* stf = item->staff();
@@ -3954,30 +3965,29 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
     int lines      = st ? st->lines() : 5;
 
     int naturalLine = item->computeNaturalLine(lines); // Measured in 1sp steps
-    int voiceOffset = item->computeVoiceOffset(lines); // Measured in 1sp steps
+    int voiceOffset = item->computeVoiceOffset(lines, ldata); // Measured in 1sp steps
     int wholeRestOffset = item->computeWholeRestOffset(voiceOffset, lines);
     int finalLine = naturalLine + voiceOffset + wholeRestOffset;
 
-    item->setSym(item->getSymbol(item->durationType().type(), finalLine + userLine, lines));
+    ldata->sym = item->getSymbol(item->durationType().type(), finalLine + userLine, lines);
 
-    item->setPosY(finalLine * lineDist * _spatium);
+    ldata->setPosY(finalLine * lineDist * _spatium);
     if (!item->shouldNotBeDrawn()) {
-        item->setbbox(item->symBbox(item->sym()));
+        ldata->setbbox(item->symBbox(item->sym()));
     }
-    layoutRestDots(item, ctx);
+    layoutRestDots(item, ctx, ldata);
 }
 
-void TLayout::layoutRestDots(Rest* item, LayoutContext& ctx)
+void TLayout::layout(Rest* item, LayoutContext& ctx)
 {
-    item->checkDots();
-    double x = item->symWidthNoLedgerLines() + ctx.conf().styleMM(Sid::dotNoteDistance) * item->mag();
-    double dx = ctx.conf().styleMM(Sid::dotDotDistance) * item->mag();
-    double y = item->dotLine() * item->spatium() * .5;
-    for (NoteDot* dot : item->dotList()) {
-        layout(dot, ctx);
-        dot->setPos(x, y);
-        x += dx;
+    if (item->isGap()) {
+        return;
     }
+    for (EngravingItem* e : item->el()) {
+        layoutItem(e, ctx);
+    }
+
+    layoutRest(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(ShadowNote* item, LayoutContext& ctx)

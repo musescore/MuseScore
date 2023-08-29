@@ -3824,7 +3824,7 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
     int lines      = st ? st->lines() : 5;
 
     int naturalLine = item->computeNaturalLine(lines); // Measured in 1sp steps
-    int voiceOffset = item->computeVoiceOffset(lines); // Measured in 1sp steps
+    int voiceOffset = item->computeVoiceOffset(lines, item->mutLayoutData()); // Measured in 1sp steps
     int wholeRestOffset = item->computeWholeRestOffset(voiceOffset, lines);
     int finalLine = naturalLine + voiceOffset + wholeRestOffset;
 
@@ -3840,7 +3840,7 @@ void TLayout::layout(Rest* item, LayoutContext& ctx)
 void TLayout::layoutRestDots(Rest* item, LayoutContext& ctx)
 {
     item->checkDots();
-    double x = item->symWidthNoLedgerLines() + ctx.conf().styleMM(Sid::dotNoteDistance) * item->mag();
+    double x = item->symWidthNoLedgerLines(item->mutLayoutData()) + ctx.conf().styleMM(Sid::dotNoteDistance) * item->mag();
     double dx = ctx.conf().styleMM(Sid::dotDotDistance) * item->mag();
     double y = item->dotLine() * item->spatium() * .5;
     for (NoteDot* dot : item->dotList()) {

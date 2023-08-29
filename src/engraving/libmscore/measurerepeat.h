@@ -71,7 +71,7 @@ public:
 
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;
 
-    struct LayoutData : public EngravingItem::LayoutData {
+    struct LayoutData : public Rest::LayoutData {
         SymId symId = SymId::noSym;
         SymIdList numberSym;
 

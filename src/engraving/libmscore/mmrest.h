@@ -56,7 +56,7 @@ public:
 
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;
 
-    struct LayoutData : public EngravingItem::LayoutData {
+    struct LayoutData : public Rest::LayoutData {
         int number = 0;                     // number of measures represented
         SymIdList numberSym;
         SymIdList restSyms;                 // stores symbols when using old-style rests
