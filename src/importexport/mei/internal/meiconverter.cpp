@@ -37,6 +37,8 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
 #include "libmscore/jump.h"
+#include "libmscore/jump.h"
+#include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
 #include "libmscore/note.h"
@@ -1925,6 +1927,59 @@ std::pair<libmei::data_STEMDIRECTION, double> Convert::stemToMEI(const engraving
     }
 
     return { meiStemDir, meiStemLen };
+}
+
+libmei::Syl Convert::sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision)
+{
+    libmei::Syl meiSyl;
+
+    switch (lyrics->syllabic()) {
+    case (engraving::LyricsSyllabic::BEGIN):
+        meiSyl.SetWordpos(libmei::sylLog_WORDPOS_i);
+        meiSyl.SetCon(libmei::sylLog_CON_d);
+        break;
+    case (engraving::LyricsSyllabic::MIDDLE):
+        meiSyl.SetWordpos(libmei::sylLog_WORDPOS_m);
+        meiSyl.SetCon(libmei::sylLog_CON_d);
+        break;
+    case (engraving::LyricsSyllabic::END):
+        meiSyl.SetWordpos(libmei::sylLog_WORDPOS_t);
+        break;
+    default:
+        break;
+    }
+
+    // Adjust @wordpos and @con with elisions
+    if (elision == ElisionFirst) {
+        // Set the elision connector
+        meiSyl.SetCon(libmei::sylLog_CON_b);
+        // Make middle a terminal and remove initial word position
+        if (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_m) {
+            meiSyl.SetWordpos(libmei::sylLog_WORDPOS_t);
+        } else if (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_i) {
+            meiSyl.SetWordpos(libmei::sylLog_WORDPOS_NONE);
+        }
+    } else if (elision == ElisionMiddle) {
+        // Set the elision conntecto and remove any word postion
+        meiSyl.SetCon(libmei::sylLog_CON_b);
+        meiSyl.SetWordpos(libmei::sylLog_WORDPOS_NONE);
+    } else if (elision == ElisionLast) {
+        // Make middle an initial and remove terminal work position
+        if (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_m) {
+            meiSyl.SetWordpos(libmei::sylLog_WORDPOS_i);
+        } else if (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_t) {
+            meiSyl.SetWordpos(libmei::sylLog_WORDPOS_NONE);
+        }
+    }
+
+    // Add extender connector
+    if ((elision == ElisionNone) || (elision == ElisionLast)) {
+        if ((meiSyl.GetCon() == libmei::sylLog_CON_NONE) && (lyrics->ticks() != engraving::Fraction(0, 1))) {
+            meiSyl.SetCon(libmei::sylLog_CON_u);
+        }
+    }
+
+    return meiSyl;
 }
 
 void Convert::tempoFromMEI(engraving::TempoText* tempoText, const StringList& meiLines, const libmei::Tempo& meiTempo, bool& warning)

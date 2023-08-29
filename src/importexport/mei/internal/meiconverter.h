@@ -48,6 +48,13 @@ enum TextCell {
     CellCount
 };
 
+enum ElisionType {
+    ElisionNone = 0,
+    ElisionFirst,
+    ElisionMiddle,
+    ElisionLast
+};
+
 // The @type attribute for <pb> and <sb>
 #define BREAK_TYPE "mscore-manual"
 // The @type attribute prefix for indicating beam in <chord>, <note> or <rest>
@@ -212,6 +219,8 @@ public:
 
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
     static std::pair<libmei::data_STEMDIRECTION, double> stemToMEI(const engraving::DirectionV direction, bool noStem);
+
+    static libmei::Syl sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision);
 
     static void tempoFromMEI(engraving::TempoText* tempo, const StringList& meiLines, const libmei::Tempo& meiTempo, bool& warning);
     static libmei::Tempo tempoToMEI(const engraving::TempoText* tempoText, StringList& meiLines);

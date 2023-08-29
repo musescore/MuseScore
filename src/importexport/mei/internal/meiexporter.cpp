@@ -64,6 +64,7 @@
 
 #include "thirdparty/libmei/cmn.h"
 #include "thirdparty/libmei/harmony.h"
+#include "thirdparty/libmei/lyrics.h"
 #include "thirdparty/libmei/shared.h"
 
 using namespace mu::iex::mei;
@@ -1152,7 +1153,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
 
     Interval interval = staff->part()->instrument()->transpose();
     auto [meiNote, meiAccid] = Convert::pitchToMEI(note, note->accidental(), interval);
-    pugi::xml_node noteNode = m_currentNode.append_child();
+    m_currentNode = m_currentNode.append_child();
     if (!isChord) {
         meiNote.SetDur(Convert::durToMEI(chord->durationType().type()));
         if (chord->dots()) {
@@ -1164,7 +1165,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeVerses(chord);
     }
     std::string xmlId = this->getXmlIdFor(note, 'n');
-    meiNote.Write(noteNode, xmlId);
+    meiNote.Write(m_currentNode, xmlId);
     if (!isChord) {
         this->fillControlEventMap(xmlId, chord);
     }
@@ -1177,9 +1178,13 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
     }
 
     if (meiAccid.HasAccid() || meiAccid.HasAccidGes()) {
-        pugi::xml_node accidNode = noteNode.append_child();
+        pugi::xml_node accidNode = m_currentNode.append_child();
         meiAccid.Write(accidNode, this->getLayerXmlIdFor(ACCID_L));
     }
+
+    // non critical assert
+    assert(isCurrentNode(meiNote));
+    m_currentNode = m_currentNode.parent();
 
     return true;
 }
@@ -1233,6 +1238,21 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
 }
 
 /**
+ * Write a syl with the corresponding text syllable and the elision type.
+ * The elision type is passed to the Convert methods that deals with the adjustment of @con and @worpos.
+ */
+
+bool MeiExporter::writeSyl(const Lyrics* lyrics, const String& text, ElisionType elision)
+{
+    libmei::Syl meiSyl = Convert::sylToMEI(lyrics, elision);
+    pugi::xml_node sylNode = m_currentNode.append_child();
+    meiSyl.Write(sylNode, this->getLayerXmlIdFor(SYL_L));
+    sylNode.text().set(text.toStdString().c_str());
+
+    return true;
+}
+
+/**
  * Write a tuplet if the ChordRest is the first element of the tuplet.
  * If the ChordRest is the last, sets the closing flag to true.
  */
@@ -1268,7 +1288,11 @@ bool MeiExporter::writeTuplet(const Tuplet* tuplet, const EngravingItem* item, b
     return true;
 }
 
-bool MeiExporter::writeVerses(const engraving::ChordRest* chordRest)
+/**
+ * Write the verses attached to a ChordRest
+ */
+
+bool MeiExporter::writeVerses(const ChordRest* chordRest)
 {
     IF_ASSERT_FAILED(chordRest) {
         return false;
@@ -1281,21 +1305,49 @@ bool MeiExporter::writeVerses(const engraving::ChordRest* chordRest)
     return true;
 }
 
-bool MeiExporter::writeVerse(const engraving::Lyrics* lyrics)
+/**
+ * Write a verse for a Lyrics and the syl - one or more with elisions.
+ * If the Lyrics text has elision(s), then splits them into distinct MEI syl.
+ */
+
+bool MeiExporter::writeVerse(const Lyrics* lyrics)
 {
     IF_ASSERT_FAILED(lyrics) {
         return false;
     }
 
-    /*
     libmei::Verse meiVerse;
     m_currentNode = m_currentNode.append_child();
     meiVerse.Write(m_currentNode, this->getLayerXmlIdFor(VERSE_L));
 
+    // Split the syllable into line blocks
+    Convert::textWithSmufl lineBlocks;
+    Convert::textToMEI(lineBlocks, String(lyrics->plainText()));
+
+    // If we have more than one line block we assume to have elision
+    // Ideally we should check that SMuFL line block do contain only an elision charachter
+    // It also means that any SMuFL special characther in the lyrics will be considered to be an elision connector
+    ElisionType elision = (lineBlocks.size() > 1) ? ElisionFirst : ElisionNone;
+
+    for (auto& lineBlock : lineBlocks) {
+        // For now assume any SMuFL line block to be an elision connector.
+        // That means we simply skip them.
+        if (lineBlock.first) {
+            continue;
+        }
+        // If the line block in the last one with an elision, mark it as such
+        if ((elision == ElisionMiddle) && (&lineBlock == &lineBlocks.back())) {
+            elision = ElisionLast;
+        }
+        // Create a /syl for each text line block
+        this->writeSyl(lyrics, lineBlock.second, elision);
+        // Next one will be a middle (or last) elision line block
+        elision = ElisionMiddle;
+    }
+
     // This is the end of the <verse> - non critical assert
     assert(isCurrentNode(libmei::Verse()));
     m_currentNode = m_currentNode.parent();
-    */
 
     return true;
 }
