@@ -4272,16 +4272,21 @@ void TLayout::layout(StaffText* item, LayoutContext& ctx)
     item->autoplaceSegmentElement();
 }
 
-void TLayout::layout(StaffTypeChange* item, LayoutContext& ctx)
+static void layoutStaffTypeChange(const StaffTypeChange* item, const LayoutContext& ctx, StaffTypeChange::LayoutData* ldata)
 {
     double _spatium = ctx.conf().spatium();
-    item->setbbox(RectF(-item->lw() * .5, -item->lw() * .5, _spatium * 2.5 + item->lw(), _spatium * 2.5 + item->lw()));
+    ldata->setbbox(RectF(-item->lw() * .5, -item->lw() * .5, _spatium * 2.5 + item->lw(), _spatium * 2.5 + item->lw()));
     if (item->measure()) {
         double y = -1.5 * _spatium - item->height() + item->measure()->system()->staff(item->staffIdx())->y();
-        item->setPos(_spatium * .8, y);
+        ldata->setPos(_spatium * .8, y);
     } else {
-        item->setPos(0.0, 0.0);
+        ldata->setPos(0.0, 0.0);
     }
+}
+
+void TLayout::layout(StaffTypeChange* item, LayoutContext& ctx)
+{
+    layoutStaffTypeChange(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Stem* item, LayoutContext& ctx)
