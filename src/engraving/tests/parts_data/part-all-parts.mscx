@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -105,9 +105,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <linkedMain/>
         <Text>
-          <linkedMain/>
           <style>title</style>
           <text>testpart2</text>
           </Text>
@@ -1110,21 +1108,6 @@
           </Instrument>
         </Part>
       <Staff id="1">
-        <VBox>
-          <height>10</height>
-          <linked>
-            </linked>
-          <Text>
-            <linked>
-              </linked>
-            <style>title</style>
-            <text>testpart2</text>
-            </Text>
-          <Text>
-            <style>instrument_excerpt</style>
-            <text>Alto</text>
-            </Text>
-          </VBox>
         <Measure>
           <voice>
             <Clef>
@@ -1812,27 +1795,6 @@
           </Instrument>
         </Part>
       <Staff id="1">
-        <VBox>
-          <height>10</height>
-          <linked>
-            <location>
-              <staves>-1</staves>
-              </location>
-            </linked>
-          <Text>
-            <linked>
-              <location>
-                <staves>-1</staves>
-                </location>
-              </linked>
-            <style>title</style>
-            <text>testpart2</text>
-            </Text>
-          <Text>
-            <style>instrument_excerpt</style>
-            <text>Tenor</text>
-            </Text>
-          </VBox>
         <Measure>
           <voice>
             <Clef>
@@ -1854,7 +1816,7 @@
                 <location>
                   <staves>-1</staves>
                   </location>
-                <indexDiff>4</indexDiff>
+                <indexDiff>2</indexDiff>
                 </linked>
               <text>𝅘𝅥 = 100</text>
               </Tempo>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -186,6 +186,7 @@
         <bottomGap>0</bottomGap>
         <topMargin>3</topMargin>
         <boxAutoSize>0</boxAutoSize>
+        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>frame</style>
           <text>îèéààéà</text>
@@ -201,6 +202,7 @@
         <topGap>10</topGap>
         <bottomGap>0</bottomGap>
         <boxAutoSize>0</boxAutoSize>
+        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>frame</style>
           <text>êêàééééç*éô</text>
