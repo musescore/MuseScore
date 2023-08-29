@@ -37,7 +37,6 @@
 #include "libmscore/hairpin.h"
 #include "libmscore/harmony.h"
 #include "libmscore/jump.h"
-#include "libmscore/jump.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/marker.h"
 #include "libmscore/measure.h"
