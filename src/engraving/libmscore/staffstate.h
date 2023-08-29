@@ -55,12 +55,6 @@ public:
     StaffStateType staffStateType() const { return m_staffStateType; }
     String staffStateTypeName() const;
 
-    const mu::draw::PainterPath& path() const { return m_path; }
-    void setPath(const mu::draw::PainterPath& p) { m_path = p; }
-
-    double lw() const { return m_lw; }
-    void setLw(double w) { m_lw = w; }
-
     bool acceptDrop(EditData&) const override;
     EngravingItem* drop(EditData&) override;
 
@@ -69,6 +63,19 @@ public:
     void setInstrument(const Instrument&& i) { *m_instrument = i; }
     Segment* segment() { return (Segment*)explicitParent(); }
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        double lw = 0.0;
+        mu::draw::PainterPath path;
+    };
+    DECLARE_LAYOUTDATA_METHODS(StaffState);
+
+    //! --- Old Interface ---
+    double lw() const { return layoutData()->lw; }
+    void setLw(double w) { mutLayoutData()->lw = w; }
+    const mu::draw::PainterPath& path() const { return layoutData()->path; }
+    void setPath(const mu::draw::PainterPath& p) { mutLayoutData()->path = p; }
+    //! ---------------------
+
 private:
 
     friend class Factory;
@@ -76,8 +83,7 @@ private:
     StaffState(const StaffState&);
 
     StaffStateType m_staffStateType = StaffStateType::INVISIBLE;
-    double m_lw = 0.0;
-    mu::draw::PainterPath m_path;
+
     Instrument* m_instrument = nullptr;
 };
 } // namespace mu::engraving

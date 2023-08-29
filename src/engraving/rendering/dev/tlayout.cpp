@@ -4206,10 +4206,10 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext& ctx)
     item->setLines(ll);
 }
 
-void TLayout::layout(StaffState* item, LayoutContext&)
+static void layoutStaffState(const StaffState* item, const LayoutContext&, StaffState::LayoutData* ldata)
 {
     double _spatium = item->spatium();
-    item->setLw(_spatium * 0.3);
+    ldata->lw = (_spatium * 0.3);
     double h  = _spatium * 4;
     double w  = _spatium * 2.5;
 //      double w1 = w * .6;
@@ -4253,12 +4253,17 @@ void TLayout::layout(StaffState* item, LayoutContext&)
         break;
     }
 
-    item->setPath(path);
+    ldata->path = path;
 
     RectF bb(0, 0, w, h);
     bb.adjust(-item->lw(), -item->lw(), item->lw(), item->lw());
-    item->setbbox(bb);
-    item->setPos(0.0, _spatium * -6.0);
+    ldata->setbbox(bb);
+    ldata->setPos(0.0, _spatium * -6.0);
+}
+
+void TLayout::layout(StaffState* item, LayoutContext& ctx)
+{
+    layoutStaffState(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(StaffText* item, LayoutContext& ctx)
