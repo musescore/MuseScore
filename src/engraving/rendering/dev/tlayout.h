@@ -347,8 +347,6 @@ private:
 
     static void keySigAddLayout(KeySig* item, LayoutContext& ctx, SymId sym, int line);
 
-    static void layoutRestDots(Rest* item, LayoutContext& ctx);
-
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
     static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
                                                       std::function<SpannerSegment* (System* parent)> createSegment);

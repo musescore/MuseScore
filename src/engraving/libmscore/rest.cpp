@@ -62,7 +62,6 @@ Rest::Rest(const ElementType& type, Segment* parent)
     : ChordRest(type, parent)
 {
     m_beamMode  = BeamMode::NONE;
-    m_sym      = SymId::restQuarter;
 }
 
 Rest::Rest(Segment* parent, const TDuration& d)
@@ -74,7 +73,6 @@ Rest::Rest(const ElementType& type, Segment* parent, const TDuration& d)
     : ChordRest(type, parent)
 {
     m_beamMode  = BeamMode::NONE;
-    m_sym      = SymId::restQuarter;
     setDurationType(d);
     if (d.fraction().isValid()) {
         setTicks(d.fraction());
@@ -89,7 +87,6 @@ Rest::Rest(const Rest& r, bool link)
         setAutoplace(true);
     }
     m_gap      = r.m_gap;
-    m_sym      = r.m_sym;
     m_dotline  = r.m_dotline;
     for (NoteDot* dot : r.m_dots) {
         add(Factory::copyNoteDot(*dot));
@@ -121,14 +118,19 @@ void Rest::setOffset(const mu::PointF& o)
     double _spatium = spatium();
     int line = lrint(o.y() / _spatium);
 
-    if (m_sym == SymId::restWhole && (line <= -2 || line >= 3)) {
-        m_sym = SymId::restWholeLegerLine;
-    } else if (m_sym == SymId::restWholeLegerLine && (line > -2 && line < 4)) {
-        m_sym = SymId::restWhole;
-    } else if (m_sym == SymId::restHalf && (line <= -3 || line >= 3)) {
-        m_sym = SymId::restHalfLegerLine;
-    } else if (m_sym == SymId::restHalfLegerLine && (line > -3 && line < 3)) {
-        m_sym = SymId::restHalf;
+    //! NOTE We need to find out why this is being done here.
+    //! We rewrite sym in the layout (we get from the Rest::getSymbol method )
+
+    LayoutData* ldata = mutLayoutData();
+
+    if (ldata->sym == SymId::restWhole && (line <= -2 || line >= 3)) {
+        ldata->sym = SymId::restWholeLegerLine;
+    } else if (ldata->sym == SymId::restWholeLegerLine && (line > -2 && line < 4)) {
+        ldata->sym = SymId::restWhole;
+    } else if (ldata->sym == SymId::restHalf && (line <= -3 || line >= 3)) {
+        ldata->sym = SymId::restHalfLegerLine;
+    } else if (ldata->sym == SymId::restHalfLegerLine && (line > -3 && line < 3)) {
+        ldata->sym = SymId::restHalf;
     }
 
     EngravingItem::setOffset(o);
@@ -277,7 +279,7 @@ EngravingItem* Rest::drop(EditData& data)
 //   getSymbol
 //---------------------------------------------------------
 
-SymId Rest::getSymbol(DurationType type, int line, int lines)
+SymId Rest::getSymbol(DurationType type, int line, int lines) const
 {
     switch (type) {
     case DurationType::V_LONG:
@@ -317,23 +319,23 @@ SymId Rest::getSymbol(DurationType type, int line, int lines)
     }
 }
 
-void Rest::updateSymbol(int line, int lines)
+void Rest::updateSymbol(int line, int lines, LayoutData* ldata) const
 {
-    m_sym = getSymbol(durationType().type(), line, lines);
+    ldata->sym = getSymbol(durationType().type(), line, lines);
 }
 
-double Rest::symWidthNoLedgerLines() const
+double Rest::symWidthNoLedgerLines(LayoutData* ldata) const
 {
-    if (m_sym == SymId::restHalfLegerLine) {
+    if (ldata->sym == SymId::restHalfLegerLine) {
         return symWidth(SymId::restHalf);
     }
-    if (m_sym == SymId::restWholeLegerLine) {
+    if (ldata->sym == SymId::restWholeLegerLine) {
         return symWidth(SymId::restWhole);
     }
-    if (m_sym == SymId::restDoubleWholeLegerLine) {
+    if (ldata->sym == SymId::restDoubleWholeLegerLine) {
         return symWidth(SymId::restDoubleWhole);
     }
-    return symWidth(m_sym);
+    return symWidth(ldata->sym);
 }
 
 //---------------------------------------------------------
@@ -404,10 +406,10 @@ int Rest::getDotline(DurationType durationType)
 //   computeLineOffset
 //---------------------------------------------------------
 
-int Rest::computeVoiceOffset(int lines)
+int Rest::computeVoiceOffset(int lines, LayoutData* ldata) const
 {
     UNUSED(lines);
-    m_mergedRests.clear();
+    ldata->mergedRests.clear();
     Segment* s = segment();
     bool offsetVoices = s && measure() && (voice() > 0 || measure()->hasVoices(staffIdx(), tick(), actualTicks()));
     if (offsetVoices && voice() == 0) {
@@ -451,7 +453,7 @@ int Rest::computeVoiceOffset(int lines)
                     Rest* r = toRest(e);
                     if (r->globalTicks() == globalTicks()) {
                         matchFound = true;
-                        m_mergedRests.push_back(r);
+                        ldata->mergedRests.push_back(r);
                         continue;
                     }
                 }
@@ -476,7 +478,7 @@ int Rest::computeVoiceOffset(int lines)
     return voiceLineOffset * upSign;
 }
 
-int Rest::computeWholeRestOffset(int voiceOffset, int lines)
+int Rest::computeWholeRestOffset(int voiceOffset, int lines) const
 {
     if (!isWholeRest()) {
         return 0;
@@ -548,7 +550,7 @@ bool Rest::isWholeRest() const
            || (durType == DurationType::V_MEASURE && measure() && measure()->ticks() < Fraction(2, 1));
 }
 
-int Rest::computeNaturalLine(int lines)
+int Rest::computeNaturalLine(int lines) const
 {
     int line = (lines % 2) ? floor(double(lines) / 2) : ceil(double(lines) / 2);
     return line;
@@ -560,7 +562,7 @@ int Rest::computeNaturalLine(int lines)
 
 double Rest::upPos() const
 {
-    return symBbox(m_sym).y();
+    return symBbox(layoutData()->sym).y();
 }
 
 //---------------------------------------------------------
@@ -569,7 +571,7 @@ double Rest::upPos() const
 
 double Rest::downPos() const
 {
-    return symBbox(m_sym).y() + symHeight(m_sym);
+    return symBbox(layoutData()->sym).y() + symHeight(layoutData()->sym);
 }
 
 //---------------------------------------------------------

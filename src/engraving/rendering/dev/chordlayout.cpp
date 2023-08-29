@@ -3038,7 +3038,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             if (isWholeOrHalf) {
                 double y = rest->pos().y();
                 int line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
-                rest->updateSymbol(line, lines); // Because it may need to use the symbol with ledger line now
+                rest->updateSymbol(line, lines, rest->mutLayoutData()); // Because it may need to use the symbol with ledger line now
             }
         }
     }

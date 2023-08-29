@@ -94,26 +94,17 @@ public:
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
 
-    SymId getSymbol(DurationType type, int line, int lines);
-    void updateSymbol(int line, int lines);
-
     void checkDots();
 
-    double symWidthNoLedgerLines() const;
     NoteDot* dot(int n);
     const std::vector<NoteDot*>& dotList() const;
     int dotLine() const { return m_dotline; }
     void setDotLine(int l) { m_dotline = l; }
 
     static int getDotline(DurationType durationType);
-    SymId sym() const { return m_sym; }
-    void setSym(SymId s) { m_sym = s; }
     bool accent();
     void setAccent(bool flag);
 
-    int computeNaturalLine(int lines); // Natural rest vertical position
-    int computeVoiceOffset(int lines); // Vertical displacement in multi-voice cases
-    int computeWholeRestOffset(int voiceOffset, int lines);
     bool isWholeRest() const;
 
     DeadSlapped* deadSlapped() const { return m_deadSlapped; }
@@ -142,7 +133,26 @@ public:
     bool shouldNotBeDrawn() const;
 
     RestVerticalClearance& verticalClearance() { return m_verticalClearance; }
-    const std::vector<Rest*>& mergedRests() const { return m_mergedRests; }
+
+    struct LayoutData : public ChordRest::LayoutData {
+        std::vector<Rest*> mergedRests;     // Rests from other voices that may be merged with this
+        SymId sym = SymId::restQuarter;
+    };
+    DECLARE_LAYOUTDATA_METHODS(Rest);
+
+    int computeNaturalLine(int lines) const; // Natural rest vertical position
+    int computeVoiceOffset(int lines, LayoutData* ldata) const; // Vertical displacement in multi-voice cases
+    int computeWholeRestOffset(int voiceOffset, int lines) const;
+
+    SymId getSymbol(DurationType type, int line, int lines) const;
+    void updateSymbol(int line, int lines, LayoutData* ldata) const;
+    double symWidthNoLedgerLines(LayoutData* ldata) const;
+
+    //! --- Old Interface ---
+    const std::vector<Rest*>& mergedRests() const { return layoutData()->mergedRests; }
+    SymId sym() const { return layoutData()->sym; }
+    void setSym(SymId s) { mutLayoutData()->sym = s; }
+    //! ---------------------
 
 protected:
     Rest(const ElementType& type, Segment* parent = 0);
@@ -164,15 +174,13 @@ private:
     void setOffset(const mu::PointF& o) override;
 
     // values calculated by layout:
-    SymId m_sym = SymId::noSym;
+
     int m_dotline = -1;             // depends on rest symbol
     bool m_gap = false;             // invisible and not selectable for user
     std::vector<NoteDot*> m_dots;
     DeadSlapped* m_deadSlapped = nullptr;
 
     RestVerticalClearance m_verticalClearance;
-
-    std::vector<Rest*> m_mergedRests; // Rests from other voices that may be merged with this
 };
 } // namespace mu::engraving
 #endif

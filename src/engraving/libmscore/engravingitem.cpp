@@ -2420,6 +2420,9 @@ EngravingItem::LayoutData* EngravingItem::createLayoutData() const
 
 const EngravingItem::LayoutData* EngravingItem::layoutData() const
 {
+    if (!m_layoutData) {
+        m_layoutData = createLayoutData();
+    }
     return m_layoutData;
 }
 
