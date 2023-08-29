@@ -3834,7 +3834,7 @@ void TLayout::layout(PickScrapeSegment* item, LayoutContext& ctx)
 
 void TLayout::layout(PlayTechAnnotation* item, LayoutContext& ctx)
 {
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ctx, item->mutLayoutData());
     item->autoplaceSegmentElement();
 }
 
