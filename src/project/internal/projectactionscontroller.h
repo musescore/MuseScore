@@ -37,7 +37,7 @@
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
-#include "isaveprojectscenario.h"
+#include "iopensaveprojectscenario.h"
 #include "io/ifilesystem.h"
 #include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
@@ -57,7 +57,7 @@ class ProjectActionsController : public IProjectFilesController, public QObject,
     INJECT(IProjectCreator, projectCreator)
     INJECT(IRecentFilesController, recentFilesController)
     INJECT(IProjectAutoSaver, projectAutoSaver)
-    INJECT(ISaveProjectScenario, saveProjectScenario)
+    INJECT(IOpenSaveProjectScenario, openSaveProjectScenario)
     INJECT(IExportProjectScenario, exportProjectScenario)
     INJECT(actions::IActionsDispatcher, dispatcher)
     INJECT(framework::IInteractive, interactive)
@@ -102,8 +102,6 @@ private:
     void downloadAndOpenCloudProject(int scoreId, const QString& hash = QString(), const QString& secret = QString(), bool isOwner = true);
     Ret openMuseScoreUrl(const QUrl& url);
     Ret openScoreFromMuseScoreCom(const QUrl& url);
-
-    void showScoreDownloadError(const Ret& ret);
 
     bool checkCanIgnoreError(const Ret& ret, const io::path_t& filepath);
     bool askIfUserAgreesToOpenProjectWithIncompatibleVersion(const std::string& errorText);

@@ -29,7 +29,7 @@
 #include "internal/projectactionscontroller.h"
 #include "internal/projectuiactions.h"
 #include "internal/projectconfiguration.h"
-#include "internal/saveprojectscenario.h"
+#include "internal/opensaveprojectscenario.h"
 #include "internal/exportprojectscenario.h"
 #include "internal/mscmetareader.h"
 #include "internal/templatesrepository.h"
@@ -95,7 +95,7 @@ void ProjectModule::registerExports()
     ioc()->registerExport<IProjectConfiguration>(moduleName(), m_configuration);
     ioc()->registerExport<IProjectCreator>(moduleName(), new ProjectCreator());
     ioc()->registerExport<IProjectFilesController>(moduleName(), m_actionsController);
-    ioc()->registerExport<ISaveProjectScenario>(moduleName(), new SaveProjectScenario());
+    ioc()->registerExport<IOpenSaveProjectScenario>(moduleName(), new OpenSaveProjectScenario());
     ioc()->registerExport<IExportProjectScenario>(moduleName(), new ExportProjectScenario());
     ioc()->registerExport<IRecentFilesController>(moduleName(), m_recentFilesController);
     ioc()->registerExport<IMscMetaReader>(moduleName(), new MscMetaReader());

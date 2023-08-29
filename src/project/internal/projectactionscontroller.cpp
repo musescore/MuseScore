@@ -358,7 +358,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     if (!scoreId) {
         // Might happen when user tries to open score that saved as a cloud score but upload did not fully succeed
         LOGE() << "invalid cloud score id";
-        showScoreDownloadError(make_ret(Err::InvalidCloudScoreId));
+        openSaveProjectScenario()->showCloudOpenError(make_ret(Err::InvalidCloudScoreId));
         return;
     }
 
@@ -371,7 +371,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
     if (!scoreInfo.ret) {
         LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
-        showScoreDownloadError(scoreInfo.ret);
+        openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
         return;
     }
 
@@ -385,7 +385,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
     io::path_t localPath = configuration()->cloudProjectPath(scoreId);
     QFile* projectData = new QFile(localPath.toQString());
     if (!projectData->open(QIODevice::WriteOnly)) {
-        showScoreDownloadError(make_ret(Err::FileOpenError));
+        openSaveProjectScenario()->showCloudOpenError(make_ret(Err::FileOpenError));
 
         delete projectData;
         return;
@@ -404,7 +404,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
-            showScoreDownloadError(res.ret);
+            openSaveProjectScenario()->showCloudOpenError(res.ret);
             return;
         }
 
@@ -460,7 +460,7 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
             isOwner = false;
         } else {
             LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
-            showScoreDownloadError(scoreInfo.ret);
+            openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
 
             return scoreInfo.ret;
         }
@@ -710,7 +710,7 @@ bool ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType s
         return saveProjectAt(SaveLocation(SaveLocationType::Local));
     }
 
-    RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, saveMode, saveLocationType);
+    RetVal<SaveLocation> response = openSaveProjectScenario()->askSaveLocation(project, saveMode, saveLocationType);
     if (!response.ret) {
         LOGE() << response.ret.toString();
         return false;
@@ -738,7 +738,7 @@ void ProjectActionsController::publish()
 
     auto project = currentNotationProject();
 
-    RetVal<CloudProjectInfo> info = saveProjectScenario()->askPublishLocation(project);
+    RetVal<CloudProjectInfo> info = openSaveProjectScenario()->askPublishLocation(project);
     if (!info.ret) {
         return;
     }
@@ -765,7 +765,7 @@ void ProjectActionsController::shareAudio()
     };
 
     auto project = currentNotationProject();
-    RetVal<CloudAudioInfo> retVal = saveProjectScenario()->askShareAudioLocation(project);
+    RetVal<CloudAudioInfo> retVal = openSaveProjectScenario()->askShareAudioLocation(project);
     if (!retVal.ret) {
         return;
     }
@@ -893,7 +893,7 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
         }
 
         if (isPublic) {
-            if (!saveProjectScenario()->warnBeforeSavingToExistingPubliclyVisibleCloudProject()) {
+            if (!openSaveProjectScenario()->warnBeforeSavingToExistingPubliclyVisibleCloudProject()) {
                 return false;
             }
         }
@@ -1213,21 +1213,21 @@ Ret ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudP
 
     closeUploadProgressDialog();
 
-    Ret userResponse = saveProjectScenario()->showCloudSaveError(ret, info, publishMode, true);
+    Ret userResponse = openSaveProjectScenario()->showCloudSaveError(ret, info, publishMode, true);
     switch (userResponse.code()) {
-    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_SAVE_AS: {
+    case IOpenSaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_SAVE_AS: {
         return saveProject(SaveMode::SaveAs);
     }
-    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE: {
+    case IOpenSaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE: {
         CloudProjectInfo newInfo = info;
         newInfo.sourceUrl = QUrl();
         return uploadProject(newInfo, audio, openEditUrl, publishMode);
     }
-    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_REPLACE: {
+    case IOpenSaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_REPLACE: {
         RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
         if (!scoreInfo.ret) {
             LOGE() << scoreInfo.ret.toString();
-            saveProjectScenario()->showCloudSaveError(scoreInfo.ret, info, publishMode, false);
+            openSaveProjectScenario()->showCloudSaveError(scoreInfo.ret, info, publishMode, false);
             break;
         }
 
@@ -1258,7 +1258,7 @@ void ProjectActionsController::onAudioUploadFailed(const Ret& ret)
 
     closeUploadProgressDialog();
 
-    saveProjectScenario()->showAudioCloudShareError(ret);
+    openSaveProjectScenario()->showAudioCloudShareError(ret);
 }
 
 void ProjectActionsController::warnCloudIsNotAvailable()
@@ -1484,76 +1484,6 @@ void ProjectActionsController::moveProject(INotationProjectPtr project, const io
     project->setPath(newPath);
 
     recentFilesController()->moveRecentFile(oldPath, makeRecentFile(project));
-}
-
-void ProjectActionsController::showScoreDownloadError(const Ret& ret)
-{
-    std::string title = trc("project", "Your score could not be opened");
-    std::string message;
-
-    switch (ret.code()) {
-    case int(Err::InvalidCloudScoreId):
-        message = trc("project", "This score is invalid.");
-        break;
-    case int(Err::FileOpenError):
-        message = trc("project/cloud", "The file could not be downloaded to your disk.");
-        break;
-    case int(cloud::Err::Status400_InvalidRequest):
-        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
-        //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
-                  .arg("400 Invalid request").toStdString();
-        break;
-    case int(cloud::Err::Status401_AuthorizationRequired):
-        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
-        //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
-                  .arg("401 Authorization required").toStdString();
-        break;
-    case int(cloud::Err::Status403_AccountNotActivated):
-        message = trc("project/cloud", "Your musescore.com account needs to be verified first. "
-                                       "Please activate your account via the link in the activation email.");
-        break;
-    case int(cloud::Err::Status403_NotOwner):
-        message = trc("project/cloud", "This score does not belong to this account. To access this score, make sure you are logged in "
-                                       "to the desktop app with the account to which this score belongs.");
-        break;
-    case int(cloud::Err::Status404_NotFound):
-        message = trc("project/cloud", "The score could not be found, or cannot be accessed by your account.");
-        break;
-    case int(cloud::Err::Status422_ValidationFailed):
-        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
-        //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
-                  .arg("422 Validation failed").toStdString();
-        break;
-    case int(cloud::Err::Status500_InternalServerError):
-        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
-        //: that is deliberately not translated
-        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
-                  .arg("500 Internal server error").toStdString();
-        break;
-    case int(cloud::Err::UnknownStatusCode): {
-        std::any status = ret.data("status");
-        if (status.has_value()) {
-            //: %1 will be replaced with the error code that MuseScore.com returned, which is a number.
-            message = qtrc("project/cloud", "MuseScore.com returned an unknown error code: %1.")
-                      .arg(std::any_cast<int>(status)).toStdString();
-        } else {
-            message = trc("project/cloud", "MuseScore.com returned an unknown error code.");
-        }
-    } break;
-
-    case int(cloud::Err::NetworkError):
-        message = trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
-                                       "Please check your internet connection or try again later.");
-        break;
-    default:
-        message = trc("project/cloud", "Please try again later.");
-        break;
-    }
-
-    interactive()->warning(title, message);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filepath)

@@ -20,10 +20,11 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "saveprojectscenario.h"
+#include "opensaveprojectscenario.h"
 
 #include "cloud/clouderrors.h"
 #include "engraving/infrastructure/mscio.h"
+#include "projecterrors.h"
 
 using namespace mu;
 using namespace mu::framework;
@@ -31,8 +32,8 @@ using namespace mu::project;
 
 static constexpr int RET_CODE_CHANGE_SAVE_LOCATION_TYPE = 1234;
 
-RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
-                                                          SaveLocationType preselectedType) const
+RetVal<SaveLocation> OpenSaveProjectScenario::askSaveLocation(INotationProjectPtr project, SaveMode mode,
+                                                              SaveLocationType preselectedType) const
 {
     SaveLocationType type = preselectedType;
 
@@ -87,7 +88,7 @@ RetVal<SaveLocation> SaveProjectScenario::askSaveLocation(INotationProjectPtr pr
     }
 }
 
-RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
+RetVal<io::path_t> OpenSaveProjectScenario::askLocalPath(INotationProjectPtr project, SaveMode saveMode) const
 {
     QString dialogTitle = qtrc("project/save", "Save score");
     std::string filenameAddition;
@@ -131,7 +132,7 @@ RetVal<io::path_t> SaveProjectScenario::askLocalPath(INotationProjectPtr project
     return RetVal<io::path_t>::make_ok(selectedPath);
 }
 
-RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const
+RetVal<SaveLocationType> OpenSaveProjectScenario::saveLocationType() const
 {
     bool shouldAsk = configuration()->shouldAskSaveLocationType();
     SaveLocationType lastUsed = configuration()->lastUsedSaveLocationType();
@@ -142,7 +143,7 @@ RetVal<SaveLocationType> SaveProjectScenario::saveLocationType() const
     return askSaveLocationType();
 }
 
-RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
+RetVal<SaveLocationType> OpenSaveProjectScenario::askSaveLocationType() const
 {
     UriQuery query("musescore://project/asksavelocationtype");
     bool shouldAsk = configuration()->shouldAskSaveLocationType();
@@ -162,21 +163,21 @@ RetVal<SaveLocationType> SaveProjectScenario::askSaveLocationType() const
     return RetVal<SaveLocationType>::make_ok(type);
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::askCloudLocation(INotationProjectPtr project, SaveMode mode) const
+RetVal<CloudProjectInfo> OpenSaveProjectScenario::askCloudLocation(INotationProjectPtr project, SaveMode mode) const
 {
     return doAskCloudLocation(project, mode, false);
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::askPublishLocation(INotationProjectPtr project) const
+RetVal<CloudProjectInfo> OpenSaveProjectScenario::askPublishLocation(INotationProjectPtr project) const
 {
     return doAskCloudLocation(project, SaveMode::Save, true);
 }
 
-RetVal<CloudAudioInfo> SaveProjectScenario::askShareAudioLocation(INotationProjectPtr project) const
+RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationProjectPtr project) const
 {
     bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
-        return warnAudioCloudIsNotAvailable();
+        return warnCloudNotAvailableForSharingAudio();
     }
 
     Ret ret = audioComService()->authorization()->ensureAuthorization(
@@ -216,11 +217,11 @@ RetVal<CloudAudioInfo> SaveProjectScenario::askShareAudioLocation(INotationProje
     return RetVal<CloudAudioInfo>::make_ok(result);
 }
 
-RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const
+RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const
 {
     bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
-        return warnCloudIsNotAvailable(isPublish);
+        return warnCloudNotAvailableForUploading(isPublish);
     }
 
     Ret ret = museScoreComService()->authorization()->ensureAuthorization(
@@ -300,7 +301,7 @@ RetVal<CloudProjectInfo> SaveProjectScenario::doAskCloudLocation(INotationProjec
     return RetVal<CloudProjectInfo>::make_ok(result);
 }
 
-bool SaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const
+bool OpenSaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const
 {
     if (isPublish) {
         if (!configuration()->shouldWarnBeforePublish()) {
@@ -347,7 +348,7 @@ bool SaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility
     return ok;
 }
 
-bool SaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProject() const
+bool OpenSaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProject() const
 {
     IInteractive::ButtonDatas buttons = {
         IInteractive::ButtonData(IInteractive::Button::Cancel, trc("global", "Cancel")),
@@ -363,7 +364,7 @@ bool SaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProject(
     return result.standardButton() == IInteractive::Button::Ok;
 }
 
-Ret SaveProjectScenario::warnCloudIsNotAvailable(bool isPublish) const
+Ret OpenSaveProjectScenario::warnCloudNotAvailableForUploading(bool isPublish) const
 {
     if (isPublish) {
         interactive()->warning(trc("project/save", "Unable to connect to MuseScore.com"),
@@ -387,14 +388,106 @@ Ret SaveProjectScenario::warnCloudIsNotAvailable(bool isPublish) const
     return make_ret(Ret::Code::Cancel);
 }
 
-Ret SaveProjectScenario::warnAudioCloudIsNotAvailable() const
+Ret OpenSaveProjectScenario::warnCloudNotAvailableForSharingAudio() const
 {
     interactive()->warning(trc("project/save", "Unable to connect to Audio.com"),
                            trc("project/save", "Please check your internet connection or try again later."));
     return make_ret(Ret::Code::Cancel);
 }
 
-Ret SaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublish, bool alreadyAttempted) const
+static std::string cloudStatusCodeErrorMessage(const Ret& ret, bool withHelp = false)
+{
+    std::string message;
+
+    switch (ret.code()) {
+    case int(cloud::Err::Status400_InvalidRequest):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("400 Invalid request").toStdString();
+        break;
+    case int(cloud::Err::Status401_AuthorizationRequired):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("401 Authorization required").toStdString();
+        break;
+    case int(cloud::Err::Status422_ValidationFailed):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("422 Validation failed").toStdString();
+        break;
+    case int(cloud::Err::Status500_InternalServerError):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("500 Internal server error").toStdString();
+        break;
+    case int(cloud::Err::UnknownStatusCode): {
+        std::any status = ret.data("status");
+        if (status.has_value()) {
+            //: %1 will be replaced with the error code that MuseScore.com returned, which is a number.
+            message = qtrc("project/cloud", "MuseScore.com returned an unknown error code: %1.")
+                      .arg(std::any_cast<int>(status)).toStdString();
+        } else {
+            message = trc("project/cloud", "MuseScore.com returned an unknown error code.");
+        }
+    } break;
+    }
+
+    if (withHelp) {
+        message += "\n\n" + trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
+    }
+
+    return message;
+}
+
+void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
+{
+    std::string title = trc("project", "Your score could not be opened");
+    std::string message;
+
+    switch (ret.code()) {
+    case int(Err::InvalidCloudScoreId):
+        message = trc("project", "This score is invalid.");
+        break;
+    case int(Err::FileOpenError):
+        message = trc("project/cloud", "The file could not be downloaded to your disk.");
+        break;
+    case int(cloud::Err::Status403_AccountNotActivated):
+        message = trc("project/cloud", "Your musescore.com account needs to be verified first. "
+                                       "Please activate your account via the link in the activation email.");
+        break;
+    case int(cloud::Err::Status403_NotOwner):
+        message = trc("project/cloud", "This score does not belong to this account. To access this score, make sure you are logged in "
+                                       "to the desktop app with the account to which this score belongs.");
+        break;
+    case int(cloud::Err::Status404_NotFound):
+        message = trc("project/cloud", "The score could not be found, or cannot be accessed by your account.");
+        break;
+
+    case int(cloud::Err::Status400_InvalidRequest):
+    case int(cloud::Err::Status401_AuthorizationRequired):
+    case int(cloud::Err::Status422_ValidationFailed):
+    case int(cloud::Err::Status500_InternalServerError):
+    case int(cloud::Err::UnknownStatusCode):
+        message = cloudStatusCodeErrorMessage(ret);
+        break;
+
+    case int(cloud::Err::NetworkError):
+        message = trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
+                                       "Please check your internet connection or try again later.");
+        break;
+    default:
+        message = trc("project/cloud", "Please try again later.");
+        break;
+    }
+
+    interactive()->warning(title, message);
+}
+
+Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublish, bool alreadyAttempted) const
 {
     std::string title;
     if (alreadyAttempted) {
@@ -426,20 +519,6 @@ Ret SaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectIn
     int defaultButtonCode = okBtn.btn;
 
     switch (ret.code()) {
-    case int(cloud::Err::Status400_InvalidRequest):
-        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
-        //: that is deliberately not translated
-        msg = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
-              .arg("400 Invalid request").toStdString();
-        msg += "\n\n" + trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
-        break;
-    case int(cloud::Err::Status401_AuthorizationRequired):
-        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
-        //: that is deliberately not translated
-        msg = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
-              .arg("400 Authorization required").toStdString();
-        msg += "\n\n" + trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
-        break;
     case int(cloud::Err::Status403_AccountNotActivated):
         msg = trc("project/cloud", "Your musescore.com account needs to be verified first. "
                                    "Please activate your account via the link in the activation email.");
@@ -471,31 +550,15 @@ Ret SaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectIn
             defaultButtonCode = replaceBtnCode;
         }
         break;
+
+    case int(cloud::Err::Status400_InvalidRequest):
+    case int(cloud::Err::Status401_AuthorizationRequired):
     case int(cloud::Err::Status422_ValidationFailed):
-        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
-        //: that is deliberately not translated
-        msg = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
-              .arg("422 Validation failed").toStdString();
-        msg += "\n\n" + trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
-        break;
     case int(cloud::Err::Status500_InternalServerError):
-        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
-        //: that is deliberately not translated
-        msg = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
-              .arg("500 Internal server error").toStdString();
-        msg += "\n\n" + trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
+    case int(cloud::Err::UnknownStatusCode):
+        msg = cloudStatusCodeErrorMessage(ret, /*withHelp=*/ true);
         break;
-    case int(cloud::Err::UnknownStatusCode): {
-        std::any status = ret.data("status");
-        if (status.has_value()) {
-            //: %1 will be replaced with the error code that MuseScore.com returned, which is a number.
-            msg = qtrc("project/cloud", "MuseScore.com returned an unknown error code: %1.")
-                  .arg(std::any_cast<int>(status)).toStdString();
-        } else {
-            msg = trc("project/cloud", "MuseScore.com returned an unknown error code.");
-        }
-        msg += "\n\n" + trc("project/cloud", "Please try again later, or get help for this problem on musescore.org.");
-    } break;
+
     case int(cloud::Err::NetworkError):
         msg = trc("project/cloud", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
                                    "Please check your internet connection or try again later.");
@@ -523,7 +586,7 @@ Ret SaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectIn
     return make_ret(Ret::Code::Cancel);
 }
 
-Ret SaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
+Ret OpenSaveProjectScenario::showAudioCloudShareError(const Ret& ret) const
 {
     std::string title= trc("project/share", "Your audio could not be shared");
     std::string msg;
