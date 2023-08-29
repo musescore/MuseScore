@@ -76,18 +76,18 @@ public:
 
     void setPedal(HarpStringType harpString, PedalPosition pedal);
 
-    void setPlayablePitches();
+    void setPlayableTpcs();
 
     String createDiagramText();
     void updateDiagramText();
 
-    bool isPitchPlayable(int pitch);
+    bool isTpcPlayable(int tpc);
 
 private:
 
     std::array<PedalPosition, HARP_STRING_NO> _pedalState;
 
-    std::set<int> _playablePitches;
+    std::set<int> _playableTpcs;
 
     bool _isDiagram = true;
 };

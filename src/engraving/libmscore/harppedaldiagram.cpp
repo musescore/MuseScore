@@ -70,32 +70,32 @@ static const ElementStyle harpPedalTextDiagramStyle {
 };
 
 // HarpPedalDiagram
-void HarpPedalDiagram::setPlayablePitches()
+void HarpPedalDiagram::setPlayableTpcs()
 {
-    std::set<int> playablePitches;
-    static const std::map<HarpStringType, int> string2pitch = {
+    std::set<int> playableTpcs;
+    static const std::map<HarpStringType, int> string2step = {
         { HarpStringType::C, 0 },
-        { HarpStringType::D, 2 },
-        { HarpStringType::E, 4 },
-        { HarpStringType::F, 5 },
-        { HarpStringType::G, 7 },
-        { HarpStringType::A, 9 },
-        { HarpStringType::B, 11 }
+        { HarpStringType::D, 1 },
+        { HarpStringType::E, 2 },
+        { HarpStringType::F, 3 },
+        { HarpStringType::G, 4 },
+        { HarpStringType::A, 5 },
+        { HarpStringType::B, 6 }
     };
-    static const std::map<PedalPosition, int> position2delta = {
-        { PedalPosition::FLAT, -1 },
-        { PedalPosition::NATURAL, 0 },
-        { PedalPosition::SHARP, 1 }
+    static const std::map<PedalPosition, AccidentalVal> position2accidentalVal = {
+        { PedalPosition::FLAT, AccidentalVal::FLAT },
+        { PedalPosition::NATURAL, AccidentalVal::NATURAL },
+        { PedalPosition::SHARP, AccidentalVal::SHARP }
     };
 
     for (size_t i = 0; i < _pedalState.size(); i++) {
-        int stringPitch = string2pitch.at(HarpStringType(i));
-        int delta = position2delta.at(_pedalState[i]);
-        int resPitch = (stringPitch + delta + 12) % 12;
-        playablePitches.insert(resPitch);
+        int stringStep = string2step.at(HarpStringType(i));
+        AccidentalVal accidentalVal = position2accidentalVal.at(_pedalState[i]);
+        int resTpc = step2tpc(stringStep, accidentalVal);
+        playableTpcs.insert(resTpc);
     }
 
-    _playablePitches = playablePitches;
+    _playableTpcs = playableTpcs;
 }
 
 HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
@@ -106,7 +106,7 @@ HarpPedalDiagram::HarpPedalDiagram(Segment* parent)
         = std::array<PedalPosition, HARP_STRING_NO> { PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL,
                                                       PedalPosition::NATURAL,
                                                       PedalPosition::NATURAL, PedalPosition::NATURAL, PedalPosition::NATURAL };
-    setPlayablePitches();
+    setPlayableTpcs();
 }
 
 HarpPedalDiagram::HarpPedalDiagram(const HarpPedalDiagram& h)
@@ -114,13 +114,13 @@ HarpPedalDiagram::HarpPedalDiagram(const HarpPedalDiagram& h)
 {
     _pedalState = h._pedalState;
     _isDiagram = h._isDiagram;
-    setPlayablePitches();
+    setPlayableTpcs();
 }
 
 void HarpPedalDiagram::setPedalState(std::array<PedalPosition, HARP_STRING_NO> state)
 {
     _pedalState = state;
-    setPlayablePitches();
+    setPlayableTpcs();
 }
 
 void HarpPedalDiagram::setIsDiagram(bool diagram)
@@ -140,7 +140,7 @@ void HarpPedalDiagram::setIsDiagram(bool diagram)
 void HarpPedalDiagram::setPedal(HarpStringType harpString, PedalPosition pedal)
 {
     _pedalState.at(harpString) = pedal;
-    setPlayablePitches();
+    setPlayableTpcs();
 }
 
 String HarpPedalDiagram::createDiagramText()
@@ -244,9 +244,9 @@ void HarpPedalDiagram::updateDiagramText()
     undoChangeProperty(Pid::TEXT, createDiagramText(), PropertyFlags::STYLED);
 }
 
-bool HarpPedalDiagram::isPitchPlayable(int pitch)
+bool HarpPedalDiagram::isTpcPlayable(int tpc)
 {
-    return _playablePitches.find(pitch % 12) != _playablePitches.cend();
+    return _playableTpcs.find(tpc) != _playableTpcs.cend();
 }
 
 PropertyValue HarpPedalDiagram::getProperty(Pid propertyId) const

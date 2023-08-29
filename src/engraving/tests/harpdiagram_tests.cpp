@@ -30,6 +30,7 @@
 #include "libmscore/part.h"
 #include "libmscore/segment.h"
 #include "libmscore/undo.h"
+#include "libmscore/pitchspelling.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -68,8 +69,9 @@ TEST_F(Engraving_HarpDiagramTests, harpdiagram)
     diagram->setPedal(HarpStringType::C, PedalPosition::SHARP);
 
     d = toHarpPedalDiagram((ScoreRW::writeReadElement(diagram)));
-    EXPECT_FALSE(d->isPitchPlayable(60));
-    EXPECT_TRUE(d->isPitchPlayable(61));
+    EXPECT_FALSE(d->isTpcPlayable(Tpc::TPC_C));
+    EXPECT_TRUE(d->isTpcPlayable(Tpc::TPC_C_S));
+    EXPECT_FALSE(d->isTpcPlayable(Tpc::TPC_D_B));
     delete d;
 }
 

@@ -2200,7 +2200,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         if (item->chord() && item->chord()->segment() && item->staff() && !item->score()->printing()
             && !item->staff()->isDrumStaff(item->chord()->tick())) {
             HarpPedalDiagram* prevDiagram = item->part()->currentHarpDiagram(item->chord()->segment()->tick());
-            if (prevDiagram && !prevDiagram->isPitchPlayable(item->ppitch())) {
+            if (prevDiagram && !prevDiagram->isTpcPlayable(item->tpc())) {
                 painter->setPen(item->selected() ? config->criticalSelectedColor() : config->criticalColor());
             }
         }
