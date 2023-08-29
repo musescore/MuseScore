@@ -554,63 +554,6 @@ public:
 };
 
 //----------------------------------------------------------------------------
-// AttCurveRend
-//----------------------------------------------------------------------------
-
-class AttCurveRend : public Att {
-protected:
-    AttCurveRend();
-    ~AttCurveRend() = default;
-
-public:
-    /** Reset the default values for the attribute class **/
-    void ResetCurveRend();
-
-    /** Read the values for the attribute class **/
-    bool ReadCurveRend(pugi::xml_node element, bool removeAttr = true);
-
-    /** Write the values for the attribute class **/
-    bool WriteCurveRend(pugi::xml_node element);
-
-    /**
-     * @name Setters, getters and presence checker for class members.
-     * The checker returns true if the attribute class is set (e.g., not equal
-     * to the default value)
-     **/
-    ///@{
-    void SetLform(data_LINEFORM lform_) { m_lform = lform_; }
-    data_LINEFORM GetLform() const { return m_lform; }
-    bool HasLform() const;
-    //
-    void SetLwidth(data_LINEWIDTH lwidth_) { m_lwidth = lwidth_; }
-    data_LINEWIDTH GetLwidth() const { return m_lwidth; }
-    bool HasLwidth() const;
-    /** Getter for reference (for alternate type only) */
-    data_LINEWIDTH *GetLwidthAlternate() { return &m_lwidth; }
-    ///@}
-
-private:
-    /** Describes the line style of a curve. **/
-    data_LINEFORM m_lform;
-    /** Width of a curved line. **/
-    data_LINEWIDTH m_lwidth;
-};
-
-//----------------------------------------------------------------------------
-// InstCurveRend
-//----------------------------------------------------------------------------
-
-/**
- * Instantiable version of AttCurveRend
- */
-
-class InstCurveRend : public AttCurveRend {
-public:
-    InstCurveRend() = default;
-    virtual ~InstCurveRend() = default;
-};
-
-//----------------------------------------------------------------------------
 // AttDataPointing
 //----------------------------------------------------------------------------
 
@@ -1390,12 +1333,26 @@ public:
      * to the default value)
      **/
     ///@{
+    void SetLform(data_LINEFORM lform_) { m_lform = lform_; }
+    data_LINEFORM GetLform() const { return m_lform; }
+    bool HasLform() const;
+    //
+    void SetLwidth(data_LINEWIDTH lwidth_) { m_lwidth = lwidth_; }
+    data_LINEWIDTH GetLwidth() const { return m_lwidth; }
+    bool HasLwidth() const;
+    /** Getter for reference (for alternate type only) */
+    data_LINEWIDTH *GetLwidthAlternate() { return &m_lwidth; }
+    //
     void SetLsegs(int lsegs_) { m_lsegs = lsegs_; }
     int GetLsegs() const { return m_lsegs; }
     bool HasLsegs() const;
     ///@}
 
 private:
+    /** Describes the style of a line. **/
+    data_LINEFORM m_lform;
+    /** Width of a line. **/
+    data_LINEWIDTH m_lwidth;
     /**
      * Describes the number of segments into which a dashed or dotted line may be
      * divided, or the number of "peaks" of a wavy line; a pair of space-separated

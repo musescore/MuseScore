@@ -468,61 +468,6 @@ bool AttCurvature::HasCurvedir() const
 }
 
 //----------------------------------------------------------------------------
-// AttCurveRend
-//----------------------------------------------------------------------------
-
-AttCurveRend::AttCurveRend() : Att()
-{
-    ResetCurveRend();
-}
-
-void AttCurveRend::ResetCurveRend()
-{
-    m_lform = LINEFORM_NONE;
-    m_lwidth = data_LINEWIDTH();
-}
-
-bool AttCurveRend::ReadCurveRend(pugi::xml_node element, bool removeAttr)
-{
-    bool hasAttribute = false;
-    if (element.attribute("lform")) {
-        this->SetLform(StrToLineform(element.attribute("lform").value()));
-        if (removeAttr) element.remove_attribute("lform");
-        hasAttribute = true;
-    }
-    if (element.attribute("lwidth")) {
-        this->SetLwidth(StrToLinewidth(element.attribute("lwidth").value()));
-        if (removeAttr) element.remove_attribute("lwidth");
-        hasAttribute = true;
-    }
-    return hasAttribute;
-}
-
-bool AttCurveRend::WriteCurveRend(pugi::xml_node element)
-{
-    bool wroteAttribute = false;
-    if (this->HasLform()) {
-        element.append_attribute("lform") = LineformToStr(this->GetLform()).c_str();
-        wroteAttribute = true;
-    }
-    if (this->HasLwidth()) {
-        element.append_attribute("lwidth") = LinewidthToStr(this->GetLwidth()).c_str();
-        wroteAttribute = true;
-    }
-    return wroteAttribute;
-}
-
-bool AttCurveRend::HasLform() const
-{
-    return (m_lform != LINEFORM_NONE);
-}
-
-bool AttCurveRend::HasLwidth() const
-{
-    return (m_lwidth.HasValue());
-}
-
-//----------------------------------------------------------------------------
 // AttDataPointing
 //----------------------------------------------------------------------------
 
@@ -1213,12 +1158,24 @@ AttLineRendBase::AttLineRendBase() : Att()
 
 void AttLineRendBase::ResetLineRendBase()
 {
+    m_lform = LINEFORM_NONE;
+    m_lwidth = data_LINEWIDTH();
     m_lsegs = MEI_UNSET;
 }
 
 bool AttLineRendBase::ReadLineRendBase(pugi::xml_node element, bool removeAttr)
 {
     bool hasAttribute = false;
+    if (element.attribute("lform")) {
+        this->SetLform(StrToLineform(element.attribute("lform").value()));
+        if (removeAttr) element.remove_attribute("lform");
+        hasAttribute = true;
+    }
+    if (element.attribute("lwidth")) {
+        this->SetLwidth(StrToLinewidth(element.attribute("lwidth").value()));
+        if (removeAttr) element.remove_attribute("lwidth");
+        hasAttribute = true;
+    }
     if (element.attribute("lsegs")) {
         this->SetLsegs(StrToInt(element.attribute("lsegs").value()));
         if (removeAttr) element.remove_attribute("lsegs");
@@ -1230,11 +1187,29 @@ bool AttLineRendBase::ReadLineRendBase(pugi::xml_node element, bool removeAttr)
 bool AttLineRendBase::WriteLineRendBase(pugi::xml_node element)
 {
     bool wroteAttribute = false;
+    if (this->HasLform()) {
+        element.append_attribute("lform") = LineformToStr(this->GetLform()).c_str();
+        wroteAttribute = true;
+    }
+    if (this->HasLwidth()) {
+        element.append_attribute("lwidth") = LinewidthToStr(this->GetLwidth()).c_str();
+        wroteAttribute = true;
+    }
     if (this->HasLsegs()) {
         element.append_attribute("lsegs") = IntToStr(this->GetLsegs()).c_str();
         wroteAttribute = true;
     }
     return wroteAttribute;
+}
+
+bool AttLineRendBase::HasLform() const
+{
+    return (m_lform != LINEFORM_NONE);
+}
+
+bool AttLineRendBase::HasLwidth() const
+{
+    return (m_lwidth.HasValue());
 }
 
 bool AttLineRendBase::HasLsegs() const

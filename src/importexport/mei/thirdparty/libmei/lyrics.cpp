@@ -70,7 +70,7 @@ void Refrain::Reset()
 }
 
 Verse::Verse() :
-    Element("verse"), AttLabelled(), AttTyped(), AttLang(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetVo(), AttVoltaGroupingSym()
+    Element("verse"), AttLabelled(), AttTyped(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetVo(), AttVoltaGroupingSym(), AttNNumberLike()
 {
 }
 
@@ -82,11 +82,11 @@ bool Verse::Read(pugi::xml_node element, bool removeAttr)
     bool hasAttribute = false;
     hasAttribute = (ReadLabelled(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTyped(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadLang(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVoltaGroupingSym(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadNNumberLike(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
 
@@ -97,11 +97,11 @@ bool Verse::Write(pugi::xml_node element, const std::string &xmlId)
     bool hasAttribute = false;
     hasAttribute = (WriteLabelled(element) || hasAttribute);
     hasAttribute = (WriteTyped(element) || hasAttribute);
-    hasAttribute = (WriteLang(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
     hasAttribute = (WriteVoltaGroupingSym(element) || hasAttribute);
+    hasAttribute = (WriteNNumberLike(element) || hasAttribute);
     return hasAttribute;
 }
 
@@ -109,11 +109,11 @@ void Verse::Reset()
 {     
     ResetLabelled();
     ResetTyped();
-    ResetLang();
     ResetPlacementRelStaff();
     ResetTypography();
     ResetVisualOffsetVo();
     ResetVoltaGroupingSym();
+    ResetNNumberLike();
 }
 
 Volta::Volta() :

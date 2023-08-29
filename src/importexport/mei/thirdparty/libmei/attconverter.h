@@ -249,6 +249,9 @@ public:
     std::string HairpinLogFormToStr(hairpinLog_FORM data) const;
     hairpinLog_FORM StrToHairpinLogForm(const std::string &value, bool logWarning = true) const;
 
+    std::string HarmVisRendgridToStr(harmVis_RENDGRID data) const;
+    harmVis_RENDGRID StrToHarmVisRendgrid(const std::string &value, bool logWarning = true) const;
+
     std::string HarpPedalLogAToStr(harpPedalLog_A data) const;
     harpPedalLog_A StrToHarpPedalLogA(const std::string &value, bool logWarning = true) const;
 

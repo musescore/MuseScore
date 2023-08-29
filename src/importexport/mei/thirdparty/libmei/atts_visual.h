@@ -69,16 +69,6 @@ public:
     void SetArrowFillcolor(std::string arrowFillcolor_) { m_arrowFillcolor = arrowFillcolor_; }
     std::string GetArrowFillcolor() const { return m_arrowFillcolor; }
     bool HasArrowFillcolor() const;
-    //
-    void SetLineForm(data_LINEFORM lineForm_) { m_lineForm = lineForm_; }
-    data_LINEFORM GetLineForm() const { return m_lineForm; }
-    bool HasLineForm() const;
-    //
-    void SetLineWidth(data_LINEWIDTH lineWidth_) { m_lineWidth = lineWidth_; }
-    data_LINEWIDTH GetLineWidth() const { return m_lineWidth; }
-    bool HasLineWidth() const;
-    /** Getter for reference (for alternate type only) */
-    data_LINEWIDTH *GetLineWidthAlternate() { return &m_lineWidth; }
     ///@}
 
 private:
@@ -92,10 +82,6 @@ private:
     std::string m_arrowColor;
     /** Captures the fill color of the arrow if different from the line color. **/
     std::string m_arrowFillcolor;
-    /** Visual form of the line. **/
-    data_LINEFORM m_lineForm;
-    /** Width of the line. **/
-    data_LINEWIDTH m_lineWidth;
 };
 
 //----------------------------------------------------------------------------
@@ -361,6 +347,55 @@ class InstHairpinVis : public AttHairpinVis {
 public:
     InstHairpinVis() = default;
     virtual ~InstHairpinVis() = default;
+};
+
+//----------------------------------------------------------------------------
+// AttHarmVis
+//----------------------------------------------------------------------------
+
+class AttHarmVis : public Att {
+protected:
+    AttHarmVis();
+    ~AttHarmVis() = default;
+
+public:
+    /** Reset the default values for the attribute class **/
+    void ResetHarmVis();
+
+    /** Read the values for the attribute class **/
+    bool ReadHarmVis(pugi::xml_node element, bool removeAttr = true);
+
+    /** Write the values for the attribute class **/
+    bool WriteHarmVis(pugi::xml_node element);
+
+    /**
+     * @name Setters, getters and presence checker for class members.
+     * The checker returns true if the attribute class is set (e.g., not equal
+     * to the default value)
+     **/
+    ///@{
+    void SetRendgrid(harmVis_RENDGRID rendgrid_) { m_rendgrid = rendgrid_; }
+    harmVis_RENDGRID GetRendgrid() const { return m_rendgrid; }
+    bool HasRendgrid() const;
+    ///@}
+
+private:
+    /** Describes how the harmonic indication should be rendered. **/
+    harmVis_RENDGRID m_rendgrid;
+};
+
+//----------------------------------------------------------------------------
+// InstHarmVis
+//----------------------------------------------------------------------------
+
+/**
+ * Instantiable version of AttHarmVis
+ */
+
+class InstHarmVis : public AttHarmVis {
+public:
+    InstHarmVis() = default;
+    virtual ~InstHarmVis() = default;
 };
 
 //----------------------------------------------------------------------------

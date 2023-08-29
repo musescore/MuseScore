@@ -100,7 +100,7 @@ void Mordent::Reset()
 }
 
 Trill::Trill() :
-    Element("trill"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttOrnamentAccid(), AttOrnamentAccidGes(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttPlacementRelStaff(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
+    Element("trill"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttOrnamentAccid(), AttOrnamentAccidGes(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
 {
 }
 
@@ -125,7 +125,6 @@ bool Trill::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
@@ -156,7 +155,6 @@ bool Trill::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
@@ -184,7 +182,6 @@ void Trill::Reset()
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetPlacementRelStaff();
     ResetExtSymAuth();
     ResetExtSymNames();

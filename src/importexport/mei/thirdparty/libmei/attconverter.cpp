@@ -43,6 +43,8 @@ std::string AttConverterBase::AccidentalGesturalToStr(data_ACCIDENTAL_GESTURAL d
         case ACCIDENTAL_GESTURAL_sd: value = "sd"; break;
         case ACCIDENTAL_GESTURAL_fu: value = "fu"; break;
         case ACCIDENTAL_GESTURAL_fd: value = "fd"; break;
+        case ACCIDENTAL_GESTURAL_xu: value = "xu"; break;
+        case ACCIDENTAL_GESTURAL_ffd: value = "ffd"; break;
         case ACCIDENTAL_GESTURAL_bms: value = "bms"; break;
         case ACCIDENTAL_GESTURAL_kms: value = "kms"; break;
         case ACCIDENTAL_GESTURAL_bs: value = "bs"; break;
@@ -74,6 +76,8 @@ data_ACCIDENTAL_GESTURAL AttConverterBase::StrToAccidentalGestural(const std::st
     if (value == "sd") return ACCIDENTAL_GESTURAL_sd;
     if (value == "fu") return ACCIDENTAL_GESTURAL_fu;
     if (value == "fd") return ACCIDENTAL_GESTURAL_fd;
+    if (value == "xu") return ACCIDENTAL_GESTURAL_xu;
+    if (value == "ffd") return ACCIDENTAL_GESTURAL_ffd;
     if (value == "bms") return ACCIDENTAL_GESTURAL_bms;
     if (value == "kms") return ACCIDENTAL_GESTURAL_kms;
     if (value == "bs") return ACCIDENTAL_GESTURAL_bs;
@@ -130,6 +134,8 @@ std::string AttConverterBase::AccidentalGesturalExtendedToStr(data_ACCIDENTAL_GE
         case ACCIDENTAL_GESTURAL_extended_sd: value = "sd"; break;
         case ACCIDENTAL_GESTURAL_extended_fu: value = "fu"; break;
         case ACCIDENTAL_GESTURAL_extended_fd: value = "fd"; break;
+        case ACCIDENTAL_GESTURAL_extended_xu: value = "xu"; break;
+        case ACCIDENTAL_GESTURAL_extended_ffd: value = "ffd"; break;
         default:
             LogWarning("Unknown value '%d' for data.ACCIDENTAL.GESTURAL.extended", data);
             value = "";
@@ -144,6 +150,8 @@ data_ACCIDENTAL_GESTURAL_extended AttConverterBase::StrToAccidentalGesturalExten
     if (value == "sd") return ACCIDENTAL_GESTURAL_extended_sd;
     if (value == "fu") return ACCIDENTAL_GESTURAL_extended_fu;
     if (value == "fd") return ACCIDENTAL_GESTURAL_extended_fd;
+    if (value == "xu") return ACCIDENTAL_GESTURAL_extended_xu;
+    if (value == "ffd") return ACCIDENTAL_GESTURAL_extended_ffd;
     if (logWarning && !value.empty())
         LogWarning("Unsupported value '%s' for data.ACCIDENTAL.GESTURAL.extended", value.c_str());
     return ACCIDENTAL_GESTURAL_extended_NONE;
@@ -171,6 +179,10 @@ std::string AttConverterBase::AccidentalWrittenToStr(data_ACCIDENTAL_WRITTEN dat
         case ACCIDENTAL_WRITTEN_fd: value = "fd"; break;
         case ACCIDENTAL_WRITTEN_nu: value = "nu"; break;
         case ACCIDENTAL_WRITTEN_nd: value = "nd"; break;
+        case ACCIDENTAL_WRITTEN_xu: value = "xu"; break;
+        case ACCIDENTAL_WRITTEN_xd: value = "xd"; break;
+        case ACCIDENTAL_WRITTEN_ffu: value = "ffu"; break;
+        case ACCIDENTAL_WRITTEN_ffd: value = "ffd"; break;
         case ACCIDENTAL_WRITTEN_1qf: value = "1qf"; break;
         case ACCIDENTAL_WRITTEN_3qf: value = "3qf"; break;
         case ACCIDENTAL_WRITTEN_1qs: value = "1qs"; break;
@@ -213,6 +225,10 @@ data_ACCIDENTAL_WRITTEN AttConverterBase::StrToAccidentalWritten(const std::stri
     if (value == "fd") return ACCIDENTAL_WRITTEN_fd;
     if (value == "nu") return ACCIDENTAL_WRITTEN_nu;
     if (value == "nd") return ACCIDENTAL_WRITTEN_nd;
+    if (value == "xu") return ACCIDENTAL_WRITTEN_xu;
+    if (value == "xd") return ACCIDENTAL_WRITTEN_xd;
+    if (value == "ffu") return ACCIDENTAL_WRITTEN_ffu;
+    if (value == "ffd") return ACCIDENTAL_WRITTEN_ffd;
     if (value == "1qf") return ACCIDENTAL_WRITTEN_1qf;
     if (value == "3qf") return ACCIDENTAL_WRITTEN_3qf;
     if (value == "1qs") return ACCIDENTAL_WRITTEN_1qs;
@@ -285,6 +301,10 @@ std::string AttConverterBase::AccidentalWrittenExtendedToStr(data_ACCIDENTAL_WRI
         case ACCIDENTAL_WRITTEN_extended_fd: value = "fd"; break;
         case ACCIDENTAL_WRITTEN_extended_nu: value = "nu"; break;
         case ACCIDENTAL_WRITTEN_extended_nd: value = "nd"; break;
+        case ACCIDENTAL_WRITTEN_extended_xu: value = "xu"; break;
+        case ACCIDENTAL_WRITTEN_extended_xd: value = "xd"; break;
+        case ACCIDENTAL_WRITTEN_extended_ffu: value = "ffu"; break;
+        case ACCIDENTAL_WRITTEN_extended_ffd: value = "ffd"; break;
         case ACCIDENTAL_WRITTEN_extended_1qf: value = "1qf"; break;
         case ACCIDENTAL_WRITTEN_extended_3qf: value = "3qf"; break;
         case ACCIDENTAL_WRITTEN_extended_1qs: value = "1qs"; break;
@@ -305,6 +325,10 @@ data_ACCIDENTAL_WRITTEN_extended AttConverterBase::StrToAccidentalWrittenExtende
     if (value == "fd") return ACCIDENTAL_WRITTEN_extended_fd;
     if (value == "nu") return ACCIDENTAL_WRITTEN_extended_nu;
     if (value == "nd") return ACCIDENTAL_WRITTEN_extended_nd;
+    if (value == "xu") return ACCIDENTAL_WRITTEN_extended_xu;
+    if (value == "xd") return ACCIDENTAL_WRITTEN_extended_xd;
+    if (value == "ffu") return ACCIDENTAL_WRITTEN_extended_ffu;
+    if (value == "ffd") return ACCIDENTAL_WRITTEN_extended_ffd;
     if (value == "1qf") return ACCIDENTAL_WRITTEN_extended_1qf;
     if (value == "3qf") return ACCIDENTAL_WRITTEN_extended_3qf;
     if (value == "1qs") return ACCIDENTAL_WRITTEN_extended_1qs;
@@ -3112,6 +3136,31 @@ hairpinLog_FORM AttConverterBase::StrToHairpinLogForm(const std::string &value, 
     return hairpinLog_FORM_NONE;
 }
 
+std::string AttConverterBase::HarmVisRendgridToStr(harmVis_RENDGRID data) const
+{
+    std::string value;
+    switch (data) {
+        case harmVis_RENDGRID_grid: value = "grid"; break;
+        case harmVis_RENDGRID_gridtext: value = "gridtext"; break;
+        case harmVis_RENDGRID_text: value = "text"; break;
+        default:
+            LogWarning("Unknown value '%d' for att.harm.vis@rendgrid", data);
+            value = "";
+            break;
+    }
+    return value;
+}
+
+harmVis_RENDGRID AttConverterBase::StrToHarmVisRendgrid(const std::string &value, bool logWarning) const
+{
+    if (value == "grid") return harmVis_RENDGRID_grid;
+    if (value == "gridtext") return harmVis_RENDGRID_gridtext;
+    if (value == "text") return harmVis_RENDGRID_text;
+    if (logWarning && !value.empty())
+        LogWarning("Unsupported value '%s' for att.harm.vis@rendgrid", value.c_str());
+    return harmVis_RENDGRID_NONE;
+}
+
 std::string AttConverterBase::HarpPedalLogAToStr(harpPedalLog_A data) const
 {
     std::string value;
@@ -3291,7 +3340,7 @@ std::string AttConverterBase::MeiVersionMeiversionToStr(meiVersion_MEIVERSION da
 {
     std::string value;
     switch (data) {
-        case meiVersion_MEIVERSION_5_0_0_devplusbasic: value = "5.0.0-dev+basic"; break;
+        case meiVersion_MEIVERSION_5_0_devplusbasic: value = "5.0-dev+basic"; break;
         default:
             LogWarning("Unknown value '%d' for att.meiVersion@meiversion", data);
             value = "";
@@ -3302,7 +3351,7 @@ std::string AttConverterBase::MeiVersionMeiversionToStr(meiVersion_MEIVERSION da
 
 meiVersion_MEIVERSION AttConverterBase::StrToMeiVersionMeiversion(const std::string &value, bool logWarning) const
 {
-    if (value == "5.0.0-dev+basic") return meiVersion_MEIVERSION_5_0_0_devplusbasic;
+    if (value == "5.0-dev+basic") return meiVersion_MEIVERSION_5_0_devplusbasic;
     if (logWarning && !value.empty())
         LogWarning("Unsupported value '%s' for att.meiVersion@meiversion", value.c_str());
     return meiVersion_MEIVERSION_NONE;

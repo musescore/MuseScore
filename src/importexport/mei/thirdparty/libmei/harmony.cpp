@@ -137,7 +137,7 @@ void ChordTable::Reset()
 }
 
 F::F() :
-    Element("f"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("f"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -160,7 +160,6 @@ bool F::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -185,7 +184,6 @@ bool F::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -207,7 +205,6 @@ void F::Reset()
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetPlacementRelStaff();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
@@ -246,7 +243,7 @@ void Fb::Reset()
 }
 
 Harm::Harm() :
-    Element("harm"), AttLabelled(), AttTyped(), AttHarmLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log()
+    Element("harm"), AttLabelled(), AttTyped(), AttHarmLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttHarmVis(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
 {
 }
 
@@ -267,6 +264,14 @@ bool Harm::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadHarmVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadVisualOffset2Ho(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
 
@@ -286,6 +291,14 @@ bool Harm::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteHarmVis(element) || hasAttribute);
+    hasAttribute = (WriteExtender(element) || hasAttribute);
+    hasAttribute = (WriteLineRend(element) || hasAttribute);
+    hasAttribute = (WriteLineRendBase(element) || hasAttribute);
+    hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
+    hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
+    hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
+    hasAttribute = (WriteVisualOffset2Ho(element) || hasAttribute);
     return hasAttribute;
 }
 
@@ -302,6 +315,14 @@ void Harm::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetHarmVis();
+    ResetExtender();
+    ResetLineRend();
+    ResetLineRendBase();
+    ResetPlacementRelStaff();
+    ResetVisualOffsetHo();
+    ResetVisualOffsetVo();
+    ResetVisualOffset2Ho();
 }
 
 

@@ -120,7 +120,7 @@ bool MeiExporter::write(std::string& meiData)
         m_mei.append_attribute("xmlns") = "http://www.music-encoding.org/ns/mei";
 
         libmei::AttConverter converter;
-        libmei::meiVersion_MEIVERSION meiVersion = libmei::meiVersion_MEIVERSION_5_0_0_devplusbasic;
+        libmei::meiVersion_MEIVERSION meiVersion = libmei::meiVersion_MEIVERSION_5_0_devplusbasic;
         m_mei.append_attribute("meiversion") = (converter.MeiVersionMeiversionToStr(meiVersion)).c_str();
 
         this->writeHeader();

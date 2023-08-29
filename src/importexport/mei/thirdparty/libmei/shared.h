@@ -172,7 +172,7 @@ public:
  * below, or between staves, but not on the staff — that is not encoded elsewhere
  * in more specific elements, like tempo, dynam or repeatMark.
  **/
-class Dir : public Element, public AttLabelled, public AttTyped, public AttLang, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttCurveRend, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
+class Dir : public Element, public AttLabelled, public AttTyped, public AttLang, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Dir();
         virtual ~Dir();
@@ -184,7 +184,7 @@ public:
 };
 
 /** Indication of the volume of a note, phrase, or section of music. **/
-class Dynam : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttCurveRend, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttLang {
+class Dynam : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttLang {
     public:
         Dynam();
         virtual ~Dynam();
@@ -199,7 +199,7 @@ public:
  * Alternative ending for a repeated passage of music; i.e., prima volta, seconda
  * volta, etc.
  **/
-class Ending : public Element, public AttLabelled, public AttTyped, public AttLineRend, public AttLineRendBase, public AttCurveRend {
+class Ending : public Element, public AttLabelled, public AttTyped, public AttLineRend, public AttLineRendBase {
     public:
         Ending();
         virtual ~Ending();
@@ -565,7 +565,7 @@ public:
  * Text and symbols descriptive of tempo, mood, or style, e.g., "allarg.", "a
  * tempo", "cantabile", "Moderato", "♩=60", "Moderato ♩ =60").
  **/
-class Tempo : public Element, public AttLabelled, public AttTyped, public AttLang, public AttTempoLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttMmTempo, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttCurveRend, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttMidiTempo {
+class Tempo : public Element, public AttLabelled, public AttTyped, public AttLang, public AttTempoLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttMmTempo, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttMidiTempo {
     public:
         Tempo();
         virtual ~Tempo();

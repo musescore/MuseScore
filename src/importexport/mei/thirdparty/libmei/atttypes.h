@@ -37,6 +37,8 @@ enum data_ACCIDENTAL_GESTURAL : int8_t {
     ACCIDENTAL_GESTURAL_sd,
     ACCIDENTAL_GESTURAL_fu,
     ACCIDENTAL_GESTURAL_fd,
+    ACCIDENTAL_GESTURAL_xu,
+    ACCIDENTAL_GESTURAL_ffd,
     ACCIDENTAL_GESTURAL_bms,
     ACCIDENTAL_GESTURAL_kms,
     ACCIDENTAL_GESTURAL_bs,
@@ -74,6 +76,8 @@ enum data_ACCIDENTAL_GESTURAL_extended : int8_t {
     ACCIDENTAL_GESTURAL_extended_sd,
     ACCIDENTAL_GESTURAL_extended_fu,
     ACCIDENTAL_GESTURAL_extended_fd,
+    ACCIDENTAL_GESTURAL_extended_xu,
+    ACCIDENTAL_GESTURAL_extended_ffd,
     ACCIDENTAL_GESTURAL_extended_MAX
 };
 
@@ -100,6 +104,10 @@ enum data_ACCIDENTAL_WRITTEN : int8_t {
     ACCIDENTAL_WRITTEN_fd,
     ACCIDENTAL_WRITTEN_nu,
     ACCIDENTAL_WRITTEN_nd,
+    ACCIDENTAL_WRITTEN_xu,
+    ACCIDENTAL_WRITTEN_xd,
+    ACCIDENTAL_WRITTEN_ffu,
+    ACCIDENTAL_WRITTEN_ffd,
     ACCIDENTAL_WRITTEN_1qf,
     ACCIDENTAL_WRITTEN_3qf,
     ACCIDENTAL_WRITTEN_1qs,
@@ -148,6 +156,10 @@ enum data_ACCIDENTAL_WRITTEN_extended : int8_t {
     ACCIDENTAL_WRITTEN_extended_fd,
     ACCIDENTAL_WRITTEN_extended_nu,
     ACCIDENTAL_WRITTEN_extended_nd,
+    ACCIDENTAL_WRITTEN_extended_xu,
+    ACCIDENTAL_WRITTEN_extended_xd,
+    ACCIDENTAL_WRITTEN_extended_ffu,
+    ACCIDENTAL_WRITTEN_extended_ffd,
     ACCIDENTAL_WRITTEN_extended_1qf,
     ACCIDENTAL_WRITTEN_extended_3qf,
     ACCIDENTAL_WRITTEN_extended_1qs,
@@ -1456,6 +1468,17 @@ enum hairpinLog_FORM : int8_t {
 };
 
 /**
+ * MEI att.harm.vis\@rendgrid
+ */
+enum harmVis_RENDGRID : int8_t {
+    harmVis_RENDGRID_NONE = 0,
+    harmVis_RENDGRID_grid,
+    harmVis_RENDGRID_gridtext,
+    harmVis_RENDGRID_text,
+    harmVis_RENDGRID_MAX
+};
+
+/**
  * MEI att.harpPedal.log\@a
  */
 enum harpPedalLog_A : int8_t {
@@ -1537,7 +1560,7 @@ enum harpPedalLog_G : int8_t {
  */
 enum meiVersion_MEIVERSION : int8_t {
     meiVersion_MEIVERSION_NONE = 0,
-    meiVersion_MEIVERSION_5_0_0_devplusbasic,
+    meiVersion_MEIVERSION_5_0_devplusbasic,
     meiVersion_MEIVERSION_MAX
 };
 

@@ -526,7 +526,7 @@ void Date::Reset()
 }
 
 Dir::Dir() :
-    Element("dir"), AttLabelled(), AttTyped(), AttLang(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
+    Element("dir"), AttLabelled(), AttTyped(), AttLang(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
 {
 }
 
@@ -550,7 +550,6 @@ bool Dir::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -577,7 +576,6 @@ bool Dir::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -601,7 +599,6 @@ void Dir::Reset()
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetPlacementRelStaff();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
@@ -609,7 +606,7 @@ void Dir::Reset()
 }
 
 Dynam::Dynam() :
-    Element("dynam"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttLang()
+    Element("dynam"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttLang()
 {
 }
 
@@ -632,7 +629,6 @@ bool Dynam::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -659,7 +655,6 @@ bool Dynam::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -683,7 +678,6 @@ void Dynam::Reset()
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetPlacementRelStaff();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
@@ -692,7 +686,7 @@ void Dynam::Reset()
 }
 
 Ending::Ending() :
-    Element("ending"), AttLabelled(), AttTyped(), AttLineRend(), AttLineRendBase(), AttCurveRend()
+    Element("ending"), AttLabelled(), AttTyped(), AttLineRend(), AttLineRendBase()
 {
 }
 
@@ -706,7 +700,6 @@ bool Ending::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadTyped(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
 
@@ -719,7 +712,6 @@ bool Ending::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteTyped(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     return hasAttribute;
 }
 
@@ -729,7 +721,6 @@ void Ending::Reset()
     ResetTyped();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
 }
 
 Label::Label() :
@@ -1897,7 +1888,7 @@ void Symbol::Reset()
 }
 
 Tempo::Tempo() :
-    Element("tempo"), AttLabelled(), AttTyped(), AttLang(), AttTempoLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttMmTempo(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttMidiTempo()
+    Element("tempo"), AttLabelled(), AttTyped(), AttLang(), AttTempoLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttMmTempo(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttMidiTempo()
 {
 }
 
@@ -1922,7 +1913,6 @@ bool Tempo::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -1951,7 +1941,6 @@ bool Tempo::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -1977,7 +1966,6 @@ void Tempo::Reset()
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetPlacementRelStaff();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
