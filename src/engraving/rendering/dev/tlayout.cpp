@@ -4360,7 +4360,7 @@ void TLayout::layout(Stem* item, LayoutContext& ctx)
     layoutStem(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(StemSlash* item, LayoutContext& ctx)
+static void layoutStemSlash(const StemSlash* item, const LayoutContext& ctx, StemSlash::LayoutData* ldata)
 {
     if (!item->chord() || !item->chord()->stem()) {
         return;
@@ -4418,12 +4418,17 @@ void TLayout::layout(StemSlash* item, LayoutContext& ctx)
         endY = startY + up * length * sin(angle);
     }
 
-    item->setLine(LineF(PointF(startX, startY), PointF(endX, endY)));
-    item->setStemWidth(ctx.conf().styleMM(Sid::stemSlashThickness) * graceNoteMag);
+    ldata->line = LineF(PointF(startX, startY), PointF(endX, endY));
+    ldata->stemWidth = ctx.conf().styleMM(Sid::stemSlashThickness) * graceNoteMag;
 
     RectF bbox = RectF(item->line().p1(), item->line().p2()).normalized();
     bbox = bbox.adjusted(-item->stemWidth() / 2, -item->stemWidth() / 2, item->stemWidth(), item->stemWidth());
-    item->setbbox(bbox);
+    ldata->setbbox(bbox);
+}
+
+void TLayout::layout(StemSlash* item, LayoutContext& ctx)
+{
+    layoutStemSlash(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Sticking* item, LayoutContext& ctx)
