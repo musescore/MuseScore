@@ -213,10 +213,10 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
     : _score(score), _gpDom(std::move(gpDom))
 {
     _drumExtension = {
-        { 91, 38 }, //Snare(rim shot)
-        { 92, 46 }, //Hi Hat (half)
+        { 91, 40 }, //Snare(rim shot)
+        { 92, 42 }, //Hi Hat (half)
         { 93, 51 }, //Ride (edje)
-        { 94, 51 }, //Ride (choke)
+        { 94, 59 }, //Ride (choke)
         { 95, 55 }, //Splash (choke)
         { 96, 52 }, //Chine(choke)
         { 97, 49 }, //Crash high (choke)
@@ -232,11 +232,11 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
         { 107, 61 },//Hand (slap)
         { 108, 64 },//Conga low (slap)
         { 109, 64 },//Conga low (mute)
-        { 110, 63 },//Conga high (slap)
+        { 110, 64 },//Conga high (slap)
         { 111, 54 },//Tambourine (return)
         { 112, 54 },//Tambourine (roll)
         { 113, 54 },//Tambourine (hand)
-        { 114, 41 },//Grancassa (hit)
+        { 114, 43 },//Grancassa (hit)
         { 115, 49 },//Piatti (hit)
         { 116, 49 },//Piatti (hand)
         { 117, 69 },//Cabasa (return)
@@ -244,7 +244,7 @@ GPConverter::GPConverter(Score* score, std::unique_ptr<GPDomModel>&& gpDom)
         { 119, 70 },//Right Maraca (hit)
         { 120, 70 },//Right Maraca (return)
         { 122, 82 },//Shaker (return)
-        { 123, 83 },//Bell Tree (return)
+        { 123, 84 },//Bell Tree (return)
         { 124, 62 },//Golpe (thumb)
         { 125, 62 },//Golpe (finger)
         { 126, 59 },//Ride (middle)
@@ -296,7 +296,7 @@ void GPConverter::fixPercussion()
         }
 
         if (pPart->midiChannel() == PERC_CHANNEL) {
-            pPart->setMidiProgram(0);
+            pPart->setMidiProgram(0, 128);
         }
     }
 }
@@ -2063,12 +2063,11 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
         fret = note->part()->instrument()->stringData()->fret(pitch, musescoreString, nullptr);
     }
 
-    if (!engravingConfiguration()->guitarProImportExperimental()) {
-        if (note->part()->hasDrumStaff()) {
-            auto it = _drumExtension.find(pitch);
-            if (it != _drumExtension.end()) {
-                pitch =  it->second;
-            }
+    bool hasDrumStaff = note->part()->hasDrumStaff();
+    if (!engravingConfiguration()->guitarProImportExperimental() && hasDrumStaff) {
+        auto it = _drumExtension.find(pitch);
+        if (it != _drumExtension.end()) {
+            pitch =  it->second;
         }
     }
 
@@ -2081,12 +2080,17 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
 void GPConverter::setTpc(Note* note, int accidental)
 {
     std::map<int, int> toneToTpc = {
-        { 0, 14 },
-        { 2, 16 },
-        { 4, 18 },
-        { 5, 13 },
-        { 7, 15 },
-        { 9, 17 },
+        { 0,  14 },
+        { 1,  21 },
+        { 2,  16 },
+        { 3,  11 },
+        { 4,  18 },
+        { 5,  13 },
+        { 6,  20 },
+        { 7,  15 },
+        { 8,  22 },
+        { 9,  17 },
+        { 10, 24 },
         { 11, 19 },
     };
 

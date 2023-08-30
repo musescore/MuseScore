@@ -441,7 +441,7 @@ void GuitarPro::initGuitarProPercussionSet(const mu::iex::guitarpro::GpDrumSet& 
     case DrumSetType::CONGAS:
         if (!gpCongasSet) {
             gpCongasSet = new Drumset;
-            gpCongasSet->drum(62) = DrumInstrument(TConv::userName(DrumNum(62)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
+            gpCongasSet->drum(62) = DrumInstrument(TConv::userName(DrumNum(62)), NoteHeadGroup::HEAD_CROSS, 0, DirectionV::DOWN);
             gpCongasSet->drum(63) = DrumInstrument(TConv::userName(DrumNum(63)), NoteHeadGroup::HEAD_NORMAL, 0, DirectionV::DOWN);
             gpCongasSet->drum(64) = DrumInstrument(TConv::userName(DrumNum(64)), NoteHeadGroup::HEAD_NORMAL, 2, DirectionV::UP);
         }
