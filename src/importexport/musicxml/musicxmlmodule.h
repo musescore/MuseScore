@@ -36,6 +36,7 @@ public:
     void registerResources() override;
     void registerExports() override;
     void resolveImports() override;
+    void onInit(const framework::IApplication::RunMode&) override;
 
 private:
     std::shared_ptr<MusicXmlConfiguration> m_configuration;

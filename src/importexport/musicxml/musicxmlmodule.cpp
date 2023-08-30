@@ -61,11 +61,6 @@ void MusicXmlModule::registerExports()
 
 void MusicXmlModule::resolveImports()
 {
-    //! TODO For some reason, the configuration init should be here,
-    //! we need to find out if this is not correct... for the correct one,
-    //! it should be in the onInit module
-    m_configuration->init();
-
     auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
     if (readers) {
         readers->reg({ "xml", "musicxml", "mxl" }, std::make_shared<MusicXmlReader>());
@@ -76,4 +71,9 @@ void MusicXmlModule::resolveImports()
         writers->reg({ "musicxml", "xml" }, std::make_shared<MusicXmlWriter>());
         writers->reg({ "mxl" }, std::make_shared<MxlWriter>());
     }
+}
+
+void MusicXmlModule::onInit(const framework::IApplication::RunMode&)
+{
+    m_configuration->init();
 }

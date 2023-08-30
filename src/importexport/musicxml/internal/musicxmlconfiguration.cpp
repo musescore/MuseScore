@@ -43,6 +43,7 @@ void MusicXmlConfiguration::init()
     settings()->setDefaultValue(MUSICXML_EXPORT_LAYOUT_KEY, Val(true));
     settings()->setDefaultValue(MUSICXML_EXPORT_BREAKS_TYPE_KEY, Val(MusicxmlExportBreaksType::All));
     settings()->setDefaultValue(MUSICXML_EXPORT_INVISIBLE_ELEMENTS_KEY, Val(false));
+    settings()->setDefaultValue(MIGRATION_APPLY_EDWIN_FOR_XML, Val(false));
     settings()->setDefaultValue(MIGRATION_NOT_ASK_AGAIN_KEY, Val(false));
 }
 
