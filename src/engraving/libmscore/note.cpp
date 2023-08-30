@@ -543,7 +543,7 @@ NoteHeadGroup NoteHead::headGroup() const
 {
     NoteHeadGroup group = NoteHeadGroup::HEAD_INVALID;
     for (int i = 0; i < int(NoteHeadGroup::HEAD_DO_WALKER); ++i) {
-        if (noteHeads[0][i][1] == _sym || noteHeads[0][i][3] == _sym) {
+        if (noteHeads[0][i][1] == m_sym || noteHeads[0][i][3] == m_sym) {
             group = (NoteHeadGroup)i;
             break;
         }

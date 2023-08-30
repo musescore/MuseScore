@@ -41,8 +41,8 @@ SystemDivider::SystemDivider(System* parent)
     : Symbol(ElementType::SYSTEM_DIVIDER, parent, ElementFlag::SYSTEM | ElementFlag::NOT_SELECTABLE)
 {
     // default value, but not valid until setDividerType()
-    _dividerType = SystemDivider::Type::LEFT;
-    _sym = SymId::systemDivider;
+    m_dividerType = SystemDivider::Type::LEFT;
+    m_sym = SymId::systemDivider;
 }
 
 //---------------------------------------------------------
@@ -52,7 +52,7 @@ SystemDivider::SystemDivider(System* parent)
 SystemDivider::SystemDivider(const SystemDivider& sd)
     : Symbol(sd)
 {
-    _dividerType = sd._dividerType;
+    m_dividerType = sd.m_dividerType;
 }
 
 //---------------------------------------------------------
@@ -61,7 +61,7 @@ SystemDivider::SystemDivider(const SystemDivider& sd)
 
 void SystemDivider::setDividerType(SystemDivider::Type v)
 {
-    _dividerType = v;
+    m_dividerType = v;
     if (v == SystemDivider::Type::LEFT) {
         setOffset(PointF(style().styleD(Sid::dividerLeftX), style().styleD(Sid::dividerLeftY)));
     } else {

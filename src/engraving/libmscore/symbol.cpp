@@ -43,7 +43,7 @@ namespace mu::engraving {
 Symbol::Symbol(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : BSymbol(type, parent, f)
 {
-    _sym = SymId::accidentalSharp;          // arbitrary valid default
+    m_sym = SymId::accidentalSharp;          // arbitrary valid default
 }
 
 Symbol::Symbol(EngravingItem* parent, ElementFlags f)
@@ -54,8 +54,8 @@ Symbol::Symbol(EngravingItem* parent, ElementFlags f)
 Symbol::Symbol(const Symbol& s)
     : BSymbol(s)
 {
-    _sym       = s._sym;
-    _scoreFont = s._scoreFont;
+    m_sym       = s.m_sym;
+    m_scoreFont = s.m_scoreFont;
 }
 
 //---------------------------------------------------------
@@ -64,7 +64,7 @@ Symbol::Symbol(const Symbol& s)
 
 AsciiStringView Symbol::symName() const
 {
-    return SymNames::nameForSymId(_sym);
+    return SymNames::nameForSymId(m_sym);
 }
 
 //---------------------------------------------------------
@@ -73,7 +73,7 @@ AsciiStringView Symbol::symName() const
 
 String Symbol::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(SymNames::userNameForSymId(_sym)));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(SymNames::userNameForSymId(m_sym)));
 }
 
 //---------------------------------------------------------
@@ -83,7 +83,7 @@ PropertyValue Symbol::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return PropertyValue::fromValue(_sym);
+        return PropertyValue::fromValue(m_sym);
     default:
         break;
     }
@@ -98,7 +98,7 @@ bool Symbol::setProperty(Pid propertyId, const PropertyValue& v)
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        _sym = v.value<SymId>();
+        m_sym = v.value<SymId>();
         break;
     default:
         break;
