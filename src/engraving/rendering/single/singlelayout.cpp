@@ -1339,12 +1339,12 @@ void SingleLayout::layout(TextLineSegment* item, const Context& ctx)
 
 void SingleLayout::layout(TimeSig* item, const Context& ctx)
 {
-    item->setPos(0.0, 0.0);
+    TimeSig::LayoutData* ldata = item->mutLayoutData();
+
     double spatium = item->spatium();
 
-    item->setbbox(RectF());                    // prepare for an empty time signature
-
-    TimeSig::DrawArgs drawArgs;
+    ldata->setPos(0.0, 0.0);
+    ldata->setbbox(RectF());                    // prepare for an empty time signature
 
     constexpr double lineDist = 1.0;
     constexpr int numOfLines = 5;
@@ -1361,49 +1361,49 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
     SizeF mag(item->magS() * item->scale());
 
     if (sigType == TimeSigType::FOUR_FOUR) {
-        drawArgs.pz = PointF(0.0, yoff);
+        ldata->pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCommon, mag);
-        item->setbbox(bbox.translated(drawArgs.pz));
-        drawArgs.ns.clear();
-        drawArgs.ns.push_back(SymId::timeSigCommon);
-        drawArgs.ds.clear();
+        ldata->setbbox(bbox.translated(ldata->pz));
+        ldata->ns.clear();
+        ldata->ns.push_back(SymId::timeSigCommon);
+        ldata->ds.clear();
     } else if (sigType == TimeSigType::ALLA_BREVE) {
-        drawArgs.pz = PointF(0.0, yoff);
+        ldata->pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCutCommon, mag);
-        item->setbbox(bbox.translated(drawArgs.pz));
-        drawArgs.ns.clear();
-        drawArgs.ns.push_back(SymId::timeSigCutCommon);
-        drawArgs.ds.clear();
+        ldata->setbbox(bbox.translated(ldata->pz));
+        ldata->ns.clear();
+        ldata->ns.push_back(SymId::timeSigCutCommon);
+        ldata->ds.clear();
     } else if (sigType == TimeSigType::CUT_BACH) {
-        drawArgs.pz = PointF(0.0, yoff);
+        ldata->pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCut2, mag);
-        item->setbbox(bbox.translated(drawArgs.pz));
-        drawArgs.ns.clear();
-        drawArgs.ns.push_back(SymId::timeSigCut2);
-        drawArgs.ds.clear();
+        ldata->setbbox(bbox.translated(ldata->pz));
+        ldata->ns.clear();
+        ldata->ns.push_back(SymId::timeSigCut2);
+        ldata->ds.clear();
     } else if (sigType == TimeSigType::CUT_TRIPLE) {
-        drawArgs.pz = PointF(0.0, yoff);
+        ldata->pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCut3, mag);
-        item->setbbox(bbox.translated(drawArgs.pz));
-        drawArgs.ns.clear();
-        drawArgs.ns.push_back(SymId::timeSigCut3);
-        drawArgs.ds.clear();
+        ldata->setbbox(bbox.translated(ldata->pz));
+        ldata->ns.clear();
+        ldata->ns.push_back(SymId::timeSigCut3);
+        ldata->ds.clear();
     } else {
         if (item->numeratorString().isEmpty()) {
-            drawArgs.ns = timeSigSymIdsFromString(item->numeratorString().isEmpty()
-                                                  ? String::number(item->sig().numerator())
-                                                  : item->numeratorString());
+            ldata->ns = timeSigSymIdsFromString(item->numeratorString().isEmpty()
+                                                ? String::number(item->sig().numerator())
+                                                : item->numeratorString());
 
-            drawArgs.ds = timeSigSymIdsFromString(item->denominatorString().isEmpty()
-                                                  ? String::number(item->sig().denominator())
-                                                  : item->denominatorString());
+            ldata->ds = timeSigSymIdsFromString(item->denominatorString().isEmpty()
+                                                ? String::number(item->sig().denominator())
+                                                : item->denominatorString());
         } else {
-            drawArgs.ns = timeSigSymIdsFromString(item->numeratorString());
-            drawArgs.ds = timeSigSymIdsFromString(item->denominatorString());
+            ldata->ns = timeSigSymIdsFromString(item->numeratorString());
+            ldata->ds = timeSigSymIdsFromString(item->denominatorString());
         }
 
-        RectF numRect = font->bbox(drawArgs.ns, mag);
-        RectF denRect = font->bbox(drawArgs.ds, mag);
+        RectF numRect = font->bbox(ldata->ns, mag);
+        RectF denRect = font->bbox(ldata->ds, mag);
 
         // position numerator and denominator; vertical displacement:
         // number of lines is odd: 0.0 (strings are directly above and below the middle line)
@@ -1417,33 +1417,31 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
 
         if (numRect.width() >= denRect.width()) {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            drawArgs.pz = PointF(0.0, pzY);
+            ldata->pz = PointF(0.0, pzY);
             // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            drawArgs.pn = PointF((numRect.width() - denRect.width()) * 0.5, pnY);
+            ldata->pn = PointF((numRect.width() - denRect.width()) * 0.5, pnY);
         } else {
             // numerator: one space above centre line, unless denomin. is empty (if so, directly centre in the middle)
-            drawArgs.pz = PointF((denRect.width() - numRect.width()) * 0.5, pzY);
+            ldata->pz = PointF((denRect.width() - numRect.width()) * 0.5, pzY);
             // denominator: horiz: centred around centre of numerator | vert: one space below centre line
-            drawArgs.pn = PointF(0.0, pnY);
+            ldata->pn = PointF(0.0, pnY);
         }
 
         // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
         int centerY = yoff / 2 + spatium;
         int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-        drawArgs.pointLargeLeftParen = PointF(-spatium, centerY);
-        drawArgs.pointLargeRightParen = PointF(widestPortion + spatium, centerY);
+        ldata->pointLargeLeftParen = PointF(-spatium, centerY);
+        ldata->pointLargeRightParen = PointF(widestPortion + spatium, centerY);
 
-        item->setbbox(numRect.translated(drawArgs.pz));       // translate bounding boxes to actual string positions
-        item->addbbox(denRect.translated(drawArgs.pn));
+        ldata->setbbox(numRect.translated(ldata->pz));       // translate bounding boxes to actual string positions
+        ldata->addbbox(denRect.translated(ldata->pn));
         if (item->largeParentheses()) {
-            item->addbbox(RectF(drawArgs.pointLargeLeftParen.x(), drawArgs.pointLargeLeftParen.y() - denRect.height(), spatium / 2,
-                                numRect.height() + denRect.height()));
-            item->addbbox(RectF(drawArgs.pointLargeRightParen.x(), drawArgs.pointLargeRightParen.y() - denRect.height(),  spatium / 2,
-                                numRect.height() + denRect.height()));
+            ldata->addbbox(RectF(ldata->pointLargeLeftParen.x(), ldata->pointLargeLeftParen.y() - denRect.height(), spatium / 2,
+                                 numRect.height() + denRect.height()));
+            ldata->addbbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),  spatium / 2,
+                                 numRect.height() + denRect.height()));
         }
     }
-
-    item->setDrawArgs(drawArgs);
 }
 
 void SingleLayout::layout(Tremolo* item, const Context& ctx)

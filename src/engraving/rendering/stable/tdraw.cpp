@@ -2833,14 +2833,14 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     }
     painter->setPen(item->curColor());
 
-    const TimeSig::DrawArgs& drawArgs = item->drawArgs();
+    const TimeSig::LayoutData* ldata = item->layoutData();
 
-    item->drawSymbols(drawArgs.ns, painter, drawArgs.pz, item->scale());
-    item->drawSymbols(drawArgs.ds, painter, drawArgs.pn, item->scale());
+    item->drawSymbols(ldata->ns, painter, ldata->pz, item->scale());
+    item->drawSymbols(ldata->ds, painter, ldata->pn, item->scale());
 
     if (item->largeParentheses()) {
-        item->drawSymbol(SymId::timeSigParensLeft,  painter, drawArgs.pointLargeLeftParen,  item->scale().width());
-        item->drawSymbol(SymId::timeSigParensRight, painter, drawArgs.pointLargeRightParen, item->scale().width());
+        item->drawSymbol(SymId::timeSigParensLeft,  painter, ldata->pointLargeLeftParen,  item->scale().width());
+        item->drawSymbol(SymId::timeSigParensRight, painter, ldata->pointLargeRightParen, item->scale().width());
     }
 }
 
