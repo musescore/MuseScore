@@ -88,7 +88,7 @@
           <Chord>
             <durationType>eighth</durationType>
             <Articulation>
-              <subtype>articAccentAbove</subtype>
+              <subtype>articAccentBelow</subtype>
               </Articulation>
             <appoggiatura/>
             <Note>
