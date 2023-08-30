@@ -581,7 +581,7 @@
         </Measure>
       <Measure>
         <Marker>
-          <style>repeat_right</style>
+          <style>repeat_left</style>
           <text><sym>coda</sym></text>
           <label>codab</label>
           </Marker>
