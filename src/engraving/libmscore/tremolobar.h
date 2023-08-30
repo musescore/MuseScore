@@ -70,8 +70,15 @@ public:
     bool play() const { return m_play; }
     void setPlay(bool val) { m_play = val; }
 
-    const mu::PolygonF& polygon() const { return m_polygon; }
-    void setPolygon(const mu::PolygonF& p) { m_polygon = p; }
+    struct LayoutData : public EngravingItem::LayoutData {
+        mu::PolygonF polygon;
+    };
+    DECLARE_LAYOUTDATA_METHODS(TremoloBar);
+
+    //! --- Old Interface ---
+    const mu::PolygonF& polygon() const { return layoutData()->polygon; }
+    void setPolygon(const mu::PolygonF& p) { mutLayoutData()->polygon = p; }
+    //! ---------------------
 
 private:
 
@@ -86,7 +93,6 @@ private:
     bool m_play = true;
 
     PitchValues m_points;
-    mu::PolygonF m_polygon;                    // computed by layout
 };
 } // namespace mu::engraving
 #endif

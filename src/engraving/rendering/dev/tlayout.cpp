@@ -5168,14 +5168,11 @@ void TLayout::layout(Tremolo* item, LayoutContext& ctx)
     TremoloLayout::layout(item, ctx);
 }
 
-void TLayout::layout(TremoloBar* item, LayoutContext&)
+static void layoutTremoloBar(const TremoloBar* item, const LayoutContext&, TremoloBar::LayoutData* ldata)
 {
     double _spatium = item->spatium();
-    if (item->explicitParent()) {
-        item->setPos(0.0, -_spatium * 3.0);
-    } else {
-        item->setPos(PointF());
-    }
+
+    ldata->setPos(0.0, -_spatium * 3.0);
 
     /* we place the tremolo bars starting slightly before the
      *  notehead, and end it slightly after, drawing above the
@@ -5192,10 +5189,15 @@ void TLayout::layout(TremoloBar* item, LayoutContext&)
     for (const PitchValue& v : item->points()) {
         polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
     }
-    item->setPolygon(polygon);
+    ldata->polygon = polygon;
 
     double w = item->lineWidth().val();
-    item->setbbox(item->polygon().boundingRect().adjusted(-w, -w, w, w));
+    ldata->setbbox(ldata->polygon.boundingRect().adjusted(-w, -w, w, w));
+}
+
+void TLayout::layout(TremoloBar* item, LayoutContext& ctx)
+{
+    layoutTremoloBar(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
