@@ -299,11 +299,19 @@ HRESULT WasapiAudioClient::configureDeviceInternal() noexcept
         logWAVEFORMATEX(m_mixFormat.get());
 
         if (m_useClosestSupportedFormat) {
+            LOGI() << "WASAPI: Querying closest supported format";
+
             unique_cotaskmem_ptr<WAVEFORMATEX> closestSupported;
             m_audioClient->IsFormatSupported(AUDCLNT_SHAREMODE_SHARED, m_mixFormat.get(), closestSupported.put());
 
-            logWAVEFORMATEX(closestSupported.get());
-            m_mixFormat = std::move(closestSupported);
+            // According to the documentation, closestSupported may be null
+            if (closestSupported) {
+                LOGI() << "WASAPI: Closest supported format:";
+                logWAVEFORMATEX(closestSupported.get());
+                m_mixFormat = std::move(closestSupported);
+            } else {
+                LOGW() << "WASAPI: Could not query closest supported format";
+            }
         }
 
         if (!audioProps.bIsOffload) {

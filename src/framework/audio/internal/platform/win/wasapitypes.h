@@ -74,6 +74,10 @@ struct unique_cotaskmem_ptr
         return *this;
     }
 
+    operator bool() const {
+        return m_p;
+    }
+
     T* operator->() { return m_p; }
     T* get() { return m_p; }
     T** put() { return &m_p; }
