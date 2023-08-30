@@ -13083,7 +13083,7 @@ a eșuat: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="996"/>
-        <source>Ionian</source>
+        <source>Aeolian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

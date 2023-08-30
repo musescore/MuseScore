@@ -13166,7 +13166,7 @@ feilet: %2</translation>
         <translation>Jonisk</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
         <translation>Lokrisk</translation>
     </message>

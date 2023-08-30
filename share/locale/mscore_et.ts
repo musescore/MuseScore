@@ -13116,7 +13116,7 @@ avamine ebaõnnestus: %2</translation>
         <translation>Ioonia</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
         <translation type="unfinished"></translation>
     </message>

@@ -13144,7 +13144,7 @@ failed: %2</source>
         <translation>아이오니안</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
         <translation>로크리안</translation>
     </message>

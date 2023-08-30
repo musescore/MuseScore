@@ -13179,7 +13179,7 @@ je spodletelo: %2</translation>
         <translation>Jonski</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
         <translation>Lokrijski</translation>
     </message>

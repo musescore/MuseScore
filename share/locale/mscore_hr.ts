@@ -13051,7 +13051,7 @@ failed: %2</source>
     </message>
     <message>
         <location filename="../../mscore/inspector/inspector.cpp" line="996"/>
-        <source>Ionian</source>
+        <source>Aeolian</source>
         <translation type="unfinished"></translation>
     </message>
     <message>

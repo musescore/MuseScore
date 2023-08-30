@@ -13174,7 +13174,7 @@ a échoué : %2</translation>
         <translation>Ionien</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
         <translation>Locrien</translation>
     </message>

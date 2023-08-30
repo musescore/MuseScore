@@ -13184,7 +13184,7 @@ failed: %2</source>
         <translation>Ионийский</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
         <translation>Локрийский</translation>
     </message>

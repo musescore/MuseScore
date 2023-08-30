@@ -13155,7 +13155,7 @@ failed: %2</source>
         <translation>伊奧尼亞調式</translation>
     </message>
     <message>
-        <location filename="../../mscore/inspector/inspector.cpp" line="997"/>
+        <location filename="../../mscore/inspector/inspector.cpp" line="998"/>
         <source>Locrian</source>
         <translation>洛克利亞調式</translation>
     </message>
