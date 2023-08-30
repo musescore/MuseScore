@@ -45,4 +45,6 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/arpeggiolayout.h
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.cpp
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.h
+    ${CMAKE_CURRENT_LIST_DIR}/autoplace.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/autoplace.h
 )

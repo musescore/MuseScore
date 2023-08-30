@@ -62,6 +62,7 @@
 #include "arpeggiolayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
+#include "autoplace.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -1036,7 +1037,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
                     staffBotY = a->y() + a->height() + minDist;
                 }
             }
-            a->doAutoplace();
+            Autoplace::doAutoplace(a, a->mutLayoutData());
         }
     }
 

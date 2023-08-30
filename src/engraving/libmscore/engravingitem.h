@@ -215,8 +215,6 @@ public:
 
     Spatium minDistance() const { return m_minDistance; }
     void setMinDistance(Spatium v) { m_minDistance = v; }
-    OffsetChange offsetChanged() const { return m_offsetChanged; }
-    void setOffsetChanged(bool v, bool absolute = true, const PointF& diff = PointF());
 
     virtual PointF pagePos() const;            ///< position in page coordinates
     virtual PointF canvasPos() const;          ///< position in canvas coordinates
@@ -478,14 +476,6 @@ public:
     virtual void triggerLayoutAll() const;
     virtual void drawEditMode(draw::Painter* painter, EditData& editData, double currentViewScaling);
 
-    void autoplaceSegmentElement(bool above, bool add);          // helper functions
-    void autoplaceMeasureElement(bool above, bool add);
-    void autoplaceSegmentElement(bool add = true) { autoplaceSegmentElement(placeAbove(), add); }
-    void autoplaceMeasureElement(bool add = true) { autoplaceMeasureElement(placeAbove(), add); }
-    void autoplaceCalculateOffset(mu::RectF& r, double minDistance);
-    double rebaseOffset(bool nox = true);
-    bool rebaseMinDistance(double& md, double& yd, double sp, double rebase, bool above, bool fix);
-
     double styleP(Sid idx) const;
 
     bool colorsInversionEnabled() const;
@@ -493,13 +483,22 @@ public:
 
     std::pair<int, float> barbeat() const;
 
+    struct Autoplace {
+        OffsetChange offsetChanged = OffsetChange::NONE;     // set by user actions that change offset, used by autoplace
+        PointF changedPos;                // position set when changing offset
+    };
+
     struct LayoutData {
         virtual ~LayoutData() = default;
+
+        Autoplace autoplace;
 
         bool isSkipDraw = false;
         double mag = 1.0;           // standard magnification (derived value)
         PointF pos;                 // Reference position, relative to _parent, set by autoplace
         RectF bbox;                 // Bounding box relative to _pos + _offset
+
+        void setSkipDraw(bool val) { isSkipDraw = val; }
 
         void setMag(double val) { mag = val; }
 
@@ -513,6 +512,8 @@ public:
 
         void setbbox(const mu::RectF& r) { bbox = r; }
         void addbbox(const mu::RectF& r) { bbox.unite(r); }
+
+        OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
     private:
         inline void doSetPos(double x, double y)
@@ -556,6 +557,18 @@ public:
 
     void setMag(double val) { mutLayoutData()->mag = val; }
 
+    // autoplace
+    OffsetChange offsetChanged() const { return layoutData()->offsetChanged(); }
+    void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
+    void autoplaceSegmentElement(bool above, bool add);          // helper functions
+    void autoplaceMeasureElement(bool above, bool add);
+    void autoplaceSegmentElement(bool add = true) { autoplaceSegmentElement(placeAbove(), add); }
+    void autoplaceMeasureElement(bool add = true) { autoplaceMeasureElement(placeAbove(), add); }
+    double rebaseOffset(bool nox = true);
+    bool rebaseMinDistance(double& md, double& yd, double sp, double rebase, bool above, bool fix);
+
+    //! ---------------------
+
 protected:
     EngravingItem(const ElementType& type, EngravingObject* parent = nullptr, ElementFlags = ElementFlag::NOTHING);
     EngravingItem(const EngravingItem&);
@@ -591,8 +604,7 @@ private:
     bool m_accessibleEnabled = false;
 
     PointF m_offset;                    // offset from reference position, set by autoplace or user
-    OffsetChange m_offsetChanged = OffsetChange::NONE; // set by user actions that change offset, used by autoplace
-    PointF m_changedPos;                // position set when changing offset
+
     Spatium m_minDistance;              // autoplace min distance
     mutable ElementFlags m_flags;
 

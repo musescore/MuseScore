@@ -169,8 +169,6 @@ public:
 
     bool isBasicArticulation() const;
 
-    void doAutoplace();
-
     void styleChanged() override;
 
     bool isOnCrossBeamSide() const;

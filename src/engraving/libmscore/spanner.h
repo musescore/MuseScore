@@ -109,7 +109,6 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
     void triggerLayout() const override;
-    void autoplaceSpannerSegment();
 
 protected:
 

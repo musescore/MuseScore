@@ -598,66 +598,6 @@ String Articulation::accessibleInfo() const
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedTypeUserName());
 }
 
-//---------------------------------------------------------
-//   doAutoplace
-//    check for collisions
-//---------------------------------------------------------
-
-void Articulation::doAutoplace()
-{
-    // rebase vertical offset on drag
-    double rebase = 0.0;
-    if (offsetChanged() != OffsetChange::NONE) {
-        rebase = rebaseOffset();
-    }
-
-    if (autoplace() && explicitParent()) {
-        Segment* s = segment();
-        Measure* m = measure();
-        staff_idx_t si = staffIdx();
-
-        double sp = style().spatium();
-        double md = minDistance().val() * sp;
-
-        SysStaff* ss = m->system()->staff(si);
-
-        Shape thisShape = shape().translate(chordRest()->pos() + m->pos() + s->pos() + pos());
-
-        for (ShapeElement& shapeEl : thisShape) {
-            RectF r = shapeEl;
-
-            double d = 0.0;
-            bool above = up();
-            SkylineLine sk(!above);
-            if (above) {
-                sk.add(r.x(), r.bottom(), r.width());
-                d = sk.minDistance(ss->skyline().north());
-            } else {
-                sk.add(r.x(), r.top(), r.width());
-                d = ss->skyline().south().minDistance(sk);
-            }
-
-            if (d > -md) {
-                double yd = d + md;
-                if (above) {
-                    yd *= -1.0;
-                }
-                if (offsetChanged() != OffsetChange::NONE) {
-                    // user moved element within the skyline
-                    // we may need to adjust minDistance, yd, and/or offset
-                    //bool inStaff = placeAbove() ? r.bottom() + rebase > 0.0 : r.top() + rebase < staff()->height();
-                    if (rebaseMinDistance(md, yd, sp, rebase, above, true)) {
-                        r.translate(0.0, rebase);
-                    }
-                }
-                movePosY(yd);
-                thisShape.translateY(yd);
-            }
-        }
-    }
-    setOffsetChanged(false);
-}
-
 void Articulation::setupShowOnTabStyles()
 {
     /// staccato
