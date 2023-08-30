@@ -59,9 +59,9 @@ public:
 
     Symbol* clone() const override { return new Symbol(*this); }
 
-    void setSym(SymId s, const std::shared_ptr<IEngravingFont>& sf = nullptr) { _sym  = s; _scoreFont = sf; }
-    SymId sym() const { return _sym; }
-    const std::shared_ptr<IEngravingFont>& scoreFont() const { return _scoreFont; }
+    void setSym(SymId s, const std::shared_ptr<IEngravingFont>& sf = nullptr) { m_sym  = s; m_scoreFont = sf; }
+    SymId sym() const { return m_sym; }
+    const std::shared_ptr<IEngravingFont>& scoreFont() const { return m_scoreFont; }
     mu::AsciiStringView symName() const;
 
     String accessibleInfo() const override;
@@ -73,8 +73,8 @@ public:
     virtual Segment* segment() const { return (Segment*)explicitParent(); }
 
 protected:
-    SymId _sym = SymId::noSym;
-    std::shared_ptr<IEngravingFont> _scoreFont = nullptr;
+    SymId m_sym = SymId::noSym;
+    std::shared_ptr<IEngravingFont> m_scoreFont = nullptr;
 };
 
 //---------------------------------------------------------

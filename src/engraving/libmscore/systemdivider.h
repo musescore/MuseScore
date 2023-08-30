@@ -36,26 +36,25 @@ class SystemDivider final : public Symbol
     DECLARE_CLASSOF(ElementType::SYSTEM_DIVIDER)
 
 public:
-    enum class Type {
-        LEFT, RIGHT
-    };
-
-private:
-    Type _dividerType;
-
-public:
     SystemDivider(System* parent = 0);
     SystemDivider(const SystemDivider&);
 
     SystemDivider* clone() const override { return new SystemDivider(*this); }
 
-    Type dividerType() const { return _dividerType; }
+    enum class Type {
+        LEFT, RIGHT
+    };
+
+    Type dividerType() const { return m_dividerType; }
     void setDividerType(Type v);
 
     mu::RectF drag(EditData&) override;
 
     Segment* segment() const override { return nullptr; }
     System* system() const { return (System*)explicitParent(); }
+
+private:
+    Type m_dividerType = Type::LEFT;
 };
 } // namespace mu::engraving
 

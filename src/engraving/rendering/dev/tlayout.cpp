@@ -4504,18 +4504,24 @@ void TLayout::layout(FSymbol* item, LayoutContext&)
     ldata->setbbox(mu::draw::FontMetrics::boundingRect(item->font(), item->toString()));
 }
 
-void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
+static void layoutSystemDivider(const SystemDivider* item, const LayoutContext& ctx, SystemDivider::LayoutData* ldata)
 {
     SymId sid;
 
+    //! NOTE Look like, this is should not be here, maybe it should be in type setter.
     if (item->dividerType() == SystemDivider::Type::LEFT) {
         sid = SymNames::symIdByName(ctx.conf().styleSt(Sid::dividerLeftSym));
     } else {
         sid = SymNames::symIdByName(ctx.conf().styleSt(Sid::dividerRightSym));
     }
-    item->setSym(sid, ctx.engravingFont());
+    const_cast<SystemDivider*>(item)->setSym(sid, ctx.engravingFont());
 
-    layout(static_cast<Symbol*>(item), ctx);
+    layoutSymbol(item, ctx, ldata);
+}
+
+void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
+{
+    layoutSystemDivider(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(SystemText* item, LayoutContext& ctx)
