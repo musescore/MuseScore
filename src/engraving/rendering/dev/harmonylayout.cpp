@@ -34,6 +34,7 @@
 #include "libmscore/system.h"
 
 #include "tlayout.h"
+#include "autoplace.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -50,7 +51,7 @@ void HarmonyLayout::layoutHarmonies(const std::vector<Segment*>& sl, LayoutConte
                 // But that layout (if it happens at all) does not do autoplace,
                 // so we need the full layout here.
                 TLayout::layout(h, ctx);
-                h->autoplaceSegmentElement();
+                Autoplace::autoplaceSegmentElement(h, h->mutLayoutData());
             }
         }
     }

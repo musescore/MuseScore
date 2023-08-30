@@ -32,6 +32,7 @@
 #include "libmscore/system.h"
 
 #include "tlayout.h"
+#include "autoplace.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -645,17 +646,18 @@ void LyricsLayout::layoutLyrics(LayoutContext& ctx, System* system)
                         if (cr) {
                             staff_idx_t nA = 0;
                             for (Lyrics* l : cr->lyrics()) {
+                                Lyrics::LayoutData* ldata = l->mutLayoutData();
                                 // user adjusted offset can possibly change placement
-                                if (l->offsetChanged() != OffsetChange::NONE) {
+                                if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                                     PlacementV p = l->placement();
-                                    l->rebaseOffset();
+                                    Autoplace::rebaseOffset(l, ldata);
                                     if (l->placement() != p) {
                                         l->undoResetProperty(Pid::AUTOPLACE);
                                         //l->undoResetProperty(Pid::OFFSET);
                                         //l->layout();
                                     }
                                 }
-                                l->setOffsetChanged(false);
+                                Autoplace::setOffsetChanged(l, ldata, false);
                                 if (l->placeAbove()) {
                                     ++nA;
                                 }

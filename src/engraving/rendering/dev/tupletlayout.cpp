@@ -33,6 +33,7 @@
 #include "libmscore/measure.h"
 
 #include "tlayout.h"
+#include "autoplace.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -513,7 +514,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     item->setbbox(r);
 
     if (outOfStaff && !item->cross()) {
-        item->autoplaceMeasureElement(item->isUp(), /* add to skyline */ true);
+        Autoplace::autoplaceMeasureElement(item, item->mutLayoutData(), item->isUp(), /* add to skyline */ true);
     }
 }
 

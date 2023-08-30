@@ -55,6 +55,7 @@
 #include "libmscore/volta.h"
 
 #include "tlayout.h"
+#include "autoplace.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "harmonylayout.h"
@@ -978,7 +979,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                     if (e->isDynamic()) {
                         toDynamic(e)->manageBarlineCollisions();
                     }
-                    e->autoplaceSegmentElement(false);
+                    Autoplace::autoplaceSegmentElement(e, e->mutLayoutData(), false);
                     dynamicsAndFigBass.push_back(e);
                 }
             }
