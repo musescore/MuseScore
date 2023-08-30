@@ -1039,7 +1039,7 @@ void NotationActionController::changeVoice(voice_idx_t voiceIndex)
     noteInput->setCurrentVoice(voiceIndex);
 
     if (!noteInput->isNoteInputMode()) {
-        interaction->changeSelectedNotesVoice(static_cast<int>(voiceIndex));
+        interaction->changeSelectionVoice(voiceIndex);
     }
 }
 

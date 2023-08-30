@@ -91,19 +91,20 @@ TEST_F(Engraving_ExchangevoicesTests, undoChangeVoice)
     EXPECT_TRUE(score);
     score->doLayout();
 
-    // do
-    score->deselectAll();
-    // select bottom note of all voice 1 chords
+    std::vector<Note*> notes;
+
     for (Segment* s = score->firstSegment(SegmentType::ChordRest); s; s = s->next1()) {
         ChordRest* cr = static_cast<ChordRest*>(s->element(0));
         if (cr && cr->type() == ElementType::CHORD) {
             Chord* c = toChord(cr);
-            score->select(c->downNote(), SelectType::ADD);
+            Note* note = c->downNote();
+            notes.push_back(note);
         }
     }
+
     // change voice
     score->startCmd();
-    score->changeSelectedNotesVoice(1);
+    score->changeNotesVoice(notes, 1);
     score->endCmd(false, /*layoutAllParts = */ true);
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, writeFile1, reference1));
 

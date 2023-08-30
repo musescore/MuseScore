@@ -5055,20 +5055,18 @@ String Score::nextRehearsalMarkText(RehearsalMark* previous, RehearsalMark* curr
 }
 
 //---------------------------------------------------------
-//   changeSelectedNotesVoice
-//    moves selected notes into specified voice if possible
+//   changeNotesVoice
+//    moves notes into specified voice if possible
 //---------------------------------------------------------
 
-void Score::changeSelectedNotesVoice(voice_idx_t voice)
+void Score::changeNotesVoice(const std::vector<Note*>& notes, voice_idx_t newVoiceIdx)
 {
-    std::vector<EngravingItem*> el;
-    std::vector<EngravingItem*> oel = selection().elements();       // make copy
-    for (EngravingItem* e : oel) {
-        if (e->type() != ElementType::NOTE) {
-            continue;
-        }
+    if (notes.empty()) {
+        return;
+    }
 
-        Note* note   = toNote(e);
+    std::vector<EngravingItem*> el;
+    for (Note* note : notes) {
         Chord* chord = note->chord();
 
         // move grace notes with main chord only
@@ -5076,11 +5074,11 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
             continue;
         }
 
-        if (chord->voice() != voice) {
+        if (chord->voice() != newVoiceIdx) {
             Segment* s       = chord->segment();
             Measure* m       = s->measure();
             size_t notes     = chord->notes().size();
-            track_idx_t dstTrack     = chord->staffIdx() * VOICES + voice;
+            track_idx_t dstTrack     = chord->staffIdx() * VOICES + newVoiceIdx;
             ChordRest* dstCR = toChordRest(s->element(dstTrack));
             Chord* dstChord  = nullptr;
 
@@ -5138,7 +5136,7 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
                     dstChord->setTicks(chord->ticks());
                     dstChord->setParent(s);
                     // makeGapVoice will not back-fill an empty voice
-                    if (voice && !dstCR) {
+                    if (newVoiceIdx && !dstCR) {
                         expandVoice(s, /*m->first(SegmentType::ChordRest,*/ dstTrack);
                     }
                     makeGapVoice(s, dstTrack, chord->actualTicks(), s->tick());

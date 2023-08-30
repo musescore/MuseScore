@@ -4096,7 +4096,7 @@ void NotationInteraction::addFret(int fretIndex)
     apply();
 }
 
-void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
+void NotationInteraction::changeSelectionVoice(voice_idx_t voiceIndex)
 {
     if (selection()->isNone()) {
         return;
@@ -4106,8 +4106,32 @@ void NotationInteraction::changeSelectedNotesVoice(int voiceIndex)
         return;
     }
 
+    //! NOTE: currently, only notes and dynamics/hairpins are supported
+    std::vector<Note*> notes;
+    std::vector<EngravingItem*> otherSupportedItems;
+
+    for (EngravingItem* item : selection()->elements()) {
+        if (item->isNote()) {
+            notes.push_back(toNote(item));
+        } else if (item->isDynamic() || item->isHairpin()) {
+            otherSupportedItems.push_back(item);
+        } else if (item->isHairpinSegment()) {
+            const HairpinSegment* seg = toHairpinSegment(item);
+            otherSupportedItems.push_back(seg->hairpin());
+        }
+    }
+
     startEdit();
-    score()->changeSelectedNotesVoice(voiceIndex);
+
+    if (!notes.empty()) {
+        score()->changeNotesVoice(notes, voiceIndex);
+    }
+
+    for (EngravingItem* item : otherSupportedItems) {
+        item->undoChangeProperty(Pid::VOICE, voiceIndex);
+        item->undoResetProperty(Pid::APPLY_TO_ALL_VOICES);
+    }
+
     apply();
 }
 
