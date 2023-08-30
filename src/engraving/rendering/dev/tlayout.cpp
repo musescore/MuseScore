@@ -4530,19 +4530,19 @@ void TLayout::layout(SystemText* item, LayoutContext& ctx)
     item->autoplaceSegmentElement();
 }
 
-void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
+static void layoutTabDurationSymbol(const TabDurationSymbol* item, const LayoutContext&, TabDurationSymbol::LayoutData* ldata)
 {
     static constexpr double TAB_RESTSYMBDISPL = 2.0;
 
     if (!item->tab()) {
-        item->setbbox(RectF());
+        ldata->setbbox(RectF());
         return;
     }
     double _spatium    = item->spatium();
     double hbb, wbb, xbb, ybb;   // bbox sizes
     double xpos, ypos;           // position coords
 
-    item->setBeamGrid(TabBeamGrid::NONE);
+    ldata->beamGrid = TabBeamGrid::NONE;
     Chord* chord = item->explicitParent() && item->explicitParent()->isChord() ? toChord(item->explicitParent()) : nullptr;
 // if no chord (shouldn't happens...) or not a special beam mode, layout regular symbol
     if (!chord || !chord->isChord()
@@ -4571,22 +4571,27 @@ void TLayout::layout(TabDurationSymbol* item, LayoutContext&)
         xpos  = 0.75 * _spatium;                        // conventional centring of stem on fret marks
         ypos  = item->tab()->durationGridYOffset();      // stem start is at bottom
         if (chord->beamMode() == BeamMode::BEGIN) {
-            item->setBeamGrid(TabBeamGrid::INITIAL);
-            item->setBeamLength(0.0);
+            ldata->beamGrid = TabBeamGrid::INITIAL;
+            ldata->beamLength = 0.0;
         } else if (chord->beamMode() == BeamMode::MID || chord->beamMode() == BeamMode::END) {
-            item->setBeamLevel(static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel));
-            item->setBeamGrid(item->beamLevel() < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
+            ldata->beamLevel = (static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel));
+            ldata->beamGrid = (item->beamLevel() < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
             // _beamLength and bbox x and width will be set in layout2(),
             // once horiz. positions of chords are known
         }
     }
 // set this' mag from parent chord mag (include staff mag)
     double mag = chord != nullptr ? chord->mag() : 1.0;
-    item->setMag(mag);
+    ldata->setMag(mag);
     mag = item->magS();         // local mag * score mag
 // set magnified bbox and position
-    item->bbox().setRect(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
-    item->setPos(xpos * mag, ypos * mag);
+    ldata->bbox.setRect(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
+    ldata->setPos(xpos * mag, ypos * mag);
+}
+
+void TLayout::layout(TabDurationSymbol* item, LayoutContext& ctx)
+{
+    layoutTabDurationSymbol(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(TempoText* item, LayoutContext& ctx)

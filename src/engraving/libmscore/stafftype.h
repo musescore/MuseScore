@@ -455,14 +455,6 @@ public:
 
     bool isEditable() const override { return false; }
 
-    TabBeamGrid beamGrid() const { return m_beamGrid; }
-    void setBeamGrid(TabBeamGrid g) { m_beamGrid = g; }
-
-    double beamLength() const { return m_beamLength; }
-    void setBeamLength(double l) { m_beamLength = l; }
-    int beamLevel() const { return m_beamLevel; }
-    void setBeamLevel(int l) { m_beamLevel = l; }
-
     void layout2();                 // second step of layout: after horiz. pos. are defined, compute width of 'grid beams'
 
     const StaffType* tab() const { return m_tab; }
@@ -476,11 +468,24 @@ public:
     bool isRepeat() const { return m_repeat; }
     void setRepeat(bool val) { m_repeat = val; }
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        TabBeamGrid beamGrid = TabBeamGrid::NONE;         // value for special 'English' grid display
+        double beamLength = 0.0;                          // if _grid==MEDIALFINAL, length of the beam toward previous grid element
+        int beamLevel = 0.0;                                // if _grid==MEDIALFINAL, the number of beams
+    };
+    DECLARE_LAYOUTDATA_METHODS(TabDurationSymbol);
+
+    //! --- Old Interface ---
+    TabBeamGrid beamGrid() const { return layoutData()->beamGrid; }
+    void setBeamGrid(TabBeamGrid g) { mutLayoutData()->beamGrid = g; }
+    double beamLength() const { return layoutData()->beamLength; }
+    void setBeamLength(double l) { mutLayoutData()->beamLength = l; }
+    int beamLevel() const { return layoutData()->beamLevel; }
+    void setBeamLevel(int l) { mutLayoutData()->beamLevel = l; }
+    //! ---------------------
+
 private:
 
-    double m_beamLength = 0.0;                      // if _grid==MEDIALFINAL, length of the beam toward previous grid element
-    int m_beamLevel = 0;                            // if _grid==MEDIALFINAL, the number of beams
-    TabBeamGrid m_beamGrid = TabBeamGrid::NONE;     // value for special 'English' grid display
     const StaffType* m_tab = nullptr;
     String m_text;
     bool m_repeat = false;

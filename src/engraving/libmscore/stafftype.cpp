@@ -28,13 +28,12 @@
 #include "draw/types/pen.h"
 #include "rw/xmlreader.h"
 #include "types/typesconv.h"
+#include "style/style.h"
 
 #include "chord.h"
-#include "measure.h"
 #include "mscore.h"
 #include "navigate.h"
 #include "staff.h"
-#include "score.h"
 
 #include "log.h"
 
@@ -798,8 +797,6 @@ TabDurationSymbol::TabDurationSymbol(ChordRest* parent)
     : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
-    m_beamGrid   = TabBeamGrid::NONE;
-    m_beamLength = 0.0;
     m_tab        = 0;
     m_text       = String();
 }
@@ -808,8 +805,6 @@ TabDurationSymbol::TabDurationSymbol(ChordRest* parent, const StaffType* tab, Du
     : EngravingItem(ElementType::TAB_DURATION_SYMBOL, parent, ElementFlag::NOT_SELECTABLE)
 {
     setGenerated(true);
-    m_beamGrid   = TabBeamGrid::NONE;
-    m_beamLength = 0.0;
     setDuration(type, dots, tab);
 }
 
@@ -829,8 +824,9 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 
 void TabDurationSymbol::layout2()
 {
+    LayoutData* ldata = mutLayoutData();
     // if not within a TAB or not a MEDIALFINAL grid element, do nothing
-    if (!m_tab || m_beamGrid != TabBeamGrid::MEDIALFINAL) {
+    if (!m_tab || ldata->beamGrid != TabBeamGrid::MEDIALFINAL) {
         return;
     }
 
@@ -844,11 +840,11 @@ void TabDurationSymbol::layout2()
     double beamLen     = prevChord->pagePos().x() - chord->pagePos().x();            // negative
     // page pos. difference already includes any magnification in effect:
     // scale it down, as it will be magnified again during drawing
-    m_beamLength = beamLen / mags;
+    ldata->beamLength = beamLen / mags;
     // update bbox x and w, but keep current y and h
-    bbox().setLeft(beamLen);
+    ldata->bbox.setLeft(beamLen);
     // set bbox width to half a stem width (magnified) plus beam length (already magnified)
-    bbox().setWidth(m_tab->_durationFonts[m_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
+    ldata->bbox.setWidth(m_tab->_durationFonts[m_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
 }
 
 //---------------------------------------------------------
