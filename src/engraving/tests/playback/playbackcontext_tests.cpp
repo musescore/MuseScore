@@ -25,8 +25,8 @@
 
 #include "utils/scorerw.h"
 
-#include "engraving/libmscore/part.h"
-#include "engraving/libmscore/hairpin.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/hairpin.h"
 
 #include "playback/playbackcontext.h"
 #include "playback/utils/arrangementutils.h"

@@ -302,6 +302,7 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <applyToAllVoices>1</applyToAllVoices>
             <text>dyn <sym>dynamicForte</sym></text>
             </Dynamic>
           <Rest>

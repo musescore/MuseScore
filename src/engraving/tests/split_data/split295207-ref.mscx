@@ -95,6 +95,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>1</subtype>
+              <applyToAllVoices>1</applyToAllVoices>
               </HairPin>
             <next>
               <location>

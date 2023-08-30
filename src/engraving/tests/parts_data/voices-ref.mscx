@@ -165,6 +165,7 @@
           <Dynamic>
             <subtype>pp</subtype>
             <velocity>33</velocity>
+            <applyToAllVoices>1</applyToAllVoices>
             <linkedMain/>
             </Dynamic>
           <Rest>
@@ -251,6 +252,7 @@
             <HairPin>
               <subtype>0</subtype>
               <veloChange>10</veloChange>
+              <applyToAllVoices>1</applyToAllVoices>
               <beginText>cresc.</beginText>
               <continueText>(cresc.)</continueText>
               <linkedMain/>
@@ -1271,6 +1273,7 @@
               <HairPin>
                 <subtype>0</subtype>
                 <veloChange>10</veloChange>
+                <applyToAllVoices>1</applyToAllVoices>
                 <beginText>cresc.</beginText>
                 <continueText>(cresc.)</continueText>
                 <linked>

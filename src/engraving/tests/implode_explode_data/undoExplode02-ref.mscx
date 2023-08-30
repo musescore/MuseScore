@@ -249,6 +249,7 @@
           <Dynamic>
             <subtype>mf</subtype>
             <velocity>80</velocity>
+            <applyToAllVoices>1</applyToAllVoices>
             </Dynamic>
           <Chord>
             <durationType>half</durationType>
@@ -354,6 +355,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <applyToAllVoices>1</applyToAllVoices>
               </HairPin>
             <next>
               <location>
@@ -602,6 +604,7 @@
           <Dynamic>
             <subtype>f</subtype>
             <velocity>96</velocity>
+            <applyToAllVoices>1</applyToAllVoices>
             </Dynamic>
           <Chord>
             <durationType>half</durationType>
