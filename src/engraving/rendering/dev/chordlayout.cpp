@@ -3063,6 +3063,7 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
         if (!rest1->visible() || !rest1->autoplace()) {
             continue;
         }
+
         RestVerticalClearance& rest1Clearance = rest1->verticalClearance();
         Shape shape1 = rest1->shape().translated(rest1->pos() - rest1->offset());
 
@@ -3163,6 +3164,24 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
             rest2->verticalClearance().setLocked(true);
             TLayout::layout(beam1, ctx);
             TLayout::layout(beam2, ctx);
+        }
+
+        bool rest1IsWholeOrHalf = rest1->isWholeRest() || rest1->durationType() == DurationType::V_HALF;
+        bool rest2IsWholeOrHalf = rest2->isWholeRest() || rest2->durationType() == DurationType::V_HALF;
+        double y = 0.0;
+        int line = 0;
+
+        if (rest1IsWholeOrHalf) {
+            Rest::LayoutData* rest1LayoutData = rest1->mutLayoutData();
+            y = rest1->pos().y();
+            line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
+            rest1->updateSymbol(line, lines, rest1LayoutData);
+        }
+        if (rest2IsWholeOrHalf) {
+            Rest::LayoutData* rest2LayoutData = rest2->mutLayoutData();
+            y = rest2->pos().y();
+            line = y < 0 ? floor(y / lineDistance) : floor(y / lineDistance);
+            rest2->updateSymbol(line, lines, rest2LayoutData);
         }
     }
 }
