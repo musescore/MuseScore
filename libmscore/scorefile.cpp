@@ -868,14 +868,14 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
 
       QByteArray sbuf = uz.fileData("score_style.mss"); // exists in Mu4 scores only
       if (!sbuf.isEmpty()) {
-            XmlReader e(sbuf);
-            while (e.readNextStartElement()) {
-                  if (e.name() == "museScore") {
-                        while (e.readNextStartElement()) {
-                              if (e.name() == "Style")
-                                    masterScore()->style().load(e);
+            XmlReader el(sbuf);
+            while (el.readNextStartElement()) {
+                  if (el.name() == "museScore") {
+                        while (el.readNextStartElement()) {
+                              if (el.name() == "Style")
+                                    masterScore()->style().load(el);
                               else
-                                    e.unknown();
+                                    el.unknown();
                               }
                         }
                   }

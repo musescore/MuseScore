@@ -4189,8 +4189,8 @@ void Score::cmdApplyInputState()
       // apply accidental state
       AccidentalType acc = _is.accidentalType();
       if (acc != AccidentalType::NONE && e->isNote()) {
-            Note* n = toNote(e);
-            n->setAccidentalType(acc);
+            Note* no = toNote(e);
+            no->setAccidentalType(acc);
             _is.setAccidentalType(AccidentalType::NONE);
             }
 

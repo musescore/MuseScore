@@ -2181,14 +2181,14 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, int staff, bool visib
                   int step = (po - line) % 7;
                   _xml.tag("key-step", QString(QChar(table2[step])));
                   _xml.tag("key-alter", accSymId2alter(ksym.sym));
-                  QString tagName = "key-accidental";
+                  QString tag = "key-accidental";
                   QString s = accSymId2MxmlString(ksym.sym);
                   //qDebug(" keysym sym %d spos %g,%g pos %g,%g -> line %d step %d s '%s' name '%s'",
                   //       static_cast<int>(ksym.sym), ksym.spos.x(), ksym.spos.y(), ksym.pos.x(), ksym.pos.y(),
                   //       line, step, qPrintable(s), Sym::id2name(ksym.sym));
                   if (s == "other")
-                        tagName += QString(" smufl=\"%1\"").arg(Sym::id2name(ksym.sym));
-                  _xml.tag(tagName, s);
+                        tag += QString(" smufl=\"%1\"").arg(Sym::id2name(ksym.sym));
+                  _xml.tag(tag, s);
                   }
             }
       else {

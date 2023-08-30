@@ -743,7 +743,7 @@ bool areTupletChordsConsistent(
       {
       auto it = chords.begin();
       const bool isInTuplet = (*it)->second.isInTuplet;
-      for (std::next(it); it != chords.end(); ++it) {
+      for ((void)std::next(it); it != chords.end(); ++it) {
             if (isInTuplet && (!(*it)->second.isInTuplet
                                || (*it)->second.tuplet != (*chords.begin())->second.tuplet)) {
                   return false;
