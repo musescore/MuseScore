@@ -117,6 +117,17 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
+    struct LayoutData : public EngravingItem::LayoutData {
+        SymIdList ns;
+        SymIdList ds;
+        mu::PointF pz;
+        mu::PointF pn;
+        mu::PointF pointLargeLeftParen;
+        mu::PointF pointLargeRightParen;
+    };
+    DECLARE_LAYOUTDATA_METHODS(TimeSig);
+
+    //! --- Old Interface ---
     struct DrawArgs {
         SymIdList ns;
         SymIdList ds;
@@ -126,8 +137,18 @@ public:
         mu::PointF pointLargeRightParen;
     };
 
-    const DrawArgs& drawArgs() const { return m_drawArgs; }
-    void setDrawArgs(const DrawArgs& args) { m_drawArgs = args; }
+    void setDrawArgs(const DrawArgs& val)
+    {
+        LayoutData* ldata = mutLayoutData();
+        ldata->ns = val.ns;
+        ldata->ds = val.ds;
+        ldata->pz = val.pz;
+        ldata->pn = val.pn;
+        ldata->pointLargeLeftParen = val.pointLargeLeftParen;
+        ldata->pointLargeRightParen = val.pointLargeRightParen;
+    }
+
+    //! --------------------
 
 protected:
     void added() override;
@@ -140,8 +161,6 @@ private:
 
     String m_numeratorString;       // calculated from actualSig() if !customText
     String m_denominatorString;
-
-    DrawArgs m_drawArgs;
 
     Fraction m_sig;
     Fraction m_stretch;        // localSig / globalSig
