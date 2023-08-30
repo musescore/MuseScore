@@ -4421,8 +4421,8 @@ static void layoutStemSlash(const StemSlash* item, const LayoutContext& ctx, Ste
     ldata->line = LineF(PointF(startX, startY), PointF(endX, endY));
     ldata->stemWidth = ctx.conf().styleMM(Sid::stemSlashThickness) * graceNoteMag;
 
-    RectF bbox = RectF(item->line().p1(), item->line().p2()).normalized();
-    bbox = bbox.adjusted(-item->stemWidth() / 2, -item->stemWidth() / 2, item->stemWidth(), item->stemWidth());
+    RectF bbox = RectF(ldata->line.p1(), ldata->line.p2()).normalized();
+    bbox = bbox.adjusted(-ldata->stemWidth / 2, -ldata->stemWidth / 2, ldata->stemWidth, ldata->stemWidth);
     ldata->setbbox(bbox);
 }
 
