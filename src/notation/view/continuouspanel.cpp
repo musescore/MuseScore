@@ -23,7 +23,7 @@
 
 #include "continuouspanel.h"
 
-#include "engraving/rendering/stable/tlayout.h"
+#include "engraving/rendering/dev/tlayout.h"
 
 #include "libmscore/barline.h"
 #include "libmscore/factory.h"
@@ -46,6 +46,7 @@
 #include "log.h"
 
 using namespace mu::notation;
+using namespace mu::engraving::rendering::dev;
 
 static constexpr bool ACCESSIBILITY_DISABLED = false;
 
@@ -360,8 +361,8 @@ void ContinuousPanel::paint(mu::draw::Painter& painter, const NotationViewContex
             newStaffLines.setParent(parent->measure());
             newStaffLines.setTrack(e->track());
             {
-                mu::engraving::rendering::stable::LayoutContext cntx(newStaffLines.score());
-                mu::engraving::rendering::stable::TLayout::layoutForWidth(&newStaffLines, bg.width(), cntx);
+                LayoutContext cntx(newStaffLines.score());
+                TLayout::layoutForWidth(&newStaffLines, bg.width(), cntx);
             }
             newStaffLines.setColor(color);
             scoreRender()->drawItem(&newStaffLines, &painter);
