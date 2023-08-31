@@ -86,7 +86,6 @@
 #include "libmscore/tremolo.h"
 #include "libmscore/tremolobar.h"
 #include "libmscore/trill.h"
-#include "libmscore/undo.h"
 #include "libmscore/vibrato.h"
 #include "libmscore/volta.h"
 
@@ -399,8 +398,8 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
     };
 
     for (MeasureRepeatInfo repeat: defaultPalette ? defaultMeasureRepeats : masterMeasureRepeats) {
-        auto rm = makeElement<MeasureRepeat>(gpaletteScore);
-        rm->setSymId(repeat.id);
+        std::shared_ptr<MeasureRepeat> rm = makeElement<MeasureRepeat>(gpaletteScore);
+        rm->mutLayoutData()->symId = repeat.id;
         rm->setNumMeasures(repeat.measuresCount);
         sp->appendElement(rm, SymNames::userNameForSymId(repeat.id));
     }

@@ -26,12 +26,10 @@
 
 #include "containers.h"
 
-#include "factory.h"
 #include "measure.h"
 #include "page.h"
 #include "score.h"
 #include "segment.h"
-#include "staff.h"
 #include "system.h"
 
 #include "log.h"
@@ -47,17 +45,17 @@ namespace mu::engraving {
 BSymbol::BSymbol(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
-    _align = { AlignH::LEFT, AlignV::BASELINE };
+    m_align = { AlignH::LEFT, AlignV::BASELINE };
 }
 
 BSymbol::BSymbol(const BSymbol& s)
     : EngravingItem(s)
 {
-    _align = s._align;
-    for (EngravingItem* e : s._leafs) {
+    m_align = s.m_align;
+    for (EngravingItem* e : s.m_leafs) {
         EngravingItem* ee = e->clone();
         ee->setParent(this);
-        _leafs.push_back(ee);
+        m_leafs.push_back(ee);
     }
 }
 
@@ -70,7 +68,7 @@ void BSymbol::add(EngravingItem* e)
     if (e->isSymbol() || e->isImage()) {
         e->setParent(this);
         e->setTrack(track());
-        _leafs.push_back(e);
+        m_leafs.push_back(e);
         toBSymbol(e)->setZ(z() - 1);        // draw on top of parent
         e->added();
     } else {
@@ -85,7 +83,7 @@ void BSymbol::add(EngravingItem* e)
 void BSymbol::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     func(data, this);
-    for (EngravingItem* e : _leafs) {
+    for (EngravingItem* e : m_leafs) {
         e->scanElements(data, func, all);
     }
 }
@@ -97,7 +95,7 @@ void BSymbol::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 void BSymbol::remove(EngravingItem* e)
 {
     if (e->isSymbol() || e->isImage()) {
-        if (mu::remove(_leafs, e)) {
+        if (mu::remove(m_leafs, e)) {
             e->removed();
         } else {
             LOGD("BSymbol::remove: element <%s> not found", e->typeName());
@@ -142,7 +140,7 @@ EngravingItem* BSymbol::drop(EditData& data)
 mu::RectF BSymbol::drag(EditData& ed)
 {
     RectF r(canvasBoundingRect());
-    for (const EngravingItem* e : _leafs) {
+    for (const EngravingItem* e : m_leafs) {
         r.unite(e->canvasBoundingRect());
     }
 
@@ -164,7 +162,7 @@ mu::RectF BSymbol::drag(EditData& ed)
     setOffset(PointF(x, y));
 
     r.unite(canvasBoundingRect());
-    for (const EngravingItem* e : _leafs) {
+    for (const EngravingItem* e : m_leafs) {
         r.unite(e->canvasBoundingRect());
     }
     return r;

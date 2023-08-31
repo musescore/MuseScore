@@ -22,8 +22,9 @@
 
 #include "mmrestrange.h"
 
+#include "style/style.h"
+
 #include "measure.h"
-#include "score.h"
 
 #include "log.h"
 
@@ -73,7 +74,7 @@ bool MMRestRange::setProperty(Pid id, const PropertyValue& val)
     switch (id) {
     case Pid::MMREST_RANGE_BRACKET_TYPE:
         setBracketType(MMRestRangeBracketType(val.toInt()));
-        setLayoutInvalid();
+        mutLayoutData()->layoutInvalid = true;
         triggerLayout();
         return true;
     default:

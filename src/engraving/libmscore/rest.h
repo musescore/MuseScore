@@ -148,12 +148,6 @@ public:
     void updateSymbol(int line, int lines, LayoutData* ldata) const;
     double symWidthNoLedgerLines(LayoutData* ldata) const;
 
-    //! --- Old Interface ---
-    const std::vector<Rest*>& mergedRests() const { return layoutData()->mergedRests; }
-    SymId sym() const { return layoutData()->sym; }
-    void setSym(SymId s) { mutLayoutData()->sym = s; }
-    //! ---------------------
-
 protected:
     Rest(const ElementType& type, Segment* parent = 0);
     Rest(const ElementType& type, Segment* parent, const TDuration&);

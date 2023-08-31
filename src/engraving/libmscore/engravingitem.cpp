@@ -2207,29 +2207,8 @@ double EngravingItem::mag() const
     return layoutData()->mag;
 }
 
-// autoplace
 void EngravingItem::setOffsetChanged(bool val, bool absolute, const PointF& diff)
 {
     rendering::dev::Autoplace::setOffsetChanged(this, mutLayoutData(), val, absolute, diff);
-}
-
-void EngravingItem::autoplaceSegmentElement(bool above, bool add)
-{
-    rendering::dev::Autoplace::autoplaceSegmentElement(this, mutLayoutData(), above, add);
-}
-
-void EngravingItem::autoplaceMeasureElement(bool above, bool add)
-{
-    rendering::dev::Autoplace::autoplaceMeasureElement(this, mutLayoutData(), above, add);
-}
-
-double EngravingItem::rebaseOffset(bool nox)
-{
-    return rendering::dev::Autoplace::rebaseOffset(this, mutLayoutData(), nox);
-}
-
-bool EngravingItem::rebaseMinDistance(double& md, double& yd, double sp, double rebase, bool above, bool fix)
-{
-    return rendering::dev::Autoplace::rebaseMinDistance(this, mutLayoutData(), md, yd, sp, rebase, above, fix);
 }
 }

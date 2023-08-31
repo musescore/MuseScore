@@ -148,13 +148,7 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         SymId symId = SymId::noSym;
     };
-
     DECLARE_LAYOUTDATA_METHODS(Clef);
-
-    //! --- Old Interface ---
-    SymId symId() const { return layoutData()->symId; }
-    void setSymId(SymId s) { mutLayoutData()->symId = s; }
-    //! ---------------------
 
 private:
 

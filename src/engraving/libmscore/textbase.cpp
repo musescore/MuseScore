@@ -223,7 +223,7 @@ TextCursor::Range TextCursor::selectionRange() const
 
 size_t TextCursor::columns() const
 {
-    return _text->textBlock(static_cast<int>(_row)).columns();
+    return _text->layoutData()->textBlock(static_cast<int>(_row)).columns();
 }
 
 //---------------------------------------------------------
@@ -365,7 +365,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
 
     size_t endSelectionRow = hasSelection() ? std::max(selectLine(), _row) : ldata->blocks.size() - 1;
 
-    const TextFragment* tf = _text->textBlock(static_cast<int>(startRow)).fragment(static_cast<int>(startColumn));
+    const TextFragment* tf = ldata->textBlock(static_cast<int>(startRow)).fragment(static_cast<int>(startColumn));
     CharFormat resultFormat = tf ? tf->format : CharFormat();
 
     for (size_t row = startRow; row <= endSelectionRow; ++row) {
@@ -469,7 +469,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
                 _row    = r2;
                 _column = c2;
             } else if (column() >= curLine().columns()) {
-                if (_row >= _text->rows() - 1) {
+                if (_row >= _text->layoutData()->rows() - 1) {
                     return false;
                 }
                 ++_row;
@@ -491,7 +491,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
             break;
 
         case TextCursor::MoveOperation::Down:
-            if (_row >= _text->rows() - 1) {
+            if (_row >= _text->layoutData()->rows() - 1) {
                 return false;
             }
             ++_row;
@@ -508,7 +508,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
             break;
 
         case TextCursor::MoveOperation::End:
-            _row    = _text->rows() - 1;
+            _row    = _text->layoutData()->rows() - 1;
             _column = curLine().columns();
 
             break;
@@ -1772,11 +1772,11 @@ void TextBase::createBlocks(LayoutData* ldata) const
                 state = 2;
                 token.clear();
             } else if (c == '\n') {
-                if (rows() <= cursor.row()) {
+                if (ldata->rows() <= cursor.row()) {
                     ldata->blocks.push_back(TextBlock());
                 }
 
-                if (cursor.row() < rows()) {
+                if (cursor.row() < ldata->rows()) {
                     if (ldata->blocks.at(cursor.row()).fragments().size() == 0) {
                         ldata->blocks[cursor.row()].insertEmptyFragmentIfNeeded(&cursor);           // used to preserve the Font size of the line (font info is held in TextFragments, see PR #5881)
                     }
@@ -1786,11 +1786,11 @@ void TextBase::createBlocks(LayoutData* ldata) const
 
                 cursor.setRow(cursor.row() + 1);
                 cursor.setColumn(0);
-                if (rows() <= cursor.row()) {
+                if (ldata->rows() <= cursor.row()) {
                     ldata->blocks.push_back(TextBlock());
                 }
 
-                if (cursor.row() < rows()) {
+                if (cursor.row() < ldata->rows()) {
                     if (ldata->blocks.at(cursor.row()).fragments().size() == 0) {
                         ldata->blocks[cursor.row()].insertEmptyFragmentIfNeeded(&cursor); // an empty fragment may be needed on either side of the newline
                     }
@@ -2227,7 +2227,7 @@ void TextBase::selectAll(TextCursor* cursor)
 
     cursor->setSelectColumn(0);
     cursor->setSelectLine(0);
-    cursor->setRow(rows() - 1);
+    cursor->setRow(ldata->rows() - 1);
     cursor->setColumn(cursor->curLine().columns());
 }
 

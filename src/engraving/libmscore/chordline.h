@@ -96,13 +96,7 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         draw::PainterPath path;
     };
-
     DECLARE_LAYOUTDATA_METHODS(ChordLine);
-
-    //! --- Old Interface ---
-    void setPath(const draw::PainterPath& p) { mutLayoutData()->path = p; }
-    const draw::PainterPath& path() const { return layoutData()->path; }
-    //! ---------------------
 
 private:
 

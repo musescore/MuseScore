@@ -69,11 +69,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(LedgerLine);
 
-    //! --- Old Interafce ---
-    void setLineWidth(double v) { mutLayoutData()->lineWidth = v; }
-    double lineWidth() const { return layoutData()->lineWidth; }
-    //! ---------------------
-
 private:
 
     double m_len = 0.0;

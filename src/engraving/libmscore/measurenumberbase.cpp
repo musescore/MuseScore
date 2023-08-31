@@ -77,7 +77,7 @@ bool MeasureNumberBase::setProperty(Pid id, const PropertyValue& val)
     switch (id) {
     case Pid::HPLACEMENT:
         setHPlacement(val.value<PlacementH>());
-        setLayoutInvalid();
+        mutLayoutData()->layoutInvalid = true;
         triggerLayout();
         return true;
     default:

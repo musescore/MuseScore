@@ -51,15 +51,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(FretCircle);
 
-    //! --- Old Interface ---
-    const mu::RectF& rect() const { return layoutData()->rect; }
-    void setRect(const mu::RectF& r) { mutLayoutData()->rect = r; }
-    double offsetFromUpNote() const { return layoutData()->offsetFromUpNote; }
-    void setOffsetFromUpNote(double o) { mutLayoutData()->offsetFromUpNote = o; }
-    double sideOffset() const { return layoutData()->sideOffset; }
-    void setSideOffset(double o) { mutLayoutData()->sideOffset = o; }
-    //! ---------------------
-
 private:
 
     friend class Factory;

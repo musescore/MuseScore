@@ -284,6 +284,7 @@ void SingleLayout::layout(ActionIcon* item, const Context&)
 
 void SingleLayout::layout(Ambitus* item, const Context& ctx)
 {
+    Ambitus::LayoutData* ldata = item->mutLayoutData();
     double headWdt = item->headWidth();
     double spatium = item->spatium();
 
@@ -298,10 +299,10 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
     //
 
     // top notehead
-    item->setTopPosY(0.0);
+    ldata->topPos.setY(0.0);
 
     // bottom notehead
-    item->setBottomPosY((numOfLines - 1) * lineDist);
+    ldata->bottomPos.setY((numOfLines - 1) * lineDist);
 
     //
     // NOTEHEAD X POS
@@ -319,50 +320,50 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
     switch (item->direction()) {
     case DirectionH::AUTO:                       // noteheads one above the other
         // left align noteheads and right align accidentals 'hanging' on the left
-        item->setTopPosX(0.0);
-        item->setBottomPosX(0.0);
+        ldata->topPos.setX(0.0);
+        ldata->bottomPos.setX(0.0);
         item->topAccidental()->setPosX(-xAccidOffTop);
         item->bottomAccidental()->setPosX(-xAccidOffBottom);
         break;
     case DirectionH::LEFT:                       // top notehead at the left of bottom notehead
         // place top notehead at left margin; bottom notehead at right of top head;
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
-        item->setTopPosX(0.0);
-        item->setBottomPosX(headWdt);
+        ldata->topPos.setX(0.0);
+        ldata->bottomPos.setX(headWdt);
         item->topAccidental()->setPosX(-xAccidOffTop);
         item->bottomAccidental()->setPosX(headWdt - xAccidOffBottom);
         break;
     case DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
         // bottom notehead at left margin; top notehead at right of bottomnotehead
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
-        item->setBottomPosX(0.0);
-        item->setTopPosX(headWdt);
+        ldata->bottomPos.setX(0.0);
+        ldata->topPos.setX(headWdt);
         item->bottomAccidental()->setPosX(-xAccidOffBottom);
         item->topAccidental()->setPosX(headWdt - xAccidOffTop);
         break;
     }
 
     // compute line from top note centre to bottom note centre
-    LineF fullLine(item->topPos().x() + headWdt * 0.5,
-                   item->topPos().y(),
-                   item->bottomPos().x() + headWdt * 0.5,
-                   item->bottomPos().y());
+    LineF fullLine(ldata->topPos.x() + headWdt * 0.5,
+                   ldata->topPos.y(),
+                   ldata->bottomPos.x() + headWdt * 0.5,
+                   ldata->bottomPos.y());
     // shorten line on each side by offsets
-    double yDelta = item->bottomPos().y() - item->topPos().y();
+    double yDelta = ldata->bottomPos.y() - ldata->topPos.y();
     if (yDelta != 0.0) {
         double off = spatium * Ambitus::LINEOFFSET_DEFAULT;
         PointF p1 = fullLine.pointAt(off / yDelta);
         PointF p2 = fullLine.pointAt(1 - (off / yDelta));
-        item->setLine(LineF(p1, p2));
+        ldata->line = LineF(p1, p2);
     } else {
-        item->setLine(fullLine);
+        ldata->line = fullLine;
     }
 
     RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
-    item->setbbox(headRect.translated(item->topPos()).united(headRect.translated(item->bottomPos()))
-                  .united(item->topAccidental()->bbox().translated(item->topAccidental()->ipos()))
-                  .united(item->bottomAccidental()->bbox().translated(item->bottomAccidental()->ipos()))
-                  );
+    ldata->setbbox(headRect.translated(ldata->topPos).united(headRect.translated(ldata->bottomPos))
+                   .united(item->topAccidental()->bbox().translated(item->topAccidental()->ipos()))
+                   .united(item->bottomAccidental()->bbox().translated(item->bottomAccidental()->ipos()))
+                   );
 }
 
 void SingleLayout::layout(Arpeggio* item, const Context& ctx)
@@ -457,13 +458,14 @@ void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
 
 void SingleLayout::layout(BarLine* item, const Context& ctx)
 {
-    item->setPos(PointF());
-    item->setMag(1.0);
+    BarLine::LayoutData* ldata = item->mutLayoutData();
+    ldata->setPos(PointF());
+    ldata->setMag(1.0);
 
     double spatium = item->spatium();
-    item->setY1(spatium * .5 * item->spanFrom());
-    if (RealIsEqual(item->y2(), 0.0)) {
-        item->setY2(spatium * .5 * (8.0 + item->spanTo()));
+    ldata->y1 = (spatium * .5 * item->spanFrom());
+    if (RealIsEqual(ldata->y2, 0.0)) {
+        ldata->y2 = (spatium * .5 * (8.0 + item->spanTo()));
     }
 
     auto layoutWidth = [](BarLine* item, const Context& ctx) {
@@ -510,25 +512,26 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
         return w;
     };
 
-    double w = layoutWidth(item, ctx) * item->mag();
-    RectF bbox(0.0, item->y1(), w, item->y2() - item->y1());
-    item->setbbox(bbox);
+    double w = layoutWidth(item, ctx) * ldata->mag;
+    RectF bbox(0.0, ldata->y1, w, ldata->y2 - ldata->y1);
+    ldata->setbbox(bbox);
 }
 
 void SingleLayout::layout(Bend* item, const Context&)
 {
+    Bend::LayoutData* ldata = item->mutLayoutData();
     double spatium = item->spatium();
     double lw = item->lineWidth();
 
-    item->setNoteWidth(0.0);
-    item->setNotePos(PointF());
+    ldata->noteWidth = 0.0;
+    ldata->notePos = PointF();
 
     RectF bb;
 
     mu::draw::FontMetrics fm(item->font(spatium));
 
     size_t n   = item->points().size();
-    double x = item->noteWidth();
+    double x = ldata->noteWidth;
     double y = -spatium * .8;
     double x2, y2;
 
@@ -544,7 +547,7 @@ void SingleLayout::layout(Bend* item, const Context&)
         }
         int pitch = item->points().at(pt).pitch;
         if (pt == 0 && pitch) {
-            y2 = -item->notePos().y() - spatium * 2;
+            y2 = -ldata->notePos.y() - spatium * 2;
             x2 = x;
             bb.unite(RectF(x, y, x2 - x, y2 - y));
 
@@ -567,7 +570,7 @@ void SingleLayout::layout(Bend* item, const Context&)
         } else if (pitch < item->points().at(pt + 1).pitch) {
             // up
             x2 = x + spatium * .5;
-            y2 = -item->notePos().y() - spatium * 2;
+            y2 = -ldata->notePos.y() - spatium * 2;
             double dx = x2 - x;
             double dy = y2 - y;
 
@@ -600,12 +603,13 @@ void SingleLayout::layout(Bend* item, const Context&)
         y = y2;
     }
     bb.adjust(-lw, -lw, lw, lw);
-    item->setbbox(bb);
-    item->setPos(0.0, 0.0);
+    ldata->setbbox(bb);
+    ldata->setPos(0.0, 0.0);
 }
 
 void SingleLayout::layout(Bracket* item, const Context& ctx)
 {
+    Bracket::LayoutData* ldata = item->mutLayoutData();
     Shape shape;
 
     switch (item->bracketType()) {
@@ -660,7 +664,7 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         break;
     }
 
-    item->setShape(shape);
+    ldata->shape = shape;
 }
 
 void SingleLayout::layout(Breath* item, const Context&)
@@ -681,7 +685,8 @@ void SingleLayout::layout(Chord* item, const Context& ctx)
 
 void SingleLayout::layout(ChordLine* item, const Context& ctx)
 {
-    item->setMag(1.0);
+    ChordLine::LayoutData* ldata = item->mutLayoutData();
+    ldata->setMag(1.0);
     if (!item->modified()) {
         double x2 = 0;
         double y2 = 0;
@@ -704,14 +709,14 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
                     path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
                 }
             }
-            item->setPath(path);
+            ldata->path = path;
         }
     }
 
-    item->setPos(0.0, 0.0);
+    ldata->setPos(0.0, 0.0);
 
     if (!item->isWavy()) {
-        RectF r = item->path().boundingRect();
+        RectF r = ldata->path.boundingRect();
         int x1 = 0, y1 = 0, width = 0, height = 0;
 
         x1 = r.x();
@@ -736,16 +741,17 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
 
 void SingleLayout::layout(Clef* item, const Context& ctx)
 {
+    Clef::LayoutData* ldata = item->mutLayoutData();
     constexpr int lines = 5;
     constexpr double lineDist = 1.0;
     double spatium = ctx.style().spatium();
     double yoff = 0.0;
 
     if (item->clefType() != ClefType::INVALID && item->clefType() != ClefType::MAX) {
-        item->setSymId(ClefInfo::symId(item->clefType()));
+        ldata->symId = ClefInfo::symId(item->clefType());
         yoff = lineDist * (5 - ClefInfo::line(item->clefType()));
     } else {
-        item->setSymId(SymId::noSym);
+        ldata->symId = SymId::noSym;
     }
 
     switch (item->clefType()) {
@@ -766,10 +772,10 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
         break;
     }
 
-    item->setPos(0.0, yoff * spatium);
+    ldata->setPos(0.0, yoff * spatium);
 
-    RectF bbox = item->symBbox(item->symId());
-    item->setbbox(bbox);
+    RectF bbox = item->symBbox(ldata->symId);
+    ldata->setbbox(bbox);
 }
 
 void SingleLayout::layout(Expression* item, const Context& ctx)
@@ -792,17 +798,18 @@ void SingleLayout::layout(Fingering* item, const Context& ctx)
 
 void SingleLayout::layout(FretDiagram* item, const Context& ctx)
 {
+    FretDiagram::LayoutData* ldata = item->mutLayoutData();
     double spatium  = item->spatium();
-    item->setStringLw(spatium * 0.08);
-    item->setNutLw((item->fretOffset() || !item->showNut()) ? item->stringLw() : spatium * 0.2);
-    item->setStringDist(ctx.style().styleMM(Sid::fretStringSpacing));
-    item->setFretDist(ctx.style().styleMM(Sid::fretFretSpacing));
-    item->setMarkerSize(item->stringDist() * 0.8);
+    ldata->stringLw = (spatium * 0.08);
+    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : spatium * 0.2);
+    ldata->stringDist = (ctx.style().styleMM(Sid::fretStringSpacing));
+    ldata->fretDist = (ctx.style().styleMM(Sid::fretFretSpacing));
+    ldata->markerSize = (ldata->stringDist * 0.8);
 
-    double w = item->stringDist() * (item->strings() - 1) + item->markerSize();
-    double h = (item->frets() + 1) * item->fretDist() + item->markerSize();
-    double y = -(item->markerSize() * 0.5 + item->fretDist());
-    double x = -(item->markerSize() * 0.5);
+    double w = ldata->stringDist * (item->strings() - 1) + ldata->markerSize;
+    double h = (item->frets() + 1) * ldata->fretDist + ldata->markerSize;
+    double y = -(ldata->markerSize * 0.5 + ldata->fretDist);
+    double x = -(ldata->markerSize * 0.5);
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
@@ -813,7 +820,7 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
         mu::draw::FontMetrics fm2(scaledFont);
         double numw = fm2.width(String::number(item->fretOffset() + 1));
-        double xdiff = numw + item->stringDist() * .4;
+        double xdiff = numw + ldata->stringDist * .4;
         w += xdiff;
         x += (item->numPos() == 0) == (item->orientation() == engraving::Orientation::VERTICAL) ? -xdiff : 0;
     }
@@ -1014,12 +1021,12 @@ void SingleLayout::layout(Jump* item, const Context& ctx)
 
 void SingleLayout::layout(KeySig* item, const Context& ctx)
 {
+    KeySig::LayoutData* ldata = item->mutLayoutData();
     double spatium = item->spatium();
     double step = spatium * 0.5;
 
-    item->setbbox(RectF());
-
-    item->keySymbols().clear();
+    ldata->setbbox(RectF());
+    ldata->keySymbols.clear();
 
     // determine current clef for this staff
     ClefType clef = ClefType::G;
@@ -1044,15 +1051,15 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                 int lineIndexOffset = key > 0 ? -1 : 6;
                 ks.sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                if (item->keySymbols().size() > 0) {
-                    KeySym& previous = item->keySymbols().back();
+                if (ldata->keySymbols.size() > 0) {
+                    KeySym& previous = ldata->keySymbols.back();
                     double previousWidth = item->symWidth(previous.sym) / spatium;
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
                 } else {
                     ks.xPos = 0;
                 }
                 // TODO octave metters?
-                item->keySymbols().push_back(ks);
+                ldata->keySymbols.push_back(ks);
             }
         }
         for (const CustDef& cd : item->customKeyDefs()) {
@@ -1063,8 +1070,8 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
             double xpos = cd.xAlt;
-            if (item->keySymbols().size() > 0) {
-                KeySym& previous = item->keySymbols().back();
+            if (ldata->keySymbols.size() > 0) {
+                KeySym& previous = ldata->keySymbols.back();
                 double previousWidth = item->symWidth(previous.sym) / spatium;
                 xpos += previous.xPos + previousWidth + accidentalGap;
             }
@@ -1081,7 +1088,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                     ks.sym = key > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                     sym = cd.sym;
                 }
-                item->keySymbols().push_back(ks);
+                ldata->keySymbols.push_back(ks);
                 xpos += key < 0 ? 0.7 : 1; // flats closer
             }
             // create symbol; natural only if is user defined
@@ -1090,7 +1097,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                 ks.sym = sym;
                 ks.line = line;
                 ks.xPos = xpos;
-                item->keySymbols().push_back(ks);
+                ldata->keySymbols.push_back(ks);
             }
         }
     } else {
@@ -1105,8 +1112,8 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                 KeySym ks;
                 ks.sym = sym;
                 double x = 0.0;
-                if (item->keySymbols().size() > 0) {
-                    const KeySym& previous = item->keySymbols().back();
+                if (ldata->keySymbols.size() > 0) {
+                    const KeySym& previous = ldata->keySymbols.back();
                     x = previous.xPos + previousWidth + accidentalGap;
                     bool isAscending = line < previous.line;
                     SmuflAnchorId currentCutout = isAscending ? SmuflAnchorId::cutOutSW : SmuflAnchorId::cutOutNW;
@@ -1120,7 +1127,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
                 }
                 ks.xPos = x;
                 ks.line = line;
-                item->keySymbols().push_back(ks);
+                ldata->keySymbols.push_back(ks);
             }
         } else {
             LOGD() << "illegal key:" << key;
@@ -1128,10 +1135,10 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
     }
 
     // compute bbox
-    for (const KeySym& ks : item->keySymbols()) {
+    for (const KeySym& ks : ldata->keySymbols) {
         double x = ks.xPos * spatium;
         double y = ks.line * step;
-        item->addbbox(item->symBbox(ks.sym).translated(x, y));
+        ldata->addbbox(item->symBbox(ks.sym).translated(x, y));
     }
 }
 
@@ -1170,33 +1177,34 @@ void SingleLayout::layout(MeasureNumber* item, const Context& ctx)
 
 void SingleLayout::layout(MeasureRepeat* item, const Context& ctx)
 {
+    MeasureRepeat::LayoutData* ldata = item->mutLayoutData();
     switch (item->numMeasures()) {
     case 1:
     {
-        item->setSymId(SymId::repeat1Bar);
+        ldata->setSymId(SymId::repeat1Bar);
         if (ctx.style().styleB(Sid::oneMeasureRepeatShow1)) {
-            item->setNumberSym(1);
+            ldata->setNumberSym(1);
         } else {
-            item->clearNumberSym();
+            ldata->clearNumberSym();
         }
         break;
     }
     case 2:
-        item->setSymId(SymId::repeat2Bars);
-        item->setNumberSym(item->numMeasures());
+        ldata->setSymId(SymId::repeat2Bars);
+        ldata->setNumberSym(item->numMeasures());
         break;
     case 4:
-        item->setSymId(SymId::repeat4Bars);
-        item->setNumberSym(item->numMeasures());
+        ldata->setSymId(SymId::repeat4Bars);
+        ldata->setNumberSym(item->numMeasures());
         break;
     default:
-        item->setSymId(SymId::noSym); // should never happen
-        item->clearNumberSym();
+        ldata->setSymId(SymId::noSym); // should never happen
+        ldata->clearNumberSym();
         break;
     }
 
-    RectF bbox = item->symBbox(item->symId());
-    item->setbbox(bbox);
+    RectF bbox = item->symBbox(ldata->symId);
+    ldata->setbbox(bbox);
 }
 
 void SingleLayout::layout(Ornament* item, const Context& ctx)
@@ -1453,9 +1461,10 @@ void SingleLayout::layout(Tremolo* item, const Context& ctx)
 
 void SingleLayout::layout(TremoloBar* item, const Context&)
 {
+    TremoloBar::LayoutData* ldata = item->mutLayoutData();
     double spatium = item->spatium();
 
-    item->setPos(PointF());
+    ldata->setPos(PointF());
 
     double timeFactor  = item->userMag() / 1.0;
     double pitchFactor = -spatium * 0.02;
@@ -1464,10 +1473,10 @@ void SingleLayout::layout(TremoloBar* item, const Context&)
     for (const PitchValue& v : item->points()) {
         polygon << PointF(v.time * timeFactor, v.pitch * pitchFactor);
     }
-    item->setPolygon(polygon);
+    ldata->polygon = polygon;
 
     double w = item->lineWidth().val();
-    item->setbbox(item->polygon().boundingRect().adjusted(-w, -w, w, w));
+    ldata->setbbox(ldata->polygon.boundingRect().adjusted(-w, -w, w, w));
 }
 
 void SingleLayout::layout(Trill* item, const Context& ctx)
@@ -1605,7 +1614,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
     double y = 0;
 
     // adjust the bounding box for the text item
-    for (size_t i = 0; i < item->rows(); ++i) {
+    for (size_t i = 0; i < ldata->rows(); ++i) {
         TextBlock& t = ldata->blocks[i];
         t.layout(item);
         const RectF* r = &t.boundingRect();

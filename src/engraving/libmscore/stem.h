@@ -85,12 +85,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(Stem);
 
-    //! --- Old Interface ---
-    void setLine(const LineF& l) { mutLayoutData()->line = l; }
-    const LineF& line() const { return layoutData()->line; }
-    PointF p2() const { return line().p2(); }
-    //! ---------------------
-
 private:
     friend class Factory;
     Stem(Chord* parent = 0);

@@ -475,15 +475,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(TabDurationSymbol);
 
-    //! --- Old Interface ---
-    TabBeamGrid beamGrid() const { return layoutData()->beamGrid; }
-    void setBeamGrid(TabBeamGrid g) { mutLayoutData()->beamGrid = g; }
-    double beamLength() const { return layoutData()->beamLength; }
-    void setBeamLength(double l) { mutLayoutData()->beamLength = l; }
-    int beamLevel() const { return layoutData()->beamLevel; }
-    void setBeamLevel(int l) { mutLayoutData()->beamLevel = l; }
-    //! ---------------------
-
 private:
 
     const StaffType* m_tab = nullptr;

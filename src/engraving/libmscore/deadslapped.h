@@ -46,15 +46,7 @@ public:
         mu::draw::PainterPath path1;
         mu::draw::PainterPath path2;
     };
-
     DECLARE_LAYOUTDATA_METHODS(DeadSlapped);
-
-    //! --- Old Interface ---
-    const mu::draw::PainterPath& path1() const { return layoutData()->path1; }
-    void setPath1(const mu::draw::PainterPath& p) { mutLayoutData()->path1 = p; }
-    const mu::draw::PainterPath& path2() const { return layoutData()->path2; }
-    void setPath2(const mu::draw::PainterPath& p) { mutLayoutData()->path2 = p; }
-    //! ---------------------
 
 private:
 

@@ -151,13 +151,6 @@ public:
 
     DECLARE_LAYOUTDATA_METHODS(BarLine)
 
-    //! --- Old Interface ---
-    double y1() const { return layoutData()->y1; }
-    double y2() const { return layoutData()->y2; }
-    void setY1(double v) { mutLayoutData()->y1 = v; }
-    void setY2(double v) { mutLayoutData()->y2 = v; }
-    //! ---------------------
-
 private:
 
     friend class Factory;

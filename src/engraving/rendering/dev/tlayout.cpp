@@ -799,6 +799,8 @@ RectF TLayout::layoutRect(const BarLine* item, LayoutContext& ctx)
 //---------------------------------------------------------
 void TLayout::layout2(BarLine* item, LayoutContext& ctx)
 {
+    BarLine::LayoutData* ldata = item->mutLayoutData();
+
     // barlines hidden on this staff
     if (item->staff() && item->segment()) {
         if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
@@ -809,29 +811,29 @@ void TLayout::layout2(BarLine* item, LayoutContext& ctx)
     }
 
     item->calcY();
-    item->bbox().setTop(item->y1());
-    item->bbox().setBottom(item->y2());
+    ldata->bbox.setTop(ldata->y1);
+    ldata->bbox.setBottom(ldata->y2);
 
     if (ctx.conf().styleB(Sid::repeatBarTips)) {
         switch (item->barLineType()) {
         case BarLineType::START_REPEAT:
-            item->bbox().unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
-            item->bbox().unite(item->symBbox(SymId::bracketBottom).translated(0, item->y2()));
+            ldata->bbox.unite(item->symBbox(SymId::bracketTop).translated(0, ldata->y1));
+            ldata->bbox.unite(item->symBbox(SymId::bracketBottom).translated(0, ldata->y2));
             break;
         case BarLineType::END_REPEAT:
         {
             double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            item->bbox().unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
-            item->bbox().unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, item->y2()));
+            ldata->bbox.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, ldata->y1));
+            ldata->bbox.unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, ldata->y2));
             break;
         }
         case BarLineType::END_START_REPEAT:
         {
             double w1 = 0.0;               //symBbox(SymId::reversedBracketTop).width();
-            item->bbox().unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, item->y1()));
-            item->bbox().unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, item->y2()));
-            item->bbox().unite(item->symBbox(SymId::bracketTop).translated(0, item->y1()));
-            item->bbox().unite(item->symBbox(SymId::bracketBottom).translated(0, item->y2()));
+            ldata->bbox.unite(item->symBbox(SymId::reversedBracketTop).translated(-w1, ldata->y1));
+            ldata->bbox.unite(item->symBbox(SymId::reversedBracketBottom).translated(-w1, ldata->y2));
+            ldata->bbox.unite(item->symBbox(SymId::bracketTop).translated(0, ldata->y1));
+            ldata->bbox.unite(item->symBbox(SymId::bracketBottom).translated(0, ldata->y2));
             break;
         }
         default:
@@ -910,7 +912,7 @@ static void layoutBend(const Bend* item, const LayoutContext&, Bend::LayoutData*
         } else if (pitch < item->points().at(pt + 1).pitch) {
             // up
             x2 = x + spatium * .5;
-            y2 = -item->notePos().y() - spatium * 2;
+            y2 = -ldata->notePos.y() - spatium * 2;
             double dx = x2 - x;
             double dy = y2 - y;
 
@@ -1211,13 +1213,13 @@ void TLayout::layout(Chord* item, LayoutContext& ctx)
     ChordLayout::layout(item, ctx);
 }
 
-static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, ChordLine::LayoutData* data)
+static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, ChordLine::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
 
-    data->mag = item->chord()->mag();
+    ldata->mag = item->chord()->mag();
 
     if (!item->modified()) {
         double x2 = 0;
@@ -1241,7 +1243,7 @@ static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, Cho
                     path.cubicTo(0.0, y2 / 2, x2 / 2, y2, x2, y2);
                 }
             }
-            data->path = path;
+            ldata->path = path;
         }
     }
 
@@ -1282,17 +1284,17 @@ static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, Cho
         y += note->height() * (upDir ? 0.8 : -0.3);
     }
 
-    data->pos.setXY(x, y);
+    ldata->pos.setXY(x, y);
 
     if (!item->isWavy()) {
-        RectF r = item->path().boundingRect();
+        RectF r = ldata->path.boundingRect();
         int x1 = 0, y1 = 0, width = 0, height = 0;
 
         x1 = r.x();
         y1 = r.y();
         width = r.width();
         height = r.height();
-        data->bbox.setRect(x1, y1, width, height);
+        ldata->bbox.setRect(x1, y1, width, height);
     } else {
         RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
         double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
@@ -1304,7 +1306,7 @@ static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, Cho
             r.setY(item->y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
         }
 
-        data->bbox = r;
+        ldata->bbox = r;
     }
 }
 
@@ -1812,7 +1814,8 @@ static void layoutFiguredBassItem(const FiguredBassItem* item, const LayoutConte
     ldata->textWidth = w;
     // if there is a cont.line, extend width to cover the whole FB element duration line
     int lineLen;
-    if (item->contLine() != FiguredBassItem::ContLine::NONE && (lineLen = item->figuredBass()->lineLength(0)) > w) {
+    if (item->contLine() != FiguredBassItem::ContLine::NONE
+        && (lineLen = item->figuredBass()->layoutData()->lineLength(0)) > w) {
         w = lineLen;
     }
     ldata->bbox.setRect(0, 0, w, h);
@@ -1950,7 +1953,7 @@ static void layoutFiguredBass(const FiguredBass* item, const LayoutContext& ctx,
     // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
     if (item->items().size() > 0) {
         layoutLines(item, ctx, ldata);
-        ldata->bbox.setRect(0, 0, item->lineLength(0), 0);
+        ldata->bbox.setRect(0, 0, ldata->lineLength(0), 0);
         // layout each item and enlarge bbox to include items bboxes
         for (FiguredBassItem* fit : item->items()) {
             layoutFiguredBassItem(fit, ctx, fit->mutLayoutData());
@@ -2116,15 +2119,15 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
 {
     double _spatium  = item->spatium() * item->userMag();
     ldata->stringLw = _spatium * 0.08;
-    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? item->stringLw() : _spatium * 0.2);
+    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : _spatium * 0.2);
     ldata->stringDist = ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag();
     ldata->fretDist = ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag();
-    ldata->markerSize = item->stringDist() * .8;
+    ldata->markerSize = ldata->stringDist * .8;
 
-    double w = item->stringDist() * (item->strings() - 1) + item->markerSize();
-    double h = (item->frets() + 1) * item->fretDist() + item->markerSize();
-    double y = -(item->markerSize() * .5 + item->fretDist());
-    double x = -(item->markerSize() * .5);
+    double w = ldata->stringDist * (item->strings() - 1) + ldata->markerSize;
+    double h = (item->frets() + 1) * ldata->fretDist + ldata->markerSize;
+    double y = -(ldata->markerSize * .5 + ldata->fretDist);
+    double x = -(ldata->markerSize * .5);
 
     // Allocate space for fret offset number
     if (item->fretOffset() > 0) {
@@ -2135,7 +2138,7 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * fretNumMag);
         mu::draw::FontMetrics fm2(scaledFont);
         double numw = fm2.width(String::number(item->fretOffset() + 1));
-        double xdiff = numw + item->stringDist() * .4;
+        double xdiff = numw + ldata->stringDist * .4;
         w += xdiff;
         x += (item->numPos() == 0) == (item->orientation() == Orientation::VERTICAL) ? -xdiff : 0;
     }
@@ -2165,7 +2168,7 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
         for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
             if (e->isRest()) {
                 Rest* r = toRest(e);
-                noteheadWidth = item->symWidth(r->sym());
+                noteheadWidth = item->symWidth(r->layoutData()->sym);
                 break;
             } else if (e->isNote()) {
                 Note* n = toNote(e);
@@ -2177,9 +2180,9 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
 
     double mainWidth = 0.0;
     if (item->orientation() == Orientation::VERTICAL) {
-        mainWidth = item->stringDist() * (item->strings() - 1);
+        mainWidth = ldata->stringDist * (item->strings() - 1);
     } else if (item->orientation() == Orientation::HORIZONTAL) {
-        mainWidth = item->fretDist() * (item->frets() + 0.5);
+        mainWidth = ldata->fretDist * (item->frets() + 0.5);
     }
     ldata->setPos((noteheadWidth - mainWidth) / 2, -(h + item->styleP(Sid::fretY)));
 
@@ -2243,11 +2246,11 @@ static void layoutFretCircle(const FretCircle* item, const LayoutContext&, FretC
         minWidth = std::min(minWidth, note->width());
     }
 
-    double offsetFromUpNote = (item->rect().height() - chordRect.height()
+    double offsetFromUpNote = (ldata->rect.height() - chordRect.height()
                                - (item->chord()->downNote()->pos().y() - item->chord()->upNote()->pos().y())
                                ) / 2;
     ldata->offsetFromUpNote = offsetFromUpNote;
-    ldata->sideOffset = ((item->rect().width() - minWidth) / 2);
+    ldata->sideOffset = ((ldata->rect.width() - minWidth) / 2);
 
     ldata->setbbox(ldata->rect.adjusted(-lw, -lw, lw, lw));
 }
@@ -2854,12 +2857,13 @@ void TLayout::layout(Harmony* item, LayoutContext& ctx)
 
 void TLayout::layout1(Harmony* item, const LayoutContext& ctx)
 {
-    if (item->isBlockNotCreated()) {
-        item->createBlocks();
+    Harmony::LayoutData* ldata = item->mutLayoutData();
+    if (ldata->layoutInvalid) {
+        item->createBlocks(ldata);
     }
 
-    if (item->blocksRef().empty()) {
-        item->blocksRef().push_back(TextBlock());
+    if (ldata->blocks.empty()) {
+        ldata->blocks.push_back(TextBlock());
     }
 
     auto positionPoint = calculateBoundingRect(item, ctx);
@@ -3109,7 +3113,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
                 int lineIndexOffset = t1 > 0 ? -1 : 6;
                 ks.sym = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
-                if (item->keySymbols().size() > 0) {
+                if (ldata->keySymbols.size() > 0) {
                     const KeySym& previous = ldata->keySymbols.back();
                     double previousWidth = item->symWidth(previous.sym) / _spatium;
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
@@ -3128,7 +3132,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
             accIdx = flat ? 13 - accIdx : accIdx;
             int line = ClefInfo::lines(clef)[accIdx] + cd.octAlt * 7;
             double xpos = cd.xAlt;
-            if (item->keySymbols().size() > 0) {
+            if (ldata->keySymbols.size() > 0) {
                 const KeySym& previous = ldata->keySymbols.back();
                 double previousWidth = item->symWidth(previous.sym) / _spatium;
                 xpos += previous.xPos + previousWidth + accidentalGap;
@@ -3293,7 +3297,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
     }
 
     // compute bbox
-    for (const KeySym& ks : item->keySymbols()) {
+    for (const KeySym& ks : ldata->keySymbols) {
         double x = ks.xPos * _spatium;
         double y = ks.line * step;
         ldata->addbbox(item->symBbox(ks.sym).translated(x, y));
@@ -3316,7 +3320,7 @@ static void layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, L
     if (item->staff()) {
         const_cast<LedgerLine*>(item)->setColor(item->staff()->staffType(item->tick())->color());
     }
-    double w2 = item->lineWidth() * .5;
+    double w2 = ldata->lineWidth * .5;
 
     //Adjust Y position to staffType offset
     if (item->staffType()) {
@@ -3552,7 +3556,7 @@ static void layoutMeasureRepeat(const MeasureRepeat* item, const LayoutContext& 
         break;
     }
 
-    RectF bbox = item->symBbox(item->symId());
+    RectF bbox = item->symBbox(ldata->symId);
 
     if (item->track() != mu::nidx) { // if this is in score rather than a palette cell
         // For unknown reasons, the symbol has some offset in almost all SMuFL fonts
@@ -3567,7 +3571,7 @@ static void layoutMeasureRepeat(const MeasureRepeat* item, const LayoutContext& 
 
     ldata->setbbox(bbox);
 
-    if (item->track() != mu::nidx && !item->numberSym().empty()) {
+    if (item->track() != mu::nidx && !ldata->numberSym.empty()) {
         ldata->addbbox(item->numberRect());
     }
 }
@@ -3585,13 +3589,13 @@ static void layoutMMRest(const MMRest* item, const LayoutContext& ctx, MMRest::L
 {
     //! NOTE This is not look like layout data, perhaps this is should be set not here
     ldata->number = item->measure()->mmRestCount();
-    ldata->setNumberSym(item->number());
+    ldata->setNumberSym(ldata->number);
 
     if (ctx.conf().styleB(Sid::oldStyleMultiMeasureRests)) {
         SymIdList restSyms;
         double symsWidth = 0.0;
 
-        int remaining = item->number();
+        int remaining = ldata->number;
         double spacing = ctx.conf().styleMM(Sid::mmRestOldStyleSpacing);
         SymId sym;
 
@@ -3618,8 +3622,8 @@ static void layoutMMRest(const MMRest* item, const LayoutContext& ctx, MMRest::L
         ldata->restSyms = restSyms;
         ldata->symsWidth = symsWidth;
 
-        double symHeight = item->symBbox(item->restSyms().at(0)).height();
-        ldata->setbbox(RectF((item->width() - item->symsWidth()) * .5, -item->spatium(), item->symsWidth(), symHeight));
+        double symHeight = item->symBbox(ldata->restSyms.at(0)).height();
+        ldata->setbbox(RectF((item->width() - ldata->symsWidth) * .5, -item->spatium(), ldata->symsWidth, symHeight));
     } else { // H-bar
         double vStrokeHeight = ctx.conf().styleMM(Sid::mmRestHBarVStrokeHeight);
         ldata->setbbox(RectF(0.0, -(vStrokeHeight * .5), item->width(), vStrokeHeight));
@@ -3987,7 +3991,7 @@ static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutD
 
     ldata->setPosY(finalLine * lineDist * _spatium);
     if (!item->shouldNotBeDrawn()) {
-        ldata->setbbox(item->symBbox(item->sym()));
+        ldata->setbbox(item->symBbox(ldata->sym));
     }
     layoutRestDots(item, ctx, ldata);
 }
@@ -4270,7 +4274,7 @@ static void layoutStaffState(const StaffState* item, const LayoutContext&, Staff
     ldata->path = path;
 
     RectF bb(0, 0, w, h);
-    bb.adjust(-item->lw(), -item->lw(), item->lw(), item->lw());
+    bb.adjust(-ldata->lw, -ldata->lw, ldata->lw, ldata->lw);
     ldata->setbbox(bb);
     ldata->setPos(0.0, _spatium * -6.0);
 }
@@ -4589,7 +4593,7 @@ static void layoutTabDurationSymbol(const TabDurationSymbol* item, const LayoutC
             ldata->beamLength = 0.0;
         } else if (chord->beamMode() == BeamMode::MID || chord->beamMode() == BeamMode::END) {
             ldata->beamLevel = (static_cast<int>(chord->durationType().type()) - static_cast<int>(font.zeroBeamLevel));
-            ldata->beamGrid = (item->beamLevel() < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
+            ldata->beamGrid = (ldata->beamLevel < 1 ? TabBeamGrid::INITIAL : TabBeamGrid::MEDIALFINAL);
             // _beamLength and bbox x and width will be set in layout2(),
             // once horiz. positions of chords are known
         }

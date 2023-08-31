@@ -226,19 +226,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(FretDiagram);
 
-    //! --- Old Interface ---
-    double stringLw() const { return layoutData()->stringLw; }
-    void setStringLw(double lw) { mutLayoutData()->stringLw = lw; }
-    double nutLw() const { return layoutData()->nutLw; }
-    void setNutLw(double lw) { mutLayoutData()->nutLw = lw; }
-    double stringDist() const { return layoutData()->stringDist; }
-    void setStringDist(double d) { mutLayoutData()->stringDist = d; }
-    double fretDist() const { return layoutData()->fretDist; }
-    void setFretDist(double d) { mutLayoutData()->fretDist = d; }
-    double markerSize() const { return layoutData()->markerSize; }
-    void setMarkerSize(double d) { mutLayoutData()->markerSize = d; }
-    //! ---------------------
-
 private:
     friend class Factory;
 

@@ -69,9 +69,9 @@ public:
     String screenReaderInfo() const override;
 
     void setIsDiagram(bool diagram);
-    bool isDiagram() { return _isDiagram; }
+    bool isDiagram() { return m_isDiagram; }
 
-    std::array<PedalPosition, HARP_STRING_NO> getPedalState() const { return _pedalState; }
+    std::array<PedalPosition, HARP_STRING_NO> getPedalState() const { return m_pedalState; }
     void setPedalState(std::array<PedalPosition, HARP_STRING_NO> state);
 
     void setPedal(HarpStringType harpString, PedalPosition pedal);
@@ -85,11 +85,11 @@ public:
 
 private:
 
-    std::array<PedalPosition, HARP_STRING_NO> _pedalState;
+    std::array<PedalPosition, HARP_STRING_NO> m_pedalState;
 
-    std::set<int> _playableTpcs;
+    std::set<int> m_playableTpcs;
 
-    bool _isDiagram = true;
+    bool m_isDiagram = true;
 };
 } // namespace mu::engraving
 

@@ -126,13 +126,7 @@ public:
 
         bool isValid() const { return !syms.empty(); }
     };
-
     DECLARE_LAYOUTDATA_METHODS(Accidental);
-
-    //! -- Old interface --
-    void clearElements() { mutLayoutData()->syms.clear(); }
-    void addElement(const LayoutData::Sym& s) { mutLayoutData()->syms.push_back(s); }
-    //! -----------
 
 private:
 

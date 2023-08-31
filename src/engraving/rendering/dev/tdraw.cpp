@@ -1129,9 +1129,10 @@ void TDraw::draw(const Fermata* item, Painter* painter)
 void TDraw::draw(const FiguredBass* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    const FiguredBass::LayoutData* ldata = item->layoutData();
     // if not printing, draw duration line(s)
     if (!item->score()->printing() && item->score()->showUnprintable()) {
-        for (double len : item->lineLengths()) {
+        for (double len : ldata->lineLengths) {
             if (len > 0) {
                 painter->setPen(Pen(FiguredBass::engravingConfiguration()->formattingMarksColor(), 3));
                 painter->drawLine(0.0, -2, len, -2);              // -2: 2 rast. un. above digits
@@ -1154,6 +1155,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
+    const FiguredBassItem::LayoutData* ldata = item->layoutData();
     int font = 0;
     double _spatium = item->spatium();
     // set font from general style
@@ -1167,16 +1169,16 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Pen pen(item->figuredBass()->curColor(), FiguredBass::FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(item->bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, item->displayText());
+    painter->drawText(item->bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
     if (item->contLine() != FiguredBassItem::ContLine::NONE) {
-        double lineStartX  = item->textWidth();                           // by default, line starts right after text
+        double lineStartX  = ldata->textWidth;                           // by default, line starts right after text
         if (lineStartX > 0.0) {
             lineStartX += _spatium * FiguredBass::FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
         }
-        lineEndX = item->figuredBass()->printedLineLength();            // by default, line ends with item duration
+        lineEndX = item->figuredBass()->layoutData()->printedLineLength;            // by default, line ends with item duration
         if (lineEndX - lineStartX < 1.0) {                         // if line length < 1 sp, ignore it
             lineEndX = 0.0;
         }
@@ -1196,7 +1198,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
                 }
                 // with a little bit of overlap
                 else {
-                    lineEndX = item->figuredBass()->lineLength(0);                  // if none found, draw to the duration end
+                    lineEndX = item->figuredBass()->layoutData()->lineLength(0);                  // if none found, draw to the duration end
                 }
             }
         }
@@ -1209,7 +1211,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
 
     // closing cont.line parenthesis
     if (item->parenth5() != FiguredBassItem::Parenthesis::NONE) {
-        int x = lineEndX > 0.0 ? lineEndX : item->textWidth();
+        int x = lineEndX > 0.0 ? lineEndX : ldata->textWidth;
         painter->drawText(RectF(x, 0, item->bbox().width(), item->bbox().height()), draw::AlignLeft | draw::AlignTop,
                           Char(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth5())].unicode()));
     }
@@ -1224,8 +1226,8 @@ void TDraw::draw(const Fingering* item, Painter* painter)
 void TDraw::draw(const FretDiagram* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-
-    PointF translation = -PointF(item->stringDist() * (item->strings() - 1), 0);
+    const FretDiagram::LayoutData* ldata = item->layoutData();
+    PointF translation = -PointF(ldata->stringDist * (item->strings() - 1), 0);
     if (item->orientation() == Orientation::HORIZONTAL) {
         painter->save();
         painter->rotate(-90);
@@ -1239,25 +1241,25 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     painter->setBrush(Brush(Color(painter->pen().color())));
 
     // x2 is the x val of the rightmost string
-    double x2 = (item->strings() - 1) * item->stringDist();
+    double x2 = (item->strings() - 1) * ldata->stringDist;
 
     // Draw the nut
-    pen.setWidthF(item->nutLw());
+    pen.setWidthF(ldata->nutLw);
     painter->setPen(pen);
-    painter->drawLine(LineF(-item->stringLw() * .5, 0.0, x2 + item->stringLw() * .5, 0.0));
+    painter->drawLine(LineF(-ldata->stringLw * .5, 0.0, x2 + ldata->stringLw * .5, 0.0));
 
     // Draw strings and frets
-    pen.setWidthF(item->stringLw());
+    pen.setWidthF(ldata->stringLw);
     painter->setPen(pen);
 
     // y2 is the y val of the bottom fretline
-    double y2 = item->fretDist() * (item->frets() + .5);
+    double y2 = ldata->fretDist * (item->frets() + .5);
     for (int i = 0; i < item->strings(); ++i) {
-        double x = item->stringDist() * i;
+        double x = ldata->stringDist * i;
         painter->drawLine(LineF(x, item->fretOffset() ? -_spatium * .2 : 0.0, x, y2));
     }
     for (int i = 1; i <= item->frets(); ++i) {
-        double y = item->fretDist() * i;
+        double y = ldata->fretDist * i;
         painter->drawLine(LineF(0.0, y, x2, y));
     }
 
@@ -1267,7 +1269,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
     // Draw dots, sym pen is used to draw them (and markers)
     Pen symPen(pen);
     symPen.setCapStyle(PenCapStyle::RoundCap);
-    double symPenWidth = item->stringLw() * 1.2;
+    double symPenWidth = ldata->stringLw * 1.2;
     symPen.setWidthF(symPenWidth);
 
     for (auto const& i : item->dots()) {
@@ -1280,8 +1282,8 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             int fret = d.fret - 1;
 
             // Calculate coords of the top left corner of the dot
-            double x = item->stringDist() * string - dotd * .5;
-            double y = item->fretDist() * fret + item->fretDist() * .5 - dotd * .5;
+            double x = ldata->stringDist * string - dotd * .5;
+            double y = ldata->fretDist * fret + ldata->fretDist * .5 - dotd * .5;
 
             // Draw different symbols
             painter->setPen(symPen);
@@ -1324,13 +1326,13 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             continue;
         }
 
-        double x = item->stringDist() * string - item->markerSize() * .5;
-        double y = -item->fretDist() - item->markerSize() * .5;
+        double x = ldata->stringDist * string - ldata->markerSize * .5;
+        double y = -ldata->fretDist - ldata->markerSize * .5;
         if (marker.mtype == FretMarkerType::CIRCLE) {
-            painter->drawEllipse(RectF(x, y, item->markerSize(), item->markerSize()));
+            painter->drawEllipse(RectF(x, y, ldata->markerSize, ldata->markerSize));
         } else if (marker.mtype == FretMarkerType::CROSS) {
-            painter->drawLine(PointF(x, y), PointF(x + item->markerSize(), y + item->markerSize()));
-            painter->drawLine(PointF(x, y + item->markerSize()), PointF(x + item->markerSize(), y));
+            painter->drawLine(PointF(x, y), PointF(x + ldata->markerSize, y + ldata->markerSize));
+            painter->drawLine(PointF(x, y + ldata->markerSize), PointF(x + ldata->markerSize, y));
         }
     }
 
@@ -1340,9 +1342,9 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
         int startString = i.second.startString;
         int endString   = i.second.endString;
 
-        double x1    = item->stringDist() * startString;
-        double newX2 = endString == -1 ? x2 : item->stringDist() * endString;
-        double y     = item->fretDist() * (fret - 1) + item->fretDist() * .5;
+        double x1    = ldata->stringDist * startString;
+        double newX2 = endString == -1 ? x2 : ldata->stringDist * endString;
+        double y     = ldata->fretDist * (fret - 1) + ldata->fretDist * .5;
         pen.setWidthF(dotd * item->style().styleD(Sid::barreLineWidth));
         pen.setCapStyle(PenCapStyle::RoundCap);
         painter->setPen(pen);
@@ -1363,10 +1365,10 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
 
         if (item->orientation() == Orientation::VERTICAL) {
             if (item->numPos() == 0) {
-                painter->drawText(RectF(-item->stringDist() * .4, .0, .0, item->fretDist()),
+                painter->drawText(RectF(-ldata->stringDist * .4, .0, .0, ldata->fretDist),
                                   draw::AlignVCenter | draw::AlignRight | draw::TextDontClip, text);
             } else {
-                painter->drawText(RectF(x2 + (item->stringDist() * .4), .0, .0, item->fretDist()),
+                painter->drawText(RectF(x2 + (ldata->stringDist * .4), .0, .0, ldata->fretDist),
                                   draw::AlignVCenter | draw::AlignLeft | draw::TextDontClip,
                                   String::number(item->fretOffset() + 1));
             }
@@ -1375,7 +1377,7 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
             painter->translate(-translation);
             painter->rotate(90);
             if (item->numPos() == 0) {
-                painter->drawText(RectF(.0, item->stringDist() * (item->strings() - 1), .0, .0),
+                painter->drawText(RectF(.0, ldata->stringDist * (item->strings() - 1), .0, .0),
                                   draw::AlignLeft | draw::TextDontClip, text);
             } else {
                 painter->drawText(RectF(.0, .0, .0, .0), draw::AlignBottom | draw::AlignLeft | draw::TextDontClip, text);
@@ -1395,10 +1397,11 @@ void TDraw::draw(const FretDiagram* item, Painter* painter)
 void TDraw::draw(const FretCircle* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    const FretCircle::LayoutData* ldata = item->layoutData();
     painter->save();
     painter->setPen(mu::draw::Pen(item->curColor(), item->spatium() * FretCircle::CIRCLE_WIDTH));
     painter->setBrush(mu::draw::BrushStyle::NoBrush);
-    painter->drawEllipse(item->rect());
+    painter->drawEllipse(ldata->rect);
     painter->restore();
 }
 
@@ -1549,7 +1552,7 @@ void TDraw::draw(const StretchedBend* item, Painter* painter)
 void TDraw::drawTextBase(const TextBase* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-
+    const TextBase::LayoutData* ldata = item->layoutData();
     if (item->hasFrame()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
         if (item->frameWidth().val() != 0.0) {
@@ -1564,7 +1567,7 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter)
         Color bg(item->bgColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (item->circle()) {
-            painter->drawEllipse(item->frame());
+            painter->drawEllipse(ldata->frame);
         } else {
             double frameRoundFactor = (item->sizeIsSpatiumDependent() ? (item->spatium() / baseSpatium) / 2 : 0.5f);
 
@@ -1572,12 +1575,12 @@ void TDraw::drawTextBase(const TextBase* item, Painter* painter)
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(item->frame(), item->frameRound() * frameRoundFactor, r2);
+            painter->drawRoundedRect(ldata->frame, item->frameRound() * frameRoundFactor, r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(item->textColor());
-    for (const TextBlock& t : item->blocks()) {
+    for (const TextBlock& t : ldata->blocks) {
         t.draw(painter, item);
     }
 }
@@ -1747,6 +1750,8 @@ void TDraw::draw(const Harmony* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
+    const TextBase::LayoutData* ldata = item->layoutData();
+
     if (item->isDrawEditMode()) {
         drawTextBase(item, painter);
         return;
@@ -1769,13 +1774,13 @@ void TDraw::draw(const Harmony* item, Painter* painter)
         Color bg(item->bgColor());
         painter->setBrush(bg.alpha() ? Brush(bg) : BrushStyle::NoBrush);
         if (item->circle()) {
-            painter->drawArc(item->frame(), 0, 5760);
+            painter->drawArc(ldata->frame, 0, 5760);
         } else {
             int r2 = item->frameRound();
             if (r2 > 99) {
                 r2 = 99;
             }
-            painter->drawRoundedRect(item->frame(), item->frameRound(), r2);
+            painter->drawRoundedRect(ldata->frame, item->frameRound(), r2);
         }
     }
     painter->setBrush(BrushStyle::NoBrush);
@@ -1884,6 +1889,7 @@ void TDraw::draw(const Jump* item, Painter* painter)
 void TDraw::draw(const KeySig* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
+    const KeySig::LayoutData* ldata = item->layoutData();
 
     painter->setPen(item->curColor());
     double _spatium = item->spatium();
@@ -1891,7 +1897,7 @@ void TDraw::draw(const KeySig* item, Painter* painter)
     int lines = item->staff() ? item->staff()->staffTypeForElement(item)->lines() : 5;
     double ledgerLineWidth = item->style().styleMM(Sid::ledgerLineWidth) * item->mag();
     double ledgerExtraLen = item->style().styleS(Sid::ledgerLineLength).val() * _spatium;
-    for (const KeySym& ks : item->keySymbols()) {
+    for (const KeySym& ks : ldata->keySymbols) {
         double x = ks.xPos * _spatium;
         double y = ks.line * step;
         item->drawSymbol(ks.sym, painter, PointF(x, y));
@@ -1957,7 +1963,10 @@ void TDraw::draw(const LedgerLine* item, Painter* painter)
     if (item->chord()->crossMeasure() == CrossMeasure::SECOND) {
         return;
     }
-    painter->setPen(Pen(item->curColor(), item->lineWidth(), PenStyle::SolidLine, PenCapStyle::FlatCap));
+
+    const LedgerLine::LayoutData* ldata = item->layoutData();
+
+    painter->setPen(Pen(item->curColor(), ldata->lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     if (item->vertical()) {
         painter->drawLine(LineF(0.0, 0.0, 0.0, item->len()));
     } else {
@@ -2016,12 +2025,14 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    painter->setPen(item->curColor());
-    item->drawSymbol(item->symId(), painter);
+    const MeasureRepeat::LayoutData* ldata = item->layoutData();
 
-    if (!item->numberSym().empty()) {
-        PointF numberPos = item->numberPosition(item->symBbox(item->numberSym()));
-        item->drawSymbols(item->numberSym(), painter, numberPos);
+    painter->setPen(item->curColor());
+    item->drawSymbol(ldata->symId, painter);
+
+    if (!ldata->numberSym.empty()) {
+        PointF numberPos = item->numberPosition(item->symBbox(ldata->numberSym));
+        item->drawSymbols(ldata->numberSym, painter, numberPos);
     }
 
     if (item->style().styleB(Sid::fourMeasureRepeatShowExtenders) && item->numMeasures() == 4) {
@@ -2036,8 +2047,8 @@ void TDraw::draw(const MeasureRepeat* item, Painter* painter)
 
             double twoMeasuresWidth = 2 * item->measure()->width();
             double margin = item->style().styleMM(Sid::multiMeasureRestMargin);
-            double xOffset = item->symBbox(item->symId()).width() * .5;
-            double gapDistance = (item->symBbox(item->symId()).width() + item->spatium()) * .5;
+            double xOffset = item->symBbox(ldata->symId).width() * .5;
+            double gapDistance = (item->symBbox(ldata->symId).width() + item->spatium()) * .5;
             painter->drawLine(LineF(-twoMeasuresWidth + xOffset + margin, 0.0, xOffset - gapDistance, 0.0));
             painter->drawLine(LineF(xOffset + gapDistance, 0.0, twoMeasuresWidth + xOffset - margin, 0.0));
         }
@@ -2051,24 +2062,26 @@ void TDraw::draw(const MMRest* item, Painter* painter)
         return;
     }
 
+    const MMRest::LayoutData* ldata = item->layoutData();
+
     double _spatium = item->spatium();
 
     // draw number
     painter->setPen(item->curColor());
-    RectF numberBox = item->symBbox(item->numberSym());
+    RectF numberBox = item->symBbox(ldata->numberSym);
     PointF numberPos = item->numberPosition(numberBox);
     if (item->numberVisible()) {
-        item->drawSymbols(item->numberSym(), painter, numberPos);
+        item->drawSymbols(ldata->numberSym, painter, numberPos);
     }
 
     numberBox.translate(numberPos);
 
     if (item->style().styleB(Sid::oldStyleMultiMeasureRests)
-        && item->number() <= item->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
+        && ldata->number <= item->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
         // draw rest symbols
-        double x = (item->width() - item->symsWidth()) * 0.5;
+        double x = (item->width() - ldata->symsWidth) * 0.5;
         double spacing = item->style().styleMM(Sid::mmRestOldStyleSpacing);
-        for (SymId sym : item->restSyms()) {
+        for (SymId sym : ldata->restSyms) {
             double y = (sym == SymId::restWhole ? -_spatium : 0);
             item->drawSymbol(sym, painter, PointF(x, y));
             x += item->symBbox(sym).width() + spacing;
@@ -2122,6 +2135,8 @@ void TDraw::draw(const Note* item, Painter* painter)
         return;
     }
 
+    const Note::LayoutData* ldata = item->layoutData();
+
     auto config = item->engravingConfiguration();
 
     bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
@@ -2146,9 +2161,12 @@ void TDraw::draw(const Note* item, Painter* painter)
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || item->fretConflict()) {
             double d  = item->spatium() * .1;
-            RectF bb
-                = RectF(item->bbox().x() - d, tab->fretMaskY() * item->magS(), item->bbox().width() + 2 * d,
-                        tab->fretMaskH() * item->magS());
+            RectF bb = RectF(item->bbox().x() - d,
+                             tab->fretMaskY() * item->magS(),
+                             item->bbox().width() + 2 * d,
+                             tab->fretMaskH() * item->magS()
+                             );
+
             // we do not know which viewer did this draw() call
             // so update all:
             if (!item->score()->getViewer().empty()) {
@@ -2206,13 +2224,13 @@ void TDraw::draw(const Note* item, Painter* painter)
             }
         }
         // draw blank notehead to avoid staff and ledger lines
-        if (item->cachedSymNull() != SymId::noSym) {
+        if (ldata->cachedSymNull != SymId::noSym) {
             painter->save();
             painter->setPen(config->noteBackgroundColor());
-            item->drawSymbol(item->cachedSymNull(), painter);
+            item->drawSymbol(ldata->cachedSymNull, painter);
             painter->restore();
         }
-        item->drawSymbol(item->cachedNoteheadSym(), painter);
+        item->drawSymbol(ldata->cachedNoteheadSym, painter);
     }
 }
 
@@ -2351,8 +2369,11 @@ void TDraw::draw(const Rest* item, Painter* painter)
     if (item->shouldNotBeDrawn()) {
         return;
     }
+
+    const Rest::LayoutData* ldata = item->layoutData();
+
     painter->setPen(item->curColor());
-    item->drawSymbol(item->sym(), painter);
+    item->drawSymbol(ldata->sym, painter);
 }
 
 //! NOTE May be removed later (should be only single mode)
@@ -2524,13 +2545,14 @@ void TDraw::draw(const StaffState* item, Painter* painter)
         return;
     }
 
+    const StaffState::LayoutData* ldata = item->layoutData();
     auto conf = item->engravingConfiguration();
 
     Pen pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
-            item->lw(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+            ldata->lw, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->setBrush(BrushStyle::NoBrush);
-    painter->drawPath(item->path());
+    painter->drawPath(ldata->path);
 }
 
 void TDraw::draw(const StaffText* item, Painter* painter)
@@ -2593,12 +2615,14 @@ void TDraw::draw(const Stem* item, Painter* painter)
         return;
     }
 
+    const Stem::LayoutData* ldata = item->layoutData();
+
     const Staff* staff = item->staff();
     const StaffType* staffType = staff ? staff->staffTypeForElement(item->chord()) : nullptr;
     const bool isTablature = staffType && staffType->isTabStaff();
 
     painter->setPen(Pen(item->curColor(), item->lineWidthMag(), PenStyle::SolidLine, PenCapStyle::FlatCap));
-    painter->drawLine(item->line());
+    painter->drawLine(ldata->line);
 
     if (!isTablature) {
         return;
@@ -2656,9 +2680,9 @@ void TDraw::draw(const Stem* item, Painter* painter)
 void TDraw::draw(const StemSlash* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-
-    painter->setPen(Pen(item->curColor(), item->stemWidth(), PenStyle::SolidLine, PenCapStyle::FlatCap));
-    painter->drawLine(item->line());
+    const StemSlash::LayoutData* ldata = item->layoutData();
+    painter->setPen(Pen(item->curColor(), ldata->stemWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
+    painter->drawLine(ldata->line);
 }
 
 void TDraw::draw(const Sticking* item, Painter* painter)
@@ -2710,6 +2734,8 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
         return;
     }
 
+    const TabDurationSymbol::LayoutData* ldata = item->layoutData();
+
     if (item->isRepeat() && (item->tab()->symRepeat() == TablatureSymbolRepeat::SYSTEM)) {
         Chord* chord = toChord(item->explicitParent());
         ChordRest* prevCR = prevChordRest(chord);
@@ -2724,7 +2750,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
     Pen pen(item->curColor());
     painter->setPen(pen);
     painter->scale(mag, mag);
-    if (item->beamGrid() == TabBeamGrid::NONE) {
+    if (ldata->beamGrid == TabBeamGrid::NONE) {
         // if no beam grid, draw symbol
         mu::draw::Font f(item->tab()->durationFont());
         f.setPointSizeF(f.pointSizeF() * MScore::pixelRatio);
@@ -2742,7 +2768,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
         painter->drawLine(PointF(0.0, h), PointF(0.0, 0.0));
         // if beam grid is medial/final, draw beam lines too: lines go from mid of
         // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)
-        if (item->beamGrid() == TabBeamGrid::MEDIALFINAL) {
+        if (ldata->beamGrid == TabBeamGrid::MEDIALFINAL) {
             pen.setWidthF(font.gridBeamWidth * _spatium);
             painter->setPen(pen);
             // lower height available to beams by half a beam width,
@@ -2750,10 +2776,10 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
             h += (font.gridBeamWidth * _spatium) * 0.5;
             // draw beams equally spaced within the stem height (this is
             // different from modern engraving, but common in historic prints)
-            double step  = -h / item->beamLevel();
+            double step  = -h / ldata->beamLevel;
             double y     = h;
-            for (int i = 0; i < item->beamLevel(); i++, y += step) {
-                painter->drawLine(PointF(item->beamLength(), y), PointF(0.0, y));
+            for (int i = 0; i < ldata->beamLevel; i++, y += step) {
+                painter->drawLine(PointF(ldata->beamLength, y), PointF(0.0, y));
             }
         }
     }
@@ -2885,10 +2911,10 @@ void TDraw::draw(const Tremolo* item, Painter* painter)
 void TDraw::draw(const TremoloBar* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-
+    const TremoloBar::LayoutData* ldata = item->layoutData();
     Pen pen(item->curColor(), item->lineWidth().val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
-    painter->drawPolyline(item->polygon());
+    painter->drawPolyline(ldata->polygon);
 }
 
 void TDraw::draw(const TrillSegment* item, Painter* painter)
