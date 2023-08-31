@@ -67,7 +67,7 @@ class RealizedHarmony {
 
       PitchMap _notes;
 
-      Voicing _voicing = Voicing::INVALID;
+      Voicing _voicing = Voicing::AUTO;
       HDuration _duration = HDuration::INVALID;
 
       //whether or not the current notes QMap is up to date
