@@ -415,7 +415,24 @@ enum class Pid {
     CAPO_IGNORED_STRINGS,
     CAPO_GENERATE_TEXT,
 
+    POSITION_LINKED_TO_MASTER,
+    APPEARANCE_LINKED_TO_MASTER,
+    TEXT_LINKED_TO_MASTER,
+    EXCLUDE_FROM_OTHER_PARTS,
+
     END
+};
+
+enum class PropertyPropagation {
+    NONE,
+    PROPAGATE,
+    UNLINK,
+};
+
+enum class PropertyGroup {
+    POSITION,
+    APPEARANCE,
+    TEXT,
 };
 
 using PropertyIdSet = std::unordered_set<Pid>;
@@ -427,6 +444,10 @@ extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
 extern Pid propertyId(const AsciiStringView& name);
 extern String propertyUserName(Pid);
+
+extern const std::set<Pid>& positionProperties(); ///< All the properties that have to do with the position of an item
+extern const std::set<Pid>& textProperties(); ///< Text body of text items
+extern const std::set<Pid>& appearanceProperties(); ///< All the properties that are not position or text properties
 } // namespace mu::engraving
 
 #endif

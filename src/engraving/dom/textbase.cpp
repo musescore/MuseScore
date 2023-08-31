@@ -2650,6 +2650,15 @@ mu::draw::FontMetrics TextBase::fontMetrics() const
     return mu::draw::FontMetrics(font());
 }
 
+bool TextBase::isPropertyLinkedToMaster(Pid id) const
+{
+    if (mu::contains(textProperties(), id)) {
+        return isTextLinkedToMaster();
+    }
+
+    return EngravingItem::isPropertyLinkedToMaster(id);
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
@@ -2685,6 +2694,8 @@ PropertyValue TextBase::getProperty(Pid propertyId) const
         return static_cast<int>(m_cursor->selectedFragmentsFormat().valign());
     case Pid::TEXT:
         return xmlText();
+    case Pid::TEXT_LINKED_TO_MASTER:
+        return isTextLinkedToMaster();
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -2744,6 +2755,15 @@ bool TextBase::setProperty(Pid pid, const PropertyValue& v)
     case Pid::TEXT_SCRIPT_ALIGN:
         m_cursor->setFormat(FormatId::Valign, v.toInt());
         break;
+    case Pid::TEXT_LINKED_TO_MASTER:
+        if (isTextLinkedToMaster() == v.toBool()) {
+            break;
+        }
+        if (!isTextLinkedToMaster()) {
+            relinkPropertiesToMaster(PropertyGroup::TEXT);
+        }
+        setTextLinkedToMaster(v.toBool());
+        break;
     default:
         rv = EngravingItem::setProperty(pid, v);
         break;
@@ -2783,6 +2803,8 @@ PropertyValue TextBase::propertyDefault(Pid id) const
         return String();
     case Pid::TEXT_SCRIPT_ALIGN:
         return static_cast<int>(VerticalAlignment::AlignNormal);
+    case Pid::TEXT_LINKED_TO_MASTER:
+        return true;
     default:
         for (const auto& p : *textStyle(TextStyleType::DEFAULT)) {
             if (p.pid == id) {
@@ -3370,11 +3392,36 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
             undoChangeProperty(Pid::TEXT, stripText(false, false, true), propertyFlags(id));
         }
     }
-    if (id == Pid::FONT_STYLE || id == Pid::FONT_FACE || id == Pid::FONT_SIZE || id == Pid::TEXT_SCRIPT_ALIGN) {
-        // can't use standard change property as Undo might set to "undefined"
-        score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
-    } else {
+
+    bool isTextSpecificProperty = id == Pid::FONT_STYLE || id == Pid::FONT_FACE || id == Pid::FONT_SIZE || id == Pid::TEXT_SCRIPT_ALIGN;
+    if (!isTextSpecificProperty) {
         EngravingItem::undoChangeProperty(id, v, ps);
+        return;
+    }
+
+    const std::list<EngravingObject*> linkedObjects = linkListForPropertyPropagation();
+    for (EngravingObject* linkedObject : linkedObjects) {
+        TextBase* linkedText = toTextBase(linkedObject);
+        if (linkedText == this) {
+            // can't use standard change property as Undo might set to "undefined"
+            score()->undo(new ChangeTextProperties(m_cursor, id, v, ps));
+            continue;
+        }
+
+        Score* linkedScore = linkedText->score();
+        TextCursor* linkedCursor = linkedText->cursor();
+        PropertyPropagation propertyPropagate = propertyPropagation(linkedText, id);
+
+        switch (propertyPropagate) {
+        case PropertyPropagation::PROPAGATE:
+            linkedScore->undo(new ChangeTextProperties(linkedCursor, id, v, ps));
+            break;
+        case PropertyPropagation::UNLINK:
+            unlinkPropertyFromMaster(id);
+            break;
+        default:
+            break;
+        }
     }
 }
 }

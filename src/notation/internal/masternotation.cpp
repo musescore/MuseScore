@@ -323,6 +323,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             nvb->setLeftMargin(tvb->leftMargin());
             nvb->setRightMargin(tvb->rightMargin());
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
+            nvb->setExcludeFromOtherParts(false);
         }
 
         clearMeasures(score);
@@ -352,6 +353,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             if (measure->type() != ElementType::VBOX) {
                 mu::engraving::MeasureBase* nm = nvb ? nvb : new mu::engraving::VBox(score->dummy()->system());
                 nm->setTick(mu::engraving::Fraction(0, 1));
+                nm->setExcludeFromOtherParts(false);
                 nm->setNext(measure);
                 score->measures()->add(nm);
                 measure = nm;

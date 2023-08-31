@@ -414,6 +414,9 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
                 LOGW("EngravingItem::readProperties: could not link %s at staff %d", item->typeName(), mainLoc.staff() + 1);
             }
         }
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::POSITION_LINKED_TO_MASTER)) {
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::APPEARANCE_LINKED_TO_MASTER)) {
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::EXCLUDE_FROM_OTHER_PARTS)) {
     } else if (tag == "lid") {
         if (ctx.mscVersion() >= 301) {
             e.skipCurrentElement();
@@ -4178,6 +4181,7 @@ bool TRead::readProperties(TextBase* t, XmlReader& e, ReadContext& ctx)
         if (t->isStyled(Pid::FONT_STYLE)) {
             t->setPropertyFlags(Pid::FONT_STYLE, PropertyFlags::UNSTYLED);
         }
+    } else if (TRead::readProperty(t, tag, e, ctx, Pid::TEXT_LINKED_TO_MASTER)) {
     } else if (!readItemProperties(t, e, ctx)) {
         return false;
     }

@@ -110,6 +110,9 @@ public:
     String accessibleInfo() const override;
     void triggerLayout() const override;
 
+    const std::list<EngravingObject*> linkListForPropertyPropagation() const override;
+    bool isPropertyLinkedToMaster(Pid id) const override;
+
 protected:
 
     SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);

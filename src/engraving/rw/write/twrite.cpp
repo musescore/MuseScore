@@ -344,6 +344,10 @@ void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, Writ
             writeProperty(item, xml, pid);
         }
     }
+
+    writeProperty(item, xml, Pid::POSITION_LINKED_TO_MASTER);
+    writeProperty(item, xml, Pid::APPEARANCE_LINKED_TO_MASTER);
+    writeProperty(item, xml, Pid::EXCLUDE_FROM_OTHER_PARTS);
 }
 
 void TWrite::write(const Accidental* item, XmlWriter& xml, WriteContext& ctx)
@@ -965,6 +969,8 @@ void TWrite::writeProperties(const TextBase* item, XmlWriter& xml, WriteContext&
     if (writeText) {
         xml.writeXml(u"text", item->xmlText());
     }
+
+    writeProperty(item, xml, Pid::TEXT_LINKED_TO_MASTER);
 }
 
 void TWrite::write(const Fermata* item, XmlWriter& xml, WriteContext& ctx)

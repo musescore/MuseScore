@@ -67,7 +67,7 @@ public:
 
     virtual double guiScaling() const = 0;
 
-    virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true) const = 0;
+    virtual draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const = 0;
     virtual void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) = 0;
     virtual async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const = 0;
 

@@ -222,6 +222,7 @@ public:
     void setPitch(int pitch, int tpc1, int tpc2);
     int pitch() const { return m_pitch; }
     int ottaveCapoFret() const;
+    int linkedOttavaPitchOffset() const;
     int ppitch() const;             // playback pitch
     int epitch() const;             // effective pitch
     int octave() const;

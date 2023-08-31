@@ -51,6 +51,8 @@ struct VoiceColorKey {
 
 static VoiceColorKey voiceColorKeys[VOICES];
 
+static Color unlinkedItemColor = "#FF9300";
+
 void EngravingConfiguration::init()
 {
     Color defaultVoiceColors[VOICES] {
@@ -216,9 +218,9 @@ double EngravingConfiguration::guiScaling() const
     return uiConfiguration()->guiScaling();
 }
 
-Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible) const
+Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore) const
 {
-    Color color = voiceColorKeys[voice].color;
+    Color color = itemIsUnlinkedFromScore ? unlinkedItemColor : voiceColorKeys[voice].color;
 
     if (itemVisible) {
         return color;

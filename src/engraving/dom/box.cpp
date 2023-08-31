@@ -51,6 +51,7 @@ static const ElementStyle hBoxStyle {
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
 {
+    setExcludeFromOtherParts(propertyDefault(Pid::EXCLUDE_FROM_OTHER_PARTS).toBool());
 }
 
 //---------------------------------------------------------
@@ -254,6 +255,8 @@ PropertyValue Box::propertyDefault(Pid id) const
     case Pid::BOTTOM_MARGIN:
         return 0.0;
     case Pid::BOX_AUTOSIZE:
+        return true;
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
         return true;
     default:
         return MeasureBase::propertyDefault(id);

@@ -287,6 +287,8 @@ class TextBase : public EngravingItem
 
     INJECT(IEngravingFontsProvider, engravingFonts)
 
+    M_PROPERTY2(bool, isTextLinkedToMaster, setTextLinkedToMaster, true)
+
 public:
 
     ~TextBase();
@@ -374,6 +376,7 @@ public:
     mu::draw::Font font() const;
     mu::draw::FontMetrics fontMetrics() const;
 
+    bool isPropertyLinkedToMaster(Pid id) const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;

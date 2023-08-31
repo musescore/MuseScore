@@ -24,6 +24,7 @@
 
 #include "factory.h"
 #include "layoutbreak.h"
+#include "masterscore.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -616,6 +617,26 @@ int MeasureBase::measureIndex() const
         }
     }
     return -1;
+}
+
+void MeasureBase::manageExclusionFromParts(bool exclude)
+{
+    if (exclude) {
+        EngravingItem::manageExclusionFromParts(exclude);
+    } else {
+        std::vector<MeasureBase*> newFrames;
+        for (Score* score : masterScore()->scoreList()) {
+            if (score == this->score()) {
+                continue;
+            }
+            MeasureBase* newFrame = score->insertMeasure(type(), next());
+            newFrame->setExcludeFromOtherParts(false);
+            newFrames.push_back(newFrame);
+        }
+        for (MeasureBase* newFrame : newFrames) {
+            newFrame->linkTo(this);
+        }
+    }
 }
 
 //---------------------------------------------------------

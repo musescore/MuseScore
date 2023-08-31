@@ -4000,8 +4000,12 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
     MeasureBase* result = nullptr;
     bool isBeginning = tick.isZero();
 
+    bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX || type == ElementType::VBOX;
+    bool isTitleFrame = (type == ElementType::VBOX || type == ElementType::TBOX) && isBeginning;
+    bool dontCloneFrameToParts = isFrame && !isTitleFrame;
+
     std::list<Score*> scores;
-    if (options.addToAllScores) {
+    if (options.addToAllScores && !dontCloneFrameToParts) {
         scores = scoreList();
     } else {
         scores.push_back(this);
@@ -4031,8 +4035,15 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 
         MeasureBase* newMeasureBase = toMeasureBase(Factory::createItem(type, score->dummy()));
         newMeasureBase->setTick(tick);
+        if (dontCloneFrameToParts) {
+            newMeasureBase->setExcludeFromOtherParts(true);
+        } else {
+            newMeasureBase->setExcludeFromOtherParts(false);
+        }
 
         if (score == this) {
+            result = newMeasureBase;
+        } else if (!result && score == scores.back()) {
             result = newMeasureBase;
         }
 
@@ -4918,34 +4929,41 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
 //    return true if an property was actually changed
 //---------------------------------------------------------
 
-bool Score::undoPropertyChanged(EngravingItem* e, Pid t, const PropertyValue& st, PropertyFlags ps)
+bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyValue& propValue, PropertyFlags propFlags)
 {
     bool changed = false;
 
-    if (propertyLink(t) && e->links()) {
-        for (EngravingObject* ee : *e->links()) {
-            if (ee == e) {
-                if (ee->getProperty(t) != st) {
-                    undoStack()->push1(new ChangeProperty(ee, t, st, ps));
-                    changed = true;
-                }
-            } else {
-                // property in linked element has not changed yet
-                // push() calls redo() to change it
-                if (ee->getProperty(t) != e->getProperty(t)) {
-                    undoStack()->push(new ChangeProperty(ee, t, e->getProperty(t), ps), 0);
-                    changed = true;
-                }
-            }
+    PropertyValue currentPropValue = item->getProperty(propId);
+    PropertyFlags currentPropFlags = item->propertyFlags(propId);
+
+    if ((currentPropValue != propValue) || (currentPropFlags != propFlags)) {
+        item->setPropertyFlags(propId, propFlags);
+        undoStack()->push1(new ChangeProperty(item, propId, propValue, propFlags));
+        changed = true;
+    }
+
+    std::list<EngravingObject*> linkedItems = item->linkListForPropertyPropagation();
+
+    for (EngravingObject* linkedItem : linkedItems) {
+        if (linkedItem == item) {
+            continue;
         }
-    } else {
-        PropertyFlags po = e->propertyFlags(t);
-        if ((e->getProperty(t) != st) || (ps != po)) {
-            e->setPropertyFlags(t, ps);
-            undoStack()->push1(new ChangeProperty(e, t, st, po));
-            changed = true;
+        PropertyPropagation propertyPropagate = item->propertyPropagation(toEngravingItem(linkedItem), propId);
+        switch (propertyPropagate) {
+        case PropertyPropagation::PROPAGATE:
+            if (linkedItem->getProperty(propId) != currentPropValue) {
+                undoStack()->push(new ChangeProperty(linkedItem, propId, currentPropValue, propFlags), 0);
+                changed = true;
+            }
+            break;
+        case PropertyPropagation::UNLINK:
+            item->unlinkPropertyFromMaster(propId);
+            break;
+        default:
+            break;
         }
     }
+
     return changed;
 }
 
@@ -5132,7 +5150,7 @@ void Score::updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff,
 //    create a clef before element e
 //---------------------------------------------------------
 
-void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool forInstrumentChange)
+void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool forInstrumentChange, Clef* clefToRelink)
 {
     IF_ASSERT_FAILED(ostaff && e) {
         return;
@@ -5170,8 +5188,9 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
     Fraction rtick = e->rtick();
     bool isSmall = (st == SegmentType::Clef);
     for (Staff* staff : ostaff->staffList()) {
-        //      if (staff->staffType(tick)->group() != ClefInfo::staffGroup(ct))
-        //            continue;
+        if (clefToRelink && ostaff == staff) {
+            continue;
+        }
 
         Score* score     = staff->score();
         Measure* measure = score->tick2measure(tick);
@@ -5252,6 +5271,16 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
             clef->setForInstrumentChange(true);
         }
         clef->setSmall(isSmall);
+
+        if (clefToRelink) {
+            LinkedObjects* links = clef->links();
+            if (!links) {
+                clef->linkTo(clefToRelink);
+            } else if (!clef->isLinked(clefToRelink)) {
+                clefToRelink->setLinks(links);
+                links->push_back(clefToRelink);
+            }
+        }
     }
 }
 
@@ -5730,7 +5759,7 @@ void Score::undoChangeVisible(EngravingItem* item, bool visible)
 //   undoAddElement
 //---------------------------------------------------------
 
-void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool ctrlModifier)
+void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool ctrlModifier, EngravingItem* elementToRelink)
 {
     Staff* ostaff = element->staff();
     track_idx_t strack = mu::nidx;
@@ -5781,6 +5810,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     staffList.push_back(staff);
                 }
             }
+        }
+
+        if (elementToRelink) {
+            staffList.remove(ostaff);
         }
 
         bool originalAdded = false;
@@ -5957,6 +5990,10 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         staves = ostaff->staffList();
     } else {
         staves.push_back(ostaff);
+    }
+
+    if (elementToRelink) {
+        staves.remove(ostaff);
     }
 
     for (Staff* staff : staves) {
@@ -6330,6 +6367,16 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 LOGW("undoAddElement: unhandled: <%s>", element->typeName());
             }
             ne->styleChanged();
+
+            if (elementToRelink) {
+                LinkedObjects* links = ne->links();
+                if (!links) {
+                    ne->linkTo(elementToRelink);
+                } else {
+                    elementToRelink->setLinks(links);
+                    links->push_back(elementToRelink);
+                }
+            }
         }
     }
 }
@@ -6468,7 +6515,7 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
 //   undoRemoveElement
 //---------------------------------------------------------
 
-void Score::undoRemoveElement(EngravingItem* element)
+void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
 {
     if (!element) {
         return;
@@ -6476,16 +6523,18 @@ void Score::undoRemoveElement(EngravingItem* element)
     std::list<Segment*> segments;
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
-        undo(new RemoveElement(e));
+        if (e == element || removeLinked) {
+            undo(new RemoveElement(e));
 
-        if (e->explicitParent() && (e->explicitParent()->isSegment())) {
-            Segment* s = toSegment(e->explicitParent());
-            if (!mu::contains(segments, s)) {
-                segments.push_back(s);
+            if (e->explicitParent() && (e->explicitParent()->isSegment())) {
+                Segment* s = toSegment(e->explicitParent());
+                if (!mu::contains(segments, s)) {
+                    segments.push_back(s);
+                }
             }
-        }
-        if (e->explicitParent() && e->explicitParent()->isSystem()) {
-            e->setParent(0);       // systems will be regenerated upon redo, so detach
+            if (e->explicitParent() && e->explicitParent()->isSystem()) {
+                e->setParent(0);   // systems will be regenerated upon redo, so detach
+            }
         }
     }
 

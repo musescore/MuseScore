@@ -132,7 +132,8 @@ ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 
 EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
 {
-    if (pid == Pid::COLOR || pid == Pid::VISIBLE || pid == Pid::PLACEMENT) {
+    if (pid == Pid::COLOR || pid == Pid::VISIBLE || pid == Pid::PLACEMENT
+        || pid == Pid::EXCLUDE_FROM_OTHER_PARTS || pid == Pid::POSITION_LINKED_TO_MASTER || pid == Pid::APPEARANCE_LINKED_TO_MASTER) {
         return spanner();
     }
     return 0;
@@ -354,6 +355,44 @@ void SpannerSegment::scanElements(void* data, void (* func)(void*, EngravingItem
     if (all || spanner()->eitherEndVisible() || systemFlag()) {
         func(data, this);
     }
+}
+
+const std::list<EngravingObject*> SpannerSegment::linkListForPropertyPropagation() const
+{
+    std::list<EngravingObject*> result;
+    result.push_back((EngravingObject*)this);
+
+    if (isMiddleType()) {
+        return result;
+    }
+
+    for (EngravingObject* linkedSpanner : m_spanner->linkList()) {
+        if (linkedSpanner == m_spanner || toSpanner(linkedSpanner)->placement() != m_spanner->placement()) {
+            continue;
+        }
+        const std::vector<SpannerSegment*>& linkedSegments = toSpanner(linkedSpanner)->spannerSegments();
+        if (linkedSegments.empty()) {
+            continue;
+        }
+        if (isSingleBeginType()) {
+            result.push_back(linkedSegments.front());
+        } else if (isSingleEndType()) {
+            result.push_back(linkedSegments.back());
+        }
+    }
+
+    return result;
+}
+
+bool SpannerSegment::isPropertyLinkedToMaster(Pid id) const
+{
+    bool linkedForSpannerSegment = EngravingItem::isPropertyLinkedToMaster(id);
+    if (!linkedForSpannerSegment) {
+        return linkedForSpannerSegment;
+    }
+
+    // The property is linked for the spanner segment, but may be unlinked for the spanner, in which case we consider it unlinked
+    return spanner()->isPropertyLinkedToMaster(id);
 }
 
 //---------------------------------------------------------
@@ -616,6 +655,24 @@ bool Spanner::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::ANCHOR:
         setAnchor(Anchor(v.toInt()));
+        break;
+    case Pid::POSITION_LINKED_TO_MASTER:
+        setPositionLinkedToMaster(v.toBool());
+        if (isPositionLinkedToMaster()) {
+            for (SpannerSegment* seg : spannerSegments()) {
+                seg->relinkPropertiesToMaster(PropertyGroup::POSITION);
+            }
+            relinkPropertiesToMaster(PropertyGroup::POSITION);
+        }
+        break;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        setAppearanceLinkedToMaster(v.toBool());
+        if (isAppearanceLinkedToMaster()) {
+            for (SpannerSegment* seg : spannerSegments()) {
+                seg->relinkPropertiesToMaster(PropertyGroup::APPEARANCE);
+            }
+            relinkPropertiesToMaster(PropertyGroup::APPEARANCE);
+        }
         break;
     default:
         return EngravingItem::setProperty(propertyId, v);

@@ -145,6 +145,8 @@ public:
     bool isHeader() const { return m_isHeader; }
     void setIsHeader(bool val) { m_isHeader = val; }
 
+    void manageExclusionFromParts(bool exclude) override;
+
     struct LayoutData : public EngravingItem::LayoutData {
         SymId symId = SymId::noSym;
     };

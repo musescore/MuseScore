@@ -146,6 +146,10 @@ class EngravingItem : public EngravingObject
     INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
     INJECT_STATIC(rendering::IScoreRenderer, renderer)
 
+    M_PROPERTY2(bool, isPositionLinkedToMaster, setPositionLinkedToMaster, true)
+    M_PROPERTY2(bool, isAppearanceLinkedToMaster, setAppearanceLinkedToMaster, true)
+    M_PROPERTY2(bool, excludeFromOtherParts, setExcludeFromOtherParts, false)
+
 public:
 
     virtual ~EngravingItem();
@@ -560,6 +564,13 @@ public:
     mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(pagePos()); }
     mu::RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(pagePos()); }
     mu::RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(canvasPos()); }
+
+    virtual bool isPropertyLinkedToMaster(Pid id) const;
+    void unlinkPropertyFromMaster(Pid id);
+    void relinkPropertiesToMaster(PropertyGroup propertyGroup);
+    PropertyPropagation propertyPropagation(EngravingItem* destinationItem, Pid propertyId);
+    bool canBeExcludedFromOtherParts() const;
+    virtual void manageExclusionFromParts(bool exclude);
 
     //! --- Old Interface ---
     virtual void setbbox(const mu::RectF& r) { mutLayoutData()->setBbox(r); }

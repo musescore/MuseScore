@@ -323,6 +323,9 @@ void EngravingItem::reset()
     undoResetProperty(Pid::OFFSET);
     setOffsetChanged(false);
     EngravingObject::reset();
+    // *After* having reset all other properties, also reset the linking to score
+    undoResetProperty(Pid::POSITION_LINKED_TO_MASTER);
+    undoResetProperty(Pid::APPEARANCE_LINKED_TO_MASTER);
 }
 
 //---------------------------------------------------------
@@ -621,7 +624,12 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible);
+        bool isUnlinkedFromMaster = !(getProperty(Pid::POSITION_LINKED_TO_MASTER).toBool()
+                                      && getProperty(Pid::APPEARANCE_LINKED_TO_MASTER).toBool());
+        if (isTextBase()) {
+            isUnlinkedFromMaster = isUnlinkedFromMaster || !getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
+        }
+        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster);
     }
 
     if (!isVisible) {
@@ -1131,6 +1139,12 @@ PropertyValue EngravingItem::getProperty(Pid propertyId) const
         return systemFlag();
     case Pid::SIZE_SPATIUM_DEPENDENT:
         return sizeIsSpatiumDependent();
+    case Pid::POSITION_LINKED_TO_MASTER:
+        return _isPositionLinkedToMaster;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        return _isAppearanceLinkedToMaster;
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
+        return _excludeFromOtherParts;
     default:
         if (explicitParent()) {
             return explicitParent()->getProperty(propertyId);
@@ -1186,6 +1200,27 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::SIZE_SPATIUM_DEPENDENT:
         setSizeIsSpatiumDependent(v.toBool());
         break;
+    case Pid::POSITION_LINKED_TO_MASTER:
+        if (_isPositionLinkedToMaster == v.toBool()) {
+            break;
+        }
+        if (!_isPositionLinkedToMaster) {
+            relinkPropertiesToMaster(PropertyGroup::POSITION);
+        }
+        setPositionLinkedToMaster(v.toBool());
+        break;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        if (_isAppearanceLinkedToMaster == v.toBool()) {
+            break;
+        }
+        if (!_isAppearanceLinkedToMaster) {
+            relinkPropertiesToMaster(PropertyGroup::APPEARANCE);
+        }
+        setAppearanceLinkedToMaster(v.toBool());
+        break;
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
+        setExcludeFromOtherParts(v.toBool());
+        break;
     default:
         if (explicitParent()) {
             return explicitParent()->setProperty(propertyId, v);
@@ -1196,6 +1231,114 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
     }
     triggerLayout();
     return true;
+}
+
+void EngravingItem::manageExclusionFromParts(bool exclude)
+{
+    if (exclude) {
+        std::list<EngravingObject*> links = linkList();
+        for (EngravingObject* linkedObject : links) {
+            if (linkedObject->score() == score()) {
+                continue;
+            }
+            EngravingItem* linkedItem = toEngravingItem(linkedObject);
+            if (linkedItem->selected()) {
+                linkedItem->score()->deselect(linkedItem);
+            }
+            linkedItem->score()->undoRemoveElement(linkedItem, false);
+            linkedItem->undoUnlink();
+        }
+    } else {
+        score()->undoAddElement(this, /*addToLinkedStaves*/ true, /*ctrlModifier*/ false, this);
+    }
+}
+
+void EngravingItem::relinkPropertiesToMaster(PropertyGroup propertyGroup)
+{
+    assert(!score()->isMaster());
+
+    std::list<EngravingObject*> linkedElements = linkListForPropertyPropagation();
+    EngravingObject* masterElement = nullptr;
+    for (EngravingObject* element : linkedElements) {
+        if (element->score()->isMaster()) {
+            masterElement = element;
+            break;
+        }
+    }
+
+    if (!masterElement) {
+        return;
+    }
+
+    const std::set<Pid>& propertiesToRelink = propertyGroup == PropertyGroup::POSITION ? positionProperties()
+                                              : propertyGroup == PropertyGroup::APPEARANCE ? appearanceProperties()
+                                              : textProperties();
+
+    for (Pid propertyId : propertiesToRelink) {
+        PropertyValue masterValue = masterElement->getProperty(propertyId);
+        PropertyFlags masterFlags = masterElement->propertyFlags(propertyId);
+        setProperty(propertyId, masterValue);
+        setPropertyFlags(propertyId, masterFlags);
+    }
+
+    return;
+}
+
+PropertyPropagation EngravingItem::propertyPropagation(EngravingItem* destinationItem, Pid propertyId)
+{
+    assert(destinationItem != this);
+
+    if (propertyLink(propertyId)) {
+        return PropertyPropagation::PROPAGATE; // These properties are always linked, no matter what
+    }
+
+    static std::set<Pid> NEVER_PROPAGATING_PROPERTIES = {
+        Pid::POSITION_LINKED_TO_MASTER,
+        Pid::APPEARANCE_LINKED_TO_MASTER,
+        Pid::TEXT_LINKED_TO_MASTER,
+        Pid::GENERATED,
+        Pid::EXCLUDE_FROM_OTHER_PARTS
+    };
+
+    if (mu::contains(NEVER_PROPAGATING_PROPERTIES, propertyId)) {
+        return PropertyPropagation::NONE;
+    }
+
+    Score* sourceScore = score();
+    Score* destinationScore = destinationItem->score();
+    bool isTextProperty = mu::contains(textProperties(), propertyId);
+
+    if (isTextProperty && isPropertyLinkedToMaster(propertyId) || sourceScore == destinationScore) {
+        return PropertyPropagation::PROPAGATE;
+    }
+
+    if (sourceScore != destinationScore && !sourceScore->isMaster()) {
+        // Properties are only propagated when being edited from master. If this is being edited
+        // from a part score, we mark it as unlinked so it becomes independent in the part.
+        return PropertyPropagation::UNLINK;
+    }
+
+    if (destinationItem->isPropertyLinkedToMaster(propertyId) || sourceScore == destinationScore) {
+        return PropertyPropagation::PROPAGATE;
+    }
+
+    return PropertyPropagation::NONE;
+}
+
+bool EngravingItem::canBeExcludedFromOtherParts() const
+{
+    static const std::set<ElementType> TYPE_EXCLUDIBLE_FROM_PARTS {
+        ElementType::STAFF_TEXT,
+        ElementType::SYSTEM_TEXT,
+        ElementType::CLEF,
+        ElementType::OTTAVA_SEGMENT,
+        ElementType::HBOX,
+        ElementType::VBOX,
+        ElementType::TBOX,
+        ElementType::FBOX,
+    };
+
+    return mu::contains(TYPE_EXCLUDIBLE_FROM_PARTS, type());
 }
 
 //---------------------------------------------------------
@@ -1253,6 +1396,12 @@ PropertyValue EngravingItem::propertyDefault(Pid pid) const
         return true;
     case Pid::Z:
         return int(type()) * 100;
+    case Pid::POSITION_LINKED_TO_MASTER:
+        return true;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        return true;
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
+        return false;
     default: {
         PropertyValue v = EngravingObject::propertyDefault(pid);
 
@@ -2195,6 +2344,28 @@ String EngravingItem::formatBarsAndBeats() const
     }
 
     return result;
+}
+
+bool EngravingItem::isPropertyLinkedToMaster(Pid id) const
+{
+    if (mu::contains(positionProperties(), id)) {
+        return isPositionLinkedToMaster();
+    }
+
+    if (mu::contains(appearanceProperties(), id)) {
+        return isAppearanceLinkedToMaster();
+    }
+
+    return true;
+}
+
+void EngravingItem::unlinkPropertyFromMaster(Pid id)
+{
+    if (mu::contains(positionProperties(), id)) {
+        score()->undo(new ChangeProperty(this, Pid::POSITION_LINKED_TO_MASTER, false));
+    } else if (mu::contains(appearanceProperties(), id)) {
+        score()->undo(new ChangeProperty(this, Pid::APPEARANCE_LINKED_TO_MASTER, false));
+    }
 }
 
 EngravingItem::LayoutData* EngravingItem::createLayoutData() const

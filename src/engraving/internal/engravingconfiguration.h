@@ -72,7 +72,7 @@ public:
 
     double guiScaling() const override;
 
-    draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true) const override;
+    draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const override;
     void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) override;
     async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const override;
 

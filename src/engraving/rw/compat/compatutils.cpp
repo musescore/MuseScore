@@ -97,6 +97,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     }
     if (masterScore->mscVersion() < 420) {
         addMissingInitKeyForTransposingInstrument(masterScore);
+        resetFramesExclusionFromParts(masterScore);
     }
 }
 
@@ -683,6 +684,17 @@ void CompatUtils::addMissingInitKeyForTransposingInstrument(MasterScore* score)
                     kse.setKey(key);
                     score->undoChangeKeySig(staff, Fraction(0, 1), kse);
                 }
+            }
+        }
+    }
+}
+
+void CompatUtils::resetFramesExclusionFromParts(MasterScore* masterScore)
+{
+    for (Score* score : masterScore->scoreList()) {
+        for (MeasureBase* measureBase = score->first(); measureBase; measureBase = measureBase->next()) {
+            if (!measureBase->isMeasure()) {
+                measureBase->setExcludeFromOtherParts(false);
             }
         }
     }

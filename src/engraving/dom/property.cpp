@@ -76,7 +76,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::FIXED,                   false, "fixed",                 P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "fixed") },
     { Pid::FIXED_LINE,              false, "fixedLine",             P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "fixed line") },
     { Pid::HEAD_TYPE,               false, "headType",              P_TYPE::NOTEHEAD_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "head type") },
-    { Pid::HEAD_GROUP,              false, "head",                  P_TYPE::NOTEHEAD_GROUP,     DUMMY_QT_TR_NOOP("propertyName", "head") },
+    { Pid::HEAD_GROUP,              true, "head",                  P_TYPE::NOTEHEAD_GROUP,     DUMMY_QT_TR_NOOP("propertyName", "head") },
     { Pid::VELO_TYPE,               false, "veloType",              P_TYPE::VELO_TYPE,      DUMMY_QT_TR_NOOP("propertyName", "velocity type") },
     { Pid::USER_VELOCITY,           false, "velocity",              P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "velocity") },
     { Pid::ARTICULATION_ANCHOR,     false, "anchor",                P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "anchor") },
@@ -135,7 +135,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::SCALE,                   false, "scale",                 P_TYPE::SCALE,          DUMMY_QT_TR_NOOP("propertyName", "scale") },
     { Pid::LOCK_ASPECT_RATIO,       false, "lockAspectRatio",       P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "aspect ratio locked") },
     { Pid::SIZE_IS_SPATIUM,         false, "sizeIsSpatium",         P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "size is spatium") },
-    { Pid::TEXT,                    true,  "text",                  P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "text") },
+    { Pid::TEXT,                    false,  "text",                  P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "text") },
     { Pid::HTML_TEXT,               false, 0,                       P_TYPE::STRING,         "" },
     { Pid::USER_MODIFIED,           false, 0,                       P_TYPE::BOOL,           "" },
     { Pid::BEAM_POS,                false, 0,                       P_TYPE::PAIR_REAL,      DUMMY_QT_TR_NOOP("propertyName", "beam position") },
@@ -406,6 +406,11 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::CAPO_IGNORED_STRINGS,    true,  "ignoredStrings",        P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "ignored strings") },
     { Pid::CAPO_GENERATE_TEXT,      true,  "generateText",          P_TYPE::BOOL,           DUMMY_QT_TR_NOOP("propertyName", "automatically generate text") },
 
+    { Pid::POSITION_LINKED_TO_MASTER,   false, "positionLinkedToMaster",   P_TYPE::BOOL,       DUMMY_QT_TR_NOOP("propertyName", "position linked to master") },
+    { Pid::APPEARANCE_LINKED_TO_MASTER, false, "appearanceLinkedToMaster", P_TYPE::BOOL,       DUMMY_QT_TR_NOOP("propertyName", "appearance linked to master") },
+    { Pid::TEXT_LINKED_TO_MASTER,       false, "textLinkedToMaster",       P_TYPE::BOOL,       DUMMY_QT_TR_NOOP("propertyName", "text linked to master") },
+    { Pid::EXCLUDE_FROM_OTHER_PARTS,    false, "excludeFromParts",         P_TYPE::BOOL,       DUMMY_QT_TR_NOOP("propertyName", "exclude from parts") },
+
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
 /* *INDENT-ON* */
@@ -553,5 +558,89 @@ String propertyToString(Pid id, const PropertyValue& value, bool mscx)
     }
 
     return String();
+}
+
+static const std::set<Pid> _positionProperties {
+    Pid::ARTICULATION_ANCHOR,
+    Pid::DIRECTION,
+    Pid::STEM_DIRECTION,
+    Pid::SLUR_DIRECTION,
+    Pid::LEADING_SPACE,
+    Pid::MIRROR_HEAD,
+    Pid::DOT_POSITION,
+    Pid::OFFSET,
+    Pid::P1,
+    Pid::P2,
+    Pid::TOP_GAP,
+    Pid::BOTTOM_GAP,
+    Pid::BEAM_POS,
+    Pid::PLACEMENT,
+    Pid::HPLACEMENT,
+    Pid::OFFSET2,
+    Pid::SLUR_UOFF1,
+    Pid::SLUR_UOFF2,
+    Pid::SLUR_UOFF3,
+    Pid::SLUR_UOFF4,
+    Pid::FRET_OFFSET,
+    Pid::FRET_NUM_POS,
+    Pid::AUTOPLACE,
+    Pid::ALIGN,
+    Pid::TEXT_SCRIPT_ALIGN,
+    Pid::BEGIN_TEXT_OFFSET,
+    Pid::CONTINUE_TEXT_OFFSET,
+    Pid::END_TEXT_OFFSET,
+    Pid::CENTER_ON_NOTEHEAD,
+    Pid::SNAP_TO_DYNAMICS,
+    Pid::POS_ABOVE,
+    Pid::POSITION,
+    Pid::MIN_DISTANCE,
+    Pid::HAIRPIN_HEIGHT,
+    Pid::HAIRPIN_CONT_HEIGHT,
+};
+
+const std::set<Pid>& positionProperties()
+{
+    return _positionProperties;
+}
+
+static const std::set<Pid> _textProperties = {
+    Pid::TEXT,
+    Pid::FONT_STYLE,
+};
+
+const std::set<Pid>& textProperties()
+{
+    return _textProperties;
+}
+
+static std::set<Pid> _appearanceProperties;
+
+const std::set<Pid>& appearanceProperties()
+{
+    static std::set<Pid> excludedProperties {
+        Pid::POSITION_LINKED_TO_MASTER,
+        Pid::APPEARANCE_LINKED_TO_MASTER,
+        Pid::TEXT_LINKED_TO_MASTER,
+        Pid::EXCLUDE_FROM_OTHER_PARTS,
+        Pid::PITCH,
+        Pid::TICK,
+        Pid::TPC1,
+        Pid::TPC2,
+        Pid::LINE,
+    };
+
+    if (_appearanceProperties.empty()) {
+        for (int i = 0; i < static_cast<int>(Pid::END); ++i) {
+            Pid propertyId = static_cast<Pid>(i);
+            bool isAppearanceProperty = !mu::contains(_positionProperties, propertyId)
+                                        && !mu::contains(_textProperties, propertyId)
+                                        && !mu::contains(excludedProperties, propertyId);
+            if (isAppearanceProperty) {
+                _appearanceProperties.insert(propertyId);
+            }
+        }
+    }
+
+    return _appearanceProperties;
 }
 }
