@@ -391,7 +391,7 @@ void Ornament::updateCueNote()
 Shape Ornament::shape() const
 {
     Shape s;
-    s.add(bbox(), this);
+    s.add(layoutData()->bbox, this);
     for (Accidental* accidental : _accidentalsAboveAndBelow) {
         if (accidental && accidental->visible()) {
             s.add(accidental->shape().translate(accidental->pos()));

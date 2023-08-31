@@ -24,7 +24,6 @@
 
 #include "importmidi_clef.h"
 #include "libmscore/factory.h"
-#include "libmscore/masterscore.h"
 #include "libmscore/staff.h"
 #include "libmscore/measure.h"
 #include "libmscore/segment.h"
@@ -32,9 +31,7 @@
 #include "libmscore/chordrest.h"
 #include "libmscore/chord.h"
 #include "libmscore/note.h"
-#include "libmscore/slur.h"
 #include "libmscore/engravingitem.h"
-#include "libmscore/sig.h"
 #include "importmidi_tie.h"
 #include "importmidi_meter.h"
 #include "importmidi_fraction.h"
@@ -127,7 +124,7 @@ static void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall =
         const track_idx_t track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
-        clef->setMag(staff->staffMag(Fraction::fromTicks(tick)));
+        clef->mutLayoutData()->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         clef->setSmall(isSmall);
         seg->add(clef);
     }

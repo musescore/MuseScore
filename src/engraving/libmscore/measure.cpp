@@ -804,7 +804,7 @@ void Measure::add(EngravingItem* e)
 
     case ElementType::HBOX:
         if (e->staff()) {
-            e->setMag(e->staff()->staffMag(tick()));                 // ?!
+            e->mutLayoutData()->setMag(e->staff()->staffMag(tick()));                 // ?!
         }
         el().push_back(e);
         break;
@@ -3207,7 +3207,7 @@ void Measure::spaceRightAlignedSegments()
             Segment* prevSegment = raSegment->prev();
             prevSegment->setWidth(prevSegment->width() - minDistAfter);
             prevSegment->setWidthOffset(prevSegment->widthOffset() - minDistAfter);
-            raSegment->movePosX(-minDistAfter);
+            raSegment->mutLayoutData()->movePosX(-minDistAfter);
             raSegment->setWidth(raSegment->width() + minDistAfter);
         }
         // 2) Make sure the segment isn't colliding with anything behind
@@ -3222,7 +3222,7 @@ void Measure::spaceRightAlignedSegments()
             prevSegment->setWidth(prevSegment->width() + minDistBefore);
         }
         for (Segment* seg = raSegment; seg; seg = seg->next()) {
-            seg->movePosX(minDistBefore);
+            seg->mutLayoutData()->movePosX(minDistBefore);
         }
         setWidth(width() + minDistBefore);
     }
@@ -3321,7 +3321,7 @@ void Measure::layoutSegmentsWithDuration(const std::vector<int>& visibleParts)
 
     auto [spacing, width] = current->computeCellWidth(visibleParts);
     currentXPos = computeFirstSegmentXPosition(current);
-    current->setPosX(currentXPos);
+    current->mutLayoutData()->setPosX(currentXPos);
     current->setWidth(width);
     current->setSpacing(spacing);
     currentXPos += width;
@@ -3337,7 +3337,7 @@ void Measure::layoutSegmentsWithDuration(const std::vector<int>& visibleParts)
         current->setWidth(width + spacing);
         current->setSpacing(spacing);
         currentXPos += spacing;
-        current->setPosX(currentXPos);
+        current->mutLayoutData()->setPosX(currentXPos);
         currentXPos += width;
         current = current->next();
     }
@@ -3406,7 +3406,7 @@ void Measure::respaceSegments()
     }
     // Start respacing segments
     for (Segment& s : m_segments) {
-        s.setPosX(x);
+        s.mutLayoutData()->setPosX(x);
         if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
             x += s.width();
         }

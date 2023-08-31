@@ -89,7 +89,7 @@ void assignKeyListToStaff(const KeyList& kl, Staff* staff)
         ks->setTrack(track);
         ks->setGenerated(false);
         ks->setKey(key);
-        ks->setMag(staff->staffMag(Fraction::fromTicks(tick)));
+        ks->mutLayoutData()->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         seg->add(ks);
     }
 }

@@ -22,8 +22,6 @@
 
 #include "lasso.h"
 
-#include "draw/types/brush.h"
-
 #include "score.h"
 
 using namespace mu;
@@ -47,38 +45,39 @@ Lasso::Lasso(Score* s)
 void Lasso::editDrag(EditData& ed)
 {
     //Qt::CursorShape cursorShape = Qt::ArrowCursor;
+    Lasso::LayoutData* ldata = mutLayoutData();
     switch (int(ed.curGrip)) {
     case 0:
         //cursorShape = Qt::SizeFDiagCursor;
-        bbox().setTopLeft(bbox().topLeft() + ed.delta);
+        ldata->bbox.setTopLeft(ldata->bbox.topLeft() + ed.delta);
         break;
     case 1:
         //cursorShape = Qt::SizeBDiagCursor;
-        bbox().setTopRight(bbox().topRight() + ed.delta);
+        ldata->bbox.setTopRight(ldata->bbox.topRight() + ed.delta);
         break;
     case 2:
         //cursorShape = Qt::SizeFDiagCursor;
-        bbox().setBottomRight(bbox().bottomRight() + ed.delta);
+        ldata->bbox.setBottomRight(ldata->bbox.bottomRight() + ed.delta);
         break;
     case 3:
         //cursorShape = Qt::SizeBDiagCursor;
-        bbox().setBottomLeft(bbox().bottomLeft() + ed.delta);
+        ldata->bbox.setBottomLeft(ldata->bbox.bottomLeft() + ed.delta);
         break;
     case 4:
         //cursorShape = Qt::SizeVerCursor;
-        bbox().setTop(bbox().top() + ed.delta.y());
+        ldata->bbox.setTop(ldata->bbox.top() + ed.delta.y());
         break;
     case 5:
         //cursorShape = Qt::SizeHorCursor;
-        bbox().setRight(bbox().right() + ed.delta.x());
+        ldata->bbox.setRight(ldata->bbox.right() + ed.delta.x());
         break;
     case 6:
         //cursorShape = Qt::SizeVerCursor;
-        bbox().setBottom(bbox().bottom() + ed.delta.y());
+        ldata->bbox.setBottom(ldata->bbox.bottom() + ed.delta.y());
         break;
     case 7:
         //cursorShape = Qt::SizeHorCursor;
-        bbox().setLeft(bbox().left() + ed.delta.x());
+        ldata->bbox.setLeft(ldata->bbox.left() + ed.delta.x());
         break;
     }
 
@@ -91,7 +90,7 @@ void Lasso::editDrag(EditData& ed)
 
 std::vector<mu::PointF> Lasso::gripsPositions(const EditData&) const
 {
-    const auto box(bbox());
+    const auto box(layoutData()->bbox);
     return {
         box.topLeft(),
         box.topRight(),

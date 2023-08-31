@@ -491,7 +491,7 @@ QString ExportMusicXml::positioningAttributes(EngravingItem const* const el, boo
     }
 
     //LOGD("single el %p _pos x,y %f %f _userOff x,y %f %f spatium %f",
-    //       el, el->ipos().x(), el->ipos().y(), el->offset().x(), el->offset().y(), el->spatium());
+    //       el, el->layoutData()->pos.x(), el->layoutData()->pos.y(), el->offset().x(), el->offset().y(), el->spatium());
 
     QPointF def;
     QPointF rel;
@@ -530,7 +530,7 @@ QString ExportMusicXml::positioningAttributes(EngravingItem const* const el, boo
             //defaultY = pos.y() + pos2.y();
         }
     } else {
-        def = el->ipos().toQPointF();       // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
+        def = el->layoutData()->pos.toQPointF();       // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
         rel = el->offset().toQPointF();
     }
 
@@ -1856,7 +1856,7 @@ QString ExportMusicXml::fermataPosition(const Fermata* const fermata)
         constexpr qreal SPATIUM2TENTHS = 10;
         constexpr qreal EPSILON = 0.01;
         const auto spatium = fermata->spatium();
-        const auto defY = -1 * SPATIUM2TENTHS * fermata->ipos().y() / spatium;
+        const auto defY = -1 * SPATIUM2TENTHS * fermata->layoutData()->pos.y() / spatium;
         const auto relY = -1 * SPATIUM2TENTHS * fermata->offset().y() / spatium;
 
         if (qAbs(defY) >= EPSILON) {
@@ -4290,7 +4290,7 @@ static void directionTag(XmlWriter& xml, Attributes& attr, EngravingItem const* 
         if (pel && pel->type() == ElementType::SYSTEM) {
             /*
             const System* sys = static_cast<const System*>(pel);
-            QRectF bb = sys->staff(el->staffIdx())->bbox();
+            QRectF bb = sys->staff(el->staffIdx())->layoutData()->bbox;
             LOGD("directionTag()  syst=%p sys x=%g y=%g cpx=%g cpy=%g",
                    sys, sys->pos().x(),  sys->pos().y(),
                    sys->pagePos().x(),
@@ -6573,7 +6573,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
             if (partNr == 0) {
                 // Find the right margin of the system.
                 double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
-                double systemRM = pageWidth - rm - (getTenthsFromDots(system->bbox().width()) + lm);
+                double systemRM = pageWidth - rm - (getTenthsFromDots(system->layoutData()->bbox.width()) + lm);
 
                 _xml.startElement("system-layout");
                 _xml.startElement("system-margins");
@@ -6585,7 +6585,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                     // see System::layout2() for the factor 2 * score()->spatium()
                     const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
                                                              - mpc.prevMeasure->pagePos().y()
-                                                             - mpc.prevMeasure->bbox().height()
+                                                             - mpc.prevMeasure->layoutData()->bbox.height()
                                                              + 2 * score()->style().spatium()
                                                              );
                     _xml.tag("system-distance", QString("%1").arg(QString::number(sysDist, 'f', 2)));
@@ -7478,7 +7478,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     const bool isFirstActualMeasure = mnsh.isFirstActualMeasure();
 
     if (configuration()->musicxmlExportLayout()) {
-        measureTag += QString(" width=\"%1\"").arg(QString::number(m->bbox().width() / DPMM / millimeters * tenths, 'f', 2));
+        measureTag += QString(" width=\"%1\"").arg(QString::number(m->layoutData()->bbox.width() / DPMM / millimeters * tenths, 'f', 2));
     }
 
     _xml.startElementRaw(measureTag);

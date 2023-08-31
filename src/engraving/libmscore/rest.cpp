@@ -636,7 +636,7 @@ double Rest::intrinsicMag() const
 int Rest::upLine() const
 {
     double _spatium = spatium();
-    return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
+    return lrint((pos().y() + layoutData()->bbox.top() + _spatium) * 2 / _spatium);
 }
 
 //---------------------------------------------------------
@@ -646,7 +646,7 @@ int Rest::upLine() const
 int Rest::downLine() const
 {
     double _spatium = spatium();
-    return lrint((pos().y() + bbox().top() + _spatium) * 2 / _spatium);
+    return lrint((pos().y() + layoutData()->bbox.top() + _spatium) * 2 / _spatium);
 }
 
 //---------------------------------------------------------
@@ -669,9 +669,9 @@ PointF Rest::stemPosBeam() const
 {
     PointF p(pagePos());
     if (m_up) {
-        p.ry() += bbox().top() + spatium() * 1.5;
+        p.ry() += layoutData()->bbox.top() + spatium() * 1.5;
     } else {
-        p.ry() += bbox().bottom() - spatium() * 1.5;
+        p.ry() += layoutData()->bbox.bottom() - spatium() * 1.5;
     }
     return p;
 }
@@ -683,9 +683,9 @@ PointF Rest::stemPosBeam() const
 double Rest::stemPosX() const
 {
     if (m_up) {
-        return bbox().right();
+        return layoutData()->bbox.right();
     } else {
-        return bbox().left();
+        return layoutData()->bbox.left();
     }
 }
 
@@ -716,11 +716,11 @@ void Rest::setAccent(bool flag)
     undoChangeProperty(Pid::SMALL, flag);
     if (voice() % 2 == 0) {
         if (flag) {
-            double yOffset = -(bbox().bottom());
+            double yOffset = -(layoutData()->bbox.bottom());
             if (durationType() >= DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
-            movePosY(yOffset);
+            mutLayoutData()->movePosY(yOffset);
         }
     }
 }

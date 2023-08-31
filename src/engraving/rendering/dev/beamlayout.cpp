@@ -131,6 +131,7 @@ void BeamLayout::layoutIfNeed(Beam* item, LayoutContext& ctx)
 //---------------------------------------------------------
 void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
 {
+    Beam::LayoutData* ldata = item->mutLayoutData();
     item->resetExplicitParent();  // parent is System
 
     const StaffType* staffType = item->staffType();
@@ -209,7 +210,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     }
 
     std::sort(item->notes().begin(), item->notes().end());
-    item->setMag(mag);
+    ldata->setMag(mag);
 
     //
     // determine beam stem direction
@@ -899,9 +900,9 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         int lineMoves = ceil(overlap / lineDistance);
         lineMoves *= up ? 1 : -1;
         double yMove = lineMoves * lineDistance;
-        rest->movePosY(yMove);
+        rest->mutLayoutData()->movePosY(yMove);
         for (Rest* mergedRest : rest->layoutData()->mergedRests) {
-            mergedRest->movePosY(yMove);
+            mergedRest->mutLayoutData()->movePosY(yMove);
         }
 
         Segment* segment = rest->segment();

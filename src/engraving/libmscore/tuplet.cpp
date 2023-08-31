@@ -22,8 +22,6 @@
 
 #include "tuplet.h"
 
-#include "draw/types/pen.h"
-
 #include "style/textstyle.h"
 
 #include "beam.h"
@@ -33,7 +31,6 @@
 #include "measure.h"
 #include "rest.h"
 #include "score.h"
-#include "stafftype.h"
 #include "text.h"
 
 #include "log.h"
@@ -286,7 +283,7 @@ Shape Tuplet::shape() const
         }
     }
     if (m_number) {
-        s.add(m_number->bbox().translated(m_number->pos()));
+        s.add(m_number->layoutData()->bbox.translated(m_number->pos()));
     }
     return s;
 }

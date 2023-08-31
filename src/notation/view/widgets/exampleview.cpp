@@ -25,15 +25,9 @@
 #include <cmath>
 #include <QMimeData>
 
-#include "libmscore/masterscore.h"
 #include "libmscore/engravingitem.h"
 #include "libmscore/page.h"
 #include "libmscore/system.h"
-#include "libmscore/actionicon.h"
-#include "libmscore/chord.h"
-#include "libmscore/factory.h"
-
-#include "commonscene/commonscenetypes.h"
 
 #include "log.h"
 
@@ -276,8 +270,8 @@ void ExampleView::constraintCanvas(int* dxx)
     Q_ASSERT(m_score->pages().front()->system(0));   // should exist if doLayout ran
 
     // form rectangle bounding the system with a spatium margin and translate relative to view space
-    qreal xstart = m_score->pages().front()->system(0)->bbox().left() - SPATIUM20;
-    qreal xend = m_score->pages().front()->system(0)->bbox().right() + 2.0 * SPATIUM20;
+    qreal xstart = m_score->pages().front()->system(0)->layoutData()->bbox.left() - SPATIUM20;
+    qreal xend = m_score->pages().front()->system(0)->layoutData()->bbox.right() + 2.0 * SPATIUM20;
     QRectF systemScaledViewRect(xstart * m_matrix.m11(), 0, xend * m_matrix.m11(), 0);
     systemScaledViewRect.translate(m_matrix.dx(), 0);
 
