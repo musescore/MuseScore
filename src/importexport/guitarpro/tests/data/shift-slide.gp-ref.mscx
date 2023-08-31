@@ -105,6 +105,7 @@
               <string>3</string>
               <Spanner type="Glissando">
                 <Glissando>
+                  <glissandoShift>1</glissandoShift>
                   <diagonal>1</diagonal>
                   <anchor>3</anchor>
                   </Glissando>

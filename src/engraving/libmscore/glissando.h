@@ -67,6 +67,7 @@ class Glissando final : public SLine
     M_PROPERTY(String, text, setText)
     M_PROPERTY(GlissandoType, glissandoType, setGlissandoType)
     M_PROPERTY(GlissandoStyle, glissandoStyle, setGlissandoStyle)
+    M_PROPERTY(bool, glissandoShift, setGlissandoShift)
     M_PROPERTY(String, fontFace, setFontFace)
     M_PROPERTY(double, fontSize, setFontSize)
     M_PROPERTY(bool, showText, setShowText)

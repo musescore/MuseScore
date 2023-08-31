@@ -2686,6 +2686,8 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
             g->setEaseOut(e.readInt());
         } else if (tag == "play") {
             g->setPlayGlissando(e.readBool());
+        } else if (tag == "glissandoShift") {
+            g->setGlissandoShift(e.readBool());
         } else if (TRead::readStyledProperty(g, tag, e, ctx)) {
         } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
             e.unknown();

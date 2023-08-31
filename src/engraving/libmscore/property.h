@@ -207,6 +207,7 @@ enum class Pid {
     GLISS_TEXT,
     GLISS_SHOW_TEXT,
     GLISS_STYLE,
+    GLISS_SHIFT,
     GLISS_EASEIN,
     GLISS_EASEOUT,
     DIAGONAL,

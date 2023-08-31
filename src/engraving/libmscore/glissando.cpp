@@ -84,6 +84,7 @@ EngravingItem* GlissandoSegment::propertyDelegate(Pid pid)
     case Pid::GLISS_TEXT:
     case Pid::GLISS_SHOW_TEXT:
     case Pid::GLISS_STYLE:
+    case Pid::GLISS_SHIFT:
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
     case Pid::PLAY:
@@ -112,6 +113,7 @@ Glissando::Glissando(EngravingItem* parent)
     resetProperty(Pid::GLISS_SHOW_TEXT);
     resetProperty(Pid::PLAY);
     resetProperty(Pid::GLISS_STYLE);
+    resetProperty(Pid::GLISS_SHIFT);
     resetProperty(Pid::GLISS_TYPE);
     resetProperty(Pid::GLISS_TEXT);
     resetProperty(Pid::GLISS_EASEIN);
@@ -126,6 +128,7 @@ Glissando::Glissando(const Glissando& g)
     _fontSize       = g._fontSize;
     _glissandoType  = g._glissandoType;
     _glissandoStyle = g._glissandoStyle;
+    _glissandoShift = g._glissandoShift;
     _easeIn         = g._easeIn;
     _easeOut        = g._easeOut;
     _showText       = g._showText;
@@ -443,6 +446,8 @@ PropertyValue Glissando::getProperty(Pid propertyId) const
         return showText();
     case Pid::GLISS_STYLE:
         return glissandoStyle();
+    case Pid::GLISS_SHIFT:
+        return glissandoShift();
     case Pid::GLISS_EASEIN:
         return easeIn();
     case Pid::GLISS_EASEOUT:
@@ -479,6 +484,9 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::GLISS_STYLE:
         setGlissandoStyle(v.value<GlissandoStyle>());
+        break;
+    case Pid::GLISS_SHIFT:
+        setGlissandoShift(v.toBool());
         break;
     case Pid::GLISS_EASEIN:
         setEaseIn(v.toInt());
@@ -521,6 +529,8 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
         return true;
     case Pid::GLISS_STYLE:
         return GlissandoStyle::CHROMATIC;
+    case Pid::GLISS_SHIFT:
+        return false;
     case Pid::GLISS_EASEIN:
     case Pid::GLISS_EASEOUT:
         return 0;

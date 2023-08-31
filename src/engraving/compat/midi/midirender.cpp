@@ -81,7 +81,6 @@ namespace mu::engraving {
 static PitchWheelSpecs wheelSpec;
 
 struct CollectNoteParams {
-    int channel = 0;
     double velocityMultiplier = 1.;
     int tickOffset = 0;
     int graceOffsetOn = 0;
@@ -101,6 +100,7 @@ struct PlayNoteParams {
     int offset = 0;
     int staffIdx = 0;
     MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
+    bool slide = false;
     bool callAllSoundOff = false;//NoteOn silence channel
 };
 
@@ -111,6 +111,7 @@ struct VibratoParams {
 };
 
 static bool graceNotesMerged(Chord* chord);
+static uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect, const MidiRenderer::Context& context);
 
 //---------------------------------------------------------
 //   Converts midi time (noteoff - noteon) to milliseconds
@@ -209,6 +210,7 @@ static void playNote(EventMap* events, const Note* note, PlayNoteParams params, 
     ev.setTuning(note->tuning());
     ev.setNote(note);
     ev.setEffect(params.effect);
+    ev.setSlide(params.slide);
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
@@ -334,13 +336,18 @@ static void collectBend(const PitchValues& playData, staff_idx_t staffIdx,
 //---------------------------------------------------------
 
 static void collectNote(EventMap* events, const Note* note, const CollectNoteParams& noteParams, Staff* staff,
-                        PitchWheelRenderer& pitchWheelRenderer)
+                        PitchWheelRenderer& pitchWheelRenderer, const MidiRenderer::Context& context)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
         return;
     }
 
     Chord* chord = note->chord();
+    Instrument* instr = chord->part()->instrument(chord->tick());
+    MidiInstrumentEffect noteEffect = noteParams.effect;
+
+    int noteChannel = getChannel(instr, note, noteEffect, context);
+    events->registerChannel(noteChannel);
 
     int tieLen = 0;
     if (chord->isGrace()) {
@@ -411,12 +418,22 @@ static void collectNote(EventMap* events, const Note* note, const CollectNotePar
         int velo = staff->velocities().val(nonUnwoundTick) * noteParams.velocityMultiplier * e.velocityMultiplier();
         if (e.play()) {
             PlayNoteParams playParams;
-            playParams.channel = noteParams.channel;
+            MidiInstrumentEffect eventEffect = noteEffect;
+            int eventChannel = noteChannel;
             playParams.pitch = p;
             playParams.velo = std::clamp(velo, 1, 127);
             playParams.onTime = std::max(0, on - noteParams.graceOffsetOn);
             playParams.offTime = std::max(0, off - noteParams.graceOffsetOff);
-            playParams.effect = noteParams.effect;
+
+            if (eventEffect == MidiInstrumentEffect::NONE && e.slide()) {
+                eventEffect = MidiInstrumentEffect::SLIDE;
+                eventChannel = getChannel(instr, note, eventEffect, context);
+                playParams.slide = true;
+                events->registerChannel(eventChannel);
+            }
+
+            playParams.effect = eventEffect;
+            playParams.channel = eventChannel;
 
             if (noteParams.graceOffsetOn == 0) {
                 playParams.offset = ticks * e.offset() / 1000;
@@ -439,13 +456,13 @@ static void collectNote(EventMap* events, const Note* note, const CollectNotePar
             break;
         }
 
-        collectBend(bend->points(), bend->staffIdx(), noteParams.channel, tick1, tick1 + getPlayTicksForBend(
-                        note).ticks(), pitchWheelRenderer, noteParams.effect);
+        collectBend(bend->points(), bend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
+                        note).ticks(), pitchWheelRenderer, noteEffect);
     }
 
     if (StretchedBend* stretchedBend = note->stretchedBend()) {
-        collectBend(stretchedBend->pitchValues(), stretchedBend->staffIdx(), noteParams.channel, tick1, tick1 + getPlayTicksForBend(
-                        note).ticks(), pitchWheelRenderer, noteParams.effect);
+        collectBend(stretchedBend->pitchValues(), stretchedBend->staffIdx(), noteChannel, tick1, tick1 + getPlayTicksForBend(
+                        note).ticks(), pitchWheelRenderer, noteEffect);
     }
 }
 
@@ -604,18 +621,13 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventMap* events,
                 params.velocityMultiplier = veloMultiplier;
                 params.tickOffset = tickOffset;
 
-                Instrument* instr = st->part()->instrument(chord->tick());
-                int channel = getChannel(instr, note, effect);
-                events->registerChannel(channel);
-                params.channel = channel;
-
                 if (note->noteType() == NoteType::ACCIACCATURA) {
                     params.graceOffsetOn = graceTickSum - graceTickOffset * currentBeaforeBeatNote;
                     params.graceOffsetOff = graceTickSum - graceTickOffset * (currentBeaforeBeatNote + 1);
 
-                    collectNote(events, note, params, st, pitchWheelRenderer);
+                    collectNote(events, note, params, st, pitchWheelRenderer, _context);
                 } else {
-                    collectNote(events, note, params, st, pitchWheelRenderer);
+                    collectNote(events, note, params, st, pitchWheelRenderer, _context);
                 }
             }
 
@@ -736,27 +748,21 @@ void MidiRenderer::doCollectMeasureEvents(EventMap* events, Measure const* m, co
                     params.effect = effect;
                 }
 
-                int channel = getChannel(instr, note, effect);
-                events->registerChannel(channel);
-                params.channel = channel;
-
                 if (_context.eachStringHasChannel && instr->hasStrings()) {
                     params.callAllSoundOff = true;
                 }
-                collectNote(events, note, params, st1, pitchWheelRenderer);
+
+                collectNote(events, note, params, st1, pitchWheelRenderer, _context);
             }
 
             if (!graceNotesMerged(chord)) {
                 for (Chord* c : chord->graceNotesAfter()) {
                     for (const Note* note : c->notes()) {
-                        int channel = getChannel(instr, note, effect);
-                        events->registerChannel(channel);
                         CollectNoteParams params;
-                        params.channel = channel;
                         params.velocityMultiplier = veloMultiplier;
                         params.tickOffset = tickOffset;
                         params.effect = effect;
-                        collectNote(events, note, params, st1, pitchWheelRenderer);
+                        collectNote(events, note, params, st1, pitchWheelRenderer, _context);
                     }
                 }
             }
@@ -1192,27 +1198,28 @@ void MidiRenderer::renderScore(EventMap* events, const Context& ctx)
     }
 }
 
-uint32_t MidiRenderer::getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect)
+/* static */
+uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect, const MidiRenderer::Context& context)
 {
     int subchannel = note->subchannel();
     int channel = instr->channel(subchannel)->channel();
 
-    if (!_context.instrumentsHaveEffects && !_context.eachStringHasChannel) {
+    if (!context.instrumentsHaveEffects && !context.eachStringHasChannel) {
         return channel;
     }
 
-    ChannelLookup::LookupData lookupData;
+    MidiRenderer::ChannelLookup::LookupData lookupData;
 
-    if (_context.instrumentsHaveEffects) {
+    if (context.instrumentsHaveEffects) {
         lookupData.effect = effect;
     }
 
-    if (_context.eachStringHasChannel && instr->hasStrings()) {
+    if (context.eachStringHasChannel && instr->hasStrings()) {
         lookupData.string = note->string();
         lookupData.staffIdx = note->staffIdx();
     }
 
-    return _context.channels->getChannel(channel, lookupData);
+    return context.channels->getChannel(channel, lookupData);
 }
 
 uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, const LookupData& lookupData)
