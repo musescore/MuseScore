@@ -743,8 +743,6 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 a->setUp(!oddVoice);
             } else if (a->symId() >= SymId::articMarcatoAbove && a->symId() <= SymId::articMarcatoTenutoBelow) {
                 a->setUp(true);         // Gould, p. 117: strong accents above staff
-            } else if (item->isGrace() && item->up() && !a->layoutCloseToNote() && item->downNote()->line() < 6) {
-                a->setUp(true);         // keep articulation close to grace note
             } else {
                 a->setUp(!item->up());         // place articulation at note head
             }
