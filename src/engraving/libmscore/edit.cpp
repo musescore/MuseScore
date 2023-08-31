@@ -4236,16 +4236,22 @@ void Score::restoreInitialKeySig()
         }
 
         Segment* keySegment = firstMeas->undoGetSegment(SegmentType::KeySig, startTick);
-        KeySig* newKeySig = Factory::createKeySig(keySegment);
-        newKeySig->setTrack(staff->idx() * VOICES);
-        newKeySig->setKey(transposedKey);
-        keySegment->add(newKeySig);
-        undoAddElement(newKeySig);
 
         KeySigEvent keySigEvent;
         keySigEvent.setConcertKey(concertKey);
         keySigEvent.setKey(transposedKey);
+        // use atonal KS for drums
+        if (instrument->useDrumset()) {
+            keySigEvent.setCustom(true);
+            keySigEvent.setMode(KeyMode::NONE);
+        }
+
+        KeySig* newKeySig = Factory::createKeySig(keySegment);
+        newKeySig->setTrack(staff->idx() * VOICES);
+        keySegment->add(newKeySig);
         newKeySig->setKeySigEvent(keySigEvent);
+        undoAddElement(newKeySig);
+
         staff->setKey(Fraction(0, 1), keySigEvent);
     }
 }
