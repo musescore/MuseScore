@@ -1253,6 +1253,7 @@ bool MeiImporter::readStaves(pugi::xml_node parentNode, Measure* measure, int& m
             Segment* segment = measure->getSegment(SegmentType::KeySig, Fraction::fromTicks(0) + measure->tick());
             KeySigEvent ksEvent;
             ksEvent.setKey(m_keySigs.at(keySigIdx));
+            ksEvent.setConcertKey(m_keySigs.at(keySigIdx));
             KeySig* keySig = Factory::createKeySig(segment);
             keySig->setTrack(staffIdx * VOICES);
             keySig->setKeySigEvent(ksEvent);

@@ -86,8 +86,7 @@
             <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>2</actualKey>
+            <concertKey>2</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -116,8 +115,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>-1</actualKey>
+            <concertKey>-1</concertKey>
             </KeySig>
           <Chord>
             <durationType>whole</durationType>
@@ -142,8 +140,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>2</actualKey>
+            <concertKey>2</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>3</sigN>
@@ -205,8 +202,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>-3</actualKey>
+            <concertKey>-3</concertKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -226,8 +222,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>0</actualKey>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>3</sigN>
@@ -283,8 +278,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>-3</actualKey>
+            <concertKey>-3</concertKey>
             </KeySig>
           <Rest>
             <durationType>measure</durationType>
@@ -304,8 +298,7 @@
       <Measure>
         <voice>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>0</actualKey>
+            <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>3</sigN>
