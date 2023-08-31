@@ -369,10 +369,6 @@
     <seq>Ctrl+Alt+Up</seq>
     </SC>
   <SC>
-    <key>top-staff</key>
-    <seq></seq>
-    </SC>
-  <SC>
     <key>first-element</key>
     <seq>Ctrl+Home</seq>
     </SC>
