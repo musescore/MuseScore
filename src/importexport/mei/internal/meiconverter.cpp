@@ -1933,8 +1933,13 @@ void Convert::sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, E
     warning = false;
 
     if (elision == ElisionLast) {
-        if ((lyrics->syllabic() == engraving::LyricsSyllabic::END) && (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_i)) {
-            lyrics->setSyllabic(engraving::LyricsSyllabic::MIDDLE);
+        if (meiSyl.GetWordpos() == libmei::sylLog_WORDPOS_i) {
+            // We had previous (the first) syl with a @wordpos terminal
+            if (lyrics->syllabic() == engraving::LyricsSyllabic::END) {
+                lyrics->setSyllabic(engraving::LyricsSyllabic::MIDDLE);
+            } else {
+                lyrics->setSyllabic(engraving::LyricsSyllabic::BEGIN);
+            }
         }
     } else if ((elision == ElisionFirst) || (elision == ElisionNone)) {
         switch (meiSyl.GetWordpos()) {

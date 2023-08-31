@@ -670,6 +670,68 @@ void MeiImporter::clearGraceNotes()
     m_readingGraceNotes = GraceNone;
 }
 
+/**
+ * Check if we have an Lyrics to extend for the given track and Lyrics no.
+ */
+
+bool MeiImporter::hasLyricsToExtend(track_idx_t track, int no)
+{
+    return (m_lyricExtenders.count(track) > 0) && (m_lyricExtenders.at(track).count(no) > 0);
+}
+
+/**
+ * Get the Lyrics / ChordRest endpoint pair.
+ * Existence of the pair need to be checked first with MeiImporter::hasLyricsToExtend.
+ */
+
+const std::pair<engraving::Lyrics*, engraving::ChordRest*>& MeiImporter::getLyricsToExtend(track_idx_t track, int no)
+{
+    return m_lyricExtenders.at(track).at(no);
+}
+
+/**
+ * Add a ChordRest as the tentative end point for the extended Lyrics.
+ * Apply it to all the Lyrics no for the ChordRest track.
+ */
+
+void MeiImporter::addChordtoLyricsToExtend(ChordRest* chordRest)
+{
+    track_idx_t track = chordRest->track();
+    if (m_lyricExtenders.count(track) > 0) {
+        auto map = &m_lyricExtenders.at(track);
+        for (auto& item : *map) {
+            item.second.second = chordRest;
+        }
+    }
+}
+
+/**
+ * Extend a Lyrics by setting the appropriate ticks.
+ * Calculate it based on the tick of the ChordRest marking the end of the extension.
+ */
+
+void MeiImporter::extendLyrics(const std::pair<engraving::Lyrics*, engraving::ChordRest*>& lyricsToExtend)
+{
+    if (lyricsToExtend.second) {
+        Fraction ticks = lyricsToExtend.second->tick() - lyricsToExtend.first->chordRest()->tick();
+        lyricsToExtend.first->setTicks(ticks);
+    }
+}
+
+/**
+ * Extend all lyrics remaining.
+ * Called at the end of the import for extended lyrics closed with a following verse.
+ */
+
+void MeiImporter::extendLyrics()
+{
+    for (auto& itemTrack : m_lyricExtenders) {
+        for (auto& itemNo : itemTrack.second) {
+            this->extendLyrics(itemNo.second);
+        }
+    }
+}
+
 //---------------------------------------------------------
 // parsing methods
 //---------------------------------------------------------
@@ -756,6 +818,7 @@ bool MeiImporter::readScore(pugi::xml_node root)
     }
 
     this->addSpannerEnds();
+    this->extendLyrics();
 
     return success;
 }
@@ -2117,6 +2180,10 @@ bool MeiImporter::readVerses(pugi::xml_node parentNode, Chord* chord)
     for (pugi::xpath_node xpathNode : elements) {
         success = success && this->readVerse(xpathNode.node(), chord);
     }
+
+    // The chord as a potential end point for the lyrics to extend (all lyrics no for that track)
+    this->addChordtoLyricsToExtend(chord);
+
     return success;
 }
 
@@ -2130,7 +2197,6 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
         return false;
     }
 
-    bool warning;
     libmei::Verse meiVerse;
     meiVerse.Read(verseNode);
 
@@ -2141,9 +2207,23 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
         no = std::max(0, no);
     }
 
+    // First check if we have a lyric extension that needs to be ended for that track / no
+    if (this->hasLyricsToExtend(chord->track(), no)) {
+        auto lyricsToExtend = this->getLyricsToExtend(chord->track(), no);
+        this->extendLyrics(lyricsToExtend);
+        // Remove it from the lyrics to extend
+        m_lyricExtenders.at(chord->track()).erase(no);
+    }
+
     Lyrics* lyrics = Factory::createLyrics(chord);
 
     bool success = true;
+
+    // If the verse has a syl with @con="u", add it to the lyrics to extend
+    pugi::xpath_node extender = verseNode.select_node("./syl[@con='u']");
+    if (extender) {
+        m_lyricExtenders[chord->track()][no] = std::make_pair(lyrics, nullptr);
+    }
 
     // Aggregate the syllable into line blocks
     Convert::textWithSmufl textBlocks;
