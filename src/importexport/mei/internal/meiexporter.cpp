@@ -1778,7 +1778,7 @@ std::list<const Volta*> MeiExporter::findVoltasInMeasure(const Measure* measure)
  * Also add Breath attached to a ChordRest, which are not represented as annotations but di
  */
 
-void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving::ChordRest* chordRest)
+void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest* chordRest)
 {
     IF_ASSERT_FAILED(chordRest) {
         return;
@@ -1816,7 +1816,7 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const engraving:
  * The map has been filled previously by MeiExporter::addToStartIdMap.
  */
 
-std::string MeiExporter::findStartIdFor(const engraving::EngravingItem* item)
+std::string MeiExporter::findStartIdFor(const EngravingItem* item)
 {
     std::string xmlId;
 

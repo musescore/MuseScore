@@ -325,7 +325,7 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
  * Look at m_graceNoteType for setting the acciaccatura note type (when grace notes preceed only)
  */
 
-bool MeiImporter::addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter)
+bool MeiImporter::addGraceNotesToChord(ChordRest* chordRest, bool isAfter)
 {
     IF_ASSERT_FAILED(chordRest) {
         return false;
@@ -684,7 +684,7 @@ bool MeiImporter::hasLyricsToExtend(track_idx_t track, int no)
  * Existence of the pair need to be checked first with MeiImporter::hasLyricsToExtend.
  */
 
-const std::pair<engraving::Lyrics*, engraving::ChordRest*>& MeiImporter::getLyricsToExtend(track_idx_t track, int no)
+const std::pair<Lyrics*, ChordRest*>& MeiImporter::getLyricsToExtend(track_idx_t track, int no)
 {
     return m_lyricExtenders.at(track).at(no);
 }
@@ -710,7 +710,7 @@ void MeiImporter::addChordtoLyricsToExtend(ChordRest* chordRest)
  * Calculate it based on the tick of the ChordRest marking the end of the extension.
  */
 
-void MeiImporter::extendLyrics(const std::pair<engraving::Lyrics*, engraving::ChordRest*>& lyricsToExtend)
+void MeiImporter::extendLyrics(const std::pair<Lyrics*, ChordRest*>& lyricsToExtend)
 {
     if (lyricsToExtend.second) {
         Fraction ticks = lyricsToExtend.second->tick() - lyricsToExtend.first->chordRest()->tick();
@@ -1217,7 +1217,7 @@ bool MeiImporter::readMeasure(pugi::xml_node measureNode)
     measure->setRepeatStart(measureSt.repeatStart);
     if (measureSt.repeatEnd) {
         measure->setRepeatEnd(true);
-    } else if (measureSt.endBarLineType != engraving::BarLineType::NORMAL) {
+    } else if (measureSt.endBarLineType != BarLineType::NORMAL) {
         this->addEndBarLineToMeasure(measure, measureSt.endBarLineType);
     }
 
@@ -1248,7 +1248,7 @@ bool MeiImporter::readPb(pugi::xml_node pbNode)
     meiPb.Read(pbNode);
 
     if (meiPb.HasType() && Convert::hasTypeValue(meiPb.GetType(), BREAK_TYPE)) {
-        this->addLayoutBreakToMeasure(m_lastMeasure, engraving::LayoutBreakType::PAGE);
+        this->addLayoutBreakToMeasure(m_lastMeasure, LayoutBreakType::PAGE);
     }
 
     return true;
@@ -1269,7 +1269,7 @@ bool MeiImporter::readSb(pugi::xml_node pbNode)
     meiSb.Read(pbNode);
 
     if (meiSb.HasType() && Convert::hasTypeValue(meiSb.GetType(), BREAK_TYPE)) {
-        this->addLayoutBreakToMeasure(m_lastMeasure, engraving::LayoutBreakType::LINE);
+        this->addLayoutBreakToMeasure(m_lastMeasure, LayoutBreakType::LINE);
     }
 
     return true;
@@ -1431,7 +1431,7 @@ bool MeiImporter::readElements(pugi::xml_node parentNode, Measure* measure, int 
  * Set MuseScore flags based on custom `@type` values.
  */
 
-bool MeiImporter::readBeam(pugi::xml_node beamNode, engraving::Measure* measure, int track, int& ticks)
+bool MeiImporter::readBeam(pugi::xml_node beamNode, Measure* measure, int track, int& ticks)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1458,7 +1458,7 @@ bool MeiImporter::readBeam(pugi::xml_node beamNode, engraving::Measure* measure,
  * Read a chord and its content (note elements).
  */
 
-bool MeiImporter::readChord(pugi::xml_node chordNode, engraving::Measure* measure, int track, int& ticks)
+bool MeiImporter::readChord(pugi::xml_node chordNode, Measure* measure, int track, int& ticks)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1486,7 +1486,7 @@ bool MeiImporter::readChord(pugi::xml_node chordNode, engraving::Measure* measur
  * Read a clef.
  */
 
-bool MeiImporter::readClef(pugi::xml_node clefNode, engraving::Measure* measure, int track, int& ticks)
+bool MeiImporter::readClef(pugi::xml_node clefNode, Measure* measure, int track, int& ticks)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1517,7 +1517,7 @@ bool MeiImporter::readClef(pugi::xml_node clefNode, engraving::Measure* measure,
  * Otherwise, only reset the flag and adding the grace notes will be performed in MeiImporter::addChordRest when the next <chord> / <note> is read
  */
 
-bool MeiImporter::readGraceGrp(pugi::xml_node graceGrpNode, engraving::Measure* measure, int track, int& ticks)
+bool MeiImporter::readGraceGrp(pugi::xml_node graceGrpNode, Measure* measure, int track, int& ticks)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1551,7 +1551,7 @@ bool MeiImporter::readGraceGrp(pugi::xml_node graceGrpNode, engraving::Measure* 
  * Read a mRest.
  */
 
-bool MeiImporter::readMRest(pugi::xml_node mRestNode, engraving::Measure* measure, int track, int& ticks)
+bool MeiImporter::readMRest(pugi::xml_node mRestNode, Measure* measure, int track, int& ticks)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1588,7 +1588,7 @@ bool MeiImporter::readMRest(pugi::xml_node mRestNode, engraving::Measure* measur
  * Read a note.
  */
 
-bool MeiImporter::readNote(pugi::xml_node noteNode, engraving::Measure* measure, int track, int& ticks, engraving::Chord* chord)
+bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track, int& ticks, Chord* chord)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1613,7 +1613,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, engraving::Measure* measure,
     }
 
     Staff* staff = m_score->staff(track2staff(track));
-    engraving::Interval interval = staff->part()->instrument()->transpose();
+    Interval interval = staff->part()->instrument()->transpose();
 
     Convert::PitchStruct pitchSt = Convert::pitchFromMEI(meiNote, meiAccid, interval, warning);
     if (warning) {
@@ -1658,7 +1658,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, engraving::Measure* measure,
  * Read a rest.
  */
 
-bool MeiImporter::readRest(pugi::xml_node restNode, engraving::Measure* measure, int track, int& ticks)
+bool MeiImporter::readRest(pugi::xml_node restNode, Measure* measure, int track, int& ticks)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1678,7 +1678,7 @@ bool MeiImporter::readRest(pugi::xml_node restNode, engraving::Measure* measure,
  * Read a space.
  */
 
-bool MeiImporter::readSpace(pugi::xml_node spaceNode, engraving::Measure* measure, int track, int& ticks)
+bool MeiImporter::readSpace(pugi::xml_node spaceNode, Measure* measure, int track, int& ticks)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1697,7 +1697,7 @@ bool MeiImporter::readSpace(pugi::xml_node spaceNode, engraving::Measure* measur
  * Read a tuplet.
  */
 
-bool MeiImporter::readTuplet(pugi::xml_node tupletNode, engraving::Measure* measure, int track, int& ticks)
+bool MeiImporter::readTuplet(pugi::xml_node tupletNode, Measure* measure, int track, int& ticks)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1793,7 +1793,7 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
  * Read a breath.
  */
 
-bool MeiImporter::readBreath(pugi::xml_node breathNode, engraving::Measure* measure)
+bool MeiImporter::readBreath(pugi::xml_node breathNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1818,7 +1818,7 @@ bool MeiImporter::readBreath(pugi::xml_node breathNode, engraving::Measure* meas
  * Read a caesura (
  */
 
-bool MeiImporter::readCaesura(pugi::xml_node caesuraNode, engraving::Measure* measure)
+bool MeiImporter::readCaesura(pugi::xml_node caesuraNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1843,7 +1843,7 @@ bool MeiImporter::readCaesura(pugi::xml_node caesuraNode, engraving::Measure* me
  * Read a dir.
  */
 
-bool MeiImporter::readDir(pugi::xml_node dirNode, engraving::Measure* measure)
+bool MeiImporter::readDir(pugi::xml_node dirNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1879,7 +1879,7 @@ bool MeiImporter::readDir(pugi::xml_node dirNode, engraving::Measure* measure)
  * Read a dynam.
  */
 
-bool MeiImporter::readDynam(pugi::xml_node dynamNode, engraving::Measure* measure)
+bool MeiImporter::readDynam(pugi::xml_node dynamNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1907,7 +1907,7 @@ bool MeiImporter::readDynam(pugi::xml_node dynamNode, engraving::Measure* measur
  * Read a fermata.
  */
 
-bool MeiImporter::readFermata(pugi::xml_node fermataNode, engraving::Measure* measure)
+bool MeiImporter::readFermata(pugi::xml_node fermataNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1949,7 +1949,7 @@ bool MeiImporter::readFermata(pugi::xml_node fermataNode, engraving::Measure* me
  * Read a hairpin.
  */
 
-bool MeiImporter::readHairpin(pugi::xml_node hairpinNode, engraving::Measure* measure)
+bool MeiImporter::readHairpin(pugi::xml_node hairpinNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -1974,7 +1974,7 @@ bool MeiImporter::readHairpin(pugi::xml_node hairpinNode, engraving::Measure* me
  * Read a harm.
  */
 
-bool MeiImporter::readHarm(pugi::xml_node harmNode, engraving::Measure* measure)
+bool MeiImporter::readHarm(pugi::xml_node harmNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -2002,7 +2002,7 @@ bool MeiImporter::readHarm(pugi::xml_node harmNode, engraving::Measure* measure)
  * Read a octave.
  */
 
-bool MeiImporter::readOctave(pugi::xml_node octaveNode, engraving::Measure* measure)
+bool MeiImporter::readOctave(pugi::xml_node octaveNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -2029,7 +2029,7 @@ bool MeiImporter::readOctave(pugi::xml_node octaveNode, engraving::Measure* meas
  * Similarly, default value for label is used for Marker.
  */
 
-bool MeiImporter::readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure)
+bool MeiImporter::readRepeatMark(pugi::xml_node repeatMarkNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -2058,7 +2058,7 @@ bool MeiImporter::readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measu
  * Read a slur.
  */
 
-bool MeiImporter::readSlur(pugi::xml_node slurNode, engraving::Measure* measure)
+bool MeiImporter::readSlur(pugi::xml_node slurNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -2104,7 +2104,7 @@ bool MeiImporter::readSyl(pugi::xml_node sylNode, Lyrics* lyrics, Convert::textW
  * Read a tempo.
  */
 
-bool MeiImporter::readTempo(pugi::xml_node tempoNode, engraving::Measure* measure)
+bool MeiImporter::readTempo(pugi::xml_node tempoNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -2132,7 +2132,7 @@ bool MeiImporter::readTempo(pugi::xml_node tempoNode, engraving::Measure* measur
  * Read a tie.
  */
 
-bool MeiImporter::readTie(pugi::xml_node tieNode, engraving::Measure* measure)
+bool MeiImporter::readTie(pugi::xml_node tieNode, Measure* measure)
 {
     IF_ASSERT_FAILED(measure) {
         return false;
@@ -2288,7 +2288,7 @@ bool MeiImporter::readGracedAtt(libmei::AttGraced& gracedAtt)
  * Attribute read are `@stem.dir` and `@stem.len` when `0.0` is converted as stem less.
  */
 
-bool MeiImporter::readStemsAtt(engraving::Chord* chord, libmei::AttStems& stemsAtt)
+bool MeiImporter::readStemsAtt(Chord* chord, libmei::AttStems& stemsAtt)
 {
     IF_ASSERT_FAILED(chord) {
         return false;
@@ -2524,7 +2524,7 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
  * Add an end barline to a measure.
  */
 
-void MeiImporter::addEndBarLineToMeasure(engraving::Measure* measure, engraving::BarLineType barLineType)
+void MeiImporter::addEndBarLineToMeasure(Measure* measure, BarLineType barLineType)
 {
     IF_ASSERT_FAILED(measure) {
         return;
@@ -2545,7 +2545,7 @@ void MeiImporter::addEndBarLineToMeasure(engraving::Measure* measure, engraving:
  * Add a layout break to a measure.
  */
 
-void MeiImporter::addLayoutBreakToMeasure(engraving::Measure* measure, engraving::LayoutBreakType layoutBreakType)
+void MeiImporter::addLayoutBreakToMeasure(Measure* measure, LayoutBreakType layoutBreakType)
 {
     if (!measure) {
         LOGD() << "MeiImporter::addLayoutBreakToMeasure no measure to add the break";
