@@ -43,7 +43,7 @@
 #include "engraving/libmscore/masterscore.h"
 
 #include "rendering/dev/scorerenderer.h"
-#include "rendering/stable/scorerenderer.h"
+//#include "rendering/stable/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
 
 #include "compat/scoreaccess.h"
