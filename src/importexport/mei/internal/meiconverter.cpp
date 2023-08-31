@@ -1507,7 +1507,7 @@ libmei::Measure Convert::measureToMEI(const engraving::Measure* measure, int& me
     // @n
     if (!measure->irregular()) {
         measureN++;
-        meiMeasure.SetN(String("%1").arg(measure->no() + 1).toStdString());
+        meiMeasure.SetN(String::number(measure->no() + 1).toStdString());
     }
     // @left
     if (measure->repeatStart()) {

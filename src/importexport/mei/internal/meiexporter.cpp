@@ -1317,7 +1317,7 @@ bool MeiExporter::writeVerse(const Lyrics* lyrics)
     }
 
     libmei::Verse meiVerse;
-    meiVerse.SetN(String("%1").arg(lyrics->no() + 1).toStdString());
+    meiVerse.SetN(String::number(lyrics->no() + 1).toStdString());
     m_currentNode = m_currentNode.append_child();
     meiVerse.Write(m_currentNode, this->getLayerXmlIdFor(VERSE_L));
 
