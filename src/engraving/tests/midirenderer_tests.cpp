@@ -276,10 +276,10 @@ TEST_F(MidiRenderer_Tests, slideInFromBelow)
     EXPECT_EQ(events.size(), 10);
 
     checkEventInterval(events, 0, 419, 60, defVol);
-    checkEventInterval(events, 420, 438, 57, defVol, true /* slide */);
-    checkEventInterval(events, 440, 458, 58, defVol, true /* slide */);
-    checkEventInterval(events, 460, 478, 59, defVol, true /* slide */);
-    checkEventInterval(events, 480, 959, 60, defVol);
+    checkEventInterval(events, 420, 438, 60, defVol, true /* slide */);
+    checkEventInterval(events, 440, 458, 61, defVol, true /* slide */);
+    checkEventInterval(events, 460, 478, 62, defVol, true /* slide */);
+    checkEventInterval(events, 480, 959, 63, defVol);
 }
 
 TEST_F(MidiRenderer_Tests, slideInFromAbove)
@@ -291,10 +291,10 @@ TEST_F(MidiRenderer_Tests, slideInFromAbove)
     EXPECT_EQ(events.size(), 10);
 
     checkEventInterval(events, 0, 419, 60, defVol);
-    checkEventInterval(events, 420, 438, 63, defVol, true /* slide */);
-    checkEventInterval(events, 440, 458, 62, defVol, true /* slide */);
-    checkEventInterval(events, 460, 478, 61, defVol, true /* slide */);
-    checkEventInterval(events, 480, 959, 60, defVol);
+    checkEventInterval(events, 420, 438, 66, defVol, true /* slide */);
+    checkEventInterval(events, 440, 458, 65, defVol, true /* slide */);
+    checkEventInterval(events, 460, 478, 64, defVol, true /* slide */);
+    checkEventInterval(events, 480, 959, 63, defVol);
 }
 
 TEST_F(MidiRenderer_Tests, slideOutFromAbove)
@@ -339,8 +339,8 @@ TEST_F(MidiRenderer_Tests, tremoloSlideIn)
     checkEventInterval(events, 224, 447, 59, defVol);
     checkEventInterval(events, 449, 672, 59, defVol);
     checkEventInterval(events, 673, 896, 59, defVol);
-    checkEventInterval(events, 900, 918, 56, defVol, true /* slide */);
-    checkEventInterval(events, 920, 938, 57, defVol, true /* slide */);
+    checkEventInterval(events, 901, 919, 56, defVol, true /* slide */);
+    checkEventInterval(events, 921, 939, 57, defVol, true /* slide */);
     checkEventInterval(events, 940, 958, 58, defVol, true /* slide */);
     checkEventInterval(events, 960, 1439, 59, defVol);
 }
@@ -373,13 +373,13 @@ TEST_F(MidiRenderer_Tests, slideInAndOut)
 
     EXPECT_EQ(events.size(), 14);
 
-    checkEventInterval(events, 420, 438, 57, defVol, true /* slide */);
-    checkEventInterval(events, 440, 458, 58, defVol, true /* slide */);
-    checkEventInterval(events, 460, 478, 59, defVol, true /* slide */);
-    checkEventInterval(events, 480, 899, 60, defVol);
-    checkEventInterval(events, 900, 918, 61, defVol, true /* slide */);
-    checkEventInterval(events, 919, 937, 62, defVol, true /* slide */);
-    checkEventInterval(events, 939, 957, 63, defVol, true /* slide */);
+    checkEventInterval(events, 420, 438, 64, defVol, true /* slide */);
+    checkEventInterval(events, 440, 458, 65, defVol, true /* slide */);
+    checkEventInterval(events, 460, 478, 66, defVol, true /* slide */);
+    checkEventInterval(events, 480, 899, 67, defVol);
+    checkEventInterval(events, 900, 918, 68, defVol, true /* slide */);
+    checkEventInterval(events, 919, 937, 69, defVol, true /* slide */);
+    checkEventInterval(events, 939, 957, 70, defVol, true /* slide */);
 }
 
 TEST_F(MidiRenderer_Tests, sameStringDifferentStaves)
@@ -445,7 +445,7 @@ TEST_F(MidiRenderer_Tests, slideToTiedNote)
 
 TEST_F(MidiRenderer_Tests, twoSlides)
 {
-    constexpr int defVol = 80; // f
+    constexpr int defVol = 80; // mf
 
     EventMap events = getNoteOnEvents(renderMidiEvents(u"two_slides.mscx"));
 
@@ -455,10 +455,110 @@ TEST_F(MidiRenderer_Tests, twoSlides)
     checkEventInterval(events, 1880, 1898, 57, defVol, true /* slide */);
     checkEventInterval(events, 1900, 1918, 58, defVol, true /* slide */);
     checkEventInterval(events, 1920, 2339, 59, defVol);
-    checkEventInterval(events, 2340, 2358, 59, defVol, true /* slide */);
-    checkEventInterval(events, 2360, 2378, 60, defVol, true /* slide */);
-    checkEventInterval(events, 2380, 2398, 61, defVol, true /* slide */);
-    checkEventInterval(events, 2400, 2879, 62, defVol);
+    checkEventInterval(events, 2340, 2358, 60, defVol, true /* slide */);
+    checkEventInterval(events, 2360, 2378, 61, defVol, true /* slide */);
+    checkEventInterval(events, 2380, 2398, 62, defVol, true /* slide */);
+    checkEventInterval(events, 2400, 2879, 63, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, reducedSlides)
+{
+    constexpr int defVol = 80; // mf
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"reduced_slides.mscx"));
+
+    EXPECT_EQ(events.size(), 42);
+
+    /// fret 0: no slides
+    checkEventInterval(events, 0, 959, 60, defVol);
+    checkEventInterval(events, 960, 1919, 64, defVol);
+
+    /// fret 1: no slides
+    checkEventInterval(events, 1920, 2879, 60, defVol);
+    checkEventInterval(events, 2880, 3839, 65, defVol);
+
+    /// fret 2: 1 slide
+    checkEventInterval(events, 3840, 4738, 60, defVol);
+    checkEventInterval(events, 4741, 4799, 65, defVol, true /* slide */);
+    checkEventInterval(events, 4800, 5759, 66, defVol);
+
+    /// fret 3: 2 slides
+    checkEventInterval(events, 5760, 6658, 60, defVol);
+    checkEventInterval(events, 6661, 6689, 65, defVol, true /* slide */);
+    checkEventInterval(events, 6691, 6719, 66, defVol, true /* slide */);
+    checkEventInterval(events, 6720, 7679, 67, defVol);
+
+    /// fret 4 (or more): 3 slides
+    checkEventInterval(events, 7680, 8578, 60, defVol);
+    checkEventInterval(events, 8581, 8599, 65, defVol, true /* slide */);
+    checkEventInterval(events, 8600, 8618, 66, defVol, true /* slide */);
+    checkEventInterval(events, 8619, 8637, 67, defVol, true /* slide */);
+    checkEventInterval(events, 8640, 9599, 68, defVol);
+
+    /// fret 0 (but slide in from above) : 3 slides
+    checkEventInterval(events, 9600, 10498, 60, defVol);
+    checkEventInterval(events, 10501, 10519, 67, defVol, true /* slide */);
+    checkEventInterval(events, 10520, 10538, 66, defVol, true /* slide */);
+    checkEventInterval(events, 10539, 10557, 65, defVol, true /* slide */);
+    checkEventInterval(events, 10560, 11519, 64, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, shortNoteBeforeSlide)
+{
+    constexpr int defVol = 80; // mf
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"short_note_before_slide.mscx"));
+
+    EXPECT_EQ(events.size(), 20);
+
+    /// 32th note before slide
+    checkEventInterval(events, 0, 29, 62, defVol);
+    checkEventInterval(events, 31, 39, 72, defVol, true /* slide */);
+    checkEventInterval(events, 40, 48, 71, defVol, true /* slide */);
+    checkEventInterval(events, 50, 58, 70, defVol, true /* slide */);
+    checkEventInterval(events, 60, 539, 69, defVol);
+
+    /// 64th note before slide
+    checkEventInterval(events, 1920, 1934, 62, defVol);
+    checkEventInterval(events, 1936, 1939, 72, defVol, true /* slide */);
+    checkEventInterval(events, 1940, 1943, 71, defVol, true /* slide */);
+    checkEventInterval(events, 1945, 1948, 70, defVol, true /* slide */);
+    checkEventInterval(events, 1950, 2429, 69, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, shortNoteWithSlide)
+{
+    constexpr int defVol = 80; // mf
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"short_note_with_slide.mscx"));
+
+    EXPECT_EQ(events.size(), 16);
+
+    /// 32th note with slide
+    checkEventInterval(events, 0, 29, 69, defVol);
+    checkEventInterval(events, 30, 38, 68, defVol, true /* slide */);
+    checkEventInterval(events, 39, 47, 67, defVol, true /* slide */);
+    checkEventInterval(events, 49, 57, 66, defVol, true /* slide */);
+
+    /// 64th note with slide
+    checkEventInterval(events, 1920, 1934, 69, defVol);
+    checkEventInterval(events, 1935, 1938, 68, defVol, true /* slide */);
+    checkEventInterval(events, 1939, 1942, 67, defVol, true /* slide */);
+    checkEventInterval(events, 1944, 1947, 66, defVol, true /* slide */);
+}
+
+TEST_F(MidiRenderer_Tests, slideInAfterRest)
+{
+    constexpr int defVol = 80; // mf
+
+    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_in_after_rest.mscx"));
+
+    EXPECT_EQ(events.size(), 8);
+
+    checkEventInterval(events, 420, 438, 60, defVol, true /* slide */);
+    checkEventInterval(events, 440, 458, 61, defVol, true /* slide */);
+    checkEventInterval(events, 460, 478, 62, defVol, true /* slide */);
+    checkEventInterval(events, 480, 959, 63, defVol);
 }
 
 /*****************************************************************************

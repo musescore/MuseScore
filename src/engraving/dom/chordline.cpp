@@ -222,8 +222,8 @@ static Note::SlideType slideType(ChordLineType type)
     static std::unordered_map<ChordLineType, Note::SlideType> chordLineToSlideTypes {
         { ChordLineType::FALL, Note::SlideType::DownFromNote },
         { ChordLineType::DOIT, Note::SlideType::UpFromNote },
-        { ChordLineType::SCOOP, Note::SlideType::DownToNote },
-        { ChordLineType::PLOP, Note::SlideType::UpToNote }
+        { ChordLineType::SCOOP, Note::SlideType::UpToNote },
+        { ChordLineType::PLOP, Note::SlideType::DownToNote }
     };
 
     if (chordLineToSlideTypes.find(type) != chordLineToSlideTypes.end()) {

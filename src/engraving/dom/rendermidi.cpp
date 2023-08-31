@@ -1145,23 +1145,57 @@ static std::set<size_t> getNotesIndexesToRender(Chord* chord)
     return notesIndexesToRender;
 }
 
-static int slideLength(Chord* chord)
+static int slideLengthChordDependent(Chord* chord)
 {
     const int currentTicks = chord->ticks().ticks();
-    return NoteEvent::NOTE_LENGTH * SLIDE_DURATION / (double)currentTicks;
+    if (currentTicks <= SLIDE_DURATION) {
+        return NoteEvent::NOTE_LENGTH / 2;
+    }
+
+    return (double)NoteEvent::NOTE_LENGTH * SLIDE_DURATION / currentTicks;
 }
 
-static void createSlideInNotePlayEvents(Note* note, NoteEventList* el)
+static int slideTicks(Chord* chord)
+{
+    const int currentTicks = chord->ticks().ticks();
+    if (currentTicks <= SLIDE_DURATION) {
+        return currentTicks / 2;
+    }
+
+    return SLIDE_DURATION;
+}
+
+static void createSlideInNotePlayEvents(Note* note, Chord* prevChord, NoteEventList* el)
 {
     if (!note->hasSlideToNote()) {
         return;
     }
 
-    const int slideNotes = NoteEvent::SLIDE_AMOUNT;
-    const int totalSlideDuration = slideLength(note->chord());
+    int slideNotes = 0;
+    bool upSlide = note->slideToType() == Note::SlideType::UpToNote;
+    if (upSlide) {
+        slideNotes = std::clamp(note->fret() - 1, 0, NoteEvent::SLIDE_AMOUNT);
+    } else {
+        slideNotes = NoteEvent::SLIDE_AMOUNT;
+    }
+
+    if (slideNotes == 0) {
+        return;
+    }
+
+    int totalSlideDuration = 0;
+    double currentTicks = note->chord()->ticks().ticks();
+    if (prevChord) {
+        /// event length is about current chord's events, but we adjust previous
+        totalSlideDuration = (double)slideLengthChordDependent(prevChord) / currentTicks * prevChord->ticks().ticks();
+    } else {
+        totalSlideDuration = (double)NoteEvent::NOTE_LENGTH * SLIDE_DURATION / currentTicks;
+    }
+
     const int slideDuration = totalSlideDuration / slideNotes;
+
     int slideOn = 0;
-    int pitchOffset = note->slideToType() == Note::SlideType::UpToNote ? 1 : -1;
+    int pitchOffset = upSlide ? -1 : 1;
     int pitch = pitchOffset * slideNotes;
     for (int i = 0; i < slideNotes; ++i) {
         NoteEvent event { pitch, 0, slideDuration, 1.0, true, totalSlideDuration - slideOn };
@@ -1179,7 +1213,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTi
     }
 
     const int slideNotes = NoteEvent::SLIDE_AMOUNT;
-    const int totalSlideDuration = slideLength(note->chord());
+    const int totalSlideDuration = slideLengthChordDependent(note->chord());
     const int slideDuration = totalSlideDuration / slideNotes;
 
     int slideOn = NoteEvent::NOTE_LENGTH - totalSlideDuration;
@@ -1206,7 +1240,7 @@ static void createSlideOutNotePlayEvents(Note* note, NoteEventList* el, int onTi
 //    trailtime signifies how much gap to leave after the note to allow for graceNotesAfter to be rendered
 //---------------------------------------------------------
 
-static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int ontime, int trailtime)
+static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, int gateTime, int ontime, int trailtime)
 {
     const std::vector<Note*>& notes = chord->notes();
     if (notes.empty()) {
@@ -1232,7 +1266,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
         });
 
         if (hasSlideOut) {
-            tremoloLength = 1.0 - slideLength(chord) / (double)NoteEvent::NOTE_LENGTH;
+            tremoloLength = 1.0 - slideLengthChordDependent(chord) / (double)NoteEvent::NOTE_LENGTH;
         }
     }
 
@@ -1271,7 +1305,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, int gateTime, int on
             }
         }
 
-        createSlideInNotePlayEvents(note, el);
+        createSlideInNotePlayEvents(note, prevChord, el);
 
         for (NoteEvent& e : *el) {
             e.setLen(e.len() * gateTime / 100);
@@ -1404,7 +1438,7 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
 //    create default play events
 //---------------------------------------------------------
 
-void Score::createPlayEvents(Chord* chord)
+void Score::createPlayEvents(Chord* chord, Chord* prevChord)
 {
     int gateTime = 100;
 
@@ -1438,7 +1472,7 @@ void Score::createPlayEvents(Chord* chord)
     //
     //    render normal (and articulated) chords
     //
-    std::vector<NoteEventList> el = renderChord(chord, gateTime, ontime, trailtime);
+    std::vector<NoteEventList> el = renderChord(chord, prevChord, gateTime, ontime, trailtime);
     if (chord->playEventType() == PlayEventType::Auto) {
         chord->setNoteEventLists(el);
     }
@@ -1462,7 +1496,9 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
     int reducedTicks = 0;
 
     const auto& notes = currentChord->notes();
-    bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) { return note->hasSlideToNote(); });
+    bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) {
+        return note->slideToType() == Note::SlideType::DownToNote || (note->slideToType() == Note::SlideType::UpToNote && note->fret() > 1);
+    });
 
     if (!graceNotesBeforeBar.empty()) {
         reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
@@ -1470,7 +1506,7 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
             return;
         }
     } else if (anySlidesIn) {
-        reducedTicks = SLIDE_DURATION;
+        reducedTicks = slideTicks(prevChord);
     } else {
         return;
     }
@@ -1561,7 +1597,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
                 }
 
                 Chord* chord = toChord(e);
-                createPlayEvents(chord);
+                createPlayEvents(chord, prevChord);
                 adjustPreviousChordLength(chord, prevChord);
                 prevChord = chord;
             }
