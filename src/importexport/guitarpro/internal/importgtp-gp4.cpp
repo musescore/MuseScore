@@ -25,20 +25,13 @@
 #include "libmscore/factory.h"
 #include "libmscore/arpeggio.h"
 #include "libmscore/articulation.h"
-#include "libmscore/barline.h"
-#include "libmscore/box.h"
-#include "libmscore/bracket.h"
 #include "libmscore/chord.h"
 #include "libmscore/chordline.h"
 #include "libmscore/clef.h"
-#include "libmscore/dynamic.h"
-#include "libmscore/excerpt.h"
 #include "libmscore/fingering.h"
 #include "libmscore/glissando.h"
-#include "libmscore/harmony.h"
 #include "libmscore/instrtemplate.h"
 #include "libmscore/instrtemplate.h"
-#include "libmscore/keysig.h"
 #include "libmscore/lyrics.h"
 #include "libmscore/measure.h"
 #include "libmscore/measurebase.h"
@@ -56,14 +49,9 @@
 #include "libmscore/stringdata.h"
 #include "libmscore/stretchedbend.h"
 #include "types/symid.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/text.h"
 #include "libmscore/tie.h"
-#include "libmscore/timesig.h"
 #include "libmscore/tremolo.h"
-#include "libmscore/tremolobar.h"
 #include "libmscore/tuplet.h"
-#include "libmscore/volta.h"
 
 #include "log.h"
 
@@ -349,7 +337,7 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
             gc->setDurationType(d);
             gc->setTicks(d.fraction());
             gc->setNoteType(NoteType::ACCIACCATURA);
-            gc->setMag(note->chord()->staff()->staffMag(Fraction(0, 1)) * score->style().styleD(Sid::graceNoteMag));
+            gc->mutLayoutData()->setMag(note->chord()->staff()->staffMag(Fraction(0, 1)) * score->style().styleD(Sid::graceNoteMag));
             note->chord()->add(gc);
             addDynamic(gn, dynamic);
 

@@ -864,7 +864,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                                 width = std::max(width, n->shape().right() + n->pos().x() + cr1->pos().x());
                             }
                         } else if (cr1->isRest() && (cr1->actualDurationType() != DurationType::V_MEASURE)) {
-                            width = std::max(width, cr1->bbox().right() + cr1->pos().x());
+                            width = std::max(width, cr1->layoutData()->bbox.right() + cr1->pos().x());
                         }
                     }
 
@@ -1031,7 +1031,7 @@ PointF SLine::linePos(Grip grip, System** sys) const
                     seg = nm->first(SegmentType::BeginBarLine | SegmentType::StartRepeatBarLine);
                 }
             }
-            double mwidth = seg && seg->measure() == m ? seg->x() : m->bbox().right();
+            double mwidth = seg && seg->measure() == m ? seg->x() : m->layoutData()->bbox.right();
             x = m->pos().x() + mwidth;
             // align to barline
             if (seg && (seg->segmentType() & SegmentType::BarLineType)) {

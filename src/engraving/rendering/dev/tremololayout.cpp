@@ -71,7 +71,7 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
             }
         }
         y = anchor1->y();
-        h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->bbox().height()) * item->chord1()->intrinsicMag();
+        h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->layoutData()->bbox.height()) * item->chord1()->intrinsicMag();
     }
 
     if (item->twoNotes()) {
@@ -140,6 +140,8 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
     UNUSED(y);
     UNUSED(h);
     UNUSED(spatium);
+
+    Tremolo::LayoutData* ldata = item->mutLayoutData();
 
     // make sure both stems are in the same direction
     int up = 0;
@@ -212,7 +214,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
         createBeamSegments(item, ctx);
         return;
     }
-    item->setPosY(0.);
+    ldata->setPosY(0.);
     std::vector<ChordRest*> chordRests{ item->chord1(), item->chord2() };
     std::vector<int> notes;
     double mag = 0.0;
@@ -234,7 +236,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
     }
 
     std::sort(notes.begin(), notes.end());
-    item->setMag(mag);
+    ldata->setMag(mag);
     item->layoutInfo->calculateAnchors(chordRests, notes);
     item->setStartAnchor(item->layoutInfo->startAnchor());
     item->setEndAnchor(item->layoutInfo->endAnchor());

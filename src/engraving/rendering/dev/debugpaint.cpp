@@ -71,7 +71,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
     PointF pos(item->pagePos());
     painter.translate(pos);
 
-    if (!item->bbox().isEmpty()) {
+    if (!item->layoutData()->bbox.isEmpty()) {
         // Draw shape
         if (configuration()->debuggingOptions().colorElementShapes
             && !item->isPage() && !item->isSystem() && !item->isStaffLines() && !item->isBox()) {
@@ -95,7 +95,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
 
             painter.setPen(borderPen);
             painter.setBrush(draw::BrushStyle::NoBrush);
-            painter.drawRect(item->bbox());
+            painter.drawRect(item->layoutData()->bbox);
         }
     }
 
@@ -147,7 +147,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         painter.setPen(Pen(Color::BLACK, 3.0 / scaling));
 
         for (const System* system : page->systems()) {
-            PointF pt(system->ipos());
+            PointF pt(system->layoutData()->pos);
             double h = system->height() + system->minBottom() + system->minTop();
             painter.translate(pt);
             RectF rect(0.0, -system->minTop(), system->width(), h);
@@ -163,7 +163,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                     continue;
                 }
 
-                PointF pt(system->ipos().x(), system->ipos().y() + ss->y());
+                PointF pt(system->layoutData()->pos.x(), system->layoutData()->pos.y() + ss->y());
                 painter.translate(pt);
                 ss->skyline().paint(painter, 3.0 / scaling);
                 painter.translate(-pt);

@@ -342,7 +342,7 @@ void Accidental::computeMag()
     if (isSmall()) {
         m *= style().styleD(Sid::smallNoteMag);
     }
-    setMag(m);
+    mutLayoutData()->setMag(m);
 }
 
 //---------------------------------------------------------

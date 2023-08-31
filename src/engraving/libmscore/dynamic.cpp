@@ -266,34 +266,34 @@ double Dynamic::customTextOffset() const
 //    Move Dynamic up or down to avoid collisions with other elements.
 //-------------------------------------------------------------------
 
-void Dynamic::doAutoplace()
-{
-    Segment* s = segment();
-    if (!(s && autoplace())) {
-        return;
-    }
+//void Dynamic::doAutoplace()
+//{
+//    Segment* s = segment();
+//    if (!(s && autoplace())) {
+//        return;
+//    }
 
-    double minDistance = style().styleS(Sid::dynamicsMinDistance).val() * spatium();
-    RectF r = bbox().translated(pos() + s->pos() + s->measure()->pos());
-    double yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
-    r.translate(0.0, -yOff);
+//    double minDistance = style().styleS(Sid::dynamicsMinDistance).val() * spatium();
+//    RectF r = bbox().translated(pos() + s->pos() + s->measure()->pos());
+//    double yOff = offset().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
+//    r.translate(0.0, -yOff);
 
-    Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
-    SkylineLine sk(!placeAbove());
-    sk.add(r);
+//    Skyline& sl       = s->measure()->system()->staff(staffIdx())->skyline();
+//    SkylineLine sk(!placeAbove());
+//    sk.add(r);
 
-    if (placeAbove()) {
-        double d = sk.minDistance(sl.north());
-        if (d > -minDistance) {
-            movePosY(-(d + minDistance));
-        }
-    } else {
-        double d = sl.south().minDistance(sk);
-        if (d > -minDistance) {
-            movePosY(d + minDistance);
-        }
-    }
-}
+//    if (placeAbove()) {
+//        double d = sk.minDistance(sl.north());
+//        if (d > -minDistance) {
+//            movePosY(-(d + minDistance));
+//        }
+//    } else {
+//        double d = sl.south().minDistance(sk);
+//        if (d > -minDistance) {
+//            movePosY(d + minDistance);
+//        }
+//    }
+//}
 
 //--------------------------------------------------------------------------
 //   manageBarlineCollisions
@@ -354,10 +354,11 @@ void Dynamic::manageBarlineCollisions()
     if (leftBarLineSegment) {
         EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
-            double leftMargin = bbox().translated(pagePos() - offset()).left() - e->bbox().translated(e->pagePos()).right()
+            double leftMargin = layoutData()->bbox.translated(pagePos() - offset()).left()
+                                - e->layoutData()->bbox.translated(e->pagePos()).right()
                                 - minBarLineDistance;
             if (leftMargin < 0) {
-                movePosX(-leftMargin);
+                mutLayoutData()->movePosX(-leftMargin);
                 return;
             }
         }
@@ -374,10 +375,11 @@ void Dynamic::manageBarlineCollisions()
     if (rightBarLineSegment) {
         EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
-            double rightMargin = e->bbox().translated(e->pagePos()).left() - bbox().translated(pagePos() - offset()).right()
+            double rightMargin = e->layoutData()->bbox.translated(e->pagePos()).left()
+                                 - layoutData()->bbox.translated(pagePos() - offset()).right()
                                  - minBarLineDistance;
             if (rightMargin < 0) {
-                movePosX(rightMargin);
+                mutLayoutData()->movePosX(rightMargin);
                 return;
             }
         }

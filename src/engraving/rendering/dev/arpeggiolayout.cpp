@@ -134,10 +134,11 @@ void ArpeggioLayout::layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx)
 
 void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
 {
-    ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
+    Arpeggio::LayoutData* ldata = item->mutLayoutData();
+    ArpeggioLayout::layout(item, ctx, ldata);
 
     Chord* c = item->chord();
-    item->setPosX(-(item->width() + item->spatium() * .5));
+    ldata->setPosX(-(item->width() + item->spatium() * .5));
 
     layoutArpeggio2(c->arpeggio(), ctx);
     Fraction _tick = item->tick();

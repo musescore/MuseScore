@@ -85,7 +85,7 @@ TEST_F(Engraving_BarlineTests, barline01)
         // check height of the bracket of each system
         // (bracket height is different between first system (3 staves) and other systems (2 staves) )
         Bracket* bracket = sys->brackets().at(0);
-        height      = bracket->bbox().height() / spatium;
+        height      = bracket->layoutData()->bbox.height() / spatium;
         heightMin   = (sysNo == 0) ? BRACKET0_HEIGHT_MIN : BRACKET_HEIGHT_MIN;
         heightMax   = (sysNo == 0) ? BRACKET0_HEIGHT_MAX : BRACKET_HEIGHT_MAX;
 

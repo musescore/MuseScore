@@ -289,7 +289,7 @@ void ScoreLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
 
         page = Factory::createPage(ctx.mutDom().rootItem());
         ctx.mutDom().pages().push_back(page);
-        page->bbox().setRect(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
+        page->mutLayoutData()->bbox.setRect(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
         page->setNo(0);
 
         System* system = Factory::createSystem(page);
@@ -397,7 +397,7 @@ void ScoreLayout::collectLinearSystem(LayoutContext& ctx)
                             if (e) {
                                 ChordRest* cr = toChordRest(e);
                                 if (cr->beam() && cr->beam()->elements().front() == cr) {
-                                    cr->beam()->movePos(p);
+                                    cr->beam()->mutLayoutData()->movePos(p);
                                 }
                             }
                         }

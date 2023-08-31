@@ -205,7 +205,7 @@ void PositionsWriter::writeMeasuresPositions(mu::framework::XmlWriter& writer, c
     qreal ndpi = pngDpiResolution();
 
     for (Measure* measure = score->firstMeasureMM(); measure; measure = measure->nextMeasureMM()) {
-        qreal sx = measure->bbox().width() * ndpi;
+        qreal sx = measure->layoutData()->bbox.width() * ndpi;
         qreal sy = measure->system()->height() * ndpi;
         qreal x = measure->pagePos().x() * ndpi;
         qreal y = measure->system()->pagePos().y() * ndpi;

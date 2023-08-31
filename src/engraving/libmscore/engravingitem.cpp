@@ -931,12 +931,13 @@ void Compound::clear()
 
 void EngravingItem::dump() const
 {
+    const LayoutData* ldata = layoutData();
     LOGD("---EngravingItem: %s, pos(%4.2f,%4.2f)"
          "\n   bbox(%g,%g,%g,%g)"
          "\n   abox(%g,%g,%g,%g)"
          "\n  parent: %p",
-         typeName(), ipos().x(), ipos().y(),
-         bbox().x(), bbox().y(), bbox().width(), bbox().height(),
+         typeName(), ldata->pos.x(), ldata->pos.y(),
+         ldata->bbox.x(), ldata->bbox.y(), ldata->bbox.width(), ldata->bbox.height(),
          abbox().x(), abbox().y(), abbox().width(), abbox().height(),
          explicitParent());
 }
@@ -2176,26 +2177,6 @@ EngravingItem::LayoutData* EngravingItem::mutLayoutData()
         m_layoutData = createLayoutData();
     }
     return m_layoutData;
-}
-
-const mu::RectF& EngravingItem::bbox() const
-{
-    if (!layoutData()) {
-        //LOGD() << "no layout data, will be returned dummy";
-        static mu::RectF dummy;
-        return dummy;
-    }
-    return layoutData()->bbox;
-}
-
-const PointF& EngravingItem::ipos() const
-{
-    if (!layoutData()) {
-        //LOGD() << "no layout data, will be returned dummy";
-        static mu::PointF dummy;
-        return dummy;
-    }
-    return layoutData()->pos;
 }
 
 double EngravingItem::mag() const

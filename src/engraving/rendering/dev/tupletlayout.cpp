@@ -40,6 +40,7 @@ using namespace mu::engraving::rendering::dev;
 
 void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
 {
+    Tuplet::LayoutData* ldata = item->mutLayoutData();
     if (item->elements().empty()) {
         LOGD("Tuplet::layout(): tuplet is empty");
         return;
@@ -83,7 +84,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 break;
             }
         }
-        item->number()->setMag(item->isSmall() ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0);
+        item->number()->mutLayoutData()->setMag(item->isSmall() ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0);
     } else {
         if (item->number()) {
             if (item->number()->selected()) {
@@ -144,7 +145,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     }
 
     item->setHasBracket(item->calcHasBracket(cr1, cr2));
-    item->setMag((cr1->mag() + cr2->mag()) / 2);
+    ldata->setMag((cr1->mag() + cr2->mag()) / 2);
 
     //
     //    calculate bracket start and end point p1 p2
@@ -423,7 +424,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double numberWidth = 0.0;
     if (item->number()) {
         TLayout::layout(item->number(), ctx);
-        numberWidth = item->number()->bbox().width();
+        numberWidth = item->number()->layoutData()->bbox.width();
 
         double y3 = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 - l1 * (item->isUp() ? 1.0 : -1.0);
         // for beamed tuplets, center number on beam - if they don't have a bracket
@@ -442,7 +443,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             x3 = item->p1().x() + deltax * .5;
         }
 
-        item->number()->setPos(PointF(x3, y3) - item->ipos());
+        item->number()->setPos(PointF(x3, y3) - ldata->pos);
     }
 
     if (item->hasBracket()) {
@@ -500,7 +501,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     // collect bounding box
     RectF r;
     if (item->number()) {
-        r |= item->number()->bbox().translated(item->number()->pos());
+        r |= item->number()->layoutData()->bbox.translated(item->number()->pos());
         if (item->hasBracket()) {
             RectF b;
             b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketR[2].x(), item->bracketR[2].y());

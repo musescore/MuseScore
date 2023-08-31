@@ -1140,8 +1140,8 @@ Shape ChordRest::shape() const
                 rmargin = std::max(rmargin, styleP(Sid::lyricsDashMinLength));
             }
             // for horizontal spacing we only need the lyrics width:
-            x1 = std::min(x1, l->bbox().x() - lmargin + l->pos().x());
-            x2 = std::max(x2, l->bbox().x() + l->bbox().width() + rmargin + l->pos().x());
+            x1 = std::min(x1, l->layoutData()->bbox.x() - lmargin + l->pos().x());
+            x2 = std::max(x2, l->layoutData()->bbox.x() + l->layoutData()->bbox.width() + rmargin + l->pos().x());
             if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS)) {
                 x2 += spatium();
             }

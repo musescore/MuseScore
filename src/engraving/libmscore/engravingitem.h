@@ -239,15 +239,8 @@ public:
 
     bool isNudged() const { return !m_offset.isNull(); }
 
-    mu::RectF abbox() const { return bbox().translated(pagePos()); }
-    mu::RectF pageBoundingRect() const { return bbox().translated(pagePos()); }
-    mu::RectF canvasBoundingRect() const { return bbox().translated(canvasPos()); }
-    virtual void setbbox(const mu::RectF& r) { mutLayoutData()->bbox = r; }
-    virtual void addbbox(const mu::RectF& r) { mutLayoutData()->bbox.unite(r); }
     bool contains(const PointF& p) const;
     bool intersects(const mu::RectF& r) const;
-    virtual Shape shape() const { return Shape(bbox(), this); }
-    virtual double baseLine() const { return -height(); }
 
     virtual mu::RectF hitBBox() const { return layoutData()->bbox; }
     virtual Shape hitShape() const { return shape(); }
@@ -526,36 +519,29 @@ public:
     const LayoutData* layoutData() const;
     LayoutData* mutLayoutData();
 
-    const mu::RectF& bbox() const;
-    const PointF& ipos() const;
     virtual double mag() const;
+    virtual Shape shape() const { return Shape(layoutData()->bbox, this); }
+    virtual double baseLine() const { return -height(); }
+
+    mu::RectF abbox() const { return layoutData()->bbox.translated(pagePos()); }
+    mu::RectF pageBoundingRect() const { return layoutData()->bbox.translated(pagePos()); }
+    mu::RectF canvasBoundingRect() const { return layoutData()->bbox.translated(canvasPos()); }
 
     //! --- Old Interface ---
-    bool skipDraw() const { return layoutData() && layoutData()->isSkipDraw; }
-    void setSkipDraw(bool val) { mutLayoutData()->isSkipDraw = val; }
-
-    mu::RectF& bbox() { return mutLayoutData()->bbox; }
-    virtual double height() const { return bbox().height(); }
+    virtual void setbbox(const mu::RectF& r) { mutLayoutData()->bbox = r; }
+    virtual void addbbox(const mu::RectF& r) { mutLayoutData()->bbox.unite(r); }
+    virtual double height() const { return layoutData()->bbox.height(); }
     virtual void setHeight(double v) { mutLayoutData()->bbox.setHeight(v); }
-    virtual double width() const { return bbox().width(); }
+    virtual double width() const { return layoutData()->bbox.width(); }
     virtual void setWidth(double v) { mutLayoutData()->bbox.setWidth(v); }
 
-    double xpos() { return ipos().x(); }
-    double ypos() { return ipos().y(); }
-    virtual const PointF pos() const { return ipos() + m_offset; }
-    virtual double x() const { return ipos().x() + m_offset.x(); }
-    virtual double y() const { return ipos().y() + m_offset.y(); }
+    virtual const PointF pos() const { return layoutData()->pos + m_offset; }
+    virtual double x() const { return layoutData()->pos.x() + m_offset.x(); }
+    virtual double y() const { return layoutData()->pos.y() + m_offset.y(); }
     virtual void setPos(double x, double y) { doSetPos(x, y); }
     virtual void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
-    void setPosX(double x) { mutLayoutData()->setPosX(x); }
-    void setPosY(double y) { mutLayoutData()->setPosY(y); }
-    void movePos(const PointF& p) { mutLayoutData()->movePos(p); }
-    void movePosX(double x) { mutLayoutData()->movePosX(x); }
-    void movePosY(double y) { mutLayoutData()->movePosY(y); }
 
     virtual void move(const PointF& s) { mutLayoutData()->pos += s; }
-
-    void setMag(double val) { mutLayoutData()->mag = val; }
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------

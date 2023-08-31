@@ -732,7 +732,7 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
 
             int off  = st->stepOffset();
             double ld = st->lineDistance().val();
-            note->setPosY((line + off * 2.0) * spatium * .5 * ld);
+            note->mutLayoutData()->setPosY((line + off * 2.0) * spatium * .5 * ld);
         }
     }
 }
@@ -883,7 +883,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
                         Chord* chord = toChord(cr);
                         chord->cmdUpdateNotes(&as);
                         for (Chord* c : chord->graceNotes()) {
-                            c->setMag(m * ctx.conf().styleD(Sid::graceNoteMag));
+                            c->mutLayoutData()->setMag(m * ctx.conf().styleD(Sid::graceNoteMag));
                             c->setTrack(t);
                             ChordLayout::computeUp(c, ctx);
                             if (drumset) {
@@ -900,7 +900,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
                         ChordLayout::layoutStem(chord, ctx); // create stems needed to calculate spacing
                                                              // stem direction can change later during beam processing
                     }
-                    cr->setMag(m);
+                    cr->mutLayoutData()->setMag(m);
                     cr->setBeamlet(nullptr); // Will be defined during beam layout
                 }
             } else if (segment.isClefType()) {
@@ -1239,19 +1239,19 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                     }
                     mmrest->setWidth(w);
                     TLayout::layout(mmrest, ctx);
-                    mmrest->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
+                    mmrest->mutLayoutData()->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
                 } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
                     // two- or four-measure repeat, center on following barline
                     double measureWidth = x2 - s.x() + .5 * (m->styleP(Sid::barWidth));
-                    e->setPosX(measureWidth - .5 * e->width());
+                    e->mutLayoutData()->setPosX(measureWidth - .5 * e->width());
                 } else {
                     // full measure rest or one-measure repeat, center within this measure
                     TLayout::layoutItem(e, ctx);
-                    e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
+                    e->mutLayoutData()->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->layoutData()->bbox.x());
                 }
                 s.createShape(staffIdx);            // DEBUG
             } else if (e->isRest()) {
-                e->setPosX(0);
+                e->mutLayoutData()->setPosX(0);
             } else if (e->isChord()) {
                 Chord* c = toChord(e);
                 if (c->tremolo()) {
@@ -1273,10 +1273,10 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                     }
                 }
             } else if (e->isBarLine()) {
-                e->setPosY(0.0);
+                e->mutLayoutData()->setPosY(0.0);
                 // for end barlines, x position was set in createEndBarLines
                 if (s.segmentType() != SegmentType::EndBarLine) {
-                    e->setPosX(0.0);
+                    e->mutLayoutData()->setPosX(0.0);
                 }
             }
         }
@@ -1465,7 +1465,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
             track_idx_t track = staffIdx * VOICES;
             BarLine* bl = toBarLine(seg->element(track));
             if (bl) {
-                bl->movePosX(blw - bl->width());
+                bl->mutLayoutData()->movePosX(blw - bl->width());
             }
         }
         seg->createShapes();
@@ -1535,7 +1535,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
     // fix segment layout
     Segment* s = seg->prevActive();
     if (s) {
-        double x = s->xpos();
+        double x = s->layoutData()->pos.x();
         computeWidth(m, ctx, s, x, false, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
     }
 
@@ -1915,7 +1915,8 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
 
 void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth, LayoutContext& ctx)
 {
-    m->bbox().setWidth(targetWidth);
+    Measure::LayoutData* ldata = m->mutLayoutData();
+    ldata->bbox.setWidth(targetWidth);
 
     //---------------------------------------------------
     //    compute stretch
@@ -1980,7 +1981,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
             double widthWithoutSpacing = s->width() - spacing;
             double segmentStretch = s->stretch();
             x += spacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
-            s->setPosX(x);
+            s->mutLayoutData()->setPosX(x);
             x += widthWithoutSpacing * (RealIsNull(segmentStretch) ? 1 : segmentStretch);
             s = s->nextEnabled();
         }
@@ -2036,11 +2037,11 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                     //
                     // center full measure rest
                     //
-                    e->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->bbox().x());
+                    e->mutLayoutData()->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->layoutData()->bbox.x());
                     s.createShape(staffIdx);  // DEBUG
                 }
             } else if (t == ElementType::REST) {
-                e->setPosX(0);
+                e->mutLayoutData()->setPosX(0);
             } else if (t == ElementType::CHORD) {
                 Chord* c = toChord(e);
                 if (c->tremolo()) {
@@ -2052,10 +2053,10 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                     }
                 }
             } else if (t == ElementType::BAR_LINE) {
-                e->setPosY(0.0);
+                e->mutLayoutData()->setPosY(0.0);
                 // for end barlines, x position was set in createEndBarLines
                 if (s.segmentType() != SegmentType::EndBarLine) {
-                    e->setPosX(0.0);
+                    e->mutLayoutData()->setPosX(0.0);
                 }
             }
         }
@@ -2069,7 +2070,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 
     // skip disabled segment
     for (s = m->first(); s && (!s->enabled() || s->allElementsInvisible()); s = s->next()) {
-        s->setPosX(m->computeFirstSegmentXPosition(s));  // this is where placement of hidden key/time sigs is set
+        s->mutLayoutData()->setPosX(m->computeFirstSegmentXPosition(s));  // this is where placement of hidden key/time sigs is set
         s->setWidth(0);                                // it shouldn't affect the width of the bar no matter what it is
     }
     if (!s) {
@@ -2136,7 +2137,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
     // PASS 1: compute the spacing of all left-aligned segments by stacking them one after the other
     while (s) {
         s->setWidthOffset(0.0);
-        s->setPosX(x);
+        s->mutLayoutData()->setPosX(x);
         // skip disabled / invisible segments
         // segments with all elements invisible are skipped, though these are already
         // skipped in computeMinWidth() -- the only way this would be an issue here is
@@ -2239,7 +2240,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                             ss->setWidth(ww1);
                         }
                         xx += ww1;
-                        ns1->setPosX(xx);
+                        ns1->mutLayoutData()->setPosX(xx);
                         ss = ns1;
                     }
                     if (s->isChordRestType() || ps == s) {
@@ -2321,6 +2322,7 @@ double MeasureLayout::computeMinMeasureWidth(Measure* m, LayoutContext& ctx)
 
 void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignRight)
 {
+    StaffLines::LayoutData* ldata = lines->mutLayoutData();
     const Staff* s = lines->staff();
     double _spatium = lines->spatium();
     wPartial *= _spatium;
@@ -2328,12 +2330,12 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, do
     lines->setPos(PointF(0.0, 0.0));
     int _lines;
     if (s) {
-        lines->setMag(s->staffMag(lines->measure()->tick()));
+        lines->mutLayoutData()->setMag(s->staffMag(lines->measure()->tick()));
         lines->setColor(s->color(lines->measure()->tick()));
         const StaffType* st = s->staffType(lines->measure()->tick());
         dist         *= st->lineDistance().val();
         _lines        = st->lines();
-        lines->setPosY(st->yoffset().val() * _spatium);
+        lines->mutLayoutData()->setPosY(st->yoffset().val() * _spatium);
     } else {
         _lines = 5;
         lines->setColor(EngravingItem::engravingConfiguration()->defaultColor());
@@ -2342,11 +2344,11 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, do
     double x1 = lines->pos().x();
     double x2 = x1 + w;
     double y  = lines->pos().y();
-    lines->bbox().setRect(x1, -lines->lw() * .5 + y, w, (_lines - 1) * dist + lines->lw());
+    ldata->bbox.setRect(x1, -lines->lw() * .5 + y, w, (_lines - 1) * dist + lines->lw());
 
     if (_lines == 1) {
         double extraSize = _spatium;
-        lines->bbox().adjust(0, -extraSize, 0, extraSize);
+        ldata->bbox.adjust(0, -extraSize, 0, extraSize);
     }
 
     std::vector<mu::LineF> ll;

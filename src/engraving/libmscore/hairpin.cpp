@@ -26,19 +26,15 @@
 
 #include "translation.h"
 
-#include "draw/types/pen.h"
 #include "draw/types/transform.h"
 
 #include "types/typesconv.h"
 
 #include "dynamic.h"
 #include "dynamichairpingroup.h"
-#include "measure.h"
 #include "score.h"
 #include "segment.h"
-#include "staff.h"
 #include "system.h"
-#include "text.h"
 
 #include "log.h"
 
@@ -119,7 +115,7 @@ Shape HairpinSegment::shape() const
     switch (hairpin()->hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
     case HairpinType::DECRESC_HAIRPIN:
-        return Shape(bbox());
+        return Shape(layoutData()->bbox);
     case HairpinType::DECRESC_LINE:
     case HairpinType::CRESC_LINE:
     default:

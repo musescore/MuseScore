@@ -99,7 +99,7 @@ public:
 
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
-    void doAutoplace();
+//    void doAutoplace();
     void manageBarlineCollisions();
 
     static String dynamicText(DynamicType t);

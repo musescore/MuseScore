@@ -153,7 +153,7 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
                 mu::engraving::StaffLines* firstSL = system->firstMeasure()->staffLines(static_cast<int>(staffIndex))->clone();
                 mu::engraving::StaffLines* lastSL =  system->lastMeasure()->staffLines(static_cast<int>(staffIndex));
 
-                qreal lastX =  lastSL->bbox().right()
+                qreal lastX =  lastSL->layoutData()->bbox.right()
                               + lastSL->pagePos().x()
                               - firstSL->pagePos().x();
                 std::vector<mu::LineF> lines = firstSL->lines();

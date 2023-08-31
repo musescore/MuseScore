@@ -322,24 +322,24 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
         // left align noteheads and right align accidentals 'hanging' on the left
         ldata->topPos.setX(0.0);
         ldata->bottomPos.setX(0.0);
-        item->topAccidental()->setPosX(-xAccidOffTop);
-        item->bottomAccidental()->setPosX(-xAccidOffBottom);
+        item->topAccidental()->mutLayoutData()->setPosX(-xAccidOffTop);
+        item->bottomAccidental()->mutLayoutData()->setPosX(-xAccidOffBottom);
         break;
     case DirectionH::LEFT:                       // top notehead at the left of bottom notehead
         // place top notehead at left margin; bottom notehead at right of top head;
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         ldata->topPos.setX(0.0);
         ldata->bottomPos.setX(headWdt);
-        item->topAccidental()->setPosX(-xAccidOffTop);
-        item->bottomAccidental()->setPosX(headWdt - xAccidOffBottom);
+        item->topAccidental()->mutLayoutData()->setPosX(-xAccidOffTop);
+        item->bottomAccidental()->mutLayoutData()->setPosX(headWdt - xAccidOffBottom);
         break;
     case DirectionH::RIGHT:                      // top notehead at the right of bottom notehead
         // bottom notehead at left margin; top notehead at right of bottomnotehead
         // top accid. 'hanging' on left of top head and bottom accid. 'hanging' at left of bottom head
         ldata->bottomPos.setX(0.0);
         ldata->topPos.setX(headWdt);
-        item->bottomAccidental()->setPosX(-xAccidOffBottom);
-        item->topAccidental()->setPosX(headWdt - xAccidOffTop);
+        item->bottomAccidental()->mutLayoutData()->setPosX(-xAccidOffBottom);
+        item->topAccidental()->mutLayoutData()->setPosX(headWdt - xAccidOffTop);
         break;
     }
 
@@ -361,8 +361,8 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
 
     RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
     ldata->setbbox(headRect.translated(ldata->topPos).united(headRect.translated(ldata->bottomPos))
-                   .united(item->topAccidental()->bbox().translated(item->topAccidental()->ipos()))
-                   .united(item->bottomAccidental()->bbox().translated(item->bottomAccidental()->ipos()))
+                   .united(item->topAccidental()->layoutData()->bbox.translated(item->topAccidental()->layoutData()->pos))
+                   .united(item->bottomAccidental()->layoutData()->bbox.translated(item->bottomAccidental()->layoutData()->pos))
                    );
 }
 
@@ -619,8 +619,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         }
         double h = item->h2() * 2;
         double w = item->symWidth(item->braceSymbol()) * item->magx();
-        item->bbox().setRect(0, 0, w, h);
-        shape.add(item->bbox());
+        ldata->bbox.setRect(0, 0, w, h);
+        shape.add(item->layoutData()->bbox);
     }
     break;
     case BracketType::NORMAL: {
@@ -636,7 +636,7 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         w += item->symWidth(SymId::bracketTop);
         double y = -item->symHeight(SymId::bracketTop) - bd;
         double h = (-y + item->h2()) * 2;
-        item->bbox().setRect(x, y, w, h);
+        ldata->bbox.setRect(x, y, w, h);
     }
     break;
     case BracketType::SQUARE: {
@@ -645,8 +645,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double y = -w;
         double h = (item->h2() + w) * 2;
         w += (0.5 * item->spatium() + 3 * w);
-        item->bbox().setRect(x, y, w, h);
-        shape.add(item->bbox());
+        ldata->bbox.setRect(x, y, w, h);
+        shape.add(item->layoutData()->bbox);
     }
     break;
     case BracketType::LINE: {
@@ -656,8 +656,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double bd = spatium * 0.25;
         double y = -bd;
         double h = (-y + item->h2()) * 2;
-        item->bbox().setRect(x, y, w, h);
-        shape.add(item->bbox());
+        ldata->bbox.setRect(x, y, w, h);
+        shape.add(item->layoutData()->bbox);
     }
     break;
     case BracketType::NO_BRACKET:
@@ -723,7 +723,7 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
         y1 = r.y();
         width = r.width();
         height = r.height();
-        item->bbox().setRect(x1, y1, width, height);
+        ldata->bbox.setRect(x1, y1, width, height);
     } else {
         RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
         double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
@@ -830,7 +830,7 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
         std::swap(x, y);
     }
 
-    item->bbox().setRect(x, y, w, h);
+    ldata->bbox.setRect(x, y, w, h);
 }
 
 void SingleLayout::layout(FSymbol* item, const Context&)
@@ -990,10 +990,10 @@ void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
 
         RectF r = RectF(l1.p1(), l1.p2()).normalized().united(RectF(l2.p1(), l2.p2()).normalized());
         if (!item->text()->empty()) {
-            r.unite(item->text()->bbox());
+            r.unite(item->text()->layoutData()->bbox);
         }
         if (!item->endText()->empty()) {
-            r.unite(item->endText()->bbox().translated(x + item->endText()->bbox().width(), 0.0));
+            r.unite(item->endText()->layoutData()->bbox.translated(x + item->endText()->layoutData()->bbox.width(), 0.0));
         }
         double w = item->point(ctx.style().styleS(Sid::hairpinLineWidth));
         item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
@@ -1221,12 +1221,12 @@ void SingleLayout::layout(Ornament* item, const Context& ctx)
                 continue;
             }
             accidental->computeMag();
-            accidental->setMag(accidental->mag() * ornamentAccidentalMag);
+            accidental->mutLayoutData()->setMag(accidental->mag() * ornamentAccidentalMag);
             layout(accidental, ctx);
             Shape accidentalShape = accidental->shape();
             double minVertDist = above
-                                 ? accidentalShape.minVerticalDistance(item->bbox())
-                                 : Shape(item->bbox()).minVerticalDistance(accidentalShape);
+                                 ? accidentalShape.minVerticalDistance(item->layoutData()->bbox)
+                                 : Shape(item->layoutData()->bbox).minVerticalDistance(accidentalShape);
             accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
         }
         return;
@@ -1297,7 +1297,7 @@ void SingleLayout::layout(Slur* item, const Context& ctx)
     s->computeBezier();
     s->setbbox(s->path().boundingRect());
 
-    item->setbbox(s->bbox());
+    item->setbbox(s->layoutData()->bbox);
 }
 
 void SingleLayout::layout(Spacer* item, const Context&)
@@ -1486,8 +1486,9 @@ void SingleLayout::layout(Trill* item, const Context& ctx)
 
 void SingleLayout::layout(TrillSegment* item, const Context& ctx)
 {
+    TrillSegment::LayoutData* ldata = item->mutLayoutData();
     if (item->spanner()->placeBelow()) {
-        item->setPosY(0.0);
+        ldata->setPosY(0.0);
     }
 
     bool accidentalGoesBelow = item->trill()->trillType() == TrillType::DOWNPRALL_LINE;
@@ -1553,8 +1554,9 @@ void SingleLayout::layout(Vibrato* item, const Context& ctx)
 
 void SingleLayout::layout(VibratoSegment* item, const Context&)
 {
+    VibratoSegment::LayoutData* ldata = item->mutLayoutData();
     if (item->spanner()->placeBelow()) {
-        item->setPosY(0.0);
+        ldata->setPosY(0.0);
     }
 
     switch (item->vibrato()->vibratoType()) {
@@ -1661,17 +1663,18 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
 
     LineSegment* lineSegm = item->frontSegment();
     layoutLineSegment(lineSegm, ctx);
-    item->setbbox(lineSegm->bbox());
+    item->setbbox(lineSegm->layoutData()->bbox);
 }
 
 void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Context& ctx)
 {
+    TextLineBaseSegment::LayoutData* ldata = item->mutLayoutData();
     item->npointsRef() = 0;
     TextLineBase* tl = item->textLineBase();
     double spatium = tl->spatium();
 
     if (item->spanner()->placeBelow()) {
-        item->setPosY(0.0);
+        ldata->setPosY(0.0);
     }
 
     if (!tl->diagonal()) {
@@ -1770,7 +1773,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         double gapBetweenTextAndLine = spatium * tl->gapBetweenTextAndLine().val();
         if ((item->isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
             || (!item->isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
-            l = item->text()->pos().x() + item->text()->bbox().width() + gapBetweenTextAndLine;
+            l = item->text()->pos().x() + item->text()->layoutData()->bbox.width() + gapBetweenTextAndLine;
         }
 
         double h = item->text()->height();
@@ -1802,14 +1805,14 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
             y1 = h;
         }
     }
-    item->bbox().setRect(x1, y1, x2 - x1, y2 - y1);
+    ldata->bbox.setRect(x1, y1, x2 - x1, y2 - y1);
     if (!item->text()->empty()) {
-        item->bbox() |= item->text()->bbox().translated(item->text()->pos());      // DEBUG
+        ldata->bbox |= item->text()->layoutData()->bbox.translated(item->text()->pos());      // DEBUG
     }
     // set end text position and extend bbox
     if (!item->endText()->empty()) {
-        item->endText()->movePosX(item->bbox().right());
-        item->bbox() |= item->endText()->bbox().translated(item->endText()->pos());
+        item->endText()->mutLayoutData()->movePosX(item->layoutData()->bbox.right());
+        ldata->bbox |= item->endText()->layoutData()->bbox.translated(item->endText()->pos());
     }
 
     if (tl->lineVisible()) {

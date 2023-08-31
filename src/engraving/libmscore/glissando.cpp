@@ -34,12 +34,7 @@ NICE-TO-HAVE TODO:
 #include <cmath>
 #include <algorithm>
 
-#include "draw/fontmetrics.h"
-#include "draw/types/pen.h"
-#include "style/style.h"
-
 #include "types/typesconv.h"
-#include "iengravingfont.h"
 
 #include "chord.h"
 #include "measure.h"
@@ -168,8 +163,8 @@ void Glissando::addLineAttachPoints()
     if (!frontSeg || !backSeg || !startNote || !endNote) {
         return;
     }
-    double startX = frontSeg->ipos().x();
-    double endX = backSeg->pos2().x() + backSeg->ipos().x(); // because pos2 is relative to ipos
+    double startX = frontSeg->layoutData()->pos.x();
+    double endX = backSeg->pos2().x() + backSeg->layoutData()->pos.x(); // because pos2 is relative to ipos
     // Here we don't pass y() because its value is unreliable during the first stages of layout.
     // The y() is irrelevant anyway for horizontal spacing.
     startNote->addLineAttachPoint(PointF(startX, 0.0), this);

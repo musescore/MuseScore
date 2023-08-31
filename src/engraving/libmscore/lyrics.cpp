@@ -168,15 +168,16 @@ void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 void Lyrics::layout2(int nAbove)
 {
+    LayoutData* ldata = mutLayoutData();
     double lh = lineSpacing() * style().styleD(Sid::lyricsLineHeight);
 
     if (placeBelow()) {
         double yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
-        setPosY(lh * (m_no - nAbove) + yo - chordRest()->y());
-        movePos(styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>());
+        ldata->setPosY(lh * (m_no - nAbove) + yo - chordRest()->y());
+        ldata->movePos(styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>());
     } else {
-        setPosY(-lh * (nAbove - m_no - 1) - chordRest()->y());
-        movePos(styleValue(Pid::OFFSET, Sid::lyricsPosAbove).value<PointF>());
+        ldata->setPosY(-lh * (nAbove - m_no - 1) - chordRest()->y());
+        ldata->movePos(styleValue(Pid::OFFSET, Sid::lyricsPosAbove).value<PointF>());
     }
 }
 

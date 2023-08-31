@@ -29,7 +29,6 @@
 #include "libmscore/staff.h"
 #include "libmscore/system.h"
 #include "libmscore/tuplet.h"
-#include "libmscore/chord.h"
 #include "libmscore/note.h"
 
 #include "utils/scorerw.h"
@@ -80,7 +79,7 @@ static void isLayoutDone(void* data, EngravingItem* e)
     }
     // If layout of element is done it (usually?) has a valid
     // bounding box (bbox).
-    if (e->visible() && !e->bbox().isValid()) {
+    if (e->visible() && !e->layoutData()->bbox.isValid()) {
         (*result) = false;
         // Print some info about the element to make test more useful...
         if (Measure* m = toMeasure(e->findMeasure())) {

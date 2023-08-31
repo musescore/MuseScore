@@ -293,7 +293,7 @@ void System::setBracketsXPosition(const double xPosition)
             }
         }
         // Set position
-        b1->setPosX(xPosition - xOffset - b1->width() + lineWidthCorrection);
+        b1->mutLayoutData()->setPosX(xPosition - xOffset - b1->width() + lineWidthCorrection);
     }
 }
 
@@ -986,7 +986,7 @@ double System::firstNoteRestSegmentX(bool leading)
                             }
                             EngravingItem* e = seg->element(i * VOICES);
                             if (e && e->addToSkyline()) {
-                                width = std::max(width, e->pos().x() + e->bbox().right());
+                                width = std::max(width, e->pos().x() + e->layoutData()->bbox.right());
                             }
                         }
                         return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
@@ -1010,7 +1010,7 @@ double System::firstNoteRestSegmentX(bool leading)
 double System::endingXForOpenEndedLines() const
 {
     double margin = style().spatium() / 4;  // TODO: this can be parameterizable
-    double systemEndX = bbox().width();
+    double systemEndX = layoutData()->bbox.width();
 
     Measure* lastMeas = lastMeasure();
     if (!lastMeas) {

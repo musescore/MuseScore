@@ -22,6 +22,7 @@
 
 #include "drumsetpalette.h"
 
+#include "engraving/libmscore/masterscore.h"
 #include "engraving/libmscore/factory.h"
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/note.h"

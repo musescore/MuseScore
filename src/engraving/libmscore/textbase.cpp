@@ -608,7 +608,7 @@ void TextCursor::selectWord()
 bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 {
     PointF pt  = p - _text->canvasPos();
-    if (!_text->bbox().contains(pt)) {
+    if (!_text->layoutData()->bbox.contains(pt)) {
         return false;
     }
     size_t oldRow    = _row;
@@ -977,7 +977,7 @@ void TextBlock::layout(const TextBase* t)
         break;
         case ElementType::MEASURE: {
             Measure* m = toMeasure(e);
-            layoutWidth = m->bbox().width();
+            layoutWidth = m->layoutData()->bbox.width();
         }
         break;
         default:
@@ -2297,7 +2297,7 @@ std::vector<LineF> TextBase::dragAnchorLines() const
 
     if (layoutToParentWidth() && !result.empty()) {
         LineF& line = result[0];
-        line.setP2(line.p2() + bbox().topLeft());
+        line.setP2(line.p2() + layoutData()->bbox.topLeft());
     }
 
     return result;

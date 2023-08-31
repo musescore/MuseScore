@@ -1324,7 +1324,7 @@ RectF Segment::contentRect() const
         if (element->isChord()) {
             const Chord* chord = dynamic_cast<const Chord*>(element);
             for (const Note* note: chord->notes()) {
-                result = result.united(note->bbox());
+                result = result.united(note->layoutData()->bbox);
             }
 
             Hook* hook = chord->hook();
@@ -1336,7 +1336,7 @@ RectF Segment::contentRect() const
             continue;
         }
 
-        result = result.united(element->bbox());
+        result = result.united(element->layoutData()->bbox);
     }
 
     return result;
@@ -2289,7 +2289,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                 continue;
             }
             if (e->addToSkyline()) {
-                s.add(e->shape().translate(e->isClef() ? e->ipos() : e->pos()));
+                s.add(e->shape().translate(e->isClef() ? e->layoutData()->pos : e->pos()));
             }
             // Non-standard trills display a cue note that we must add to shape here
             if (e->isChord()) {
@@ -2315,8 +2315,8 @@ void Segment::createShape(staff_idx_t staffIdx)
             // use same spacing calculation as for chordrest
             renderer()->layoutItem(toHarmony(e));
 
-            double x1 = e->bbox().x() + e->pos().x();
-            double x2 = e->bbox().x() + e->bbox().width() + e->pos().x();
+            double x1 = e->layoutData()->bbox.x() + e->pos().x();
+            double x2 = e->layoutData()->bbox.x() + e->layoutData()->bbox.width() + e->pos().x();
             s.addHorizontalSpacing(e, x1, x2);
         } else if (!e->isRehearsalMark()
                    && !e->isFretDiagram()
