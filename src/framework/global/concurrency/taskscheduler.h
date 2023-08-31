@@ -179,18 +179,12 @@ private:
             std::function<void()> task = m_taskQueue.front();
             m_taskQueue.pop();
 
-            bool isQueueEmpty = m_taskQueue.empty();
-
             lock.unlock();
 
             task();
 
             if (m_isWaitingForAllTasksDone) {
                 m_taskFinishedCv.notify_one();
-            }
-
-            if (isQueueEmpty) {
-                std::this_thread::sleep_for(std::chrono::milliseconds(1));
             }
         }
     }
