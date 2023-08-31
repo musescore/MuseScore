@@ -52,13 +52,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(StemSlash);
 
-    //! --- Old Interface ---
-    const mu::LineF& line() const { return layoutData()->line; }
-    void setLine(const mu::LineF& l) { mutLayoutData()->line = l; }
-    double stemWidth() const { return layoutData()->stemWidth; }
-    void setStemWidth(double w) { mutLayoutData()->stemWidth = w; }
-    //! ---------------------
-
 private:
 
     friend class Factory;

@@ -100,46 +100,7 @@ public:
 
         bool isValid() const { return bbox.isValid(); }
     };
-
     DECLARE_LAYOUTDATA_METHODS(BagpipeEmbellishment);
-
-    //! -- Old interface --
-    //---------------------------------------------------------
-    //   BEDrawingDataX
-    //      BagpipeEmbellishment drawing data in the x direction
-    //      shared between ::draw() and ::layout()
-    //---------------------------------------------------------
-
-    struct BEDrawingDataX {
-        const SymId headsym = SymId::noSym; // grace note head symbol
-        const SymId flagsym = SymId::noSym; // grace note flag symbol
-        const double mags = 1.0;            // grace head magnification
-        double headw = 0.0;                 // grace head width
-        double headp = 0.0;                 // horizontal head pitch
-        const double spatium = 1.0;         // spatium
-        const double lw = 0.0;              // line width for stem
-        double xl = 0.0;                    // calc x for stem of leftmost note
-        const double xcorr = 0.0;           // correction to align flag with top of stem
-
-        BEDrawingDataX(SymId hs, SymId fs, const double m, const double s, const int nn);
-    };
-
-    //---------------------------------------------------------
-    //   BEDrawingDataY
-    //      BagpipeEmbellishment drawing data in the y direction
-    //      shared between ::draw() and ::layout()
-    //---------------------------------------------------------
-
-    struct BEDrawingDataY {
-        const double y1b;          // top of all stems for beamed notes
-        const double y1f;          // top of stem for note with flag
-        const double y2;           // bottom of stem
-        const double ycorr;        // correction to align flag with top of stem
-        const double bw;           // line width for beam
-
-        BEDrawingDataY(const int l, const double s);
-    };
-    //! -------------------
 
 private:
 

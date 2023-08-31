@@ -39,7 +39,7 @@ namespace mu::engraving {
 DurationElement::DurationElement(const ElementType& type, EngravingItem* parent, ElementFlags f)
     : EngravingItem(type, parent, f)
 {
-    _tuplet = 0;
+    m_tuplet = 0;
 }
 
 //---------------------------------------------------------
@@ -49,8 +49,8 @@ DurationElement::DurationElement(const ElementType& type, EngravingItem* parent,
 DurationElement::DurationElement(const DurationElement& e)
     : EngravingItem(e)
 {
-    _tuplet   = 0;      // e._tuplet;
-    _duration = e._duration;
+    m_tuplet   = 0;      // e._tuplet;
+    m_duration = e.m_duration;
 }
 
 //---------------------------------------------------------
@@ -59,13 +59,13 @@ DurationElement::DurationElement(const DurationElement& e)
 
 DurationElement::~DurationElement()
 {
-    if (_tuplet) {
+    if (m_tuplet) {
         // Note that this sanity check is different from and unrelated to the next `if` condition.
         // See tuplet.h for the difference between `_tuplet->contains` (which involves `_tuplet->
         // _currentElements`) and `tuplet->_allElements`.
-        assert(mu::contains(_tuplet->m_allElements, this));
+        assert(mu::contains(m_tuplet->m_allElements, this));
 
-        if (_tuplet->contains(this)) {
+        if (m_tuplet->contains(this)) {
             while (Tuplet* t = topTuplet()) { // delete tuplets from top to bottom
                 delete t;   // Tuplet destructor removes references to the deleted object
             }
@@ -97,7 +97,7 @@ Tuplet* DurationElement::topTuplet() const
 
 Fraction DurationElement::globalTicks() const
 {
-    Fraction f(_duration);
+    Fraction f(m_duration);
     for (Tuplet* t = tuplet(); t; t = t->tuplet()) {
         f /= t->ratio();
     }
@@ -106,7 +106,7 @@ Fraction DurationElement::globalTicks() const
 
 float DurationElement::timeStretchFactor() const
 {
-    int nominalDuration = _duration.ticks();
+    int nominalDuration = m_duration.ticks();
     int actualDuration = actualTicks().ticks();
 
     return actualDuration / static_cast<float>(nominalDuration);
@@ -135,14 +135,14 @@ void DurationElement::readAddTuplet(Tuplet* t)
 
 void DurationElement::setTuplet(Tuplet* t)
 {
-    if (_tuplet) {
-        _tuplet->removeDurationElement(this);
+    if (m_tuplet) {
+        m_tuplet->removeDurationElement(this);
     }
 
-    _tuplet = t;
+    m_tuplet = t;
 
-    if (_tuplet) {
-        _tuplet->addDurationElement(this);
+    if (m_tuplet) {
+        m_tuplet->addDurationElement(this);
     }
 }
 
@@ -154,7 +154,7 @@ PropertyValue DurationElement::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::DURATION:
-        return PropertyValue::fromValue(_duration);
+        return PropertyValue::fromValue(m_duration);
     default:
         return EngravingItem::getProperty(propertyId);
     }

@@ -193,13 +193,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(FiguredBassItem)
 
-    //! --- Old Interface ---
-    String displayText() const { return layoutData()->displayText; }
-    void setDisplayText(const String& s) { mutLayoutData()->displayText = s; }
-    double textWidth() const { return layoutData()->textWidth; }
-    void setTextWidth(double w) { mutLayoutData()->textWidth = w; }
-    //! ---------------------
-
 private:
 
     friend class FiguredBass;
@@ -308,23 +301,16 @@ public:
     struct LayoutData : public TextBase::LayoutData {
         std::vector<double> lineLengths;               // lengths of duration indicator lines (in raster units)
         double printedLineLength = 0.0;                // the length of lines actually printed (i.e. continuation lines)
+
+        double lineLength(size_t idx) const
+        {
+            if (idx < lineLengths.size()) {
+                return lineLengths.at(idx);
+            }
+            return 0.0;
+        }
     };
     DECLARE_LAYOUTDATA_METHODS(FiguredBass);
-
-    //! --- Old Interface ---
-    void setLineLengths(const std::vector<double>& ll) { mutLayoutData()->lineLengths = ll; }
-    const std::vector<double>& lineLengths() const { return layoutData()->lineLengths; }
-    double lineLength(size_t idx) const
-    {
-        if (idx < lineLengths().size()) {
-            return lineLengths().at(idx);
-        }
-        return 0;
-    }
-
-    void setPrintedLineLength(double l) { mutLayoutData()->printedLineLength = l; }
-    double printedLineLength() const { return layoutData()->printedLineLength; }
-    //! ---------------------
 
 private:
 

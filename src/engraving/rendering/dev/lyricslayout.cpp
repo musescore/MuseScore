@@ -70,6 +70,8 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         return;
     }
 
+    Lyrics::LayoutData* ldata = item->mutLayoutData();
+
     //
     // parse leading verse number and/or punctuation, so we can factor it into layout separately
     //
@@ -187,10 +189,10 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     if (ctx.conf().styleB(Sid::lyricsAlignVerseNumber)) {
         // Calculate leading and trailing parts widths. Lyrics
         // should have text layout to be able to do it correctly.
-        DO_ASSERT(item->rows() != 0);
+        DO_ASSERT(ldata->blocks.size() != 0);
         if (!leading.isEmpty() || !trailing.isEmpty()) {
 //                   LOGD("create leading, trailing <%s> -- <%s><%s>", muPrintable(text), muPrintable(leading), muPrintable(trailing));
-            const TextBlock& tb = item->textBlock(0);
+            const TextBlock& tb = ldata->blocks.at(0);
 
             const double leadingWidth = tb.xpos(leading.size(), item) - tb.boundingRect().x();
             const size_t trailingPos = text.size() - trailing.size();

@@ -83,16 +83,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(MeasureRepeat);
 
-    //! --- Old Interface ---
-    void setSymId(SymId id) { mutLayoutData()->symId = id; }
-    SymId symId() const { return layoutData()->symId; }
-
-    void setNumberSym(int n) { mutLayoutData()->setNumberSym(n); }
-    void setNumberSym(const String& s) { mutLayoutData()->setNumberSym(s); }
-    const SymIdList& numberSym() const { return layoutData()->numberSym; }
-    void clearNumberSym() { mutLayoutData()->clearNumberSym(); }
-    //! ---------------------
-
 private:
 
     Sid getPropertyStyle(Pid) const override;

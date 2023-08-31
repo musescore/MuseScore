@@ -557,16 +557,7 @@ public:
 
     void setMag(double val) { mutLayoutData()->mag = val; }
 
-    // autoplace
-    OffsetChange offsetChanged() const { return layoutData()->offsetChanged(); }
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
-    void autoplaceSegmentElement(bool above, bool add);          // helper functions
-    void autoplaceMeasureElement(bool above, bool add);
-    void autoplaceSegmentElement(bool add = true) { autoplaceSegmentElement(placeAbove(), add); }
-    void autoplaceMeasureElement(bool add = true) { autoplaceMeasureElement(placeAbove(), add); }
-    double rebaseOffset(bool nox = true);
-    bool rebaseMinDistance(double& md, double& yd, double sp, double rebase, bool above, bool fix);
-
     //! ---------------------
 
 protected:

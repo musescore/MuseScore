@@ -83,17 +83,7 @@ public:
         double noteWidth = 0.0;
         double noteHeight = 0.0;
     };
-
     DECLARE_LAYOUTDATA_METHODS(Bend)
-
-    //! --- Old Interface ---
-    void setNoteWidth(double v) { mutLayoutData()->noteWidth = v; }
-    double noteWidth() const { return layoutData()->noteWidth; }
-    void setNoteHeight(double v) { mutLayoutData()->noteHeight = v; }
-    double noteHeight() const { return layoutData()->noteHeight; }
-    void setNotePos(const PointF& v) { mutLayoutData()->notePos = v; }
-    const PointF& notePos() const { return layoutData()->notePos; }
-    //! ---------------------
 
 private:
     friend class Factory;

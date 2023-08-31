@@ -447,6 +447,10 @@ public:
         bool layoutInvalid = true;
 
         mu::RectF frame;
+
+        size_t rows() const { return blocks.size(); }
+        const TextBlock& textBlock(size_t i) const { return blocks.at(i); }
+        TextBlock& textBlock(size_t i) { return blocks[i]; }
     };
     DECLARE_LAYOUTDATA_METHODS(TextBase);
 
@@ -454,19 +458,6 @@ public:
     void createBlocks(LayoutData* ldata) const;
     void layoutFrame();
     void layoutFrame(LayoutData* ldata) const;
-
-    //! --- Old Interface ---
-    const TextBlock& textBlock(int line) const { return layoutData()->blocks.at(line); }
-    TextBlock& textBlock(int line) { return mutLayoutData()->blocks[line]; }
-    std::vector<TextBlock>& blocksRef() { return mutLayoutData()->blocks; }
-    const std::vector<TextBlock>& blocks() const { return layoutData()->blocks; }
-    size_t rows() const { return layoutData()->blocks.size(); }
-
-    void setLayoutInvalid() { mutLayoutData()->layoutInvalid = true; }
-    bool isBlockNotCreated() const { return !layoutData() || layoutData()->layoutInvalid; }
-
-    const mu::RectF& frame() const { return layoutData()->frame; }
-    //! ---------------------
 
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,

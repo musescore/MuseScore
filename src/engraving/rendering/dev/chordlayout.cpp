@@ -3031,7 +3031,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
                 yMove = steps * lineDistance * upSign;
                 rest->movePosY(yMove);
             }
-            for (Rest* mergedRest : rest->mergedRests()) {
+            for (Rest* mergedRest : rest->layoutData()->mergedRests) {
                 mergedRest->movePosY(yMove);
             }
             if (isWholeOrHalf) {
@@ -3070,7 +3070,7 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
             continue;
         }
 
-        if (mu::contains(rest1->mergedRests(), rest2) || mu::contains(rest2->mergedRests(), rest1)) {
+        if (mu::contains(rest1->layoutData()->mergedRests, rest2) || mu::contains(rest2->layoutData()->mergedRests, rest1)) {
             continue;
         }
 

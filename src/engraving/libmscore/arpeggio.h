@@ -99,13 +99,7 @@ public:
 
         bool isValid() const { return bbox.isValid(); }
     };
-
     DECLARE_LAYOUTDATA_METHODS(Arpeggio);
-
-    //! -- Old interface --
-    void setSymbols(const SymIdList& sl) { mutLayoutData()->symbols = sl; }
-    const SymIdList& symbols() { return layoutData()->symbols; }
-    //! -------------------
 
 private:
 

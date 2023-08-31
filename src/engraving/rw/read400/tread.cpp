@@ -2530,7 +2530,9 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
 {
-    l->setPath(PainterPath());
+    //! NOTE Need separated "given" data and layout data
+    ChordLine::LayoutData* ldata = l->mutLayoutData();
+    ldata->path = PainterPath();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Path") {
@@ -2575,7 +2577,7 @@ void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
                     e.unknown();
                 }
             }
-            l->setPath(path);
+            ldata->path = path;
             l->setModified(true);
         } else if (tag == "subtype") {
             l->setChordLineType(TConv::fromXml(e.readAsciiText(), ChordLineType::NOTYPE));
@@ -2882,7 +2884,9 @@ bool TRead::readProperties(LedgerLine* l, XmlReader& e, ReadContext&)
     const AsciiStringView tag(e.name());
 
     if (tag == "lineWidth") {
-        l->setLineWidth(e.readDouble() * l->spatium());
+        //! NOTE Probably need to be removed, because it is calculated in Layout
+        LedgerLine::LayoutData* ldata = l->mutLayoutData();
+        ldata->lineWidth = (e.readDouble() * l->spatium());
     } else if (tag == "lineLen") {
         l->setLen(e.readDouble() * l->spatium());
     } else if (tag == "vertical") {

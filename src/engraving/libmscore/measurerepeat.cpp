@@ -101,7 +101,7 @@ const Measure* MeasureRepeat::referringMeasure(const Measure* measure) const
 
 PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
 {
-    double x = (symBbox(symId()).width() - numberBbox.width()) * .5;
+    double x = (symBbox(layoutData()->symId).width() - numberBbox.width()) * .5;
     // -pos().y(): relative to topmost staff line
     // - 0.5 * r.height(): relative to the baseline of the number symbol
     // (rather than the center)
@@ -125,7 +125,7 @@ Shape MeasureRepeat::shape() const
 {
     Shape shape;
     shape.add(numberRect());
-    shape.add(symBbox(symId()));
+    shape.add(symBbox(layoutData()->symId));
     return shape;
 }
 

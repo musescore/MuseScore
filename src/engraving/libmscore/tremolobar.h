@@ -75,11 +75,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(TremoloBar);
 
-    //! --- Old Interface ---
-    const mu::PolygonF& polygon() const { return layoutData()->polygon; }
-    void setPolygon(const mu::PolygonF& p) { mutLayoutData()->polygon = p; }
-    //! ---------------------
-
 private:
 
     friend class Factory;

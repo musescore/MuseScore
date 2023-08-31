@@ -856,7 +856,9 @@ void TWrite::write(const ChordLine* item, XmlWriter& xml, WriteContext& ctx)
     xml.tag("lengthY", item->lengthY(), 0.0);
     writeItemProperties(item, xml, ctx);
     if (item->modified()) {
-        const draw::PainterPath& path = item->path();
+        //! NOTE Need separated "given" data and layout data
+        const ChordLine::LayoutData* ldata = item->layoutData();
+        const draw::PainterPath& path = ldata->path;
         size_t n = path.elementCount();
         xml.startElement("Path");
         for (size_t i = 0; i < n; ++i) {

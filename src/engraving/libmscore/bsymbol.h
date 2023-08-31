@@ -53,11 +53,11 @@ public:
     EngravingItem* drop(EditData&) override;
     mu::RectF drag(EditData&) override;
 
-    Align align() const { return _align; }
-    void setAlign(Align a) { _align = a; }
+    Align align() const { return m_align; }
+    void setAlign(Align a) { m_align = a; }
 
-    const std::vector<EngravingItem*>& leafs() const { return _leafs; }
-    std::vector<EngravingItem*>& leafs() { return _leafs; }
+    const std::vector<EngravingItem*>& leafs() const { return m_leafs; }
+    std::vector<EngravingItem*>& leafs() { return m_leafs; }
     mu::PointF pagePos() const override;
     mu::PointF canvasPos() const override;
     std::vector<mu::LineF> dragAnchorLines() const override;
@@ -68,8 +68,8 @@ protected:
 
 private:
 
-    std::vector<EngravingItem*> _leafs;
-    Align _align;
+    std::vector<EngravingItem*> m_leafs;
+    Align m_align = { AlignH::LEFT, AlignV::BASELINE };
 };
 } // namespace mu::engraving
 #endif

@@ -590,7 +590,7 @@ EngravingObjectList BSymbol::scanChildren() const
 {
     EngravingObjectList children;
 
-    for (EngravingItem* leaf : _leafs) {
+    for (EngravingItem* leaf : m_leafs) {
         children.push_back(leaf);
     }
 

@@ -774,17 +774,18 @@ void SplitJoinText::join(EditData* ed)
     t->setTextInvalid();
     t->triggerLayout();
 
+    TextBase::LayoutData* ldata = t->mutLayoutData();
     CharFormat* charFmt = _cursor.format();         // take current format
-    size_t col          = t->textBlock(static_cast<int>(line) - 1).columns();
-    int eol             = t->textBlock(static_cast<int>(line)).eol();
-    auto fragmentsList = t->textBlock(static_cast<int>(line)).fragmentsWithoutEmpty();
+    size_t col          = ldata->textBlock(static_cast<int>(line) - 1).columns();
+    int eol             = ldata->textBlock(static_cast<int>(line)).eol();
+    auto fragmentsList = ldata->textBlock(static_cast<int>(line)).fragmentsWithoutEmpty();
 
     if (fragmentsList.size() > 0) {
-        t->textBlock(static_cast<int>(line) - 1).removeEmptyFragment();
+        ldata->textBlock(static_cast<int>(line) - 1).removeEmptyFragment();
     }
-    mu::join(t->textBlock(static_cast<int>(line) - 1).fragments(), fragmentsList);
+    mu::join(ldata->textBlock(static_cast<int>(line) - 1).fragments(), fragmentsList);
 
-    t->blocksRef().erase(t->blocksRef().begin() + line);
+    ldata->blocks.erase(ldata->blocks.begin() + line);
 
     _cursor.setRow(line - 1);
     _cursor.curLine().setEol(eol);
@@ -806,9 +807,10 @@ void SplitJoinText::split(EditData* ed)
     t->setTextInvalid();
     t->triggerLayout();
 
+    TextBase::LayoutData* ldata = t->mutLayoutData();
     CharFormat* charFmt = _cursor.format();           // take current format
-    t->blocksRef().insert(t->blocksRef().begin() + line + 1,
-                          _cursor.curLine().split(static_cast<int>(_cursor.column()), t->cursorFromEditData(*ed)));
+    ldata->blocks.insert(ldata->blocks.begin() + line + 1,
+                         _cursor.curLine().split(static_cast<int>(_cursor.column()), t->cursorFromEditData(*ed)));
     _cursor.curLine().setEol(true);
 
     _cursor.setRow(line + 1);

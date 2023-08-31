@@ -26,12 +26,8 @@
 #include "engraving/libmscore/chord.h"
 #include "engraving/libmscore/note.h"
 #include "engraving/libmscore/drumset.h"
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/staff.h"
-#include "engraving/libmscore/part.h"
 #include "engraving/libmscore/stem.h"
 #include "engraving/libmscore/mscore.h"
-#include "engraving/libmscore/undo.h"
 
 #include "translation.h"
 #include "log.h"
@@ -138,7 +134,7 @@ void DrumsetPalette::updateDrumset()
             noteheadSym = note->noteHead(true, noteHead, NoteHeadType::HEAD_QUARTER);
         }
 
-        note->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
+        note->mutLayoutData()->cachedNoteheadSym = noteheadSym;     // we use the cached notehead so we don't recompute it at each layout
         chord->add(note);
 
         int shortcutCode = m_drumset->shortcut(pitch);

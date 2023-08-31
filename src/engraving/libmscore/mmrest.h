@@ -66,17 +66,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(MMRest);
 
-    //! --- Old Interface ---
-    int number() const { return layoutData()->number; }
-    void setNumber(int n) { mutLayoutData()->number = n; }
-    const SymIdList& numberSym() const { return layoutData()->numberSym; }
-    void setNumberSym(int n) { mutLayoutData()->setNumberSym(n); }
-    const SymIdList& restSyms() const { return layoutData()->restSyms; }
-    void setRestSyms(const SymIdList& syms) { mutLayoutData()->restSyms = syms; }
-    double symsWidth() const { return layoutData()->symsWidth; }
-    void setSymsWidth(double w) { mutLayoutData()->symsWidth = w; }
-    //! ---------------------
-
 private:
 
     Sid getPropertyStyle(Pid) const override;

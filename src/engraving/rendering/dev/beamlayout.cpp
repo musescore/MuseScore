@@ -900,7 +900,7 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         lineMoves *= up ? 1 : -1;
         double yMove = lineMoves * lineDistance;
         rest->movePosY(yMove);
-        for (Rest* mergedRest : rest->mergedRests()) {
+        for (Rest* mergedRest : rest->layoutData()->mergedRests) {
             mergedRest->movePosY(yMove);
         }
 

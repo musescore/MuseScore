@@ -127,29 +127,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(TimeSig);
 
-    //! --- Old Interface ---
-    struct DrawArgs {
-        SymIdList ns;
-        SymIdList ds;
-        mu::PointF pz;
-        mu::PointF pn;
-        mu::PointF pointLargeLeftParen;
-        mu::PointF pointLargeRightParen;
-    };
-
-    void setDrawArgs(const DrawArgs& val)
-    {
-        LayoutData* ldata = mutLayoutData();
-        ldata->ns = val.ns;
-        ldata->ds = val.ds;
-        ldata->pz = val.pz;
-        ldata->pn = val.pn;
-        ldata->pointLargeLeftParen = val.pointLargeLeftParen;
-        ldata->pointLargeRightParen = val.pointLargeRightParen;
-    }
-
-    //! --------------------
-
 protected:
     void added() override;
     void removed() override;

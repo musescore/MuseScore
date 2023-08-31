@@ -100,11 +100,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(KeySig);
 
-    //! --- Old Interface ---
-    const std::vector<KeySym>& keySymbols() const { return layoutData()->keySymbols; }
-    std::vector<KeySym>& keySymbols() { return mutLayoutData()->keySymbols; }
-    //! ---------------------
-
 private:
     friend class Factory;
 

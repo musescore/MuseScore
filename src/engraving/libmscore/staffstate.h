@@ -69,13 +69,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(StaffState);
 
-    //! --- Old Interface ---
-    double lw() const { return layoutData()->lw; }
-    void setLw(double w) { mutLayoutData()->lw = w; }
-    const mu::draw::PainterPath& path() const { return layoutData()->path; }
-    void setPath(const mu::draw::PainterPath& p) { mutLayoutData()->path = p; }
-    //! ---------------------
-
 private:
 
     friend class Factory;

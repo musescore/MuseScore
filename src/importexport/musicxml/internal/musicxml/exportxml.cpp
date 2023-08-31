@@ -102,7 +102,6 @@
 #include "libmscore/rehearsalmark.h"
 #include "libmscore/rest.h"
 #include "libmscore/segment.h"
-#include "libmscore/sig.h"
 #include "libmscore/slur.h"
 #include "libmscore/spanner.h"
 #include "libmscore/staff.h"
@@ -2337,7 +2336,10 @@ void ExportMusicXml::keysig(const KeySig* ks, ClefType ct, staff_idx_t staff, bo
     _attr.doAttr(_xml, true);
     _xml.startElement("key", attrs);
 
-    const std::vector<KeySym>& keysyms = ks->keySymbols();
+    //! NOTE It looks like there is some kind of problem here,
+    //! layout data should not be used to write to a file or export
+    const KeySig::LayoutData* ldata = ks->layoutData();
+    const std::vector<KeySym>& keysyms = ldata->keySymbols;
     if (ks->isCustom() && !ks->isAtonal() && keysyms.size() > 0) {
         // non-traditional key signature
         // MusicXML order is left-to-right order, while KeySims in keySymbols()

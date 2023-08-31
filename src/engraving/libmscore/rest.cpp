@@ -935,7 +935,7 @@ Shape Rest::shape() const
     Shape shape;
     if (!m_gap) {
         shape.add(ChordRest::shape());
-        shape.add(symBbox(sym()), this);
+        shape.add(symBbox(layoutData()->sym), this);
         for (NoteDot* dot : m_dots) {
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
         }

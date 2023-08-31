@@ -446,14 +446,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(Note);
 
-    //! --- Old Interface ---
-    //setter is used only in drumset tools to setup the notehead preview in the drumset editor and the palette
-    SymId cachedNoteheadSym() const { return layoutData()->cachedNoteheadSym; }
-    void setCachedNoteheadSym(SymId i) { mutLayoutData()->cachedNoteheadSym = i; }
-    SymId cachedSymNull() const { return layoutData()->cachedSymNull; }
-    void setCachedSymNull(SymId s) { mutLayoutData()->cachedSymNull = s; }
-    //! --------------------
-
 private:
 
     friend class Factory;

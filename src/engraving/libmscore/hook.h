@@ -43,7 +43,7 @@ public:
     EngravingItem* elementBase() const override;
 
     void setHookType(int v);
-    int hookType() const { return _hookType; }
+    int hookType() const { return m_hookType; }
 
     Chord* chord() const { return toChord(explicitParent()); }
     mu::PointF smuflAnchor() const;
@@ -53,7 +53,7 @@ public:
     static SymId symIdForHookIndex(int index, bool straight);
 
 private:
-    int _hookType { 0 };
+    int m_hookType = 0;
 };
 } // namespace mu::engraving
 #endif

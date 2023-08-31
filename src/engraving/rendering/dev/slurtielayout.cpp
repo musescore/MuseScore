@@ -589,7 +589,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
     case SlurAnchor::STEM:                //sc can't be null
     {
         // place slur starting point at stem end point
-        pt = sc->stemPos() - sc->pagePos() + sc->stem()->p2();
+        pt = sc->stemPos() - sc->pagePos() + sc->stem()->layoutData()->line.p2();
         if (useTablature) {                           // in tabs, stems are centred on note:
             pt.rx() = hw1 * 0.5 + (note1 ? note1->bboxXShift() : 0.0);                      // skip half notehead to touch stem, anatoly-os: incorrect. half notehead width is not always the stem position
         }
@@ -637,7 +637,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
     switch (sa2) {
     case SlurAnchor::STEM:                //ec can't be null
     {
-        pt = ec->stemPos() - ec->pagePos() + ec->stem()->p2();
+        pt = ec->stemPos() - ec->pagePos() + ec->stem()->layoutData()->line.p2();
         if (useTablature) {
             pt.rx() = hw2 * 0.5;
         }
@@ -939,7 +939,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
             if (ch && ch->ticks() >= halfFraction) {
                 for (EngravingItem* item : ch->el()) {
                     if (item && item->isFretCircle()) {
-                        coord += PointF(0, toFretCircle(item)->offsetFromUpNote() * (up ? -1 : 1));
+                        coord += PointF(0, toFretCircle(item)->layoutData()->offsetFromUpNote * (up ? -1 : 1));
                         break;
                     }
                 }
@@ -1230,9 +1230,9 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
                 for (EngravingItem* e : ch->el()) {
                     if (e && e->isFretCircle()) {
                         FretCircle* fretCircle = toFretCircle(e);
-                        coord += PointF(0, fretCircle->offsetFromUpNote() * (item->up() ? -1 : 1));
+                        coord += PointF(0, fretCircle->layoutData()->offsetFromUpNote * (item->up() ? -1 : 1));
                         if (item->isInside()) {
-                            coord += PointF(fretCircle->sideOffset() * (tieStart ? 1 : -1), 0);
+                            coord += PointF(fretCircle->layoutData()->sideOffset * (tieStart ? 1 : -1), 0);
                         }
 
                         break;

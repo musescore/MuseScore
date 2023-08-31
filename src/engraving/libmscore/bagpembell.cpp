@@ -22,13 +22,8 @@
 
 #include "bagpembell.h"
 
-#include "draw/types/pen.h"
-
 #include "types/typesconv.h"
 
-#include "iengravingfont.h"
-
-#include "score.h"
 #include "log.h"
 
 using namespace mu;
@@ -71,34 +66,6 @@ BagpipeNoteList BagpipeEmbellishment::resolveNoteList() const
 
     return nl;
 }
-
-//---------------------------------------------------------
-//   BEDrawingDataX
-//      BagpipeEmbellishment drawing data in the x direction
-//      shared between ::draw() and ::layout()
-//---------------------------------------------------------
-
-BagpipeEmbellishment::BEDrawingDataX::BEDrawingDataX(SymId hs, SymId fs, const double m, const double s, const int nn)
-    : headsym(hs), flagsym(fs), mags(0.75 * m), spatium(s), lw(0.1 * s), xcorr(0.1 * s)
-{
-    double w = Score::paletteScore()->engravingFont()->width(hs, mags);
-    headw = 1.2 * w;         // using 1.0 the stem xpos is off
-    headp = 1.6 * w;
-    xl    = (1 - 1.6 * (nn - 1)) * w / 2;
-}
-
-//---------------------------------------------------------
-//   BEDrawingDataY
-//      BagpipeEmbellishment drawing data in the y direction
-//      shared between ::draw() and ::layout()
-//---------------------------------------------------------
-
-BagpipeEmbellishment::BEDrawingDataY::BEDrawingDataY(const int l, const double s)
-    : y1b(-8 * s / 2),
-    y1f((l - 6) * s / 2),
-    y2(l * s / 2),
-    ycorr(0.8 * s),
-    bw(0.3 * s) {}
 
 //---------------------------------------------------------
 //   mag

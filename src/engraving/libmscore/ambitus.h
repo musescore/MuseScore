@@ -121,23 +121,7 @@ public:
         PointF bottomPos;       // position of bottom note symbol
         LineF line;             // the drawn line
     };
-
     DECLARE_LAYOUTDATA_METHODS(Ambitus);
-
-    //! -- Old interface --
-    PointF topPos() const { return layoutData()->topPos; }
-    void setTopPos(const PointF& p) { mutLayoutData()->topPos = p; }
-    void setTopPosX(double p) { mutLayoutData()->topPos.setX(p); }
-    void setTopPosY(double p) { mutLayoutData()->topPos.setY(p); }
-
-    PointF bottomPos() const { return layoutData()->bottomPos; }
-    void setBottomPos(const PointF& p) { mutLayoutData()->bottomPos = p; }
-    void setBottomPosX(double p) { mutLayoutData()->bottomPos.setX(p); }
-    void setBottomPosY(double p) { mutLayoutData()->bottomPos.setY(p); }
-
-    LineF line() const { return layoutData()->line; }
-    void setLine(const LineF& l) { mutLayoutData()->line = l; }
-    //! -------------------
 
 private:
 

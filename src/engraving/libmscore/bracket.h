@@ -110,16 +110,7 @@ public:
         PainterPath path;
         Shape shape;
     };
-
     DECLARE_LAYOUTDATA_METHODS(Bracket);
-
-    //! --- Old Interface ---
-    void setShape(const Shape& sh) { mutLayoutData()->shape = sh; }
-    Shape shape() const override { return layoutData()->shape; }
-
-    const draw::PainterPath& path() const { return layoutData()->path; }
-    void setPath(const draw::PainterPath& p) { mutLayoutData()->path = p; }
-    //! ---------------------
 
 private:
     friend class Factory;

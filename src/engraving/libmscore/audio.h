@@ -38,15 +38,15 @@ class Audio
 
 public:
     Audio();
-    const String& path() const { return _path; }
-    void setPath(const String& s) { _path = s; }
-    const ByteArray& data() const { return _data; }
-    ByteArray data() { return _data; }
-    void setData(const ByteArray& ba) { _data = ba; }
+    const String& path() const { return m_path; }
+    void setPath(const String& s) { m_path = s; }
+    const ByteArray& data() const { return m_data; }
+    ByteArray data() { return m_data; }
+    void setData(const ByteArray& ba) { m_data = ba; }
 
 private:
-    String _path;
-    ByteArray _data;
+    String m_path;
+    ByteArray m_data;
 };
 } // namespace mu::engraving
 #endif // MU_ENGRAVING_AUDIO_H

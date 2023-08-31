@@ -132,7 +132,7 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
 
 void HorizontalSpacing::computeLedgerRestPadding(const Rest* rest2, double& padding)
 {
-    SymId restSym = rest2->sym();
+    SymId restSym = rest2->layoutData()->sym;
     switch (restSym) {
     case SymId::restWholeLegerLine:
     case SymId::restDoubleWholeLegerLine:
