@@ -7,7 +7,6 @@ set(_components
     Qml
     Quick
     QuickControls2
-    QuickTemplates2
     QuickWidgets
     Xml
     XmlPatterns
@@ -37,6 +36,13 @@ if (WIN32)
 endif(WIN32)
 
 find_package(Qt5Core ${QT_MIN_VERSION} REQUIRED)
+
+if (Qt5Core_VERSION VERSION_GREATER_EQUAL 5.12.0)
+    set(_components
+      ${_components}
+      QuickTemplates2
+      )
+endif(Qt5Core_VERSION VERSION_GREATER_EQUAL 5.12.0)
 
 foreach(_component ${_components})
   find_package(Qt5${_component})
