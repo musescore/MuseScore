@@ -35,7 +35,7 @@
 namespace libmei {
 
 /** Records a temporary alteration to the pitch of a note. **/
-class Accid : public Element, public AttLabelled, public AttTyped, public AttAccidLog, public AttAccidental, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttExtSymAuth, public AttExtSymNames, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttAccidentalGes {
+class Accid : public Element, public AttLabelled, public AttTyped, public AttAccidLog, public AttAccidental, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttAccidentalGes {
     public:
         Accid();
         virtual ~Accid();
@@ -63,7 +63,7 @@ public:
 };
 
 /** An indication of how to play a note or chord. **/
-class Artic : public Element, public AttLabelled, public AttTyped, public AttArticulation, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelEvent, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Artic : public Element, public AttLabelled, public AttTyped, public AttArticulation, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelEvent, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Artic();
         virtual ~Artic();
@@ -90,7 +90,7 @@ public:
  * Break, pause, or interruption in the normal tempo of a composition.
  * Typically indicated by "railroad tracks", i.e., two diagonal slashes.
  **/
-class Caesura : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttStartId, public AttTimestampLog, public AttExtSymAuth, public AttExtSymNames, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Caesura : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttStartId, public AttTimestampLog, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Caesura();
         virtual ~Caesura();
@@ -105,7 +105,7 @@ public:
  * A simultaneous sounding of two or more notes in the same layer *with the same
  * duration*.
  **/
-class Chord : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttGraced, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttChordVis, public AttExtSymAuth, public AttExtSymNames, public AttStems, public AttVisualOffsetHo, public AttBeamSecondary, public AttInstrumentIdent {
+class Chord : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttGraced, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttChordVis, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttStems, public AttVisualOffsetHo, public AttBeamSecondary, public AttInstrumentIdent {
     public:
         Chord();
         virtual ~Chord();
@@ -120,7 +120,7 @@ public:
  * Indication of the exact location of a particular note on the staff and,
  * therefore, the other notes as well.
  **/
-class Clef : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttClefLog, public AttClefShape, public AttLineLoc, public AttOctave, public AttOctaveDisplacement, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Clef : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttStaffIdent, public AttClefLog, public AttClefShape, public AttLineLoc, public AttOctave, public AttOctaveDisplacement, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Clef();
         virtual ~Clef();
@@ -317,7 +317,7 @@ public:
 };
 
 /** A single pitched event. **/
-class Note : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttGraced, public AttPitch, public AttOctave, public AttExtSymAuth, public AttExtSymNames, public AttStems, public AttTypography, public AttVisualOffsetHo, public AttBeamSecondary, public AttNoteGes, public AttInstrumentIdent, public AttMidiVelocity, public AttStringtab {
+class Note : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttGraced, public AttPitch, public AttOctave, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttStems, public AttTypography, public AttVisualOffsetHo, public AttBeamSecondary, public AttNoteGes, public AttInstrumentIdent, public AttMidiVelocity, public AttStringtab {
     public:
         Note();
         virtual ~Note();
@@ -329,7 +329,7 @@ public:
 };
 
 /** An element indicating an ornament that is not a mordent, turn, or trill. **/
-class Ornam : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
+class Ornam : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttOrnamentAccid, public AttOrnamentAccidGes, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttColor, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Ornam();
         virtual ~Ornam();
@@ -392,7 +392,7 @@ public:
  * A formatting element indicating special visual rendering, e.g., bold or
  * italicized, of a text word or phrase.
  **/
-class Rend : public Element, public AttLabelled, public AttTyped, public AttExtSymAuth, public AttHorizontalAlign, public AttLang, public AttTextRendition, public AttTypography, public AttVerticalAlign, public AttWhitespace {
+class Rend : public Element, public AttColor, public AttLabelled, public AttTyped, public AttExtSymAuth, public AttHorizontalAlign, public AttLang, public AttTextRendition, public AttTypography, public AttVerticalAlign, public AttWhitespace {
     public:
         Rend();
         virtual ~Rend();
@@ -420,7 +420,7 @@ public:
 };
 
 /** A non-sounding event found in the source being transcribed. **/
-class Rest : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttBeamSecondary, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttInstrumentIdent {
+class Rest : public Element, public AttLabelled, public AttTyped, public AttAugmentDots, public AttCue, public AttDurationLog, public AttLayerIdent, public AttStaffIdent, public AttColor, public AttBeamSecondary, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttInstrumentIdent {
     public:
         Rest();
         virtual ~Rest();
@@ -550,7 +550,7 @@ public:
 };
 
 /** A reference to a previously defined symbol. **/
-class Symbol : public Element, public AttLabelled, public AttTyped, public AttExtSymAuth, public AttExtSymNames, public AttScalable, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Symbol : public Element, public AttLabelled, public AttTyped, public AttColor, public AttExtSymAuth, public AttExtSymNames, public AttScalable, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Symbol();
         virtual ~Symbol();

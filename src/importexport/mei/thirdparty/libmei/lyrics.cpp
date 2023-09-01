@@ -23,7 +23,7 @@
 namespace libmei {
 
 Refrain::Refrain() :
-    Element("refrain"), AttLabelled(), AttTyped(), AttLang(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetVo(), AttVoltaGroupingSym()
+    Element("refrain"), AttLabelled(), AttTyped(), AttLang(), AttColor(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetVo(), AttVoltaGroupingSym()
 {
 }
 
@@ -36,6 +36,7 @@ bool Refrain::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadLabelled(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTyped(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLang(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -51,6 +52,7 @@ bool Refrain::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteLabelled(element) || hasAttribute);
     hasAttribute = (WriteTyped(element) || hasAttribute);
     hasAttribute = (WriteLang(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -63,6 +65,7 @@ void Refrain::Reset()
     ResetLabelled();
     ResetTyped();
     ResetLang();
+    ResetColor();
     ResetPlacementRelStaff();
     ResetTypography();
     ResetVisualOffsetVo();
@@ -70,7 +73,7 @@ void Refrain::Reset()
 }
 
 Verse::Verse() :
-    Element("verse"), AttLabelled(), AttTyped(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetVo(), AttVoltaGroupingSym(), AttNNumberLike()
+    Element("verse"), AttLabelled(), AttTyped(), AttColor(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetVo(), AttVoltaGroupingSym(), AttNNumberLike()
 {
 }
 
@@ -82,6 +85,7 @@ bool Verse::Read(pugi::xml_node element, bool removeAttr)
     bool hasAttribute = false;
     hasAttribute = (ReadLabelled(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTyped(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -97,6 +101,7 @@ bool Verse::Write(pugi::xml_node element, const std::string &xmlId)
     bool hasAttribute = false;
     hasAttribute = (WriteLabelled(element) || hasAttribute);
     hasAttribute = (WriteTyped(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -109,6 +114,7 @@ void Verse::Reset()
 {     
     ResetLabelled();
     ResetTyped();
+    ResetColor();
     ResetPlacementRelStaff();
     ResetTypography();
     ResetVisualOffsetVo();
@@ -117,7 +123,7 @@ void Verse::Reset()
 }
 
 Volta::Volta() :
-    Element("volta"), AttLabelled(), AttTyped(), AttLang(), AttTypography(), AttVisualOffsetVo()
+    Element("volta"), AttLabelled(), AttTyped(), AttLang(), AttColor(), AttTypography(), AttVisualOffsetVo()
 {
 }
 
@@ -130,6 +136,7 @@ bool Volta::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadLabelled(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTyped(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLang(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
     return hasAttribute;
@@ -143,6 +150,7 @@ bool Volta::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteLabelled(element) || hasAttribute);
     hasAttribute = (WriteTyped(element) || hasAttribute);
     hasAttribute = (WriteLang(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
     return hasAttribute;
@@ -153,6 +161,7 @@ void Volta::Reset()
     ResetLabelled();
     ResetTyped();
     ResetLang();
+    ResetColor();
     ResetTypography();
     ResetVisualOffsetVo();
 }

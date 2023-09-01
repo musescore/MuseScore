@@ -456,6 +456,58 @@ public:
 };
 
 //----------------------------------------------------------------------------
+// AttColor
+//----------------------------------------------------------------------------
+
+class AttColor : public Att {
+protected:
+    AttColor();
+    ~AttColor() = default;
+
+public:
+    /** Reset the default values for the attribute class **/
+    void ResetColor();
+
+    /** Read the values for the attribute class **/
+    bool ReadColor(pugi::xml_node element, bool removeAttr = true);
+
+    /** Write the values for the attribute class **/
+    bool WriteColor(pugi::xml_node element);
+
+    /**
+     * @name Setters, getters and presence checker for class members.
+     * The checker returns true if the attribute class is set (e.g., not equal
+     * to the default value)
+     **/
+    ///@{
+    void SetColor(std::string color_) { m_color = color_; }
+    std::string GetColor() const { return m_color; }
+    bool HasColor() const;
+    ///@}
+
+private:
+    /**
+     * Used to indicate visual appearance.
+     * Do not confuse this with the musical term 'color' as used in pre-CMN notation.
+     **/
+    std::string m_color;
+};
+
+//----------------------------------------------------------------------------
+// InstColor
+//----------------------------------------------------------------------------
+
+/**
+ * Instantiable version of AttColor
+ */
+
+class InstColor : public AttColor {
+public:
+    InstColor() = default;
+    virtual ~InstColor() = default;
+};
+
+//----------------------------------------------------------------------------
 // AttCue
 //----------------------------------------------------------------------------
 
