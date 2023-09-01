@@ -119,6 +119,12 @@ bool MeiExporter::write(std::string& meiData)
         m_mei = meiDoc.append_child("mei");
         m_mei.append_attribute("xmlns") = "http://www.music-encoding.org/ns/mei";
 
+        // Save xml:id metaTag's as mei@xml:id
+        String xmlId = m_score->metaTag(u"xml:id");
+        if (!xmlId.isEmpty()) {
+            m_mei.append_attribute("xml:id") = xmlId.toStdString().c_str();
+        }
+
         libmei::AttConverter converter;
         libmei::meiVersion_MEIVERSION meiVersion = libmei::meiVersion_MEIVERSION_5_0plusbasic;
         m_mei.append_attribute("meiversion") = (converter.MeiVersionMeiversionToStr(meiVersion)).c_str();
@@ -2089,7 +2095,13 @@ std::string MeiExporter::getXmlIdFor(const EngravingItem* item, const char c)
     if (m_xmlIDCounter == 0) {
         std::random_device rd;
         std::mt19937 randomGenerator(rd());
-        m_xmlIDCounter = randomGenerator();
+        // Use xml:id metaTag's hash to initialize IDs
+        String xmlId = m_score->metaTag(u"xml:id");
+        if (!xmlId.isEmpty()) {
+            m_xmlIDCounter = static_cast<int>(xmlId.hash());
+        } else {
+            m_xmlIDCounter = randomGenerator();
+        }
     }
 
     return c + this->generateHashID();
