@@ -3346,7 +3346,7 @@ ChordRest* Score::deleteRange(Segment* s1, Segment* s2, track_idx_t track1, trac
                 }
 
                 if (currentTuplet != cr1->tuplet()) {
-                    if (f.isValid()) { // Set rests for the previous tuplet we were dealing with
+                    if (f.isValid() && !fullMeasure) { // Set rests for the previous tuplet we were dealing with
                         setRest(tick, track, f, false, currentTuplet);
                     }
                     Tuplet* t = cr1->tuplet();
