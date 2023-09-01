@@ -358,7 +358,7 @@ void Dynamic::manageBarlineCollisions()
                     - e->layoutData()->bbox().translated(e->pagePos()).right()
                                 - minBarLineDistance;
             if (leftMargin < 0) {
-                mutLayoutData()->movePosX(-leftMargin);
+                mutLayoutData()->moveX(-leftMargin);
                 return;
             }
         }
@@ -379,7 +379,7 @@ void Dynamic::manageBarlineCollisions()
                     - layoutData()->bbox().translated(pagePos() - offset()).right()
                                  - minBarLineDistance;
             if (rightMargin < 0) {
-                mutLayoutData()->movePosX(rightMargin);
+                mutLayoutData()->moveX(rightMargin);
                 return;
             }
         }

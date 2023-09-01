@@ -1465,7 +1465,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
             track_idx_t track = staffIdx * VOICES;
             BarLine* bl = toBarLine(seg->element(track));
             if (bl) {
-                bl->mutLayoutData()->movePosX(blw - bl->width());
+                bl->mutLayoutData()->moveX(blw - bl->width());
             }
         }
         seg->createShapes();
@@ -1535,7 +1535,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
     // fix segment layout
     Segment* s = seg->prevActive();
     if (s) {
-        double x = s->layoutData()->pos.x();
+        double x = s->layoutData()->pos().x();
         computeWidth(m, ctx, s, x, false, m->system()->minSysTicks(), m->system()->maxSysTicks(), m->layoutStretch());
     }
 

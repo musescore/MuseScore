@@ -91,7 +91,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
                     r.translate(0.0, rebase);
                 }
             }
-            ldata->movePosY(yd);
+            ldata->moveY(yd);
             r.translate(PointF(0.0, yd));
         }
         if (add && item->addToSkyline()) {
@@ -150,7 +150,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
                     sh.translateY(rebase);
                 }
             }
-            ldata->movePosY(yd);
+            ldata->moveY(yd);
             sh.translateY(yd);
         }
         if (add && item->addToSkyline()) {
@@ -212,7 +212,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
                 bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->height();
                 rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
             }
-            ldata->movePosY(yd);
+            ldata->moveY(yd);
         }
     }
     setOffsetChanged(item, ldata, false);
@@ -250,7 +250,7 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
             off.ry() += above ? -staffHeight : staffHeight;
             const_cast<EngravingItem*>(item)->undoChangeProperty(Pid::OFFSET, PropertyValue::fromValue(off + p));
             ldata->autoplace.offsetChanged = OffsetChange::ABSOLUTE_OFFSET;             //saveChangedValue;
-            ldata->movePosY(above ? staffHeight : -staffHeight);
+            ldata->moveY(above ? staffHeight : -staffHeight);
             PropertyFlags pf = e->propertyFlags(Pid::PLACEMENT);
             if (pf == PropertyFlags::STYLED) {
                 pf = PropertyFlags::UNSTYLED;
@@ -387,7 +387,7 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
                         r.translate(0.0, rebase);
                     }
                 }
-                ldata->movePosY(yd);
+                ldata->moveY(yd);
                 thisShape.translateY(yd);
             }
         }

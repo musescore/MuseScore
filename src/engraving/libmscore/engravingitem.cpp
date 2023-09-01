@@ -936,7 +936,7 @@ void EngravingItem::dump() const
          "\n   bbox(%g,%g,%g,%g)"
          "\n   abox(%g,%g,%g,%g)"
          "\n  parent: %p",
-         typeName(), ldata->pos.x(), ldata->pos.y(),
+         typeName(), ldata->pos().x(), ldata->pos().y(),
          ldata->bbox().x(), ldata->bbox().y(), ldata->bbox().width(), ldata->bbox().height(),
          abbox().x(), abbox().y(), abbox().width(), abbox().height(),
          explicitParent());

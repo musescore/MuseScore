@@ -1350,7 +1350,7 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
 
     //Adjust Y pos to staff type yOffset before other calculations
     if (item->staffType()) {
-        ldata->movePosY(item->staffType()->yoffset().val() * item->spatium());
+        ldata->moveY(item->staffType()->yoffset().val() * item->spatium());
     }
 
     item->computeBezier();

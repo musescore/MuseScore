@@ -1176,7 +1176,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         break;
                     }
                 }
-                y = std::min(y, ss->layoutData()->pos.y());
+                y = std::min(y, ss->layoutData()->pos().y());
                 ++idx;
                 prevVolta = volta;
             }
@@ -1303,13 +1303,13 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
     if (align && segments.size() > 1) {
         const size_t nstaves = system->staves().size();
         constexpr double minY = -1000000.0;
-        const double defaultY = segments[0]->layoutData()->pos.y();
+        const double defaultY = segments[0]->layoutData()->pos().y();
         std::vector<double> y(nstaves, minY);
 
         for (SpannerSegment* ss : segments) {
             if (ss->visible()) {
                 double& staffY = y[ss->staffIdx()];
-                staffY = std::max(staffY, ss->layoutData()->pos.y());
+                staffY = std::max(staffY, ss->layoutData()->pos().y());
             }
         }
         for (SpannerSegment* ss : segments) {
@@ -1403,7 +1403,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && RealIsEqual(prevSegment->x(), ss->x())) {
                 double diff = ss->layoutData()->bbox().bottom() - prevSegment->layoutData()->bbox().bottom()
                         + prevSegment->layoutData()->bbox().top();
-                prevSegment->mutLayoutData()->movePosY(diff);
+                prevSegment->mutLayoutData()->moveY(diff);
                 fixed = true;
             }
             if (prevSegment->visible()
@@ -1412,7 +1412,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && ss->isHarmonicMarkSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
                 double diff = prevSegment->layoutData()->bbox().bottom() - ss->layoutData()->bbox().bottom() + ss->layoutData()->bbox().top();
-                ss->mutLayoutData()->movePosY(diff);
+                ss->mutLayoutData()->moveY(diff);
                 fixed = true;
             }
         }

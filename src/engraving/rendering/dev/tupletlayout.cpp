@@ -443,7 +443,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             x3 = item->p1().x() + deltax * .5;
         }
 
-        item->number()->setPos(PointF(x3, y3) - ldata->pos);
+        item->number()->setPos(PointF(x3, y3) - ldata->pos());
     }
 
     if (item->hasBracket()) {

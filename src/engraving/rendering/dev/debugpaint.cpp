@@ -147,7 +147,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
         painter.setPen(Pen(Color::BLACK, 3.0 / scaling));
 
         for (const System* system : page->systems()) {
-            PointF pt(system->layoutData()->pos);
+            PointF pt(system->layoutData()->pos());
             double h = system->height() + system->minBottom() + system->minTop();
             painter.translate(pt);
             RectF rect(0.0, -system->minTop(), system->width(), h);
@@ -163,7 +163,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                     continue;
                 }
 
-                PointF pt(system->layoutData()->pos.x(), system->layoutData()->pos.y() + ss->y());
+                PointF pt(system->layoutData()->pos().x(), system->layoutData()->pos().y() + ss->y());
                 painter.translate(pt);
                 ss->skyline().paint(painter, 3.0 / scaling);
                 painter.translate(-pt);

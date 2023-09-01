@@ -1210,7 +1210,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
         // if some line, draw it
         if (lineEndX > 0.0) {
             double h = ldata->bbox().height() * FiguredBass::FB_CONTLINE_HEIGHT;
-            painter->drawLine(lineStartX, h, lineEndX - ldata->pos.x(), h);
+            painter->drawLine(lineStartX, h, lineEndX - ldata->pos().x(), h);
         }
     }
 

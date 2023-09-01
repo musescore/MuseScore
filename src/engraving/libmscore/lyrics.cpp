@@ -174,10 +174,10 @@ void Lyrics::layout2(int nAbove)
     if (placeBelow()) {
         double yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
         ldata->setPosY(lh * (m_no - nAbove) + yo - chordRest()->y());
-        ldata->movePos(styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>());
+        ldata->move(styleValue(Pid::OFFSET, Sid::lyricsPosBelow).value<PointF>());
     } else {
         ldata->setPosY(-lh * (nAbove - m_no - 1) - chordRest()->y());
-        ldata->movePos(styleValue(Pid::OFFSET, Sid::lyricsPosAbove).value<PointF>());
+        ldata->move(styleValue(Pid::OFFSET, Sid::lyricsPosAbove).value<PointF>());
     }
 }
 

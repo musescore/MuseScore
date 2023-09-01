@@ -361,8 +361,8 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
 
     RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
     ldata->setBbox(headRect.translated(ldata->topPos).united(headRect.translated(ldata->bottomPos))
-                   .united(item->topAccidental()->layoutData()->bbox().translated(item->topAccidental()->layoutData()->pos))
-                   .united(item->bottomAccidental()->layoutData()->bbox().translated(item->bottomAccidental()->layoutData()->pos))
+                   .united(item->topAccidental()->layoutData()->bbox().translated(item->topAccidental()->layoutData()->pos()))
+                   .united(item->bottomAccidental()->layoutData()->bbox().translated(item->bottomAccidental()->layoutData()->pos()))
                    );
 }
 
@@ -1596,7 +1596,7 @@ void SingleLayout::layout(Text* item, const Context& ctx)
 
 void SingleLayout::layoutTextBase(const TextBase* item, const Context& ctx, TextBase::LayoutData* ldata)
 {
-    ldata->pos = PointF();
+    ldata->resetPos();
     const_cast<TextBase*>(item)->setOffset(PointF());
 
     if (item->placeBelow()) {
@@ -1631,7 +1631,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
     double yoff = 0;
     double h    = 0;
 
-    ldata->pos = PointF();
+    ldata->resetPos();
 
     if (item->align() == AlignV::BOTTOM) {
         yoff += h - bb.bottom();
@@ -1811,7 +1811,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     }
     // set end text position and extend bbox
     if (!item->endText()->empty()) {
-        item->endText()->mutLayoutData()->movePosX(item->layoutData()->bbox().right());
+        item->endText()->mutLayoutData()->moveX(item->layoutData()->bbox().right());
         ldata->addBbox(item->endText()->layoutData()->bbox().translated(item->endText()->pos()));
     }
 

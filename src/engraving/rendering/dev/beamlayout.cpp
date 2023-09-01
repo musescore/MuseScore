@@ -900,9 +900,9 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         int lineMoves = ceil(overlap / lineDistance);
         lineMoves *= up ? 1 : -1;
         double yMove = lineMoves * lineDistance;
-        rest->mutLayoutData()->movePosY(yMove);
+        rest->mutLayoutData()->moveY(yMove);
         for (Rest* mergedRest : rest->layoutData()->mergedRests) {
-            mergedRest->mutLayoutData()->movePosY(yMove);
+            mergedRest->mutLayoutData()->moveY(yMove);
         }
 
         Segment* segment = rest->segment();
