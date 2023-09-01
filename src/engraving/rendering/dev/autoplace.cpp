@@ -49,9 +49,9 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         staff_idx_t si = item->staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
-        ldata->isSkipDraw = (si == mu::nidx);
-        const_cast<EngravingItem*>(item)->setSelectable(!ldata->isSkipDraw);
-        if (ldata->isSkipDraw) {
+        ldata->setIsSkipDraw(si == mu::nidx);
+        const_cast<EngravingItem*>(item)->setSelectable(!ldata->isSkipDraw());
+        if (ldata->isSkipDraw()) {
             return;
         }
 
@@ -114,9 +114,9 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
         staff_idx_t si = item->staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
-        ldata->isSkipDraw = (si == mu::nidx);
-        const_cast<EngravingItem*>(item)->setSelectable(!ldata->isSkipDraw);
-        if (ldata->isSkipDraw) {
+        ldata->setIsSkipDraw(si == mu::nidx);
+        const_cast<EngravingItem*>(item)->setSelectable(!ldata->isSkipDraw());
+        if (ldata->isSkipDraw()) {
             return;
         }
 
@@ -188,10 +188,10 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
         double yd = 0.0;
         staff_idx_t stfIdx = item->systemFlag() ? item->staffIdxOrNextVisible() : item->staffIdx();
         if (stfIdx == mu::nidx) {
-            ldata->isSkipDraw = true;
+            ldata->setIsSkipDraw(true);
             return;
         } else {
-            ldata->isSkipDraw = false;
+            ldata->setIsSkipDraw(false);
         }
         if (above) {
             double d = item->system()->topDistance(stfIdx, sl);

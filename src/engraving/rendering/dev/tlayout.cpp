@@ -399,10 +399,10 @@ static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, A
     // TODO: remove Accidental in layout
     // don't show accidentals for tab or slash notation
     if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     if (item->accidentalType() == AccidentalType::NONE) {
         return;
@@ -619,10 +619,10 @@ void TLayout::layout(Articulation* item, LayoutContext& ctx)
 {
     Articulation::LayoutData* ldata = item->mutLayoutData();
     if (item->isHiddenOnTabStaff()) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     if (item->isOrnament()) {
         layout(toOrnament(item), ctx);
@@ -685,12 +685,12 @@ static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::Layo
         if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
             || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
             ldata->setBbox(RectF());
-            ldata->isSkipDraw = true;
+            ldata->setIsSkipDraw(true);
             return;
         }
     }
 
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     ldata->setMag(ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0);
     // Note: the true values of y1 and y2 are computed in layout2() (can be done only
@@ -1507,11 +1507,11 @@ static void layoutDynamic(const Dynamic* item, const LayoutContext& ctx, Dynamic
     const StaffType* stType = item->staffType();
 
     if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
 
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     TLayout::layoutTextBase(item, ctx, ldata);
 
@@ -1654,10 +1654,10 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
     const StaffType* stType = item->staffType();
 
     if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     Segment* s = item->segment();
     ldata->resetPos();
@@ -1989,10 +1989,10 @@ static void layoutFingering(const Fingering* item, const LayoutContext& ctx, Fin
 
     if (st && st->isTabStaff(tick)
         && (!st->staffType(tick)->showTabFingering() || item->textStyleType() == TextStyleType::STRING_NUMBER)) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     TLayout::layoutTextBase(item, ctx, ldata);
     ldata->setPosY(0.0); // handle placement below
@@ -2241,11 +2241,11 @@ void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
 static void layoutFretCircle(const FretCircle* item, const LayoutContext&, FretCircle::LayoutData* ldata)
 {
     if (!item->tabEllipseEnabled()) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         ldata->setBbox(RectF());
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     double lw = item->spatium() * FretCircle::CIRCLE_WIDTH / 2;
     ldata->rect = item->ellipseRect();
@@ -2518,10 +2518,10 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::hairpinShowTabCommon, Sid::hairpinShowTabSimple)) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     const double _spatium = item->spatium();
     const track_idx_t _trck = item->track();
@@ -2843,10 +2843,10 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
     if (stType
         && (!stType->isTabStaff()
             || stType->isHiddenElementOnTab(ctx.conf().style(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     layoutTextLineBaseSegment(item, ctx);
 
@@ -3364,10 +3364,10 @@ void TLayout::layout(LetRingSegment* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::letRingShowTabCommon, Sid::letRingShowTabSimple)) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     layoutTextLineBaseSegment(item, ctx);
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
@@ -3836,10 +3836,10 @@ void TLayout::layout(PalmMuteSegment* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::palmMuteShowTabCommon, Sid::palmMuteShowTabSimple)) {
-        ldata->setSkipDraw(true);
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->setSkipDraw(false);
+    ldata->setIsSkipDraw(false);
 
     layoutTextLineBaseSegment(item, ctx);
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
@@ -3880,10 +3880,10 @@ void TLayout::layout(RasgueadoSegment* item, LayoutContext& ctx)
     const StaffType* stType = item->staffType();
 
     if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::rasgueadoShowTabCommon, Sid::rasgueadoShowTabSimple)) {
-        ldata->setSkipDraw(true);
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->setSkipDraw(false);
+    ldata->setIsSkipDraw(false);
 
     layoutTextLineBaseSegment(item, ctx);
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
@@ -3946,10 +3946,10 @@ static void layoutRestDots(const Rest* item, const LayoutContext& ctx, Rest::Lay
 static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutData* ldata)
 {
     if (item->deadSlapped()) {
-        ldata->isSkipDraw = true;
+        ldata->setIsSkipDraw(true);
         return;
     }
-    ldata->isSkipDraw = false;
+    ldata->setIsSkipDraw(false);
 
     double _spatium = item->spatium();
 
