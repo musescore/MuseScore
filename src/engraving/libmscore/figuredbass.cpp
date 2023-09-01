@@ -849,8 +849,8 @@ double FiguredBass::additionalContLineX(double pagePosY) const
             && fbi->prefix() == FiguredBassItem::Modifier::NONE
             && fbi->suffix() == FiguredBassItem::Modifier::NONE
             && fbi->parenth4() == FiguredBassItem::Parenthesis::NONE
-            && std::abs(pgPos.y() + fbi->layoutData()->pos.y() - pagePosY) < 0.05) {
-            return pgPos.x() + fbi->layoutData()->pos.x();
+                && std::abs(pgPos.y() + fbi->layoutData()->pos().y() - pagePosY) < 0.05) {
+            return pgPos.x() + fbi->layoutData()->pos().x();
         }
     }
 

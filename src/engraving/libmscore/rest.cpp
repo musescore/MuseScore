@@ -720,7 +720,7 @@ void Rest::setAccent(bool flag)
             if (durationType() >= DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
-            mutLayoutData()->movePosY(yOffset);
+            mutLayoutData()->moveY(yOffset);
         }
     }
 }

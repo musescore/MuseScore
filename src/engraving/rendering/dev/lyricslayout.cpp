@@ -375,22 +375,22 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         offsetX           += ctx.conf().styleMM(isEndMelisma ? Sid::lyricsMelismaPad : Sid::lyricsDashPad);
 
         //               delta from curr.pos. | add initial padding
-        ldata->movePosX(offsetX);
+        ldata->moveX(offsetX);
         item->rxpos2()          -= offsetX;
     }
 
     // VERTICAL POSITION: at the base line of the syllable text
     if (!item->isEndType()) {
-        ldata->setPosY(lyr->layoutData()->pos.y());
+        ldata->setPosY(lyr->layoutData()->pos().y());
         item->ryoffset() = lyr->offset().y();
     } else {
         // use Y position of *next* syllable if there is one on same system
         Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
         if (nextLyr1 && nextLyr1->segment()->system() == item->system()) {
-            ldata->setPosY(nextLyr1->layoutData()->pos.y());
+            ldata->setPosY(nextLyr1->layoutData()->pos().y());
             item->ryoffset() = nextLyr1->offset().y();
         } else {
-            ldata->setPosY(lyr->layoutData()->pos.y());
+            ldata->setPosY(lyr->layoutData()->pos().y());
             item->ryoffset() = lyr->offset().y();
         }
     }
@@ -406,7 +406,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         } else {
             item->setNumOfDashes(1);
         }
-        ldata->movePosY(-item->lyricsLine()->lineWidth() * .5);     // let the line 'sit on' the base line
+        ldata->moveY(-item->lyricsLine()->lineWidth() * .5);     // let the line 'sit on' the base line
         // if not final segment, shorten it (why? -AS)
         /*
         if (isBeginType() || isMiddleType()) {
@@ -415,7 +415,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         */
     } else {                              // dash(es)
         // set conventional dash Y pos
-        ldata->movePosY(-lyr->fontMetrics().xHeight() * ctx.conf().styleD(Sid::lyricsDashYposRatio));
+        ldata->moveY(-lyr->fontMetrics().xHeight() * ctx.conf().styleD(Sid::lyricsDashYposRatio));
         item->setDashLength(ctx.conf().styleMM(Sid::lyricsDashMaxLength) * item->mag());      // and dash length
         if (len < minDashLen) {                                               // if no room for a dash
             // if at end of system or dash is forced
@@ -436,13 +436,13 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         }
         // adjust next lyrics horiz. position if too little a space forced to skip the dash
         if (item->numOfDashes() == 0 && nextLyr != nullptr && len > 0) {
-            nextLyr->mutLayoutData()->movePosX(-(toX - fromX));
+            nextLyr->mutLayoutData()->moveX(-(toX - fromX));
         }
     }
 
     // apply yoffset for staff type change (keeps lyrics lines aligned with lyrics)
     if (item->staffType()) {
-        ldata->movePosY(item->staffType()->yoffset().val() * item->spatium());
+        ldata->moveY(item->staffType()->yoffset().val() * item->spatium());
     }
 
     // set bounding box
@@ -567,7 +567,7 @@ static void applyLyricsMax(const MStyle& style, Segment& s, staff_idx_t staffIdx
             double lyricsMinBottomDistance = style.styleMM(Sid::lyricsMinBottomDistance);
             for (Lyrics* l : cr->lyrics()) {
                 if (l->autoplace() && l->placeBelow()) {
-                    l->mutLayoutData()->movePosY(yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
+                    l->mutLayoutData()->moveY(yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
                     if (l->addToSkyline()) {
                         PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
                         sk.add(l->layoutData()->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
@@ -594,7 +594,7 @@ static void applyLyricsMin(ChordRest* cr, staff_idx_t staffIdx, double yMin)
     Skyline& sk = cr->measure()->system()->staff(staffIdx)->skyline();
     for (Lyrics* l : cr->lyrics()) {
         if (l->autoplace() && l->placeAbove()) {
-            l->mutLayoutData()->movePosY(yMin - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
+            l->mutLayoutData()->moveY(yMin - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
             if (l->addToSkyline()) {
                 PointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
                 sk.add(l->layoutData()->bbox().translated(offset));

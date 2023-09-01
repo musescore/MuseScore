@@ -412,7 +412,7 @@ void ScoreLayout::collectLinearSystem(LayoutContext& ctx)
                             if (e) {
                                 ChordRest* cr = toChordRest(e);
                                 if (cr->beam() && cr->beam()->elements().front() == cr) {
-                                    cr->beam()->mutLayoutData()->movePos(p);
+                                    cr->beam()->mutLayoutData()->move(p);
                                 }
                             }
                         }

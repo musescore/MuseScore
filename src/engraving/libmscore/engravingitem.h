@@ -490,7 +490,6 @@ public:
 
         bool isSkipDraw = false;
         double mag = 1.0;           // standard magnification (derived value)
-        PointF pos;                 // Reference position, relative to _parent, set by autoplace
 
         void reset()
         {
@@ -501,13 +500,15 @@ public:
 
         void setMag(double val) { mag = val; }
 
+        void resetPos() { m_pos = PointF(); }
+        const PointF& pos() const { return m_pos; }
         void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
         void setPos(double x, double y) { doSetPos(x, y); }
-        void setPosX(double x) { doSetPos(x, pos.y()); }
-        void setPosY(double y) { doSetPos(pos.x(), y); }
-        void movePos(const PointF& p) { doSetPos(pos.x() + p.x(), pos.y() + p.y()); }
-        void movePosX(double x) { doSetPos(pos.x() + x, pos.y()); }
-        void movePosY(double y) { doSetPos(pos.x(), pos.y() + y); }
+        void setPosX(double x) { doSetPos(x, m_pos.y()); }
+        void setPosY(double y) { doSetPos(m_pos.x(), y); }
+        void move(const PointF& p) { doSetPos(m_pos.x() + p.x(), m_pos.y() + p.y()); }
+        void moveX(double x) { doSetPos(m_pos.x() + x, m_pos.y()); }
+        void moveY(double y) { doSetPos(m_pos.x(), m_pos.y() + y); }
 
         void resetBbox() { m_bbox = RectF(); }
         const RectF& bbox() const { return m_bbox; }
@@ -522,10 +523,11 @@ public:
     protected:
         inline void doSetPos(double x, double y)
         {
-            pos.setX(x),
-            pos.setY(y);
+            m_pos.setX(x),
+            m_pos.setY(y);
         }
 
+        PointF m_pos;          // Reference position, relative to _parent, set by autoplace
         RectF m_bbox;          // Bounding box relative to _pos + _offset
     };
 
@@ -548,13 +550,13 @@ public:
     virtual double width() const { return layoutData()->bbox().width(); }
     virtual void setWidth(double v) { mutLayoutData()->setWidth(v); }
 
-    virtual const PointF pos() const { return layoutData()->pos + m_offset; }
-    virtual double x() const { return layoutData()->pos.x() + m_offset.x(); }
-    virtual double y() const { return layoutData()->pos.y() + m_offset.y(); }
-    virtual void setPos(double x, double y) { doSetPos(x, y); }
-    virtual void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
+    virtual const PointF pos() const { return layoutData()->pos() + m_offset; }
+    virtual double x() const { return layoutData()->pos().x() + m_offset.x(); }
+    virtual double y() const { return layoutData()->pos().y() + m_offset.y(); }
+    virtual void setPos(double x, double y) { mutLayoutData()->setPos(x, y); }
+    virtual void setPos(const PointF& p) { mutLayoutData()->setPos(p.x(), p.y()); }
 
-    virtual void move(const PointF& s) { mutLayoutData()->pos += s; }
+    virtual void move(const PointF& s) { mutLayoutData()->move(s); }
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------
@@ -583,13 +585,6 @@ private:
     void doInitAccessible();
     AccessibleItemPtr m_accessible;
 #endif
-
-    inline void doSetPos(double x, double y)
-    {
-        LayoutData* d = mutLayoutData();
-        d->pos.setX(x),
-        d->pos.setY(y);
-    }
 
     bool m_accessibleEnabled = false;
 

@@ -530,7 +530,7 @@ QString ExportMusicXml::positioningAttributes(EngravingItem const* const el, boo
             //defaultY = pos.y() + pos2.y();
         }
     } else {
-        def = el->layoutData()->pos.toQPointF();       // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
+        def = el->layoutData()->pos().toQPointF();       // Note: for some elements, Finale Notepad seems to work slightly better w/o default-x
         rel = el->offset().toQPointF();
     }
 
@@ -1856,7 +1856,7 @@ QString ExportMusicXml::fermataPosition(const Fermata* const fermata)
         constexpr qreal SPATIUM2TENTHS = 10;
         constexpr qreal EPSILON = 0.01;
         const auto spatium = fermata->spatium();
-        const auto defY = -1 * SPATIUM2TENTHS * fermata->layoutData()->pos.y() / spatium;
+        const auto defY = -1 * SPATIUM2TENTHS * fermata->layoutData()->pos().y() / spatium;
         const auto relY = -1 * SPATIUM2TENTHS * fermata->offset().y() / spatium;
 
         if (qAbs(defY) >= EPSILON) {

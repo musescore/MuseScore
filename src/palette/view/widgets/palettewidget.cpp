@@ -614,7 +614,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
     painter.scale(cellMag, cellMag);
 
     painter.translate(-r.topLeft());
-    PointF pos = element->layoutData()->pos;
+    PointF pos = element->layoutData()->pos();
     element->setPos(0, 0);
 
     QColor color;

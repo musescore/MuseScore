@@ -93,7 +93,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     double mag_             = item->staff() ? item->staff()->staffMag(item) : 1.0;      // palette elements do not have a staff
     double dotNoteDistance  = ctx.conf().styleMM(Sid::dotNoteDistance) * mag_;
 
-    double chordX           = (item->noteType() == NoteType::NORMAL) ? item->layoutData()->pos.x() : 0.0;
+    double chordX           = (item->noteType() == NoteType::NORMAL) ? item->layoutData()->pos().x() : 0.0;
 
     while (item->ledgerLines()) {
         LedgerLine* l = item->ledgerLines()->next();
@@ -264,7 +264,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
                     alignNote.push_back(f);
                     if (!leftFound) {
                         leftFound = true;
-                        double xf = f->layoutData()->pos.x();
+                        double xf = f->layoutData()->pos().x();
                         xNote = std::min(xNote, xf);
                     }
                 }
@@ -357,8 +357,8 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
                     //    use available space
                     // for negative x offset:
                     //    space is allocated elsewhere, so don't re-allocate here
-                    if (note->layoutData()->pos.x() != 0.0) {                      // this probably does not work for TAB, as
-                        overlap += std::abs(note->layoutData()->pos.x());              // _pos is used to centre the fret on the stem
+                    if (note->layoutData()->pos().x() != 0.0) {                      // this probably does not work for TAB, as
+                        overlap += std::abs(note->layoutData()->pos().x());              // _pos is used to centre the fret on the stem
                     } else {
                         overlap -= fretWidth * 0.125;
                     }
@@ -498,7 +498,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             TLayout::layout(item->tabDur(), ctx);
             if (minY < 0) {                           // if some fret extends above tab body (like bass strings)
                 TabDurationSymbol::LayoutData* tdladata = item->tabDur()->mutLayoutData();
-                tdladata->movePosY(minY);             // raise duration symbol
+                tdladata->moveY(minY);             // raise duration symbol
                 tdladata->setBbox(tdladata->bbox().translated(0, minY));
             }
         } else {                                // symbol not needed: if exists, delete
@@ -1013,8 +1013,8 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         if (a->isStaccato()) {
             stacc = a;
         } else if (stacc && a->isAccent() && stacc->up() == a->up()
-                   && (RealIsEqualOrLess(stacc->layoutData()->pos.y(), 0.0)
-                       || RealIsEqualOrMore(stacc->layoutData()->pos.y(), item->staff()->height()))) {
+                   && (RealIsEqualOrLess(stacc->layoutData()->pos().y(), 0.0)
+                       || RealIsEqualOrMore(stacc->layoutData()->pos().y(), item->staff()->height()))) {
             // obviously, the accent doesn't have a cutout, so this value just artificially moves the stacc
             // and accent closer to each other to simulate some kind of kerning. Looks great using all musescore fonts,
             // though there is a possibility that a different font which has vertically-asymmetrical accents
@@ -1097,7 +1097,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
             d *= slur->up() ? -1 : 1;
             for (auto iter2 = iter; iter2 != item->articulations().end(); ++iter2) {
                 Articulation* aa = *iter2;
-                aa->mutLayoutData()->movePosY(d);
+                aa->mutLayoutData()->moveY(d);
                 Shape aaShape = aa->shape().translated(aa->pos() + item->pos() + s->pos() + m->pos());
                 if (sstaff && aa->addToSkyline()) {
                     sstaff->skyline().add(aaShape);
@@ -1863,21 +1863,21 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 Chord::LayoutData* chordLdata = chord->mutLayoutData();
                 if (chord->up()) {
                     if (!RealIsNull(upOffset)) {
-                        chordLdata->movePosX(upOffset + centerAdjustUp + oversizeUp);
+                        chordLdata->moveX(upOffset + centerAdjustUp + oversizeUp);
                         if (downDots && !upDots) {
-                            chordLdata->movePosX(dotAdjust);
+                            chordLdata->moveX(dotAdjust);
                         }
                     } else {
-                        chordLdata->movePosX(centerUp);
+                        chordLdata->moveX(centerUp);
                     }
                 } else {
                     if (!RealIsNull(downOffset)) {
-                        chordLdata->movePosX(downOffset + centerAdjustDown);
+                        chordLdata->moveX(downOffset + centerAdjustDown);
                         if (upDots && !downDots) {
-                            chordLdata->movePosX(dotAdjust);
+                            chordLdata->moveX(dotAdjust);
                         }
                     } else {
-                        chordLdata->movePosX(centerDown);
+                        chordLdata->moveX(centerDown);
                     }
                 }
             }
@@ -2393,7 +2393,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
         }
 
         double ny = (note->line() + stepOffset) * stepDistance;
-        if (note->layoutData()->pos.y() != ny) {
+        if (note->layoutData()->pos().y() != ny) {
             note->mutLayoutData()->setPosY(ny);
             if (chord->stem()) {
                 TLayout::layout(chord->stem(), ctx);
@@ -2872,9 +2872,9 @@ void ChordLayout::repositionGraceNotesAfter(Segment* segment, size_t tracks)
         }
         GraceNotesGroup* gng = toGraceNotesGroup(item);
         for (Chord* chord : *gng) {
-            double offset = segment->layoutData()->pos.x() - chord->parentItem()->parentItem()->layoutData()->pos.x();
+            double offset = segment->layoutData()->pos().x() - chord->parentItem()->parentItem()->layoutData()->pos().x();
             // Difference between the segment they "belong" and the segment they are "appended" to.
-            chord->setPos(chord->layoutData()->pos.x() + offset, 0.0);
+            chord->setPos(chord->layoutData()->pos().x() + offset, 0.0);
         }
     }
 }
@@ -3028,14 +3028,14 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             if (useHalfSpaceSteps) {
                 int steps = ceil(abs(margin) / (lineDistance / 2));
                 yMove = steps * lineDistance / 2 * upSign;
-                rest->mutLayoutData()->movePosY(yMove);
+                rest->mutLayoutData()->moveY(yMove);
             } else {
                 int steps = ceil(abs(margin) / lineDistance);
                 yMove = steps * lineDistance * upSign;
-                rest->mutLayoutData()->movePosY(yMove);
+                rest->mutLayoutData()->moveY(yMove);
             }
             for (Rest* mergedRest : rest->layoutData()->mergedRests) {
-                mergedRest->mutLayoutData()->movePosY(yMove);
+                mergedRest->mutLayoutData()->moveY(yMove);
             }
             if (isWholeOrHalf) {
                 double y = rest->pos().y();
@@ -3117,8 +3117,8 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
         }
         step1 = std::min(step1, maxStep1);
         step2 = std::min(step2, maxStep2);
-        rest1->mutLayoutData()->movePosY(step1 * lineDistance * (firstAbove ? -1 : 1));
-        rest2->mutLayoutData()->movePosY(step2 * lineDistance * (firstAbove ? 1 : -1));
+        rest1->mutLayoutData()->moveY(step1 * lineDistance * (firstAbove ? -1 : 1));
+        rest2->mutLayoutData()->moveY(step2 * lineDistance * (firstAbove ? 1 : -1));
 
         Beam* beam1 = rest1->beam();
         Beam* beam2 = rest2->beam();
@@ -3149,16 +3149,16 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
                 steps = ceil((centerY - lowerBound) / lineDistance);
             }
             double moveY = steps * lineDistance;
-            rest1->mutLayoutData()->movePosY(moveY);
-            rest2->mutLayoutData()->movePosY(moveY);
+            rest1->mutLayoutData()->moveY(moveY);
+            rest2->mutLayoutData()->moveY(moveY);
             shape1.translate(PointF(0.0, moveY));
             shape2.translate(PointF(0.0, moveY));
 
             double halfLineDistance = 0.5 * lineDistance;
             if (shape1.bottom() < -halfLineDistance) {
-                rest1->mutLayoutData()->movePosY(halfLineDistance);
+                rest1->mutLayoutData()->moveY(halfLineDistance);
             } else if (centerY >= (lines - 1) * lineDistance + halfLineDistance) {
-                rest2->mutLayoutData()->movePosY(-halfLineDistance);
+                rest2->mutLayoutData()->moveY(-halfLineDistance);
             }
 
             rest1->verticalClearance().setLocked(true);
@@ -3356,7 +3356,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
                 }
 
                 if (Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround() && item->staff()->isTabStaff(e->tick())) {
-                    e->mutLayoutData()->movePosX(right + item->symWidth(SymId::noteheadParenthesisRight));
+                    e->mutLayoutData()->moveX(right + item->symWidth(SymId::noteheadParenthesisRight));
                 } else {
                     e->mutLayoutData()->setPosX(right + parenthesisPadding);
                 }

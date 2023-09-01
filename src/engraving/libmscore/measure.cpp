@@ -3207,7 +3207,7 @@ void Measure::spaceRightAlignedSegments()
             Segment* prevSegment = raSegment->prev();
             prevSegment->setWidth(prevSegment->width() - minDistAfter);
             prevSegment->setWidthOffset(prevSegment->widthOffset() - minDistAfter);
-            raSegment->mutLayoutData()->movePosX(-minDistAfter);
+            raSegment->mutLayoutData()->moveX(-minDistAfter);
             raSegment->setWidth(raSegment->width() + minDistAfter);
         }
         // 2) Make sure the segment isn't colliding with anything behind
@@ -3222,7 +3222,7 @@ void Measure::spaceRightAlignedSegments()
             prevSegment->setWidth(prevSegment->width() + minDistBefore);
         }
         for (Segment* seg = raSegment; seg; seg = seg->next()) {
-            seg->mutLayoutData()->movePosX(minDistBefore);
+            seg->mutLayoutData()->moveX(minDistBefore);
         }
         setWidth(width() + minDistBefore);
     }

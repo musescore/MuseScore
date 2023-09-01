@@ -2289,7 +2289,7 @@ void Segment::createShape(staff_idx_t staffIdx)
                 continue;
             }
             if (e->addToSkyline()) {
-                s.add(e->shape().translate(e->isClef() ? e->layoutData()->pos : e->pos()));
+                s.add(e->shape().translate(e->isClef() ? e->layoutData()->pos() : e->pos()));
             }
             // Non-standard trills display a cue note that we must add to shape here
             if (e->isChord()) {

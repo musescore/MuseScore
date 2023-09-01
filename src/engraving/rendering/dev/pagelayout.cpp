@@ -523,12 +523,12 @@ void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double y
         TLayout::layout(divider, ctx);
         dividerLdata->setPosY(divider->height() * .5 + yOffset);
         if (left) {
-            dividerLdata->movePosY(ctx.conf().styleD(Sid::dividerLeftY) * SPATIUM20);
+            dividerLdata->moveY(ctx.conf().styleD(Sid::dividerLeftY) * SPATIUM20);
             dividerLdata->setPosX(ctx.conf().styleD(Sid::dividerLeftX) * SPATIUM20);
         } else {
-            dividerLdata->movePosY(ctx.conf().styleD(Sid::dividerRightY) * SPATIUM20);
+            dividerLdata->moveY(ctx.conf().styleD(Sid::dividerRightY) * SPATIUM20);
             dividerLdata->setPosX(ctx.conf().styleD(Sid::pagePrintableWidth) * DPI - divider->width());
-            dividerLdata->movePosX(ctx.conf().styleD(Sid::dividerRightX) * SPATIUM20);
+            dividerLdata->moveX(ctx.conf().styleD(Sid::dividerRightX) * SPATIUM20);
         }
     } else if (divider) {
         if (divider->generated()) {
@@ -716,7 +716,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
         if (prvSystem == vgd->system) {
             staffShift += vgd->actualAddedSpace();
         } else {
-            vgd->system->mutLayoutData()->movePosY(systemShift);
+            vgd->system->mutLayoutData()->moveY(systemShift);
             if (prvSystem) {
                 prvSystem->setDistance(vgd->system->y() - prvSystem->y());
                 prvSystem->setHeight(prvSystem->height() + staffShift);
