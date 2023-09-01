@@ -380,7 +380,7 @@ void TDraw::draw(const ActionIcon* item, draw::Painter* painter)
     TRACE_DRAW_ITEM;
     const ActionIcon::LayoutData* ldata = item->layoutData();
     painter->setFont(item->iconFont());
-    painter->drawText(ldata->bbox, draw::AlignCenter, Char(item->icon()));
+    painter->drawText(ldata->bbox(), draw::AlignCenter, Char(item->icon()));
 }
 
 void TDraw::draw(const Ambitus* item, draw::Painter* painter)
@@ -436,13 +436,13 @@ void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Arpeggio::LayoutData* layoutData = item->layoutData();
-    IF_ASSERT_FAILED(layoutData) {
+    const Arpeggio::LayoutData* ldata = item->layoutData();
+    IF_ASSERT_FAILED(ldata) {
         return;
     }
 
-    const double y1 = layoutData->bbox.top();
-    const double y2 = layoutData->bbox.bottom();
+    const double y1 = ldata->bbox().top();
+    const double y2 = ldata->bbox().bottom();
     const double lineWidth = item->style().styleMM(Sid::ArpeggioLineWidth);
 
     painter->setPen(Pen(item->curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
@@ -452,21 +452,21 @@ void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
     case ArpeggioType::NORMAL:
     case ArpeggioType::UP:
     {
-        const RectF& r = layoutData->symsBBox;
+        const RectF& r = ldata->symsBBox;
         painter->rotate(-90.0);
-        item->drawSymbols(layoutData->symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
+        item->drawSymbols(ldata->symbols, painter, PointF(-r.right() - y1, -r.bottom() + r.height()));
     } break;
 
     case ArpeggioType::DOWN:
     {
-        const RectF& r = layoutData->symsBBox;
+        const RectF& r = ldata->symsBBox;
         painter->rotate(90.0);
-        item->drawSymbols(layoutData->symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
+        item->drawSymbols(ldata->symbols, painter, PointF(-r.left() + y1, -r.top() - r.height()));
     } break;
 
     case ArpeggioType::UP_STRAIGHT:
     {
-        const RectF& r = layoutData->symsBBox;
+        const RectF& r = ldata->symsBBox;
         double x1 = item->spatium() * 0.5;
         item->drawSymbol(SymId::arrowheadBlackUp, painter, PointF(x1 - r.width() * 0.5, y1 - r.top()));
         double ny1 = y1 - r.top() * 0.5;
@@ -475,7 +475,7 @@ void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
 
     case ArpeggioType::DOWN_STRAIGHT:
     {
-        const RectF& r = layoutData->symsBBox;
+        const RectF& r = ldata->symsBBox;
         double x1 = item->spatium() * 0.5;
         item->drawSymbol(SymId::arrowheadBlackDown, painter, PointF(x1 - r.width() * 0.5, y2 - r.bottom()));
         double ny2 = y2 + r.top() * 0.5;
@@ -507,7 +507,7 @@ void TDraw::draw(const Articulation* item, draw::Painter* painter)
         mu::draw::Font scaledFont(item->font());
         scaledFont.setPointSizeF(scaledFont.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(scaledFont);
-        painter->drawText(ldata->bbox, TextDontClip | AlignLeft | AlignTop, TConv::text(item->textType()));
+        painter->drawText(ldata->bbox(), TextDontClip | AlignLeft | AlignTop, TConv::text(item->textType()));
     }
 }
 
@@ -959,7 +959,7 @@ void TDraw::draw(const Box* item, Painter* painter)
         painter->setBrush(BrushStyle::NoBrush);
         painter->setPen(pen);
         lineWidth *= 0.5;
-        painter->drawRect(ldata->bbox.adjusted(lineWidth, lineWidth, -lineWidth, -lineWidth));
+        painter->drawRect(ldata->bbox().adjusted(lineWidth, lineWidth, -lineWidth, -lineWidth));
     }
 }
 
@@ -1174,7 +1174,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
     painter->setBrush(BrushStyle::NoBrush);
     Pen pen(item->figuredBass()->curColor(), FiguredBass::FB_CONTLINE_THICKNESS * _spatium, PenStyle::SolidLine, PenCapStyle::RoundCap);
     painter->setPen(pen);
-    painter->drawText(ldata->bbox, draw::TextDontClip | draw::AlignLeft | draw::AlignTop, ldata->displayText);
+    painter->drawText(ldata->bbox(), draw::TextDontClip | draw::AlignLeft | draw::AlignTop, ldata->displayText);
 
     // continuation line
     double lineEndX = 0.0;
@@ -1209,7 +1209,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
         }
         // if some line, draw it
         if (lineEndX > 0.0) {
-            double h = ldata->bbox.height() * FiguredBass::FB_CONTLINE_HEIGHT;
+            double h = ldata->bbox().height() * FiguredBass::FB_CONTLINE_HEIGHT;
             painter->drawLine(lineStartX, h, lineEndX - ldata->pos.x(), h);
         }
     }
@@ -1217,7 +1217,7 @@ void TDraw::draw(const FiguredBassItem* item, Painter* painter)
     // closing cont.line parenthesis
     if (item->parenth5() != FiguredBassItem::Parenthesis::NONE) {
         int x = lineEndX > 0.0 ? lineEndX : ldata->textWidth;
-        painter->drawText(RectF(x, 0, ldata->bbox.width(), ldata->bbox.height()), draw::AlignLeft | draw::AlignTop,
+        painter->drawText(RectF(x, 0, ldata->bbox().width(), ldata->bbox().height()), draw::AlignLeft | draw::AlignTop,
                           Char(FiguredBass::FBFonts().at(font).displayParenthesis[int(item->parenth5())].unicode()));
     }
 }
@@ -1824,7 +1824,7 @@ void TDraw::draw(const Image* item, Painter* painter)
         if (!item->svgRenderer()) {
             emptyImage = true;
         } else {
-            item->svgRenderer()->render(painter, ldata->bbox);
+            item->svgRenderer()->render(painter, ldata->bbox());
         }
     } else if (item->imageType() == ImageType::RASTER) {
         if (item->rasterImage() == nullptr) {
@@ -1863,14 +1863,14 @@ void TDraw::draw(const Image* item, Painter* painter)
     if (emptyImage) {
         painter->setBrush(mu::draw::BrushStyle::NoBrush);
         painter->setPen(item->engravingConfiguration()->defaultColor());
-        painter->drawRect(ldata->bbox);
-        painter->drawLine(0.0, 0.0, ldata->bbox.width(), ldata->bbox.height());
-        painter->drawLine(ldata->bbox.width(), 0.0, 0.0, ldata->bbox.height());
+        painter->drawRect(ldata->bbox());
+        painter->drawLine(0.0, 0.0, ldata->bbox().width(), ldata->bbox().height());
+        painter->drawLine(ldata->bbox().width(), 0.0, 0.0, ldata->bbox().height());
     }
     if (item->selected() && !(item->score() && item->score()->printing())) {
         painter->setBrush(mu::draw::BrushStyle::NoBrush);
         painter->setPen(item->engravingConfiguration()->selectionColor());
-        painter->drawRect(ldata->bbox);
+        painter->drawRect(ldata->bbox());
     }
 }
 
@@ -1931,7 +1931,7 @@ void TDraw::draw(const Lasso* item, Painter* painter)
     // always 2 pixel width
     double w = 2.0 / painter->worldTransform().m11() * item->engravingConfiguration()->guiScaling();
     painter->setPen(Pen(item->engravingConfiguration()->selectionColor(), w));
-    painter->drawRect(ldata->bbox);
+    painter->drawRect(ldata->bbox());
 }
 
 void TDraw::draw(const LayoutBreak* item, Painter* painter)
@@ -2167,9 +2167,9 @@ void TDraw::draw(const Note* item, Painter* painter)
         // draw background, if required (to hide a segment of string line or to show a fretting conflict)
         if (!tab->linesThrough() || item->fretConflict()) {
             double d  = item->spatium() * .1;
-            RectF bb = RectF(ldata->bbox.x() - d,
+            RectF bb = RectF(ldata->bbox().x() - d,
                              tab->fretMaskY() * item->magS(),
-                             ldata->bbox.width() + 2 * d,
+                             ldata->bbox().width() + 2 * d,
                              tab->fretMaskH() * item->magS()
                              );
 
@@ -2195,7 +2195,7 @@ void TDraw::draw(const Note* item, Painter* painter)
         f.setPointSizeF(f.pointSizeF() * item->magS() * MScore::pixelRatio);
         painter->setFont(f);
         painter->setPen(c);
-        double startPosX = ldata->bbox.x();
+        double startPosX = ldata->bbox().x();
         if (item->ghost() && config->tablatureParenthesesZIndexWorkaround()) {
             startPosX += item->symWidth(SymId::noteheadParenthesisLeft);
         }
@@ -2770,7 +2770,7 @@ void TDraw::draw(const TabDurationSymbol* item, Painter* painter)
         pen.setWidthF(font.gridStemWidth * _spatium);
         painter->setPen(pen);
         // take stem height from bbox, but de-magnify it, as drawing is already magnified
-        double h = ldata->bbox.y() / mag;
+        double h = ldata->bbox().y() / mag;
         painter->drawLine(PointF(0.0, h), PointF(0.0, 0.0));
         // if beam grid is medial/final, draw beam lines too: lines go from mid of
         // previous stem (delta x stored in _beamLength) to mid of this' stem (0.0)

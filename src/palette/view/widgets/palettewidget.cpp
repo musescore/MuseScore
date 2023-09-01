@@ -596,7 +596,7 @@ QPixmap PaletteWidget::pixmapForCellAt(int paletteIdx) const
 
     engravingRender()->layoutItem(element.get());
 
-    RectF r = element->layoutData()->bbox;
+    RectF r = element->layoutData()->bbox();
     int w = lrint(r.width() * cellMag);
     int h = lrint(r.height() * cellMag);
 
@@ -1084,9 +1084,9 @@ void PaletteWidget::paintEvent(QPaintEvent* /*event*/)
         if (drawStaff) {
             sy = gy + gh * .5 - 2.0 * _spatium;
         } else {
-            sy  = gy + (gh - sh) * .5 - el->layoutData()->bbox.y();
+            sy  = gy + (gh - sh) * .5 - el->layoutData()->bbox().y();
         }
-        double sx  = gx + (gw - sw) * .5 - el->layoutData()->bbox.x();
+        double sx  = gx + (gw - sw) * .5 - el->layoutData()->bbox().x();
 
         sy += yOffset() * _spatium;
 

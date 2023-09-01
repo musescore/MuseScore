@@ -1247,7 +1247,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 } else {
                     // full measure rest or one-measure repeat, center within this measure
                     TLayout::layoutItem(e, ctx);
-                    e->mutLayoutData()->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->layoutData()->bbox.x());
+                    e->mutLayoutData()->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->layoutData()->bbox().x());
                 }
                 s.createShape(staffIdx);            // DEBUG
             } else if (e->isRest()) {
@@ -1916,7 +1916,7 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
 void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth, LayoutContext& ctx)
 {
     Measure::LayoutData* ldata = m->mutLayoutData();
-    ldata->bbox.setWidth(targetWidth);
+    ldata->setWidth(targetWidth);
 
     //---------------------------------------------------
     //    compute stretch
@@ -2037,7 +2037,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                     //
                     // center full measure rest
                     //
-                    e->mutLayoutData()->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->layoutData()->bbox.x());
+                    e->mutLayoutData()->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->layoutData()->bbox().x());
                     s.createShape(staffIdx);  // DEBUG
                 }
             } else if (t == ElementType::REST) {
@@ -2344,11 +2344,11 @@ void MeasureLayout::layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, do
     double x1 = lines->pos().x();
     double x2 = x1 + w;
     double y  = lines->pos().y();
-    ldata->bbox.setRect(x1, -lines->lw() * .5 + y, w, (_lines - 1) * dist + lines->lw());
+    ldata->setBbox(x1, -lines->lw() * .5 + y, w, (_lines - 1) * dist + lines->lw());
 
     if (_lines == 1) {
         double extraSize = _spatium;
-        ldata->bbox.adjust(0, -extraSize, 0, extraSize);
+        ldata->setBbox(ldata->bbox().adjusted(0, -extraSize, 0, extraSize));
     }
 
     std::vector<mu::LineF> ll;

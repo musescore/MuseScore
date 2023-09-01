@@ -99,10 +99,10 @@ Shape TextLineBaseSegment::shape() const
 {
     Shape shape;
     if (!m_text->empty()) {
-        shape.add(m_text->layoutData()->bbox.translated(m_text->pos()));
+        shape.add(m_text->layoutData()->bbox().translated(m_text->pos()));
     }
     if (!m_endText->empty()) {
-        shape.add(m_endText->layoutData()->bbox.translated(m_endText->pos()));
+        shape.add(m_endText->layoutData()->bbox().translated(m_endText->pos()));
     }
     double lw2 = 0.5 * textLineBase()->lineWidth();
     bool isDottedLine = textLineBase()->lineStyle() == LineType::DOTTED;

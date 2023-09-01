@@ -60,7 +60,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         double minDistance = item->minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        RectF r = item->layoutData()->bbox.translated(m->pos() + s->pos() + item->pos());
+        RectF r = item->layoutData()->bbox().translated(m->pos() + s->pos() + item->pos());
 
         // Adjust bbox Y pos for staffType offset
         if (item->staffType()) {
@@ -240,7 +240,7 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
         // TODO: elements that support PLACEMENT but not as a styled property (add supportsPlacement() method?)
         // TODO: refactor to take advantage of existing cmdFlip() algorithms
         // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
-        RectF r = ldata->bbox.translated(ldata->autoplace.changedPos);
+        RectF r = ldata->bbox().translated(ldata->autoplace.changedPos);
         double staffHeight = item->staff()->height();
         const EngravingItem* e = item->isSpannerSegment() ? toSpannerSegment(item)->spanner() : item;
         bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;

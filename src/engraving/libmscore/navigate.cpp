@@ -49,8 +49,8 @@ static bool isChild1beforeChild2(const ElementPair& child1, const ElementPair& c
 {
     assert(child1.first->parent() == child2.first->parent());
 
-    PointF p1 = child1.first->pos() + child1.first->layoutData()->bbox.center();
-    PointF p2 = child2.first->pos() + child2.first->layoutData()->bbox.center();
+    PointF p1 = child1.first->pos() + child1.first->layoutData()->bbox().center();
+    PointF p2 = child2.first->pos() + child2.first->layoutData()->bbox().center();
 
     // If one child is *clearly* above the other then visit the higher one first
     double verticalSeparation = p2.y() - p1.y();

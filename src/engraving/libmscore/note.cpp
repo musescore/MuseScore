@@ -3411,21 +3411,21 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::shape() const
 {
-    RectF r(layoutData()->bbox);
+    RectF r(layoutData()->bbox());
 
     Shape shape(r, this);
     for (NoteDot* dot : m_dots) {
         shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
     }
     if (m_accidental && m_accidental->addToSkyline()) {
-        shape.add(m_accidental->layoutData()->bbox.translated(m_accidental->pos()), m_accidental);
+        shape.add(m_accidental->layoutData()->bbox().translated(m_accidental->pos()), m_accidental);
     }
     for (auto e : m_el) {
         if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
-            shape.add(e->layoutData()->bbox.translated(e->pos()), e);
+            shape.add(e->layoutData()->bbox().translated(e->pos()), e);
         }
     }
     return shape;

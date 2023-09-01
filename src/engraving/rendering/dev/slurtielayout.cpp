@@ -66,7 +66,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
         }
         s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
         layoutSegment(s, ctx, PointF(0, 0), PointF(_spatium * 6, 0));
-        item->setbbox(item->frontSegment()->layoutData()->bbox);
+        item->setbbox(item->frontSegment()->layoutData()->bbox());
         return;
     }
 
@@ -174,14 +174,14 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
         // case 2: start segment
         else if (i == 0) {
             segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-            double x = system->layoutData()->bbox.width();
+            double x = system->layoutData()->bbox().width();
             layoutSegment(segment, ctx, sPos.p1, PointF(x, sPos.p1.y()));
         }
         // case 3: middle segment
         else if (i != 0 && system != sPos.system2) {
             segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
             double x1 = system->firstNoteRestSegmentX(true);
-            double x2 = system->layoutData()->bbox.width();
+            double x2 = system->layoutData()->bbox().width();
             double y  = item->staffIdx() > system->staves().size() ? system->y() : system->staff(item->staffIdx())->y();
             layoutSegment(segment, ctx, PointF(x1, y), PointF(x2, y));
         }
@@ -195,7 +195,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
             break;
         }
     }
-    item->setbbox(item->spannerSegments().empty() ? RectF() : item->frontSegment()->layoutData()->bbox);
+    item->setbbox(item->spannerSegments().empty() ? RectF() : item->frontSegment()->layoutData()->bbox());
 }
 
 SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutContext& ctx)
@@ -608,7 +608,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
             Hook* hook = sc->hook();
             // regular flags
 
-            if (hook && hook->layoutData()->bbox.translated(hook->pos()).contains(pt)) {
+            if (hook && hook->layoutData()->bbox().translated(hook->pos()).contains(pt)) {
                 // TODO: in the utopian far future where all hooks have SMuFL cutouts, this fakeCutout business will no
                 // longer be used. for the time being fakeCutout describes a point on the line y=mx+b, out from the top of the stem
                 // where y = yadj, m = fakeCutoutSlope, and x = y/m + fakeCutout
@@ -618,7 +618,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
         } else {
             Hook* hook = sc->hook();
             // straight flags
-            if (hook && hook->layoutData()->bbox.translated(hook->pos()).contains(pt)) {
+            if (hook && hook->layoutData()->bbox().translated(hook->pos()).contains(pt)) {
                 double hookWidth = hook->width() * hook->mag();
                 pt.rx() = (hookWidth * straightStemXOffset) + (hook->pos().x() + sc->x());
                 if (item->up()) {
@@ -677,9 +677,9 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
         if (note1) {
             po.ry() = note1->pos().y();
         } else if (item->up()) {
-            po.ry() = scr->layoutData()->bbox.top();
+            po.ry() = scr->layoutData()->bbox().top();
         } else {
-            po.ry() = scr->layoutData()->bbox.top() + scr->height();
+            po.ry() = scr->layoutData()->bbox().top() + scr->height();
         }
         double offset = useTablature ? 0.75 : 0.9;
         po.ry() += scr->intrinsicMag() * _spatium * offset * __up;
@@ -812,9 +812,9 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
             if (note2) {
                 po.ry() = note2->pos().y();
             } else if (item->up()) {
-                po.ry() = item->endCR()->layoutData()->bbox.top();
+                po.ry() = item->endCR()->layoutData()->bbox().top();
             } else {
-                po.ry() = item->endCR()->layoutData()->bbox.top() + item->endCR()->height();
+                po.ry() = item->endCR()->layoutData()->bbox().top() + item->endCR()->height();
             }
             double offset = useTablature ? 0.75 : 0.9;
             po.ry() += ecr->intrinsicMag() * _spatium * offset * __up;
@@ -1152,14 +1152,14 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
         line2 = useTablature ? item->endNote()->string() : item->endNote()->line();
     }
     bool isHorizontal = ec ? line1 == line2 && sc->vStaffIdx() == ec->vStaffIdx() : true;
-    y1 += item->startNote()->layoutData()->bbox.y();
+    y1 += item->startNote()->layoutData()->bbox().y();
     if (item->endNote()) {
-        y2 += item->endNote()->layoutData()->bbox.y();
+        y2 += item->endNote()->layoutData()->bbox().y();
     }
     if (!item->up()) {
-        y1 += item->startNote()->layoutData()->bbox.height();
+        y1 += item->startNote()->layoutData()->bbox().height();
         if (item->endNote()) {
-            y2 += item->endNote()->layoutData()->bbox.height();
+            y2 += item->endNote()->layoutData()->bbox().height();
         }
     }
     if (!item->endNote()) {
@@ -1354,5 +1354,5 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
     }
 
     item->computeBezier();
-    ldata->setbbox(item->path().boundingRect());
+    ldata->setBbox(item->path().boundingRect());
 }

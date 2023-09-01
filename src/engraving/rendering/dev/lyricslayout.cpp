@@ -352,7 +352,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         // if next lyrics is on a different system, this line segment is at the end of its system:
         // do not adjust for next lyrics position
         if (sys && !endOfSystem) {
-            double lyrX        = lyr->layoutData()->bbox.x();
+            double lyrX        = lyr->layoutData()->bbox().x();
             double lyrXp       = lyr->pagePos().x();
             double sysXp       = sys->pagePos().x();
             toX               = lyrXp - sysXp + lyrX;             // syst.rel. X pos.
@@ -365,9 +365,9 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     lyr  = item->lyricsLine()->lyrics();
     sys  = lyr->segment()->system();
     if (sys && item->isSingleBeginType()) {
-        double lyrX        = lyr->layoutData()->bbox.x();
+        double lyrX        = lyr->layoutData()->bbox().x();
         double lyrXp       = lyr->pagePos().x();
-        double lyrW        = lyr->layoutData()->bbox.width();
+        double lyrW        = lyr->layoutData()->bbox().width();
         double sysXp       = sys->pagePos().x();
         fromX             = lyrXp - sysXp + lyrX + lyrW;
         //               syst.rel. X pos. | lyr.advance
@@ -476,7 +476,7 @@ static double findLyricsMaxY(const MStyle& style, Segment& s, staff_idx_t staffI
                 if (l->autoplace() && l->placeBelow()) {
                     double yOff = l->offset().y();
                     PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
-                    RectF r = l->layoutData()->bbox.translated(offset);
+                    RectF r = l->layoutData()->bbox().translated(offset);
                     r.translate(0.0, -yOff);
                     sk.add(r.x(), r.top(), r.width());
                 }
@@ -514,7 +514,7 @@ static double findLyricsMinY(const MStyle& style, Segment& s, staff_idx_t staffI
             for (Lyrics* l : cr->lyrics()) {
                 if (l->autoplace() && l->placeAbove()) {
                     double yOff = l->offset().y();
-                    RectF r = l->layoutData()->bbox.translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
+                    RectF r = l->layoutData()->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
                     r.translate(0.0, -yOff);
                     sk.add(r.x(), r.bottom(), r.width());
                 }
@@ -570,7 +570,7 @@ static void applyLyricsMax(const MStyle& style, Segment& s, staff_idx_t staffIdx
                     l->mutLayoutData()->movePosY(yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
                     if (l->addToSkyline()) {
                         PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
-                        sk.add(l->layoutData()->bbox.translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+                        sk.add(l->layoutData()->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
                     }
                 }
             }
@@ -597,7 +597,7 @@ static void applyLyricsMin(ChordRest* cr, staff_idx_t staffIdx, double yMin)
             l->mutLayoutData()->movePosY(yMin - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
             if (l->addToSkyline()) {
                 PointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
-                sk.add(l->layoutData()->bbox.translated(offset));
+                sk.add(l->layoutData()->bbox().translated(offset));
             }
         }
     }

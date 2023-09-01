@@ -71,7 +71,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
     PointF pos(item->pagePos());
     painter.translate(pos);
 
-    if (!item->layoutData()->bbox.isEmpty()) {
+    if (!item->layoutData()->bbox().isEmpty()) {
         // Draw shape
         if (configuration()->debuggingOptions().colorElementShapes
             && !item->isPage() && !item->isSystem() && !item->isStaffLines() && !item->isBox()) {
@@ -95,7 +95,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
 
             painter.setPen(borderPen);
             painter.setBrush(draw::BrushStyle::NoBrush);
-            painter.drawRect(item->layoutData()->bbox);
+            painter.drawRect(item->layoutData()->bbox());
         }
     }
 

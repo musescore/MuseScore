@@ -771,13 +771,13 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 continue;
             }
             if (mno && mno->addToSkyline()) {
-                ss->skyline().add(mno->layoutData()->bbox.translated(m->pos() + mno->pos()));
+                ss->skyline().add(mno->layoutData()->bbox().translated(m->pos() + mno->pos()));
             }
             if (mmrr && mmrr->addToSkyline()) {
-                ss->skyline().add(mmrr->layoutData()->bbox.translated(m->pos() + mmrr->pos()));
+                ss->skyline().add(mmrr->layoutData()->bbox().translated(m->pos() + mmrr->pos()));
             }
             if (m->staffLines(staffIdx)->addToSkyline()) {
-                ss->skyline().add(m->staffLines(staffIdx)->layoutData()->bbox.translated(m->pos()));
+                ss->skyline().add(m->staffLines(staffIdx)->layoutData()->bbox().translated(m->pos()));
             }
             for (Segment& s : m->segments()) {
                 if (!s.enabled() || s.isTimeSigType()) {             // hack: ignore time signatures
@@ -1401,8 +1401,8 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && prevSegment->isHarmonicMarkSegment()
                 && ss->isVibratoSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
-                double diff = ss->layoutData()->bbox.bottom() - prevSegment->layoutData()->bbox.bottom()
-                              + prevSegment->layoutData()->bbox.top();
+                double diff = ss->layoutData()->bbox().bottom() - prevSegment->layoutData()->bbox().bottom()
+                        + prevSegment->layoutData()->bbox().top();
                 prevSegment->mutLayoutData()->movePosY(diff);
                 fixed = true;
             }
@@ -1411,7 +1411,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && prevSegment->isVibratoSegment()
                 && ss->isHarmonicMarkSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
-                double diff = prevSegment->layoutData()->bbox.bottom() - ss->layoutData()->bbox.bottom() + ss->layoutData()->bbox.top();
+                double diff = prevSegment->layoutData()->bbox().bottom() - ss->layoutData()->bbox().bottom() + ss->layoutData()->bbox().top();
                 ss->mutLayoutData()->movePosY(diff);
                 fixed = true;
             }
@@ -1719,11 +1719,11 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
         int staffLines = staff->lines(Fraction(0, 1));
         if (staffLines <= 1) {
             double h = staff->lineDistance(Fraction(0, 1)) * staffMag * system->spatium();
-            s->bbox().setRect(system->leftMargin() + xo1, -h, 0.0, 2 * h);
+            s->setbbox(system->leftMargin() + xo1, -h, 0.0, 2 * h);
         } else {
             double h = (staffLines - 1) * staff->lineDistance(Fraction(0, 1));
             h = h * staffMag * system->spatium();
-            s->bbox().setRect(system->leftMargin() + xo1, 0.0, 0.0, h);
+            s->setbbox(system->leftMargin() + xo1, 0.0, 0.0, h);
         }
     }
 
@@ -2045,7 +2045,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     Box* vb = system->vbox();
     if (vb) {
         TLayout::layout(vb, ctx);
-        system->setbbox(vb->layoutData()->bbox);
+        system->setbbox(vb->layoutData()->bbox());
         return;
     }
 
@@ -2094,7 +2094,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         }
         if (ni == visibleStaves.end()) {
             ss->setYOff(yOffset);
-            ss->bbox().setRect(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
+            ss->setbbox(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
             ss->saveLayout();
             break;
         }
@@ -2153,7 +2153,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             dist = std::max(dist, d + minVerticalDistance);
         }
         ss->setYOff(yOffset);
-        ss->bbox().setRect(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
+        ss->setbbox(system->leftMargin(), y - yOffset, system->width() - system->leftMargin(), h);
         ss->saveLayout();
         y += dist;
     }
@@ -2221,9 +2221,9 @@ void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext
         if (m->isMeasure()) {
             // note that the factor 2 * _spatium must be corrected for when exporting
             // system distance in MusicXML (issue #24733)
-            mldata->bbox.setRect(0.0, -_spatium, m->width(), height + 2.0 * _spatium);
+            mldata->setBbox(0.0, -_spatium, m->width(), height + 2.0 * _spatium);
         } else if (m->isHBox()) {
-            mldata->bbox.setRect(0.0, 0.0, m->width(), height);
+            mldata->setBbox(0.0, 0.0, m->width(), height);
             TLayout::layout2(toHBox(m), ctx);
         } else if (m->isTBox()) {
             TLayout::layout(toTBox(m), ctx);

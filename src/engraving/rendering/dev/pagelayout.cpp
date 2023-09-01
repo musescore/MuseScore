@@ -86,7 +86,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
         }
         ctx.mutState().setPrevSystem(systems.empty() ? nullptr : systems.back());
     }
-    ctx.mutState().page()->mutLayoutData()->bbox.setRect(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
+    ctx.mutState().page()->mutLayoutData()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
     ctx.mutState().page()->setNo(ctx.state().pageIdx());
     double x = 0.0;
     double y = 0.0;
@@ -353,7 +353,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
     if (ctx.conf().isMode(LayoutMode::SYSTEM)) {
         const System* s = ctx.state().page()->systems().back();
         double height = s ? s->pos().y() + s->height() + s->minBottom() : ctx.state().page()->tm();
-        ctx.mutState().page()->mutLayoutData()->bbox.setRect(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
+        ctx.mutState().page()->mutLayoutData()->setBbox(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
     }
 
     // HACK: we relayout here cross-staff slurs because only now the information

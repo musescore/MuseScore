@@ -23,6 +23,8 @@
 #ifndef __ELEMENT_H__
 #define __ELEMENT_H__
 
+#include <optional>
+
 #include "engravingobject.h"
 #include "elementgroup.h"
 
@@ -242,7 +244,7 @@ public:
     bool contains(const PointF& p) const;
     bool intersects(const mu::RectF& r) const;
 
-    virtual mu::RectF hitBBox() const { return layoutData()->bbox; }
+    virtual mu::RectF hitBBox() const { return layoutData()->bbox(); }
     virtual Shape hitShape() const { return shape(); }
     Shape canvasHitShape() const { return hitShape().translate(canvasPos()); }
     bool hitShapeContains(const PointF& p) const;
@@ -489,7 +491,11 @@ public:
         bool isSkipDraw = false;
         double mag = 1.0;           // standard magnification (derived value)
         PointF pos;                 // Reference position, relative to _parent, set by autoplace
-        RectF bbox;                 // Bounding box relative to _pos + _offset
+
+        void reset()
+        {
+            //m_bbox.reset();
+        }
 
         void setSkipDraw(bool val) { isSkipDraw = val; }
 
@@ -503,37 +509,44 @@ public:
         void movePosX(double x) { doSetPos(pos.x() + x, pos.y()); }
         void movePosY(double y) { doSetPos(pos.x(), pos.y() + y); }
 
-        void setbbox(const mu::RectF& r) { bbox = r; }
-        void addbbox(const mu::RectF& r) { bbox.unite(r); }
+        void resetBbox() { m_bbox = RectF(); }
+        const RectF& bbox() const { return m_bbox; }
+        void setBbox(const mu::RectF& r) { m_bbox = r; }
+        void setBbox(double x, double y, double w, double h) { m_bbox.setRect(x, y, w, h); }
+        void addBbox(const mu::RectF& r) { m_bbox.unite(r); }
+        void setHeight(double v) { m_bbox.setHeight(v); }
+        void setWidth(double v) { m_bbox.setWidth(v); }
 
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
-    private:
+    protected:
         inline void doSetPos(double x, double y)
         {
             pos.setX(x),
             pos.setY(y);
         }
+
+        RectF m_bbox;          // Bounding box relative to _pos + _offset
     };
 
     const LayoutData* layoutData() const;
     LayoutData* mutLayoutData();
 
     virtual double mag() const;
-    virtual Shape shape() const { return Shape(layoutData()->bbox, this); }
+    virtual Shape shape() const { return Shape(layoutData()->bbox(), this); }
     virtual double baseLine() const { return -height(); }
 
-    mu::RectF abbox() const { return layoutData()->bbox.translated(pagePos()); }
-    mu::RectF pageBoundingRect() const { return layoutData()->bbox.translated(pagePos()); }
-    mu::RectF canvasBoundingRect() const { return layoutData()->bbox.translated(canvasPos()); }
+    mu::RectF abbox() const { return layoutData()->bbox().translated(pagePos()); }
+    mu::RectF pageBoundingRect() const { return layoutData()->bbox().translated(pagePos()); }
+    mu::RectF canvasBoundingRect() const { return layoutData()->bbox().translated(canvasPos()); }
 
     //! --- Old Interface ---
-    virtual void setbbox(const mu::RectF& r) { mutLayoutData()->bbox = r; }
-    virtual void addbbox(const mu::RectF& r) { mutLayoutData()->bbox.unite(r); }
-    virtual double height() const { return layoutData()->bbox.height(); }
-    virtual void setHeight(double v) { mutLayoutData()->bbox.setHeight(v); }
-    virtual double width() const { return layoutData()->bbox.width(); }
-    virtual void setWidth(double v) { mutLayoutData()->bbox.setWidth(v); }
+    virtual void setbbox(const mu::RectF& r) { mutLayoutData()->setBbox(r); }
+    virtual void addbbox(const mu::RectF& r) { mutLayoutData()->addBbox(r); }
+    virtual double height() const { return layoutData()->bbox().height(); }
+    virtual void setHeight(double v) { mutLayoutData()->setHeight(v); }
+    virtual double width() const { return layoutData()->bbox().width(); }
+    virtual void setWidth(double v) { mutLayoutData()->setWidth(v); }
 
     virtual const PointF pos() const { return layoutData()->pos + m_offset; }
     virtual double x() const { return layoutData()->pos.x() + m_offset.x(); }

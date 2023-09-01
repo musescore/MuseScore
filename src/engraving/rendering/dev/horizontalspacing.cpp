@@ -137,7 +137,7 @@ void HorizontalSpacing::computeLedgerRestPadding(const Rest* rest2, double& padd
     case SymId::restWholeLegerLine:
     case SymId::restDoubleWholeLegerLine:
     case SymId::restHalfLegerLine:
-        padding += rest2->layoutData()->bbox.left();
+        padding += rest2->layoutData()->bbox().left();
         return;
     default:
         return;

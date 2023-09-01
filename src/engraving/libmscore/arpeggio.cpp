@@ -77,8 +77,8 @@ std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 {
     const LayoutData* ldata = layoutData();
     const PointF pp(pagePos());
-    PointF p1(ldata->bbox.width() / 2, ldata->bbox.top());
-    PointF p2(ldata->bbox.width() / 2, ldata->bbox.bottom());
+    PointF p1(ldata->bbox().width() / 2, ldata->bbox().top());
+    PointF p2(ldata->bbox().width() / 2, ldata->bbox().bottom());
     return { p1 + pp, p2 + pp };
 }
 

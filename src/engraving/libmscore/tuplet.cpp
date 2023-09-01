@@ -283,7 +283,7 @@ Shape Tuplet::shape() const
         }
     }
     if (m_number) {
-        s.add(m_number->layoutData()->bbox.translated(m_number->pos()));
+        s.add(m_number->layoutData()->bbox().translated(m_number->pos()));
     }
     return s;
 }

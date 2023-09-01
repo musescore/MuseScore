@@ -57,6 +57,7 @@ public:
     const mu::RectF& bbox() const { return m_bbox; }
     mu::RectF& bbox() { return m_bbox; }
     void setbbox(const mu::RectF& r) { m_bbox = r; }
+    void setbbox(double x, double y, double w, double h) { m_bbox.setRect(x, y, w, h); }
     double y() const { return m_bbox.y() + m_yOff; }
     void setYOff(double offset) { m_yOff = offset; }
     double yOffset() const { return m_yOff; }
