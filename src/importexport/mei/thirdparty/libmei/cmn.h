@@ -36,7 +36,7 @@ namespace libmei {
  * simultaneously, usually from lowest to highest.
  * Sometimes called a "roll".
  **/
-class Arpeg : public Element, public AttLabelled, public AttTyped, public AttArpegLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartId, public AttArpegVis, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Arpeg : public Element, public AttLabelled, public AttTyped, public AttArpegLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartId, public AttArpegVis, public AttExtSymAuth, public AttExtSymNames, public AttLineRendBase, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Arpeg();
         virtual ~Arpeg();
@@ -137,7 +137,7 @@ public:
  * A continuous or sliding movement from one pitch to another, usually indicated by
  * a straight or wavy line.
  **/
-class Gliss : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo, public AttLineRend, public AttLineRendBase, public AttCurveRend {
+class Gliss : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtSymAuth, public AttExtSymNames, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo, public AttLineRend, public AttLineRendBase {
     public:
         Gliss();
         virtual ~Gliss();
@@ -164,7 +164,7 @@ public:
  * Indicates continuous dynamics expressed on the score as wedge-shaped graphics,
  * e.g., < and >.
  **/
-class Hairpin : public Element, public AttLabelled, public AttTyped, public AttHairpinLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttHairpinVis, public AttLineRendBase, public AttCurveRend, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo, public AttMidiValue, public AttMidiValue2 {
+class Hairpin : public Element, public AttLabelled, public AttTyped, public AttHairpinLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttHairpinVis, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo, public AttMidiValue, public AttMidiValue2 {
     public:
         Hairpin();
         virtual ~Hairpin();
@@ -200,7 +200,7 @@ public:
 };
 
 /** A "tie-like" indication that a note should ring beyond its written duration. **/
-class Lv : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo, public AttCurvature, public AttCurveRend {
+class Lv : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttCurvature, public AttLineRendBase, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo {
     public:
         Lv();
         virtual ~Lv();
@@ -299,7 +299,7 @@ public:
  * An indication that a passage should be performed one or more octaves above or
  * below its written pitch.
  **/
-class Octave : public Element, public AttLabelled, public AttTyped, public AttOctaveLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttOctaveDisplacement, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttCurveRend, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
+class Octave : public Element, public AttLabelled, public AttTyped, public AttOctaveLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttOctaveDisplacement, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Octave();
         virtual ~Octave();
@@ -311,7 +311,7 @@ public:
 };
 
 /** Piano pedal mark. **/
-class Pedal : public Element, public AttLabelled, public AttTyped, public AttPedalLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttPedalVis, public AttExtSymAuth, public AttExtSymNames, public AttLineRend, public AttLineRendBase, public AttCurveRend, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class Pedal : public Element, public AttLabelled, public AttTyped, public AttPedalLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttPedalVis, public AttExtSymAuth, public AttExtSymNames, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         Pedal();
         virtual ~Pedal();
@@ -341,7 +341,7 @@ public:
  * An instruction expressed as a combination of text and symbols – segno and coda –
  * typically above, below, or between staves, but not on the staff.
  **/
-class RepeatMark : public Element, public AttLabelled, public AttTyped, public AttLang, public AttRepeatMarkLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttCurveRend, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
+class RepeatMark : public Element, public AttLabelled, public AttTyped, public AttLang, public AttRepeatMarkLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttExtSymAuth, public AttExtSymNames, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         RepeatMark();
         virtual ~RepeatMark();
@@ -353,7 +353,7 @@ public:
 };
 
 /** Indication of 1) a "unified melodic idea" or 2) performance technique. **/
-class Slur : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo, public AttCurvature, public AttCurveRend {
+class Slur : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttCurvature, public AttLineRendBase, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo {
     public:
         Slur();
         virtual ~Slur();
@@ -368,7 +368,7 @@ public:
  * An indication that two notes of the same pitch form a single note with their
  * combined rhythmic values.
  **/
-class Tie : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo, public AttCurvature, public AttCurveRend {
+class Tie : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttCurvature, public AttLineRendBase, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho, public AttVisualOffset2Vo {
     public:
         Tie();
         virtual ~Tie();

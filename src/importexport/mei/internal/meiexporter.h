@@ -74,6 +74,8 @@ enum layerElementCounter {
     ACCID_L = 0,
     BEAM_L,
     GRACEGRP_L,
+    SYL_L,
+    VERSE_L,
     UNSPECIFIED_L,
 };
 
@@ -118,7 +120,10 @@ private:
     bool writeGraceGrp(const engraving::Chord* chord, const engraving::Staff* staff, bool isAfter = false);
     bool writeNote(const engraving::Note* note, const engraving::Chord* chord, const engraving::Staff* staff, bool isChord);
     bool writeRest(const engraving::Rest* rest, const engraving::Staff* staff);
+    bool writeSyl(const engraving::Lyrics* lyrics, const String& text, ElisionType elision);
     bool writeTuplet(const engraving::Tuplet* tuplet, const engraving::EngravingItem* item, bool& closing);
+    bool writeVerses(const engraving::ChordRest* chordRest);
+    bool writeVerse(const engraving::Lyrics* lyrics);
 
     /**
      * Methods for writing MEI control events (within <measure>)
@@ -223,6 +228,8 @@ private:
         { ACCID_L, u"a" },
         { BEAM_L, u"b" },
         { GRACEGRP_L, u"g" },
+        { SYL_L, u"s" },
+        { VERSE_L, u"v" },
         { UNSPECIFIED_L, u"x" }
     };
 };

@@ -23,7 +23,7 @@
 namespace libmei {
 
 Fing::Fing() :
-    Element("fing"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("fing"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -46,7 +46,6 @@ bool Fing::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -71,7 +70,6 @@ bool Fing::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -93,7 +91,6 @@ void Fing::Reset()
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetPlacementRelStaff();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();

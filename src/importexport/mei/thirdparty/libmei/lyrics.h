@@ -46,7 +46,7 @@ public:
  * Division of a poem or song lyrics, sometimes having a fixed length, meter or
  * rhyme scheme; a stanza.
  **/
-class Verse : public Element, public AttLabelled, public AttTyped, public AttLang, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym {
+class Verse : public Element, public AttLabelled, public AttTyped, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym, public AttNNumberLike {
     public:
         Verse();
         virtual ~Verse();

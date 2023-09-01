@@ -23,7 +23,7 @@
 namespace libmei {
 
 Arpeg::Arpeg() :
-    Element("arpeg"), AttLabelled(), AttTyped(), AttArpegLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartId(), AttArpegVis(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("arpeg"), AttLabelled(), AttTyped(), AttArpegLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartId(), AttArpegVis(), AttExtSymAuth(), AttExtSymNames(), AttLineRendBase(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -44,6 +44,7 @@ bool Arpeg::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadArpegVis(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -66,6 +67,7 @@ bool Arpeg::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteArpegVis(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
+    hasAttribute = (WriteLineRendBase(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -85,6 +87,7 @@ void Arpeg::Reset()
     ResetArpegVis();
     ResetExtSymAuth();
     ResetExtSymNames();
+    ResetLineRendBase();
     ResetTypography();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
@@ -418,7 +421,7 @@ void Fermata::Reset()
 }
 
 Gliss::Gliss() :
-    Element("gliss"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttLineRend(), AttLineRendBase(), AttCurveRend()
+    Element("gliss"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttLineRend(), AttLineRendBase()
 {
 }
 
@@ -447,7 +450,6 @@ bool Gliss::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadVisualOffset2Vo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
 
@@ -475,7 +477,6 @@ bool Gliss::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteVisualOffset2Vo(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     return hasAttribute;
 }
 
@@ -500,7 +501,6 @@ void Gliss::Reset()
     ResetVisualOffset2Vo();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
 }
 
 GraceGrp::GraceGrp() :
@@ -548,7 +548,7 @@ void GraceGrp::Reset()
 }
 
 Hairpin::Hairpin() :
-    Element("hairpin"), AttLabelled(), AttTyped(), AttHairpinLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttHairpinVis(), AttLineRendBase(), AttCurveRend(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttMidiValue(), AttMidiValue2()
+    Element("hairpin"), AttLabelled(), AttTyped(), AttHairpinLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttHairpinVis(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttMidiValue(), AttMidiValue2()
 {
 }
 
@@ -571,7 +571,6 @@ bool Hairpin::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadHairpinVis(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
@@ -600,7 +599,6 @@ bool Hairpin::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
     hasAttribute = (WriteHairpinVis(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
@@ -626,7 +624,6 @@ void Hairpin::Reset()
     ResetTimestamp2Log();
     ResetHairpinVis();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetPlacementRelStaff();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
@@ -767,7 +764,7 @@ void HarpPedal::Reset()
 }
 
 Lv::Lv() :
-    Element("lv"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttCurvature(), AttCurveRend()
+    Element("lv"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
 {
 }
 
@@ -786,12 +783,12 @@ bool Lv::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffset2Ho(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffset2Vo(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
 
@@ -809,12 +806,12 @@ bool Lv::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteCurvature(element) || hasAttribute);
+    hasAttribute = (WriteLineRendBase(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffset2Ho(element) || hasAttribute);
     hasAttribute = (WriteVisualOffset2Vo(element) || hasAttribute);
-    hasAttribute = (WriteCurvature(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     return hasAttribute;
 }
 
@@ -829,12 +826,12 @@ void Lv::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetCurvature();
+    ResetLineRendBase();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
     ResetVisualOffset2Ho();
     ResetVisualOffset2Vo();
-    ResetCurvature();
-    ResetCurveRend();
 }
 
 MNum::MNum() :
@@ -1156,7 +1153,7 @@ void MultiRpt::Reset()
 }
 
 Octave::Octave() :
-    Element("octave"), AttLabelled(), AttTyped(), AttOctaveLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttOctaveDisplacement(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
+    Element("octave"), AttLabelled(), AttTyped(), AttOctaveLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttOctaveDisplacement(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
 {
 }
 
@@ -1181,7 +1178,6 @@ bool Octave::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffset2Ho(element, removeAttr) || hasAttribute);
@@ -1208,7 +1204,6 @@ bool Octave::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffset2Ho(element) || hasAttribute);
@@ -1232,14 +1227,13 @@ void Octave::Reset()
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
     ResetVisualOffset2Ho();
 }
 
 Pedal::Pedal() :
-    Element("pedal"), AttLabelled(), AttTyped(), AttPedalLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttPedalVis(), AttExtSymAuth(), AttExtSymNames(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("pedal"), AttLabelled(), AttTyped(), AttPedalLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttPedalVis(), AttExtSymAuth(), AttExtSymNames(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -1264,7 +1258,6 @@ bool Pedal::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
@@ -1292,7 +1285,6 @@ bool Pedal::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
@@ -1317,7 +1309,6 @@ void Pedal::Reset()
     ResetExtSymNames();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetPlacementRelStaff();
     ResetTypography();
     ResetVisualOffsetHo();
@@ -1381,7 +1372,7 @@ void Reh::Reset()
 }
 
 RepeatMark::RepeatMark() :
-    Element("repeatMark"), AttLabelled(), AttTyped(), AttLang(), AttRepeatMarkLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttCurveRend(), AttExtSymAuth(), AttExtSymNames(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
+    Element("repeatMark"), AttLabelled(), AttTyped(), AttLang(), AttRepeatMarkLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttExtSymAuth(), AttExtSymNames(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
 {
 }
 
@@ -1406,7 +1397,6 @@ bool RepeatMark::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
@@ -1436,7 +1426,6 @@ bool RepeatMark::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
@@ -1463,7 +1452,6 @@ void RepeatMark::Reset()
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
-    ResetCurveRend();
     ResetExtSymAuth();
     ResetExtSymNames();
     ResetPlacementRelStaff();
@@ -1473,7 +1461,7 @@ void RepeatMark::Reset()
 }
 
 Slur::Slur() :
-    Element("slur"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttCurvature(), AttCurveRend()
+    Element("slur"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
 {
 }
 
@@ -1493,12 +1481,12 @@ bool Slur::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffset2Ho(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffset2Vo(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
 
@@ -1517,12 +1505,12 @@ bool Slur::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteCurvature(element) || hasAttribute);
+    hasAttribute = (WriteLineRendBase(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffset2Ho(element) || hasAttribute);
     hasAttribute = (WriteVisualOffset2Vo(element) || hasAttribute);
-    hasAttribute = (WriteCurvature(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     return hasAttribute;
 }
 
@@ -1538,16 +1526,16 @@ void Slur::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetCurvature();
+    ResetLineRendBase();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
     ResetVisualOffset2Ho();
     ResetVisualOffset2Vo();
-    ResetCurvature();
-    ResetCurveRend();
 }
 
 Tie::Tie() :
-    Element("tie"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttCurvature(), AttCurveRend()
+    Element("tie"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
 {
 }
 
@@ -1566,12 +1554,12 @@ bool Tie::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetVo(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffset2Ho(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffset2Vo(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
-    hasAttribute = (ReadCurveRend(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
 
@@ -1589,12 +1577,12 @@ bool Tie::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteCurvature(element) || hasAttribute);
+    hasAttribute = (WriteLineRendBase(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetVo(element) || hasAttribute);
     hasAttribute = (WriteVisualOffset2Ho(element) || hasAttribute);
     hasAttribute = (WriteVisualOffset2Vo(element) || hasAttribute);
-    hasAttribute = (WriteCurvature(element) || hasAttribute);
-    hasAttribute = (WriteCurveRend(element) || hasAttribute);
     return hasAttribute;
 }
 
@@ -1609,12 +1597,12 @@ void Tie::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetCurvature();
+    ResetLineRendBase();
     ResetVisualOffsetHo();
     ResetVisualOffsetVo();
     ResetVisualOffset2Ho();
     ResetVisualOffset2Vo();
-    ResetCurvature();
-    ResetCurveRend();
 }
 
 Tuplet::Tuplet() :

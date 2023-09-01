@@ -299,8 +299,7 @@
             <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>1</actualKey>
+            <concertKey>1</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -333,8 +332,7 @@
             <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>2</actualKey>
+            <concertKey>2</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -367,8 +365,7 @@
             <isHeader>1</isHeader>
             </Clef>
           <KeySig>
-            <concertKey>-8</concertKey>
-            <actualKey>3</actualKey>
+            <concertKey>3</concertKey>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

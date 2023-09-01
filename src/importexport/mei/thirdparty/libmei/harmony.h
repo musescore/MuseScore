@@ -26,6 +26,7 @@
 #include "atts_harmony.h"
 #include "atts_shared.h"
 #include "atts_stringtab.h"
+#include "atts_visual.h"
 
 
 namespace libmei {
@@ -67,7 +68,7 @@ public:
 };
 
 /** Single element of a figured bass indication. **/
-class F : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttCurveRend, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo {
+class F : public Element, public AttLabelled, public AttTyped, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo {
     public:
         F();
         virtual ~F();
@@ -98,7 +99,7 @@ public:
  * An indication of harmony, e.g., chord names, tablature grids, harmonic analysis,
  * figured bass.
  **/
-class Harm : public Element, public AttLabelled, public AttTyped, public AttHarmLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log {
+class Harm : public Element, public AttLabelled, public AttTyped, public AttHarmLog, public AttLayerIdent, public AttPlist, public AttStaffIdent, public AttTimestampLog, public AttDurationAdditive, public AttStartEndId, public AttStartId, public AttTimestamp2Log, public AttHarmVis, public AttExtender, public AttLineRend, public AttLineRendBase, public AttPlacementRelStaff, public AttVisualOffsetHo, public AttVisualOffsetVo, public AttVisualOffset2Ho {
     public:
         Harm();
         virtual ~Harm();

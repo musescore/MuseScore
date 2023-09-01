@@ -38,8 +38,6 @@ void AttArpegVis::ResetArpegVis()
     m_arrowSize = MEI_UNSET;
     m_arrowColor = "";
     m_arrowFillcolor = "";
-    m_lineForm = LINEFORM_NONE;
-    m_lineWidth = data_LINEWIDTH();
 }
 
 bool AttArpegVis::ReadArpegVis(pugi::xml_node element, bool removeAttr)
@@ -70,16 +68,6 @@ bool AttArpegVis::ReadArpegVis(pugi::xml_node element, bool removeAttr)
         if (removeAttr) element.remove_attribute("arrow.fillcolor");
         hasAttribute = true;
     }
-    if (element.attribute("line.form")) {
-        this->SetLineForm(StrToLineform(element.attribute("line.form").value()));
-        if (removeAttr) element.remove_attribute("line.form");
-        hasAttribute = true;
-    }
-    if (element.attribute("line.width")) {
-        this->SetLineWidth(StrToLinewidth(element.attribute("line.width").value()));
-        if (removeAttr) element.remove_attribute("line.width");
-        hasAttribute = true;
-    }
     return hasAttribute;
 }
 
@@ -104,14 +92,6 @@ bool AttArpegVis::WriteArpegVis(pugi::xml_node element)
     }
     if (this->HasArrowFillcolor()) {
         element.append_attribute("arrow.fillcolor") = StrToStr(this->GetArrowFillcolor()).c_str();
-        wroteAttribute = true;
-    }
-    if (this->HasLineForm()) {
-        element.append_attribute("line.form") = LineformToStr(this->GetLineForm()).c_str();
-        wroteAttribute = true;
-    }
-    if (this->HasLineWidth()) {
-        element.append_attribute("line.width") = LinewidthToStr(this->GetLineWidth()).c_str();
         wroteAttribute = true;
     }
     return wroteAttribute;
@@ -140,16 +120,6 @@ bool AttArpegVis::HasArrowColor() const
 bool AttArpegVis::HasArrowFillcolor() const
 {
     return (m_arrowFillcolor != "");
-}
-
-bool AttArpegVis::HasLineForm() const
-{
-    return (m_lineForm != LINEFORM_NONE);
-}
-
-bool AttArpegVis::HasLineWidth() const
-{
-    return (m_lineWidth.HasValue());
 }
 
 //----------------------------------------------------------------------------
@@ -370,6 +340,46 @@ bool AttHairpinVis::HasOpeningVertical() const
 bool AttHairpinVis::HasAngleOptimize() const
 {
     return (m_angleOptimize != BOOLEAN_NONE);
+}
+
+//----------------------------------------------------------------------------
+// AttHarmVis
+//----------------------------------------------------------------------------
+
+AttHarmVis::AttHarmVis() : Att()
+{
+    ResetHarmVis();
+}
+
+void AttHarmVis::ResetHarmVis()
+{
+    m_rendgrid = harmVis_RENDGRID_NONE;
+}
+
+bool AttHarmVis::ReadHarmVis(pugi::xml_node element, bool removeAttr)
+{
+    bool hasAttribute = false;
+    if (element.attribute("rendgrid")) {
+        this->SetRendgrid(StrToHarmVisRendgrid(element.attribute("rendgrid").value()));
+        if (removeAttr) element.remove_attribute("rendgrid");
+        hasAttribute = true;
+    }
+    return hasAttribute;
+}
+
+bool AttHarmVis::WriteHarmVis(pugi::xml_node element)
+{
+    bool wroteAttribute = false;
+    if (this->HasRendgrid()) {
+        element.append_attribute("rendgrid") = HarmVisRendgridToStr(this->GetRendgrid()).c_str();
+        wroteAttribute = true;
+    }
+    return wroteAttribute;
+}
+
+bool AttHarmVis::HasRendgrid() const
+{
+    return (m_rendgrid != harmVis_RENDGRID_NONE);
 }
 
 //----------------------------------------------------------------------------

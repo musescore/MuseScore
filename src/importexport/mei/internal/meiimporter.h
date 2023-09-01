@@ -122,8 +122,11 @@ private:
     bool readOctave(pugi::xml_node octaveNode, engraving::Measure* measure);
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
     bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
+    bool readSyl(pugi::xml_node sylNode, engraving::Lyrics* lyrics, Convert::textWithSmufl& textBlocks, ElisionType elision);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
     bool readTie(pugi::xml_node tieNode, engraving::Measure* measure);
+    bool readVerses(pugi::xml_node parentNode, engraving::Chord* chord);
+    bool readVerse(pugi::xml_node verseNode, engraving::Chord* chord);
 
     /**
      * Methods for parsing specific MEI attribute classes within elements
@@ -165,6 +168,11 @@ private:
     engraving::Note* findStartNote(const libmei::Element& meiElement);
     engraving::Note* findEndNote(pugi::xml_node controlNode);
     void clearGraceNotes();
+    bool hasLyricsToExtend(track_idx_t track, int no);
+    const std::pair<engraving::Lyrics*, engraving::ChordRest*>& getLyricsToExtend(track_idx_t track, int no);
+    void addChordtoLyricsToExtend(ChordRest* chordRest);
+    void extendLyrics(const std::pair<engraving::Lyrics*, engraving::ChordRest*>& lyricsToExtend);
+    void extendLyrics();
 
     /** The Score pointer */
     engraving::Score* m_score = nullptr;
@@ -200,6 +208,9 @@ private:
     std::map<std::string, engraving::Note*> m_endIdNotes;
     /* A map for open spanners that needs to be ended */
     std::map<engraving::Spanner*, pugi::xml_node> m_openSpannerMap;
+
+    /** A map of a map for lyrics with extender that needs to be extended */
+    std::map<track_idx_t, std::map<int, std::pair<engraving::Lyrics*, engraving::ChordRest*> > > m_lyricExtenders;
 
     engraving::Tuplet* m_tuplet;
     engraving::BeamMode m_beamBeginMode;
