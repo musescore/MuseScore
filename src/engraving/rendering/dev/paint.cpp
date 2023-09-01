@@ -211,7 +211,7 @@ SizeF Paint::pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions
 void Paint::paintItem(mu::draw::Painter& painter, const EngravingItem* item)
 {
     TRACEFUNC;
-    if (item->layoutData()->isSkipDraw) {
+    if (item->layoutData()->isSkipDraw()) {
         return;
     }
     item->itemDiscovered = false;

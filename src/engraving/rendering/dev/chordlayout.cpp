@@ -1418,7 +1418,7 @@ void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, trac
             for (Note* note : toChord(item)->notes()) {
                 Accidental* acc = note->accidental();
                 if (acc) {
-                    acc->mutLayoutData()->isSkipDraw = true;
+                    acc->mutLayoutData()->setIsSkipDraw(true);
                 }
             }
         }

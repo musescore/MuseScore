@@ -355,7 +355,7 @@ void Dynamic::manageBarlineCollisions()
         EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
             double leftMargin = layoutData()->bbox().translated(pagePos() - offset()).left()
-                    - e->layoutData()->bbox().translated(e->pagePos()).right()
+                                - e->layoutData()->bbox().translated(e->pagePos()).right()
                                 - minBarLineDistance;
             if (leftMargin < 0) {
                 mutLayoutData()->moveX(-leftMargin);
@@ -376,7 +376,7 @@ void Dynamic::manageBarlineCollisions()
         EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
             double rightMargin = e->layoutData()->bbox().translated(e->pagePos()).left()
-                    - layoutData()->bbox().translated(pagePos() - offset()).right()
+                                 - layoutData()->bbox().translated(pagePos() - offset()).right()
                                  - minBarLineDistance;
             if (rightMargin < 0) {
                 mutLayoutData()->moveX(rightMargin);

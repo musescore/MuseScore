@@ -1402,7 +1402,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && ss->isVibratoSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
                 double diff = ss->layoutData()->bbox().bottom() - prevSegment->layoutData()->bbox().bottom()
-                        + prevSegment->layoutData()->bbox().top();
+                              + prevSegment->layoutData()->bbox().top();
                 prevSegment->mutLayoutData()->moveY(diff);
                 fixed = true;
             }
@@ -1411,7 +1411,8 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && prevSegment->isVibratoSegment()
                 && ss->isHarmonicMarkSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
-                double diff = prevSegment->layoutData()->bbox().bottom() - ss->layoutData()->bbox().bottom() + ss->layoutData()->bbox().top();
+                double diff = prevSegment->layoutData()->bbox().bottom() - ss->layoutData()->bbox().bottom()
+                              + ss->layoutData()->bbox().top();
                 ss->mutLayoutData()->moveY(diff);
                 fixed = true;
             }
