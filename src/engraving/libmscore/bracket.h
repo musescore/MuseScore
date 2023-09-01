@@ -70,7 +70,7 @@ public:
     Fraction playTick() const override;
 
     void setHeight(double) override;
-    double width() const override;
+    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override;
 
     double h2() const { return m_h2; }
 

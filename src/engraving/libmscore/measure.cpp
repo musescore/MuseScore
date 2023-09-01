@@ -3237,7 +3237,7 @@ void Measure::stretchToTargetWidth(double targetWidth)
     for (Segment& s : m_segments) {
         if (s.isChordRestType() && s.visible() && s.enabled() && !s.allElementsInvisible()) {
             double springConst = 1 / s.stretch();
-            double width = s.width() - s.widthOffset();
+            double width = s.width(LD_ACCESS::BAD) - s.widthOffset();
             double preTension = width * springConst;
             springs.push_back(Spring(springConst, width, preTension, &s));
         }
@@ -3408,7 +3408,7 @@ void Measure::respaceSegments()
     for (Segment& s : m_segments) {
         s.mutLayoutData()->setPosX(x);
         if (s.enabled() && s.visible() && !s.allElementsInvisible()) {
-            x += s.width();
+            x += s.width(LD_ACCESS::BAD);
         }
     }
     // Update measure width

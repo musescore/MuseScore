@@ -159,6 +159,8 @@ public:
     const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
 
+    void computeShape();
+
     std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
 private:
@@ -166,8 +168,6 @@ private:
 
     Tremolo(Chord* parent);
     Tremolo(const Tremolo&);
-
-    void computeShape();
 
     void setBeamPos(const PairF& bp);
 

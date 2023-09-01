@@ -123,6 +123,13 @@ enum class KerningType
     NOT_SET,
 };
 
+//! NOTE Enum for detect layoutdata bad access errors
+enum class LD_ACCESS {
+    CHECK = 0,          // should be correct; assert if still not
+    BAD,                // known to be bad; don’t assert, we’ll fix it later
+    MAYBE_NOTINITED     // in this case it’s okay if we access it before it’s been inited
+};
+
 class EngravingItemList : public std::list<EngravingItem*>
 {
     OBJECT_ALLOCATOR(engraving, EngravingItemList)
@@ -490,7 +497,7 @@ public:
 
         void reset()
         {
-            //m_bbox.reset();
+            m_bbox.reset();
         }
 
         bool isSkipDraw() const { return m_isSkipDraw; }
@@ -509,13 +516,25 @@ public:
         void moveX(double x) { doSetPos(m_pos.x() + x, m_pos.y()); }
         void moveY(double y) { doSetPos(m_pos.x(), m_pos.y() + y); }
 
-        void resetBbox() { m_bbox = RectF(); }
-        const RectF& bbox() const { return m_bbox; }
-        void setBbox(const mu::RectF& r) { m_bbox = r; }
-        void setBbox(double x, double y, double w, double h) { m_bbox.setRect(x, y, w, h); }
-        void addBbox(const mu::RectF& r) { m_bbox.unite(r); }
-        void setHeight(double v) { m_bbox.setHeight(v); }
-        void setWidth(double v) { m_bbox.setWidth(v); }
+        void resetBbox() { m_bbox.reset(); }
+        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const
+        {
+            if (!m_bbox.has_value()) {
+                if (mode == LD_ACCESS::CHECK) {
+                    LOGE() << "BAD ACCESS to bbox (not set)";
+                }
+                static const RectF dummy;
+                return dummy;
+            }
+
+            return m_bbox.value();
+        }
+
+        void setBbox(const mu::RectF& r) { m_bbox = std::make_optional<RectF>(r); }
+        void setBbox(double x, double y, double w, double h) { mutBbox().setRect(x, y, w, h); }
+        void addBbox(const mu::RectF& r) { mutBbox().unite(r); }
+        void setHeight(double v) { mutBbox().setHeight(v); }
+        void setWidth(double v) { mutBbox().setWidth(v); }
 
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
@@ -526,10 +545,18 @@ public:
             m_pos.setY(y);
         }
 
+        mu::RectF& mutBbox()
+        {
+            if (!m_bbox) {
+                m_bbox = std::make_optional<RectF>();
+            }
+            return m_bbox.value();
+        }
+
         bool m_isSkipDraw = false;
-        double m_mag = 1.0;                   // standard magnification (derived value)
-        PointF m_pos;          // Reference position, relative to _parent, set by autoplace
-        RectF m_bbox;          // Bounding box relative to _pos + _offset
+        double m_mag = 1.0;                     // standard magnification (derived value)
+        PointF m_pos;                           // Reference position, relative to _parent, set by autoplace
+        std::optional<RectF> m_bbox;            // Bounding box relative to _pos + _offset
     };
 
     const LayoutData* layoutData() const;
@@ -539,16 +566,16 @@ public:
     virtual Shape shape() const { return Shape(layoutData()->bbox(), this); }
     virtual double baseLine() const { return -height(); }
 
-    mu::RectF abbox() const { return layoutData()->bbox().translated(pagePos()); }
-    mu::RectF pageBoundingRect() const { return layoutData()->bbox().translated(pagePos()); }
-    mu::RectF canvasBoundingRect() const { return layoutData()->bbox().translated(canvasPos()); }
+    mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(pagePos()); }
+    mu::RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(pagePos()); }
+    mu::RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(canvasPos()); }
 
     //! --- Old Interface ---
     virtual void setbbox(const mu::RectF& r) { mutLayoutData()->setBbox(r); }
     virtual void addbbox(const mu::RectF& r) { mutLayoutData()->addBbox(r); }
     virtual double height() const { return layoutData()->bbox().height(); }
     virtual void setHeight(double v) { mutLayoutData()->setHeight(v); }
-    virtual double width() const { return layoutData()->bbox().width(); }
+    virtual double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).width(); }
     virtual void setWidth(double v) { mutLayoutData()->setWidth(v); }
 
     virtual const PointF pos() const { return layoutData()->pos() + m_offset; }

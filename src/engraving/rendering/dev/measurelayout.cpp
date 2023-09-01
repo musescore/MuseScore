@@ -1366,7 +1366,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
     Measure* nm  = m->nextMeasure();
     double blw    = 0.0;
 
-    double oldWidth = m->width();
+    double oldWidth = m->width(LD_ACCESS::BAD);
 
     if (nm && nm->repeatStart() && !m->repeatEnd() && !isLastMeasureInSystem && m->next() == nm) {
         // we may skip barline at end of a measure immediately before a start repeat:
@@ -2234,7 +2234,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                     double xx = ps->x();
                     for (Segment* ss = ps; ss != s;) {
                         Segment* ns1 = ss->nextActive();
-                        double ww1    = ss->width();
+                        double ww1 = ss->width(LD_ACCESS::BAD);
                         if (ss->isChordRestType()) {
                             ww1 += d;
                             ss->setWidth(ww1);

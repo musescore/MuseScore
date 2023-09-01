@@ -86,7 +86,7 @@ void Bracket::setHeight(double h)
 //   width
 //---------------------------------------------------------
 
-double Bracket::width() const
+double Bracket::width(LD_ACCESS) const
 {
     double w;
     switch (bracketType()) {

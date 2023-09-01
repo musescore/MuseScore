@@ -197,7 +197,7 @@ PropertyValue Box::getProperty(Pid propertyId) const
 
 bool Box::setProperty(Pid propertyId, const PropertyValue& v)
 {
-    score()->addRefresh(canvasBoundingRect());
+    score()->addRefresh(canvasBoundingRect(LD_ACCESS::BAD));
     switch (propertyId) {
     case Pid::BOX_HEIGHT:
         _boxHeight = v.value<Spatium>();

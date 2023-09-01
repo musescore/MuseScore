@@ -42,7 +42,7 @@ public:
     EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
     void setWidth(double width) override { m_width = width; }
-    double width() const override { return m_width; }
+    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override { UNUSED(mode); return m_width; }
 
     bool numberVisible() const { return m_numberVisible; }
 

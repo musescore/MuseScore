@@ -314,8 +314,8 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
     layout(item->bottomAccidental(), ctx);
 
     double accNoteDist = item->point(ctx.style().styleS(Sid::accidentalNoteDistance));
-    double xAccidOffTop = item->topAccidental()->width() + accNoteDist;
-    double xAccidOffBottom = item->bottomAccidental()->width() + accNoteDist;
+    double xAccidOffTop = item->topAccidental()->width(LD_ACCESS::BAD) + accNoteDist;
+    double xAccidOffBottom = item->bottomAccidental()->width(LD_ACCESS::BAD) + accNoteDist;
 
     switch (item->direction()) {
     case DirectionH::AUTO:                       // noteheads one above the other
@@ -361,8 +361,10 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
 
     RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
     ldata->setBbox(headRect.translated(ldata->topPos).united(headRect.translated(ldata->bottomPos))
-                   .united(item->topAccidental()->layoutData()->bbox().translated(item->topAccidental()->layoutData()->pos()))
-                   .united(item->bottomAccidental()->layoutData()->bbox().translated(item->bottomAccidental()->layoutData()->pos()))
+                   .united(item->topAccidental()->layoutData()->bbox(LD_ACCESS::BAD)
+                           .translated(item->topAccidental()->layoutData()->pos()))
+                   .united(item->bottomAccidental()->layoutData()->bbox(LD_ACCESS::BAD)
+                           .translated(item->bottomAccidental()->layoutData()->pos()))
                    );
 }
 
@@ -1663,7 +1665,8 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
 
     LineSegment* lineSegm = item->frontSegment();
     layoutLineSegment(lineSegm, ctx);
-    item->setbbox(lineSegm->layoutData()->bbox());
+
+    item->setbbox(lineSegm->layoutData()->bbox(LD_ACCESS::BAD));
 }
 
 void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Context& ctx)
@@ -1811,7 +1814,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
     }
     // set end text position and extend bbox
     if (!item->endText()->empty()) {
-        item->endText()->mutLayoutData()->moveX(item->layoutData()->bbox().right());
+        item->endText()->mutLayoutData()->moveX(ldata->bbox().right());
         ldata->addBbox(item->endText()->layoutData()->bbox().translated(item->endText()->pos()));
     }
 

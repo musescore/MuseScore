@@ -3411,7 +3411,7 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::shape() const
 {
-    RectF r(layoutData()->bbox());
+    RectF r(layoutData()->bbox(LD_ACCESS::BAD));
 
     Shape shape(r, this);
     for (NoteDot* dot : m_dots) {
