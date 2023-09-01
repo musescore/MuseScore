@@ -4272,16 +4272,10 @@ void Score::restoreInitialKeySigAndTimeSig()
         newTimeSig->setSig(Fraction(4, 4));
         timeSegment->add(newTimeSig);
         undoAddElement(newTimeSig);
-
-        SigEvent timeSigEvent;
-        timeSigEvent.setTimesig(Fraction(4, 4));
-        timeSigEvent.setNominal(Fraction(4, 4));
-
-        firstMeas->setTimesig(newTimeSig->sig());
-        firstMeas->setTicks(newTimeSig->sig());
-        staff->addTimeSig(newTimeSig);
-        sigmap()->add(0, timeSigEvent);
     }
+
+    firstMeas->setTimesig(Fraction(4, 4));
+    firstMeas->setTicks(Fraction(4, 4));
 }
 
 //---------------------------------------------------------
