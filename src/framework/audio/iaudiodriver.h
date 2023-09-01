@@ -91,6 +91,18 @@ public:
     virtual void suspend() = 0;
 };
 using IAudioDriverPtr = std::shared_ptr<IAudioDriver>;
+
+class AudioDriverState
+{
+public:
+    virtual std::string name() const = 0;
+    virtual bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) = 0;
+    virtual void close() = 0;
+    virtual bool isOpened() const = 0;
+
+    IAudioDriver::Spec m_spec; // current running spec
+    std::string m_deviceId;
+};
 }
 
 #endif // MUSE_AUDIO_IAUDIODRIVER_H

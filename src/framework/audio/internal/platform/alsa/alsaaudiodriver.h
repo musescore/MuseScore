@@ -26,29 +26,22 @@
 #include "iaudiodriver.h"
 
 namespace muse::audio {
-
-class AlsaDriverState
+class AlsaDriverState : public AudioDriverState
 {
 public:
     AlsaDriverState();
     ~AlsaDriverState();
 
-    std::string name() const;
-    bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec);
-    void close();
-    bool isOpened() const;
+    std::string name() const override;
+    bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
+    void close() override;
+    bool isOpened() const override;
 
     void* m_alsaDeviceHandle = nullptr;
 
     float* m_buffer = nullptr;
-    unsigned long m_samples = 0;
-    int m_channels = 0;
     bool m_audioProcessingDone = false;
     pthread_t m_threadHandle = 0;
-    IAudioDriver::Callback m_callback;
-    void* m_userdata = nullptr;
-    IAudioDriver::Spec m_format;
-    std::string m_deviceId;
 private:
     void alsaCleanup();
 };
