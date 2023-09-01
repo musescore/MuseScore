@@ -439,11 +439,24 @@ void StringData::sortChordNotesUseSameString(const Chord* chord, int pitchOffset
     std::unordered_map<size_t, Note*> usedStrings;
     std::unordered_map<int, std::vector<int> > fretTable;
 
+    for (size_t i = 0; i < m_stringTable.size(); ++i) {
+        usedStrings[i] = nullptr;
+    }
+
     for (auto note: chord->notes()) {
         usedStrings[note->string()] = note;
+    }
+
+    for (const auto& [string, note] : usedStrings) {
+        if (!note) {
+            continue;
+        }
         int pitch = note->pitch() - capoFret;
+        if (fretTable.find(pitch) != fretTable.end()) {
+            continue;
+        }
         fretTable.insert_or_assign(pitch, std::vector<int>());
-        for (size_t i = 0; i < usedStrings.size(); ++i) {
+        for (size_t i = 0; i < m_stringTable.size(); ++i) {
             fretTable[pitch].push_back(fret(pitch, (int)i, pitchOffset));
         }
     }
