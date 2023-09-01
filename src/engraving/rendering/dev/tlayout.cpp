@@ -984,9 +984,7 @@ void TLayout::layoutBox(Box* item, LayoutContext& ctx)
 {
     layoutMeasureBase(item, ctx);
     for (EngravingItem* e : item->el()) {
-        if (!e->isLayoutBreak()) {
-            layoutItem(e, ctx);
-        }
+        layoutItem(e, ctx);
     }
 }
 
@@ -1026,9 +1024,7 @@ void TLayout::layout(VBox* item, LayoutContext& ctx)
     }
 
     for (EngravingItem* e : item->el()) {
-        if (!e->isLayoutBreak()) {
-            layoutItem(e, ctx);
-        }
+        layoutItem(e, ctx);
     }
 
     if (item->getProperty(Pid::BOX_AUTOSIZE).toBool()) {
@@ -3324,7 +3320,9 @@ void TLayout::layout(KeySig* item, LayoutContext& ctx)
 
 void TLayout::layout(LayoutBreak* item, LayoutContext&)
 {
-    UNUSED(item);
+    LayoutBreak::LayoutData* ldata = item->mutLayoutData();
+    double lw = item->lineWidth();
+    ldata->setBbox(item->iconBorderRect().adjusted(-lw, -lw, lw, lw));
 }
 
 static void layoutLedgerLine(const LedgerLine* item, const LayoutContext& ctx, LedgerLine::LayoutData* ldata)
@@ -3423,13 +3421,16 @@ void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
 
     for (EngravingItem* element : item->el()) {
         if (element->isLayoutBreak()) {
+            TLayout::layoutItem(element, ctx);
             double _spatium = item->spatium();
             double x;
             double y;
             if (toLayoutBreak(element)->isNoBreak()) {
                 x = item->width() + ctx.conf().styleMM(Sid::barWidth) - element->width() * .5;
             } else {
-                x = item->width() + ctx.conf().styleMM(Sid::barWidth) - element->width()
+                x = item->width()
+                    + ctx.conf().styleMM(Sid::barWidth)
+                    - element->width()
                     - breakCount * (element->width() + _spatium * .5);
                 breakCount++;
             }

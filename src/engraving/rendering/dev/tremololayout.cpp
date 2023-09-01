@@ -36,6 +36,8 @@ using namespace mu::engraving::rendering::dev;
 
 void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
 {
+    item->computeShape();     // set bbox
+
     item->setPath(item->basePath());
 
     item->setChord1(toChord(item->explicitParent()));

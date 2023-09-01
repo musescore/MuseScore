@@ -327,7 +327,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             }
             if (nmb->isMeasure()) {
                 oldStretch = toMeasure(nmb)->layoutStretch();
-                oldWidth = toMeasure(nmb)->width();
+                oldWidth = toMeasure(nmb)->width(LD_ACCESS::BAD);
             }
             if (!ctx.state().curMeasure()->noBreak()) {
                 // current measure is not a nobreak,
