@@ -388,6 +388,46 @@ bool AttCleffingLog::HasClefDisPlace() const
 }
 
 //----------------------------------------------------------------------------
+// AttColor
+//----------------------------------------------------------------------------
+
+AttColor::AttColor() : Att()
+{
+    ResetColor();
+}
+
+void AttColor::ResetColor()
+{
+    m_color = "";
+}
+
+bool AttColor::ReadColor(pugi::xml_node element, bool removeAttr)
+{
+    bool hasAttribute = false;
+    if (element.attribute("color")) {
+        this->SetColor(StrToStr(element.attribute("color").value()));
+        if (removeAttr) element.remove_attribute("color");
+        hasAttribute = true;
+    }
+    return hasAttribute;
+}
+
+bool AttColor::WriteColor(pugi::xml_node element)
+{
+    bool wroteAttribute = false;
+    if (this->HasColor()) {
+        element.append_attribute("color") = StrToStr(this->GetColor()).c_str();
+        wroteAttribute = true;
+    }
+    return wroteAttribute;
+}
+
+bool AttColor::HasColor() const
+{
+    return (m_color != "");
+}
+
+//----------------------------------------------------------------------------
 // AttCue
 //----------------------------------------------------------------------------
 

@@ -23,7 +23,7 @@
 namespace libmei {
 
 Arpeg::Arpeg() :
-    Element("arpeg"), AttLabelled(), AttTyped(), AttArpegLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartId(), AttArpegVis(), AttExtSymAuth(), AttExtSymNames(), AttLineRendBase(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("arpeg"), AttLabelled(), AttTyped(), AttArpegLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartId(), AttArpegVis(), AttColor(), AttExtSymAuth(), AttExtSymNames(), AttLineRendBase(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -42,6 +42,7 @@ bool Arpeg::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadTimestampLog(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadArpegVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
@@ -65,6 +66,7 @@ bool Arpeg::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteTimestampLog(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteArpegVis(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
@@ -85,6 +87,7 @@ void Arpeg::Reset()
     ResetTimestampLog();
     ResetStartId();
     ResetArpegVis();
+    ResetColor();
     ResetExtSymAuth();
     ResetExtSymNames();
     ResetLineRendBase();
@@ -150,7 +153,7 @@ void BTrem::Reset()
 }
 
 Beam::Beam() :
-    Element("beam"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttCue()
+    Element("beam"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttColor(), AttCue()
 {
 }
 
@@ -164,6 +167,7 @@ bool Beam::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadTyped(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLayerIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadCue(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
@@ -177,6 +181,7 @@ bool Beam::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteTyped(element) || hasAttribute);
     hasAttribute = (WriteLayerIdent(element) || hasAttribute);
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteCue(element) || hasAttribute);
     return hasAttribute;
 }
@@ -187,11 +192,12 @@ void Beam::Reset()
     ResetTyped();
     ResetLayerIdent();
     ResetStaffIdent();
+    ResetColor();
     ResetCue();
 }
 
 BeatRpt::BeatRpt() :
-    Element("beatRpt"), AttLabelled(), AttTyped(), AttBeatRptLog(), AttLayerIdent(), AttStaffIdent(), AttBeatRptVis(), AttExpandable(), AttExtSymAuth(), AttExtSymNames(), AttPlist()
+    Element("beatRpt"), AttLabelled(), AttTyped(), AttBeatRptLog(), AttLayerIdent(), AttStaffIdent(), AttBeatRptVis(), AttColor(), AttExpandable(), AttExtSymAuth(), AttExtSymNames(), AttPlist()
 {
 }
 
@@ -207,6 +213,7 @@ bool BeatRpt::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadLayerIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadBeatRptVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExpandable(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
@@ -225,6 +232,7 @@ bool BeatRpt::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteLayerIdent(element) || hasAttribute);
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
     hasAttribute = (WriteBeatRptVis(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExpandable(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
@@ -240,6 +248,7 @@ void BeatRpt::Reset()
     ResetLayerIdent();
     ResetStaffIdent();
     ResetBeatRptVis();
+    ResetColor();
     ResetExpandable();
     ResetExtSymAuth();
     ResetExtSymNames();
@@ -247,7 +256,7 @@ void BeatRpt::Reset()
 }
 
 Breath::Breath() :
-    Element("breath"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttStartId(), AttTimestampLog(), AttExtSymAuth(), AttExtSymNames(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("breath"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttStartId(), AttTimestampLog(), AttColor(), AttExtSymAuth(), AttExtSymNames(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -263,6 +272,7 @@ bool Breath::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestampLog(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
@@ -281,6 +291,7 @@ bool Breath::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestampLog(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
@@ -296,6 +307,7 @@ void Breath::Reset()
     ResetStaffIdent();
     ResetStartId();
     ResetTimestampLog();
+    ResetColor();
     ResetExtSymAuth();
     ResetExtSymNames();
     ResetVisualOffsetHo();
@@ -353,7 +365,7 @@ void FTrem::Reset()
 }
 
 Fermata::Fermata() :
-    Element("fermata"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttFermataVis(), AttExtSymAuth(), AttExtSymNames(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("fermata"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttFermataVis(), AttColor(), AttExtSymAuth(), AttExtSymNames(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -372,6 +384,7 @@ bool Fermata::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadFermataVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
@@ -394,6 +407,7 @@ bool Fermata::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteFermataVis(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
@@ -413,6 +427,7 @@ void Fermata::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetFermataVis();
+    ResetColor();
     ResetExtSymAuth();
     ResetExtSymNames();
     ResetPlacementRelStaff();
@@ -421,7 +436,7 @@ void Fermata::Reset()
 }
 
 Gliss::Gliss() :
-    Element("gliss"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttLineRend(), AttLineRendBase()
+    Element("gliss"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttColor(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttLineRend(), AttLineRendBase()
 {
 }
 
@@ -441,6 +456,7 @@ bool Gliss::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
@@ -468,6 +484,7 @@ bool Gliss::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
@@ -492,6 +509,7 @@ void Gliss::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetColor();
     ResetExtSymAuth();
     ResetExtSymNames();
     ResetTypography();
@@ -504,7 +522,7 @@ void Gliss::Reset()
 }
 
 GraceGrp::GraceGrp() :
-    Element("graceGrp"), AttLabelled(), AttTyped(), AttGraceGrpLog(), AttLayerIdent(), AttStaffIdent(), AttGraced()
+    Element("graceGrp"), AttLabelled(), AttTyped(), AttGraceGrpLog(), AttLayerIdent(), AttStaffIdent(), AttGraced(), AttColor()
 {
 }
 
@@ -520,6 +538,7 @@ bool GraceGrp::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadLayerIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadGraced(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
 
@@ -534,6 +553,7 @@ bool GraceGrp::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteLayerIdent(element) || hasAttribute);
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
     hasAttribute = (WriteGraced(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     return hasAttribute;
 }
 
@@ -545,10 +565,11 @@ void GraceGrp::Reset()
     ResetLayerIdent();
     ResetStaffIdent();
     ResetGraced();
+    ResetColor();
 }
 
 Hairpin::Hairpin() :
-    Element("hairpin"), AttLabelled(), AttTyped(), AttHairpinLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttHairpinVis(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttMidiValue(), AttMidiValue2()
+    Element("hairpin"), AttLabelled(), AttTyped(), AttHairpinLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttHairpinVis(), AttColor(), AttLineRendBase(), AttPlacementRelStaff(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo(), AttMidiValue(), AttMidiValue2()
 {
 }
 
@@ -570,6 +591,7 @@ bool Hairpin::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadHairpinVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
@@ -598,6 +620,7 @@ bool Hairpin::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
     hasAttribute = (WriteHairpinVis(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
@@ -623,6 +646,7 @@ void Hairpin::Reset()
     ResetStartId();
     ResetTimestamp2Log();
     ResetHairpinVis();
+    ResetColor();
     ResetLineRendBase();
     ResetPlacementRelStaff();
     ResetVisualOffsetHo();
@@ -634,7 +658,7 @@ void Hairpin::Reset()
 }
 
 HalfmRpt::HalfmRpt() :
-    Element("halfmRpt"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttDurationLog(), AttExpandable(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("halfmRpt"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttDurationLog(), AttColor(), AttExpandable(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -649,6 +673,7 @@ bool HalfmRpt::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadLayerIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadDurationLog(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExpandable(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
@@ -668,6 +693,7 @@ bool HalfmRpt::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteLayerIdent(element) || hasAttribute);
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
     hasAttribute = (WriteDurationLog(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExpandable(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
@@ -684,6 +710,7 @@ void HalfmRpt::Reset()
     ResetLayerIdent();
     ResetStaffIdent();
     ResetDurationLog();
+    ResetColor();
     ResetExpandable();
     ResetExtSymAuth();
     ResetExtSymNames();
@@ -693,7 +720,7 @@ void HalfmRpt::Reset()
 }
 
 HarpPedal::HarpPedal() :
-    Element("harpPedal"), AttLabelled(), AttTyped(), AttHarpPedalLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttExtSymAuth(), AttExtSymNames(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("harpPedal"), AttLabelled(), AttTyped(), AttHarpPedalLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttColor(), AttExtSymAuth(), AttExtSymNames(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -712,6 +739,7 @@ bool HarpPedal::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadTimestampLog(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
@@ -735,6 +763,7 @@ bool HarpPedal::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteTimestampLog(element) || hasAttribute);
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
@@ -755,6 +784,7 @@ void HarpPedal::Reset()
     ResetTimestampLog();
     ResetStartEndId();
     ResetStartId();
+    ResetColor();
     ResetExtSymAuth();
     ResetExtSymNames();
     ResetPlacementRelStaff();
@@ -764,7 +794,7 @@ void HarpPedal::Reset()
 }
 
 Lv::Lv() :
-    Element("lv"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
+    Element("lv"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttColor(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
 {
 }
 
@@ -783,6 +813,7 @@ bool Lv::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
@@ -806,6 +837,7 @@ bool Lv::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteCurvature(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
@@ -826,6 +858,7 @@ void Lv::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetColor();
     ResetCurvature();
     ResetLineRendBase();
     ResetVisualOffsetHo();
@@ -835,7 +868,7 @@ void Lv::Reset()
 }
 
 MNum::MNum() :
-    Element("mNum"), AttLabelled(), AttTyped(), AttLang(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("mNum"), AttLabelled(), AttTyped(), AttLang(), AttColor(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -848,6 +881,7 @@ bool MNum::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadLabelled(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTyped(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLang(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
@@ -863,6 +897,7 @@ bool MNum::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteLabelled(element) || hasAttribute);
     hasAttribute = (WriteTyped(element) || hasAttribute);
     hasAttribute = (WriteLang(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
@@ -875,6 +910,7 @@ void MNum::Reset()
     ResetLabelled();
     ResetTyped();
     ResetLang();
+    ResetColor();
     ResetPlacementRelStaff();
     ResetTypography();
     ResetVisualOffsetHo();
@@ -882,7 +918,7 @@ void MNum::Reset()
 }
 
 MRest::MRest() :
-    Element("mRest"), AttLabelled(), AttTyped(), AttCue(), AttDurationAdditive(), AttLayerIdent(), AttStaffIdent(), AttCutout(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("mRest"), AttLabelled(), AttTyped(), AttCue(), AttDurationAdditive(), AttLayerIdent(), AttStaffIdent(), AttColor(), AttCutout(), AttExtSymAuth(), AttExtSymNames(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -898,6 +934,7 @@ bool MRest::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadDurationAdditive(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLayerIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadCutout(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
@@ -918,6 +955,7 @@ bool MRest::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteDurationAdditive(element) || hasAttribute);
     hasAttribute = (WriteLayerIdent(element) || hasAttribute);
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteCutout(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
@@ -935,6 +973,7 @@ void MRest::Reset()
     ResetDurationAdditive();
     ResetLayerIdent();
     ResetStaffIdent();
+    ResetColor();
     ResetCutout();
     ResetExtSymAuth();
     ResetExtSymNames();
@@ -944,7 +983,7 @@ void MRest::Reset()
 }
 
 MRpt::MRpt() :
-    Element("mRpt"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttNumbered(), AttExpandable(), AttExtSymAuth(), AttExtSymNames(), AttNumberPlacement(), AttTypography()
+    Element("mRpt"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttNumbered(), AttColor(), AttExpandable(), AttExtSymAuth(), AttExtSymNames(), AttNumberPlacement(), AttTypography()
 {
 }
 
@@ -959,6 +998,7 @@ bool MRpt::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadLayerIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadNumbered(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExpandable(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
@@ -977,6 +1017,7 @@ bool MRpt::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteLayerIdent(element) || hasAttribute);
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
     hasAttribute = (WriteNumbered(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExpandable(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
@@ -992,6 +1033,7 @@ void MRpt::Reset()
     ResetLayerIdent();
     ResetStaffIdent();
     ResetNumbered();
+    ResetColor();
     ResetExpandable();
     ResetExtSymAuth();
     ResetExtSymNames();
@@ -1041,7 +1083,7 @@ void Measure::Reset()
 }
 
 MultiRest::MultiRest() :
-    Element("multiRest"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttNumbered(), AttMultiRestVis(), AttExtSymAuth(), AttExtSymNames(), AttNumberPlacement(), AttTypography(), AttWidth()
+    Element("multiRest"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttNumbered(), AttMultiRestVis(), AttColor(), AttExtSymAuth(), AttExtSymNames(), AttNumberPlacement(), AttTypography(), AttWidth()
 {
 }
 
@@ -1057,6 +1099,7 @@ bool MultiRest::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadNumbered(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadMultiRestVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadNumberPlacement(element, removeAttr) || hasAttribute);
@@ -1076,6 +1119,7 @@ bool MultiRest::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
     hasAttribute = (WriteNumbered(element) || hasAttribute);
     hasAttribute = (WriteMultiRestVis(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WriteNumberPlacement(element) || hasAttribute);
@@ -1092,6 +1136,7 @@ void MultiRest::Reset()
     ResetStaffIdent();
     ResetNumbered();
     ResetMultiRestVis();
+    ResetColor();
     ResetExtSymAuth();
     ResetExtSymNames();
     ResetNumberPlacement();
@@ -1100,7 +1145,7 @@ void MultiRest::Reset()
 }
 
 MultiRpt::MultiRpt() :
-    Element("multiRpt"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttNumbered(), AttExpandable(), AttExtSymAuth(), AttExtSymNames(), AttTypography()
+    Element("multiRpt"), AttLabelled(), AttTyped(), AttLayerIdent(), AttStaffIdent(), AttNumbered(), AttColor(), AttExpandable(), AttExtSymAuth(), AttExtSymNames(), AttTypography()
 {
 }
 
@@ -1115,6 +1160,7 @@ bool MultiRpt::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadLayerIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadNumbered(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExpandable(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
@@ -1132,6 +1178,7 @@ bool MultiRpt::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteLayerIdent(element) || hasAttribute);
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
     hasAttribute = (WriteNumbered(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExpandable(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
@@ -1146,6 +1193,7 @@ void MultiRpt::Reset()
     ResetLayerIdent();
     ResetStaffIdent();
     ResetNumbered();
+    ResetColor();
     ResetExpandable();
     ResetExtSymAuth();
     ResetExtSymNames();
@@ -1153,7 +1201,7 @@ void MultiRpt::Reset()
 }
 
 Octave::Octave() :
-    Element("octave"), AttLabelled(), AttTyped(), AttOctaveLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttOctaveDisplacement(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttExtender(), AttLineRend(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
+    Element("octave"), AttLabelled(), AttTyped(), AttOctaveLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttOctaveDisplacement(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttColor(), AttExtender(), AttLineRend(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho()
 {
 }
 
@@ -1175,6 +1223,7 @@ bool Octave::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtender(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
@@ -1201,6 +1250,7 @@ bool Octave::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtender(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
@@ -1224,6 +1274,7 @@ void Octave::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetColor();
     ResetExtender();
     ResetLineRend();
     ResetLineRendBase();
@@ -1233,7 +1284,7 @@ void Octave::Reset()
 }
 
 Pedal::Pedal() :
-    Element("pedal"), AttLabelled(), AttTyped(), AttPedalLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttPedalVis(), AttExtSymAuth(), AttExtSymNames(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("pedal"), AttLabelled(), AttTyped(), AttPedalLog(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttPedalVis(), AttColor(), AttExtSymAuth(), AttExtSymNames(), AttLineRend(), AttLineRendBase(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -1254,6 +1305,7 @@ bool Pedal::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPedalVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymAuth(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadExtSymNames(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRend(element, removeAttr) || hasAttribute);
@@ -1281,6 +1333,7 @@ bool Pedal::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
     hasAttribute = (WritePedalVis(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteExtSymAuth(element) || hasAttribute);
     hasAttribute = (WriteExtSymNames(element) || hasAttribute);
     hasAttribute = (WriteLineRend(element) || hasAttribute);
@@ -1305,6 +1358,7 @@ void Pedal::Reset()
     ResetStartId();
     ResetTimestamp2Log();
     ResetPedalVis();
+    ResetColor();
     ResetExtSymAuth();
     ResetExtSymNames();
     ResetLineRend();
@@ -1316,7 +1370,7 @@ void Pedal::Reset()
 }
 
 Reh::Reh() :
-    Element("reh"), AttLabelled(), AttTyped(), AttLang(), AttStaffIdent(), AttStartId(), AttTimestampLog(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
+    Element("reh"), AttLabelled(), AttTyped(), AttLang(), AttStaffIdent(), AttStartId(), AttTimestampLog(), AttColor(), AttPlacementRelStaff(), AttTypography(), AttVisualOffsetHo(), AttVisualOffsetVo()
 {
 }
 
@@ -1332,6 +1386,7 @@ bool Reh::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStaffIdent(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestampLog(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadPlacementRelStaff(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTypography(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
@@ -1350,6 +1405,7 @@ bool Reh::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStaffIdent(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestampLog(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WritePlacementRelStaff(element) || hasAttribute);
     hasAttribute = (WriteTypography(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
@@ -1365,6 +1421,7 @@ void Reh::Reset()
     ResetStaffIdent();
     ResetStartId();
     ResetTimestampLog();
+    ResetColor();
     ResetPlacementRelStaff();
     ResetTypography();
     ResetVisualOffsetHo();
@@ -1461,7 +1518,7 @@ void RepeatMark::Reset()
 }
 
 Slur::Slur() :
-    Element("slur"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
+    Element("slur"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttDurationAdditive(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttColor(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
 {
 }
 
@@ -1481,6 +1538,7 @@ bool Slur::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
@@ -1505,6 +1563,7 @@ bool Slur::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteCurvature(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
@@ -1526,6 +1585,7 @@ void Slur::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetColor();
     ResetCurvature();
     ResetLineRendBase();
     ResetVisualOffsetHo();
@@ -1535,7 +1595,7 @@ void Slur::Reset()
 }
 
 Tie::Tie() :
-    Element("tie"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
+    Element("tie"), AttLabelled(), AttTyped(), AttLayerIdent(), AttPlist(), AttStaffIdent(), AttTimestampLog(), AttStartEndId(), AttStartId(), AttTimestamp2Log(), AttColor(), AttCurvature(), AttLineRendBase(), AttVisualOffsetHo(), AttVisualOffsetVo(), AttVisualOffset2Ho(), AttVisualOffset2Vo()
 {
 }
 
@@ -1554,6 +1614,7 @@ bool Tie::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTimestamp2Log(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadCurvature(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadLineRendBase(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadVisualOffsetHo(element, removeAttr) || hasAttribute);
@@ -1577,6 +1638,7 @@ bool Tie::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTimestamp2Log(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteCurvature(element) || hasAttribute);
     hasAttribute = (WriteLineRendBase(element) || hasAttribute);
     hasAttribute = (WriteVisualOffsetHo(element) || hasAttribute);
@@ -1597,6 +1659,7 @@ void Tie::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTimestamp2Log();
+    ResetColor();
     ResetCurvature();
     ResetLineRendBase();
     ResetVisualOffsetHo();
@@ -1606,7 +1669,7 @@ void Tie::Reset()
 }
 
 Tuplet::Tuplet() :
-    Element("tuplet"), AttLabelled(), AttTyped(), AttDurationAdditive(), AttDurationRatio(), AttLayerIdent(), AttStaffIdent(), AttStartEndId(), AttStartId(), AttTupletVis(), AttNumberPlacement()
+    Element("tuplet"), AttLabelled(), AttTyped(), AttDurationAdditive(), AttDurationRatio(), AttLayerIdent(), AttStaffIdent(), AttStartEndId(), AttStartId(), AttTupletVis(), AttColor(), AttNumberPlacement()
 {
 }
 
@@ -1625,6 +1688,7 @@ bool Tuplet::Read(pugi::xml_node element, bool removeAttr)
     hasAttribute = (ReadStartEndId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadStartId(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadTupletVis(element, removeAttr) || hasAttribute);
+    hasAttribute = (ReadColor(element, removeAttr) || hasAttribute);
     hasAttribute = (ReadNumberPlacement(element, removeAttr) || hasAttribute);
     return hasAttribute;
 }
@@ -1643,6 +1707,7 @@ bool Tuplet::Write(pugi::xml_node element, const std::string &xmlId)
     hasAttribute = (WriteStartEndId(element) || hasAttribute);
     hasAttribute = (WriteStartId(element) || hasAttribute);
     hasAttribute = (WriteTupletVis(element) || hasAttribute);
+    hasAttribute = (WriteColor(element) || hasAttribute);
     hasAttribute = (WriteNumberPlacement(element) || hasAttribute);
     return hasAttribute;
 }
@@ -1658,6 +1723,7 @@ void Tuplet::Reset()
     ResetStartEndId();
     ResetStartId();
     ResetTupletVis();
+    ResetColor();
     ResetNumberPlacement();
 }
 

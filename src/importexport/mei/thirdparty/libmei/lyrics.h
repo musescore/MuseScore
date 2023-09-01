@@ -31,7 +31,7 @@ namespace libmei {
  * Recurring lyrics, especially at the end of each verse or stanza of a poem or
  * song lyrics; a chorus.
  **/
-class Refrain : public Element, public AttLabelled, public AttTyped, public AttLang, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym {
+class Refrain : public Element, public AttLabelled, public AttTyped, public AttLang, public AttColor, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym {
     public:
         Refrain();
         virtual ~Refrain();
@@ -46,7 +46,7 @@ public:
  * Division of a poem or song lyrics, sometimes having a fixed length, meter or
  * rhyme scheme; a stanza.
  **/
-class Verse : public Element, public AttLabelled, public AttTyped, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym, public AttNNumberLike {
+class Verse : public Element, public AttLabelled, public AttTyped, public AttColor, public AttPlacementRelStaff, public AttTypography, public AttVisualOffsetVo, public AttVoltaGroupingSym, public AttNNumberLike {
     public:
         Verse();
         virtual ~Verse();
@@ -58,7 +58,7 @@ public:
 };
 
 /** Sung text for a specific iteration of a repeated section of music. **/
-class Volta : public Element, public AttLabelled, public AttTyped, public AttLang, public AttTypography, public AttVisualOffsetVo {
+class Volta : public Element, public AttLabelled, public AttTyped, public AttLang, public AttColor, public AttTypography, public AttVisualOffsetVo {
     public:
         Volta();
         virtual ~Volta();

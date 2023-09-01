@@ -1560,7 +1560,8 @@ enum harpPedalLog_G : int8_t {
  */
 enum meiVersion_MEIVERSION : int8_t {
     meiVersion_MEIVERSION_NONE = 0,
-    meiVersion_MEIVERSION_5_0_devplusbasic,
+    meiVersion_MEIVERSION_5_0,
+    meiVersion_MEIVERSION_5_0plusbasic,
     meiVersion_MEIVERSION_MAX
 };
 
