@@ -39,24 +39,24 @@ using namespace muse::audio;
 static void* alsaThread(void* aParam)
 {
     muse::runtime::setThreadName("audio_driver");
-    AlsaDriverState* data = static_cast<AlsaDriverState*>(aParam);
+    AlsaDriverState* state = static_cast<AlsaDriverState*>(aParam);
 
-    int ret = snd_pcm_wait(static_cast<snd_pcm_t*>(data->m_alsaDeviceHandle), 1000);
+    int ret = snd_pcm_wait(static_cast<snd_pcm_t*>(state->m_alsaDeviceHandle), 1000);
     IF_ASSERT_FAILED(ret > 0) {
         return nullptr;
     }
 
-    while (!data->m_audioProcessingDone)
+    while (!state->m_audioProcessingDone)
     {
-        uint8_t* stream = (uint8_t*)data->m_buffer;
-        int len = data->m_samples * data->m_channels * sizeof(float);
+        uint8_t* stream = (uint8_t*)state->m_buffer;
+        int len = state->m_spec.samples * state->m_spec.channels * sizeof(float);
 
-        data->m_callback(data->m_userdata, stream, len);
+        state->m_spec.callback(state->m_spec.userdata, stream, len);
 
-        snd_pcm_sframes_t pcm = snd_pcm_writei(static_cast<snd_pcm_t*>(data->m_alsaDeviceHandle), data->m_buffer, data->m_samples);
+        snd_pcm_sframes_t pcm = snd_pcm_writei(static_cast<snd_pcm_t*>(state->m_alsaDeviceHandle), state->m_buffer, state->m_spec.samples);
         if (pcm != -EPIPE) {
         } else {
-            snd_pcm_prepare(static_cast<snd_pcm_t*>(data->m_alsaDeviceHandle));
+            snd_pcm_prepare(static_cast<snd_pcm_t*>(state->m_alsaDeviceHandle));
         }
     }
 
@@ -97,15 +97,15 @@ std::string AlsaDriverState::name() const
 
 bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec)
 {
-    m_samples = spec.samples;
-    m_channels = spec.channels;
-    m_callback = spec.callback;
-    m_userdata = spec.userdata;
+    m_spec.samples = spec.samples;
+    m_spec.channels = spec.channels;
+    m_spec.callback = spec.callback;
+    m_spec.userdata = spec.userdata;
 
-    int rc;
     snd_pcm_t* handle;
-    rc = snd_pcm_open(&handle, name().c_str(), SND_PCM_STREAM_PLAYBACK, 0);
+    int rc = snd_pcm_open(&handle, outputDevice().c_str(), SND_PCM_STREAM_PLAYBACK, 0);
     if (rc < 0) {
+        LOGE() << "Unable to open device: " << outputDevice() << ", err code: " << rc;
         return false;
     }
 
@@ -124,10 +124,16 @@ bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     int dir = 0;
     rc = snd_pcm_hw_params_set_rate_near(handle, params, &val, &dir);
     if (rc < 0) {
+        LOGE() << "Unable to set sample rate: " << val << ", err code: " << rc;
         return false;
     }
 
-    snd_pcm_hw_params_set_buffer_size_near(handle, params, &m_samples);
+    long unsigned int samples = m_spec.samples;
+    rc = snd_pcm_hw_params_set_buffer_size_near(handle, params, &samples);
+    if (rc < 0) {
+        LOGE() << "Unable to set buffer size: " << samples << ", err code: " << rc;
+    }
+    m_spec.samples = (int)samples;
 
     rc = snd_pcm_hw_params(handle, params);
     if (rc < 0) {
@@ -142,18 +148,17 @@ bool AlsaDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         delete[] m_buffer;
     }
 
-    m_buffer = new float[m_samples * m_channels];
+    m_buffer = new float[m_spec.samples * m_spec.channels];
 
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = IAudioDriver::Format::AudioF32;
         activeSpec->sampleRate = aSamplerate;
-        m_format = *activeSpec;
+        m_spec = *activeSpec;
     }
 
     m_threadHandle = 0;
     int ret = pthread_create(&m_threadHandle, NULL, alsaThread, (void*)this);
-
     if (0 != ret) {
         return false;
     }
