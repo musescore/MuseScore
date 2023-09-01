@@ -108,9 +108,6 @@ void Score::splitMeasure(Segment* segment)
 
     MeasureBase* nm = measure->next();
 
-    undoRemoveMeasures(measure, measure, true);
-    undoInsertTime(measure->tick(), -measure->ticks());
-
     // create empty measures:
     InsertMeasureOptions options;
     options.createEmptyMeasures = true;
@@ -120,6 +117,9 @@ void Score::splitMeasure(Segment* segment)
     Measure* m2 = toMeasure(nm ? nm->prev() : lastMeasure());
     insertMeasure(ElementType::MEASURE, m2, options);
     Measure* m1 = toMeasure(m2->prev());
+
+    undoRemoveMeasures(measure, measure, true);
+    undoInsertTime(measure->tick(), -measure->ticks());
 
     Fraction tick = segment->tick();
     m1->setTick(measure->tick());

@@ -3,7 +3,7 @@
   <Score>
     <Division>480</Division>
     <Style>
-      <Spatium>1.76389</Spatium>
+      <Spatium>1.74978</Spatium>
       </Style>
     <showInvisible>1</showInvisible>
     <showUnprintable>1</showUnprintable>
@@ -17,6 +17,7 @@
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
+    <metaTag name="sourceRevisionId"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Test</metaTag>
@@ -27,13 +28,13 @@
           </StaffType>
         </Staff>
       <trackName>Voice</trackName>
-      <Instrument id="voice">
+      <Instrument id="piano">
         <trackName>Voice</trackName>
         <minPitchP>36</minPitchP>
         <maxPitchP>94</maxPitchP>
         <minPitchA>40</minPitchA>
         <maxPitchA>79</maxPitchA>
-        <instrumentId>voice.vocals</instrumentId>
+        <instrumentId>keyboard.piano</instrumentId>
         <Articulation>
           <velocity>100</velocity>
           <gateTime>100</gateTime>
@@ -51,7 +52,7 @@
           <gateTime>100</gateTime>
           </Articulation>
         <Channel>
-          <program value="52"/>
+          <program value="0"/>
           </Channel>
         </Instrument>
       </Part>
@@ -110,9 +111,6 @@
         </Measure>
       <Measure len="2/4">
         <voice>
-          <KeySig>
-            <concertKey>0</concertKey>
-            </KeySig>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
