@@ -44,6 +44,8 @@ elseif(OS_IS_LIN OR OS_IS_FBSD)
         )
     else (MUE_ENABLE_AUDIO_JACK)
         set(DRIVER_SRC
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.cpp
+            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.h
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
