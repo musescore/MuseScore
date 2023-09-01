@@ -499,7 +499,7 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
     }
 
     QUrlQuery query(url);
-    QString hash = query.queryItemValue("hash");
+    QString hash = query.queryItemValue("h");
     QString secret = query.queryItemValue("secret");
 
     downloadAndOpenCloudProject(scoreId, hash, secret, isOwner);
