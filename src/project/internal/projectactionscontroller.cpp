@@ -368,18 +368,21 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QS
         return;
     }
 
-    RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
-    if (!scoreInfo.ret) {
-        LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
-        openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
-        return;
-    }
-
     CloudProjectInfo info;
-    info.name = scoreInfo.val.title;
-    info.visibility = scoreInfo.val.visibility;
-    info.sourceUrl = scoreInfo.val.url;
-    info.revisionId = scoreInfo.val.revisionId;
+
+    if (isOwner) {
+        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+        if (!scoreInfo.ret) {
+            LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
+            openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
+            return;
+        }
+
+        info.name = scoreInfo.val.title;
+        info.visibility = scoreInfo.val.visibility;
+        info.sourceUrl = scoreInfo.val.url;
+        info.revisionId = scoreInfo.val.revisionId;
+    }
 
     // TODO(cloud): conflict checking (don't recklessly overwrite the existing file)
     io::path_t localPath = configuration()->cloudProjectPath(scoreId);
