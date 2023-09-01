@@ -38,36 +38,6 @@ static constexpr char DEFAULT_DEVICE_ID[] = "default";
 
 using namespace mu::audio;
 
-namespace {
-static void* alsaThread(void* aParam)
-{
-    mu::runtime::setThreadName("audio_driver");
-    ALSADriverState* data = static_cast<ALSADriverState*>(aParam);
-
-    int ret = snd_pcm_wait(static_cast<snd_pcm_t*>(data->alsaDeviceHandle), 1000);
-    IF_ASSERT_FAILED(ret > 0) {
-        return nullptr;
-    }
-
-    while (!data->audioProcessingDone)
-    {
-        uint8_t* stream = (uint8_t*)data->buffer;
-        int len = data->samples * data->channels * sizeof(float);
-
-        data->callback(data->userdata, stream, len);
-
-        snd_pcm_sframes_t pcm = snd_pcm_writei(static_cast<snd_pcm_t*>(data->alsaDeviceHandle), data->buffer, data->samples);
-        if (pcm != -EPIPE) {
-        } else {
-            snd_pcm_prepare(static_cast<snd_pcm_t*>(data->alsaDeviceHandle));
-        }
-    }
-
-    LOGI() << "exit";
-    return nullptr;
-}
-}
-
 void LinuxAudioDriver::alsaCleanup()
 {
     m_alsaDriverState->audioProcessingDone = true;
@@ -163,11 +133,6 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     }
 
     m_alsaDriverState->threadHandle = 0;
-    int ret = pthread_create(&m_alsaDriverState->threadHandle, NULL, alsaThread, (void*)m_alsaDriverState.get());
-
-    if (0 != ret) {
-        return false;
-    }
 
     LOGD() << "Connected to " << outputDevice();
     return true;
