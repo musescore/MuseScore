@@ -161,7 +161,7 @@ void NotationPainting::paintPageSheet(Painter* painter, const Page* page, const 
         return;
     }
 
-    RectF pageContentRect = page->layoutData()->bbox.adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
+    RectF pageContentRect = page->layoutData()->bbox().adjusted(page->lm(), page->tm(), -page->rm(), -page->bm());
 
     painter->setBrush(BrushStyle::NoBrush);
     painter->setPen(engravingConfiguration()->formattingMarksColor());

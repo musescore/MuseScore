@@ -6573,7 +6573,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
             if (partNr == 0) {
                 // Find the right margin of the system.
                 double systemLM = getTenthsFromDots(mmR1->pagePos().x() - system->page()->pagePos().x()) - lm;
-                double systemRM = pageWidth - rm - (getTenthsFromDots(system->layoutData()->bbox.width()) + lm);
+                double systemRM = pageWidth - rm - (getTenthsFromDots(system->layoutData()->bbox().width()) + lm);
 
                 _xml.startElement("system-layout");
                 _xml.startElement("system-margins");
@@ -6585,7 +6585,7 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
                     // see System::layout2() for the factor 2 * score()->spatium()
                     const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
                                                              - mpc.prevMeasure->pagePos().y()
-                                                             - mpc.prevMeasure->layoutData()->bbox.height()
+                                                             - mpc.prevMeasure->layoutData()->bbox().height()
                                                              + 2 * score()->style().spatium()
                                                              );
                     _xml.tag("system-distance", QString("%1").arg(QString::number(sysDist, 'f', 2)));
@@ -7478,7 +7478,7 @@ void ExportMusicXml::writeMeasure(const Measure* const m,
     const bool isFirstActualMeasure = mnsh.isFirstActualMeasure();
 
     if (configuration()->musicxmlExportLayout()) {
-        measureTag += QString(" width=\"%1\"").arg(QString::number(m->layoutData()->bbox.width() / DPMM / millimeters * tenths, 'f', 2));
+        measureTag += QString(" width=\"%1\"").arg(QString::number(m->layoutData()->bbox().width() / DPMM / millimeters * tenths, 'f', 2));
     }
 
     _xml.startElementRaw(measureTag);

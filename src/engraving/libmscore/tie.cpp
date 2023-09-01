@@ -601,7 +601,7 @@ void TieSegment::adjustX()
                 double chordOffset = chord->x() - sc->x() - sn->x() - sn->width(); // sn for right-offset notes, width() to normalize to zero
                 // adjust for hooks
                 if (chord->hook() && chord->hook()->visible() && adjustForHooks) {
-                    double hookHeight = chord->hook()->layoutData()->bbox.height();
+                    double hookHeight = chord->hook()->layoutData()->bbox().height();
                     // turn the hook upside down for downstems
                     double hookY = chord->hook()->pos().y() - (chord->up() ? 0 : hookHeight);
                     if (p1.y() > hookY - collisionYMargin && p1.y() < hookY + hookHeight + collisionYMargin) {
@@ -611,7 +611,7 @@ void TieSegment::adjustX()
 
                 // adjust for stems
                 if (chord->stem() && chord->stem()->visible()) {
-                    double stemLen = chord->stem()->layoutData()->bbox.height();
+                    double stemLen = chord->stem()->layoutData()->bbox().height();
                     double stemY = chord->stem()->pos().y() - (chord->up() ? stemLen : 0);
                     if (p1.y() > stemY - collisionYMargin && p1.y() < stemY + stemLen + collisionYMargin) {
                         xo = std::max(xo, chord->stem()->x() + chord->stem()->width() + chordOffset);
@@ -640,7 +640,7 @@ void TieSegment::adjustX()
                     if (note == sn) {
                         continue;
                     }
-                    double noteTop = note->y() + note->layoutData()->bbox.top();
+                    double noteTop = note->y() + note->layoutData()->bbox().top();
                     double noteHeight = note->height();
                     if (p1.y() > noteTop - collisionYMargin && p1.y() < noteTop + noteHeight + collisionYMargin) {
                         xo = std::max(xo, note->x() + note->width() + chordOffset);
@@ -652,7 +652,7 @@ void TieSegment::adjustX()
             if ((slurTie()->up() && sc->up()) || (!slurTie()->up() && !sc->up())) {
                 // outside ties may still require adjustment for hooks
                 if (sc->hook() && sc->hook()->visible() && adjustForHooks) {
-                    double hookHeight = sc->hook()->layoutData()->bbox.height();
+                    double hookHeight = sc->hook()->layoutData()->bbox().height();
                     // turn the hook upside down for downstems
                     double hookY = sc->hook()->pos().y() - (sc->up() ? 0 : hookHeight);
                     if (p1.y() > hookY - collisionYMargin && p1.y() < hookY + hookHeight + collisionYMargin) {
@@ -705,7 +705,7 @@ void TieSegment::adjustX()
 
                 if (chord->stem() && chord->stem()->visible()) {
                     // adjust for stems
-                    double stemLen = chord->stem()->layoutData()->bbox.height();
+                    double stemLen = chord->stem()->layoutData()->bbox().height();
                     double stemY = chord->stem()->pos().y() - (chord->up() ? stemLen : 0);
                     if (p2.y() > stemY - offsetMargin && p2.y() < stemY + stemLen + offsetMargin) {
                         xo = std::min(xo, chord->stem()->x() - chordOffset);
@@ -716,7 +716,7 @@ void TieSegment::adjustX()
                     // adjust for accidentals
                     Accidental* acc = note->accidental();
                     if (acc && acc->visible()) {
-                        double accTop = (note->y() + acc->y()) + acc->layoutData()->bbox.top();
+                        double accTop = (note->y() + acc->y()) + acc->layoutData()->bbox().top();
                         double accHeight = acc->height();
                         if (p2.y() >= accTop && p2.y() <= accTop + accHeight) {
                             xo = std::min(xo, note->x() + acc->x() - chordOffset);
@@ -727,7 +727,7 @@ void TieSegment::adjustX()
                         continue;
                     }
                     // adjust for shifted notes (such as intervals of unison or second)
-                    double noteTop = note->y() + note->layoutData()->bbox.top();
+                    double noteTop = note->y() + note->layoutData()->bbox().top();
                     double noteHeight = note->headHeight();
                     if (p2.y() >= noteTop - collisionYMargin && p2.y() <= noteTop + noteHeight + collisionYMargin) {
                         xo = std::min(xo, note->x() - chordOffset);

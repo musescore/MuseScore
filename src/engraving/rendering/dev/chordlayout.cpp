@@ -221,7 +221,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             TLayout::layout(item->hook(), ctx);
             if (item->up() && item->stem()) {
                 // hook position is not set yet
-                double x = item->hook()->layoutData()->bbox.right() + item->stem()->flagPosition().x() + chordX;
+                double x = item->hook()->layoutData()->bbox().right() + item->stem()->flagPosition().x() + chordX;
                 rrr = std::max(rrr, x);
             }
         }
@@ -240,7 +240,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         }
         TLayout::layoutItem(e, ctx);
         if (e->type() == ElementType::CHORDLINE) {
-            RectF tbbox = e->layoutData()->bbox.translated(e->pos());
+            RectF tbbox = e->layoutData()->bbox().translated(e->pos());
             double lx = tbbox.left() + chordX;
             double rx = tbbox.right() + chordX;
             if (-lx > item->spaceLw()) {
@@ -311,7 +311,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         Note* note = item->notes().at(i);
         TLayout::layout(note, ctx);
         // set headWidth to max fret text width
-        double fretWidth = note->layoutData()->bbox.width();
+        double fretWidth = note->layoutData()->bbox().width();
         if (headWidth < fretWidth) {
             headWidth = fretWidth;
         }
@@ -497,8 +497,9 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 //                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
             TLayout::layout(item->tabDur(), ctx);
             if (minY < 0) {                           // if some fret extends above tab body (like bass strings)
-                item->tabDur()->mutLayoutData()->movePosY(minY);             // raise duration symbol
-                item->tabDur()->mutLayoutData()->bbox.translate(0, minY);
+                TabDurationSymbol::LayoutData* tdladata = item->tabDur()->mutLayoutData();
+                tdladata->movePosY(minY);             // raise duration symbol
+                tdladata->setBbox(tdladata->bbox().translated(0, minY));
             }
         } else {                                // symbol not needed: if exists, delete
             delete item->tabDur();
@@ -535,7 +536,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             TLayout::layout(item->hook(), ctx);
             if (item->up()) {
                 // hook position is not set yet
-                double x = item->hook()->layoutData()->bbox.right() + item->stem()->flagPosition().x();
+                double x = item->hook()->layoutData()->bbox().right() + item->stem()->flagPosition().x();
                 rrr = std::max(rrr, x);
             }
         }
@@ -619,7 +620,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     for (EngravingItem* e : item->el()) {
         TLayout::layoutItem(e, ctx);
         if (e->type() == ElementType::CHORDLINE) {
-            RectF tbbox = e->layoutData()->bbox.translated(e->pos());
+            RectF tbbox = e->layoutData()->bbox().translated(e->pos());
             double lx = tbbox.left();
             double rx = tbbox.right();
             if (-lx > item->spaceLw()) {
@@ -635,9 +636,9 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         layoutNote2(item->notes().at(i), ctx);
     }
     RectF bb;
-    item->processSiblings([&bb](EngravingItem* e) { bb.unite(e->layoutData()->bbox.translated(e->pos())); }, true);
+    item->processSiblings([&bb](EngravingItem* e) { bb.unite(e->layoutData()->bbox().translated(e->pos())); }, true);
     if (item->tabDur()) {
-        bb.unite(item->tabDur()->layoutData()->bbox.translated(item->tabDur()->pos()));
+        bb.unite(item->tabDur()->layoutData()->bbox().translated(item->tabDur()->pos()));
     }
     item->setbbox(bb);
     if (item->stemSlash()) {
@@ -782,12 +783,12 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
         if (bottom) {
             if (!headSide && item->stem()) {
-                double stemBottom = item->stem()->layoutData()->bbox.translated(item->stem()->pos()).bottom();
+                double stemBottom = item->stem()->layoutData()->bbox().translated(item->stem()->pos()).bottom();
                 // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
                 if (item->hook()) {
-                    y = item->hook()->layoutData()->bbox.translated(item->hook()->pos()).bottom();
+                    y = item->hook()->layoutData()->bbox().translated(item->hook()->pos()).bottom();
                 } else {
-                    y = item->stem()->layoutData()->bbox.translated(item->stem()->pos()).bottom();
+                    y = item->stem()->layoutData()->bbox().translated(item->stem()->pos()).bottom();
                 }
                 int line   = round((y + _lineDist) / _lineDist);
                 int lines = 2 * (staffType->lines() - 1);
@@ -837,12 +838,12 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
             // center symbol
         } else { // topside
             if (!headSide && item->stem()) {
-                double stemTop = item->stem()->layoutData()->bbox.translated(item->stem()->pos()).top();
+                double stemTop = item->stem()->layoutData()->bbox().translated(item->stem()->pos()).top();
                 // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
                 if (item->hook()) {
-                    y = item->hook()->layoutData()->bbox.translated(item->hook()->pos()).top();
+                    y = item->hook()->layoutData()->bbox().translated(item->hook()->pos()).top();
                 } else {
-                    y = item->stem()->layoutData()->bbox.translated(item->stem()->pos()).top();
+                    y = item->stem()->layoutData()->bbox().translated(item->stem()->pos()).top();
                 }
                 int line = round((y - _lineDist) / _lineDist);
                 if (line > 0 && !(line % 2)) {
@@ -951,14 +952,14 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         // Check if there's a hook, because the tip of the hook always extends slightly past the end of the stem
         if (item->up()) {
             double tip = item->hook()
-                         ? item->hook()->layoutData()->bbox.translated(item->hook()->pos()).top()
-                         : item->stem()->layoutData()->bbox.translated(item->stem()->pos()).top();
+                         ? item->hook()->layoutData()->bbox().translated(item->hook()->pos()).top()
+                         : item->stem()->layoutData()->bbox().translated(item->stem()->pos()).top();
 
             chordTopY = tip;
         } else {
             double tip = item->hook()
-                         ? item->hook()->layoutData()->bbox.translated(item->hook()->pos()).bottom()
-                         : item->stem()->layoutData()->bbox.translated(item->stem()->pos()).bottom();
+                         ? item->hook()->layoutData()->bbox().translated(item->hook()->pos()).bottom()
+                         : item->stem()->layoutData()->bbox().translated(item->stem()->pos()).bottom();
 
             chordBotY = tip;
         }
@@ -2170,11 +2171,11 @@ static std::pair<double, double> layoutAccidental(const MStyle& style, AcEl* me,
         conflictBelow = resolveAccidentals(me, below, lx, pd, sp);
     }
     if (conflictAbove || conflictBelow) {
-        me->x = lx - acc->width() - acc->layoutData()->bbox.x();
+        me->x = lx - acc->width() - acc->layoutData()->bbox().x();
     } else if (colOffset != 0.0) {
-        me->x = lx - pd - acc->width() - acc->layoutData()->bbox.x();
+        me->x = lx - pd - acc->width() - acc->layoutData()->bbox().x();
     } else {
-        me->x = lx - pnd - acc->width() - acc->layoutData()->bbox.x();
+        me->x = lx - pnd - acc->width() - acc->layoutData()->bbox().x();
     }
 
     return std::pair<double, double>(me->x, me->x + me->width);
@@ -2325,15 +2326,15 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
             ac->computeMag();
             TLayout::layout(ac, ctx);
             if (!ac->visible() || note->fixed()) {
-                ac->setPos(ac->layoutData()->bbox.x() - ac->width(), 0.0);
+                ac->setPos(ac->layoutData()->bbox().x() - ac->width(), 0.0);
             } else {
                 AcEl acel;
                 acel.note   = note;
                 int line    = note->line();
                 acel.line   = line;
                 acel.x      = 0.0;
-                acel.top    = line * 0.5 * sp + ac->layoutData()->bbox.top();
-                acel.bottom = line * 0.5 * sp + ac->layoutData()->bbox.bottom();
+                acel.top    = line * 0.5 * sp + ac->layoutData()->bbox().top();
+                acel.bottom = line * 0.5 * sp + ac->layoutData()->bbox().bottom();
                 acel.width  = ac->width();
                 PointF bboxNE = ac->symBbox(ac->symId()).topRight();
                 PointF bboxSW = ac->symBbox(ac->symId()).bottomLeft();
@@ -3202,7 +3203,7 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
         if (f->addToSkyline()) {
             Note* n = f->note();
             RectF r
-                = f->layoutData()->bbox.translated(f->pos() + n->pos() + n->chord()->pos() + segment->pos() + segment->measure()->pos());
+                = f->layoutData()->bbox().translated(f->pos() + n->pos() + n->chord()->pos() + segment->pos() + segment->measure()->pos());
             system->staff(f->note()->chord()->vStaffIdx())->skyline().add(r);
         }
         shapesToRecreate.insert(f->staffIdx());
@@ -3286,7 +3287,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             )) {
         item->setFretString(String(u"(%1)").arg(item->fretString()));
         double w = item->tabHeadWidth(staffType);     // !! use _fretString
-        ldata->bbox.setRect(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
+        ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
     }
     int dots = item->chord()->dots();
     if (dots && !item->dots().empty()) {

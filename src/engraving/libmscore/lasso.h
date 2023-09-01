@@ -44,7 +44,7 @@ public:
     Lasso(Score*);
     virtual Lasso* clone() const override { return new Lasso(*this); }
 
-    bool isEmpty() const { return layoutData()->bbox.isEmpty(); }
+    bool isEmpty() const { return layoutData()->bbox().isEmpty(); }
 
     bool isEditable() const override { return true; }
     void editDrag(EditData&) override;

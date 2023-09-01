@@ -608,7 +608,7 @@ void TextCursor::selectWord()
 bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 {
     PointF pt  = p - _text->canvasPos();
-    if (!_text->layoutData()->bbox.contains(pt)) {
+    if (!_text->layoutData()->bbox().contains(pt)) {
         return false;
     }
     size_t oldRow    = _row;
@@ -977,7 +977,7 @@ void TextBlock::layout(const TextBase* t)
         break;
         case ElementType::MEASURE: {
             Measure* m = toMeasure(e);
-            layoutWidth = m->layoutData()->bbox.width();
+            layoutWidth = m->layoutData()->bbox().width();
         }
         break;
         default:
@@ -1930,14 +1930,14 @@ void TextBase::layoutFrame()
 void TextBase::layoutFrame(LayoutData* ldata) const
 {
 //      if (empty()) {    // or bbox.width() <= 1.0
-    if (ldata->bbox.width() <= 1.0 || ldata->bbox.height() < 1.0) {      // or bbox.width() <= 1.0
+    if (ldata->bbox().width() <= 1.0 || ldata->bbox().height() < 1.0) {      // or bbox.width() <= 1.0
         // this does not work for Harmony:
         mu::draw::FontMetrics fm(font());
         double ch = fm.ascent();
         double cw = fm.width('n');
         ldata->frame = RectF(0.0, -ch, cw, ch);
     } else {
-        ldata->frame = ldata->bbox;
+        ldata->frame = ldata->bbox();
     }
 
     if (square()) {
@@ -1959,7 +1959,7 @@ void TextBase::layoutFrame(LayoutData* ldata) const
     double w = (paddingWidth() + frameWidth() * .5f).val() * _spatium;
     ldata->frame.adjust(-w, -w, w, w);
     w = frameWidth().val() * _spatium;
-    ldata->bbox = ldata->frame.adjusted(-w, -w, w, w);
+    ldata->setBbox(ldata->frame.adjusted(-w, -w, w, w));
 }
 
 //---------------------------------------------------------
@@ -2297,7 +2297,7 @@ std::vector<LineF> TextBase::dragAnchorLines() const
 
     if (layoutToParentWidth() && !result.empty()) {
         LineF& line = result[0];
-        line.setP2(line.p2() + layoutData()->bbox.topLeft());
+        line.setP2(line.p2() + layoutData()->bbox().topLeft());
     }
 
     return result;

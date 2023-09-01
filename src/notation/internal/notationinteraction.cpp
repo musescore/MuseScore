@@ -440,7 +440,7 @@ mu::engraving::Page* NotationInteraction::point2page(const PointF& p) const
         return score()->pages().empty() ? 0 : score()->pages().front();
     }
     for (mu::engraving::Page* page : score()->pages()) {
-        if (page->layoutData()->bbox.translated(page->pos()).contains(p)) {
+        if (page->layoutData()->bbox().translated(page->pos()).contains(p)) {
             return page;
         }
     }
@@ -953,7 +953,7 @@ void NotationInteraction::doDragLasso(const PointF& pt)
     r.setCoords(m_dragData.beginMove.x(), m_dragData.beginMove.y(), pt.x(), pt.y());
     m_lasso->setbbox(r.normalized());
     score()->addRefresh(m_lasso->canvasBoundingRect());
-    score()->lassoSelect(m_lasso->layoutData()->bbox);
+    score()->lassoSelect(m_lasso->layoutData()->bbox());
     score()->update();
 }
 

@@ -282,13 +282,13 @@ void FretDiagram::init(StringData* stringData, Chord* chord)
 double FretDiagram::centerX() const
 {
     // Keep in sync with how bbox is calculated in layout().
-    return (layoutData()->bbox.right() - layoutData()->markerSize * .5) * .5;
+    return (layoutData()->bbox().right() - layoutData()->markerSize * .5) * .5;
 }
 
 double FretDiagram::rightX() const
 {
     // Keep in sync with how bbox is calculated in layout().
-    return layoutData()->bbox.right() - layoutData()->markerSize * .5;
+    return layoutData()->bbox().right() - layoutData()->markerSize * .5;
 }
 
 //---------------------------------------------------------

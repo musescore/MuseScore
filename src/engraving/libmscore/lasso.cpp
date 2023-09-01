@@ -46,40 +46,43 @@ void Lasso::editDrag(EditData& ed)
 {
     //Qt::CursorShape cursorShape = Qt::ArrowCursor;
     Lasso::LayoutData* ldata = mutLayoutData();
+    RectF bbox = ldata->bbox();
     switch (int(ed.curGrip)) {
     case 0:
         //cursorShape = Qt::SizeFDiagCursor;
-        ldata->bbox.setTopLeft(ldata->bbox.topLeft() + ed.delta);
+        bbox.setTopLeft(bbox.topLeft() + ed.delta);
         break;
     case 1:
         //cursorShape = Qt::SizeBDiagCursor;
-        ldata->bbox.setTopRight(ldata->bbox.topRight() + ed.delta);
+        bbox.setTopRight(bbox.topRight() + ed.delta);
         break;
     case 2:
         //cursorShape = Qt::SizeFDiagCursor;
-        ldata->bbox.setBottomRight(ldata->bbox.bottomRight() + ed.delta);
+        bbox.setBottomRight(bbox.bottomRight() + ed.delta);
         break;
     case 3:
         //cursorShape = Qt::SizeBDiagCursor;
-        ldata->bbox.setBottomLeft(ldata->bbox.bottomLeft() + ed.delta);
+        bbox.setBottomLeft(bbox.bottomLeft() + ed.delta);
         break;
     case 4:
         //cursorShape = Qt::SizeVerCursor;
-        ldata->bbox.setTop(ldata->bbox.top() + ed.delta.y());
+        bbox.setTop(bbox.top() + ed.delta.y());
         break;
     case 5:
         //cursorShape = Qt::SizeHorCursor;
-        ldata->bbox.setRight(ldata->bbox.right() + ed.delta.x());
+        bbox.setRight(bbox.right() + ed.delta.x());
         break;
     case 6:
         //cursorShape = Qt::SizeVerCursor;
-        ldata->bbox.setBottom(ldata->bbox.bottom() + ed.delta.y());
+        bbox.setBottom(bbox.bottom() + ed.delta.y());
         break;
     case 7:
         //cursorShape = Qt::SizeHorCursor;
-        ldata->bbox.setLeft(ldata->bbox.left() + ed.delta.x());
+        bbox.setLeft(bbox.left() + ed.delta.x());
         break;
     }
+
+    ldata->setBbox(bbox);
 
     // ed.view()->setCursor(QCursor(cursorShape));
 }
@@ -90,7 +93,7 @@ void Lasso::editDrag(EditData& ed)
 
 std::vector<mu::PointF> Lasso::gripsPositions(const EditData&) const
 {
-    const auto box(layoutData()->bbox);
+    const auto box(layoutData()->bbox());
     return {
         box.topLeft(),
         box.topRight(),

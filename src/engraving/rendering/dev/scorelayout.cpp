@@ -61,6 +61,16 @@ public:
     ~CmdStateLocker() { m_score->cmdState().unlock(); }
 };
 
+static void resetLayoutData(EngravingItem* item)
+{
+    if (item->layoutData()) {
+        item->mutLayoutData()->reset();
+    }
+    for (EngravingItem* ch : item->childrenItems()) {
+        resetLayoutData(ch);
+    }
+}
+
 void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& et)
 {
     CmdStateLocker cmdStateLocker(score);
@@ -80,7 +90,7 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
         return;
     }
 
-    bool layoutAll = stick <= Fraction(0, 1) && (etick < Fraction(0, 1) || etick >= score->masterScore()->last()->endTick());
+    bool isLayoutAll = stick <= Fraction(0, 1) && (etick < Fraction(0, 1) || etick >= score->masterScore()->last()->endTick());
     if (stick < Fraction(0, 1)) {
         stick = Fraction(0, 1);
     }
@@ -89,6 +99,11 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
     }
 
     ctx.mutState().setEndTick(etick);
+
+    if (isLayoutAll) {
+        RootItem* rootItem = score->rootItem();
+        resetLayoutData(rootItem);
+    }
 
     if (score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
         if (score->isMaster()) {
@@ -130,11 +145,11 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
         ctx.mutState().setPrevMeasure(nullptr);
         ctx.mutState().setNextMeasure(m);         //_showVBox ? first() : firstMeasure();
         ctx.mutState().setStartTick(m->tick());
-        layoutLinear(ctx, layoutAll);
+        layoutLinear(ctx, isLayoutAll);
         return;
     }
 
-    if (!layoutAll && m->system()) {
+    if (!isLayoutAll && m->system()) {
         System* system = m->system();
         system_idx_t systemIndex = mu::indexOf(score->systems(), system);
         ctx.mutState().setPage(system->page());
@@ -289,7 +304,7 @@ void ScoreLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
 
         page = Factory::createPage(ctx.mutDom().rootItem());
         ctx.mutDom().pages().push_back(page);
-        page->mutLayoutData()->bbox.setRect(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
+        page->mutLayoutData()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
         page->setNo(0);
 
         System* system = Factory::createSystem(page);

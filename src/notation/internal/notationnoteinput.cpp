@@ -177,7 +177,7 @@ EngravingItem* NotationNoteInput::resolveNoteInputStartPosition() const
         if (page) {
             qreal tlY = 0.0;
             Fraction tlTick = Fraction(0, 1);
-            RectF pageRect  = page->layoutData()->bbox.translated(page->x(), page->y());
+            RectF pageRect  = page->layoutData()->bbox().translated(page->x(), page->y());
             RectF intersect = viewRect & pageRect;
             intersect.translate(-page->x(), -page->y());
             std::vector<EngravingItem*> el = page->items(intersect);

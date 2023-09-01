@@ -93,7 +93,7 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 
 Shape VibratoSegment::shape() const
 {
-    return Shape(layoutData()->bbox);
+    return Shape(layoutData()->bbox());
 }
 
 //---------------------------------------------------------

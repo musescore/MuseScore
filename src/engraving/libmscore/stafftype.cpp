@@ -843,9 +843,12 @@ void TabDurationSymbol::layout2()
     // scale it down, as it will be magnified again during drawing
     ldata->beamLength = beamLen / mags;
     // update bbox x and w, but keep current y and h
-    ldata->bbox.setLeft(beamLen);
+    RectF bbox = ldata->bbox();
+    bbox.setLeft(beamLen);
     // set bbox width to half a stem width (magnified) plus beam length (already magnified)
-    ldata->bbox.setWidth(m_tab->_durationFonts[m_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
+    bbox.setWidth(m_tab->_durationFonts[m_tab->_durationFontIdx].gridStemWidth * spatium() * 0.5 * mags - beamLen);
+
+    ldata->setBbox(bbox);
 }
 
 //---------------------------------------------------------

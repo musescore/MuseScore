@@ -424,7 +424,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double numberWidth = 0.0;
     if (item->number()) {
         TLayout::layout(item->number(), ctx);
-        numberWidth = item->number()->layoutData()->bbox.width();
+        numberWidth = item->number()->layoutData()->bbox().width();
 
         double y3 = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 - l1 * (item->isUp() ? 1.0 : -1.0);
         // for beamed tuplets, center number on beam - if they don't have a bracket
@@ -501,7 +501,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     // collect bounding box
     RectF r;
     if (item->number()) {
-        r |= item->number()->layoutData()->bbox.translated(item->number()->pos());
+        r |= item->number()->layoutData()->bbox().translated(item->number()->pos());
         if (item->hasBracket()) {
             RectF b;
             b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketR[2].x(), item->bracketR[2].y());

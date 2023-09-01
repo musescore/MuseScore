@@ -98,7 +98,7 @@ public:
         std::map<size_t /*note index*/, NoteData> notesData;
         BeamData beamData;
 
-        bool isValid() const { return bbox.isValid(); }
+        bool isValid() const { return m_bbox.isValid(); }
     };
     DECLARE_LAYOUTDATA_METHODS(BagpipeEmbellishment);
 

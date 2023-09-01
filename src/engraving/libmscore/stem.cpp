@@ -74,7 +74,7 @@ void Stem::spatiumChanged(double oldValue, double newValue)
 //! In chord coordinates
 PointF Stem::flagPosition() const
 {
-    return pos() + PointF(layoutData()->bbox.left(), up() ? -length() : length());
+    return pos() + PointF(layoutData()->bbox().left(), up() ? -length() : length());
 }
 
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const

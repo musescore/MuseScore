@@ -97,7 +97,7 @@ public:
         SymIdList symbols;
         RectF symsBBox;
 
-        bool isValid() const { return bbox.isValid(); }
+        bool isValid() const { return m_bbox.isValid(); }
     };
     DECLARE_LAYOUTDATA_METHODS(Arpeggio);
 

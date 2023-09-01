@@ -268,11 +268,11 @@ compat::DummyElement* SingleLayout::Context::dummyParent() const
 void SingleLayout::layout(Accidental* item, const Context&)
 {
     if (!item->layoutData()) {
-        Accidental::LayoutData* data = item->mutLayoutData();
+        Accidental::LayoutData* ldata = item->mutLayoutData();
         SymId symId = item->symId();
         Accidental::LayoutData::Sym s(symId, 0.0, 0.0);
-        data->syms.push_back(s);
-        data->bbox = item->symBbox(symId);
+        ldata->syms.push_back(s);
+        ldata->setBbox(item->symBbox(symId));
     }
 }
 
@@ -360,9 +360,9 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
     }
 
     RectF headRect(0, -0.5 * spatium, headWdt, 1 * spatium);
-    ldata->setbbox(headRect.translated(ldata->topPos).united(headRect.translated(ldata->bottomPos))
-                   .united(item->topAccidental()->layoutData()->bbox.translated(item->topAccidental()->layoutData()->pos))
-                   .united(item->bottomAccidental()->layoutData()->bbox.translated(item->bottomAccidental()->layoutData()->pos))
+    ldata->setBbox(headRect.translated(ldata->topPos).united(headRect.translated(ldata->bottomPos))
+                   .united(item->topAccidental()->layoutData()->bbox().translated(item->topAccidental()->layoutData()->pos))
+                   .united(item->bottomAccidental()->layoutData()->bbox().translated(item->bottomAccidental()->layoutData()->pos))
                    );
 }
 
@@ -390,26 +390,26 @@ void SingleLayout::layout(Articulation* item, const Context&)
 
 void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
 {
-    BagpipeEmbellishment::LayoutData* data = item->mutLayoutData();
+    BagpipeEmbellishment::LayoutData* ldata = item->mutLayoutData();
     const double mags = item->magS() * 0.75; // grace head magnification
     const double spatium = ctx.style().spatium();
 
     const BagpipeNoteList nl = item->resolveNoteList();
 
-    data->bbox = RectF();
-    data->isDrawBeam = nl.size() > 1;
-    data->isDrawFlag = nl.size() == 1;
-    data->spatium = spatium;
-    data->headsym = SymId::noteheadBlack;
-    data->flagsym = SymId::flag32ndUp;
-    data->stemLineW = data->spatium * 0.1;
+    ldata->resetBbox();
+    ldata->isDrawBeam = nl.size() > 1;
+    ldata->isDrawFlag = nl.size() == 1;
+    ldata->spatium = spatium;
+    ldata->headsym = SymId::noteheadBlack;
+    ldata->flagsym = SymId::flag32ndUp;
+    ldata->stemLineW = ldata->spatium * 0.1;
 
-    BagpipeEmbellishment::LayoutData::BeamData& dataBeam = data->beamData;
+    BagpipeEmbellishment::LayoutData::BeamData& dataBeam = ldata->beamData;
     dataBeam.y = (-8 * spatium / 2);
     dataBeam.width = (0.3 * spatium);
 
-    const RectF headBBox = ctx.engravingFont()->bbox(data->headsym, mags);
-    const RectF flagBBox = ctx.engravingFont()->bbox(data->flagsym, mags);
+    const RectF headBBox = ctx.engravingFont()->bbox(ldata->headsym, mags);
+    const RectF flagBBox = ctx.engravingFont()->bbox(ldata->flagsym, mags);
     const double xcorr = spatium * 0.1;     // correction to align flag with top of stem
 
     double headW = headBBox.width();
@@ -420,7 +420,7 @@ void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
     // draw the notes including stem, (optional) flag and (optional) ledger line
     double x = xl;
     for (size_t i = 0; i < nl.size(); ++i) {
-        BagpipeEmbellishment::LayoutData::NoteData& noteData = data->notesData[i];
+        BagpipeEmbellishment::LayoutData::NoteData& noteData = ldata->notesData[i];
         const int line = BagpipeEmbellishment::BAGPIPE_NOTEINFO_LIST[nl.at(i)].line;
         const double y1f = ((line - 6) * spatium / 2);      // top of stem for note with flag
         const double y2 = (line * spatium / 2);             // bottom of stem
@@ -428,32 +428,32 @@ void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
 
         // head
         noteData.headXY = PointF(x - headw, y2);
-        data->bbox.unite(headBBox.translated(noteData.headXY));
+        ldata->addBbox(headBBox.translated(noteData.headXY));
 
         // stem
         // top of stems actually used
-        double y1 = data->isDrawFlag ? y1f : dataBeam.y;
-        noteData.stemLine = LineF(x - data->stemLineW * .5, y1, x - data->stemLineW * .5, y2);
-        data->bbox.unite(RectF(x - data->stemLineW * .5 - headw, y1, data->stemLineW, y2 - y1));
+        double y1 = ldata->isDrawFlag ? y1f : dataBeam.y;
+        noteData.stemLine = LineF(x - ldata->stemLineW * .5, y1, x - ldata->stemLineW * .5, y2);
+        ldata->addBbox(RectF(x - ldata->stemLineW * .5 - headw, y1, ldata->stemLineW, y2 - y1));
 
         // flag
-        if (data->isDrawFlag) {
-            noteData.flagXY = mu::PointF(x - data->stemLineW * .5 + xcorr, y1 + ycorr);
-            data->bbox.unite(flagBBox.translated(noteData.flagXY));
+        if (ldata->isDrawFlag) {
+            noteData.flagXY = mu::PointF(x - ldata->stemLineW * .5 + xcorr, y1 + ycorr);
+            ldata->addBbox(flagBBox.translated(noteData.flagXY));
         }
 
         // draw the ledger line for high A
         if (line == -2) {
-            noteData.ledgerLine = LineF(x - headw * 1.5 - data->stemLineW * .5, y2, x + headw * .5 - data->stemLineW * .5, y2);
-            data->bbox.unite(RectF(x - headw * 1.5 - data->stemLineW * .5, y2 - data->stemLineW * 2, headw * 2, data->stemLineW));
+            noteData.ledgerLine = LineF(x - headw * 1.5 - ldata->stemLineW * .5, y2, x + headw * .5 - ldata->stemLineW * .5, y2);
+            ldata->addBbox(RectF(x - headw * 1.5 - ldata->stemLineW * .5, y2 - ldata->stemLineW * 2, headw * 2, ldata->stemLineW));
         }
 
         // move x to next note x position
         x += headp;
     }
 
-    dataBeam.x1 = xl - data->stemLineW * .5;
-    dataBeam.x2 = x - headp - data->stemLineW * .5;
+    dataBeam.x1 = xl - ldata->stemLineW * .5;
+    dataBeam.x2 = x - headp - ldata->stemLineW * .5;
 }
 
 void SingleLayout::layout(BarLine* item, const Context& ctx)
@@ -514,7 +514,7 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
 
     double w = layoutWidth(item, ctx) * ldata->mag;
     RectF bbox(0.0, ldata->y1, w, ldata->y2 - ldata->y1);
-    ldata->setbbox(bbox);
+    ldata->setBbox(bbox);
 }
 
 void SingleLayout::layout(Bend* item, const Context&)
@@ -603,7 +603,7 @@ void SingleLayout::layout(Bend* item, const Context&)
         y = y2;
     }
     bb.adjust(-lw, -lw, lw, lw);
-    ldata->setbbox(bb);
+    ldata->setBbox(bb);
     ldata->setPos(0.0, 0.0);
 }
 
@@ -619,8 +619,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         }
         double h = item->h2() * 2;
         double w = item->symWidth(item->braceSymbol()) * item->magx();
-        ldata->bbox.setRect(0, 0, w, h);
-        shape.add(item->layoutData()->bbox);
+        ldata->setBbox(0, 0, w, h);
+        shape.add(item->layoutData()->bbox());
     }
     break;
     case BracketType::NORMAL: {
@@ -636,7 +636,7 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         w += item->symWidth(SymId::bracketTop);
         double y = -item->symHeight(SymId::bracketTop) - bd;
         double h = (-y + item->h2()) * 2;
-        ldata->bbox.setRect(x, y, w, h);
+        ldata->setBbox(x, y, w, h);
     }
     break;
     case BracketType::SQUARE: {
@@ -645,8 +645,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double y = -w;
         double h = (item->h2() + w) * 2;
         w += (0.5 * item->spatium() + 3 * w);
-        ldata->bbox.setRect(x, y, w, h);
-        shape.add(item->layoutData()->bbox);
+        ldata->setBbox(x, y, w, h);
+        shape.add(item->layoutData()->bbox());
     }
     break;
     case BracketType::LINE: {
@@ -656,8 +656,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double bd = spatium * 0.25;
         double y = -bd;
         double h = (-y + item->h2()) * 2;
-        ldata->bbox.setRect(x, y, w, h);
-        shape.add(item->layoutData()->bbox);
+        ldata->setBbox(x, y, w, h);
+        shape.add(item->layoutData()->bbox());
     }
     break;
     case BracketType::NO_BRACKET:
@@ -723,7 +723,7 @@ void SingleLayout::layout(ChordLine* item, const Context& ctx)
         y1 = r.y();
         width = r.width();
         height = r.height();
-        ldata->bbox.setRect(x1, y1, width, height);
+        ldata->setBbox(x1, y1, width, height);
     } else {
         RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
         double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
@@ -775,7 +775,7 @@ void SingleLayout::layout(Clef* item, const Context& ctx)
     ldata->setPos(0.0, yoff * spatium);
 
     RectF bbox = item->symBbox(ldata->symId);
-    ldata->setbbox(bbox);
+    ldata->setBbox(bbox);
 }
 
 void SingleLayout::layout(Expression* item, const Context& ctx)
@@ -830,7 +830,7 @@ void SingleLayout::layout(FretDiagram* item, const Context& ctx)
         std::swap(x, y);
     }
 
-    ldata->bbox.setRect(x, y, w, h);
+    ldata->setBbox(x, y, w, h);
 }
 
 void SingleLayout::layout(FSymbol* item, const Context&)
@@ -990,10 +990,10 @@ void SingleLayout::layout(HairpinSegment* item, const Context& ctx)
 
         RectF r = RectF(l1.p1(), l1.p2()).normalized().united(RectF(l2.p1(), l2.p2()).normalized());
         if (!item->text()->empty()) {
-            r.unite(item->text()->layoutData()->bbox);
+            r.unite(item->text()->layoutData()->bbox());
         }
         if (!item->endText()->empty()) {
-            r.unite(item->endText()->layoutData()->bbox.translated(x + item->endText()->layoutData()->bbox.width(), 0.0));
+            r.unite(item->endText()->layoutData()->bbox().translated(x + item->endText()->layoutData()->bbox().width(), 0.0));
         }
         double w = item->point(ctx.style().styleS(Sid::hairpinLineWidth));
         item->setbbox(r.adjusted(-w * .5, -w * .5, w, w));
@@ -1025,7 +1025,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
     double spatium = item->spatium();
     double step = spatium * 0.5;
 
-    ldata->setbbox(RectF());
+    ldata->setBbox(RectF());
     ldata->keySymbols.clear();
 
     // determine current clef for this staff
@@ -1138,7 +1138,7 @@ void SingleLayout::layout(KeySig* item, const Context& ctx)
     for (const KeySym& ks : ldata->keySymbols) {
         double x = ks.xPos * spatium;
         double y = ks.line * step;
-        ldata->addbbox(item->symBbox(ks.sym).translated(x, y));
+        ldata->addBbox(item->symBbox(ks.sym).translated(x, y));
     }
 }
 
@@ -1204,7 +1204,7 @@ void SingleLayout::layout(MeasureRepeat* item, const Context& ctx)
     }
 
     RectF bbox = item->symBbox(ldata->symId);
-    ldata->setbbox(bbox);
+    ldata->setBbox(bbox);
 }
 
 void SingleLayout::layout(Ornament* item, const Context& ctx)
@@ -1225,8 +1225,8 @@ void SingleLayout::layout(Ornament* item, const Context& ctx)
             layout(accidental, ctx);
             Shape accidentalShape = accidental->shape();
             double minVertDist = above
-                                 ? accidentalShape.minVerticalDistance(item->layoutData()->bbox)
-                                 : Shape(item->layoutData()->bbox).minVerticalDistance(accidentalShape);
+                                 ? accidentalShape.minVerticalDistance(item->layoutData()->bbox())
+                                 : Shape(item->layoutData()->bbox()).minVerticalDistance(accidentalShape);
             accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
         }
         return;
@@ -1297,7 +1297,7 @@ void SingleLayout::layout(Slur* item, const Context& ctx)
     s->computeBezier();
     s->setbbox(s->path().boundingRect());
 
-    item->setbbox(s->layoutData()->bbox);
+    item->setbbox(s->layoutData()->bbox());
 }
 
 void SingleLayout::layout(Spacer* item, const Context&)
@@ -1352,7 +1352,7 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
     double spatium = item->spatium();
 
     ldata->setPos(0.0, 0.0);
-    ldata->setbbox(RectF());                    // prepare for an empty time signature
+    ldata->setBbox(RectF());                    // prepare for an empty time signature
 
     constexpr double lineDist = 1.0;
     constexpr int numOfLines = 5;
@@ -1371,28 +1371,28 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
     if (sigType == TimeSigType::FOUR_FOUR) {
         ldata->pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCommon, mag);
-        ldata->setbbox(bbox.translated(ldata->pz));
+        ldata->setBbox(bbox.translated(ldata->pz));
         ldata->ns.clear();
         ldata->ns.push_back(SymId::timeSigCommon);
         ldata->ds.clear();
     } else if (sigType == TimeSigType::ALLA_BREVE) {
         ldata->pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCutCommon, mag);
-        ldata->setbbox(bbox.translated(ldata->pz));
+        ldata->setBbox(bbox.translated(ldata->pz));
         ldata->ns.clear();
         ldata->ns.push_back(SymId::timeSigCutCommon);
         ldata->ds.clear();
     } else if (sigType == TimeSigType::CUT_BACH) {
         ldata->pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCut2, mag);
-        ldata->setbbox(bbox.translated(ldata->pz));
+        ldata->setBbox(bbox.translated(ldata->pz));
         ldata->ns.clear();
         ldata->ns.push_back(SymId::timeSigCut2);
         ldata->ds.clear();
     } else if (sigType == TimeSigType::CUT_TRIPLE) {
         ldata->pz = PointF(0.0, yoff);
         RectF bbox = font->bbox(SymId::timeSigCut3, mag);
-        ldata->setbbox(bbox.translated(ldata->pz));
+        ldata->setBbox(bbox.translated(ldata->pz));
         ldata->ns.clear();
         ldata->ns.push_back(SymId::timeSigCut3);
         ldata->ds.clear();
@@ -1441,12 +1441,12 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
         ldata->pointLargeLeftParen = PointF(-spatium, centerY);
         ldata->pointLargeRightParen = PointF(widestPortion + spatium, centerY);
 
-        ldata->setbbox(numRect.translated(ldata->pz));       // translate bounding boxes to actual string positions
-        ldata->addbbox(denRect.translated(ldata->pn));
+        ldata->setBbox(numRect.translated(ldata->pz));       // translate bounding boxes to actual string positions
+        ldata->addBbox(denRect.translated(ldata->pn));
         if (item->largeParentheses()) {
-            ldata->addbbox(RectF(ldata->pointLargeLeftParen.x(), ldata->pointLargeLeftParen.y() - denRect.height(), spatium / 2,
+            ldata->addBbox(RectF(ldata->pointLargeLeftParen.x(), ldata->pointLargeLeftParen.y() - denRect.height(), spatium / 2,
                                  numRect.height() + denRect.height()));
-            ldata->addbbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),  spatium / 2,
+            ldata->addBbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),  spatium / 2,
                                  numRect.height() + denRect.height()));
         }
     }
@@ -1476,7 +1476,7 @@ void SingleLayout::layout(TremoloBar* item, const Context&)
     ldata->polygon = polygon;
 
     double w = item->lineWidth().val();
-    ldata->setbbox(ldata->polygon.boundingRect().adjusted(-w, -w, w, w));
+    ldata->setBbox(ldata->polygon.boundingRect().adjusted(-w, -w, w, w));
 }
 
 void SingleLayout::layout(Trill* item, const Context& ctx)
@@ -1649,7 +1649,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
 
     bb.translate(0.0, yoff);
 
-    ldata->bbox = bb;
+    ldata->setBbox(bb);
     if (item->hasFrame()) {
         item->layoutFrame(ldata);
     }
@@ -1663,7 +1663,7 @@ void SingleLayout::layoutLine(SLine* item, const Context& ctx)
 
     LineSegment* lineSegm = item->frontSegment();
     layoutLineSegment(lineSegm, ctx);
-    item->setbbox(lineSegm->layoutData()->bbox);
+    item->setbbox(lineSegm->layoutData()->bbox());
 }
 
 void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Context& ctx)
@@ -1773,7 +1773,7 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
         double gapBetweenTextAndLine = spatium * tl->gapBetweenTextAndLine().val();
         if ((item->isSingleBeginType() && (tl->beginTextPlace() == TextPlace::LEFT || tl->beginTextPlace() == TextPlace::AUTO))
             || (!item->isSingleBeginType() && (tl->continueTextPlace() == TextPlace::LEFT || tl->continueTextPlace() == TextPlace::AUTO))) {
-            l = item->text()->pos().x() + item->text()->layoutData()->bbox.width() + gapBetweenTextAndLine;
+            l = item->text()->pos().x() + item->text()->layoutData()->bbox().width() + gapBetweenTextAndLine;
         }
 
         double h = item->text()->height();
@@ -1805,14 +1805,14 @@ void SingleLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, const Co
             y1 = h;
         }
     }
-    ldata->bbox.setRect(x1, y1, x2 - x1, y2 - y1);
+    ldata->setBbox(x1, y1, x2 - x1, y2 - y1);
     if (!item->text()->empty()) {
-        ldata->bbox |= item->text()->layoutData()->bbox.translated(item->text()->pos());      // DEBUG
+        ldata->addBbox(item->text()->layoutData()->bbox().translated(item->text()->pos()));      // DEBUG
     }
     // set end text position and extend bbox
     if (!item->endText()->empty()) {
-        item->endText()->mutLayoutData()->movePosX(item->layoutData()->bbox.right());
-        ldata->bbox |= item->endText()->layoutData()->bbox.translated(item->endText()->pos());
+        item->endText()->mutLayoutData()->movePosX(item->layoutData()->bbox().right());
+        ldata->addBbox(item->endText()->layoutData()->bbox().translated(item->endText()->pos()));
     }
 
     if (tl->lineVisible()) {

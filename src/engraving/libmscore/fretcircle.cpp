@@ -64,14 +64,14 @@ RectF FretCircle::ellipseRect() const
     auto notes = m_chord->notes();
     Note* up = m_chord->upNote();
     Note* down = m_chord->downNote();
-    RectF elRect = up->layoutData()->bbox;
+    RectF elRect = up->layoutData()->bbox();
 
     double maxWidth = 0;
     double initialX = up->x();
     double initialWidth = up->width();
 
     for (const Note* note : notes) {
-        elRect |= note->layoutData()->bbox;
+        elRect |= note->layoutData()->bbox();
         maxWidth = std::max(note->width(), maxWidth);
     }
 
