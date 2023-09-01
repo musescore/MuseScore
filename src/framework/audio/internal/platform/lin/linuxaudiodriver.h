@@ -30,6 +30,19 @@
 #include "audiodeviceslistener.h"
 
 namespace mu::audio {
+struct ALSADriverState
+{
+    float* buffer = nullptr;
+    void* alsaDeviceHandle = nullptr;
+    unsigned long samples = 0;
+    int channels = 0;
+    bool audioProcessingDone = false;
+    pthread_t threadHandle = 0;
+    IAudioDriver::Callback callback;
+    void* userdata = nullptr;
+    IAudioDriver::Spec format;
+};
+
 class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
 {
 public:
@@ -61,6 +74,7 @@ public:
     void suspend() override;
 
 private:
+    void alsaCleanup();
     async::Notification m_outputDeviceChanged;
 
     mutable std::mutex m_devicesMutex;
@@ -71,6 +85,8 @@ private:
 
     async::Notification m_bufferSizeChanged;
     async::Notification m_sampleRateChanged;
+
+    std::unique_ptr<ALSADriverState> m_alsaDriverState;
 };
 }
 

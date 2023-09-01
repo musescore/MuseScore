@@ -39,27 +39,12 @@ static constexpr char DEFAULT_DEVICE_ID[] = "default";
 using namespace mu::audio;
 
 namespace {
-struct ALSAData
-{
-    float* buffer = nullptr;
-    snd_pcm_t* alsaDeviceHandle = nullptr;
-    unsigned long samples = 0;
-    int channels = 0;
-    bool audioProcessingDone = false;
-    pthread_t threadHandle = 0;
-    IAudioDriver::Callback callback;
-    void* userdata = nullptr;
-};
-
-static ALSAData* s_alsaData{ nullptr };
-IAudioDriver::Spec s_format;
-
 static void* alsaThread(void* aParam)
 {
     mu::runtime::setThreadName("audio_driver");
-    ALSAData* data = static_cast<ALSAData*>(aParam);
+    ALSADriverState* data = static_cast<ALSADriverState*>(aParam);
 
-    int ret = snd_pcm_wait(data->alsaDeviceHandle, 1000);
+    int ret = snd_pcm_wait(static_cast<snd_pcm_t*>(data->alsaDeviceHandle), 1000);
     IF_ASSERT_FAILED(ret > 0) {
         return nullptr;
     }
@@ -71,43 +56,37 @@ static void* alsaThread(void* aParam)
 
         data->callback(data->userdata, stream, len);
 
-        snd_pcm_sframes_t pcm = snd_pcm_writei(data->alsaDeviceHandle, data->buffer, data->samples);
+        snd_pcm_sframes_t pcm = snd_pcm_writei(static_cast<snd_pcm_t*>(data->alsaDeviceHandle), data->buffer, data->samples);
         if (pcm != -EPIPE) {
         } else {
-            snd_pcm_prepare(data->alsaDeviceHandle);
+            snd_pcm_prepare(static_cast<snd_pcm_t*>(data->alsaDeviceHandle));
         }
     }
 
     LOGI() << "exit";
     return nullptr;
 }
-
-static void alsaCleanup()
-{
-    if (!s_alsaData) {
-        return;
-    }
-
-    s_alsaData->audioProcessingDone = true;
-    if (s_alsaData->threadHandle) {
-        pthread_join(s_alsaData->threadHandle, nullptr);
-    }
-    if (nullptr != s_alsaData->alsaDeviceHandle) {
-        snd_pcm_drain(s_alsaData->alsaDeviceHandle);
-        snd_pcm_close(s_alsaData->alsaDeviceHandle);
-    }
-
-    if (nullptr != s_alsaData->buffer) {
-        delete[] s_alsaData->buffer;
-    }
-
-    delete s_alsaData;
-    s_alsaData = nullptr;
 }
+
+void LinuxAudioDriver::alsaCleanup()
+{
+    m_alsaDriverState->audioProcessingDone = true;
+    if (m_alsaDriverState->threadHandle) {
+        pthread_join(m_alsaDriverState->threadHandle, nullptr);
+    }
+    if (m_alsaDriverState->alsaDeviceHandle != nullptr) {
+        snd_pcm_t* alsaDeviceHandle = static_cast<snd_pcm_t*>(m_alsaDriverState->alsaDeviceHandle);
+        snd_pcm_drain(alsaDeviceHandle);
+        snd_pcm_close(alsaDeviceHandle);
+        m_alsaDriverState->alsaDeviceHandle = nullptr;
+    }
+
+    delete[] m_alsaDriverState->buffer;
 }
 
 LinuxAudioDriver::LinuxAudioDriver()
 {
+    m_alsaDriverState = std::make_unique<ALSADriverState>();
     m_deviceId = DEFAULT_DEVICE_ID;
 }
 
@@ -134,11 +113,10 @@ std::string LinuxAudioDriver::name() const
 
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
-    s_alsaData = new ALSAData();
-    s_alsaData->samples = spec.samples;
-    s_alsaData->channels = spec.channels;
-    s_alsaData->callback = spec.callback;
-    s_alsaData->userdata = spec.userdata;
+    m_alsaDriverState->samples = spec.samples;
+    m_alsaDriverState->channels = spec.channels;
+    m_alsaDriverState->callback = spec.callback;
+    m_alsaDriverState->userdata = spec.userdata;
 
     int rc;
     snd_pcm_t* handle;
@@ -147,7 +125,7 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    s_alsaData->alsaDeviceHandle = handle;
+    m_alsaDriverState->alsaDeviceHandle = handle;
 
     snd_pcm_hw_params_t* params;
     snd_pcm_hw_params_alloca(&params);
@@ -165,7 +143,7 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
         return false;
     }
 
-    snd_pcm_hw_params_set_buffer_size_near(handle, params, &s_alsaData->samples);
+    snd_pcm_hw_params_set_buffer_size_near(handle, params, &m_alsaDriverState->samples);
 
     rc = snd_pcm_hw_params(handle, params);
     if (rc < 0) {
@@ -175,18 +153,17 @@ bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
     snd_pcm_hw_params_get_rate(params, &val, &dir);
     aSamplerate = val;
 
-    s_alsaData->buffer = new float[s_alsaData->samples * s_alsaData->channels];
-    //_alsaData->sampleBuffer = new short[_alsaData->samples * _alsaData->channels];
+    m_alsaDriverState->buffer = new float[m_alsaDriverState->samples * m_alsaDriverState->channels];
 
     if (activeSpec) {
         *activeSpec = spec;
         activeSpec->format = Format::AudioF32;
         activeSpec->sampleRate = aSamplerate;
-        s_format = *activeSpec;
+        m_alsaDriverState->format = *activeSpec;
     }
 
-    s_alsaData->threadHandle = 0;
-    int ret = pthread_create(&s_alsaData->threadHandle, NULL, alsaThread, (void*)s_alsaData);
+    m_alsaDriverState->threadHandle = 0;
+    int ret = pthread_create(&m_alsaDriverState->threadHandle, NULL, alsaThread, (void*)m_alsaDriverState.get());
 
     if (0 != ret) {
         return false;
@@ -203,7 +180,7 @@ void LinuxAudioDriver::close()
 
 bool LinuxAudioDriver::isOpened() const
 {
-    return s_alsaData != nullptr;
+    return m_alsaDriverState->alsaDeviceHandle != nullptr;
 }
 
 AudioDeviceID LinuxAudioDriver::outputDevice() const
@@ -223,7 +200,7 @@ bool LinuxAudioDriver::selectOutputDevice(const AudioDeviceID& deviceId)
 
     bool ok = true;
     if (reopen) {
-        ok = open(s_format, &s_format);
+        ok = open(m_alsaDriverState->format, &m_alsaDriverState->format);
     }
 
     if (ok) {
@@ -258,22 +235,22 @@ mu::async::Notification LinuxAudioDriver::availableOutputDevicesChanged() const
 
 unsigned int LinuxAudioDriver::outputDeviceBufferSize() const
 {
-    return s_format.samples;
+    return m_alsaDriverState->format.samples;
 }
 
 bool LinuxAudioDriver::setOutputDeviceBufferSize(unsigned int bufferSize)
 {
-    if (s_format.samples == bufferSize) {
+    if (m_alsaDriverState->format.samples == bufferSize) {
         return true;
     }
 
     bool reopen = isOpened();
     close();
-    s_format.samples = bufferSize;
+    m_alsaDriverState->format.samples = bufferSize;
 
     bool ok = true;
     if (reopen) {
-        ok = open(s_format, &s_format);
+        ok = open(m_alsaDriverState->format, &m_alsaDriverState->format);
     }
 
     if (ok) {

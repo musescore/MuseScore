@@ -41,8 +41,6 @@ elseif(OS_IS_LIN OR OS_IS_FBSD)
         set(DRIVER_SRC
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/audiodeviceslistener.h
         )
     else (MUE_ENABLE_AUDIO_JACK)
         set(DRIVER_SRC
