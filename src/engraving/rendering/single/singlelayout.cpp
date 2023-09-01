@@ -512,7 +512,7 @@ void SingleLayout::layout(BarLine* item, const Context& ctx)
         return w;
     };
 
-    double w = layoutWidth(item, ctx) * ldata->mag;
+    double w = layoutWidth(item, ctx) * ldata->mag();
     RectF bbox(0.0, ldata->y1, w, ldata->y2 - ldata->y1);
     ldata->setBbox(bbox);
 }

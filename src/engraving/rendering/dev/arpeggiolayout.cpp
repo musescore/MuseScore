@@ -48,8 +48,8 @@ void ArpeggioLayout::layout(const Arpeggio* item, const LayoutContext& ctx, Arpe
     ldata->top = calcTop(item, ctx);
     ldata->bottom = calcBottom(item, ctx);
 
-    ldata->mag = item->staff() ? item->staff()->staffMag(item->tick()) : item->mag();
-    ldata->magS = ctx.conf().magS(ldata->mag);
+    ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
+    ldata->magS = ctx.conf().magS(ldata->mag());
 
     const IEngravingFontPtr font = ctx.engravingFont();
     switch (item->arpeggioType()) {

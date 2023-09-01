@@ -489,7 +489,6 @@ public:
         Autoplace autoplace;
 
         bool isSkipDraw = false;
-        double mag = 1.0;           // standard magnification (derived value)
 
         void reset()
         {
@@ -498,7 +497,8 @@ public:
 
         void setSkipDraw(bool val) { isSkipDraw = val; }
 
-        void setMag(double val) { mag = val; }
+        double mag() const { return m_mag; }
+        void setMag(double val) { m_mag = val; }
 
         void resetPos() { m_pos = PointF(); }
         const PointF& pos() const { return m_pos; }
@@ -527,6 +527,7 @@ public:
             m_pos.setY(y);
         }
 
+        double m_mag = 1.0;                   // standard magnification (derived value)
         PointF m_pos;          // Reference position, relative to _parent, set by autoplace
         RectF m_bbox;          // Bounding box relative to _pos + _offset
     };
