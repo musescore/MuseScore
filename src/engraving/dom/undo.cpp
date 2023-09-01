@@ -3016,10 +3016,15 @@ void ChangeSingleHarpPedal::flip(EditData*)
 
 void ChangeStringData::flip(EditData*)
 {
-    int frets = m_instrument->stringData()->frets();
-    std::vector<mu::engraving::instrString> stringList = m_instrument->stringData()->stringList();
+    const StringData* stringData =  m_stringTunings ? m_stringTunings->stringData() : m_instrument->stringData();
+    int frets = stringData->frets();
+    std::vector<mu::engraving::instrString> stringList = stringData->stringList();
 
-    m_instrument->setStringData(m_stringData);
+    if (m_stringTunings) {
+        m_stringTunings->setStringData(m_stringData);
+    } else {
+        m_instrument->setStringData(m_stringData);
+    }
 
     m_stringData.set(StringData(frets, stringList));
 }

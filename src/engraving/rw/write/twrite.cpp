@@ -2564,6 +2564,10 @@ void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext& ctx)
 
     writeProperty(item, xml, Pid::STRINGTUNINGS_PRESET);
 
+    if (!item->stringData()->isNull()) {
+        write(item->stringData(), xml);
+    }
+
     xml.endElement();
 }
 

@@ -31,11 +31,13 @@
 #include "fret.h"
 #include "harppedaldiagram.h"
 #include "instrtemplate.h"
+#include "instrchange.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
+#include "stringtunings.h"
 
 #include "log.h"
 
@@ -402,6 +404,40 @@ const Instrument* Part::instrumentById(const std::string& id) const
 const InstrumentList& Part::instruments() const
 {
     return _instruments;
+}
+
+const StringData* Part::stringData(const Fraction& tick) const
+{
+    if (!score()) {
+        return nullptr;
+    }
+
+    const StringTunings* stringTunings = nullptr;
+    const Instrument* instrument = this->instrument(tick);
+
+    for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            std::vector<EngravingItem*> annotations = segment->annotations();
+
+            for (EngravingItem* annotation : annotations) {
+                if (!annotation) {
+                    continue;
+                }
+
+                if (annotation->isStringTunings()) {
+                    stringTunings = toStringTunings(annotation);
+                    instrument = nullptr;
+                    break;
+                } else if (annotation->isInstrumentChange()) {
+                    instrument = toInstrumentChange(annotation)->instrument();
+                    stringTunings = nullptr;
+                    break;
+                }
+            }
+        }
+    }
+
+    return stringTunings ? stringTunings->stringData() : instrument->stringData();
 }
 
 //---------------------------------------------------------

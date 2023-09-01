@@ -3875,6 +3875,10 @@ void TRead::read(StringTunings* s, XmlReader& xml, ReadContext& ctx)
 
         if (tag == "preset") {
             s->setPreset(xml.readText());
+        } else if (tag == "StringData") {
+            StringData sd;
+            read(&sd, xml);
+            s->setStringData(sd);
         } else if (!readProperties(static_cast<StaffTextBase*>(s), xml, ctx)) {
             xml.unknown();
         }

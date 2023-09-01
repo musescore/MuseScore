@@ -59,6 +59,7 @@
 #include "staff.h"
 #include "stafftype.h"
 #include "stringdata.h"
+#include "stringtunings.h"
 #include "synthesizerstate.h"
 #include "text.h"
 #include "tremolo.h"
@@ -1608,9 +1609,12 @@ public:
 class ChangeStringData : public UndoCommand
 {
     Instrument* m_instrument = nullptr;
+    StringTunings* m_stringTunings = nullptr;
     StringData m_stringData;
 
 public:
+    ChangeStringData(StringTunings* stringTunings, const StringData& stringData)
+        : m_stringTunings(stringTunings), m_stringData(stringData) {}
     ChangeStringData(Instrument* instrument, const StringData& stringData)
         : m_instrument(instrument), m_stringData(stringData) {}
 

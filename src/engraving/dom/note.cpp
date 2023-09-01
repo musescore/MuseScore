@@ -2422,7 +2422,7 @@ void Note::verticalDrag(EditData& ed)
     int lineOffset      = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
-        const StringData* strData = staff()->part()->instrument(_tick)->stringData();
+        const StringData* strData = staff()->part()->stringData(_tick);
         int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
         int nFret   = strData->fret(m_pitch, nString, staff());
 
