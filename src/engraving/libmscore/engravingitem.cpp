@@ -2185,7 +2185,7 @@ double EngravingItem::mag() const
         //LOGD() << "no layout data, will be returned default (1.0)";
         return 1.0;
     }
-    return layoutData()->mag;
+    return layoutData()->mag();
 }
 
 void EngravingItem::setOffsetChanged(bool val, bool absolute, const PointF& diff)

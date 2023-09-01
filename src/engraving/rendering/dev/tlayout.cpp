@@ -692,7 +692,7 @@ static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::Layo
 
     ldata->isSkipDraw = false;
 
-    ldata->mag = ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0;
+    ldata->setMag(ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0);
     // Note: the true values of y1 and y2 are computed in layout2() (can be done only
     // after staff distances are known). This is a temporary layout.
     const double spatium = item->spatium();
@@ -701,9 +701,9 @@ static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::Layo
     ldata->y2 = spatium * .5 * (8.0 + item->spanTo());
 
     const IEngravingFontPtr font = ctx.engravingFont();
-    const double magS = ctx.conf().magS(ldata->mag);
+    const double magS = ctx.conf().magS(ldata->mag());
 
-    double w = barLineWidth(item, ctx.conf().style(), font->width(SymId::repeatDot, magS)) * ldata->mag;
+    double w = barLineWidth(item, ctx.conf().style(), font->width(SymId::repeatDot, magS)) * ldata->mag();
     RectF r(0.0, ldata->y1, w, ldata->y2 - ldata->y1);
 
     if (ctx.conf().styleB(Sid::repeatBarTips)) {
@@ -1229,7 +1229,7 @@ static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, Cho
         return;
     }
 
-    ldata->mag = item->chord()->mag();
+    ldata->setMag(item->chord()->mag());
 
     if (!item->modified()) {
         double x2 = 0;
@@ -4334,7 +4334,7 @@ static void layoutStem(const Stem* item, const LayoutContext& ctx, Stem::LayoutD
 
     bool isTabStaff = false;
     if (item->chord()) {
-        ldata->mag = item->chord()->mag();
+        ldata->setMag(item->chord()->mag());
 
         const Staff* staff = item->staff();
         const StaffType* staffType = staff ? staff->staffTypeForElement(item->chord()) : nullptr;
