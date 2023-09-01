@@ -23,11 +23,7 @@
 #ifndef MU_AUDIO_ALSAAUDIODRIVER_H
 #define MU_AUDIO_ALSAAUDIODRIVER_H
 
-#include "async/asyncable.h"
-
 #include "iaudiodriver.h"
-
-#include "audiodeviceslistener.h"
 
 namespace muse::audio {
 
@@ -38,20 +34,22 @@ public:
     ~AlsaDriverState();
 
     std::string name() const;
-    bool open(const Spec& spec, Spec* activeSpec);
+    bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec);
     void close();
     bool isOpened() const;
 
+    void* m_alsaDeviceHandle = nullptr;
+
+    float* m_buffer = nullptr;
+    unsigned long m_samples = 0;
+    int m_channels = 0;
+    bool m_audioProcessingDone = false;
+    pthread_t m_threadHandle = 0;
+    IAudioDriver::Callback m_callback;
+    void* m_userdata = nullptr;
+    IAudioDriver::Spec m_format;
+    std::string m_deviceId;
 private:
-    float* buffer = nullptr;
-    void* alsaDeviceHandle = nullptr;
-    unsigned long samples = 0;
-    int channels = 0;
-    bool audioProcessingDone = false;
-    pthread_t threadHandle = 0;
-    IAudioDriver::Callback callback;
-    void* userdata = nullptr;
-    IAudioDriver::Spec format;
     void alsaCleanup();
 };
 }
