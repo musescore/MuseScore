@@ -116,6 +116,11 @@ bool MeiImporter::read(const io::path_t& path)
         Convert::logs.push_back(String("The MEI file does not seem to be a MEI basic version '%1' file").arg(String(MEI_BASIC_VERSION)));
     }
 
+    pugi::xml_attribute xmlId = root.attribute("xml:id");
+    if (xmlId && !String(xmlId.value()).empty()) {
+        m_score->setMetaTag(u"xml:id", String(xmlId.value()));
+    }
+
     bool success = true;
 
     success = success && this->readMeiHead(root);
