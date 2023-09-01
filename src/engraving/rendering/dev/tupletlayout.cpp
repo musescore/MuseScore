@@ -161,15 +161,11 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double noteRight     = (style.styleMM(Sid::tupletNoteRightDistance) - style.styleMM(Sid::tupletBracketWidth) / 2) * cr2->mag();
 
     int move = 0;
-    item->setStaffIdx(cr1->vStaffIdx());
     if (outOfStaff && cr1->isChordRest() && cr2->isChordRest()) {
         // account for staff move when adjusting bracket to avoid staff
         // but don't attempt adjustment unless both endpoints are in same staff
         if (toChordRest(cr1)->staffMove() == toChordRest(cr2)->staffMove()) {
             move = toChordRest(cr1)->staffMove();
-            if (move == 1) {
-                item->setStaffIdx(cr1->vStaffIdx());
-            }
         } else {
             outOfStaff = false;
         }
@@ -404,7 +400,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     if (item->explicitParent()->isMeasure()) {
         System* s = toMeasure(item->explicitParent())->system();
         if (s) {
-            mp.ry() += s->staff(item->staffIdx())->y();
+            mp.ry() += s->staff(item->vStaffIdx())->y();
         }
     }
     item->p1() -= mp;
