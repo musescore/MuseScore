@@ -79,7 +79,7 @@ PropertyValue StringTunings::getProperty(Pid id) const
             }
         }
 
-        return part()->instrument(tick())->stringData()->strings();
+        return stringData()->strings();
     } else if (id == Pid::STRINGTUNINGS_PRESET) {
         return m_preset;
     }
@@ -90,7 +90,7 @@ PropertyValue StringTunings::getProperty(Pid id) const
 PropertyValue StringTunings::propertyDefault(Pid id) const
 {
     if (id == Pid::STRINGTUNINGS_STRINGS_COUNT) {
-        return part()->instrument(tick())->stringData()->strings(); // todo
+        return stringData()->strings(); // todo
     } else if (id == Pid::STRINGTUNINGS_PRESET) {
         return String();
     }
@@ -126,12 +126,18 @@ bool StringTunings::setProperty(Pid id, const PropertyValue& val)
 
 const StringData* StringTunings::stringData() const
 {
-    return part()->instrument(tick())->stringData();
+    return &m_stringData;
+}
+
+void StringTunings::setStringData(const StringData& stringData)
+{
+    m_stringData.set(stringData);
+    triggerLayout();
 }
 
 void StringTunings::undoStringData(const StringData& stringData)
 {
-    score()->undo(new ChangeStringData(part()->instrument(tick()), stringData));
+    score()->undo(new ChangeStringData(this, stringData));
     triggerLayout();
 }
 
@@ -152,11 +158,12 @@ void StringTunings::updateText()
 
 String StringTunings::generateText() const
 {
-    if (!part() || !part()->instrument(tick())) {
+    const StringData* stringData = this->stringData();
+    if (stringData->isNull()) {
         return String();
     }
 
-    std::vector<instrString> stringList = part()->instrument(tick())->stringData()->stringList();
+    std::vector<instrString> stringList = stringData->stringList();
     std::vector<String> stringListOpened;
     for (size_t i = 0; i < stringList.size(); ++i) {
         if (stringList[i].open) {

@@ -1713,11 +1713,9 @@ void TLayout::layoutCapo(const Capo* item, Capo::LayoutData* ldata, const Layout
     //! NOTE Looks like it doesn't belong here
     if (item->shouldAutomaticallyGenerateText() || item->empty()) {
         if (const Part* part = item->part()) {
-            if (const Instrument* instrument = part->instrument(item->tick())) {
-                if (const StringData* stringData = instrument->stringData()) {
-                    String text = item->generateText(stringData->strings());
-                    const_cast<Capo*>(item)->setXmlText(text);
-                }
+            if (const StringData* stringData = part->stringData(item->tick())) {
+                String text = item->generateText(stringData->strings());
+                const_cast<Capo*>(item)->setXmlText(text);
             }
         }
     }

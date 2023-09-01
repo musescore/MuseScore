@@ -148,6 +148,8 @@ public:
     void removeInstrument(const Fraction&);
     const InstrumentList& instruments() const;
 
+    const StringData* stringData(const Fraction& tick) const;
+
     void insertTime(const Fraction& tick, const Fraction& len);
 
     void addHarpDiagram(HarpPedalDiagram*);

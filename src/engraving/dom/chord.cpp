@@ -1599,11 +1599,11 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
     const Staff* st = staff();
     StaffGroup staffGroup = st->staffTypeForElement(this)->group();
     if (staffGroup == StaffGroup::TAB) {
-        const Instrument* instrument = part()->instrument(this->tick());
+        const StringData* stringData = part()->stringData(this->tick());
         for (Chord* ch : graceNotes()) {
-            instrument->stringData()->fretChords(ch);
+            stringData->fretChords(ch);
         }
-        instrument->stringData()->fretChords(this);
+        stringData->fretChords(this);
         return;
     } else {
         // if not tablature, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
