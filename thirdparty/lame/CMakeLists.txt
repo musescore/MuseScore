@@ -70,7 +70,7 @@ target_no_warning(${MODULE} -Wno-shift-negative-value)
 target_no_warning(${MODULE} -Wno-implicit-fallthrough)
 target_no_warning(${MODULE} -Wno-empty-body)
 target_no_warning(${MODULE} -Wno-attributes)
-target_no_warning(${MODULE} -Wno-absolute-value)
+target_no_warning(${MODULE} -Wno-absolute-value) # we need this for C code in this module , but not for its C++ code
 #target_no_warning(${MODULE} -Wno-tautological-pointer-compare)
 target_no_warning(${MODULE} -WMSVC-no-translation-unit-is-empty)
 target_no_warning(${MODULE} -WMSVC-no-nonstandard-extension-used)
