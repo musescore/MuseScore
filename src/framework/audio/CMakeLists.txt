@@ -37,21 +37,22 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
     )
 elseif(OS_IS_LIN OR OS_IS_FBSD)
+    set(JACK_SRC "")
     if (MUE_ENABLE_AUDIO_JACK)
-        set(DRIVER_SRC
+        set(JACK_SRC
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
         )
-    else (MUE_ENABLE_AUDIO_JACK)
-        set(DRIVER_SRC
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
-            ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
-        )
     endif()
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/audiodeviceslistener.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/alsa/alsaaudiodriver.h
+        ${JACK_SRC}
+       )
 elseif(OS_IS_MAC)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/osxaudiodriver.mm
