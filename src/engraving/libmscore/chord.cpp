@@ -805,8 +805,8 @@ void Chord::remove(EngravingItem* e)
         if (it != m_notes.end()) {
             (*it)->setStretchedBend(nullptr);
         }
-        // fallthrough
     }
+    // fallthrough
     case ElementType::CHORDLINE:
     case ElementType::FRET_CIRCLE:
         el().remove(e);
