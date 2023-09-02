@@ -523,8 +523,8 @@ public:
                 if (mode == LD_ACCESS::CHECK) {
                     LOGE() << "BAD ACCESS to bbox (not set)";
                 }
-                static const RectF dummy;
-                return dummy;
+                static const RectF _dummy;
+                return _dummy;
             }
 
             return m_bbox.value();
