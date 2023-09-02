@@ -443,7 +443,7 @@ void GPConverter::addBarline(const GPMasterBar* mB, Measure* measure, int32_t ma
 {
     static bool insideFreeTime = false;
     size_t staves = _score->staves().size();
-    bool lastMeasure = (masterBarIndex == _gpDom->masterBars().size() - 1);
+    bool lastMeasure = (masterBarIndex == static_cast<int32_t>(_gpDom->masterBars().size() - 1));
 
     if (!lastMeasure && mB->barlineType() == GPMasterBar::BarlineType::NORMAL) {
         for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
