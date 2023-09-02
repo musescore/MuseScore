@@ -769,6 +769,9 @@ TEST_F(Musicxml_Tests, restsNoType) {
 TEST_F(Musicxml_Tests, restsTypeWhole) {
     mxmlIoTestRef("testRestsTypeWhole");
 }
+TEST_F(Musicxml_Tests, slurTieDirection) {
+    mxmlIoTest("testSlurTieDirection");
+}
 TEST_F(Musicxml_Tests, slurTieLineStyle) {
     mxmlIoTest("testSlurTieLineStyle");
 }
