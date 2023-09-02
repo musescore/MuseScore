@@ -93,3 +93,5 @@ if (OS_IS_LIN)
 endif()
 
 include(SetupModule)
+
+target_no_warning(${MODULE} -Wno-deprecated-declarations)
