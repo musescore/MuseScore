@@ -3,7 +3,7 @@
 <?include "cpack_variables.wxi"?>
 
 <?define ShortVersion="$(var.CPACK_PACKAGE_VERSION)" ?>
-<?define VShortVersion="4" ?>
+<?define VShortVersion="$(var.CPACK_PACKAGE_VERSION_MAJOR)" ?>
 <?define ProdName="$(var.CPACK_PACKAGE_NAME) $(var.VShortVersion)" ?>
 <?define ShortProdName="$(var.CPACK_PACKAGE_NAME)$(var.VShortVersion)" ?>
 <?define ExeName="$(var.ShortProdName).exe" ?>
@@ -11,8 +11,7 @@
 <?define ExeId="CM_FP_bin.$(var.ShortProdName).exe" ?>
 <?define RegistryRoot="HKMU" ?> <!--HKCU / HKLM-->
 
-<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
-    RequiredVersion="3.6.3303.0">
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi" RequiredVersion="3.6.3303.0">
 
     <Product Id="$(var.CPACK_WIX_PRODUCT_GUID)"
         Name="$(var.ProdName)"
