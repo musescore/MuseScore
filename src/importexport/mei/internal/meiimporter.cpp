@@ -126,7 +126,7 @@ bool MeiImporter::read(const io::path_t& path)
     if (xmlId && !String(xmlId.value()).empty()) {
         m_score->setMetaTag(u"xml:id", String(xmlId.value()));
         // Do not keep a xml:id map when having a xml:id seed.
-        m_uids.clear();
+        m_uids->clear();
     }
 
     return success;
