@@ -181,7 +181,7 @@ protected:
     virtual void onLoadNotation(INotationPtr notation);
     virtual void onUnloadNotation(INotationPtr notation);
 
-    virtual void onMatrixChanged(const draw::Transform& matrix, bool overrideZoomType);
+    virtual void onMatrixChanged(const draw::Transform& oldMatrix, const draw::Transform& newMatrix, bool overrideZoomType);
 
 protected slots:
     virtual void onViewSizeChanged();

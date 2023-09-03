@@ -138,8 +138,10 @@ void AbstractNotationPaintView::moveCanvasToCenter()
     }
 
     PointF canvasCenter = this->canvasCenter();
+    Transform oldMatrix = m_matrix;
+
     if (doMoveCanvas(canvasCenter.x(), canvasCenter.y())) {
-        onMatrixChanged(m_matrix, false);
+        onMatrixChanged(oldMatrix, m_matrix, false);
     }
 }
 
@@ -321,6 +323,7 @@ void AbstractNotationPaintView::setMatrix(const Transform& matrix)
         return;
     }
 
+    Transform oldMatrix = m_matrix;
     m_matrix = matrix;
 
     // If `ensureViewportInsideScrollableArea` returns true, it has already
@@ -329,12 +332,19 @@ void AbstractNotationPaintView::setMatrix(const Transform& matrix)
         return;
     }
 
-    onMatrixChanged(m_matrix, false);
+    onMatrixChanged(oldMatrix, m_matrix, false);
 }
 
-void AbstractNotationPaintView::onMatrixChanged(const Transform&, bool overrideZoomType)
+void AbstractNotationPaintView::onMatrixChanged(const Transform& oldMatrix, const Transform& newMatrix, bool overrideZoomType)
 {
     UNUSED(overrideZoomType);
+
+    Transform oldMatrixInverted = oldMatrix.inverted();
+
+    if (m_shadowNoteRect.isValid()) {
+        RectF logicRect = oldMatrixInverted.map(m_shadowNoteRect);
+        m_shadowNoteRect = newMatrix.map(logicRect);
+    }
 
     redraw();
 
@@ -902,8 +912,9 @@ bool AbstractNotationPaintView::ensureViewportInsideScrollableArea()
         return false;
     }
 
+    Transform oldMatrix = m_matrix;
     m_matrix.translate(dx, dy);
-    onMatrixChanged(m_matrix, false);
+    onMatrixChanged(oldMatrix, m_matrix, false);
     return true;
 }
 
@@ -912,8 +923,9 @@ bool AbstractNotationPaintView::moveCanvasToPosition(const PointF& logicPos)
     TRACEFUNC;
 
     PointF viewTopLeft = viewportTopLeft();
+    Transform oldMatrix = m_matrix;
     if (doMoveCanvas(viewTopLeft.x() - logicPos.x(), viewTopLeft.y() - logicPos.y())) {
-        onMatrixChanged(m_matrix, false);
+        onMatrixChanged(oldMatrix, m_matrix, false);
         return true;
     }
 
@@ -924,10 +936,11 @@ bool AbstractNotationPaintView::moveCanvas(qreal dx, qreal dy)
 {
     TRACEFUNC;
 
+    Transform oldMatrix = m_matrix;
     bool moved = doMoveCanvas(dx, dy);
 
     if (moved) {
-        onMatrixChanged(m_matrix, false);
+        onMatrixChanged(oldMatrix, m_matrix, false);
 
         m_autoScrollEnabled = false;
         m_enableAutoScrollTimer.start(2000);
@@ -1030,6 +1043,7 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool over
 
     PointF pointBeforeScaling = toLogical(pos);
 
+    Transform oldMatrix = m_matrix;
     m_matrix.scale(factor, factor);
 
     PointF pointAfterScaling = toLogical(pos);
@@ -1039,7 +1053,7 @@ void AbstractNotationPaintView::scale(qreal factor, const PointF& pos, bool over
 
     doMoveCanvas(dx, dy);
 
-    onMatrixChanged(m_matrix, overrideZoomType);
+    onMatrixChanged(oldMatrix, m_matrix, overrideZoomType);
 }
 
 void AbstractNotationPaintView::pinchToZoom(qreal scaleFactor, const QPointF& pos)
@@ -1224,10 +1238,12 @@ void AbstractNotationPaintView::setReadonly(bool readonly)
 
 void AbstractNotationPaintView::clear()
 {
+    Transform oldMatrix = m_matrix;
     m_matrix = Transform();
     m_previousHorizontalScrollPosition = 0;
     m_previousVerticalScrollPosition = 0;
-    onMatrixChanged(m_matrix, false);
+    m_shadowNoteRect = RectF();
+    onMatrixChanged(oldMatrix, m_matrix, false);
 }
 
 qreal AbstractNotationPaintView::width() const
