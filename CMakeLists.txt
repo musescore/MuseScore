@@ -213,7 +213,7 @@ if (OS_IS_LIN)
 endif(OS_IS_LIN)
 
 if (OS_IS_WIN)
-    include(Packaging)
+    include(SetupWindowsPackaging)
 endif(OS_IS_WIN)
 
 ###########################################
