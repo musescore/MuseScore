@@ -17,21 +17,25 @@
             <family>flugelhorns</family>
             <family>trombones</family>
             <family>tubas</family>
+            <unsorted group="brass"/>
         </section>
         <section id="timpani">
             <family>timpani</family>
         </section>
         <section id="percussion">
             <family>keyboard-percussion</family>
+            <unsorted group="pitched-percussion"/>
             <family>drums</family>
             <family>unpitched-metal-percussion</family>
             <family>unpitched-wooden-percussion</family>
             <family>other-percussion</family>
+            <unsorted group="unpitched-percussion"/>
         </section>
         <family>keyboards</family>
         <family>harps</family>
         <family>organs</family>
         <family>synths</family>
+        <unsorted/>
         <soloists/>
         <section id="voices" barLineSpan="false">
             <family>voices</family>
@@ -40,7 +44,6 @@
         <section id="strings">
             <family>orchestral-strings</family>
         </section>
-        <unsorted/>
     </Order>
     <Order id="choir">
         <name>Choir</name>
@@ -118,6 +121,7 @@
             <family>flutes</family>
             <family>clarinets</family>
             <family>saxophones</family>
+            <unsorted group="woodwinds"/>
         </section>
         <section id="trumpets" thinBrackets="false">
             <family>trumpets</family>
@@ -223,6 +227,7 @@
         <section id="percussion" thinBrackets="false">
             <family>timpani</family>
             <family>keyboard-percussion</family>
+            <unsorted group="pitched-percussion"/>
             <family>drums</family>
             <unsorted group="unpitched-percussion"/>
         </section>
@@ -250,9 +255,11 @@
         <section id="tubas" thinBrackets="false">
             <family>tubas</family>
         </section>
+        <unsorted group="brass"/>
         <section id="percussion" thinBrackets="false">
             <family>timpani</family>
             <family>keyboard-percussion</family>
+            <unsorted group="pitched-percussion"/>
             <family>drums</family>
             <unsorted group="unpitched-percussion"/>
         </section>
