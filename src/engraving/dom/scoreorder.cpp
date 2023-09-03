@@ -337,7 +337,8 @@ int ScoreOrder::instrumentSortingIndex(const String& instrumentId, bool isSolois
                    && (sg.unsorted == ii.instrTemplate->groupId)) {
             index = i;
             priority = Priority::UnsortedGroup;
-        } else if ((priority < Priority::Unsorted) && (sg.family == UnsortedGroup)) {
+        } else if ((priority < Priority::Unsorted) && (sg.family == UnsortedGroup)
+                   && (sg.unsorted == u"")) {
             index = i;
             priority = Priority::Unsorted;
         }
