@@ -21,7 +21,7 @@
  */
 #include "notationnavigator.h"
 
-#include "libmscore/system.h"
+#include "engraving/dom/system.h"
 
 #include "log.h"
 

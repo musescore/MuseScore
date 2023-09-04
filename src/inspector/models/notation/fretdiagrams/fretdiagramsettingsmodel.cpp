@@ -24,7 +24,7 @@
 #include "dataformatter.h"
 #include "translation.h"
 
-#include "engraving/libmscore/fret.h"
+#include "engraving/dom/fret.h"
 
 using namespace mu::inspector;
 

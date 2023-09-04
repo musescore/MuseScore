@@ -27,7 +27,7 @@
 
 #include "uicomponents/view/itemmultiselectionmodel.h"
 
-#include "engraving/libmscore/utils.h"
+#include "engraving/dom/utils.h"
 
 using namespace mu::notation;
 using namespace mu::uicomponents;

@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_SCOREACCESS_H
 #define MU_ENGRAVING_SCOREACCESS_H
 
-#include "libmscore/masterscore.h"
+#include "dom/masterscore.h"
 
 //! NOTE This is a temporary class for controlling (master)score access
 //! See Project class description for detail

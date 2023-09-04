@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_CONNECTORINFOREADER_H
 #define MU_ENGRAVING_CONNECTORINFOREADER_H
 
-#include "../../libmscore/connector.h"
+#include "../../dom/connector.h"
 
 //---------------------------------------------------------
 //   @@ ConnectorInfoReader

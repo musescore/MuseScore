@@ -22,8 +22,8 @@
 
 #include "event.h"
 
-#include "libmscore/note.h"
-#include "libmscore/sig.h"
+#include "dom/note.h"
+#include "dom/sig.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------

@@ -24,7 +24,7 @@
 
 #include "muversion.h"
 
-#include "engraving/libmscore/mscore.h"
+#include "engraving/dom/mscore.h"
 
 #include "log.h"
 

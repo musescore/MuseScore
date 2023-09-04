@@ -22,13 +22,13 @@
 
 #include "chordarticulationsparser.h"
 
-#include "libmscore/arpeggio.h"
-#include "libmscore/chord.h"
-#include "libmscore/chordline.h"
-#include "libmscore/score.h"
-#include "libmscore/segment.h"
-#include "libmscore/spanner.h"
-#include "libmscore/tremolo.h"
+#include "dom/arpeggio.h"
+#include "dom/chord.h"
+#include "dom/chordline.h"
+#include "dom/score.h"
+#include "dom/segment.h"
+#include "dom/spanner.h"
+#include "dom/tremolo.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/filters/chordfilter.h"

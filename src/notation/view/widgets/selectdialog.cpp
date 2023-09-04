@@ -26,7 +26,7 @@
  Implementation of class Selection plus other selection related functions.
 */
 
-#include "engraving/libmscore/system.h"
+#include "engraving/dom/system.h"
 
 #include "notationtypes.h"
 

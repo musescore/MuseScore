@@ -24,7 +24,7 @@
 #include "translation.h"
 #include "ui/view/iconcodes.h"
 
-#include "libmscore/pedal.h"
+#include "engraving/dom/pedal.h"
 
 using namespace mu::inspector;
 

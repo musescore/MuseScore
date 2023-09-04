@@ -21,14 +21,14 @@
  */
 #include "continiouselementsbuilder.h"
 
-#include "libmscore/trill.h"
-#include "libmscore/score.h"
-#include "libmscore/ottava.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/hairpin.h"
-#include "libmscore/textline.h"
-#include "libmscore/vibrato.h"
-#include "libmscore/factory.h"
+#include "engraving/dom/trill.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/ottava.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/hairpin.h"
+#include "engraving/dom/textline.h"
+#include "engraving/dom/vibrato.h"
+#include "engraving/dom/factory.h"
 
 using namespace mu::engraving;
 

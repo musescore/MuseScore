@@ -27,8 +27,8 @@
 #include "engraving/tests/utils/scorerw.h"
 #include "engraving/tests/utils/scorecomp.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/excerpt.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/excerpt.h"
 
 #include "modularity/ioc.h"
 #include "importexport/mei/imeiconfiguration.h"

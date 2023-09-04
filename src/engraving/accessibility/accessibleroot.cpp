@@ -21,10 +21,10 @@
  */
 #include "accessibleroot.h"
 
-#include "../libmscore/score.h"
-#include "../libmscore/staff.h"
-#include "../libmscore/part.h"
-#include "../libmscore/segment.h"
+#include "../dom/score.h"
+#include "../dom/staff.h"
+#include "../dom/part.h"
+#include "../dom/segment.h"
 
 #include "log.h"
 #include "translation.h"

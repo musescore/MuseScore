@@ -29,8 +29,8 @@
 #include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
 
-#include "libmscore/part.h"
-#include "libmscore/score.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------

@@ -23,13 +23,13 @@
 
 #include "style/styledef.h"
 
-#include "libmscore/chordrest.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/measure.h"
-#include "libmscore/score.h"
-#include "libmscore/segment.h"
-#include "libmscore/stafftype.h"
-#include "libmscore/system.h"
+#include "dom/chordrest.h"
+#include "dom/lyrics.h"
+#include "dom/measure.h"
+#include "dom/score.h"
+#include "dom/segment.h"
+#include "dom/stafftype.h"
+#include "dom/system.h"
 
 #include "tlayout.h"
 #include "autoplace.h"

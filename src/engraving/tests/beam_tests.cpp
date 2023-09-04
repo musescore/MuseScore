@@ -22,13 +22,13 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/beam.h"
-#include "libmscore/chord.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/note.h"
-#include "libmscore/tremolo.h"
+#include "dom/beam.h"
+#include "dom/chord.h"
+#include "dom/chordrest.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/note.h"
+#include "dom/tremolo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

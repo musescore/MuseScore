@@ -27,7 +27,7 @@
 #include "../xmlreader.h"
 #include "readcontext.h"
 
-#include "../../libmscore/property.h"
+#include "../../dom/property.h"
 
 namespace mu::engraving {
 class XmlReader;

@@ -23,10 +23,10 @@
 
 #include "videoencoder.h"
 
-#include "engraving/libmscore/page.h"
-#include "engraving/libmscore/system.h"
-#include "engraving/libmscore/repeatlist.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/page.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/repeatlist.h"
+#include "engraving/dom/masterscore.h"
 
 #include "notation/view/playbackcursor.h"
 

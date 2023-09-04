@@ -24,7 +24,7 @@
 
 #include <memory>
 
-#include "libmscore/textbase.h"
+#include "dom/textbase.h"
 
 namespace mu::engraving {
 class MStyle;

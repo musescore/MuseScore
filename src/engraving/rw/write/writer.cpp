@@ -23,11 +23,11 @@
 
 #include "types/types.h"
 
-#include "libmscore/score.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/part.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/staff.h"
+#include "dom/score.h"
+#include "dom/masterscore.h"
+#include "dom/part.h"
+#include "dom/excerpt.h"
+#include "dom/staff.h"
 
 #include "../xmlwriter.h"
 #include "../inoutdata.h"

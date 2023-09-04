@@ -15,7 +15,7 @@ This is like a third-party engine, such as Unity, Unreal Engine, etc.
 
 And should not contain or depend on such modules as:
 
-* Notation (libmscore, view)
+* Notation (engraving, view)
 * Sequencer (view)
 * Piano roll
 * Mixer (view)

@@ -23,8 +23,8 @@
 #include "elements.h"
 #include "fraction.h"
 #include "part.h"
-#include "libmscore/property.h"
-#include "libmscore/undo.h"
+#include "engraving/dom/property.h"
+#include "engraving/dom/undo.h"
 
 #include "log.h"
 

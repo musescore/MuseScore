@@ -28,7 +28,7 @@
 #include "pitchspelling.h"
 
 #include "types/types.h"
-#include "libmscore/types.h"
+#include "dom/types.h"
 #include "types/dimension.h"
 
 #include "accidental.h"

@@ -21,10 +21,10 @@
  */
 #include "notationparts.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/undo.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/page.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/undo.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/page.h"
 
 #include "igetscore.h"
 

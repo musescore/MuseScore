@@ -22,7 +22,7 @@
 
 #include "glissandosrenderer.h"
 
-#include "libmscore/glissando.h"
+#include "dom/glissando.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;

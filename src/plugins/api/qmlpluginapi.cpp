@@ -26,8 +26,8 @@
 
 #include "engraving/compat/dummyelement.h"
 #include "engraving/compat/scoreaccess.h"
-#include "engraving/libmscore/factory.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
 
 #include "cursor.h"
 #include "elements.h"

@@ -25,7 +25,7 @@
 #include "../xmlwriter.h"
 #include "writecontext.h"
 
-#include "../../libmscore/property.h"
+#include "../../dom/property.h"
 
 #include "global/modularity/ioc.h"
 #include "../../iengravingconfiguration.h"

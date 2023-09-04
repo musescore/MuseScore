@@ -22,8 +22,8 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/hairpin.h"
-#include "libmscore/masterscore.h"
+#include "dom/hairpin.h"
+#include "dom/masterscore.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"

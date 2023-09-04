@@ -22,9 +22,9 @@
 
 #include "playevent.h"
 
-#include "libmscore/note.h"
-#include "libmscore/score.h"
-#include "libmscore/undo.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/undo.h"
 
 #include "elements.h"
 

@@ -25,12 +25,12 @@
 #include "mimedatautils.h"
 
 #include "engraving/rw/rwregister.h"
-#include "engraving/libmscore/actionicon.h"
-#include "engraving/libmscore/engravingitem.h"
-#include "engraving/libmscore/fret.h"
-#include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/textbase.h"
-#include "engraving/libmscore/factory.h"
+#include "engraving/dom/actionicon.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/textbase.h"
+#include "engraving/dom/factory.h"
 
 #include "view/widgets/palettewidget.h"
 

@@ -29,8 +29,8 @@
 
 #include "importexport/mei/meimodule.h"
 
-#include "engraving/libmscore/instrtemplate.h"
-#include "engraving/libmscore/mscore.h"
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/mscore.h"
 
 #include "log.h"
 

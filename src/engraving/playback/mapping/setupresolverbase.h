@@ -27,7 +27,7 @@
 
 #include "mpe/events.h"
 
-#include "libmscore/instrument.h"
+#include "dom/instrument.h"
 
 namespace mu::engraving {
 template<class T>

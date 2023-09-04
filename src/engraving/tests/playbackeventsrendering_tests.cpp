@@ -25,8 +25,8 @@
 
 #include "mpe/tests/utils/articulationutils.h"
 
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
+#include "dom/measure.h"
+#include "dom/segment.h"
 
 #include "utils/scorerw.h"
 #include "playback/playbackeventsrenderer.h"

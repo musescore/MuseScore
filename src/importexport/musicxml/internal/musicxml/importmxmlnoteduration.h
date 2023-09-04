@@ -23,7 +23,7 @@
 #ifndef __IMPORTMXMLNOTEDURATION_H__
 #define __IMPORTMXMLNOTEDURATION_H__
 
-#include "libmscore/durationtype.h"
+#include "engraving/dom/durationtype.h"
 #include "engraving/types/fraction.h"
 
 namespace mu::engraving {

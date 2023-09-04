@@ -30,9 +30,9 @@
 #include "mpe/tests/mocks/articulationprofilesrepositorymock.h"
 
 #include "utils/scorerw.h"
-#include "libmscore/part.h"
-#include "libmscore/measure.h"
-#include "libmscore/chord.h"
+#include "dom/part.h"
+#include "dom/measure.h"
+#include "dom/chord.h"
 
 #include "playback/playbackmodel.h"
 

@@ -22,9 +22,9 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/factory.h"
-#include "libmscore/part.h"
-#include "libmscore/staff.h"
+#include "dom/factory.h"
+#include "dom/part.h"
+#include "dom/staff.h"
 
 #include "compat/scoreaccess.h"
 

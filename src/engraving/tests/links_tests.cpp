@@ -22,15 +22,15 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/excerpt.h"
-#include "libmscore/factory.h"
-#include "libmscore/linkedobjects.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/mcursor.h"
-#include "libmscore/measure.h"
-#include "libmscore/part.h"
-#include "libmscore/segment.h"
-#include "libmscore/undo.h"
+#include "dom/excerpt.h"
+#include "dom/factory.h"
+#include "dom/linkedobjects.h"
+#include "dom/masterscore.h"
+#include "dom/mcursor.h"
+#include "dom/measure.h"
+#include "dom/part.h"
+#include "dom/segment.h"
+#include "dom/undo.h"
 
 using namespace mu;
 using namespace mu::engraving;

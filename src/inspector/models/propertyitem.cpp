@@ -21,7 +21,7 @@
  */
 #include "propertyitem.h"
 
-#include "property.h"
+#include "engraving/dom/property.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;

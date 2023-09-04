@@ -22,8 +22,8 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/dynamic.h"
-#include "libmscore/masterscore.h"
+#include "dom/dynamic.h"
+#include "dom/masterscore.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"

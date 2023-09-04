@@ -22,7 +22,7 @@
 
 #include "instrumentnamesettingsmodel.h"
 
-#include "engraving/libmscore/instrumentname.h"
+#include "engraving/dom/instrumentname.h"
 
 using namespace mu::inspector;
 using namespace mu::actions;

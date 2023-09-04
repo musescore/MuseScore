@@ -27,23 +27,23 @@
 
 #include <QQmlListProperty>
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/beam.h"
-#include "libmscore/chord.h"
-#include "libmscore/hook.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/measure.h"
-#include "libmscore/note.h"
-#include "libmscore/notedot.h"
-#include "libmscore/page.h"
-#include "libmscore/segment.h"
-#include "libmscore/staff.h"
-#include "libmscore/stem.h"
-#include "libmscore/stemslash.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/accidental.h"
-#include "libmscore/undo.h"
-#include "libmscore/types.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/beam.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/hook.h"
+#include "engraving/dom/lyrics.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/notedot.h"
+#include "engraving/dom/page.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stem.h"
+#include "engraving/dom/stemslash.h"
+#include "engraving/dom/tuplet.h"
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/undo.h"
+#include "engraving/dom/types.h"
 
 #include "playevent.h"
 
@@ -768,7 +768,7 @@ class Segment : public EngravingItem
      * of the score to this segment.
      * \see \ref ticklength
      */
-    Q_PROPERTY(int tick READ tick)                               // TODO: revise libmscore (or this API):
+    Q_PROPERTY(int tick READ tick)                               // TODO: revise engraving (or this API):
                                                                  // Pid::TICK is relative or absolute in different contexts
 
 public:

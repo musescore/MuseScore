@@ -24,7 +24,7 @@
 #include <QGuiApplication>
 #include <QScreen>
 
-#include "libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "notationpainting.h"
 #include "notationviewstate.h"

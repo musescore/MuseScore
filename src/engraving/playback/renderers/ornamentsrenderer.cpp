@@ -24,8 +24,8 @@
 
 #include "realfn.h"
 
-#include "libmscore/ornament.h"
-#include "libmscore/utils.h"
+#include "dom/ornament.h"
+#include "dom/utils.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
 

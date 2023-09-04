@@ -35,7 +35,7 @@
 
 #include "engraving/rw/xmlreader.h"
 #include "engraving/engravingerrors.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 #include "serialization/zipreader.h"
 
 #include "log.h"

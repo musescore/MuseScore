@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "abstractinspectormodel.h"
-#include "libmscore/dynamic.h"
+#include "engraving/dom/dynamic.h"
 
 #include "types/texttypes.h"
 

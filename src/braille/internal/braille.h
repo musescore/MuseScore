@@ -25,7 +25,7 @@
 #include <QIODevice>
 
 #include "engraving/types/types.h"
-#include "engraving/libmscore/types.h"
+#include "engraving/dom/types.h"
 
 namespace mu::engraving {
 class Arpeggio;
@@ -137,7 +137,7 @@ private:
     void credits(QIODevice& device);
     void instruments(QIODevice& device);
 
-    /* --------------- Utils. Move these to libmscore? --------------- */
+    /* --------------- Utils. Move these to engraving? --------------- */
     int computeInterval(Note* rootNote, Note* note, bool ignoreOctaves);
     std::vector<Slur*> slurs(ChordRest* chordRest);
     std::vector<Hairpin*> hairpins(ChordRest* chordRest);

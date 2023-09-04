@@ -28,7 +28,7 @@
 #include "types/string.h"
 
 #include "engraving/engravingerrors.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 namespace mu::engraving {
 class ScoreRW

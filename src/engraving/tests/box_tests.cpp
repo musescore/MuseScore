@@ -22,10 +22,10 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/box.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/system.h"
-#include "libmscore/undo.h"
+#include "dom/box.h"
+#include "dom/masterscore.h"
+#include "dom/system.h"
+#include "dom/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

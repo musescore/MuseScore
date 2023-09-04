@@ -22,7 +22,7 @@
 #ifndef MU_PALETTE_PALETTECELL_H
 #define MU_PALETTE_PALETTECELL_H
 
-#include "libmscore/engravingitem.h"
+#include "engraving/dom/engravingitem.h"
 
 #include <QAccessibleInterface>
 

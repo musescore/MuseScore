@@ -23,7 +23,7 @@
 
 #include <QScreen>
 
-#include "engraving/libmscore/score.h"
+#include "engraving/dom/score.h"
 
 #include "notation.h"
 #include "notationinteraction.h"

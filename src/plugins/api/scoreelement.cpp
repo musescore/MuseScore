@@ -27,8 +27,8 @@
 #include "fraction.h"
 #include "score.h"
 
-#include "libmscore/engravingobject.h"
-#include "libmscore/score.h"
+#include "engraving/dom/engravingobject.h"
+#include "engraving/dom/score.h"
 
 using namespace mu;
 using namespace mu::engraving;

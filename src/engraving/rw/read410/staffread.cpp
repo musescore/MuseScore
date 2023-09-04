@@ -23,9 +23,9 @@
 
 #include "rw/write/twrite.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/measure.h"
-#include "libmscore/score.h"
+#include "dom/factory.h"
+#include "dom/measure.h"
+#include "dom/score.h"
 
 #include "measureread.h"
 #include "tread.h"

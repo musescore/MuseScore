@@ -21,7 +21,7 @@
  */
 #include "stemsettingsmodel.h"
 
-#include "engraving/libmscore/beam.h"
+#include "engraving/dom/beam.h"
 
 #include "translation.h"
 #include "log.h"

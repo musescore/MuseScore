@@ -22,8 +22,8 @@
 
 #include "notearticulationsparser.h"
 
-#include "libmscore/note.h"
-#include "libmscore/spanner.h"
+#include "dom/note.h"
+#include "dom/spanner.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "internal/spannersmetaparser.h"

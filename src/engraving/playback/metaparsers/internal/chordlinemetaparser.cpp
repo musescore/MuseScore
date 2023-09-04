@@ -22,7 +22,7 @@
 
 #include "chordlinemetaparser.h"
 
-#include "libmscore/chordline.h"
+#include "dom/chordline.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;

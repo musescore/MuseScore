@@ -26,7 +26,7 @@
 #include <QDialog>
 
 #include "ui_editstaff.h"
-#include "libmscore/stafftype.h"
+#include "engraving/dom/stafftype.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"

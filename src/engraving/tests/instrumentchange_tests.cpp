@@ -22,14 +22,14 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/chordrest.h"
-#include "libmscore/instrchange.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/part.h"
-#include "libmscore/segment.h"
-#include "libmscore/staff.h"
-#include "libmscore/undo.h"
+#include "dom/chordrest.h"
+#include "dom/instrchange.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/part.h"
+#include "dom/segment.h"
+#include "dom/staff.h"
+#include "dom/undo.h"
 
 #include "engraving/compat/midi/midipatch.h"
 

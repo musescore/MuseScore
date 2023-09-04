@@ -25,9 +25,9 @@
 #include <cmath>
 #include <QMimeData>
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/page.h"
-#include "libmscore/system.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/page.h"
+#include "engraving/dom/system.h"
 
 #include "log.h"
 

@@ -21,29 +21,30 @@
  */
 #include "elementrepositoryservice.h"
 
-#include "chord.h"
-#include "stem.h"
-#include "hook.h"
-#include "beam.h"
-#include "glissando.h"
-#include "hairpin.h"
-#include "volta.h"
-#include "staff.h"
-#include "layoutbreak.h"
-#include "pedal.h"
-#include "tremolo.h"
-#include "bracket.h"
-#include "bracketItem.h"
-#include "durationtype.h"
-#include "stafftype.h"
-#include "mscore.h"
-#include "trill.h"
-
-#include "log.h"
 #include "types/texttypes.h"
 
+#include "engraving/dom/chord.h"
+#include "engraving/dom/stem.h"
+#include "engraving/dom/hook.h"
+#include "engraving/dom/beam.h"
+#include "engraving/dom/glissando.h"
+#include "engraving/dom/hairpin.h"
+#include "engraving/dom/volta.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/layoutbreak.h"
+#include "engraving/dom/pedal.h"
+#include "engraving/dom/tremolo.h"
+#include "engraving/dom/bracket.h"
+#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/durationtype.h"
+#include "engraving/dom/stafftype.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/trill.h"
+
+#include "log.h"
+
 using namespace mu::inspector;
-using namespace mu::notation;
+using namespace mu::engraving;
 
 ElementRepositoryService::ElementRepositoryService(QObject* parent)
     : QObject(parent)
@@ -55,14 +56,14 @@ QObject* ElementRepositoryService::getQObject()
     return this;
 }
 
-bool ElementRepositoryService::needUpdateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
-                                                     SelectionState selectionState) const
+bool ElementRepositoryService::needUpdateElementList(const QList<EngravingItem*>& newRawElementList,
+                                                     SelState selectionState) const
 {
     return m_rawElementList != newRawElementList || m_selectionState != selectionState;
 }
 
-void ElementRepositoryService::updateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
-                                                 SelectionState selectionState)
+void ElementRepositoryService::updateElementList(const QList<EngravingItem*>& newRawElementList,
+                                                 SelState selectionState)
 {
     if (!needUpdateElementList(newRawElementList, selectionState)) {
         return;

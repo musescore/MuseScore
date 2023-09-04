@@ -24,12 +24,12 @@
 #include "paintdebugger.h"
 
 //#include "accessibility/accessibleitem.h"
-#include "libmscore/page.h"
-#include "libmscore/score.h"
-#include "libmscore/system.h"
-#include "libmscore/measurebase.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
+#include "dom/page.h"
+#include "dom/score.h"
+#include "dom/system.h"
+#include "dom/measurebase.h"
+#include "dom/measure.h"
+#include "dom/segment.h"
 
 #include "log.h"
 

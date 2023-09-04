@@ -22,7 +22,7 @@
 
 #include "instrumentsactionscontroller.h"
 
-#include "engraving/libmscore/instrchange.h"
+#include "engraving/dom/instrchange.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;

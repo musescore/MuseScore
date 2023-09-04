@@ -25,7 +25,7 @@
 #include <QObject>
 #include <QVariant>
 
-#include "engraving/libmscore/property.h"
+#include "engraving/dom/property.h"
 #include "engraving/style/styledef.h"
 
 namespace mu::inspector {

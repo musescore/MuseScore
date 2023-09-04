@@ -23,7 +23,7 @@
 #include "selection.h"
 #include "score.h"
 
-#include "libmscore/undo.h"
+#include "engraving/dom/undo.h"
 
 using namespace mu::engraving;
 

@@ -27,11 +27,10 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
-#include "libmscore/tempotext.h"
-#include "libmscore/text.h"
+#include "engraving/dom/tempotext.h"
+#include "engraving/dom/text.h"
 
 #include "log.h"
-#include "global/deprecated/xmlwriter.h"
 
 using namespace mu::converter;
 using namespace mu::engraving;

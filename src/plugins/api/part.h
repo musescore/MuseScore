@@ -24,7 +24,7 @@
 #define __PLUGIN_API_PART_H__
 
 #include "scoreelement.h"
-#include "libmscore/part.h"
+#include "engraving/dom/part.h"
 
 namespace mu::plugins::api {
 class Instrument;

@@ -22,7 +22,7 @@
 
 #include "caposettingsmodel.h"
 
-#include "engraving/libmscore/capo.h"
+#include "engraving/dom/capo.h"
 
 using namespace mu::notation;
 

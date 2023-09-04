@@ -30,7 +30,7 @@
 
 #include "engravingerrors.h"
 #include "style/styledef.h"
-#include "libmscore/score.h"
+#include "dom/score.h"
 
 namespace mu::engraving {
 class XmlReader;

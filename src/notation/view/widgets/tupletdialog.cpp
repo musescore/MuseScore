@@ -21,7 +21,7 @@
  */
 #include "tupletdialog.h"
 
-#include "engraving/libmscore/tuplet.h"
+#include "engraving/dom/tuplet.h"
 
 #include "ui/view/widgetstatestore.h"
 

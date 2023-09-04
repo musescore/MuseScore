@@ -23,7 +23,7 @@
 #define MU_NOTATION_FONTSTYLESELECT_H
 
 #include "ui_font_style_select.h"
-#include "libmscore/types.h"
+#include "engraving/dom/types.h"
 
 namespace mu::notation {
 class FontStyleSelect : public QWidget, public Ui::FontStyleSelect

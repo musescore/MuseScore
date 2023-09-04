@@ -22,7 +22,7 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/masterscore.h"
+#include "dom/masterscore.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

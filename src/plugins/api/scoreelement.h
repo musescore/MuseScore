@@ -27,7 +27,7 @@
 #include <QQmlListProperty>
 #include <QQmlEngine>
 
-#include "libmscore/property.h"
+#include "engraving/dom/property.h"
 
 namespace mu::engraving {
 class EngravingObject;
@@ -39,7 +39,7 @@ namespace mu::plugins::api {
 ///   \cond PLUGIN_API \private \endcond
 ///   \internal
 ///   Represents ownership policy regarding the underlying
-///   libmscore objects.
+///   engraving objects.
 //---------------------------------------------------------
 
 enum class Ownership {

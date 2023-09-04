@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importmidi_fraction.h"
-#include "libmscore/mscore.h"
+#include "engraving/dom/mscore.h"
 
 #include <limits>
 #include <QtGlobal>

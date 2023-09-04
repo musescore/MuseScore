@@ -21,7 +21,7 @@
  */
 #include "staffcontroltreeitem.h"
 
-#include "engraving/libmscore/factory.h"
+#include "engraving/dom/factory.h"
 
 using namespace mu::instrumentsscene;
 using namespace mu::notation;

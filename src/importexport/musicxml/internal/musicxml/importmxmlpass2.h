@@ -29,7 +29,7 @@
 #include "importxmlfirstpass.h"
 #include "musicxml.h" // a.o. for Slur
 
-#include "libmscore/types.h"
+#include "engraving/dom/types.h"
 
 namespace mu::engraving {
 class StringData;

@@ -30,7 +30,7 @@
 #include "notation/inotationconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
 
-#include "libmscore/drumset.h"
+#include "engraving/dom/drumset.h"
 
 namespace mu::palette {
 //---------------------------------------------------------

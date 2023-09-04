@@ -27,7 +27,7 @@
 
 #include "io/file.h"
 
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "engraving/engravingerrors.h"
 #include "engraving/compat/mscxcompat.h"

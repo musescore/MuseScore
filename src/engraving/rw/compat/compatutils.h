@@ -25,7 +25,7 @@
 #include <vector>
 #include <set>
 
-#include "libmscore/articulation.h"
+#include "dom/articulation.h"
 
 namespace mu::engraving {
 enum class SymId;

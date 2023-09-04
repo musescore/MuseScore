@@ -21,7 +21,7 @@
  */
 #include "textstyle.h"
 
-#include "libmscore/property.h"
+#include "dom/property.h"
 
 #include "log.h"
 

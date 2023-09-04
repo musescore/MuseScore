@@ -23,8 +23,8 @@
 #ifndef MU_ENGRAVING_BEAMTREMOLOLAYOUT_DEV_H
 #define MU_ENGRAVING_BEAMTREMOLOLAYOUT_DEV_H
 
-#include "libmscore/beam.h"
-#include "libmscore/engravingitem.h"
+#include "dom/beam.h"
+#include "dom/engravingitem.h"
 
 namespace mu::engraving {
 class Chord;

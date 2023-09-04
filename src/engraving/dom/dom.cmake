@@ -18,7 +18,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-set(LIBMSCORE_SRC
+set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/accidental.cpp
     ${CMAKE_CURRENT_LIST_DIR}/accidental.h
     ${CMAKE_CURRENT_LIST_DIR}/actionicon.cpp

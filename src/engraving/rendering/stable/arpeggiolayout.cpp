@@ -21,11 +21,11 @@
  */
 #include "arpeggiolayout.h"
 
-#include "libmscore/arpeggio.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/segment.h"
-#include "libmscore/staff.h"
+#include "dom/arpeggio.h"
+#include "dom/chord.h"
+#include "dom/note.h"
+#include "dom/segment.h"
+#include "dom/staff.h"
 
 #include "tlayout.h"
 

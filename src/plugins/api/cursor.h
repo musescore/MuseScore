@@ -25,8 +25,8 @@
 
 #include "fraction.h"
 
-#include "engraving/libmscore/input.h"
-#include "engraving/libmscore/types.h"
+#include "engraving/dom/input.h"
+#include "engraving/dom/types.h"
 
 namespace mu::engraving {
 class EngravingItem;

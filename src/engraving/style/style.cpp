@@ -29,8 +29,8 @@
 #include "rw/xmlwriter.h"
 #include "types/typesconv.h"
 
-#include "libmscore/mscore.h"
-#include "libmscore/types.h"
+#include "dom/mscore.h"
+#include "dom/types.h"
 
 #include "defaultstyle.h"
 

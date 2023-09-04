@@ -24,7 +24,7 @@
 
 #include "testing/qtestsuite.h"
 #include "testbase.h"
-#include "libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 static const QString BIAB_DIR("data/");
 

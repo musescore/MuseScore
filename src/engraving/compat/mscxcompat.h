@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_MSCXCOMPAT_H
 #define MU_ENGRAVING_MSCXCOMPAT_H
 
-#include "libmscore/masterscore.h"
+#include "dom/masterscore.h"
 #include "engravingproject.h"
 
 namespace mu::engraving::compat {

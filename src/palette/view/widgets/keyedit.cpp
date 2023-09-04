@@ -32,12 +32,12 @@
 #include "translation.h"
 
 #include "engraving/rw/rwregister.h"
-#include "engraving/libmscore/accidental.h"
-#include "engraving/libmscore/clef.h"
-#include "engraving/libmscore/keysig.h"
-#include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/mscore.h"
-#include "engraving/libmscore/factory.h"
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/clef.h"
+#include "engraving/dom/keysig.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/factory.h"
 #include "engraving/style/defaultstyle.h"
 #include "engraving/compat/dummyelement.h"
 

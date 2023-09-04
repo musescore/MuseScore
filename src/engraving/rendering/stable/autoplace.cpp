@@ -23,12 +23,12 @@
 
 #include "style/style.h"
 
-#include "libmscore/chordrest.h"
-#include "libmscore/segment.h"
-#include "libmscore/spanner.h"
-#include "libmscore/staff.h"
-#include "libmscore/system.h"
-#include "libmscore/measure.h"
+#include "dom/chordrest.h"
+#include "dom/segment.h"
+#include "dom/spanner.h"
+#include "dom/staff.h"
+#include "dom/system.h"
+#include "dom/measure.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;

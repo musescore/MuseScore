@@ -29,8 +29,8 @@
 
 #include "engraving/tests/utils/scorerw.h"
 
-#include "engraving/libmscore/instrtemplate.h"
-#include "engraving/libmscore/mscore.h"
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/mscore.h"
 
 #include "log.h"
 
@@ -40,7 +40,7 @@ using namespace mu::engraving;
 static mu::testing::SuiteEnvironment musicxml_se(
 {
     new mu::draw::DrawModule(),
-    new mu::fonts::FontsModule(), // needs for libmscore
+    new mu::fonts::FontsModule(), // needs for engraving
     new mu::engraving::EngravingModule(),
     new mu::iex::musicxml::MusicXmlModule() // needs for init resources
 },

@@ -29,9 +29,9 @@
 */
 
 #include "engraving/types/fraction.h"
-#include "libmscore/mscore.h"
-#include "libmscore/pitchspelling.h"
-#include "libmscore/line.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/pitchspelling.h"
+#include "engraving/dom/line.h"
 #include "importxmlfirstpass.h"
 #include "musicxmlsupport.h"
 

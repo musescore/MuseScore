@@ -22,13 +22,13 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/chord.h"
-#include "libmscore/factory.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/staff.h"
-#include "libmscore/timesig.h"
-#include "libmscore/tuplet.h"
+#include "dom/chord.h"
+#include "dom/factory.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/staff.h"
+#include "dom/timesig.h"
+#include "dom/tuplet.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

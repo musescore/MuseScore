@@ -35,8 +35,8 @@
 #include "inotationundostack.h"
 #include "iselectinstrumentscenario.h"
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/elementgroup.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/elementgroup.h"
 #include "scorecallbacks.h"
 
 namespace mu::engraving {

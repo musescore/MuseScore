@@ -25,8 +25,8 @@
 
 #include "notationtypes.h"
 
-#include "libmscore/note.h"
-#include "libmscore/text.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/text.h"
 
 #include "translation.h"
 #include "log.h"

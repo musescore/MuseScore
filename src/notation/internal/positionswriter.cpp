@@ -24,9 +24,9 @@
 
 #include <cmath>
 
-#include "libmscore/masterscore.h"
-#include "libmscore/repeatlist.h"
-#include "libmscore/system.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/repeatlist.h"
+#include "engraving/dom/system.h"
 
 #include "engraving/types/types.h"
 

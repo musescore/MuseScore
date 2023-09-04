@@ -21,9 +21,9 @@
  */
 #include "searchcommandsparser.h"
 
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/measure.h"
-#include "libmscore/page.h"
+#include "engraving/dom/rehearsalmark.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/page.h"
 
 #include "log.h"
 #include "translation.h"

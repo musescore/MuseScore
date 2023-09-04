@@ -31,7 +31,7 @@
 #include "engraving/rw/read400/tread.h"
 #include "engraving/rw/write/twrite.h"
 #include "engraving/rw/rwregister.h"
-#include "engraving/libmscore/factory.h"
+#include "engraving/dom/factory.h"
 #include "engraving/rw/rwregister.h"
 
 #include "log.h"

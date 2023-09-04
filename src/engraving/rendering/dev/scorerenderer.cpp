@@ -21,11 +21,11 @@
  */
 #include "scorerenderer.h"
 
-#include "libmscore/arpeggio.h"
-#include "libmscore/beam.h"
-#include "libmscore/textlinebase.h"
-#include "libmscore/harmony.h"
-#include "libmscore/chord.h"
+#include "dom/arpeggio.h"
+#include "dom/beam.h"
+#include "dom/textlinebase.h"
+#include "dom/harmony.h"
+#include "dom/chord.h"
 
 #include "tdraw.h"
 #include "tlayout.h"

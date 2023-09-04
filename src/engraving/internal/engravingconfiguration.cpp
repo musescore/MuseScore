@@ -30,7 +30,7 @@
 
 #include "global/settings.h"
 #include "draw/types/color.h"
-#include "libmscore/mscore.h"
+#include "dom/mscore.h"
 #include "translation.h"
 
 #include "log.h"

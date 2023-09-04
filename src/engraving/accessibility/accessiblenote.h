@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_ACCESSIBLENOTE_H
 
 #include "accessibleitem.h"
-#include "libmscore/note.h"
+#include "dom/note.h"
 
 //! NOTE Just for example
 namespace mu::engraving {

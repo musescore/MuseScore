@@ -24,7 +24,7 @@
 
 #include "log.h"
 
-#include "libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 #include "musicxml/exportxml.h"
 
 using namespace mu::iex::musicxml;

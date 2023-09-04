@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_READ410_CONNECTORINFOREADER_H
 
 #include "../xmlreader.h"
-#include "../../libmscore/connector.h"
+#include "../../dom/connector.h"
 
 //---------------------------------------------------------
 //   @@ ConnectorInfoReader

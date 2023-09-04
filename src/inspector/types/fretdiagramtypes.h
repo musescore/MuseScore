@@ -30,7 +30,7 @@ class FretDiagramTypes
 
 public:
     // the difference between the start numbers of two enum types
-    // is because of how they're defined in libmscore/fret.h
+    // is because of how they're defined in engraving/dom/fret.h
     // to enable direct cast, we use the same values
     enum class FretDot {
         DOT_NONE = -1,

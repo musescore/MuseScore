@@ -21,9 +21,9 @@
  */
 #include "staffwrite.h"
 
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
-#include "libmscore/measure.h"
+#include "dom/score.h"
+#include "dom/staff.h"
+#include "dom/measure.h"
 
 #include "twrite.h"
 #include "measurewrite.h"

@@ -25,7 +25,7 @@
 #include "translation.h"
 
 #include "engraving/engravingerrors.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "meiimporter.h"
 #include "meiconverter.h"

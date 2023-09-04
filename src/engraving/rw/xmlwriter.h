@@ -28,7 +28,7 @@
 #include "io/iodevice.h"
 #include "serialization/xmlstreamwriter.h"
 
-#include "libmscore/property.h"
+#include "dom/property.h"
 
 namespace mu::engraving {
 class EngravingObject;

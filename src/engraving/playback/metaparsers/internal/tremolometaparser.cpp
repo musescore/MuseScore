@@ -22,8 +22,8 @@
 
 #include "tremolometaparser.h"
 
-#include "libmscore/tremolo.h"
-#include "libmscore/chord.h"
+#include "dom/tremolo.h"
+#include "dom/chord.h"
 
 using namespace mu::engraving;
 

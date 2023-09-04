@@ -21,11 +21,11 @@
  */
 #include "measurewrite.h"
 
-#include "libmscore/measure.h"
-#include "libmscore/measurenumber.h"
-#include "libmscore/mmrestrange.h"
-#include "libmscore/spacer.h"
-#include "libmscore/textlinebase.h"
+#include "dom/measure.h"
+#include "dom/measurenumber.h"
+#include "dom/mmrestrange.h"
+#include "dom/spacer.h"
+#include "dom/textlinebase.h"
 
 #include "twrite.h"
 

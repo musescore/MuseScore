@@ -22,8 +22,8 @@
 
 #include "arpeggiorenderer.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/arpeggio.h"
+#include "dom/chord.h"
+#include "dom/arpeggio.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;

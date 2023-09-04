@@ -24,7 +24,7 @@
 #include "style/style.h"
 #include "rw/xmlreader.h"
 
-#include "libmscore/mscore.h"
+#include "dom/mscore.h"
 
 namespace mu::engraving::compat {
 //---------------------------------------------------------

@@ -23,9 +23,9 @@
 
 #include "style/defaultstyle.h"
 
-#include "libmscore/mscoreview.h"
-#include "libmscore/score.h"
-#include "libmscore/spanner.h"
+#include "dom/mscoreview.h"
+#include "dom/score.h"
+#include "dom/spanner.h"
 
 #include "tlayout.h"
 

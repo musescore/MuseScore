@@ -23,7 +23,7 @@
 
 #include "io/file.h"
 
-#include "libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/engravingerrors.h"
 
 namespace mu::iex::guitarpro {

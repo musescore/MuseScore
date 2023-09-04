@@ -22,8 +22,8 @@
 #include "ornamentsettingsmodel.h"
 #include "inspector/types/ornamenttypes.h"
 
-#include "libmscore/articulation.h"
-#include "libmscore/ornament.h"
+#include "engraving/dom/articulation.h"
+#include "engraving/dom/ornament.h"
 
 #include "log.h"
 #include "translation.h"

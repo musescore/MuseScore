@@ -27,7 +27,7 @@
 #include "palettecell.h"
 
 #include "engraving/rendering/isinglerenderer.h"
-#include "engraving/libmscore/engravingitem.h"
+#include "engraving/dom/engravingitem.h"
 
 #include "types/translatablestring.h"
 #include "actions/actiontypes.h"

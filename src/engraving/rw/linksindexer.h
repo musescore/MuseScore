@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_LINKSINDEXER_H
 #define MU_ENGRAVING_LINKSINDEXER_H
 
-#include "../libmscore/location.h"
+#include "../dom/location.h"
 
 namespace mu::engraving {
 class LinksIndexer

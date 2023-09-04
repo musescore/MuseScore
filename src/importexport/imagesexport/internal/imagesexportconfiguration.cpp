@@ -23,7 +23,7 @@
 
 #include "settings.h"
 
-#include "libmscore/mscore.h"
+#include "engraving/dom/mscore.h"
 
 using namespace mu::framework;
 using namespace mu::iex::imagesexport;

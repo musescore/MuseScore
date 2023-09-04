@@ -21,12 +21,12 @@
  */
 #include "tremololayout.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/stem.h"
-#include "libmscore/tremolo.h"
-#include "libmscore/note.h"
-#include "libmscore/staff.h"
-#include "libmscore/measure.h"
+#include "dom/chord.h"
+#include "dom/stem.h"
+#include "dom/tremolo.h"
+#include "dom/note.h"
+#include "dom/staff.h"
+#include "dom/measure.h"
 
 #include "chordlayout.h"
 #include "../dev/beamtremololayout.h"

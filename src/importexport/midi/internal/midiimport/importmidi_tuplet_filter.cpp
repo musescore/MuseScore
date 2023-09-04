@@ -25,7 +25,7 @@
 #include "importmidi_chord.h"
 #include "importmidi_quant.h"
 #include "importmidi_inner.h"
-#include "libmscore/mscore.h"
+#include "engraving/dom/mscore.h"
 
 #include <set>
 

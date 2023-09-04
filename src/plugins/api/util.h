@@ -29,7 +29,7 @@
 
 #include "uicomponents/view/quickpaintedview.h"
 
-#include "libmscore/mscoreview.h"
+#include "engraving/dom/mscoreview.h"
 
 namespace mu::engraving {
 class Score;

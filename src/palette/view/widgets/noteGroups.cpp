@@ -22,14 +22,14 @@
 
 #include "noteGroups.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/mcursor.h"
-#include "libmscore/timesig.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/part.h"
-#include "libmscore/key.h"
-#include "libmscore/actionicon.h"
-#include "libmscore/staff.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/mcursor.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/key.h"
+#include "engraving/dom/actionicon.h"
+#include "engraving/dom/staff.h"
 
 #include "translation.h"
 

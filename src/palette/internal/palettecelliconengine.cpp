@@ -26,9 +26,9 @@
 #include "draw/types/geometry.h"
 #include "draw/painter.h"
 #include "draw/types/pen.h"
-#include "engraving/libmscore/actionicon.h"
-#include "engraving/libmscore/engravingitem.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/actionicon.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/style/defaultstyle.h"
 
 #include "log.h"

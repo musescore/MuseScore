@@ -22,7 +22,7 @@
 
 #include "chordfilter.h"
 
-#include "libmscore/chord.h"
+#include "dom/chord.h"
 
 #include "internal/tremolofilter.h"
 

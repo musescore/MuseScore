@@ -22,7 +22,7 @@
 
 #include "hairpinlinesettingsmodel.h"
 
-#include "libmscore/hairpin.h"
+#include "engraving/dom/hairpin.h"
 
 #include "translation.h"
 

@@ -25,7 +25,7 @@
 #include <QQmlEngine>
 #include <QMetaEnum>
 
-#include "libmscore/score.h"
+#include "engraving/dom/score.h"
 
 #include "log.h"
 

@@ -23,14 +23,14 @@
 #include <gtest/gtest.h>
 
 #include "engraving/compat/scoreaccess.h"
-#include "libmscore/factory.h"
-#include "libmscore/harppedaldiagram.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/part.h"
-#include "libmscore/segment.h"
-#include "libmscore/undo.h"
-#include "libmscore/pitchspelling.h"
+#include "dom/factory.h"
+#include "dom/harppedaldiagram.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/part.h"
+#include "dom/segment.h"
+#include "dom/undo.h"
+#include "dom/pitchspelling.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

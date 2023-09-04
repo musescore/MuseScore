@@ -22,8 +22,8 @@
 
 #include "excerptnotation.h"
 
-#include "libmscore/excerpt.h"
-#include "libmscore/text.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/text.h"
 
 #include "log.h"
 

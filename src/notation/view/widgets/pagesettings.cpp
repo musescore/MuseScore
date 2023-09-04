@@ -24,10 +24,10 @@
 #include <QKeyEvent>
 #include <QPageSize>
 
-#include "engraving/libmscore/page.h"
-#include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/mscore.h"
-#include "engraving/libmscore/excerpt.h"
+#include "engraving/dom/page.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/style/pagestyle.h"
 
 #include "ui/view/widgetstatestore.h"

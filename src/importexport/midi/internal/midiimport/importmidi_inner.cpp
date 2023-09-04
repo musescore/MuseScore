@@ -27,8 +27,8 @@
 #include "importmidi_chord.h"
 #include "../midishared/midifile.h"
 
-#include "engraving/libmscore/durationtype.h"
-#include "engraving/libmscore/sig.h"
+#include "engraving/dom/durationtype.h"
+#include "engraving/dom/sig.h"
 
 namespace mu::iex::midi {
 MTrack::MTrack()

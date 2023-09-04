@@ -26,7 +26,7 @@
 #include "draw/utils/drawdatapaint.h"
 #include "draw/painter.h"
 
-#include "engraving/libmscore/mscore.h"
+#include "engraving/dom/mscore.h"
 
 #include "log.h"
 

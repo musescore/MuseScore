@@ -22,9 +22,9 @@
 
 #include "chordarticulationsrenderer.h"
 
-#include "libmscore/tempo.h"
-#include "libmscore/staff.h"
-#include "libmscore/swing.h"
+#include "dom/tempo.h"
+#include "dom/staff.h"
+#include "dom/swing.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
 #include "ornamentsrenderer.h"

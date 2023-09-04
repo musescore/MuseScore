@@ -21,11 +21,11 @@
  */
 
 #include "editstafftype.h"
-#include "libmscore/part.h"
-#include "libmscore/mscore.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/staff.h"
-#include "libmscore/stringdata.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stringdata.h"
 
 #include "engraving/types/typesconv.h"
 #include "engraving/compat/scoreaccess.h"

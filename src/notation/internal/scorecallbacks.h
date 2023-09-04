@@ -22,7 +22,7 @@
 #ifndef MU_NOTATION_SCORECALLBACKS_H
 #define MU_NOTATION_SCORECALLBACKS_H
 
-#include "libmscore/mscoreview.h"
+#include "engraving/dom/mscoreview.h"
 
 #include "notation/inotationconfiguration.h"
 #include "modularity/ioc.h"
