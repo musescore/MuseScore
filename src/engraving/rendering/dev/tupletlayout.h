@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_TUPLETLAYOUT_H
-#define MU_ENGRAVING_TUPLETLAYOUT_H
+#ifndef MU_ENGRAVING_TUPLETLAYOUT_DEV_H
+#define MU_ENGRAVING_TUPLETLAYOUT_DEV_H
 
 #include "layoutcontext.h"
 
@@ -43,4 +43,4 @@ public:
 };
 }
 
-#endif // MU_ENGRAVING_TUPLETLAYOUT_H
+#endif // MU_ENGRAVING_TUPLETLAYOUT_DEV_H

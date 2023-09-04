@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_DEBUGPAINT_H
-#define MU_ENGRAVING_DEBUGPAINT_H
+#ifndef MU_ENGRAVING_DEBUGPAINT_DEV_H
+#define MU_ENGRAVING_DEBUGPAINT_DEV_H
 
 #include "draw/painter.h"
 
@@ -48,4 +48,4 @@ public:
 };
 }
 
-#endif // MU_ENGRAVING_DEBUGPAINT_H
+#endif // MU_ENGRAVING_DEBUGPAINT_DEV_H
