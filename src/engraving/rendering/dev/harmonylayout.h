@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_HARMONYLAYOUT_H
-#define MU_ENGRAVING_HARMONYLAYOUT_H
+#ifndef MU_ENGRAVING_HARMONYLAYOUT_DEV_H
+#define MU_ENGRAVING_HARMONYLAYOUT_DEV_H
 
 #include <vector>
 
@@ -42,4 +42,4 @@ public:
 };
 }
 
-#endif // MU_ENGRAVING_HARMONYLAYOUT_H
+#endif // MU_ENGRAVING_HARMONYLAYOUT_DEV_H

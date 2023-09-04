@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_ARPEGGIOLAYOUT_H
-#define MU_ENGRAVING_ARPEGGIOLAYOUT_H
+#ifndef MU_ENGRAVING_ARPEGGIOLAYOUT_DEV_H
+#define MU_ENGRAVING_ARPEGGIOLAYOUT_DEV_H
 
 #include "layoutcontext.h"
 #include "libmscore/arpeggio.h"
@@ -45,4 +45,4 @@ private:
 };
 }
 
-#endif // MU_ENGRAVING_ARPEGGIOLAYOUT_H
+#endif // MU_ENGRAVING_ARPEGGIOLAYOUT_DEV_H

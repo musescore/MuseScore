@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_BEAMTREMOLOLAYOUT_H
-#define MU_ENGRAVING_BEAMTREMOLOLAYOUT_H
+#ifndef MU_ENGRAVING_BEAMTREMOLOLAYOUT_DEV_H
+#define MU_ENGRAVING_BEAMTREMOLOLAYOUT_DEV_H
 
 #include "libmscore/beam.h"
 #include "libmscore/engravingitem.h"

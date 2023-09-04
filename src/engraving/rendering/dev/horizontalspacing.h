@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_HORIZONTALSPACINGUTILS_H
-#define MU_ENGRAVING_HORIZONTALSPACINGUTILS_H
+#ifndef MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
+#define MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H
 
 namespace mu::engraving {
 class Chord;
@@ -54,4 +54,4 @@ private:
     static KerningType computeStemSlashKerningType(const StemSlash* stemSlash, const EngravingItem* item2);
 };
 } // namespace mu::engraving::layout
-#endif // MU_ENGRAVING_HORIZONTALSPACINGUTILS_H
+#endif // MU_ENGRAVING_HORIZONTALSPACINGUTILS_DEV_H

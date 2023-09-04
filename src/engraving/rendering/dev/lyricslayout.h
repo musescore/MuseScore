@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_LYRICSLAYOUT_H
-#define MU_ENGRAVING_LYRICSLAYOUT_H
+#ifndef MU_ENGRAVING_LYRICSLAYOUT_DEV_H
+#define MU_ENGRAVING_LYRICSLAYOUT_DEV_H
 
 #include "layoutcontext.h"
 
@@ -45,4 +45,4 @@ public:
     static void layoutLyrics(LayoutContext& ctx, System* system);
 };
 }
-#endif // MU_ENGRAVING_LYRICSLAYOUT_H
+#endif // MU_ENGRAVING_LYRICSLAYOUT_DEV_H
