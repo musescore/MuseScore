@@ -24,7 +24,7 @@ set(MODULE_QRC engraving.qrc)
 include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
-#include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/single/single.cmake)
 
 set(MODULE_SRC
