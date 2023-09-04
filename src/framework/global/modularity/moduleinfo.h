@@ -33,7 +33,23 @@
 #endif
 #endif
 
+#if defined(__GNUC__) && !defined(__clang__)
+#if (__GNUC__ < 11)
+#define IOC_NO_STRING_VIEW_CONSTEXPR_METHODS
+#endif
+#endif
+
 namespace mu::modularity {
+struct InterfaceInfo {
+    std::string_view id;
+    std::string_view module;
+    bool internal = false;
+    constexpr InterfaceInfo(std::string_view i, std::string_view m, bool intr)
+        : id(i), module(m), internal(intr) {}
+};
+
+#ifndef IOC_NO_STRING_VIEW_CONSTEXPR_METHODS
+
 constexpr std::string_view moduleNameBySig(const std::string_view& sig)
 {
     constexpr std::string_view ArgBegin("(");
@@ -58,6 +74,34 @@ constexpr std::string_view moduleNameBySig(const std::string_view& sig)
     std::string_view module = sig.substr(beginModule, endModule - beginModule);
     return module;
 }
+
+#else
+inline std::string_view moduleNameBySig(const std::string_view& sig)
+{
+    static const std::string_view ArgBegin("(");
+    static const std::string_view Space(" ");
+    static const std::string_view Colon("::");
+
+    //! NOTE Signature should be like
+    //! SomeType mu::modulename::maybe::ClassName::methodName()
+
+    std::size_t endMethod = sig.find_first_of(ArgBegin);
+    if (endMethod == std::string_view::npos) {
+        return sig;
+    }
+
+    std::size_t beginMethod = sig.find_last_of(Space, endMethod);
+    if (beginMethod == std::string_view::npos) {
+        return sig;
+    }
+
+    size_t beginModule = sig.find_first_of(Colon, beginMethod) + 2;
+    size_t endModule = sig.find_first_of(Colon, beginModule);
+    std::string_view module = sig.substr(beginModule, endModule - beginModule);
+    return module;
+}
+
+#endif
 }
 
 #endif // MU_MODULARITY_MODULEINFO_H

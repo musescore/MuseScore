@@ -29,14 +29,6 @@
 #include "moduleinfo.h"
 
 namespace mu::modularity {
-struct InterfaceInfo {
-    std::string_view id;
-    std::string_view module;
-    bool internal = false;
-    constexpr InterfaceInfo(std::string_view i, std::string_view m, bool intr)
-        : id(i), module(m), internal(intr) {}
-};
-
 class IModuleInterface
 {
 public:
@@ -77,6 +69,8 @@ struct IModuleInternalCreator : public IModuleCreator {
 };
 }
 
+#ifndef IOC_NO_STRING_VIEW_CONSTEXPR_METHODS
+
 #define INTERFACE_ID(id)                                                \
 public:                                                                 \
     static constexpr mu::modularity::InterfaceInfo interfaceInfo() {    \
@@ -86,6 +80,17 @@ public:                                                                 \
     }                                                                   \
 private:                                                                \
 
+#else
+#define INTERFACE_ID(id)                                                \
+public:                                                                 \
+    static const mu::modularity::InterfaceInfo& interfaceInfo() {       \
+        static const std::string_view sig(IOC_FUNC_SIG);                \
+        static const mu::modularity::InterfaceInfo info(#id, mu::modularity::moduleNameBySig(sig), isInternalInterface());    \
+        return info;                                                    \
+    }                                                                   \
+private:                                                                \
+
+#endif
 
 #define MODULE_EXPORT_INTERFACE public mu::modularity::IModuleExportInterface
 #define MODULE_EXPORT_CREATOR public mu::modularity::IModuleExportCreator
