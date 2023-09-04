@@ -33,22 +33,22 @@ using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
 VerticalGapData::VerticalGapData(const MStyle* style, bool first, System* sys, const Staff* st, SysStaff* sst, Spacer* nextSpacer, double y)
-    : _fixedHeight(first), style(style), system(sys), sysStaff(sst), staff(st)
+    : m_fixedHeight(first), style(style), system(sys), sysStaff(sst), staff(st)
 {
-    if (_fixedHeight) {
-        _normalisedSpacing = style->styleMM(Sid::staffUpperBorder);
-        _maxActualSpacing = _normalisedSpacing;
+    if (m_fixedHeight) {
+        m_normalisedSpacing = style->styleMM(Sid::staffUpperBorder);
+        m_maxActualSpacing = m_normalisedSpacing;
     } else {
-        _normalisedSpacing = system->y() + (sysStaff ? sysStaff->bbox().y() : 0.0) - y;
-        _maxActualSpacing = style->styleMM(Sid::maxStaffSpread);
+        m_normalisedSpacing = system->y() + (sysStaff ? sysStaff->bbox().y() : 0.0) - y;
+        m_maxActualSpacing = style->styleMM(Sid::maxStaffSpread);
 
         Spacer* spacer { staff ? system->upSpacer(staff->idx(), nextSpacer) : nullptr };
 
         if (spacer) {
-            _fixedSpacer = spacer->spacerType() == SpacerType::FIXED;
-            _normalisedSpacing = std::max(_normalisedSpacing, spacer->gap().val());
-            if (_fixedSpacer) {
-                _maxActualSpacing = _normalisedSpacing;
+            m_fixedSpacer = spacer->spacerType() == SpacerType::FIXED;
+            m_normalisedSpacing = std::max(m_normalisedSpacing, spacer->gap().val());
+            if (m_fixedSpacer) {
+                m_maxActualSpacing = m_normalisedSpacing;
             }
         }
     }
@@ -60,12 +60,12 @@ VerticalGapData::VerticalGapData(const MStyle* style, bool first, System* sys, c
 
 void VerticalGapData::updateFactor(double factor)
 {
-    if (_fixedHeight) {
+    if (m_fixedHeight) {
         return;
     }
-    double f = std::max(factor, _factor);
-    _normalisedSpacing *= _factor / f;
-    _factor = f;
+    double f = std::max(factor, m_factor);
+    m_normalisedSpacing *= m_factor / f;
+    m_factor = f;
 }
 
 //---------------------------------------------------------
@@ -75,8 +75,8 @@ void VerticalGapData::updateFactor(double factor)
 void VerticalGapData::addSpaceBetweenSections()
 {
     updateFactor(style->styleD(Sid::spreadSystem));
-    if (!(_fixedHeight | _fixedSpacer)) {
-        _maxActualSpacing = style->styleMM(Sid::maxSystemSpread) / _factor;
+    if (!(m_fixedHeight | m_fixedSpacer)) {
+        m_maxActualSpacing = style->styleMM(Sid::maxSystemSpread) / m_factor;
     }
 }
 
@@ -86,10 +86,10 @@ void VerticalGapData::addSpaceBetweenSections()
 
 void VerticalGapData::addSpaceAroundVBox(bool above)
 {
-    _fixedHeight = true;
-    _factor = 1.0;
-    _normalisedSpacing = above ? style->styleMM(Sid::frameSystemDistance) : style->styleMM(Sid::systemFrameDistance);
-    _maxActualSpacing = _normalisedSpacing / _factor;
+    m_fixedHeight = true;
+    m_factor = 1.0;
+    m_normalisedSpacing = above ? style->styleMM(Sid::frameSystemDistance) : style->styleMM(Sid::systemFrameDistance);
+    m_maxActualSpacing = m_normalisedSpacing / m_factor;
 }
 
 //---------------------------------------------------------
@@ -116,7 +116,7 @@ void VerticalGapData::addSpaceAroundCurlyBracket()
 
 void VerticalGapData::insideCurlyBracket()
 {
-    _maxActualSpacing = style->styleMM(Sid::maxAkkoladeDistance) / _factor;
+    m_maxActualSpacing = style->styleMM(Sid::maxAkkoladeDistance) / m_factor;
 }
 
 //---------------------------------------------------------
@@ -125,7 +125,7 @@ void VerticalGapData::insideCurlyBracket()
 
 double VerticalGapData::factor() const
 {
-    return _factor;
+    return m_factor;
 }
 
 //---------------------------------------------------------
@@ -135,7 +135,7 @@ double VerticalGapData::factor() const
 
 double VerticalGapData::spacing() const
 {
-    return _normalisedSpacing + _addedNormalisedSpace;
+    return m_normalisedSpacing + m_addedNormalisedSpace;
 }
 
 //---------------------------------------------------------
@@ -144,7 +144,7 @@ double VerticalGapData::spacing() const
 
 double VerticalGapData::actualAddedSpace() const
 {
-    return _addedNormalisedSpace * factor();
+    return m_addedNormalisedSpace * factor();
 }
 
 //---------------------------------------------------------
@@ -153,20 +153,20 @@ double VerticalGapData::actualAddedSpace() const
 
 double VerticalGapData::addSpacing(double step)
 {
-    if (_fixedHeight | _fixedSpacer) {
+    if (m_fixedHeight | m_fixedSpacer) {
         return 0.0;
     }
-    if (_normalisedSpacing >= _maxActualSpacing) {
-        _normalisedSpacing = _maxActualSpacing;
+    if (m_normalisedSpacing >= m_maxActualSpacing) {
+        m_normalisedSpacing = m_maxActualSpacing;
         step = 0.0;
     } else {
-        double newSpacing { _normalisedSpacing + _addedNormalisedSpace + step };
-        if ((newSpacing >= _maxActualSpacing)) {
-            step = _maxActualSpacing - _normalisedSpacing - _addedNormalisedSpace;
+        double newSpacing { m_normalisedSpacing + m_addedNormalisedSpace + step };
+        if ((newSpacing >= m_maxActualSpacing)) {
+            step = m_maxActualSpacing - m_normalisedSpacing - m_addedNormalisedSpace;
         }
     }
-    _addedNormalisedSpace += step;
-    _lastStep = step;
+    m_addedNormalisedSpace += step;
+    m_lastStep = step;
     return step;
 }
 
@@ -176,7 +176,7 @@ double VerticalGapData::addSpacing(double step)
 
 bool VerticalGapData::isFixedHeight() const
 {
-    return _fixedHeight || RealIsNull(_normalisedSpacing - _maxActualSpacing);
+    return m_fixedHeight || RealIsNull(m_normalisedSpacing - m_maxActualSpacing);
 }
 
 //---------------------------------------------------------
@@ -185,8 +185,8 @@ bool VerticalGapData::isFixedHeight() const
 
 void VerticalGapData::undoLastAddSpacing()
 {
-    _addedNormalisedSpace -= _lastStep;
-    _lastStep = 0.0;
+    m_addedNormalisedSpace -= m_lastStep;
+    m_lastStep = 0.0;
 }
 
 //---------------------------------------------------------
@@ -195,14 +195,19 @@ void VerticalGapData::undoLastAddSpacing()
 
 double VerticalGapData::addFillSpacing(double step, double maxFill)
 {
-    if (_fixedSpacer) {
+    if (m_fixedSpacer) {
         return 0.0;
     }
-    double actStep { ((step + _fillSpacing / _factor) > maxFill) ? (maxFill - _fillSpacing / _factor) : step };
+    double actStep { ((step + m_fillSpacing / m_factor) > maxFill) ? (maxFill - m_fillSpacing / m_factor) : step };
     double res = addSpacing(actStep);
-    _fillSpacing += res * _factor;
-    return res;
-}
+                 m_fillSpacing += res * m_factor;
+                              return res;
+                   }
+
+    void VerticalGapData::setNormalisedSpacing(double newNormalisedSpacing)
+    {
+        m_normalisedSpacing = newNormalisedSpacing;
+    }
 
 //---------------------------------------------------------
 //   deleteAll
