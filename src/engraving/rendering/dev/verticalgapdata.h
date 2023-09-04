@@ -40,17 +40,6 @@ namespace mu::engraving::rendering::dev {
 
 class VerticalGapData
 {
-private:
-    bool _fixedHeight        { false };
-    bool _fixedSpacer        { false };
-    double _factor               { 1.0 };
-    double _normalisedSpacing    { 0.0 };
-    double _maxActualSpacing     { 0.0 };
-    double _addedNormalisedSpace { 0.0 };
-    double _fillSpacing          { 0.0 };
-    double _lastStep             { 0.0 };
-    void  updateFactor(double factor);
-
 public:
     const MStyle* style = nullptr;
     System* system = nullptr;
@@ -73,6 +62,20 @@ public:
     bool isFixedHeight() const;
     void undoLastAddSpacing();
     double addFillSpacing(double step, double maxFill);
+
+    void setNormalisedSpacing(double newNormalisedSpacing);
+
+private:
+    void  updateFactor(double factor);
+
+    bool m_fixedHeight = false;
+    bool m_fixedSpacer = false;
+    double m_factor = 1.0;
+    double m_normalisedSpacing = 0.0;
+    double m_maxActualSpacing = 0.0;
+    double m_addedNormalisedSpace = 0.0;
+    double m_fillSpacing = 0.0;
+    double m_lastStep = 0.0;
 };
 
 //---------------------------------------------------------

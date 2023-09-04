@@ -81,8 +81,8 @@ private:
     double m_slope = 0.;
     bool m_isGrace = false;
     int m_beamSpacing = 0;
-    double m_beamDist = 0.;
-    double m_beamWidth = 0.;
+    double m_beamDist = 0.0;
+    double m_beamWidth = 0.0;
     std::vector<ChordRest*> m_elements;
     std::vector<int> m_notes;
     StaffType const* m_tab = nullptr;
