@@ -43,7 +43,7 @@
 #include "engraving/libmscore/masterscore.h"
 
 #include "rendering/dev/scorerenderer.h"
-//#include "rendering/stable/scorerenderer.h"
+#include "rendering/stable/scorerenderer.h"
 #include "rendering/single/singlerenderer.h"
 
 #include "compat/scoreaccess.h"
@@ -86,7 +86,7 @@ Versions:
 * see layout/README.h
 */
     ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::dev::ScoreRenderer());
-    //ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new layout::stable::ScoreRenderer());
+    //ioc()->registerExport<rendering::IScoreRenderer>(moduleName(), new rendering::stable::ScoreRenderer());
 
     ioc()->registerExport<rendering::ISingleRenderer>(moduleName(), new rendering::single::SingleRenderer());
 }
