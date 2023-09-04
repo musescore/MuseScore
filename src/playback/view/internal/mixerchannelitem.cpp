@@ -482,15 +482,24 @@ InputResourceItem* MixerChannelItem::buildInputResourceItem()
             return;
         }
 
-        for (aux_channel_idx_t idx = 0; idx < static_cast<size_t>(m_auxSendItems.size()); ++idx) {
+        bool auxParamsChanged = false;
+        for (aux_channel_idx_t idx = 0; idx < static_cast<size_t>(m_outParams.auxSends.size()); ++idx) {
+            const String& soundId = m_inputParams.resourceMeta.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE);
+            gain_t newAudioSignalAmount = configuration()->defaultAuxSendValue(idx, m_inputParams.type(), soundId);
+
             auto it = m_auxSendItems.find(idx);
             if (it == m_auxSendItems.end()) {
-                continue;
+                if (!RealIsEqual(m_outParams.auxSends.at(idx).signalAmount, newAudioSignalAmount)) {
+                    m_outParams.auxSends.at(idx).signalAmount = newAudioSignalAmount;
+                    auxParamsChanged = true;
+                }
+            } else {
+                it.value()->setAudioSignalPercentage(newAudioSignalAmount * 100.f);
             }
+        }
 
-            const String& soundId = m_inputParams.resourceMeta.attributeVal(PLAYBACK_SETUP_DATA_ATTRIBUTE);
-            int newAudioSignalPercentage = configuration()->defaultAuxSendValue(idx, m_inputParams.type(), soundId) * 100.f;
-            it.value()->setAudioSignalPercentage(newAudioSignalPercentage);
+        if (auxParamsChanged) {
+            emit outputParamsChanged(m_outParams);
         }
     });
 
