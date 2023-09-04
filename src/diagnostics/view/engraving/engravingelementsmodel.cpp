@@ -23,9 +23,9 @@
 
 #include <QTextStream>
 
-#include "engraving/libmscore/engravingobject.h"
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/engravingobject.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/masterscore.h"
 #include "dataformatter.h"
 
 #include "log.h"

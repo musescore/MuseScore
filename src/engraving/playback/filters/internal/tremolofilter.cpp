@@ -22,8 +22,8 @@
 
 #include "tremolofilter.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/tremolo.h"
+#include "dom/chord.h"
+#include "dom/tremolo.h"
 
 using namespace mu::engraving;
 

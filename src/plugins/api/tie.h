@@ -24,7 +24,7 @@
 #define __PLUGIN_API_TIE_H__
 
 #include "elements.h"
-#include "libmscore/tie.h"
+#include "engraving/dom/tie.h"
 
 namespace mu::plugins::api {
 //---------------------------------------------------------

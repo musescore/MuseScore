@@ -22,7 +22,7 @@
 
 #include "offsetSelect.h"
 
-#include "libmscore/types.h"
+#include "engraving/dom/types.h"
 
 using namespace mu::notation;
 

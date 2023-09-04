@@ -22,14 +22,14 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/chordrest.h"
-#include "libmscore/durationtype.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/harmony.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/part.h"
-#include "libmscore/segment.h"
+#include "dom/chordrest.h"
+#include "dom/durationtype.h"
+#include "dom/excerpt.h"
+#include "dom/harmony.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/part.h"
+#include "dom/segment.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

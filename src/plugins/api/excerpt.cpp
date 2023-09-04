@@ -22,7 +22,7 @@
 
 #include "excerpt.h"
 #include "score.h"
-#include "libmscore/score.h"
+#include "engraving/dom/score.h"
 
 namespace mu::plugins::api {
 //---------------------------------------------------------

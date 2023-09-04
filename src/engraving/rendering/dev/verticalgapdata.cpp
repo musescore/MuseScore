@@ -23,9 +23,9 @@
 
 #include "realfn.h"
 
-#include "libmscore/spacer.h"
-#include "libmscore/staff.h"
-#include "libmscore/system.h"
+#include "dom/spacer.h"
+#include "dom/staff.h"
+#include "dom/system.h"
 
 #include "style/style.h"
 
@@ -33,7 +33,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
 VerticalGapData::VerticalGapData(const MStyle* style, bool first, System* sys, const Staff* st, SysStaff* sst, Spacer* nextSpacer, double y)
-    : m_fixedHeight(first), style(style), system(sys), sysStaff(sst), staff(st)
+    : style(style), system(sys), sysStaff(sst), staff(st), m_fixedHeight(first)
 {
     if (m_fixedHeight) {
         m_normalisedSpacing = style->styleMM(Sid::staffUpperBorder);

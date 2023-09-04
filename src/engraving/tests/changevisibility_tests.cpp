@@ -22,15 +22,15 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/accidental.h"
-#include "libmscore/measure.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/ornament.h"
-#include "libmscore/rest.h"
-#include "libmscore/stem.h"
-#include "libmscore/hook.h"
-#include "libmscore/beam.h"
+#include "dom/accidental.h"
+#include "dom/measure.h"
+#include "dom/chord.h"
+#include "dom/note.h"
+#include "dom/ornament.h"
+#include "dom/rest.h"
+#include "dom/stem.h"
+#include "dom/hook.h"
+#include "dom/beam.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

@@ -22,9 +22,9 @@
 #include "paint.h"
 
 #include "draw/painter.h"
-#include "libmscore/score.h"
-#include "libmscore/page.h"
-#include "libmscore/engravingitem.h"
+#include "dom/score.h"
+#include "dom/page.h"
+#include "dom/engravingitem.h"
 
 #include "debugpaint.h"
 

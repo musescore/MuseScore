@@ -23,7 +23,7 @@
 
 #include "style/style.h"
 
-#include "libmscore/score.h"
+#include "dom/score.h"
 
 #include "log.h"
 

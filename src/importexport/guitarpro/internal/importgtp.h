@@ -30,9 +30,10 @@
 
 #include "gtp/gp67dombuilder.h"
 #include "continiouselementsbuilder.h"
-#include "libmscore/score.h"
-#include "libmscore/vibrato.h"
-#include "libmscore/articulation.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/vibrato.h"
+#include "engraving/dom/articulation.h"
+#include "engraving/dom/instrument.h"
 #include "engraving/engravingerrors.h"
 
 #include "modularity/ioc.h"

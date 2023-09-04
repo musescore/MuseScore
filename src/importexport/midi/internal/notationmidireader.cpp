@@ -21,7 +21,7 @@
  */
 #include "notationmidireader.h"
 
-#include "libmscore/score.h"
+#include "engraving/dom/score.h"
 #include "engraving/engravingerrors.h"
 
 using namespace mu::iex::midi;

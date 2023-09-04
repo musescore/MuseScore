@@ -30,13 +30,13 @@
 #include "translation.h"
 
 #include "engraving/types/typesconv.h"
-#include "engraving/libmscore/chord.h"
-#include "engraving/libmscore/engravingitem.h"
-#include "engraving/libmscore/note.h"
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/segment.h"
-#include "engraving/libmscore/select.h"
-#include "engraving/libmscore/system.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/select.h"
+#include "engraving/dom/system.h"
 
 #include "ui/view/widgetstatestore.h"
 

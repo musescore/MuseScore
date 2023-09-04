@@ -23,12 +23,12 @@
 
 #include <QGuiApplication>
 
-#include "libmscore/masterscore.h"
-#include "libmscore/segment.h"
-#include "libmscore/tie.h"
-#include "libmscore/score.h"
-#include "libmscore/note.h"
-#include "libmscore/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/tie.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/factory.h"
 
 #include "notationtypes.h"
 

@@ -22,8 +22,8 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/masterscore.h"
-#include "libmscore/segment.h"
+#include "dom/masterscore.h"
+#include "dom/segment.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

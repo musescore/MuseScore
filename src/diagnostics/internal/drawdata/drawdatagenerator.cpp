@@ -30,7 +30,7 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/mscloader.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #ifdef MUE_BUILD_IMPORTEXPORT_MODULE
 #include "importexport/guitarpro/internal/guitarproreader.h"

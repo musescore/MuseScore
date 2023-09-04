@@ -24,7 +24,7 @@
 
 #include <cmath>
 
-#include "libmscore/fret.h"
+#include "engraving/dom/fret.h"
 
 using namespace mu::inspector;
 

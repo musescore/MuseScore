@@ -26,8 +26,8 @@
 #include "style/defaultstyle.h"
 #include "rw/mscloader.h"
 #include "rw/mscsaver.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/part.h"
+#include "dom/masterscore.h"
+#include "dom/part.h"
 
 #include "log.h"
 

@@ -39,7 +39,7 @@
 
 #include "engraving/types/types.h"
 
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "log.h"
 

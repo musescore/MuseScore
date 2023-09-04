@@ -26,7 +26,7 @@
 
 #include "types/symnames.h"
 
-#include "libmscore/mscore.h"
+#include "dom/mscore.h"
 
 #include "log.h"
 

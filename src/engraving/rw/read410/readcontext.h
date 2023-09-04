@@ -30,10 +30,10 @@
 
 #include "types/types.h"
 
-#include "libmscore/connector.h"
-#include "libmscore/interval.h"
-#include "libmscore/location.h"
-#include "libmscore/sig.h"
+#include "dom/connector.h"
+#include "dom/interval.h"
+#include "dom/location.h"
+#include "dom/sig.h"
 
 #include "../linksindexer.h"
 #include "../inoutdata.h"

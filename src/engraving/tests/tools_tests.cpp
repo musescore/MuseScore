@@ -22,9 +22,9 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/undo.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

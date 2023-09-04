@@ -30,7 +30,7 @@
 
 #include "style/style.h"
 #include "iengravingfont.h"
-#include "libmscore/mscore.h"
+#include "dom/mscore.h"
 
 #include "../layoutoptions.h"
 

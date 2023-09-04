@@ -24,7 +24,7 @@
 #define __IMPORTXMLFIRSTPASS_H__
 
 #include "engraving/types/fraction.h"
-#include "libmscore/interval.h"
+#include "engraving/dom/interval.h"
 #include "musicxmlsupport.h"
 
 namespace mu::engraving {

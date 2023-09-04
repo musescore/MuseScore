@@ -22,9 +22,9 @@
 #include "projectmigrator.h"
 
 #include "engraving/types/constants.h"
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/excerpt.h"
-#include "engraving/libmscore/undo.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/undo.h"
 
 #include "rw/compat/readstyle.h"
 

@@ -25,9 +25,8 @@
 
 #include <memory>
 
-#include "libmscore/instrument.h"
-#include "libmscore/measure.h"
-#include "libmscore/synthesizerstate.h"
+#include "dom/measure.h"
+#include "dom/synthesizerstate.h"
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
 

@@ -26,10 +26,10 @@
 
 #include "score.h"
 
-#include "libmscore/measurebase.h"
-#include "libmscore/page.h"
-#include "libmscore/score.h"
-#include "libmscore/system.h"
+#include "engraving/dom/measurebase.h"
+#include "engraving/dom/page.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/system.h"
 
 using namespace mu;
 

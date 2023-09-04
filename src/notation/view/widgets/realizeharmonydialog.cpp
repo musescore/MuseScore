@@ -22,8 +22,8 @@
 
 #include "realizeharmonydialog.h"
 
-#include "libmscore/harmony.h"
-#include "libmscore/staff.h"
+#include "engraving/dom/harmony.h"
+#include "engraving/dom/staff.h"
 
 #include "translation.h"
 

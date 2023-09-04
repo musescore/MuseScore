@@ -34,7 +34,7 @@
 
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/infrastructure/mscwriter.h"
-#include "engraving/libmscore/excerpt.h"
+#include "engraving/dom/excerpt.h"
 #include "engraving/rw/mscsaver.h"
 
 #include "backendjsonwriter.h"

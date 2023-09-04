@@ -26,7 +26,7 @@
 
 #include "musedata.h"
 
-#include "libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/engravingerrors.h"
 
 using namespace mu::iex::musedata;

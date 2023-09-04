@@ -22,7 +22,7 @@
 
 #include "arpeggiometaparser.h"
 
-#include "libmscore/arpeggio.h"
+#include "dom/arpeggio.h"
 
 using namespace mu::engraving;
 

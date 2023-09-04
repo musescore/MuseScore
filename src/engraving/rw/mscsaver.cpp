@@ -23,10 +23,10 @@
 
 #include "global/io/buffer.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/imageStore.h"
-#include "libmscore/audio.h"
+#include "dom/masterscore.h"
+#include "dom/excerpt.h"
+#include "dom/imageStore.h"
+#include "dom/audio.h"
 
 #include "rwregister.h"
 #include "inoutdata.h"

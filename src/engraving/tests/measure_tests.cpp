@@ -22,13 +22,13 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/measurenumber.h"
-#include "libmscore/rest.h"
-#include "libmscore/segment.h"
-#include "libmscore/undo.h"
+#include "dom/engravingitem.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/measurenumber.h"
+#include "dom/rest.h"
+#include "dom/segment.h"
+#include "dom/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

@@ -25,8 +25,8 @@
 #include "importmidi_clef.h"
 #include "importmidi_operations.h"
 #include "importmidi_quant.h"
-#include "libmscore/mscore.h"
-#include "libmscore/sig.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/sig.h"
 
 #include <set>
 

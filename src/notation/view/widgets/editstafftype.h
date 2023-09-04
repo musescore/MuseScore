@@ -24,8 +24,8 @@
 #define MU_NOTATION_EDITSTAFFTYPE_H
 
 #include "ui_editstafftype.h"
-#include "libmscore/mscore.h"
-#include "libmscore/stafftype.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/stafftype.h"
 
 #include "notation/notationtypes.h"
 

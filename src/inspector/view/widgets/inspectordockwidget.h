@@ -26,8 +26,8 @@
 #include <QDockWidget>
 #include <QQmlEngine>
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/masterscore.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/masterscore.h"
 
 class InspectorFormWidget;
 

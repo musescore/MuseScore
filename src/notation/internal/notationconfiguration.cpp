@@ -21,7 +21,7 @@
  */
 #include "notationconfiguration.h"
 
-#include "libmscore/mscore.h"
+#include "engraving/dom/mscore.h"
 
 #include "log.h"
 #include "settings.h"

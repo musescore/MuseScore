@@ -2991,8 +2991,8 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3869"/>
         <source>After key signature if changing to fewer ♯ or ♭. Before if changing between ♯ and ♭</source>
-        <translation>Después de la clave si se cambia a menos ♯ o ♭. 
-Antes si se cambia entre ♯ y ♭. </translation>
+        <translation>Después de la clave si se cambia a menos ♯ o ♭. 
+Antes si se cambia entre ♯ y ♭. </translation>
     </message>
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="3963"/>
@@ -10941,191 +10941,191 @@ biblioteca de sonidos Muse Sounds</translation>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="664"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="664"/>
         <source>Duplet</source>
         <translation>Dosillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="667"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="667"/>
         <source>Triplet</source>
         <translation>Tresillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="670"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="670"/>
         <source>Quadruplet</source>
         <translation>Cuatrillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="673"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="673"/>
         <source>Quintuplet</source>
         <translation>Quintillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="676"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="676"/>
         <source>Sextuplet</source>
         <translation>Seisillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="679"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="679"/>
         <source>Septuplet</source>
         <translation>Septillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="682"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="682"/>
         <source>Octuplet</source>
         <translation>Octillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="685"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="685"/>
         <source>Nonuplet</source>
         <translation>Novenillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="689"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="689"/>
         <source>%1 note tuplet</source>
         <extracomment>%1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="699"/>
-        <location filename="../../src/engraving/libmscore/tempotext.cpp" line="468"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="699"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="468"/>
         <source>Dotted %1</source>
         <translation>%1 con puntillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="702"/>
-        <location filename="../../src/engraving/libmscore/tempotext.cpp" line="470"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="702"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="470"/>
         <source>Double dotted %1</source>
         <translation>%1 con doble puntillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="705"/>
-        <location filename="../../src/engraving/libmscore/tempotext.cpp" line="472"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="705"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="472"/>
         <source>Triple dotted %1</source>
         <translation>%1 con triple puntillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="708"/>
-        <location filename="../../src/engraving/libmscore/tempotext.cpp" line="474"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="708"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="474"/>
         <source>Quadruple dotted %1</source>
         <translation>Cuádruple puntillo %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1257"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1257"/>
         <source>Start and end of %1</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3091"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3091"/>
         <source>Current contents of measures will be replaced</source>
         <translation>Los contenidos actuales de los compases serán reemplazado</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/cmd.cpp" line="3092"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3092"/>
         <source>Continue with inserting measure repeat?</source>
         <translation>¿Continuar con la inserción de repetición de compás?</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/engravingitem.cpp" line="2725"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2725"/>
         <source>Measure: %1</source>
         <translation>Compás: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/engravingitem.cpp" line="2728"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2728"/>
         <source>Beat: %1</source>
         <translation>Tiempo: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fingering.cpp" line="281"/>
+        <location filename="../../src/engraving/dom/fingering.cpp" line="281"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="947"/>
         <source>String number</source>
         <translation>Número de cuerda</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1462"/>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1563"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1462"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1563"/>
         <source>with chord symbol %1</source>
         <translation>con símbolo de acorde %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1464"/>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1564"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1464"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1564"/>
         <source>without chord symbol</source>
         <translation>sin símbolo de acorde</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1477"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1477"/>
         <source>string %1</source>
         <translation>texto %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1483"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1483"/>
         <source>circle marker</source>
         <translation>círculo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1486"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1486"/>
         <source>cross marker</source>
         <translation>Marcador</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1518"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1518"/>
         <source>%1 and %2</source>
         <translation>%1 y %2</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1526"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1526"/>
         <source>%n dot(s) on fret(s) %1</source>
         <extracomment>Omit the &quot;%n &quot; for the singular translation (and the &quot;(s)&quot; too)</extracomment>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1538"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1538"/>
         <source>fret %1</source>
         <translation>traste %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1542"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1542"/>
         <source>barré %1</source>
         <translation>cejilla %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1544"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1544"/>
         <source>beginning string %1</source>
         <translation>cuerda inicial %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1547"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1547"/>
         <source>and ending string %1</source>
         <translation>cuerda final %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1550"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1550"/>
         <source>partial barré %1 %2 %3</source>
         <translation>cejilla parcial %1 %2 %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1559"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1559"/>
         <source>no content</source>
         <translation>sin contenido</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/libmscore/fret.cpp" line="1568"/>
+        <location filename="../../src/engraving/dom/fret.cpp" line="1568"/>
         <source>%n string(s) total</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="930"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="930"/>
         <source>Crescendo</source>
         <translation>Crescendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="933"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="933"/>
         <source>Decrescendo</source>
         <translation>Decrescendo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/hairpin.cpp" line="936"/>
+        <location filename="../../src/engraving/dom/hairpin.cpp" line="936"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="493"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2198"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="2220"/>
@@ -11134,144 +11134,144 @@ biblioteca de sonidos Muse Sounds</translation>
         <translation>Personalizada</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/harmony.cpp" line="2072"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="2072"/>
         <source>Roman numeral</source>
         <translation>Números romanos</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/harmony.cpp" line="2074"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="2074"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="940"/>
         <source>Nashville number</source>
         <translation>Número de Nashville</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/harmony.cpp" line="2112"/>
+        <location filename="../../src/engraving/dom/harmony.cpp" line="2112"/>
         <source>lower case</source>
         <translation>letra minúscula</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/instrchange.cpp" line="141"/>
+        <location filename="../../src/engraving/dom/instrchange.cpp" line="141"/>
         <source>To %1</source>
         <extracomment>The text of an &quot;instrument change&quot; marking. It is an instruction to the player to switch to another instrument.</extracomment>
         <translation>A %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/lyrics.cpp" line="166"/>
+        <location filename="../../src/engraving/dom/lyrics.cpp" line="166"/>
         <source>Verse %1</source>
         <translation>Verso %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="881"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="881"/>
         <source>%1 (sounding as %2%3)</source>
         <translation>%1 (suena como %2%3)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2551"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2551"/>
         <source>Acciaccatura</source>
         <translation>Acciaccatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2553"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2553"/>
         <source>Appoggiatura</source>
         <translation>Appoggiatura</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2557"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2557"/>
         <source>Grace note after</source>
         <translation>Nota de adorno posterior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2561"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2561"/>
         <source>Grace note before</source>
         <translation>Nota de adorno anterior</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="2563"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="2563"/>
         <location filename="../../src/engraving/types/typesconv.cpp" line="156"/>
         <source>Note</source>
         <translation>Nota</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3382"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3419"/>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="850"/>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="862"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3382"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3419"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="850"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="862"/>
         <source>Voice: %1</source>
         <translation>Voz: %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3389"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3389"/>
         <source> (on %1‰ off %2‰)</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3395"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3424"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3395"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3424"/>
         <source>Beat slash</source>
         <translation>Barras inclinadas (Pulso)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3395"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3424"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3395"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3424"/>
         <source>Rhythm slash</source>
         <translation>Barras inclinadas (rítmico)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3399"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3428"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3399"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3428"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation>%1; Cuerda: %2; Traste: %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3405"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3405"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation>%1; Altura: %2; Duración: %3%4%5</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3434"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3434"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3436"/>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="865"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3436"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="865"/>
         <source>Cross-staff above</source>
         <translation>Cruzar pentagrama arriba</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3438"/>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="867"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3438"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="867"/>
         <source>Cross-staff below</source>
         <translation>Cruzar pentagrama abajo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3442"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3442"/>
         <source>too low</source>
         <translation>demasiado bajo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3444"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3444"/>
         <source>too high</source>
         <translation>demasiado alto</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3446"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3446"/>
         <source>too low for amateurs</source>
         <translation>demasiado bajo para aficionados</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3448"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3448"/>
         <source>too high for amateurs</source>
         <translation>demasiado alto para aficionados</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/noteentry.cpp" line="391"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="391"/>
         <source>Note input will remove measure repeat</source>
         <translation>La introducción de notas eliminará la repetición de compás</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/noteentry.cpp" line="392"/>
+        <location filename="../../src/engraving/dom/noteentry.cpp" line="392"/>
         <source>This measure contains a measure repeat. If you enter notes here, it will be deleted. Do you want to continue?</source>
         <translation type="unfinished"/>
     </message>
@@ -11312,152 +11312,152 @@ biblioteca de sonidos Muse Sounds</translation>
         <translation>Triple sostenido</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/rest.cpp" line="851"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="851"/>
         <source>%1; Duration: %2; %3</source>
         <translation>%1; Duración: %2, %3</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/segment.cpp" line="2194"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2194"/>
         <source>Annotations:</source>
         <translation>Anotaciones:</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/barline.cpp" line="1665"/>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1248"/>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1259"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3474"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3486"/>
-        <location filename="../../src/engraving/libmscore/segment.cpp" line="2220"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1665"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1248"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1259"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3474"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3486"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2220"/>
         <source>Start of %1</source>
         <translation>Inicio de %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/barline.cpp" line="1668"/>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1251"/>
-        <location filename="../../src/engraving/libmscore/chordrest.cpp" line="1261"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3478"/>
-        <location filename="../../src/engraving/libmscore/note.cpp" line="3494"/>
-        <location filename="../../src/engraving/libmscore/segment.cpp" line="2235"/>
+        <location filename="../../src/engraving/dom/barline.cpp" line="1668"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1251"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1261"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3478"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3494"/>
+        <location filename="../../src/engraving/dom/segment.cpp" line="2235"/>
         <source>End of %1</source>
         <translation>Fín de %1</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1699"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1699"/>
         <source>Start measure: %1; Start beat: %2</source>
         <translation>Compás inicial: %1; Pulso inicial: %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/spanner.cpp" line="1706"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1706"/>
         <source>End measure: %1; End beat: %2</source>
         <translation>Compás final: %1; Pulso final: %2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1489"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1489"/>
         <source>Standard</source>
         <translation>Estándar</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1490"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1490"/>
         <source>Perc. 1 line</source>
         <translation>Perc. 1 línea</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1491"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1491"/>
         <source>Perc. 3 lines</source>
         <translation>Perc. 3 líneas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1492"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1492"/>
         <source>Perc. 5 lines</source>
         <translation>Perc. 5 líneas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1495"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1495"/>
         <source>Tab. 6-str. simple</source>
         <translation>Tab. simple de 6 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1496"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1496"/>
         <source>Tab. 6-str. common</source>
         <translation>Tab. común de 6 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1497"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1497"/>
         <source>Tab. 6-str. full</source>
         <translation>Tab. completa 6 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1498"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1498"/>
         <source>Tab. 4-str. simple</source>
         <translation>Tab. simple 4 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1499"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1499"/>
         <source>Tab. 4-str. common</source>
         <translation>Tab. común 4 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1500"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1500"/>
         <source>Tab. 4-str. full</source>
         <translation>Tab. completa 4 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1501"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1501"/>
         <source>Tab. 5-str. simple</source>
         <translation>Tab. simple 5 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1502"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1502"/>
         <source>Tab. 5-str. common</source>
         <translation>Tab. común 5 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1503"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1503"/>
         <source>Tab. 5-str. full</source>
         <translation>Tab. completa 5 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1504"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1504"/>
         <source>Tab. ukulele</source>
         <translation>Tab. ukelele</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1505"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1505"/>
         <source>Tab. balalaika</source>
         <translation>Tab. balalaika</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1506"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1506"/>
         <source>Tab. dulcimer</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1507"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1507"/>
         <source>Tab. 6-str. Italian</source>
         <translation>Tab. italiana 6 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1508"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1508"/>
         <source>Tab. 6-str. French</source>
         <translation>Tab. francesa 6 cuerdas</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1509"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1509"/>
         <source>Tab. 7-str. common</source>
         <translation>Tab. 7 cuerdas común</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1510"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1510"/>
         <source>Tab. 8-str. common</source>
         <translation>Tab. 8 cuerdas común</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1511"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1511"/>
         <source>Tab. 7-str. simple</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1512"/>
+        <location filename="../../src/engraving/dom/stafftype.cpp" line="1512"/>
         <source>Tab. 8-str. simple</source>
         <translation type="unfinished"/>
     </message>
@@ -12691,7 +12691,7 @@ biblioteca de sonidos Muse Sounds</translation>
         <translation>Tonalidad abierta / Atonal</translation>
     </message>
     <message numerus="yes">
-        <location filename="../../src/engraving/libmscore/measurerepeat.cpp" line="307"/>
+        <location filename="../../src/engraving/dom/measurerepeat.cpp" line="307"/>
         <source>%1; Duration: %n measure(s)</source>
         <translation type="unfinished"><numerusform></numerusform><numerusform></numerusform><numerusform></numerusform></translation>
     </message>
@@ -12746,7 +12746,7 @@ biblioteca de sonidos Muse Sounds</translation>
         <translation>El archivo &quot;%1&quot; está gravemente corrompido y no se puede procesar.</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/ambitus.cpp" line="864"/>
+        <location filename="../../src/engraving/dom/ambitus.cpp" line="864"/>
         <source>Top pitch: %1; Bottom pitch: %2</source>
         <translation type="unfinished"/>
     </message>
@@ -12761,13 +12761,13 @@ biblioteca de sonidos Muse Sounds</translation>
         <translation>seleccionado</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/tempotext.cpp" line="512"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="512"/>
         <source>%1 note = %2 note</source>
         <extracomment>%1 and %2 are note durations. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot; and &quot;%2 note&quot; with &quot;%2&quot;, so that just the duration will be shown.</extracomment>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/tempotext.cpp" line="518"/>
+        <location filename="../../src/engraving/dom/tempotext.cpp" line="518"/>
         <source>%1 note = %2</source>
         <extracomment>%1 is a note duration. If your language does not have different terms for &quot;quarter note&quot; and &quot;quarter&quot; (for example), or if the translations for the durations as separate strings are not suitable to be used as adjectives here, translate &quot;%1 note&quot; with &quot;%1&quot;, so that just the duration will be shown.</extracomment>
         <translation type="unfinished"/>
@@ -14139,13 +14139,13 @@ biblioteca de sonidos Muse Sounds</translation>
 <context>
     <name>engraving/instruments</name>
     <message>
-        <location filename="../../src/engraving/libmscore/instrument.cpp" line="49"/>
+        <location filename="../../src/engraving/dom/instrument.cpp" line="49"/>
         <source>normal</source>
         <extracomment>Channel name for otherwise unnamed channels</extracomment>
         <translation>normal</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/instrument.cpp" line="51"/>
+        <location filename="../../src/engraving/dom/instrument.cpp" line="51"/>
         <source>harmony</source>
         <extracomment>Channel name for the chord symbols playback channel, best keep translation shorter than 11 letters</extracomment>
         <translation>Armonía</translation>
@@ -14588,7 +14588,7 @@ biblioteca de sonidos Muse Sounds</translation>
 <context>
     <name>engraving/scoreorder</name>
     <message>
-        <location filename="../../src/engraving/libmscore/scoreorder.cpp" line="223"/>
+        <location filename="../../src/engraving/dom/scoreorder.cpp" line="223"/>
         <source>%1 (Customized)</source>
         <translation>%1 (Personalizado)</translation>
     </message>
@@ -16439,12 +16439,12 @@ biblioteca de sonidos Muse Sounds</translation>
         <translation>Barra de compás corta 2</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/articulation.cpp" line="62"/>
+        <location filename="../../src/engraving/dom/articulation.cpp" line="62"/>
         <source>Slap</source>
         <translation>Slap</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/articulation.cpp" line="63"/>
+        <location filename="../../src/engraving/dom/articulation.cpp" line="63"/>
         <source>Pop</source>
         <translation type="unfinished"/>
     </message>
@@ -16452,33 +16452,33 @@ biblioteca de sonidos Muse Sounds</translation>
 <context>
     <name>engraving/timesig</name>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="566"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="566"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1705"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1724"/>
         <source>Common time</source>
         <translation>Compasillo</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="569"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="569"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1706"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1725"/>
         <source>Cut time</source>
         <translation>Compasillo binario</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="572"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="572"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1729"/>
         <source>Cut time (Bach)</source>
         <translation>Tiempo cortado (Bach)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="575"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="575"/>
         <location filename="../../src/palette/internal/palettecreator.cpp" line="1730"/>
         <source>Cut triple time (9/8)</source>
         <translation>Tiempo cortado triple (9/8)</translation>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/timesig.cpp" line="578"/>
+        <location filename="../../src/engraving/dom/timesig.cpp" line="578"/>
         <source>%1/%2 time</source>
         <translation>%1/%2 tiempo</translation>
     </message>
@@ -16557,37 +16557,37 @@ biblioteca de sonidos Muse Sounds</translation>
 <context>
     <name>engraving/tripletfeel</name>
     <message>
-        <location filename="../../src/engraving/libmscore/tripletfeel.cpp" line="106"/>
+        <location filename="../../src/engraving/dom/tripletfeel.cpp" line="106"/>
         <source>Triplet 8th</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/tripletfeel.cpp" line="107"/>
+        <location filename="../../src/engraving/dom/tripletfeel.cpp" line="107"/>
         <source>Triplet 16th</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/tripletfeel.cpp" line="108"/>
+        <location filename="../../src/engraving/dom/tripletfeel.cpp" line="108"/>
         <source>Dotted 8th</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/tripletfeel.cpp" line="109"/>
+        <location filename="../../src/engraving/dom/tripletfeel.cpp" line="109"/>
         <source>Dotted 16th</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/tripletfeel.cpp" line="110"/>
+        <location filename="../../src/engraving/dom/tripletfeel.cpp" line="110"/>
         <source>Scottish 8th</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/tripletfeel.cpp" line="111"/>
+        <location filename="../../src/engraving/dom/tripletfeel.cpp" line="111"/>
         <source>Scottish 16th</source>
         <translation type="unfinished"/>
     </message>
     <message>
-        <location filename="../../src/engraving/libmscore/tripletfeel.cpp" line="112"/>
+        <location filename="../../src/engraving/dom/tripletfeel.cpp" line="112"/>
         <source>No triplet feel</source>
         <translation type="unfinished"/>
     </message>

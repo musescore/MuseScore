@@ -24,8 +24,8 @@
 #include "importmxmlnotepitch.h"
 #include "musicxmlsupport.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/score.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/score.h"
 
 #include "log.h"
 

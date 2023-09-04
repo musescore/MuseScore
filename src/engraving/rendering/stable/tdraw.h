@@ -22,7 +22,7 @@
 #ifndef MU_ENGRAVING_TDRAW_STABLE_H
 #define MU_ENGRAVING_TDRAW_STABLE_H
 
-#include "libmscore/engravingitem.h"
+#include "dom/engravingitem.h"
 
 namespace mu::engraving {
 class Accidental;

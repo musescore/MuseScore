@@ -22,14 +22,14 @@
 
 #include "beamtremololayout.h"
 
-#include "../libmscore/beam.h"
-#include "../libmscore/chordrest.h"
-#include "../libmscore/note.h"
-#include "../libmscore/score.h"
-#include "../libmscore/staff.h"
-#include "../libmscore/stem.h"
-#include "../libmscore/stemslash.h"
-#include "../libmscore/tremolo.h"
+#include "../dom/beam.h"
+#include "../dom/chordrest.h"
+#include "../dom/note.h"
+#include "../dom/score.h"
+#include "../dom/staff.h"
+#include "../dom/stem.h"
+#include "../dom/stemslash.h"
+#include "../dom/tremolo.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"

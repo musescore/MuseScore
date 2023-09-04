@@ -21,12 +21,12 @@
  */
 #include "notationselectionrange.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/segment.h"
-#include "libmscore/measure.h"
-#include "libmscore/system.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/skyline.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/skyline.h"
 
 #include "log.h"
 

@@ -26,9 +26,9 @@
 #include "engraving/types/symnames.h"
 #include "engraving/infrastructure/smufl.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/symbol.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/symbol.h"
 
 #include "palettewidget.h"
 

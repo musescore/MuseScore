@@ -21,7 +21,7 @@
  */
 
 #include "harppedalpopupmodel.h"
-#include "libmscore/stafflines.h"
+#include "engraving/dom/stafflines.h"
 
 #include "log.h"
 

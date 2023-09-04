@@ -24,8 +24,8 @@
 
 #include "layoutcontext.h"
 
-#include "libmscore/textbase.h"
-#include "libmscore/measurenumberbase.h"
+#include "dom/textbase.h"
+#include "dom/measurenumberbase.h"
 
 namespace mu::engraving {
 class EngravingItem;

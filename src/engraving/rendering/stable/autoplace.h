@@ -22,9 +22,9 @@
 #ifndef MU_ENGRAVING_AUTOPLACE_STABLE_H
 #define MU_ENGRAVING_AUTOPLACE_STABLE_H
 
-#include "libmscore/articulation.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/spanner.h"
+#include "dom/articulation.h"
+#include "dom/engravingitem.h"
+#include "dom/spanner.h"
 
 namespace mu::engraving::rendering::stable {
 class Autoplace

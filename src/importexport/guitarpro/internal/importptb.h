@@ -24,20 +24,20 @@
 
 #include "io/file.h"
 
-#include <libmscore/score.h>
-#include <libmscore/mscore.h>
-#include <types/fraction.h>
-#include <libmscore/fret.h>
-#include <libmscore/chordrest.h>
-#include <libmscore/slur.h>
-#include <libmscore/clef.h>
-#include <libmscore/keysig.h>
-#include <libmscore/chordrest.h>
-#include <libmscore/clef.h>
-#include <libmscore/keysig.h>
-#include <libmscore/hairpin.h>
-#include <libmscore/ottava.h>
-#include <libmscore/drumset.h>
+#include "engraving/types/fraction.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/fret.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/slur.h"
+#include "engraving/dom/clef.h"
+#include "engraving/dom/keysig.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/clef.h"
+#include "engraving/dom/keysig.h"
+#include "engraving/dom/hairpin.h"
+#include "engraving/dom/ottava.h"
+#include "engraving/dom/drumset.h"
 
 #include "engraving/engravingerrors.h"
 

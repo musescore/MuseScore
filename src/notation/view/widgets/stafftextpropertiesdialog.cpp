@@ -21,10 +21,10 @@
  */
 #include "stafftextpropertiesdialog.h"
 
-#include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/staff.h"
-#include "engraving/libmscore/stafftextbase.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stafftextbase.h"
 
 #include "ui/view/widgetstatestore.h"
 

@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "clefsettingsmodel.h"
-#include "clef.h"
+#include "engraving/dom/clef.h"
 
 #include "translation.h"
 

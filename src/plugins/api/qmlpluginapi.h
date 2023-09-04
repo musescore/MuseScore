@@ -31,8 +31,8 @@
 #include "context/iglobalcontext.h"
 #include "modularity/ioc.h"
 
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/types.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/types.h"
 #include "engraving/types/types.h"
 
 #include "apitypes.h"

@@ -22,10 +22,10 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/clef.h"
-#include "libmscore/factory.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
+#include "dom/clef.h"
+#include "dom/factory.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

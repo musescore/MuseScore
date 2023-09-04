@@ -21,9 +21,9 @@
  */
 #include "bracketsettingsmodel.h"
 
-#include "libmscore/bracketItem.h"
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
+#include "engraving/dom/bracketItem.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 
 #include "translation.h"
 

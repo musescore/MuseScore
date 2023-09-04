@@ -23,9 +23,9 @@
 
 #include <QMimeData>
 
-#include "libmscore/masterscore.h"
-#include "libmscore/segment.h"
-#include "libmscore/measure.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/measure.h"
 
 #include "notationselectionrange.h"
 #include "notationerrors.h"

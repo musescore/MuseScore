@@ -27,10 +27,10 @@
 
 #include "engraving/rw/rwregister.h"
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/actionicon.h"
-#include "libmscore/chord.h"
-#include "libmscore/factory.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/actionicon.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/factory.h"
 
 #include "commonscene/commonscenetypes.h"
 

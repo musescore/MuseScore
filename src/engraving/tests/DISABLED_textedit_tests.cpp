@@ -22,10 +22,10 @@
 
 #include "testing/qtestsuite.h"
 #include "testutils.h"
-#include "libmscore/text.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/sym.h"
-#include "libmscore/xml.h"
+#include "dom/text.h"
+#include "dom/masterscore.h"
+#include "dom/sym.h"
+#include "dom/xml.h"
 
 using namespace Ms;
 

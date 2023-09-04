@@ -25,8 +25,8 @@
 
 #include "abstractelementpopupmodel.h"
 #include "context/iglobalcontext.h"
-#include "engraving/libmscore/harppedaldiagram.h"
-#include "engraving/libmscore/undo.h"
+#include "engraving/dom/harppedaldiagram.h"
+#include "engraving/dom/undo.h"
 #include <QObject>
 
 namespace mu::notation {

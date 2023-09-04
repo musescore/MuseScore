@@ -26,8 +26,8 @@
 #include "global/realfn.h"
 #include "mpe/mpetypes.h"
 
-#include "libmscore/score.h"
-#include "libmscore/repeatlist.h"
+#include "dom/score.h"
+#include "dom/repeatlist.h"
 #include "types/constants.h"
 
 namespace mu::engraving {

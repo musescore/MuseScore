@@ -23,8 +23,8 @@
 
 #include "rw/xmlwriter.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/excerpt.h"
+#include "dom/masterscore.h"
+#include "dom/excerpt.h"
 
 #include "rw/write/writer.h"
 

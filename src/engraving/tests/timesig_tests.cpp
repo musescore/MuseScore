@@ -22,11 +22,11 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/factory.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/timesig.h"
-#include "libmscore/undo.h"
+#include "dom/factory.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/timesig.h"
+#include "dom/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

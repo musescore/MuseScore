@@ -24,14 +24,14 @@
 #include "importmidi_chord.h"
 #include "importmidi_inner.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/key.h"
-#include "libmscore/keysig.h"
-#include "libmscore/keylist.h"
-#include "libmscore/measure.h"
-#include "libmscore/staff.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/part.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/key.h"
+#include "engraving/dom/keysig.h"
+#include "engraving/dom/keylist.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/part.h"
 #include "importmidi_operations.h"
 
 // This simple key detection algorithm is from thesis

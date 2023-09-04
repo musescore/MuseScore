@@ -24,13 +24,13 @@
 
 #include "draw/painter.h"
 
-#include "libmscore/measure.h"
-#include "libmscore/page.h"
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
-#include "libmscore/stafflines.h"
-#include "libmscore/system.h"
-#include "libmscore/repeatlist.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/page.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/stafflines.h"
+#include "engraving/dom/system.h"
+#include "engraving/dom/repeatlist.h"
 
 #include "svggenerator.h"
 

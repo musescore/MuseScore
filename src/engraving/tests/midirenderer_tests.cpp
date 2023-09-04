@@ -26,7 +26,7 @@
 #include "engraving/compat/midi/midirender.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/mscloader.h"
-#include "engraving/libmscore/noteevent.h"
+#include "engraving/dom/noteevent.h"
 
 using namespace mu;
 using namespace mu::engraving;

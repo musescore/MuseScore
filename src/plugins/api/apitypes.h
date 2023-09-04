@@ -26,7 +26,7 @@
 #include <QObject>
 
 #include "engraving/types/types.h"
-#include "engraving/libmscore/types.h"
+#include "engraving/dom/types.h"
 
 namespace mu::plugins::api::enums {
 Q_NAMESPACE;

@@ -21,7 +21,7 @@
  */
 #include "playbackcursor.h"
 
-#include "engraving/libmscore/system.h"
+#include "engraving/dom/system.h"
 
 using namespace mu::notation;
 

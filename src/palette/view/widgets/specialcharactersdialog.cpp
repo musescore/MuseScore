@@ -28,9 +28,9 @@
 
 #include "translation.h"
 
-#include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/symbol.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/symbol.h"
 #include "engraving/types/symnames.h"
 #include "engraving/infrastructure/smufl.h"
 

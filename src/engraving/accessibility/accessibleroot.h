@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_ACCESSIBLEROOT_H
 
 #include "accessibleitem.h"
-#include "../libmscore/rootitem.h"
+#include "../dom/rootitem.h"
 
 namespace mu::engraving {
 using AccessibleMapToScreenFunc = std::function<RectF(const RectF&)>;

@@ -21,11 +21,11 @@
  */
 #include "connectorinfowriter.h"
 
-#include "../../libmscore/engravingitem.h"
-#include "../../libmscore/spanner.h"
-#include "../../libmscore/measurebase.h"
-#include "../../libmscore/measure.h"
-#include "../../libmscore/score.h"
+#include "../../dom/engravingitem.h"
+#include "../../dom/spanner.h"
+#include "../../dom/measurebase.h"
+#include "../../dom/measure.h"
+#include "../../dom/score.h"
 
 #include "../xmlwriter.h"
 

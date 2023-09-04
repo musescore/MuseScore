@@ -22,7 +22,7 @@
 
 #include "testing/qtestsuite.h"
 #include "testutils.h"
-#include "libmscore/score.h"
+#include "dom/score.h"
 
 static const QString CONCERTPITCH_DATA_DIR("concertpitch_data/");
 

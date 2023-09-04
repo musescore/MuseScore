@@ -24,10 +24,10 @@
 
 #include "containers.h"
 
-#include "libmscore/part.h"
-#include "libmscore/note.h"
-#include "libmscore/drumset.h"
-#include "libmscore/utils.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/drumset.h"
+#include "engraving/dom/utils.h"
 
 #include "log.h"
 

@@ -22,9 +22,9 @@
 
 #include "testing/qtestsuite.h"
 #include "testutils.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/staff.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/staff.h"
 
 static const QString MIDIMAPPING_DATA_DIR("midimapping_data/");
 

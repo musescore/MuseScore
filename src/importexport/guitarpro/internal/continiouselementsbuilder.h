@@ -23,7 +23,7 @@
 #ifndef MU_IMPORTEXPORT_CONTINIOUSELEMENTSBUILDER_H
 #define MU_IMPORTEXPORT_CONTINIOUSELEMENTSBUILDER_H
 
-#include <libmscore/line.h>
+#include "engraving/dom/line.h"
 
 namespace mu::iex::guitarpro {
 class ContiniousElementsBuilder

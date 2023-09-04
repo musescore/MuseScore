@@ -919,7 +919,7 @@ ByteArray Selection::symbolListMimeData() const
         switch (e->type()) {
         /* All these element types are ignored:
 
-        Enabling copying of more element types requires enabling pasting in Score::pasteSymbols() in libmscore/paste.cpp
+        Enabling copying of more element types requires enabling pasting in Score::pasteSymbols() in dom/paste.cpp
 
                           case ElementType::SYMBOL:
                           case ElementType::TEXT:

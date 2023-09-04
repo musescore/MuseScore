@@ -28,8 +28,8 @@
 #include "importmidi_operations.h"
 #include "../midishared/midifile.h"
 
-#include "engraving/libmscore/drumset.h"
-#include "engraving/libmscore/staff.h"
+#include "engraving/dom/drumset.h"
+#include "engraving/dom/staff.h"
 
 namespace mu::iex::midi {
 namespace MidiDrum {

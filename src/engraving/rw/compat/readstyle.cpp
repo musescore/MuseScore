@@ -28,7 +28,7 @@
 
 #include "rw/xmlreader.h"
 
-#include "libmscore/masterscore.h"
+#include "dom/masterscore.h"
 
 #include "readchordlisthook.h"
 

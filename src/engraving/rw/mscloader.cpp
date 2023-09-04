@@ -29,10 +29,10 @@
 
 #include "types/types.h"
 
-#include "../libmscore/masterscore.h"
-#include "../libmscore/audio.h"
-#include "../libmscore/excerpt.h"
-#include "../libmscore/imageStore.h"
+#include "../dom/masterscore.h"
+#include "../dom/audio.h"
+#include "../dom/excerpt.h"
+#include "../dom/imageStore.h"
 
 #include "compat/compatutils.h"
 #include "compat/readstyle.h"

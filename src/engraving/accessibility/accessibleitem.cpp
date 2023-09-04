@@ -22,8 +22,8 @@
 #include "accessibleitem.h"
 
 #include "accessibleroot.h"
-#include "../libmscore/score.h"
-#include "../libmscore/measure.h"
+#include "../dom/score.h"
+#include "../dom/measure.h"
 
 #include "translation.h"
 #include "log.h"

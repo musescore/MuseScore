@@ -28,7 +28,7 @@
 
 #include "uicomponents/view/quickpaintedview.h"
 #include "context/iglobalcontext.h"
-#include "fret.h"
+#include "engraving/dom/fret.h"
 
 namespace mu::inspector {
 class FretCanvas : public uicomponents::QuickPaintedView

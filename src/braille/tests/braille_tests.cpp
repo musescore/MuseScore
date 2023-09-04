@@ -27,7 +27,7 @@
 #include "engraving/tests/utils/scorerw.h"
 #include "engraving/tests/utils/scorecomp.h"
 
-#include "libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 #include "../internal/braille.h"
 
 using namespace mu;

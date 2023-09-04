@@ -25,7 +25,7 @@
 
 #include "stringutils.h"
 
-#include "engraving/libmscore/score.h"
+#include "engraving/dom/score.h"
 
 #include "log.h"
 

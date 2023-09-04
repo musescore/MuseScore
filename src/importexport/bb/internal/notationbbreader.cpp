@@ -21,7 +21,7 @@
  */
 #include "notationbbreader.h"
 
-#include "engraving/libmscore/score.h"
+#include "engraving/dom/score.h"
 #include "engraving/engravingerrors.h"
 
 using namespace mu::iex::bb;

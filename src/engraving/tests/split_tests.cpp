@@ -22,10 +22,10 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/chordrest.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
+#include "dom/chordrest.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/segment.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

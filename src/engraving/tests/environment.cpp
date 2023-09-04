@@ -23,12 +23,12 @@
 #include "testing/environment.h"
 
 #include "engraving/engravingmodule.h"
-#include "engraving/libmscore/engravingitem.h"
+#include "engraving/dom/engravingitem.h"
 #include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 
-#include "libmscore/instrtemplate.h"
-#include "libmscore/mscore.h"
+#include "dom/instrtemplate.h"
+#include "dom/mscore.h"
 
 #include "mocks/engravingconfigurationmock.h"
 

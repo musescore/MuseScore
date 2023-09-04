@@ -26,8 +26,8 @@
 #include "types/commontypes.h"
 #include "types/texttypes.h"
 
-#include "engraving/libmscore/dynamic.h"
-#include "engraving/libmscore/textbase.h"
+#include "engraving/dom/dynamic.h"
+#include "engraving/dom/textbase.h"
 #include "engraving/types/typesconv.h"
 
 #include "translation.h"

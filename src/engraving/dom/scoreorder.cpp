@@ -28,12 +28,12 @@
 
 #include "types/translatablestring.h"
 
-#include "libmscore/bracketItem.h"
-#include "libmscore/instrtemplate.h"
-#include "libmscore/part.h"
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
-#include "libmscore/undo.h"
+#include "dom/bracketItem.h"
+#include "dom/instrtemplate.h"
+#include "dom/part.h"
+#include "dom/score.h"
+#include "dom/staff.h"
+#include "dom/undo.h"
 
 #include "log.h"
 

@@ -28,11 +28,11 @@
 #include "importmidi_instrument_names.h"
 #include "importmidi_operations.h"
 
-#include "libmscore/drumset.h"
-#include "libmscore/instrtemplate.h"
-#include "libmscore/part.h"
-#include "libmscore/score.h"
-#include "libmscore/staff.h"
+#include "engraving/dom/drumset.h"
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/staff.h"
 
 using namespace mu::engraving;
 

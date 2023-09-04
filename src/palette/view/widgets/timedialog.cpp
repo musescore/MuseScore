@@ -29,9 +29,9 @@
 #include "palettewidget.h"
 #include "internal/palettecreator.h"
 
-#include "engraving/libmscore/factory.h"
-#include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/timesig.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/timesig.h"
 #include "engraving/compat/dummyelement.h"
 
 using namespace mu::palette;

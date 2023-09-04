@@ -22,11 +22,11 @@
 
 #include "masternotationparts.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/scoreorder.h"
-#include "libmscore/excerpt.h"
-#include "libmscore/undo.h"
-#include "libmscore/utils.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/scoreorder.h"
+#include "engraving/dom/excerpt.h"
+#include "engraving/dom/undo.h"
+#include "engraving/dom/utils.h"
 
 #include "log.h"
 

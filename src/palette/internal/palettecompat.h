@@ -23,7 +23,7 @@
 #ifndef MU_PALETTE_PALETTECOMPAT_H
 #define MU_PALETTE_PALETTECOMPAT_H
 
-#include "libmscore/engravingitem.h"
+#include "engraving/dom/engravingitem.h"
 
 namespace mu::palette {
 class Palette;

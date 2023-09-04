@@ -22,11 +22,11 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/keysig.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/part.h"
-#include "libmscore/undo.h"
+#include "dom/keysig.h"
+#include "dom/masterscore.h"
+#include "dom/measure.h"
+#include "dom/part.h"
+#include "dom/undo.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"

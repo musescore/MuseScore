@@ -27,9 +27,9 @@
 
 #include "io/buffer.h"
 
-#include "libmscore/undo.h"
+#include "engraving/dom/undo.h"
 
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 #include "engraving/engravingproject.h"
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/compat/mscxcompat.h"

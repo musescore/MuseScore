@@ -27,7 +27,7 @@
 #include "part.h"
 #include "style.h"
 #include "excerpt.h"
-#include "libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"

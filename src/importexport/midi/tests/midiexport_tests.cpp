@@ -29,16 +29,16 @@
 
 #include "testutils.h"
 
-#include "libmscore/mscore.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/durationtype.h"
-#include "libmscore/measure.h"
-#include "libmscore/segment.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/chord.h"
-#include "libmscore/note.h"
-#include "libmscore/keysig.h"
-#include "libmscore/mcursor.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/durationtype.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/tempotext.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/keysig.h"
+#include "engraving/dom/mcursor.h"
 
 //#include "audio/exports/exportmidi.h"
 

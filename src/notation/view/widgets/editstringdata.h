@@ -23,7 +23,7 @@
 #define MU_NOTATION_EDITSTRINGDATA_H
 
 #include "ui_editstringdata.h"
-#include "libmscore/stringdata.h"
+#include "engraving/dom/stringdata.h"
 
 namespace mu::notation {
 //---------------------------------------------------------

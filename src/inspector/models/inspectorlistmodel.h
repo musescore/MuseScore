@@ -24,7 +24,7 @@
 
 #include <QAbstractListModel>
 
-#include "libmscore/engravingitem.h"
+#include "engraving/dom/engravingitem.h"
 
 #include "modularity/ioc.h"
 #include "async/asyncable.h"

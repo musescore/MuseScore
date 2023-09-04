@@ -23,7 +23,7 @@
 
 #include "translation.h"
 #include "types/barlinetypes.h"
-#include "barline.h"
+#include "engraving/dom/barline.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;

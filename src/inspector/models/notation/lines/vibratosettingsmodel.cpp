@@ -23,7 +23,7 @@
 
 #include "translation.h"
 
-#include "libmscore/vibrato.h"
+#include "engraving/dom/vibrato.h"
 
 using namespace mu::inspector;
 

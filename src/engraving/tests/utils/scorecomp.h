@@ -23,7 +23,7 @@
 #ifndef MU_ENGRAVING_SCORECOMP_H
 #define MU_ENGRAVING_SCORECOMP_H
 
-#include "engraving/libmscore/score.h"
+#include "engraving/dom/score.h"
 
 namespace mu::engraving {
 class ScoreComp

@@ -23,11 +23,11 @@
 
 #include "importmidi_inner.h"
 #include "importmidi_beat.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/measure.h"
-#include "libmscore/tempo.h"
-#include "libmscore/tempotext.h"
-#include "libmscore/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/tempo.h"
+#include "engraving/dom/tempotext.h"
+#include "engraving/dom/factory.h"
 #include "importmidi_operations.h"
 
 #include "log.h"

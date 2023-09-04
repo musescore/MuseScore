@@ -26,13 +26,13 @@
 
 #include "types/constants.h"
 
-#include "libmscore/articulation.h"
-#include "libmscore/mscore.h"
-#include "libmscore/realizedharmony.h"
-#include "libmscore/textbase.h"
-#include "libmscore/tremolo.h"
-#include "libmscore/tuplet.h"
-#include "libmscore/types.h"
+#include "dom/articulation.h"
+#include "dom/mscore.h"
+#include "dom/realizedharmony.h"
+#include "dom/textbase.h"
+#include "dom/tremolo.h"
+#include "dom/tuplet.h"
+#include "dom/types.h"
 
 using namespace mu;
 using namespace mu::draw;

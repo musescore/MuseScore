@@ -24,8 +24,8 @@
 
 #include "log.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/undo.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/undo.h"
 
 using namespace mu::notation;
 using namespace mu::async;

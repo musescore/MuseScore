@@ -25,7 +25,7 @@
 
 #include <QXmlStreamReader>
 
-#include "libmscore/accidental.h"
+#include "engraving/dom/accidental.h"
 
 namespace mu::engraving {
 class MxmlLogger;

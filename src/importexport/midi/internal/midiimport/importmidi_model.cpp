@@ -25,7 +25,7 @@
 
 #include "importmidi_inner.h"
 #include "importmidi_clef.h"
-#include "libmscore/instrtemplate.h"
+#include "engraving/dom/instrtemplate.h"
 
 namespace mu::iex::midi {
 class TracksModel::Column

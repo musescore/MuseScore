@@ -22,12 +22,12 @@
 
 #include "spannersmetaparser.h"
 
-#include "libmscore/glissando.h"
-#include "libmscore/note.h"
-#include "libmscore/spanner.h"
-#include "libmscore/trill.h"
-#include "libmscore/pedal.h"
-#include "libmscore/tempo.h"
+#include "dom/glissando.h"
+#include "dom/note.h"
+#include "dom/spanner.h"
+#include "dom/trill.h"
+#include "dom/pedal.h"
+#include "dom/tempo.h"
 
 #include "playback/utils/pitchutils.h"
 #include "playback/filters/spannerfilter.h"

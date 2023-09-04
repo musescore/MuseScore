@@ -21,7 +21,7 @@
  */
 #include "articulationsettingsmodel.h"
 
-#include "libmscore/articulation.h"
+#include "engraving/dom/articulation.h"
 
 #include "log.h"
 #include "translation.h"

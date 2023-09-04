@@ -21,9 +21,9 @@
  */
 #include "scorecallbacks.h"
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/lyrics.h"
-#include "libmscore/system.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/lyrics.h"
+#include "engraving/dom/system.h"
 
 #include "inotationinteraction.h"
 #include "igetscore.h"

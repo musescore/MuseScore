@@ -36,8 +36,8 @@ public:
     QObject* getQObject() override;
 
     bool needUpdateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList,
-                               notation::SelectionState selectionState) const override;
-    void updateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList, notation::SelectionState selectionState) override;
+                               engraving::SelState selectionState) const override;
+    void updateElementList(const QList<mu::engraving::EngravingItem*>& newRawElementList, engraving::SelState selectionState) override;
 
     QList<mu::engraving::EngravingItem*> findElementsByType(const mu::engraving::ElementType elementType) const override;
     QList<mu::engraving::EngravingItem*> findElementsByType(const mu::engraving::ElementType elementType,
@@ -69,7 +69,7 @@ private:
 
     QList<mu::engraving::EngravingItem*> m_exposedElementList;
     QList<mu::engraving::EngravingItem*> m_rawElementList;
-    notation::SelectionState m_selectionState = notation::SelectionState::NONE;
+    mu::engraving::SelState m_selectionState = mu::engraving::SelState::NONE;
 };
 }
 

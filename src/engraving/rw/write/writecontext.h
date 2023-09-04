@@ -27,7 +27,7 @@
 
 #include "containers.h"
 #include "../linksindexer.h"
-#include "libmscore/select.h"
+#include "dom/select.h"
 
 namespace mu::engraving::write {
 class WriteContext

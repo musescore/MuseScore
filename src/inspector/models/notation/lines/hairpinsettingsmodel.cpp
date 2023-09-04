@@ -21,7 +21,7 @@
  */
 #include "hairpinsettingsmodel.h"
 
-#include "libmscore/hairpin.h"
+#include "engraving/dom/hairpin.h"
 
 #include "types/commontypes.h"
 #include "types/hairpintypes.h"

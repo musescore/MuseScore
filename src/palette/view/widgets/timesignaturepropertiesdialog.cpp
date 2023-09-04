@@ -25,10 +25,10 @@
 #include <QRegularExpression>
 
 #include "engraving/iengravingfont.h"
-#include "engraving/libmscore/masterscore.h"
-#include "engraving/libmscore/measure.h"
-#include "engraving/libmscore/score.h"
-#include "engraving/libmscore/timesig.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/timesig.h"
 
 #include "ui/view/musicalsymbolcodes.h"
 #include "ui/view/widgetstatestore.h"

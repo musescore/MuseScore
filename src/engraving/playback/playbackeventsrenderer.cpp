@@ -24,13 +24,13 @@
 
 #include "log.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/harmony.h"
-#include "libmscore/note.h"
-#include "libmscore/rest.h"
-#include "libmscore/sig.h"
-#include "libmscore/tempo.h"
-#include "libmscore/staff.h"
+#include "dom/chord.h"
+#include "dom/harmony.h"
+#include "dom/note.h"
+#include "dom/rest.h"
+#include "dom/sig.h"
+#include "dom/tempo.h"
+#include "dom/staff.h"
 
 #include "utils/arrangementutils.h"
 #include "metaparsers/chordarticulationsparser.h"

@@ -24,8 +24,8 @@
 
 #include "types/typesconv.h"
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/property.h"
+#include "dom/engravingitem.h"
+#include "dom/property.h"
 
 #include "log.h"
 

@@ -30,8 +30,8 @@
 #include "importmidi_tuplet_voice.h"
 #include "../midishared/midifile.h"
 
-#include "engraving/libmscore/sig.h"
-#include "engraving/libmscore/durationtype.h"
+#include "engraving/dom/sig.h"
+#include "engraving/dom/durationtype.h"
 
 using namespace mu::engraving;
 

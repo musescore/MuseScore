@@ -20,14 +20,14 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "importmidi_swing.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/chordrest.h"
-#include "libmscore/stafftext.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/segment.h"
-#include "libmscore/measure.h"
-#include "libmscore/staff.h"
-#include "libmscore/tuplet.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/chordrest.h"
+#include "engraving/dom/stafftext.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/tuplet.h"
 #include "importmidi_fraction.h"
 
 using namespace mu::engraving;

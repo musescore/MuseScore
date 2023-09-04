@@ -21,7 +21,7 @@
  */
 #include "noteheadgroupsmodel.h"
 
-#include "engraving/libmscore/note.h"
+#include "engraving/dom/note.h"
 #include "engraving/types/typesconv.h"
 
 using namespace mu::inspector;

@@ -30,7 +30,7 @@
 #include "importmidi_quant.h"
 #include "importmidi_inner.h"
 #include "importmidi_operations.h"
-#include "libmscore/sig.h"
+#include "engraving/dom/sig.h"
 
 #include "log.h"
 

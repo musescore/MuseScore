@@ -24,8 +24,8 @@
 #include <QQueue>
 
 #include "importmidi_fraction.h"
-#include "libmscore/durationtype.h"
-#include "libmscore/mscore.h"
+#include "engraving/dom/durationtype.h"
+#include "engraving/dom/mscore.h"
 #include "importmidi_tuplet.h"
 #include "importmidi_chord.h"
 #include "importmidi_inner.h"

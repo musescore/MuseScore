@@ -26,7 +26,7 @@
 #include <QQmlEngine>
 #include <QQmlListProperty>
 
-#include "libmscore/noteevent.h"
+#include "engraving/dom/noteevent.h"
 
 namespace mu::plugins::api {
 class Note;

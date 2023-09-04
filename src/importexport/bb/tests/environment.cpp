@@ -26,15 +26,15 @@
 #include "draw/drawmodule.h"
 #include "engraving/engravingmodule.h"
 
-#include "engraving/libmscore/instrtemplate.h"
-#include "engraving/libmscore/mscore.h"
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/mscore.h"
 
 #include "log.h"
 
 static mu::testing::SuiteEnvironment importexport_se(
 {
     new mu::draw::DrawModule(),
-    new mu::fonts::FontsModule(), // needs for libmscore
+    new mu::fonts::FontsModule(), // needs for engraving
     new mu::engraving::EngravingModule()
 },
     nullptr,

@@ -22,7 +22,7 @@
 
 #include "annotationsmetaparser.h"
 
-#include "libmscore/dynamic.h"
+#include "dom/dynamic.h"
 
 using namespace mu::engraving;
 using namespace mu::mpe;

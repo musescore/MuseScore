@@ -23,10 +23,10 @@
 #ifndef MU_IMPORTEXPORT_MEICONVERTER_H
 #define MU_IMPORTEXPORT_MEICONVERTER_H
 
-#include "libmscore/accidental.h"
-#include "libmscore/interval.h"
-#include "libmscore/timesig.h"
-#include "libmscore/volta.h"
+#include "engraving/dom/accidental.h"
+#include "engraving/dom/interval.h"
+#include "engraving/dom/timesig.h"
+#include "engraving/dom/volta.h"
 
 #include "iengravingfontsprovider.h"
 

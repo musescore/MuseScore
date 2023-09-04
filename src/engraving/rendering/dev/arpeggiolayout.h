@@ -23,7 +23,7 @@
 #define MU_ENGRAVING_ARPEGGIOLAYOUT_DEV_H
 
 #include "layoutcontext.h"
-#include "libmscore/arpeggio.h"
+#include "dom/arpeggio.h"
 
 namespace mu::engraving::rendering::dev {
 class ArpeggioLayout

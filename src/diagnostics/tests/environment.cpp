@@ -26,8 +26,8 @@
 #include "fonts/fontsmodule.h"
 #include "draw/drawmodule.h"
 
-#include "libmscore/instrtemplate.h"
-#include "libmscore/mscore.h"
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/mscore.h"
 
 #include "log.h"
 

@@ -27,14 +27,14 @@
 
 #include "translation.h"
 
-#include "libmscore/masterscore.h"
-#include "libmscore/spanner.h"
-#include "libmscore/segment.h"
-#include "libmscore/slur.h"
-#include "libmscore/staff.h"
-#include "libmscore/part.h"
-#include "libmscore/sig.h"
-#include "libmscore/measure.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/spanner.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/slur.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/part.h"
+#include "engraving/dom/sig.h"
+#include "engraving/dom/measure.h"
 
 #include "braille/internal/braille.h"
 #include "braille/internal/louis.h"

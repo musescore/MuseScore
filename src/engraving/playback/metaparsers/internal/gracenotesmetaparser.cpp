@@ -22,7 +22,7 @@
 
 #include "gracenotesmetaparser.h"
 
-#include "libmscore/chord.h"
+#include "dom/chord.h"
 
 using namespace mu::engraving;
 

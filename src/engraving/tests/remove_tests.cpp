@@ -22,9 +22,9 @@
 
 #include <gtest/gtest.h>
 
-#include "libmscore/excerpt.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/spanner.h"
+#include "dom/excerpt.h"
+#include "dom/masterscore.h"
+#include "dom/spanner.h"
 
 #include "utils/scorerw.h"
 

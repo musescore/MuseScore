@@ -22,7 +22,7 @@
 
 #include "symbolsmetaparser.h"
 
-#include "libmscore/articulation.h"
+#include "dom/articulation.h"
 
 using namespace mu::engraving;
 

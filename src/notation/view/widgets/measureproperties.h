@@ -26,7 +26,7 @@
 #include <QDialog>
 
 #include "ui_measureproperties.h"
-#include "libmscore/sig.h"
+#include "engraving/dom/sig.h"
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
 #include "notation/inotation.h"

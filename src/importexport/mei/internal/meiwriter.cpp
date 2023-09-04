@@ -28,7 +28,7 @@
 #include "log.h"
 
 #include "engraving/engravingerrors.h"
-#include "engraving/libmscore/score.h"
+#include "engraving/dom/score.h"
 
 using namespace mu;
 using namespace mu::iex::mei;

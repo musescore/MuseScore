@@ -27,8 +27,8 @@
 #include "draw/painter.h"
 #include "types/symnames.h"
 
-#include "libmscore/mscore.h"
-#include "libmscore/shape.h"
+#include "dom/mscore.h"
+#include "dom/shape.h"
 
 #include "smufl.h"
 

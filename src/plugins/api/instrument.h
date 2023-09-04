@@ -25,7 +25,7 @@
 
 #include "log.h"
 #include "scoreelement.h"
-#include "libmscore/instrument.h"
+#include "engraving/dom/instrument.h"
 
 namespace mu::engraving {
 class Instrument;

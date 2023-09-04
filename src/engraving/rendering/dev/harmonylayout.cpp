@@ -27,11 +27,11 @@
 #include "realfn.h"
 #include "containers.h"
 
-#include "libmscore/fret.h"
-#include "libmscore/harmony.h"
-#include "libmscore/measurebase.h"
-#include "libmscore/segment.h"
-#include "libmscore/system.h"
+#include "dom/fret.h"
+#include "dom/harmony.h"
+#include "dom/measurebase.h"
+#include "dom/segment.h"
+#include "dom/system.h"
 
 #include "tlayout.h"
 #include "autoplace.h"

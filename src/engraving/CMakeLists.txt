@@ -21,7 +21,7 @@
 set(MODULE engraving)
 set(MODULE_QRC engraving.qrc)
 
-include(${CMAKE_CURRENT_LIST_DIR}/libmscore/libmscore.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/dom/dom.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/compat/midi/compatmidi.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/dev/rendering.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/rendering/stable/rendering.cmake)
@@ -55,7 +55,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/rtti.h
 
-    ${LIBMSCORE_SRC}
+    ${DOM_SRC}
 
     ${CMAKE_CURRENT_LIST_DIR}/rw/README.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/ireader.h
@@ -273,7 +273,7 @@ else()
 endif()
 
 set_source_files_properties( # For these files, Unity Build does not work
-    ${CMAKE_CURRENT_LIST_DIR}/libmscore/chordlist.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/dom/chordlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/chordlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/read114.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/read206.cpp

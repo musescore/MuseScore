@@ -21,7 +21,7 @@
  */
 #include "mscoreerrorscontroller.h"
 
-#include "engraving/libmscore/mscore.h"
+#include "engraving/dom/mscore.h"
 
 using namespace mu::engraving;
 using namespace mu::notation;

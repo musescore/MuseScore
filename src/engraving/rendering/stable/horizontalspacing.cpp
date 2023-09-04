@@ -21,13 +21,13 @@
  */
 #include "horizontalspacing.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/glissando.h"
-#include "libmscore/note.h"
-#include "libmscore/rest.h"
-#include "libmscore/score.h"
-#include "libmscore/stemslash.h"
+#include "dom/chord.h"
+#include "dom/engravingitem.h"
+#include "dom/glissando.h"
+#include "dom/note.h"
+#include "dom/rest.h"
+#include "dom/score.h"
+#include "dom/stemslash.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;

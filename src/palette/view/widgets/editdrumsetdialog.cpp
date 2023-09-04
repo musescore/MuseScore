@@ -33,13 +33,13 @@
 #include "engraving/rw/xmlreader.h"
 #include "engraving/rw/xmlwriter.h"
 
-#include "libmscore/chord.h"
-#include "libmscore/factory.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/note.h"
-#include "libmscore/score.h"
-#include "libmscore/stem.h"
-#include "libmscore/utils.h"
+#include "engraving/dom/chord.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/stem.h"
+#include "engraving/dom/utils.h"
 
 #include "draw/types/geometry.h"
 

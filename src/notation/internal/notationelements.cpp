@@ -21,11 +21,11 @@
  */
 #include "notationelements.h"
 
-#include "libmscore/measure.h"
-#include "libmscore/note.h"
-#include "libmscore/page.h"
-#include "libmscore/rehearsalmark.h"
-#include "libmscore/segment.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/note.h"
+#include "engraving/dom/page.h"
+#include "engraving/dom/rehearsalmark.h"
+#include "engraving/dom/segment.h"
 
 #include "log.h"
 #include "searchcommandsparser.h"

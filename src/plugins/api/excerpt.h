@@ -25,7 +25,7 @@
 
 #include <QQmlEngine>
 
-#include "libmscore/excerpt.h"
+#include "engraving/dom/excerpt.h"
 
 namespace mu::plugins::api {
 class Score;

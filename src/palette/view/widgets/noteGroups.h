@@ -25,7 +25,7 @@
 
 #include "ui_note_groups.h"
 
-#include "libmscore/groups.h"
+#include "engraving/dom/groups.h"
 
 #include "modularity/ioc.h"
 #include "ipaletteconfiguration.h"

@@ -28,7 +28,7 @@
 
 #include "layoutcontext.h"
 
-#include "libmscore/beam.h"
+#include "dom/beam.h"
 
 namespace mu::engraving {
 class Beam;

@@ -28,8 +28,8 @@
 #include <QSourceLocation>
 
 #include "engraving/types/fraction.h"
-#include "libmscore/mscore.h"
-#include "libmscore/note.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/note.h"
 
 class Chord;
 

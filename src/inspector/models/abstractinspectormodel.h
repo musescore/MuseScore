@@ -27,8 +27,8 @@
 
 #include "async/asyncable.h"
 
-#include "libmscore/engravingitem.h"
-#include "libmscore/property.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/property.h"
 
 #include "internal/interfaces/ielementrepositoryservice.h"
 #include "notation/inotation.h"

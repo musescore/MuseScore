@@ -24,12 +24,12 @@
 #include "cursor.h"
 #include "elements.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/instrtemplate.h"
-#include "libmscore/measure.h"
-#include "libmscore/score.h"
-#include "libmscore/segment.h"
-#include "libmscore/text.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/instrtemplate.h"
+#include "engraving/dom/measure.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/segment.h"
+#include "engraving/dom/text.h"
 
 using namespace mu::engraving;
 

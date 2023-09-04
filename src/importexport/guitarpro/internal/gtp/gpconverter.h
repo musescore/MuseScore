@@ -11,8 +11,8 @@
 #include "../continiouselementsbuilder.h"
 #include "types/fraction.h"
 
-#include "libmscore/vibrato.h"
-#include "libmscore/ottava.h"
+#include "engraving/dom/vibrato.h"
+#include "engraving/dom/ottava.h"
 
 #include "iengravingconfiguration.h"
 

@@ -23,7 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "engraving/engravingerrors.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "settings.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"

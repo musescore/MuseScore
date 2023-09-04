@@ -39,8 +39,8 @@
 
 #include "engraving/style/defaultstyle.h"
 
-#include "engraving/libmscore/mscore.h"
-#include "engraving/libmscore/masterscore.h"
+#include "engraving/dom/mscore.h"
+#include "engraving/dom/masterscore.h"
 
 #include "rendering/dev/scorerenderer.h"
 #include "rendering/stable/scorerenderer.h"
@@ -185,7 +185,7 @@ void EngravingModule::onInit(const framework::IApplication::RunMode& mode)
                                    m_configuration->partStyleFilePath());
 #endif
 
-    MScore::init();     // initialize libmscore
+    MScore::init();     // initialize dom
 
     MScore::setNudgeStep(0.1);     // cursor key (default 0.1)
     MScore::setNudgeStep10(1.0);     // Ctrl + cursor key (default 1.0)

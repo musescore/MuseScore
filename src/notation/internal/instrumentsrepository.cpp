@@ -24,7 +24,7 @@
 #include "log.h"
 #include "translation.h"
 
-#include "libmscore/instrtemplate.h"
+#include "engraving/dom/instrtemplate.h"
 
 using namespace mu::notation;
 

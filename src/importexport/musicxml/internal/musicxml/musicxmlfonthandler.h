@@ -23,7 +23,7 @@
 #ifndef __MUSICXMLFONTHANDLER_H__
 #define __MUSICXMLFONTHANDLER_H__
 
-#include "libmscore/text.h"
+#include "engraving/dom/text.h"
 
 namespace mu::engraving {
 class XmlWriter;

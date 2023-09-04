@@ -31,10 +31,10 @@
 
 #include "svggenerator.h"
 #include "types/bytearray.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/image.h"
-#include "libmscore/imageStore.h"
-#include "libmscore/mscore.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/image.h"
+#include "engraving/dom/imageStore.h"
+#include "engraving/dom/mscore.h"
 
 #include "log.h"
 

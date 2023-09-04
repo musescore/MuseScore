@@ -26,13 +26,13 @@
 #include "importmidi_operations.h"
 #include "../midishared/midifile.h"
 
-#include "libmscore/factory.h"
-#include "libmscore/box.h"
-#include "libmscore/engravingitem.h"
-#include "libmscore/measurebase.h"
-#include "libmscore/masterscore.h"
-#include "libmscore/staff.h"
-#include "libmscore/text.h"
+#include "engraving/dom/factory.h"
+#include "engraving/dom/box.h"
+#include "engraving/dom/engravingitem.h"
+#include "engraving/dom/measurebase.h"
+#include "engraving/dom/masterscore.h"
+#include "engraving/dom/staff.h"
+#include "engraving/dom/text.h"
 
 #include <set>
 

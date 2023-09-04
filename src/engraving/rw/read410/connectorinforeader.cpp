@@ -23,16 +23,16 @@
 
 #include "../../infrastructure/rtti.h"
 
-#include "../../libmscore/factory.h"
-#include "../../libmscore/score.h"
-#include "../../libmscore/engravingitem.h"
-#include "../../libmscore/spanner.h"
-#include "../../libmscore/chordrest.h"
-#include "../../libmscore/measure.h"
-#include "../../libmscore/note.h"
-#include "../../libmscore/tie.h"
-#include "../../libmscore/chord.h"
-#include "../../libmscore/staff.h"
+#include "../../dom/factory.h"
+#include "../../dom/score.h"
+#include "../../dom/engravingitem.h"
+#include "../../dom/spanner.h"
+#include "../../dom/chordrest.h"
+#include "../../dom/measure.h"
+#include "../../dom/note.h"
+#include "../../dom/tie.h"
+#include "../../dom/chord.h"
+#include "../../dom/staff.h"
 
 #include "../types/typesconv.h"
 

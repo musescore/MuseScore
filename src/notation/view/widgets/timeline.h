@@ -23,7 +23,7 @@
 #ifndef MU_NOTATION_TIMELINE_H
 #define MU_NOTATION_TIMELINE_H
 
-#include "libmscore/select.h"
+#include "engraving/dom/select.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"

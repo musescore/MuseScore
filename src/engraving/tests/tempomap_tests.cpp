@@ -25,7 +25,7 @@
 #include "utils/scorerw.h"
 #include "realfn.h"
 #include "types/constants.h"
-#include "libmscore/tempo.h"
+#include "dom/tempo.h"
 
 using namespace mu;
 using namespace mu::engraving;
