@@ -718,7 +718,7 @@ static const auto& mappingByCategory(const mpe::SoundCategory category)
 
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden,
                                     mpe::SoundSubCategory::Temple } }, { midi::Program(128, 0) } },
-        { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(0, 115) } },
+        { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Wooden } }, { midi::Program(128, 0) } },
         { { mpe::SoundId::Block,  { mpe::SoundSubCategory::Sandpaper } }, { midi::Program(128, 0) } },
 
         { { mpe::SoundId::Cabasa,  {} }, { midi::Program(128, 0) } },
