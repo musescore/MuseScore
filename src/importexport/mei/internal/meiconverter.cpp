@@ -542,7 +542,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
         meiClef.SetShape(libmei::CLEFSHAPE_F);
     }
 
-    int line = engraving::ClefInfo::line(clef);
+    const int line = engraving::ClefInfo::line(clef);
     meiClef.SetLine(line);
 
     // @dis and @dis.place
@@ -1667,7 +1667,7 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
     int alterInt = static_cast<int>(alter);
 
     /* This is currently not available in MEI Basic
-    if (accid.HasEnclose()) {
+    if (meiAccid.HasEnclose()) {
         pitch.accidBracket = (accid.GetEnclose() == paren) ? engraving::AccidentalBracket::PARENTHESIS : engraving::AccidentalBracket::BRACKET;
     }
     */
