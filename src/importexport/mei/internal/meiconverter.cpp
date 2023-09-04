@@ -516,7 +516,6 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::G8_VA):
     case (engraving::ClefType::G15_MA):
     case (engraving::ClefType::G_1):
-        meiClef.SetLine(2);
         meiClef.SetShape(libmei::CLEFSHAPE_G);
         break;
     case (engraving::ClefType::C1):
@@ -524,7 +523,6 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::C3):
     case (engraving::ClefType::C4):
     case (engraving::ClefType::C5):
-        meiClef.SetLine(3);
         meiClef.SetShape(libmei::CLEFSHAPE_C);
         break;
     case (engraving::ClefType::F):
@@ -534,11 +532,9 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::F_15MA):
     case (engraving::ClefType::F_B):
     case (engraving::ClefType::F_C):
-        meiClef.SetLine(4);
         meiClef.SetShape(libmei::CLEFSHAPE_F);
         break;
     case (engraving::ClefType::G8_VB_O):
-        meiClef.SetLine(2);
         meiClef.SetShape(libmei::CLEFSHAPE_GG);
         break;
     default:
@@ -546,28 +542,8 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
         meiClef.SetShape(libmei::CLEFSHAPE_F);
     }
 
-    // @line
-    switch (clef) {
-    // G
-    case (engraving::ClefType::G_1): meiClef.SetLine(1);
-        break;
-    // C
-    case (engraving::ClefType::C1): meiClef.SetLine(1);
-        break;
-    case (engraving::ClefType::C2): meiClef.SetLine(2);
-        break;
-    case (engraving::ClefType::C4): meiClef.SetLine(4);
-        break;
-    case (engraving::ClefType::C5): meiClef.SetLine(5);
-        break;
-    // F
-    case (engraving::ClefType::F_B): meiClef.SetLine(3);
-        break;
-    case (engraving::ClefType::F_C): meiClef.SetLine(5);
-        break;
-    default:
-        break;
-    }
+    const int line = engraving::ClefInfo::line(clef);
+    meiClef.SetLine(line);
 
     // @dis and @dis.place
     switch (clef) {
@@ -1691,7 +1667,7 @@ Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const li
     int alterInt = static_cast<int>(alter);
 
     /* This is currently not available in MEI Basic
-    if (accid.HasEnclose()) {
+    if (meiAccid.HasEnclose()) {
         pitch.accidBracket = (accid.GetEnclose() == paren) ? engraving::AccidentalBracket::PARENTHESIS : engraving::AccidentalBracket::BRACKET;
     }
     */
