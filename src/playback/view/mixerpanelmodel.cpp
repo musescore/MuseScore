@@ -141,14 +141,13 @@ void MixerPanelModel::loadItems()
             addInstrumentTrack(instrumentTrackId, isPrimary);
         }
     }
-
-    addInstrumentTrack(notationPlayback()->metronomeTrackId());
-
     for (auto it = instrumentTrackIdMap.cbegin(); it != instrumentTrackIdMap.cend(); ++it) {
         if (notationPlayback()->isChordSymbolsTrack(it->first)) {
             addInstrumentTrack(it->first);
         }
     }
+
+    addInstrumentTrack(notationPlayback()->metronomeTrackId());
 
     const auto& auxTrackIdMap = controller()->auxTrackIdMap();
     for (auto it = auxTrackIdMap.cbegin(); it != auxTrackIdMap.cend(); ++it) {
@@ -333,10 +332,17 @@ void MixerPanelModel::setupConnections()
     });
 
     configuration()->isAuxChannelVisibleChanged().onReceive(this, [this](aux_channel_idx_t index, bool visible) {
-        TrackId trackId = mu::value(controller()->auxTrackIdMap(), index);
-
+        const auto& auxMap = controller()->auxTrackIdMap();
+        TrackId trackId = mu::value(auxMap, index);
         if (visible) {
-            addItem(buildAuxChannelItem(index, trackId), m_mixerChannelList.size() - 1);
+            int visibleAuxesOnRight = 0;
+
+            for (const auto& aux : auxMap) {
+                if (configuration()->isAuxChannelVisible(aux.first) && (aux.first > index)) {
+                    visibleAuxesOnRight++;
+                }
+            }
+            addItem(buildAuxChannelItem(index, trackId), masterChannelIndex() - visibleAuxesOnRight);
         } else {
             removeItem(trackId);
         }
@@ -347,19 +353,27 @@ int MixerPanelModel::resolveInsertIndex(const engraving::InstrumentTrackId& newI
 {
     const InstrumentTrackId& metronomeTrackId = notationPlayback()->metronomeTrackId();
     if (newInstrumentTrackId == metronomeTrackId) {
-        return m_mixerChannelList.size() - 1;
+        return masterChannelIndex();
     }
 
+    // Assumptions:
+    // - the last channel is always the master channel
+    // - metronome channel is placed to the immediate left of the master (or auxes if visible)
+    // - the InstrumentTrackIds from the mixer channel items are always a correctly
+    //   sorted subset of the InstrumentTrackIds from NotationParts
     if (notationPlayback()->isChordSymbolsTrack(newInstrumentTrackId)) {
-        return m_mixerChannelList.size() - 1;
+        int metronomeIdx = 0;
+        for (const MixerChannelItem* channelItem : m_mixerChannelList) {
+            const engraving::InstrumentTrackId& instrumentTrackId = channelItem->instrumentTrackId();
+            if (instrumentTrackId.isValid() && instrumentTrackId != metronomeTrackId) {
+                metronomeIdx++;
+            }
+        }
+        return metronomeIdx;
     }
 
     int mixerChannelListIdx = 0;
 
-    // Assumptions:
-    // - the last channel is always the master channel
-    // - the InstrumentTrackIds from the mixer channel items are always a correctly
-    //   sorted subset of the InstrumentTrackIds from NotationParts
     for (const Part* part : masterNotationParts()->partList()) {
         for (const InstrumentTrackId& instrumentTrackId : part->instrumentTrackIdList()) {
             if (instrumentTrackId == newInstrumentTrackId) {
@@ -566,6 +580,11 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     });
 
     return item;
+}
+
+int MixerPanelModel::masterChannelIndex() const
+{
+    return m_mixerChannelList.size() - 1;
 }
 
 MixerChannelItem* MixerPanelModel::findChannelItem(const audio::TrackId& trackId) const

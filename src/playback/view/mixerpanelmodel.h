@@ -90,6 +90,8 @@ private:
     MixerChannelItem* buildAuxChannelItem(audio::aux_channel_idx_t index, const audio::TrackId trackId);
     MixerChannelItem* buildMasterChannelItem();
 
+    int masterChannelIndex() const;
+
     MixerChannelItem* findChannelItem(const audio::TrackId& trackId) const;
 
     void loadOutputParams(MixerChannelItem* item, audio::AudioOutputParams&& params);
