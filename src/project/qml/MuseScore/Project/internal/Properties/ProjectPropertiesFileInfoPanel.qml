@@ -78,7 +78,6 @@ ColumnLayout {
         spacing: 8
 
         PropertyItem {
-            propertyNameWidth: root.propertyNameWidth
             index: 2
             propertyName: qsTrc("project/properties", "MuseScore version:")
             propertyValue: projectPropertiesModel.version
