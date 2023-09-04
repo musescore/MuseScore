@@ -7,7 +7,7 @@ on:
     
   schedule:
     - cron: '0 3 */1 */1 *' # At 03:00 on every day-of-month for master
-    - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
+    # - cron: '0 5 */1 */1 *' # At 05:00 on every day-of-month for current release branch
   workflow_dispatch:
     inputs:
       build_mode:
@@ -24,7 +24,7 @@ on:
         default: ''
 
 env:
-  CURRENT_RELEASE_BRANCH: 4.1.1
+  # CURRENT_RELEASE_BRANCH: 4.2.0
   DEVELOPER_DIR: /Applications/Xcode_12.4.app/Contents/Developer
 
 jobs:

@@ -16,8 +16,8 @@ on:
         required: false
         default: ''
 
-env:
-  CURRENT_RELEASE_BRANCH: 4.1.1
+# env:
+#   CURRENT_RELEASE_BRANCH: 4.2.0
 
 jobs:
   build_armhf:
