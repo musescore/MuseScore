@@ -39,17 +39,17 @@ namespace mu::engraving {
 
 void Score::cmdSplitMeasure(ChordRest* cr)
 {
-    startCmd();
-    splitMeasure(cr->segment());
-    endCmd();
+    masterScore()->splitMeasure(cr->tick());
 }
 
 //---------------------------------------------------------
 //   splitMeasure
 //---------------------------------------------------------
 
-void Score::splitMeasure(Segment* segment)
+void MasterScore::splitMeasure(const Fraction& tick)
 {
+    Segment* segment = tick2segment(tick, false, SegmentType::ChordRest);
+
     if (segment->rtick().isZero()) {
         MScore::setError(MsError::CANNOT_SPLIT_MEASURE_FIRST_BEAT);
         return;
@@ -58,7 +58,9 @@ void Score::splitMeasure(Segment* segment)
         MScore::setError(MsError::CANNOT_SPLIT_MEASURE_TUPLET);
         return;
     }
-    Measure* measure = segment->measure();
+
+    Measure* measure = tick2measure(tick);
+
     for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
         if (measure->isMeasureRepeatGroup(static_cast<int>(staffIdx))) {
             MScore::setError(MsError::CANNOT_SPLIT_MEASURE_REPEAT);
@@ -118,16 +120,21 @@ void Score::splitMeasure(Segment* segment)
     insertMeasure(ElementType::MEASURE, m2, options);
     Measure* m1 = toMeasure(m2->prev());
 
-    undoRemoveMeasures(measure, measure, true);
+    for (Score* s : scoreList()) {
+        Measure* m = s->tick2measure(tick);
+        s->undoRemoveMeasures(m, m, true);
+    }
     undoInsertTime(measure->tick(), -measure->ticks());
 
-    Fraction tick = segment->tick();
     m1->setTick(measure->tick());
     m2->setTick(tick);
-    Fraction ticks1 = segment->tick() - measure->tick();
+
+    Fraction ticks1 = tick - measure->tick();
     Fraction ticks2 = measure->ticks() - ticks1;
+
     m1->setTimesig(measure->timesig());
     m2->setTimesig(measure->timesig());
+
     ticks1.reduce();
     ticks2.reduce();
     // Now make sure this reduction doesn't go 'beyond' the original measure's
@@ -151,8 +158,23 @@ void Score::splitMeasure(Segment* segment)
         MScore::setError(MsError::CANNOT_SPLIT_MEASURE_TOO_SHORT);
         return;
     }
+
     m1->adjustToLen(ticks1, false);
     m2->adjustToLen(ticks2, false);
+
+    // set correct barline types if needed
+    for (Score* s : scoreList()) {
+        Measure* sM1 = s->tick2measure(m1->tick());
+        Measure* sM2 = s->tick2measure(m2->tick());
+        // TODO: handle other end barline types; they may differ per staff
+        if (measure->endBarLineType() == BarLineType::END_REPEAT) {
+            sM2->undoChangeProperty(Pid::REPEAT_END, true);
+        }
+        if (measure->getProperty(Pid::REPEAT_START).toBool()) {
+            sM1->undoChangeProperty(Pid::REPEAT_START, true);
+        }
+    }
+
     range.write(this, m1->tick());
 
     // Restore ties to the beginning of the split measure.
