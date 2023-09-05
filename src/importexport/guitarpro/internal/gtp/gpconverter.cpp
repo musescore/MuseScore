@@ -2086,7 +2086,12 @@ void GPConverter::setPitch(Note* note, const GPNote::MidiPitch& midiPitch)
     }
 
     note->setFret(fret);
-    note->setString(musescoreString);
+
+    if (note->part()->instrument(note->tick())->useDrumset()) {
+        note->setString(0);
+    } else {
+        note->setString(musescoreString);
+    }
 
     note->setPitch(pitch);
 }

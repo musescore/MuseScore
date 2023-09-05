@@ -30,7 +30,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-
 class MidiRenderer_Tests : public ::testing::Test
 {
 };

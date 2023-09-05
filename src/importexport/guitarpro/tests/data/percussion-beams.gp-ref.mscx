@@ -570,7 +570,7 @@
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>38</fret>
-              <string>2</string>
+              <string>0</string>
               </Note>
             </Chord>
           <Chord>
@@ -579,7 +579,7 @@
               <pitch>38</pitch>
               <tpc>16</tpc>
               <fret>38</fret>
-              <string>2</string>
+              <string>0</string>
               </Note>
             </Chord>
           <Rest>
