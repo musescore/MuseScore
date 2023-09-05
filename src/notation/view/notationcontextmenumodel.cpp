@@ -25,6 +25,8 @@
 
 #include "ui/view/iconcodes.h"
 
+#include "view/widgets/editstyle.h"
+
 using namespace mu::notation;
 using namespace mu::uicomponents;
 
@@ -199,6 +201,20 @@ MenuItemList NotationContextMenuModel::makeElementItems()
         items << makeSeparator();
         items << makeMenuItem("edit-element");
     }
+
+    items << makeSeparator();
+
+    MenuItem* item = new MenuItem(uiActionsRegister()->action("edit-style"), this);
+    item->setState(uiActionsRegister()->actionState(item->action().code));
+
+    if (hitElement) {
+        QString pageCode = EditStyle::pageCodeForElement(hitElement);
+        if (!pageCode.isEmpty()) {
+            item->setArgs(mu::actions::ActionData::make_arg1<QString>(pageCode));
+        }
+    }
+
+    items << item;
 
     return items;
 }

@@ -86,6 +86,7 @@ static const QStringList ALL_PAGE_CODES {
     "staff-text",
     "tempo-text",
     "lyrics",
+    "expression",
     "dynamics",
     "rehearsal-marks",
     "figured-bass",
@@ -1269,115 +1270,6 @@ void EditStyle::adjustPagesStackSize(int currentPageIndex)
     });
 }
 
-//---------------------------------------------------------
-//   pageForElement
-///   Returns the page related to the element `e`, to allow the creation of a 'Style...'
-///   menu for every possible element on the score.
-//---------------------------------------------------------
-
-EditStyle::EditStylePage EditStyle::pageForElement(EngravingItem* e)
-{
-    switch (e->type()) {
-    case ElementType::SCORE:
-        return &EditStyle::PageScore;
-    case ElementType::PAGE:
-        return &EditStyle::PagePage;
-    case ElementType::TEXT:
-        if (toText(e)->textStyleType() == TextStyleType::FOOTER
-            || toText(e)->textStyleType() == TextStyleType::HEADER) {
-            return &EditStyle::PageHeaderFooter;
-        }
-        return nullptr;
-    case ElementType::MEASURE_NUMBER:
-    case ElementType::MMREST_RANGE:
-        return &EditStyle::PageMeasureNumbers;
-    case ElementType::BRACKET:
-    case ElementType::BRACKET_ITEM:
-    case ElementType::SYSTEM_DIVIDER:
-        return &EditStyle::PageSystem;
-    case ElementType::CLEF:
-        return &EditStyle::PageClefs;
-    case ElementType::KEYSIG:
-        return &EditStyle::PageAccidentals;
-    case ElementType::MEASURE:
-        return &EditStyle::PageMeasure;
-    case ElementType::BAR_LINE:
-        return &EditStyle::PageBarlines;
-    case ElementType::NOTE:
-    case ElementType::CHORD:
-    case ElementType::ACCIDENTAL:
-    case ElementType::STEM:
-    case ElementType::STEM_SLASH:
-    case ElementType::LEDGER_LINE:
-        return &EditStyle::PageNotes;
-    case ElementType::REST:
-    case ElementType::MMREST:
-        return &EditStyle::PageRests;
-    case ElementType::MEASURE_REPEAT:
-        return &EditStyle::PageMeasureRepeats;
-    case ElementType::BEAM:
-        return &EditStyle::PageBeams;
-    case ElementType::TUPLET:
-        return &EditStyle::PageTuplets;
-    case ElementType::ARPEGGIO:
-        return &EditStyle::PageArpeggios;
-    case ElementType::SLUR:
-    case ElementType::SLUR_SEGMENT:
-    case ElementType::TIE:
-    case ElementType::TIE_SEGMENT:
-        return &EditStyle::PageSlursTies;
-    case ElementType::HAIRPIN:
-    case ElementType::HAIRPIN_SEGMENT:
-        return &EditStyle::PageHairpins;
-    case ElementType::VOLTA:
-    case ElementType::VOLTA_SEGMENT:
-        return &EditStyle::PageVolta;
-    case ElementType::OTTAVA:
-    case ElementType::OTTAVA_SEGMENT:
-        return &EditStyle::PageOttava;
-    case ElementType::PEDAL:
-    case ElementType::PEDAL_SEGMENT:
-        return &EditStyle::PagePedal;
-    case ElementType::TRILL:
-    case ElementType::TRILL_SEGMENT:
-        return &EditStyle::PageTrill;
-    case ElementType::VIBRATO:
-    case ElementType::VIBRATO_SEGMENT:
-        return &EditStyle::PageVibrato;
-    case ElementType::BEND:
-        return &EditStyle::PageBend;
-    case ElementType::TEXTLINE:
-    case ElementType::TEXTLINE_SEGMENT:
-        return &EditStyle::PageTextLine;
-    case ElementType::ARTICULATION:
-        return &EditStyle::PageArticulationsOrnaments;
-    case ElementType::FERMATA:
-        return &EditStyle::PageFermatas;
-    case ElementType::STAFF_TEXT:
-        return &EditStyle::PageStaffText;
-    case ElementType::TEMPO_TEXT:
-        return &EditStyle::PageTempoText;
-    case ElementType::LYRICS:
-    case ElementType::LYRICSLINE:
-    case ElementType::LYRICSLINE_SEGMENT:
-        return &EditStyle::PageLyrics;
-    case ElementType::DYNAMIC:
-        return &EditStyle::PageDynamics;
-    case ElementType::EXPRESSION:
-        return &EditStyle::PageExpression;
-    case ElementType::REHEARSAL_MARK:
-        return &EditStyle::PageRehearsalMarks;
-    case ElementType::FIGURED_BASS:
-        return &EditStyle::PageFiguredBass;
-    case ElementType::HARMONY:
-        return &EditStyle::PageChordSymbols;
-    case ElementType::FRET_DIAGRAM:
-        return &EditStyle::PageFretboardDiagrams;
-    default:
-        return nullptr;
-    }
-}
-
 QString EditStyle::currentPageCode() const
 {
     return m_currentPageCode;
@@ -1386,6 +1278,152 @@ QString EditStyle::currentPageCode() const
 QString EditStyle::currentSubPageCode() const
 {
     return m_currentSubPageCode;
+}
+
+QString EditStyle::pageCodeForElement(const EngravingItem* element)
+{
+    IF_ASSERT_FAILED(element) {
+        return QString();
+    }
+
+    switch (element->type()) {
+    case ElementType::SCORE:
+        return "score";
+
+    case ElementType::PAGE:
+        return "page";
+
+    case ElementType::INSTRUMENT_NAME:
+    case ElementType::TEXT: {
+        if (element->isText()) {
+            if (toText(element)->textStyleType() == TextStyleType::FOOTER
+                || toText(element)->textStyleType() == TextStyleType::HEADER) {
+                return "header-and-footer";
+            }
+        }
+        return "text-styles";
+    }
+
+    case ElementType::MEASURE_NUMBER:
+    case ElementType::MMREST_RANGE:
+        return "measure-number";
+
+    case ElementType::BRACKET:
+    case ElementType::BRACKET_ITEM:
+    case ElementType::SYSTEM_DIVIDER:
+        return "system";
+
+    case ElementType::CLEF:
+        return "clefs";
+
+    case ElementType::KEYSIG:
+    case ElementType::ACCIDENTAL:
+        return "accidentals";
+
+    case ElementType::MEASURE:
+        return "measure";
+
+    case ElementType::BAR_LINE:
+        return "barlines";
+
+    case ElementType::NOTE:
+    case ElementType::CHORD:
+    case ElementType::STEM:
+    case ElementType::STEM_SLASH:
+    case ElementType::LEDGER_LINE:
+        return "notes";
+
+    case ElementType::REST:
+    case ElementType::MMREST:
+        return "rests";
+
+    case ElementType::MEASURE_REPEAT:
+        return "measure-repeats";
+
+    case ElementType::BEAM:
+        return "beams";
+
+    case ElementType::TUPLET:
+        return "tuplets";
+
+    case ElementType::ARPEGGIO:
+        return "arpeggios";
+
+    case ElementType::SLUR:
+    case ElementType::SLUR_SEGMENT:
+    case ElementType::TIE:
+    case ElementType::TIE_SEGMENT:
+        return "slurs-and-ties";
+
+    case ElementType::HAIRPIN:
+    case ElementType::HAIRPIN_SEGMENT:
+        return "hairpins";
+
+    case ElementType::VOLTA:
+    case ElementType::VOLTA_SEGMENT:
+        return "volta";
+
+    case ElementType::OTTAVA:
+    case ElementType::OTTAVA_SEGMENT:
+        return "ottava";
+
+    case ElementType::PEDAL:
+    case ElementType::PEDAL_SEGMENT:
+        return "pedal";
+
+    case ElementType::TRILL:
+    case ElementType::TRILL_SEGMENT:
+        return "trill";
+
+    case ElementType::VIBRATO:
+    case ElementType::VIBRATO_SEGMENT:
+        return "vibrato";
+
+    case ElementType::BEND:
+        return "bend";
+
+    case ElementType::TEXTLINE:
+    case ElementType::TEXTLINE_SEGMENT:
+        return "text-line";
+
+    case ElementType::ARTICULATION:
+        return "articulations-and-ornaments";
+
+    case ElementType::FERMATA:
+        return "fermatas";
+
+    case ElementType::PLAYTECH_ANNOTATION:
+    case ElementType::STAFF_TEXT:
+        return "staff-text";
+
+    case ElementType::TEMPO_TEXT:
+        return "tempo-text";
+
+    case ElementType::LYRICS:
+    case ElementType::LYRICSLINE:
+    case ElementType::LYRICSLINE_SEGMENT:
+        return "lyrics";
+
+    case ElementType::EXPRESSION:
+        return "expression";
+
+    case ElementType::DYNAMIC:
+        return "dynamics";
+
+    case ElementType::REHEARSAL_MARK:
+        return "rehearsal-marks";
+
+    case ElementType::FIGURED_BASS:
+        return "figured-bass";
+
+    case ElementType::HARMONY:
+        return "chord-symbols";
+
+    case ElementType::FRET_DIAGRAM:
+        return "fretboard-diagrams";
+
+    default: return QString();
+    }
 }
 
 void EditStyle::setCurrentPageCode(const QString& code)

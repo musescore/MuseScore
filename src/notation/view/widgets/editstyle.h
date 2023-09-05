@@ -55,6 +55,8 @@ public:
     QString currentPageCode() const;
     QString currentSubPageCode() const;
 
+    static QString pageCodeForElement(const EngravingItem*);
+
 public slots:
     void accept();
     void reject();
@@ -80,7 +82,6 @@ private:
     /// This is a type for a pointer to any QWidget that is a member of EditStyle.
     /// It's used to create static references to the pointers to pages.
     typedef QWidget* EditStyle::* EditStylePage;
-    static EditStylePage pageForElement(EngravingItem*);
 
     struct StyleWidget {
         StyleId idx = StyleId::NOSTYLE;
