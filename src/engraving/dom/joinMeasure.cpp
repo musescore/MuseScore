@@ -122,10 +122,14 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
     for (Score* s : scoreList()) {
         Measure* ins = s->tick2measure(startTick);
         ins->undoChangeProperty(Pid::TIMESIG_NOMINAL, newTimesig);
-//             TODO: there was a commented chunk of code regarding setting bar
-//             line types. Should we handle them here too?
-//             m->setEndBarLineType(m2->endBarLineType(), m2->endBarLineGenerated(),
-//             m2->endBarLineVisible(), m2->endBarLineColor());
+        // set correct barline types if needed
+        // TODO: handle other end barline types; they may differ per staff
+        if (m2->endBarLineType() == BarLineType::END_REPEAT) {
+            ins->undoChangeProperty(Pid::REPEAT_END, true);
+        }
+        if (m1->getProperty(Pid::REPEAT_START).toBool()) {
+            ins->undoChangeProperty(Pid::REPEAT_START, true);
+        }
     }
     Measure* inserted = (next ? next->prevMeasure() : lastMeasure());
     inserted->adjustToLen(newLen, /* appendRests... */ false);
