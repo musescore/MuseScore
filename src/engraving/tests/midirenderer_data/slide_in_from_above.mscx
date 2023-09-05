@@ -85,9 +85,12 @@
           <Chord>
             <durationType>quarter</durationType>
             <Note>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
-              <fret>1</fret>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                </Accidental>
+              <pitch>63</pitch>
+              <tpc>23</tpc>
+              <fret>4</fret>
               <string>1</string>
               <ChordLine>
                 <subtype>3</subtype>
