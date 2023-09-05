@@ -88,6 +88,7 @@ signals:
 private:
     void updateStrings();
     void saveStrings();
+    void saveStringsVisibleState();
     void updateCurrentPreset();
 
     void doSetCurrentPreset(const QString& preset);

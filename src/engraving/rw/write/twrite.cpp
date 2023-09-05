@@ -2564,11 +2564,13 @@ void TWrite::write(const StringData* item, XmlWriter& xml)
     xml.endElement();
 }
 
-void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext&)
 {
     xml.startElement(item);
 
     writeProperty(item, xml, Pid::STRINGTUNINGS_PRESET);
+
+    xml.tag("visibleStrings", TConv::toXml(item->visibleStrings()));
 
     if (!item->stringData()->isNull()) {
         write(item->stringData(), xml);

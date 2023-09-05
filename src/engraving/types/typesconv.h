@@ -39,6 +39,9 @@ public:
     static String toXml(const std::vector<int>& v);
     static std::vector<int> fromXml(const String& tag, const std::vector<int>& def);
 
+    static String toXml(const std::vector<string_idx_t>& v);
+    static std::vector<string_idx_t> fromXml(const String& tag, const std::vector<string_idx_t>& def);
+
     static const TranslatableString& userName(ElementType v);
     static AsciiStringView toXml(ElementType v);
     static ElementType fromXml(const AsciiStringView& tag, ElementType def, bool silent = false);

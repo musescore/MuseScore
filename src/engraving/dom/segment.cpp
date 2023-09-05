@@ -595,7 +595,6 @@ void Segment::add(EngravingItem* el)
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
-    case ElementType::STRING_TUNINGS:
     case ElementType::REHEARSAL_MARK:
     case ElementType::MARKER:
     case ElementType::IMAGE:
@@ -607,6 +606,23 @@ void Segment::add(EngravingItem* el)
     case ElementType::STICKING:
         _annotations.push_back(el);
         break;
+
+    case ElementType::STRING_TUNINGS: {
+        // already a string tunings element in this segment
+        bool alreadyHasStringTunings = false;
+        for (EngravingItem* element : _annotations) {
+            if (element && element->isStringTunings()) {
+                alreadyHasStringTunings = true;
+                break;
+            }
+        }
+
+        if (!alreadyHasStringTunings) {
+            _annotations.push_back(el);
+        }
+
+        break;
+    }
 
     case ElementType::STAFF_STATE:
         if (toStaffState(el)->staffStateType() == StaffStateType::INSTRUMENT) {

@@ -106,6 +106,7 @@
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
+#include "dom/stringtunings.h"
 #include "dom/stretchedbend.h"
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
@@ -279,6 +280,8 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::STEM_SLASH:           draw(item_cast<const StemSlash*>(item), painter);
         break;
     case ElementType::STICKING:             draw(item_cast<const Sticking*>(item), painter);
+        break;
+    case ElementType::STRING_TUNINGS:       draw(item_cast<const StringTunings*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
@@ -1463,6 +1466,12 @@ void SingleDraw::draw(const StemSlash* item, Painter* painter)
 }
 
 void SingleDraw::draw(const Sticking* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    drawTextBase(item, painter);
+}
+
+void SingleDraw::draw(const StringTunings* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);

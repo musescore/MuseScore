@@ -29,9 +29,9 @@
 
 #include "editpitch.h"
 
-#include "libmscore/stringdata.h"
-#include "libmscore/stringtunings.h"
-#include "libmscore/undo.h"
+#include "dom/stringdata.h"
+#include "dom/stringtunings.h"
+#include "dom/undo.h"
 
 #include "ui/view/widgetstatestore.h"
 #include "ui/view/widgetnavigationfix.h"

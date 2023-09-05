@@ -3878,6 +3878,8 @@ void TRead::read(StringTunings* s, XmlReader& xml, ReadContext& ctx)
             StringData sd;
             read(&sd, xml);
             s->setStringData(sd);
+        } else if (tag == "visibleStrings") {
+            s->setVisibleStrings(TConv::fromXml(xml.readText(), std::vector<string_idx_t>()));
         } else if (!readProperties(static_cast<StaffTextBase*>(s), xml, ctx)) {
             xml.unknown();
         }
