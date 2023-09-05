@@ -772,7 +772,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
             case ArticulationStemSideAlign::AVERAGE:
             default:
                 x = item->up() ? (item->stem()->width() * .5 + item->downNote()->noteheadCenterX()) * .5
-                               : (item->stem()->width() * .5 + item->centerX()) * .5;
+                    : (item->stem()->width() * .5 + item->centerX()) * .5;
                 break;
             }
             if (item->up()) {
@@ -927,7 +927,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
         case ArticulationStemSideAlign::AVERAGE:
         default:
             stemSideX = item->up() ? (item->stem()->width() * .5 + item->downNote()->noteheadCenterX()) * .5
-                                   : (item->stem()->width() * .5 + item->centerX()) * .5;
+                        : (item->stem()->width() * .5 + item->centerX()) * .5;
             break;
         }
         if (item->up()) {
