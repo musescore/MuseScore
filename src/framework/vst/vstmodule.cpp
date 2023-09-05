@@ -115,12 +115,8 @@ void VSTModule::registerUiTypes()
     ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(vst_QML_IMPORT);
 }
 
-void VSTModule::onInit(const framework::IApplication::RunMode& mode)
+void VSTModule::onInit(const framework::IApplication::RunMode&)
 {
-    if (mode == framework::IApplication::RunMode::ConsoleApp) {
-        return;
-    }
-
     s_configuration->init();
     s_pluginModulesRepo->init();
 }
