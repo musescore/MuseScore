@@ -85,7 +85,7 @@
      </item>
      <item>
       <property name="text">
-       <string>Root Only</string>
+       <string>Root only</string>
       </property>
      </item>
      <item>
@@ -95,22 +95,22 @@
      </item>
      <item>
       <property name="text">
-       <string extracomment="2nd note an octave down">Drop Two</string>
+       <string extracomment="2nd note an octave down">Drop two</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string extracomment="6 note chord">Six Note</string>
+       <string extracomment="6 note chord">Six note</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string extracomment="4 note chord">Four Note</string>
+       <string extracomment="4 note chord">Four note</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string extracomment="3 note chord">Three Note</string>
+       <string extracomment="3 note chord">Three note</string>
       </property>
      </item>
     </widget>
@@ -119,17 +119,17 @@
     <widget class="QComboBox" name="durationBox">
      <item>
       <property name="text">
-       <string>Until Next Chord Symbol</string>
+       <string>Until next chord symbol</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Until Measure End</string>
+       <string>Until measure end</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Chord/Rest Duration</string>
+       <string>Chord/rest duration</string>
       </property>
      </item>
     </widget>

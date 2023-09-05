@@ -144,7 +144,7 @@ FocusableItem {
                 DropdownPropertyView {
                     id: noteHeadSystemSection
 
-                    titleText: qsTrc("inspector", "Notehead system")
+                    titleText: qsTrc("inspector", "Notehead scheme")
                     propertyItem: root.model ? root.model.headSystem : null
 
                     model: root.model.possibleHeadSystemTypes()

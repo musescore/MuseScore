@@ -691,132 +691,132 @@
             </property>
             <item>
              <property name="text">
-              <string>0 - Perfect Unison</string>
+              <string>0 - Perfect unison</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>1 - Augmented Unison</string>
+              <string>1 - Augmented unison</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>0 - Diminished Second</string>
+              <string>0 - Diminished second</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>1 - Minor Second</string>
+              <string>1 - Minor second</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>2 - Major Second</string>
+              <string>2 - Major second</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>3 - Augmented Second</string>
+              <string>3 - Augmented second</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>2 - Diminished Third</string>
+              <string>2 - Diminished third</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>3 - Minor Third</string>
+              <string>3 - Minor third</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>4 - Major Third</string>
+              <string>4 - Major third</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>5 - Augmented Third</string>
+              <string>5 - Augmented third</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>4 - Diminished Fourth</string>
+              <string>4 - Diminished fourth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>5 - Perfect Fourth</string>
+              <string>5 - Perfect fourth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>6 - Augmented Fourth</string>
+              <string>6 - Augmented fourth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>6 - Diminished Fifth</string>
+              <string>6 - Diminished fifth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>7 - Perfect Fifth</string>
+              <string>7 - Perfect fifth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>8 - Augmented Fifth</string>
+              <string>8 - Augmented fifth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>7 - Diminished Sixth</string>
+              <string>7 - Diminished sixth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>8 - Minor Sixth</string>
+              <string>8 - Minor sixth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>9 - Major Sixth</string>
+              <string>9 - Major sixth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>10 - Augmented Sixth</string>
+              <string>10 - Augmented sixth</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>9 - Diminished Seventh</string>
+              <string>9 - Diminished seventh</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>10 - Minor Seventh</string>
+              <string>10 - Minor seventh</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>11 - Major Seventh</string>
+              <string>11 - Major seventh</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>12 - Augmented Seventh</string>
+              <string>12 - Augmented seventh</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>11 - Diminished Octave</string>
+              <string>11 - Diminished octave</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>12 - Perfect Octave</string>
+              <string>12 - Perfect octave</string>
              </property>
             </item>
            </widget>
@@ -958,7 +958,7 @@
          <item>
           <widget class="QPushButton" name="editStringData">
            <property name="text">
-            <string>Edit String Data…</string>
+            <string>Edit string data…</string>
            </property>
           </widget>
          </item>

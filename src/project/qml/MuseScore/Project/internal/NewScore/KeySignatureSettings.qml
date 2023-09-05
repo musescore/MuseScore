@@ -97,7 +97,8 @@ FlatButton {
 
                 StyledTabButton {
                     id: majorTab
-                    text: qsTrc("project/newscore", "Major")
+                    //: mode of a key signature, not an interval
+                    text: qsTrc("project/newscore", "Major", "key signature mode")
 
                     navigation.name: "MajorTab"
                     navigation.panel: bar.navigationPanel
@@ -105,7 +106,8 @@ FlatButton {
                 }
 
                 StyledTabButton {
-                    text: qsTrc("project/newscore", "Minor")
+                    //: mode of a key signature, not an interval
+                    text: qsTrc("project/newscore", "Minor", "key signature mode")
 
                     navigation.name: "MinorTab"
                     navigation.panel: bar.navigationPanel

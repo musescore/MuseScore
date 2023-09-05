@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Select Notes</string>
+   <string>Select notes</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>

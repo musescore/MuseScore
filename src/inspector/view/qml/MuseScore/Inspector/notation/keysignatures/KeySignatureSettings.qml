@@ -65,8 +65,10 @@ Column {
         model: [
             { text: qsTrc("inspector", "Unknown"), value: KeySignatureTypes.MODE_UNKNOWN },
             { text: qsTrc("inspector", "None"), value: KeySignatureTypes.MODE_NONE },
-            { text: qsTrc("inspector", "Major"), value: KeySignatureTypes.MODE_MAJOR },
-            { text: qsTrc("inspector", "Minor"), value: KeySignatureTypes.MODE_MINOR },
+            //: mode of a key signature, not an interval
+            { text: qsTrc("inspector", "Major", "key signature mode"), value: KeySignatureTypes.MODE_MAJOR },
+            //: mode of a key signature, not an interval
+            { text: qsTrc("inspector", "Minor", "key signature mode"), value: KeySignatureTypes.MODE_MINOR },
             { text: qsTrc("inspector", "Dorian"), value: KeySignatureTypes.MODE_DORIAN },
             { text: qsTrc("inspector", "Phrygian"), value: KeySignatureTypes.MODE_PHRYGIAN },
             { text: qsTrc("inspector", "Lydian"), value: KeySignatureTypes.MODE_LYDIAN },

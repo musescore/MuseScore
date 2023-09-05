@@ -55,7 +55,7 @@ Item {
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
 
-        titleText: qsTrc("inspector", "Leading")
+        titleText: qsTrc("inspector", "Leading space")
         propertyItem: root.leadingSpace
 
         icon: IconCode.HORIZONTAL

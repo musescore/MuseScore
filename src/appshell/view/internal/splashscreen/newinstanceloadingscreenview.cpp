@@ -39,7 +39,7 @@ NewInstanceLoadingScreenView::NewInstanceLoadingScreenView(const QString& openin
         m_message = qtrc("appshell", "Loading new score…\u200e");
         m_dialogSize = QSize(288, 80);
     } else {
-        m_message = qtrc("appshell", "Loading \"%1\"…\u200e").arg(openingFileName);
+        m_message = qtrc("appshell", "Loading “%1”…\u200e").arg(openingFileName);
         m_dialogSize = QSize(360, 80);
     }
 

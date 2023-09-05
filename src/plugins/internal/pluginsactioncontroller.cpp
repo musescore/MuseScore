@@ -78,7 +78,7 @@ void PluginsActionController::onPluginTriggered(const CodeKey& codeKey)
     }
 
     IInteractive::Result result = interactive()->warning(
-        qtrc("plugins", "The plugin \"%1\" is currently disabled. Do you want to enable it now?").arg(pluginName).toStdString(),
+        qtrc("plugins", "The plugin “%1” is currently disabled. Do you want to enable it now?").arg(pluginName).toStdString(),
         trc("plugins", "Alternatively, you can enable it at any time from Home > Plugins."),
         { interactive()->buttonData(IInteractive::Button::No),
           interactive()->buttonData(IInteractive::Button::Yes) }, 0);

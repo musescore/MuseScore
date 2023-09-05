@@ -11,13 +11,13 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Note Selection</string>
+   <string>Note selection</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Select Note:</string>
+      <string>Select note:</string>
      </property>
     </widget>
    </item>

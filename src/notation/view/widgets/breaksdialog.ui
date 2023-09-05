@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Add/Remove System Breaks</string>
+   <string>Add/remove system breaks</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_2">
    <item>

@@ -20,7 +20,7 @@
       <item>
        <widget class="mu::uicomponents::RadioButtonGroupBox" name="chromaticBox">
         <property name="title">
-         <string>Transpose Chromatically</string>
+         <string>Transpose chromatically</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -168,10 +168,10 @@
          <item>
           <widget class="mu::uicomponents::RadioButtonGroupBox" name="transposeByInterval">
            <property name="toolTip">
-            <string>Transpose by Interval</string>
+            <string>Transpose by interval</string>
            </property>
            <property name="title">
-            <string>By Interval</string>
+            <string>By interval</string>
            </property>
            <property name="checkable">
             <bool>true</bool>
@@ -209,132 +209,132 @@
               </property>
               <item>
                <property name="text">
-                <string>Perfect Unison</string>
+                <string>Perfect unison</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Unison</string>
+                <string>Augmented unison</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Second</string>
+                <string>Diminished second</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Minor Second</string>
+                <string>Minor second</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Major Second</string>
+                <string>Major second</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Second</string>
+                <string>Augmented second</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Third</string>
+                <string>Diminished third</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Minor Third</string>
+                <string>Minor third</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Major Third</string>
+                <string>Major third</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Third</string>
+                <string>Augmented third</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Fourth</string>
+                <string>Diminished fourth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Perfect Fourth</string>
+                <string>Perfect fourth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Fourth</string>
+                <string>Augmented fourth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Fifth</string>
+                <string>Diminished fifth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Perfect Fifth</string>
+                <string>Perfect fifth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Fifth</string>
+                <string>Augmented fifth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Sixth</string>
+                <string>Diminished sixth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Minor Sixth</string>
+                <string>Minor sixth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Major Sixth</string>
+                <string>Major sixth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Sixth</string>
+                <string>Augmented sixth</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Seventh</string>
+                <string>Diminished seventh</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Minor Seventh</string>
+                <string>Minor seventh</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Major Seventh</string>
+                <string>Major seventh</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Augmented Seventh</string>
+                <string>Augmented seventh</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Diminished Octave</string>
+                <string>Diminished octave</string>
                </property>
               </item>
               <item>
                <property name="text">
-                <string>Perfect Octave</string>
+                <string>Perfect octave</string>
                </property>
               </item>
              </widget>
@@ -368,7 +368,7 @@
       <item>
        <widget class="mu::uicomponents::RadioButtonGroupBox" name="diatonicBox">
         <property name="title">
-         <string>Transpose Diatonically</string>
+         <string>Transpose diatonically</string>
         </property>
         <property name="checkable">
          <bool>true</bool>
@@ -491,12 +491,12 @@
            </property>
            <item>
             <property name="text">
-             <string>Single ♯ and ♭ Only</string>
+             <string>Single ♯ and ♭ only</string>
             </property>
            </item>
            <item>
             <property name="text">
-             <string>Use Double ♯ and ♭</string>
+             <string>Use double ♯ and ♭</string>
             </property>
            </item>
           </widget>

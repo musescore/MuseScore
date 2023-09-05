@@ -97,11 +97,11 @@ MenuItem* PianoKeyboardPanelContextMenuModel::makeViewMenu()
     items << makeSeparator();
 
     std::vector<std::pair<TranslatableString, int> > possibleNumbersOfKeys {
-        { TranslatableString("notation", "128 notes (full)"), 128 },
-        { TranslatableString("notation", "88 notes (piano)"), 88 },
-        { TranslatableString("notation", "61 notes"), 61 },
-        { TranslatableString("notation", "49 notes"), 49 },
-        { TranslatableString("notation", "25 notes"), 25 },
+        { TranslatableString("notation", "128 keys (full)"), 128 },
+        { TranslatableString("notation", "88 keys (piano)"), 88 },
+        { TranslatableString("notation", "61 keys"), 61 },
+        { TranslatableString("notation", "49 keys"), 49 },
+        { TranslatableString("notation", "25 keys"), 25 },
     };
 
     for (auto [title, numberOfKeys] : possibleNumbersOfKeys) {

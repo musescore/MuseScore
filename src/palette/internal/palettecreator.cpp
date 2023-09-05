@@ -578,7 +578,7 @@ PalettePtr PaletteCreator::newLayoutPalette()
 PalettePtr PaletteCreator::newFingeringPalette(bool defaultPalette)
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Fingering);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Fingering"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Fingerings"));
     sp->setMag(1.5);
     sp->setGridSize(28, 30);
     sp->setDrawGrid(true);
@@ -1007,7 +1007,7 @@ PalettePtr PaletteCreator::newBreathPalette(bool defaultPalette)
 PalettePtr PaletteCreator::newArpeggioPalette()
 {
     PalettePtr sp = std::make_shared<Palette>(Palette::Type::Arpeggio);
-    sp->setName(QT_TRANSLATE_NOOP("palette", "Arpeggios & glissandi"));
+    sp->setName(QT_TRANSLATE_NOOP("palette", "Arpeggios & glissandos"));
     sp->setGridSize(42, 44);
     sp->setDrawGrid(true);
     sp->setVisible(false);

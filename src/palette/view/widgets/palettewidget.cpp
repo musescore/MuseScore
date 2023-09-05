@@ -1148,7 +1148,7 @@ void PaletteWidget::contextMenuEvent(QContextMenuEvent* event)
         if (cell) {
             std::string title = mu::trc("palette", "Delete palette cell");
             std::string question
-                = mu::qtrc("palette", "Are you sure you want to delete palette cell \"%1\"?").arg(cell->name).toStdString();
+                = mu::qtrc("palette", "Are you sure you want to delete palette cell “%1”?").arg(cell->name).toStdString();
 
             IInteractive::Result result = interactive()->question(title, question, {
                 IInteractive::Button::Yes,

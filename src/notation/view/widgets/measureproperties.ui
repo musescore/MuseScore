@@ -49,7 +49,7 @@
             </property>
             <row>
              <property name="text">
-              <string>New Row</string>
+              <string>New row</string>
              </property>
             </row>
             <column>
@@ -96,7 +96,7 @@
        <item>
         <widget class="QGroupBox" name="groupBox">
          <property name="title">
-          <string>Measure Duration</string>
+          <string>Measure duration</string>
          </property>
          <layout class="QGridLayout">
           <property name="verticalSpacing">
@@ -428,12 +428,12 @@
             </item>
             <item>
              <property name="text">
-              <string>Always Show</string>
+              <string>Always show</string>
              </property>
             </item>
             <item>
              <property name="text">
-              <string>Always Hide</string>
+              <string>Always hide</string>
              </property>
             </item>
            </widget>
