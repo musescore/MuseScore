@@ -160,13 +160,13 @@
             <durationType>quarter</durationType>
             <Note>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <Fingering>
                 <text>T</text>
                 </Fingering>
               <pitch>51</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               <fret>1</fret>
               <string>3</string>
               </Note>
@@ -189,9 +189,6 @@
           <Chord>
             <durationType>half</durationType>
             <Note>
-              <Accidental>
-                <subtype>accidentalNatural</subtype>
-                </Accidental>
               <Fingering>
                 <text>M</text>
                 </Fingering>

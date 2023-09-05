@@ -982,10 +982,10 @@
             <durationType>whole</durationType>
             <Note>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>58</pitch>
-              <tpc>12</tpc>
+              <tpc>24</tpc>
               <play>0</play>
               <fret>3</fret>
               <string>2</string>

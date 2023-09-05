@@ -213,10 +213,10 @@
             <durationType>quarter</durationType>
             <Note>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>51</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               <fret>1</fret>
               <string>3</string>
               </Note>
