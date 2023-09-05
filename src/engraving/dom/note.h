@@ -243,7 +243,7 @@ public:
     void setTpc(int v);
     void setTpc1(int v) { m_tpc[0] = v; }
     void setTpc2(int v) { m_tpc[1] = v; }
-    void setTpcFromPitch();
+    void setTpcFromPitch(Prefer prefer = Prefer::NEAREST);
     int tpc1default(int pitch) const;
     int tpc2default(int pitch) const;
     int transposeTpc(int tpc) const;

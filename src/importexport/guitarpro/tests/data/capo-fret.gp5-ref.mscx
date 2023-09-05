@@ -139,10 +139,10 @@
               </Note>
             <Note>
               <Accidental>
-                <subtype>accidentalFlat</subtype>
+                <subtype>accidentalSharp</subtype>
                 </Accidental>
               <pitch>58</pitch>
-              <tpc>12</tpc>
+              <tpc>24</tpc>
               <fret>2</fret>
               <string>2</string>
               </Note>

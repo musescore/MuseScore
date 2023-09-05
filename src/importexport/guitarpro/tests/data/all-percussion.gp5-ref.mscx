@@ -561,7 +561,7 @@
             <durationType>eighth</durationType>
             <Note>
               <pitch>27</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               <fret>27</fret>
               <string>0</string>
               </Note>
@@ -634,7 +634,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>34</pitch>
-              <tpc>12</tpc>
+              <tpc>24</tpc>
               <fret>34</fret>
               <string>0</string>
               </Note>
@@ -692,7 +692,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>39</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               <fret>39</fret>
               <string>0</string>
               </Note>
@@ -769,7 +769,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>46</pitch>
-              <tpc>12</tpc>
+              <tpc>24</tpc>
               <head>xcircle</head>
               <fret>46</fret>
               <string>0</string>
@@ -828,7 +828,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>51</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               <head>cross</head>
               <fret>51</fret>
               <string>0</string>
@@ -909,7 +909,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>58</pitch>
-              <tpc>12</tpc>
+              <tpc>24</tpc>
               <fret>58</fret>
               <string>0</string>
               </Note>
@@ -968,7 +968,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>63</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               <head>cross</head>
               <fret>63</fret>
               <string>0</string>
@@ -1047,7 +1047,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>70</pitch>
-              <tpc>12</tpc>
+              <tpc>24</tpc>
               <fret>70</fret>
               <string>0</string>
               </Note>
@@ -1104,7 +1104,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>75</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               <fret>75</fret>
               <string>0</string>
               </Note>
@@ -1179,7 +1179,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>82</pitch>
-              <tpc>12</tpc>
+              <tpc>24</tpc>
               <fret>82</fret>
               <string>0</string>
               </Note>
@@ -1236,7 +1236,7 @@
             <durationType>half</durationType>
             <Note>
               <pitch>87</pitch>
-              <tpc>11</tpc>
+              <tpc>23</tpc>
               <fret>87</fret>
               <string>0</string>
               </Note>
