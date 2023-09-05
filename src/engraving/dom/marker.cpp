@@ -118,7 +118,7 @@ void Marker::setMarkerType(MarkerType t)
         break;
 
     case MarkerType::DA_DBLCODA:
-        txt = "Da Double Coda";
+        txt = "Da Doppia Coda";
         initTextStyleType(TextStyleType::REPEAT_RIGHT, true);
         setLabel(u"coda");
         break;

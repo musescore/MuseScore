@@ -54,12 +54,12 @@ const std::vector<JumpTypeTableItem> jumpTypeTable {
     { JumpType::DS_AL_FINE, "D.S. al Fine", "segno", "fine", "" },
     { JumpType::DS,         "D.S.",         "segno", "end",  "" },
 
-    { JumpType::DC_AL_DBLCODA,  "D.C. al Double Coda",   "start", "varcoda",  "codab" },
-    { JumpType::DS_AL_DBLCODA,  "D.S. al Double Coda",   "segno", "varcoda",  "codab" },
-    { JumpType::DSS,            "Dal Segno Segno",       "varsegno", "end",  "" },
-    { JumpType::DSS_AL_CODA,    "D.S.S. al Coda",        "varsegno", "coda",  "codab" },
-    { JumpType::DSS_AL_DBLCODA, "D.S.S. al Double Coda", "varsegno", "varcoda", "codab" },
-    { JumpType::DSS_AL_FINE,    "D.S.S. al Fine",        "varsegno", "fine",  "" },
+    { JumpType::DC_AL_DBLCODA,  "D.C. al Doppia Coda",   "start",    "varcoda", "codab" },
+    { JumpType::DS_AL_DBLCODA,  "D.S. al Doppia Coda",   "segno",    "varcoda", "codab" },
+    { JumpType::DSS,            "Dal Doppio Segno",      "varsegno", "end",     "" },
+    { JumpType::DSS_AL_CODA,    "D.D.S. al Coda",        "varsegno", "coda",    "codab" },
+    { JumpType::DSS_AL_DBLCODA, "D.D.S. al Doppia Coda", "varsegno", "varcoda", "codab" },
+    { JumpType::DSS_AL_FINE,    "D.D.S. al Fine",        "varsegno", "fine",    "" },
 };
 
 //---------------------------------------------------------

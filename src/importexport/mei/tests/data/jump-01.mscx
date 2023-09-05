@@ -76,7 +76,7 @@
       <Measure>
         <Jump>
           <style>repeat_right</style>
-          <text>D.C. al Double Coda</text>
+          <text>D.C. al Doppia Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>varcoda</playUntil>
           <continueAt>codab</continueAt>

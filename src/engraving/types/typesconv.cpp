@@ -2287,12 +2287,12 @@ static const std::vector<Item<JumpType> > JUMP_TYPES = {
     { JumpType::DS_AL_FINE,     "", TranslatableString("engraving", "D.S. al Fine") },
     { JumpType::DS,             "", TranslatableString("engraving", "D.S.") },
 
-    { JumpType::DC_AL_DBLCODA,  "", TranslatableString("engraving", "Da Capo al Double Coda") },
-    { JumpType::DS_AL_DBLCODA,  "", TranslatableString("engraving", "Dal Segno al Double Coda") },
-    { JumpType::DSS,            "", TranslatableString("engraving", "Dal Segno Segno") },
-    { JumpType::DSS_AL_CODA,    "", TranslatableString("engraving", "Dal Segno Segno al Coda") },
-    { JumpType::DSS_AL_DBLCODA, "", TranslatableString("engraving", "Dal Segno Segno al Double Coda") },
-    { JumpType::DSS_AL_FINE,    "", TranslatableString("engraving", "Dal Segno Segno al Fine") },
+    { JumpType::DC_AL_DBLCODA,  "", TranslatableString("engraving", "Da Capo al Doppia Coda") },
+    { JumpType::DS_AL_DBLCODA,  "", TranslatableString("engraving", "Dal Segno al Doppia Coda") },
+    { JumpType::DSS,            "", TranslatableString("engraving", "Dal Doppio Segno") },
+    { JumpType::DSS_AL_CODA,    "", TranslatableString("engraving", "Dal Doppio Segno al Coda") },
+    { JumpType::DSS_AL_DBLCODA, "", TranslatableString("engraving", "Dal Doppio Segno al Doppia Coda") },
+    { JumpType::DSS_AL_FINE,    "", TranslatableString("engraving", "Dal Doppio Segno al Fine") },
 
     { JumpType::USER,           "", TranslatableString("engraving", "Custom") }
 };
@@ -2312,12 +2312,12 @@ static const std::array<Item<MarkerType>, 11> MARKER_TYPES = { {
     { MarkerType::VARSEGNO,     "varsegno", TranslatableString("engraving", "Segno variation") },
     { MarkerType::CODA,         "codab",    TranslatableString("engraving", "Coda") },
     { MarkerType::VARCODA,      "varcoda",  TranslatableString("engraving", "Varied coda") },
-    { MarkerType::CODETTA,      "codetta",  TranslatableString("engraving", "Codetta") },
+    { MarkerType::CODETTA,      "codetta",  TranslatableString("engraving", "Doppia Coda") },
     { MarkerType::FINE,         "fine",     TranslatableString("engraving", "Fine") },
     { MarkerType::TOCODA,       "coda",     TranslatableString("engraving", "To coda") },
     { MarkerType::TOCODASYM,    "",         TranslatableString("engraving", "To coda (symbol)") },
     { MarkerType::DA_CODA,      "",         TranslatableString("engraving", "Da Coda") },
-    { MarkerType::DA_DBLCODA,   "",         TranslatableString("engraving", "Da Double Coda") },
+    { MarkerType::DA_DBLCODA,   "",         TranslatableString("engraving", "Da Doppia Coda") },
     { MarkerType::USER,         "",         TranslatableString("engraving", "Custom") }
 } };
 
