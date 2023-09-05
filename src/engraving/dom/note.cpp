@@ -761,14 +761,14 @@ int Note::tpc2default(int p) const
 //   setTpcFromPitch
 //---------------------------------------------------------
 
-void Note::setTpcFromPitch()
+void Note::setTpcFromPitch(Prefer prefer /* = Prefer::NEAREST */)
 {
     // works best if note is already added to score, otherwise we can't determine transposition or key
     Fraction tick = chord() ? chord()->tick() : Fraction(-1, 1);
     Interval v = staff() ? staff()->transpose(tick) : Interval();
     Key cKey = (staff() && chord()) ? staff()->concertKey(chord()->tick()) : Key::C;
     // set concert pitch tpc
-    m_tpc[0] = pitch2tpc(m_pitch, cKey, Prefer::NEAREST);
+    m_tpc[0] = pitch2tpc(m_pitch, cKey, prefer);
     // set transposed tpc
     if (v.isZero()) {
         m_tpc[1] = m_tpc[0];

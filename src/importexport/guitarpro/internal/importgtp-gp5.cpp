@@ -46,6 +46,7 @@
 #include "engraving/dom/measurebase.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/notedot.h"
+#include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/rehearsalmark.h"
 #include "engraving/dom/rest.h"
@@ -356,7 +357,7 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
                 if (note->fret() == -20) {
                     delnote.push_back(note);
                 } else {
-                    note->setTpcFromPitch();
+                    note->setTpcFromPitch(Prefer::SHARPS);
                 }
             }
         }
@@ -1235,7 +1236,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), harmonicOvertone, staff);
 
             note->setPitch(std::clamp(pitch, 0, 127));
-            note->setTpcFromPitch();
+            note->setTpcFromPitch(Prefer::SHARPS);
         } else if (type >= HARMONIC_MARK_ARTIFICIAL && type <= HARMONIC_MARK_SEMI) {
             int fret = (type == HARMONIC_MARK_TAP ? (readChar() - note->fret()) : note->fret());
             float midi = note->pitch() + fret;
@@ -1295,7 +1296,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
             int pitch = staff->part()->instrument()->stringData()->getPitch(note->string(), overtoneFret + note->part()->capoFret(), staff);
 
             harmonicNote->setPitch(std::clamp(pitch, 0, 127));
-            harmonicNote->setTpcFromPitch();
+            harmonicNote->setTpcFromPitch(Prefer::SHARPS);
             note->chord()->add(harmonicNote);
 
             switch (type) {
@@ -1587,7 +1588,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                 note2->setString(true_note->string());
                 note2->setFret(true_note->fret());
                 note2->setPitch(true_note->pitch());
-                note2->setTpcFromPitch();
+                note2->setTpcFromPitch(Prefer::SHARPS);
                 chord1->setNoteType(true_note->noteType());
                 chord1->add(note2);
                 Tie* tie = Factory::createTie(note2);
