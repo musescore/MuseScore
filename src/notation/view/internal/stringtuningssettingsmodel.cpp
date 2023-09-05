@@ -76,12 +76,13 @@ void StringTuningsSettingsModel::init()
     }
 
     const std::vector<engraving::instrString>& stringList = stringData->stringList();
-    for (mu::engraving::string_idx_t i = 0; i < stringList.size(); ++i) {
+    std::vector<engraving::string_idx_t> visibleStrings = stringTunings->visibleStrings();
+    for (engraving::string_idx_t i = 0; i < stringList.size(); ++i) {
         const engraving::instrString& string = stringList[i];
         StringTuningsItem* item = new StringTuningsItem(this);
 
         item->blockSignals(true);
-        item->setShow(string.open);
+        item->setShow(contains(visibleStrings, i));
         item->setNumber(QString::number(i + 1)); // todo
         item->setValue(string.pitch);
         item->blockSignals(false);
@@ -110,7 +111,7 @@ void StringTuningsSettingsModel::toggleString(int stringIndex)
     StringTuningsItem* item = m_strings.at(stringIndex);
     item->setShow(!item->show());
 
-    saveStrings();
+    saveStringsVisibleState();
 }
 
 bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& stringValue)
@@ -238,6 +239,7 @@ void StringTuningsSettingsModel::setCurrentPreset(const QString& preset)
 
     updateStrings();
     saveStrings();
+    saveStringsVisibleState();
 
     endMultiCommands();
 }
@@ -334,7 +336,7 @@ void StringTuningsSettingsModel::saveStrings()
     stringList.resize(m_strings.size());
 
     for (int i = 0; i < m_strings.size(); ++i) {
-        stringList[i].open = m_strings[i]->show();
+        stringList[i].open = false;
         stringList[i].pitch = m_strings[i]->value();
     }
 
@@ -345,6 +347,20 @@ void StringTuningsSettingsModel::saveStrings()
 
     endCommand();
     updateNotation();
+}
+
+void StringTuningsSettingsModel::saveStringsVisibleState()
+{
+    std::vector<int> visibleStrings;
+    for (int i = 0; i < m_strings.size(); ++i) {
+        const StringTuningsItem* item = m_strings.at(i);
+
+        if (item->show()) {
+            visibleStrings.push_back(i);
+        }
+    }
+
+    changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_VISIBLE_STRINGS, visibleStrings);
 }
 
 void StringTuningsSettingsModel::updateCurrentPreset()

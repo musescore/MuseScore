@@ -408,6 +408,7 @@ static constexpr PropertyMetaData propertyList[] = {
 
     { Pid::STRINGTUNINGS_STRINGS_COUNT, true,  "stringsCount",      P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "strings count") },
     { Pid::STRINGTUNINGS_PRESET,    true,  "preset",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "strings preset") },
+    { Pid::STRINGTUNINGS_VISIBLE_STRINGS,   true,  "visibleStrings",P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "visible strings") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };

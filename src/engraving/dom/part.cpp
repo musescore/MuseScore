@@ -416,7 +416,15 @@ const StringData* Part::stringData(const Fraction& tick) const
     const Instrument* instrument = this->instrument(tick);
 
     for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        if (measure->tick() > tick) {
+            break;
+        }
+
         for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            if (segment->tick() > tick) {
+                break;
+            }
+
             std::vector<EngravingItem*> annotations = segment->annotations();
 
             for (EngravingItem* annotation : annotations) {

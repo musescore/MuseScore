@@ -132,6 +132,33 @@ std::vector<int> TConv::fromXml(const String& tag, const std::vector<int>& def)
     return list;
 }
 
+String TConv::toXml(const std::vector<string_idx_t>& v)
+{
+    std::vector<int> _v;
+    for (string_idx_t string : v) {
+        _v.push_back(static_cast<int>(string));
+    }
+
+    return toXml(_v);
+}
+
+std::vector<string_idx_t> TConv::fromXml(const String& tag, const std::vector<string_idx_t>& def)
+{
+    std::vector<int> _def;
+    for (string_idx_t string : def) {
+        _def.push_back(static_cast<int>(string));
+    }
+
+    std::vector<string_idx_t> v;
+    std::vector<int> _v = fromXml(tag, _def);
+
+    for (int string : _v) {
+        v.push_back(static_cast<string_idx_t>(string));
+    }
+
+    return v;
+}
+
 static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::INVALID,              "invalid",              TranslatableString("engraving", "Invalid") },
     { ElementType::BRACKET_ITEM,         "BracketItem",          TranslatableString("engraving", "Bracket") },

@@ -82,6 +82,13 @@ PropertyValue StringTunings::getProperty(Pid id) const
         return stringData()->strings();
     } else if (id == Pid::STRINGTUNINGS_PRESET) {
         return m_preset;
+    } else if (id == Pid::STRINGTUNINGS_VISIBLE_STRINGS) {
+        std::vector<int> visibleStrings;
+        for (string_idx_t string : m_visibleStrings) {
+            visibleStrings.push_back(static_cast<int>(string));
+        }
+
+        return visibleStrings;
     }
 
     return StaffTextBase::getProperty(id);
@@ -93,6 +100,8 @@ PropertyValue StringTunings::propertyDefault(Pid id) const
         return stringData()->strings(); // todo
     } else if (id == Pid::STRINGTUNINGS_PRESET) {
         return String();
+    } else if (id == Pid::STRINGTUNINGS_VISIBLE_STRINGS) {
+        return {};
     }
 
     return StaffTextBase::propertyDefault(id);
@@ -116,6 +125,12 @@ bool StringTunings::setProperty(Pid id, const PropertyValue& val)
         }
     } else if (id == Pid::STRINGTUNINGS_PRESET) {
         m_preset = val.value<String>();
+    } else if (id == Pid::STRINGTUNINGS_VISIBLE_STRINGS) {
+        m_visibleStrings.clear();
+        std::vector<int> ignoredStrings = val.value<std::vector<int> >();
+        for (int string : ignoredStrings) {
+            m_visibleStrings.push_back(static_cast<string_idx_t>(string));
+        }
     } else {
         return StaffTextBase::setProperty(id, val);
     }
@@ -151,6 +166,16 @@ void StringTunings::setPreset(const String& preset)
     m_preset = preset;
 }
 
+std::vector<string_idx_t> StringTunings::visibleStrings() const
+{
+    return m_visibleStrings;
+}
+
+void StringTunings::setVisibleStrings(const std::vector<string_idx_t>& visibleStrings)
+{
+    m_visibleStrings = visibleStrings;
+}
+
 void StringTunings::updateText()
 {
     undoChangeProperty(Pid::TEXT, generateText(), PropertyFlags::STYLED);
@@ -164,31 +189,32 @@ String StringTunings::generateText() const
     }
 
     std::vector<instrString> stringList = stringData->stringList();
-    std::vector<String> stringListOpened;
-    for (size_t i = 0; i < stringList.size(); ++i) {
-        if (stringList[i].open) {
+    std::vector<String> visibleStringList;
+    for (string_idx_t i = 0; i < stringList.size(); ++i) {
+        if (mu::contains(m_visibleStrings, i)) {
             String pitchStr = pitch2string(stringList[i].pitch);
             if (pitchStr.empty()) {
                 LOGE() << "Invalid get pitch name for " << stringList[i].pitch;
                 continue;
             }
 
-            stringListOpened.push_back(String(u"<sym>guitarString%1</sym> - %2").arg(String::number(i + 1), String(pitchStr[0]).toUpper()));
+            visibleStringList.push_back(String(u"<sym>guitarString%1</sym> - %2").arg(String::number(i + 1),
+                                                                                      String(pitchStr[0]).toUpper()));
         }
     }
 
-    if (stringListOpened.empty()) {
+    if (visibleStringList.empty()) {
         return u"<sym>guitarString6</sym>"; // todo fork
     }
 
     int columnCount = 0;
     int rowCount = 0;
 
-    if (stringListOpened.size() <= 4) {
-        rowCount = stringListOpened.size();
+    if (visibleStringList.size() <= 4) {
+        rowCount = visibleStringList.size();
         columnCount = 1;
     } else {
-        rowCount = std::ceil(static_cast<double>(stringListOpened.size()) / 2);
+        rowCount = std::ceil(static_cast<double>(visibleStringList.size()) / 2);
         columnCount = 2;
     }
 
@@ -196,8 +222,8 @@ String StringTunings::generateText() const
     for (int i = 0; i < rowCount; ++i) {
         for (int j = 0; j < columnCount; ++j) {
             size_t index = i + j * rowCount;
-            if (index < stringListOpened.size()) {
-                result += stringListOpened[index];
+            if (index < visibleStringList.size()) {
+                result += visibleStringList[index];
             }
             result += u"\t";
         }

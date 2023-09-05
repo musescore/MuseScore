@@ -50,12 +50,16 @@ public:
     String preset() const;
     void setPreset(const String& preset);
 
+    std::vector<string_idx_t> visibleStrings() const;
+    void setVisibleStrings(const std::vector<string_idx_t>& visibleStrings);
+
     void updateText();
 
 private:
     String generateText() const;
 
     String m_preset;
+    std::vector<string_idx_t> m_visibleStrings;
     StringData m_stringData;
 };
 }
