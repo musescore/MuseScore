@@ -3354,12 +3354,34 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
     if (p->score()->mscVersion() < 301) {
         ctx.addSpanner(e.intAttribute("id", -1), p);
     }
+
+    p->setBeginText(String());
+    p->setContinueText(String());
+    p->setEndText(String());
+
+    bool beginTextTag = false;
+    bool continueTextTag = false;
+    bool endTextTag = false;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
+        beginTextTag = tag == "beginText" || beginTextTag;
+        continueTextTag = tag == "continueText" || continueTextTag;
+        endTextTag = tag == "endText" || endTextTag;
         if (readStyledProperty(p, tag, e, ctx)) {
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
         }
+    }
+
+    if (!beginTextTag) {
+        p->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+    }
+    if (!continueTextTag) {
+        p->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+    }
+    if (!endTextTag) {
+        p->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     }
 }
 

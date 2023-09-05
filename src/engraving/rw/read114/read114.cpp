@@ -1359,6 +1359,14 @@ static void readTextLine114(XmlReader& e, ReadContext& ctx, TextLine* textLine)
 
 static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
 {
+    bool beginTextTag = false;
+    bool continueTextTag = false;
+    bool endTextTag = false;
+
+    pedal->setBeginText(String());
+    pedal->setContinueText(String());
+    pedal->setEndText(String());
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
@@ -1373,26 +1381,38 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
             read400::TRead::readProperty(pedal, e, ctx, Pid::LINE_STYLE);
             pedal->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
         } else if (tag == "beginSymbol" || tag == "symbol") {   // "symbol" is obsolete
+            beginTextTag = true;
             String text(e.readText());
-            pedal->setBeginText(String(u"<sym>%1</sym>").arg(
-                                    text.at(0).isDigit()
-                                    ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
-                                    : text));
-            pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+            String symbol = String(u"<sym>%1</sym>").arg(
+                text.at(0).isDigit()
+                ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                : text);
+            if (symbol != pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>()) {
+                pedal->setBeginText(symbol);
+                pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+            }
         } else if (tag == "continueSymbol") {
+            continueTextTag = true;
             String text(e.readText());
-            pedal->setContinueText(String(u"<sym>%1</sym>").arg(
-                                       text.at(0).isDigit()
-                                       ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
-                                       : text));
-            pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+            String symbol = String(u"<sym>%1</sym>").arg(
+                text.at(0).isDigit()
+                ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                : text);
+            if (symbol != pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>()) {
+                pedal->setContinueText(symbol);
+                pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+            }
         } else if (tag == "endSymbol") {
+            endTextTag = true;
             String text(e.readText());
-            pedal->setEndText(String(u"<sym>%1</sym>").arg(
-                                  text.at(0).isDigit()
-                                  ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
-                                  : text));
-            pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+            String symbol = String(u"<sym>%1</sym>").arg(
+                text.at(0).isDigit()
+                ? resolveSymCompatibility(SymId(text.toInt()), ctx.mscoreVersion())
+                : text);
+            if (symbol != pedal->propertyDefault(Pid::END_TEXT).value<String>()) {
+                pedal->setEndText(symbol);
+                pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+            }
         } else if (tag == "beginSymbolOffset") { // obsolete
             e.readPoint();
         } else if (tag == "continueSymbolOffset") { // obsolete
@@ -1402,6 +1422,16 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
         } else if (!readTextLineProperties114(e, ctx, pedal)) {
             e.unknown();
         }
+    }
+
+    if (!beginTextTag) {
+        pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+    }
+    if (!continueTextTag) {
+        pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+    }
+    if (!endTextTag) {
+        pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     }
 }
 

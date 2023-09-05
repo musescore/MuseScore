@@ -3431,11 +3431,44 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
     if (p->score()->mscVersion() < 301) {
         ctx.addSpanner(e.intAttribute("id", -1), p);
     }
+
+    bool beginTextTag = false;
+    bool continueTextTag = false;
+    bool endTextTag = false;
+
+    if (p->score()->mscVersion() < 420) {
+        p->setBeginText(String());
+        p->setContinueText(String());
+        p->setEndText(String());
+    }
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
+        beginTextTag = tag == "beginText" || beginTextTag;
+        continueTextTag = tag == "continueText" || continueTextTag;
+        endTextTag = tag == "endText" || endTextTag;
+
         if (readStyledProperty(p, tag, e, ctx)) {
+        } else if (TRead::readProperty(p, tag, e, ctx, Pid::LINE_VISIBLE)) {
+            p->resetProperty(Pid::END_TEXT);
+        } else if (TRead::readProperty(p, tag, e, ctx, Pid::BEGIN_HOOK_TYPE)) {
+            if (p->beginHookType() != HookType::NONE) {
+                p->setBeginText(String());
+            }
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
+        }
+    }
+
+    if (p->score()->mscVersion() < 420) {
+        if (!beginTextTag) {
+            p->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+        }
+        if (!continueTextTag) {
+            p->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+        }
+        if (!endTextTag) {
+            p->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
         }
     }
 }

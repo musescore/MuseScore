@@ -2051,11 +2051,34 @@ static void readVolta206(XmlReader& e, ReadContext& ctx, Volta* volta)
 
 static void readPedal(XmlReader& e, ReadContext& ctx, Pedal* pedal)
 {
+    bool beginTextTag = false;
+    bool continueTextTag = false;
+    bool endTextTag = false;
+
+    pedal->setBeginText(String());
+    pedal->setContinueText(String());
+    pedal->setEndText(String());
+
     while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        beginTextTag = tag == "beginText" || beginTextTag;
+        continueTextTag = tag == "continueText" || continueTextTag;
+        endTextTag = tag == "endText" || endTextTag;
         if (!readTextLineProperties(e, ctx, pedal)) {
             e.unknown();
         }
     }
+
+    if (!beginTextTag) {
+        pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+    }
+    if (!continueTextTag) {
+        pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+    }
+    if (!endTextTag) {
+        pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+    }
+
     adjustPlacement(pedal);
 }
 

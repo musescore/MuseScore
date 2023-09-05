@@ -84,7 +84,6 @@
             </TimeSig>
           <Spanner type="Pedal">
             <Pedal>
-              <beginText>&lt;sym&gt;keyboardPedalPed&lt;/sym&gt;</beginText>
               <continueText>&lt;font size=&quot;11&quot;/&gt;</continueText>
               <endHookHeight>-1.5</endHookHeight>
               <lineWidth>0.006</lineWidth>
