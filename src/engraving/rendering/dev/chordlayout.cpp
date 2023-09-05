@@ -767,15 +767,16 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 x = item->stem()->width() * .5;
                 break;
             case ArticulationStemSideAlign::NOTEHEAD:
-                x = item->centerX();
+                x = item->up() ? item->downNote()->noteheadCenterX() : item->centerX();
                 break;
             case ArticulationStemSideAlign::AVERAGE:
             default:
-                x = (item->stem()->width() * .5 + item->centerX()) * .5;
+                x = item->up() ? (item->stem()->width() * .5 + item->downNote()->noteheadCenterX()) * .5
+                               : (item->stem()->width() * .5 + item->centerX()) * .5;
                 break;
             }
             if (item->up()) {
-                x = item->downNote()->bboxRightPos() - x;
+                x = item->downNote()->pos().x() + item->downNote()->bboxRightPos() - x;
             }
         } else {
             x = item->centerX();
@@ -921,15 +922,16 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             stemSideX = item->stem()->width() * .5;
             break;
         case ArticulationStemSideAlign::NOTEHEAD:
-            stemSideX = item->centerX();
+            stemSideX = item->up() ? item->downNote()->noteheadCenterX() : item->centerX();
             break;
         case ArticulationStemSideAlign::AVERAGE:
         default:
-            stemSideX = (item->stem()->width() * .5 + item->centerX()) * .5;
+            stemSideX = item->up() ? (item->stem()->width() * .5 + item->downNote()->noteheadCenterX()) * .5
+                                   : (item->stem()->width() * .5 + item->centerX()) * .5;
             break;
         }
         if (item->up()) {
-            stemSideX = item->downNote()->bboxRightPos() - stemSideX;
+            stemSideX = item->downNote()->pos().x() + item->downNote()->bboxRightPos() - stemSideX;
         }
     }
 
