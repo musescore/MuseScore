@@ -1662,15 +1662,17 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
         const_cast<Fermata*>(item)->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
     }
 
+    double x = 0.0;
+    double y = 0.0;
     EngravingItem* e = s->element(item->track());
     if (e) {
         if (e->isChord()) {
             Chord* chord = toChord(e);
-            Note* note = chord->up() ? chord->downNote() : chord->upNote();
-            double offset = chord->layoutData()->pos().x() + note->layoutData()->pos().x() + note->headWidth() / 2;
-            ldata->moveX(offset);
+            x = chord->x() + chord->centerX();
+            y = chord->y();
         } else {
-            ldata->moveX(e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5);
+            x = e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;
+            y = e->y();
         }
     }
 
@@ -1681,12 +1683,12 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
             const_cast<Fermata*>(item)->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Above"));
         }
     } else {
-        ldata->moveY(item->staff()->height());
         if (name.endsWith(u"Above")) {
             //! NOTE It is not clear whether SymId is layout data or given data.
             const_cast<Fermata*>(item)->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Below"));
         }
     }
+    ldata->setPos(x, y);
     RectF b(item->symBbox(item->symId()));
     ldata->setBbox(b.translated(-0.5 * b.width(), 0.0));
 
