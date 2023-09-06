@@ -1189,6 +1189,7 @@ void MidiRenderer::renderScore(EventMap& events, const Context& ctx)
     renderSpanners(events, pitchWheelRender);
 
     EventMap pitchWheelEvents = pitchWheelRender.renderPitchWheel();
+    events.mergePitchWheelEvents(pitchWheelEvents);
 //    events->merge(pitchWheelEvents);
 
     if (ctx.metronome) {

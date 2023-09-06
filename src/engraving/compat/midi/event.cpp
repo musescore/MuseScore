@@ -219,6 +219,26 @@ const EventMap::events_multimap_t& EventMap::operator[](std::size_t idx) const
     assert(idx < size());
     return _channels[idx];
 }
+
+void EventMap::mergePitchWheelEvents(EventMap& pitchWheelEvents)
+{
+    for (size_t i = 0; i < size(); ++i) {
+        for (const auto& eventPair : _channels[i]) {
+            const auto& event = eventPair.second;
+            const auto& tick = eventPair.first;
+            if (event.type() == ME_NOTEON && event.velo() != 0) {
+                const auto& pwEvent = findLess(pitchWheelEvents[i], tick);
+                if (pwEvent != pitchWheelEvents[i].end()
+                    && pwEvent->second.type() == ME_PITCHBEND) {
+                    PitchWheelSpecs specs;
+                    NPlayEvent pwReset(ME_PITCHBEND, i, specs.mLimit % 128, specs.mLimit / 128);
+                    _channels[i].insert(std::pair<int, NPlayEvent>(tick - 1, pwReset));
+                }
+            }
+        }
+        _channels[i].merge(pitchWheelEvents[i]);
+    }
+}
 //---------------------------------------------------------
 //   class EventMap::fixupMIDI
 //---------------------------------------------------------
