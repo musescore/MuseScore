@@ -212,6 +212,21 @@ async::Channel<int> ProjectConfigurationStub::autoSaveIntervalChanged() const
     return ch;
 }
 
+bool ProjectConfigurationStub::promptShareAudioCom() const
+{
+    return false;
+}
+
+void ProjectConfigurationStub::setPromptShareAudioCom(bool prompt)
+{
+}
+
+async::Channel<bool> ProjectConfigurationStub::promptShareAudioComChanged() const
+{
+    static async::Channel<bool> ch;
+    return ch;
+}
+
 io::path_t ProjectConfigurationStub::newProjectTemporaryPath() const
 {
     return io::path_t();

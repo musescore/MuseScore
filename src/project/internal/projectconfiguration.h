@@ -115,6 +115,10 @@ public:
     void setAutoSaveInterval(int minutes) override;
     async::Channel<int> autoSaveIntervalChanged() const override;
 
+    bool promptShareAudioCom() const override;
+    void setPromptShareAudioCom(bool prompt) override;
+    async::Channel<bool> promptShareAudioComChanged() const override;
+
     io::path_t newProjectTemporaryPath() const override;
 
     bool isAccessibleEnabled() const override;
@@ -155,6 +159,8 @@ private:
 
     async::Channel<bool> m_autoSaveEnabledChanged;
     async::Channel<int> m_autoSaveIntervalChanged;
+
+    async::Channel<bool> m_promptShareAudioComChanged;
 
     mutable std::map<MigrationType, MigrationOptions> m_migrationOptions;
 };

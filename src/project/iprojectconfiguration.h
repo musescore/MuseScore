@@ -119,6 +119,10 @@ public:
     virtual void setAutoSaveInterval(int minutes) = 0;
     virtual async::Channel<int> autoSaveIntervalChanged() const = 0;
 
+    virtual bool promptShareAudioCom() const = 0;
+    virtual void setPromptShareAudioCom(bool prompt) = 0;
+    virtual async::Channel<bool> promptShareAudioComChanged() const = 0;
+
     virtual io::path_t newProjectTemporaryPath() const = 0;
 
     virtual bool isAccessibleEnabled() const = 0;

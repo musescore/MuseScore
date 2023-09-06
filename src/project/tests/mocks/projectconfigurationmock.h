@@ -97,6 +97,10 @@ public:
     MOCK_METHOD(void, setAutoSaveInterval, (int), (override));
     MOCK_METHOD(async::Channel<int>, autoSaveIntervalChanged, (), (const, override));
 
+    MOCK_METHOD(bool, promptShareAudioCom, (), (const, override));
+    MOCK_METHOD(void, setPromptShareAudioCom, (bool), (override));
+    MOCK_METHOD(async::Channel<bool>, promptShareAudioComChanged, (), (const, override));
+
     MOCK_METHOD(io::path_t, newProjectTemporaryPath, (), (const, override));
 
     MOCK_METHOD(bool, isAccessibleEnabled, (), (const, override));
