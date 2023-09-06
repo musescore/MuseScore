@@ -65,12 +65,15 @@ struct float_x4
         s.n128_f32[1] = v1;
         s.n128_f32[2] = v2;
         s.n128_f32[3] = v3;
+#elif defined(__GNUC__) // gcc (12.2.0) doesn't seem to allow initializer list.
+        const float init[4] = { v0, v1, v2, v3 };
+        s = vld1q_f32(init);
 #else
         s = { v0, v1, v2, v3 };
 #endif
     }
 
-#if __clang__
+#if defined(__clang__) || defined(__GNUC__)
 private:
     // this helper class allows writing to the single registers for clang
     // __mm128 is a built-in type -> we can't return a float& reference.
