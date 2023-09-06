@@ -92,6 +92,11 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
 void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     assert(!item->twoNotes());
+    const StaffType* staffType = item->staffType();
+
+    if (staffType && staffType->isTabStaff()) {
+        x = item->chord()->centerX();
+    }
 
     bool up = item->chord()->up();
     int upValue = up ? -1 : 1;
@@ -116,7 +121,7 @@ void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, doub
         // we need an additional offset for beams > 2 since those beams extend outwards and we don't want to adjust for that
         double beamOffset = straightFlags ? 0.75 : 0.5;
         yOffset -= beams >= 2 ? beamOffset * spatium : 0.0;
-    } else if (beams) {
+    } else if (beams && staffType && !staffType->isSimpleTabStaff()) {
         yOffset -= (beams * (ctx.conf().styleB(Sid::useWideBeams) ? 1.0 : 0.75) - 0.25) * spatium;
     }
     yOffset -= item->isBuzzRoll() && up ? 0.5 * spatium : 0.0;
