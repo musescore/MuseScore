@@ -25,6 +25,7 @@
 
 #include <set>
 
+#include "chordrest.h"
 #include "engravingitem.h"
 
 namespace mu::engraving {
@@ -172,6 +173,8 @@ public:
     void styleChanged() override;
 
     bool isOnCrossBeamSide() const;
+
+    staff_idx_t vStaffIdx() const override { return chordRest()->vStaffIdx(); }
 
 protected:
     friend class mu::engraving::Factory;

@@ -351,7 +351,7 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
     if (item->autoplace() && item->explicitParent()) {
         Segment* s = item->segment();
         Measure* m = item->measure();
-        staff_idx_t si = item->staffIdx();
+        staff_idx_t si = item->vStaffIdx();
 
         double sp = item->style().spatium();
         double md = item->minDistance().val() * sp;
