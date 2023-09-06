@@ -90,8 +90,8 @@ void StringTuningsSettingsModel::init()
         m_strings.push_back(item);
     }
 
-    emit stringNumbersChanged();
-    emit currentStringNumberChanged();
+    emit numbersOfStringsChanged();
+    emit currentNumberOfStringsChanged();
     emit presetsChanged();
     emit currentPresetChanged();
     emit stringsChanged();
@@ -185,7 +185,7 @@ QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
         presetsList << customMap;
     }
 
-    int currentStringNumber = this->currentStringNumber();
+    int currentStringNumber = this->currentNumberOfStrings();
 
     for (const StringTuningsInfo& stringTuning : stringTunings.at(m_itemId)) {
         if (stringTuning.number != currentStringNumber) {
@@ -244,7 +244,7 @@ void StringTuningsSettingsModel::setCurrentPreset(const QString& preset)
     endMultiCommands();
 }
 
-QVariantList StringTuningsSettingsModel::stringNumbers() const
+QVariantList StringTuningsSettingsModel::numbersOfStrings() const
 {
     const InstrumentStringTuningsMap& stringTunings = instrumentsRepository()->stringTuningsPresets();
 
@@ -264,22 +264,22 @@ QVariantList StringTuningsSettingsModel::stringNumbers() const
     return numbersList;
 }
 
-int StringTuningsSettingsModel::currentStringNumber() const
+int StringTuningsSettingsModel::currentNumberOfStrings() const
 {
     return m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_STRINGS_COUNT).toInt() : 0;
 }
 
-void StringTuningsSettingsModel::setCurrentStringNumber(int stringNumber)
+void StringTuningsSettingsModel::setCurrentNumberOfStrings(int number)
 {
-    if (currentStringNumber() == stringNumber) {
+    if (currentNumberOfStrings() == number) {
         return;
     }
 
     beginMultiCommands();
 
-    changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_STRINGS_COUNT, stringNumber);
+    changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_STRINGS_COUNT, number);
 
-    emit currentStringNumberChanged();
+    emit currentNumberOfStringsChanged();
     emit presetsChanged();
 
     setCurrentPreset(presets(false /*withCustom*/).first().toMap()["text"].toString());

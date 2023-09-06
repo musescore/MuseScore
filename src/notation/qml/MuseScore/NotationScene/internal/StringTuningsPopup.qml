@@ -92,6 +92,7 @@ StyledPopupView {
                 navigation.name: "Presets"
                 navigation.panel: navPanel
                 navigation.row: 1
+                navigation.accessible: titleLabel.text + " " + currentText
 
                 model: stringTuningsModel.presets
 
@@ -107,16 +108,17 @@ StyledPopupView {
 
                 Layout.preferredWidth: 92
 
-                navigation.name: "StringNumber"
+                navigation.name: "StringsNumber"
                 navigation.panel: navPanel
                 navigation.row: 2
+                navigation.accessible.name: qsTrc("notation", "Number of strings:") + " " + currentText
 
-                model: stringTuningsModel.stringNumbers
+                model: stringTuningsModel.numbersOfStrings
 
-                currentIndex: indexOfValue(stringTuningsModel.currentStringNumber)
+                currentIndex: indexOfValue(stringTuningsModel.currentNumberOfStrings)
 
                 onActivated: function(index, value) {
-                    stringTuningsModel.currentStringNumber = parseInt(textOfValue(value))
+                    stringTuningsModel.currentNumberOfStrings = parseInt(textOfValue(value))
                 }
             }
         }
@@ -127,7 +129,7 @@ StyledPopupView {
             direction: NavigationPanel.Vertical
             section: root.notationViewNavigationSection
             order: navPanel.order + 1
-            accessible.name: qsTrc("notation", "Strings") // todo
+            accessible.name: qsTrc("notation", "Strings")
         }
 
         GridLayout {
@@ -161,7 +163,7 @@ StyledPopupView {
                     navigation.panel: stringsNavPanel
                     navigation.row: index
                     navigation.column: 1
-                    //                navigation.accessible.name: hint // todo
+                    navigation.accessible.name: visibleBox.navigation.accessible.name + " " + qsTrc("notation", "Value %1").arg(valueControl.currentValue)
 
                     VisibilityBox {
                         id: visibleBox
@@ -170,11 +172,12 @@ StyledPopupView {
                         anchors.verticalCenter: parent.verticalCenter
 
                         isVisible: modelData["show"]
-                        text: modelData["number"] // todo
+                        text: modelData["number"]
 
                         navigation.panel: stringsNavPanel
                         navigation.row: index
                         navigation.column: 2
+                        accessibleText: qsTrc("notation", "String %1").arg(text)
 
                         onVisibleToggled: {
                             stringTuningsModel.toggleString(index)
@@ -182,6 +185,8 @@ StyledPopupView {
                     }
 
                     IncrementalPropertyControl {
+                        id: valueControl
+
                         anchors.right: parent.right
                         anchors.verticalCenter: parent.verticalCenter
 

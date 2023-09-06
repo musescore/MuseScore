@@ -691,7 +691,7 @@ struct StringTuningsInfo
     std::vector<StringTuningPreset> presets;
 };
 
-using InstrumentStringTuningsMap = std::map<std::string, std::vector<StringTuningsInfo>>;
+using InstrumentStringTuningsMap = std::map<std::string, std::vector<StringTuningsInfo> >;
 }
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

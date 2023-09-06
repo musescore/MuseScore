@@ -182,7 +182,7 @@ bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
                 JsonObject presetObj = presetVal.toObject();
 
                 StringTuningPreset preset;
-                preset.name = trc("instruments/stringTunings", presetObj.value("name").toStdString().c_str()); // todo
+                preset.name = trc("instruments/stringTunings", presetObj.value("name").toStdString().c_str());
 
                 JsonArray valuesArr = presetObj.value("value").toArray();
                 for (size_t l = 0; l < valuesArr.size(); ++l) {

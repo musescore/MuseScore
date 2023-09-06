@@ -40,6 +40,7 @@
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/mscore.h"
 #include "engraving/dom/trill.h"
+#include "engraving/dom/note.h"
 
 #include "log.h"
 
