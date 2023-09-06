@@ -589,9 +589,12 @@ void EditStaff::editStringDataClicked()
     int frets = m_instrument.stringData()->frets();
     std::vector<mu::engraving::instrString> stringList = m_instrument.stringData()->stringList();
 
-    EditStringData* esd = new EditStringData(this, &stringList, &frets);
-    esd->setWindowModality(Qt::WindowModal);
+    EditStringData* esd = new EditStringData(this, stringList, frets);
+
     if (esd->exec()) {
+        frets = esd->frets();
+        stringList = esd->strings();
+
         mu::engraving::StringData stringData(frets, stringList);
 
         // update instrument pitch ranges as necessary

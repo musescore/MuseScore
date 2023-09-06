@@ -73,6 +73,7 @@
 #include "notation/rests/restsettingsproxymodel.h"
 #include "notation/dynamics/dynamicsettingsmodel.h"
 #include "notation/expressions/expressionsettingsmodel.h"
+#include "notation/stringtunings/stringtuningssettingsmodel.h"
 
 using namespace mu::inspector;
 
@@ -190,6 +191,8 @@ AbstractInspectorModel* InspectorModelCreator::newInspectorModel(InspectorModelT
         return new DynamicsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_EXPRESSION:
         return new ExpressionSettingsModel(parent, repository);
+    case InspectorModelType::TYPE_STRING_TUNINGS:
+        return new StringTuningsSettingsModel(parent, repository);
     case InspectorModelType::TYPE_BREATH:
     case InspectorModelType::TYPE_ARPEGGIO:
     case InspectorModelType::TYPE_UNDEFINED:
