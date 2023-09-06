@@ -45,7 +45,7 @@ InspectorPropertyView {
         navigation.row: root.navigationRowStart + 1
         navigation.accessible.name: root.titleText + " " + currentText
 
-        onTextEdited: function(newTextValue) {
+        onTextEditingFinished: function(newTextValue) {
             if (root.propertyItem) {
                 root.propertyItem.value = newTextValue
             }
