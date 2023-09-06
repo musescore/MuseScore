@@ -177,6 +177,9 @@ public:
     bool isGraceAfter() const;
     Breath* hasBreathMark() const;
 
+    bool isTrillCueNote() const { return m_isTrillCueNote; }
+    void setIsTrillCueNote(bool v);
+
     Segment* nextSegmentAfterCR(SegmentType types) const;
 
     void setScore(Score* s) override;
@@ -232,6 +235,8 @@ private:
     TDuration m_durationType;
     int m_staffMove = 0; // -1, 0, +1, used for crossbeaming
     int m_storedStaffMove = 0; // used to remember and re-apply staff move if needed
+
+    bool m_isTrillCueNote = false;
 };
 } // namespace mu::engraving
 #endif

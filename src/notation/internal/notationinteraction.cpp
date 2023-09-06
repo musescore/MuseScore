@@ -3889,6 +3889,9 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
 
     std::set<Chord*> chords;
     for (Note* note: notes) {
+        if (note->isTrillCueNote()) {
+            return;
+        }
         Chord* chord = note->chord();
         if (chords.find(chord) == chords.end()) {
             chords.insert(chord);
@@ -3939,7 +3942,7 @@ void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
 bool NotationInteraction::canAddTupletToSelectedChordRests() const
 {
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
-        if (chordRest->isGrace()) {
+        if (chordRest->isGrace() || chordRest->isTrillCueNote()) {
             continue;
         }
 
@@ -3961,7 +3964,7 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
     startEdit();
 
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
-        if (!chordRest->isGrace()) {
+        if (!chordRest->isGrace() && !chordRest->isTrillCueNote()) {
             Fraction ratio = options.ratio;
             if (options.autoBaseLen) {
                 ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), chordRest->ticks()));

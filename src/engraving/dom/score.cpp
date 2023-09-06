@@ -2964,6 +2964,14 @@ void Score::cmdConcertPitchChanged(bool flag)
 
 void Score::padToggle(Pad p, const EditData& ed)
 {
+    if (!noteEntryMode()) {
+        for (ChordRest* cr : getSelectedChordRests()) {
+            if (cr->isTrillCueNote()) {
+                return;
+            }
+        }
+    }
+
     int oldDots = m_is.duration().dots();
     switch (p) {
     case Pad::NOTE00:
@@ -5064,7 +5072,7 @@ void Score::changeSelectedNotesVoice(voice_idx_t voice)
         Chord* chord = note->chord();
 
         // move grace notes with main chord only
-        if (chord->isGrace()) {
+        if (chord->isGrace() || chord->isTrillCueNote()) {
             continue;
         }
 

@@ -780,6 +780,15 @@ Breath* ChordRest::hasBreathMark() const
     return s ? toBreath(s->element(track())) : 0;
 }
 
+void ChordRest::setIsTrillCueNote(bool v)
+{
+    if (isChord()) {
+        m_isTrillCueNote = v;
+    } else {
+        m_isTrillCueNote = false;
+    }
+}
+
 //---------------------------------------------------------
 //   nextSegmentAfterCR
 //    returns first segment at tick CR->tick + CR->actualTicks

@@ -3599,6 +3599,14 @@ mu::PointF Note::posInStaffCoordinates()
     return mu::PointF(X, y());
 }
 
+void Note::setIsTrillCueNote(bool v)
+{
+    m_isTrillCueNote = v;
+    if (chord()) {
+        chord()->setIsTrillCueNote(v);
+    }
+}
+
 void Note::addLineAttachPoint(PointF point, EngravingItem* line)
 {
     // IMPORTANT: the point is expected in *staff* coordinates
