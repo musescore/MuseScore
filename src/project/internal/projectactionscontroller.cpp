@@ -455,19 +455,15 @@ Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
     }
 
     // Check if user is owner
-    bool isOwner = true;
     RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
     if (!scoreInfo.ret) {
-        if (scoreInfo.ret.code() == int(cloud::Err::Status403_NotOwner)) {
-            LOGI() << "Downloading score info returned 403, so not owner";
-            isOwner = false;
-        } else {
-            LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
-            openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
+        LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
+        openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
 
-            return scoreInfo.ret;
-        }
+        return scoreInfo.ret;
     }
+
+    bool isOwner = QString::number(scoreInfo.val.owner.id) == museScoreComService()->authorization()->accountInfo().val.id;
 
     // If yes, score will be opened as regular cloud score; check if not yet opened
     if (isOwner) {
