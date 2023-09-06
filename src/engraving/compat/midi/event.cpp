@@ -214,6 +214,11 @@ EventMap::events_multimap_t& EventMap::operator[](std::size_t idx)
     return _channels[idx];
 }
 
+const EventMap::events_multimap_t& EventMap::operator[](std::size_t idx) const
+{
+    assert(idx < size());
+    return _channels[idx];
+}
 //---------------------------------------------------------
 //   class EventMap::fixupMIDI
 //---------------------------------------------------------

@@ -189,6 +189,7 @@ class EventMap
 public:
     [[nodiscard]] size_t size() const { return _channels.size(); }
     events_multimap_t& operator[](std::size_t idx);
+    const events_multimap_t& operator[](std::size_t idx) const;
     void mergePitchWheelEvents(EventMap& pitchWheelEvents);
     void fixupMIDI();
 };
