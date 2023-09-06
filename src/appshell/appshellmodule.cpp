@@ -47,11 +47,11 @@
 #include "view/preferences/generalpreferencesmodel.h"
 #include "view/preferences/updatepreferencesmodel.h"
 #include "view/preferences/appearancepreferencesmodel.h"
-#include "view/preferences/programmestartpreferencesmodel.h"
 #include "view/preferences/folderspreferencesmodel.h"
 #include "view/preferences/noteinputpreferencesmodel.h"
 #include "view/preferences/advancedpreferencesmodel.h"
 #include "view/preferences/canvaspreferencesmodel.h"
+#include "view/preferences/saveandpublishpreferencesmodel.h"
 #include "view/preferences/scorepreferencesmodel.h"
 #include "view/preferences/importpreferencesmodel.h"
 #include "view/preferences/iopreferencesmodel.h"
@@ -153,11 +153,11 @@ void AppShellModule::registerUiTypes()
     qmlRegisterType<GeneralPreferencesModel>("MuseScore.Preferences", 1, 0, "GeneralPreferencesModel");
     qmlRegisterType<UpdatePreferencesModel>("MuseScore.Preferences", 1, 0, "UpdatePreferencesModel");
     qmlRegisterType<AppearancePreferencesModel>("MuseScore.Preferences", 1, 0, "AppearancePreferencesModel");
-    qmlRegisterType<ProgrammeStartPreferencesModel>("MuseScore.Preferences", 1, 0, "ProgrammeStartPreferencesModel");
     qmlRegisterType<FoldersPreferencesModel>("MuseScore.Preferences", 1, 0, "FoldersPreferencesModel");
     qmlRegisterType<NoteInputPreferencesModel>("MuseScore.Preferences", 1, 0, "NoteInputPreferencesModel");
     qmlRegisterType<AdvancedPreferencesModel>("MuseScore.Preferences", 1, 0, "AdvancedPreferencesModel");
     qmlRegisterType<CanvasPreferencesModel>("MuseScore.Preferences", 1, 0, "CanvasPreferencesModel");
+    qmlRegisterType<SaveAndPublishPreferencesModel>("MuseScore.Preferences", 1, 0, "SaveAndPublishPreferencesModel");
     qmlRegisterType<ScorePreferencesModel>("MuseScore.Preferences", 1, 0, "ScorePreferencesModel");
     qmlRegisterType<ImportPreferencesModel>("MuseScore.Preferences", 1, 0, "ImportPreferencesModel");
     qmlRegisterType<IOPreferencesModel>("MuseScore.Preferences", 1, 0, "IOPreferencesModel");

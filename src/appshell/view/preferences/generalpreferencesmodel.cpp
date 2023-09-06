@@ -24,6 +24,7 @@
 #include "languages/languageserrors.h"
 
 #include "log.h"
+#include "translation.h"
 
 using namespace mu::appshell;
 using namespace mu::framework;
@@ -43,14 +44,6 @@ void GeneralPreferencesModel::load()
     setIsNeedRestart(languagesService()->needRestartToApplyLanguageChange());
     languagesService()->needRestartToApplyLanguageChangeChanged().onReceive(this, [this](bool need) {
         setIsNeedRestart(need);
-    });
-
-    projectConfiguration()->autoSaveEnabledChanged().onReceive(this, [this](bool enabled) {
-        emit autoSaveEnabledChanged(enabled);
-    });
-
-    projectConfiguration()->autoSaveIntervalChanged().onReceive(this, [this](int minutes) {
-        emit autoSaveIntervalChanged(minutes);
     });
 }
 
@@ -121,16 +114,6 @@ QString GeneralPreferencesModel::currentKeyboardLayout() const
     return shortcutsConfiguration()->currentKeyboardLayout();
 }
 
-bool GeneralPreferencesModel::isAutoSaveEnabled() const
-{
-    return projectConfiguration()->isAutoSaveEnabled();
-}
-
-int GeneralPreferencesModel::autoSaveInterval() const
-{
-    return projectConfiguration()->autoSaveIntervalMinutes();
-}
-
 bool GeneralPreferencesModel::isOSCRemoteControl() const
 {
     return false;
@@ -161,26 +144,6 @@ void GeneralPreferencesModel::setCurrentKeyboardLayout(const QString& keyboardLa
     emit currentKeyboardLayoutChanged();
 }
 
-void GeneralPreferencesModel::setAutoSaveEnabled(bool enabled)
-{
-    if (enabled == isAutoSaveEnabled()) {
-        return;
-    }
-
-    projectConfiguration()->setAutoSaveEnabled(enabled);
-    emit autoSaveEnabledChanged(enabled);
-}
-
-void GeneralPreferencesModel::setAutoSaveInterval(int minutes)
-{
-    if (minutes == autoSaveInterval()) {
-        return;
-    }
-
-    projectConfiguration()->setAutoSaveInterval(minutes);
-    emit autoSaveIntervalChanged(minutes);
-}
-
 void GeneralPreferencesModel::setIsOSCRemoteControl(bool isOSCRemoteControl)
 {
     NOT_IMPLEMENTED;
@@ -205,4 +168,134 @@ void GeneralPreferencesModel::setIsNeedRestart(bool newIsNeedRestart)
     }
     m_isNeedRestart = newIsNeedRestart;
     emit isNeedRestartChanged();
+}
+
+QVariantList GeneralPreferencesModel::startupModes() const
+{
+    QVariantList result;
+
+    for (const StartMode& mode: allStartupModes()) {
+        QVariantMap obj;
+        obj["title"] = mode.title;
+        obj["checked"] = mode.checked;
+        obj["canSelectScorePath"] = mode.canSelectScorePath;
+        obj["scorePath"] = mode.scorePath;
+
+        result << obj;
+    }
+
+    return result;
+}
+
+GeneralPreferencesModel::StartModeList GeneralPreferencesModel::allStartupModes() const
+{
+    static const QMap<StartupModeType, QString> modeTitles {
+        { StartupModeType::StartEmpty,  qtrc("appshell/preferences", "Start empty") },
+        { StartupModeType::ContinueLastSession, qtrc("appshell/preferences", "Continue last session") },
+        { StartupModeType::StartWithNewScore, qtrc("appshell/preferences", "Start with new score") },
+        { StartupModeType::StartWithScore, qtrc("appshell/preferences", "Start with score:") }
+    };
+
+    StartModeList modes;
+
+    for (StartupModeType type : modeTitles.keys()) {
+        bool canSelectScorePath = (type == StartupModeType::StartWithScore);
+
+        StartMode mode;
+        mode.type = type;
+        mode.title = modeTitles[type];
+        mode.checked = configuration()->startupModeType() == type;
+        mode.scorePath = canSelectScorePath ? configuration()->startupScorePath().toQString() : QString();
+        mode.canSelectScorePath = canSelectScorePath;
+
+        modes << mode;
+    }
+
+    return modes;
+}
+
+QVariantList GeneralPreferencesModel::panels() const
+{
+    QVariantList result;
+
+    for (const Panel& panel: allPanels()) {
+        QVariantMap obj;
+        obj["title"] = panel.title;
+        obj["visible"] = panel.visible;
+
+        result << obj;
+    }
+
+    return result;
+}
+
+GeneralPreferencesModel::PanelList GeneralPreferencesModel::allPanels() const
+{
+    PanelList panels {
+        /*
+         * TODO: https://github.com/musescore/MuseScore/issues/9807
+         * Panel { SplashScreen, qtrc("appshell/preferences", "Show splash screen"), configuration()->needShowSplashScreen() },
+         */
+        Panel { Navigator, qtrc("appshell/preferences", "Show navigator"), configuration()->isNotationNavigatorVisible() },
+    };
+
+    return panels;
+}
+
+QStringList GeneralPreferencesModel::scorePathFilter() const
+{
+    return { qtrc("appshell/preferences", "MuseScore file") + " (*.mscz)",
+             qtrc("appshell/preferences", "All") + " (*)" };
+}
+
+void GeneralPreferencesModel::setCurrentStartupMode(int modeIndex)
+{
+    StartModeList modes = allStartupModes();
+
+    if (modeIndex < 0 || modeIndex >= modes.size()) {
+        return;
+    }
+
+    StartupModeType selectedType = modes[modeIndex].type;
+    if (selectedType == configuration()->startupModeType()) {
+        return;
+    }
+
+    configuration()->setStartupModeType(selectedType);
+    emit startupModesChanged();
+}
+
+void GeneralPreferencesModel::setStartupScorePath(const QString& scorePath)
+{
+    if (scorePath.isEmpty() || scorePath == configuration()->startupScorePath().toQString()) {
+        return;
+    }
+
+    configuration()->setStartupScorePath(scorePath);
+
+    emit startupModesChanged();
+}
+
+void GeneralPreferencesModel::setPanelVisible(int panelIndex, bool visible)
+{
+    PanelList panels = allPanels();
+
+    if (panelIndex < 0 || panelIndex >= panels.size()) {
+        return;
+    }
+
+    Panel panel = panels[panelIndex];
+
+    switch (panel.type) {
+    case SplashScreen:
+        configuration()->setNeedShowSplashScreen(visible);
+        break;
+    case Navigator:
+        configuration()->setIsNotationNavigatorVisible(visible);
+        break;
+    case Unknown:
+        return;
+    }
+
+    emit panelsChanged();
 }

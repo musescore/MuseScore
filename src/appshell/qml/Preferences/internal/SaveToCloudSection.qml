@@ -23,14 +23,25 @@ import QtQuick 2.15
 
 import MuseScore.Project 1.0
 import MuseScore.Ui 1.0
+import MuseScore.UiComponents 1.0
 
 BaseSection {
     id: root
 
-    title: qsTrc("appshell/preferences", "Generate MP3 audio for private cloud scores")
+    title: qsTrc("appshell/preferences", "Save to cloud")
 
-    navigation.name: "AudioGenerationSettingsContent"
+    navigation.name: "SaveToCloudSectionContent"
     navigation.direction: NavigationPanel.Both
+
+    rowSpacing: spacing
+
+    StyledTextLabel {
+        width: parent.width
+
+        text: qsTrc("appshell/preferences", "Generate MP3 audio for private cloud scores")
+
+        horizontalAlignment: Qt.AlignLeft
+    }
 
     AudioGenerationSettings {
         width: parent.width
