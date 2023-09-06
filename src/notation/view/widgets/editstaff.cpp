@@ -156,6 +156,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     m_staff->setShowIfEmpty(m_orgStaff->showIfEmpty());
     m_staff->setHideSystemBarLine(m_orgStaff->hideSystemBarLine());
     m_staff->setMergeMatchingRests(m_orgStaff->mergeMatchingRests());
+    m_staff->setReflectTranspositionInLinkedTab(m_orgStaff->reflectTranspositionInLinkedTab());
 
     // get tick range for instrument
     auto i = part->instruments().upper_bound(tick.ticks());
@@ -183,6 +184,7 @@ void EditStaff::setStaff(Staff* s, const Fraction& tick)
     showIfEmpty->setChecked(m_staff->showIfEmpty());
     hideSystemBarLine->setChecked(m_staff->hideSystemBarLine());
     mergeMatchingRests->setChecked(m_staff->mergeMatchingRests());
+    noReflectTranspositionInLinkedTab->setChecked(!m_staff->reflectTranspositionInLinkedTab());
 
     updateStaffType(*stt);
     updateInstrument();
@@ -506,6 +508,7 @@ void EditStaff::applyStaffProperties()
     config.hideMode = Staff::HideMode(hideMode->currentIndex());
     config.clefTypeList = m_instrument.clefType(m_orgStaff->rstaff());
     config.staffType = *m_staff->staffType(mu::engraving::Fraction(0, 1));
+    config.reflectTranspositionInLinkedTab = !noReflectTranspositionInLinkedTab->isChecked();
 
     notationParts()->setStaffConfig(m_orgStaff->id(), config);
 }
