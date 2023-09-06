@@ -19,29 +19,28 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_PASSLAYOUTINDEPENDEDITEMS_DEV_H
-#define MU_ENGRAVING_PASSLAYOUTINDEPENDEDITEMS_DEV_H
+#include "passlayoutindependentitems.h"
 
-#include "passbase.h"
+#include "dom/score.h"
 
-#include "types/types.h"
+#include "layoutcontext.h"
+#include "layoutindependent.h"
 
-namespace mu::engraving {
-class EngravingItem;
-}
+using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
-namespace mu::engraving::rendering::dev {
-class PassLayoutIndependedItems : public PassBase
+void PassLayoutIndependentItems::doRun(Score* score, LayoutContext& ctx)
 {
-public:
-
-private:
-
-    void doRun(Score* score, LayoutContext& ctx) override;
-
-    void scan(EngravingItem* item, LayoutContext& ctx);
-    bool isItemIndepended(ElementType type) const;
-};
+    RootItem* rootItem = score->rootItem();
+    scan(rootItem, ctx);
 }
 
-#endif // MU_ENGRAVING_PASSLAYOUTINDEPENDEDITEMS_DEV_H
+void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
+{
+    bool isIndependent = LayoutIndependent::layoutItem(item, ctx);
+    UNUSED(isIndependent); // for debugging
+
+    for (EngravingItem* ch : item->childrenItems()) {
+        scan(ch, ctx);
+    }
+}

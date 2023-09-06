@@ -35,12 +35,10 @@
 #include "../dom/utils.h"
 
 #include "../dom/accidental.h"
-#include "../dom/actionicon.h"
 #include "../dom/ambitus.h"
 #include "../dom/arpeggio.h"
 #include "../dom/articulation.h"
 
-#include "../dom/bagpembell.h"
 #include "../dom/barline.h"
 #include "../dom/beam.h"
 #include "../dom/bend.h"
@@ -157,6 +155,8 @@
 #include "tremololayout.h"
 #include "tupletlayout.h"
 
+#include "layoutindependent.h"
+
 using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
@@ -165,16 +165,16 @@ using namespace mu::engraving::rendering::dev;
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
     //DO_ASSERT(!ctx.conf().isPaletteMode());
+
+    bool isIndependent = LayoutIndependent::layoutItem(item, ctx);
+    if (isIndependent) {
+        return;
+    }
+
     switch (item->type()) {
-    case ElementType::ACCIDENTAL:       layout(item_cast<Accidental*>(item), ctx);
-        break;
-    case ElementType::ACTION_ICON:      layout(item_cast<ActionIcon*>(item), ctx);
-        break;
     case ElementType::AMBITUS:          layout(item_cast<Ambitus*>(item), ctx);
         break;
     case ElementType::ARPEGGIO:         layout(item_cast<Arpeggio*>(item), ctx);
-        break;
-    case ElementType::ARTICULATION:     layout(item_cast<Articulation*>(item), ctx);
         break;
     case ElementType::BAR_LINE:         layout(item_cast<BarLine*>(item), ctx);
         break;
@@ -274,8 +274,6 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::NOTEHEAD:         layout(item_cast<NoteHead*>(item), ctx);
         break;
-    case ElementType::ORNAMENT:         layout(item_cast<Ornament*>(item), ctx);
-        break;
     case ElementType::OTTAVA:           layout(item_cast<Ottava*>(item), ctx);
         break;
     case ElementType::OTTAVA_SEGMENT:   layout(item_cast<OttavaSegment*>(item), ctx);
@@ -362,111 +360,6 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     }
 }
 
-static SymId accidentalSingleSym(const Accidental* item)
-{
-    // if the accidental is standard (doubleflat, flat, natural, sharp or double sharp)
-    // and it has either no bracket or parentheses, then we have glyphs straight from smufl.
-
-    if (item->bracket() == AccidentalBracket::PARENTHESIS && !item->parentNoteHasParentheses()) {
-        switch (item->accidentalType()) {
-        case AccidentalType::FLAT:      return SymId::accidentalFlatParens;
-        case AccidentalType::FLAT2:     return SymId::accidentalDoubleFlatParens;
-        case AccidentalType::NATURAL:   return SymId::accidentalNaturalParens;
-        case AccidentalType::SHARP:     return SymId::accidentalSharpParens;
-        case AccidentalType::SHARP2:    return SymId::accidentalDoubleSharpParens;
-        default:
-            break;
-        }
-    }
-    return SymId::noSym;
-}
-
-static std::pair<SymId, SymId> accidentalBracketSyms(AccidentalBracket type)
-{
-    switch (type) {
-    case AccidentalBracket::PARENTHESIS: return { SymId::accidentalParensLeft, SymId::accidentalParensRight };
-    case AccidentalBracket::BRACKET: return { SymId::accidentalBracketLeft, SymId::accidentalBracketRight };
-    case AccidentalBracket::BRACE: return { SymId::accidentalCombiningOpenCurlyBrace, SymId::accidentalCombiningCloseCurlyBrace };
-    case AccidentalBracket::NONE: return { SymId::noSym, SymId::noSym };
-    }
-    return { SymId::noSym, SymId::noSym };
-}
-
-static void layoutAccidental(const Accidental* item, const LayoutContext& ctx, Accidental::LayoutData* ldata)
-{
-    ldata->syms.clear();
-
-    // TODO: remove Accidental in layout
-    // don't show accidentals for tab or slash notation
-    if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
-        ldata->setIsSkipDraw(true);
-        return;
-    }
-    ldata->setIsSkipDraw(false);
-
-    if (item->accidentalType() == AccidentalType::NONE) {
-        return;
-    }
-
-    // Single?
-    SymId singleSym = accidentalSingleSym(item);
-    if (singleSym != SymId::noSym && ctx.engravingFont()->isValid(singleSym)) {
-        Accidental::LayoutData::Sym s(singleSym, 0.0, 0.0);
-        ldata->syms.push_back(s);
-
-        ldata->addBbox(item->symBbox(singleSym));
-    }
-    // Multi
-    else {
-        double margin = ctx.conf().styleMM(Sid::bracketedAccidentalPadding);
-        double x = 0.0;
-
-        std::pair<SymId, SymId> bracketSyms;
-        bool isNeedBracket = item->bracket() != AccidentalBracket::NONE && !item->parentNoteHasParentheses();
-        if (isNeedBracket) {
-            bracketSyms = accidentalBracketSyms(item->bracket());
-        }
-
-        // Left
-        if (bracketSyms.first != SymId::noSym) {
-            Accidental::LayoutData::Sym ls(bracketSyms.first, 0.0,
-                                           item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
-            ldata->syms.push_back(ls);
-            ldata->addBbox(item->symBbox(bracketSyms.first));
-
-            x += item->symAdvance(bracketSyms.first) + margin;
-        }
-
-        // Main
-        SymId mainSym = item->symId();
-        Accidental::LayoutData::Sym ms(mainSym, x, 0.0);
-        ldata->syms.push_back(ms);
-        ldata->addBbox(item->symBbox(mainSym).translated(x, 0.0));
-
-        // Right
-        if (bracketSyms.second != SymId::noSym) {
-            x += item->symAdvance(mainSym) + margin;
-
-            Accidental::LayoutData::Sym rs(bracketSyms.second, x,
-                                           item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
-            ldata->syms.push_back(rs);
-            ldata->addBbox(item->symBbox(bracketSyms.second).translated(x, 0.0));
-        }
-    }
-}
-
-void TLayout::layout(Accidental* item, LayoutContext& ctx)
-{
-    layoutAccidental(item, ctx, item->mutLayoutData());
-}
-
-void TLayout::layout(ActionIcon* item, LayoutContext&)
-{
-    ActionIcon::LayoutData* ldata = item->mutLayoutData();
-    FontMetrics fontMetrics(item->iconFont());
-    ldata->setBbox(fontMetrics.boundingRect(Char(item->icon())));
-}
-
 void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 {
     const double spatium = item->spatium();
@@ -496,7 +389,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->topTpc(), key);
             item->topAccidental()->setAccidentalType(accidType);
-            layoutAccidental(item->topAccidental(), ctx, topAccData);
+            LayoutIndependent::layoutItem(item->topAccidental(), topAccData, ctx);
             topAccData->setPosY(ldata->topPos.y());
         }
 
@@ -510,7 +403,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->bottomTpc(), key);
             item->bottomAccidental()->setAccidentalType(accidType);
-            layoutAccidental(item->bottomAccidental(), ctx, bottomAccData);
+            LayoutIndependent::layoutItem(item->bottomAccidental(), bottomAccData, ctx);
             bottomAccData->setPosY(ldata->bottomPos.y());
         }
     }
@@ -597,38 +490,6 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 void TLayout::layout(Arpeggio* item, LayoutContext& ctx)
 {
     ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
-}
-
-static void layoutArticulation(const Articulation* item, const LayoutContext&, Articulation::LayoutData* ldata)
-{
-    RectF bRect;
-
-    if (item->textType() == ArticulationTextType::NO_TEXT) {
-        bRect = item->symBbox(item->symId());
-    } else {
-        mu::draw::Font scaledFont(item->font());
-        scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
-        mu::draw::FontMetrics fm(scaledFont);
-        bRect = fm.boundingRect(scaledFont, TConv::text(item->textType()));
-    }
-
-    ldata->setBbox(bRect.translated(-0.5 * bRect.width(), 0.0));
-}
-
-void TLayout::layout(Articulation* item, LayoutContext& ctx)
-{
-    Articulation::LayoutData* ldata = item->mutLayoutData();
-    if (item->isHiddenOnTabStaff()) {
-        ldata->setIsSkipDraw(true);
-        return;
-    }
-    ldata->setIsSkipDraw(false);
-
-    if (item->isOrnament()) {
-        layout(toOrnament(item), ctx);
-    } else {
-        layoutArticulation(item, ctx, ldata);
-    }
 }
 
 static double barLineWidth(const BarLine* item, const MStyle& style, double dotWidth)
@@ -3751,32 +3612,6 @@ void TLayout::layout(NoteDot* item, LayoutContext& ctx)
     layoutNoteDot(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Ornament* item, LayoutContext& ctx)
-{
-    Ornament::LayoutData* ldata = item->mutLayoutData();
-    layoutArticulation(item, ctx, ldata);
-
-    double _spatium = item->spatium();
-    double vertMargin = 0.35 * _spatium;
-    static constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
-
-    for (size_t i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
-        bool above = (i == 0);
-        Accidental* accidental = item->accidentalsAboveAndBelow()[i];
-        if (!accidental) {
-            continue;
-        }
-        accidental->computeMag();
-        accidental->mutLayoutData()->setMag(accidental->mag() * ornamentAccidentalMag);
-        layout(accidental, ctx);
-        Shape accidentalShape = accidental->shape();
-        double minVertDist = above
-                             ? accidentalShape.minVerticalDistance(ldata->bbox())
-                             : Shape(ldata->bbox()).minVerticalDistance(accidentalShape);
-        accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
-    }
-}
-
 void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {
@@ -5267,7 +5102,7 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
     Ornament* ornament = trill->ornament();
     if (ornament) {
         if (item->isSingleBeginType()) {
-            TLayout::layout(ornament, ctx);
+            LayoutIndependent::layoutItem(ornament, ctx);
         }
         trill->setAccidental(accidentalGoesBelow ? ornament->accidentalBelow() : ornament->accidentalAbove());
         trill->setCueNoteChord(ornament->cueNoteChord());

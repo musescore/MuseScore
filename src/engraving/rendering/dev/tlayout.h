@@ -174,11 +174,8 @@ public:
 
     static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
 
-    static void layout(Accidental* item, LayoutContext& ctx);
-    static void layout(ActionIcon* item, LayoutContext& ctx);
     static void layout(Ambitus* item, LayoutContext& ctx);
     static void layout(Arpeggio* item, LayoutContext& ctx);
-    static void layout(Articulation* item, LayoutContext& ctx);  // factory
 
     static void layout(BarLine* item, LayoutContext& ctx);
     static void layout2(BarLine* item, LayoutContext& ctx);
@@ -257,7 +254,6 @@ public:
     static void layout(Note* item, LayoutContext& ctx);
     static void layout(NoteDot* item, LayoutContext& ctx);
 
-    static void layout(Ornament* item, LayoutContext& ctx);
     static void layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx);
 
     static void layout(Ottava* item, LayoutContext& ctx);
