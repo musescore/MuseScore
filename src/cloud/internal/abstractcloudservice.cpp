@@ -380,6 +380,7 @@ Ret AbstractCloudService::uploadingDownloadingRetFromRawRet(const Ret& rawRet, b
         case 404: return make_ret(Err::Status404_NotFound);
         case 409: return make_ret(Err::Status409_Conflict);
         case 422: return make_ret(Err::Status422_ValidationFailed);
+        case 429: return make_ret(Err::Status429_RateLimitExceeded);
         case 500: return make_ret(Err::Status500_InternalServerError);
         default: break;
         }

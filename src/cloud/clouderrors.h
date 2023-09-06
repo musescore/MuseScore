@@ -41,6 +41,7 @@ enum class Err {
     Status404_NotFound,
     Status409_Conflict,
     Status422_ValidationFailed,
+    Status429_RateLimitExceeded,
     Status500_InternalServerError,
     UnknownStatusCode,
     NetworkError,
@@ -63,6 +64,7 @@ inline Ret make_ret(Err e)
     case Err::Status404_NotFound: return Ret(retCode, "Status 404: not found");
     case Err::Status409_Conflict: return Ret(retCode, "Status 409: conflict");
     case Err::Status422_ValidationFailed: return Ret(retCode, "Status 422: validation failed");
+    case Err::Status429_RateLimitExceeded: return Ret(retCode, "Status 429: rate limit exceeded");
     case Err::Status500_InternalServerError: return Ret(retCode, "Status 500: internal server error");
     case Err::UnknownStatusCode: return Ret(retCode, "Unknown status code");
     case Err::NetworkError: return Ret(retCode, "Network error");

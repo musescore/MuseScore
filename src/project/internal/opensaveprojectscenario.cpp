@@ -250,6 +250,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
         case int(cloud::Err::Status400_InvalidRequest):
         case int(cloud::Err::Status403_AccountNotActivated):
         case int(cloud::Err::Status422_ValidationFailed):
+        case int(cloud::Err::Status429_RateLimitExceeded):
         case int(cloud::Err::Status500_InternalServerError):
         case int(cloud::Err::UnknownStatusCode):
         case int(cloud::Err::NetworkError):
@@ -418,6 +419,12 @@ static std::string cloudStatusCodeErrorMessage(const Ret& ret, bool withHelp = f
         message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
                   .arg("422 Validation failed").toStdString();
         break;
+    case int(cloud::Err::Status429_RateLimitExceeded):
+        //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
+        //: that is deliberately not translated
+        message = qtrc("project/cloud", "MuseScore.com returned an error code: %1.")
+                  .arg("429 Rate limit exceeded").toStdString();
+        break;
     case int(cloud::Err::Status500_InternalServerError):
         //: %1 will be replaced with the error code that MuseScore.com returned; this might contain english text
         //: that is deliberately not translated
@@ -470,6 +477,7 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
     case int(cloud::Err::Status400_InvalidRequest):
     case int(cloud::Err::Status401_AuthorizationRequired):
     case int(cloud::Err::Status422_ValidationFailed):
+    case int(cloud::Err::Status429_RateLimitExceeded):
     case int(cloud::Err::Status500_InternalServerError):
     case int(cloud::Err::UnknownStatusCode):
         message = cloudStatusCodeErrorMessage(ret);
@@ -554,6 +562,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
     case int(cloud::Err::Status400_InvalidRequest):
     case int(cloud::Err::Status401_AuthorizationRequired):
     case int(cloud::Err::Status422_ValidationFailed):
+    case int(cloud::Err::Status429_RateLimitExceeded):
     case int(cloud::Err::Status500_InternalServerError):
     case int(cloud::Err::UnknownStatusCode):
         msg = cloudStatusCodeErrorMessage(ret, /*withHelp=*/ true);
