@@ -50,6 +50,7 @@
 #include "chordlayout.h"
 
 #include "passresetlayoutdata.h"
+#include "passlayoutindependeditems.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -91,11 +92,6 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
     }
 
     ctx.mutState().setEndTick(etick);
-
-    if (isLayoutAll) {
-        PassResetLayoutData resetLD;
-        resetLD.run(score);
-    }
 
     if (score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
         if (score->isMaster()) {
@@ -212,6 +208,14 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
 
     MeasureLayout::getNextMeasure(ctx);
     ctx.mutState().setCurSystem(SystemLayout::collectSystem(ctx));
+
+    if (isLayoutAll) {
+        PassResetLayoutData resetPass;
+        resetPass.run(score, ctx);
+
+        PassLayoutIndependedItems independedPass;
+        independedPass.run(score, ctx);
+    }
 
     doLayout(ctx);
 }

@@ -27,16 +27,17 @@ class Score;
 }
 
 namespace mu::engraving::rendering::dev {
+class LayoutContext;
 class PassBase
 {
 public:
     virtual ~PassBase() = default;
 
-    void run(Score* score);
+    void run(Score* score, LayoutContext& ctx);
 
 private:
 
-    virtual void doRun(Score* score) = 0;
+    virtual void doRun(Score* score, LayoutContext& ctx) = 0;
 };
 }
 

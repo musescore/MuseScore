@@ -19,26 +19,29 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "passresetlayoutdata.h"
+#ifndef MU_ENGRAVING_PASSLAYOUTINDEPENDEDITEMS_DEV_H
+#define MU_ENGRAVING_PASSLAYOUTINDEPENDEDITEMS_DEV_H
 
-#include "dom/score.h"
+#include "passbase.h"
 
-using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
+#include "types/types.h"
 
-static void resetLayoutData(EngravingItem* item)
-{
-    if (item->layoutData()) {
-        item->mutLayoutData()->reset();
-    }
-
-    for (EngravingItem* ch : item->childrenItems()) {
-        resetLayoutData(ch);
-    }
+namespace mu::engraving {
+class EngravingItem;
 }
 
-void PassResetLayoutData::doRun(Score* score, LayoutContext&)
+namespace mu::engraving::rendering::dev {
+class PassLayoutIndependedItems : public PassBase
 {
-    RootItem* rootItem = score->rootItem();
-    resetLayoutData(rootItem);
+public:
+
+private:
+
+    void doRun(Score* score, LayoutContext& ctx) override;
+
+    void scan(EngravingItem* item, LayoutContext& ctx);
+    bool isItemIndepended(ElementType type) const;
+};
 }
+
+#endif // MU_ENGRAVING_PASSLAYOUTINDEPENDEDITEMS_DEV_H
