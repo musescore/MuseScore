@@ -49,6 +49,8 @@
 #include "arpeggiolayout.h"
 #include "chordlayout.h"
 
+#include "passresetlayoutdata.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -60,16 +62,6 @@ public:
         : m_score(s) { m_score->cmdState().lock(); }
     ~CmdStateLocker() { m_score->cmdState().unlock(); }
 };
-
-static void resetLayoutData(EngravingItem* item)
-{
-    if (item->layoutData()) {
-        item->mutLayoutData()->reset();
-    }
-    for (EngravingItem* ch : item->childrenItems()) {
-        resetLayoutData(ch);
-    }
-}
 
 void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& et)
 {
@@ -101,8 +93,8 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
     ctx.mutState().setEndTick(etick);
 
     if (isLayoutAll) {
-        RootItem* rootItem = score->rootItem();
-        resetLayoutData(rootItem);
+        PassResetLayoutData resetLD;
+        resetLD.run(score);
     }
 
     if (score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {

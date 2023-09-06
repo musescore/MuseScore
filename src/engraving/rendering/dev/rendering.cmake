@@ -47,4 +47,9 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.h
     ${CMAKE_CURRENT_LIST_DIR}/autoplace.cpp
     ${CMAKE_CURRENT_LIST_DIR}/autoplace.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/passbase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/passbase.h
+    ${CMAKE_CURRENT_LIST_DIR}/passresetlayoutdata.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/passresetlayoutdata.h
 )
