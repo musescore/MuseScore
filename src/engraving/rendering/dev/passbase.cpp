@@ -23,7 +23,7 @@
 
 using namespace mu::engraving::rendering::dev;
 
-void PassBase::run(Score* score)
+void PassBase::run(Score* score, LayoutContext& ctx)
 {
-    doRun(score);
+    doRun(score, ctx);
 }

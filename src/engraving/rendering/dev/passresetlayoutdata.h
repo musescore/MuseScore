@@ -31,7 +31,7 @@ public:
     PassResetLayoutData() = default;
 
 private:
-    void doRun(Score* score) override;
+    void doRun(Score* score, LayoutContext& ctx) override;
 };
 }
 
