@@ -13,6 +13,7 @@
 #ifndef __ARTICULATION_H__
 #define __ARTICULATION_H__
 
+#include "chordrest.h"
 #include "element.h"
 #include "mscore.h"
 #include "sym.h"
@@ -142,6 +143,7 @@ class Articulation final : public Element {
       bool isOrnament() const;
 
       void doAutoplace();
+      int vStaffIdx() const override { return chordRest()->vStaffIdx(); }
       };
 
 }     // namespace Ms
