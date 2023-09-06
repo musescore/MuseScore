@@ -60,6 +60,7 @@ import "lyrics"
 import "rests"
 import "dynamics"
 import "expressions"
+import "stringtunings"
 
 Loader {
     id: root
@@ -133,6 +134,7 @@ Loader {
             case Inspector.TYPE_REST_BEAM: return restComp
             case Inspector.TYPE_DYNAMIC: return dynamicComp
             case Inspector.TYPE_EXPRESSION: return expressionComp
+            case Inspector.TYPE_STRING_TUNINGS: return stringTuningsComp
             }
 
             return null
@@ -335,5 +337,10 @@ Loader {
     Component {
         id: expressionComp
         ExpressionsSettings {}
+    }
+
+    Component {
+        id: stringTuningsComp
+        StringTuningsSettings {}
     }
 }

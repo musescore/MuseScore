@@ -125,6 +125,7 @@ public:
         TYPE_LYRICS,
         TYPE_REST,
         TYPE_REST_BEAM,
+        TYPE_STRING_TUNINGS,
     };
     Q_ENUM(InspectorModelType)
 

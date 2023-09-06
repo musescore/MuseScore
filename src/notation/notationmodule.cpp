@@ -59,6 +59,7 @@
 #include "view/widgets/editstyle.h"
 #include "view/widgets/measureproperties.h"
 #include "view/widgets/editstaff.h"
+#include "view/widgets/editstringdata.h"
 #include "view/widgets/breaksdialog.h"
 #include "view/widgets/pagesettings.h"
 #include "view/widgets/transposedialog.h"
@@ -143,6 +144,9 @@ void NotationModule::resolveImports()
         ir->registerUri(Uri("musescore://notation/staffproperties"),
                         ContainerMeta(ContainerType::QWidgetDialog, EditStaff::metaTypeId()));
 
+        ir->registerUri(Uri("musescore://notation/editstrings"),
+                        ContainerMeta(ContainerType::QWidgetDialog, EditStringData::metaTypeId()));
+
         ir->registerUri(Uri("musescore://notation/transpose"),
                         ContainerMeta(ContainerType::QWidgetDialog, qRegisterMetaType<TransposeDialog>("TransposeDialog")));
 
@@ -209,6 +213,7 @@ void NotationModule::registerUiTypes()
 
     qRegisterMetaType<EditStyle>("EditStyle");
     qRegisterMetaType<EditStaff>("EditStaff");
+    qRegisterMetaType<EditStringData>("EditStringData");
     qRegisterMetaType<SelectNoteDialog>("SelectNoteDialog");
     qRegisterMetaType<SelectDialog>("SelectDialog");
     qRegisterMetaType<StaffTextPropertiesDialog>("StaffTextPropertiesDialog");

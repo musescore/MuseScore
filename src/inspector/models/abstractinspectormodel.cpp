@@ -97,7 +97,8 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::LYRICS, InspectorModelType::TYPE_LYRICS },
     { mu::engraving::ElementType::REST, InspectorModelType::TYPE_REST },
     { mu::engraving::ElementType::DYNAMIC, InspectorModelType::TYPE_DYNAMIC },
-    { mu::engraving::ElementType::EXPRESSION, InspectorModelType::TYPE_EXPRESSION }
+    { mu::engraving::ElementType::EXPRESSION, InspectorModelType::TYPE_EXPRESSION },
+    { mu::engraving::ElementType::STRING_TUNINGS, InspectorModelType::TYPE_STRING_TUNINGS }
 };
 
 static QMap<mu::engraving::HairpinType, InspectorModelType> HAIRPIN_ELEMENT_MODEL_TYPES = {

@@ -2413,6 +2413,10 @@ const UiActionList NotationUiActions::m_engravingDebuggingActions = {
              mu::context::CTX_NOTATION_OPENED,
              TranslatableString::untranslatable("Show corrupted measures"),
              Checkable::Yes
+             ),
+    UiAction("edit-strings",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_NOTATION_OPENED
              )
 };
 

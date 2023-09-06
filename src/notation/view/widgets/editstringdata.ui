@@ -11,7 +11,7 @@
      <item>
       <widget class="QLabel" name="label">
        <property name="text">
-        <string>Strings tuning:</string>
+        <string>Default strings tuning:</string>
        </property>
       </widget>
      </item>
