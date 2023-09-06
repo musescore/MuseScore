@@ -65,16 +65,17 @@ bool StringTunings::isEditable() const
 PropertyValue StringTunings::getProperty(Pid id) const
 {
     if (id == Pid::STRINGTUNINGS_STRINGS_COUNT) {
-        if (staff()->isTabStaff(Fraction(0, 1))) {
-            return staff()->lines(Fraction(0, 1));
+        Fraction tick = this->tick();
+        if (staff()->isTabStaff(tick)) {
+            return staff()->lines(tick);
         } else {
             for (Staff* _staff : staff()->staffList()) {
                 if (_staff == staff()) {
                     continue;
                 }
 
-                if (_staff->score() == staff()->score() && _staff->isTabStaff(Fraction(0, 1))) {
-                    return _staff->lines(Fraction(0, 1));
+                if (_staff->score() == staff()->score() && _staff->isTabStaff(tick)) {
+                    return _staff->lines(tick);
                 }
             }
         }

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>751</width>
-    <height>641</height>
+    <width>788</width>
+    <height>659</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -959,6 +959,16 @@
           <widget class="QPushButton" name="editStringData">
            <property name="text">
             <string>Edit string data…</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QCheckBox" name="noReflectTranspositionInLinkedTab">
+           <property name="text">
+            <string>Don’t reflect transposition in linked tablature staves</string>
+           </property>
+           <property name="checked">
+            <bool>true</bool>
            </property>
           </widget>
          </item>

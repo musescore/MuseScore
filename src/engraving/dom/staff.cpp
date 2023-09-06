@@ -348,6 +348,16 @@ void Staff::updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tr
     _visibilityVoices = voices;
 }
 
+bool Staff::reflectTranspositionInLinkedTab() const
+{
+    return m_reflectTranspositionInLinkedTab;
+}
+
+void Staff::setReflectTranspositionInLinkedTab(bool reflect)
+{
+    m_reflectTranspositionInLinkedTab = reflect;
+}
+
 //---------------------------------------------------------
 //   cleanupBrackets
 //---------------------------------------------------------

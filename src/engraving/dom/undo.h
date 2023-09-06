@@ -698,6 +698,7 @@ class ChangeStaff : public UndoCommand
     bool cutaway = false;
     bool hideSystemBarLine = false;
     bool mergeMatchingRests = false;
+    bool reflectTranspositionInLinkedTab = false;
 
     void flip(EditData*) override;
 
@@ -705,7 +706,7 @@ public:
     ChangeStaff(Staff*);
 
     ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, double userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                bool _hideSystemBarLine, bool _mergeRests);
+                bool _hideSystemBarLine, bool _mergeRests, bool _reflectTranspositionInLinkedTab);
 
     UNDO_TYPE(CommandType::ChangeStaff)
     UNDO_NAME("ChangeStaff")
