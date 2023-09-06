@@ -52,6 +52,8 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/passbase.h
     ${CMAKE_CURRENT_LIST_DIR}/passresetlayoutdata.cpp
     ${CMAKE_CURRENT_LIST_DIR}/passresetlayoutdata.h
-    ${CMAKE_CURRENT_LIST_DIR}/passlayoutindependeditems.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/passlayoutindependeditems.h
+    ${CMAKE_CURRENT_LIST_DIR}/passlayoutindependentitems.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/passlayoutindependentitems.h
+    ${CMAKE_CURRENT_LIST_DIR}/layoutindependent.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/layoutindependent.h
 )

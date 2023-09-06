@@ -500,6 +500,8 @@ public:
             m_bbox.reset();
         }
 
+        bool isValid() const { return m_bbox ? true : false; }
+
         bool isSkipDraw() const { return m_isSkipDraw; }
         void setIsSkipDraw(bool val) { m_isSkipDraw = val; }
 

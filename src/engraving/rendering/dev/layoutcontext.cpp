@@ -72,6 +72,14 @@ bool LayoutConfiguration::isPrintingMode() const
     return score()->printing();
 }
 
+std::shared_ptr<const IEngravingFont> LayoutConfiguration::engravingFont() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->engravingFont();
+}
+
 const MStyle& LayoutConfiguration::style() const
 {
     IF_ASSERT_FAILED(score()) {

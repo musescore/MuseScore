@@ -90,6 +90,8 @@ public:
     double maxSystemDistance() const;
     bool isShowInstrumentNames() const;
 
+    std::shared_ptr<const IEngravingFont> engravingFont() const;
+
     const MStyle& style() const;
 
     const PropertyValue& styleV(Sid idx) const { return style().styleV(idx); }
