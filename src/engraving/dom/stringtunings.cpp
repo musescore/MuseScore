@@ -31,6 +31,7 @@
 #include "undo.h"
 
 #include "containers.h"
+#include "translation.h"
 
 using namespace mu;
 using namespace mu::engraving;
@@ -111,16 +112,17 @@ PropertyValue StringTunings::propertyDefault(Pid id) const
 bool StringTunings::setProperty(Pid id, const PropertyValue& val)
 {
     if (id == Pid::STRINGTUNINGS_STRINGS_COUNT) {
-        if (staff()->isTabStaff(Fraction(0, 1))) {
-            staff()->staffType(Fraction(0, 1))->setLines(val.toInt());
+        Fraction tick = this->tick();
+        if (staff()->isTabStaff(tick)) {
+            staff()->staffType(tick)->setLines(val.toInt());
         } else {
             for (Staff* _staff : staff()->staffList()) {
                 if (_staff == staff()) {
                     continue;
                 }
 
-                if (_staff->score() == staff()->score() && _staff->isTabStaff(Fraction(0, 1))) {
-                    _staff->staffType(Fraction(0, 1))->setLines(val.toInt());
+                if (_staff->score() == staff()->score() && _staff->isTabStaff(tick)) {
+                    _staff->staffType(tick)->setLines(val.toInt());
                 }
             }
         }
@@ -138,6 +140,37 @@ bool StringTunings::setProperty(Pid id, const PropertyValue& val)
 
     triggerLayout();
     return true;
+}
+
+String StringTunings::accessibleInfo() const
+{
+    const StringData* stringData = this->stringData();
+    if (stringData->isNull()) {
+        return String();
+    }
+
+    String info;
+
+    std::vector<instrString> stringList = stringData->stringList();
+    for (string_idx_t i = 0; i < stringList.size(); ++i) {
+        if (mu::contains(m_visibleStrings, i)) {
+            String pitchStr = pitch2string(stringList[i].pitch);
+            if (pitchStr.empty()) {
+                LOGE() << "Invalid get pitch name for " << stringList[i].pitch;
+                continue;
+            }
+
+            info += mtrc("engraving", "String %1").arg(String::number(i + 1)) + u", "
+                    + mtrc("engraving", "Value %1").arg(pitchStr) + u"; ";
+        }
+    }
+
+    return info;
+}
+
+String StringTunings::screenReaderInfo() const
+{
+    return accessibleInfo();
 }
 
 const StringData* StringTunings::stringData() const

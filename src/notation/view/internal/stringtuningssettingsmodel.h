@@ -45,8 +45,8 @@ class StringTuningsSettingsModel : public AbstractElementPopupModel
     Q_PROPERTY(QVariantList presets READ presets NOTIFY presetsChanged)
     Q_PROPERTY(QString currentPreset READ currentPreset WRITE setCurrentPreset NOTIFY currentPresetChanged)
 
-    Q_PROPERTY(QVariantList stringNumbers READ stringNumbers NOTIFY stringNumbersChanged)
-    Q_PROPERTY(int currentStringNumber READ currentStringNumber WRITE setCurrentStringNumber NOTIFY currentStringNumberChanged)
+    Q_PROPERTY(QVariantList numbersOfStrings READ numbersOfStrings NOTIFY numbersOfStringsChanged)
+    Q_PROPERTY(int currentNumberOfStrings READ currentNumberOfStrings WRITE setCurrentNumberOfStrings NOTIFY currentNumberOfStringsChanged)
 
     Q_PROPERTY(QList<StringTuningsItem*> strings READ strings NOTIFY stringsChanged)
 
@@ -70,19 +70,18 @@ public:
     QString currentPreset() const;
     void setCurrentPreset(const QString& preset);
 
-    QVariantList stringNumbers() const;
-    void setStringNumbers(const QVariantList& newStringNumbers);
+    QVariantList numbersOfStrings() const;
 
-    int currentStringNumber() const;
-    void setCurrentStringNumber(int stringNumber);
+    int currentNumberOfStrings() const;
+    void setCurrentNumberOfStrings(int number);
 
     QList<StringTuningsItem*> strings() const;
 
 signals:
     void presetsChanged();
     void currentPresetChanged();
-    void stringNumbersChanged();
-    void currentStringNumberChanged();
+    void numbersOfStringsChanged();
+    void currentNumberOfStringsChanged();
     void stringsChanged();
 
 private:
@@ -96,8 +95,6 @@ private:
     QList<StringTuningsItem*> m_strings;
 
     std::string m_itemId;
-
-    int m_lastSuccessfullyInstalledStringValue = -1;
 };
 
 class StringTuningsItem : public QObject
