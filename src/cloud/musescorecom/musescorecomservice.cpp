@@ -49,7 +49,8 @@ static const QUrl MUSESCORECOM_USER_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/m
 
 static const QUrl MUSESCORECOM_SCORE_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/info");
 static const QUrl MUSESCORECOM_SCORES_LIST_API_URL(MUSESCORECOM_API_ROOT_URL + "/collection/scores");
-static const QUrl MUSESCORECOM_DOWNLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download");
+static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download");
+static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download-shared");
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
@@ -328,18 +329,22 @@ mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloa
 {
     TRACEFUNC;
 
+    QUrl baseDownloadUrl = MUSESCORECOM_SCORE_DOWNLOAD_API_URL;
+
     QVariantMap params;
     params["score_id"] = scoreId;
 
     if (!hash.isEmpty()) {
+        baseDownloadUrl = MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL;
+
         params["h"] = hash;
+
+        if (!secret.isEmpty()) {
+            params["secret"] = secret;
+        }
     }
 
-    if (!secret.isEmpty()) {
-        params["secret"] = secret;
-    }
-
-    RetVal<QUrl> downloadUrl = prepareUrlForRequest(MUSESCORECOM_DOWNLOAD_SCORE_API_URL, params);
+    RetVal<QUrl> downloadUrl = prepareUrlForRequest(baseDownloadUrl, params);
     if (!downloadUrl.ret) {
         return downloadUrl.ret;
     }
