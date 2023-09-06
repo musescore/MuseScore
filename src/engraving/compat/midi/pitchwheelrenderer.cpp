@@ -108,7 +108,7 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
                 if (staffInfoValid) {
                     evb.setOriginatingStaff(staffIdx);
                 }
-                pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
+                pitchWheelEvents[channel].emplace_hint(pitchWheelEvents[channel].end(), std::make_pair(tick, evb));
                 forceUpdate = false;
             }
 

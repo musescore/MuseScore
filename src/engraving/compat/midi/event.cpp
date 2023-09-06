@@ -200,6 +200,20 @@ void EventList::insert(const Event& e)
     push_back(e);
 }
 
+EventMap::events_multimap_t& EventMap::operator[](std::size_t idx)
+{
+    if (size() == 0) {
+        _channels.emplace_back();
+    }
+    if (idx >= size()) {
+        auto diff = idx - size();
+        do {
+            _channels.emplace_back();
+        } while (diff-- != 0);
+    }
+    return _channels[idx];
+}
+
 //---------------------------------------------------------
 //   class EventMap::fixupMIDI
 //---------------------------------------------------------
@@ -215,33 +229,35 @@ void EventMap::fixupMIDI()
     };
 
     /* track info for each channel (on the heap, 0-initialised) */
-    struct channelInfo* info = (struct channelInfo*)calloc(_highestChannel + 1, sizeof(struct channelInfo));
+    auto* info = (struct channelInfo*)calloc(size() + 1, sizeof(struct channelInfo));
 
-    auto it = begin();
-    while (it != end()) {
-        NPlayEvent& event = it->second;
-        /* ME_NOTEOFF is never emitted, no need to check for it */
-        if (event.type() == ME_NOTEON && !event.isMuted()) {
-            unsigned short np = info[event.channel()].nowPlaying[event.pitch()];
-            if (event.velo() == 0) {
-                /* already off (should not happen) or still playing? */
-                if (np == 0 || --np > 0) {
-                    event.setDiscard(1);
+    for (auto& mm : _channels) {
+        auto it = mm.begin();
+        while (it != mm.end()) {
+            NPlayEvent& event = it->second;
+            /* ME_NOTEOFF is never emitted, no need to check for it */
+            if (event.type() == ME_NOTEON) {
+                uint8_t np = info[event.channel()].nowPlaying[event.pitch()];
+                if (event.velo() == 0) {
+                    /* already off (should not happen) or still playing? */
+                    if (np == 0 || --np > 0) {
+                        event.setDiscard(1);
+                    } else {
+                        /* hoist NOTEOFF to same track as NOTEON */
+                        event.setOriginatingStaff(info[event.channel()].event[event.pitch()]->getOriginatingStaff());
+                    }
                 } else {
-                    /* hoist NOTEOFF to same track as NOTEON */
-                    event.setOriginatingStaff(info[event.channel()].event[event.pitch()]->getOriginatingStaff());
+                    if (++np > 1) {
+                        /* restrike, possibly on different track */
+                        event.setDiscard(info[event.channel()].event[event.pitch()]->getOriginatingStaff() + 1);
+                    }
+                    info[event.channel()].event[event.pitch()] = &event;
                 }
-            } else {
-                if (++np > 1) {
-                    /* restrike, possibly on different track */
-                    event.setDiscard(info[event.channel()].event[event.pitch()]->getOriginatingStaff() + 1);
-                }
-                info[event.channel()].event[event.pitch()] = &event;
+                info[event.channel()].nowPlaying[event.pitch()] = np;
             }
-            info[event.channel()].nowPlaying[event.pitch()] = np;
-        }
 
-        ++it;
+            ++it;
+        }
     }
 
     free((void*)info);

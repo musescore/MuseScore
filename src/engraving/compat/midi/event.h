@@ -180,19 +180,17 @@ public:
     void insertNote(int channel, Note*);
 };
 
-class EventMap : public std::multimap<int, NPlayEvent>
+class EventMap
 {
     OBJECT_ALLOCATOR(engraving, EventMap)
 
-    int _highestChannel = 15;
+    using events_multimap_t = std::multimap<int, NPlayEvent>;
+    std::vector<events_multimap_t> _channels;
 public:
+    [[nodiscard]] size_t size() const { return _channels.size(); }
+    events_multimap_t& operator[](std::size_t idx);
+    void mergePitchWheelEvents(EventMap& pitchWheelEvents);
     void fixupMIDI();
-    void registerChannel(int c)
-    {
-        if (c > _highestChannel) {
-            _highestChannel = c;
-        }
-    }
 };
 
 typedef EventList::iterator iEvent;

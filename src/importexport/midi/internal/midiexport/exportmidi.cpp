@@ -234,7 +234,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     ctx.instrumentsHaveEffects = false;
     ctx.metronome = false;
     ctx.synthState = synthState;
-    m_score->renderMidi(&events, ctx, midiExpandRepeats);
+    m_score->renderMidi(events, ctx, midiExpandRepeats);
 
     m_pauseMap.calculate(m_score);
     writeHeader();
@@ -299,62 +299,64 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
                     track.insert(0, ev);
                 }
 
-                for (auto i = events.begin(); i != events.end(); ++i) {
-                    const NPlayEvent& event = i->second;
-
-                    if (event.isMuted()) {
-                        continue;
-                    }
-                    if (event.discard() == staffIdx + 1 && event.velo() > 0) {
-                        // turn note off so we can restrike it in another track
-                        track.insert(m_pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
-                                                                                   event.pitch(), 0));
-                    }
-
-                    staff_idx_t equivalentStaffIdx = staffIdx;
-                    for (Staff* st : m_score->masterScore()->staves()) {
-                        if (staff->id() == st->id()) {
-                            equivalentStaffIdx = st->idx();
+                for (size_t e = 0; e < events.size(); ++e) {
+                    auto& multimap = events[e];
+                    for (auto& item : multimap) {
+                        const NPlayEvent& event = item.second;
+                        if (event.isMuted()) {
+                            continue;
                         }
-                    }
+                        if (event.discard() == staffIdx + 1 && event.velo() > 0) {
+                            // turn note off so we can restrike it in another track
+                            track.insert(m_pauseMap.addPauseTicks(item.first), MidiEvent(ME_NOTEON, channel,
+                                                                                          event.pitch(), 0));
+                        }
 
-                    if (event.getOriginatingStaff() != equivalentStaffIdx) {
-                        continue;
-                    }
+                        staff_idx_t equivalentStaffIdx = staffIdx;
+                        for (Staff* st : m_score->masterScore()->staves()) {
+                            if (staff->id() == st->id()) {
+                                equivalentStaffIdx = st->idx();
+                            }
+                        }
 
-                    if (event.discard() && event.velo() == 0) {
-                        // ignore noteoff but restrike noteon
-                        continue;
-                    }
+                        if (event.getOriginatingStaff() != equivalentStaffIdx) {
+                            continue;
+                        }
 
-                    if (!exportRPNs && event.type() == ME_CONTROLLER && event.portamento()) {
-                        // ignore portamento control events if exportRPN isn't switched on
-                        continue;
-                    }
+                        if (event.discard() && event.velo() == 0) {
+                            // ignore noteoff but restrike noteon
+                            continue;
+                        }
 
-                    char eventPort    = m_score->masterScore()->midiPort(event.channel());
-                    char eventChannel = m_score->masterScore()->midiChannel(event.channel());
-                    if (port != eventPort || channel != eventChannel) {
-                        continue;
-                    }
+                        if (!exportRPNs && event.type() == ME_CONTROLLER && event.portamento()) {
+                            // ignore portamento control events if exportRPN isn't switched on
+                            continue;
+                        }
 
-                    if (event.type() == ME_NOTEON) {
-                        // use the note values instead of the event values if portamento is suppressed
-                        if (!exportRPNs && event.portamento()) {
-                            track.insert(m_pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
-                                                                                       event.note()->pitch(), event.velo()));
+                        char eventPort    = m_score->masterScore()->midiPort(event.channel());
+                        char eventChannel = m_score->masterScore()->midiChannel(event.channel());
+                        if (port != eventPort || channel != eventChannel) {
+                            continue;
+                        }
+
+                        if (event.type() == ME_NOTEON) {
+                            // use the note values instead of the event values if portamento is suppressed
+                            if (!exportRPNs && event.portamento()) {
+                                track.insert(m_pauseMap.addPauseTicks(item.first), MidiEvent(ME_NOTEON, channel,
+                                                                                              event.note()->pitch(), event.velo()));
+                            } else {
+                                track.insert(m_pauseMap.addPauseTicks(item.first), MidiEvent(ME_NOTEON, channel,
+                                                                                              event.pitch(), event.velo()));
+                            }
+                        } else if (event.type() == ME_CONTROLLER) {
+                            track.insert(m_pauseMap.addPauseTicks(item.first), MidiEvent(ME_CONTROLLER, channel,
+                                                                                          event.controller(), event.value()));
+                        } else if (event.type() == ME_PITCHBEND) {
+                            track.insert(m_pauseMap.addPauseTicks(item.first), MidiEvent(ME_PITCHBEND, channel,
+                                                                                          event.dataA(), event.dataB()));
                         } else {
-                            track.insert(m_pauseMap.addPauseTicks(i->first), MidiEvent(ME_NOTEON, channel,
-                                                                                       event.pitch(), event.velo()));
+                            LOGD("writeMidi: unknown midi event 0x%02x", event.type());
                         }
-                    } else if (event.type() == ME_CONTROLLER) {
-                        track.insert(m_pauseMap.addPauseTicks(i->first), MidiEvent(ME_CONTROLLER, channel,
-                                                                                   event.controller(), event.value()));
-                    } else if (event.type() == ME_PITCHBEND) {
-                        track.insert(m_pauseMap.addPauseTicks(i->first), MidiEvent(ME_PITCHBEND, channel,
-                                                                                   event.dataA(), event.dataB()));
-                    } else {
-                        LOGD("writeMidi: unknown midi event 0x%02x", event.type());
                     }
                 }
             }
