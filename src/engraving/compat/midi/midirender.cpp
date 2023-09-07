@@ -215,12 +215,6 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
         return;
     }
     bool useDrumSet = note->part()->instrument(note->tick())->useDrumset();
-    // We need to set Pitch Value to initial in case previous note was with bendUp
-    if (!useDrumSet && params.onTime - params.offset - 1 > 0) {
-        PitchWheelSpecs specs;
-        NPlayEvent pwReset(ME_PITCHBEND, params.channel, specs.mLimit % 128, specs.mLimit / 128);
-        events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset - 1), pwReset));
-    }
 
     events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
     // adds portamento for continuous glissando

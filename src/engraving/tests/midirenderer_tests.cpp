@@ -43,7 +43,6 @@ static NPlayEvent noteEvent(int pitch, int volume, int channel)
     return NPlayEvent(EventType::ME_NOTEON, channel, pitch, volume);
 }
 
-
 static int getEventsCount(EventsHolder& events)
 {
     int eventsCount = 0;
@@ -109,7 +108,7 @@ static EventsHolder getNoteOnEvents(const EventsHolder& events)
             if (ev.second.type() != EventType::ME_NOTEON) {
                 continue;
             }
-            filteredEventMap[i].insert({ev.first, ev.second});
+            filteredEventMap[i].insert({ ev.first, ev.second });
         }
     }
 
@@ -201,7 +200,7 @@ TEST_F(MidiRenderer_Tests, graceBeforeBeat)
 
     EventsHolder events = renderMidiEvents(u"grace_before_beat.mscx");
 
-    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 6);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 55, defVol);
@@ -214,7 +213,7 @@ TEST_F(MidiRenderer_Tests, graceOnBeat)
 
     EventsHolder events = renderMidiEvents(u"grace_on_beat.mscx");
 
-    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 6);
 
     checkEventInterval(events, 0, 479, 59, defVol);
     checkEventInterval(events, 480, 719, 55, defVol);
@@ -228,7 +227,7 @@ TEST_F(MidiRenderer_Tests, ghostNote)
 
     EventsHolder events = renderMidiEvents(u"ghost_note.mscx");
 
-    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 5);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
 
     checkEventInterval(events, 0, 479, 59, defVol);
     checkEventInterval(events, 480, 959, 57, ghostVol);
@@ -240,7 +239,7 @@ TEST_F(MidiRenderer_Tests, simpleTremolo)
 
     EventsHolder events = renderMidiEvents(u"simple_tremolo.mscx");
 
-    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 11);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 59, defVol);

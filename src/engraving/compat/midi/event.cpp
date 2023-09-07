@@ -246,6 +246,7 @@ void EventsHolder::mergePitchWheelEvents(EventsHolder& pitchWheelEvents)
         _channels[i].merge(pitchWheelEvents[i]);
     }
 }
+
 //---------------------------------------------------------
 //   class EventsHolder::fixupMIDI
 //---------------------------------------------------------
