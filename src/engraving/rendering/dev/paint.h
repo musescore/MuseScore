@@ -40,7 +40,7 @@ public:
 
     static void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt);
     static void paintItem(draw::Painter& painter, const EngravingItem* item);
-    static void paintItems(draw::Painter& painter, const std::vector<EngravingItem*>& items, bool isPrinting);
+    static void paintItems(draw::Painter& painter, const std::vector<EngravingItem*>& items);
 
     static SizeF pageSizeInch(const Score* score);
     static SizeF pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions& opt);

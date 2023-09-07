@@ -26,7 +26,7 @@
 #include <QHash>
 
 #include "modularity/ioc.h"
-#include "iengravingelementsprovider.h"
+#include "../../iengravingelementsprovider.h"
 #include "actions/iactionsdispatcher.h"
 
 namespace mu::diagnostics {
