@@ -21,6 +21,7 @@
  */
 #include "layoutindependent.h"
 
+#include "global/async/asyncable.h"
 #include "draw/fontmetrics.h"
 
 #include "../../types/typesconv.h"
@@ -190,6 +191,14 @@ void LayoutIndependent::layout(const Articulation* item, Articulation::LayoutDat
 
     if (item->textType() == ArticulationTextType::NO_TEXT) {
         bbox = item->symBbox(item->symId());
+
+        //! NOTE symId can be changed during layout if anchor is auto
+        static mu::async::Asyncable holder;
+        item->symIdChanged().resetOnReceive(&holder);
+        item->symIdChanged().onReceive(&holder, [item, ldata](SymId val) {
+            RectF bbox = item->symBbox(val);
+            ldata->setBbox(bbox.translated(-0.5 * bbox.width(), 0.0));
+        });
     } else {
         Font scaledFont(item->font());
         scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
