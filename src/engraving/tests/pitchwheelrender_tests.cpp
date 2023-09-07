@@ -99,7 +99,7 @@ TEST_F(PitchWheelRender_Tests, simpleLinear)
     func.func = linearFunc;
     render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
-    EventMap events = render.renderPitchWheel();
+    EventsHolder events = render.renderPitchWheel();
 
     EXPECT_EQ(events[DEFAULT_CHANNEL].begin()->second.channel(), 0);
 
@@ -136,7 +136,7 @@ TEST_F(PitchWheelRender_Tests, twoReverseFunctions)
     func.func = reverseLinearFunc;
     render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
 
-    EventMap events = render.renderPitchWheel();
+    EventsHolder events = render.renderPitchWheel();
     EXPECT_EQ(events.size(), 1);
 }
 
@@ -161,7 +161,7 @@ TEST_F(PitchWheelRender_Tests, channelTest)
     render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     render.addPitchWheelFunction(func, 1, 0, MidiInstrumentEffect::NONE);
 
-    EventMap events = render.renderPitchWheel();
+    EventsHolder events = render.renderPitchWheel();
 
     EXPECT_EQ(events[0].size(), 3);
     EXPECT_EQ(events[0].count(0), 1);
@@ -207,7 +207,7 @@ TEST_F(PitchWheelRender_Tests, twoConnectedFunctions)
         render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
-    EventMap events = render.renderPitchWheel();
+    EventsHolder events = render.renderPitchWheel();
 
     EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 6);
     std::set<int> expectedValues = { 8192, 8202, 8212, 8222, 8232, 8242 };
@@ -255,7 +255,7 @@ TEST_F(PitchWheelRender_Tests, twoDevidedFunctions)
         render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
-    EventMap events = render.renderPitchWheel();
+    EventsHolder events = render.renderPitchWheel();
 
     EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 5);
     std::multimap<int, int> expectedValues = { { 0, 8192 }, { 10, 8202 }, { 20, 8212 }, { 40, 8222 }, { 50, 8232 } };
@@ -304,7 +304,7 @@ TEST_F(PitchWheelRender_Tests, twoOverlappedFunctions)
         render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
-    EventMap events = render.renderPitchWheel();
+    EventsHolder events = render.renderPitchWheel();
 
     EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
     std::multimap<int, int> pitches;
@@ -358,7 +358,7 @@ TEST_F(PitchWheelRender_Tests, threeDevidedFunctions)
         render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
-    EventMap events = render.renderPitchWheel();
+    EventsHolder events = render.renderPitchWheel();
 
     std::multimap<int, int> pitches;
     std::multimap<int, int> expectedValues = { { 10, 8202 }, { 20, 8192 }, { 30, 8212 }, { 40, 8192 }, { 60, 8222 } };
@@ -411,7 +411,7 @@ TEST_F(PitchWheelRender_Tests, threeOverLappedFunctions)
         render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
     }
 
-    EventMap events = render.renderPitchWheel();
+    EventsHolder events = render.renderPitchWheel();
 
     std::multimap<int, int> pitches;
     std::multimap<int, int> expectedValues = { { 0, 8202 }, { 20, 8212 }, { 40, 8222 }, { 50, 8212 }, { 60, 8202 }, { 70, 8192 } };

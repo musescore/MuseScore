@@ -228,7 +228,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
         tracks.push_back(MidiTrack());
     }
 
-    EventMap events;
+    EventsHolder events;
     MidiRenderer::Context ctx;
     ctx.eachStringHasChannel = false;
     ctx.instrumentsHaveEffects = false;

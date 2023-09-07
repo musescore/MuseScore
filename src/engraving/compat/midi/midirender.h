@@ -31,7 +31,7 @@
 #include "pitchwheelrenderer.h"
 
 namespace mu::engraving {
-class EventMap;
+class EventsHolder;
 class MasterScore;
 class Staff;
 class SynthesizerState;
@@ -75,24 +75,24 @@ public:
 
     explicit MidiRenderer(Score* s);
 
-    void renderScore(EventMap& events, const Context& ctx);
+    void renderScore(EventsHolder& events, const Context& ctx);
 
     static const int ARTICULATION_CONV_FACTOR { 100000 };
 
 private:
 
-    void renderStaff(EventMap& events, const Staff* sctx, PitchWheelRenderer& pitchWheelRenderer);
+    void renderStaff(EventsHolder& events, const Staff* sctx, PitchWheelRenderer& pitchWheelRenderer);
 
-    void renderSpanners(EventMap& events, PitchWheelRenderer& pitchWheelRenderer);
-    void doRenderSpanners(EventMap& events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
+    void renderSpanners(EventsHolder& events, PitchWheelRenderer& pitchWheelRenderer);
+    void doRenderSpanners(EventsHolder& events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
                           MidiInstrumentEffect effect);
 
-    void renderMetronome(EventMap& events);
-    void renderMetronome(EventMap& events, Measure const* m);
+    void renderMetronome(EventsHolder& events);
+    void renderMetronome(EventsHolder& events, Measure const* m);
 
-    void collectMeasureEvents(EventMap& events, Measure const* m, const Staff* sctx, int tickOffset,
+    void collectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
                               PitchWheelRenderer& pitchWheelRenderer);
-    void doCollectMeasureEvents(EventMap& events, Measure const* m, const Staff* sctx, int tickOffset,
+    void doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
                                 PitchWheelRenderer& pitchWheelRenderer);
 
     struct ChordParams {
@@ -102,8 +102,8 @@ private:
     };
 
     ChordParams collectChordParams(const Chord* chord, int tickOffset) const;
-    void collectGraceBeforeChordEvents(Chord* chord, EventMap& events, double veloMultiplier, Staff* st, int tickOffset,
-                                       PitchWheelRenderer& pitchWheelRenderer,  MidiInstrumentEffect effect);
+    void collectGraceBeforeChordEvents(Chord* chord, EventsHolder& events, double veloMultiplier, Staff* st, int tickOffset,
+                                       PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
 
     Score* score = nullptr;
 

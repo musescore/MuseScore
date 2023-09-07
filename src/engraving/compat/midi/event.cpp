@@ -200,7 +200,7 @@ void EventList::insert(const Event& e)
     push_back(e);
 }
 
-EventMap::events_multimap_t& EventMap::operator[](std::size_t idx)
+EventsHolder::events_multimap_t& EventsHolder::operator[](std::size_t idx)
 {
     if (size() == 0) {
         _channels.emplace_back();
@@ -214,13 +214,20 @@ EventMap::events_multimap_t& EventMap::operator[](std::size_t idx)
     return _channels[idx];
 }
 
-const EventMap::events_multimap_t& EventMap::operator[](std::size_t idx) const
+const EventsHolder::events_multimap_t& EventsHolder::operator[](std::size_t idx) const
 {
+    // Since EventsHolder acts more like a vector
+    // Using const subscript operator for a nonexistent element is UB
+    /*
+     * cppreference.com
+     * Unlike std::map::operator[], this operator never inserts a new element into the container.
+     * Accessing a nonexistent element through this operator is undefined behavior.
+     */
     assert(idx < size());
     return _channels[idx];
 }
 
-void EventMap::mergePitchWheelEvents(EventMap& pitchWheelEvents)
+void EventsHolder::mergePitchWheelEvents(EventsHolder& pitchWheelEvents)
 {
     for (size_t i = 0; i < size(); ++i) {
         for (const auto& eventPair : _channels[i]) {
@@ -240,10 +247,10 @@ void EventMap::mergePitchWheelEvents(EventMap& pitchWheelEvents)
     }
 }
 //---------------------------------------------------------
-//   class EventMap::fixupMIDI
+//   class EventsHolder::fixupMIDI
 //---------------------------------------------------------
 
-void EventMap::fixupMIDI()
+void EventsHolder::fixupMIDI()
 {
     /* track info for each of the 128 possible MIDI notes */
     struct channelInfo {
