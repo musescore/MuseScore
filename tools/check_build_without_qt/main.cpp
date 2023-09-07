@@ -7,8 +7,12 @@
 
 #include "importexport/guitarpro/guitarpromodule.h"
 
+#include "global/async/asyncable.h"
+
 int main(int argc, char* argv[])
 {
+    mu::async::Asyncable a;
+
     mu::modularity::ioc()->registerExport<mu::draw::IFontProvider>("test", new mu::draw::FontProviderStub());
 
     mu::engraving::compat::ScoreAccess::createMasterScore();

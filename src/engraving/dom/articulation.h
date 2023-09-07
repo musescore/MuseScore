@@ -28,6 +28,8 @@
 #include "chordrest.h"
 #include "engravingitem.h"
 
+#include "../infrastructure/bind.h"
+
 namespace mu::engraving {
 class Factory;
 
@@ -113,7 +115,8 @@ public:
 
     double mag() const override;
 
-    SymId symId() const { return m_symId; }
+    SymId symId() const { return m_symId.val(); }
+    async::Channel<SymId> symIdChanged() const { return m_symId.changed(); }
     void setSymId(SymId id);
     int subtype() const override;
     void setTextType(ArticulationTextType textType);
@@ -195,7 +198,7 @@ private:
 
     ArticulationCategories m_categories = ArticulationCategory::NONE;
 
-    SymId m_symId = SymId::noSym;
+    Bind<SymId> m_symId = SymId::noSym;
     DirectionV m_direction = DirectionV::AUTO;
     String m_channelName;
 
