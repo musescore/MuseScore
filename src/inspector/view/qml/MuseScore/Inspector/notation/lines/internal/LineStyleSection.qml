@@ -70,7 +70,7 @@ Column {
 
     FlatRadioButtonGroupPropertyView {
         id: styleSection
-        titleText: qsTrc("inspector", "Line Style")
+        titleText: qsTrc("inspector", "Line style")
         propertyItem: root.lineStyle
 
         navigationPanel: root.navigationPanel
