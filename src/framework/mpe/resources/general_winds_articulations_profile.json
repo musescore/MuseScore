@@ -1892,39 +1892,39 @@
                         },
                         {
                             "offsetPosition": 1000,
-                            "offsetValue": 800
+                            "offsetValue": 1500
                         },
                         {
                             "offsetPosition": 2000,
-                            "offsetValue": 1500
-                        },
-                        {
-                            "offsetPosition": 3000,
-                            "offsetValue": 2000
-                        },
-                        {
-                            "offsetPosition": 4000,
-                            "offsetValue": 2300
-                        },
-                        {
-                            "offsetPosition": 5000,
                             "offsetValue": 2500
                         },
                         {
+                            "offsetPosition": 3000,
+                            "offsetValue": 3500
+                        },
+                        {
+                            "offsetPosition": 4000,
+                            "offsetValue": 4500
+                        },
+                        {
+                            "offsetPosition": 5000,
+                            "offsetValue": 5000
+                        },
+                        {
                             "offsetPosition": 6000,
-                            "offsetValue": 2300
+                            "offsetValue": 4500
                         },
                         {
                             "offsetPosition": 7000,
-                            "offsetValue": 2000
+                            "offsetValue": 3500
                         },
                         {
                             "offsetPosition": 8000,
-                            "offsetValue": 1500
+                            "offsetValue": 2500
                         },
                         {
                             "offsetPosition": 9000,
-                            "offsetValue": 800
+                            "offsetValue": 1500
                         },
                         {
                             "offsetPosition": 10000,

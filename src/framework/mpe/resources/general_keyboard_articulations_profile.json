@@ -135,7 +135,7 @@
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 6500
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
@@ -864,15 +864,15 @@
                         },
                         {
                             "offsetPosition": 4000,
-                            "offsetValue": 3900
+                            "offsetValue": 4500
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 4000
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
-                            "offsetValue": 3900
+                            "offsetValue": 4500
                         },
                         {
                             "offsetPosition": 7000,
@@ -2964,7 +2964,7 @@
                         },
                         {
                             "offsetPosition": 5000,
-                            "offsetValue": 5200
+                            "offsetValue": 5000
                         },
                         {
                             "offsetPosition": 6000,
