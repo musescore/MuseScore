@@ -31,6 +31,7 @@
 #include "log.h"
 
 using namespace mu::diagnostics;
+using namespace mu::engraving;
 
 EngravingElementsModel::EngravingElementsModel(QObject* parent)
     : QAbstractItemModel(parent)
@@ -220,10 +221,14 @@ void EngravingElementsModel::reload()
     m_rootItem = createItem(nullptr);
 
     const EngravingObjectList& elements = elementsProvider()->elements();
+    EngravingObjectList notpalettes;
+
     for (const mu::engraving::EngravingObject* el : elements) {
-        if (el == mu::engraving::gpaletteScore) {
+        if (el == mu::engraving::gpaletteScore || el->score() == mu::engraving::gpaletteScore) {
             continue;
         }
+
+        notpalettes.insert(el);
 
         if (el->isScore() && mu::engraving::toScore(el)->isMaster()) {
             Item* scoreItem = createItem(m_rootItem);
@@ -236,7 +241,7 @@ void EngravingElementsModel::reload()
     QVariantMap lostData;
     lostData["info"] = "Lost items";
     lostItem->setData(lostData);
-    findAndAddLost(elements, lostItem);
+    findAndAddLost(notpalettes, lostItem);
 
     endResetModel();
 

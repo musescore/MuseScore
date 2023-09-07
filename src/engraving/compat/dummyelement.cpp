@@ -62,14 +62,14 @@ void DummyElement::init()
 #endif
 
     m_root = new RootItem(score());
-    m_root->setParent(explicitParent());
+    m_root->setParent(this);
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
     m_root->setupAccessible();
 #endif
 
     m_page = Factory::createPage(m_root);
-    m_page->setParent(explicitParent());
+    m_page->setParent(m_root);
 
     m_system = Factory::createSystem(m_page);
     m_system->setParent(m_page);

@@ -151,14 +151,23 @@ EngravingItem* EngravingItem::parentItem(bool explicitParent) const
     return nullptr;
 }
 
-EngravingItemList EngravingItem::childrenItems() const
+static void сollectСhildrenItems(const EngravingObject* item, EngravingItemList& list, bool all)
 {
-    EngravingItemList list;
-    for (EngravingObject* ch : children()) {
+    for (EngravingObject* ch : item->children()) {
         if (ch->isEngravingItem()) {
             list.push_back(static_cast<EngravingItem*>(ch));
+
+            if (all) {
+                сollectСhildrenItems(ch, list, all);
+            }
         }
     }
+}
+
+EngravingItemList EngravingItem::childrenItems(bool all) const
+{
+    EngravingItemList list;
+    сollectСhildrenItems(this, list, all);
     return list;
 }
 

@@ -163,7 +163,7 @@ public:
     void deleteLater();
 
     EngravingItem* parentItem(bool explicitParent = true) const;
-    EngravingItemList childrenItems() const;
+    EngravingItemList childrenItems(bool all = false) const;
 
     EngravingItem* findAncestor(ElementType t);
     const EngravingItem* findAncestor(ElementType t) const;

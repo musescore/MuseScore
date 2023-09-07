@@ -58,20 +58,24 @@ static Color colorForPointer(const void* ptr)
     return Color(r, g, b, 128);
 }
 
-void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingItem* item,
-                                   std::shared_ptr<PaintDebugger>& debugger)
+void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingItem* item)
 {
     // Elements tree
     bool isDiagnosticSelected = elementsProvider()->isSelected(item);
-    if (isDiagnosticSelected) {
-        // Overriding pen
-        debugger->setDebugPenColor(DEBUG_ELTREE_SELECTED_COLOR);
-    }
 
     PointF pos(item->pagePos());
     painter.translate(pos);
 
-    if (!item->layoutData()->bbox().isEmpty()) {
+    RectF bbox = item->layoutData()->bbox();
+
+    if (item->isType(ElementType::SEGMENT)) {
+        if (RealIsNull(bbox.height())) {
+            bbox.setHeight(10.0);
+            LOGW() << "Segment bbox height is null";
+        }
+    }
+
+    if (!bbox.isEmpty()) {
         // Draw shape
         if (configuration()->debuggingOptions().colorElementShapes
             && !item->isPage() && !item->isSystem() && !item->isStaffLines() && !item->isBox()) {
@@ -95,33 +99,11 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
 
             painter.setPen(borderPen);
             painter.setBrush(draw::BrushStyle::NoBrush);
-            painter.drawRect(item->layoutData()->bbox());
+            painter.drawRect(bbox);
         }
     }
 
     painter.translate(-pos);
-
-    debugger->restorePenColor();
-}
-
-void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements)
-{
-    // Setup debug provider
-    auto originalProvider = painter.provider();
-    std::shared_ptr<PaintDebugger> debugger = std::make_shared<PaintDebugger>(originalProvider);
-    painter.setProvider(debugger, false);
-
-    for (const EngravingItem* element : elements) {
-        if (!element->isInteractionAvailable()) {
-            continue;
-        }
-
-        paintElementDebug(painter, element, debugger);
-    }
-
-    // Restore provider
-    debugger->restorePenColor();
-    painter.setProvider(debugger->realProvider(), false);
 }
 
 void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
@@ -139,6 +121,11 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
     double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
 
     painter.save();
+
+    EngravingItemList items = page->childrenItems(true);
+    for (const EngravingItem* item : items) {
+        paintElementDebug(painter, item);
+    }
 
     auto options = configuration()->debuggingOptions();
 
