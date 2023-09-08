@@ -92,6 +92,7 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
     }
 
     ctx.mutState().setEndTick(etick);
+    ctx.mutState().setIsLayoutAll(isLayoutAll);
 
     if (score->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
         if (score->isMaster()) {
@@ -100,11 +101,6 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
     }
     if (score->cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO) {
         score->updateVelo();
-    }
-
-    if (isLayoutAll) {
-        PassResetLayoutData resetPass;
-        resetPass.run(score, ctx);
     }
 
     //---------------------------------------------------
@@ -138,6 +134,10 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
         ctx.mutState().setPrevMeasure(nullptr);
         ctx.mutState().setNextMeasure(m);         //_showVBox ? first() : firstMeasure();
         ctx.mutState().setStartTick(m->tick());
+
+        PassResetLayoutData resetPass;
+        resetPass.run(score, ctx);
+
         layoutLinear(ctx, isLayoutAll);
         return;
     }
@@ -210,6 +210,9 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
     }
 
     ctx.mutState().setPrevMeasure(nullptr);
+
+    PassResetLayoutData resetPass;
+    resetPass.run(score, ctx);
 
     MeasureLayout::getNextMeasure(ctx);
     ctx.mutState().setCurSystem(SystemLayout::collectSystem(ctx));
@@ -380,6 +383,7 @@ void ScoreLayout::collectLinearSystem(LayoutContext& ctx)
             if (m->trailer()) {
                 MeasureLayout::removeSystemTrailer(m, ctx);
             }
+
             if (m->tick() >= ctx.state().startTick() && m->tick() <= ctx.state().endTick()) {
                 // for measures in range, do full layout
                 if (ctx.conf().isMode(LayoutMode::HORIZONTAL_FIXED)) {
