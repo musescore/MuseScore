@@ -54,7 +54,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/rtti.h
-    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/bind.h
 
     ${DOM_SRC}
 

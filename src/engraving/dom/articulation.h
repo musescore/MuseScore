@@ -28,8 +28,6 @@
 #include "chordrest.h"
 #include "engravingitem.h"
 
-#include "../infrastructure/bind.h"
-
 namespace mu::engraving {
 class Factory;
 
@@ -115,8 +113,7 @@ public:
 
     double mag() const override;
 
-    SymId symId() const { return m_symId.val(); }
-    async::Channel<SymId> symIdChanged() const { return m_symId.changed(); }
+    SymId symId() const { return m_symId; }
     void setSymId(SymId id);
     int subtype() const override;
     void setTextType(ArticulationTextType textType);
@@ -179,6 +176,11 @@ public:
 
     staff_idx_t vStaffIdx() const override { return chordRest()->vStaffIdx(); }
 
+    struct LayoutData : public EngravingItem::LayoutData
+    {
+    };
+    DECLARE_LAYOUTDATA_METHODS(Articulation);
+
 protected:
     friend class mu::engraving::Factory;
     Articulation(ChordRest* parent, ElementType type = ElementType::ARTICULATION);
@@ -198,7 +200,7 @@ private:
 
     ArticulationCategories m_categories = ArticulationCategory::NONE;
 
-    Bind<SymId> m_symId = SymId::noSym;
+    SymId m_symId = SymId::noSym;
     DirectionV m_direction = DirectionV::AUTO;
     String m_channelName;
 

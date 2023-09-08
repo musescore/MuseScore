@@ -155,8 +155,6 @@
 #include "tremololayout.h"
 #include "tupletlayout.h"
 
-#include "layoutindependent.h"
-
 using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
@@ -166,15 +164,27 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
     //DO_ASSERT(!ctx.conf().isPaletteMode());
 
-    bool isIndependent = LayoutIndependent::layoutItem(item, ctx);
-    if (isIndependent) {
-        return;
-    }
+    EngravingItem::LayoutData* ldata = item->mutLayoutData();
 
     switch (item->type()) {
+    case ElementType::ACCIDENTAL:
+        if (!ldata->isValid()) {
+            layout(item_cast<const Accidental*>(item), static_cast<Accidental::LayoutData*>(ldata), ctx.conf());
+        }
+        break;
+    case ElementType::ACTION_ICON:
+        if (!ldata->isValid()) {
+            layout(item_cast<const ActionIcon*>(item), static_cast<ActionIcon::LayoutData*>(ldata));
+        }
+        break;
     case ElementType::AMBITUS:          layout(item_cast<Ambitus*>(item), ctx);
         break;
     case ElementType::ARPEGGIO:         layout(item_cast<Arpeggio*>(item), ctx);
+        break;
+    case ElementType::ARTICULATION:
+        if (!ldata->isValid()) {
+            layout(item_cast<const Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
+        }
         break;
     case ElementType::BAR_LINE:         layout(item_cast<BarLine*>(item), ctx);
         break;
@@ -274,6 +284,11 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::NOTEHEAD:         layout(item_cast<NoteHead*>(item), ctx);
         break;
+    case ElementType::ORNAMENT:
+        if (!ldata->isValid()) {
+            layout(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
+        }
+        break;
     case ElementType::OTTAVA:           layout(item_cast<Ottava*>(item), ctx);
         break;
     case ElementType::OTTAVA_SEGMENT:   layout(item_cast<OttavaSegment*>(item), ctx);
@@ -360,6 +375,105 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     }
 }
 
+void TLayout::layout(const Accidental* item, Accidental::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    ldata->syms.clear();
+
+    // TODO: remove Accidental in layout
+    // don't show accidentals for tab or slash notation
+    if (item->onTabStaff() || (item->note() && item->note()->fixed())) {
+        ldata->setIsSkipDraw(true);
+        return;
+    }
+    ldata->setIsSkipDraw(false);
+
+    if (item->accidentalType() == AccidentalType::NONE) {
+        return;
+    }
+
+    auto accidentalSingleSym = [](const Accidental* item) -> SymId
+    {
+        // if the accidental is standard (doubleflat, flat, natural, sharp or double sharp)
+        // and it has either no bracket or parentheses, then we have glyphs straight from smufl.
+
+        if (item->bracket() == AccidentalBracket::PARENTHESIS && !item->parentNoteHasParentheses()) {
+            switch (item->accidentalType()) {
+            case AccidentalType::FLAT:      return SymId::accidentalFlatParens;
+            case AccidentalType::FLAT2:     return SymId::accidentalDoubleFlatParens;
+            case AccidentalType::NATURAL:   return SymId::accidentalNaturalParens;
+            case AccidentalType::SHARP:     return SymId::accidentalSharpParens;
+            case AccidentalType::SHARP2:    return SymId::accidentalDoubleSharpParens;
+            default:
+                break;
+            }
+        }
+        return SymId::noSym;
+    };
+
+    auto accidentalBracketSyms = [](AccidentalBracket type) -> std::pair<SymId, SymId>
+    {
+        switch (type) {
+        case AccidentalBracket::PARENTHESIS: return { SymId::accidentalParensLeft, SymId::accidentalParensRight };
+        case AccidentalBracket::BRACKET: return { SymId::accidentalBracketLeft, SymId::accidentalBracketRight };
+        case AccidentalBracket::BRACE: return { SymId::accidentalCombiningOpenCurlyBrace, SymId::accidentalCombiningCloseCurlyBrace };
+        case AccidentalBracket::NONE: return { SymId::noSym, SymId::noSym };
+        }
+        return { SymId::noSym, SymId::noSym };
+    };
+
+    // Single?
+    SymId singleSym = accidentalSingleSym(item);
+    if (singleSym != SymId::noSym && conf.engravingFont()->isValid(singleSym)) {
+        Accidental::LayoutData::Sym s(singleSym, 0.0, 0.0);
+        ldata->syms.push_back(s);
+
+        ldata->addBbox(item->symBbox(singleSym));
+    }
+    // Multi
+    else {
+        double margin = conf.styleMM(Sid::bracketedAccidentalPadding);
+        double x = 0.0;
+
+        std::pair<SymId, SymId> bracketSyms;
+        bool isNeedBracket = item->bracket() != AccidentalBracket::NONE && !item->parentNoteHasParentheses();
+        if (isNeedBracket) {
+            bracketSyms = accidentalBracketSyms(item->bracket());
+        }
+
+        // Left
+        if (bracketSyms.first != SymId::noSym) {
+            Accidental::LayoutData::Sym ls(bracketSyms.first, 0.0,
+                                           item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
+            ldata->syms.push_back(ls);
+            ldata->addBbox(item->symBbox(bracketSyms.first));
+
+            x += item->symAdvance(bracketSyms.first) + margin;
+        }
+
+        // Main
+        SymId mainSym = item->symId();
+        Accidental::LayoutData::Sym ms(mainSym, x, 0.0);
+        ldata->syms.push_back(ms);
+        ldata->addBbox(item->symBbox(mainSym).translated(x, 0.0));
+
+        // Right
+        if (bracketSyms.second != SymId::noSym) {
+            x += item->symAdvance(mainSym) + margin;
+
+            Accidental::LayoutData::Sym rs(bracketSyms.second, x,
+                                           item->bracket() == AccidentalBracket::BRACE ? item->spatium() * 0.4 : 0.0);
+            ldata->syms.push_back(rs);
+            ldata->addBbox(item->symBbox(bracketSyms.second).translated(x, 0.0));
+        }
+    }
+}
+
+void TLayout::layout(const ActionIcon* item, ActionIcon::LayoutData* ldata)
+{
+    FontMetrics fontMetrics(item->iconFont());
+    ldata->setBbox(fontMetrics.boundingRect(Char(item->icon())));
+}
+
 void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 {
     const double spatium = item->spatium();
@@ -389,7 +503,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->topTpc(), key);
             item->topAccidental()->setAccidentalType(accidType);
-            LayoutIndependent::layoutItem(item->topAccidental(), topAccData, ctx);
+            TLayout::layout(item->topAccidental(), topAccData, ctx.conf());
             topAccData->setPosY(ldata->topPos.y());
         }
 
@@ -403,7 +517,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
             // compute accidental
             AccidentalType accidType = Ambitus::accidentalType(item->bottomTpc(), key);
             item->bottomAccidental()->setAccidentalType(accidType);
-            LayoutIndependent::layoutItem(item->bottomAccidental(), bottomAccData, ctx);
+            TLayout::layout(item->bottomAccidental(), bottomAccData, ctx.conf());
             bottomAccData->setPosY(ldata->bottomPos.y());
         }
     }
@@ -490,6 +604,28 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
 void TLayout::layout(Arpeggio* item, LayoutContext& ctx)
 {
     ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
+}
+
+void TLayout::layout(const Articulation* item, Articulation::LayoutData* ldata)
+{
+    if (item->isHiddenOnTabStaff()) {
+        ldata->setIsSkipDraw(true);
+        return;
+    }
+    ldata->setIsSkipDraw(false);
+
+    RectF bbox;
+
+    if (item->textType() == ArticulationTextType::NO_TEXT) {
+        bbox = item->symBbox(item->symId());
+    } else {
+        Font scaledFont(item->font());
+        scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
+        FontMetrics fm(scaledFont);
+        bbox = fm.boundingRect(scaledFont, TConv::text(item->textType()));
+    }
+
+    ldata->setBbox(bbox.translated(-0.5 * bbox.width(), 0.0));
 }
 
 static double barLineWidth(const BarLine* item, const MStyle& style, double dotWidth)
@@ -3612,6 +3748,33 @@ void TLayout::layout(NoteDot* item, LayoutContext& ctx)
     layoutNoteDot(item, ctx, item->mutLayoutData());
 }
 
+void TLayout::layout(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    layout(static_cast<const Articulation*>(item), ldata);
+
+    double _spatium = item->spatium();
+    double vertMargin = 0.35 * _spatium;
+    static constexpr double ornamentAccidentalMag = 0.6; // TODO: style?
+
+    for (size_t i = 0; i < item->accidentalsAboveAndBelow().size(); ++i) {
+        bool above = (i == 0);
+        Accidental* accidental = item->accidentalsAboveAndBelow()[i];
+        if (!accidental) {
+            continue;
+        }
+        accidental->computeMag();
+        Accidental::LayoutData* accLData = accidental->mutLayoutData();
+        accLData->setMag(accLData->mag() * ornamentAccidentalMag);
+        layout(accidental, accLData, conf);
+        Shape accidentalShape = accidental->shape();
+        double minVertDist = above
+                             ? accidentalShape.minVerticalDistance(ldata->bbox())
+                             : Shape(ldata->bbox()).minVerticalDistance(accidentalShape);
+
+        accLData->setPos(-0.5 * accLData->bbox().width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
+    }
+}
+
 void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {
@@ -5102,7 +5265,7 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
     Ornament* ornament = trill->ornament();
     if (ornament) {
         if (item->isSingleBeginType()) {
-            LayoutIndependent::layoutItem(ornament, ctx);
+            TLayout::layout(ornament, ornament->mutLayoutData(), ctx.conf());
         }
         trill->setAccidental(accidentalGoesBelow ? ornament->accidentalBelow() : ornament->accidentalAbove());
         trill->setCueNoteChord(ornament->cueNoteChord());

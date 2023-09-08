@@ -23,8 +23,7 @@
 
 #include "dom/score.h"
 
-#include "layoutcontext.h"
-#include "layoutindependent.h"
+#include "tlayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -37,8 +36,13 @@ void PassLayoutIndependentItems::doRun(Score* score, LayoutContext& ctx)
 
 void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
 {
-    bool isIndependent = LayoutIndependent::layoutItem(item, ctx);
-    UNUSED(isIndependent); // for debugging
+    switch (item->type()) {
+    case ElementType::ACCIDENTAL:
+    case ElementType::ACTION_ICON:
+        TLayout::layoutItem(item, ctx);
+    default:
+        break;
+    }
 
     for (EngravingItem* ch : item->childrenItems()) {
         scan(ch, ctx);

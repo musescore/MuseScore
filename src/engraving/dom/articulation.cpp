@@ -107,7 +107,7 @@ int Articulation::subtype() const
         return int(SymNames::symIdByName(s.left(s.size() - 6)));
     }
 
-    return int(m_symId.val());
+    return int(m_symId);
 }
 
 //---------------------------------------------------------
