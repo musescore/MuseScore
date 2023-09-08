@@ -34,7 +34,7 @@ using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 using namespace mu::engraving::rtti;
 
-bool LayoutIndependent::isItemIndepended(const EngravingItem* item)
+bool LayoutIndependent::isItemIndependent(const EngravingItem* item)
 {
     static LayoutContext _dummy(nullptr);
     return dolayoutItem(item, nullptr, _dummy, false);

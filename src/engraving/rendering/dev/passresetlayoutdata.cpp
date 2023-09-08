@@ -23,6 +23,8 @@
 
 #include "dom/score.h"
 
+#include "layoutcontext.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -37,8 +39,15 @@ static void resetLayoutData(EngravingItem* item)
     }
 }
 
-void PassResetLayoutData::doRun(Score* score, LayoutContext&)
+void PassResetLayoutData::doRun(Score* score, LayoutContext& ctx)
 {
-    RootItem* rootItem = score->rootItem();
-    resetLayoutData(rootItem);
+    if (ctx.state().isLayoutAll()) {
+        resetLayoutData(score->rootItem());
+    } else {
+        MeasureBase* m = ctx.mutState().nextMeasure();
+        while (m && m->tick() < ctx.state().endTick()) {
+            resetLayoutData(m);
+            m = m->next();
+        }
+    }
 }

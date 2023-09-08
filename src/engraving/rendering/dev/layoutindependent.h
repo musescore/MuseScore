@@ -38,7 +38,7 @@ class LayoutIndependent
 public:
     LayoutIndependent();
 
-    static bool isItemIndepended(const EngravingItem* item);
+    static bool isItemIndependent(const EngravingItem* item);
     static bool layoutItem(EngravingItem* item, const LayoutContext& ctx);
     static bool layoutItem(const EngravingItem* item, EngravingItem::LayoutData* ldata, const LayoutContext& ctx);
 

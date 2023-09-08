@@ -196,6 +196,7 @@ public:
     const Fraction& tick() const { return m_tick; }
     const Fraction& startTick() const { return m_startTick; }
     const Fraction& endTick() const { return m_endTick; }
+    bool isLayoutAll() const { return m_isLayoutAll; }
 
     const Page* page() const { return m_page; }
     page_idx_t pageIdx() const { return m_pageIdx; }
@@ -223,6 +224,7 @@ public:
     void setTick(const Fraction& t) { m_tick = t; }
     void setStartTick(const Fraction& t) { m_startTick = t; }
     void setEndTick(const Fraction& t) { m_endTick = t; }
+    void setIsLayoutAll(bool v) { m_isLayoutAll = v; }
 
     Page* page() { return m_page; }
     void setPage(Page* p) { m_page = p; }
@@ -260,6 +262,7 @@ private:
     Fraction m_tick{ 0, 1 };
     Fraction m_startTick;
     Fraction m_endTick;
+    bool m_isLayoutAll = false;
 
     Page* m_page = nullptr;
     page_idx_t m_pageIdx = 0;               // index in Score->page()s
