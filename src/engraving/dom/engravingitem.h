@@ -495,7 +495,7 @@ public:
 
         Autoplace autoplace;
 
-        void reset()
+        virtual void reset()
         {
             m_bbox.reset();
         }

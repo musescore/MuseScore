@@ -136,8 +136,6 @@ public:
     void resetProperty(Pid id) override;
     Sid getPropertyStyle(Pid id) const override;
 
-    bool up() const { return m_up; }
-    void setUp(bool val);
     void setDirection(DirectionV d) { m_direction = d; }
     DirectionV direction() const { return m_direction; }
 
@@ -178,8 +176,52 @@ public:
 
     struct LayoutData : public EngravingItem::LayoutData
     {
+        void reset() override
+        {
+            EngravingItem::LayoutData::reset();
+            m_up.reset();
+            m_symId.reset();
+        }
+
+        bool isSetUp() const { return m_up.has_value(); }
+        bool up(LD_ACCESS mode = LD_ACCESS::CHECK) const
+        {
+            if (!m_up.has_value()) {
+                if (mode == LD_ACCESS::CHECK) {
+                    //LOGE() << "BAD ACCESS to bbox (not set)";
+                }
+                return true;
+            }
+            return m_up.value();
+        }
+
+        void setUp(bool val) { m_up = std::make_optional<bool>(val); }
+
+        bool isSetSymId() const { return m_symId.has_value(); }
+        SymId symId(LD_ACCESS mode = LD_ACCESS::CHECK) const
+        {
+            if (!m_symId.has_value()) {
+                if (mode == LD_ACCESS::CHECK) {
+                    //LOGE() << "BAD ACCESS to bbox (not set)";
+                }
+                return SymId::noSym;
+            }
+            return m_symId.value();
+        }
+
+        void setSymId(SymId val) { m_symId = std::make_optional<SymId>(val); }
+
+    private:
+        std::optional<bool> m_up;
+        std::optional<SymId> m_symId;
     };
     DECLARE_LAYOUTDATA_METHODS(Articulation);
+
+    void setUp(bool val);
+
+    //! --- DEPRECATED ---
+    bool up() const { return layoutData()->up(); }
+    //! ------------------
 
 protected:
     friend class mu::engraving::Factory;
@@ -209,7 +251,6 @@ private:
 
     ArticulationAnchor m_anchor = ArticulationAnchor::AUTO;
 
-    bool m_up = true;
     OrnamentStyle m_ornamentStyle = OrnamentStyle::DEFAULT;       // for use in ornaments such as trill
     bool m_playArticulation = true;
 

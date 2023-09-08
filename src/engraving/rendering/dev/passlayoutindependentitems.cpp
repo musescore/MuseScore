@@ -36,6 +36,7 @@ void PassLayoutIndependentItems::doRun(Score* score, LayoutContext& ctx)
 
 void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
 {
+    //! NOTE These items are independent
     switch (item->type()) {
     case ElementType::ACCIDENTAL:
     case ElementType::ACTION_ICON:

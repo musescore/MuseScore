@@ -155,6 +155,17 @@
 #include "tremololayout.h"
 #include "tupletlayout.h"
 
+#ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS
+
+#define LD_CONDITION(val, name) \
+    if (!val) { \
+        LOGE() << "BAD ACCESS, not set" << name; \
+    } \
+
+#else
+#define LD_CONDITION(val, name)
+#endif
+
 using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
@@ -617,7 +628,9 @@ void TLayout::layout(const Articulation* item, Articulation::LayoutData* ldata)
     RectF bbox;
 
     if (item->textType() == ArticulationTextType::NO_TEXT) {
-        bbox = item->symBbox(item->symId());
+        //! NOTE Must already be set previously
+        LD_CONDITION(ldata->isSetSymId(), "symId");
+        bbox = item->symBbox(ldata->symId());
     } else {
         Font scaledFont(item->font());
         scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
