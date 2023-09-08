@@ -35,6 +35,7 @@
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 #include "rendering/iscorerenderer.h"
+#include "rendering/ld_access.h"
 
 #include "types/fraction.h"
 #include "types/symid.h"
@@ -121,13 +122,6 @@ enum class KerningType
     KERNING_UNTIL_ORIGIN,
     ALLOW_COLLISION,
     NOT_SET,
-};
-
-//! NOTE Enum for detect layoutdata bad access errors
-enum class LD_ACCESS {
-    CHECK = 0,          // should be correct; assert if still not
-    BAD,                // known to be bad; don’t assert, we’ll fix it later
-    MAYBE_NOTINITED     // in this case it’s okay if we access it before it’s been inited
 };
 
 class EngravingItemList : public std::list<EngravingItem*>
@@ -500,7 +494,7 @@ public:
             m_bbox.reset();
         }
 
-        bool isValid() const { return m_bbox ? true : false; }
+        bool isValid() const { return m_bbox.has_value(); }
 
         bool isSkipDraw() const { return m_isSkipDraw; }
         void setIsSkipDraw(bool val) { m_isSkipDraw = val; }
@@ -519,24 +513,8 @@ public:
         void moveY(double y) { doSetPos(m_pos.x(), m_pos.y() + y); }
 
         void resetBbox() { m_bbox.reset(); }
-        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const
-        {
-            if (!m_bbox.has_value()) {
-#ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS
-                if (mode == LD_ACCESS::CHECK) {
-                    LOGE() << "BAD ACCESS to bbox (not set)";
-                }
-#else
-                UNUSED(mode);
-#endif
-                static const RectF _dummy;
-                return _dummy;
-            }
-
-            return m_bbox.value();
-        }
-
-        void setBbox(const mu::RectF& r) { m_bbox = std::make_optional<RectF>(r); }
+        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bbox.value(mode); }
+        void setBbox(const mu::RectF& r) { m_bbox.set_value(r); }
         void setBbox(double x, double y, double w, double h) { mutBbox().setRect(x, y, w, h); }
         void addBbox(const mu::RectF& r) { mutBbox().unite(r); }
         void setHeight(double v) { mutBbox().setHeight(v); }
@@ -551,18 +529,12 @@ public:
             m_pos.setY(y);
         }
 
-        mu::RectF& mutBbox()
-        {
-            if (!m_bbox) {
-                m_bbox = std::make_optional<RectF>();
-            }
-            return m_bbox.value();
-        }
+        mu::RectF& mutBbox() { return m_bbox.mut_value(); }
 
         bool m_isSkipDraw = false;
         double m_mag = 1.0;                     // standard magnification (derived value)
         PointF m_pos;                           // Reference position, relative to _parent, set by autoplace
-        std::optional<RectF> m_bbox;            // Bounding box relative to _pos + _offset
+        ld_field<RectF> m_bbox = "bbox";        // Bounding box relative to _pos + _offset
     };
 
     const LayoutData* layoutData() const;

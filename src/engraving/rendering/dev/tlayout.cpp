@@ -146,6 +146,8 @@
 
 #include "../dom/whammybar.h"
 
+#include "../ld_access.h"
+
 #include "autoplace.h"
 #include "arpeggiolayout.h"
 #include "beamlayout.h"
@@ -154,17 +156,6 @@
 #include "slurtielayout.h"
 #include "tremololayout.h"
 #include "tupletlayout.h"
-
-#ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS
-
-#define LD_CONDITION(val, name) \
-    if (!val) { \
-        LOGE() << "BAD ACCESS, not set" << name; \
-    } \
-
-#else
-#define LD_CONDITION(val, name)
-#endif
 
 using namespace mu::draw;
 using namespace mu::engraving;
