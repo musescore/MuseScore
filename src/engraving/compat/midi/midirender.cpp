@@ -214,7 +214,6 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
-    bool useDrumSet = note->part()->instrument(note->tick())->useDrumset();
 
     events[params.channel].insert(std::pair<int, NPlayEvent>(std::max(0, params.onTime - params.offset), ev));
     // adds portamento for continuous glissando
