@@ -304,7 +304,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
 
         const MeasureBase* mb = ctx.state().curMeasure();
         bool lineBreak  = false;
-        switch (ctx.conf().layoutMode()) {
+        switch (ctx.conf().viewMode()) {
         case LayoutMode::PAGE:
         case LayoutMode::SYSTEM:
             lineBreak = mb->pageBreak() || mb->lineBreak() || mb->sectionBreak();

@@ -113,7 +113,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
     TRACEFUNC;
 
     const double slb = ctx.conf().styleMM(Sid::staffLowerBorder);
-    bool breakPages = ctx.conf().layoutMode() != LayoutMode::SYSTEM;
+    bool breakPages = ctx.conf().viewMode() != LayoutMode::SYSTEM;
     double footerExtension = ctx.state().page()->footerExtension();
     double headerExtension = ctx.state().page()->headerExtension();
     double headerFooterPadding = ctx.conf().styleMM(Sid::staffHeaderFooterPadding);
@@ -426,13 +426,13 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     checkDivider(ctx, false, lastSystem, 0.0, true);       // remove
 
     if (sList.empty() || MScore::noVerticalStretch || ctx.conf().isVerticalSpreadEnabled()
-        || ctx.conf().layoutMode() == LayoutMode::SYSTEM) {
-        if (ctx.conf().layoutMode() == LayoutMode::FLOAT) {
+        || ctx.conf().viewMode() == LayoutMode::SYSTEM) {
+        if (ctx.conf().viewMode() == LayoutMode::FLOAT) {
             double y = restHeight * .5;
             for (System* system : page->systems()) {
                 system->move(PointF(0.0, y));
             }
-        } else if ((ctx.conf().layoutMode() != LayoutMode::SYSTEM) && ctx.conf().isVerticalSpreadEnabled()) {
+        } else if ((ctx.conf().viewMode() != LayoutMode::SYSTEM) && ctx.conf().isVerticalSpreadEnabled()) {
             distributeStaves(ctx, page, footerPadding);
         }
 
