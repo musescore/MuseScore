@@ -1102,8 +1102,7 @@ int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrume
     for (const Part* part : score()->parts()) {
         const Instrument* partInstrument = part->instrument();
 
-        if (partInstrument->id() == instrument.id
-            && partInstrument->trait().name == instrument.trait.name) {
+        if (partInstrument->id() == instrument.id) {
             ++count;
         }
     }
@@ -1115,7 +1114,7 @@ int NotationParts::resolveNewInstrumentNumber(const InstrumentTemplate& instrume
     for (const PartInstrument& partInstrument: allNewInstruments) {
         const InstrumentTemplate& templ = partInstrument.instrumentTemplate;
 
-        if (templ.id == instrument.id && templ.trait.name == instrument.trait.name) {
+        if (templ.id == instrument.id) {
             ++count;
         }
     }
