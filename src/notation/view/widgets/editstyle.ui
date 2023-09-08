@@ -6666,7 +6666,7 @@ By default, they will be placed such as that their right end are at the same lev
                <item row="2" column="0" colspan="2">
                 <widget class="QGroupBox" name="groupBox_tuplets_horizontalDist">
                  <property name="title">
-                  <string>Horizontal Distance from Notes</string>
+                  <string>Horizontal distance from notes</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_17">
                   <item row="1" column="1">
