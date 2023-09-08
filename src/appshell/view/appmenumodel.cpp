@@ -185,9 +185,7 @@ MenuItem* AppMenuModel::makeEditMenu()
 MenuItem* AppMenuModel::makeViewMenu()
 {
     MenuItemList viewItems {
-#ifndef Q_OS_MAC
         makeMenuItem("fullscreen"),
-#endif
         makeMenuItem("toggle-palettes"),
         makeMenuItem("masterpalette"),
         makeMenuItem("toggle-instruments"),

@@ -29,7 +29,12 @@
 using namespace mu::shortcuts;
 using namespace mu::framework;
 
+#ifndef Q_OS_MAC
 static const mu::io::path_t SHORTCUTS_FILE_NAME("/shortcuts.xml");
+#else
+static const mu::io::path_t SHORTCUTS_FILE_NAME("/shortcuts-Mac.xml");
+#endif
+
 static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data" + SHORTCUTS_FILE_NAME);
 
 static const std::string MIDIMAPPINGS_FILE_NAME("/midi_mappings.xml");
