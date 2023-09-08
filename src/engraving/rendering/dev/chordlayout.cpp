@@ -2742,8 +2742,20 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
 void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes,
                                      std::vector<int>& anchoredDots)
 {
-    bool hasVoices = c->measure()->hasVoices(c->staffIdx(), c->tick(), c->ticks());
-    if (!hasVoices) {
+    bool hasVoices = c->measure()->hasVoices(c->vStaffIdx(), c->tick(), c->ticks());
+    bool hasCrossNotes = c->staffMove();
+    Measure* m = c->measure();
+    if (!hasCrossNotes) {
+        for (size_t i = (c->vStaffIdx() + 1) * VOICES; i < (c->vStaffIdx() + 2) * VOICES; ++i) {
+            if (Chord* voiceChord = m->findChord(c->tick(), i)) {
+                if (voiceChord->vStaffIdx() == c->vStaffIdx()) {
+                    hasCrossNotes = true;
+                    break;
+                }
+            }
+        }
+    }
+    if (!hasVoices && !hasCrossNotes) {
         // only this voice, so topDownNotes is just the notes in the chord
         for (Note* note : c->notes()) {
             if (note->line() & 1) {
@@ -2765,11 +2777,16 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
         // Get a list of notes in this staff that adjust dots from top down,
         // bottom up, and also start our locked-in dot list by adding all lines where dots are
         // guaranteed
-        Measure* m = c->measure();
-        size_t firstVoice = c->track() - c->voice();
-        for (size_t i = firstVoice; i < firstVoice + VOICES; ++i) {
+        size_t firstVoice = c->staffMove() ? c->track() : c->track() - c->voice();
+        // Check staff below for moved chords
+        size_t lastVoice = (c->vStaffIdx() + 2) * VOICES;
+        for (size_t i = firstVoice; i < lastVoice; ++i) {
             if (Chord* voiceChord = m->findChord(c->tick(), i)) {
-                bool startFromTop = !((voiceChord->voice() & 1) && !voiceChord->up());
+                // Skip chords on adjacent staves which have not been moved to this staff
+                if (voiceChord->vStaffIdx() != c->vStaffIdx()) {
+                    continue;
+                }
+                bool startFromTop = !((voiceChord->voice() & 1) && !voiceChord->up()) && voiceChord->staffMove() != -1;
                 if (startFromTop) {
                     for (Note* note : voiceChord->notes()) {
                         if (note->line() & 1) {
