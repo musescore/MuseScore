@@ -1640,6 +1640,13 @@ libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
     return meiOctave;
 }
 
+libmei::Ornam Convert::ornamToMEI(const engraving::Ornament* ornament)
+{
+    libmei::Ornam meiOrnam;
+
+    return meiOrnam;
+}
+
 Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
                                            bool& warning)
 {
