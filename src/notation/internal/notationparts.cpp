@@ -624,7 +624,7 @@ void NotationParts::replaceDrumset(const InstrumentKey& instrumentKey, const Dru
 
     startEdit();
 
-    score()->undo(new mu::engraving::ChangeDrumset(instrument, &newDrumset));
+    score()->undo(new mu::engraving::ChangeDrumset(instrument, &newDrumset, part));
 
     apply();
 

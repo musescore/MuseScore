@@ -2821,6 +2821,10 @@ void ChangeDrumset::flip(EditData*)
     Drumset d = *instrument->drumset();
     instrument->setDrumset(&drumset);
     drumset = d;
+
+    if (part->staves().size() > 0) {
+        part->score()->setLayout(Fraction(0, 1), part->score()->endTick(), part->staves().front()->idx(), part->staves().back()->idx());
+    }
 }
 
 //---------------------------------------------------------
