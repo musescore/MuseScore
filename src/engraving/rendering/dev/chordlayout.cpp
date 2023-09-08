@@ -59,7 +59,6 @@
 #include "dom/utils.h"
 
 #include "tlayout.h"
-#include "layoutindependent.h"
 #include "arpeggiolayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
@@ -757,7 +756,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
         }
 
         bool bottom = !a->up();      // true: articulation is below chord;  false: articulation is above chord
-        LayoutIndependent::layoutItem(a, ctx);     // must be done after assigning direction, or else symId is not reliable
+        TLayout::layoutItem(a, ctx);     // must be done after assigning direction, or else symId is not reliable
 
         bool headSide = bottom == item->up();
         double y = 0.0;
@@ -1028,7 +1027,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             stacc = nullptr;
         }
         if (!a->layoutCloseToNote()) {
-            LayoutIndependent::layoutItem(a, ctx);
+            TLayout::layoutItem(a, ctx);
             if (a->up()) {
                 a->setPos(!item->up() || !a->isBasicArticulation() ? headSideX : stemSideX, staffTopY + kearnHeight);
                 if (a->visible()) {
@@ -2327,7 +2326,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
             prevLine = note->line();
             prevSubtype = ac->subtype();
             ac->computeMag();
-            LayoutIndependent::layoutItem(ac, ctx);
+            TLayout::layoutItem(ac, ctx);
             if (!ac->visible() || note->fixed()) {
                 ac->setPos(ac->layoutData()->bbox().x() - ac->width(), 0.0);
             } else {

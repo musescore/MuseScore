@@ -24,17 +24,21 @@
 
 #include "layoutcontext.h"
 
-#include "dom/textbase.h"
+#include "dom/accidental.h"
+#include "dom/actionicon.h"
+#include "dom/articulation.h"
+
 #include "dom/measurenumberbase.h"
+
+#include "dom/textbase.h"
+
+#include "dom/ornament.h"
 
 namespace mu::engraving {
 class EngravingItem;
 
-class Accidental;
-class ActionIcon;
 class Ambitus;
 class Arpeggio;
-class Articulation;
 
 class BagpipeEmbellishment;
 class BarLine;
@@ -106,8 +110,6 @@ class MMRestRange;
 class Note;
 class NoteDot;
 
-class Ornament;
-
 class Ottava;
 class OttavaSegment;
 
@@ -174,8 +176,11 @@ public:
 
     static void layoutItem(EngravingItem* item, LayoutContext& ctx);  // factory
 
+    static void layout(const Accidental* item, Accidental::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layout(const ActionIcon* item, ActionIcon::LayoutData* ldata);
     static void layout(Ambitus* item, LayoutContext& ctx);
     static void layout(Arpeggio* item, LayoutContext& ctx);
+    static void layout(const Articulation* item, Articulation::LayoutData* ldata);
 
     static void layout(BarLine* item, LayoutContext& ctx);
     static void layout2(BarLine* item, LayoutContext& ctx);
@@ -254,6 +259,7 @@ public:
     static void layout(Note* item, LayoutContext& ctx);
     static void layout(NoteDot* item, LayoutContext& ctx);
 
+    static void layout(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx);
 
     static void layout(Ottava* item, LayoutContext& ctx);
