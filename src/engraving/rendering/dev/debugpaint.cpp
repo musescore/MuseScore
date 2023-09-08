@@ -71,7 +71,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
     if (item->isType(ElementType::SEGMENT)) {
         if (RealIsNull(bbox.height())) {
             bbox.setHeight(10.0);
-            LOGW() << "Segment bbox height is null";
+            LOGD() << "Segment bbox height is null";
         }
     }
 

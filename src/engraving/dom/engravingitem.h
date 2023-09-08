@@ -520,9 +520,13 @@ public:
         const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const
         {
             if (!m_bbox.has_value()) {
+#ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS
                 if (mode == LD_ACCESS::CHECK) {
                     LOGE() << "BAD ACCESS to bbox (not set)";
                 }
+#else
+                UNUSED(mode);
+#endif
                 static const RectF _dummy;
                 return _dummy;
             }
