@@ -187,6 +187,8 @@ public:
     static void octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning);
     static libmei::Octave octaveToMEI(const engraving::Ottava* ottava);
 
+    static libmei::Ornam ornamToMEI(const engraving::Ornament* ornament);
+
     struct PitchStruct {
         int pitch = 0;
         int tpc2 = 0;

@@ -44,6 +44,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/ottava.h"
+#include "engraving/dom/ornament.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/rest.h"
@@ -1560,6 +1561,25 @@ bool MeiExporter::writeOctave(const Ottava* ottava, const std::string& startid)
 
     // Add the node to the map of open control events
     this->addNodeToOpenControlEvents(octaveNode, ottava, startid);
+
+    return true;
+}
+
+/**
+ * Write a ornam (ornament).
+ */
+
+bool MeiExporter::writeOrnam(const Ornament* ornament, const std::string& startid)
+{
+    IF_ASSERT_FAILED(ornament) {
+        return false;
+    }
+
+    pugi::xml_node octaveNode = m_currentNode.append_child();
+    libmei::Ornam meiOrnam = Convert::ornamToMEI(ornament);
+    meiOrnam.SetStartid(startid);
+
+    meiOrnam.Write(octaveNode, this->getXmlIdFor(ornament, 'o'));
 
     return true;
 }
