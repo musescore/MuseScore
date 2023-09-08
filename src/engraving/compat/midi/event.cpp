@@ -239,7 +239,7 @@ void EventsHolder::mergePitchWheelEvents(EventsHolder& pitchWheelEvents)
                     && pwEvent->second.type() == ME_PITCHBEND) {
                     PitchWheelSpecs specs;
                     NPlayEvent pwReset(ME_PITCHBEND, i, specs.mLimit % 128, specs.mLimit / 128);
-                    _channels[i].insert(std::pair<int, NPlayEvent>(tick - 1, pwReset));
+                    _channels[i].insert(std::pair<int, NPlayEvent>(((tick - pwEvent->first) / 2) + pwEvent->first, pwReset));
                 }
             }
         }

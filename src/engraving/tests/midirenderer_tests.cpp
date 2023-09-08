@@ -151,7 +151,7 @@ TEST_F(MidiRenderer_Tests, mergePitchWheelEvents)
     noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(200, note2_ON));
     noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(300, note2_OFF));
     noteEvents.mergePitchWheelEvents(pitchWheelEvents);
-    EXPECT_NE(noteEvents[DEFAULT_CHANNEL].find(199), noteEvents[DEFAULT_CHANNEL].end());
+    EXPECT_NE(noteEvents[DEFAULT_CHANNEL].find(145), noteEvents[DEFAULT_CHANNEL].end());
 }
 
 TEST_F(MidiRenderer_Tests, subscriptOperator)
