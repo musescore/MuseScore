@@ -106,7 +106,7 @@ int LayoutConfiguration::pageNumberOffset() const
 
 bool LayoutConfiguration::isVerticalSpreadEnabled() const
 {
-    return styleB(Sid::enableVerticalSpread) && (layoutMode() != LayoutMode::SYSTEM);
+    return styleB(Sid::enableVerticalSpread) && (viewMode() != LayoutMode::SYSTEM);
 }
 
 double LayoutConfiguration::maxSystemDistance() const

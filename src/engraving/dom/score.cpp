@@ -5541,6 +5541,16 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
     m_engravingFont = engravingFonts()->fontByName(style().value(Sid::MusicalSymbolFont).value<String>().toStdString());
     m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, style().spatium() / SPATIUM20);
 
+    if (this->cmdState().layoutFlags & LayoutFlag::REBUILD_MIDI_MAPPING) {
+        if (this->isMaster()) {
+            this->masterScore()->rebuildMidiMapping();
+        }
+    }
+
+    if (this->cmdState().layoutFlags & LayoutFlag::FIX_PITCH_VELO) {
+        this->updateVelo();
+    }
+
     renderer()->layoutScore(this, st, et);
 
     if (m_resetAutoplace) {

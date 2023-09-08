@@ -74,7 +74,7 @@ class LayoutConfiguration
 public:
     LayoutConfiguration(IGetScoreInternal* s);
 
-    LayoutMode layoutMode() const { return options().mode; }
+    LayoutMode viewMode() const { return options().mode; }
     bool isMode(LayoutMode m) const { return options().isMode(m); }
     bool isLineMode() const { return isMode(LayoutMode::LINE); }
     bool isLinearMode() const { return options().isLinearMode(); }

@@ -19,22 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCORELAYOUT_DEV_H
-#define MU_ENGRAVING_SCORELAYOUT_DEV_H
+#ifndef MU_ENGRAVING_SCOREPAGEVIEWLAYOUT_DEV_H
+#define MU_ENGRAVING_SCOREPAGEVIEWLAYOUT_DEV_H
 
-#include "types/fraction.h"
-
-namespace mu::engraving {
-class Score;
-}
+#include "layoutcontext.h"
 
 namespace mu::engraving::rendering::dev {
-class ScoreLayout
+class ScorePageViewLayout
 {
 public:
 
-    static void layoutRange(Score* score, const Fraction& st, const Fraction& et);
+    static void layoutPageView(Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick);
+
+private:
+    static void doLayout(LayoutContext& ctx);
 };
 }
 
-#endif // MU_ENGRAVING_SCORELAYOUT_DEV_H
+#endif // MU_ENGRAVING_SCOREPAGEVIEWLAYOUT_DEV_H
