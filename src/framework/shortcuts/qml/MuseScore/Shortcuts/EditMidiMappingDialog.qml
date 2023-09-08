@@ -62,7 +62,7 @@ StyledDialogView {
             spacing: 24
 
             Row {
-                width: parent.width
+                anchors.horizontalCenter: parent.horizontalCenter
 
                 spacing: 8
 
