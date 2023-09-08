@@ -184,36 +184,16 @@ public:
         }
 
         bool isSetUp() const { return m_up.has_value(); }
-        bool up(LD_ACCESS mode = LD_ACCESS::CHECK) const
-        {
-            if (!m_up.has_value()) {
-                if (mode == LD_ACCESS::CHECK) {
-                    //LOGE() << "BAD ACCESS to bbox (not set)";
-                }
-                return true;
-            }
-            return m_up.value();
-        }
-
-        void setUp(bool val) { m_up = std::make_optional<bool>(val); }
+        bool up(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_up.value(mode); }
+        void setUp(bool val) { m_up.set_value(val); }
 
         bool isSetSymId() const { return m_symId.has_value(); }
-        SymId symId(LD_ACCESS mode = LD_ACCESS::CHECK) const
-        {
-            if (!m_symId.has_value()) {
-                if (mode == LD_ACCESS::CHECK) {
-                    //LOGE() << "BAD ACCESS to bbox (not set)";
-                }
-                return SymId::noSym;
-            }
-            return m_symId.value();
-        }
-
-        void setSymId(SymId val) { m_symId = std::make_optional<SymId>(val); }
+        SymId symId(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_symId.value(mode); }
+        void setSymId(SymId val) { m_symId.set_value(val); }
 
     private:
-        std::optional<bool> m_up;
-        std::optional<SymId> m_symId;
+        ld_field<bool> m_up = { "up", true };
+        ld_field<SymId> m_symId = { "symId", SymId::noSym };
     };
     DECLARE_LAYOUTDATA_METHODS(Articulation);
 
