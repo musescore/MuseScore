@@ -53,7 +53,11 @@ bool SpannerFilter::isPlayable(const EngravingItem* item, const RenderingContext
 int SpannerFilter::spannerActualDurationTicks(const Spanner* spanner, const int nominalDurationTicks)
 {
     if (spanner->type() == ElementType::TRILL) {
-        return spanner->endSegment()->tick().ticks() - spanner->tick().ticks() - 1;
+        const Segment* endSegment = spanner->endSegment();
+        if (endSegment) {
+            return endSegment->tick().ticks() - spanner->tick().ticks() - 1;
+        }
+        LOGW("Trill without `endSegment()`, ignoring it");
     }
 
     if (spanner->type() == ElementType::PEDAL) {
