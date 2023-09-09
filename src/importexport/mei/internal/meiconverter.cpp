@@ -221,6 +221,27 @@ libmei::data_ACCIDENTAL_GESTURAL Convert::accidGesToMEI(const engraving::Acciden
     }
 }
 
+engraving::ArticulationAnchor Convert::anchorFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning)
+{
+    warning = false;
+    switch (meiPlace) {
+    case (libmei::STAFFREL_above): return engraving::ArticulationAnchor::TOP;
+    case (libmei::STAFFREL_below): return engraving::ArticulationAnchor::BOTTOM;
+    default:
+        return engraving::ArticulationAnchor::AUTO;
+    }
+}
+
+libmei::data_STAFFREL Convert::anchorToMEI(engraving::ArticulationAnchor anchor)
+{
+    switch (anchor) {
+    case (engraving::ArticulationAnchor::TOP): return libmei::STAFFREL_above;
+    case (engraving::ArticulationAnchor::BOTTOM): return libmei::STAFFREL_below;
+    default:
+        return libmei::STAFFREL_NONE;
+    }
+}
+
 engraving::BarLineType Convert::barlineFromMEI(const libmei::data_BARRENDITION meiBarline, bool& warning)
 {
     warning = false;
@@ -1605,6 +1626,85 @@ libmei::Mordent Convert::mordentToMEI(const engraving::Ornament* ornament)
 {
     libmei::Mordent meiMordent;
 
+    // @accidlower
+    if (ornament->accidentalBelow()) {
+        meiMordent.SetAccidlower(Convert::accidToMEI(ornament->accidentalBelow()->accidentalType()));
+    }
+
+    // @accidupper
+    if (ornament->accidentalAbove()) {
+        meiMordent.SetAccidupper(Convert::accidToMEI(ornament->accidentalAbove()->accidentalType()));
+    }
+
+    // @form
+    switch (ornament->symId()) {
+    case (engraving::SymId::ornamentMordent):
+    case engraving::SymId::ornamentPrallMordent:
+    case engraving::SymId::ornamentUpMordent:
+    case engraving::SymId::ornamentDownMordent:
+        meiMordent.SetForm(libmei::mordentLog_FORM_lower);
+        break;
+    case engraving::SymId::ornamentShortTrill:
+    case engraving::SymId::ornamentTremblement:
+    case engraving::SymId::ornamentUpPrall:
+    case engraving::SymId::ornamentPrecompMordentUpperPrefix:
+    case engraving::SymId::ornamentPrallDown:
+    case engraving::SymId::ornamentPrallUp:
+    case engraving::SymId::ornamentLinePrall:
+        meiMordent.SetForm(libmei::mordentLog_FORM_upper);
+        break;
+    default:
+        break;
+    }
+
+    // @long
+    switch (ornament->symId()) {
+    case engraving::SymId::ornamentTremblement:
+    case engraving::SymId::ornamentPrallMordent:
+    case engraving::SymId::ornamentUpPrall:
+    case engraving::SymId::ornamentPrecompMordentUpperPrefix:
+    case engraving::SymId::ornamentUpMordent:
+    case engraving::SymId::ornamentDownMordent:
+    case engraving::SymId::ornamentPrallDown:
+    case engraving::SymId::ornamentPrallUp:
+    case engraving::SymId::ornamentLinePrall:
+        meiMordent.SetLong(libmei::BOOLEAN_true);
+        break;
+    default:
+        break;
+    }
+
+    // glyph.name
+    bool smufl = true;
+    switch (ornament->symId()) {
+    case (engraving::SymId::ornamentMordent):
+    case engraving::SymId::ornamentShortTrill:
+    case engraving::SymId::ornamentTremblement:
+    case engraving::SymId::ornamentPrallMordent:
+        smufl = false;
+        break;
+    default:
+        break;
+    }
+    if (smufl) {
+        // For glyph with composite glyphs in MuseScore use the values in the Convert map
+        if (s_mordentGlyphs.count(ornament->symId())) {
+            meiMordent.SetGlyphName(s_mordentGlyphs.at(ornament->symId()));
+        } else {
+            AsciiStringView glyphName = engraving::SymNames::nameForSymId(ornament->symId());
+            meiMordent.SetGlyphName(glyphName.ascii());
+        }
+        meiMordent.SetGlyphAuth("smufl");
+    }
+
+    // @place
+    if (ornament->propertyFlags(engraving::Pid::ARTICULATION_ANCHOR) == engraving::PropertyFlags::UNSTYLED) {
+        meiMordent.SetPlace(Convert::anchorToMEI(ornament->anchor()));
+    }
+
+    // @type
+    meiMordent.SetType(Convert::ornamintervalToMEI(ornament).toStdString());
+
     return meiMordent;
 }
 
@@ -1699,7 +1799,44 @@ libmei::Ornam Convert::ornamToMEI(const engraving::Ornament* ornament)
 {
     libmei::Ornam meiOrnam;
 
+    // @accidlower
+    if (ornament->accidentalBelow()) {
+        meiOrnam.SetAccidlower(Convert::accidToMEI(ornament->accidentalBelow()->accidentalType()));
+    }
+
+    // @accidupper
+    if (ornament->accidentalAbove()) {
+        meiOrnam.SetAccidupper(Convert::accidToMEI(ornament->accidentalAbove()->accidentalType()));
+    }
+
+    // @place
+    if (ornament->propertyFlags(engraving::Pid::ARTICULATION_ANCHOR) == engraving::PropertyFlags::UNSTYLED) {
+        meiOrnam.SetPlace(Convert::anchorToMEI(ornament->anchor()));
+    }
+
+    // @type
+    meiOrnam.SetType(Convert::ornamintervalToMEI(ornament).toStdString());
+
     return meiOrnam;
+}
+
+String Convert::ornamintervalToMEI(const engraving::Ornament* ornament)
+{
+    // @type
+    StringList typeList;
+
+    if (ornament->hasIntervalAbove() && (ornament->intervalAbove().type != engraving::IntervalType::AUTO)) {
+        // Since a , is not valid in a type attribute, replace with :
+        String intervalStr = engraving::TConv::toXml(ornament->intervalAbove()).replace(u',', u':');
+        typeList << String("%1%2").arg(String(INTERVAL_ABOVE)).arg(intervalStr);
+    }
+
+    if (ornament->hasIntervalBelow() && (ornament->intervalBelow().type != engraving::IntervalType::AUTO)) {
+        String intervalStr = engraving::TConv::toXml(ornament->intervalBelow()).replace(u',', u':');
+        typeList << String("%1%2").arg(String(INTERVAL_BELOW)).arg(intervalStr);
+    }
+
+    return typeList.join(u" ");
 }
 
 Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
@@ -2258,6 +2395,31 @@ libmei::Trill Convert::trillToMEI(const engraving::Ornament* ornament)
 {
     libmei::Trill meiTrill;
 
+    // @accidlower
+    if (ornament->accidentalBelow()) {
+        meiTrill.SetAccidlower(Convert::accidToMEI(ornament->accidentalBelow()->accidentalType()));
+    }
+
+    // @accidupper
+    if (ornament->accidentalAbove()) {
+        meiTrill.SetAccidupper(Convert::accidToMEI(ornament->accidentalAbove()->accidentalType()));
+    }
+
+    // @glyph.name
+    if (ornament->symId() != engraving::SymId::ornamentTrill) {
+        AsciiStringView glyphName = engraving::SymNames::nameForSymId(ornament->symId());
+        meiTrill.SetGlyphName(glyphName.ascii());
+        meiTrill.SetGlyphAuth("smufl");
+    }
+
+    // @place
+    if (ornament->propertyFlags(engraving::Pid::ARTICULATION_ANCHOR) == engraving::PropertyFlags::UNSTYLED) {
+        meiTrill.SetPlace(Convert::anchorToMEI(ornament->anchor()));
+    }
+
+    // @type
+    meiTrill.SetType(Convert::ornamintervalToMEI(ornament).toStdString());
+
     return meiTrill;
 }
 
@@ -2336,6 +2498,41 @@ libmei::Tuplet Convert::tupletToMEI(const engraving::Tuplet* tuplet)
 libmei::Turn Convert::turnToMEI(const engraving::Ornament* ornament)
 {
     libmei::Turn meiTurn;
+
+    // @accidlower
+    if (ornament->accidentalBelow()) {
+        meiTurn.SetAccidlower(Convert::accidToMEI(ornament->accidentalBelow()->accidentalType()));
+    }
+
+    // @accidupper
+    if (ornament->accidentalAbove()) {
+        meiTurn.SetAccidupper(Convert::accidToMEI(ornament->accidentalAbove()->accidentalType()));
+    }
+
+    // @form
+    switch (ornament->symId()) {
+    case (engraving::SymId::ornamentTurn):
+    case (engraving::SymId::ornamentTurnSlash): meiTurn.SetForm(libmei::turnLog_FORM_upper);
+        break;
+    case (engraving::SymId::ornamentTurnInverted): meiTurn.SetForm(libmei::turnLog_FORM_lower);
+        break;
+    default: break;
+    }
+
+    // @glyph.name
+    if (ornament->symId() == engraving::SymId::ornamentTurnSlash) {
+        AsciiStringView glyphName = engraving::SymNames::nameForSymId(ornament->symId());
+        meiTurn.SetGlyphName(glyphName.ascii());
+        meiTurn.SetGlyphAuth("smufl");
+    }
+
+    // @place
+    if (ornament->propertyFlags(engraving::Pid::ARTICULATION_ANCHOR) == engraving::PropertyFlags::UNSTYLED) {
+        meiTurn.SetPlace(Convert::anchorToMEI(ornament->anchor()));
+    }
+
+    // @type
+    meiTurn.SetType(Convert::ornamintervalToMEI(ornament).toStdString());
 
     return meiTurn;
 }
