@@ -39,6 +39,7 @@ FocusScope {
     property alias paintView: notationView
 
     property alias isNavigatorVisible: notationNavigator.visible
+    property alias isBraillePanelVisible: brailleViewLoader.active
     property alias isMainView: notationView.isMainView
 
     property alias defaultNavigationControl: fakeNavCtrl
@@ -198,15 +199,22 @@ FocusScope {
                 }
             }
 
-            BrailleView {
-                id: brailleView
+            Loader {
+                id: brailleViewLoader
+
+                readonly property int navigationOrder: popUpLoader.navigationOrderEnd + 1
+
+                active: false
+                visible: active
 
                 SplitView.fillWidth: true
                 SplitView.preferredHeight: 50
                 SplitView.minimumHeight: 30
 
-                navigationPanel.section: navSec
-                navigationPanel.order: popUpLoader.navigationOrderEnd + 1
+                sourceComponent: BrailleView {
+                    navigationPanel.section: navSec
+                    navigationPanel.order: brailleViewLoader.navigationOrder
+                }
             }
 
             Component {
@@ -263,7 +271,7 @@ FocusScope {
             Layout.fillWidth: true
 
             navigationPanel.section: navSec
-            navigationOrderStart: brailleView.navigationPanel.order + 1
+            navigationOrderStart: brailleViewLoader.navigationOrder + 1
 
             onClosed: {
                 fakeNavCtrl.requestActive()
