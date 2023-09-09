@@ -56,6 +56,9 @@ enum ElisionType {
     ElisionLast
 };
 
+// SMuFL in @glyph.auth
+#define SMUFL_AUTH "smufl"
+
 // The @type attribute for <pb> and <sb>
 #define BREAK_TYPE "mscore-manual"
 // The @type attribute prefix for indicating beam in <chord>, <note> or <rest>

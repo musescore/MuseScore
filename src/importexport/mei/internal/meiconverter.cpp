@@ -479,7 +479,7 @@ void Convert::breathFromMEI(engraving::Breath* breath, const libmei::Breath& mei
     warning = false;
 
     // @glyhp.name
-    bool smufl = (meiBreath.HasGlyphAuth() && (meiBreath.GetGlyphAuth() == "smufl"));
+    bool smufl = (meiBreath.HasGlyphAuth() && (meiBreath.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::breathMarkComma;
 
@@ -517,7 +517,7 @@ libmei::Breath Convert::breathToMEI(const engraving::Breath* breath)
     if (smufl) {
         AsciiStringView glyphName = engraving::SymNames::nameForSymId(breath->symId());
         meiBreath.SetGlyphName(glyphName.ascii());
-        meiBreath.SetGlyphAuth("smufl");
+        meiBreath.SetGlyphAuth(SMUFL_AUTH);
     }
 
     return meiBreath;
@@ -528,7 +528,7 @@ void Convert::caesuraFromMEI(engraving::Breath* breath, const libmei::Caesura& m
     warning = false;
 
     // @glyhp.name
-    bool smufl = (meiCeasura.HasGlyphAuth() && (meiCeasura.GetGlyphAuth() == "smufl"));
+    bool smufl = (meiCeasura.HasGlyphAuth() && (meiCeasura.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::caesura;
 
@@ -568,7 +568,7 @@ libmei::Caesura Convert::caesuraToMEI(const engraving::Breath* breath)
     if (smufl) {
         AsciiStringView glyphName = engraving::SymNames::nameForSymId(breath->symId());
         meiCaesura.SetGlyphName(glyphName.ascii());
-        meiCaesura.SetGlyphAuth("smufl");
+        meiCaesura.SetGlyphAuth(SMUFL_AUTH);
     }
 
     return meiCaesura;
@@ -1055,7 +1055,7 @@ void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata&
     bool below = (meiFermata.HasPlace() && (meiFermata.GetPlace() == libmei::STAFFREL_below));
 
     // @glyhp.name
-    bool smufl = (meiFermata.HasGlyphAuth() && (meiFermata.GetGlyphAuth() == "smufl"));
+    bool smufl = (meiFermata.HasGlyphAuth() && (meiFermata.GetGlyphAuth() == SMUFL_AUTH));
 
     engraving::SymId symId = engraving::SymId::fermataAbove;
 
@@ -1132,7 +1132,7 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
     if (smufl) {
         AsciiStringView glyphName = engraving::SymNames::nameForSymId(fermata->symId());
         meiFermata.SetGlyphName(glyphName.ascii());
-        meiFermata.SetGlyphAuth("smufl");
+        meiFermata.SetGlyphAuth(SMUFL_AUTH);
     }
 
     return meiFermata;
@@ -1694,7 +1694,7 @@ libmei::Mordent Convert::mordentToMEI(const engraving::Ornament* ornament)
             AsciiStringView glyphName = engraving::SymNames::nameForSymId(ornament->symId());
             meiMordent.SetGlyphName(glyphName.ascii());
         }
-        meiMordent.SetGlyphAuth("smufl");
+        meiMordent.SetGlyphAuth(SMUFL_AUTH);
     }
 
     // @place
@@ -2409,7 +2409,7 @@ libmei::Trill Convert::trillToMEI(const engraving::Ornament* ornament)
     if (ornament->symId() != engraving::SymId::ornamentTrill) {
         AsciiStringView glyphName = engraving::SymNames::nameForSymId(ornament->symId());
         meiTrill.SetGlyphName(glyphName.ascii());
-        meiTrill.SetGlyphAuth("smufl");
+        meiTrill.SetGlyphAuth(SMUFL_AUTH);
     }
 
     // @place
@@ -2523,7 +2523,7 @@ libmei::Turn Convert::turnToMEI(const engraving::Ornament* ornament)
     if (ornament->symId() == engraving::SymId::ornamentTurnSlash) {
         AsciiStringView glyphName = engraving::SymNames::nameForSymId(ornament->symId());
         meiTurn.SetGlyphName(glyphName.ascii());
-        meiTurn.SetGlyphAuth("smufl");
+        meiTurn.SetGlyphAuth(SMUFL_AUTH);
     }
 
     // @place

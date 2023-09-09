@@ -973,7 +973,7 @@ bool MeiImporter::readLinesWithSmufl(pugi::xml_node parentNode, StringList& line
         else if (this->isNode(child, u"rend")) {
             libmei::Rend meiRend;
             meiRend.Read(child);
-            bool isSmufl = (meiRend.HasGlyphAuth() && meiRend.GetGlyphAuth() == "smufl");
+            bool isSmufl = (meiRend.HasGlyphAuth() && meiRend.GetGlyphAuth() == SMUFL_AUTH);
             // If smufl, add its text as smufl, otherwise as text
             lineBlocks.push_back(std::make_pair(isSmufl, String(child.first_child().text().as_string())));
         }
