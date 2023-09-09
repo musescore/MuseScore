@@ -802,6 +802,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
             success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isOrnament()) {
+            success = success && this->writeOrnament(dynamic_cast<const Ornament*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isSlur()) {
             success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOttava()) {
@@ -1566,20 +1568,34 @@ bool MeiExporter::writeOctave(const Ottava* ottava, const std::string& startid)
 }
 
 /**
- * Write a ornam (ornament).
+ * Write a ornament.
+ * Select the appropriate corresponding MEI element for it.
  */
 
-bool MeiExporter::writeOrnam(const Ornament* ornament, const std::string& startid)
+bool MeiExporter::writeOrnament(const Ornament* ornament, const std::string& startid)
 {
     IF_ASSERT_FAILED(ornament) {
         return false;
     }
 
-    pugi::xml_node octaveNode = m_currentNode.append_child();
-    libmei::Ornam meiOrnam = Convert::ornamToMEI(ornament);
-    meiOrnam.SetStartid(startid);
-
-    meiOrnam.Write(octaveNode, this->getXmlIdFor(ornament, 'o'));
+    pugi::xml_node ornamentNode = m_currentNode.append_child();
+    if (Convert::isMordent(ornament)) {
+        libmei::Mordent meiMordent = Convert::mordentToMEI(ornament);
+        meiMordent.SetStartid(startid);
+        meiMordent.Write(ornamentNode, this->getXmlIdFor(ornament, 'm'));
+    } else if (Convert::isTrill(ornament)) {
+        libmei::Trill meiTrill = Convert::trillToMEI(ornament);
+        meiTrill.SetStartid(startid);
+        meiTrill.Write(ornamentNode, this->getXmlIdFor(ornament, 't'));
+    } else if (Convert::isTurn(ornament)) {
+        libmei::Turn meiTurn = Convert::turnToMEI(ornament);
+        meiTurn.SetStartid(startid);
+        meiTurn.Write(ornamentNode, this->getXmlIdFor(ornament, 't'));
+    } else {
+        libmei::Ornam meiOrnam = Convert::ornamToMEI(ornament);
+        meiOrnam.SetStartid(startid);
+        meiOrnam.Write(ornamentNode, this->getXmlIdFor(ornament, 'o'));
+    }
 
     return true;
 }
@@ -1833,6 +1849,13 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
             } else if (spanner->endCR() == chordRest) {
                 m_endingControlEventMap[spanner] = "#" + xmlId;
             }
+        }
+    }
+    // Articulations
+    if (chordRest->isChord()) {
+        const Chord* chord = toChord(chordRest);
+        for (const Articulation* articulation : chord->articulations()) {
+            m_startingControlEventMap.push_back(std::make_pair(articulation, "#" + xmlId));
         }
     }
 }

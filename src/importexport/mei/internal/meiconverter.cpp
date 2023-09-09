@@ -42,6 +42,7 @@
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
 #include "engraving/dom/ottava.h"
+#include "engraving/dom/ornament.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/slurtie.h"
@@ -98,6 +99,53 @@ engraving::ElementType Convert::elementTypeFor(const libmei::RepeatMark& meiRepe
 bool Convert::isDirWithExt(const libmei::Dir& meiDir)
 {
     return meiDir.HasExtender() && (meiDir.GetExtender() == libmei::BOOLEAN_true);
+}
+
+bool Convert::isMordent(const engraving::Ornament* ornament)
+{
+    switch (ornament->symId()) {
+    case engraving::SymId::ornamentMordent:
+    case engraving::SymId::ornamentShortTrill:
+    case engraving::SymId::ornamentTremblement:
+    case engraving::SymId::ornamentPrallMordent:
+    case engraving::SymId::ornamentUpPrall:
+    case engraving::SymId::ornamentPrecompMordentUpperPrefix:
+    case engraving::SymId::ornamentUpMordent:
+    case engraving::SymId::ornamentDownMordent:
+    case engraving::SymId::ornamentPrallDown:
+    case engraving::SymId::ornamentPrallUp:
+    case engraving::SymId::ornamentLinePrall:
+    case engraving::SymId::ornamentPrecompSlide:
+    case engraving::SymId::ornamentTremblementCouperin:
+    case engraving::SymId::ornamentPinceCouperin:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool Convert::isTrill(const engraving::Ornament* ornament)
+{
+    switch (ornament->symId()) {
+    case engraving::SymId::ornamentTrill:
+    case engraving::SymId::ornamentShake3:
+    case engraving::SymId::ornamentShakeMuffat1:
+        return true;
+    default:
+        return false;
+    }
+}
+
+bool Convert::isTurn(const engraving::Ornament* ornament)
+{
+    switch (ornament->symId()) {
+    case engraving::SymId::ornamentTurnInverted:
+    case engraving::SymId::ornamentTurnSlash:
+    case engraving::SymId::ornamentTurn:
+        return true;
+    default:
+        return false;
+    }
 }
 
 engraving::AccidentalType Convert::accidFromMEI(const libmei::data_ACCIDENTAL_WRITTEN meiAccid, bool& warning)
@@ -1553,6 +1601,13 @@ libmei::StaffDef Convert::meterToMEI(const engraving::Fraction& fraction, engrav
     return meiStaffDef;
 }
 
+libmei::Mordent Convert::mordentToMEI(const engraving::Ornament* ornament)
+{
+    libmei::Mordent meiMordent;
+
+    return meiMordent;
+}
+
 void Convert::octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning)
 {
     warning = false;
@@ -2199,6 +2254,13 @@ libmei::Tie Convert::tieToMEI(const engraving::SlurTie* tie)
     return meiTie;
 }
 
+libmei::Trill Convert::trillToMEI(const engraving::Ornament* ornament)
+{
+    libmei::Trill meiTrill;
+
+    return meiTrill;
+}
+
 void Convert::tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& meiTuplet, bool& warning)
 {
     IF_ASSERT_FAILED(tuplet) {
@@ -2269,6 +2331,13 @@ libmei::Tuplet Convert::tupletToMEI(const engraving::Tuplet* tuplet)
     }
 
     return meiTuplet;
+}
+
+libmei::Turn Convert::turnToMEI(const engraving::Ornament* ornament)
+{
+    libmei::Turn meiTurn;
+
+    return meiTurn;
 }
 
 bool Convert::hasTypeValue(const std::string& typeStr, const std::string& value)
