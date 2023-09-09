@@ -74,6 +74,9 @@ enum ElisionType {
 #define MARKER_TYPE "mscore-marker-"
 // The @type attribute prefix for tempo inferring type in <tempo>
 #define TEMPO_INFER_FROM_TEXT "mscore-infer-from-text"
+// The @type attribute prefixes for ornament interval (above/below)
+#define INTERVAL_ABOVE "mscore-above-"
+#define INTERVAL_BELOW "mscore-below-"
 
 class Convert
 {
@@ -101,6 +104,9 @@ public:
 
     static engraving::AccidentalVal accidGesFromMEI(const libmei::data_ACCIDENTAL_GESTURAL meiAccid, bool& warning);
     static libmei::data_ACCIDENTAL_GESTURAL accidGesToMEI(const engraving::AccidentalVal accid);
+
+    static engraving::ArticulationAnchor anchorFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
+    static libmei::data_STAFFREL anchorToMEI(engraving::ArticulationAnchor anchor);
 
     static engraving::BarLineType barlineFromMEI(const libmei::data_BARRENDITION meiBarline, bool& warning);
     static libmei::data_BARRENDITION barlineToMEI(engraving::BarLineType barline);
@@ -195,6 +201,8 @@ public:
 
     static libmei::Ornam ornamToMEI(const engraving::Ornament* ornament);
 
+    static String ornamintervalToMEI(const engraving::Ornament* ornament);
+
     struct PitchStruct {
         int pitch = 0;
         int tpc2 = 0;
@@ -283,6 +291,18 @@ private:
         { engraving::JumpType::DSS_AL_CODA, "dss-al-coda" },
         { engraving::JumpType::DSS_AL_DBLCODA, "dss-al-double-coda" },
         { engraving::JumpType::DSS_AL_FINE, "dss-al-fine" }
+    };
+
+    /** Since MuseScore uses composed glyph - see EngravingFont::loadComposedGlyphs */
+    static inline std::map<engraving::SymId, std::string> s_mordentGlyphs = {
+        { engraving::SymId::ornamentPrallMordent, "ornamentPrecompTrillWithMordent" },
+        { engraving::SymId::ornamentUpPrall, "ornamentPrecompSlideTrillDAnglebert" },
+        { engraving::SymId::ornamentUpMordent, "ornamentPrecompSlideTrillBach" },
+        { engraving::SymId::ornamentPrallDown, "ornamentPrecompTrillLowerSuffix" },
+        { engraving::SymId::ornamentDownMordent, "ornamentPrecompTurnTrillBach" },
+        { engraving::SymId::ornamentPrallUp, "ornamentPrecompTrillSuffixDandrieu" },
+        { engraving::SymId::ornamentLinePrall, "ornamentPrecompMordentUpperPrefix" },
+        { engraving::SymId::ornamentPrecompSlide, "ornamentSchleifer" }
     };
 };
 
