@@ -53,7 +53,7 @@ function(target_no_warning TARGET WNAME)
     elseif(WNAME STREQUAL "-Wno-sign-compare")
     elseif(WNAME STREQUAL "-Wno-attributes")
     elseif(WNAME STREQUAL "-Wno-restrict")
-
+        unset(CLANG_Warning)
     elseif(WNAME STREQUAL "-w")
         set(MSVC_Warning /W0)
 
