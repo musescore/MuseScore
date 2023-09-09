@@ -1701,6 +1701,27 @@ bool MeiImporter::readSpace(pugi::xml_node spaceNode, Measure* measure, int trac
 }
 
 /**
+ * Read a syl
+ */
+
+bool MeiImporter::readSyl(pugi::xml_node sylNode, Lyrics* lyrics, Convert::textWithSmufl& textBlocks, ElisionType elision)
+{
+    IF_ASSERT_FAILED(lyrics) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Syl meiSyl;
+    meiSyl.Read(sylNode);
+
+    Convert::sylFromMEI(lyrics, meiSyl, elision, warning);
+
+    textBlocks.push_back(std::make_pair(false, String(sylNode.text().as_string())));
+
+    return true;
+}
+
+/**
  * Read a tuplet.
  */
 
@@ -1744,6 +1765,96 @@ bool MeiImporter::readTuplet(pugi::xml_node tupletNode, Measure* measure, int tr
     m_tuplet->setTicks(tupletTicks);
 
     m_tuplet = nullptr;
+
+    return success;
+}
+
+/**
+ * Loop through the content of the MEI <note> or <chord> and read the verses
+ */
+
+bool MeiImporter::readVerses(pugi::xml_node parentNode, Chord* chord)
+{
+    IF_ASSERT_FAILED(chord) {
+        return false;
+    }
+
+    bool success = true;
+
+    pugi::xpath_node_set elements = parentNode.select_nodes("./verse");
+    for (pugi::xpath_node xpathNode : elements) {
+        success = success && this->readVerse(xpathNode.node(), chord);
+    }
+
+    // The chord as a potential end point for the lyrics to extend (all lyrics no for that track)
+    this->addChordtoLyricsToExtend(chord);
+
+    return success;
+}
+
+/**
+ * Read a verse.
+ */
+
+bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
+{
+    IF_ASSERT_FAILED(chord) {
+        return false;
+    }
+
+    libmei::Verse meiVerse;
+    meiVerse.Read(verseNode);
+
+    int no = 0;
+    if (meiVerse.HasN()) {
+        no = std::stoi(meiVerse.GetN()) - 1;
+        // Make sure we have no verse number below 0;
+        no = std::max(0, no);
+    }
+
+    // First check if we have a lyric extension that needs to be ended for that track / no
+    if (this->hasLyricsToExtend(chord->track(), no)) {
+        auto lyricsToExtend = this->getLyricsToExtend(chord->track(), no);
+        this->extendLyrics(lyricsToExtend);
+        // Remove it from the lyrics to extend
+        m_lyricExtenders.at(chord->track()).erase(no);
+    }
+
+    Lyrics* lyrics = Factory::createLyrics(chord);
+
+    bool success = true;
+
+    // If the verse has a syl with @con="u", add it to the lyrics to extend
+    pugi::xpath_node extender = verseNode.select_node("./syl[@con='u']");
+    if (extender) {
+        m_lyricExtenders[chord->track()][no] = std::make_pair(lyrics, nullptr);
+    }
+
+    // Aggregate the syllable into line blocks
+    Convert::textWithSmufl textBlocks;
+    pugi::xpath_node_set elements = verseNode.select_nodes("./syl");
+
+    // If we have more than one syl we assume to have elision
+    ElisionType elision = (elements.size() > 1) ? ElisionFirst : ElisionNone;
+    size_t sylCount = 0;
+
+    for (pugi::xpath_node xpathNode : elements) {
+        if (sylCount > 0) {
+            textBlocks.push_back(std::make_pair(true, u"\uE551"));
+        }
+
+        success = success && this->readSyl(xpathNode.node(), lyrics, textBlocks, elision);
+        sylCount++;
+        elision = (sylCount == elements.size() - 1) ? ElisionLast : ElisionMiddle;
+    }
+
+    String syllable;
+    Convert::textFromMEI(syllable, textBlocks);
+
+    lyrics->setXmlText(syllable);
+    lyrics->setNo(no);
+    lyrics->setTrack(chord->track());
+    chord->add(lyrics);
 
     return success;
 }
@@ -2087,27 +2198,6 @@ bool MeiImporter::readSlur(pugi::xml_node slurNode, Measure* measure)
 }
 
 /**
- *
- */
-
-bool MeiImporter::readSyl(pugi::xml_node sylNode, Lyrics* lyrics, Convert::textWithSmufl& textBlocks, ElisionType elision)
-{
-    IF_ASSERT_FAILED(lyrics) {
-        return false;
-    }
-
-    bool warning;
-    libmei::Syl meiSyl;
-    meiSyl.Read(sylNode);
-
-    Convert::sylFromMEI(lyrics, meiSyl, elision, warning);
-
-    textBlocks.push_back(std::make_pair(false, String(sylNode.text().as_string())));
-
-    return true;
-}
-
-/**
  * Read a tempo.
  */
 
@@ -2169,96 +2259,6 @@ bool MeiImporter::readTie(pugi::xml_node tieNode, Measure* measure)
     Convert::tieFromMEI(tie, meiTie, warning);
 
     return true;
-}
-
-/**
- * Loop through the content of the MEI <note> or <chord> and read the verses
- */
-
-bool MeiImporter::readVerses(pugi::xml_node parentNode, Chord* chord)
-{
-    IF_ASSERT_FAILED(chord) {
-        return false;
-    }
-
-    bool success = true;
-
-    pugi::xpath_node_set elements = parentNode.select_nodes("./verse");
-    for (pugi::xpath_node xpathNode : elements) {
-        success = success && this->readVerse(xpathNode.node(), chord);
-    }
-
-    // The chord as a potential end point for the lyrics to extend (all lyrics no for that track)
-    this->addChordtoLyricsToExtend(chord);
-
-    return success;
-}
-
-/**
- * Read a verse.
- */
-
-bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
-{
-    IF_ASSERT_FAILED(chord) {
-        return false;
-    }
-
-    libmei::Verse meiVerse;
-    meiVerse.Read(verseNode);
-
-    int no = 0;
-    if (meiVerse.HasN()) {
-        no = std::stoi(meiVerse.GetN()) - 1;
-        // Make sure we have no verse number below 0;
-        no = std::max(0, no);
-    }
-
-    // First check if we have a lyric extension that needs to be ended for that track / no
-    if (this->hasLyricsToExtend(chord->track(), no)) {
-        auto lyricsToExtend = this->getLyricsToExtend(chord->track(), no);
-        this->extendLyrics(lyricsToExtend);
-        // Remove it from the lyrics to extend
-        m_lyricExtenders.at(chord->track()).erase(no);
-    }
-
-    Lyrics* lyrics = Factory::createLyrics(chord);
-
-    bool success = true;
-
-    // If the verse has a syl with @con="u", add it to the lyrics to extend
-    pugi::xpath_node extender = verseNode.select_node("./syl[@con='u']");
-    if (extender) {
-        m_lyricExtenders[chord->track()][no] = std::make_pair(lyrics, nullptr);
-    }
-
-    // Aggregate the syllable into line blocks
-    Convert::textWithSmufl textBlocks;
-    pugi::xpath_node_set elements = verseNode.select_nodes("./syl");
-
-    // If we have more than one syl we assume to have elision
-    ElisionType elision = (elements.size() > 1) ? ElisionFirst : ElisionNone;
-    size_t sylCount = 0;
-
-    for (pugi::xpath_node xpathNode : elements) {
-        if (sylCount > 0) {
-            textBlocks.push_back(std::make_pair(true, u"\uE551"));
-        }
-
-        success = success && this->readSyl(xpathNode.node(), lyrics, textBlocks, elision);
-        sylCount++;
-        elision = (sylCount == elements.size() - 1) ? ElisionLast : ElisionMiddle;
-    }
-
-    String syllable;
-    Convert::textFromMEI(syllable, textBlocks);
-
-    lyrics->setXmlText(syllable);
-    lyrics->setNo(no);
-    lyrics->setTrack(chord->track());
-    chord->add(lyrics);
-
-    return success;
 }
 
 //---------------------------------------------------------
