@@ -238,7 +238,7 @@ void EventsHolder::mergePitchWheelEvents(EventsHolder& pitchWheelEvents)
                 if (pwEvent != pitchWheelEvents[i].end()
                     && pwEvent->second.type() == ME_PITCHBEND) {
                     PitchWheelSpecs specs;
-                    NPlayEvent pwReset(ME_PITCHBEND, i, specs.mLimit % 128, specs.mLimit / 128);
+                    NPlayEvent pwReset(ME_PITCHBEND, (uint8_t)i, specs.mLimit % 128, specs.mLimit / 128);
                     pwReset.setOriginatingStaff(pwEvent->second.getOriginatingStaff());
                     _channels[i].insert(std::pair<int, NPlayEvent>(((tick - pwEvent->first) / 2) + pwEvent->first, pwReset));
                 }
