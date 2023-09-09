@@ -76,6 +76,8 @@ set(MODULE_SRC
 
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmn.h
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmnornaments.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/cmnornaments.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/harmony.cpp
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/harmony.h
     ${CMAKE_CURRENT_LIST_DIR}/thirdparty/libmei/lyrics.cpp
