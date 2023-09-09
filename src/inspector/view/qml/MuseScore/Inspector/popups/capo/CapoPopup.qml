@@ -71,13 +71,13 @@ StyledPopupView {
             direction: NavigationPanel.Vertical
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
-            accessible.name: qsTrc("notation", "Capo settings")
+            accessible.name: qsTrc("inspector", "Capo settings")
         }
 
         StyledTextLabel {
             id: titleLabel
 
-            text: qsTrc("notation", "Capo")
+            text: qsTrc("inspector", "Capo")
             horizontalAlignment: Text.AlignLeft
         }
 
@@ -109,7 +109,7 @@ StyledPopupView {
         StyledTextLabel {
             id: fretLabel
 
-            text: qsTrc("notation", "Fret")
+            text: qsTrc("inspector", "Fret")
             horizontalAlignment: Text.AlignLeft
 
             visible: capoModel.capoIsOn
@@ -141,7 +141,7 @@ StyledPopupView {
         StyledTextLabel {
             id: applyToLabel
 
-            text: qsTrc("notation", "Apply to")
+            text: qsTrc("inspector", "Apply to")
             horizontalAlignment: Text.AlignLeft
 
             visible: capoModel.capoIsOn && repeaterStrings.count > 0
@@ -198,7 +198,7 @@ StyledPopupView {
                         anchors.leftMargin: 4
                         anchors.verticalCenter: parent.verticalCenter
 
-                        text: qsTrc("notation", "String %1").arg(model.index + 1)
+                        text: qsTrc("inspector", "String %1").arg(model.index + 1)
                     }
                 }
             }
@@ -212,7 +212,7 @@ StyledPopupView {
             navigation.panel: capoSettingsNavPanel
             navigation.row: applyToStringsGrid.navigationRowEnd + 1
 
-            text: qsTrc("notation", "Manually specify instruction text")
+            text: qsTrc("inspector", "Manually specify instruction text")
 
             checked: capoModel.capoTextSpecifiedByUser
 
@@ -240,7 +240,7 @@ StyledPopupView {
         }
 
         StyledTextLabel {
-            text: qsTrc("notation", "Position")
+            text: qsTrc("inspector", "Position")
             horizontalAlignment: Text.AlignLeft
         }
 
@@ -251,7 +251,7 @@ StyledPopupView {
 
             navigationPanel: capoSettingsNavPanel
             navigationRowStart: capoTextField.navigation.row + 1
-            accessibleName: qsTrc("notation", "Capo position")
+            accessibleName: qsTrc("inspector", "Capo position")
 
             currentValue: capoModel.capoPlacement
             model: capoModel.possibleCapoPlacements()
