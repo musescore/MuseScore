@@ -176,7 +176,7 @@
       </item>
       <item>
        <property name="text">
-        <string>Articulations, Ornaments</string>
+        <string>Articulations, ornaments</string>
        </property>
       </item>
       <item>
@@ -5924,7 +5924,7 @@ By default, they will be placed such as that their right end are at the same lev
         <item row="0" column="0">
          <widget class="QGroupBox" name="groupBox_2">
           <property name="title">
-           <string>Measure Repeats</string>
+           <string>Measure repeats</string>
           </property>
           <layout class="QGridLayout" name="gridLayout_52">
            <item row="3" column="0" colspan="2">
@@ -11930,7 +11930,7 @@ By default, they will be placed such as that their right end are at the same lev
                   <item row="4" column="0" colspan="6">
                    <widget class="QGroupBox" name="automaticCapitalization">
                     <property name="title">
-                     <string>Automatic Capitalization</string>
+                     <string>Automatic capitalization</string>
                     </property>
                     <property name="checkable">
                      <bool>true</bool>
