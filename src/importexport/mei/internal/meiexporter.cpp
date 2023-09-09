@@ -455,7 +455,7 @@ bool MeiExporter::writeLinesWithSMuFL(pugi::xml_node node, const StringList& lin
             if (block.first) {
                 pugi::xml_node rendText = node.append_child();
                 libmei::Rend meiRend;
-                meiRend.SetGlyphAuth("smufl");
+                meiRend.SetGlyphAuth(SMUFL_AUTH);
                 meiRend.Write(rendText);
                 rendText.text() = block.second.toStdString().c_str();
             } else {
