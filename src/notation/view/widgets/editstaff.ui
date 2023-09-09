@@ -384,7 +384,7 @@
           <item>
            <widget class="QPushButton" name="changeInstrument">
             <property name="text">
-             <string>Replace Instrument…</string>
+             <string>Replace instrument…</string>
             </property>
            </widget>
           </item>
