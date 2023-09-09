@@ -33,10 +33,13 @@ import "../../common"
 StyledPopupView {
     id: root
 
-    property NavigationSection notationViewNavigationSection: null
     property QtObject model: textStyleModel
+
+    // The navigation order does not match the order of the components
+    // in the file
+    property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
-    property int navigationOrderEnd: 0
+    property int navigationOrderEnd: textStyleSettingsNavPanel.order
 
     contentWidth: contentRow.width
     contentHeight: contentRow.height
@@ -65,12 +68,26 @@ StyledPopupView {
     RowLayout {
         id: contentRow
 
+        NavigationPanel {
+            id: textStyleSettingsNavPanel
+            name: "TextStyleSettings"
+            direction: NavigationPanel.Vertical
+            section: root.notationViewNavigationSection
+            order: root.navigationOrderStart
+            accessible.name: qsTrc("inspector", "Text style settings buttons")
+        }
+
         ColumnLayout {
-            StyledDropdown {
+            StyledDropdown { //1
                 id: fontDropdown
 
                 Layout.fillWidth: true
                 Layout.alignment: Qt.AlignVCenter | Qt.AlignLeft
+
+                navigation.name: "fontDropdown"
+                navigation.panel: textStyleSettingsNavPanel
+                navigation.row: 1
+                navigation.accessible.name: qsTrc("inspector", "Font dropdown")
 
                 textRole: "text"
                 valueRole: "text"
@@ -98,12 +115,15 @@ StyledPopupView {
                 }
             }
 
-            RowLayout {
+            RowLayout { //6
                 RadioButtonGroup {
                     id: textStyleButtonGroup
 
                     height: 30
                     width: implicitWidth
+
+                    property int navigationRowStart: textStylePopupButton.navigation.row + 1
+                    property int navigationRowEnd: navigationRowStart + count
 
                     model: [
                         {
@@ -129,6 +149,11 @@ StyledPopupView {
                     ]
 
                     delegate: FlatToggleButton {
+                        navigation.name: "textStyleButtonGroup"
+                        navigation.panel: textStyleSettingsNavPanel
+                        navigation.row: textStyleButtonGroup.navigationRowStart + model.index
+                        navigation.accessible.name: qsTrc("inspector", "Text style buttons")
+
                         toolTipTitle: modelData.title
 
                         icon: modelData.iconCode
@@ -144,11 +169,14 @@ StyledPopupView {
                     }
                 }
 
-                RadioButtonGroup {
+                RadioButtonGroup { //7
                     id: horizontalAlignmentButtonList
 
                     height: 30
                     width: implicitWidth
+
+                    property int navigationRowStart: textStyleButtonGroup.navigationRowEnd + 1
+                    property int navigationRowEnd: navigationRowStart + count
 
                     enabled: textStyleModel.textSettingsModel.isHorizontalAlignmentAvailable
 
@@ -174,6 +202,11 @@ StyledPopupView {
                     ]
 
                     delegate: FlatRadioButton {
+                        navigation.name: "horizonalAlignmentButtonList"
+                        navigation.panel: textStyleSettingsNavPanel
+                        navigation.row: horizontalAlignmentButtonList.navigationRowStart + model.index
+                        navigation.accessible.name: qsTrc("inspector", "Horizontal alignent buttons")
+
                         width: 30
 
                         toolTipTitle: modelData.title
@@ -195,8 +228,13 @@ StyledPopupView {
         }
         ColumnLayout {
             RowLayout {
-                IncrementalPropertyControl {
+                IncrementalPropertyControl { //2
                     id: fontSizeSpinBox
+
+                    navigation.name: "fontSizeSpinBox"
+                    navigation.panel: textStyleSettingsNavPanel
+                    navigation.row: fontDropdown.navigation.row + 1
+                    navigation.accessible.name: qsTrc("inspector", "Font size spinbox")
 
                     Layout.preferredWidth: 60
 
@@ -218,8 +256,11 @@ StyledPopupView {
                     }
                 }
 
-                RadioButtonGroup {
+                RadioButtonGroup { //3
                     id: verticalAlignmentButtonList
+
+                    property int navigationRowStart: fontSizeSpinBox.navigation.row + 1
+                    property int navigationRowEnd: navigationRowStart + count
 
                     height: 30
                     width: implicitWidth
@@ -252,6 +293,11 @@ StyledPopupView {
                     ]
 
                     delegate: FlatRadioButton {
+                        navigation.name: "verticalAlignmentButtonList"
+                        navigation.panel: textStyleSettingsNavPanel
+                        navigation.row: verticalAlignmentButtonList.navigationRowStart + model.index
+                        navigation.accessible.name: qsTrc("inspector", "Vertical alignment buttons")
+
                         width: 30
 
                         toolTipTitle: modelData.title
@@ -272,10 +318,13 @@ StyledPopupView {
             }
 
             RowLayout {
-                RadioButtonGroup {
+                RadioButtonGroup { //8
                     id: subscriptOptionsButtonList
 
                     height: 30
+
+                    property int navigationRowStart: horizontalAlignmentButtonList.navigationRowEnd + 1
+                    property int navigationRowEnd: navigationRowStart + count
 
                     model: [
                         { iconRole: IconCode.TEXT_SUBSCRIPT, typeRole: TextTypes.TEXT_SUBSCRIPT_BOTTOM, titleRole: qsTrc("inspector", "Subscript") },
@@ -283,6 +332,11 @@ StyledPopupView {
                     ]
 
                     delegate: FlatRadioButton {
+                        navigation.name: "subscriptOptionsButtonList"
+                        navigation.panel: textStyleSettingsNavPanel
+                        navigation.row: subscriptOptionsButtonList.navigationRowStart + model.index
+                        navigation.accessible.name: qsTrc("inspector", "Subscript buttons")
+
                         width: 30
 
                         toolTipTitle: modelData.titleRole
@@ -305,11 +359,18 @@ StyledPopupView {
                 }
 
                 StyledTextLabel {
+                    Layout.fillWidth: true
+                    horizontalAlignment: Text.AlignRight
                     text: qsTrc("inspector", "Line spacing:")
                 }
 
-                IncrementalPropertyControl {
+                IncrementalPropertyControl { //9
                     id: lineSpacingSpinBox
+
+                    navigation.name: "lineSpacingSpinBox"
+                    navigation.panel: textStyleSettingsNavPanel
+                    navigation.row: subscriptOptionsButtonList.navigationRowEnd + 1
+                    navigation.accessible.name: qsTrc("inspector", "Line spacing spinbox")
 
                     Layout.preferredWidth: 60
 
@@ -334,9 +395,16 @@ StyledPopupView {
         }
 
         RowLayout {
-            FlatButton {
+            FlatButton { //4
+                id: addSymbolsButton
+
                 Layout.preferredWidth: 90
                 Layout.fillHeight: true
+
+                navigation.name: "addSymbolsButton"
+                navigation.panel: textStyleSettingsNavPanel
+                navigation.row: verticalAlignmentButtonList.navigationRowEnd + 1
+                navigation.accessible.name: qsTrc("inspector", "Add symbols button")
 
                 icon: IconCode.FLAT
                 text: qsTrc("inspector", "Add symbols")
@@ -353,8 +421,15 @@ StyledPopupView {
             ColumnLayout {
                 Layout.preferredWidth: 90
 
-                FlatButton {
+                FlatButton { //5
+                    id: textStylePopupButton
+
                     Layout.fillWidth: true
+
+                    navigation.name: "textStylePopupButton"
+                    navigation.panel: textStyleSettingsNavPanel
+                    navigation.row: addSymbolsButton.navigation.row + 1
+                    navigation.accessible.name: qsTrc("inspector", "Text style options")
 
                     text: qsTrc("inspector", "Text style")
 
@@ -370,9 +445,16 @@ StyledPopupView {
                 }
 
                 FlatButton {
+                    id: framePopupButton
+
                     Layout.fillWidth: true
 
-                    visible: !root.textSettingsModel.isDynamicSpecificSettings
+                    navigation.name: "framePopupButton"
+                    navigation.panel: textStyleSettingsNavPanel
+                    navigation.row: lineSpacingSpinBox.navigation.row + 1
+                    navigation.accessible.name: qsTrc("inspector", "Frame settings")
+
+                    visible: !textStyleModel.textSettingsModel.isDynamicSpecificSettings
 
                     text: qsTrc("inspector", "Frame")
 
