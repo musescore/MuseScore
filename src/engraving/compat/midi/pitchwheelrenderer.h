@@ -46,7 +46,7 @@ public:
 
     void addPitchWheelFunction(const PitchWheelFunction& function, uint32_t channel, staff_idx_t staffIdx, MidiInstrumentEffect effect);
 
-    EventMap renderPitchWheel() const noexcept;
+    EventsHolder renderPitchWheel() const noexcept;
 
     static void generateRanges(const std::list<PitchWheelFunction>& functions, std::map<int, int, std::greater<> >& ranges);
 
@@ -59,7 +59,7 @@ private:
         std::list<PitchWheelFunction> functions;
     };
 
-    void renderChannelPitchWheel(EventMap& pitchWheelEvents, const PitchWheelFunctions& functions, uint32_t channel) const noexcept;
+    void renderChannelPitchWheel(EventsHolder& pitchWheelEvents, const PitchWheelFunctions& functions, uint32_t channel) const noexcept;
 
     int32_t findNextStartTick(const std::list<PitchWheelFunction>& functions) const noexcept;
 

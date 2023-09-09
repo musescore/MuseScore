@@ -96,7 +96,7 @@ class Chord;
 class ChordRest;
 class Clef;
 class Element;
-class EventMap;
+class EventsHolder;
 class Excerpt;
 class FiguredBass;
 class Hairpin;
@@ -648,7 +648,7 @@ public:
     void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
-    void renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats);
+    void renderMidi(EventsHolder& events, const MidiRenderer::Context& ctx, bool expandRepeats);
 
     static void transposeChord(Chord* c, const Fraction& tick);
 

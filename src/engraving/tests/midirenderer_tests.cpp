@@ -43,12 +43,21 @@ static NPlayEvent noteEvent(int pitch, int volume, int channel)
     return NPlayEvent(EventType::ME_NOTEON, channel, pitch, volume);
 }
 
-static void checkEventInterval(EventMap& events, int tickStart, int tickEnd, int pitch, int volume, bool slide = false,
+static int getEventsCount(EventsHolder& events)
+{
+    int eventsCount = 0;
+    for (size_t i = 0; i < events.size(); ++i) {
+        eventsCount += (int)events[i].size();
+    }
+    return eventsCount;
+}
+
+static void checkEventInterval(EventsHolder& events, int tickStart, int tickEnd, int pitch, int volume, bool slide = false,
                                int channel = DEFAULT_CHANNEL)
 {
-    auto it = events.find(tickStart);
-    EXPECT_TRUE(it != events.end());
-    if (it == events.end()) {
+    auto it = events[channel].find(tickStart);
+    EXPECT_TRUE(it != events[channel].end());
+    if (it == events[channel].end()) {
         return;
     }
 
@@ -57,11 +66,11 @@ static void checkEventInterval(EventMap& events, int tickStart, int tickEnd, int
     EXPECT_EQ(it->second.channel(), channel);
     EXPECT_EQ(it->second.slide(), slide);
 
-    events.erase(it);
+    events[channel].erase(it);
 
-    it = events.find(tickEnd);
-    EXPECT_TRUE(it != events.end());
-    if (it == events.end()) {
+    it = events[channel].find(tickEnd);
+    EXPECT_TRUE(it != events[channel].end());
+    if (it == events[channel].end()) {
         return;
     }
 
@@ -70,36 +79,37 @@ static void checkEventInterval(EventMap& events, int tickStart, int tickEnd, int
     EXPECT_EQ(it->second.channel(), channel);
     EXPECT_EQ(it->second.slide(), slide);
 
-    events.erase(it);
+    events[channel].erase(it);
 }
 
-static EventMap renderMidiEvents(const String& fileName, bool eachStringHasChannel = false, bool instrumentsHaveEffects = false)
+static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasChannel = false, bool instrumentsHaveEffects = false)
 {
     MasterScore* score = ScoreRW::readScore(MIDIRENDERER_TESTS_DIR + fileName);
     EXPECT_TRUE(score);
 
     MidiRenderer render(score);
-    EventMap events;
+    EventsHolder events;
     MidiRenderer::Context ctx;
 
     ctx.synthState = mu::engraving::SynthesizerState();
     ctx.metronome = false;
     ctx.eachStringHasChannel = eachStringHasChannel;
     ctx.instrumentsHaveEffects = instrumentsHaveEffects;
-    score->renderMidi(&events, ctx, true);
+    score->renderMidi(events, ctx, true);
 
     return events;
 }
 
-static EventMap getNoteOnEvents(const EventMap& events)
+static EventsHolder getNoteOnEvents(const EventsHolder& events)
 {
-    EventMap filteredEventMap;
-    for (const auto& ev : events) {
-        if (ev.second.type() != EventType::ME_NOTEON) {
-            continue;
+    EventsHolder filteredEventMap;
+    for (size_t i = 0; i < events.size(); ++i) {
+        for (auto ev: events[i]) {
+            if (ev.second.type() != EventType::ME_NOTEON) {
+                continue;
+            }
+            filteredEventMap[i].insert({ ev.first, ev.second });
         }
-
-        filteredEventMap.insert({ ev.first, ev.second });
     }
 
     return filteredEventMap;
@@ -110,14 +120,65 @@ static EventMap getNoteOnEvents(const EventMap& events)
     ENABLED TESTS BELOW
 
 *****************************************************************************/
+TEST_F(MidiRenderer_Tests, mergePitchWheelEvents)
+{
+    PitchWheelSpecs wheelSpec;
+    PitchWheelRenderer render(wheelSpec);
+
+    PitchWheelRenderer::PitchWheelFunction func;
+    func.mStartTick = 0;
+    func.mEndTick = 100;
+    //! y = ax + b
+    int a = 1;
+    int b = 0;
+
+    auto linearFunc = [ startTick = func.mStartTick, a, b] (uint32_t tick) {
+        float x = (float)(tick - startTick);
+        float y = a * x + b;
+        return (int)y;
+    };
+    func.func = linearFunc;
+    render.addPitchWheelFunction(func, 0, 0, MidiInstrumentEffect::NONE);
+
+    EventsHolder pitchWheelEvents = render.renderPitchWheel();
+    EventsHolder noteEvents;
+    NPlayEvent note1_ON{ 144, 0, 59, 96 };
+    NPlayEvent note1_OFF{ 144, 0, 59, 0 };
+    NPlayEvent note2_ON{ 144, 0, 61, 96 };
+    NPlayEvent note2_OFF{ 144, 0, 61, 0 };
+    noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(0, note1_ON));
+    noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(90, note1_OFF));
+    noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(200, note2_ON));
+    noteEvents[DEFAULT_CHANNEL].insert(std::make_pair(300, note2_OFF));
+    noteEvents.mergePitchWheelEvents(pitchWheelEvents);
+    EXPECT_NE(noteEvents[DEFAULT_CHANNEL].find(145), noteEvents[DEFAULT_CHANNEL].end());
+}
+
+TEST_F(MidiRenderer_Tests, subscriptOperator)
+{
+    EventsHolder events;
+    events[0];
+    EXPECT_EQ(events.size(), 1);
+    events[1];
+    EXPECT_EQ(events.size(), 2);
+    events[3];
+    EXPECT_EQ(events.size(), 4);
+    events[50];
+    EXPECT_EQ(events.size(), 51);
+    EventsHolder events2;
+    events2[10];
+    EXPECT_EQ(events2.size(), 11);
+    events2[192];
+    EXPECT_EQ(events2.size(), 193);
+}
 
 TEST_F(MidiRenderer_Tests, oneGuitarNote)
 {
     constexpr int defVol = 96; // f
 
-    EventMap events = renderMidiEvents(u"one_guitar_note.mscx");
+    EventsHolder events = renderMidiEvents(u"one_guitar_note.mscx");
 
-    EXPECT_EQ(events.size(), 2);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
 
     checkEventInterval(events, 0, 479, 59, defVol);
 }
@@ -126,20 +187,20 @@ TEST_F(MidiRenderer_Tests, onePercussionNote)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = renderMidiEvents(u"one_percussion_note.mscx");
+    EventsHolder events = renderMidiEvents(u"one_percussion_note.mscx");
 
     EXPECT_EQ(events.size(), 1);
 
-    EXPECT_EQ(events.find(0)->second, noteEvent(41, defVol, DEFAULT_CHANNEL));
+    EXPECT_EQ(events[DEFAULT_CHANNEL].find(0)->second, noteEvent(41, defVol, DEFAULT_CHANNEL));
 }
 
 TEST_F(MidiRenderer_Tests, graceBeforeBeat)
 {
     constexpr int defVol = 96; // f
 
-    EventMap events = renderMidiEvents(u"grace_before_beat.mscx");
+    EventsHolder events = renderMidiEvents(u"grace_before_beat.mscx");
 
-    EXPECT_EQ(events.size(), 8);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 6);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 55, defVol);
@@ -150,9 +211,9 @@ TEST_F(MidiRenderer_Tests, graceOnBeat)
 {
     constexpr int defVol = 96; // f
 
-    EventMap events = renderMidiEvents(u"grace_on_beat.mscx");
+    EventsHolder events = renderMidiEvents(u"grace_on_beat.mscx");
 
-    EXPECT_EQ(events.size(), 8);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 6);
 
     checkEventInterval(events, 0, 479, 59, defVol);
     checkEventInterval(events, 480, 719, 55, defVol);
@@ -164,9 +225,9 @@ TEST_F(MidiRenderer_Tests, ghostNote)
     constexpr int defVol = 96; // f
     constexpr int ghostVol = defVol * NoteEvent::GHOST_VELOCITY_MULTIPLIER;
 
-    EventMap events = renderMidiEvents(u"ghost_note.mscx");
+    EventsHolder events = renderMidiEvents(u"ghost_note.mscx");
 
-    EXPECT_EQ(events.size(), 5);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
 
     checkEventInterval(events, 0, 479, 59, defVol);
     checkEventInterval(events, 480, 959, 57, ghostVol);
@@ -176,9 +237,9 @@ TEST_F(MidiRenderer_Tests, simpleTremolo)
 {
     constexpr int defVol = 96; // f
 
-    EventMap events = renderMidiEvents(u"simple_tremolo.mscx");
+    EventsHolder events = renderMidiEvents(u"simple_tremolo.mscx");
 
-    EXPECT_EQ(events.size(), 11);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 59, defVol);
@@ -190,9 +251,9 @@ TEST_F(MidiRenderer_Tests, legatoGlissando)
 {
     constexpr int defVol = 96; // forte
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"simple_glissando_legato.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"simple_glissando_legato.mscx"));
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 10);
 
     checkEventInterval(events, 0, 642, 59, defVol);
     checkEventInterval(events, 643, 747, 58, defVol, true /* slide */);
@@ -205,7 +266,7 @@ TEST_F(MidiRenderer_Tests, sameStringNoEffects)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"channels.mscx", false, false));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"channels.mscx", false, false));
 
     checkEventInterval(events, 0, 959, 60, defVol, false, DEFAULT_CHANNEL);
     checkEventInterval(events, 480, 1439, 64, defVol, false, DEFAULT_CHANNEL);
@@ -216,7 +277,7 @@ TEST_F(MidiRenderer_Tests, sameStringWithEffects)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"channels.mscx", false, true));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"channels.mscx", false, true));
 
     checkEventInterval(events, 0, 959, 60, defVol, false, DEFAULT_CHANNEL);
     checkEventInterval(events, 480, 1439, 64, defVol, false, DEFAULT_CHANNEL);
@@ -227,9 +288,10 @@ TEST_F(MidiRenderer_Tests, diffStringNoEffects)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"channels.mscx", true, false));
+    auto midievents = renderMidiEvents(u"channels.mscx", true, false);
+    EventsHolder events = getNoteOnEvents(midievents);
 
-    EXPECT_EQ(events.size(), 6);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size() + events[DEFAULT_CHANNEL + 1].size(), 6);
 
     checkEventInterval(events, 0, 959, 60, defVol, false, DEFAULT_CHANNEL);
     checkEventInterval(events, 480, 1439, 64, defVol, false, DEFAULT_CHANNEL + 1);
@@ -240,9 +302,12 @@ TEST_F(MidiRenderer_Tests, diffStringWithEffects)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"channels.mscx", true, true));
+    auto midiEvents = renderMidiEvents(u"channels.mscx", true, true);
+    EventsHolder events = getNoteOnEvents(midiEvents);
 
-    EXPECT_EQ(events.size(), 6);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
+    int eventsCount =  getEventsCount(events);
+    EXPECT_EQ(eventsCount, 6);
 
     checkEventInterval(events, 0, 959, 60, defVol, false, DEFAULT_CHANNEL);
     checkEventInterval(events, 480, 1439, 64, defVol, false, DEFAULT_CHANNEL + 1);
@@ -253,9 +318,9 @@ TEST_F(MidiRenderer_Tests, tremoloAndGlissando)
 {
     constexpr int defVol = 96; // f
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_glissando.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_glissando.mscx"));
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 14);
 
     checkEventInterval(events, 0, 239, 59, defVol);
     checkEventInterval(events, 240, 479, 59, defVol);
@@ -270,9 +335,9 @@ TEST_F(MidiRenderer_Tests, slideInFromBelow)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_in_from_below.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_in_from_below.mscx"));
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 10);
 
     checkEventInterval(events, 0, 419, 60, defVol);
     checkEventInterval(events, 420, 438, 60, defVol, true /* slide */);
@@ -285,9 +350,9 @@ TEST_F(MidiRenderer_Tests, slideInFromAbove)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_in_from_above.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_in_from_above.mscx"));
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 10);
 
     checkEventInterval(events, 0, 419, 60, defVol);
     checkEventInterval(events, 420, 438, 66, defVol, true /* slide */);
@@ -300,9 +365,9 @@ TEST_F(MidiRenderer_Tests, slideOutFromAbove)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_out_from_above.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_out_from_above.mscx"));
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 10);
 
     checkEventInterval(events, 0, 419, 60, defVol);
     checkEventInterval(events, 420, 438, 59, defVol, true /* slide */);
@@ -315,9 +380,9 @@ TEST_F(MidiRenderer_Tests, slideOutFromBelow)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_out_from_below.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_out_from_below.mscx"));
 
-    EXPECT_EQ(events.size(), 10);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 10);
 
     checkEventInterval(events, 0, 419, 60, defVol);
     checkEventInterval(events, 420, 438, 61, defVol, true /* slide */);
@@ -330,9 +395,9 @@ TEST_F(MidiRenderer_Tests, tremoloSlideIn)
 {
     constexpr int defVol = 96; // f
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_slide_in.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_slide_in.mscx"));
 
-    EXPECT_EQ(events.size(), 16);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 16);
 
     checkEventInterval(events, 0, 223, 59, defVol);
     checkEventInterval(events, 224, 447, 59, defVol);
@@ -348,9 +413,9 @@ TEST_F(MidiRenderer_Tests, tremoloSlideOut)
 {
     constexpr int defVol = 96; // f
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_slide_out.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_slide_out.mscx"));
 
-    EXPECT_EQ(events.size(), 20);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 20);
 
     checkEventInterval(events, 0, 263, 59, defVol);
     checkEventInterval(events, 264, 527, 59, defVol);
@@ -368,9 +433,9 @@ TEST_F(MidiRenderer_Tests, slideInAndOut)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_in_and_out.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_in_and_out.mscx"));
 
-    EXPECT_EQ(events.size(), 14);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 14);
 
     checkEventInterval(events, 420, 438, 64, defVol, true /* slide */);
     checkEventInterval(events, 440, 458, 65, defVol, true /* slide */);
@@ -385,9 +450,10 @@ TEST_F(MidiRenderer_Tests, sameStringDifferentStaves)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"same_string_diff_staves.mscx", true));
+    auto midiEvents = renderMidiEvents(u"same_string_diff_staves.mscx", true);
+    EventsHolder events = getNoteOnEvents(midiEvents);
 
-    EXPECT_EQ(events.size(), 6);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
 
     checkEventInterval(events, 0, 239, 62, defVol, false, DEFAULT_CHANNEL);
     checkEventInterval(events, 240, 479, 62, defVol, false, DEFAULT_CHANNEL);
@@ -399,9 +465,12 @@ TEST_F(MidiRenderer_Tests, trillOnHiddenStaff)
     constexpr int mfVol = 80;
     constexpr int fVol = 96;
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"trill_on_hidden_staff.mscx"));
+    auto midiEvents = renderMidiEvents(u"trill_on_hidden_staff.mscx");
+    EventsHolder events = getNoteOnEvents(midiEvents);
 
-    EXPECT_EQ(events.size(), 18);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
+    int eventsCount = getEventsCount(events);
+    EXPECT_EQ(eventsCount, 18);
 
     checkEventInterval(events, 0, 1919, 60, mfVol, false, DEFAULT_CHANNEL);
     checkEventInterval(events, 1920, 1979, 79, fVol, false, DEFAULT_CHANNEL + 1);
@@ -418,9 +487,9 @@ TEST_F(MidiRenderer_Tests, letRingRepeat)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"let_ring_repeat.mscx", true, false));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"let_ring_repeat.mscx", true, false));
 
-    EXPECT_EQ(events.size(), 8);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
 
     checkEventInterval(events, 1920, 3840, 60, defVol, false, DEFAULT_CHANNEL);
     checkEventInterval(events, 2880, 3840, 64, defVol, false, DEFAULT_CHANNEL + 1);
@@ -432,9 +501,9 @@ TEST_F(MidiRenderer_Tests, slideToTiedNote)
 {
     constexpr int defVol = 96; // f
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_to_tied_note.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_to_tied_note.mscx"));
 
-    EXPECT_EQ(events.size(), 8);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
 
     checkEventInterval(events, 420, 438, 66, defVol, true /* slide */);
     checkEventInterval(events, 440, 458, 67, defVol, true /* slide */);
@@ -446,9 +515,9 @@ TEST_F(MidiRenderer_Tests, twoSlides)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"two_slides.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"two_slides.mscx"));
 
-    EXPECT_EQ(events.size(), 16);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 16);
 
     checkEventInterval(events, 1860, 1878, 56, defVol, true /* slide */);
     checkEventInterval(events, 1880, 1898, 57, defVol, true /* slide */);
@@ -464,9 +533,9 @@ TEST_F(MidiRenderer_Tests, reducedSlides)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"reduced_slides.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"reduced_slides.mscx"));
 
-    EXPECT_EQ(events.size(), 42);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 42);
 
     /// fret 0: no slides
     checkEventInterval(events, 0, 959, 60, defVol);
@@ -506,9 +575,9 @@ TEST_F(MidiRenderer_Tests, shortNoteBeforeSlide)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"short_note_before_slide.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"short_note_before_slide.mscx"));
 
-    EXPECT_EQ(events.size(), 20);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 20);
 
     /// 32th note before slide
     checkEventInterval(events, 0, 29, 62, defVol);
@@ -529,9 +598,9 @@ TEST_F(MidiRenderer_Tests, shortNoteWithSlide)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"short_note_with_slide.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"short_note_with_slide.mscx"));
 
-    EXPECT_EQ(events.size(), 16);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 16);
 
     /// 32th note with slide
     checkEventInterval(events, 0, 29, 69, defVol);
@@ -550,9 +619,9 @@ TEST_F(MidiRenderer_Tests, slideInAfterRest)
 {
     constexpr int defVol = 80; // mf
 
-    EventMap events = getNoteOnEvents(renderMidiEvents(u"slide_in_after_rest.mscx"));
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_in_after_rest.mscx"));
 
-    EXPECT_EQ(events.size(), 8);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
 
     checkEventInterval(events, 420, 438, 60, defVol, true /* slide */);
     checkEventInterval(events, 440, 458, 61, defVol, true /* slide */);

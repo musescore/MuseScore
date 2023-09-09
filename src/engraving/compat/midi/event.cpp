@@ -200,11 +200,59 @@ void EventList::insert(const Event& e)
     push_back(e);
 }
 
+EventsHolder::events_multimap_t& EventsHolder::operator[](std::size_t idx)
+{
+    if (size() == 0) {
+        _channels.emplace_back();
+    }
+    if (idx >= size()) {
+        auto diff = idx - size();
+        do {
+            _channels.emplace_back();
+        } while (diff-- != 0);
+    }
+    return _channels[idx];
+}
+
+const EventsHolder::events_multimap_t& EventsHolder::operator[](std::size_t idx) const
+{
+    // Since EventsHolder acts more like a vector
+    // Using const subscript operator for a nonexistent element is UB
+    /*
+     * cppreference.com
+     * Unlike std::map::operator[], this operator never inserts a new element into the container.
+     * Accessing a nonexistent element through this operator is undefined behavior.
+     */
+    assert(idx < size());
+    return _channels[idx];
+}
+
+void EventsHolder::mergePitchWheelEvents(EventsHolder& pitchWheelEvents)
+{
+    for (size_t i = 0; i < size(); ++i) {
+        for (const auto& eventPair : _channels[i]) {
+            const auto& event = eventPair.second;
+            const auto& tick = eventPair.first;
+            if (event.type() == ME_NOTEON && event.velo() != 0) {
+                const auto& pwEvent = findLess(pitchWheelEvents[i], tick);
+                if (pwEvent != pitchWheelEvents[i].end()
+                    && pwEvent->second.type() == ME_PITCHBEND) {
+                    PitchWheelSpecs specs;
+                    NPlayEvent pwReset(ME_PITCHBEND, i, specs.mLimit % 128, specs.mLimit / 128);
+                    pwReset.setOriginatingStaff(pwEvent->second.getOriginatingStaff());
+                    _channels[i].insert(std::pair<int, NPlayEvent>(((tick - pwEvent->first) / 2) + pwEvent->first, pwReset));
+                }
+            }
+        }
+        _channels[i].merge(pitchWheelEvents[i]);
+    }
+}
+
 //---------------------------------------------------------
-//   class EventMap::fixupMIDI
+//   class EventsHolder::fixupMIDI
 //---------------------------------------------------------
 
-void EventMap::fixupMIDI()
+void EventsHolder::fixupMIDI()
 {
     /* track info for each of the 128 possible MIDI notes */
     struct channelInfo {
@@ -215,33 +263,35 @@ void EventMap::fixupMIDI()
     };
 
     /* track info for each channel (on the heap, 0-initialised) */
-    struct channelInfo* info = (struct channelInfo*)calloc(_highestChannel + 1, sizeof(struct channelInfo));
+    auto* info = (struct channelInfo*)calloc(size() + 1, sizeof(struct channelInfo));
 
-    auto it = begin();
-    while (it != end()) {
-        NPlayEvent& event = it->second;
-        /* ME_NOTEOFF is never emitted, no need to check for it */
-        if (event.type() == ME_NOTEON && !event.isMuted()) {
-            unsigned short np = info[event.channel()].nowPlaying[event.pitch()];
-            if (event.velo() == 0) {
-                /* already off (should not happen) or still playing? */
-                if (np == 0 || --np > 0) {
-                    event.setDiscard(1);
+    for (auto& mm : _channels) {
+        auto it = mm.begin();
+        while (it != mm.end()) {
+            NPlayEvent& event = it->second;
+            /* ME_NOTEOFF is never emitted, no need to check for it */
+            if (event.type() == ME_NOTEON) {
+                uint8_t np = info[event.channel()].nowPlaying[event.pitch()];
+                if (event.velo() == 0) {
+                    /* already off (should not happen) or still playing? */
+                    if (np == 0 || --np > 0) {
+                        event.setDiscard(1);
+                    } else {
+                        /* hoist NOTEOFF to same track as NOTEON */
+                        event.setOriginatingStaff(info[event.channel()].event[event.pitch()]->getOriginatingStaff());
+                    }
                 } else {
-                    /* hoist NOTEOFF to same track as NOTEON */
-                    event.setOriginatingStaff(info[event.channel()].event[event.pitch()]->getOriginatingStaff());
+                    if (++np > 1) {
+                        /* restrike, possibly on different track */
+                        event.setDiscard(info[event.channel()].event[event.pitch()]->getOriginatingStaff() + 1);
+                    }
+                    info[event.channel()].event[event.pitch()] = &event;
                 }
-            } else {
-                if (++np > 1) {
-                    /* restrike, possibly on different track */
-                    event.setDiscard(info[event.channel()].event[event.pitch()]->getOriginatingStaff() + 1);
-                }
-                info[event.channel()].event[event.pitch()] = &event;
+                info[event.channel()].nowPlaying[event.pitch()] = np;
             }
-            info[event.channel()].nowPlaying[event.pitch()] = np;
-        }
 
-        ++it;
+            ++it;
+        }
     }
 
     free((void*)info);

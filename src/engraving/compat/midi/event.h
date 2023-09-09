@@ -169,7 +169,7 @@ public:
 
 //---------------------------------------------------------
 //   EventList
-//   EventMap
+//   EventsHolder
 //---------------------------------------------------------
 
 class EventList : public std::vector<Event>
@@ -180,19 +180,18 @@ public:
     void insertNote(int channel, Note*);
 };
 
-class EventMap : public std::multimap<int, NPlayEvent>
+class EventsHolder
 {
-    OBJECT_ALLOCATOR(engraving, EventMap)
+    OBJECT_ALLOCATOR(engraving, EventsHolder)
 
-    int _highestChannel = 15;
+    using events_multimap_t = std::multimap<int, NPlayEvent>;
+    std::vector<events_multimap_t> _channels;
 public:
+    [[nodiscard]] size_t size() const { return _channels.size(); }
+    events_multimap_t& operator[](std::size_t idx);
+    const events_multimap_t& operator[](std::size_t idx) const;
+    void mergePitchWheelEvents(EventsHolder& pitchWheelEvents);
     void fixupMIDI();
-    void registerChannel(int c)
-    {
-        if (c > _highestChannel) {
-            _highestChannel = c;
-        }
-    }
 };
 
 typedef EventList::iterator iEvent;

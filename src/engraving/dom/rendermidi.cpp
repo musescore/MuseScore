@@ -1605,7 +1605,7 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
     }
 }
 
-void Score::renderMidi(EventMap* events, const MidiRenderer::Context& ctx, bool expandRepeats)
+void Score::renderMidi(EventsHolder& events, const MidiRenderer::Context& ctx, bool expandRepeats)
 {
     masterScore()->setExpandRepeats(expandRepeats);
     MidiRenderer(this).renderScore(events, ctx);

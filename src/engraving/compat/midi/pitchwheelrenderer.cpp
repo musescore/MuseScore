@@ -25,9 +25,9 @@ void PitchWheelRenderer::addPitchWheelFunction(const PitchWheelFunction& functio
     functions.functions.push_back(function);
 }
 
-EventMap PitchWheelRenderer::renderPitchWheel() const noexcept
+EventsHolder PitchWheelRenderer::renderPitchWheel() const noexcept
 {
-    EventMap pitchWheelEvents;
+    EventsHolder pitchWheelEvents;
 
     for (const auto& function : _functions) {
         renderChannelPitchWheel(pitchWheelEvents, function.second, function.first);
@@ -38,7 +38,7 @@ EventMap PitchWheelRenderer::renderPitchWheel() const noexcept
 
 //! MARK: PRIVATE METHODS
 
-void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
+void PitchWheelRenderer::renderChannelPitchWheel(EventsHolder& pitchWheelEvents,
                                                  const PitchWheelFunctions& functions,
                                                  uint32_t channel) const noexcept
 {
@@ -108,7 +108,7 @@ void PitchWheelRenderer::renderChannelPitchWheel(EventMap& pitchWheelEvents,
                 if (staffInfoValid) {
                     evb.setOriginatingStaff(staffIdx);
                 }
-                pitchWheelEvents.emplace_hint(pitchWheelEvents.end(), std::make_pair(tick, evb));
+                pitchWheelEvents[channel].emplace_hint(pitchWheelEvents[channel].end(), std::make_pair(tick, evb));
                 forceUpdate = false;
             }
 
