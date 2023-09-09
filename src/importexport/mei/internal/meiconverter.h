@@ -31,6 +31,7 @@
 #include "iengravingfontsprovider.h"
 
 #include "thirdparty/libmei/cmn.h"
+#include "thirdparty/libmei/cmnornaments.h"
 #include "thirdparty/libmei/harmony.h"
 #include "thirdparty/libmei/shared.h"
 
@@ -87,6 +88,9 @@ public:
     static engraving::ElementType elementTypeForDirWithExt(const libmei::Element& meiElement);
     static engraving::ElementType elementTypeFor(const libmei::RepeatMark& meiRepeatMark);
     static bool isDirWithExt(const libmei::Dir& meiDir);
+    static bool isMordent(const engraving::Ornament* ornament);
+    static bool isTrill(const engraving::Ornament* ornament);
+    static bool isTurn(const engraving::Ornament* ornament);
 
     /**
      * Methods for converting from and to MEI
@@ -184,6 +188,8 @@ public:
     static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef meterToMEI(const engraving::Fraction& fraction, engraving::TimeSigType tsType);
 
+    static libmei::Mordent mordentToMEI(const engraving::Ornament* ornament);
+
     static void octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning);
     static libmei::Octave octaveToMEI(const engraving::Ottava* ottava);
 
@@ -239,8 +245,12 @@ public:
     static void tieFromMEI(engraving::SlurTie* tie, const libmei::Tie& meiTie, bool& warning);
     static libmei::Tie tieToMEI(const engraving::SlurTie* tie);
 
+    static libmei::Trill trillToMEI(const engraving::Ornament* ornament);
+
     static void tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& meiTuplet, bool& warning);
     static libmei::Tuplet tupletToMEI(const engraving::Tuplet* tuplet);
+
+    static libmei::Turn turnToMEI(const engraving::Ornament* ornament);
 
     /**
      * Helper methods
