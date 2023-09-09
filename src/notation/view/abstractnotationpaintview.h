@@ -202,7 +202,7 @@ private:
 
     bool doMoveCanvas(qreal dx, qreal dy);
 
-    void redraw(const RectF& rect = RectF());
+    void scheduleRedraw(const RectF& rect = RectF());
     RectF correctDrawRect(const RectF& rect) const;
 
     // Input
