@@ -220,6 +220,65 @@ TEST_F(MidiRenderer_Tests, graceOnBeat)
     checkEventInterval(events, 720, 959, 57, defVol);
 }
 
+TEST_F(MidiRenderer_Tests, graceBeforeBeatGroup)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = renderMidiEvents(u"grace_before_beat_group.mscx");
+
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
+
+    checkEventInterval(events, 0, 359, 60, defVol);
+    checkEventInterval(events, 360, 419, 62, defVol);
+    checkEventInterval(events, 420, 479, 63, defVol);
+    checkEventInterval(events, 480, 959, 64, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, graceOnBeatGroup)
+{
+    constexpr int defVol = 80; // f
+
+    EventsHolder events = renderMidiEvents(u"grace_on_beat_group.mscx");
+
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
+
+    checkEventInterval(events, 0, 479, 60, defVol);
+    checkEventInterval(events, 480, 539, 62, defVol);
+    checkEventInterval(events, 540, 599, 63, defVol);
+    checkEventInterval(events, 600, 959, 64, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, graceOnBeatAndGlissando)
+{
+    constexpr int defVol = 80; // f
+
+    EventsHolder events = renderMidiEvents(u"grace_on_beat_and_glissando.mscx");
+
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 14);
+
+    checkEventInterval(events, 960, 1199, 64, defVol);
+    checkEventInterval(events, 1200, 1359, 60, defVol);
+    checkEventInterval(events, 1360, 1378, 61, defVol, true /* slide */);
+    checkEventInterval(events, 1380, 1398, 62, defVol, true /* slide */);
+    checkEventInterval(events, 1400, 1418, 63, defVol, true /* slide */);
+    checkEventInterval(events, 1419, 1437, 64, defVol, true /* slide */);
+    checkEventInterval(events, 1440, 1919, 65, defVol, true /* slide */);
+}
+
+TEST_F(MidiRenderer_Tests, graceBeforeBeatShortNote)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = renderMidiEvents(u"grace_before_beat_short_note.mscx");
+
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
+
+    checkEventInterval(events, 0, 1799, 63, defVol);
+    checkEventInterval(events, 1800, 1859, 58, defVol);
+    checkEventInterval(events, 1860, 1919, 67, defVol);
+    checkEventInterval(events, 1920, 2399, 69, defVol);
+}
+
 TEST_F(MidiRenderer_Tests, ghostNote)
 {
     constexpr int defVol = 96; // f
@@ -260,6 +319,19 @@ TEST_F(MidiRenderer_Tests, legatoGlissando)
     checkEventInterval(events, 748, 852, 57, defVol, true /* slide */);
     checkEventInterval(events, 854, 958, 56, defVol, true /* slide */);
     checkEventInterval(events, 960, 1439, 55, defVol, true /* slide */);
+}
+
+TEST_F(MidiRenderer_Tests, invalidGlissando)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"invalid_glissando.mscx"));
+
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 4);
+
+    /// glissando is not played because of different start/end note strings
+    checkEventInterval(events, 480, 959, 60, defVol);
+    checkEventInterval(events, 960, 1439, 57, defVol);
 }
 
 TEST_F(MidiRenderer_Tests, sameStringNoEffects)

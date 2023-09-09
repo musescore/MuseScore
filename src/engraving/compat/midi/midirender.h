@@ -26,6 +26,7 @@
 #include <memory>
 
 #include "dom/measure.h"
+#include "dom/mscore.h"
 #include "dom/synthesizerstate.h"
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
@@ -91,9 +92,9 @@ private:
     void renderMetronome(EventsHolder& events, Measure const* m);
 
     void collectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
-                              PitchWheelRenderer& pitchWheelRenderer);
+                              PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords);
     void doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
-                                PitchWheelRenderer& pitchWheelRenderer);
+                                PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords);
 
     struct ChordParams {
         bool letRing = false;
@@ -102,8 +103,8 @@ private:
     };
 
     ChordParams collectChordParams(const Chord* chord, int tickOffset) const;
-    void collectGraceBeforeChordEvents(Chord* chord, EventsHolder& events, double veloMultiplier, Staff* st, int tickOffset,
-                                       PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
+    void collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier, Staff* st,
+                                       int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
 
     Score* score = nullptr;
 

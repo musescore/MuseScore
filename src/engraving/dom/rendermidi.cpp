@@ -639,6 +639,23 @@ static Glissando* backGlissando(Note* note)
 }
 
 //---------------------------------------------------------
+//   isGlissandoValid
+//
+//   checking if glissando can be played
+//---------------------------------------------------------
+
+static bool isGlissandoValid(Glissando* glissando)
+{
+    EngravingItem* startItem = glissando->startElement();
+    EngravingItem* endItem = glissando->endElement();
+    if (!startItem || !endItem || !startItem->isNote() || !endItem->isNote()) {
+        return false;
+    }
+
+    return toNote(startItem)->string() == toNote(endItem)->string();
+}
+
+//---------------------------------------------------------
 //   renderNoteArticulation
 // prefix, vector of int, normally something like {0,-1,0,1} modeling the prefix of tremblement relative to the base note
 // body, vector of int, normally something like {0,-1,0,1} modeling the possibly repeated tremblement relative to the base note
@@ -758,30 +775,6 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
         return ontime + duration;
     };
 
-    // local function:
-    //    Given a chord from a grace note, (normally the chord contains a single note) and create
-    //    a NoteEvent as if the grace note were part of the articulation (such as trill).  This
-    //    local function works for the graceNotesBefore() and also graceNotesAfter().
-    //    If the grace note has play=false, then it will sound as a rest, but the other grace
-    //    notes will still play.  This means graceExtend simply omits the call to append( NoteEvent(...))
-    //    but still updates ontime +=millespernote.
-    //    RETURNS the new value of ontime, so caller must make an assignment to the return value.
-    auto graceExtend = [millespernote, chord, events](int notePitch, std::vector<Chord*> graceNotes, int ontime) {
-        for (Chord* c : graceNotes) {
-            for (Note* n : c->notes()) {
-                // NoteEvent takes relative pitch as first argument.
-                // The pitch is relative to the pitch of the note, the event is rendering
-                if (n->play()) {
-                    events->push_back(NoteEvent(n->pitch() - notePitch,
-                                                ontime / chord->actualTicks().ticks(),
-                                                millespernote / chord->actualTicks().ticks()));
-                }
-            }
-            ontime += millespernote;
-        }
-        return ontime;
-    };
-
     // calculate the number of times to repeat the body, and sustain the last note of the body
     // 1000 = P + numrepeat*B+sustain + S
     if (repeatp) {
@@ -789,11 +782,6 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
     }
     if (sustainp) {
         sustain   = space - millespernote * (gnb + p + numrepeat * b + s + gna);
-    }
-    // render the graceNotesBefore
-    ///@NOTE grace note + glissando combination is treated separetely
-    if (!noteIsGlissandoStart(note)) {
-        ontime = graceExtend(note->pitch(), note->chord()->graceNotesBefore(), ontime);
     }
 
     // render the prefix
@@ -803,11 +791,21 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
 
     if (b > 0) {
         // Check that we are doing a glissando
-        bool isGlissando = false;
+        enum GlissandoState {
+            NOT_FOUND,
+            VALID,
+            INVALID
+        } glissandoState = GlissandoState::NOT_FOUND;
+
         std::vector<int> onTimes;
         for (Spanner* spanner : note->spannerFor()) {
             if (spanner->type() == ElementType::GLISSANDO) {
                 Glissando* glissando = toGlissando(spanner);
+                if (!isGlissandoValid(glissando)) {
+                    glissandoState = GlissandoState::INVALID;
+                    break;
+                }
+
                 EaseInOut easeInOut(static_cast<double>(glissando->easeIn()) / 100.0,
                                     static_cast<double>(glissando->easeOut()) / 100.0);
 
@@ -830,17 +828,22 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
                     }
                 }
 
-                isGlissando = true;
+                glissandoState = GlissandoState::VALID;
                 break;
             }
         }
-        if (isGlissando) {
+        if (glissandoState == GlissandoState::VALID) {
             const double defaultVelocityMultiplier = 1.0;
 
             // render the body, i.e. the glissando
             if (onTimes.size() > 1) {
                 makeEvent(body[0], onTimes[0], onTimes[1] - onTimes[0],
                           defaultVelocityMultiplier, !note->tieBack());
+
+                Glissando* gl = backGlissando(note);
+                if (gl && isGlissandoValid(gl) && !gl->glissandoShift()) {
+                    events->back().setSlide(true);
+                }
             }
 
             for (int j = 1; j < b - 1; j++) {
@@ -853,7 +856,7 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
                 makeEvent(body[b - 1], onTimes[b - 1], (millespernote * b - onTimes[b - 1]) + sustain, defaultVelocityMultiplier);
                 events->back().setSlide(true);
             }
-        } else {
+        } else if (glissandoState != GlissandoState::INVALID) {
             // render the body, but not the final repetition
             for (int r = 0; r < numrepeat - 1; r++) {
                 for (int j = 0; j < b; j++) {
@@ -872,8 +875,7 @@ static bool renderNoteArticulation(NoteEventList* events, Note* note, bool chrom
     for (int j = 0; j < s; j++) {
         ontime = makeEvent(suffix[j], ontime, tieForward(j, suffix));
     }
-    // render graceNotesAfter
-    graceExtend(note->pitch(), note->chord()->graceNotesAfter(), ontime);
+
     return true;
 }
 
@@ -1300,7 +1302,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
                                     !note->ghost() ? NoteEvent::DEFAULT_VELOCITY_MULTIPLIER : NoteEvent::GHOST_VELOCITY_MULTIPLIER));
 
             Glissando* gl = backGlissando(note);
-            if (gl && !gl->glissandoShift()) {
+            if (gl && isGlissandoValid(gl) && !gl->glissandoShift()) {
                 el->back().setSlide(true);
             }
         }
@@ -1501,10 +1503,7 @@ static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
     });
 
     if (!graceNotesBeforeBar.empty()) {
-        reducedTicks = graceNotesBeforeBar[0]->ticks().ticks();
-        if (reducedTicks >= prevTicks) {
-            return;
-        }
+        reducedTicks = std::min(graceNotesBeforeBar[0]->ticks().ticks(), prevTicks / 2);
     } else if (anySlidesIn) {
         reducedTicks = slideTicks(prevChord);
     } else {
