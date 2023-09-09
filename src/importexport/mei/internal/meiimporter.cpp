@@ -1892,8 +1892,12 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readHairpin(xpathNode.node(), measure);
         } else if (elementName == "harm") {
             success = success && this->readHarm(xpathNode.node(), measure);
+        } else if (elementName == "mordent") {
+            success = success && this->readMordent(xpathNode.node(), measure);
         } else if (elementName == "octave") {
             success = success && this->readOctave(xpathNode.node(), measure);
+        } else if (elementName == "ornam") {
+            success = success && this->readOrnam(xpathNode.node(), measure);
         } else if (elementName == "repeatMark") {
             success = success && this->readRepeatMark(xpathNode.node(), measure);
         } else if (elementName == "slur") {
@@ -1902,6 +1906,10 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readTempo(xpathNode.node(), measure);
         } else if (elementName == "tie") {
             success = success && this->readTie(xpathNode.node(), measure);
+        } else if (elementName == "trill") {
+            success = success && this->readTrill(xpathNode.node(), measure);
+        } else if (elementName == "turn") {
+            success = success && this->readTurn(xpathNode.node(), measure);
         }
     }
     return success;
@@ -2117,6 +2125,23 @@ bool MeiImporter::readHarm(pugi::xml_node harmNode, Measure* measure)
 }
 
 /**
+ * Read a mordent.
+ */
+
+bool MeiImporter::readMordent(pugi::xml_node mordentNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Mordent meiMordent;
+    meiMordent.Read(mordentNode);
+
+    return true;
+}
+
+/**
  * Read a octave.
  */
 
@@ -2137,6 +2162,23 @@ bool MeiImporter::readOctave(pugi::xml_node octaveNode, Measure* measure)
     }
 
     Convert::octaveFromMEI(ottava, meiOctave, warning);
+
+    return true;
+}
+
+/**
+ * Read a ornam.
+ */
+
+bool MeiImporter::readOrnam(pugi::xml_node ornamNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Ornam meiOrnam;
+    meiOrnam.Read(ornamNode);
 
     return true;
 }
@@ -2257,6 +2299,40 @@ bool MeiImporter::readTie(pugi::xml_node tieNode, Measure* measure)
     m_openSpannerMap[tie] = tieNode;
 
     Convert::tieFromMEI(tie, meiTie, warning);
+
+    return true;
+}
+
+/**
+ * Read a trill.
+ */
+
+bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Trill meiTrill;
+    meiTrill.Read(trillNode);
+
+    return true;
+}
+
+/**
+ * Read a mordent.
+ */
+
+bool MeiImporter::readTurn(pugi::xml_node turnNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Turn meiTurn;
+    meiTurn.Read(turnNode);
 
     return true;
 }

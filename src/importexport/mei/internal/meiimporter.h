@@ -122,11 +122,15 @@ private:
     bool readFermata(pugi::xml_node fermataNode, engraving::Measure* measure);
     bool readHairpin(pugi::xml_node hairpinNode, engraving::Measure* measure);
     bool readHarm(pugi::xml_node harmNode, engraving::Measure* measure);
+    bool readMordent(pugi::xml_node mordentNode, engraving::Measure* measure);
     bool readOctave(pugi::xml_node octaveNode, engraving::Measure* measure);
+    bool readOrnam(pugi::xml_node ornamNode, engraving::Measure* measure);
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
     bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
     bool readTie(pugi::xml_node tieNode, engraving::Measure* measure);
+    bool readTrill(pugi::xml_node trillNode, engraving::Measure* measure);
+    bool readTurn(pugi::xml_node turnNode, engraving::Measure* measure);
 
     /**
      * Methods for parsing specific MEI attribute classes within elements
