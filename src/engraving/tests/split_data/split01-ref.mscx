@@ -100,9 +100,6 @@
         </Measure>
       <Measure len="2/4">
         <voice>
-          <KeySig>
-            <concertKey>0</concertKey>
-            </KeySig>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
