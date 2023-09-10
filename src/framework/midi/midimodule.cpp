@@ -57,6 +57,10 @@ void MidiModule::registerExports()
 {
     m_configuration = std::make_shared<MidiConfiguration>();
 
+#if defined(JACK_AUDIO)
+    m_midiOutPort = std::make_shared<JackMidiOutPort>();
+    m_midiInPort = std::make_shared<JackMidiInPort>();
+#else
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     m_midiOutPort = std::make_shared<AlsaMidiOutPort>();
     m_midiInPort = std::make_shared<AlsaMidiInPort>();
@@ -69,6 +73,7 @@ void MidiModule::registerExports()
 #else
     m_midiOutPort = std::make_shared<DummyMidiOutPort>();
     m_midiInPort = std::make_shared<DummyMidiInPort>();
+#endif
 #endif
 
     modularity::ioc()->registerExport<IMidiConfiguration>(moduleName(), m_configuration);

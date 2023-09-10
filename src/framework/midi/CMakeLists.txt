@@ -21,6 +21,15 @@
 set(MODULE midi)
 
 include(GetPlatformInfo)
+
+if (MUE_ENABLE_AUDIO_JACK)
+    set(DRIVER_SRC
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidioutport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidioutport.h
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidiinport.cpp
+        ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackmidiinport.h
+    )
+else()
 if (OS_IS_WIN)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmidioutport.cpp
@@ -49,6 +58,7 @@ elseif(OS_IS_MAC)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidiinport.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/osx/coremidiinport.h
     )
+endif()
 endif()
 
 
