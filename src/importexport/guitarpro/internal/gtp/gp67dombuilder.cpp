@@ -860,7 +860,7 @@ GPMasterBar::KeySig GP67DomBuilder::readKeySig(XmlDomNode* keyNode) const
     }
 
     int keyCount = accidentalCount.toElement().text().toInt();
-    
+
     return GPMasterBar::KeySig{ GPMasterBar::KeySig::Accidentals(keyCount), mode };
 }
 
