@@ -933,8 +933,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
     auto convertMode = [](GPMasterBar::KeySig::Mode m) {
         if (m == GPMasterBar::KeySig::Mode::Major) {
             return KeyMode::MAJOR;
-        }
-        else {
+        } else {
             return KeyMode::MINOR;
         }
     };
@@ -967,7 +966,7 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
             continue;
         }
         int key = static_cast<int>(mB->keySig().accidentalCount);
-        
+
         bool useFlats = mB->useFlats() || key < 0;
         size_t numSharps = getNumSharps(key);
         IF_ASSERT_FAILED(numSharps != nidx) {
