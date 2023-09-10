@@ -57,19 +57,19 @@ void MidiModule::registerExports()
 {
     m_configuration = std::make_shared<MidiConfiguration>();
 
-    #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
     m_midiOutPort = std::make_shared<AlsaMidiOutPort>();
     m_midiInPort = std::make_shared<AlsaMidiInPort>();
-    #elif defined(Q_OS_WIN)
+#elif defined(Q_OS_WIN)
     m_midiOutPort = std::make_shared<WinMidiOutPort>();
     m_midiInPort = std::make_shared<WinMidiInPort>();
-    #elif defined(Q_OS_MACOS)
+#elif defined(Q_OS_MACOS)
     m_midiOutPort = std::make_shared<CoreMidiOutPort>();
     m_midiInPort = std::make_shared<CoreMidiInPort>();
-    #else
+#else
     m_midiOutPort = std::make_shared<DummyMidiOutPort>();
     m_midiInPort = std::make_shared<DummyMidiInPort>();
-    #endif
+#endif
 
     modularity::ioc()->registerExport<IMidiConfiguration>(moduleName(), m_configuration);
     modularity::ioc()->registerExport<IMidiOutPort>(moduleName(), m_midiOutPort);
