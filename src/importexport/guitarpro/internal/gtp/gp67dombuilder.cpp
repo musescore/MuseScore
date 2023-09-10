@@ -850,9 +850,18 @@ GPTrack::RSE GP67DomBuilder::readTrackRSE(XmlDomNode* trackChildNode) const
 GPMasterBar::KeySig GP67DomBuilder::readKeySig(XmlDomNode* keyNode) const
 {
     const auto& accidentalCount = keyNode->firstChildElement("AccidentalCount");
-    int keyCount = accidentalCount.toElement().text().toInt();
+    const auto& modeNode = keyNode->firstChildElement("Mode");
 
-    return GPMasterBar::KeySig(keyCount);
+    String modeName = modeNode.toElement().text();
+
+    GPMasterBar::KeySig::Mode mode = GPMasterBar::KeySig::Mode::Major;
+    if (modeName == "Minor") {
+        mode = GPMasterBar::KeySig::Mode::Minor;
+    }
+
+    int keyCount = accidentalCount.toElement().text().toInt();
+    
+    return GPMasterBar::KeySig{ GPMasterBar::KeySig::Accidentals(keyCount), mode };
 }
 
 bool GP67DomBuilder::readUseFlats(XmlDomNode* keyNode) const

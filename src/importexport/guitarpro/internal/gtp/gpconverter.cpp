@@ -896,41 +896,50 @@ void GPConverter::addTripletFeel(const GPMasterBar* mB, Measure* measure)
 
 void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
 {
-    auto convertKeySig = [](GPMasterBar::KeySig kS) {
-        if (kS == GPMasterBar::KeySig::C_B) {
+    auto convertKeySig = [](GPMasterBar::KeySig::Accidentals kS) {
+        if (kS == GPMasterBar::KeySig::Accidentals::C_B) {
             return Key::C_B;
-        } else if (kS == GPMasterBar::KeySig::G_B) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::G_B) {
             return Key::G_B;
-        } else if (kS == GPMasterBar::KeySig::D_B) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::D_B) {
             return Key::D_B;
-        } else if (kS == GPMasterBar::KeySig::A_B) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::A_B) {
             return Key::A_B;
-        } else if (kS == GPMasterBar::KeySig::E_B) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::E_B) {
             return Key::E_B;
-        } else if (kS == GPMasterBar::KeySig::B_B) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::B_B) {
             return Key::B_B;
-        } else if (kS == GPMasterBar::KeySig::F) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::F) {
             return Key::F;
-        } else if (kS == GPMasterBar::KeySig::C) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::C) {
             return Key::C;
-        } else if (kS == GPMasterBar::KeySig::G) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::G) {
             return Key::G;
-        } else if (kS == GPMasterBar::KeySig::D) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::D) {
             return Key::D;
-        } else if (kS == GPMasterBar::KeySig::A) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::A) {
             return Key::A;
-        } else if (kS == GPMasterBar::KeySig::E) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::E) {
             return Key::E;
-        } else if (kS == GPMasterBar::KeySig::B) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::B) {
             return Key::B;
-        } else if (kS == GPMasterBar::KeySig::F_S) {
+        } else if (kS == GPMasterBar::KeySig::Accidentals::F_S) {
             return Key::F_S;
         } else {
             return Key::C_S;
         }
     };
 
-    using KS = GPMasterBar::KeySig;
+    auto convertMode = [](GPMasterBar::KeySig::Mode m) {
+        if (m == GPMasterBar::KeySig::Mode::Major) {
+            return KeyMode::MAJOR;
+        }
+        else {
+            return KeyMode::MINOR;
+        }
+    };
+
+    using KS = GPMasterBar::KeySig::Accidentals;
 
     Fraction tick = measure->tick();
     size_t staves = _score->staves().size();
@@ -954,10 +963,11 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
     };
 
     for (size_t staffIdx = 0; staffIdx < staves; ++staffIdx) {
-        if (!tick.isZero() && _lastKeySigs[staffIdx] == mB->keySig()) {
+        if (!tick.isZero() && _lastKeySigs[staffIdx].accidentalCount == mB->keySig().accidentalCount) {
             continue;
         }
-        int key = static_cast<int>(mB->keySig());
+        int key = static_cast<int>(mB->keySig().accidentalCount);
+        
         bool useFlats = mB->useFlats() || key < 0;
         size_t numSharps = getNumSharps(key);
         IF_ASSERT_FAILED(numSharps != nidx) {
@@ -972,12 +982,14 @@ void GPConverter::addKeySig(const GPMasterBar* mB, Measure* measure)
         }
 
         auto scoreKeySig = convertKeySig(static_cast<KS>(key));
+        auto scoreMode = convertMode(mB->keySig().mode);
 
         Staff* staff = _score->staff(staffIdx);
         if (staff->staffType()->genTimesig()) {
             KeySig* t = mu::engraving::Factory::createKeySig(_score->dummy()->segment());
             t->setTrack(staffIdx * VOICES);
             t->setKey(scoreKeySig);
+            t->setMode(scoreMode);
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             s->add(t);
             _lastKeySigs[staffIdx] = mB->keySig();
