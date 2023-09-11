@@ -2154,7 +2154,7 @@ const UiActionList NotationUiActions::m_actions = {
              ),
     UiAction("pad-dot",
              mu::context::UiCtxNotationOpened,
-             mu::context::CTX_NOTATION_NOT_NOTE_INPUT_STAFF_TAB,
+             mu::context::CTX_NOTATION_OPENED,
              TranslatableString("action", "Augmentation dot"),
              TranslatableString("action", "Toggle duration dot"),
              IconCode::Code::NOTE_DOTTED
