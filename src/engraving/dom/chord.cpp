@@ -1919,7 +1919,6 @@ EngravingItem* Chord::drop(EditData& data)
         }
         a->setTrack(track());
         a->setParent(this);
-        a->setHeight(spatium() * 5);             //DEBUG
         score()->undoAddElement(a);
     }
         return e;

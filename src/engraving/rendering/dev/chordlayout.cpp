@@ -59,7 +59,6 @@
 #include "dom/utils.h"
 
 #include "tlayout.h"
-#include "arpeggiolayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
 #include "autoplace.h"
@@ -179,7 +178,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     item->addLedgerLines();
 
     if (item->arpeggio()) {
-        ArpeggioLayout::computeHeight(item->arpeggio());
         TLayout::layout(item->arpeggio(), item->arpeggio()->mutLayoutData(), ctx.conf());
 
         double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
@@ -508,12 +506,9 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     }                                     // end of if(duration_symbols)
 
     if (item->arpeggio()) {
-        double headHeight = upnote->headHeight();
+        double y = upnote->pos().y() - upnote->headHeight() * .5;
         TLayout::layout(item->arpeggio(), item->arpeggio()->mutLayoutData(), ctx.conf());
         lll += item->arpeggio()->width() + _spatium * .5;
-        double y = item->upNote()->pos().y() - headHeight * .5;
-        double h = item->downNote()->pos().y() + item->downNote()->headHeight() - y;
-        item->arpeggio()->setHeight(h);
         item->arpeggio()->setPos(-lll, y);
 
         // handle the special case of _arpeggio->span() > 1

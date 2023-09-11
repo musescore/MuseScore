@@ -179,7 +179,8 @@ public:
     static void layout(const Accidental* item, Accidental::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(const ActionIcon* item, ActionIcon::LayoutData* ldata);
     static void layout(Ambitus* item, LayoutContext& ctx);
-    static void layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
+                       bool includeCrossStaffHeight = false);
     static void layout(const Articulation* item, Articulation::LayoutData* ldata);
 
     static void layout(BarLine* item, LayoutContext& ctx);

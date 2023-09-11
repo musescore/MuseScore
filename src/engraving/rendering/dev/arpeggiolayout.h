@@ -30,10 +30,7 @@ class ArpeggioLayout
 {
 public:
 
-    static void layout(const Arpeggio* item, const LayoutContext& ctx, Arpeggio::LayoutData* data);
-
     static void layoutArpeggio2(Arpeggio* item, LayoutContext& ctx);
-    static void computeHeight(Arpeggio* item, bool includeCrossStaffHeight = false);
 
     static void layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx);
     static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);

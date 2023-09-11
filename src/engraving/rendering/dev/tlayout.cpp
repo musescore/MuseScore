@@ -181,9 +181,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::AMBITUS:          layout(item_cast<Ambitus*>(item), ctx);
         break;
     case ElementType::ARPEGGIO:
-        if (!ldata->isValid()) {
-            layout(item_cast<const Arpeggio*>(item), static_cast<Arpeggio::LayoutData*>(ldata), ctx.conf());
-        }
+        //if (!ldata->isValid()) {
+        layout(item_cast<const Arpeggio*>(item), static_cast<Arpeggio::LayoutData*>(ldata), ctx.conf());
+        //}
         break;
     case ElementType::ARTICULATION:
         if (!ldata->isValid()) {
@@ -605,7 +605,7 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf)
+void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf, bool includeCrossStaffHeight)
 {
     if (conf.styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
@@ -618,13 +618,35 @@ void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const La
     }
     ldata->setIsSkipDraw(false);
 
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
+    }
+
+    //! NOTE Must already be set previously
+    Chord* parentChord = item->chord();
+    //LD_CONDITION(parentChord->upNote()->layoutData()->isSetPos(), "upNote->pos");
+    //LD_CONDITION(parentChord->downNote()->layoutData()->isSetPos(), "upNote->pos");
+
+    auto computeHeight = [](const Arpeggio* item, bool includeCrossStaffHeight) -> double
+    {
+        Chord* chord = item->chord();
+        double y = chord->upNote()->pagePos().y() - chord->upNote()->headHeight() * .5;
+
+        Note* downNote = chord->downNote();
+        if (includeCrossStaffHeight) {
+            track_idx_t bottomTrack = item->track() + (item->span() - 1) * VOICES;
+            EngravingItem* element = chord->segment()->element(bottomTrack);
+            Chord* bottomChord = (element && element->isChord()) ? toChord(element) : chord;
+            downNote = bottomChord->downNote();
+        }
+
+        double h = downNote->pagePos().y() + downNote->headHeight() * .5 - y;
+        return h;
+    };
+
     auto calcTop = [](const Arpeggio* item, const LayoutConfiguration& conf) -> double
     {
         double top = -item->userLen1();
-        if (!item->explicitParent()) {
-            return top;
-        }
-
         switch (item->arpeggioType()) {
         case ArpeggioType::BRACKET: {
             double lineWidth = conf.styleMM(Sid::ArpeggioLineWidth);
@@ -654,13 +676,10 @@ void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const La
         }
     };
 
-    auto calcBottom = [](const Arpeggio* item, const LayoutConfiguration& conf) -> double
+    auto calcBottom = [](const Arpeggio* item, double arpeggioHeight, const LayoutConfiguration& conf) -> double
     {
         double top = -item->userLen1();
-        double bottom = item->height() + item->userLen2();
-        if (!item->explicitParent()) {
-            return bottom;
-        }
+        double bottom = arpeggioHeight + item->userLen2();
 
         switch (item->arpeggioType()) {
         case ArpeggioType::BRACKET: {
@@ -692,8 +711,9 @@ void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const La
         data->symbols.push_back(end);
     };
 
+    ldata->arpeggioHeight = computeHeight(item, includeCrossStaffHeight);
     ldata->top = calcTop(item, conf);
-    ldata->bottom = calcBottom(item, conf);
+    ldata->bottom = calcBottom(item, ldata->arpeggioHeight, conf);
 
     ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
     ldata->magS = conf.magS(ldata->mag());

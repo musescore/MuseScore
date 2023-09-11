@@ -1152,7 +1152,7 @@ void NotationInteraction::startDrop(const QByteArray& edata)
 
     EngravingItem* el = engraving::Factory::createItem(type, score()->dummy());
     if (el) {
-        if (type == ElementType::BAR_LINE || type == ElementType::ARPEGGIO || type == ElementType::BRACKET) {
+        if (type == ElementType::BAR_LINE || type == ElementType::BRACKET) {
             double spatium = score()->style().spatium();
             el->setHeight(spatium * 5);
         }
