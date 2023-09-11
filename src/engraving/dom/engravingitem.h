@@ -493,7 +493,8 @@ public:
         virtual void reset()
         {
             m_bbox.reset();
-            m_pos.reset();
+            //! NOTE Temporary removed, have problems, need investigation
+            //m_pos.reset();
         }
 
         bool isValid() const { return m_bbox.has_value(); }
@@ -506,7 +507,13 @@ public:
 
         bool isSetPos() const { return m_pos.has_value(); }
         void clearPos() { m_pos.set_value(PointF()); }
-        const PointF& pos(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_pos.value(mode); }
+        const PointF& pos(LD_ACCESS mode = LD_ACCESS::CHECK) const
+        {
+            //! NOTE Temporarily to mute a lot of messages
+            mode = (LD_ACCESS::CHECK == mode) ? LD_ACCESS::MAYBE_NOTINITED : mode;
+            return m_pos.value(mode);
+        }
+
         void setPos(const PointF& p) { doSetPos(p.x(), p.y()); }
         void setPos(double x, double y) { doSetPos(x, y); }
         void setPosX(double x) { doSetPos(x, pos(LD_ACCESS::MAYBE_NOTINITED).y()); }

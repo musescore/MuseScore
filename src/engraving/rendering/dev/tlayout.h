@@ -24,21 +24,20 @@
 
 #include "layoutcontext.h"
 
-#include "dom/accidental.h"
-#include "dom/actionicon.h"
-#include "dom/arpeggio.h"
-#include "dom/articulation.h"
+#include "../../dom/accidental.h"
+#include "../../dom/actionicon.h"
+#include "../../dom/ambitus.h"
+#include "../../dom/arpeggio.h"
+#include "../../dom/articulation.h"
 
-#include "dom/measurenumberbase.h"
+#include "../../dom/measurenumberbase.h"
 
-#include "dom/textbase.h"
+#include "../../dom/textbase.h"
 
-#include "dom/ornament.h"
+#include "../../dom/ornament.h"
 
 namespace mu::engraving {
 class EngravingItem;
-
-class Ambitus;
 
 class BagpipeEmbellishment;
 class BarLine;
@@ -178,7 +177,7 @@ public:
 
     static void layout(const Accidental* item, Accidental::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(const ActionIcon* item, ActionIcon::LayoutData* ldata);
-    static void layout(Ambitus* item, LayoutContext& ctx);
+    static void layout(const Ambitus* item, Ambitus::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
                        bool includeCrossStaffHeight = false);
     static void layout(const Articulation* item, Articulation::LayoutData* ldata);

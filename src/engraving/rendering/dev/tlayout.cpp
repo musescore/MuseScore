@@ -148,7 +148,6 @@
 #include "dom/whammybar.h"
 
 #include "autoplace.h"
-#include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "lyricslayout.h"
@@ -178,9 +177,14 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
             layout(item_cast<const ActionIcon*>(item), static_cast<ActionIcon::LayoutData*>(ldata));
         }
         break;
-    case ElementType::AMBITUS:          layout(item_cast<Ambitus*>(item), ctx);
+    case ElementType::AMBITUS:
+        if (!ldata->isValid()) {
+            layout(item_cast<const Ambitus*>(item), static_cast<Ambitus::LayoutData*>(ldata), ctx);
+        }
         break;
     case ElementType::ARPEGGIO:
+        //! NOTE Can be edited and relayout,
+        //! in this case the reset layout data has not yet been done
         //if (!ldata->isValid()) {
         layout(item_cast<const Arpeggio*>(item), static_cast<Arpeggio::LayoutData*>(ldata), ctx.conf());
         //}
@@ -478,12 +482,10 @@ void TLayout::layout(const ActionIcon* item, ActionIcon::LayoutData* ldata)
     ldata->setBbox(fontMetrics.boundingRect(Char(item->icon())));
 }
 
-void TLayout::layout(Ambitus* item, LayoutContext& ctx)
+void TLayout::layout(const Ambitus* item, Ambitus::LayoutData* ldata, const LayoutContext& ctx)
 {
     const double spatium = item->spatium();
     const double headWdt = item->headWidth();
-
-    Ambitus::LayoutData* ldata = item->mutLayoutData();
 
     Accidental::LayoutData* topAccData = item->topAccidental()->mutLayoutData();
     Accidental::LayoutData* bottomAccData = item->bottomAccidental()->mutLayoutData();
