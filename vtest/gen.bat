@@ -57,7 +57,7 @@ set SRC=bravura-mmrest,gonville-mmrest, ^
  layout-sequence-9, layout-sequence-10, layout-sequence-11, layout-sequence-12, ^
  layout-sequence-13, layout-sequence-14, layout-sequence-15, layout-sequence-16, ^
  measure-number-1, measure-number-2, measure-number-3, measure-number-4, measure-number-5 ^
- custom-keysig-1, custom-keysig-2, custom-keysig-2, custom-keysig-3
+ custom-keysig-1, custom-keysig-2, custom-keysig-2, custom-keysig-3, timesig-1
 
 IF NOT "%1"=="" (
    SET INSTALL_PATH=%1
