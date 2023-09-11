@@ -534,7 +534,7 @@ String Clef::accessibleInfo() const
 void Clef::clear()
 {
     LayoutData* ldata = mutLayoutData();
-    ldata->resetBbox();
+    ldata->clearBbox();
     ldata->symId = SymId::noSym;
     Clef* pairedClef = otherClef();
     if (selected() && !m_isHeader && pairedClef) {

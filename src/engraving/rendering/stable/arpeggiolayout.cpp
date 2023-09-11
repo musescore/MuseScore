@@ -38,7 +38,7 @@ void ArpeggioLayout::layout(const Arpeggio* item, const LayoutContext& ctx, Arpe
         if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
             for (Staff* s : item->staff()->staffList()) {
                 if (s->onSameScore(item) && s->isTabStaff(item->tick()) && s->visible()) {
-                    ldata->resetBbox();
+                    ldata->clearBbox();
                     return;
                 }
             }

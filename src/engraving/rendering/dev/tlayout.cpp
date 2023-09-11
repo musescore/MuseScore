@@ -624,8 +624,8 @@ void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const La
 
     //! NOTE Must already be set previously
     Chord* parentChord = item->chord();
-    //LD_CONDITION(parentChord->upNote()->layoutData()->isSetPos(), "upNote->pos");
-    //LD_CONDITION(parentChord->downNote()->layoutData()->isSetPos(), "upNote->pos");
+    LD_CONDITION(parentChord->upNote()->layoutData()->isSetPos(), "parentChord->upNote->pos");
+    LD_CONDITION(parentChord->downNote()->layoutData()->isSetPos(), "parentChord->downNote->pos");
 
     auto computeHeight = [](const Arpeggio* item, bool includeCrossStaffHeight) -> double
     {
@@ -834,7 +834,7 @@ static double barLineWidth(const BarLine* item, const MStyle& style, double dotW
 
 static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::LayoutData* ldata)
 {
-    ldata->resetPos();
+    ldata->clearPos();
 
     // barlines hidden on this staff
     if (item->staff() && item->segment()) {
@@ -962,7 +962,7 @@ void TLayout::layout2(BarLine* item, LayoutContext& ctx)
     if (item->staff() && item->segment()) {
         if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
             || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
-            ldata->resetBbox();
+            ldata->clearBbox();
             return;
         }
     }
@@ -1107,7 +1107,7 @@ static void layoutBend(const Bend* item, const LayoutContext&, Bend::LayoutData*
     bb.adjust(-lw, -lw, lw, lw);
 
     ldata->setBbox(bb);
-    ldata->resetPos();
+    ldata->clearPos();
 }
 
 void TLayout::layout(Bend* item, LayoutContext& ctx)
@@ -1812,7 +1812,7 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
     ldata->setIsSkipDraw(false);
 
     Segment* s = item->segment();
-    ldata->resetPos();
+    ldata->clearPos();
 
     if (item->isStyled(Pid::OFFSET)) {
         const_cast<Fermata*>(item)->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
@@ -4829,7 +4829,7 @@ void TLayout::layoutTextBase(const TextBase* item, const LayoutContext& ctx, Tex
         return;
     }
 
-    ldata->resetPos();
+    ldata->clearPos();
 
     if (item->placeBelow()) {
         ldata->setPosY(item->staff() ? item->staff()->height() : 0.0);
@@ -4896,7 +4896,7 @@ void TLayout::layout1TextBase(const TextBase* item, const LayoutContext&, TextBa
             }
         }
     } else {
-        ldata->resetPos();
+        ldata->clearPos();
     }
 
     if (item->align() == AlignV::BOTTOM) {
