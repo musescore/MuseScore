@@ -2537,9 +2537,10 @@ Tid textStyleFromName(const QString& name)
             }
       if (name == "Technique")                  // compatibility
             return Tid::EXPRESSION;
-
-      if (name == "poet")                       // 4.x compatibility
+      else if (name == "poet")                  // 4.x compatibility
             return Tid::POET;
+      else if (name == "instrument_excerpt")    // 4.x compatibility
+            return Tid::INSTRUMENT_EXCERPT;
 
       qDebug("text style <%s> not known", qPrintable(name));
       return Tid::DEFAULT;
