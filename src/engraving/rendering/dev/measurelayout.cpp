@@ -384,7 +384,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     ctx.mutDom().undo(new AddElement(mmrAmbitus));
                 } else {
                     mmrAmbitus->initFrom(underlyingAmbitus);
-                    TLayout::layout(mmrAmbitus, ctx);
+                    TLayout::layout(mmrAmbitus, mmrAmbitus->mutLayoutData(), ctx);
                 }
             }
         }
