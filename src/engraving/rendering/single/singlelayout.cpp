@@ -461,7 +461,7 @@ void SingleLayout::layout(BagpipeEmbellishment* item, const Context& ctx)
 
     const BagpipeNoteList nl = item->resolveNoteList();
 
-    ldata->resetBbox();
+    ldata->clearBbox();
     ldata->isDrawBeam = nl.size() > 1;
     ldata->isDrawFlag = nl.size() == 1;
     ldata->spatium = spatium;
@@ -1661,7 +1661,7 @@ void SingleLayout::layout(Text* item, const Context& ctx)
 
 void SingleLayout::layoutTextBase(const TextBase* item, const Context& ctx, TextBase::LayoutData* ldata)
 {
-    ldata->resetPos();
+    ldata->clearPos();
     const_cast<TextBase*>(item)->setOffset(PointF());
 
     if (item->placeBelow()) {
@@ -1696,7 +1696,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
     double yoff = 0;
     double h    = 0;
 
-    ldata->resetPos();
+    ldata->clearPos();
 
     if (item->align() == AlignV::BOTTOM) {
         yoff += h - bb.bottom();
