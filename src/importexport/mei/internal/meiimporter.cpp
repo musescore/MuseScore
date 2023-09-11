@@ -491,6 +491,35 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
 }
 
 /**
+ * Create a articulation (MEI control event with @startid).
+ * Create the EngravingItem according to the MEI element name (e.g., "mordent", "artic")
+ * The articulation object is added to the EngravingItem (and not to the segment as for annotations)
+ * Return nullptr if the lookup fails.
+ */
+
+EngravingItem* MeiImporter::addArticulation(const libmei::Element& meiElement, Measure* measure)
+{
+    ChordRest* chordRest = this->findStart(meiElement, measure);
+    if (!chordRest) {
+        return nullptr;
+    }
+
+    EngravingItem* item = nullptr;
+
+    if (meiElement.m_name == "mordent") {
+        item = Factory::createOrnament(chordRest);
+    } else {
+        return nullptr;
+    }
+    m_uids->reg(item, meiElement.m_xmlId);
+
+    item->setTrack(chordRest->track());
+    chordRest->add(item);
+
+    return item;
+}
+
+/**
  * Basic helper that removes the '#' characther from a dataURI reference to \@xml:id.
  */
 
@@ -2138,6 +2167,14 @@ bool MeiImporter::readMordent(pugi::xml_node mordentNode, Measure* measure)
     libmei::Mordent meiMordent;
     meiMordent.Read(mordentNode);
 
+    Ornament* ornament = static_cast<Ornament*>(this->addArticulation(meiMordent, measure));
+    if (!ornament) {
+        // Warning message given in MeiExpoter::addSpanner
+        return true;
+    }
+
+    Convert::OrnamStruct ornamSt = Convert::mordentFromMEI(ornament, meiMordent, warning);
+
     return true;
 }
 
@@ -2179,6 +2216,14 @@ bool MeiImporter::readOrnam(pugi::xml_node ornamNode, Measure* measure)
     bool warning;
     libmei::Ornam meiOrnam;
     meiOrnam.Read(ornamNode);
+
+    Ornament* ornament = static_cast<Ornament*>(this->addArticulation(meiOrnam, measure));
+    if (!ornament) {
+        // Warning message given in MeiExpoter::addSpanner
+        return true;
+    }
+
+    Convert::OrnamStruct ornamSt = Convert::ornamFromMEI(ornament, meiOrnam, warning);
 
     return true;
 }
@@ -2317,6 +2362,14 @@ bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
     libmei::Trill meiTrill;
     meiTrill.Read(trillNode);
 
+    Ornament* ornament = static_cast<Ornament*>(this->addArticulation(meiTrill, measure));
+    if (!ornament) {
+        // Warning message given in MeiExpoter::addSpanner
+        return true;
+    }
+
+    Convert::OrnamStruct ornamSt = Convert::trillFromMEI(ornament, meiTrill, warning);
+
     return true;
 }
 
@@ -2333,6 +2386,14 @@ bool MeiImporter::readTurn(pugi::xml_node turnNode, Measure* measure)
     bool warning;
     libmei::Turn meiTurn;
     meiTurn.Read(turnNode);
+
+    Ornament* ornament = static_cast<Ornament*>(this->addArticulation(meiTurn, measure));
+    if (!ornament) {
+        // Warning message given in MeiExpoter::addSpanner
+        return true;
+    }
+
+    Convert::OrnamStruct ornamSt = Convert::turnFromMEI(ornament, meiTurn, warning);
 
     return true;
 }
