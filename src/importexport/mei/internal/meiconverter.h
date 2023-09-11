@@ -88,6 +88,42 @@ class Convert
 public:
 
     /**
+     * Structures for methods needing to return a group of variables
+     */
+
+    struct BracketStruct {
+        engraving::BracketType bracketType = engraving::BracketType::NO_BRACKET;
+        int barLineSpan = 0;
+    };
+
+    struct MeasureStruct {
+        bool irregular = false;
+        int n = 0;
+        bool repeatStart = false;
+        engraving::BarLineType endBarLineType = engraving::BarLineType::NORMAL;
+        bool repeatEnd = false;
+        int repeatCount = 0;
+    };
+
+    struct OrnamStruct {
+        int lines;
+        engraving::OrnamentInterval above;
+    };
+
+    struct StaffStruct {
+        int lines;
+        engraving::Interval interval;
+    };
+
+    struct PitchStruct {
+        int pitch = 0;
+        int tpc2 = 0;
+        engraving::AccidentalType accidType = engraving::AccidentalType::NONE;
+        engraving::AccidentalBracket accidBracket = engraving::AccidentalBracket::NONE;
+        engraving::AccidentalRole accidRole = engraving::AccidentalRole::AUTO;
+    };
+
+    /**
      * Methods for checking which element to create depending on some attribute values of the MuseScore or MEI element
      */
     static engraving::ElementType elementTypeForDir(const libmei::Element& meiElement);
@@ -120,12 +156,7 @@ public:
     static engraving::BeamMode breaksecFromMEI(int breaksec, bool& warning);
     static int breaksecToMEI(engraving::BeamMode beamMode);
 
-    struct BracketStruct {
-        engraving::BracketType bracketType = engraving::BracketType::NO_BRACKET;
-        int barLineSpan = 0;
-    };
-
-    static Convert::BracketStruct bracketFromMEI(const libmei::StaffGrp& meiStaffGrp);
+    static const Convert::BracketStruct& bracketFromMEI(const libmei::StaffGrp& meiStaffGrp);
     static libmei::StaffGrp bracketToMEI(const engraving::BracketType, int barLineSpan);
 
     static void breathFromMEI(engraving::Breath* breath, const libmei::Breath& meiBreath, bool& warning);
@@ -181,41 +212,26 @@ public:
     static void markerFromMEI(engraving::Marker* marker, const libmei::RepeatMark& meiRepeatMark, bool& warning);
     static libmei::RepeatMark markerToMEI(const engraving::Marker* marker, String& text);
 
-    struct MeasureStruct {
-        bool irregular = false;
-        int n = 0;
-        bool repeatStart = false;
-        engraving::BarLineType endBarLineType = engraving::BarLineType::NORMAL;
-        bool repeatEnd = false;
-        int repeatCount = 0;
-    };
-
-    static MeasureStruct measureFromMEI(const libmei::Measure& meiMeasure, bool& warning);
+    static const MeasureStruct& measureFromMEI(const libmei::Measure& meiMeasure, bool& warning);
     static libmei::Measure measureToMEI(const engraving::Measure* measure, int& measureN, bool& isLastIrregular);
 
     static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::ScoreDef& meiScoreDef, bool& warning);
     static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef meterToMEI(const engraving::Fraction& fraction, engraving::TimeSigType tsType);
 
+    static const OrnamStruct& mordentFromMEI(engraving::Ornament* ornament, const libmei::Mordent& meiMordent, bool& warning);
     static libmei::Mordent mordentToMEI(const engraving::Ornament* ornament);
 
     static void octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning);
     static libmei::Octave octaveToMEI(const engraving::Ottava* ottava);
 
+    static const OrnamStruct& ornamFromMEI(engraving::Ornament* ornament, const libmei::Ornam& meiOrnam, bool& warning);
     static libmei::Ornam ornamToMEI(const engraving::Ornament* ornament);
 
     static String ornamintervalToMEI(const engraving::Ornament* ornament);
 
-    struct PitchStruct {
-        int pitch = 0;
-        int tpc2 = 0;
-        engraving::AccidentalType accidType = engraving::AccidentalType::NONE;
-        engraving::AccidentalBracket accidBracket = engraving::AccidentalBracket::NONE;
-        engraving::AccidentalRole accidRole = engraving::AccidentalRole::AUTO;
-    };
-
-    static PitchStruct pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
-                                    bool& warning);
+    static const PitchStruct& pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
+                                           bool& warning);
     static std::pair<libmei::Note, libmei::Accid> pitchToMEI(const engraving::Note* note, const engraving::Accidental* accid,
                                                              const engraving::Interval& interval);
 
@@ -228,12 +244,7 @@ public:
     static engraving::SlurStyleType slurstyleFromMEI(const libmei::data_LINEFORM meiLine, bool& warning);
     static libmei::data_LINEFORM slurstyleToMEI(engraving::SlurStyleType slurstyle);
 
-    struct StaffStruct {
-        int lines;
-        engraving::Interval interval;
-    };
-
-    static StaffStruct staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
+    static const StaffStruct& staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef staffToMEI(const engraving::Staff* staff);
 
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
