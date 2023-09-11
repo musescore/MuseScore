@@ -267,11 +267,13 @@ public:
     static void tieFromMEI(engraving::SlurTie* tie, const libmei::Tie& meiTie, bool& warning);
     static libmei::Tie tieToMEI(const engraving::SlurTie* tie);
 
+    static const OrnamStruct& trillFromMEI(engraving::Ornament* ornament, const libmei::Trill& meiTrill, bool& warning);
     static libmei::Trill trillToMEI(const engraving::Ornament* ornament);
 
     static void tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& meiTuplet, bool& warning);
     static libmei::Tuplet tupletToMEI(const engraving::Tuplet* tuplet);
 
+    static const OrnamStruct& turnFromMEI(engraving::Ornament* ornament, const libmei::Turn& meiTurn, bool& warning);
     static libmei::Turn turnToMEI(const engraving::Ornament* ornament);
 
     /**

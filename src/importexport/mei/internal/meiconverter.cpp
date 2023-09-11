@@ -1622,6 +1622,13 @@ libmei::StaffDef Convert::meterToMEI(const engraving::Fraction& fraction, engrav
     return meiStaffDef;
 }
 
+const Convert::OrnamStruct& Convert::mordentFromMEI(engraving::Ornament* ornament, const libmei::Mordent& meiMordent, bool& warning)
+{
+    OrnamStruct ornamSt;
+
+    return ornamSt;
+}
+
 libmei::Mordent Convert::mordentToMEI(const engraving::Ornament* ornament)
 {
     libmei::Mordent meiMordent;
@@ -1793,6 +1800,13 @@ libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
     }
 
     return meiOctave;
+}
+
+const Convert::OrnamStruct& Convert::ornamFromMEI(engraving::Ornament* ornament, const libmei::Ornam& meiOrnam, bool& warning)
+{
+    OrnamStruct ornamSt;
+
+    return ornamSt;
 }
 
 libmei::Ornam Convert::ornamToMEI(const engraving::Ornament* ornament)
@@ -2392,6 +2406,13 @@ libmei::Tie Convert::tieToMEI(const engraving::SlurTie* tie)
     return meiTie;
 }
 
+const Convert::OrnamStruct& Convert::trillFromMEI(engraving::Ornament* ornament, const libmei::Trill& meiTrill, bool& warning)
+{
+    OrnamStruct ornamSt;
+
+    return ornamSt;
+}
+
 libmei::Trill Convert::trillToMEI(const engraving::Ornament* ornament)
 {
     libmei::Trill meiTrill;
@@ -2494,6 +2515,13 @@ libmei::Tuplet Convert::tupletToMEI(const engraving::Tuplet* tuplet)
     }
 
     return meiTuplet;
+}
+
+const Convert::OrnamStruct& Convert::turnFromMEI(engraving::Ornament* ornament, const libmei::Turn& meiTurn, bool& warning)
+{
+    OrnamStruct ornamSt;
+
+    return ornamSt;
 }
 
 libmei::Turn Convert::turnToMEI(const engraving::Ornament* ornament)
