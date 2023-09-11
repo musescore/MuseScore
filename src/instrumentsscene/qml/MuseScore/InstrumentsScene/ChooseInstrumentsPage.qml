@@ -41,6 +41,8 @@ Rectangle {
 
     property NavigationSection navigationSection: null
 
+    property alias navigation: instrumentsView.navigation
+
     signal submitRequested()
 
     function instruments() {
