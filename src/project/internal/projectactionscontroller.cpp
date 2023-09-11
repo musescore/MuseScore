@@ -22,12 +22,13 @@
 #include "projectactionscontroller.h"
 
 #include <QBuffer>
-#include <QTemporaryFile>
+#include <QEventLoop>
 #include <QFileInfo>
+#include <QTemporaryFile>
 
+#include "async/async.h"
 #include "defer.h"
 #include "translation.h"
-#include "async/async.h"
 
 #include "cloud/clouderrors.h"
 #include "engraving/infrastructure/mscio.h"
@@ -730,12 +731,8 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
 
     m_isProjectUploading = true;
 
-    bool isUploadingFinished = true;
-
     DEFER {
-        if (isUploadingFinished) {
-            m_isProjectUploading = false;
-        }
+        m_isProjectUploading = false;
     };
 
     bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
@@ -820,12 +817,11 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
         }
     }
 
-    uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false);
-    isUploadingFinished = false;
+    Ret ret = uploadProject(info, audio, /*openEditUrl=*/ isPublic, /*publishMode=*/ false);
 
     m_numberOfSavesToCloud++;
 
-    return true;
+    return ret;
 }
 
 Ret ProjectActionsController::askAudioGenerationSettings() const
@@ -929,11 +925,11 @@ void ProjectActionsController::closeUploadProgressDialog()
     }
 }
 
-void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
+Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl, bool publishMode)
 {
     INotationProjectPtr project = globalContext()->currentProject();
     if (!project) {
-        return;
+        return false;
     }
 
     QBuffer* projectData = new QBuffer();
@@ -943,13 +939,16 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
     if (!ret) {
         LOGE() << ret.toString();
         delete projectData;
-        return;
+        return ret;
     }
 
     projectData->close();
     projectData->open(QIODevice::ReadOnly);
 
     bool isFirstSave = info.sourceUrl.isEmpty();
+
+    // The method must not return until the saving is complete, to prevent the app from being quit prematurely
+    QEventLoop eventLoop;
 
     m_uploadingProjectProgress = museScoreComService()->uploadScore(*projectData, info.name, info.visibility, info.sourceUrl,
                                                                     info.revisionId);
@@ -966,12 +965,18 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
     });
 
     m_uploadingProjectProgress->finished.onReceive(this, [this, project, projectData, info, audio, openEditUrl, publishMode,
-                                                          isFirstSave](const ProgressResult& res) {
+                                                          isFirstSave, &ret, &eventLoop](const ProgressResult& res) {
+        DEFER {
+            eventLoop.quit();
+        };
+
         projectData->deleteLater();
+
+        ret = res.ret;
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
-            onProjectUploadFailed(res.ret, info, audio, openEditUrl, publishMode);
+            ret = onProjectUploadFailed(res.ret, info, audio, openEditUrl, publishMode);
             return;
         }
 
@@ -1004,6 +1009,10 @@ void ProjectActionsController::uploadProject(const CloudProjectInfo& info, const
             onProjectSuccessfullyUploaded(editUrl, isFirstSave);
         }
     });
+
+    eventLoop.exec();
+
+    return ret;
 }
 
 void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave)
@@ -1072,8 +1081,8 @@ void ProjectActionsController::onProjectSuccessfullyUploaded(const QUrl& urlToOp
     }
 }
 
-void ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,
-                                                     bool publishMode)
+Ret ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudProjectInfo& info, const AudioFile& audio, bool openEditUrl,
+                                                    bool publishMode)
 {
     m_isProjectUploading = false;
 
@@ -1082,32 +1091,31 @@ void ProjectActionsController::onProjectUploadFailed(const Ret& ret, const Cloud
     Ret userResponse = saveProjectScenario()->showCloudSaveError(ret, info, publishMode, true);
     switch (userResponse.code()) {
     case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_SAVE_AS: {
-        saveProject(SaveMode::SaveAs);
-        break;
+        return saveProject(SaveMode::SaveAs);
     }
     case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE: {
         CloudProjectInfo newInfo = info;
         newInfo.sourceUrl = QUrl();
-        uploadProject(newInfo, audio, openEditUrl, publishMode);
-        break;
+        return uploadProject(newInfo, audio, openEditUrl, publishMode);
     }
     case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_REPLACE: {
         RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
         if (!scoreInfo.ret) {
             LOGE() << scoreInfo.ret.toString();
             saveProjectScenario()->showCloudSaveError(scoreInfo.ret, info, publishMode, false);
-            return;
+            break;
         }
 
         int cloudRevisionId = scoreInfo.val.revisionId;
         CloudProjectInfo newInfo = info;
         newInfo.revisionId = cloudRevisionId;
-        uploadProject(newInfo, audio, openEditUrl, publishMode);
-        break;
+        return uploadProject(newInfo, audio, openEditUrl, publishMode);
     }
     default:
         break;
     }
+
+    return ret;
 }
 
 void ProjectActionsController::onAudioSuccessfullyUploaded(const QUrl& urlToOpen)
