@@ -35,7 +35,8 @@
 #include "modularity/ioc.h"
 #include "iengravingconfiguration.h"
 #include "rendering/iscorerenderer.h"
-#include "rendering/ld_access.h"
+
+#include "infrastructure/ld_access.h"
 
 #include "types/fraction.h"
 #include "types/symid.h"

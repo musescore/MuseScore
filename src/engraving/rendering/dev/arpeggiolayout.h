@@ -37,11 +37,6 @@ public:
 
     static void layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx);
     static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);
-
-private:
-    static void symbolLine(const IEngravingFontPtr& f, Arpeggio::LayoutData* data, SymId end, SymId fill);
-    static double calcTop(const Arpeggio* item, const LayoutContext& ctx);
-    static double calcBottom(const Arpeggio* item, const LayoutContext& ctx);
 };
 }
 
