@@ -424,7 +424,7 @@ engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warn
     return engraving::ClefType::G;
 }
 
-Convert::BracketStruct Convert::bracketFromMEI(const libmei::StaffGrp& meiStaffGrp)
+const Convert::BracketStruct& Convert::bracketFromMEI(const libmei::StaffGrp& meiStaffGrp)
 {
     Convert::BracketStruct bracketSt;
 
@@ -1498,7 +1498,7 @@ libmei::RepeatMark Convert::markerToMEI(const engraving::Marker* marker, String&
     return meiRepeatMark;
 }
 
-Convert::MeasureStruct Convert::measureFromMEI(const libmei::Measure& meiMeasure, bool& warning)
+const Convert::MeasureStruct& Convert::measureFromMEI(const libmei::Measure& meiMeasure, bool& warning)
 {
     warning = false;
     MeasureStruct measureSt;
@@ -1839,8 +1839,9 @@ String Convert::ornamintervalToMEI(const engraving::Ornament* ornament)
     return typeList.join(u" ");
 }
 
-Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
-                                           bool& warning)
+const Convert::PitchStruct& Convert::pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid,
+                                                  const engraving::Interval& interval,
+                                                  bool& warning)
 {
     // The mapping from pitch name to step
     static int pitchMap[7]  = { 0, 2, 4, 5, 7, 9, 11 };
@@ -2019,7 +2020,7 @@ libmei::data_LINEFORM Convert::slurstyleToMEI(engraving::SlurStyleType slurstyle
     }
 }
 
-Convert::StaffStruct Convert::staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning)
+const Convert::StaffStruct& Convert::staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning)
 {
     warning = false;
     StaffStruct staffSt;
