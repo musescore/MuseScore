@@ -61,7 +61,7 @@ public:
     int span() const { return m_span; }
     void setSpan(int val) { m_span = val; }
     void setHeight(double) override;
-    double height() const override { return m_height; }
+    double height() const override;
 
     double userLen1() const { return m_userLen1; }
     double userLen2() const { return m_userLen2; }
@@ -96,6 +96,7 @@ public:
         // out
         SymIdList symbols;
         RectF symsBBox;
+        double arpeggioHeight = -1.0;
     };
     DECLARE_LAYOUTDATA_METHODS(Arpeggio);
 
@@ -117,7 +118,7 @@ private:
     ArpeggioType m_arpeggioType = ArpeggioType::NORMAL;
     double m_userLen1 = 0.0;
     double m_userLen2 = 0.0;
-    double m_height = 0.0;
+
     int m_span = 1;                // spanning staves
     bool m_playArpeggio = true;
 

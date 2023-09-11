@@ -22,19 +22,11 @@
 #include "arpeggiolayout.h"
 
 #include "dom/arpeggio.h"
-#include "dom/chord.h"
-#include "dom/note.h"
-#include "dom/segment.h"
-#include "dom/staff.h"
 
 #include "tlayout.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
-
-void ArpeggioLayout::layout(const Arpeggio* item, const LayoutContext& ctx, Arpeggio::LayoutData* ldata)
-{
-}
 
 //   layoutArpeggio2
 //    called after layout of page
@@ -44,45 +36,22 @@ void ArpeggioLayout::layoutArpeggio2(Arpeggio* item, LayoutContext& ctx)
     if (!item || item->span() < 2) {
         return;
     }
-    computeHeight(item, /*includeCrossStaffHeight = */ true);
-    TLayout::layout(item, item->mutLayoutData(), ctx.conf());
-}
-
-void ArpeggioLayout::computeHeight(Arpeggio* item, bool includeCrossStaffHeight)
-{
-    Chord* topChord = item->chord();
-    if (!topChord) {
-        return;
-    }
-    double y = topChord->upNote()->pagePos().y() - topChord->upNote()->headHeight() * .5;
-
-    Note* bottomNote = topChord->downNote();
-    if (includeCrossStaffHeight) {
-        track_idx_t bottomTrack = item->track() + (item->span() - 1) * VOICES;
-        EngravingItem* element = topChord->segment()->element(bottomTrack);
-        Chord* bottomChord = (element && element->isChord()) ? toChord(element) : topChord;
-        bottomNote = bottomChord->downNote();
-    }
-
-    double h = bottomNote->pagePos().y() + bottomNote->headHeight() * .5 - y;
-    item->setHeight(h);
+    TLayout::layout(item, item->mutLayoutData(), ctx.conf(), /*includeCrossStaffHeight = */ true);
 }
 
 void ArpeggioLayout::layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx)
 {
-    ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
+    TLayout::layout(item, item->mutLayoutData(), ctx.conf());
 }
 
 void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
 {
     Arpeggio::LayoutData* ldata = item->mutLayoutData();
-    ArpeggioLayout::layout(item, ctx, ldata);
+    TLayout::layout(item, ldata, ctx.conf(), true);
 
-    Chord* c = item->chord();
-    ldata->setPosX(-(item->width() + item->spatium() * .5));
+    ldata->setPosX(-(ldata->bbox().width() + item->spatium() * .5));
 
-    layoutArpeggio2(c->arpeggio(), ctx);
-    Fraction _tick = item->tick();
+    Fraction tick = item->tick();
 
-    ctx.setLayout(_tick, _tick, item->staffIdx(), item->staffIdx() + item->span(), item);
+    ctx.setLayout(tick, tick, item->staffIdx(), item->staffIdx() + item->span(), item);
 }

@@ -370,8 +370,71 @@ void SingleLayout::layout(Ambitus* item, const Context& ctx)
 
 void SingleLayout::layout(Arpeggio* item, const Context& ctx)
 {
-    LayoutContext tctx(ctx.dontUseScore());
-    ArpeggioLayout::layout(item, tctx, item->mutLayoutData());
+    Arpeggio::LayoutData* ldata = item->mutLayoutData();
+
+    auto symbolLine = [](const std::shared_ptr<const IEngravingFont>& f, Arpeggio::LayoutData* data, SymId end, SymId fill)
+    {
+        data->symbols.clear();
+
+        double w = data->bottom - data->top;
+        double w1 = f->advance(end, data->magS);
+        double w2 = f->advance(fill, data->magS);
+        int n = lrint((w - w1) / w2);
+        for (int i = 0; i < n; ++i) {
+            data->symbols.push_back(fill);
+        }
+        data->symbols.push_back(end);
+    };
+
+    ldata->arpeggioHeight = item->spatium() * 4;
+    ldata->top = 0.0;
+    ldata->bottom = ldata->arpeggioHeight;
+
+    ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
+    ldata->magS = ldata->mag() * (ctx.style().spatium() / SPATIUM20);
+
+    std::shared_ptr<const IEngravingFont> font = ctx.engravingFont();
+    switch (item->arpeggioType()) {
+    case ArpeggioType::NORMAL: {
+        symbolLine(font, ldata, SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
+        // string is rotated -90 degrees
+        ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
+        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+    } break;
+
+    case ArpeggioType::UP: {
+        symbolLine(font, ldata, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+        // string is rotated -90 degrees
+        ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
+        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+    } break;
+
+    case ArpeggioType::DOWN: {
+        symbolLine(font, ldata, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+        // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
+        ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
+        ldata->setBbox(RectF(0.0, ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+    } break;
+
+    case ArpeggioType::UP_STRAIGHT: {
+        double x1 = item->spatium() * 0.5;
+        ldata->symsBBox = font->bbox(SymId::arrowheadBlackUp, ldata->magS);
+        double w = ldata->symsBBox.width();
+        ldata->setBbox(RectF(x1 - w * 0.5, ldata->top, w, ldata->bottom));
+    } break;
+
+    case ArpeggioType::DOWN_STRAIGHT: {
+        double x1 = item->spatium() * 0.5;
+        ldata->symsBBox = font->bbox(SymId::arrowheadBlackDown, ldata->magS);
+        double w = ldata->symsBBox.width();
+        ldata->setBbox(RectF(x1 - w * 0.5, ldata->top, w, ldata->bottom));
+    } break;
+
+    case ArpeggioType::BRACKET: {
+        double w  = ctx.style().styleS(Sid::ArpeggioHookLen).val() * item->spatium();
+        ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
+    } break;
+    }
 }
 
 void SingleLayout::layout(Articulation* item, const Context&)
