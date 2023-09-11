@@ -584,7 +584,8 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
     }
 }
 
-void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventsHolder& events, double veloMultiplier, Staff* st, int tickOffset,
+void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier, Staff* st,
+                                                 int tickOffset,
                                                  PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
 {
     // calculate offset for grace notes here
@@ -600,6 +601,10 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, EventsHolder& eve
     size_t acciacaturaGraceSize = graceNotesBeforeBar.size();
     if (acciacaturaGraceSize > 0) {
         graceTickSum = graceNotesBeforeBar[0]->ticks().ticks();
+        if (prevChord) {
+            graceTickSum = std::min(prevChord->ticks().ticks() / 2, graceTickSum);
+        }
+
         graceTickOffset = graceTickSum / static_cast<int>(acciacaturaGraceSize);
     }
 
@@ -651,11 +656,11 @@ MidiRenderer::ChordParams MidiRenderer::collectChordParams(const Chord* chord, i
 }
 
 //---------------------------------------------------------
-//   collectMeasureEventsDefault
+//   doCollectMeasureEvents
 //---------------------------------------------------------
 
 void MidiRenderer::doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff, int tickOffset,
-                                          PitchWheelRenderer& pitchWheelRenderer)
+                                          PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords)
 {
     staff_idx_t firstStaffIdx = staff->idx();
     for (Staff* st : staff->masterScore()->staves()) {
@@ -696,12 +701,10 @@ void MidiRenderer::doCollectMeasureEvents(EventsHolder& events, Measure const* m
                 continue;
             }
 
+            size_t voice = track % VOICES;
             EngravingItem* cr = seg->element(track);
-            if (!cr) {
-                continue;
-            }
-
-            if (!cr->isChord()) {
+            if (!cr || !cr->isChord()) {
+                prevChords[voice] = nullptr;
                 continue;
             }
 
@@ -727,7 +730,7 @@ void MidiRenderer::doCollectMeasureEvents(EventsHolder& events, Measure const* m
                 effect = MidiInstrumentEffect::PALM_MUTE;
             }
 
-            collectGraceBeforeChordEvents(chord, events, veloMultiplier, st1, tickOffset, pitchWheelRenderer, effect);
+            collectGraceBeforeChordEvents(chord, prevChords[voice], events, veloMultiplier, st1, tickOffset, pitchWheelRenderer, effect);
 
             for (const Note* note : chord->notes()) {
                 CollectNoteParams params;
@@ -757,6 +760,8 @@ void MidiRenderer::doCollectMeasureEvents(EventsHolder& events, Measure const* m
                     }
                 }
             }
+
+            prevChords[voice] = chord;
         }
     }
 }
@@ -772,9 +777,9 @@ MidiRenderer::MidiRenderer(Score* s)
 //---------------------------------------------------------
 
 void MidiRenderer::collectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff, int tickOffset,
-                                        PitchWheelRenderer& pitchWheelRenderer)
+                                        PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords)
 {
-    doCollectMeasureEvents(events, m, staff, tickOffset, pitchWheelRenderer);
+    doCollectMeasureEvents(events, m, staff, tickOffset, pitchWheelRenderer, prevChords);
 
     collectProgramChanges(events, m, staff, tickOffset);
 }
@@ -788,6 +793,7 @@ void MidiRenderer::renderStaff(EventsHolder& events, const Staff* staff, PitchWh
     Measure const* lastMeasure = nullptr;
 
     const RepeatList& repeatList = score->repeatList();
+    std::array<Chord*, VOICES> prevChords = { nullptr };
 
     for (const RepeatSegment* rs : repeatList) {
         const int tickOffset = rs->utick - rs->tick;
@@ -808,10 +814,10 @@ void MidiRenderer::renderStaff(EventsHolder& events, const Staff* staff, PitchWh
                 }
 
                 int offset = (m->tick() - playMeasure->tick()).ticks();
-                collectMeasureEvents(events, playMeasure, staff, tickOffset + offset, pitchWheelRenderer);
+                collectMeasureEvents(events, playMeasure, staff, tickOffset + offset, pitchWheelRenderer, prevChords);
             } else {
                 lastMeasure = m;
-                collectMeasureEvents(events, lastMeasure, staff, tickOffset, pitchWheelRenderer);
+                collectMeasureEvents(events, lastMeasure, staff, tickOffset, pitchWheelRenderer, prevChords);
             }
 
             if (m == rs->lastMeasure()) {
