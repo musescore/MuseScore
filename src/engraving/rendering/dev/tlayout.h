@@ -26,6 +26,7 @@
 
 #include "dom/accidental.h"
 #include "dom/actionicon.h"
+#include "dom/arpeggio.h"
 #include "dom/articulation.h"
 
 #include "dom/measurenumberbase.h"
@@ -38,7 +39,6 @@ namespace mu::engraving {
 class EngravingItem;
 
 class Ambitus;
-class Arpeggio;
 
 class BagpipeEmbellishment;
 class BarLine;
@@ -179,7 +179,7 @@ public:
     static void layout(const Accidental* item, Accidental::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(const ActionIcon* item, ActionIcon::LayoutData* ldata);
     static void layout(Ambitus* item, LayoutContext& ctx);
-    static void layout(Arpeggio* item, LayoutContext& ctx);
+    static void layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(const Articulation* item, Articulation::LayoutData* ldata);
 
     static void layout(BarLine* item, LayoutContext& ctx);

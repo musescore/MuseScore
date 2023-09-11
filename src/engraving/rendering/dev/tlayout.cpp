@@ -25,128 +25,127 @@
 #include "global/realfn.h"
 #include "draw/fontmetrics.h"
 
-#include "../iengravingconfiguration.h"
-#include "../infrastructure/rtti.h"
+#include "iengravingconfiguration.h"
+#include "infrastructure/rtti.h"
+#include "infrastructure/ld_access.h"
 
-#include "../iengravingfont.h"
-#include "../types/typesconv.h"
-#include "../types/symnames.h"
-#include "../dom/score.h"
-#include "../dom/utils.h"
+#include "iengravingfont.h"
+#include "types/typesconv.h"
+#include "types/symnames.h"
+#include "dom/score.h"
+#include "dom/utils.h"
 
-#include "../dom/accidental.h"
-#include "../dom/ambitus.h"
-#include "../dom/arpeggio.h"
-#include "../dom/articulation.h"
+#include "dom/accidental.h"
+#include "dom/ambitus.h"
+#include "dom/arpeggio.h"
+#include "dom/articulation.h"
 
-#include "../dom/barline.h"
-#include "../dom/beam.h"
-#include "../dom/bend.h"
-#include "../dom/box.h"
-#include "../dom/bracket.h"
-#include "../dom/breath.h"
+#include "dom/barline.h"
+#include "dom/beam.h"
+#include "dom/bend.h"
+#include "dom/box.h"
+#include "dom/bracket.h"
+#include "dom/breath.h"
 
-#include "../dom/chord.h"
-#include "../dom/chordline.h"
-#include "../dom/clef.h"
-#include "../dom/capo.h"
+#include "dom/chord.h"
+#include "dom/chordline.h"
+#include "dom/clef.h"
+#include "dom/capo.h"
 
-#include "../dom/deadslapped.h"
-#include "../dom/dynamic.h"
+#include "dom/deadslapped.h"
+#include "dom/dynamic.h"
 
-#include "../dom/expression.h"
+#include "dom/expression.h"
 
-#include "../dom/fermata.h"
-#include "../dom/figuredbass.h"
-#include "../dom/fingering.h"
-#include "../dom/fret.h"
-#include "../dom/fretcircle.h"
+#include "dom/fermata.h"
+#include "dom/figuredbass.h"
+#include "dom/fingering.h"
+#include "dom/fret.h"
+#include "dom/fretcircle.h"
 
-#include "../dom/glissando.h"
-#include "../dom/gradualtempochange.h"
+#include "dom/glissando.h"
+#include "dom/gradualtempochange.h"
 
-#include "../dom/hairpin.h"
-#include "../dom/harppedaldiagram.h"
-#include "../dom/harmonicmark.h"
-#include "../dom/harmony.h"
-#include "../dom/hook.h"
+#include "dom/hairpin.h"
+#include "dom/harppedaldiagram.h"
+#include "dom/harmonicmark.h"
+#include "dom/harmony.h"
+#include "dom/hook.h"
 
-#include "../dom/image.h"
-#include "../dom/instrchange.h"
-#include "../dom/instrumentname.h"
+#include "dom/image.h"
+#include "dom/instrchange.h"
+#include "dom/instrumentname.h"
 
-#include "../dom/jump.h"
+#include "dom/jump.h"
 
-#include "../dom/keysig.h"
+#include "dom/keysig.h"
 
-#include "../dom/layoutbreak.h"
-#include "../dom/ledgerline.h"
-#include "../dom/letring.h"
-#include "../dom/line.h"
-#include "../dom/lyrics.h"
+#include "dom/layoutbreak.h"
+#include "dom/ledgerline.h"
+#include "dom/letring.h"
+#include "dom/line.h"
+#include "dom/lyrics.h"
 
-#include "../dom/marker.h"
-#include "../dom/measurebase.h"
-#include "../dom/measurenumber.h"
-#include "../dom/measurenumberbase.h"
-#include "../dom/measurerepeat.h"
-#include "../dom/mmrest.h"
-#include "../dom/mmrestrange.h"
+#include "dom/marker.h"
+#include "dom/measurebase.h"
+#include "dom/measurenumber.h"
+#include "dom/measurenumberbase.h"
+#include "dom/measurerepeat.h"
+#include "dom/mmrest.h"
+#include "dom/mmrestrange.h"
 
-#include "../dom/note.h"
-#include "../dom/notedot.h"
+#include "dom/note.h"
+#include "dom/notedot.h"
 
-#include "../dom/ornament.h"
-#include "../dom/ottava.h"
+#include "dom/ornament.h"
+#include "dom/ottava.h"
 
-#include "../dom/page.h"
-#include "../dom/palmmute.h"
-#include "../dom/part.h"
-#include "../dom/pedal.h"
-#include "../dom/pickscrape.h"
-#include "../dom/playtechannotation.h"
+#include "dom/page.h"
+#include "dom/palmmute.h"
+#include "dom/part.h"
+#include "dom/pedal.h"
+#include "dom/pickscrape.h"
+#include "dom/playtechannotation.h"
 
-#include "../dom/rasgueado.h"
-#include "../dom/rehearsalmark.h"
-#include "../dom/rest.h"
+#include "dom/rasgueado.h"
+#include "dom/rehearsalmark.h"
+#include "dom/rest.h"
 
-#include "../dom/shadownote.h"
-#include "../dom/slur.h"
-#include "../dom/spacer.h"
-#include "../dom/staff.h"
-#include "../dom/stafflines.h"
-#include "../dom/staffstate.h"
-#include "../dom/stafftext.h"
-#include "../dom/stafftype.h"
-#include "../dom/stafftypechange.h"
-#include "../dom/stem.h"
-#include "../dom/stemslash.h"
-#include "../dom/sticking.h"
-#include "../dom/stretchedbend.h"
-#include "../dom/bsymbol.h"
-#include "../dom/symbol.h"
-#include "../dom/system.h"
-#include "../dom/systemdivider.h"
-#include "../dom/systemtext.h"
+#include "dom/shadownote.h"
+#include "dom/slur.h"
+#include "dom/spacer.h"
+#include "dom/staff.h"
+#include "dom/stafflines.h"
+#include "dom/staffstate.h"
+#include "dom/stafftext.h"
+#include "dom/stafftype.h"
+#include "dom/stafftypechange.h"
+#include "dom/stem.h"
+#include "dom/stemslash.h"
+#include "dom/sticking.h"
+#include "dom/stretchedbend.h"
+#include "dom/bsymbol.h"
+#include "dom/symbol.h"
+#include "dom/system.h"
+#include "dom/systemdivider.h"
+#include "dom/systemtext.h"
 
-#include "../dom/tempotext.h"
-#include "../dom/text.h"
-#include "../dom/textframe.h"
-#include "../dom/textline.h"
-#include "../dom/tie.h"
-#include "../dom/timesig.h"
-#include "../dom/tremolo.h"
-#include "../dom/tremolobar.h"
-#include "../dom/trill.h"
-#include "../dom/tripletfeel.h"
-#include "../dom/tuplet.h"
+#include "dom/tempotext.h"
+#include "dom/text.h"
+#include "dom/textframe.h"
+#include "dom/textline.h"
+#include "dom/tie.h"
+#include "dom/timesig.h"
+#include "dom/tremolo.h"
+#include "dom/tremolobar.h"
+#include "dom/trill.h"
+#include "dom/tripletfeel.h"
+#include "dom/tuplet.h"
 
-#include "../dom/vibrato.h"
-#include "../dom/volta.h"
+#include "dom/vibrato.h"
+#include "dom/volta.h"
 
-#include "../dom/whammybar.h"
-
-#include "../ld_access.h"
+#include "dom/whammybar.h"
 
 #include "autoplace.h"
 #include "arpeggiolayout.h"
@@ -181,7 +180,10 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::AMBITUS:          layout(item_cast<Ambitus*>(item), ctx);
         break;
-    case ElementType::ARPEGGIO:         layout(item_cast<Arpeggio*>(item), ctx);
+    case ElementType::ARPEGGIO:
+        if (!ldata->isValid()) {
+            layout(item_cast<const Arpeggio*>(item), static_cast<Arpeggio::LayoutData*>(ldata), ctx.conf());
+        }
         break;
     case ElementType::ARTICULATION:
         if (!ldata->isValid()) {
@@ -603,9 +605,141 @@ void TLayout::layout(Ambitus* item, LayoutContext& ctx)
     }
 }
 
-void TLayout::layout(Arpeggio* item, LayoutContext& ctx)
+void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
+    if (conf.styleB(Sid::ArpeggioHiddenInStdIfTab)) {
+        if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
+            for (Staff* s : item->staff()->staffList()) {
+                if (s->onSameScore(item) && s->isTabStaff(item->tick()) && s->visible()) {
+                    ldata->setIsSkipDraw(true);
+                }
+            }
+        }
+    }
+    ldata->setIsSkipDraw(false);
+
+    auto calcTop = [](const Arpeggio* item, const LayoutConfiguration& conf) -> double
+    {
+        double top = -item->userLen1();
+        if (!item->explicitParent()) {
+            return top;
+        }
+
+        switch (item->arpeggioType()) {
+        case ArpeggioType::BRACKET: {
+            double lineWidth = conf.styleMM(Sid::ArpeggioLineWidth);
+            return top - lineWidth / 2.0;
+        }
+        case ArpeggioType::NORMAL:
+        case ArpeggioType::UP:
+        case ArpeggioType::DOWN: {
+            // if the top is in the staff on a space, move it up
+            // if the bottom note is on a line, the distance is 0.25 spaces
+            // if the bottom note is on a space, the distance is 0.5 spaces
+            int topNoteLine = item->chord()->upNote()->line();
+            int lines = item->staff()->lines(item->tick());
+            int bottomLine = (lines - 1) * 2;
+            if (topNoteLine <= 0 || topNoteLine % 2 == 0 || topNoteLine >= bottomLine) {
+                return top;
+            }
+            int downNoteLine = item->chord()->downNote()->line();
+            if (downNoteLine % 2 == 1 && downNoteLine < bottomLine) {
+                return top - 0.4 * item->spatium();
+            }
+            return top - 0.25 * item->spatium();
+        }
+        default: {
+            return top - item->spatium() / 4;
+        }
+        }
+    };
+
+    auto calcBottom = [](const Arpeggio* item, const LayoutConfiguration& conf) -> double
+    {
+        double top = -item->userLen1();
+        double bottom = item->height() + item->userLen2();
+        if (!item->explicitParent()) {
+            return bottom;
+        }
+
+        switch (item->arpeggioType()) {
+        case ArpeggioType::BRACKET: {
+            double lineWidth = conf.styleMM(Sid::ArpeggioLineWidth);
+            return bottom - top + lineWidth;
+        }
+        case ArpeggioType::NORMAL:
+        case ArpeggioType::UP:
+        case ArpeggioType::DOWN: {
+            return bottom;
+        }
+        default: {
+            return bottom - top + item->spatium() / 2;
+        }
+        }
+    };
+
+    auto symbolLine = [](const std::shared_ptr<const IEngravingFont>& f, Arpeggio::LayoutData* data, SymId end, SymId fill)
+    {
+        data->symbols.clear();
+
+        double w = data->bottom - data->top;
+        double w1 = f->advance(end, data->magS);
+        double w2 = f->advance(fill, data->magS);
+        int n = lrint((w - w1) / w2);
+        for (int i = 0; i < n; ++i) {
+            data->symbols.push_back(fill);
+        }
+        data->symbols.push_back(end);
+    };
+
+    ldata->top = calcTop(item, conf);
+    ldata->bottom = calcBottom(item, conf);
+
+    ldata->setMag(item->staff() ? item->staff()->staffMag(item->tick()) : item->mag());
+    ldata->magS = conf.magS(ldata->mag());
+
+    std::shared_ptr<const IEngravingFont> font = conf.engravingFont();
+    switch (item->arpeggioType()) {
+    case ArpeggioType::NORMAL: {
+        symbolLine(font, ldata, SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
+        // string is rotated -90 degrees
+        ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
+        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+    } break;
+
+    case ArpeggioType::UP: {
+        symbolLine(font, ldata, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+        // string is rotated -90 degrees
+        ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
+        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+    } break;
+
+    case ArpeggioType::DOWN: {
+        symbolLine(font, ldata, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
+        // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
+        ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
+        ldata->setBbox(RectF(0.0, ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+    } break;
+
+    case ArpeggioType::UP_STRAIGHT: {
+        double x1 = item->spatium() * 0.5;
+        ldata->symsBBox = font->bbox(SymId::arrowheadBlackUp, ldata->magS);
+        double w = ldata->symsBBox.width();
+        ldata->setBbox(RectF(x1 - w * 0.5, ldata->top, w, ldata->bottom));
+    } break;
+
+    case ArpeggioType::DOWN_STRAIGHT: {
+        double x1 = item->spatium() * 0.5;
+        ldata->symsBBox = font->bbox(SymId::arrowheadBlackDown, ldata->magS);
+        double w = ldata->symsBBox.width();
+        ldata->setBbox(RectF(x1 - w * 0.5, ldata->top, w, ldata->bottom));
+    } break;
+
+    case ArpeggioType::BRACKET: {
+        double w  = conf.styleS(Sid::ArpeggioHookLen).val() * item->spatium();
+        ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
+    } break;
+    }
 }
 
 void TLayout::layout(const Articulation* item, Articulation::LayoutData* ldata)
@@ -616,11 +750,12 @@ void TLayout::layout(const Articulation* item, Articulation::LayoutData* ldata)
     }
     ldata->setIsSkipDraw(false);
 
+    //! NOTE Must already be set previously
+    LD_CONDITION(ldata->isSetSymId(), "symId");
+
     RectF bbox;
 
     if (item->textType() == ArticulationTextType::NO_TEXT) {
-        //! NOTE Must already be set previously
-        LD_CONDITION(ldata->isSetSymId(), "symId");
         bbox = item->symBbox(ldata->symId());
     } else {
         Font scaledFont(item->font());

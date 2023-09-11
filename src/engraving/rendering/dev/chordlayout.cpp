@@ -180,7 +180,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     if (item->arpeggio()) {
         ArpeggioLayout::computeHeight(item->arpeggio());
-        TLayout::layout(item->arpeggio(), ctx);
+        TLayout::layout(item->arpeggio(), item->arpeggio()->mutLayoutData(), ctx.conf());
 
         double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
 
@@ -509,7 +509,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     if (item->arpeggio()) {
         double headHeight = upnote->headHeight();
-        TLayout::layout(item->arpeggio(), ctx);
+        TLayout::layout(item->arpeggio(), item->arpeggio()->mutLayoutData(), ctx.conf());
         lll += item->arpeggio()->width() + _spatium * .5;
         double y = item->upNote()->pos().y() - headHeight * .5;
         double h = item->downNote()->pos().y() + item->downNote()->headHeight() - y;

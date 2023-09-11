@@ -54,6 +54,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/rtti.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/ld_access.h
 
     ${DOM_SRC}
 
@@ -174,7 +175,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rendering/layoutoptions.h
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rendering/paddingtable.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendering/ld_access.h
 
     ${RENDERING_DEV_SRC}
     ${RENDERING_STABLE_SRC}
