@@ -2034,12 +2034,13 @@ void NotationInteraction::doAddSlur(const mu::engraving::Slur* slurTemplate)
                 }
             }
 
-            if (firstChordRest && (firstChordRest != secondChordRest)) {
+            if (firstChordRest && (firstChordRest != secondChordRest)
+                && !(firstChordRest->isTrillCueNote() || (secondChordRest || secondChordRest->isTrillCueNote()))) {
                 doAddSlur(firstChordRest, secondChordRest, slurTemplate);
             }
         }
     } else if (sel.isSingle()) {
-        if (sel.element()->isNote()) {
+        if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
         }
     } else {
@@ -2063,7 +2064,7 @@ void NotationInteraction::doAddSlur(const mu::engraving::Slur* slurTemplate)
             secondChordRest = mu::engraving::nextChordRest(firstChordRest);
         }
 
-        if (firstChordRest) {
+        if (firstChordRest && !(firstChordRest->isTrillCueNote() || (secondChordRest && secondChordRest->isTrillCueNote()))) {
             doAddSlur(firstChordRest, secondChordRest, slurTemplate);
         }
     }
