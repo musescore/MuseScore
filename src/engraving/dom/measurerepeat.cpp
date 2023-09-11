@@ -105,7 +105,12 @@ PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
     // -pos().y(): relative to topmost staff line
     // - 0.5 * r.height(): relative to the baseline of the number symbol
     // (rather than the center)
-    double y = -pos().y() + m_numberPos * spatium() - 0.5 * numberBbox.height();
+    double staffTop = -pos().y();
+    // Single line staff barlines extend above top of staff
+    if (staffType() && staffType()->lines() == 1) {
+        staffTop -= 2.0 * spatium();
+    }
+    double y = std::min(staffTop, -symBbox(layoutData()->symId).height() / 2) + m_numberPos * spatium() - 0.5 * numberBbox.height();
 
     return PointF(x, y);
 }
