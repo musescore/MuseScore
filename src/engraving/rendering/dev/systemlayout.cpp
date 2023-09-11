@@ -49,6 +49,7 @@
 #include "dom/stafflines.h"
 #include "dom/system.h"
 #include "dom/tie.h"
+#include "dom/timesig.h"
 #include "dom/tremolo.h"
 #include "dom/tuplet.h"
 #include "dom/volta.h"
@@ -780,7 +781,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 ss->skyline().add(m->staffLines(staffIdx)->layoutData()->bbox().translated(m->pos()));
             }
             for (Segment& s : m->segments()) {
-                if (!s.enabled() || s.isTimeSigType()) {             // hack: ignore time signatures
+                if (!s.enabled()) {
                     continue;
                 }
                 PointF p(s.pos() + m->pos());
@@ -790,6 +791,11 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                     if (bl && bl->addToSkyline()) {
                         RectF r = TLayout::layoutRect(bl, ctx);
                         skyline.add(r.translated(bl->pos() + p));
+                    }
+                } else if (s.segmentType() & SegmentType::TimeSig) {
+                    TimeSig* ts = toTimeSig(s.element(staffIdx * VOICES));
+                    if (ts && ts->addToSkyline()) {
+                        skyline.add(ts->shape().translate(ts->pos() + p));
                     }
                 } else {
                     track_idx_t strack = staffIdx * VOICES;
