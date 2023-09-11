@@ -166,6 +166,7 @@ private:
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::Spanner* addSpanner(const libmei::Element& meiElement, engraving::Measure* measure, pugi::xml_node node);
+    engraving::EngravingItem* addArticulation(const libmei::Element& meiElement, engraving::Measure* measure);
     std::string xmlIdFrom(std::string dataURI);
     engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, const engraving::ChordRest* startChordRest);
