@@ -189,50 +189,44 @@ RowLayout {
             anchors.right: parent.right
 
             buttons: root.buttons
-            customButtons: {
-                if (!root.customButtons) {
-                    return
-                }
-
-                var result = []
-                for (var i = 0; i < root.customButtons.length; i++) {
-                    var customButton = root.customButtons[i]
-
-                    const button = Qt.createQmlObject('
-                                    import MuseScore.UiComponents 1.0
-
-                                    ButtonBoxItem {
-                                    }', buttons)
-                    button.text = customButton.text
-                    button.buttonRole = customButton.role
-                    button.isAccent = customButton.isAccent
-                    button.isLeftSide = customButton.isLeftSide
-
-                    const buttonId = customButton.buttonId;
-                    button.clicked.connect(function() {
-                        root.clicked(buttonId, !dontShowAgainCheckBox.checked)
-                    })
-
-                    result.push(button)
-                }
-                return result
-            }
+            customButtons: prv.customButtonsRepeater.children
 
             separationGap: false
+            navigationPanel: navPanel
 
-            delegateProperties: { //! NOTE See description about AccessibleItem { id: accessibleInfo }
-                "accessible.ignored" : true,
-                "navigation.onActiveChanged": function(item) {
+            onStandardButtonClicked: function(type) {
+                root.clicked(type, !dontShowAgainCheckBox.checked)
+            }
+        }
+    }
+
+    QtObject {
+        id: prv
+
+        property Repeater customButtonsRepeater: Repeater {
+            model: root.customButtons
+
+            FlatButton {
+                text: model.text
+                accentButton: model.isAccent
+
+                buttonRole: model.role
+                isLeftSide: model.isLefSide
+
+                navigation.panel: navPanel
+                navigation.column: model.index
+                //! NOTE See description about AccessibleItem { id: accessibleInfo }
+                accessible.ignored : true
+                navigation.onActiveChanged: function(item) {
                     if (!item.navigation.active) {
                         item.accessible.ignored = false
                         accessibleInfo.ignored = true
                     }
                 }
-            }
-            navigationPanel: navPanel
 
-            onStandardButtonClicked: function(type) {
-                root.clicked(type, !dontShowAgainCheckBox.checked)
+                onClicked: {
+                    root.clicked(model.buttonId, !dontShowAgainCheckBox.checked)
+                }
             }
         }
     }

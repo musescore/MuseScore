@@ -42,14 +42,15 @@ StyledDialogView {
 
     property int buttons: 0
     property var customButtons
-    property alias defaultButtonId: content.defaultButtonId
+    property alias defaultButtonId: mainPanel.defaultButtonId
 
     QtObject {
         id: toggleDetailsButton
 
         property int buttonId: 999
-        property string title: detailsLoader.active ? qsTrc("global", "Hide details") : qsTrc("global", "Show details")
-        property bool accent: false
+        property string text: detailsLoader.active ? qsTrc("global", "Hide details") : qsTrc("global", "Show details")
+        property bool isAccent: false
+        property bool isLeftSide: true
     }
 
     contentWidth: content.implicitWidth
@@ -65,11 +66,11 @@ StyledDialogView {
         var tmp = []
         tmp.push(toggleDetailsButton)
 
-        for (var i = 0; i < root.buttons.length; ++i) {
-            tmp.push(root.buttons[i])
+        for (var i = 0; i < root.customButtons.length; ++i) {
+            tmp.push(root.customButtons[i])
         }
 
-        root.buttons = tmp
+        root.customButtons = tmp
     }
 
     onNavigationActivateRequested: {
@@ -83,10 +84,6 @@ StyledDialogView {
     Column {
         id: content
 
-        navigation.section: root.navigationSection
-        buttons: root.buttons
-        customButtons: root.customButtons
-
         spacing: 16
 
         StandardDialogPanel {
@@ -96,6 +93,7 @@ StyledDialogView {
             navigation.order: 1
 
             buttons: root.buttons
+            customButtons: root.customButtons
 
             onClicked: function(buttonId, showAgain) {
                 if (buttonId === toggleDetailsButton.buttonId) {

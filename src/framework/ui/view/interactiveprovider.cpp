@@ -375,7 +375,7 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
     params["defaultButtonId"] = defBtn;
 
     int buttonsList = 0;
-    QList<QVariant> customButtonsList;
+    QVariantList customButtonsList;
     for (const IInteractive::ButtonData& buttonData: buttons) {
         if (buttonData.btn < static_cast<int>(IInteractive::Button::CustomButton)) {
             buttonsList |= buttonData.btn;
@@ -392,7 +392,7 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
     }
 
     params["buttons"] = buttonsList;
-    params["customButtons"] = QVariant(customButtonsList);
+    params["customButtons"] = customButtonsList;
 
     if (options.testFlag(IInteractive::Option::WithIcon)) {
         params["withIcon"] = true;

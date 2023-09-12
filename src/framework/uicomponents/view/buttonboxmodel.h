@@ -84,8 +84,8 @@ public:
         BackRole,
         CustomRole
     };
-
     Q_ENUM(ButtonRole)
+    Q_ENUMS(ButtonBoxModel::ButtonRole)
 
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;

@@ -37,7 +37,6 @@ RowLayout {
 
     property alias buttons: buttonBoxModel.buttons
     property int count: buttonBoxModel.rowCount()
-    property var delegateProperties: null
     
     property NavigationPanel navigationPanel: null
 
@@ -67,51 +66,10 @@ RowLayout {
         standardButtonClicked(type)
     }
 
-    function setDelegateButtonProperty(item, propertyName, propertyValue) {
-        var subProperties = propertyName.split(".")
-
-        if (subProperties.length === 1) {
-
-            if (propertyName.length > 2 && propertyName.slice(0, 2) === "on") { //Changes "onClicked" to "clicked"
-                var newPropertyName = propertyName.slice(2)
-                newPropertyName = newPropertyName[0].toLowerCase() + newPropertyName.substring(1)
-                item[newPropertyName].connect(function() { propertyValue(item) })
-
-                return
-            }
-
-            item[propertyName] = propertyValue
-        } else if (subProperties.length === 2) {
-
-            if (subProperties[1].length > 2 && subProperties[1].slice(0, 2) === "on") { //Changes "onClicked" to "clicked"
-                subProperties[1] = subProperties[1].slice(2)
-                subProperties[1] = subProperties[1][0].toLowerCase() + subProperties[1].substring(1)
-                item[subProperties[0]][subProperties[1]].connect(function() { propertyValue(item) })
-                return
-            }
-
-            item[subProperties[0]][subProperties[1]] = propertyValue
-        } else {
-            console.log("Property: ", propertyName, " has more than two subproperties")
-        }
-    }
-
-    function setDelegateButtonProperties(repeater) {
-        if (!root.delegateProperties || root.delegateProperties.length === 0) {
-            return
-        }
-
-        for (var i = 0; i < repeater.count; i++) {
-            for (var propertyName in root.delegateProperties) {
-                setDelegateButtonProperty(repeater.itemAt(i), propertyName, root.delegateProperties[propertyName])
-            }
-        }
-    }
-
     QtObject {
         id: prv
 
-        property list<ButtonBoxItem> customButtons
+        property list<FlatButton> customButtons
     }
 
     ButtonBoxModel {
@@ -147,8 +105,6 @@ RowLayout {
 
             onClicked: root.buttonClicked(model.type, model.customButtonIndex)
         }
-
-        Component.onCompleted: root.setDelegateButtonProperties(leftRepeater)
     }
 
     Item {
@@ -175,7 +131,5 @@ RowLayout {
 
             onClicked: root.buttonClicked(model.type, model.customButtonIndex)
         }
-
-        Component.onCompleted: root.setDelegateButtonProperties(rightRepeater)
     }
 }
