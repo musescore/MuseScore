@@ -88,7 +88,6 @@
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
 #include "dom/tempotext.h"
-#include "dom/textframe.h"
 #include "dom/textline.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"

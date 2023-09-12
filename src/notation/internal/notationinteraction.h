@@ -30,10 +30,10 @@
 #include "iinteractive.h"
 #include "engraving/rendering/isinglerenderer.h"
 
-#include "inotationinteraction.h"
-#include "inotationconfiguration.h"
+#include "../inotationinteraction.h"
+#include "../inotationconfiguration.h"
+#include "../iselectinstrumentscenario.h"
 #include "inotationundostack.h"
-#include "iselectinstrumentscenario.h"
 
 #include "engraving/dom/engravingitem.h"
 #include "engraving/dom/elementgroup.h"
