@@ -506,7 +506,9 @@ EngravingItem* MeiImporter::addArticulation(const libmei::Element& meiElement, M
 
     EngravingItem* item = nullptr;
 
-    if (meiElement.m_name == "mordent") {
+    static const std::vector<std::string> s_ornaments = { "mordent", "ornam", "trill", "turn" };
+
+    if (std::find(s_ornaments.begin(), s_ornaments.end(), meiElement.m_name) != s_ornaments.end()) {
         item = Factory::createOrnament(chordRest);
     } else {
         return nullptr;
