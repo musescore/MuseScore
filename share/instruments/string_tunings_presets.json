@@ -1,6 +1,6 @@
 [
   {
-    "familyOrInstrumentId": "guitars",
+    "familyId": "guitars",
     "strings": [
       {
         "number": 5,
@@ -122,7 +122,7 @@
             "name": "Nashville",
             "value": [52, 57, 62, 67, 59, 64]
           }
-        ] 
+        ]
       },{
         "number": 7,
         "presets": [
@@ -183,7 +183,7 @@
     ]
   },
   {
-    "familyOrInstrumentId": "shamisens",
+    "familyId": "shamisens",
     "strings": [
       {
         "number": 3,
@@ -197,7 +197,7 @@
     ]
   },
   {
-    "familyOrInstrumentId": "banjos",
+    "familytId": "banjos",
     "strings": [
       {
         "number": 4,
@@ -244,7 +244,7 @@
       }
     ]
   },{
-    "familyOrInstrumentId": "mandolins",
+    "familyId": "mandolins",
     "strings": [
       {
         "number": 4,
@@ -257,7 +257,7 @@
       }
     ]
   },{
-    "familyOrInstrumentId": "ukuleles",
+    "familyId": "ukuleles",
     "strings": [
       {
         "number": 4,
@@ -279,7 +279,7 @@
       }
     ]
   },{
-    "familyOrInstrumentId": "orchestral-strings",
+    "familyId": "orchestral-strings",
     "strings": [
       {
         "number": 4,
@@ -292,7 +292,7 @@
       }
     ]
   },{
-    "familyOrInstrumentId": "contrabass",
+    "instrumentId": "contrabass",
     "strings": [
       {
         "number": 4,

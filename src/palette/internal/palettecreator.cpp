@@ -1868,7 +1868,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
 
     auto stringTunings = makeElement<StringTunings>(gpaletteScore);
-    stringTunings->setXmlText(u"<sym>guitarString6</sym> - D"); // todo
+    stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
     sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(true);
 
     const char* finger = "pimac";

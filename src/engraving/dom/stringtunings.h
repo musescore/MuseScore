@@ -50,10 +50,10 @@ public:
     void setStringData(const StringData& stringData);
     void undoStringData(const StringData& stringData);
 
-    String preset() const;
+    const String& preset() const;
     void setPreset(const String& preset);
 
-    std::vector<string_idx_t> visibleStrings() const;
+    const std::vector<string_idx_t>& visibleStrings() const;
     void setVisibleStrings(const std::vector<string_idx_t>& visibleStrings);
 
     void updateText();

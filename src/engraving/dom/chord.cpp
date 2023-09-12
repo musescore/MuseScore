@@ -1599,19 +1599,20 @@ void Chord::cmdUpdateNotes(AccidentalState* as)
     const Staff* st = staff();
     StaffGroup staffGroup = st->staffTypeForElement(this)->group();
     if (staffGroup == StaffGroup::TAB) {
-        for (Staff* _staff : st->staffList()) {
+        Fraction tick = this->tick();
+        for (const Staff* _staff : st->staffList()) {
             if (!_staff || _staff == st) {
                 continue;
             }
 
-            if (_staff->score() == st->score() && !_staff->isTabStaff(this->tick())) {
+            if (_staff->score() == st->score() && !_staff->isTabStaff(tick)) {
                 if (!_staff->reflectTranspositionInLinkedTab()) {
                     return;
                 }
             }
         }
 
-        const StringData* stringData = part()->stringData(this->tick());
+        const StringData* stringData = part()->stringData(tick);
         for (Chord* ch : graceNotes()) {
             stringData->fretChords(ch);
         }

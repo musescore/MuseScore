@@ -135,13 +135,15 @@ void InstrumentsRepository::load()
     }
 
     io::path_t stringTuningsPresetsPath = configuration()->stringTuningsPresetsPath();
-    if (!loadStringTuningsPresets(stringTuningsPresetsPath)) { // todo
+    if (!loadStringTuningsPresets(stringTuningsPresetsPath)) {
         LOGE() << "Could not load string tunings presets from " << stringTuningsPresetsPath << "!";
     }
 }
 
 bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
 {
+    TRACEFUNC;
+
     Ret ret = fileSystem()->exists(path);
     if (!ret) {
         LOGE() << ret.toString();
@@ -162,12 +164,12 @@ bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
     }
 
     for (size_t i = 0; i < arr.size(); ++i) {
-        const JsonValue& familyOrInstrumentVal = arr.at(i);
-        JsonObject familyOrInstrumentObj = familyOrInstrumentVal.toObject();
+        const JsonValue& presetInfoVal = arr.at(i);
+        JsonObject presetInfoObj = presetInfoVal.toObject();
 
         std::vector<StringTuningsInfo> strings;
 
-        JsonArray stringsArr = familyOrInstrumentObj.value("strings").toArray();
+        JsonArray stringsArr = presetInfoObj.value("strings").toArray();
         for (size_t j = 0; j < stringsArr.size(); ++j) {
             StringTuningsInfo info;
 
@@ -195,13 +197,16 @@ bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
                     continue;
                 }
 
-                info.presets.push_back(preset);
+                info.presets.emplace_back(std::move(preset));
             }
 
-            strings.push_back(info);
+            strings.emplace_back(std::move(info));
         }
 
-        m_stringTuningsPresets.emplace(familyOrInstrumentObj.value("familyOrInstrumentId").toStdString(), strings);
+        std::string id = presetInfoObj.contains("familyId") ? presetInfoObj.value("familyId").toStdString()
+                         : presetInfoObj.value("instrumentId").toStdString();
+
+        m_stringTuningsPresets.emplace(id, strings);
     }
 
     return true;
