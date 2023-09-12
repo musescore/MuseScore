@@ -194,13 +194,16 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
             layout(item_cast<const Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
         }
         break;
-    case ElementType::BAR_LINE:
-        layout(item_cast<const BarLine*>(item), static_cast<BarLine::LayoutData*>(ldata), ctx);
-        break;
+    case ElementType::BAR_LINE: {
+        BarLine* bl = item_cast<BarLine*>(item);
+        layout(bl, bl->mutLayoutData(), ctx);
+    } break;
     case ElementType::BEAM:             layout(item_cast<Beam*>(item), ctx);
         break;
-    case ElementType::BEND:             layout(item_cast<Bend*>(item), ctx);
-        break;
+    case ElementType::BEND: {
+        Bend* bend = item_cast<Bend*>(item);
+        layout(bend, bend->mutLayoutData());
+    } break;
     case ElementType::STRETCHED_BEND:   layout(item_cast<StretchedBend*>(item), ctx);
         break;
     case ElementType::HBOX:             layout(item_cast<HBox*>(item), ctx);
@@ -638,8 +641,8 @@ void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const La
 
     //! NOTE Must already be set previously
     Chord* parentChord = item->chord();
-    LD_CONDITION(parentChord->upNote()->layoutData()->isSetPos(), "parentChord->upNote->pos");
-    LD_CONDITION(parentChord->downNote()->layoutData()->isSetPos(), "parentChord->downNote->pos");
+    LD_CONDITION(parentChord->upNote()->layoutData()->isSetPos());
+    LD_CONDITION(parentChord->downNote()->layoutData()->isSetPos());
 
     auto computeHeight = [](const Arpeggio* item, bool includeCrossStaffHeight) -> double
     {
@@ -786,7 +789,7 @@ void TLayout::layout(const Articulation* item, Articulation::LayoutData* ldata)
     ldata->setPos(PointF());
 
     //! NOTE Must already be set previously
-    LD_CONDITION(ldata->isSetSymId(), "symId");
+    LD_CONDITION(ldata->isSetSymId());
 
     RectF bbox;
 
@@ -869,7 +872,8 @@ void TLayout::layout(const BarLine* item, BarLine::LayoutData* ldata, const Layo
     for (const EngravingItem* e : *item->el()) {
         switch (e->type()) {
         case ElementType::ARTICULATION:
-            LD_CONDITION(item_cast<const Articulation*>(e)->layoutData()->isSetSymId(), "symId");
+            // form Articulation layout
+            LD_CONDITION(item_cast<const Articulation*>(e)->layoutData()->isSetSymId());
             break;
         case ElementType::SYMBOL:
             // not yet clear
@@ -1000,13 +1004,8 @@ void TLayout::layout2(BarLine* item, LayoutContext& ctx)
 {
     BarLine::LayoutData* ldata = item->mutLayoutData();
 
-    // barlines hidden on this staff
-    if (item->staff() && item->segment()) {
-        if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
-            || (item->staff()->hideSystemBarLine() && item->segment()->segmentType() == SegmentType::BeginBarLine)) {
-            ldata->clearBbox();
-            return;
-        }
+    if (ldata->isSkipDraw()) {
+        return;
     }
 
     item->calcY();
@@ -1054,20 +1053,23 @@ void TLayout::layout1(Beam* item, LayoutContext& ctx)
     BeamLayout::layout1(item, ctx);
 }
 
-static void layoutBend(const Bend* item, const LayoutContext&, Bend::LayoutData* ldata)
+void TLayout::layout(const Bend* item, Bend::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
 
-    double spatium = item->spatium();
+    LD_CONDITION(item->note()->layoutData()->isSetPos());
+    LD_CONDITION(item->note()->layoutData()->isSetBbox());
 
+    double spatium = item->spatium();
     double lw = item->lineWidth();
-    Note* note = toNote(item->explicitParent());
-    PointF notePos = note->pos();
+
+    const Note::LayoutData* noteLD = item->note()->layoutData();
+    PointF notePos = noteLD->pos();
     notePos.ry() = std::max(notePos.y(), 0.0);
 
-    ldata->noteWidth = note->width();
+    ldata->noteWidth = noteLD->bbox().width();
     ldata->notePos = notePos;
 
     RectF bb;
@@ -1150,11 +1152,6 @@ static void layoutBend(const Bend* item, const LayoutContext&, Bend::LayoutData*
 
     ldata->setBbox(bb);
     ldata->setPos(PointF());
-}
-
-void TLayout::layout(Bend* item, LayoutContext& ctx)
-{
-    layoutBend(item, ctx, item->mutLayoutData());
 }
 
 using BoxTypes = rtti::TypeList<HBox, VBox, FBox, TBox>;

@@ -35,13 +35,15 @@ enum class LD_ACCESS {
 };
 
 #ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS
-#define LD_CONDITION(val, name) \
+
+//! TODO Using this macro, we can collect and output debugging information to show the dependency tree
+#define LD_CONDITION(val) \
     if (!val) { \
-        LOGE_T("LD_ACCESS")() << "BAD ACCESS to " << name << ", not set"; \
+        LOGE_T("LD_ACCESS")() << "BAD ACCESS to: " << #val; \
     } \
 
 #else
-#define LD_CONDITION(val, name) (void)val; (void)name;
+#define LD_CONDITION(val) (void)val;
 #endif
 
 // just mark as independent
@@ -62,7 +64,9 @@ public:
     const T& value(LD_ACCESS mode) const
     {
         if (!m_val.has_value()) {
-            LD_CONDITION((mode != LD_ACCESS::CHECK), m_name)
+            if (mode == LD_ACCESS::CHECK) {
+                LOGE_T("LD_ACCESS")() << "BAD ACCESS to: " << m_name;
+            }
             return m_def;
         }
         return m_val.value();
