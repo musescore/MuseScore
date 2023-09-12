@@ -497,6 +497,9 @@ void Convert::breathFromMEI(engraving::Breath* breath, const libmei::Breath& mei
         }
     }
 
+    // @color
+    Convert::colorFromMEI(breath, meiBreath);
+
     breath->setSymId(symId);
 }
 
@@ -519,6 +522,9 @@ libmei::Breath Convert::breathToMEI(const engraving::Breath* breath)
         meiBreath.SetGlyphName(glyphName.ascii());
         meiBreath.SetGlyphAuth(SMUFL_AUTH);
     }
+
+    // @color
+    Convert::colorToMEI(breath, meiBreath);
 
     return meiBreath;
 }
@@ -546,6 +552,9 @@ void Convert::caesuraFromMEI(engraving::Breath* breath, const libmei::Caesura& m
         }
     }
 
+    // @color
+    Convert::colorFromMEI(breath, meiCeasura);
+
     breath->setSymId(symId);
 }
 
@@ -570,6 +579,9 @@ libmei::Caesura Convert::caesuraToMEI(const engraving::Breath* breath)
         meiCaesura.SetGlyphName(glyphName.ascii());
         meiCaesura.SetGlyphAuth(SMUFL_AUTH);
     }
+
+    // @color
+    Convert::colorToMEI(breath, meiCaesura);
 
     return meiCaesura;
 }
@@ -661,6 +673,37 @@ engraving::ClefType Convert::clefFromMEI(const libmei::StaffDef& meiStaffDef, bo
     meiClef.SetDis(meiStaffDef.GetClefDis());
     meiClef.SetDisPlace(meiStaffDef.GetClefDisPlace());
     return Convert::clefFromMEI(meiClef, warning);
+}
+
+void Convert::colorFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement)
+{
+    const libmei::AttColor* colorAtt = dynamic_cast<const libmei::AttColor*>(&meiElement);
+
+    IF_ASSERT_FAILED(colorAtt) {
+        return;
+    }
+
+    // @color
+    if (colorAtt->HasColor()) {
+        engraving::Color color = engraving::Color::fromString(colorAtt->GetColor());
+        if (color.isValid()) {
+            item->setColor(color.fromString(colorAtt->GetColor()));
+        }
+    }
+}
+
+void Convert::colorToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement)
+{
+    libmei::AttColor* colorAtt = dynamic_cast<libmei::AttColor*>(&meiElement);
+
+    IF_ASSERT_FAILED(colorAtt) {
+        return;
+    }
+
+    // @color
+    if (item->color() != engravingConfiguration()->defaultColor()) {
+        colorAtt->SetColor(item->color().toString());
+    }
 }
 
 engraving::DirectionV Convert::curvedirFromMEI(const libmei::curvature_CURVEDIR meiCurvedir, bool& warning)
@@ -1087,6 +1130,9 @@ void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata&
     if (below) {
         fermata->setPlacement(engraving::PlacementV::BELOW);
     }
+
+    // @color
+    Convert::colorFromMEI(fermata, meiFermata);
 }
 
 libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
@@ -1134,6 +1180,9 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
         meiFermata.SetGlyphName(glyphName.ascii());
         meiFermata.SetGlyphAuth(SMUFL_AUTH);
     }
+
+    // @color
+    Convert::colorToMEI(fermata, meiFermata);
 
     return meiFermata;
 }
@@ -1193,6 +1242,9 @@ void Convert::hairpinFromMEI(engraving::Hairpin* hairpin, const libmei::Hairpin&
         hairpin->setPropertyFlags(engraving::Pid::LINE_STYLE, engraving::PropertyFlags::UNSTYLED);
         warning = (warning || lformWarning);
     }
+
+    // @color
+    Convert::colorFromMEI(hairpin, meiHairpin);
 }
 
 libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
@@ -1215,6 +1267,9 @@ libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
     if (hairpin->lineStyle() != engraving::LineType::SOLID) {
         meiHairpin.SetLform(Convert::lineToMEI(hairpin->lineStyle()));
     }
+
+    // @color
+    Convert::colorToMEI(hairpin, meiHairpin);
 
     return meiHairpin;
 }
@@ -1781,6 +1836,9 @@ void Convert::octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& mei
     if (meiOctave.HasLendsym() && (meiOctave.GetLendsym() == libmei::LINESTARTENDSYMBOL_none)) {
         ottava->setEndHookType(engraving::HookType::NONE);
     }
+
+    // @color
+    Convert::colorFromMEI(ottava, meiOctave);
 }
 
 libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
@@ -1827,6 +1885,9 @@ libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
         meiOctave.SetLendsym(libmei::LINESTARTENDSYMBOL_none);
     }
 
+    // @color
+    Convert::colorToMEI(ottava, meiOctave);
+
     return meiOctave;
 }
 
@@ -1869,6 +1930,9 @@ Convert::OrnamStruct Convert::ornamFromMEI(engraving::Ornament* ornament, const 
         Convert::ornamintervaleFromMEI(ornament, typedAtt->GetType());
     }
 
+    // @color
+    Convert::colorFromMEI(ornament, meiElement);
+
     return ornamSt;
 }
 
@@ -1908,6 +1972,9 @@ void Convert::ornamToMEI(const engraving::Ornament* ornament, libmei::Element& m
 
     // @type
     typedAtt->SetType(Convert::ornamintervalToMEI(ornament).toStdString());
+
+    // @color
+    Convert::colorToMEI(ornament, meiElement);
 }
 
 void Convert::ornamintervaleFromMEI(engraving::Ornament* ornament, const std::string& meiType)
@@ -2084,6 +2151,9 @@ void Convert::slurFromMEI(engraving::SlurTie* slur, const libmei::Slur& meiSlur,
         slur->setStyleType(Convert::slurstyleFromMEI(meiSlur.GetLform(), typeWarning));
         warning = (warning || typeWarning);
     }
+
+    // @color
+    Convert::colorFromMEI(slur, meiSlur);
 }
 
 libmei::Slur Convert::slurToMEI(const engraving::SlurTie* slur)
@@ -2099,6 +2169,9 @@ libmei::Slur Convert::slurToMEI(const engraving::SlurTie* slur)
     if (slur->styleType() != engraving::SlurStyleType::Solid) {
         meiSlur.SetLform(Convert::slurstyleToMEI(slur->styleType()));
     }
+
+    // @color
+    Convert::colorToMEI(slur, meiSlur);
 
     return meiSlur;
 }
@@ -2585,6 +2658,9 @@ void Convert::tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& mei
         tuplet->setPropertyFlags(engraving::Pid::DIRECTION, engraving::PropertyFlags::UNSTYLED);
     }
 
+    // @color
+    Convert::colorFromMEI(tuplet, meiTuplet);
+
     return;
 }
 
@@ -2614,6 +2690,9 @@ libmei::Tuplet Convert::tupletToMEI(const engraving::Tuplet* tuplet)
         meiTuplet.SetBracketPlace(libmei::STAFFREL_basic_below);
         meiTuplet.SetNumPlace(libmei::STAFFREL_basic_below);
     }
+
+    // @color
+    Convert::colorToMEI(tuplet, meiTuplet);
 
     return meiTuplet;
 }
