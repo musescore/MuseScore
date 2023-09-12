@@ -74,7 +74,7 @@ using namespace mu::engraving;
 
 #define SCOREDEF_IDX -1
 
-#define MEI_BASIC_VERSION "5.0.0-dev+basic"
+#define MEI_BASIC_VERSION "5.0+basic"
 
 /**
  * Read the Score from the file.
