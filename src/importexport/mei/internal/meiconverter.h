@@ -85,6 +85,7 @@ class Convert
 {
     // The fallback font is used to convert smufl codes (char32_t) to engraving::SymId
     INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
+    INJECT_STATIC(engraving::IEngravingConfiguration, engravingConfiguration);
 public:
 
     /**
@@ -169,6 +170,9 @@ public:
     static libmei::Clef clefToMEI(engraving::ClefType clef);
 
     static engraving::ClefType clefFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
+
+    static void colorFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement);
+    static void colorToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
 
     static void dirFromMEI(engraving::TextBase* textBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning);
     static void dirFromMEI(engraving::TextLineBase* textLineBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning);
