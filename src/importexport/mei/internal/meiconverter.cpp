@@ -1834,6 +1834,22 @@ libmei::Ornam Convert::ornamToMEI(const engraving::Ornament* ornament)
     return meiOrnam;
 }
 
+void Convert::ornamintervaleFromMEI(engraving::Ornament *ornament, const std::string& meiType)
+{
+    // @type
+    std::string value;
+    
+    if (Convert::getTypeValueWithPrefix(meiType, INTERVAL_ABOVE, value)) {
+        engraving::OrnamentInterval interval = engraving::TConv::fromXml(String(value.c_str()).replace(u':', u','), engraving::DEFAULT_ORNAMENT_INTERVAL);
+        ornament->setIntervalAbove(interval);
+    }
+
+    if (Convert::getTypeValueWithPrefix(meiType, INTERVAL_BELOW, value)) {
+        engraving::OrnamentInterval interval = engraving::TConv::fromXml(String(value.c_str()).replace(u':', u','), engraving::DEFAULT_ORNAMENT_INTERVAL);
+        ornament->setIntervalBelow(interval);
+    }
+}
+
 String Convert::ornamintervalToMEI(const engraving::Ornament* ornament)
 {
     // @type
@@ -2574,6 +2590,23 @@ bool Convert::hasTypeValue(const std::string& typeStr, const std::string& value)
     while (std::getline(iss, token, ' ')) {
         if (token == value) {
             return true;  // value found
+        }
+    }
+
+    return false;
+}
+
+
+bool Convert::getTypeValueWithPrefix(const std::string& typeStr, const std::string& prefix, std::string& value)
+{
+    std::istringstream iss(typeStr);
+    std::list<std::string> values;
+
+    std::string token;
+    while (std::getline(iss, token, ' ')) {
+        if ((token.rfind(prefix, 0) == 0) && (prefix.size() < token.size())) {
+            value = token.erase(0, prefix.length());
+            return true;
         }
     }
 
