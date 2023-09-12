@@ -80,13 +80,13 @@ StyledDialogView {
                 id: repeater
 
                 model: [
-                    //: "sp" = abbreviation of "spatium"
                     {
                         title: qsTrc("palette", "X"),
                         value: propertiesModel.xOffset,
                         incrementStep: 1,
                         minValue: -10,
                         maxValue: 10,
+                        //: Abbreviation of "spatium"
                         measureUnit: qsTrc("global", "sp")
                     },
                     {
