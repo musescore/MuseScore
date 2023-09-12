@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" xml:id="ornam-01-122019" meiversion="5.0+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Untitled score</title>
+            <respStmt>
+               <persName role="composer">Composer / arranger</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-09-12T15:25:11" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Untitled score</rend>
+                        <lb />
+                        <rend type="subtitle" fontsize="large">Subtitle</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Composer / arranger</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <label>Violin</label>
+                        <labelAbbr>Vln.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="mjg518l" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="n1uefyrp" dur="4" pname="c" oct="5" />
+                           <note xml:id="ndt6snn" dur="4" pname="e" oct="5" />
+                           <note xml:id="n1shscya" dur="4" pname="e" oct="4" />
+                           <note xml:id="n1nfnqgv" dur="4" pname="g" oct="4" />
+                        </layer>
+                     </staff>
+                     <turn xml:id="t9xoymv" form="lower" startid="#n1uefyrp" color="#FF2600" />
+                     <turn xml:id="t8mstau" form="upper" startid="#ndt6snn" />
+                     <trill xml:id="t1hj884n" startid="#n1shscya" />
+                     <mordent xml:id="mtbehht" form="upper" startid="#n1nfnqgv" color="#942192" />
+                  </measure>
+                  <measure xml:id="m1v01cvz" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="nu8d38l" dur="4" pname="c" oct="5" />
+                           <note xml:id="nleajnm" dur="4" pname="e" oct="5" />
+                           <note xml:id="n11cgveo" dur="4" pname="e" oct="4" />
+                           <note xml:id="nm91uz7" dur="4" pname="g" oct="4" />
+                        </layer>
+                     </staff>
+                     <mordent xml:id="milufdt" form="lower" startid="#nu8d38l" />
+                     <turn xml:id="tq7xacn" form="upper" startid="#nleajnm" glyph.auth="smufl" glyph.name="ornamentTurnSlash" />
+                     <mordent xml:id="md8mfmf" form="upper" long="true" startid="#n11cgveo" />
+                     <mordent xml:id="mfxsv12" form="lower" long="true" startid="#nm91uz7" />
+                  </measure>
+                  <measure xml:id="m14ubnv9" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <note xml:id="na9nhyx" dur="4" pname="c" oct="5" />
+                           <note xml:id="nj8secb" dur="4" pname="e" oct="5" />
+                           <note xml:id="nzs5yfw" dur="4" pname="e" oct="4" />
+                           <note xml:id="np3ven4" dur="4" pname="g" oct="4" />
+                        </layer>
+                     </staff>
+                     <turn xml:id="t1nuir3b" type="mscore-above-second:minor" form="lower" accidupper="f" startid="#na9nhyx" place="below" />
+                     <turn xml:id="t1p0tam2" type="mscore-above-second:major mscore-below-second:major" form="upper" accidupper="s" accidlower="n" startid="#nj8secb" place="below" />
+                     <trill xml:id="t1tqui3f" type="mscore-above-second:major" accidupper="s" startid="#nzs5yfw" place="above" />
+                     <mordent xml:id="mo1dgh4" type="mscore-above-second:minor" form="upper" startid="#np3ven4" accidupper="f" place="above" />
+                  </measure>
+                  <measure xml:id="m1ihzkxi" right="end" n="4">
+                     <staff xml:id="m4s1" n="1">
+                        <layer xml:id="m4s1l1" n="1">
+                           <note xml:id="ngoprss" dur="4" pname="c" oct="5" />
+                           <note xml:id="n6ebrrg" dur="4" pname="e" oct="5" />
+                           <note xml:id="nkdbvmi" dur="4" pname="e" oct="4" />
+                           <note xml:id="nuftt82" dur="4" pname="g" oct="4" />
+                        </layer>
+                     </staff>
+                     <trill xml:id="t4gkgil" startid="#ngoprss" glyph.auth="smufl" glyph.name="ornamentShake3" />
+                     <trill xml:id="t1a3gjvn" startid="#n6ebrrg" glyph.auth="smufl" glyph.name="ornamentShakeMuffat1" />
+                     <mordent xml:id="m1p93p1f" type="mscore-above-second:major" form="upper" startid="#nkdbvmi" accidupper="s" />
+                     <mordent xml:id="m1g6mdmd" type="mscore-below-second:minor" form="lower" startid="#nuftt82" accidlower="s" />
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>
