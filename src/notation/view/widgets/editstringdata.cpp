@@ -237,7 +237,7 @@ void EditStringData::init()
     QString toolTip = qtrc("notation/editstringdata",
                            "<b>Always open</b><br>On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.");
     stringList->horizontalHeaderItem(0)->setToolTip(toolTip);
-    int numOfStrings = static_cast<int>(_strings->size());
+    int numOfStrings = static_cast<int>(_strings.size());
     stringList->setRowCount(numOfStrings);
     // if any string, insert into string list control and select the first one
 
@@ -246,7 +246,7 @@ void EditStringData::init()
         // insert into local working copy and into string list dlg control
         // IN REVERSED ORDER
         for (int i = 0; i < numOfStrings; i++) {
-            strg = (*_strings)[numOfStrings - i - 1];
+            strg = _strings[numOfStrings - i - 1];
             _stringsLoc.push_back(strg);
             QTableWidgetItem* newCheck = new QTableWidgetItem();
             newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));

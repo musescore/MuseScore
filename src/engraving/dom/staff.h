@@ -100,7 +100,7 @@ private:
     ChangeMap _velocityMultiplications;         ///< cached value
     PitchList _pitchOffsets;        ///< cached value
 
-    bool m_reflectTranspositionInLinkedTab = false;
+    bool m_reflectTranspositionInLinkedTab = true;
 
     friend class Factory;
     Staff(Part* parent);

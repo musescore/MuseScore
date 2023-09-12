@@ -412,40 +412,40 @@ const StringData* Part::stringData(const Fraction& tick) const
         return nullptr;
     }
 
-    const StringTunings* stringTunings = nullptr;
+    auto it = m_stringTunings.upper_bound(tick.ticks());
+    if (it != m_stringTunings.begin()) {
+        --it;
+    }
+
+    StringTunings* stringTunings = nullptr;
     const Instrument* instrument = this->instrument(tick);
 
-    for (Measure* measure = score()->firstMeasure(); measure; measure = measure->nextMeasure()) {
-        if (measure->tick() > tick) {
-            break;
-        }
+    if (it != m_stringTunings.end()) {
+        stringTunings = it->second;
+    }
 
-        for (Segment* segment = measure->first(); segment; segment = segment->next()) {
-            if (segment->tick() > tick) {
-                break;
-            }
-
-            std::vector<EngravingItem*> annotations = segment->annotations();
-
-            for (EngravingItem* annotation : annotations) {
-                if (!annotation) {
-                    continue;
-                }
-
-                if (annotation->isStringTunings()) {
-                    stringTunings = toStringTunings(annotation);
-                    instrument = nullptr;
-                    break;
-                } else if (annotation->isInstrumentChange()) {
-                    instrument = toInstrumentChange(annotation)->instrument();
-                    stringTunings = nullptr;
-                    break;
-                }
-            }
+    if (stringTunings) {
+        //!NOTE: if there is string tunings element between current instrument and current tick,
+        //! then return string data from string tunings element
+        const Instrument* stringTuningsInstrument = this->instrument(stringTunings->tick());
+        if (instrument == stringTuningsInstrument) {
+            return stringTunings->stringData();
         }
     }
 
-    return stringTunings ? stringTunings->stringData() : instrument->stringData();
+    return instrument->stringData();
+}
+
+void Part::addStringTunings(StringTunings* stringTunings)
+{
+    m_stringTunings[stringTunings->segment()->tick().ticks()] = stringTunings;
+}
+
+void Part::removeStringTunings(StringTunings* stringTunings)
+{
+    if (m_stringTunings[stringTunings->segment()->tick().ticks()] == stringTunings) {
+        m_stringTunings.erase(stringTunings->segment()->tick().ticks());
+    }
 }
 
 //---------------------------------------------------------
