@@ -72,14 +72,7 @@ Item {
     }
 
     function focusOnSelected() {
-        switch (bar.currentIndex) {
-        case 0:
-            chooseInstrumentsBtn.navigation.requestActive()
-            break
-        case 1:
-            createFromTemplateBtn.navigation.requestActive()
-            break
-        }
+        pageLoader.item.navigation.requestActive()
     }
 
     StyledTabBar {
@@ -93,6 +86,7 @@ Item {
         onCurrentItemChanged: {
             if (currentItem && currentItem.navigation) {
                 currentItemNavigationIndex = [currentItem.navigation.row, currentItem.navigation.column]
+                root.focusOnSelected()
             }
         }
 
