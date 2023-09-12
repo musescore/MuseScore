@@ -32,7 +32,10 @@
 
 #include "../../dom/barline.h"
 #include "../../dom/bend.h"
+#include "../../dom/box.h"
+#include "../../dom/textframe.h"
 
+#include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
 #include "../../dom/textbase.h"
@@ -44,12 +47,6 @@ class EngravingItem;
 
 class BagpipeEmbellishment;
 class Beam;
-
-class Box;
-class HBox;
-class VBox;
-class FBox;
-class TBox;
 
 class Bracket;
 class Breath;
@@ -101,7 +98,6 @@ class LyricsLine;
 class LyricsLineSegment;
 
 class Marker;
-class MeasureBase;
 class MeasureNumber;
 class MeasureRepeat;
 class MMRest;
@@ -189,13 +185,13 @@ public:
     static void layout1(Beam* item, LayoutContext& ctx);
     static void layout(const Bend* item, Bend::LayoutData* ldata);
 
-    static void layout(Box* item, LayoutContext& ctx);    // factory
-    static void layoutBox(Box* item, LayoutContext& ctx); // base class
-    static void layout(HBox* item, LayoutContext& ctx);
+    static void layout(const Box* item, Box::LayoutData* ldata, const LayoutContext& ctx); // factory
+    static void layoutBox(const Box* item, Box::LayoutData* ldata, const LayoutContext& ctx); // base class
+    static void layout(const HBox* item, HBox::LayoutData* ldata, const LayoutContext& ctx);
     static void layout2(HBox* item, LayoutContext& ctx);
-    static void layout(VBox* item, LayoutContext& ctx);
-    static void layout(FBox* item, LayoutContext& ctx);
-    static void layout(TBox* item, LayoutContext& ctx);
+    static void layout(const VBox* item, VBox::LayoutData* ldata, const LayoutContext& ctx);
+    static void layout(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
+    static void layout(const TBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
 
     static void layout(Bracket* item, LayoutContext& ctx);
     static void layout(Breath* item, LayoutContext& ctx);
@@ -250,7 +246,7 @@ public:
 
     static void layout(Marker* item, LayoutContext& ctx);
     static void layout(MeasureBase* item, LayoutContext& ctx); // factory
-    static void layoutMeasureBase(MeasureBase* item, LayoutContext& ctx); // base class
+    static void layoutMeasureBase(const MeasureBase* item, MeasureBase::LayoutData* ldata, const LayoutContext& ctx); // base class
     static void layout(MeasureNumber* item, LayoutContext& ctx);
     static void layoutMeasureNumberBase(const MeasureNumberBase* item, const LayoutContext& ctx, TextBase::LayoutData* ldata); // base class
     static void layout(MeasureRepeat* item, LayoutContext& ctx);
@@ -342,8 +338,6 @@ public:
 private:
 
     friend class SlurTieLayout;
-
-    static void adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx);
 
     static PointF calculateBoundingRect(Harmony* item, const LayoutContext& ctx);
 

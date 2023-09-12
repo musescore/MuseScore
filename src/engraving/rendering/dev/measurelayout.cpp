@@ -86,7 +86,7 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     }
 
     // layout LAYOUT_BREAK elements
-    TLayout::layoutMeasureBase(item, ctx);
+    TLayout::layoutMeasureBase(item, item->mutLayoutData(), ctx);
 
     //---------------------------------------------------
     //    layout ties
