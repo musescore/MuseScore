@@ -178,6 +178,7 @@ private:
     void addChordtoLyricsToExtend(ChordRest* chordRest);
     void extendLyrics(const std::pair<engraving::Lyrics*, engraving::ChordRest*>& lyricsToExtend);
     void extendLyrics();
+    void setOrnamentAccid(engraving::Ornament* ornament, const Convert::OrnamStruct& ornamSt);
 
     /** The Score pointer */
     engraving::Score* m_score = nullptr;

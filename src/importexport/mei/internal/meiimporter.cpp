@@ -768,6 +768,27 @@ void MeiImporter::extendLyrics()
     }
 }
 
+/**
+ * Creates the accidentals (above and below) for an ornament.
+ * Currently does not work if the corresponding OrnamentInterval value is not set in the Ornament.
+ */
+
+void MeiImporter::setOrnamentAccid(engraving::Ornament* ornament, const Convert::OrnamStruct& ornamSt)
+{
+    if (ornament->hasIntervalAbove() && (ornamSt.accidTypeAbove != AccidentalType::NONE)) {
+        Accidental* accidental = Factory::createAccidental(ornament);
+        accidental->setAccidentalType(ornamSt.accidTypeAbove);
+        accidental->setParent(ornament);
+        ornament->setAccidentalAbove(accidental);
+    }
+    if (ornament->hasIntervalBelow() && (ornamSt.accidTypeBelow != AccidentalType::NONE)) {
+        Accidental* accidental = Factory::createAccidental(ornament);
+        accidental->setAccidentalType(ornamSt.accidTypeBelow);
+        accidental->setParent(ornament);
+        ornament->setAccidentalBelow(accidental);
+    }
+}
+
 //---------------------------------------------------------
 // parsing methods
 //---------------------------------------------------------
@@ -2174,6 +2195,7 @@ bool MeiImporter::readMordent(pugi::xml_node mordentNode, Measure* measure)
     }
 
     Convert::OrnamStruct ornamSt = Convert::mordentFromMEI(ornament, meiMordent, warning);
+    this->setOrnamentAccid(ornament, ornamSt);
 
     return true;
 }
@@ -2224,6 +2246,7 @@ bool MeiImporter::readOrnam(pugi::xml_node ornamNode, Measure* measure)
     }
 
     Convert::OrnamStruct ornamSt = Convert::ornamFromMEI(ornament, meiOrnam, warning);
+    this->setOrnamentAccid(ornament, ornamSt);
 
     return true;
 }
@@ -2369,6 +2392,7 @@ bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
     }
 
     Convert::OrnamStruct ornamSt = Convert::trillFromMEI(ornament, meiTrill, warning);
+    this->setOrnamentAccid(ornament, ornamSt);
 
     return true;
 }
@@ -2394,6 +2418,7 @@ bool MeiImporter::readTurn(pugi::xml_node turnNode, Measure* measure)
     }
 
     Convert::OrnamStruct ornamSt = Convert::turnFromMEI(ornament, meiTurn, warning);
+    this->setOrnamentAccid(ornament, ornamSt);
 
     return true;
 }
