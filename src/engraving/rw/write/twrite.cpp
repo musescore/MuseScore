@@ -52,7 +52,6 @@
 #include "../../dom/bend.h"
 #include "../../dom/stretchedbend.h"
 #include "../../dom/box.h"
-#include "../../dom/textframe.h"
 #include "../../dom/bracket.h"
 #include "../../dom/breath.h"
 

@@ -33,7 +33,6 @@
 #include "../../dom/barline.h"
 #include "../../dom/bend.h"
 #include "../../dom/box.h"
-#include "../../dom/textframe.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"

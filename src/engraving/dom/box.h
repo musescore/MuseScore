@@ -20,21 +20,16 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BOX_H__
-#define __BOX_H__
-
-/**
- \file
- Definition of HBox and VBox classes.
-*/
+#ifndef MU_ENGRAVING_BOX_H
+#define MU_ENGRAVING_BOX_H
 
 #include "measurebase.h"
 #include "property.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
-//   @@ Box
-///    virtual base class for frames "boxes"
+//   Box
+//   virtual base class for frames "boxes"
 //---------------------------------------------------------
 
 class Box : public MeasureBase
@@ -57,24 +52,24 @@ public:
     virtual void add(EngravingItem* e) override;
 
     mu::RectF contentRect() const;
-    Spatium boxWidth() const { return _boxWidth; }
-    void setBoxWidth(Spatium val) { _boxWidth = val; }
-    Spatium boxHeight() const { return _boxHeight; }
-    void setBoxHeight(Spatium val) { _boxHeight = val; }
-    double leftMargin() const { return _leftMargin; }
-    double rightMargin() const { return _rightMargin; }
-    double topMargin() const { return _topMargin; }
-    double bottomMargin() const { return _bottomMargin; }
-    void setLeftMargin(double val) { _leftMargin = val; }
-    void setRightMargin(double val) { _rightMargin = val; }
-    void setTopMargin(double val) { _topMargin = val; }
-    void setBottomMargin(double val) { _bottomMargin = val; }
-    Millimetre topGap() const { return _topGap; }
-    void setTopGap(Millimetre val) { _topGap = val; }
-    Millimetre bottomGap() const { return _bottomGap; }
-    void setBottomGap(Millimetre val) { _bottomGap = val; }
-    bool isAutoSizeEnabled() const { return _isAutoSizeEnabled; }
-    void setAutoSizeEnabled(const bool val) { _isAutoSizeEnabled = val; }
+    Spatium boxWidth() const { return m_boxWidth; }
+    void setBoxWidth(Spatium val) { m_boxWidth = val; }
+    Spatium boxHeight() const { return m_boxHeight; }
+    void setBoxHeight(Spatium val) { m_boxHeight = val; }
+    double leftMargin() const { return m_leftMargin; }
+    double rightMargin() const { return m_rightMargin; }
+    double topMargin() const { return m_topMargin; }
+    double bottomMargin() const { return m_bottomMargin; }
+    void setLeftMargin(double val) { m_leftMargin = val; }
+    void setRightMargin(double val) { m_rightMargin = val; }
+    void setTopMargin(double val) { m_topMargin = val; }
+    void setBottomMargin(double val) { m_bottomMargin = val; }
+    Millimetre topGap() const { return m_topGap; }
+    void setTopGap(Millimetre val) { m_topGap = val; }
+    Millimetre bottomGap() const { return m_bottomGap; }
+    void setBottomGap(Millimetre val) { m_bottomGap = val; }
+    bool isAutoSizeEnabled() const { return m_isAutoSizeEnabled; }
+    void setAutoSizeEnabled(const bool val) { m_isAutoSizeEnabled = val; }
     void copyValues(Box* origin);
 
     PropertyValue getProperty(Pid propertyId) const override;
@@ -91,22 +86,22 @@ public:
     std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overridden in descendants
 
 private:
-    Spatium _boxWidth             { Spatium(0) };      // only valid for HBox
-    Spatium _boxHeight            { Spatium(0) };      // only valid for VBox
-    Millimetre _topGap            { Millimetre(0.0) }; // distance from previous system (left border for hbox)
-                                                       // initialized with Sid::systemFrameDistance
-    Millimetre _bottomGap         { Millimetre(0.0) }; // distance to next system (right border for hbox)
-                                                       // initialized with Sid::frameSystemDistance
-    double _leftMargin             { 0.0 };
-    double _rightMargin            { 0.0 };             // inner margins in metric mm
-    double _topMargin              { 0.0 };
-    double _bottomMargin           { 0.0 };
-    bool _isAutoSizeEnabled       { true };
+    Spatium m_boxWidth;         // only valid for HBox
+    Spatium m_boxHeight;        // only valid for VBox
+    Millimetre m_topGap;        // distance from previous system (left border for hbox)
+                                // initialized with Sid::systemFrameDistance
+    Millimetre m_bottomGap;     // distance to next system (right border for hbox)
+                                // initialized with Sid::frameSystemDistance
+    double m_leftMargin = 0.0;
+    double m_rightMargin = 0.0; // inner margins in metric mm
+    double m_topMargin = 0.0;
+    double m_bottomMargin = 0.0;
+    bool m_isAutoSizeEnabled = true;
 };
 
 //---------------------------------------------------------
-//   @@ HBox
-///    horizontal frame
+//   HBox
+//   horizontal frame
 //---------------------------------------------------------
 
 class HBox final : public Box
@@ -116,7 +111,6 @@ class HBox final : public Box
 
 public:
     HBox(System* parent);
-    virtual ~HBox() {}
 
     HBox* clone() const override { return new HBox(*this); }
 
@@ -140,8 +134,8 @@ private:
 };
 
 //---------------------------------------------------------
-//   @@ VBox
-///    vertical frame
+//   VBox
+//   vertical frame
 //---------------------------------------------------------
 
 class VBox : public Box
@@ -152,7 +146,6 @@ class VBox : public Box
 public:
     VBox(const ElementType& type, System* parent);
     VBox(System* parent);
-    virtual ~VBox() {}
 
     VBox* clone() const override { return new VBox(*this); }
 
@@ -167,8 +160,8 @@ public:
 };
 
 //---------------------------------------------------------
-//   @@ FBox
-///    frame containing fret diagrams
+//   FBox
+//   frame containing fret diagrams
 //---------------------------------------------------------
 
 class FBox : public VBox
@@ -179,11 +172,51 @@ class FBox : public VBox
 public:
     FBox(System* parent)
         : VBox(ElementType::FBOX, parent) {}
-    virtual ~FBox() {}
 
     FBox* clone() const override { return new FBox(*this); }
 
     void add(EngravingItem*) override;
+};
+
+//---------------------------------------------------------
+//   TBox
+//   Text frame.
+//---------------------------------------------------------
+
+class Text;
+class TBox : public VBox
+{
+    OBJECT_ALLOCATOR(engraving, TBox)
+    DECLARE_CLASSOF(ElementType::TBOX)
+
+public:
+    TBox(System* parent);
+    TBox(const TBox&);
+    ~TBox() override;
+
+    Text* text() const { return m_text; }
+
+    // Score Tree functions
+    EngravingObject* scanParent() const override;
+    EngravingObjectList scanChildren() const override;
+    void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all = true) override;
+
+    TBox* clone() const override { return new TBox(*this); }
+
+    EngravingItem* drop(EditData&) override;
+    void add(EngravingItem* e) override;
+    void remove(EngravingItem* el) override;
+
+    String accessibleExtraInfo() const override;
+
+    int gripsCount() const override;
+    Grip initialEditModeGrip() const override;
+    Grip defaultGrip() const override;
+
+    bool needStartEditingAfterSelecting() const override { return false; }
+
+private:
+    Text* m_text = nullptr;
 };
 } // namespace mu::engraving
 #endif

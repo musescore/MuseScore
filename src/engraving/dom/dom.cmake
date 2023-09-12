@@ -329,8 +329,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/textbase.h
     ${CMAKE_CURRENT_LIST_DIR}/textedit.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textedit.h
-    ${CMAKE_CURRENT_LIST_DIR}/textframe.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/textframe.h
     ${CMAKE_CURRENT_LIST_DIR}/textline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/textline.h
     ${CMAKE_CURRENT_LIST_DIR}/textlinebase.cpp
