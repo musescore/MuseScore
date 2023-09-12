@@ -194,25 +194,27 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
             layout(item_cast<const Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
         }
         break;
-    case ElementType::BAR_LINE: {
-        BarLine* bl = item_cast<BarLine*>(item);
-        layout(bl, bl->mutLayoutData(), ctx);
-    } break;
+    case ElementType::BAR_LINE:
+        layout(item_cast<const BarLine*>(item), static_cast<BarLine::LayoutData*>(ldata), ctx);
+        break;
     case ElementType::BEAM:             layout(item_cast<Beam*>(item), ctx);
         break;
-    case ElementType::BEND: {
-        Bend* bend = item_cast<Bend*>(item);
-        layout(bend, bend->mutLayoutData());
-    } break;
+    case ElementType::BEND:
+        layout(item_cast<const Bend*>(item), static_cast<Bend::LayoutData*>(ldata));
+        break;
     case ElementType::STRETCHED_BEND:   layout(item_cast<StretchedBend*>(item), ctx);
         break;
-    case ElementType::HBOX:             layout(item_cast<HBox*>(item), ctx);
+    case ElementType::HBOX:
+        layout(item_cast<const HBox*>(item), static_cast<HBox::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::VBOX:             layout(item_cast<VBox*>(item), ctx);
+    case ElementType::VBOX:
+        layout(item_cast<const VBox*>(item), static_cast<VBox::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::FBOX:             layout(item_cast<FBox*>(item), ctx);
+    case ElementType::FBOX:
+        layout(item_cast<const FBox*>(item), static_cast<FBox::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::TBOX:             layout(item_cast<TBox*>(item), ctx);
+    case ElementType::TBOX:
+        layout(item_cast<const TBox*>(item), static_cast<TBox::LayoutData*>(ldata), ctx);
         break;
     case ElementType::BRACKET:          layout(item_cast<Bracket*>(item), ctx);
         break;
@@ -882,7 +884,7 @@ void TLayout::layout(const BarLine* item, BarLine::LayoutData* ldata, const Layo
             // not yet clear
             break;
         default:
-            DO_ASSERT(false);
+            UNREACHABLE;
         }
     }
 
@@ -947,7 +949,7 @@ void TLayout::layout(const BarLine* item, BarLine::LayoutData* ldata, const Layo
             TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
             break;
         default:
-            DO_ASSERT(false);
+            UNREACHABLE;
         }
     }
 }
@@ -1154,72 +1156,80 @@ void TLayout::layout(const Bend* item, Bend::LayoutData* ldata)
     ldata->setPos(PointF());
 }
 
-using BoxTypes = rtti::TypeList<HBox, VBox, FBox, TBox>;
-
-class BoxVisitor : public rtti::Visitor<BoxVisitor>
+void TLayout::layout(const Box* item, Box::LayoutData* ldata, const LayoutContext& ctx)
 {
-public:
-    template<typename T>
-    static bool doVisit(EngravingItem* item, LayoutContext& ctx)
-    {
-        if (T::classof(item)) {
-            TLayout::layout(static_cast<T*>(item), ctx);
-            return true;
-        }
-        return false;
-    }
-};
-
-void TLayout::layout(Box* item, LayoutContext& ctx)
-{
-    BoxVisitor::visit(BoxVisitor::ShouldBeFound, BoxTypes {}, item, ctx);
-}
-
-void TLayout::layoutBox(Box* item, LayoutContext& ctx)
-{
-    layoutMeasureBase(item, ctx);
-    for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
+    switch (item->type()) {
+    case ElementType::HBOX:
+        TLayout::layout(static_cast<const HBox*>(item), static_cast<HBox::LayoutData*>(ldata), ctx);
+        break;
+    case ElementType::VBOX:
+        TLayout::layout(static_cast<const VBox*>(item), static_cast<VBox::LayoutData*>(ldata), ctx);
+        break;
+    case ElementType::FBOX:
+        TLayout::layout(static_cast<const FBox*>(item), static_cast<FBox::LayoutData*>(ldata), ctx);
+        break;
+    case ElementType::TBOX:
+        TLayout::layout(static_cast<const TBox*>(item), static_cast<TBox::LayoutData*>(ldata), ctx);
+        break;
+    default:
+        UNREACHABLE;
+        break;
     }
 }
 
-void TLayout::layout(HBox* item, LayoutContext& ctx)
+void TLayout::layoutBox(const Box* item, Box::LayoutData* ldata, const LayoutContext& ctx)
 {
-    HBox::LayoutData* ldata = item->mutLayoutData();
+    layoutMeasureBase(item, ldata, ctx);
+}
+
+void TLayout::layout(const HBox* item, HBox::LayoutData* ldata, const LayoutContext& ctx)
+{
     if (item->explicitParent() && item->explicitParent()->isVBox()) {
-        VBox* vb = toVBox(item->explicitParent());
-        double x = vb->leftMargin() * DPMM;
-        double y = vb->topMargin() * DPMM;
+        const VBox* parentVBox = toVBox(item->explicitParent());
+
+        LD_CONDITION(parentVBox->layoutData()->isSetBbox());
+
+        double x = parentVBox->leftMargin() * DPMM;
+        double y = parentVBox->topMargin() * DPMM;
         double w = item->point(item->boxWidth());
-        double h = vb->height() - (vb->topMargin() + vb->bottomMargin()) * DPMM;
+        double h = parentVBox->layoutData()->bbox().height() - (parentVBox->topMargin() + parentVBox->bottomMargin()) * DPMM;
         ldata->setPos(x, y);
         ldata->setBbox(0.0, 0.0, w, h);
     } else if (item->system()) {
-        ldata->setBbox(0.0, 0.0, item->point(item->boxWidth()), item->system()->height());
+        const System* parentSystem = item->system();
+
+        LD_CONDITION(parentSystem->layoutData()->isSetBbox());
+
+        ldata->setPos(PointF());
+        ldata->setBbox(0.0, 0.0, item->point(item->boxWidth()), parentSystem->layoutData()->bbox().height());
     } else {
+        ldata->setPos(PointF());
         ldata->setBbox(0.0, 0.0, 50, 50);
     }
-    layoutBox(static_cast<Box*>(item), ctx);
+    layoutBox(item, ldata, ctx);
 }
 
 void TLayout::layout2(HBox* item, LayoutContext& ctx)
 {
-    layoutBox(item, ctx);
+    layoutBox(item, item->mutLayoutData(), ctx);
 }
 
-void TLayout::layout(VBox* item, LayoutContext& ctx)
+void TLayout::layout(const VBox* item, VBox::LayoutData* ldata, const LayoutContext& ctx)
 {
-    VBox::LayoutData* ldata = item->mutLayoutData();
     ldata->setPos(PointF());
 
     if (item->system()) {
-        ldata->setBbox(0.0, 0.0, item->system()->width(), item->point(item->boxHeight()));
+        const System* parentSystem = item->system();
+
+        LD_CONDITION(parentSystem->layoutData()->isSetBbox());
+
+        ldata->setBbox(0.0, 0.0, parentSystem->layoutData()->bbox().width(), item->point(item->boxHeight()));
     } else {
         ldata->setBbox(0.0, 0.0, 50, 50);
     }
 
     for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
+        layoutItem(e, const_cast<LayoutContext&>(ctx));
     }
 
     if (item->getProperty(Pid::BOX_AUTOSIZE).toBool()) {
@@ -1229,62 +1239,68 @@ void TLayout::layout(VBox* item, LayoutContext& ctx)
             contentHeight = item->minHeight();
         }
 
-        item->setHeight(contentHeight);
+        ldata->setHeight(contentHeight);
     }
-
-    layoutMeasureBase(item, ctx);
 
     if (MScore::noImages) {
-        adjustLayoutWithoutImages(item, ctx);
-    }
-}
+        // adjustLayoutWithoutImages
+        double calculatedVBoxHeight = 0;
+        const int padding = ctx.conf().spatium();
+        ElementList elist = item->el();
+        for (EngravingItem* e : elist) {
+            if (e->isText()) {
+                Text* txt = toText(e);
+                Text::LayoutData* txtLD = txt->mutLayoutData();
 
-void TLayout::adjustLayoutWithoutImages(VBox* item, LayoutContext& ctx)
-{
-    double calculatedVBoxHeight = 0;
-    const int padding = ctx.conf().spatium();
-    auto elementList = item->el();
+                LD_CONDITION(txtLD->isSetBbox());
 
-    for (auto pElement : elementList) {
-        if (pElement->isText()) {
-            Text* txt = toText(pElement);
-            RectF bbox = txt->layoutData()->bbox();
-            bbox.moveTop(0.0);
-            txt->mutLayoutData()->setBbox(bbox);
-            calculatedVBoxHeight += txt->height() + padding;
+                RectF bbox = txtLD->bbox();
+                bbox.moveTop(0.0);
+                txtLD->setBbox(bbox);
+                calculatedVBoxHeight += txtLD->bbox().height() + padding;
+            }
         }
+
+        ldata->setHeight(calculatedVBoxHeight);
     }
-
-    item->setHeight(calculatedVBoxHeight);
-    layoutBox(static_cast<Box*>(item), ctx);
 }
 
-void TLayout::layout(FBox* item, LayoutContext& ctx)
+void TLayout::layout(const FBox* item, EngravingItem::LayoutData* ldata, const LayoutContext& ctx)
 {
-    FBox::LayoutData* ldata = item->mutLayoutData();
-    ldata->setBbox(0.0, 0.0, item->system()->width(), item->point(item->boxHeight()));
-    layoutBox(static_cast<Box*>(item), ctx);
+    const System* parentSystem = item->system();
+
+    LD_CONDITION(parentSystem->layoutData()->isSetBbox());
+
+    ldata->setPos(PointF());
+    ldata->setBbox(0.0, 0.0, parentSystem->layoutData()->bbox().width(), item->point(item->boxHeight()));
+    layoutBox(item, ldata, ctx);
 }
 
-void TLayout::layout(TBox* item, LayoutContext& ctx)
+void TLayout::layout(const TBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx)
 {
-    FBox::LayoutData* ldata = item->mutLayoutData();
-    ldata->setPos(PointF());        // !?
-    ldata->setBbox(0.0, 0.0, item->system()->width(), 0);
-    layout(item->text(), ctx);
+    const System* parentSystem = item->system();
 
-    double h = 0.;
+    LD_CONDITION(parentSystem->layoutData()->isSetBbox());
+
+    ldata->setPos(PointF());
+    ldata->setBbox(0.0, 0.0, parentSystem->layoutData()->bbox().width(), 0);
+
+    TLayout::layout(item->text(), const_cast<LayoutContext&>(ctx));
+
+    Text::LayoutData* textLD = item->text()->mutLayoutData();
+
+    double h = 0.0;
     if (item->text()->empty()) {
-        h = mu::draw::FontMetrics::ascent(item->text()->font());
+        h = FontMetrics::ascent(item->text()->font());
     } else {
-        h = item->text()->height();
+        h = textLD->bbox().height();
     }
     double y = item->topMargin() * DPMM;
-    item->text()->setPos(item->leftMargin() * DPMM, y);
+    textLD->setPos(item->leftMargin() * DPMM, y);
     h += item->topMargin() * DPMM + item->bottomMargin() * DPMM;
     ldata->setBbox(0.0, 0.0, item->system()->width(), h);
 
-    layoutMeasureBase(item, ctx);   // layout LayoutBreak's
+    layoutMeasureBase(item, ldata, ctx);   // layout LayoutBreak's
 }
 
 static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket::LayoutData* ldata)
@@ -3612,30 +3628,33 @@ void TLayout::layout(MeasureBase* item, LayoutContext& ctx)
     layoutItem(item, ctx);
 }
 
-void TLayout::layoutMeasureBase(MeasureBase* item, LayoutContext& ctx)
+void TLayout::layoutMeasureBase(const MeasureBase* item, MeasureBase::LayoutData* ldata, const LayoutContext& ctx)
 {
+    LD_CONDITION(ldata->isSetBbox());
+
     int breakCount = 0;
 
-    for (EngravingItem* element : item->el()) {
-        if (element->isLayoutBreak()) {
-            TLayout::layoutItem(element, ctx);
-            double _spatium = item->spatium();
-            double x;
-            double y;
-            if (toLayoutBreak(element)->isNoBreak()) {
-                x = item->width() + ctx.conf().styleMM(Sid::barWidth) - element->width() * .5;
+    for (EngravingItem* e : item->el()) {
+        if (e->isLayoutBreak()) {
+            TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
+            EngravingItem::LayoutData* eldata = e->mutLayoutData();
+            double spatium = item->spatium();
+            double x = 0.0;
+            double y = 0.0;
+            if (toLayoutBreak(e)->isNoBreak()) {
+                x = /*mb*/ ldata->bbox().width() + ctx.conf().styleMM(Sid::barWidth) - eldata->bbox().width() * .5;
             } else {
-                x = item->width()
+                x = /*mb*/ ldata->bbox().width()
                     + ctx.conf().styleMM(Sid::barWidth)
-                    - element->width()
-                    - breakCount * (element->width() + _spatium * .5);
+                    - eldata->bbox().width()
+                    - breakCount * (eldata->bbox().width() + spatium * .5);
                 breakCount++;
             }
-            y = -2.5 * _spatium - element->height();
-            element->setPos(x, y);
-        } else if (element->isMarker() || element->isJump()) {
+            y = -2.5 * spatium - eldata->bbox().height();
+            eldata->setPos(x, y);
+        } else if (e->isMarker() || e->isJump()) {
         } else {
-            layoutItem(element, ctx);
+            layoutItem(e, const_cast<LayoutContext&>(ctx));
         }
     }
 }

@@ -334,9 +334,10 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
             m->setPos(pos);
             MeasureLayout::layoutStaffLines(m, ctx);
         } else if (ctx.state().curMeasure()->isHBox()) {
-            ctx.mutState().curMeasure()->setPos(pos + PointF(toHBox(ctx.state().curMeasure())->topGap(), 0.0));
-            TLayout::layoutMeasureBase(ctx.mutState().curMeasure(), ctx);
-            ww = ctx.state().curMeasure()->width();
+            MeasureBase* curM = ctx.mutState().curMeasure();
+            curM->setPos(pos + PointF(toHBox(curM)->topGap(), 0.0));
+            TLayout::layoutMeasureBase(curM, curM->mutLayoutData(), ctx);
+            ww = curM->width();
         }
         pos.rx() += ww;
 

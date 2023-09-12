@@ -46,7 +46,7 @@ enum class LD_ACCESS {
 #define LD_CONDITION(val) (void)val;
 #endif
 
-// just mark as independent
+// mark as independent
 #define LD_INDEPENDENT
 
 template<typename T>

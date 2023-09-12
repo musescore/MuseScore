@@ -125,8 +125,8 @@ public:
     bool isMovable() const override;
     void computeMinWidth() override;
 
-    bool createSystemHeader() const { return _createSystemHeader; }
-    void setCreateSystemHeader(bool val) { _createSystemHeader = val; }
+    bool createSystemHeader() const { return m_createSystemHeader; }
+    void setCreateSystemHeader(bool val) { m_createSystemHeader = val; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -136,7 +136,7 @@ public:
 
 private:
 
-    bool _createSystemHeader { true };
+    bool m_createSystemHeader = true;
 };
 
 //---------------------------------------------------------
