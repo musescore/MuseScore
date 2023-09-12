@@ -225,8 +225,9 @@ public:
     static void octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning);
     static libmei::Octave octaveToMEI(const engraving::Ottava* ottava);
 
-    static OrnamStruct ornamFromMEI(engraving::Ornament* ornament, const libmei::Ornam& meiOrnam, bool& warning);
+    static OrnamStruct ornamFromMEI(engraving::Ornament* ornament, const libmei::Element& meiElement, bool& warning);
     static libmei::Ornam ornamToMEI(const engraving::Ornament* ornament);
+    static void ornamToMEI(const engraving::Ornament* ornament, libmei::Element& meiElement);
 
     static void ornamintervaleFromMEI(engraving::Ornament* ornament, const std::string& meiType);
     static String ornamintervalToMEI(const engraving::Ornament* ornament);
