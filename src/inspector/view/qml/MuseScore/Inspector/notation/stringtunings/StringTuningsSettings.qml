@@ -47,7 +47,6 @@ Column {
         id: editStringsButton
 
         width: parent.width
-        height: 30
 
         text: qsTrc("inspector", "Edit strings")
 

@@ -76,14 +76,14 @@ void StringTuningsSettingsModel::init()
     }
 
     const std::vector<engraving::instrString>& stringList = stringData->stringList();
-    std::vector<engraving::string_idx_t> visibleStrings = stringTunings->visibleStrings();
+    const std::vector<engraving::string_idx_t>& visibleStrings = stringTunings->visibleStrings();
     for (engraving::string_idx_t i = 0; i < stringList.size(); ++i) {
         const engraving::instrString& string = stringList[i];
         StringTuningsItem* item = new StringTuningsItem(this);
 
         item->blockSignals(true);
         item->setShow(contains(visibleStrings, i));
-        item->setNumber(QString::number(i + 1)); // todo
+        item->setNumber(QString::number(i + 1));
         item->setValue(string.pitch);
         item->blockSignals(false);
 
@@ -312,7 +312,7 @@ void StringTuningsSettingsModel::updateStrings()
 
             item->blockSignals(true);
             item->setShow(true);
-            item->setNumber(QString::number(i + 1)); // todo
+            item->setNumber(QString::number(i + 1));
             item->setValue(valueList[i].toInt());
             item->blockSignals(false);
 
@@ -336,7 +336,6 @@ void StringTuningsSettingsModel::saveStrings()
     stringList.resize(m_strings.size());
 
     for (int i = 0; i < m_strings.size(); ++i) {
-        stringList[i].open = false;
         stringList[i].pitch = m_strings[i]->value();
     }
 

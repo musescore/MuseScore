@@ -3023,7 +3023,7 @@ void ChangeStringData::flip(EditData*)
 {
     const StringData* stringData =  m_stringTunings ? m_stringTunings->stringData() : m_instrument->stringData();
     int frets = stringData->frets();
-    std::vector<mu::engraving::instrString> stringList = stringData->stringList();
+    std::vector<instrString> stringList = stringData->stringList();
 
     if (m_stringTunings) {
         m_stringTunings->setStringData(m_stringData);

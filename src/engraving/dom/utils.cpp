@@ -528,10 +528,10 @@ String pitch2string(int v)
     if (v < 0 || v > 127) {
         return String(u"----");
     }
-    int octave = (v / 12) - 1;
+    int octave = (v / PITCH_DELTA_OCTAVE) - 1;
     String o;
     o = String::number(octave);
-    int i = v % 12;
+    int i = v % PITCH_DELTA_OCTAVE;
     return (octave < 0 ? valu[i] : vall[i]) + o;
 }
 
@@ -561,7 +561,7 @@ int string2pitch(const String& s)
     origin = origin.mid(0, origin.size() - (negative ? 2 : 1));
 
     int pitchIndex = -1;
-    for (int i = 0; i < 12; ++i) {
+    for (int i = 0; i < PITCH_DELTA_OCTAVE; ++i) {
         if (origin.toLower() == String(octave < 0 ? valu[i] : vall[i]).toLower()) {
             pitchIndex = i;
             break;
@@ -572,7 +572,7 @@ int string2pitch(const String& s)
         return -1;
     }
 
-    return (octave + 1) * 12 + pitchIndex;
+    return (octave + 1) * PITCH_DELTA_OCTAVE + pitchIndex;
 }
 
 /*!

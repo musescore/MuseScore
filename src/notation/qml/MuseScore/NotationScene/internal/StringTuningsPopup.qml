@@ -92,7 +92,7 @@ StyledPopupView {
                 navigation.name: "Presets"
                 navigation.panel: navPanel
                 navigation.row: 1
-                navigation.accessible: titleLabel.text + " " + currentText
+                navigation.accessible.name: titleLabel.text + " " + currentText
 
                 model: stringTuningsModel.presets
 

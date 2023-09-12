@@ -37,7 +37,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 // STYLE
-static const ElementStyle stringTuningsStyle {
+static const ElementStyle STRING_TUNINGS_STYLE {
     { Sid::staffTextPlacement, Pid::PLACEMENT },
     { Sid::staffTextMinDistance, Pid::MIN_DISTANCE },
 };
@@ -45,7 +45,7 @@ static const ElementStyle stringTuningsStyle {
 StringTunings::StringTunings(Segment* parent, TextStyleType textStyleType)
     : StaffTextBase(ElementType::STRING_TUNINGS, parent, textStyleType, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
-    initElementStyle(&stringTuningsStyle);
+    initElementStyle(&STRING_TUNINGS_STYLE);
 }
 
 StringTunings::StringTunings(const StringTunings& s)
@@ -70,7 +70,7 @@ PropertyValue StringTunings::getProperty(Pid id) const
         if (staff()->isTabStaff(tick)) {
             return staff()->lines(tick);
         } else {
-            for (Staff* _staff : staff()->staffList()) {
+            for (const Staff* _staff : staff()->staffList()) {
                 if (_staff == staff()) {
                     continue;
                 }
@@ -87,7 +87,7 @@ PropertyValue StringTunings::getProperty(Pid id) const
     } else if (id == Pid::STRINGTUNINGS_VISIBLE_STRINGS) {
         std::vector<int> visibleStrings;
         for (string_idx_t string : m_visibleStrings) {
-            visibleStrings.push_back(static_cast<int>(string));
+            visibleStrings.emplace_back(static_cast<int>(string));
         }
 
         return visibleStrings;
@@ -99,7 +99,7 @@ PropertyValue StringTunings::getProperty(Pid id) const
 PropertyValue StringTunings::propertyDefault(Pid id) const
 {
     if (id == Pid::STRINGTUNINGS_STRINGS_COUNT) {
-        return stringData()->strings(); // todo
+        return stringData()->strings();
     } else if (id == Pid::STRINGTUNINGS_PRESET) {
         return String();
     } else if (id == Pid::STRINGTUNINGS_VISIBLE_STRINGS) {
@@ -132,7 +132,7 @@ bool StringTunings::setProperty(Pid id, const PropertyValue& val)
         m_visibleStrings.clear();
         std::vector<int> ignoredStrings = val.value<std::vector<int> >();
         for (int string : ignoredStrings) {
-            m_visibleStrings.push_back(static_cast<string_idx_t>(string));
+            m_visibleStrings.emplace_back(static_cast<string_idx_t>(string));
         }
     } else {
         return StaffTextBase::setProperty(id, val);
@@ -151,7 +151,7 @@ String StringTunings::accessibleInfo() const
 
     String info;
 
-    std::vector<instrString> stringList = stringData->stringList();
+    const std::vector<instrString>& stringList = stringData->stringList();
     for (string_idx_t i = 0; i < stringList.size(); ++i) {
         if (mu::contains(m_visibleStrings, i)) {
             String pitchStr = pitch2string(stringList[i].pitch);
@@ -190,7 +190,7 @@ void StringTunings::undoStringData(const StringData& stringData)
     triggerLayout();
 }
 
-String StringTunings::preset() const
+const String& StringTunings::preset() const
 {
     return m_preset;
 }
@@ -200,7 +200,7 @@ void StringTunings::setPreset(const String& preset)
     m_preset = preset;
 }
 
-std::vector<string_idx_t> StringTunings::visibleStrings() const
+const std::vector<string_idx_t>& StringTunings::visibleStrings() const
 {
     return m_visibleStrings;
 }
@@ -222,7 +222,7 @@ String StringTunings::generateText() const
         return String();
     }
 
-    std::vector<instrString> stringList = stringData->stringList();
+    const std::vector<instrString>& stringList = stringData->stringList();
     std::vector<String> visibleStringList;
     for (string_idx_t i = 0; i < stringList.size(); ++i) {
         if (mu::contains(m_visibleStrings, i)) {
@@ -232,8 +232,8 @@ String StringTunings::generateText() const
                 continue;
             }
 
-            visibleStringList.push_back(String(u"<sym>guitarString%1</sym> - %2").arg(String::number(i + 1),
-                                                                                      String(pitchStr[0]).toUpper()));
+            visibleStringList.emplace_back(String(u"<sym>guitarString%1</sym> - %2").arg(String::number(i + 1),
+                                                                                         String(pitchStr[0]).toUpper()));
         }
     }
 
