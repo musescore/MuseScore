@@ -228,6 +228,7 @@ public:
     static const OrnamStruct& ornamFromMEI(engraving::Ornament* ornament, const libmei::Ornam& meiOrnam, bool& warning);
     static libmei::Ornam ornamToMEI(const engraving::Ornament* ornament);
 
+    static void ornamintervaleFromMEI(engraving::Ornament *ornament, const std::string &meiType);
     static String ornamintervalToMEI(const engraving::Ornament* ornament);
 
     static const PitchStruct& pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
@@ -280,6 +281,7 @@ public:
      * Helper methods
      */
     static bool hasTypeValue(const std::string& typeStr, const std::string& value);
+    static bool getTypeValueWithPrefix(const std::string& typeStr, const std::string& prefix, std::string& value);
     static std::list<std::string> getTypeValuesWithPrefix(const std::string& typeStr, const std::string& prefix);
     static double tstampFromFraction(const engraving::Fraction& fraction, const engraving::Fraction& timesig);
     static engraving::Fraction tstampToFraction(double tstamp, const engraving::Fraction& timesig);
