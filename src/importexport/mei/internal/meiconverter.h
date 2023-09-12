@@ -106,8 +106,8 @@ public:
     };
 
     struct OrnamStruct {
-        int lines;
-        engraving::OrnamentInterval above;
+        engraving::AccidentalType accidTypeAbove = engraving::AccidentalType::NONE;
+        engraving::AccidentalType accidTypeBelow = engraving::AccidentalType::NONE;
     };
 
     struct StaffStruct {
@@ -156,7 +156,7 @@ public:
     static engraving::BeamMode breaksecFromMEI(int breaksec, bool& warning);
     static int breaksecToMEI(engraving::BeamMode beamMode);
 
-    static const Convert::BracketStruct& bracketFromMEI(const libmei::StaffGrp& meiStaffGrp);
+    static BracketStruct bracketFromMEI(const libmei::StaffGrp& meiStaffGrp);
     static libmei::StaffGrp bracketToMEI(const engraving::BracketType, int barLineSpan);
 
     static void breathFromMEI(engraving::Breath* breath, const libmei::Breath& meiBreath, bool& warning);
@@ -212,27 +212,27 @@ public:
     static void markerFromMEI(engraving::Marker* marker, const libmei::RepeatMark& meiRepeatMark, bool& warning);
     static libmei::RepeatMark markerToMEI(const engraving::Marker* marker, String& text);
 
-    static const MeasureStruct& measureFromMEI(const libmei::Measure& meiMeasure, bool& warning);
+    static MeasureStruct measureFromMEI(const libmei::Measure& meiMeasure, bool& warning);
     static libmei::Measure measureToMEI(const engraving::Measure* measure, int& measureN, bool& isLastIrregular);
 
     static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::ScoreDef& meiScoreDef, bool& warning);
     static std::pair<engraving::Fraction, engraving::TimeSigType> meterFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef meterToMEI(const engraving::Fraction& fraction, engraving::TimeSigType tsType);
 
-    static const OrnamStruct& mordentFromMEI(engraving::Ornament* ornament, const libmei::Mordent& meiMordent, bool& warning);
+    static OrnamStruct mordentFromMEI(engraving::Ornament* ornament, const libmei::Mordent& meiMordent, bool& warning);
     static libmei::Mordent mordentToMEI(const engraving::Ornament* ornament);
 
     static void octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& meiOctave, bool& warning);
     static libmei::Octave octaveToMEI(const engraving::Ottava* ottava);
 
-    static const OrnamStruct& ornamFromMEI(engraving::Ornament* ornament, const libmei::Ornam& meiOrnam, bool& warning);
+    static OrnamStruct ornamFromMEI(engraving::Ornament* ornament, const libmei::Ornam& meiOrnam, bool& warning);
     static libmei::Ornam ornamToMEI(const engraving::Ornament* ornament);
 
-    static void ornamintervaleFromMEI(engraving::Ornament *ornament, const std::string &meiType);
+    static void ornamintervaleFromMEI(engraving::Ornament* ornament, const std::string& meiType);
     static String ornamintervalToMEI(const engraving::Ornament* ornament);
 
-    static const PitchStruct& pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
-                                           bool& warning);
+    static PitchStruct pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
+                                    bool& warning);
     static std::pair<libmei::Note, libmei::Accid> pitchToMEI(const engraving::Note* note, const engraving::Accidental* accid,
                                                              const engraving::Interval& interval);
 
@@ -245,7 +245,7 @@ public:
     static engraving::SlurStyleType slurstyleFromMEI(const libmei::data_LINEFORM meiLine, bool& warning);
     static libmei::data_LINEFORM slurstyleToMEI(engraving::SlurStyleType slurstyle);
 
-    static const StaffStruct& staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
+    static StaffStruct staffFromMEI(const libmei::StaffDef& meiStaffDef, bool& warning);
     static libmei::StaffDef staffToMEI(const engraving::Staff* staff);
 
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
@@ -268,13 +268,13 @@ public:
     static void tieFromMEI(engraving::SlurTie* tie, const libmei::Tie& meiTie, bool& warning);
     static libmei::Tie tieToMEI(const engraving::SlurTie* tie);
 
-    static const OrnamStruct& trillFromMEI(engraving::Ornament* ornament, const libmei::Trill& meiTrill, bool& warning);
+    static OrnamStruct trillFromMEI(engraving::Ornament* ornament, const libmei::Trill& meiTrill, bool& warning);
     static libmei::Trill trillToMEI(const engraving::Ornament* ornament);
 
     static void tupletFromMEI(engraving::Tuplet* tuplet, const libmei::Tuplet& meiTuplet, bool& warning);
     static libmei::Tuplet tupletToMEI(const engraving::Tuplet* tuplet);
 
-    static const OrnamStruct& turnFromMEI(engraving::Ornament* ornament, const libmei::Turn& meiTurn, bool& warning);
+    static OrnamStruct turnFromMEI(engraving::Ornament* ornament, const libmei::Turn& meiTurn, bool& warning);
     static libmei::Turn turnToMEI(const engraving::Ornament* ornament);
 
     /**
@@ -319,7 +319,7 @@ private:
         { engraving::SymId::ornamentPrallDown, "ornamentPrecompTrillLowerSuffix" },
         { engraving::SymId::ornamentDownMordent, "ornamentPrecompTurnTrillBach" },
         { engraving::SymId::ornamentPrallUp, "ornamentPrecompTrillSuffixDandrieu" },
-        { engraving::SymId::ornamentLinePrall, "ornamentPrecompMordentUpperPrefix" },
+        { engraving::SymId::ornamentLinePrall, "ornamentPrecompAppoggTrill" },
         { engraving::SymId::ornamentPrecompSlide, "ornamentSchleifer" }
     };
 };
