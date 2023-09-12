@@ -31,6 +31,7 @@
 #include "../../dom/articulation.h"
 
 #include "../../dom/barline.h"
+#include "../../dom/bend.h"
 
 #include "../../dom/measurenumberbase.h"
 
@@ -43,7 +44,6 @@ class EngravingItem;
 
 class BagpipeEmbellishment;
 class Beam;
-class Bend;
 
 class Box;
 class HBox;
@@ -187,7 +187,7 @@ public:
     static void layout2(BarLine* item, LayoutContext& ctx);
     static void layout(Beam* item, LayoutContext& ctx);
     static void layout1(Beam* item, LayoutContext& ctx);
-    static void layout(Bend* item, LayoutContext& ctx);
+    static void layout(const Bend* item, Bend::LayoutData* ldata);
 
     static void layout(Box* item, LayoutContext& ctx);    // factory
     static void layoutBox(Box* item, LayoutContext& ctx); // base class
