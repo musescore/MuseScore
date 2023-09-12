@@ -687,7 +687,7 @@ void Convert::colorFromMEI(engraving::EngravingItem* item, const libmei::Element
     if (colorAtt->HasColor()) {
         engraving::Color color = engraving::Color::fromString(colorAtt->GetColor());
         if (color.isValid()) {
-            item->setColor(color.fromString(colorAtt->GetColor()));
+            item->setColor(color);
         }
     }
 }
