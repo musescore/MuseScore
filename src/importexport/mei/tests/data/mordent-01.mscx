@@ -21,7 +21,6 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle">Untitled score</metaTag>
-    <metaTag name="xml:id">mordent-01-342295</metaTag>
     <Part id="1">
       <Staff id="1">
         <StaffType group="pitched">
