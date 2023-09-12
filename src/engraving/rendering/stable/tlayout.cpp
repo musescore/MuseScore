@@ -678,7 +678,7 @@ static double barLineWidth(const BarLine* item, const MStyle& style, double dotW
 
 static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::LayoutData* ldata)
 {
-    ldata->clearPos();
+    ldata->setPos(PointF());
 
     // barlines hidden on this staff
     if (item->staff() && item->segment()) {
@@ -951,7 +951,7 @@ static void layoutBend(const Bend* item, const LayoutContext&, Bend::LayoutData*
     bb.adjust(-lw, -lw, lw, lw);
 
     ldata->setBbox(bb);
-    ldata->clearPos();
+    ldata->setPos(PointF());
 }
 
 void TLayout::layout(Bend* item, LayoutContext& ctx)
@@ -1656,7 +1656,7 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
     ldata->setIsSkipDraw(false);
 
     Segment* s = item->segment();
-    ldata->clearPos();
+    ldata->setPos(PointF());
 
     if (item->isStyled(Pid::OFFSET)) {
         const_cast<Fermata*>(item)->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
@@ -4670,7 +4670,7 @@ void TLayout::layoutTextBase(const TextBase* item, const LayoutContext& ctx, Tex
         return;
     }
 
-    ldata->clearPos();
+    ldata->setPos(PointF());
 
     if (item->placeBelow()) {
         ldata->setPosY(item->staff() ? item->staff()->height() : 0.0);
@@ -4737,7 +4737,7 @@ void TLayout::layout1TextBase(const TextBase* item, const LayoutContext&, TextBa
             }
         }
     } else {
-        ldata->clearPos();
+        ldata->setPos(PointF());
     }
 
     if (item->align() == AlignV::BOTTOM) {

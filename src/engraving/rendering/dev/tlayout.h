@@ -30,6 +30,8 @@
 #include "../../dom/arpeggio.h"
 #include "../../dom/articulation.h"
 
+#include "../../dom/barline.h"
+
 #include "../../dom/measurenumberbase.h"
 
 #include "../../dom/textbase.h"
@@ -40,7 +42,6 @@ namespace mu::engraving {
 class EngravingItem;
 
 class BagpipeEmbellishment;
-class BarLine;
 class Beam;
 class Bend;
 
@@ -182,7 +183,7 @@ public:
                        bool includeCrossStaffHeight = false);
     static void layout(const Articulation* item, Articulation::LayoutData* ldata);
 
-    static void layout(BarLine* item, LayoutContext& ctx);
+    static void layout(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx);
     static void layout2(BarLine* item, LayoutContext& ctx);
     static void layout(Beam* item, LayoutContext& ctx);
     static void layout1(Beam* item, LayoutContext& ctx);
