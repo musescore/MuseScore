@@ -619,6 +619,7 @@ void Segment::add(EngravingItem* el)
 
         if (!alreadyHasStringTunings) {
             _annotations.push_back(el);
+            el->part()->addStringTunings(toStringTunings(el));
         }
 
         break;
@@ -792,7 +793,6 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
-    case ElementType::STRING_TUNINGS:
     case ElementType::SYMBOL:
     case ElementType::TAB_DURATION_SYMBOL:
     case ElementType::TEMPO_TEXT:
@@ -800,6 +800,11 @@ void Segment::remove(EngravingItem* el)
     case ElementType::TREMOLOBAR:
     case ElementType::FERMATA:
     case ElementType::STICKING:
+        removeAnnotation(el);
+        break;
+
+    case ElementType::STRING_TUNINGS:
+        el->part()->removeStringTunings(toStringTunings(el));
         removeAnnotation(el);
         break;
 
