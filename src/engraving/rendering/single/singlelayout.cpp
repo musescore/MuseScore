@@ -1661,7 +1661,7 @@ void SingleLayout::layout(Text* item, const Context& ctx)
 
 void SingleLayout::layoutTextBase(const TextBase* item, const Context& ctx, TextBase::LayoutData* ldata)
 {
-    ldata->clearPos();
+    ldata->setPos(PointF());
     const_cast<TextBase*>(item)->setOffset(PointF());
 
     if (item->placeBelow()) {
@@ -1696,7 +1696,7 @@ void SingleLayout::layout1TextBase(const TextBase* item, const Context&, TextBas
     double yoff = 0;
     double h    = 0;
 
-    ldata->clearPos();
+    ldata->setPos(PointF());
 
     if (item->align() == AlignV::BOTTOM) {
         yoff += h - bb.bottom();

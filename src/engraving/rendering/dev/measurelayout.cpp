@@ -981,7 +981,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
             BarLine* b = toBarLine(seg->element(staffIdx * VOICES));
             if (b) {
                 b->setBarLineType(BarLineType::START_REPEAT);
-                TLayout::layout(b, ctx);
+                TLayout::layout(b, b->mutLayoutData(), ctx);
             }
         }
     } else if (seg) {
@@ -1346,7 +1346,7 @@ void MeasureLayout::barLinesSetSpan(Segment* seg, LayoutContext& ctx)
             bl->setSpanStaff(staff->barLineSpan());
             bl->setSpanFrom(staff->barLineFrom());
             bl->setSpanTo(staff->barLineTo());
-            TLayout::layout(bl, ctx);
+            TLayout::layout(bl, bl->mutLayoutData(), ctx);
             ctx.mutDom().addElement(bl);
         }
         track += VOICES;
@@ -1457,7 +1457,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
                 }
             }
 
-            TLayout::layout(bl, ctx);
+            TLayout::layout(bl, bl->mutLayoutData(), ctx);
             blw = std::max(blw, bl->width());
         }
         // right align within segment
@@ -1902,7 +1902,7 @@ void MeasureLayout::createSystemBeginBarLine(Measure* m, LayoutContext& ctx)
                 s->add(bl);
             }
 
-            TLayout::layout(bl, ctx);
+            TLayout::layout(bl, bl->mutLayoutData(), ctx);
         }
         s->createShapes();
         s->setEnabled(true);

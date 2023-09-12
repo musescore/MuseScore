@@ -506,7 +506,6 @@ public:
         void setMag(double val) { m_mag = val; }
 
         bool isSetPos() const { return m_pos.has_value(); }
-        void clearPos() { m_pos.set_value(PointF()); }
         const PointF& pos(LD_ACCESS mode = LD_ACCESS::CHECK) const
         {
             //! NOTE Temporarily to mute a lot of messages

@@ -194,7 +194,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
             layout(item_cast<const Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
         }
         break;
-    case ElementType::BAR_LINE:         layout(item_cast<BarLine*>(item), ctx);
+    case ElementType::BAR_LINE:
+        layout(item_cast<const BarLine*>(item), static_cast<BarLine::LayoutData*>(ldata), ctx);
         break;
     case ElementType::BEAM:             layout(item_cast<Beam*>(item), ctx);
         break;
@@ -385,6 +386,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 
 void TLayout::layout(const Accidental* item, Accidental::LayoutData* ldata, const LayoutConfiguration& conf)
 {
+    LD_INDEPENDENT;
+
     ldata->syms.clear();
 
     // TODO: remove Accidental in layout
@@ -394,6 +397,7 @@ void TLayout::layout(const Accidental* item, Accidental::LayoutData* ldata, cons
         return;
     }
     ldata->setIsSkipDraw(false);
+    ldata->setPos(PointF());
 
     if (item->accidentalType() == AccidentalType::NONE) {
         return;
@@ -478,17 +482,24 @@ void TLayout::layout(const Accidental* item, Accidental::LayoutData* ldata, cons
 
 void TLayout::layout(const ActionIcon* item, ActionIcon::LayoutData* ldata)
 {
+    LD_INDEPENDENT;
+
     FontMetrics fontMetrics(item->iconFont());
     ldata->setBbox(fontMetrics.boundingRect(Char(item->icon())));
+    ldata->setPos(PointF());
 }
 
 void TLayout::layout(const Ambitus* item, Ambitus::LayoutData* ldata, const LayoutContext& ctx)
 {
+    LD_INDEPENDENT;
+
     const double spatium = item->spatium();
     const double headWdt = item->headWidth();
 
     Accidental::LayoutData* topAccData = item->topAccidental()->mutLayoutData();
     Accidental::LayoutData* bottomAccData = item->bottomAccidental()->mutLayoutData();
+
+    ldata->setPos(PointF());
 
     //
     // NOTEHEADS Y POS
@@ -619,6 +630,7 @@ void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const La
         }
     }
     ldata->setIsSkipDraw(false);
+    ldata->setPos(PointF());
 
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -771,6 +783,7 @@ void TLayout::layout(const Articulation* item, Articulation::LayoutData* ldata)
         return;
     }
     ldata->setIsSkipDraw(false);
+    ldata->setPos(PointF());
 
     //! NOTE Must already be set previously
     LD_CONDITION(ldata->isSetSymId(), "symId");
@@ -834,10 +847,8 @@ static double barLineWidth(const BarLine* item, const MStyle& style, double dotW
     return w;
 }
 
-static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::LayoutData* ldata)
+void TLayout::layout(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx)
 {
-    ldata->clearPos();
-
     // barlines hidden on this staff
     if (item->staff() && item->segment()) {
         if ((!item->staff()->staffTypeForElement(item)->showBarlines() && item->segment()->segmentType() == SegmentType::EndBarLine)
@@ -849,6 +860,27 @@ static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::Layo
     }
 
     ldata->setIsSkipDraw(false);
+    ldata->setPos(PointF());
+
+    // Check conditions
+
+    //! NOTE Here the goal is not just to check whether the conditions are met,
+    //! but the goal is to clearly show these conditions to the developer.
+    for (const EngravingItem* e : *item->el()) {
+        switch (e->type()) {
+        case ElementType::ARTICULATION:
+            LD_CONDITION(item_cast<const Articulation*>(e)->layoutData()->isSetSymId(), "symId");
+            break;
+        case ElementType::SYMBOL:
+            // not yet clear
+            break;
+        case ElementType::IMAGE:
+            // not yet clear
+            break;
+        default:
+            DO_ASSERT(false);
+        }
+    }
 
     ldata->setMag(ctx.conf().styleB(Sid::scaleBarlines) && item->staff() ? item->staff()->staffMag(item->tick()) : 1.0);
     // Note: the true values of y1 and y2 are computed in layout2() (can be done only
@@ -885,27 +917,35 @@ static void layoutBarLine(const BarLine* item, LayoutContext& ctx, BarLine::Layo
 
     ldata->setBbox(r);
 
+    //! NOTE The types are listed here explicitly to show what types there are (see add method)
+    //! and accordingly show what the barline layout depends on.
     for (EngravingItem* e : *item->el()) {
-        TLayout::layoutItem(e, ctx);
-        if (e->isArticulationFamily()) {
-            Articulation* a = toArticulation(e);
+        switch (e->type()) {
+        case ElementType::ARTICULATION: {
+            Articulation* a = item_cast<Articulation*>(e);
+            Articulation::LayoutData* aldata = a->mutLayoutData();
+            TLayout::layout(a, aldata);
             DirectionV dir = a->direction();
-            double distance = 0.5 * item->spatium();
-            double x = item->width() * .5;
+            double distance = 0.5 * spatium;
+            double x = /*barline*/ ldata->bbox().width() * 0.5;
             if (dir == DirectionV::DOWN) {
                 double botY = ldata->y2 + distance;
-                a->setPos(PointF(x, botY));
+                aldata->setPos(PointF(x, botY));
             } else {
                 double topY = ldata->y1 - distance;
-                a->setPos(PointF(x, topY));
+                aldata->setPos(PointF(x, topY));
             }
+        } break;
+        case ElementType::SYMBOL:
+            TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
+            break;
+        case ElementType::IMAGE:
+            TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
+            break;
+        default:
+            DO_ASSERT(false);
         }
     }
-}
-
-void TLayout::layout(BarLine* item, LayoutContext& ctx)
-{
-    layoutBarLine(item, ctx, item->mutLayoutData());
 }
 
 RectF TLayout::layoutRect(const BarLine* item, LayoutContext& ctx)
@@ -1109,7 +1149,7 @@ static void layoutBend(const Bend* item, const LayoutContext&, Bend::LayoutData*
     bb.adjust(-lw, -lw, lw, lw);
 
     ldata->setBbox(bb);
-    ldata->clearPos();
+    ldata->setPos(PointF());
 }
 
 void TLayout::layout(Bend* item, LayoutContext& ctx)
@@ -1812,9 +1852,9 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
         return;
     }
     ldata->setIsSkipDraw(false);
+    ldata->setPos(PointF());
 
     Segment* s = item->segment();
-    ldata->clearPos();
 
     if (item->isStyled(Pid::OFFSET)) {
         const_cast<Fermata*>(item)->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
@@ -4831,7 +4871,7 @@ void TLayout::layoutTextBase(const TextBase* item, const LayoutContext& ctx, Tex
         return;
     }
 
-    ldata->clearPos();
+    ldata->setPos(PointF());
 
     if (item->placeBelow()) {
         ldata->setPosY(item->staff() ? item->staff()->height() : 0.0);
@@ -4898,7 +4938,7 @@ void TLayout::layout1TextBase(const TextBase* item, const LayoutContext&, TextBa
             }
         }
     } else {
-        ldata->clearPos();
+        ldata->setPos(PointF());
     }
 
     if (item->align() == AlignV::BOTTOM) {
