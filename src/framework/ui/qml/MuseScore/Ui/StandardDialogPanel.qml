@@ -49,7 +49,9 @@ RowLayout {
 
     function focusOnFirst() {
         var btn = buttons.accentButton()
-        btn.navigation.requestActive()
+        if (btn) {
+            btn.navigation.requestActive()
+        }
     }
 
     function readInfo() {
@@ -96,7 +98,7 @@ RowLayout {
         accessibleParent: navPanel.accessible
         visualItem: root
         role: MUAccessible.Button
-        name: root.title + " " + root.text + " " + root.firstFocusBtn().text
+        name: root.title + " " + root.text + " " + buttons.firstFocusBtn().text
 
         function readInfo() {
             accessibleInfo.ignored = false

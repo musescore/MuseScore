@@ -376,19 +376,23 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
 
     int buttonsList = 0;
     QVariantList customButtonsList;
-    for (const IInteractive::ButtonData& buttonData: buttons) {
-        if (buttonData.btn < static_cast<int>(IInteractive::Button::CustomButton)) {
-            buttonsList |= buttonData.btn;
-            continue;
-        }
+    if (buttons.empty()) {
+        buttonsList |= static_cast<int>(IInteractive::Button::Ok);
+    } else {
+        for (const IInteractive::ButtonData& buttonData: buttons) {
+            if (buttonData.btn < static_cast<int>(IInteractive::Button::CustomButton)) {
+                buttonsList |= buttonData.btn;
+                continue;
+            }
 
-        QVariantMap customButton;
-        customButton["buttonId"] = buttonData.btn;
-        customButton["text"] = QString::fromStdString(buttonData.text);
-        customButton["role"] = static_cast<int>(buttonData.role);
-        customButton["isAccent"] = buttonData.accent;
-        customButton["isLeftSide"] = buttonData.leftSide;
-        customButtonsList << QVariant(customButton);
+            QVariantMap customButton;
+            customButton["buttonId"] = buttonData.btn;
+            customButton["text"] = QString::fromStdString(buttonData.text);
+            customButton["role"] = static_cast<int>(buttonData.role);
+            customButton["isAccent"] = buttonData.accent;
+            customButton["isLeftSide"] = buttonData.leftSide;
+            customButtonsList << QVariant(customButton);
+        }
     }
 
     params["buttons"] = buttonsList;
