@@ -68,7 +68,6 @@
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentTurnInverted</subtype>
-              <color r="255" g="38" b="0" a="255"/>
               </Ornament>
             <Note>
               <pitch>72</pitch>
@@ -99,7 +98,6 @@
             <durationType>quarter</durationType>
             <Ornament>
               <subtype>ornamentShortTrill</subtype>
-              <color r="148" g="33" b="146" a="255"/>
               </Ornament>
             <Note>
               <pitch>67</pitch>

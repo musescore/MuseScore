@@ -48,10 +48,10 @@
                            <note xml:id="n1nfnqgv" dur="4" pname="g" oct="4" />
                         </layer>
                      </staff>
-                     <turn xml:id="t9xoymv" form="lower" startid="#n1uefyrp" color="#FF2600" />
+                     <turn xml:id="t9xoymv" form="lower" startid="#n1uefyrp" />
                      <turn xml:id="t8mstau" form="upper" startid="#ndt6snn" />
                      <trill xml:id="t1hj884n" startid="#n1shscya" />
-                     <mordent xml:id="mtbehht" form="upper" startid="#n1nfnqgv" color="#942192" />
+                     <mordent xml:id="mtbehht" form="upper" startid="#n1nfnqgv" />
                   </measure>
                   <measure xml:id="m1v01cvz" n="2">
                      <staff xml:id="m2s1" n="1">

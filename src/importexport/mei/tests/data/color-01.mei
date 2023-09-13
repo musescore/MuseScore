@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://relaxng.org/ns/structure/1.0"?>
+<?xml-model href="https://music-encoding.org/schema/5.0/mei-basic.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>
+<mei xmlns="http://www.music-encoding.org/ns/mei" meiversion="5.0+basic">
+   <meiHead>
+      <fileDesc>
+         <titleStmt>
+            <title>Untitled score</title>
+            <respStmt>
+               <persName role="composer">Composer / arranger</persName>
+            </respStmt>
+         </titleStmt>
+         <pubStmt>
+            <date isodate="2023-09-13T11:22:08" />
+         </pubStmt>
+      </fileDesc>
+   </meiHead>
+   <music>
+      <body>
+         <mdiv>
+            <score>
+               <scoreDef>
+                  <pgHead>
+                     <rend halign="center" valign="top">
+                        <rend type="title" fontsize="x-large">Untitled score</rend>
+                        <lb />
+                        <rend type="subtitle" fontsize="large">Subtitle</rend>
+                     </rend>
+                     <rend halign="right" valign="bottom">
+                        <rend type="composer">Composer / arranger</rend>
+                     </rend>
+                  </pgHead>
+                  <staffGrp>
+                     <staffDef n="1" lines="5" meter.count="4" meter.unit="4">
+                        <label>Violin</label>
+                        <labelAbbr>Vln.</labelAbbr>
+                        <clef shape="G" line="2" />
+                     </staffDef>
+                  </staffGrp>
+               </scoreDef>
+               <section xml:id="s1">
+                  <measure xml:id="m6i5c29" n="1">
+                     <staff xml:id="m1s1" n="1">
+                        <layer xml:id="m1s1l1" n="1">
+                           <note xml:id="n1lc48vv" dur="4" pname="c" oct="5" color="#FF9300" />
+                           <chord xml:id="ctmar2e" dur="4">
+                              <note xml:id="n18ejl49" pname="e" oct="4" />
+                              <note xml:id="n1wlnt2c" pname="c" oct="5" color="#FF9300" />
+                           </chord>
+                           <chord xml:id="c1y06jio" dur="4">
+                              <note xml:id="n4r8353" pname="e" oct="4" color="#FF9300" />
+                              <note xml:id="n1od7omu" pname="c" oct="5" color="#FF9300" />
+                           </chord>
+                           <rest xml:id="rwmfng" dur="4" color="#FF9300" />
+                        </layer>
+                     </staff>
+                     <breath xml:id="bsr5wid" startid="#ctmar2e" color="#FF9300" />
+                     <caesura xml:id="c1lqd1qv" startid="#c1y06jio" color="#FF9300" />
+                  </measure>
+                  <measure xml:id="m7cg44b" n="2">
+                     <staff xml:id="m2s1" n="1">
+                        <layer xml:id="m2s1l1" n="1">
+                           <note xml:id="n1109gbp" dur="4" pname="c" oct="5">
+                              <verse color="#FF2600" n="1">
+                                 <syl>Hello</syl>
+                              </verse>
+                           </note>
+                           <note xml:id="nwf7ny0" dur="4" pname="c" oct="5">
+                              <verse color="#FF2600" n="1">
+                                 <syl>World!</syl>
+                              </verse>
+                           </note>
+                           <note xml:id="nlfvtwc" dur="4" pname="c" oct="5" />
+                           <note xml:id="n1iwvpc5" dur="4" pname="c" oct="5" />
+                        </layer>
+                     </staff>
+                     <turn xml:id="t1laj0aq" form="lower" startid="#n1109gbp" color="#FF2600" />
+                     <trill xml:id="t1t3b4o4" startid="#nwf7ny0" color="#FF2600" />
+                     <mordent xml:id="mxbl4zg" form="upper" startid="#nlfvtwc" color="#FF2600" />
+                     <fermata xml:id="f1wdg2kf" startid="#n1iwvpc5" color="#FF2600" />
+                  </measure>
+                  <measure xml:id="m17s3rzp" n="3">
+                     <staff xml:id="m3s1" n="1">
+                        <layer xml:id="m3s1l1" n="1">
+                           <note xml:id="n1guozug" dur="4" pname="c" oct="5" oct.ges="6" />
+                           <note xml:id="n19dyned" dur="4" pname="c" oct="5" oct.ges="6" />
+                           <note xml:id="n13jwu7g" dur="4" pname="c" oct="5" />
+                           <note xml:id="nrvquou" dur="4" pname="c" oct="5" />
+                        </layer>
+                     </staff>
+                     <octave xml:id="o1dsvo6w" dis="8" dis.place="above" startid="#n1guozug" color="#0433FF" endid="#n19dyned" />
+                     <hairpin xml:id="hxbk6tg" form="cres" startid="#n1guozug" color="#0433FF" endid="#nrvquou" />
+                     <tie xml:id="tabpg9e" startid="#nrvquou" color="#0433FF" endid="#n12ej5nc" />
+                  </measure>
+                  <measure xml:id="m1ykv4v4" n="4">
+                     <staff xml:id="m4s1" n="1">
+                        <layer xml:id="m4s1l1" n="1">
+                           <note xml:id="n12ej5nc" dur="4" pname="c" oct="5" />
+                           <beam>
+                              <tuplet xml:id="tq1nzo7" num="3" numbase="2" color="#00F900">
+                                 <note xml:id="ncdiu0d" dur="8" pname="c" oct="5" />
+                                 <note xml:id="n1be0v1v" dur="8" pname="g" oct="4" />
+                                 <note xml:id="nug9tia" dur="8" pname="e" oct="4" />
+                              </tuplet>
+                           </beam>
+                           <tuplet xml:id="t1btcdw1" num="3" numbase="2" color="#00F900">
+                              <rest xml:id="r1bkkx6m" type="mscore-beam-none" dur="8" />
+                              <rest xml:id="r1j8t5jh" type="mscore-beam-none" dur="8" />
+                              <rest xml:id="rbga0cv" type="mscore-beam-none" dur="8" />
+                           </tuplet>
+                           <note xml:id="n1xloq5x" dur="4" pname="e" oct="4" />
+                        </layer>
+                     </staff>
+                     <slur xml:id="s14ip5c8" startid="#ncdiu0d" color="#00F900" endid="#n1xloq5x" />
+                  </measure>
+                  <measure xml:id="myi0wv4" right="end" n="5">
+                     <staff xml:id="m5s1" n="1">
+                        <layer xml:id="m5s1l1" n="1">
+                           <mRest xml:id="m190ojd7" color="#FF40FF" />
+                        </layer>
+                     </staff>
+                  </measure>
+               </section>
+            </score>
+         </mdiv>
+      </body>
+   </music>
+</mei>
