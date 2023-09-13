@@ -2594,6 +2594,7 @@ void Convert::tieFromMEI(engraving::SlurTie* tie, const libmei::Tie& meiTie, boo
     libmei::Slur meiSlur;
     meiSlur.SetCurvedir(meiTie.GetCurvedir());
     meiSlur.SetLform(meiTie.GetLform());
+    meiSlur.SetColor(meiTie.GetColor());
     Convert::slurFromMEI(tie, meiSlur, warning);
 }
 
@@ -2603,6 +2604,7 @@ libmei::Tie Convert::tieToMEI(const engraving::SlurTie* tie)
     libmei::Tie meiTie;
     meiTie.SetCurvedir(meiSlur.GetCurvedir());
     meiTie.SetLform(meiSlur.GetLform());
+    meiTie.SetColor(meiSlur.GetColor());
     return meiTie;
 }
 
