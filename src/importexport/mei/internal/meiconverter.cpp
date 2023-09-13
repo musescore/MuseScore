@@ -688,6 +688,7 @@ void Convert::colorFromMEI(engraving::EngravingItem* item, const libmei::Element
         engraving::Color color = engraving::Color::fromString(colorAtt->GetColor());
         if (color.isValid()) {
             item->setColor(color);
+            item->setPropertyFlags(engraving::Pid::COLOR, engraving::PropertyFlags::UNSTYLED);
         }
     }
 }
@@ -719,6 +720,7 @@ void Convert::colorlineFromMEI(engraving::SLine* line, const libmei::Element& me
         engraving::Color color = engraving::Color::fromString(colorAtt->GetColor());
         if (color.isValid()) {
             line->setLineColor(color);
+            line->setPropertyFlags(engraving::Pid::COLOR, engraving::PropertyFlags::UNSTYLED);
         }
     }
 }
