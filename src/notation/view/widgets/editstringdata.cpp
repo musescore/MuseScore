@@ -49,6 +49,9 @@ EditStringData::EditStringData(QWidget* parent, std::vector<mu::engraving::instr
     _strings = strings;
     stringList->setHorizontalHeaderLabels({ qtrc("notation/editstringdata", "Always open"),
                                             qtrc("notation/editstringdata", "Pitch") });
+    QString toolTip = qtrc("notation/editstringdata",
+                           "<b>Always open</b><br>On tablature staves, fret positions other than ‘0’ cannot be entered on strings marked ‘always open’. Useful for instruments with strings that are not on the fretboard, such as the theorbo.");
+    stringList->horizontalHeaderItem(0)->setToolTip(toolTip);
     int numOfStrings = static_cast<int>(_strings->size());
     stringList->setRowCount(numOfStrings);
     // if any string, insert into string list control and select the first one
@@ -64,7 +67,8 @@ EditStringData::EditStringData(QWidget* parent, std::vector<mu::engraving::instr
             newCheck->setFlags(Qt::ItemFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled));
             newCheck->setCheckState(strg.open ? Qt::Checked : Qt::Unchecked);
 
-            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, qtrc("notation/editstringdata", "Always open"));
+            newCheck->setData(OPEN_ACCESSIBLE_TITLE_ROLE, stringList->horizontalHeaderItem(0)->text());
+            newCheck->setToolTip(toolTip);
             newCheck->setData(Qt::AccessibleTextRole, openColumnAccessibleText(newCheck));
 
             stringList->setItem(i, 0, newCheck);
