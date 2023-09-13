@@ -37,6 +37,7 @@
 #include "../../dom/breath.h"
 
 #include "../../dom/chordline.h"
+#include "../../dom/clef.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -52,7 +53,6 @@ class BagpipeEmbellishment;
 class Beam;
 
 class Chord;
-class Clef;
 class Capo;
 
 class DeadSlapped;
@@ -197,7 +197,7 @@ public:
 
     static void layout(Chord* item, LayoutContext& ctx);
     static void layout(const ChordLine* item, ChordLine::LayoutData* ldata, const LayoutConfiguration& conf);
-    static void layout(Clef* item, LayoutContext& ctx);
+    static void layout(const Clef* item, Clef::LayoutData* ldata);
     static void layout(Capo* item, LayoutContext& ctx);
 
     static void layout(DeadSlapped* item, LayoutContext& ctx);

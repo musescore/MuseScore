@@ -1499,7 +1499,7 @@ double MeasureLayout::createEndBarLines(Measure* m, bool isLastMeasureInSystem, 
                         visibleInt = 1;
                     }
                 } else {
-                    TLayout::layout(clef, ctx);
+                    TLayout::layout(clef, clef->mutLayoutData());
                     clefSeg->createShape(staffIdx);
                     visibleInt = 2;
                 }
@@ -1603,7 +1603,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                     clef->setClefType(cl);
                 }
                 clef->setSmall(false);
-                TLayout::layout(clef, ctx);
+                TLayout::layout(clef, clef->mutLayoutData());
             } else if (clef) {
                 clef->parentItem()->remove(clef);
                 if (clef->generated()) {
