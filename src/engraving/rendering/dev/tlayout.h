@@ -38,6 +38,7 @@
 
 #include "../../dom/chordline.h"
 #include "../../dom/clef.h"
+#include "../../dom/capo.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -53,7 +54,6 @@ class BagpipeEmbellishment;
 class Beam;
 
 class Chord;
-class Capo;
 
 class DeadSlapped;
 class Dynamic;
@@ -198,7 +198,7 @@ public:
     static void layout(Chord* item, LayoutContext& ctx);
     static void layout(const ChordLine* item, ChordLine::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(const Clef* item, Clef::LayoutData* ldata);
-    static void layout(Capo* item, LayoutContext& ctx);
+    static void layout(const Capo* item, Capo::LayoutData* ldata, const LayoutContext& ctx);
 
     static void layout(DeadSlapped* item, LayoutContext& ctx);
     static void layout(Dynamic* item, LayoutContext& ctx);
@@ -298,10 +298,10 @@ public:
     static void layout(TempoText* item, LayoutContext& ctx);
 
     static void layout(TextBase* item, LayoutContext& ctx);                 // factory
-    static void layoutTextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data); // base class
+    static void layoutTextBase(const TextBase* item, TextBase::LayoutData* data); // base class
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
     static void layout1TextBase(TextBase* item, const LayoutContext& ctx);  // base class
-    static void layout1TextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data);
+    static void layout1TextBase(const TextBase* item, TextBase::LayoutData* data);
 
     static void layout(Text* item, LayoutContext& ctx);
 
