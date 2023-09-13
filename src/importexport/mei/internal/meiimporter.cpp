@@ -1623,6 +1623,7 @@ bool MeiImporter::readMRest(pugi::xml_node mRestNode, Measure* measure, int trac
 
     Segment* segment = measure->getSegment(SegmentType::ChordRest, Fraction::fromTicks(ticks) + measure->tick());
     Rest* rest = Factory::createRest(segment, TDuration(DurationType::V_MEASURE));
+    Convert::colorFromMEI(rest, meiMRest);
     m_uids->reg(rest, meiMRest.m_xmlId);
     rest->setTicks(m_currentTimeSig);
     rest->setDurationType(DurationType::V_MEASURE);
@@ -1687,6 +1688,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     }
 
     Note* note = Factory::createNote(chord);
+    Convert::colorFromMEI(note, meiNote);
     m_uids->reg(note, meiNote.m_xmlId);
 
     // If there is a reference to the note in the MEI, add it the maps (e.g., for ties)
@@ -1727,6 +1729,7 @@ bool MeiImporter::readRest(pugi::xml_node restNode, Measure* measure, int track,
     meiRest.Read(restNode);
 
     Rest* rest = static_cast<Rest*>(addChordRest(restNode, measure, track, meiRest, ticks, true));
+    Convert::colorFromMEI(rest, meiRest);
 
     UNUSED(rest);
 
@@ -1873,6 +1876,7 @@ bool MeiImporter::readVerse(pugi::xml_node verseNode, Chord* chord)
     }
 
     Lyrics* lyrics = Factory::createLyrics(chord);
+    Convert::colorFromMEI(lyrics, meiVerse);
 
     bool success = true;
 

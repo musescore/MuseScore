@@ -1173,6 +1173,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeStemAtt(chord, meiNote);
         this->writeVerses(chord);
     }
+    Convert::colorToMEI(note, meiNote);
     std::string xmlId = this->getXmlIdFor(note, 'n');
     meiNote.Write(m_currentNode, xmlId);
     if (!isChord) {
@@ -1212,6 +1213,7 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
     if (rest->durationType() == DurationType::V_MEASURE) {
         pugi::xml_node mRestNode = m_currentNode.append_child();
         libmei::MRest meiMRest;
+        Convert::colorToMEI(rest, meiMRest);
         std::string xmlId = this->getXmlIdFor(rest, 'm');
         meiMRest.Write(mRestNode, xmlId);
         this->fillControlEventMap(xmlId, rest);
@@ -1227,6 +1229,7 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
         if (rest->dots()) {
             meiRest.SetDots(rest->dots());
         }
+        Convert::colorToMEI(rest, meiRest);
         this->writeBeamTypeAtt(rest, meiRest);
         this->writeStaffIdenAtt(rest, staff, meiRest);
         this->writeVerses(rest);
@@ -1327,6 +1330,7 @@ bool MeiExporter::writeVerse(const Lyrics* lyrics)
 
     libmei::Verse meiVerse;
     meiVerse.SetN(String::number(lyrics->no() + 1).toStdString());
+    Convert::colorToMEI(lyrics, meiVerse);
     m_currentNode = m_currentNode.append_child();
     meiVerse.Write(m_currentNode, this->getLayerXmlIdFor(VERSE_L));
 
