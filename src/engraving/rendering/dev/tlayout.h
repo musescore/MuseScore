@@ -40,6 +40,8 @@
 #include "../../dom/clef.h"
 #include "../../dom/capo.h"
 
+#include "../../dom/deadslapped.h"
+
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
@@ -55,7 +57,6 @@ class Beam;
 
 class Chord;
 
-class DeadSlapped;
 class Dynamic;
 
 class Expression;
@@ -200,7 +201,7 @@ public:
     static void layout(const Clef* item, Clef::LayoutData* ldata);
     static void layout(const Capo* item, Capo::LayoutData* ldata, const LayoutContext& ctx);
 
-    static void layout(DeadSlapped* item, LayoutContext& ctx);
+    static void layout(const DeadSlapped* item, DeadSlapped::LayoutData* ldata);
     static void layout(Dynamic* item, LayoutContext& ctx);
 
     static void layout(Expression* item, LayoutContext& ctx);

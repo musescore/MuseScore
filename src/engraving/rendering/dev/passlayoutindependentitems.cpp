@@ -43,6 +43,7 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::AMBITUS:
     case ElementType::BREATH:
     case ElementType::CLEF:
+    case ElementType::DEAD_SLAPPED:
         TLayout::layoutItem(item, ctx);
     default:
         break;
