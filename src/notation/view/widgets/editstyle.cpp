@@ -1043,10 +1043,11 @@ EditStyle::EditStyle(QWidget* parent)
     resetTabStylesButton->setVisible(false);
 
     connect(textStyles, &QListWidget::currentRowChanged, this, &EditStyle::textStyleChanged);
-    textStyles->setCurrentRow(0);
+    textStyles->setCurrentRow(s_lastSubPageRow);
 
     connect(pageList, &QListWidget::currentRowChanged, pageStack, &QStackedWidget::setCurrentIndex);
-    pageList->setCurrentRow(0);
+    connect(pageList, &QListWidget::currentRowChanged, this, &EditStyle::on_pageRowSelectionChanged);
+    pageList->setCurrentRow(s_lastPageRow);
 
     adjustPagesStackSize(0);
 
@@ -1279,6 +1280,10 @@ QString EditStyle::currentSubPageCode() const
 {
     return m_currentSubPageCode;
 }
+
+int EditStyle::s_lastPageRow = 0;
+
+int EditStyle::s_lastSubPageRow = 0;
 
 QString EditStyle::pageCodeForElement(const EngravingItem* element)
 {
@@ -1567,6 +1572,15 @@ void EditStyle::on_resetTabStylesButton_clicked()
     for (int i = static_cast<int>(StyleId::slurShowTabSimple); i <= static_cast<int>(StyleId::golpeShowTabCommon); i++) {
         resetStyleValue(i);
     }
+}
+
+//---------------------------------------------------------
+//    On pageRowSelectionChanged
+//---------------------------------------------------------
+
+void EditStyle::on_pageRowSelectionChanged()
+{
+    s_lastPageRow = pageList->currentRow();
 }
 
 //---------------------------------------------------------
@@ -2290,6 +2304,8 @@ void EditStyle::textStyleChanged(int row)
     styleName->setText(score->getTextStyleUserName(tid).qTranslated());
     styleName->setEnabled(int(tid) >= int(TextStyleType::USER1));
     resetTextStyleName->setEnabled(styleName->text() != TConv::translatedUserName(tid));
+
+    s_lastSubPageRow = row;
 }
 
 //---------------------------------------------------------

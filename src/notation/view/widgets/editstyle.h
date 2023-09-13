@@ -135,6 +135,7 @@ private slots:
     void on_buttonTogglePagelist_clicked();
     void on_resetStylesButton_clicked();
     void on_resetTabStylesButton_clicked();
+    void on_pageRowSelectionChanged();
     void editUserStyleName();
     void endEditUserStyleName();
     void resetUserStyleName();
@@ -142,6 +143,9 @@ private slots:
 private:
     QString m_currentPageCode;
     QString m_currentSubPageCode;
+
+    static int s_lastPageRow;
+    static int s_lastSubPageRow;
 };
 }
 
