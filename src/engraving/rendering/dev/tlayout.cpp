@@ -241,7 +241,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::EXPRESSION:
         layout(item_cast<const Expression*>(item), static_cast<Expression::LayoutData*>(ldata));
         break;
-    case ElementType::FERMATA:          layout(item_cast<Fermata*>(item), ctx);
+    case ElementType::FERMATA:
+        layout(item_cast<const Fermata*>(item), static_cast<Fermata::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::FIGURED_BASS:     layout(item_cast<FiguredBass*>(item), ctx);
         break;
@@ -1880,18 +1881,15 @@ void TLayout::layout(const Expression* item, Expression::LayoutData* ldata)
     }
 }
 
-static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata::LayoutData* ldata)
+void TLayout::layout(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     const StaffType* stType = item->staffType();
-
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(conf.style(), Sid::fermataShowTabCommon, Sid::fermataShowTabSimple)) {
         ldata->setIsSkipDraw(true);
         return;
     }
     ldata->setIsSkipDraw(false);
     ldata->setPos(PointF());
-
-    Segment* s = item->segment();
 
     if (item->isStyled(Pid::OFFSET)) {
         const_cast<Fermata*>(item)->setOffset(item->propertyDefault(Pid::OFFSET).value<PointF>());
@@ -1899,10 +1897,15 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
 
     double x = 0.0;
     double y = 0.0;
-    EngravingItem* e = s->element(item->track());
+    const Segment* s = item->segment();
+    const EngravingItem* e = s->element(item->track());
+
+    LD_CONDITION(e->layoutData()->isSetBbox()); // e->shape()
+    LD_CONDITION(e->layoutData()->isSetPos());
+
     if (e) {
         if (e->isChord()) {
-            Chord* chord = toChord(e);
+            const Chord* chord = toChord(e);
             x = chord->x() + chord->centerX();
             y = chord->y();
         } else {
@@ -1927,12 +1930,15 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
     RectF b(item->symBbox(item->symId()));
     ldata->setBbox(b.translated(-0.5 * b.width(), 0.0));
 
-    Autoplace::autoplaceSegmentElement(item, ldata);
-}
+    if (item->autoplace()) {
+        const Segment* s = item->segment();
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(s->layoutData()->isSetPos());
+    }
 
-void TLayout::layout(Fermata* item, LayoutContext& ctx)
-{
-    layoutFermata(item, ctx, item->mutLayoutData());
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 //---------------------------------------------------------

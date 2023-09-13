@@ -58,7 +58,7 @@ Fermata::Fermata(EngravingItem* parent)
     : EngravingItem(ElementType::FERMATA, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     setPlacement(PlacementV::ABOVE);
-    m_symId         = SymId::noSym;
+    m_symId = SymId::noSym;
     setPlay(true);
     initElementStyle(&fermataStyle);
 }
@@ -268,7 +268,7 @@ double Fermata::mag() const
 
 void Fermata::setSymIdAndTimeStretch(SymId id)
 {
-    m_symId  = id;
+    m_symId = id;
     m_timeStretch = m_timeStretch == -1 ? propertyDefault(Pid::TIME_STRETCH).value<double>() : -1;
 }
 
