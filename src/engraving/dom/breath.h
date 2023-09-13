@@ -54,14 +54,14 @@ public:
 
     double mag() const override;
 
-    void setSymId(SymId id) { _symId = id; }
-    SymId symId() const { return _symId; }
-    double pause() const { return _pause; }
-    void setPause(double v) { _pause = v; }
+    void setSymId(SymId id) { m_symId = id; }
+    SymId symId() const { return m_symId; }
+    double pause() const { return m_pause; }
+    void setPause(double v) { m_pause = v; }
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 
-    mu::PointF pagePos() const override;        ///< position in page coordinates
+    mu::PointF pagePos() const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -73,7 +73,7 @@ public:
 
     bool isCaesura() const;
 
-    static const std::vector<BreathType> breathList;
+    static const std::vector<BreathType> BREATH_LIST;
 
 protected:
     void added() override;
@@ -84,8 +84,8 @@ private:
     friend class Factory;
     Breath(Segment* parent);
 
-    double _pause;
-    SymId _symId;
+    double m_pause = 0.0;
+    SymId m_symId = SymId::breathMarkComma;
 };
 } // namespace mu::engraving
 #endif

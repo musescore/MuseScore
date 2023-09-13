@@ -34,6 +34,7 @@
 #include "../../dom/bend.h"
 #include "../../dom/box.h"
 #include "../../dom/bracket.h"
+#include "../../dom/breath.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -47,8 +48,6 @@ class EngravingItem;
 
 class BagpipeEmbellishment;
 class Beam;
-
-class Breath;
 
 class Chord;
 class ChordLine;
@@ -193,7 +192,7 @@ public:
     static void layout(const TBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
 
     static void layout(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf);
-    static void layout(Breath* item, LayoutContext& ctx);
+    static void layout(const Breath* item, Breath::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void layout(Chord* item, LayoutContext& ctx);
     static void layout(ChordLine* item, LayoutContext& ctx);
