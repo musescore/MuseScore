@@ -218,6 +218,10 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(std::vector<ChordRest*> c
 
 void BeamTremoloLayout::extendStem(Chord* chord, double addition)
 {
+    if ((chord->staff() && chord->staff()->clefType(Fraction()) == ClefType::JIANPU) && (chord->staffType() && chord->staffType()->lines() == 0)) {
+        return;
+    }
+
     PointF anchor = chordBeamAnchor(chord, ChordBeamAnchorType::Middle);
     double desiredY;
     if (m_endAnchor.x() > m_startAnchor.x()) {
@@ -860,6 +864,12 @@ int BeamTremoloLayout::getMiddleStaffLine(ChordRest* startChord, ChordRest* endC
 
 int BeamTremoloLayout::computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const
 {
+    Chord* startChord = toChord(m_elements.front());
+    if ((startChord->staff() && startChord->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (startChord->staffType() && startChord->staffType()->lines() == 0)) {
+        return 0;
+    }
+
     if (m_beamType == BeamType::BEAM && toBeam(m_element)->noSlope()) {
         return 0;
     }
@@ -1019,6 +1029,10 @@ double BeamTremoloLayout::chordBeamAnchorX(const ChordRest* cr, ChordBeamAnchorT
     double pagePosX = m_trem ? m_trem->pagePos().x() : m_beam->pagePos().x();
     double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
 
+    if ((cr->staff() && cr->staff()->clefType(Fraction()) == ClefType::JIANPU) && (cr->staffType() && cr->staffType()->lines() == 0)) {
+        double symWidth = cr->symWidth(SymId::keysig_1_Jianpu);
+        return cr->pagePos().x() - pagePosX + symWidth / 5.0 * 2.15;
+    }
     if (!cr->isChord() || !toChord(cr)->stem()) {
         if (!m_up) {
             // rests always return the right side of the glyph as their stemPosX
@@ -1066,11 +1080,18 @@ double BeamTremoloLayout::chordBeamAnchorX(const ChordRest* cr, ChordBeamAnchorT
 
 double BeamTremoloLayout::chordBeamAnchorY(const ChordRest* cr) const
 {
+    const Chord* chord = toChord(cr);
+
+    if ((chord->staff() && chord->staff()->clefType(Fraction()) == ClefType::JIANPU) && (chord->staffType() && chord->staffType()->lines() == 0)) {
+        Note* note = chord->downNote();
+        PointF position = note->pagePos();
+        return position.y() - 0.000001;
+    }
+
     if (!cr->isChord()) {
         return cr->pagePos().y();
     }
 
-    const Chord* chord = toChord(cr);
     Note* note = cr->up() ? chord->downNote() : chord->upNote();
     PointF position = note->pagePos();
 

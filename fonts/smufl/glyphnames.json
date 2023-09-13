@@ -11948,5 +11948,153 @@
 	"windWeakAirPressure": {
 		"codepoint": "U+E602",
 		"description": "Very relaxed embouchure / weak air-pressure"
-	}
+        },
+        "keysig_1_Jianpu": {
+                "codepoint": "U+31",
+                "description": "Do"
+        },
+        "keysig_Equal_Jianpu": {
+                "codepoint": "U+3D",
+                "description": "Equal"
+        },
+        "keysigFlat_G_Jianpu": {
+                "codepoint": "U+47",
+                "description": "Flat G"
+        },
+        "keysigFlat_A_Jianpu": {
+                "codepoint": "U+41",
+                "description": "Flat A"
+        },
+        "keysigFlat_B_Jianpu": {
+                "codepoint": "U+42",
+                "description": "Flat B"
+        },
+        "keysigFlat_C_Jianpu": {
+                "codepoint": "U+43",
+                "description": "Flat C"
+        },
+        "keysigFlat_D_Jianpu": {
+                "codepoint": "U+44",
+                "description": "Flat D"
+        },
+        "keysigFlat_E_Jianpu": {
+                "codepoint": "U+45",
+                "description": "Flat E"
+        },
+        "keysig_G_Jianpu": {
+                "codepoint": "U+47",
+                "description": "G major"
+        },
+        "keysig_A_Jianpu": {
+                "codepoint": "U+41",
+                "description": "A major"
+        },
+        "keysig_B_Jianpu": {
+                "codepoint": "U+42",
+                "description": "B major"
+        },
+        "keysig_C_Jianpu": {
+                "codepoint": "U+43",
+                "description": "C major"
+        },
+        "keysig_D_Jianpu": {
+                "codepoint": "U+44",
+                "description": "D major"
+        },
+        "keysig_E_Jianpu": {
+                "codepoint": "U+45",
+                "description": "E major"
+        },
+        "keysig_F_Jianpu": {
+                "codepoint": "U+46",
+                "description": "F major"
+        },
+        "keysigSharp_C_Jianpu": {
+                "codepoint": "U+43",
+                "description": "Sharp C"
+        },
+        "keysigSharp_F_Jianpu": {
+                "codepoint": "U+46",
+                "description": "Sharp F"
+        },
+        "noteRestJianpu": {
+                "codepoint": "U+30",
+                "description": "Rest jianpu note"
+        },
+        "noteDoJianpu": {
+                "codepoint": "U+31",
+                "description": "Do Jianpu note"
+        },
+        "noteReJianpu": {
+                "codepoint": "U+32",
+                "description": "Re Jianpu note"
+        },
+        "noteMiJianpu": {
+                "codepoint": "U+33",
+                "description": "Mi Jianpu note"
+        },
+        "noteFaJianpu": {
+                "codepoint": "U+34",
+                "description": "Fa Jianpu note"
+        },
+        "noteSoJianpu": {
+                "codepoint": "U+35",
+                "description": "So Jianpu note"
+        },
+        "noteLaJianpu": {
+                "codepoint": "U+36",
+                "description": "La Jianpu note"
+        },
+        "noteSiJianpu": {
+                "codepoint": "U+37",
+                "description": "Si Jianpu note"
+        },
+        "dotJianpu": {
+                "codepoint": "U+2E",
+                "description": "Dot Jianpu"
+        },
+        "beamJianpu": {
+                "codepoint": "U+5F",
+                "description": "Beam Jianpu"
+        },
+        "timeSig_0_Jianpu": {
+                "codepoint": "U+30",
+                "description": "timeSig 0 Jianpu"
+        },
+        "timeSig_1_Jianpu": {
+                "codepoint": "U+31",
+                "description": "timeSig 1 Jianpu"
+        },
+        "timeSig_2_Jianpu": {
+                "codepoint": "U+32",
+                "description": "timeSig 2 Jianpu"
+        },
+        "timeSig_3_Jianpu": {
+                "codepoint": "U+33",
+                "description": "timeSig 3 Jianpu"
+        },
+        "timeSig_4_Jianpu": {
+                "codepoint": "U+34",
+                "description": "timeSig 4 Jianpu"
+        },
+        "timeSig_5_Jianpu": {
+                "codepoint": "U+35",
+                "description": "timeSig 5 Jianpu"
+        },
+        "timeSig_6_Jianpu": {
+                "codepoint": "U+36",
+                "description": "timeSig 6 Jianpu"
+        },
+        "timeSig_7_Jianpu": {
+                "codepoint": "U+37",
+                "description": "timeSig 7 Jianpu"
+        },
+        "timeSig_8_Jianpu": {
+                "codepoint": "U+38",
+                "description": "timeSig 8 Jianpu"
+        },
+        "timeSig_9_Jianpu": {
+                "codepoint": "U+39",
+                "description": "timeSig 9 Jianpu"
+        }
 }

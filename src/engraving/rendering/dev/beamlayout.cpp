@@ -96,16 +96,35 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
         }
         layout2(item, ctx, crl, st, static_cast<int>(n));
 
-        double lw2 = item->beamWidth() / 2.0;
+        if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+            double symWidth = item->symWidth(SymId::keysig_1_Jianpu);
+            double symHeight = item->symHeight(SymId::keysig_1_Jianpu);
+            double lw2 = item->beamWidth() / 6.0;
+            for (const BeamSegment* bs : item->beamSegments()) {
+                double y1 = bs->line.y1() / 1.65 + symHeight / 2.55;
 
-        for (const BeamSegment* bs : item->beamSegments()) {
-            PolygonF a(4);
-            a[0] = PointF(bs->line.x1(), bs->line.y1());
-            a[1] = PointF(bs->line.x2(), bs->line.y2());
-            a[2] = PointF(bs->line.x2(), bs->line.y2());
-            a[3] = PointF(bs->line.x1(), bs->line.y1());
-            RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
-            item->addbbox(r);
+                PolygonF a(4);
+                a[0] = PointF(bs->line.x1() - symWidth / 2.0, y1 - lw2);
+                a[1] = PointF(bs->line.x2() + symWidth / 2.0, y1 - lw2);
+                a[2] = PointF(bs->line.x2() + symWidth / 2.0, y1 + lw2);
+                a[3] = PointF(bs->line.x1() - symWidth / 2.0, y1 + lw2);
+
+                RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
+                item->addbbox(r);
+            }
+
+        } else {
+            double lw2 = item->beamWidth() / 2.0;
+
+            for (const BeamSegment* bs : item->beamSegments()) {
+                PolygonF a(4);
+                a[0] = PointF(bs->line.x1(), bs->line.y1());
+                a[1] = PointF(bs->line.x2(), bs->line.y2());
+                a[2] = PointF(bs->line.x2(), bs->line.y2());
+                a[3] = PointF(bs->line.x1(), bs->line.y1());
+                RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
+                item->addbbox(r);
+            }
         }
     }
 
@@ -151,6 +170,16 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
                 break;
             }
         }
+        return;
+    }
+
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        item->setUp(item->beamDirection() == DirectionV::DOWN);
+        item->setSlope(0.0);
+        item->setCross(false);
+        item->setMinMove(0);
+        item->setMaxMove(0);
+
         return;
     }
 
@@ -662,6 +691,12 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 continue;
             }
 
+            if ((stf && stf->clefType(Fraction()) == ClefType::JIANPU) && (cr->staffType() && cr->staffType()->lines() == 0)) {
+                if (beam && cr && cr->durationType().type() == DurationType::V_EIGHTH){
+                    beam = 0;
+                }
+            }
+
             if (firstCR) {
                 firstCR = false;
                 // Handle cross-measure beams
@@ -1121,7 +1156,10 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
     const bool firstUp = startCr->up();
     const bool lastUp = endCr->up();
     bool overallUp = item->up();
-    if (isFirstSubgroup == isLastSubgroup) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
+        overallUp = true;
+    } else if (isFirstSubgroup == isLastSubgroup) {
         // this subgroup is either the only one in the beam, or in the middle
         if (firstUp == lastUp) {
             // the "outside notes" of this subgroup go the same direction so use them
@@ -1211,6 +1249,11 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         ++(b->above ? beamsAbove : beamsBelow);
     }
 
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
+        return;
+    }
+
     // extend stems properly
     for (ChordRest* cr : item->elements()) {
         if (!cr->isChord() || cr->tick() < startCr->tick()) {
@@ -1259,6 +1302,39 @@ void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest*
 
     // how many beams past level 0 (i.e. beams on the other side of level 0 for this subgroup)
     int extraBeamAdjust = 0;
+
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
+        const int upValue = -1;
+
+        const double verticalOffset = item->beamDist() * (level - extraBeamAdjust) * upValue;
+
+        if (RealIsEqual(item->growLeft(), item->growRight())) {
+            startY -= verticalOffset * item->growLeft();
+            endY -= verticalOffset * item->growLeft();
+        } else {
+            double startProportionAlongX = (startX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
+            double endProportionAlongX = (endX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
+
+            double grow1 = startProportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
+            double grow2 = endProportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
+
+            startY -= verticalOffset * grow1;
+            endY -= verticalOffset * grow2;
+        }
+
+        double endXs = endX + (startX - endX);
+        BeamSegment* b = new BeamSegment(item);
+        b->above = !cr->up();
+        b->level = level;
+        b->line = LineF(startX, startY, endXs, endY);
+        b->isBeamlet = true;
+        b->isBefore = isBefore;
+        cr->setBeamlet(b);
+        item->beamSegments().push_back(b);
+
+        return;
+    }
 
     // avoid adjusting for beams on opposite side of level 0
     for (const BeamSegment* beam : item->beamSegments()) {

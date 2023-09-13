@@ -208,6 +208,7 @@ StaffTypes StaffType::type() const
 {
     static const std::map<String, StaffTypes> xmlNameToType {
         { u"stdNormal", StaffTypes::STANDARD },
+        { u"stdJianpu", StaffTypes::JIANPU },
 
         { u"perc1Line", StaffTypes::PERC_1LINE },
         { u"perc2Line", StaffTypes::PERC_2LINE },
@@ -1189,6 +1190,7 @@ void StaffType::initStaffTypes()
     _presets = {
 //                       group,              xml-name,  human-readable-name,          lin stpOff  dist clef   bars stmless time  key    ledger invis     color
         StaffType(StaffGroup::STANDARD,   u"stdNormal", mtrc("engraving", "Standard"),        5, 0,     1,   true,  true, false, true, true, true, false,  engravingConfiguration()->defaultColor()),
+        StaffType(StaffGroup::STANDARD,   u"stdJianpu", mtrc("engraving", "Jianpu"),          0, 0,     0,   false, true, false, true, true, false, false,  engravingConfiguration()->defaultColor()),
         StaffType(StaffGroup::PERCUSSION, u"perc1Line", mtrc("engraving", "Perc. 1 line"),    1, 0,     1,   true,  true, false, true, false, true, false,  engravingConfiguration()->defaultColor()),
         StaffType(StaffGroup::PERCUSSION, u"perc2Line", mtrc("engraving", "Perc. 2 lines"),   2, 0,     1,   true,  true, false, true, false, true, false,  engravingConfiguration()->defaultColor()),
         StaffType(StaffGroup::PERCUSSION, u"perc3Line", mtrc("engraving", "Perc. 3 lines"),   3, 0,     2,   true,  true, false, true, false, true, false,  engravingConfiguration()->defaultColor()),

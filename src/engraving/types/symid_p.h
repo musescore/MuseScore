@@ -3027,6 +3027,47 @@ enum class SymId {
 
 //    END OF TABLE
 
+    //Jianpu
+    keysig_1_Jianpu,
+    keysig_Equal_Jianpu,
+    keysigFlat_G_Jianpu,
+    keysigFlat_A_Jianpu,
+    keysigFlat_B_Jianpu,
+    keysigFlat_C_Jianpu,
+    keysigFlat_D_Jianpu,
+    keysigFlat_E_Jianpu,
+    keysig_G_Jianpu,
+    keysig_A_Jianpu,
+    keysig_B_Jianpu,
+    keysig_C_Jianpu,
+    keysig_D_Jianpu,
+    keysig_E_Jianpu,
+    keysig_F_Jianpu,
+    keysigSharp_C_Jianpu,
+    keysigSharp_F_Jianpu,
+    noteRestJianpu,
+    noteDoJianpu,
+    noteReJianpu,
+    noteMiJianpu,
+    noteFaJianpu,
+    noteSoJianpu,
+    noteLaJianpu,
+    noteSiJianpu,
+    dotJianpu,
+    beamJianpu,
+    timeSig_0_Jianpu,
+    timeSig_1_Jianpu,
+    timeSig_2_Jianpu,
+    timeSig_3_Jianpu,
+    timeSig_4_Jianpu,
+    timeSig_5_Jianpu,
+    timeSig_6_Jianpu,
+    timeSig_7_Jianpu,
+    timeSig_8_Jianpu,
+    timeSig_9_Jianpu,
+
+    //    end Jianpu
+
     lastSym
 };
 using SymIdList = std::vector<SymId>;

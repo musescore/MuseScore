@@ -625,6 +625,8 @@ static const std::vector<Item<ClefType> > CLEF_TYPES = {
     { ClefType::F_F18C,     "F_F18C",   TranslatableString("engraving/cleftype", "F clef (French, 18th century)") },
     { ClefType::F_19C,      "F_19C",    TranslatableString("engraving/cleftype", "F clef (19th century)") },
 
+    { ClefType::JIANPU,     "JIANPU",   TranslatableString("engraving/cleftype", "Jianpu") },
+
     { ClefType::PERC,       "PERC",     TranslatableString("engraving/cleftype", "Percussion") },
     { ClefType::PERC2,      "PERC2",    TranslatableString("engraving/cleftype", "Percussion 2") },
 

@@ -279,6 +279,15 @@ void SlurSegment::adjustEndpoints()
     PointF p1 = ups(Grip::START).p;
     PointF p2 = ups(Grip::END).p;
 
+    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU) && (staffType() && staffType()->lines() == 0)) {
+        double symHeight = staff()->symHeight(SymId::keysig_1_Jianpu) * 0.75;
+        setPos(0.0, 0.0);
+        p1.ry() = -symHeight;
+        p2.ry() = p1.ry() ? p1.ry() : p1.ry();
+
+        return;
+    }
+
     double y1sp = p1.y() / lw;
     double y2sp = p2.y() / lw;
 
@@ -849,6 +858,15 @@ void Slur::slurPosChord(SlurPos* sp)
     assert(sp->system1);
     sp->system2 = sp->system1;
     PointF pp(sp->system1->pagePos());
+
+    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU) && (staffType() && staffType()->lines() == 0)) {
+        double symHeight = staff()->symHeight(SymId::keysig_1_Jianpu) * 0.75;
+        setPos(x(), 0.0);
+        sp->p1.ry() = -symHeight;
+        sp->p2.ry() = sp->p1.ry() ? sp->p1.ry() : sp->p1.ry();
+
+        return;
+    }
 
     double xo;
     double yo;

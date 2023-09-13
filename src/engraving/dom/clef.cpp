@@ -80,6 +80,8 @@ const ClefInfo ClefInfo::clefTable[] = {
     { ClefType::F_F18C,  4, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClefFrench,      StaffGroup::STANDARD },
     { ClefType::F_19C,   4, 33, { 2, 5, 1, 4, 7, 3, 6, 6, 3, 7, 4, 8, 5, 9 },  SymId::fClef19thCentury, StaffGroup::STANDARD },
 
+    { ClefType::JIANPU,  0, 0,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::noSym,            StaffGroup::STANDARD },
+
     { ClefType::PERC,    2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::unpitchedPercussionClef1, StaffGroup::PERCUSSION },
     { ClefType::PERC2,   2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::unpitchedPercussionClef2, StaffGroup::PERCUSSION },
 

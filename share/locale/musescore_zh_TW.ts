@@ -11370,6 +11370,11 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation>敲擊樂 5 線譜</translation>
     </message>
     <message>
+        <location filename="../../src/engraving/libmscore/stafftype.cpp" line="1493"/>
+        <source>Jianpu</source>
+        <translation>簡譜</translation>
+    </message>
+    <message>
         <location filename="../../src/engraving/dom/stafftype.cpp" line="1495"/>
         <source>Tab. 6-str. simple</source>
         <translation>簡單 6 弦指法譜</translation>
@@ -13774,6 +13779,11 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <location filename="../../src/engraving/types/typesconv.cpp" line="545"/>
         <source>F clef (19th century)</source>
         <translation>F譜號（19世紀）</translation>
+    </message>
+    <message>
+        <location filename="../../src/engraving/types/typesconv.cpp" line="546"/>
+        <source>Jianpu</source>
+        <translation>簡譜</translation>
     </message>
     <message>
         <location filename="../../src/engraving/types/typesconv.cpp" line="547"/>

@@ -148,7 +148,16 @@ public:
 
     ClefList& clefList() { return clefs; }
     ClefTypeList clefType(const Fraction&) const;
-    ClefTypeList defaultClefType() const { return _defaultClefType; }
+    ClefTypeList defaultClefType() const {
+        if ((staffType() && staffType()->type() == StaffTypes::JIANPU)
+            || (staffType() && staffType()->xmlName() == "stdJianpu")) {
+            return ClefTypeList(ClefType::JIANPU);
+        }
+        else
+        {
+            return _defaultClefType;
+        }
+    }
     void setDefaultClefType(const ClefTypeList& l) { _defaultClefType = l; }
     ClefType clef(const Fraction&) const;
     Fraction nextClefTick(const Fraction&) const;

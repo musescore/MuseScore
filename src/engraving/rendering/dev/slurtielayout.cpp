@@ -195,6 +195,15 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
             break;
         }
     }
+
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        item->setUp(true);
+        double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.75;
+        item->setPos(0.0, 0.0);
+        sPos.p1.ry() = -symHeight;
+        sPos.p2.ry() = sPos.p1.ry() ? sPos.p1.ry() : sPos.p1.ry();
+    }
+
     item->setbbox(item->spannerSegments().empty() ? RectF() : item->frontSegment()->layoutData()->bbox());
 }
 
@@ -252,6 +261,18 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     // adjust for ties
     p1 = sPos.p1;
     p2 = sPos.p2;
+
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.75;
+        item->setPos(0.0, 0.0);
+        p1.ry() = -symHeight;
+        p2.ry() = p1.ry() ? p1.ry() : p1.ry();
+
+        layoutSegment(slurSegment, ctx, p1, p2);
+
+        return slurSegment;
+    }
+
     bool constrainLeftAnchor = false;
 
     // start anchor, either on the start chordrest or at the beginning of the system
@@ -530,6 +551,18 @@ void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
 
     sp->p1 = scr->pos() + scr->segment()->pos() + scr->measure()->pos();
     sp->p2 = ecr->pos() + ecr->segment()->pos() + ecr->measure()->pos();
+
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        double symWidth = item->symWidth(SymId::keysig_1_Jianpu) * 0.4;
+        double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.75;
+        item->setPos(0.0, 0.0);
+        sp->p1.rx() += symWidth;
+        sp->p2.rx() += symWidth;
+        sp->p1.ry() = -symHeight;
+        sp->p2.ry() = sp->p1.ry() ? sp->p1.ry() : sp->p1.ry();
+
+        return;
+    }
 
     // adjust for cross-staff
     if (scr->vStaffIdx() != item->vStaffIdx() && sp->system1) {
@@ -1062,6 +1095,14 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     segment->adjustX(); // adjust horizontally for inside-style ties
     segment->finalizeSegment(); // compute bezier and set bbox
     segment->addLineAttachPoints(); // add attach points to start and end note
+
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.75;
+        item->setPos(0.0, 0.0);
+        sPos.p1.ry() = -symHeight;
+        sPos.p2.ry() = sPos.p1.ry() ? sPos.p1.ry() : sPos.p1.ry();
+    }
+
     return segment;
 }
 
@@ -1095,6 +1136,14 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
     segment->adjustX();
     segment->finalizeSegment();
     segment->addLineAttachPoints();
+
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.75;
+        item->setPos(0.0, 0.0);
+        sPos.p1.ry() = -symHeight;
+        sPos.p2.ry() = sPos.p1.ry() ? sPos.p1.ry() : sPos.p1.ry();
+    }
+
     return segment;
 }
 
@@ -1244,10 +1293,22 @@ void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
         adjustTie(sc, sp->p1, true);
         adjustTie(ec, sp->p2, false);
     }
+
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.75;
+        item->setPos(0.0, 0.0);
+        sp->p1.ry() = -symHeight;
+        sp->p2.ry() = sp->p1.ry() ? sp->p1.ry() : sp->p1.ry();
+    }
 }
 
 void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
 {
+    if ((slur->staff() && slur->staff()->clefType(Fraction()) == ClefType::JIANPU) && (slur->staffType() && slur->staffType()->lines() == 0)) {
+        slur->setUp(true);
+        return;
+    }
+
     switch (slur->slurDirection()) {
     case DirectionV::UP:
         slur->setUp(true);

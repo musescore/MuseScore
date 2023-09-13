@@ -2092,7 +2092,12 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         double dist = staff->height();
         double yOffset;
         double h;
-        if (staff->lines(Fraction(0, 1)) == 1) {
+        if ((staff && staff->clefType(Fraction()) == ClefType::JIANPU) && (staff->staffType() && staff->staffType()->lines() == 0)) {
+            double symHeight = staff->symHeight(SymId::keysig_1_Jianpu);
+            yOffset = symHeight * 2.5;
+            h = symHeight * 5.0;
+            y += symHeight;
+        } else if (staff->lines(Fraction(0, 1)) == 1) {
             yOffset = _spatium * BARLINE_SPAN_1LINESTAFF_TO * 0.5;
             h = _spatium * (BARLINE_SPAN_1LINESTAFF_TO - BARLINE_SPAN_1LINESTAFF_FROM) * 0.5;
         } else {

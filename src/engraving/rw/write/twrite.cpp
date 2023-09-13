@@ -1616,10 +1616,12 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
         ClefTypeList ct = item->clefType(i);
         if (ct._concertClef == ct._transposingClef) {
             if (ct._concertClef != ClefType::G) {
-                if (i) {
-                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
-                } else {
-                    xml.tag("clef", TConv::toXml(ct._concertClef));
+                if (ct._concertClef != ClefType::JIANPU) {
+                    if (i) {
+                        xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
+                    } else {
+                        xml.tag("clef", TConv::toXml(ct._concertClef));
+                    }
                 }
             }
         } else {
@@ -2317,7 +2319,9 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
     ClefTypeList ct = item->defaultClefType();
     if (ct._concertClef == ct._transposingClef) {
         if (ct._concertClef != ClefType::G) {
-            xml.tag("defaultClef", TConv::toXml(ct._concertClef));
+            if ((ct._concertClef != ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() != 0)) {
+                xml.tag("defaultClef", TConv::toXml(ct._concertClef));
+            }
         }
     } else {
         xml.tag("defaultConcertClef", TConv::toXml(ct._concertClef));
@@ -2432,10 +2436,14 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
         xml.tag("name", item->xmlName());
     }
     if (item->lines() != 5) {
-        xml.tag("lines", item->lines());
+        if (item->type() != StaffTypes::JIANPU && item->lines() != 0) {
+            xml.tag("lines", item->lines());
+        }
     }
     if (item->lineDistance().val() != 1.0) {
-        xml.tag("lineDistance", item->lineDistance().val());
+        if (item->type() != StaffTypes::JIANPU && item->lines() != 0) {
+            xml.tag("lineDistance", item->lineDistance().val());
+        }
     }
     if (item->yoffset().val() != 0.0) {
         xml.tag("yoffset", item->yoffset().val());
@@ -2450,7 +2458,9 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
         xml.tag("stepOffset", item->stepOffset());
     }
     if (!item->genClef()) {
-        xml.tag("clef", item->genClef());
+        if (item->type() != StaffTypes::JIANPU && item->lines() != 0) {
+            xml.tag("clef", item->genClef());
+        }
     }
     if (item->stemless()) {
         xml.tag("slashStyle", item->stemless());     // for backwards compatibility
@@ -2475,7 +2485,7 @@ void TWrite::write(const StaffType* item, XmlWriter& xml, WriteContext&)
         if (!item->genKeysig()) {
             xml.tag("keysig", item->genKeysig());
         }
-        if (!item->showLedgerLines()) {
+        if (!item->showLedgerLines() && !(item->type() == StaffTypes::JIANPU && item->lines() == 0)) {
             xml.tag("ledgerlines", item->showLedgerLines());
         }
     } else {
