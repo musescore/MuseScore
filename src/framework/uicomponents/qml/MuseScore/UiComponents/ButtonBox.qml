@@ -37,7 +37,8 @@ RowLayout {
 
     property alias buttons: buttonBoxModel.buttons
     property int count: buttonBoxModel.rowCount()
-    
+    property alias buttonLayout: buttonBoxModel.buttonLayout
+
     property NavigationPanel navigationPanel: null
 
     signal standardButtonClicked(int type)
@@ -56,6 +57,15 @@ RowLayout {
         }
 
         return leftRepeater.itemAt(0).visible ? leftRepeater.itemAt(0) : rightRepeater.itemAt(0)
+    }
+
+    function firstFocusBtn() {
+        var btn = accentButton()
+        if (!Boolean(btn)) {
+            btn = rightRepeater.itemAt(0)
+        }
+
+        return btn
     }
 
     function buttonClicked(type, customButtonIndex) {

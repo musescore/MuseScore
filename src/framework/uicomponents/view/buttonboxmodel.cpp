@@ -34,6 +34,7 @@ ButtonBoxModel::ButtonBoxModel(QObject* parent)
 void ButtonBoxModel::load()
 {
     beginResetModel();
+    m_buttons.clear();
 
     std::unordered_map <int, std::vector <LayoutButton*> > sortedButtons;
 
@@ -157,14 +158,21 @@ void ButtonBoxModel::setButtons(const int& buttons)
 
 const std::vector <ButtonBoxModel::ButtonRole> ButtonBoxModel::chooseButtonLayoutType()
 {
-    int index = 0;
+    size_t index = 0;
+    if (m_buttonLayout != ButtonLayout::UnknownLayout) {
+        index = static_cast<size_t>(m_buttonLayout);
+    } else {
 #if defined (Q_OS_OSX)
-    return buttonRoleLayouts[1];
-    index = 1;
+        index = 1;
 #elif defined (Q_OS_LINUX) || defined (Q_OS_UNIX)
-    return buttonRoleLayouts[2];
-    index = 2;
+        index = 2;
 #endif
+    }
+
+    IF_ASSERT_FAILED(index >= 0 || index <= buttonRoleLayouts.size()) {
+        index = 0;
+    }
+
     return buttonRoleLayouts[index];
 }
 
@@ -173,4 +181,20 @@ void ButtonBoxModel::addCustomButton(int index, QString text, int role, bool isA
     LayoutButton* button = new LayoutButton(text, ButtonType::CustomButton,  ButtonRole(role), isAccent, isLeftSide, navigationName);
     button->customButtonIndex = index;
     m_customButtons << button;
+}
+
+ButtonBoxModel::ButtonLayout ButtonBoxModel::buttonLayout() const
+{
+    return m_buttonLayout;
+}
+
+void ButtonBoxModel::setButtonLayout(ButtonLayout newButtonLayout)
+{
+    if (m_buttonLayout == newButtonLayout) {
+        return;
+    }
+    m_buttonLayout = newButtonLayout;
+    emit buttonLayoutChanged();
+
+    load();
 }

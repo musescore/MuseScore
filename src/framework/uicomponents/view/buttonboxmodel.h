@@ -32,6 +32,7 @@ class ButtonBoxModel : public QAbstractListModel
     Q_OBJECT
 
     Q_PROPERTY(int buttons READ buttons WRITE setButtons NOTIFY buttonsChanged)
+    Q_PROPERTY(ButtonLayout buttonLayout READ buttonLayout WRITE setButtonLayout NOTIFY buttonLayoutChanged)
 
 public:
     explicit ButtonBoxModel(QObject* parent = nullptr);
@@ -87,6 +88,15 @@ public:
     Q_ENUM(ButtonRole)
     Q_ENUMS(ButtonBoxModel::ButtonRole)
 
+    enum ButtonLayout {
+        UnknownLayout = -1,
+        WinLayout,
+        MacLayout,
+        LinuxLayout
+    };
+    Q_ENUM(ButtonLayout)
+    Q_ENUMS(ButtonBoxModel::ButtonLayout)
+
     QVariant data(const QModelIndex& index, int role) const override;
     int rowCount(const QModelIndex& parent = QModelIndex()) const override;
     QHash<int, QByteArray> roleNames() const override;
@@ -96,11 +106,16 @@ public:
     Q_INVOKABLE void load();
     Q_INVOKABLE void addCustomButton(int index, QString text, int role, bool isAccent, bool isLeftSide, QString navigationName);
 
+    ButtonLayout buttonLayout() const;
+    void setButtonLayout(ButtonLayout newButtonLayout);
+
 public slots:
     void setButtons(const int& buttons);
 
 signals:
     void buttonsChanged(const int& buttons);
+
+    void buttonLayoutChanged();
 
 private:
     enum Roles {
@@ -164,7 +179,7 @@ private:
         { Done,            new LayoutButton(qtrc(c, "Done"),             Done,            AcceptRole,      true) }
     };
 
-    std::vector <ButtonRole> buttonRoleLayouts[3] = {
+    std::vector<std::vector <ButtonRole>> buttonRoleLayouts = {
         // WinLayout
         std::vector <ButtonRole> { CustomRole, ResetRole, RetryRole, BackRole, AcceptRole, ApplyRole, ContinueRole, DestructiveRole,
                                    RejectRole, HelpRole },
@@ -182,6 +197,7 @@ private:
     QList<LayoutButton*> m_customButtons;
 
     QList<LayoutButton*> m_buttons;
+    ButtonLayout m_buttonLayout = ButtonLayout::UnknownLayout;
 };
 }
 
