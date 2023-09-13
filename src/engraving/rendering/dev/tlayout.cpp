@@ -235,7 +235,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::DEAD_SLAPPED:
         layout(item_cast<const DeadSlapped*>(item), static_cast<DeadSlapped::LayoutData*>(ldata));
         break;
-    case ElementType::DYNAMIC:          layout(item_cast<Dynamic*>(item), ctx);
+    case ElementType::DYNAMIC:
+        layout(item_cast<const Dynamic*>(item), static_cast<Dynamic::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::EXPRESSION:       layout(item_cast<Expression*>(item), ctx);
         break;
@@ -1662,6 +1663,7 @@ void TLayout::layout(const Capo* item, Capo::LayoutData* ldata, const LayoutCont
     }
 
     if (item->layoutToParentWidth()) {
+        // from layoutTextBase
         LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
     }
 
@@ -1719,22 +1721,25 @@ void TLayout::layout(const DeadSlapped* item, DeadSlapped::LayoutData* ldata)
     }
 }
 
-static void layoutDynamic(const Dynamic* item, const LayoutContext& ctx, Dynamic::LayoutData* ldata)
+void TLayout::layout(const Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     const_cast<Dynamic*>(item)->setSnappedExpression(nullptr); // Here we reset it. It will become known again when we layout expression
 
     const StaffType* stType = item->staffType();
-
-    if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
+    if (stType && stType->isHiddenElementOnTab(conf.style(), Sid::dynamicsShowTabCommon, Sid::dynamicsShowTabSimple)) {
         ldata->setIsSkipDraw(true);
         return;
     }
-
     ldata->setIsSkipDraw(false);
+
+    if (item->layoutToParentWidth()) {
+        // from layoutTextBase
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
+    }
 
     TLayout::layoutTextBase(item, ldata);
 
-    Segment* s = item->segment();
+    const Segment* s = item->segment();
     if (!s || (!item->centerOnNotehead() && item->align().horizontal == AlignH::LEFT)) {
         return;
     }
@@ -1754,6 +1759,8 @@ static void layoutDynamic(const Dynamic* item, const LayoutContext& ctx, Dynamic
     if (!itemToAlign) {
         return;
     }
+
+    LD_CONDITION(itemToAlign->layoutData()->isSetBbox());
 
     if (!itemToAlign->isChord()) {
         ldata->moveX(itemToAlign->width() * 0.5);
@@ -1778,18 +1785,13 @@ static void layoutDynamic(const Dynamic* item, const LayoutContext& ctx, Dynamic
     if (symId != SymId::noSym && opticalCenter) {
         double symWidth = item->symBbox(symId).width();
         double offset = symWidth / 2 - opticalCenter + item->symBbox(symId).left();
-        double spatiumScaling = item->spatium() / ctx.conf().spatium();
+        double spatiumScaling = item->spatium() / conf.spatium();
         offset *= spatiumScaling;
         ldata->moveX(offset);
     }
 
     // If the dynamic contains custom text, keep it aligned
     ldata->moveX(-item->customTextOffset());
-}
-
-void TLayout::layout(Dynamic* item, LayoutContext& ctx)
-{
-    layoutDynamic(item, ctx, item->mutLayoutData());
 }
 
 static void layoutExpression(const Expression* item, const LayoutContext&, Expression::LayoutData* ldata)
