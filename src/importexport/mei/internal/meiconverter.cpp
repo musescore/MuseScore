@@ -1275,7 +1275,7 @@ void Convert::hairpinFromMEI(engraving::Hairpin* hairpin, const libmei::Hairpin&
     }
 
     // @color
-    Convert::colorFromMEI(hairpin, meiHairpin);
+    Convert::colorlineFromMEI(hairpin, meiHairpin);
 }
 
 libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
@@ -1300,7 +1300,7 @@ libmei::Hairpin Convert::hairpinToMEI(const engraving::Hairpin* hairpin)
     }
 
     // @color
-    Convert::colorToMEI(hairpin, meiHairpin);
+    Convert::colorlineToMEI(hairpin, meiHairpin);
 
     return meiHairpin;
 }
@@ -1869,7 +1869,7 @@ void Convert::octaveFromMEI(engraving::Ottava* ottava, const libmei::Octave& mei
     }
 
     // @color
-    Convert::colorFromMEI(ottava, meiOctave);
+    Convert::colorlineFromMEI(ottava, meiOctave);
 }
 
 libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
@@ -1917,7 +1917,7 @@ libmei::Octave Convert::octaveToMEI(const engraving::Ottava* ottava)
     }
 
     // @color
-    Convert::colorToMEI(ottava, meiOctave);
+    Convert::colorlineToMEI(ottava, meiOctave);
 
     return meiOctave;
 }
