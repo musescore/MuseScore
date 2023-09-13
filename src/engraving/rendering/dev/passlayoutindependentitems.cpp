@@ -41,6 +41,7 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::ACCIDENTAL:
     case ElementType::ACTION_ICON:
     case ElementType::AMBITUS:
+    case ElementType::BREATH:
         TLayout::layoutItem(item, ctx);
     default:
         break;

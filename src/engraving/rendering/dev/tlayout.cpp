@@ -218,7 +218,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::BRACKET:
         layout(item_cast<const Bracket*>(item), static_cast<Bracket::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::BREATH:           layout(item_cast<Breath*>(item), ctx);
+    case ElementType::BREATH:
+        layout(item_cast<const Breath*>(item), static_cast<Breath::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::CHORD:            layout(item_cast<Chord*>(item), ctx);
         break;
@@ -1410,24 +1411,20 @@ void TLayout::layout(const Bracket* item, Bracket::LayoutData* ldata, const Layo
     }
 }
 
-static void layoutBreath(const Breath* item, const LayoutContext& ctx, Breath::LayoutData* ldata)
+void TLayout::layout(const Breath* item, Breath::LayoutData* ldata, const LayoutConfiguration& conf)
 {
+    LD_INDEPENDENT;
+
     int voiceOffset = item->placeBelow() * (item->staff()->lines(item->tick()) - 1) * item->spatium();
     if (item->isCaesura()) {
-        ldata->setPos(PointF(ldata->pos().x(), item->spatium() + voiceOffset));
-    } else if ((ctx.conf().styleSt(Sid::MusicalSymbolFont) == "Emmentaler")
-               && (item->symId() == SymId::breathMarkComma)) {
-        ldata->setPos(PointF(ldata->pos().x(), 0.5 * item->spatium() + voiceOffset));
+        ldata->setPosY(item->spatium() + voiceOffset);
+    } else if ((conf.styleSt(Sid::MusicalSymbolFont) == "Emmentaler") && (item->symId() == SymId::breathMarkComma)) {
+        ldata->setPosY(0.5 * item->spatium() + voiceOffset);
     } else {
-        ldata->setPos(PointF(ldata->pos().x(), -0.5 * item->spatium() + voiceOffset));
+        ldata->setPosY(-0.5 * item->spatium() + voiceOffset);
     }
 
     ldata->setBbox(item->symBbox(item->symId()));
-}
-
-void TLayout::layout(Breath* item, LayoutContext& ctx)
-{
-    layoutBreath(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Chord* item, LayoutContext& ctx)
