@@ -223,7 +223,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::CHORD:            layout(item_cast<Chord*>(item), ctx);
         break;
-    case ElementType::CHORDLINE:        layout(item_cast<ChordLine*>(item), ctx);
+    case ElementType::CHORDLINE:
+        layout(item_cast<const ChordLine*>(item), static_cast<ChordLine::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::CLEF:             layout(item_cast<Clef*>(item), ctx);
         break;
@@ -1432,11 +1433,29 @@ void TLayout::layout(Chord* item, LayoutContext& ctx)
     ChordLayout::layout(item, ctx);
 }
 
-static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, ChordLine::LayoutData* ldata)
+void TLayout::layout(const ChordLine* item, ChordLine::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
+
+    Note* note = nullptr;
+
+    if (item->note()) {
+        note = item->chord()->findNote(item->note()->pitch());
+    }
+
+    if (!note) {
+        note = item->chord()->upNote();
+    }
+
+    const Note::LayoutData* noteLD = note->layoutData();
+
+    //! NOTE Temporary, instead of item->chord()->shape()
+    LD_CONDITION(item->chord()->layoutData()->isSetBbox());
+
+    LD_CONDITION(noteLD->isSetPos());
+    LD_CONDITION(noteLD->isSetBbox());
 
     ldata->setMag(item->chord()->mag());
 
@@ -1466,18 +1485,8 @@ static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, Cho
         }
     }
 
-    Note* note = nullptr;
-
-    if (item->note()) {
-        note = item->chord()->findNote(item->note()->pitch());
-    }
-
-    if (!note) {
-        note = item->chord()->upNote();
-    }
-
     double x = 0.0;
-    double y = note->pos().y();
+    double y = noteLD->pos().y();
     double horOffset = 0.33 * item->spatium();         // one third of a space away from the note
     double vertOffset = 0.25 * item->spatium();         // one quarter of a space from the center line
     // Get chord shape
@@ -1500,7 +1509,7 @@ static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, Cho
     /// TODO: calculate properly the position for wavy type
     if (item->isWavy()) {
         bool upDir = item->chordLineType() == ChordLineType::DOIT;
-        y += note->height() * (upDir ? 0.8 : -0.3);
+        y += noteLD->bbox().height() * (upDir ? 0.8 : -0.3);
     }
 
     ldata->setPos(x, y);
@@ -1515,23 +1524,18 @@ static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, Cho
         height = r.height();
         ldata->setBbox(x1, y1, width, height);
     } else {
-        RectF r = ctx.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
+        RectF r = conf.engravingFont()->bbox(ChordLine::WAVE_SYMBOLS, item->magS());
         double angle = ChordLine::WAVE_ANGEL * M_PI / 180;
 
         r.setHeight(r.height() + r.width() * sin(angle));
 
         /// TODO: calculate properly the rect for wavy type
         if (item->chordLineType() == ChordLineType::DOIT) {
-            r.setY(item->y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
+            r.setY(ldata->pos().y() - r.height() * (item->onTabStaff() ? 1.25 : 1));
         }
 
         ldata->setBbox(r);
     }
-}
-
-void TLayout::layout(ChordLine* item, LayoutContext& ctx)
-{
-    layoutChordLine(item, ctx, item->mutLayoutData());
 }
 
 static void layoutClef(const Clef* item, const LayoutContext&, Clef::LayoutData* ldata)
