@@ -706,6 +706,37 @@ void Convert::colorToMEI(const engraving::EngravingItem* item, libmei::Element& 
     }
 }
 
+void Convert::colorlineFromMEI(engraving::SLine* line, const libmei::Element& meiElement)
+{
+    const libmei::AttColor* colorAtt = dynamic_cast<const libmei::AttColor*>(&meiElement);
+
+    IF_ASSERT_FAILED(colorAtt) {
+        return;
+    }
+
+    // @color
+    if (colorAtt->HasColor()) {
+        engraving::Color color = engraving::Color::fromString(colorAtt->GetColor());
+        if (color.isValid()) {
+            line->setLineColor(color);
+        }
+    }
+}
+
+void Convert::colorlineToMEI(const engraving::SLine* line, libmei::Element& meiElement)
+{
+    libmei::AttColor* colorAtt = dynamic_cast<libmei::AttColor*>(&meiElement);
+
+    IF_ASSERT_FAILED(colorAtt) {
+        return;
+    }
+
+    // @color
+    if (line->lineColor() != engravingConfiguration()->defaultColor()) {
+        colorAtt->SetColor(line->lineColor().toString());
+    }
+}
+
 engraving::DirectionV Convert::curvedirFromMEI(const libmei::curvature_CURVEDIR meiCurvedir, bool& warning)
 {
     warning = false;
