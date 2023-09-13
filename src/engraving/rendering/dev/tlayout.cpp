@@ -238,7 +238,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::DYNAMIC:
         layout(item_cast<const Dynamic*>(item), static_cast<Dynamic::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::EXPRESSION:       layout(item_cast<Expression*>(item), ctx);
+    case ElementType::EXPRESSION:
+        layout(item_cast<const Expression*>(item), static_cast<Expression::LayoutData*>(ldata));
         break;
     case ElementType::FERMATA:          layout(item_cast<Fermata*>(item), ctx);
         break;
@@ -1670,8 +1671,8 @@ void TLayout::layout(const Capo* item, Capo::LayoutData* ldata, const LayoutCont
     TLayout::layoutTextBase(item, ldata);
 
     if (item->autoplace()) {
-        Segment* s = toSegment(item->explicitParent());
-        Measure* m = s->measure();
+        const Segment* s = item->segment();
+        const Measure* m = s->measure();
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->layoutData()->isSetPos());
         LD_CONDITION(s->layoutData()->isSetPos());
@@ -1794,15 +1795,20 @@ void TLayout::layout(const Dynamic* item, Dynamic::LayoutData* ldata, const Layo
     ldata->moveX(-item->customTextOffset());
 }
 
-static void layoutExpression(const Expression* item, const LayoutContext&, Expression::LayoutData* ldata)
+void TLayout::layout(const Expression* item, Expression::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
 
+    if (item->layoutToParentWidth()) {
+        // from layoutTextBase
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
+    }
+
     TLayout::layoutTextBase(item, ldata);
 
-    Segment* segment = toSegment(item->explicitParent());
+    const Segment* segment = item->segment();
 
     if (item->align().horizontal != AlignH::LEFT) {
         Chord* chordToAlign = nullptr;
@@ -1831,6 +1837,12 @@ static void layoutExpression(const Expression* item, const LayoutContext&, Expre
         return;
     }
 
+    const Segment* s = item->segment();
+    const Measure* m = s->measure();
+    LD_CONDITION(ldata->isSetPos());
+    LD_CONDITION(m->layoutData()->isSetPos());
+    LD_CONDITION(s->layoutData()->isSetPos());
+
     if (!item->snapToDynamics()) {
         Autoplace::autoplaceSegmentElement(item, ldata);
         return;
@@ -1844,6 +1856,9 @@ static void layoutExpression(const Expression* item, const LayoutContext&, Expre
 
     const_cast<Expression*>(item)->setSnappedDynamic(dynamic);
     dynamic->setSnappedExpression(const_cast<Expression*>(item));
+
+    LD_CONDITION(dynamic->layoutData()->isSetBbox()); // dynamic->shape()
+    LD_CONDITION(dynamic->layoutData()->isSetPos());
 
     // If there is a dynamic on same segment and track, lock this expression to it
     double padding = item->computeDynamicExpressionDistance();
@@ -1863,11 +1878,6 @@ static void layoutExpression(const Expression* item, const LayoutContext&, Expre
     } else {
         ldata->moveY((yDynamic - yExpression));
     }
-}
-
-void TLayout::layout(Expression* item, LayoutContext& ctx)
-{
-    layoutExpression(item, ctx, item->mutLayoutData());
 }
 
 static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata::LayoutData* ldata)

@@ -43,6 +43,8 @@
 #include "../../dom/deadslapped.h"
 #include "../../dom/dynamic.h"
 
+#include "../../dom/expression.h"
+
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
@@ -57,8 +59,6 @@ class BagpipeEmbellishment;
 class Beam;
 
 class Chord;
-
-class Expression;
 
 class Fermata;
 class FiguredBassItem;
@@ -203,7 +203,7 @@ public:
     static void layout(const DeadSlapped* item, DeadSlapped::LayoutData* ldata);
     static void layout(const Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf);
 
-    static void layout(Expression* item, LayoutContext& ctx);
+    static void layout(const Expression* item, Expression::LayoutData* ldata);
 
     static void layout(Fermata* item, LayoutContext& ctx);
     static void layout(FiguredBassItem* item, LayoutContext& ctx);
