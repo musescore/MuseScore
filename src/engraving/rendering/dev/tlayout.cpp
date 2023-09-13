@@ -215,7 +215,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::TBOX:
         layout(item_cast<const TBox*>(item), static_cast<TBox::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::BRACKET:          layout(item_cast<Bracket*>(item), ctx);
+    case ElementType::BRACKET:
+        layout(item_cast<const Bracket*>(item), static_cast<Bracket::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::BREATH:           layout(item_cast<Breath*>(item), ctx);
         break;
@@ -1302,9 +1303,10 @@ void TLayout::layout(const TBox* item, FBox::LayoutData* ldata, const LayoutCont
     layoutMeasureBase(item, ldata, ctx);   // layout LayoutBreak's
 }
 
-static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket::LayoutData* ldata)
+void TLayout::layout(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    if (RealIsNull(item->h2())) {
+    LD_CONDITION(ldata->isSetBracketHeight());
+    if (!ldata->isSetBracketHeight()) {
         return;
     }
 
@@ -1313,13 +1315,14 @@ static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket
 
     switch (item->bracketType()) {
     case BracketType::BRACE: {
-        String musicalSymbolFont = ctx.conf().styleSt(Sid::MusicalSymbolFont);
+        String musicalSymbolFont = conf.styleSt(Sid::MusicalSymbolFont);
         if (musicalSymbolFont == "Emmentaler" || musicalSymbolFont == "Gonville") {
             ldata->braceSymbol = SymId::noSym;
-            double w = ctx.conf().styleMM(Sid::akkoladeWidth);
+            double w = conf.styleMM(Sid::akkoladeWidth);
+            double h2 = ldata->bracketHeight() * 0.5;
 
 #define XM(a) (a + 700) * w / 700
-#define YM(a) (a + 7100) * item->h2() / 7100
+#define YM(a) (a + 7100) * h2 / 7100
 
             PainterPath path;
             path.moveTo(XM(-8), YM(-2048));
@@ -1346,62 +1349,65 @@ static void layoutBracket(const Bracket* item, const LayoutContext& ctx, Bracket
             ldata->path = path;
             ldata->setBbox(path.boundingRect());
             ldata->shape.add(ldata->bbox());
+            ldata->setBracketWidth(w + conf.styleMM(Sid::akkoladeBarDistance));
         } else {
             if (item->braceSymbol() == SymId::noSym) {
                 ldata->braceSymbol = SymId::brace;
             }
-            double h = item->h2() * 2;
-            double w = item->symWidth(item->braceSymbol()) * item->magx();
+            double h = ldata->bracketHeight();
+            double w = item->symWidth(ldata->braceSymbol) * item->magx();
             ldata->setBbox(RectF(0, 0, w, h));
             ldata->shape.add(ldata->bbox());
+            ldata->setBracketWidth(w + conf.styleMM(Sid::akkoladeBarDistance));
         }
     }
     break;
     case BracketType::NORMAL: {
-        double _spatium = item->spatium();
-        double w = ctx.conf().styleMM(Sid::bracketWidth) * .5;
+        double spatium = item->spatium();
+        double w = conf.styleMM(Sid::bracketWidth) * .5;
         double x = -w;
 
-        double bd = (ctx.conf().styleSt(Sid::MusicalSymbolFont) == "Leland") ? _spatium * .5 : _spatium * .25;
-        ldata->shape.add(RectF(x, -bd, w * 2, 2 * (item->h2() + bd)));
+        double bd = (conf.styleSt(Sid::MusicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
+        ldata->shape.add(RectF(x, -bd, w * 2, 2 * (ldata->bracketHeight() * 0.5 + bd)));
         ldata->shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
-        ldata->shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * item->h2())));
+        ldata->shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + ldata->bracketHeight())));
 
         w += item->symWidth(SymId::bracketTop);
         double y = -item->symHeight(SymId::bracketTop) - bd;
-        double h = (-y + item->h2()) * 2;
+        double h = (-y + ldata->bracketHeight() * 0.5) * 2;
         ldata->setBbox(RectF(x, y, w, h));
+
+        ldata->setBracketWidth(conf.styleMM(Sid::bracketWidth) + conf.styleMM(Sid::bracketDistance));
     }
     break;
     case BracketType::SQUARE: {
-        double w = ctx.conf().styleMM(Sid::staffLineWidth) * .5;
+        double w = conf.styleMM(Sid::staffLineWidth) * .5;
         double x = -w;
         double y = -w;
-        double h = (item->h2() + w) * 2;
+        double h = (ldata->bracketHeight() * 0.5 + w) * 2;
         w += (.5 * item->spatium() + 3 * w);
         ldata->setBbox(RectF(x, y, w, h));
         ldata->shape.add(ldata->bbox());
+
+        ldata->setBracketWidth(conf.styleMM(Sid::staffLineWidth) / 2 + 0.5 * item->spatium());
     }
     break;
     case BracketType::LINE: {
         double _spatium = item->spatium();
-        double w = 0.67 * ctx.conf().styleMM(Sid::bracketWidth) * .5;
+        double w = 0.67 * conf.styleMM(Sid::bracketWidth) * .5;
         double x = -w;
         double bd = _spatium * .25;
         double y = -bd;
-        double h = (-y + item->h2()) * 2;
+        double h = (-y + ldata->bracketHeight() * 0.5) * 2;
         ldata->setBbox(RectF(x, y, w, h));
         ldata->shape.add(ldata->bbox());
+
+        ldata->setBracketWidth(0.67 * conf.styleMM(Sid::bracketWidth) + conf.styleMM(Sid::bracketDistance));
     }
     break;
     case BracketType::NO_BRACKET:
         break;
     }
-}
-
-void TLayout::layout(Bracket* item, LayoutContext& ctx)
-{
-    layoutBracket(item, ctx, item->mutLayoutData());
 }
 
 static void layoutBreath(const Breath* item, const LayoutContext& ctx, Breath::LayoutData* ldata)
