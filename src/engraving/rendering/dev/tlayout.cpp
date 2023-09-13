@@ -232,7 +232,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::CAPO:
         layout(item_cast<const Capo*>(item), static_cast<Capo::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::DEAD_SLAPPED:     layout(item_cast<DeadSlapped*>(item), ctx);
+    case ElementType::DEAD_SLAPPED:
+        layout(item_cast<const DeadSlapped*>(item), static_cast<DeadSlapped::LayoutData*>(ldata));
         break;
     case ElementType::DYNAMIC:          layout(item_cast<Dynamic*>(item), ctx);
         break;
@@ -1677,11 +1678,14 @@ void TLayout::layout(const Capo* item, Capo::LayoutData* ldata, const LayoutCont
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
-static void layoutDeadSlapped(const DeadSlapped* item, const LayoutContext&, DeadSlapped::LayoutData* ldata)
+void TLayout::layout(const DeadSlapped* item, DeadSlapped::LayoutData* ldata)
 {
+    LD_INDEPENDENT;
+
     const double deadSlappedWidth = item->spatium() * 2;
     RectF rect = RectF(0, 0, deadSlappedWidth, item->staff()->height());
     ldata->setBbox(rect);
+    ldata->setPos(PointF());
 
     // fillPath
     {
@@ -1713,11 +1717,6 @@ static void layoutDeadSlapped(const DeadSlapped* item, const LayoutContext&, Dea
         ldata->path1 = path1;
         ldata->path2 = path2;
     }
-}
-
-void TLayout::layout(DeadSlapped* item, LayoutContext& ctx)
-{
-    layoutDeadSlapped(item, ctx, item->mutLayoutData());
 }
 
 static void layoutDynamic(const Dynamic* item, const LayoutContext& ctx, Dynamic::LayoutData* ldata)
