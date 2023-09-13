@@ -174,6 +174,9 @@ public:
     static void colorFromMEI(engraving::EngravingItem* item, const libmei::Element& meiElement);
     static void colorToMEI(const engraving::EngravingItem* item, libmei::Element& meiElement);
 
+    static void colorlineFromMEI(engraving::SLine* line, const libmei::Element& meiElement);
+    static void colorlineToMEI(const engraving::SLine* line, libmei::Element& meiElement);
+
     static void dirFromMEI(engraving::TextBase* textBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning);
     static void dirFromMEI(engraving::TextLineBase* textLineBase, const StringList& meiLines, const libmei::Dir& meiDir, bool& warning);
     static libmei::Dir dirToMEI(const engraving::TextBase* textBase, StringList& meiLines);
