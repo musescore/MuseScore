@@ -69,6 +69,7 @@ Rectangle {
                     { textRole: "FlatButton", componentRole: flatButtonSample },
                     { textRole: "ProgressButton", componentRole: progressButtonSample },
                     { textRole: "RadioButtonGroup + FlatRadioButton", componentRole: flatRadioButtonSample },
+                    { textRole: "DialogButtonBox", componentRole: dialogButtonBoxSample },
                     { textRole: "RoundedRadioButton", componentRole: roundedRadioButtonSample },
                     { textRole: "IncrementalPropertyControl (Hidden icon, Icon left, Icon right)", componentRole: incrementalPropertyControlSample },
                     { textRole: "FlatToggleButton", componentRole: flatToggleButtonSample },
@@ -509,6 +510,50 @@ Rectangle {
                     onToggled: {
                         textButtonList.currentValue = modelData["valueRole"]
                     }
+                }
+            }
+        }
+    }
+
+    Component {
+        id: dialogButtonBoxSample
+
+        Column {
+            spacing: 8
+
+            Row {
+                spacing: 8
+
+                FlatButton {
+                    text: "Windows"
+                    onClicked: {
+                        dialogButtonBox.buttonLayout = ButtonBoxModel.WinLayout
+                    }
+                }
+                FlatButton {
+                    text: "Mac"
+                    onClicked: {
+                        dialogButtonBox.buttonLayout = ButtonBoxModel.MacLayout
+                    }
+                }
+                FlatButton {
+                    text: "Linux"
+                    onClicked: {
+                        dialogButtonBox.buttonLayout = ButtonBoxModel.LinuxLayout
+                    }
+                }
+            }
+
+            ButtonBox {
+                id: dialogButtonBox
+                buttonLayout: ButtonBoxModel.WinLayout
+                FlatButton {
+                    text: qsTr("Save")
+                    buttonRole: ButtonBoxModel.AcceptRole
+                }
+                FlatButton {
+                    text: qsTr("Close")
+                    buttonRole: ButtonBoxModel.DestructiveRole
                 }
             }
         }
