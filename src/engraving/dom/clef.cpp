@@ -162,9 +162,7 @@ EngravingItem* Clef::drop(EditData& data)
 
 void Clef::setSmall(bool val)
 {
-    if (val != m_isSmall) {
-        m_isSmall = val;
-    }
+    m_isSmall = val;
 }
 
 //---------------------------------------------------------

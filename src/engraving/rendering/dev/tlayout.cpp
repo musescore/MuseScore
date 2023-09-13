@@ -226,7 +226,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::CHORDLINE:
         layout(item_cast<const ChordLine*>(item), static_cast<ChordLine::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::CLEF:             layout(item_cast<Clef*>(item), ctx);
+    case ElementType::CLEF:
+        layout(item_cast<const Clef*>(item), static_cast<Clef::LayoutData*>(ldata));
         break;
     case ElementType::CAPO:             layout(item_cast<Capo*>(item), ctx);
         break;
@@ -1538,19 +1539,21 @@ void TLayout::layout(const ChordLine* item, ChordLine::LayoutData* ldata, const 
     }
 }
 
-static void layoutClef(const Clef* item, const LayoutContext&, Clef::LayoutData* ldata)
+void TLayout::layout(const Clef* item, Clef::LayoutData* ldata)
 {
+    LD_INDEPENDENT;
+
     // determine current number of lines and line distance
-    int lines;
-    double lineDist;
+    int lines = 0;
+    double lineDist = 0;
     Segment* clefSeg  = item->segment();
-    int stepOffset;
+    int stepOffset = 0;
 
     // check clef visibility and type compatibility
     if (clefSeg && item->staff()) {
         Fraction tick = clefSeg->tick();
         const StaffType* st = item->staff()->staffType(tick);
-        bool show     = st->genClef();            // check staff type allows clef display
+        bool show = st->genClef();            // check staff type allows clef display
         StaffGroup staffGroup = st->group();
 
         // if not tab, use instrument->useDrumset to set staffGroup (to allow pitched to unpitched in same staff)
@@ -1640,11 +1643,6 @@ static void layoutClef(const Clef* item, const LayoutContext&, Clef::LayoutData*
     double x = item->segment() && item->segment()->rtick().isNotZero() ? -r.right() : 0.0;
     ldata->setPos(PointF(x, yoff * _spatium + (stepOffset * 0.5 * _spatium)));
     ldata->setBbox(r);
-}
-
-void TLayout::layout(Clef* item, LayoutContext& ctx)
-{
-    layoutClef(item, ctx, item->mutLayoutData());
 }
 
 static void layoutCapo(const Capo* item, const LayoutContext& ctx, Capo::LayoutData* ldata)
