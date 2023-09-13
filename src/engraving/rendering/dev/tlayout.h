@@ -45,6 +45,8 @@
 
 #include "../../dom/expression.h"
 
+#include "../../dom/fermata.h"
+
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
@@ -60,7 +62,6 @@ class Beam;
 
 class Chord;
 
-class Fermata;
 class FiguredBassItem;
 class FiguredBass;
 class Fingering;
@@ -205,7 +206,7 @@ public:
 
     static void layout(const Expression* item, Expression::LayoutData* ldata);
 
-    static void layout(Fermata* item, LayoutContext& ctx);
+    static void layout(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(FiguredBassItem* item, LayoutContext& ctx);
     static void layout(FiguredBass* item, LayoutContext& ctx);
     static void layout(Fingering* item, LayoutContext& ctx);
