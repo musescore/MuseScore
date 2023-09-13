@@ -229,7 +229,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::CLEF:
         layout(item_cast<const Clef*>(item), static_cast<Clef::LayoutData*>(ldata));
         break;
-    case ElementType::CAPO:             layout(item_cast<Capo*>(item), ctx);
+    case ElementType::CAPO:
+        layout(item_cast<const Capo*>(item), static_cast<Capo::LayoutData*>(ldata), ctx);
         break;
     case ElementType::DEAD_SLAPPED:     layout(item_cast<DeadSlapped*>(item), ctx);
         break;
@@ -1645,7 +1646,7 @@ void TLayout::layout(const Clef* item, Clef::LayoutData* ldata)
     ldata->setBbox(r);
 }
 
-static void layoutCapo(const Capo* item, const LayoutContext& ctx, Capo::LayoutData* ldata)
+void TLayout::layout(const Capo* item, Capo::LayoutData* ldata, const LayoutContext&)
 {
     //! NOTE Looks like it doesn't belong here
     if (item->shouldAutomaticallyGenerateText() || item->empty()) {
@@ -1659,13 +1660,21 @@ static void layoutCapo(const Capo* item, const LayoutContext& ctx, Capo::LayoutD
         }
     }
 
-    TLayout::layoutTextBase(item, ctx, ldata);
-    Autoplace::autoplaceSegmentElement(item, ldata);
-}
+    if (item->layoutToParentWidth()) {
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
+    }
 
-void TLayout::layout(Capo* item, LayoutContext& ctx)
-{
-    layoutCapo(item, ctx, item->mutLayoutData());
+    TLayout::layoutTextBase(item, ldata);
+
+    if (item->autoplace()) {
+        Segment* s = toSegment(item->explicitParent());
+        Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(s->layoutData()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 static void layoutDeadSlapped(const DeadSlapped* item, const LayoutContext&, DeadSlapped::LayoutData* ldata)
@@ -1724,7 +1733,7 @@ static void layoutDynamic(const Dynamic* item, const LayoutContext& ctx, Dynamic
 
     ldata->setIsSkipDraw(false);
 
-    TLayout::layoutTextBase(item, ctx, ldata);
+    TLayout::layoutTextBase(item, ldata);
 
     Segment* s = item->segment();
     if (!s || (!item->centerOnNotehead() && item->align().horizontal == AlignH::LEFT)) {
@@ -1784,13 +1793,13 @@ void TLayout::layout(Dynamic* item, LayoutContext& ctx)
     layoutDynamic(item, ctx, item->mutLayoutData());
 }
 
-static void layoutExpression(const Expression* item, const LayoutContext& ctx, Expression::LayoutData* ldata)
+static void layoutExpression(const Expression* item, const LayoutContext&, Expression::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
 
-    TLayout::layoutTextBase(item, ctx, ldata);
+    TLayout::layoutTextBase(item, ldata);
 
     Segment* segment = toSegment(item->explicitParent());
 
@@ -2170,7 +2179,7 @@ static void layoutFiguredBass(const FiguredBass* item, const LayoutContext& ctx,
     ldata->setPos(PointF(0.0, y));
 
     // BOUNDING BOX and individual item layout (if required)
-    TLayout::layout1TextBase(item, ctx, ldata);  // prepare structs and data expected by Text methods
+    TLayout::layout1TextBase(item, ldata);  // prepare structs and data expected by Text methods
     // if element could be parsed into items, layout each element
     // Items list will be empty in edit mode (see FiguredBass::startEdit).
     // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
@@ -2191,7 +2200,7 @@ void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
     layoutFiguredBass(item, ctx, item->mutLayoutData());
 }
 
-static void layoutFingering(const Fingering* item, const LayoutContext& ctx, Fingering::LayoutData* ldata)
+static void layoutFingering(const Fingering* item, const LayoutContext&, Fingering::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -2207,7 +2216,7 @@ static void layoutFingering(const Fingering* item, const LayoutContext& ctx, Fin
     }
     ldata->setIsSkipDraw(false);
 
-    TLayout::layoutTextBase(item, ctx, ldata);
+    TLayout::layoutTextBase(item, ldata);
     ldata->setPosY(0.0); // handle placement below
 
     if (item->autoplace() && item->note()) {
@@ -3041,10 +3050,10 @@ void TLayout::layout(Hairpin* item, LayoutContext& ctx)
     layoutTextLineBase(item, ctx);
 }
 
-void TLayout::layout(HarpPedalDiagram* item, LayoutContext& ctx)
+void TLayout::layout(HarpPedalDiagram* item, LayoutContext&)
 {
     item->updateDiagramText();
-    layoutTextBase(item, ctx, item->mutLayoutData());
+    layoutTextBase(item, item->mutLayoutData());
     Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
 }
 
@@ -3238,20 +3247,20 @@ void TLayout::layout(Image* item, LayoutContext& ctx)
     layoutImage(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(InstrumentChange* item, LayoutContext& ctx)
+void TLayout::layout(InstrumentChange* item, LayoutContext&)
 {
-    layoutTextBase(item, ctx, item->mutLayoutData());
+    layoutTextBase(item, item->mutLayoutData());
     Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
 }
 
-void TLayout::layout(InstrumentName* item, LayoutContext& ctx)
+void TLayout::layout(InstrumentName* item, LayoutContext&)
 {
-    layoutTextBase(item, ctx, item->mutLayoutData());
+    layoutTextBase(item, item->mutLayoutData());
 }
 
-void TLayout::layout(Jump* item, LayoutContext& ctx)
+void TLayout::layout(Jump* item, LayoutContext&)
 {
-    layoutTextBase(item, ctx, item->mutLayoutData());
+    layoutTextBase(item, item->mutLayoutData());
     Autoplace::autoplaceMeasureElement(item, item->mutLayoutData());
 }
 
@@ -3610,7 +3619,7 @@ void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 
 static void layoutMarker(const Marker* item, const LayoutContext& ctx, Marker::LayoutData* ldata)
 {
-    TLayout::layoutTextBase(item, ctx, ldata);
+    TLayout::layoutTextBase(item, ldata);
 
     // although normally laid out to parent (measure) width,
     // force to center over barline if left-aligned
@@ -3668,7 +3677,7 @@ void TLayout::layout(MeasureNumber* item, LayoutContext& ctx)
     layoutMeasureNumberBase(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, const LayoutContext& ctx, MeasureNumberBase::LayoutData* ldata)
+void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, const LayoutContext&, MeasureNumberBase::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -3676,7 +3685,7 @@ void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, const Layou
 
     ldata->setPos(PointF());
 
-    layout1TextBase(item, ctx, ldata);
+    layout1TextBase(item, ldata);
 
     if (item->placeBelow()) {
         double yoff = ldata->bbox().height();
@@ -4090,9 +4099,9 @@ void TLayout::layout(PickScrapeSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layout(PlayTechAnnotation* item, LayoutContext& ctx)
+void TLayout::layout(PlayTechAnnotation* item, LayoutContext&)
 {
-    layoutTextBase(item, ctx, item->mutLayoutData());
+    layoutTextBase(item, item->mutLayoutData());
     Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
 }
 
@@ -4523,9 +4532,9 @@ void TLayout::layout(StaffState* item, LayoutContext& ctx)
     layoutStaffState(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(StaffText* item, LayoutContext& ctx)
+void TLayout::layout(StaffText* item, LayoutContext&)
 {
-    layoutTextBase(item, ctx, item->mutLayoutData());
+    layoutTextBase(item, item->mutLayoutData());
     Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
 }
 
@@ -4690,9 +4699,9 @@ void TLayout::layout(StemSlash* item, LayoutContext& ctx)
     layoutStemSlash(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(Sticking* item, LayoutContext& ctx)
+void TLayout::layout(Sticking* item, LayoutContext&)
 {
-    layoutTextBase(item, ctx, item->mutLayoutData());
+    layoutTextBase(item, item->mutLayoutData());
     Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
 }
 
@@ -4783,9 +4792,9 @@ void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
     layoutSystemDivider(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(SystemText* item, LayoutContext& ctx)
+void TLayout::layout(SystemText* item, LayoutContext&)
 {
-    layoutTextBase(item, ctx, item->mutLayoutData());
+    layoutTextBase(item, item->mutLayoutData());
     Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
 }
 
@@ -4885,7 +4894,7 @@ void TLayout::layout(TextBase* item, LayoutContext& ctx)
     layoutItem(item, ctx);
 }
 
-void TLayout::layoutTextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* ldata)
+void TLayout::layoutTextBase(const TextBase* item, TextBase::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -4897,20 +4906,20 @@ void TLayout::layoutTextBase(const TextBase* item, const LayoutContext& ctx, Tex
         ldata->setPosY(item->staff() ? item->staff()->height() : 0.0);
     }
 
-    if (Harmony::classof(item)) {
-        layout1(static_cast<Harmony*>(const_cast<TextBase*>(item)), ctx);
-    } else {
-        layout1TextBase(const_cast<TextBase*>(item), ctx);
+    layout1TextBase(item, ldata);
+}
+
+void TLayout::layoutTextBase(TextBase* item, LayoutContext&)
+{
+    layoutTextBase(item, item->mutLayoutData());
+}
+
+void TLayout::layout1TextBase(const TextBase* item, TextBase::LayoutData* ldata)
+{
+    if (item->explicitParent() && item->layoutToParentWidth()) {
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
     }
-}
 
-void TLayout::layoutTextBase(TextBase* item, LayoutContext& ctx)
-{
-    layoutTextBase(item, ctx, item->mutLayoutData());
-}
-
-void TLayout::layout1TextBase(const TextBase* item, const LayoutContext&, TextBase::LayoutData* ldata)
-{
     if (ldata->layoutInvalid) {
         item->createBlocks(ldata);
     }
@@ -4983,9 +4992,9 @@ void TLayout::layout1TextBase(const TextBase* item, const LayoutContext&, TextBa
     }
 }
 
-void TLayout::layout1TextBase(TextBase* item, const LayoutContext& ctx)
+void TLayout::layout1TextBase(TextBase* item, const LayoutContext&)
 {
-    layout1TextBase(item, ctx, item->mutLayoutData());
+    layout1TextBase(item, item->mutLayoutData());
 }
 
 void TLayout::layout(Text* item, LayoutContext& ctx)
