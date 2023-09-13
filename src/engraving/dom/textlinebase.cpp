@@ -50,6 +50,8 @@ TextLineBaseSegment::TextLineBaseSegment(const ElementType& type, Spanner* sp, S
     m_endText->setParent(this);
     m_text->setFlag(ElementFlag::MOVABLE, false);
     m_endText->setFlag(ElementFlag::MOVABLE, false);
+    m_text->setColor(textLineBase()->lineColor());
+    m_endText->setColor(textLineBase()->lineColor());
 }
 
 TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
@@ -59,6 +61,8 @@ TextLineBaseSegment::TextLineBaseSegment(const TextLineBaseSegment& seg)
     m_endText = seg.m_endText->clone();
     m_text->setParent(this);
     m_endText->setParent(this);
+    m_text->setColor(textLineBase()->lineColor());
+    m_endText->setColor(textLineBase()->lineColor());
     // set the right _text
     renderer()->layoutTextLineBaseSegment(this);
 }
