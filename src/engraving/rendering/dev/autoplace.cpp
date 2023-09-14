@@ -42,8 +42,8 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
     }
 
     if (item->autoplace() && item->explicitParent()) {
-        Segment* s = toSegment(item->explicitParent());
-        Measure* m = s->measure();
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
 
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->layoutData()->isSetPos());
