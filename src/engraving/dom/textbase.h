@@ -327,9 +327,6 @@ public:
     void setFamily(const String& val);
     void setSize(const double& val);
 
-    bool layoutToParentWidth() const { return m_layoutToParentWidth; }
-    void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
-
     virtual void startEdit(EditData&) override;
     virtual bool isEditAllowed(EditData&) const override;
     virtual bool edit(EditData&) override;
@@ -459,6 +456,10 @@ public:
     void layoutFrame();
     void layoutFrame(LayoutData* ldata) const;
 
+    //! NOTE It can only be set for some types of text, see who has the setter.
+    //! At the moment it's: Text, Jump, Marker
+    bool layoutToParentWidth() const { return m_layoutToParentWidth; }
+
 protected:
     TextBase(const ElementType& type, EngravingItem* parent = 0, TextStyleType tid = TextStyleType::DEFAULT,
              ElementFlags = ElementFlag::NOTHING);
@@ -470,6 +471,8 @@ protected:
     bool prepareFormat(const String& token, CharFormat& format);
 
     virtual void commitText();
+
+    bool m_layoutToParentWidth = false;
 
 private:
 
@@ -509,8 +512,6 @@ private:
     bool m_textInvalid = true;
 
     TextStyleType m_textStyleType = TextStyleType::DEFAULT;           // text style id
-
-    bool m_layoutToParentWidth = false;
 
     int m_hexState = -1;
     bool m_primed = 0;

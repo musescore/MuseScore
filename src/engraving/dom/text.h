@@ -43,6 +43,8 @@ public:
 
     static String readXmlText(XmlReader& r, Score* score);
 
+    void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
+
 private:
     friend class Factory;
     Text(EngravingItem* parent, TextStyleType tid = TextStyleType::DEFAULT);

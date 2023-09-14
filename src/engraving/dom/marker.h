@@ -67,6 +67,8 @@ public:
     EngravingItem* prevSegmentElement() override;
     String accessibleInfo() const override;
 
+    void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
+
 private:
     MarkerType _markerType;
     String _label;                 ///< referenced from Jump() element
