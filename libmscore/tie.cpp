@@ -583,7 +583,7 @@ void TieSegment::adjustX()
             }
 
       // ADJUST RIGHT GRIP ----------
-      if (sc && ((spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END))) {
+      if (ec && ((spannerSegmentType() == SpannerSegmentType::SINGLE || spannerSegmentType() == SpannerSegmentType::END))) {
             // grips are in system coordinates, normalize to note position
             QPointF p2 = ups(Grip::END).p + QPointF(system()->pos().x() - en->canvasX(), 0);
             xo = 0;
