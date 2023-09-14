@@ -306,7 +306,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::MARKER:
         layout(item_cast<const Marker*>(item), static_cast<Marker::LayoutData*>(ldata));
         break;
-    case ElementType::MEASURE_NUMBER:   layout(item_cast<MeasureNumber*>(item), ctx);
+    case ElementType::MEASURE_NUMBER:
+        layout(item_cast<const MeasureNumber*>(item), static_cast<MeasureNumber::LayoutData*>(ldata));
         break;
     case ElementType::MEASURE_REPEAT:   layout(item_cast<MeasureRepeat*>(item), ctx);
         break;
@@ -3673,16 +3674,20 @@ void TLayout::layoutMeasureBase(const MeasureBase* item, MeasureBase::LayoutData
     }
 }
 
-void TLayout::layout(MeasureNumber* item, LayoutContext& ctx)
+void TLayout::layout(const MeasureNumber* item, MeasureNumber::LayoutData* ldata)
 {
-    layoutMeasureNumberBase(item, ctx, item->mutLayoutData());
+    LD_CONDITION(item->measure()->layoutData()->isSetBbox());
+
+    layoutMeasureNumberBase(item, ldata);
 }
 
-void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, const LayoutContext&, MeasureNumberBase::LayoutData* ldata)
+void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
+
+    LD_CONDITION(item->measure()->layoutData()->isSetBbox());
 
     ldata->setPos(PointF());
 
@@ -3748,11 +3753,11 @@ void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, const Layou
 
         // if s1/s2 does not exist, it means there is no header/trailer segment. Align with start/end of measure.
         double x1 = s1 ? s1->x() + s1->minRight() : 0;
-        double x2 = s2 ? s2->x() - s2->minLeft() : mea->width();
+        double x2 = s2 ? s2->x() - s2->minLeft() : mea->layoutData()->bbox().width();
 
         ldata->setPosX((x1 + x2) * 0.5);
     } else if (item->hPlacement() == PlacementH::RIGHT) {
-        ldata->setPosX(item->measure()->width());
+        ldata->setPosX(item->measure()->layoutData()->bbox().width());
     }
 }
 
@@ -3891,9 +3896,9 @@ void TLayout::layout(MMRest* item, LayoutContext& ctx)
     layoutMMRest(item, ctx, item->mutLayoutData());
 }
 
-void TLayout::layout(MMRestRange* item, LayoutContext& ctx)
+void TLayout::layout(MMRestRange* item, LayoutContext&)
 {
-    layoutMeasureNumberBase(item, ctx, item->mutLayoutData());
+    layoutMeasureNumberBase(item, item->mutLayoutData());
 }
 
 static void layoutNote(const Note* item, const LayoutContext&, Note::LayoutData* ldata)

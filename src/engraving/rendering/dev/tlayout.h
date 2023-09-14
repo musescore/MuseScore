@@ -66,6 +66,7 @@
 
 #include "../../dom/marker.h"
 #include "../../dom/measurebase.h"
+#include "../../dom/measurenumber.h"
 #include "../../dom/measurenumberbase.h"
 
 #include "../../dom/textbase.h"
@@ -98,7 +99,6 @@ class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
 
-class MeasureNumber;
 class MeasureRepeat;
 class MMRest;
 class MMRestRange;
@@ -244,8 +244,8 @@ public:
     static void layout(const Marker* item, Marker::LayoutData* ldata);
     static void layout(MeasureBase* item, LayoutContext& ctx); // factory
     static void layoutMeasureBase(const MeasureBase* item, MeasureBase::LayoutData* ldata, const LayoutContext& ctx); // base class
-    static void layout(MeasureNumber* item, LayoutContext& ctx);
-    static void layoutMeasureNumberBase(const MeasureNumberBase* item, const LayoutContext& ctx, TextBase::LayoutData* ldata); // base class
+    static void layout(const MeasureNumber* item, MeasureNumber::LayoutData* ldata);
+    static void layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumberBase::LayoutData* ldata); // base class
     static void layout(MeasureRepeat* item, LayoutContext& ctx);
     static void layout(MMRest* item, LayoutContext& ctx);
     static void layout(MMRestRange* item, LayoutContext& ctx);
