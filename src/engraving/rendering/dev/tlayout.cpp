@@ -2619,16 +2619,32 @@ static void layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissando
     offs2 *= -1.0;
     // Look at chord shapes (but don't consider lyrics)
     Shape cr1shape = cr1->shape();
-    mu::remove_if(cr1shape, [](ShapeElement& s) {
-        if (!s.toItem || s.toItem->isLyrics()) {
+
+    // don't consider symbols above and below noteheads
+    double yMin = cr1->upNote()->y() + cr1->upNote()->headHeight();
+    double yMax = cr1->downNote()->y();
+    mu::remove_if(cr1shape, [yMin, yMax](ShapeElement& s) {
+        if (!s.toItem || s.toItem->isLyrics()
+            || (s.toItem->isSymbol() && (s.toItem->y() < yMin || s.toItem->y() > yMax))) {
             return true;
         } else {
             return false;
         }
     });
+    Shape cr2shape = cr2->shape();
+    double yMin2 = cr2->upNote()->y() + cr2->upNote()->headHeight();
+    double yMax2 = cr2->downNote()->y();
+    mu::remove_if(cr2shape, [yMin2, yMax2](ShapeElement& s) {
+        if (!s.toItem || (s.toItem->isSymbol() && (s.toItem->y() < yMin2 || s.toItem->y() > yMax2))) {
+            return true;
+        } else {
+            return false;
+        }
+    });
+
     offs1.rx() += cr1shape.right() - anchor1->pos().x();
     if (!cr2->staff()->isTabStaff(cr2->tick())) {
-        offs2.rx() -= cr2->shape().left() + anchor2->pos().x();
+        offs2.rx() -= cr2shape.left() + anchor2->pos().x();
     }
     // Add note distance
     const double glissNoteDist = 0.25 * item->spatium(); // TODO: style
