@@ -1785,6 +1785,27 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 }
             }
 
+            // Create space between ledger lines and stems
+            // Above stave
+            if (!bottomUpNote->chord()->noStem() && bottomUpNote->chord()->stem()) {
+                int bottomUpStemLen = bottomUpNote->chord()->stem()->length() / sp * 2;
+                int firstLedgerAbove = -2;
+                if (topDownNote->line() < -1 && topDownNote->line() < bottomUpNote->line()
+                    && bottomUpNote->line() - bottomUpStemLen <= firstLedgerAbove) {
+                    upOffset += 0.15 * sp;
+                }
+            }
+
+            // Below stave
+            if (!topDownNote->chord()->noStem() && topDownNote->chord()->stem()) {
+                int topDownStemLen = topDownNote->chord()->stem()->length() / sp * 2;
+                int firstLedgerBelow = staff->lines(bottomUpNote->tick()) * 2;
+                if (bottomUpNote->line() > staff->lines(bottomUpNote->tick()) * 2 - 1 && topDownNote->line() < bottomUpNote->line()
+                    && topDownNote->line() + topDownStemLen >= firstLedgerBelow) {
+                    upOffset += 0.15 * sp;
+                }
+            }
+
             // adjust for dots
             if ((upDots && !downDots) || (downDots && !upDots)) {
                 // only one sets of dots
