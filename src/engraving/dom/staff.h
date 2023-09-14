@@ -157,6 +157,7 @@ public:
             return _defaultClefType;
         }
     }
+
     void setDefaultClefType(const ClefTypeList& l) { _defaultClefType = l; }
     ClefType clef(const Fraction&) const;
     Fraction nextClefTick(const Fraction&) const;

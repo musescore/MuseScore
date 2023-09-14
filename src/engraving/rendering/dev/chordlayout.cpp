@@ -698,7 +698,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     double mag            = (staffType->isSmall() ? ctx.conf().styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
     double _spatium       = ctx.conf().spatium() * mag;
     double _lineDist       = ((st && st->clefType(Fraction()) == ClefType::JIANPU)
-                        && (st->staffType() && st->staffType()->lines() == 0)) ? 0.5 : _spatium * staffType->lineDistance().val() / 2;
+                        && (st->staffType() && st->staffType()->lines() == 0)) ? 0.5 : _spatium* staffType->lineDistance().val() / 2;
     const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
     const ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);

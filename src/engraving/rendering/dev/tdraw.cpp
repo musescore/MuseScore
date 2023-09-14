@@ -627,7 +627,8 @@ static void drawTips(const BarLine* item, const BarLine::LayoutData* data, Paint
             item->drawSymbol(SymId::reversedBracketTop, painter, PointF(x - item->symWidth(SymId::reversedBracketTop), data->y1 - step));
         }
         if (item->isBottom()) {
-            item->drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - item->symWidth(SymId::reversedBracketBottom), data->y2 + step));
+            item->drawSymbol(SymId::reversedBracketBottom, painter, PointF(x - item->symWidth(
+                                                                               SymId::reversedBracketBottom), data->y2 + step));
         }
     } else {
         if (item->isTop()) {
@@ -842,10 +843,10 @@ void TDraw::draw(const Beam* item, Painter* painter)
             double y1 = bs1->line.y1() / 1.65 + symHeight / 2.55;
             painter->drawPolygon(
                 PolygonF({
-                    PointF(bs1->line.x1() - symWidth / 2.0, y1 - ww),
-                    PointF(bs1->line.x2() + symWidth / 2.0, y1 - ww),
-                    PointF(bs1->line.x2() + symWidth / 2.0, y1 + ww),
-                    PointF(bs1->line.x1() - symWidth / 2.0, y1 + ww),
+                PointF(bs1->line.x1() - symWidth / 2.0, y1 - ww),
+                PointF(bs1->line.x2() + symWidth / 2.0, y1 - ww),
+                PointF(bs1->line.x2() + symWidth / 2.0, y1 + ww),
+                PointF(bs1->line.x1() - symWidth / 2.0, y1 + ww),
                 }),
                 draw::FillRule::OddEvenFill);
         }
@@ -2005,7 +2006,6 @@ void TDraw::draw(const KeySig* item, Painter* painter)
         painter->save();
         painter->scale(scale, scale);
 
-
         if (item->concertKey() == Key::C) {
             keysigSymbols = 1;
             x = spacing * 2.25;
@@ -2111,17 +2111,17 @@ void TDraw::draw(const KeySig* item, Painter* painter)
             item->drawSymbol(SymId::keysig_1_Jianpu, painter, PointF(x, y));
             x = spacing;
             y = symHeight / 2.775;
-            item->drawSymbol(SymId::keysig_Equal_Jianpu, painter, PointF(x ,y));
+            item->drawSymbol(SymId::keysig_Equal_Jianpu, painter, PointF(x, y));
         }
         for (int i = 0; i < keysigFlatSymbol; ++i) {
             x = spacing * 2.25;
             y = -step * 1.5;
-            item->drawSymbol(SymId::accidentalFlat, painter, PointF(x ,y));
+            item->drawSymbol(SymId::accidentalFlat, painter, PointF(x, y));
         }
         for (int i = 0; i < keysigSharpSymbol; ++i) {
             x = spacing * 2.25;
             y = -step * 2.5;
-            item->drawSymbol(SymId::accidentalSharp, painter, PointF(x ,y));
+            item->drawSymbol(SymId::accidentalSharp, painter, PointF(x, y));
         }
 
         painter->restore();
@@ -2865,40 +2865,31 @@ void TDraw::draw(const Rest* item, Painter* painter)
 
         if (item->durationType().type() == DurationType::V_EIGHTH) {
             restEighthSymbols = 1;
-
         } else if (item->durationType().type() == DurationType::V_16TH) {
             restNoteSymbols = 1;
             beamSymbol = 2;
-
         } else if (item->durationType().type() == DurationType::V_32ND) {
             restNoteSymbols = 1;
             beamSymbol = 3;
-
         } else if (item->durationType().type() == DurationType::V_64TH) {
             restNoteSymbols = 1;
             beamSymbol = 4;
-
         } else if (item->durationType().type() == DurationType::V_128TH) {
             restNoteSymbols = 1;
             beamSymbol = 5;
-
         } else if (item->durationType().type() == DurationType::V_256TH) {
             restNoteSymbols = 1;
             beamSymbol = 6;
-
         } else if (item->durationType().type() == DurationType::V_512TH) {
             restNoteSymbols = 1;
             beamSymbol = 7;
-
         } else if (item->durationType().type() == DurationType::V_1024TH) {
             restNoteSymbols = 1;
             beamSymbol = 8;
-
         } else if (item->durationType().type() == DurationType::V_HALF) {
             spacing = _spatium * 2;
             restNoteSymbols = 2;
         } else if (item->durationType().type() == DurationType::V_QUARTER) {
-            qDebug()<< "4:";
             restNoteSymbols = 1;
         } else if (item->durationType().type() == DurationType::V_WHOLE) {
             restNoteSymbols = 4;
@@ -3471,7 +3462,6 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
         double x = 0;
         double y = 0.0;
         x = 0.0;
-
 
         if (item->numerator() == 2 && item->denominator() == 2) {
             y = -step;

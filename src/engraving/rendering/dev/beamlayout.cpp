@@ -113,7 +113,6 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
                 RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
                 item->addbbox(r);
             }
-
         } else {
             double lw2 = item->beamWidth() / 2.0;
 
@@ -695,7 +694,7 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
 
             if ((stf && stf->clefType(Fraction()) == ClefType::JIANPU)
                 && (cr->staffType() && cr->staffType()->lines() == 0)) {
-                if (beam && cr && cr->durationType().type() == DurationType::V_EIGHTH){
+                if (beam && cr && cr->durationType().type() == DurationType::V_EIGHTH) {
                     beam = 0;
                 }
             }
