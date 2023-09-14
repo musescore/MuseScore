@@ -52,6 +52,7 @@
 
 #include "../../dom/harppedaldiagram.h"
 #include "../../dom/harmony.h"
+#include "../../dom/hook.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -77,7 +78,6 @@ class GradualTempoChange;
 class HairpinSegment;
 class Hairpin;
 class HarmonicMarkSegment;
-class Hook;
 
 class Image;
 class InstrumentChange;
@@ -220,7 +220,7 @@ public:
     static void layout(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata);
     static void layout(HarmonicMarkSegment* item, LayoutContext& ctx);
     static void layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutContext& ctx);
-    static void layout(Hook* item, LayoutContext& ctx);
+    static void layout(const Hook* item, Hook::LayoutData* ldata);
 
     static void layout(Image* item, LayoutContext& ctx);
     static void layout(InstrumentChange* item, LayoutContext& ctx);

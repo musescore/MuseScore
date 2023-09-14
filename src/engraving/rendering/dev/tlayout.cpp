@@ -273,7 +273,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::HARMONIC_MARK_SEGMENT: layout(item_cast<HarmonicMarkSegment*>(item), ctx);
         break;
-    case ElementType::HOOK:             layout(item_cast<Hook*>(item), ctx);
+    case ElementType::HOOK:
+        layout(item_cast<const Hook*>(item), static_cast<Hook::LayoutData*>(ldata));
         break;
     case ElementType::IMAGE:            layout(item_cast<Image*>(item), ctx);
         break;
@@ -3172,9 +3173,9 @@ void TLayout::layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutCont
     ldata->setPos(positionPoint);
 }
 
-void TLayout::layout(Hook* item, LayoutContext&)
+void TLayout::layout(const Hook* item, Hook::LayoutData* ldata)
 {
-    Hook::LayoutData* ldata = item->mutLayoutData();
+    LD_INDEPENDENT;
     ldata->setBbox(item->symBbox(item->sym()));
 }
 
