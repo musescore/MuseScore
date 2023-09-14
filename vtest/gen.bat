@@ -24,7 +24,7 @@ set SRC=bravura-mmrest,gonville-mmrest, ^
  emmentaler-text-3,gonville-text-3,bravura-text-3,musejazz-text-3, ^
  frametext,ottava,bend-1, ^
  barline-1,barline-2,instrument-1,symbol-1, ^
- slurs-1,slurs-2,slurs-3,slurs-4,hairpins-1,pedal-1,line-1,line-2,line-3,line-4,line-5,line-6,line-7,gliss-1,gliss-2,gliss-3, ^
+ slurs-1,slurs-2,slurs-3,slurs-4,hairpins-1,pedal-1,line-1,line-2,line-3,line-4,line-5,line-6,line-7,line-colored,line-dashed,gliss-1,gliss-2,gliss-3, ^
  chord-layout-1,chord-layout-2,chord-layout-3,chord-layout-4,chord-layout-5, ^
  chord-layout-6,chord-layout-7,chord-layout-8,chord-layout-9,chord-layout-10, ^
  chord-layout-11,chord-layout-12,chord-layout-13,chord-layout-14,chord-layout-15,chord-layout-16,chord-layout-17, ^

@@ -272,6 +272,7 @@ void TextLineBaseSegment::layout()
             }
       _text->setPlacement(Placement::ABOVE);
       _text->setTrack(track());
+      _text->setColor(textLineBase()->lineColor());
       _text->layout();
 
       if ((isSingleType() || isEndType())) {
@@ -286,6 +287,7 @@ void TextLineBaseSegment::layout()
             _endText->setStrike(tl->endFontStyle() & FontStyle::Strike);
             _endText->setPlacement(Placement::ABOVE);
             _endText->setTrack(track());
+            _endText->setColor(textLineBase()->lineColor());
             _endText->layout();
             }
       else {
