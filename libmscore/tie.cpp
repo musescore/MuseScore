@@ -502,12 +502,15 @@ void TieSegment::finalizeSegment()
 
 void TieSegment::adjustX()
       {
-      qreal offsetMargin = spatium() * 0.25;
-      qreal collisionYMargin = spatium() * 0.25;
       Note* sn = tie()->startNote();
       Note* en = tie()->endNote();
       Chord* sc = sn ? sn->chord() : nullptr;
       Chord* ec = en ? en->chord() : nullptr;
+
+      bool beginGrace = (sn && sn->noteType() != NoteType::NORMAL);
+      bool endGrace = (en && en->noteType() != NoteType::NORMAL);
+      qreal offsetMargin = !(beginGrace || endGrace) ? spatium() * 0.25 : spatium() * 0.10;
+      qreal collisionYMargin = spatium() * 0.25;
 
       qreal xo;
 
@@ -575,7 +578,7 @@ void TieSegment::adjustX()
                               }
                         }
                   }
-            xo += offsetMargin;
+            xo = (beginGrace || endGrace ? 0.0 : xo) + offsetMargin;
             ups(Grip::START).p += QPointF(xo, 0);
             }
 
@@ -630,7 +633,7 @@ void TieSegment::adjustX()
                               }
                         }
                   }
-            xo -= offsetMargin;
+            xo = (beginGrace || endGrace ? 0.0 : xo) - offsetMargin;
             ups(Grip::END).p += QPointF(xo, 0);
             }
       }
