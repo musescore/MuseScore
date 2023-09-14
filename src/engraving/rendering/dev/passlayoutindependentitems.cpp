@@ -45,6 +45,7 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::CLEF:
     case ElementType::DEAD_SLAPPED:
     case ElementType::HARMONY:
+    case ElementType::HOOK:
         TLayout::layoutItem(item, ctx);
     default:
         break;
