@@ -26,7 +26,6 @@
 #include <set>
 
 #include "containers.h"
-#include "realfn.h"
 #include "translation.h"
 
 #include "actionicon.h"
@@ -123,14 +122,14 @@ void Rest::setOffset(const mu::PointF& o)
 
     LayoutData* ldata = mutLayoutData();
 
-    if (ldata->sym == SymId::restWhole && (line <= -2 || line >= 3)) {
-        ldata->sym = SymId::restWholeLegerLine;
-    } else if (ldata->sym == SymId::restWholeLegerLine && (line > -2 && line < 4)) {
-        ldata->sym = SymId::restWhole;
-    } else if (ldata->sym == SymId::restHalf && (line <= -3 || line >= 3)) {
-        ldata->sym = SymId::restHalfLegerLine;
-    } else if (ldata->sym == SymId::restHalfLegerLine && (line > -3 && line < 3)) {
-        ldata->sym = SymId::restHalf;
+    if (ldata->sym() == SymId::restWhole && (line <= -2 || line >= 3)) {
+        ldata->setSym(SymId::restWholeLegerLine);
+    } else if (ldata->sym() == SymId::restWholeLegerLine && (line > -2 && line < 4)) {
+        ldata->setSym(SymId::restWhole);
+    } else if (ldata->sym() == SymId::restHalf && (line <= -3 || line >= 3)) {
+        ldata->setSym(SymId::restHalfLegerLine);
+    } else if (ldata->sym() == SymId::restHalfLegerLine && (line > -3 && line < 3)) {
+        ldata->setSym(SymId::restHalf);
     }
 
     EngravingItem::setOffset(o);
@@ -321,21 +320,21 @@ SymId Rest::getSymbol(DurationType type, int line, int lines) const
 
 void Rest::updateSymbol(int line, int lines, LayoutData* ldata) const
 {
-    ldata->sym = getSymbol(durationType().type(), line, lines);
+    ldata->setSym(getSymbol(durationType().type(), line, lines));
 }
 
 double Rest::symWidthNoLedgerLines(LayoutData* ldata) const
 {
-    if (ldata->sym == SymId::restHalfLegerLine) {
+    if (ldata->sym() == SymId::restHalfLegerLine) {
         return symWidth(SymId::restHalf);
     }
-    if (ldata->sym == SymId::restWholeLegerLine) {
+    if (ldata->sym() == SymId::restWholeLegerLine) {
         return symWidth(SymId::restWhole);
     }
-    if (ldata->sym == SymId::restDoubleWholeLegerLine) {
+    if (ldata->sym() == SymId::restDoubleWholeLegerLine) {
         return symWidth(SymId::restDoubleWhole);
     }
-    return symWidth(ldata->sym);
+    return symWidth(ldata->sym());
 }
 
 //---------------------------------------------------------
@@ -562,7 +561,7 @@ int Rest::computeNaturalLine(int lines) const
 
 double Rest::upPos() const
 {
-    return symBbox(layoutData()->sym).y();
+    return symBbox(layoutData()->sym()).y();
 }
 
 //---------------------------------------------------------
@@ -571,7 +570,7 @@ double Rest::upPos() const
 
 double Rest::downPos() const
 {
-    return symBbox(layoutData()->sym).y() + symHeight(layoutData()->sym);
+    return symBbox(layoutData()->sym()).y() + symHeight(layoutData()->sym());
 }
 
 //---------------------------------------------------------
@@ -935,7 +934,7 @@ Shape Rest::shape() const
     Shape shape;
     if (!m_gap) {
         shape.add(ChordRest::shape());
-        shape.add(symBbox(layoutData()->sym), this);
+        shape.add(symBbox(layoutData()->sym()), this);
         for (NoteDot* dot : m_dots) {
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
         }

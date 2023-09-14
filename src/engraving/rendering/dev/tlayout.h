@@ -48,6 +48,7 @@
 #include "../../dom/fermata.h"
 #include "../../dom/figuredbass.h"
 #include "../../dom/fingering.h"
+#include "../../dom/fret.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -64,7 +65,6 @@ class Beam;
 
 class Chord;
 
-class FretDiagram;
 class FretCircle;
 
 class Glissando;
@@ -208,7 +208,7 @@ public:
     static void layout(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(const Fingering* item, Fingering::LayoutData* ldata);
-    static void layout(FretDiagram* item, LayoutContext& ctx);
+    static void layout(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(FretCircle* item, LayoutContext& ctx);
 
     static void layout(Glissando* item, LayoutContext& ctx);

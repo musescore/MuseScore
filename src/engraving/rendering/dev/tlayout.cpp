@@ -250,7 +250,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::FINGERING:
         layout(item_cast<const Fingering*>(item), static_cast<Fingering::LayoutData*>(ldata));
         break;
-    case ElementType::FRET_DIAGRAM:     layout(item_cast<FretDiagram*>(item), ctx);
+    case ElementType::FRET_DIAGRAM:
+        layout(item_cast<const FretDiagram*>(item), static_cast<FretDiagram::LayoutData*>(ldata), ctx);
         break;
     case ElementType::GLISSANDO:        layout(item_cast<Glissando*>(item), ctx);
         break;
@@ -2372,11 +2373,11 @@ void TLayout::layout(const Fingering* item, Fingering::LayoutData* ldata)
     Autoplace::setOffsetChanged(item, ldata, false);
 }
 
-static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx, FretDiagram::LayoutData* ldata)
+void TLayout::layout(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx)
 {
-    double _spatium  = item->spatium() * item->userMag();
-    ldata->stringLw = _spatium * 0.08;
-    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : _spatium * 0.2);
+    double spatium  = item->spatium() * item->userMag();
+    ldata->stringLw = spatium * 0.08;
+    ldata->nutLw = ((item->fretOffset() || !item->showNut()) ? ldata->stringLw : spatium * 0.2);
     ldata->stringDist = ctx.conf().styleMM(Sid::fretStringSpacing) * item->userMag();
     ldata->fretDist = ctx.conf().styleMM(Sid::fretFretSpacing) * item->userMag();
     ldata->markerSize = ldata->stringDist * .8;
@@ -2418,14 +2419,15 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
     }
 
     // We need to get the width of the notehead/rest in order to position the fret diagram correctly
-    Segment* pSeg = toSegment(item->explicitParent());
+    Segment* pSeg = item->segment();
     double noteheadWidth = 0;
     if (pSeg->isChordRestType()) {
         staff_idx_t idx = item->staff()->idx();
         for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
             if (e->isRest()) {
-                Rest* r = toRest(e);
-                noteheadWidth = item->symWidth(r->layoutData()->sym);
+                const Rest* r = toRest(e);
+                LD_CONDITION(r->layoutData()->isSetSym());
+                noteheadWidth = item->symWidth(r->layoutData()->sym());
                 break;
             } else if (e->isNote()) {
                 Note* n = toNote(e);
@@ -2443,12 +2445,15 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
     }
     ldata->setPos((noteheadWidth - mainWidth) / 2, -(h + item->styleP(Sid::fretY)));
 
-    Autoplace::autoplaceSegmentElement(item, ldata);
-
-    // don't display harmony in palette
-    if (!item->explicitParent()) {
-        return;
+    if (item->autoplace()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(s->layoutData()->isSetPos());
     }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 
     Harmony* harmony = item->harmony();
     if (harmony) {
@@ -2477,11 +2482,6 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
             ss->skyline().add(r);
         }
     }
-}
-
-void TLayout::layout(FretDiagram* item, LayoutContext& ctx)
-{
-    layoutFretDiagram(item, ctx, item->mutLayoutData());
 }
 
 static void layoutFretCircle(const FretCircle* item, const LayoutContext&, FretCircle::LayoutData* ldata)
@@ -4258,11 +4258,11 @@ static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutD
     int wholeRestOffset = item->computeWholeRestOffset(voiceOffset, lines);
     int finalLine = naturalLine + voiceOffset + wholeRestOffset;
 
-    ldata->sym = item->getSymbol(item->durationType().type(), finalLine + userLine, lines);
+    ldata->setSym(item->getSymbol(item->durationType().type(), finalLine + userLine, lines));
 
     ldata->setPosY(finalLine * lineDist * _spatium);
     if (!item->shouldNotBeDrawn()) {
-        ldata->setBbox(item->symBbox(ldata->sym));
+        ldata->setBbox(item->symBbox(ldata->sym()));
     }
     layoutRestDots(item, ctx, ldata);
 }

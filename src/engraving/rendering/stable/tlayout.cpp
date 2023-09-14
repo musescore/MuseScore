@@ -40,7 +40,6 @@
 #include "../dom/arpeggio.h"
 #include "../dom/articulation.h"
 
-#include "../dom/bagpembell.h"
 #include "../dom/barline.h"
 #include "../dom/beam.h"
 #include "../dom/bend.h"
@@ -2174,7 +2173,7 @@ static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx,
         for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
             if (e->isRest()) {
                 Rest* r = toRest(e);
-                noteheadWidth = item->symWidth(r->layoutData()->sym);
+                noteheadWidth = item->symWidth(r->layoutData()->sym());
                 break;
             } else if (e->isNote()) {
                 Note* n = toNote(e);
@@ -4003,11 +4002,11 @@ static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutD
     int wholeRestOffset = item->computeWholeRestOffset(voiceOffset, lines);
     int finalLine = naturalLine + voiceOffset + wholeRestOffset;
 
-    ldata->sym = item->getSymbol(item->durationType().type(), finalLine + userLine, lines);
+    ldata->setSym(item->getSymbol(item->durationType().type(), finalLine + userLine, lines));
 
     ldata->setPosY(finalLine * lineDist * _spatium);
     if (!item->shouldNotBeDrawn()) {
-        ldata->setBbox(item->symBbox(ldata->sym));
+        ldata->setBbox(item->symBbox(ldata->sym()));
     }
     layoutRestDots(item, ctx, ldata);
 }
