@@ -1076,7 +1076,7 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
     }
     setElementPropertyFlags(na, Pid::PLACEMENT, direction);
     if (cr->segment() == nullptr && cr->isGrace()) {
-        cr->el().push_back(na);           // store for later move to segment
+        cr->addFermata(na);           // store for later move to segment
     } else {
         cr->segment()->add(na);
     }
@@ -2101,7 +2101,7 @@ static void addGraceChordsBefore(Chord* c, GraceChordList& gcl)
         for (EngravingItem* e : gc->el()) {
             if (e->isFermata()) {
                 c->segment()->add(e);
-                gc->el().remove(e);
+                gc->removeFermata(toFermata(e));
                 break;                          // out of the door, line on the left, one cross each
             }
         }

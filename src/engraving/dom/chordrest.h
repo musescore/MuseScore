@@ -28,6 +28,8 @@
 #include "durationelement.h"
 #include "types/types.h"
 
+#include "fermata.h"
+
 namespace mu::engraving {
 enum class CrossMeasure : signed char {
     UNKNOWN = -1,
@@ -147,8 +149,12 @@ public:
     void removeDeleteBeam(bool beamed);
     void replaceBeam(Beam* newBeam);
 
-    ElementList& el() { return m_el; }
     const ElementList& el() const { return m_el; }
+
+    //! TODO Look like a hack, see using
+    void addFermata(Fermata* f) { addEl(f); }
+    void removeFermata(Fermata* f) { removeEl(f); }
+    //! --------------------------------
 
     Slur* slur(const ChordRest* secondChordRest = nullptr) const;
 
@@ -196,6 +202,10 @@ public:
     void setTabDur(TabDurationSymbol* s) { m_tabDur = s; }
 
 protected:
+
+    void addEl(EngravingItem* e) { m_el.push_back(e); }
+    bool removeEl(EngravingItem* e) { return m_el.remove(e); }
+    void clearEls() { m_el.clear(); }
 
     std::vector<Lyrics*> m_lyrics;
     TabDurationSymbol* m_tabDur = nullptr;  // stores a duration symbol in tablature staves

@@ -47,7 +47,6 @@
 #include "part.h"
 #include "score.h"
 #include "segment.h"
-#include "slur.h"
 #include "staff.h"
 #include "stafftype.h"
 #include "stem.h"
@@ -691,7 +690,7 @@ void Chord::add(EngravingItem* e)
     case ElementType::STRETCHED_BEND:
     case ElementType::CHORDLINE:
     case ElementType::FRET_CIRCLE:
-        el().push_back(e);
+        addEl(e);
         break;
     case ElementType::STEM_SLASH:
         assert(!m_stemSlash);
@@ -762,7 +761,7 @@ void Chord::remove(EngravingItem* e)
                 note->removeSpannerFor(s);
             }
             if (StretchedBend* stretchedBend = note->stretchedBend()) {
-                el().remove(stretchedBend);
+                removeEl(stretchedBend);
             }
         } else {
             LOGD("Chord::remove() note %p not found!", e);
@@ -809,7 +808,7 @@ void Chord::remove(EngravingItem* e)
     // fallthrough
     case ElementType::CHORDLINE:
     case ElementType::FRET_CIRCLE:
-        el().remove(e);
+        removeEl(e);
         break;
     case ElementType::CHORD:
     {
