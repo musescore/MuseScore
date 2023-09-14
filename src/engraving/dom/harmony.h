@@ -157,9 +157,6 @@ public:
 
     const std::vector<TextSegment*>& textList() const { return m_textList; }
 
-    double harmonyHeight() const { return m_harmonyHeight; }
-    void setHarmonyHeight(double h) { m_harmonyHeight = h; }
-
     void afterRead();
     String harmonyName() const;
     void render();
@@ -201,6 +198,21 @@ public:
     bool isDrawEditMode() const { return m_isDrawEditMode; }
     void setIsDrawEditMode(bool val) { m_isDrawEditMode = val; }
 
+    struct LayoutData : public TextBase::LayoutData {
+        bool isSetHarmonyHeight() const { return m_harmonyHeight.has_value(); }
+        double harmonyHeight() const { return m_harmonyHeight.value(LD_ACCESS::CHECK); }
+        void setHarmonyHeight(double h) { m_harmonyHeight.set_value(h); }
+
+    private:
+        ld_field<double> m_harmonyHeight = { "harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
+    };
+    DECLARE_LAYOUTDATA_METHODS(Harmony);
+
+    //! --- DEPRECATED ---
+    double harmonyHeight() const { return layoutData()->harmonyHeight(); }
+    void setHarmonyHeight(double h) { mutLayoutData()->setHarmonyHeight(h); }
+    //! ------------------
+
 private:
 
     void determineRootBaseSpelling();
@@ -225,7 +237,6 @@ private:
     mutable ParsedChord* m_parsedForm = nullptr;   // parsed form of chord
     bool m_isMisspelled = false; // show spell check warning
     HarmonyType m_harmonyType = HarmonyType::STANDARD;   // used to control rendering, transposition, export, etc.
-    double m_harmonyHeight = 0.0;       // used for calculating the height is frame while editing.
 
     mutable RealizedHarmony m_realizedHarmony; // the realized harmony used for playback
 
