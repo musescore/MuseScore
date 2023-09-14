@@ -303,7 +303,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::LYRICSLINE_SEGMENT: layout(item_cast<LyricsLineSegment*>(item), ctx);
         break;
-    case ElementType::MARKER:           layout(item_cast<Marker*>(item), ctx);
+    case ElementType::MARKER:
+        layout(item_cast<const Marker*>(item), static_cast<Marker::LayoutData*>(ldata));
         break;
     case ElementType::MEASURE_NUMBER:   layout(item_cast<MeasureNumber*>(item), ctx);
         break;
@@ -3250,9 +3251,7 @@ void TLayout::layout(const InstrumentName* item, InstrumentName::LayoutData* lda
 
 void TLayout::layout(const Jump* item, Jump::LayoutData* ldata)
 {
-    if (item->layoutToParentWidth()) {
-        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
-    }
+    LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
 
     layoutTextBase(item, ldata);
 
@@ -3616,23 +3615,26 @@ void TLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     LyricsLayout::layout(item, ctx);
 }
 
-static void layoutMarker(const Marker* item, const LayoutContext& ctx, Marker::LayoutData* ldata)
+void TLayout::layout(const Marker* item, Marker::LayoutData* ldata)
 {
+    LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
+
     TLayout::layoutTextBase(item, ldata);
 
     // although normally laid out to parent (measure) width,
     // force to center over barline if left-aligned
+    if (item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
+        ldata->moveX(-ldata->bbox().width() * 0.5);
+    }
 
-    if (!ctx.conf().isPaletteMode() && item->layoutToParentWidth() && item->align() == AlignH::LEFT) {
-        ldata->moveX(-item->width() * 0.5);
+    if (item->autoplace()) {
+        const Measure* m = toMeasure(item->explicitParent());
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(ldata->isSetBbox());
+        LD_CONDITION(m->layoutData()->isSetPos());
     }
 
     Autoplace::autoplaceMeasureElement(item, ldata);
-}
-
-void TLayout::layout(Marker* item, LayoutContext& ctx)
-{
-    layoutMarker(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(MeasureBase* item, LayoutContext& ctx)
