@@ -51,6 +51,7 @@
 #include "../../dom/fret.h"
 
 #include "../../dom/harppedaldiagram.h"
+#include "../../dom/harmony.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -76,7 +77,6 @@ class GradualTempoChange;
 class HairpinSegment;
 class Hairpin;
 class HarmonicMarkSegment;
-class Harmony;
 class Hook;
 
 class Image;
@@ -219,8 +219,7 @@ public:
     static void layout(Hairpin* item, LayoutContext& ctx);
     static void layout(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata);
     static void layout(HarmonicMarkSegment* item, LayoutContext& ctx);
-    static void layout(Harmony* item, LayoutContext& ctx);
-    static void layout1(Harmony* item, const LayoutContext& ctx);
+    static void layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutContext& ctx);
     static void layout(Hook* item, LayoutContext& ctx);
 
     static void layout(Image* item, LayoutContext& ctx);
@@ -336,8 +335,6 @@ private:
     friend class SlurTieLayout;
 
     static void layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem::LayoutData* ldata, const LayoutContext& ctx);
-
-    static PointF calculateBoundingRect(Harmony* item, const LayoutContext& ctx);
 
     static void keySigAddLayout(KeySig* item, LayoutContext& ctx, SymId sym, int line);
 

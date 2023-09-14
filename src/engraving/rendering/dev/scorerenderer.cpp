@@ -84,7 +84,7 @@ void ScoreRenderer::layoutText1(TextBase* item, bool base)
     if (base) {
         TLayout::layout1TextBase(item, ctx);
     } else if (Harmony::classof(item)) {
-        TLayout::layout1(static_cast<Harmony*>(item), ctx);
+        TLayout::layout(static_cast<Harmony*>(item), static_cast<Harmony*>(item)->mutLayoutData(), ctx);
     } else {
         TLayout::layout1TextBase(item, ctx);
     }

@@ -268,7 +268,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::HARP_DIAGRAM:
         layout(item_cast<const HarpPedalDiagram*>(item), static_cast<HarpPedalDiagram::LayoutData*>(ldata));
         break;
-    case ElementType::HARMONY:          layout(item_cast<Harmony*>(item), ctx);
+    case ElementType::HARMONY:
+        layout(item_cast<const Harmony*>(item), static_cast<Harmony::LayoutData*>(ldata), ctx);
         break;
     case ElementType::HARMONIC_MARK_SEGMENT: layout(item_cast<HarmonicMarkSegment*>(item), ctx);
         break;
@@ -3068,7 +3069,6 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
 {
     HarmonicMarkSegment::LayoutData* ldata = item->mutLayoutData();
     const StaffType* stType = item->staffType();
-
     if (stType
         && (!stType->isTabStaff()
             || stType->isHiddenElementOnTab(ctx.conf().style(), Sid::harmonicMarkShowTabCommon, Sid::harmonicMarkShowTabSimple))) {
@@ -3082,23 +3082,17 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layout(Harmony* item, LayoutContext& ctx)
+void TLayout::layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {
-        item->setPos(0.0, 0.0);
-        item->setOffset(0.0, 0.0);
-        layout1(item, ctx);
-        return;
+        ldata->setPos(0.0, 0.0);
+        const_cast<Harmony*>(item)->setOffset(0.0, 0.0);
     }
-    //if (isStyled(Pid::OFFSET))
-    //      setOffset(propertyDefault(Pid::OFFSET).value<PointF>());
 
-    layout1(item, ctx);
-}
+    if (item->explicitParent() && item->layoutToParentWidth()) {
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
+    }
 
-void TLayout::layout1(Harmony* item, const LayoutContext& ctx)
-{
-    Harmony::LayoutData* ldata = item->mutLayoutData();
     if (ldata->layoutInvalid) {
         item->createBlocks(ldata);
     }
@@ -3107,105 +3101,104 @@ void TLayout::layout1(Harmony* item, const LayoutContext& ctx)
         ldata->blocks.push_back(TextBlock());
     }
 
-    auto positionPoint = calculateBoundingRect(item, ctx);
+    auto calculateBoundingRect = [](const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx) -> PointF
+    {
+        const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->height() : 0.0;
+        const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
+                                ? toFretDiagram(item->explicitParent())
+                                : nullptr;
+
+        const double cw = item->symWidth(SymId::noteheadBlack);
+
+        double newPosX = 0.0;
+        double newPosY = 0.0;
+
+        if (item->textList().empty()) {
+            layout1TextBase(item, ldata);
+
+            if (fd) {
+                newPosY = ldata->pos().y();
+            } else {
+                newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? item->harmonyHeight() - ldata->bbox().height() : 0.0);
+            }
+        } else {
+            RectF bb;
+            for (TextSegment* ts : item->textList()) {
+                bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
+            }
+
+            double xx = 0.0;
+            switch (item->align().horizontal) {
+            case AlignH::LEFT:
+                xx = -bb.left();
+                break;
+            case AlignH::HCENTER:
+                xx = -(bb.center().x());
+                break;
+            case AlignH::RIGHT:
+                xx = -bb.right();
+                break;
+            }
+
+            double yy = -bb.y();      // Align::TOP
+            if (item->align() == AlignV::VCENTER) {
+                yy = -bb.y() / 2.0;
+            } else if (item->align() == AlignV::BASELINE) {
+                yy = 0.0;
+            } else if (item->align() == AlignV::BOTTOM) {
+                yy = -bb.height() - bb.y();
+            }
+
+            if (fd) {
+                newPosY = ypos - yy - ctx.conf().styleMM(Sid::harmonyFretDist);
+            } else {
+                newPosY = ypos;
+            }
+
+            for (TextSegment* ts : item->textList()) {
+                ts->offset = PointF(xx, yy);
+            }
+
+            ldata->setBbox(bb.translated(xx, yy));
+            ldata->setHarmonyHeight(ldata->bbox().height());
+        }
+
+        if (fd) {
+            switch (item->align().horizontal) {
+            case AlignH::LEFT:
+                newPosX = 0.0;
+                break;
+            case AlignH::HCENTER:
+                newPosX = fd->centerX();
+                break;
+            case AlignH::RIGHT:
+                newPosX = fd->rightX();
+                break;
+            }
+        } else {
+            switch (item->align().horizontal) {
+            case AlignH::LEFT:
+                newPosX = 0.0;
+                break;
+            case AlignH::HCENTER:
+                newPosX = cw * 0.5;
+                break;
+            case AlignH::RIGHT:
+                newPosX = cw;
+                break;
+            }
+        }
+
+        return PointF(newPosX, newPosY);
+    };
+
+    auto positionPoint = calculateBoundingRect(item, ldata, ctx);
 
     if (item->hasFrame()) {
-        item->layoutFrame();
+        item->layoutFrame(ldata);
     }
 
-    item->setPos(positionPoint);
-}
-
-PointF TLayout::calculateBoundingRect(Harmony* item, const LayoutContext& ctx)
-{
-    const Harmony::LayoutData* ldata = item->layoutData();
-    const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->height() : 0.0;
-    const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
-                            ? toFretDiagram(item->explicitParent())
-                            : nullptr;
-
-    const double cw = item->symWidth(SymId::noteheadBlack);
-
-    double newPosX = 0.0;
-    double newPosY = 0.0;
-
-    if (item->textList().empty()) {
-        layout1TextBase(item, ctx);
-
-        if (fd) {
-            newPosY = ldata->pos().y();
-        } else {
-            newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? item->harmonyHeight() - ldata->bbox().height() : 0.0);
-        }
-    } else {
-        RectF bb;
-        for (TextSegment* ts : item->textList()) {
-            bb.unite(ts->tightBoundingRect().translated(ts->x, ts->y));
-        }
-
-        double xx = 0.0;
-        switch (item->align().horizontal) {
-        case AlignH::LEFT:
-            xx = -bb.left();
-            break;
-        case AlignH::HCENTER:
-            xx = -(bb.center().x());
-            break;
-        case AlignH::RIGHT:
-            xx = -bb.right();
-            break;
-        }
-
-        double yy = -bb.y();      // Align::TOP
-        if (item->align() == AlignV::VCENTER) {
-            yy = -bb.y() / 2.0;
-        } else if (item->align() == AlignV::BASELINE) {
-            yy = 0.0;
-        } else if (item->align() == AlignV::BOTTOM) {
-            yy = -bb.height() - bb.y();
-        }
-
-        if (fd) {
-            newPosY = ypos - yy - ctx.conf().styleMM(Sid::harmonyFretDist);
-        } else {
-            newPosY = ypos;
-        }
-
-        for (TextSegment* ts : item->textList()) {
-            ts->offset = PointF(xx, yy);
-        }
-
-        item->setbbox(bb.translated(xx, yy));
-        item->setHarmonyHeight(ldata->bbox().height());
-    }
-
-    if (fd) {
-        switch (item->align().horizontal) {
-        case AlignH::LEFT:
-            newPosX = 0.0;
-            break;
-        case AlignH::HCENTER:
-            newPosX = fd->centerX();
-            break;
-        case AlignH::RIGHT:
-            newPosX = fd->rightX();
-            break;
-        }
-    } else {
-        switch (item->align().horizontal) {
-        case AlignH::LEFT:
-            newPosX = 0.0;
-            break;
-        case AlignH::HCENTER:
-            newPosX = cw * 0.5;
-            break;
-        case AlignH::RIGHT:
-            newPosX = cw;
-            break;
-        }
-    }
-
-    return PointF(newPosX, newPosY);
+    ldata->setPos(positionPoint);
 }
 
 void TLayout::layout(Hook* item, LayoutContext&)
