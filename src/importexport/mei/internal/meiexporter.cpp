@@ -959,7 +959,7 @@ bool MeiExporter::writeArtic(const Articulation* articulation)
     }
 
     pugi::xml_node articNode = m_currentNode.append_child();
-    libmei::Artic meiArtic; // = Convert::articToMEI(articulation);
+    libmei::Artic meiArtic = Convert::articToMEI(articulation);
     meiArtic.Write(articNode, this->getXmlIdFor(articulation, 'a'));
 
     return true;

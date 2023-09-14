@@ -242,6 +242,87 @@ libmei::data_STAFFREL Convert::anchorToMEI(engraving::ArticulationAnchor anchor)
     }
 }
 
+void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::Artic& meiArtic, bool& warning)
+{
+}
+
+libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
+{
+    libmei::Artic meiArtic;
+
+    // @artic
+    switch (articulation->symId()) {
+    case (engraving::SymId::articAccentAbove):
+    case (engraving::SymId::articAccentBelow): meiArtic.SetArtic({ libmei::ARTICULATION_acc });
+        break;
+    case (engraving::SymId::articStaccatoAbove):
+    case (engraving::SymId::articStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc });
+        break;
+    case (engraving::SymId::articStaccatissimoAbove):
+    case (engraving::SymId::articStaccatissimoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacciss });
+        break;
+    case (engraving::SymId::articTenutoAbove):
+    case (engraving::SymId::articTenutoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_ten });
+        break;
+    case (engraving::SymId::articTenutoStaccatoAbove):
+    case (engraving::SymId::articTenutoStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc, libmei::ARTICULATION_ten });
+        break;
+    case (engraving::SymId::articMarcatoAbove):
+    case (engraving::SymId::articMarcatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_marc });
+        break;
+    case (engraving::SymId::articAccentStaccatoAbove):
+    case (engraving::SymId::articAccentStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc, libmei::ARTICULATION_acc });
+        break;
+    case (engraving::SymId::articTenutoAccentAbove):
+    case (engraving::SymId::articTenutoAccentBelow): meiArtic.SetArtic({ libmei::ARTICULATION_ten, libmei::ARTICULATION_acc });
+        break;
+    case (engraving::SymId::articMarcatoStaccatoAbove):
+    case (engraving::SymId::articMarcatoStaccatoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stacc, libmei::ARTICULATION_marc });
+        break;
+    case (engraving::SymId::articMarcatoTenutoAbove):
+    case (engraving::SymId::articMarcatoTenutoBelow): meiArtic.SetArtic({ libmei::ARTICULATION_ten, libmei::ARTICULATION_marc });
+        break;
+    case (engraving::SymId::articStaccatissimoStrokeAbove):
+    case (engraving::SymId::articStaccatissimoStrokeBelow): meiArtic.SetArtic({ libmei::ARTICULATION_stroke });
+        break;
+    case (engraving::SymId::articStaccatissimoWedgeAbove):
+    case (engraving::SymId::articStaccatissimoWedgeBelow): meiArtic.SetArtic({ libmei::ARTICULATION_spicc });
+        break;
+    case (engraving::SymId::articSoftAccentAbove):
+    case (engraving::SymId::articSoftAccentBelow): meiArtic.SetArtic({ libmei::ARTICULATION_acc_soft });
+        break;
+    case (engraving::SymId::stringsUpBow):
+    case (engraving::SymId::stringsUpBowTurned): meiArtic.SetArtic({ libmei::ARTICULATION_upbow });
+        break;
+    case (engraving::SymId::stringsDownBow):
+    case (engraving::SymId::stringsDownBowTurned): meiArtic.SetArtic({ libmei::ARTICULATION_dnbow });
+        break;
+    case (engraving::SymId::pluckedSnapPizzicatoAbove):
+    case (engraving::SymId::pluckedSnapPizzicatoBelow):   meiArtic.SetArtic({ libmei::ARTICULATION_snap });
+        break;
+    // Values without down or invert
+    case (engraving::SymId::brassMuteOpen): meiArtic.SetArtic({ libmei::ARTICULATION_open });
+        break;
+    case (engraving::SymId::brassMuteClosed): meiArtic.SetArtic({ libmei::ARTICULATION_stop });
+        break;
+    case (engraving::SymId::stringsHarmonic): meiArtic.SetArtic({ libmei::ARTICULATION_harm });
+        break;
+
+    default:
+        break;
+    }
+
+    // @place
+    if (articulation->propertyFlags(engraving::Pid::ARTICULATION_ANCHOR) == engraving::PropertyFlags::UNSTYLED) {
+        meiArtic.SetPlace(Convert::anchorToMEI(articulation->anchor()));
+    }
+    
+    // @color
+    Convert::colorToMEI(articulation, meiArtic);
+
+    return meiArtic;
+}
+
 engraving::BarLineType Convert::barlineFromMEI(const libmei::data_BARRENDITION meiBarline, bool& warning)
 {
     warning = false;
