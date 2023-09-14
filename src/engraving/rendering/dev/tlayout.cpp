@@ -290,7 +290,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::KEYSIG:
         layout(item_cast<const KeySig*>(item), static_cast<KeySig::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::LAYOUT_BREAK:     layout(item_cast<LayoutBreak*>(item), ctx);
+    case ElementType::LAYOUT_BREAK:
+        layout(item_cast<const LayoutBreak*>(item), static_cast<LayoutBreak::LayoutData*>(ldata));
         break;
     case ElementType::LET_RING:         layout(item_cast<LetRing*>(item), ctx);
         break;
@@ -3542,9 +3543,9 @@ void TLayout::layout(const KeySig* item, KeySig::LayoutData* ldata, const Layout
     }
 }
 
-void TLayout::layout(LayoutBreak* item, LayoutContext&)
+void TLayout::layout(const LayoutBreak* item, LayoutBreak::LayoutData* ldata)
 {
-    LayoutBreak::LayoutData* ldata = item->mutLayoutData();
+    LD_INDEPENDENT;
     double lw = item->lineWidth();
     ldata->setBbox(item->iconBorderRect().adjusted(-lw, -lw, lw, lw));
 }

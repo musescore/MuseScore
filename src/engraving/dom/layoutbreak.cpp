@@ -70,7 +70,7 @@ LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     _startWithLongNames     = lb._startWithLongNames;
     _startWithMeasureOne    = lb._startWithMeasureOne;
     _firstSystemIndentation = lb._firstSystemIndentation;
-    layout0();
+    init();
 }
 
 void LayoutBreak::setParent(MeasureBase* parent)
@@ -82,7 +82,7 @@ void LayoutBreak::setParent(MeasureBase* parent)
 //   layout0
 //---------------------------------------------------------
 
-void LayoutBreak::layout0()
+void LayoutBreak::init()
 {
     double _spatium = spatium();
     double w = _spatium * 2.5;
@@ -156,7 +156,7 @@ void LayoutBreak::layout0()
 void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 {
     _layoutBreakType = val;
-    layout0();
+    init();
 }
 
 //---------------------------------------------------------
@@ -166,7 +166,7 @@ void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 void LayoutBreak::spatiumChanged(double, double)
 {
     m_lw = spatium() * 0.3;
-    layout0();
+    init();
 }
 
 //---------------------------------------------------------
