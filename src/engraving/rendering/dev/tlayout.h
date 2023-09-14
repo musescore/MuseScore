@@ -54,6 +54,8 @@
 #include "../../dom/harmony.h"
 #include "../../dom/hook.h"
 
+#include "../../dom/image.h"
+
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
@@ -79,7 +81,6 @@ class HairpinSegment;
 class Hairpin;
 class HarmonicMarkSegment;
 
-class Image;
 class InstrumentChange;
 class InstrumentName;
 class Jump;
@@ -222,7 +223,7 @@ public:
     static void layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutContext& ctx);
     static void layout(const Hook* item, Hook::LayoutData* ldata);
 
-    static void layout(Image* item, LayoutContext& ctx);
+    static void layout(const Image* item, Image::LayoutData* ldata);
     static void layout(InstrumentChange* item, LayoutContext& ctx);
     static void layout(InstrumentName* item, LayoutContext& ctx);
 
