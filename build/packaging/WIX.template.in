@@ -2,15 +2,14 @@
 
 <?include "cpack_variables.wxi"?>
 
-<?define ProdName="@MUSESCORE_NAME_VERSION@"?>
-<?define ShortProdName="$(var.CPACK_PACKAGE_NAME)$(var.CPACK_PACKAGE_VERSION_MAJOR)@MUSESCORE_VERSION_LABEL@"?>
-<?define ExeName="$(var.ShortProdName).exe"?>
+<?define ProdName="$(var.MUSESCORE_NAME_VERSION)"?>
+<?define ShortProdName="$(var.CPACK_PACKAGE_NAME)$(var.CPACK_PACKAGE_VERSION_MAJOR)$(var.MUSESCORE_VERSION_LABEL)"?>
+<?define ExeName="$(var.CPACK_PACKAGE_NAME)$(var.CPACK_PACKAGE_VERSION_MAJOR).exe"?>
 <?define ExeKey="$(var.ShortProdName).exe"?>
-<?define ExeId="CM_FP_bin.$(var.ShortProdName).exe"?>
 <?define RegistryRoot="HKMU"?> <!--HKCU / HKLM-->
 
-<?if "@MUSESCORE_VERSION_LABEL@" != ""?>
-<?define ProgIdSuffix="$(var.CPACK_PACKAGE_VERSION_MAJOR).@MUSESCORE_VERSION_LABEL@"?>
+<?if "$(var.MUSESCORE_VERSION_LABEL)" != ""?>
+<?define ProgIdSuffix="$(var.CPACK_PACKAGE_VERSION_MAJOR).$(var.MUSESCORE_VERSION_LABEL)"?>
 <?else?>
 <?define ProgIdSuffix="$(var.CPACK_PACKAGE_VERSION_MAJOR)"?>
 <?endif?>
@@ -65,7 +64,7 @@
         </UI>
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOXTEXT" Value="Launch $(var.ProdName)" />
         <Property Id="WIXUI_EXITDIALOGOPTIONALCHECKBOX" Value="1" />
-        <Property Id="WixShellExecTarget" Value="[#CM_FP_bin.$(var.ShortProdName).exe]" />
+        <Property Id="WixShellExecTarget" Value="[#CM_FP_bin.$(var.ExeName)]" />
         <CustomAction Id="LaunchApplication" BinaryKey="WixCA" DllEntry="WixShellExec" Impersonate="yes" />
 
         <Component Id="RegisterTypes" Directory="TARGETDIR" Guid="76707452-ee26-4f9a-9650-2cf2c70a6448">
@@ -153,12 +152,12 @@
                 <RegistryValue Key="DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),1" Type="string" />
                 <RegistryValue Key="shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
             </RegistryKey>
-            <?if "@MUSESCORE_UNSTABLE@" = ""?>
+            <?ifndef MUSESCORE_UNSTABLE?>
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscz\CurVer" Value="MuseScore.mscz.$(var.ProgIdSuffix)" Type="string" />
             <?endif?>
 
             <RegistryKey Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\.mscz">
-                <?if "@MUSESCORE_UNSTABLE@" = ""?>
+                <?ifndef MUSESCORE_UNSTABLE?>
                 <RegistryValue Value="MuseScore.mscz.$(var.ProgIdSuffix)" Type="string" />
                 <?endif?>
                 <RegistryValue Name="Content Type" Value="application/x-musescore" Type="string" />
@@ -170,12 +169,12 @@
                 <RegistryValue Key="DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),2" Type="string" />
                 <RegistryValue Key="shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
             </RegistryKey>
-            <?if "@MUSESCORE_UNSTABLE@" = ""?>
+            <?ifndef MUSESCORE_UNSTABLE?>
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscx\CurVer" Value="MuseScore.mscx.$(var.ProgIdSuffix)" Type="string" />
             <?endif?>
 
             <RegistryKey Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\.mscx">
-                <?if "@MUSESCORE_UNSTABLE@" = ""?>
+                <?ifndef MUSESCORE_UNSTABLE?>
                 <RegistryValue Value="MuseScore.mscx.$(var.ProgIdSuffix)" Type="string" />
                 <?endif?>
                 <RegistryValue Name="Content Type" Value="application/x-musescore+xml" Type="string" />
@@ -187,12 +186,12 @@
                 <RegistryValue Key="DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),1" Type="string" />
                 <RegistryValue Key="shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
             </RegistryKey>
-            <?if "@MUSESCORE_UNSTABLE@" = ""?>
+            <?ifndef MUSESCORE_UNSTABLE?>
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.mscs\CurVer" Value="MuseScore.mscs.$(var.ProgIdSuffix)" Type="string" />
             <?endif?>
 
             <RegistryKey Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\.mscs">
-                <?if "@MUSESCORE_UNSTABLE@" = ""?>
+                <?ifndef MUSESCORE_UNSTABLE?>
                 <RegistryValue Value="MuseScore.mscs.$(var.ProgIdSuffix)" Type="string" />
                 <?endif?>
                 <RegistryValue Name="Content Type" Value="application/x-musescore+xml" Type="string" />
@@ -204,7 +203,7 @@
                 <RegistryValue Key="DefaultIcon" Value="[INSTALL_ROOT]bin\$(var.ExeName),1" Type="string" />
                 <RegistryValue Key="shell\open\command" Value="&quot;[INSTALL_ROOT]bin\$(var.ExeName)&quot; &quot;%1&quot;" Type="string" />
             </RegistryKey>
-            <?if "@MUSESCORE_UNSTABLE@" = ""?>
+            <?ifndef MUSESCORE_UNSTABLE?>
             <RegistryValue Root="$(var.RegistryRoot)" Key="SOFTWARE\Classes\MuseScore.Url.musescore\CurVer" Value="MuseScore.Url.musescore.$(var.ProgIdSuffix)" Type="string" />
             <?endif?>
 
@@ -218,5 +217,8 @@
             <!-- Step 3: Tell WiX to install the shortcut and types -->
             <ComponentRef Id="RegisterTypes" />
         </FeatureRef>
+
+        <?include "properties.wxi"?>
+        <?include "product_fragment.wxi"?>
     </Product>
 </Wix>
