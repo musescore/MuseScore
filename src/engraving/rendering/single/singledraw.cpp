@@ -2021,7 +2021,7 @@ void SingleDraw::draw(const Rest* item, Painter* painter)
     }
     const Rest::LayoutData* ldata = item->layoutData();
     painter->setPen(item->curColor());
-    item->drawSymbol(ldata->sym, painter);
+    item->drawSymbol(ldata->sym(), painter);
 }
 
 void SingleDraw::draw(const ShadowNote* item, Painter* painter)

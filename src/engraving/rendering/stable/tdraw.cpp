@@ -2378,7 +2378,7 @@ void TDraw::draw(const Rest* item, Painter* painter)
     const Rest::LayoutData* ldata = item->layoutData();
 
     painter->setPen(item->curColor());
-    item->drawSymbol(ldata->sym, painter);
+    item->drawSymbol(ldata->sym(), painter);
 }
 
 //! NOTE May be removed later (should be only single mode)
