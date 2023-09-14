@@ -284,7 +284,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::INSTRUMENT_NAME:
         layout(item_cast<const InstrumentName*>(item), static_cast<InstrumentName::LayoutData*>(ldata));
         break;
-    case ElementType::JUMP:             layout(item_cast<Jump*>(item), ctx);
+    case ElementType::JUMP:
+        layout(item_cast<const Jump*>(item), static_cast<Jump::LayoutData*>(ldata));
         break;
     case ElementType::KEYSIG:           layout(item_cast<KeySig*>(item), ctx);
         break;
@@ -3245,10 +3246,22 @@ void TLayout::layout(const InstrumentName* item, InstrumentName::LayoutData* lda
     layoutTextBase(item, ldata);
 }
 
-void TLayout::layout(Jump* item, LayoutContext&)
+void TLayout::layout(const Jump* item, Jump::LayoutData* ldata)
 {
-    layoutTextBase(item, item->mutLayoutData());
-    Autoplace::autoplaceMeasureElement(item, item->mutLayoutData());
+    if (item->layoutToParentWidth()) {
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
+    }
+
+    layoutTextBase(item, ldata);
+
+    if (item->autoplace()) {
+        const Measure* m = toMeasure(item->explicitParent());
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(ldata->isSetBbox());
+        LD_CONDITION(m->layoutData()->isSetPos());
+    }
+
+    Autoplace::autoplaceMeasureElement(item, ldata);
 }
 
 static void keySigAddLayout(const KeySig* item, const LayoutContext& ctx, SymId sym, int line, KeySig::LayoutData* ldata)
