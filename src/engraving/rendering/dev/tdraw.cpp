@@ -847,7 +847,7 @@ void TDraw::draw(const Beam* item, Painter* painter)
                 PointF(bs1->line.x2() + symWidth / 2.0, y1 - ww),
                 PointF(bs1->line.x2() + symWidth / 2.0, y1 + ww),
                 PointF(bs1->line.x1() - symWidth / 2.0, y1 + ww),
-              }),
+            }),
                 draw::FillRule::OddEvenFill);
         }
         return;
