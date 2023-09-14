@@ -218,7 +218,8 @@ void BeamTremoloLayout::offsetBeamWithAnchorShortening(std::vector<ChordRest*> c
 
 void BeamTremoloLayout::extendStem(Chord* chord, double addition)
 {
-    if ((chord->staff() && chord->staff()->clefType(Fraction()) == ClefType::JIANPU) && (chord->staffType() && chord->staffType()->lines() == 0)) {
+    if ((chord->staff() && chord->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (chord->staffType() && chord->staffType()->lines() == 0)) {
         return;
     }
 
@@ -866,7 +867,8 @@ int BeamTremoloLayout::computeDesiredSlant(int startNote, int endNote, int middl
 {
     Chord* startChord = toChord(m_elements.front());
 
-    if ((startChord->staff() && startChord->staff()->clefType(Fraction()) == ClefType::JIANPU) && (startChord->staffType() && startChord->staffType()->lines() == 0)) {
+    if ((startChord->staff() && startChord->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (startChord->staffType() && startChord->staffType()->lines() == 0)) {
         return 0;
     }
 
@@ -1029,7 +1031,8 @@ double BeamTremoloLayout::chordBeamAnchorX(const ChordRest* cr, ChordBeamAnchorT
     double pagePosX = m_trem ? m_trem->pagePos().x() : m_beam->pagePos().x();
     double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
 
-    if ((cr->staff() && cr->staff()->clefType(Fraction()) == ClefType::JIANPU) && (cr->staffType() && cr->staffType()->lines() == 0)) {
+    if ((cr->staff() && cr->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (cr->staffType() && cr->staffType()->lines() == 0)) {
         double symWidth = cr->symWidth(SymId::keysig_1_Jianpu);
         return cr->pagePos().x() - pagePosX + symWidth / 5.0 * 2.15;
     }
@@ -1083,7 +1086,8 @@ double BeamTremoloLayout::chordBeamAnchorY(const ChordRest* cr) const
 {
     const Chord* chord = toChord(cr);
 
-    if ((chord->staff() && chord->staff()->clefType(Fraction()) == ClefType::JIANPU) && (chord->staffType() && chord->staffType()->lines() == 0)) {
+    if ((chord->staff() && chord->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (chord->staffType() && chord->staffType()->lines() == 0)) {
         Note* note = chord->downNote();
         PointF position = note->pagePos();
         return position.y() - 0.000001;

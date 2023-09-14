@@ -337,7 +337,8 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
     ups(Grip::START).p = p1;
     ups(Grip::END).p = p2;
 
-    if ((sc->staff() && sc->staff()->clefType(Fraction()) == ClefType::JIANPU) && (sc->staffType() && sc->staffType()->lines() == 0)) {
+    if ((sc->staff() && sc->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (sc->staffType() && sc->staffType()->lines() == 0)) {
         double symHeight = sc->symHeight(SymId::keysig_1_Jianpu) * 0.75;
         if (tie()) {
             setPos(x(), 0.0);
@@ -835,7 +836,8 @@ void Tie::calculateDirection()
     Measure* m1 = c1->measure();
     Measure* m2 = c2->measure();
 
-    if ((c1->staff() && c1->staff()->clefType(Fraction()) == ClefType::JIANPU) && (c1->staffType() && c1->staffType()->lines() == 0)) {
+    if ((c1->staff() && c1->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (c1->staffType() && c1->staffType()->lines() == 0)) {
         m_up = true;
         return;
     }

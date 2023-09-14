@@ -148,13 +148,12 @@ public:
 
     ClefList& clefList() { return clefs; }
     ClefTypeList clefType(const Fraction&) const;
-    ClefTypeList defaultClefType() const {
+    ClefTypeList defaultClefType() const
+    {
         if ((staffType() && staffType()->type() == StaffTypes::JIANPU)
             || (staffType() && staffType()->xmlName() == "stdJianpu")) {
             return ClefTypeList(ClefType::JIANPU);
-        }
-        else
-        {
+        } else {
             return _defaultClefType;
         }
     }

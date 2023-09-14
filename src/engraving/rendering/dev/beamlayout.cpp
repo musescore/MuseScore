@@ -96,7 +96,8 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
         }
         layout2(item, ctx, crl, st, static_cast<int>(n));
 
-        if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+            && (item->staffType() && item->staffType()->lines() == 0)) {
             double symWidth = item->symWidth(SymId::keysig_1_Jianpu);
             double symHeight = item->symHeight(SymId::keysig_1_Jianpu);
             double lw2 = item->beamWidth() / 6.0;
@@ -173,7 +174,8 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
         return;
     }
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         item->setUp(item->beamDirection() == DirectionV::DOWN);
         item->setSlope(0.0);
         item->setCross(false);
@@ -691,7 +693,8 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 continue;
             }
 
-            if ((stf && stf->clefType(Fraction()) == ClefType::JIANPU) && (cr->staffType() && cr->staffType()->lines() == 0)) {
+            if ((stf && stf->clefType(Fraction()) == ClefType::JIANPU)
+                && (cr->staffType() && cr->staffType()->lines() == 0)) {
                 if (beam && cr && cr->durationType().type() == DurationType::V_EIGHTH){
                     beam = 0;
                 }
@@ -1157,7 +1160,8 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
     const bool lastUp = endCr->up();
     bool overallUp = item->up();
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         overallUp = true;
     } else if (isFirstSubgroup == isLastSubgroup) {
         // this subgroup is either the only one in the beam, or in the middle
@@ -1249,7 +1253,8 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         ++(b->above ? beamsAbove : beamsBelow);
     }
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         return;
     }
 
@@ -1302,7 +1307,8 @@ void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest*
     // how many beams past level 0 (i.e. beams on the other side of level 0 for this subgroup)
     int extraBeamAdjust = 0;
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         const int upValue = -1;
 
         const double verticalOffset = item->beamDist() * (level - extraBeamAdjust) * upValue;

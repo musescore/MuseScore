@@ -603,7 +603,8 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
     }
 
     double step = 0.0;
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.25;
         step = (symHeight - y1l);
     }
@@ -615,7 +616,8 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
 static void drawTips(const BarLine* item, const BarLine::LayoutData* data, Painter* painter, bool reversed, double x)
 {
     double step = 0.0;
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.725;
         step = (symHeight - data->y2);
     }
@@ -647,7 +649,8 @@ void TDraw::draw(const BarLine* item, Painter* painter)
     }
 
     double step = 0.0;
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double symHeight = item->symHeight(SymId::keysig_1_Jianpu) * 0.725;
         step = (symHeight - data->y2);
     }
@@ -830,7 +833,8 @@ void TDraw::draw(const Beam* item, Painter* painter)
     painter->setBrush(mu::draw::Brush(item->curColor()));
     painter->setNoPen();
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double ww = item->beamWidth() / 6.0;
         double symWidth = item->symWidth(SymId::keysig_1_Jianpu);
         double symHeight = item->symHeight(SymId::keysig_1_Jianpu);
@@ -1848,7 +1852,8 @@ void TDraw::draw(const Hook* item, Painter* painter)
 
     painter->setPen(item->curColor());
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double symHeight = item->symHeight(SymId::keysig_1_Jianpu);
         double step = symHeight / 5;
         double desiredSymbolSize = 25.0;
@@ -1981,7 +1986,8 @@ void TDraw::draw(const KeySig* item, Painter* painter)
 
     painter->setPen(item->curColor());
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double _spatium = item->spatium();
         double symHeight = item->symHeight(SymId::keysig_1_Jianpu);
         double step = symHeight / 5.0;
@@ -2109,12 +2115,12 @@ void TDraw::draw(const KeySig* item, Painter* painter)
         }
         for (int i = 0; i < keysigFlatSymbol; ++i) {
             x = spacing * 2.25;
-            y = - step * 1.5;
+            y = -step * 1.5;
             item->drawSymbol(SymId::accidentalFlat, painter, PointF(x ,y));
         }
         for (int i = 0; i < keysigSharpSymbol; ++i) {
             x = spacing * 2.25;
-            y = - step * 2.5;
+            y = -step * 2.5;
             item->drawSymbol(SymId::accidentalSharp, painter, PointF(x ,y));
         }
 
@@ -2461,7 +2467,8 @@ void TDraw::draw(const Note* item, Painter* painter)
             painter->restore();
         }
 
-        if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+        if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+            && (item->staffType() && item->staffType()->lines() == 0)) {
             double _spatium = item->spatium();
             double symHeight = item->symHeight(SymId::keysig_1_Jianpu);
             double symWidth = item->symWidth(SymId::keysig_1_Jianpu);
@@ -2503,7 +2510,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                 || item->tpc() == Tpc::TPC_C_SS || item->tpc() == Tpc::TPC_C_SSS) {
                 y = symHeight / 2.0;
                 item->drawSymbol(SymId::noteDoJianpu, painter, PointF(x, y));
-            } else if (item->tpc() == Tpc::TPC_D_B  ||  item->tpc() == Tpc::TPC_D  ||  item->tpc() == Tpc::TPC_D_S
+            } else if (item->tpc() == Tpc::TPC_D_B || item->tpc() == Tpc::TPC_D || item->tpc() == Tpc::TPC_D_S
                        || item->tpc() == Tpc::TPC_D_BB || item->tpc() == Tpc::TPC_D_BBB
                        || item->tpc() == Tpc::TPC_D_SS || item->tpc() == Tpc::TPC_D_SSS) {
                 y = symHeight / 2.0;
@@ -2550,7 +2557,7 @@ void TDraw::draw(const Note* item, Painter* painter)
 
             for (int i = 0; i < pitchDotSymbolsUp; ++i) {
                 x = symWidth / 3.0;
-                y = - (symHeight / 2.0 + step * 0.75);
+                y = -(symHeight / 2.0 + step * 0.75);
                 y -= i * (step * 2.5);
                 item->drawSymbol(SymId::dotJianpu, painter, PointF(x, y));
             }
@@ -2582,7 +2589,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                 x = symWidth / 3.0;
                 item->drawSymbol(SymId::dotJianpu, painter, PointF(x, y));
                 if (i < pitchDotSymbolsDown - 1) {
-                    y += step * 1.25;;
+                    y += step * 1.25;
                 }
             }
 
@@ -2594,8 +2601,8 @@ void TDraw::draw(const Note* item, Painter* painter)
                 || (item->tpc() == Tpc::TPC_E_B)
                 || (item->tpc() == Tpc::TPC_F_B)
                 || (item->tpc() == Tpc::TPC_G_B)) {
-                x = - spacing * 0.4;
-                y = - step * 4.75;
+                x = -spacing * 0.4;
+                y = -step * 4.75;
                 item->drawSymbol(SymId::accidentalFlat, painter, PointF(x, y));
             } else if ((item->tpc() == Tpc::TPC_A_BB)
                        || (item->tpc() == Tpc::TPC_B_BB)
@@ -2604,8 +2611,8 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_E_BB)
                        || (item->tpc() == Tpc::TPC_F_BB)
                        || (item->tpc() == Tpc::TPC_G_BB)) {
-                x = - spacing * 1.07;
-                y = - step * 4.75;
+                x = -spacing * 1.07;
+                y = -step * 4.75;
                 item->drawSymbol(SymId::accidentalDoubleFlat, painter, PointF(x, y));
             } else if ((item->tpc() == Tpc::TPC_A_BBB)
                        || (item->tpc() == Tpc::TPC_B_BBB)
@@ -2614,8 +2621,8 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_E_BBB)
                        || (item->tpc() == Tpc::TPC_F_BBB)
                        || (item->tpc() == Tpc::TPC_G_BBB)) {
-                x = - spacing * 1.75;
-                y = - step * 4.75;
+                x = -spacing * 1.75;
+                y = -step * 4.75;
                 item->drawSymbol(SymId::accidentalTripleFlat, painter, PointF(x, y));
             } else if ((item->tpc() == Tpc::TPC_A_S)
                        || (item->tpc() == Tpc::TPC_B_S)
@@ -2624,8 +2631,8 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_E_S)
                        || (item->tpc() == Tpc::TPC_F_S)
                        || (item->tpc() == Tpc::TPC_G_S)) {
-                x = - spacing * 0.67;
-                y = - step * 5.75;
+                x = -spacing * 0.67;
+                y = -step * 5.75;
                 item->drawSymbol(SymId::accidentalSharp, painter, PointF(x, y));
             } else if ((item->tpc() == Tpc::TPC_A_SS)
                        || (item->tpc() == Tpc::TPC_B_SS)
@@ -2634,8 +2641,8 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_E_SS)
                        || (item->tpc() == Tpc::TPC_F_SS)
                        || (item->tpc() == Tpc::TPC_G_SS)) {
-                x = - spacing * 0.75;
-                y = - step * 6.0;
+                x = -spacing * 0.75;
+                y = -step * 6.0;
                 item->drawSymbol(SymId::accidentalDoubleSharp, painter, PointF(x, y));
             } else if ((item->tpc() == Tpc::TPC_A_SSS)
                        || (item->tpc() == Tpc::TPC_B_SSS)
@@ -2644,8 +2651,8 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_E_SSS)
                        || (item->tpc() == Tpc::TPC_F_SSS)
                        || (item->tpc() == Tpc::TPC_G_SSS)) {
-                x = - spacing * 2.0;
-                y = - step * 6.0;
+                x = -spacing * 2.0;
+                y = -step * 6.0;
                 item->drawSymbol(SymId::accidentalTripleSharp, painter, PointF(x, y));
             }
 
@@ -2658,7 +2665,7 @@ void TDraw::draw(const Note* item, Painter* painter)
 
             for (int i = 0; i < durationSymbols; ++i) {
                 x = symWidth + spacing * 2.0;
-                y = - step * 1.35;
+                y = -step * 1.35;
                 x += i * (symWidth + spacing * 2.0);
                 painter->scale(scale * 2.0, scale * 2.0);
                 item->drawSymbol(SymId::beamJianpu, painter, PointF(x, y));
@@ -2686,7 +2693,8 @@ void TDraw::draw(const NoteDot* item, Painter* painter)
         return;
     }
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         painter->setPen(item->curColor());
 
         double desiredSymbolSize = 25.0;
@@ -2833,7 +2841,8 @@ void TDraw::draw(const Rest* item, Painter* painter)
 
     painter->setPen(item->curColor());
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double _spatium = item->spatium();
         double symWidth = item->symWidth(SymId::keysig_1_Jianpu);
         double symHeight = item->symHeight(SymId::keysig_1_Jianpu);
@@ -2856,42 +2865,34 @@ void TDraw::draw(const Rest* item, Painter* painter)
 
         if (item->durationType().type() == DurationType::V_EIGHTH) {
             restEighthSymbols = 1;
-            qDebug()<< "8:";
 
         } else if (item->durationType().type() == DurationType::V_16TH) {
             restNoteSymbols = 1;
             beamSymbol = 2;
-            qDebug()<< "16:";
 
         } else if (item->durationType().type() == DurationType::V_32ND) {
             restNoteSymbols = 1;
             beamSymbol = 3;
-            qDebug()<< "32:";
 
         } else if (item->durationType().type() == DurationType::V_64TH) {
             restNoteSymbols = 1;
             beamSymbol = 4;
-            qDebug()<< "64:";
 
         } else if (item->durationType().type() == DurationType::V_128TH) {
             restNoteSymbols = 1;
             beamSymbol = 5;
-            qDebug()<< "128:";
 
         } else if (item->durationType().type() == DurationType::V_256TH) {
             restNoteSymbols = 1;
             beamSymbol = 6;
-            qDebug()<< "256:";
 
         } else if (item->durationType().type() == DurationType::V_512TH) {
             restNoteSymbols = 1;
             beamSymbol = 7;
-            qDebug()<< "512:" ;
 
         } else if (item->durationType().type() == DurationType::V_1024TH) {
             restNoteSymbols = 1;
             beamSymbol = 8;
-            qDebug()<< "1024:";
 
         } else if (item->durationType().type() == DurationType::V_HALF) {
             spacing = _spatium * 2;
@@ -2938,8 +2939,8 @@ void TDraw::draw(const Rest* item, Painter* painter)
         }
 
         for (int i = 0; i < wholeBeamSymbols; ++i) {
-            x = - spacing / 2.0;
-            y = - step * 0.77;
+            x = -spacing / 2.0;
+            y = -step * 0.77;
             x += i * spacing;
             painter->scale(scale * 2.0, scale * 3.0);
             item->drawSymbol(SymId::beamJianpu, painter, PointF(x, y));
@@ -3187,7 +3188,8 @@ void TDraw::draw(const Stem* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         return;
     }
 
@@ -3266,7 +3268,8 @@ void TDraw::draw(const StemSlash* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         return;
     }
 
@@ -3450,7 +3453,8 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     }
     painter->setPen(item->curColor());
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double _spatium = item->spatium();
         double symHeight = item->symHeight(SymId::keysig_1_Jianpu);
         double step = symHeight / 5.0;
@@ -3470,98 +3474,98 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
 
 
         if (item->numerator() == 2 && item->denominator() == 2) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_2_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_2_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 3 && item->denominator() == 2) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_3_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_2_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 4 && item->denominator() == 2) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_2_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 2 && item->denominator() == 4) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_2_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 3 && item->denominator() == 4) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_3_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 4 && item->denominator() == 4) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 5 && item->denominator() == 4) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_5_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 6 && item->denominator() == 4) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_6_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 7 && item->denominator() == 4) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_7_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 3 && item->denominator() == 8) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_3_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_8_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 4 && item->denominator() == 8) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_4_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_8_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 5 && item->denominator() == 8) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_5_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_8_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 6 && item->denominator() == 8) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_6_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_8_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 7 && item->denominator() == 8) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_7_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_8_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 9 && item->denominator() == 8) {
-            y = - step;
+            y = -step;
             item->drawSymbol(SymId::timeSig_9_Jianpu, painter, PointF(x, y));
             timeSigMinusSymbol = 1;
             y = symHeight + step;
             item->drawSymbol(SymId::timeSig_8_Jianpu, painter, PointF(x, y));
         } else if (item->numerator() == 12 && item->denominator() == 8) {
-            x = - spacing * 1.1;
-            y = - step;
+            x = -spacing * 1.1;
+            y = -step;
             item->drawSymbol(SymId::timeSig_1_Jianpu, painter, PointF(x, y));
             x += spacing * 2.0;
             item->drawSymbol(SymId::timeSig_2_Jianpu, painter, PointF(x, y));
@@ -3572,7 +3576,7 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
         }
 
         for (int i = 0; i < timeSigMinusSymbol; ++i) {
-            x = - spacing / 4.0;
+            x = -spacing / 4.0;
             y = step * 0.03;
             painter->scale(scale * 2.5, scale * 1.5);
             item->drawSymbol(SymId::timeSigMinus, painter, PointF(x, y));

@@ -3518,7 +3518,8 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
     }
 
     // compute bbox
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double symWidth = item->symWidth(SymId::keysig_1_Jianpu);
         double x = symWidth * 3.5;
 
@@ -4172,7 +4173,8 @@ static void layoutRestDots(const Rest* item, const LayoutContext& ctx, Rest::Lay
     double dx = ctx.conf().styleMM(Sid::dotDotDistance) * item->mag();
     double y = item->dotLine() * item->spatium() * .5;
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         double symHeight   = item->symHeight(SymId::keysig_1_Jianpu);
         for (NoteDot* dot : item->dotList()) {
             NoteDot::LayoutData* dotldata = dot->mutLayoutData();
@@ -4199,7 +4201,8 @@ static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutD
     }
     ldata->setIsSkipDraw(false);
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         ldata->setPos(0.0, 0.0);
         ldata->setBbox(item->symBbox(ldata->sym));
         layoutRestDots(item, ctx, ldata);
@@ -4647,7 +4650,8 @@ static void layoutStem(const Stem* item, const LayoutContext& ctx, Stem::LayoutD
 
 void TLayout::layout(Stem* item, LayoutContext& ctx)
 {
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         return;
     }
 
@@ -4724,7 +4728,8 @@ static void layoutStemSlash(const StemSlash* item, const LayoutContext& ctx, Ste
 
 void TLayout::layout(StemSlash* item, LayoutContext& ctx)
 {
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         return;
     }
 

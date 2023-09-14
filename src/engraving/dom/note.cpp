@@ -1901,7 +1901,8 @@ void Note::setDotRelativeLine(int dotMove)
         }
     }
 
-    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU) && (staffType() && staffType()->lines() == 0)) {
+    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (staffType() && staffType()->lines() == 0)) {
         double symWidth = staff()->symWidth(SymId::keysig_1_Jianpu);
         y = 0.0;
         y += symWidth / 3.0;

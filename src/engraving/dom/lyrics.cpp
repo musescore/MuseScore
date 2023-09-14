@@ -171,7 +171,8 @@ void Lyrics::layout2(int nAbove)
     LayoutData* ldata = mutLayoutData();
     double lh = lineSpacing() * style().styleD(Sid::lyricsLineHeight);
 
-    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU) && (staffType() && staffType()->lines() == 0)) {
+    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (staffType() && staffType()->lines() == 0)) {
         double yo = segment()->measure()->system()->staff(staffIdx())->bbox().height();
         placeBelow();
         ldata->setPosY(lh * ((m_no + 1) - nAbove) + yo - chordRest()->y());

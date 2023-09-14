@@ -279,7 +279,8 @@ void SlurSegment::adjustEndpoints()
     PointF p1 = ups(Grip::START).p;
     PointF p2 = ups(Grip::END).p;
 
-    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU) && (staffType() && staffType()->lines() == 0)) {
+    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (staffType() && staffType()->lines() == 0)) {
         double symHeight = staff()->symHeight(SymId::keysig_1_Jianpu) * 0.75;
         setPos(0.0, 0.0);
         p1.ry() = -symHeight;
@@ -859,7 +860,8 @@ void Slur::slurPosChord(SlurPos* sp)
     sp->system2 = sp->system1;
     PointF pp(sp->system1->pagePos());
 
-    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU) && (staffType() && staffType()->lines() == 0)) {
+    if ((staff() && staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (staffType() && staffType()->lines() == 0)) {
         double symHeight = staff()->symHeight(SymId::keysig_1_Jianpu) * 0.75;
         setPos(x(), 0.0);
         sp->p1.ry() = -symHeight;

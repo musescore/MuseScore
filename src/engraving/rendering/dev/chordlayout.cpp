@@ -697,7 +697,8 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     const StaffType* staffType = st->staffTypeForElement(item);
     double mag            = (staffType->isSmall() ? ctx.conf().styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
     double _spatium       = ctx.conf().spatium() * mag;
-    double _lineDist       = ((st && st->clefType(Fraction()) == ClefType::JIANPU) && (st->staffType() && st->staffType()->lines() == 0)) ? 0.5 : _spatium * staffType->lineDistance().val() / 2;
+    double _lineDist       = ((st && st->clefType(Fraction()) == ClefType::JIANPU)
+                        && (st->staffType() && st->staffType()->lines() == 0)) ? 0.5 : _spatium * staffType->lineDistance().val() / 2;
     const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
     const ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);
@@ -1108,7 +1109,8 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
 //! May be called again when the chord is added to or removed from a beam.
 void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
 {
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         return;
     }
 
@@ -1359,7 +1361,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         return;
     }
 
-    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU) && (item->staffType() && item->staffType()->lines() == 0)) {
+    if ((item->staff() && item->staff()->clefType(Fraction()) == ClefType::JIANPU)
+        && (item->staffType() && item->staffType()->lines() == 0)) {
         item->setUp(false);
         return;
     }
@@ -2318,7 +2321,8 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
     int prevSubtype = 0;
     int prevLine = std::numeric_limits<int>::min();
 
-    if ((staff && staff->clefType(Fraction()) == ClefType::JIANPU) && (staff->staffType() && staff->staffType()->lines() == 0)) {
+    if ((staff && staff->clefType(Fraction()) == ClefType::JIANPU)
+        && (staff->staffType() && staff->staffType()->lines() == 0)) {
         for (int i = nNotes - 1; i >= 0; --i) {
             Note* note = notes[i];
             Accidental* ac = note->accidental();
