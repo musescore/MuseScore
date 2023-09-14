@@ -318,7 +318,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::NOTEDOT:          layout(item_cast<NoteDot*>(item), ctx);
         break;
-    case ElementType::NOTEHEAD:         layout(item_cast<NoteHead*>(item), ctx);
+    case ElementType::NOTEHEAD:         layoutSymbol(item_cast<NoteHead*>(item), ctx);
         break;
     case ElementType::ORNAMENT:
         if (!ldata->isValid()) {
@@ -363,7 +363,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::STICKING:         layout(item_cast<Sticking*>(item), ctx);
         break;
-    case ElementType::SYMBOL:           layout(item_cast<Symbol*>(item), ctx);
+    case ElementType::SYMBOL:           layoutSymbol(item_cast<Symbol*>(item), ctx);
         break;
     case ElementType::FSYMBOL:          layout(item_cast<FSymbol*>(item), ctx);
         break;
@@ -4741,7 +4741,7 @@ static void layoutBaseSymbol(const BSymbol* item, const LayoutContext& ctx, BSym
     }
 }
 
-static void layoutSymbol(const Symbol* item, const LayoutContext& ctx, Symbol::LayoutData* ldata)
+static void _layoutSymbol(const Symbol* item, const LayoutContext& ctx, Symbol::LayoutData* ldata)
 {
     ldata->setBbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
     double w = ldata->bbox().width();
@@ -4762,9 +4762,9 @@ static void layoutSymbol(const Symbol* item, const LayoutContext& ctx, Symbol::L
     layoutBaseSymbol(item, ctx, ldata);
 }
 
-void TLayout::layout(Symbol* item, LayoutContext& ctx)
+void TLayout::layoutSymbol(Symbol* item, LayoutContext& ctx)
 {
-    layoutSymbol(item, ctx, item->mutLayoutData());
+    _layoutSymbol(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(FSymbol* item, LayoutContext&)
@@ -4785,7 +4785,7 @@ static void layoutSystemDivider(const SystemDivider* item, const LayoutContext& 
     }
     const_cast<SystemDivider*>(item)->setSym(sid, ctx.engravingFont());
 
-    layoutSymbol(item, ctx, ldata);
+    _layoutSymbol(item, ctx, ldata);
 }
 
 void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
