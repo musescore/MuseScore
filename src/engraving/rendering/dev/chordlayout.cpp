@@ -216,7 +216,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         if (item->beam()) {
             ctx.mutDom().undoRemoveElement(item->hook());
         } else {
-            TLayout::layout(item->hook(), ctx);
+            TLayout::layout(item->hook(), item->hook()->mutLayoutData());
             if (item->up() && item->stem()) {
                 // hook position is not set yet
                 double x = item->hook()->layoutData()->bbox().right() + item->stem()->flagPosition().x() + chordX;
@@ -528,7 +528,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         if (item->beam()) {
             ctx.mutDom().undoRemoveElement(item->hook());
         } else if (tab == 0) {
-            TLayout::layout(item->hook(), ctx);
+            TLayout::layout(item->hook(), item->hook()->mutLayoutData());
             if (item->up()) {
                 // hook position is not set yet
                 double x = item->hook()->layoutData()->bbox().right() + item->stem()->flagPosition().x();
@@ -1157,7 +1157,7 @@ void ChordLayout::layoutHook(Chord* item, LayoutContext& ctx)
         computeUp(item, ctx);
     }
     item->hook()->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
-    rendering::dev::TLayout::layout(item->hook(), ctx);
+    TLayout::layout(item->hook(), item->hook()->mutLayoutData());
 }
 
 void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
