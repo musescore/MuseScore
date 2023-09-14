@@ -98,6 +98,8 @@ private:
      * Methods for parsing MEI elements within a <layer>
      */
     bool readElements(pugi::xml_node parentNode, engraving::Measure* measure, int track, int& ticks);
+    bool readArtics(pugi::xml_node parentNode, engraving::Chord* chord);
+    bool readArtic(pugi::xml_node articNode, engraving::Chord* chord);
     bool readBeam(pugi::xml_node beamNode, engraving::Measure* measure, int track, int& ticks);
     bool readClef(pugi::xml_node clefNode, engraving::Measure* measure, int track, int& ticks);
     bool readChord(pugi::xml_node chordNode, engraving::Measure* measure, int track, int& ticks);
@@ -166,7 +168,8 @@ private:
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::Spanner* addSpanner(const libmei::Element& meiElement, engraving::Measure* measure, pugi::xml_node node);
-    engraving::EngravingItem* addArticulation(const libmei::Element& meiElement, engraving::Measure* measure);
+    engraving::EngravingItem* addArticulation(const libmei::Element& meiElement, engraving::Measure* measure,
+                                              engraving::Chord* chord = nullptr);
     std::string xmlIdFrom(std::string dataURI);
     engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, const engraving::ChordRest* startChordRest);

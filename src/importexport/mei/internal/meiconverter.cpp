@@ -316,7 +316,7 @@ libmei::Artic Convert::articToMEI(const engraving::Articulation* articulation)
     if (articulation->propertyFlags(engraving::Pid::ARTICULATION_ANCHOR) == engraving::PropertyFlags::UNSTYLED) {
         meiArtic.SetPlace(Convert::anchorToMEI(articulation->anchor()));
     }
-    
+
     // @color
     Convert::colorToMEI(articulation, meiArtic);
 
