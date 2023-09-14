@@ -244,7 +244,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::FERMATA:
         layout(item_cast<const Fermata*>(item), static_cast<Fermata::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::FIGURED_BASS:     layout(item_cast<FiguredBass*>(item), ctx);
+    case ElementType::FIGURED_BASS:
+        layout(item_cast<const FiguredBass*>(item), static_cast<FiguredBass::LayoutData*>(ldata), ctx);
         break;
     case ElementType::FINGERING:        layout(item_cast<Fingering*>(item), ctx);
         break;
@@ -1946,10 +1947,8 @@ void TLayout::layout(const Fermata* item, Fermata::LayoutData* ldata, const Layo
 //    creates the display text (set as element text) and computes
 //    the horiz. offset needed to align the right part as well as the vert. offset
 //---------------------------------------------------------
-static void layoutFiguredBassItem(const FiguredBassItem* item, const LayoutContext& ctx, FiguredBassItem::LayoutData* ldata)
+void TLayout::layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem::LayoutData* ldata, const LayoutContext& ctx)
 {
-    double h, w, x, x1, x2, y;
-
     // construct font metrics
     int fontIdx = 0;
     mu::draw::Font f(FiguredBass::FBFonts().at(fontIdx).family, draw::Font::Type::Tablature);
@@ -1961,8 +1960,9 @@ static void layoutFiguredBassItem(const FiguredBassItem* item, const LayoutConte
     mu::draw::FontMetrics fm(f);
 
     String str;
-    x  = item->symWidth(SymId::noteheadBlack) * .5;
-    x1 = x2 = 0.0;
+    double x = item->symWidth(SymId::noteheadBlack) * .5;
+    double x1 = 0.0;
+    double x2 = 0.0;
 
     // create display text
     int font = 0;
@@ -2049,8 +2049,9 @@ static void layoutFiguredBassItem(const FiguredBassItem* item, const LayoutConte
         x = 0;                            // start at note left margin
     }
     // vertical position
-    h = fm.lineSpacing();
+    double h = fm.lineSpacing();
     h *= ctx.conf().styleD(Sid::figuredBassLineHeight);
+    double y = 0.0;
     if (ctx.conf().styleI(Sid::figuredBassAlignment) == 0) {          // top alignment: stack down from first item
         y = h * item->ord();
     } else {                                                      // bottom alignment: stack up from last item
@@ -2059,10 +2060,10 @@ static void layoutFiguredBassItem(const FiguredBassItem* item, const LayoutConte
     ldata->setPos(x, y);
     // determine bbox from text width
 //      w = fm.width(str);
-    w = fm.width(str);
+    double w = fm.width(str);
     ldata->textWidth = w;
     // if there is a cont.line, extend width to cover the whole FB element duration line
-    int lineLen;
+    int lineLen = 0;
     if (item->contLine() != FiguredBassItem::ContLine::NONE
         && (lineLen = item->figuredBass()->layoutData()->lineLength(0)) > w) {
         w = lineLen;
@@ -2070,15 +2071,10 @@ static void layoutFiguredBassItem(const FiguredBassItem* item, const LayoutConte
     ldata->setBbox(0, 0, w, h);
 }
 
-void TLayout::layout(FiguredBassItem* item, LayoutContext& ctx)
-{
-    layoutFiguredBassItem(item, ctx, item->mutLayoutData());
-}
-
 //    lays out the duration indicator line(s), filling the _lineLengths array
 //    and the length of printed lines (used by continuation lines)
 
-static void layoutLines(const FiguredBass* item, const LayoutContext& ctx, FiguredBass::LayoutData* ldata)
+static void layoutLines(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx)
 {
     std::vector<double> lineLengths = ldata->lineLengths;
     if (item->ticks() <= Fraction(0, 1) || !item->segment()) {
@@ -2189,8 +2185,12 @@ static void layoutLines(const FiguredBass* item, const LayoutContext& ctx, Figur
     ldata->lineLengths = lineLengths;
 }
 
-static void layoutFiguredBass(const FiguredBass* item, const LayoutContext& ctx, FiguredBass::LayoutData* ldata)
+void TLayout::layout(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx)
 {
+    if (item->explicitParent() && item->layoutToParentWidth()) {
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox()); // layout1TextBase
+    }
+
     // VERTICAL POSITION:
     const double y = ctx.conf().styleD(Sid::figuredBassYOffset) * item->spatium();
     ldata->setPos(PointF(0.0, y));
@@ -2201,20 +2201,15 @@ static void layoutFiguredBass(const FiguredBass* item, const LayoutContext& ctx,
     // Items list will be empty in edit mode (see FiguredBass::startEdit).
     // TODO: consider disabling specific layout in case text style is changed (tid() != TextStyleName::FIGURED_BASS).
     if (item->items().size() > 0) {
-        layoutLines(item, ctx, ldata);
+        layoutLines(item, ldata, ctx);
         ldata->setBbox(0, 0, ldata->lineLength(0), 0);
         // layout each item and enlarge bbox to include items bboxes
         for (FiguredBassItem* fit : item->items()) {
             FiguredBassItem::LayoutData* fildata = fit->mutLayoutData();
-            layoutFiguredBassItem(fit, ctx, fildata);
+            layoutFiguredBassItem(fit, fildata, ctx);
             ldata->addBbox(fildata->bbox().translated(fit->pos()));
         }
     }
-}
-
-void TLayout::layout(FiguredBass* item, LayoutContext& ctx)
-{
-    layoutFiguredBass(item, ctx, item->mutLayoutData());
 }
 
 static void layoutFingering(const Fingering* item, const LayoutContext&, Fingering::LayoutData* ldata)
