@@ -47,6 +47,7 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::HARMONY:
     case ElementType::HOOK:
     case ElementType::INSTRUMENT_NAME:
+    case ElementType::KEYSIG:
         TLayout::layoutItem(item, ctx);
     default:
         break;

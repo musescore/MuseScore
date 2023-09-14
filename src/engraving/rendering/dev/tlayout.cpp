@@ -287,7 +287,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::JUMP:
         layout(item_cast<const Jump*>(item), static_cast<Jump::LayoutData*>(ldata));
         break;
-    case ElementType::KEYSIG:           layout(item_cast<KeySig*>(item), ctx);
+    case ElementType::KEYSIG:
+        layout(item_cast<const KeySig*>(item), static_cast<KeySig::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::LAYOUT_BREAK:     layout(item_cast<LayoutBreak*>(item), ctx);
         break;
@@ -3264,7 +3265,7 @@ void TLayout::layout(const Jump* item, Jump::LayoutData* ldata)
     Autoplace::autoplaceMeasureElement(item, ldata);
 }
 
-static void keySigAddLayout(const KeySig* item, const LayoutContext& ctx, SymId sym, int line, KeySig::LayoutData* ldata)
+static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf, SymId sym, int line, KeySig::LayoutData* ldata)
 {
     double _spatium = item->spatium();
     double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
@@ -3273,11 +3274,11 @@ static void keySigAddLayout(const KeySig* item, const LayoutContext& ctx, SymId 
     double x = 0.0;
     if (ldata->keySymbols.size() > 0) {
         const KeySym& previous = ldata->keySymbols.back();
-        double accidentalGap = ctx.conf().styleS(Sid::keysigAccidentalDistance).val();
+        double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
         if (previous.sym != sym) {
             accidentalGap *= 2;
         } else if (previous.sym == SymId::accidentalNatural && sym == SymId::accidentalNatural) {
-            accidentalGap = ctx.conf().styleS(Sid::keysigNaturalDistance).val();
+            accidentalGap = conf.styleS(Sid::keysigNaturalDistance).val();
         }
         double previousWidth = item->symWidth(previous.sym) / _spatium;
         x = previous.xPos + previousWidth + accidentalGap;
@@ -3296,10 +3297,12 @@ static void keySigAddLayout(const KeySig* item, const LayoutContext& ctx, SymId 
     ldata->keySymbols.push_back(ks);
 }
 
-static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::LayoutData* ldata)
+void TLayout::layout(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    double _spatium = item->spatium();
-    double step = _spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
+    LD_INDEPENDENT;
+
+    double spatium = item->spatium();
+    double step = spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
 
     ldata->setBbox(RectF());
 
@@ -3331,7 +3334,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
     int t1 = int(item->key());
 
     if (item->isCustom() && !item->isAtonal()) {
-        double accidentalGap = ctx.conf().styleS(Sid::keysigAccidentalDistance).val();
+        double accidentalGap = conf.styleS(Sid::keysigAccidentalDistance).val();
         // add standard key accidentals first, if necessary
         for (int i = 1; i <= abs(t1) && abs(t1) <= 7; ++i) {
             bool drop = false;
@@ -3350,7 +3353,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
                 ks.line = ClefInfo::lines(clef)[lineIndexOffset + i];
                 if (ldata->keySymbols.size() > 0) {
                     const KeySym& previous = ldata->keySymbols.back();
-                    double previousWidth = item->symWidth(previous.sym) / _spatium;
+                    double previousWidth = item->symWidth(previous.sym) / spatium;
                     ks.xPos = previous.xPos + previousWidth + accidentalGap;
                 } else {
                     ks.xPos = 0;
@@ -3369,7 +3372,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
             double xpos = cd.xAlt;
             if (ldata->keySymbols.size() > 0) {
                 const KeySym& previous = ldata->keySymbols.back();
-                double previousWidth = item->symWidth(previous.sym) / _spatium;
+                double previousWidth = item->symWidth(previous.sym) / spatium;
                 xpos += previous.xPos + previousWidth + accidentalGap;
             }
             // if translated symbol if out of range, add key accidental followed by untranslated symbol
@@ -3434,7 +3437,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
             const bool newSection = (!item->segment()
                                      || (item->segment()->rtick().isZero() && (!prevMeasure || prevMeasure->sectionBreak()))
                                      );
-            naturalsOn = !newSection && (ctx.conf().styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
+            naturalsOn = !newSection && (conf.styleI(Sid::keySigNaturals) != int(KeySigNatural::NONE) || (t1 == 0));
         }
 
         // Don't repeat naturals if shown in courtesy
@@ -3491,7 +3494,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
         // OR going from sharps to flats or vice versa (i.e. t1 & t2 have opposite signs)
 
         bool prefixNaturals = naturalsOn
-                              && (ctx.conf().styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE)
+                              && (conf.styleI(Sid::keySigNaturals) == int(KeySigNatural::BEFORE)
                                   || t1 * int(t2) < 0);
 
         // naturals should go AFTER accidentals if they should not go before!
@@ -3502,7 +3505,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
         if (prefixNaturals) {
             for (int i = 0; i < 7; ++i) {
                 if (naturals & (1 << i)) {
-                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset], ldata);
+                    keySigAddLayout(item, conf, SymId::accidentalNatural, lines[i + coffset], ldata);
                 }
             }
         }
@@ -3510,7 +3513,7 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
             SymId symbol = t1 > 0 ? SymId::accidentalSharp : SymId::accidentalFlat;
             int lineIndexOffset = t1 > 0 ? 0 : 7;
             for (int i = 0; i < abs(t1); ++i) {
-                keySigAddLayout(item, ctx, symbol, lines[lineIndexOffset + i], ldata);
+                keySigAddLayout(item, conf, symbol, lines[lineIndexOffset + i], ldata);
             }
         } else {
             LOGD("illegal t1 key %d", t1);
@@ -3520,28 +3523,23 @@ static void layoutKeySig(const KeySig* item, const LayoutContext& ctx, KeySig::L
         if (suffixNaturals) {
             for (int i = 0; i < 7; ++i) {
                 if (naturals & (1 << i)) {
-                    keySigAddLayout(item, ctx, SymId::accidentalNatural, lines[i + coffset], ldata);
+                    keySigAddLayout(item, conf, SymId::accidentalNatural, lines[i + coffset], ldata);
                 }
             }
         }
 
         // Follow stepOffset
         if (item->staffType()) {
-            ldata->setPosY(item->staffType()->stepOffset() * 0.5 * _spatium);
+            ldata->setPosY(item->staffType()->stepOffset() * 0.5 * spatium);
         }
     }
 
     // compute bbox
     for (const KeySym& ks : ldata->keySymbols) {
-        double x = ks.xPos * _spatium;
+        double x = ks.xPos * spatium;
         double y = ks.line * step;
         ldata->addBbox(item->symBbox(ks.sym).translated(x, y));
     }
-}
-
-void TLayout::layout(KeySig* item, LayoutContext& ctx)
-{
-    layoutKeySig(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(LayoutBreak* item, LayoutContext&)
