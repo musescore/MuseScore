@@ -247,7 +247,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::FIGURED_BASS:
         layout(item_cast<const FiguredBass*>(item), static_cast<FiguredBass::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::FINGERING:        layout(item_cast<Fingering*>(item), ctx);
+    case ElementType::FINGERING:
+        layout(item_cast<const Fingering*>(item), static_cast<Fingering::LayoutData*>(ldata));
         break;
     case ElementType::FRET_DIAGRAM:     layout(item_cast<FretDiagram*>(item), ctx);
         break;
@@ -2212,7 +2213,7 @@ void TLayout::layout(const FiguredBass* item, FiguredBass::LayoutData* ldata, co
     }
 }
 
-static void layoutFingering(const Fingering* item, const LayoutContext&, Fingering::LayoutData* ldata)
+void TLayout::layout(const Fingering* item, Fingering::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -2220,7 +2221,6 @@ static void layoutFingering(const Fingering* item, const LayoutContext&, Fingeri
 
     Fraction tick = item->parentItem()->tick();
     const Staff* st = item->staff();
-
     if (st && st->isTabStaff(tick)
         && (!st->staffType(tick)->showTabFingering() || item->textStyleType() == TextStyleType::STRING_NUMBER)) {
         ldata->setIsSkipDraw(true);
@@ -2228,16 +2228,21 @@ static void layoutFingering(const Fingering* item, const LayoutContext&, Fingeri
     }
     ldata->setIsSkipDraw(false);
 
+    if (item->explicitParent() && item->layoutToParentWidth()) {
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox()); // layoutTextBase
+    }
+
     TLayout::layoutTextBase(item, ldata);
     ldata->setPosY(0.0); // handle placement below
 
-    if (item->autoplace() && item->note()) {
-        Note* n      = item->note();
-        Chord* chord = n->chord();
+    if (item->autoplace()) {
+        const Note* note  = item->note();
+        const Chord* chord = note->chord();
+
         bool voices  = chord->measure()->hasVoices(chord->staffIdx(), chord->tick(), chord->actualTicks());
         bool tight   = voices && chord->notes().size() == 1 && !chord->beam() && item->textStyleType() != TextStyleType::STRING_NUMBER;
 
-        double headWidth = n->bboxRightPos();
+        double headWidth = note->bboxRightPos();
 
         // update offset after drag
         double rebase = 0.0;
@@ -2250,16 +2255,28 @@ static void layoutFingering(const Fingering* item, const LayoutContext&, Fingeri
 
         if (item->layoutType() == ElementType::CHORD) {
             bool above = item->placeAbove();
-            Stem* stem = chord->stem();
-            Segment* s = chord->segment();
-            Measure* m = s->measure();
+            const Stem* stem = chord->stem();
+            const Segment* segment = chord->segment();
+            const Measure* measure = segment->measure();
             double sp = item->spatium();
             double md = item->minDistance().val() * sp;
-            SysStaff* ss = m->system()->staff(chord->vStaffIdx());
-            Staff* vStaff = chord->staff();           // TODO: use current height at tick
+            const SysStaff* ss = measure->system()->staff(chord->vStaffIdx());
+            const Staff* vStaff = chord->staff();           // TODO: use current height at tick
 
-            if (n->mirror()) {
-                ldata->moveX(-n->layoutData()->pos().x());
+            LD_CONDITION(measure->layoutData()->isSetPos());
+            LD_CONDITION(segment->layoutData()->isSetPos());
+            LD_CONDITION(chord->layoutData()->isSetPos());
+            LD_CONDITION(note->layoutData()->isSetPos());
+            LD_CONDITION(note->layoutData()->isSetBbox());
+            LD_CONDITION(stem->layoutData()->isSetPos());
+            LD_CONDITION(stem->layoutData()->isSetBbox());
+            LD_CONDITION(chord->upNote()->layoutData()->isSetBbox());
+            LD_CONDITION(chord->upNote()->layoutData()->isSetPos());
+            LD_CONDITION(chord->downNote()->layoutData()->isSetBbox());
+            LD_CONDITION(chord->downNote()->layoutData()->isSetPos());
+
+            if (note->mirror()) {
+                ldata->moveX(-note->layoutData()->pos().x());
             }
             ldata->moveX(headWidth * .5);
             if (above) {
@@ -2269,24 +2286,24 @@ static void layoutFingering(const Fingering* item, const LayoutContext&, Fingeri
                     }
                     ldata->moveY(-1.5 * sp);
                 } else {
-                    RectF r = ldata->bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
+                    RectF r = ldata->bbox().translated(measure->pos() + segment->pos() + chord->pos() + note->pos() + item->pos());
                     SkylineLine sk(false);
                     sk.add(r.x(), r.bottom(), r.width());
                     double d = sk.minDistance(ss->skyline().north());
                     double yd = 0.0;
                     if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
-                        yd -= d + item->height() * .25;
+                        yd -= d + item->layoutData()->bbox().height() * .25;
                     }
                     // force extra space above staff & chord (but not other fingerings)
-                    double top;
+                    double top = 0.0;
                     if (chord->up() && chord->beam() && stem) {
                         top = stem->y() + stem->layoutData()->bbox().top();
                     } else {
-                        Note* un = chord->upNote();
+                        const Note* un = chord->upNote();
                         top = std::min(0.0, un->y() + un->layoutData()->bbox().top());
                     }
                     top -= md;
-                    double diff = (ldata->bbox().bottom() + ldata->pos().y() + yd + n->y()) - top;
+                    double diff = (ldata->bbox().bottom() + ldata->pos().y() + yd + note->y()) - top;
                     if (diff > 0.0) {
                         yd -= diff;
                     }
@@ -2305,24 +2322,24 @@ static void layoutFingering(const Fingering* item, const LayoutContext&, Fingeri
                     }
                     ldata->moveY(1.5 * sp);
                 } else {
-                    RectF r = ldata->bbox().translated(m->pos() + s->pos() + chord->pos() + n->pos() + item->pos());
+                    RectF r = ldata->bbox().translated(measure->pos() + segment->pos() + chord->pos() + note->pos() + item->pos());
                     SkylineLine sk(true);
                     sk.add(r.x(), r.top(), r.width());
                     double d = ss->skyline().south().minDistance(sk);
                     double yd = 0.0;
                     if (d > 0.0 && item->isStyled(Pid::MIN_DISTANCE)) {
-                        yd += d + item->height() * .25;
+                        yd += d + item->layoutData()->bbox().height() * .25;
                     }
                     // force extra space below staff & chord (but not other fingerings)
                     double bottom;
                     if (!chord->up() && chord->beam() && stem) {
                         bottom = stem->y() + stem->layoutData()->bbox().bottom();
                     } else {
-                        Note* dn = chord->downNote();
+                        const Note* dn = chord->downNote();
                         bottom = std::max(vStaff->height(), dn->y() + dn->layoutData()->bbox().bottom());
                     }
                     bottom += md;
-                    double diff = bottom - (ldata->bbox().top() + ldata->pos().y() + yd + n->y());
+                    double diff = bottom - (ldata->bbox().top() + ldata->pos().y() + yd + note->y());
                     if (diff > 0.0) {
                         yd += diff;
                     }
@@ -2337,11 +2354,11 @@ static void layoutFingering(const Fingering* item, const LayoutContext&, Fingeri
             }
         } else if (item->textStyleType() == TextStyleType::LH_GUITAR_FINGERING) {
             // place to left of note
-            double left = n->shape().left();
-            if (left - n->x() > 0.0) {
+            double left = note->shape().left();
+            if (left - note->x() > 0.0) {
                 ldata->moveX(-left);
             } else {
-                ldata->moveX(-n->x());
+                ldata->moveX(-note->x());
             }
         }
         // for other fingering styles, do not autoplace
@@ -2353,11 +2370,6 @@ static void layoutFingering(const Fingering* item, const LayoutContext&, Fingeri
         Autoplace::rebaseOffset(item, ldata, false);
     }
     Autoplace::setOffsetChanged(item, ldata, false);
-}
-
-void TLayout::layout(Fingering* item, LayoutContext& ctx)
-{
-    layoutFingering(item, ctx, item->mutLayoutData());
 }
 
 static void layoutFretDiagram(const FretDiagram* item, const LayoutContext& ctx, FretDiagram::LayoutData* ldata)
