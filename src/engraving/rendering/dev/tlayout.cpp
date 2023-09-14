@@ -276,7 +276,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::HOOK:
         layout(item_cast<const Hook*>(item), static_cast<Hook::LayoutData*>(ldata));
         break;
-    case ElementType::IMAGE:            layout(item_cast<Image*>(item), ctx);
+    case ElementType::IMAGE:
+        layout(item_cast<const Image*>(item), static_cast<Image::LayoutData*>(ldata));
         break;
     case ElementType::INSTRUMENT_CHANGE: layout(item_cast<InstrumentChange*>(item), ctx);
         break;
@@ -3179,8 +3180,14 @@ void TLayout::layout(const Hook* item, Hook::LayoutData* ldata)
     ldata->setBbox(item->symBbox(item->sym()));
 }
 
-static void layoutImage(const Image* item, const LayoutContext&, Image::LayoutData* ldata)
+void TLayout::layout(const Image* item, Image::LayoutData* ldata)
 {
+    IF_ASSERT_FAILED(item->explicitParent()) {
+        return;
+    }
+
+    LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
+
     ldata->setPos(0.0, 0.0);
     const_cast<Image*>(item)->init();
 
@@ -3188,14 +3195,14 @@ static void layoutImage(const Image* item, const LayoutContext&, Image::LayoutDa
 
     // if autoscale && inside a box, scale to box relevant size
     if (item->autoScale()
-        && item->explicitParent()
         && ((item->explicitParent()->isHBox() || item->explicitParent()->isVBox()))) {
+        const EngravingItem::LayoutData* parentLD = item->parentItem()->layoutData();
         if (item->lockAspectRatio()) {
             double f = item->sizeIsSpatium() ? item->spatium() : DPMM;
             SizeF size(item->imageSize());
             double ratio = size.width() / size.height();
-            double w = item->parentItem()->width();
-            double h = item->parentItem()->height();
+            double w = parentLD->bbox().width();
+            double h = parentLD->bbox().height();
             if ((w / h) < ratio) {
                 imageSize.setWidth(w / f);
                 imageSize.setHeight((w / ratio) / f);
@@ -3204,7 +3211,7 @@ static void layoutImage(const Image* item, const LayoutContext&, Image::LayoutDa
                 imageSize.setWidth(h * ratio / f);
             }
         } else {
-            imageSize = item->pixel2size(item->parentItem()->layoutData()->bbox().size());
+            imageSize = item->pixel2size(parentLD->bbox().size());
         }
     }
 
@@ -3212,11 +3219,6 @@ static void layoutImage(const Image* item, const LayoutContext&, Image::LayoutDa
 
     // in any case, adjust position relative to parent
     ldata->setBbox(RectF(PointF(), item->size2pixel(imageSize)));
-}
-
-void TLayout::layout(Image* item, LayoutContext& ctx)
-{
-    layoutImage(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(InstrumentChange* item, LayoutContext&)
