@@ -2485,84 +2485,66 @@ void TDraw::draw(const Note* item, Painter* painter)
             y = symHeight / 2.0;
 
             //            dot up
-            if (item->pitch() > 71 && item->pitch() < 84)
-            {
+            if (item->pitch() > 71 && item->pitch() < 84) {
                 pitchDotSymbolsUp = 1;
-            } else if (item->pitch() > 83 && item->pitch() < 96)
-            {
+            } else if (item->pitch() > 83 && item->pitch() < 96) {
                 pitchDotSymbolsUp = 2;
-            } else if (item->pitch() > 95 && item->pitch() < 108)
-            {
+            } else if (item->pitch() > 95 && item->pitch() < 108) {
                 pitchDotSymbolsUp = 3;
-            } else if (item->pitch() > 107 && item->pitch() < 120)
-            {
+            } else if (item->pitch() > 107 && item->pitch() < 120) {
                 pitchDotSymbolsUp = 4;
-            } else if (item->pitch() > 119 && item->pitch() < 132)
-            {
+            } else if (item->pitch() > 119 && item->pitch() < 132) {
                 pitchDotSymbolsUp = 5;
             }
 
             //            note
             if (item->tpc() == Tpc::TPC_C_B || item->tpc() == Tpc::TPC_C || item->tpc() == Tpc::TPC_C_S
                 || item->tpc() == Tpc::TPC_C_BB || item->tpc() == Tpc::TPC_C_BBB
-                || item->tpc() == Tpc::TPC_C_SS || item->tpc() == Tpc::TPC_C_SSS)
-            {
+                || item->tpc() == Tpc::TPC_C_SS || item->tpc() == Tpc::TPC_C_SSS) {
                 y = symHeight / 2.0;
                 item->drawSymbol(SymId::noteDoJianpu, painter, PointF(x, y));
             } else if (item->tpc() == Tpc::TPC_D_B  ||  item->tpc() == Tpc::TPC_D  ||  item->tpc() == Tpc::TPC_D_S
                        || item->tpc() == Tpc::TPC_D_BB || item->tpc() == Tpc::TPC_D_BBB
-                       || item->tpc() == Tpc::TPC_D_SS || item->tpc() == Tpc::TPC_D_SSS)
-            {
+                       || item->tpc() == Tpc::TPC_D_SS || item->tpc() == Tpc::TPC_D_SSS) {
                 y = symHeight / 2.0;
                 item->drawSymbol(SymId::noteReJianpu, painter, PointF(x, y));
             } else if (item->tpc() == Tpc::TPC_E_B || item->tpc() == Tpc::TPC_E || item->tpc() == Tpc::TPC_E_S
                        || item->tpc() == Tpc::TPC_E_BB || item->tpc() == Tpc::TPC_E_BBB
-                       || item->tpc() == Tpc::TPC_E_SS || item->tpc() == Tpc::TPC_E_SSS)
-            {
+                       || item->tpc() == Tpc::TPC_E_SS || item->tpc() == Tpc::TPC_E_SSS) {
                 y = symHeight / 2.0;
                 item->drawSymbol(SymId::noteMiJianpu, painter, PointF(x, y));
             } else if (item->tpc() == Tpc::TPC_F_B || item->tpc() == Tpc::TPC_F || item->tpc() == Tpc::TPC_F_S
                        || item->tpc() == Tpc::TPC_F_BB || item->tpc() == Tpc::TPC_F_BBB
-                       || item->tpc() == Tpc::TPC_F_SS || item->tpc() == Tpc::TPC_F_SSS)
-            {
+                       || item->tpc() == Tpc::TPC_F_SS || item->tpc() == Tpc::TPC_F_SSS) {
                 y = symHeight / 2.0;
                 item->drawSymbol(SymId::noteFaJianpu, painter, PointF(x, y));
             } else if (item->tpc() == Tpc::TPC_G_B || item->tpc() == Tpc::TPC_G || item->tpc() == Tpc::TPC_G_S
                        || item->tpc() == Tpc::TPC_G_BB || item->tpc() == Tpc::TPC_G_BBB
-                       || item->tpc() == Tpc::TPC_G_SS || item->tpc() == Tpc::TPC_G_SSS)
-            {
+                       || item->tpc() == Tpc::TPC_G_SS || item->tpc() == Tpc::TPC_G_SSS) {
                 y = symHeight / 2.0;
                 item->drawSymbol(SymId::noteSoJianpu, painter, PointF(x, y));
             } else if (item->tpc() == Tpc::TPC_A_B || item->tpc() == Tpc::TPC_A || item->tpc() == Tpc::TPC_A_S
                        || item->tpc() == Tpc::TPC_A_BB || item->tpc() == Tpc::TPC_A_BBB
-                       || item->tpc() == Tpc::TPC_A_SS || item->tpc() == Tpc::TPC_A_SSS)
-            {
+                       || item->tpc() == Tpc::TPC_A_SS || item->tpc() == Tpc::TPC_A_SSS) {
                 y = symHeight / 2.0;
                 item->drawSymbol(SymId::noteLaJianpu, painter, PointF(x, y));
             } else if (item->tpc() == Tpc::TPC_B_B || item->tpc() == Tpc::TPC_B || item->tpc() == Tpc::TPC_B_S
                        || item->tpc() == Tpc::TPC_B_BB || item->tpc() == Tpc::TPC_B_BBB
-                       || item->tpc() == Tpc::TPC_B_SS || item->tpc() == Tpc::TPC_B_SSS)
-            {
+                       || item->tpc() == Tpc::TPC_B_SS || item->tpc() == Tpc::TPC_B_SSS) {
                 y = symHeight / 2.0;
                 item->drawSymbol(SymId::noteSiJianpu, painter, PointF(x, y));
             }
 
             //           dot Down
-            if (item->pitch() < 60 && item->pitch() > 47)
-            {
+            if (item->pitch() < 60 && item->pitch() > 47) {
                 pitchDotSymbolsDown = 1;
-            }
-            else if (item->pitch() < 48 && item->pitch() > 35)
-            {
+            } else if (item->pitch() < 48 && item->pitch() > 35) {
                 pitchDotSymbolsDown = 2;
-            } else if (item->pitch() < 36 && item->pitch() > 23)
-            {
+            } else if (item->pitch() < 36 && item->pitch() > 23) {
                 pitchDotSymbolsDown = 3;
-            } else if (item->pitch() < 24 && item->pitch() > 11)
-            {
+            } else if (item->pitch() < 24 && item->pitch() > 11) {
                 pitchDotSymbolsDown = 4;
-            } else if (item->pitch() < 12 && item->pitch() > -1)
-            {
+            } else if (item->pitch() < 12 && item->pitch() > -1) {
                 pitchDotSymbolsDown = 5;
             }
 
@@ -2579,28 +2561,21 @@ void TDraw::draw(const Note* item, Painter* painter)
                 } else {
                     if (item->chord()->ticks() == Fraction(1, 8)) {
                         y += step * 2.7 * 1.70;
-                    }else if (item->chord()->ticks() == Fraction(1, 16))
-                    {
+                    } else if (item->chord()->ticks() == Fraction(1, 16)) {
                         y += step * 2.7 * 2.54;
-                    }else if (item->chord()->ticks() == Fraction(1, 32))
-                    {
+                    } else if (item->chord()->ticks() == Fraction(1, 32)) {
                         y += step * 2.7 * 3.38;
-                    }else if (item->chord()->ticks() == Fraction(1, 64))
-                    {
+                    } else if (item->chord()->ticks() == Fraction(1, 64)) {
                         y += step * 2.7 * 4.22;
-                    }else if (item->chord()->ticks() == Fraction(1, 128))
-                    {
+                    } else if (item->chord()->ticks() == Fraction(1, 128)) {
                         y += step * 2.7 * 5.06;
-                    }else if (item->chord()->ticks() == Fraction(1, 256))
-                    {
+                    } else if (item->chord()->ticks() == Fraction(1, 256)) {
                         y += step * 2.7 * 5.9;
-                    }else if (item->chord()->ticks() == Fraction(1, 512))
-                    {
+                    } else if (item->chord()->ticks() == Fraction(1, 512)) {
                         y += step * 2.7 * 6.74;
-                    }else if (item->chord()->ticks() == Fraction(1, 1024))
-                    {
+                    } else if (item->chord()->ticks() == Fraction(1, 1024)) {
                         y += step * 2.7 * 7.58;
-                    }else {
+                    } else {
                         y += step * 2.7;
                     }
                 }
@@ -2618,8 +2593,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                 || (item->tpc() == Tpc::TPC_D_B)
                 || (item->tpc() == Tpc::TPC_E_B)
                 || (item->tpc() == Tpc::TPC_F_B)
-                || (item->tpc() == Tpc::TPC_G_B))
-            {
+                || (item->tpc() == Tpc::TPC_G_B)) {
                 x = - spacing * 0.4;
                 y = - step * 4.75;
                 item->drawSymbol(SymId::accidentalFlat, painter, PointF(x, y));
@@ -2629,8 +2603,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_D_BB)
                        || (item->tpc() == Tpc::TPC_E_BB)
                        || (item->tpc() == Tpc::TPC_F_BB)
-                       || (item->tpc() == Tpc::TPC_G_BB))
-            {
+                       || (item->tpc() == Tpc::TPC_G_BB)) {
                 x = - spacing * 1.07;
                 y = - step * 4.75;
                 item->drawSymbol(SymId::accidentalDoubleFlat, painter, PointF(x, y));
@@ -2640,8 +2613,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_D_BBB)
                        || (item->tpc() == Tpc::TPC_E_BBB)
                        || (item->tpc() == Tpc::TPC_F_BBB)
-                       || (item->tpc() == Tpc::TPC_G_BBB))
-            {
+                       || (item->tpc() == Tpc::TPC_G_BBB)) {
                 x = - spacing * 1.75;
                 y = - step * 4.75;
                 item->drawSymbol(SymId::accidentalTripleFlat, painter, PointF(x, y));
@@ -2651,8 +2623,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_D_S)
                        || (item->tpc() == Tpc::TPC_E_S)
                        || (item->tpc() == Tpc::TPC_F_S)
-                       || (item->tpc() == Tpc::TPC_G_S))
-            {
+                       || (item->tpc() == Tpc::TPC_G_S)) {
                 x = - spacing * 0.67;
                 y = - step * 5.75;
                 item->drawSymbol(SymId::accidentalSharp, painter, PointF(x, y));
@@ -2662,8 +2633,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_D_SS)
                        || (item->tpc() == Tpc::TPC_E_SS)
                        || (item->tpc() == Tpc::TPC_F_SS)
-                       || (item->tpc() == Tpc::TPC_G_SS))
-            {
+                       || (item->tpc() == Tpc::TPC_G_SS)) {
                 x = - spacing * 0.75;
                 y = - step * 6.0;
                 item->drawSymbol(SymId::accidentalDoubleSharp, painter, PointF(x, y));
@@ -2673,8 +2643,7 @@ void TDraw::draw(const Note* item, Painter* painter)
                        || (item->tpc() == Tpc::TPC_D_SSS)
                        || (item->tpc() == Tpc::TPC_E_SSS)
                        || (item->tpc() == Tpc::TPC_F_SSS)
-                       || (item->tpc() == Tpc::TPC_G_SSS))
-            {
+                       || (item->tpc() == Tpc::TPC_G_SSS)) {
                 x = - spacing * 2.0;
                 y = - step * 6.0;
                 item->drawSymbol(SymId::accidentalTripleSharp, painter, PointF(x, y));

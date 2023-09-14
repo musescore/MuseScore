@@ -865,8 +865,8 @@ int BeamTremoloLayout::getMiddleStaffLine(ChordRest* startChord, ChordRest* endC
 int BeamTremoloLayout::computeDesiredSlant(int startNote, int endNote, int middleLine, int dictator, int pointer) const
 {
     Chord* startChord = toChord(m_elements.front());
-    if ((startChord->staff() && startChord->staff()->clefType(Fraction()) == ClefType::JIANPU)
-        && (startChord->staffType() && startChord->staffType()->lines() == 0)) {
+
+    if ((startChord->staff() && startChord->staff()->clefType(Fraction()) == ClefType::JIANPU) && (startChord->staffType() && startChord->staffType()->lines() == 0)) {
         return 0;
     }
 
@@ -1033,6 +1033,7 @@ double BeamTremoloLayout::chordBeamAnchorX(const ChordRest* cr, ChordBeamAnchorT
         double symWidth = cr->symWidth(SymId::keysig_1_Jianpu);
         return cr->pagePos().x() - pagePosX + symWidth / 5.0 * 2.15;
     }
+
     if (!cr->isChord() || !toChord(cr)->stem()) {
         if (!m_up) {
             // rests always return the right side of the glyph as their stemPosX
