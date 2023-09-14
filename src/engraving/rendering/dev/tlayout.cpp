@@ -265,7 +265,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::HAIRPIN_SEGMENT:  layout(item_cast<HairpinSegment*>(item), ctx);
         break;
-    case ElementType::HARP_DIAGRAM:     layout(item_cast<HarpPedalDiagram*>(item), ctx);
+    case ElementType::HARP_DIAGRAM:
+        layout(item_cast<const HarpPedalDiagram*>(item), static_cast<HarpPedalDiagram::LayoutData*>(ldata));
         break;
     case ElementType::HARMONY:          layout(item_cast<Harmony*>(item), ctx);
         break;
@@ -2229,7 +2230,7 @@ void TLayout::layout(const Fingering* item, Fingering::LayoutData* ldata)
     }
     ldata->setIsSkipDraw(false);
 
-    if (item->explicitParent() && item->layoutToParentWidth()) {
+    if (item->layoutToParentWidth()) {
         LD_CONDITION(item->parentItem()->layoutData()->isSetBbox()); // layoutTextBase
     }
 
@@ -2482,39 +2483,6 @@ void TLayout::layout(const FretDiagram* item, FretDiagram::LayoutData* ldata, co
             ss->skyline().add(r);
         }
     }
-}
-
-static void layoutFretCircle(const FretCircle* item, const LayoutContext&, FretCircle::LayoutData* ldata)
-{
-    if (!item->tabEllipseEnabled()) {
-        ldata->setIsSkipDraw(true);
-        ldata->setBbox(RectF());
-        return;
-    }
-    ldata->setIsSkipDraw(false);
-
-    double lw = item->spatium() * FretCircle::CIRCLE_WIDTH / 2;
-    ldata->rect = item->ellipseRect();
-
-    RectF chordRect;
-    double minWidth = item->chord()->upNote()->width();
-    for (const Note* note : item->chord()->notes()) {
-        chordRect |= note->layoutData()->bbox();
-        minWidth = std::min(minWidth, note->width());
-    }
-
-    double offsetFromUpNote = (ldata->rect.height() - chordRect.height()
-                               - (item->chord()->downNote()->pos().y() - item->chord()->upNote()->pos().y())
-                               ) / 2;
-    ldata->offsetFromUpNote = offsetFromUpNote;
-    ldata->sideOffset = ((ldata->rect.width() - minWidth) / 2);
-
-    ldata->setBbox(ldata->rect.adjusted(-lw, -lw, lw, lw));
-}
-
-void TLayout::layout(FretCircle* item, LayoutContext& ctx)
-{
-    layoutFretCircle(item, ctx, item->mutLayoutData());
 }
 
 static void layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissando::LayoutData* ldata)
@@ -3074,11 +3042,26 @@ void TLayout::layout(Hairpin* item, LayoutContext& ctx)
     layoutTextLineBase(item, ctx);
 }
 
-void TLayout::layout(HarpPedalDiagram* item, LayoutContext&)
+void TLayout::layout(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata)
 {
-    item->updateDiagramText();
-    layoutTextBase(item, item->mutLayoutData());
-    Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
+    const_cast<HarpPedalDiagram*>(item)->updateDiagramText();
+
+    if (item->layoutToParentWidth()) {
+        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox()); // layoutTextBase
+    }
+
+    layoutTextBase(item, ldata);
+
+    if (item->autoplace()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(s->layoutData()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)

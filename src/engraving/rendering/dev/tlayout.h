@@ -50,6 +50,8 @@
 #include "../../dom/fingering.h"
 #include "../../dom/fret.h"
 
+#include "../../dom/harppedaldiagram.h"
+
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
@@ -65,8 +67,6 @@ class Beam;
 
 class Chord;
 
-class FretCircle;
-
 class Glissando;
 class GlissandoSegment;
 class GraceNotesGroup;
@@ -75,7 +75,6 @@ class GradualTempoChange;
 
 class HairpinSegment;
 class Hairpin;
-class HarpPedalDiagram;
 class HarmonicMarkSegment;
 class Harmony;
 class Hook;
@@ -209,7 +208,6 @@ public:
     static void layout(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(const Fingering* item, Fingering::LayoutData* ldata);
     static void layout(const FretDiagram* item, FretDiagram::LayoutData* ldata, const LayoutContext& ctx);
-    static void layout(FretCircle* item, LayoutContext& ctx);
 
     static void layout(Glissando* item, LayoutContext& ctx);
     static void layout(GlissandoSegment* item, LayoutContext& ctx);
@@ -219,7 +217,7 @@ public:
 
     static void layout(HairpinSegment* item, LayoutContext& ctx);
     static void layout(Hairpin* item, LayoutContext& ctx);
-    static void layout(HarpPedalDiagram* item, LayoutContext& ctx);
+    static void layout(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata);
     static void layout(HarmonicMarkSegment* item, LayoutContext& ctx);
     static void layout(Harmony* item, LayoutContext& ctx);
     static void layout1(Harmony* item, const LayoutContext& ctx);
