@@ -344,5 +344,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
         MeasureLayout::getNextMeasure(ctx);
     }
 
+    SystemLayout::hideEmptyStaves(system, ctx, true);
+
     system->setWidth(pos.x());
 }
