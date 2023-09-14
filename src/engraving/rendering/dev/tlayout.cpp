@@ -279,7 +279,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::IMAGE:
         layout(item_cast<const Image*>(item), static_cast<Image::LayoutData*>(ldata));
         break;
-    case ElementType::INSTRUMENT_CHANGE: layout(item_cast<InstrumentChange*>(item), ctx);
+    case ElementType::INSTRUMENT_CHANGE:
+        layout(item_cast<const InstrumentChange*>(item), static_cast<InstrumentChange::LayoutData*>(ldata));
         break;
     case ElementType::JUMP:             layout(item_cast<Jump*>(item), ctx);
         break;
@@ -3221,10 +3222,19 @@ void TLayout::layout(const Image* item, Image::LayoutData* ldata)
     ldata->setBbox(RectF(PointF(), item->size2pixel(imageSize)));
 }
 
-void TLayout::layout(InstrumentChange* item, LayoutContext&)
+void TLayout::layout(const InstrumentChange* item, InstrumentChange::LayoutData* ldata)
 {
-    layoutTextBase(item, item->mutLayoutData());
-    Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
+    layoutTextBase(item, ldata);
+
+    if (item->autoplace()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(s->layoutData()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layout(InstrumentName* item, LayoutContext&)
