@@ -62,6 +62,8 @@
 
 #include "../../dom/keysig.h"
 
+#include "../../dom/layoutbreak.h"
+
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
@@ -87,7 +89,6 @@ class HairpinSegment;
 class Hairpin;
 class HarmonicMarkSegment;
 
-class LayoutBreak;
 class LedgerLine;
 class LetRing;
 class LetRingSegment;
@@ -231,7 +232,7 @@ public:
 
     static void layout(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf);
 
-    static void layout(LayoutBreak* item, LayoutContext& ctx);
+    static void layout(const LayoutBreak* item, LayoutBreak::LayoutData* ldata);
     static void layout(LedgerLine* item, LayoutContext& ctx);
     static void layout(LetRing* item, LayoutContext& ctx);
     static void layout(LetRingSegment* item, LayoutContext& ctx);

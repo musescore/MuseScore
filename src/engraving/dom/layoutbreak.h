@@ -70,7 +70,7 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
-    void layout0();
+    void init();
 
     double lineWidth() const { return m_lw; }
     const RectF& iconBorderRect() const { return m_iconBorderRect; }
