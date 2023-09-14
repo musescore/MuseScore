@@ -46,6 +46,7 @@
 #include "../../dom/expression.h"
 
 #include "../../dom/fermata.h"
+#include "../../dom/figuredbass.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -62,7 +63,6 @@ class Beam;
 
 class Chord;
 
-class FiguredBassItem;
 class FiguredBass;
 class Fingering;
 class FretDiagram;
@@ -207,8 +207,7 @@ public:
     static void layout(const Expression* item, Expression::LayoutData* ldata);
 
     static void layout(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf);
-    static void layout(FiguredBassItem* item, LayoutContext& ctx);
-    static void layout(FiguredBass* item, LayoutContext& ctx);
+    static void layout(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(Fingering* item, LayoutContext& ctx);
     static void layout(FretDiagram* item, LayoutContext& ctx);
     static void layout(FretCircle* item, LayoutContext& ctx);
@@ -338,6 +337,8 @@ public:
 private:
 
     friend class SlurTieLayout;
+
+    static void layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem::LayoutData* ldata, const LayoutContext& ctx);
 
     static PointF calculateBoundingRect(Harmony* item, const LayoutContext& ctx);
 
