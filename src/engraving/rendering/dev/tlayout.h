@@ -58,6 +58,8 @@
 #include "../../dom/instrchange.h"
 #include "../../dom/instrumentname.h"
 
+#include "../../dom/jump.h"
+
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
@@ -82,8 +84,6 @@ class GradualTempoChange;
 class HairpinSegment;
 class Hairpin;
 class HarmonicMarkSegment;
-
-class Jump;
 
 class KeySig;
 
@@ -227,7 +227,7 @@ public:
     static void layout(const InstrumentChange* item, InstrumentChange::LayoutData* ldata);
     static void layout(const InstrumentName* item, InstrumentName::LayoutData* ldata);
 
-    static void layout(Jump* item, LayoutContext& ctx);
+    static void layout(const Jump* item, Jump::LayoutData* ldata);
 
     static void layout(KeySig* item, LayoutContext& ctx);
 

@@ -114,7 +114,12 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
     }
 
     if (item->autoplace() && item->explicitParent()) {
-        Measure* m = toMeasure(item->explicitParent());
+        const Measure* m = toMeasure(item->explicitParent());
+
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(ldata->isSetBbox());
+        LD_CONDITION(m->layoutData()->isSetPos());
+
         staff_idx_t si = item->staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
