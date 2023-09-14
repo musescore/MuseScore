@@ -773,7 +773,7 @@ void Rest::add(EngravingItem* e)
     // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
-        el().push_back(e);
+        addEl(e);
         e->added();
         break;
     default:
@@ -798,7 +798,7 @@ void Rest::remove(EngravingItem* e)
     // fallthrough
     case ElementType::SYMBOL:
     case ElementType::IMAGE:
-        if (!el().remove(e)) {
+        if (!removeEl(e)) {
             LOGD("Rest::remove(): cannot find %s", e->typeName());
         } else {
             e->removed();

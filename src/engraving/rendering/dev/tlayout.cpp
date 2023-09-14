@@ -309,7 +309,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::MEASURE_NUMBER:
         layout(item_cast<const MeasureNumber*>(item), static_cast<MeasureNumber::LayoutData*>(ldata));
         break;
-    case ElementType::MEASURE_REPEAT:   layout(item_cast<MeasureRepeat*>(item), ctx);
+    case ElementType::MEASURE_REPEAT:
+        layout(item_cast<const MeasureRepeat*>(item), static_cast<MeasureRepeat::LayoutData*>(ldata), ctx);
         break;
     case ElementType::MMREST:           layout(item_cast<MMRest*>(item), ctx);
         break;
@@ -3100,7 +3101,7 @@ void TLayout::layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutCont
             if (fd) {
                 newPosY = ldata->pos().y();
             } else {
-                newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? item->harmonyHeight() - ldata->bbox().height() : 0.0);
+                newPosY = ypos - ((item->align() == AlignV::BOTTOM) ? -ldata->bbox().height() : 0.0);
             }
         } else {
             RectF bb;
@@ -3194,8 +3195,6 @@ void TLayout::layout(const Image* item, Image::LayoutData* ldata)
         return;
     }
 
-    LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
-
     ldata->setPos(0.0, 0.0);
     const_cast<Image*>(item)->init();
 
@@ -3205,6 +3204,9 @@ void TLayout::layout(const Image* item, Image::LayoutData* ldata)
     if (item->autoScale()
         && ((item->explicitParent()->isHBox() || item->explicitParent()->isVBox()))) {
         const EngravingItem::LayoutData* parentLD = item->parentItem()->layoutData();
+
+        LD_CONDITION(parentLD->isSetBbox());
+
         if (item->lockAspectRatio()) {
             double f = item->sizeIsSpatium() ? item->spatium() : DPMM;
             SizeF size(item->imageSize());
@@ -3676,7 +3678,7 @@ void TLayout::layoutMeasureBase(const MeasureBase* item, MeasureBase::LayoutData
 
 void TLayout::layout(const MeasureNumber* item, MeasureNumber::LayoutData* ldata)
 {
-    LD_CONDITION(item->measure()->layoutData()->isSetBbox());
+    LD_CONDITION(item->measure()->layoutData()->isSetBbox()); // layoutMeasureNumberBase
 
     layoutMeasureNumberBase(item, ldata);
 }
@@ -3761,8 +3763,32 @@ void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, MeasureNumb
     }
 }
 
-static void layoutMeasureRepeat(const MeasureRepeat* item, const LayoutContext& ctx, MeasureRepeat::LayoutData* ldata)
+void TLayout::layout(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutContext& ctx)
 {
+    //! NOTE The types are listed here explicitly to show what types there are (see Rest::add method)
+    //! and accordingly show what depends on.
+    for (EngravingItem* e : item->el()) {
+        switch (e->type()) {
+        case ElementType::DEAD_SLAPPED: {
+            DeadSlapped* ds = item_cast<DeadSlapped*>(e);
+            LD_INDEPENDENT;
+            layout(ds, ds->mutLayoutData());
+        } break;
+        case ElementType::SYMBOL: {
+            Symbol* s = item_cast<Symbol*>(e);
+            // not clear yet
+            layoutSymbol(s, const_cast<LayoutContext&>(ctx));
+        } break;
+        case ElementType::IMAGE: {
+            Image* im = item_cast<Image*>(e);
+            LD_INDEPENDENT;
+            layout(im, im->mutLayoutData());
+        } break;
+        default:
+            UNREACHABLE;
+        }
+    }
+
     switch (item->numMeasures()) {
     case 1:
     {
@@ -3770,7 +3796,7 @@ static void layoutMeasureRepeat(const MeasureRepeat* item, const LayoutContext& 
         if (ctx.conf().styleB(Sid::mrNumberSeries) && item->track() != mu::nidx) {
             int placeInSeries = 2; // "1" would be the measure actually being repeated
             staff_idx_t staffIdx = item->staffIdx();
-            Measure* m = item->measure();
+            const Measure* m = item->measure();
             while (m && m->isOneMeasureRepeat(staffIdx) && m->prevIsOneMeasureRepeat(staffIdx)) {
                 placeInSeries++;
                 m = m->prevMeasure();
@@ -3823,15 +3849,6 @@ static void layoutMeasureRepeat(const MeasureRepeat* item, const LayoutContext& 
     if (item->track() != mu::nidx && !ldata->numberSym.empty()) {
         ldata->addBbox(item->numberRect());
     }
-}
-
-void TLayout::layout(MeasureRepeat* item, LayoutContext& ctx)
-{
-    for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
-    }
-
-    layoutMeasureRepeat(item, ctx, item->mutLayoutData());
 }
 
 static void layoutMMRest(const MMRest* item, const LayoutContext& ctx, MMRest::LayoutData* ldata)
