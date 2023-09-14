@@ -50,9 +50,10 @@
         <WixVariable Id="WixUIDialogBmp" Value="$(var.CPACK_WIX_UI_DIALOG)" />
         <?endif?>
 
-        <Property Id='ARPCONTACT'>https://musescore.org</Property>
         <Property Id='ARPHELPLINK'>https://musescore.org</Property>
         <Property Id='ARPURLINFOABOUT'>https://musescore.org</Property>
+        <!-- Properties from CMake -->
+        <?include "properties.wxi"?>
 
         <!-- Add to checkbox to launch program after install ²-->
         <UI>
@@ -218,7 +219,7 @@
             <ComponentRef Id="RegisterTypes" />
         </FeatureRef>
 
-        <?include "properties.wxi"?>
+        <!-- Something from CMake-->
         <?include "product_fragment.wxi"?>
     </Product>
 </Wix>
