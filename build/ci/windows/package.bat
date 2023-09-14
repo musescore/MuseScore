@@ -162,7 +162,7 @@ cmake -DCPACK_WIX_PRODUCT_GUID=%PACKAGE_UUID% ^
     ..
 
 SET PATH=%WIX_DIR%;%PATH% 
-cmake --build . --target package || GOTO END_ERROR
+cmake --build . --target package || SET WIX_ERROR=1
 cd ..
 
 ECHO "Create logs dir"
@@ -177,6 +177,10 @@ ECHO "Copy from %WIX_LOGS_PATH% to %ARTIFACTS_DIR%\logs\WIX"
 
 ECHO .msi > excludedmsi.txt
 XCOPY /Y /EXCLUDE:excludedmsi.txt %WIX_LOGS_PATH% %ARTIFACTS_DIR%\logs\WIX
+
+IF DEFINED WIX_ERROR (
+    GOTO END_ERROR
+)
 
 :: find the MSI file without the hardcoded version
 for /r %%i in (%BUILD_DIR%\*.msi) do (
