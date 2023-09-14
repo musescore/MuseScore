@@ -1669,11 +1669,6 @@ void TLayout::layout(const Capo* item, Capo::LayoutData* ldata, const LayoutCont
         }
     }
 
-    if (item->layoutToParentWidth()) {
-        // from layoutTextBase
-        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
-    }
-
     TLayout::layoutTextBase(item, ldata);
 
     if (item->autoplace()) {
@@ -1739,11 +1734,6 @@ void TLayout::layout(const Dynamic* item, Dynamic::LayoutData* ldata, const Layo
     }
     ldata->setIsSkipDraw(false);
 
-    if (item->layoutToParentWidth()) {
-        // from layoutTextBase
-        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
-    }
-
     TLayout::layoutTextBase(item, ldata);
 
     const Segment* s = item->segment();
@@ -1805,11 +1795,6 @@ void TLayout::layout(const Expression* item, Expression::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
-    }
-
-    if (item->layoutToParentWidth()) {
-        // from layoutTextBase
-        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
     }
 
     TLayout::layoutTextBase(item, ldata);
@@ -2191,10 +2176,6 @@ static void layoutLines(const FiguredBass* item, FiguredBass::LayoutData* ldata,
 
 void TLayout::layout(const FiguredBass* item, FiguredBass::LayoutData* ldata, const LayoutContext& ctx)
 {
-    if (item->explicitParent() && item->layoutToParentWidth()) {
-        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox()); // layout1TextBase
-    }
-
     // VERTICAL POSITION:
     const double y = ctx.conf().styleD(Sid::figuredBassYOffset) * item->spatium();
     ldata->setPos(PointF(0.0, y));
@@ -2230,10 +2211,6 @@ void TLayout::layout(const Fingering* item, Fingering::LayoutData* ldata)
         return;
     }
     ldata->setIsSkipDraw(false);
-
-    if (item->layoutToParentWidth()) {
-        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox()); // layoutTextBase
-    }
 
     TLayout::layoutTextBase(item, ldata);
     ldata->setPosY(0.0); // handle placement below
@@ -3047,10 +3024,6 @@ void TLayout::layout(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData*
 {
     const_cast<HarpPedalDiagram*>(item)->updateDiagramText();
 
-    if (item->layoutToParentWidth()) {
-        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox()); // layoutTextBase
-    }
-
     layoutTextBase(item, ldata);
 
     if (item->autoplace()) {
@@ -3084,13 +3057,11 @@ void TLayout::layout(HarmonicMarkSegment* item, LayoutContext& ctx)
 
 void TLayout::layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutContext& ctx)
 {
+    LD_INDEPENDENT;
+
     if (!item->explicitParent()) {
         ldata->setPos(0.0, 0.0);
         const_cast<Harmony*>(item)->setOffset(0.0, 0.0);
-    }
-
-    if (item->explicitParent() && item->layoutToParentWidth()) {
-        LD_CONDITION(item->parentItem()->layoutData()->isSetBbox());
     }
 
     if (ldata->layoutInvalid) {
