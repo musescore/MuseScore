@@ -59,14 +59,11 @@ using namespace mu::audio;
 using namespace mu::audio::synth;
 using namespace mu::audio::fx;
 
-#ifdef Q_OS_LINUX
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
 #include "internal/platform/lin/linuxaudiodriver.h"
 #endif
 
-#ifdef Q_OS_FREEBSD
-#include "internal/platform/lin/linuxaudiodriver.h"
-#endif
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && !defined(MINGW)
 //#include "internal/platform/win/winmmdriver.h"
 //#include "internal/platform/win/wincoreaudiodriver.h"
 #include "internal/platform/win/wasapiaudiodriver.h"
@@ -107,11 +104,11 @@ void AudioModule::registerExports()
     m_soundFontRepository = std::make_shared<SoundFontRepository>();
     m_registerAudioPluginsScenario = std::make_shared<RegisterAudioPluginsScenario>();
 
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD) || defined(MINGW)
     m_audioDriver = std::shared_ptr<IAudioDriver>(new LinuxAudioDriver());
 #endif
 
-#ifdef Q_OS_WIN
+#if defined(Q_OS_WIN) && !defined(MINGW)
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new WinmmDriver());
     //m_audioDriver = std::shared_ptr<IAudioDriver>(new CoreAudioDriver());
     m_audioDriver = std::shared_ptr<IAudioDriver>(new WasapiAudioDriver());

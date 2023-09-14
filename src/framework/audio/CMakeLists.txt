@@ -22,7 +22,7 @@ set(MODULE audio)
 
 include(GetPlatformInfo)
 
-if (OS_IS_WIN)
+if (OS_IS_WIN AND (NOT MINGW))
     set(DRIVER_SRC
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.cpp
         #${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/winmmdriver.h
@@ -36,14 +36,14 @@ if (OS_IS_WIN)
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/win/audiodeviceslistener.h
     )
-elseif(OS_IS_LIN OR OS_IS_FBSD)
+elseif(OS_IS_LIN OR OS_IS_FBSD OR MINGW)
     set(JACK_SRC "")
     if (MUE_ENABLE_AUDIO_JACK)
         set(JACK_SRC
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.cpp
             ${CMAKE_CURRENT_LIST_DIR}/internal/platform/jack/jackaudiodriver.h
-        )
-    endif()
+           )
+    endif(MUE_ENABLE_AUDIO_JACK)
     set(DRIVER_SRC
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.cpp
         ${CMAKE_CURRENT_LIST_DIR}/internal/platform/lin/linuxaudiodriver.h
@@ -290,21 +290,28 @@ else ()
         )
 endif()
 
-if (MUE_ENABLE_AUDIO_JACK)
-    find_package(Jack REQUIRED)
-    set(MODULE_INCLUDE ${MODULE_INCLUDE} ${JACK_INCLUDE_DIRS} )
-    set(MODULE_LINK ${MODULE_LINK} ${JACK_LIBRARIES} pthread )
-else ()
-    if (OS_IS_MAC)
+if (OS_IS_MAC)
         find_library(AudioToolbox NAMES AudioToolbox)
         find_library(CoreAudio NAMES CoreAudio)
         set(MODULE_LINK ${MODULE_LINK} ${AudioToolbox} ${CoreAudio})
-    elseif (OS_IS_WIN)
+elseif (OS_IS_WIN)
+    if (MUE_ENABLE_AUDIO_JACK)
+        pkg_check_modules(JACK REQUIRED jack)
+        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${JACK_INCLUDE_DIRS})
+        set(MODULE_LINK ${MODULE_LINK} ${JACK_LDFLAGS})
+    else()
         set(MODULE_LINK ${MODULE_LINK} winmm mmdevapi mfplat)
-    elseif (OS_IS_LIN)
+    endif()
+elseif (OS_IS_LIN)
+    if (MUE_ENABLE_AUDIO_JACK)
         find_package(ALSA REQUIRED)
-        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} )
-        set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread )
+        find_package(Jack REQUIRED)
+        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS} ${JACK_INCLUDE_DIRS})
+        set(MODULE_LINK ${MODULE_LINK} ${JACK_LDFLAGS} ${ALSA_LIBRARIES} pthread)
+    else()
+        find_package(ALSA REQUIRED)
+        set(MODULE_INCLUDE ${MODULE_INCLUDE} ${ALSA_INCLUDE_DIRS})
+        set(MODULE_LINK ${MODULE_LINK} ${ALSA_LIBRARIES} pthread)
     endif()
 endif()
 
