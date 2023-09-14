@@ -101,7 +101,6 @@ option(MUE_DOWNLOAD_SOUNDFONT "Download the latest soundfont version as part of 
 
 # === Pack ===
 option(MUE_RUN_LRELEASE "Generate .qm files" ON)
-option(MUE_ENABLE_FILE_ASSOCIATION "File types association (using for package)" OFF)
 option(MUE_INSTALL_SOUNDFONT "Install sound font" ON)
 
 # === Tests ===
