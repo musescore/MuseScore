@@ -858,7 +858,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
                 }
                 Fraction tick = segment.tick();
                 as.init(staff->keySigEvent(tick));
-                TLayout::layout(ks, ctx);
+                TLayout::layout(ks, ks->mutLayoutData(), ctx.conf());
             } else if (segment.isChordRestType()) {
                 const StaffType* st = staff->staffTypeForElement(&segment);
                 track_idx_t track     = staffIdx * VOICES;
@@ -1668,7 +1668,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                 kSegment->add(keysig);
             }
             keysig->setKeySigEvent(keyIdx);
-            TLayout::layout(keysig, ctx);
+            TLayout::layout(keysig, keysig->mutLayoutData(), ctx.conf());
             //kSegment->createShape(staffIdx);
             kSegment->setEnabled(true);
         } else if (kSegment && isPitchedStaff) {
@@ -1688,7 +1688,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                 EngravingItem* e = kSegment->element(track);
                 if (e && e->isKeySig()) {
                     KeySig* keysig = toKeySig(e);
-                    TLayout::layout(keysig, ctx);
+                    TLayout::layout(keysig, keysig->mutLayoutData(), ctx.conf());
                 }
             }
         }
@@ -1821,7 +1821,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                     s->setTrailer(true);
                 }
                 keySig->setKeySigEvent(key2);
-                TLayout::layout(keySig, ctx);
+                TLayout::layout(keySig, keySig->mutLayoutData(), ctx.conf());
                 //s->createShape(track / VOICES);
                 s->setEnabled(true);
             } else { /// !staffIsPitchedAtNextMeas || !needsCourtesy

@@ -60,6 +60,8 @@
 
 #include "../../dom/jump.h"
 
+#include "../../dom/keysig.h"
+
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
 
@@ -84,8 +86,6 @@ class GradualTempoChange;
 class HairpinSegment;
 class Hairpin;
 class HarmonicMarkSegment;
-
-class KeySig;
 
 class LayoutBreak;
 class LedgerLine;
@@ -229,7 +229,7 @@ public:
 
     static void layout(const Jump* item, Jump::LayoutData* ldata);
 
-    static void layout(KeySig* item, LayoutContext& ctx);
+    static void layout(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void layout(LayoutBreak* item, LayoutContext& ctx);
     static void layout(LedgerLine* item, LayoutContext& ctx);
@@ -336,8 +336,6 @@ private:
     friend class SlurTieLayout;
 
     static void layoutFiguredBassItem(const FiguredBassItem* item, FiguredBassItem::LayoutData* ldata, const LayoutContext& ctx);
-
-    static void keySigAddLayout(KeySig* item, LayoutContext& ctx, SymId sym, int line);
 
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
     static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
