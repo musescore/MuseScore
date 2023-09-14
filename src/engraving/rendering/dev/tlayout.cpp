@@ -61,7 +61,6 @@
 #include "dom/figuredbass.h"
 #include "dom/fingering.h"
 #include "dom/fret.h"
-#include "dom/fretcircle.h"
 
 #include "dom/glissando.h"
 #include "dom/gradualtempochange.h"
@@ -281,6 +280,9 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::INSTRUMENT_CHANGE:
         layout(item_cast<const InstrumentChange*>(item), static_cast<InstrumentChange::LayoutData*>(ldata));
+        break;
+    case ElementType::INSTRUMENT_NAME:
+        layout(item_cast<const InstrumentName*>(item), static_cast<InstrumentName::LayoutData*>(ldata));
         break;
     case ElementType::JUMP:             layout(item_cast<Jump*>(item), ctx);
         break;
@@ -3237,9 +3239,10 @@ void TLayout::layout(const InstrumentChange* item, InstrumentChange::LayoutData*
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
-void TLayout::layout(InstrumentName* item, LayoutContext&)
+void TLayout::layout(const InstrumentName* item, InstrumentName::LayoutData* ldata)
 {
-    layoutTextBase(item, item->mutLayoutData());
+    LD_INDEPENDENT;
+    layoutTextBase(item, ldata);
 }
 
 void TLayout::layout(Jump* item, LayoutContext&)

@@ -56,6 +56,7 @@
 
 #include "../../dom/image.h"
 #include "../../dom/instrchange.h"
+#include "../../dom/instrumentname.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -82,7 +83,6 @@ class HairpinSegment;
 class Hairpin;
 class HarmonicMarkSegment;
 
-class InstrumentName;
 class Jump;
 
 class KeySig;
@@ -225,7 +225,7 @@ public:
 
     static void layout(const Image* item, Image::LayoutData* ldata);
     static void layout(const InstrumentChange* item, InstrumentChange::LayoutData* ldata);
-    static void layout(InstrumentName* item, LayoutContext& ctx);
+    static void layout(const InstrumentName* item, InstrumentName::LayoutData* ldata);
 
     static void layout(Jump* item, LayoutContext& ctx);
 
