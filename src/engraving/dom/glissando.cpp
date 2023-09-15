@@ -218,7 +218,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
             int en = noteStart->tpc() + TPC_DELTA_ENHARMONIC * -direction;
             // Harp pedalling will only have 1 flat or sharp
             if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
-                pitchOffsets.push_back(PITCH_DELTA_OCTAVE * noteStart->octave() + tpc2pitch(en) - pitchStart);
+                pitchOffsets.push_back(0);
             }
             pitchOffsets.push_back(pitchStart - pitchStart);
 
@@ -233,7 +233,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
             // Check for enharmonic at end, in correct direction
             en = noteEnd->tpc() + TPC_DELTA_ENHARMONIC * direction;
             if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
-                pitchOffsets.push_back(PITCH_DELTA_OCTAVE * noteEnd->octave() + tpc2pitch(en) - pitchStart);
+                pitchOffsets.push_back(pitchEnd - pitchStart);
             }
 
             return pitchOffsets.size() > 0;

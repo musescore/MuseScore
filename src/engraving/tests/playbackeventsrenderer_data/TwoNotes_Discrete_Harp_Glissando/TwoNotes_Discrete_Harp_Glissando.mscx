@@ -136,8 +136,11 @@ D<sym>csymAccidentalNatural</sym> C<sym>csymAccidentalNatural</sym> B<sym>csymAc
           <Chord>
             <durationType>whole</durationType>
             <Note>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                </Accidental>
               <pitch>60</pitch>
-              <tpc>14</tpc>
+              <tpc>26</tpc>
               <Spanner type="Glissando">
                 <Glissando>
                   <text>gliss.</text>
@@ -163,12 +166,12 @@ D<sym>csymAccidentalNatural</sym> C<sym>csymAccidentalNatural</sym> B<sym>csymAc
               <string name="1">1</string>
               <string name="2">1</string>
               <string name="3">1</string>
-              <string name="4">1</string>
-              <string name="5">1</string>
+              <string name="4">2</string>
+              <string name="5">0</string>
               <string name="6">1</string>
               </pedalState>
             <style>harp_pedal_text_diagram</style>
-            <text>F<sym>csymAccidentalNatural</sym> G<sym>csymAccidentalNatural</sym> A<sym>csymAccidentalNatural</sym> 
+            <text>G<sym>csymAccidentalFlat</sym> A<sym>csymAccidentalNatural</sym> 
 B<sym>csymAccidentalNatural</sym> </text>
             </HarpPedalDiagram>
           <Chord>
@@ -204,8 +207,11 @@ B<sym>csymAccidentalNatural</sym> </text>
           <Chord>
             <durationType>whole</durationType>
             <Note>
-              <pitch>60</pitch>
-              <tpc>14</tpc>
+              <Accidental>
+                <subtype>accidentalSharp</subtype>
+                </Accidental>
+              <pitch>66</pitch>
+              <tpc>20</tpc>
               <Spanner type="Glissando">
                 <prev>
                   <location>

@@ -933,12 +933,12 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) 
     // TEST FIRST GLISS
 
     // [GIVEN] Expected glissando disclosure
-    size_t expectedSubNotesCount = 7;
+    size_t expectedSubNotesCount = 8;
 
     float expectedDuration = static_cast<float>(WHOLE_NOTE_DURATION) / expectedSubNotesCount;
 
     pitch_level_t nominalPitchLevel = pitchLevel(PitchClass::C, 4);
-    std::vector<int> pitchesWt = { 0, 2, 4, 6, 8, 10, 12 };
+    std::vector<int> pitchesWt = { 0, 0, 2, 4, 6, 8, 10, 12 };
 
     std::vector<pitch_level_t> expectedPitches;
     for (size_t i = 0; i < expectedSubNotesCount; ++i) {
@@ -974,13 +974,15 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) 
     // TEST SECOND GLISS
 
     // [GIVEN] Expected glissando disclosure
+    expectedSubNotesCount = 4;
+    expectedDuration = static_cast<float>(WHOLE_NOTE_DURATION) / expectedSubNotesCount;
 
     nominalPitchLevel = pitchLevel(PitchClass::C, 5);
-    std::vector<int> pitchesC = { 0, 1, 3, 5, 7, 8, 10 };
+    std::vector<int> pitches2 = { 0, 1, 3, 6 };
 
     expectedPitches.clear();
     for (size_t i = 0; i < expectedSubNotesCount; ++i) {
-        expectedPitches.push_back(nominalPitchLevel - pitchesC.at(i) * PITCH_LEVEL_STEP);
+        expectedPitches.push_back(nominalPitchLevel - pitches2.at(i) * PITCH_LEVEL_STEP);
     }
 
     m_defaultProfile->setPattern(ArticulationType::DiscreteGlissando, m_dummyPattern);
@@ -1002,10 +1004,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, TwoNotes_Discrete_Harp_Glissando) 
 
             // [THEN] We expect that each sub-note in Discrete Glissando articulation has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, static_cast<int>(expectedDuration));
-            // HACK: for some reason the 4th note in the gliss starts 1ms too late
-            if (i != 3) {
-                EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, WHOLE_NOTE_DURATION + static_cast<int>(i * expectedDuration));
-            }
+
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, WHOLE_NOTE_DURATION + static_cast<int>(i * expectedDuration));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
             EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
