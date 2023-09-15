@@ -30,6 +30,7 @@
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
 
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/dynamic.h"
@@ -249,6 +250,26 @@ void Convert::arpegFromMEI(engraving::Arpeggio* arpeggio, const libmei::Arpeg& m
 libmei::Arpeg Convert::arpegToMEI(const engraving::Arpeggio* arpeggio)
 {
     libmei::Arpeg meiArpeg;
+
+    // @arrow and @order
+    switch (arpeggio->arpeggioType()) {
+    case (engraving::ArpeggioType::DOWN):
+        meiArpeg.SetOrder(libmei::arpegLog_ORDER_down);
+        meiArpeg.SetArrow(libmei::BOOLEAN_true);
+        break;
+    case (engraving::ArpeggioType::UP):
+        meiArpeg.SetOrder(libmei::arpegLog_ORDER_up);
+        meiArpeg.SetArrow(libmei::BOOLEAN_true);
+        break;
+    case (engraving::ArpeggioType::BRACKET):
+        meiArpeg.SetOrder(libmei::arpegLog_ORDER_nonarp);
+        break;
+    default:
+        break;
+    }
+
+    // @color
+    Convert::colorToMEI(arpeggio, meiArpeg);
 
     return meiArpeg;
 }
