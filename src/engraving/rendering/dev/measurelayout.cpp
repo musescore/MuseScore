@@ -2024,15 +2024,15 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                 double x2 = s2 ? s2->x() - s2->minLeft() : targetWidth;
 
                 if (m->isMMRest()) {
-                    Rest* mmrest = toMMRest(e);
+                    MMRest* mmrest = toMMRest(e);
                     //
                     // center multi measure rest
                     //
                     double d = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
                     double w = x2 - x1 - 2 * d;
 
-                    mmrest->setWidth(w);
-                    TLayout::layout(mmrest, ctx);
+                    mmrest->mutLayoutData()->setRestWidth(w);
+                    TLayout::layoutMMRest(mmrest, mmrest->mutLayoutData(), ctx);
                     e->setPos(x1 - s.x() + d, e->staff()->height() * .5);   // center vertically in measure
                     s.createShape(staffIdx);
                 } else { // if (rest->isFullMeasureRest()) {
