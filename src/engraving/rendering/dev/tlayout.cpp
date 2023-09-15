@@ -334,7 +334,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::RASGUEADO_SEGMENT: layout(item_cast<RasgueadoSegment*>(item), ctx);
         break;
-    case ElementType::REHEARSAL_MARK:   layout(item_cast<RehearsalMark*>(item), ctx);
+    case ElementType::REHEARSAL_MARK:
+        layoutRehearsalMark(item_cast<const RehearsalMark*>(item), static_cast<RehearsalMark::LayoutData*>(ldata));
         break;
     case ElementType::REST:             layout(item_cast<Rest*>(item), ctx);
         break;
@@ -4230,44 +4231,62 @@ void TLayout::layout(RasgueadoSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layout(RehearsalMark* item, LayoutContext& ctx)
+void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::LayoutData* ldata)
 {
-    RehearsalMark::LayoutData* ldata = item->mutLayoutData();
-    layoutTextBase(item, ctx);
+    layoutTextBase(item, ldata);
 
-    Segment* s = item->segment();
-    if (s) {
-        if (s->rtick().isZero()) {
-            // first CR of measure, alignment is hcenter or right (the usual cases)
-            // align with barline, point just after header, or start of measure depending on context
+    const Segment* s = item->segment();
 
-            Measure* m = s->measure();
-            Segment* header = s->prev();        // possibly just a start repeat
-            double measureX = -s->x();
-            Segment* repeat = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
-            double barlineX = repeat ? repeat->x() - s->x() : measureX;
-            System* sys = m->system();
-            bool systemFirst = (sys && m->isFirstInSystem());
+    LD_CONDITION(s->layoutData()->isSetPos());
 
-            if (!header || repeat || !systemFirst) {
-                // no header, or header with repeat, or header mid-system - align with barline
-                ldata->setPosX(barlineX);
-            } else {
-                // header at start of system
-                // align to a point just after the header
-                EngravingItem* e = header->element(item->track());
-                double w = e ? e->width() : header->width();
-                ldata->setPosX(header->x() + w - s->x());
+    if (s->rtick().isZero()) {
+        // first CR of measure, alignment is hcenter or right (the usual cases)
+        // align with barline, point just after header, or start of measure depending on context
 
-                // special case for right aligned rehearsal marks at start of system
-                // left align with start of measure if that is further left
-                if (item->align() == AlignH::RIGHT) {
-                    ldata->setPosX(std::min(ldata->pos().x(), measureX + item->width()));
-                }
+        const Measure* m = s->measure();
+        const Segment* header = s->prev();            // possibly just a start repeat
+        double measureX = -s->x();
+        const Segment* repeat = m->findSegmentR(SegmentType::StartRepeatBarLine, Fraction(0, 1));
+
+        if (repeat) {
+            LD_CONDITION(repeat->layoutData()->isSetPos());
+        }
+
+        double barlineX = repeat ? repeat->x() - s->x() : measureX;
+        const System* sys = m->system();
+        bool systemFirst = (sys && m->isFirstInSystem());
+
+        if (!header || repeat || !systemFirst) {
+            // no header, or header with repeat, or header mid-system - align with barline
+            ldata->setPosX(barlineX);
+        } else {
+            // header at start of system
+            // align to a point just after the header
+            EngravingItem* e = header->element(item->track());
+
+            LD_CONDITION(e->layoutData()->isSetBbox());
+            LD_CONDITION(header->layoutData()->isSetBbox());
+
+            double w = e ? e->layoutData()->bbox().width() : header->layoutData()->bbox().width();
+            ldata->setPosX(header->x() + w - s->x());
+
+            // special case for right aligned rehearsal marks at start of system
+            // left align with start of measure if that is further left
+            if (item->align() == AlignH::RIGHT) {
+                ldata->setPosX(std::min(ldata->pos().x(), measureX + ldata->bbox().width()));
             }
         }
-        Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
     }
+
+    if (item->autoplace()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(s->layoutData()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 static void layoutRestDots(const Rest* item, const LayoutContext& ctx, Rest::LayoutData* ldata)
