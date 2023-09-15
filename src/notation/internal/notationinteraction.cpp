@@ -3398,10 +3398,10 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, AddBoxesTarget ta
         break;
     }
 
-    addBoxes(boxType, count, beforeBoxIndex);
+    addBoxes(boxType, count, beforeBoxIndex, target == AddBoxesTarget::AfterSelection);
 }
 
-void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex)
+void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool insertAfter)
 {
     if (count < 1) {
         return;
@@ -3430,7 +3430,7 @@ void NotationInteraction::addBoxes(BoxType boxType, int count, int beforeBoxInde
 
     mu::engraving::Score::InsertMeasureOptions options;
     options.createEmptyMeasures = false;
-    options.moveSignaturesClef = true;
+    options.moveSignaturesClef = !insertAfter;
     options.needDeselectAll = false;
 
     for (int i = 0; i < count; ++i) {
