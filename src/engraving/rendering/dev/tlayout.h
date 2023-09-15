@@ -78,6 +78,7 @@
 #include "../../dom/playtechannotation.h"
 
 #include "../../dom/rehearsalmark.h"
+#include "../../dom/rest.h"
 
 #include "../../dom/textbase.h"
 
@@ -119,7 +120,6 @@ class PedalSegment;
 class PickScrapeSegment;
 
 class RasgueadoSegment;
-class Rest;
 
 class ShadowNote;
 class SLine;
@@ -269,7 +269,7 @@ public:
 
     static void layout(RasgueadoSegment* item, LayoutContext& ctx);
     static void layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::LayoutData* ldata);
-    static void layout(Rest* item, LayoutContext& ctx);
+    static void layoutRest(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx);
 
     static void layout(ShadowNote* item, LayoutContext& ctx);
     static void layoutLine(SLine* item, LayoutContext& ctx); // base class

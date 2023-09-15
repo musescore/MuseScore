@@ -337,7 +337,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::REHEARSAL_MARK:
         layoutRehearsalMark(item_cast<const RehearsalMark*>(item), static_cast<RehearsalMark::LayoutData*>(ldata));
         break;
-    case ElementType::REST:             layout(item_cast<Rest*>(item), ctx);
+    case ElementType::REST:
+        layoutRest(item_cast<const Rest*>(item), static_cast<Rest::LayoutData*>(ldata), ctx);
         break;
     case ElementType::SHADOW_NOTE:      layout(item_cast<ShadowNote*>(item), ctx);
         break;
@@ -4289,29 +4290,43 @@ void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::Layo
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
-static void layoutRestDots(const Rest* item, const LayoutContext& ctx, Rest::LayoutData* ldata)
+void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const LayoutContext& ctx)
 {
-    const_cast<Rest*>(item)->checkDots();
-    double x = item->symWidthNoLedgerLines(ldata) + ctx.conf().styleMM(Sid::dotNoteDistance) * item->mag();
-    double dx = ctx.conf().styleMM(Sid::dotDotDistance) * item->mag();
-    double y = item->dotLine() * item->spatium() * .5;
-    for (NoteDot* dot : item->dotList()) {
-        NoteDot::LayoutData* dotldata = dot->mutLayoutData();
-        TLayout::layoutNoteDot(dot, dotldata);
-        dotldata->setPos(x, y);
-        x += dx;
+    if (item->isGap()) {
+        return;
     }
-}
 
-static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutData* ldata)
-{
+    //! NOTE The types are listed here explicitly to show what types there are (see Rest::add method)
+    //! and accordingly show what depends on.
+    for (EngravingItem* e : item->el()) {
+        switch (e->type()) {
+        case ElementType::DEAD_SLAPPED: {
+            DeadSlapped* ds = item_cast<DeadSlapped*>(e);
+            LD_INDEPENDENT;
+            layout(ds, ds->mutLayoutData());
+        } break;
+        case ElementType::SYMBOL: {
+            Symbol* s = item_cast<Symbol*>(e);
+            // not clear yet
+            layoutSymbol(s, const_cast<LayoutContext&>(ctx));
+        } break;
+        case ElementType::IMAGE: {
+            Image* im = item_cast<Image*>(e);
+            LD_INDEPENDENT;
+            layout(im, im->mutLayoutData());
+        } break;
+        default:
+            UNREACHABLE;
+        }
+    }
+
     if (item->deadSlapped()) {
         ldata->setIsSkipDraw(true);
         return;
     }
     ldata->setIsSkipDraw(false);
 
-    double _spatium = item->spatium();
+    double spatium = item->spatium();
 
     ldata->setPosX(0.0);
     const StaffType* stt = item->staffType();
@@ -4355,7 +4370,7 @@ static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutD
     const Staff* stf = item->staff();
     const StaffType* st = stf ? stf->staffTypeForElement(item) : 0;
     double lineDist = st ? st->lineDistance().val() : 1.0;
-    int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * _spatium));
+    int userLine   = yOff == 0.0 ? 0 : lrint(yOff / (lineDist * spatium));
     int lines      = st ? st->lines() : 5;
 
     int naturalLine = item->computeNaturalLine(lines); // Measured in 1sp steps
@@ -4365,23 +4380,26 @@ static void layoutRest(const Rest* item, const LayoutContext& ctx, Rest::LayoutD
 
     ldata->setSym(item->getSymbol(item->durationType().type(), finalLine + userLine, lines));
 
-    ldata->setPosY(finalLine * lineDist * _spatium);
+    ldata->setPosY(finalLine * lineDist * spatium);
     if (!item->shouldNotBeDrawn()) {
         ldata->setBbox(item->symBbox(ldata->sym()));
     }
-    layoutRestDots(item, ctx, ldata);
-}
 
-void TLayout::layout(Rest* item, LayoutContext& ctx)
-{
-    if (item->isGap()) {
-        return;
-    }
-    for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
-    }
+    auto layoutRestDots = [](const Rest* item, const LayoutConfiguration& conf, Rest::LayoutData* ldata)
+    {
+        const_cast<Rest*>(item)->checkDots();
+        double x = item->symWidthNoLedgerLines(ldata) + conf.styleMM(Sid::dotNoteDistance) * item->mag();
+        double dx = conf.styleMM(Sid::dotDotDistance) * item->mag();
+        double y = item->dotLine() * item->spatium() * .5;
+        for (NoteDot* dot : item->dotList()) {
+            NoteDot::LayoutData* dotldata = dot->mutLayoutData();
+            TLayout::layoutNoteDot(dot, dotldata);
+            dotldata->setPos(x, y);
+            x += dx;
+        }
+    };
 
-    layoutRest(item, ctx, item->mutLayoutData());
+    layoutRestDots(item, ctx.conf(), ldata);
 }
 
 void TLayout::layout(ShadowNote* item, LayoutContext& ctx)
