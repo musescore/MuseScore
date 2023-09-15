@@ -1171,7 +1171,7 @@ void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
         }
         // setXmlText is reimplemented to take care of brackets
         rr->setXmlText(s);
-        TLayout::layout(rr, ctx);
+        TLayout::layoutMMRestRange(rr, rr->mutLayoutData());
     }
 }
 

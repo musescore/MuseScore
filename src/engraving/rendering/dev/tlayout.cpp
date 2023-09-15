@@ -303,7 +303,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::MMREST:
         layoutMMRest(item_cast<const MMRest*>(item), static_cast<MMRest::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::MMREST_RANGE:     layout(item_cast<MMRestRange*>(item), ctx);
+    case ElementType::MMREST_RANGE:
+        layoutMMRestRange(item_cast<const MMRestRange*>(item), static_cast<MMRestRange::LayoutData*>(ldata));
         break;
     case ElementType::NOTE:             layout(item_cast<Note*>(item), ctx);
         break;
@@ -3279,7 +3280,7 @@ void TLayout::layout(const InstrumentChange* item, InstrumentChange::LayoutData*
 void TLayout::layout(const InstrumentName* item, InstrumentName::LayoutData* ldata)
 {
     LD_INDEPENDENT;
-
+    //! NOTE There are problems, an investigation is required
 //    if (ldata->isValid()) {
 //        return;
 //    }
@@ -3339,6 +3340,7 @@ void TLayout::layout(const KeySig* item, KeySig::LayoutData* ldata, const Layout
 {
     LD_INDEPENDENT;
 
+    //! NOTE There are problems, an investigation is required
 //    if (ldata->isValid()) {
 //        return;
 //    }
@@ -3974,9 +3976,11 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
     }
 }
 
-void TLayout::layout(MMRestRange* item, LayoutContext&)
+void TLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata)
 {
-    layoutMeasureNumberBase(item, item->mutLayoutData());
+    LD_CONDITION(item->measure()->layoutData()->isSetBbox()); // layoutMeasureNumberBase
+
+    layoutMeasureNumberBase(item, ldata);
 }
 
 static void layoutNote(const Note* item, const LayoutContext&, Note::LayoutData* ldata)
