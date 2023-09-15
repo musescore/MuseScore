@@ -315,9 +315,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::NOTEHEAD:         layoutSymbol(item_cast<NoteHead*>(item), ctx);
         break;
     case ElementType::ORNAMENT:
-        if (!ldata->isValid()) {
-            layout(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
-        }
+        layout(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::OTTAVA:           layout(item_cast<Ottava*>(item), ctx);
         break;
@@ -331,7 +329,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::PEDAL_SEGMENT:    layout(item_cast<PedalSegment*>(item), ctx);
         break;
-    case ElementType::PLAYTECH_ANNOTATION: layout(item_cast<PlayTechAnnotation*>(item), ctx);
+    case ElementType::PLAYTECH_ANNOTATION:
+        layoutPlayTechAnnotation(item_cast<const PlayTechAnnotation*>(item), static_cast<PlayTechAnnotation::LayoutData*>(ldata));
         break;
     case ElementType::RASGUEADO_SEGMENT: layout(item_cast<RasgueadoSegment*>(item), ctx);
         break;
@@ -4074,6 +4073,8 @@ void TLayout::layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata)
 
 void TLayout::layout(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf)
 {
+    LD_CONDITION(ldata->isSetSymId());
+
     layout(static_cast<const Articulation*>(item), ldata);
 
     double _spatium = item->spatium();
@@ -4086,8 +4087,12 @@ void TLayout::layout(const Ornament* item, Ornament::LayoutData* ldata, const La
         if (!accidental) {
             continue;
         }
-        accidental->computeMag();
         Accidental::LayoutData* accLData = accidental->mutLayoutData();
+
+        LD_CONDITION(accLData->isSetBbox());
+
+        accidental->computeMag();
+
         accLData->setMag(accLData->mag() * ornamentAccidentalMag);
         layout(accidental, accLData, conf);
         Shape accidentalShape = accidental->shape();
@@ -4193,10 +4198,19 @@ void TLayout::layout(PickScrapeSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layout(PlayTechAnnotation* item, LayoutContext&)
+void TLayout::layoutPlayTechAnnotation(const PlayTechAnnotation* item, PlayTechAnnotation::LayoutData* ldata)
 {
-    layoutTextBase(item, item->mutLayoutData());
-    Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
+    layoutTextBase(item, ldata);
+
+    if (item->autoplace()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(s->layoutData()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layout(RasgueadoSegment* item, LayoutContext& ctx)
