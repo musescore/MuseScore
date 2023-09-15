@@ -27,6 +27,7 @@
 #include "log.h"
 #include "types/datetime.h"
 
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracket.h"
@@ -791,7 +792,9 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
     }
 
     for (auto controlEvent : m_startingControlEventMap) {
-        if (controlEvent.first->isBreath()) {
+        if (controlEvent.first->isArpeggio()) {
+            success = success && this->writeArpeg(dynamic_cast<const Arpeggio*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isBreath()) {
             success = success && this->writeBreath(dynamic_cast<const Breath*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isExpression() || controlEvent.first->isPlayTechAnnotation() || controlEvent.first->isStaffText()) {
             success = success && this->writeDir(dynamic_cast<const TextBase*>(controlEvent.first), controlEvent.second);
@@ -1411,6 +1414,25 @@ bool MeiExporter::writeVerse(const Lyrics* lyrics)
 //---------------------------------------------------------
 
 /**
+ * Write a arpeg.
+ */
+
+bool MeiExporter::writeArpeg(const Arpeggio* arpeggio, const std::string& startid)
+{
+    IF_ASSERT_FAILED(arpeggio) {
+        return false;
+    }
+
+    pugi::xml_node arpegNode = m_currentNode.append_child();
+    libmei::Arpeg meiArpeg; // = Convert::fermataToMEI(arpeggio);
+    meiArpeg.SetStartid(startid);
+
+    meiArpeg.Write(arpegNode, this->getXmlIdFor(arpeggio, 'a'));
+
+    return true;
+}
+
+/**
  * Write a breath (i.e., breath or caesura).
  */
 
@@ -1895,13 +1917,19 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
             }
         }
     }
-    // Ornaments
+    // For chords only
     if (chordRest->isChord()) {
         const Chord* chord = toChord(chordRest);
+        // Ornaments
         for (const Articulation* articulation : chord->articulations()) {
             if (articulation->isOrnament()) {
                 m_startingControlEventMap.push_back(std::make_pair(articulation, "#" + xmlId));
             }
+        }
+        // Arpeggio
+        const Arpeggio* arpeggio = chord->arpeggio();
+        if (arpeggio) {
+            m_startingControlEventMap.push_back(std::make_pair(arpeggio, "#" + xmlId));
         }
     }
 }
