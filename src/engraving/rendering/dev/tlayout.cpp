@@ -5093,6 +5093,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     }
     item->text()->setPlacement(PlacementV::ABOVE);
     item->text()->setTrack(item->track());
+    item->text()->setColor(tl->lineColor());
     layout(item->text(), ctx);
 
     if ((item->isSingleType() || item->isEndType())) {
@@ -5104,6 +5105,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->endText()->setFontStyle(tl->endFontStyle());
         item->endText()->setPlacement(PlacementV::ABOVE);
         item->endText()->setTrack(item->track());
+        item->endText()->setColor(tl->lineColor());
         layout(item->endText(), ctx);
     } else {
         item->endText()->setXmlText(u"");
