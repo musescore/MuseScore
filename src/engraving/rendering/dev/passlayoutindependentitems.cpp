@@ -49,6 +49,7 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::INSTRUMENT_NAME:
     case ElementType::KEYSIG:
     case ElementType::LAYOUT_BREAK:
+    case ElementType::NOTE:
         TLayout::layoutItem(item, ctx);
     default:
         break;
