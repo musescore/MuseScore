@@ -1424,7 +1424,7 @@ bool MeiExporter::writeArpeg(const Arpeggio* arpeggio, const std::string& starti
     }
 
     pugi::xml_node arpegNode = m_currentNode.append_child();
-    libmei::Arpeg meiArpeg; // = Convert::fermataToMEI(arpeggio);
+    libmei::Arpeg meiArpeg = Convert::arpegToMEI(arpeggio);
     meiArpeg.SetStartid(startid);
 
     meiArpeg.Write(arpegNode, this->getXmlIdFor(arpeggio, 'a'));

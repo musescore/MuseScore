@@ -148,6 +148,9 @@ public:
     static engraving::ArticulationAnchor anchorFromMEI(const libmei::data_STAFFREL meiPlace, bool& warning);
     static libmei::data_STAFFREL anchorToMEI(engraving::ArticulationAnchor anchor);
 
+    static void arpegFromMEI(engraving::Arpeggio* arpeggio, const libmei::Arpeg& meiArpeg, bool& warning);
+    static libmei::Arpeg arpegToMEI(const engraving::Arpeggio* arpeggio);
+
     static void articFromMEI(engraving::Articulation* articulation, const libmei::Artic& meiArtic, bool& warning);
     static libmei::Artic articToMEI(const engraving::Articulation* articulation);
 

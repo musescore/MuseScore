@@ -242,6 +242,17 @@ libmei::data_STAFFREL Convert::anchorToMEI(engraving::ArticulationAnchor anchor)
     }
 }
 
+void Convert::arpegFromMEI(engraving::Arpeggio* arpeggio, const libmei::Arpeg& meiArpeg, bool& warning)
+{
+}
+
+libmei::Arpeg Convert::arpegToMEI(const engraving::Arpeggio* arpeggio)
+{
+    libmei::Arpeg meiArpeg;
+
+    return meiArpeg;
+}
+
 void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::Artic& meiArtic, bool& warning)
 {
     engraving::SymId symId = engraving::SymId::articAccentAbove;
