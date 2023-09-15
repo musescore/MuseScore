@@ -42,7 +42,6 @@ static const ElementStyle mmRestStyle {
 MMRest::MMRest(Segment* s)
     : Rest(ElementType::MMREST, s)
 {
-    m_width = 0;
     m_numberVisible = true;
     if (score()) {
         initElementStyle(&mmRestStyle);
@@ -56,7 +55,6 @@ MMRest::MMRest(const MMRest& r, bool link)
         score()->undo(new Link(this, const_cast<MMRest*>(&r)));
         setAutoplace(true);
     }
-    m_width = r.m_width;
     m_numberVisible = r.m_numberVisible;
 }
 
@@ -67,7 +65,7 @@ MMRest::MMRest(const MMRest& r, bool link)
 
 PointF MMRest::numberPosition(const mu::RectF& numberBbox) const
 {
-    double x = (m_width - numberBbox.width()) * .5;
+    double x = (layoutData()->restWidth() - numberBbox.width()) * .5;
     // -pos().y(): relative to topmost staff line
     // - 0.5 * r.height(): relative to the baseline of the number symbol
     // (rather than the center)
@@ -144,7 +142,7 @@ Shape MMRest::shape() const
 {
     Shape shape;
     double vStrokeHeight = style().styleMM(Sid::mmRestHBarVStrokeHeight);
-    shape.add(RectF(0.0, -(vStrokeHeight * .5), m_width, vStrokeHeight));
+    shape.add(RectF(0.0, -(vStrokeHeight * .5), layoutData()->restWidth(), vStrokeHeight));
     if (m_numberVisible) {
         shape.add(numberRect());
     }

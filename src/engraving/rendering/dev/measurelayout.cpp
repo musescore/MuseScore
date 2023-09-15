@@ -1237,9 +1237,10 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                         x1 = s1 ? s1->x() + s1->width() : 0;
                         w = x2 - x1 - d;
                     }
-                    mmrest->setWidth(w);
-                    TLayout::layout(mmrest, ctx);
-                    mmrest->mutLayoutData()->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
+                    MMRest::LayoutData* mmrestLD = mmrest->mutLayoutData();
+                    mmrestLD->setRestWidth(w);
+                    TLayout::layoutMMRest(mmrest, mmrest->mutLayoutData(), ctx);
+                    mmrestLD->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
                 } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
                     // two- or four-measure repeat, center on following barline
                     double measureWidth = x2 - s.x() + .5 * (m->styleP(Sid::barWidth));
