@@ -309,7 +309,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::NOTE:
         layoutNote(item_cast<const Note*>(item), static_cast<Note::LayoutData*>(ldata));
         break;
-    case ElementType::NOTEDOT:          layout(item_cast<NoteDot*>(item), ctx);
+    case ElementType::NOTEDOT:
+        layoutNoteDot(item_cast<const NoteDot*>(item), static_cast<NoteDot::LayoutData*>(ldata));
         break;
     case ElementType::NOTEHEAD:         layoutSymbol(item_cast<NoteHead*>(item), ctx);
         break;
@@ -4062,14 +4063,15 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
     }
 }
 
-static void layoutNoteDot(const NoteDot* item, const LayoutContext&, NoteDot::LayoutData* ldata)
+void TLayout::layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata)
 {
-    ldata->setBbox(item->symBbox(SymId::augmentationDot));
-}
+    LD_INDEPENDENT;
 
-void TLayout::layout(NoteDot* item, LayoutContext& ctx)
-{
-    layoutNoteDot(item, ctx, item->mutLayoutData());
+    if (ldata->isValid()) {
+        return;
+    }
+
+    ldata->setBbox(item->symBbox(SymId::augmentationDot));
 }
 
 void TLayout::layout(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf)
@@ -4262,7 +4264,7 @@ static void layoutRestDots(const Rest* item, const LayoutContext& ctx, Rest::Lay
     double y = item->dotLine() * item->spatium() * .5;
     for (NoteDot* dot : item->dotList()) {
         NoteDot::LayoutData* dotldata = dot->mutLayoutData();
-        layoutNoteDot(dot, ctx, dotldata);
+        TLayout::layoutNoteDot(dot, dotldata);
         dotldata->setPos(x, y);
         x += dx;
     }

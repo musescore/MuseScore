@@ -73,6 +73,7 @@
 #include "../../dom/mmrestrange.h"
 
 #include "../../dom/note.h"
+#include "../../dom/notedot.h"
 
 #include "../../dom/textbase.h"
 
@@ -103,8 +104,6 @@ class LineSegment;
 class Lyrics;
 class LyricsLine;
 class LyricsLineSegment;
-
-class NoteDot;
 
 class Ottava;
 class OttavaSegment;
@@ -251,7 +250,7 @@ public:
     static void layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata);
 
     static void layoutNote(const Note* item, Note::LayoutData* ldata);
-    static void layout(NoteDot* item, LayoutContext& ctx);
+    static void layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata);
 
     static void layout(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx);
