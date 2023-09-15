@@ -1604,6 +1604,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                     clef->setClefType(cl);
                 }
                 clef->setSmall(false);
+                clef->mutLayoutData()->reset();
                 TLayout::layout(clef, clef->mutLayoutData());
             } else if (clef) {
                 clef->parentItem()->remove(clef);

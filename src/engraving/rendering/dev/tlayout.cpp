@@ -166,31 +166,19 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 
     switch (item->type()) {
     case ElementType::ACCIDENTAL:
-        if (!ldata->isValid()) {
-            layout(item_cast<const Accidental*>(item), static_cast<Accidental::LayoutData*>(ldata), ctx.conf());
-        }
+        layout(item_cast<const Accidental*>(item), static_cast<Accidental::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::ACTION_ICON:
-        if (!ldata->isValid()) {
-            layout(item_cast<const ActionIcon*>(item), static_cast<ActionIcon::LayoutData*>(ldata));
-        }
+        layout(item_cast<const ActionIcon*>(item), static_cast<ActionIcon::LayoutData*>(ldata));
         break;
     case ElementType::AMBITUS:
-        if (!ldata->isValid()) {
-            layout(item_cast<const Ambitus*>(item), static_cast<Ambitus::LayoutData*>(ldata), ctx);
-        }
+        layout(item_cast<const Ambitus*>(item), static_cast<Ambitus::LayoutData*>(ldata), ctx);
         break;
     case ElementType::ARPEGGIO:
-        //! NOTE Can be edited and relayout,
-        //! in this case the reset layout data has not yet been done
-        //if (!ldata->isValid()) {
         layout(item_cast<const Arpeggio*>(item), static_cast<Arpeggio::LayoutData*>(ldata), ctx.conf());
-        //}
         break;
     case ElementType::ARTICULATION:
-        if (!ldata->isValid()) {
-            layout(item_cast<const Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
-        }
+        layout(item_cast<const Articulation*>(item), static_cast<Articulation::LayoutData*>(ldata));
         break;
     case ElementType::BAR_LINE:
         layout(item_cast<const BarLine*>(item), static_cast<BarLine::LayoutData*>(ldata), ctx);
@@ -418,6 +406,10 @@ void TLayout::layout(const Accidental* item, Accidental::LayoutData* ldata, cons
 {
     LD_INDEPENDENT;
 
+    if (ldata->isValid()) {
+        return;
+    }
+
     ldata->syms.clear();
 
     // TODO: remove Accidental in layout
@@ -514,6 +506,10 @@ void TLayout::layout(const ActionIcon* item, ActionIcon::LayoutData* ldata)
 {
     LD_INDEPENDENT;
 
+    if (ldata->isValid()) {
+        return;
+    }
+
     FontMetrics fontMetrics(item->iconFont());
     ldata->setBbox(fontMetrics.boundingRect(Char(item->icon())));
     ldata->setPos(PointF());
@@ -522,6 +518,10 @@ void TLayout::layout(const ActionIcon* item, ActionIcon::LayoutData* ldata)
 void TLayout::layout(const Ambitus* item, Ambitus::LayoutData* ldata, const LayoutContext& ctx)
 {
     LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
+    }
 
     const double spatium = item->spatium();
     const double headWdt = item->headWidth();
@@ -650,6 +650,12 @@ void TLayout::layout(const Ambitus* item, Ambitus::LayoutData* ldata, const Layo
 
 void TLayout::layout(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf, bool includeCrossStaffHeight)
 {
+    //! NOTE Can be edited and relayout,
+    //! in this case the reset layout data has not yet been done
+//    if (ldata->isValid()) {
+//        return;
+//    }
+
     if (conf.styleB(Sid::ArpeggioHiddenInStdIfTab)) {
         if (item->staff() && item->staff()->isPitchedStaff(item->tick())) {
             for (Staff* s : item->staff()->staffList()) {
@@ -1439,6 +1445,10 @@ void TLayout::layout(const Breath* item, Breath::LayoutData* ldata, const Layout
 {
     LD_INDEPENDENT;
 
+    if (ldata->isValid()) {
+        return;
+    }
+
     int voiceOffset = item->placeBelow() * (item->staff()->lines(item->tick()) - 1) * item->spatium();
     if (item->isCaesura()) {
         ldata->setPosY(item->spatium() + voiceOffset);
@@ -1564,6 +1574,10 @@ void TLayout::layout(const ChordLine* item, ChordLine::LayoutData* ldata, const 
 void TLayout::layout(const Clef* item, Clef::LayoutData* ldata)
 {
     LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
+    }
 
     // determine current number of lines and line distance
     int lines = 0;
@@ -1697,6 +1711,10 @@ void TLayout::layout(const Capo* item, Capo::LayoutData* ldata, const LayoutCont
 void TLayout::layout(const DeadSlapped* item, DeadSlapped::LayoutData* ldata)
 {
     LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
+    }
 
     const double deadSlappedWidth = item->spatium() * 2;
     RectF rect = RectF(0, 0, deadSlappedWidth, item->staff()->height());
@@ -3073,6 +3091,10 @@ void TLayout::layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutCont
 {
     LD_INDEPENDENT;
 
+    if (ldata->isValid()) {
+        return;
+    }
+
     if (!item->explicitParent()) {
         ldata->setPos(0.0, 0.0);
         const_cast<Harmony*>(item)->setOffset(0.0, 0.0);
@@ -3189,6 +3211,11 @@ void TLayout::layout(const Harmony* item, Harmony::LayoutData* ldata, LayoutCont
 void TLayout::layout(const Hook* item, Hook::LayoutData* ldata)
 {
     LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
+    }
+
     ldata->setBbox(item->symBbox(item->sym()));
 }
 
@@ -3252,6 +3279,11 @@ void TLayout::layout(const InstrumentChange* item, InstrumentChange::LayoutData*
 void TLayout::layout(const InstrumentName* item, InstrumentName::LayoutData* ldata)
 {
     LD_INDEPENDENT;
+
+//    if (ldata->isValid()) {
+//        return;
+//    }
+
     layoutTextBase(item, ldata);
 }
 
@@ -3306,6 +3338,10 @@ static void keySigAddLayout(const KeySig* item, const LayoutConfiguration& conf,
 void TLayout::layout(const KeySig* item, KeySig::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     LD_INDEPENDENT;
+
+//    if (ldata->isValid()) {
+//        return;
+//    }
 
     double spatium = item->spatium();
     double step = spatium * (item->staff() ? item->staff()->staffTypeForElement(item)->lineDistance().val() * 0.5 : 0.5);
@@ -3551,6 +3587,11 @@ void TLayout::layout(const KeySig* item, KeySig::LayoutData* ldata, const Layout
 void TLayout::layout(const LayoutBreak* item, LayoutBreak::LayoutData* ldata)
 {
     LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
+    }
+
     double lw = item->lineWidth();
     ldata->setBbox(item->iconBorderRect().adjusted(-lw, -lw, lw, lw));
 }
