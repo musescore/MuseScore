@@ -75,6 +75,8 @@
 #include "../../dom/note.h"
 #include "../../dom/notedot.h"
 
+#include "../../dom/playtechannotation.h"
+
 #include "../../dom/textbase.h"
 
 #include "../../dom/ornament.h"
@@ -113,7 +115,6 @@ class PalmMuteSegment;
 class Pedal;
 class PedalSegment;
 class PickScrapeSegment;
-class PlayTechAnnotation;
 
 class RasgueadoSegment;
 class RehearsalMark;
@@ -263,7 +264,7 @@ public:
     static void layout(Pedal* item, LayoutContext& ctx);
     static void layout(PedalSegment* item, LayoutContext& ctx);
     static void layout(PickScrapeSegment* item, LayoutContext& ctx);
-    static void layout(PlayTechAnnotation* item, LayoutContext& ctx);
+    static void layoutPlayTechAnnotation(const PlayTechAnnotation* item, PlayTechAnnotation::LayoutData* ldata);
 
     static void layout(RasgueadoSegment* item, LayoutContext& ctx);
     static void layout(RehearsalMark* item, LayoutContext& ctx);
