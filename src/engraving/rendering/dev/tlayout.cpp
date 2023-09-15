@@ -306,7 +306,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::MMREST_RANGE:
         layoutMMRestRange(item_cast<const MMRestRange*>(item), static_cast<MMRestRange::LayoutData*>(ldata));
         break;
-    case ElementType::NOTE:             layout(item_cast<Note*>(item), ctx);
+    case ElementType::NOTE:
+        layoutNote(item_cast<const Note*>(item), static_cast<Note::LayoutData*>(ldata));
         break;
     case ElementType::NOTEDOT:          layout(item_cast<NoteDot*>(item), ctx);
         break;
@@ -3981,8 +3982,18 @@ void TLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData
     layoutMeasureNumberBase(item, ldata);
 }
 
-static void layoutNote(const Note* item, const LayoutContext&, Note::LayoutData* ldata)
+void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 {
+    LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
+    }
+
+    if (!ldata->isSetPos()) {
+        ldata->setPos(PointF());
+    }
+
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
     if (useTablature) {
         if (item->displayFret() == Note::DisplayFretOption::Hide) {
@@ -4047,11 +4058,6 @@ static void layoutNote(const Note* item, const LayoutContext&, Note::LayoutData*
         }
         ldata->setBbox(item->symBbox(nh));
     }
-}
-
-void TLayout::layout(Note* item, LayoutContext& ctx)
-{
-    layoutNote(item, ctx, item->mutLayoutData());
 }
 
 static void layoutNoteDot(const NoteDot* item, const LayoutContext&, NoteDot::LayoutData* ldata)

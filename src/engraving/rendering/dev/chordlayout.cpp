@@ -88,7 +88,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         layoutPitched(c, ctx);
     }
 
-    double _spatium         = item->spatium();
     double mag_             = item->staff() ? item->staff()->staffMag(item) : 1.0;      // palette elements do not have a staff
     double dotNoteDistance  = ctx.conf().styleMM(Sid::dotNoteDistance) * mag_;
 
@@ -108,24 +107,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     delete item->tabDur();     // no TAB? no duration symbol! (may happen when converting a TAB into PITCHED)
     item->setTabDur(nullptr);
 
-    if (!item->segment()) {
-        //
-        // hack for use in palette
-        //
-        size_t n = item->notes().size();
-        for (size_t i = 0; i < n; i++) {
-            Note* note = item->notes().at(i);
-            TLayout::layout(note, ctx);
-            double x = 0.0;
-            double y = note->line() * _spatium * .5;
-            note->setPos(x, y);
-        }
-        computeUp(item, ctx);
-        layoutStem(item, ctx);
-        item->addLedgerLines();
-        return;
-    }
-
     //-----------------------------------------
     //  process notes
     //-----------------------------------------
@@ -137,7 +118,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     std::vector<Accidental*> chordAccidentals;
 
     for (Note* note : item->notes()) {
-        TLayout::layout(note, ctx);
+        TLayout::layoutNote(note, note->mutLayoutData());
 
         double x1 = note->pos().x() + chordX;
         double x2 = x1 + note->headWidth();
@@ -307,7 +288,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     double minY        = 1000.0;                 // just a very large value
     for (size_t i = 0; i < numOfNotes; ++i) {
         Note* note = item->notes().at(i);
-        TLayout::layout(note, ctx);
+        TLayout::layoutNote(note, note->mutLayoutData());
         // set headWidth to max fret text width
         double fretWidth = note->layoutData()->bbox().width();
         if (headWidth < fretWidth) {
