@@ -72,6 +72,5 @@
         <file>qml/MuseScore/UiComponents/internal/MenuMetrics.qml</file>
         <file>qml/MuseScore/UiComponents/StyledBusyIndicator.qml</file>
         <file>qml/MuseScore/UiComponents/ButtonBox.qml</file>
-        <file>qml/MuseScore/UiComponents/ButtonBoxItem.qml</file>
     </qresource>
 </RCC>

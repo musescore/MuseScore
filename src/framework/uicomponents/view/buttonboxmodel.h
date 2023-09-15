@@ -24,53 +24,56 @@
 #define MU_UICOMPONENTS_BUTTONBOXMODEL_H
 
 #include <QObject>
+#include <QQuickItem>
+
 #include "translation.h"
+#include "qmllistproperty.h"
 
 namespace mu::uicomponents {
-class ButtonBoxModel : public QAbstractListModel
+class ButtonBoxModel : public QObject
 {
     Q_OBJECT
 
-    Q_PROPERTY(int buttons READ buttons WRITE setButtons NOTIFY buttonsChanged)
     Q_PROPERTY(ButtonLayout buttonLayout READ buttonLayout WRITE setButtonLayout NOTIFY buttonLayoutChanged)
+
+    Q_PROPERTY(QQmlListProperty<QQuickItem> buttonsItems READ buttonsItems NOTIFY buttonsItemsChanged)
 
 public:
     explicit ButtonBoxModel(QObject* parent = nullptr);
 
     enum ButtonType {
-        NoButton          = 0x0000000,
-        Ok                = 0x0000001,
-        Continue          = 0x0000002,
-        RestoreDefaults   = 0x0000004,
-        Reset             = 0x0000008,
-        Apply             = 0x0000010,
-        Help              = 0x0000020,
-        Discard           = 0x0000040,
-        Cancel            = 0x0000080,
-        Close             = 0x0000100,
-        Ignore            = 0x0000200,
-        Retry             = 0x0000400,
-        Abort             = 0x0000800,
-        NoToAll           = 0x0001000,
-        No                = 0x0002000,
-        YesToAll          = 0x0004000,
-        Yes               = 0x0008000,
-        Open              = 0x0010000,
-        DontSave          = 0x0020000,
-        SaveAll           = 0x0040000,
-        Save              = 0x0080000,
-        Next              = 0x0100000,
-        Back              = 0x0200000,
-        Select            = 0x0400000,
-        Clear             = 0x0800000,
-        Done              = 0x1000000,
+        NoButton,
+        Ok,
+        Continue,
+        RestoreDefaults,
+        Reset,
+        Apply,
+        Help,
+        Discard,
+        Cancel,
+        Close,
+        Ignore,
+        Retry,
+        Abort,
+        NoToAll,
+        No,
+        YesToAll,
+        Yes,
+        Open,
+        DontSave,
+        SaveAll,
+        Save,
+        Next,
+        Back,
+        Select,
+        Clear,
+        Done,
 
-        CustomButton      = 0x2000000,
+        CustomButton,
 
         FirstButton       = Ok,
         LastButton        = CustomButton
     };
-
     Q_ENUM(ButtonType)
 
     enum ButtonRole { // Keep updated with buttonRoleLayouts
@@ -97,69 +100,51 @@ public:
     Q_ENUM(ButtonLayout)
     Q_ENUMS(ButtonBoxModel::ButtonLayout)
 
-    QVariant data(const QModelIndex& index, int role) const override;
-    int rowCount(const QModelIndex& parent = QModelIndex()) const override;
-    QHash<int, QByteArray> roleNames() const override;
-
-    int buttons() const;
-
-    Q_INVOKABLE void load();
-    Q_INVOKABLE void addCustomButton(int index, QString text, int role, bool isAccent, bool isLeftSide, QString navigationName);
+    Q_INVOKABLE QList<int> load();
+    Q_INVOKABLE void setButtons(const QVariantList& buttons);
 
     ButtonLayout buttonLayout() const;
     void setButtonLayout(ButtonLayout newButtonLayout);
 
-public slots:
-    void setButtons(const int& buttons);
+    QQmlListProperty<QQuickItem> buttonsItems();
 
 signals:
-    void buttonsChanged(const int& buttons);
-
     void buttonLayoutChanged();
+    void buttonsItemsChanged();
+
+    void addButton(QString text, int buttonType, ButtonRole buttonRole, bool isAccent, bool isLeftSide);
+    void reloadRequested();
 
 private:
-    enum Roles {
-        ButtonText = Qt::UserRole + 1,
-        Type,
-        Accent,
-        IsLeftSide,
-        CustomButtonIndex,
-        NavigationName,
-        NavigationColumn
-    };
-
     const std::vector<ButtonRole> chooseButtonLayoutType();
 
     struct LayoutButton {
         QString text;
-        ButtonType buttonType;
-        ButtonRole buttonRole;
-        bool isAccent;
+        int buttonType = int(ButtonType::NoButton);
+        ButtonRole buttonRole = ButtonRole::CustomRole;
+        bool isAccent = false;
         bool isLeftSide = false;
-        int customButtonIndex = -1;
-        QString navigationName = "";
-        int navigationColumn = 0;
 
-        LayoutButton(QString _text, ButtonType _buttonType,  ButtonRole _buttonRole, bool _isAccent, bool _isLeftSide = false,
-                     QString _navigationName = "")
-            : text(_text), buttonType(_buttonType),  buttonRole(_buttonRole), isAccent(_isAccent), isLeftSide(_isLeftSide),
-            navigationName(_navigationName)
+        LayoutButton(QString _text, int _buttonType,  ButtonRole _buttonRole, bool _isAccent, bool _isLeftSide = false)
+            : text(_text), buttonType(_buttonType),  buttonRole(_buttonRole), isAccent(_isAccent), isLeftSide(_isLeftSide)
         {
         }
     };
+
+    LayoutButton* layoutButton(const QQuickItem* item) const;
 
     const char* c = "uicomponents"; //To make Following Hash look neat
 
     QHash<ButtonType, LayoutButton*> m_layoutButtons {
         { Ok,              new LayoutButton(qtrc(c, "OK"),               Ok,              AcceptRole,      true) },
         { Save,            new LayoutButton(qtrc(c, "Save"),             Save,            ApplyRole,       true) },
-        { SaveAll,         new LayoutButton(qtrc(c, "Save all"),         SaveAll,         ApplyRole,       false, false, "SaveAll") },
-        { DontSave,        new LayoutButton(qtrc(c, "Don't save"),       DontSave,        DestructiveRole, false, false, "DontSave") },
+        { SaveAll,         new LayoutButton(qtrc(c, "Save all"),         SaveAll,         ApplyRole,       false) },
+        { DontSave,        new LayoutButton(qtrc(c, "Don't save"),       DontSave,        DestructiveRole, false) },
         { Open,            new LayoutButton(qtrc(c, "Open"),             Open,            AcceptRole,      true) },
         { Yes,             new LayoutButton(qtrc(c, "Yes"),              Yes,             AcceptRole,      true) },
-        { YesToAll,        new LayoutButton(qtrc(c, "Yes to all"),       YesToAll,        AcceptRole,      false, false, "YesToAll") },
+        { YesToAll,        new LayoutButton(qtrc(c, "Yes to all"),       YesToAll,        AcceptRole,      false) },
         { No,              new LayoutButton(qtrc(c, "No"),               No,              RejectRole,      false) },
-        { NoToAll,         new LayoutButton(qtrc(c, "No to all"),        NoToAll,         RejectRole,      false, false, "NoToAll") },
+        { NoToAll,         new LayoutButton(qtrc(c, "No to all"),        NoToAll,         RejectRole,      false) },
         { Abort,           new LayoutButton(qtrc(c, "Abort"),            Abort,           RejectRole,      false) },
         { Retry,           new LayoutButton(qtrc(c, "Retry"),            Retry,           RetryRole,       false) },
         { Ignore,          new LayoutButton(qtrc(c, "Ignore"),           Ignore,          DestructiveRole, false) },
@@ -168,14 +153,13 @@ private:
         { Discard,         new LayoutButton(qtrc(c, "Discard"),          Discard,         DestructiveRole, false) },
         { Help,            new LayoutButton(qtrc(c, "Help"),             Help,            HelpRole,        false) },
         { Apply,           new LayoutButton(qtrc(c, "Apply"),            Apply,           ApplyRole,       false) },
-        { Reset,           new LayoutButton(qtrc(c, "Reset"),            Reset,           ResetRole,       false, true) },
-        { RestoreDefaults,
-          new LayoutButton(qtrc(c, "Restore defaults"), RestoreDefaults, ResetRole,       false, true, "RestoreDefaults") },
+        { Reset,           new LayoutButton(qtrc(c, "Reset"),            Reset,           ResetRole,       false) },
+        { RestoreDefaults, new LayoutButton(qtrc(c, "Restore defaults"), RestoreDefaults, ResetRole,       false) },
         { Continue,        new LayoutButton(qtrc(c, "Continue"),         Continue,        ContinueRole,    true) },
         { Next,            new LayoutButton(qtrc(c, "Next"),             Next,            ContinueRole,    false) },
         { Back,            new LayoutButton(qtrc(c, "Back"),             Back,            BackRole,        false) },
         { Select,          new LayoutButton(qtrc(c, "Select"),           Select,          AcceptRole,      true) },
-        { Clear,           new LayoutButton(qtrc(c, "Clear"),            Clear,           DestructiveRole, false, true) },
+        { Clear,           new LayoutButton(qtrc(c, "Clear"),            Clear,           DestructiveRole, false) },
         { Done,            new LayoutButton(qtrc(c, "Done"),             Done,            AcceptRole,      true) }
     };
 
@@ -193,11 +177,8 @@ private:
                                    DestructiveRole, RejectRole }
     };
 
-    QList<int> m_buttonsEnum; //Enum version of m_buttons for temp use
-    QList<LayoutButton*> m_customButtons;
-
-    QList<LayoutButton*> m_buttons;
     ButtonLayout m_buttonLayout = ButtonLayout::UnknownLayout;
+    QmlListProperty<QQuickItem> m_buttonsItems;
 };
 }
 

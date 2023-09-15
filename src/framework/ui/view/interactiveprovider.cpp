@@ -374,20 +374,20 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
     params["textFormat"] = format(text.format);
     params["defaultButtonId"] = defBtn;
 
-    int buttonsList = 0;
+    QVariantList buttonsList;
     QVariantList customButtonsList;
     if (buttons.empty()) {
-        buttonsList |= static_cast<int>(IInteractive::Button::Ok);
+        buttonsList << static_cast<int>(IInteractive::Button::Ok);
     } else {
         for (const IInteractive::ButtonData& buttonData: buttons) {
             if (buttonData.btn < static_cast<int>(IInteractive::Button::CustomButton)) {
-                buttonsList |= buttonData.btn;
+                buttonsList << buttonData.btn;
                 continue;
             }
 
             QVariantMap customButton;
-            customButton["buttonId"] = buttonData.btn;
             customButton["text"] = QString::fromStdString(buttonData.text);
+            customButton["buttonId"] = buttonData.btn;
             customButton["role"] = static_cast<int>(buttonData.role);
             customButton["isAccent"] = buttonData.accent;
             customButton["isLeftSide"] = buttonData.leftSide;

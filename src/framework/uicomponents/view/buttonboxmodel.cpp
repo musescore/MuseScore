@@ -27,132 +27,63 @@
 using namespace mu::uicomponents;
 
 ButtonBoxModel::ButtonBoxModel(QObject* parent)
-    : QAbstractListModel(parent)
+    : QObject(parent), m_buttonsItems(this)
 {
 }
 
-void ButtonBoxModel::load()
+QList<int> ButtonBoxModel::load()
 {
-    beginResetModel();
-    m_buttons.clear();
-
+    QList<int> result;
     std::unordered_map <int, std::vector <LayoutButton*> > sortedButtons;
 
-    for (int i : m_buttonsEnum) {
-        LayoutButton* button = m_layoutButtons[ButtonType(i)];
+    QList<QQuickItem*> buttonsItems = m_buttonsItems.list();
+    for (const QQuickItem* item : buttonsItems) {
+        QVariant buttonRoleVar = item->property("buttonRole");
+        if (!buttonRoleVar.isValid()) {
+            continue;
+        }
 
-        sortedButtons[button->buttonRole].push_back(button);
+        ButtonRole role = static_cast<ButtonRole>(buttonRoleVar.toInt());
+
+        QVariant buttonTypeVar = item->property("buttonId");
+        int type = static_cast<int>(ButtonType::CustomButton);
+        LayoutButton* button = nullptr;
+        if (buttonTypeVar.isValid()) {
+            type = buttonTypeVar.toInt();
+            if (type >= static_cast<int>(ButtonType::CustomButton)) {
+                button = layoutButton(item);
+            } else {
+                button = m_layoutButtons[static_cast<ButtonType>(type)];
+            }
+        } else {
+            button = m_layoutButtons[static_cast<ButtonType>(type)];
+        }
+
+        sortedButtons[role].push_back(button);
     }
 
-    for (LayoutButton* button : m_customButtons) {
-        sortedButtons[button->buttonRole].push_back(button);
-    }
-
-    const std::vector <ButtonRole> currentLayout = chooseButtonLayoutType();
+    const std::vector<ButtonRole> currentLayout = chooseButtonLayoutType();
 
     for (ButtonRole buttonRole : currentLayout) {
-        std::vector <LayoutButton*> buttons = sortedButtons[buttonRole];
+        if (!contains(sortedButtons, static_cast<int>(buttonRole))) {
+            continue;
+        }
+
+        std::vector<LayoutButton*> buttons = sortedButtons[buttonRole];
 
         for (LayoutButton* button : buttons) {
-            m_buttons << button;
+            result << button->buttonType;
         }
     }
 
-    std::vector <LayoutButton*> acceptApplyButtons(sortedButtons[ButtonRole::AcceptRole]);
-    acceptApplyButtons.insert(acceptApplyButtons.end(),
-                              sortedButtons[ButtonRole::ApplyRole].begin(), sortedButtons[ButtonRole::ApplyRole].end());
-
-    LayoutButton* targetButton = acceptApplyButtons.size() > 0 ? acceptApplyButtons[0] : nullptr;
-    for (LayoutButton* button : acceptApplyButtons) { // Searching for accent button, accent button be navigation column 0
-        if (button->isAccent) {
-            targetButton = button;
-            break;
-        }
-    }
-
-    if (!targetButton) {
-        endResetModel();
-        return;
-    }
-
-    auto it = std::find(m_buttons.begin(), m_buttons.end(), targetButton);
-
-    int navigationColumnStart = 0;
-    if (it != m_buttons.end()) {
-        navigationColumnStart = it - m_buttons.begin();
-    }
-
-    for (int i = 0; i < m_buttons.size(); i++) {
-        LayoutButton* button = m_buttons[i];
-
-        button->navigationColumn = (i + m_buttons.size() - navigationColumnStart) % m_buttons.size(); // Algorithm for "shifting"
-                                                                                                      // indexes
-    }
-
-    endResetModel();
+    return result;
 }
 
-QVariant ButtonBoxModel::data(const QModelIndex& index, int role) const
+void ButtonBoxModel::setButtons(const QVariantList& buttons)
 {
-    if (!index.isValid() || index.row() >= rowCount()) {
-        return QVariant();
-    }
-
-    LayoutButton* button = m_buttons[index.row()];
-
-    switch (role) {
-    case ButtonText:
-        return button->text;
-    case Type:
-        return button->buttonType;
-    case Accent:
-        return button->isAccent;
-    case IsLeftSide:
-        return button->isLeftSide;
-    case CustomButtonIndex:
-        return button->customButtonIndex;
-    case NavigationName:
-        return button->navigationName;
-    case NavigationColumn:
-        return button->navigationColumn;
-    }
-
-    return QVariant();
-}
-
-int ButtonBoxModel::rowCount(const QModelIndex&) const
-{
-    return m_buttons.size();
-}
-
-QHash<int, QByteArray> ButtonBoxModel::roleNames() const
-{
-    static const QHash<int, QByteArray> roles {
-        { ButtonText, "text" },
-        { Type, "type" },
-        { Accent, "isAccent" },
-        { IsLeftSide, "isLeftSide" },
-        { CustomButtonIndex, "customButtonIndex" },
-        { NavigationName, "navigationName" },
-        { NavigationColumn, "navigationColumn" }
-    };
-
-    return roles;
-}
-
-int ButtonBoxModel::buttons() const
-{
-    return 0; // Not used
-}
-
-void ButtonBoxModel::setButtons(const int& buttons)
-{
-    int i = ButtonType::FirstButton;
-    while (i <= ButtonType::LastButton) {
-        if (i & buttons) {
-            m_buttonsEnum << ButtonType(i);
-        }
-        i = i << 1;
+    for (const QVariant& buttonTypeVar : buttons) {
+        LayoutButton* button = m_layoutButtons[ButtonType(buttonTypeVar.toInt())];
+        emit addButton(button->text, button->buttonType, button->buttonRole, button->isAccent, button->isLeftSide);
     }
 }
 
@@ -176,11 +107,15 @@ const std::vector <ButtonBoxModel::ButtonRole> ButtonBoxModel::chooseButtonLayou
     return buttonRoleLayouts[index];
 }
 
-void ButtonBoxModel::addCustomButton(int index, QString text, int role, bool isAccent, bool isLeftSide, QString navigationName)
+ButtonBoxModel::LayoutButton* ButtonBoxModel::layoutButton(const QQuickItem* item) const
 {
-    LayoutButton* button = new LayoutButton(text, ButtonType::CustomButton,  ButtonRole(role), isAccent, isLeftSide, navigationName);
-    button->customButtonIndex = index;
-    m_customButtons << button;
+    QString text = item->property("text").toString();
+    ButtonRole role = static_cast<ButtonRole>(item->property("buttonRole").toInt());
+    int type = item->property("buttonId").toInt();
+    bool isAccent = item->property("accentButton").toBool();
+    bool isLeftSide = item->property("isLeftSide").toBool();
+
+    return new LayoutButton(text, type, role, isAccent, isLeftSide);
 }
 
 ButtonBoxModel::ButtonLayout ButtonBoxModel::buttonLayout() const
@@ -196,5 +131,10 @@ void ButtonBoxModel::setButtonLayout(ButtonLayout newButtonLayout)
     m_buttonLayout = newButtonLayout;
     emit buttonLayoutChanged();
 
-    load();
+    emit reloadRequested();
+}
+
+QQmlListProperty<QQuickItem> ButtonBoxModel::buttonsItems()
+{
+    return m_buttonsItems.property();
 }

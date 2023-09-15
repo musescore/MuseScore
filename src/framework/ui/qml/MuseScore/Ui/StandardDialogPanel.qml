@@ -39,13 +39,31 @@ RowLayout {
 
     property alias withDontShowAgainCheckBox: dontShowAgainCheckBox.visible
 
-    property int buttons: 0
+    property var buttons
     property var customButtons
     property int defaultButtonId: 0
 
     property alias navigation: navPanel
 
     signal clicked(int buttonId, bool showAgain)
+
+    onCustomButtonsChanged: {
+        if (!root.customButtons) {
+            return
+        }
+
+        var result = []
+        for (var i = 0; i < root.customButtons.length; i++) {
+            var customButton = root.customButtons[i]
+
+            var button = buttons.addButton(customButton.text, customButton.buttonId, customButton.role, customButton.isAccent, customButton.isLeftSide)
+
+            const buttonId = customButton.buttonId
+            button.clicked.connect(function() {
+                root.clicked(buttonId, !dontShowAgainCheckBox.checked)
+            })
+        }
+    }
 
     function focusOnFirst() {
         var btn = buttons.accentButton()
@@ -188,10 +206,11 @@ RowLayout {
         ButtonBox {
             id: buttons
 
+            anchors.left: parent.left
             anchors.right: parent.right
 
             buttons: root.buttons
-            customButtons: prv.customButtonsRepeater.children
+            clip: false
 
             separationGap: false
             navigationPanel: navPanel
@@ -199,36 +218,9 @@ RowLayout {
             onStandardButtonClicked: function(type) {
                 root.clicked(type, !dontShowAgainCheckBox.checked)
             }
-        }
-    }
 
-    QtObject {
-        id: prv
-
-        property Repeater customButtonsRepeater: Repeater {
-            model: root.customButtons
-
-            FlatButton {
-                text: model.text
-                accentButton: model.isAccent
-
-                buttonRole: model.role
-                isLeftSide: model.isLefSide
-
-                navigation.panel: navPanel
-                navigation.column: model.index
-                //! NOTE See description about AccessibleItem { id: accessibleInfo }
-                accessible.ignored : true
-                navigation.onActiveChanged: function(item) {
-                    if (!item.navigation.active) {
-                        item.accessible.ignored = false
-                        accessibleInfo.ignored = true
-                    }
-                }
-
-                onClicked: {
-                    root.clicked(model.buttonId, !dontShowAgainCheckBox.checked)
-                }
+            onAccessibleInfoIgnoreRequested: {
+                accessibleInfo.ignored = true
             }
         }
     }

@@ -20,126 +20,229 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQml 2.14
 import QtQuick.Controls 2.15
 import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
 
-RowLayout {
+Container {
     id: root
 
-    spacing: 12
-
-    property bool separationGap: true
-
-    default property alias customButtons : prv.customButtons
-
-    property alias buttons: buttonBoxModel.buttons
-    property int count: buttonBoxModel.rowCount()
+    property var buttons: []
     property alias buttonLayout: buttonBoxModel.buttonLayout
 
     property NavigationPanel navigationPanel: null
 
-    signal standardButtonClicked(int type)
+    implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
+                            contentWidth + leftPadding + rightPadding)
+    implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
+                             contentHeight + topPadding + bottomPadding)
+
+    padding: 0
+
+    signal accessibleInfoIgnoreRequested()
+
+    contentItem: RowLayout {
+        spacing: prv.spacing
+        Repeater {
+            model: root.contentModel
+        }
+    }
+
+    background: Rectangle {
+        implicitHeight: ui.theme.defaultButtonSize
+        x: 1; y: 1
+        width: parent.width
+        height: parent.height
+        color: "transparent"
+    }
+
+    signal standardButtonClicked(int buttonId)
 
     function accentButton() {
-        var size = leftRepeater.count
-        if (size === 0) {
-            return null
-        }
-
-        for (var i = 0; i < size; i++) {
-            var btn = leftRepeater.itemAt(i).visible ? leftRepeater.itemAt(i) : rightRepeater.itemAt(i)
+        for (var i = 0; i < root.count; i++) {
+            var btn = root.itemAt(i)
             if (btn.accentButton) {
                 return btn
             }
         }
 
-        return leftRepeater.itemAt(0).visible ? leftRepeater.itemAt(0) : rightRepeater.itemAt(0)
+        return null
     }
 
     function firstFocusBtn() {
         var btn = accentButton()
         if (!Boolean(btn)) {
-            btn = rightRepeater.itemAt(0)
+            btn = root.itemAt(0)
         }
 
         return btn
     }
 
-    function buttonClicked(type, customButtonIndex) {
-        if (type === ButtonBoxModel.CustomButton) {
-            prv.customButtons[customButtonIndex].clicked()
-            return
+    function addButton(text, buttonId, buttonRole, isAccent, isLeftSide) {
+        const button = Qt.createQmlObject('
+                                    import MuseScore.UiComponents 1.0
+                                    FlatButton {
+                                    }', root)
+        button.text = text
+        button.accentButton = isAccent
+
+        button.buttonId = buttonId
+        button.buttonRole = buttonRole
+        button.isLeftSide = isLeftSide
+
+        button.navigation.panel = root.navigationPanel
+        //! NOTE See description about AccessibleItem { id: accessibleInfo }
+        button.accessible.ignored = true
+        const _buttonId = buttonId
+        button.navigation.onActiveChanged.connect(function() {
+            var _buttonInfo = prv.buttonInfo(_buttonId)
+            if (!_buttonInfo.button.navigation.active) {
+                _buttonInfo.button.accessible.ignored = false
+                root.accessibleInfoIgnoreRequested()
+            }
+        })
+
+        root.addItem(button)
+
+        return button
+    }
+
+    ButtonBoxModel {
+        id: buttonBoxModel
+
+        buttonsItems: root.contentChildren
+    }
+
+    Connections {
+        target: buttonBoxModel
+
+        function onAddButton(text, buttonId, buttonRole, isAccent, isLeftSide) {
+            const button = root.addButton(text, buttonId, buttonRole, isAccent, isLeftSide)
+
+            button.clicked.connect(function() {
+                root.standardButtonClicked(buttonId)
+            })
         }
-        standardButtonClicked(type)
+
+        function onReloadRequested() {
+            prv.layoutButtons()
+        }
+    }
+
+    Component.onCompleted: {
+        buttonBoxModel.setButtons(root.buttons)
+        prv.layoutButtons()
     }
 
     QtObject {
         id: prv
 
-        property list<FlatButton> customButtons
-    }
+        property int spacing: 12
 
-    ButtonBoxModel {
-        id: buttonBoxModel
-    }
+        function layoutButtons() {
+            var buttonsTypes = buttonBoxModel.load()
 
-    Component.onCompleted: {
-        var buttons = prv.customButtons
-        for (var i = 0; i < buttons.length; i++) {
-            var button = buttons[i]
-            buttonBoxModel.addCustomButton(i, button.text, button.buttonRole, button.isAccent, button.isLeftSide, button.navigationName)
+            removeSeparator()
+
+            var lastLeftSideButtonType = -1
+            var buttonsWidths = 0
+
+            for (var i = buttonsTypes.length - 1; i >= 0; i--) {
+                var buttonInfo = prv.buttonInfo(buttonsTypes[i])
+                if (!Boolean(buttonInfo)) {
+                    continue
+                }
+
+                var btn = root.itemAt(i)
+                if (buttonInfo.button !== btn) {
+                    root.moveItem(buttonInfo.index, i)
+                }
+
+                buttonInfo.button.navigation.panel = root.navigationPanel
+                buttonInfo.button.navigation.row = i
+
+                if (lastLeftSideButtonType === -1 && buttonInfo.button.isLeftSide) {
+                    lastLeftSideButtonType = buttonsTypes[i]
+                }
+
+                buttonsWidths += buttonInfo.button.width
+            }
+
+            if (buttonsWidths + buttonsTypes.length * prv.spacing > root.width) {
+                return
+            }
+
+            insertSeparator(lastLeftSideButtonType)
         }
 
-        buttonBoxModel.load()
-    }
+        function buttonInfo(buttonType) {
+            for (var i = 0; i < root.count; i++) {
+                var btn = root.itemAt(i)
+                if (!Boolean(btn)) {
+                    continue
+                }
 
-    Repeater {
-        id: leftRepeater
+                if (buttonType === btn.buttonId) {
+                    return { index: i, button: btn }
+                }
+            }
 
-        model: buttonBoxModel
-        delegate: FlatButton {
-            text: model.text
-            visible: model.isLeftSide && (model.type === ButtonBoxModel.CustomButton ?
-                         prv.customButtons[model.customButtonIndex].visible : true)
-            enabled: model.type === ButtonBoxModel.CustomButton ?
-                         prv.customButtons[model.customButtonIndex].enabled : true
+            return null
+        }
 
-            accentButton: model.isAccent
+        function separatorInfo() {
+            for (var i = 0; i < root.count; i++) {
+                var item = root.itemAt(i)
+                if (Boolean(item.isSeparator)) {
+                    return { index: i, separator: item }
+                }
+            }
 
-            navigation.name: model.navigationName ? model.navigationName : model.text
-            navigation.panel: root.navigationPanel
-            navigation.column: model.navigationColumn
+            return null
+        }
 
-            onClicked: root.buttonClicked(model.type, model.customButtonIndex)
+        function removeSeparator() {
+            var separatorInfo = prv.separatorInfo()
+            if (Boolean(separatorInfo)) {
+                root.removeItem(separatorInfo.index)
+            }
+        }
+
+        function insertSeparator(lastLeftSideButtonType) {
+            var index = 0
+            if (lastLeftSideButtonType !== -1) {
+                var lastLeftSideButtonInfo = buttonInfo(lastLeftSideButtonType)
+                if (Boolean(lastLeftSideButtonInfo)) {
+                    index = lastLeftSideButtonInfo.index + 1
+                }
+            }
+
+            var separator = separatorComp.createObject(root)
+            root.addItem(separator)
+
+            for (var i = root.count - 2; i >= 0; i--) {
+                var button = root.itemAt(i)
+                if (button.buttonId === lastLeftSideButtonType) {
+                    break;
+                }
+
+                root.moveItem(i, i + 1)
+            }
         }
     }
 
-    Item {
-        visible: root.separationGap
-        Layout.fillWidth: true
-    }
+    Component {
+        id: separatorComp
 
-    Repeater {
-        id: rightRepeater
-
-        model: buttonBoxModel
-        delegate: FlatButton {
-            text: model.text
-            visible: !model.isLeftSide && (model.type === ButtonBoxModel.CustomButton ?
-                         prv.customButtons[model.customButtonIndex].visible : true)
-            enabled: model.type === ButtonBoxModel.CustomButton ?
-                         prv.customButtons[model.customButtonIndex].enabled : true
-
-            accentButton: model.isAccent
-
-            navigation.name: model.navigationName ? model.navigationName : model.text
-            navigation.panel: root.navigationPanel
-            navigation.column: model.navigationColumn
-
-            onClicked: root.buttonClicked(model.type, model.customButtonIndex)
+        Item {
+            property bool isSeparator: true
+            property string text: "seporator"
+            Layout.fillWidth: true
+            Layout.fillHeight: true
         }
     }
+
 }
