@@ -498,7 +498,7 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
  * Return nullptr if the lookup fails.
  */
 
-EngravingItem* MeiImporter::addArticulation(const libmei::Element& meiElement, Measure* measure, Chord* chord)
+EngravingItem* MeiImporter::addToChordRest(const libmei::Element& meiElement, Measure* measure, Chord* chord)
 {
     ChordRest* chordRest = (!measure) ? chord : this->findStart(meiElement, measure);
     if (!chordRest) {
@@ -511,6 +511,10 @@ EngravingItem* MeiImporter::addArticulation(const libmei::Element& meiElement, M
 
     if (std::find(s_ornaments.begin(), s_ornaments.end(), meiElement.m_name) != s_ornaments.end()) {
         item = Factory::createOrnament(chordRest);
+    } else if (meiElement.m_name == "arpeg") {
+        if (chordRest->isChord()) {
+            item = Factory::createArpeggio(toChord(chordRest));
+        }
     } else if (meiElement.m_name == "artic") {
         item = Factory::createArticulation(chordRest);
     } else {
@@ -1522,7 +1526,7 @@ bool MeiImporter::readArtic(pugi::xml_node articNode, Chord* chord)
     libmei::Artic meiArtic;
     meiArtic.Read(articNode);
 
-    Articulation* articulation = static_cast<Articulation*>(this->addArticulation(meiArtic, nullptr, chord));
+    Articulation* articulation = static_cast<Articulation*>(this->addToChordRest(meiArtic, nullptr, chord));
     if (!articulation) {
         // Warning message given in MeiExpoter::addSpanner
         return true;
@@ -1985,7 +1989,9 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
     pugi::xpath_node_set elements = parentNode.select_nodes("./*");
     for (pugi::xpath_node xpathNode : elements) {
         std::string elementName = std::string(xpathNode.node().name());
-        if (elementName == "breath") {
+        if (elementName == "arpeg") {
+            success = success && this->readArpeg(xpathNode.node(), measure);
+        } else if (elementName == "breath") {
             success = success && this->readBreath(xpathNode.node(), measure);
         } else if (elementName == "caesura") {
             success = success && this->readCaesura(xpathNode.node(), measure);
@@ -2020,6 +2026,31 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
         }
     }
     return success;
+}
+
+/**
+ * Read a arpeg.
+ */
+
+bool MeiImporter::readArpeg(pugi::xml_node arpegNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Arpeg meiArpeg;
+    meiArpeg.Read(arpegNode);
+
+    Arpeggio* arpeggio = static_cast<Arpeggio*>(this->addToChordRest(meiArpeg, measure));
+    if (!arpeggio) {
+        // Warning message given in MeiExpoter::addAnnotation
+        return true;
+    }
+
+    Convert::arpegFromMEI(arpeggio, meiArpeg, warning);
+
+    return true;
 }
 
 /**
@@ -2245,7 +2276,7 @@ bool MeiImporter::readMordent(pugi::xml_node mordentNode, Measure* measure)
     libmei::Mordent meiMordent;
     meiMordent.Read(mordentNode);
 
-    Ornament* ornament = static_cast<Ornament*>(this->addArticulation(meiMordent, measure));
+    Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiMordent, measure));
     if (!ornament) {
         // Warning message given in MeiExpoter::addSpanner
         return true;
@@ -2296,7 +2327,7 @@ bool MeiImporter::readOrnam(pugi::xml_node ornamNode, Measure* measure)
     libmei::Ornam meiOrnam;
     meiOrnam.Read(ornamNode);
 
-    Ornament* ornament = static_cast<Ornament*>(this->addArticulation(meiOrnam, measure));
+    Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiOrnam, measure));
     if (!ornament) {
         // Warning message given in MeiExpoter::addSpanner
         return true;
@@ -2442,7 +2473,7 @@ bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
     libmei::Trill meiTrill;
     meiTrill.Read(trillNode);
 
-    Ornament* ornament = static_cast<Ornament*>(this->addArticulation(meiTrill, measure));
+    Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiTrill, measure));
     if (!ornament) {
         // Warning message given in MeiExpoter::addSpanner
         return true;
@@ -2468,7 +2499,7 @@ bool MeiImporter::readTurn(pugi::xml_node turnNode, Measure* measure)
     libmei::Turn meiTurn;
     meiTurn.Read(turnNode);
 
-    Ornament* ornament = static_cast<Ornament*>(this->addArticulation(meiTurn, measure));
+    Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiTurn, measure));
     if (!ornament) {
         // Warning message given in MeiExpoter::addSpanner
         return true;

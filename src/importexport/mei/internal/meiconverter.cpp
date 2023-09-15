@@ -245,6 +245,27 @@ libmei::data_STAFFREL Convert::anchorToMEI(engraving::ArticulationAnchor anchor)
 
 void Convert::arpegFromMEI(engraving::Arpeggio* arpeggio, const libmei::Arpeg& meiArpeg, bool& warning)
 {
+    warning = false;
+
+    // @arrow and @order
+    if (meiArpeg.HasOrder()) {
+        switch (meiArpeg.GetOrder()) {
+        case (libmei::arpegLog_ORDER_down):
+            arpeggio->setArpeggioType(engraving::ArpeggioType::DOWN);
+            break;
+        case (libmei::arpegLog_ORDER_nonarp):
+            arpeggio->setArpeggioType(engraving::ArpeggioType::BRACKET);
+            break;
+        case (libmei::arpegLog_ORDER_up):
+            arpeggio->setArpeggioType(engraving::ArpeggioType::UP);
+            break;
+        default:
+            break;
+        }
+    }
+
+    // @color
+    Convert::colorFromMEI(arpeggio, meiArpeg);
 }
 
 libmei::Arpeg Convert::arpegToMEI(const engraving::Arpeggio* arpeggio)

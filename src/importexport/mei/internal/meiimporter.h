@@ -117,6 +117,7 @@ private:
      * Methods for parsing MEI control events (within <measure>)
      */
     bool readControlEvents(pugi::xml_node parentNode, engraving::Measure* measure);
+    bool readArpeg(pugi::xml_node arpegNode, engraving::Measure* measure);
     bool readBreath(pugi::xml_node breathNode, engraving::Measure* measure);
     bool readCaesura(pugi::xml_node caesuraNode, engraving::Measure* measure);
     bool readDir(pugi::xml_node dirNote, engraving::Measure* measure);
@@ -168,8 +169,8 @@ private:
     bool addGraceNotesToChord(engraving::ChordRest* chordRest, bool isAfter = false);
     engraving::EngravingItem* addAnnotation(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::Spanner* addSpanner(const libmei::Element& meiElement, engraving::Measure* measure, pugi::xml_node node);
-    engraving::EngravingItem* addArticulation(const libmei::Element& meiElement, engraving::Measure* measure,
-                                              engraving::Chord* chord = nullptr);
+    engraving::EngravingItem* addToChordRest(const libmei::Element& meiElement, engraving::Measure* measure,
+                                             engraving::Chord* chord = nullptr);
     std::string xmlIdFrom(std::string dataURI);
     engraving::ChordRest* findStart(const libmei::Element& meiElement, engraving::Measure* measure);
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, const engraving::ChordRest* startChordRest);
