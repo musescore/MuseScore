@@ -177,9 +177,17 @@ private:
     /** A flag indicating that we have mulitple sections in the file */
     bool m_hasSections;
 
-    std::list<std::pair<const engraving::EngravingItem*, std::string> > m_startingControlEventMap;
+    /** A list of items (first) for which we know the @startid (second)  */
+    std::list<std::pair<const engraving::EngravingItem*, std::string> > m_startingControlEventList;
+    /** A map of items with the @endid they will need to have added */
     std::map<const engraving::EngravingItem*, std::string> m_endingControlEventMap;
+    /** A map of items with the @plist value they will need to have added */
+    std::map<const engraving::EngravingItem*, std::string> m_plistMap;
+    /** A map of chord that are a plist of the arpeggio */
+    std::map<const engraving::Chord*, const engraving::Arpeggio*> m_arpegPlistMap;
+    /** A map of elements (e.g., Fermata) to which a tstamp will need to be added  */
     std::list<std::pair<const engraving::EngravingItem*, std::pair<libmei::xsdPositiveInteger_List, double> > > m_tstampControlEventMap;
+    /** A map of items with the corresponding node (to which the endid from m_endingControlEventMap or plist from m_plistMap will be added) */
     std::map<const engraving::EngravingItem*, pugi::xml_node> m_openControlEventMap;
 
     std::list<MeiExporter::RepeatMark> m_repeatMarks;
