@@ -346,7 +346,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::SPACER:           layout(item_cast<Spacer*>(item), ctx);
         break;
-    case ElementType::STAFF_STATE:      layout(item_cast<StaffState*>(item), ctx);
+    case ElementType::STAFF_STATE:
+        layoutStaffState(item_cast<const StaffState*>(item), static_cast<StaffState::LayoutData*>(ldata));
         break;
     case ElementType::STAFF_TEXT:       layout(item_cast<StaffText*>(item), ctx);
         break;
@@ -4619,8 +4620,14 @@ void TLayout::layoutForWidth(StaffLines* item, double w, LayoutContext& ctx)
     item->setLines(ll);
 }
 
-static void layoutStaffState(const StaffState* item, const LayoutContext&, StaffState::LayoutData* ldata)
+void TLayout::layoutStaffState(const StaffState* item, StaffState::LayoutData* ldata)
 {
+    LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
+    }
+
     double _spatium = item->spatium();
     ldata->lw = (_spatium * 0.3);
     double h  = _spatium * 4;
@@ -4672,11 +4679,6 @@ static void layoutStaffState(const StaffState* item, const LayoutContext&, Staff
     bb.adjust(-ldata->lw, -ldata->lw, ldata->lw, ldata->lw);
     ldata->setBbox(bb);
     ldata->setPos(0.0, _spatium * -6.0);
-}
-
-void TLayout::layout(StaffState* item, LayoutContext& ctx)
-{
-    layoutStaffState(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(StaffText* item, LayoutContext&)
