@@ -33,40 +33,6 @@
 
 #include "thirdparty/pugixml.hpp"
 
-namespace mu::engraving {
-class Beam;
-class Breath;
-class Chord;
-class ChordRest;
-class Clef;
-class Dynamic;
-class EngravingItem;
-class Fermata;
-class Fermata;
-class Fraction;
-class Hairpin;
-class Harmony;
-class Jump;
-class Marker;
-class Measure;
-class Note;
-class Ottava;
-class Part;
-class Rest;
-class Score;
-class Segment;
-class Slur;
-class Spanner;
-class Staff;
-class TempoText;
-class TextBase;
-class TextLineBase;
-class Tie;
-class Tuplet;
-class VBox;
-class Volta;
-}
-
 namespace mu::iex::mei {
 class UIDRegister;
 
