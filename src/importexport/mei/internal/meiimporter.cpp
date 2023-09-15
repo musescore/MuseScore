@@ -254,6 +254,9 @@ ChordRest* MeiImporter::addChordRest(pugi::xml_node node, Measure* measure, int 
     if (m_endIdChordRests.count(meiElement.m_xmlId)) {
         m_endIdChordRests[meiElement.m_xmlId] = chordRest;
     }
+    if (m_plistValueChordRests.count(meiElement.m_xmlId)) {
+        m_plistValueChordRests[meiElement.m_xmlId] = chordRest;
+    }
 
     // Handle cross-staff notation
     if (staffIdentAtt->HasStaff()) {
@@ -699,6 +702,34 @@ Note* MeiImporter::findEndNote(pugi::xml_node controlNode)
         return nullptr;
     }
     return m_endIdNotes.at(endId);
+}
+
+/**
+ * Look for the ChordRest for an MEI element with @plist.
+ * Do a lookup in the m_plistValueChordRests map with the @plist values to retrieve all the ChordRests to which the plist refers to.
+ */
+
+const std::list<ChordRest*> MeiImporter::findPlistChordRests(pugi::xml_node controlNode)
+{
+    libmei::InstPlist plistAtt;
+    plistAtt.ReadPlist(controlNode);
+
+    // This should not happend because an element without and @endid will not have been added to the map
+    if (!plistAtt.HasPlist()) {
+        return {};
+    }
+
+    std::list<ChordRest*> plistChordRests;
+    for (auto& id : plistAtt.GetPlist()) {
+        std::string plistValue = this->xmlIdFrom(id);
+        // The endid corresponding Note should have been added to the m_endIdNotes previously
+        if (!m_plistValueChordRests.count(plistValue) || !m_plistValueChordRests.at(plistValue)) {
+            Convert::logs.push_back(String("Could not find note for @plist value '%1'").arg(String::fromStdString(id)));
+            continue;
+        }
+        plistChordRests.push_back(m_plistValueChordRests.at(plistValue));
+    }
+    return plistChordRests;
 }
 
 /**
@@ -2050,6 +2081,11 @@ bool MeiImporter::readArpeg(pugi::xml_node arpegNode, Measure* measure)
 
     Convert::arpegFromMEI(arpeggio, meiArpeg, warning);
 
+    if (meiArpeg.HasPlist()) {
+        // Add the Arpeggion to the open arpeggio map, which will handle ties differently as appropriate
+        m_openArpegMap[arpeggio] = arpegNode;
+    }
+
     return true;
 }
 
@@ -2591,6 +2627,20 @@ bool MeiImporter::buildIdMap(pugi::xml_node scoreNode)
         m_endIdChordRests[id.erase(0, 1)] = nullptr;
     }
 
+    pugi::xpath_node_set nodesWithPlist = scoreNode.select_nodes("//@plist");
+
+    for (pugi::xpath_node elementXpathNode : nodesWithPlist) {
+        std::string plist = elementXpathNode.attribute().value();
+        std::istringstream iss(plist);
+        std::string id;
+        while (std::getline(iss, id, ' ')) {
+            if (id.size() < 1 || id.at(0) != '#') {
+                continue;
+            }
+            m_plistValueChordRests[id.erase(0, 1)] = nullptr;
+        }
+    }
+
     return true;
 }
 
@@ -2840,37 +2890,49 @@ void MeiImporter::addTextToTitleFrame(VBox*& vBox, const String& str, TextStyleT
 
 void MeiImporter::addSpannerEnds()
 {
-    for (auto spanner : m_openSpannerMap) {
+    for (auto spannerMapEntry : m_openSpannerMap) {
         // Ties are added directly to the notes
-        if (spanner.first->isTie()) {
-            Note* endNote = this->findEndNote(spanner.second);
+        if (spannerMapEntry.first->isTie()) {
+            Note* endNote = this->findEndNote(spannerMapEntry.second);
             if (!endNote) {
                 continue;
             }
-            Tie* tie = toTie(spanner.first);
+            Tie* tie = toTie(spannerMapEntry.first);
             endNote->setTieBack(tie);
             tie->setEndNote(endNote);
             // All other Spanners
-        } else if (spanner.first->startCR()) {
-            ChordRest* chordRest = this->findEnd(spanner.second, spanner.first->startCR());
+        } else if (spannerMapEntry.first->startCR()) {
+            ChordRest* chordRest = this->findEnd(spannerMapEntry.second, spannerMapEntry.first->startCR());
             if (!chordRest) {
                 continue;
             }
-            spanner.first->setTick2(chordRest->tick());
-            spanner.first->setEndElement(chordRest);
-            spanner.first->setTrack2(chordRest->track());
+            spannerMapEntry.first->setTick2(chordRest->tick());
+            spannerMapEntry.first->setEndElement(chordRest);
+            spannerMapEntry.first->setTrack2(chordRest->track());
             // Special handling of hairpin
-            if (spanner.first->isHairpin()) {
+            if (spannerMapEntry.first->isHairpin()) {
                 // Set the tick2 to include the duration of the ChordRest (not needed for others, i.e., slurs?)
-                spanner.first->setTick2(chordRest->tick() + chordRest->ticks());
+                spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
             }
             // Special handling of ottava
-            else if (spanner.first->isOttava()) {
+            else if (spannerMapEntry.first->isOttava()) {
                 // Set the tick2 to include the duration of the ChordRest
-                spanner.first->setTick2(chordRest->tick() + chordRest->ticks());
-                Ottava* ottava = toOttava(spanner.first);
+                spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
+                Ottava* ottava = toOttava(spannerMapEntry.first);
                 // Make the staff fill the pitch offsets accordingly since we use Note::ppitch in export
                 ottava->staff()->updateOttava();
+            }
+        }
+    }
+    for (auto arpegMapEntry : m_openArpegMap) {
+        std::list plistChordRests = findPlistChordRests(arpegMapEntry.second);
+        // Go through the list of chord rest and check if they are on a staff below
+        for (auto chordRest : plistChordRests) {
+            Arpeggio* arpeggio = arpegMapEntry.first;
+            int span = static_cast<int>(chordRest->staffIdx() - arpeggio->staffIdx()) + 1;
+            // Adjust the span if it is currently smaller
+            if (arpeggio->span() < span) {
+                arpeggio->setSpan(span);
             }
         }
     }

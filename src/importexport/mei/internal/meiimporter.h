@@ -176,6 +176,7 @@ private:
     engraving::ChordRest* findEnd(pugi::xml_node controlNode, const engraving::ChordRest* startChordRest);
     engraving::Note* findStartNote(const libmei::Element& meiElement);
     engraving::Note* findEndNote(pugi::xml_node controlNode);
+    const std::list<engraving::ChordRest*> findPlistChordRests(pugi::xml_node controlNode);
     void clearGraceNotes();
     bool hasLyricsToExtend(track_idx_t track, int no);
     const std::pair<engraving::Lyrics*, engraving::ChordRest*>& getLyricsToExtend(track_idx_t track, int no);
@@ -216,8 +217,12 @@ private:
     std::map<std::string, engraving::Note*> m_startIdNotes;
     /* A map for endId and corresponding engraving::Note */
     std::map<std::string, engraving::Note*> m_endIdNotes;
+    /* A map for plist values and corresponding engraving::ChordRest */
+    std::map<std::string, engraving::ChordRest*> m_plistValueChordRests;
     /* A map for open spanners that needs to be ended */
     std::map<engraving::Spanner*, pugi::xml_node> m_openSpannerMap;
+    /* A map for open arpeg that needs to be spanned */
+    std::map<engraving::Arpeggio*, pugi::xml_node> m_openArpegMap;
 
     /** A map of a map for lyrics with extender that needs to be extended */
     std::map<track_idx_t, std::map<int, std::pair<engraving::Lyrics*, engraving::ChordRest*> > > m_lyricExtenders;
