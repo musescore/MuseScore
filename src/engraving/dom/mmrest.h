@@ -41,9 +41,6 @@ public:
     MMRest* clone() const override { return new MMRest(*this, false); }
     EngravingItem* linkedClone() override { return new MMRest(*this, true); }
 
-    void setWidth(double width) override { m_width = width; }
-    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override { UNUSED(mode); return m_width; }
-
     bool numberVisible() const { return m_numberVisible; }
 
     PropertyValue propertyDefault(Pid) const override;
@@ -62,15 +59,36 @@ public:
         SymIdList restSyms;                 // stores symbols when using old-style rests
         double symsWidth = 0.0;             // width of symbols with spacing when using old-style
 
+        bool isSetRestWidth() const { return m_restWidth.has_value(); }
+        void setRestWidth(double v) { m_restWidth.set_value(v); }
+        double restWidth() const { return m_restWidth.value(LD_ACCESS::CHECK); }
+
         void setNumberSym(int n) { numberSym = timeSigSymIdsFromString(String::number(n)); }
+
+    private:
+        ld_field<double> m_restWidth = { "restWidth", 0.0 };                   // width of multimeasure rest
     };
     DECLARE_LAYOUTDATA_METHODS(MMRest);
+
+    //! --- DEPRECATED ---
+    void setWidth(double width) override
+    {
+        UNREACHABLE;
+        mutLayoutData()->setRestWidth(width);
+    }
+
+    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override
+    {
+        UNUSED(mode);
+        UNREACHABLE;
+        return layoutData()->restWidth();
+    }
+
+    //! ------------------
 
 private:
 
     Sid getPropertyStyle(Pid) const override;
-
-    double m_width = 0.0;           // width of multimeasure rest
 
     double m_numberPos = 0.0;       // vertical position of number relative to staff
     bool m_numberVisible = false;   // show or hide number

@@ -312,7 +312,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::MEASURE_REPEAT:
         layout(item_cast<const MeasureRepeat*>(item), static_cast<MeasureRepeat::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::MMREST:           layout(item_cast<MMRest*>(item), ctx);
+    case ElementType::MMREST:
+        layoutMMRest(item_cast<const MMRest*>(item), static_cast<MMRest::LayoutData*>(ldata), ctx);
         break;
     case ElementType::MMREST_RANGE:     layout(item_cast<MMRestRange*>(item), ctx);
         break;
@@ -3851,8 +3852,34 @@ void TLayout::layout(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata
     }
 }
 
-static void layoutMMRest(const MMRest* item, const LayoutContext& ctx, MMRest::LayoutData* ldata)
+void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const LayoutContext& ctx)
 {
+    //! NOTE The types are listed here explicitly to show what types there are (see Rest::add method)
+    //! and accordingly show what depends on.
+    for (EngravingItem* e : item->el()) {
+        switch (e->type()) {
+        case ElementType::DEAD_SLAPPED: {
+            DeadSlapped* ds = item_cast<DeadSlapped*>(e);
+            LD_INDEPENDENT;
+            layout(ds, ds->mutLayoutData());
+        } break;
+        case ElementType::SYMBOL: {
+            Symbol* s = item_cast<Symbol*>(e);
+            // not clear yet
+            layoutSymbol(s, const_cast<LayoutContext&>(ctx));
+        } break;
+        case ElementType::IMAGE: {
+            Image* im = item_cast<Image*>(e);
+            LD_INDEPENDENT;
+            layout(im, im->mutLayoutData());
+        } break;
+        default:
+            UNREACHABLE;
+        }
+    }
+
+    LD_CONDITION(ldata->isSetRestWidth());
+
     //! NOTE This is not look like layout data, perhaps this is should be set not here
     ldata->number = item->measure()->mmRestCount();
     ldata->setNumberSym(ldata->number);
@@ -3889,10 +3916,10 @@ static void layoutMMRest(const MMRest* item, const LayoutContext& ctx, MMRest::L
         ldata->symsWidth = symsWidth;
 
         double symHeight = item->symBbox(ldata->restSyms.at(0)).height();
-        ldata->setBbox(RectF((item->width() - ldata->symsWidth) * .5, -item->spatium(), ldata->symsWidth, symHeight));
+        ldata->setBbox(RectF((ldata->restWidth() - ldata->symsWidth) * .5, -item->spatium(), ldata->symsWidth, symHeight));
     } else { // H-bar
         double vStrokeHeight = ctx.conf().styleMM(Sid::mmRestHBarVStrokeHeight);
-        ldata->setBbox(RectF(0.0, -(vStrokeHeight * .5), item->width(), vStrokeHeight));
+        ldata->setBbox(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth(), vStrokeHeight));
     }
 
     // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
@@ -3902,15 +3929,6 @@ static void layoutMMRest(const MMRest* item, const LayoutContext& ctx, MMRest::L
     if (item->numberVisible()) {
         ldata->addBbox(item->numberRect());
     }
-}
-
-void TLayout::layout(MMRest* item, LayoutContext& ctx)
-{
-    for (EngravingItem* e : item->el()) {
-        layoutItem(e, ctx);
-    }
-
-    layoutMMRest(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(MMRestRange* item, LayoutContext&)

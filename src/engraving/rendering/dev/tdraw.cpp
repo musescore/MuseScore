@@ -2080,7 +2080,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
     if (item->style().styleB(Sid::oldStyleMultiMeasureRests)
         && ldata->number <= item->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
         // draw rest symbols
-        double x = (item->width() - ldata->symsWidth) * 0.5;
+        double x = (ldata->restWidth() - ldata->symsWidth) * 0.5;
         double spacing = item->style().styleMM(Sid::mmRestOldStyleSpacing);
         for (SymId sym : ldata->restSyms) {
             double y = (sym == SymId::restWhole ? -_spatium : 0);
@@ -2103,11 +2103,11 @@ void TDraw::draw(const MMRest* item, Painter* painter)
                 && numberBox.bottom() >= -halfHBarThickness
                 && numberBox.top() <= halfHBarThickness) {
                 double gapDistance = (numberBox.width() + _spatium) * .5;
-                double midpoint = item->width() * .5;
+                double midpoint = ldata->restWidth() * .5;
                 painter->drawLine(LineF(0.0, 0.0, midpoint - gapDistance, 0.0));
-                painter->drawLine(LineF(midpoint + gapDistance, 0.0, item->width(), 0.0));
+                painter->drawLine(LineF(midpoint + gapDistance, 0.0, ldata->restWidth(), 0.0));
             } else {
-                painter->drawLine(LineF(0.0, 0.0, item->width(), 0.0));
+                painter->drawLine(LineF(0.0, 0.0, ldata->restWidth(), 0.0));
             }
         }
 
@@ -2118,7 +2118,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
             painter->setPen(pen);
             double halfVStrokeHeight = item->style().styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;
             painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
-            painter->drawLine(LineF(item->width(), -halfVStrokeHeight, item->width(), halfVStrokeHeight));
+            painter->drawLine(LineF(ldata->restWidth(), -halfVStrokeHeight, ldata->restWidth(), halfVStrokeHeight));
         }
     }
 }
