@@ -80,6 +80,8 @@
 #include "../../dom/rehearsalmark.h"
 #include "../../dom/rest.h"
 
+#include "../../dom/staffstate.h"
+
 #include "../../dom/textbase.h"
 
 #include "../../dom/ornament.h"
@@ -127,7 +129,6 @@ class Slur;
 class Spacer;
 class SpannerSegment;
 class StaffLines;
-class StaffState;
 class StaffText;
 class StaffTypeChange;
 class Stem;
@@ -278,7 +279,7 @@ public:
     static void layout(Spanner* item, LayoutContext& ctx);
     static void layout(StaffLines* item, LayoutContext& ctx);
     static void layoutForWidth(StaffLines* item, double w, LayoutContext& ctx);
-    static void layout(StaffState* item, LayoutContext& ctx);
+    static void layoutStaffState(const StaffState* item, StaffState::LayoutData* ldata);
     static void layout(StaffText* item, LayoutContext& ctx);
     static void layout(StaffTypeChange* item, LayoutContext& ctx);
     static void layout(Stem* item, LayoutContext& ctx);
