@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -62,6 +63,21 @@ MixerPanelSection {
         color: Utils.colorWithAlpha(labelColor, resolveLabelColorOpacity())
         border.color: labelColor
         border.width: 1
+
+        MouseArea{
+            id: mouseArea
+            anchors.fill: parent
+
+            hoverEnabled: true
+
+            onContainsMouseChanged: {
+                if (mouseArea.containsMouse) {
+                    ui.tooltip.show(root, channelItem.title, "", "")
+                } else {
+                    ui.tooltip.hide(root)
+                }
+            }
+        }
 
         StyledTextLabel {
             anchors.centerIn: parent
