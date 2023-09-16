@@ -33,6 +33,19 @@
 #include "../../dom/barline.h"
 #include "../../dom/bend.h"
 #include "../../dom/box.h"
+#include "../../dom/bracket.h"
+#include "../../dom/breath.h"
+
+#include "../../dom/chordline.h"
+#include "../../dom/clef.h"
+#include "../../dom/capo.h"
+
+#include "../../dom/deadslapped.h"
+#include "../../dom/dynamic.h"
+
+#include "../../dom/expression.h"
+
+#include "../../dom/fermata.h"
 
 #include "../../dom/measurebase.h"
 #include "../../dom/measurenumberbase.h"
@@ -47,20 +60,8 @@ class EngravingItem;
 class BagpipeEmbellishment;
 class Beam;
 
-class Bracket;
-class Breath;
-
 class Chord;
-class ChordLine;
-class Clef;
-class Capo;
 
-class DeadSlapped;
-class Dynamic;
-
-class Expression;
-
-class Fermata;
 class FiguredBassItem;
 class FiguredBass;
 class Fingering;
@@ -192,20 +193,20 @@ public:
     static void layout(const FBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(const TBox* item, FBox::LayoutData* ldata, const LayoutContext& ctx);
 
-    static void layout(Bracket* item, LayoutContext& ctx);
-    static void layout(Breath* item, LayoutContext& ctx);
+    static void layout(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layout(const Breath* item, Breath::LayoutData* ldata, const LayoutConfiguration& conf);
 
     static void layout(Chord* item, LayoutContext& ctx);
-    static void layout(ChordLine* item, LayoutContext& ctx);
-    static void layout(Clef* item, LayoutContext& ctx);
-    static void layout(Capo* item, LayoutContext& ctx);
+    static void layout(const ChordLine* item, ChordLine::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void layout(const Clef* item, Clef::LayoutData* ldata);
+    static void layout(const Capo* item, Capo::LayoutData* ldata, const LayoutContext& ctx);
 
-    static void layout(DeadSlapped* item, LayoutContext& ctx);
-    static void layout(Dynamic* item, LayoutContext& ctx);
+    static void layout(const DeadSlapped* item, DeadSlapped::LayoutData* ldata);
+    static void layout(const Dynamic* item, Dynamic::LayoutData* ldata, const LayoutConfiguration& conf);
 
-    static void layout(Expression* item, LayoutContext& ctx);
+    static void layout(const Expression* item, Expression::LayoutData* ldata);
 
-    static void layout(Fermata* item, LayoutContext& ctx);
+    static void layout(const Fermata* item, Fermata::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(FiguredBassItem* item, LayoutContext& ctx);
     static void layout(FiguredBass* item, LayoutContext& ctx);
     static void layout(Fingering* item, LayoutContext& ctx);
@@ -298,10 +299,10 @@ public:
     static void layout(TempoText* item, LayoutContext& ctx);
 
     static void layout(TextBase* item, LayoutContext& ctx);                 // factory
-    static void layoutTextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data); // base class
+    static void layoutTextBase(const TextBase* item, TextBase::LayoutData* data); // base class
     static void layoutTextBase(TextBase* item, LayoutContext& ctx);  // base class
     static void layout1TextBase(TextBase* item, const LayoutContext& ctx);  // base class
-    static void layout1TextBase(const TextBase* item, const LayoutContext& ctx, TextBase::LayoutData* data);
+    static void layout1TextBase(const TextBase* item, TextBase::LayoutData* data);
 
     static void layout(Text* item, LayoutContext& ctx);
 

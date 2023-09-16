@@ -41,12 +41,18 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::ACCIDENTAL:
     case ElementType::ACTION_ICON:
     case ElementType::AMBITUS:
+    case ElementType::BREATH:
+    case ElementType::CLEF:
+    case ElementType::DEAD_SLAPPED:
         TLayout::layoutItem(item, ctx);
     default:
         break;
     }
 
     for (EngravingItem* ch : item->childrenItems()) {
+        if (ch->isType(ElementType::DUMMY)) {
+            continue;
+        }
         scan(ch, ctx);
     }
 }

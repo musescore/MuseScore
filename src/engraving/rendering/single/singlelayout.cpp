@@ -675,17 +675,21 @@ void SingleLayout::layout(Bend* item, const Context&)
 void SingleLayout::layout(Bracket* item, const Context& ctx)
 {
     Bracket::LayoutData* ldata = item->mutLayoutData();
+
+    ldata->setBracketHeight(3.5 * item->spatium() * 2);
+
     Shape shape;
 
     switch (item->bracketType()) {
     case BracketType::BRACE: {
         if (item->braceSymbol() == SymId::noSym) {
-            item->setBraceSymbol(SymId::brace);
+            ldata->braceSymbol = SymId::brace;
         }
-        double h = item->h2() * 2;
-        double w = item->symWidth(item->braceSymbol()) * item->magx();
-        ldata->setBbox(0, 0, w, h);
-        shape.add(item->layoutData()->bbox());
+        double h = ldata->bracketHeight();
+        double w = item->symWidth(ldata->braceSymbol) * item->magx();
+        ldata->setBbox(RectF(0, 0, w, h));
+        ldata->shape.add(ldata->bbox());
+        ldata->setBracketWidth(w + ctx.style().styleMM(Sid::akkoladeBarDistance));
     }
     break;
     case BracketType::NORMAL: {
@@ -702,6 +706,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double y = -item->symHeight(SymId::bracketTop) - bd;
         double h = (-y + item->h2()) * 2;
         ldata->setBbox(x, y, w, h);
+
+        ldata->setBracketWidth(ctx.style().styleMM(Sid::bracketWidth) + ctx.style().styleMM(Sid::bracketDistance));
     }
     break;
     case BracketType::SQUARE: {
@@ -712,6 +718,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         w += (0.5 * item->spatium() + 3 * w);
         ldata->setBbox(x, y, w, h);
         shape.add(item->layoutData()->bbox());
+
+        ldata->setBracketWidth(ctx.style().styleMM(Sid::staffLineWidth) / 2 + 0.5 * item->spatium());
     }
     break;
     case BracketType::LINE: {
@@ -723,6 +731,8 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double h = (-y + item->h2()) * 2;
         ldata->setBbox(x, y, w, h);
         shape.add(item->layoutData()->bbox());
+
+        ldata->setBracketWidth(0.67 * ctx.style().styleMM(Sid::bracketWidth) + ctx.style().styleMM(Sid::bracketDistance));
     }
     break;
     case BracketType::NO_BRACKET:

@@ -1848,9 +1848,10 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
                 Bracket* dummyBr = Factory::createBracket(ctx.mutDom().dummyParent(), /*isAccessibleEnabled=*/ false);
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
-                TLayout::layout(dummyBr, ctx);
+                dummyBr->mutLayoutData()->setBracketHeight(3.5 * dummyBr->spatium() * 2); // default
+                TLayout::layout(dummyBr, dummyBr->mutLayoutData(), ctx.conf());
                 for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
-                    bracketWidth[stfIdx] += dummyBr->width();
+                    bracketWidth[stfIdx] += dummyBr->layoutData()->bracketWidth();
                 }
                 delete dummyBr;
             }
@@ -1871,16 +1872,7 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
     size_t nstaves = system->staves().size();
     size_t columns = system->getBracketsColumnsCount();
 
-#if (!defined (_MSCVER) && !defined (_MSC_VER))
-    double bracketWidth[columns];
-#else
-    // MSVC does not support VLA. Replace with std::vector. If profiling determines that the
-    //    heap allocation is slow, an optimization might be used.
-    std::vector<double> bracketWidth(columns);
-#endif
-    for (size_t i = 0; i < columns; ++i) {
-        bracketWidth[i] = 0.0;
-    }
+    std::vector<double> bracketWidth(columns, 0.0);
 
     std::vector<Bracket*> bl;
     bl.swap(system->brackets());
@@ -1894,7 +1886,9 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
                 }
                 Bracket* b = SystemLayout::createBracket(system, ctx, bi, i, static_cast<int>(staffIdx), bl, system->firstMeasure());
                 if (b != nullptr) {
-                    bracketWidth[i] = std::max(bracketWidth[i], b->width());
+                    b->mutLayoutData()->setBracketHeight(3.5 * b->spatium() * 2); // dummy
+                    TLayout::layout(b, b->mutLayoutData(), ctx.conf());
+                    bracketWidth[i] = std::max(bracketWidth[i], b->layoutData()->bracketWidth());
                 }
             }
         }
@@ -2272,9 +2266,11 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
             sy = system->staves().at(staffIdx1)->bbox().top();
             ey = system->staves().at(staffIdx2)->bbox().bottom();
         }
-        b->mutLayoutData()->setPosY(sy);
-        b->setHeight(ey - sy);
-        TLayout::layout(b, ctx);
+
+        Bracket::LayoutData* bldata = b->mutLayoutData();
+        bldata->setPosY(sy);
+        bldata->setBracketHeight(ey - sy);
+        TLayout::layout(b, bldata, ctx.conf());
     }
 }
 

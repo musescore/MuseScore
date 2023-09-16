@@ -47,6 +47,8 @@ public:
 
     static void layoutSystem(System* system, LayoutContext& ctx, double xo1, bool isFirstSystem = false, bool firstSystemIndent = false);
 
+    static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
+
     static void layout2(System* system, LayoutContext& ctx);
     static void restoreLayout2(System* system, LayoutContext& ctx);
     static void setMeasureHeight(System* system, double height, LayoutContext& ctx);
@@ -59,7 +61,6 @@ public:
 
 private:
     static System* getNextSystem(LayoutContext& lc);
-    static void hideEmptyStaves(System* system, LayoutContext& ctx, bool isFirstSystem);
     static void processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align);
     static void layoutTies(Chord* ch, System* system, const Fraction& stick);
     static void doLayoutTies(System* system, std::vector<Segment*> sl, const Fraction& stick, const Fraction& etick);

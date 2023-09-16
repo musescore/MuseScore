@@ -36,7 +36,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-const std::vector<BreathType> Breath::breathList {
+const std::vector<BreathType> Breath::BREATH_LIST {
     { SymId::breathMarkComma,      false, 0.0 },
     { SymId::breathMarkTick,       false, 0.0 },
     { SymId::breathMarkSalzedo,    false, 0.0 },
@@ -56,8 +56,8 @@ const std::vector<BreathType> Breath::breathList {
 Breath::Breath(Segment* parent)
     : EngravingItem(ElementType::BREATH, parent, ElementFlag::MOVABLE)
 {
-    _symId = SymId::breathMarkComma;
-    _pause = 0.0;
+    m_symId = SymId::breathMarkComma;
+    m_pause = 0.0;
 }
 
 //---------------------------------------------------------
@@ -66,8 +66,8 @@ Breath::Breath(Segment* parent)
 
 bool Breath::isCaesura() const
 {
-    for (const BreathType& bt : breathList) {
-        if (bt.id == _symId) {
+    for (const BreathType& bt : BREATH_LIST) {
+        if (bt.id == m_symId) {
             return bt.isCaesura;
         }
     }
@@ -108,9 +108,9 @@ PropertyValue Breath::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::SYMBOL:
-        return PropertyValue::fromValue(_symId);
+        return PropertyValue::fromValue(m_symId);
     case Pid::PAUSE:
-        return _pause;
+        return m_pause;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -180,7 +180,7 @@ EngravingItem* Breath::prevSegmentElement()
 
 String Breath::accessibleInfo() const
 {
-    return SymNames::translatedUserNameForSymId(_symId);
+    return SymNames::translatedUserNameForSymId(m_symId);
 }
 
 void Breath::added()

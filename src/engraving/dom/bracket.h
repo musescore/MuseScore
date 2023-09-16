@@ -25,7 +25,6 @@
 
 #include "engravingitem.h"
 #include "bracketItem.h"
-#include "draw/types/painterpath.h"
 
 namespace mu::engraving {
 class Factory;
@@ -69,11 +68,6 @@ public:
 
     Fraction playTick() const override;
 
-    void setHeight(double) override;
-    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override;
-
-    double h2() const { return m_h2; }
-
     const BracketItem* bi() const { return m_bi; }
 
     bool isEditable() const override;
@@ -109,8 +103,27 @@ public:
 
         PainterPath path;
         Shape shape;
+
+        bool isSetBracketHeight() const { return m_bracketHeight.has_value(); }
+        void setBracketHeight(double v) { m_bracketHeight.set_value(v); }
+        double bracketHeight(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bracketHeight.value(mode); }
+        double h2(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bracketHeight.value(mode) * 0.5; }
+
+        bool isSetBracketWidth() const { return m_bracketWidth.has_value(); }
+        void setBracketWidth(double v) { m_bracketWidth.set_value(v); }
+        double bracketWidth(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bracketWidth.value(mode); }
+
+    private:
+        ld_field<double> m_bracketHeight = { "bracketHeight", 0.0 };
+        ld_field<double> m_bracketWidth = { "bracketWidth", 0.0 };
     };
     DECLARE_LAYOUTDATA_METHODS(Bracket);
+
+    //! --- DEPRECATED ---
+    double h2() const { return layoutData()->h2(); }
+    void setHeight(double) override;
+    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override;
+    //! ------------------
 
 private:
     friend class Factory;
@@ -119,7 +132,6 @@ private:
 
     BracketItem* m_bi = nullptr;
     double m_ay1 = 0.0;
-    double m_h2 = 0.0;
 
     size_t m_firstStaff = 0;
     size_t m_lastStaff = 0;
