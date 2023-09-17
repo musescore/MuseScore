@@ -651,6 +651,7 @@ bool MeiExporter::writeStaffDef(const Staff* staff, const Measure* measure, cons
                 Clef* clef = static_cast<Clef*>(clefSeg->element(track));
                 if (clef) {
                     libmei::Clef meiClef = Convert::clefToMEI(clef->clefType());
+                    Convert::colorToMEI(clef, meiClef);
                     pugi::xml_node clefNode = staffDefNode.append_child();
                     meiClef.Write(clefNode);
                     break;
@@ -1049,6 +1050,7 @@ bool MeiExporter::writeClef(const Clef* clef)
 
     pugi::xml_node clefNode = m_currentNode.append_child();
     libmei::Clef meiClef = Convert::clefToMEI(clef->clefType());
+    Convert::colorToMEI(clef, meiClef);
     std::string xmlId = this->getXmlIdFor(clef, 'c');
     meiClef.Write(clefNode, xmlId);
 
@@ -1483,7 +1485,7 @@ bool MeiExporter::writeFermata(const Fermata* fermata, const std::string& starti
 }
 
 /**
- * Write a fermata with a staffNs and tsamp
+ * Write a fermata with a staffNs and tstamp
  */
 
 bool MeiExporter::writeFermata(const Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp)
