@@ -1557,6 +1557,7 @@ bool MeiImporter::readClef(pugi::xml_node clefNode, Measure* measure, int track,
 
     Segment* segment = measure->getSegment(SegmentType::Clef, Fraction::fromTicks(ticks) + measure->tick());
     Clef* clef = Factory::createClef(segment);
+    Convert::colorFromMEI(clef, meiClef);
     m_uids->reg(clef, meiClef.m_xmlId);
     clef->setClefType(ClefTypeList(Convert::clefFromMEI(meiClef, warning)));
     if (warning) {
