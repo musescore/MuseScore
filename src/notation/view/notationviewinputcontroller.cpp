@@ -579,7 +579,17 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
 
     if (playbackController()->isPlaying()) {
         if (hitElement) {
-            playbackController()->seekElement(hitElement);
+            switch (hitElement->type()) {
+            case ElementType::NOTE:
+            case ElementType::REST:
+            case ElementType::MMREST:
+            case ElementType::MEASURE:
+            case ElementType::BAR_LINE: {
+                playbackController()->seekElement(hitElement);
+                break;
+            }
+            default: break;
+            }
         }
         return;
     }
