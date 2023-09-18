@@ -194,7 +194,8 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
     }
     bool tupletStartsBeam = beamStart->elements().front() == c1;
     bool tupletEndsBeam = beamEnd->elements().back() == c2;
-    if (tupletStartsBeam && tupletEndsBeam) {
+    bool headSide = isUp() != (c1->up() || c2->up());
+    if (tupletStartsBeam && tupletEndsBeam && !headSide) {
         return false;
     }
 
@@ -240,7 +241,7 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
         endChordDefinesTuplet = endChordDefinesTuplet || nextEndChord->beams() < beamCount;
     }
 
-    if (startChordDefinesTuplet && endChordDefinesTuplet) {
+    if (startChordDefinesTuplet && endChordDefinesTuplet && !headSide) {
         return false;
     }
 
