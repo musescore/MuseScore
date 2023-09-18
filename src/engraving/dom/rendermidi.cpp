@@ -1254,21 +1254,22 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
     bool arpeggio = false;
 
     /// when note has glissando or slide from note, tremolo should be shortened
-    double tremoloLength = 1.0;
+    int baseLength = NoteEvent::NOTE_LENGTH - ontime - trailtime;
+    double tremoloLength = (double)baseLength / NoteEvent::NOTE_LENGTH;
 
     bool glissandoStart = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
         return noteIsGlissandoStart(note);
     });
 
     if (glissandoStart) {
-        tremoloLength = 0.5;
+        tremoloLength = 0.5 * baseLength / NoteEvent::NOTE_LENGTH;
     } else {
         bool hasSlideOut = std::any_of(notes.begin(), notes.end(), [] (Note* note) {
             return note->hasSlideFromNote();
         });
 
         if (hasSlideOut) {
-            tremoloLength = 1.0 - slideLengthChordDependent(chord) / (double)NoteEvent::NOTE_LENGTH;
+            tremoloLength = (baseLength - slideLengthChordDependent(chord)) / (double)NoteEvent::NOTE_LENGTH;
         }
     }
 
@@ -1283,7 +1284,7 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
             tremolo = true;
         }
 
-        renderChordArticulation(chord, ell, gateTime, (double)ontime / 1000, tremolo);
+        renderChordArticulation(chord, ell, gateTime, (double)ontime / NoteEvent::NOTE_LENGTH, tremolo);
     }
 
     // Check each note and apply gateTime
@@ -1439,12 +1440,40 @@ void Score::createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& 
     }
 }
 
-//---------------------------------------------------------
-//   createPlayEvents
-//    create default play events
-//---------------------------------------------------------
+static void adjustTrailtime(int& trailtime, Chord* currentChord, Chord* nextChord)
+{
+    if (!nextChord) {
+        return;
+    }
 
-void Score::createPlayEvents(Chord* chord, Chord* prevChord)
+    const std::vector<Chord*>& graceBeforeChords = nextChord->graceNotesBefore();
+    std::vector<Chord*> graceNotesBeforeBar;
+    std::copy_if(graceBeforeChords.begin(), graceBeforeChords.end(), std::back_inserter(graceNotesBeforeBar), [](Chord* ch) {
+        return ch->noteType() == NoteType::ACCIACCATURA;
+    });
+
+    const int currentTicks = currentChord->ticks().ticks();
+    IF_ASSERT_FAILED(currentTicks > 0) {
+        return;
+    }
+
+    int reducedTicks = 0;
+
+    const auto& notes = nextChord->notes();
+    bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) {
+        return note->slideToType() == Note::SlideType::DownToNote || (note->slideToType() == Note::SlideType::UpToNote && note->fret() > 1);
+    });
+
+    if (!graceNotesBeforeBar.empty()) {
+        reducedTicks = std::min(graceNotesBeforeBar[0]->ticks().ticks(), currentTicks / 2);
+    } else if (anySlidesIn) {
+        reducedTicks = slideTicks(currentChord);
+    }
+
+    trailtime += reducedTicks / (double)currentTicks * NoteEvent::NOTE_LENGTH;
+}
+
+void Score::createPlayEvents(Chord* chord, Chord* prevChord, Chord* nextChord)
 {
     int gateTime = 100;
 
@@ -1468,7 +1497,9 @@ void Score::createPlayEvents(Chord* chord, Chord* prevChord)
 
     int ontime    = 0;
     int trailtime = 0;
+
     createGraceNotesPlayEvents(tick, chord, ontime, trailtime);   // ontime and trailtime are modified by this call depending on grace notes before and after
+    adjustTrailtime(trailtime, chord, nextChord);
 
     SwingParameters st = chord->staff()->swing(tick);
     // Check if swing needs to be applied
@@ -1485,68 +1516,16 @@ void Score::createPlayEvents(Chord* chord, Chord* prevChord)
     // don't change event list if type is PlayEventType::User
 }
 
-static void adjustPreviousChordLength(Chord* currentChord, Chord* prevChord)
+static Chord* getChordFromSegment(Segment* segment, track_idx_t track)
 {
-    if (!prevChord) {
-        return;
-    }
-
-    const std::vector<Chord*>& graceBeforeChords = currentChord->graceNotesBefore();
-    std::vector<Chord*> graceNotesBeforeBar;
-    std::copy_if(graceBeforeChords.begin(), graceBeforeChords.end(), std::back_inserter(graceNotesBeforeBar), [](Chord* ch) {
-        return ch->noteType() == NoteType::ACCIACCATURA;
-    });
-
-    int prevTicks = prevChord->ticks().ticks();
-
-    int reducedTicks = 0;
-
-    const auto& notes = currentChord->notes();
-    bool anySlidesIn = std::any_of(notes.begin(), notes.end(), [](const Note* note) {
-        return note->slideToType() == Note::SlideType::DownToNote || (note->slideToType() == Note::SlideType::UpToNote && note->fret() > 1);
-    });
-
-    if (!graceNotesBeforeBar.empty()) {
-        reducedTicks = std::min(graceNotesBeforeBar[0]->ticks().ticks(), prevTicks / 2);
-    } else if (anySlidesIn) {
-        reducedTicks = slideTicks(prevChord);
-    } else {
-        return;
-    }
-
-    double lengthMultiply = std::min(1.0, (double)(prevTicks - reducedTicks) / prevTicks);
-
-    for (size_t i = 0; i < prevChord->notes().size(); i++) {
-        Note* prevChordNote = prevChord->notes()[i];
-        NoteEventList evList;
-        NoteEventList prevEvents = prevChordNote->playEvents();
-
-        int curPos = prevEvents.front().ontime();
-
-        for (size_t i = 0; i < prevEvents.size(); i++) {
-            NoteEvent event;
-            const NoteEvent& prevEvent = prevEvents[i];
-            event.setOntime(curPos);
-            event.setPitch(prevEvent.pitch());
-            event.setOffset(prevEvent.offset());
-            event.setVelocityMultiplier(prevEvent.velocityMultiplier());
-            event.setSlide(prevEvent.slide());
-            int prevLen = prevEvent.len();
-
-            // not shortening events before beat
-            if (prevEvent.offset() == 0) {
-                int newEventLength = prevLen * lengthMultiply;
-                event.setLen(newEventLength);
-                curPos += newEventLength;
-            } else {
-                event.setLen(prevLen);
-            }
-
-            evList.push_back(event);
+    if (segment) {
+        EngravingItem* item = segment->element(track);
+        if (item && item->isChord()) {
+            return toChord(item);
         }
-
-        prevChordNote->setPlayEvents(evList);
     }
+
+    return nullptr;
 }
 
 void Score::createPlayEvents(Measure const* start, Measure const* const end)
@@ -1589,19 +1568,28 @@ void Score::createPlayEvents(Measure const* start, Measure const* const end)
                 continue;
             }
             for (Segment* seg = m->first(st); seg; seg = seg->next(st)) {
-                EngravingItem* e = seg->element(track);
-                if (e == 0) {
+                EngravingItem* item = seg->element(track);
+                if (!item) {
                     continue;
                 }
 
-                if (!e->isChord()) {
+                if (!item->isChord()) {
                     prevChord = nullptr;
                     continue;
                 }
 
-                Chord* chord = toChord(e);
-                createPlayEvents(chord, prevChord);
-                adjustPreviousChordLength(chord, prevChord);
+                Chord* chord = toChord(item);
+                Chord* nextChord = getChordFromSegment(seg->next(st), track);
+
+                if (!nextChord) {
+                    // check if next chord is in next measure
+                    Measure* nextMeasure = m->nextMeasure();
+                    if (nextMeasure) {
+                        nextChord = getChordFromSegment(nextMeasure->first(st), track);
+                    }
+                }
+
+                createPlayEvents(chord, prevChord, nextChord);
                 prevChord = chord;
             }
         }
