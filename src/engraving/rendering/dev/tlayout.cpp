@@ -352,7 +352,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STAFF_TEXT:
         layoutStaffText(item_cast<const StaffText*>(item), static_cast<StaffText::LayoutData*>(ldata));
         break;
-    case ElementType::STAFFTYPE_CHANGE: layout(item_cast<StaffTypeChange*>(item), ctx);
+    case ElementType::STAFFTYPE_CHANGE:
+        layoutStaffTypeChange(item_cast<const StaffTypeChange*>(item), static_cast<StaffTypeChange::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::STEM:             layout(item_cast<Stem*>(item), ctx);
         break;
@@ -4704,21 +4705,18 @@ void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldat
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
-static void layoutStaffTypeChange(const StaffTypeChange* item, const LayoutContext& ctx, StaffTypeChange::LayoutData* ldata)
+void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    double _spatium = ctx.conf().spatium();
-    ldata->setBbox(RectF(-item->lw() * .5, -item->lw() * .5, _spatium * 2.5 + item->lw(), _spatium * 2.5 + item->lw()));
+    LD_INDEPENDENT;
+
+    double spatium = conf.spatium();
+    ldata->setBbox(RectF(-item->lw() * .5, -item->lw() * .5, spatium * 2.5 + item->lw(), spatium * 2.5 + item->lw()));
     if (item->measure()) {
-        double y = -1.5 * _spatium - item->height() + item->measure()->system()->staff(item->staffIdx())->y();
-        ldata->setPos(_spatium * .8, y);
+        double y = -1.5 * spatium - ldata->bbox().height() + item->measure()->system()->staff(item->staffIdx())->y();
+        ldata->setPos(spatium * .8, y);
     } else {
         ldata->setPos(0.0, 0.0);
     }
-}
-
-void TLayout::layout(StaffTypeChange* item, LayoutContext& ctx)
-{
-    layoutStaffTypeChange(item, ctx, item->mutLayoutData());
 }
 
 static void layoutStem(const Stem* item, const LayoutContext& ctx, Stem::LayoutData* ldata)
