@@ -2154,7 +2154,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
             }
         }
     } else {
-        // add articulations from newArtics that are not found in _articulations
+        // add articulations from newArtics that are not found in m_articulations
         for (const SymId& id : newArtics) {
             Articulation* newArticulation = Factory::createArticulation(score()->dummy()->chord());
             newArticulation->setSymId(id);
@@ -2162,7 +2162,11 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
                 newArticulation->setAnchor(overallAnchor);
                 newArticulation->setPropertyFlags(Pid::ARTICULATION_ANCHOR, PropertyFlags::UNSTYLED);
             }
-            score()->toggleArticulation(this, newArticulation);
+            if (!hasArticulation(newArticulation)) {
+                score()->toggleArticulation(this, newArticulation);
+            } else {
+                delete newArticulation;
+            }
         }
     }
 }
