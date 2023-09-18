@@ -83,6 +83,18 @@ Item {
         anchors.fill: parent
         hoverEnabled: true
         onClicked: root.clicked()
+
+        onContainsMouseChanged: {
+            if (!labelItem.truncated) {
+                return
+            }
+
+            if (mouseArea.containsMouse) {
+                ui.tooltip.show(root, labelItem.text)
+            } else {
+                ui.tooltip.hide(root)
+            }
+        }
     }
 
     states: [

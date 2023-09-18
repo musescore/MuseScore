@@ -149,6 +149,8 @@ String StringTunings::accessibleInfo() const
         return String();
     }
 
+    String elementName = score() ? score()->getTextStyleUserName(TextStyleType::STRING_TUNINGS).translated()
+                         : TConv::translatedUserName(TextStyleType::STRING_TUNINGS);
     String info;
 
     const std::vector<instrString>& stringList = stringData->stringList();
@@ -165,7 +167,7 @@ String StringTunings::accessibleInfo() const
         }
     }
 
-    return info;
+    return String(u"%1: %2").arg(elementName, info);
 }
 
 String StringTunings::screenReaderInfo() const
@@ -217,9 +219,10 @@ void StringTunings::updateText()
 
 String StringTunings::generateText() const
 {
+    static const String DEFAULT_SYMBOL = u"<sym>guitarString6</sym>";
     const StringData* stringData = this->stringData();
     if (stringData->isNull()) {
-        return String();
+        return DEFAULT_SYMBOL;
     }
 
     const std::vector<instrString>& stringList = stringData->stringList();
@@ -232,19 +235,27 @@ String StringTunings::generateText() const
                 continue;
             }
 
+            Char accidental;
+            if (pitchStr.size() > 1) {
+                Char sym(pitchStr[1]);
+                if (!sym.isDigit()) {
+                    accidental = sym;
+                }
+            }
+
             visibleStringList.emplace_back(String(u"<sym>guitarString%1</sym> - %2").arg(String::number(i + 1),
-                                                                                         String(pitchStr[0]).toUpper()));
+                                                                                         String(pitchStr[0]).toUpper() + accidental));
         }
     }
 
     if (visibleStringList.empty()) {
-        return u"<sym>guitarString6</sym>"; // todo fork
+        return DEFAULT_SYMBOL; // todo fork
     }
 
     int columnCount = 0;
     int rowCount = 0;
 
-    if (visibleStringList.size() <= 4) {
+    if (visibleStringList.size() < 4) {
         rowCount = visibleStringList.size();
         columnCount = 1;
     } else {
