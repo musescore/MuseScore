@@ -355,7 +355,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STAFFTYPE_CHANGE:
         layoutStaffTypeChange(item_cast<const StaffTypeChange*>(item), static_cast<StaffTypeChange::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::STEM:             layout(item_cast<Stem*>(item), ctx);
+    case ElementType::STEM:
+        layoutStem(item_cast<const Stem*>(item), static_cast<Stem::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::STEM_SLASH:       layout(item_cast<StemSlash*>(item), ctx);
         break;
@@ -4719,8 +4720,10 @@ void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange
     }
 }
 
-static void layoutStem(const Stem* item, const LayoutContext& ctx, Stem::LayoutData* ldata)
+void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const LayoutConfiguration& conf)
 {
+    LD_INDEPENDENT;
+
     const bool up = item->up();
     const double _up = up ? -1.0 : 1.0;
 
@@ -4767,7 +4770,7 @@ static void layoutStem(const Stem* item, const LayoutContext& ctx, Stem::LayoutD
         }
 
         if (item->chord()->beam()) {
-            y2 -= _up * item->point(ctx.conf().styleS(Sid::beamWidth)) * .5 * item->chord()->beam()->mag();
+            y2 -= _up * item->point(conf.styleS(Sid::beamWidth)) * .5 * item->chord()->beam()->mag();
         }
     }
 
@@ -4779,15 +4782,10 @@ static void layoutStem(const Stem* item, const LayoutContext& ctx, Stem::LayoutD
 
     // HACK: if there is a beam, extend the bounding box of the stem (NOT the stem itself) by half beam width.
     // This way the bbox of the stem covers also the beam position. Hugely helps with all the collision checks.
-    double beamCorrection = (item->chord() && item->chord()->beam()) ? _up * ctx.conf().styleMM(Sid::beamWidth) * item->mag() / 2 : 0.0;
+    double beamCorrection = (item->chord() && item->chord()->beam()) ? _up * conf.styleMM(Sid::beamWidth) * item->mag() / 2 : 0.0;
     // compute line and bounding rectangle
     RectF rect(line.p1(), line.p2() + PointF(0.0, beamCorrection));
     ldata->setBbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
-}
-
-void TLayout::layout(Stem* item, LayoutContext& ctx)
-{
-    layoutStem(item, ctx, item->mutLayoutData());
 }
 
 static void layoutStemSlash(const StemSlash* item, const LayoutContext& ctx, StemSlash::LayoutData* ldata)
