@@ -62,18 +62,18 @@ static const Acc ACC_LIST[] = {
     Acc(AccidentalVal::SHARP2,     0,   SymId::accidentalSharpSharp),   // SHARP_SHARP
 
     // Gould arrow quartertone
-    Acc(AccidentalVal::NATURAL,  -50,   SymId::accidentalQuarterToneFlatArrowUp),          // FLAT_ARROW_UP
-    Acc(AccidentalVal::NATURAL, -150,   SymId::accidentalThreeQuarterTonesFlatArrowDown),  // FLAT_ARROW_DOWN
+    Acc(AccidentalVal::FLAT,      50,   SymId::accidentalQuarterToneFlatArrowUp),          // FLAT_ARROW_UP
+    Acc(AccidentalVal::FLAT,     -50,   SymId::accidentalThreeQuarterTonesFlatArrowDown),  // FLAT_ARROW_DOWN
     Acc(AccidentalVal::NATURAL,   50,   SymId::accidentalQuarterToneSharpNaturalArrowUp),  // NATURAL_ARROW_UP
     Acc(AccidentalVal::NATURAL,  -50,   SymId::accidentalQuarterToneFlatNaturalArrowDown), // NATURAL_ARROW_DOWN
-    Acc(AccidentalVal::NATURAL,  150,   SymId::accidentalThreeQuarterTonesSharpArrowUp),   // SHARP_ARROW_UP
-    Acc(AccidentalVal::NATURAL,   50,   SymId::accidentalQuarterToneSharpArrowDown),       // SHARP_ARROW_DOWN
-    Acc(AccidentalVal::NATURAL,  250,   SymId::accidentalFiveQuarterTonesSharpArrowUp),    // SHARP2_ARROW_UP
-    Acc(AccidentalVal::NATURAL,  150,   SymId::accidentalThreeQuarterTonesSharpArrowDown), // SHARP2_ARROW_DOWN
-    Acc(AccidentalVal::NATURAL, -150,   SymId::accidentalThreeQuarterTonesFlatArrowUp),    // FLAT2_ARROW_UP
-    Acc(AccidentalVal::NATURAL, -250,   SymId::accidentalFiveQuarterTonesFlatArrowDown),   // FLAT2_ARROW_DOWN
-    Acc(AccidentalVal::NATURAL,  -50,   SymId::accidentalArrowDown), // ARROW_DOWN
-    Acc(AccidentalVal::NATURAL,   50,   SymId::accidentalArrowUp),   // ARROW_UP
+    Acc(AccidentalVal::SHARP,     50,   SymId::accidentalThreeQuarterTonesSharpArrowUp),   // SHARP_ARROW_UP
+    Acc(AccidentalVal::SHARP,    -50,   SymId::accidentalQuarterToneSharpArrowDown),       // SHARP_ARROW_DOWN
+    Acc(AccidentalVal::SHARP2,    50,   SymId::accidentalFiveQuarterTonesSharpArrowUp),    // SHARP2_ARROW_UP
+    Acc(AccidentalVal::SHARP2,   -50,   SymId::accidentalThreeQuarterTonesSharpArrowDown), // SHARP2_ARROW_DOWN
+    Acc(AccidentalVal::FLAT2,     50,   SymId::accidentalThreeQuarterTonesFlatArrowUp),    // FLAT2_ARROW_UP
+    Acc(AccidentalVal::FLAT2,    -50,   SymId::accidentalFiveQuarterTonesFlatArrowDown),   // FLAT2_ARROW_DOWN
+    Acc(AccidentalVal::NATURAL,   50,   SymId::accidentalArrowUp),                         // ARROW_UP
+    Acc(AccidentalVal::NATURAL,  -50,   SymId::accidentalArrowDown),                       // ARROW_DOWN
 
     // Stein-Zimmermann
     Acc(AccidentalVal::NATURAL,  -50,   SymId::accidentalQuarterToneFlatStein),   // MIRRORED_FLAT
