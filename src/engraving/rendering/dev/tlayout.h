@@ -83,6 +83,7 @@
 #include "../../dom/staffstate.h"
 #include "../../dom/stafftext.h"
 #include "../../dom/stafftypechange.h"
+#include "../../dom/stem.h"
 
 #include "../../dom/textbase.h"
 
@@ -131,7 +132,6 @@ class Slur;
 class Spacer;
 class SpannerSegment;
 class StaffLines;
-class Stem;
 class StemSlash;
 class Sticking;
 class StretchedBend;
@@ -282,7 +282,7 @@ public:
     static void layoutStaffState(const StaffState* item, StaffState::LayoutData* ldata);
     static void layoutStaffText(const StaffText* item, StaffText::LayoutData* ldata);
     static void layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange::LayoutData* ldata, const LayoutConfiguration& conf);
-    static void layout(Stem* item, LayoutContext& ctx);
+    static void layoutStem(const Stem* item, Stem::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layout(StemSlash* item, LayoutContext& ctx);
     static void layout(Sticking* item, LayoutContext& ctx);
     static void layout(StretchedBend* item, LayoutContext& ctx);

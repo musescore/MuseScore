@@ -1946,7 +1946,7 @@ double ChordLayout::layoutChords2(std::vector<Note*>& notes, bool up, LayoutCont
         }
         note->setMirror(mirror);
         if (chord->stem()) {
-            TLayout::layout(chord->stem(), ctx); // needed because mirroring can cause stem position to change
+            TLayout::layoutStem(chord->stem(), chord->stem()->mutLayoutData(), ctx.conf()); // needed because mirroring can cause stem position to change
         }
 
         // accumulate return value
@@ -2354,7 +2354,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
         if (note->layoutData()->pos().y() != ny) {
             note->mutLayoutData()->setPosY(ny);
             if (chord->stem()) {
-                TLayout::layout(chord->stem(), ctx);
+                TLayout::layoutStem(chord->stem(), chord->stem()->mutLayoutData(), ctx.conf());
                 if (chord->hook()) {
                     chord->hook()->mutLayoutData()->setPosY(chord->stem()->flagPosition().y());
                 }
