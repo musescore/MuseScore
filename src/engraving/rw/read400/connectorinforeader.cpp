@@ -372,7 +372,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 Tie* tie = toTie(sp);
                 tie->setParent(n);
                 tie->setStartNote(n);
-                item->setTieFor(tie);
+                n->setTieFor(tie);
             } else {
                 sp->setAnchor(Spanner::Anchor::NOTE);
                 sp->setStartElement(item);
