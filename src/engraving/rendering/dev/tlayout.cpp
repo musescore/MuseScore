@@ -349,7 +349,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STAFF_STATE:
         layoutStaffState(item_cast<const StaffState*>(item), static_cast<StaffState::LayoutData*>(ldata));
         break;
-    case ElementType::STAFF_TEXT:       layout(item_cast<StaffText*>(item), ctx);
+    case ElementType::STAFF_TEXT:
+        layoutStaffText(item_cast<const StaffText*>(item), static_cast<StaffText::LayoutData*>(ldata));
         break;
     case ElementType::STAFFTYPE_CHANGE: layout(item_cast<StaffTypeChange*>(item), ctx);
         break;
@@ -4688,10 +4689,19 @@ void TLayout::layoutStaffState(const StaffState* item, StaffState::LayoutData* l
     ldata->setPos(0.0, _spatium * -6.0);
 }
 
-void TLayout::layout(StaffText* item, LayoutContext&)
+void TLayout::layoutStaffText(const StaffText* item, StaffText::LayoutData* ldata)
 {
-    layoutTextBase(item, item->mutLayoutData());
-    Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
+    layoutTextBase(item, ldata);
+
+    if (item->autoplace()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(s->layoutData()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 static void layoutStaffTypeChange(const StaffTypeChange* item, const LayoutContext& ctx, StaffTypeChange::LayoutData* ldata)
