@@ -131,6 +131,7 @@ class Stem;
 class StemSlash;
 class Sticking;
 class StretchedBend;
+class StringTunings;
 
 class BSymbol;
 class Symbol;
@@ -263,6 +264,7 @@ private:
     static void draw(const Stem* item, draw::Painter* painter);
     static void draw(const StemSlash* item, draw::Painter* painter);
     static void draw(const Sticking* item, draw::Painter* painter);
+    static void draw(const StringTunings* item, draw::Painter* painter);
     static void draw(const StretchedBend* item, draw::Painter* painter);
     static void draw(const Symbol* item, draw::Painter* painter);
     static void draw(const FSymbol* item, draw::Painter* painter);

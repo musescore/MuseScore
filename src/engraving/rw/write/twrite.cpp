@@ -2558,7 +2558,7 @@ void TWrite::write(const StringData* item, XmlWriter& xml)
     xml.endElement();
 }
 
-void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext&)
+void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
 
@@ -2570,6 +2570,7 @@ void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext&)
         write(item->stringData(), xml);
     }
 
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
