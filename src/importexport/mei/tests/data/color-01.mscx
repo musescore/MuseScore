@@ -358,6 +358,59 @@
             <durationType>measure</durationType>
             <duration>4/4</duration>
             </Rest>
+          </voice>
+        </Measure>
+      <Measure>
+        <voice>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>64</pitch>
+              <tpc>18</tpc>
+              </Note>
+            <Note>
+              <pitch>67</pitch>
+              <tpc>15</tpc>
+              </Note>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            <Arpeggio>
+              <color r="148" g="33" b="146" a="255"/>
+              <subtype>0</subtype>
+              </Arpeggio>
+            </Chord>
+          <Beam>
+            <l1>34</l1>
+            <l2>34</l2>
+            </Beam>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articAccentAbove</subtype>
+              <color r="148" g="33" b="146" a="255"/>
+              </Articulation>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>eighth</durationType>
+            <Articulation>
+              <subtype>articAccentAbove</subtype>
+              <color r="148" g="33" b="146" a="255"/>
+              </Articulation>
+            <Note>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          <Rest>
+            <BeamMode>auto</BeamMode>
+            <durationType>half</durationType>
+            </Rest>
           <BarLine>
             <subtype>end</subtype>
             </BarLine>

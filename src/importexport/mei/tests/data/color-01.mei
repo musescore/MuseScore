@@ -113,12 +113,33 @@
                      </staff>
                      <slur xml:id="s14ip5c8" startid="#ncdiu0d" color="#00F900" endid="#n1xloq5x" />
                   </measure>
-                  <measure xml:id="myi0wv4" right="end" n="5">
+                  <measure xml:id="myi0wv4" n="5">
                      <staff xml:id="m5s1" n="1">
                         <layer xml:id="m5s1l1" n="1">
                            <mRest xml:id="m190ojd7" color="#FF40FF" />
                         </layer>
                      </staff>
+                  </measure>
+                  <measure xml:id="mhyy331" right="end" n="6">
+                     <staff xml:id="m6s1" n="1">
+                        <layer xml:id="m6s1l1" n="1">
+                           <chord xml:id="cbmm15i" dur="4">
+                              <note xml:id="n16tikqq" pname="e" oct="4" />
+                              <note xml:id="njpefjv" pname="g" oct="4" />
+                              <note xml:id="n1xri4e1" pname="c" oct="5" />
+                           </chord>
+                           <beam>
+                              <note xml:id="nsg7u8r" dur="8" pname="c" oct="5">
+                                 <artic xml:id="a91s8j0" artic="acc" color="#942192" />
+                              </note>
+                              <note xml:id="n1owhrf" dur="8" pname="c" oct="5">
+                                 <artic xml:id="amgmujo" artic="acc" color="#942192" />
+                              </note>
+                           </beam>
+                           <rest xml:id="r3fy93" dur="2" />
+                        </layer>
+                     </staff>
+                     <arpeg xml:id="ajn6s0k" startid="#cbmm15i" color="#942192" />
                   </measure>
                </section>
             </score>
