@@ -3450,7 +3450,7 @@
                   <barlineSpan>2</barlineSpan>
                   <clef staff="2">F</clef>
                   <aPitchRange>36-93</aPitchRange>
-                  <pPitchRange>12-97</pPitchRange>
+                  <pPitchRange>28-97</pPitchRange>
                   <Channel>
                         <!--MIDI: Bank 0, Prog 21; MS General: Accordion-->
                         <program value="21"/> <!--Accordion-->
