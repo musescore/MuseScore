@@ -172,9 +172,9 @@ private:
         std::vector <ButtonRole> { CustomRole, HelpRole, ResetRole, RetryRole, DestructiveRole, RejectRole, BackRole, AcceptRole,
                                    ApplyRole, ContinueRole },
 
-        // KdeLayout (Linux / Unix Layout)
-        std::vector <ButtonRole> { CustomRole, HelpRole, ResetRole, RetryRole, BackRole, AcceptRole, ApplyRole, ContinueRole,
-                                   DestructiveRole, RejectRole }
+        // LinuxLayout
+        std::vector <ButtonRole> { CustomRole, HelpRole, ResetRole, RetryRole, DestructiveRole, RejectRole, BackRole, AcceptRole,
+                                   ApplyRole, ContinueRole }
     };
 
     ButtonLayout m_buttonLayout = ButtonLayout::UnknownLayout;
