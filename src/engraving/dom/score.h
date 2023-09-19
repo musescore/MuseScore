@@ -565,7 +565,7 @@ public:
     Segment* tick2segmentMM(const Fraction& tick, bool first, SegmentType st) const;
     Segment* tick2segmentMM(const Fraction& tick) const;
     Segment* tick2segmentMM(const Fraction& tick, bool first) const;
-    Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false) const;
+    Segment* tick2leftSegment(const Fraction& tick, bool useMMrest = false, bool anySegmentType = false) const;
     Segment* tick2rightSegment(const Fraction& tick, bool useMMrest = false) const;
     Segment* tick2leftSegmentMM(const Fraction& tick) { return tick2leftSegment(tick, /* useMMRest */ true); }
 
