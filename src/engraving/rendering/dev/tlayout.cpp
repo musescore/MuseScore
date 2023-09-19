@@ -2259,8 +2259,10 @@ void TLayout::layout(const Fingering* item, Fingering::LayoutData* ldata)
             LD_CONDITION(chord->layoutData()->isSetPos());
             LD_CONDITION(note->layoutData()->isSetPos());
             LD_CONDITION(note->layoutData()->isSetBbox());
-            LD_CONDITION(stem->layoutData()->isSetPos());
-            LD_CONDITION(stem->layoutData()->isSetBbox());
+            if (stem) {
+                LD_CONDITION(stem->layoutData()->isSetPos());
+                LD_CONDITION(stem->layoutData()->isSetBbox());
+            }
             LD_CONDITION(chord->upNote()->layoutData()->isSetBbox());
             LD_CONDITION(chord->upNote()->layoutData()->isSetPos());
             LD_CONDITION(chord->downNote()->layoutData()->isSetBbox());
