@@ -112,6 +112,17 @@ void Staff::triggerLayout(const Fraction& tick)
     score()->setLayout(tick, idx());
 }
 
+Staff* Staff::findLinkedInScore(const Score* score) const
+{
+    for (Staff* staff : score->staves()) {
+        if (staff->id() == id()) {
+            return staff;
+        }
+    }
+
+    return nullptr;
+}
+
 //---------------------------------------------------------
 //   fillBrackets
 //    make sure index idx is valid

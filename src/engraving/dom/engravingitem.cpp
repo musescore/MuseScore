@@ -2109,6 +2109,36 @@ std::pair<int, float> EngravingItem::barbeat() const
     return std::pair<int, float>(bar + 1, beat + 1 + ticks / static_cast<float>(ticksB));
 }
 
+EngravingItem* EngravingItem::findLinkedInScore(const Score* score) const
+{
+    if (!score || !staff() || !links() || links()->empty()) {
+        return nullptr;
+    }
+
+    Staff* linkedStaffInScore = staff()->findLinkedInScore(score);
+
+    if (!linkedStaffInScore) {
+        return nullptr;
+    }
+
+    return findLinkedInStaff(linkedStaffInScore);
+}
+
+EngravingItem* EngravingItem::findLinkedInStaff(const Staff* staff) const
+{
+    if (!links() || links()->empty()) {
+        return nullptr;
+    }
+
+    for (EngravingObject* linked : *links()) {
+        if (toEngravingItem(linked)->staff() == staff) {
+            return toEngravingItem(linked);
+        }
+    }
+
+    return nullptr;
+}
+
 bool EngravingItem::selected() const
 {
     return flag(ElementFlag::SELECTED);

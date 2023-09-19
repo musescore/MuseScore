@@ -304,6 +304,8 @@ public:
 
     void triggerLayout() const override;
     void triggerLayout(const Fraction& tick);
+
+    Staff* findLinkedInScore(const Score* score) const override;
 };
 } // namespace mu::engraving
 #endif

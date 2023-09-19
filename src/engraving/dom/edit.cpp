@@ -6438,11 +6438,11 @@ void Score::undoAddCR(ChordRest* cr, Measure* measure, const Fraction& tick)
             DurationElement* elementBelow = cr;
             Tuplet* tupletAbove = elementBelow->tuplet();
             while (tupletAbove) {
-                DurationElement* linkedElementBelow = (DurationElement*)elementBelow->findLinkedInScore(score);
+                DurationElement* linkedElementBelow = (DurationElement*)elementBelow->findLinkedInStaff(staff);
                 if (!linkedElementBelow) { // shouldn't happen
                     break;
                 }
-                Tuplet* linkedTuplet = (Tuplet*)tupletAbove->findLinkedInScore(score);
+                Tuplet* linkedTuplet = (Tuplet*)tupletAbove->findLinkedInStaff(staff);
                 if (!linkedTuplet) {
                     linkedTuplet = toTuplet(tupletAbove->linkedClone());
                     linkedTuplet->setScore(score);

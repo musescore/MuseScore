@@ -542,22 +542,6 @@ bool EngravingObject::isLinked(EngravingObject* se) const
 }
 
 //---------------------------------------------------------
-//   findLinkedInScore
-///  if exists, returns the linked object in the required
-///  score, else returns null
-//---------------------------------------------------------
-
-EngravingObject* EngravingObject::findLinkedInScore(Score* score) const
-{
-    if (score == this || !m_links || m_links->empty()) {
-        return nullptr;
-    }
-    auto findElem = std::find_if(m_links->begin(), m_links->end(),
-                                 [this, score](EngravingObject* engObj) { return engObj && engObj != this && engObj->score() == score; });
-    return findElem != m_links->end() ? *findElem : nullptr;
-}
-
-//---------------------------------------------------------
 //   undoUnlink
 //---------------------------------------------------------
 
