@@ -4167,6 +4167,15 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                                 }
                             }
                         }
+                        if (measureInsert->repeatStart()) {
+                            localMeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                            measureInsert->undoChangeProperty(Pid::REPEAT_START, false);
+                        }
+                    } else {
+                        if (pm->repeatEnd()) {
+                            localMeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                            pm->undoChangeProperty(Pid::REPEAT_END, false);
+                        }
                     }
                 }
             } else if (!measureInsert && tick == Fraction(0, 1)) {
