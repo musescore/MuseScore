@@ -569,6 +569,75 @@ TEST_F(MidiRenderer_Tests, letRingRepeat)
     checkEventInterval(events, 6720, 7680, 64, defVol, false, DEFAULT_CHANNEL + 1);
 }
 
+TEST_F(MidiRenderer_Tests, letRingLong)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"letring_long.mscx", true, true));
+
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
+
+    checkEventInterval(events, 0, 7680, 69, defVol, false, DEFAULT_CHANNEL);
+}
+
+TEST_F(MidiRenderer_Tests, slideInLetRing)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_in_letring.mscx", true, true));
+
+    EXPECT_EQ(events.size(), 4);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 1].size(), 6);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 2].size(), 2);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 3].size(), 2);
+
+    checkEventInterval(events, 420, 438, 72, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 440, 458, 71, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 460, 478, 70, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 480, 1920, 69, defVol, false, DEFAULT_CHANNEL);
+    checkEventInterval(events, 960, 1920, 67, defVol, false, DEFAULT_CHANNEL + 2);
+    checkEventInterval(events, 1440, 1920, 62, defVol, false, DEFAULT_CHANNEL + 3);
+}
+
+TEST_F(MidiRenderer_Tests, slideOutLetRing)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"slide_out_letring.mscx", true, true));
+
+    EXPECT_EQ(events.size(), 4);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 1].size(), 6);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 2].size(), 2);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 3].size(), 2);
+
+    checkEventInterval(events, 0, 419, 69, defVol, false, DEFAULT_CHANNEL);
+    checkEventInterval(events, 420, 438, 68, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 439, 457, 67, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 459, 477, 66, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 480, 1440, 52, defVol, false, DEFAULT_CHANNEL + 2);
+    checkEventInterval(events, 960, 1440, 50, defVol, false, DEFAULT_CHANNEL + 3);
+}
+
+TEST_F(MidiRenderer_Tests, glissandoLetRing)
+{
+    constexpr int defVol = 80; // mf
+
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"glissando_letring.mscx", true, true));
+
+    EXPECT_EQ(events.size(), 3);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 2);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 1].size(), 6);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 2].size(), 2);
+
+    checkEventInterval(events, 0, 320, 69, defVol, false, DEFAULT_CHANNEL);
+    checkEventInterval(events, 321, 399, 68, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 400, 478, 67, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 480, 1440, 66, defVol, true, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 960, 1440, 60, defVol, false, DEFAULT_CHANNEL + 2);
+}
+
 TEST_F(MidiRenderer_Tests, slideToTiedNote)
 {
     constexpr int defVol = 96; // f

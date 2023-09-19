@@ -79,6 +79,7 @@ using namespace mu::engraving;
 
 namespace mu::engraving {
 static PitchWheelSpecs wheelSpec;
+static int LET_RING_MAX_TICKS = Constants::DIVISION * 16;
 
 struct CollectNoteParams {
     double velocityMultiplier = 1.;
@@ -132,6 +133,19 @@ int toMilliseconds(float tempo, float midiTime)
 bool isGlissandoFor(const Note* note)
 {
     for (Spanner* spanner : note->spannerFor()) {
+        if (spanner->type() == ElementType::GLISSANDO) {
+            return true;
+        }
+    }
+    return false;
+}
+
+//---------------------------------------------------------
+//   Detects if a note is an end of a glissando
+//---------------------------------------------------------
+bool isGlissandoBack(const Note* note)
+{
+    for (Spanner* spanner : note->spannerBack()) {
         if (spanner->type() == ElementType::GLISSANDO) {
             return true;
         }
@@ -325,6 +339,23 @@ static void collectBend(const PitchValues& playData, staff_idx_t staffIdx,
     pitchWheelRenderer.addPitchWheelFunction(func, channel, staffIdx, effect);
 }
 
+static bool letRingShouldApply(const NoteEvent& event, const Note* note)
+{
+    if (note->hasSlideFromNote()) {
+        return false;
+    }
+
+    if (isGlissandoBack(note)) {
+        return true;
+    }
+
+    if (event.slide() || isGlissandoFor(note)) {
+        return false;
+    }
+
+    return true;
+}
+
 //---------------------------------------------------------
 //   collectNote
 //---------------------------------------------------------
@@ -400,8 +431,11 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
                 off += tieLen;
             }
 
-            if (noteParams.letRingNote) {
+            if (noteParams.letRingNote && letRingShouldApply(e, note)) {
                 off = std::max(off, noteParams.endLetRingTick);
+                if (off - on > LET_RING_MAX_TICKS) {
+                    off = on + LET_RING_MAX_TICKS;
+                }
             }
         }
 
