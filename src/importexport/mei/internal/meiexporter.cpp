@@ -931,6 +931,42 @@ bool MeiExporter::writeLayer(track_idx_t track, const Staff* staff, const Measur
 //---------------------------------------------------------
 
 /**
+ * Write the artics attached to a Chord
+ */
+
+bool MeiExporter::writeArtics(const Chord* chord)
+{
+    IF_ASSERT_FAILED(chord) {
+        return false;
+    }
+
+    for (const Articulation* articulation : chord->articulations()) {
+        if (articulation->isArticulation()) {
+            this->writeArtic(articulation);
+        }
+    }
+
+    return true;
+}
+
+/**
+ * Write an artic (articulation).
+ */
+
+bool MeiExporter::writeArtic(const Articulation* articulation)
+{
+    IF_ASSERT_FAILED(articulation) {
+        return false;
+    }
+
+    pugi::xml_node articNode = m_currentNode.append_child();
+    libmei::Artic meiArtic = Convert::articToMEI(articulation);
+    meiArtic.Write(articNode, this->getXmlIdFor(articulation, 'a'));
+
+    return true;
+}
+
+/**
  * Open and close beam and tuplet elements for a ChordRest.
  * When both a beam and a tuplet is opening and closing, check which is the appropriate nesting order.
  * By default, nest the tuplet within the beam.
@@ -1090,6 +1126,7 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
         this->writeBeamTypeAtt(chord, meiChord);
         this->writeStaffIdenAtt(chord, staff, meiChord);
         this->writeStemAtt(chord, meiChord);
+        this->writeArtics(chord);
         this->writeVerses(chord);
         std::string xmlId = this->getXmlIdFor(chord, 'c');
         meiChord.Write(m_currentNode, xmlId);
@@ -1173,6 +1210,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
         this->writeBeamTypeAtt(chord, meiNote);
         this->writeStaffIdenAtt(chord, staff, meiNote);
         this->writeStemAtt(chord, meiNote);
+        this->writeArtics(chord);
         this->writeVerses(chord);
     }
     Convert::colorToMEI(note, meiNote);
@@ -1857,11 +1895,13 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
             }
         }
     }
-    // Articulations
+    // Ornaments
     if (chordRest->isChord()) {
         const Chord* chord = toChord(chordRest);
         for (const Articulation* articulation : chord->articulations()) {
-            m_startingControlEventMap.push_back(std::make_pair(articulation, "#" + xmlId));
+            if (articulation->isOrnament()) {
+                m_startingControlEventMap.push_back(std::make_pair(articulation, "#" + xmlId));
+            }
         }
     }
 }

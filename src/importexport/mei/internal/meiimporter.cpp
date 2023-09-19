@@ -492,14 +492,15 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
 
 /**
  * Create a articulation (MEI control event with @startid).
- * Create the EngravingItem according to the MEI element name (e.g., "mordent", "artic")
+ * Create the EngravingItem according to the MEI element name (e.g., "mordent", "turn")
+ * If measure is null, then chord is expected and no lookup for the chordRest will be performed (e.g., for "artic")
  * The articulation object is added to the EngravingItem (and not to the segment as for annotations)
  * Return nullptr if the lookup fails.
  */
 
-EngravingItem* MeiImporter::addArticulation(const libmei::Element& meiElement, Measure* measure)
+EngravingItem* MeiImporter::addArticulation(const libmei::Element& meiElement, Measure* measure, Chord* chord)
 {
-    ChordRest* chordRest = this->findStart(meiElement, measure);
+    ChordRest* chordRest = (!measure) ? chord : this->findStart(meiElement, measure);
     if (!chordRest) {
         return nullptr;
     }
@@ -510,6 +511,8 @@ EngravingItem* MeiImporter::addArticulation(const libmei::Element& meiElement, M
 
     if (std::find(s_ornaments.begin(), s_ornaments.end(), meiElement.m_name) != s_ornaments.end()) {
         item = Factory::createOrnament(chordRest);
+    } else if (meiElement.m_name == "artic") {
+        item = Factory::createArticulation(chordRest);
     } else {
         return nullptr;
     }
@@ -1486,6 +1489,51 @@ bool MeiImporter::readElements(pugi::xml_node parentNode, Measure* measure, int 
 }
 
 /**
+ * Loop through the content of the MEI <note> or <chord> and read the artics
+ */
+
+bool MeiImporter::readArtics(pugi::xml_node parentNode, Chord* chord)
+{
+    IF_ASSERT_FAILED(chord) {
+        return false;
+    }
+
+    bool success = true;
+
+    pugi::xpath_node_set elements = parentNode.select_nodes("./artic");
+    for (pugi::xpath_node xpathNode : elements) {
+        success = success && this->readArtic(xpathNode.node(), chord);
+    }
+
+    return success;
+}
+
+/**
+ * Read a verse.
+ */
+
+bool MeiImporter::readArtic(pugi::xml_node articNode, Chord* chord)
+{
+    IF_ASSERT_FAILED(chord) {
+        return false;
+    }
+
+    bool warning = false;
+    libmei::Artic meiArtic;
+    meiArtic.Read(articNode);
+
+    Articulation* articulation = static_cast<Articulation*>(this->addArticulation(meiArtic, nullptr, chord));
+    if (!articulation) {
+        // Warning message given in MeiExpoter::addSpanner
+        return true;
+    }
+
+    Convert::articFromMEI(articulation, meiArtic, warning);
+
+    return true;
+}
+
+/**
  * Read a beam.
  * Set MuseScore flags based on custom `@type` values.
  */
@@ -1532,6 +1580,7 @@ bool MeiImporter::readChord(pugi::xml_node chordNode, Measure* measure, int trac
     this->readGracedAtt(meiChord);
     Chord* chord = static_cast<Chord*>(addChordRest(chordNode, measure, track, meiChord, ticks, false));
     this->readStemsAtt(chord, meiChord);
+    this->readArtics(chordNode, chord);
 
     pugi::xpath_node_set notes = chordNode.select_nodes(".//note");
     for (pugi::xpath_node xpathNode : notes) {
@@ -1685,6 +1734,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
     if (!chord) {
         chord = static_cast<Chord*>(addChordRest(noteNode, measure, track, meiNote, ticks, false));
         this->readStemsAtt(chord, meiNote);
+        this->readArtics(noteNode, chord);
         this->readVerses(noteNode, chord);
     }
 
