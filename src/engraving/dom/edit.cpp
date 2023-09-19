@@ -4074,9 +4074,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             std::vector<Clef*> clefList;
             std::vector<Clef*> previousClefList;
             std::list<Clef*> specialCaseClefs;
+            std::vector<BarLine*> previousBarLinesList;
 
             //
-            // remove clef, time and key signatures
+            // remove clef, barlines, time and key signatures
             //
             if (measureInsert) {
                 for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
@@ -4090,6 +4091,17 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                                 undo(new RemoveElement(pc));
                                 if (ps->empty()) {
                                     undoRemoveElement(ps);
+                                }
+                            }
+                        }
+                        Segment* pbs = pm->findSegment(SegmentType::EndBarLine, tick);
+                        if (pbs && pbs->enabled()) {
+                            EngravingItem* pb = pbs->element(staffIdx * VOICES);
+                            if (pb && !pb->generated() && !options.moveSignaturesClef) {
+                                previousBarLinesList.push_back(toBarLine(pb));
+                                undo(new RemoveElement(pb));
+                                if (pbs->empty()) {
+                                    pbs->setEnabled(false);
                                 }
                             }
                         }
@@ -4164,7 +4176,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             }
 
             //
-            // move clef, time, key signatures
+            // move clef, barline, time, key signatures
             //
             for (TimeSig* ts : timeSigList) {
                 TimeSig* nts = Factory::copyTimeSig(*ts);
@@ -4199,6 +4211,12 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, newMeasure->ticks());
                 nClef->setParent(s);
                 undoAddElement(nClef);
+            }
+            for (BarLine* barLine : previousBarLinesList) {
+                BarLine* nBarLine = Factory::copyBarLine(*barLine);
+                Segment* s = pm->undoGetSegmentR(SegmentType::EndBarLine, pm->ticks());
+                nBarLine->setParent(s);
+                undoAddElement(nBarLine);
             }
         } else {
             // a frame, not a measure
