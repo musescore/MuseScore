@@ -64,9 +64,11 @@ public:
     const T& value(LD_ACCESS mode) const
     {
         if (!m_val.has_value()) {
+#ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS
             if (mode == LD_ACCESS::CHECK) {
                 LOGE_T("LD_ACCESS")() << "BAD ACCESS to: " << m_name;
             }
+#endif
             return m_def;
         }
         return m_val.value();
