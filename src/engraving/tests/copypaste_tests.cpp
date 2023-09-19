@@ -52,6 +52,7 @@ public:
     void copypastevoice(const char*, int);
     void copypastetuplet(const char*);
     void copypastenote(const String&, Fraction = Fraction(1, 1));
+    void copypastesplit(const String&);
 };
 
 //---------------------------------------------------------
@@ -583,6 +584,95 @@ TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteOntoMMRest)
 TEST_F(Engraving_CopyPasteTests, copypasteQtrNoteDoubleDuration)
 {
     copypastenote(u"11", Fraction(2, 1));
+}
+
+TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverBar)
+{
+    // Copy first note m2 to last note m1
+    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteSplit01.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+
+    Segment* s = m2->first(SegmentType::ChordRest);
+    score->select(toChord(s->element(0))->notes().at(0));
+    QMimeData mimeData;
+    mimeData.setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
+    ChordRest* cr = m1->findChordRest(Fraction(7, 8), 0);
+    score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
+    score->startCmd();
+    QMimeDataAdapter ma(&mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypasteSplit01.mscx"),
+                                            COPYPASTE_DATA_DIR + "copypasteSplit01-ref.mscx"));
+}
+
+TEST_F(Engraving_CopyPasteTests, copypasteSplitTiedNoteOverBar)
+{
+    // Copy range first 2 beats of m2 to 2nd to last note m1
+    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteSplit02.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+
+    // create a range selection on 1st to 2nd beat (voice 1) of 2nd measure
+    Segment* s = m2->first(SegmentType::ChordRest);
+    score->select(toChord(s->element(0))->notes().at(0));
+    s = s->next1(SegmentType::ChordRest)->next1(SegmentType::ChordRest);
+    score->select(s->element(0), SelectType::RANGE);
+
+    EXPECT_TRUE(score->selection().canCopy());
+
+    QMimeData mimeData;
+    mimeData.setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
+    ChordRest* cr = m1->findChordRest(Fraction(6, 8), 0);
+    EXPECT_TRUE(cr);
+    score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
+    score->startCmd();
+    QMimeDataAdapter ma(&mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypasteSplit02.mscx"),
+                                            COPYPASTE_DATA_DIR + "copypasteSplit02-ref.mscx"));
+}
+
+TEST_F(Engraving_CopyPasteTests, copypasteSplitNoteOverManyBars)
+{
+    // copy first note to last note m2
+    MasterScore* score = ScoreRW::readScore(COPYPASTE_DATA_DIR + "copypasteSplit03.mscx");
+    EXPECT_TRUE(score);
+
+    Measure* m1 = score->firstMeasure();
+    Measure* m2 = m1->nextMeasure();
+
+    EXPECT_TRUE(m1);
+    EXPECT_TRUE(m2);
+
+    Segment* s = m1->first(SegmentType::ChordRest);
+    score->select(toChord(s->element(0))->notes().at(0));
+    QMimeData mimeData;
+    mimeData.setData(score->selection().mimeType(), score->selection().mimeData().toQByteArray());
+    ChordRest* cr = m2->findChordRest(Fraction(19, 8), 0);
+    EXPECT_TRUE(cr);
+    score->select(cr->isChord() ? toChord(cr)->upNote() : static_cast<EngravingItem*>(cr));
+    score->startCmd();
+    QMimeDataAdapter ma(&mimeData);
+    score->cmdPaste(&ma, 0);
+    score->endCmd();
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(score, String("copypasteSplit03.mscx"),
+                                            COPYPASTE_DATA_DIR + "copypasteSplit03-ref.mscx"));
 }
 
 //---------------------------------------------------------
