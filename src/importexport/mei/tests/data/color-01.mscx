@@ -13,7 +13,7 @@
     <metaTag name="composer">Composer / arranger</metaTag>
     <metaTag name="copyright"></metaTag>
     <metaTag name="lyricist"></metaTag>
-    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title&gt;Untitled score&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;composer&quot;&gt;Composer / arranger&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2023-09-13T11:22:08&quot;/&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
+    <metaTag name="meiHead">&lt;meiHead&gt;&lt;fileDesc&gt;&lt;titleStmt&gt;&lt;title&gt;Untitled score&lt;/title&gt;&lt;respStmt&gt;&lt;persName role=&quot;composer&quot;&gt;Composer / arranger&lt;/persName&gt;&lt;/respStmt&gt;&lt;/titleStmt&gt;&lt;pubStmt&gt;&lt;date isodate=&quot;2023-09-20T08:12:43&quot;/&gt;&lt;/pubStmt&gt;&lt;/fileDesc&gt;&lt;/meiHead&gt;</metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
     <metaTag name="poet"></metaTag>
@@ -269,6 +269,11 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <Clef>
+            <concertClefType>C3</concertClefType>
+            <transposingClefType>C3</transposingClefType>
+            <color r="0" g="249" b="0" a="255"/>
+            </Clef>
           <Tuplet>
             <color r="0" g="249" b="0" a="255"/>
             <normalNotes>2</normalNotes>
@@ -280,7 +285,7 @@
               </Number>
             </Tuplet>
           <Beam>
-            <l1>-10</l1>
+            <l1>-6</l1>
             <l2>-6</l2>
             </Beam>
           <Chord>
@@ -296,22 +301,22 @@
                 </next>
               </Spanner>
             <Note>
-              <pitch>72</pitch>
+              <pitch>60</pitch>
               <tpc>14</tpc>
               </Note>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
-              <pitch>67</pitch>
+              <pitch>55</pitch>
               <tpc>15</tpc>
               </Note>
             </Chord>
           <Chord>
             <durationType>eighth</durationType>
             <Note>
-              <pitch>64</pitch>
-              <tpc>18</tpc>
+              <pitch>60</pitch>
+              <tpc>14</tpc>
               </Note>
             </Chord>
           <endTuplet/>
@@ -335,6 +340,11 @@
             <durationType>eighth</durationType>
             </Rest>
           <endTuplet/>
+          <Clef>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
+            <color r="0" g="249" b="0" a="255"/>
+            </Clef>
           <Chord>
             <durationType>quarter</durationType>
             <Spanner type="Slur">
