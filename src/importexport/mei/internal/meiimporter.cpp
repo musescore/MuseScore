@@ -714,7 +714,7 @@ const std::list<ChordRest*> MeiImporter::findPlistChordRests(pugi::xml_node cont
     libmei::InstPlist plistAtt;
     plistAtt.ReadPlist(controlNode);
 
-    // This should not happend because an element without and @endid will not have been added to the map
+    // This should not happend because an element without and @plist will not have been added to the map
     if (!plistAtt.HasPlist()) {
         return {};
     }
@@ -722,7 +722,7 @@ const std::list<ChordRest*> MeiImporter::findPlistChordRests(pugi::xml_node cont
     std::list<ChordRest*> plistChordRests;
     for (auto& id : plistAtt.GetPlist()) {
         std::string plistValue = this->xmlIdFrom(id);
-        // The endid corresponding Note should have been added to the m_endIdNotes previously
+        // The plist corresponding Note should have been added to the m_plistValueChordRests previously
         if (!m_plistValueChordRests.count(plistValue) || !m_plistValueChordRests.at(plistValue)) {
             Convert::logs.push_back(String("Could not find note for @plist value '%1'").arg(String::fromStdString(id)));
             continue;
@@ -2075,7 +2075,7 @@ bool MeiImporter::readArpeg(pugi::xml_node arpegNode, Measure* measure)
 
     Arpeggio* arpeggio = static_cast<Arpeggio*>(this->addToChordRest(meiArpeg, measure));
     if (!arpeggio) {
-        // Warning message given in MeiExpoter::addAnnotation
+        // Warning message given in MeiExpoter::addToChordRest
         return true;
     }
 
@@ -2314,7 +2314,7 @@ bool MeiImporter::readMordent(pugi::xml_node mordentNode, Measure* measure)
 
     Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiMordent, measure));
     if (!ornament) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiExpoter::addToChordRest
         return true;
     }
 
@@ -2365,7 +2365,7 @@ bool MeiImporter::readOrnam(pugi::xml_node ornamNode, Measure* measure)
 
     Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiOrnam, measure));
     if (!ornament) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiExpoter::addToChordRest
         return true;
     }
 
@@ -2511,7 +2511,7 @@ bool MeiImporter::readTrill(pugi::xml_node trillNode, Measure* measure)
 
     Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiTrill, measure));
     if (!ornament) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiExpoter::addToChordRest
         return true;
     }
 
@@ -2537,7 +2537,7 @@ bool MeiImporter::readTurn(pugi::xml_node turnNode, Measure* measure)
 
     Ornament* ornament = static_cast<Ornament*>(this->addToChordRest(meiTurn, measure));
     if (!ornament) {
-        // Warning message given in MeiExpoter::addSpanner
+        // Warning message given in MeiExpoter::addToChordRest
         return true;
     }
 

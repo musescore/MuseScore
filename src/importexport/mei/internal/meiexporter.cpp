@@ -2155,7 +2155,7 @@ void MeiExporter::addEndidToControlEvents()
             closedEvents.push_back(item);
         }
         if (m_plistMap.count(item) && m_openControlEventMap.count(item)) {
-            // Create an attribute class instance to add the @endid
+            // Create an attribute class instance to add the @plist
             libmei::InstPlist plist;
             plist.SetPlist({ m_plistMap.at(item) });
             plist.WritePlist(m_openControlEventMap.at(item));
