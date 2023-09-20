@@ -4691,9 +4691,8 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
       QString rest;
       QPointF p;
 
-      QString lineEnd = "none";
       QString type;
-      bool hook = false;
+      HookType hookType = HookType::NONE;
       double hookHeight = 0.0;
       if (tl->tick() == tick) {
             if (!isDashes) {
@@ -4713,7 +4712,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
                         }
                   rest += QString(" line-type=\"%1\"").arg(lineType);
                   }
-            hook       = tl->beginHookType() != HookType::NONE;
+            hookType   = tl->beginHookType();
             hookHeight = tl->beginHookHeight().val();
             if (!tl->segmentsEmpty())
                   p = tl->frontSegment()->offset();
@@ -4721,7 +4720,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
             type = "start";
             }
       else {
-            hook = tl->endHookType() != HookType::NONE;
+            hookType   = tl->endHookType();
             hookHeight = tl->endHookHeight().val();
             if (!tl->segmentsEmpty())
                   p = (toLineSegment(tl->backSegment()))->userOff2();
@@ -4729,14 +4728,22 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
             type = "stop";
             }
 
-      if (hook) {
-            if (hookHeight < 0.0) {
-                  lineEnd = "up";
-                  hookHeight *= -1.0;
-                  }
-            else
-                  lineEnd = "down";
-            rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
+      QString lineEnd;
+      switch (hookType) {
+            case HookType::HOOK_90T:
+                  lineEnd = "both";
+                  rest += QString(" end-length=\"%1\"").arg(std::abs(hookHeight * 20));
+                  break;
+            case HookType::HOOK_90:
+                  lineEnd = (hookHeight < 0.0) ? "up" : "down";
+                  rest += QString(" end-length=\"%1\"").arg(std::abs(hookHeight * 10));
+                  break;
+            case HookType::NONE:
+                  lineEnd = "none";
+                  break;
+            default:
+                  lineEnd = "none";
+                  qDebug("HookType %d not supported", int(hookType));
             }
 
       rest += positioningAttributes(tl, tl->tick() == tick);
