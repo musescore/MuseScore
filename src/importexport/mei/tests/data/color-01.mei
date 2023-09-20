@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-09-13T11:22:08" />
+            <date isodate="2023-09-20T08:12:43" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -96,29 +96,52 @@
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
                            <note xml:id="n12ej5nc" dur="4" pname="c" oct="5" />
+                           <clef xml:id="cq1nzo7" shape="C" line="3" color="#00F900" />
                            <beam>
-                              <tuplet xml:id="tq1nzo7" num="3" numbase="2" color="#00F900">
-                                 <note xml:id="ncdiu0d" dur="8" pname="c" oct="5" />
-                                 <note xml:id="n1be0v1v" dur="8" pname="g" oct="4" />
-                                 <note xml:id="nug9tia" dur="8" pname="e" oct="4" />
+                              <tuplet xml:id="tcdiu0d" num="3" numbase="2" color="#00F900">
+                                 <note xml:id="n1be0v1v" dur="8" pname="c" oct="4" />
+                                 <note xml:id="nug9tia" dur="8" pname="g" oct="3" />
+                                 <note xml:id="n1btcdw1" dur="8" pname="c" oct="4" />
                               </tuplet>
                            </beam>
-                           <tuplet xml:id="t1btcdw1" num="3" numbase="2" color="#00F900">
-                              <rest xml:id="r1bkkx6m" type="mscore-beam-none" dur="8" />
+                           <tuplet xml:id="t1bkkx6m" num="3" numbase="2" color="#00F900">
                               <rest xml:id="r1j8t5jh" type="mscore-beam-none" dur="8" />
                               <rest xml:id="rbga0cv" type="mscore-beam-none" dur="8" />
+                              <rest xml:id="r1xloq5x" type="mscore-beam-none" dur="8" />
                            </tuplet>
-                           <note xml:id="n1xloq5x" dur="4" pname="e" oct="4" />
+                           <clef xml:id="c14ip5c8" shape="G" line="2" color="#00F900" />
+                           <note xml:id="nyi0wv4" dur="4" pname="e" oct="4" />
                         </layer>
                      </staff>
-                     <slur xml:id="s14ip5c8" startid="#ncdiu0d" color="#00F900" endid="#n1xloq5x" />
+                     <slur xml:id="s190ojd7" startid="#n1be0v1v" color="#00F900" endid="#nyi0wv4" />
                   </measure>
-                  <measure xml:id="myi0wv4" right="end" n="5">
+                  <measure xml:id="mhyy331" n="5">
                      <staff xml:id="m5s1" n="1">
                         <layer xml:id="m5s1l1" n="1">
-                           <mRest xml:id="m190ojd7" color="#FF40FF" />
+                           <mRest xml:id="mbmm15i" color="#FF40FF" />
                         </layer>
                      </staff>
+                  </measure>
+                  <measure xml:id="m16tikqq" right="end" n="6">
+                     <staff xml:id="m6s1" n="1">
+                        <layer xml:id="m6s1l1" n="1">
+                           <chord xml:id="cjpefjv" dur="4">
+                              <note xml:id="n1xri4e1" pname="e" oct="4" />
+                              <note xml:id="n91s8j0" pname="g" oct="4" />
+                              <note xml:id="nsg7u8r" pname="c" oct="5" />
+                           </chord>
+                           <beam>
+                              <note xml:id="n1owhrf" dur="8" pname="c" oct="5">
+                                 <artic xml:id="amgmujo" artic="acc" color="#942192" />
+                              </note>
+                              <note xml:id="njn6s0k" dur="8" pname="c" oct="5">
+                                 <artic xml:id="a3fy93" artic="acc" color="#942192" />
+                              </note>
+                           </beam>
+                           <rest xml:id="r63pbtd" dur="2" />
+                        </layer>
+                     </staff>
+                     <arpeg xml:id="aokn5r1" startid="#cjpefjv" color="#942192" />
                   </measure>
                </section>
             </score>

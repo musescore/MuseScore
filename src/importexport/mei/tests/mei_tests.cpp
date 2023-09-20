@@ -99,6 +99,10 @@ TEST_F(Mei_Tests, mei_accid_02) {
     meiReadTest("accid-02");
 }
 
+TEST_F(Mei_Tests, mei_arpeg_01) {
+    meiReadTest("arpeg-01");
+}
+
 TEST_F(Mei_Tests, mei_artic_01) {
     meiReadTest("artic-01");
 }

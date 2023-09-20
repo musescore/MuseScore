@@ -27,6 +27,7 @@
 #include "log.h"
 #include "types/datetime.h"
 
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/beam.h"
 #include "engraving/dom/box.h"
 #include "engraving/dom/bracket.h"
@@ -790,8 +791,10 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
         }
     }
 
-    for (auto controlEvent : m_startingControlEventMap) {
-        if (controlEvent.first->isBreath()) {
+    for (auto controlEvent : m_startingControlEventList) {
+        if (controlEvent.first->isArpeggio()) {
+            success = success && this->writeArpeg(dynamic_cast<const Arpeggio*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isBreath()) {
             success = success && this->writeBreath(dynamic_cast<const Breath*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isExpression() || controlEvent.first->isPlayTechAnnotation() || controlEvent.first->isStaffText()) {
             success = success && this->writeDir(dynamic_cast<const TextBase*>(controlEvent.first), controlEvent.second);
@@ -815,7 +818,7 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeTie(dynamic_cast<const Tie*>(controlEvent.first), controlEvent.second);
         }
     }
-    m_startingControlEventMap.clear();
+    m_startingControlEventList.clear();
 
     for (auto controlEvent : m_tstampControlEventMap) {
         if (controlEvent.first->isFermata()) {
@@ -1221,7 +1224,7 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
     }
 
     if (note->tieFor()) {
-        m_startingControlEventMap.push_back(std::make_pair(note->tieFor(), "#" + xmlId));
+        m_startingControlEventList.push_back(std::make_pair(note->tieFor(), "#" + xmlId));
     }
     if (note->tieBack()) {
         m_endingControlEventMap[note->tieBack()] = "#" + xmlId;
@@ -1409,6 +1412,30 @@ bool MeiExporter::writeVerse(const Lyrics* lyrics)
 //---------------------------------------------------------
 // write MEI control events
 //---------------------------------------------------------
+
+/**
+ * Write a arpeg.
+ */
+
+bool MeiExporter::writeArpeg(const Arpeggio* arpeggio, const std::string& startid)
+{
+    IF_ASSERT_FAILED(arpeggio) {
+        return false;
+    }
+
+    pugi::xml_node arpegNode = m_currentNode.append_child();
+    libmei::Arpeg meiArpeg = Convert::arpegToMEI(arpeggio);
+    meiArpeg.SetStartid(startid);
+
+    meiArpeg.Write(arpegNode, this->getXmlIdFor(arpeggio, 'a'));
+
+    // If the arpeggio is spanning to a lower staff, keep it as open control event
+    if (arpeggio->span() > 1) {
+        m_openControlEventMap[arpeggio] = arpegNode;
+    }
+
+    return true;
+}
 
 /**
  * Write a breath (i.e., breath or caesura).
@@ -1874,13 +1901,13 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
 
     for (const EngravingItem* element : chordRest->segment()->annotations()) {
         if (element->track() == trackIdx) {
-            m_startingControlEventMap.push_back(std::make_pair(element, "#" + xmlId));
+            m_startingControlEventList.push_back(std::make_pair(element, "#" + xmlId));
         }
     }
     // Breath a handled differently
     const Breath* breath = chordRest->hasBreathMark();
     if (breath) {
-        m_startingControlEventMap.push_back(std::make_pair(breath, "#" + xmlId));
+        m_startingControlEventList.push_back(std::make_pair(breath, "#" + xmlId));
     }
     // Slurs
     SpannerMap& smap = m_score->spannerMap();
@@ -1889,19 +1916,40 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
         Spanner* spanner = interval.value;
         if (spanner && (spanner->isHairpin() || spanner->isOttava() || spanner->isSlur())) {
             if (spanner->startCR() == chordRest) {
-                m_startingControlEventMap.push_back(std::make_pair(spanner, "#" + xmlId));
+                m_startingControlEventList.push_back(std::make_pair(spanner, "#" + xmlId));
             } else if (spanner->endCR() == chordRest) {
                 m_endingControlEventMap[spanner] = "#" + xmlId;
             }
         }
     }
-    // Ornaments
+    // For chords only
     if (chordRest->isChord()) {
         const Chord* chord = toChord(chordRest);
+        // Ornaments
         for (const Articulation* articulation : chord->articulations()) {
             if (articulation->isOrnament()) {
-                m_startingControlEventMap.push_back(std::make_pair(articulation, "#" + xmlId));
+                m_startingControlEventList.push_back(std::make_pair(articulation, "#" + xmlId));
             }
+        }
+        // Arpeggio
+        const Arpeggio* arpeggio = chord->arpeggio();
+        if (arpeggio) {
+            m_startingControlEventList.push_back(std::make_pair(arpeggio, "#" + xmlId));
+            // The arpeggio is spanning to a lower staff
+            if (arpeggio->span() > 1) {
+                // We need to retrieve the chord it is spanning to
+                track_idx_t bottomTrack = arpeggio->track() + (arpeggio->span() - 1) * VOICES;
+                const EngravingItem* element = chord->segment()->element(bottomTrack);
+                // We do not know the xml:id of the chord yet, keep it in a map
+                if (element && element->isChord()) {
+                    m_arpegPlistMap[toChord(element)] = arpeggio;
+                }
+            }
+        }
+        // This is the lower chord of a spanning arpeggio - we can now move it to the map with the chord xml:id
+        if (m_arpegPlistMap.count(chord)) {
+            m_plistMap[m_arpegPlistMap.at(chord)] = "#" + xmlId;
+            m_arpegPlistMap.erase(chord);
         }
     }
 }
@@ -1915,10 +1963,10 @@ std::string MeiExporter::findStartIdFor(const EngravingItem* item)
 {
     std::string xmlId;
 
-    auto result = std::find_if(m_startingControlEventMap.begin(), m_startingControlEventMap.end(),
+    auto result = std::find_if(m_startingControlEventList.begin(), m_startingControlEventList.end(),
                                [item](const auto& entry) { return entry.first == item; });
 
-    if (result != m_startingControlEventMap.end()) {
+    if (result != m_startingControlEventList.end()) {
         xmlId = result->second;
     }
     return xmlId;
@@ -2089,6 +2137,7 @@ void MeiExporter::addNodeToOpenControlEvents(pugi::xml_node node, const Spanner*
 void MeiExporter::addEndidToControlEvents()
 {
     std::list<const EngravingItem*> closedEvents;
+    std::list<const EngravingItem*> closedPlists;
 
     // Go through the list of open control events and see if the end element has been written
     for (auto controlEvent : m_openControlEventMap) {
@@ -2105,11 +2154,21 @@ void MeiExporter::addEndidToControlEvents()
             // Add it to the list of closed events we can remove from the maps (below)
             closedEvents.push_back(item);
         }
+        if (m_plistMap.count(item) && m_openControlEventMap.count(item)) {
+            // Create an attribute class instance to add the @plist
+            libmei::InstPlist plist;
+            plist.SetPlist({ m_plistMap.at(item) });
+            plist.WritePlist(m_openControlEventMap.at(item));
+            // Add it to the list of closed plists we can remove from the maps (below)
+            closedPlists.push_back(item);
+        }
     }
 
     for (auto item : closedEvents) {
         m_openControlEventMap.erase(item);
-        m_endingControlEventMap.erase(item);
+    }
+    for (auto item : closedPlists) {
+        m_plistMap.erase(item);
     }
 }
 
