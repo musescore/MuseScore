@@ -30,6 +30,7 @@
 #include "engraving/types/symnames.h"
 #include "engraving/types/typesconv.h"
 
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/dynamic.h"
@@ -240,6 +241,58 @@ libmei::data_STAFFREL Convert::anchorToMEI(engraving::ArticulationAnchor anchor)
     default:
         return libmei::STAFFREL_NONE;
     }
+}
+
+void Convert::arpegFromMEI(engraving::Arpeggio* arpeggio, const libmei::Arpeg& meiArpeg, bool& warning)
+{
+    warning = false;
+
+    // @arrow and @order
+    if (meiArpeg.HasOrder()) {
+        switch (meiArpeg.GetOrder()) {
+        case (libmei::arpegLog_ORDER_down):
+            arpeggio->setArpeggioType(engraving::ArpeggioType::DOWN);
+            break;
+        case (libmei::arpegLog_ORDER_nonarp):
+            arpeggio->setArpeggioType(engraving::ArpeggioType::BRACKET);
+            break;
+        case (libmei::arpegLog_ORDER_up):
+            arpeggio->setArpeggioType(engraving::ArpeggioType::UP);
+            break;
+        default:
+            break;
+        }
+    }
+
+    // @color
+    Convert::colorFromMEI(arpeggio, meiArpeg);
+}
+
+libmei::Arpeg Convert::arpegToMEI(const engraving::Arpeggio* arpeggio)
+{
+    libmei::Arpeg meiArpeg;
+
+    // @arrow and @order
+    switch (arpeggio->arpeggioType()) {
+    case (engraving::ArpeggioType::DOWN):
+        meiArpeg.SetOrder(libmei::arpegLog_ORDER_down);
+        meiArpeg.SetArrow(libmei::BOOLEAN_true);
+        break;
+    case (engraving::ArpeggioType::UP):
+        meiArpeg.SetOrder(libmei::arpegLog_ORDER_up);
+        meiArpeg.SetArrow(libmei::BOOLEAN_true);
+        break;
+    case (engraving::ArpeggioType::BRACKET):
+        meiArpeg.SetOrder(libmei::arpegLog_ORDER_nonarp);
+        break;
+    default:
+        break;
+    }
+
+    // @color
+    Convert::colorToMEI(arpeggio, meiArpeg);
+
+    return meiArpeg;
 }
 
 void Convert::articFromMEI(engraving::Articulation* articulation, const libmei::Artic& meiArtic, bool& warning)
