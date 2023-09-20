@@ -219,9 +219,9 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
     static ArticulationMap emptyArticulations;
 
     BeatType beatType = score->tick2beatType(Fraction::fromTicks(tick));
-    pitch_level_t eventPitchLevel = pitchLevel(PitchClass::A, 4);
-    if (beatType == BeatType::DOWNBEAT && tick == 0) {
-        eventPitchLevel = pitchLevel(PitchClass::B, 4);
+    pitch_level_t eventPitchLevel = beatType == BeatType::DOWNBEAT
+                                    ? pitchLevel(PitchClass::E, 5) // high wood block
+                                    : pitchLevel(PitchClass::F, 5); // low wood block
     }
 
     result[actualTimestamp].emplace_back(mpe::NoteEvent(actualTimestamp,
