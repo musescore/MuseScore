@@ -68,6 +68,8 @@ public:
             if (mode == LD_ACCESS::CHECK) {
                 LOGE_T("LD_ACCESS")() << "BAD ACCESS to: " << m_name;
             }
+#else
+            UNUSED(mode);
 #endif
             return m_def;
         }
