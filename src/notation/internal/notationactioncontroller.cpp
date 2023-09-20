@@ -158,10 +158,6 @@ void NotationActionController::init()
     registerAction("sharp2", [this]() { toggleAccidental(AccidentalType::SHARP2); });
 
     registerAction("rest", &Interaction::putRestToSelection);
-    registerAction("rest-1", &Interaction::putRest, Duration(DurationType::V_WHOLE));
-    registerAction("rest-2", &Interaction::putRest, Duration(DurationType::V_HALF));
-    registerAction("rest-4", &Interaction::putRest, Duration(DurationType::V_QUARTER));
-    registerAction("rest-8", &Interaction::putRest, Duration(DurationType::V_EIGHTH));
 
     registerAction("add-marcato", [this]() { addArticulation(SymbolId::articMarcatoAbove); });
     registerAction("add-sforzato", [this]() { addArticulation(SymbolId::articAccentAbove); });
