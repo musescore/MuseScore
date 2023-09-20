@@ -222,7 +222,6 @@ void PlaybackEventsRenderer::renderMetronome(const Score* score, const int tick,
     pitch_level_t eventPitchLevel = beatType == BeatType::DOWNBEAT
                                     ? pitchLevel(PitchClass::E, 5) // high wood block
                                     : pitchLevel(PitchClass::F, 5); // low wood block
-    
 
     result[actualTimestamp].emplace_back(mpe::NoteEvent(actualTimestamp,
                                                         durationFromTicks(bps.val, ticksPerBeat, ticksPerBeat),
