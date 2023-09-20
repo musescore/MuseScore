@@ -107,6 +107,7 @@ private:
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
     bool writeOctave(const engraving::Ottava* ottava, const std::string& startid);
     bool writeOrnament(const engraving::Ornament* ornament, const std::string& startid);
+    bool writePedal(const engraving::Pedal* pedal, const std::string& startid);
     bool writeRepeatMark(const engraving::Jump* jump, const engraving::Measure* measure);
     bool writeRepeatMark(const engraving::Marker* marker, const engraving::Measure* measure);
     bool writeSlur(const engraving::Slur* slur, const std::string& startid);
