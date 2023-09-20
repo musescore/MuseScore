@@ -152,6 +152,7 @@ Score::Score()
     m_style = DefaultStyle::defaultStyle();
 
     m_rootItem = new RootItem(this);
+    m_rootItem->setParent(this);
     m_rootItem->init();
 
     //! NOTE Looks like a bug, `minimumPaddingUnit` is set using the default style's spatium value
