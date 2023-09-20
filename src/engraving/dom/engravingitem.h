@@ -480,6 +480,9 @@ public:
 
     std::pair<int, float> barbeat() const;
 
+    virtual EngravingItem* findLinkedInScore(const Score* score) const;
+    EngravingItem* findLinkedInStaff(const Staff* staff) const;
+
     struct Autoplace {
         OffsetChange offsetChanged = OffsetChange::NONE;     // set by user actions that change offset, used by autoplace
         PointF changedPos;                // position set when changing offset

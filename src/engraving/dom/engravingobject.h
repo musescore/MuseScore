@@ -267,7 +267,6 @@ public:
     void linkTo(EngravingObject*);
     void unlink();
     bool isLinked(EngravingObject* se = nullptr) const;
-    EngravingObject* findLinkedInScore(Score* score) const;
 
     virtual void undoUnlink();
     LinkedObjects* links() const { return m_links; }
