@@ -1544,7 +1544,7 @@ bool MeiImporter::readArtics(pugi::xml_node parentNode, Chord* chord)
 }
 
 /**
- * Read a verse.
+ * Read an artic.
  */
 
 bool MeiImporter::readArtic(pugi::xml_node articNode, Chord* chord)
