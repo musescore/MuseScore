@@ -2033,9 +2033,11 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             }
         } else {
             Note* nn = n;
-            while (nn->tieFor()) {
+            while (nn && nn->tieFor()) {
                 nn = nn->tieFor()->endNote();
-                score->undo(new ChangePitch(nn, pitch, tpc1, tpc2));
+                if (nn) {
+                    score->undo(new ChangePitch(nn, pitch, tpc1, tpc2));
+                }
             }
         }
     }
