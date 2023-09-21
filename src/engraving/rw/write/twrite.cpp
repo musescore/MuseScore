@@ -2649,6 +2649,7 @@ void TWrite::write(const TextLine* item, XmlWriter& xml, WriteContext& ctx)
 void TWrite::write(const Tie* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
+    writeProperty(item, xml, Pid::TIE_PLACEMENT);
     writeProperties(static_cast<const SlurTie*>(item), xml, ctx);
     xml.endElement();
 }

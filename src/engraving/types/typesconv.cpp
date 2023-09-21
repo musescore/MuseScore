@@ -369,6 +369,22 @@ OrnamentInterval TConv::fromXml(const String& str, OrnamentInterval def)
     return interval;
 }
 
+static const std::vector<Item<TiePlacement> > TIE_PLACEMENT = {
+    { TiePlacement::AUTO, "auto" },
+    { TiePlacement::INSIDE, "inside" },
+    { TiePlacement::OUTSIDE, "outside" },
+};
+
+String TConv::toXml(TiePlacement tiePlacement)
+{
+    return String::fromAscii(findXmlTagByType<TiePlacement>(TIE_PLACEMENT, tiePlacement).ascii());
+}
+
+TiePlacement TConv::fromXml(const String& str, TiePlacement def)
+{
+    return findTypeByXmlTag<TiePlacement>(TIE_PLACEMENT, str, def);
+}
+
 IntervalStep TConv::fromXml(const AsciiStringView& tag, IntervalStep def)
 {
     return findTypeByXmlTag<IntervalStep>(INTERVAL_STEP, tag, def);

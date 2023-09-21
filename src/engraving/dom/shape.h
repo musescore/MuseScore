@@ -95,6 +95,8 @@ public:
     double right() const;
     double top() const;
     double bottom() const;
+    double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
+    double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
 
     size_t size() const { return std::vector<ShapeElement>::size(); }
     bool empty() const { return std::vector<ShapeElement>::empty(); }

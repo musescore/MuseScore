@@ -27,13 +27,15 @@
 namespace mu::engraving {
 class Slur;
 class SlurSegment;
-struct SlurPos;
+struct SlurTiePos;
 class SpannerSegment;
 class System;
 class Chord;
 class TieSegment;
 class Tie;
 class Tremolo;
+enum class Grip;
+class Note;
 }
 
 namespace mu::engraving::rendering::dev {
@@ -45,15 +47,24 @@ public:
 
     static TieSegment* tieLayoutFor(Tie* item, System* system);
     static TieSegment* tieLayoutBack(Tie* item, System* system);
+    static void resolveVerticalTieCollisions(std::vector<TieSegment*>& stackedTies);
 
     static void computeUp(Slur* slur, LayoutContext& ctx);
 
 private:
 
-    static void slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx);
+    static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
 
-    static void tiePos(Tie* item, SlurPos* sp);
+    static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
+    static PointF computeDefaultStartOrEndPoint(Tie* tie, Grip startOrEnd);
+    static double noteOpticalCenterForTie(Note* note, bool up);
+    static void correctForCrossStaff(Tie* tie, SlurTiePos& sPos);
+    static void forceHorizontal(Tie* tie, SlurTiePos& sPos);
+    static void adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip startOrEnd);
+    static void adjustForLedgerLines(TieSegment* tieSegment, SlurTiePos& sPos);
+    static void adjustY(TieSegment* tieSegment);
+    static TieSegment* layoutTieWithNoEndNote(Tie* item);
 
     static double defaultStemLengthStart(Tremolo* tremolo);
     static double defaultStemLengthEnd(Tremolo* tremolo);

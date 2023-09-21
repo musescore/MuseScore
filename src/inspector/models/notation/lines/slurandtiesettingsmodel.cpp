@@ -62,6 +62,16 @@ PropertyItem* SlurAndTieSettingsModel::direction() const
     return m_direction;
 }
 
+PropertyItem* SlurAndTieSettingsModel::tiePlacement() const
+{
+    return m_tiePlacement;
+}
+
+bool SlurAndTieSettingsModel::isTiePlacementAvailable() const
+{
+    return m_isTiePlacementAvailable;
+}
+
 QVariantList SlurAndTieSettingsModel::possibleLineStyles() const
 {
     QVariantList result {
@@ -78,16 +88,37 @@ void SlurAndTieSettingsModel::createProperties()
 {
     m_lineStyle = buildPropertyItem(mu::engraving::Pid::SLUR_STYLE_TYPE);
     m_direction = buildPropertyItem(mu::engraving::Pid::SLUR_DIRECTION);
+    m_tiePlacement = buildPropertyItem(mu::engraving::Pid::TIE_PLACEMENT);
+    updateIsTiePlacementAvailable();
 }
 
 void SlurAndTieSettingsModel::loadProperties()
 {
     loadPropertyItem(m_lineStyle);
     loadPropertyItem(m_direction);
+    loadPropertyItem(m_tiePlacement);
+    updateIsTiePlacementAvailable();
 }
 
 void SlurAndTieSettingsModel::resetProperties()
 {
     m_lineStyle->resetToDefault();
     m_direction->resetToDefault();
+    m_tiePlacement->resetToDefault();
+}
+
+void SlurAndTieSettingsModel::updateIsTiePlacementAvailable()
+{
+    bool available = false;
+    for (EngravingItem* item : m_elementList) {
+        if (item->isTie()) {
+            available = true;
+            break;
+        }
+    }
+
+    if (available != m_isTiePlacementAvailable) {
+        m_isTiePlacementAvailable = available;
+        emit isTiePlacementAvailableChanged(m_isTiePlacementAvailable);
+    }
 }

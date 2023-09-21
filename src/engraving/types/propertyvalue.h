@@ -78,6 +78,7 @@ enum class P_TYPE {
     ORIENTATION,
     BEAM_MODE,
     ACCIDENTAL_ROLE,
+    TIE_PLACEMENT,
 
     // Sound
     FRACTION,
@@ -202,6 +203,9 @@ public:
 
     PropertyValue(const AccidentalRole& v)
         : m_type(P_TYPE::ACCIDENTAL_ROLE), m_data(make_data<AccidentalRole>(v)) {}
+
+    PropertyValue(TiePlacement v)
+        : m_type(P_TYPE::TIE_PLACEMENT), m_data(make_data<TiePlacement>(v)) {}
 
     // Sound
     PropertyValue(const Fraction& v)

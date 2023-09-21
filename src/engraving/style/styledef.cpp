@@ -479,6 +479,11 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::SlurMinDistance,         "slurMinDistance",         Spatium(0.5) },
     { Sid::HeaderToLineStartDistance,   "headerSlurTieDistance",   Spatium(1.0) },
 
+    { Sid::tiePlacementSingleNote,   "tiePlacementSingleNote", TiePlacement::OUTSIDE },
+    { Sid::tiePlacementChord,        "tiePlacementChord",      TiePlacement::OUTSIDE },
+    { Sid::tieMinShoulderHeight,     "tieMinShoulderHeight",   Spatium(0.3) },
+    { Sid::tieMaxShoulderHeight,     "tieMaxShoulderHeight",   Spatium(2.0) },
+
     { Sid::SectionPause,            "sectionPause",            PropertyValue(double(3.0)) },
     { Sid::MusicalSymbolFont,       "musicalSymbolFont",       PropertyValue(String(u"Leland")) },
     { Sid::MusicalTextFont,         "musicalTextFont",         PropertyValue(String(u"Leland Text")) },

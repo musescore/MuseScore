@@ -285,6 +285,8 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
         return PropertyValue(TConv::fromXml(e.readAsciiText(), PlayingTechniqueType::Natural));
     case P_TYPE::TEMPOCHANGE_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), GradualTempoChangeType::Undefined));
+    case P_TYPE::TIE_PLACEMENT:
+        return PropertyValue(TConv::fromXml(e.readText(), TiePlacement::AUTO));
     default:
         ASSERT_X("unhandled PID type");
         break;
@@ -3925,7 +3927,13 @@ void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Tie* t, XmlReader& xml, ReadContext& ctx)
 {
-    TRead::read(static_cast<SlurTie*>(t), xml, ctx);
+    while (xml.readNextStartElement()) {
+        AsciiStringView tag = xml.name();
+        if (TRead::readProperty(t, tag, xml, ctx, Pid::TIE_PLACEMENT)) {
+        } else if (!readProperties(static_cast<SlurTie*>(t), xml, ctx)) {
+            xml.unknown();
+        }
+    }
 }
 
 void TRead::read(TimeSig* s, XmlReader& e, ReadContext& ctx)

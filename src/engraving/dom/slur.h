@@ -125,7 +125,7 @@ private:
     Slur(EngravingItem* parent);
     Slur(const Slur&);
 
-    void slurPosChord(SlurPos*);
+    void slurPosChord(SlurTiePos*);
 
     int m_sourceStemArrangement = -1;
 

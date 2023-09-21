@@ -643,16 +643,6 @@ void ChordLayout::layoutSpanners(Chord* item, System* system, const Fraction& st
 {
     //! REVIEW Needs explanation
     for (const Note* note : item->notes()) {
-        Tie* t = note->tieFor();
-        if (t) {
-            SlurTieLayout::tieLayoutFor(t, system);
-        }
-        t = note->tieBack();
-        if (t) {
-            if (t->startNote()->tick() < stick) {
-                SlurTieLayout::tieLayoutBack(t, system);
-            }
-        }
         for (Spanner* sp : note->spannerBack()) {
             TLayout::layout(sp, ctx);
         }
