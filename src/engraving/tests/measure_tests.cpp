@@ -49,7 +49,7 @@ TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureMiddle) //TODO: verify prog
 
     score->startCmd();
     Measure* m = score->firstMeasure()->nextMeasure();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-1.mscx", MEASURE_DATA_DIR + u"measure-1-ref.mscx"));
@@ -63,7 +63,7 @@ TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureBegin) // TODO: verify prog
 
     score->startCmd();
     Measure* m = score->firstMeasure();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-2.mscx", MEASURE_DATA_DIR + u"measure-2-ref.mscx"));
@@ -76,7 +76,7 @@ TEST_F(Engraving_MeasureTests, DISABLED_insertMeasureEnd) // TODO: verify progra
     EXPECT_TRUE(score);
 
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, 0);
+    score->insertMeasure(0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-3.mscx", MEASURE_DATA_DIR + u"measure-3-ref.mscx"));
@@ -89,7 +89,7 @@ TEST_F(Engraving_MeasureTests, insertAtBeginning)
     EXPECT_TRUE(score);
     Measure* m = score->firstMeasure();
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_beginning.mscx",
                                             MEASURE_DATA_DIR + u"measure-insert_beginning-ref.mscx"));
@@ -105,7 +105,7 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
     Measure* m = score->firstMeasure()->nextMeasure();
     m = m->nextMeasure()->nextMeasure();
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef.mscx", MEASURE_DATA_DIR + u"measure-insert_bf_clef-ref.mscx"));
@@ -116,7 +116,7 @@ TEST_F(Engraving_MeasureTests, insertBfClefChange)
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_clef-2.mscx",
@@ -137,7 +137,7 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
     Measure* m = score->firstMeasure()->nextMeasure();
     m = m->nextMeasure()->nextMeasure();
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
 
     EXPECT_TRUE(score->checkKeys());
@@ -151,7 +151,7 @@ TEST_F(Engraving_MeasureTests, insertBfKeyChange)
 
     m = score->firstMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure()->nextMeasure();
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
     EXPECT_TRUE(score->checkKeys());
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-insert_bf_key-2.mscx",
@@ -180,7 +180,7 @@ TEST_F(Engraving_MeasureTests, spanner_a)
 
     Measure* m = score->firstMeasure()->nextMeasure();
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-4.mscx", MEASURE_DATA_DIR + u"measure-4-ref.mscx"));
@@ -202,7 +202,7 @@ TEST_F(Engraving_MeasureTests, spanner_b)
 
     Measure* m = score->firstMeasure();
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"measure-5.mscx", MEASURE_DATA_DIR + u"measure-5-ref.mscx"));

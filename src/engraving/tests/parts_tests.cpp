@@ -239,7 +239,7 @@ TEST_F(Engraving_PartsTests, appendMeasure)
     createParts(score);
 
     score->startCmd();
-    score->insertMeasure(ElementType::MEASURE, 0);
+    score->insertMeasure(0);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-all-appendmeasures.mscx", PARTS_DATA_DIR + u"part-all-appendmeasures.mscx"));
@@ -263,7 +263,7 @@ TEST_F(Engraving_PartsTests, insertMeasure)
 
     score->startCmd();
     Measure* m = score->firstMeasure();
-    score->insertMeasure(ElementType::MEASURE, m);
+    score->insertMeasure(m);
     score->endCmd();
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(score, u"part-all-insertmeasures.mscx", PARTS_DATA_DIR + u"part-all-insertmeasures.mscx"));

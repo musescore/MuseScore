@@ -430,7 +430,23 @@ void Box::manageExclusionFromParts(bool exclude)
             if (score == this->score()) {
                 continue;
             }
-            MeasureBase* newFrame = score->insertMeasure(type(), next());
+            MeasureBase* newMB = nullptr;
+            if (!next()->isMeasure() && !next()->excludeFromOtherParts()) {
+                for (auto e : next()->linkList()) {
+                    if (e->score() == score) {
+                        newMB = toMeasureBase(e);
+                        break;
+                    }
+                }
+            }
+            // no linked frame found in score; use measure as insert point
+            if (!newMB) {
+                newMB = score->tick2measure(next()->tick());
+            }
+            if (!newMB) {
+                LOGD("measure base not found in score");
+            }
+            MeasureBase* newFrame = score->insertMeasure(type(), newMB);
             newFrame->setExcludeFromOtherParts(false);
             newFrames.push_back(newFrame);
         }

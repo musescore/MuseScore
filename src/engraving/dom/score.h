@@ -462,7 +462,7 @@ public:
     NoteVal noteValForPosition(Position pos, AccidentalType at, bool& error);
 
     Slur* addSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const Slur* slurTemplate);
-    TextBase* addText(TextStyleType type, EngravingItem* destinationElement = nullptr, bool addToAllScores = true);
+    TextBase* addText(TextStyleType type, EngravingItem* destinationElement = nullptr);
 
     void deleteItem(EngravingItem*);
     void deleteMeasures(MeasureBase* firstMeasure, MeasureBase* lastMeasure, bool preserveTies = false);
@@ -826,11 +826,12 @@ public:
         bool createEmptyMeasures = false;
         bool moveSignaturesClef = true;
         bool needDeselectAll = true;
-        bool addToAllScores = true;
     };
 
     MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
                                const InsertMeasureOptions& options = InsertMeasureOptions());
+    MeasureBase* insertBox(ElementType type, MeasureBase* beforeMeasure = nullptr,
+                           const InsertMeasureOptions& options = InsertMeasureOptions());
 
     Audio* audio() const { return m_audio; }
     void setAudio(Audio* a) { m_audio = a; }
