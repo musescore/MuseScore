@@ -2259,6 +2259,24 @@ String Convert::ornamintervalToMEI(const engraving::Ornament* ornament)
 void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPedal, bool& warning)
 {
     warning = false;
+
+    // @dir - ignore, dealing with "down" only
+
+    // @form
+    if (meiPedal.GetForm() == libmei::PEDALSTYLE_pedstar) {
+        pedal->setBeginText(engraving::Pedal::PEDAL_SYMBOL);
+        pedal->setPropertyFlags(engraving::Pid::BEGIN_TEXT, engraving::PropertyFlags::UNSTYLED);
+        pedal->setEndText(engraving::Pedal::STAR_SYMBOL);
+        pedal->setPropertyFlags(engraving::Pid::END_TEXT, engraving::PropertyFlags::UNSTYLED);
+        pedal->setLineVisible(false);
+    } else if (meiPedal.GetForm() == libmei::PEDALSTYLE_pedline) {
+        pedal->setBeginText(engraving::Pedal::PEDAL_SYMBOL);
+        pedal->setPropertyFlags(engraving::Pid::BEGIN_TEXT, engraving::PropertyFlags::UNSTYLED);
+        pedal->setEndHookType(engraving::HookType::HOOK_90);
+    } else {
+        pedal->setBeginHookType(engraving::HookType::HOOK_90);
+        pedal->setEndHookType(engraving::HookType::HOOK_90);
+    }
 }
 
 libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)

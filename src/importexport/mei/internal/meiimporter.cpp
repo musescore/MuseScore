@@ -2943,13 +2943,16 @@ void MeiImporter::addSpannerEnds()
                 // Set the tick2 to include the duration of the ChordRest (not needed for others, i.e., slurs?)
                 spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
             }
-            // Special handling of ottava
-            else if (spannerMapEntry.first->isOttava()) {
+            // Special handling of ottava and pedal
+            else if (spannerMapEntry.first->isOttava() || spannerMapEntry.first->isPedal()) {
                 // Set the tick2 to include the duration of the ChordRest
                 spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
-                Ottava* ottava = toOttava(spannerMapEntry.first);
-                // Make the staff fill the pitch offsets accordingly since we use Note::ppitch in export
-                ottava->staff()->updateOttava();
+                // Special handling of ottava
+                if (spannerMapEntry.first->isOttava()) {
+                    Ottava* ottava = toOttava(spannerMapEntry.first);
+                    // Make the staff fill the pitch offsets accordingly since we use Note::ppitch in export
+                    ottava->staff()->updateOttava();
+                }
             }
         }
     }
