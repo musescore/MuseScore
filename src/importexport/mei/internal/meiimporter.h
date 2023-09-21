@@ -128,6 +128,7 @@ private:
     bool readMordent(pugi::xml_node mordentNode, engraving::Measure* measure);
     bool readOctave(pugi::xml_node octaveNode, engraving::Measure* measure);
     bool readOrnam(pugi::xml_node ornamNode, engraving::Measure* measure);
+    bool readPedal(pugi::xml_node pedalNode, engraving::Measure* measure);
     bool readRepeatMark(pugi::xml_node repeatMarkNode, engraving::Measure* measure);
     bool readSlur(pugi::xml_node slurNode, engraving::Measure* measure);
     bool readTempo(pugi::xml_node tempoNode, engraving::Measure* measure);
