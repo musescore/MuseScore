@@ -1,20 +1,20 @@
-# MuseScore_General.sf2
+# MS Basic.sf2
 
 **Version 0.2**
 
 ---
 
-Please see **MuseScore_General_License.md** for authorship and license information.
+Please see **MS Basic_License.md** for authorship and license information.
 
-The purpose of this README is to provide useful information on instruments contained within MuseScore_General. It is currently a work-in-progress.
+The purpose of this README is to provide useful information on instruments contained within MS Basic. It is currently a work-in-progress.
 
 ## About
 
-This is a scaled-down version of **MuseScore_General-HQ.sf2** that replaces some of the larger instruments to save memory and CPU on older PCs. This SoundFont is currently a work-in-progress. Detailed information on presets and sample sources used can be found in "MuseScore_General_Sample_Sources.csv". All instruments without attribution are still using samples from FluidR3Mono.
+This is a scaled-down version of **MS Basic-HQ.sf2** that replaces some of the larger instruments to save memory and CPU on older PCs. This SoundFont is currently a work-in-progress. Detailed information on presets and sample sources used can be found in "MS Basic_Sample_Sources.csv". All instruments without attribution are still using samples from FluidR3Mono.
 
 ## SoundFont Compatibility
 
-**MuseScore_General** makes full use of SoundFont 2.01 specification modulators (particularly in the newer instruments) and requires a player/sampler with robust support for the standard. To my knowledge, the only SoundFont players that can accurately play this SoundFont are:
+**MS Basic** makes full use of SoundFont 2.01 specification modulators (particularly in the newer instruments) and requires a player/sampler with robust support for the standard. To my knowledge, the only SoundFont players that can accurately play this SoundFont are:
 
 * [MuseScore](https://musescore.org)
 * [FluidSynth](http://www.fluidsynth.org/)
@@ -30,7 +30,7 @@ The only SoundFont editors that can play this SoundFont correctly are:
 
 ### General MIDI Presets
 
-**MuseScore_General** is compatible with the [General MIDI standard](https://en.wikipedia.org/wiki/General_MIDI) with some additional presets from the [Roland GS standard](https://en.wikipedia.org/wiki/Roland_GS) as well.
+**MS Basic** is compatible with the [General MIDI standard](https://en.wikipedia.org/wiki/General_MIDI) with some additional presets from the [Roland GS standard](https://en.wikipedia.org/wiki/Roland_GS) as well.
 
 ### Fluid r3 Additional Drum Kits
 
@@ -54,9 +54,9 @@ These presets are used for marching percussion support in MuseScore and do not c
 
 ### Expressive Presets
 
-As of version 0.1.5, **MuseScore_General** features expressive variants of all sustained presets, indicated by "Expr." at the end of the preset name. The dynamics of these presets are controlled using MIDI Control Change #2 (CC2), allowing fluid crescendos and diminuendos while a note is being held. This makes for much more realistic expression of strings, brass, woodwinds, etc. Note velocity no longer controls dynamics in these presets, but in some instruments, velocity will have some effect on the speed of the note attack. In MuseScore, the default (and ideal) behavior is for expressive instruments to have their dynamics controlled by sending identical values to both CC2 and note velocity (the latter only during note-on, naturally).
+As of version 0.1.5, **MS Basic** features expressive variants of all sustained presets, indicated by "Expr." at the end of the preset name. The dynamics of these presets are controlled using MIDI Control Change #2 (CC2), allowing fluid crescendos and diminuendos while a note is being held. This makes for much more realistic expression of strings, brass, woodwinds, etc. Note velocity no longer controls dynamics in these presets, but in some instruments, velocity will have some effect on the speed of the note attack. In MuseScore, the default (and ideal) behavior is for expressive instruments to have their dynamics controlled by sending identical values to both CC2 and note velocity (the latter only during note-on, naturally).
 
-The expressive presets exist on higher bank numbers but use the same preset number as their non-expressive defaults. You can see what bank numbers the expressive presets use in column #2 ("Expr. Bank #") of the included **MuseScore_General_Sample_Sources.csv** file. The general rule is as follows:
+The expressive presets exist on higher bank numbers but use the same preset number as their non-expressive defaults. You can see what bank numbers the expressive presets use in column #2 ("Expr. Bank #") of the included **MS Basic_Sample_Sources.csv** file. The general rule is as follows:
 
 * Bank 0 expressive presets are on Bank 17
 * Bank 8 expressive presets are on Bank 18
@@ -64,7 +64,7 @@ The expressive presets exist on higher bank numbers but use the same preset numb
 
 ### Dummy Presets
 
-To maintain preset compatibility with the "HQ" version, **MuseScore_General** version contains dummy presets that are simply duplicates of the similar instruments found on bank 0. For example, the full SoundFont has the following instruments assigned to preset #48, all on different banks (presets listed in bank#:preset# format):
+To maintain preset compatibility with the "HQ" version, **MS Basic** version contains dummy presets that are simply duplicates of the similar instruments found on bank 0. For example, the full SoundFont has the following instruments assigned to preset #48, all on different banks (presets listed in bank#:preset# format):
 
 - 000:048 - Strings Fast
 - 020:048 - Violins Fast
@@ -73,6 +73,6 @@ To maintain preset compatibility with the "HQ" version, **MuseScore_General** ve
 - 040:048 - Celli Fast
 - 050:048 - Basses Fast
 
-In the HQ version of the SoundFont, each of these sounds different since they feature unique samples for each section, but in this **MuseScore_General**, these presets on banks 20 and higher are mere duplicates of **000:048 - Strings Fast**, and only exist to avoid issues transitioning between the HQ and lighter versions of the SoundFont.
+In the HQ version of the SoundFont, each of these sounds different since they feature unique samples for each section, but in this **MS Basic**, these presets on banks 20 and higher are mere duplicates of **000:048 - Strings Fast**, and only exist to avoid issues transitioning between the HQ and lighter versions of the SoundFont.
 
-All dummy presets are indicated as such in the included **MuseScore_General_Sample_Sources.csv** file.
+All dummy presets are indicated as such in the included **MS Basic_Sample_Sources.csv** file.

@@ -1,4 +1,4 @@
-# MuseScore_General.sf2
+# MS Basic.sf2
 
 **Changelog**
 
@@ -47,7 +47,7 @@
 
 ## 0.1.6
 
-* The SoundFont was renamed from "MuseScore_General_Lite.sf2" to "MuseScore_General.sf2" and will be the version that ships with MuseScore by default. The SoundFont formerly named "MuseScore_General.sf2" has been renamed to "MuseScore_General_HQ.sf2" and will be downloadable through the MuseScore resource manager. Currently, the only difference between the two versions is that the HQ version includes the new ensemble strings based on VSCO 2 samples. Over time, more instruments will be upgraded in the HQ version, and the difference between the two versions will grow.
+* The SoundFont was renamed from "MS Basic_Lite.sf2" to "MS Basic.sf2" and will be the version that ships with MuseScore by default. The SoundFont formerly named "MS Basic.sf2" has been renamed to "MS Basic_HQ.sf2" and will be downloadable through the MuseScore resource manager. Currently, the only difference between the two versions is that the HQ version includes the new ensemble strings based on VSCO 2 samples. Over time, more instruments will be upgraded in the HQ version, and the difference between the two versions will grow.
 * Added the new pianos from the full version of the SoundFont, updating the following presets:
   - **"000:000 Grand Piano"**
   - **"008:000 Mellow Grand Piano"**
@@ -56,7 +56,7 @@
 
 ## 0.1.5
 
-* MuseScore_General now includes additional presets labeled "Expr." that can be dynamically controlled via MIDI Control Change #2 (CC2). To accommodate this new functionality, many instruments were reprogrammed to use modulators for velocity-based filtering rather than separate instrument layers within the preset. Please refer to the included "MuseScore_General_Readme.md" file for more information on these new presets.
+* MS Basic now includes additional presets labeled "Expr." that can be dynamically controlled via MIDI Control Change #2 (CC2). To accommodate this new functionality, many instruments were reprogrammed to use modulators for velocity-based filtering rather than separate instrument layers within the preset. Please refer to the included "MS Basic_Readme.md" file for more information on these new presets.
 * Reprogrammed the velocity-based effects for the following instruments:
   - **"000:056 Trumpet"**
   - **"000:057 Trombone"**
@@ -73,11 +73,11 @@
 ## 0.1.3
 
 * There are now two versions of the SoundFont:
-  - **MuseScore_General**: This is the version that will include all of the new instrument sounds as they are developed. To reach a higher sound quality, new instrument presets will often require more RAM and CPU than the older versions.
-  - **MuseScore_General_Lite**: This version is intended for more limited computers and uses less RAM and CPU by retaining the older, smaller instrument sounds where it is advantageous to do so. Currently, the only difference between the two versions is the acoustic pianos and ensemble strings (plus some synth-style presets that also use the strings samples: "Warm Pad", "Orchestra Pad", "Synth Strings 3"), but this difference will grow much greater over time.
-* Added "dummy" presets to **MuseScore_General_Lite** for preset compatibility with the new ensemble strings in the full version of **MuseScore_General**. These strings presets can be found on banks 20-32, but are merely duplicates of the ensemble strings presets present on bank 0 (Tremolo, Pizzicato, Fast and Slow strings).
+  - **MS Basic**: This is the version that will include all of the new instrument sounds as they are developed. To reach a higher sound quality, new instrument presets will often require more RAM and CPU than the older versions.
+  - **MS Basic_Lite**: This version is intended for more limited computers and uses less RAM and CPU by retaining the older, smaller instrument sounds where it is advantageous to do so. Currently, the only difference between the two versions is the acoustic pianos and ensemble strings (plus some synth-style presets that also use the strings samples: "Warm Pad", "Orchestra Pad", "Synth Strings 3"), but this difference will grow much greater over time.
+* Added "dummy" presets to **MS Basic_Lite** for preset compatibility with the new ensemble strings in the full version of **MS Basic**. These strings presets can be found on banks 20-32, but are merely duplicates of the ensemble strings presets present on bank 0 (Tremolo, Pizzicato, Fast and Slow strings).
 * Removed the superfluous **"001:048 Dry Strings"** preset.
-* Returned to the original FluidR3Mono pianos for lower memory consumption in **MuseScore_General_Lite**.
+* Returned to the original FluidR3Mono pianos for lower memory consumption in **MS Basic_Lite**.
 * Optimized the use of generators in all instruments, freeing thousands of generators for future instrument use (the limit is 65,535 instrument-level generators).
 
 ## 0.1.2

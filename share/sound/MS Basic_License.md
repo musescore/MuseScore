@@ -1,21 +1,21 @@
-# MuseScore_General.sf2
+ # MS Basic.sf2
 ---
 
 Current version: 0.2  13th May 2020
 
-This is a scaled-down version of **MuseScore_General-HQ.sf2** that replaces some of the larger instruments to save memory and CPU on older PCs. This SoundFont is currently a work-in-progress. Detailed information on presets and sample sources used can be found in "MuseScore_General_Sample_Sources.csv". All instruments without attribution are still using samples from FluidR3Mono.
+This is a scaled-down version of **MS Basic-HQ.sf2** that replaces some of the larger instruments to save memory and CPU on older PCs. This SoundFont is currently a work-in-progress. Detailed information on presets and sample sources used can be found in "MS Basic_Sample_Sources.csv". All instruments without attribution are still using samples from FluidR3Mono.
 
 FluidR3 (original version) by Frank Wen Copyright (c) 2000-02
 
 Mono conversion (FluidR3Mono) by Michael Cowgill Copyright (c) 2014-17
 
-Adaptation for MuseScore_General.sf2 by S. Christian Collins Copyright (c) 2018-19
+Adaptation for MS Basic.sf2 by S. Christian Collins Copyright (c) 2018-19
 
 Temple Blocks instrument provided by Ethan Winer Copyright (c) 2002
 
 Drumline Cymbals provided by Michael Schorsch Copyright (c) 2016
 
-MuseScore_General.sf2 is shared under the MIT license as described in COPYING, as was FluidR3Mono and FluidR3 before it.
+MS Basic.sf2 is shared under the MIT license as described in COPYING, as was FluidR3Mono and FluidR3 before it.
 
 The COPYING and README files from the original FluidR3GM file are now displayed here for reference.
 
