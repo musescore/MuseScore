@@ -2277,6 +2277,9 @@ void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPeda
         pedal->setBeginHookType(engraving::HookType::HOOK_90);
         pedal->setEndHookType(engraving::HookType::HOOK_90);
     }
+
+    // @color
+    Convert::colorlineFromMEI(pedal, meiPedal);
 }
 
 libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
@@ -2287,7 +2290,7 @@ libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
     meiPedal.SetDir(libmei::pedalLog_DIR_down);
 
     bool symbol = (pedal->beginText() == engraving::Pedal::PEDAL_SYMBOL);
-    bool star = (pedal->beginText() == engraving::Pedal::STAR_SYMBOL);
+    bool star = (pedal->endText() == engraving::Pedal::STAR_SYMBOL);
 
     // @form
     if (symbol && star) {
@@ -2297,6 +2300,9 @@ libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
     } else {
         meiPedal.SetForm(libmei::PEDALSTYLE_line);
     }
+
+    // @color
+    Convert::colorlineToMEI(pedal, meiPedal);
 
     return meiPedal;
 }
