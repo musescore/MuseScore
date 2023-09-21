@@ -59,7 +59,6 @@ class GeneralPreferencesModel : public QObject, public async::Asyncable
     Q_PROPERTY(bool isNeedRestart READ isNeedRestart WRITE setIsNeedRestart NOTIFY isNeedRestartChanged)
 
     Q_PROPERTY(QVariantList startupModes READ startupModes NOTIFY startupModesChanged)
-    Q_PROPERTY(QVariantList panels READ panels NOTIFY panelsChanged)
 
 public:
     explicit GeneralPreferencesModel(QObject* parent = nullptr);
@@ -69,7 +68,6 @@ public:
 
     Q_INVOKABLE void setCurrentStartupMode(int modeIndex);
     Q_INVOKABLE void setStartupScorePath(const QString& scorePath);
-    Q_INVOKABLE void setPanelVisible(int panelIndex, bool visible);
 
     Q_INVOKABLE QStringList scorePathFilter() const;
 
@@ -80,7 +78,6 @@ public:
     QString currentKeyboardLayout() const;
 
     QVariantList startupModes() const;
-    QVariantList panels() const;
 
     bool isOSCRemoteControl() const;
     int oscPort() const;
@@ -104,27 +101,11 @@ signals:
     void isNeedRestartChanged();
 
     void startupModesChanged();
-    void panelsChanged();
 
 private:
     framework::Progress m_languageUpdateProgress;
 
     bool m_isNeedRestart = false;
-
-    enum PanelType {
-        Unknown,
-        SplashScreen,
-        Navigator
-    };
-
-    struct Panel
-    {
-        PanelType type = Unknown;
-        QString title;
-        bool visible = false;
-    };
-
-    using PanelList = QList<Panel>;
 
     struct StartMode
     {
@@ -137,7 +118,6 @@ private:
 
     using StartModeList = QList<StartMode>;
 
-    PanelList allPanels() const;
     StartModeList allStartupModes() const;
 };
 }
