@@ -7279,6 +7279,70 @@ By default, they will be placed such as that their right end are at the same lev
          </widget>
         </item>
         <item>
+         <widget class="QGroupBox" name="groupBox">
+          <property name="title">
+           <string>Ties</string>
+          </property>
+          <layout class="QGridLayout" name="gridLayout_61">
+           <item row="1" column="1">
+            <widget class="QRadioButton" name="tieChordInside">
+             <property name="text">
+              <string>Inside</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QRadioButton" name="tieSingleNoteInside">
+             <property name="text">
+              <string>Inside</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_171">
+             <property name="text">
+              <string>Placement on single notes:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="2">
+            <widget class="QRadioButton" name="tieChordOutside">
+             <property name="text">
+              <string>Outside</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_173">
+             <property name="text">
+              <string>Placement on chords:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QRadioButton" name="tieSingleNoteOutside">
+             <property name="text">
+              <string>Outside</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <spacer name="horizontalSpacer_64">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
+        </item>
+        <item>
          <spacer name="verticalSpacer_4">
           <property name="orientation">
            <enum>Qt::Vertical</enum>

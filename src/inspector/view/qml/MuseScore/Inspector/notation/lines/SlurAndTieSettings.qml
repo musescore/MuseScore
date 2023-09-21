@@ -70,4 +70,19 @@ Column {
             { text: qsTrc("inspector", "Below"), value: DirectionTypes.VERTICAL_DOWN }
         ]
     }
+
+    PlacementSection {
+        visible: root.model ? root.model.isTiePlacementAvailable : false
+        propertyItem: root.model ? root.model.tiePlacement : null
+        titleText: qsTrc("inspector", "Tie placement")
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: styleSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: DirectionTypes.TIE_PLACEMENT_AUTO },
+            { text: qsTrc("inspector", "Inside"), value: DirectionTypes.TIE_PLACEMENT_INSIDE },
+            { text: qsTrc("inspector", "Outside"), value: DirectionTypes.TIE_PLACEMENT_OUTSIDE }
+        ]
+    }
 }

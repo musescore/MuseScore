@@ -291,6 +291,9 @@ void XmlWriter::tagProperty(const AsciiStringView& name, P_TYPE type, const Prop
     case P_TYPE::ORNAMENT_INTERVAL: {
         element(name, TConv::toXml(data.value<OrnamentInterval>()));
     } break;
+    case P_TYPE::TIE_PLACEMENT: {
+        element(name, TConv::toXml(data.value<TiePlacement>()));
+    } break;
     default: {
         UNREACHABLE; //! TODO
     }

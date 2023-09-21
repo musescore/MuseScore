@@ -42,8 +42,15 @@ public:
         HORIZONTAL_RIGHT
     };
 
+    enum TiePlacement {
+        TIE_PLACEMENT_AUTO,
+        TIE_PLACEMENT_INSIDE,
+        TIE_PLACEMENT_OUTSIDE,
+    };
+
     Q_ENUM(VerticalDirection)
     Q_ENUM(HorizontalDirection)
+    Q_ENUM(TiePlacement)
 };
 }
 

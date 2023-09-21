@@ -40,6 +40,7 @@
 #include "dom/score.h"
 #include "dom/stafflines.h"
 #include "dom/system.h"
+#include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/trill.h"
 #include "dom/undo.h"
@@ -49,6 +50,7 @@
 #include "layoutcontext.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "slurtielayout.h"
 
 #include "log.h"
 
@@ -89,7 +91,7 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
     TLayout::layoutMeasureBase(item, item->mutLayoutData(), ctx);
 
     //---------------------------------------------------
-    //    layout ties
+    //    layout cross-staff ties
     //---------------------------------------------------
 
     Fraction stick = item->system()->measures().front()->tick();
@@ -101,14 +103,21 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
             continue;
         }
         for (Segment* seg = item->first(st); seg; seg = seg->next(st)) {
-            ChordRest* cr = seg->cr(track);
-            if (!cr) {
+            EngravingItem* element = seg->elementAt(track);
+            if (!element || !element->isChord()) {
                 continue;
             }
-
-            if (cr->isChord()) {
-                Chord* c = toChord(cr);
-                ChordLayout::layoutSpanners(c, item->system(), stick, ctx);
+            Chord* chord = toChord(element);
+            ChordLayout::layoutSpanners(chord, item->system(), stick, ctx);
+            for (Note* note : chord->notes()) {
+                Tie* tieFor = note->tieFor();
+                Tie* tieBack = note->tieBack();
+                if (tieFor && tieFor->isCrossStaff()) {
+                    SlurTieLayout::tieLayoutFor(tieFor, item->system());
+                }
+                if (tieBack && tieBack->tick() < item->system()->tick() && tieBack->isCrossStaff()) {
+                    SlurTieLayout::tieLayoutBack(tieBack, item->system());
+                }
             }
         }
     }

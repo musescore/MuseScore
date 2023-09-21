@@ -971,6 +971,12 @@ enum class SpannerSegmentType {
     SINGLE, BEGIN, MIDDLE, END
 };
 
+enum class TiePlacement {
+    AUTO,
+    INSIDE,
+    OUTSIDE,
+};
+
 //---------------------------------------------------------
 //   Key
 //---------------------------------------------------------

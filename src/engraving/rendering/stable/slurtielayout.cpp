@@ -123,7 +123,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
     break;
     }
 
-    SlurPos sPos;
+    SlurTiePos sPos;
     slurPos(item, &sPos, ctx);
 
     const std::vector<System*>& sl = ctx.dom().systems();
@@ -246,7 +246,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
     }
     slurSegment->setSpannerSegmentType(sst);
 
-    SlurPos sPos;
+    SlurTiePos sPos;
     slurPos(item, &sPos, ctx);
     PointF p1, p2;
     // adjust for ties
@@ -467,7 +467,7 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
 //    relative to System() position
 //---------------------------------------------------------
 
-void SlurTieLayout::slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx)
+void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 {
     item->stemFloated().reset();
     double _spatium = (item->staffType() ? item->staffType()->lineDistance().val() : 1.0) * item->spatium();
@@ -1031,7 +1031,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         TieSegment* segment = item->segmentAt(0);
         segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
         segment->setSystem(item->startNote()->chord()->segment()->measure()->system());
-        SlurPos sPos;
+        SlurTiePos sPos;
         tiePos(item, &sPos);
         segment->adjustY(sPos.p1, sPos.p2);
         segment->finalizeSegment();
@@ -1039,7 +1039,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     }
     item->calculateDirection();
 
-    SlurPos sPos;
+    SlurTiePos sPos;
     tiePos(item, &sPos);  // get unadjusted x values and determine inside or outside
 
     item->setPos(0, 0);
@@ -1081,7 +1081,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
         return nullptr;
     }
 
-    SlurPos sPos;
+    SlurTiePos sPos;
     tiePos(item, &sPos);
 
     item->fixupSegments(2);
@@ -1104,7 +1104,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
 //    relative to System() position.
 //---------------------------------------------------------
 
-void SlurTieLayout::tiePos(Tie* item, SlurPos* sp)
+void SlurTieLayout::tiePos(Tie* item, SlurTiePos* sp)
 {
     const StaffType* staffType = item->staffType();
     bool useTablature = staffType->isTabStaff();

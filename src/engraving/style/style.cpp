@@ -180,6 +180,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::CLEF_TO_BARLINE_POS:
                 set(idx, ClefToBarlinePosition(e.readInt()));
                 break;
+            case P_TYPE::TIE_PLACEMENT:
+                set(idx, TConv::fromXml(e.readText(), TiePlacement::AUTO));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }
@@ -398,6 +401,8 @@ void MStyle::save(XmlWriter& xml, bool optimize)
             xml.tag(st.name(), TConv::toXml(a));
         } else if (P_TYPE::LINE_TYPE == type) {
             xml.tagProperty(st.name(), value(idx));
+        } else if (P_TYPE::TIE_PLACEMENT == type) {
+            xml.tag(st.name(), TConv::toXml(value(idx).value<TiePlacement>()));
         } else {
             PropertyValue val = value(idx);
             //! NOTE for compatibility
