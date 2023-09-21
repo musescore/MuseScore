@@ -2520,6 +2520,7 @@ std::pair<libmei::data_STEMDIRECTION, double> Convert::stemToMEI(const engraving
         break;
     }
     if (noStem) {
+        meiStemDir = libmei::STEMDIRECTION_NONE;
         meiStemLen = 0.0;
     }
 
