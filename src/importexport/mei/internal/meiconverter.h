@@ -245,6 +245,9 @@ public:
     static void ornamintervaleFromMEI(engraving::Ornament* ornament, const std::string& meiType);
     static String ornamintervalToMEI(const engraving::Ornament* ornament);
 
+    static void pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPedal, bool& warning);
+    static libmei::Pedal pedalToMEI(const engraving::Pedal* pedal);
+
     static PitchStruct pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid, const engraving::Interval& interval,
                                     bool& warning);
     static std::pair<libmei::Note, libmei::Accid> pitchToMEI(const engraving::Note* note, const engraving::Accidental* accid,

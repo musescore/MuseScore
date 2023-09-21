@@ -48,6 +48,7 @@
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/segment.h"
@@ -808,10 +809,12 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeHarm(dynamic_cast<const Harmony*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOrnament()) {
             success = success && this->writeOrnament(dynamic_cast<const Ornament*>(controlEvent.first), controlEvent.second);
-        } else if (controlEvent.first->isSlur()) {
-            success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isOttava()) {
             success = success && this->writeOctave(dynamic_cast<const Ottava*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isPedal()) {
+            success = success && this->writePedal(dynamic_cast<const Pedal*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isSlur()) {
+            success = success && this->writeSlur(dynamic_cast<const Slur*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTempoText()) {
             success = success && this->writeTempo(dynamic_cast<const TempoText*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isTie()) {
@@ -1672,6 +1675,28 @@ bool MeiExporter::writeOrnament(const Ornament* ornament, const std::string& sta
 }
 
 /**
+ * Write a pedal.
+ */
+
+bool MeiExporter::writePedal(const Pedal* pedal, const std::string& startid)
+{
+    IF_ASSERT_FAILED(pedal) {
+        return false;
+    }
+
+    pugi::xml_node pedalNode = m_currentNode.append_child();
+    libmei::Pedal meiPedal = Convert::pedalToMEI(pedal);
+    meiPedal.SetStartid(startid);
+
+    meiPedal.Write(pedalNode, this->getXmlIdFor(pedal, 'p'));
+
+    // Add the node to the map of open control events
+    this->addNodeToOpenControlEvents(pedalNode, pedal, startid);
+
+    return true;
+}
+
+/**
  * Write a repeatMark from a Jump.
  */
 
@@ -1914,7 +1939,7 @@ void MeiExporter::fillControlEventMap(const std::string& xmlId, const ChordRest*
     auto spanners = smap.findOverlapping(chordRest->tick().ticks(), chordRest->tick().ticks());
     for (auto interval : spanners) {
         Spanner* spanner = interval.value;
-        if (spanner && (spanner->isHairpin() || spanner->isOttava() || spanner->isSlur())) {
+        if (spanner && (spanner->isHairpin() || spanner->isOttava() || spanner->isPedal() || spanner->isSlur())) {
             if (spanner->startCR() == chordRest) {
                 m_startingControlEventList.push_back(std::make_pair(spanner, "#" + xmlId));
             } else if (spanner->endCR() == chordRest) {

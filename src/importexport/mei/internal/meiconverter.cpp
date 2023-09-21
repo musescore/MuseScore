@@ -45,6 +45,7 @@
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/slurtie.h"
 #include "engraving/dom/staff.h"
@@ -2253,6 +2254,57 @@ String Convert::ornamintervalToMEI(const engraving::Ornament* ornament)
     }
 
     return typeList.join(u" ");
+}
+
+void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPedal, bool& warning)
+{
+    warning = false;
+
+    // @dir - ignore, dealing with "down" only
+
+    // @form
+    if (meiPedal.GetForm() == libmei::PEDALSTYLE_pedstar) {
+        pedal->setBeginText(engraving::Pedal::PEDAL_SYMBOL);
+        pedal->setPropertyFlags(engraving::Pid::BEGIN_TEXT, engraving::PropertyFlags::UNSTYLED);
+        pedal->setEndText(engraving::Pedal::STAR_SYMBOL);
+        pedal->setPropertyFlags(engraving::Pid::END_TEXT, engraving::PropertyFlags::UNSTYLED);
+        pedal->setLineVisible(false);
+    } else if (meiPedal.GetForm() == libmei::PEDALSTYLE_pedline) {
+        pedal->setBeginText(engraving::Pedal::PEDAL_SYMBOL);
+        pedal->setPropertyFlags(engraving::Pid::BEGIN_TEXT, engraving::PropertyFlags::UNSTYLED);
+        pedal->setEndHookType(engraving::HookType::HOOK_90);
+    } else {
+        pedal->setBeginHookType(engraving::HookType::HOOK_90);
+        pedal->setEndHookType(engraving::HookType::HOOK_90);
+    }
+
+    // @color
+    Convert::colorlineFromMEI(pedal, meiPedal);
+}
+
+libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
+{
+    libmei::Pedal meiPedal;
+
+    // @dir
+    meiPedal.SetDir(libmei::pedalLog_DIR_down);
+
+    bool symbol = (pedal->beginText() == engraving::Pedal::PEDAL_SYMBOL);
+    bool star = (pedal->endText() == engraving::Pedal::STAR_SYMBOL);
+
+    // @form
+    if (symbol && star) {
+        meiPedal.SetForm(libmei::PEDALSTYLE_pedstar);
+    } else if (symbol && !star) {
+        meiPedal.SetForm(libmei::PEDALSTYLE_pedline);
+    } else {
+        meiPedal.SetForm(libmei::PEDALSTYLE_line);
+    }
+
+    // @color
+    Convert::colorlineToMEI(pedal, meiPedal);
+
+    return meiPedal;
 }
 
 Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid,

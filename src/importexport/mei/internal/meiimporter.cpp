@@ -474,6 +474,8 @@ Spanner* MeiImporter::addSpanner(const libmei::Element& meiElement, Measure* mea
         item = Factory::createHairpin(chordRest->segment());
     } else if (meiElement.m_name == "octave") {
         item = Factory::createOttava(chordRest->segment());
+    } else if (meiElement.m_name == "pedal") {
+        item = Factory::createPedal(chordRest->segment());
     } else if (meiElement.m_name == "slur") {
         item = Factory::createSlur(chordRest->segment());
     } else {
@@ -2042,6 +2044,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readOctave(xpathNode.node(), measure);
         } else if (elementName == "ornam") {
             success = success && this->readOrnam(xpathNode.node(), measure);
+        } else if (elementName == "pedal") {
+            success = success && this->readPedal(xpathNode.node(), measure);
         } else if (elementName == "repeatMark") {
             success = success && this->readRepeatMark(xpathNode.node(), measure);
         } else if (elementName == "slur") {
@@ -2371,6 +2375,31 @@ bool MeiImporter::readOrnam(pugi::xml_node ornamNode, Measure* measure)
 
     Convert::OrnamStruct ornamSt = Convert::ornamFromMEI(ornament, meiOrnam, warning);
     this->setOrnamentAccid(ornament, ornamSt);
+
+    return true;
+}
+
+/**
+ * Read a pedal.
+ */
+
+bool MeiImporter::readPedal(pugi::xml_node pedalNode, Measure* measure)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Pedal meiPedal;
+    meiPedal.Read(pedalNode);
+
+    Pedal* pedal = static_cast<Pedal*>(this->addSpanner(meiPedal, measure, pedalNode));
+    if (!pedal) {
+        // Warning message given in MeiExpoter::addSpanner
+        return true;
+    }
+
+    Convert::pedalFromMEI(pedal, meiPedal, warning);
 
     return true;
 }
@@ -2914,13 +2943,16 @@ void MeiImporter::addSpannerEnds()
                 // Set the tick2 to include the duration of the ChordRest (not needed for others, i.e., slurs?)
                 spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
             }
-            // Special handling of ottava
-            else if (spannerMapEntry.first->isOttava()) {
+            // Special handling of ottava and pedal
+            else if (spannerMapEntry.first->isOttava() || spannerMapEntry.first->isPedal()) {
                 // Set the tick2 to include the duration of the ChordRest
                 spannerMapEntry.first->setTick2(chordRest->tick() + chordRest->ticks());
-                Ottava* ottava = toOttava(spannerMapEntry.first);
-                // Make the staff fill the pitch offsets accordingly since we use Note::ppitch in export
-                ottava->staff()->updateOttava();
+                // Special handling of ottava
+                if (spannerMapEntry.first->isOttava()) {
+                    Ottava* ottava = toOttava(spannerMapEntry.first);
+                    // Make the staff fill the pitch offsets accordingly since we use Note::ppitch in export
+                    ottava->staff()->updateOttava();
+                }
             }
         }
     }

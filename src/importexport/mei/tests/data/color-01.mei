@@ -11,7 +11,7 @@
             </respStmt>
          </titleStmt>
          <pubStmt>
-            <date isodate="2023-09-20T08:12:43" />
+            <date isodate="2023-09-21T10:11:20" />
          </pubStmt>
       </fileDesc>
    </meiHead>
@@ -138,10 +138,11 @@
                                  <artic xml:id="a3fy93" artic="acc" color="#942192" />
                               </note>
                            </beam>
-                           <rest xml:id="r63pbtd" dur="2" />
+                           <note xml:id="n63pbtd" dur="2" pname="c" oct="5" />
                         </layer>
                      </staff>
-                     <arpeg xml:id="aokn5r1" startid="#cjpefjv" color="#942192" />
+                     <pedal xml:id="pokn5r1" dir="down" startid="#cjpefjv" form="pedline" color="#942192" endid="#n63pbtd" />
+                     <arpeg xml:id="a1lp6cmh" startid="#cjpefjv" color="#942192" />
                   </measure>
                </section>
             </score>
