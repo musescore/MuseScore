@@ -41,6 +41,7 @@ using namespace mu::notation;
 
 static const std::string PDF_SUFFIX = "pdf";
 static const std::string PNG_SUFFIX = "png";
+static const std::string SVG_SUFFIX = "svg";
 
 mu::Ret ConverterController::batchConvert(const io::path_t& batchJobFile, const io::path_t& stylePath, bool forceMode)
 {
@@ -176,7 +177,8 @@ mu::RetVal<ConverterController::BatchJob> ConverterController::parseBatchJob(con
 bool ConverterController::isConvertPageByPage(const std::string& suffix) const
 {
     QList<std::string> types {
-        PNG_SUFFIX
+        PNG_SUFFIX,
+        SVG_SUFFIX
     };
 
     return types.contains(suffix);
