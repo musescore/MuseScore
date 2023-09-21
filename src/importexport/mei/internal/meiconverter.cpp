@@ -45,6 +45,7 @@
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/pitchspelling.h"
 #include "engraving/dom/slurtie.h"
 #include "engraving/dom/staff.h"
@@ -2253,6 +2254,17 @@ String Convert::ornamintervalToMEI(const engraving::Ornament* ornament)
     }
 
     return typeList.join(u" ");
+}
+
+void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPedal, bool& warning)
+{
+    warning = false;
+}
+
+libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
+{
+    libmei::Pedal meiPedal;
+    return meiPedal;
 }
 
 Convert::PitchStruct Convert::pitchFromMEI(const libmei::Note& meiNote, const libmei::Accid& meiAccid,
