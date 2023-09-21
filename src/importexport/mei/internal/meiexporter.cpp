@@ -1275,7 +1275,7 @@ bool MeiExporter::writeRest(const Rest* rest, const Staff* staff)
         Convert::colorToMEI(rest, meiRest);
         this->writeBeamTypeAtt(rest, meiRest);
         this->writeStaffIdenAtt(rest, staff, meiRest);
-        this->writeVerses(rest);
+        // this->writeVerses(rest);
         const char prefix = (rest->visible()) ? 'r' : 's';
         std::string xmlId = this->getXmlIdFor(rest, prefix);
         meiRest.Write(restNode, xmlId);
