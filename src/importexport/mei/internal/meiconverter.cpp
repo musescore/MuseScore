@@ -2264,6 +2264,22 @@ void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPeda
 libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
 {
     libmei::Pedal meiPedal;
+
+    // @dir
+    meiPedal.SetDir(libmei::pedalLog_DIR_down);
+
+    bool symbol = (pedal->beginText() == engraving::Pedal::PEDAL_SYMBOL);
+    bool star = (pedal->beginText() == engraving::Pedal::STAR_SYMBOL);
+
+    // @form
+    if (symbol && star) {
+        meiPedal.SetForm(libmei::PEDALSTYLE_pedstar);
+    } else if (symbol && !star) {
+        meiPedal.SetForm(libmei::PEDALSTYLE_pedline);
+    } else {
+        meiPedal.SetForm(libmei::PEDALSTYLE_line);
+    }
+
     return meiPedal;
 }
 

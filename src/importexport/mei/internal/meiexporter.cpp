@@ -1685,7 +1685,7 @@ bool MeiExporter::writePedal(const Pedal* pedal, const std::string& startid)
     }
 
     pugi::xml_node pedalNode = m_currentNode.append_child();
-    libmei::Pedal meiPedal; // = Convert::pedalToMEI(pedal);
+    libmei::Pedal meiPedal = Convert::pedalToMEI(pedal);
     meiPedal.SetStartid(startid);
 
     meiPedal.Write(pedalNode, this->getXmlIdFor(pedal, 'p'));
