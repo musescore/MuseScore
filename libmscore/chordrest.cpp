@@ -258,7 +258,7 @@ bool ChordRest::readProperties(XmlReader& e)
                   bm = Beam::Mode(val.toInt());
             _beamMode = Beam::Mode(bm);
             }
-      else if (tag == "Articulation") {
+      else if (tag == "Articulation" || tag == "Ornament") { // + 4.x compat
             Articulation* atr = new Articulation(score());
             atr->setTrack(track());
             atr->read(e);
