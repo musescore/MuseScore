@@ -1375,7 +1375,7 @@ void ProjectActionsController::showScoreDownloadError(const Ret& ret)
         break;
     case int(network::Err::NetworkError):
         message = trc("project", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
-                                 "Please check your internet connection, or try again later.");
+                                 "Please check your internet connection or try again later.");
         break;
     case int(cloud::Err::AccountNotActivated):
         message = trc("project", "Your musescore.com account needs to be verified first. "
