@@ -5129,12 +5129,14 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         break;
     case HookType::HOOK_90:
         lineEnd = (hookHeight < 0.0) ? "up" : "down";
-        rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
+        rest += QString(" end-length=\"%1\"").arg(fabsf(hookHeight * 10));
         break;
     case HookType::NONE:
-    default:
         lineEnd = "none";
         break;
+    default:
+        lineEnd = "none";
+        LOGD("HookType %d not supported", int(hookType));
     }
 
     rest += positioningAttributes(tl, tl->tick() == tick);
