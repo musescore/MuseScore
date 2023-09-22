@@ -639,16 +639,6 @@ void ChordLayout::layoutSpanners(Chord* item, LayoutContext& ctx)
     }
 }
 
-void ChordLayout::layoutSpanners(Chord* item, System* system, const Fraction& stick, LayoutContext& ctx)
-{
-    //! REVIEW Needs explanation
-    for (const Note* note : item->notes()) {
-        for (Spanner* sp : note->spannerBack()) {
-            TLayout::layout(sp, ctx);
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   layoutArticulations
 //    layout tenuto and staccato

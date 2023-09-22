@@ -136,7 +136,7 @@ void TieSegment::changeAnchor(EditData& ed, EngravingItem* element)
 
 void TieSegment::editDrag(EditData& ed)
 {
-    consolidateAdjustOffsetIntoUserOffset();
+    consolidateAdjustmentOffsetIntoUserOffset();
     Grip g = ed.curGrip;
     ups(g).off += ed.delta;
 
@@ -197,33 +197,33 @@ void TieSegment::computeMidThickness(double tieLengthInSp)
 
 void TieSegment::computeBezier(PointF shoulderOffset)
 {
-    PointF tieStart = ups(Grip::START).p + ups(Grip::START).off;
-    PointF tieEnd = ups(Grip::END).p + ups(Grip::END).off;
+    const PointF tieStart = ups(Grip::START).p + ups(Grip::START).off;
+    const PointF tieEnd = ups(Grip::END).p + ups(Grip::END).off;
 
     PointF tieEndNormalized = tieEnd - tieStart;  // normalize to zero
     if (RealIsNull(tieEndNormalized.x())) {
         return;
     }
 
-    double tieAngle = atan(tieEndNormalized.y() / tieEndNormalized.x()); // angle required from tie start to tie end--zero if horizontal
+    const double tieAngle = atan(tieEndNormalized.y() / tieEndNormalized.x()); // angle required from tie start to tie end--zero if horizontal
     Transform t;
     t.rotateRadians(-tieAngle);  // rotate so that we are working with horizontal ties regardless of endpoint height difference
     tieEndNormalized = t.map(tieEndNormalized);  // apply that rotation
     shoulderOffset = t.map(shoulderOffset);  // also apply to shoulderOffset
 
-    double _spatium = spatium();
+    const double _spatium = spatium();
     double tieLengthInSp = tieEndNormalized.x() / _spatium;
 
-    double minShoulderHeight = style().styleMM(Sid::tieMinShoulderHeight);
-    double maxShoulderHeight = style().styleMM(Sid::tieMaxShoulderHeight);
+    const double minShoulderHeight = style().styleMM(Sid::tieMinShoulderHeight);
+    const double maxShoulderHeight = style().styleMM(Sid::tieMaxShoulderHeight);
     double shoulderH = minShoulderHeight + _spatium * 0.3 * sqrt(abs(tieLengthInSp - 1));
     shoulderH = std::clamp(shoulderH, minShoulderHeight, maxShoulderHeight);
 
     shoulderH -= shoulderOffset.y();
 
     PointF shoulderAdjustOffset = tie()->up() ? PointF(0.0, shoulderOffset.y()) : PointF(0.0, -shoulderOffset.y());
-    addAdjustOffset(shoulderAdjustOffset, Grip::BEZIER1);
-    addAdjustOffset(shoulderAdjustOffset, Grip::BEZIER2);
+    addAdjustmentOffset(shoulderAdjustOffset, Grip::BEZIER1);
+    addAdjustmentOffset(shoulderAdjustOffset, Grip::BEZIER2);
 
     if (!tie()->up()) {
         shoulderH = -shoulderH;
@@ -231,27 +231,27 @@ void TieSegment::computeBezier(PointF shoulderOffset)
 
     double shoulderW = 0.6; // TODO: style
 
-    double tieWidth = tieEndNormalized.x();
-    double bezier1X = (tieWidth - tieWidth * shoulderW) * .5 + shoulderOffset.x();
-    double bezier2X = bezier1X + tieWidth * shoulderW + shoulderOffset.x();
+    const double tieWidth = tieEndNormalized.x();
+    const double bezier1X = (tieWidth - tieWidth * shoulderW) * .5 + shoulderOffset.x();
+    const double bezier2X = bezier1X + tieWidth * shoulderW + shoulderOffset.x();
 
-    PointF tieDrag = PointF(tieWidth * .5, 0.0);
+    const PointF tieDrag = PointF(tieWidth * .5, 0.0);
 
-    PointF bezier1(bezier1X, -shoulderH);
-    PointF bezier2(bezier2X, -shoulderH);
+    const PointF bezier1(bezier1X, -shoulderH);
+    const PointF bezier2(bezier2X, -shoulderH);
 
     computeMidThickness(tieLengthInSp);
 
     PointF tieThickness(0.0, m_midThickness);
 
-    PointF bezier1Offset = t.map(ups(Grip::BEZIER1).off);
-    PointF bezier2Offset = t.map(ups(Grip::BEZIER2).off);
+    const PointF bezier1Offset = t.map(ups(Grip::BEZIER1).off);
+    const PointF bezier2Offset = t.map(ups(Grip::BEZIER2).off);
 
     //-----------------------------------calculate p6
-    PointF bezier1Final = bezier1 + bezier1Offset;
-    PointF bezier2Final = bezier2 + bezier2Offset;
+    const PointF bezier1Final = bezier1 + bezier1Offset;
+    const PointF bezier2Final = bezier2 + bezier2Offset;
 
-    PointF tieShoulder = 0.5 * (bezier1Final + bezier2Final);
+    const PointF tieShoulder = 0.5 * (bezier1Final + bezier2Final);
     //-----------------------------------
 
     m_path = PainterPath();
@@ -751,17 +751,17 @@ void TieSegment::adjustX()
     }
 }
 
-void TieSegment::consolidateAdjustOffsetIntoUserOffset()
+void TieSegment::consolidateAdjustmentOffsetIntoUserOffset()
 {
-    for (size_t i = 0; i < m_adjustOffsets.size(); ++i) {
+    for (size_t i = 0; i < m_adjustmentOffsets.size(); ++i) {
         Grip grip = static_cast<Grip>(i);
-        PointF adjustOffset = m_adjustOffsets[i];
+        PointF adjustOffset = m_adjustmentOffsets[i];
         if (!adjustOffset.isNull()) {
             ups(grip).p -= adjustOffset;
             ups(grip).off = adjustOffset;
         }
     }
-    resetAdjustOffset();
+    resetAdjustmentOffset();
 }
 
 //---------------------------------------------------------
@@ -953,18 +953,18 @@ void Tie::calculateIsInside()
         return;
     }
 
-    Note* startN = startNote();
-    Chord* startChord = startN ? startN->chord() : nullptr;
-    Note* endN = endNote();
-    Chord* endChord = endN ? endN->chord() : nullptr;
+    const Note* startN = startNote();
+    const Chord* startChord = startN ? startN->chord() : nullptr;
+    const Note* endN = endNote();
+    const Chord* endChord = endN ? endN->chord() : nullptr;
 
     if (!startChord || !endChord) {
         setIsInside(false);
         return;
     }
 
-    bool startIsSingleNote = startChord->notes().size() <= 1;
-    bool endIsSingleNote = endChord->notes().size() <= 1;
+    const bool startIsSingleNote = startChord->notes().size() <= 1;
+    const bool endIsSingleNote = endChord->notes().size() <= 1;
 
     if (startIsSingleNote && endIsSingleNote) {
         setIsInside(style().styleV(Sid::tiePlacementSingleNote).value<TiePlacement>() == TiePlacement::INSIDE);
@@ -1041,29 +1041,29 @@ bool Tie::isOuterTieOfChord(Grip startOrEnd) const
         return false;
     }
 
-    bool start = startOrEnd == Grip::START;
-    Note* note = start ? startNote() : endNote();
+    const bool start = startOrEnd == Grip::START;
+    const Note* note = start ? startNote() : endNote();
     if (!note) {
         return false;
     }
 
-    Chord* chord = note->chord();
+    const Chord* chord = note->chord();
 
     return (note == chord->upNote() && up()) || (note == chord->downNote() && !up());
 }
 
 bool Tie::hasTiedSecondInside() const
 {
-    Note* note = startNote();
+    const Note* note = startNote();
     if (!note) {
         return false;
     }
 
-    Chord* chord = note->chord();
-    int line = note->line();
-    int secondInsideLine = up() ? line + 1 : line - 1;
+    const Chord* chord = note->chord();
+    const int line = note->line();
+    const int secondInsideLine = up() ? line + 1 : line - 1;
 
-    for (Note* otherNote : chord->notes()) {
+    for (const Note* otherNote : chord->notes()) {
         if (otherNote->line() == secondInsideLine && otherNote->tieFor() && otherNote->tieFor()->up() == up()) {
             return true;
         }
@@ -1074,8 +1074,8 @@ bool Tie::hasTiedSecondInside() const
 
 bool Tie::isCrossStaff() const
 {
-    Note* startN = startNote();
-    Note* endN = endNote();
+    const Note* startN = startNote();
+    const Note* endN = endNote();
 
     return (startN && startN->chord()->staffMove() != 0) || (endN && endN->chord()->staffMove() != 0);
 }

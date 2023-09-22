@@ -47,7 +47,7 @@ public:
 
     static TieSegment* tieLayoutFor(Tie* item, System* system);
     static TieSegment* tieLayoutBack(Tie* item, System* system);
-    static void resolveVerticalTieCollisions(std::vector<TieSegment*>& stackedTies);
+    static void resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies);
 
     static void computeUp(Slur* slur, LayoutContext& ctx);
 
@@ -57,8 +57,8 @@ private:
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
-    static PointF computeDefaultStartOrEndPoint(Tie* tie, Grip startOrEnd);
-    static double noteOpticalCenterForTie(Note* note, bool up);
+    static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
+    static double noteOpticalCenterForTie(const Note* note, bool up);
     static void correctForCrossStaff(Tie* tie, SlurTiePos& sPos);
     static void forceHorizontal(Tie* tie, SlurTiePos& sPos);
     static void adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip startOrEnd);
