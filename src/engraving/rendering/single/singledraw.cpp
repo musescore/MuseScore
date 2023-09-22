@@ -534,13 +534,13 @@ void SingleDraw::draw(const Note* item, Painter* painter)
             }
         }
         // draw blank notehead to avoid staff and ledger lines
-        if (ldata->cachedSymNull != SymId::noSym) {
+        if (ldata->cachedSymNull() != SymId::noSym) {
             painter->save();
             painter->setPen(config->noteBackgroundColor());
-            item->drawSymbol(ldata->cachedSymNull, painter);
+            item->drawSymbol(ldata->cachedSymNull(), painter);
             painter->restore();
         }
-        item->drawSymbol(ldata->cachedNoteheadSym, painter);
+        item->drawSymbol(ldata->cachedNoteheadSym(), painter);
     }
 }
 

@@ -358,7 +358,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STEM:
         layoutStem(item_cast<const Stem*>(item), static_cast<Stem::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::STEM_SLASH:       layout(item_cast<StemSlash*>(item), ctx);
+    case ElementType::STEM_SLASH:
+        layoutStemSlash(item_cast<const StemSlash*>(item), static_cast<StemSlash::LayoutData*>(ldata), ctx.conf());
         break;
     case ElementType::STICKING:         layout(item_cast<Sticking*>(item), ctx);
         break;
@@ -2290,6 +2291,7 @@ void TLayout::layout(const Fingering* item, Fingering::LayoutData* ldata)
             LD_CONDITION(chord->layoutData()->isSetPos());
             LD_CONDITION(note->layoutData()->isSetPos());
             LD_CONDITION(note->layoutData()->isSetBbox());
+            LD_CONDITION(note->layoutData()->isSetMirror());
             if (stem) {
                 LD_CONDITION(stem->layoutData()->isSetPos());
                 LD_CONDITION(stem->layoutData()->isSetBbox());
@@ -2299,7 +2301,7 @@ void TLayout::layout(const Fingering* item, Fingering::LayoutData* ldata)
             LD_CONDITION(chord->downNote()->layoutData()->isSetBbox());
             LD_CONDITION(chord->downNote()->layoutData()->isSetPos());
 
-            if (note->mirror()) {
+            if (note->layoutData()->mirror()) {
                 ldata->moveX(-note->layoutData()->pos().x());
             }
             ldata->moveX(headWidth * .5);
@@ -4055,18 +4057,18 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             nh = SymId::noteheadXBlack;
         }
 
-        ldata->cachedNoteheadSym = nh;
+        ldata->setCachedNoteheadSym(nh);
 
         if (item->isNoteName()) {
-            ldata->cachedSymNull = SymId::noteEmptyBlack;
+            ldata->setCachedSymNull(SymId::noteEmptyBlack);
             NoteHeadType ht = item->headType() == NoteHeadType::HEAD_AUTO ? item->chord()->durationType().headType() : item->headType();
             if (ht == NoteHeadType::HEAD_WHOLE) {
-                ldata->cachedSymNull = SymId::noteEmptyWhole;
+                ldata->setCachedSymNull(SymId::noteEmptyWhole);
             } else if (ht == NoteHeadType::HEAD_HALF) {
-                ldata->cachedSymNull = SymId::noteEmptyHalf;
+                ldata->setCachedSymNull(SymId::noteEmptyHalf);
             }
         } else {
-            ldata->cachedSymNull = SymId::noSym;
+            ldata->setCachedSymNull(SymId::noSym);
         }
         ldata->setBbox(item->symBbox(nh));
     }
@@ -4722,10 +4724,11 @@ void TLayout::layoutStaffTypeChange(const StaffTypeChange* item, StaffTypeChange
 
 void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    LD_INDEPENDENT;
-
     const bool up = item->up();
     const double _up = up ? -1.0 : 1.0;
+
+    Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
+    LD_CONDITION(note->layoutData()->isSetMirror());
 
     double y1 = 0.0; // vertical displacement to match note attach point
     double y2 = _up * (item->length());
@@ -4756,7 +4759,7 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
         } else { // non-TAB
             // move stem start to note attach point
             Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
-            if ((up && !note->mirror()) || (!up && note->mirror())) {
+            if ((up && !note->layoutData()->mirror()) || (!up && note->layoutData()->mirror())) {
                 y1 = note->stemUpSE().y();
             } else {
                 y1 = note->stemDownNW().y();
@@ -4788,15 +4791,19 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     ldata->setBbox(rect.normalized().adjusted(-lineWidthCorrection, 0, lineWidthCorrection, 0));
 }
 
-static void layoutStemSlash(const StemSlash* item, const LayoutContext& ctx, StemSlash::LayoutData* ldata)
+void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    if (!item->chord() || !item->chord()->stem()) {
+    IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
-    Chord* c = item->chord();
-    Stem* stem = c->stem();
-    Hook* hook = c->hook();
-    Beam* beam = c->beam();
+
+    const Chord* c = item->chord();
+    const Stem* stem = c->stem();
+    const Hook* hook = c->hook();
+    const Beam* beam = c->beam();
+
+    LD_CONDITION(stem->layoutData()->isSetPos());
+    LD_CONDITION(stem->layoutData()->isSetBbox());
 
     static constexpr double heightReduction = 0.66;
     static constexpr double angleIncrease = 1.2;
@@ -4807,25 +4814,25 @@ static void layoutStemSlash(const StemSlash* item, const LayoutContext& ctx, Ste
     double stemTipY = c->up()
                       ? stem->layoutData()->bbox().translated(stem->pos()).top()
                       : stem->layoutData()->bbox().translated(stem->pos()).bottom();
-    double leftHang = ctx.conf().noteHeadWidth() * mag / 2;
-    double angle = ctx.conf().styleD(Sid::stemSlashAngle) * M_PI / 180; // converting to radians
-    bool straight = ctx.conf().styleB(Sid::useStraightNoteFlags);
+    double leftHang = conf.noteHeadWidth() * mag / 2;
+    double angle = conf.styleD(Sid::stemSlashAngle) * M_PI / 180; // converting to radians
+    bool straight = conf.styleB(Sid::useStraightNoteFlags);
     double graceNoteMag = mag;
 
     double startX = stem->layoutData()->bbox().translated(stem->pos()).right() - leftHang;
 
     double startY;
     if (straight || beam) {
-        startY = stemTipY - up * graceNoteMag * ctx.conf().styleMM(Sid::stemSlashPosition) * heightReduction;
+        startY = stemTipY - up * graceNoteMag * conf.styleMM(Sid::stemSlashPosition) * heightReduction;
     } else {
-        startY = stemTipY - up * graceNoteMag * ctx.conf().styleMM(Sid::stemSlashPosition);
+        startY = stemTipY - up * graceNoteMag * conf.styleMM(Sid::stemSlashPosition);
     }
 
     double endX = 0;
     double endY = 0;
 
     if (hook) {
-        auto musicFont = ctx.conf().styleSt(Sid::MusicalSymbolFont);
+        auto musicFont = conf.styleSt(Sid::MusicalSymbolFont);
         // HACK: adjust slash angle for fonts with "fat" hooks. In future, we must use smufl cutOut
         if (c->beams() >= 2 && !straight
             && (musicFont == "Bravura" || musicFont == "Finale Maestro" || musicFont == "Gonville")) {
@@ -4849,16 +4856,11 @@ static void layoutStemSlash(const StemSlash* item, const LayoutContext& ctx, Ste
     }
 
     ldata->line = LineF(PointF(startX, startY), PointF(endX, endY));
-    ldata->stemWidth = ctx.conf().styleMM(Sid::stemSlashThickness) * graceNoteMag;
+    ldata->stemWidth = conf.styleMM(Sid::stemSlashThickness) * graceNoteMag;
 
     RectF bbox = RectF(ldata->line.p1(), ldata->line.p2()).normalized();
     bbox = bbox.adjusted(-ldata->stemWidth / 2, -ldata->stemWidth / 2, ldata->stemWidth, ldata->stemWidth);
     ldata->setBbox(bbox);
-}
-
-void TLayout::layout(StemSlash* item, LayoutContext& ctx)
-{
-    layoutStemSlash(item, ctx, item->mutLayoutData());
 }
 
 void TLayout::layout(Sticking* item, LayoutContext&)

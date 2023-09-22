@@ -61,7 +61,7 @@ public:
 
     bool has_value() const { return m_val.has_value(); }
 
-    const T& value(LD_ACCESS mode) const
+    const T& value(LD_ACCESS mode = LD_ACCESS::CHECK) const
     {
         if (!m_val.has_value()) {
 #ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS

@@ -22,8 +22,10 @@
 #include "slurtielayout.h"
 
 #include "iengravingfont.h"
+
+#include "compat/dummyelement.h"
+
 #include "dom/slur.h"
-#include "dom/score.h"
 #include "dom/chord.h"
 #include "dom/system.h"
 #include "dom/staff.h"
@@ -36,6 +38,7 @@
 #include "dom/fretcircle.h"
 #include "dom/tie.h"
 #include "dom/engravingitem.h"
+#include "dom/measure.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
@@ -545,10 +548,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     }
 
     // account for centering or other adjustments (other than mirroring)
-    if (note1 && !note1->mirror()) {
+    if (note1 && !note1->layoutData()->mirror()) {
         sp->p1.rx() += note1->x();
     }
-    if (note2 && !note2->mirror()) {
+    if (note2 && !note2->layoutData()->mirror()) {
         sp->p2.rx() += note2->x();
     }
 
@@ -1210,7 +1213,7 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
 double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
 {
-    SymId symId = note->layoutData()->cachedNoteheadSym;
+    SymId symId = note->layoutData()->cachedNoteheadSym();
     PointF cutOutLeft = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNW : SmuflAnchorId::cutOutSW);
     PointF cutOutRight = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE);
 
