@@ -2698,7 +2698,20 @@ void TDraw::draw(const Sticking* item, Painter* painter)
 void TDraw::draw(const StringTunings* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    drawTextBase(item, painter);
+    if (item->noStringVisible()) {
+        if (item->score()->printing()) {
+            return;
+        } else {
+            Pen pen(item->selected() ? item->engravingConfiguration()->selectionColor() : item->engravingConfiguration()->
+                    formattingMarksColor());
+            painter->setPen(pen);
+            for (const TextBlock& t : item->layoutData()->blocks) {
+                t.draw(painter, item);
+            }
+        }
+    } else {
+        drawTextBase(item, painter);
+    }
 }
 
 void TDraw::draw(const Symbol* item, Painter* painter)

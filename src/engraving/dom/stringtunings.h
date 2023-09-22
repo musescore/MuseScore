@@ -58,12 +58,16 @@ public:
 
     void updateText();
 
+    bool noStringVisible() const { return m_noStringVisible; }
+
 private:
     String generateText() const;
 
     String m_preset;
     std::vector<string_idx_t> m_visibleStrings;
     StringData m_stringData;
+
+    bool m_noStringVisible = false;
 };
 }
 
