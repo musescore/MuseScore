@@ -618,7 +618,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     }
     item->setbbox(bb);
     if (item->stemSlash()) {
-        TLayout::layout(item->stemSlash(), ctx);
+        TLayout::layoutStemSlash(item->stemSlash(), item->stemSlash()->mutLayoutData(), ctx.conf());
     }
 }
 
@@ -1105,7 +1105,7 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
         if (!item->stemSlash()) {
             item->add(Factory::createStemSlash(item));
         }
-        rendering::dev::TLayout::layout(item->stemSlash(), ctx);
+        TLayout::layoutStemSlash(item->stemSlash(), item->stemSlash()->mutLayoutData(), ctx.conf());
     } else if (item->stemSlash()) {
         item->remove(item->stemSlash());
     }
@@ -1636,7 +1636,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     NoteHeadType pHeadType;
                     Chord* nchord = n->chord();
                     Chord* pchord = p->chord();
-                    if (n->mirror()) {
+                    if (n->layoutData()->mirror()) {
                         if (separation < 0) {
                             // don't try to share heads if there is any mirroring
                             shareHeads = false;
@@ -1657,7 +1657,8 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         // that notes must be one same line with same tpc
                         // noteheads must be unmirrored and of same group
                         // and chords must be same size (or else sharing code won't work)
-                        if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->mirror() || p->mirror()
+                        if (n->headGroup() != p->headGroup() || n->tpc() != p->tpc() || n->layoutData()->mirror()
+                            || p->layoutData()->mirror()
                             || nchord->isSmall() != pchord->isSmall()) {
                             shareHeads = false;
                         } else {
@@ -2326,7 +2327,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
         bool _up     = chord->up();
 
         if (chord->stemSlash()) {
-            TLayout::layout(chord->stemSlash(), ctx);
+            TLayout::layoutStemSlash(chord->stemSlash(), chord->stemSlash()->mutLayoutData(), ctx.conf());
         }
 
         double overlapMirror;
@@ -2340,7 +2341,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
         }
 
         double x = 0.0;
-        if (note->mirror()) {
+        if (note->layoutData()->mirror()) {
             if (_up) {
                 x = chord->stemPosX() - overlapMirror;
             } else {
@@ -2366,7 +2367,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
         // a mirrored note that extends to left of segment X origin
         // will displace accidentals only if there is conflict
         double sx = x + chord->x();     // segment-relative X position of note
-        if (note->mirror() && !chord->up() && sx < -note->headBodyWidth() / 2) {
+        if (note->layoutData()->mirror() && !chord->up() && sx < -note->headBodyWidth() / 2) {
             leftNotes.push_back(note);
         } else if (sx < lx) {
             lx = sx;

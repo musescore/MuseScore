@@ -633,7 +633,6 @@ Note::Note(const Note& n, bool link)
     m_headScheme        = n.m_headScheme;
     m_headGroup         = n.m_headGroup;
     m_headType          = n.m_headType;
-    m_mirror            = n.m_mirror;
     m_userMirror        = n.m_userMirror;
     m_isSmall          = n.m_isSmall;
     m_userDotPosition   = n.m_userDotPosition;
@@ -952,7 +951,7 @@ SymId Note::noteHead() const
                 }
             }
         } else {
-            return layoutData()->cachedNoteheadSym;
+            return layoutData()->cachedNoteheadSym();
         }
     }
 

@@ -282,9 +282,6 @@ public:
     void add(EngravingItem*) override;
     void remove(EngravingItem*) override;
 
-    bool mirror() const { return m_mirror; }
-    void setMirror(bool val) { m_mirror = val; }
-
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val);
 
@@ -442,10 +439,26 @@ public:
     bool isNoteName() const;
 
     struct LayoutData : public EngravingItem::LayoutData {
-        SymId cachedNoteheadSym;      // use in draw to avoid recomputing at every update
-        SymId cachedSymNull;          // additional symbol for some transparent notehead
+        SymId cachedNoteheadSym() const { return m_cachedNoteheadSym.value(); }
+        void setCachedNoteheadSym(SymId s) { m_cachedNoteheadSym.set_value(s); }
+        SymId cachedSymNull() const { return m_cachedSymNull.value(); }
+        void setCachedSymNull(SymId s) { m_cachedSymNull.set_value(s); }
+
+        bool isSetMirror() const { return m_mirror.has_value(); }
+        bool mirror() const { return m_mirror.value(); }
+        void setMirror(bool val) { m_mirror.set_value(val); }
+
+    private:
+        ld_field<SymId> m_cachedNoteheadSym = { "Note::cachedNoteheadSym", SymId::noSym };      // use in draw to avoid recomputing at every update
+        ld_field<SymId> m_cachedSymNull = { "Note::cachedSymNull", SymId::noSym };           // additional symbol for some transparent notehead
+        ld_field<bool> m_mirror = { "Note::mirror", false };                  // True if note is mirrored at stem.
     };
     DECLARE_LAYOUTDATA_METHODS(Note);
+
+    //! --- DEPRECATED ---
+    bool mirror() const { return layoutData()->mirror(); }
+    void setMirror(bool val) { mutLayoutData()->setMirror(val); }
+    //! ------------------
 
 private:
 
@@ -485,7 +498,6 @@ private:
     bool m_fretConflict = false;      // used by TAB staves to mark a fretting conflict:
                                       // two or more notes on the same string
     bool m_dragMode = false;
-    bool m_mirror = false;        // True if note is mirrored at stem.
     bool m_isSmall = false;
     bool m_play = true;           // note is not played if false
     mutable bool m_mark = false;  // for use in sequencer
