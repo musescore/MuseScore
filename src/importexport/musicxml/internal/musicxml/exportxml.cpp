@@ -5086,9 +5086,8 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     QString rest;
     QPointF p;
 
-    QString lineEnd = "none";
     QString type;
-    bool hook = false;
+    HookType hookType = HookType::NONE;
     double hookHeight = 0.0;
     if (tl->tick() == tick) {
         if (!isDashes) {
@@ -5106,7 +5105,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
             }
             rest += QString(" line-type=\"%1\"").arg(lineType);
         }
-        hook       = tl->beginHookType() != HookType::NONE;
+        hookType   = tl->beginHookType();
         hookHeight = tl->beginHookHeight().val();
         if (!tl->segmentsEmpty()) {
             p = tl->frontSegment()->offset().toQPointF();
@@ -5114,7 +5113,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         // offs = tl->mxmlOff();
         type = "start";
     } else {
-        hook = tl->endHookType() != HookType::NONE;
+        hookType   = tl->endHookType();
         hookHeight = tl->endHookHeight().val();
         if (!tl->segmentsEmpty()) {
             p = (toLineSegment(tl->backSegment()))->userOff2().toQPointF();
@@ -5123,14 +5122,19 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         type = "stop";
     }
 
-    if (hook) {
-        if (hookHeight < 0.0) {
-            lineEnd = "up";
-            hookHeight *= -1.0;
-        } else {
-            lineEnd = "down";
-        }
+    QString lineEnd;
+    switch (hookType) {
+    case HookType::HOOK_90T:
+        lineEnd = "both";
+        break;
+    case HookType::HOOK_90:
+        lineEnd = (hookHeight < 0.0) ? "up" : "down";
         rest += QString(" end-length=\"%1\"").arg(hookHeight * 10);
+        break;
+    case HookType::NONE:
+    default:
+        lineEnd = "none";
+        break;
     }
 
     rest += positioningAttributes(tl, tl->tick() == tick);
