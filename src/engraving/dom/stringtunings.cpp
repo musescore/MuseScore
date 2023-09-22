@@ -212,18 +212,28 @@ void StringTunings::setVisibleStrings(const std::vector<string_idx_t>& visibleSt
     m_visibleStrings = visibleStrings;
 }
 
+static const String DEFAULT_SYMBOL = u"\uEF21"; // Tuning fork symbol from the icon font
+
 void StringTunings::updateText()
 {
-    undoChangeProperty(Pid::TEXT, generateText(), PropertyFlags::STYLED);
+    String updatedText = generateText();
+    undoChangeProperty(Pid::TEXT, updatedText, PropertyFlags::STYLED);
+
+    if (updatedText == DEFAULT_SYMBOL) {
+        m_noStringVisible = true;
+    } else {
+        m_noStringVisible = false;
+    }
 }
 
 String StringTunings::generateText() const
 {
-    static const String DEFAULT_SYMBOL = u"<sym>guitarString6</sym>";
     const StringData* stringData = this->stringData();
     if (stringData->isNull()) {
         return DEFAULT_SYMBOL;
     }
+
+    auto guitarStringSymbol = [](int i) { return String(u"<sym>guitarString") + String::number(i) + u"</sym>"; };
 
     const std::vector<instrString>& stringList = stringData->stringList();
     std::vector<String> visibleStringList;
@@ -243,8 +253,8 @@ String StringTunings::generateText() const
                 }
             }
 
-            visibleStringList.emplace_back(String(u"<sym>guitarString%1</sym> - %2").arg(String::number(i + 1),
-                                                                                         String(pitchStr[0]).toUpper() + accidental));
+            visibleStringList.emplace_back(String(guitarStringSymbol(i + 1) + u" \u2012 "
+                                                  + String(pitchStr[0]).toUpper() + accidental) + u"  ");
         }
     }
 

@@ -4510,7 +4510,7 @@ void TLayout::layout(StringTunings* item, LayoutContext& ctx)
 {
     item->updateText();
     layoutTextBase(item, ctx);
-    Autoplace::autoplaceSegmentElement(item, item->mutLayoutData());
+    Autoplace::autoplaceSegmentElement(item, item->mutldata());
 }
 
 static void layoutBaseSymbol(const BSymbol* item, const LayoutContext& ctx, BSymbol::LayoutData* ldata)

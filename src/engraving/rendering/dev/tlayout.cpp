@@ -4977,6 +4977,40 @@ void TLayout::layout(StringTunings* item, LayoutContext& ctx)
 {
     item->updateText();
     layoutTextBase(item, ctx);
+
+    for (TextBlock& block : item->mutldata()->blocks) {
+        for (TextFragment& fragment : block.fragments()) {
+            mu::draw::Font font = fragment.font(item);
+            if (font.type() == mu::draw::Font::Type::MusicSymbol) {
+                // HACK: the music symbol doesn't have a good baseline
+                // to go with text so we correct it here
+                const double baselineAdjustment = 0.35 * font.pointSizeF();
+                fragment.pos.setY(fragment.pos.y() + baselineAdjustment);
+            }
+        }
+    }
+
+    double secondStringXAlign = 0.0;
+    for (const TextFragment& fragment : item->fragmentList()) {
+        if (fragment.font(item).type() == mu::draw::Font::Type::MusicSymbol) {
+            secondStringXAlign = std::max(secondStringXAlign, fragment.pos.x());
+        }
+    }
+
+    for (TextBlock& block : item->mutldata()->blocks) {
+        double xMove = 0.0;
+        for (auto& it = ++(block.fragments().begin()); it != block.fragments().end(); ++it) {
+            TextFragment& fragment = *it;
+            if (fragment.font(item).type() == mu::draw::Font::Type::MusicSymbol) {
+                xMove = secondStringXAlign - fragment.pos.x();
+            }
+            fragment.pos.setX(fragment.pos.x() + xMove);
+        }
+    }
+
+    Segment* parentSegment = item->segment();
+    item->move(PointF(-parentSegment->x(), 0.0));
+
     Autoplace::autoplaceSegmentElement(item, item->mutldata());
 }
 

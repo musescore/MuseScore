@@ -414,9 +414,9 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::TEXT_LINKED_TO_MASTER,       false, "textLinkedToMaster",       P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "text linked to master") },
     { Pid::EXCLUDE_FROM_OTHER_PARTS,    false, "excludeFromParts",         P_TYPE::BOOL,        PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "exclude from parts") },
 
-    { Pid::STRINGTUNINGS_STRINGS_COUNT, true,  "stringsCount",      P_TYPE::INT,            DUMMY_QT_TR_NOOP("propertyName", "strings count") },
-    { Pid::STRINGTUNINGS_PRESET,    true,  "preset",                P_TYPE::STRING,         DUMMY_QT_TR_NOOP("propertyName", "strings preset") },
-    { Pid::STRINGTUNINGS_VISIBLE_STRINGS,   true,  "visibleStrings",P_TYPE::INT_VEC,        DUMMY_QT_TR_NOOP("propertyName", "visible strings") },
+    { Pid::STRINGTUNINGS_STRINGS_COUNT, true,  "stringsCount",      P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "strings count") },
+    { Pid::STRINGTUNINGS_PRESET,    true,  "preset",                P_TYPE::STRING,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "strings preset") },
+    { Pid::STRINGTUNINGS_VISIBLE_STRINGS,   true,  "visibleStrings",P_TYPE::INT_VEC,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "visible strings") },
 
     { Pid::END,                     false, "++end++",               P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "<invalid property>") }
 };
