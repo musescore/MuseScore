@@ -5126,6 +5126,7 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
     switch (hookType) {
     case HookType::HOOK_90T:
         lineEnd = "both";
+        rest += QString(" end-length=\"%1\"").arg(fabsf(hookHeight * 20));
         break;
     case HookType::HOOK_90:
         lineEnd = (hookHeight < 0.0) ? "up" : "down";
