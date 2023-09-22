@@ -1,4 +1,4 @@
- # MS Basic.sf2
+# MS Basic.sf2
 ---
 
 Current version: 0.2  13th May 2020
