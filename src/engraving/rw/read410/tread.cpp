@@ -286,7 +286,7 @@ PropertyValue TRead::readPropertyValue(Pid id, XmlReader& e, ReadContext& ctx)
     case P_TYPE::TEMPOCHANGE_TYPE:
         return PropertyValue(TConv::fromXml(e.readAsciiText(), GradualTempoChangeType::Undefined));
     case P_TYPE::TIE_PLACEMENT:
-        return PropertyValue(TConv::fromXml(e.readText(), TiePlacement::AUTO));
+        return PropertyValue(TConv::fromXml(e.readAsciiText(), TiePlacement::AUTO));
     default:
         ASSERT_X("unhandled PID type");
         break;

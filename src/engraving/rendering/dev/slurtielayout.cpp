@@ -992,18 +992,18 @@ void SlurTieLayout::fixArticulations(Slur* item, PointF& pt, Chord* c, double up
 
 TieSegment* SlurTieLayout::layoutTieWithNoEndNote(Tie* item)
 {
-    StaffType* st = item->staff()->staffType(item->startNote() ? item->startNote()->tick() : Fraction(0, 1));
+    StaffType* st = item->staff()->staffType(item->startNote()->tick());
     Chord* c1 = item->startNote()->chord();
     item->setTick(c1->tick());
 
     if (item->slurDirection() == DirectionV::AUTO) {
         bool simpleException = st && st->isSimpleTabStaff();
-        if (st && st->isSimpleTabStaff()) {
+        if (simpleException) {
             item->setUp(isUpVoice(c1->voice()));
         } else {
             if (c1->measure()->hasVoices(c1->staffIdx(), c1->tick(), c1->actualTicks())) {
                 // in polyphonic passage, ties go on the stem side
-                item->setUp(simpleException ? isUpVoice(c1->voice()) : c1->up());
+                item->setUp(c1->up());
             } else {
                 item->setUp(!c1->up());
             }
@@ -1016,7 +1016,7 @@ TieSegment* SlurTieLayout::layoutTieWithNoEndNote(Tie* item)
     TieSegment* segment = item->segmentAt(0);
     segment->setSpannerSegmentType(SpannerSegmentType::SINGLE);
     segment->setSystem(item->startNote()->chord()->segment()->measure()->system());
-    segment->resetAdjustOffset();
+    segment->resetAdjustmentOffset();
 
     SlurTiePos sPos;
     computeStartAndEndSystem(item, sPos);
@@ -1074,7 +1074,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     TieSegment* segment = item->segmentAt(0);
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     segment->setSystem(system);   // Needed to populate System.spannerSegments
-    segment->resetAdjustOffset();
+    segment->resetAdjustmentOffset();
 
     Chord* startChord = item->startNote()->chord();
     item->setTick(startChord->tick()); // Why is this here?? (M.S.)
@@ -1123,7 +1123,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
     item->fixupSegments(2);
     TieSegment* segment = item->segmentAt(1);
     segment->setSystem(system);
-    segment->resetAdjustOffset();
+    segment->resetAdjustmentOffset();
 
     segment->adjustY(sPos.p1, sPos.p2);
     segment->setSpannerSegmentType(SpannerSegmentType::END);
@@ -1165,7 +1165,7 @@ void SlurTieLayout::computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos)
     slurTiePos.system2 = endSystem;
 }
 
-PointF SlurTieLayout::computeDefaultStartOrEndPoint(Tie* tie, Grip startOrEnd)
+PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd)
 {
     if (startOrEnd != Grip::START && startOrEnd != Grip::END) {
         return PointF();
@@ -1182,13 +1182,13 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(Tie* tie, Grip startOrEnd)
 
     PointF result = note->pos() + chord->pos() + chord->segment()->pos() + chord->measure()->pos();
 
-    bool up = tie->up();
-    bool inside = tie->isInside();
-    int upSign = up ? -1 : 1;
-    int leftRightSign = start ? +1 : -1;
-    double noteWidth = note->width();
-    double noteHeight = note->height();
-    double spatium = tie->spatium();
+    const bool up = tie->up();
+    const bool inside = tie->isInside();
+    const int upSign = up ? -1 : 1;
+    const int leftRightSign = start ? +1 : -1;
+    const double noteWidth = note->width();
+    const double noteHeight = note->height();
+    const double spatium = tie->spatium();
 
     double baseX, baseY = 0.0;
     if (inside) {
@@ -1208,7 +1208,7 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(Tie* tie, Grip startOrEnd)
     return result;
 }
 
-double SlurTieLayout::noteOpticalCenterForTie(Note* note, bool up)
+double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
 {
     SymId symId = note->layoutData()->cachedNoteheadSym;
     PointF cutOutLeft = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNW : SmuflAnchorId::cutOutSW);
@@ -1296,7 +1296,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     bool avoidStem = chord->stem() && chord->stem()->visible() && chord->up() == tie->up();
 
     if (isOuterTieOfChord && !avoidStem) {
-        tieSegment->addAdjustOffset(PointF(resultingX - tiePoint.x(), 0.0), startOrEnd);
+        tieSegment->addAdjustmentOffset(PointF(resultingX - tiePoint.x(), 0.0), startOrEnd);
         tiePoint.setX(resultingX);
         return;
     }
@@ -1312,10 +1312,10 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         return !s.toItem || (s.toItem == note || s.toItem->isHook() || s.toItem->isLedgerLine());
     });
 
-    double arcSideMargin = 0.3 * spatium;
-    double pointsSideMargin = 0.15 * spatium;
-    double yBelow = tiePoint.y() - (tie->up() ? arcSideMargin : pointsSideMargin);
-    double yAbove = tiePoint.y() + (tie->up() ? pointsSideMargin : arcSideMargin);
+    const double arcSideMargin = 0.3 * spatium;
+    const double pointsSideMargin = 0.15 * spatium;
+    const double yBelow = tiePoint.y() - (tie->up() ? arcSideMargin : pointsSideMargin);
+    const double yAbove = tiePoint.y() + (tie->up() ? pointsSideMargin : arcSideMargin);
     double pointToClear = start ? chordShape.rightMostEdgeAtHeight(yBelow, yAbove)
                           : chordShape.leftMostEdgeAtHeight(yBelow, yAbove);
 
@@ -1324,7 +1324,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 
     resultingX = start ? std::max(resultingX, pointToClear) : std::min(resultingX, pointToClear);
 
-    tieSegment->addAdjustOffset(PointF(resultingX - tiePoint.x(), 0.0), startOrEnd);
+    tieSegment->addAdjustmentOffset(PointF(resultingX - tiePoint.x(), 0.0), startOrEnd);
     tiePoint.setX(resultingX);
 }
 
@@ -1373,26 +1373,26 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
     bool up = tieSegment->tie()->up();
     int upSign = up ? -1 : 1;
 
-    double spatium = tieSegment->spatium();
-    double staffLineDist = staff->lineDistance(tick) * spatium;
-    double staffLineThickness = tieSegment->style().styleMM(Sid::staffLineWidth);
+    const double spatium = tieSegment->spatium();
+    const double staffLineDist = staff->lineDistance(tick) * spatium;
+    const double staffLineThickness = tieSegment->style().styleMM(Sid::staffLineWidth);
 
     // 1. Check for bad end point protrusion
 
-    double endPointY = tieSegment->ups(Grip::START).p.y();
-    int closestLineToEndpoints = up ? floor(endPointY / staffLineDist) : ceil(endPointY / staffLineDist);
-    bool isEndInsideStaff = closestLineToEndpoints >= 0 && closestLineToEndpoints < staff->lines(tick);
-    bool isEndInsideLedgerLines = !isEndInsideStaff && !tieSegment->tie()->isOuterTieOfChord(Grip::START);
+    const double endPointY = tieSegment->ups(Grip::START).p.y();
+    const int closestLineToEndpoints = up ? floor(endPointY / staffLineDist) : ceil(endPointY / staffLineDist);
+    const bool isEndInsideStaff = closestLineToEndpoints >= 0 && closestLineToEndpoints < staff->lines(tick);
+    const bool isEndInsideLedgerLines = !isEndInsideStaff && !tieSegment->tie()->isOuterTieOfChord(Grip::START);
 
-    double halfLineThicknessCorrection = 0.5 * staffLineThickness * upSign;
-    double protrusion = abs(endPointY - (closestLineToEndpoints * spatium - halfLineThicknessCorrection));
+    const double halfLineThicknessCorrection = 0.5 * staffLineThickness * upSign;
+    const double protrusion = abs(endPointY - (closestLineToEndpoints * spatium - halfLineThicknessCorrection));
     const double badIntersectionLimit = 0.20 * spatium; // TODO: style
 
     bool badIntersection = protrusion < badIntersectionLimit && (isEndInsideStaff || isEndInsideLedgerLines);
     if (badIntersection) {
         double correctedY = closestLineToEndpoints * spatium + halfLineThicknessCorrection + badIntersectionLimit * upSign;
-        tieSegment->addAdjustOffset(PointF(0.0, correctedY - endPointY), Grip::START);
-        tieSegment->addAdjustOffset(PointF(0.0, correctedY - endPointY), Grip::END);
+        tieSegment->addAdjustmentOffset(PointF(0.0, correctedY - endPointY), Grip::START);
+        tieSegment->addAdjustmentOffset(PointF(0.0, correctedY - endPointY), Grip::END);
         tieSegment->ups(Grip::START).p.setY(correctedY);
         tieSegment->ups(Grip::END).p.setY(correctedY);
         tieSegment->computeBezier();
@@ -1435,13 +1435,13 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         bool isInside = tie->isInside();
         bool isOuterOfChord = tie->isOuterTieOfChord(Grip::START) || tie->isOuterTieOfChord(Grip::END);
         bool hasTiedSecondInside = tie->hasTiedSecondInside();
-        bool hasEndPointAboveNote = abs(tieSegment->adjustOffset(Grip::START).x()) < 0.5 * note->width()
-                                    || abs(tieSegment->adjustOffset(Grip::END).x()) < 0.5 * note->width();
+        bool hasEndPointAboveNote = abs(tieSegment->adjustmentOffset(Grip::START).x()) < 0.5 * note->width()
+                                    || abs(tieSegment->adjustmentOffset(Grip::END).x()) < 0.5 * note->width();
         if (!isInside && !isOuterOfChord && !hasTiedSecondInside && !hasEndPointAboveNote) {
             double currentY = tieSegment->ups(Grip::START).p.y();
             double yCorrection = -upSign * (badArcIntersectionLimit - outwardMargin);
-            tieSegment->addAdjustOffset(PointF(0.0, yCorrection), Grip::START);
-            tieSegment->addAdjustOffset(PointF(0.0, yCorrection), Grip::END);
+            tieSegment->addAdjustmentOffset(PointF(0.0, yCorrection), Grip::START);
+            tieSegment->addAdjustmentOffset(PointF(0.0, yCorrection), Grip::END);
             tieSegment->ups(Grip::START).p.setY(currentY + yCorrection);
             tieSegment->ups(Grip::END).p.setY(currentY + yCorrection);
             tieSegment->computeBezier();
@@ -1459,8 +1459,8 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         if (rest > 0) {
             rest *= upSign;
             double currentY = tieSegment->ups(Grip::START).p.y();
-            tieSegment->addAdjustOffset(PointF(0.0, rest), Grip::START);
-            tieSegment->addAdjustOffset(PointF(0.0, rest), Grip::END);
+            tieSegment->addAdjustmentOffset(PointF(0.0, rest), Grip::START);
+            tieSegment->addAdjustmentOffset(PointF(0.0, rest), Grip::END);
             tieSegment->ups(Grip::START).p.setY(currentY + rest);
             tieSegment->ups(Grip::END).p.setY(currentY + rest);
         }
@@ -1470,9 +1470,9 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
     }
 }
 
-void SlurTieLayout::resolveVerticalTieCollisions(std::vector<TieSegment*>& stackedTies)
+void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies)
 {
-    if (stackedTies.size() <= 2) {
+    if (stackedTies.size() < 2) {
         return;
     }
 
@@ -1492,8 +1492,8 @@ void SlurTieLayout::resolveVerticalTieCollisions(std::vector<TieSegment*>& stack
         int upSign = up ? -1 : 1;
 
         double thisTieOuterY = up ? thisTie->layoutData()->bbox().top() : thisTie->layoutData()->bbox().bottom();
-        double nextTieInnerY = (up ? nextTie->layoutData()->bbox().top() : nextTie->layoutData()->bbox().bottom()) - upSign * 2
-                               * nextTie->midThickness();
+        double nextTieInnerY = (up ? nextTie->layoutData()->bbox().top() : nextTie->layoutData()->bbox().bottom())
+                               - upSign * 2 * nextTie->midThickness();
         double clearanceMargin = 0.15 * spatium;
         bool collision = upSign * (nextTieInnerY - thisTieOuterY) < clearanceMargin;
         if (!collision) {
@@ -1513,13 +1513,13 @@ void SlurTieLayout::resolveVerticalTieCollisions(std::vector<TieSegment*>& stack
         double thisTieYCorrection = yMidPoint - upSign * 0.5 * clearanceMargin - thisTieOuterY;
         double nextTieYCorrection = yMidPoint + upSign * 0.5 * clearanceMargin - nextTieInnerY;
 
-        double thisShoulderOff = thisTie->adjustOffset(Grip::BEZIER1).y();
-        double nextShoulderOff = nextTie->adjustOffset(Grip::BEZIER1).y();
+        double thisShoulderOff = thisTie->adjustmentOffset(Grip::BEZIER1).y();
+        double nextShoulderOff = nextTie->adjustmentOffset(Grip::BEZIER1).y();
         // Subtract it otherwise it gets summed twice
-        thisTie->addAdjustOffset(PointF(0.0, -thisShoulderOff), Grip::BEZIER1);
-        thisTie->addAdjustOffset(PointF(0.0, -thisShoulderOff), Grip::BEZIER2);
-        nextTie->addAdjustOffset(PointF(0.0, -nextShoulderOff), Grip::BEZIER1);
-        nextTie->addAdjustOffset(PointF(0.0, -nextShoulderOff), Grip::BEZIER2);
+        thisTie->addAdjustmentOffset(PointF(0.0, -thisShoulderOff), Grip::BEZIER1);
+        thisTie->addAdjustmentOffset(PointF(0.0, -thisShoulderOff), Grip::BEZIER2);
+        nextTie->addAdjustmentOffset(PointF(0.0, -nextShoulderOff), Grip::BEZIER1);
+        nextTie->addAdjustmentOffset(PointF(0.0, -nextShoulderOff), Grip::BEZIER2);
 
         thisTie->computeBezier(PointF(0.0, -upSign * (thisShoulderOff + thisTieYCorrection)));
         nextTie->computeBezier(PointF(0.0, -upSign * (nextShoulderOff + nextTieYCorrection)));

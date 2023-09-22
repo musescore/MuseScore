@@ -108,14 +108,13 @@ void MeasureLayout::layout2(Measure* item, LayoutContext& ctx)
                 continue;
             }
             Chord* chord = toChord(element);
-            ChordLayout::layoutSpanners(chord, item->system(), stick, ctx);
             for (Note* note : chord->notes()) {
                 Tie* tieFor = note->tieFor();
                 Tie* tieBack = note->tieBack();
                 if (tieFor && tieFor->isCrossStaff()) {
                     SlurTieLayout::tieLayoutFor(tieFor, item->system());
                 }
-                if (tieBack && tieBack->tick() < item->system()->tick() && tieBack->isCrossStaff()) {
+                if (tieBack && tieBack->tick() < stick && tieBack->isCrossStaff()) {
                     SlurTieLayout::tieLayoutBack(tieBack, item->system());
                 }
             }

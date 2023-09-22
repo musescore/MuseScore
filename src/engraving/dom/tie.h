@@ -38,7 +38,7 @@ class TieSegment final : public SlurTieSegment
 
     double m_midThickness = 0.0;
 
-    std::array<PointF, static_cast<size_t>(Grip::GRIPS)> m_adjustOffsets = { PointF() };
+    std::array<PointF, static_cast<size_t>(Grip::GRIPS)> m_adjustmentOffsets;
 
     /*************************
      * DEPRECATED
@@ -65,10 +65,10 @@ public:
     void adjustY(const PointF& p1, const PointF& p2);
     void adjustX();
 
-    void addAdjustOffset(const PointF& offset, Grip grip) { m_adjustOffsets[static_cast<size_t>(grip)] += offset; }
-    void resetAdjustOffset() { m_adjustOffsets.fill(PointF()); }
-    PointF adjustOffset(Grip grip) { return m_adjustOffsets[static_cast<size_t>(grip)]; }
-    void consolidateAdjustOffsetIntoUserOffset();
+    void addAdjustmentOffset(const PointF& offset, Grip grip) { m_adjustmentOffsets[static_cast<size_t>(grip)] += offset; }
+    void resetAdjustmentOffset() { m_adjustmentOffsets.fill(PointF()); }
+    PointF adjustmentOffset(Grip grip) { return m_adjustmentOffsets[static_cast<size_t>(grip)]; }
+    void consolidateAdjustmentOffsetIntoUserOffset();
 
     void finalizeSegment();
 

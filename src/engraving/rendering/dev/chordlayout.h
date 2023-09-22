@@ -47,7 +47,6 @@ public:
     static void layout(Chord* item, LayoutContext& ctx);
 
     static void layoutSpanners(Chord* item, LayoutContext& ctx);
-    static void layoutSpanners(Chord* item, System* system, const Fraction& stick, LayoutContext& ctx);
 
     static void layoutArticulations(Chord* item, LayoutContext& ctx);
     static void layoutArticulations2(Chord* item, LayoutContext& ctx, bool layoutOnCrossBeamSide = false);

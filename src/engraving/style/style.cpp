@@ -181,7 +181,7 @@ bool MStyle::readProperties(XmlReader& e)
                 set(idx, ClefToBarlinePosition(e.readInt()));
                 break;
             case P_TYPE::TIE_PLACEMENT:
-                set(idx, TConv::fromXml(e.readText(), TiePlacement::AUTO));
+                set(idx, TConv::fromXml(e.readAsciiText(), TiePlacement::AUTO));
                 break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
