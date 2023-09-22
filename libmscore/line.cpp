@@ -1310,7 +1310,17 @@ bool SLine::readProperties(XmlReader& e)
       else if (tag == "lineWidth")
             _lineWidth = e.readDouble() * spatium();
       else if (tag == "lineStyle")
-            _lineStyle = Qt::PenStyle(e.readInt());
+            if (score()->mscVersion() > MSCVERSION) { // 4.x compat
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  else
+                        _lineStyle = Qt::SolidLine;
+                  }
+            else
+                  _lineStyle = Qt::PenStyle(e.readInt());
       else if (tag == "dashLineLength")
             _dashLineLen = e.readDouble();
       else if (tag == "dashGapLength")
