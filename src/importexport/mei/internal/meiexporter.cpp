@@ -37,6 +37,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fermata.h"
+#include "engraving/dom/figuredbass.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
@@ -803,6 +804,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeDynam(dynamic_cast<const Dynamic*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFermata()) {
             success = success && this->writeFermata(dynamic_cast<const Fermata*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isFiguredBass()) {
+            success = success && this->writeFb(dynamic_cast<const FiguredBass*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHairpin()) {
             success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
@@ -1568,6 +1571,36 @@ bool MeiExporter::writeFermata(const Fermata* fermata, const libmei::xsdPositive
     meiFermata.SetTstamp(tstamp);
 
     meiFermata.Write(fermataNode, this->getXmlIdFor(fermata, 'f'));
+
+    return true;
+}
+
+/**
+ * Write a fb (figureBass).
+ */
+
+bool MeiExporter::writeFb(const FiguredBass* figuredBass, const std::string& startid)
+{
+    IF_ASSERT_FAILED(figuredBass) {
+        return false;
+    }
+    return true;
+}
+
+/**
+ * Write a fb (figureBassItem).
+ */
+
+bool MeiExporter::writeF(const FiguredBassItem* figuredBassItem)
+{
+    IF_ASSERT_FAILED(figuredBassItem) {
+        return false;
+    }
+
+    pugi::xml_node fNode = m_currentNode.append_child();
+    libmei::F meiF;// = Convert::fToMEI(figuredBassItem);
+
+    meiF.Write(fNode, this->getXmlIdFor(figuredBassItem, 'f'));
 
     return true;
 }
