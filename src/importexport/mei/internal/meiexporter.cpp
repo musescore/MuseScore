@@ -1619,10 +1619,13 @@ bool MeiExporter::writeF(const FiguredBassItem* figuredBassItem)
         return false;
     }
 
-    pugi::xml_node fNode = m_currentNode.append_child();
-    libmei::F meiF;// = Convert::fToMEI(figuredBassItem);
+    StringList meiLines;
 
+    pugi::xml_node fNode = m_currentNode.append_child();
+    libmei::F meiF = Convert::fToMEI(figuredBassItem, meiLines);
     meiF.Write(fNode, this->getXmlIdFor(figuredBassItem, 'f'));
+
+    this->writeLines(fNode, meiLines);
 
     return true;
 }

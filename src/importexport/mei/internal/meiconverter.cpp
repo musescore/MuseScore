@@ -1340,6 +1340,10 @@ libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, Str
 {
     libmei::F meiF;
 
+    // content - to be imporved
+    String plainText = figuredBassItem->normalizedText();
+    meiLines = plainText.split(u"\n");
+
     return meiF;
 }
 
