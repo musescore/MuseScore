@@ -1743,8 +1743,10 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
         if (rests == 1 && chords == 0) {
             // if measure value didn't change, stick to whole measure rest
             if (m_timesig == nf) {
-                rest->undoChangeProperty(Pid::DURATION, nf * stretch);
-                rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, DurationTypeWithDots(DurationType::V_MEASURE));
+                for (EngravingObject* e : rest->linkList()) {
+                    e->undoChangeProperty(Pid::DURATION, nf * stretch);
+                    e->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, DurationTypeWithDots(DurationType::V_MEASURE));
+                }
             } else {          // if measure value did change, represent with rests actual measure value
                 // convert the measure duration in a list of values (no dots for rests)
                 std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
