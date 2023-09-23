@@ -102,10 +102,10 @@ private:
     bool writeDir(const engraving::TextBase* dir, const std::string& startid);
     bool writeDir(const engraving::TextLineBase* dir, const std::string& startid);
     bool writeDynam(const engraving::Dynamic* dynamic, const std::string& startid);
+    bool writeF(const engraving::FiguredBassItem* figuredBassItem);
+    bool writeFb(const engraving::FiguredBass* figuredBass, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp);
-    bool writeFb(const engraving::FiguredBass* figuredBass, const std::string& startid);
-    bool writeF(const engraving::FiguredBassItem* figuredBassItem);
     bool writeHairpin(const engraving::Hairpin* hairpin, const std::string& startid);
     bool writeHarm(const engraving::Harmony* harmony, const std::string& startid);
     bool writeOctave(const engraving::Ottava* ottava, const std::string& startid);

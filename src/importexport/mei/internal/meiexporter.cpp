@@ -1537,6 +1537,61 @@ bool MeiExporter::writeDynam(const Dynamic* dynamic, const std::string& startid)
 }
 
 /**
+ * Write a f (FigureBassItem).
+ */
+
+bool MeiExporter::writeF(const FiguredBassItem* figuredBassItem)
+{
+    IF_ASSERT_FAILED(figuredBassItem) {
+        return false;
+    }
+
+    StringList meiLines;
+
+    pugi::xml_node fNode = m_currentNode.append_child();
+    libmei::F meiF = Convert::fToMEI(figuredBassItem, meiLines);
+    meiF.Write(fNode, this->getXmlIdFor(figuredBassItem, 'f'));
+
+    this->writeLines(fNode, meiLines);
+
+    return true;
+}
+
+/**
+ * Write a fb (FigureBass).
+ */
+
+bool MeiExporter::writeFb(const FiguredBass* figuredBass, const std::string& startid)
+{
+    IF_ASSERT_FAILED(figuredBass) {
+        return false;
+    }
+
+    m_currentNode = m_currentNode.append_child();
+
+    auto [meiHarm, meiFb] = Convert::fbToMEI(figuredBass);
+    meiHarm.SetStartid(startid);
+    meiHarm.Write(m_currentNode, this->getLayerXmlIdFor(HARM_L));
+
+    m_currentNode = m_currentNode.append_child();
+    meiFb.Write(m_currentNode, this->getXmlIdFor(figuredBass, 'f'));
+
+    for (const FiguredBassItem* f : figuredBass->items()) {
+        this->writeF(f);
+    }
+
+    // This is the end of the <fb> - non critical assert
+    assert(isCurrentNode(libmei::Fb()));
+    m_currentNode = m_currentNode.parent();
+
+    // This is the end of the <harm> - non critical assert
+    assert(isCurrentNode(libmei::Harm()));
+    m_currentNode = m_currentNode.parent();
+
+    return true;
+}
+
+/**
  * Write a fermata.
  */
 
@@ -1571,61 +1626,6 @@ bool MeiExporter::writeFermata(const Fermata* fermata, const libmei::xsdPositive
     meiFermata.SetTstamp(tstamp);
 
     meiFermata.Write(fermataNode, this->getXmlIdFor(fermata, 'f'));
-
-    return true;
-}
-
-/**
- * Write a fb (figureBass).
- */
-
-bool MeiExporter::writeFb(const FiguredBass* figuredBass, const std::string& startid)
-{
-    IF_ASSERT_FAILED(figuredBass) {
-        return false;
-    }
-
-    m_currentNode = m_currentNode.append_child();
-
-    auto [meiHarm, meiFb] = Convert::fbToMEI(figuredBass);
-    meiHarm.SetStartid(startid);
-    meiHarm.Write(m_currentNode, this->getLayerXmlIdFor(HARM_L));
-
-    m_currentNode = m_currentNode.append_child();
-    meiFb.Write(m_currentNode, this->getXmlIdFor(figuredBass, 'f'));
-
-    for (const FiguredBassItem* f : figuredBass->items()) {
-        this->writeF(f);
-    }
-
-    // This is the end of the <fb> - non critical assert
-    assert(isCurrentNode(libmei::Fb()));
-    m_currentNode = m_currentNode.parent();
-
-    // This is the end of the <harm> - non critical assert
-    assert(isCurrentNode(libmei::Harm()));
-    m_currentNode = m_currentNode.parent();
-
-    return true;
-}
-
-/**
- * Write a fb (figureBassItem).
- */
-
-bool MeiExporter::writeF(const FiguredBassItem* figuredBassItem)
-{
-    IF_ASSERT_FAILED(figuredBassItem) {
-        return false;
-    }
-
-    StringList meiLines;
-
-    pugi::xml_node fNode = m_currentNode.append_child();
-    libmei::F meiF = Convert::fToMEI(figuredBassItem, meiLines);
-    meiF.Write(fNode, this->getXmlIdFor(figuredBassItem, 'f'));
-
-    this->writeLines(fNode, meiLines);
 
     return true;
 }

@@ -1347,6 +1347,21 @@ libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, Str
     return meiF;
 }
 
+void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb, bool& warning)
+{
+    warning = false;
+}
+
+std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBass* figuredBass)
+{
+    libmei::Harm meiHarm;
+    libmei::Fb meiFb;
+
+    UNUSED(figuredBass);
+
+    return { meiHarm, meiFb };
+}
+
 void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata& meiFermata, bool& warning)
 {
     warning = false;
@@ -1442,21 +1457,6 @@ libmei::Fermata Convert::fermataToMEI(const engraving::Fermata* fermata)
     Convert::colorToMEI(fermata, meiFermata);
 
     return meiFermata;
-}
-
-void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb, bool& warning)
-{
-    warning = false;
-}
-
-std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBass* figuredBass)
-{
-    libmei::Harm meiHarm;
-    libmei::Fb meiFb;
-
-    UNUSED(figuredBass);
-
-    return { meiHarm, meiFb };
 }
 
 std::pair<bool, engraving::NoteType> Convert::gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach, const libmei::data_GRACE meiGrace,
