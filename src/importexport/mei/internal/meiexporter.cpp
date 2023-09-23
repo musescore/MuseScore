@@ -1584,6 +1584,28 @@ bool MeiExporter::writeFb(const FiguredBass* figuredBass, const std::string& sta
     IF_ASSERT_FAILED(figuredBass) {
         return false;
     }
+
+    m_currentNode = m_currentNode.append_child();
+
+    auto [meiHarm, meiFb] = Convert::fbToMEI(figuredBass);
+    meiHarm.SetStartid(startid);
+    meiHarm.Write(m_currentNode, this->getLayerXmlIdFor(HARM_L));
+
+    m_currentNode = m_currentNode.append_child();
+    meiFb.Write(m_currentNode, this->getXmlIdFor(figuredBass, 'f'));
+
+    for (const FiguredBassItem* f : figuredBass->items()) {
+        this->writeF(f);
+    }
+
+    // This is the end of the <fb> - non critical assert
+    assert(isCurrentNode(libmei::Fb()));
+    m_currentNode = m_currentNode.parent();
+
+    // This is the end of the <harm> - non critical assert
+    assert(isCurrentNode(libmei::Harm()));
+    m_currentNode = m_currentNode.parent();
+
     return true;
 }
 

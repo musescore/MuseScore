@@ -203,6 +203,9 @@ public:
     static void fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata& meiFermata, bool& warning);
     static libmei::Fermata fermataToMEI(const engraving::Fermata* fermata);
 
+    static void fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb, bool& warning);
+    static std::pair<libmei::Harm, libmei::Fb> fbToMEI(const engraving::FiguredBass* figuredBass);
+
     static std::pair<bool, engraving::NoteType> gracegrpFromMEI(const libmei::graceGrpLog_ATTACH meiAttach,
                                                                 const libmei::data_GRACE meiGrace, bool& warning);
     static std::pair<libmei::graceGrpLog_ATTACH, libmei::data_GRACE> gracegrpToMEI(bool isAfter, engraving::NoteType noteType);
