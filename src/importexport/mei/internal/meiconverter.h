@@ -200,6 +200,9 @@ public:
     static void endingFromMEI(engraving::Volta* volta, const libmei::Ending& meiEnding, bool& warning);
     static libmei::Ending endingToMEI(const engraving::Volta* volta);
 
+    static void fFromMEI(engraving::FiguredBassItem* figuredBassItem, const StringList& meiLines, const libmei::F& meiF, bool& warning);
+    static libmei::F fToMEI(const engraving::FiguredBassItem* figuredBassItem, StringList& meiLines);
+
     static void fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata& meiFermata, bool& warning);
     static libmei::Fermata fermataToMEI(const engraving::Fermata* fermata);
 

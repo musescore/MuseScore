@@ -1331,6 +1331,18 @@ libmei::Ending Convert::endingToMEI(const engraving::Volta* volta)
     return meiEnding;
 }
 
+void Convert::fFromMEI(engraving::FiguredBassItem* figuredBassItem, const StringList& meiLines, const libmei::F& meiF, bool& warning)
+{
+    warning = false;
+}
+
+libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, StringList& meiLines)
+{
+    libmei::F meiF;
+
+    return meiF;
+}
+
 void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata& meiFermata, bool& warning)
 {
     warning = false;
