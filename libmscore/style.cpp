@@ -3050,16 +3050,72 @@ void MStyle::load(XmlReader& e)
                   _customChordList = true;
                   chordListTag = true;
                   }
-            else if (tag == "lyricsDashMaxLegth") // pre-3.6 typo
+            else if (tag == "lyricsDashMaxLegth") // pre-3.6 typo, now: "lyricsDashMaxLength"
                   set(Sid::lyricsDashMaxLength, e.readDouble());
-            else if (tag == "dontHideStavesInFirstSystem") // pre-4.0 typo
-                  set(Sid::dontHideStavesInFirstSystem, e.readBool());
-            else if (tag == "useWideBeams") // beamDistance maps to useWideBeams in 4.0
-                  set(Sid::beamDistance, e.readDouble() > 0.75);
-            else if (tag == "pedalLineStyle") // pre-4.0 typo
-                  set(Sid::pedalLineStyle, e.readInt());
+// start 4.x compat
             else if (tag == "chordlineThickness") // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
                   e.skipCurrentElement();
+            else if (tag == "dontHideStavesInFirstSystem") // pre-4.0 typo: "dontHidStavesInFirstSystm"
+                  set(Sid::dontHideStavesInFirstSystem, e.readBool());
+            else if (tag == "hairpinLineStyle") {
+                  int _lineStyle = Qt::SolidLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  set(Sid::hairpinLineStyle, _lineStyle);
+                  }
+            else if (tag == "hairpinLineLineStyle") {
+                  int _lineStyle = Qt::CustomDashLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "solid")
+                        _lineStyle = Qt::SolidLine;
+                  set(Sid::hairpinLineLineStyle, _lineStyle);
+                  }
+            else if (tag == "letRingLineStyle") {
+                  int _lineStyle = Qt::DashLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "solid")
+                        _lineStyle = Qt::SolidLine;
+                  set(Sid::letRingLineStyle, _lineStyle);
+                  }
+            else if (tag == "palmMuteLineStyle") {
+                  int _lineStyle = Qt::DashLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "solid")
+                        _lineStyle = Qt::SolidLine;
+                  set(Sid::palmMuteLineStyle, _lineStyle);
+                  }
+            else if (tag == "pedalLineStyle") { // pre-4.0 typo: "pedalListStyle"
+                  int _lineStyle = Qt::SolidLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  set(Sid::pedalLineStyle, _lineStyle);
+                  }
+            else if (tag == "useWideBeams") // beamDistance maps to useWideBeams in 4.0 and later
+                  set(Sid::beamDistance, e.readDouble() > 0.75);
+            else if (tag == "voltaLineStyle") {
+                  int _lineStyle = Qt::SolidLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  set(Sid::voltaLineStyle, _lineStyle);
+                  }
+            else if (tag == "tempoChangeLineStyle") // doesn't exist in Mu3
+                  e.skipCurrentElement();
+// end 4.x compat
             else if (!readProperties(e))
                   e.unknown();
             }
