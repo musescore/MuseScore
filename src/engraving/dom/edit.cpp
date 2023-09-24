@@ -4035,11 +4035,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 
         MeasureBase* newMeasureBase = toMeasureBase(Factory::createItem(type, score->dummy()));
         newMeasureBase->setTick(tick);
-        if (dontCloneFrameToParts) {
-            newMeasureBase->setExcludeFromOtherParts(true);
-        } else {
-            newMeasureBase->setExcludeFromOtherParts(false);
-        }
+        newMeasureBase->setExcludeFromOtherParts(dontCloneFrameToParts);
 
         if (score == this) {
             result = newMeasureBase;

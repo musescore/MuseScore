@@ -323,7 +323,6 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
             nvb->setLeftMargin(tvb->leftMargin());
             nvb->setRightMargin(tvb->rightMargin());
             nvb->setAutoSizeEnabled(tvb->isAutoSizeEnabled());
-            nvb->setExcludeFromOtherParts(false);
         }
 
         clearMeasures(score);

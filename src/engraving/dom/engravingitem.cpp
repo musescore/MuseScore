@@ -1280,8 +1280,6 @@ void EngravingItem::relinkPropertiesToMaster(PropertyGroup propertyGroup)
         setProperty(propertyId, masterValue);
         setPropertyFlags(propertyId, masterFlags);
     }
-
-    return;
 }
 
 PropertyPropagation EngravingItem::propertyPropagation(EngravingItem* destinationItem, Pid propertyId)
@@ -1308,7 +1306,7 @@ PropertyPropagation EngravingItem::propertyPropagation(EngravingItem* destinatio
     Score* destinationScore = destinationItem->score();
     bool isTextProperty = mu::contains(textProperties(), propertyId);
 
-    if (isTextProperty && isPropertyLinkedToMaster(propertyId) || sourceScore == destinationScore) {
+    if ((isTextProperty && isPropertyLinkedToMaster(propertyId)) || sourceScore == destinationScore) {
         return PropertyPropagation::PROPAGATE;
     }
 
