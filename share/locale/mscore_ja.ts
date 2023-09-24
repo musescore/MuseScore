@@ -475,7 +475,7 @@
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="202"/>
         <source>Release time (ms)</source>
-        <translation> リリース タイム (秒)</translation>
+        <translation>リリース タイム (秒)</translation>
     </message>
     <message>
         <location filename="../../effects/compressor/compressor_gui.ui" line="205"/>
@@ -12356,7 +12356,7 @@ A human-readable summary is available:
     <message>
         <location filename="../../mscore/drumroll.cpp" line="196"/>
         <source>&lt;%1&gt; Staff: %2</source>
-        <translation> &lt;%1&gt; 譜表: %2</translation>
+        <translation>&lt;%1&gt; 譜表: %2</translation>
     </message>
 </context>
 <context>
@@ -13440,7 +13440,7 @@ failed: %2</source>
     <message>
         <location filename="../../mscore/cloud/loginmanager.cpp" line="731"/>
         <source>Upload Error</source>
-        <translation> アップロードエラー</translation>
+        <translation>アップロードエラー</translation>
     </message>
     <message>
         <location filename="../../mscore/cloud/loginmanager.cpp" line="732"/>
@@ -14178,7 +14178,7 @@ Do you want to replace it?
     <message>
         <location filename="../../mscore/musescore.cpp" line="2157"/>
         <source>&amp;Measures</source>
-        <translation>小節</translation>
+        <translation>小節(&amp;M)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2158"/>
@@ -14298,7 +14298,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2167"/>
         <source>&amp;Voices</source>
-        <translation>声部</translation>
+        <translation>声部(&amp;V)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2155"/>
@@ -14343,7 +14343,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2100"/>
         <source>&amp;About…</source>
-        <translation>MuseScoreについて…</translation>
+        <translation>MuseScoreについて…(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="1005"/>
@@ -14365,12 +14365,12 @@ Please select a measure and try again</source>
         <location filename="../../mscore/musescore.cpp" line="1711"/>
         <location filename="../../mscore/musescore.cpp" line="2165"/>
         <source>&amp;Stretch</source>
-        <translation>&amp;間隔</translation>
+        <translation>間隔(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2161"/>
         <source>N&amp;otes</source>
-        <translation>音符(&amp;N)</translation>
+        <translation>音符(&amp;O)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2162"/>
@@ -14390,12 +14390,12 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2101"/>
         <source>About &amp;Qt…</source>
-        <translation>Qtについて…</translation>
+        <translation>Qtについて…(&amp;Q)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2102"/>
         <source>About &amp;MusicXML…</source>
-        <translation>MusicXMLについて…</translation>
+        <translation>MusicXMLについて…(&amp;M)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2105"/>
@@ -15247,7 +15247,7 @@ connection enabled</source>
     <message>
         <location filename="../../mscore/pianoroll/pianoroll.cpp" line="589"/>
         <source>&lt;%1&gt; Staff: %2</source>
-        <translation> &lt;%1&gt; 譜表: %2</translation>
+        <translation>&lt;%1&gt; 譜表: %2</translation>
     </message>
     <message>
         <location filename="../../mscore/pianoroll/pianoroll.cpp" line="598"/>
@@ -21119,7 +21119,7 @@ Visit the %1MuseScore website%2 to obtain the latest version.</source>
     <message>
         <location filename="../../libmscore/note.cpp" line="3101"/>
         <source> (on %1‰ off %2‰)</source>
-        <translation> (オン %1‰ オフ %2‰)</translation>
+        <translation>(オン %1‰ オフ %2‰)</translation>
     </message>
     <message>
         <location filename="../../libmscore/note.cpp" line="3105"/>
@@ -24211,7 +24211,7 @@ Note: &quot;Ctrl+Shift+1&quot; is one key combination.</source>
     <message>
         <location filename="../../libmscore/tremolo.cpp" line="46"/>
         <source>16th between notes</source>
-        <translation> 16分音符で交互に演奏</translation>
+        <translation>16分音符で交互に演奏</translation>
     </message>
     <message>
         <location filename="../../libmscore/tremolo.cpp" line="47"/>
@@ -26416,7 +26416,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2919"/>
         <source>Par&amp;ts…</source>
-        <translation>パー&amp;ト…</translation>
+        <translation>パート…(&amp;T)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="2926"/>
@@ -26486,7 +26486,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3115"/>
         <source>&amp;Resource Manager…</source>
-        <translation>&amp;リソース マネージャー…</translation>
+        <translation>リソース マネージャー…(&amp;R)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="3126"/>
@@ -26583,7 +26583,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="56"/>
         <source>&amp;Save</source>
-        <translation>&amp;保存</translation>
+        <translation>保存(&amp;S)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="57"/>
@@ -26598,7 +26598,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="77"/>
         <source>Save &amp;As…</source>
-        <translation>名前を付け&amp;て保存…</translation>
+        <translation>名前を付けて保存…(&amp;A)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="78"/>
@@ -26613,7 +26613,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="110"/>
         <source>&amp;Export…</source>
-        <translation>&amp;エクスポート…</translation>
+        <translation>エクスポート…(&amp;E)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="130"/>
@@ -26628,7 +26628,7 @@ failed</source>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="147"/>
         <source>&amp;Print…</source>
-        <translation>&amp;印刷…</translation>
+        <translation>印刷…(&amp;P)</translation>
     </message>
     <message>
         <location filename="../../mscore/shortcut.cpp" line="149"/>
@@ -29972,7 +29972,7 @@ failed</source>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="235"/>
         <source>Thumb grace note pele on low A</source>
-        <translation> Low-A親指グレイス ペレ</translation>
+        <translation>Low-A親指グレイス ペレ</translation>
     </message>
     <message>
         <location filename="../../libmscore/bagpembell.cpp" line="236"/>
@@ -34497,7 +34497,7 @@ Measure is not empty</source>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="79"/>
         <source>Tibetan</source>
-        <translation> チベット語</translation>
+        <translation>チベット語</translation>
     </message>
     <message>
         <location filename="../../mscore/textpalette.cpp" line="80"/>
