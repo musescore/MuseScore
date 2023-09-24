@@ -376,6 +376,10 @@ void MScore::init()
             ":/fonts/mscore/MScoreText.ttf",
             ":/fonts/petaluma/PetalumaText.otf",
             ":/fonts/petaluma/PetalumaScript.otf",
+            ":/fonts/finalebroadway/FinaleBroadway.otf",
+            ":/fonts/finalebroadway/FinaleBroadwayText.otf",
+            ":/fonts/finalemaestro/FinaleMaestro.otf",
+            ":/fonts/finalemaestro/FinaleMaestroText-Regular.otf",
             };
 
       for (unsigned i = 0; i < sizeof(fonts)/sizeof(*fonts); ++i) {

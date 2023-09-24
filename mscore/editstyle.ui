@@ -322,6 +322,16 @@
                      <string notr="true">Petaluma</string>
                     </property>
                    </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">FinaleMaestro</string>
+                    </property>
+                   </item>
+                   <item>
+                    <property name="text">
+                     <string notr="true">FinaleBroadway</string>
+                    </property>
+                   </item>
                   </widget>
                  </item>
                  <item row="1" column="1">

@@ -1442,6 +1442,8 @@ void EditStyle::setValues()
       musicalTextFont->addItem("Gonville Text", "Gootville Text");
       musicalTextFont->addItem("MuseJazz Text", "MuseJazz Text");
       musicalTextFont->addItem("Petaluma Text", "Petaluma Text");
+      musicalTextFont->addItem("FinaleMaestro Text", "FinaleMaestro Text");
+      musicalTextFont->addItem("FinaleBroadway Text", "FinaleBroadway Text");
       QString tfont(lstyle.value(Sid::MusicalTextFont).toString());
       idx = musicalTextFont->findData(tfont);
       musicalTextFont->setCurrentIndex(idx);

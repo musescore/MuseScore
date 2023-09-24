@@ -40,6 +40,8 @@ QVector<ScoreFont> ScoreFont::_scoreFonts {
       ScoreFont("Gonville",   "Gootville",   ":/fonts/gootville/", "Gootville.otf"),
       ScoreFont("MuseJazz",   "MuseJazz",    ":/fonts/musejazz/",  "MuseJazz.otf" ),
       ScoreFont("Petaluma",   "Petaluma",    ":/fonts/petaluma/",  "Petaluma.otf" ),
+      ScoreFont("FinaleMaestro",   "FinaleMaestro",    ":/fonts/finalemaestro/",  "FinaleMaestro.otf" ),
+      ScoreFont("FinaleBroadway",   "FinaleBroadway",    ":/fonts/finalebroadway/",  "FinaleBroadway.otf" ),
       };
 
 std::array<uint, size_t(SymId::lastSym)+1> ScoreFont::_mainSymCodeTable { {0} };

@@ -47,6 +47,8 @@ static void initResources()
       Q_INIT_RESOURCE(musescorefonts_FreeSerif);
       Q_INIT_RESOURCE(musescorefonts_Free);
       Q_INIT_RESOURCE(musescorefonts_Petaluma);
+      Q_INIT_RESOURCE(musescorefonts_FinaleMaestro);
+      Q_INIT_RESOURCE(musescorefonts_FinaleBroadway);
       Q_INIT_RESOURCE(shortcut);
 #endif
       }
