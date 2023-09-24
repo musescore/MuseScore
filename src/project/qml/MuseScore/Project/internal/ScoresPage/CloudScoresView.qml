@@ -215,7 +215,7 @@ ScoresView {
                 anchors.rightMargin: root.sideMargin
 
                 title: qsTrc("project", "Unable to load online scores")
-                body: qsTrc("project", "Please check your internet connection, or try again later.")
+                body: qsTrc("project", "Please check your internet connection or try again later.")
             }
         }
     }
