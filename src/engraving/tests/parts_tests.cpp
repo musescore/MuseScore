@@ -50,8 +50,8 @@ static const String PARTS_DATA_DIR("parts_data/");
 class Engraving_PartsTests : public ::testing::Test
 {
 public:
+    Score* createPart(MasterScore* score);
     void createParts(MasterScore* score);
-    void createPart(MasterScore* score);
     void testPartCreation(const String& test);
 
     MasterScore* doAddBreath();
@@ -67,6 +67,24 @@ public:
     MasterScore* doAddImage();
     MasterScore* doRemoveImage();
 };
+
+Score* Engraving_PartsTests::createPart(MasterScore* masterScore)
+{
+    std::vector<Part*> parts;
+    parts.push_back(masterScore->parts().at(0));
+    Score* nscore = masterScore->createScore();
+
+    Excerpt* ex = new Excerpt(masterScore);
+    ex->setExcerptScore(nscore);
+    ex->setParts(parts);
+    ex->setName(parts.front()->partName());
+    Excerpt::createExcerpt(ex);
+
+    masterScore->excerpts().push_back(ex);
+    masterScore->setExcerptsChanged(true);
+
+    return nscore;
+}
 
 //---------------------------------------------------------
 //   createParts
@@ -109,24 +127,6 @@ void Engraving_PartsTests::createParts(MasterScore* masterScore)
     EXPECT_TRUE(nscore);
 
     //nscore->setName(parts.front()->partName());
-
-    masterScore->setExcerptsChanged(true);
-}
-
-void Engraving_PartsTests::createPart(MasterScore* masterScore)
-{
-    std::vector<Part*> parts;
-    parts.push_back(masterScore->parts().at(0));
-    Score* nscore = masterScore->createScore();
-
-    Excerpt* ex = new Excerpt(masterScore);
-    ex->setExcerptScore(nscore);
-    ex->setParts(parts);
-    ex->setName(parts.front()->partName());
-    Excerpt::createExcerpt(ex);
-    masterScore->excerpts().push_back(ex);
-
-    EXPECT_TRUE(nscore);
 
     masterScore->setExcerptsChanged(true);
 }
@@ -1170,14 +1170,7 @@ TEST_F(Engraving_PartsTests, partExclusion)
 
     EXPECT_TRUE(masterScore);
 
-    createPart(masterScore);
-    Score* partScore;
-    for (Score* score : masterScore->scoreList()) {
-        if (score != masterScore) {
-            partScore = score;
-            break;
-        }
-    }
+    Score* partScore = createPart(masterScore);
     EXPECT_TRUE(partScore);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
@@ -1234,14 +1227,7 @@ TEST_F(Engraving_PartsTests, partPropertyLinking)
 
     EXPECT_TRUE(masterScore);
 
-    createPart(masterScore);
-    Score* partScore;
-    for (Score* score : masterScore->scoreList()) {
-        if (score != masterScore) {
-            partScore = score;
-            break;
-        }
-    }
+    Score* partScore = createPart(masterScore);
     EXPECT_TRUE(partScore);
 
     EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
