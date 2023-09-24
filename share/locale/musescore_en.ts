@@ -11147,12 +11147,12 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2160"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2190"/>
         <source>Measure: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2163"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2193"/>
         <source>Beat: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11321,8 +11321,8 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2888"/>
         <location filename="../../src/engraving/dom/note.cpp" line="2926"/>
-        <location filename="../../src/engraving/dom/rest.cpp" line="734"/>
-        <location filename="../../src/engraving/dom/rest.cpp" line="746"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="733"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="745"/>
         <source>Voice: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11363,13 +11363,13 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2943"/>
-        <location filename="../../src/engraving/dom/rest.cpp" line="749"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="748"/>
         <source>Cross-staff above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/note.cpp" line="2945"/>
-        <location filename="../../src/engraving/dom/rest.cpp" line="751"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="750"/>
         <source>Cross-staff below</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11440,7 +11440,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/rest.cpp" line="735"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="734"/>
         <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -25547,6 +25547,11 @@ failed.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1377"/>
+        <source>Could not connect to &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;. Please check your internet connection or try again later.</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1427"/>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1449"/>
         <source>Open anyway</source>
@@ -25653,11 +25658,6 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1374"/>
         <source>The file could not be downloaded to your disk.</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/project/internal/projectactionscontroller.cpp" line="1377"/>
-        <source>Could not connect to &lt;a href=&quot;https://musescore.com&quot;&gt;musescore.com&lt;/a&gt;. Please check your internet connection, or try again later.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -25915,7 +25915,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/project/qml/MuseScore/Project/internal/ScoresPage/CloudScoresView.qml" line="218"/>
-        <source>Please check your internet connection, or try again later.</source>
+        <source>Please check your internet connection or try again later.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
