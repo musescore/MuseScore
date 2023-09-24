@@ -20,34 +20,33 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
 import MuseScore.Inspector 1.0
 
-Item {
-    id: main
-    height: toggle.height
+RowLayout {
+    id: root
+
     width: parent.width
 
     required property PropertyItem propertyItem
     property alias text: label.text
     property alias navigation: toggle.navigation
 
+    visible: propertyItem && propertyItem.isVisible
+    enabled: propertyItem && propertyItem.isEnabled
+
+    spacing: 4
 
     ToggleButton {
         id: toggle
 
-        anchors.left: parent.left
-        anchors.top: parent.top
-
-        visible: propertyItem && propertyItem.isVisible
-        enabled: propertyItem && propertyItem.isEnabled
-
-        checked: propertyItem && Boolean(propertyItem.value)
+        checked: root.propertyItem && Boolean(root.propertyItem.value)
 
         onToggled: {
-            if (propertyItem) {
-                propertyItem.value = !checked
+            if (root.propertyItem) {
+                root.propertyItem.value = !checked
             }
         }
     }
@@ -55,7 +54,8 @@ Item {
     StyledTextLabel {
         id: label
 
-        anchors.left: toggle.right
-        anchors.leftMargin: 4
+        Layout.fillWidth: true
+
+        horizontalAlignment: Text.AlignLeft
     }
 }
