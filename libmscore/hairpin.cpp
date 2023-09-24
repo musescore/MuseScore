@@ -694,6 +694,19 @@ void Hairpin::read(XmlReader& e)
             const QStringRef& tag(e.name());
             if (tag == "subtype")
                   setHairpinType(HairpinType(e.readInt()));
+            else if (tag == "lineStyle" && score()->mscVersion() > MSCVERSION) { // 4.x compat
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dashed") { // closest guesses, better than loosing them entirely
+                        if (isLineType())
+                              setLineStyle(Qt::CustomDashLine);
+                        else
+                              setLineStyle(Qt::DashLine);
+                        }
+                  else if (lineStyle == "dotted")
+                        setLineStyle(Qt::DotLine);
+                  else
+                        setLineStyle(Qt::SolidLine);
+                  }
             else if (readStyledProperty(e, tag))
                   ;
             else if (tag == "hairpinCircledTip")

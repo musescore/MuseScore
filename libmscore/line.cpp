@@ -1312,10 +1312,10 @@ bool SLine::readProperties(XmlReader& e)
       else if (tag == "lineStyle")
             if (score()->mscVersion() > MSCVERSION) { // 4.x compat
                   QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "dashed")
+                  if (lineStyle == "dashed")
                         _lineStyle = Qt::DashLine;
+                  else if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
                   else
                         _lineStyle = Qt::SolidLine;
                   }
