@@ -1207,7 +1207,7 @@ bool NotationInteraction::startDrop(const QUrl& url)
     m_dropData.ed.dragOffset = QPointF();
     m_dropData.ed.dropElement->setParent(nullptr);
 
-    mu::engraving::EngravingItem::renderer()->layoutItem(m_dropData.ed.dropElement);
+    engravingRenderer()->layoutItem(m_dropData.ed.dropElement);
 
     return true;
 }

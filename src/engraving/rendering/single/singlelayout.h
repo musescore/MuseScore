@@ -67,6 +67,7 @@ class Hairpin;
 class HairpinSegment;
 class HarpPedalDiagram;
 
+class Image;
 class InstrumentChange;
 
 class Jump;
@@ -182,6 +183,7 @@ public:
     static void layout(Hairpin* item, const Context& ctx);
     static void layout(HarpPedalDiagram* item, const Context& ctx);
 
+    static void layout(Image* item, const Context& ctx);
     static void layout(InstrumentChange* item, const Context& ctx);
 
     static void layout(Jump* item, const Context& ctx);
