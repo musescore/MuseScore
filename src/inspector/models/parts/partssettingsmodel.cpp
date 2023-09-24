@@ -75,6 +75,10 @@ void PartsSettingsModel::requestElements()
             m_elementsForTextLinkingOption.push_back(item);
         }
     }
+
+    updateShowPartLinkingOption();
+    updateShowExcludeOption();
+    updateShowTextLinkingOption();
 }
 
 void PartsSettingsModel::loadProperties()
@@ -83,10 +87,6 @@ void PartsSettingsModel::loadProperties()
     loadPropertyItem(m_appearanceLinkedToMaster, m_elementsForPartLinkingOption);
     loadPropertyItem(m_textLinkedToMaster, m_elementsForTextLinkingOption);
     loadPropertyItem(m_excludeFromOtherParts, m_elementsForExcludeOption);
-
-    updateShowPartLinkingOption();
-    updateShowExcludeOption();
-    updateShowTextLinkingOption();
 }
 
 void PartsSettingsModel::resetProperties()
@@ -138,7 +138,7 @@ bool PartsSettingsModel::showTextLinkingOption() const
 
 void PartsSettingsModel::updateShowPartLinkingOption()
 {
-    bool showPartLinking = m_elementsForPartLinkingOption.size() > 0;
+    bool showPartLinking = !m_elementsForPartLinkingOption.empty();
 
     if (m_showPartLinkingOption != showPartLinking) {
         m_showPartLinkingOption = showPartLinking;
@@ -148,7 +148,7 @@ void PartsSettingsModel::updateShowPartLinkingOption()
 
 void PartsSettingsModel::updateShowExcludeOption()
 {
-    bool showExclude = m_elementsForExcludeOption.size() > 0;
+    bool showExclude = !m_elementsForExcludeOption.empty();
 
     if (m_showExcludeOption != showExclude) {
         m_showExcludeOption = showExclude;
@@ -158,7 +158,7 @@ void PartsSettingsModel::updateShowExcludeOption()
 
 void PartsSettingsModel::updateShowTextLinkingOption()
 {
-    bool showTextLink = m_elementsForTextLinkingOption.size() > 0;
+    bool showTextLink = !m_elementsForTextLinkingOption.empty();
 
     if (m_showTextLinkingOption != showTextLink) {
         m_showTextLinkingOption = showTextLink;

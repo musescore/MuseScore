@@ -33,13 +33,13 @@ InspectorSectionView {
 
     implicitHeight: contentColumn.height
 
-    ColumnLayout {
+    Column {
         id: contentColumn
 
         width: parent.width
         spacing: 12
 
-        ColumnLayout {
+        Column {
             id: linkOptions
 
             width: parent.width
@@ -51,7 +51,10 @@ InspectorSectionView {
             enabled: !excludeFromScore.checked
 
             StyledTextLabel {
+                width: parent.width
+
                 text: qsTrc("inspector", "Synchronise with main score")
+                horizontalAlignment: Text.AlignLeft
             }
 
             PropertyToggle {
@@ -97,29 +100,15 @@ InspectorSectionView {
 
             propertyItem: root.model ? root.model.excludeFromOtherParts : null
 
-            visible: root.model ? root.model.showExcludeOption && linkOptions.visible : false
+            visible: root.model ? root.model.showExcludeOption : false
 
-            navigation.name: "ScoreOption"
+            navigation.name: "Exclude from other parts"
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart
 
-            text: qsTrc("inspector", "Exclude from score")
-        }
-
-        PropertyCheckBox {
-            id: excludeFromPart
-
-            width: parent.width
-
-            propertyItem: root.model ? root.model.excludeFromOtherParts : null
-
-            visible: root.model ? root.model.showExcludeOption && !excludeFromScore.visible : false
-
-            navigation.name: "ScoreOption"
-            navigation.panel: root.navigationPanel
-            navigation.row: root.navigationRowStart
-
-            text: qsTrc("inspector", "Exclude from parts")
+            text: root.model && root.model.showPartLinkingOption
+                  ? qsTrc("inspector", "Exclude from score")
+                  : qsTrc("inspector", "Exclude from parts")
         }
     }
 }
