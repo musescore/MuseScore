@@ -34,11 +34,8 @@ BaseSection {
     property alias startupModes: startupModesBox.model
     property var scorePathFilter: null
 
-    property alias panels: panelsView.model
-
     signal currentStartupModesChanged(int index)
     signal startupScorePathChanged(string path)
-    signal panelsVisibleChanged(int panelIndex, bool visible)
 
     rowSpacing: 16
 
@@ -92,32 +89,6 @@ BaseSection {
                 onPathEdited: function(newPath) {
                     root.startupScorePathChanged(newPath)
                 }
-            }
-        }
-    }
-
-    ListView {
-        id: panelsView
-
-        spacing: root.rowSpacing
-        interactive: false
-
-        width: parent.width
-        height: contentHeight
-
-        delegate: CheckBox {
-            width: parent.width
-
-            text: modelData.title
-            checked: modelData.visible
-
-            navigation.name: modelData.title
-            navigation.panel: root.navigation
-            navigation.row: startupModesBox.count + model.index
-            navigation.column: 0
-
-            onClicked: {
-                root.panelsVisibleChanged(model.index, !checked)
             }
         }
     }
