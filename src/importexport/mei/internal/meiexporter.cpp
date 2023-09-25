@@ -893,6 +893,17 @@ bool MeiExporter::writeLayer(track_idx_t track, const Staff* staff, const Measur
     meiLayer.SetN(static_cast<int>(track2voice(track) + 1));
     meiLayer.Write(m_currentNode, this->getLayerXmlId());
 
+    const Measure* mmR1 = measure->coveringMMRestOrThis();
+    if (mmR1->mmRestFirst()) {
+        pugi::xml_node multiRestNode = m_currentNode.append_child();
+        libmei::MultiRest meiMultiRest;
+        meiMultiRest.SetNum(mmR1->mmRestCount());
+        std::string xmlId = this->getXmlIdFor(mmR1, 'm');
+        meiMultiRest.Write(multiRestNode, xmlId);
+        m_currentNode = m_currentNode.parent();
+        return true;
+    }
+
     for (Segment* seg = measure->first(); seg; seg = seg->next()) {
         if (seg->segmentType() == SegmentType::EndBarLine) {
             this->addFermataToMap(track, seg, measure);
