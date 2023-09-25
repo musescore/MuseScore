@@ -27,6 +27,7 @@
 #include "actionicon.h"
 #include "factory.h"
 #include "layoutbreak.h"
+#include "masterscore.h"
 #include "mscore.h"
 #include "score.h"
 #include "stafftext.h"
@@ -417,6 +418,26 @@ EngravingItem* Box::drop(EditData& data)
         return 0;
     }
     return 0;
+}
+
+void Box::manageExclusionFromParts(bool exclude)
+{
+    if (exclude) {
+        EngravingItem::manageExclusionFromParts(exclude);
+    } else {
+        std::vector<MeasureBase*> newFrames;
+        for (Score* score : masterScore()->scoreList()) {
+            if (score == this->score()) {
+                continue;
+            }
+            MeasureBase* newFrame = score->insertMeasure(type(), next());
+            newFrame->setExcludeFromOtherParts(false);
+            newFrames.push_back(newFrame);
+        }
+        for (MeasureBase* newFrame : newFrames) {
+            newFrame->linkTo(this);
+        }
+    }
 }
 
 //---------------------------------------------------------

@@ -179,8 +179,6 @@ public:
     void setOldWidth(double n) { m_oldWidth = n; }
     double oldWidth() const { return m_oldWidth; }
 
-    void manageExclusionFromParts(bool exclude) override;
-
 protected:
 
     MeasureBase(const ElementType& type, System* system = 0);
