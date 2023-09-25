@@ -1334,7 +1334,7 @@ libmei::Ending Convert::endingToMEI(const engraving::Volta* volta)
 void Convert::fFromMEI(engraving::FiguredBassItem* figuredBassItem, const StringList& meiLines, const libmei::F& meiF, bool& warning)
 {
     warning = false;
-    
+
     // content
     String text = meiLines.join(u"\n");
     figuredBassItem->parse(text);

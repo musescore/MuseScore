@@ -436,8 +436,7 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         const libmei::AttLabelled* labeledAtt = dynamic_cast<const libmei::AttLabelled*>(&meiElement);
         if (labeledAtt && (labeledAtt->GetLabel() == MEI_FB_HARM)) {
             item = Factory::createFiguredBass(chordRest->segment());
-        }
-        else {
+        } else {
             item = Factory::createHarmony(chordRest->segment());
         }
     } else if (meiElement.m_name == "harm") {
@@ -2232,9 +2231,9 @@ bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBas
     bool warning;
     libmei::F meiF;
     meiF.Read(fNode);
-    
+
     const int line = static_cast<int>(figuredBass->itemsCount());
-    FiguredBassItem *figuredBassItem = figuredBass->createItem(line);
+    FiguredBassItem* figuredBassItem = figuredBass->createItem(line);
     if (!figuredBassItem) {
         return true;
     }
@@ -2245,7 +2244,7 @@ bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBas
     this->readLines(fNode, meiLines);
 
     Convert::fFromMEI(figuredBassItem, meiLines, meiF, warning);
-    
+
     figuredBass->appendItem(figuredBassItem);
 
     return true;
@@ -2259,7 +2258,7 @@ bool MeiImporter::readFb(pugi::xml_node harmNode, Measure* measure)
 {
     // Already checked in MeiImporter::readControlEvents
     pugi::xml_node fbNode = harmNode.select_node("./fb").node();
-    
+
     IF_ASSERT_FAILED(fbNode && measure) {
         return false;
     }
@@ -2277,11 +2276,11 @@ bool MeiImporter::readFb(pugi::xml_node harmNode, Measure* measure)
         // Warning message given in MeiExpoter::addAnnotation
         return true;
     }
-    
+
     Convert::fbFromMEI(figuredBass, meiHarm, meiFb, warning);
-    
+
     bool success = true;
-    
+
     pugi::xpath_node_set fs = fbNode.select_nodes("./f");
     for (pugi::xpath_node xpathNode : fs) {
         success = success && this->readF(xpathNode.node(), figuredBass);
