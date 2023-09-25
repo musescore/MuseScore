@@ -14370,7 +14370,7 @@ Please select a measure and try again</source>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2161"/>
         <source>N&amp;otes</source>
-        <translation>音符(&amp;O)</translation>
+        <translation>音符(&amp;N)</translation>
     </message>
     <message>
         <location filename="../../mscore/musescore.cpp" line="2162"/>
