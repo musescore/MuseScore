@@ -567,7 +567,7 @@ public:
 
     virtual bool isPropertyLinkedToMaster(Pid id) const;
     void unlinkPropertyFromMaster(Pid id);
-    void relinkPropertiesToMaster(PropertyGroup propertyGroup);
+    void relinkPropertiesToMaster(PropertyGroup propGroup);
     PropertyPropagation propertyPropagation(EngravingItem* destinationItem, Pid propertyId);
     bool canBeExcludedFromOtherParts() const;
     virtual void manageExclusionFromParts(bool exclude);

@@ -2652,7 +2652,7 @@ mu::draw::FontMetrics TextBase::fontMetrics() const
 
 bool TextBase::isPropertyLinkedToMaster(Pid id) const
 {
-    if (mu::contains(textProperties(), id)) {
+    if (propertyGroup(id) == PropertyGroup::TEXT) {
         return isTextLinkedToMaster();
     }
 

@@ -423,16 +423,19 @@ enum class Pid {
     END
 };
 
+// Determines propagation of properties between score and parts
 enum class PropertyPropagation {
     NONE,
     PROPAGATE,
     UNLINK,
 };
 
+// Each group can be propagated differently between score and parts
 enum class PropertyGroup {
     POSITION,
-    APPEARANCE,
     TEXT,
+    APPEARANCE,
+    NONE, // Properties that should not be taken into account when propagating
 };
 
 using PropertyIdSet = std::unordered_set<Pid>;
@@ -442,12 +445,9 @@ extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
+extern PropertyGroup propertyGroup(Pid id);
 extern Pid propertyId(const AsciiStringView& name);
 extern String propertyUserName(Pid);
-
-extern const std::set<Pid>& positionProperties(); ///< All the properties that have to do with the position of an item
-extern const std::set<Pid>& textProperties(); ///< Text body of text items
-extern const std::set<Pid>& appearanceProperties(); ///< All the properties that are not position or text properties
 } // namespace mu::engraving
 
 #endif

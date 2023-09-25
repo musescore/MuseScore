@@ -1253,7 +1253,7 @@ void EngravingItem::manageExclusionFromParts(bool exclude)
     }
 }
 
-void EngravingItem::relinkPropertiesToMaster(PropertyGroup propertyGroup)
+void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
 {
     assert(!score()->isMaster());
 
@@ -1270,11 +1270,11 @@ void EngravingItem::relinkPropertiesToMaster(PropertyGroup propertyGroup)
         return;
     }
 
-    const std::set<Pid>& propertiesToRelink = propertyGroup == PropertyGroup::POSITION ? positionProperties()
-                                              : propertyGroup == PropertyGroup::APPEARANCE ? appearanceProperties()
-                                              : textProperties();
-
-    for (Pid propertyId : propertiesToRelink) {
+    for (int i = 0; i < static_cast<int>(Pid::END); ++i) {
+        Pid propertyId = static_cast<Pid>(i);
+        if (propertyGroup(propertyId) != propGroup) {
+            continue;
+        }
         PropertyValue masterValue = masterElement->getProperty(propertyId);
         PropertyFlags masterFlags = masterElement->propertyFlags(propertyId);
         setProperty(propertyId, masterValue);
@@ -1290,21 +1290,13 @@ PropertyPropagation EngravingItem::propertyPropagation(EngravingItem* destinatio
         return PropertyPropagation::PROPAGATE; // These properties are always linked, no matter what
     }
 
-    static std::set<Pid> NEVER_PROPAGATING_PROPERTIES = {
-        Pid::POSITION_LINKED_TO_MASTER,
-        Pid::APPEARANCE_LINKED_TO_MASTER,
-        Pid::TEXT_LINKED_TO_MASTER,
-        Pid::GENERATED,
-        Pid::EXCLUDE_FROM_OTHER_PARTS
-    };
-
-    if (mu::contains(NEVER_PROPAGATING_PROPERTIES, propertyId)) {
+    if (propertyGroup(propertyId) == PropertyGroup::NONE) {
         return PropertyPropagation::NONE;
     }
 
     Score* sourceScore = score();
     Score* destinationScore = destinationItem->score();
-    bool isTextProperty = mu::contains(textProperties(), propertyId);
+    bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
 
     if ((isTextProperty && isPropertyLinkedToMaster(propertyId)) || sourceScore == destinationScore) {
         return PropertyPropagation::PROPAGATE;
@@ -2346,11 +2338,11 @@ String EngravingItem::formatBarsAndBeats() const
 
 bool EngravingItem::isPropertyLinkedToMaster(Pid id) const
 {
-    if (mu::contains(positionProperties(), id)) {
+    if (propertyGroup(id) == PropertyGroup::POSITION) {
         return isPositionLinkedToMaster();
     }
 
-    if (mu::contains(appearanceProperties(), id)) {
+    if (propertyGroup(id) == PropertyGroup::APPEARANCE) {
         return isAppearanceLinkedToMaster();
     }
 
@@ -2359,9 +2351,9 @@ bool EngravingItem::isPropertyLinkedToMaster(Pid id) const
 
 void EngravingItem::unlinkPropertyFromMaster(Pid id)
 {
-    if (mu::contains(positionProperties(), id)) {
+    if (propertyGroup(id) == PropertyGroup::POSITION) {
         score()->undo(new ChangeProperty(this, Pid::POSITION_LINKED_TO_MASTER, false));
-    } else if (mu::contains(appearanceProperties(), id)) {
+    } else if (propertyGroup(id) == PropertyGroup::APPEARANCE) {
         score()->undo(new ChangeProperty(this, Pid::APPEARANCE_LINKED_TO_MASTER, false));
     }
 }
