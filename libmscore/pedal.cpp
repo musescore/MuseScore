@@ -42,6 +42,7 @@ static const ElementStyle pedalStyle {
       { Sid::pedalBeginTextOffset,               Pid::END_TEXT_OFFSET         },
       { Sid::pedalLineWidth,                     Pid::LINE_WIDTH              },
       { Sid::pedalPlacement,                     Pid::PLACEMENT               },
+      { Sid::pedalLineStyle,                     Pid::LINE_STYLE              },
       { Sid::pedalPosBelow,                      Pid::OFFSET                  },
       };
 
