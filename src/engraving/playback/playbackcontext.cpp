@@ -207,8 +207,10 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
         const Hairpin* hairpin = toHairpin(spanner);
 
         {
-            Dynamic* startDynamic
-                = toDynamic(hairpin->startSegment()->findAnnotation(ElementType::DYNAMIC, hairpin->track(), hairpin->track()));
+            Segment* startSegment = hairpin->startSegment();
+            Dynamic* startDynamic = startSegment
+                                    ? toDynamic(startSegment->findAnnotation(ElementType::DYNAMIC, hairpin->track(), hairpin->track()))
+                                    : nullptr;
             if (startDynamic) {
                 if (startDynamic->dynamicType() != DynamicType::OTHER
                     && !isOrdinaryDynamicType(startDynamic->dynamicType())
