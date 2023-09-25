@@ -2237,6 +2237,7 @@ bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBas
     if (!figuredBassItem) {
         return true;
     }
+    m_uids->reg(figuredBassItem, meiF.m_xmlId);
     figuredBassItem->setTrack(figuredBass->track());
     figuredBassItem->setParent(figuredBass);
 
@@ -2276,6 +2277,8 @@ bool MeiImporter::readFb(pugi::xml_node harmNode, Measure* measure)
         // Warning message given in MeiExpoter::addAnnotation
         return true;
     }
+    // Needs to be registered by hand because we pass meiHarm to MeiImporter::addAnnotation
+    m_uids->reg(figuredBass, meiFb.m_xmlId);
 
     Convert::fbFromMEI(figuredBass, meiHarm, meiFb, warning);
 
