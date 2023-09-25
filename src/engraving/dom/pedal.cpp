@@ -54,6 +54,7 @@ static const ElementStyle pedalStyle {
     { Sid::pedalDashLineLen,                   Pid::DASH_LINE_LEN },
     { Sid::pedalDashGapLen,                    Pid::DASH_GAP_LEN },
     { Sid::pedalPlacement,                     Pid::PLACEMENT },
+    { Sid::pedalLineStyle,                     Pid::LINE_STYLE },
     { Sid::pedalPosBelow,                      Pid::OFFSET },
     { Sid::pedalFontSpatiumDependent,          Pid::TEXT_SIZE_SPATIUM_DEPENDENT }
 };
