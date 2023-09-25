@@ -4108,7 +4108,13 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                             }
                         }
                     }
+
+                    if (pm->repeatEnd()) {
+                        localMeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                        pm->undoChangeProperty(Pid::REPEAT_END, false);
+                    }
                 }
+
                 if (options.moveSignaturesClef) {
                     for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                         for (Segment* s = measureInsert->first(); s && s->rtick().isZero(); s = s->next()) {
@@ -4172,14 +4178,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                             }
                         }
                     }
+
                     if (measureInsert->repeatStart()) {
                         localMeasure->undoChangeProperty(Pid::REPEAT_START, true);
                         measureInsert->undoChangeProperty(Pid::REPEAT_START, false);
-                    }
-                } else {
-                    if (pm && pm->repeatEnd()) {
-                        localMeasure->undoChangeProperty(Pid::REPEAT_END, true);
-                        pm->undoChangeProperty(Pid::REPEAT_END, false);
                     }
                 }
             } else if (!measureInsert && tick == Fraction(0, 1)) {
