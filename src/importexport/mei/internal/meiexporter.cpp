@@ -894,7 +894,7 @@ bool MeiExporter::writeLayer(track_idx_t track, const Staff* staff, const Measur
     meiLayer.Write(m_currentNode, this->getLayerXmlId());
 
     const Measure* mmR1 = measure->coveringMMRestOrThis();
-    if (mmR1->mmRestFirst()) {
+    if (measure != mmR1 && mmR1->mmRestFirst()) {
         pugi::xml_node multiRestNode = m_currentNode.append_child();
         libmei::MultiRest meiMultiRest;
         meiMultiRest.SetNum(mmR1->mmRestCount());
