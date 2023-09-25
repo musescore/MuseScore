@@ -91,28 +91,27 @@ StyledDialogView {
             ButtonBox {
                 id: buttonBox
 
-                buttons: ButtonBoxModel.Cancel
-                separationGap: false
+                Layout.fillWidth: true
 
-                ButtonBoxItem {
+                buttons: [ ButtonBoxModel.Cancel ]
+
+                navigationPanel.section: root.navigationSection
+                navigationPanel.order: 100
+
+                FlatButton {
                     text: qsTrc("global", "OK")
+                    buttonRole: ButtonBoxModel.AcceptRole
+                    buttonId: ButtonBoxModel.Ok
                     enabled: instrumentsPage.hasSelectedInstruments
-                    isAccent: true
+                    accentButton: true
 
                     onClicked: {
                         root.submit()
                     }
                 }
 
-                navigationPanel: NavigationPanel {
-                    name: "BottomPanel"
-                    section: root.navigationSection
-                    order: 100
-                    direction: NavigationPanel.Horizontal
-                }
-
-                onStandardButtonClicked: function(type) {
-                    if (type === ButtonBoxModel.Cancel) {
+                onStandardButtonClicked: function(buttonId) {
+                    if (buttonId === ButtonBoxModel.Cancel) {
                         root.reject()
                     }
                 }

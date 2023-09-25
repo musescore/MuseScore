@@ -138,14 +138,13 @@ StyledDialogView {
 
             ButtonBox {
                 width: parent.width
-                height: childrenRect.height
 
-                buttons: ButtonBoxModel.Cancel | ButtonBoxModel.Save
+                buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Save ]
 
-                onStandardButtonClicked: function(type) {
-                    if (type === ButtonBoxModel.Cancel) {
+                onStandardButtonClicked: function(buttonId) {
+                    if (buttonId === ButtonBoxModel.Cancel) {
                         root.reject()
-                    } else if (type === ButtonBoxModel.Save) {
+                    } else if (buttonId === ButtonBoxModel.Save) {
                         model.applyNewSequence()
                         root.accept()
                     }

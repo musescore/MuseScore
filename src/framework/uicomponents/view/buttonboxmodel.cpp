@@ -35,16 +35,10 @@ QList<int> ButtonBoxModel::load()
 {
     QList<int> result;
     std::unordered_map <int, std::vector <LayoutButton*> > sortedButtons;
+    int maxCustomRole = static_cast<int>(ButtonRole::CustomRole);
 
     QList<QQuickItem*> buttonsItems = m_buttonsItems.list();
     for (const QQuickItem* item : buttonsItems) {
-        QVariant buttonRoleVar = item->property("buttonRole");
-        if (!buttonRoleVar.isValid()) {
-            continue;
-        }
-
-        ButtonRole role = static_cast<ButtonRole>(buttonRoleVar.toInt());
-
         QVariant buttonTypeVar = item->property("buttonId");
         int type = static_cast<int>(ButtonType::CustomButton);
         LayoutButton* button = nullptr;
@@ -59,17 +53,38 @@ QList<int> ButtonBoxModel::load()
             button = m_layoutButtons[static_cast<ButtonType>(type)];
         }
 
+        ButtonRole role = button->buttonRole;
+        if (role >= ButtonRole::CustomRole) {
+            maxCustomRole = std::max(maxCustomRole, static_cast<int>(role));
+        }
+
         sortedButtons[role].push_back(button);
     }
 
-    const std::vector<ButtonRole> currentLayout = chooseButtonLayoutType();
+    const std::vector<ButtonRole>& currentLayout = chooseButtonLayoutType();
 
-    for (ButtonRole buttonRole : currentLayout) {
-        if (!contains(sortedButtons, static_cast<int>(buttonRole))) {
-            continue;
+    auto buttonsByRole = [&sortedButtons, maxCustomRole](ButtonRole role) -> std::vector<LayoutButton*> {
+        bool isCustom = role == ButtonRole::CustomRole;
+        if (!isCustom) {
+            if (contains(sortedButtons, static_cast<int>(role))) {
+                return sortedButtons[role];
+            }
+
+            return {};
         }
 
-        std::vector<LayoutButton*> buttons = sortedButtons[buttonRole];
+        std::vector<LayoutButton*> buttons;
+        for (int role = static_cast<int>(ButtonRole::CustomRole); role <= maxCustomRole; ++role) {
+            for (LayoutButton* button : sortedButtons[role]) {
+                buttons.push_back(button);
+            }
+        }
+
+        return buttons;
+    };
+
+    for (ButtonRole buttonRole : currentLayout) {
+        std::vector<LayoutButton*> buttons = buttonsByRole(buttonRole);
 
         for (LayoutButton* button : buttons) {
             result << button->buttonType;
@@ -87,7 +102,7 @@ void ButtonBoxModel::setButtons(const QVariantList& buttons)
     }
 }
 
-const std::vector <ButtonBoxModel::ButtonRole> ButtonBoxModel::chooseButtonLayoutType()
+const std::vector <ButtonBoxModel::ButtonRole>& ButtonBoxModel::chooseButtonLayoutType()
 {
     size_t index = 0;
     if (m_buttonLayout != ButtonLayout::UnknownLayout) {
@@ -95,12 +110,12 @@ const std::vector <ButtonBoxModel::ButtonRole> ButtonBoxModel::chooseButtonLayou
     } else {
 #if defined (Q_OS_OSX)
         index = 1;
-#elif defined (Q_OS_LINUX) || defined (Q_OS_UNIX)
+#elif defined (Q_OS_LINUX) || defined (Q_OS_UNIX) || defined(Q_OS_FREEBSD)
         index = 2;
 #endif
     }
 
-    IF_ASSERT_FAILED(index >= 0 || index <= buttonRoleLayouts.size()) {
+    IF_ASSERT_FAILED(index >= 0 && index < buttonRoleLayouts.size()) {
         index = 0;
     }
 

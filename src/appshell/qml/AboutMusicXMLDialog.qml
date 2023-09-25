@@ -112,19 +112,16 @@ StyledDialogView {
         }
 
         ButtonBox {
+            Layout.fillWidth: true
             Layout.rightMargin: 16
             Layout.bottomMargin: 16
 
-            buttons: ButtonBoxModel.Ok
+            buttons: [ ButtonBoxModel.Ok ]
 
-            navigationPanel: NavigationPanel {
-                name: "AboutMusicXMLOkayButton"
-                section: root.navigationSection
-                direction: NavigationPanel.Horizontal
-            }
+            navigationPanel.section: root.navigationSection
 
-            onStandardButtonClicked: function(type) {
-                if (type === ButtonBoxModel.Ok) {
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Ok) {
                     root.hide()
                 }
             }

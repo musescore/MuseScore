@@ -136,56 +136,53 @@ StyledDialogView {
         ButtonBox {
             id: buttonBox
 
-            buttons: ButtonBoxModel.Cancel
+            Layout.preferredWidth: implicitWidth
 
-            ButtonBoxItem {
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 100
+
+            FlatButton {
+                text: qsTrc("global", "Cancel")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 1
+
+                onClicked: {
+                    root.reject()
+                }
+            }
+
+            FlatButton {
                 text: qsTrc("global", "Back")
-                buttonRole: ButtonBoxModel.BackRole
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 2
                 visible: pagesStack.currentIndex > 0
-
-                navigationName: "Back"
 
                 onClicked: {
                     pagesStack.currentIndex--
                 }
             }
 
-            ButtonBoxItem {
+            FlatButton {
                 text: qsTrc("global", "Next")
-                buttonRole: ButtonBoxModel.ContinueRole
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 3
                 visible: pagesStack.currentIndex < pagesStack.count - 1
                 enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-                navigationName: "Next"
 
                 onClicked: {
                     pagesStack.currentIndex++
                 }
             }
 
-            ButtonBoxItem {
+            FlatButton {
                 text: qsTrc("global", "Done")
                 buttonRole: ButtonBoxModel.AcceptRole
-                isAccent: true;
+                buttonId: ButtonBoxModel.Done
+                accentButton: true
                 enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-                navigationName: "Done"
 
                 onClicked: {
                     root.onDone()
-                }
-            }
-
-            navigationPanel: NavigationPanel {
-                name: "BottomPanel"
-                section: root.navigationSection
-                direction: NavigationPanel.Horizontal
-                order: 100
-            }
-
-            onStandardButtonClicked: function(type) {
-                if (type === ButtonBoxModel.Cancel) {
-                    root.reject()
                 }
             }
         }

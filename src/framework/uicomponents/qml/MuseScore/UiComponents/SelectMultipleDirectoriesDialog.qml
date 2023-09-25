@@ -98,29 +98,20 @@ StyledDialogView {
         ButtonBox {
             id: buttonBox
 
+            Layout.fillWidth: true
             Layout.rightMargin: prv.buttonsMargin
             Layout.bottomMargin: prv.buttonsMargin
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            buttons: ButtonBoxModel.Cancel | ButtonBoxModel.Ok
+            buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]
 
-            navigationPanel: NavigationPanel {
-                 name: "DirectoriesBottomPanel"
-                 enabled: buttonBox.enabled && buttonBox.visible
-                 section: root.navigationSection
-                 direction: NavigationPanel.Horizontal
-                 order: 3
-                 onActiveChanged: function(active) {
-                     if (active) {
-                         buttonBox.forceActiveFocus()
-                     }
-                 }
-             }
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 3
 
-            onStandardButtonClicked: function(type) {
-                if (type === ButtonBoxModel.Cancel) {
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Cancel) {
                     root.reject()
-                } else if (type === ButtonBoxModel.Ok) {
+                } else if (buttonId === ButtonBoxModel.Ok) {
                     root.ret = { errcode: 0, value: directoriesModel.directories() }
                     root.hide()
                 }

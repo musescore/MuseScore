@@ -39,8 +39,8 @@ RowLayout {
 
     property alias withDontShowAgainCheckBox: dontShowAgainCheckBox.visible
 
-    property var buttons
-    property var customButtons
+    property var buttons: []
+    property var customButtons: []
     property int defaultButtonId: 0
 
     property alias navigation: navPanel
@@ -66,7 +66,7 @@ RowLayout {
     }
 
     function focusOnFirst() {
-        var btn = buttons.accentButton()
+        var btn = buttons.firstFocusBtn
         if (btn) {
             btn.navigation.requestActive()
         }
@@ -106,6 +106,18 @@ RowLayout {
         direction: NavigationPanel.Horizontal
         accessible.role: MUAccessible.Dialog
         accessible.name: root.standardName(root.type)
+
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.AboutActive) {
+                var btn = buttons.firstFocusBtn
+                if (Boolean(btn) && btn.enabled) {
+                    event.setData("controlIndex", [ btn.navigation.row, btn.navigation.column ])
+                }
+            } else {
+                buttons.restoreAccessibility()
+                accessibleInfo.resetFocus()
+            }
+        }
     }
 
     //! NOTE By default accessibility for buttons ignored.
@@ -116,7 +128,7 @@ RowLayout {
         accessibleParent: navPanel.accessible
         visualItem: root
         role: MUAccessible.Button
-        name: root.title + " " + root.text + " " + buttons.firstFocusBtn().text
+        name: root.title + " " + root.text + " " + buttons.firstFocusBtn.text
 
         function readInfo() {
             accessibleInfo.ignored = false
@@ -145,8 +157,6 @@ RowLayout {
     }
 
     Column {
-        Layout.fillWidth: true
-
         // Unclear why "+ 1" is needed; apparently implicitWidth is incorrect
         readonly property real textsImplicitWidth: Math.max(titleLabel.implicitWidth,
                                                             textLabel.implicitWidth,
@@ -156,7 +166,7 @@ RowLayout {
         readonly property real textsImplicitWidthBounded: Math.min(420, textsImplicitWidth)
 
         // But if the buttons need more space, then the dialog becomes as wide as necessary
-        Layout.preferredWidth: Math.max(buttons.width, textsImplicitWidthBounded)
+        Layout.preferredWidth: Math.max(buttons.implicitWidth, textsImplicitWidthBounded)
 
         spacing: 18
 
@@ -206,21 +216,16 @@ RowLayout {
         ButtonBox {
             id: buttons
 
-            anchors.left: parent.left
-            anchors.right: parent.right
+            width: parent.width
 
             buttons: root.buttons
             clip: false
 
-            separationGap: false
             navigationPanel: navPanel
+            isAccessibilityDisabledWhenInit: true
 
-            onStandardButtonClicked: function(type) {
-                root.clicked(type, !dontShowAgainCheckBox.checked)
-            }
-
-            onAccessibleInfoIgnoreRequested: {
-                accessibleInfo.ignored = true
+            onStandardButtonClicked: function(buttonId) {
+                root.clicked(buttonId, !dontShowAgainCheckBox.checked)
             }
         }
     }

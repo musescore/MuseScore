@@ -195,29 +195,30 @@ StyledDialogView {
             ButtonBox {
                 id: buttonBox
 
-                separationGap: false
+                Layout.fillWidth: true
 
-                buttons: ButtonBoxModel.Cancel
+                buttons: [ ButtonBoxModel.Cancel ]
 
-                ButtonBoxItem {
+                navigationPanel.section: root.navigationSection
+                navigationPanel.order: 2
+
+                FlatButton {
                     text: qsTrc("project/save", "Save to computer")
-                    buttonRole: ButtonBoxModel.CustomRole
+                    buttonRole: ButtonBoxModel.ApplyRole
+                    buttonId: ButtonBoxModel.CustomButton + 1
                     visible: !root.isPublish
-
-                    navigationName: "SaveToComputer"
 
                     onClicked: {
                         root.done(SaveToCloudResponse.SaveLocallyInstead)
                     }
                 }
 
-                ButtonBoxItem {
-                    text: qsTrc("project/save", "Save")
+                FlatButton {
+                    text: root.isPublish ? qsTrc("project/save", "Publish") : qsTrc("project/save", "Save")
                     buttonRole: ButtonBoxModel.ApplyRole
+                    buttonId: ButtonBoxModel.Save
                     enabled: Boolean(root.name)
-                    isAccent: true
-
-                    navigationName: "Save"
+                    accentButton: true
 
                     onClicked: {
                         root.done(SaveToCloudResponse.Ok, {
@@ -228,16 +229,8 @@ StyledDialogView {
                     }
                 }
 
-                navigationPanel: NavigationPanel {
-                    name: "SaveToCloudButtons"
-                    enabled: buttonBox.enabled && buttonBox.visible
-                    section: root.navigationSection
-                    direction: NavigationPanel.Horizontal
-                    order: 2
-                }
-
-                onStandardButtonClicked: function(type) {
-                    if (type === ButtonBoxModel.Cancel) {
+                onStandardButtonClicked: function(buttonId) {
+                    if (buttonId === ButtonBoxModel.Cancel) {
                         root.done(SaveToCloudResponse.Cancel)
                     }
                 }

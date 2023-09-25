@@ -69,7 +69,6 @@ Rectangle {
                     { textRole: "FlatButton", componentRole: flatButtonSample },
                     { textRole: "ProgressButton", componentRole: progressButtonSample },
                     { textRole: "RadioButtonGroup + FlatRadioButton", componentRole: flatRadioButtonSample },
-                    { textRole: "DialogButtonBox", componentRole: dialogButtonBoxSample },
                     { textRole: "RoundedRadioButton", componentRole: roundedRadioButtonSample },
                     { textRole: "IncrementalPropertyControl (Hidden icon, Icon left, Icon right)", componentRole: incrementalPropertyControlSample },
                     { textRole: "FlatToggleButton", componentRole: flatToggleButtonSample },
@@ -86,7 +85,8 @@ Rectangle {
                     { textRole: "NumberInputField", componentRole: numberInputFieldSample },
                     { textRole: "TimeInputField", componentRole: timeInputFieldSample },
                     { textRole: "ValueList", componentRole: valueListSample },
-                    { textRole: "StyledBusyIndicator", componentRole: styledBusyIndicatorSample }
+                    { textRole: "StyledBusyIndicator", componentRole: styledBusyIndicatorSample },
+                    { textRole: "DialogButtonBox", componentRole: dialogButtonBoxSample }
                 ]
 
                 delegate: Column {
@@ -523,6 +523,7 @@ Rectangle {
 
             Row {
                 spacing: 8
+                anchors.right: parent.right
 
                 FlatButton {
                     text: "Windows"
@@ -547,13 +548,29 @@ Rectangle {
             ButtonBox {
                 id: dialogButtonBox
                 buttonLayout: ButtonBoxModel.WinLayout
+
+                FlatButton {
+                    text: qsTr("Details")
+                    buttonRole: ButtonBoxModel.CustomRole
+                    buttonId: ButtonBoxModel.CustomButton + 1
+                    isLeftSide: true
+                }
+
                 FlatButton {
                     text: qsTr("Save")
                     buttonRole: ButtonBoxModel.AcceptRole
+                    buttonId: ButtonBoxModel.Save
                 }
                 FlatButton {
                     text: qsTr("Close")
                     buttonRole: ButtonBoxModel.DestructiveRole
+                    buttonId: ButtonBoxModel.Close
+                }
+                FlatButton {
+                    text: qsTr("Details 2")
+                    buttonRole: ButtonBoxModel.CustomRole
+                    buttonId: ButtonBoxModel.CustomButton + 2
+                    isLeftSide: false
                 }
             }
         }

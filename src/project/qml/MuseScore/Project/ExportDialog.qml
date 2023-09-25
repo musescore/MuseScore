@@ -142,24 +142,20 @@ StyledDialogView {
                 Layout.alignment: Qt.AlignRight
                 spacing: 12
 
-                NavigationPanel {
-                    id: rightButtonsNavPanel
-                    name: "ExportBottom"
-                    section: root.navigationSection
-                    order: 4
-                    direction: NavigationPanel.Horizontal
-                }
-
                 ButtonBox {
-                    buttons: ButtonBoxModel.Cancel
+                    Layout.fillWidth: true
 
-                    ButtonBoxItem {
+                    buttons: [ ButtonBoxModel.Cancel ]
+
+                    navigationPanel.section: root.navigationSection
+                    navigationPanel.order: 4
+
+                    FlatButton {
                         text: qsTrc("project/export", "Export…")
                         buttonRole: ButtonBoxModel.AcceptRole
+                        buttonId: ButtonBoxModel.Done
                         enabled: exportModel.selectionLength > 0
-                        isAccent: true
-
-                        navigationName: "Export"
+                        accentButton: true
 
                         onClicked: {
                             if (exportModel.exportScores()) {
@@ -168,8 +164,8 @@ StyledDialogView {
                         }
                     }
 
-                    onStandardButtonClicked: function(type) {
-                        if (type === ButtonBoxModel.Cancel) {
+                    onStandardButtonClicked: function(buttonId) {
+                        if (buttonId === ButtonBoxModel.Cancel) {
                             root.hide()
                         }
                     }

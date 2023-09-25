@@ -90,18 +90,28 @@ StyledDialogView {
             id: buttonBox
 
             Layout.fillWidth: true
-            Layout.preferredHeight: childrenRect.height
             Layout.leftMargin: privateProperties.buttonsMargin
             Layout.rightMargin: privateProperties.buttonsMargin
             Layout.bottomMargin: privateProperties.buttonsMargin
 
-            buttons: ButtonBoxModel.Close
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 3
 
-            ButtonBoxItem {
+            FlatButton {
+                text: qsTrc("global", "Close")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 1
+                isLeftSide: true
+
+                onClicked: {
+                    root.hide()
+                }
+            }
+
+            FlatButton {
                 text: qsTrc("global", "Open all")
-                buttonRole: ButtonBoxModel.AcceptRole
-
-                navigationName: "Open all"
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 2
 
                 onClicked: {
                     partsModel.openAllParts()
@@ -109,36 +119,15 @@ StyledDialogView {
                 }
             }
 
-            ButtonBoxItem {
+            FlatButton {
                 text: qsTrc("global", "Open selected")
-                buttonRole: ButtonBoxModel.AcceptRole
-                isAccent: true
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 3
+                accentButton: true
                 enabled: partsModel.hasSelection
-
-                navigationName: "Open selected"
 
                 onClicked: {
                     partsModel.openSelectedParts()
-                    root.hide()
-                }
-            }
-
-            navigationPanel: NavigationPanel {
-                name: "PartsBottomPanel"
-                enabled: buttonBox.enabled && buttonBox.visible
-                section: root.navigationSection
-                direction: NavigationPanel.Horizontal
-                order: 3
-
-                onActiveChanged: function(active) {
-                    if (active) {
-                        buttonBox.forceActiveFocus()
-                    }
-                }
-            }
-
-            onStandardButtonClicked: function(type) {
-                if (type === ButtonBoxModel.Close) {
                     root.hide()
                 }
             }

@@ -154,14 +154,13 @@ StyledDialogView {
         ButtonBox {
             width: parent.width
 
-            buttons: ButtonBoxModel.Cancel | ButtonBoxModel.Ok
-            separationGap: false
+            buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]
 
-            onStandardButtonClicked: function(type) {
-                if (type === ButtonBoxModel.Cancel) {
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Cancel) {
                     propertiesModel.reject()
                     root.hide()
-                } else if (type === ButtonBoxModel.Ok) {
+                } else if (buttonId === ButtonBoxModel.Ok) {
                     root.hide()
                 }
             }

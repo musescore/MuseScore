@@ -246,7 +246,7 @@ void ApplicationActionController::revertToFactorySettings()
                                            "The list of recent scores will also be cleared.\n\n"
                                            "This action will not delete any of your scores.");
 
-    int revertBtn = int(IInteractive::Button::CustomButton) + 1;
+    int revertBtn = int(IInteractive::Button::Apply);
     IInteractive::Result result = interactive()->warning(title, question,
                                                          { interactive()->buttonData(IInteractive::Button::Cancel),
                                                            IInteractive::ButtonData(revertBtn, trc("appshell", "Revert"), true) },
@@ -263,7 +263,7 @@ void ApplicationActionController::revertToFactorySettings()
     title = trc("appshell", "Would you like to restart MuseScore now?");
     question = trc("appshell", "MuseScore needs to be restarted for these changes to take effect.");
 
-    int restartBtn = int(IInteractive::Button::CustomButton) + 1;
+    int restartBtn = int(IInteractive::Button::Apply);
     result = interactive()->question(title, question,
                                      { interactive()->buttonData(IInteractive::Button::Cancel),
                                        IInteractive::ButtonData(restartBtn, trc("appshell", "Restart"), true) },

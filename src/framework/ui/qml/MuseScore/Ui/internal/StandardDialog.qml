@@ -50,12 +50,11 @@ StyledDialogView {
         property int buttonId: 999
         property string text: detailsLoader.active ? qsTrc("global", "Hide details") : qsTrc("global", "Show details")
         property int role: ButtonBoxModel.CustomRole
-        property int type: ButtonBoxModel.CustomButton + 1
         property bool isAccent: false
         property bool isLeftSide: true
     }
 
-    contentWidth: content.implicitWidth
+    contentWidth: mainPanel.implicitWidth
     contentHeight: content.implicitHeight
 
     margins: 16

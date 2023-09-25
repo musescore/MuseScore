@@ -98,17 +98,19 @@ StyledDialogView {
         }
 
         ButtonBox {
+            Layout.fillWidth: true
             Layout.topMargin: 20
-            Layout.preferredHeight: childrenRect.height
 
-            buttons: ButtonBoxModel.Cancel
+            buttons: [ ButtonBoxModel.Cancel ]
 
-            ButtonBoxItem {
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
+
+            FlatButton {
                 text: qsTrc("global", "Select")
                 buttonRole: ButtonBoxModel.AcceptRole
-                isAccent: true
-
-                navigationName: "SelectButton"
+                buttonId: ButtonBoxModel.Select
+                accentButton: true
 
                 onClicked: {
                     if (!workspacesModel.apply()) {
@@ -120,15 +122,8 @@ StyledDialogView {
                 }
             }
 
-            navigationPanel: NavigationPanel {
-                name: "WorkspacesBottomPanel"
-                section: root.navigationSection
-                direction: NavigationPanel.Horizontal
-                order: 2
-            }
-
-            onStandardButtonClicked: function(type) {
-                if (type === ButtonBoxModel.Cancel) {
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Cancel) {
                     root.reject()
                 }
             }

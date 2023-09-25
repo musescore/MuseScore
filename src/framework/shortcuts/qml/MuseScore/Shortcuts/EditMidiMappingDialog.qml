@@ -109,15 +109,16 @@ StyledDialogView {
             }
 
             ButtonBox {
-                anchors.right: parent.right
+                width: parent.width
 
-                buttons: ButtonBoxModel.Cancel
-                separationGap: false
+                buttons: [ ButtonBoxModel.Cancel ]
 
-                ButtonBoxItem {
+                FlatButton {
                     text: qsTrc("global", "Add")
+                    buttonRole: ButtonBoxModel.ApplyRole
+                    buttonId: ButtonBoxModel.Apply
                     enabled: mappingField.hasText
-                    isAccent: true
+                    accentButton: true
 
                     onClicked: {
                         root.mapToEventRequested(model.inputtedEvent())
@@ -125,8 +126,8 @@ StyledDialogView {
                     }
                 }
 
-                onStandardButtonClicked: function(type) {
-                    if (type === ButtonBoxModel.Cancel) {
+                onStandardButtonClicked: function(buttonId) {
+                    if (buttonId === ButtonBoxModel.Cancel) {
                         root.reject()
                     }
                 }

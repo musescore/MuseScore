@@ -137,8 +137,8 @@ void InteractiveTestsModel::warning()
     IInteractive::Result result = interactive()->warning("Do you want to save changes to the score “Untitled” before closing?",
                                                          "Your changes will be lost if you don’t save them.",
                                                          { interactive()->buttonData(IInteractive::Button::DontSave),
-                                                           interactive()->buttonData(IInteractive::Button::Cancel),
-                                                           interactive()->buttonData(IInteractive::Button::Save) });
+                                                           interactive()->buttonData(IInteractive::Button::Save),
+                                                           interactive()->buttonData(IInteractive::Button::Cancel) });
 
     if (result.standardButton() == IInteractive::Button::DontSave) {
         LOGI() << "Don’t save!!";

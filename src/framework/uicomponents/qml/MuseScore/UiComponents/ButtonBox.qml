@@ -33,8 +33,6 @@ Container {
     property var buttons: []
     property alias buttonLayout: buttonBoxModel.buttonLayout
 
-    property NavigationPanel navigationPanel: null
-
     implicitWidth: Math.max(implicitBackgroundWidth + leftInset + rightInset,
                             contentWidth + leftPadding + rightPadding)
     implicitHeight: Math.max(implicitBackgroundHeight + topInset + bottomInset,
@@ -42,21 +40,30 @@ Container {
 
     padding: 0
 
-    signal accessibleInfoIgnoreRequested()
+    property bool isAccessibilityDisabledWhenInit: false
+    property NavigationPanel navigationPanel: NavigationPanel {
+        name: "ButtonBox"
+        enabled: root.enabled && root.visible
+        direction: NavigationPanel.Horizontal
 
-    contentItem: RowLayout {
-        spacing: prv.spacing
-        Repeater {
-            model: root.contentModel
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.AboutActive) {
+                var btn = root.firstFocusBtn
+                if (Boolean(btn) && btn.enabled) {
+                    event.setData("controlIndex", [ btn.navigation.row, btn.navigation.column ])
+                }
+            }
         }
     }
 
-    background: Rectangle {
-        implicitHeight: ui.theme.defaultButtonSize
-        x: 1; y: 1
-        width: parent.width
-        height: parent.height
-        color: "transparent"
+
+    property var firstFocusBtn: {
+        var btn = accentButton()
+        if (!Boolean(btn)) {
+            btn = root.itemAt(0)
+        }
+
+        return btn
     }
 
     signal standardButtonClicked(int buttonId)
@@ -72,15 +79,6 @@ Container {
         return null
     }
 
-    function firstFocusBtn() {
-        var btn = accentButton()
-        if (!Boolean(btn)) {
-            btn = root.itemAt(0)
-        }
-
-        return btn
-    }
-
     function addButton(text, buttonId, buttonRole, isAccent, isLeftSide) {
         const button = Qt.createQmlObject('
                                     import MuseScore.UiComponents 1.0
@@ -94,20 +92,30 @@ Container {
         button.isLeftSide = isLeftSide
 
         button.navigation.panel = root.navigationPanel
-        //! NOTE See description about AccessibleItem { id: accessibleInfo }
-        button.accessible.ignored = true
-        const _buttonId = buttonId
-        button.navigation.onActiveChanged.connect(function() {
-            var _buttonInfo = prv.buttonInfo(_buttonId)
-            if (!_buttonInfo.button.navigation.active) {
-                _buttonInfo.button.accessible.ignored = false
-                root.accessibleInfoIgnoreRequested()
-            }
-        })
+        button.navigation.column = root.count
+        button.accessible.ignored = root.isAccessibilityDisabledWhenInit
 
         root.addItem(button)
 
         return button
+    }
+
+    function restoreAccessibility() {
+        for (var i = 0; i < root.count; i++) {
+            var btn = root.itemAt(i)
+            if (!Boolean(btn.navigation)) {
+                continue
+            }
+
+            btn.accessible.ignored = false
+        }
+    }
+
+    contentItem: RowLayout {
+        spacing: prv.spacing
+        Repeater {
+            model: root.contentModel
+        }
     }
 
     ButtonBoxModel {
@@ -162,13 +170,19 @@ Container {
                 }
 
                 buttonInfo.button.navigation.panel = root.navigationPanel
-                buttonInfo.button.navigation.row = i
+                buttonInfo.button.navigation.column = i
+
+                //! NOTE See description about AccessibleItem { id: accessibleInfo }
+                buttonInfo.button.accessible.ignored = root.isAccessibilityDisabledWhenInit
+                const _buttonId = buttonInfo.button.buttonId
 
                 if (lastLeftSideButtonType === -1 && buttonInfo.button.isLeftSide) {
                     lastLeftSideButtonType = buttonsTypes[i]
                 }
 
-                buttonsWidths += buttonInfo.button.width
+                if (buttonInfo.button.visible) {
+                    buttonsWidths += buttonInfo.button.width
+                }
             }
 
             if (buttonsWidths + buttonsTypes.length * prv.spacing > root.width) {
@@ -239,10 +253,9 @@ Container {
 
         Item {
             property bool isSeparator: true
-            property string text: "seporator"
+            property string text: "separator"
             Layout.fillWidth: true
             Layout.fillHeight: true
         }
     }
-
 }

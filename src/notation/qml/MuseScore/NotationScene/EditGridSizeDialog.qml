@@ -139,16 +139,15 @@ StyledDialogView {
         }
 
         ButtonBox {
+            Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-            Layout.preferredHeight: childrenRect.height
 
-            buttons: ButtonBoxModel.Cancel | ButtonBoxModel.Ok
-            separationGap: false
+            buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]
 
-            onStandardButtonClicked: function(type) {
-                if (type === ButtonBoxModel.Cancel) {
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Cancel) {
                     root.reject()
-                } else if (type === ButtonBoxModel.Ok) {
+                } else if (buttonId === ButtonBoxModel.Ok) {
                     model.apply()
                     root.hide()
                 }

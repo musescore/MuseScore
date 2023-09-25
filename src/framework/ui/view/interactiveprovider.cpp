@@ -380,11 +380,6 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
         buttonsList << static_cast<int>(IInteractive::Button::Ok);
     } else {
         for (const IInteractive::ButtonData& buttonData: buttons) {
-            if (buttonData.btn < static_cast<int>(IInteractive::Button::CustomButton)) {
-                buttonsList << buttonData.btn;
-                continue;
-            }
-
             QVariantMap customButton;
             customButton["text"] = QString::fromStdString(buttonData.text);
             customButton["buttonId"] = buttonData.btn;

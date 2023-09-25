@@ -46,14 +46,16 @@ StyledDialogView {
         }
     }
 
-    Component.onCompleted: {
-        cloudsModel.load()
+    onNavigationActivateRequested: {
+        content.focusOnFirst()
     }
 
-    enum ButtonId {
-        Cancel,
-        CreateAccount,
-        Login
+    onAccessibilityActivateRequested: {
+        content.readInfo()
+    }
+
+    Component.onCompleted: {
+        cloudsModel.load()
     }
 
     StandardDialogPanel {
@@ -64,21 +66,21 @@ StyledDialogView {
 
         title: qsTrc("cloud", "You are not signed in")
 
-        buttons: [
-            { "buttonId": RequireAuthorizationDialog.Cancel, "title": qsTrc("global", "Cancel") },
-            { "buttonId": RequireAuthorizationDialog.CreateAccount, "title": qsTrc("cloud", "Create account") },
-            { "buttonId": RequireAuthorizationDialog.Login, "title": qsTrc("cloud", "Login") }
+        customButtons: [
+            { "buttonId": ButtonBoxModel.Cancel, "text": qsTrc("global", "Cancel"), "role": ButtonBoxModel.RejectRole, "isAccent": false, "isLeftSide": false },
+            { "buttonId": ButtonBoxModel.CustomButton + 1, "text": qsTrc("cloud", "Create account"), "role": ButtonBoxModel.ApplyRole, "isAccent": false, "isLeftSide": false },
+            { "buttonId": ButtonBoxModel.CustomButton + 2, "text": qsTrc("cloud", "Login"), "role": ButtonBoxModel.ApplyRole, "isAccent": false, "isLeftSide": false }
         ]
 
         onClicked: function(buttonId, showAgain) {
             switch (buttonId) {
-            case RequireAuthorizationDialog.Cancel:
+            case ButtonBoxModel.Cancel:
                 root.hide()
                 return
-            case RequireAuthorizationDialog.CreateAccount:
+            case ButtonBoxModel.CustomButton + 1:
                 cloudsModel.createAccount(root.cloudCode)
                 return
-            case RequireAuthorizationDialog.Login:
+            case ButtonBoxModel.CustomButton + 2:
                 cloudsModel.signIn(root.cloudCode)
                 return
             }

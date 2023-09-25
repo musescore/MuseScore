@@ -30,48 +30,37 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-    property NavigationPanel navigation: NavigationPanel {
-        name: "PreferencesButtonsPanel"
-        enabled: root.enabled && root.visible
-        direction: NavigationPanel.Horizontal
-
-        onActiveChanged: function(active) {
-            if (active) {
-                root.forceActiveFocus()
-            }
-        }
-    }
+    property alias navigation: buttonBox.navigationPanel
 
     signal revertFactorySettingsRequested()
     signal applyRequested()
     signal rejectRequested()
 
     ButtonBox {
+        id: buttonBox
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.margins: 20
 
-        buttons: ButtonBoxModel.Cancel | ButtonBoxModel.Ok
+        buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]
 
-        ButtonBoxItem {
+        FlatButton {
             text: qsTrc("appshell/preferences", "Reset preferences")
-            buttonRole: ButtonBoxModel.ResetRole
+            buttonRole: ButtonBoxModel.CustomRole
+            buttonId: ButtonBoxModel.CustomButton + 1
             isLeftSide: true
-
-            navigationName: "ResetPreferences"
 
             onClicked: {
                 root.revertFactorySettingsRequested()
             }
         }
 
-        navigationPanel: root.navigation
-
-        onStandardButtonClicked: function(type) {
-            if (type === ButtonBoxModel.Cancel) {
+        onStandardButtonClicked: function(buttonId) {
+            if (buttonId === ButtonBoxModel.Cancel) {
                 root.rejectRequested()
-            } else if (type === ButtonBoxModel.Ok) {
+            } else if (buttonId === ButtonBoxModel.Ok) {
                 root.applyRequested()
             }
         }

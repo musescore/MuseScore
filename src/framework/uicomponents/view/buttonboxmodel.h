@@ -89,7 +89,6 @@ public:
         CustomRole
     };
     Q_ENUM(ButtonRole)
-    Q_ENUMS(ButtonBoxModel::ButtonRole)
 
     enum ButtonLayout {
         UnknownLayout = -1,
@@ -98,7 +97,6 @@ public:
         LinuxLayout
     };
     Q_ENUM(ButtonLayout)
-    Q_ENUMS(ButtonBoxModel::ButtonLayout)
 
     Q_INVOKABLE QList<int> load();
     Q_INVOKABLE void setButtons(const QVariantList& buttons);
@@ -116,7 +114,7 @@ signals:
     void reloadRequested();
 
 private:
-    const std::vector<ButtonRole> chooseButtonLayoutType();
+    const std::vector<ButtonRole>& chooseButtonLayoutType();
 
     struct LayoutButton {
         QString text;
@@ -133,37 +131,35 @@ private:
 
     LayoutButton* layoutButton(const QQuickItem* item) const;
 
-    const char* c = "uicomponents"; //To make Following Hash look neat
-
     QHash<ButtonType, LayoutButton*> m_layoutButtons {
-        { Ok,              new LayoutButton(qtrc(c, "OK"),               Ok,              AcceptRole,      true) },
-        { Save,            new LayoutButton(qtrc(c, "Save"),             Save,            ApplyRole,       true) },
-        { SaveAll,         new LayoutButton(qtrc(c, "Save all"),         SaveAll,         ApplyRole,       false) },
-        { DontSave,        new LayoutButton(qtrc(c, "Don't save"),       DontSave,        DestructiveRole, false) },
-        { Open,            new LayoutButton(qtrc(c, "Open"),             Open,            AcceptRole,      true) },
-        { Yes,             new LayoutButton(qtrc(c, "Yes"),              Yes,             AcceptRole,      true) },
-        { YesToAll,        new LayoutButton(qtrc(c, "Yes to all"),       YesToAll,        AcceptRole,      false) },
-        { No,              new LayoutButton(qtrc(c, "No"),               No,              RejectRole,      false) },
-        { NoToAll,         new LayoutButton(qtrc(c, "No to all"),        NoToAll,         RejectRole,      false) },
-        { Abort,           new LayoutButton(qtrc(c, "Abort"),            Abort,           RejectRole,      false) },
-        { Retry,           new LayoutButton(qtrc(c, "Retry"),            Retry,           RetryRole,       false) },
-        { Ignore,          new LayoutButton(qtrc(c, "Ignore"),           Ignore,          DestructiveRole, false) },
-        { Close,           new LayoutButton(qtrc(c, "Close"),            Close,           RejectRole,      false) },
-        { Cancel,          new LayoutButton(qtrc(c, "Cancel"),           Cancel,          RejectRole,      false) },
-        { Discard,         new LayoutButton(qtrc(c, "Discard"),          Discard,         DestructiveRole, false) },
-        { Help,            new LayoutButton(qtrc(c, "Help"),             Help,            HelpRole,        false) },
-        { Apply,           new LayoutButton(qtrc(c, "Apply"),            Apply,           ApplyRole,       false) },
-        { Reset,           new LayoutButton(qtrc(c, "Reset"),            Reset,           ResetRole,       false) },
-        { RestoreDefaults, new LayoutButton(qtrc(c, "Restore defaults"), RestoreDefaults, ResetRole,       false) },
-        { Continue,        new LayoutButton(qtrc(c, "Continue"),         Continue,        ContinueRole,    true) },
-        { Next,            new LayoutButton(qtrc(c, "Next"),             Next,            ContinueRole,    false) },
-        { Back,            new LayoutButton(qtrc(c, "Back"),             Back,            BackRole,        false) },
-        { Select,          new LayoutButton(qtrc(c, "Select"),           Select,          AcceptRole,      true) },
-        { Clear,           new LayoutButton(qtrc(c, "Clear"),            Clear,           DestructiveRole, false) },
-        { Done,            new LayoutButton(qtrc(c, "Done"),             Done,            AcceptRole,      true) }
+        { Ok,              new LayoutButton(qtrc("uicomponents", "OK"),               Ok,              AcceptRole,      true) },
+        { Save,            new LayoutButton(qtrc("uicomponents", "Save"),             Save,            ApplyRole,       true) },
+        { SaveAll,         new LayoutButton(qtrc("uicomponents", "Save all"),         SaveAll,         ApplyRole,       false) },
+        { DontSave,        new LayoutButton(qtrc("uicomponents", "Don't save"),       DontSave,        DestructiveRole, false) },
+        { Open,            new LayoutButton(qtrc("uicomponents", "Open"),             Open,            AcceptRole,      true) },
+        { Yes,             new LayoutButton(qtrc("uicomponents", "Yes"),              Yes,             AcceptRole,      true) },
+        { YesToAll,        new LayoutButton(qtrc("uicomponents", "Yes to all"),       YesToAll,        AcceptRole,      false) },
+        { No,              new LayoutButton(qtrc("uicomponents", "No"),               No,              RejectRole,      false) },
+        { NoToAll,         new LayoutButton(qtrc("uicomponents", "No to all"),        NoToAll,         RejectRole,      false) },
+        { Abort,           new LayoutButton(qtrc("uicomponents", "Abort"),            Abort,           RejectRole,      false) },
+        { Retry,           new LayoutButton(qtrc("uicomponents", "Retry"),            Retry,           RetryRole,       false) },
+        { Ignore,          new LayoutButton(qtrc("uicomponents", "Ignore"),           Ignore,          DestructiveRole, false) },
+        { Close,           new LayoutButton(qtrc("uicomponents", "Close"),            Close,           RejectRole,      false) },
+        { Cancel,          new LayoutButton(qtrc("uicomponents", "Cancel"),           Cancel,          RejectRole,      false) },
+        { Discard,         new LayoutButton(qtrc("uicomponents", "Discard"),          Discard,         DestructiveRole, false) },
+        { Help,            new LayoutButton(qtrc("uicomponents", "Help"),             Help,            HelpRole,        false) },
+        { Apply,           new LayoutButton(qtrc("uicomponents", "Apply"),            Apply,           ApplyRole,       false) },
+        { Reset,           new LayoutButton(qtrc("uicomponents", "Reset"),            Reset,           ResetRole,       false) },
+        { RestoreDefaults, new LayoutButton(qtrc("uicomponents", "Restore defaults"), RestoreDefaults, ResetRole,       false) },
+        { Continue,        new LayoutButton(qtrc("uicomponents", "Continue"),         Continue,        ContinueRole,    true) },
+        { Next,            new LayoutButton(qtrc("uicomponents", "Next"),             Next,            ContinueRole,    false) },
+        { Back,            new LayoutButton(qtrc("uicomponents", "Back"),             Back,            BackRole,        false) },
+        { Select,          new LayoutButton(qtrc("uicomponents", "Select"),           Select,          AcceptRole,      true) },
+        { Clear,           new LayoutButton(qtrc("uicomponents", "Clear"),            Clear,           DestructiveRole, false) },
+        { Done,            new LayoutButton(qtrc("uicomponents", "Done"),             Done,            AcceptRole,      true) }
     };
 
-    std::vector<std::vector <ButtonRole>> buttonRoleLayouts = {
+    std::vector<std::vector<ButtonRole> > buttonRoleLayouts = {
         // WinLayout
         std::vector <ButtonRole> { CustomRole, ResetRole, RetryRole, BackRole, AcceptRole, ApplyRole, ContinueRole, DestructiveRole,
                                    RejectRole, HelpRole },
