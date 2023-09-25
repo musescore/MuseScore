@@ -4082,11 +4082,11 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             if (measureInsert) {
                 for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                     Measure* pm = newMeasure->prevMeasure();
-                    if (pm) {
+                    if (pm && !options.moveSignaturesClef) {
                         Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                         if (ps && ps->enabled()) {
                             EngravingItem* pc = ps->element(staffIdx * VOICES);
-                            if (pc && !options.moveSignaturesClef) {
+                            if (pc) {
                                 previousClefList.push_back(toClef(pc));
                                 undo(new RemoveElement(pc));
                                 if (ps->empty()) {
@@ -4097,7 +4097,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                         Segment* pbs = pm->findSegment(SegmentType::EndBarLine, tick);
                         if (pbs && pbs->enabled()) {
                             EngravingItem* pb = pbs->element(staffIdx * VOICES);
-                            if (pb && !pb->generated() && !options.moveSignaturesClef) {
+                            if (pb && !pb->generated()) {
                                 previousBarLinesList.push_back(toBarLine(pb));
                                 undo(new RemoveElement(pb));
                                 if (pbs->empty()) {
@@ -4208,10 +4208,9 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 nClef->setParent(s);
                 undoAddElement(nClef);
             }
-            Measure* pm = newMeasure;
             for (Clef* clef : previousClefList) {
                 Clef* nClef = Factory::copyClef(*clef);
-                Segment* s  = pm->undoGetSegmentR(SegmentType::Clef, pm->ticks());
+                Segment* s  = newMeasure->undoGetSegmentR(SegmentType::Clef, newMeasure->ticks());
                 nClef->setParent(s);
                 undoAddElement(nClef);
             }
@@ -4223,7 +4222,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             }
             for (BarLine* barLine : previousBarLinesList) {
                 BarLine* nBarLine = Factory::copyBarLine(*barLine);
-                Segment* s = pm->undoGetSegmentR(SegmentType::EndBarLine, pm->ticks());
+                Segment* s = newMeasure->undoGetSegmentR(SegmentType::EndBarLine, newMeasure->ticks());
                 nBarLine->setParent(s);
                 undoAddElement(nBarLine);
             }
