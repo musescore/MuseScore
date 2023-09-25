@@ -48,12 +48,6 @@ FocusScope {
 
     opacity: root.enabled ? 1.0 : ui.theme.itemOpacityDisabled
 
-    function ensureActiveFocus() {
-        if (!root.activeFocus) {
-            root.forceActiveFocus()
-        }
-    }
-
     NavigationControl {
         id: navCtrl
         name: root.objectName != "" ? root.objectName : "FlatToggleButton"
@@ -91,8 +85,6 @@ FocusScope {
         hoverEnabled: true
         onClicked: {
             navigation.requestActiveByInteraction()
-
-            root.ensureActiveFocus()
             root.toggled()
         }
 

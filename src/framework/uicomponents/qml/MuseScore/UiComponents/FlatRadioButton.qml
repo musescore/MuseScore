@@ -57,16 +57,8 @@ RadioDelegate {
                                  : ui.theme.defaultButtonSize
     hoverEnabled: true
 
-    function ensureActiveFocus() {
-        if (!root.activeFocus) {
-            root.forceActiveFocus()
-        }
-    }
-
     onClicked: {
         navigation.requestActiveByInteraction()
-
-        root.ensureActiveFocus()
     }
 
     onPressedChanged: {
