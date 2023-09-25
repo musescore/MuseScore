@@ -168,7 +168,7 @@ EngravingItem* ChordRest::drop(EditData& data)
 
     case ElementType::BAR_LINE:
         if (data.control()) {
-            score()->splitMeasure(segment());
+            score()->cmdSplitMeasure(this);
         } else {
             BarLine* bl = toBarLine(e);
             bl->setPos(PointF());

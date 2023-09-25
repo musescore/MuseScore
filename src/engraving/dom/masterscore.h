@@ -215,6 +215,9 @@ public:
 
     MasterScore* unrollRepeats();
 
+    void splitMeasure(const Fraction&);
+    void joinMeasure(const Fraction&, const Fraction&);
+
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 

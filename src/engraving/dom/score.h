@@ -785,7 +785,6 @@ public:
     void setMetaTag(const String& tag, const String& val);
 
     void cmdSplitMeasure(ChordRest*);
-    void splitMeasure(Segment*);
     void cmdJoinMeasure(Measure*, Measure*);
 
     int pageNumberOffset() const { return m_pageNumberOffset; }
