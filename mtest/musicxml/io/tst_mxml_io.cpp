@@ -39,7 +39,7 @@ class TestMxmlIO : public QObject, public MTest
       void mxmlIoTest(const char* file);
       void mxmlIoTestRef(const char* file);
       void mxmlIoTestRefBreaks(const char* file);
-      void mxmlMscxExportTestRef(const char* file);
+      void mxmlMscxExportTestRef(const char* file, bool exportLayout = false);
       void mxmlMscxExportTestRefBreaks(const char* file);
       void mxmlReadTestCompr(const char* file);
       void mxmlReadWriteTestCompr(const char* file);
@@ -234,6 +234,7 @@ private slots:
       void systemBrackets3() { mxmlImportTestRef("testSystemBrackets3"); }
       void systemBrackets4() { mxmlIoTest("testSystemBrackets4"); }
       void systemBrackets5() { mxmlIoTest("testSystemBrackets5"); }
+      void systemDistance() {  mxmlMscxExportTestRef("testSystemDistance", true); }
       void tablature1() { mxmlIoTest("testTablature1"); }
       void tablature2() { mxmlIoTest("testTablature2"); }
       void tablature3() { mxmlIoTest("testTablature3"); }
@@ -389,11 +390,11 @@ void TestMxmlIO::mxmlIoTestRefBreaks(const char* file)
 //   read a MuseScore mscx file, write to a MusicXML file and verify against reference
 //---------------------------------------------------------
 
-void TestMxmlIO::mxmlMscxExportTestRef(const char* file)
+void TestMxmlIO::mxmlMscxExportTestRef(const char* file, bool exportLayout)
       {
       MScore::debugMode = true;
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
-      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportLayout);
       MasterScore* score = readScore(DIR + file + ".mscx");
       QVERIFY(score);
       fixupScore(score);

@@ -5994,9 +5994,10 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
                         if (mpc.systemStart && !mpc.pageStart) {
                               // see System::layout2() for the factor 2 * score()->spatium()
+                              const Measure* prevSystem = mpc.prevMeasure->coveringMMRestOrThis();
                               const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
-                                                                       - mpc.prevMeasure->pagePos().y()
-                                                                       - mpc.prevMeasure->bbox().height()
+                                                                       - prevSystem->pagePos().y()
+                                                                       - prevSystem->bbox().height()
                                                                        + 2 * score()->spatium()
                                                                        );
                               _xml.tag("system-distance",
