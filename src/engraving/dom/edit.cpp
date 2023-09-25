@@ -4080,11 +4080,11 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             // remove clef, barlines, time and key signatures
             //
             if (measureInsert) {
-                for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-                    Measure* pm = newMeasure->prevMeasure();
-                    if (pm && !options.moveSignaturesClef) {
-                        Segment* ps = pm->findSegment(SegmentType::Clef, tick);
-                        if (ps && ps->enabled()) {
+                Measure* pm = newMeasure->prevMeasure();
+                if (pm && !options.moveSignaturesClef) {
+                    Segment* ps = pm->findSegment(SegmentType::Clef, tick);
+                    if (ps && ps->enabled()) {
+                        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                             EngravingItem* pc = ps->element(staffIdx * VOICES);
                             if (pc) {
                                 previousClefList.push_back(toClef(pc));
@@ -4094,8 +4094,10 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                                 }
                             }
                         }
-                        Segment* pbs = pm->findSegment(SegmentType::EndBarLine, tick);
-                        if (pbs && pbs->enabled()) {
+                    }
+                    Segment* pbs = pm->findSegment(SegmentType::EndBarLine, tick);
+                    if (pbs && pbs->enabled()) {
+                        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                             EngravingItem* pb = pbs->element(staffIdx * VOICES);
                             if (pb && !pb->generated()) {
                                 previousBarLinesList.push_back(toBarLine(pb));
@@ -4106,7 +4108,9 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                             }
                         }
                     }
-                    if (options.moveSignaturesClef) {
+                }
+                if (options.moveSignaturesClef) {
+                    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                         for (Segment* s = measureInsert->first(); s && s->rtick().isZero(); s = s->next()) {
                             if (!s->enabled()) {
                                 continue;
@@ -4167,15 +4171,15 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                                 }
                             }
                         }
-                        if (measureInsert->repeatStart()) {
-                            localMeasure->undoChangeProperty(Pid::REPEAT_START, true);
-                            measureInsert->undoChangeProperty(Pid::REPEAT_START, false);
-                        }
-                    } else {
-                        if (pm->repeatEnd()) {
-                            localMeasure->undoChangeProperty(Pid::REPEAT_END, true);
-                            pm->undoChangeProperty(Pid::REPEAT_END, false);
-                        }
+                    }
+                    if (measureInsert->repeatStart()) {
+                        localMeasure->undoChangeProperty(Pid::REPEAT_START, true);
+                        measureInsert->undoChangeProperty(Pid::REPEAT_START, false);
+                    }
+                } else {
+                    if (pm && pm->repeatEnd()) {
+                        localMeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                        pm->undoChangeProperty(Pid::REPEAT_END, false);
                     }
                 }
             } else if (!measureInsert && tick == Fraction(0, 1)) {
