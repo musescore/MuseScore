@@ -76,6 +76,8 @@ using namespace mu::engraving;
 
 #define MEI_BASIC_VERSION "5.0+basic"
 
+#define MEI_FB_HARM "fb-harm"
+
 /**
  * Read the Score from the file.
  * Return false on error.
@@ -430,6 +432,14 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         item = Factory::createDynamic(chordRest->segment());
     } else if (meiElement.m_name == "fermata") {
         item = Factory::createFermata(chordRest->segment());
+    } else if (meiElement.m_name == "harm") {
+        const libmei::AttLabelled* labeledAtt = dynamic_cast<const libmei::AttLabelled*>(&meiElement);
+        if (labeledAtt && (labeledAtt->GetLabel() == MEI_FB_HARM)) {
+            item = Factory::createFiguredBass(chordRest->segment());
+        }
+        else {
+            item = Factory::createHarmony(chordRest->segment());
+        }
     } else if (meiElement.m_name == "harm") {
         item = Factory::createHarmony(chordRest->segment());
     } else if (meiElement.m_name == "tempo") {
@@ -2036,6 +2046,8 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readFermata(xpathNode.node(), measure);
         } else if (elementName == "hairpin") {
             success = success && this->readHairpin(xpathNode.node(), measure);
+        } else if (elementName == "harm" && xpathNode.node().select_node("./fb")) {
+            success = success && this->readFb(xpathNode.node(), measure);
         } else if (elementName == "harm") {
             success = success && this->readHarm(xpathNode.node(), measure);
         } else if (elementName == "mordent") {
@@ -2208,6 +2220,77 @@ bool MeiImporter::readDynam(pugi::xml_node dynamNode, Measure* measure)
 }
 
 /**
+ * Read a f (FiguredBassItem)
+ */
+
+bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBass)
+{
+    IF_ASSERT_FAILED(figuredBass) {
+        return false;
+    }
+
+    bool warning;
+    libmei::F meiF;
+    meiF.Read(fNode);
+    
+    const int line = static_cast<int>(figuredBass->itemsCount());
+    FiguredBassItem *figuredBassItem = figuredBass->createItem(line);
+    if (!figuredBassItem) {
+        return true;
+    }
+    figuredBassItem->setTrack(figuredBass->track());
+    figuredBassItem->setParent(figuredBass);
+
+    StringList meiLines;
+    this->readLines(fNode, meiLines);
+
+    Convert::fFromMEI(figuredBassItem, meiLines, meiF, warning);
+    
+    figuredBass->appendItem(figuredBassItem);
+
+    return true;
+}
+
+/**
+ * Read a fb (FiguredBass).
+ */
+
+bool MeiImporter::readFb(pugi::xml_node harmNode, Measure* measure)
+{
+    // Already checked in MeiImporter::readControlEvents
+    pugi::xml_node fbNode = harmNode.select_node("./fb").node();
+    
+    IF_ASSERT_FAILED(fbNode && measure) {
+        return false;
+    }
+
+    bool warning;
+    libmei::Harm meiHarm;
+    meiHarm.Read(harmNode);
+    // Add a custom label for MeiImporter::addAnnotation to create a FiguredBass
+    meiHarm.SetLabel(MEI_FB_HARM);
+    libmei::Fb meiFb;
+    meiFb.Read(fbNode);
+
+    FiguredBass* figuredBass = static_cast<FiguredBass*>(this->addAnnotation(meiHarm, measure));
+    if (!figuredBass) {
+        // Warning message given in MeiExpoter::addAnnotation
+        return true;
+    }
+    
+    Convert::fbFromMEI(figuredBass, meiHarm, meiFb, warning);
+    
+    bool success = true;
+    
+    pugi::xpath_node_set fs = fbNode.select_nodes("./f");
+    for (pugi::xpath_node xpathNode : fs) {
+        success = success && this->readF(xpathNode.node(), figuredBass);
+    }
+
+    return success;
+}
+
+/**
  * Read a fermata.
  */
 
@@ -2276,6 +2359,7 @@ bool MeiImporter::readHairpin(pugi::xml_node hairpinNode, Measure* measure)
 
 /**
  * Read a harm.
+ * <harm> with <fb> are read by MeiImporter::readFb
  */
 
 bool MeiImporter::readHarm(pugi::xml_node harmNode, Measure* measure)
