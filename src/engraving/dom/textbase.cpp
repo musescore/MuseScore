@@ -3393,8 +3393,7 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
         }
     }
 
-    bool isTextSpecificProperty = id == Pid::FONT_STYLE || id == Pid::FONT_FACE || id == Pid::FONT_SIZE || id == Pid::TEXT_SCRIPT_ALIGN;
-    if (!isTextSpecificProperty) {
+    if (propertyGroup(id) != PropertyGroup::TEXT) {
         EngravingItem::undoChangeProperty(id, v, ps);
         return;
     }

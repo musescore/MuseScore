@@ -40,6 +40,8 @@ public:
 
     StaffText* clone() const override { return new StaffText(*this); }
 
+    bool canBeExcludedFromOtherParts() const override { return true; }
+
 private:
     PropertyValue propertyDefault(Pid id) const override;
 };

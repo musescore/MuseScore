@@ -4039,8 +4039,6 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
 
         if (score == this) {
             result = newMeasureBase;
-        } else if (!result && score == scores.back()) {
-            result = newMeasureBase;
         }
 
         if (actualBeforeMeasure) {

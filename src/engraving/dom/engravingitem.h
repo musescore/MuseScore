@@ -569,7 +569,7 @@ public:
     void unlinkPropertyFromMaster(Pid id);
     void relinkPropertiesToMaster(PropertyGroup propGroup);
     PropertyPropagation propertyPropagation(EngravingItem* destinationItem, Pid propertyId);
-    bool canBeExcludedFromOtherParts() const;
+    virtual bool canBeExcludedFromOtherParts() const { return false; }
     virtual void manageExclusionFromParts(bool exclude);
 
     //! --- Old Interface ---

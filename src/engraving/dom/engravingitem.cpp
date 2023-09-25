@@ -1302,33 +1302,17 @@ PropertyPropagation EngravingItem::propertyPropagation(EngravingItem* destinatio
         return PropertyPropagation::PROPAGATE;
     }
 
-    if (sourceScore != destinationScore && !sourceScore->isMaster()) {
+    if (!sourceScore->isMaster()) {
         // Properties are only propagated when being edited from master. If this is being edited
         // from a part score, we mark it as unlinked so it becomes independent in the part.
         return PropertyPropagation::UNLINK;
     }
 
-    if (destinationItem->isPropertyLinkedToMaster(propertyId) || sourceScore == destinationScore) {
+    if (destinationItem->isPropertyLinkedToMaster(propertyId)) {
         return PropertyPropagation::PROPAGATE;
     }
 
     return PropertyPropagation::NONE;
-}
-
-bool EngravingItem::canBeExcludedFromOtherParts() const
-{
-    static const std::set<ElementType> TYPE_EXCLUDIBLE_FROM_PARTS {
-        ElementType::STAFF_TEXT,
-        ElementType::SYSTEM_TEXT,
-        ElementType::CLEF,
-        ElementType::OTTAVA_SEGMENT,
-        ElementType::HBOX,
-        ElementType::VBOX,
-        ElementType::TBOX,
-        ElementType::FBOX,
-    };
-
-    return mu::contains(TYPE_EXCLUDIBLE_FROM_PARTS, type());
 }
 
 //---------------------------------------------------------

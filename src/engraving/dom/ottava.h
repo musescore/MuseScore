@@ -91,6 +91,8 @@ public:
     Ottava* ottava() const { return (Ottava*)spanner(); }
 
     EngravingItem* propertyDelegate(Pid) override;
+
+    bool canBeExcludedFromOtherParts() const override { return true; }
 };
 
 //---------------------------------------------------------
