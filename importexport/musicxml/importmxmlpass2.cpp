@@ -1248,11 +1248,13 @@ static NoteHead::Group convertNotehead(QString mxmlName)
       map["diamond"] = int(NoteHead::Group::HEAD_DIAMOND);
       map["cross"] = int(NoteHead::Group::HEAD_PLUS);
       map["x"] = int(NoteHead::Group::HEAD_CROSS);
+      map["circled"] = int(NoteHead::Group::HEAD_CIRCLED);
       map["circle-x"] = int(NoteHead::Group::HEAD_XCIRCLE);
       map["inverted triangle"] = int(NoteHead::Group::HEAD_TRIANGLE_DOWN);
       map["slashed"] = int(NoteHead::Group::HEAD_SLASHED1);
       map["back slashed"] = int(NoteHead::Group::HEAD_SLASHED2);
       map["normal"] = int(NoteHead::Group::HEAD_NORMAL);
+      map["rectangle"] = int(NoteHead::Group::HEAD_LA);
       map["do"] = int(NoteHead::Group::HEAD_DO);
       map["re"] = int(NoteHead::Group::HEAD_RE);
       map["mi"] = int(NoteHead::Group::HEAD_MI);

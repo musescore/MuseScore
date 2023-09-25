@@ -315,7 +315,6 @@ class Note final : public Element {
       int concertPitchIdx() const;
       void updateRelLine(int relLine, bool undoable);
       bool isNoteName() const;
-      SymId noteHead() const;
 
       void normalizeLeftDragDelta(Segment* seg, EditData &ed, NoteEditData* ned);
 
@@ -515,6 +514,7 @@ class Note final : public Element {
 
       void addParentheses();
 
+      SymId noteHead() const;
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type, int tpc, Key key, NoteHead::Scheme scheme);
       static SymId noteHead(int direction, NoteHead::Group, NoteHead::Type);
       NoteVal noteVal() const;
