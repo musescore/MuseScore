@@ -3022,7 +3022,7 @@ bool MStyle::load(QFile* qf, bool ign)
 
 extern void readPageFormat(MStyle* style, XmlReader& e);
 
-void MStyle::load(XmlReader& e)
+void MStyle::load(XmlReader& e, bool isMu4)
       {
       QString oldChordDescriptionFile = value(Sid::chordDescriptionFile).toString();
       bool chordListTag = false;
@@ -3057,7 +3057,7 @@ void MStyle::load(XmlReader& e)
                   e.skipCurrentElement();
             else if (tag == "dontHideStavesInFirstSystem") // pre-4.0 typo: "dontHidStavesInFirstSystm"
                   set(Sid::dontHideStavesInFirstSystem, e.readBool());
-            else if (tag == "hairpinLineStyle") {
+            else if (isMu4 && tag == "hairpinLineStyle") {
                   int _lineStyle = Qt::SolidLine;
                   QString lineStyle = e.readElementText();
                   if (lineStyle == "dotted")
@@ -3066,7 +3066,7 @@ void MStyle::load(XmlReader& e)
                         _lineStyle = Qt::DashLine;
                   set(Sid::hairpinLineStyle, _lineStyle);
                   }
-            else if (tag == "hairpinLineLineStyle") {
+            else if (isMu4 && tag == "hairpinLineLineStyle") {
                   int _lineStyle = Qt::CustomDashLine;
                   QString lineStyle = e.readElementText();
                   if (lineStyle == "dotted")
@@ -3075,7 +3075,7 @@ void MStyle::load(XmlReader& e)
                         _lineStyle = Qt::SolidLine;
                   set(Sid::hairpinLineLineStyle, _lineStyle);
                   }
-            else if (tag == "letRingLineStyle") {
+            else if (isMu4 && tag == "letRingLineStyle") {
                   int _lineStyle = Qt::DashLine;
                   QString lineStyle = e.readElementText();
                   if (lineStyle == "dotted")
@@ -3084,7 +3084,7 @@ void MStyle::load(XmlReader& e)
                         _lineStyle = Qt::SolidLine;
                   set(Sid::letRingLineStyle, _lineStyle);
                   }
-            else if (tag == "palmMuteLineStyle") {
+            else if (isMu4 && tag == "palmMuteLineStyle") {
                   int _lineStyle = Qt::DashLine;
                   QString lineStyle = e.readElementText();
                   if (lineStyle == "dotted")
@@ -3093,7 +3093,7 @@ void MStyle::load(XmlReader& e)
                         _lineStyle = Qt::SolidLine;
                   set(Sid::palmMuteLineStyle, _lineStyle);
                   }
-            else if (tag == "pedalLineStyle") { // pre-4.0 typo: "pedalListStyle"
+            else if (isMu4 && tag == "pedalLineStyle") { // pre-4.0 typo: "pedalListStyle"
                   int _lineStyle = Qt::SolidLine;
                   QString lineStyle = e.readElementText();
                   if (lineStyle == "dotted")
@@ -3104,7 +3104,7 @@ void MStyle::load(XmlReader& e)
                   }
             else if (tag == "useWideBeams") // beamDistance maps to useWideBeams in 4.0 and later
                   set(Sid::beamDistance, e.readDouble() > 0.75);
-            else if (tag == "voltaLineStyle") {
+            else if (isMu4 && tag == "voltaLineStyle") {
                   int _lineStyle = Qt::SolidLine;
                   QString lineStyle = e.readElementText();
                   if (lineStyle == "dotted")

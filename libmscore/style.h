@@ -1477,7 +1477,7 @@ class MStyle {
       void checkChordList();
 
       bool load(QFile* qf, bool ign = false);
-      void load(XmlReader& e);
+      void load(XmlReader& e, bool isMu4 = false);
       void applyNewDefaults(const MStyle& other, const int defaultsVersion);
       void save(XmlWriter& xml, bool optimize);
       bool readProperties(XmlReader&);

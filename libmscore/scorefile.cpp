@@ -873,7 +873,7 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
                   if (el.name() == "museScore") {
                         while (el.readNextStartElement()) {
                               if (el.name() == "Style")
-                                    masterScore()->style().load(el);
+                                    masterScore()->style().load(el, true);
                               else
                                     el.unknown();
                               }
