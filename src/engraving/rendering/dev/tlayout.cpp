@@ -4767,7 +4767,11 @@ void TLayout::layout(StringTunings* item, LayoutContext& ctx)
 
     for (TextBlock& block : item->mutLayoutData()->blocks) {
         double xMove = 0.0;
-        for (auto& it = ++(block.fragments().begin()); it != block.fragments().end(); ++it) {
+        auto& fragments = block.fragments();
+        for (auto& it = fragments.begin(); it != fragments.end(); ++it) {
+            if (it == fragments.begin()) { // need to skip the first
+                continue;
+            }
             TextFragment& fragment = *it;
             if (fragment.font(item).type() == mu::draw::Font::Type::MusicSymbol) {
                 xMove = secondStringXAlign - fragment.pos.x();
