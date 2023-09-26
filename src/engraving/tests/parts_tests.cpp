@@ -1187,9 +1187,9 @@ TEST_F(Engraving_PartsTests, partExclusion)
             if (item && item->isClef() && !item->generated()) {
                 itemsToExclude.push_back(item);
             }
-            for (EngravingItem* item : segment.annotations()) {
-                if (item->isTextBase()) {
-                    itemsToExclude.push_back(item);
+            for (EngravingItem* annotation : segment.annotations()) {
+                if (annotation->isTextBase()) {
+                    itemsToExclude.push_back(annotation);
                 }
             }
         }
