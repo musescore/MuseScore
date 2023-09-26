@@ -253,6 +253,14 @@ EditStyle::EditStyle(QWidget* parent)
     articulationKeepTogether->addButton(radioArticKeepTogether, 1);
     articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
 
+    QButtonGroup* tieSingleNote = new QButtonGroup(this);
+    tieSingleNote->addButton(tieSingleNoteInside, int(TiePlacement::INSIDE));
+    tieSingleNote->addButton(tieSingleNoteOutside, int(TiePlacement::OUTSIDE));
+
+    QButtonGroup* tieChord = new QButtonGroup(this);
+    tieChord->addButton(tieChordInside, int(TiePlacement::INSIDE));
+    tieChord->addButton(tieChordOutside, int(TiePlacement::OUTSIDE));
+
     // ====================================================
     // Style widgets
     // ====================================================
@@ -430,6 +438,9 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::voltaPosAbove,           false, voltaPosAbove,           resetVoltaPosAbove },
         { StyleId::voltaHook,               false, voltaHook,               resetVoltaHook },
         { StyleId::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth },
+
+        { StyleId::tiePlacementSingleNote, false, tieSingleNote, 0 },
+        { StyleId::tiePlacementChord, false, tieChord, 0 },
 
         { StyleId::ottavaPosAbove,          false, ottavaPosAbove,          resetOttavaPosAbove },
         { StyleId::ottavaPosBelow,          false, ottavaPosBelow,          resetOttavaPosBelow },
@@ -1688,6 +1699,10 @@ PropertyValue EditStyle::getValue(StyleId idx)
         AlignSelect* as = qobject_cast<AlignSelect*>(sw.widget);
         return as->align();
     } break;
+    case P_TYPE::TIE_PLACEMENT: {
+        QButtonGroup* bg = qobject_cast<QButtonGroup*>(sw.widget);
+        return TiePlacement(bg->checkedId());
+    } break;
     default: {
         ASSERT_X(QString::asprintf("EditStyle::getValue: unhandled type <%d>", static_cast<int>(type)));
     } break;
@@ -1752,6 +1767,7 @@ void EditStyle::setValues()
         case P_TYPE::HOOK_TYPE:
         case P_TYPE::DYNAMIC_TYPE:
         case P_TYPE::ACCIDENTAL_ROLE:
+        case P_TYPE::TIE_PLACEMENT:
         case P_TYPE::INT: {
             int value = val.toInt();
             if (qobject_cast<QComboBox*>(sw.widget)) {

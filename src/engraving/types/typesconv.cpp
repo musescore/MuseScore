@@ -379,6 +379,22 @@ IntervalType TConv::fromXml(const AsciiStringView& tag, IntervalType def)
     return findTypeByXmlTag<IntervalType>(INTERVAL_TYPE, tag, def);
 }
 
+static const std::vector<Item<TiePlacement> > TIE_PLACEMENT = {
+    { TiePlacement::AUTO, "auto" },
+    { TiePlacement::INSIDE, "inside" },
+    { TiePlacement::OUTSIDE, "outside" },
+};
+
+AsciiStringView TConv::toXml(TiePlacement tiePlacement)
+{
+    return findXmlTagByType<TiePlacement>(TIE_PLACEMENT, tiePlacement);
+}
+
+TiePlacement TConv::fromXml(const AsciiStringView& str, TiePlacement def)
+{
+    return findTypeByXmlTag<TiePlacement>(TIE_PLACEMENT, str, def);
+}
+
 String TConv::translatedUserName(SymId v)
 {
     return SymNames::translatedUserNameForSymId(v);

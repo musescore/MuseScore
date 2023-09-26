@@ -822,7 +822,7 @@ Slur::Slur(const Slur& s)
 //    relative to System() position.
 //---------------------------------------------------------
 
-void Slur::slurPosChord(SlurPos* sp)
+void Slur::slurPosChord(SlurTiePos* sp)
 {
     Chord* stChord;
     Chord* enChord;

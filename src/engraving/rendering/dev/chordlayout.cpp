@@ -639,26 +639,6 @@ void ChordLayout::layoutSpanners(Chord* item, LayoutContext& ctx)
     }
 }
 
-void ChordLayout::layoutSpanners(Chord* item, System* system, const Fraction& stick, LayoutContext& ctx)
-{
-    //! REVIEW Needs explanation
-    for (const Note* note : item->notes()) {
-        Tie* t = note->tieFor();
-        if (t) {
-            SlurTieLayout::tieLayoutFor(t, system);
-        }
-        t = note->tieBack();
-        if (t) {
-            if (t->startNote()->tick() < stick) {
-                SlurTieLayout::tieLayoutBack(t, system);
-            }
-        }
-        for (Spanner* sp : note->spannerBack()) {
-            TLayout::layout(sp, ctx);
-        }
-    }
-}
-
 //---------------------------------------------------------
 //   layoutArticulations
 //    layout tenuto and staccato

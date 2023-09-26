@@ -225,6 +225,9 @@ public:
 
     static const char* userName(Key v, bool isAtonal = false, bool isCustom = false);
     static String translatedUserName(Key v, bool isAtonal = false, bool isCustom = false);
+
+    static AsciiStringView toXml(TiePlacement interval);
+    static TiePlacement fromXml(const AsciiStringView& str, TiePlacement def);
 };
 }
 

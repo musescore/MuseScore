@@ -88,6 +88,7 @@ struct Constants
 //    4.20 (Version 4.2)
 //       - By default, frames are not cloned to parts
 //       - Corrections to key signature and transposition (#18998)
+//       - New inside/outside style for ties
 
     constexpr static int DIVISION = 480;
     constexpr static BeatsPerSecond DEFAULT_TEMPO = 2.0; //default tempo is equal 120 bpm

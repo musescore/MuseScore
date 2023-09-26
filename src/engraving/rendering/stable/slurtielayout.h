@@ -27,7 +27,7 @@
 namespace mu::engraving {
 class Slur;
 class SlurSegment;
-struct SlurPos;
+struct SlurTiePos;
 class SpannerSegment;
 class System;
 class Chord;
@@ -50,10 +50,10 @@ public:
 
 private:
 
-    static void slurPos(Slur* item, SlurPos* sp, LayoutContext& ctx);
+    static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
 
-    static void tiePos(Tie* item, SlurPos* sp);
+    static void tiePos(Tie* item, SlurTiePos* sp);
 
     static double defaultStemLengthStart(Tremolo* tremolo);
     static double defaultStemLengthEnd(Tremolo* tremolo);
