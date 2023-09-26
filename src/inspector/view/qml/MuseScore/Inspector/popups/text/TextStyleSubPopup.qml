@@ -35,16 +35,31 @@ StyledPopupView {
 
     required property QtObject textSettingsModel
 
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: textStyleSubSettingsNavPanel.order
+
     height: contentHeight
 
     Column {
         width: parent.width
         spacing: 12
 
+        NavigationPanel {
+            id: textStyleSubSettingsNavPanel
+            name: "TextStyleSubSettings"
+            direction: NavigationPanel.Vertical
+            section: root.navigationSection
+            order: root.navigationOrderStart
+            accessible.name: qsTrc("inspector", "Additional text style controls")
+        }
+
         DropdownPropertyView {
             id: textStyleSection
             titleText: qsTrc("inspector", "Text style")
             propertyItem: root.textSettingsModel ? root.textSettingsModel.textType : null
+
+            navigationPanel: textStyleSubSettingsNavPanel
+            navigationRowStart: 1
 
             visible: !root.textSettingsModel.isDynamicSpecificSettings
             height: visible ? implicitHeight : 0
@@ -55,6 +70,9 @@ StyledPopupView {
         PlacementSection {
             id: textPlacementSection
             propertyItem: root.textSettingsModel ? root.textSettingsModel.textPlacement : null
+
+            navigationPanel: textStyleSubSettingsNavPanel
+            navigationRowStart: textStyleSection.navigationRowEnd + 1
 
             visible: !root.textSettingsModel.isDynamicSpecificSettings
         }

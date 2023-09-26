@@ -35,12 +35,27 @@ StyledPopupView {
 
     required property QtObject textSettingsModel
 
+    property int navigationOrderStart: 0
+    property int navigationOrderEnd: frameSettingsNavPanel.order
+
     height: contentHeight
+
+    NavigationPanel {
+        id: frameSettingsNavPanel
+        name: "FrameSettings"
+        direction: NavigationPanel.Vertical
+        section: root.navigationSection
+        order: root.navigationOrderStart
+        accessible.name: qsTrc("inspector", "Frame settings")
+    }
 
     FrameSettings {
         id: frameSettings
 
         height: implicitHeight
+
+        navigationPanel: frameSettingsNavPanel
+        navigationRowStart: 1
 
         frameType: root.textSettingsModel ? root.textSettingsModel.frameType : null
         frameBorderColor: root.textSettingsModel ? root.textSettingsModel.frameBorderColor : null
