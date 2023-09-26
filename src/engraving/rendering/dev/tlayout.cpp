@@ -1925,10 +1925,10 @@ void TLayout::layout(const Fermata* item, Fermata::LayoutData* ldata, const Layo
     const Segment* s = item->segment();
     const EngravingItem* e = s->element(item->track());
 
-    LD_CONDITION(e->layoutData()->isSetBbox()); // e->shape()
-    LD_CONDITION(e->layoutData()->isSetPos());
-
     if (e) {
+        LD_CONDITION(e->layoutData()->isSetBbox()); // e->shape()
+        LD_CONDITION(e->layoutData()->isSetPos());
+
         if (e->isChord()) {
             const Chord* chord = toChord(e);
             x = chord->x() + chord->centerX();
@@ -4266,7 +4266,10 @@ void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::Layo
             // align to a point just after the header
             EngravingItem* e = header->element(item->track());
 
-            LD_CONDITION(e->layoutData()->isSetBbox());
+            if (e) {
+                LD_CONDITION(e->layoutData()->isSetBbox());
+            }
+
             LD_CONDITION(header->layoutData()->isSetBbox());
 
             double w = e ? e->layoutData()->bbox().width() : header->layoutData()->bbox().width();
