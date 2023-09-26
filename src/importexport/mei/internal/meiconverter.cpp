@@ -1338,6 +1338,8 @@ void Convert::fFromMEI(engraving::FiguredBassItem* figuredBassItem, const String
     // content
     String text = meiLines.join(u"\n");
     figuredBassItem->parse(text);
+
+    UNUSED(meiF);
 }
 
 libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, StringList& meiLines)
@@ -1354,6 +1356,10 @@ libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, Str
 void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb, bool& warning)
 {
     warning = false;
+
+    UNUSED(figuredBass);
+    UNUSED(meiHarm);
+    UNUSED(meiFb);
 }
 
 std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBass* figuredBass)
