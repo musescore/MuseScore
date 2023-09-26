@@ -439,8 +439,6 @@ EngravingItem* MeiImporter::addAnnotation(const libmei::Element& meiElement, Mea
         } else {
             item = Factory::createHarmony(chordRest->segment());
         }
-    } else if (meiElement.m_name == "harm") {
-        item = Factory::createHarmony(chordRest->segment());
     } else if (meiElement.m_name == "tempo") {
         item = Factory::createTempoText(chordRest->segment());
     } else {
@@ -2045,10 +2043,12 @@ bool MeiImporter::readControlEvents(pugi::xml_node parentNode, Measure* measure)
             success = success && this->readFermata(xpathNode.node(), measure);
         } else if (elementName == "hairpin") {
             success = success && this->readHairpin(xpathNode.node(), measure);
-        } else if (elementName == "harm" && xpathNode.node().select_node("./fb")) {
-            success = success && this->readFb(xpathNode.node(), measure);
         } else if (elementName == "harm") {
-            success = success && this->readHarm(xpathNode.node(), measure);
+            if (xpathNode.node().select_node("./fb")) {
+                success = success && this->readFb(xpathNode.node(), measure);
+            } else {
+                success = success && this->readHarm(xpathNode.node(), measure);
+            }
         } else if (elementName == "mordent") {
             success = success && this->readMordent(xpathNode.node(), measure);
         } else if (elementName == "octave") {
