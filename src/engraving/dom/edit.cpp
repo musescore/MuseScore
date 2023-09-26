@@ -3992,17 +3992,17 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
         tick = last() ? last()->endTick() : Fraction(0, 1);
     }
 
-    Fraction currentTimeSig = sigmap()->timesig(tick.ticks()).nominal();   // use nominal time signature of current measure
+    const Fraction currentTimeSig = sigmap()->timesig(tick.ticks()).nominal();   // use nominal time signature of current measure
     Measure* localMeasure = nullptr; // measure base in "this" score
     MeasureBase* linkedMasterMeasure = nullptr; // measure base in root score (for linking)
     Fraction ticks   = { 0, 1 };
 
     MeasureBase* result = nullptr;
-    bool isBeginning = tick.isZero();
+    const bool isBeginning = tick.isZero();
 
-    bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX || type == ElementType::VBOX;
-    bool isTitleFrame = (type == ElementType::VBOX || type == ElementType::TBOX) && isBeginning;
-    bool dontCloneFrameToParts = isFrame && !isTitleFrame;
+    const bool isFrame = type == ElementType::FBOX || type == ElementType::HBOX || type == ElementType::TBOX || type == ElementType::VBOX;
+    const bool isTitleFrame = (type == ElementType::VBOX || type == ElementType::TBOX) && isBeginning;
+    const bool dontCloneFrameToParts = isFrame && !isTitleFrame;
 
     std::list<Score*> scores;
     if (options.addToAllScores && !dontCloneFrameToParts) {
@@ -4927,8 +4927,8 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
 {
     bool changed = false;
 
-    PropertyValue currentPropValue = item->getProperty(propId);
-    PropertyFlags currentPropFlags = item->propertyFlags(propId);
+    const PropertyValue currentPropValue = item->getProperty(propId);
+    const PropertyFlags currentPropFlags = item->propertyFlags(propId);
 
     if ((currentPropValue != propValue) || (currentPropFlags != propFlags)) {
         item->setPropertyFlags(propId, propFlags);
@@ -4936,7 +4936,7 @@ bool Score::undoPropertyChanged(EngravingItem* item, Pid propId, const PropertyV
         changed = true;
     }
 
-    std::list<EngravingObject*> linkedItems = item->linkListForPropertyPropagation();
+    const std::list<EngravingObject*> linkedItems = item->linkListForPropertyPropagation();
 
     for (EngravingObject* linkedItem : linkedItems) {
         if (linkedItem == item) {

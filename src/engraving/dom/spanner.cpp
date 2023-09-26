@@ -364,7 +364,7 @@ void SpannerSegment::scanElements(void* data, void (* func)(void*, EngravingItem
     }
 }
 
-const std::list<EngravingObject*> SpannerSegment::linkListForPropertyPropagation() const
+std::list<EngravingObject*> SpannerSegment::linkListForPropertyPropagation() const
 {
     std::list<EngravingObject*> result;
     result.push_back(const_cast<SpannerSegment*>(this));
@@ -373,7 +373,7 @@ const std::list<EngravingObject*> SpannerSegment::linkListForPropertyPropagation
         return result;
     }
 
-    for (EngravingObject* linkedSpanner : m_spanner->linkList()) {
+    for (const EngravingObject* linkedSpanner : m_spanner->linkList()) {
         if (linkedSpanner == m_spanner || toSpanner(linkedSpanner)->placement() != m_spanner->placement()) {
             continue;
         }

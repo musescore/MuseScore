@@ -110,7 +110,7 @@ public:
     String accessibleInfo() const override;
     void triggerLayout() const override;
 
-    const std::list<EngravingObject*> linkListForPropertyPropagation() const override;
+    std::list<EngravingObject*> linkListForPropertyPropagation() const override;
     bool isPropertyLinkedToMaster(Pid id) const override;
 
 protected:

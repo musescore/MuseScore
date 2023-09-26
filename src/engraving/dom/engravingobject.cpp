@@ -386,7 +386,7 @@ static void changeProperty(EngravingObject* e, Pid t, const PropertyValue& st, P
 
 static void changeProperties(EngravingObject* object, Pid propertyId, const PropertyValue& propertyValue, PropertyFlags propertyFlag)
 {
-    std::list<EngravingObject*> linkList = object->linkListForPropertyPropagation();
+    const std::list<EngravingObject*> linkList = object->linkListForPropertyPropagation();
     for (EngravingObject* linkedObject : linkList) {
         if (linkedObject == object) {
             changeProperty(object, propertyId, propertyValue, propertyFlag);

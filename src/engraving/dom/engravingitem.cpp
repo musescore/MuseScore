@@ -1236,7 +1236,7 @@ bool EngravingItem::setProperty(Pid propertyId, const PropertyValue& v)
 void EngravingItem::manageExclusionFromParts(bool exclude)
 {
     if (exclude) {
-        std::list<EngravingObject*> links = linkList();
+        const std::list<EngravingObject*> links = linkList();
         for (EngravingObject* linkedObject : links) {
             if (linkedObject->score() == score()) {
                 continue;
@@ -1257,7 +1257,7 @@ void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
 {
     assert(!score()->isMaster());
 
-    std::list<EngravingObject*> linkedElements = linkListForPropertyPropagation();
+    const std::list<EngravingObject*> linkedElements = linkListForPropertyPropagation();
     EngravingObject* masterElement = nullptr;
     for (EngravingObject* element : linkedElements) {
         if (element->score()->isMaster()) {
@@ -1271,18 +1271,18 @@ void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
     }
 
     for (int i = 0; i < static_cast<int>(Pid::END); ++i) {
-        Pid propertyId = static_cast<Pid>(i);
+        const Pid propertyId = static_cast<Pid>(i);
         if (propertyGroup(propertyId) != propGroup) {
             continue;
         }
-        PropertyValue masterValue = masterElement->getProperty(propertyId);
-        PropertyFlags masterFlags = masterElement->propertyFlags(propertyId);
+        const PropertyValue masterValue = masterElement->getProperty(propertyId);
+        const PropertyFlags masterFlags = masterElement->propertyFlags(propertyId);
         setProperty(propertyId, masterValue);
         setPropertyFlags(propertyId, masterFlags);
     }
 }
 
-PropertyPropagation EngravingItem::propertyPropagation(EngravingItem* destinationItem, Pid propertyId)
+PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* destinationItem, Pid propertyId) const
 {
     assert(destinationItem != this);
 
@@ -1294,9 +1294,9 @@ PropertyPropagation EngravingItem::propertyPropagation(EngravingItem* destinatio
         return PropertyPropagation::NONE;
     }
 
-    Score* sourceScore = score();
-    Score* destinationScore = destinationItem->score();
-    bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
+    const Score* sourceScore = score();
+    const Score* destinationScore = destinationItem->score();
+    const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
 
     if ((isTextProperty && isPropertyLinkedToMaster(propertyId)) || sourceScore == destinationScore) {
         return PropertyPropagation::PROPAGATE;
