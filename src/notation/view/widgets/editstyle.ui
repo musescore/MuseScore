@@ -3989,7 +3989,7 @@ By default, they will be placed such as that their right end are at the same lev
          <enum>QLayout::SetMinimumSize</enum>
         </property>
         <item>
-         <widget class="QGroupBox" name="groupbox_measure">
+         <widget class="QGroupBox" name="groupBox_measure">
           <property name="title">
            <string>Measures</string>
           </property>
@@ -5922,7 +5922,7 @@ By default, they will be placed such as that their right end are at the same lev
       <widget class="QWidget" name="PageMeasureRepeats">
        <layout class="QGridLayout" name="gridLayout_58">
         <item row="0" column="0">
-         <widget class="QGroupBox" name="groupBox_2">
+         <widget class="QGroupBox" name="groupBox_measure_repeats">
           <property name="title">
            <string>Measure repeats</string>
           </property>
@@ -7279,7 +7279,7 @@ By default, they will be placed such as that their right end are at the same lev
          </widget>
         </item>
         <item>
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_ties">
           <property name="title">
            <string>Ties</string>
           </property>
@@ -13312,7 +13312,7 @@ By default, they will be placed such as that their right end are at the same lev
           </property>
           <layout class="QGridLayout" name="_12">
            <item row="12" column="0" colspan="3">
-            <widget class="QGroupBox" name="groupBox_40">
+            <widget class="QGroupBox" name="groupBox_text_style">
              <property name="title">
               <string/>
              </property>
