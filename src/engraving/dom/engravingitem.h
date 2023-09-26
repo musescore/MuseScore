@@ -504,7 +504,7 @@ public:
             //m_pos.reset();
         }
 
-        bool isValid() const { return m_bbox.has_value(); }
+        virtual bool isValid() const { return m_bbox.has_value(); }
 
         bool isSkipDraw() const { return m_isSkipDraw; }
         void setIsSkipDraw(bool val) { m_isSkipDraw = val; }
