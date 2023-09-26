@@ -61,6 +61,8 @@ Item {
             stepSize: 1
             value: root.auxSendItemModel.audioSignalPercentage
 
+            accentControl: root.auxSendItemModel.isActive
+
             navigation.panel: root.navigationPanel
             navigation.row: root.navigationRowStart
             navigation.accessible.name: root.accessibleName
