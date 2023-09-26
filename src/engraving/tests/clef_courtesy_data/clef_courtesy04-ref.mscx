@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -238,6 +238,7 @@
         </Measure>
       <HBox>
         <width>5</width>
+        <excludeFromParts>0</excludeFromParts>
         </HBox>
       <Measure>
         <voice>

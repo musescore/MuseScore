@@ -384,14 +384,34 @@ static void changeProperty(EngravingObject* e, Pid t, const PropertyValue& st, P
 //   changeProperties
 //---------------------------------------------------------
 
-static void changeProperties(EngravingObject* e, Pid t, const PropertyValue& st, PropertyFlags ps)
+static void changeProperties(EngravingObject* object, Pid propertyId, const PropertyValue& propertyValue, PropertyFlags propertyFlag)
 {
-    if (propertyLink(t)) {
-        for (EngravingObject* ee : e->linkList()) {
-            changeProperty(ee, t, st, ps);
+    const std::list<EngravingObject*> linkList = object->linkListForPropertyPropagation();
+    for (EngravingObject* linkedObject : linkList) {
+        if (linkedObject == object) {
+            changeProperty(object, propertyId, propertyValue, propertyFlag);
+            continue;
         }
-    } else {
-        changeProperty(e, t, st, ps);
+
+        if (!object->isEngravingItem() || !linkedObject->isEngravingItem()) {
+            continue;
+        }
+
+        EngravingItem* item = toEngravingItem(object);
+        EngravingItem* linkedItem = toEngravingItem(linkedObject);
+        PropertyPropagation propertyPropagate = item->propertyPropagation(linkedItem, propertyId);
+        switch (propertyPropagate) {
+        case PropertyPropagation::NONE:
+            break;
+        case PropertyPropagation::PROPAGATE:
+            changeProperty(linkedObject, propertyId, propertyValue, propertyFlag);
+            break;
+        case PropertyPropagation::UNLINK:
+            item->unlinkPropertyFromMaster(propertyId);
+            break;
+        default:
+            break;
+        }
     }
 }
 
@@ -444,6 +464,15 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
             EngravingItem* e = toEngravingItem(this);
             if (e->offset() != v.value<PointF>()) {
                 e->setOffsetChanged(true, false, v.value<PointF>() - e->offset());
+            }
+        }
+    } else if (id == Pid::EXCLUDE_FROM_OTHER_PARTS) {
+        if (isEngravingItem() && getProperty(Pid::EXCLUDE_FROM_OTHER_PARTS) != v) {
+            EngravingItem* delegate = toEngravingItem(this)->propertyDelegate(id);
+            if (delegate) {
+                delegate->manageExclusionFromParts(v.toBool());
+            } else {
+                toEngravingItem(this)->manageExclusionFromParts(v.toBool());
             }
         }
     }

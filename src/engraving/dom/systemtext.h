@@ -41,6 +41,8 @@ public:
     SystemText* clone() const override { return new SystemText(*this); }
     Segment* segment() const { return (Segment*)explicitParent(); }
 
+    bool canBeExcludedFromOtherParts() const override { return true; }
+
 protected:
     PropertyValue propertyDefault(Pid id) const override;
 };

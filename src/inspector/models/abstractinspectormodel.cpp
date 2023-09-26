@@ -250,7 +250,22 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
         types << InspectorSectionType::SECTION_MEASURES;
     }
 
+    if (showPartsSection(selectedElementList)) {
+        types << InspectorSectionType::SECTION_PARTS;
+    }
+
     return types;
+}
+
+bool AbstractInspectorModel::showPartsSection(const QList<EngravingItem*>& selectedElementList)
+{
+    for (EngravingItem* element : selectedElementList) {
+        if (!element->score()->isMaster() || element->canBeExcludedFromOtherParts()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 bool AbstractInspectorModel::isEmpty() const

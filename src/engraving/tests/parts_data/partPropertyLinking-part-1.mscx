@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<museScore version="4.20">
+  <Score>
+    <Division>480</Division>
+    <Style>
+      <Spatium>1.74978</Spatium>
+      </Style>
+    <showInvisible>1</showInvisible>
+    <showUnprintable>1</showUnprintable>
+    <showFrames>1</showFrames>
+    <showMargins>0</showMargins>
+    <metaTag name="partName">Flute</metaTag>
+    <Part id="1">
+      <Staff id="1">
+        <linkedTo>1</linkedTo>
+        <StaffType group="pitched">
+          <name>stdNormal</name>
+          </StaffType>
+        </Staff>
+      <trackName>Flute</trackName>
+      <Instrument id="flute">
+        <longName>Flute</longName>
+        <shortName>Fl.</shortName>
+        <trackName>Flute</trackName>
+        <minPitchP>59</minPitchP>
+        <maxPitchP>98</maxPitchP>
+        <minPitchA>60</minPitchA>
+        <maxPitchA>93</maxPitchA>
+        <instrumentId>wind.flutes.flute</instrumentId>
+        <Channel>
+          <program value="73"/>
+          </Channel>
+        </Instrument>
+      </Part>
+    <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <excludeFromParts>0</excludeFromParts>
+        <Text>
+          <style>instrument_excerpt</style>
+          <text>Flute</text>
+          </Text>
+        </VBox>
+      <Measure>
+        <voice>
+          <KeySig>
+            <linked>
+              </linked>
+            <concertKey>0</concertKey>
+            </KeySig>
+          <TimeSig>
+            <linked>
+              <indexDiff>-1</indexDiff>
+              </linked>
+            <sigN>4</sigN>
+            <sigD>4</sigD>
+            </TimeSig>
+          <Dynamic>
+            <subtype>mf</subtype>
+            <velocity>80</velocity>
+            <dynamicsSize>1.2</dynamicsSize>
+            <linked>
+              <indexDiff>-2</indexDiff>
+              </linked>
+            <placement>above</placement>
+            <positionLinkedToMaster>0</positionLinkedToMaster>
+            <appearanceLinkedToMaster>0</appearanceLinkedToMaster>
+            <placement>above</placement>
+            <dynamicsSize>1.2</dynamicsSize>
+            </Dynamic>
+          <Chord>
+            <linked>
+              <indexDiff>-3</indexDiff>
+              </linked>
+            <durationType>whole</durationType>
+            <Note>
+              <linked>
+                <indexDiff>-4</indexDiff>
+                </linked>
+              <pitch>72</pitch>
+              <tpc>14</tpc>
+              </Note>
+            </Chord>
+          </voice>
+        </Measure>
+      </Staff>
+    <name>Flute</name>
+    </Score>
+  </museScore>

@@ -415,7 +415,27 @@ enum class Pid {
     CAPO_IGNORED_STRINGS,
     CAPO_GENERATE_TEXT,
 
+    POSITION_LINKED_TO_MASTER,
+    APPEARANCE_LINKED_TO_MASTER,
+    TEXT_LINKED_TO_MASTER,
+    EXCLUDE_FROM_OTHER_PARTS,
+
     END
+};
+
+// Determines propagation of properties between score and parts
+enum class PropertyPropagation {
+    NONE,
+    PROPAGATE,
+    UNLINK,
+};
+
+// Each group can be propagated differently between score and parts
+enum class PropertyGroup {
+    POSITION,
+    TEXT,
+    APPEARANCE,
+    NONE, // Properties that should not be taken into account when propagating
 };
 
 using PropertyIdSet = std::unordered_set<Pid>;
@@ -425,6 +445,7 @@ extern String propertyToString(Pid, const PropertyValue& value, bool mscx);
 extern P_TYPE propertyType(Pid);
 extern const char* propertyName(Pid);
 extern bool propertyLink(Pid id);
+extern PropertyGroup propertyGroup(Pid id);
 extern Pid propertyId(const AsciiStringView& name);
 extern String propertyUserName(Pid);
 } // namespace mu::engraving

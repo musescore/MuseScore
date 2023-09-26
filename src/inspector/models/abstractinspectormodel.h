@@ -62,7 +62,8 @@ public:
         SECTION_NOTATION,
         SECTION_TEXT,
         SECTION_SCORE_DISPLAY,
-        SECTION_SCORE_APPEARANCE
+        SECTION_SCORE_APPEARANCE,
+        SECTION_PARTS,
     };
     Q_ENUM(InspectorSectionType)
 
@@ -144,6 +145,7 @@ public:
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
     static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,
                                                                 const QList<mu::engraving::EngravingItem*>& selectedElementList = {});
+    static bool showPartsSection(const QList<mu::engraving::EngravingItem*>& selectedElementList);
 
     virtual bool isEmpty() const;
 

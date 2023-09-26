@@ -31,6 +31,7 @@ import "measures"
 import "notation"
 import "text"
 import "score"
+import "parts"
 
 ExpandableBlank {
     id: root
@@ -72,6 +73,7 @@ ExpandableBlank {
             }
         case Inspector.SECTION_SCORE_DISPLAY: return scoreSection
         case Inspector.SECTION_SCORE_APPEARANCE: return scoreAppearanceSection
+        case Inspector.SECTION_PARTS: return partsSection
         }
 
         return undefined
@@ -189,6 +191,25 @@ ExpandableBlank {
         id: scoreAppearanceSection
 
         ScoreAppearanceInspectorView {
+            model: root.sectionModel
+            navigationPanel: root.navigationPanel
+            navigationRowStart: root.navigation.row + 1
+            anchorItem: root.anchorItem
+
+            onEnsureContentVisibleRequested: function(invisibleContentHeight) {
+                root.ensureContentVisibleRequested(-invisibleContentHeight)
+            }
+
+            onPopupOpened: {
+                root.popupOpened(openedPopup, control)
+            }
+        }
+    }
+
+    Component {
+        id: partsSection
+
+        PartsSettings {
             model: root.sectionModel
             navigationPanel: root.navigationPanel
             navigationRowStart: root.navigation.row + 1

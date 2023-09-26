@@ -477,6 +477,20 @@ void Clef::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps)
     }
 }
 
+void Clef::manageExclusionFromParts(bool exclude)
+{
+    if (exclude) {
+        EngravingItem::manageExclusionFromParts(exclude);
+    } else {
+        Measure* measure = findMeasure();
+        EngravingItem* nextEl = measure && rtick() == measure->ticks() ? measure->next() : nullptr;
+        if (!nextEl) {
+            nextEl = nextElement();
+        }
+        score()->undoChangeClef(staff(), nextEl, clefType(), false, this);
+    }
+}
+
 //---------------------------------------------------------
 //   propertyDefault
 //---------------------------------------------------------

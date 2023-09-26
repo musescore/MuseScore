@@ -57,6 +57,7 @@ private:
     static void resetStemLengthsForTwoNoteTrems(MasterScore* masterScore);
     static void replaceStaffTextWithCapo(MasterScore* masterScore);
     static void addMissingInitKeyForTransposingInstrument(MasterScore* score);
+    static void resetFramesExclusionFromParts(MasterScore* masterScore);
 };
 }
 #endif // MU_ENGRAVING_COMPATUTILS_H

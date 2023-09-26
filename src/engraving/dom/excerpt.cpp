@@ -344,9 +344,10 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
 
     cloneStaves(masterScore, score, srcStaves, excerpt->tracksMapping());
 
+    MeasureBase* masterMeasure = masterScore->first();
     MeasureBase* scoreMeasure = score->first();
 
-    if (!scoreMeasure || !scoreMeasure->isVBox()) {
+    if ((!scoreMeasure || !scoreMeasure->isVBox()) && !masterMeasure->excludeFromOtherParts()) {
         Score::InsertMeasureOptions options;
         options.addToAllScores = false;
 
@@ -354,9 +355,8 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
         scoreMeasure = score->first();
     }
 
-    VBox* titleFrameScore = toVBox(scoreMeasure);
+    VBox* titleFrameScore = scoreMeasure && scoreMeasure->isVBox() ? toVBox(scoreMeasure) : nullptr;
 
-    MeasureBase* masterMeasure = masterScore->first();
     if (titleFrameScore && masterMeasure && masterMeasure->isVBox()) {
         VBox* titleFrameMaster = toVBox(masterMeasure);
 
@@ -763,7 +763,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
             for (Segment* oseg = m->first(); oseg; oseg = oseg->next()) {
                 Segment* ns = nullptr;           //create segment later, on demand
                 for (EngravingItem* e : oseg->annotations()) {
-                    if (e->generated()) {
+                    if (e->generated() || e->excludeFromOtherParts()) {
                         continue;
                     }
                     if ((e->track() == srcTrack && strack != mu::nidx && !e->systemFlag())
@@ -842,7 +842,7 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
                         }
                     }
 
-                    if (oe && !oe->generated()) {
+                    if (oe && !oe->generated() && !oe->excludeFromOtherParts()) {
                         EngravingItem* ne;
                         ne = oe->linkedClone();
                         ne->setTrack(track);
@@ -977,6 +977,8 @@ static MeasureBase* cloneMeasure(MeasureBase* mb, Score* score, const Score* osc
     }
 
     nmb->linkTo(mb);
+    nmb->setExcludeFromOtherParts(false);
+
     for (EngravingItem* e : mb->el()) {
         if (e->isLayoutBreak()) {
             LayoutBreakType st = toLayoutBreak(e)->layoutBreakType();
@@ -1032,6 +1034,9 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
     TieMap tieMap;
 
     for (MeasureBase* mb = sourceScore->measures()->first(); mb; mb = mb->next()) {
+        if (mb->excludeFromOtherParts()) {
+            continue;
+        }
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
         measures->add(newMeasure);
     }
@@ -1056,6 +1061,10 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
 
     for (auto i : sourceScore->spanner()) {
         Spanner* s    = i.second;
+        if (s->excludeFromOtherParts()) {
+            continue;
+        }
+
         track_idx_t dstTrack  = mu::nidx;
         track_idx_t dstTrack2 = mu::nidx;
 
@@ -1427,7 +1436,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
 
                 for (EngravingItem* e : oseg->annotations()) {
-                    if (e->generated()) {
+                    if (e->generated() || e->excludeFromOtherParts()) {
                         continue;
                     }
                     bool systemObject = e->systemFlag() && e->track() == 0;
@@ -1445,7 +1454,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
 
                 EngravingItem* oe = oseg->element(srcTrack);
-                if (oe == 0 || oe->generated()) {
+                if (oe == 0 || oe->generated() || oe->excludeFromOtherParts()) {
                     continue;
                 }
 
@@ -1514,7 +1523,7 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
 
     for (auto i : oscore->spanner()) {
         Spanner* s = i.second;
-        if (!(s->tick() >= startTick && s->tick2() < endTick)) {
+        if (!(s->tick() >= startTick && s->tick2() < endTick) || s->excludeFromOtherParts()) {
             continue;
         }
 

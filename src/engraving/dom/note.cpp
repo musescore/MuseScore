@@ -2262,7 +2262,7 @@ int Note::ppitch() const
         }
     }
 
-    return m_pitch + ottaveCapoFret();
+    return m_pitch + ottaveCapoFret() + linkedOttavaPitchOffset();
 }
 
 //---------------------------------------------------------
@@ -2274,7 +2274,28 @@ int Note::ppitch() const
 
 int Note::epitch() const
 {
-    return m_pitch - (concertPitch() ? 0 : transposition());
+    return m_pitch - (concertPitch() ? 0 : transposition()) + linkedOttavaPitchOffset();
+}
+
+//---------------------------------------------------------
+//   linkedOttavaPitchOffset
+//    if an ottava exists in another part but has been excluded
+//    from this one, this returns the corresponding pitch offset
+//---------------------------------------------------------
+
+int Note::linkedOttavaPitchOffset() const
+{
+    int linkedOttavaPitchOffset = 0;
+    if (links() && staff()->pitchOffset(tick()) == 0) {
+        for (EngravingObject* link : *links()) {
+            int offset = toNote(link)->staff()->pitchOffset(tick());
+            if (offset != 0) {
+                linkedOttavaPitchOffset = offset;
+                break;
+            }
+        }
+    }
+    return linkedOttavaPitchOffset;
 }
 
 //---------------------------------------------------------

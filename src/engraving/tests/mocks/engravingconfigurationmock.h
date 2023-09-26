@@ -57,7 +57,7 @@ public:
 
     MOCK_METHOD(double, guiScaling, (), (const, override));
 
-    MOCK_METHOD(draw::Color, selectionColor, (engraving::voice_idx_t, bool), (const, override));
+    MOCK_METHOD(draw::Color, selectionColor, (engraving::voice_idx_t, bool, bool), (const, override));
     MOCK_METHOD(void, setSelectionColor, (engraving::voice_idx_t, draw::Color), (override));
     MOCK_METHOD((async::Channel<engraving::voice_idx_t, draw::Color>), selectionColorChanged, (), (const, override));
 

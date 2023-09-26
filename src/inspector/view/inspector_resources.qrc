@@ -104,5 +104,7 @@
         <file>qml/MuseScore/Inspector/common/FrameSettings.qml</file>
         <file>qml/MuseScore/Inspector/common/CheckBoxPropertyView.qml</file>
         <file>qml/MuseScore/Inspector/common/PropertyResetButton.qml</file>
+        <file>qml/MuseScore/Inspector/common/PropertyToggle.qml</file>
+        <file>qml/MuseScore/Inspector/parts/PartsSettings.qml</file>
     </qresource>
 </RCC>

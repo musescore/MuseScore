@@ -24,6 +24,7 @@
 #include "general/generalsettingsmodel.h"
 #include "measures/measuressettingsmodel.h"
 #include "notation/notationsettingsproxymodel.h"
+#include "parts/partssettingsmodel.h"
 #include "text/textsettingsmodel.h"
 #include "score/scoredisplaysettingsmodel.h"
 #include "score/scoreappearancesettingsmodel.h"
@@ -179,6 +180,9 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
             break;
         case InspectorSectionType::SECTION_SCORE_APPEARANCE:
             newModel = new ScoreAppearanceSettingsModel(this, m_repository);
+            break;
+        case InspectorSectionType::SECTION_PARTS:
+            newModel = new PartsSettingsModel(this, m_repository);
             break;
         case AbstractInspectorModel::InspectorSectionType::SECTION_UNDEFINED:
             break;

@@ -85,6 +85,9 @@ public:
     Grip defaultGrip() const override { return Grip::START; }
     std::vector<mu::PointF> gripsPositions(const EditData&) const override { return { mu::PointF() }; }   // overridden in descendants
 
+    bool canBeExcludedFromOtherParts() const override { return true; }
+    void manageExclusionFromParts(bool exclude) override;
+
 private:
     Spatium m_boxWidth;         // only valid for HBox
     Spatium m_boxHeight;        // only valid for VBox

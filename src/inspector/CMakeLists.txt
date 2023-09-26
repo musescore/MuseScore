@@ -86,6 +86,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/score/scoredisplaysettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/score/internal/pagetypelistmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/score/internal/pagetypelistmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/models/parts/partssettingsmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/parts/partssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/text/textsettingsmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/text/textsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/fretcanvas.cpp

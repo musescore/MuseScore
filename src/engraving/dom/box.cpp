@@ -27,6 +27,7 @@
 #include "actionicon.h"
 #include "factory.h"
 #include "layoutbreak.h"
+#include "masterscore.h"
 #include "mscore.h"
 #include "score.h"
 #include "stafftext.h"
@@ -51,6 +52,7 @@ static const ElementStyle hBoxStyle {
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
 {
+    setExcludeFromOtherParts(propertyDefault(Pid::EXCLUDE_FROM_OTHER_PARTS).toBool());
 }
 
 //---------------------------------------------------------
@@ -255,6 +257,8 @@ PropertyValue Box::propertyDefault(Pid id) const
         return 0.0;
     case Pid::BOX_AUTOSIZE:
         return true;
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
+        return true;
     default:
         return MeasureBase::propertyDefault(id);
     }
@@ -414,6 +418,26 @@ EngravingItem* Box::drop(EditData& data)
         return 0;
     }
     return 0;
+}
+
+void Box::manageExclusionFromParts(bool exclude)
+{
+    if (exclude) {
+        EngravingItem::manageExclusionFromParts(exclude);
+    } else {
+        std::vector<MeasureBase*> newFrames;
+        for (Score* score : masterScore()->scoreList()) {
+            if (score == this->score()) {
+                continue;
+            }
+            MeasureBase* newFrame = score->insertMeasure(type(), next());
+            newFrame->setExcludeFromOtherParts(false);
+            newFrames.push_back(newFrame);
+        }
+        for (MeasureBase* newFrame : newFrames) {
+            newFrame->linkTo(this);
+        }
+    }
 }
 
 //---------------------------------------------------------

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -102,6 +102,7 @@
       <VBox>
         <height>10</height>
         <linkedMain/>
+        <excludeFromParts>0</excludeFromParts>
         <Text>
           <linkedMain/>
           <style>title</style>
@@ -358,6 +359,7 @@
           <height>10</height>
           <linked>
             </linked>
+          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               </linked>
@@ -559,6 +561,7 @@
               <staves>-1</staves>
               </location>
             </linked>
+          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               <location>

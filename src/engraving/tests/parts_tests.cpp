@@ -25,6 +25,7 @@
 #include "dom/breath.h"
 #include "dom/chord.h"
 #include "dom/chordline.h"
+#include "dom/dynamic.h"
 #include "dom/engravingitem.h"
 #include "dom/excerpt.h"
 #include "dom/factory.h"
@@ -36,6 +37,7 @@
 #include "dom/note.h"
 #include "dom/part.h"
 #include "dom/segment.h"
+#include "dom/spanner.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -48,6 +50,7 @@ static const String PARTS_DATA_DIR("parts_data/");
 class Engraving_PartsTests : public ::testing::Test
 {
 public:
+    Score* createPart(MasterScore* score);
     void createParts(MasterScore* score);
     void testPartCreation(const String& test);
 
@@ -64,6 +67,24 @@ public:
     MasterScore* doAddImage();
     MasterScore* doRemoveImage();
 };
+
+Score* Engraving_PartsTests::createPart(MasterScore* masterScore)
+{
+    std::vector<Part*> parts;
+    parts.push_back(masterScore->parts().at(0));
+    Score* nscore = masterScore->createScore();
+
+    Excerpt* ex = new Excerpt(masterScore);
+    ex->setExcerptScore(nscore);
+    ex->setParts(parts);
+    ex->setName(parts.front()->partName());
+    Excerpt::createExcerpt(ex);
+
+    masterScore->excerpts().push_back(ex);
+    masterScore->setExcerptsChanged(true);
+
+    return nscore;
+}
 
 //---------------------------------------------------------
 //   createParts
@@ -1141,6 +1162,102 @@ TEST_F(Engraving_PartsTests, undoRedoRemoveImage)
 TEST_F(Engraving_PartsTests, createPartStemless)
 {
     testPartCreation(u"part-stemless");
+}
+
+TEST_F(Engraving_PartsTests, partExclusion)
+{
+    MasterScore* masterScore = ScoreRW::readScore(PARTS_DATA_DIR + u"partExclusion.mscx");
+
+    EXPECT_TRUE(masterScore);
+
+    Score* partScore = createPart(masterScore);
+    EXPECT_TRUE(partScore);
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
+
+    // Collect the relevant items
+    std::vector<EngravingItem*> itemsToExclude;
+    for (MeasureBase* mb = masterScore->first(); mb; mb = mb->next()) {
+        if (!mb->isMeasure()) {
+            itemsToExclude.push_back(mb);
+            continue;
+        }
+        for (Segment& segment : toMeasure(mb)->segments()) {
+            EngravingItem* item = segment.elementAt(0);
+            if (item && item->isClef() && !item->generated()) {
+                itemsToExclude.push_back(item);
+            }
+            for (EngravingItem* item : segment.annotations()) {
+                if (item->isTextBase()) {
+                    itemsToExclude.push_back(item);
+                }
+            }
+        }
+    }
+    for (auto pair : masterScore->spanner()) {
+        Spanner* spanner = pair.second;
+        if (spanner && spanner->isOttava()) {
+            itemsToExclude.push_back(spanner);
+        }
+    }
+
+    // Invert exclusion property
+    for (EngravingItem* item : itemsToExclude) {
+        masterScore->select(item);
+        bool exclude = item->getProperty(Pid::EXCLUDE_FROM_OTHER_PARTS).toBool();
+        item->undoChangeProperty(Pid::EXCLUDE_FROM_OTHER_PARTS, !exclude);
+    }
+
+    // Excluded items are not in the part anymore and viceversa
+    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-1.mscx", PARTS_DATA_DIR + u"partExclusion-part-1.mscx"));
+
+    // Revert again and check it is equal to the initial file again
+    for (EngravingItem* item : itemsToExclude) {
+        masterScore->select(item);
+        bool exclude = item->getProperty(Pid::EXCLUDE_FROM_OTHER_PARTS).toBool();
+        item->undoChangeProperty(Pid::EXCLUDE_FROM_OTHER_PARTS, !exclude);
+    }
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partExclusion-part-0.mscx", PARTS_DATA_DIR + u"partExclusion-part-0.mscx"));
+}
+
+TEST_F(Engraving_PartsTests, partPropertyLinking)
+{
+    MasterScore* masterScore = ScoreRW::readScore(PARTS_DATA_DIR + u"partPropertyLinking.mscx");
+
+    EXPECT_TRUE(masterScore);
+
+    Score* partScore = createPart(masterScore);
+    EXPECT_TRUE(partScore);
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
+                                            PARTS_DATA_DIR + u"partPropertyLinking-part-0.mscx"));
+
+    Dynamic* dynamic = nullptr;
+    Measure* measure = masterScore->firstMeasure();
+    for (Segment& segment : measure->segments()) {
+        for (EngravingItem* annotation : segment.annotations()) {
+            if (annotation->isDynamic()) {
+                dynamic = toDynamic(annotation);
+                break;
+            }
+        }
+    }
+    Dynamic* testItem = toDynamic(dynamic->findLinkedInScore(partScore));
+    EXPECT_TRUE(testItem);
+
+    testItem->undoChangeProperty(Pid::PLACEMENT, PropertyValue::fromValue(PlacementV::ABOVE), PropertyFlags::NOSTYLE);
+    testItem->undoChangeProperty(Pid::DYNAMICS_SIZE, PropertyValue::fromValue(1.2), PropertyFlags::NOSTYLE);
+    EXPECT_FALSE(testItem->isPositionLinkedToMaster());
+    EXPECT_FALSE(testItem->isAppearanceLinkedToMaster());
+
+    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-1.mscx",
+                                            PARTS_DATA_DIR + u"partPropertyLinking-part-1.mscx"));
+
+    testItem->undoChangeProperty(Pid::POSITION_LINKED_TO_MASTER, true, PropertyFlags::NOSTYLE);
+    testItem->undoChangeProperty(Pid::APPEARANCE_LINKED_TO_MASTER, true, PropertyFlags::NOSTYLE);
+    EXPECT_TRUE(ScoreComp::saveCompareScore(partScore, u"partPropertyLinking-part-0.mscx",
+                                            PARTS_DATA_DIR + u"partPropertyLinking-part-0.mscx"));
 }
 
 //---------------------------------------------------------

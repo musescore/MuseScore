@@ -28,8 +28,8 @@
 namespace mu::engraving {
 struct Constants
 {
-    static constexpr int MSC_VERSION = 410;
-    static constexpr const char* MSC_VERSION_STR = "4.10";
+    static constexpr int MSC_VERSION = 420;
+    static constexpr const char* MSC_VERSION_STR = "4.20";
 
 // History:
 //    1.3   added staff->_barLineSpan
@@ -84,6 +84,10 @@ struct Constants
 //       - Clefs carry a "header" tag in the file (istead of trying to guess it from context)
 //       - New "Ornament" item with new properties and options
 //       - New "Capo" item
+
+//    4.20 (Version 4.2)
+//       - By default, frames are not cloned to parts
+//       - Corrections to key signature and transposition (#18998)
 
     constexpr static int DIVISION = 480;
     constexpr static BeatsPerSecond DEFAULT_TEMPO = 2.0; //default tempo is equal 120 bpm

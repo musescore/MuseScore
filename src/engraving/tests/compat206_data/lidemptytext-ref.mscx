@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -136,6 +136,7 @@
         <height>8</height>
         <bottomGap>13</bottomGap>
         <boxAutoSize>0</boxAutoSize>
+        <excludeFromParts>0</excludeFromParts>
         </VBox>
       <Measure>
         <stretch>0.9</stretch>
@@ -306,6 +307,7 @@
           <height>8</height>
           <bottomGap>13</bottomGap>
           <boxAutoSize>0</boxAutoSize>
+          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>instrument_excerpt</style>
             <text>Bass</text>

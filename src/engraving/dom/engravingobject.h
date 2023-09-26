@@ -299,6 +299,8 @@ private:
 
 public:
 
+    virtual std::list<EngravingObject*> linkListForPropertyPropagation() const { return linkList(); }
+
     //---------------------------------------------------
     // check type
     //

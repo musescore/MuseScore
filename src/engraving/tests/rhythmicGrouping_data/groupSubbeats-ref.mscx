@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<museScore version="4.10">
+<museScore version="4.20">
   <Score>
     <Division>480</Division>
     <Style>
@@ -74,6 +74,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <text>Subbeat Groupings</text>
