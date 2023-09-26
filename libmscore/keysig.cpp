@@ -443,7 +443,7 @@ void KeySig::read(XmlReader& e)
                   _showCourtesy = e.readInt();
             else if (tag == "showNaturals")           // obsolete
                   e.readInt();
-            else if (tag == "accidental")
+            else if (tag == "accidental" || tag == "concertKey") // + 4.x compat
                   _sig.setKey(Key(e.readInt()));
             else if (tag == "natural")                // obsolete
                   e.readInt();
