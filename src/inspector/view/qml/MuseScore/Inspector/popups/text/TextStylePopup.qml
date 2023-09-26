@@ -35,8 +35,7 @@ StyledPopupView {
 
     property QtObject model: textStyleModel
 
-    // The navigation order does not match the order of the components
-    // in the file
+    // The navigation order does not match the order of the components in the file
     property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
     property int navigationOrderEnd: textStyleSettingsNavPanel.order
