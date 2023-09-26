@@ -2234,9 +2234,6 @@ bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBas
 
     const int line = static_cast<int>(figuredBass->itemsCount());
     FiguredBassItem* figuredBassItem = figuredBass->createItem(line);
-    if (!figuredBassItem) {
-        return true;
-    }
     m_uids->reg(figuredBassItem, meiF.m_xmlId);
     figuredBassItem->setTrack(figuredBass->track());
     figuredBassItem->setParent(figuredBass);
