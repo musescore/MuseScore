@@ -205,16 +205,18 @@ Segment* Score::tick2segment(const Fraction& tick, bool first) const
 /// the first segment *before* this tick position
 //---------------------------------------------------------
 
-Segment* Score::tick2leftSegment(const Fraction& tick, bool useMMrest) const
+Segment* Score::tick2leftSegment(const Fraction& tick, bool useMMrest, bool anySegmentType) const
 {
     Measure* m = useMMrest ? tick2measureMM(tick) : tick2measure(tick);
     if (m == 0) {
         LOGD("tick2leftSegment(): not found tick %d", tick.ticks());
         return 0;
     }
+
     // loop over all segments
+    SegmentType segmentType = anySegmentType ? SegmentType::All : SegmentType::ChordRest;
     Segment* ps = 0;
-    for (Segment* s = m->first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
+    for (Segment* s = m->first(segmentType); s; s = s->next(segmentType)) {
         if (tick < s->tick()) {
             return ps;
         } else if (tick == s->tick()) {

@@ -1504,6 +1504,12 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                 }
             }
         }
+        for (Segment& seg : nm->segments()) {
+            seg.checkEmpty();
+            if (seg.empty()) {
+                score->undoRemoveElement(&seg);
+            }
+        }
     }
 
     for (auto i : oscore->spanner()) {
