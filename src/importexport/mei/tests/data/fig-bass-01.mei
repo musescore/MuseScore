@@ -124,7 +124,7 @@
                         </fb>
                      </harm>
                   </measure>
-                  <measure xml:id="m11r4jtj" n="4" right="end">
+                  <measure xml:id="m11r4jtj" right="end" n="4">
                      <staff xml:id="m4s1" n="1">
                         <layer xml:id="m4s1l1" n="1">
                            <mRest xml:id="m1km5xsb" />
