@@ -132,11 +132,18 @@ ByteArray SpannerSegment::mimeData(const PointF& dragOffset) const
 
 EngravingItem* SpannerSegment::propertyDelegate(Pid pid)
 {
-    if (pid == Pid::COLOR || pid == Pid::VISIBLE || pid == Pid::PLACEMENT
-        || pid == Pid::EXCLUDE_FROM_OTHER_PARTS || pid == Pid::POSITION_LINKED_TO_MASTER || pid == Pid::APPEARANCE_LINKED_TO_MASTER) {
+    switch (pid) {
+    case Pid::COLOR:
+    case Pid::VISIBLE:
+    case Pid::PLACEMENT:
+    case Pid::EXCLUDE_FROM_OTHER_PARTS:
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
         return spanner();
+    default: break;
     }
-    return 0;
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -360,7 +367,7 @@ void SpannerSegment::scanElements(void* data, void (* func)(void*, EngravingItem
 const std::list<EngravingObject*> SpannerSegment::linkListForPropertyPropagation() const
 {
     std::list<EngravingObject*> result;
-    result.push_back((EngravingObject*)this);
+    result.push_back(const_cast<SpannerSegment*>(this));
 
     if (isMiddleType()) {
         return result;
@@ -388,7 +395,7 @@ bool SpannerSegment::isPropertyLinkedToMaster(Pid id) const
 {
     bool linkedForSpannerSegment = EngravingItem::isPropertyLinkedToMaster(id);
     if (!linkedForSpannerSegment) {
-        return linkedForSpannerSegment;
+        return false;
     }
 
     // The property is linked for the spanner segment, but may be unlinked for the spanner, in which case we consider it unlinked
