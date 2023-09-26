@@ -1,5 +1,8 @@
 {
     "files.associations": {
+        "*.mei": "xml",
+        "*.musicxml ": "xml",
+        "*.odd": "xml",
         "array": "cpp",
         "atomic": "cpp",
         "*.tcc": "cpp",
@@ -45,7 +48,8 @@
         "memory": "cpp",
         "qgroupbox": "cpp",
         "qbytearray": "cpp",
-        "qcombobox": "cpp"
+        "qcombobox": "cpp",
+        "complex": "cpp"
     },
     "cmake.buildDirectory": "${workspaceRoot}/build.debug",
     "cmake.configureOnOpen": true,

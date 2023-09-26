@@ -895,13 +895,7 @@ bool MeiExporter::writeLayer(track_idx_t track, const Staff* staff, const Measur
 
     const Measure* mmR1 = measure->coveringMMRestOrThis();
     if (measure != mmR1 && mmR1->mmRestFirst()) {
-        pugi::xml_node multiRestNode = m_currentNode.append_child();
-        libmei::MultiRest meiMultiRest;
-        meiMultiRest.SetNum(mmR1->mmRestCount());
-        std::string xmlId = this->getXmlIdFor(mmR1, 'm');
-        meiMultiRest.Write(multiRestNode, xmlId);
-        m_currentNode = m_currentNode.parent();
-        return true;
+        this->writeMultiRest(mmR1);
     }
 
     for (Segment* seg = measure->first(); seg; seg = seg->next()) {
@@ -1252,6 +1246,25 @@ bool MeiExporter::writeNote(const Note* note, const Chord* chord, const Staff* s
     // non critical assert
     assert(isCurrentNode(meiNote));
     m_currentNode = m_currentNode.parent();
+
+    return true;
+}
+
+/**
+ * Write a multi-measure rest.
+ */
+
+bool MeiExporter::writeMultiRest(const Measure* mmRest)
+{
+    IF_ASSERT_FAILED(mmRest) {
+        return false;
+    }
+
+    pugi::xml_node multiRestNode = m_currentNode.append_child();
+    libmei::MultiRest meiMultiRest;
+    meiMultiRest.SetNum(mmRest->mmRestCount());
+    std::string xmlId = this->getXmlIdFor(mmRest, 'm');
+    meiMultiRest.Write(multiRestNode, xmlId);
 
     return true;
 }
