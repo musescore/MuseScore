@@ -896,39 +896,39 @@ bool MeiExporter::writeLayer(track_idx_t track, const Staff* staff, const Measur
     const Measure* mmR1 = measure->coveringMMRestOrThis();
     if (measure != mmR1 && mmR1->mmRestFirst()) {
         this->writeMultiRest(mmR1);
-    }
-
-    for (Segment* seg = measure->first(); seg; seg = seg->next()) {
-        if (seg->segmentType() == SegmentType::EndBarLine) {
-            this->addFermataToMap(track, seg, measure);
-        }
-
-        // Do not go any further than the measure tick (ignore EndBarLine, KeySigAnnounce, TimeSigAnnounce)
-        const EngravingItem* item = seg->element(track);
-        if (!item || item->generated()) {
-            continue;
-        }
-
-        if (item->isClef()) {
-            this->writeClef(dynamic_cast<const Clef*>(item));
-        } else if (item->isChord()) {
-            this->writeChord(dynamic_cast<const Chord*>(item), staff);
-        } else if (item->isRest()) {
-            this->writeRest(dynamic_cast<const Rest*>(item), staff);
-        } else if (item->isBarLine()) {
-            //
-        } else if (item->isKeySig()) {
-            if (m_keySig && (seg != m_keySig)) {
-                LOGD() << "MeiExporter::writeLayer unexpected KeySig segment";
+    } else {
+        for (Segment* seg = measure->first(); seg; seg = seg->next()) {
+            if (seg->segmentType() == SegmentType::EndBarLine) {
+                this->addFermataToMap(track, seg, measure);
             }
-            m_keySig = seg;
-        } else if (item->isTimeSig()) {
-            if (m_timeSig && (seg != m_timeSig)) {
-                LOGD() << "MeiExporter::writeLayer unexpected TimeSig segment";
+
+            // Do not go any further than the measure tick (ignore EndBarLine, KeySigAnnounce, TimeSigAnnounce)
+            const EngravingItem* item = seg->element(track);
+            if (!item || item->generated()) {
+                continue;
             }
-            m_timeSig = seg;
-        } else {
-            LOGD() << "MeiExporter::writeLayer unknown segment type " << item->typeName();
+
+            if (item->isClef()) {
+                this->writeClef(dynamic_cast<const Clef*>(item));
+            } else if (item->isChord()) {
+                this->writeChord(dynamic_cast<const Chord*>(item), staff);
+            } else if (item->isRest()) {
+                this->writeRest(dynamic_cast<const Rest*>(item), staff);
+            } else if (item->isBarLine()) {
+                //
+            } else if (item->isKeySig()) {
+                if (m_keySig && (seg != m_keySig)) {
+                    LOGD() << "MeiExporter::writeLayer unexpected KeySig segment";
+                }
+                m_keySig = seg;
+            } else if (item->isTimeSig()) {
+                if (m_timeSig && (seg != m_timeSig)) {
+                    LOGD() << "MeiExporter::writeLayer unexpected TimeSig segment";
+                }
+                m_timeSig = seg;
+            } else {
+                LOGD() << "MeiExporter::writeLayer unknown segment type " << item->typeName();
+            }
         }
     }
 

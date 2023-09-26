@@ -86,7 +86,7 @@ private:
     bool writeClef(const engraving::Clef* clef);
     bool writeChord(const engraving::Chord* chord, const engraving::Staff* staff);
     bool writeGraceGrp(const engraving::Chord* chord, const engraving::Staff* staff, bool isAfter = false);
-    bool writeMultiRest(const Measure* measure);
+    bool writeMultiRest(const engraving::Measure* measure);
     bool writeNote(const engraving::Note* note, const engraving::Chord* chord, const engraving::Staff* staff, bool isChord);
     bool writeRest(const engraving::Rest* rest, const engraving::Staff* staff);
     bool writeSyl(const engraving::Lyrics* lyrics, const String& text, ElisionType elision);
