@@ -3053,7 +3053,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
             else if (tag == "lyricsDashMaxLegth") // pre-3.6 typo, now: "lyricsDashMaxLength"
                   set(Sid::lyricsDashMaxLength, e.readDouble());
 // start 4.x compat
-            else if (tag == "chordlineThickness") // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
+            else if (tag == "chordlineThickness") // doesn't exist in Mu3 (and was wrong in Mu4.0)
                   e.skipCurrentElement();
             else if (tag == "dontHideStavesInFirstSystem") // pre-4.0 typo: "dontHidStavesInFirstSystm"
                   set(Sid::dontHideStavesInFirstSystem, e.readBool());
@@ -3093,7 +3093,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         _lineStyle = Qt::SolidLine;
                   set(Sid::palmMuteLineStyle, _lineStyle);
                   }
-            else if (isMu4 && tag == "pedalLineStyle") { // pre-4.0 typo: "pedalListStyle"
+            else if (tag == "pedalLineStyle" || (isMu4 && tag == "pedalListStyle")) { // pre-4.1 typo: "pedalListStyle"
                   int _lineStyle = Qt::SolidLine;
                   QString lineStyle = e.readElementText();
                   if (lineStyle == "dotted")
