@@ -246,8 +246,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::LINE_VISIBLE,            true,  "lineVisible",           P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "visible line") },
     { Pid::MAG,                     false, "mag",                   P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "mag") },
     { Pid::USE_DRUMSET,             false, "useDrumset",            P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "using drumset") },
-    { Pid::DURATION,                false, 0,                       P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "duration") },
-    { Pid::DURATION_TYPE_WITH_DOTS, false, 0,                       P_TYPE::DURATION_TYPE_WITH_DOTS, PropertyGroup::APPEARANCE, DUMMY_QT_TR_NOOP("propertyName", "duration type") },
+    { Pid::DURATION,                true,  0,                       P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "duration") },
+    { Pid::DURATION_TYPE_WITH_DOTS, true,  0,                       P_TYPE::DURATION_TYPE_WITH_DOTS, PropertyGroup::APPEARANCE, DUMMY_QT_TR_NOOP("propertyName", "duration type") },
     { Pid::ACCIDENTAL_ROLE,         false, "role",                  P_TYPE::ACCIDENTAL_ROLE,    PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "role") },
     { Pid::TRACK,                   false, 0,                       P_TYPE::SIZE_T,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "track") },
 
