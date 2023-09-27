@@ -69,7 +69,7 @@ Dial {
         readonly property real startAngle: -140 * (Math.PI/180) - Math.PI/2
         readonly property real endAngle: 140 * (Math.PI/180) - Math.PI/2
 
-        readonly property color valueArcColor: accentControl ? ui.theme.accentColor : ui.theme.buttonColor
+        readonly property color valueArcColor: accentControl ? ui.theme.accentColor : Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.3)
         readonly property color outerArcColor: Utils.colorWithAlpha(ui.theme.buttonColor, 0.7)
         readonly property color innerArcColor: Utils.colorWithAlpha(ui.theme.fontPrimaryColor, 0.5)
 
