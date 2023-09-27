@@ -4109,7 +4109,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                         }
                     }
 
-                    if (pm->repeatEnd()) {
+                    if (localMeasure && pm->repeatEnd()) {
                         localMeasure->undoChangeProperty(Pid::REPEAT_END, true);
                         pm->undoChangeProperty(Pid::REPEAT_END, false);
                     }
@@ -4179,7 +4179,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                         }
                     }
 
-                    if (measureInsert->repeatStart()) {
+                    if (localMeasure && measureInsert->repeatStart()) {
                         localMeasure->undoChangeProperty(Pid::REPEAT_START, true);
                         measureInsert->undoChangeProperty(Pid::REPEAT_START, false);
                     }
