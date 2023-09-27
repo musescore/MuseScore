@@ -134,12 +134,12 @@ AboutBoxDialog::AboutBoxDialog()
             ":/data/musescore-logo-transbg-m.png" : ":/data/musescore_logo_full.png"));
 
       if (MuseScore::unstable())
-            versionLabel->setText(tr("Unstable Prerelease for Version: %1").arg(VERSION));
+            versionLabel->setText(tr("Unstable Prerelease for Version: %1").arg(VERSION) + tr(" Evolution"));
       else {
             auto msVersion = QString(VERSION);
             if (strlen(BUILD_NUMBER))
                   msVersion += QString(".") + QString(BUILD_NUMBER);// +QString(" Beta");
-            versionLabel->setText(tr("Version: %1").arg(msVersion));
+            versionLabel->setText(tr("Version: %1").arg(msVersion) + tr(" Evolution"));
       }
 
       revisionLabel->setText(tr("Revision: %1").arg(revision));

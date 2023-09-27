@@ -90,12 +90,12 @@ void MsSplashScreen::drawContents(QPainter* painter)
       painter->drawImage(0, 0, _bgImage);
 
       // Development build icon and text.
-      if (MuseScore::unstable()) {
+      /*if (MuseScore::unstable())*/ {
             _devBuildIconRenderer.render(painter, _devBuildIconRect);
             drawDebugRect(painter, _devBuildIconRect, 0xFF, 0x80, 0x80);
 
             painter->setPen(textColor);
-            painter->drawText(_devBuildTextRect, Qt::AlignHCenter | Qt::AlignTop, tr("Development Build"));
+            painter->drawText(_devBuildTextRect, Qt::AlignHCenter | Qt::AlignTop, tr("Evolution"));
             drawDebugRect(painter, _devBuildTextRect, 0xFF, 0x80, 0x80);
             }
 

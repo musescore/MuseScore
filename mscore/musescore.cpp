@@ -3994,11 +3994,11 @@ MasterSynthesizer* synthesizerFactory()
 
 bool MuseScore::unstable()
       {
-#ifdef MSCORE_UNSTABLE
-      return true;
-#else
+//#ifdef MSCORE_UNSTABLE
+//      return true;
+//#else
       return false;
-#endif
+//#endif
       }
 
 //---------------------------------------------------------
@@ -4848,7 +4848,7 @@ void MuseScore::play(Element* e, int pitch) const
 
 void MuseScore::reportBug(QString medium)
       {
-      QString url = QString("https://musescore.org/redirect/post/bug-report?sha=%1&locale=%2&%3")
+      QString url = QString("https://github.com/Jojo-Schmitz/MuseScore/issues")
          .arg(revision())
          .arg(getLocaleISOCode())
          .arg(getUtmParameters(medium));
@@ -7852,11 +7852,13 @@ MuseScoreApplication::CommandLineParseResult MuseScoreApplication::parseCommandL
                         return parseResult;
                         }
                   }
+#if NDEBUG // allow multiple instances when debugging (actually: when built in Debug mode)
             else
                   if (app->sendMessage(QString(""))) {
                         parseResult.exit = true;
                         return parseResult;
                         }
+#endif
             }
       if (rawDiffMode || diffMode) {
             if (argv.size() != 2) {
