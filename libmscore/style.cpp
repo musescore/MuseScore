@@ -604,7 +604,7 @@ static const StyleType styleTypes[] {
       { Sid::barGraceDistance,        "barGraceDistance",        Spatium(1.0) },
       { Sid::minVerticalDistance,     "minVerticalDistance",     Spatium(0.5) },
       { Sid::ornamentStyle,           "ornamentStyle",           int(MScore::OrnamentStyle::DEFAULT) },
-      { Sid::spatium,                 "Spatium",                 24.8 },
+      { Sid::spatium,                 "Spatium",                 24.8 }, // 1.75 * DPMM
 
       { Sid::autoplaceHairpinDynamicsDistance, "autoplaceHairpinDynamicsDistance", Spatium(0.5) },
 
@@ -3051,12 +3051,12 @@ void MStyle::load(XmlReader& e, bool isMu4)
                   chordListTag = true;
                   }
             else if (tag == "lyricsDashMaxLegth") // pre-3.6 typo, now: "lyricsDashMaxLength"
-                  set(Sid::lyricsDashMaxLength, e.readDouble());
+                  set(Sid::lyricsDashMaxLength, Spatium(e.readDouble()));
 // start 4.x compat
-            else if (tag == "chordlineThickness") // doesn't exist in Mu3 (and was wrong in Mu4.0)
+            else if (tag == "chordlineThickness") // doesn't exist in Mu3 (and was wrong in Mu4.0), let's skip
                   e.skipCurrentElement();
             else if (tag == "dontHideStavesInFirstSystem") // pre-4.0 typo: "dontHidStavesInFirstSystm"
-                  set(Sid::dontHideStavesInFirstSystem, e.readBool());
+                  set(Sid::dontHideStavesInFirstSystem, QVariant(e.readBool()));
             else if (isMu4 && tag == "hairpinLineStyle") {
                   int _lineStyle = Qt::SolidLine;
                   QString lineStyle = e.readElementText();
@@ -3064,7 +3064,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "dashed")
                         _lineStyle = Qt::DashLine;
-                  set(Sid::hairpinLineStyle, _lineStyle);
+                  set(Sid::hairpinLineStyle, QVariant(_lineStyle));
                   }
             else if (isMu4 && tag == "hairpinLineLineStyle") {
                   int _lineStyle = Qt::CustomDashLine;
@@ -3073,7 +3073,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "solid")
                         _lineStyle = Qt::SolidLine;
-                  set(Sid::hairpinLineLineStyle, _lineStyle);
+                  set(Sid::hairpinLineLineStyle, QVariant(_lineStyle));
                   }
             else if (isMu4 && tag == "letRingLineStyle") {
                   int _lineStyle = Qt::DashLine;
@@ -3082,7 +3082,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "solid")
                         _lineStyle = Qt::SolidLine;
-                  set(Sid::letRingLineStyle, _lineStyle);
+                  set(Sid::letRingLineStyle, QVariant(_lineStyle));
                   }
             else if (isMu4 && tag == "palmMuteLineStyle") {
                   int _lineStyle = Qt::DashLine;
@@ -3091,7 +3091,7 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "solid")
                         _lineStyle = Qt::SolidLine;
-                  set(Sid::palmMuteLineStyle, _lineStyle);
+                  set(Sid::palmMuteLineStyle, QVariant(_lineStyle));
                   }
             else if (tag == "pedalLineStyle" || (isMu4 && tag == "pedalListStyle")) { // pre-4.1 typo: "pedalListStyle"
                   int _lineStyle = Qt::SolidLine;
@@ -3100,10 +3100,10 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "dashed")
                         _lineStyle = Qt::DashLine;
-                  set(Sid::pedalLineStyle, _lineStyle);
+                  set(Sid::pedalLineStyle, QVariant(_lineStyle));
                   }
-            else if (tag == "useWideBeams") // beamDistance maps to useWideBeams in 4.0 and later
-                  set(Sid::beamDistance, e.readDouble() > 0.75);
+            else if (tag == "useWideBeams") // beamDistance maps to useWideBeams in 4.0 and later, default depends on font's `engravingDefaults`! Maybe better skip?
+                  set(Sid::beamDistance, e.readBool() ? QVariant(1.0) : styleTypes[int(Sid::beamDistance)].defaultValue());
             else if (isMu4 && tag == "voltaLineStyle") {
                   int _lineStyle = Qt::SolidLine;
                   QString lineStyle = e.readElementText();
@@ -3111,10 +3111,233 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         _lineStyle = Qt::DotLine;
                   else if (lineStyle == "dashed")
                         _lineStyle = Qt::DashLine;
-                  set(Sid::voltaLineStyle, _lineStyle);
+                  set(Sid::voltaLineStyle, QVariant(_lineStyle));
                   }
-            else if (tag == "tempoChangeLineStyle") // doesn't exist in Mu3
+            else if (tag == "tempoChangeLineStyle") // doesn't exist in Mu3, let's skip
                   e.skipCurrentElement();
+            // fixing some Mu4 defaults to their Mu3.6 counterparts
+            //else if (isMu4 && tag == "pageWidth") { // 8.27 -> 8.27662, rounding issue, and depends on locale, printer setup, so let's pass
+            //else if (isMu4 && tag == "pageHeight") { // 11.69 -> 11.6929, rounding issue, and depends on locale, printer setup, so let's pass
+            //else if (isMu4 && tag == "pagePrintableWidth") { // 7.0889 -> 7.08661, rounding issue, and depends on locale, printer setup, so let's pass
+            //else if (isMu4 && tag == "lyricsMinBottomDistance") { // 1.5 -> 2, Mu4's default seems better, so let's pass
+            else if (isMu4 && tag == "lyricsDashLineThickness") { // 0.1 -> 0.15
+                  qreal lyricsDashLineThickness = e.readDouble();
+                  if (qFuzzyCompare(lyricsDashLineThickness, 0.1)) // 4.x default
+                        set(Sid::lyricsDashLineThickness, styleTypes[int(Sid::lyricsDashLineThickness)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::lyricsDashLineThickness, Spatium(lyricsDashLineThickness));
+                  }
+            else if (isMu4 && tag == "minMeasureWidth") { // 8 -> 5
+                  qreal minMeasureWidth = e.readDouble();
+                  if (qFuzzyCompare(minMeasureWidth, 8.0)) // 4.x default
+                        set(Sid::minMeasureWidth, styleTypes[int(Sid::minMeasureWidth)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::minMeasureWidth, Spatium(minMeasureWidth));
+                  }
+            else if (isMu4 && tag == "doubleBarDistance") // 0.37 -> 0.55, depends on font's `engravingDefaults`! Let's skip.
+                  e.skipCurrentElement();
+            else if (isMu4 && tag == "endBarDistance") // 0.37 -> 0.7, depends on font's `engravingDefaults`! Let's skip.
+                  e.skipCurrentElement();
+            else if (isMu4 && tag == "repeatBarlineDotSeparation") // 0.37 -> 0.7, depends on font's `engravingDefaults`! Let's skip.
+                  e.skipCurrentElement();
+            else if (isMu4 && tag == "bracketWidth") { // 0.45 -> 0.44
+                  qreal bracketWidth = e.readDouble();
+                  if (qFuzzyCompare(bracketWidth, 0.45)) // 4.x default
+                        set(Sid::bracketWidth, styleTypes[int(Sid::bracketWidth)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::bracketWidth, Spatium(bracketWidth));
+            }
+            else if (isMu4 && tag == "bracketDistance") { // 0.45 -> 0.1
+                  qreal bracketDistance = e.readDouble();
+                  if (qFuzzyCompare(bracketDistance, 0.45)) // 4.x default
+                        set(Sid::bracketDistance, styleTypes[int(Sid::bracketDistance)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::bracketDistance, Spatium(bracketDistance));
+                  }
+            else if (isMu4 && tag == "akkoladeWidth") { // 1.5 -> 1.6
+                  qreal akkoladeWidth = e.readDouble();
+                  if (qFuzzyCompare(akkoladeWidth, 1.5)) // 4.x default
+                        set(Sid::akkoladeWidth, styleTypes[int(Sid::akkoladeWidth)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::akkoladeWidth, Spatium(akkoladeWidth));
+                  }
+            else if (isMu4 && tag == "akkoladeBarDistance") { // 0.35 -> 0.4
+                  qreal akkoladeBarDistance = e.readDouble();
+                  if (qFuzzyCompare(akkoladeBarDistance, 0.35)) // 4.x default
+                        set(Sid::akkoladeBarDistance, styleTypes[int(Sid::akkoladeBarDistance)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::akkoladeBarDistance, Spatium(akkoladeBarDistance));
+                  }
+            else if (isMu4 && tag == "clefLeftMargin") { // 0.75 -> 0.8
+                  qreal clefLeftMargin = e.readDouble();
+                  if (qFuzzyCompare(clefLeftMargin, 0.75)) // 4.x default
+                        set(Sid::clefLeftMargin, styleTypes[int(Sid::clefLeftMargin)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::clefLeftMargin, Spatium(clefLeftMargin));
+                  }
+            else if (isMu4 && tag == "stemWidth") // 0.1 -> 0.11, depends on font's `engravingDefaults`! Let's skip.
+                  e.skipCurrentElement();
+            else if (isMu4 && tag == "shortestStem") { // 2.5 -> 2.25
+                  qreal shortestStem = e.readDouble();
+                  if (qFuzzyCompare(shortestStem, 2.5)) // 4.x default
+                        set(Sid::shortestStem, styleTypes[int(Sid::shortestStem)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::shortestStem, Spatium(shortestStem));
+                  }
+            else if (isMu4 && tag == "minNoteDistance") { // 0.5 -> 0.2
+                  qreal minNoteDistance = e.readDouble();
+                  if (qFuzzyCompare(minNoteDistance, 0.5)) // 4.x default
+                        set(Sid::minNoteDistance, styleTypes[int(Sid::minNoteDistance)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::minNoteDistance, Spatium(minNoteDistance));
+                  }
+            else if (isMu4 && tag == "measureSpacing") { // 1.5 -> 1.2
+                  qreal measureSpacing = e.readDouble();
+                  if (qFuzzyCompare(measureSpacing, 1.5)) // 4.x default, `measureSpacing == 1.5` works here too
+                        set(Sid::measureSpacing, styleTypes[int(Sid::measureSpacing)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::measureSpacing, QVariant(measureSpacing));
+                  }
+            else if (isMu4 && tag == "ledgerLineLength") // 0.33 -> 0.35, depends on font's `engravingDefaults`! Let's skip.
+                  e.skipCurrentElement();
+            else if (isMu4 && tag == "beamMinLen") { // 1.1 -> 1.3
+                  qreal beamMinLen = e.readDouble();
+                  if (qFuzzyCompare(beamMinLen, 1.1)) // 4.x default
+                        set(Sid::beamMinLen, styleTypes[int(Sid::beamMinLen)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::beamMinLen, Spatium(beamMinLen));
+                  }
+            //else if (isMu4 && tag == "propertyDistanceHead") { // 0.4 -> 1, articulation/ornaments distance, let's pass
+            //else if (isMu4 && tag == "propertyDistanceStem") { // 0.4 -> 1.8, articulation/ornaments distance, let's pass
+            //else if (isMu4 && tag == "propertyDistance") // { 0.4 -> 1, articulation/ornaments distance, let's pass
+            else if (isMu4 && tag == "hairpinLinePosAbove") { // y: -1.5 -> -3
+                  QPointF hairpinLinePosAbove = e.readPoint();
+                  if (qFuzzyCompare(hairpinLinePosAbove.y(), -1.5)) // 4.x default
+                        set(Sid::hairpinLinePosAbove, styleTypes[int(Sid::hairpinLinePosAbove)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::hairpinLinePosAbove, QPointF(hairpinLinePosAbove));
+                  }
+            else if (isMu4 && tag == "hairpinLinePosBelow") { // y: 2.5 -> 4
+                  QPointF hairpinLinePosBelow = e.readPoint();
+                  if (qFuzzyCompare(hairpinLinePosBelow.y(), 2.5)) // 4.x default
+                        set(Sid::hairpinLinePosBelow, styleTypes[int(Sid::hairpinLinePosBelow)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::hairpinLinePosBelow, QPointF(hairpinLinePosBelow));
+            }
+            else if (isMu4 && tag == "chordSymbolAFontSize") { // 10 -> 11
+                  qreal chordSymbolAFontSize = e.readDouble();
+                  if (qFuzzyCompare(chordSymbolAFontSize, 10.0)) // 4.x default
+                        set(Sid::chordSymbolAFontSize, styleTypes[int(Sid::chordSymbolAFontSize)].defaultValue());
+                  else
+                        set(Sid::chordSymbolAFontSize, QVariant(chordSymbolAFontSize));
+                  }
+            else if (isMu4 && tag == "chordSymbolBFontSize") { // 10 -> 11
+                  qreal chordSymbolBFontSize = e.readDouble();
+                  if (qFuzzyCompare(chordSymbolBFontSize, 10.0)) // 4.x default
+                        set(Sid::chordSymbolBFontSize, styleTypes[int(Sid::chordSymbolBFontSize)].defaultValue());
+                  else
+                        set(Sid::chordSymbolBFontSize, QVariant(chordSymbolBFontSize));
+            }
+            //else if (isMu4 && tag == "useStandardNoteNames") { // 1 -> 0, why??? Seems a mistake, let's pass
+            else if (isMu4 && tag == "minMMRestWidth") { // 4. resp. 6 -> 4
+                  qreal minMMRestWidth = e.readDouble();
+                  if (qFuzzyCompare(minMMRestWidth, 6.0)) // 4.1 default (4.0 same as 3.6)
+                        set(Sid::minMMRestWidth, styleTypes[int(Sid::minMMRestWidth)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::minMMRestWidth, Spatium(minMMRestWidth));
+                  }
+            else if (isMu4 && tag == "mmRestNumberPos") { // -0.5 -> -1.5, maybe keep the Mu4 default?
+                  qreal mmRestNumberPos = e.readDouble();
+                  if (qFuzzyCompare(mmRestNumberPos, -0.5)) // 4.x default
+                        set(Sid::mmRestNumberPos, styleTypes[int(Sid::mmRestNumberPos)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::mmRestNumberPos, Spatium(mmRestNumberPos));
+                  }
+            else if (isMu4 && tag == "slurEndWidth") // 0.05 -> 0.07, depends on font's `engravingDefaults`! Let's skip.
+                  e.skipCurrentElement();
+            //else if (isMu4 && tag == "evenFooterC") { // $C -> $:copyright:, hard to tell whether set on purpose, however: I do like the Mu4 default better, so let's pass
+            //else if (isMu4 && tag == "oddFooterC") { // $C -> $:copyright:, hard to tell whether set on purpose however: I do like the Mu4 default better, so let's pass
+            else if (isMu4 && tag == "tupletStemLeftDistance") { // 0.5 -> 0
+                  qreal tupletStemLeftDistance = e.readDouble();
+                  if (qFuzzyCompare(tupletStemLeftDistance, 0.5)) // 4.x default
+                        set(Sid::tupletStemLeftDistance, styleTypes[int(Sid::tupletStemLeftDistance)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::tupletStemLeftDistance, Spatium(tupletStemLeftDistance));
+                  }
+            else if (isMu4 && tag == "tupletNoteLeftDistance") { // 0 -> -0.5
+                  qreal tupletNoteLeftDistance = e.readDouble();
+                  if (qFuzzyCompare(tupletNoteLeftDistance, 0.0)) // 4.x default
+                        set(Sid::tupletNoteLeftDistance, styleTypes[int(Sid::tupletNoteLeftDistance)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::tupletNoteLeftDistance, Spatium(tupletNoteLeftDistance));
+                  }
+            else if (isMu4 && tag == "scaleBarlines") { // 0 -> 1, why???
+                  bool scaleBarlines = e.readInt();
+                  if (!scaleBarlines) // 4.x default
+                        set(Sid::scaleBarlines, styleTypes[int(Sid::scaleBarlines)].defaultValue());
+                  else
+                        set(Sid::scaleBarlines, QVariant(scaleBarlines));
+                  }
+            else if (isMu4 && tag == "subTitleFontSize") { // 14 -> 16
+                  qreal subTitleFontSize = e.readDouble();
+                  if (qFuzzyCompare(subTitleFontSize, 14.0)) // 4.x default
+                        set(Sid::subTitleFontSize, styleTypes[int(Sid::subTitleFontSize)].defaultValue());
+                  else
+                        set(Sid::subTitleFontSize, QVariant(subTitleFontSize));
+                  }
+            //else if (isMu4 && tag == "dynamicsFontSize") { // 10 -> 11, Mu4 uses the musical font's ones, maybe that's the reason, so let's pass
+            else if (isMu4 && tag == "measureNumberPosBelow") { // y: 1 -> 2
+                  QPointF measureNumberPosBelow = e.readPoint();
+                  if (qFuzzyCompare(measureNumberPosBelow.y(), 1.0)) // 4.x default
+                        set(Sid::measureNumberPosBelow, styleTypes[int(Sid::measureNumberPosBelow)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::measureNumberPosBelow, QPointF(measureNumberPosBelow));
+                  }
+            else if (isMu4 && tag == "footerOffset") { // y: 0 -> 5, better use Mu3's default to prevent collisions.
+                  QPointF footerOffset = e.readPoint();
+                  if (qFuzzyCompare(footerOffset.y(), 0.0)) // 4.x default
+                        set(Sid::footerOffset, styleTypes[int(Sid::footerOffset)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::footerOffset, QPointF(footerOffset));
+                  }
+            else if (isMu4 && tag == "letRingLineWidth") { // 0.11 -> 0.15
+                  qreal letRingLineWidth = e.readDouble();
+                  if (qFuzzyCompare(letRingLineWidth, 0.11)) // 4.x default
+                        set(Sid::letRingLineWidth, styleTypes[int(Sid::letRingLineWidth)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::letRingLineWidth, Spatium(letRingLineWidth));
+                  }
+            else if (isMu4 && tag == "palmMutePosAbove") { // y: -4 resp. 0 -> -4
+                  QPointF palmMutePosAbove = e.readPoint();
+                  if (qFuzzyCompare(palmMutePosAbove.y(), 0.0)) // 4.1 default
+                        set(Sid::palmMutePosAbove, styleTypes[int(Sid::palmMutePosAbove)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::palmMutePosAbove, QPointF(palmMutePosAbove));
+                  }
+            else if (isMu4 && tag == "palmMutePosBelow") { // y: 4 resp. 0 -> 4
+                  QPointF palmMutePosBelow = e.readPoint();
+                  if (qFuzzyCompare(palmMutePosBelow.y(), 0.0)) // 4.1 default
+                        set(Sid::palmMutePosBelow, styleTypes[int(Sid::palmMutePosBelow)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::palmMutePosBelow, QPointF(palmMutePosBelow));
+                  }
+            else if (isMu4 && tag == "palmMuteLineWidth") { // 0.11 -> 0.15
+                  qreal palmMuteLineWidth = e.readDouble();
+                  if (qFuzzyCompare(palmMuteLineWidth, 0.11)) // 4.x default
+                        set(Sid::palmMuteLineWidth, styleTypes[int(Sid::palmMuteLineWidth)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::palmMuteLineWidth, Spatium(palmMuteLineWidth));
+                  }
+            else if (isMu4 && tag == "articulationMinDistance") { // 0.4 -> 0.5
+                  qreal articulationMinDistance = e.readDouble();
+                  if (qFuzzyCompare(articulationMinDistance, 0.4)) // 4.x default
+                        set(Sid::articulationMinDistance, styleTypes[int(Sid::articulationMinDistance)].defaultValue()); // 3.x default
+                  else
+                        set(Sid::articulationMinDistance, Spatium(articulationMinDistance));
+                  }
+            else if (isMu4 && tag == "defaultsVersion") // 400 -> 302, let's ignore
+                  e.skipCurrentElement();
+            //else if (isMu4 && tag == "Spatium") { // 1.74978 -> 1.75, rounding issue, has been read further up already
 // end 4.x compat
             else if (!readProperties(e))
                   e.unknown();
