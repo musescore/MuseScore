@@ -5389,20 +5389,8 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
 
 void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
 {
-    auto sl = cr->staff()->staffList();
-    for (Staff* staff : sl) {
-        ChordRest* ncr;
-        if (cr->isGrace()) {
-            ncr = findLinkedChord(toChord(cr), staff);
-        } else {
-            ncr = toChordRest(findLinkedVoiceElement(cr, staff));
-        }
-        if (!ncr) {
-            continue;
-        }
-        ncr->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, d.typeWithDots());
-        ncr->undoChangeProperty(Pid::DURATION, d.fraction());
-    }
+    cr->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, d.typeWithDots());
+    cr->undoChangeProperty(Pid::DURATION, d.fraction());
 }
 
 //---------------------------------------------------------
