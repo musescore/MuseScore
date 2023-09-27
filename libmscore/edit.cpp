@@ -4112,48 +4112,6 @@ void Score::undoChangeClef(Staff* ostaff, Element* e, ClefType ct, bool forInstr
             }
       }
 
-//---------------------------------------------------------
-//   findLinkedVoiceElement
-//---------------------------------------------------------
-
-static Element* findLinkedVoiceElement(Element* e, Staff* nstaff)
-      {
-      Excerpt* se = e->score()->excerpt();
-      Excerpt* de = nstaff->score()->excerpt();
-      int strack = e->track();
-      int dtrack = nstaff->idx() * VOICES + e->voice();
-
-      if (se)
-            strack = se->tracks().key(strack);
-
-      if (de) {
-            QList<int> l = de->tracks().values(strack);
-            if (l.isEmpty()) {
-                  // simply return the first linked element whose staff is equal to nstaff
-                  for (ScoreElement* ee : e->linkList()) {
-                        Element* el = toElement(ee);
-                        if (el->staff() == nstaff)
-                              return el;
-                        }
-                  return 0;
-                  }
-            for (int i : qAsConst(l)) {
-                  if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
-                        dtrack = i;
-                        break;
-                        }
-                  }
-            }
-
-      Score* score     = nstaff->score();
-      Segment* segment = toSegment(e->parent());
-      Measure* measure = segment->measure();
-      Measure* m       = score->tick2measure(measure->tick());
-      Segment* s       = m->findSegment(segment->segmentType(), segment->tick());
-      if (!s)
-            return 0;
-      return s->element(dtrack);
-      }
 
 //---------------------------------------------------------
 //   findLinkedChord
@@ -4217,18 +4175,8 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
 
 void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
       {
-      auto sl = cr->staff()->staffList();
-      for (Staff* staff : qAsConst(sl)) {
-            ChordRest *ncr;
-            if (cr->isGrace())
-                  ncr = findLinkedChord(toChord(cr), staff);
-            else
-                  ncr = toChordRest(findLinkedVoiceElement(cr, staff));
-            if (!ncr)
-                  continue;
-            ncr->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue(d));
-            ncr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(d.fraction()));
-            }
+      cr->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue(d));
+      cr->undoChangeProperty(Pid::DURATION, QVariant::fromValue(d.fraction()));
       }
 
 //---------------------------------------------------------

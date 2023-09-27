@@ -226,8 +226,8 @@ static constexpr PropertyMetaData propertyList[] = {
       { Pid::LINE_VISIBLE,            true,  "lineVisible",           P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "visible line")     },
       { Pid::MAG,                     false, "mag",                   P_TYPE::REAL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "mag")              },
       { Pid::USE_DRUMSET,             false, "useDrumset",            P_TYPE::BOOL,                DUMMY_QT_TRANSLATE_NOOP("propertyName", "using drumset")    },
-      { Pid::DURATION,                false, 0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "duration")         },
-      { Pid::DURATION_TYPE,           false, 0,                       P_TYPE::TDURATION,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "duration type")    },
+      { Pid::DURATION,                true,  0,                       P_TYPE::FRACTION,            DUMMY_QT_TRANSLATE_NOOP("propertyName", "duration")         },
+      { Pid::DURATION_TYPE,           true,  0,                       P_TYPE::TDURATION,           DUMMY_QT_TRANSLATE_NOOP("propertyName", "duration type")    },
       { Pid::ROLE,                    false, "role",                  P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "role")             },
       { Pid::TRACK,                   false, 0,                       P_TYPE::INT,                 DUMMY_QT_TRANSLATE_NOOP("propertyName", "track")            },
 

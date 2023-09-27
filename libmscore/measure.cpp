@@ -1846,11 +1846,8 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                         // convert the measure duration in a list of values (no dots for rests)
                         std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
 
-                        // set the existing rest to the first value of the duration list
-                        for (ScoreElement* e : rest->linkList()) {
-                              e->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(durList[0].fraction()));
-                              e->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue<TDuration>(durList[0]));
-                              }
+                        rest->undoChangeProperty(Pid::DURATION, QVariant::fromValue<Fraction>(durList[0].fraction()));
+                        rest->undoChangeProperty(Pid::DURATION_TYPE, QVariant::fromValue<TDuration>(durList[0]));
 
                         // add rests for any other duration list value
                         Fraction tickOffset = tick() + rest->actualTicks();
