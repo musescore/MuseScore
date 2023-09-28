@@ -697,6 +697,11 @@ double Rest::rightEdge() const
     return x() + width();
 }
 
+double Rest::centerX() const
+{
+    return score()->engravingFont()->width(layoutData()->sym(), mag()) / 2;
+}
+
 //---------------------------------------------------------
 //   accent
 //---------------------------------------------------------
