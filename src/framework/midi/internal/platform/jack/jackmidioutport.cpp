@@ -70,12 +70,14 @@ void JackMidiOutPort::deinit()
 
 std::vector<MidiDevice> JackMidiOutPort::availableDevices() const
 {
+    std::vector<MidiDevice> ret;
     ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
+
     MidiDevice dev;
     dev.name = "jack"; //snd_seq_client_info_get_name(cinfo);
     int client = 0; //FIXsnd_seq_port_info_get_client(pinfo);
     int port = 0; //FIXsnd_seq_port_info_get_port(pinfo);
-    dev.id = makeUniqueDeviceId(index++, client, port);
+    dev.id = makeUniqueDeviceId(0, client, port);
     ret.push_back(std::move(dev));
     return ret;
 }
@@ -87,6 +89,10 @@ mu::async::Notification JackMidiOutPort::availableDevicesChanged() const
 
 mu::Ret JackMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
+    //----> common with jackaudio <----
+    jack_client_t* client;
+    client = jack_client_open(_jackName, options, &status);
+    //----><----
     if (!deviceExists(deviceID)) {
         return make_ret(Err::MidiFailedConnect, "not found device, id: " + deviceID);
     }
@@ -107,23 +113,15 @@ mu::Ret JackMidiOutPort::connect(const MidiDeviceID& deviceID)
             disconnect();
         }
 
-        int err = snd_seq_open(&m_jack->midiOut, "default", SND_SEQ_OPEN_OUTPUT, 0);
-        if (err < 0) {
-            return make_ret(Err::MidiFailedConnect, "failed open seq, err: " + std::string(snd_strerror(err)));
-        }
-        snd_seq_set_client_name(m_jack->midiOut, "MuseScore");
-
-        int port = snd_seq_create_simple_port(m_jack->midiOut, "MuseScore Port-0", SND_SEQ_PORT_CAP_READ, SND_SEQ_PORT_TYPE_MIDI_GENERIC);
-        if (port < 0) {
-            return make_ret(Err::MidiFailedConnect, "failed create port");
+        jack_port_t* port = jack_port_register(client, "MuseScore-midi", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
+        if (port == 0) {
+            return make_ret(Err::MidiFailedConnect, "failed open jack-midi");
+        } else {
+            m_jack->midiOut = port;
         }
 
         m_jack->client = deviceParams.at(1);
         m_jack->port = deviceParams.at(2);
-        err = snd_seq_connect_to(m_jack->midiOut, port, m_jack->client, m_jack->port);
-        if (err < 0) {
-            return make_ret(Err::MidiFailedConnect,  "failed connect, err: " + std::string(snd_strerror(err)));
-        }
     }
 
     m_deviceID = deviceID;
