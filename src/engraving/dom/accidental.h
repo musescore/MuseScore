@@ -124,7 +124,7 @@ public:
 
         std::vector<Sym> syms;
 
-        bool isValid() const { return !syms.empty(); }
+        bool isValid() const override { return EngravingItem::LayoutData::isValid() && !syms.empty(); }
     };
     DECLARE_LAYOUTDATA_METHODS(Accidental);
 

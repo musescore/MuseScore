@@ -267,7 +267,7 @@ compat::DummyElement* SingleLayout::Context::dummyParent() const
 
 void SingleLayout::layout(Accidental* item, const Context&)
 {
-    if (!item->layoutData()) {
+    if (!item->layoutData() || !item->layoutData()->isValid()) {
         Accidental::LayoutData* ldata = item->mutLayoutData();
         SymId symId = item->symId();
         Accidental::LayoutData::Sym s(symId, 0.0, 0.0);
