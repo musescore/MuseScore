@@ -834,8 +834,6 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
             continue;
         }
 
-        const Drumset* drumset
-            = staff->part()->instrument(measure->tick())->useDrumset() ? staff->part()->instrument(measure->tick())->drumset() : 0;
         AccidentalState as;          // list of already set accidentals for this measure
         as.init(staff->keySigEvent(measure->tick()));
 
@@ -859,6 +857,8 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
             // TODO? maybe we do need to process it here to make it possible to enable later
             //if (!segment.enabled())
             //      continue;
+            Instrument* ins = staff->part()->instrument(segment.tick());
+            const Drumset* drumset = ins->useDrumset() ? ins->drumset() : nullptr;
             if (segment.isKeySigType()) {
                 KeySig* ks = toKeySig(segment.element(staffIdx * VOICES));
                 if (!ks) {
