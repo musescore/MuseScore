@@ -1935,7 +1935,7 @@ void TLayout::layout(const Fermata* item, Fermata::LayoutData* ldata, const Layo
             y = chord->y();
         } else if (e->isRest()) {
             const Rest* rest = toRest(e);
-            x = rest->pos().x() + rest->centerX();
+            x = rest->x() + rest->centerX();
             y = rest->y();
         } else {
             x = e->x() - e->shape().left() + e->width() * item->staff()->staffMag(Fraction(0, 1)) * .5;

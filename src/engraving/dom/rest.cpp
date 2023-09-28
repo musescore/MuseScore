@@ -699,7 +699,9 @@ double Rest::rightEdge() const
 
 double Rest::centerX() const
 {
-    return score()->engravingFont()->width(layoutData()->sym(), mag()) / 2;
+    SymId sym = layoutData()->sym();
+    RectF bbox = symBbox(sym);
+    return bbox.left() + bbox.width() / 2;
 }
 
 //---------------------------------------------------------
