@@ -864,10 +864,8 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
       XmlReader e(dbuf);
       e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
-      FileError retval = read1(e, ignoreVersionError);
-
       QByteArray sbuf = uz.fileData("score_style.mss"); // exists in Mu4 scores only
-      if (!sbuf.isEmpty()) {
+      if (!sbuf.isEmpty() && ignoreVersionError) { // needs to be read before the actual score
             XmlReader el(sbuf);
             while (el.readNextStartElement()) {
                   if (el.name() == "museScore") {
@@ -881,8 +879,10 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
                   }
             }
 
-      QByteArray vbuf = uz.fileData("viewsettings.json");  // exists in Mu4 scores only
-      if (!vbuf.isEmpty()) {
+      FileError retval = read1(e, ignoreVersionError);
+
+      QByteArray vbuf = uz.fileData("viewsettings.json"); // exists in Mu4 scores only
+      if (!vbuf.isEmpty() && ignoreVersionError) {
             QJsonDocument doc = QJsonDocument::fromJson(vbuf);
             QJsonObject obj = doc.object();
             QString viewMode = obj["notation"].toObject()["viewMode"].toString();
@@ -1068,7 +1068,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
                   if (created() && !preferences.getString(PREF_SCORE_STYLE_DEFAULTSTYLEFILE).isEmpty()) {
                         setStyle(MScore::defaultStyle());
                         }
-                  else {
+                  else if (mscVersion() < 400) { // 4.x compat, style read already
                         int defaultsVersion = readStyleDefaultsVersion();
 
                         setStyle(*MStyle::resolveStyleDefaults(defaultsVersion));
