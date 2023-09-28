@@ -465,6 +465,13 @@
           <name>Snare (Rim shot)</name>
           <stem>1</stem>
           </Drum>
+        <Drum pitch="92">
+          <head>cross</head>
+          <line>-1</line>
+          <voice>0</voice>
+          <name>Open Hi-Hat</name>
+          <stem>1</stem>
+          </Drum>
         <Drum pitch="93">
           <head>cross</head>
           <line>0</line>
