@@ -141,7 +141,8 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
     // if there are some Time Signatures in joined measures, move last one to the next measure (if there is not one already)
     Segment* ts = inserted->last()->prev(SegmentType::TimeSig);
     if (ts && ts->rtick().isNotZero()) {
-        for (Segment* insMSeg = inserted->last()->prev(SegmentType::TimeSig); insMSeg && insMSeg->rtick().isNotZero(); insMSeg = insMSeg->prev(SegmentType::TimeSig)) {
+        for (Segment* insMSeg = inserted->last()->prev(SegmentType::TimeSig); insMSeg && insMSeg->rtick().isNotZero();
+             insMSeg = insMSeg->prev(SegmentType::TimeSig)) {
             for (staff_idx_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
                 if (TimeSig* insTimeSig = toTimeSig(insMSeg->element(staffIdx * VOICES))) {
                     TimeSig* lts = nullptr;
@@ -152,7 +153,7 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
                         track_idx_t track = timeSig->track();
                         Measure* sNext = next ? score->tick2measure(next->tick()) : nullptr;
                         Segment* nextTSeg = sNext ? sNext->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1)) : nullptr;
-                        if (sNext && !nextTSeg->element(track)){
+                        if (sNext && !nextTSeg->element(track)) {
                             TimeSig* nsig = Factory::copyTimeSig(*timeSig);
                             nsig->setScore(score);
                             nsig->setTrack(track);
