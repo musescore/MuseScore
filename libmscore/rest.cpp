@@ -853,6 +853,13 @@ qreal Rest::rightEdge() const
       return x() + width();
       }
 
+qreal Rest::centerX() const
+      {
+      SymId sym = this->sym();
+      const auto& bbox = symBbox(sym);
+      return symWidth(sym) / 2 + bbox.bottomLeft().x();
+      }
+
 //---------------------------------------------------------
 //   accent
 //---------------------------------------------------------
