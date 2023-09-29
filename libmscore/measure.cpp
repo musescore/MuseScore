@@ -2361,6 +2361,20 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         segment->add(t);
                         }
                   }
+            else if (tag == "Expression") { // 4.x compat
+                  StaffText* t = new StaffText(score());
+                  t->setTid(Tid::EXPRESSION);
+                  t->setTrack(e.track());
+                  t->read(e);
+                  if (t->empty()) {
+                        qDebug("==reading empty text: deleted");
+                        delete t;
+                  }
+                  else {
+                        segment = getSegment(SegmentType::ChordRest, e.tick());
+                        segment->add(t);
+                        }
+                  }
 
             //----------------------------------------------------
             // Annotation
