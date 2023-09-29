@@ -4076,11 +4076,12 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             std::list<Clef*> specialCaseClefs;
             std::vector<BarLine*> previousBarLinesList;
 
+            Measure* pm = newMeasure->prevMeasure();
+
             //
             // remove clef, barlines, time and key signatures
             //
             if (measureInsert) {
-                Measure* pm = newMeasure->prevMeasure();
                 if (pm && !options.moveSignaturesClef) {
                     Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                     if (ps && ps->enabled()) {
@@ -4094,24 +4095,6 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                                 }
                             }
                         }
-                    }
-                    Segment* pbs = pm->findSegment(SegmentType::EndBarLine, tick);
-                    if (pbs && pbs->enabled()) {
-                        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-                            EngravingItem* pb = pbs->element(staffIdx * VOICES);
-                            if (pb && !pb->generated()) {
-                                previousBarLinesList.push_back(toBarLine(pb));
-                                undo(new RemoveElement(pb));
-                                if (pbs->empty()) {
-                                    pbs->setEnabled(false);
-                                }
-                            }
-                        }
-                    }
-
-                    if (localMeasure && pm->repeatEnd()) {
-                        localMeasure->undoChangeProperty(Pid::REPEAT_END, true);
-                        pm->undoChangeProperty(Pid::REPEAT_END, false);
                     }
                 }
 
@@ -4188,6 +4171,26 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                 // If inserting measure into an empty score, restore default C key signature
                 // and 4/4 time signature
                 score->restoreInitialKeySigAndTimeSig();
+            }
+
+            if (pm && !options.moveSignaturesClef) {
+                Segment* pbs = pm->findSegment(SegmentType::EndBarLine, tick);
+                if (pbs && pbs->enabled()) {
+                    for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
+                        EngravingItem* pb = pbs->element(staffIdx * VOICES);
+                        if (pb && !pb->generated()) {
+                            previousBarLinesList.push_back(toBarLine(pb));
+                            undo(new RemoveElement(pb));
+                            if (pbs->empty()) {
+                                pbs->setEnabled(false);
+                            }
+                        }
+                    }
+                }
+                if (localMeasure && pm->repeatEnd()) {
+                    localMeasure->undoChangeProperty(Pid::REPEAT_END, true);
+                    pm->undoChangeProperty(Pid::REPEAT_END, false);
+                }
             }
 
             //
