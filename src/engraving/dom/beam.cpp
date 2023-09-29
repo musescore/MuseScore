@@ -444,8 +444,8 @@ void Beam::reset()
         undoChangeProperty(Pid::USER_MODIFIED, false);
     }
     undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
-    resetProperty(Pid::BEAM_NO_SLOPE);
-    setGenerated(true);
+    undoResetProperty(Pid::BEAM_NO_SLOPE);
+    undoChangeProperty(Pid::GENERATED, true);
 }
 
 //---------------------------------------------------------
