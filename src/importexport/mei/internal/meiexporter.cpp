@@ -208,8 +208,7 @@ bool MeiExporter::writeHeader()
 
         if (!m_score->metaTag(u"copyright").isEmpty()) {
             pugi::xml_node availability = pubStmt.append_child("availability");
-            pugi::xml_node distributor = availability.append_child("distributor");
-            distributor.text().set(m_score->metaTag(u"copyright").toStdString().c_str());
+            availability.text().set(m_score->metaTag(u"copyright").toStdString().c_str());
         }
     }
 
