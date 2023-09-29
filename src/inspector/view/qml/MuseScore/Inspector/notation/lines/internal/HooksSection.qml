@@ -100,8 +100,8 @@ Column {
             propertyItem: root.startHookHeight
 
             step: 0.5
-            maxValue: 10.0
-            minValue: -10.0
+            maxValue: 1000.0
+            minValue: -1000.0
             decimals: 2
 
             navigationName: "StartHookHeight"
@@ -119,8 +119,8 @@ Column {
             propertyItem: root.endHookHeight
 
             step: 0.5
-            maxValue: 10.0
-            minValue: -10.0
+            maxValue: 1000.0
+            minValue: -1000.0
             decimals: 2
 
             navigationName: "EndHookHeight"
