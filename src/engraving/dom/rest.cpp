@@ -697,6 +697,13 @@ double Rest::rightEdge() const
     return x() + width();
 }
 
+double Rest::centerX() const
+{
+    SymId sym = layoutData()->sym();
+    RectF bbox = symBbox(sym);
+    return bbox.left() + bbox.width() / 2;
+}
+
 //---------------------------------------------------------
 //   accent
 //---------------------------------------------------------

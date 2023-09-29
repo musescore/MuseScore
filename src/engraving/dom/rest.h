@@ -115,6 +115,7 @@ public:
     double stemPosX() const override;
     mu::PointF stemPosBeam() const override;
     double rightEdge() const override;
+    double centerX() const;
 
     void localSpatiumChanged(double oldValue, double newValue) override;
     PropertyValue propertyDefault(Pid) const override;
