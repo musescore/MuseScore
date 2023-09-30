@@ -160,7 +160,7 @@ public:
 
     virtual Ret canAddBoxes() const = 0;
     virtual void addBoxes(BoxType boxType, int count, AddBoxesTarget target) = 0;
-    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex) = 0;
+    virtual void addBoxes(BoxType boxType, int count, int beforeBoxIndex, bool insertAfter) = 0;
 
     virtual void copySelection() = 0;
     virtual mu::Ret repeatSelection() = 0;
