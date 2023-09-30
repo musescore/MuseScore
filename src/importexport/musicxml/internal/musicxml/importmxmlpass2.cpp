@@ -1226,6 +1226,7 @@ static NoteHeadGroup convertNotehead(QString mxmlName)
     map["slashed"] = int(NoteHeadGroup::HEAD_SLASHED1);
     map["back slashed"] = int(NoteHeadGroup::HEAD_SLASHED2);
     map["normal"] = int(NoteHeadGroup::HEAD_NORMAL);
+    map["rectangle"] = int(NoteHeadGroup::HEAD_LA);
     map["do"] = int(NoteHeadGroup::HEAD_DO);
     map["re"] = int(NoteHeadGroup::HEAD_RE);
     map["mi"] = int(NoteHeadGroup::HEAD_MI);
