@@ -52,10 +52,6 @@ bool SpannerFilter::isPlayable(const EngravingItem* item, const RenderingContext
 
 int SpannerFilter::spannerActualDurationTicks(const Spanner* spanner, const int nominalDurationTicks)
 {
-    if (spanner->type() == ElementType::TRILL) {
-        return spanner->endSegment()->tick().ticks() - spanner->tick().ticks() - 1;
-    }
-
     if (spanner->type() == ElementType::SLUR) {
         EngravingItem* startItem = spanner->startElement();
         EngravingItem* endItem = spanner->endElement();
