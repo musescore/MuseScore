@@ -4082,7 +4082,9 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
             // remove clef, barlines, time and key signatures
             //
             if (measureInsert) {
-                if (pm && !options.moveSignaturesClef) {
+                // if inserting before first measure, always preserve clefs and signatures
+                // at the begining of the score (move them back)
+                if (pm && !options.moveSignaturesClef && !isBeginning) {
                     Segment* ps = pm->findSegment(SegmentType::Clef, tick);
                     if (ps && ps->enabled()) {
                         for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
@@ -4098,7 +4100,7 @@ MeasureBase* Score::insertMeasure(ElementType type, MeasureBase* beforeMeasure, 
                     }
                 }
 
-                if (options.moveSignaturesClef) {
+                if (options.moveSignaturesClef || isBeginning) {
                     for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
                         for (Segment* s = measureInsert->first(); s && s->rtick().isZero(); s = s->next()) {
                             if (!s->enabled()) {
