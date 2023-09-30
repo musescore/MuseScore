@@ -64,7 +64,7 @@ public:
     void mxmlIoTest(const char* file);
     void mxmlIoTestRef(const char* file);
     void mxmlIoTestRefBreaks(const char* file);
-    void mxmlMscxExportTestRef(const char* file);
+    void mxmlMscxExportTestRef(const char* file, bool exportLayout = false);
     void mxmlMscxExportTestRefBreaks(const char* file);
     void mxmlMscxExportTestRefInvisibleElements(const char* file);
     void mxmlReadTestCompr(const char* file);
@@ -206,12 +206,12 @@ void Musicxml_Tests::mxmlIoTestRefBreaks(const char* file)
 //   read a MuseScore mscx file, write to a MusicXML file and verify against reference
 //---------------------------------------------------------
 
-void Musicxml_Tests::mxmlMscxExportTestRef(const char* file)
+void Musicxml_Tests::mxmlMscxExportTestRef(const char* file, bool exportLayout)
 {
     MScore::debugMode = true;
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
-    setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
+    setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(exportLayout));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
 
     String fileName = String::fromUtf8(file);
@@ -810,6 +810,9 @@ TEST_F(Musicxml_Tests, systemBrackets4) {
 }
 TEST_F(Musicxml_Tests, systemBrackets5) {
     mxmlIoTest("testSystemBrackets1");
+}
+TEST_F(Musicxml_Tests, systemDistance) {
+    mxmlMscxExportTestRef("testSystemDistance", true);
 }
 TEST_F(Musicxml_Tests, tablature1) {
     mxmlIoTest("testTablature1");
