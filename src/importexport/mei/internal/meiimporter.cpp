@@ -874,7 +874,7 @@ bool MeiImporter::readMeiHead(pugi::xml_node root)
         }
     }
 
-    pugi::xml_node copyrightNode = root.select_node("//meiHead/fileDesc/pubStmt/availability/distributor").node();
+    pugi::xml_node copyrightNode = root.select_node("//meiHead/fileDesc/pubStmt/availability").node();
     if (copyrightNode) {
         m_score->setMetaTag(u"copyright", String(copyrightNode.text().as_string()));
     }
