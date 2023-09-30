@@ -1220,6 +1220,7 @@ static NoteHeadGroup convertNotehead(QString mxmlName)
     map["diamond"] = int(NoteHeadGroup::HEAD_DIAMOND);
     map["cross"] = int(NoteHeadGroup::HEAD_PLUS);
     map["x"] = int(NoteHeadGroup::HEAD_CROSS);
+    map["circled"] = int(NoteHeadGroup::HEAD_CIRCLED);
     map["circle-x"] = int(NoteHeadGroup::HEAD_XCIRCLE);
     map["inverted triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_DOWN);
     map["slashed"] = int(NoteHeadGroup::HEAD_SLASHED1);
