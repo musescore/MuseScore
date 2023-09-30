@@ -37,6 +37,7 @@
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fermata.h"
+#include "engraving/dom/figuredbass.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
@@ -802,6 +803,8 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
             success = success && this->writeDynam(dynamic_cast<const Dynamic*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isFermata()) {
             success = success && this->writeFermata(dynamic_cast<const Fermata*>(controlEvent.first), controlEvent.second);
+        } else if (controlEvent.first->isFiguredBass()) {
+            success = success && this->writeFb(dynamic_cast<const FiguredBass*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHairpin()) {
             success = success && this->writeHairpin(dynamic_cast<const Hairpin*>(controlEvent.first), controlEvent.second);
         } else if (controlEvent.first->isHarmony()) {
@@ -1528,6 +1531,61 @@ bool MeiExporter::writeDynam(const Dynamic* dynamic, const std::string& startid)
     meiDynam.Write(dynamNode, this->getXmlIdFor(dynamic, 'd'));
 
     this->writeLines(dynamNode, meiLines);
+
+    return true;
+}
+
+/**
+ * Write a f (FigureBassItem).
+ */
+
+bool MeiExporter::writeF(const FiguredBassItem* figuredBassItem)
+{
+    IF_ASSERT_FAILED(figuredBassItem) {
+        return false;
+    }
+
+    StringList meiLines;
+
+    pugi::xml_node fNode = m_currentNode.append_child();
+    libmei::F meiF = Convert::fToMEI(figuredBassItem, meiLines);
+    meiF.Write(fNode, this->getXmlIdFor(figuredBassItem, 'f'));
+
+    this->writeLines(fNode, meiLines);
+
+    return true;
+}
+
+/**
+ * Write a fb (FigureBass).
+ */
+
+bool MeiExporter::writeFb(const FiguredBass* figuredBass, const std::string& startid)
+{
+    IF_ASSERT_FAILED(figuredBass) {
+        return false;
+    }
+
+    m_currentNode = m_currentNode.append_child();
+
+    auto [meiHarm, meiFb] = Convert::fbToMEI(figuredBass);
+    meiHarm.SetStartid(startid);
+    meiHarm.Write(m_currentNode, this->getLayerXmlIdFor(HARM_L));
+
+    m_currentNode = m_currentNode.append_child();
+    meiFb.Write(m_currentNode, this->getXmlIdFor(figuredBass, 'f'));
+
+    for (const FiguredBassItem* f : figuredBass->items()) {
+        this->writeF(f);
+    }
+
+    // This is the end of the <fb> - non critical assert
+    assert(isCurrentNode(libmei::Fb()));
+    m_currentNode = m_currentNode.parent();
+
+    // This is the end of the <harm> - non critical assert
+    assert(isCurrentNode(libmei::Harm()));
+    m_currentNode = m_currentNode.parent();
 
     return true;
 }

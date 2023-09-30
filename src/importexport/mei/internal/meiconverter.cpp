@@ -35,6 +35,7 @@
 #include "engraving/dom/breath.h"
 #include "engraving/dom/dynamic.h"
 #include "engraving/dom/fermata.h"
+#include "engraving/dom/figuredbass.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
@@ -1328,6 +1329,47 @@ libmei::Ending Convert::endingToMEI(const engraving::Volta* volta)
     }
 
     return meiEnding;
+}
+
+void Convert::fFromMEI(engraving::FiguredBassItem* figuredBassItem, const StringList& meiLines, const libmei::F& meiF, bool& warning)
+{
+    warning = false;
+
+    // content
+    String text = meiLines.join(u"\n");
+    figuredBassItem->parse(text);
+
+    UNUSED(meiF);
+}
+
+libmei::F Convert::fToMEI(const engraving::FiguredBassItem* figuredBassItem, StringList& meiLines)
+{
+    libmei::F meiF;
+
+    // content - to be imporved
+    String plainText = figuredBassItem->normalizedText();
+    meiLines = plainText.split(u"\n");
+
+    return meiF;
+}
+
+void Convert::fbFromMEI(engraving::FiguredBass* figuredBass, const libmei::Harm& meiHarm, const libmei::Fb& meiFb, bool& warning)
+{
+    warning = false;
+
+    UNUSED(figuredBass);
+    UNUSED(meiHarm);
+    UNUSED(meiFb);
+}
+
+std::pair<libmei::Harm, libmei::Fb> Convert::fbToMEI(const engraving::FiguredBass* figuredBass)
+{
+    libmei::Harm meiHarm;
+    libmei::Fb meiFb;
+
+    UNUSED(figuredBass);
+
+    return { meiHarm, meiFb };
 }
 
 void Convert::fermataFromMEI(engraving::Fermata* fermata, const libmei::Fermata& meiFermata, bool& warning)

@@ -39,6 +39,7 @@ class UIDRegister;
 enum layerElementCounter {
     ACCID_L = 0,
     BEAM_L,
+    HARM_L,
     GRACEGRP_L,
     SYL_L,
     VERSE_L,
@@ -101,6 +102,8 @@ private:
     bool writeDir(const engraving::TextBase* dir, const std::string& startid);
     bool writeDir(const engraving::TextLineBase* dir, const std::string& startid);
     bool writeDynam(const engraving::Dynamic* dynamic, const std::string& startid);
+    bool writeF(const engraving::FiguredBassItem* figuredBassItem);
+    bool writeFb(const engraving::FiguredBass* figuredBass, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const std::string& startid);
     bool writeFermata(const engraving::Fermata* fermata, const libmei::xsdPositiveInteger_List& staffNs, double tstamp);
     bool writeHairpin(const engraving::Hairpin* hairpin, const std::string& startid);
