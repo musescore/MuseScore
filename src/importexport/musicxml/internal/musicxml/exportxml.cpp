@@ -6192,6 +6192,9 @@ static void spannerStop(ExportMusicXml* exp, track_idx_t strack, track_idx_t etr
             case ElementType::LET_RING:
                 exp->textLine(toLetRing(e), sstaff, Fraction(-1, 1));
                 break;
+            case ElementType::GRADUAL_TEMPO_CHANGE:
+                exp->textLine(toGradualTempoChange(e), sstaff, Fraction(-1, 1));
+                break;
             case ElementType::PALM_MUTE:
                 exp->textLine(toPalmMute(e), sstaff, Fraction(-1, 1));
                 break;
