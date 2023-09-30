@@ -35,35 +35,46 @@ id<NSObject> darkModeObserverToken = nil;
 
 void MacOSPlatformTheme::startListening()
 {
-    if (!darkModeObserverToken) {
-        darkModeObserverToken = [[NSDistributedNotificationCenter defaultCenter]
-                                 addObserverForName:@"AppleInterfaceThemeChangedNotification"
-                                 object:nil
-                                 queue:nil
-                                 usingBlock:^(NSNotification*) {
-                                     m_platformThemeChanged.notify();
-                                 }];
+    if (__builtin_available(macOS 10.14, *)) {
+        if (!darkModeObserverToken) {
+            darkModeObserverToken = [[NSDistributedNotificationCenter defaultCenter]
+                                     addObserverForName:@"AppleInterfaceThemeChangedNotification"
+                                     object:nil
+                                     queue:nil
+                                     usingBlock:^(NSNotification*) {
+                                         m_platformThemeChanged.notify();
+                                     }];
+        }
     }
 }
 
 void MacOSPlatformTheme::stopListening()
 {
-    if (darkModeObserverToken) {
-        [[NSDistributedNotificationCenter defaultCenter] removeObserver:darkModeObserverToken];
-        darkModeObserverToken = nil;
+    if (__builtin_available(macOS 10.14, *)) {
+        if (darkModeObserverToken) {
+            [[NSDistributedNotificationCenter defaultCenter] removeObserver:darkModeObserverToken];
+            darkModeObserverToken = nil;
+        }
     }
 }
 
 bool MacOSPlatformTheme::isFollowSystemThemeAvailable() const
 {
-    // Supported from macOS 10.14, which is our minimum supported version
-    return true;
+    if (__builtin_available(macOS 10.14, *)) {
+        return true;
+    }
+
+    return false;
 }
 
 bool MacOSPlatformTheme::isSystemThemeDark() const
 {
-    NSString* systemMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
-    return [systemMode isEqualToString:@"Dark"];
+    if (__builtin_available(macOS 10.14, *)) {
+        NSString* systemMode = [[NSUserDefaults standardUserDefaults] stringForKey:@"AppleInterfaceStyle"];
+        return [systemMode isEqualToString:@"Dark"];
+    }
+
+    return false;
 }
 
 bool MacOSPlatformTheme::isGlobalMenuAvailable() const
@@ -78,12 +89,14 @@ Notification MacOSPlatformTheme::platformThemeChanged() const
 
 void MacOSPlatformTheme::applyPlatformStyleOnAppForTheme(const ThemeCode& themeCode)
 {
-    // The system will turn these appearance names into their high contrast
-    // counterparts automatically if system high contrast is enabled
-    if (isDarkTheme(themeCode)) {
-        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
-    } else {
-        [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
+    if (__builtin_available(macOS 10.14, *)) {
+        // The system will turn these appearance names into their high contrast
+        // counterparts automatically if system high contrast is enabled
+        if (isDarkTheme(themeCode)) {
+            [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameDarkAqua]];
+        } else {
+            [NSApp setAppearance:[NSAppearance appearanceNamed:NSAppearanceNameAqua]];
+        }
     }
 }
 

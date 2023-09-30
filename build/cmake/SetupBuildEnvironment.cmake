@@ -137,7 +137,7 @@ if (OS_IS_MAC)
         message(STATUS "Building for default architecture(s)")
     endif()
 
-    set(MACOSX_DEPLOYMENT_TARGET 10.14)
-    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.14)
+    set(MACOSX_DEPLOYMENT_TARGET 10.13)
+    set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)
 endif(OS_IS_MAC)
 

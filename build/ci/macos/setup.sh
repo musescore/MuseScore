@@ -23,7 +23,7 @@ echo "Setup MacOS build environment"
 trap 'echo Setup failed; exit 1' ERR
 SKIP_ERR_FLAG=true
 
-export MACOSX_DEPLOYMENT_TARGET=10.14
+export MACOSX_DEPLOYMENT_TARGET=10.13
 
 # install dependencies
 wget -c --no-check-certificate -nv -O bottles.zip https://musescore.org/sites/musescore.org/files/2020-02/bottles-MuseScore-3.0-yosemite.zip
