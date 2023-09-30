@@ -390,7 +390,7 @@ void EditStaff::apply()
                         score->undo(new ChangePart(part, new Instrument(*part->instrument()), newPartName));  //tick?
                   if (instrumentFieldChanged) {
                         Segment* s = score->tick2segment(_tickStart, true, SegmentType::ChordRest);
-                        const std::vector<Element*> elist = s ? s->findAnnotations(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack()) : std::vector<Element*>();
+                        const std::vector<Element*> elist = s ? s->findAnnotations(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack() - 1) : std::vector<Element*>();
                         if (elist.size())
                               for (Element* e : elist) // Change instrument in all Instrument Changes (for linked staves)
                                     score->undo(new ChangeInstrument(toInstrumentChange(e), new Instrument(instrument)));
