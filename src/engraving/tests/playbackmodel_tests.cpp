@@ -45,6 +45,7 @@ using namespace mu::mpe;
 using namespace mu;
 
 static const String PLAYBACK_MODEL_TEST_FILES_DIR("playbackmodel_data/");
+static constexpr duration_t QUARTER_NOTE_DURATION = 500000; // duration in microseconds for 4/4 120BPM
 
 class Engraving_PlaybackModelTests : public ::testing::Test, public async::Asyncable
 {
@@ -290,6 +291,86 @@ TEST_F(Engraving_PlaybackModelTests, Da_Capo_Al_Coda)
 
     // [THEN] Amount of events does match expectations
     EXPECT_EQ(result.size(), expectedSize);
+}
+
+/**
+ * @brief PlaybackModelTests_Spanners
+ * @details Given a score where in each measure there is a spanner over the second and third note,
+ *          we check that the spanner affects indeed the expected notes.
+ */
+TEST_F(Engraving_PlaybackModelTests, Spanners)
+{
+    // [GIVEN] Simple piece of score, where in each measure there is a spanner over the second and third note
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "spanners/spanners.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Part* part = score->parts().at(0);
+    ASSERT_TRUE(part);
+    ASSERT_EQ(part->instruments().size(), 1);
+
+    // [GIVEN] Expected amount of events
+    static constexpr int expectedNumberOfEvents = 3 * 4;
+
+    // [WHEN] The articulation profiles repository will be returning profiles
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    m_defaultProfile->setPattern(ArticulationType::Pedal, buildTestArticulationPattern());
+    m_defaultProfile->setPattern(ArticulationType::Trill, buildTestArticulationPattern());
+    m_defaultProfile->setPattern(ArticulationType::Legato, buildTestArticulationPattern());
+
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model;
+    model.setprofilesRepository(m_repositoryMock);
+    model.load(score);
+
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+
+    // [THEN] Amount of events matches expectations
+    EXPECT_EQ(result.size(), expectedNumberOfEvents);
+
+    // [THEN] Details of applied articulations match expectations
+    struct ExpectedArticulation {
+        ArticulationType articulationType = ArticulationType::Standard;
+        timestamp_t from = 0;
+        timestamp_t to = 0;
+    };
+
+    // [THEN] Amount of applied articulations matches expectations
+    static const std::vector<ExpectedArticulation> expectedArticulations = {
+        {},
+        { ArticulationType::Pedal, 1 * QUARTER_NOTE_DURATION, 3 * QUARTER_NOTE_DURATION },
+        { ArticulationType::Pedal, 1 * QUARTER_NOTE_DURATION, 3 * QUARTER_NOTE_DURATION },
+        {},
+        {},
+        { ArticulationType::Trill, 5 * QUARTER_NOTE_DURATION, 7 * QUARTER_NOTE_DURATION },
+        { ArticulationType::Trill, 5 * QUARTER_NOTE_DURATION, 7 * QUARTER_NOTE_DURATION },
+        {},
+        {},
+        { ArticulationType::Legato, 9 * QUARTER_NOTE_DURATION, 11 * QUARTER_NOTE_DURATION },
+        { ArticulationType::Legato, 9 * QUARTER_NOTE_DURATION, 11 * QUARTER_NOTE_DURATION },
+        {}
+    };
+
+    for (size_t i=0; i < expectedNumberOfEvents; ++i) {
+        const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(result.at(i * QUARTER_NOTE_DURATION).at(0));
+
+        EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+
+        const ArticulationMap::PairType& articulation = *noteEvent.expressionCtx().articulations.cbegin();
+
+        const ExpectedArticulation& expectedArticulation = expectedArticulations[i];
+
+        if (expectedArticulation.articulationType == ArticulationType::Standard) {
+            EXPECT_EQ(articulation.first, ArticulationType::Standard);
+        } else {
+            EXPECT_EQ(articulation.first, expectedArticulation.articulationType);
+            EXPECT_EQ(articulation.second.meta.timestamp, expectedArticulation.from);
+            EXPECT_EQ(articulation.second.meta.timestamp + articulation.second.meta.overallDuration, expectedArticulation.to);
+        }
+    }
 }
 
 /**
