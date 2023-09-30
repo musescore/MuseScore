@@ -24,31 +24,23 @@
 
 #include <memory>
 
-#include "async/asyncable.h"
-#include "midi/imidioutport.h"
-#include "internal/midideviceslistener.h"
+#include "midi/midiportstate.h"
 
 namespace mu::midi {
-class JackMidiOutPort : public IMidiOutPort, public async::Asyncable
+class JackMidiOutPort : public MidiPortState
 {
 public:
     JackMidiOutPort() = default;
     ~JackMidiOutPort() = default;
-
     void init();
     void deinit();
 
     std::vector<MidiDevice> availableDevices() const override;
-    async::Notification availableDevicesChanged() const override;
-
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
-    async::Notification deviceChanged() const override;
-
     bool supportsMIDI20Output() const override;
-
     Ret sendEvent(const Event& e) override;
 
 private:
@@ -57,12 +49,6 @@ private:
     struct Jack;
     std::shared_ptr<Jack> m_jack;
     MidiDeviceID m_deviceID;
-    async::Notification m_deviceChanged;
-
-    async::Notification m_availableDevicesChanged;
-    MidiDevicesListener m_devicesListener;
-
-    mutable std::mutex m_devicesMutex;
 };
 }
 

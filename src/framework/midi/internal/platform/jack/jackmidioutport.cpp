@@ -26,12 +26,12 @@
 
 #include "midierrors.h"
 #include "translation.h"
-#include "defer.h"
+//#include "defer.h"
 #include "log.h"
 
 struct mu::midi::JackMidiOutPort::Jack {
     jack_port_t* midiOut = nullptr;
-    int client = -1;
+    jack_client_t* client = nullptr;
     int port = -1;
 };
 
@@ -39,7 +39,9 @@ using namespace mu::midi;
 
 void JackMidiOutPort::init()
 {
+    LOGI("---- linux JACK init ----");
     m_jack = std::make_shared<Jack>();
+    /*
 
     m_devicesListener.startWithCallback([this]() {
         return availableDevices();
@@ -59,6 +61,7 @@ void JackMidiOutPort::init()
 
         m_availableDevicesChanged.notify();
     });
+    */
 }
 
 void JackMidiOutPort::deinit()
@@ -70,81 +73,45 @@ void JackMidiOutPort::deinit()
 
 std::vector<MidiDevice> JackMidiOutPort::availableDevices() const
 {
+    //LOGI("---- linux JACK availableDevices ----");
     std::vector<MidiDevice> ret;
-    ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
-
     MidiDevice dev;
-    dev.name = "jack"; //snd_seq_client_info_get_name(cinfo);
-    int client = 0; //FIXsnd_seq_port_info_get_client(pinfo);
-    int port = 0; //FIXsnd_seq_port_info_get_port(pinfo);
-    dev.id = makeUniqueDeviceId(0, client, port);
+    dev.name = "JACK";
+    dev.id = makeUniqueDeviceId(0,9999,0);
     ret.push_back(std::move(dev));
     return ret;
 }
 
-mu::async::Notification JackMidiOutPort::availableDevicesChanged() const
-{
-    return m_availableDevicesChanged;
-}
-
 mu::Ret JackMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
+    LOGI("---- linux JACK connect ----");
     //----> common with jackaudio <----
     jack_client_t* client;
-    client = jack_client_open(_jackName, options, &status);
-    //----><----
-    if (!deviceExists(deviceID)) {
-        return make_ret(Err::MidiFailedConnect, "not found device, id: " + deviceID);
+    jack_options_t options = (jack_options_t)0;
+    jack_status_t status;
+    client = jack_client_open("MuseScore", options, &status);
+    if (!client) {
+        return make_ret(Err::MidiInvalidDeviceID, "jack-open fail, device: " + deviceID);
     }
-
-    DEFER {
-        m_deviceChanged.notify();
-    };
-
-    Ret ret = make_ok();
-
-    if (!deviceID.empty() && deviceID != NONE_DEVICE_ID) {
-        std::vector<int> deviceParams = splitDeviceId(deviceID);
-        IF_ASSERT_FAILED(deviceParams.size() == 3) {
-            return make_ret(Err::MidiInvalidDeviceID, "invalid device id: " + deviceID);
-        }
-
-        if (isConnected()) {
-            disconnect();
-        }
-
-        jack_port_t* port = jack_port_register(client, "MuseScore-midi", JACK_DEFAULT_MIDI_TYPE, JackPortIsOutput, 0);
-        if (port == 0) {
-            return make_ret(Err::MidiFailedConnect, "failed open jack-midi");
-        } else {
-            m_jack->midiOut = port;
-        }
-
-        m_jack->client = deviceParams.at(1);
-        m_jack->port = deviceParams.at(2);
-    }
-
-    m_deviceID = deviceID;
-
-    if (ret) {
-        LOGD() << "Connected to " << m_deviceID;
-    }
-
     return Ret(true);
 }
 
 void JackMidiOutPort::disconnect()
 {
+    LOGI("---- linux JACK disconnect ----");
     if (!isConnected()) {
         return;
     }
 
-    snd_seq_disconnect_from(m_jack->midiOut, 0, m_jack->client, m_jack->port);
-    snd_seq_close(m_jack->midiOut);
+    //FIX:
+    //const char* sn = jack_port_name((jack_port_t*) src);
+    //const char* dn = jack_port_name((jack_port_t*) dst);
+    //jackdisconnect(m_jack->midiOut, 0, m_jack->client, m_jack->port);
+    if (jack_deactivate(m_jack->client)) {
+        LOGE() << "failed to deactive jack";
+    }
 
-    LOGD() << "Disconnected from " << m_deviceID;
-
-    m_jack->client = -1;
+    m_jack->client = nullptr;
     m_jack->port = -1;
     m_jack->midiOut = nullptr;
     m_deviceID.clear();
@@ -152,26 +119,25 @@ void JackMidiOutPort::disconnect()
 
 bool JackMidiOutPort::isConnected() const
 {
+    LOGI("---- linux JACK isConnect ----");
     return m_jack && m_jack->midiOut && !m_deviceID.empty();
 }
 
 MidiDeviceID JackMidiOutPort::deviceID() const
 {
+    LOGI("---- linux JACK deviceID ----");
     return m_deviceID;
-}
-
-mu::async::Notification JackMidiOutPort::deviceChanged() const
-{
-    return m_deviceChanged;
 }
 
 bool JackMidiOutPort::supportsMIDI20Output() const
 {
+    LOGI("---- linux JACK supportsMIDI20Output ----");
     return false;
 }
 
 mu::Ret JackMidiOutPort::sendEvent(const Event& e)
 {
+    LOGI() << "---- linux JACK sendEvent ----" << e.to_string();
     // LOGI() << e.to_string();
 
     if (!isConnected()) {
@@ -189,40 +155,41 @@ mu::Ret JackMidiOutPort::sendEvent(const Event& e)
         return Ret(true);
     }
 
-    snd_seq_event_t seqev;
-    memset(&seqev, 0, sizeof(seqev));
-    snd_seq_ev_set_direct(&seqev);
-    snd_seq_ev_set_source(&seqev, 0);
-    snd_seq_ev_set_dest(&seqev, SND_SEQ_ADDRESS_SUBSCRIBERS, 0);
+//    snd_seq_event_t seqev;
+//    memset(&seqev, 0, sizeof(seqev));
+//    snd_seq_ev_set_direct(&seqev);
+//    snd_seq_ev_set_source(&seqev, 0);
+//    snd_seq_ev_set_dest(&seqev, SND_SEQ_ADDRESS_SUBSCRIBERS, 0);
 
     switch (e.opcode()) {
     case Event::Opcode::NoteOn:
-        snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity());
+//        snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity());
         break;
     case Event::Opcode::NoteOff:
-        snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity());
+//        snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity());
         break;
     case Event::Opcode::ProgramChange:
-        snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.program());
+//        snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.program());
         break;
     case Event::Opcode::ControlChange:
-        snd_seq_ev_set_controller(&seqev, e.channel(), e.index(), e.data());
+//        snd_seq_ev_set_controller(&seqev, e.channel(), e.index(), e.data());
         break;
     case Event::Opcode::PitchBend:
-        snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.data() - 8192);
+//        snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.data() - 8192);
         break;
     default:
         NOT_SUPPORTED << "event: " << e.to_string();
         return make_ret(Err::MidiNotSupported);
     }
 
-    snd_seq_event_output_direct(m_jack->midiOut, &seqev);
+//    snd_seq_event_output_direct(m_jack->midiOut, &seqev);
 
     return Ret(true);
 }
 
 bool JackMidiOutPort::deviceExists(const MidiDeviceID& deviceId) const
 {
+    LOGI("---- linux JACK deviceExists ----");
     for (const MidiDevice& device : availableDevices()) {
         if (device.id == deviceId) {
             return true;

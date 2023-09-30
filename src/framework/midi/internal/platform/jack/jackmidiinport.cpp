@@ -30,7 +30,7 @@
 #include "defer.h"
 #include "log.h"
 
-struct mu::midi::JackMidiInPort::Alsa {
+struct mu::midi::JackMidiInPort::Jack {
     jack_port_t* midiIn = nullptr;
     int client = -1;
     int port = -1;
@@ -40,7 +40,7 @@ using namespace mu::midi;
 
 void JackMidiInPort::init()
 {
-    m_jack = std::make_shared<Alsa>();
+    m_jack = std::make_shared<Jack>();
 
     m_devicesListener.startWithCallback([this]() {
         return availableDevices();
@@ -73,29 +73,29 @@ std::vector<MidiDevice> JackMidiInPort::availableDevices() const
 {
     std::lock_guard lock(m_devicesMutex);
 
-    int streams = SND_SEQ_OPEN_INPUT;
-    unsigned int cap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
-    unsigned int type = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
+    //int streams = 0; //SND_SEQ_OPEN_INPUT;
+    //unsigned int cap = 0; //SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
+    //unsigned int type = 0; //SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
 
     std::vector<MidiDevice> ret;
 
     ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
 
-    snd_seq_client_info_t* cinfo;
-    snd_seq_port_info_t* pinfo;
-    int client;
+    //snd_seq_client_info_t* cinfo;
+    //snd_seq_port_info_t* pinfo;
+    //int client;
     int err;
-    snd_seq_t* handle;
+    //snd_seq_t* handle;
 
-    err = snd_seq_open(&handle, "hw", streams, 0);
+    err = 0; // snd_seq_open(&handle, "hw", streams, 0);
     if (err < 0) {
         /* Use snd_strerror(errno) to get the error here. */
         return ret;
     }
 
-    snd_seq_client_info_alloca(&cinfo);
-    snd_seq_client_info_set_client(cinfo, -1);
-
+    //snd_seq_client_info_alloca(&cinfo);
+    //snd_seq_client_info_set_client(cinfo, -1);
+#if 0
     int index = 0;
     while (snd_seq_query_next_client(handle, cinfo) >= 0) {
         client = snd_seq_client_info_get_client(cinfo);
@@ -125,8 +125,9 @@ std::vector<MidiDevice> JackMidiInPort::availableDevices() const
             }
         }
     }
+#endif
 
-    snd_seq_close(handle);
+//    snd_seq_close(handle);
 
     return ret;
 }
@@ -157,7 +158,7 @@ mu::Ret JackMidiInPort::connect(const MidiDeviceID& deviceID)
         IF_ASSERT_FAILED(deviceParams.size() == 3) {
             return make_ret(Err::MidiInvalidDeviceID, "invalid device id: " + deviceID);
         }
-
+#if 0
         int err = snd_seq_open(&m_jack->midiIn, "default", SND_SEQ_OPEN_INPUT, SND_SEQ_NONBLOCK);
         if (err < 0) {
             return make_ret(Err::MidiFailedConnect, "failed open seq, err: " + std::string(snd_strerror(err)));
@@ -179,6 +180,7 @@ mu::Ret JackMidiInPort::connect(const MidiDeviceID& deviceID)
 
         m_deviceID = deviceID;
         ret = run();
+#endif
     } else {
         m_deviceID = deviceID;
     }
@@ -195,14 +197,14 @@ void JackMidiInPort::disconnect()
     if (!isConnected()) {
         return;
     }
-
+#if 0
     snd_seq_disconnect_to(m_jack->midiIn, 0, m_jack->client, m_jack->port);
     snd_seq_close(m_jack->midiIn);
 
     stop();
 
     LOGD() << "Disconnected from " << m_deviceID;
-
+#endif
     m_jack->client = -1;
     m_jack->port = -1;
     m_jack->midiIn = nullptr;
@@ -257,18 +259,18 @@ void JackMidiInPort::stop()
     m_thread = nullptr;
 }
 
-void JackMidiInPort::process(AlsaMidiInPort* self)
+void JackMidiInPort::process(JackMidiInPort* self)
 {
     self->doProcess();
 }
 
 void JackMidiInPort::doProcess()
 {
-    snd_seq_event_t* ev = nullptr;
-    uint32_t data = 0;
-    uint32_t value = 0;
+    //snd_seq_event_t* ev = nullptr;
+    //uint32_t data = 0;
+    //uint32_t value = 0;
     Event e;
-
+#if 0
     while (m_running.load() && isConnected()) {
         snd_seq_event_input(m_jack->midiIn, &ev);
 
@@ -342,6 +344,7 @@ void JackMidiInPort::doProcess()
 
         sleep();
     }
+#endif
 }
 
 bool JackMidiInPort::deviceExists(const MidiDeviceID& deviceId) const

@@ -55,7 +55,7 @@ private:
     Ret run();
     void stop();
 
-    static void process(AlsaMidiInPort* self);
+    static void process(JackMidiInPort* self);
     void doProcess();
 
     bool deviceExists(const MidiDeviceID& deviceId) const;
