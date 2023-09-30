@@ -6590,9 +6590,10 @@ void ExportMusicXml::print(const Measure* const m, const int partNr, const int f
 
                 if (mpc.systemStart && !mpc.pageStart) {
                     // see System::layout2() for the factor 2 * score()->spatium()
+                    const Measure* prevSystemMeasure = mpc.prevMeasure->coveringMMRestOrThis();
                     const double sysDist = getTenthsFromDots(mmR1->pagePos().y()
-                                                             - mpc.prevMeasure->pagePos().y()
-                                                             - mpc.prevMeasure->layoutData()->bbox().height()
+                                                             - prevSystemMeasure->pagePos().y()
+                                                             - prevSystemMeasure->layoutData()->bbox().height()
                                                              + 2 * score()->style().spatium()
                                                              );
                     _xml.tag("system-distance", QString("%1").arg(QString::number(sysDist, 'f', 2)));
