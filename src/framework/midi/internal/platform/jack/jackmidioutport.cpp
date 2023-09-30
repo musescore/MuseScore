@@ -26,13 +26,13 @@
 
 #include "midierrors.h"
 #include "translation.h"
-//#include "defer.h"
 #include "log.h"
 
 struct mu::midi::JackMidiOutPort::Jack {
     jack_port_t* midiOut = nullptr;
     jack_client_t* client = nullptr;
     int port = -1;
+    int segmentSize;
 };
 
 using namespace mu::midi;
@@ -41,27 +41,6 @@ void JackMidiOutPort::init()
 {
     LOGI("---- linux JACK init ----");
     m_jack = std::make_shared<Jack>();
-    /*
-
-    m_devicesListener.startWithCallback([this]() {
-        return availableDevices();
-    });
-
-    m_devicesListener.devicesChanged().onNotify(this, [this]() {
-        bool connectedDeviceRemoved = true;
-        for (const MidiDevice& device: availableDevices()) {
-            if (m_deviceID == device.id) {
-                connectedDeviceRemoved = false;
-            }
-        }
-
-        if (connectedDeviceRemoved) {
-            disconnect();
-        }
-
-        m_availableDevicesChanged.notify();
-    });
-    */
 }
 
 void JackMidiOutPort::deinit()
@@ -93,6 +72,8 @@ mu::Ret JackMidiOutPort::connect(const MidiDeviceID& deviceID)
     if (!client) {
         return make_ret(Err::MidiInvalidDeviceID, "jack-open fail, device: " + deviceID);
     }
+    m_jack->client = client;
+    m_jack->segmentSize = jack_get_buffer_size(client);
     return Ret(true);
 }
 
@@ -135,8 +116,62 @@ bool JackMidiOutPort::supportsMIDI20Output() const
     return false;
 }
 
+// FIX: is opcode an compatible MIDI enumeration?
+
+mu::Ret sendEvent_noteonoff (void *pb, int framePos, const Event& e) {
+    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
+    if (p == 0) {
+        qDebug("JackMidi: buffer overflow, event lost");
+        return mu::Ret(false);
+    }
+    if (e.opcode() == Event::Opcode::NoteOn) {
+        p[0] = /* e.opcode() */ 0x90 | e.channel();
+    } else {
+        p[0] = /* e.opcode() */ 0x80 | e.channel();
+    }
+    p[1] = e.note();
+    p[2] = e.velocity();
+    return mu::Ret(true);
+}
+
+mu::Ret sendEvent_control (void *pb, int framePos, const Event& e) {
+    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
+    if (p == 0) {
+        qDebug("JackMidi: buffer overflow, event lost");
+        return mu::Ret(false);
+    }
+    p[0] = /* e.opcode() */ 0xb0 | e.channel();
+    p[1] = e.index();
+    p[2] = e.data();
+    return mu::Ret(true);
+}
+
+mu::Ret sendEvent_program (void *pb, int framePos, const Event& e) {
+    unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
+    if (p == 0) {
+        qDebug("JackMidi: buffer overflow, event lost");
+        return mu::Ret(false);
+    }
+    p[0] = /* e.opcode() */ 0xc0 | e.channel();
+    p[1] = e.program();
+    return mu::Ret(true);
+}
+
+mu::Ret sendEvent_pitchbend (void *pb, int framePos, const Event& e) {
+    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
+    if (p == 0) {
+        qDebug("JackMidi: buffer overflow, event lost");
+        return mu::Ret(false);
+    }
+    p[0] = /* e.opcode() */ 0xe0 | e.channel();
+    p[1] = e.data(); // dataA
+    p[2] = e.velocity(); // dataB
+    return mu::Ret(true);
+}
+
 mu::Ret JackMidiOutPort::sendEvent(const Event& e)
 {
+    int framePos = 0;
     LOGI() << "---- linux JACK sendEvent ----" << e.to_string();
     // LOGI() << e.to_string();
 
@@ -155,34 +190,26 @@ mu::Ret JackMidiOutPort::sendEvent(const Event& e)
         return Ret(true);
     }
 
-//    snd_seq_event_t seqev;
-//    memset(&seqev, 0, sizeof(seqev));
-//    snd_seq_ev_set_direct(&seqev);
-//    snd_seq_ev_set_source(&seqev, 0);
-//    snd_seq_ev_set_dest(&seqev, SND_SEQ_ADDRESS_SUBSCRIBERS, 0);
+    //  int portIdx = seq->score()->midiPort(e.channel()); ??
+    jack_port_t* port = m_jack->midiOut; // [portIdx];
+    void* pb = jack_port_get_buffer(port, m_jack->segmentSize);
 
     switch (e.opcode()) {
+    // FIX: Event::Opcode::POLYAFTER ?
     case Event::Opcode::NoteOn:
-//        snd_seq_ev_set_noteon(&seqev, e.channel(), e.note(), e.velocity());
-        break;
+        return sendEvent_noteonoff(pb, framePos, e);
     case Event::Opcode::NoteOff:
-//        snd_seq_ev_set_noteoff(&seqev, e.channel(), e.note(), e.velocity());
-        break;
-    case Event::Opcode::ProgramChange:
-//        snd_seq_ev_set_pgmchange(&seqev, e.channel(), e.program());
-        break;
+        return sendEvent_noteonoff(pb, framePos, e);
     case Event::Opcode::ControlChange:
-//        snd_seq_ev_set_controller(&seqev, e.channel(), e.index(), e.data());
-        break;
+        return sendEvent_control(pb, framePos, e);
+    case Event::Opcode::ProgramChange:
+        return sendEvent_control(pb, framePos, e);
     case Event::Opcode::PitchBend:
-//        snd_seq_ev_set_pitchbend(&seqev, e.channel(), e.data() - 8192);
-        break;
+        return sendEvent_pitchbend(pb, framePos, e);
     default:
         NOT_SUPPORTED << "event: " << e.to_string();
         return make_ret(Err::MidiNotSupported);
     }
-
-//    snd_seq_event_output_direct(m_jack->midiOut, &seqev);
 
     return Ret(true);
 }

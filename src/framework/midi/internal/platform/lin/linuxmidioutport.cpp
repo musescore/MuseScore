@@ -188,7 +188,7 @@ mu::Ret LinuxMidiOutPort::sendEvent(const Event& e)
         return Ret(true);
     }
 
-    return Ret(true);
+    return m_midiOutPortCurrent->sendEvent(e);
 }
 
 bool LinuxMidiOutPort::deviceExists(const MidiDeviceID& deviceId) const
