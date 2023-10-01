@@ -454,14 +454,22 @@ void ExportDialog::accept()
                   saveFormat = "xml";
             else
                   saveFormat = "mxl";
-            if (musicxmlExportAllLayout->isChecked() && !preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT))
+            if (musicxmlExportAllLayout->isChecked() && !preferences.getBool(PREF_EXPORT_MUSICXML_EXPORTLAYOUT)) {
                   preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, true);
-            else if (musicxmlExportAllBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::ALL)
                   preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::ALL);
-            else if (musicxmlExportManualBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::MANUAL)
+            }
+            else if (musicxmlExportAllBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::ALL) {
+                  preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
+                  preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::ALL);
+                  }
+            else if (musicxmlExportManualBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::MANUAL) {
+                  preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
                   preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
-            else if (musicxmlExportNoBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::NO)
+                  }
+            else if (musicxmlExportNoBreaks->isChecked() && preferences.musicxmlExportBreaks() != MusicxmlExportBreaks::NO) {
+                  preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
                   preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::NO);
+                  }
       } else if (currentIndex == 9)
             saveFormat = "mscx";
 
