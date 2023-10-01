@@ -266,6 +266,7 @@ public:
     void toggleItalic() override;
     void toggleUnderline() override;
     void toggleStrike() override;
+    void toggleRed() override;
     void toggleArticulation(mu::engraving::SymId) override;
     void toggleAutoplace(bool) override;
     bool canInsertClef(mu::engraving::ClefType) const override;

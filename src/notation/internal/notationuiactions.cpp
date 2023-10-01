@@ -1753,6 +1753,13 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Format text: strikethrough"),
              Checkable::Yes
              ),
+    UiAction("text-red",
+            mu::context::UiCtxNotationOpened,
+            mu::context::CTX_NOTATION_OPENED,
+            TranslatableString("action", "Red"),
+            TranslatableString("action", "Format text: red"),
+            Checkable::Yes
+            ),
     UiAction("pitch-up-diatonic",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
