@@ -5420,13 +5420,6 @@ void NotationInteraction::toggleFontStyle(mu::engraving::FontStyle style)
     notifyAboutTextEditingChanged();
 }
 
-void NotationInteraction::toggleRed()
-{
-//FIXME
-   /*mu::engraving::TextBase* text = toTextBase(m_editData.element);
-    int currentColor = text->getProperty(mu::engraving::Pid::COLOR).toInt();
-    text->textColor( ).RED;*/
-}
 
 void NotationInteraction::toggleBold()
 {
