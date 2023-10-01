@@ -26,6 +26,8 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonValue>
+#include <QMap>
+#include <QString>
 #include <map>
 
 #include <QApplication>
@@ -42,6 +44,7 @@
 #include "modularity/ioc.h"
 #include "ui/internal/uiengine.h"
 #include "muversion.h"
+#include "types/symnames.h"
 
 #include "framework/global/globalmodule.h"
 
@@ -57,48 +60,43 @@ namespace mu {
 extern bool g_tuneMap_loaded;
 extern bool g_tuning_additive;
 extern bool g_tuning_write;
-extern std::map<int, double> g_tuneMap;
+extern std::map<int, double> g_tunePitchMap;
+extern std::map<int, double> g_tuneAccidentalMap;
 
-std::map<int, double> tuneMapLoad(const std::string tuneFilename)
+void tuneMapLoad(const std::string tuneFilename)
 {
-    std::map<int, double> tuneMap;
     QString filename = QString::fromStdString(tuneFilename);
     QFile file(filename);
     if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qWarning("Failed to open tunemap file.");
-        return tuneMap;
+        return;
     }
 
     QJsonDocument document = QJsonDocument::fromJson(file.readAll());
     if (document.isNull()) {
         qWarning("Failed to parse tunemap file.");
-        return tuneMap;
+        return;
     }
 
     if (!document.isObject()) {
         qWarning("tunemap file doesn't contain a JSON object.");
-        return tuneMap;
+        return;
     }
 
     QJsonObject jsonObject = document.object();
-    for (auto it = jsonObject.begin(); it != jsonObject.end(); ++it) {
-        bool keyOk;
-        int key = it.key().toInt(&keyOk);
-        if (!it.value().isDouble()) {
-            qWarning("Value is not a valid number.");
-            continue;
-        }
-        double value = it.value().toDouble();
-
-        if (keyOk) {
-            tuneMap[key] = value;
+    for (auto it = jsonObject.constBegin(); it != jsonObject.constEnd(); ++it) {
+        if (it.key().startsWith("midi-")) {
+            bool ok;
+            int midiNum = it.key().mid(5).toInt(&ok); // Extract the number after "midi-"
+            if (ok) {
+                g_tunePitchMap[midiNum] = it.value().toDouble();
+            }
         } else {
-            qWarning("Failed to convert key or value to int.");
+            int symId = static_cast<int>(mu::engraving::SymNames::symIdByName(AsciiStringView(it.key().toStdString())));
+            g_tuneAccidentalMap[symId] = it.value().toDouble();
         }
     }
-
-    LOGI() << "Loaded tunemap, " << tuneMap.size() << " tuning adjustments";
-    return tuneMap;
+    LOGI() << "Loaded tunemaps: pitch-tunemap:" << g_tunePitchMap.size() << ",  accidental-tunemap: " << g_tuneAccidentalMap.size();
 }
 }
 
@@ -456,7 +454,7 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, IAp
     notationConfiguration()->setTestModeEnabled(options.notation.testModeEnabled);
 
     if (options.notation.tuneMapFile) {
-        g_tuneMap = tuneMapLoad(options.notation.tuneMapFile.value());
+        tuneMapLoad(options.notation.tuneMapFile.value());
         g_tuneMap_loaded = true;
     }
 

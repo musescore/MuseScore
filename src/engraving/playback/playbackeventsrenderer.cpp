@@ -27,6 +27,7 @@
 #include "dom/chord.h"
 #include "dom/harmony.h"
 #include "dom/note.h"
+#include "dom/accidental.h"
 #include "dom/rest.h"
 #include "dom/sig.h"
 #include "dom/tempo.h"
@@ -48,25 +49,32 @@ namespace mu {
 bool g_tuneMap_loaded = false;
 bool g_tuning_additive = false;
 bool g_tuning_write    = false;
-std::map<int, double> g_tuneMap;
+std::map<int, double> g_tunePitchMap;
+std::map<int, double> g_tuneAccidentalMap;
 
-double tuneMapGet(const mu::engraving::Note* note, int pitch, double tuning)
+double tuneMapGet(const mu::engraving::Note* note, int pitch, double curTuning)
 {
-    LOGI("tunemap find %i ", pitch);
-    if (g_tuneMap_loaded) {
-        if (g_tuneMap.find(pitch) != g_tuneMap.end()) {
-            // Cant modify note here
-            // if (g_tuning_write) {
-            //     note->setTuning(g_tuneMap[pitch]);
-            // }
-            if (g_tuning_additive) {
-                LOGI("tunemap %i, %f + %f", pitch, g_tuneMap[pitch], tuning);
-                return g_tuneMap[pitch] + tuning;
-            } else {
-                LOGI("tunemap %i, %f", pitch, g_tuneMap[pitch]);
-                return g_tuneMap[pitch];
-            }
+    if (!g_tuneMap_loaded) {
+        return curTuning;
+    }
+    double tuning = 0;
+    if (g_tuning_additive) {
+        tuning += curTuning;
+    }
+    Accidental* acc = note->accidental();
+    if (acc) {
+        AccidentalType at = acc->accidentalType();
+        int sid = static_cast<int>(acc->symId());
+        const char* str = acc->subtype2name(at).ascii();
+        if (g_tuneAccidentalMap.find(sid) != g_tuneAccidentalMap.end()) {
+            LOGI("accidental-tune-map accidental acc-sid=%i acc-name=%s", sid, str);
+            return g_tuneAccidentalMap[sid] + tuning;
         }
+    }
+
+    if (g_tunePitchMap.find(pitch) != g_tunePitchMap.end()) {
+        LOGI("tunemap %i, %f + %f", pitch, g_tunePitchMap[pitch], tuning);
+        return g_tunePitchMap[pitch] + tuning;
     }
     return tuning;
 }
