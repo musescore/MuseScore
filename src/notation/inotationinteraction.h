@@ -260,6 +260,7 @@ public:
     virtual void toggleItalic() = 0;
     virtual void toggleUnderline() = 0;
     virtual void toggleStrike() = 0;
+    virtual void toggleRed() = 0;
 
     virtual bool canInsertClef(mu::engraving::ClefType) const = 0;
     virtual void insertClef(mu::engraving::ClefType) = 0;
