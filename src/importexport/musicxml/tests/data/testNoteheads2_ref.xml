@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
+<score-partwise version="4.0">
+  <work>
+    <work-title>Full range of noteheads</work-title>
+    </work>
+  <identification>
+    <creator type="composer">Klaus Rettinghaus</creator>
+    <encoding>
+      <software>MuseScore 0.7.0</software>
+      <encoding-date>2007-09-10</encoding-date>
+      <supports element="accidental" type="yes"/>
+      <supports element="beam" type="yes"/>
+      <supports element="print" attribute="new-page" type="no"/>
+      <supports element="print" attribute="new-system" type="no"/>
+      <supports element="stem" type="yes"/>
+      </encoding>
+    </identification>
+  <part-list>
+    <score-part id="P1">
+      <part-name>Piano</part-name>
+      <score-instrument id="P1-I1">
+        <instrument-name>Piano</instrument-name>
+        </score-instrument>
+      <midi-device id="P1-I1" port="1"></midi-device>
+      <midi-instrument id="P1-I1">
+        <midi-channel>1</midi-channel>
+        <midi-program>1</midi-program>
+        <volume>78.7402</volume>
+        <pan>0</pan>
+        </midi-instrument>
+      </score-part>
+    </part-list>
+  <part id="P1">
+    <measure number="1">
+      <attributes>
+        <divisions>1</divisions>
+        <key>
+          <fifths>0</fifths>
+          </key>
+        <time>
+          <beats>2</beats>
+          <beat-type>4</beat-type>
+          </time>
+        <clef>
+          <sign>G</sign>
+          <line>2</line>
+          </clef>
+        </attributes>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>x</notehead>
+        </note>
+      </measure>
+    <measure number="2">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>cross</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>circle-x</notehead>
+        </note>
+      </measure>
+    <measure number="3">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead smufl="noteheadVoidWithX">other</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>triangle</notehead>
+        </note>
+      </measure>
+    <measure number="4">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>inverted triangle</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>slashed</notehead>
+        </note>
+      </measure>
+    <measure number="5">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>back slashed</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>diamond</notehead>
+        </note>
+      </measure>
+    <measure number="6">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead smufl="noteheadDiamondBlackOld">other</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>circled</notehead>
+        </note>
+      </measure>
+    <measure number="7">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead smufl="noteheadCircledBlackLarge">other</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead smufl="noteheadLargeArrowDownBlack">other</notehead>
+        </note>
+      </measure>
+    <measure number="8">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead smufl="noteheadBlack">other</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>slash</notehead>
+        </note>
+      </measure>
+    <measure number="9">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead smufl="noteheadSlashHorizontalEnds">other</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>so</notehead>
+        </note>
+      </measure>
+    <measure number="10">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>la</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>fa up</notehead>
+        </note>
+      </measure>
+    <measure number="11">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>mi</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>do</notehead>
+        </note>
+      </measure>
+    <measure number="12">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>re</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead>ti</notehead>
+        </note>
+      </measure>
+    <measure number="13">
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead smufl="noteheadHeavyX">other</notehead>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>up</stem>
+        <notehead smufl="noteheadHeavyXHat">other</notehead>
+        </note>
+      <barline location="right">
+        <bar-style>light-heavy</bar-style>
+        </barline>
+      </measure>
+    </part>
+  </score-partwise>

@@ -3569,6 +3569,8 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         xml.tagRaw(noteheadTagname, "cross");
     } else if (note->headGroup() == NoteHeadGroup::HEAD_CROSS) {
         xml.tagRaw(noteheadTagname, "x");
+    } else if (note->headGroup() == NoteHeadGroup::HEAD_CIRCLED) {
+        xml.tagRaw(noteheadTagname, "circled");
     } else if (note->headGroup() == NoteHeadGroup::HEAD_XCIRCLE) {
         xml.tagRaw(noteheadTagname, "circle-x");
     } else if (note->headGroup() == NoteHeadGroup::HEAD_TRIANGLE_DOWN) {
@@ -3599,6 +3601,10 @@ static void writeNotehead(XmlWriter& xml, const Note* const note)
         xml.tagRaw(noteheadTagname, "normal");
     } else if (note->headType() != NoteHeadType::HEAD_AUTO) {
         xml.tagRaw(noteheadTagname, "normal");
+    } else if (note->headGroup() != NoteHeadGroup::HEAD_NORMAL) {
+        AsciiStringView noteheadName = SymNames::nameForSymId(note->noteHead());
+        noteheadTagname += QString(" smufl=\"%1\"").arg(noteheadName.ascii());
+        xml.tagRaw(noteheadTagname, "other");
     }
 }
 

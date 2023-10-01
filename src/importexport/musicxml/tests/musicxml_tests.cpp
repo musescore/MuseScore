@@ -736,6 +736,9 @@ TEST_F(Musicxml_Tests, noteheadParentheses) {
 TEST_F(Musicxml_Tests, noteheads) {
     mxmlIoTest("testNoteheads");
 }
+TEST_F(Musicxml_Tests, noteheads2) {
+    mxmlMscxExportTestRef("testNoteheads2");
+}
 TEST_F(Musicxml_Tests, noteheadsFilled) {
     mxmlIoTest("testNoteheadsFilled");
 }
