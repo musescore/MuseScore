@@ -101,7 +101,6 @@ struct PlayNoteParams {
     int offset = 0;
     int staffIdx = 0;
     MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
-    bool slide = false;
     bool callAllSoundOff = false;//NoteOn silence channel
 };
 
@@ -224,7 +223,6 @@ static void playNote(EventsHolder& events, const Note* note, PlayNoteParams para
     ev.setTuning(note->tuning());
     ev.setNote(note);
     ev.setEffect(params.effect);
-    ev.setSlide(params.slide);
     if (params.offTime > 0 && params.offTime < params.onTime) {
         return;
     }
@@ -452,10 +450,14 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             playParams.onTime = std::max(0, on - noteParams.graceOffsetOn);
             playParams.offTime = std::max(0, off - noteParams.graceOffsetOff);
 
-            if (eventEffect == MidiInstrumentEffect::NONE && e.slide()) {
-                eventEffect = MidiInstrumentEffect::SLIDE;
+            if (eventEffect == MidiInstrumentEffect::NONE) {
+                if (e.slide()) {
+                    eventEffect = MidiInstrumentEffect::SLIDE;
+                } else if (e.hammerPull()) {
+                    eventEffect = MidiInstrumentEffect::HAMMER_PULL;
+                }
+
                 eventChannel = getChannel(instr, note, eventEffect, context);
-                playParams.slide = true;
             }
 
             playParams.effect = eventEffect;
