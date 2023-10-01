@@ -49,6 +49,8 @@ public:
         struct {
             std::optional<bool> templateModeEnabled;
             std::optional<bool> testModeEnabled;
+            std::optional<std::string> tuneMapFile;
+            std::optional<std::string> tuneMode;
         } notation;
 
         struct {

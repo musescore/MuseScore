@@ -44,6 +44,34 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
+namespace mu {
+bool g_tuneMap_loaded = false;
+bool g_tuning_additive = false;
+bool g_tuning_write    = false;
+std::map<int, double> g_tuneMap;
+
+double tuneMapGet(const mu::engraving::Note* note, int pitch, double tuning)
+{
+    LOGI("tunemap find %i ", pitch);
+    if (g_tuneMap_loaded) {
+        if (g_tuneMap.find(pitch) != g_tuneMap.end()) {
+            // Cant modify note here
+            // if (g_tuning_write) {
+            //     note->setTuning(g_tuneMap[pitch]);
+            // }
+            if (g_tuning_additive) {
+                LOGI("tunemap %i, %f + %f", pitch, g_tuneMap[pitch], tuning);
+                return g_tuneMap[pitch] + tuning;
+            } else {
+                LOGI("tunemap %i, %f", pitch, g_tuneMap[pitch]);
+                return g_tuneMap[pitch];
+            }
+        }
+    }
+    return tuning;
+}
+}
+
 static ArticulationMap makeStandardArticulationMap(const ArticulationsProfilePtr profile, timestamp_t timestamp, duration_t duration)
 {
     ArticulationMeta meta(ArticulationType::Standard,
@@ -142,6 +170,9 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol,
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
+        //if (g_tuning_write) {
+        //    it->setTuning(tuneMapGet(pitch, it->tuning()));
+        //}
         int tpc = pitch2tpc(pitch, key, Prefer::NEAREST);
         int octave = playingOctave(pitch, tpc);
         pitch_level_t pitchLevel = notePitchLevel(tpc, octave);
@@ -179,6 +210,9 @@ void PlaybackEventsRenderer::renderChordSymbol(const Harmony* chordSymbol, const
 
     for (auto it = notes.cbegin(); it != notes.cend(); ++it) {
         int pitch = it->first;
+        //if (g_tuning_write) {
+        //    it->setTuning(tuneMapGet(pitch, it->tuning()));
+        //}
         int tpc = pitch2tpc(pitch, key, Prefer::NEAREST);
         int octave = playingOctave(pitch, tpc);
         pitch_level_t pitchLevel = notePitchLevel(tpc, octave);

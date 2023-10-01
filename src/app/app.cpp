@@ -22,6 +22,12 @@
 
 #include "app.h"
 
+#include <QFile>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QJsonValue>
+#include <map>
+
 #include <QApplication>
 #include <QQmlApplicationEngine>
 #include <QQuickWindow>
@@ -46,6 +52,55 @@ using namespace mu::appshell;
 
 //! NOTE Separately to initialize logger and profiler as early as possible
 static mu::GlobalModule globalModule;
+
+namespace mu {
+extern bool g_tuneMap_loaded;
+extern bool g_tuning_additive;
+extern bool g_tuning_write;
+extern std::map<int, double> g_tuneMap;
+
+std::map<int, double> tuneMapLoad(const std::string tuneFilename)
+{
+    std::map<int, double> tuneMap;
+    QString filename = QString::fromStdString(tuneFilename);
+    QFile file(filename);
+    if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning("Failed to open tunemap file.");
+        return tuneMap;
+    }
+
+    QJsonDocument document = QJsonDocument::fromJson(file.readAll());
+    if (document.isNull()) {
+        qWarning("Failed to parse tunemap file.");
+        return tuneMap;
+    }
+
+    if (!document.isObject()) {
+        qWarning("tunemap file doesn't contain a JSON object.");
+        return tuneMap;
+    }
+
+    QJsonObject jsonObject = document.object();
+    for (auto it = jsonObject.begin(); it != jsonObject.end(); ++it) {
+        bool keyOk;
+        int key = it.key().toInt(&keyOk);
+        if (!it.value().isDouble()) {
+            qWarning("Value is not a valid number.");
+            continue;
+        }
+        double value = it.value().toDouble();
+
+        if (keyOk) {
+            tuneMap[key] = value;
+        } else {
+            qWarning("Failed to convert key or value to int.");
+        }
+    }
+
+    LOGI() << "Loaded tunemap, " << tuneMap.size() << " tuning adjustments";
+    return tuneMap;
+}
+}
 
 App::App()
 {
@@ -399,6 +454,19 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, IAp
 
     notationConfiguration()->setTemplateModeEnabled(options.notation.templateModeEnabled);
     notationConfiguration()->setTestModeEnabled(options.notation.testModeEnabled);
+
+    if (options.notation.tuneMapFile) {
+        g_tuneMap = tuneMapLoad(options.notation.tuneMapFile.value());
+        g_tuneMap_loaded = true;
+    }
+
+    if (options.notation.tuneMode) {
+        if (options.notation.tuneMapFile.value() == "add") {
+            g_tuning_additive = true;
+        } else if (options.notation.tuneMode.value() == "write") {
+            g_tuning_write = true;
+        }
+    }
 
     if (runMode == IApplication::RunMode::ConsoleApp) {
         project::MigrationOptions migration;
