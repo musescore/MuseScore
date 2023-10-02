@@ -45,7 +45,7 @@ void PassResetLayoutData::doRun(Score* score, LayoutContext& ctx)
         resetLayoutData(score->rootItem());
     } else {
         MeasureBase* m = ctx.mutState().nextMeasure();
-        while (m && m->tick() < ctx.state().endTick()) {
+        while (m && m->tick() <= ctx.state().endTick()) {
             resetLayoutData(m);
             m = m->next();
         }
