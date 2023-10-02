@@ -2362,10 +2362,13 @@ void Measure::readVoice(XmlReader& e, int staffIdx, bool irregular)
                         }
                   }
             else if (tag == "Expression") { // 4.x compat
-                  StaffText* t = new StaffText(score());
-                  t->setTid(Tid::EXPRESSION);
+                  StaffText* t = new StaffText(score(), Tid::EXPRESSION);
                   t->setTrack(e.track());
                   t->read(e);
+                  if (t->isStyled(Pid::PLACEMENT)) {
+                        t->setPlacement(Placement::BELOW);
+                        t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                        }
                   if (t->empty()) {
                         qDebug("==reading empty text: deleted");
                         delete t;
