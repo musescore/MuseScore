@@ -29,7 +29,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         submodules: 'true'
     - name: "Configure workflow"
@@ -114,7 +114,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 3
     - name: Fetch submodules
@@ -194,7 +194,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 3
     - name: Fetch submodules

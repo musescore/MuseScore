@@ -29,7 +29,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: "Configure workflow"
       run: |
         sudo bash ./build/ci/tools/make_build_mode_env.sh -e ${{ github.event_name }} -m ${{ github.event.inputs.build_mode }}
@@ -89,7 +89,7 @@ jobs:
         CXXFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
     steps:
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup environment
       run: |
         sudo bash ./build/ci/linux/setup.sh

@@ -29,7 +29,7 @@ jobs:
 
     - name: Clone repository
       if: env.DO_RUN == 'true'
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup environment
       if: env.DO_RUN == 'true'
