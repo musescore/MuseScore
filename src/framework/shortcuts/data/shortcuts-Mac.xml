@@ -520,14 +520,6 @@
     <seq>Shift+.</seq>
     </SC>
   <SC>
-    <key>add-8va</key>
-    <seq>Ctrl+Y,Ctrl+O,Ctrl+A</seq>
-    </SC>
-  <SC>
-    <key>add-8vb</key>
-    <seq>Ctrl+Y,Ctrl+O,Ctrl+B</seq>
-    </SC>
-  <SC>
     <key>notation-escape</key>
     <seq>Esc</seq>
     </SC>
@@ -755,14 +747,6 @@
     <seq>Ctrl+A</seq>
     </SC>
   <SC>
-    <key>clef-violin</key>
-    <seq>Ctrl+Y,Ctrl+1</seq>
-    </SC>
-  <SC>
-    <key>clef-bass</key>
-    <seq>Ctrl+Y,Ctrl+2</seq>
-    </SC>
-  <SC>
     <key>system-break</key>
     <seq>Return</seq>
     </SC>
@@ -782,22 +766,6 @@
   <SC>
     <key>show-keys</key>
     <seq>Shift+F2</seq>
-    </SC>
-  <SC>
-    <key>rest-1</key>
-    <seq>Shift+R, Shift+S</seq>
-    </SC>
-  <SC>
-    <key>rest-2</key>
-    <seq>Shift+R, Shift+M</seq>
-    </SC>
-  <SC>
-    <key>rest-4</key>
-    <seq>Shift+R, Shift+R</seq>
-    </SC>
-  <SC>
-    <key>rest-8</key>
-    <seq>Shift+R, Shift+Q</seq>
     </SC>
   <SC>
     <key>backspace</key>

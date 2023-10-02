@@ -1067,30 +1067,6 @@ const UiActionList NotationUiActions::m_actions = {
              TranslatableString("action", "Rest"),
              TranslatableString("action", "Enter rest")
              ),
-    UiAction("rest-1",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Whole rest"),
-             TranslatableString("action", "Enter rest: whole")
-             ),
-    UiAction("rest-2",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Half rest"),
-             TranslatableString("action", "Enter rest: half")
-             ),
-    UiAction("rest-4",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Quarter rest"),
-             TranslatableString("action", "Enter rest: quarter")
-             ),
-    UiAction("rest-8",
-             mu::context::UiCtxNotationOpened,
-             mu::context::CTX_ANY,
-             TranslatableString("action", "Eighth rest"),
-             TranslatableString("action", "Enter rest: eighth")
-             ),
     UiAction("rest-TAB",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_NOTATION_NOTE_INPUT_STAFF_TAB,
