@@ -2157,9 +2157,28 @@ bool Score::toggleArticulation(EngravingItem* el, Articulation* a)
         undoRemoveElement(oa);
         return false;
     }
-    a->setParent(c);
-    a->setTrack(c->track());   // make sure it propagates between score and parts
-    undoAddElement(a);
+
+    if (!a->isDouble()) {
+        a->setParent(c);
+        a->setTrack(c->track());
+        undoAddElement(a);
+        return true;
+    }
+
+    // Split the new articulation into "sub-components", only add the unique ones (not present in the chord)...
+    std::set<SymId> newSubComponentIds = splitArticulations({ a->symId() });
+    for (const SymId& id : newSubComponentIds) {
+        Articulation* articCopy = a->clone();
+        articCopy->setSymId(id);
+
+        if (!c->hasArticulation(articCopy)) {
+            articCopy->setParent(c);
+            articCopy->setTrack(c->track());
+            undoAddElement(articCopy);
+            continue;
+        }
+        delete articCopy;
+    }
     return true;
 }
 
