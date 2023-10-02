@@ -225,7 +225,7 @@ mu::engraving::InstrumentChange* NotationParts::findInstrumentChange(const Part*
         return nullptr;
     }
 
-    mu::engraving::EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack());
+    mu::engraving::EngravingItem* item = segment->findAnnotation(ElementType::INSTRUMENT_CHANGE, part->startTrack(), part->endTrack() - 1);
     return item ? mu::engraving::toInstrumentChange(item) : nullptr;
 }
 
