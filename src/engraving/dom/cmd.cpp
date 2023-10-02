@@ -4034,9 +4034,10 @@ void Score::addRemoveBreaks(int interval, bool lock)
 
 void Score::cmdRemoveEmptyTrailingMeasures()
 {
-    auto beginMeasure = firstTrailingMeasure();
+    Score* mScore = masterScore();
+    auto beginMeasure = mScore->firstTrailingMeasure();
     if (beginMeasure) {
-        deleteMeasures(beginMeasure, lastMeasure());
+        mScore->deleteMeasures(beginMeasure, mScore->lastMeasure());
     }
 }
 
