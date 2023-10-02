@@ -1511,6 +1511,10 @@ void ProjectActionsController::continueLastSession()
     const ProjectFilesList& recentScorePaths = recentFilesController()->recentFilesList();
 
     if (recentScorePaths.empty()) {
+        Ret ret = openPageIfNeed(HOME_PAGE_URI);
+        if (!ret) {
+            LOGE() << ret.toString();
+        }
         return;
     }
 

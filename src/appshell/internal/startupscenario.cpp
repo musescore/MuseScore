@@ -169,9 +169,8 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
     case StartupModeType::StartWithNewScore:
         return HOME_URI;
     case StartupModeType::StartWithScore:
-        return NOTATION_URI;
     case StartupModeType::ContinueLastSession:
-        return HOME_URI;
+        return NOTATION_URI;
     }
 
     return HOME_URI;
