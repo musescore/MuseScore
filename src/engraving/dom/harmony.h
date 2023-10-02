@@ -209,8 +209,8 @@ public:
     DECLARE_LAYOUTDATA_METHODS(Harmony);
 
     //! --- DEPRECATED ---
-    double harmonyHeight() const { return layoutData()->harmonyHeight(); }
-    void setHarmonyHeight(double h) { mutLayoutData()->setHarmonyHeight(h); }
+    double harmonyHeight() const { return ldata()->harmonyHeight(); }
+    void setHarmonyHeight(double h) { mutldata()->setHarmonyHeight(h); }
     //! ------------------
 
 private:

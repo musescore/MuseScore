@@ -422,7 +422,7 @@ static size_t nextVisibleSpannedStaff(const BarLine* bl)
 
 void BarLine::calcY()
 {
-    BarLine::LayoutData* data = mutLayoutData();
+    BarLine::LayoutData* data = mutldata();
     double _spatium = spatium();
     if (!explicitParent()) {
         // for use in palette
@@ -516,7 +516,7 @@ void BarLine::drawEditMode(Painter* p, EditData& ed, double currentViewScaling)
 {
     EngravingItem::drawEditMode(p, ed, currentViewScaling);
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    BarLine::LayoutData* ldata = mutLayoutData();
+    BarLine::LayoutData* ldata = mutldata();
     ldata->y1 += bed->yoff1;
     ldata->y2 += bed->yoff2;
     PointF pos(canvasPos());
@@ -681,7 +681,7 @@ std::vector<PointF> BarLine::gripsPositions(const EditData& ed) const
 
     return {
         //PointF(lw * .5, y1 + bed->yoff1) + pp,
-        PointF(lw * .5, layoutData()->y2 + bed->yoff2) + pp
+        PointF(lw * .5, ldata()->y2 + bed->yoff2) + pp
     };
 }
 
@@ -739,12 +739,12 @@ void BarLine::editDrag(EditData& ed)
         return;
     } else {
         // min for bottom grip is 1 line below top grip
-        const double min = layoutData()->y1 - layoutData()->y2 + lineDist;
+        const double min = ldata()->y1 - ldata()->y2 + lineDist;
         // max is the bottom of the system
         const System* system = segment() ? segment()->system() : nullptr;
         const staff_idx_t st = staffIdx();
         const double max = (system && st != mu::nidx)
-                           ? (system->height() - layoutData()->y2 - system->staff(st)->y())
+                           ? (system->height() - ldata()->y2 - system->staff(st)->y())
                            : std::numeric_limits<double>::max();
         // update yoff2 and bring it within limit
         bed->yoff2 += ed.delta.y();
@@ -766,11 +766,11 @@ void BarLine::endEditDrag(EditData& ed)
 {
     calcY();
     BarLineEditData* bed = static_cast<BarLineEditData*>(ed.getData(this).get());
-    mutLayoutData()->y1 += bed->yoff1;
-    mutLayoutData()->y2 += bed->yoff2;
+    mutldata()->y1 += bed->yoff1;
+    mutldata()->y2 += bed->yoff2;
 
     double ay0      = pagePos().y();
-    double ay2      = ay0 + mutLayoutData()->y2;                       // absolute (page-relative) bar line bottom coord
+    double ay2      = ay0 + mutldata()->y2;                       // absolute (page-relative) bar line bottom coord
     staff_idx_t staffIdx1 = staffIdx();
     System* syst   = segment()->measure()->system();
     double systTopY = syst->pagePos().y();
@@ -851,7 +851,7 @@ void BarLine::endEditDrag(EditData& ed)
 Shape BarLine::shape() const
 {
     Shape shape;
-    shape.add(layoutData()->bbox(), this);
+    shape.add(ldata()->bbox(), this);
     return shape;
 }
 

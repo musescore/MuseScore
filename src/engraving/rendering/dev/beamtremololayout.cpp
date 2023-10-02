@@ -234,7 +234,7 @@ void BeamTremoloLayout::extendStem(Chord* chord, double addition)
     }
     if (chord->stemSlash()) {
         LayoutContext ctx(chord->stemSlash()->score());
-        TLayout::layoutStemSlash(chord->stemSlash(), chord->stemSlash()->mutLayoutData(), ctx.conf());
+        TLayout::layoutStemSlash(chord->stemSlash(), chord->stemSlash()->mutldata(), ctx.conf());
     }
 }
 

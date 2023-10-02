@@ -36,17 +36,17 @@ void ArpeggioLayout::layoutArpeggio2(Arpeggio* item, LayoutContext& ctx)
     if (!item || item->span() < 2) {
         return;
     }
-    TLayout::layout(item, item->mutLayoutData(), ctx.conf(), /*includeCrossStaffHeight = */ true);
+    TLayout::layout(item, item->mutldata(), ctx.conf(), /*includeCrossStaffHeight = */ true);
 }
 
 void ArpeggioLayout::layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx)
 {
-    TLayout::layout(item, item->mutLayoutData(), ctx.conf());
+    TLayout::layout(item, item->mutldata(), ctx.conf());
 }
 
 void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
 {
-    Arpeggio::LayoutData* ldata = item->mutLayoutData();
+    Arpeggio::LayoutData* ldata = item->mutldata();
     TLayout::layout(item, ldata, ctx.conf(), true);
 
     ldata->setPosX(-(ldata->bbox().width() + item->spatium() * .5));

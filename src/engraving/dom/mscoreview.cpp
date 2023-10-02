@@ -67,7 +67,7 @@ Page* MuseScoreView::point2page(const mu::PointF& p) const
         return score()->pages().empty() ? 0 : score()->pages().front();
     }
     for (Page* page : score()->pages()) {
-        if (page->layoutData()->bbox().translated(page->pos()).contains(p)) {
+        if (page->ldata()->bbox().translated(page->pos()).contains(p)) {
             return page;
         }
     }

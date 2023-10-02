@@ -86,7 +86,7 @@ void PageLayout::getNextPage(LayoutContext& ctx)
         }
         ctx.mutState().setPrevSystem(systems.empty() ? nullptr : systems.back());
     }
-    ctx.mutState().page()->mutLayoutData()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
+    ctx.mutState().page()->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
     ctx.mutState().page()->setNo(ctx.state().pageIdx());
     double x = 0.0;
     double y = 0.0;
@@ -353,7 +353,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
     if (ctx.conf().isMode(LayoutMode::SYSTEM)) {
         const System* s = ctx.state().page()->systems().back();
         double height = s ? s->pos().y() + s->height() + s->minBottom() : ctx.state().page()->tm();
-        ctx.mutState().page()->mutLayoutData()->setBbox(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
+        ctx.mutState().page()->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), height + ctx.state().page()->bm());
     }
 
     // HACK: we relayout here cross-staff slurs because only now the information
@@ -496,7 +496,7 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
     for (int i = 0; i < gaps; ++i) {
         System* s1  = page->systems().at(i);
         System* s2  = page->systems().at(i + 1);
-        s1->mutLayoutData()->setPosY(y);
+        s1->mutldata()->setPosY(y);
         y          += s1->distance();
 
         if (!(s1->vbox() || s2->vbox())) {
@@ -505,7 +505,7 @@ void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, d
             checkDivider(ctx, false, s1, yOffset);
         }
     }
-    page->systems().back()->mutLayoutData()->setPosY(y);
+    page->systems().back()->mutldata()->setPosY(y);
 }
 
 void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double yOffset, bool remove)
@@ -519,7 +519,7 @@ void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double y
             divider->setGenerated(true);
             s->add(divider);
         }
-        dividerLdata = divider->mutLayoutData();
+        dividerLdata = divider->mutldata();
         TLayout::layout(divider, ctx);
         dividerLdata->setPosY(divider->height() * .5 + yOffset);
         if (left) {
@@ -716,7 +716,7 @@ void PageLayout::distributeStaves(LayoutContext& ctx, Page* page, double footerP
         if (prvSystem == vgd->system) {
             staffShift += vgd->actualAddedSpace();
         } else {
-            vgd->system->mutLayoutData()->moveY(systemShift);
+            vgd->system->mutldata()->moveY(systemShift);
             if (prvSystem) {
                 prvSystem->setDistance(vgd->system->y() - prvSystem->y());
                 prvSystem->setHeight(prvSystem->height() + staffShift);

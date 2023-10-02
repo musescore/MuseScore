@@ -168,7 +168,7 @@ void Lyrics::scanElements(void* data, void (* func)(void*, EngravingItem*), bool
 
 void Lyrics::layout2(int nAbove)
 {
-    LayoutData* ldata = mutLayoutData();
+    LayoutData* ldata = mutldata();
     double lh = lineSpacing() * style().styleD(Sid::lyricsLineHeight);
 
     if (placeBelow()) {

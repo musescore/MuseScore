@@ -135,7 +135,7 @@ void DrumsetPalette::updateDrumset()
             noteheadSym = note->noteHead(true, noteHead, NoteHeadType::HEAD_QUARTER);
         }
 
-        note->mutLayoutData()->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
+        note->mutldata()->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
         chord->add(note);
 
         int shortcutCode = m_drumset->shortcut(pitch);

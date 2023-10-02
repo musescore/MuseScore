@@ -72,7 +72,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
         }
         s->setSpannerSegmentType(SpannerSegmentType::SINGLE);
         layoutSegment(s, ctx, PointF(0, 0), PointF(_spatium * 6, 0));
-        item->setbbox(item->frontSegment()->layoutData()->bbox());
+        item->setbbox(item->frontSegment()->ldata()->bbox());
         return;
     }
 
@@ -180,14 +180,14 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
         // case 2: start segment
         else if (i == 0) {
             segment->setSpannerSegmentType(SpannerSegmentType::BEGIN);
-            double x = system->layoutData()->bbox().width();
+            double x = system->ldata()->bbox().width();
             layoutSegment(segment, ctx, sPos.p1, PointF(x, sPos.p1.y()));
         }
         // case 3: middle segment
         else if (i != 0 && system != sPos.system2) {
             segment->setSpannerSegmentType(SpannerSegmentType::MIDDLE);
             double x1 = system->firstNoteRestSegmentX(true);
-            double x2 = system->layoutData()->bbox().width();
+            double x2 = system->ldata()->bbox().width();
             double y  = item->staffIdx() > system->staves().size() ? system->y() : system->staff(item->staffIdx())->y();
             layoutSegment(segment, ctx, PointF(x1, y), PointF(x2, y));
         }
@@ -201,7 +201,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
             break;
         }
     }
-    item->setbbox(item->spannerSegments().empty() ? RectF() : item->frontSegment()->layoutData()->bbox());
+    item->setbbox(item->spannerSegments().empty() ? RectF() : item->frontSegment()->ldata()->bbox());
 }
 
 SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutContext& ctx)
@@ -548,10 +548,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     }
 
     // account for centering or other adjustments (other than mirroring)
-    if (note1 && !note1->layoutData()->mirror()) {
+    if (note1 && !note1->ldata()->mirror()) {
         sp->p1.rx() += note1->x();
     }
-    if (note2 && !note2->layoutData()->mirror()) {
+    if (note2 && !note2->ldata()->mirror()) {
         sp->p2.rx() += note2->x();
     }
 
@@ -595,7 +595,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     case SlurAnchor::STEM:                //sc can't be null
     {
         // place slur starting point at stem end point
-        pt = sc->stemPos() - sc->pagePos() + sc->stem()->layoutData()->line.p2();
+        pt = sc->stemPos() - sc->pagePos() + sc->stem()->ldata()->line.p2();
         if (useTablature) {                           // in tabs, stems are centred on note:
             pt.rx() = hw1 * 0.5 + (note1 ? note1->bboxXShift() : 0.0);                      // skip half notehead to touch stem, anatoly-os: incorrect. half notehead width is not always the stem position
         }
@@ -614,7 +614,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             Hook* hook = sc->hook();
             // regular flags
 
-            if (hook && hook->layoutData()->bbox().translated(hook->pos()).contains(pt)) {
+            if (hook && hook->ldata()->bbox().translated(hook->pos()).contains(pt)) {
                 // TODO: in the utopian far future where all hooks have SMuFL cutouts, this fakeCutout business will no
                 // longer be used. for the time being fakeCutout describes a point on the line y=mx+b, out from the top of the stem
                 // where y = yadj, m = fakeCutoutSlope, and x = y/m + fakeCutout
@@ -624,7 +624,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         } else {
             Hook* hook = sc->hook();
             // straight flags
-            if (hook && hook->layoutData()->bbox().translated(hook->pos()).contains(pt)) {
+            if (hook && hook->ldata()->bbox().translated(hook->pos()).contains(pt)) {
                 double hookWidth = hook->width() * hook->mag();
                 pt.rx() = (hookWidth * straightStemXOffset) + (hook->pos().x() + sc->x());
                 if (item->up()) {
@@ -643,7 +643,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     switch (sa2) {
     case SlurAnchor::STEM:                //ec can't be null
     {
-        pt = ec->stemPos() - ec->pagePos() + ec->stem()->layoutData()->line.p2();
+        pt = ec->stemPos() - ec->pagePos() + ec->stem()->ldata()->line.p2();
         if (useTablature) {
             pt.rx() = hw2 * 0.5;
         }
@@ -683,9 +683,9 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         if (note1) {
             po.ry() = note1->pos().y();
         } else if (item->up()) {
-            po.ry() = scr->layoutData()->bbox().top();
+            po.ry() = scr->ldata()->bbox().top();
         } else {
-            po.ry() = scr->layoutData()->bbox().top() + scr->height();
+            po.ry() = scr->ldata()->bbox().top() + scr->height();
         }
         double offset = useTablature ? 0.75 : 0.9;
         po.ry() += scr->intrinsicMag() * _spatium * offset * __up;
@@ -818,9 +818,9 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             if (note2) {
                 po.ry() = note2->pos().y();
             } else if (item->up()) {
-                po.ry() = item->endCR()->layoutData()->bbox().top();
+                po.ry() = item->endCR()->ldata()->bbox().top();
             } else {
-                po.ry() = item->endCR()->layoutData()->bbox().top() + item->endCR()->height();
+                po.ry() = item->endCR()->ldata()->bbox().top() + item->endCR()->height();
             }
             double offset = useTablature ? 0.75 : 0.9;
             po.ry() += ecr->intrinsicMag() * _spatium * offset * __up;
@@ -945,7 +945,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             if (ch && ch->ticks() >= halfFraction) {
                 for (EngravingItem* item : ch->el()) {
                     if (item && item->isFretCircle()) {
-                        coord += PointF(0, toFretCircle(item)->layoutData()->offsetFromUpNote * (up ? -1 : 1));
+                        coord += PointF(0, toFretCircle(item)->ldata()->offsetFromUpNote * (up ? -1 : 1));
                         break;
                     }
                 }
@@ -1213,7 +1213,7 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
 double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
 {
-    SymId symId = note->layoutData()->cachedNoteheadSym();
+    SymId symId = note->ldata()->cachedNoteheadSym();
     PointF cutOutLeft = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNW : SmuflAnchorId::cutOutSW);
     PointF cutOutRight = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE);
 
@@ -1403,7 +1403,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
 
     // 2. Check for bad arc protrusion
 
-    RectF tieSegmentBBox = tieSegment->layoutData()->bbox();
+    RectF tieSegmentBBox = tieSegment->ldata()->bbox();
     double tieLength = tieSegmentBBox.width();
     double tieHeight = tieSegmentBBox.height();
     double midThickness = tieSegment->midThickness() * 2;
@@ -1494,8 +1494,8 @@ void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>&
         bool up = thisTie->tie()->up();
         int upSign = up ? -1 : 1;
 
-        double thisTieOuterY = up ? thisTie->layoutData()->bbox().top() : thisTie->layoutData()->bbox().bottom();
-        double nextTieInnerY = (up ? nextTie->layoutData()->bbox().top() : nextTie->layoutData()->bbox().bottom())
+        double thisTieOuterY = up ? thisTie->ldata()->bbox().top() : thisTie->ldata()->bbox().bottom();
+        double nextTieInnerY = (up ? nextTie->ldata()->bbox().top() : nextTie->ldata()->bbox().bottom())
                                - upSign * 2 * nextTie->midThickness();
         double clearanceMargin = 0.15 * spatium;
         bool collision = upSign * (nextTieInnerY - thisTieOuterY) < clearanceMargin;
@@ -1633,7 +1633,7 @@ double SlurTieLayout::defaultStemLengthEnd(Tremolo* tremolo)
 
 void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2)
 {
-    SlurSegment::LayoutData* ldata = item->mutLayoutData();
+    SlurSegment::LayoutData* ldata = item->mutldata();
     const StaffType* stType = item->staffType();
 
     if (stType && stType->isHiddenElementOnTab(ctx.conf().style(), Sid::slurShowTabCommon, Sid::slurShowTabSimple)) {

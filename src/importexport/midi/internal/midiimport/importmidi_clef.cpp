@@ -124,7 +124,7 @@ static void createClef(ClefType clefType, Staff* staff, int tick, bool isSmall =
         const track_idx_t track = staff->idx() * VOICES;
         clef->setTrack(track);
         clef->setGenerated(false);
-        clef->mutLayoutData()->setMag(staff->staffMag(Fraction::fromTicks(tick)));
+        clef->mutldata()->setMag(staff->staffMag(Fraction::fromTicks(tick)));
         clef->setSmall(isSmall);
         seg->add(clef);
     }

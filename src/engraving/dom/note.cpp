@@ -951,7 +951,7 @@ SymId Note::noteHead() const
                 }
             }
         } else {
-            return layoutData()->cachedNoteheadSym();
+            return ldata()->cachedNoteheadSym();
         }
     }
 
@@ -1922,7 +1922,7 @@ void Note::setDotRelativeLine(int dotMove)
 
     for (NoteDot* dot : m_dots) {
         renderer()->layoutItem(dot);
-        dot->mutLayoutData()->setPosY(y);
+        dot->mutldata()->setPosY(y);
     }
 }
 
@@ -2194,7 +2194,7 @@ int Note::line() const
 void Note::setString(int val)
 {
     m_string = val;
-    mutLayoutData()->setPosY(m_string * spatium() * 1.5);
+    mutldata()->setPosY(m_string * spatium() * 1.5);
 }
 
 //---------------------------------------------------------
@@ -2569,7 +2569,7 @@ void Note::updateRelLine(int relLine, bool undoable)
 
     int off  = st->stepOffset();
     double ld = st->lineDistance().val();
-    mutLayoutData()->setPosY((m_line + off * 2.0) * spatium() * .5 * ld);
+    mutldata()->setPosY((m_line + off * 2.0) * spatium() * .5 * ld);
 }
 
 //---------------------------------------------------------
@@ -3431,21 +3431,21 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::shape() const
 {
-    RectF r(layoutData()->bbox(LD_ACCESS::BAD));
+    RectF r(ldata()->bbox(LD_ACCESS::BAD));
 
     Shape shape(r, this);
     for (NoteDot* dot : m_dots) {
         shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
     }
     if (m_accidental && m_accidental->addToSkyline()) {
-        shape.add(m_accidental->layoutData()->bbox().translated(m_accidental->pos()), m_accidental);
+        shape.add(m_accidental->ldata()->bbox().translated(m_accidental->pos()), m_accidental);
     }
     for (auto e : m_el) {
         if (e->addToSkyline()) {
             if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
                 continue;
             }
-            shape.add(e->layoutData()->bbox().translated(e->pos()), e);
+            shape.add(e->ldata()->bbox().translated(e->pos()), e);
         }
     }
     return shape;

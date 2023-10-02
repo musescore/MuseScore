@@ -79,7 +79,7 @@ Fraction Bracket::playTick() const
 void Bracket::setHeight(double h)
 {
     UNREACHABLE;
-    mutLayoutData()->setBracketHeight(h);
+    mutldata()->setBracketHeight(h);
 }
 
 //---------------------------------------------------------
@@ -89,7 +89,7 @@ void Bracket::setHeight(double h)
 double Bracket::width(LD_ACCESS) const
 {
     UNREACHABLE;
-    return layoutData()->bracketWidth();
+    return ldata()->bracketWidth();
 }
 
 //---------------------------------------------------------
@@ -157,7 +157,7 @@ void Bracket::startEdit(EditData& ed)
 
 std::vector<PointF> Bracket::gripsPositions(const EditData&) const
 {
-    return { PointF(0.0, layoutData()->bracketHeight()) + pagePos() };
+    return { PointF(0.0, ldata()->bracketHeight()) + pagePos() };
 }
 
 //---------------------------------------------------------
@@ -172,9 +172,9 @@ void Bracket::endEdit(EditData& ed)
 
 void Bracket::editDrag(EditData& ed)
 {
-    double bracketHeight = layoutData()->bracketHeight();
+    double bracketHeight = ldata()->bracketHeight();
     bracketHeight += ed.delta.y();
-    mutLayoutData()->setBracketHeight(bracketHeight);
+    mutldata()->setBracketHeight(bracketHeight);
 
     renderer()->layoutItem(this);
 }
@@ -186,7 +186,7 @@ void Bracket::editDrag(EditData& ed)
 
 void Bracket::endEditDrag(EditData&)
 {
-    double ay2 = m_ay1 + layoutData()->bracketHeight();
+    double ay2 = m_ay1 + ldata()->bracketHeight();
 
     staff_idx_t staffIdx1 = staffIdx();
     staff_idx_t staffIdx2;
@@ -211,7 +211,7 @@ void Bracket::endEditDrag(EditData&)
 
     double sy = system()->staff(staffIdx1)->y();
     double ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
-    mutLayoutData()->setBracketHeight(ey - sy);
+    mutldata()->setBracketHeight(ey - sy);
     bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
 }
 

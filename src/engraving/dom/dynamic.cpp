@@ -238,14 +238,14 @@ double Dynamic::customTextOffset() const
     renderer()->layoutItem(toTextBase(&referenceDynamic));
 
     TextFragment referenceFragment;
-    if (!referenceDynamic.layoutData()->blocks.empty()) {
-        TextBlock referenceBlock = referenceDynamic.layoutData()->blocks.front();
+    if (!referenceDynamic.ldata()->blocks.empty()) {
+        TextBlock referenceBlock = referenceDynamic.ldata()->blocks.front();
         if (!referenceBlock.fragments().empty()) {
-            referenceFragment = referenceDynamic.layoutData()->blocks.front().fragments().front();
+            referenceFragment = referenceDynamic.ldata()->blocks.front().fragments().front();
         }
     }
 
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     IF_ASSERT_FAILED(ldata) {
         return 0.0;
     }
@@ -354,11 +354,11 @@ void Dynamic::manageBarlineCollisions()
     if (leftBarLineSegment) {
         EngravingItem* e = leftBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
-            double leftMargin = layoutData()->bbox().translated(pagePos() - offset()).left()
-                                - e->layoutData()->bbox().translated(e->pagePos()).right()
+            double leftMargin = ldata()->bbox().translated(pagePos() - offset()).left()
+                                - e->ldata()->bbox().translated(e->pagePos()).right()
                                 - minBarLineDistance;
             if (leftMargin < 0) {
-                mutLayoutData()->moveX(-leftMargin);
+                mutldata()->moveX(-leftMargin);
                 return;
             }
         }
@@ -375,11 +375,11 @@ void Dynamic::manageBarlineCollisions()
     if (rightBarLineSegment) {
         EngravingItem* e = rightBarLineSegment->elementAt(barLineStaff * VOICES);
         if (e) {
-            double rightMargin = e->layoutData()->bbox().translated(e->pagePos()).left()
-                                 - layoutData()->bbox().translated(pagePos() - offset()).right()
+            double rightMargin = e->ldata()->bbox().translated(e->pagePos()).left()
+                                 - ldata()->bbox().translated(pagePos() - offset()).right()
                                  - minBarLineDistance;
             if (rightMargin < 0) {
-                mutLayoutData()->moveX(rightMargin);
+                mutldata()->moveX(rightMargin);
                 return;
             }
         }

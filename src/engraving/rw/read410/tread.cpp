@@ -2524,7 +2524,7 @@ bool TRead::readProperties(ChordRest* ch, XmlReader& e, ReadContext& ctx)
 void TRead::read(ChordLine* l, XmlReader& e, ReadContext& ctx)
 {
     //! NOTE Need separated "given" data and layout data
-    ChordLine::LayoutData* ldata = l->mutLayoutData();
+    ChordLine::LayoutData* ldata = l->mutldata();
     ldata->path = PainterPath();
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
@@ -2920,7 +2920,7 @@ bool TRead::readProperties(LedgerLine* l, XmlReader& e, ReadContext&)
 
     if (tag == "lineWidth") {
         //! NOTE Probably need to be removed, because it is calculated in Layout
-        LedgerLine::LayoutData* ldata = l->mutLayoutData();
+        LedgerLine::LayoutData* ldata = l->mutldata();
         ldata->lineWidth = (e.readDouble() * l->spatium());
     } else if (tag == "lineLen") {
         l->setLen(e.readDouble() * l->spatium());

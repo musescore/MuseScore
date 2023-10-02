@@ -70,7 +70,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
         return;
     }
 
-    Lyrics::LayoutData* ldata = item->mutLayoutData();
+    Lyrics::LayoutData* ldata = item->mutldata();
 
     //
     // parse leading verse number and/or punctuation, so we can factor it into layout separately
@@ -325,7 +325,7 @@ void LyricsLayout::layout(LyricsLine* item, LayoutContext& ctx)
 
 void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 {
-    LyricsLineSegment::LayoutData* ldata = item->mutLayoutData();
+    LyricsLineSegment::LayoutData* ldata = item->mutldata();
     item->ryoffset() = 0.0;
 
     bool endOfSystem       = false;
@@ -352,7 +352,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         // if next lyrics is on a different system, this line segment is at the end of its system:
         // do not adjust for next lyrics position
         if (sys && !endOfSystem) {
-            double lyrX        = lyr->layoutData()->bbox().x();
+            double lyrX        = lyr->ldata()->bbox().x();
             double lyrXp       = lyr->pagePos().x();
             double sysXp       = sys->pagePos().x();
             toX               = lyrXp - sysXp + lyrX;             // syst.rel. X pos.
@@ -365,9 +365,9 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
     lyr  = item->lyricsLine()->lyrics();
     sys  = lyr->segment()->system();
     if (sys && item->isSingleBeginType()) {
-        double lyrX        = lyr->layoutData()->bbox().x();
+        double lyrX        = lyr->ldata()->bbox().x();
         double lyrXp       = lyr->pagePos().x();
-        double lyrW        = lyr->layoutData()->bbox().width();
+        double lyrW        = lyr->ldata()->bbox().width();
         double sysXp       = sys->pagePos().x();
         fromX             = lyrXp - sysXp + lyrX + lyrW;
         //               syst.rel. X pos. | lyr.advance
@@ -381,16 +381,16 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 
     // VERTICAL POSITION: at the base line of the syllable text
     if (!item->isEndType()) {
-        ldata->setPosY(lyr->layoutData()->pos().y());
+        ldata->setPosY(lyr->ldata()->pos().y());
         item->ryoffset() = lyr->offset().y();
     } else {
         // use Y position of *next* syllable if there is one on same system
         Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
         if (nextLyr1 && nextLyr1->segment()->system() == item->system()) {
-            ldata->setPosY(nextLyr1->layoutData()->pos().y());
+            ldata->setPosY(nextLyr1->ldata()->pos().y());
             item->ryoffset() = nextLyr1->offset().y();
         } else {
-            ldata->setPosY(lyr->layoutData()->pos().y());
+            ldata->setPosY(lyr->ldata()->pos().y());
             item->ryoffset() = lyr->offset().y();
         }
     }
@@ -436,7 +436,7 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
         }
         // adjust next lyrics horiz. position if too little a space forced to skip the dash
         if (item->numOfDashes() == 0 && nextLyr != nullptr && len > 0) {
-            nextLyr->mutLayoutData()->moveX(-(toX - fromX));
+            nextLyr->mutldata()->moveX(-(toX - fromX));
         }
     }
 
@@ -476,7 +476,7 @@ static double findLyricsMaxY(const MStyle& style, Segment& s, staff_idx_t staffI
                 if (l->autoplace() && l->placeBelow()) {
                     double yOff = l->offset().y();
                     PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
-                    RectF r = l->layoutData()->bbox().translated(offset);
+                    RectF r = l->ldata()->bbox().translated(offset);
                     r.translate(0.0, -yOff);
                     sk.add(r.x(), r.top(), r.width());
                 }
@@ -514,7 +514,7 @@ static double findLyricsMinY(const MStyle& style, Segment& s, staff_idx_t staffI
             for (Lyrics* l : cr->lyrics()) {
                 if (l->autoplace() && l->placeAbove()) {
                     double yOff = l->offset().y();
-                    RectF r = l->layoutData()->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
+                    RectF r = l->ldata()->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
                     r.translate(0.0, -yOff);
                     sk.add(r.x(), r.bottom(), r.width());
                 }
@@ -567,10 +567,10 @@ static void applyLyricsMax(const MStyle& style, Segment& s, staff_idx_t staffIdx
             double lyricsMinBottomDistance = style.styleMM(Sid::lyricsMinBottomDistance);
             for (Lyrics* l : cr->lyrics()) {
                 if (l->autoplace() && l->placeBelow()) {
-                    l->mutLayoutData()->moveY(yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
+                    l->mutldata()->moveY(yMax - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
                     if (l->addToSkyline()) {
                         PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
-                        sk.add(l->layoutData()->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
+                        sk.add(l->ldata()->bbox().translated(offset).adjusted(0.0, 0.0, 0.0, lyricsMinBottomDistance));
                     }
                 }
             }
@@ -594,10 +594,10 @@ static void applyLyricsMin(ChordRest* cr, staff_idx_t staffIdx, double yMin)
     Skyline& sk = cr->measure()->system()->staff(staffIdx)->skyline();
     for (Lyrics* l : cr->lyrics()) {
         if (l->autoplace() && l->placeAbove()) {
-            l->mutLayoutData()->moveY(yMin - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
+            l->mutldata()->moveY(yMin - l->propertyDefault(Pid::OFFSET).value<PointF>().y());
             if (l->addToSkyline()) {
                 PointF offset = l->pos() + cr->pos() + cr->segment()->pos() + cr->segment()->measure()->pos();
-                sk.add(l->layoutData()->bbox().translated(offset));
+                sk.add(l->ldata()->bbox().translated(offset));
             }
         }
     }
@@ -649,7 +649,7 @@ void LyricsLayout::layoutLyrics(LayoutContext& ctx, System* system)
                         if (cr) {
                             staff_idx_t nA = 0;
                             for (Lyrics* l : cr->lyrics()) {
-                                Lyrics::LayoutData* ldata = l->mutLayoutData();
+                                Lyrics::LayoutData* ldata = l->mutldata();
                                 // user adjusted offset can possibly change placement
                                 if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                                     PlacementV p = l->placement();

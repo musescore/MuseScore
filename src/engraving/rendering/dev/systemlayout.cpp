@@ -772,13 +772,13 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                 continue;
             }
             if (mno && mno->addToSkyline()) {
-                ss->skyline().add(mno->layoutData()->bbox().translated(m->pos() + mno->pos()));
+                ss->skyline().add(mno->ldata()->bbox().translated(m->pos() + mno->pos()));
             }
             if (mmrr && mmrr->addToSkyline()) {
-                ss->skyline().add(mmrr->layoutData()->bbox().translated(m->pos() + mmrr->pos()));
+                ss->skyline().add(mmrr->ldata()->bbox().translated(m->pos() + mmrr->pos()));
             }
             if (m->staffLines(staffIdx)->addToSkyline()) {
-                ss->skyline().add(m->staffLines(staffIdx)->layoutData()->bbox().translated(m->pos()));
+                ss->skyline().add(m->staffLines(staffIdx)->ldata()->bbox().translated(m->pos()));
             }
             for (Segment& s : m->segments()) {
                 if (!s.enabled()) {
@@ -984,7 +984,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                     if (e->isDynamic()) {
                         toDynamic(e)->manageBarlineCollisions();
                     }
-                    Autoplace::autoplaceSegmentElement(e, e->mutLayoutData(), false);
+                    Autoplace::autoplaceSegmentElement(e, e->mutldata(), false);
                     dynamicsAndFigBass.push_back(e);
                 }
             }
@@ -1182,7 +1182,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         break;
                     }
                 }
-                y = std::min(y, ss->layoutData()->pos().y());
+                y = std::min(y, ss->ldata()->pos().y());
                 ++idx;
                 prevVolta = volta;
             }
@@ -1190,7 +1190,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             for (int i = 0; i < idx; ++i) {
                 SpannerSegment* ss = voltaSegments[i];
                 if (ss->autoplace() && ss->isStyled(Pid::OFFSET)) {
-                    ss->mutLayoutData()->setPosY(y);
+                    ss->mutldata()->setPosY(y);
                 }
                 if (ss->addToSkyline()) {
                     system->staff(staffIdx)->skyline().add(ss->shape().translate(ss->pos()));
@@ -1309,13 +1309,13 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
     if (align && segments.size() > 1) {
         const size_t nstaves = system->staves().size();
         constexpr double minY = -1000000.0;
-        const double defaultY = segments[0]->layoutData()->pos().y();
+        const double defaultY = segments[0]->ldata()->pos().y();
         std::vector<double> y(nstaves, minY);
 
         for (SpannerSegment* ss : segments) {
             if (ss->visible()) {
                 double& staffY = y[ss->staffIdx()];
-                staffY = std::max(staffY, ss->layoutData()->pos().y());
+                staffY = std::max(staffY, ss->ldata()->pos().y());
             }
         }
         for (SpannerSegment* ss : segments) {
@@ -1324,9 +1324,9 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
             }
             const double staffY = y[ss->staffIdx()];
             if (staffY > minY) {
-                ss->mutLayoutData()->setPosY(staffY);
+                ss->mutldata()->setPosY(staffY);
             } else {
-                ss->mutLayoutData()->setPosY(defaultY);
+                ss->mutldata()->setPosY(defaultY);
             }
         }
     }
@@ -1407,9 +1407,9 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && prevSegment->isHarmonicMarkSegment()
                 && ss->isVibratoSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
-                double diff = ss->layoutData()->bbox().bottom() - prevSegment->layoutData()->bbox().bottom()
-                              + prevSegment->layoutData()->bbox().top();
-                prevSegment->mutLayoutData()->moveY(diff);
+                double diff = ss->ldata()->bbox().bottom() - prevSegment->ldata()->bbox().bottom()
+                              + prevSegment->ldata()->bbox().top();
+                prevSegment->mutldata()->moveY(diff);
                 fixed = true;
             }
             if (prevSegment->visible()
@@ -1417,9 +1417,9 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 && prevSegment->isVibratoSegment()
                 && ss->isHarmonicMarkSegment()
                 && RealIsEqual(prevSegment->x(), ss->x())) {
-                double diff = prevSegment->layoutData()->bbox().bottom() - ss->layoutData()->bbox().bottom()
-                              + ss->layoutData()->bbox().top();
-                ss->mutLayoutData()->moveY(diff);
+                double diff = prevSegment->ldata()->bbox().bottom() - ss->ldata()->bbox().bottom()
+                              + ss->ldata()->bbox().top();
+                ss->mutldata()->moveY(diff);
                 fixed = true;
             }
         }
@@ -1616,7 +1616,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
             Segment* first = m->firstEnabled();
             double currentFirstX = first->x();
             if (currentFirstX > 0 && !first->hasAccidentals()) {
-                first->mutLayoutData()->setPosX(currentFirstX * std::max(squeezeFactor, squeezeLimit));
+                first->mutldata()->setPosX(currentFirstX * std::max(squeezeFactor, squeezeLimit));
             }
             for (Segment& segment : m->segments()) {
                 if (!segment.header() && !segment.isTimeSigType()) {
@@ -1758,13 +1758,13 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
 
             switch (t->align().horizontal) {
             case AlignH::LEFT:
-                t->mutLayoutData()->setPosX(0);
+                t->mutldata()->setPosX(0);
                 break;
             case AlignH::HCENTER:
-                t->mutLayoutData()->setPosX(maxNamesWidth * .5);
+                t->mutldata()->setPosX(maxNamesWidth * .5);
                 break;
             case AlignH::RIGHT:
-                t->mutLayoutData()->setPosX(maxNamesWidth);
+                t->mutldata()->setPosX(maxNamesWidth);
                 break;
             }
         }
@@ -1854,10 +1854,10 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
                 Bracket* dummyBr = Factory::createBracket(ctx.mutDom().dummyParent(), /*isAccessibleEnabled=*/ false);
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
-                dummyBr->mutLayoutData()->setBracketHeight(3.5 * dummyBr->spatium() * 2); // default
-                TLayout::layout(dummyBr, dummyBr->mutLayoutData(), ctx.conf());
+                dummyBr->mutldata()->setBracketHeight(3.5 * dummyBr->spatium() * 2); // default
+                TLayout::layout(dummyBr, dummyBr->mutldata(), ctx.conf());
                 for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
-                    bracketWidth[stfIdx] += dummyBr->layoutData()->bracketWidth();
+                    bracketWidth[stfIdx] += dummyBr->ldata()->bracketWidth();
                 }
                 delete dummyBr;
             }
@@ -1892,9 +1892,9 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
                 }
                 Bracket* b = SystemLayout::createBracket(system, ctx, bi, i, static_cast<int>(staffIdx), bl, system->firstMeasure());
                 if (b != nullptr) {
-                    b->mutLayoutData()->setBracketHeight(3.5 * b->spatium() * 2); // dummy
-                    TLayout::layout(b, b->mutLayoutData(), ctx.conf());
-                    bracketWidth[i] = std::max(bracketWidth[i], b->layoutData()->bracketWidth());
+                    b->mutldata()->setBracketHeight(3.5 * b->spatium() * 2); // dummy
+                    TLayout::layout(b, b->mutldata(), ctx.conf());
+                    bracketWidth[i] = std::max(bracketWidth[i], b->ldata()->bracketWidth());
                 }
             }
         }
@@ -2052,7 +2052,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
     Box* vb = system->vbox();
     if (vb) {
         TLayout::layout(vb, ctx);
-        system->setbbox(vb->layoutData()->bbox());
+        system->setbbox(vb->ldata()->bbox());
         return;
     }
 
@@ -2224,7 +2224,7 @@ void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext
 {
     double _spatium = system->spatium();
     for (MeasureBase* m : system->measures()) {
-        MeasureBase::LayoutData* mldata = m->mutLayoutData();
+        MeasureBase::LayoutData* mldata = m->mutldata();
         if (m->isMeasure()) {
             // note that the factor 2 * _spatium must be corrected for when exporting
             // system distance in MusicXML (issue #24733)
@@ -2267,7 +2267,7 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
             ey = system->staves().at(staffIdx2)->bbox().bottom();
         }
 
-        Bracket::LayoutData* bldata = b->mutLayoutData();
+        Bracket::LayoutData* bldata = b->mutldata();
         bldata->setPosY(sy);
         bldata->setBracketHeight(ey - sy);
         TLayout::layout(b, bldata, ctx.conf());
@@ -2339,7 +2339,7 @@ void SystemLayout::layoutInstrumentNames(System* system, LayoutContext& ctx)
                     y2 = system->staff(staffIdx + 2)->bbox().bottom();
                     break;
                 }
-                t->mutLayoutData()->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
+                t->mutldata()->setPosY(y1 + (y2 - y1) * .5 + t->offset().y());
             }
         }
         staffIdx += nstaves;

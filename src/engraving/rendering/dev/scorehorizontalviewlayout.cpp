@@ -130,7 +130,7 @@ void ScoreHorizontalViewLayout::resetSystems(LayoutContext& ctx, bool layoutAll)
 
         page = Factory::createPage(ctx.mutDom().rootItem());
         ctx.mutDom().pages().push_back(page);
-        page->mutLayoutData()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
+        page->mutldata()->setBbox(0.0, 0.0, ctx.conf().loWidth(), ctx.conf().loHeight());
         page->setNo(0);
 
         System* system = Factory::createSystem(page);
@@ -324,7 +324,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
                             if (e) {
                                 ChordRest* cr = toChordRest(e);
                                 if (cr->beam() && cr->beam()->elements().front() == cr) {
-                                    cr->beam()->mutLayoutData()->move(p);
+                                    cr->beam()->mutldata()->move(p);
                                 }
                             }
                         }
@@ -336,7 +336,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
         } else if (ctx.state().curMeasure()->isHBox()) {
             MeasureBase* curM = ctx.mutState().curMeasure();
             curM->setPos(pos + PointF(toHBox(curM)->topGap(), 0.0));
-            TLayout::layoutMeasureBase(curM, curM->mutLayoutData(), ctx);
+            TLayout::layoutMeasureBase(curM, curM->mutldata(), ctx);
             ww = curM->width();
         }
         pos.rx() += ww;

@@ -948,7 +948,7 @@ void Compound::clear()
 
 void EngravingItem::dump() const
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     LOGD("---EngravingItem: %s, pos(%4.2f,%4.2f)"
          "\n   bbox(%g,%g,%g,%g)"
          "\n   abox(%g,%g,%g,%g)"
@@ -2347,7 +2347,7 @@ EngravingItem::LayoutData* EngravingItem::createLayoutData() const
     return new EngravingItem::LayoutData();
 }
 
-const EngravingItem::LayoutData* EngravingItem::layoutData() const
+const EngravingItem::LayoutData* EngravingItem::ldata() const
 {
     if (!m_layoutData) {
         m_layoutData = createLayoutData();
@@ -2355,7 +2355,7 @@ const EngravingItem::LayoutData* EngravingItem::layoutData() const
     return m_layoutData;
 }
 
-EngravingItem::LayoutData* EngravingItem::mutLayoutData()
+EngravingItem::LayoutData* EngravingItem::mutldata()
 {
     if (!m_layoutData) {
         m_layoutData = createLayoutData();
@@ -2365,15 +2365,15 @@ EngravingItem::LayoutData* EngravingItem::mutLayoutData()
 
 double EngravingItem::mag() const
 {
-    if (!layoutData()) {
+    if (!ldata()) {
         //LOGD() << "no layout data, will be returned default (1.0)";
         return 1.0;
     }
-    return layoutData()->mag();
+    return ldata()->mag();
 }
 
 void EngravingItem::setOffsetChanged(bool val, bool absolute, const PointF& diff)
 {
-    rendering::dev::Autoplace::setOffsetChanged(this, mutLayoutData(), val, absolute, diff);
+    rendering::dev::Autoplace::setOffsetChanged(this, mutldata(), val, absolute, diff);
 }
 }

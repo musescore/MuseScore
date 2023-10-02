@@ -180,7 +180,7 @@ void TextCursor::init()
 
 std::pair<size_t, size_t> TextCursor::positionToLocalCoord(int position) const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return { mu::nidx, mu::nidx };
     }
@@ -223,7 +223,7 @@ TextCursor::Range TextCursor::selectionRange() const
 
 size_t TextCursor::columns() const
 {
-    return _text->layoutData()->textBlock(static_cast<int>(_row)).columns();
+    return _text->ldata()->textBlock(static_cast<int>(_row)).columns();
 }
 
 //---------------------------------------------------------
@@ -232,7 +232,7 @@ size_t TextCursor::columns() const
 
 Char TextCursor::currentCharacter() const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return Char();
     }
@@ -251,7 +251,7 @@ Char TextCursor::currentCharacter() const
 
 void TextCursor::updateCursorFormat()
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
@@ -297,7 +297,7 @@ RectF TextCursor::cursorRect() const
 
 const TextBlock& TextCursor::curLine() const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         static TextBlock dummy;
         return dummy;
@@ -308,7 +308,7 @@ const TextBlock& TextCursor::curLine() const
 
 TextBlock& TextCursor::curLine()
 {
-    TextBase::LayoutData* ldata = _text->mutLayoutData();
+    TextBase::LayoutData* ldata = _text->mutldata();
     return ldata->blocks[_row];
 }
 
@@ -318,7 +318,7 @@ TextBlock& TextCursor::curLine()
 
 void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
 {
-    TextBase::LayoutData* ldata = _text->mutLayoutData();
+    TextBase::LayoutData* ldata = _text->mutldata();
 
     size_t r1 = selectLine();
     size_t r2 = row();
@@ -355,7 +355,7 @@ const CharFormat TextCursor::selectedFragmentsFormat() const
         return _format;
     }
 
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return CharFormat();
     }
@@ -469,7 +469,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
                 _row    = r2;
                 _column = c2;
             } else if (column() >= curLine().columns()) {
-                if (_row >= _text->layoutData()->rows() - 1) {
+                if (_row >= _text->ldata()->rows() - 1) {
                     return false;
                 }
                 ++_row;
@@ -491,7 +491,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
             break;
 
         case TextCursor::MoveOperation::Down:
-            if (_row >= _text->layoutData()->rows() - 1) {
+            if (_row >= _text->ldata()->rows() - 1) {
                 return false;
             }
             ++_row;
@@ -508,7 +508,7 @@ bool TextCursor::movePosition(TextCursor::MoveOperation op, TextCursor::MoveMode
             break;
 
         case TextCursor::MoveOperation::End:
-            _row    = _text->layoutData()->rows() - 1;
+            _row    = _text->ldata()->rows() - 1;
             _column = curLine().columns();
 
             break;
@@ -608,7 +608,7 @@ void TextCursor::selectWord()
 bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 {
     PointF pt  = p - _text->canvasPos();
-    if (!_text->layoutData()->bbox().contains(pt)) {
+    if (!_text->ldata()->bbox().contains(pt)) {
         return false;
     }
     size_t oldRow    = _row;
@@ -618,7 +618,7 @@ bool TextCursor::set(const PointF& p, TextCursor::MoveMode mode)
 //            _text->_layout.append(TextBlock());
     _row = 0;
 
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return false;
     }
@@ -664,7 +664,7 @@ String TextCursor::selectedText(bool withFormat) const
 
 String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return String();
     }
@@ -688,7 +688,7 @@ String TextCursor::extractText(int r1, int c1, int r2, int c2, bool withFormat) 
 
 TextCursor::Range TextCursor::range(int start, int end) const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return Range();
     }
@@ -716,7 +716,7 @@ TextCursor::Range TextCursor::range(int start, int end) const
 
 int TextCursor::position(int row, int column) const
 {
-    const TextBase::LayoutData* ldata = _text->layoutData();
+    const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return 0;
     }
@@ -977,7 +977,7 @@ void TextBlock::layout(const TextBase* t)
         break;
         case ElementType::MEASURE: {
             Measure* m = toMeasure(e);
-            layoutWidth = m->layoutData()->bbox().width();
+            layoutWidth = m->ldata()->bbox().width();
         }
         break;
         default:
@@ -1747,7 +1747,7 @@ static double parseNumProperty(const String& s)
 //---------------------------------------------------------
 void TextBase::createBlocks()
 {
-    createBlocks(mutLayoutData());
+    createBlocks(mutldata());
 }
 
 void TextBase::createBlocks(LayoutData* ldata) const
@@ -1924,7 +1924,7 @@ void TextBase::prepareFormat(const String& token, TextCursor& cursor)
 
 void TextBase::layoutFrame()
 {
-    layoutFrame(mutLayoutData());
+    layoutFrame(mutldata());
 }
 
 void TextBase::layoutFrame(LayoutData* ldata) const
@@ -2210,7 +2210,7 @@ String TextBase::genText(const LayoutData* ldata) const
 
 void TextBase::genText()
 {
-    m_text = genText(layoutData());
+    m_text = genText(ldata());
     m_textInvalid = false;
 }
 
@@ -2220,7 +2220,7 @@ void TextBase::genText()
 
 void TextBase::selectAll(TextCursor* cursor)
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->blocks.empty()) {
         return;
     }
@@ -2297,7 +2297,7 @@ std::vector<LineF> TextBase::dragAnchorLines() const
 
     if (layoutToParentWidth() && !result.empty()) {
         LineF& line = result[0];
-        line.setP2(line.p2() + layoutData()->bbox().topLeft());
+        line.setP2(line.p2() + ldata()->bbox().topLeft());
     }
 
     return result;
@@ -2343,7 +2343,7 @@ void TextBase::setXmlText(const String& s)
 {
     m_text = s;
     m_textInvalid = false;
-    mutLayoutData()->layoutInvalid = true;
+    mutldata()->layoutInvalid = true;
 }
 
 void TextBase::checkCustomFormatting(const String& s)
@@ -2380,7 +2380,7 @@ std::list<TextFragment> TextBase::fragmentList() const
 
     const TextBase* text = this;
     std::unique_ptr<TextBase> tmpText;
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->layoutInvalid) {
         // Create temporary text object to avoid side effects
         // of createLayout() call.
@@ -2389,7 +2389,7 @@ std::list<TextFragment> TextBase::fragmentList() const
         text = tmpText.get();
     }
 
-    const LayoutData* tmlldata = text->layoutData();
+    const LayoutData* tmlldata = text->ldata();
     for (const TextBlock& block : tmlldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             /* TODO TBD
@@ -2417,7 +2417,7 @@ String TextBase::plainText() const
 
     const TextBase* text = this;
     std::unique_ptr<TextBase> tmpText;
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->layoutInvalid) {
         // Create temporary text object to avoid side effects
         // of createLayout() call.
@@ -2426,7 +2426,7 @@ String TextBase::plainText() const
         text = tmpText.get();
     }
 
-    const LayoutData* tmlldata = text->layoutData();
+    const LayoutData* tmlldata = text->ldata();
     for (const TextBlock& block : tmlldata->blocks) {
         for (const TextFragment& f : block.fragments()) {
             s += f.text;
@@ -2448,7 +2448,7 @@ String TextBase::xmlText() const
         return m_text;
     }
 
-    String text = genText(layoutData());
+    String text = genText(ldata());
     return text;
 }
 
@@ -3146,7 +3146,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentVi
     }
     TextCursor* cursor = ted->cursor();
 
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
@@ -3207,7 +3207,7 @@ void TextBase::drawEditMode(mu::draw::Painter* p, EditData& ed, double currentVi
 
 bool TextBase::hasCustomFormatting() const
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     IF_ASSERT_FAILED(ldata) {
         return false;
     }
@@ -3252,7 +3252,7 @@ bool TextBase::hasCustomFormatting() const
 
 String TextBase::stripText(bool removeStyle, bool removeSize, bool removeFace) const
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     IF_ASSERT_FAILED(ldata) {
         return String();
     }

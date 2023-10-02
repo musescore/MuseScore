@@ -101,7 +101,7 @@ void Box::editDrag(EditData& ed)
             int n = lrint(m_boxHeight.val() / vRaster);
             m_boxHeight = Spatium(vRaster * n);
         }
-        mutLayoutData()->setBbox(0.0, 0.0, system()->width(), point(boxHeight()));
+        mutldata()->setBbox(0.0, 0.0, system()->width(), point(boxHeight()));
         system()->setHeight(height());
         triggerLayout();
     } else {
@@ -156,7 +156,7 @@ RectF Box::contentRect() const
     RectF result;
 
     for (const EngravingItem* element : el()) {
-        result = result.united(element->layoutData()->bbox());
+        result = result.united(element->ldata()->bbox());
     }
 
     return result;

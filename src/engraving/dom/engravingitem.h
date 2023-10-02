@@ -46,8 +46,8 @@
 #include "editdata.h"
 
 #define DECLARE_LAYOUTDATA_METHODS(Class) \
-    const LayoutData* layoutData() const { return static_cast<const Class::LayoutData*>(EngravingItem::layoutData()); } \
-    LayoutData* mutLayoutData() { return static_cast<Class::LayoutData*>(EngravingItem::mutLayoutData()); } \
+    const LayoutData* ldata() const { return static_cast<const Class::LayoutData*>(EngravingItem::ldata()); } \
+    LayoutData* mutldata() { return static_cast<Class::LayoutData*>(EngravingItem::mutldata()); } \
     LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
 
 namespace mu::engraving {
@@ -250,7 +250,7 @@ public:
     bool contains(const PointF& p) const;
     bool intersects(const mu::RectF& r) const;
 
-    virtual mu::RectF hitBBox() const { return layoutData()->bbox(); }
+    virtual mu::RectF hitBBox() const { return ldata()->bbox(); }
     virtual Shape hitShape() const { return shape(); }
     Shape canvasHitShape() const { return hitShape().translate(canvasPos()); }
     bool hitShapeContains(const PointF& p) const;
@@ -554,16 +554,16 @@ public:
         ld_field<RectF> m_bbox = "bbox";        // Bounding box relative to _pos + _offset
     };
 
-    const LayoutData* layoutData() const;
-    LayoutData* mutLayoutData();
+    const LayoutData* ldata() const;
+    LayoutData* mutldata();
 
     virtual double mag() const;
-    virtual Shape shape() const { return Shape(layoutData()->bbox(), this); }
+    virtual Shape shape() const { return Shape(ldata()->bbox(), this); }
     virtual double baseLine() const { return -height(); }
 
-    mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(pagePos()); }
-    mu::RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(pagePos()); }
-    mu::RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).translated(canvasPos()); }
+    mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
+    mu::RectF pageBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
+    mu::RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(canvasPos()); }
 
     virtual bool isPropertyLinkedToMaster(Pid id) const;
     void unlinkPropertyFromMaster(Pid id);
@@ -573,20 +573,20 @@ public:
     virtual void manageExclusionFromParts(bool exclude);
 
     //! --- Old Interface ---
-    virtual void setbbox(const mu::RectF& r) { mutLayoutData()->setBbox(r); }
-    virtual void addbbox(const mu::RectF& r) { mutLayoutData()->addBbox(r); }
-    virtual double height() const { return layoutData()->bbox().height(); }
-    virtual void setHeight(double v) { mutLayoutData()->setHeight(v); }
-    virtual double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return layoutData()->bbox(mode).width(); }
-    virtual void setWidth(double v) { mutLayoutData()->setWidth(v); }
+    virtual void setbbox(const mu::RectF& r) { mutldata()->setBbox(r); }
+    virtual void addbbox(const mu::RectF& r) { mutldata()->addBbox(r); }
+    virtual double height() const { return ldata()->bbox().height(); }
+    virtual void setHeight(double v) { mutldata()->setHeight(v); }
+    virtual double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).width(); }
+    virtual void setWidth(double v) { mutldata()->setWidth(v); }
 
-    virtual const PointF pos() const { return layoutData()->pos() + m_offset; }
-    virtual double x() const { return layoutData()->pos().x() + m_offset.x(); }
-    virtual double y() const { return layoutData()->pos().y() + m_offset.y(); }
-    virtual void setPos(double x, double y) { mutLayoutData()->setPos(x, y); }
-    virtual void setPos(const PointF& p) { mutLayoutData()->setPos(p.x(), p.y()); }
+    virtual const PointF pos() const { return ldata()->pos() + m_offset; }
+    virtual double x() const { return ldata()->pos().x() + m_offset.x(); }
+    virtual double y() const { return ldata()->pos().y() + m_offset.y(); }
+    virtual void setPos(double x, double y) { mutldata()->setPos(x, y); }
+    virtual void setPos(const PointF& p) { mutldata()->setPos(p.x(), p.y()); }
 
-    virtual void move(const PointF& s) { mutLayoutData()->move(s); }
+    virtual void move(const PointF& s) { mutldata()->move(s); }
 
     void setOffsetChanged(bool val, bool absolute = true, const PointF& diff = PointF());
     //! ---------------------

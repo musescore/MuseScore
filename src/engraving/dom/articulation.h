@@ -200,7 +200,7 @@ public:
     void setUp(bool val);
 
     //! --- DEPRECATED ---
-    bool up() const { return layoutData()->up(); }
+    bool up() const { return ldata()->up(); }
     //! ------------------
 
 protected:

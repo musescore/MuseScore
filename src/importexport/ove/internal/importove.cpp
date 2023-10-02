@@ -1546,7 +1546,7 @@ void OveToMScore::convertNotes(Measure* measure, int part, int staff, int track)
                 if (!isRestDefaultLine(notePtr, container->getNoteType()) && notePtr->getLine() != 0) {
                     double yOffset = -(double)(notePtr->getLine());
                     int stepOffset = cr->staff()->staffType(cr->tick())->stepOffset();
-                    int lineOffset = toRest(cr)->computeVoiceOffset(5, toRest(cr)->mutLayoutData());
+                    int lineOffset = toRest(cr)->computeVoiceOffset(5, toRest(cr)->mutldata());
                     yOffset -= qreal(lineOffset + stepOffset);
                     yOffset *= m_score->style().spatium() / 2.0;
                     cr->ryoffset() = yOffset;

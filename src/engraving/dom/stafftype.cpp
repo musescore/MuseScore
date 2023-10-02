@@ -825,7 +825,7 @@ TabDurationSymbol::TabDurationSymbol(const TabDurationSymbol& e)
 
 void TabDurationSymbol::layout2()
 {
-    LayoutData* ldata = mutLayoutData();
+    LayoutData* ldata = mutldata();
     // if not within a TAB or not a MEDIALFINAL grid element, do nothing
     if (!m_tab || ldata->beamGrid != TabBeamGrid::MEDIALFINAL) {
         return;

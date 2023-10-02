@@ -399,7 +399,7 @@ PalettePtr PaletteCreator::newRepeatsPalette(bool defaultPalette)
 
     for (MeasureRepeatInfo repeat: defaultPalette ? defaultMeasureRepeats : masterMeasureRepeats) {
         std::shared_ptr<MeasureRepeat> rm = makeElement<MeasureRepeat>(gpaletteScore);
-        rm->mutLayoutData()->symId = repeat.id;
+        rm->mutldata()->symId = repeat.id;
         rm->setNumMeasures(repeat.measuresCount);
         sp->appendElement(rm, SymNames::userNameForSymId(repeat.id));
     }

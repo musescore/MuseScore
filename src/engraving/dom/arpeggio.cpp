@@ -66,13 +66,13 @@ const TranslatableString& Arpeggio::arpeggioTypeName() const
 void Arpeggio::setHeight(double h)
 {
     UNREACHABLE;
-    mutLayoutData()->arpeggioHeight = h;
+    mutldata()->arpeggioHeight = h;
 }
 
 double Arpeggio::height() const
 {
     UNREACHABLE;
-    return layoutData()->arpeggioHeight;
+    return ldata()->arpeggioHeight;
 }
 
 //---------------------------------------------------------
@@ -81,7 +81,7 @@ double Arpeggio::height() const
 
 std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     const PointF pp(pagePos());
     PointF p1(ldata->bbox().width() / 2, ldata->bbox().top());
     PointF p2(ldata->bbox().width() / 2, ldata->bbox().bottom());

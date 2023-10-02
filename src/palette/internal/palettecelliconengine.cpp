@@ -116,7 +116,7 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
 
     engravingRender()->layoutItem(action);
 
-    painter.translate(rect.center() - action->layoutData()->bbox().center());
+    painter.translate(rect.center() - action->ldata()->bbox().center());
     engravingRender()->drawItem(action, &painter);
     painter.restore();
 }
@@ -173,7 +173,7 @@ void PaletteCellIconEngine::paintScoreElement(Painter& painter, EngravingItem* i
     // calculate bbox
     engravingRender()->layoutItem(item);
 
-    PointF origin = item->layoutData()->bbox().center();
+    PointF origin = item->ldata()->bbox().center();
 
     if (alignToStaff) {
         // y = 0 is position of the element's parent.

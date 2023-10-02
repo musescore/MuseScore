@@ -101,7 +101,7 @@ const Measure* MeasureRepeat::referringMeasure(const Measure* measure) const
 
 PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
 {
-    double x = (symBbox(layoutData()->symId).width() - numberBbox.width()) * .5;
+    double x = (symBbox(ldata()->symId).width() - numberBbox.width()) * .5;
     // -pos().y(): relative to topmost staff line
     // - 0.5 * r.height(): relative to the baseline of the number symbol
     // (rather than the center)
@@ -110,14 +110,14 @@ PointF MeasureRepeat::numberPosition(const mu::RectF& numberBbox) const
     if (staffType() && staffType()->lines() == 1) {
         staffTop -= 2.0 * spatium();
     }
-    double y = std::min(staffTop, -symBbox(layoutData()->symId).height() / 2) + m_numberPos * spatium() - 0.5 * numberBbox.height();
+    double y = std::min(staffTop, -symBbox(ldata()->symId).height() / 2) + m_numberPos * spatium() - 0.5 * numberBbox.height();
 
     return PointF(x, y);
 }
 
 RectF MeasureRepeat::numberRect() const
 {
-    RectF r = symBbox(layoutData()->numberSym);
+    RectF r = symBbox(ldata()->numberSym);
     r.translate(numberPosition(r));
     return r;
 }
@@ -130,7 +130,7 @@ Shape MeasureRepeat::shape() const
 {
     Shape shape;
     shape.add(numberRect());
-    shape.add(symBbox(layoutData()->symId));
+    shape.add(symBbox(ldata()->symId));
     return shape;
 }
 

@@ -46,8 +46,8 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         const Measure* m = s->measure();
 
         LD_CONDITION(ldata->isSetPos());
-        LD_CONDITION(m->layoutData()->isSetPos());
-        LD_CONDITION(s->layoutData()->isSetPos());
+        LD_CONDITION(m->ldata()->isSetPos());
+        LD_CONDITION(s->ldata()->isSetPos());
 
         double sp = item->style().spatium();
         staff_idx_t si = item->staffIdxOrNextVisible();
@@ -64,7 +64,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         double minDistance = item->minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        RectF r = item->layoutData()->bbox().translated(m->pos() + s->pos() + item->pos());
+        RectF r = item->ldata()->bbox().translated(m->pos() + s->pos() + item->pos());
 
         // Adjust bbox Y pos for staffType offset
         if (item->staffType()) {
@@ -118,7 +118,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
 
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(ldata->isSetBbox());
-        LD_CONDITION(m->layoutData()->isSetPos());
+        LD_CONDITION(m->ldata()->isSetPos());
 
         staff_idx_t si = item->staffIdxOrNextVisible();
 

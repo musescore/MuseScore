@@ -74,7 +74,7 @@ bool MMRestRange::setProperty(Pid id, const PropertyValue& val)
     switch (id) {
     case Pid::MMREST_RANGE_BRACKET_TYPE:
         setBracketType(MMRestRangeBracketType(val.toInt()));
-        mutLayoutData()->layoutInvalid = true;
+        mutldata()->layoutInvalid = true;
         triggerLayout();
         return true;
     default:

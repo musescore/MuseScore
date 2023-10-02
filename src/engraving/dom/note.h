@@ -456,8 +456,8 @@ public:
     DECLARE_LAYOUTDATA_METHODS(Note);
 
     //! --- DEPRECATED ---
-    bool mirror() const { return layoutData()->mirror(); }
-    void setMirror(bool val) { mutLayoutData()->setMirror(val); }
+    bool mirror() const { return ldata()->mirror(); }
+    void setMirror(bool val) { mutldata()->setMirror(val); }
     //! ------------------
 
 private:

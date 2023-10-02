@@ -74,12 +74,12 @@ void Stem::spatiumChanged(double oldValue, double newValue)
 //! In chord coordinates
 PointF Stem::flagPosition() const
 {
-    return pos() + PointF(layoutData()->bbox().left(), up() ? -length() : length());
+    return pos() + PointF(ldata()->bbox().left(), up() ? -length() : length());
 }
 
 std::vector<mu::PointF> Stem::gripsPositions(const EditData&) const
 {
-    return { pagePos() + layoutData()->line.p2() };
+    return { pagePos() + ldata()->line.p2() };
 }
 
 void Stem::startEdit(EditData& ed)

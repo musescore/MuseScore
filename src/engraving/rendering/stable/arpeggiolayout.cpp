@@ -129,12 +129,12 @@ void ArpeggioLayout::computeHeight(Arpeggio* item, bool includeCrossStaffHeight)
 
 void ArpeggioLayout::layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx)
 {
-    ArpeggioLayout::layout(item, ctx, item->mutLayoutData());
+    ArpeggioLayout::layout(item, ctx, item->mutldata());
 }
 
 void ArpeggioLayout::layoutOnEdit(Arpeggio* item, LayoutContext& ctx)
 {
-    Arpeggio::LayoutData* ldata = item->mutLayoutData();
+    Arpeggio::LayoutData* ldata = item->mutldata();
     ArpeggioLayout::layout(item, ctx, ldata);
 
     Chord* c = item->chord();
