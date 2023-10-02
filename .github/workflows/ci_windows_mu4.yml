@@ -35,12 +35,12 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository (default)
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
       with:
         fetch-depth: 3
     - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
       with:
         fetch-depth: 3
@@ -230,7 +230,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         fetch-depth: 3
     - name: Fetch submodules

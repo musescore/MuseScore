@@ -29,10 +29,10 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository (default)
       if: ${{ github.event_name != 'schedule' }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Clone repository (3.x for build nightly )
       if: ${{ github.event_name == 'schedule' }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: 3.x
     - name: "Configure workflow"

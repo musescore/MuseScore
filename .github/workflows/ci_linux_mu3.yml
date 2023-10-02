@@ -25,10 +25,10 @@ jobs:
         access_token: ${{ github.token }}
     - name: Clone repository (default)
       if: ${{ github.event_name != 'schedule' }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Clone repository (3.x for build nightly )
       if: ${{ github.event_name == 'schedule' }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: 3.x
     - name: Prepare ccache timestamp
@@ -120,7 +120,7 @@ jobs:
         CXXFLAGS: "-fsanitize=address -fno-omit-frame-pointer"
     steps:
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Setup environment
       run: |
         sudo bash ./build/ci/linux/setup.sh

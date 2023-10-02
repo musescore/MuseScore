@@ -19,7 +19,7 @@ jobs:
       with:
         access_token: ${{ github.token }}
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: "Configure workflow"
       run: |
         sudo bash ./build/ci/tools/make_build_number.sh
@@ -65,7 +65,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true' # Can't use env: see https://github.com/actions/runner/issues/480
     steps:
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Ccache cache files
       uses: actions/cache@v3
       with:
@@ -94,7 +94,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository and checkout reference commit
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         ref: ${{ needs.setup.outputs.reference_sha }}
     - name: Ccache cache files
@@ -125,7 +125,7 @@ jobs:
     if: needs.setup.outputs.do_run == 'true'
     steps:
     - name: Clone repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
     - name: Download current
       uses: actions/download-artifact@v3
       with:
