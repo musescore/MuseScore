@@ -68,7 +68,7 @@ TextCursor* TextEditData::cursor() const
 
 void TextBase::editInsertText(TextCursor* cursor, const String& s)
 {
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     IF_ASSERT_FAILED(ldata && !ldata->layoutInvalid) {
         return;
     }
@@ -114,7 +114,7 @@ void TextBase::startEdit(EditData& ed)
     ted->oldXmlText = xmlText();
     ted->startUndoIdx = score()->undoStack()->getCurIdx();
 
-    const LayoutData* ldata = layoutData();
+    const LayoutData* ldata = this->ldata();
     if (!ldata || ldata->layoutInvalid) {
         renderer()->layoutItem(this);
     }
@@ -774,7 +774,7 @@ void SplitJoinText::join(EditData* ed)
     t->setTextInvalid();
     t->triggerLayout();
 
-    TextBase::LayoutData* ldata = t->mutLayoutData();
+    TextBase::LayoutData* ldata = t->mutldata();
     CharFormat* charFmt = _cursor.format();         // take current format
     size_t col          = ldata->textBlock(static_cast<int>(line) - 1).columns();
     int eol             = ldata->textBlock(static_cast<int>(line)).eol();
@@ -807,7 +807,7 @@ void SplitJoinText::split(EditData* ed)
     t->setTextInvalid();
     t->triggerLayout();
 
-    TextBase::LayoutData* ldata = t->mutLayoutData();
+    TextBase::LayoutData* ldata = t->mutldata();
     CharFormat* charFmt = _cursor.format();           // take current format
     ldata->blocks.insert(ldata->blocks.begin() + line + 1,
                          _cursor.curLine().split(static_cast<int>(_cursor.column()), t->cursorFromEditData(*ed)));
@@ -970,7 +970,7 @@ void TextBase::endHexState(EditData& ed)
             size_t c2 = cursor->column();
             size_t c1 = c2 - (m_hexState + 1);
 
-            TextBlock& t = mutLayoutData()->blocks[cursor->row()];
+            TextBlock& t = mutldata()->blocks[cursor->row()];
             String ss   = t.remove(static_cast<int>(c1), m_hexState + 1, cursor);
             bool ok;
             char16_t code = ss.mid(1).toInt(&ok, 16);

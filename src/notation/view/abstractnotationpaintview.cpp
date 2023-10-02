@@ -674,7 +674,7 @@ RectF AbstractNotationPaintView::notationContentRect() const
 
     RectF result;
     for (const Page* page: notationElements()->pages()) {
-        result.unite(page->layoutData()->bbox().translated(page->pos()));
+        result.unite(page->ldata()->bbox().translated(page->pos()));
     }
 
     return result;

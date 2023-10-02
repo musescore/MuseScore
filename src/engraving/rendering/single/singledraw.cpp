@@ -325,12 +325,12 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
 
 void SingleDraw::draw(const Accidental* item, draw::Painter* painter)
 {
-    IF_ASSERT_FAILED(item->layoutData()) {
+    IF_ASSERT_FAILED(item->ldata()) {
         return;
     }
 
     painter->setPen(item->curColor());
-    for (const Accidental::LayoutData::Sym& e : item->layoutData()->syms) {
+    for (const Accidental::LayoutData::Sym& e : item->ldata()->syms) {
         item->drawSymbol(e.sym, painter, PointF(e.x, e.y));
     }
 }
@@ -338,7 +338,7 @@ void SingleDraw::draw(const Accidental* item, draw::Painter* painter)
 void SingleDraw::draw(const ActionIcon* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    const ActionIcon::LayoutData* ldata = item->layoutData();
+    const ActionIcon::LayoutData* ldata = item->ldata();
     painter->setFont(item->iconFont());
     painter->drawText(ldata->bbox(), draw::AlignCenter, Char(item->icon()));
 }
@@ -347,7 +347,7 @@ void SingleDraw::draw(const Ambitus* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Ambitus::LayoutData* layoutData = item->layoutData();
+    const Ambitus::LayoutData* layoutData = item->ldata();
     IF_ASSERT_FAILED(layoutData) {
         return;
     }
@@ -367,7 +367,7 @@ void SingleDraw::draw(const Arpeggio* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Arpeggio::LayoutData* ldata = item->layoutData();
+    const Arpeggio::LayoutData* ldata = item->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
@@ -428,7 +428,7 @@ void SingleDraw::draw(const Articulation* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Articulation::LayoutData* ldata = item->layoutData();
+    const Articulation::LayoutData* ldata = item->ldata();
     painter->setPen(item->curColor());
 
     if (item->textType() == ArticulationTextType::NO_TEXT) {
@@ -448,7 +448,7 @@ void SingleDraw::draw(const Note* item, Painter* painter)
         return;
     }
 
-    const Note::LayoutData* ldata = item->layoutData();
+    const Note::LayoutData* ldata = item->ldata();
     auto config = item->engravingConfiguration();
 
     bool negativeFret = item->negativeFretUsed() && item->staff()->isTabStaff(item->tick());
@@ -558,7 +558,7 @@ void SingleDraw::draw(const BagpipeEmbellishment* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const BagpipeEmbellishment::LayoutData* data = item->layoutData();
+    const BagpipeEmbellishment::LayoutData* data = item->ldata();
     IF_ASSERT_FAILED(data) {
         return;
     }
@@ -623,7 +623,7 @@ static void drawDots(const BarLine* item, Painter* painter, double x)
 
 static void drawTips(const BarLine* item, Painter* painter, bool reversed, double x)
 {
-    const BarLine::LayoutData* ldata = item->layoutData();
+    const BarLine::LayoutData* ldata = item->ldata();
     if (reversed) {
         if (item->isTop()) {
             item->drawSymbol(SymId::reversedBracketTop, painter, PointF(x - item->symWidth(SymId::reversedBracketTop), ldata->y1));
@@ -644,7 +644,7 @@ static void drawTips(const BarLine* item, Painter* painter, bool reversed, doubl
 void SingleDraw::draw(const BarLine* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    const BarLine::LayoutData* ldata = item->layoutData();
+    const BarLine::LayoutData* ldata = item->ldata();
     switch (item->barLineType()) {
     case BarLineType::NORMAL: {
         double lw = item->style().styleMM(Sid::barWidth) * item->mag();
@@ -831,7 +831,7 @@ void SingleDraw::draw(const Bend* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Bend::LayoutData* ldata = item->layoutData();
+    const Bend::LayoutData* ldata = item->ldata();
     double _spatium = item->spatium();
     double _lw = item->lineWidth();
 
@@ -925,7 +925,7 @@ void SingleDraw::draw(const Bracket* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Bracket::LayoutData* ldata = item->layoutData();
+    const Bracket::LayoutData* ldata = item->ldata();
 
     switch (item->bracketType()) {
     case BracketType::BRACE: {
@@ -988,7 +988,7 @@ void SingleDraw::draw(const Breath* item, Painter* painter)
 void SingleDraw::draw(const ChordLine* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    const ChordLine::LayoutData* ldata = item->layoutData();
+    const ChordLine::LayoutData* ldata = item->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
@@ -1008,7 +1008,7 @@ void SingleDraw::draw(const ChordLine* item, Painter* painter)
 void SingleDraw::draw(const Clef* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    const Clef::LayoutData* ldata = item->layoutData();
+    const Clef::LayoutData* ldata = item->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
@@ -1028,7 +1028,7 @@ void SingleDraw::draw(const Capo* item, Painter* painter)
 void SingleDraw::draw(const DeadSlapped* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    const DeadSlapped::LayoutData* ldata = item->layoutData();
+    const DeadSlapped::LayoutData* ldata = item->ldata();
     IF_ASSERT_FAILED(ldata) {
         return;
     }
@@ -1074,7 +1074,7 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const FiguredBassItem::LayoutData* ldata = item->layoutData();
+    const FiguredBassItem::LayoutData* ldata = item->ldata();
     int font = 0;
     double _spatium = item->spatium();
     // set font from general style
@@ -1097,7 +1097,7 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter)
         if (lineStartX > 0.0) {
             lineStartX += _spatium * FiguredBass::FB_CONTLINE_LEFT_PADDING;          // if some text, give some room after it
         }
-        lineEndX = item->figuredBass()->layoutData()->printedLineLength;            // by default, line ends with item duration
+        lineEndX = item->figuredBass()->ldata()->printedLineLength;            // by default, line ends with item duration
         if (lineEndX - lineStartX < 1.0) {                         // if line length < 1 sp, ignore it
             lineEndX = 0.0;
         }
@@ -1117,7 +1117,7 @@ void SingleDraw::draw(const FiguredBassItem* item, Painter* painter)
                 }
                 // with a little bit of overlap
                 else {
-                    lineEndX = item->figuredBass()->layoutData()->lineLength(0);                  // if none found, draw to the duration end
+                    lineEndX = item->figuredBass()->ldata()->lineLength(0);                  // if none found, draw to the duration end
                 }
             }
         }
@@ -1146,7 +1146,7 @@ void SingleDraw::draw(const FretDiagram* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const FretDiagram::LayoutData* ldata = item->layoutData();
+    const FretDiagram::LayoutData* ldata = item->ldata();
     PointF translation = -PointF(ldata->stringDist * (item->strings() - 1), 0);
     if (item->orientation() == Orientation::HORIZONTAL) {
         painter->save();
@@ -1392,7 +1392,7 @@ void SingleDraw::draw(const Stem* item, Painter* painter)
         return;
     }
 
-    const Stem::LayoutData* ldata = item->layoutData();
+    const Stem::LayoutData* ldata = item->ldata();
     const Staff* staff = item->staff();
     const StaffType* staffType = staff ? staff->staffTypeForElement(item->chord()) : nullptr;
     const bool isTablature = staffType && staffType->isTabStaff();
@@ -1457,7 +1457,7 @@ void SingleDraw::draw(const StemSlash* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const StemSlash::LayoutData* ldata = item->layoutData();
+    const StemSlash::LayoutData* ldata = item->ldata();
     painter->setPen(Pen(item->curColor(), ldata->stemWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     painter->drawLine(ldata->line);
 }
@@ -1550,7 +1550,7 @@ void SingleDraw::drawTextBase(const TextBase* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const TextBase::LayoutData* ldata = item->layoutData();
+    const TextBase::LayoutData* ldata = item->ldata();
 
     if (item->hasFrame()) {
         double baseSpatium = DefaultStyle::baseStyle().value(Sid::spatium).toReal();
@@ -1758,7 +1758,7 @@ void SingleDraw::draw(const Harmony* item, Painter* painter)
         return;
     }
 
-    const Harmony::LayoutData* ldata = item->layoutData();
+    const Harmony::LayoutData* ldata = item->ldata();
 
     if (item->hasFrame()) {
         if (item->frameWidth().val() != 0.0) {
@@ -1806,7 +1806,7 @@ void SingleDraw::draw(const Hook* item, Painter* painter)
 void SingleDraw::draw(const Image* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    const Image::LayoutData* ldata = item->layoutData();
+    const Image::LayoutData* ldata = item->ldata();
     bool emptyImage = false;
     if (item->imageType() == ImageType::SVG) {
         if (!item->svgRenderer()) {
@@ -1875,7 +1875,7 @@ void SingleDraw::draw(const KeySig* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const KeySig::LayoutData* ldata = item->layoutData();
+    const KeySig::LayoutData* ldata = item->ldata();
 
     painter->setPen(item->curColor());
     double _spatium = item->spatium();
@@ -1934,7 +1934,7 @@ void SingleDraw::draw(const LayoutBreak* item, Painter* painter)
 void SingleDraw::draw(const LedgerLine* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    const LedgerLine::LayoutData* ldata = item->layoutData();
+    const LedgerLine::LayoutData* ldata = item->ldata();
 
     painter->setPen(Pen(item->curColor(), ldata->lineWidth, PenStyle::SolidLine, PenCapStyle::FlatCap));
     if (item->vertical()) {
@@ -1966,7 +1966,7 @@ void SingleDraw::draw(const MeasureRepeat* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const MeasureRepeat::LayoutData* ldata = item->layoutData();
+    const MeasureRepeat::LayoutData* ldata = item->ldata();
     painter->setPen(item->curColor());
     item->drawSymbol(ldata->symId, painter);
 }
@@ -2019,7 +2019,7 @@ void SingleDraw::draw(const Rest* item, Painter* painter)
     if (item->shouldNotBeDrawn()) {
         return;
     }
-    const Rest::LayoutData* ldata = item->layoutData();
+    const Rest::LayoutData* ldata = item->ldata();
     painter->setPen(item->curColor());
     item->drawSymbol(ldata->sym(), painter);
 }
@@ -2186,7 +2186,7 @@ void SingleDraw::draw(const StaffState* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const StaffState::LayoutData* ldata = item->layoutData();
+    const StaffState::LayoutData* ldata = item->ldata();
     auto conf = item->engravingConfiguration();
 
     Pen pen(item->selected() ? conf->selectionColor() : conf->formattingMarksColor(),
@@ -2349,7 +2349,7 @@ void SingleDraw::draw(const TimeSig* item, Painter* painter)
     }
     painter->setPen(item->curColor());
 
-    const TimeSig::LayoutData* ldata = item->layoutData();
+    const TimeSig::LayoutData* ldata = item->ldata();
 
     item->drawSymbols(ldata->ns, painter, ldata->pz, item->scale());
     item->drawSymbols(ldata->ds, painter, ldata->pn, item->scale());
@@ -2364,7 +2364,7 @@ void SingleDraw::draw(const Tremolo* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Tremolo::LayoutData* ldata = item->layoutData();
+    const Tremolo::LayoutData* ldata = item->ldata();
 
     if (item->isBuzzRoll()) {
         painter->setPen(item->curColor());
@@ -2414,7 +2414,7 @@ void SingleDraw::draw(const Tremolo* item, Painter* painter)
 void SingleDraw::draw(const TremoloBar* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    const TremoloBar::LayoutData* ldata = item->layoutData();
+    const TremoloBar::LayoutData* ldata = item->ldata();
     Pen pen(item->curColor(), item->lineWidth().val(), PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
     painter->setPen(pen);
     painter->drawPolyline(ldata->polygon);

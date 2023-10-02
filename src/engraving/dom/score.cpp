@@ -968,7 +968,7 @@ Page* Score::searchPage(const PointF& p) const
     }
 
     for (Page* page : m_pages) {
-        RectF r = page->layoutData()->bbox().translated(page->pos());
+        RectF r = page->ldata()->bbox().translated(page->pos());
         if (r.contains(p)) {
             return page;
         }
@@ -1014,7 +1014,7 @@ std::vector<System*> Score::searchSystem(const PointF& pos, const System* prefer
             y2 = page->height();
         } else {
             double currentSpacingFactor;
-            double sy2 = s->y() + s->layoutData()->bbox().height();
+            double sy2 = s->y() + s->ldata()->bbox().height();
             if (s == preferredSystem) {
                 currentSpacingFactor = preferredSpacingFactor; //y2 = ns->y();
             } else if (ns == preferredSystem) {
@@ -1051,7 +1051,7 @@ Measure* Score::searchMeasure(const PointF& p, const System* preferredSystem, do
     for (System* system : systems) {
         double x = p.x() - system->canvasPos().x();
         for (MeasureBase* mb : system->measures()) {
-            if (mb->isMeasure() && (x < (mb->x() + mb->layoutData()->bbox().width()))) {
+            if (mb->isMeasure() && (x < (mb->x() + mb->ldata()->bbox().width()))) {
                 return toMeasure(mb);
             }
         }
@@ -1216,7 +1216,7 @@ bool Score::getPosition(Position* pos, const PointF& p, voice_idx_t voice) const
             x2    = ns->x();
             d     = x2 - x1;
         } else {
-            x2    = measure->layoutData()->bbox().width();
+            x2    = measure->ldata()->bbox().width();
             d     = (x2 - x1) * 2.0;
             x     = x1;
             pos->segment = segment;
@@ -3902,7 +3902,7 @@ void Score::lassoSelect(const RectF& bbox)
     select(0, SelectType::SINGLE, 0);
     RectF fr(bbox.normalized());
     for (Page* page : pages()) {
-        RectF pr(page->layoutData()->bbox());
+        RectF pr(page->ldata()->bbox());
         RectF frr(fr.translated(-page->pos()));
         if (pr.right() < frr.left()) {
             continue;

@@ -115,7 +115,7 @@ Shape HairpinSegment::shape() const
     switch (hairpin()->hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
     case HairpinType::DECRESC_HAIRPIN:
-        return Shape(layoutData()->bbox());
+        return Shape(ldata()->bbox());
     case HairpinType::DECRESC_LINE:
     case HairpinType::CRESC_LINE:
     default:

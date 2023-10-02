@@ -178,7 +178,7 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
     System* system() const { return toSystem(explicitParent()->explicitParent()); }
-    double x() const override { return layoutData()->pos().x(); }
+    double x() const override { return ldata()->pos().x(); }
 
     mu::RectF contentRect() const;
 

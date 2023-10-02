@@ -120,7 +120,7 @@ public:
     DECLARE_LAYOUTDATA_METHODS(Bracket);
 
     //! --- DEPRECATED ---
-    double h2() const { return layoutData()->h2(); }
+    double h2() const { return ldata()->h2(); }
     void setHeight(double) override;
     double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override;
     //! ------------------

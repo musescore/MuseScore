@@ -60,7 +60,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
         double minDistance = item->minDistance().val() * sp;
 
         SysStaff* ss = m->system()->staff(si);
-        RectF r = item->layoutData()->bbox().translated(m->pos() + s->pos() + item->pos());
+        RectF r = item->ldata()->bbox().translated(m->pos() + s->pos() + item->pos());
 
         // Adjust bbox Y pos for staffType offset
         if (item->staffType()) {

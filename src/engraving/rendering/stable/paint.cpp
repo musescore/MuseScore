@@ -79,7 +79,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRendere
             Page* page = pages.at(pi);
 
             PointF pagePos = page->pos();
-            RectF pageRect = page->layoutData()->bbox();
+            RectF pageRect = page->ldata()->bbox();
 
             //! NOTE Trim page margins, if need
             if (opt.trimMarginPixelSize >= 0) {
@@ -178,7 +178,7 @@ SizeF Paint::pageSizeInch(const Score* score)
     //! then the page sizes will differ from the standard sizes (in PAGE view mode)
     if (score->npages() > 0) {
         const Page* page = score->pages().front();
-        return SizeF(page->layoutData()->bbox().width() / mu::engraving::DPI, page->layoutData()->bbox().height() / mu::engraving::DPI);
+        return SizeF(page->ldata()->bbox().width() / mu::engraving::DPI, page->ldata()->bbox().height() / mu::engraving::DPI);
     }
 
     return SizeF(score->style().styleD(Sid::pageWidth), score->style().styleD(Sid::pageHeight));
@@ -197,7 +197,7 @@ SizeF Paint::pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions
 
     const Page* page = score->pages().at(pageNo);
 
-    RectF pageRect = page->layoutData()->bbox();
+    RectF pageRect = page->ldata()->bbox();
 
     //! NOTE Trim page margins, if need
     if (opt.trimMarginPixelSize >= 0) {
@@ -211,7 +211,7 @@ SizeF Paint::pageSizeInch(const Score* score, const IScoreRenderer::PaintOptions
 void Paint::paintItem(mu::draw::Painter& painter, const EngravingItem* item)
 {
     TRACEFUNC;
-    if (item->layoutData()->isSkipDraw()) {
+    if (item->ldata()->isSkipDraw()) {
         return;
     }
     item->itemDiscovered = false;

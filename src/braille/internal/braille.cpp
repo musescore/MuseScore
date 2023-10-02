@@ -1521,7 +1521,7 @@ QString Braille::brailleArpeggio(Arpeggio* arpeggio)
     // Table 22. Page 17. Music Braille Code 2015.
     QString result = QString();
     // fix me - this is a simple heuristic. can we do better?
-    if (arpeggio->layoutData()->arpeggioHeight > 200) {
+    if (arpeggio->ldata()->arpeggioHeight > 200) {
         result += BRAILLE_ARPEGGIO_MULTISTAVES;
     }
 

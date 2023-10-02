@@ -2256,7 +2256,7 @@ void Chord::setSlash(bool flag, bool stemless)
         // for drum staves, no offset, but use normal head
         if (!staffType->isDrumStaff()) {
             // undoChangeProperty(Pid::OFFSET, PointF(0.0, y));
-            mutLayoutData()->moveY(y);
+            mutldata()->moveY(y);
         } else {
             head = NoteHeadGroup::HEAD_NORMAL;
         }
@@ -2826,7 +2826,7 @@ Shape Chord::shape() const
         shape.add(l->shape().translate(l->pos()));
     }
     if (m_beamlet && m_stem) {
-        double xPos = m_beamlet->line.p1().x() - m_stem->layoutData()->pos().x();
+        double xPos = m_beamlet->line.p1().x() - m_stem->ldata()->pos().x();
         if (m_beamlet->isBefore && !m_up) {
             xPos -= m_stem->width();
         } else if (!m_beamlet->isBefore && m_up) {
@@ -2962,7 +2962,7 @@ void GraceNotesGroup::setPos(double x, double y)
     EngravingItem::setPos(x, y);
     for (unsigned i = 0; i < this->size(); ++i) {
         Chord* chord = this->at(i);
-        chord->mutLayoutData()->move(PointF(x, y));
+        chord->mutldata()->move(PointF(x, y));
     }
 }
 

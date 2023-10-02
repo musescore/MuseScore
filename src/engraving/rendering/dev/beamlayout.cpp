@@ -131,7 +131,7 @@ void BeamLayout::layoutIfNeed(Beam* item, LayoutContext& ctx)
 //---------------------------------------------------------
 void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
 {
-    Beam::LayoutData* ldata = item->mutLayoutData();
+    Beam::LayoutData* ldata = item->mutldata();
     item->resetExplicitParent();  // parent is System
 
     const StaffType* staffType = item->staffType();
@@ -900,9 +900,9 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         int lineMoves = ceil(overlap / lineDistance);
         lineMoves *= up ? 1 : -1;
         double yMove = lineMoves * lineDistance;
-        rest->mutLayoutData()->moveY(yMove);
-        for (Rest* mergedRest : rest->layoutData()->mergedRests) {
-            mergedRest->mutLayoutData()->moveY(yMove);
+        rest->mutldata()->moveY(yMove);
+        for (Rest* mergedRest : rest->ldata()->mergedRests) {
+            mergedRest->mutldata()->moveY(yMove);
         }
 
         Segment* segment = rest->segment();

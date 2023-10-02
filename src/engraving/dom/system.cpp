@@ -289,12 +289,12 @@ void System::setBracketsXPosition(const double xPosition)
             bool b1LastStaffInB2 = (b1->lastStaff() >= b2->firstStaff() && b1->lastStaff() <= b2->lastStaff());
             if (b1->column() > b2->column()
                 && (b1FirstStaffInB2 || b1LastStaffInB2)) {
-                xOffset += b2->layoutData()->bracketWidth();
+                xOffset += b2->ldata()->bracketWidth();
             }
         }
         // Set position
-        double x = xPosition - xOffset - b1->layoutData()->bracketWidth() + lineWidthCorrection;
-        b1->mutLayoutData()->setPosX(x);
+        double x = xPosition - xOffset - b1->ldata()->bracketWidth() + lineWidthCorrection;
+        b1->mutldata()->setPosX(x);
     }
 }
 
@@ -987,7 +987,7 @@ double System::firstNoteRestSegmentX(bool leading)
                             }
                             EngravingItem* e = seg->element(i * VOICES);
                             if (e && e->addToSkyline()) {
-                                width = std::max(width, e->pos().x() + e->layoutData()->bbox().right());
+                                width = std::max(width, e->pos().x() + e->ldata()->bbox().right());
                             }
                         }
                         return std::min(seg->measure()->pos().x() + seg->pos().x() + width + margin, noteRestPos);
@@ -1011,7 +1011,7 @@ double System::firstNoteRestSegmentX(bool leading)
 double System::endingXForOpenEndedLines() const
 {
     double margin = style().spatium() / 4;  // TODO: this can be parameterizable
-    double systemEndX = layoutData()->bbox().width();
+    double systemEndX = ldata()->bbox().width();
 
     Measure* lastMeas = lastMeasure();
     if (!lastMeas) {

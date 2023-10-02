@@ -74,14 +74,14 @@ public:
     void setWidth(double width) override
     {
         UNREACHABLE;
-        mutLayoutData()->setRestWidth(width);
+        mutldata()->setRestWidth(width);
     }
 
     double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override
     {
         UNUSED(mode);
         UNREACHABLE;
-        return layoutData()->restWidth();
+        return ldata()->restWidth();
     }
 
     //! ------------------

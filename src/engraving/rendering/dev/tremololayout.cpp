@@ -63,7 +63,7 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
         if (!item->twoNotes()) {
             bool hasMirroredNote = false;
             for (Note* n : item->chord1()->notes()) {
-                if (n->layoutData()->mirror()) {
+                if (n->ldata()->mirror()) {
                     hasMirroredNote = true;
                     break;
                 }
@@ -73,7 +73,7 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
             }
         }
         y = anchor1->y();
-        h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->layoutData()->bbox().height()) * item->chord1()->intrinsicMag();
+        h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->ldata()->bbox().height()) * item->chord1()->intrinsicMag();
     }
 
     if (item->twoNotes()) {
@@ -143,7 +143,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
     UNUSED(h);
     UNUSED(spatium);
 
-    Tremolo::LayoutData* ldata = item->mutLayoutData();
+    Tremolo::LayoutData* ldata = item->mutldata();
 
     // make sure both stems are in the same direction
     int up = 0;

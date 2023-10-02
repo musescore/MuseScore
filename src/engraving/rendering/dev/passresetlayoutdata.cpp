@@ -30,8 +30,8 @@ using namespace mu::engraving::rendering::dev;
 
 static void resetLayoutData(EngravingItem* item)
 {
-    if (item->layoutData()) {
-        item->mutLayoutData()->reset();
+    if (item->ldata()) {
+        item->mutldata()->reset();
     }
 
     for (EngravingItem* ch : item->childrenItems()) {

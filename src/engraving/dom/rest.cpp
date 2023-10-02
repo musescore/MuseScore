@@ -120,7 +120,7 @@ void Rest::setOffset(const mu::PointF& o)
     //! NOTE We need to find out why this is being done here.
     //! We rewrite sym in the layout (we get from the Rest::getSymbol method )
 
-    LayoutData* ldata = mutLayoutData();
+    LayoutData* ldata = mutldata();
 
     if (ldata->sym() == SymId::restWhole && (line <= -2 || line >= 3)) {
         ldata->setSym(SymId::restWholeLegerLine);
@@ -561,7 +561,7 @@ int Rest::computeNaturalLine(int lines) const
 
 double Rest::upPos() const
 {
-    return symBbox(layoutData()->sym()).y();
+    return symBbox(ldata()->sym()).y();
 }
 
 //---------------------------------------------------------
@@ -570,7 +570,7 @@ double Rest::upPos() const
 
 double Rest::downPos() const
 {
-    return symBbox(layoutData()->sym()).y() + symHeight(layoutData()->sym());
+    return symBbox(ldata()->sym()).y() + symHeight(ldata()->sym());
 }
 
 //---------------------------------------------------------
@@ -635,7 +635,7 @@ double Rest::intrinsicMag() const
 int Rest::upLine() const
 {
     double _spatium = spatium();
-    return lrint((pos().y() + layoutData()->bbox().top() + _spatium) * 2 / _spatium);
+    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
 }
 
 //---------------------------------------------------------
@@ -645,7 +645,7 @@ int Rest::upLine() const
 int Rest::downLine() const
 {
     double _spatium = spatium();
-    return lrint((pos().y() + layoutData()->bbox().top() + _spatium) * 2 / _spatium);
+    return lrint((pos().y() + ldata()->bbox().top() + _spatium) * 2 / _spatium);
 }
 
 //---------------------------------------------------------
@@ -668,9 +668,9 @@ PointF Rest::stemPosBeam() const
 {
     PointF p(pagePos());
     if (m_up) {
-        p.ry() += layoutData()->bbox().top() + spatium() * 1.5;
+        p.ry() += ldata()->bbox().top() + spatium() * 1.5;
     } else {
-        p.ry() += layoutData()->bbox().bottom() - spatium() * 1.5;
+        p.ry() += ldata()->bbox().bottom() - spatium() * 1.5;
     }
     return p;
 }
@@ -682,9 +682,9 @@ PointF Rest::stemPosBeam() const
 double Rest::stemPosX() const
 {
     if (m_up) {
-        return layoutData()->bbox().right();
+        return ldata()->bbox().right();
     } else {
-        return layoutData()->bbox().left();
+        return ldata()->bbox().left();
     }
 }
 
@@ -699,7 +699,7 @@ double Rest::rightEdge() const
 
 double Rest::centerX() const
 {
-    SymId sym = layoutData()->sym();
+    SymId sym = ldata()->sym();
     RectF bbox = symBbox(sym);
     return bbox.left() + bbox.width() / 2;
 }
@@ -722,11 +722,11 @@ void Rest::setAccent(bool flag)
     undoChangeProperty(Pid::SMALL, flag);
     if (voice() % 2 == 0) {
         if (flag) {
-            double yOffset = -(layoutData()->bbox().bottom());
+            double yOffset = -(ldata()->bbox().bottom());
             if (durationType() >= DurationType::V_HALF) {
                 yOffset -= staff()->spatium(tick()) * 0.5;
             }
-            mutLayoutData()->moveY(yOffset);
+            mutldata()->moveY(yOffset);
         }
     }
 }
@@ -941,7 +941,7 @@ Shape Rest::shape() const
     Shape shape;
     if (!m_gap) {
         shape.add(ChordRest::shape());
-        shape.add(symBbox(layoutData()->sym()), this);
+        shape.add(symBbox(ldata()->sym()), this);
         for (NoteDot* dot : m_dots) {
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
         }
