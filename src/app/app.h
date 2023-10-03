@@ -37,6 +37,7 @@
 #include "ui/iuiconfiguration.h"
 #include "notation/inotationconfiguration.h"
 #include "project/iprojectconfiguration.h"
+#include "playback/isoundprofilesrepository.h"
 #include "appshell/iappshellconfiguration.h"
 #include "appshell/internal/istartupscenario.h"
 #include "importexport/imagesexport/iimagesexportconfiguration.h"
@@ -61,6 +62,7 @@ class App
     INJECT(appshell::IStartupScenario, startupScenario)
     INJECT(notation::INotationConfiguration, notationConfiguration)
     INJECT(project::IProjectConfiguration, projectConfiguration)
+    INJECT(playback::ISoundProfilesRepository, soundProfilesRepository)
     INJECT(iex::imagesexport::IImagesExportConfiguration, imagesExportConfiguration)
     INJECT(iex::midi::IMidiImportExportConfiguration, midiImportExportConfiguration)
     INJECT(iex::audioexport::IAudioExportConfiguration, audioExportConfiguration)

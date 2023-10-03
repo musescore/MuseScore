@@ -104,6 +104,10 @@ void CommandLineParser::init()
 
     m_parser.addOption(QCommandLineOption({ "S", "style" }, "Load style file", "style"));
 
+    m_parser.addOption(QCommandLineOption("sound-profile",
+                                          "Use with '-o <file>.mp3' or with '-j <file>', override the sound profile in the given score(s). "
+                                          "Possible values: \"MuseScore Basic\", \"Muse Sounds\"", "sound-profile"));
+
     // Video export
 #ifdef MUE_BUILD_VIDEOEXPORT_MODULE
     m_parser.addOption(QCommandLineOption("score-video", "Generate video for the given score and export it to file"));
@@ -392,6 +396,10 @@ void CommandLineParser::parse(int argc, char** argv)
 
     if (m_parser.isSet("S")) {
         m_converterTask.params[CommandLineParser::ParamKey::StylePath] = fromUserInputPath(m_parser.value("S"));
+    }
+
+    if (m_parser.isSet("sound-profile")) {
+        m_converterTask.params[CommandLineParser::ParamKey::SoundProfile] = m_parser.value("sound-profile");
     }
 
     if (m_parser.isSet("gp-linked")) {

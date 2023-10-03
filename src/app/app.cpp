@@ -457,16 +457,22 @@ int App::processConverter(const CommandLineParser::ConverterTask& task)
     Ret ret = make_ret(Ret::Code::Ok);
     io::path_t stylePath = task.params[CommandLineParser::ParamKey::StylePath].toString();
     bool forceMode = task.params[CommandLineParser::ParamKey::ForceMode].toBool();
+    String soundProfile = task.params[CommandLineParser::ParamKey::SoundProfile].toString();
+
+    if (!soundProfile.isEmpty() && !soundProfilesRepository()->containsProfile(soundProfile)) {
+        LOGE() << "Unknown sound profile: " << soundProfile;
+        soundProfile.clear();
+    }
 
     switch (task.type) {
     case CommandLineParser::ConvertType::Batch:
-        ret = converter()->batchConvert(task.inputFile, stylePath, forceMode);
+        ret = converter()->batchConvert(task.inputFile, stylePath, forceMode, soundProfile);
+        break;
+    case CommandLineParser::ConvertType::File:
+        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode, soundProfile);
         break;
     case CommandLineParser::ConvertType::ConvertScoreParts:
         ret = converter()->convertScoreParts(task.inputFile, task.outputFile, stylePath);
-        break;
-    case CommandLineParser::ConvertType::File:
-        ret = converter()->fileConvert(task.inputFile, task.outputFile, stylePath, forceMode);
         break;
     case CommandLineParser::ConvertType::ExportScoreMedia: {
         io::path_t highlightConfigPath = task.params[CommandLineParser::ParamKey::HighlightConfigPath].toString();

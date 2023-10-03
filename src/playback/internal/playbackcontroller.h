@@ -43,7 +43,7 @@
 
 #include "../iplaybackcontroller.h"
 #include "../iplaybackconfiguration.h"
-#include "isoundprofilesrepository.h"
+#include "../isoundprofilesrepository.h"
 
 namespace mu::playback {
 class PlaybackController : public IPlaybackController, public actions::Actionable, public async::Asyncable

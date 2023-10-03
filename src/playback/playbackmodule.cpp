@@ -106,6 +106,7 @@ void PlaybackModule::onInit(const framework::IApplication::RunMode& mode)
     }
 
     m_configuration->init();
+    m_soundProfileRepo->init();
     m_playbackController->init();
 
     if (mode != framework::IApplication::RunMode::GuiApp) {

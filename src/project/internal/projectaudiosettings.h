@@ -47,6 +47,7 @@ public:
 
     audio::AudioInputParams trackInputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackInputParams(const engraving::InstrumentTrackId& partId, const audio::AudioInputParams& params) override;
+    void clearTrackInputParams() override;
 
     audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& partId) const override;
     void setTrackOutputParams(const engraving::InstrumentTrackId& partId, const audio::AudioOutputParams& params) override;

@@ -111,6 +111,7 @@ public:
         ScoreSource,
         ScoreTransposeOptions,
         ForceMode,
+        SoundProfile,
 
         // Video
     };

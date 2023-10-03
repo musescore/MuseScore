@@ -45,6 +45,7 @@ public:
 
     virtual audio::AudioInputParams trackInputParams(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackInputParams(const engraving::InstrumentTrackId& trackId, const audio::AudioInputParams& params) = 0;
+    virtual void clearTrackInputParams() = 0;
 
     virtual audio::AudioOutputParams trackOutputParams(const engraving::InstrumentTrackId& trackId) const = 0;
     virtual void setTrackOutputParams(const engraving::InstrumentTrackId& trackId, const audio::AudioOutputParams& params) = 0;

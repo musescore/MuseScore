@@ -43,7 +43,8 @@ static const std::string PDF_SUFFIX = "pdf";
 static const std::string PNG_SUFFIX = "png";
 static const std::string SVG_SUFFIX = "svg";
 
-mu::Ret ConverterController::batchConvert(const io::path_t& batchJobFile, const io::path_t& stylePath, bool forceMode)
+mu::Ret ConverterController::batchConvert(const io::path_t& batchJobFile, const io::path_t& stylePath, bool forceMode,
+                                          const String& soundProfile)
 {
     TRACEFUNC;
 
@@ -55,7 +56,7 @@ mu::Ret ConverterController::batchConvert(const io::path_t& batchJobFile, const 
 
     Ret ret = make_ret(Ret::Code::Ok);
     for (const Job& job : batchJob.val) {
-        ret = fileConvert(job.in, job.out, stylePath, forceMode);
+        ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile);
         if (!ret) {
             LOGE() << "failed convert, err: " << ret.toString() << ", in: " << job.in << ", out: " << job.out;
             break;
@@ -65,7 +66,8 @@ mu::Ret ConverterController::batchConvert(const io::path_t& batchJobFile, const 
     return ret;
 }
 
-mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
+mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode,
+                                         const String& soundProfile)
 {
     TRACEFUNC;
 
@@ -85,6 +87,11 @@ mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t&
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
+    }
+
+    if (!soundProfile.isEmpty()) {
+        notationProject->audioSettings()->clearTrackInputParams();
+        notationProject->audioSettings()->setActiveSoundProfile(soundProfile);
     }
 
     globalContext()->setCurrentProject(notationProject);
