@@ -6750,7 +6750,11 @@ void ExportMusicXml::findAndExportClef(const Measure* const m, const int staves,
                 if ((tick.isZero() || !cle->generated())
                     && ((seg->measure() != m) || ((seg->segmentType() == SegmentType::HeaderClef) && !cle->otherClef()))) {
                     clefDebug("exportxml: clef exported");
-                    clef(sstaff, cle->clefType(), color2xml(cle));
+                    QString clefAttr = color2xml(cle);
+                    if (!cle->visible()) {
+                        clefAttr += " print-object=\"no\"";
+                    }
+                    clef(sstaff, cle->clefType(), clefAttr);
                 } else {
                     clefDebug("exportxml: clef not exported");
                 }
@@ -6980,13 +6984,14 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
         // these will be output at the start of the next measure
         const auto cle = toClef(el);
         const auto ti = cle->segment()->tick();
+        const QString visible = (!cle->visible()) ? " print-object=\"no\"" : "";
         clefDebug("exportxml: clef in measure ti=%d ct=%d gen=%d", ti, int(cle->clefType()), el->generated());
         if (el->generated()) {
             clefDebug("exportxml: generated clef not exported");
         } else if (!el->generated() && tickIsInMiddleOfMeasure(ti, m)) {
-            clef(sstaff, cle->clefType(), color2xml(cle));
+            clef(sstaff, cle->clefType(), color2xml(cle) + visible);
         } else if (!el->generated() && (ti == m->tick()) && (cle->segment()->segmentType() != SegmentType::HeaderClef)) {
-            clef(sstaff, cle->clefType(), color2xml(cle) + QString(" after-barline=\"yes\""));
+            clef(sstaff, cle->clefType(), color2xml(cle) + visible + QString(" after-barline=\"yes\""));
         } else {
             clefDebug("exportxml: clef not exported");
         }
