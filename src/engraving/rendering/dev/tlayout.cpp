@@ -368,7 +368,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::SYMBOL:
         layoutSymbol(item_cast<const Symbol*>(item), static_cast<Symbol::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::FSYMBOL:          layout(item_cast<FSymbol*>(item), ctx);
+    case ElementType::FSYMBOL:
+        layoutFSymbol(item_cast<const FSymbol*>(item), static_cast<FSymbol::LayoutData*>(ldata));
         break;
     case ElementType::SYSTEM_DIVIDER:   layout(item_cast<SystemDivider*>(item), ctx);
         break;
@@ -4952,10 +4953,10 @@ void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const 
     }
 }
 
-void TLayout::layout(FSymbol* item, LayoutContext&)
+void TLayout::layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata)
 {
-    FSymbol::LayoutData* ldata = item->mutldata();
-    ldata->setBbox(mu::draw::FontMetrics::boundingRect(item->font(), item->toString()));
+    LD_INDEPENDENT;
+    ldata->setBbox(FontMetrics::boundingRect(item->font(), item->toString()));
 }
 
 static void layoutSystemDivider(const SystemDivider* item, const LayoutContext& ctx, SystemDivider::LayoutData* ldata)
