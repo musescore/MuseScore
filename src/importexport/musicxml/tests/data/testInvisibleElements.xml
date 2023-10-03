@@ -43,7 +43,7 @@
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
-        <clef>
+        <clef print-object="no">
           <sign>G</sign>
           <line>2</line>
           </clef>
