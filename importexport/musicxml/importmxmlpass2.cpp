@@ -4826,8 +4826,9 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
       int i = 0;
       int line = -1;
 
-      QString strClefno = _e.attributes().value("number").toString();
+      const QString strClefno = _e.attributes().value("number").toString();
       const bool afterBarline = _e.attributes().value("after-barline") == "yes";
+      const bool printObject  = _e.attributes().value("print-object") != "no";
 
       while (_e.readNextStartElement()) {
             if (_e.name() == "sign")
@@ -4904,7 +4905,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
             }
       else if (c == "TAB") {
             clef = ClefType::TAB;
-            st= StaffTypes::TAB_DEFAULT;
+            st = StaffTypes::TAB_DEFAULT;
             }
       else
             qDebug("clef: unknown clef <sign=%s line=%d oct ch=%d>", qPrintable(c), line, i);  // TODO
@@ -4932,6 +4933,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
 
       Clef* clefs = new Clef(_score);
       clefs->setClefType(clef);
+      clefs->setVisible(printObject);
       int track = _pass1.trackForPart(partId) + clefno * VOICES;
       clefs->setTrack(track);
       Segment* s;
