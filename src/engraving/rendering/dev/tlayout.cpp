@@ -312,7 +312,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::NOTEDOT:
         layoutNoteDot(item_cast<const NoteDot*>(item), static_cast<NoteDot::LayoutData*>(ldata));
         break;
-    case ElementType::NOTEHEAD:         layoutSymbol(item_cast<NoteHead*>(item), ctx);
+    case ElementType::NOTEHEAD:
+        layoutSymbol(item_cast<const NoteHead*>(item), static_cast<NoteHead::LayoutData*>(ldata), ctx);
         break;
     case ElementType::ORNAMENT:
         layout(item_cast<const Ornament*>(item), static_cast<Ornament::LayoutData*>(ldata), ctx.conf());
@@ -364,7 +365,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STICKING:
         layoutSticking(item_cast<const Sticking*>(item), static_cast<Sticking::LayoutData*>(ldata));
         break;
-    case ElementType::SYMBOL:           layoutSymbol(item_cast<Symbol*>(item), ctx);
+    case ElementType::SYMBOL:
+        layoutSymbol(item_cast<const Symbol*>(item), static_cast<Symbol::LayoutData*>(ldata), ctx);
         break;
     case ElementType::FSYMBOL:          layout(item_cast<FSymbol*>(item), ctx);
         break;
@@ -3836,8 +3838,8 @@ void TLayout::layout(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata
         } break;
         case ElementType::SYMBOL: {
             Symbol* s = item_cast<Symbol*>(e);
-            // not clear yet
-            layoutSymbol(s, const_cast<LayoutContext&>(ctx));
+            // LD_X not clear yet
+            layoutSymbol(s, s->mutldata(), ctx);
         } break;
         case ElementType::IMAGE: {
             Image* im = item_cast<Image*>(e);
@@ -3924,8 +3926,8 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
         } break;
         case ElementType::SYMBOL: {
             Symbol* s = item_cast<Symbol*>(e);
-            // not clear yet
-            layoutSymbol(s, const_cast<LayoutContext&>(ctx));
+            // LD_X not clear yet
+            layoutSymbol(s, s->mutldata(), ctx);
         } break;
         case ElementType::IMAGE: {
             Image* im = item_cast<Image*>(e);
@@ -4321,8 +4323,8 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
         } break;
         case ElementType::SYMBOL: {
             Symbol* s = item_cast<Symbol*>(e);
-            // not clear yet
-            layoutSymbol(s, const_cast<LayoutContext&>(ctx));
+            // LD_X not clear yet
+            layoutSymbol(s, s->mutldata(), ctx);
         } break;
         case ElementType::IMAGE: {
             Image* im = item_cast<Image*>(e);
@@ -4897,25 +4899,18 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
     item->setPos(0.0, 0.0);
 }
 
-static void layoutBaseSymbol(const BSymbol* item, const LayoutContext& ctx, BSymbol::LayoutData* ldata)
+void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
 
-    if (item->parentItem()->isNote()) {
-        ldata->setMag(item->parentItem()->mag());
-    } else if (item->staff()) {
-        ldata->setMag(item->staff()->staffMag(item->tick()));
+    LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
     }
 
-    for (EngravingItem* e : item->leafs()) {
-        TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
-    }
-}
-
-static void _layoutSymbol(const Symbol* item, const LayoutContext& ctx, Symbol::LayoutData* ldata)
-{
     ldata->setBbox(item->scoreFont() ? item->scoreFont()->bbox(item->sym(), item->magS()) : item->symBbox(item->sym()));
     double w = ldata->bbox().width();
     PointF p;
@@ -4932,12 +4927,29 @@ static void _layoutSymbol(const Symbol* item, const LayoutContext& ctx, Symbol::
         p.setX(-(w * .5));
     }
     ldata->setPos(p);
-    layoutBaseSymbol(item, ctx, ldata);
-}
 
-void TLayout::layoutSymbol(Symbol* item, LayoutContext& ctx)
-{
-    _layoutSymbol(item, ctx, item->mutldata());
+    if (item->parentItem()->isNote()) {
+        ldata->setMag(item->parentItem()->mag());
+    } else if (item->staff()) {
+        ldata->setMag(item->staff()->staffMag(item->tick()));
+    }
+
+    // see BSymbol::add
+    for (EngravingItem* e : item->leafs()) {
+        switch (e->type()) {
+        case ElementType::SYMBOL: {
+            Symbol* s = item_cast<Symbol*>(e);
+            layoutSymbol(s, s->mutldata(), ctx);
+        } break;
+        case ElementType::IMAGE: {
+            Image* im = item_cast<Image*>(e);
+            layout(im, im->mutldata());
+        }
+        default:
+            UNREACHABLE;
+            break;
+        }
+    }
 }
 
 void TLayout::layout(FSymbol* item, LayoutContext&)
@@ -4958,7 +4970,7 @@ static void layoutSystemDivider(const SystemDivider* item, const LayoutContext& 
     }
     const_cast<SystemDivider*>(item)->setSym(sid, ctx.engravingFont());
 
-    _layoutSymbol(item, ctx, ldata);
+    TLayout::layoutSymbol(item, ldata, ctx);
 }
 
 void TLayout::layout(SystemDivider* item, LayoutContext& ctx)

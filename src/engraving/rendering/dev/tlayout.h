@@ -288,7 +288,7 @@ public:
     static void layout(StretchedBend* item, LayoutContext& ctx);
     static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
 
-    static void layoutSymbol(Symbol* item, LayoutContext& ctx);
+    static void layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(FSymbol* item, LayoutContext& ctx);
 
     static void layout(SystemDivider* item, LayoutContext& ctx);
