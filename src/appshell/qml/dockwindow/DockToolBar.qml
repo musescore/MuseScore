@@ -85,7 +85,6 @@ DockToolBarView {
             visible: root.floatable
 
             mouseArea.objectName: root.objectName + "_gripButton"
-            mouseArea.cursorShape: Qt.SizeAllCursor
 
             transparent: true
             contentItem: StyledIconLabel {
