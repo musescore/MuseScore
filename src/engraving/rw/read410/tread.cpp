@@ -1735,14 +1735,8 @@ void TRead::read(SystemDivider* d, XmlReader& e, ReadContext& ctx)
 {
     if (e.attribute("type") == "left") {
         d->setDividerType(SystemDivider::Type::LEFT);
-
-        SymId sym = SymNames::symIdByName(ctx.style().styleSt(Sid::dividerLeftSym));
-        d->setSym(sym, d->score()->engravingFont());
     } else {
         d->setDividerType(SystemDivider::Type::RIGHT);
-
-        SymId sym = SymNames::symIdByName(ctx.style().styleSt(Sid::dividerRightSym));
-        d->setSym(sym, d->score()->engravingFont());
     }
     TRead::read(static_cast<Symbol*>(d), e, ctx);
 }
