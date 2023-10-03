@@ -1707,6 +1707,29 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 }
 
                 bool conflict = conflictUnison || conflictSecondDownHigher || conflictSecondUpHigher;
+                bool ledgerOverlapAbove = false;
+                bool ledgerOverlapBelow = false;
+
+                double ledgerGap = 0.15 * sp;
+                double ledgerLen = ctx.conf().styleS(Sid::ledgerLineLength).val() * sp;
+                if (!conflict && topDownNote->chord()->stem()) {
+                    int topDownStemLen = topDownNote->chord()->stem()->length() / sp * 2;
+                    int firstLedgerBelow = staff->lines(bottomUpNote->tick()) * 2;
+                    if (bottomUpNote->line() > firstLedgerBelow - 1 && topDownNote->line() < bottomUpNote->line()
+                        && topDownNote->line() + topDownStemLen >= firstLedgerBelow) {
+                        ledgerOverlapBelow = true;
+                    }
+                }
+
+                if (!conflict && bottomUpNote->chord()->stem()) {
+                    int bottomUpStemLen = bottomUpNote->chord()->stem()->length() / sp * 2;
+                    int firstLedgerAbove = -2;
+                    if (!conflict && topDownNote->line() < -1 && topDownNote->line() < bottomUpNote->line()
+                        && bottomUpNote->line() - bottomUpStemLen <= firstLedgerAbove) {
+                        ledgerOverlapAbove = true;
+                    }
+                }
+
                 // calculate offsets
                 if (shareHeads) {
                     for (int i = static_cast<int>(overlapNotes.size()) - 1; i >= 1; i -= 2) {
@@ -1746,7 +1769,9 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 } else if (conflictSecondUpHigher) {
                     upOffset = maxDownWidth + 0.15 * sp;
                 } else if ((downHooks && !upHooks) && !(upDots && !downDots)) {
-                    downOffset = maxUpWidth + 0.3 * sp;
+                    // Shift by ledger line length if ledger line conflict or just 0.3sp if no ledger lines
+                    double adjSpace = (ledgerOverlapAbove || ledgerOverlapBelow) ? ledgerGap + ledgerLen : 0.3 * sp;
+                    downOffset = maxUpWidth + adjSpace;
                 } else if (conflictSecondDownHigher) {
                     if (downDots && !upDots) {
                         downOffset = maxUpWidth + 0.2 * sp;
@@ -1758,13 +1783,23 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     }
                 } else {
                     // no direct conflict, so parts can overlap (downstem on left)
-                    // just be sure that stems clear opposing noteheads
+                    // just be sure that stems clear opposing noteheads and ledger lines
                     double clearLeft = 0.0, clearRight = 0.0;
                     if (topDownNote->chord()->stem()) {
-                        clearLeft = topDownNote->chord()->stem()->lineWidth() + 0.3 * sp;
+                        if (ledgerOverlapBelow) {
+                            // Create space between stem and ledger line below staff
+                            clearLeft = ledgerLen + ledgerGap + topDownNote->chord()->stem()->lineWidth();
+                        } else {
+                            clearLeft = topDownNote->chord()->stem()->lineWidth() + 0.3 * sp;
+                        }
                     }
                     if (bottomUpNote->chord()->stem()) {
-                        clearRight = bottomUpNote->chord()->stem()->lineWidth() + std::max(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
+                        if (ledgerOverlapAbove) {
+                            // Create space between stem and ledger line above staff
+                            clearRight = maxDownWidth + ledgerLen + ledgerGap - maxUpWidth + bottomUpNote->chord()->stem()->lineWidth();
+                        } else {
+                            clearRight = bottomUpNote->chord()->stem()->lineWidth() + std::max(maxDownWidth - maxUpWidth, 0.0) + 0.3 * sp;
+                        }
                     } else {
                         downDots = 0;             // no need to adjust for dots in this case
                     }
@@ -1772,6 +1807,10 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     if (downHooks) {
                         // we will need more space to avoid collision with hook
                         // but we won't need as much dot adjustment
+                        if (ledgerOverlapBelow) {
+                            double flagWidth = topDownNote->chord()->hook()->width();
+                            upOffset = flagWidth + ledgerLen + ledgerGap;
+                        }
                         upOffset = std::max(upOffset, maxDownWidth + 0.1 * sp);
                         dotAdjustThreshold = maxUpWidth - 0.3 * sp;
                     }
@@ -1782,34 +1821,6 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         centerAdjustUp = 0.0;
                         dotAdjustThreshold = (upOffset - maxDownWidth) + maxUpWidth - 0.3 * sp;
                     }
-                }
-            }
-
-            // Create space between ledger lines and stems
-            // Above stave
-            Note* topUpNote = upStemNotes.back();
-            Note* bottomDownNote = downStemNotes.front();
-            if (!bottomUpNote->chord()->noStem() && bottomUpNote->chord()->stem()) {
-                int bottomUpStemLen = bottomUpNote->chord()->stem()->length() / sp * 2;
-                int firstLedgerAbove = -2;
-                // Don't adjust unisons or 2nds as these move anyway
-                int sep = topUpNote->line() - bottomDownNote->line();
-                if (topDownNote->line() < -1 && topDownNote->line() < bottomUpNote->line() && sep > 1
-                    && bottomUpNote->line() - bottomUpStemLen <= firstLedgerAbove) {
-                    upOffset += 0.15 * sp;
-                }
-            }
-
-            // Below stave
-            if (!topDownNote->chord()->noStem() && topDownNote->chord()->stem()) {
-                int topDownStemLen = topDownNote->chord()->stem()->length() / sp * 2;
-                int firstLedgerBelow = staff->lines(bottomUpNote->tick()) * 2;
-                // Don't adjust unisons or 2nds as these move anyway
-                int sep = topUpNote->line() - bottomDownNote->line();
-                if (bottomUpNote->line() > staff->lines(bottomUpNote->tick()) * 2 - 1 && topDownNote->line() < bottomUpNote->line()
-                    && sep > 1
-                    && topDownNote->line() + topDownStemLen >= firstLedgerBelow) {
-                    upOffset += 0.15 * sp;
                 }
             }
 
