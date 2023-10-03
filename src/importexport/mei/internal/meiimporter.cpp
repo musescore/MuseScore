@@ -2856,11 +2856,16 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
         }
 
         Part* part = new Part(m_score);
-        part->setLongName(String(labelNode.text().as_string()));
+
+        StringList lines;
+        this->readLines(labelNode, lines);
+        part->setLongName(lines.join(u"\n"));
 
         pugi::xml_node labelAbbrNode = labelNode.select_node("./following-sibling::labelAbbr").node();
         if (labelAbbrNode) {
-            part->setShortName(String(labelAbbrNode.text().as_string()));
+            StringList abbrLines;
+            this->readLines(labelAbbrNode, abbrLines);
+            part->setShortName(abbrLines.join(u"\n"));
         }
 
         m_score->appendPart(part);

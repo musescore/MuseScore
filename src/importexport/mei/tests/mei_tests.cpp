@@ -187,6 +187,10 @@ TEST_F(Mei_Tests, mei_key_signature_01) {
     meiReadTest("key-signature-01");
 }
 
+TEST_F(Mei_Tests, mei_label_01) {
+    meiReadTest("label-01");
+}
+
 TEST_F(Mei_Tests, mei_lyric_01) {
     meiReadTest("lyric-01");
 }
