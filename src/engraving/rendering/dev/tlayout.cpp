@@ -361,7 +361,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STEM_SLASH:
         layoutStemSlash(item_cast<const StemSlash*>(item), static_cast<StemSlash::LayoutData*>(ldata), ctx.conf());
         break;
-    case ElementType::STICKING:         layout(item_cast<Sticking*>(item), ctx);
+    case ElementType::STICKING:
+        layoutSticking(item_cast<const Sticking*>(item), static_cast<Sticking::LayoutData*>(ldata));
         break;
     case ElementType::SYMBOL:           layoutSymbol(item_cast<Symbol*>(item), ctx);
         break;
@@ -4863,10 +4864,19 @@ void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldat
     ldata->setBbox(bbox);
 }
 
-void TLayout::layout(Sticking* item, LayoutContext&)
+void TLayout::layoutSticking(const Sticking* item, Sticking::LayoutData* ldata)
 {
-    layoutTextBase(item, item->mutldata());
-    Autoplace::autoplaceSegmentElement(item, item->mutldata());
+    layoutTextBase(item, ldata);
+
+    if (item->autoplace() && item->explicitParent()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->ldata()->isSetPos());
+        LD_CONDITION(s->ldata()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layout(StretchedBend* item, LayoutContext& ctx)
