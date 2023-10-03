@@ -371,7 +371,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::FSYMBOL:
         layoutFSymbol(item_cast<const FSymbol*>(item), static_cast<FSymbol::LayoutData*>(ldata));
         break;
-    case ElementType::SYSTEM_DIVIDER:   layout(item_cast<SystemDivider*>(item), ctx);
+    case ElementType::SYSTEM_DIVIDER:
+        layoutSystemDivider(item_cast<const SystemDivider*>(item), static_cast<SystemDivider::LayoutData*>(ldata), ctx);
         break;
     case ElementType::SYSTEM_TEXT:      layout(item_cast<SystemText*>(item), ctx);
         break;
@@ -4959,24 +4960,10 @@ void TLayout::layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata)
     ldata->setBbox(FontMetrics::boundingRect(item->font(), item->toString()));
 }
 
-static void layoutSystemDivider(const SystemDivider* item, const LayoutContext& ctx, SystemDivider::LayoutData* ldata)
+void TLayout::layoutSystemDivider(const SystemDivider* item, SystemDivider::LayoutData* ldata, const LayoutContext& ctx)
 {
-    SymId sid;
-
-    //! NOTE Look like, this is should not be here, maybe it should be in type setter.
-    if (item->dividerType() == SystemDivider::Type::LEFT) {
-        sid = SymNames::symIdByName(ctx.conf().styleSt(Sid::dividerLeftSym));
-    } else {
-        sid = SymNames::symIdByName(ctx.conf().styleSt(Sid::dividerRightSym));
-    }
-    const_cast<SystemDivider*>(item)->setSym(sid, ctx.engravingFont());
-
-    TLayout::layoutSymbol(item, ldata, ctx);
-}
-
-void TLayout::layout(SystemDivider* item, LayoutContext& ctx)
-{
-    layoutSystemDivider(item, ctx, item->mutldata());
+    LD_INDEPENDENT;
+    layoutSymbol(item, ldata, ctx);
 }
 
 void TLayout::layout(SystemText* item, LayoutContext&)

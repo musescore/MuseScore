@@ -86,6 +86,7 @@
 #include "../../dom/stem.h"
 #include "../../dom/stemslash.h"
 #include "../../dom/sticking.h"
+#include "../../dom/systemdivider.h"
 
 #include "../../dom/textbase.h"
 
@@ -291,7 +292,7 @@ public:
     static void layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata);
 
-    static void layout(SystemDivider* item, LayoutContext& ctx);
+    static void layoutSystemDivider(const SystemDivider* item, SystemDivider::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(SystemText* item, LayoutContext& ctx);
 
     static void layout(TabDurationSymbol* item, LayoutContext& ctx);

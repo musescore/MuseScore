@@ -62,10 +62,17 @@ SystemDivider::SystemDivider(const SystemDivider& sd)
 void SystemDivider::setDividerType(SystemDivider::Type v)
 {
     m_dividerType = v;
+
     if (v == SystemDivider::Type::LEFT) {
         setOffset(PointF(style().styleD(Sid::dividerLeftX), style().styleD(Sid::dividerLeftY)));
     } else {
         setOffset(PointF(style().styleD(Sid::dividerRightX), style().styleD(Sid::dividerRightY)));
+    }
+
+    if (v == SystemDivider::Type::LEFT) {
+        setSym(SymNames::symIdByName(style().styleSt(Sid::dividerLeftSym)), score()->engravingFont());
+    } else {
+        setSym(SymNames::symIdByName(style().styleSt(Sid::dividerRightSym)), score()->engravingFont());
     }
 }
 

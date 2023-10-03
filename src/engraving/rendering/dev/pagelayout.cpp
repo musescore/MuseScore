@@ -520,7 +520,7 @@ void PageLayout::checkDivider(LayoutContext& ctx, bool left, System* s, double y
             s->add(divider);
         }
         dividerLdata = divider->mutldata();
-        TLayout::layout(divider, ctx);
+        TLayout::layoutSystemDivider(divider, divider->mutldata(), ctx);
         dividerLdata->setPosY(divider->height() * .5 + yOffset);
         if (left) {
             dividerLdata->moveY(ctx.conf().styleD(Sid::dividerLeftY) * SPATIUM20);
