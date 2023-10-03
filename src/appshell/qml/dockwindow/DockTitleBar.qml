@@ -46,6 +46,13 @@ Item {
 
     visible: Boolean(titleBarCpp)
 
+    MouseArea {
+        id: mouseArea
+        anchors.fill: parent
+        acceptedButtons: Qt.NoButton
+        cursorShape: Qt.SizeAllCursor
+    }
+
     KDDW.TitleBarBase {
         id: titleBar
 
