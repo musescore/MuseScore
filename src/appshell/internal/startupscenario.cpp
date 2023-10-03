@@ -94,7 +94,7 @@ void StartupScenario::run()
     StartupModeType modeType = resolveStartupModeType();
     bool isMainInstance = multiInstancesProvider()->isMainInstance();
     if (isMainInstance && sessionsManager()->hasProjectsForRestore()) {
-        modeType = StartupModeType::ContinueLastSession;
+        modeType = StartupModeType::Recovery;
     }
 
     Uri startupUri = startupPageUri(modeType);
@@ -148,6 +148,9 @@ void StartupScenario::onStartupPageOpened(StartupModeType modeType)
         dispatcher()->dispatch("file-new");
         break;
     case StartupModeType::ContinueLastSession:
+        dispatcher()->dispatch("continue-last-session");
+        break;
+    case StartupModeType::Recovery:
         restoreLastSession();
         break;
     case StartupModeType::StartWithScore: {
@@ -167,11 +170,11 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
     switch (modeType) {
     case StartupModeType::StartEmpty:
     case StartupModeType::StartWithNewScore:
+    case StartupModeType::Recovery:
         return HOME_URI;
     case StartupModeType::StartWithScore:
-        return NOTATION_URI;
     case StartupModeType::ContinueLastSession:
-        return HOME_URI;
+        return NOTATION_URI;
     }
 
     return HOME_URI;
@@ -184,11 +187,6 @@ void StartupScenario::openScore(const project::ProjectFile& file)
 
 void StartupScenario::restoreLastSession()
 {
-    if (!sessionsManager()->hasProjectsForRestore()) {
-        dispatcher()->dispatch("continue-last-session");
-        return;
-    }
-
     IInteractive::Result result = interactive()->question(trc("appshell", "The previous session quit unexpectedly."),
                                                           trc("appshell", "Do you want to restore the session?"),
                                                           { IInteractive::Button::No, IInteractive::Button::Yes });
