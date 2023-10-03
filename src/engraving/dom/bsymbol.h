@@ -57,7 +57,6 @@ public:
     void setAlign(Align a) { m_align = a; }
 
     const std::vector<EngravingItem*>& leafs() const { return m_leafs; }
-    std::vector<EngravingItem*>& leafs() { return m_leafs; }
     mu::PointF pagePos() const override;
     mu::PointF canvasPos() const override;
     std::vector<mu::LineF> dragAnchorLines() const override;
