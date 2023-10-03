@@ -374,7 +374,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::SYSTEM_DIVIDER:
         layoutSystemDivider(item_cast<const SystemDivider*>(item), static_cast<SystemDivider::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::SYSTEM_TEXT:      layout(item_cast<SystemText*>(item), ctx);
+    case ElementType::SYSTEM_TEXT:
+        layoutSystemText(item_cast<SystemText*>(item), static_cast<SystemText::LayoutData*>(ldata));
         break;
     case ElementType::TEMPO_TEXT:       layout(item_cast<TempoText*>(item), ctx);
         break;
@@ -4966,10 +4967,19 @@ void TLayout::layoutSystemDivider(const SystemDivider* item, SystemDivider::Layo
     layoutSymbol(item, ldata, ctx);
 }
 
-void TLayout::layout(SystemText* item, LayoutContext&)
+void TLayout::layoutSystemText(const SystemText* item, SystemText::LayoutData* ldata)
 {
-    layoutTextBase(item, item->mutldata());
-    Autoplace::autoplaceSegmentElement(item, item->mutldata());
+    layoutTextBase(item, ldata);
+
+    if (item->autoplace() && item->explicitParent()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->ldata()->isSetPos());
+        LD_CONDITION(s->ldata()->isSetPos());
+    }
+
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 static void layoutTabDurationSymbol(const TabDurationSymbol* item, const LayoutContext&, TabDurationSymbol::LayoutData* ldata)
@@ -5725,9 +5735,9 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layout(TripletFeel* item, LayoutContext& ctx)
+void TLayout::layout(TripletFeel* item, LayoutContext&)
 {
-    layout(static_cast<SystemText*>(item), ctx);
+    layoutSystemText(item, item->mutldata());
 }
 
 void TLayout::layout(Trill* item, LayoutContext& ctx)
