@@ -114,7 +114,7 @@ void TextLineBaseSegment::draw(QPainter* painter) const
       QVector<qreal> dashDotDotted = { 3.0, 3.0, 0.01, 2.99, 0.01, 2.99 };
       QVector<qreal> customDashes  = { tl->dashLineLen(), tl->dashGapLen() };
 
-      pen.setCapStyle(Qt::FlatCap); // not SquareCaps
+      pen.setCapStyle(Qt::SquareCap);
       switch (tl->lineStyle()) {
             case Qt::DashLine:
                 pen.setDashPattern(dashed);
@@ -159,6 +159,20 @@ void TextLineBaseSegment::draw(QPainter* painter) const
                   painter->drawLines(&points[npoints-1], 1);
                   end--;
                   }
+#if 0 // experiment
+            if (tl->beginHookType() == HookType::HOOK_45 && (isSingleType() || isBeginType())) {
+                  pen.setCapStyle(Qt::RoundCap);
+                  painter->setPen(pen);
+                  painter->drawLines(&points[0], 1);
+                  start++;
+            }
+            if (tl->endHookType() == HookType::HOOK_45 && (isSingleType() || isEndType())) {
+                  pen.setCapStyle(Qt::RoundCap);
+                  painter->setPen(pen);
+                  painter->drawLines(&points[npoints-1], 1);
+                  end--;
+            }
+#endif
             //draw rest of line as regular
             //calculate new gap
             if (tl->lineStyle() == Qt::CustomDashLine) {
