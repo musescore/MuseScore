@@ -832,6 +832,7 @@ static void createDefaultHeader(Score* const score)
     }
 
     const auto vbox = createAndAddVBoxForCreditWords(score);
+    vbox->setExcludeFromOtherParts(false);
     addText(vbox, score, strTitle.toHtmlEscaped(),      TextStyleType::TITLE);
     addText(vbox, score, strSubTitle.toHtmlEscaped(),   TextStyleType::SUBTITLE);
     addText(vbox, score, strComposer.toHtmlEscaped(),   TextStyleType::COMPOSER);
@@ -866,6 +867,9 @@ static void createMeasuresAndVboxes(Score* const score,
         if (pageStartMeasureNrs.count(i) || i == 0) {
             ++pageNr;
             vbox = addCreditWords(score, crWords, pageNr, pageSize, true);
+            if (i == 0 && vbox) {
+                vbox->setExcludeFromOtherParts(false);
+            }
         }
 
         // create and add the measure
