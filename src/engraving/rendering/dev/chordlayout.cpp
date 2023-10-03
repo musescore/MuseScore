@@ -1712,7 +1712,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
 
                 double ledgerGap = 0.15 * sp;
                 double ledgerLen = ctx.conf().styleS(Sid::ledgerLineLength).val() * sp;
-                if (!conflict && topDownNote->chord()->stem()) {
+                if (!conflictUnison && topDownNote->chord()->stem()) {
                     int topDownStemLen = topDownNote->chord()->stem()->length() / sp * 2;
                     int firstLedgerBelow = staff->lines(bottomUpNote->tick()) * 2;
                     if (bottomUpNote->line() > firstLedgerBelow - 1 && topDownNote->line() < bottomUpNote->line()
@@ -1721,10 +1721,10 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     }
                 }
 
-                if (!conflict && bottomUpNote->chord()->stem()) {
+                if (!conflictUnison && bottomUpNote->chord()->stem()) {
                     int bottomUpStemLen = bottomUpNote->chord()->stem()->length() / sp * 2;
                     int firstLedgerAbove = -2;
-                    if (!conflict && topDownNote->line() < -1 && topDownNote->line() < bottomUpNote->line()
+                    if (topDownNote->line() < -1 && topDownNote->line() < bottomUpNote->line()
                         && bottomUpNote->line() - bottomUpStemLen <= firstLedgerAbove) {
                         ledgerOverlapAbove = true;
                     }
@@ -1776,9 +1776,11 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     if (downDots && !upDots) {
                         downOffset = maxUpWidth + 0.2 * sp;
                     } else {
-                        upOffset = maxDownWidth - 0.2 * sp;
+                        upOffset = maxDownWidth + 0.15 * sp;
                         if (downHooks) {
-                            upOffset += 0.3 * sp;
+                            bool needsHookSpace = (ledgerOverlapBelow || ledgerOverlapAbove);
+                            double hookSpace = topDownNote->chord()->hook()->width() + ledgerLen + ledgerGap;
+                            upOffset = needsHookSpace ? hookSpace : upOffset + 0.3 * sp;
                         }
                     }
                 } else {
@@ -1808,8 +1810,8 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         // we will need more space to avoid collision with hook
                         // but we won't need as much dot adjustment
                         if (ledgerOverlapBelow) {
-                            double flagWidth = topDownNote->chord()->hook()->width();
-                            upOffset = flagWidth + ledgerLen + ledgerGap;
+                            double hookWidth = topDownNote->chord()->hook()->width();
+                            upOffset = hookWidth + ledgerLen + ledgerGap;
                         }
                         upOffset = std::max(upOffset, maxDownWidth + 0.1 * sp);
                         dotAdjustThreshold = maxUpWidth - 0.3 * sp;
