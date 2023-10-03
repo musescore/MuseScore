@@ -55,6 +55,7 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::STAFFTYPE_CHANGE:
     case ElementType::STEM:
     case ElementType::SYMBOL:
+    case ElementType::FSYMBOL:
         TLayout::layoutItem(item, ctx);
     default:
         break;
