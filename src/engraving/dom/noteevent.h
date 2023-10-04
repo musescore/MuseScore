@@ -53,12 +53,14 @@ public:
     bool play() const { return m_play; }
     int offset() const { return m_offset; }
     bool slide() const { return m_slide; }
+    bool hammerPull() const { return m_hammerPull; }
     void setPitch(int v) { m_pitch = v; }
     void setOntime(int v) { m_ontime = v; }
     void setLen(int v) { m_len = v; }
     void setVelocityMultiplier(double velocityMultiplier) { m_velocityMultiplier = velocityMultiplier; }
     void setOffset(int v) { m_offset = v; }
     void setSlide(bool slide) { m_slide = slide; }
+    void setHammerPull(bool hammerPull) { m_hammerPull = hammerPull; }
 
     bool operator==(const NoteEvent&) const;
 
@@ -70,6 +72,7 @@ private:
     bool m_play = true; // when 'false', note event is used only for length calculation
     int m_offset = 0;
     bool m_slide = false; // event is slide or glissando
+    bool m_hammerPull = false;
 };
 
 //---------------------------------------------------------

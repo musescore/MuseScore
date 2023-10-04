@@ -1309,6 +1309,10 @@ static std::vector<NoteEventList> renderChord(Chord* chord, Chord* prevChord, in
 
         createSlideInNotePlayEvents(note, prevChord, el);
 
+        if (note->isHammerOn() && el->size() == 1) {
+            el->front().setHammerPull(true);
+        }
+
         for (NoteEvent& e : *el) {
             e.setLen(e.len() * gateTime / 100);
         }
