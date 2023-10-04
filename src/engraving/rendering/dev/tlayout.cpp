@@ -4978,6 +4978,17 @@ void TLayout::layout(StringTunings* item, LayoutContext& ctx)
     item->updateText();
     layoutTextBase(item, ctx);
 
+    if (item->noStringVisible()) {
+        double spatium = item->spatium();
+        mu::draw::Font font(item->font());
+
+        RectF rect;
+        rect.setTopLeft({ 0, item->ldata()->bbox().y() - font.weight() - spatium * .15 });
+        rect.setSize({ font.weight() - spatium, (font.weight() - spatium * .35) * 1.5 });
+
+        item->setbbox(rect);
+    }
+
     for (TextBlock& block : item->mutldata()->blocks) {
         for (TextFragment& fragment : block.fragments()) {
             mu::draw::Font font = fragment.font(item);

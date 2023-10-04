@@ -2698,17 +2698,39 @@ void TDraw::draw(const Sticking* item, Painter* painter)
 void TDraw::draw(const StringTunings* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
+
     if (item->noStringVisible()) {
-        if (item->score()->printing()) {
-            return;
-        } else {
-            Pen pen(item->selected() ? item->engravingConfiguration()->selectionColor() : item->engravingConfiguration()->
-                    formattingMarksColor());
-            painter->setPen(pen);
-            for (const TextBlock& t : item->ldata()->blocks) {
-                t.draw(painter, item);
-            }
-        }
+        const TextBase::LayoutData* data = item->ldata();
+
+        double spatium = item->spatium();
+        double lineWidth = spatium * .15;
+
+        Pen pen(item->curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+        painter->setPen(pen);
+        painter->setBrush(Brush(item->curColor()));
+
+        mu::draw::Font f(item->font());
+        painter->setFont(f);
+
+        RectF rect = data->bbox();
+
+        qreal x = rect.x();
+        qreal y = rect.y();
+        qreal width = rect.width();
+        qreal height = rect.height();
+        qreal topPartHeight = height * .66;
+        qreal cornerRadius = 8.0;
+
+        PainterPath path;
+        path.moveTo(x, y);
+        path.arcTo(x, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 180.0, 90.0);
+        path.arcTo(x + width - 2 * cornerRadius, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 270, 90);
+        path.lineTo(x + width, y);
+        path.moveTo(x + width / 2, y + topPartHeight);
+        path.lineTo(x + width / 2, y + height);
+
+        painter->setBrush(BrushStyle::NoBrush);
+        painter->drawPath(path);
     } else {
         drawTextBase(item, painter);
     }

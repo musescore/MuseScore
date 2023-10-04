@@ -212,25 +212,28 @@ void StringTunings::setVisibleStrings(const std::vector<string_idx_t>& visibleSt
     m_visibleStrings = visibleStrings;
 }
 
-static const String DEFAULT_SYMBOL = u"\uEF21"; // Tuning fork symbol from the icon font
-
 void StringTunings::updateText()
 {
     String updatedText = generateText();
     undoChangeProperty(Pid::TEXT, updatedText, PropertyFlags::STYLED);
 
-    if (updatedText == DEFAULT_SYMBOL) {
+    if (updatedText.empty()) {
         m_noStringVisible = true;
     } else {
         m_noStringVisible = false;
     }
 }
 
+bool StringTunings::noStringVisible() const
+{
+    return m_noStringVisible;
+}
+
 String StringTunings::generateText() const
 {
     const StringData* stringData = this->stringData();
     if (stringData->isNull()) {
-        return DEFAULT_SYMBOL;
+        return u"";
     }
 
     auto guitarStringSymbol = [](int i) { return String(u"<sym>guitarString") + String::number(i) + u"</sym>"; };
@@ -259,7 +262,7 @@ String StringTunings::generateText() const
     }
 
     if (visibleStringList.empty()) {
-        return DEFAULT_SYMBOL; // todo fork
+        return u"";
     }
 
     int columnCount = 0;

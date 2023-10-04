@@ -58,7 +58,7 @@ public:
 
     void updateText();
 
-    bool noStringVisible() const { return m_noStringVisible; }
+    bool noStringVisible() const;
 
 private:
     String generateText() const;
