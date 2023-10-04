@@ -4369,7 +4369,7 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
             }
             item->tabDur()->setParent(const_cast<Rest*>(item));
 // needed?        _tabDur->setTrack(track());
-            TLayout::layout(item->tabDur(), const_cast<LayoutContext&>(ctx));
+            TLayout::layoutTabDurationSymbol(item->tabDur(), item->tabDur()->mutldata());
             ldata->setBbox(item->tabDur()->ldata()->bbox());
             ldata->setPos(0.0, 0.0);                   // no rest is drawn: reset any position might be set for it
             return;
@@ -4958,12 +4958,20 @@ void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const 
 void TLayout::layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata)
 {
     LD_INDEPENDENT;
+    if (ldata->isValid()) {
+        return;
+    }
+
     ldata->setBbox(FontMetrics::boundingRect(item->font(), item->toString()));
 }
 
 void TLayout::layoutSystemDivider(const SystemDivider* item, SystemDivider::LayoutData* ldata, const LayoutContext& ctx)
 {
     LD_INDEPENDENT;
+    if (ldata->isValid()) {
+        return;
+    }
+
     layoutSymbol(item, ldata, ctx);
 }
 
@@ -4982,15 +4990,17 @@ void TLayout::layoutSystemText(const SystemText* item, SystemText::LayoutData* l
     Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
-static void layoutTabDurationSymbol(const TabDurationSymbol* item, const LayoutContext&, TabDurationSymbol::LayoutData* ldata)
+void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata)
 {
+    LD_INDEPENDENT;
+
     static constexpr double TAB_RESTSYMBDISPL = 2.0;
 
     if (!item->tab()) {
         ldata->setBbox(RectF());
         return;
     }
-    double _spatium    = item->spatium();
+    double spatium    = item->spatium();
     double hbb, wbb, xbb, ybb;   // bbox sizes
     double xpos, ypos;           // position coords
 
@@ -5009,18 +5019,18 @@ static void layoutTabDurationSymbol(const TabDurationSymbol* item, const LayoutC
         ybb   = item->tab()->durationBoxY() - ypos;
         // with rests, move symbol down by half its displacement from staff
         if (item->explicitParent() && item->explicitParent()->isRest()) {
-            ybb  += TAB_RESTSYMBDISPL * _spatium;
-            ypos += TAB_RESTSYMBDISPL * _spatium;
+            ybb  += TAB_RESTSYMBDISPL * spatium;
+            ypos += TAB_RESTSYMBDISPL * spatium;
         }
     }
 // if on a chord with special beam mode, layout an 'English'-style duration grid
     else {
         TablatureDurationFont font = item->tab()->_durationFonts[item->tab()->_durationFontIdx];
-        hbb   = font.gridStemHeight * _spatium;         // bbox height is stem height
-        wbb   = font.gridStemWidth * _spatium;          // bbox width is stem width
+        hbb   = font.gridStemHeight * spatium;         // bbox height is stem height
+        wbb   = font.gridStemWidth * spatium;          // bbox width is stem width
         xbb   = -wbb * 0.5;                             // bbox is half at left and half at right of stem centre
         ybb   = -hbb;                                   // bbox top is at top of stem height
-        xpos  = 0.75 * _spatium;                        // conventional centring of stem on fret marks
+        xpos  = 0.75 * spatium;                        // conventional centring of stem on fret marks
         ypos  = item->tab()->durationGridYOffset();      // stem start is at bottom
         if (chord->beamMode() == BeamMode::BEGIN) {
             ldata->beamGrid = TabBeamGrid::INITIAL;
@@ -5039,11 +5049,6 @@ static void layoutTabDurationSymbol(const TabDurationSymbol* item, const LayoutC
 // set magnified bbox and position
     ldata->setBbox(xbb * mag, ybb * mag, wbb * mag, hbb * mag);
     ldata->setPos(xpos * mag, ypos * mag);
-}
-
-void TLayout::layout(TabDurationSymbol* item, LayoutContext& ctx)
-{
-    layoutTabDurationSymbol(item, ctx, item->mutldata());
 }
 
 void TLayout::layout(TempoText* item, LayoutContext& ctx)

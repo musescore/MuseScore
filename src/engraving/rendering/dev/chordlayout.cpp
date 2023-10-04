@@ -474,7 +474,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             item->tabDur()->setParent(item);
             item->tabDur()->setRepeat(repeat);
 //                  _tabDur->setMag(mag());           // useless to set grace mag: graces have no dur. symbol
-            TLayout::layout(item->tabDur(), ctx);
+            TLayout::layoutTabDurationSymbol(item->tabDur(), item->tabDur()->mutldata());
             if (minY < 0) {                           // if some fret extends above tab body (like bass strings)
                 TabDurationSymbol::LayoutData* tdladata = item->tabDur()->mutldata();
                 tdladata->moveY(minY);             // raise duration symbol

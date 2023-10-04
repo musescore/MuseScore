@@ -296,7 +296,7 @@ public:
     static void layoutSystemDivider(const SystemDivider* item, SystemDivider::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutSystemText(const SystemText* item, SystemText::LayoutData* ldata);
 
-    static void layout(TabDurationSymbol* item, LayoutContext& ctx);
+    static void layoutTabDurationSymbol(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata);
     static void layout(TempoText* item, LayoutContext& ctx);
 
     static void layout(TextBase* item, LayoutContext& ctx);                 // factory
