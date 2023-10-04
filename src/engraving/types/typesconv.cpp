@@ -2531,21 +2531,21 @@ LyricsSyllabic TConv::fromXml(const AsciiStringView& tag, LyricsSyllabic def)
 }
 
 const std::array<const char*, 17> KEY_NAMES = { {
-    QT_TRANSLATE_NOOP("engraving", "G major, E minor"),
     QT_TRANSLATE_NOOP("engraving", "C♭ major, A♭ minor"),
-    QT_TRANSLATE_NOOP("engraving", "D major, B minor"),
     QT_TRANSLATE_NOOP("engraving", "G♭ major, E♭ minor"),
-    QT_TRANSLATE_NOOP("engraving", "A major, F♯ minor"),
     QT_TRANSLATE_NOOP("engraving", "D♭ major, B♭ minor"),
-    QT_TRANSLATE_NOOP("engraving", "E major, C♯ minor"),
     QT_TRANSLATE_NOOP("engraving", "A♭ major, F minor"),
-    QT_TRANSLATE_NOOP("engraving", "B major, G♯ minor"),
     QT_TRANSLATE_NOOP("engraving", "E♭ major, C minor"),
-    QT_TRANSLATE_NOOP("engraving", "F♯ major, D♯ minor"),
     QT_TRANSLATE_NOOP("engraving", "B♭ major, G minor"),
-    QT_TRANSLATE_NOOP("engraving", "C♯ major, A♯ minor"),
     QT_TRANSLATE_NOOP("engraving", "F major, D minor"),
     QT_TRANSLATE_NOOP("engraving", "C major, A minor"),
+    QT_TRANSLATE_NOOP("engraving", "G major, E minor"),
+    QT_TRANSLATE_NOOP("engraving", "D major, B minor"),
+    QT_TRANSLATE_NOOP("engraving", "A major, F♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "E major, C♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "B major, G♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "F♯ major, D♯ minor"),
+    QT_TRANSLATE_NOOP("engraving", "C♯ major, A♯ minor"),
     QT_TRANSLATE_NOOP("engraving", "Open/Atonal"),
     QT_TRANSLATE_NOOP("engraving", "Custom")
 } };
@@ -2558,16 +2558,8 @@ const char* TConv::userName(Key v, bool isAtonal, bool isCustom)
         return KEY_NAMES[16];
     }
 
-    if (v == Key::C) {
-        return KEY_NAMES[14];
-    }
-
     int keyInt = static_cast<int>(v);
-    if (keyInt < 0) {
-        return KEY_NAMES[(7 + keyInt) * 2 + 1];
-    } else {
-        return KEY_NAMES[(keyInt - 1) * 2];
-    }
+    return KEY_NAMES[keyInt + 7];
 }
 
 String TConv::translatedUserName(Key v, bool isAtonal, bool isCustom)
