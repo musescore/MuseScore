@@ -401,7 +401,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::TRILL_SEGMENT:    layout(item_cast<TrillSegment*>(item), ctx);
         break;
-    case ElementType::TRIPLET_FEEL:     layout(item_cast<TripletFeel*>(item), ctx);
+    case ElementType::TRIPLET_FEEL:
+        layoutTripletFeel(item_cast<const TripletFeel*>(item), static_cast<TripletFeel::LayoutData*>(ldata));
         break;
     case ElementType::TUPLET:           layout(item_cast<Tuplet*>(item), ctx);
         break;
@@ -5750,9 +5751,9 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
-void TLayout::layout(TripletFeel* item, LayoutContext&)
+void TLayout::layoutTripletFeel(const TripletFeel* item, TripletFeel::LayoutData* ldata)
 {
-    layoutSystemText(item, item->mutldata());
+    layoutSystemText(item, ldata);
 }
 
 void TLayout::layout(Trill* item, LayoutContext& ctx)
