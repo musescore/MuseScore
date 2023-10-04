@@ -646,7 +646,7 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord,
 
     if (!graceNotesMerged(chord)) {
         int currentBeaforeBeatNote = 0;
-        for (Chord* c : chord->graceNotesBefore()) {
+        for (Chord* c : grChords) {
             for (const Note* note : c->notes()) {
                 CollectNoteParams params;
                 params.effect = effect;

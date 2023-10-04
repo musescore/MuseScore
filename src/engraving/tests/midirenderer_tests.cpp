@@ -489,12 +489,11 @@ TEST_F(MidiRenderer_Tests, tremoloSlideIn)
     EventsHolder events = getNoteOnEvents(renderMidiEvents(u"tremolo_and_slide_in.mscx"));
 
     EXPECT_EQ(events.size(), 1);
-    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 16);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 14);
 
-    checkEventInterval(events, 0, 223, 59, defVol);
-    checkEventInterval(events, 224, 447, 59, defVol);
-    checkEventInterval(events, 449, 672, 59, defVol);
-    checkEventInterval(events, 673, 896, 59, defVol);
+    checkEventInterval(events, 0, 298, 59, defVol);
+    checkEventInterval(events, 299, 597, 59, defVol);
+    checkEventInterval(events, 599, 897, 59, defVol);
     checkEventInterval(events, 901, 919, 56, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 921, 939, 57, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 940, 958, 58, defVol, MidiInstrumentEffect::SLIDE);
@@ -717,25 +716,25 @@ TEST_F(MidiRenderer_Tests, reducedSlides)
     checkEventInterval(events, 2880, 3839, 65, defVol);
 
     /// fret 2: 1 slide
-    checkEventInterval(events, 3840, 4738, 60, defVol);
+    checkEventInterval(events, 3840, 4739, 60, defVol);
     checkEventInterval(events, 4741, 4799, 65, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 4800, 5759, 66, defVol);
 
     /// fret 3: 2 slides
-    checkEventInterval(events, 5760, 6658, 60, defVol);
+    checkEventInterval(events, 5760, 6659, 60, defVol);
     checkEventInterval(events, 6661, 6689, 65, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 6691, 6719, 66, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 6720, 7679, 67, defVol);
 
     /// fret 4 (or more): 3 slides
-    checkEventInterval(events, 7680, 8578, 60, defVol);
+    checkEventInterval(events, 7680, 8579, 60, defVol);
     checkEventInterval(events, 8581, 8599, 65, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 8600, 8618, 66, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 8619, 8637, 67, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 8640, 9599, 68, defVol);
 
     /// fret 0 (but slide in from above) : 3 slides
-    checkEventInterval(events, 9600, 10498, 60, defVol);
+    checkEventInterval(events, 9600, 10499, 60, defVol);
     checkEventInterval(events, 10501, 10519, 67, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 10520, 10538, 66, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 10539, 10557, 65, defVol, MidiInstrumentEffect::SLIDE);
