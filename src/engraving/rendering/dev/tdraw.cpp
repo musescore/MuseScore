@@ -1419,7 +1419,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
 
     Pen pen(item->curColor(item->visible(), glissando->lineColor()));
     pen.setWidthF(glissando->lineWidth());
-    pen.setCapStyle(PenCapStyle::RoundCap);
+    pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     // rotate painter so that the line become horizontal
