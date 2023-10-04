@@ -389,7 +389,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::TIE:              layout(item_cast<Tie*>(item), ctx);
         break;
-    case ElementType::TIMESIG:          layout(item_cast<TimeSig*>(item), ctx);
+    case ElementType::TIMESIG:
+        layoutTimeSig(item_cast<const TimeSig*>(item), static_cast<TimeSig::LayoutData*>(ldata), ctx);
         break;
     case ElementType::TREMOLO:          layout(item_cast<Tremolo*>(item), ctx);
         break;
@@ -5498,10 +5499,16 @@ void TLayout::layout(Tie* item, LayoutContext&)
     UNUSED(item);
 }
 
-static void layoutTimeSig(const TimeSig* item, const LayoutContext& ctx, TimeSig::LayoutData* ldata)
+void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, const LayoutContext& ctx)
 {
+    LD_INDEPENDENT;
+
+    if (ldata->isValid()) {
+        return;
+    }
+
     ldata->setPos(0.0, 0.0);
-    double _spatium = item->spatium();
+    double spatium = item->spatium();
 
     ldata->setBbox(RectF());                    // prepare for an empty time signature
 
@@ -5510,14 +5517,14 @@ static void layoutTimeSig(const TimeSig* item, const LayoutContext& ctx, TimeSig
     ldata->pn = PointF();
     ldata->pointLargeRightParen = PointF();
 
-    double lineDist;
-    int numOfLines;
+    double lineDist = 0.0;
+    int numOfLines = 0;
     TimeSigType sigType = item->timeSigType();
-    const Staff* _staff = item->staff();
+    const Staff* staff = item->staff();
 
-    if (_staff) {
+    if (staff) {
         // if staff is without time sig, format as if no text at all
-        if (!_staff->staffTypeForElement(item)->genTimesig()) {
+        if (!staff->staffTypeForElement(item)->genTimesig()) {
             // reset position and box sizes to 0
             // LOGD("staff: no time sig");
             ldata->pointLargeLeftParen.rx() = 0.0;
@@ -5529,8 +5536,8 @@ static void layoutTimeSig(const TimeSig* item, const LayoutContext& ctx, TimeSig
             // draw() will anyway skip any drawing if staff type has no time sigs
             return;
         }
-        numOfLines  = _staff->lines(item->tick());
-        lineDist    = _staff->lineDistance(item->tick());
+        numOfLines  = staff->lines(item->tick());
+        lineDist    = staff->lineDistance(item->tick());
     } else {
         // assume dimensions of a standard staff
         lineDist = 1.0;
@@ -5541,7 +5548,7 @@ static void layoutTimeSig(const TimeSig* item, const LayoutContext& ctx, TimeSig
     // compute vert. displacement to center in the staff height
     // determine middle staff position:
 
-    double yoff = _spatium * (numOfLines - 1) * .5 * lineDist;
+    double yoff = spatium * (numOfLines - 1) * .5 * lineDist;
 
     // C and Ccut are placed at the middle of the staff: use yoff directly
     IEngravingFontPtr font = ctx.engravingFont();
@@ -5596,7 +5603,7 @@ static void layoutTimeSig(const TimeSig* item, const LayoutContext& ctx, TimeSig
         // number of lines is odd: 0.0 (strings are directly above and below the middle line)
         // number of lines even:   0.05 (strings are moved up/down to leave 1/10sp between them)
 
-        double displ = (numOfLines & 1) ? 0.0 : (0.05 * _spatium);
+        double displ = (numOfLines & 1) ? 0.0 : (0.05 * spatium);
 
         //align on the wider
         double pzY = yoff - (denRect.width() < 0.01 ? 0.0 : (displ + numRect.height() * .5));
@@ -5615,25 +5622,20 @@ static void layoutTimeSig(const TimeSig* item, const LayoutContext& ctx, TimeSig
         }
 
         // centering of parenthesis so the middle of the parenthesis is at the divisor marking level
-        int centerY = yoff / 2 + _spatium;
+        int centerY = yoff / 2 + spatium;
         int widestPortion = numRect.width() > denRect.width() ? numRect.width() : denRect.width();
-        ldata->pointLargeLeftParen = PointF(-_spatium, centerY);
-        ldata->pointLargeRightParen = PointF(widestPortion + _spatium, centerY);
+        ldata->pointLargeLeftParen = PointF(-spatium, centerY);
+        ldata->pointLargeRightParen = PointF(widestPortion + spatium, centerY);
 
         ldata->setBbox(numRect.translated(ldata->pz));       // translate bounding boxes to actual string positions
         ldata->addBbox(denRect.translated(ldata->pn));
         if (item->largeParentheses()) {
-            ldata->addBbox(RectF(ldata->pointLargeLeftParen.x(), ldata->pointLargeLeftParen.y() - denRect.height(), _spatium / 2,
+            ldata->addBbox(RectF(ldata->pointLargeLeftParen.x(), ldata->pointLargeLeftParen.y() - denRect.height(), spatium / 2,
                                  numRect.height() + denRect.height()));
-            ldata->addBbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),  _spatium / 2,
+            ldata->addBbox(RectF(ldata->pointLargeRightParen.x(), ldata->pointLargeRightParen.y() - denRect.height(),  spatium / 2,
                                  numRect.height() + denRect.height()));
         }
     }
-}
-
-void TLayout::layout(TimeSig* item, LayoutContext& ctx)
-{
-    layoutTimeSig(item, ctx, item->mutldata());
 }
 
 void TLayout::layout(Tremolo* item, LayoutContext& ctx)

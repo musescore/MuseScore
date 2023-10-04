@@ -363,7 +363,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     mmrTimeSig->setSig(underlyingTimeSig->sig(), underlyingTimeSig->timeSigType());
                     mmrTimeSig->setNumeratorString(underlyingTimeSig->numeratorString());
                     mmrTimeSig->setDenominatorString(underlyingTimeSig->denominatorString());
-                    TLayout::layout(mmrTimeSig, ctx);
+                    TLayout::layoutTimeSig(mmrTimeSig, mmrTimeSig->mutldata(), ctx);
                 }
             }
         }
@@ -1779,7 +1779,7 @@ void MeasureLayout::addSystemTrailer(Measure* m, Measure* nm, LayoutContext& ctx
                         s->setTrailer(true);
                     }
                     ts->setFrom(nts);
-                    TLayout::layout(ts, ctx);
+                    TLayout::layoutTimeSig(ts, ts->mutldata(), ctx);
                     //s->createShape(track / VOICES);
                 }
                 s->createShapes();

@@ -57,6 +57,7 @@ void PassLayoutIndependentItems::scan(EngravingItem* item, LayoutContext& ctx)
     case ElementType::SYMBOL:
     case ElementType::FSYMBOL:
     case ElementType::SYSTEM_DIVIDER:
+    case ElementType::TIMESIG:
         TLayout::layoutItem(item, ctx);
     default:
         break;
