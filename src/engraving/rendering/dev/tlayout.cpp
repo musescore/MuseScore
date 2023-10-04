@@ -380,7 +380,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::TEMPO_TEXT:
         layoutTempoText(item_cast<const TempoText*>(item), static_cast<TempoText::LayoutData*>(ldata));
         break;
-    case ElementType::TEXT:             layout(item_cast<Text*>(item), ctx);
+    case ElementType::TEXT:
+        layoutText(item_cast<const Text*>(item), static_cast<Text::LayoutData*>(ldata));
         break;
     case ElementType::TEXTLINE:         layout(item_cast<TextLine*>(item), ctx);
         break;
@@ -1332,7 +1333,7 @@ void TLayout::layout(const TBox* item, FBox::LayoutData* ldata, const LayoutCont
     ldata->setPos(PointF());
     ldata->setBbox(0.0, 0.0, parentSystem->ldata()->bbox().width(), 0);
 
-    TLayout::layout(item->text(), const_cast<LayoutContext&>(ctx));
+    TLayout::layoutText(item->text(), item->text()->mutldata());
 
     Text::LayoutData* textLD = item->text()->mutldata();
 
@@ -5191,9 +5192,13 @@ void TLayout::layout1TextBase(TextBase* item, const LayoutContext&)
     layout1TextBase(item, item->mutldata());
 }
 
-void TLayout::layout(Text* item, LayoutContext& ctx)
+void TLayout::layoutText(const Text* item, Text::LayoutData* ldata)
 {
-    layoutTextBase(static_cast<TextBase*>(item), ctx);
+    if (item->explicitParent() && item->layoutToParentWidth()) {
+        LD_CONDITION(item->parentItem()->ldata()->isSetBbox());
+    }
+
+    layoutTextBase(item, ldata);
 }
 
 void TLayout::layout(TextLine* item, LayoutContext& ctx)
@@ -5302,7 +5307,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     item->text()->setPlacement(PlacementV::ABOVE);
     item->text()->setTrack(item->track());
     item->text()->setColor(tl->lineColor());
-    layout(item->text(), ctx);
+    layoutText(item->text(), item->text()->mutldata());
 
     if ((item->isSingleType() || item->isEndType())) {
         item->endText()->setXmlText(tl->endText());
@@ -5314,7 +5319,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
         item->endText()->setPlacement(PlacementV::ABOVE);
         item->endText()->setTrack(item->track());
         item->endText()->setColor(tl->lineColor());
-        layout(item->endText(), ctx);
+        layoutText(item->endText(), item->endText()->mutldata());
     } else {
         item->endText()->setXmlText(u"");
     }

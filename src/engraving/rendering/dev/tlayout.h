@@ -91,6 +91,7 @@
 
 #include "../../dom/textbase.h"
 #include "../../dom/tempotext.h"
+#include "../../dom/text.h"
 
 #include "../../dom/ornament.h"
 
@@ -306,7 +307,7 @@ public:
     static void layout1TextBase(TextBase* item, const LayoutContext& ctx);  // base class
     static void layout1TextBase(const TextBase* item, TextBase::LayoutData* data);
 
-    static void layout(Text* item, LayoutContext& ctx);
+    static void layoutText(const Text* item, Text::LayoutData* ldata);
 
     static void layout(TextLine* item, LayoutContext& ctx);
     static void layout(TextLineSegment* item, LayoutContext& ctx);
