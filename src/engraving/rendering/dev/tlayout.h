@@ -93,6 +93,7 @@
 #include "../../dom/tempotext.h"
 #include "../../dom/text.h"
 #include "../../dom/timesig.h"
+#include "../../dom/tremolobar.h"
 
 #include "../../dom/ornament.h"
 
@@ -317,7 +318,7 @@ public:
     static void layout(Tie* item, LayoutContext& ctx);
     static void layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(Tremolo* item, LayoutContext& ctx);
-    static void layout(TremoloBar* item, LayoutContext& ctx);
+    static void layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* ldata);
     static void layout(Trill* item, LayoutContext& ctx);
     static void layout(TrillSegment* item, LayoutContext& ctx);
     static void layout(TripletFeel* item, LayoutContext& ctx);

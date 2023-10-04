@@ -394,7 +394,8 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::TREMOLO:          layout(item_cast<Tremolo*>(item), ctx);
         break;
-    case ElementType::TREMOLOBAR:       layout(item_cast<TremoloBar*>(item), ctx);
+    case ElementType::TREMOLOBAR:
+        layoutTremoloBar(item_cast<const TremoloBar*>(item), static_cast<TremoloBar::LayoutData*>(ldata));
         break;
     case ElementType::TRILL:            layout(item_cast<Trill*>(item), ctx);
         break;
@@ -5643,11 +5644,13 @@ void TLayout::layout(Tremolo* item, LayoutContext& ctx)
     TremoloLayout::layout(item, ctx);
 }
 
-static void layoutTremoloBar(const TremoloBar* item, const LayoutContext&, TremoloBar::LayoutData* ldata)
+void TLayout::layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* ldata)
 {
-    double _spatium = item->spatium();
+    LD_INDEPENDENT;
 
-    ldata->setPos(0.0, -_spatium * 3.0);
+    double spatium = item->spatium();
+
+    ldata->setPos(0.0, -spatium * 3.0);
 
     /* we place the tremolo bars starting slightly before the
      *  notehead, and end it slightly after, drawing above the
@@ -5658,7 +5661,7 @@ static void layoutTremoloBar(const TremoloBar* item, const LayoutContext&, Tremo
      *  Musescore scale. */
 
     double timeFactor  = item->userMag() / 1.0;
-    double pitchFactor = -_spatium * .02;
+    double pitchFactor = -spatium * .02;
 
     PolygonF polygon;
     for (const PitchValue& v : item->points()) {
@@ -5668,11 +5671,6 @@ static void layoutTremoloBar(const TremoloBar* item, const LayoutContext&, Tremo
 
     double w = item->lineWidth().val();
     ldata->setBbox(ldata->polygon.boundingRect().adjusted(-w, -w, w, w));
-}
-
-void TLayout::layout(TremoloBar* item, LayoutContext& ctx)
-{
-    layoutTremoloBar(item, ctx, item->mutldata());
 }
 
 void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
