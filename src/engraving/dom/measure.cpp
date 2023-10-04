@@ -3239,7 +3239,7 @@ void Measure::stretchToTargetWidth(double targetWidth)
             double springConst = 1 / s.stretch();
             double width = s.width(LD_ACCESS::BAD) - s.widthOffset();
             double preTension = width * springConst;
-            springs.push_back(Spring(springConst, width, preTension, &s));
+            springs.emplace_back(springConst, width, preTension, &s);
         }
     }
     Segment::stretchSegmentsToWidth(springs, targetWidth - width());
