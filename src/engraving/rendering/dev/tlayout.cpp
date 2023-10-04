@@ -375,9 +375,10 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutSystemDivider(item_cast<const SystemDivider*>(item), static_cast<SystemDivider::LayoutData*>(ldata), ctx);
         break;
     case ElementType::SYSTEM_TEXT:
-        layoutSystemText(item_cast<SystemText*>(item), static_cast<SystemText::LayoutData*>(ldata));
+        layoutSystemText(item_cast<const SystemText*>(item), static_cast<SystemText::LayoutData*>(ldata));
         break;
-    case ElementType::TEMPO_TEXT:       layout(item_cast<TempoText*>(item), ctx);
+    case ElementType::TEMPO_TEXT:
+        layoutTempoText(item_cast<const TempoText*>(item), static_cast<TempoText::LayoutData*>(ldata));
         break;
     case ElementType::TEXT:             layout(item_cast<Text*>(item), ctx);
         break;
@@ -5051,20 +5052,24 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     ldata->setPos(xpos * mag, ypos * mag);
 }
 
-void TLayout::layout(TempoText* item, LayoutContext& ctx)
+void TLayout::layoutTempoText(const TempoText* item, TempoText::LayoutData* ldata)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
 
-    TempoText::LayoutData* ldata = item->mutldata();
+    layoutTextBase(item, ldata);
 
-    layoutTextBase(item, ctx);
-
-    Segment* s = item->segment();
+    if (item->autoplace()) {
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->ldata()->isSetPos());
+        LD_CONDITION(s->ldata()->isSetPos());
+    }
 
     // tempo text on first chordrest of measure should align over time sig if present
-    //
+    Segment* s = item->segment();
     if (item->autoplace() && s->rtick().isZero()) {
         Segment* p = item->segment()->prev(SegmentType::TimeSig);
         if (p) {
@@ -5075,7 +5080,7 @@ void TLayout::layout(TempoText* item, LayoutContext& ctx)
             }
         }
     }
-    Autoplace::autoplaceSegmentElement(item, item->mutldata());
+    Autoplace::autoplaceSegmentElement(item, ldata);
 }
 
 void TLayout::layout(TextBase* item, LayoutContext& ctx)
