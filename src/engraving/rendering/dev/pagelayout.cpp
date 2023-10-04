@@ -229,7 +229,6 @@ void PageLayout::collectPage(LayoutContext& ctx)
                           + ctx.state().curSystem()->height();
             Box* vbox = ctx.state().curSystem()->vbox();
             if (vbox) {
-                dist += vbox->bottomGap();
                 if (footerExtension > 0) {
                     dist += footerExtension;
                 }
