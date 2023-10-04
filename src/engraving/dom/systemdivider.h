@@ -53,6 +53,8 @@ public:
     Segment* segment() const override { return nullptr; }
     System* system() const { return (System*)explicitParent(); }
 
+    void styleChanged() override;
+
 private:
     Type m_dividerType = Type::LEFT;
 };
