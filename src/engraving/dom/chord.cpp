@@ -1861,7 +1861,13 @@ EngravingItem* Chord::drop(EditData& data)
             }
             atr->setParent(this);
             atr->setTrack(track());
-            score()->undoAddElement(atr);
+
+            // Immediately add if the chord has no existing articulations, toggle otherwise...
+            if (m_articulations.empty()) {
+                score()->undoAddElement(atr);
+            } else {
+                score()->toggleArticulation(this, atr);
+            }
         }
         return atr;
     }
