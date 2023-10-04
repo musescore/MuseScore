@@ -84,7 +84,7 @@ void GlissandoSegment::draw(QPainter* painter) const
 
       QPen pen(curColor(visible(), glissando()->lineColor()));
       pen.setWidthF(glissando()->lineWidth());
-      pen.setCapStyle(Qt::RoundCap);
+      pen.setCapStyle(Qt::FlatCap);
       painter->setPen(pen);
 
       // rotate painter so that the line become horizontal
