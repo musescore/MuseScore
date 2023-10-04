@@ -92,6 +92,7 @@
 #include "../../dom/textbase.h"
 #include "../../dom/tempotext.h"
 #include "../../dom/text.h"
+#include "../../dom/timesig.h"
 
 #include "../../dom/ornament.h"
 
@@ -314,7 +315,7 @@ public:
     static void layoutTextLineBase(TextLineBase* item, LayoutContext& ctx);
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx); // base class
     static void layout(Tie* item, LayoutContext& ctx);
-    static void layout(TimeSig* item, LayoutContext& ctx);
+    static void layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, const LayoutContext& ctx);
     static void layout(Tremolo* item, LayoutContext& ctx);
     static void layout(TremoloBar* item, LayoutContext& ctx);
     static void layout(Trill* item, LayoutContext& ctx);
