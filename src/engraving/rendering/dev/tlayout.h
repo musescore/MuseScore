@@ -90,6 +90,7 @@
 #include "../../dom/systemtext.h"
 
 #include "../../dom/textbase.h"
+#include "../../dom/tempotext.h"
 
 #include "../../dom/ornament.h"
 
@@ -297,7 +298,7 @@ public:
     static void layoutSystemText(const SystemText* item, SystemText::LayoutData* ldata);
 
     static void layoutTabDurationSymbol(const TabDurationSymbol* item, TabDurationSymbol::LayoutData* ldata);
-    static void layout(TempoText* item, LayoutContext& ctx);
+    static void layoutTempoText(const TempoText* item, TempoText::LayoutData* ldata);
 
     static void layout(TextBase* item, LayoutContext& ctx);                 // factory
     static void layoutTextBase(const TextBase* item, TextBase::LayoutData* data); // base class
