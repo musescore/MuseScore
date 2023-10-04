@@ -44,6 +44,8 @@ static const Settings::Key PART_STYLE_FILE_PATH("engraving", "engraving/style/pa
 
 static const Settings::Key INVERT_SCORE_COLOR("engraving", "engraving/scoreColorInversion");
 
+static const Settings::Key ALL_VOICES_COLOR_KEY("engraving", "engraving/allVoicesColor");
+
 struct VoiceColor {
     Settings::Key key;
     Color color;
@@ -82,6 +84,14 @@ void EngravingConfiguration::init()
         Color currentColor = settings()->value(key).toQColor();
         VOICE_COLORS[voice] = VoiceColor { std::move(key), currentColor };
     }
+
+    m_allVoicesColor = Color("#6038FC");
+    settings()->setDefaultValue(ALL_VOICES_COLOR_KEY, Val(m_allVoicesColor.toQColor()));
+    settings()->setCanBeManuallyEdited(ALL_VOICES_COLOR_KEY, true);
+    settings()->setDescription(ALL_VOICES_COLOR_KEY, trc("engraving", "All voices color"));
+    settings()->valueChanged(ALL_VOICES_COLOR_KEY).onReceive(this, [this](const Val& val) {
+        m_allVoicesColor = val.toQColor();
+    });
 }
 
 mu::io::path_t EngravingConfiguration::appDataPath() const
@@ -218,9 +228,17 @@ double EngravingConfiguration::guiScaling() const
     return uiConfiguration()->guiScaling();
 }
 
-Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore) const
+Color EngravingConfiguration::selectionColor(voice_idx_t voice, bool itemVisible, bool itemIsUnlinkedFromScore, bool applyToAllVoices) const
 {
-    Color color = itemIsUnlinkedFromScore ? UNLINKED_ITEM_COLOR : VOICE_COLORS[voice].color;
+    Color color;
+
+    if (itemIsUnlinkedFromScore) {
+        color = UNLINKED_ITEM_COLOR;
+    } else if (applyToAllVoices) {
+        color = m_allVoicesColor;
+    } else {
+        color = VOICE_COLORS[voice].color;
+    }
 
     if (itemVisible) {
         return color;

@@ -632,7 +632,14 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
         if (isTextBase()) {
             isUnlinkedFromMaster = isUnlinkedFromMaster || !getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
         }
-        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster);
+
+        bool applyToAllVoices = false;
+        if (isDynamic() || isHairpin()) {
+            applyToAllVoices = getProperty(Pid::APPLY_TO_ALL_VOICES).toBool();
+        }
+
+        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster,
+                                                        applyToAllVoices);
     }
 
     if (!isVisible) {
