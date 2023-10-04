@@ -78,12 +78,13 @@ void StringTuningsSettingsModel::init()
     const std::vector<engraving::instrString>& stringList = stringData->stringList();
     const std::vector<engraving::string_idx_t>& visibleStrings = stringTunings->visibleStrings();
     int numOfStrings = static_cast<int>(stringList.size());
-    for (engraving::string_idx_t i = 0; i < numOfStrings; ++i) {
-        const engraving::instrString& string = stringList[numOfStrings - i - 1];
+    for (int i = 0; i < numOfStrings; ++i) {
+        engraving::string_idx_t instrStringIndex = numOfStrings - i - 1;
+        const engraving::instrString& string = stringList[instrStringIndex];
         StringTuningsItem* item = new StringTuningsItem(this);
 
         item->blockSignals(true);
-        item->setShow(contains(visibleStrings, i));
+        item->setShow(contains(visibleStrings, instrStringIndex));
         item->setNumber(QString::number(i + 1));
         item->setValue(string.pitch);
         item->blockSignals(false);
@@ -353,11 +354,12 @@ void StringTuningsSettingsModel::saveStrings()
 void StringTuningsSettingsModel::saveStringsVisibleState()
 {
     std::vector<int> visibleStrings;
-    for (int i = 0; i < m_strings.size(); ++i) {
+    int numOfStrings = static_cast<int>(m_strings.size());
+    for (int i = 0; i < numOfStrings; ++i) {
         const StringTuningsItem* item = m_strings.at(i);
 
         if (item->show()) {
-            visibleStrings.push_back(i);
+            visibleStrings.push_back(numOfStrings - i - 1);
         }
     }
 

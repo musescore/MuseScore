@@ -81,6 +81,10 @@ PropertyValue StringTunings::getProperty(Pid id) const
             }
         }
 
+        if (m_stringsNumber.has_value()) {
+            return m_stringsNumber.value();
+        }
+
         return stringData()->strings();
     } else if (id == Pid::STRINGTUNINGS_PRESET) {
         return m_preset;
@@ -126,6 +130,8 @@ bool StringTunings::setProperty(Pid id, const PropertyValue& val)
                 }
             }
         }
+
+        m_stringsNumber = val.toInt();
     } else if (id == Pid::STRINGTUNINGS_PRESET) {
         m_preset = val.value<String>();
     } else if (id == Pid::STRINGTUNINGS_VISIBLE_STRINGS) {
@@ -154,11 +160,13 @@ String StringTunings::accessibleInfo() const
     String info;
 
     const std::vector<instrString>& stringList = stringData->stringList();
-    for (string_idx_t i = 0; i < stringList.size(); ++i) {
-        if (mu::contains(m_visibleStrings, i)) {
-            String pitchStr = pitch2string(stringList[i].pitch);
+    int numOfStrings = static_cast<int>(stringList.size());
+    for (string_idx_t i = 0; i < numOfStrings; ++i) {
+        string_idx_t index = numOfStrings - i - 1;
+        if (mu::contains(m_visibleStrings, index)) {
+            String pitchStr = pitch2string(stringList[index].pitch);
             if (pitchStr.empty()) {
-                LOGE() << "Invalid get pitch name for " << stringList[i].pitch;
+                LOGE() << "Invalid get pitch name for " << stringList[index].pitch;
                 continue;
             }
 
@@ -240,11 +248,13 @@ String StringTunings::generateText() const
 
     const std::vector<instrString>& stringList = stringData->stringList();
     std::vector<String> visibleStringList;
-    for (string_idx_t i = 0; i < stringList.size(); ++i) {
-        if (mu::contains(m_visibleStrings, i)) {
-            String pitchStr = pitch2string(stringList[i].pitch);
+    int numOfStrings = static_cast<int>(stringList.size());
+    for (string_idx_t i = 0; i < numOfStrings; ++i) {
+        string_idx_t index = numOfStrings - i - 1;
+        if (mu::contains(m_visibleStrings, index)) {
+            String pitchStr = pitch2string(stringList[index].pitch);
             if (pitchStr.empty()) {
-                LOGE() << "Invalid get pitch name for " << stringList[i].pitch;
+                LOGE() << "Invalid get pitch name for " << stringList[index].pitch;
                 continue;
             }
 

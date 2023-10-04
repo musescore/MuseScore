@@ -68,6 +68,7 @@ private:
     StringData m_stringData;
 
     bool m_noStringVisible = false;
+    std::optional<int> m_stringsNumber;
 };
 }
 

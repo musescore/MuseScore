@@ -608,20 +608,8 @@ void Segment::add(EngravingItem* el)
         break;
 
     case ElementType::STRING_TUNINGS: {
-        // already a string tunings element in this segment
-        bool alreadyHasStringTunings = false;
-        for (EngravingItem* element : _annotations) {
-            if (element && element->isStringTunings()) {
-                alreadyHasStringTunings = true;
-                break;
-            }
-        }
-
-        if (!alreadyHasStringTunings) {
-            _annotations.push_back(el);
-            el->part()->addStringTunings(toStringTunings(el));
-        }
-
+        _annotations.push_back(el);
+        el->part()->addStringTunings(toStringTunings(el));
         break;
     }
 

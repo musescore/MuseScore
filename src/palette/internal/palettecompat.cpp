@@ -90,11 +90,9 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     for (const PaletteCellPtr& cell : guitarPalette.cells()) {
         if (cell->element && cell->element->isCapo()) {
             containsCapo = true;
-            break;
         }
         if (cell->element && cell->element->isStringTunings()) {
             containsStringTunings = true;
-            break;
         }
     }
 
@@ -108,8 +106,9 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
     if (!containsStringTunings) {
         auto stringTunings = std::make_shared<StringTunings>(paletteScore->dummy()->segment());
         stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
+        stringTunings->initTextStyleType(TextStyleType::STAFF);
         int defaultPosition = std::min(8, guitarPalette.cellsCount());
-        guitarPalette.insertElement(defaultPosition, stringTunings, QT_TRANSLATE_NOOP("palette", "StringTunings"))->setElementTranslated(
+        guitarPalette.insertElement(defaultPosition, stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(
             true);
     }
 }

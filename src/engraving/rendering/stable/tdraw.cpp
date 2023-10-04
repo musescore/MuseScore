@@ -2718,12 +2718,12 @@ void TDraw::draw(const StringTunings* item, draw::Painter* painter)
 
         RectF rect = data->bbox();
 
-        qreal x = rect.x();
-        qreal y = rect.y();
-        qreal width = rect.width();
-        qreal height = rect.height();
-        qreal topPartHeight = height * 2 / 3;
-        qreal cornerRadius = 8.0;
+        double x = rect.x();
+        double y = rect.y();
+        double width = rect.width();
+        double height = rect.height();
+        double topPartHeight = height * 2 / 3;
+        double cornerRadius = 8.0;
 
         PainterPath path;
         path.moveTo(x, y);

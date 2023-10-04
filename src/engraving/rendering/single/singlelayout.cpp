@@ -1398,6 +1398,18 @@ void SingleLayout::layout(StaffTypeChange* item, const Context& ctx)
 void SingleLayout::layout(StringTunings* item, const Context& ctx)
 {
     layoutTextBase(item, ctx, item->mutldata());
+
+    for (TextBlock& block : item->mutldata()->blocks) {
+        for (TextFragment& fragment : block.fragments()) {
+            mu::draw::Font font = fragment.font(item);
+            if (font.type() != mu::draw::Font::Type::MusicSymbol) {
+                // HACK: the music symbol doesn't have a good baseline
+                // to go with text so we correct text here
+                const double baselineAdjustment = font.pointSizeF();
+                fragment.pos.setY(fragment.pos.y() - baselineAdjustment);
+            }
+        }
+    }
 }
 
 void SingleLayout::layout(Symbol* item, const Context&)

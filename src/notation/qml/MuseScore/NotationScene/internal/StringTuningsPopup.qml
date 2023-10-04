@@ -165,59 +165,76 @@ StyledPopupView {
                     navigation.column: 1
                     navigation.accessible.name: visibleBox.navigation.accessible.name + " " + qsTrc("notation", "Value %1").arg(valueControl.currentValue)
 
-                    VisibilityBox {
-                        id: visibleBox
+                    RowLayout {
+                        anchors.fill: parent
 
-                        anchors.left: parent.left
-                        anchors.verticalCenter: parent.verticalCenter
+                        VisibilityBox {
+                            id: visibleBox
 
-                        isVisible: modelData["show"]
-                        text: modelData["number"]
+                            isVisible: modelData["show"]
 
-                        navigation.panel: stringsNavPanel
-                        navigation.row: index
-                        navigation.column: 2
-                        accessibleText: qsTrc("notation", "String %1").arg(text)
+                            navigation.panel: stringsNavPanel
+                            navigation.row: index
+                            navigation.column: 2
+                            accessibleText: qsTrc("notation", "String %1").arg(numberLabel.text)
 
-                        onVisibleToggled: {
-                            stringTuningsModel.toggleString(index)
-                        }
-                    }
-
-                    IncrementalPropertyControl {
-                        id: valueControl
-
-                        anchors.right: parent.right
-                        anchors.verticalCenter: parent.verticalCenter
-
-                        implicitHeight: parent.height - ui.theme.borderWidth * 2
-                        implicitWidth: 64
-
-                        currentValue: modelData["valueStr"]
-
-                        minValue: 0
-                        maxValue: 127
-
-                        navigation.panel: stringsNavPanel
-                        navigation.row: index
-                        navigation.column: 3
-
-                        canIncrease: modelData["value"] < maxValue
-                        onIncrement: function() {
-                            return stringTuningsModel.increaseStringValue(currentValue)
+                            onVisibleToggled: {
+                                stringTuningsModel.toggleString(index)
+                            }
                         }
 
-                        canDecrease: modelData["value"] > minValue
-                        onDecrement: function() {
-                            return stringTuningsModel.decreaseStringValue(currentValue)
+                        Rectangle {
+                            height: numberLabel.height + 4
+                            width: height
+
+                            color: "transparent"
+                            radius: 180
+                            border.color: ui.theme.fontPrimaryColor
+                            border.width: 1
+
+                            StyledTextLabel {
+                                id: numberLabel
+
+                                anchors.centerIn: parent
+
+                                text: modelData["number"]
+                            }
                         }
 
-                        onValueEditingFinished: function(newValue) {
-                            var ok = stringTuningsModel.setStringValue(index, newValue)
-                            if (!ok) {
-                                //! NOTE: reset the text entered by the user
-                                currentValue = modelData["valueStr"]
-                                currentValue = Qt.binding( function() { return modelData["valueStr"] } )
+                        IncrementalPropertyControl {
+                            id: valueControl
+
+                            Layout.leftMargin: 6
+
+                            Layout.preferredHeight: parent.height - ui.theme.borderWidth * 2
+                            Layout.preferredWidth: 64
+
+                            currentValue: modelData["valueStr"]
+
+                            minValue: 0
+                            maxValue: 127
+
+                            navigation.panel: stringsNavPanel
+                            navigation.row: index
+                            navigation.column: 3
+
+                            canIncrease: modelData["value"] < maxValue
+                            onIncrement: function() {
+                                return stringTuningsModel.increaseStringValue(currentValue)
+                            }
+
+                            canDecrease: modelData["value"] > minValue
+                            onDecrement: function() {
+                                return stringTuningsModel.decreaseStringValue(currentValue)
+                            }
+
+                            onValueEditingFinished: function(newValue) {
+                                var ok = stringTuningsModel.setStringValue(index, newValue)
+                                if (!ok) {
+                                    //! NOTE: reset the text entered by the user
+                                    currentValue = modelData["valueStr"]
+                                    currentValue = Qt.binding( function() { return modelData["valueStr"] } )
+                                }
                             }
                         }
                     }

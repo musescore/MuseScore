@@ -1329,9 +1329,33 @@ bool Measure::acceptDrop(EditData& data) const
     case ElementType::SYMBOL:
     case ElementType::CLEF:
     case ElementType::STAFFTYPE_CHANGE:
-    case ElementType::STRING_TUNINGS:
         viewer->setDropRectangle(staffR);
         return true;
+
+    case ElementType::STRING_TUNINGS: {
+        const StringData* stringData = score()->staff(staffIdx)->part()->instrument(tick())->stringData();
+        if (!stringData || stringData->frettedStrings() == 0) {
+            return false;
+        }
+
+        // already a string tunings element in this measure
+        bool alreadyHasStringTunings = false;
+        for (const Segment& segment : m_segments) {
+            for (EngravingItem* element : segment.annotations()) {
+                if (element && element->isStringTunings()) {
+                    alreadyHasStringTunings = true;
+                    break;
+                }
+            }
+        }
+
+        if (alreadyHasStringTunings) {
+            return false;
+        }
+
+        viewer->setDropRectangle(staffR);
+        return true;
+    }
 
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
