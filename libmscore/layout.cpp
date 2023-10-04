@@ -4913,7 +4913,6 @@ void LayoutContext::collectPage()
                   qreal dist = prevSystem->minDistance(curSystem) + curSystem->height();
                   Box* vbox = curSystem->vbox();
                   if (vbox) {
-                        dist += vbox->bottomGap();
                         if (footerExtension > 0)
                               dist += footerExtension;
                         }
