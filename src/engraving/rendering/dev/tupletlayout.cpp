@@ -423,7 +423,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double x3 = 0.0;
     double numberWidth = 0.0;
     if (item->number()) {
-        TLayout::layout(item->number(), ctx);
+        TLayout::layoutText(item->number(), item->number()->mutldata());
         numberWidth = item->number()->ldata()->bbox().width();
 
         double y3 = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 - l1 * (item->isUp() ? 1.0 : -1.0);
