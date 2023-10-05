@@ -42,42 +42,63 @@ public:
     enum class Button {
         NoButton,
         Ok,
-        Save,
-        SaveAll,
-        DontSave,
-        Open,
-        Yes,
-        YesToAll,
-        No,
-        NoToAll,
-        Abort,
-        Retry,
-        Ignore,
-        Close,
-        Cancel,
-        Discard,
-        Help,
-        Apply,
-        Reset,
         Continue,
+        RestoreDefaults,
+        Reset,
+        Apply,
+        Help,
+        Discard,
+        Cancel,
+        Close,
+        Ignore,
+        Retry,
+        Abort,
+        NoToAll,
+        No,
+        YesToAll,
+        Yes,
+        Open,
+        DontSave,
+        SaveAll,
+        Save,
+        Next,
+        Back,
+        Select,
+        Clear,
+        Done,
 
-        CustomButton
+        CustomButton,
     };
     using Buttons = std::vector<Button>;
+
+    enum ButtonRole { // Keep updated with ButtonRole in buttonboxmodel.h
+        AcceptRole,
+        RejectRole,
+        DestructiveRole,
+        ResetRole,
+        ApplyRole,
+        RetryRole,
+        HelpRole,
+        ContinueRole,
+        BackRole,
+        CustomRole
+    };
 
     struct ButtonData {
         int btn = int(Button::CustomButton);
         std::string text;
         bool accent = false;
+        bool leftSide = false;
+        ButtonRole role = ButtonRole::CustomRole;
 
         ButtonData(int btn, const std::string& text)
             : btn(btn), text(text) {}
         ButtonData(Button btn, const std::string& text)
             : btn(int(btn)), text(text) {}
-        ButtonData(int btn, const std::string& text, bool accent)
-            : btn(btn), text(text), accent(accent) {}
-        ButtonData(Button btn, const std::string& text, bool accent)
-            : btn(int(btn)), text(text), accent(accent) {}
+        ButtonData(int btn, const std::string& text, bool accent, bool leftSide = false, ButtonRole role = ButtonRole::CustomRole)
+            : btn(btn), text(text), accent(accent), leftSide(leftSide), role(role) {}
+        ButtonData(Button btn, const std::string& text, bool accent, bool leftSide = false, ButtonRole role = ButtonRole::CustomRole)
+            : btn(int(btn)), text(text), accent(accent), leftSide(leftSide), role(role) {}
     };
     using ButtonDatas = std::vector<ButtonData>;
 

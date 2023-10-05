@@ -81,6 +81,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/view/quickpaintedview.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetview.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgetview.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/buttonboxmodel.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/buttonboxmodel.cpp
     )
 
 if (OS_IS_MAC)

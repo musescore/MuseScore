@@ -86,31 +86,50 @@ StyledDialogView {
             navigationPanel.order: 2
         }
 
-        PartsBottomPanel {
+        ButtonBox {
+            id: buttonBox
+
             Layout.fillWidth: true
-            Layout.preferredHeight: childrenRect.height
             Layout.leftMargin: privateProperties.buttonsMargin
             Layout.rightMargin: privateProperties.buttonsMargin
             Layout.bottomMargin: privateProperties.buttonsMargin
-            Layout.alignment: Qt.AlignRight | Qt.AlignBottom
-
-            canOpenSelectedParts: partsModel.hasSelection
 
             navigationPanel.section: root.navigationSection
             navigationPanel.order: 3
 
-            onCloseRequested: {
-                root.hide()
+            FlatButton {
+                text: qsTrc("global", "Close")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 1
+                isLeftSide: true
+
+                onClicked: {
+                    root.hide()
+                }
             }
 
-            onOpenSelectedPartsRequested: {
-                partsModel.openSelectedParts()
-                root.hide()
+            FlatButton {
+                text: qsTrc("global", "Open all")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 2
+
+                onClicked: {
+                    partsModel.openAllParts()
+                    root.hide()
+                }
             }
 
-            onOpenAllPartsRequested: {
-                partsModel.openAllParts()
-                root.hide()
+            FlatButton {
+                text: qsTrc("global", "Open selected")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 3
+                accentButton: true
+                enabled: partsModel.hasSelection
+
+                onClicked: {
+                    partsModel.openSelectedParts()
+                    root.hide()
+                }
             }
         }
     }

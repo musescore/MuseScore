@@ -32,6 +32,11 @@ FocusScope {
     property string text: ""
     property int textFormat: Text.AutoText
 
+    //!NOTE: used to sort buttons inside a button box
+    property int buttonId: 0
+    property int buttonRole: 0
+    property bool isLeftSide: false
+
     property string toolTipTitle: ""
     property string toolTipDescription: ""
     property string toolTipShortcut: ""

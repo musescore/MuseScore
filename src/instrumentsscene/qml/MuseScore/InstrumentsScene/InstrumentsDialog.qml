@@ -75,21 +75,12 @@ StyledDialogView {
         RowLayout {
             spacing: 12
 
-            NavigationPanel {
-                id: navBottomPanel
-
-                name: "BottomPanel"
-                section: root.navigationSection
-                order: 100
-                direction: NavigationPanel.Horizontal
-            }
-
             StyledTextLabel {
                 id: descriptionLabel
                 text: instrumentsPage.description
 
                 Layout.fillWidth: true
-                Layout.maximumHeight: okButton.height
+                Layout.maximumHeight: buttonBox.height
 
                 font: ui.theme.bodyFont
                 opacity: 0.7
@@ -97,29 +88,32 @@ StyledDialogView {
                 wrapMode: Text.Wrap
             }
 
-            FlatButton {
-                text: qsTrc("global", "Cancel")
+            ButtonBox {
+                id: buttonBox
 
-                navigation.name: "Cancel"
-                navigation.panel: navBottomPanel
-                navigation.column: 1
+                Layout.fillWidth: true
 
-                onClicked: {
-                    root.reject()
+                buttons: [ ButtonBoxModel.Cancel ]
+
+                navigationPanel.section: root.navigationSection
+                navigationPanel.order: 100
+
+                FlatButton {
+                    text: qsTrc("global", "OK")
+                    buttonRole: ButtonBoxModel.AcceptRole
+                    buttonId: ButtonBoxModel.Ok
+                    enabled: instrumentsPage.hasSelectedInstruments
+                    accentButton: true
+
+                    onClicked: {
+                        root.submit()
+                    }
                 }
-            }
 
-            FlatButton {
-                id: okButton
-                text: qsTrc("global", "OK")
-                enabled: instrumentsPage.hasSelectedInstruments
-
-                navigation.name: "OK"
-                navigation.panel: navBottomPanel
-                navigation.column: 2
-
-                onClicked: {
-                    root.submit()
+                onStandardButtonClicked: function(buttonId) {
+                    if (buttonId === ButtonBoxModel.Cancel) {
+                        root.reject()
+                    }
                 }
             }
         }

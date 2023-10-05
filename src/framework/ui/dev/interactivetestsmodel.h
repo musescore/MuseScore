@@ -56,6 +56,7 @@ public:
     Q_INVOKABLE void information();
     Q_INVOKABLE void warning();
     Q_INVOKABLE void critical();
+    Q_INVOKABLE void criticalWithDetailedText();
 
     Q_INVOKABLE void require();
 

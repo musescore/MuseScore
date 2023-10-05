@@ -56,7 +56,6 @@
         <file>qml/MuseScore/Project/AudioGenerationSettingsDialog.qml</file>
         <file>qml/MuseScore/Project/AudioGenerationSettings.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesFileInfoPanel.qml</file>
-        <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesBottomPanel.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/ProjectPropertiesView.qml</file>
         <file>qml/MuseScore/Project/internal/Properties/PropertyItem.qml</file>
         <file>resources/Placeholder_GP.png</file>

@@ -85,45 +85,31 @@ StyledDialogView {
             }
         }
 
-        Row {
-            Layout.preferredHeight: childrenRect.height
+        ButtonBox {
+            Layout.fillWidth: true
             Layout.alignment: Qt.AlignRight | Qt.AlignBottom
 
-            spacing: 12
+            buttons: [ ButtonBoxModel.Cancel ]
 
-            NavigationPanel {
-                id: buttonsNavigationPanel
-                name: "ButtonsNavigationPanel"
-                enabled: parent && parent.enabled && parent.visible
-                section: root.navigationSection
-                order: 2
-                direction: NavigationPanel.Horizontal
-            }
-
-            FlatButton {
-                text: qsTrc("global", "Cancel")
-
-                navigation.name: "CancelButton"
-                navigation.panel: buttonsNavigationPanel
-                navigation.order: 2
-
-                onClicked: {
-                    root.reject()
-                }
-            }
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
             FlatButton {
                 text: qsTrc("global", "OK")
+                buttonRole: ButtonBoxModel.AcceptRole
+                buttonId: ButtonBoxModel.Ok
                 enabled: root.measuresCount > 0
-                accentButton: enabled
-
-                navigation.name: "OkButton"
-                navigation.panel: buttonsNavigationPanel
-                navigation.order: 1
+                accentButton: true
 
                 onClicked: {
                     root.ret = { errcode: 0, value: root.measuresCount }
                     root.hide()
+                }
+            }
+
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Cancel) {
+                    root.reject()
                 }
             }
         }

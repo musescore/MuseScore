@@ -118,15 +118,6 @@ StyledDialogView {
 
         spacing: 12
 
-        NavigationPanel {
-            id: navBottomPanel
-
-            name: "BottomPanel"
-            section: root.navigationSection
-            order: 100
-            direction: NavigationPanel.Horizontal
-        }
-
         StyledTextLabel {
             id: descriptionLabel
             text: pagesStack.currentIndex === 0
@@ -134,7 +125,7 @@ StyledDialogView {
                   : ""
 
             Layout.fillWidth: true
-            Layout.maximumHeight: doneButton.height
+            Layout.maximumHeight: buttonBox.height
 
             font: ui.theme.bodyFont
             opacity: 0.7
@@ -142,60 +133,57 @@ StyledDialogView {
             wrapMode: Text.Wrap
         }
 
-        FlatButton {
-            navigation.name: "Cancel"
-            navigation.panel: navBottomPanel
-            navigation.column: 1
+        ButtonBox {
+            id: buttonBox
 
-            text: qsTrc("global", "Cancel")
+            Layout.preferredWidth: implicitWidth
 
-            onClicked: {
-                root.reject()
+            navigationPanel.section: root.navigationSection
+            navigationPanel.order: 100
+
+            FlatButton {
+                text: qsTrc("global", "Cancel")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 1
+
+                onClicked: {
+                    root.reject()
+                }
             }
-        }
 
-        FlatButton {
-            navigation.name: "Back"
-            navigation.panel: navBottomPanel
-            navigation.column: 2
+            FlatButton {
+                text: qsTrc("global", "Back")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 2
+                visible: pagesStack.currentIndex > 0
 
-            visible: pagesStack.currentIndex > 0
-
-            text: qsTrc("global", "Back")
-
-            onClicked: {
-                pagesStack.currentIndex--
+                onClicked: {
+                    pagesStack.currentIndex--
+                }
             }
-        }
 
-        FlatButton {
-            navigation.name: "Next"
-            navigation.panel: navBottomPanel
-            navigation.column: 3
+            FlatButton {
+                text: qsTrc("global", "Next")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 3
+                visible: pagesStack.currentIndex < pagesStack.count - 1
+                enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
-            visible: pagesStack.currentIndex < pagesStack.count - 1
-            enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-            text: qsTrc("global", "Next")
-
-            onClicked: {
-                pagesStack.currentIndex++
+                onClicked: {
+                    pagesStack.currentIndex++
+                }
             }
-        }
 
-        FlatButton {
-            id: doneButton
+            FlatButton {
+                text: qsTrc("global", "Done")
+                buttonRole: ButtonBoxModel.AcceptRole
+                buttonId: ButtonBoxModel.Done
+                accentButton: true
+                enabled: chooseInstrumentsAndTemplatePage.hasSelection
 
-            navigation.name: "Done"
-            navigation.panel: navBottomPanel
-            navigation.column: 4
-
-            enabled: chooseInstrumentsAndTemplatePage.hasSelection
-
-            text: qsTrc("global", "Done")
-
-            onClicked: {
-                root.onDone()
+                onClicked: {
+                    root.onDone()
+                }
             }
         }
     }

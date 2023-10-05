@@ -374,19 +374,24 @@ void InteractiveProvider::fillStandardDialogData(QmlLaunchData* data, const QStr
     params["textFormat"] = format(text.format);
     params["defaultButtonId"] = defBtn;
 
-    QVariantList buttonList;
-    for (const IInteractive::ButtonData& buttonData: buttons) {
-        QVariantMap buttonObj;
-        buttonObj["buttonId"] = QVariant::fromValue(buttonData.btn);
-        buttonObj["title"] = QVariant::fromValue(QString::fromStdString(buttonData.text));
-        buttonObj["accent"] = QVariant::fromValue(buttonData.accent);
-
-        buttonList << buttonObj;
+    QVariantList buttonsList;
+    QVariantList customButtonsList;
+    if (buttons.empty()) {
+        buttonsList << static_cast<int>(IInteractive::Button::Ok);
+    } else {
+        for (const IInteractive::ButtonData& buttonData: buttons) {
+            QVariantMap customButton;
+            customButton["text"] = QString::fromStdString(buttonData.text);
+            customButton["buttonId"] = buttonData.btn;
+            customButton["role"] = static_cast<int>(buttonData.role);
+            customButton["isAccent"] = buttonData.accent;
+            customButton["isLeftSide"] = buttonData.leftSide;
+            customButtonsList << QVariant(customButton);
+        }
     }
 
-    if (!buttonList.empty()) {
-        params["buttons"] = buttonList;
-    }
+    params["buttons"] = buttonsList;
+    params["customButtons"] = customButtonsList;
 
     if (options.testFlag(IInteractive::Option::WithIcon)) {
         params["withIcon"] = true;

@@ -94,12 +94,33 @@ StyledDialogView {
             navigationPanel: root.navigationPanel
         }
 
-        ProjectPropertiesBottomPanel {
-            model: projectPropertiesModel
+        ButtonBox {
+            Layout.fillWidth: true
+
+            buttons: [ ButtonBoxModel.Ok, ButtonBoxModel.Cancel ]
 
             navigationPanel.section: root.navigationSection
+            navigationPanel.order: 2
 
-            onHide: root.hide()
+            FlatButton {
+                text: qsTrc("project", "New property")
+                buttonRole: ButtonBoxModel.CustomRole
+                buttonId: ButtonBoxModel.CustomButton + 1
+                isLeftSide: true
+
+                onClicked: {
+                    projectPropertiesModel.newProperty()
+                }
+            }
+
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Ok) {
+                    projectPropertiesModel.saveProperties()
+                    root.hide()
+                } else if (buttonId === ButtonBoxModel.Cancel) {
+                    root.hide()
+                }
+            }
         }
     }
 }

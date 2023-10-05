@@ -63,7 +63,6 @@
         <file>qml/MuseScore/UiComponents/internal/ArrowScrollButton.qml</file>
         <file>qml/MuseScore/UiComponents/SelectMultipleDirectoriesDialog.qml</file>
         <file>qml/MuseScore/UiComponents/internal/DirectoriesView.qml</file>
-        <file>qml/MuseScore/UiComponents/internal/DirectoriesBottomPanel.qml</file>
         <file>qml/MuseScore/UiComponents/internal/DirectoriesTopPanel.qml</file>
         <file>qml/MuseScore/UiComponents/internal/PopupContent.qml</file>
         <file>qml/MuseScore/UiComponents/internal/StyledDropdownLoader.qml</file>
@@ -72,5 +71,6 @@
         <file>qml/MuseScore/UiComponents/internal/StyledMenu.qml</file>
         <file>qml/MuseScore/UiComponents/internal/MenuMetrics.qml</file>
         <file>qml/MuseScore/UiComponents/StyledBusyIndicator.qml</file>
+        <file>qml/MuseScore/UiComponents/ButtonBox.qml</file>
     </qresource>
 </RCC>

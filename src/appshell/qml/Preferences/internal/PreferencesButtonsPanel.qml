@@ -30,72 +30,37 @@ Rectangle {
 
     color: ui.theme.backgroundPrimaryColor
 
-    property NavigationPanel navigation: NavigationPanel {
-        name: "PreferencesButtonsPanel"
-        enabled: root.enabled && root.visible
-        direction: NavigationPanel.Horizontal
-
-        onActiveChanged: function(active) {
-            if (active) {
-                root.forceActiveFocus()
-            }
-        }
-    }
+    property alias navigation: buttonBox.navigationPanel
 
     signal revertFactorySettingsRequested()
     signal applyRequested()
     signal rejectRequested()
 
-    Item {
+    ButtonBox {
+        id: buttonBox
+
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.verticalCenter: parent.verticalCenter
         anchors.margins: 20
 
-        height: childrenRect.height
+        buttons: [ ButtonBoxModel.Cancel, ButtonBoxModel.Ok ]
 
         FlatButton {
-            anchors.left: parent.left
-
-            minWidth: 160
-
-            navigation.panel: root.navigation
-            navigation.order: 2
-
             text: qsTrc("appshell/preferences", "Reset preferences")
+            buttonRole: ButtonBoxModel.CustomRole
+            buttonId: ButtonBoxModel.CustomButton + 1
+            isLeftSide: true
 
             onClicked: {
                 root.revertFactorySettingsRequested()
             }
         }
 
-        FlatButton {
-            anchors.right: applyButton.left
-            anchors.rightMargin: 12
-
-            navigation.panel: root.navigation
-            navigation.order: 3
-
-            text: qsTrc("global", "Cancel")
-
-            onClicked: {
+        onStandardButtonClicked: function(buttonId) {
+            if (buttonId === ButtonBoxModel.Cancel) {
                 root.rejectRequested()
-            }
-        }
-
-        FlatButton {
-            id: applyButton
-
-            anchors.right: parent.right
-
-            navigation.panel: root.navigation
-            navigation.order: 1
-
-            accentButton: true
-
-            text: qsTrc("global", "OK")
-
-            onClicked: {
+            } else if (buttonId === ButtonBoxModel.Ok) {
                 root.applyRequested()
             }
         }

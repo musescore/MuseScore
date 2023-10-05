@@ -111,17 +111,17 @@ StyledDialogView {
             }
         }
 
-        RowLayout {
-            Layout.alignment: Qt.AlignRight
+        ButtonBox {
+            Layout.fillWidth: true
             Layout.rightMargin: 16
             Layout.bottomMargin: 16
 
-            spacing: 12
+            buttons: [ ButtonBoxModel.Ok ]
 
-            FlatButton {
-                text: qsTrc("global", "OK")
+            navigationPanel.section: root.navigationSection
 
-                onClicked: {
+            onStandardButtonClicked: function(buttonId) {
+                if (buttonId === ButtonBoxModel.Ok) {
                     root.hide()
                 }
             }

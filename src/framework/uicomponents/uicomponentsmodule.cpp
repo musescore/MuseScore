@@ -36,6 +36,7 @@
 #include "view/itemmultiselectionmodel.h"
 #include "view/textinputfieldmodel.h"
 #include "view/selectmultipledirectoriesmodel.h"
+#include "view/buttonboxmodel.h"
 
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
@@ -104,6 +105,7 @@ void UiComponentsModule::registerUiTypes()
 
     qmlRegisterType<TextInputFieldModel>("MuseScore.UiComponents", 1, 0, "TextInputFieldModel");
     qmlRegisterType<SelectMultipleDirectoriesModel>("MuseScore.UiComponents", 1, 0, "SelectMultipleDirectoriesModel");
+    qmlRegisterType<ButtonBoxModel>("MuseScore.UiComponents", 1, 0, "ButtonBoxModel");
 
     auto ui = modularity::ioc()->resolve<ui::IUiEngine>(moduleName());
     if (ui) {

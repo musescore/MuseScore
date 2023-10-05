@@ -40,30 +40,40 @@ RowLayout {
     property alias withDontShowAgainCheckBox: dontShowAgainCheckBox.visible
 
     property var buttons: []
+    property var customButtons: []
     property int defaultButtonId: 0
 
     property alias navigation: navPanel
 
     signal clicked(int buttonId, bool showAgain)
 
+    onCustomButtonsChanged: {
+        if (!root.customButtons) {
+            return
+        }
+
+        var result = []
+        for (var i = 0; i < root.customButtons.length; i++) {
+            var customButton = root.customButtons[i]
+
+            var button = buttons.addButton(customButton.text, customButton.buttonId, customButton.role, customButton.isAccent, customButton.isLeftSide)
+
+            const buttonId = customButton.buttonId
+            button.clicked.connect(function() {
+                root.clicked(buttonId, !dontShowAgainCheckBox.checked)
+            })
+        }
+    }
+
     function focusOnFirst() {
-        var btn = root.firstFocusBtn()
-        btn.navigation.requestActive()
+        var btn = buttons.firstFocusBtn
+        if (btn) {
+            btn.navigation.requestActive()
+        }
     }
 
     function readInfo() {
         accessibleInfo.readInfo()
-    }
-
-    function firstFocusBtn() {
-        var btn = null
-        for (var i = buttons.count - 1; i >= 0; --i) {
-            btn = buttons.itemAtIndex(i)
-            if (btn.accentButton) {
-                break;
-            }
-        }
-        return btn;
     }
 
     function standardIcon(type) {
@@ -96,6 +106,18 @@ RowLayout {
         direction: NavigationPanel.Horizontal
         accessible.role: MUAccessible.Dialog
         accessible.name: root.standardName(root.type)
+
+        onNavigationEvent: function(event) {
+            if (event.type === NavigationEvent.AboutActive) {
+                var btn = buttons.firstFocusBtn
+                if (Boolean(btn) && btn.enabled) {
+                    event.setData("controlIndex", [ btn.navigation.row, btn.navigation.column ])
+                }
+            } else {
+                buttons.restoreAccessibility()
+                accessibleInfo.resetFocus()
+            }
+        }
     }
 
     //! NOTE By default accessibility for buttons ignored.
@@ -106,7 +128,7 @@ RowLayout {
         accessibleParent: navPanel.accessible
         visualItem: root
         role: MUAccessible.Button
-        name: root.title + " " + root.text + " " + root.firstFocusBtn().text
+        name: root.title + " " + root.text + " " + buttons.firstFocusBtn.text
 
         function readInfo() {
             accessibleInfo.ignored = false
@@ -135,8 +157,6 @@ RowLayout {
     }
 
     Column {
-        Layout.fillWidth: true
-
         // Unclear why "+ 1" is needed; apparently implicitWidth is incorrect
         readonly property real textsImplicitWidth: Math.max(titleLabel.implicitWidth,
                                                             textLabel.implicitWidth,
@@ -146,7 +166,7 @@ RowLayout {
         readonly property real textsImplicitWidthBounded: Math.min(420, textsImplicitWidth)
 
         // But if the buttons need more space, then the dialog becomes as wide as necessary
-        Layout.preferredWidth: Math.max(buttons.width, textsImplicitWidthBounded)
+        Layout.preferredWidth: Math.max(buttons.implicitWidth, textsImplicitWidthBounded)
 
         spacing: 18
 
@@ -193,39 +213,19 @@ RowLayout {
             }
         }
 
-        ListView {
+        ButtonBox {
             id: buttons
-            anchors.right: parent.right
-            spacing: 12
 
-            width: contentWidth
-            height: contentHeight
-            contentHeight: 30
+            width: parent.width
 
-            model: root.buttons
-            orientation: Qt.Horizontal
-            interactive: false
+            buttons: root.buttons
+            clip: false
 
-            delegate: FlatButton {
-                navigation.panel: navPanel
-                navigation.column: model.index
+            navigationPanel: navPanel
+            isAccessibilityDisabledWhenInit: true
 
-                //! NOTE See description about AccessibleItem { id: accessibleInfo }
-                accessible.ignored: this === root.firstFocusBtn()
-                navigation.onActiveChanged: {
-                    if (!navigation.active) {
-                        accessible.ignored = false
-                        accessible.focused = true
-                        accessibleInfo.resetFocus()
-                    }
-                }
-
-                text: modelData.title
-                accentButton: Boolean(modelData.accent)
-
-                onClicked: {
-                    root.clicked(modelData.buttonId, !dontShowAgainCheckBox.checked)
-                }
+            onStandardButtonClicked: function(buttonId) {
+                root.clicked(buttonId, !dontShowAgainCheckBox.checked)
             }
         }
     }
