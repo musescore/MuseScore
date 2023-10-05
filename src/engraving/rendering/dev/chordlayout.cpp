@@ -159,7 +159,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     item->addLedgerLines();
 
     if (item->arpeggio()) {
-        TLayout::layout(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
+        TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
 
         double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
 
@@ -197,7 +197,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         if (item->beam()) {
             ctx.mutDom().undoRemoveElement(item->hook());
         } else {
-            TLayout::layout(item->hook(), item->hook()->mutldata());
+            TLayout::layoutHook(item->hook(), item->hook()->mutldata());
             if (item->up() && item->stem()) {
                 // hook position is not set yet
                 double x = item->hook()->ldata()->bbox().right() + item->stem()->flagPosition().x() + chordX;
@@ -370,7 +370,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             ldgLin->setPos(llX, llY);
             ldgLin->setNext(item->ledgerLines());
             item->setLedgerLine(ldgLin);
-            TLayout::layout(ldgLin, ctx);
+            TLayout::layoutLedgerLine(ldgLin, ctx);
             llY += lineDist / ledgerLines;
         }
         headWidth += extraLen;            // include ledger lines extra width in chord width
@@ -488,7 +488,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
 
     if (item->arpeggio()) {
         double y = upnote->pos().y() - upnote->headHeight() * .5;
-        TLayout::layout(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
+        TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
         lll += item->arpeggio()->width() + _spatium * .5;
         item->arpeggio()->setPos(-lll, y);
 
@@ -509,7 +509,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         if (item->beam()) {
             ctx.mutDom().undoRemoveElement(item->hook());
         } else if (tab == 0) {
-            TLayout::layout(item->hook(), item->hook()->mutldata());
+            TLayout::layoutHook(item->hook(), item->hook()->mutldata());
             if (item->up()) {
                 // hook position is not set yet
                 double x = item->hook()->ldata()->bbox().right() + item->stem()->flagPosition().x();
@@ -631,10 +631,10 @@ void ChordLayout::layoutSpanners(Chord* item, LayoutContext& ctx)
     for (const Note* n : item->notes()) {
         Tie* tie = n->tieFor();
         if (tie) {
-            TLayout::layout(tie, ctx);
+            TLayout::layoutTie(tie, ctx);
         }
         for (Spanner* sp : n->spannerBack()) {
-            TLayout::layout(sp, ctx);
+            TLayout::layoutSpanner(sp, ctx);
         }
     }
 }
@@ -1118,7 +1118,7 @@ void ChordLayout::layoutHook(Chord* item, LayoutContext& ctx)
         computeUp(item, ctx);
     }
     item->hook()->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
-    TLayout::layout(item->hook(), item->hook()->mutldata());
+    TLayout::layoutHook(item->hook(), item->hook()->mutldata());
 }
 
 void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
@@ -1221,7 +1221,7 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
             if (cross && item == firstCr) {
                 // necessary because this beam was never laid out before, so its position isn't known
                 // and the first chord would calculate wrong stem direction
-                TLayout::layout(item->beam(), ctx);
+                TLayout::layoutBeam(item->beam(), ctx);
             } else {
                 // otherwise we can use stale layout data; the only reason we would need to lay out here is if
                 // it's literally never been laid out before which due to the insane nature of our layout system
@@ -1248,11 +1248,11 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
             }
         }
 
-        TLayout::layout(item->beam(), ctx);
+        TLayout::layoutBeam(item->beam(), ctx);
         if (cross && item->tremolo() && item->tremolo()->twoNotes() && item->tremolo()->chord1() == item
             && item->tremolo()->chord1()->beam() == item->tremolo()->chord2()->beam()) {
             // beam-infixed two-note trems have to be laid out here
-            TLayout::layout(item->tremolo(), ctx);
+            TLayout::layoutTremolo(item->tremolo(), ctx);
         }
         if (!cross && !item->beam()->userModified()) {
             item->setUp(item->beam()->up());
@@ -1264,7 +1264,7 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         bool cross = c1->staffMove() != c2->staffMove();
         if (item == c1) {
             // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
-            TLayout::layout(item->tremolo(), ctx);
+            TLayout::layoutTremolo(item->tremolo(), ctx);
         }
         Measure* measure = item->findMeasure();
         if (!cross && !item->tremolo()->userModified()) {
@@ -2775,7 +2775,7 @@ void ChordLayout::updateGraceNotes(Measure* measure, LayoutContext& ctx)
             EngravingItem* e = s.preAppendedItem(track);
             if (e && e->isGraceNotesGroup()) {
                 GraceNotesGroup* gng = toGraceNotesGroup(e);
-                TLayout::layout(gng, ctx);
+                TLayout::layoutGraceNotesGroup(gng, ctx);
                 gng->addToShape();
             }
         }
@@ -2872,7 +2872,7 @@ void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, La
                 if (sp->isGlissando()) {
                     Glissando* gliss = toGlissando(sp);
                     if (gliss->startElement() && gliss->startElement()->isNote()) {
-                        TLayout::layout(gliss, ctx);     // line attach points are updated here
+                        TLayout::layoutGlissando(gliss, ctx);     // line attach points are updated here
                     }
                 }
             }
@@ -3123,8 +3123,8 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
 
             rest1->verticalClearance().setLocked(true);
             rest2->verticalClearance().setLocked(true);
-            TLayout::layout(beam1, ctx);
-            TLayout::layout(beam2, ctx);
+            TLayout::layoutBeam(beam1, ctx);
+            TLayout::layoutBeam(beam2, ctx);
         }
 
         bool rest1IsWholeOrHalf = rest1->isWholeRest() || rest1->durationType() == DurationType::V_HALF;
@@ -3177,7 +3177,7 @@ void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutC
         }
     }
     for (Fingering* f : fingerings) {
-        TLayout::layout(f, ctx);
+        TLayout::layoutFingering(f, f->mutldata());
         if (f->addToSkyline()) {
             Note* n = f->note();
             RectF r
@@ -3352,7 +3352,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             // layout fingerings that are placed relative to notehead
             // fingerings placed relative to chord will be laid out later
             if (f->layoutType() == ElementType::NOTE) {
-                TLayout::layout(f, ctx);
+                TLayout::layoutFingering(f, f->mutldata());
             }
         } else {
             e->mutldata()->setMag(item->mag());
