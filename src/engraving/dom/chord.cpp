@@ -1420,7 +1420,7 @@ double Chord::calcDefaultStemLength()
         // when the chord's magnitude is < 1, the stem length with mag can find itself below the middle line.
         // in those cases, we have to add the extra amount to it to bring it to a minimum.
         double upValue = m_up ? -1. : 1.;
-        double stemStart = startNote->pos().y();
+        double stemStart = startNote->ldata()->pos().y();
         double stemEndMag = stemStart + (finalStemLength * upValue);
         double topLine = 0.0;
         lineDistance *= _spatium;

@@ -1085,7 +1085,7 @@ double BeamTremoloLayout::chordBeamAnchorY(const ChordRest* cr) const
         return y + chord->pagePos().y();
     }
 
-    return position.y() + (chord->defaultStemLength() * upValue) - beamOffset;
+    return position.y() - note->offset().y() + (chord->defaultStemLength() * upValue) - beamOffset;
 }
 
 PointF BeamTremoloLayout::chordBeamAnchor(const ChordRest* cr, ChordBeamAnchorType anchorType) const
