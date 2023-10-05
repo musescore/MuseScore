@@ -63,11 +63,11 @@ QList<int> ButtonBoxModel::load()
 
     const std::vector<ButtonRole>& currentLayout = chooseButtonLayoutType();
 
-    auto buttonsByRole = [&sortedButtons, maxCustomRole](ButtonRole role) -> std::vector<LayoutButton*> {
-        bool isCustom = role == ButtonRole::CustomRole;
+    auto buttonsByRole = [&sortedButtons, maxCustomRole](ButtonRole buttonRole) -> std::vector<LayoutButton*> {
+        bool isCustom = buttonRole == ButtonRole::CustomRole;
         if (!isCustom) {
-            if (contains(sortedButtons, static_cast<int>(role))) {
-                return sortedButtons[role];
+            if (contains(sortedButtons, static_cast<int>(buttonRole))) {
+                return sortedButtons[buttonRole];
             }
 
             return {};
