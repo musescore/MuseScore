@@ -90,7 +90,7 @@ class Segment final : public EngravingItem
     Fraction _tick;    // { Fraction(0, 1) };
     Fraction _ticks;   // { Fraction(0, 1) };
     Spatium _extraLeadingSpace;
-    double _stretch;
+    double _stretch = 1.;
     double _widthOffset = 0.0; // part of the segment width that will not be stretched during system justification
 
     Segment* _next = nullptr;                       // linked list of segments inside a measure
