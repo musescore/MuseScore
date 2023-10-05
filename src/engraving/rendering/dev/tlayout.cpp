@@ -4849,7 +4849,7 @@ void TLayout::layoutStemSlash(const StemSlash* item, StemSlash::LayoutData* ldat
             && (musicFont == "Bravura" || musicFont == "Finale Maestro" || musicFont == "Gonville")) {
             angle *= angleIncrease;
         }
-        endX = hook->ldata()->bbox().translated(hook->pos()).right(); // always ends at the right bbox margin of the hook
+        endX = hook->ldata()->bbox().translated(hook->ldata()->pos()).right(); // always ends at the right bbox margin of the hook
         endY = startY + up * (endX - startX) * tan(angle);
     }
     if (beam) {
