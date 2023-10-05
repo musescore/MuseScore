@@ -541,7 +541,7 @@ void TupletLayout::layout(DurationElement* de, LayoutContext& ctx)
         }
     }
     // layout t
-    TLayout::layout(t, ctx);
+    TLayout::layoutTuplet(t, ctx);
 }
 
 bool TupletLayout::isTopTuplet(ChordRest* cr)

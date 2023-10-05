@@ -112,7 +112,7 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
     // The beam may have changed shape. one-note trems within this beam need to be layed out here
     for (ChordRest* cr : item->elements()) {
         if (cr->isChord() && toChord(cr)->tremolo() && !toChord(cr)->tremolo()->twoNotes()) {
-            TLayout::layout(toChord(cr)->tremolo(), ctx);
+            TLayout::layoutTremolo(toChord(cr)->tremolo(), ctx);
         }
     }
 }
@@ -449,7 +449,7 @@ void BeamLayout::restoreBeams(Measure* m, LayoutContext& ctx)
                 ChordRest* cr = toChordRest(e);
                 Beam* b = cr->beam();
                 if (b && !b->elements().empty() && b->elements().front() == cr) {
-                    TLayout::layout(b, ctx);
+                    TLayout::layoutBeam(b, ctx);
                     b->addSkyline(m->system()->staff(b->staffIdx())->skyline());
                 }
             }
@@ -837,7 +837,7 @@ void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
         ChordRest* cr = toChordRest(e);
         // layout beam
         if (BeamLayout::isTopBeam(cr)) {
-            TLayout::layout(cr->beam(), ctx);
+            TLayout::layoutBeam(cr->beam(), ctx);
             if (!cr->beam()->tremAnchors().empty()) {
                 // there are inset tremolos in here
                 for (ChordRest* beamCr : cr->beam()->elements()) {
@@ -846,7 +846,7 @@ void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
                     }
                     Chord* c = toChord(beamCr);
                     if (c->tremolo() && c->tremolo()->twoNotes()) {
-                        TLayout::layout(c->tremolo(), ctx);
+                        TLayout::layoutTremolo(c->tremolo(), ctx);
                     }
                 }
             }
@@ -856,7 +856,7 @@ void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
         }
         for (Chord* grace : toChord(cr)->graceNotes()) {
             if (BeamLayout::isTopBeam(grace)) {
-                TLayout::layout(grace->beam(), ctx);
+                TLayout::layoutBeam(grace->beam(), ctx);
             }
         }
     }
@@ -915,7 +915,7 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         ChordLayout::resolveRestVSRest(rests, staff, segment, ctx, /*considerBeams*/ true);
     }
 
-    TLayout::layout(beam, ctx);
+    TLayout::layoutBeam(beam, ctx);
 }
 
 void BeamLayout::createBeamSegments(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests)

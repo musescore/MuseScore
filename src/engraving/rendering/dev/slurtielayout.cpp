@@ -695,7 +695,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         if (stem1 || (trem && trem->twoNotes())) {     //sc not null
             Beam* beam1 = sc->beam();
             if (beam1 && (beam1->elements().back() != sc) && (sc->up() == item->up())) {
-                TLayout::layout(beam1, ctx);
+                TLayout::layoutBeam(beam1, ctx);
                 // start chord is beamed but not the last chord of beam group
                 // and slur direction is same as start chord (stem side)
 
@@ -717,7 +717,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 // if start and end chords have same stem direction
                 stemPos = true;
             } else if (trem && trem->twoNotes() && trem->chord2() != sc && sc->up() == item->up()) {
-                TLayout::layout(trem, ctx);
+                TLayout::layoutTremolo(trem, ctx);
                 Note* note = item->up() ? sc->upNote() : sc->downNote();
                 double stemHeight = stem1 ? stem1->length() : defaultStemLengthStart(trem);
                 double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
@@ -839,10 +839,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                     || (trem && trem->twoNotes() && ec->up() == item->up())
                     ) {
                     if (beam2) {
-                        TLayout::layout(beam2, ctx);
+                        TLayout::layoutBeam(beam2, ctx);
                     }
                     if (trem) {
-                        TLayout::layout(trem, ctx);
+                        TLayout::layoutTremolo(trem, ctx);
                     }
                     // slur start was laid out to stem and start and end have same direction
                     // OR

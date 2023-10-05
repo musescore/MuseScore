@@ -284,14 +284,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
                         }
                         ChordRest* cr = toChordRest(e);
                         if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
-                            TLayout::layout(cr->beam(), ctx);
+                            TLayout::layoutBeam(cr->beam(), ctx);
                         }
                         if (TupletLayout::notTopTuplet(cr)) {
                             // fix layout of tuplets
                             DurationElement* de = cr;
                             while (de->tuplet() && de->tuplet()->elements().front() == de) {
                                 Tuplet* t = de->tuplet();
-                                TLayout::layout(t, ctx);
+                                TLayout::layoutTuplet(t, ctx);
                                 de = t;
                             }
                         }
@@ -300,7 +300,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             Chord* c = toChord(cr);
                             for (Chord* cc : c->graceNotes()) {
                                 if (cc->beam() && cc->beam()->elements().front() == cc) {
-                                    TLayout::layout(cc->beam(), ctx);
+                                    TLayout::layoutBeam(cc->beam(), ctx);
                                 }
                                 ChordLayout::layoutSpanners(cc, ctx);
                                 for (EngravingItem* element : cc->el()) {
@@ -334,14 +334,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                         }
                                         Fingering* fingering = toFingering(e);
                                         if (fingering->isOnCrossBeamSide()) {
-                                            TLayout::layout(fingering, ctx);
+                                            TLayout::layoutFingering(fingering, fingering->mutldata());
                                         }
                                     }
                                 }
                             }
                         }
                     } else if (e->isBarLine()) {
-                        rendering::dev::TLayout::layout2(toBarLine(e), ctx);
+                        rendering::dev::TLayout::layoutBarLine2(toBarLine(e), ctx);
                     }
                 }
             }
@@ -374,7 +374,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                 continue;
             }
             if (toSlur(sp)->isCrossStaff()) {
-                TLayout::layout(toSlur(sp), ctx);
+                TLayout::layoutSlur(toSlur(sp), ctx);
             }
         }
     }

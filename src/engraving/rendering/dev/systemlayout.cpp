@@ -478,7 +478,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             }
         } else if (mb->isHBox()) {
             mb->setPos(pos + PointF(toHBox(mb)->topGap(), 0.0));
-            TLayout::layout(mb, ctx);
+            TLayout::layoutMeasureBase(mb, ctx);
             createBrackets = toHBox(mb)->createSystemHeader();
         } else if (mb->isVBox()) {
             mb->setPos(pos);
@@ -1754,7 +1754,7 @@ void SystemLayout::layoutSystem(System* system, LayoutContext& ctx, double xo1, 
 
     for (const SysStaff* s : system->staves()) {
         for (InstrumentName* t : s->instrumentNames) {
-            TLayout::layout(t, ctx);
+            TLayout::layoutInstrumentName(t, t->mutldata());
 
             switch (t->align().horizontal) {
             case AlignH::LEFT:
@@ -1792,7 +1792,7 @@ double SystemLayout::instrumentNamesWidth(System* system, LayoutContext& ctx, bo
         }
 
         for (InstrumentName* name : staff->instrumentNames) {
-            TLayout::layout(name, ctx);
+            TLayout::layoutInstrumentName(name, name->mutldata());
             namesWidth = std::max(namesWidth, name->width());
         }
     }
@@ -1855,7 +1855,7 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
                 dummyBr->mutldata()->setBracketHeight(3.5 * dummyBr->spatium() * 2); // default
-                TLayout::layout(dummyBr, dummyBr->mutldata(), ctx.conf());
+                TLayout::layoutBracket(dummyBr, dummyBr->mutldata(), ctx.conf());
                 for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
                     bracketWidth[stfIdx] += dummyBr->ldata()->bracketWidth();
                 }
@@ -1893,7 +1893,7 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
                 Bracket* b = SystemLayout::createBracket(system, ctx, bi, i, static_cast<int>(staffIdx), bl, system->firstMeasure());
                 if (b != nullptr) {
                     b->mutldata()->setBracketHeight(3.5 * b->spatium() * 2); // dummy
-                    TLayout::layout(b, b->mutldata(), ctx.conf());
+                    TLayout::layoutBracket(b, b->mutldata(), ctx.conf());
                     bracketWidth[i] = std::max(bracketWidth[i], b->ldata()->bracketWidth());
                 }
             }
@@ -2051,7 +2051,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
 {
     Box* vb = system->vbox();
     if (vb) {
-        TLayout::layout(vb, ctx);
+        TLayout::layoutBox(vb, vb->mutldata(), ctx);
         system->setbbox(vb->ldata()->bbox());
         return;
     }
@@ -2231,9 +2231,9 @@ void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext
             mldata->setBbox(0.0, -_spatium, m->width(), height + 2.0 * _spatium);
         } else if (m->isHBox()) {
             mldata->setBbox(0.0, 0.0, m->width(), height);
-            TLayout::layout2(toHBox(m), ctx);
+            TLayout::layoutHBox2(toHBox(m), ctx);
         } else if (m->isTBox()) {
-            TLayout::layout(toTBox(m), ctx);
+            TLayout::layoutTBox(toTBox(m), toTBox(m)->mutldata(), ctx);
         } else {
             LOGD("unhandled measure type %s", m->typeName());
         }
@@ -2270,7 +2270,7 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
         Bracket::LayoutData* bldata = b->mutldata();
         bldata->setPosY(sy);
         bldata->setBracketHeight(ey - sy);
-        TLayout::layout(b, bldata, ctx.conf());
+        TLayout::layoutBracket(b, bldata, ctx.conf());
     }
 }
 

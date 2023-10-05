@@ -178,14 +178,14 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                     }
                     ChordRest* cr = toChordRest(e);
                     if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
-                        TLayout::layout(cr->beam(), ctx);
+                        TLayout::layoutBeam(cr->beam(), ctx);
                     }
                     if (TupletLayout::notTopTuplet(cr)) {
                         // fix layout of tuplets
                         DurationElement* de = cr;
                         while (de->tuplet() && de->tuplet()->elements().front() == de) {
                             Tuplet* t = de->tuplet();
-                            TLayout::layout(t, ctx);
+                            TLayout::layoutTuplet(t, ctx);
                             de = de->tuplet();
                         }
                     }
@@ -194,7 +194,7 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                         Chord* c = toChord(cr);
                         for (Chord* cc : c->graceNotes()) {
                             if (cc->beam() && cc->beam()->elements().front() == cc) {
-                                TLayout::layout(cc->beam(), ctx);
+                                TLayout::layoutBeam(cc->beam(), ctx);
                             }
                             ChordLayout::layoutSpanners(cc, ctx);
                             for (EngravingItem* element : cc->el()) {
@@ -210,12 +210,12 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                             Chord* c1 = t->chord1();
                             Chord* c2 = t->chord2();
                             if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
-                                TLayout::layout(t, ctx);
+                                TLayout::layoutTremolo(t, ctx);
                             }
                         }
                     }
                 } else if (e->isBarLine()) {
-                    TLayout::layout2(toBarLine(e), ctx);
+                    TLayout::layoutBarLine2(toBarLine(e), ctx);
                 }
             }
         }
@@ -336,7 +336,7 @@ void ScoreHorizontalViewLayout::collectLinearSystem(LayoutContext& ctx)
         } else if (ctx.state().curMeasure()->isHBox()) {
             MeasureBase* curM = ctx.mutState().curMeasure();
             curM->setPos(pos + PointF(toHBox(curM)->topGap(), 0.0));
-            TLayout::layoutMeasureBase(curM, curM->mutldata(), ctx);
+            TLayout::layoutBaseMeasureBase(curM, curM->mutldata(), ctx);
             ww = curM->width();
         }
         pos.rx() += ww;
