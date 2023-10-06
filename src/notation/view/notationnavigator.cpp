@@ -21,14 +21,49 @@
  */
 #include "notationnavigator.h"
 
+#include "draw/types/geometry.h"
 #include "engraving/dom/system.h"
 
 #include "log.h"
+#include <memory>
+#include <qevent.h>
+#include <qpainter.h>
+#include <qquickitem.h>
+#include <qquickpainteditem.h>
+#include <qwidget.h>
 
 using namespace mu::notation;
 
+NotationNavigatorViewRect::NotationNavigatorViewRect(QQuickItem* parent)
+    : QQuickPaintedItem(parent)
+{
+    this->setSize(parent->size()); // FIXME: doesn't set the size
+}
+
+void NotationNavigatorViewRect::paint(QPainter* painter)
+{
+    TRACEFUNC;
+
+    QColor color(configuration()->selectionColor());
+    QPen pen(color, configuration()->borderWidth());
+    painter->setPen(pen);
+    painter->setBrush(QColor(color.red(), color.green(), color.blue(), configuration()->cursorOpacity()));
+
+    painter->drawRect(m_cursorRect.toQRectF());
+}
+
+mu::RectF NotationNavigatorViewRect::getRect()
+{
+    return m_cursorRect;
+}
+
+void NotationNavigatorViewRect::setRect(RectF cursorRect)
+{
+    m_cursorRect = cursorRect;
+}
+
 NotationNavigator::NotationNavigator(QQuickItem* parent)
-    : AbstractNotationPaintView(parent)
+    : AbstractNotationPaintView(parent), m_viewRect(std::make_unique<NotationNavigatorViewRect>(this))
 {
     setReadonly(true);
 }
@@ -42,6 +77,7 @@ void NotationNavigator::load()
 
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         update();
+        m_viewRect->update();
     });
 
     AbstractNotationPaintView::load();
@@ -103,14 +139,15 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
 {
     TRACEFUNC;
 
+    RectF cursorRect = m_viewRect->getRect();
     PointF logicPos = toLogical(event->pos());
     m_startMove = logicPos;
-    if (m_cursorRect.contains(logicPos)) {
+    if (cursorRect.contains(logicPos)) {
         return;
     }
 
-    double dx = logicPos.x() - (m_cursorRect.x() + (m_cursorRect.width() / 2));
-    double dy = logicPos.y() - (m_cursorRect.y() + (m_cursorRect.height() / 2));
+    double dx = logicPos.x() - (cursorRect.x() + (cursorRect.width() / 2));
+    double dy = logicPos.y() - (cursorRect.y() + (cursorRect.height() / 2));
 
     moveNotationRequested(-dx, -dy);
 }
@@ -126,7 +163,7 @@ void NotationNavigator::mouseMoveEvent(QMouseEvent* event)
     m_startMove = logicPos;
 }
 
-void NotationNavigator::moveCanvasToRect(const RectF& viewRect)
+bool NotationNavigator::moveCanvasToRect(const RectF& viewRect)
 {
     TRACEFUNC;
 
@@ -144,7 +181,7 @@ void NotationNavigator::moveCanvasToRect(const RectF& viewRect)
         PointF bottom = newViewRect.bottomRight();
 
         if (!notationContentRect.contains(top) && !notationContentRect.contains(bottom)) {
-            return;
+            return false;
         }
 
         if (viewport.top() > top.y()) {
@@ -159,7 +196,7 @@ void NotationNavigator::moveCanvasToRect(const RectF& viewRect)
         PointF right = newViewRect.bottomRight();
 
         if (!notationContentRect.contains(left) && !notationContentRect.contains(right)) {
-            return;
+            return false;
         }
 
         if (viewport.left() > left.x()) {
@@ -169,7 +206,7 @@ void NotationNavigator::moveCanvasToRect(const RectF& viewRect)
         }
     }
 
-    moveCanvas(-dx, -dy);
+    return moveCanvas(-dx, -dy);
 }
 
 void NotationNavigator::setCursorRect(const QRectF& rect)
@@ -182,11 +219,15 @@ void NotationNavigator::setCursorRect(const QRectF& rect)
 
     RectF newCursorRect = notationContentRect().intersected(RectF::fromQRectF(rect));
 
-    moveCanvasToRect(newCursorRect);
+    bool moved = moveCanvasToRect(newCursorRect);
 
-    m_cursorRect = newCursorRect;
+    m_viewRect->setRect(newCursorRect);
+
     rescale();
-    update();
+    if (moved) {
+        update();
+    }
+    m_viewRect->update();
 }
 
 int NotationNavigator::orientation() const
@@ -238,23 +279,10 @@ void NotationNavigator::paint(QPainter* painter)
     AbstractNotationPaintView::paint(painter);
 
     paintPageNumbers(painter);
-    paintCursor(painter);
 }
 
 void NotationNavigator::onViewSizeChanged()
 {
-}
-
-void NotationNavigator::paintCursor(QPainter* painter)
-{
-    TRACEFUNC;
-
-    QColor color(configuration()->selectionColor());
-    QPen pen(color, configuration()->borderWidth());
-    painter->setPen(pen);
-    painter->setBrush(QColor(color.red(), color.green(), color.blue(), configuration()->cursorOpacity()));
-
-    painter->drawRect(m_cursorRect.toQRectF());
 }
 
 void NotationNavigator::paintPageNumbers(QPainter* painter)
