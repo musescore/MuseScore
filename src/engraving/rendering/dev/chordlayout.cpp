@@ -1712,18 +1712,20 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
 
                 double ledgerGap = 0.15 * sp;
                 double ledgerLen = ctx.conf().styleS(Sid::ledgerLineLength).val() * sp;
+                int firstLedgerBelow = staff->lines(bottomUpNote->tick()) * 2;
+                int topDownStemLen = 0;
                 if (!conflictUnison && topDownNote->chord()->stem()) {
-                    int topDownStemLen = topDownNote->chord()->stem()->length() / sp * 2;
-                    int firstLedgerBelow = staff->lines(bottomUpNote->tick()) * 2;
+                    topDownStemLen = std::round(topDownNote->chord()->stem()->ldata()->bbox().height() / sp * 2);
                     if (bottomUpNote->line() > firstLedgerBelow - 1 && topDownNote->line() < bottomUpNote->line()
                         && topDownNote->line() + topDownStemLen >= firstLedgerBelow) {
                         ledgerOverlapBelow = true;
                     }
                 }
 
+                int firstLedgerAbove = -2;
+                int bottomUpStemLen = 0;
                 if (!conflictUnison && bottomUpNote->chord()->stem()) {
-                    int bottomUpStemLen = bottomUpNote->chord()->stem()->length() / sp * 2;
-                    int firstLedgerAbove = -2;
+                    bottomUpStemLen = std::round(bottomUpNote->chord()->stem()->ldata()->bbox().height() / sp * 2);
                     if (topDownNote->line() < -1 && topDownNote->line() < bottomUpNote->line()
                         && bottomUpNote->line() - bottomUpStemLen <= firstLedgerAbove) {
                         ledgerOverlapAbove = true;
@@ -1774,13 +1776,18 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                     downOffset = maxUpWidth + adjSpace;
                 } else if (conflictSecondDownHigher) {
                     if (downDots && !upDots) {
-                        downOffset = maxUpWidth + 0.2 * sp;
+                        double adjSpace = (ledgerOverlapAbove || ledgerOverlapBelow) ? ledgerGap + ledgerLen : 0.2 * sp;
+                        downOffset = maxUpWidth + adjSpace;
                     } else {
-                        upOffset = maxDownWidth + 0.15 * sp;
+                        // Prevent ledger line & notehead collision
+                        double adjSpace
+                            = (topDownNote->line() <= firstLedgerAbove
+                               || bottomUpNote->line() >= firstLedgerBelow) ? ledgerLen - ledgerGap - 0.2 * sp : -0.2 * sp;
+                        upOffset = maxDownWidth + adjSpace;
                         if (downHooks) {
                             bool needsHookSpace = (ledgerOverlapBelow || ledgerOverlapAbove);
-                            double hookSpace = topDownNote->chord()->hook()->width() + ledgerLen + ledgerGap;
-                            upOffset = needsHookSpace ? hookSpace : upOffset + 0.3 * sp;
+                            double hookSpace = topDownNote->chord()->hook()->width();
+                            upOffset = needsHookSpace ? hookSpace + ledgerLen + ledgerGap : upOffset + 0.3 * sp;
                         }
                     }
                 } else {
@@ -1806,7 +1813,12 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                         downDots = 0;             // no need to adjust for dots in this case
                     }
                     upOffset = std::max(clearLeft, clearRight);
-                    if (downHooks) {
+                    // Check if there's enough space to tuck under a flag
+                    Note* topUpNote = upStemNotes.back();
+                    // Move notes out of the way of straight flags
+                    int pad = ctx.conf().styleB(Sid::useStraightNoteFlags) ? 2 : 1;
+                    bool overlapsFlag = topDownNote->line() + topDownStemLen + pad > topUpNote->line();
+                    if (downHooks && (ledgerOverlapBelow || overlapsFlag)) {
                         // we will need more space to avoid collision with hook
                         // but we won't need as much dot adjustment
                         if (ledgerOverlapBelow) {
