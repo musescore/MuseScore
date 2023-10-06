@@ -53,7 +53,6 @@ class NotationNavigatorViewRect : public QQuickPaintedItem
 public:
     NotationNavigatorViewRect(QQuickItem* parent = nullptr);
 
-    RectF getRect();
     void setRect(RectF cursorRect);
 };
 
@@ -105,6 +104,7 @@ private:
 
     PageList pages() const;
 
+    RectF m_cursorRect;
     std::unique_ptr<NotationNavigatorViewRect> m_viewRect;
     PointF m_startMove;
 };

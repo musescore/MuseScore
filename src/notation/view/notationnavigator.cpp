@@ -37,7 +37,6 @@ using namespace mu::notation;
 NotationNavigatorViewRect::NotationNavigatorViewRect(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
-    this->setSize(parent->size()); // FIXME: doesn't set the size
 }
 
 void NotationNavigatorViewRect::paint(QPainter* painter)
@@ -50,11 +49,6 @@ void NotationNavigatorViewRect::paint(QPainter* painter)
     painter->setBrush(QColor(color.red(), color.green(), color.blue(), configuration()->cursorOpacity()));
 
     painter->drawRect(m_cursorRect.toQRectF());
-}
-
-mu::RectF NotationNavigatorViewRect::getRect()
-{
-    return m_cursorRect;
 }
 
 void NotationNavigatorViewRect::setRect(RectF cursorRect)
@@ -139,15 +133,14 @@ void NotationNavigator::mousePressEvent(QMouseEvent* event)
 {
     TRACEFUNC;
 
-    RectF cursorRect = m_viewRect->getRect();
     PointF logicPos = toLogical(event->pos());
     m_startMove = logicPos;
-    if (cursorRect.contains(logicPos)) {
+    if (m_cursorRect.contains(logicPos)) {
         return;
     }
 
-    double dx = logicPos.x() - (cursorRect.x() + (cursorRect.width() / 2));
-    double dy = logicPos.y() - (cursorRect.y() + (cursorRect.height() / 2));
+    double dx = logicPos.x() - (m_cursorRect.x() + (m_cursorRect.width() / 2));
+    double dy = logicPos.y() - (m_cursorRect.y() + (m_cursorRect.height() / 2));
 
     moveNotationRequested(-dx, -dy);
 }
@@ -220,8 +213,10 @@ void NotationNavigator::setCursorRect(const QRectF& rect)
     RectF newCursorRect = notationContentRect().intersected(RectF::fromQRectF(rect));
 
     bool moved = moveCanvasToRect(newCursorRect);
+    m_cursorRect = newCursorRect;
 
-    m_viewRect->setRect(newCursorRect);
+    m_viewRect->setSize(this->size());
+    m_viewRect->setRect(fromLogical(newCursorRect));
 
     rescale();
     if (moved) {
