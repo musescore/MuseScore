@@ -936,6 +936,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     std::vector<Spanner*> spanner;
     for (auto interval : spanners) {
         Spanner* sp = interval.value;
+        if (sp->staff() && !sp->staff()->show()) {
+            continue;
+        }
+
         sp->computeStartElement();
         sp->computeEndElement();
         ctx.mutState().processedSpanners().insert(sp);
@@ -1037,6 +1041,10 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     for (auto interval : spanners) {
         Spanner* sp = interval.value;
+        if (sp->staff() && !sp->staff()->show()) {
+            continue;
+        }
+
         if (sp->tick() < etick && sp->tick2() > stick) {
             if (sp->isOttava()) {
                 if (sp->staff()->staffType()->isTabStaff()) {
