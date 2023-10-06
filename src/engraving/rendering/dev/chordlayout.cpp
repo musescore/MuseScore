@@ -3149,6 +3149,7 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
 
 void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx)
 {
+    UNUSED(ctx);
     std::set<staff_idx_t> shapesToRecreate;
     std::list<Note*> notes;
     Segment* segment = chord->segment();
