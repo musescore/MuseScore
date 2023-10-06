@@ -1581,7 +1581,8 @@ public:
         : diagram(_diagram), pedalState(_pedalState) {}
 
     UNDO_NAME("ChangeHarpPedalState")
-    UNDO_CHANGED_OBJECTS({ diagram })
+//    UNDO_CHANGED_OBJECTS({ diagram })
+    std::vector<const EngravingObject*> objectItems() const override;
 };
 
 //---------------------------------------------------------
@@ -1607,7 +1608,8 @@ public:
     }
 
     UNDO_NAME("ChangeSingleHarpPedal")
-    UNDO_CHANGED_OBJECTS({ diagram });
+//    UNDO_CHANGED_OBJECTS({ diagram });
+    std::vector<const EngravingObject*> objectItems() const override;
 };
 } // namespace mu::engraving
 #endif
