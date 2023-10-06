@@ -92,6 +92,8 @@ private:
 
     void doSetCurrentPreset(const QString& preset);
 
+    QString fixStringValue(const QString& stringValue) const;
+
     QList<StringTuningsItem*> m_strings;
 
     std::string m_itemId;

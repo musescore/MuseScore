@@ -124,7 +124,8 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
 
     StringTuningsItem* item = m_strings.at(stringIndex);
 
-    int value = engraving::string2pitch(stringValue);
+    QString _stringValue = fixStringValue(stringValue);
+    int value = engraving::string2pitch(_stringValue);
     if (value == -1) {
         item->valueChanged();
         return false;
@@ -144,22 +145,26 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
 
 bool StringTuningsSettingsModel::canIncreaseStringValue(const QString& stringValue) const
 {
-    return engraving::string2pitch(stringValue) != -1;
+    QString value = fixStringValue(stringValue);
+    return engraving::string2pitch(value) != -1;
 }
 
 QString StringTuningsSettingsModel::increaseStringValue(const QString& stringValue)
 {
-    return engraving::pitch2string(engraving::string2pitch(stringValue) + 1);
+    QString value = fixStringValue(stringValue);
+    return engraving::pitch2string(engraving::string2pitch(value) + 1);
 }
 
 bool StringTuningsSettingsModel::canDecreaseStringValue(const QString& stringValue) const
 {
-    return engraving::string2pitch(stringValue) != -1;
+    QString value = fixStringValue(stringValue);
+    return engraving::string2pitch(value) != -1;
 }
 
 QString StringTuningsSettingsModel::decreaseStringValue(const QString& stringValue)
 {
-    return engraving::pitch2string(engraving::string2pitch(stringValue) - 1);
+    QString value = fixStringValue(stringValue);
+    return engraving::pitch2string(engraving::string2pitch(value) - 1);
 }
 
 QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
@@ -304,21 +309,23 @@ void StringTuningsSettingsModel::updateStrings()
     m_strings.clear();
 
     for (const QVariant& _preset : presets) {
-        if (_preset.toMap()["text"].toString() != currentPreset) {
-            continue;
-        }
+        if (_preset.toMap()["text"].toString() == currentPreset) {
+            QVariantList valueList = _preset.toMap()["value"].toList();
+            int numOfStrings = valueList.size();
+            for (int i = 0; i < numOfStrings; ++i) {
+                int valueIndex = numOfStrings - i - 1;
+                StringTuningsItem* item = new StringTuningsItem(this);
 
-        QVariantList valueList = _preset.toMap()["value"].toList();
-        for (int i = 0; i < valueList.size(); ++i) {
-            StringTuningsItem* item = new StringTuningsItem(this);
+                item->blockSignals(true);
+                item->setShow(true);
+                item->setNumber(QString::number(i + 1));
+                item->setValue(valueList[valueIndex].toInt());
+                item->blockSignals(false);
 
-            item->blockSignals(true);
-            item->setShow(true);
-            item->setNumber(QString::number(i + 1));
-            item->setValue(valueList[i].toInt());
-            item->blockSignals(false);
+                m_strings.push_back(item);
+            }
 
-            m_strings.push_back(item);
+            break;
         }
     }
 
@@ -397,6 +404,27 @@ void StringTuningsSettingsModel::doSetCurrentPreset(const QString& preset)
 {
     changeItemProperty(mu::engraving::Pid::STRINGTUNINGS_PRESET, String::fromQString(preset));
     emit currentPresetChanged();
+}
+
+QString StringTuningsSettingsModel::fixStringValue(const QString& stringValue) const
+{
+    if (stringValue.isEmpty()) {
+        return QString();
+    }
+
+    QString value = stringValue[0];
+    for (int i = 1; i < stringValue.size(); ++i) {
+        QChar symbol = stringValue[i].toLower();
+        if (symbol == "b") {
+            value.append("♭");
+        } else if (symbol == "#") {
+            value.append("♯");
+        } else {
+            value.append(symbol);
+        }
+    }
+
+    return value;
 }
 
 StringTuningsItem::StringTuningsItem(QObject* parent)

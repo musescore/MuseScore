@@ -206,6 +206,16 @@ bool Rest::acceptDrop(EditData& data) const
         return true;
     }
 
+    if (type == ElementType::STRING_TUNINGS) {
+        staff_idx_t staffIdx;
+        Segment* seg;
+        if (!score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0)) {
+            return false;
+        }
+
+        return measure()->canAddStringTunings(staffIdx);
+    }
+
     // prevent 'hanging' slurs, avoid crash on tie
     static const std::set<ElementType> ignoredTypes {
         ElementType::SLUR,
@@ -267,6 +277,9 @@ EngravingItem* Rest::drop(EditData& data)
         e->setParent(this);
         score()->undoAddElement(e);
         return e;
+
+    case ElementType::STRING_TUNINGS:
+        return measure()->drop(data);
 
     default:
         return ChordRest::drop(data);

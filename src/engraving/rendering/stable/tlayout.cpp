@@ -317,7 +317,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::STICKING:         layout(item_cast<Sticking*>(item), ctx);
         break;
-    case ElementType::STRING_TUNINGS:   layout(item_cast<StringTunings*>(item), ctx);
+    case ElementType::STRING_TUNINGS:   layoutStringTunings(item_cast<StringTunings*>(item), ctx);
         break;
     case ElementType::SYMBOL:           layout(item_cast<Symbol*>(item), ctx);
         break;
@@ -4506,10 +4506,59 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
     item->setPos(0.0, 0.0);
 }
 
-void TLayout::layout(StringTunings* item, LayoutContext& ctx)
+void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
 {
     item->updateText();
-    layoutTextBase(item, ctx);
+
+    TLayout::layoutTextBase(item, ctx);
+
+    if (item->noStringVisible()) {
+        double spatium = item->spatium();
+        mu::draw::Font font(item->font());
+
+        RectF rect;
+        rect.setTopLeft({ 0, item->ldata()->bbox().y() - font.weight() - spatium * .15 });
+        rect.setSize({ font.weight() - spatium, (font.weight() - spatium * .35) * 1.5 });
+
+        item->setbbox(rect);
+    }
+
+    for (TextBlock& block : item->mutldata()->blocks) {
+        for (TextFragment& fragment : block.fragments()) {
+            mu::draw::Font font = fragment.font(item);
+            if (font.type() == mu::draw::Font::Type::MusicSymbol) {
+                // HACK: the music symbol doesn't have a good baseline
+                // to go with text so we correct it here
+                const double baselineAdjustment = 0.35 * font.pointSizeF();
+                fragment.pos.setY(fragment.pos.y() + baselineAdjustment);
+            }
+        }
+    }
+
+    double secondStringXAlign = 0.0;
+    for (const TextFragment& fragment : item->fragmentList()) {
+        if (fragment.font(item).type() == mu::draw::Font::Type::MusicSymbol) {
+            secondStringXAlign = std::max(secondStringXAlign, fragment.pos.x());
+        }
+    }
+
+    for (TextBlock& block : item->mutldata()->blocks) {
+        double xMove = 0.0;
+        for (TextFragment& fragment : block.fragments()) {
+            if (block.fragments().front() == fragment) {  // skip first
+                continue;
+            }
+
+            if (fragment.font(item).type() == mu::draw::Font::Type::MusicSymbol) {
+                xMove = secondStringXAlign - fragment.pos.x();
+            }
+            fragment.pos.setX(fragment.pos.x() + xMove);
+        }
+    }
+
+    Segment* parentSegment = item->segment();
+    item->move(PointF(-parentSegment->x(), 0.0));
+
     Autoplace::autoplaceSegmentElement(item, item->mutldata());
 }
 

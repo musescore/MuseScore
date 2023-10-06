@@ -240,7 +240,7 @@ bool StringTunings::noStringVisible() const
 String StringTunings::generateText() const
 {
     const StringData* stringData = this->stringData();
-    if (stringData->isNull()) {
+    if (!stringData || stringData->isNull()) {
         return u"";
     }
 

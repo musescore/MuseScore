@@ -369,7 +369,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         layoutSticking(item_cast<const Sticking*>(item), static_cast<Sticking::LayoutData*>(ldata));
         break;
     case ElementType::STRING_TUNINGS:
-        layout(item_cast<StringTunings*>(item), ctx);
+        layoutStringTunings(item_cast<StringTunings*>(item), ctx);
         break;
     case ElementType::SYMBOL:
         layoutSymbol(item_cast<const Symbol*>(item), static_cast<Symbol::LayoutData*>(ldata), ctx);
@@ -4973,10 +4973,11 @@ void TLayout::layoutStretched(StretchedBend* item, LayoutContext& ctx)
     item->setPos(0.0, 0.0);
 }
 
-void TLayout::layout(StringTunings* item, LayoutContext& ctx)
+void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
 {
     item->updateText();
-    layoutTextBase(item, ctx);
+
+    TLayout::layoutBaseTextBase(item, ctx);
 
     if (item->noStringVisible()) {
         double spatium = item->spatium();
@@ -5010,8 +5011,11 @@ void TLayout::layout(StringTunings* item, LayoutContext& ctx)
 
     for (TextBlock& block : item->mutldata()->blocks) {
         double xMove = 0.0;
-        for (auto& it = ++(block.fragments().begin()); it != block.fragments().end(); ++it) {
-            TextFragment& fragment = *it;
+        for (TextFragment& fragment : block.fragments()) {
+            if (block.fragments().front() == fragment) {  // skip first
+                continue;
+            }
+
             if (fragment.font(item).type() == mu::draw::Font::Type::MusicSymbol) {
                 xMove = secondStringXAlign - fragment.pos.x();
             }

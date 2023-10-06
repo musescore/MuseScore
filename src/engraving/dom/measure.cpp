@@ -1333,23 +1333,7 @@ bool Measure::acceptDrop(EditData& data) const
         return true;
 
     case ElementType::STRING_TUNINGS: {
-        const StringData* stringData = score()->staff(staffIdx)->part()->instrument(tick())->stringData();
-        if (!stringData || stringData->frettedStrings() == 0) {
-            return false;
-        }
-
-        // already a string tunings element in this measure
-        bool alreadyHasStringTunings = false;
-        for (const Segment& segment : m_segments) {
-            for (EngravingItem* element : segment.annotations()) {
-                if (element && element->isStringTunings()) {
-                    alreadyHasStringTunings = true;
-                    break;
-                }
-            }
-        }
-
-        if (alreadyHasStringTunings) {
+        if (!canAddStringTunings(staffIdx)) {
             return false;
         }
 
@@ -3209,6 +3193,27 @@ void Measure::checkTrailer()
             break;
         }
     }
+}
+
+bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
+{
+    const StringData* stringData = score()->staff(staffIdx)->part()->instrument(tick())->stringData();
+    if (!stringData || stringData->frettedStrings() == 0) {
+        return false;
+    }
+
+    // already a string tunings element in this measure
+    bool alreadyHasStringTunings = false;
+    for (const Segment& segment : m_segments) {
+        for (EngravingItem* element : segment.annotations()) {
+            if (element && element->isStringTunings()) {
+                alreadyHasStringTunings = true;
+                break;
+            }
+        }
+    }
+
+    return !alreadyHasStringTunings;
 }
 
 void Measure::stretchToTargetWidth(double targetWidth)
