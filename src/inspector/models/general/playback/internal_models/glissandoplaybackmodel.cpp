@@ -44,6 +44,7 @@ void GlissandoPlaybackModel::createProperties()
 void GlissandoPlaybackModel::requestElements()
 {
     m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::GLISSANDO);
+    updateIsHarpGliss();
 }
 
 void GlissandoPlaybackModel::loadProperties()
@@ -56,15 +57,33 @@ void GlissandoPlaybackModel::resetProperties()
     m_styleType->resetToDefault();
 }
 
-bool GlissandoPlaybackModel::isHarpGliss() const
+void GlissandoPlaybackModel::updateIsHarpGliss()
 {
-    for (mu::engraving::EngravingItem* element : selection()->elements()) {
-        if (element->isGlissandoSegment()) {
-            Glissando* gliss = toGlissando(element);
-            return gliss->isHarpGliss();
+    bool isHarpGliss = false;
+    for (EngravingItem* element : m_elementList) {
+        if (element->isGlissando()) {
+            if (toGlissando(element)->isHarpGliss()) {
+                isHarpGliss = true;
+                break;
+            }
         }
     }
-    return false;
+    setIsHarpGliss(isHarpGliss);
+}
+
+bool GlissandoPlaybackModel::isHarpGliss() const
+{
+    return m_isHarpGliss;
+}
+
+void GlissandoPlaybackModel::setIsHarpGliss(bool isHarpGliss)
+{
+    if (isHarpGliss == m_isHarpGliss) {
+        return;
+    }
+
+    m_isHarpGliss = isHarpGliss;
+    emit isHarpGlissChanged(m_isHarpGliss);
 }
 
 PropertyItem* GlissandoPlaybackModel::styleType() const

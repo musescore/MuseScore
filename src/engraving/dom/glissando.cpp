@@ -208,19 +208,19 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
         // Obey harp pedal diagrams if on a harp staff
         if (glissando->isHarpGliss()) {
             HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
-            std::set<int> playableTpcs = hd ? hd->getPlayableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
+            std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
             std::vector<int> playablePitches;
             for (int t : playableTpcs) {
                 playablePitches.push_back(tpc2pitch(t) % PITCH_DELTA_OCTAVE);
             }
 
-            // Check for enharmonic on the next string
+            // Push starting note, then check for enharmonic on the next string.  If there is an enharmonic, 0 will be pushed back twice
+            pitchOffsets.push_back(0);
             int en = noteStart->tpc() + TPC_DELTA_ENHARMONIC * -direction;
             // Harp pedalling will only have 1 flat or sharp
             if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
                 pitchOffsets.push_back(0);
             }
-            pitchOffsets.push_back(pitchStart - pitchStart);
 
             for (int p = pitchStart + direction; p != pitchEnd; p += direction) {
                 // Count times pitch occurs in harp pedalling - this accounts for enharmonics

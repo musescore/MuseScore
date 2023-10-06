@@ -33,9 +33,9 @@ ExpandableBlank {
 
     property int navigationRowEnd: contentItem.navigationRowEnd
 
-    enabled: model ? !model.isEmpty : false
+    readonly property bool isHarpGliss: model ? model.isHarpGliss : false
 
-    property bool isHarpGliss: model ? model.isHarpGliss : false
+    enabled: model ? !model.isEmpty : false
 
     title: model ? model.title : ""
 
