@@ -1322,15 +1322,63 @@ static void defaults(XmlWriter& xml, const MStyle& s, double& millimeters, const
 
     writePageFormat(s, xml, INCH / millimeters * tenths);
 
-    // TODO: also write default system layout here
     // when exporting only manual or no breaks, system-distance is not written at all
+    if (s.styleB(Sid::dividerLeft) || s.styleB(Sid::dividerRight)) {
+        xml.startElement("system-layout");
+        xml.startElement("system-dividers");
+        if (s.styleB(Sid::dividerLeft)) {
+            xml.tag("left-divider", { { "print-object", "yes" },
+                        { "relative-x", s.styleD(Sid::dividerLeftX) * 10 },
+                        { "relative-y", s.styleD(Sid::dividerLeftY) * 10 } });
+        } else {
+            xml.tag("left-divider", { { "print-object", "no" } });
+        }
+        if (s.styleB(Sid::dividerRight)) {
+            xml.tag("right-divider", { { "print-object", "yes" },
+                        { "relative-x", s.styleD(Sid::dividerRightX) * 10 },
+                        { "relative-y", s.styleD(Sid::dividerRightY) * 10 } });
+        } else {
+            xml.tag("right-divider", { { "print-object", "no" } });
+        }
+        xml.endElement();
+        xml.endElement();
+    }
+
+    {
+        xml.startElement("appearance");
+        // line width values in tenth
+        xml.tag("line-width", { { "type", "light barline" } }, s.styleS(Sid::barWidth).val() * 10);
+        xml.tag("line-width", { { "type", "heavy barline" } }, s.styleS(Sid::endBarWidth).val() * 10);
+        xml.tag("line-width", { { "type", "beam" } }, s.styleS(Sid::beamWidth).val() * 10);
+        xml.tag("line-width", { { "type", "bracket" } }, s.styleS(Sid::bracketWidth).val() * 10);
+        xml.tag("line-width", { { "type", "dashes" } }, s.styleS(Sid::lyricsDashLineThickness).val() * 10);
+        xml.tag("line-width", { { "type", "enclosure" } }, s.styleD(Sid::staffTextFrameWidth) * 10);
+        xml.tag("line-width", { { "type", "ending" } }, s.styleS(Sid::voltaLineWidth).val() * 10);
+        xml.tag("line-width", { { "type", "extend" } }, s.styleS(Sid::lyricsLineThickness).val() * 10);
+        xml.tag("line-width", { { "type", "leger" } }, s.styleS(Sid::ledgerLineWidth).val() * 10);
+        xml.tag("line-width", { { "type", "pedal" } }, s.styleS(Sid::pedalLineWidth).val() * 10);
+        xml.tag("line-width", { { "type", "octave shift" } }, s.styleS(Sid::ottavaLineWidth).val() * 10);
+        xml.tag("line-width", { { "type", "slur middle" } }, s.styleS(Sid::SlurMidWidth).val() * 10);
+        xml.tag("line-width", { { "type", "slur tip" } }, s.styleS(Sid::SlurEndWidth).val() * 10);
+        xml.tag("line-width", { { "type", "staff" } }, s.styleS(Sid::staffLineWidth).val() * 10);
+        xml.tag("line-width", { { "type", "stem" } }, s.styleS(Sid::stemWidth).val() * 10);
+        xml.tag("line-width", { { "type", "tie middle" } }, s.styleS(Sid::SlurMidWidth).val() * 10);
+        xml.tag("line-width", { { "type", "tie tip" } }, s.styleS(Sid::SlurEndWidth).val() * 10);
+        xml.tag("line-width", { { "type", "tuplet bracket" } }, s.styleS(Sid::tupletBracketWidth).val() * 10);
+        xml.tag("line-width", { { "type", "wedge" } }, s.styleS(Sid::hairpinLineWidth).val() * 10);
+        // note size values in percent
+        xml.tag("note-size", { { "type", "cue" } }, s.styleD(Sid::smallNoteMag) * 100);
+        xml.tag("note-size", { { "type", "grace" } }, s.styleD(Sid::graceNoteMag) * 100);
+        xml.tag("note-size", { { "type", "grace-cue" } }, s.styleD(Sid::graceNoteMag) * s.styleD(Sid::smallNoteMag) * 100);
+        xml.endElement();
+    }
 
     // font defaults
     // as MuseScore supports dozens of different styles, while MusicXML only has defaults
-    // for music (TODO), words and lyrics, use Tid STAFF (typically used for words)
+    // for music, words and lyrics, use Tid STAFF (typically used for words)
     // and LYRIC1 to get MusicXML defaults
 
-    // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
+    xml.tag("music-font", { { "font-family", s.styleSt(Sid::MusicalSymbolFont) } });
     xml.tag("word-font", { { "font-family", s.styleSt(Sid::staffTextFontFace) }, { "font-size", s.styleD(Sid::staffTextFontSize) } });
     xml.tag("lyric-font",
             { { "font-family", s.styleSt(Sid::lyricsOddFontFace) }, { "font-size", s.styleD(Sid::lyricsOddFontSize) } });

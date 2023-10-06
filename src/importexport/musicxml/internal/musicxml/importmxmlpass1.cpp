@@ -1535,9 +1535,7 @@ void MusicXMLParserPass1::defaults()
     bool isImportLayout = musicxmlImportLayout();
 
     while (_e.readNextStartElement()) {
-        if (_e.name() == "appearance") {
-            _e.skipCurrentElement();        // skip but don't log
-        } else if (_e.name() == "scaling") {
+        if (_e.name() == "scaling") {
             while (_e.readNextStartElement()) {
                 if (_e.name() == "millimeters") {
                     millimeter = _e.readElementText().toDouble();
@@ -1559,18 +1557,36 @@ void MusicXMLParserPass1::defaults()
             }
         } else if (_e.name() == "system-layout") {
             while (_e.readNextStartElement()) {
-                if (_e.name() == "system-dividers") {
-                    _e.skipCurrentElement();            // skip but don't log
-                } else if (_e.name() == "system-margins") {
+                if (_e.name() == "system-margins") {
                     _e.skipCurrentElement();            // skip but don't log
                 } else if (_e.name() == "system-distance") {
-                    Spatium val(_e.readElementText().toDouble() / 10.0);
+                    const Spatium val(_e.readElementText().toDouble() / 10.0);
                     if (isImportLayout) {
                         _score->style().set(Sid::minSystemDistance, val);
                         //LOGD("system distance %f", val.val());
                     }
                 } else if (_e.name() == "top-system-distance") {
                     _e.skipCurrentElement();            // skip but don't log
+                } else if (_e.name() == "system-dividers") {
+                    while (_e.readNextStartElement()) {
+                        if (_e.name() == "left-divider") {
+                            _score->style().set(Sid::dividerLeft, !(_e.attributes().value("print-object") == "no"));
+                            if (isImportLayout) {
+                                _score->style().set(Sid::dividerLeftX, _e.attributes().value("relative-x").toDouble() / 10.0);
+                                _score->style().set(Sid::dividerLeftY, _e.attributes().value("relative-y").toDouble() / 10.0);
+                            }
+                            _e.skipCurrentElement();
+                        } else if (_e.name() == "right-divider") {
+                            _score->style().set(Sid::dividerRight, !(_e.attributes().value("print-object") == "no"));
+                            if (isImportLayout) {
+                                _score->style().set(Sid::dividerRightX, _e.attributes().value("relative-x").toDouble() / 10.0);
+                                _score->style().set(Sid::dividerRightY, _e.attributes().value("relative-y").toDouble() / 10.0);
+                            }
+                            _e.skipCurrentElement();
+                        } else {
+                            skipLogCurrElem();
+                        }
+                    }
                 } else {
                     skipLogCurrElem();
                 }
@@ -1586,6 +1602,8 @@ void MusicXMLParserPass1::defaults()
                     skipLogCurrElem();
                 }
             }
+        } else if (_e.name() == "appearance") {
+            _e.skipCurrentElement();        // skip but don't log
         } else if (_e.name() == "music-font") {
             _e.skipCurrentElement();        // skip but don't log
         } else if (_e.name() == "word-font") {
