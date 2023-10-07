@@ -36,7 +36,7 @@ class IMidiOutPort : MODULE_EXPORT_INTERFACE
 public:
     virtual ~IMidiOutPort() = default;
 
-    virtual MidiDeviceList availableDevices() const = 0;
+    virtual std::vector<MidiDevice> availableDevices() const = 0;
     virtual async::Notification availableDevicesChanged() const = 0;
 
     virtual Ret connect(const MidiDeviceID& deviceID) = 0;

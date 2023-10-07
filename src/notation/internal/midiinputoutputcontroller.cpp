@@ -91,10 +91,10 @@ void MidiInputOutputController::checkOutputConnection()
 }
 
 void MidiInputOutputController::checkConnection(const midi::MidiDeviceID& preferredDeviceId, const midi::MidiDeviceID& currentDeviceId,
-                                                const midi::MidiDeviceList& availableDevices,
+                                                const std::vector<midi::MidiDevice>& availableDevices,
                                                 const std::function<Ret(const midi::MidiDeviceID&)>& connectCallback)
 {
-    auto containsDevice = [](const MidiDeviceList& devices, const MidiDeviceID& deviceId) {
+    auto containsDevice = [](const std::vector<MidiDevice>& devices, const MidiDeviceID& deviceId) {
         for (const MidiDevice& device : devices) {
             if (device.id == deviceId) {
                 return true;
@@ -150,7 +150,7 @@ void MidiInputOutputController::onMidiEventReceived(const midi::tick_t tick, con
     }
 }
 
-mu::midi::MidiDeviceID MidiInputOutputController::firstAvailableDeviceId(const midi::MidiDeviceList& devices) const
+mu::midi::MidiDeviceID MidiInputOutputController::firstAvailableDeviceId(const std::vector<midi::MidiDevice>& devices) const
 {
     for (const midi::MidiDevice& device : devices) {
         if (device.id == midi::NONE_DEVICE_ID) {

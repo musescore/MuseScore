@@ -164,9 +164,9 @@ void CoreMidiOutPort::initCore()
     }
 }
 
-MidiDeviceList CoreMidiOutPort::availableDevices() const
+std::vector<MidiDevice> CoreMidiOutPort::availableDevices() const
 {
-    MidiDeviceList ret;
+    std::vector<MidiDevice> ret;
 
     ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
 

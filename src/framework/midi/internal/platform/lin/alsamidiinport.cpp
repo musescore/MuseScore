@@ -70,7 +70,7 @@ void AlsaMidiInPort::deinit()
     }
 }
 
-MidiDeviceList AlsaMidiInPort::availableDevices() const
+std::vector<MidiDevice> AlsaMidiInPort::availableDevices() const
 {
     std::lock_guard lock(m_devicesMutex);
 
@@ -79,7 +79,7 @@ MidiDeviceList AlsaMidiInPort::availableDevices() const
     const unsigned int type_hw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
     const unsigned int type_sw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_SOFTWARE;
 
-    MidiDeviceList ret;
+    std::vector<MidiDevice> ret;
 
     ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
 

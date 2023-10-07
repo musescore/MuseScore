@@ -138,8 +138,6 @@ struct MidiDevice {
     }
 };
 
-using MidiDeviceList = std::vector<MidiDevice>;
-
 inline MidiDeviceID makeUniqueDeviceId(int index, int arg1, int arg2)
 {
     return std::to_string(index) + ":" + std::to_string(arg1) + ":" + std::to_string(arg2);
