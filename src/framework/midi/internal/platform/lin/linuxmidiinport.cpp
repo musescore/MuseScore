@@ -31,6 +31,7 @@ using namespace mu::midi;
 
 void LinuxMidiInPort::init()
 {
+    LOGI(" -- linux init --");
     //m_alsa = std::make_shared<Linux>();
 
     m_devicesListener.startWithCallback([this]() {

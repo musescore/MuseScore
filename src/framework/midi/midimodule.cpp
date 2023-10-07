@@ -29,6 +29,7 @@
 
 #include "ui/iuiengine.h"
 #include "view/devtools/midiportdevmodel.h"
+#include "framework/audio/audiomodule.h"
 
 #include "log.h"
 
@@ -83,6 +84,7 @@ void MidiModule::registerUiTypes()
 
 void MidiModule::onInit(const IApplication::RunMode& mode)
 {
+    LOGI("-- onInit --");
     m_configuration->init();
 
     if (mode == IApplication::RunMode::GuiApp) {
@@ -96,3 +98,12 @@ void MidiModule::onDeinit()
     m_midiOutPort->deinit();
     m_midiInPort->deinit();
 }
+
+void MidiModule::preamble(mu::audio::AudioModule* am)
+{
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    LOGI("-- audiomodule: %lx", am);
+    m_audioDriver = am->getDriver();
+#endif
+}
+

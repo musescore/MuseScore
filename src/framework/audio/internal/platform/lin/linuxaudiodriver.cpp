@@ -41,6 +41,7 @@ LinuxAudioDriver::~LinuxAudioDriver()
 
 void LinuxAudioDriver::init()
 {
+    LOGI(" -- init --");
     m_devicesListener.startWithCallback([this]() {
         return availableOutputDevices();
     });

@@ -62,6 +62,10 @@ public:
     void onDeinit() override;
     void onDestroy() override;
 
+    #ifdef Q_OS_LINUX
+    std::shared_ptr<IAudioDriver> getDriver() { return  m_audioDriver; }
+    #endif
+
 private:
     void setupAudioDriver(const IApplication::RunMode& mode);
     void setupAudioWorker(const IAudioDriver::Spec& activeSpec);

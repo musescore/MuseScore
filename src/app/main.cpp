@@ -259,9 +259,13 @@ int main(int argc, char** argv)
     // framework
     app.addModule(new mu::accessibility::AccessibilityModule());
     app.addModule(new mu::actions::ActionsModule());
-    app.addModule(new mu::audio::AudioModule());
     app.addModule(new mu::draw::DrawModule());
-    app.addModule(new mu::midi::MidiModule());
+    auto am = new mu::audio::AudioModule();
+    app.addModule(am);
+    auto mm = new mu::midi::MidiModule();
+    app.addModule(mm);
+    mm->preamble(am);
+
     app.addModule(new mu::mpe::MpeModule());
 #ifdef MUE_BUILD_MUSESAMPLER_MODULE
     app.addModule(new mu::musesampler::MuseSamplerModule());
