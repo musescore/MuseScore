@@ -26,10 +26,6 @@
 #include <QMouseEvent>
 #include <QPainter>
 #include <QQuickPaintedItem>
-#include <memory>
-#include <qpainter.h>
-#include <qquickpainteditem.h>
-#include <qwidget.h>
 
 #include "draw/types/geometry.h"
 #include "modularity/ioc.h"
@@ -47,13 +43,15 @@ class NotationNavigatorViewRect : public QQuickPaintedItem
 
     INJECT(INotationConfiguration, configuration)
 
-    virtual void paint(QPainter* painter) override;
-    RectF m_cursorRect;
-
 public:
     NotationNavigatorViewRect(QQuickItem* parent = nullptr);
 
-    void setRect(RectF cursorRect);
+    void setRect(const RectF& cursorRect);
+
+private:
+    virtual void paint(QPainter* painter) override;
+
+    RectF m_cursorRect;
 };
 
 class NotationNavigator : public AbstractNotationPaintView
@@ -105,7 +103,7 @@ private:
     PageList pages() const;
 
     RectF m_cursorRect;
-    std::unique_ptr<NotationNavigatorViewRect> m_viewRect;
+    NotationNavigatorViewRect* m_cursorRectView;
     PointF m_startMove;
 };
 }

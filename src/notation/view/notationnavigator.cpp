@@ -25,12 +25,6 @@
 #include "engraving/dom/system.h"
 
 #include "log.h"
-#include <memory>
-#include <qevent.h>
-#include <qpainter.h>
-#include <qquickitem.h>
-#include <qquickpainteditem.h>
-#include <qwidget.h>
 
 using namespace mu::notation;
 
@@ -51,13 +45,13 @@ void NotationNavigatorViewRect::paint(QPainter* painter)
     painter->drawRect(m_cursorRect.toQRectF());
 }
 
-void NotationNavigatorViewRect::setRect(RectF cursorRect)
+void NotationNavigatorViewRect::setRect(const RectF& cursorRect)
 {
     m_cursorRect = cursorRect;
 }
 
 NotationNavigator::NotationNavigator(QQuickItem* parent)
-    : AbstractNotationPaintView(parent), m_viewRect(std::make_unique<NotationNavigatorViewRect>(this))
+    : AbstractNotationPaintView(parent), m_cursorRectView(new NotationNavigatorViewRect(this))
 {
     setReadonly(true);
 }
@@ -71,7 +65,7 @@ void NotationNavigator::load()
 
     uiConfiguration()->currentThemeChanged().onNotify(this, [this]() {
         update();
-        m_viewRect->update();
+        m_cursorRectView->update();
     });
 
     AbstractNotationPaintView::load();
@@ -215,14 +209,14 @@ void NotationNavigator::setCursorRect(const QRectF& rect)
     bool moved = moveCanvasToRect(newCursorRect);
     m_cursorRect = newCursorRect;
 
-    m_viewRect->setSize(this->size());
-    m_viewRect->setRect(fromLogical(newCursorRect));
+    m_cursorRectView->setSize(this->size());
+    m_cursorRectView->setRect(fromLogical(newCursorRect));
 
     rescale();
     if (moved) {
         update();
     }
-    m_viewRect->update();
+    m_cursorRectView->update();
 }
 
 int NotationNavigator::orientation() const
