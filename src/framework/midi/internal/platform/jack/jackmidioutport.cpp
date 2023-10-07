@@ -39,8 +39,8 @@ using namespace mu::midi;
 
 void JackMidiOutPort::init()
 {
-    LOGI("---- linux JACK init ----");
-    m_jack = std::make_shared<Jack>();
+    LOGI("---- linux JACK-midi output init ----");
+    m_jack = std::make_unique<Jack>();
 }
 
 void JackMidiOutPort::deinit()
@@ -63,7 +63,7 @@ std::vector<MidiDevice> JackMidiOutPort::availableDevices() const
 
 mu::Ret JackMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
-    LOGI("---- linux JACK connect ----");
+    LOGI("---- JACK output connect ----");
     //----> common with jackaudio <----
     jack_client_t* client;
     jack_options_t options = (jack_options_t)0;
@@ -100,19 +100,19 @@ void JackMidiOutPort::disconnect()
 
 bool JackMidiOutPort::isConnected() const
 {
-    LOGI("---- linux JACK isConnect ----");
+    LOGI("---- JACK output isConnect ----");
     return m_jack && m_jack->midiOut && !m_deviceID.empty();
 }
 
 MidiDeviceID JackMidiOutPort::deviceID() const
 {
-    LOGI("---- linux JACK deviceID ----");
+    LOGI("---- JACK output deviceID ----");
     return m_deviceID;
 }
 
 bool JackMidiOutPort::supportsMIDI20Output() const
 {
-    LOGI("---- linux JACK supportsMIDI20Output ----");
+    LOGI("---- JACK output supportsMIDI20Output ----");
     return false;
 }
 
@@ -149,7 +149,7 @@ mu::Ret sendEvent_control (void *pb, int framePos, const Event& e) {
 mu::Ret sendEvent_program (void *pb, int framePos, const Event& e) {
     unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
     if (p == 0) {
-        qDebug("JackMidi: buffer overflow, event lost");
+        qDebug("JackMidiOutput: buffer overflow, event lost");
         return mu::Ret(false);
     }
     p[0] = /* e.opcode() */ 0xc0 | e.channel();
@@ -160,7 +160,7 @@ mu::Ret sendEvent_program (void *pb, int framePos, const Event& e) {
 mu::Ret sendEvent_pitchbend (void *pb, int framePos, const Event& e) {
     unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
     if (p == 0) {
-        qDebug("JackMidi: buffer overflow, event lost");
+        qDebug("JackMidiOutput: buffer overflow, event lost");
         return mu::Ret(false);
     }
     p[0] = /* e.opcode() */ 0xe0 | e.channel();
@@ -172,7 +172,7 @@ mu::Ret sendEvent_pitchbend (void *pb, int framePos, const Event& e) {
 mu::Ret JackMidiOutPort::sendEvent(const Event& e)
 {
     int framePos = 0;
-    LOGI() << "---- linux JACK sendEvent ----" << e.to_string();
+    LOGI() << "---- JACK-midi output sendEvent ----" << e.to_string();
     // LOGI() << e.to_string();
 
     if (!isConnected()) {
@@ -216,7 +216,7 @@ mu::Ret JackMidiOutPort::sendEvent(const Event& e)
 
 bool JackMidiOutPort::deviceExists(const MidiDeviceID& deviceId) const
 {
-    LOGI("---- linux JACK deviceExists ----");
+    LOGI("---- JACK-midi output deviceExists ----");
     for (const MidiDevice& device : availableDevices()) {
         if (device.id == deviceId) {
             return true;

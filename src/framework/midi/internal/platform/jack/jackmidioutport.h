@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,7 +23,6 @@
 #define MU_MIDI_JACKMIDIOUTPORT_H
 
 #include <memory>
-
 #include "midi/midiportstate.h"
 
 namespace mu::midi {
@@ -47,7 +46,7 @@ private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
     struct Jack;
-    std::shared_ptr<Jack> m_jack;
+    std::unique_ptr<Jack> m_jack;
     MidiDeviceID m_deviceID;
 };
 }

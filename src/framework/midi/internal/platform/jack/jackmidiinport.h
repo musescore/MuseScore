@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -23,56 +23,30 @@
 #define MU_MIDI_JACKMIDIINPORT_H
 
 #include <memory>
-#include <thread>
-
-#include "async/asyncable.h"
-
-#include "imidiinport.h"
-#include "internal/midideviceslistener.h"
+#include "midi/midiportstate.h"
 
 namespace mu::midi {
-class JackMidiInPort : public IMidiInPort, public async::Asyncable
+class JackMidiInPort : public MidiPortState
 {
 public:
     JackMidiInPort() = default;
     ~JackMidiInPort() = default;
-
     void init();
     void deinit();
 
     std::vector<MidiDevice> availableDevices() const override;
-    async::Notification availableDevicesChanged() const override;
-
     Ret connect(const MidiDeviceID& deviceID) override;
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
-    async::Notification deviceChanged() const override;
-
-    async::Channel<tick_t, Event> eventReceived() const override;
 
 private:
-    Ret run();
-    void stop();
-
-    static void process(JackMidiInPort* self);
-    void doProcess();
-
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
     struct Jack;
-    std::shared_ptr<Jack> m_jack;
+    std::unique_ptr<Jack> m_jack;
     MidiDeviceID m_deviceID;
-    std::shared_ptr<std::thread> m_thread;
-    std::atomic<bool> m_running{ false };
-    async::Notification m_deviceChanged;
 
-    async::Notification m_availableDevicesChanged;
-    MidiDevicesListener m_devicesListener;
-
-    mutable std::mutex m_devicesMutex;
-
-    async::Channel<tick_t, Event > m_eventReceived;
 };
 }
 
