@@ -4,8 +4,8 @@
 
 <?define ProdName="$(var.MUSESCORE_NAME_VERSION)"?>
 <?define ShortProdName="$(var.CPACK_PACKAGE_NAME)$(var.CPACK_PACKAGE_VERSION_MAJOR)$(var.MUSESCORE_VERSION_LABEL)"?>
-<?define ExeName="$(var.CPACK_PACKAGE_NAME)$(var.CPACK_PACKAGE_VERSION_MAJOR).exe"?>
 <?define ExeKey="$(var.ShortProdName).exe"?>
+<?define ExeName="$(var.MUSESCORE_EXECUTABLE_NAME).exe"?>
 <?define RegistryRoot="HKMU"?> <!--HKCU / HKLM-->
 
 <?if "$(var.MUSESCORE_VERSION_LABEL)" != ""?>
