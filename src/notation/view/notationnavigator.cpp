@@ -209,10 +209,10 @@ void NotationNavigator::setCursorRect(const QRectF& rect)
     bool moved = moveCanvasToRect(newCursorRect);
     m_cursorRect = newCursorRect;
 
+    rescale();
     m_cursorRectView->setSize(this->size());
     m_cursorRectView->setRect(fromLogical(newCursorRect));
 
-    rescale();
     if (moved) {
         update();
     }
