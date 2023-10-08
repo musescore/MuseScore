@@ -550,24 +550,24 @@ Rectangle {
                 buttonLayout: ButtonBoxModel.WinLayout
 
                 FlatButton {
-                    text: qsTr("Details")
+                    text: "Details"
                     buttonRole: ButtonBoxModel.CustomRole
                     buttonId: ButtonBoxModel.CustomButton + 1
                     isLeftSide: true
                 }
 
                 FlatButton {
-                    text: qsTr("Save")
+                    text: "Save"
                     buttonRole: ButtonBoxModel.AcceptRole
                     buttonId: ButtonBoxModel.Save
                 }
                 FlatButton {
-                    text: qsTr("Close")
+                    text: "Close"
                     buttonRole: ButtonBoxModel.DestructiveRole
                     buttonId: ButtonBoxModel.Close
                 }
                 FlatButton {
-                    text: qsTr("Details 2")
+                    text: "Details 2"
                     buttonRole: ButtonBoxModel.CustomRole
                     buttonId: ButtonBoxModel.CustomButton + 2
                     isLeftSide: false

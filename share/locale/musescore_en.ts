@@ -4822,29 +4822,6 @@ By default, they will be placed such as that their right end are at the same lev
     </message>
 </context>
 <context>
-    <name>GeneralComponentsGallery</name>
-    <message>
-        <location filename="../../src/appshell/qml/DevTools/Gallery/GeneralComponentsGallery.qml" line="553"/>
-        <source>Details</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/DevTools/Gallery/GeneralComponentsGallery.qml" line="560"/>
-        <source>Save</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/DevTools/Gallery/GeneralComponentsGallery.qml" line="565"/>
-        <source>Close</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/appshell/qml/DevTools/Gallery/GeneralComponentsGallery.qml" line="570"/>
-        <source>Details 2</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>KeyEdit</name>
     <message>
         <location filename="../../src/palette/view/widgets/keyedit.ui" line="38"/>
