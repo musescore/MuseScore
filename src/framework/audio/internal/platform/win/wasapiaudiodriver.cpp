@@ -369,4 +369,8 @@ unsigned int WasapiAudioDriver::minSupportedBufferSize() const
     }
 
     return closestBufferSize;
+
+bool WasapiAudioDriver::pushMidiEvent(muse::midi::Event&)
+{
+    return true;
 }

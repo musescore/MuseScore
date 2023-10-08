@@ -36,6 +36,7 @@ public:
     bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+    bool pushMidiEvent(muse::midi::Event& e) override;
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
 

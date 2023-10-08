@@ -38,6 +38,9 @@ public:
     bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
+    //std::shared_ptr<ThreadSafeQueue<const Event>&> getAudioDriverQueue() const override;
+    bool pushMidiEvent(muse::midi::Event& e) override;
+
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
 
@@ -46,6 +49,8 @@ public:
     float* m_buffer = nullptr;
 
     std::vector<jack_port_t*> m_outputPorts;
+    std::vector<jack_port_t*> m_midiOutputPorts;
+    ThreadSafeQueue<muse::midi::Event> m_midiQueue;
 
 private:
     std::string m_deviceName;
