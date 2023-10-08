@@ -532,10 +532,6 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         MeasureBase* newMeasureBase = toMeasureBase(Factory::createMeasure(score->dummy()->system()));
         newMeasureBase->setTick(tick);
 
-        if (score == this) {
-            result = newMeasureBase;
-        }
-
         if (actualBeforeMeasure) {
             actualBeforeMeasure = actualBeforeMeasure->top(); // don't try to insert in front of nested frame
         }
@@ -560,6 +556,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         }
 
         if (score->isMaster()) {
+            result = newMeasureBase;
             masterMeasure = newMeasure;
         }
 
