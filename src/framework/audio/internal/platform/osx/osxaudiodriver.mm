@@ -575,3 +575,8 @@ void OSXAudioDriver::OnFillBuffer(void* context, AudioQueueRef, AudioQueueBuffer
     pData->callback(pData->mUserData, (uint8_t*)buffer->mAudioData, buffer->mAudioDataByteSize);
     AudioQueueEnqueueBuffer(pData->audioQueue, buffer, 0, NULL);
 }
+
+bool OSXAudioDriver::pushMidiEvent(muse::midi::Event&)
+{
+    return true; // dummy
+}

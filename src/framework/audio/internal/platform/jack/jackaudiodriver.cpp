@@ -20,6 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "jackaudiodriver.h"
+#include <jack/midiport.h>
+#include "framework/midi/midierrors.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -37,8 +39,87 @@
 #define JACK_DEFAULT_IDENTIFY_AS "MuseScore"
 
 using namespace muse::audio;
-
+using namespace muse::midi;
 namespace muse::audio {
+muse::Ret sendEvent_noteonoff(void* pb, int framePos, const muse::midi::Event& e)
+{
+    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
+    if (p == 0) {
+        LOGE("JackMidi: buffer overflow, event lost");
+        return muse::Ret(false);
+    }
+    // FIX: is opcode an compatible MIDI enumeration?
+    if (e.opcode() == muse::midi::Event::Opcode::NoteOn) {
+        p[0] = /* e.opcode() */ 0x90 | e.channel();
+    } else {
+        p[0] = /* e.opcode() */ 0x80 | e.channel();
+    }
+    p[1] = e.note();
+    p[2] = e.velocity();
+    return muse::Ret(true);
+}
+
+muse::Ret sendEvent_control(void* pb, int framePos, const Event& e)
+{
+    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
+    if (p == 0) {
+        LOGE("JackMidi: buffer overflow, event lost");
+        return muse::Ret(false);
+    }
+    p[0] = /* e.opcode() */ 0xb0 | e.channel();
+    p[1] = e.index();
+    p[2] = e.data();
+    return muse::Ret(true);
+}
+
+muse::Ret sendEvent_program(void* pb, int framePos, const Event& e)
+{
+    unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
+    if (p == 0) {
+        LOGE("JackMidiOutput: buffer overflow, event lost");
+        return muse::Ret(false);
+    }
+    p[0] = /* e.opcode() */ 0xc0 | e.channel();
+    p[1] = e.program();
+    return muse::Ret(true);
+}
+
+muse::Ret sendEvent_pitchbend(void* pb, int framePos, const Event& e)
+{
+    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
+    if (p == 0) {
+        LOGE("JackMidiOutput: buffer overflow, event lost");
+        return muse::Ret(false);
+    }
+    p[0] = /* e.opcode() */ 0xe0 | e.channel();
+    p[1] = e.data(); // dataA
+    p[2] = e.velocity(); // dataB
+    return muse::Ret(true);
+}
+
+muse::Ret sendEvent(const Event& e, void* pb)
+{
+    int framePos = 0;
+    switch (e.opcode()) {
+    // FIX: Event::Opcode::POLYAFTER ?
+    case Event::Opcode::NoteOn:
+        return sendEvent_noteonoff(pb, framePos, e);
+    case Event::Opcode::NoteOff:
+        return sendEvent_noteonoff(pb, framePos, e);
+    case Event::Opcode::ControlChange:
+        return sendEvent_control(pb, framePos, e);
+    case Event::Opcode::ProgramChange:
+        return sendEvent_control(pb, framePos, e);
+    case Event::Opcode::PitchBend:
+        return sendEvent_pitchbend(pb, framePos, e);
+    default:
+        NOT_SUPPORTED << "event: " << e.to_string();
+        return make_ret(muse::midi::Err::MidiNotSupported);
+    }
+
+    return Ret(true);
+}
+
 static int jack_process_callback(jack_nframes_t nframes, void* args)
 {
     JackDriverState* state = static_cast<JackDriverState*>(args);
@@ -53,6 +134,37 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
         *l++ = *sp++;
         *r++ = *sp++;
     }
+
+    // if (!isConnected()) {
+    //    LOGI() << "---- JACK-midi output sendEvent SORRY, not connected";
+    //    return make_ret(Err::MidiNotConnected);
+    // }
+    if (!state->m_midiOutputPorts.empty()) {
+        jack_port_t* port = state->m_midiOutputPorts.front();
+        if (port) {
+            int segmentSize = jack_get_buffer_size(static_cast<jack_client_t*>(state->m_jackDeviceHandle));
+            void* pb = jack_port_get_buffer(port, segmentSize);
+            // handle midi
+            muse::midi::Event e;
+            while (1) {
+                if (state->m_midiQueue.pop(e)) {
+                    sendEvent(e, pb);
+                } else {
+                    break;
+                }
+            }
+        }
+    } else {
+        muse::midi::Event e;
+        while (1) {
+            if (state->m_midiQueue.pop(e)) {
+                LOGW() << "no jack-midi-outport, consumed unused Event: " << e.to_string();
+            } else {
+                break;
+            }
+        }
+    }
+
     return 0;
 }
 
@@ -153,6 +265,13 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         return false;
     }
 
+    // midi
+    jack_options_t options = (jack_options_t)0;
+    int portFlag = JackPortIsOutput;
+    const char* portType = JACK_DEFAULT_MIDI_TYPE;
+    jack_port_t* port = jack_port_register(handle, "Musescore", portType, portFlag, 0);
+    m_midiOutputPorts.push_back(port);
+
     return true;
 }
 
@@ -167,4 +286,10 @@ void JackDriverState::close()
 bool JackDriverState::isOpened() const
 {
     return m_jackDeviceHandle != nullptr;
+}
+
+bool JackDriverState::pushMidiEvent(muse::midi::Event& e)
+{
+    m_midiQueue.push(e);
+    return true;
 }

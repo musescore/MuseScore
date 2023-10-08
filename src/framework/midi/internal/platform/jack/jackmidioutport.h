@@ -23,6 +23,8 @@
 #define MU_MIDI_JACKMIDIOUTPORT_H
 
 #include <memory>
+#include "framework/audio/midiqueue.h"
+#include "framework/audio/audiomodule.h"
 #include "midi/midiportstate.h"
 
 namespace muse::midi {
@@ -44,8 +46,14 @@ public:
 
 private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
-
-    struct Jack;
+    std::shared_ptr<muse::audio::IAudioDriver> m_audioDriver;
+    std::shared_ptr<ThreadSafeQueue<const Event> > m_midiQueue;
+    struct Jack {
+        void* midiOut = nullptr;
+        void* client = nullptr;
+        int port = -1;
+        int segmentSize;
+    };
     std::unique_ptr<Jack> m_jack;
     MidiDeviceID m_deviceID;
 };

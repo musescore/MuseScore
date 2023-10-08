@@ -86,8 +86,8 @@ void MidiModule::onInit(const IApplication::RunMode& mode)
     m_configuration->init();
 
     if (mode == IApplication::RunMode::GuiApp) {
-        m_midiOutPort->init();
         m_midiInPort->init();
+        m_midiOutPort->init();
     }
 }
 

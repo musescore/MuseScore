@@ -19,7 +19,11 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+//#include <thread>
+//#include <queue>
+//#include <mutex>
 #include "linuxmidioutport.h"
+#include "framework/audio/audiomodule.h"
 
 #include "midierrors.h"
 #include "translation.h"
@@ -30,9 +34,6 @@ using namespace muse::midi;
 
 void LinuxMidiOutPort::init()
 {
-    LOGI("---- linux init ----");
-    //m_alsa = std::make_shared<Alsa>();
-
 #if JACK_AUDIO
     m_midiOutPortJack = std::make_unique<JackMidiOutPort>();
     m_midiOutPortJack->init();
@@ -62,7 +63,6 @@ void LinuxMidiOutPort::init()
 
 void LinuxMidiOutPort::deinit()
 {
-    LOGI("---- linux deinit ----");
     if (isConnected()) {
         disconnect();
     }
@@ -87,17 +87,15 @@ std::vector<MidiDevice> LinuxMidiOutPort::availableDevices() const
 
 muse::async::Notification LinuxMidiOutPort::availableDevicesChanged() const
 {
-    LOGI("---- linux availableDevicesChanged ----");
     return m_availableDevicesChanged;
 }
 
 muse::Ret LinuxMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
-    LOGI("---- linux connect to %s ----", deviceID.c_str());
     if (!deviceExists(deviceID)) {
         return make_ret(Err::MidiFailedConnect, "not found device, id: " + deviceID);
     }
-    
+
     DEFER {
         m_deviceChanged.notify();
     };
@@ -107,12 +105,12 @@ muse::Ret LinuxMidiOutPort::connect(const MidiDeviceID& deviceID)
         IF_ASSERT_FAILED(deviceParams.size() == 3) {
             return make_ret(Err::MidiInvalidDeviceID, "invalid device id: " + deviceID);
         }
-        
+
         if (deviceParams.at(1) == 9999) { // This is an jack device
-            LOGI("---- linux connect to jack ----");
+#if JACK_AUDIO
             m_midiOutPortCurrent = /* JackMidiOutPort */ m_midiOutPortJack.get();
+#endif
         } else {
-            LOGI("---- linux connect to alsa ----");
             m_midiOutPortCurrent = /* AlsaMidiOutPort */ m_midiOutPortAlsa.get();
         }
 
@@ -122,7 +120,7 @@ muse::Ret LinuxMidiOutPort::connect(const MidiDeviceID& deviceID)
         LOGD() << "Connected to " << deviceID; // FIX: let caller log instead (has return state of connect)
         m_deviceID = deviceID;
         // continue the connect in the driver
-        return m_midiOutPortCurrent ->connect(deviceID);
+        return m_midiOutPortCurrent->connect(deviceID);
     }
 
     return Ret(true);
@@ -130,50 +128,38 @@ muse::Ret LinuxMidiOutPort::connect(const MidiDeviceID& deviceID)
 
 void LinuxMidiOutPort::disconnect()
 {
-    LOGI("---- linux disconnect ----");
     if (!isConnected()) {
         return;
     }
 
     LOGD() << "Disconnected from " << m_deviceID;
 
-    //m_alsa->client = -1;
-    //m_alsa->port = -1;
-    //m_alsa->midiOut = nullptr;
     m_deviceID.clear();
 }
 
 bool LinuxMidiOutPort::isConnected() const
 {
-    LOGI("---- linux isConnect ----");
     return m_midiOutPortCurrent && !m_deviceID.empty();
 }
 
 MidiDeviceID LinuxMidiOutPort::deviceID() const
 {
-    LOGI("---- linux deviceID ----");
     return m_deviceID;
 }
 
 muse::async::Notification LinuxMidiOutPort::deviceChanged() const
 {
-    LOGI("---- linux deviceChanged ----");
     return m_deviceChanged;
 }
 
 bool LinuxMidiOutPort::supportsMIDI20Output() const
 {
-    LOGI("---- linux supportsMIDI20Output ----");
     return false;
 }
 
 muse::Ret LinuxMidiOutPort::sendEvent(const Event& e)
 {
-    // LOGI() << e.to_string();
-    LOGI() << "---- linux sendEvent ----" << e.to_string();
-
     if (!isConnected()) {
-        LOGI() << "---- linux sendEvent NOT CONNECTED";
         return make_ret(Err::MidiNotConnected);
     }
 
@@ -188,14 +174,17 @@ muse::Ret LinuxMidiOutPort::sendEvent(const Event& e)
         return muse::Ret(true);
     }
 
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    Event e2(e);
+    return muse::Ret(audioDriver()->pushMidiEvent(e2));
+#else // alsa
     return m_midiOutPortCurrent->sendEvent(e);
+#endif
 }
 
 bool LinuxMidiOutPort::deviceExists(const MidiDeviceID& deviceId) const
 {
-    LOGI("---- linux deviceExists ----");
     for (const MidiDevice& device : availableDevices()) {
-        LOGI("---- linux deviceExists dev equal? %s <=> %s", deviceId.c_str(), device.id.c_str());
         if (device.id == deviceId) {
             return true;
         }

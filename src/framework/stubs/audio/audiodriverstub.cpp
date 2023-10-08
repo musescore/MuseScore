@@ -130,3 +130,8 @@ void AudioDriverStub::resume()
 void AudioDriverStub::suspend()
 {
 }
+
+bool AudioDriverStub::pushMidiEvent(muse::midi::Event&)
+{
+    return true;
+}

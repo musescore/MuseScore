@@ -25,6 +25,7 @@
 #include <memory>
 
 #include "async/asyncable.h"
+#include "framework/audio/audiomodule.h"
 #include "midi/imidioutport.h"
 #include "internal/midideviceslistener.h"
 
@@ -60,7 +61,6 @@ public:
 private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
-    //std::shared_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
     async::Notification m_deviceChanged;
 
@@ -69,14 +69,13 @@ private:
 
     mutable std::mutex m_devicesMutex;
 
-    //
-    MidiPortState* m_midiOutPortCurrent;
+    std::shared_ptr<muse::audio::AudioModule> m_audioModule;
 
+    MidiPortState* m_midiOutPortCurrent;
 #if defined(JACK_AUDIO)
     std::unique_ptr<JackMidiOutPort> m_midiOutPortJack;
 #endif
     std::unique_ptr<AlsaMidiOutPort> m_midiOutPortAlsa;
-
 };
 }
 
