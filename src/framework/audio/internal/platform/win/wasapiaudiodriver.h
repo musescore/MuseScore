@@ -64,6 +64,7 @@ public:
     async::Notification outputDeviceSampleRateChanged() const override;
     std::vector<unsigned int> availableOutputDeviceSampleRates() const override;
 
+    bool pushMidiEvent(muse::midi::Event& e) override;
     void resume() override;
     void suspend() override;
 

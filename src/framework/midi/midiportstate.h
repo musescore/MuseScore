@@ -28,7 +28,6 @@
 namespace muse::midi {
 class MidiPortState
 {
-
 public:
     virtual ~MidiPortState() = default;
 
@@ -50,6 +49,5 @@ public:
     virtual Ret sendEvent(const Event& e) = 0;
 };
 }
-
 
 #endif // MU_MIDI_MIDIPORTSTATE_H
