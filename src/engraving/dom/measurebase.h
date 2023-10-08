@@ -96,6 +96,8 @@ public:
     void setPrev(MeasureBase* e) { m_prev = e; }
     MeasureBase* top() const;
 
+    MeasureBase* getInScore(Score* score, bool useNextMeasureFallback = false) const;
+
     Measure* nextMeasure() const;
     Measure* prevMeasure() const;
     Measure* nextMeasureMM() const;

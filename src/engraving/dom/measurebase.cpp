@@ -299,6 +299,30 @@ MeasureBase* MeasureBase::top() const
 }
 
 //---------------------------------------------------------
+//   getInScore
+//---------------------------------------------------------
+
+MeasureBase* MeasureBase::getInScore(Score* score, bool useNextMeasureFallback) const
+{
+    MeasureBase* newMB = nullptr;
+    if (!isMeasure() && !excludeFromOtherParts()) {
+        for (auto e : linkList()) {
+            if (e->score() == score) {
+                newMB = toMeasureBase(e);
+                break;
+            }
+        }
+    }
+    if (isMeasure() || (!newMB && useNextMeasureFallback)) {
+        newMB = score->tick2measure(tick());
+    }
+    if (!newMB) {
+        LOGD("measure base not found in score");
+    }
+    return newMB;
+}
+
+//---------------------------------------------------------
 //   tick
 //---------------------------------------------------------
 
