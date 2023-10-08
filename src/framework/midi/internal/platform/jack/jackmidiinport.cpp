@@ -56,16 +56,18 @@ std::vector<MidiDevice> JackMidiInPort::availableDevices() const
     for (const char** p = prts; p && *p; ++p) {
         jack_port_t* port = jack_port_by_name(m_jack->client, *p);
         int flags = jack_port_flags(port);
-        if (!(flags & JackPortIsInput))
-              continue;
+        if (!(flags & JackPortIsInput)) {
+            continue;
+        }
         char buffer[128];
         strncpy(buffer, *p, sizeof(buffer) - 1);
         buffer[sizeof(buffer) - 1] = 0;
-        if (strncmp(buffer, "MuseScore", 9) == 0)
-              continue;
+        if (strncmp(buffer, "MuseScore", 9) == 0) {
+            continue;
+        }
         MidiDevice dev;
         dev.name = buffer;
-        dev.id = makeUniqueDeviceId(devIndex++,0,0);
+        dev.id = makeUniqueDeviceId(devIndex++, 0, 0);
         ports.push_back(std::move(dev));
     }
     return ports;

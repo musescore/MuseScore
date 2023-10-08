@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "linuxmidiinport.h"
+#include "framework/audio/audiomodule.h"
 
 #include "midierrors.h"
 #include "stringutils.h"
@@ -29,28 +30,16 @@
 
 using namespace muse::midi;
 
-void LinuxMidiInPort::init()
+void LinuxMidiInPort::init(std::shared_ptr<muse::audio::AudioModule> am)
 {
     //m_alsa = std::make_shared<Linux>();
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    LOGI("-- init using audiomodule: %lx", am);
 
-    m_devicesListener.startWithCallback([this]() {
-        return availableDevices();
-    });
-
-    m_devicesListener.devicesChanged().onNotify(this, [this]() {
-        bool connectedDeviceRemoved = true;
-        for (const MidiDevice& device: availableDevices()) {
-            if (m_deviceID == device.id) {
-                connectedDeviceRemoved = false;
-            }
-        }
-
-        if (connectedDeviceRemoved) {
-            disconnect();
-        }
-
-        m_availableDevicesChanged.notify();
-    });
+    //std::shared_ptr<muse::audio::IAudioDriver> ad = am->getDriver();
+    //LOGI("-- init got audiodriver: %lx", ad);
+    //LOGI("-- audiohandle: %lx", ad->getAudioDriverHandle());
+#endif
 }
 
 void LinuxMidiInPort::deinit()
@@ -62,15 +51,17 @@ void LinuxMidiInPort::deinit()
 
 std::vector<MidiDevice> LinuxMidiInPort::availableDevices() const
 {
+// FIX: this is compile-time, change so that we call availableMidiDevices if jack is selected
+#if defined(JACK_AUDIO)
+    return audioDriver()->availableMidiDevices();
+#else
     std::lock_guard lock(m_devicesMutex);
-
     std::vector<MidiDevice> ret;
-
     ret.push_back({ NONE_DEVICE_ID, muse::trc("midi", "No device") });
-
     // return concatenation of alsa + jack devices
-
+    std::shared_ptr<IMidiInPort> m_midiInPortJack;
     return ret;
+#endif
 }
 
 muse::async::Notification LinuxMidiInPort::availableDevicesChanged() const

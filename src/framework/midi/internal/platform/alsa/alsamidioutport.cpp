@@ -199,8 +199,6 @@ bool AlsaMidiOutPort::supportsMIDI20Output() const
 
 Ret AlsaMidiOutPort::sendEvent(const Event& e)
 {
-    // LOGI() << e.to_string();
-
     if (!isConnected()) {
         return make_ret(Err::MidiNotConnected);
     }
