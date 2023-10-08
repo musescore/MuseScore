@@ -89,9 +89,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/iexportprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/isaveprojectscenario.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/saveprojectscenario.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/internal/saveprojectscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/iopensaveprojectscenario.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/opensaveprojectscenario.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/opensaveprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/recentfilescontroller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/recentfilescontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/mscmetareader.cpp

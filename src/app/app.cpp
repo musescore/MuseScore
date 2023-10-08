@@ -169,11 +169,15 @@ int App::run(int argc, char** argv)
         if (multiInstancesProvider()->isMainInstance()) {
             splashScreen = new SplashScreen(SplashScreen::Default);
         } else {
-            project::ProjectFile file = startupScenario()->startupScoreFile();
+            const project::ProjectFile& file = startupScenario()->startupScoreFile();
             if (file.isValid()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, file.displayName(true /* includingExtension */));
+                if (file.hasDisplayName()) {
+                    splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false, file.displayName(true /* includingExtension */));
+                } else {
+                    splashScreen = new SplashScreen(SplashScreen::ForNewInstance, false);
+                }
             } else if (startupScenario()->isStartWithNewFileAsSecondaryInstance()) {
-                splashScreen = new SplashScreen(SplashScreen::ForNewInstance);
+                splashScreen = new SplashScreen(SplashScreen::ForNewInstance, true);
             } else {
                 splashScreen = new SplashScreen(SplashScreen::Default);
             }
@@ -432,8 +436,8 @@ void App::applyCommandLineOptions(const CommandLineParser::Options& options, fra
     if (runMode == framework::IApplication::RunMode::GuiApp) {
         startupScenario()->setStartupType(options.startup.type);
 
-        if (options.startup.scorePath.has_value()) {
-            project::ProjectFile file { options.startup.scorePath.value() };
+        if (options.startup.scoreUrl.has_value()) {
+            project::ProjectFile file { options.startup.scoreUrl.value() };
 
             if (options.startup.scoreDisplayNameOverride.has_value()) {
                 file.displayNameOverride = options.startup.scoreDisplayNameOverride.value();

@@ -424,6 +424,20 @@
 		</dict>
 	</array>
 
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLName</key>
+            <string>org.musescore.musescore.musescoreurl</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>musescore</string>
+            </array>
+        </dict>
+    </array>
+
     <key>ATSApplicationFontsPath</key>
     <string>fonts</string>
 

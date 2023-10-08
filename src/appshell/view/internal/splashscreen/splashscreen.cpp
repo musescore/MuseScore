@@ -38,7 +38,7 @@ static constexpr Qt::WindowFlags splashScreenWindowFlags = (Qt::SplashScreen | Q
 static constexpr Qt::WindowFlags splashScreenWindowFlags = Qt::SplashScreen | Qt::FramelessWindowHint;
 #endif
 
-SplashScreen::SplashScreen(SplashScreen::SplashScreenType type, const QVariant& data)
+SplashScreen::SplashScreen(SplashScreen::SplashScreenType type, bool forNewScore, const QString& openingFileName)
     : QWidget(nullptr, splashScreenWindowFlags)
 {
     setAttribute(Qt::WA_TranslucentBackground);
@@ -48,7 +48,7 @@ SplashScreen::SplashScreen(SplashScreen::SplashScreenType type, const QVariant& 
         m_view = new LoadingScreenView(this);
         break;
     case SplashScreen::ForNewInstance:
-        m_view = new NewInstanceLoadingScreenView(data.toString(), this);
+        m_view = new NewInstanceLoadingScreenView(forNewScore, openingFileName, this);
         break;
     }
 

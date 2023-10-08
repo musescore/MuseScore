@@ -182,7 +182,7 @@ mu::Uri StartupScenario::startupPageUri(StartupModeType modeType) const
 
 void StartupScenario::openScore(const project::ProjectFile& file)
 {
-    dispatcher()->dispatch("file-open", ActionData::make_arg2<io::path_t, QString>(file.path, file.displayNameOverride));
+    dispatcher()->dispatch("file-open", ActionData::make_arg2<QUrl, QString>(file.url, file.displayNameOverride));
 }
 
 void StartupScenario::restoreLastSession()

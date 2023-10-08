@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PROJECT_ISAVEPROJECTSCENARIO_H
-#define MU_PROJECT_ISAVEPROJECTSCENARIO_H
+#ifndef MU_PROJECT_IOPENSAVEPROJECTSCENARIO_H
+#define MU_PROJECT_IOPENSAVEPROJECTSCENARIO_H
 
 #include "modularity/imoduleinterface.h"
 #include "inotationproject.h"
@@ -29,9 +29,9 @@
 #include "types/retval.h"
 
 namespace mu::project {
-class ISaveProjectScenario : MODULE_EXPORT_INTERFACE
+class IOpenSaveProjectScenario : MODULE_EXPORT_INTERFACE
 {
-    INTERFACE_ID(ISaveProjectScenario)
+    INTERFACE_ID(IOpenSaveProjectScenario)
 
 public:
     virtual RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
@@ -48,9 +48,10 @@ public:
     static constexpr int RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE = 1236;
     static constexpr int RET_CODE_CONFLICT_RESPONSE_REPLACE = 1237;
 
+    virtual void showCloudOpenError(const Ret& ret) const = 0;
     virtual Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool publishMode, bool alreadyAttempted) const = 0;
     virtual Ret showAudioCloudShareError(const Ret& ret) const = 0;
 };
 }
 
-#endif // MU_PROJECT_ISAVEPROJECTSCENARIO_H
+#endif // MU_PROJECT_IOPENSAVEPROJECTSCENARIO_H

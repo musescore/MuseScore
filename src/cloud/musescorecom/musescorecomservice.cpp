@@ -49,7 +49,8 @@ static const QUrl MUSESCORECOM_USER_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/m
 
 static const QUrl MUSESCORECOM_SCORE_INFO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/info");
 static const QUrl MUSESCORECOM_SCORES_LIST_API_URL(MUSESCORECOM_API_ROOT_URL + "/collection/scores");
-static const QUrl MUSESCORECOM_DOWNLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download");
+static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download");
+static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/download-shared");
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
@@ -215,7 +216,7 @@ mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
 
     if (!ret) {
         printServerReply(receivedData);
-        result.ret = ret;
+        result.ret = uploadingDownloadingRetFromRawRet(ret);
         return result;
     }
 
@@ -300,7 +301,7 @@ mu::async::Promise<ScoresList> MuseScoreComService::downloadScoresList(int score
     });
 }
 
-ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData)
+ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData, const QString& hash, const QString& secret)
 {
     ProgressPtr progress = std::make_shared<Progress>();
 
@@ -309,12 +310,12 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
         progress->progressChanged.send(current, total, message);
     });
 
-    async::Async::call(this, [this, manager, scoreId, &scoreData, progress]() {
+    async::Async::call(this, [this, manager, scoreId, &scoreData, hash, secret, progress]() {
         progress->started.notify();
 
         ProgressResult result;
-        result.ret = executeRequest([this, manager, scoreId, &scoreData]() {
-            return doDownloadScore(manager, scoreId, scoreData);
+        result.ret = executeRequest([this, manager, scoreId, &scoreData, hash, secret]() {
+            return doDownloadScore(manager, scoreId, scoreData, hash, secret);
         });
 
         progress->finished.send(result);
@@ -323,14 +324,27 @@ ProgressPtr MuseScoreComService::downloadScore(int scoreId, QIODevice& scoreData
     return progress;
 }
 
-mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData)
+mu::Ret MuseScoreComService::doDownloadScore(network::INetworkManagerPtr downloadManager, int scoreId, QIODevice& scoreData,
+                                             const QString& hash, const QString& secret)
 {
     TRACEFUNC;
+
+    QUrl baseDownloadUrl = MUSESCORECOM_SCORE_DOWNLOAD_API_URL;
 
     QVariantMap params;
     params["score_id"] = scoreId;
 
-    RetVal<QUrl> downloadUrl = prepareUrlForRequest(MUSESCORECOM_DOWNLOAD_SCORE_API_URL, params);
+    if (!hash.isEmpty()) {
+        baseDownloadUrl = MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL;
+
+        params["h"] = hash;
+
+        if (!secret.isEmpty()) {
+            params["secret"] = secret;
+        }
+    }
+
+    RetVal<QUrl> downloadUrl = prepareUrlForRequest(baseDownloadUrl, params);
     if (!downloadUrl.ret) {
         return downloadUrl.ret;
     }

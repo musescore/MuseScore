@@ -20,10 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_PROJECT_SAVEPROJECTSCENARIO_H
-#define MU_PROJECT_SAVEPROJECTSCENARIO_H
+#ifndef MU_PROJECT_OPENSAVEPROJECTSCENARIO_H
+#define MU_PROJECT_OPENSAVEPROJECTSCENARIO_H
 
-#include "isaveprojectscenario.h"
+#include "iopensaveprojectscenario.h"
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
@@ -33,7 +33,7 @@
 #include "cloud/audiocom/iaudiocomservice.h"
 
 namespace mu::project {
-class SaveProjectScenario : public ISaveProjectScenario
+class OpenSaveProjectScenario : public IOpenSaveProjectScenario
 {
     INJECT(IProjectConfiguration, configuration)
     INJECT(framework::IInteractive, interactive)
@@ -41,7 +41,7 @@ class SaveProjectScenario : public ISaveProjectScenario
     INJECT(cloud::IAudioComService, audioComService)
 
 public:
-    SaveProjectScenario() = default;
+    OpenSaveProjectScenario() = default;
 
     RetVal<SaveLocation> askSaveLocation(INotationProjectPtr project, SaveMode mode,
                                          SaveLocationType preselectedType = SaveLocationType::Undefined) const override;
@@ -53,6 +53,7 @@ public:
 
     bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const override;
 
+    void showCloudOpenError(const Ret& ret) const override;
     Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublish, bool alreadyAttempted) const override;
     Ret showAudioCloudShareError(const Ret& ret) const override;
 
@@ -67,8 +68,8 @@ private:
 
     bool warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const;
 
-    Ret warnCloudIsNotAvailable(bool isPublish) const;
-    Ret warnAudioCloudIsNotAvailable() const;
+    Ret warnCloudNotAvailableForUploading(bool isPublish) const;
+    Ret warnCloudNotAvailableForSharingAudio() const;
 };
 
 class QMLSaveLocationType
@@ -98,4 +99,4 @@ public:
 };
 }
 
-#endif // MU_PROJECT_SAVEPROJECTSCENARIO_H
+#endif // MU_PROJECT_OPENSAVEPROJECTSCENARIO_H

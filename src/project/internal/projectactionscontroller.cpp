@@ -25,6 +25,8 @@
 #include <QEventLoop>
 #include <QFileInfo>
 #include <QTemporaryFile>
+#include <QUrl>
+#include <QUrlQuery>
 
 #include "async/async.h"
 #include "defer.h"
@@ -44,11 +46,14 @@ using namespace mu::notation;
 using namespace mu::framework;
 using namespace mu::actions;
 
-static mu::Uri NOTATION_PAGE_URI("musescore://notation");
-static mu::Uri HOME_PAGE_URI("musescore://home");
-static mu::Uri NEW_SCORE_URI("musescore://project/newscore");
-static mu::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
-static mu::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
+static const mu::Uri NOTATION_PAGE_URI("musescore://notation");
+static const mu::Uri HOME_PAGE_URI("musescore://home");
+static const mu::Uri NEW_SCORE_URI("musescore://project/newscore");
+static const mu::Uri PROJECT_PROPERTIES_URI("musescore://project/properties");
+static const mu::Uri UPLOAD_PROGRESS_URI("musescore://project/upload/progress");
+
+static const QString MUSESCORE_URL_SCHEME("musescore");
+static const QString OPEN_SCORE_URL_HOSTNAME("open-score");
 
 void ProjectActionsController::init()
 {
@@ -129,6 +134,21 @@ bool ProjectActionsController::canReceiveAction(const ActionCode& code) const
     return true;
 }
 
+bool ProjectActionsController::isUrlSupported(const QUrl& url) const
+{
+    if (url.isLocalFile()) {
+        return isFileSupported(io::path_t(url));
+    }
+
+    if (url.scheme() == MUSESCORE_URL_SCHEME) {
+        if (url.host() == OPEN_SCORE_URL_HOSTNAME) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 bool ProjectActionsController::isFileSupported(const io::path_t& path) const
 {
     std::string suffix = io::suffix(path);
@@ -145,18 +165,28 @@ bool ProjectActionsController::isFileSupported(const io::path_t& path) const
 
 void ProjectActionsController::openProject(const actions::ActionData& args)
 {
-    io::path_t projectPath = !args.empty() ? args.arg<io::path_t>(0) : "";
+    QUrl url = !args.empty() ? args.arg<QUrl>(0) : QUrl();
     QString displayNameOverride = args.count() >= 2 ? args.arg<QString>(1) : QString();
 
-    openProject(ProjectFile(projectPath, displayNameOverride));
-}
-
-Ret ProjectActionsController::openProject(const io::path_t& path)
-{
-    return openProject(ProjectFile(path));
+    openProject(ProjectFile(url, displayNameOverride));
 }
 
 Ret ProjectActionsController::openProject(const ProjectFile& file)
+{
+    LOGI() << "Try open project: url = " << file.url.toString() << ", displayNameOverride = " << file.displayNameOverride;
+
+    if (file.url.isLocalFile()) {
+        return openProject(file.path(), file.displayNameOverride);
+    }
+
+    if (file.url.scheme() == MUSESCORE_URL_SCHEME) {
+        return openMuseScoreUrl(file.url);
+    }
+
+    return make_ret(Err::UnsupportedUrl);
+}
+
+Ret ProjectActionsController::openProject(const io::path_t& givenPath, const QString& displayNameOverride)
 {
     //! NOTE This method is synchronous,
     //! but inside `multiInstancesProvider` there can be an event loop
@@ -174,23 +204,23 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
     };
 
     //! Step 1. If no path is specified, ask the user to select a project
-    io::path_t projectPath = fileSystem()->absoluteFilePath(file.path);
-    if (projectPath.empty()) {
-        projectPath = selectScoreOpeningFile();
+    io::path_t actualPath = fileSystem()->absoluteFilePath(givenPath);
+    if (actualPath.empty()) {
+        actualPath = selectScoreOpeningFile();
 
-        if (projectPath.empty()) {
+        if (actualPath.empty()) {
             return make_ret(Ret::Code::Cancel);
         }
     }
 
     //! Step 2. If the project is already open in the current window, then just switch to showing the notation
-    if (isProjectOpened(projectPath)) {
+    if (isProjectOpened(actualPath)) {
         return openPageIfNeed(NOTATION_PAGE_URI);
     }
 
     //! Step 3. Check, if the project already opened in another window, then activate the window with the project
-    if (multiInstancesProvider()->isProjectAlreadyOpened(projectPath)) {
-        multiInstancesProvider()->activateWindowWithProject(projectPath);
+    if (multiInstancesProvider()->isProjectAlreadyOpened(actualPath)) {
+        multiInstancesProvider()->activateWindowWithProject(actualPath);
         return make_ret(Ret::Code::Ok);
     }
 
@@ -198,10 +228,10 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
     //! then create a new instance
     if (globalContext()->currentProject()) {
         QStringList args;
-        args << projectPath.toQString();
+        args << actualPath.toQString();
 
-        if (!file.displayNameOverride.isEmpty()) {
-            args << "--score-display-name-override" << file.displayNameOverride;
+        if (!displayNameOverride.isEmpty()) {
+            args << "--score-display-name-override" << displayNameOverride;
         }
 
         multiInstancesProvider()->openNewAppInstance(args);
@@ -209,13 +239,13 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
     }
 
     //! Step 5. If it's a cloud project, download the latest version
-    if (configuration()->isCloudProject(projectPath) && !configuration()->isLegacyCloudProject(projectPath)) {
-        downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(projectPath));
+    if (configuration()->isCloudProject(actualPath) && !configuration()->isLegacyCloudProject(actualPath)) {
+        downloadAndOpenCloudProject(configuration()->cloudScoreIdFromPath(actualPath));
         return make_ret(Ret::Code::Ok);
     }
 
     //! Step 6. Open project in the current window
-    return doOpenProject(projectPath);
+    return doOpenProject(actualPath);
 }
 
 RetVal<INotationProjectPtr> ProjectActionsController::loadProject(const io::path_t& filePath)
@@ -284,7 +314,7 @@ Ret ProjectActionsController::doOpenProject(const io::path_t& filePath)
     return openPageIfNeed(NOTATION_PAGE_URI);
 }
 
-Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info)
+Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, const CloudProjectInfo& info, bool isOwner)
 {
     RetVal<INotationProjectPtr> rv = loadProject(filePath);
     if (!rv.ret) {
@@ -293,9 +323,15 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
 
     INotationProjectPtr project = rv.val;
 
-    project->setCloudInfo(info);
+    if (isOwner) {
+        project->setCloudInfo(info);
+    } else {
+        project->markAsNewlyCreated();
+        project->setCloudInfo(CloudProjectInfo());
+    }
 
-    bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath);
+    bool isNewlyCreated = projectAutoSaver()->isAutosaveOfNewlyCreatedProject(filePath)
+                          || !isOwner;
     if (!isNewlyCreated) {
         recentFilesController()->prependRecentFile(makeRecentFile(project));
     }
@@ -305,7 +341,7 @@ Ret ProjectActionsController::doOpenCloudProject(const io::path_t& filePath, con
     return openPageIfNeed(NOTATION_PAGE_URI);
 }
 
-void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
+void ProjectActionsController::downloadAndOpenCloudProject(int scoreId, const QString& hash, const QString& secret, bool isOwner)
 {
     if (m_isProjectDownloading) {
         return;
@@ -322,7 +358,7 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
     if (!scoreId) {
         // Might happen when user tries to open score that saved as a cloud score but upload did not fully succeed
         LOGE() << "invalid cloud score id";
-        showScoreDownloadError(make_ret(Err::InvalidCloudScoreId));
+        openSaveProjectScenario()->showCloudOpenError(make_ret(Err::InvalidCloudScoreId));
         return;
     }
 
@@ -332,33 +368,36 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
         return;
     }
 
-    RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
-    if (!scoreInfo.ret) {
-        LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
-        showScoreDownloadError(scoreInfo.ret);
-        return;
-    }
-
     CloudProjectInfo info;
-    info.name = scoreInfo.val.title;
-    info.visibility = scoreInfo.val.visibility;
-    info.sourceUrl = scoreInfo.val.url;
-    info.revisionId = scoreInfo.val.revisionId;
+
+    if (isOwner) {
+        RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+        if (!scoreInfo.ret) {
+            LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
+            openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
+            return;
+        }
+
+        info.name = scoreInfo.val.title;
+        info.visibility = scoreInfo.val.visibility;
+        info.sourceUrl = scoreInfo.val.url;
+        info.revisionId = scoreInfo.val.revisionId;
+    }
 
     // TODO(cloud): conflict checking (don't recklessly overwrite the existing file)
     io::path_t localPath = configuration()->cloudProjectPath(scoreId);
     QFile* projectData = new QFile(localPath.toQString());
     if (!projectData->open(QIODevice::WriteOnly)) {
-        showScoreDownloadError(make_ret(Err::FileOpenError));
+        openSaveProjectScenario()->showCloudOpenError(make_ret(Err::FileOpenError));
 
         delete projectData;
         return;
     }
 
     m_projectBeingDownloaded.scoreId = scoreId;
-    m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, *projectData);
+    m_projectBeingDownloaded.progress = museScoreComService()->downloadScore(scoreId, *projectData, hash, secret);
 
-    m_projectBeingDownloaded.progress->finished.onReceive(this, [this, localPath, info, projectData](const ProgressResult& res) {
+    m_projectBeingDownloaded.progress->finished.onReceive(this, [this, localPath, info, isOwner, projectData](const ProgressResult& res) {
         projectData->deleteLater();
 
         m_projectBeingDownloaded = {};
@@ -368,15 +407,100 @@ void ProjectActionsController::downloadAndOpenCloudProject(int scoreId)
 
         if (!res.ret) {
             LOGE() << res.ret.toString();
-            showScoreDownloadError(res.ret);
+            openSaveProjectScenario()->showCloudOpenError(res.ret);
             return;
         }
 
-        doOpenCloudProject(localPath, info);
+        doOpenCloudProject(localPath, info, isOwner);
     });
 
     m_projectBeingDownloadedChanged.notify();
     isDownloadingFinished = false;
+}
+
+Ret ProjectActionsController::openMuseScoreUrl(const QUrl& url)
+{
+    if (url.host() == OPEN_SCORE_URL_HOSTNAME) {
+        return openScoreFromMuseScoreCom(url);
+    }
+
+    return make_ret(Err::UnsupportedUrl);
+}
+
+Ret ProjectActionsController::openScoreFromMuseScoreCom(const QUrl& url)
+{
+    //! NOTE See explanation in `openProject(const io::path_t& _path, const QString& displayNameOverride)`
+    if (m_isProjectProcessing || m_isProjectDownloading) {
+        // TODO: instead of ignoring the open request, queue it?
+        return make_ret(Ret::Code::InternalError);
+    }
+    m_isProjectProcessing = true;
+
+    DEFER {
+        m_isProjectProcessing = false;
+    };
+
+    // Retrieve score id from URL
+    bool ok = false;
+    int scoreId = url.fileName().toInt(&ok);
+    if (!ok || scoreId <= 0) {
+        return make_ret(Err::MalformedOpenScoreUrl);
+    }
+
+    // Ensure logged in
+    Ret ret = museScoreComService()->authorization()->ensureAuthorization(
+        trc("project/save", "Login or create a free account on musescore.com to open this score."));
+    if (!ret) {
+        return ret;
+    }
+
+    // Check if user is owner
+    RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(scoreId);
+    if (!scoreInfo.ret) {
+        LOGE() << "Error while downloading score info: " << scoreInfo.ret.toString();
+        openSaveProjectScenario()->showCloudOpenError(scoreInfo.ret);
+
+        return scoreInfo.ret;
+    }
+
+    bool isOwner = QString::number(scoreInfo.val.owner.id) == museScoreComService()->authorization()->accountInfo().val.id;
+
+    // If yes, score will be opened as regular cloud score; check if not yet opened
+    if (isOwner) {
+        io::path_t projectPath = configuration()->cloudProjectPath(scoreId);
+
+        // either in this instance
+        if (isProjectOpened(projectPath)) {
+            return openPageIfNeed(NOTATION_PAGE_URI);
+        }
+
+        // or in another one
+        if (multiInstancesProvider()->isProjectAlreadyOpened(projectPath)) {
+            multiInstancesProvider()->activateWindowWithProject(projectPath);
+            return make_ok();
+        }
+    }
+
+    // Check if this instance already has an open project
+    if (globalContext()->currentProject()) {
+        QStringList args;
+        args << url.toString();
+
+        if (!scoreInfo.val.title.isEmpty()) {
+            args << "--score-display-name-override" << scoreInfo.val.title;
+        }
+
+        multiInstancesProvider()->openNewAppInstance(args);
+        return make_ok();
+    }
+
+    QUrlQuery query(url);
+    QString hash = query.queryItemValue("h");
+    QString secret = query.queryItemValue("secret");
+
+    downloadAndOpenCloudProject(scoreId, hash, secret, isOwner);
+
+    return make_ok();
 }
 
 const ProjectBeingDownloaded& ProjectActionsController::projectBeingDownloaded() const
@@ -585,7 +709,7 @@ bool ProjectActionsController::saveProject(SaveMode saveMode, SaveLocationType s
         return saveProjectAt(SaveLocation(SaveLocationType::Local));
     }
 
-    RetVal<SaveLocation> response = saveProjectScenario()->askSaveLocation(project, saveMode, saveLocationType);
+    RetVal<SaveLocation> response = openSaveProjectScenario()->askSaveLocation(project, saveMode, saveLocationType);
     if (!response.ret) {
         LOGE() << response.ret.toString();
         return false;
@@ -613,7 +737,7 @@ void ProjectActionsController::publish()
 
     auto project = currentNotationProject();
 
-    RetVal<CloudProjectInfo> info = saveProjectScenario()->askPublishLocation(project);
+    RetVal<CloudProjectInfo> info = openSaveProjectScenario()->askPublishLocation(project);
     if (!info.ret) {
         return;
     }
@@ -640,7 +764,7 @@ void ProjectActionsController::shareAudio()
     };
 
     auto project = currentNotationProject();
-    RetVal<CloudAudioInfo> retVal = saveProjectScenario()->askShareAudioLocation(project);
+    RetVal<CloudAudioInfo> retVal = openSaveProjectScenario()->askShareAudioLocation(project);
     if (!retVal.ret) {
         return;
     }
@@ -768,7 +892,7 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
         }
 
         if (isPublic) {
-            if (!saveProjectScenario()->warnBeforeSavingToExistingPubliclyVisibleCloudProject()) {
+            if (!openSaveProjectScenario()->warnBeforeSavingToExistingPubliclyVisibleCloudProject()) {
                 return false;
             }
         }
@@ -1088,21 +1212,21 @@ Ret ProjectActionsController::onProjectUploadFailed(const Ret& ret, const CloudP
 
     closeUploadProgressDialog();
 
-    Ret userResponse = saveProjectScenario()->showCloudSaveError(ret, info, publishMode, true);
+    Ret userResponse = openSaveProjectScenario()->showCloudSaveError(ret, info, publishMode, true);
     switch (userResponse.code()) {
-    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_SAVE_AS: {
+    case IOpenSaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_SAVE_AS: {
         return saveProject(SaveMode::SaveAs);
     }
-    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE: {
+    case IOpenSaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_PUBLISH_AS_NEW_SCORE: {
         CloudProjectInfo newInfo = info;
         newInfo.sourceUrl = QUrl();
         return uploadProject(newInfo, audio, openEditUrl, publishMode);
     }
-    case ISaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_REPLACE: {
+    case IOpenSaveProjectScenario::RET_CODE_CONFLICT_RESPONSE_REPLACE: {
         RetVal<cloud::ScoreInfo> scoreInfo = museScoreComService()->downloadScoreInfo(info.sourceUrl);
         if (!scoreInfo.ret) {
             LOGE() << scoreInfo.ret.toString();
-            saveProjectScenario()->showCloudSaveError(scoreInfo.ret, info, publishMode, false);
+            openSaveProjectScenario()->showCloudSaveError(scoreInfo.ret, info, publishMode, false);
             break;
         }
 
@@ -1133,7 +1257,7 @@ void ProjectActionsController::onAudioUploadFailed(const Ret& ret)
 
     closeUploadProgressDialog();
 
-    saveProjectScenario()->showAudioCloudShareError(ret);
+    openSaveProjectScenario()->showAudioCloudShareError(ret);
 }
 
 void ProjectActionsController::warnCloudIsNotAvailable()
@@ -1336,9 +1460,9 @@ void ProjectActionsController::revertCorruptedScoreToLastSaved()
     }
 }
 
-ProjectFile ProjectActionsController::makeRecentFile(INotationProjectPtr project)
+RecentFile ProjectActionsController::makeRecentFile(INotationProjectPtr project)
 {
-    ProjectFile file;
+    RecentFile file;
     file.path = project->path();
 
     if (project->isCloudProject()) {
@@ -1359,41 +1483,6 @@ void ProjectActionsController::moveProject(INotationProjectPtr project, const io
     project->setPath(newPath);
 
     recentFilesController()->moveRecentFile(oldPath, makeRecentFile(project));
-}
-
-void ProjectActionsController::showScoreDownloadError(const Ret& ret)
-{
-    std::string title = trc("project", "Your score could not be opened");
-    std::string message;
-
-    switch (ret.code()) {
-    case int(Err::InvalidCloudScoreId):
-        message = trc("project", "This score is invalid.");
-        break;
-    case int(Err::FileOpenError):
-        message = trc("project", "The file could not be downloaded to your disk.");
-        break;
-    case int(network::Err::NetworkError):
-        message = trc("project", "Could not connect to <a href=\"https://musescore.com\">musescore.com</a>. "
-                                 "Please check your internet connection or try again later.");
-        break;
-    case int(cloud::Err::AccountNotActivated):
-        message = trc("project", "Your musescore.com account needs to be verified first. "
-                                 "Please activate your account via the link in the activation email.");
-        break;
-    case int(cloud::Err::NetworkError):
-        message = cloud::cloudNetworkErrorUserDescription(ret);
-        if (!message.empty()) {
-            message += "\n\n" + trc("project/save", "Please try again later.");
-            break;
-        }
-    // FALLTHROUGH
-    default:
-        message = trc("project/save", "Please try again later.");
-        break;
-    }
-
-    interactive()->warning(title, message);
 }
 
 bool ProjectActionsController::checkCanIgnoreError(const Ret& ret, const io::path_t& filepath)
@@ -1508,7 +1597,7 @@ void ProjectActionsController::clearRecentScores()
 
 void ProjectActionsController::continueLastSession()
 {
-    const ProjectFilesList& recentScorePaths = recentFilesController()->recentFilesList();
+    const RecentFilesList& recentScorePaths = recentFilesController()->recentFilesList();
 
     if (recentScorePaths.empty()) {
         Ret ret = openPageIfNeed(HOME_PAGE_URI);
