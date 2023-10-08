@@ -46,7 +46,6 @@ private:
     struct Jack;
     std::unique_ptr<Jack> m_jack;
     MidiDeviceID m_deviceID;
-
 };
 }
 

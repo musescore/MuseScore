@@ -191,7 +191,6 @@ MidiDeviceID AlsaMidiOutPort::deviceID() const
     return m_deviceID;
 }
 
-
 bool AlsaMidiOutPort::supportsMIDI20Output() const
 {
     return false;
@@ -199,8 +198,6 @@ bool AlsaMidiOutPort::supportsMIDI20Output() const
 
 mu::Ret AlsaMidiOutPort::sendEvent(const Event& e)
 {
-    // LOGI() << e.to_string();
-
     if (!isConnected()) {
         return make_ret(Err::MidiNotConnected);
     }

@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "linuxmidiinport.h"
+#include "framework/audio/audiomodule.h"
 
 #include "midierrors.h"
 #include "stringutils.h"
@@ -29,29 +30,17 @@
 
 using namespace mu::midi;
 
-void LinuxMidiInPort::init()
+void LinuxMidiInPort::init(std::shared_ptr<mu::audio::AudioModule> am)
 {
     LOGI(" -- linux init --");
     //m_alsa = std::make_shared<Linux>();
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    LOGI("-- init using audiomodule: %lx", am);
 
-    m_devicesListener.startWithCallback([this]() {
-        return availableDevices();
-    });
-
-    m_devicesListener.devicesChanged().onNotify(this, [this]() {
-        bool connectedDeviceRemoved = true;
-        for (const MidiDevice& device: availableDevices()) {
-            if (m_deviceID == device.id) {
-                connectedDeviceRemoved = false;
-            }
-        }
-
-        if (connectedDeviceRemoved) {
-            disconnect();
-        }
-
-        m_availableDevicesChanged.notify();
-    });
+    //std::shared_ptr<mu::audio::IAudioDriver> ad = am->getDriver();
+    //LOGI("-- init got audiodriver: %lx", ad);
+    //LOGI("-- audiohandle: %lx", ad->getAudioDriverHandle());
+#endif
 }
 
 void LinuxMidiInPort::deinit()

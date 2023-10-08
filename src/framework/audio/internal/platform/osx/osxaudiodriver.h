@@ -69,6 +69,7 @@ public:
     async::Notification outputDeviceBufferSizeChanged() const override;
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    bool pushMidiEvent(mu::midi::Event& e) override;
 
 private:
     static void OnFillBuffer(void* context, OpaqueAudioQueue* queue, AudioQueueBuffer* buffer);

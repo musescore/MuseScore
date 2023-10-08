@@ -63,7 +63,7 @@ public:
     void onDestroy() override;
 
     #ifdef Q_OS_LINUX
-    std::shared_ptr<IAudioDriver> getDriver() { return  m_audioDriver; }
+    std::shared_ptr<IAudioDriver> getDriver() { return m_audioDriver; }
     #endif
 
 private:

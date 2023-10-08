@@ -50,7 +50,7 @@ private:
 
     void checkConnection(const midi::MidiDeviceID& preferredDeviceId, const midi::MidiDeviceID& currentDeviceId,
                          const std::vector<midi::MidiDevice>& availableDevices, const std::function<Ret(
-                                                                                               const midi::MidiDeviceID&)>& connectCallback);
+                                                                                                        const midi::MidiDeviceID&)>& connectCallback);
 
     void onMidiEventReceived(const midi::tick_t tick, const midi::Event& event);
 

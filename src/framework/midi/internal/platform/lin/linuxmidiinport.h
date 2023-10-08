@@ -27,6 +27,7 @@
 
 #include "async/asyncable.h"
 
+#include "framework/audio/audiomodule.h"
 #include "imidiinport.h"
 #include "internal/midideviceslistener.h"
 
@@ -43,7 +44,7 @@ public:
     LinuxMidiInPort() = default;
     ~LinuxMidiInPort() = default;
 
-    void init();
+    void init(std::shared_ptr<mu::audio::AudioModule> am);
     void deinit();
 
     std::vector<MidiDevice> availableDevices() const override;
@@ -66,7 +67,6 @@ private:
 
     bool deviceExists(const MidiDeviceID& deviceId) const;
 
-    //std::shared_ptr<Alsa> m_alsa;
     MidiDeviceID m_deviceID;
     std::shared_ptr<std::thread> m_thread;
     std::atomic<bool> m_running{ false };
@@ -79,14 +79,11 @@ private:
 
     async::Channel<tick_t, Event > m_eventReceived;
 
-    //
-
 #if defined(JACK_AUDIO)
     std::shared_ptr<IMidiInPort> m_midiInPortJack;
 #endif
     std::shared_ptr<AlsaMidiInPort> m_midiInPortAlsa;
-
 };
 }
 
-#endif // MU_MIDI_ALSAMIDIINPORT_H
+#endif // MU_MIDI_LINUXMIDIINPORT_H

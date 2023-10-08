@@ -264,7 +264,9 @@ int main(int argc, char** argv)
     app.addModule(am);
     auto mm = new mu::midi::MidiModule();
     app.addModule(mm);
+#ifdef MUE_BUILD_MIDI_MODULE
     mm->preamble(am);
+#endif
 
     app.addModule(new mu::mpe::MpeModule());
 #ifdef MUE_BUILD_MUSESAMPLER_MODULE

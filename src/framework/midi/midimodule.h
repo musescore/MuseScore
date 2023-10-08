@@ -52,15 +52,16 @@ public:
 
     void registerExports() override;
     void registerUiTypes() override;
-    void preamble(mu::audio::AudioModule* am);
     void onInit(const IApplication::RunMode& mode) override;
     void onDeinit() override;
+
+    void preamble(mu::audio::AudioModule* am);
 
 private:
     std::shared_ptr<MidiConfiguration> m_configuration;
 
     #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    std::shared_ptr<mu::audio::IAudioDriver> m_audioDriver;
+    std::shared_ptr<mu::audio::AudioModule> m_audioModule;
     std::shared_ptr<LinuxMidiOutPort> m_midiOutPort;
     std::shared_ptr<LinuxMidiInPort> m_midiInPort;
 

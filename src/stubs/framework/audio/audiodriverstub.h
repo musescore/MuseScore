@@ -42,6 +42,7 @@ public:
 
     AudioDeviceList availableOutputDevices() const override;
     async::Notification availableOutputDevicesChanged() const override;
+    bool pushMidiEvent(mu::midi::Event& e) override;
 
     unsigned int outputDeviceBufferSize() const override;
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;

@@ -51,6 +51,7 @@ public:
     bool setOutputDeviceBufferSize(unsigned int bufferSize) override;
     async::Notification outputDeviceBufferSizeChanged() const override;
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
+    bool pushMidiEvent(mu::midi::Event& e) override;
     void resume() override;
     void suspend() override;
 

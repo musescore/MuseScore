@@ -307,3 +307,8 @@ AudioDeviceID WasapiAudioDriver::defaultDeviceId() const
 
     return result;
 }
+
+bool WasapiAudioDriver::pushMidiEvent(mu::midi::Event&)
+{
+    return true;
+}

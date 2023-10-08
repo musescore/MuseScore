@@ -84,12 +84,16 @@ void MidiModule::registerUiTypes()
 
 void MidiModule::onInit(const IApplication::RunMode& mode)
 {
-    LOGI("-- onInit --");
     m_configuration->init();
 
     if (mode == IApplication::RunMode::GuiApp) {
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+        m_midiOutPort->init(m_audioModule);
+        m_midiInPort->init(m_audioModule);
+#else
         m_midiOutPort->init();
         m_midiInPort->init();
+#endif
     }
 }
 
@@ -102,8 +106,6 @@ void MidiModule::onDeinit()
 void MidiModule::preamble(mu::audio::AudioModule* am)
 {
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    LOGI("-- audiomodule: %lx", am);
-    m_audioDriver = am->getDriver();
+    m_audioModule = std::shared_ptr<mu::audio::AudioModule>(am);
 #endif
 }
-

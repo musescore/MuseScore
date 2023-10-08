@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include "framework/audio/audiomodule.h"
 #include "jackmidioutport.h"
 
 #include <jack/jack.h>
@@ -37,10 +38,16 @@ struct mu::midi::JackMidiOutPort::Jack {
 
 using namespace mu::midi;
 
+void JackMidiOutPort::preamble(std::shared_ptr<mu::audio::IAudioDriver> audioDriver)
+{
+    m_audioDriver = audioDriver;
+    m_jack = std::make_unique<Jack>();
+    // FIX: do we need the jack-client (handle)?
+    //m_jack->client = static_cast<jack_client_t*>(jackClient);
+}
+
 void JackMidiOutPort::init()
 {
-    LOGI("---- linux JACK-midi output init ----");
-    m_jack = std::make_unique<Jack>();
 }
 
 void JackMidiOutPort::deinit()
@@ -52,47 +59,40 @@ void JackMidiOutPort::deinit()
 
 std::vector<MidiDevice> JackMidiOutPort::availableDevices() const
 {
-    //LOGI("---- linux JACK availableDevices ----");
     std::vector<MidiDevice> ret;
     MidiDevice dev;
     dev.name = "JACK";
-    dev.id = makeUniqueDeviceId(0,9999,0);
+    dev.id = makeUniqueDeviceId(0, 9999, 0);
     ret.push_back(std::move(dev));
     return ret;
 }
 
 mu::Ret JackMidiOutPort::connect(const MidiDeviceID& deviceID)
 {
-    LOGI("---- JACK output connect ----");
-    //----> common with jackaudio <----
-    jack_client_t* client;
-    jack_options_t options = (jack_options_t)0;
-    jack_status_t status;
-    client = jack_client_open("MuseScore", options, &status);
-    if (!client) {
+    if (!m_jack->client) {
         return make_ret(Err::MidiInvalidDeviceID, "jack-open fail, device: " + deviceID);
     }
-    m_jack->client = client;
-    m_jack->segmentSize = jack_get_buffer_size(client);
+
     return Ret(true);
 }
 
 void JackMidiOutPort::disconnect()
 {
-    LOGI("---- linux JACK disconnect ----");
     if (!isConnected()) {
         return;
     }
+    if (!m_jack->client) {
+        return;
+    }
+    jack_client_t* client = m_jack->client;
 
     //FIX:
     //const char* sn = jack_port_name((jack_port_t*) src);
     //const char* dn = jack_port_name((jack_port_t*) dst);
     //jackdisconnect(m_jack->midiOut, 0, m_jack->client, m_jack->port);
-    if (jack_deactivate(m_jack->client)) {
+    if (jack_deactivate(client)) {
         LOGE() << "failed to deactive jack";
     }
-
-    m_jack->client = nullptr;
     m_jack->port = -1;
     m_jack->midiOut = nullptr;
     m_deviceID.clear();
@@ -100,123 +100,21 @@ void JackMidiOutPort::disconnect()
 
 bool JackMidiOutPort::isConnected() const
 {
-    LOGI("---- JACK output isConnect ----");
-    return m_jack && m_jack->midiOut && !m_deviceID.empty();
+    return !(m_jack.get() && m_jack->midiOut && !m_deviceID.empty());
 }
 
 MidiDeviceID JackMidiOutPort::deviceID() const
 {
-    LOGI("---- JACK output deviceID ----");
     return m_deviceID;
 }
 
 bool JackMidiOutPort::supportsMIDI20Output() const
 {
-    LOGI("---- JACK output supportsMIDI20Output ----");
     return false;
-}
-
-// FIX: is opcode an compatible MIDI enumeration?
-
-mu::Ret sendEvent_noteonoff (void *pb, int framePos, const Event& e) {
-    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
-    if (p == 0) {
-        qDebug("JackMidi: buffer overflow, event lost");
-        return mu::Ret(false);
-    }
-    if (e.opcode() == Event::Opcode::NoteOn) {
-        p[0] = /* e.opcode() */ 0x90 | e.channel();
-    } else {
-        p[0] = /* e.opcode() */ 0x80 | e.channel();
-    }
-    p[1] = e.note();
-    p[2] = e.velocity();
-    return mu::Ret(true);
-}
-
-mu::Ret sendEvent_control (void *pb, int framePos, const Event& e) {
-    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
-    if (p == 0) {
-        qDebug("JackMidi: buffer overflow, event lost");
-        return mu::Ret(false);
-    }
-    p[0] = /* e.opcode() */ 0xb0 | e.channel();
-    p[1] = e.index();
-    p[2] = e.data();
-    return mu::Ret(true);
-}
-
-mu::Ret sendEvent_program (void *pb, int framePos, const Event& e) {
-    unsigned char* p = jack_midi_event_reserve(pb, framePos, 2);
-    if (p == 0) {
-        qDebug("JackMidiOutput: buffer overflow, event lost");
-        return mu::Ret(false);
-    }
-    p[0] = /* e.opcode() */ 0xc0 | e.channel();
-    p[1] = e.program();
-    return mu::Ret(true);
-}
-
-mu::Ret sendEvent_pitchbend (void *pb, int framePos, const Event& e) {
-    unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
-    if (p == 0) {
-        qDebug("JackMidiOutput: buffer overflow, event lost");
-        return mu::Ret(false);
-    }
-    p[0] = /* e.opcode() */ 0xe0 | e.channel();
-    p[1] = e.data(); // dataA
-    p[2] = e.velocity(); // dataB
-    return mu::Ret(true);
-}
-
-mu::Ret JackMidiOutPort::sendEvent(const Event& e)
-{
-    int framePos = 0;
-    LOGI() << "---- JACK-midi output sendEvent ----" << e.to_string();
-    // LOGI() << e.to_string();
-
-    if (!isConnected()) {
-        return make_ret(Err::MidiNotConnected);
-    }
-
-    if (e.isChannelVoice20()) {
-        auto events = e.toMIDI10();
-        for (auto& event : events) {
-            mu::Ret ret = sendEvent(event);
-            if (!ret) {
-                return ret;
-            }
-        }
-        return Ret(true);
-    }
-
-    //  int portIdx = seq->score()->midiPort(e.channel()); ??
-    jack_port_t* port = m_jack->midiOut; // [portIdx];
-    void* pb = jack_port_get_buffer(port, m_jack->segmentSize);
-
-    switch (e.opcode()) {
-    // FIX: Event::Opcode::POLYAFTER ?
-    case Event::Opcode::NoteOn:
-        return sendEvent_noteonoff(pb, framePos, e);
-    case Event::Opcode::NoteOff:
-        return sendEvent_noteonoff(pb, framePos, e);
-    case Event::Opcode::ControlChange:
-        return sendEvent_control(pb, framePos, e);
-    case Event::Opcode::ProgramChange:
-        return sendEvent_control(pb, framePos, e);
-    case Event::Opcode::PitchBend:
-        return sendEvent_pitchbend(pb, framePos, e);
-    default:
-        NOT_SUPPORTED << "event: " << e.to_string();
-        return make_ret(Err::MidiNotSupported);
-    }
-
-    return Ret(true);
 }
 
 bool JackMidiOutPort::deviceExists(const MidiDeviceID& deviceId) const
 {
-    LOGI("---- JACK-midi output deviceExists ----");
     for (const MidiDevice& device : availableDevices()) {
         if (device.id == deviceId) {
             return true;
@@ -224,4 +122,10 @@ bool JackMidiOutPort::deviceExists(const MidiDeviceID& deviceId) const
     }
 
     return false;
+}
+
+// Not used
+mu::Ret JackMidiOutPort::sendEvent(const Event&)
+{
+    return Ret(true);
 }

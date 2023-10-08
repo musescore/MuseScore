@@ -23,6 +23,8 @@
 #define MU_MIDI_JACKMIDIOUTPORT_H
 
 #include <memory>
+#include "framework/audio/midiqueue.h"
+#include "framework/audio/audiomodule.h"
 #include "midi/midiportstate.h"
 
 namespace mu::midi {
@@ -31,6 +33,7 @@ class JackMidiOutPort : public MidiPortState
 public:
     JackMidiOutPort() = default;
     ~JackMidiOutPort() = default;
+    void preamble(std::shared_ptr<mu::audio::IAudioDriver> audioDriver);
     void init();
     void deinit();
 
@@ -44,7 +47,8 @@ public:
 
 private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
-
+    std::shared_ptr<mu::audio::IAudioDriver> m_audioDriver;
+    std::shared_ptr<ThreadSafeQueue<const Event> > m_midiQueue;
     struct Jack;
     std::unique_ptr<Jack> m_jack;
     MidiDeviceID m_deviceID;

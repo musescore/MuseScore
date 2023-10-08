@@ -190,3 +190,8 @@ bool AlsaDriverState::isOpened() const
 {
     return m_alsaDeviceHandle != nullptr;
 }
+
+bool AlsaDriverState::pushMidiEvent(mu::midi::Event& e)
+{
+    return true; // dummy
+}
