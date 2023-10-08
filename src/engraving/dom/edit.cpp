@@ -684,7 +684,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
             for (Score* score : scoreList()) {
                 MeasureBase* titleFrame = score->first();
                 if (!titleFrame || !titleFrame->isVBox()) {
-                    titleFrame = score->insertMeasure(ElementType::VBOX, titleFrame);
+                    titleFrame = score->insertBox(ElementType::VBOX, titleFrame);
                 }
                 if (!linkedFrame) {
                     linkedFrame = titleFrame;

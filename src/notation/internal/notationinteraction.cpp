@@ -2144,16 +2144,16 @@ bool NotationInteraction::dropCanvas(EngravingItem* e)
     if (e->isActionIcon()) {
         switch (mu::engraving::toActionIcon(e)->actionType()) {
         case mu::engraving::ActionIconType::VFRAME:
-            score()->insertMeasure(ElementType::VBOX);
+            score()->insertBox(ElementType::VBOX);
             break;
         case mu::engraving::ActionIconType::HFRAME:
-            score()->insertMeasure(ElementType::HBOX);
+            score()->insertBox(ElementType::HBOX);
             break;
         case mu::engraving::ActionIconType::TFRAME:
-            score()->insertMeasure(ElementType::TBOX);
+            score()->insertBox(ElementType::TBOX);
             break;
         case mu::engraving::ActionIconType::FFRAME:
-            score()->insertMeasure(ElementType::FBOX);
+            score()->insertBox(ElementType::FBOX);
             break;
         case mu::engraving::ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE);

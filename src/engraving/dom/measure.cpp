@@ -1654,16 +1654,16 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::VFRAME:
-            score()->insertMeasure(ElementType::VBOX, this);
+            score()->insertBox(ElementType::VBOX, this);
             break;
         case ActionIconType::HFRAME:
-            score()->insertMeasure(ElementType::HBOX, this);
+            score()->insertBox(ElementType::HBOX, this);
             break;
         case ActionIconType::TFRAME:
-            score()->insertMeasure(ElementType::TBOX, this);
+            score()->insertBox(ElementType::TBOX, this);
             break;
         case ActionIconType::FFRAME:
-            score()->insertMeasure(ElementType::FBOX, this);
+            score()->insertBox(ElementType::FBOX, this);
             break;
         case ActionIconType::MEASURE:
             score()->insertMeasure(ElementType::MEASURE, this);
