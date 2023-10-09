@@ -123,9 +123,6 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
 
     engraving::MasterScore* score = masterNotation->notation()->elements()->msScore()->masterScore();
 
-    const double CANVAS_DPI = 300;
-    const draw::Color CURSOR_COLOR = draw::Color(0, 0, 255, 50);
-
     // Setup Score view
     masterNotation->notation()->setViewMode(notation::ViewMode::PAGE);
     score->setShowFrames(false);
@@ -134,6 +131,24 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
     score->setShowPageborders(false);
     score->setShowUnprintable(false);
     score->setShowVBox(false);
+
+    PageList pages = masterNotation->notation()->elements()->pages();
+    if (pages.empty()) {
+        LOGE() << "No pages";
+        return make_ret(Ret::Code::UnknownError);
+    }
+
+    double CANVAS_DPI = 300;
+
+    const Page* page = pages.front();
+    if (score->staves().size() > 3) {
+        //! NOTE: Calculate the dpi to display all page elements
+        RectF ttbox = page->tbbox();
+        double margin = 100.0;
+        double ttboxHeight = ttbox.height() + margin * 2;
+        double scale = config.height / ttboxHeight;
+        CANVAS_DPI = scale * engraving::DPI;
+    }
 
     score->setStyleValue(engraving::Sid::pageHeight, config.height / CANVAS_DPI);
     score->setStyleValue(engraving::Sid::pageWidth, config.width / CANVAS_DPI);
@@ -179,7 +194,8 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
 
     int frameCount = (totalPlayTimeSec + config.leadingSec + config.trailingSec) * config.fps;
 
-    PageList pages = masterNotation->notation()->elements()->pages();
+    //! NOTE: After setting the score above, the number of pages may change - get them again
+    pages = masterNotation->notation()->elements()->pages();
 
     auto pageByTick = [](const PageList& pages, midi::tick_t tick) -> const Page* {
         for (const Page* p : pages) {
@@ -189,6 +205,8 @@ mu::Ret VideoWriter::generatePagedOriginalVideo(INotationProjectPtr project, con
         }
         return nullptr;
     };
+
+    const draw::Color CURSOR_COLOR = draw::Color(0, 0, 255, 50);
 
     PlaybackCursor cursor;
     cursor.setNotation(masterNotation->notation());
