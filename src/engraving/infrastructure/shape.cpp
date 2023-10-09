@@ -59,6 +59,7 @@ Shape& Shape::translate(const PointF& pt)
     for (RectF& r : m_elements) {
         r.translate(pt);
     }
+    invalidateBBox();
     return *this;
 }
 
@@ -68,6 +69,7 @@ void Shape::translateX(double xo)
         r.setLeft(r.left() + xo);
         r.setRight(r.right() + xo);
     }
+    invalidateBBox();
 }
 
 void Shape::translateY(double yo)
@@ -76,6 +78,7 @@ void Shape::translateY(double yo)
         r.setTop(r.top() + yo);
         r.setBottom(r.bottom() + yo);
     }
+    invalidateBBox();
 }
 
 //---------------------------------------------------------
@@ -89,6 +92,21 @@ Shape Shape::translated(const PointF& pt) const
         s.add(r.translated(pt), r.toItem);
     }
     return s;
+}
+
+void Shape::invalidateBBox()
+{
+    m_bbox = RectF();
+}
+
+const RectF& Shape::bbox() const
+{
+    if (m_bbox.isNull()) {
+        for (const ShapeElement& e : m_elements) {
+            m_bbox.unite(e);
+        }
+    }
+    return m_bbox;
 }
 
 //-------------------------------------------------------------------
@@ -365,6 +383,8 @@ void Shape::add(const Shape& s)
     if (!m_spatium) {
         m_spatium = s.m_spatium;
     }
+
+    invalidateBBox();
 }
 
 void Shape::add(const RectF& r, const EngravingItem* p)
@@ -373,6 +393,14 @@ void Shape::add(const RectF& r, const EngravingItem* p)
     if (!m_spatium && p) {
         m_spatium = p->spatium();
     }
+
+    invalidateBBox();
+}
+
+void Shape::add(const mu::RectF& r)
+{
+    m_elements.push_back(ShapeElement(r));
+    invalidateBBox();
 }
 
 //---------------------------------------------------------
@@ -389,6 +417,8 @@ void Shape::remove(const RectF& r)
     }
 
     ASSERT_X("Shape::remove: RectF not found in Shape");
+
+    invalidateBBox();
 }
 
 void Shape::remove(const Shape& s)
@@ -396,6 +426,8 @@ void Shape::remove(const Shape& s)
     for (const RectF& r : s.m_elements) {
         remove(r);
     }
+
+    invalidateBBox();
 }
 
 void Shape::removeInvisibles()
@@ -403,6 +435,7 @@ void Shape::removeInvisibles()
     mu::remove_if(m_elements, [](ShapeElement& shapeElement) {
         return !shapeElement.toItem || !shapeElement.toItem->visible();
     });
+    invalidateBBox();
 }
 
 //---------------------------------------------------------

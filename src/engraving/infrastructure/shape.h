@@ -23,7 +23,6 @@
 #ifndef MU_ENGRAVING_SHAPE_H
 #define MU_ENGRAVING_SHAPE_H
 
-#include "global/allocator.h"
 #include "draw/types/geometry.h"
 
 namespace mu::draw {
@@ -32,7 +31,6 @@ class Painter;
 
 namespace mu::engraving {
 class EngravingItem;
-class Score;
 
 //---------------------------------------------------------
 //   ShapeElement
@@ -61,9 +59,13 @@ public:
     Shape() {}
     Shape(const mu::RectF& r, const EngravingItem* p = nullptr) { add(r, p); }
 
+    size_t size() const { return m_elements.size(); }
+    bool empty() const { return m_elements.empty(); }
+    void clear() { m_elements.clear(); }
+
     void add(const Shape& s);
     void add(const mu::RectF& r, const EngravingItem* p);
-    void add(const mu::RectF& r) { m_elements.push_back(ShapeElement(r)); }
+    void add(const mu::RectF& r);
 
     void remove(const mu::RectF&);
     void remove(const Shape&);
@@ -72,8 +74,11 @@ public:
     {
         size_t origSize = m_elements.size();
         m_elements.erase(std::remove_if(m_elements.begin(), m_elements.end(), p), m_elements.end());
+        invalidateBBox();
         return origSize != m_elements.size();
     }
+
+    const std::vector<ShapeElement>& elements() const { return m_elements; }
 
     void removeInvisibles();
 
@@ -84,6 +89,7 @@ public:
     void translateY(double);
     Shape translated(const mu::PointF&) const;
 
+    const mu::RectF& bbox() const;
     double minHorizontalDistance(const Shape&) const;
     double minVerticalDistance(const Shape&) const;
     double verticalClearance(const Shape&) const;
@@ -95,11 +101,6 @@ public:
     double bottom() const;
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
-
-    const std::vector<ShapeElement>& elements() const { return m_elements; }
-    size_t size() const { return m_elements.size(); }
-    bool empty() const { return m_elements.empty(); }
-    void clear() { m_elements.clear(); }
 
     bool contains(const mu::PointF&) const;
     bool intersects(const mu::RectF& rr) const;
@@ -114,7 +115,11 @@ public:
 #endif
 
 private:
+
+    void invalidateBBox();
+
     std::vector<ShapeElement> m_elements;
+    mutable RectF m_bbox;   // cache
     double m_spatium = 0.0;
     double m_squeezeFactor = 1.0;
 };
