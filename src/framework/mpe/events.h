@@ -279,6 +279,7 @@ struct PlaybackSetupData
     SoundSubCategories subCategorySet;
 
     std::optional<std::string> musicXmlSoundId;
+    bool supportsSingleNoteDynamics = false;
 
     bool contains(const SoundSubCategory subcategory) const
     {
@@ -289,7 +290,8 @@ struct PlaybackSetupData
     {
         return id == other.id
                && category == other.category
-               && subCategorySet == other.subCategorySet;
+               && subCategorySet == other.subCategorySet
+               && supportsSingleNoteDynamics == other.supportsSingleNoteDynamics;
     }
 
     bool operator<(const PlaybackSetupData& other) const

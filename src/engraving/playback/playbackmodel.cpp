@@ -688,8 +688,8 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
             continue;
         }
 
-        search->second.mainStream.send(search->second.originEvents);
         search->second.dynamicLevelChanges.send(search->second.dynamicLevelLayers);
+        search->second.mainStream.send(search->second.originEvents);
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {

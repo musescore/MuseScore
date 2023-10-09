@@ -860,9 +860,11 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
     ASSERT_TRUE(score);
     ASSERT_EQ(score->parts().size(), 12);
 
+    constexpr bool supportsSnd = true; // supports single note dynamics
+
     // [GIVEN] Expected setup data for each instrument
     std::unordered_map<std::string, mpe::PlaybackSetupData> expectedSetupData = {
-        { "sopranissimo-saxophone", { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo }, {} } },
+        { "sopranissimo-saxophone", { SoundId::Saxophone, SoundCategory::Winds, { SoundSubCategory::Sopranissimo }, {}, supportsSnd } },
         { "marching-tenor-drums", { SoundId::Drum, SoundCategory::Percussions, { SoundSubCategory::Marching,
                                                                                  SoundSubCategory::Snare,
                                                                                  SoundSubCategory::Tenor }, {} } },
@@ -873,16 +875,16 @@ TEST_F(Engraving_PlaybackModelTests, Playback_Setup_Data_MultiInstrument)
         { "bass-steel-drums", { SoundId::SteelDrums, SoundCategory::Percussions, { SoundSubCategory::Metal,
                                                                                    SoundSubCategory::Steel,
                                                                                    SoundSubCategory::Bass }, {} } },
-        { "alto-viol", { SoundId::Viol, SoundCategory::Strings, { SoundSubCategory::Alto }, {} } },
-        { "f-wagner-tuba", { SoundId::Tuba, SoundCategory::Winds, { SoundSubCategory::Wagner }, {} } },
+        { "alto-viol", { SoundId::Viol, SoundCategory::Strings, { SoundSubCategory::Alto }, {}, supportsSnd } },
+        { "f-wagner-tuba", { SoundId::Tuba, SoundCategory::Winds, { SoundSubCategory::Wagner }, {}, supportsSnd } },
         { "bass-harmonica-hohner", { SoundId::Harmonica, SoundCategory::Winds, { SoundSubCategory::Bass,
-                                                                                 SoundSubCategory::Hohner }, {} } },
+                                                                                 SoundSubCategory::Hohner }, {}, supportsSnd } },
         { "chinese-tom-toms", { SoundId::TomToms, SoundCategory::Percussions, { SoundSubCategory::Chinese }, {} } },
         { "electric-piano", { SoundId::Piano, SoundCategory::Keyboards, { SoundSubCategory::Electric }, {} } },
         { "crystal-synth", { SoundId::Synthesizer, SoundCategory::Keyboards, { SoundSubCategory::Electric,
-                                                                               SoundSubCategory::FX_Crystal }, {} } },
+                                                                               SoundSubCategory::FX_Crystal }, {}, supportsSnd } },
         { "boy-soprano", { SoundId::Choir, SoundCategory::Voices, { SoundSubCategory::Soprano,
-                                                                    SoundSubCategory::Boy }, {} } },
+                                                                    SoundSubCategory::Boy }, {}, supportsSnd } },
     };
 
     // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family

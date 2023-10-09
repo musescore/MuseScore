@@ -101,9 +101,9 @@ private:
     Ret init();
     void createFluidInstance();
 
-    bool handleEvent(const midi::Event& event);
+    bool handleMidiEvent(const midi::Event& event);
+    bool handleDynamicEvent(const midi::DynamicEvent& event);
 
-    int setExpressionLevel(int level);
     int setControllerValue(const midi::Event& event);
 
     std::shared_ptr<Fluid> m_fluid = nullptr;
@@ -115,6 +115,9 @@ private:
     std::optional<midi::Program> m_preset;
 
     KeyTuning m_tuning;
+
+    midi::Event m_expressionEvent;
+    bool m_useDynamicEvents = false;
 };
 
 using FluidSynthPtr = std::shared_ptr<FluidSynth>;

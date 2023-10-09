@@ -34,9 +34,11 @@ static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
 static constexpr int MIN_SUPPORTED_DYNAMIC_VELOCITY = 16; // MIDI equivalent for PPP
 static constexpr int MAX_SUPPORTED_DYNAMIC_VELOCITY = 127; // MIDI equivalent for FFF
 
-void FluidSequencer::init(const PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride)
+void FluidSequencer::init(const PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride,
+                          bool useDynamicEvents)
 {
     m_channels.init(setupData, programOverride);
+    m_useDynamicEvents = useDynamicEvents;
 }
 
 void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
@@ -54,6 +56,7 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes
 void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
     m_mainStreamEvents.clear();
+    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
@@ -61,6 +64,7 @@ void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& change
 
     updatePlaybackEvents(m_mainStreamEvents, changes);
     updateMainSequenceIterator();
+    updateDynamicChangesIterator();
 }
 
 void FluidSequencer::updateDynamicChanges(const mpe::DynamicLevelLayers&)
@@ -92,14 +96,21 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             channel_t channelIdx = channel(noteEvent);
             note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
-            velocity_t velocity = noteVelocity(noteEvent);
             tuning_t tuning = noteTuning(noteEvent, noteIdx);
 
             midi::Event noteOn(Event::Opcode::NoteOn, Event::MessageType::ChannelVoice20);
             noteOn.setChannel(channelIdx);
             noteOn.setNote(noteIdx);
-            noteOn.setVelocity(velocity);
             noteOn.setPitchNote(noteIdx, tuning);
+
+            if (m_useDynamicChangeEvents) {
+                velocity_t velocity = dynamicLevelToMidiVelocity(dynamicLevelFromType(DynamicType::Natural));
+                noteOn.setVelocity(velocity);
+                appendDynamicChangeEvents(m_dynamicEvents, noteEvent, m_dynamicLevelLayers, channelIdx);
+            } else {
+                velocity_t velocity = noteVelocity(noteEvent);
+                noteOn.setVelocity(velocity);
+            }
 
             destination[timestampFrom].emplace(std::move(noteOn));
 
@@ -213,6 +224,56 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
 
     event.setData(8192);
     destination[timestampFrom].emplace(std::move(event));
+}
+
+void FluidSequencer::appendDynamicEvents(EventSequenceMap& destination, const NoteEvent& noteEvent,
+                                         const mpe::DynamicLevelLayers& dynamicLayers, const channel_t channelIdx)
+{
+    const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    timestamp_t timestampFrom = arrangementCtx.actualTimestamp;
+    timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+
+    if (timestampTo < timestampFrom) {
+        return;
+    }
+
+    dynamic_layer_idx_t dynamicLayerIdx = makeDynamicLayerIndex(arrangementCtx.voiceLayerIndex);
+    auto dynamicLevelMapIt = dynamicLayers.find(dynamicLayerIdx);
+    if (dynamicLevelMapIt == dynamicLayers.end()) {
+        return;
+    }
+
+    const DynamicLevelMap& dynamicLevelMap = dynamicLevelMapIt->second;
+    if (dynamicLevelMap.empty()) {
+        return;
+    }
+
+    auto fromIt = findLessOrEqual(dynamicLevelMap, timestampFrom);
+    if (fromIt == dynamicLevelMap.end()) {
+        return;
+    }
+
+    auto toIt = findLessOrEqual(dynamicLevelMap, timestampTo);
+    if (toIt == dynamicLevelMap.end()) {
+        return;
+    }
+
+    if (fromIt == toIt) {
+        DynamicEvent event;
+        event.channelIdx = channelIdx;
+        event.value = noteVelocity(noteEvent);
+        destination[timestampFrom].emplace(std::move(event));
+        return;
+    }
+
+    auto endIt = std::next(toIt);
+
+    for (auto it = fromIt; it != endIt; ++it) {
+        DynamicEvent event;
+        event.channelIdx = channelIdx;
+        event.value = dynamicLevelToMidiVelocity(it->second);
+        destination[it->first].emplace(std::move(event));
+    }
 }
 
 channel_t FluidSequencer::channel(const mpe::NoteEvent& noteEvent) const

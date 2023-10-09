@@ -25,16 +25,43 @@
 
 #include "async/channel.h"
 #include "midi/midievent.h"
+#include "midi/miditypes.h"
 #include "mpe/events.h"
 
 #include "../../abstracteventsequencer.h"
 #include "soundmapping.h"
 
+typedef typename std::variant<mu::midi::Event, mu::midi::DynamicEvent> FluidSequencerEvent;
+
+template<>
+struct std::less<FluidSequencerEvent>
+{
+    bool operator()(const FluidSequencerEvent& first,
+                    const FluidSequencerEvent& second) const
+    {
+        if (first.index() != second.index()) {
+            return first.index() < second.index();
+        }
+
+        if (std::holds_alternative<mu::midi::Event>(first)) {
+            return std::less<mu::midi::Event> {}(std::get<mu::midi::Event>(first),
+                                                 std::get<mu::midi::Event>(second));
+        }
+
+        if (std::holds_alternative<mu::midi::DynamicEvent>(first)) {
+            return std::less<mu::midi::DynamicEvent> {}(std::get<mu::midi::DynamicEvent>(first),
+                                                        std::get<mu::midi::DynamicEvent>(second));
+        }
+
+        return false;
+    }
+};
+
 namespace mu::audio {
-class FluidSequencer : public AbstractEventSequencer<midi::Event>
+class FluidSequencer : public AbstractEventSequencer<mu::midi::Event, mu::midi::DynamicEvent>
 {
 public:
-    void init(const mpe::PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride);
+    void init(const mpe::PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride, bool useDynamicEvents);
 
     void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
     void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
@@ -53,6 +80,9 @@ private:
     void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                          const midi::channel_t channelIdx);
 
+    void appendDynamicEvents(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
+                             const mpe::DynamicLevelLayers& dynamicLayers, const midi::channel_t channelIdx);
+
     midi::channel_t channel(const mpe::NoteEvent& noteEvent) const;
     midi::note_idx_t noteIndex(const mpe::pitch_level_t pitchLevel) const;
     midi::tuning_t noteTuning(const mpe::NoteEvent& noteEvent, const int noteIdx) const;
@@ -61,6 +91,7 @@ private:
     int pitchBendLevel(const mpe::pitch_level_t pitchLevel) const;
 
     mutable ChannelMap m_channels;
+    bool m_useDynamicEvents = false;
 };
 }
 
