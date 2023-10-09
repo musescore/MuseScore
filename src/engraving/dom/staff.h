@@ -203,7 +203,7 @@ public:
     void setBarLineSpan(int val) { _barLineSpan = val; }
     void setBarLineFrom(int val) { _barLineFrom = val; }
     void setBarLineTo(int val) { _barLineTo = val; }
-    double height() const override;
+    double staffHeight() const;
 
     int channel(const Fraction&, voice_idx_t voice) const;
 

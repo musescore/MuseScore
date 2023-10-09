@@ -527,7 +527,7 @@ void Lyrics::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags ps
             // rebase offset
             PointF off = offset();
             double y = pos().y() - propertyDefault(Pid::OFFSET).value<PointF>().y();
-            off.ry() = placeAbove() ? y : y - staff()->height();
+            off.ry() = placeAbove() ? y : y - staff()->staffHeight();
             undoChangeProperty(Pid::OFFSET, off, PropertyFlags::UNSTYLED);
         }
         TextBase::undoChangeProperty(id, v, ps);

@@ -883,7 +883,7 @@ static void adjustPlacement(EngravingItem* e)
 
     // determine placement based on offset
     // anything below staff will be set to below
-    double staffHeight = e->staff()->height();
+    double staffHeight = e->staff()->staffHeight();
     double threshold = staffHeight;
     double offsetAdjust = 0.0;
     PlacementV defaultPlacement = e->propertyDefault(Pid::PLACEMENT).value<PlacementV>();

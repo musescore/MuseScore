@@ -2031,7 +2031,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
 
                     mmrest->setWidth(w);
                     TLayout::layout(mmrest, ctx);
-                    e->setPos(x1 - s.x() + d, e->staff()->height() * .5);   // center vertically in measure
+                    e->setPos(x1 - s.x() + d, e->staff()->staffHeight() * .5);   // center vertically in measure
                     s.createShape(staffIdx);
                 } else { // if (rest->isFullMeasureRest()) {
                     //

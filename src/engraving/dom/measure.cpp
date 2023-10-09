@@ -1537,16 +1537,16 @@ EngravingItem* Measure::drop(EditData& data)
                 if (ns == s) {
                     double y1 = s->staffYpage(staffIdx);
                     double y2 = s->page()->height() - s->page()->bm();
-                    gap = y2 - y1 - score()->staff(staffIdx)->height();
+                    gap = y2 - y1 - score()->staff(staffIdx)->staffHeight();
                 } else if (ns && ns->page() == s->page()) {
                     double y1 = s->staffYpage(staffIdx);
                     double y2 = ns->staffYpage(0);
-                    gap = y2 - y1 - score()->staff(staffIdx)->height();
+                    gap = y2 - y1 - score()->staff(staffIdx)->staffHeight();
                 }
             } else {
                 double y1 = s->staffYpage(staffIdx);
                 double y2 = s->staffYpage(nextVisStaffIdx);
-                gap = y2 - y1 - score()->staff(staffIdx)->height();
+                gap = y2 - y1 - score()->staff(staffIdx)->staffHeight();
             }
             spacer->setGap(Millimetre(gap));
         }
