@@ -1750,10 +1750,8 @@ void Measure::adjustToLen(Fraction nf, bool appendRestsIfNecessary)
                 std::vector<TDuration> durList = toDurationList(nf * stretch, false, 0);
 
                 // set the existing rest to the first value of the duration list
-                for (EngravingObject* e : rest->linkList()) {
-                    e->undoChangeProperty(Pid::DURATION, durList[0].fraction());
-                    e->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, durList[0].typeWithDots());
-                }
+                rest->undoChangeProperty(Pid::DURATION, durList[0].fraction());
+                rest->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, durList[0].typeWithDots());
 
                 // add rests for any other duration list value
                 Fraction tickOffset = tick() + rest->actualTicks();

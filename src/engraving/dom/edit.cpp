@@ -5319,49 +5319,6 @@ void Score::undoChangeClef(Staff* ostaff, EngravingItem* e, ClefType ct, bool fo
 }
 
 //---------------------------------------------------------
-//   findLinkedVoiceElement
-//---------------------------------------------------------
-
-static EngravingItem* findLinkedVoiceElement(EngravingItem* e, Staff* nstaff)
-{
-    Excerpt* se = e->score()->excerpt();
-    Excerpt* de = nstaff->score()->excerpt();
-    track_idx_t strack = e->track();
-    track_idx_t dtrack = nstaff->idx() * VOICES + e->voice();
-
-    if (se) {
-        strack = mu::key(se->tracksMapping(), strack);
-    }
-
-    if (de) {
-        std::vector<track_idx_t> l = mu::values(de->tracksMapping(), strack);
-        if (l.empty()) {
-            // simply return the first linked element whose staff is equal to nstaff
-            for (EngravingObject* ee : e->linkList()) {
-                EngravingItem* el = toEngravingItem(ee);
-                if (el->staff() == nstaff) {
-                    return el;
-                }
-            }
-            return 0;
-        }
-        for (track_idx_t i : l) {
-            if (nstaff->idx() * VOICES <= i && (nstaff->idx() + 1) * VOICES > i) {
-                dtrack = i;
-                break;
-            }
-        }
-    }
-
-    Score* score     = nstaff->score();
-    Segment* segment = toSegment(e->explicitParent());
-    Measure* measure = segment->measure();
-    Measure* m       = score->tick2measure(measure->tick());
-    Segment* s       = m->findSegment(segment->segmentType(), segment->tick());
-    return s ? s->element(dtrack) : nullptr;
-}
-
-//---------------------------------------------------------
 //   findLinkedChord
 //---------------------------------------------------------
 
@@ -5429,20 +5386,8 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
 
 void Score::undoChangeChordRestLen(ChordRest* cr, const TDuration& d)
 {
-    auto sl = cr->staff()->staffList();
-    for (Staff* staff : sl) {
-        ChordRest* ncr;
-        if (cr->isGrace()) {
-            ncr = findLinkedChord(toChord(cr), staff);
-        } else {
-            ncr = toChordRest(findLinkedVoiceElement(cr, staff));
-        }
-        if (!ncr) {
-            continue;
-        }
-        ncr->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, d.typeWithDots());
-        ncr->undoChangeProperty(Pid::DURATION, d.fraction());
-    }
+    cr->undoChangeProperty(Pid::DURATION_TYPE_WITH_DOTS, d.typeWithDots());
+    cr->undoChangeProperty(Pid::DURATION, d.fraction());
 }
 
 //---------------------------------------------------------
