@@ -44,8 +44,9 @@ public:
     virtual INotationNoteInputPtr noteInput() const = 0;
 
     // Shadow note
-    virtual void showShadowNote(const PointF& pos) = 0;
+    virtual bool showShadowNote(const PointF& pos) = 0;
     virtual void hideShadowNote() = 0;
+    virtual RectF shadowNoteRect() const = 0;
 
     // Visibility
     virtual void toggleVisible() = 0;

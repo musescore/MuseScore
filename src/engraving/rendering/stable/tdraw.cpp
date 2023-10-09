@@ -2399,7 +2399,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
     bool up = item->computeUp();
 
     // Draw the accidental
-    SymId acc = Accidental::subtype2symbol(item->score()->inputState().accidentalType());
+    SymId acc = Accidental::subtype2symbol(item->accidentalType());
     if (acc != SymId::noSym) {
         PointF posAcc;
         posAcc.rx() -= item->symWidth(acc) + item->style().styleMM(Sid::accidentalNoteDistance) * item->mag();
@@ -2452,7 +2452,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
     }
 
     // Draw ledger lines if needed
-    if (!item->isRest() && item->lineIndex() < 100 && item->lineIndex() > -100) {
+    if (item->ledgerLinesVisible()) {
         double extraLen = item->style().styleS(Sid::ledgerLineLength).val() * sp;
         double x1 = -extraLen;
         double x2 = noteheadWidth + extraLen;

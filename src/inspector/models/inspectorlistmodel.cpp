@@ -140,6 +140,19 @@ int InspectorListModel::columnCount(const QModelIndex&) const
     return 1;
 }
 
+void InspectorListModel::setInspectorVisible(bool visible)
+{
+    if (m_inspectorVisible == visible) {
+        return;
+    }
+
+    m_inspectorVisible = visible;
+
+    if (visible) {
+        updateElementList();
+    }
+}
+
 void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionType>& sectionTypeList,
                                                    const ElementKeySet& selectedElementKeySet)
 {
@@ -158,7 +171,8 @@ void InspectorListModel::createModelsBySectionType(const QList<InspectorSectionT
             continue;
         }
 
-        beginInsertRows(QModelIndex(), rowCount(), rowCount());
+        int rows = rowCount();
+        beginInsertRows(QModelIndex(), rows, rows);
 
         AbstractInspectorModel* newModel = nullptr;
 
@@ -296,22 +310,31 @@ void InspectorListModel::notifyModelsAboutNotationChanged()
 
 void InspectorListModel::listenSelectionChanged()
 {
-    auto updateElementList = [this]() {
-        INotationPtr notation = context()->currentNotation();
-        if (!notation) {
-            setElementList({});
-            return;
-        }
-
-        INotationSelectionPtr selection = notation->interaction()->selection();
-        auto elements = selection->elements();
-        setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
-    };
-
     updateElementList();
 
     INotationPtr notation = context()->currentNotation();
-    if (notation) {
-        notation->interaction()->selectionChanged().onNotify(this, updateElementList);
+    if (!notation) {
+        return;
     }
+
+    notation->interaction()->selectionChanged().onNotify(this, [this]() {
+        updateElementList();
+    });
+}
+
+void InspectorListModel::updateElementList()
+{
+    if (!m_inspectorVisible) {
+        return;
+    }
+
+    INotationPtr notation = context()->currentNotation();
+    if (!notation) {
+        setElementList({});
+        return;
+    }
+
+    INotationSelectionPtr selection = notation->interaction()->selection();
+    auto elements = selection->elements();
+    setElementList(QList(elements.cbegin(), elements.cend()), selection->state());
 }

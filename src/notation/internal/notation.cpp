@@ -88,11 +88,8 @@ Notation::Notation(mu::engraving::Score* score)
     });
 
     configuration()->canvasOrientation().ch.onReceive(this, [this](framework::Orientation) {
-        if (m_score) {
+        if (m_score && m_score->autoLayoutEnabled()) {
             m_score->doLayout();
-            for (Score* score : m_score->scoreList()) {
-                score->doLayout();
-            }
         }
     });
 
@@ -238,6 +235,11 @@ void Notation::notifyAboutNotationChanged()
 void Notation::setViewMode(const ViewMode& viewMode)
 {
     m_painting->setViewMode(viewMode);
+}
+
+mu::async::Notification Notation::viewModeChanged() const
+{
+    return m_painting->viewModeChanged();
 }
 
 ViewMode Notation::viewMode() const

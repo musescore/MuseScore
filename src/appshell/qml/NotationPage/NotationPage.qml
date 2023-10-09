@@ -431,6 +431,7 @@ DockPage {
         name: "MainNotationView"
 
         isNavigatorVisible: pageModel.isNavigatorVisible
+        isBraillePanelVisible: pageModel.isBraillePanelVisible
         isMainView: true
 
         Component.onCompleted: {

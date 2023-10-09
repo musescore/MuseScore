@@ -80,6 +80,7 @@ public:
     bool isInstrumentSelected() const;
 
     Q_INVOKABLE void load();
+    Q_INVOKABLE void setInstrumentsPanelVisible(bool visible);
     Q_INVOKABLE void selectRow(const QModelIndex& rowIndex);
     Q_INVOKABLE void clearSelection();
     Q_INVOKABLE void addInstruments();
@@ -128,6 +129,7 @@ private:
     void setupPartsConnections();
     void setupStavesConnections(const ID& stavesPartId);
     void listenNotationSelectionChanged();
+    void updateSelectedRows();
 
     void clear();
     void deleteItems();
@@ -162,6 +164,8 @@ private:
 
     using NotationKey = QString;
     QHash<NotationKey, QList<ID> > m_sortedPartIdList;
+
+    bool m_instrumentsPanelVisible = true;
 };
 }
 

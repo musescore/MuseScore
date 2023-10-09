@@ -39,6 +39,7 @@ public:
 
     virtual void setViewMode(const ViewMode& vm) = 0;
     virtual ViewMode viewMode() const = 0;
+    virtual async::Notification viewModeChanged() const = 0;
 
     virtual int pageCount() const = 0;
     virtual SizeF pageSizeInch() const = 0;

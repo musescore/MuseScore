@@ -62,6 +62,7 @@ public:
 
     ViewMode viewMode() const override;
     void setViewMode(const ViewMode& viewMode) override;
+    async::Notification viewModeChanged() const override;
 
     INotationPaintingPtr painting() const override;
     INotationViewStatePtr viewState() const override;

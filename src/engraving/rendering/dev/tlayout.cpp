@@ -4433,19 +4433,18 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         item->setbbox(RectF());
         return;
     }
+
     double _spatium = item->spatium();
-    RectF newBbox;
+    double mag = item->mag();
     RectF noteheadBbox = item->symBbox(item->noteheadSymbol());
     bool up = item->computeUp();
 
-    // TODO: Take into account accidentals and articulations?
-
     // Layout dots
-    double dotWidth = 0;
+    double dotWidth = 0.0;
     if (item->duration().dots() > 0) {
         double noteheadWidth = noteheadBbox.width();
-        double d  = ctx.conf().styleMM(Sid::dotNoteDistance) * item->mag();
-        double dd = ctx.conf().styleMM(Sid::dotDotDistance) * item->mag();
+        double d  = ctx.conf().styleMM(Sid::dotNoteDistance) * mag;
+        double dd = ctx.conf().styleMM(Sid::dotDotDistance) * mag;
         dotWidth = (noteheadWidth + d);
         if (item->hasFlag() && up) {
             dotWidth = std::max(dotWidth, noteheadWidth + item->symBbox(item->flagSym()).right());
@@ -4454,6 +4453,8 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
             dotWidth += dd * i;
         }
     }
+
+    RectF newBbox;
     newBbox.setRect(noteheadBbox.x(), noteheadBbox.y(), noteheadBbox.width() + dotWidth, noteheadBbox.height());
 
     // Layout stem and flag
@@ -4464,6 +4465,7 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         double stemWidth = ctx.conf().styleMM(Sid::stemWidth);
         double stemLength = (up ? -3.5 : 3.5) * _spatium;
         double stemAnchor = item->symSmuflAnchor(item->noteheadSymbol(), up ? SmuflAnchorId::stemUpSE : SmuflAnchorId::stemDownNW).y();
+
         newBbox |= RectF(up ? x + w - stemWidth : x,
                          stemAnchor,
                          stemWidth,
@@ -4478,9 +4480,11 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         }
     }
 
+    int lineIdx = item->lineIndex();
+
     // Layout ledger lines if needed
-    if (!item->isRest() && item->lineIndex() < 100 && item->lineIndex() > -100) {
-        double extraLen = ctx.conf().styleMM(Sid::ledgerLineLength) * item->mag();
+    if (item->ledgerLinesVisible()) {
+        double extraLen = ctx.conf().styleMM(Sid::ledgerLineLength) * mag;
         double step = 0.5 * _spatium * item->staffType()->lineDistance().val();
         double x = noteheadBbox.x() - extraLen;
         double w = noteheadBbox.width() + 2 * extraLen;
@@ -4488,14 +4492,62 @@ void TLayout::layoutShadowNote(ShadowNote* item, LayoutContext& ctx)
         double lw = ctx.conf().styleMM(Sid::ledgerLineWidth);
 
         RectF r(x, -lw * .5, w, lw);
-        for (int i = -2; i >= item->lineIndex(); i -= 2) {
-            newBbox |= r.translated(PointF(0, step * (i - item->lineIndex())));
+        for (int i = -2; i >= lineIdx; i -= 2) {
+            newBbox |= r.translated(PointF(0, step * (i - lineIdx)));
         }
         int l = item->staffType()->lines() * 2; // first ledger line below staff
-        for (int i = l; i <= item->lineIndex(); i += 2) {
-            newBbox |= r.translated(PointF(0, step * (i - item->lineIndex())));
+        for (int i = l; i <= lineIdx; i += 2) {
+            newBbox |= r.translated(PointF(0, step * (i - lineIdx)));
         }
     }
+
+    // Layout accidental
+    SymId acc = Accidental::subtype2symbol(item->accidentalType());
+    if (acc != SymId::noSym) {
+        RectF symRect = item->symBbox(acc);
+        double accWidth = symRect.width() + ctx.conf().styleMM(Sid::accidentalNoteDistance) * mag;
+        double dh = 0.0;
+
+        if (symRect.y() < newBbox.y()) {
+            dh = symRect.height() - (newBbox.y() - symRect.y());
+            newBbox.setY(symRect.y());
+        } else if (symRect.y() > newBbox.y()) {
+            dh = newBbox.height() - (symRect.y() - newBbox.y());
+        }
+
+        newBbox.setX(newBbox.x() - accWidth);
+        newBbox.setWidth(newBbox.width() + accWidth);
+        newBbox.setHeight(newBbox.height() + dh);
+    }
+
+    const std::set<SymId>& articulationIds = item->articulationIds();
+    if (articulationIds.empty()) {
+        item->setbbox(newBbox);
+        return;
+    }
+
+    // Layout articulations
+    double articulationsTop = -_spatium * .5 * lineIdx + item->segmentSkylineTopY();
+    RectF rectWithArticulations = RectF(PointF(newBbox.x(), articulationsTop), newBbox.bottomRight());
+
+    for (const SymId& artic: item->articulationIds()) {
+        bool isMarcato = Articulation::symId2ArticulationName(artic).contains(u"marcato");
+        double symH = item->symHeight(artic);
+
+        if (!up || isMarcato) {
+            double topY = rectWithArticulations.y();
+            if (topY > 0.0) {
+                topY = 0.0;
+            }
+
+            rectWithArticulations.setTop(topY - symH - _spatium);
+        } else {
+            rectWithArticulations.setHeight(rectWithArticulations.height() + symH + _spatium);
+        }
+    }
+
+    newBbox.unite(rectWithArticulations);
+
     item->setbbox(newBbox);
 }
 

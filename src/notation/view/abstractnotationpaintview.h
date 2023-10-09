@@ -181,7 +181,7 @@ protected:
     virtual void onLoadNotation(INotationPtr notation);
     virtual void onUnloadNotation(INotationPtr notation);
 
-    virtual void onMatrixChanged(const draw::Transform& matrix, bool overrideZoomType);
+    virtual void onMatrixChanged(const draw::Transform& oldMatrix, const draw::Transform& newMatrix, bool overrideZoomType);
 
 protected slots:
     virtual void onViewSizeChanged();
@@ -202,7 +202,7 @@ private:
 
     bool doMoveCanvas(qreal dx, qreal dy);
 
-    void redraw(const RectF& rect = RectF());
+    void scheduleRedraw(const RectF& rect = RectF());
     RectF correctDrawRect(const RectF& rect) const;
 
     // Input
@@ -272,6 +272,8 @@ private:
 
     bool m_isPopupOpen = false;
     bool m_isContextMenuOpen = false;
+
+    RectF m_shadowNoteRect;
 };
 }
 

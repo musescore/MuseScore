@@ -40,6 +40,11 @@ bool NotationPageModel::isNavigatorVisible() const
     return configuration()->isNotationNavigatorVisible();
 }
 
+bool NotationPageModel::isBraillePanelVisible() const
+{
+    return brailleConfiguration()->braillePanelEnabled();
+}
+
 void NotationPageModel::init()
 {
     TRACEFUNC;
@@ -51,6 +56,10 @@ void NotationPageModel::init()
 
     globalContext()->currentNotationChanged().onNotify(this, [this]() {
         onNotationChanged();
+    });
+
+    brailleConfiguration()->braillePanelEnabledChanged().onNotify(this, [this]() {
+        emit isBraillePanelVisibleChanged();
     });
 
     onNotationChanged();

@@ -52,13 +52,16 @@ bool ShadowNote::isValid() const
     return m_noteheadSymbol != SymId::noSym;
 }
 
-void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, double segmentSkylineTopY, double segmentSkylineBottomY)
+void ShadowNote::setState(SymId noteSymbol, TDuration duration, bool rest, double segmentSkylineTopY, double segmentSkylineBottomY,
+                          AccidentalType accidentalType, const std::set<SymId>& articulationIds)
 {
     m_noteheadSymbol = noteSymbol;
     m_duration = duration;
     m_isRest = rest;
     m_segmentSkylineTopY = segmentSkylineTopY;
     m_segmentSkylineBottomY = segmentSkylineBottomY;
+    m_accidentalType = accidentalType;
+    m_articulationIds = articulationIds;
 }
 
 bool ShadowNote::hasStem() const
@@ -80,6 +83,31 @@ SymId ShadowNote::flagSym() const
     bool straight = style().styleB(Sid::useStraightNoteFlags);
     int hooks = computeUp() ? m_duration.hooks() : -m_duration.hooks();
     return Hook::symIdForHookIndex(hooks, straight);
+}
+
+AccidentalType ShadowNote::accidentalType() const
+{
+    return m_accidentalType;
+}
+
+const std::set<SymId>& ShadowNote::articulationIds() const
+{
+    return m_articulationIds;
+}
+
+double ShadowNote::segmentSkylineBottomY() const
+{
+    return m_segmentSkylineBottomY;
+}
+
+double ShadowNote::segmentSkylineTopY() const
+{
+    return m_segmentSkylineTopY;
+}
+
+bool ShadowNote::ledgerLinesVisible() const
+{
+    return !m_isRest && m_lineIndex < 100 && m_lineIndex > -100;
 }
 
 //---------------------------------------------------------
@@ -115,7 +143,7 @@ void ShadowNote::drawArticulations(mu::draw::Painter* painter) const
 
     RectF boundRect = RectF(PointF(x1, y1), PointF(x2, y2));
 
-    for (const SymId& artic: score()->inputState().articulationIds()) {
+    for (const SymId& artic: m_articulationIds) {
         bool isMarcato = Articulation::symId2ArticulationName(artic).contains(u"marcato");
 
         if (isMarcato) {

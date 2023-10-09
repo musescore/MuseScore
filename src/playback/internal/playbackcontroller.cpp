@@ -191,12 +191,20 @@ void PlaybackController::reset()
 
 void PlaybackController::seek(const midi::tick_t tick)
 {
+    if (m_currentTick == tick) {
+        return;
+    }
+
     seek(tickToMsecs(tick));
 }
 
 void PlaybackController::seek(const audio::msecs_t msecs)
 {
-    IF_ASSERT_FAILED(notationPlayback() && playback()) {
+    IF_ASSERT_FAILED(playback()) {
+        return;
+    }
+
+    if (m_currentPlaybackTimeMsecs == msecs) {
         return;
     }
 
@@ -270,16 +278,19 @@ void PlaybackController::playElements(const std::vector<const notation::Engravin
 
     std::vector<const notation::EngravingItem*> elementsForPlaying;
 
+    bool playChordWhenEditing = configuration()->playChordWhenEditing();
+    bool playHarmonyWhenEditing = configuration()->playHarmonyWhenEditing();
+
     for (const EngravingItem* element : elements) {
         IF_ASSERT_FAILED(element) {
             continue;
         }
 
-        if (element->isChord() && !configuration()->playChordWhenEditing()) {
+        if (element->isChord() && !playChordWhenEditing) {
             continue;
         }
 
-        if (element->isHarmony() && !configuration()->playHarmonyWhenEditing()) {
+        if (element->isHarmony() && !playHarmonyWhenEditing) {
             continue;
         }
 

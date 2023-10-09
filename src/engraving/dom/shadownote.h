@@ -25,6 +25,7 @@
 
 #include "engravingitem.h"
 #include "durationtype.h"
+#include "types.h"
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -58,7 +59,8 @@ public:
 
     const TDuration& duration() const { return m_duration; }
 
-    void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY);
+    void setState(SymId noteSymbol, TDuration duration, bool isRest, double segmentSkylineTopY, double segmentSkylineBottomY,
+                  AccidentalType accidentalType = AccidentalType::NONE, const std::set<SymId>& articulationIds = {});
 
     void drawArticulations(mu::draw::Painter* painter) const;
     void drawMarcato(mu::draw::Painter* painter, const SymId& articulation, mu::RectF& boundRect) const;
@@ -69,6 +71,12 @@ public:
     bool hasStem() const;
     bool hasFlag() const;
     SymId flagSym() const;
+    AccidentalType accidentalType() const;
+    const std::set<SymId>& articulationIds() const;
+    double segmentSkylineBottomY() const;
+    double segmentSkylineTopY() const;
+
+    bool ledgerLinesVisible() const;
 
 private:
 
@@ -77,6 +85,8 @@ private:
     SymId m_noteheadSymbol = SymId::noSym;
     TDuration m_duration;
     bool m_isRest = false;
+    AccidentalType m_accidentalType = AccidentalType::NONE;
+    std::set<SymId> m_articulationIds;
 
     double m_segmentSkylineTopY = 0.0;
     double m_segmentSkylineBottomY = 0.0;

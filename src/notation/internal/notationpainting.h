@@ -49,6 +49,7 @@ public:
 
     void setViewMode(const ViewMode& viewMode) override;
     ViewMode viewMode() const override;
+    async::Notification viewModeChanged() const override;
 
     int pageCount() const override;
     SizeF pageSizeInch() const override;
@@ -68,6 +69,8 @@ private:
     void paintPageSheet(mu::draw::Painter* painter, const engraving::Page* page, const RectF& pageRect, bool printPageBackground) const;
 
     Notation* m_notation = nullptr;
+
+    async::Notification m_viewModeChanged;
 };
 }
 

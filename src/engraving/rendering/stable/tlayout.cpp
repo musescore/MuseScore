@@ -4075,7 +4075,7 @@ void TLayout::layout(ShadowNote* item, LayoutContext& ctx)
     }
 
     // Layout ledger lines if needed
-    if (!item->isRest() && item->lineIndex() < 100 && item->lineIndex() > -100) {
+    if (item->ledgerLinesVisible()) {
         double extraLen = ctx.conf().styleMM(Sid::ledgerLineLength) * item->mag();
         double step = 0.5 * _spatium * item->staffType()->lineDistance().val();
         double x = noteheadBbox.x() - extraLen;
