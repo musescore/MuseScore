@@ -113,14 +113,6 @@ struct NominalNoteCtx {
                                   note->tuning())),
         chordCtx(ctx)
     {
-        if (RealIsEqual(userVelocityFraction, 0.f)) {
-            return;
-        }
-
-        mpe::dynamic_level_t userDynamicLevel = userVelocityFraction * mpe::MAX_DYNAMIC_LEVEL;
-        chordCtx.nominalDynamicLevel = std::clamp(userDynamicLevel,
-                                                  mpe::MIN_DYNAMIC_LEVEL,
-                                                  mpe::MAX_DYNAMIC_LEVEL);
     }
 };
 

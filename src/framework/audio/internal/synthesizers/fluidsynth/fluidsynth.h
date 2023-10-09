@@ -103,8 +103,6 @@ private:
 
     bool handleEvent(const midi::Event& event);
 
-    void toggleExpressionController();
-
     int setExpressionLevel(int level);
     int setControllerValue(const midi::Event& event);
 

@@ -303,7 +303,6 @@ bool FluidSynth::isActive() const
 void FluidSynth::setIsActive(const bool isActive)
 {
     m_sequencer.setActive(isActive);
-    toggleExpressionController();
 }
 
 msecs_t FluidSynth::playbackPosition() const
@@ -314,10 +313,6 @@ msecs_t FluidSynth::playbackPosition() const
 void FluidSynth::setPlaybackPosition(const msecs_t newPosition)
 {
     m_sequencer.setPlaybackPosition(newPosition);
-
-    if (isActive()) {
-        setExpressionLevel(m_sequencer.currentExpressionLevel());
-    }
 }
 
 unsigned int FluidSynth::audioChannelsCount() const
@@ -360,17 +355,6 @@ async::Channel<unsigned int> FluidSynth::audioChannelsCountChanged() const
     return m_streamsCountChanged;
 }
 
-void FluidSynth::toggleExpressionController()
-{
-    int volume = DEFAULT_MIDI_VOLUME;
-
-    if (isActive()) {
-        volume = m_sequencer.currentExpressionLevel();
-    }
-
-    setExpressionLevel(volume);
-}
-
 int FluidSynth::setExpressionLevel(int level)
 {
     midi::channel_t lastChannelIdx = m_sequencer.channels().lastIndex();
@@ -391,5 +375,5 @@ int FluidSynth::setControllerValue(const midi::Event& event)
         return FLUID_OK;
     }
 
-    return fluid_synth_cc(m_fluid->synth, event.channel(), event.index(),  event.data());
+    return fluid_synth_cc(m_fluid->synth, event.channel(), event.index(), event.data());
 }
