@@ -60,8 +60,6 @@ public:
 
     int span() const { return m_span; }
     void setSpan(int val) { m_span = val; }
-    void setHeight(double) override;
-    double height() const override;
 
     double userLen1() const { return m_userLen1; }
     double userLen2() const { return m_userLen2; }

@@ -574,12 +574,12 @@ public:
     virtual void manageExclusionFromParts(bool exclude);
 
     //! --- Old Interface ---
-    virtual void setbbox(const mu::RectF& r) { mutldata()->setBbox(r); }
-    virtual void addbbox(const mu::RectF& r) { mutldata()->addBbox(r); }
-    virtual double height() const { return ldata()->bbox().height(); }
-    virtual void setHeight(double v) { mutldata()->setHeight(v); }
-    virtual double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).width(); }
-    virtual void setWidth(double v) { mutldata()->setWidth(v); }
+    void setbbox(const mu::RectF& r) { mutldata()->setBbox(r); }
+    void addbbox(const mu::RectF& r) { mutldata()->addBbox(r); }
+    double height() const { return ldata()->bbox().height(); }
+    void setHeight(double v) { mutldata()->setHeight(v); }
+    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).width(); }
+    void setWidth(double v) { mutldata()->setWidth(v); }
 
     virtual const PointF pos() const { return ldata()->pos() + m_offset; }
     virtual double x() const { return ldata()->pos().x() + m_offset.x(); }

@@ -121,8 +121,6 @@ public:
 
     //! --- DEPRECATED ---
     double h2() const { return ldata()->h2(); }
-    void setHeight(double) override;
-    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override;
     //! ------------------
 
 private:

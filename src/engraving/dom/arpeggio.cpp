@@ -60,22 +60,6 @@ const TranslatableString& Arpeggio::arpeggioTypeName() const
 }
 
 //---------------------------------------------------------
-//   setHeight
-//---------------------------------------------------------
-
-void Arpeggio::setHeight(double h)
-{
-    UNREACHABLE;
-    mutldata()->arpeggioHeight = h;
-}
-
-double Arpeggio::height() const
-{
-    UNREACHABLE;
-    return ldata()->arpeggioHeight;
-}
-
-//---------------------------------------------------------
 //   gripsPositions
 //---------------------------------------------------------
 

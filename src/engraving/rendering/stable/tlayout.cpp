@@ -1454,7 +1454,7 @@ void TLayout::layout(Capo* item, LayoutContext& ctx)
 static void layoutDeadSlapped(const DeadSlapped* item, const LayoutContext&, DeadSlapped::LayoutData* ldata)
 {
     const double deadSlappedWidth = item->spatium() * 2;
-    RectF rect = RectF(0, 0, deadSlappedWidth, item->staff()->height());
+    RectF rect = RectF(0, 0, deadSlappedWidth, item->staff()->staffHeight());
     ldata->setBbox(rect);
 
     // fillPath
@@ -1679,7 +1679,7 @@ static void layoutFermata(const Fermata* item, const LayoutContext& ctx, Fermata
             const_cast<Fermata*>(item)->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Above"));
         }
     } else {
-        ldata->moveY(item->staff()->height());
+        ldata->moveY(item->staff()->staffHeight());
         if (name.endsWith(u"Above")) {
             //! NOTE It is not clear whether SymId is layout data or given data.
             const_cast<Fermata*>(item)->setSymId(SymNames::symIdByName(name.left(name.size() - 5) + u"Below"));
@@ -2053,7 +2053,7 @@ static void layoutFingering(const Fingering* item, const LayoutContext& ctx, Fin
                     if (ldata->offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
+                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight();
                         Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
                     }
                     ldata->moveY(yd);
@@ -2079,7 +2079,7 @@ static void layoutFingering(const Fingering* item, const LayoutContext& ctx, Fin
                         bottom = stem->y() + stem->ldata()->bbox().bottom();
                     } else {
                         Note* dn = chord->downNote();
-                        bottom = std::max(vStaff->height(), dn->y() + dn->ldata()->bbox().bottom());
+                        bottom = std::max(vStaff->staffHeight(), dn->y() + dn->ldata()->bbox().bottom());
                     }
                     bottom += md;
                     double diff = bottom - (ldata->bbox().top() + ldata->pos().y() + yd + n->y());
@@ -2089,7 +2089,7 @@ static void layoutFingering(const Fingering* item, const LayoutContext& ctx, Fin
                     if (ldata->offsetChanged() != OffsetChange::NONE) {
                         // user moved element within the skyline
                         // we may need to adjust minDistance, yd, and/or offset
-                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
+                        bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight();
                         Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
                     }
                     ldata->moveY(yd);
@@ -2757,7 +2757,7 @@ void TLayout::layout(HairpinSegment* item, LayoutContext& ctx)
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
                 double adj = item->pos().y() + rebase;
-                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->height();
+                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->staffHeight();
                 Autoplace::rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
             }
             ldata->moveY(yd);
@@ -2884,7 +2884,7 @@ void TLayout::layout1(Harmony* item, const LayoutContext& ctx)
 PointF TLayout::calculateBoundingRect(Harmony* item, const LayoutContext& ctx)
 {
     const Harmony::LayoutData* ldata = item->ldata();
-    const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->height() : 0.0;
+    const double ypos = (item->placeBelow() && item->staff()) ? item->staff()->staffHeight() : 0.0;
     const FretDiagram* fd = (item->explicitParent() && item->explicitParent()->isFretDiagram())
                             ? toFretDiagram(item->explicitParent())
                             : nullptr;
@@ -3463,7 +3463,7 @@ void TLayout::layoutMeasureNumberBase(const MeasureNumberBase* item, const Layou
         if (item->staff()->constStaffType(item->measure()->tick())->lines() == 1) {
             yoff += 2.0 * item->spatium();
         } else {
-            yoff += item->staff()->height();
+            yoff += item->staff()->staffHeight();
         }
 
         ldata->setPosY(yoff);
@@ -4671,7 +4671,7 @@ void TLayout::layoutTextBase(const TextBase* item, const LayoutContext& ctx, Tex
     ldata->setPos(PointF());
 
     if (item->placeBelow()) {
-        ldata->setPosY(item->staff() ? item->staff()->height() : 0.0);
+        ldata->setPosY(item->staff() ? item->staff()->staffHeight() : 0.0);
     }
 
     if (Harmony::classof(item)) {
@@ -4821,7 +4821,7 @@ void TLayout::layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext
     double _spatium = tl->spatium();
 
     if (item->spanner()->placeBelow()) {
-        ldata->setPosY(item->staff() ? item->staff()->height() : 0.0);
+        ldata->setPosY(item->staff() ? item->staff()->staffHeight() : 0.0);
     }
 
     // adjust Y pos to staffType offset
@@ -5257,7 +5257,7 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
         ldata->setMag(item->staff()->staffMag(item->tick()));
     }
     if (item->spanner()->placeBelow()) {
-        ldata->setPosY(item->staff() ? item->staff()->height() : 0.0);
+        ldata->setPosY(item->staff() ? item->staff()->staffHeight() : 0.0);
     }
 
     bool accidentalGoesBelow = item->trill()->trillType() == TrillType::DOWNPRALL_LINE;
@@ -5341,7 +5341,7 @@ void TLayout::layout(VibratoSegment* item, LayoutContext& ctx)
         ldata->setMag(item->staff()->staffMag(item->tick()));
     }
     if (item->spanner()->placeBelow()) {
-        ldata->setPosY(item->staff() ? item->staff()->height() : 0.0);
+        ldata->setPosY(item->staff() ? item->staff()->staffHeight() : 0.0);
     }
 
     switch (item->vibrato()->vibratoType()) {

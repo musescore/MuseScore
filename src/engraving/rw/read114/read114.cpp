@@ -3006,7 +3006,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
                 // fix ottava position
                 yo = masterScore->styleValue(Pid::OFFSET, Sid::ottavaPosAbove).value<PointF>().y();
                 if (s->placeBelow()) {
-                    yo = -yo + s->staff()->height();
+                    yo = -yo + s->staff()->staffHeight();
                 }
             } else if (s->isPedal()) {
                 yo = masterScore->styleValue(Pid::OFFSET, Sid::pedalPosBelow).value<PointF>().y();
