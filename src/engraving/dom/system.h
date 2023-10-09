@@ -30,8 +30,6 @@
 
 #include "engravingitem.h"
 
-#include "skyline.h"
-
 namespace mu::engraving {
 class Box;
 class Bracket;

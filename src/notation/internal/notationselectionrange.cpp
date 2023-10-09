@@ -21,12 +21,10 @@
  */
 #include "notationselectionrange.h"
 
-#include "engraving/dom/masterscore.h"
 #include "engraving/dom/segment.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/system.h"
 #include "engraving/dom/chordrest.h"
-#include "engraving/dom/skyline.h"
 
 #include "log.h"
 

@@ -25,7 +25,6 @@
 
 #include "engravingitem.h"
 
-#include "shape.h"
 #include "types.h"
 
 namespace mu::engraving {

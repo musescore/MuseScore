@@ -37,12 +37,13 @@
 #include "rendering/iscorerenderer.h"
 
 #include "infrastructure/ld_access.h"
+#include "infrastructure/shape.h"
+#include "infrastructure/skyline.h"
 
 #include "types/fraction.h"
 #include "types/symid.h"
 #include "types/types.h"
 
-#include "shape.h"
 #include "editdata.h"
 
 #define DECLARE_LAYOUTDATA_METHODS(Class) \

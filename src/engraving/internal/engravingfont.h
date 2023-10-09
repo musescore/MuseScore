@@ -32,7 +32,8 @@
 
 #include "io/path.h"
 
-#include "smufl.h"
+#include "infrastructure/smufl.h"
+#include "infrastructure/shape.h"
 
 #include "style/styledef.h"
 #include "types/symid.h"
