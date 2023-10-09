@@ -1269,7 +1269,7 @@ static void layoutChordLine(const ChordLine* item, const LayoutContext& ctx, Cho
     Shape chordShape = item->chord()->shape();
     // ...but remove from the shape items that the chordline shouldn't try to avoid
     // (especially the chordline itself)
-    mu::remove_if(chordShape, [](ShapeElement& shapeEl){
+    chordShape.remove_if([](ShapeElement& shapeEl){
         if (!shapeEl.toItem) {
             return true;
         }
@@ -2375,7 +2375,7 @@ static void layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissando
     offs2 *= -1.0;
     // Look at chord shapes (but don't consider lyrics)
     Shape cr1shape = cr1->shape();
-    mu::remove_if(cr1shape, [](ShapeElement& s) {
+    cr1shape.remove_if([](ShapeElement& s) {
         if (!s.toItem || s.toItem->isLyrics()) {
             return true;
         } else {
@@ -2448,7 +2448,7 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext& ctx)
         Chord* grace = item->at(i);
         Shape graceShape = grace->shape();
         Shape groupShape = _shape;
-        mu::remove_if(groupShape, [grace](ShapeElement& s) {
+        groupShape.remove_if([grace](ShapeElement& s) {
             if (!s.toItem || (s.toItem->isStem() && s.toItem->vStaffIdx() != grace->vStaffIdx())) {
                 return true;
             }

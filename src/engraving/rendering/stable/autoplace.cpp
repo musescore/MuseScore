@@ -360,7 +360,7 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
 
         Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos());
 
-        for (ShapeElement& shapeEl : thisShape) {
+        for (const ShapeElement& shapeEl : thisShape.elements()) {
             RectF r = shapeEl;
 
             double d = 0.0;

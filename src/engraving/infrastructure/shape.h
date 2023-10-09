@@ -54,28 +54,27 @@ public:
 //   Shape
 //---------------------------------------------------------
 
-class Shape : public std::vector<ShapeElement>
+class Shape
 {
-    OBJECT_ALLOCATOR(engraving, Shape)
-private:
-    double _spatium = 0.0;
-    double _squeezeFactor = 1.0;
 public:
-    enum HorizontalSpacingType {
-        SPACING_GENERAL = 0,
-        SPACING_LYRICS,
-        SPACING_HARMONY,
-    };
 
     Shape() {}
     Shape(const mu::RectF& r, const EngravingItem* p = nullptr) { add(r, p); }
 
     void add(const Shape& s);
     void add(const mu::RectF& r, const EngravingItem* p);
-    void add(const mu::RectF& r) { push_back(ShapeElement(r)); }
+    void add(const mu::RectF& r) { m_elements.push_back(ShapeElement(r)); }
 
     void remove(const mu::RectF&);
     void remove(const Shape&);
+    template<typename Predicate>
+    inline bool remove_if(Predicate p)
+    {
+        size_t origSize = m_elements.size();
+        m_elements.erase(std::remove_if(m_elements.begin(), m_elements.end(), p), m_elements.end());
+        return origSize != m_elements.size();
+    }
+
     void removeInvisibles();
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
@@ -97,21 +96,27 @@ public:
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
 
-    size_t size() const { return std::vector<ShapeElement>::size(); }
-    bool empty() const { return std::vector<ShapeElement>::empty(); }
-    void clear() { std::vector<ShapeElement>::clear(); }
+    const std::vector<ShapeElement>& elements() const { return m_elements; }
+    size_t size() const { return m_elements.size(); }
+    bool empty() const { return m_elements.empty(); }
+    void clear() { m_elements.clear(); }
 
     bool contains(const mu::PointF&) const;
     bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
     bool clearsVertically(const Shape& a) const;
 
-    void setSqueezeFactor(double v) { _squeezeFactor = v; }
+    void setSqueezeFactor(double v) { m_squeezeFactor = v; }
 
     void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG
     void dump(const char*) const;
 #endif
+
+private:
+    std::vector<ShapeElement> m_elements;
+    double m_spatium = 0.0;
+    double m_squeezeFactor = 1.0;
 };
 
 //---------------------------------------------------------

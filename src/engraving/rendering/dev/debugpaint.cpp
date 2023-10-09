@@ -83,7 +83,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
             path.setFillRule(PainterPath::FillRule::WindingFill);
 
             Shape shape = item->shape();
-            for (const RectF& rect : shape) {
+            for (const RectF& rect : shape.elements()) {
                 path.addRect(rect);
             }
 
@@ -181,7 +181,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                         path.setFillRule(PainterPath::FillRule::WindingFill);
 
                         Shape shape = s->shapes().at(i);
-                        for (const RectF& rect : shape) {
+                        for (const RectF& rect : shape.elements()) {
                             path.addRect(rect);
                         }
 

@@ -24,8 +24,6 @@
 #include <cmath>
 
 #include "draw/types/transform.h"
-#include "draw/types/pen.h"
-#include "draw/types/brush.h"
 
 #include "beam.h"
 #include "chord.h"
@@ -359,7 +357,7 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
     }
 
     // Remove items that the slur shouldn't try to avoid
-    mu::remove_if(segShape, [&](ShapeElement& shapeEl) {
+    segShape.remove_if([&](ShapeElement& shapeEl) {
         if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
             return true;
         }

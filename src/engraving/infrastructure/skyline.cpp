@@ -151,7 +151,7 @@ SkylineLine::SegConstIter SkylineLine::find(double x) const
 
 void SkylineLine::add(const Shape& s)
 {
-    for (const auto& r : s) {
+    for (const auto& r : s.elements()) {
         add(r);
     }
 }
@@ -167,7 +167,7 @@ void SkylineLine::add(const ShapeElement& r)
 
 void Skyline::add(const Shape& s)
 {
-    for (const auto& r : s) {
+    for (const auto& r : s.elements()) {
         add(r);
     }
 }
