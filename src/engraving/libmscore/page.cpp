@@ -590,7 +590,7 @@ double Page::rm() const
 //    calculates and returns smallest rectangle containing all (visible) page elements
 //---------------------------------------------------------
 
-RectF Page::tbbox()
+RectF Page::tbbox() const
 {
     double x1 = width();
     double x2 = 0.0;
