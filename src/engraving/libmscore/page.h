@@ -94,7 +94,7 @@ public:
     void invalidateBspTree() { bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements
-    mu::RectF tbbox();                             // tight bounding box, excluding white space
+    mu::RectF tbbox() const;                             // tight bounding box, excluding white space
     Fraction endTick() const;
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
