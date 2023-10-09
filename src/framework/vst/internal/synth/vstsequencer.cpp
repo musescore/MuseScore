@@ -38,7 +38,7 @@ void VstSequencer::init(ParamsMapping&& mapping)
     m_mapping = std::move(mapping);
 
     updateDynamicChanges(m_dynamicLevelLayers);
-    updateMainStreamEvents(m_playbackEventsMap);
+    updateMainStreamEvents(m_eventsMap);
 }
 
 void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
@@ -55,6 +55,7 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
 
 void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
 {
+    m_eventsMap = changes;
     m_mainStreamEvents.clear();
 
     if (m_onMainStreamFlushed) {

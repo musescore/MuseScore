@@ -59,7 +59,6 @@ public:
         m_offStreamChanges = data.offStream;
         m_dynamicLevelChanges = data.dynamicLevelChanges;
 
-        m_playbackEventsMap = data.originEvents;
         m_dynamicLevelLayers = data.dynamicLevelLayers;
 
         m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& changes) {
@@ -67,7 +66,6 @@ public:
         });
 
         m_mainStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& changes) {
-            m_playbackEventsMap = changes;
             updateMainStreamEvents(changes);
         });
 
@@ -248,7 +246,6 @@ protected:
     EventSequenceMap m_dynamicEvents;
 
     mpe::DynamicLevelLayers m_dynamicLevelLayers;
-    mpe::PlaybackEventsMap m_playbackEventsMap;
 
     bool m_isActive = false;
 

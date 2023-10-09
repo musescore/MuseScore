@@ -81,6 +81,7 @@ private:
     float expressionLevel(const mpe::dynamic_level_t dynamicLevel) const;
 
     ParamsMapping m_mapping;
+    mpe::PlaybackEventsMap m_eventsMap;
 };
 }
 
