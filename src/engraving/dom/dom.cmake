@@ -264,12 +264,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/select.h
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.cpp
     ${CMAKE_CURRENT_LIST_DIR}/shadownote.h
-    ${CMAKE_CURRENT_LIST_DIR}/shape.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/shape.h
     ${CMAKE_CURRENT_LIST_DIR}/sig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/sig.h
-    ${CMAKE_CURRENT_LIST_DIR}/skyline.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/skyline.h
     ${CMAKE_CURRENT_LIST_DIR}/slur.cpp
     ${CMAKE_CURRENT_LIST_DIR}/slur.h
     ${CMAKE_CURRENT_LIST_DIR}/slurtie.cpp

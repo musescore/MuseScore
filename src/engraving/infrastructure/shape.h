@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SHAPE_H__
-#define __SHAPE_H__
+#ifndef MU_ENGRAVING_SHAPE_H
+#define MU_ENGRAVING_SHAPE_H
 
 #include "global/allocator.h"
 #include "draw/types/geometry.h"
@@ -39,7 +39,6 @@ class Score;
 //---------------------------------------------------------
 
 struct ShapeElement : public mu::RectF {
-    OBJECT_ALLOCATOR(engraving, ShapeElement)
 public:
     const EngravingItem* toItem = nullptr;
     ShapeElement(const mu::RectF& f, const EngravingItem* p)

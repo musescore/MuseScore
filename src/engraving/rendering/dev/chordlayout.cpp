@@ -46,7 +46,6 @@
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/segment.h"
-#include "dom/shape.h"
 #include "dom/staff.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
@@ -3200,9 +3199,8 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
     }
 }
 
-void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutContext& ctx)
+void ChordLayout::layoutChordBaseFingering(Chord* chord, System* system, LayoutContext&)
 {
-    UNUSED(ctx);
     std::set<staff_idx_t> shapesToRecreate;
     std::list<Note*> notes;
     Segment* segment = chord->segment();
