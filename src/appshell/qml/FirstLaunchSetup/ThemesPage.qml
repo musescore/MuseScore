@@ -32,7 +32,7 @@ Page {
     id: root
 
     title: qsTrc("appshell/gettingstarted", "Welcome to MuseScore 4")
-    explanation: qsTrc("appshell/gettingstarted", "Let's get started by choosing a theme.")
+    explanation: qsTrc("appshell/gettingstarted", "Let’s get started by choosing a theme.")
 
     titleContentSpacing: model.isFollowSystemThemeAvailable ? 24 : 28
 

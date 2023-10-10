@@ -97,7 +97,7 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     case IInteractive::Button::Ok:          return ButtonData(int(b), trc("global", "OK"), accent);
     case IInteractive::Button::Save:        return ButtonData(int(b), trc("global", "Save"), accent);
     case IInteractive::Button::SaveAll:     return ButtonData(int(b), trc("global", "Save all"));
-    case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("global", "Don't save"));
+    case IInteractive::Button::DontSave:    return ButtonData(int(b), trc("global", "Don’t save"));
     case IInteractive::Button::Open:        return ButtonData(int(b), trc("global", "Open"));
     case IInteractive::Button::Yes:         return ButtonData(int(b), trc("global", "Yes"), accent);
     case IInteractive::Button::YesToAll:    return ButtonData(int(b), trc("global", "Yes to all"), accent);

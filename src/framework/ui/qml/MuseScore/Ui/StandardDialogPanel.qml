@@ -201,7 +201,7 @@ RowLayout {
                 width: parent.width
                 visible: false
 
-                text: qsTrc("global", "Don't show this message again")
+                text: qsTrc("global", "Don’t show this message again")
                 checked: false
 
                 navigation.panel: navPanel
