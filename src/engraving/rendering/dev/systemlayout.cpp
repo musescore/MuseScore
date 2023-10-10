@@ -748,7 +748,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
             }
             Rest* rest = toRest(item);
             Beam* beam = rest->beam();
-            if (beam && !beam->cross()) {
+            if (beam && !beam->cross() /* && !rest->staffMove()*/) {
                 BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
             }
         }

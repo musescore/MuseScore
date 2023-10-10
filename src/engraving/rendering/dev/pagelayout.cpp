@@ -285,6 +285,16 @@ void PageLayout::collectPage(LayoutContext& ctx)
                         ChordRest* cr = toChordRest(e);
                         if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
                             TLayout::layoutBeam(cr->beam(), ctx);
+                            for (EngravingItem* item : cr->beam()->elements()) {
+                                if (!item || !item->isRest()) {
+                                    continue;
+                                }
+                                Rest* rest = toRest(item);
+                                Beam* beam = cr->beam();
+                                if (beam && rest->staffMove()) {
+                                    BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
+                                }
+                            }
                         }
                         if (TupletLayout::notTopTuplet(cr)) {
                             // fix layout of tuplets
