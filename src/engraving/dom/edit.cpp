@@ -2365,7 +2365,7 @@ void Score::deleteItem(EngravingItem* el)
         return;
     }
     // cannot remove generated elements
-    if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber())) {
+    if (el->generated() && !(el->isBracket() || el->isBarLine() || el->isClef() || el->isMeasureNumber() || el->isKeySig())) {
         return;
     }
 //      LOGD("%s", el->typeName());
@@ -2399,6 +2399,16 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::KEYSIG:
     {
         KeySig* k = toKeySig(el);
+        Measure* m = k->measure();
+        if (m->isMMRest()) {
+            m = m->mmRestFirst();
+            if (Segment* s = m->findSegment(SegmentType::KeySig, k->tick())) {
+                k = toKeySig(s->element(k->track()));
+            }
+            if (!k || k->generated()) {
+                return;
+            }
+        }
         bool ic = k->segment()->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
                                                                              el->part()->startTrack(), el->part()->endTrack() - 1);
         undoRemoveElement(k);
