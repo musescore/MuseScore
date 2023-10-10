@@ -175,6 +175,16 @@ Ret ProjectActionsController::openProject(const ProjectFile& file)
 {
     LOGI() << "Try open project: url = " << file.url.toString() << ", displayNameOverride = " << file.displayNameOverride;
 
+    if (file.isNull()) {
+        io::path_t askedPath = selectScoreOpeningFile();
+
+        if (askedPath.empty()) {
+            return make_ret(Ret::Code::Cancel);
+        }
+
+        return openProject(askedPath);
+    }
+
     if (file.url.isLocalFile()) {
         return openProject(file.path(), file.displayNameOverride);
     }
@@ -203,14 +213,11 @@ Ret ProjectActionsController::openProject(const io::path_t& givenPath, const QSt
         m_isProjectProcessing = false;
     };
 
-    //! Step 1. If no path is specified, ask the user to select a project
+    //! Step 1. Take absolute path
     io::path_t actualPath = fileSystem()->absoluteFilePath(givenPath);
     if (actualPath.empty()) {
-        actualPath = selectScoreOpeningFile();
-
-        if (actualPath.empty()) {
-            return make_ret(Ret::Code::Cancel);
-        }
+        // We assume that a valid path has been specified to this method
+        return make_ret(Ret::Code::UnknownError);
     }
 
     //! Step 2. If the project is already open in the current window, then just switch to showing the notation

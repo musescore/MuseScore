@@ -192,6 +192,11 @@ struct ProjectFile {
     ProjectFile(const io::path_t& path, const QString& displayNameOverride = {})
         : url(path.toQUrl()), displayNameOverride(displayNameOverride) {}
 
+    bool isNull() const
+    {
+        return url.isEmpty();
+    }
+
     bool isValid() const
     {
         return url.isValid();
@@ -217,7 +222,7 @@ struct ProjectFile {
 
     io::path_t path() const
     {
-        assert(url.isLocalFile());
+        assert(url.isEmpty() || url.isLocalFile());
 
         return io::path_t(url);
     }
