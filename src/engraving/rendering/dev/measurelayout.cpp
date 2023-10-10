@@ -927,6 +927,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
     }
 
     BeamLayout::createBeams(ctx, measure);
+
     /* HACK: The real beam layout is computed at much later stage (you can't do the beams until you know
      * horizontal spacing). However, horizontal spacing needs to know stems extensions to avoid collision
      * with stems, and stems extensions depend on beams. Solution: we compute dummy beams here, *before*

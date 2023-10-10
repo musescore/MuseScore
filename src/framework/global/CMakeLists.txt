@@ -61,6 +61,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/allocator.h
     ${CMAKE_CURRENT_LIST_DIR}/dlib.h
     ${CMAKE_CURRENT_LIST_DIR}/iprocess.h
+    ${CMAKE_CURRENT_LIST_DIR}/number.h
 
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/bytearray.h
