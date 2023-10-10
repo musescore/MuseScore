@@ -101,12 +101,17 @@ void Shape::invalidateBBox()
 
 const RectF& Shape::bbox() const
 {
-    if (m_bbox.isNull()) {
-        for (const ShapeElement& e : m_elements) {
-            m_bbox.unite(e);
+    if (type() == Type::Fixed) {
+        static const RectF _dummy;
+        return m_elements.empty() ? _dummy : m_elements.at(0);
+    } else {
+        if (m_bbox.isNull()) {
+            for (const ShapeElement& e : m_elements) {
+                m_bbox.unite(e);
+            }
         }
+        return m_bbox;
     }
-    return m_bbox;
 }
 
 //-------------------------------------------------------------------
@@ -371,6 +376,32 @@ double Shape::bottomDistance(const PointF& p) const
         }
     }
     return dist;
+}
+
+void Shape::setBBox(const mu::RectF& r)
+{
+    IF_ASSERT_FAILED(type() == Type::Fixed) {
+        return;
+    }
+
+    if (m_elements.empty()) {
+        m_elements.push_back(r);
+    } else {
+        m_elements[0] = r;
+    }
+}
+
+void Shape::addBBox(const mu::RectF& r)
+{
+    IF_ASSERT_FAILED(type() == Type::Fixed) {
+        return;
+    }
+
+    if (m_elements.empty()) {
+        m_elements.push_back(mu::RectF());
+    }
+
+    m_elements[0].unite(r);
 }
 
 //---------------------------------------------------------

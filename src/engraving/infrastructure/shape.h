@@ -56,13 +56,30 @@ class Shape
 {
 public:
 
-    Shape() {}
-    Shape(const mu::RectF& r, const EngravingItem* p = nullptr) { add(r, p); }
+    enum class Type {
+        Fixed,      // fixed size, like just bbox
+        FixedX,     // not implemented (reserved)
+        FixedY,     // not implemented (reserved)
+        Composite   // composed of other shapes
+    };
+
+    Shape(Type t = Type::Fixed)
+        : m_type(t) {}
+    Shape(const mu::RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed)
+        : m_type(t) { add(r, p); }
+
+    Type type() const { return m_type; }
+    bool isComposite() const { return m_type == Type::Composite; }
 
     size_t size() const { return m_elements.size(); }
     bool empty() const { return m_elements.empty(); }
     void clear() { m_elements.clear(); }
 
+    // Fixed
+    void setBBox(const mu::RectF& r);
+    void addBBox(const mu::RectF& r);
+
+    // Composite
     void add(const Shape& s);
     void add(const mu::RectF& r, const EngravingItem* p);
     void add(const mu::RectF& r);
@@ -77,6 +94,8 @@ public:
         invalidateBBox();
         return origSize != m_elements.size();
     }
+
+    // ---
 
     const std::vector<ShapeElement>& elements() const { return m_elements; }
 
@@ -118,6 +137,7 @@ private:
 
     void invalidateBBox();
 
+    Type m_type = Type::Fixed;
     std::vector<ShapeElement> m_elements;
     mutable RectF m_bbox;   // cache
     double m_spatium = 0.0;

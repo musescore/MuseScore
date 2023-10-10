@@ -500,12 +500,12 @@ public:
 
         virtual void reset()
         {
-            m_bbox.reset();
+            m_shape.reset();
             //! NOTE Temporary removed, have problems, need investigation
             //m_pos.reset();
         }
 
-        virtual bool isValid() const { return m_bbox.has_value(); }
+        virtual bool isValid() const { return m_shape.has_value(); }
 
         bool isSkipDraw() const { return m_isSkipDraw; }
         void setIsSkipDraw(bool val) { m_isSkipDraw = val; }
@@ -529,14 +529,49 @@ public:
         void moveX(double x) { doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x() + x, pos(LD_ACCESS::MAYBE_NOTINITED).y()); }
         void moveY(double y) { doSetPos(pos(LD_ACCESS::MAYBE_NOTINITED).x(), pos(LD_ACCESS::MAYBE_NOTINITED).y() + y); }
 
-        bool isSetBbox() const { return m_bbox.has_value(); }
-        void clearBbox() { m_bbox.reset(); }
-        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bbox.value(mode); }
-        void setBbox(const mu::RectF& r) { m_bbox.set_value(r); }
-        void setBbox(double x, double y, double w, double h) { mutBbox().setRect(x, y, w, h); }
-        void addBbox(const mu::RectF& r) { mutBbox().unite(r); }
-        void setHeight(double v) { mutBbox().setHeight(v); }
-        void setWidth(double v) { mutBbox().setWidth(v); }
+        bool isSetBbox() const { return m_shape.has_value(); }
+        void clearBbox() { m_shape.reset(); }
+        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const
+        {
+            return m_shape.value(mode).bbox();
+        }
+
+        void setBbox(const mu::RectF& r)
+        {
+            DO_ASSERT(!std::isnan(r.x()) && !std::isinf(r.x()));
+            DO_ASSERT(!std::isnan(r.y()) && !std::isinf(r.y()));
+            DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
+            DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
+
+            DO_ASSERT(!isShapeComposite());
+            m_shape.set_value(Shape(r, nullptr, Shape::Type::Fixed));
+        }
+
+        void setBbox(double x, double y, double w, double h) { setBbox(mu::RectF(x, y, w, h)); }
+        void addBbox(const mu::RectF& r)
+        {
+            DO_ASSERT(!std::isnan(r.x()) && !std::isinf(r.x()));
+            DO_ASSERT(!std::isnan(r.y()) && !std::isinf(r.y()));
+            DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
+            DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
+
+            DO_ASSERT(!isShapeComposite());
+            mutShape().addBBox(r);
+        }
+
+        void setHeight(double v)
+        {
+            mu::RectF r = bbox();
+            r.setHeight(v);
+            setBbox(r);
+        }
+
+        void setWidth(double v)
+        {
+            mu::RectF r = bbox();
+            r.setWidth(v);
+            setBbox(r);
+        }
 
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
@@ -547,12 +582,13 @@ public:
             m_pos.mut_value().setY(y);
         }
 
-        mu::RectF& mutBbox() { return m_bbox.mut_value(); }
+        Shape& mutShape() { return m_shape.mut_value(); }
+        bool isShapeComposite() const { return m_shape.has_value() && m_shape.value().isComposite(); }
 
         bool m_isSkipDraw = false;
         double m_mag = 1.0;                     // standard magnification (derived value)
         ld_field<PointF> m_pos = "pos";         // Reference position, relative to _parent, set by autoplace
-        ld_field<RectF> m_bbox = "bbox";        // Bounding box relative to _pos + _offset
+        ld_field<Shape> m_shape = "shape";
     };
 
     const LayoutData* ldata() const;
@@ -578,6 +614,7 @@ public:
     void addbbox(const mu::RectF& r) { mutldata()->addBbox(r); }
     double height() const { return ldata()->bbox().height(); }
     void setHeight(double v) { mutldata()->setHeight(v); }
+
     double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).width(); }
     void setWidth(double v) { mutldata()->setWidth(v); }
 

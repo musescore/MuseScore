@@ -23,6 +23,7 @@
 #include "tlayout.h"
 
 #include "global/realfn.h"
+#include "global/number.h"
 #include "draw/fontmetrics.h"
 
 #include "iengravingconfiguration.h"
@@ -2608,7 +2609,7 @@ static void _layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissand
     double y0   = segm1->ldata()->pos().y();
     double yTot = segm2->ldata()->pos().y() + segm2->ipos2().y() - y0;
     yTot -= yStaffDifference(segm2->system(), segm2->staffIdx(), segm1->system(), segm1->staffIdx());
-    double ratio = yTot / xTot;
+    double ratio = mu::divide(yTot, xTot, 1.0);
     // interpolate y-coord of intermediate points across total width and height
     double xCurr = 0.0;
     double yCurr;
@@ -2648,11 +2649,11 @@ static void _layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissand
     offs2.rx() -= glissNoteDist;
 
     // apply offsets: shorten first segment by x1 (and proportionally y) and adjust its length accordingly
-    offs1.ry() = segm1->ipos2().y() * offs1.x() / segm1->ipos2().x();
+    offs1.ry() = segm1->ipos2().y() * mu::divide(offs1.x(), segm1->ipos2().x(), 1.0);
     segm1->setPos(segm1->ldata()->pos() + offs1);
     segm1->setPos2(segm1->ipos2() - offs1);
     // adjust last segment length by x2 (and proportionally y)
-    offs2.ry() = segm2->ipos2().y() * offs2.x() / segm2->ipos2().x();
+    offs2.ry() = segm2->ipos2().y() * mu::divide(offs2.x(), segm2->ipos2().x(), 1.0);
     segm2->setPos2(segm2->ipos2() + offs2);
 
     for (SpannerSegment* segm : item->spannerSegments()) {
