@@ -51,6 +51,7 @@
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "slurtielayout.h"
+#include "distances.h"
 
 #include "log.h"
 
@@ -2080,14 +2081,14 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 
     // skip disabled segment
     for (s = m->first(); s && (!s->enabled() || s->allElementsInvisible()); s = s->next()) {
-        s->mutldata()->setPosX(m->computeFirstSegmentXPosition(s));  // this is where placement of hidden key/time sigs is set
+        s->mutldata()->setPosX(m->computeFirstSegmentXPosition(s, ctx.state().segmentShapeSqueezeFactor()));  // this is where placement of hidden key/time sigs is set
         s->setWidth(0);                                // it shouldn't affect the width of the bar no matter what it is
     }
     if (!s) {
         m->setWidth(0.0);
         return;
     }
-    double x;
+    double x = 0.0;
     bool first = m->isFirstInSystem();
 
     // left barriere:
@@ -2111,7 +2112,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 
     ChordLayout::updateGraceNotes(m, ctx);
 
-    x = m->computeFirstSegmentXPosition(s);
+    x = m->computeFirstSegmentXPosition(s, ctx.state().segmentShapeSqueezeFactor());
     bool isSystemHeader = s->header();
 
     m->setSqueezableSpace(0.0);
@@ -2169,15 +2170,15 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
             ns = s->next(SegmentType::BarLineType);
         }
 
-        double w;
+        double w = 0.0;
 
         if (ns) {
             if (isSystemHeader && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
                 // this is the system header gap
-                w = s->minHorizontalDistance(ns, true);
+                w = s->minHorizontalDistance(ns, true, ctx.state().segmentShapeSqueezeFactor());
                 isSystemHeader = false;
             } else {
-                w = s->minHorizontalDistance(ns, false);
+                w = s->minHorizontalDistance(ns, false, ctx.state().segmentShapeSqueezeFactor());
                 if (s->isChordRestType()) {
                     Segment* ps = s->prevActive();
                     double durStretch = s->computeDurationStretch(ps, minTicks, maxTicks);
@@ -2229,7 +2230,8 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                     continue;
                 }
 
-                double ww = ps->minHorizontalCollidingDistance(ns) - (s->x() - ps->x());
+                double minHorColDistance = distances::minHorizontalCollidingDistance(ps, ns, ctx.state().segmentShapeSqueezeFactor());
+                double ww = minHorColDistance - (s->x() - ps->x());
                 if (ps == fs) {
                     ww = std::max(ww, ns->minLeft(ls) - s->x());
                 }
@@ -2279,7 +2281,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
     m->setWidth(x);
 
     // PASS 2: now put in the right-aligned segments
-    m->spaceRightAlignedSegments();
+    m->spaceRightAlignedSegments(ctx.state().segmentShapeSqueezeFactor());
 
     // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
     double minWidth = computeMinMeasureWidth(m, ctx);

@@ -127,6 +127,8 @@ public:
     bool clearsVertically(const Shape& a) const;
 
     void setSqueezeFactor(double v) { m_squeezeFactor = v; }
+    double squeezeFactor() const { return m_squeezeFactor; }
+    double spatium() const { return m_spatium; }
 
     void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG

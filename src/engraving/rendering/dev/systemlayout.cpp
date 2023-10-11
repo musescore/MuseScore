@@ -1610,6 +1610,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                     shape.setSqueezeFactor(squeezeFactor);
                 }
             }
+            ctx.mutState().setSegmentShapeSqueezeFactor(squeezeFactor);
             MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, stretchCoeff,  /*overrideMinMeasureWidth*/ true);
 
             // Reduce other distances that don't depend on paddings
@@ -1626,7 +1627,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                 if (!nextSeg || !nextSeg->isChordRestType()) {
                     continue;
                 }
-                double margin = segment.width() - segment.minHorizontalCollidingDistance(nextSeg);
+                double margin = segment.width() - segment.minHorizontalCollidingDistance(nextSeg, ctx.state().segmentShapeSqueezeFactor());
                 double reducedMargin = margin * (1 - std::max(squeezeFactor, squeezeLimit));
                 segment.setWidth(segment.width() - reducedMargin);
             }

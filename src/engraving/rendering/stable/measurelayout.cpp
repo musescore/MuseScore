@@ -2070,7 +2070,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 
     // skip disabled segment
     for (s = m->first(); s && (!s->enabled() || s->allElementsInvisible()); s = s->next()) {
-        s->mutldata()->setPosX(m->computeFirstSegmentXPosition(s));  // this is where placement of hidden key/time sigs is set
+        s->mutldata()->setPosX(m->computeFirstSegmentXPosition(s, 1.0));  // this is where placement of hidden key/time sigs is set
         s->setWidth(0);                                // it shouldn't affect the width of the bar no matter what it is
     }
     if (!s) {
@@ -2101,7 +2101,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 
     ChordLayout::updateGraceNotes(m, ctx);
 
-    x = m->computeFirstSegmentXPosition(s);
+    x = m->computeFirstSegmentXPosition(s, 1.0);
     bool isSystemHeader = s->header();
 
     m->setSqueezableSpace(0.0);
@@ -2164,10 +2164,10 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
         if (ns) {
             if (isSystemHeader && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
                 // this is the system header gap
-                w = s->minHorizontalDistance(ns, true);
+                w = s->minHorizontalDistance(ns, true, 1.0);
                 isSystemHeader = false;
             } else {
-                w = s->minHorizontalDistance(ns, false);
+                w = s->minHorizontalDistance(ns, false, 1.0);
                 if (s->isChordRestType()) {
                     Segment* ps = s->prevActive();
                     double durStretch = s->computeDurationStretch(ps, minTicks, maxTicks);
@@ -2269,7 +2269,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
     m->setWidth(x);
 
     // PASS 2: now put in the right-aligned segments
-    m->spaceRightAlignedSegments();
+    m->spaceRightAlignedSegments(1.0);
 
     // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
     double minWidth = computeMinMeasureWidth(m, ctx);

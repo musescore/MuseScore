@@ -29,6 +29,7 @@
 #include "types/typesconv.h"
 
 #include "rendering/dev/tlayout.h"
+#include "rendering/dev/distances.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -36,7 +37,6 @@
 #include "chord.h"
 #include "clef.h"
 #include "engravingitem.h"
-#include "glissando.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
 #include "hook.h"
@@ -67,6 +67,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -2480,7 +2481,7 @@ std::pair<double, double> Segment::computeCellWidth(const std::vector<int>& visi
     }
 
     if (nextSeg) {
-        return { 0, minHorizontalDistance(nextSeg, false) };
+        return { 0, minHorizontalDistance(nextSeg, false, 1.0) };
     }
 
     return { 0, minRight() };
@@ -2529,18 +2530,9 @@ double Segment::spacing() const
 //    calculate the minimum distance to ns avoiding collisions
 //---------------------------------------------------------
 
-double Segment::minHorizontalCollidingDistance(Segment* ns) const
+double Segment::minHorizontalCollidingDistance(Segment* ns, double squeezeFactor) const
 {
-    if (isBeginBarLineType() && ns->isStartRepeatBarLineType()) {
-        return 0.0;
-    }
-
-    double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
-    for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        double d = staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx));
-        w       = std::max(w, d);
-    }
-    return w;
+    return distances::minHorizontalCollidingDistance(this, ns, squeezeFactor);
 }
 
 double Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
@@ -2614,97 +2606,9 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 //    calculate the minimum layout distance to Segment ns
 //---------------------------------------------------------
 
-double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap) const
+double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap, double squeezeFactor) const
 {
-    if (isBeginBarLineType() && ns->isStartRepeatBarLineType()) {
-        return 0.0;
-    }
-
-    double ww = -1000000.0;          // can remain negative
-    double d = 0.0;
-    for (unsigned staffIdx = 0; staffIdx < _shapes.size(); ++staffIdx) {
-        d = ns ? staffShape(staffIdx).minHorizontalDistance(ns->staffShape(staffIdx)) : 0.0;
-        // first chordrest of a staff should clear the widest header for any staff
-        // so make sure segment is as wide as it needs to be
-        if (systemHeaderGap) {
-            d = std::max(d, staffShape(staffIdx).right());
-        }
-        ww      = std::max(ww, d);
-    }
-    double w = std::max(ww, 0.0);        // non-negative
-
-    // Header exceptions that need additional space (more than the padding)
-    double absoluteMinHeaderDist = 1.5 * spatium();
-    if (systemHeaderGap) {
-        if (isTimeSigType()) {
-            w = std::max(w, minRight() + style().styleMM(Sid::systemHeaderTimeSigDistance));
-        } else {
-            w = std::max(w, minRight() + style().styleMM(Sid::systemHeaderDistance));
-        }
-        if (ns && ns->isStartRepeatBarLineType()) {
-            // Align the thin barline of the start repeat to the header
-            w -= style().styleMM(Sid::endBarWidth) + style().styleMM(Sid::endBarDistance);
-        }
-        double diff = w - minRight() - ns->minLeft();
-        if (diff < absoluteMinHeaderDist) {
-            w += absoluteMinHeaderDist - diff;
-        }
-    }
-
-    // Multimeasure rest exceptions that need special handling
-    if (measure() && measure()->isMMRest()) {
-        if (ns->isChordRestType()) {
-            double minDist = minRight();
-            if (isClefType()) {
-                minDist += score()->paddingTable().at(ElementType::CLEF).at(ElementType::REST);
-            } else if (isKeySigType()) {
-                minDist += score()->paddingTable().at(ElementType::KEYSIG).at(ElementType::REST);
-            } else if (isTimeSigType()) {
-                minDist += score()->paddingTable().at(ElementType::TIMESIG).at(ElementType::REST);
-            }
-            w = std::max(w, minDist);
-        } else if (isChordRestType()) {
-            double minWidth = style().styleMM(Sid::minMMRestWidth).val();
-            if (!style().styleB(Sid::oldStyleMultiMeasureRests)) {
-                minWidth += style().styleMM(Sid::multiMeasureRestMargin).val();
-            }
-            w = std::max(w, minWidth);
-        }
-    }
-
-    // Allocate space to ensure minimum length of "dangling" ties or gliss at start of system
-    if (systemHeaderGap && ns && ns->isChordRestType()) {
-        for (EngravingItem* e : ns->elist()) {
-            if (!e || !e->isChord()) {
-                continue;
-            }
-            double headerTieMargin = style().styleMM(Sid::HeaderToLineStartDistance);
-            for (Note* note : toChord(e)->notes()) {
-                bool tieOrGlissBack = note->spannerBack().size() || note->tieBack();
-                if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
-                    continue;
-                }
-                const EngravingItem* attachedLine = note->lineAttachPoints().front().line();
-                double minLength = 0.0;
-                if (attachedLine->isTie()) {
-                    minLength = style().styleMM(Sid::MinTieLength);
-                } else if (attachedLine->isGlissando()) {
-                    bool straight = toGlissando(attachedLine)->glissandoType() == GlissandoType::STRAIGHT;
-                    minLength = straight ? style().styleMM(Sid::MinStraightGlissandoLength)
-                                : style().styleMM(Sid::MinWigglyGlissandoLength);
-                }
-                double tieStartPointX = minRight() + headerTieMargin;
-                double notePosX = w + note->pos().x() + toChord(e)->pos().x() + note->headWidth() / 2;
-                double tieEndPointX = notePosX + note->lineAttachPoints().at(0).pos().x();
-                double tieLength = tieEndPointX - tieStartPointX;
-                if (tieLength < minLength) {
-                    w += minLength - tieLength;
-                }
-            }
-        }
-    }
-
-    return w;
+    return distances::minHorizontalDistance(this, ns, systemHeaderGap, squeezeFactor);
 }
 
 //------------------------------------------------------
