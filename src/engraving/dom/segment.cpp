@@ -2245,7 +2245,6 @@ void Segment::createShapes()
 void Segment::createShape(staff_idx_t staffIdx)
 {
     Shape& s = _shapes[staffIdx];
-    s.setSqueezeFactor(1);
     s.clear();
 
     if (const System* system = this->system()) {
