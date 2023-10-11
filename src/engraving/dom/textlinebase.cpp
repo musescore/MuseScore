@@ -184,6 +184,27 @@ const std::array<Pid, 27>& TextLineBase::textLineBasePropertyIds()
     return TextLineBasePropertyId;
 }
 
+void TextLineBase::reset()
+{
+    String beginText = _beginText;
+    String contText = _continueText;
+    String endText = _endText;
+    bool beginStyled = isStyled(Pid::BEGIN_TEXT);
+    bool contStyled = isStyled(Pid::CONTINUE_TEXT);
+    bool endStyled = isStyled(Pid::END_TEXT);
+
+    SLine::reset();
+    if (!beginStyled) {
+        undoChangeProperty(Pid::BEGIN_TEXT, beginText, PropertyFlags::UNSTYLED);
+    }
+    if (!contStyled) {
+        undoChangeProperty(Pid::CONTINUE_TEXT, contText, PropertyFlags::UNSTYLED);
+    }
+    if (!endStyled) {
+        undoChangeProperty(Pid::END_TEXT, endText, PropertyFlags::UNSTYLED);
+    }
+}
+
 //---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
