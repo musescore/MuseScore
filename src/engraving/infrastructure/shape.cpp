@@ -26,12 +26,14 @@
 
 #include "../dom/engravingitem.h"
 
+#include "../rendering/dev/shapeutils.h"
+
 #include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
+using namespace mu::engraving;
 
-namespace mu::engraving {
 //---------------------------------------------------------
 //   addHorizontalSpacing
 //    This methods creates "walls". They are represented by
@@ -123,45 +125,7 @@ const RectF& Shape::bbox() const
 
 double Shape::minHorizontalDistance(const Shape& a) const
 {
-    double dist = -1000000.0;        // min real
-    double absoluteMinPadding = 0.1 * m_spatium * m_squeezeFactor;
-    double verticalClearance = 0.2 * m_spatium * m_squeezeFactor;
-    for (const ShapeElement& r2 : a.m_elements) {
-        if (r2.isNull()) {
-            continue;
-        }
-        const EngravingItem* item2 = r2.toItem;
-        double by1 = r2.top();
-        double by2 = r2.bottom();
-        for (const ShapeElement& r1 : m_elements) {
-            if (r1.isNull()) {
-                continue;
-            }
-            const EngravingItem* item1 = r1.toItem;
-            double ay1 = r1.top();
-            double ay2 = r1.bottom();
-            bool intersection = mu::engraving::intersects(ay1, ay2, by1, by2, verticalClearance);
-            double padding = 0;
-            KerningType kerningType = KerningType::NON_KERNING;
-            if (item1 && item2) {
-                padding = EngravingItem::renderer()->computePadding(item1, item2);
-                padding *= m_squeezeFactor;
-                padding = std::max(padding, absoluteMinPadding);
-                kerningType = EngravingItem::renderer()->computeKerning(item1, item2);
-            }
-            if ((intersection && kerningType != KerningType::ALLOW_COLLISION)
-                || (r1.width() == 0 || r2.width() == 0)  // Temporary hack: shapes of zero-width are assumed to collide with everyghin
-                || (!item1 && item2 && item2->isLyrics())  // Temporary hack: avoids collision with melisma line
-                || kerningType == KerningType::NON_KERNING) {
-                dist = std::max(dist, r1.right() - r2.left() + padding);
-            }
-            if (kerningType == KerningType::KERNING_UNTIL_ORIGIN) { //prepared for future user option, for now always false
-                double origin = r1.left();
-                dist = std::max(dist, origin - r2.left());
-            }
-        }
-    }
-    return dist;
+    return mu::engraving::rendering::dev::minHorizontalDistance(*this, a, m_spatium, m_squeezeFactor);
 }
 
 //-------------------------------------------------------------------
@@ -537,4 +501,3 @@ void ShapeElement::dump() const
 }
 
 #endif
-} // namespace mu::engraving
