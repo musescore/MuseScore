@@ -456,11 +456,23 @@ void BarLine::calcY()
 
     int from    = m_spanFrom;
     int to      = m_spanTo;
-    int oneLine = st1->lines() <= 1;
-    if (oneLine && m_spanFrom == 0) {
+    int numLines = st1->lines();
+    if (numLines == 1 && m_spanFrom == 0) {
         from = BARLINE_SPAN_1LINESTAFF_FROM;
         if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
             to = BARLINE_SPAN_1LINESTAFF_TO;
+        }
+    }
+    if (numLines == 2 && m_spanFrom == 0) {
+        from = BARLINE_SPAN_1LINESTAFF_FROM + 1;
+        if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
+            to = BARLINE_SPAN_1LINESTAFF_TO - 1;
+        }
+    }
+    if (numLines == 3 && m_spanFrom == 0) {
+        from = BARLINE_SPAN_1LINESTAFF_FROM + 2;
+        if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
+            to = BARLINE_SPAN_1LINESTAFF_TO - 2;
         }
     }
     SysStaff* sysStaff1  = system->staff(staffIdx1);
