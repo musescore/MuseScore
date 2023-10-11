@@ -125,7 +125,7 @@ ScoresView {
                 anchors.right: parent.right
                 anchors.rightMargin: root.sideMargin
 
-                title: qsTrc("project", "You don't have any online scores yet")
+                title: qsTrc("project", "You don’t have any online scores yet")
                 body: qsTrc("project", "Scores will appear here when you save a file to the cloud, or publish a score on <a href=\"https://musescore.com\">musescore.com</a>.")
             }
         }
