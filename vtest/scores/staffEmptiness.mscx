@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <museScore version="3.02">
-  <programVersion>3.6.3</programVersion>
-  <programRevision></programRevision>
+  <programVersion>3.6.2</programVersion>
+  <programRevision>3224f34</programRevision>
   <Score>
     <LayerTag id="0" tag="default"></LayerTag>
     <currentLayer>0</currentLayer>
@@ -48,8 +48,6 @@
         <family>cornets</family>
         <family>flugelhorns</family>
         <family>trombones</family>
-        <family>baritone-horns</family>
-        <family>euphoniums</family>
         <family>tubas</family>
         </section>
       <section id="timpani" brackets="true" showSystemMarkings="false" barLineSpan="true" thinBrackets="true">
@@ -498,6 +496,10 @@
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
+          <StaffText>
+            <minDistance>-0.595317</minDistance>
+            <text>Staff 2 hidden</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -508,10 +510,6 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <StaffText>
-            <offset x="-10.8383" y="-3.22005"/>
-            <text>Staff 2 hidden</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -802,6 +800,9 @@
         </Measure>
       <Measure>
         <voice>
+          <StaffText>
+            <text>Ottava line (unhides staff 2)</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -860,8 +861,18 @@
       <Measure>
         <voice>
           <StaffText>
-            <text>Ottava line (unhides staff 2)</text>
+            <text>Hairpin (should not unhide <b>next</b> staff 1)</text>
             </StaffText>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              </HairPin>
+            <next>
+              <location>
+                <measures>2</measures>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -906,6 +917,13 @@
         </Measure>
       <Measure>
         <voice>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-2</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
@@ -1467,8 +1485,7 @@
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-11.5541" y="4.40686"/>
+            <minDistance>0.203254</minDistance>
             <text>Volta (should NOT unhide staff 1)</text>
             </StaffText>
           <Rest>

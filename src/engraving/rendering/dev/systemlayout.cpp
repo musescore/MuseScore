@@ -607,7 +607,8 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
             bool hideStaff = true;
             for (auto spanner : spanners) {
                 if (spanner.value->staff() == staff
-                    && !spanner.value->systemFlag()) {
+                    && !spanner.value->systemFlag()
+                    && !spanner.value->isHairpin()) {
                     hideStaff = false;
                     break;
                 }
