@@ -591,7 +591,7 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
 
     Fraction stick = system->measures().front()->tick();
     Fraction etick = system->measures().back()->endTick();
-    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks() - 1);
 
     for (const Staff* staff : ctx.dom().staves()) {
         SysStaff* ss  = system->staff(staffIdx);
@@ -605,7 +605,8 @@ void SystemLayout::hideEmptyStaves(System* system, LayoutContext& ctx, bool isFi
                 && hideMode != Staff::HideMode::NEVER)) {
             bool hideStaff = true;
             for (auto spanner : spanners) {
-                if (spanner.value->staff() == staff) {
+                if (spanner.value->staff() == staff
+                    && !spanner.value->systemFlag()) {
                     hideStaff = false;
                     break;
                 }
