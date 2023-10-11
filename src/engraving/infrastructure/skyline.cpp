@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -22,17 +22,16 @@
 
 #include "skyline.h"
 
-#include "arpeggio.h"
-#include "beam.h"
-#include "chord.h"
-#include "stem.h"
-#include "tremolo.h"
-
+#include "realfn.h"
 #include "draw/painter.h"
 
-#include "shape.h"
+#include "../dom/arpeggio.h"
+#include "../dom/beam.h"
+#include "../dom/chord.h"
+#include "../dom/stem.h"
+#include "../dom/tremolo.h"
 
-#include "realfn.h"
+#include "shape.h"
 
 using namespace mu;
 using namespace mu::draw;
@@ -152,7 +151,7 @@ SkylineLine::SegConstIter SkylineLine::find(double x) const
 
 void SkylineLine::add(const Shape& s)
 {
-    for (const auto& r : s) {
+    for (const auto& r : s.elements()) {
         add(r);
     }
 }
@@ -168,7 +167,7 @@ void SkylineLine::add(const ShapeElement& r)
 
 void Skyline::add(const Shape& s)
 {
-    for (const auto& r : s) {
+    for (const auto& r : s.elements()) {
         add(r);
     }
 }

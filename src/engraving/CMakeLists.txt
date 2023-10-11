@@ -55,6 +55,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/smufl.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/rtti.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/ld_access.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/shape.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/shape.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/skyline.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/skyline.h
 
     ${DOM_SRC}
 

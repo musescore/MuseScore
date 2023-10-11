@@ -73,26 +73,6 @@ Fraction Bracket::playTick() const
 }
 
 //---------------------------------------------------------
-//   setHeight
-//---------------------------------------------------------
-
-void Bracket::setHeight(double h)
-{
-    UNREACHABLE;
-    mutldata()->setBracketHeight(h);
-}
-
-//---------------------------------------------------------
-//   width
-//---------------------------------------------------------
-
-double Bracket::width(LD_ACCESS) const
-{
-    UNREACHABLE;
-    return ldata()->bracketWidth();
-}
-
-//---------------------------------------------------------
 //   setStaffSpan
 //---------------------------------------------------------
 
@@ -197,7 +177,7 @@ void Bracket::endEditDrag(EditData&)
         double ay  = parentItem()->pagePos().y();
         System* s = system();
         double y   = s->staff(staffIdx1)->y() + ay;
-        double h1  = staff()->height();
+        double h1  = staff()->staffHeight();
 
         for (staffIdx2 = staffIdx1 + 1; staffIdx2 < n; ++staffIdx2) {
             double h = s->staff(staffIdx2)->y() + ay - y;
@@ -210,7 +190,7 @@ void Bracket::endEditDrag(EditData&)
     }
 
     double sy = system()->staff(staffIdx1)->y();
-    double ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->height();
+    double ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->staffHeight();
     mutldata()->setBracketHeight(ey - sy);
     bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
 }

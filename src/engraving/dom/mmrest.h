@@ -70,22 +70,6 @@ public:
     };
     DECLARE_LAYOUTDATA_METHODS(MMRest);
 
-    //! --- DEPRECATED ---
-    void setWidth(double width) override
-    {
-        UNREACHABLE;
-        mutldata()->setRestWidth(width);
-    }
-
-    double width(LD_ACCESS mode = LD_ACCESS::CHECK) const override
-    {
-        UNUSED(mode);
-        UNREACHABLE;
-        return ldata()->restWidth();
-    }
-
-    //! ------------------
-
 private:
 
     Sid getPropertyStyle(Pid) const override;

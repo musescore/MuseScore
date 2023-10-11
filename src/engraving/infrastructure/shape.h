@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,10 +20,9 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SHAPE_H__
-#define __SHAPE_H__
+#ifndef MU_ENGRAVING_SHAPE_H
+#define MU_ENGRAVING_SHAPE_H
 
-#include "global/allocator.h"
 #include "draw/types/geometry.h"
 
 namespace mu::draw {
@@ -32,14 +31,12 @@ class Painter;
 
 namespace mu::engraving {
 class EngravingItem;
-class Score;
 
 //---------------------------------------------------------
 //   ShapeElement
 //---------------------------------------------------------
 
 struct ShapeElement : public mu::RectF {
-    OBJECT_ALLOCATOR(engraving, ShapeElement)
 public:
     const EngravingItem* toItem = nullptr;
     ShapeElement(const mu::RectF& f, const EngravingItem* p)
@@ -55,28 +52,53 @@ public:
 //   Shape
 //---------------------------------------------------------
 
-class Shape : public std::vector<ShapeElement>
+class Shape
 {
-    OBJECT_ALLOCATOR(engraving, Shape)
-private:
-    double _spatium = 0.0;
-    double _squeezeFactor = 1.0;
 public:
-    enum HorizontalSpacingType {
-        SPACING_GENERAL = 0,
-        SPACING_LYRICS,
-        SPACING_HARMONY,
+
+    enum class Type {
+        Fixed,      // fixed size, like just bbox
+        FixedX,     // not implemented (reserved)
+        FixedY,     // not implemented (reserved)
+        Composite   // composed of other shapes
     };
 
-    Shape() {}
-    Shape(const mu::RectF& r, const EngravingItem* p = nullptr) { add(r, p); }
+    Shape(Type t = Type::Fixed)
+        : m_type(t) {}
+    Shape(const mu::RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed)
+        : m_type(t) { add(r, p); }
 
+    Type type() const { return m_type; }
+    bool isComposite() const { return m_type == Type::Composite; }
+
+    size_t size() const { return m_elements.size(); }
+    bool empty() const { return m_elements.empty(); }
+    void clear() { m_elements.clear(); }
+
+    // Fixed
+    void setBBox(const mu::RectF& r);
+    void addBBox(const mu::RectF& r);
+
+    // Composite
     void add(const Shape& s);
     void add(const mu::RectF& r, const EngravingItem* p);
-    void add(const mu::RectF& r) { push_back(ShapeElement(r)); }
+    void add(const mu::RectF& r);
 
     void remove(const mu::RectF&);
     void remove(const Shape&);
+    template<typename Predicate>
+    inline bool remove_if(Predicate p)
+    {
+        size_t origSize = m_elements.size();
+        m_elements.erase(std::remove_if(m_elements.begin(), m_elements.end(), p), m_elements.end());
+        invalidateBBox();
+        return origSize != m_elements.size();
+    }
+
+    // ---
+
+    const std::vector<ShapeElement>& elements() const { return m_elements; }
+
     void removeInvisibles();
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
@@ -86,6 +108,7 @@ public:
     void translateY(double);
     Shape translated(const mu::PointF&) const;
 
+    const mu::RectF& bbox() const;
     double minHorizontalDistance(const Shape&) const;
     double minVerticalDistance(const Shape&) const;
     double verticalClearance(const Shape&) const;
@@ -98,21 +121,27 @@ public:
     double rightMostEdgeAtHeight(double yAbove, double yBelow) const;
     double leftMostEdgeAtHeight(double yAbove, double yBelow) const;
 
-    size_t size() const { return std::vector<ShapeElement>::size(); }
-    bool empty() const { return std::vector<ShapeElement>::empty(); }
-    void clear() { std::vector<ShapeElement>::clear(); }
-
     bool contains(const mu::PointF&) const;
     bool intersects(const mu::RectF& rr) const;
     bool intersects(const Shape&) const;
     bool clearsVertically(const Shape& a) const;
 
-    void setSqueezeFactor(double v) { _squeezeFactor = v; }
+    void setSqueezeFactor(double v) { m_squeezeFactor = v; }
 
     void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG
     void dump(const char*) const;
 #endif
+
+private:
+
+    void invalidateBBox();
+
+    Type m_type = Type::Fixed;
+    std::vector<ShapeElement> m_elements;
+    mutable RectF m_bbox;   // cache
+    double m_spatium = 0.0;
+    double m_squeezeFactor = 1.0;
 };
 
 //---------------------------------------------------------

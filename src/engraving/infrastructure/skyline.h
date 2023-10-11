@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SKYLINE_H__
-#define __SKYLINE_H__
+#ifndef MU_ENGRAVING_SKYLINE_H
+#define MU_ENGRAVING_SKYLINE_H
 
 #include <vector>
 

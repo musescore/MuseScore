@@ -805,7 +805,7 @@ Fraction Staff::currentKeyTick(const Fraction& tick) const
 //   height
 //---------------------------------------------------------
 
-double Staff::height() const
+double Staff::staffHeight() const
 {
     Fraction tick = Fraction(0, 1);
     return (lines(tick) - 1) * spatium(tick) * staffType(tick)->lineDistance().val();

@@ -46,7 +46,6 @@
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/segment.h"
-#include "dom/shape.h"
 #include "dom/staff.h"
 #include "dom/stem.h"
 #include "dom/stemslash.h"
@@ -943,7 +942,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
     double chordBotY = item->downPos() + 0.5 * item->upNote()->headHeight();    // note position of lowest note
 
     double staffTopY = -staffDist;
-    double staffBotY = item->staff()->height() + staffDist;
+    double staffBotY = item->staff()->staffHeight() + staffDist;
 
     // avoid collisions of staff articulations with chord notes:
     // gap between note and staff articulation is distance0 + 0.5 spatium
@@ -1014,7 +1013,7 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
             stacc = a;
         } else if (stacc && a->isAccent() && stacc->up() == a->up()
                    && (RealIsEqualOrLess(stacc->ldata()->pos().y(), 0.0)
-                       || RealIsEqualOrMore(stacc->ldata()->pos().y(), item->staff()->height()))) {
+                       || RealIsEqualOrMore(stacc->ldata()->pos().y(), item->staff()->staffHeight()))) {
             // obviously, the accent doesn't have a cutout, so this value just artificially moves the stacc
             // and accent closer to each other to simulate some kind of kerning. Looks great using all musescore fonts,
             // though there is a possibility that a different font which has vertically-asymmetrical accents
@@ -3337,7 +3336,7 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
         if (e->isSymbol()) {
             e->mutldata()->setMag(item->mag());
             Shape noteShape = item->shape();
-            mu::remove_if(noteShape, [e](ShapeElement& s) { return s.toItem == e || s.toItem->isBend(); });
+            noteShape.remove_if([e](ShapeElement& s) { return s.toItem == e || s.toItem->isBend(); });
             LedgerLine* ledger = item->line() < -1 || item->line() > item->staff()->lines(item->tick())
                                  ? item->chord()->ledgerLines() : nullptr;
             if (ledger) {

@@ -86,7 +86,7 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
             if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->height();
+                bool inStaff = above ? r.bottom() + rebase > 0.0 : r.top() + rebase < item->staff()->staffHeight();
                 if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
                     r.translate(0.0, rebase);
                 }
@@ -145,7 +145,7 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
             if (ldata->autoplace.offsetChanged != OffsetChange::NONE) {
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
-                bool inStaff = above ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < item->staff()->height();
+                bool inStaff = above ? sh.bottom() + rebase > 0.0 : sh.top() + rebase < item->staff()->staffHeight();
                 if (rebaseMinDistance(item, ldata, minDistance, yd, sp, rebase, above, inStaff)) {
                     sh.translateY(rebase);
                 }
@@ -209,7 +209,7 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
                 // user moved element within the skyline
                 // we may need to adjust minDistance, yd, and/or offset
                 double adj = item->pos().y() + rebase;
-                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->height();
+                bool inStaff = above ? sh.bottom() + adj > 0.0 : sh.top() + adj < item->staff()->staffHeight();
                 rebaseMinDistance(item, ldata, md, yd, sp, rebase, above, inStaff);
             }
             ldata->moveY(yd);
@@ -241,7 +241,7 @@ double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutD
         // TODO: refactor to take advantage of existing cmdFlip() algorithms
         // TODO: adjustPlacement() (from read206.cpp) on read for 3.0 as well
         RectF r = ldata->bbox().translated(ldata->autoplace.changedPos);
-        double staffHeight = item->staff()->height();
+        double staffHeight = item->staff()->staffHeight();
         const EngravingItem* e = item->isSpannerSegment() ? toSpannerSegment(item)->spanner() : item;
         bool multi = e->isSpanner() && toSpanner(e)->spannerSegments().size() > 1;
         bool above = e->placeAbove();
@@ -360,7 +360,7 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
 
         Shape thisShape = item->shape().translate(item->chordRest()->pos() + m->pos() + s->pos() + item->pos());
 
-        for (ShapeElement& shapeEl : thisShape) {
+        for (const ShapeElement& shapeEl : thisShape.elements()) {
             RectF r = shapeEl;
 
             double d = 0.0;

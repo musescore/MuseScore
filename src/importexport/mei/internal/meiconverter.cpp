@@ -1564,14 +1564,6 @@ void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLine
 
     warning = false;
 
-    // @place
-    /*
-    if (meiHarm.HasPlace()) {
-        harmony->setPlacement(meiHarm.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
-        harmony->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
-    }
-    */
-
     // @type
     engraving::HarmonyType harmonyType = engraving::HarmonyType::STANDARD;
     if (Convert::hasTypeValue(meiHarm.GetType(), std::string(HARMONY_TYPE) + "roman")) {
@@ -1583,17 +1575,18 @@ void Convert::harmFromMEI(engraving::Harmony* harmony, const StringList& meiLine
     harmony->setHarmony(meiLines.join(u"\n"));
     harmony->setPlainText(harmony->harmonyName());
 
+    // @place
+    if (meiHarm.HasPlace()) {
+        harmony->setPlacement(meiHarm.GetPlace() == libmei::STAFFREL_above ? engraving::PlacementV::ABOVE : engraving::PlacementV::BELOW);
+        harmony->setPropertyFlags(engraving::Pid::PLACEMENT, engraving::PropertyFlags::UNSTYLED);
+    }
+
     return;
 }
 
 libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& meiLines)
 {
     libmei::Harm meiHarm;
-
-    // @place
-    if (harmony->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
-        //meiHarm.SetPlace(Convert::placeToMEI(harmony->placement()));
-    }
 
     // @type
     if (harmony->harmonyType() != engraving::HarmonyType::STANDARD) {
@@ -1611,6 +1604,11 @@ libmei::Harm Convert::harmToMEI(const engraving::Harmony* harmony, StringList& m
     // content
     String plainText = harmony->plainText();
     meiLines = plainText.split(u"\n");
+
+    // @place
+    if (harmony->propertyFlags(engraving::Pid::PLACEMENT) == engraving::PropertyFlags::UNSTYLED) {
+        meiHarm.SetPlace(Convert::placeToMEI(harmony->placement()));
+    }
 
     return meiHarm;
 }

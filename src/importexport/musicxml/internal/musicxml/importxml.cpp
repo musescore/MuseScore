@@ -208,7 +208,7 @@ static Err doValidate(const QString& name, QIODevice* dev)
 
     if (!valid) {
         LOGD("importMusicXml() file '%s' is not a valid MusicXML file", qPrintable(name));
-        QString strErr = qtrc("iex_musicxml", "File '%1' is not a valid MusicXML file.").arg(name);
+        QString strErr = qtrc("iex_musicxml", "File “%1” is not a valid MusicXML file.").arg(name);
         if (MScore::noGui) {
             return Err::NoError;         // might as well try anyhow in converter mode
         }

@@ -28,7 +28,6 @@
 #include "types/symnames.h"
 
 #include "dom/mscore.h"
-#include "dom/shape.h"
 
 #include "smufl.h"
 

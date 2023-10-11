@@ -34,7 +34,6 @@
 
 #include "noteevent.h"
 #include "pitchspelling.h"
-#include "shape.h"
 #include "symbol.h"
 #include "types.h"
 

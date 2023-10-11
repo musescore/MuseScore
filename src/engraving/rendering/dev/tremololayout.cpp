@@ -21,6 +21,8 @@
  */
 #include "tremololayout.h"
 
+#include "global/number.h"
+
 #include "dom/chord.h"
 #include "dom/stem.h"
 #include "dom/tremolo.h"
@@ -297,11 +299,13 @@ void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
         return;
     }
     bool _isGrace = item->chord1()->isGrace();
-    PointF startAnchor = item->layoutInfo->startAnchor() - PointF(0., item->pagePos().y());
-    PointF endAnchor = item->layoutInfo->endAnchor() - PointF(0., item->pagePos().y());
+    const PointF pagePos = item->pagePos();
+    PointF startAnchor = item->layoutInfo->startAnchor() - PointF(0.0, pagePos.y());
+    PointF endAnchor = item->layoutInfo->endAnchor() - PointF(0.0, pagePos.y());
 
     // inset trem from stems for default style
-    double slope = (endAnchor.y() - startAnchor.y()) / (endAnchor.x() - startAnchor.x());
+    const double slope = mu::divide(endAnchor.y() - startAnchor.y(), endAnchor.x() - startAnchor.x(), 0.0);
+
     double gapSp = stemGapSp;
     if (defaultStyle || item->tremoloStyle() == TremoloStyle::TRADITIONAL_ALTERNATE) {
         // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together

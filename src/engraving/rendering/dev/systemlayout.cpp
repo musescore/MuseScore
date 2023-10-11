@@ -2089,7 +2089,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
         const Staff* staff  = ctx.dom().staff(si1);
         auto ni = std::next(i);
 
-        double dist = staff->height();
+        double dist = staff->staffHeight();
         double yOffset;
         double h;
         yOffset = 0.0;
@@ -2128,16 +2128,16 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
             Spacer* sp = m->vspacerDown(si1);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
-                    dist = staff->height() + sp->gap();
+                    dist = staff->staffHeight() + sp->gap();
                     fixedSpace = true;
                     break;
                 } else {
-                    dist = std::max(dist, staff->height() + sp->gap());
+                    dist = std::max(dist, staff->staffHeight() + sp->gap());
                 }
             }
             sp = m->vspacerUp(si2);
             if (sp) {
-                dist = std::max(dist, sp->gap() + staff->height());
+                dist = std::max(dist, sp->gap() + staff->staffHeight());
             }
         }
         if (!fixedSpace) {

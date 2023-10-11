@@ -98,7 +98,7 @@ ColumnLayout {
 
         Layout.fillWidth: true
 
-        text: qsTrc("global", "Don't show this message again")
+        text: qsTrc("global", "Don’t show this message again")
         checked: !root.isAskAgain
 
         navigation.panel: navigationPanel

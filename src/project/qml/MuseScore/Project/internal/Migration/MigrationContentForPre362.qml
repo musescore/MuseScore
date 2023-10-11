@@ -215,7 +215,7 @@ Item {
             id: askAgain
             anchors.left: parent.left
             anchors.verticalCenter: parent.verticalCenter
-            text: qsTrc("global", "Don't ask again")
+            text: qsTrc("global", "Don’t ask again")
             checked: !root.isAskAgain
 
             navigation.panel: footer.navigationPanel

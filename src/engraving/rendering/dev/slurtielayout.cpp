@@ -1311,7 +1311,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         chordSystemPos += PointF(0.0, yDiff);
     }
     Shape chordShape = chord->shape().translate(chordSystemPos);
-    mu::remove_if(chordShape, [note](ShapeElement& s) {
+    chordShape.remove_if([note](ShapeElement& s) {
         return !s.toItem || (s.toItem == note || s.toItem->isHook() || s.toItem->isLedgerLine());
     });
 
