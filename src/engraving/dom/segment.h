@@ -274,8 +274,8 @@ public:
     double minRight() const;
     double minLeft(const Shape&) const;
     double minLeft() const;
-    double minHorizontalDistance(Segment*, bool isSystemGap) const;
-    double minHorizontalCollidingDistance(Segment* ns) const;
+    double minHorizontalDistance(Segment*, bool isSystemGap, double squeezeFactor) const;
+    double minHorizontalCollidingDistance(Segment* ns, double squeezeFactor = 1.0) const;
 
     double widthOffset() const { return _widthOffset; }
     void setWidthOffset(double w) { _widthOffset = w; }

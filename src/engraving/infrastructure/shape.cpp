@@ -24,15 +24,16 @@
 
 #include "draw/painter.h"
 
-#include "../dom/engravingitem.h"
+#include "dom/engravingitem.h"
 
-#include "../rendering/dev/shapeutils.h"
+#include "rendering/dev/distances.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::draw;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
 //---------------------------------------------------------
 //   addHorizontalSpacing
@@ -125,7 +126,9 @@ const RectF& Shape::bbox() const
 
 double Shape::minHorizontalDistance(const Shape& a) const
 {
-    return mu::engraving::rendering::dev::minHorizontalDistance(*this, a, m_spatium, m_squeezeFactor);
+    DO_ASSERT(RealIsEqual(m_squeezeFactor, 1.0));
+
+    return distances::minHorizontalDistance(*this, a, m_spatium, m_squeezeFactor);
 }
 
 //-------------------------------------------------------------------

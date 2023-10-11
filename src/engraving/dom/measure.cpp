@@ -3182,7 +3182,7 @@ void Measure::checkTrailer()
     }
 }
 
-void Measure::spaceRightAlignedSegments()
+void Measure::spaceRightAlignedSegments(double segmentShapeSqueezeFactor)
 {
     // Collect all the right-aligned segments starting from the back
     std::vector<Segment*> rightAlignedSegments;
@@ -3198,7 +3198,7 @@ void Measure::spaceRightAlignedSegments()
         double minDistAfter = arbitraryLowReal;
         for (Segment* seg = raSegment->next(); seg; seg = seg->next()) {
             double xDiff = seg->x() - raSegment->x();
-            double minDist = raSegment->minHorizontalCollidingDistance(seg);
+            double minDist = raSegment->minHorizontalCollidingDistance(seg, segmentShapeSqueezeFactor);
             minDistAfter = std::max(minDistAfter, minDist - xDiff);
         }
         if (minDistAfter != arbitraryLowReal && raSegment->prevActive()) {
@@ -3212,7 +3212,7 @@ void Measure::spaceRightAlignedSegments()
         double minDistBefore = 0.0;
         for (Segment* seg = raSegment->prevActive(); seg; seg = seg->prevActive()) {
             double xDiff = raSegment->x() - seg->x();
-            double minDist = seg->minHorizontalCollidingDistance(raSegment);
+            double minDist = seg->minHorizontalCollidingDistance(raSegment, segmentShapeSqueezeFactor);
             minDistBefore = std::max(minDistBefore, minDist - xDiff);
         }
         Segment* prevSegment = raSegment->prevActive();
@@ -3249,7 +3249,7 @@ void Measure::layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts)
     layoutSegmentsWithDuration(visibleParts);
 }
 
-double Measure::computeFirstSegmentXPosition(Segment* segment)
+double Measure::computeFirstSegmentXPosition(Segment* segment, double segmentShapeSqueezeFactor)
 {
     double x = 0;
 
@@ -3261,7 +3261,7 @@ double Measure::computeFirstSegmentXPosition(Segment* segment)
     bool ignorePrev = !prevMeas || prevMeas->system() != system() || !prevMeasEnd
                       || (prevMeasEnd->segmentType() & SegmentType::BarLineType && segment->segmentType() & SegmentType::BarLineType);
     if (!ignorePrev) {
-        x = prevMeasEnd->minHorizontalCollidingDistance(segment);
+        x = prevMeasEnd->minHorizontalCollidingDistance(segment, segmentShapeSqueezeFactor);
         x -= prevMeas->width() - prevMeasEnd->x();
     }
 
@@ -3318,7 +3318,7 @@ void Measure::layoutSegmentsWithDuration(const std::vector<int>& visibleParts)
     Segment* current = findFirstEnabledSegment(this);
 
     auto [spacing, width] = current->computeCellWidth(visibleParts);
-    currentXPos = computeFirstSegmentXPosition(current);
+    currentXPos = computeFirstSegmentXPosition(current, 1.0);
     current->mutldata()->setPosX(currentXPos);
     current->setWidth(width);
     current->setSpacing(spacing);

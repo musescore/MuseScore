@@ -19,13 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SHAPEUTILS_DEV_H
-#define MU_ENGRAVING_SHAPEUTILS_DEV_H
+#ifndef MU_ENGRAVING_DISTANCES_DEV_H
+#define MU_ENGRAVING_DISTANCES_DEV_H
 
 #include "infrastructure/shape.h"
 
-namespace mu::engraving::rendering::dev {
-double minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor = 1.0);
+namespace mu::engraving {
+class Segment;
 }
 
-#endif // MU_ENGRAVING_SHAPEUTILS_DEV_H
+namespace mu::engraving::rendering::dev::distances {
+double minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor = 1.0);
+double shapeSpatium(const Shape& s);
+
+double minHorizontalDistance(const Segment* f, const Segment* ns, bool systemHeaderGap, double squeezeFactor);
+double minHorizontalCollidingDistance(const Segment* f, const Segment* ns, double squeezeFactor);
+}
+
+#endif // MU_ENGRAVING_DISTANCES_DEV_H

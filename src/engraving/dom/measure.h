@@ -350,7 +350,7 @@ public:
     //! puts segments on the positions according to their length
     void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
 
-    double computeFirstSegmentXPosition(Segment* segment);
+    double computeFirstSegmentXPosition(Segment* segment, double segmentShapeSqueezeFactor);
 
     void layoutSegmentsWithDuration(const std::vector<int>& visibleParts);
 
@@ -363,7 +363,7 @@ public:
 
     void respaceSegments();
 
-    void spaceRightAlignedSegments();
+    void spaceRightAlignedSegments(double segmentShapeSqueezeFactor);
 
 private:
 
