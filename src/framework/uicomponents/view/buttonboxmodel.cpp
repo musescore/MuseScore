@@ -115,7 +115,7 @@ const std::vector <ButtonBoxModel::ButtonRole>& ButtonBoxModel::chooseButtonLayo
 #endif
     }
 
-    IF_ASSERT_FAILED(index != ButtonLayout::UnknownLayout && index < buttonRoleLayouts.size()) {
+    IF_ASSERT_FAILED(index < buttonRoleLayouts.size()) {
         index = 0;
     }
 
