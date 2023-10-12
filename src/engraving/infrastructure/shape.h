@@ -73,7 +73,7 @@ public:
 
     size_t size() const { return m_elements.size(); }
     bool empty() const { return m_elements.empty(); }
-    void clear() { m_elements.clear(); }
+    void clear() { m_elements.clear(); m_spatium = 0.0; }
 
     // Fixed
     void setBBox(const mu::RectF& r);
