@@ -52,14 +52,14 @@ double mu::engraving::rendering::dev::distances::minHorizontalDistance(const Sha
         if (r2.isNull()) {
             continue;
         }
-        const EngravingItem* item2 = r2.toItem;
+        const EngravingItem* item2 = r2.item();
         double by1 = r2.top();
         double by2 = r2.bottom();
         for (const ShapeElement& r1 : f.elements()) {
             if (r1.isNull()) {
                 continue;
             }
-            const EngravingItem* item1 = r1.toItem;
+            const EngravingItem* item1 = r1.item();
             double ay1 = r1.top();
             double ay2 = r1.bottom();
             bool intersection = mu::engraving::intersects(ay1, ay2, by1, by2, verticalClearance);
@@ -89,9 +89,9 @@ double mu::engraving::rendering::dev::distances::minHorizontalDistance(const Sha
 // Logic moved from Shape
 double mu::engraving::rendering::dev::distances::shapeSpatium(const Shape& s)
 {
-    for (auto it = s.elements().rbegin(); it != s.elements().rend(); ++it) {
-        if (it->toItem) {
-            return it->toItem->spatium();
+    for (auto it = s.elements().begin(); it != s.elements().end(); ++it) {
+        if (it->item()) {
+            return it->item()->spatium();
         }
     }
     return 0.0;
@@ -114,9 +114,6 @@ double mu::engraving::rendering::dev::distances::minHorizontalDistance(const Seg
     for (unsigned staffIdx = 0; staffIdx < f->shapes().size(); ++staffIdx) {
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
-        if (RealIsNull(sp)) {
-            sp = f->spatium();
-        }
         d = ns ? minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor) : 0.0;
         // first chordrest of a staff should clear the widest header for any staff
         // so make sure segment is as wide as it needs to be
@@ -211,9 +208,6 @@ double mu::engraving::rendering::dev::distances::minHorizontalCollidingDistance(
     for (unsigned staffIdx = 0; staffIdx < f->shapes().size(); ++staffIdx) {
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
-        if (RealIsNull(sp)) {
-            sp = f->spatium();
-        }
         double d = minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor);
         w = std::max(w, d);
     }

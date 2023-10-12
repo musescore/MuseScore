@@ -92,7 +92,7 @@ Shape Shape::translated(const PointF& pt) const
 {
     Shape s;
     for (const ShapeElement& r : m_elements) {
-        s.add(r.translated(pt), r.toItem);
+        s.add(r.translated(pt), r.item());
     }
     return s;
 }
@@ -228,7 +228,7 @@ double Shape::left() const
 {
     double dist = 10000.0;
     for (const ShapeElement& r : m_elements) {
-        if (r.height() != 0.0 && !(r.toItem && r.toItem->isTextBase()) && r.left() < dist) {
+        if (r.height() != 0.0 && !(r.item() && r.item()->isTextBase()) && r.left() < dist) {
             // if (r.left() < dist)
             dist = r.left();
         }
@@ -431,7 +431,7 @@ void Shape::remove(const Shape& s)
 void Shape::removeInvisibles()
 {
     mu::remove_if(m_elements, [](ShapeElement& shapeElement) {
-        return !shapeElement.toItem || !shapeElement.toItem->visible();
+        return !shapeElement.item() || !shapeElement.item()->visible();
     });
     invalidateBBox();
 }
@@ -500,7 +500,7 @@ void Shape::dump(const char* p) const
 
 void ShapeElement::dump() const
 {
-    LOGD("   %s: %f %f %f %f", toItem ? toItem->typeName() : "", x(), y(), width(), height());
+    LOGD("   %s: %f %f %f %f", item() ? item()->typeName() : "", x(), y(), width(), height());
 }
 
 #endif

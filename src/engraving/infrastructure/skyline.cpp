@@ -54,7 +54,7 @@ static const double MINIMUM_Y = -1000000.0;
 
 void Skyline::add(const ShapeElement& r)
 {
-    const EngravingItem* item = r.toItem;
+    const EngravingItem* item = r.item();
     bool crossSouth = false;
     bool crossNorth = false;
     if (item && item->isStem()) {

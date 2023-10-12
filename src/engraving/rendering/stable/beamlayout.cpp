@@ -877,7 +877,7 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
 
     Shape beamShape = beam->shape().translated(beam->pagePos());
     beamShape.remove_if([&](ShapeElement& el) {
-        return el.toItem && el.toItem->isBeamSegment() && toBeamSegment(el.toItem)->isBeamlet;
+        return el.item() && el.item()->isBeamSegment() && toBeamSegment(el.item())->isBeamlet;
     });
 
     Shape restShape = rest->shape().translated(rest->pagePos() - rest->offset());
