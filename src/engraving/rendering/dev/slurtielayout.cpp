@@ -1312,7 +1312,7 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     }
     Shape chordShape = chord->shape().translate(chordSystemPos);
     chordShape.remove_if([note](ShapeElement& s) {
-        return !s.toItem || (s.toItem == note || s.toItem->isHook() || s.toItem->isLedgerLine());
+        return !s.item() || (s.item() == note || s.item()->isHook() || s.item()->isLedgerLine());
     });
 
     const double arcSideMargin = 0.3 * spatium;

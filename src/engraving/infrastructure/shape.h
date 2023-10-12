@@ -38,14 +38,19 @@ class EngravingItem;
 
 struct ShapeElement : public mu::RectF {
 public:
-    const EngravingItem* toItem = nullptr;
+
     ShapeElement(const mu::RectF& f, const EngravingItem* p)
-        : mu::RectF(f), toItem(p) {}
+        : mu::RectF(f), m_item(p) {}
     ShapeElement(const mu::RectF& f)
         : mu::RectF(f) {}
 #ifndef NDEBUG
     void dump() const;
 #endif
+
+    const EngravingItem* item() const { return m_item; }
+
+private:
+    const EngravingItem* m_item = nullptr;
 };
 
 //---------------------------------------------------------

@@ -1550,10 +1550,10 @@ void TLayout::layoutChordLine(const ChordLine* item, ChordLine::LayoutData* ldat
     // ...but remove from the shape items that the chordline shouldn't try to avoid
     // (especially the chordline itself)
     chordShape.remove_if([](ShapeElement& shapeEl){
-        if (!shapeEl.toItem) {
+        if (!shapeEl.item()) {
             return true;
         }
-        const EngravingItem* item = shapeEl.toItem;
+        const EngravingItem* item = shapeEl.item();
         if (item->isChordLine() || item->isHarmony() || item->isLyrics()) {
             return true;
         }
@@ -2634,7 +2634,7 @@ static void _layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissand
     // Look at chord shapes (but don't consider lyrics)
     Shape cr1shape = cr1->shape();
     cr1shape.remove_if([](ShapeElement& s) {
-        if (!s.toItem || s.toItem->isLyrics()) {
+        if (!s.item() || s.item()->isLyrics()) {
             return true;
         } else {
             return false;
@@ -2707,7 +2707,7 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
         Shape graceShape = grace->shape();
         Shape groupShape = _shape;
         groupShape.remove_if([grace](ShapeElement& s) {
-            if (!s.toItem || (s.toItem->isStem() && s.toItem->vStaffIdx() != grace->vStaffIdx())) {
+            if (!s.item() || (s.item()->isStem() && s.item()->vStaffIdx() != grace->vStaffIdx())) {
                 return true;
             }
             return false;

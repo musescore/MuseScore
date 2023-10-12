@@ -358,10 +358,10 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
 
     // Remove items that the slur shouldn't try to avoid
     segShape.remove_if([&](ShapeElement& shapeEl) {
-        if (!shapeEl.toItem || !shapeEl.toItem->parentItem()) {
+        if (!shapeEl.item() || !shapeEl.item()->parentItem()) {
             return true;
         }
-        const EngravingItem* item = shapeEl.toItem;
+        const EngravingItem* item = shapeEl.item();
         const EngravingItem* parent = item->parentItem();
         // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
         if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
