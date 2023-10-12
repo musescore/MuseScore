@@ -1593,7 +1593,6 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
     }
 
     // Now we are limited by the collision checks, so try to gradually squeeze everything without collisions
-    staff_idx_t nstaves = ctx.dom().nstaves();
     double squeezeFactor = 1 - step;
     while (curSysWidth > targetSysWidth && RealIsEqualOrMore(squeezeFactor, 0.0)) {
         for (MeasureBase* mb : system->measures()) {
@@ -1604,12 +1603,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
             // Reduce all paddings
             Measure* m = toMeasure(mb);
             double prevWidth = m->width();
-            for (Segment& segment : m->segments()) {
-                for (staff_idx_t staffIdx = 0; staffIdx < nstaves; ++staffIdx) {
-                    Shape& shape = segment.staffShape(staffIdx);
-                    shape.setSqueezeFactor(squeezeFactor);
-                }
-            }
+
             ctx.mutState().setSegmentShapeSqueezeFactor(squeezeFactor);
             MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, stretchCoeff,  /*overrideMinMeasureWidth*/ true);
 
