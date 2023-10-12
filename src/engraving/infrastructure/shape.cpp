@@ -139,29 +139,7 @@ double Shape::minHorizontalDistance(const Shape& a) const
 
 double Shape::minVerticalDistance(const Shape& a) const
 {
-    if (empty() || a.empty()) {
-        return 0.0;
-    }
-
-    double dist = -1000000.0; // min real
-    for (const RectF& r2 : a.m_elements) {
-        if (r2.height() <= 0.0) {
-            continue;
-        }
-        double bx1 = r2.left();
-        double bx2 = r2.right();
-        for (const RectF& r1 : m_elements) {
-            if (r1.height() <= 0.0) {
-                continue;
-            }
-            double ax1 = r1.left();
-            double ax2 = r1.right();
-            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
-                dist = std::max(dist, r1.bottom() - r2.top());
-            }
-        }
-    }
-    return dist;
+    return distances::minVerticalDistance(*this, a);
 }
 
 //-------------------------------------------------------------------
@@ -174,29 +152,7 @@ double Shape::minVerticalDistance(const Shape& a) const
 
 double Shape::verticalClearance(const Shape& a) const
 {
-    if (empty() || a.empty()) {
-        return 0.0;
-    }
-
-    double dist = 1000000.0; // max real
-    for (const RectF& r2 : a.m_elements) {
-        if (r2.height() <= 0.0) {
-            continue;
-        }
-        double bx1 = r2.left();
-        double bx2 = r2.right();
-        for (const RectF& r1 : m_elements) {
-            if (r1.height() <= 0.0) {
-                continue;
-            }
-            double ax1 = r1.left();
-            double ax2 = r1.right();
-            if (mu::engraving::intersects(ax1, ax2, bx1, bx2, 0.0)) {
-                dist = std::min(dist, r2.top() - r1.bottom());
-            }
-        }
-    }
-    return dist;
+    return distances::verticalClearance(*this, a);
 }
 
 //----------------------------------------------------------------
