@@ -78,6 +78,42 @@ void Score::cmdJoinMeasure(Measure* m1, Measure* m2)
 
       range.write(this, m1->tick());
 
+      // if there are some Time Signatures in joined measures, move last one to the next measure (if there is not one already)
+      Segment* ts = inserted->last()->prev(SegmentType::TimeSig);
+      if (ts && ts->rtick().isNotZero()) {
+            for (Segment* insMSeg = inserted->last()->prev(SegmentType::TimeSig); insMSeg && insMSeg->rtick().isNotZero();
+               insMSeg = insMSeg->prev(SegmentType::TimeSig)) {
+                  for (int staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+                        if (TimeSig* insTimeSig = toTimeSig(insMSeg->element(staffIdx * VOICES))) {
+                              TimeSig* lts = nullptr;
+                              for (ScoreElement* l : insTimeSig->linkList()) {
+                                    Score* score = l->score();
+                                    TimeSig* timeSig = toTimeSig(l);
+                                    Segment* tSeg = timeSig->segment();
+                                    int track = timeSig->track();
+                                    Measure* sNext = next ? score->tick2measure(next->tick()) : nullptr;
+                                    Segment* nextTSeg = sNext ? sNext->undoGetSegmentR(SegmentType::TimeSig, Fraction(0, 1)) : nullptr;
+                                    if (sNext && !nextTSeg->element(track)) {
+                                        TimeSig* nsig = new TimeSig(*timeSig);
+                                          nsig->setScore(score);
+                                          nsig->setTrack(track);
+                                          nsig->setParent(nextTSeg);
+
+                                          score->undo(new AddElement(nsig));
+
+                                          if (!lts)
+                                                lts = nsig;
+                                          else
+                                                score->undo(new Link(lts, nsig));
+                                          }
+                                    score->undo(new RemoveElement(timeSig));
+                                    if (tSeg->empty())
+                                          score->undo(new RemoveElement(tSeg));
+                                    }
+                              }
+                        }
+                  }
+            }
       endCmd();
       }
 
