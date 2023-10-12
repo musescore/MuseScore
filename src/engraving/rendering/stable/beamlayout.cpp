@@ -44,11 +44,13 @@
 #include "tlayout.h"
 #include "chordlayout.h"
 #include "../dev/beamtremololayout.h"
+#include "../dev/distances.h"
 
 #include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;
+using namespace mu::engraving::rendering::dev;
 
 void BeamLayout::layout(Beam* item, LayoutContext& ctx)
 {
@@ -882,7 +884,10 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
 
     Shape restShape = rest->shape().translated(rest->pagePos() - rest->offset());
 
-    double restToBeamClearance = up ? beamShape.verticalClearance(restShape) : restShape.verticalClearance(beamShape);
+    double restToBeamClearance = up
+                                 ? distances::verticalClearance(beamShape, restShape)
+                                 : distances::verticalClearance(restShape, beamShape);
+
     if (restToBeamClearance > restToBeamPadding) {
         return;
     }

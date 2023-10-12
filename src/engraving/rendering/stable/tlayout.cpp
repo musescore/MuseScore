@@ -3775,8 +3775,8 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
         layout(accidental, ctx);
         Shape accidentalShape = accidental->shape();
         double minVertDist = above
-                             ? accidentalShape.minVerticalDistance(ldata->bbox())
-                             : Shape(ldata->bbox()).minVerticalDistance(accidentalShape);
+                             ? distances::minVerticalDistance(accidentalShape, ldata->bbox())
+                             : distances::minVerticalDistance(Shape(ldata->bbox()), accidentalShape);
         accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
     }
 }
@@ -5311,8 +5311,9 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
             double x = 0;
             double y = 0;
             x = 0.5 * (box.width() - a->width());
-            double minVertDist = accidentalGoesBelow ? Shape(box).minVerticalDistance(a->shape())
-                                 : a->shape().minVerticalDistance(Shape(box));
+            double minVertDist = accidentalGoesBelow
+                                 ? distances::minVerticalDistance(Shape(box), a->shape())
+                                 : distances::minVerticalDistance(a->shape(), Shape(box));
             y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
             a->setPos(x, y);
             a->setParent(item);
