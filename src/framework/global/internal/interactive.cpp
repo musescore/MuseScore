@@ -113,6 +113,11 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     case IInteractive::Button::Apply:       return ButtonData(int(b), trc("global", "Apply"));
     case IInteractive::Button::Reset:       return ButtonData(int(b), trc("global", "Reset"));
     case IInteractive::Button::Continue:    return ButtonData(int(b), trc("global", "Continue"));
+    case IInteractive::Button::Next:
+    case IInteractive::Button::Back:
+    case IInteractive::Button::Select:
+    case IInteractive::Button::Clear:
+    case IInteractive::Button::Done:
     case IInteractive::Button::CustomButton: break;
     }
 
