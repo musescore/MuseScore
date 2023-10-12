@@ -5006,7 +5006,7 @@ void TLayout::layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const 
         case ElementType::IMAGE: {
             Image* im = item_cast<Image*>(e);
             layoutImage(im, im->mutldata());
-        }
+        } break;
         default:
             UNREACHABLE;
             break;
