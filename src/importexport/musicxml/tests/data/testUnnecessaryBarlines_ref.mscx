@@ -86,6 +86,7 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <excludeFromParts>0</excludeFromParts>
         </VBox>
       <Measure>
         <voice>

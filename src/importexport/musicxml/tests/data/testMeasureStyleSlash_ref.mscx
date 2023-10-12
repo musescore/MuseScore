@@ -116,6 +116,7 @@
     <Staff id="1">
       <VBox>
         <height>3.5</height>
+        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.0564445"/>
