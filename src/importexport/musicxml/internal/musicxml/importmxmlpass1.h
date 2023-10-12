@@ -134,6 +134,7 @@ public:
     void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
     void scorePart();
     void scoreInstrument(const QString& partId);
+    void setStyle(const QString& type, const double val);
     void midiInstrument(const QString& partId);
     void part();
     void measure(const QString& partId, const Fraction cTime, Fraction& mdur, VoiceOverlapDetector& vod, const int measureNr);
