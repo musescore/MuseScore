@@ -115,30 +115,6 @@ const RectF& Shape::bbox() const
     }
 }
 
-//-------------------------------------------------------------------
-//   minVerticalDistance
-//    a is located below this shape.
-//    Calculates the minimum distance between two shapes.
-//-------------------------------------------------------------------
-
-double Shape::minVerticalDistance(const Shape& a) const
-{
-    return distances::minVerticalDistance(*this, a);
-}
-
-//-------------------------------------------------------------------
-//   verticalClearance
-//    a is located below this shape.
-//    Claculates the amount of clearance between the two shapes.
-//    If there is an overlap, returns a negative value corresponging
-//    to the amount of overlap.
-//-------------------------------------------------------------------
-
-double Shape::verticalClearance(const Shape& a) const
-{
-    return distances::verticalClearance(*this, a);
-}
-
 //----------------------------------------------------------------
 // clearsVertically()
 // a is located below this shape
