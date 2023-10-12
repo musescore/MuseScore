@@ -78,7 +78,7 @@ public:
 
     size_t size() const { return m_elements.size(); }
     bool empty() const { return m_elements.empty(); }
-    void clear() { m_elements.clear(); m_spatium = 0.0; }
+    void clear() { m_elements.clear(); }
 
     // Fixed
     void setBBox(const mu::RectF& r);
@@ -114,7 +114,6 @@ public:
     Shape translated(const mu::PointF&) const;
 
     const mu::RectF& bbox() const;
-    double minHorizontalDistance(const Shape&) const;
     double minVerticalDistance(const Shape&) const;
     double verticalClearance(const Shape&) const;
     double topDistance(const mu::PointF&) const;
@@ -131,10 +130,6 @@ public:
     bool intersects(const Shape&) const;
     bool clearsVertically(const Shape& a) const;
 
-    void setSqueezeFactor(double v) { m_squeezeFactor = v; }
-    double squeezeFactor() const { return m_squeezeFactor; }
-    double spatium() const { return m_spatium; }
-
     void paint(mu::draw::Painter& painter) const;
 #ifndef NDEBUG
     void dump(const char*) const;
@@ -147,8 +142,6 @@ private:
     Type m_type = Type::Fixed;
     std::vector<ShapeElement> m_elements;
     mutable RectF m_bbox;   // cache
-    double m_spatium = 0.0;
-    double m_squeezeFactor = 1.0;
 };
 
 //---------------------------------------------------------

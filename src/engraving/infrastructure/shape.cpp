@@ -26,8 +26,6 @@
 
 #include "dom/engravingitem.h"
 
-#include "rendering/dev/horizontalspacing.h"
-
 #include "log.h"
 
 using namespace mu;
@@ -115,20 +113,6 @@ const RectF& Shape::bbox() const
         }
         return m_bbox;
     }
-}
-
-//-------------------------------------------------------------------
-//   minHorizontalDistance
-//    a is located right of this shape.
-//    Calculates the minimum horizontal distance between the two shapes
-//    so they don’t touch.
-//-------------------------------------------------------------------
-
-double Shape::minHorizontalDistance(const Shape& a) const
-{
-    DO_ASSERT(RealIsEqual(m_squeezeFactor, 1.0));
-
-    return HorizontalSpacing::minHorizontalDistance(*this, a, m_spatium, m_squeezeFactor);
 }
 
 //-------------------------------------------------------------------
@@ -334,20 +318,12 @@ void Shape::addBBox(const mu::RectF& r)
 void Shape::add(const Shape& s)
 {
     m_elements.insert(m_elements.end(), s.m_elements.begin(), s.m_elements.end());
-    if (!m_spatium) {
-        m_spatium = s.m_spatium;
-    }
-
     invalidateBBox();
 }
 
 void Shape::add(const RectF& r, const EngravingItem* p)
 {
     m_elements.push_back(ShapeElement(r, p));
-    if (!m_spatium && p) {
-        m_spatium = p->spatium();
-    }
-
     invalidateBBox();
 }
 

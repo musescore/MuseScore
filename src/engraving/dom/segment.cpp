@@ -2389,8 +2389,9 @@ double Segment::minRight() const
 double Segment::minLeft(const Shape& sl) const
 {
     double distance = 0.0;
+    double sp = distances::shapeSpatium(sl);
     for (const Shape& sh : shapes()) {
-        double d = sl.minHorizontalDistance(sh);
+        double d = distances::minHorizontalDistance(sl, sh, sp, 1.0);
         if (d > distance) {
             distance = d;
         }

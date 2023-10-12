@@ -155,10 +155,15 @@
 #include "tremololayout.h"
 #include "tupletlayout.h"
 
+#include "../dev/distances.h"
+
 using namespace mu::draw;
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
 using namespace mu::engraving::rendering::stable;
+
+//! NOTE Temporary, us need to update the stable
+using namespace mu::engraving::rendering::dev;
 
 void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
 {
@@ -2454,8 +2459,8 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext& ctx)
             }
             return false;
         });
-        double offset;
-        offset = -std::max(graceShape.minHorizontalDistance(groupShape), 0.0);
+        double dist = distances::minHorizontalDistance(graceShape, groupShape, distances::shapeSpatium(graceShape), 1.0);
+        double offset = -std::max(dist, 0.0);
         // Adjust spacing for cross-beam situations
         if (i < item->size() - 1) {
             Chord* prevGrace = item->at(i + 1);
@@ -2472,16 +2477,19 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext& ctx)
         double xpos = offset - item->parent()->rxoffset() - item->parent()->ldata()->pos().x();
         grace->setPos(xpos, 0.0);
     }
-    double xPos = -_shape.minHorizontalDistance(item->appendedSegment()->staffShape(item->parent()->staffIdx()));
+
+    Segment* aSeg = item->appendedSegment();
+    double _sp = distances::shapeSpatium(_shape);
+    double xPos = -distances::minHorizontalDistance(_shape, aSeg->staffShape(item->parent()->staffIdx()), _sp, 1.0);
     // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
     if (item->parent()->staffMove() != 0) {
-        double xPosCross = -_shape.minHorizontalDistance(item->appendedSegment()->staffShape(item->parent()->vStaffIdx()));
+        double xPosCross = -distances::minHorizontalDistance(_shape, aSeg->staffShape(item->parent()->vStaffIdx()), _sp, 1.0);
         xPos = std::min(xPos, xPosCross);
     }
     // Same if the grace note itself is cross-staff
     Chord* firstGN = item->back();
     if (firstGN->staffMove() != 0) {
-        double xPosCross = -_shape.minHorizontalDistance(item->appendedSegment()->staffShape(firstGN->vStaffIdx()));
+        double xPosCross = -distances::minHorizontalDistance(_shape, aSeg->staffShape(firstGN->vStaffIdx()), _sp, 1.0);
         xPos = std::min(xPos, xPosCross);
     }
     // Safety net in case the shape checks don't succeed
@@ -3798,14 +3806,15 @@ void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
 
     Shape noteShape = cueNoteChord->shape();
     Shape parentChordShape = parentChord->shape();
-    double minDist = parentChordShape.minHorizontalDistance(noteShape);
+    double minDist = distances::minHorizontalDistance(parentChordShape, noteShape, distances::shapeSpatium(parentChordShape), 1.0);
     // Check for possible other chords in same segment
     staff_idx_t startStaff = staff2track(parentChord->staffIdx());
     for (staff_idx_t staff = startStaff; staff < startStaff + VOICES; ++staff) {
         Segment* segment = parentChord->segment();
         ChordRest* cr = segment->elementAt(staff) ? toChordRest(segment->elementAt(staff)) : nullptr;
         if (cr) {
-            minDist = std::max(minDist, cr->shape().minHorizontalDistance(noteShape));
+            double dist = distances::minHorizontalDistance(cr->shape(), noteShape, distances::shapeSpatium(cr->shape()), 1.0);
+            minDist = std::max(minDist, dist);
         }
     }
     cueNoteChord->mutldata()->setPosX(minDist);
