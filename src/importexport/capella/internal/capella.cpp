@@ -419,7 +419,7 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
     int graceNumber1 = 0;
     bool foundcr1 = false;
     Fraction tick2 = tick;
-    foreach (NoteObj* nobj, objects) {
+    for (NoteObj* nobj : objects) {
         BasicDurationalObj* d = 0;
         if (nobj->type() == CapellaNoteObjectType::REST) {
             d = static_cast<BasicDurationalObj*>(static_cast<RestObj*>(nobj));
@@ -468,14 +468,14 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
         if (seg->segmentType() != SegmentType::ChordRest) {
             continue;
         }
-        ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+        ChordRest* cr = toChordRest(seg->element(track));
         if (cr) {
-            if (graceNumber1 > 0) {       // the spanner is starting from a grace note
-                Chord* chord = static_cast<Chord*>(cr);
-                foreach (Chord* cc, chord->graceNotes()) {
+            if ((graceNumber1 > 0) && cr->isChord()) {       // the spanner is starting from a grace note
+                Chord* chord = toChord(cr);
+                for (Chord* cc : chord->graceNotes()) {
                     --graceNumber1;
                     if ((graceNumber1 == 0) && (!cr1)) {
-                        cr1 = static_cast<ChordRest*>(cc);             // found first ChordRest
+                        cr1 = toChordRest(cc);             // found first ChordRest
                     }
                 }
             }
@@ -489,14 +489,14 @@ static bool findChordRests(BasicDrawObj const* const o, Score* score, const int 
         if (seg->segmentType() != SegmentType::ChordRest) {
             continue;
         }
-        ChordRest* cr = static_cast<ChordRest*>(seg->element(track));
+        ChordRest* cr = toChordRest(seg->element(track));
         if (cr) {
-            if ((graceNumber > 0) && (cr->type() == ElementType::CHORD)) {       // the spanner is ending on a grace note
-                Chord* chord = static_cast<Chord*>(cr);
-                foreach (Chord* cc, chord->graceNotes()) {
+            if ((graceNumber > 0) && cr->isChord()) {       // the spanner is ending on a grace note
+                Chord* chord = toChord(cr);
+                for (Chord* cc : chord->graceNotes()) {
                     --graceNumber;
                     if ((graceNumber == 0) && (!cr2)) {
-                        cr2 = static_cast<ChordRest*>(cc);             // found 2nd ChordRest
+                        cr2 = toChordRest(cc);             // found 2nd ChordRest
                     }
                 }
             }
