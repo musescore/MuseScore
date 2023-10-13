@@ -53,6 +53,7 @@ public:
         CheckBox,
         RadioButton,
         ComboBox,
+        List,
         ListItem,
         MenuItem,
         Range,
@@ -147,6 +148,9 @@ public:
     virtual QString accessibleTextAfterOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
     virtual QString accessibleTextAtOffset(int offset, TextBoundaryType boundaryType, int* startOffset, int* endOffset) const = 0;
     virtual int accessibleCharacterCount() const = 0;
+
+    // ListView item Interface
+    virtual int accessibleRowIndex() const = 0;
 
     virtual async::Channel<IAccessible::Property, Val> accessiblePropertyChanged() const = 0;
 

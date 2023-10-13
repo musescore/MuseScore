@@ -30,7 +30,8 @@
 #include "ui/iinteractiveprovider.h"
 
 namespace mu::accessibility {
-class AccessibleItemInterface : public QAccessibleInterface, public QAccessibleValueInterface, public QAccessibleTextInterface
+class AccessibleItemInterface : public QAccessibleInterface, public QAccessibleValueInterface, public QAccessibleTextInterface,
+    public QAccessibleTableCellInterface
 {
     INJECT(ui::IInteractiveProvider, interactiveProvider)
 
@@ -83,6 +84,18 @@ public:
 
     void scrollToSubstring(int startIndex, int endIndex) override;
     QString attributes(int /* offset */, int* startOffset, int* endOffset) const override;
+
+    // Table cell(list view item) Interface
+    bool isSelected() const override;
+
+    QList<QAccessibleInterface*> columnHeaderCells() const override;
+    QList<QAccessibleInterface*> rowHeaderCells() const override;
+    int columnIndex() const override;
+    int rowIndex() const override;
+    int columnExtent() const override;
+    int rowExtent() const override;
+
+    QAccessibleInterface* table() const override;
 
 protected:
     void* interface_cast(QAccessible::InterfaceType t) override;

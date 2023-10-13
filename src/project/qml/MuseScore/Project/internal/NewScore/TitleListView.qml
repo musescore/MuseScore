@@ -36,7 +36,7 @@ Item {
     property alias searchText: searchField.searchText
     property alias searching: searchField.hasText
 
-    property alias navigationPanel: navPanel
+    property alias navigationPanel: view.navigation
 
     signal titleClicked(var index)
 
@@ -44,25 +44,6 @@ Item {
 
     function clearSearch() {
         searchField.clear()
-    }
-
-    QtObject {
-        id: prv
-
-        property var currentItemNavigationIndex: []
-    }
-
-    NavigationPanel {
-        id: navPanel
-        name: "TitleListView"
-        direction: NavigationPanel.Vertical
-        enabled: root.enabled && root.visible
-
-        onNavigationEvent: function(event) {
-            if (event.type === NavigationEvent.AboutActive) {
-                event.setData("controlIndex", prv.currentItemNavigationIndex)
-            }
-        }
     }
 
     StyledTextLabel {
@@ -80,7 +61,7 @@ Item {
         anchors.topMargin: 16
 
         navigation.name: "Search"
-        navigation.panel: navPanel
+        navigation.panel: view.navigation
         navigation.row: 1
 
         width: parent.width
@@ -98,19 +79,18 @@ Item {
 
         currentIndex: 0
 
+        accessible.name: title.text
+
         delegate: ListItemBlank {
             id: item
 
             isSelected: view.currentIndex === model.index
 
             navigation.name: modelData
-            navigation.panel: navPanel
+            navigation.panel: view.navigation
             navigation.row: 2 + model.index
             navigation.accessible.name: titleLabel.text
-
-            onNavigationActivated: {
-                prv.currentItemNavigationIndex = [navigation.row, navigation.column]
-            }
+            navigation.accessible.row: model.index
 
             StyledTextLabel {
                 id: titleLabel

@@ -368,6 +368,12 @@ int AccessibleItem::accessibleCharacterCount() const
     return static_cast<int>(text->plainText().size());
 }
 
+int AccessibleItem::accessibleRowIndex() const
+{
+    NOT_IMPLEMENTED;
+    return 0;
+}
+
 bool AccessibleItem::accessibleState(State st) const
 {
     if (!registered()) {

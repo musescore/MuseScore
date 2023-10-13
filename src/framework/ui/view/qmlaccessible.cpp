@@ -365,6 +365,11 @@ mu::async::Channel<IAccessible::State, bool> AccessibleItem::accessibleStateChan
     return m_accessibleStateChanged;
 }
 
+int AccessibleItem::accessibleRowIndex() const
+{
+    return m_row;
+}
+
 void AccessibleItem::classBegin()
 {
 }
@@ -438,6 +443,11 @@ int AccessibleItem::selectionEnd() const
 int AccessibleItem::cursorPosition() const
 {
     return m_cursorPosition;
+}
+
+int AccessibleItem::row() const
+{
+    return m_row;
 }
 
 bool AccessibleItem::ignored() const
@@ -619,6 +629,16 @@ void AccessibleItem::setCursorPosition(int cursorPosition)
     m_cursorPosition = cursorPosition;
     emit cursorPositionChanged();
     m_accessiblePropertyChanged.send(IAccessible::Property::TextCursor, Val());
+}
+
+void AccessibleItem::setRow(int row)
+{
+    if (m_row == row) {
+        return;
+    }
+
+    m_row = row;
+    emit rowChanged();
 }
 
 void AccessibleItem::setIgnored(bool ignored)
