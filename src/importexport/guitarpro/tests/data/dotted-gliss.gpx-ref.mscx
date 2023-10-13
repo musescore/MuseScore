@@ -102,6 +102,7 @@ Innuendo</text>
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>major</mode>
             </KeySig>
           <TimeSig>
             <sigN>12</sigN>

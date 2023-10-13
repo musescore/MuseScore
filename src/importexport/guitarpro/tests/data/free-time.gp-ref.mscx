@@ -80,6 +80,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>major</mode>
             </KeySig>
           <StaffText>
             <text>Free time</text>
