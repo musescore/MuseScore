@@ -36,7 +36,7 @@ class TestMxmlIO : public QObject, public MTest
       {
       Q_OBJECT
 
-      void mxmlIoTest(const char* file);
+      void mxmlIoTest(const char* file, bool exportLayout = false);
       void mxmlIoTestRef(const char* file);
       void mxmlIoTestRefBreaks(const char* file);
       void mxmlMscxExportTestRef(const char* file, bool exportLayout = false);
@@ -166,6 +166,7 @@ private slots:
       void keysig2() { mxmlIoTest("testKeysig2"); }
       void layoutCleanup1() { mxmlImportTestRef("testLayoutCleanup1"); }
       void layoutCleanup2() { mxmlImportTestRef("testLayoutCleanup2"); }
+      void layout() { mxmlIoTest("testLayout", true); }
       void lessWhiteSpace() { mxmlIoTestRef("testLessWhiteSpace"); }
       void lines1() { mxmlIoTest("testLines1"); }
       void lines2() { mxmlIoTest("testLines2"); }
@@ -236,6 +237,7 @@ private slots:
       void systemBrackets4() { mxmlIoTest("testSystemBrackets4"); }
       void systemBrackets5() { mxmlIoTest("testSystemBrackets5"); }
       void systemDistance() {  mxmlMscxExportTestRef("testSystemDistance", true); }
+      void systemDividers() {  mxmlIoTest("testSystemDividers", true); }
       void tablature1() { mxmlIoTest("testTablature1"); }
       void tablature2() { mxmlIoTest("testTablature2"); }
       void tablature3() { mxmlIoTest("testTablature3"); }
@@ -323,12 +325,12 @@ static void fixupScore(Score* score)
 //   read a MusicXML file, write to a new file and verify both files are identical
 //---------------------------------------------------------
 
-void TestMxmlIO::mxmlIoTest(const char* file)
+void TestMxmlIO::mxmlIoTest(const char* file, bool exportLayout)
       {
       MScore::debugMode = true;
       preferences.setCustomPreference<MusicxmlExportBreaks>(PREF_EXPORT_MUSICXML_EXPORTBREAKS, MusicxmlExportBreaks::MANUAL);
       preferences.setPreference(PREF_IMPORT_MUSICXML_IMPORTBREAKS, true);
-      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, false);
+      preferences.setPreference(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, exportLayout);
       MasterScore* score = readScore(DIR + file + ".xml");
       QVERIFY(score);
       fixupScore(score);

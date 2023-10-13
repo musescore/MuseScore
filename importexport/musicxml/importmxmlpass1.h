@@ -130,6 +130,7 @@ public:
       void partList(MusicXmlPartGroupList& partGroupList);
       void partGroup(const int scoreParts, MusicXmlPartGroupList& partGroupList, MusicXmlPartGroupMap& partGroups);
       void scorePart();
+      void setStyle(const QString& type, const double val);
       void scoreInstrument(const QString& partId);
       void midiInstrument(const QString& partId);
       void part();

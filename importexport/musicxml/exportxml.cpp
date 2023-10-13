@@ -1207,15 +1207,65 @@ static void defaults(XmlWriter& xml, const Score* const s, double& millimeters, 
 
       writePageFormat(s, xml, INCH / millimeters * tenths);
 
-      // TODO: also write default system layout here
       // when exporting only manual or no breaks, system-distance is not written at all
+      if (s->styleB(Sid::dividerLeft) || s->styleB(Sid::dividerRight)) {
+            xml.stag("system-layout");
+            xml.stag("system-dividers");
+            if (s->styleB(Sid::dividerLeft))
+                  xml.tagE(QString("left-divider print-object=\"yes\" relative-x=\"%1\" relative-y=\"%2\"")
+                               .arg(s->styleD(Sid::dividerLeftX) * 10)
+                               .arg(s->styleD(Sid::dividerLeftY) * 10));
+            else
+                  xml.tagE("left-divider print-object=\"no\"");
+            if (s->styleB(Sid::dividerRight))
+                  xml.tagE(QString("right-divider print-object=\"yes\" relative-x=\"%1\" relative-y=\"%2\"")
+                               .arg(s->styleD(Sid::dividerRightX) * 10)
+                               .arg(s->styleD(Sid::dividerRightY) * 10));
+            else
+                  xml.tagE("right-divider print-object=\"no\"");
+            xml.etag();
+            xml.etag();
+            }
+
+      {
+            xml.stag("appearance");
+            // line width values in tenth
+            xml.tag("line-width type=\"light barline\"", s->styleS(Sid::barWidth) * 10);
+            xml.tag("line-width type=\"heavy barline\"", s->styleS(Sid::endBarWidth) * 10);
+            xml.tag("line-width type=\"beam\"", s->styleS(Sid::beamWidth) * 10);
+            xml.tag("line-width type=\"bracket\"", s->styleS(Sid::bracketWidth) * 10);
+            xml.tag("line-width type=\"dashes\"", s->styleS(Sid::lyricsDashLineThickness) * 10);
+            xml.tag("line-width type=\"enclosure\"", s->styleD(Sid::staffTextFrameWidth) * 10);
+            xml.tag("line-width type=\"ending\"", s->styleS(Sid::voltaLineWidth) * 10);
+            xml.tag("line-width type=\"extend\"", s->styleS(Sid::lyricsLineThickness) * 10);
+            xml.tag("line-width type=\"leger\"", s->styleS(Sid::ledgerLineWidth) * 10);
+            xml.tag("line-width type=\"pedal\"", s->styleS(Sid::pedalLineWidth) * 10);
+            xml.tag("line-width type=\"octave shift\"", s->styleS(Sid::ottavaLineWidth) * 10);
+            xml.tag("line-width type=\"slur middle\"", s->styleS(Sid::SlurMidWidth) * 10);
+            xml.tag("line-width type=\"slur tip\"", s->styleS(Sid::SlurEndWidth) * 10);
+            xml.tag("line-width type=\"staff\"", s->styleS(Sid::staffLineWidth) * 10);
+            xml.tag("line-width type=\"stem\"", s->styleS(Sid::stemWidth) * 10);
+            xml.tag("line-width type=\"tie middle\"", s->styleS(Sid::SlurMidWidth) * 10);
+            xml.tag("line-width type=\"tie tip\"", s->styleS(Sid::SlurEndWidth) * 10);
+            xml.tag("line-width type=\"tuplet bracket\"", s->styleS(Sid::tupletBracketWidth) * 10);
+            xml.tag("line-width type=\"wedge\"", s->styleS(Sid::hairpinLineWidth) * 10);
+            // note size values in percent
+            xml.tag("note-size type=\"cue\"", s->styleD(Sid::smallNoteMag) * 100);
+            xml.tag("note-size type=\"grace\"", s->styleD(Sid::graceNoteMag) * 100);
+            xml.tag("note-size type=\"grace-cue\"", s->styleD(Sid::graceNoteMag) * s->styleD(Sid::smallNoteMag) * 100);
+            //xml.tag("note-size type=\"large\"", s->styleD(Sid::???) * 100);
+            // distance values in tenth
+            //xml.tag("distance type=\"beam\"", s->styleD(Sid::beamDistance) * 10); // unclear, won't work in Mu4
+            //xml.tag("distance type=\"hyphen\"", s->styleS(Sid::lyricsDashPad) * 10); // Or lyricsDashMinDistance or lyricsDashMaxDistance?
+            xml.etag();
+            }
 
       // font defaults
       // as MuseScore supports dozens of different styles, while MusicXML only has defaults
-      // for music (TODO), words and lyrics, use Tid STAFF (typically used for words)
+      // for music, words and lyrics, use Tid STAFF (typically used for words)
       // and LYRIC1 to get MusicXML defaults
 
-      // TODO xml.tagE("music-font font-family=\"TBD\" font-size=\"TBD\"");
+      xml.tagE(QString("music-font font-family=\"%1\"").arg(s->styleSt(Sid::MusicalSymbolFont)));
       xml.tagE(QString("word-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::staffTextFontFace)).arg(s->styleD(Sid::staffTextFontSize)));
       xml.tagE(QString("lyric-font font-family=\"%1\" font-size=\"%2\"").arg(s->styleSt(Sid::lyricsOddFontFace)).arg(s->styleD(Sid::lyricsOddFontSize)));
       xml.etag();
