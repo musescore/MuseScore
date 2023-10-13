@@ -38,6 +38,7 @@ enum class CommandType {
     // Parts
     InsertPart,
     RemovePart,
+    AddPartToExcerpt,
     SetSoloist,
     ChangePart,
 
