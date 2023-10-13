@@ -65,17 +65,18 @@ private slots:
       void articulationCombination() { mxmlIoTestRef("testArticulationCombination"); }
       void backupRoundingError() { mxmlImportTestRef("testBackupRoundingError"); }
       void barlineFermatas() { mxmlMscxExportTestRef("testBarlineFermatas"); }
+      void barlinesGrandStaff1() { mxmlImportTestRef("testBarlinesGrandStaff"); }
+      void barlinesGrandStaff2() { mxmlIoTest("testBarlinesGrandStaff"); }
       void barStyles() { mxmlIoTest("testBarStyles"); }
       void barStyles2() { mxmlIoTest("testBarStyles2"); }
       void barStyles3() { mxmlIoTest("testBarStyles3"); }
-      void bracketTypes() { mxmlImportTestRef("testBracketTypes"); }
+      void barStyles4() { mxmlIoTest("testBarStyles4"); }
       void beamEnd() { mxmlIoTest("testBeamEnd"); }
       void beamModes() { mxmlImportTestRef("testBeamModes"); }
       void beams1() { mxmlIoTest("testBeams1"); }
       void beams2() { mxmlIoTest("testBeams2"); }
       void beams3() { mxmlIoTestRef("testBeams3"); }
-      void barlinesGrandStaff1() { mxmlImportTestRef("testBarlinesGrandStaff"); }
-      void barlinesGrandStaff2() { mxmlIoTest("testBarlinesGrandStaff"); }
+      void bracketTypes() { mxmlImportTestRef("testBracketTypes"); }
       void breaksImplExpl() { mxmlMscxExportTestRefBreaks("testBreaksImplExpl"); }
       void breaksMMRest() { mxmlMscxExportTestRefBreaks("testBreaksMMRest"); }
       void breaksManual() { mxmlIoTestRefBreaks("testBreaksManual"); }
@@ -89,6 +90,8 @@ private slots:
       void chordSymbols() { mxmlMscxExportTestRef("testChordSymbols"); }
       void clefs1() { mxmlIoTest("testClefs1"); }
       void clefs2() { mxmlIoTest("testClefs2"); }
+      void colorExport() { mxmlMscxExportTestRef("testColorExport"); }
+      void colors() { mxmlIoTest("testColors"); }
       void completeMeasureRests() { mxmlIoTest("testCompleteMeasureRests"); }
       void connectedArpeggios1() { mxmlImportTestRef("testConnectedArpeggios"); }
       void connectedArpeggios2() { mxmlIoTestRef("testConnectedArpeggios"); }
@@ -175,9 +178,9 @@ private slots:
       void lines4() { mxmlMscxExportTestRef("testLines4"); }
       void lyricBracket() { mxmlImportTestRef("testLyricBracket"); }
       void lyricColor() { mxmlIoTest("testLyricColor"); }
-      void lyrics1() { mxmlIoTestRef("testLyrics1"); }
       void lyricExtensions1() { mxmlIoTest("testLyricExtensions"); }
       void lyricExtensions2() { mxmlImportTestRef("testLyricExtensions"); }
+      void lyrics1() { mxmlIoTestRef("testLyrics1"); }
       void lyricsVoice2a() { mxmlIoTest("testLyricsVoice2a"); }
       void lyricsVoice2b() { mxmlIoTestRef("testLyricsVoice2b"); }
       void maxNumberLevel() { mxmlMscxExportTestRef("testMaxNumberLevel"); }
@@ -222,9 +225,10 @@ private slots:
       void restsNoType() { mxmlIoTestRef("testRestsNoType"); }
       void restsTypeWhole() { mxmlIoTestRef("testRestsTypeWhole"); }
       void secondVoiceMelismata() { mxmlImportTestRef("testSecondVoiceMelismata"); }
-      void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void slurs() { mxmlIoTest("testSlurs"); }
       void slurs2() { mxmlIoTest("testSlurs2"); }
+      void slurTieDirecton() { mxmlIoTest("testSlurTieDirection"); }
+      void slurTieLineStyle() { mxmlIoTest("testSlurTieLineStyle"); }
       void sound1() { mxmlIoTest("testSound1"); }
       void sound2() { mxmlIoTestRef("testSound2"); }
       // void specialCharacters() { mxmlIoTest("testSpecialCharacters"); } // TODO
@@ -291,10 +295,11 @@ private slots:
       void volta2() { mxmlIoTest("testVolta2"); }
       void voltaHiding1() { mxmlImportTestRef("testVoltaHiding"); }
       void voltaHiding2() { mxmlIoTestRef("testVoltaHiding"); }
-      void wedgeOffset() { mxmlImportTestRef("testWedgeOffset"); }
       void wedge1() { mxmlIoTest("testWedge1"); }
       void wedge2() { mxmlIoTest("testWedge2"); }
       void wedge3() { mxmlIoTest("testWedge3"); }
+      //void wedge4() { mxmlIoTestRef("testWedge4"); }
+      void wedgeOffset() { mxmlImportTestRef("testWedgeOffset"); }
       void words1() { mxmlIoTest("testWords1"); }
       // void words2() { mxmlIoTest("testWords2"); } // TODO
       void hiddenStaves()

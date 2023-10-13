@@ -29,9 +29,11 @@ namespace Ms {
 
 static Accidental* accidental(QXmlStreamReader& e, Score* score)
       {
-      bool cautionary = e.attributes().value("cautionary") == "yes";
-      bool editorial = e.attributes().value("editorial") == "yes";
-      bool parentheses = e.attributes().value("parentheses") == "yes";
+      const bool cautionary = e.attributes().value("cautionary") == "yes";
+      const bool editorial = e.attributes().value("editorial") == "yes";
+      const bool parentheses = e.attributes().value("parentheses") == "yes";
+      const bool bracket = e.attributes().value("bracket") == "yes";
+      const QColor accColor = e.attributes().value("color").toString();
       QString smufl = e.attributes().value("smufl").toString();
 
       const auto s = e.readElementText();
@@ -40,10 +42,16 @@ static Accidental* accidental(QXmlStreamReader& e, Score* score)
       if (type != AccidentalType::NONE) {
             auto a = new Accidental(score);
             a->setAccidentalType(type);
-            if (editorial || cautionary || parentheses) {
-                  a->setBracket(AccidentalBracket(cautionary || parentheses));
+            if (cautionary || parentheses) {
+                  a->setBracket(AccidentalBracket(AccidentalBracket::PARENTHESIS));
                   a->setRole(AccidentalRole::USER);
                   }
+            else if (editorial || bracket) {
+                  a->setBracket(AccidentalBracket(AccidentalBracket::BRACKET));
+                  a->setRole(AccidentalRole::USER);
+                  }
+            if (accColor.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
+                  a->setColor(accColor);
             return a;
             }
 

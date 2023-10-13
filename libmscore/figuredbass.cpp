@@ -1736,6 +1736,12 @@ void FiguredBass::writeMusicXML(XmlWriter& xml, bool isOriginalFigure, int crEnd
       QString stag = "figured-bass";
       if (hasParentheses())
             stag += " parentheses=\"yes\"";
+      if (placeAbove())
+            stag += " placement=\"above\"";
+      if (color() != MScore::defaultColor)
+            stag += QString(" color=\"%1\"").arg(color().name().toUpper());
+      if (!visible())
+            stag += " print-object=\"no\"";
       xml.stag(stag);
       for(FiguredBassItem* item : items)
             item->writeMusicXML(xml, isOriginalFigure, crEndTick, fbEndTick);

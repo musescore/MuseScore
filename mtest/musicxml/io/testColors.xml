@@ -2,11 +2,10 @@
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
   <work>
-    <work-number>MuseScore testfile</work-number>
-    <work-title>Non-unique things</work-title>
+    <work-title>Color test</work-title>
     </work>
   <identification>
-    <creator type="composer">Leon Vinken</creator>
+    <creator type="composer">Klaus Retttinghaus</creator>
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
@@ -19,15 +18,15 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>Piccolo</part-name>
-      <part-abbreviation>Picc.</part-abbreviation>
+      <part-name>Violine</part-name>
+      <part-abbreviation>Vl.</part-abbreviation>
       <score-instrument id="P1-I1">
-        <instrument-name>Piccolo</instrument-name>
+        <instrument-name>Violine</instrument-name>
         </score-instrument>
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
-        <midi-program>73</midi-program>
+        <midi-program>41</midi-program>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>
@@ -37,116 +36,153 @@
     <measure number="1">
       <attributes>
         <divisions>1</divisions>
-        <key>
-          <fifths>0</fifths>
+        <key color="#00FDFF">
+          <fifths>-1</fifths>
           </key>
-        <time>
+        <time color="#4F8F00">
           <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
-        <clef>
+        <clef color="#FEFB03">
           <sign>G</sign>
           <line>2</line>
-          <clef-octave-change>1</clef-octave-change>
           </clef>
         </attributes>
       <note>
         <pitch>
-          <step>G</step>
-          <octave>5</octave>
+          <step>D</step>
+          <octave>4</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
-          <slur type="start" number="1"/>
+          <slide line-type="solid" number="1" type="start" color="#A873BE"/>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>G</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <notations>
+          <articulations>
+            <staccato color="#FF2600"/>
+            <accent color="#FF2600"/>
+            </articulations>
+          <slide line-type="solid" number="1" type="stop"/>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>E</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <notations>
+          <glissando line-type="wavy" number="1" type="start" color="#82A365">gliss.</glissando>
           </notations>
         </note>
       <note>
         <pitch>
           <step>A</step>
-          <octave>5</octave>
+          <octave>4</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>B</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
-          <slur type="stop" number="1"/>
+          <articulations>
+            <strong-accent type="up" color="#C3D610"/>
+            </articulations>
+          <glissando line-type="wavy" number="1" type="stop"/>
           </notations>
         </note>
-      <note>
-        <pitch>
-          <step>C</step>
-          <octave>6</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
+      <barline location="right">
+        <bar-style color="#D783FF">regular</bar-style>
+        </barline>
       </measure>
     <measure number="2">
       <note>
         <pitch>
           <step>G</step>
-          <octave>5</octave>
+          <octave>4</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
-          <slur type="start" number="1"/>
+          <slur type="start" color="#EFCDAB" number="1"/>
           </notations>
         </note>
       <note>
         <pitch>
-          <step>B</step>
-          <octave>5</octave>
+          <step>A</step>
+          <octave>4</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
+        </note>
+      <note>
+        <pitch>
+          <step>B</step>
+          <octave>4</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
+        <type>quarter</type>
+        <accidental color="#0F12A7">natural</accidental>
+        <stem>down</stem>
         <notations>
-          <slur type="stop" number="1"/>
+          <ornaments>
+            <mordent color="#047110"/>
+            </ornaments>
           </notations>
         </note>
       <note>
         <pitch>
           <step>C</step>
-          <octave>6</octave>
+          <alter>1</alter>
+          <octave>5</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <accidental color="#A632F0">sharp</accidental>
+        <stem>down</stem>
+        <notations>
+          <ornaments>
+            <turn color="#007007"/>
+            </ornaments>
+          </notations>
         </note>
-      <barline location="right">
-        <bar-style>light-heavy</bar-style>
-        </barline>
+      </measure>
+    <measure number="3">
+      <note>
+        <pitch>
+          <step>D</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>4</duration>
+        <voice>1</voice>
+        <type>whole</type>
+        <notehead color="#9437FF">normal</notehead>
+        <notations>
+          <slur type="stop" number="1"/>
+          </notations>
+        </note>
       </measure>
     </part>
   </score-partwise>

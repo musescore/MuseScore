@@ -71,7 +71,7 @@ enum class MusicXmlSlash : char {
 struct MusicXmlTupletDesc {
       MusicXmlTupletDesc();
       MxmlStartStop type;
-      Placement placement;
+      Direction direction;
       TupletBracketType bracket;
       TupletNumberType shownumber;
       };
@@ -304,7 +304,7 @@ private:
       void backup(Fraction& dura);
       void timeModification(Fraction& timeMod, TDuration& normalType);
       void stem(Direction& sd, bool& nost);
-      void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QString& text, const bool print);
+      void doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QColor color, const QString& text, const bool print);
       void staffDetails(const QString& partId, Measure* measure = nullptr);
       void staffTuning(StringData* t);
       void addCopyrightVBox();
