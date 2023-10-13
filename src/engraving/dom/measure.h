@@ -347,23 +347,10 @@ public:
     // parameter, meaning it can't be any narrower than it currently is.
     void setWidthLocked(bool b) { m_isWidthLocked = b; }
 
-    //! puts segments on the positions according to their length
-    void layoutSegmentsInPracticeMode(const std::vector<int>& visibleParts);
-
-    double computeFirstSegmentXPosition(Segment* segment, double segmentShapeSqueezeFactor);
-
-    void layoutSegmentsWithDuration(const std::vector<int>& visibleParts);
-
-    void calculateQuantumCell(const std::vector<int>& visibleParts);
-
-    Fraction quantumOfSegmentCell() const;
-
     double squeezableSpace() const { return m_squeezableSpace; }
     void setSqueezableSpace(double val) { m_squeezableSpace = val; }
 
     void respaceSegments();
-
-    void spaceRightAlignedSegments(double segmentShapeSqueezeFactor);
 
 private:
 
@@ -403,8 +390,6 @@ private:
 
     MeasureNumberMode m_noMode = MeasureNumberMode::AUTO;
     bool m_breakMultiMeasureRest = false;
-
-    Fraction m_quantumOfSegmentCell = { 1, 16 };
 
     double m_layoutStretch = 1.0;
     bool m_isWidthLocked = false;

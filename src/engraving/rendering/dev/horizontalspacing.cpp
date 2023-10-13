@@ -28,6 +28,7 @@
 #include "dom/rest.h"
 #include "dom/score.h"
 #include "dom/stemslash.h"
+#include "dom/staff.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -208,6 +209,119 @@ double HorizontalSpacing::minHorizontalCollidingDistance(const Segment* f, const
         w = std::max(w, d);
     }
     return w;
+}
+
+//---------------------------------------------------------
+//   minLeft
+//    Calculate minimum distance needed to the left shape
+//    sl. Sl is the same for all staves.
+//---------------------------------------------------------
+
+double HorizontalSpacing::minLeft(const Segment* seg, const Shape& ls)
+{
+    double distance = 0.0;
+    double sp = shapeSpatium(ls);
+    for (const Shape& sh : seg->shapes()) {
+        double d = minHorizontalDistance(ls, sh, sp, 1.0);
+        if (d > distance) {
+            distance = d;
+        }
+    }
+    return distance;
+}
+
+void HorizontalSpacing::spaceRightAlignedSegments(Measure* m, double segmentShapeSqueezeFactor)
+{
+    // Collect all the right-aligned segments starting from the back
+    std::vector<Segment*> rightAlignedSegments;
+    for (Segment* segment = m->segments().last(); segment; segment = segment->prev()) {
+        if (segment->enabled() && segment->isRightAligned()) {
+            rightAlignedSegments.push_back(segment);
+        }
+    }
+    // Compute spacing
+    static constexpr double arbitraryLowReal = -10000.0;
+    for (Segment* raSegment : rightAlignedSegments) {
+        // 1) right-align the segment against the following ones
+        double minDistAfter = arbitraryLowReal;
+        for (Segment* seg = raSegment->next(); seg; seg = seg->next()) {
+            double xDiff = seg->x() - raSegment->x();
+            double minDist = minHorizontalCollidingDistance(raSegment, seg, segmentShapeSqueezeFactor);
+            minDistAfter = std::max(minDistAfter, minDist - xDiff);
+        }
+        if (minDistAfter != arbitraryLowReal && raSegment->prevActive()) {
+            Segment* prevSegment = raSegment->prev();
+            prevSegment->setWidth(prevSegment->width() - minDistAfter);
+            prevSegment->setWidthOffset(prevSegment->widthOffset() - minDistAfter);
+            raSegment->mutldata()->moveX(-minDistAfter);
+            raSegment->setWidth(raSegment->width() + minDistAfter);
+        }
+        // 2) Make sure the segment isn't colliding with anything behind
+        double minDistBefore = 0.0;
+        for (Segment* seg = raSegment->prevActive(); seg; seg = seg->prevActive()) {
+            double xDiff = raSegment->x() - seg->x();
+            double minDist = minHorizontalCollidingDistance(seg, raSegment, segmentShapeSqueezeFactor);
+            minDistBefore = std::max(minDistBefore, minDist - xDiff);
+        }
+        Segment* prevSegment = raSegment->prevActive();
+        if (prevSegment) {
+            prevSegment->setWidth(prevSegment->width() + minDistBefore);
+        }
+        for (Segment* seg = raSegment; seg; seg = seg->next()) {
+            seg->mutldata()->moveX(minDistBefore);
+        }
+        m->setWidth(m->width() + minDistBefore);
+    }
+}
+
+double HorizontalSpacing::computeFirstSegmentXPosition(const Measure* m, const Segment* segment, double segmentShapeSqueezeFactor)
+{
+    double x = 0;
+
+    Shape ls(RectF(0.0, 0.0, 0.0, m->spatium() * 4));
+
+    // First, try to compute first segment x-position by padding against end barline of previous measure
+    Measure* prevMeas = (m->prev() && m->prev()->isMeasure() && m->prev()->system() == m->system()) ? toMeasure(m->prev()) : nullptr;
+    Segment* prevMeasEnd = prevMeas ? prevMeas->lastEnabled() : nullptr;
+    bool ignorePrev = !prevMeas || prevMeas->system() != m->system() || !prevMeasEnd
+                      || (prevMeasEnd->segmentType() & SegmentType::BarLineType && segment->segmentType() & SegmentType::BarLineType);
+    if (!ignorePrev) {
+        x = minHorizontalCollidingDistance(prevMeasEnd, segment, segmentShapeSqueezeFactor);
+        x -= prevMeas->width() - prevMeasEnd->x();
+    }
+
+    // If that doesn't succeed (e.g. first bar) then just use left-margins
+    if (x <= 0) {
+        x = minLeft(segment, ls);
+        if (segment->isChordRestType()) {
+            x += m->style().styleMM(segment->hasAccidentals() ? Sid::barAccidentalDistance : Sid::barNoteDistance);
+        } else if (segment->isClefType() || segment->isHeaderClefType()) {
+            x += m->style().styleMM(Sid::clefLeftMargin);
+        } else if (segment->isKeySigType()) {
+            x = std::max(x, m->style().styleMM(Sid::keysigLeftMargin).val());
+        } else if (segment->isTimeSigType()) {
+            x = std::max(x, m->style().styleMM(Sid::timesigLeftMargin).val());
+        }
+    }
+
+    // Special case: the start-repeat should overlap the end-repeat of the previous measure
+    bool prevIsEndRepeat = prevMeas && prevMeas->repeatEnd() && prevMeasEnd && prevMeasEnd->isEndBarLineType();
+    if (prevIsEndRepeat && segment->isStartRepeatBarLineType() && (prevMeas->system() == m->system())) {
+        x -= m->style().styleMM(Sid::endBarWidth);
+    }
+
+    // Do a final check of chord distances (invisible items may in some cases elude the 2 previous steps)
+    if (segment->isChordRestType()) {
+        double barNoteDist = m->style().styleMM(Sid::barNoteDistance).val();
+        for (EngravingItem* e : segment->elist()) {
+            if (!e || !e->isChordRest() || (e->staff() && e->staff()->isTabStaff(e->tick()))) {
+                continue;
+            }
+            x = std::max(x, barNoteDist * e->mag() - e->pos().x());
+        }
+    }
+    x += segment->extraLeadingSpace().val() * m->spatium();
+    return x;
 }
 
 double HorizontalSpacing::computePadding(const EngravingItem* item1, const EngravingItem* item2)

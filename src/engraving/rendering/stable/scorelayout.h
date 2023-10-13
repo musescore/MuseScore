@@ -41,6 +41,11 @@ private:
     static void resetSystems(LayoutContext& ctx, bool layoutAll);
     static void collectLinearSystem(LayoutContext& ctx);
 
+    static void layoutSegmentsWithDuration(Measure* m, const std::vector<int>& visibleParts);
+    static std::pair<double, double> computeCellWidth(const Segment* s, const std::vector<int>& visibleParts);
+    static ChordRest* chordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts);
+    static Fraction calculateQuantumCell(const Measure* m, const std::vector<int>& visibleParts);
+
     static void doLayout(LayoutContext& ctx);
 };
 }

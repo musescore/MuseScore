@@ -63,10 +63,13 @@
 #include "tupletlayout.h"
 #include "slurtielayout.h"
 
+#include "../dev/horizontalspacing.h"
+
 #include "log.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;
+using namespace mu::engraving::rendering::dev;
 
 //---------------------------------------------------------
 //   collectSystem
@@ -1608,7 +1611,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                 if (!nextSeg || !nextSeg->isChordRestType()) {
                     continue;
                 }
-                double margin = segment.width() - segment.minHorizontalCollidingDistance(nextSeg);
+                double margin = segment.width() - HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, 1.0);
                 double reducedMargin = margin * (1 - std::max(squeezeFactor, squeezeLimit));
                 segment.setWidth(segment.width() - reducedMargin);
             }
