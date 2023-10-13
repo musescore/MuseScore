@@ -514,6 +514,8 @@ bool Part::setProperty(Pid id, const QVariant& property)
 
 int Part::startTrack() const
       {
+      if (_staves.empty())
+            return -1;
       return _staves.front()->idx() * VOICES;
       }
 
@@ -523,6 +525,8 @@ int Part::startTrack() const
 
 int Part::endTrack() const
       {
+      if (_staves.empty())
+            return -1;
       return _staves.back()->idx() * VOICES + VOICES;
       }
 
