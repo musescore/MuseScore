@@ -29,7 +29,7 @@
 #include "types/typesconv.h"
 
 #include "rendering/dev/tlayout.h"
-#include "rendering/dev/distances.h"
+#include "rendering/dev/horizontalspacing.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -2532,7 +2532,7 @@ double Segment::spacing() const
 
 double Segment::minHorizontalCollidingDistance(Segment* ns, double squeezeFactor) const
 {
-    return distances::minHorizontalCollidingDistance(this, ns, squeezeFactor);
+    return HorizontalSpacing::minHorizontalCollidingDistance(this, ns, squeezeFactor);
 }
 
 double Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
@@ -2608,7 +2608,7 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
 
 double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap, double squeezeFactor) const
 {
-    return distances::minHorizontalDistance(this, ns, systemHeaderGap, squeezeFactor);
+    return HorizontalSpacing::minHorizontalDistance(this, ns, systemHeaderGap, squeezeFactor);
 }
 
 //------------------------------------------------------

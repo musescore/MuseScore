@@ -29,6 +29,7 @@ class Note;
 class Rest;
 class Shape;
 class StemSlash;
+class Segment;
 enum class ElementType;
 enum class KerningType;
 }
@@ -37,6 +38,14 @@ namespace mu::engraving::rendering::dev {
 class HorizontalSpacing
 {
 public:
+
+    static double minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor = 1.0);
+    //! NOTE Temporary solution
+    static double shapeSpatium(const Shape& s);
+
+    static double minHorizontalDistance(const Segment* f, const Segment* ns, bool systemHeaderGap, double squeezeFactor);
+    static double minHorizontalCollidingDistance(const Segment* f, const Segment* ns, double squeezeFactor);
+
     static double computePadding(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2);
 

@@ -1627,7 +1627,10 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                 if (!nextSeg || !nextSeg->isChordRestType()) {
                     continue;
                 }
-                double margin = segment.width() - segment.minHorizontalCollidingDistance(nextSeg, ctx.state().segmentShapeSqueezeFactor());
+
+                double squeezeFactor = ctx.state().segmentShapeSqueezeFactor();
+                double margin = segment.width() - segment.minHorizontalCollidingDistance(nextSeg, squeezeFactor);
+
                 double reducedMargin = margin * (1 - std::max(squeezeFactor, squeezeLimit));
                 segment.setWidth(segment.width() - reducedMargin);
             }

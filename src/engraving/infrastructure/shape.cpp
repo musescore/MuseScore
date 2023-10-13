@@ -26,7 +26,7 @@
 
 #include "dom/engravingitem.h"
 
-#include "rendering/dev/distances.h"
+#include "rendering/dev/horizontalspacing.h"
 
 #include "log.h"
 
@@ -128,7 +128,7 @@ double Shape::minHorizontalDistance(const Shape& a) const
 {
     DO_ASSERT(RealIsEqual(m_squeezeFactor, 1.0));
 
-    return distances::minHorizontalDistance(*this, a, m_spatium, m_squeezeFactor);
+    return HorizontalSpacing::minHorizontalDistance(*this, a, m_spatium, m_squeezeFactor);
 }
 
 //-------------------------------------------------------------------
