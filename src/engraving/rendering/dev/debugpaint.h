@@ -42,7 +42,7 @@ class DebugPaint
 
 public:
     static void paintElementDebug(mu::draw::Painter& painter, const EngravingItem* item);
-    static void paintPageDebug(mu::draw::Painter& painter, const Page* page);
+    static void paintPageDebug(mu::draw::Painter& painter, const Page* page, const std::vector<EngravingItem*>& items);
 };
 }
 

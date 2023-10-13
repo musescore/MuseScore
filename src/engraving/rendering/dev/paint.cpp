@@ -145,7 +145,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRendere
 
 #ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
             if (!opt.isPrinting) {
-                DebugPaint::paintPageDebug(*painter, page);
+                DebugPaint::paintPageDebug(*painter, page, elements);
             }
 #endif
 
