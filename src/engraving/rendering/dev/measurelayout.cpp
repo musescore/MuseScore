@@ -51,7 +51,7 @@
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "slurtielayout.h"
-#include "distances.h"
+#include "horizontalspacing.h"
 
 #include "log.h"
 
@@ -2230,7 +2230,9 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                     continue;
                 }
 
-                double minHorColDistance = distances::minHorizontalCollidingDistance(ps, ns, ctx.state().segmentShapeSqueezeFactor());
+                double minHorColDistance = HorizontalSpacing::minHorizontalCollidingDistance(ps,
+                                                                                             ns,
+                                                                                             ctx.state().segmentShapeSqueezeFactor());
                 double ww = minHorColDistance - (s->x() - ps->x());
                 if (ps == fs) {
                     ww = std::max(ww, ns->minLeft(ls) - s->x());
