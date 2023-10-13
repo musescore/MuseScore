@@ -19,30 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_MIDIMODULE_H
-#define MU_IMPORTEXPORT_MIDIMODULE_H
 
-#include <memory>
+#ifndef MU_IMPORTEXPORT_MIDIRENDER_HPP
+#define MU_IMPORTEXPORT_MIDIRENDER_HPP
 
-#include "modularity/imodulesetup.h"
+#include "importexport/midi/imidirender.h"
+#include "midirendertypes.h"
 
 namespace mu::iex::midi {
-class MidiConfiguration;
-class MidiModule : public modularity::IModuleSetup
+class RenderStrategy;
+
+class MidiRender : public IMidiRender
 {
 public:
+    ~MidiRender() override = default;
 
-    std::string moduleName() const override;
-    void registerExports() override;
+    void render(mu::engraving::Score* score, RenderContext& ctx, MidiRenderOutData& outData, RenderStrategy& strategy) override;
 
-#ifdef MUE_ENABLE_MIDI_IMPORTEXPORT
-    void resolveImports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
 private:
-    std::shared_ptr<MidiConfiguration> m_configuration;
-#endif
+    RenderContext m_ctx;
+    mu::engraving::Score* m_score;
 
+    std::unordered_map<mu::engraving::EngravingItem*, Meta> m_renderMeta;
+
+    void collectNotes();
+
+    void
+    collectGraceNotes(bool isBefore, const mu::engraving::Chord* chord, int mainChordStartTick, uint64_t partID,
+                      mu::engraving::Chord* dependentItem);
 };
 }
 
-#endif // MU_IMPORTEXPORT_MIDIMODULE_H
+#endif //MU_IMPORTEXPORT_MIDIRENDER_HPP

@@ -64,7 +64,7 @@ class Induction
                    *          of the top tempo hypotheses but no beats
                    */
       static AgentList beatInduction(const AgentParameters &params,
-                                     const EventList &events);
+                                     const BeatTracker::EventList &events);
 
    private:
                   /** For variable cluster widths in newInduction().

@@ -19,30 +19,31 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_IMPORTEXPORT_MIDIMODULE_H
-#define MU_IMPORTEXPORT_MIDIMODULE_H
+#ifndef MU_IMPORTEXPORT_IMIDICONVERTER_H
+#define MU_IMPORTEXPORT_IMIDICONVERTER_H
 
-#include <memory>
 
-#include "modularity/imodulesetup.h"
+#include "modularity/imoduleinterface.h"
 
-namespace mu::iex::midi {
-class MidiConfiguration;
-class MidiModule : public modularity::IModuleSetup
-{
-public:
-
-    std::string moduleName() const override;
-    void registerExports() override;
-
-#ifdef MUE_ENABLE_MIDI_IMPORTEXPORT
-    void resolveImports() override;
-    void onInit(const framework::IApplication::RunMode& mode) override;
-private:
-    std::shared_ptr<MidiConfiguration> m_configuration;
-#endif
-
-};
+namespace mu::engraving {
+    class Score;
 }
 
-#endif // MU_IMPORTEXPORT_MIDIMODULE_H
+namespace mu::iex::midi {
+    class RenderStrategy;
+
+    class RenderContext;
+
+    struct MidiRenderOutData;
+
+    class IMidiRender : MODULE_EXPORT_INTERFACE {
+    INTERFACE_ID(IMidiConverter)
+    public:
+        ~IMidiRender() override = default;
+
+        virtual void
+        render(mu::engraving::Score *, RenderContext &ctx, MidiRenderOutData &outData, RenderStrategy &strategy) = 0;
+    };
+}
+
+#endif // MU_IMPORTEXPORT_IMIDICONVERTER_H

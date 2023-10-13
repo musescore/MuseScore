@@ -1173,6 +1173,7 @@ void CompatMidiRendererInternal::renderMetronome(EventsHolder& events, Measure c
 void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context& ctx)
 {
     _context = ctx;
+    _context.instrumentsHaveEffects = true;
     PitchWheelRenderer pitchWheelRender(wheelSpec);
 
     score->updateSwing();

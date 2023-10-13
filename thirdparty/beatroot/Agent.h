@@ -20,7 +20,10 @@
 
 
 class AgentList;
+namespace BeatTracker
+{
 struct Event;
+}
 
 class AgentParameters
       {
@@ -103,7 +106,7 @@ class Agent
 
                   /** The list of Events (onsets) accepted by this Agent as beats,
                    *  plus interpolated beats. */
-      EventList events;
+      BeatTracker::EventList events;
 
                   /** Constructor: the work is performed by init()
                    *  @param ibi The beat period (inter-beat interval)
@@ -118,7 +121,7 @@ class Agent
                    *  @param err The difference between the predicted and actual beat times.
                    *  @param beats The number of beats since the last beat that matched an Event.
                    */
-      void accept(const Event &e, double err, int beats);
+      void accept(const BeatTracker::Event &e, double err, int beats);
 
                   /** The given Event is tested for a possible beat time.
                    *  The following situations can occur:
@@ -136,7 +139,7 @@ class Agent
                    * @param a The list of all agents, which is updated if a new agent is created.
                    * @return Indicate whether the given Event was accepted as a beat by this Agent.
                    */
-      bool considerAsBeat(const Event &e, AgentList &a);
+      bool considerAsBeat(const BeatTracker::Event &e, AgentList &a);
 
                   /** Interpolates missing beats in the Agent's beat track,
                    *  starting from the beginning of the piece.
