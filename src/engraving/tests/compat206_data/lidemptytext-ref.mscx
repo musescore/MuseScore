@@ -229,7 +229,6 @@
         </Measure>
       </Staff>
     <Score>
-      <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
         <pedalPosBelow x="0" y="0"/>
