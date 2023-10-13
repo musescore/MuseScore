@@ -25,7 +25,8 @@
  render score into event list
 */
 
-#include "midirender.h"
+#include "compatmidirender.h"
+#include "compatmidirenderinternal.h"
 
 #include <set>
 #include <cmath>
@@ -74,9 +75,6 @@
 
 #include "log.h"
 
-using namespace mu;
-using namespace mu::engraving;
-
 namespace mu::engraving {
 static PitchWheelSpecs wheelSpec;
 static int LET_RING_MAX_TICKS = Constants::DIVISION * 16;
@@ -110,8 +108,8 @@ struct VibratoParams {
     int period = 0;
 };
 
-static bool graceNotesMerged(Chord* chord);
-static uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect, const MidiRenderer::Context& context);
+static uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect,
+                           const CompatMidiRendererInternal::Context& context);
 
 //---------------------------------------------------------
 //   Converts midi time (noteoff - noteon) to milliseconds
@@ -359,7 +357,7 @@ static bool letRingShouldApply(const NoteEvent& event, const Note* note)
 //---------------------------------------------------------
 
 static void collectNote(EventsHolder& events, const Note* note, const CollectNoteParams& noteParams, Staff* staff,
-                        PitchWheelRenderer& pitchWheelRenderer, const MidiRenderer::Context& context)
+                        PitchWheelRenderer& pitchWheelRenderer, const CompatMidiRendererInternal::Context& context)
 {
     if (!note->play() || note->hidden()) {      // do not play overlapping notes
         return;
@@ -373,7 +371,7 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
 
     int tieLen = 0;
     if (chord->isGrace()) {
-        assert(!graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
+        assert(!CompatMidiRendererInternal::graceNotesMerged(chord));      // this function should not be called on a grace note if grace notes are merged
         chord = toChord(chord->explicitParent());
     }
 
@@ -620,9 +618,10 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
     }
 }
 
-void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier, Staff* st,
-                                                 int tickOffset,
-                                                 PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
+void CompatMidiRendererInternal::collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord, EventsHolder& events, double veloMultiplier,
+                                                               Staff* st,
+                                                               int tickOffset,
+                                                               PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect)
 {
     // calculate offset for grace notes here
     const auto& grChords = chord->graceNotesBefore();
@@ -668,7 +667,7 @@ void MidiRenderer::collectGraceBeforeChordEvents(Chord* chord, Chord* prevChord,
     }
 }
 
-MidiRenderer::ChordParams MidiRenderer::collectChordParams(const Chord* chord, int tickOffset) const
+CompatMidiRendererInternal::ChordParams CompatMidiRendererInternal::collectChordParams(const Chord* chord, int tickOffset) const
 {
     ChordParams chordParams;
 
@@ -695,8 +694,8 @@ MidiRenderer::ChordParams MidiRenderer::collectChordParams(const Chord* chord, i
 //   doCollectMeasureEvents
 //---------------------------------------------------------
 
-void MidiRenderer::doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff, int tickOffset,
-                                          PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords)
+void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff, int tickOffset,
+                                                        PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords)
 {
     staff_idx_t firstStaffIdx = staff->idx();
     for (Staff* st : staff->masterScore()->staves()) {
@@ -802,7 +801,7 @@ void MidiRenderer::doCollectMeasureEvents(EventsHolder& events, Measure const* m
     }
 }
 
-MidiRenderer::MidiRenderer(Score* s)
+CompatMidiRendererInternal::CompatMidiRendererInternal(Score* s)
     : score(s)
 {
 }
@@ -812,8 +811,8 @@ MidiRenderer::MidiRenderer(Score* s)
 //    redirects to the correct function based on the passed method
 //---------------------------------------------------------
 
-void MidiRenderer::collectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff, int tickOffset,
-                                        PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords)
+void CompatMidiRendererInternal::collectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* staff, int tickOffset,
+                                                      PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords)
 {
     doCollectMeasureEvents(events, m, staff, tickOffset, pitchWheelRenderer, prevChords);
 
@@ -824,7 +823,7 @@ void MidiRenderer::collectMeasureEvents(EventsHolder& events, Measure const* m, 
 //   renderStaff
 //---------------------------------------------------------
 
-void MidiRenderer::renderStaff(EventsHolder& events, const Staff* staff, PitchWheelRenderer& pitchWheelRenderer)
+void CompatMidiRendererInternal::renderStaff(EventsHolder& events, const Staff* staff, PitchWheelRenderer& pitchWheelRenderer)
 {
     Measure const* lastMeasure = nullptr;
 
@@ -867,7 +866,7 @@ void MidiRenderer::renderStaff(EventsHolder& events, const Staff* staff, PitchWh
 //   renderSpanners
 //---------------------------------------------------------
 
-void MidiRenderer::renderSpanners(EventsHolder& events, PitchWheelRenderer& pitchWheelRenderer)
+void CompatMidiRendererInternal::renderSpanners(EventsHolder& events, PitchWheelRenderer& pitchWheelRenderer)
 {
     for (const auto& sp : score->spannerMap().map()) {
         Spanner* s = sp.second;
@@ -972,8 +971,9 @@ static VibratoParams getVibratoParams(VibratoType type)
     return params;
 }
 
-void MidiRenderer::doRenderSpanners(EventsHolder& events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
-                                    MidiInstrumentEffect effect)
+void CompatMidiRendererInternal::doRenderSpanners(EventsHolder& events, Spanner* s, uint32_t channel,
+                                                  PitchWheelRenderer& pitchWheelRenderer,
+                                                  MidiInstrumentEffect effect)
 {
     std::vector<std::pair<int, std::pair<bool, int> > > pedalEventList;
 
@@ -1034,82 +1034,6 @@ void MidiRenderer::doRenderSpanners(EventsHolder& events, Spanner* s, uint32_t c
     }
 }
 
-// This struct specifies how to render an articulation.
-//   atype - the articulation type to implement, such as SymId::ornamentTurn
-//   ostyles - the actual ornament has a property called ornamentStyle whose value is
-//             a value of type OrnamentStyle.  This ostyles field indicates the
-//             the set of ornamentStyles which apply to this rendition.
-//   duration - the default duration for each note in the rendition, the final duration
-//            rendered might be less than this if an articulation is attached to a note of
-//            short duration.
-//   prefix - vector of integers. indicating which notes to play at the beginning of rendering the
-//            articulation.  0 represents the principle note, 1==> the note diatonically 1 above
-//            -1 ==> the note diatonically 1 below.  E.g., in the key of G, if a turn articulation
-//            occurs above the note F#, then 0==>F#, 1==>G, -1==>E.
-//            These integers indicate which notes actual notes to play when rendering the ornamented
-//            note.   However, if the same integer appears several times adjacently such as {0,0,0,1}
-//            That means play the notes tied.  e.g., F# followed by G, but the duration of F# is 3x the
-//            duration of the G.
-//    body   - notes to play comprising the body of the rendered ornament.
-//            The body differs from the prefix and suffix in several ways.
-//            * body does not support tied notes: {0,0,0,1} means play 4 distinct notes (not tied).
-//            * if there is sufficient duration in the principle note, AND repeatp is true, then body
-//               will be rendered multiple times, as the duration allows.
-//            * to avoid a time gap (or rest) in rendering the articulation, if sustainp is true,
-//               then the final note of the body will be sustained to fill the left-over time.
-//    suffix - similar to prefix but played once at the end of the rendered ornament.
-//    repeatp  - whether the body is repeatable in its entirety.
-//    sustainp - whether the final note of the body should be sustained to fill the remaining duration.
-
-struct OrnamentExcursion {
-    SymId atype;
-    std::set<OrnamentStyle> ostyles;
-    int duration;
-    std::vector<int> prefix;
-    std::vector<int> body;
-    bool repeatp;
-    bool sustainp;
-    std::vector<int> suffix;
-};
-
-std::set<OrnamentStyle> baroque  = { OrnamentStyle::BAROQUE };
-std::set<OrnamentStyle> defstyle = { OrnamentStyle::DEFAULT };
-std::set<OrnamentStyle> any; // empty set has the special meaning of any-style, rather than no-styles.
-int _16th = Constants::DIVISION / 4;
-int _32nd = _16th / 2;
-
-std::vector<OrnamentExcursion> excursions = {
-    //  articulation type            set of  duration       body         repeatp      suffix
-    //                               styles          prefix                    sustainp
-    { SymId::ornamentTurn,                any, _32nd, {},    { 1, 0, -1, 0 },   false, true, {} },
-    { SymId::ornamentTurnInverted,        any, _32nd, {},    { -1, 0, 1, 0 },   false, true, {} },
-    { SymId::ornamentTurnSlash,           any, _32nd, {},    { -1, 0, 1, 0 },   false, true, {} },
-    { SymId::ornamentTrill,           baroque, _32nd, { 1, 0 }, { 1, 0 },        true,  true, {} },
-    { SymId::ornamentTrill,          defstyle, _32nd, { 0, 1 }, { 0, 1 },        true,  true, {} },
-    { SymId::brassMuteClosed,         baroque, _32nd, { 0, -1 }, { 0, -1 },      true,  true, {} },
-    { SymId::ornamentMordent,             any, _32nd, {},    { 0, -1, 0 },     false, true, {} },
-    { SymId::ornamentShortTrill,     defstyle, _32nd, {},    { 0, 1, 0 },      false, true, {} },// inverted mordent
-    { SymId::ornamentShortTrill,      baroque, _32nd, { 1, 0, 1 }, { 0 },         false, true, {} },// short trill
-    { SymId::ornamentTremblement,         any, _32nd, { 1, 0 }, { 1, 0 },        false, true, {} },
-    { SymId::brassMuteClosed,        defstyle, _32nd, {},    { 0 },             false, true, {} },// regular hand-stopped brass
-    { SymId::ornamentPrallMordent,        any, _32nd, {},    { 1, 0, -1, 0 },   false, true, {} },
-    { SymId::ornamentLinePrall,           any, _32nd, { 2, 2, 2 }, { 1, 0 },       true,  true, {} },
-    { SymId::ornamentUpPrall,             any, _16th, { -1, 0 }, { 1, 0 },        true,  true, { 1, 0 } },// p 144 Ex 152 [1]
-    { SymId::ornamentUpMordent,           any, _16th, { -1, 0 }, { 1, 0 },        true,  true, { -1, 0 } },// p 144 Ex 152 [1]
-    { SymId::ornamentPrecompMordentUpperPrefix, any, _16th, { 1, 1, 1, 0 }, { 1, 0 },    true,  true, {} },// p136 Cadence Appuyee [1] [2]
-    { SymId::ornamentDownMordent,         any, _16th, { 1, 1, 1, 0 }, { 1, 0 },    true,  true, { -1, 0 } },// p136 Cadence Appuyee + mordent [1] [2]
-    { SymId::ornamentPrallUp,             any, _16th, { 1, 0 }, { 1, 0 },        true,  true, { -1, 0 } },// p136 Double Cadence [1]
-    { SymId::ornamentPrallDown,           any, _16th, { 1, 0 }, { 1, 0 },        true,  true, { -1, 0, 0, 0 } },// p144 ex 153 [1]
-    { SymId::ornamentPrecompSlide,        any, _32nd, {},    { 0 },          false, true, {} }
-
-    // [1] Some of the articulations/ornaments in the excursions table above come from
-    // Baroque Music, Style and Performance A Handbook, by Robert Donington,(c) 1982
-    // ISBN 0-393-30052-8, W. W. Norton & Company, Inc.
-
-    // [2] In some cases, the example from [1] does not preserve the timing.
-    // For example, illustrates 2+1/4 counts per half note.
-};
-
 //---------------------------------------------------------
 // findFirstTrill
 //  search the spanners in the score, finding the first one
@@ -1136,33 +1060,12 @@ static Trill* findFirstTrill(Chord* chord)
     return nullptr;
 }
 
-// In the case that graceNotesBefore or graceNotesAfter are attached to a note
-// with an articulation such as a trill, then the grace notes are/will-be/have-been
-// already merged into the articulation.
-// So this predicate, graceNotesMerged, checks for this condition to avoid calling
-// functions which would re-emit the grace notes by a different algorithm.
-
-static bool graceNotesMerged(Chord* chord)
-{
-    if (findFirstTrill(chord)) {
-        return true;
-    }
-    for (Articulation* a : chord->articulations()) {
-        for (auto& oe : excursions) {
-            if (oe.atype == a->symId()) {
-                return true;
-            }
-        }
-    }
-    return false;
-}
-
 //---------------------------------------------------------
 //   renderMetronome
 ///   add metronome tick events
 //---------------------------------------------------------
 
-void MidiRenderer::renderMetronome(EventsHolder& events)
+void CompatMidiRendererInternal::renderMetronome(EventsHolder& events)
 {
     Measure const* const start = score->firstMeasure();
     Measure const* const end = score->lastMeasure();
@@ -1177,7 +1080,7 @@ void MidiRenderer::renderMetronome(EventsHolder& events)
 ///   add metronome tick events
 //---------------------------------------------------------
 
-void MidiRenderer::renderMetronome(EventsHolder& events, Measure const* m)
+void CompatMidiRendererInternal::renderMetronome(EventsHolder& events, Measure const* m)
 {
     int msrTick         = m->tick().ticks();
     BeatsPerSecond tempo = score->tempomap()->tempo(msrTick);
@@ -1201,7 +1104,7 @@ void MidiRenderer::renderMetronome(EventsHolder& events, Measure const* m)
     }
 }
 
-void MidiRenderer::renderScore(EventsHolder& events, const Context& ctx)
+void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context& ctx)
 {
     _context = ctx;
     PitchWheelRenderer pitchWheelRender(wheelSpec);
@@ -1209,7 +1112,7 @@ void MidiRenderer::renderScore(EventsHolder& events, const Context& ctx)
     score->updateSwing();
     score->updateCapo();
 
-    score->createPlayEvents(score->firstMeasure(), nullptr);
+    CompatMidiRender::createPlayEvents(score, score->firstMeasure(), nullptr);
 
     score->updateChannel();
     score->updateVelo();
@@ -1233,7 +1136,8 @@ void MidiRenderer::renderScore(EventsHolder& events, const Context& ctx)
 }
 
 /* static */
-uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect, const MidiRenderer::Context& context)
+uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect,
+                    const CompatMidiRendererInternal::Context& context)
 {
     int subchannel = note->subchannel();
     int channel = instr->channel(subchannel)->channel();
@@ -1242,7 +1146,7 @@ uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEff
         return channel;
     }
 
-    MidiRenderer::ChannelLookup::LookupData lookupData;
+    CompatMidiRendererInternal::ChannelLookup::LookupData lookupData;
 
     if (context.instrumentsHaveEffects) {
         lookupData.effect = effect;
@@ -1256,7 +1160,7 @@ uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEff
     return context.channels->getChannel(channel, lookupData);
 }
 
-uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, const LookupData& lookupData)
+uint32_t CompatMidiRendererInternal::ChannelLookup::getChannel(uint32_t instrumentChannel, const LookupData& lookupData)
 {
     auto& channelsForInstrument = channelsMap[instrumentChannel];
 
@@ -1269,8 +1173,30 @@ uint32_t MidiRenderer::ChannelLookup::getChannel(uint32_t instrumentChannel, con
     return maxChannel++;
 }
 
-bool MidiRenderer::ChannelLookup::LookupData::operator<(const MidiRenderer::ChannelLookup::LookupData& other) const
+bool CompatMidiRendererInternal::ChannelLookup::LookupData::operator<(const CompatMidiRendererInternal::ChannelLookup::LookupData& other)
+const
 {
     return std::tie(string, staffIdx, effect) < std::tie(other.string, other.staffIdx, other.effect);
+}
+
+// In the case that graceNotesBefore or graceNotesAfter are attached to a note
+// with an articulation such as a trill, then the grace notes are/will-be/have-been
+// already merged into the articulation.
+// So this predicate, graceNotesMerged, checks for this condition to avoid calling
+// functions which would re-emit the grace notes by a different algorithm.
+
+bool CompatMidiRendererInternal::graceNotesMerged(Chord* chord)
+{
+    if (findFirstTrill(chord)) {
+        return true;
+    }
+    for (Articulation* a : chord->articulations()) {
+        for (auto& oe : excursions) {
+            if (oe.atype == a->symId()) {
+                return true;
+            }
+        }
+    }
+    return false;
 }
 }

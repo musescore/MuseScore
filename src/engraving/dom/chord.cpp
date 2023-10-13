@@ -59,6 +59,7 @@
 #include "trill.h"
 #include "tuplet.h"
 #include "undo.h"
+#include "compat/midi/compatmidirender.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -2183,7 +2184,7 @@ void Chord::updateArticulations(const std::set<SymId>& newArticulationIds, Artic
 void Chord::reset()
 {
     undoChangeProperty(Pid::STEM_DIRECTION, DirectionV::AUTO);
-    score()->createPlayEvents(this);
+    CompatMidiRender::createPlayEvents(this->score(), this);
     ChordRest::reset();
 }
 

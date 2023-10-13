@@ -31,6 +31,7 @@
 
 #include "modularity/ioc.h"
 #include "context/iglobalcontext.h"
+#include "engraving/compat/midi/compatmidirender.h"
 
 namespace mu::engraving {
 class InstrumentTemplate;
@@ -238,7 +239,7 @@ public:
      * PlayEvent lists.
      * \since 3.3
      */
-    Q_INVOKABLE void createPlayEvents() { score()->createPlayEvents(); }
+    Q_INVOKABLE void createPlayEvents() { CompatMidiRender::createPlayEvents(score()); }
 
     /// \cond MS_INTERNAL
     QString mscoreVersion() { return score()->mscoreVersion(); }

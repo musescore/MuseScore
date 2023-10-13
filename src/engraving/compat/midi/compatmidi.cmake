@@ -24,8 +24,10 @@ set(COMPAT_MIDI_SRC
     ${CMAKE_CURRENT_LIST_DIR}/midicoreevent.h
     ${CMAKE_CURRENT_LIST_DIR}/midiinstrumenteffects.h
     ${CMAKE_CURRENT_LIST_DIR}/midipatch.h
-    ${CMAKE_CURRENT_LIST_DIR}/midirender.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/midirender.h
+    ${CMAKE_CURRENT_LIST_DIR}/compatmidirenderinternal.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compatmidirenderinternal.h
+    ${CMAKE_CURRENT_LIST_DIR}/compatmidirender.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/compatmidirender.h
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrenderer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pitchwheelrenderer.h
     )

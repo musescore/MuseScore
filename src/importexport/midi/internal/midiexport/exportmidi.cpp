@@ -229,7 +229,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     }
 
     EventsHolder events;
-    MidiRenderer::Context ctx;
+    CompatMidiRendererInternal::Context ctx;
     ctx.eachStringHasChannel = false;
     ctx.instrumentsHaveEffects = false;
     ctx.metronome = false;
