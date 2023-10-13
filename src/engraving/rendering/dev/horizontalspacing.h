@@ -30,6 +30,7 @@ class Rest;
 class Shape;
 class StemSlash;
 class Segment;
+class Measure;
 enum class ElementType;
 enum class KerningType;
 }
@@ -45,6 +46,10 @@ public:
 
     static double minHorizontalDistance(const Segment* f, const Segment* ns, bool systemHeaderGap, double squeezeFactor);
     static double minHorizontalCollidingDistance(const Segment* f, const Segment* ns, double squeezeFactor);
+    static double minLeft(const Segment* seg, const Shape& ls);
+
+    static void spaceRightAlignedSegments(Measure* m, double segmentShapeSqueezeFactor);
+    static double computeFirstSegmentXPosition(const Measure* m, const Segment* segment, double segmentShapeSqueezeFactor);
 
     static double computePadding(const EngravingItem* item1, const EngravingItem* item2);
     static KerningType computeKerning(const EngravingItem* item1, const EngravingItem* item2);

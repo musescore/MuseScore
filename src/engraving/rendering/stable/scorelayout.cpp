@@ -39,6 +39,7 @@
 #include "dom/tuplet.h"
 #include "dom/chord.h"
 #include "dom/tremolo.h"
+#include "dom/note.h"
 
 #include "tlayout.h"
 #include "pagelayout.h"
@@ -49,8 +50,11 @@
 #include "arpeggiolayout.h"
 #include "chordlayout.h"
 
+#include "../dev/horizontalspacing.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;
+using namespace mu::engraving::rendering::dev;
 
 class CmdStateLocker
 {
@@ -386,7 +390,7 @@ void ScoreLayout::collectLinearSystem(LayoutContext& ctx)
                 // for measures in range, do full layout
                 if (ctx.conf().isMode(LayoutMode::HORIZONTAL_FIXED)) {
                     MeasureLayout::createEndBarLines(m, true, ctx);
-                    m->layoutSegmentsInPracticeMode(visibleParts);
+                    layoutSegmentsWithDuration(m, visibleParts);
                     ww = m->width();
                     MeasureLayout::stretchMeasureInPracticeMode(m, ww, ctx);
                 } else {
@@ -517,4 +521,166 @@ void ScoreLayout::layoutLinear(LayoutContext& ctx)
     ctx.mutState().page()->setWidth(lm + system->width() + rm);
     ctx.mutState().page()->setHeight(tm + system->height() + bm);
     ctx.mutState().page()->invalidateBspTree();
+}
+
+static Segment* findFirstEnabledSegment(Measure* measure)
+{
+    Segment* current = measure->first();
+    while (current && !current->enabled()) {
+        current = current->next();
+    }
+
+    return current;
+}
+
+void ScoreLayout::layoutSegmentsWithDuration(Measure* m, const std::vector<int>& visibleParts)
+{
+    double currentXPos = 0;
+
+    Segment* current = findFirstEnabledSegment(m);
+
+    auto [spacing, width] = computeCellWidth(current, visibleParts);
+    currentXPos = HorizontalSpacing::computeFirstSegmentXPosition(m, current, 1.0);
+    current->mutldata()->setPosX(currentXPos);
+    current->setWidth(width);
+    current->setSpacing(spacing);
+    currentXPos += width;
+
+    current = current->next();
+    while (current) {
+//        if (!current->enabled() || !current->visible()) {
+//            current = current->next();
+//            continue;
+//        }
+
+        auto [spacing, width] = computeCellWidth(current, visibleParts);
+        current->setWidth(width + spacing);
+        current->setSpacing(spacing);
+        currentXPos += spacing;
+        current->mutldata()->setPosX(currentXPos);
+        currentXPos += width;
+        current = current->next();
+    }
+
+    m->setWidth(currentXPos);
+}
+
+std::pair<double, double> ScoreLayout::computeCellWidth(const Segment* s, const std::vector<int>& visibleParts)
+{
+    if (!s->enabled()) {
+        return { 0, 0 };
+    }
+
+    Fraction quantum = calculateQuantumCell(s->measure(), visibleParts);
+
+    auto calculateWidth = [quantum, sc = s->score()->masterScore()](ChordRest* cr) {
+        return sc->widthOfSegmentCell()
+               * sc->style().spatium()
+               * cr->globalTicks().numerator() / cr->globalTicks().denominator()
+               * quantum.denominator() / quantum.numerator();
+    };
+
+    if (s->isChordRestType()) {
+        float width = 0.0;
+        float spacing = 0.0;
+
+        ChordRest* cr = nullptr;
+
+        cr = chordRestWithMinDuration(s, visibleParts);
+
+        if (cr) {
+            width = calculateWidth(cr);
+
+            if (cr->type() == ElementType::REST) {
+                //spacing = 0; //!not necessary. It is to more clearly understanding code
+            } else if (cr->type() == ElementType::CHORD) {
+                Chord* ch = toChord(cr);
+
+                //! check that gracenote exist. If exist add additional spacing
+                //! to avoid colliding between grace note and previous chord
+                if (!ch->graceNotes().empty()) {
+                    Segment* prevSeg = s->prev();
+                    if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
+                        ChordRest* prevCR = chordRestWithMinDuration(prevSeg, visibleParts);
+
+                        if (prevCR && prevCR->globalTicks() < quantum) {
+                            spacing = calculateWidth(prevCR);
+                            return { spacing, width };
+                        }
+                    }
+                }
+
+                //! check that accidental exist in the chord. If exist add additional spacing
+                //! to avoid colliding between grace note and previous chord
+                for (auto note : ch->notes()) {
+                    if (note->accidental()) {
+                        Segment* prevSeg = s->prev();
+                        if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
+                            ChordRest* prevCR = chordRestWithMinDuration(prevSeg, visibleParts);
+
+                            if (prevCR && prevCR->globalTicks() < quantum) {
+                                spacing = calculateWidth(prevCR);
+                                return { spacing, width };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return { spacing, width };
+    }
+
+    Segment* nextSeg = s->nextActive();
+    if (!nextSeg) {
+        nextSeg = s->next(SegmentType::BarLineType);
+    }
+
+    if (nextSeg) {
+        return { 0, HorizontalSpacing::minHorizontalDistance(s, nextSeg, false, 1.0) };
+    }
+
+    return { 0, s->minRight() };
+}
+
+ChordRest* ScoreLayout::chordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts)
+{
+    ChordRest* chordRestWithMinDuration = nullptr;
+    int minTicks = std::numeric_limits<int>::max();
+    for (int partIdx : visibleParts) {
+        for (const Staff* staff : seg->score()->parts().at(partIdx)->staves()) {
+            staff_idx_t staffIdx = staff->idx();
+            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                if (auto element = seg->elist().at(staffIdx * VOICES + voice)) {
+                    if (!element->isChordRest()) {
+                        continue;
+                    }
+
+                    ChordRest* cr = toChordRest(element);
+                    int chordTicks = cr->ticks().ticks();
+                    if (chordTicks > minTicks) {
+                        continue;
+                    }
+                    minTicks = chordTicks;
+                    chordRestWithMinDuration = cr;
+                }
+            }
+        }
+    }
+
+    return chordRestWithMinDuration;
+}
+
+Fraction ScoreLayout::calculateQuantumCell(const Measure* m, const std::vector<int>& visibleParts)
+{
+    Fraction quantum = { 1, 16 };
+    for (const Segment& s : m->segments()) {
+        ChordRest* cr = chordRestWithMinDuration(&s, visibleParts);
+
+        if (cr && cr->actualTicks() < quantum) {
+            quantum = cr->actualTicks();
+        }
+    }
+
+    return quantum;
 }

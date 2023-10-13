@@ -29,7 +29,6 @@
 #include "types/typesconv.h"
 
 #include "rendering/dev/tlayout.h"
-#include "rendering/dev/horizontalspacing.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -42,7 +41,6 @@
 #include "hook.h"
 #include "instrchange.h"
 #include "keysig.h"
-#include "masterscore.h"
 #include "measure.h"
 #include "mscore.h"
 #include "note.h"
@@ -67,7 +65,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -2380,25 +2377,6 @@ double Segment::minRight() const
     return distance;
 }
 
-//---------------------------------------------------------
-//   minLeft
-//    Calculate minimum distance needed to the left shape
-//    sl. Sl is the same for all staves.
-//---------------------------------------------------------
-
-double Segment::minLeft(const Shape& sl) const
-{
-    double distance = 0.0;
-    double sp = HorizontalSpacing::shapeSpatium(sl);
-    for (const Shape& sh : shapes()) {
-        double d = HorizontalSpacing::minHorizontalDistance(sl, sh, sp, 1.0);
-        if (d > distance) {
-            distance = d;
-        }
-    }
-    return distance;
-}
-
 double Segment::minLeft() const
 {
     double distance = 0.0;
@@ -2411,111 +2389,6 @@ double Segment::minLeft() const
     return distance;
 }
 
-std::pair<double, double> Segment::computeCellWidth(const std::vector<int>& visibleParts) const
-{
-    if (!this->enabled()) {
-        return { 0, 0 };
-    }
-
-    auto calculateWidth = [measure = measure(), sc = score()->masterScore()](ChordRest* cr) {
-        auto quantum = measure->quantumOfSegmentCell();
-        return sc->widthOfSegmentCell()
-               * sc->style().spatium()
-               * cr->globalTicks().numerator() / cr->globalTicks().denominator()
-               * quantum.denominator() / quantum.numerator();
-    };
-
-    if (isChordRestType()) {
-        float width{ 0 };
-        float spacing{ 0 };
-
-        ChordRest* cr{ nullptr };
-
-        cr = ChordRestWithMinDuration(this, visibleParts);
-
-        if (cr) {
-            width = calculateWidth(cr);
-
-            if (cr->type() == ElementType::REST) {
-                //spacing = 0; //!not necessary. It is to more clearly understanding code
-            } else if (cr->type() == ElementType::CHORD) {
-                Chord* ch = toChord(cr);
-
-                //! check that gracenote exist. If exist add additional spacing
-                //! to avoid colliding between grace note and previous chord
-                if (!ch->graceNotes().empty()) {
-                    Segment* prevSeg = prev();
-                    if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
-                        ChordRest* prevCR = ChordRestWithMinDuration(prevSeg, visibleParts);
-
-                        if (prevCR && prevCR->globalTicks() < measure()->quantumOfSegmentCell()) {
-                            spacing = calculateWidth(prevCR);
-                            return { spacing, width };
-                        }
-                    }
-                }
-
-                //! check that accidental exist in the chord. If exist add additional spacing
-                //! to avoid colliding between grace note and previous chord
-                for (auto note : ch->notes()) {
-                    if (note->accidental()) {
-                        Segment* prevSeg = prev();
-                        if (prevSeg && prevSeg->segmentType() == SegmentType::ChordRest) {
-                            ChordRest* prevCR = ChordRestWithMinDuration(prevSeg, visibleParts);
-
-                            if (prevCR && prevCR->globalTicks() < measure()->quantumOfSegmentCell()) {
-                                spacing = calculateWidth(prevCR);
-                                return { spacing, width };
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        return { spacing, width };
-    }
-
-    Segment* nextSeg = nextActive();
-    if (!nextSeg) {
-        nextSeg = next(SegmentType::BarLineType);
-    }
-
-    if (nextSeg) {
-        return { 0, minHorizontalDistance(nextSeg, false, 1.0) };
-    }
-
-    return { 0, minRight() };
-}
-
-ChordRest* Segment::ChordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts)
-{
-    ChordRest* chordRestWithMinDuration{ nullptr };
-    int minTicks = std::numeric_limits<int>::max();
-    for (int partIdx : visibleParts) {
-        for (const Staff* staff : seg->score()->parts().at(partIdx)->staves()) {
-            staff_idx_t staffIdx = staff->idx();
-            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-                if (auto element = seg->elist().at(staffIdx * VOICES + voice)) {
-                    if (!element->isChordRest()) {
-                        continue;
-                    }
-
-                    ChordRest* cr = toChordRest(element);
-                    int chordTicks = cr->ticks().ticks();
-                    if (chordTicks > minTicks) {
-                        continue;
-                    }
-                    minTicks = chordTicks;
-                    chordRestWithMinDuration = cr;
-                }
-            }
-        }
-    }
-
-    return chordRestWithMinDuration;
-}
-
 void Segment::setSpacing(double val)
 {
     m_spacing = val;
@@ -2524,16 +2397,6 @@ void Segment::setSpacing(double val)
 double Segment::spacing() const
 {
     return m_spacing;
-}
-
-//---------------------------------------------------------
-//   minHorizontalCollidingDistance
-//    calculate the minimum distance to ns avoiding collisions
-//---------------------------------------------------------
-
-double Segment::minHorizontalCollidingDistance(Segment* ns, double squeezeFactor) const
-{
-    return HorizontalSpacing::minHorizontalCollidingDistance(this, ns, squeezeFactor);
 }
 
 double Segment::elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const
@@ -2600,16 +2463,6 @@ double Segment::elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const
     }
 
     return bottomOffset;
-}
-
-//---------------------------------------------------------
-//   minHorizontalDistance
-//    calculate the minimum layout distance to Segment ns
-//---------------------------------------------------------
-
-double Segment::minHorizontalDistance(Segment* ns, bool systemHeaderGap, double squeezeFactor) const
-{
-    return HorizontalSpacing::minHorizontalDistance(this, ns, systemHeaderGap, squeezeFactor);
 }
 
 //------------------------------------------------------

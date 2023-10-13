@@ -2081,7 +2081,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 
     // skip disabled segment
     for (s = m->first(); s && (!s->enabled() || s->allElementsInvisible()); s = s->next()) {
-        s->mutldata()->setPosX(m->computeFirstSegmentXPosition(s, ctx.state().segmentShapeSqueezeFactor()));  // this is where placement of hidden key/time sigs is set
+        s->mutldata()->setPosX(HorizontalSpacing::computeFirstSegmentXPosition(m, s, ctx.state().segmentShapeSqueezeFactor()));  // this is where placement of hidden key/time sigs is set
         s->setWidth(0);                                // it shouldn't affect the width of the bar no matter what it is
     }
     if (!s) {
@@ -2096,7 +2096,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
     //
     Shape ls(first ? RectF(0.0, -1000000.0, 0.0, 2000000.0) : RectF(0.0, 0.0, 0.0, m->spatium() * 4));
 
-    x = s->minLeft(ls);
+    x = HorizontalSpacing::minLeft(s, ls);
 
     if (s->isStartRepeatBarLineType()) {
         System* sys = m->system();
@@ -2112,7 +2112,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Fraction minTic
 
     ChordLayout::updateGraceNotes(m, ctx);
 
-    x = m->computeFirstSegmentXPosition(s, ctx.state().segmentShapeSqueezeFactor());
+    x = HorizontalSpacing::computeFirstSegmentXPosition(m, s, ctx.state().segmentShapeSqueezeFactor());
     bool isSystemHeader = s->header();
 
     m->setSqueezableSpace(0.0);
@@ -2175,10 +2175,10 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
         if (ns) {
             if (isSystemHeader && (ns->isStartRepeatBarLineType() || ns->isChordRestType() || (ns->isClefType() && !ns->header()))) {
                 // this is the system header gap
-                w = s->minHorizontalDistance(ns, true, ctx.state().segmentShapeSqueezeFactor());
+                w = HorizontalSpacing::minHorizontalDistance(s, ns, true, ctx.state().segmentShapeSqueezeFactor());
                 isSystemHeader = false;
             } else {
-                w = s->minHorizontalDistance(ns, false, ctx.state().segmentShapeSqueezeFactor());
+                w = HorizontalSpacing::minHorizontalDistance(s, ns, false, ctx.state().segmentShapeSqueezeFactor());
                 if (s->isChordRestType()) {
                     Segment* ps = s->prevActive();
                     double durStretch = s->computeDurationStretch(ps, minTicks, maxTicks);
@@ -2217,7 +2217,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
             // look back for collisions with previous segments
             // this is time consuming (ca. +5%) and probably requires more optimization
             if (s == fs) {     // don't let the second segment cross measure start (not covered by the loop below)
-                w = std::max(w, ns->minLeft(ls) - s->x());
+                w = std::max(w, HorizontalSpacing::minLeft(ns, ls) - s->x());
             }
 
             int n = 1;
@@ -2235,7 +2235,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
                                                                                              ctx.state().segmentShapeSqueezeFactor());
                 double ww = minHorColDistance - (s->x() - ps->x());
                 if (ps == fs) {
-                    ww = std::max(ww, ns->minLeft(ls) - s->x());
+                    ww = std::max(ww, HorizontalSpacing::minLeft(ns, ls) - s->x());
                 }
 
                 if (ww > w) {
@@ -2283,7 +2283,7 @@ void MeasureLayout::computeWidth(Measure* m, LayoutContext& ctx, Segment* s, dou
     m->setWidth(x);
 
     // PASS 2: now put in the right-aligned segments
-    m->spaceRightAlignedSegments(ctx.state().segmentShapeSqueezeFactor());
+    HorizontalSpacing::spaceRightAlignedSegments(m, ctx.state().segmentShapeSqueezeFactor());
 
     // Check against minimum width and increase if needed (MMRest minWidth is guaranteed elsewhere)
     double minWidth = computeMinMeasureWidth(m, ctx);

@@ -272,10 +272,7 @@ public:
     void createShapes();
     void createShape(staff_idx_t staffIdx);
     double minRight() const;
-    double minLeft(const Shape&) const;
     double minLeft() const;
-    double minHorizontalDistance(Segment*, bool isSystemGap, double squeezeFactor) const;
-    double minHorizontalCollidingDistance(Segment* ns, double squeezeFactor = 1.0) const;
 
     double widthOffset() const { return _widthOffset; }
     void setWidthOffset(double w) { _widthOffset = w; }
@@ -284,16 +281,6 @@ public:
 
     double elementsTopOffsetFromSkyline(staff_idx_t staffIndex) const;
     double elementsBottomOffsetFromSkyline(staff_idx_t staffIndex) const;
-
-    /*! \brief callulate width of segment and additional spacing of segment depends on duration of segment
-     *  \return pair of {spacing, width}
-     */
-    std::pair<double, double> computeCellWidth(const std::vector<int>& visibleParts) const;
-
-    /*! \brief get among all ChordRests of segment the ChordRest with minimum ticks,
-    * take into account visibleParts
-    */
-    static ChordRest* ChordRestWithMinDuration(const Segment* seg, const std::vector<int>& visibleParts);
 
     //! spacing is additional width of segment, for example accidental needs this spacing to avoid overlapping
     void setSpacing(double);

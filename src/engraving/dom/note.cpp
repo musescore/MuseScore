@@ -34,6 +34,8 @@
 #include "types/typesconv.h"
 #include "iengravingfont.h"
 
+#include "rendering/dev/horizontalspacing.h"
+
 #include "accidental.h"
 #include "actionicon.h"
 #include "articulation.h"
@@ -73,6 +75,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -2494,7 +2497,7 @@ void Note::normalizeLeftDragDelta(Segment* seg, EditData& ed, NoteEditData* ned)
     Segment* previous = seg->prev();
 
     if (previous) {
-        double minDist = previous->minHorizontalCollidingDistance(seg);
+        double minDist = HorizontalSpacing::minHorizontalCollidingDistance(previous, seg, 1.0);
 
         double diff = (ed.pos.x()) - (previous->pageX() + minDist);
 

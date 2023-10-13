@@ -63,6 +63,7 @@
 #include "measurelayout.h"
 #include "tupletlayout.h"
 #include "slurtielayout.h"
+#include "horizontalspacing.h"
 
 #include "log.h"
 
@@ -1623,7 +1624,7 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                 }
 
                 double squeezeFactor = ctx.state().segmentShapeSqueezeFactor();
-                double margin = segment.width() - segment.minHorizontalCollidingDistance(nextSeg, squeezeFactor);
+                double margin = segment.width() - HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, squeezeFactor);
 
                 double reducedMargin = margin * (1 - std::max(squeezeFactor, squeezeLimit));
                 segment.setWidth(segment.width() - reducedMargin);
