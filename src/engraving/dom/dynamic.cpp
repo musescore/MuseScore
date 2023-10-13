@@ -345,7 +345,7 @@ void Dynamic::manageBarlineCollisions()
 
     // Check barlines to the left
     Segment* leftBarLineSegment = nullptr;
-    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->prev1()) {
+    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->prev1enabled()) {
         if (segment->segmentType() & SegmentType::BarLineType) {
             leftBarLineSegment = segment;
             break;
@@ -366,7 +366,7 @@ void Dynamic::manageBarlineCollisions()
 
     // Check barlines to the right
     Segment* rightBarLineSegment = nullptr;
-    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->next1()) {
+    for (Segment* segment = thisSegment; segment && segment->measure()->system() == system; segment = segment->next1enabled()) {
         if (segment->segmentType() & SegmentType::BarLineType) {
             rightBarLineSegment = segment;
             break;
