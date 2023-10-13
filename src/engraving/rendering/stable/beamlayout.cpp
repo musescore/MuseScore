@@ -44,7 +44,6 @@
 #include "tlayout.h"
 #include "chordlayout.h"
 #include "../dev/beamtremololayout.h"
-#include "../dev/distances.h"
 
 #include "log.h"
 
@@ -885,8 +884,8 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     Shape restShape = rest->shape().translated(rest->pagePos() - rest->offset());
 
     double restToBeamClearance = up
-                                 ? distances::verticalClearance(beamShape, restShape)
-                                 : distances::verticalClearance(restShape, beamShape);
+                                 ? beamShape.verticalClearance(restShape)
+                                 : restShape.verticalClearance(beamShape);
 
     if (restToBeamClearance > restToBeamPadding) {
         return;

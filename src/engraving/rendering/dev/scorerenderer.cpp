@@ -99,16 +99,6 @@ void ScoreRenderer::layoutOnEdit(Arpeggio* item)
     ArpeggioLayout::layoutOnEdit(item, ctx);
 }
 
-double ScoreRenderer::computePadding(const EngravingItem* item1, const EngravingItem* item2)
-{
-    return HorizontalSpacing::computePadding(item1, item2);
-}
-
-KerningType ScoreRenderer::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
-{
-    return HorizontalSpacing::computeKerning(item1, item2);
-}
-
 void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 {
     LayoutContext ctx(item->score());
