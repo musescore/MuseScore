@@ -80,6 +80,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>major</mode>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -137,6 +138,7 @@
         <voice>
           <KeySig>
             <concertKey>1</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -182,6 +184,7 @@
         <voice>
           <KeySig>
             <concertKey>2</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -230,6 +233,7 @@
         <voice>
           <KeySig>
             <concertKey>3</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -281,6 +285,7 @@
         <voice>
           <KeySig>
             <concertKey>4</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -335,6 +340,7 @@
         <voice>
           <KeySig>
             <concertKey>5</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -389,6 +395,7 @@
         <voice>
           <KeySig>
             <concertKey>6</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -443,6 +450,7 @@
         <voice>
           <KeySig>
             <concertKey>7</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -494,6 +502,7 @@
         <voice>
           <KeySig>
             <concertKey>-1</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -539,6 +548,7 @@
         <voice>
           <KeySig>
             <concertKey>-2</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -587,6 +597,7 @@
         <voice>
           <KeySig>
             <concertKey>-3</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -638,6 +649,7 @@
         <voice>
           <KeySig>
             <concertKey>-4</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -689,6 +701,7 @@
         <voice>
           <KeySig>
             <concertKey>-5</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -740,6 +753,7 @@
         <voice>
           <KeySig>
             <concertKey>-6</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -794,6 +808,7 @@
         <voice>
           <KeySig>
             <concertKey>-7</concertKey>
+            <mode>major</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -851,6 +866,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -896,6 +912,7 @@
         <voice>
           <KeySig>
             <concertKey>1</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -944,6 +961,7 @@
         <voice>
           <KeySig>
             <concertKey>2</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -992,6 +1010,7 @@
         <voice>
           <KeySig>
             <concertKey>3</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1043,6 +1062,7 @@
         <voice>
           <KeySig>
             <concertKey>4</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1097,6 +1117,7 @@
         <voice>
           <KeySig>
             <concertKey>5</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1151,6 +1172,7 @@
         <voice>
           <KeySig>
             <concertKey>6</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1205,6 +1227,7 @@
         <voice>
           <KeySig>
             <concertKey>7</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1259,6 +1282,7 @@
         <voice>
           <KeySig>
             <concertKey>-1</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1304,6 +1328,7 @@
         <voice>
           <KeySig>
             <concertKey>-2</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1352,6 +1377,7 @@
         <voice>
           <KeySig>
             <concertKey>-3</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1403,6 +1429,7 @@
         <voice>
           <KeySig>
             <concertKey>-4</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1454,6 +1481,7 @@
         <voice>
           <KeySig>
             <concertKey>-5</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1505,6 +1533,7 @@
         <voice>
           <KeySig>
             <concertKey>-6</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1559,6 +1588,7 @@
         <voice>
           <KeySig>
             <concertKey>-7</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>
@@ -1613,6 +1643,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <Chord>
             <durationType>quarter</durationType>

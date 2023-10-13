@@ -268,6 +268,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>major</mode>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -506,6 +507,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>major</mode>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -626,6 +628,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>major</mode>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -863,6 +866,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>major</mode>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
@@ -1090,6 +1094,7 @@
         <voice>
           <KeySig>
             <concertKey>0</concertKey>
+            <mode>major</mode>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>

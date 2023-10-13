@@ -96,6 +96,7 @@ solo concert</text>
         <voice>
           <KeySig>
             <concertKey>1</concertKey>
+            <mode>major</mode>
             </KeySig>
           <StaffText>
             <text>Free time</text>

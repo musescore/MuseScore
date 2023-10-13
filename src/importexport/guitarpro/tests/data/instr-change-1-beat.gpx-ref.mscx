@@ -101,6 +101,7 @@ The Wall</text>
         <voice>
           <KeySig>
             <concertKey>1</concertKey>
+            <mode>minor</mode>
             </KeySig>
           <TimeSig>
             <sigN>4</sigN>
