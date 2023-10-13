@@ -89,7 +89,6 @@
 #include "rendering/dev/tremololayout.h"
 #include "rendering/dev/arpeggiolayout.h"
 #include "rendering/dev/chordlayout.h"
-#include "rendering/dev/distances.h"
 
 #include "log.h"
 
@@ -1301,8 +1300,8 @@ void SingleLayout::layout(Ornament* item, const Context& ctx)
             layout(accidental, ctx);
             Shape accidentalShape = accidental->shape();
             double minVertDist = above
-                                 ? distances::minVerticalDistance(accidentalShape, item->ldata()->bbox())
-                                 : distances::minVerticalDistance(Shape(item->ldata()->bbox()), accidentalShape);
+                                 ? accidentalShape.minVerticalDistance(item->ldata()->bbox())
+                                 : Shape(item->ldata()->bbox()).minVerticalDistance(accidentalShape);
             accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
         }
         return;
@@ -1610,8 +1609,8 @@ void SingleLayout::layout(TrillSegment* item, const Context& ctx)
             double y = 0;
             x = 0.5 * (box.width() - a->width());
             double minVertDist = accidentalGoesBelow
-                                 ? distances::minVerticalDistance(Shape(box), a->shape())
-                                 : distances::minVerticalDistance(a->shape(), Shape(box));
+                                 ? Shape(box).minVerticalDistance(a->shape())
+                                 : a->shape().minVerticalDistance(Shape(box));
             y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
             a->setPos(x, y);
             a->setParent(item);

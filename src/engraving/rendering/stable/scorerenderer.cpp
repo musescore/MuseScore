@@ -33,7 +33,6 @@
 #include "layoutcontext.h"
 #include "scorelayout.h"
 #include "arpeggiolayout.h"
-#include "horizontalspacing.h"
 
 #include "paint.h"
 
@@ -97,16 +96,6 @@ void ScoreRenderer::layoutOnEdit(Arpeggio* item)
 {
     LayoutContext ctx(item->score());
     ArpeggioLayout::layoutOnEdit(item, ctx);
-}
-
-double ScoreRenderer::computePadding(const EngravingItem* item1, const EngravingItem* item2)
-{
-    return HorizontalSpacing::computePadding(item1, item2);
-}
-
-KerningType ScoreRenderer::computeKerning(const EngravingItem* item1, const EngravingItem* item2)
-{
-    return HorizontalSpacing::computeKerning(item1, item2);
 }
 
 void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)

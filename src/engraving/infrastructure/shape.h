@@ -114,6 +114,8 @@ public:
     Shape translated(const mu::PointF&) const;
 
     const mu::RectF& bbox() const;
+    double minVerticalDistance(const Shape&) const;
+    double verticalClearance(const Shape&) const;
     double topDistance(const mu::PointF&) const;
     double bottomDistance(const mu::PointF&) const;
     double left() const;

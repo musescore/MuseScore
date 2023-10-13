@@ -61,7 +61,6 @@
 #include "slurtielayout.h"
 #include "beamlayout.h"
 #include "autoplace.h"
-#include "distances.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -1052,8 +1051,8 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
         if (aShape.intersects(sShape)) {
             double d = ctx.conf().styleS(Sid::articulationMinDistance).val() * item->spatium();
             d += slur->up()
-                 ? std::max(distances::minVerticalDistance(aShape, sShape), 0.0)
-                 : std::max(distances::minVerticalDistance(sShape, aShape), 0.0);
+                 ? std::max(aShape.minVerticalDistance(sShape), 0.0)
+                 : std::max(sShape.minVerticalDistance(aShape), 0.0);
             d *= slur->up() ? -1 : 1;
             for (auto iter2 = iter; iter2 != item->articulations().end(); ++iter2) {
                 Articulation* aa = *iter2;
@@ -3015,8 +3014,8 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             Shape restShape = rest->shape().translated(rest->pos() - offset);
             if (chord->segment() == rest->segment()) {
                 clearance = restAbove
-                            ? distances::verticalClearance(restShape, chordShape)
-                            : distances::verticalClearance(chordShape, restShape);
+                            ? restShape.verticalClearance(chordShape)
+                            : chordShape.verticalClearance(restShape);
             } else {
                 Note* limitNote = restAbove ? chord->upNote() : chord->downNote();
                 Shape noteShape = limitNote->shape().translate(limitNote->pos());
@@ -3100,9 +3099,9 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
         double clearance;
         bool firstAbove = rest1->voice() < rest2->voice();
         if (firstAbove) {
-            clearance = distances::verticalClearance(shape1, shape2);
+            clearance = shape1.verticalClearance(shape2);
         } else {
-            clearance = distances::verticalClearance(shape2, shape1);
+            clearance = shape2.verticalClearance(shape1);
         }
         double margin = clearance - minRestToRestClearance;
         int marginInSteps = floor(margin / lineDistance);

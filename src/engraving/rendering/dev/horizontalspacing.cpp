@@ -41,11 +41,6 @@ using namespace mu::engraving::rendering::dev;
 
 double HorizontalSpacing::minHorizontalDistance(const Shape& f, const Shape& s, double spatium, double squeezeFactor)
 {
-    if (f.elements().size()) {
-        DO_ASSERT(RealIsEqual(f.squeezeFactor(), squeezeFactor));
-        DO_ASSERT(RealIsEqual(f.spatium(), spatium));
-    }
-
     double dist = -1000000.0;        // min real
     double absoluteMinPadding = 0.1 * spatium * squeezeFactor;
     double verticalClearance = 0.2 * spatium * squeezeFactor;

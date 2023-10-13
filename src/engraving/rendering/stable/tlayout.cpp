@@ -154,8 +154,7 @@
 #include "slurtielayout.h"
 #include "tremololayout.h"
 #include "tupletlayout.h"
-
-#include "../dev/distances.h"
+#include "../dev/horizontalspacing.h"
 
 using namespace mu::draw;
 using namespace mu::engraving;
@@ -2459,7 +2458,7 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext& ctx)
             }
             return false;
         });
-        double dist = distances::minHorizontalDistance(graceShape, groupShape, distances::shapeSpatium(graceShape), 1.0);
+        double dist = HorizontalSpacing::minHorizontalDistance(graceShape, groupShape, HorizontalSpacing::shapeSpatium(graceShape), 1.0);
         double offset = -std::max(dist, 0.0);
         // Adjust spacing for cross-beam situations
         if (i < item->size() - 1) {
@@ -2479,17 +2478,17 @@ void TLayout::layout(GraceNotesGroup* item, LayoutContext& ctx)
     }
 
     Segment* aSeg = item->appendedSegment();
-    double _sp = distances::shapeSpatium(_shape);
-    double xPos = -distances::minHorizontalDistance(_shape, aSeg->staffShape(item->parent()->staffIdx()), _sp, 1.0);
+    double _sp = HorizontalSpacing::shapeSpatium(_shape);
+    double xPos = -HorizontalSpacing::minHorizontalDistance(_shape, aSeg->staffShape(item->parent()->staffIdx()), _sp, 1.0);
     // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
     if (item->parent()->staffMove() != 0) {
-        double xPosCross = -distances::minHorizontalDistance(_shape, aSeg->staffShape(item->parent()->vStaffIdx()), _sp, 1.0);
+        double xPosCross = -HorizontalSpacing::minHorizontalDistance(_shape, aSeg->staffShape(item->parent()->vStaffIdx()), _sp, 1.0);
         xPos = std::min(xPos, xPosCross);
     }
     // Same if the grace note itself is cross-staff
     Chord* firstGN = item->back();
     if (firstGN->staffMove() != 0) {
-        double xPosCross = -distances::minHorizontalDistance(_shape, aSeg->staffShape(firstGN->vStaffIdx()), _sp, 1.0);
+        double xPosCross = -HorizontalSpacing::minHorizontalDistance(_shape, aSeg->staffShape(firstGN->vStaffIdx()), _sp, 1.0);
         xPos = std::min(xPos, xPosCross);
     }
     // Safety net in case the shape checks don't succeed
@@ -3775,8 +3774,8 @@ void TLayout::layout(Ornament* item, LayoutContext& ctx)
         layout(accidental, ctx);
         Shape accidentalShape = accidental->shape();
         double minVertDist = above
-                             ? distances::minVerticalDistance(accidentalShape, ldata->bbox())
-                             : distances::minVerticalDistance(Shape(ldata->bbox()), accidentalShape);
+                             ? accidentalShape.minVerticalDistance(ldata->bbox())
+                             : Shape(ldata->bbox()).minVerticalDistance(accidentalShape);
         accidental->setPos(-0.5 * accidental->width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
     }
 }
@@ -3806,14 +3805,20 @@ void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)
 
     Shape noteShape = cueNoteChord->shape();
     Shape parentChordShape = parentChord->shape();
-    double minDist = distances::minHorizontalDistance(parentChordShape, noteShape, distances::shapeSpatium(parentChordShape), 1.0);
+    double minDist = HorizontalSpacing::minHorizontalDistance(parentChordShape,
+                                                              noteShape,
+                                                              HorizontalSpacing::shapeSpatium(parentChordShape),
+                                                              1.0);
     // Check for possible other chords in same segment
     staff_idx_t startStaff = staff2track(parentChord->staffIdx());
     for (staff_idx_t staff = startStaff; staff < startStaff + VOICES; ++staff) {
         Segment* segment = parentChord->segment();
         ChordRest* cr = segment->elementAt(staff) ? toChordRest(segment->elementAt(staff)) : nullptr;
         if (cr) {
-            double dist = distances::minHorizontalDistance(cr->shape(), noteShape, distances::shapeSpatium(cr->shape()), 1.0);
+            double dist = HorizontalSpacing::minHorizontalDistance(cr->shape(),
+                                                                   noteShape,
+                                                                   HorizontalSpacing::shapeSpatium(cr->shape()),
+                                                                   1.0);
             minDist = std::max(minDist, dist);
         }
     }
@@ -5312,8 +5317,8 @@ void TLayout::layout(TrillSegment* item, LayoutContext& ctx)
             double y = 0;
             x = 0.5 * (box.width() - a->width());
             double minVertDist = accidentalGoesBelow
-                                 ? distances::minVerticalDistance(Shape(box), a->shape())
-                                 : distances::minVerticalDistance(a->shape(), Shape(box));
+                                 ? Shape(box).minVerticalDistance(a->shape())
+                                 : a->shape().minVerticalDistance(Shape(box));
             y = accidentalGoesBelow ? minVertDist + vertMargin : -minVertDist - vertMargin;
             a->setPos(x, y);
             a->setParent(item);
