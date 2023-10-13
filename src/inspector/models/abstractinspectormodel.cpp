@@ -466,7 +466,7 @@ QVariant AbstractInspectorModel::valueFromElementUnits(const mu::engraving::Pid&
 
     switch (value.type()) {
     case P_TYPE::POINT: {
-        if (element->sizeIsSpatiumDependent()) {
+        if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
             return value.value<PointF>().toQPointF() / element->spatium();
         } else {
             return value.value<PointF>().toQPointF() / mu::engraving::DPMM;
