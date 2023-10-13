@@ -98,7 +98,7 @@ Staff* Part::staff(staff_idx_t idx) const
 
 String Part::familyId() const
 {
-    if (_instruments.size() <= 0) {
+    if (_instruments.empty()) {
         return String(u"");
     }
 
@@ -526,6 +526,10 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
 
 track_idx_t Part::startTrack() const
 {
+    IF_ASSERT_FAILED(!_staves.empty()) {
+        return mu::nidx;
+    }
+
     return _staves.front()->idx() * VOICES;
 }
 
@@ -535,6 +539,10 @@ track_idx_t Part::startTrack() const
 
 track_idx_t Part::endTrack() const
 {
+    IF_ASSERT_FAILED(!_staves.empty()) {
+        return mu::nidx;
+    }
+
     return _staves.back()->idx() * VOICES + VOICES;
 }
 
