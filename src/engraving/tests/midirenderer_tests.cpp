@@ -24,6 +24,7 @@
 
 #include "utils/scorerw.h"
 #include "engraving/compat/midi/compatmidirender.h"
+#include "engraving/compat/midi/compatmidirenderinternal.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/mscloader.h"
 #include "engraving/dom/noteevent.h"
