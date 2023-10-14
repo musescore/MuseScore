@@ -50,6 +50,8 @@ public:
     MOCK_METHOD(void, setSampleRate, (unsigned int), (override));
     MOCK_METHOD(async::Notification, sampleRateChanged, (), (const, override));
 
+    MOCK_METHOD(size_t, minTrackCountForMultithreading, (), (const, override));
+
     // synthesizers
     MOCK_METHOD(AudioInputParams, defaultAudioInputParams, (), (const, override));
 

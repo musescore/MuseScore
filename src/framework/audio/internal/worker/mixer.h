@@ -63,6 +63,9 @@ public:
 
     async::Channel<audioch_t, AudioSignalVal> masterAudioSignalChanges() const;
 
+    void setIsIdle(bool idle);
+    void setTracksToProcessWhenIdle(std::unordered_set<TrackId>&& trackIds);
+
     // IAudioSource
     void setSampleRate(unsigned int sampleRate) override;
     unsigned int audioChannelsCount() const override;
@@ -78,7 +81,13 @@ private:
     void writeTrackToAuxBuffers(const float* trackBuffer, const AuxSendsParams& auxSends, samples_t samplesPerChannel);
     void processAuxChannels(float* buffer, samples_t samplesPerChannel);
     void completeOutput(float* buffer, samples_t samplesPerChannel);
+
+    bool useMultithreading() const;
+
+    void notifyNoAudioSignal();
     void notifyAboutAudioSignalChanges(const audioch_t audioChannelNumber, const float linearRms) const;
+
+    size_t m_minTrackCountForMultithreading = 0;
 
     std::vector<float> m_writeCacheBuff;
 
@@ -87,6 +96,7 @@ private:
     std::vector<IFxProcessorPtr> m_masterFxProcessors = {};
 
     std::map<TrackId, MixerChannelPtr> m_trackChannels = {};
+    std::unordered_set<TrackId> m_tracksToProcessWhenIdle;
 
     struct AuxChannelInfo {
         MixerChannelPtr channel;
@@ -104,6 +114,7 @@ private:
     mutable AudioSignalsNotifier m_audioSignalNotifier;
 
     bool m_isSilence = false;
+    bool m_isIdle = false;
 };
 
 using MixerPtr = std::shared_ptr<Mixer>;

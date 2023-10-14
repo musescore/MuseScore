@@ -86,6 +86,8 @@ private:
 
     async::Channel<TrackPtr> m_trackAboutToBeAdded;
     async::Channel<TrackPtr> m_trackAboutToBeRemoved;
+
+    TrackId m_prevActiveTrackId = INVALID_TRACK_ID;
 };
 }
 

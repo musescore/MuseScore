@@ -58,6 +58,8 @@ using aux_channel_idx_t = uint8_t;
 using PlaybackData = std::variant<mpe::PlaybackData, io::IODevice*>;
 using PlaybackSetupData = mpe::PlaybackSetupData;
 
+static constexpr TrackId INVALID_TRACK_ID = -1;
+
 static constexpr int MINIMUM_BUFFER_SIZE = 1024;
 
 enum class SoundTrackType {
@@ -381,6 +383,7 @@ using AudioDeviceList = std::vector<AudioDevice>;
 enum class RenderMode {
     Undefined = -1,
     RealTimeMode,
+    IdleMode,
     OfflineMode
 };
 }

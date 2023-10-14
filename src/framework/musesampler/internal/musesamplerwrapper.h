@@ -78,6 +78,8 @@ protected:
 
     std::array<float*, 2> m_internalBuffer;
 
+    bool m_offlineModeStarted = false;
+
     MuseSamplerSequencer m_sequencer;
 };
 

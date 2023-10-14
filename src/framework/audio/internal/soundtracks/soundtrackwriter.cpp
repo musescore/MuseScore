@@ -79,7 +79,7 @@ Ret SoundTrackWriter::write()
     DEFER {
         m_encoderPtr->flush();
 
-        AudioEngine::instance()->setMode(RenderMode::RealTimeMode);
+        AudioEngine::instance()->setMode(RenderMode::IdleMode);
 
         m_source->setSampleRate(AudioEngine::instance()->sampleRate());
         m_source->setIsActive(false);

@@ -90,6 +90,11 @@ async::Notification AudioConfigurationStub::sampleRateChanged() const
     return async::Notification();
 }
 
+size_t AudioConfigurationStub::minTrackCountForMultithreading() const
+{
+    return 0;
+}
+
 // synthesizers
 AudioInputParams AudioConfigurationStub::defaultAudioInputParams() const
 {

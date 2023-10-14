@@ -84,6 +84,7 @@ void MuseSamplerWrapper::setSampleRate(unsigned int sampleRate)
 
     if (currentRenderMode() == audio::RenderMode::OfflineMode) {
         m_samplerLib->startOfflineMode(m_sampler, m_sampleRate);
+        m_offlineModeStarted = true;
     }
 }
 
@@ -242,8 +243,9 @@ void MuseSamplerWrapper::updateRenderingMode(const audio::RenderMode mode)
         return;
     }
 
-    if (mode != audio::RenderMode::OfflineMode) {
+    if (mode != audio::RenderMode::OfflineMode && m_offlineModeStarted) {
         m_samplerLib->stopOfflineMode(m_sampler);
+        m_offlineModeStarted = false;
     }
 }
 

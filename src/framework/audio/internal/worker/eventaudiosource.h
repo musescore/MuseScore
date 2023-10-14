@@ -37,7 +37,9 @@ class EventAudioSource : public ITrackAudioInput, public async::Asyncable
     INJECT(synth::ISynthResolver, synthResolver)
 
 public:
-    explicit EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData);
+    using OnOffStreamEventsReceived = std::function<void (const TrackId)>;
+
+    explicit EventAudioSource(const TrackId trackId, const mpe::PlaybackData& playbackData, OnOffStreamEventsReceived onOffStreamReceived);
 
     ~EventAudioSource() override;
 
