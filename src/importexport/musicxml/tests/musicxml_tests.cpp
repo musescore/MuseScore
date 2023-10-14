@@ -61,7 +61,7 @@ static const std::string PREF_EXPORT_MUSICXML_EXPORTINVISIBLE("export/musicXML/e
 class Musicxml_Tests : public ::testing::Test
 {
 public:
-    void mxmlIoTest(const char* file);
+    void mxmlIoTest(const char* file, bool exportLayout = false);
     void mxmlIoTestRef(const char* file);
     void mxmlIoTestRefBreaks(const char* file);
     void mxmlMscxExportTestRef(const char* file, bool exportLayout = false);
@@ -127,13 +127,13 @@ bool Musicxml_Tests::saveCompareMusicXmlScore(MasterScore* score, const String& 
 //   read a MusicXML file, write to a new file and verify both files are identical
 //---------------------------------------------------------
 
-void Musicxml_Tests::mxmlIoTest(const char* file)
+void Musicxml_Tests::mxmlIoTest(const char* file, bool exportLayout)
 {
     MScore::debugMode = true;
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
-    setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
+    setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(exportLayout));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
 
     String fileName = String::fromUtf8(file);
@@ -155,6 +155,7 @@ void Musicxml_Tests::mxmlIoTestRef(const char* file)
     MScore::debugMode = true;
 
     setValue(PREF_EXPORT_MUSICXML_EXPORTBREAKS, Val(IMusicXmlConfiguration::MusicxmlExportBreaksType::Manual));
+    setValue(PREF_EXPORT_MUSICXML_EXPORTLAYOUT, Val(false));
     setValue(PREF_IMPORT_MUSICXML_IMPORTBREAKS, Val(true));
     setValue(PREF_EXPORT_MUSICXML_EXPORTINVISIBLE, Val(true));
 
@@ -628,6 +629,9 @@ TEST_F(Musicxml_Tests, keysig1) {
 TEST_F(Musicxml_Tests, keysig2) {
     mxmlIoTest("testKeysig2");
 }
+TEST_F(Musicxml_Tests, layout) {
+    mxmlIoTest("testLayout", true);
+}
 TEST_F(Musicxml_Tests, lessWhiteSpace) {
     mxmlIoTestRef("testLessWhiteSpace");
 }
@@ -816,6 +820,9 @@ TEST_F(Musicxml_Tests, systemBrackets5) {
 }
 TEST_F(Musicxml_Tests, systemDistance) {
     mxmlMscxExportTestRef("testSystemDistance", true);
+}
+TEST_F(Musicxml_Tests, systemDividers) {
+    mxmlIoTest("testSystemDividers", true);
 }
 TEST_F(Musicxml_Tests, tablature1) {
     mxmlIoTest("testTablature1");

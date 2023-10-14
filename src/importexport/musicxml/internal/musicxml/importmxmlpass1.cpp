@@ -1535,9 +1535,7 @@ void MusicXMLParserPass1::defaults()
     bool isImportLayout = musicxmlImportLayout();
 
     while (_e.readNextStartElement()) {
-        if (_e.name() == "appearance") {
-            _e.skipCurrentElement();        // skip but don't log
-        } else if (_e.name() == "scaling") {
+        if (_e.name() == "scaling") {
             while (_e.readNextStartElement()) {
                 if (_e.name() == "millimeters") {
                     millimeter = _e.readElementText().toDouble();
@@ -1559,18 +1557,36 @@ void MusicXMLParserPass1::defaults()
             }
         } else if (_e.name() == "system-layout") {
             while (_e.readNextStartElement()) {
-                if (_e.name() == "system-dividers") {
-                    _e.skipCurrentElement();            // skip but don't log
-                } else if (_e.name() == "system-margins") {
+                if (_e.name() == "system-margins") {
                     _e.skipCurrentElement();            // skip but don't log
                 } else if (_e.name() == "system-distance") {
-                    Spatium val(_e.readElementText().toDouble() / 10.0);
+                    const Spatium val(_e.readElementText().toDouble() / 10.0);
                     if (isImportLayout) {
                         _score->style().set(Sid::minSystemDistance, val);
                         //LOGD("system distance %f", val.val());
                     }
                 } else if (_e.name() == "top-system-distance") {
                     _e.skipCurrentElement();            // skip but don't log
+                } else if (_e.name() == "system-dividers") {
+                    while (_e.readNextStartElement()) {
+                        if (_e.name() == "left-divider") {
+                            _score->style().set(Sid::dividerLeft, (_e.attributes().value("print-object") != "no"));
+                            if (isImportLayout) {
+                                _score->style().set(Sid::dividerLeftX, _e.attributes().value("relative-x").toDouble() / 10.0);
+                                _score->style().set(Sid::dividerLeftY, _e.attributes().value("relative-y").toDouble() / 10.0);
+                            }
+                            _e.skipCurrentElement();
+                        } else if (_e.name() == "right-divider") {
+                            _score->style().set(Sid::dividerRight, (_e.attributes().value("print-object") != "no"));
+                            if (isImportLayout) {
+                                _score->style().set(Sid::dividerRightX, _e.attributes().value("relative-x").toDouble() / 10.0);
+                                _score->style().set(Sid::dividerRightY, _e.attributes().value("relative-y").toDouble() / 10.0);
+                            }
+                            _e.skipCurrentElement();
+                        } else {
+                            skipLogCurrElem();
+                        }
+                    }
                 } else {
                     skipLogCurrElem();
                 }
@@ -1582,6 +1598,29 @@ void MusicXMLParserPass1::defaults()
                     if (isImportLayout) {
                         _score->style().set(Sid::staffDistance, val);
                     }
+                } else {
+                    skipLogCurrElem();
+                }
+            }
+        } else if (_e.name() == "appearance") {
+            while (_e.readNextStartElement()) {
+                const QString type = _e.attributes().value("type").toString();
+                if (_e.name() == "line-width") {
+                    const double val = _e.readElementText().toDouble();
+                    if (isImportLayout) {
+                        setStyle(type, val);
+                    }
+                } else if (_e.name() == "note-size") {
+                    const double val = _e.readElementText().toDouble();
+                    if (isImportLayout) {
+                        setStyle(type, val);
+                    }
+                } else if (_e.name() == "distance") {
+                    _e.skipCurrentElement();        // skip but don't log
+                } else if (_e.name() == "glyph") {
+                    _e.skipCurrentElement();        // skip but don't log
+                } else if (_e.name() == "other-appearance") {
+                    _e.skipCurrentElement();        // skip but don't log
                 } else {
                     skipLogCurrElem();
                 }
@@ -1609,6 +1648,55 @@ void MusicXMLParserPass1::defaults()
            qPrintable(lyricFontFamily), qPrintable(lyricFontSize));
     */
     updateStyles(_score, wordFontFamily, wordFontSize, lyricFontFamily, lyricFontSize);
+}
+
+//---------------------------------------------------------
+//   setStyle
+//---------------------------------------------------------
+
+void MusicXMLParserPass1::setStyle(const QString& type, const double val)
+{
+    if (type == "light barline") {
+        _score->style().set(Sid::barWidth, Spatium(val / 10));
+    } else if (type == "heavy barline") {
+        _score->style().set(Sid::endBarWidth, Spatium(val / 10));
+    } else if (type == "beam") {
+        _score->style().set(Sid::beamWidth, Spatium(val / 10));
+    } else if (type == "bracket") {
+        _score->style().set(Sid::bracketWidth, Spatium(val / 10));
+    } else if (type == "dashes") {
+        _score->style().set(Sid::lyricsDashLineThickness, Spatium(val / 10));
+    } else if (type == "enclosure") {
+        _score->style().set(Sid::staffTextFrameWidth, Spatium(val / 10));
+    } else if (type == "ending") {
+        _score->style().set(Sid::voltaLineWidth, Spatium(val / 10));
+    } else if (type == "extend") {
+        _score->style().set(Sid::lyricsLineThickness, Spatium(val / 10));
+    } else if (type == "leger") {
+        _score->style().set(Sid::ledgerLineWidth, Spatium(val / 10));
+    } else if (type == "pedal") {
+        _score->style().set(Sid::pedalLineWidth, Spatium(val / 10));
+    } else if (type == "octave shift") {
+        _score->style().set(Sid::ottavaLineWidth, Spatium(val / 10));
+    } else if (type == "staff") {
+        _score->style().set(Sid::staffLineWidth, Spatium(val / 10));
+    } else if (type == "stem") {
+        _score->style().set(Sid::stemWidth, Spatium(val / 10));
+    } else if (type == "tuplet bracket") {
+        _score->style().set(Sid::tupletBracketWidth, Spatium(val / 10));
+    } else if (type == "wedge") {
+        _score->style().set(Sid::hairpinLineWidth, Spatium(val / 10));
+    } else if ((type == "slur middle") || (type == "tie middle")) {
+        _score->style().set(Sid::SlurMidWidth, Spatium(val / 10));
+    } else if ((type == "slur tip") || (type == "tie tip")) {
+        _score->style().set(Sid::SlurEndWidth, Spatium(val / 10));
+    } else if ((type == "cue")) {
+        _score->style().set(Sid::smallNoteMag, val / 100);
+    } else if ((type == "grace")) {
+        _score->style().set(Sid::graceNoteMag, val / 100);
+    } else if ((type == "grace-cue")) {
+        // not supported
+    }
 }
 
 //---------------------------------------------------------
@@ -1665,12 +1753,12 @@ void MusicXMLParserPass1::pageLayout(PageFormat& pf, const qreal conversion)
                 pf.evenBottomMargin = bm;
             }
         } else if (_e.name() == "page-height") {
-            double val = _e.readElementText().toDouble();
+            const double val = _e.readElementText().toDouble();
             size.rheight() = val * conversion;
             // set pageHeight and pageWidth for use by doCredits()
             _pageSize.setHeight(static_cast<int>(val + 0.5));
         } else if (_e.name() == "page-width") {
-            double val = _e.readElementText().toDouble();
+            const double val = _e.readElementText().toDouble();
             size.rwidth() = val * conversion;
             // set pageHeight and pageWidth for use by doCredits()
             _pageSize.setWidth(static_cast<int>(val + 0.5));
