@@ -61,8 +61,8 @@
       <note-size type="grace">70</note-size>
       <note-size type="grace-cue">49</note-size>
       </appearance>
-      <music-font font-family="Leland"/>
-            <word-font font-family="Edwin" font-size="10"/>
+    <music-font font-family="Leland"/>
+    <word-font font-family="Edwin" font-size="10"/>
     <lyric-font font-family="Edwin" font-size="10"/>
     </defaults>
   <credit page="1">
