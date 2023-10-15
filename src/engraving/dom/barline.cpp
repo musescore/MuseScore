@@ -69,10 +69,17 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             m->undoChangeProperty(Pid::REPEAT_START, false);
         }
         m = m->prevMeasure();
-        if (!m || m->isFirstInSystem()) {
+        if (!m || (m->system() && m->isFirstInSystem())) {
             return;
         }
         bl = const_cast<BarLine*>(m->endBarLine());
+
+        if (!bl) {
+            // TODO investigate, why barline is missing,
+            // when standard measure changes to multimeasure-rest measure after inserting measure
+            // see GH #19684
+            return;
+        }
     }
 
     switch (barType) {
@@ -130,7 +137,7 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                     }
 
                     lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
-                    if (lmeasure->nextMeasure() && !lmeasure->nextMeasure()->isFirstInSystem()) {
+                    if (lmeasure->nextMeasure() && (!lmeasure->nextMeasure()->system() || !lmeasure->nextMeasure()->isFirstInSystem())) {
                         lmeasure->nextMeasure()->undoChangeProperty(Pid::REPEAT_START, false);
                     }
                     Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
