@@ -58,13 +58,6 @@ fi
     #   if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
     #   run: |
     #     sudo python3 ./tools/translations/placeholder_translations.py
-#    - name: Generate .qm files
-#      if: env.DO_BUILD == 'true'
-if [ $DO_BUILD == 'true' ]; then
-#      run: |
-        bash ./build/ci/translation/run_lrelease.sh  
-fi   
-
 #exit 0
 #    - name: Build
 #      if: env.DO_BUILD == 'true'
