@@ -63,8 +63,8 @@ public:
 
     enum class Type {
         Fixed,      // fixed size, like just bbox
-        FixedX,     // not implemented (reserved)
-        FixedY,     // not implemented (reserved)
+//        FixedX,     // not implemented (reserved)
+//        FixedY,     // not implemented (reserved)
         Composite   // composed of other shapes
     };
 
@@ -79,6 +79,20 @@ public:
     size_t size() const { return m_elements.size(); }
     bool empty() const { return m_elements.empty(); }
     void clear() { m_elements.clear(); }
+
+    bool equal(const Shape& sh) const
+    {
+        if (m_type != sh.m_type) {
+            return false;
+        }
+
+        switch (m_type) {
+        case Type::Fixed: return this->bbox() == sh.bbox();
+        case Type::Composite: return this->m_elements == sh.m_elements;
+        }
+
+        return true;
+    }
 
     // Fixed
     void setBBox(const mu::RectF& r);

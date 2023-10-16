@@ -108,7 +108,7 @@ public:
     bool edit(EditData& ed) override;
     void editDrag(EditData&) override;
     void endEditDrag(EditData&) override;
-    Shape shape() const override;
+    Shape doCreateShape() const override;
 
     const ElementList* el() const { return &m_el; }
 

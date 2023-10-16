@@ -846,7 +846,7 @@ bool Beam::hasAllRests()
     return true;
 }
 
-Shape Beam::shape() const
+Shape Beam::doCreateShape() const
 {
     Shape shape;
     for (BeamSegment* beamSegment : m_beamSegments) {

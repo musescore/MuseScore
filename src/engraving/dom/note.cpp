@@ -3439,7 +3439,7 @@ void Note::setAccidentalType(AccidentalType type)
 //   shape
 //---------------------------------------------------------
 
-Shape Note::shape() const
+Shape Note::doCreateShape() const
 {
     RectF r(ldata()->bbox(LD_ACCESS::BAD));
 

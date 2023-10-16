@@ -64,7 +64,7 @@ public:
     GraceNotesGroup(Chord* c);
 
     Chord* parent() const { return _parent; }
-    Shape shape() const override;
+    Shape doCreateShape() const override;
 
     void setPos(double x, double y) override;
     Segment* appendedSegment() const { return _appendedSegment; }
@@ -266,7 +266,7 @@ public:
     AccessibleItemPtr createAccessible() override;
 #endif
 
-    Shape shape() const override;
+    Shape doCreateShape() const override;
     void undoChangeProperty(Pid id, const PropertyValue& newValue);
     void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
 

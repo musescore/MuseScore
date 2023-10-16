@@ -186,7 +186,7 @@ public:
     virtual EngravingItem* nextSegmentElement() override;
     virtual EngravingItem* prevSegmentElement() override;
     virtual String accessibleExtraInfo() const override;
-    virtual Shape shape() const override;
+    virtual Shape doCreateShape() const override;
     virtual void computeUp();
 
     bool isFullMeasureRest() const { return m_durationType == DurationType::V_MEASURE; }

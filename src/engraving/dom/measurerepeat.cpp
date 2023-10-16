@@ -126,7 +126,7 @@ RectF MeasureRepeat::numberRect() const
 //   shape
 //---------------------------------------------------------
 
-Shape MeasureRepeat::shape() const
+Shape MeasureRepeat::doCreateShape() const
 {
     Shape shape;
     shape.add(numberRect());

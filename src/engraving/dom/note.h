@@ -400,7 +400,7 @@ public:
     String screenReaderInfo() const override;
     String accessibleExtraInfo() const override;
 
-    Shape shape() const override;
+    Shape doCreateShape() const override;
     std::vector<Note*> tiedNotes() const;
 
     void setOffTimeType(int v) { m_offTimeType = v; }

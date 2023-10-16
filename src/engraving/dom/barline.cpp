@@ -848,7 +848,7 @@ void BarLine::endEditDrag(EditData& ed)
 //   shape
 //---------------------------------------------------------
 
-Shape BarLine::shape() const
+Shape BarLine::doCreateShape() const
 {
     Shape shape;
     shape.add(ldata()->bbox(), this);

@@ -388,7 +388,7 @@ void Ornament::updateCueNote()
     cueNote->setIsTrillCueNote(true);
 }
 
-Shape Ornament::shape() const
+Shape Ornament::doCreateShape() const
 {
     Shape s;
     s.add(ldata()->bbox(), this);

@@ -536,6 +536,14 @@ public:
             return m_shape.value(mode).bbox();
         }
 
+//        Shape shape() const
+//        {
+//            Shape old = m_item->_internal_shape();
+//            const Shape& sh = m_shape.value(LD_ACCESS::CHECK);
+//            DO_ASSERT(old.equal(sh));
+//            return old;
+//        }
+
         void setBbox(const mu::RectF& r)
         {
             DO_ASSERT(!std::isnan(r.x()) && !std::isinf(r.x()));
@@ -585,6 +593,9 @@ public:
         Shape& mutShape() { return m_shape.mut_value(); }
         bool isShapeComposite() const { return m_shape.has_value() && m_shape.value().isComposite(); }
 
+        friend class EngravingItem;
+
+        const EngravingItem* m_item = nullptr;
         bool m_isSkipDraw = false;
         double m_mag = 1.0;                     // standard magnification (derived value)
         ld_field<PointF> m_pos = "pos";         // Reference position, relative to _parent, set by autoplace
@@ -595,7 +606,7 @@ public:
     LayoutData* mutldata();
 
     virtual double mag() const;
-    virtual Shape shape() const { return Shape(ldata()->bbox(), this); }
+    Shape shape() const { return doCreateShape(); }
     virtual double baseLine() const { return -height(); }
 
     mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
@@ -618,6 +629,9 @@ public:
     double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).width(); }
     void setWidth(double v) { mutldata()->setWidth(v); }
 
+    //! NOTE Temporary method, don't use it
+    Shape _internal_shape() const { return doCreateShape(); }
+
     virtual const PointF pos() const { return ldata()->pos() + m_offset; }
     virtual double x() const { return ldata()->pos().x() + m_offset.x(); }
     virtual double y() const { return ldata()->pos().y() + m_offset.y(); }
@@ -639,6 +653,8 @@ protected:
 #endif
 
     virtual LayoutData* createLayoutData() const;
+
+    virtual Shape doCreateShape() const { return Shape(ldata()->bbox(), this); }
 
     mutable int m_z = 0;
     mu::draw::Color m_color;                // element color attribute
