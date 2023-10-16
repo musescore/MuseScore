@@ -2255,8 +2255,8 @@ void Beam::reset()
             undoChangeProperty(Pid::USER_MODIFIED, false);
             }
       undoChangeProperty(Pid::STEM_DIRECTION, QVariant::fromValue<Direction>(Direction::AUTO));
-      resetProperty(Pid::BEAM_NO_SLOPE);
-      setGenerated(true);
+      undoResetProperty(Pid::BEAM_NO_SLOPE);
+      undoChangeProperty(Pid::GENERATED, true);
       }
 
 //---------------------------------------------------------
