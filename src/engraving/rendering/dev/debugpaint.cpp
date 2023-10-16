@@ -106,7 +106,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
     painter.translate(-pos);
 }
 
-void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
+void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::vector<EngravingItem*>& items)
 {
     IF_ASSERT_FAILED(page) {
         return;
@@ -122,7 +122,6 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
 
     painter.save();
 
-    EngravingItemList items = page->childrenItems(true);
     for (const EngravingItem* item : items) {
         paintElementDebug(painter, item);
     }
