@@ -82,11 +82,11 @@ public:
 
     bool equal(const Shape& sh) const
     {
-        if (m_type != sh.m_type) {
-            return false;
-        }
+//        if (m_type != sh.m_type) {
+//            return false;
+//        }
 
-        switch (m_type) {
+        switch (sh.type()) {
         case Type::Fixed: return this->bbox() == sh.bbox();
         case Type::Composite: return this->m_elements == sh.m_elements;
         }

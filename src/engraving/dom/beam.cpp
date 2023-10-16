@@ -848,11 +848,8 @@ bool Beam::hasAllRests()
 
 Shape Beam::doCreateShape() const
 {
-    Shape shape;
-    for (BeamSegment* beamSegment : m_beamSegments) {
-        shape.add(beamSegment->shape());
-    }
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 
 //-------------------------------------------------------
