@@ -243,7 +243,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/realizedharmony.h
     ${CMAKE_CURRENT_LIST_DIR}/rehearsalmark.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rehearsalmark.h
-    ${CMAKE_CURRENT_LIST_DIR}/rendermidi.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeatlist.cpp
     ${CMAKE_CURRENT_LIST_DIR}/repeatlist.h
     ${CMAKE_CURRENT_LIST_DIR}/rest.cpp

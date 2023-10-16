@@ -33,6 +33,7 @@
 #include "engraving/dom/tempo.h"
 
 #include "engraving/compat/midi/event.h"
+#include "engraving/compat/midi/compatmidirender.h"
 
 #include "log.h"
 
@@ -234,7 +235,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     ctx.instrumentsHaveEffects = false;
     ctx.metronome = false;
     ctx.synthState = synthState;
-    m_score->renderMidi(events, ctx, midiExpandRepeats);
+    CompatMidiRender::renderScore(m_score, events, ctx, midiExpandRepeats);
 
     m_pauseMap.calculate(m_score);
     writeHeader();

@@ -1,10 +1,11 @@
 #include "compatmidirender.h"
 
 namespace mu::engraving {
-void CompatMidiRender::renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx)
+void CompatMidiRender::renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx, bool expandRepeats)
 {
+    score->masterScore()->setExpandRepeats(expandRepeats);
     CompatMidiRendererInternal internal{ score };
-    internal.renderScore(events, ctx);
+    internal.renderScore(events, ctx, expandRepeats);
 }
 
 void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start, Measure const* const end)

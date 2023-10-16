@@ -1104,7 +1104,7 @@ void CompatMidiRendererInternal::renderMetronome(EventsHolder& events, Measure c
     }
 }
 
-void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context& ctx)
+void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context& ctx, bool expandRepeats)
 {
     _context = ctx;
     PitchWheelRenderer pitchWheelRender(wheelSpec);

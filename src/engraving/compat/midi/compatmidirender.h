@@ -75,8 +75,8 @@ using namespace mu::engraving;
 class CompatMidiRender
 {
 public:
-    static void renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx);
-    static void createPlayEvents(const Score* score, Measure const* start = nullptr, Measure const* const end = nullptr);
+    static void renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx, bool expandRepeats);
+    static void createPlayEvents(const Score* score, Measure const* start = nullptr, Measure const* end = nullptr);
     static void createPlayEvents(const Score* score, Chord* chord, Chord* prevChord = nullptr, Chord* nextChord = nullptr);
 private:
     static void createGraceNotesPlayEvents(const Score* score, const Fraction& tick, Chord* chord, int& ontime, int& trailtime);
