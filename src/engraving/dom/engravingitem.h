@@ -536,13 +536,25 @@ public:
             return m_shape.value(mode).bbox();
         }
 
-//        Shape shape() const
-//        {
-//            Shape old = m_item->_internal_shape();
-//            const Shape& sh = m_shape.value(LD_ACCESS::CHECK);
-//            DO_ASSERT(old.equal(sh));
-//            return old;
-//        }
+        bool isSetShape() const { return m_shape.has_value(); }
+        void clearShape() { m_shape.reset(); }
+        Shape shape() const
+        {
+            const Shape& sh = m_shape.value(LD_ACCESS::CHECK);
+
+            //! NOTE Temporary for debuging
+            {
+                switch (m_item->type()) {
+                case ElementType::BEAM: return sh;
+                default:
+                    break;
+                }
+            }
+            Shape old = m_item->_internal_shape();
+            return old;
+        }
+
+        void setShape(const Shape& sh) { m_shape.set_value(sh); }
 
         void setBbox(const mu::RectF& r)
         {
@@ -606,7 +618,7 @@ public:
     LayoutData* mutldata();
 
     virtual double mag() const;
-    Shape shape() const { return doCreateShape(); }
+    Shape shape() const { return ldata()->shape(); }
     virtual double baseLine() const { return -height(); }
 
     mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }
