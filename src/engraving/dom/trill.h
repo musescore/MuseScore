@@ -51,7 +51,7 @@ public:
     EngravingItem* propertyDelegate(Pid) override;
 
     void remove(EngravingItem*) override;
-    Shape shape() const override;
+    Shape doCreateShape() const override;
 
     const SymIdList& symbols() const { return _symbols; }
     void setSymbols(const SymIdList& s) { _symbols = s; }

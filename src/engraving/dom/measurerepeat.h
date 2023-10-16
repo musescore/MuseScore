@@ -61,7 +61,7 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue getProperty(Pid) const override;
 
-    Shape shape() const override;
+    Shape doCreateShape() const override;
 
     String accessibleInfo() const override;
 

@@ -2816,7 +2816,7 @@ String Chord::accessibleExtraInfo() const
 //    does not contain articulations
 //---------------------------------------------------------
 
-Shape Chord::shape() const
+Shape Chord::doCreateShape() const
 {
     Shape shape;
     if (m_hook && m_hook->addToSkyline()) {
@@ -2841,7 +2841,7 @@ Shape Chord::shape() const
             shape.add(e->shape().translate(e->pos()));
         }
     }
-    shape.add(ChordRest::shape());      // add lyrics
+    shape.add(ChordRest::doCreateShape());      // add lyrics
     for (LedgerLine* l = m_ledgerLines; l; l = l->next()) {
         shape.add(l->shape().translate(l->pos()));
     }
@@ -3001,7 +3001,7 @@ void GraceNotesGroup::addToShape()
     }
 }
 
-Shape GraceNotesGroup::shape() const
+Shape GraceNotesGroup::doCreateShape() const
 {
     Shape shape;
     for (Chord* grace : *this) {

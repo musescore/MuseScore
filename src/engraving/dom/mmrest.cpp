@@ -138,7 +138,7 @@ bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
 //   shape
 //---------------------------------------------------------
 
-Shape MMRest::shape() const
+Shape MMRest::doCreateShape() const
 {
     Shape shape;
     double vStrokeHeight = style().styleMM(Sid::mmRestHBarVStrokeHeight);

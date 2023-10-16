@@ -124,7 +124,7 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 //   shape
 //---------------------------------------------------------
 
-Shape TrillSegment::shape() const
+Shape TrillSegment::doCreateShape() const
 {
     IEngravingFontPtr font = score()->engravingFont();
     Shape s = font->shape(_symbols, magS());

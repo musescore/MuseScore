@@ -2351,6 +2351,7 @@ const EngravingItem::LayoutData* EngravingItem::ldata() const
 {
     if (!m_layoutData) {
         m_layoutData = createLayoutData();
+        m_layoutData->m_item = this;
     }
     return m_layoutData;
 }
@@ -2359,6 +2360,7 @@ EngravingItem::LayoutData* EngravingItem::mutldata()
 {
     if (!m_layoutData) {
         m_layoutData = createLayoutData();
+        m_layoutData->m_item = this;
     }
     return m_layoutData;
 }

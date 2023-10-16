@@ -110,7 +110,7 @@ EngravingItem* HairpinSegment::drop(EditData& data)
 //   shape
 //---------------------------------------------------------
 
-Shape HairpinSegment::shape() const
+Shape HairpinSegment::doCreateShape() const
 {
     switch (hairpin()->hairpinType()) {
     case HairpinType::CRESC_HAIRPIN:
@@ -119,7 +119,7 @@ Shape HairpinSegment::shape() const
     case HairpinType::DECRESC_LINE:
     case HairpinType::CRESC_LINE:
     default:
-        return TextLineBaseSegment::shape();
+        return TextLineBaseSegment::doCreateShape();
     }
 }
 

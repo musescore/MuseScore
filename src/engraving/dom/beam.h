@@ -209,7 +209,7 @@ public:
 
     bool hasAllRests();
 
-    Shape shape() const override;
+    Shape doCreateShape() const override;
 
     const std::vector<TremAnchor>& tremAnchors() const { return m_tremAnchors; }
     std::vector<TremAnchor>& tremAnchors() { return m_tremAnchors; }

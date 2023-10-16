@@ -65,7 +65,7 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    Shape shape() const override;
+    Shape doCreateShape() const override;
 
     int gripsCount() const override;
     std::vector<mu::PointF> gripsPositions(const EditData& = EditData()) const override;

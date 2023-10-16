@@ -270,7 +270,7 @@ public:
 //   shape
 //---------------------------------------------------------
 
-Shape Tuplet::shape() const
+Shape Tuplet::doCreateShape() const
 {
     Shape s;
     if (m_hasBracket) {

@@ -949,11 +949,11 @@ EngravingItem* Rest::prevElement()
 //   shape
 //---------------------------------------------------------
 
-Shape Rest::shape() const
+Shape Rest::doCreateShape() const
 {
     Shape shape;
     if (!m_gap) {
-        shape.add(ChordRest::shape());
+        shape.add(ChordRest::doCreateShape());
         shape.add(symBbox(ldata()->sym()), this);
         for (NoteDot* dot : m_dots) {
             shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);

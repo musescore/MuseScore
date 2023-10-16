@@ -95,7 +95,7 @@ RectF TextLineBaseSegment::boundingBoxOfLine(const PointF& p1, const PointF& p2,
 //   shape
 //---------------------------------------------------------
 
-Shape TextLineBaseSegment::shape() const
+Shape TextLineBaseSegment::doCreateShape() const
 {
     Shape shape;
     if (!m_text->empty()) {

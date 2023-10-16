@@ -1124,7 +1124,7 @@ void ChordRest::setMelismaEnd(bool v)
 //   shape
 //---------------------------------------------------------
 
-Shape ChordRest::shape() const
+Shape ChordRest::doCreateShape() const
 {
     Shape shape;
     {
