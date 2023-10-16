@@ -82,7 +82,7 @@ public:
     void updateDiagramText();
 
     bool isTpcPlayable(int tpc);
-    std::set<int> playableTpcs() { return m_playableTpcs; }
+    const std::set<int>& playableTpcs() const { return m_playableTpcs; }
 
 private:
 

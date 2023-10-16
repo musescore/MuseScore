@@ -51,15 +51,17 @@ ExpandableBlank {
         titleText: qsTrc("inspector", "Style")
         propertyItem: root.model ? root.model.styleType : null
 
-        model: isHarpGliss ? [
-                            { text: qsTrc("inspector", "Default (Diatonic)"), value: Glissando.STYLE_DIATONIC },
-                            { text: qsTrc("inspector", "Chromatic"), value: Glissando.STYLE_CHROMATIC }
-            ] : [
-            { text: qsTrc("inspector", "Chromatic"), value: Glissando.STYLE_CHROMATIC },
-            { text: qsTrc("inspector", "White keys"), value: Glissando.STYLE_WHITE_KEYS },
-            { text: qsTrc("inspector", "Black keys"), value: Glissando.STYLE_BLACK_KEYS },
-            { text: qsTrc("inspector", "Diatonic"), value: Glissando.STYLE_DIATONIC },
-            { text: qsTrc("inspector", "Portamento"), value: Glissando.STYLE_PORTAMENTO }
-        ]
+        model: root.isHarpGliss
+               ? [
+                     { text: qsTrc("inspector", "Default (Diatonic)"), value: Glissando.STYLE_DIATONIC },
+                     { text: qsTrc("inspector", "Chromatic"), value: Glissando.STYLE_CHROMATIC }
+                 ]
+               : [
+                     { text: qsTrc("inspector", "Chromatic"), value: Glissando.STYLE_CHROMATIC },
+                     { text: qsTrc("inspector", "White keys"), value: Glissando.STYLE_WHITE_KEYS },
+                     { text: qsTrc("inspector", "Black keys"), value: Glissando.STYLE_BLACK_KEYS },
+                     { text: qsTrc("inspector", "Diatonic"), value: Glissando.STYLE_DIATONIC },
+                     { text: qsTrc("inspector", "Portamento"), value: Glissando.STYLE_PORTAMENTO }
+                 ]
     }
 }

@@ -38,9 +38,6 @@ public:
     PropertyItem* styleType() const;
     bool isHarpGliss() const;
 
-public slots:
-    void setIsHarpGliss(bool isHarpGliss);
-
 signals:
     void isHarpGlissChanged(bool isHarpGliss);
 
@@ -52,6 +49,7 @@ protected:
 
 private:
     void updateIsHarpGliss();
+    void setIsHarpGliss(bool isHarpGliss);
 
     PropertyItem* m_styleType = nullptr;
 
