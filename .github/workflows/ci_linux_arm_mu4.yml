@@ -127,7 +127,6 @@ jobs:
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
         sudo docker run -i -v "${PWD}:/MuseScore" "arm32v7/ubuntu:bionic" /bin/bash -c "cd /MuseScore && \
         bash /MuseScore/build/ci/linux/setup-arm.sh --arch armv7l && \
-        bash /MuseScore/build/ci/translation/run_lrelease.sh && \
         bash /MuseScore/build/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --arch armv7l && \
         bash ./build/ci/linux/dumpsyms.sh && \
         bash /MuseScore/build/ci/linux/package.sh --arch armv7l && \
@@ -247,7 +246,6 @@ jobs:
         C_URL=${SENTRY_URL}; if [ -z "$C_URL" ]; then C_URL="''"; fi
         sudo docker run -i -v "${PWD}:/MuseScore" "arm64v8/ubuntu:bionic" /bin/bash -c "cd /MuseScore && \
         bash /MuseScore/build/ci/linux/setup-arm.sh --arch aarch64 && \
-        bash /MuseScore/build/ci/translation/run_lrelease.sh && \
         bash /MuseScore/build/ci/linux/build.sh -n ${{ env.BUILD_NUMBER }} --youtube_api_key $YT_API_KEY --crash_log_url $C_URL --arch aarch64 && \
         bash ./build/ci/linux/dumpsyms.sh && \
         bash /MuseScore/build/ci/linux/package.sh --arch aarch64 && \

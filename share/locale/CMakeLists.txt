@@ -18,37 +18,22 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-file(GLOB INSTRUMENTS_TS_FILES  ${CMAKE_CURRENT_LIST_DIR}/instruments_*.ts )
-file(GLOB MUSESCORE_TS_FILES    ${CMAKE_CURRENT_LIST_DIR}/musescore_*.ts )
-file(GLOB QT_TS_FILES           ${CMAKE_CURRENT_LIST_DIR}/qt_*.ts )
+file(GLOB TS_FILES CONFIGURE_DEPENDS ${CMAKE_CURRENT_LIST_DIR}/*.ts)
 
-# Translations update and generate on CI
 if (MUE_RUN_LRELEASE)
-    add_custom_command(
-        OUTPUT ${CMAKE_CURRENT_LIST_DIR}/musescore_en_US.qm
-        COMMAND Qt5::lrelease ${INSTRUMENTS_TS_FILES}
-        COMMAND Qt5::lrelease ${MUSESCORE_TS_FILES}
-        COMMAND Qt5::lrelease ${QT_TS_FILES}
-        WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
-    )
+    qt5_add_translation(QM_FILES ${TS_FILES})
 
     add_custom_target(lrelease ALL
-        DEPENDS ${CMAKE_CURRENT_LIST_DIR}/musescore_en_US.qm
+        DEPENDS ${QM_FILES}
         COMMENT "Generating .qm files" VERBATIM
     )
 endif()
 
 install(FILES
-      ${CMAKE_CURRENT_LIST_DIR}/languages.json
-      DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
-      )
-
-install(DIRECTORY ./
+    ${CMAKE_CURRENT_LIST_DIR}/languages.json
+    ${QM_FILES}
     DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale
-    FILES_MATCHING
-    REGEX ".*\\.qm"
-    REGEX ".*_en\\.qm" EXCLUDE
-    )
+)
 
 install(DIRECTORY ${QT_INSTALL_PREFIX}/translations/
     DESTINATION ${Mscore_SHARE_NAME}${Mscore_INSTALL_NAME}locale

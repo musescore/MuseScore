@@ -170,11 +170,6 @@ jobs:
       shell: bash
       run: |
         python3 -X utf8 ./tools/translations/placeholder_translations.py --warn-only
-    - name: Generate .qm files
-      if: env.DO_BUILD == 'true'
-      shell: bash
-      run: |
-        bash ./build/ci/translation/run_lrelease.sh      
     - name: Build
       if: env.DO_BUILD == 'true'
       shell: cmd
@@ -312,11 +307,6 @@ jobs:
       run: |
         bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s windows
         bash ./build/ci/translation/tx_pull.sh
-    - name: Generate .qm files
-      if: env.DO_BUILD == 'true'
-      shell: bash
-      run: |
-        bash ./build/ci/translation/run_lrelease.sh      
     - name: Build
       if: env.DO_BUILD == 'true'
       shell: cmd

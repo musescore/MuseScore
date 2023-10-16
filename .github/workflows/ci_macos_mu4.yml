@@ -179,10 +179,6 @@ jobs:
       if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
       run: |
         python3 ./tools/translations/placeholder_translations.py --warn-only
-    - name: Generate .qm files
-      if: env.DO_BUILD == 'true'
-      run: |
-        bash ./build/ci/translation/run_lrelease.sh      
     - name: Build
       if: env.DO_BUILD == 'true'    
       run: |

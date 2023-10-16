@@ -29,9 +29,7 @@ MuseScorePortable
 /*.includes
 *.user
 /share/locale/*placeholder.ts
-*.qm
-share/manual/en
-share/manual/de
+/share/locale/*.qm
 /share/instruments/tsv
 Doc
 DocLib
