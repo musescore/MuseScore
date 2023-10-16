@@ -210,6 +210,7 @@ if (MINGW)
 
     install(FILES
       ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
+      ${QT_INSTALL_PLUGINS}/platforms/qoffscreen.dll
       DESTINATION bin/platforms)
 
     install(FILES
@@ -443,6 +444,7 @@ else (MINGW)
 
       install(FILES
          ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
+         ${QT_INSTALL_PLUGINS}/platforms/qoffscreen.dll
          DESTINATION bin/platforms)
 
       install(FILES
