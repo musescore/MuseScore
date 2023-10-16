@@ -1,6 +1,0 @@
-The Wix.template.in file contains one absolute path to the exe file. It needs to be changed.
-<?define ExeId="CM_FP_bin.$(var.CPACK_PACKAGE_NAME).exe" ?>
-
-To create new version, the 3 digits version of MuseScore needs to be 
-changed and the product ID as well (see Packaging.cmake)
-
