@@ -351,6 +351,7 @@ if (OS_IS_WIN)
 
     install(FILES
             ${QT_INSTALL_PLUGINS}/platforms/qwindows.dll
+            ${QT_INSTALL_PLUGINS}/platforms/qoffscreen.dll
             DESTINATION bin/platforms)
 
     install(FILES
