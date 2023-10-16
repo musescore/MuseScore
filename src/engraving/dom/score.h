@@ -33,7 +33,7 @@
 
 #include "async/channel.h"
 #include "types/ret.h"
-#include "compat/midi/midirender.h"
+#include "compat/midi/compatmidirenderinternal.h"
 
 #include "modularity/ioc.h"
 #include "draw/iimageprovider.h"
@@ -650,7 +650,6 @@ public:
     void cmdPaste(const IMimeData* ms, MuseScoreView* view, Fraction scale = Fraction(1, 1));
     bool pasteStaff(XmlReader&, Segment* dst, staff_idx_t staffIdx, Fraction scale = Fraction(1, 1));
     void pasteSymbols(XmlReader& e, ChordRest* dst);
-    void renderMidi(EventsHolder& events, const MidiRenderer::Context& ctx, bool expandRepeats);
 
     static void transposeChord(Chord* c, const Fraction& tick);
 
@@ -662,7 +661,6 @@ public:
     void addLyrics(const Fraction& tick, staff_idx_t staffIdx, const String&);
 
     void updateSwing();
-    void createPlayEvents(Measure const* start = nullptr, Measure const* const end = nullptr);
 
     void updateCapo();
     void updateVelo();
@@ -954,8 +952,7 @@ protected:
     int m_fileDivision = 0;   // division of current loading *.msc file
     SynthesizerState m_synthesizerState;
 
-    void createPlayEvents(Chord* chord, Chord* prevChord = nullptr, Chord* nextChord = nullptr);
-    void createGraceNotesPlayEvents(const Fraction& tick, Chord* chord, int& ontime, int& trailtime);
+    // NOTE: Looks like this four are unused
     void cmdPitchUp();
     void cmdPitchDown();
     void cmdPitchUpOctave();

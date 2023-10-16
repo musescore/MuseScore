@@ -28,8 +28,7 @@
 #include "ipclock.h"
 #include "ipclog.h"
 
-using namespace mu::ipc;
-
+namespace mu::ipc {
 IpcSocket::~IpcSocket()
 {
     delete m_socket;
@@ -189,4 +188,5 @@ QList<ID> IpcSocket::instances() const
 mu::async::Notification IpcSocket::instancesChanged() const
 {
     return m_instancesChanged;
+}
 }

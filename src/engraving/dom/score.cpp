@@ -45,9 +45,12 @@
 #include "box.h"
 #include "bracket.h"
 #include "breath.h"
+#include "capo.h"
+#include "compat/midi/compatmidirender.h"
 #include "chord.h"
 #include "clef.h"
 #include "excerpt.h"
+#include "dynamic.h"
 #include "factory.h"
 #include "fermata.h"
 #include "glissando.h"
@@ -67,6 +70,7 @@
 #include "note.h"
 #include "ottava.h"
 #include "page.h"
+#include "palmmute.h"
 #include "part.h"
 #include "pitchspelling.h"
 #include "rehearsalmark.h"
@@ -74,6 +78,7 @@
 #include "rest.h"
 #include "scoreorder.h"
 #include "segment.h"
+#include "stafftextbase.h"
 #include "select.h"
 #include "shadownote.h"
 #include "sig.h"
@@ -91,6 +96,8 @@
 #include "tuplet.h"
 #include "undo.h"
 #include "utils.h"
+#include "volta.h"
+#include "hairpin.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -1491,7 +1498,7 @@ void Score::addElement(EngravingItem* element)
     case ElementType::ARPEGGIO:
     {
         if (parent && parent->isChord()) {
-            createPlayEvents(toChord(parent));
+            CompatMidiRender::createPlayEvents(this, toChord(parent));
         }
     }
     break;
@@ -1655,7 +1662,7 @@ void Score::removeElement(EngravingItem* element)
     {
         EngravingItem* cr = element->parentItem();
         if (cr->isChord()) {
-            createPlayEvents(toChord(cr));
+            CompatMidiRender::createPlayEvents(this, toChord(cr));
         }
     }
     break;
@@ -5603,6 +5610,349 @@ void Score::autoUpdateSpatium()
 
     style().setSpatium(targetSpatium);
     createPaddingTable();
+}
+
+//---------------------------------------------------------
+//   updateSwing
+//---------------------------------------------------------
+
+void Score::updateSwing()
+{
+    for (Staff* s : m_staves) {
+        s->clearSwingList();
+    }
+    Measure* fm = firstMeasure();
+    if (!fm) {
+        return;
+    }
+    for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        for (const EngravingItem* e : s->annotations()) {
+            if (!e->isStaffTextBase()) {
+                continue;
+            }
+            const StaffTextBase* st = toStaffTextBase(e);
+            if (st->xmlText().isEmpty()) {
+                continue;
+            }
+            Staff* staff = st->staff();
+            if (!st->swing()) {
+                continue;
+            }
+            SwingParameters sp;
+            sp.swingRatio = st->swingParameters().swingRatio;
+            sp.swingUnit = st->swingParameters().swingUnit;
+            if (st->systemFlag()) {
+                for (Staff* sta : m_staves) {
+                    sta->insertIntoSwingList(s->tick(), sp);
+                }
+            } else {
+                staff->insertIntoSwingList(s->tick(), sp);
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   updateCapo
+//---------------------------------------------------------
+
+void Score::updateCapo()
+{
+    for (Staff* s : m_staves) {
+        s->clearCapoParams();
+    }
+
+    Measure* fm = firstMeasure();
+    if (!fm) {
+        return;
+    }
+
+    for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        Fraction segmentTick = s->tick();
+
+        for (EngravingItem* e : s->annotations()) {
+            if (e->isHarmony()) {
+                toHarmony(e)->realizedHarmony().setDirty(true);
+            }
+
+            if (!e->isCapo()) {
+                continue;
+            }
+
+            for (Staff* staff : e->staff()->staffList()) {
+                staff->insertCapoParams(segmentTick, toCapo(e)->params());
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   updateChannel
+//---------------------------------------------------------
+
+void Score::updateChannel()
+{
+    for (Staff* s : staves()) {
+        for (voice_idx_t i = 0; i < VOICES; ++i) {
+            s->clearChannelList(i);
+        }
+    }
+    Measure* fm = firstMeasure();
+    if (!fm) {
+        return;
+    }
+    for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        for (const EngravingItem* e : s->annotations()) {
+            if (e->isInstrumentChange()) {
+                for (Staff* staff : e->part()->staves()) {
+                    for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                        staff->insertIntoChannelList(voice, s->tick(), 0);
+                    }
+                }
+                continue;
+            }
+            if (!e->isStaffTextBase()) {
+                continue;
+            }
+            const StaffTextBase* st = toStaffTextBase(e);
+            for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
+                String an(st->channelName(voice));
+                if (an.isEmpty()) {
+                    continue;
+                }
+                Staff* staff = Score::staff(st->staffIdx());
+                int a = staff->part()->instrument(s->tick())->channelIdx(an);
+                if (a != -1) {
+                    staff->insertIntoChannelList(voice, s->tick(), a);
+                }
+            }
+        }
+    }
+
+    for (auto it = spanner().cbegin(); it != spanner().cend(); ++it) {
+        Spanner* spanner = (*it).second;
+        if (spanner->isPalmMute()) {
+            toPalmMute(spanner)->setChannel();
+        }
+        if (spanner->isVolta()) {
+            toVolta(spanner)->setChannel();
+        }
+    }
+
+    for (Segment* s = fm->first(SegmentType::ChordRest); s; s = s->next1(SegmentType::ChordRest)) {
+        for (Staff* st : staves()) {
+            track_idx_t strack = st->idx() * VOICES;
+            track_idx_t etrack = strack + VOICES;
+            for (track_idx_t track = strack; track < etrack; ++track) {
+                if (!s->element(track)) {
+                    continue;
+                }
+                EngravingItem* e = s->element(track);
+                if (e->type() != ElementType::CHORD) {
+                    continue;
+                }
+                Chord* c = toChord(e);
+                size_t channel = st->channel(c->tick(), c->voice());
+                Instrument* instr = c->part()->instrument(c->tick());
+                if (channel >= instr->channel().size()) {
+                    LOGD() << "Channel " << channel << " too high. Max " << instr->channel().size();
+                    channel = 0;
+                }
+                for (Note* note : c->notes()) {
+                    if (note->hidden()) {
+                        continue;
+                    }
+                    note->setSubchannel(static_cast<int>(channel));
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   updateHairpin
+//---------------------------------------------------------
+
+void Score::updateHairpin(Hairpin* h)
+{
+    Staff* st = h->staff();
+    Fraction tick  = h->tick();
+    Fraction tick2 = h->tick2();
+    int veloChange  = h->veloChange();
+    ChangeMethod method = h->veloChangeMethod();
+
+    // Make the change negative when the hairpin is a diminuendo
+    HairpinType htype = h->hairpinType();
+    ChangeDirection direction = ChangeDirection::INCREASING;
+    if (htype == HairpinType::DECRESC_HAIRPIN || htype == HairpinType::DECRESC_LINE) {
+        veloChange *= -1;
+        direction = ChangeDirection::DECREASING;
+    }
+
+    switch (h->dynRange()) {
+    case DynamicRange::STAFF:
+        st->velocities().addRamp(tick, tick2, veloChange, method, direction);
+        break;
+    case DynamicRange::PART:
+        for (Staff* s : st->part()->staves()) {
+            s->velocities().addRamp(tick, tick2, veloChange, method, direction);
+        }
+        break;
+    case DynamicRange::SYSTEM:
+        for (Staff* s : m_staves) {
+            s->velocities().addRamp(tick, tick2, veloChange, method, direction);
+        }
+        break;
+    }
+}
+
+//---------------------------------------------------------
+//   updateVelo
+//    calculate velocity for all notes
+//---------------------------------------------------------
+
+void Score::updateVelo()
+{
+    //
+    //    collect Dynamics
+    //
+    if (!firstMeasure()) {
+        return;
+    }
+
+    for (Staff* st : m_staves) {
+        st->velocities().clear();
+        st->velocityMultiplications().clear();
+    }
+    for (size_t staffIdx = 0; staffIdx < nstaves(); ++staffIdx) {
+        Staff* st      = staff(staffIdx);
+        ChangeMap& velo = st->velocities();
+        ChangeMap& mult = st->velocityMultiplications();
+        Part* prt      = st->part();
+        size_t partStaves = prt->nstaves();
+        staff_idx_t partStaff  = Score::staffIdx(prt);
+
+        for (Segment* s = firstMeasure()->first(); s; s = s->next1()) {
+            Fraction tick = s->tick();
+            for (const EngravingItem* e : s->annotations()) {
+                if (e->staffIdx() != staffIdx) {
+                    continue;
+                }
+                if (e->type() != ElementType::DYNAMIC) {
+                    continue;
+                }
+                const Dynamic* d = toDynamic(e);
+                int v            = d->velocity();
+
+                // treat an invalid dynamic as no change, i.e. a dynamic set to 0
+                if (v < 1) {
+                    continue;
+                }
+
+                v = std::clamp(v, 1, 127);                 //  illegal values
+
+                // If a dynamic has 'velocity change' update its ending
+                int change = d->changeInVelocity();
+                ChangeDirection direction = ChangeDirection::INCREASING;
+                if (change < 0) {
+                    direction = ChangeDirection::DECREASING;
+                }
+
+                staff_idx_t dStaffIdx = d->staffIdx();
+                switch (d->dynRange()) {
+                case DynamicRange::STAFF:
+                    if (dStaffIdx == staffIdx) {
+                        velo.addFixed(tick, v);
+                        if (change != 0) {
+                            Fraction etick = tick + d->velocityChangeLength();
+                            ChangeMethod method = ChangeMethod::NORMAL;
+                            velo.addRamp(tick, etick, change, method, direction);
+                        }
+                    }
+                    break;
+                case DynamicRange::PART:
+                    if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
+                        for (staff_idx_t i = partStaff; i < partStaff + partStaves; ++i) {
+                            ChangeMap& stVelo = staff(i)->velocities();
+                            stVelo.addFixed(tick, v);
+                            if (change != 0) {
+                                Fraction etick = tick + d->velocityChangeLength();
+                                ChangeMethod method = ChangeMethod::NORMAL;
+                                stVelo.addRamp(tick, etick, change, method, direction);
+                            }
+                        }
+                    }
+                    break;
+                case DynamicRange::SYSTEM:
+                    for (size_t i = 0; i < nstaves(); ++i) {
+                        ChangeMap& stVelo = staff(i)->velocities();
+                        stVelo.addFixed(tick, v);
+                        if (change != 0) {
+                            Fraction etick = tick + d->velocityChangeLength();
+                            ChangeMethod method = ChangeMethod::NORMAL;
+                            stVelo.addRamp(tick, etick, change, method, direction);
+                        }
+                    }
+                    break;
+                }
+            }
+
+            if (s->isChordRestType()) {
+                for (size_t i = staffIdx * VOICES; i < (staffIdx + 1) * VOICES; ++i) {
+                    EngravingItem* el = s->element(i);
+                    if (!el || !el->isChord()) {
+                        continue;
+                    }
+
+                    Chord* chord = toChord(el);
+                    Instrument* instr = chord->part()->instrument();
+
+                    double veloMultiplier = 1;
+                    for (Articulation* a : chord->articulations()) {
+                        if (a->playArticulation()) {
+                            veloMultiplier *= instr->getVelocityMultiplier(a->articulationName());
+                        }
+                    }
+
+                    if (veloMultiplier == 1.0) {
+                        continue;
+                    }
+
+                    // TODO this should be a (configurable?) constant somewhere
+                    static Fraction ARTICULATION_CHANGE_TIME_MAX = Fraction(1, 16);
+                    Fraction ARTICULATION_CHANGE_TIME = std::min(s->ticks(), ARTICULATION_CHANGE_TIME_MAX);
+                    int start = veloMultiplier * engraving::CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+                    int change = (veloMultiplier - 1) * engraving::CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+                    mult.addFixed(chord->tick(), start);
+                    mult.addRamp(chord->tick(),
+                                 chord->tick() + ARTICULATION_CHANGE_TIME, change, ChangeMethod::NORMAL, ChangeDirection::DECREASING);
+                }
+            }
+        }
+
+        for (const auto& sp : m_spanner.map()) {
+            Spanner* s = sp.second;
+            if (s->type() != ElementType::HAIRPIN || sp.second->staffIdx() != staffIdx) {
+                continue;
+            }
+            Hairpin* h = toHairpin(s);
+            updateHairpin(h);
+        }
+    }
+
+    for (Staff* st : m_staves) {
+        st->velocities().cleanup();
+        st->velocityMultiplications().cleanup();
+    }
+
+    for (auto it = spanner().cbegin(); it != spanner().cend(); ++it) {
+        Spanner* spanner = (*it).second;
+        if (!spanner->isVolta()) {
+            continue;
+        }
+        Volta* volta = toVolta(spanner);
+        volta->setVelocity();
+    }
 }
 
 UndoStack* Score::undoStack() const { return m_masterScore->undoStack(); }

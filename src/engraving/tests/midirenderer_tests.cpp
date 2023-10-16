@@ -23,7 +23,7 @@
 #include <gtest/gtest.h>
 
 #include "utils/scorerw.h"
-#include "engraving/compat/midi/midirender.h"
+#include "engraving/compat/midi/compatmidirender.h"
 #include "engraving/infrastructure/localfileinfoprovider.h"
 #include "engraving/rw/mscloader.h"
 #include "engraving/dom/noteevent.h"
@@ -79,15 +79,14 @@ static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasC
     MasterScore* score = ScoreRW::readScore(MIDIRENDERER_TESTS_DIR + fileName);
     EXPECT_TRUE(score);
 
-    MidiRenderer render(score);
     EventsHolder events;
-    MidiRenderer::Context ctx;
+    CompatMidiRendererInternal::Context ctx;
 
     ctx.synthState = mu::engraving::SynthesizerState();
     ctx.metronome = false;
     ctx.eachStringHasChannel = eachStringHasChannel;
     ctx.instrumentsHaveEffects = instrumentsHaveEffects;
-    score->renderMidi(events, ctx, true);
+    CompatMidiRender::renderScore(score, events, ctx, true);
 
     return events;
 }

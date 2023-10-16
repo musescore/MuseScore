@@ -30,8 +30,7 @@
 
 #include "log.h"
 
-using namespace mu::ipc;
-
+namespace mu::ipc {
 IpcChannel::IpcChannel()
 {
     m_selfSocket = new IpcSocket();
@@ -101,7 +100,7 @@ Code IpcChannel::syncRequestToAll(const QString& method, const QStringList& args
     IpcLoop loop;
 
     int total = m_selfSocket->instances().count();
-    total -= 1; //! NOTE Exclude itself
+    total -= 1;     //! NOTE Exclude itself
     int received = 0;
 
     m_msgCallback = [method, total, &received, &loop, onReceived](const Msg& msg) {
@@ -185,4 +184,5 @@ QList<ID> IpcChannel::instances() const
 mu::async::Notification IpcChannel::instancesChanged() const
 {
     return m_selfSocket->instancesChanged();
+}
 }
