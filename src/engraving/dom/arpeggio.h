@@ -40,6 +40,7 @@ class Arpeggio final : public EngravingItem
 
 public:
 
+    ~Arpeggio();
     Arpeggio* clone() const override { return new Arpeggio(*this); }
 
     ArpeggioType arpeggioType() const { return m_arpeggioType; }
@@ -61,18 +62,25 @@ public:
     int span() const { return m_span; }
     void setSpan(int val) { m_span = val; }
 
+    bool crossStaff() const;
+    void findChords();
+    void removeChords(track_idx_t strack, track_idx_t etrack);
+
     double userLen1() const { return m_userLen1; }
     double userLen2() const { return m_userLen2; }
     void setUserLen1(double v) { m_userLen1 = v; }
     void setUserLen2(double v) { m_userLen2 = v; }
 
-    double insetDistance(std::vector<Accidental*>& accidentals, double mag_) const;
+    double insetDistance(std::vector<Accidental*>& accidentals, double mag_, Chord* _chord) const;
 
     bool playArpeggio() const { return m_playArpeggio; }
     void setPlayArpeggio(bool p) { m_playArpeggio = p; }
 
     double Stretch() const { return m_stretch; }
     void setStretch(double val) { m_stretch = val; }
+
+    double maxChordPad() const { return m_maxChordPad; }
+    void setMaxChordPad(double val) { m_maxChordPad = val; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -109,15 +117,17 @@ private:
     std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
 
-    double insetTop() const;
-    double insetBottom() const;
+    double insetTop(Chord* c) const;
+    double insetBottom(Chord* c) const;
     double insetWidth() const;
 
     ArpeggioType m_arpeggioType = ArpeggioType::NORMAL;
     double m_userLen1 = 0.0;
     double m_userLen2 = 0.0;
 
-    int m_span = 1;                // spanning staves
+    double m_maxChordPad = 0.0;
+
+    int m_span = 1;                // how many voices the arpeggio spans
     bool m_playArpeggio = true;
 
     double m_stretch = 1.0;

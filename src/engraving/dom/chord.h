@@ -163,6 +163,9 @@ public:
     Stem* stem() const { return m_stem; }
     Arpeggio* arpeggio() const { return m_arpeggio; }
     void setArpeggio(Arpeggio* a) { m_arpeggio = a; }
+
+    Arpeggio* spanArpeggio() const { return m_spanArpeggio; }
+    void setSpanArpeggio(Arpeggio* a) { m_spanArpeggio = a; }
     Tremolo* tremolo() const { return m_tremolo; }
     void setTremolo(Tremolo* t, bool applyLogic = true);
 
@@ -340,7 +343,8 @@ private:
     Hook* m_hook = nullptr;
     StemSlash* m_stemSlash = nullptr;     // for acciacatura
 
-    Arpeggio* m_arpeggio = nullptr;
+    Arpeggio* m_arpeggio = nullptr;       // arpeggio which starts on the chord
+    Arpeggio* m_spanArpeggio = nullptr;   // arpeggio which spans over this chord
     Tremolo* m_tremolo = nullptr;
     bool m_endsGlissando = false;        // true if this chord is the ending point of a glissando (needed for layout)
     std::vector<Chord*> m_graceNotes;    // storage for all grace notes

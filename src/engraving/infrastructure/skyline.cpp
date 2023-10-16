@@ -91,7 +91,7 @@ void Skyline::add(const ShapeElement& r)
     }
     if (item && item->isArpeggio()) {
         const Arpeggio* arpeggio = toArpeggio(item);
-        if (arpeggio->span() > 1) {
+        if (arpeggio->crossStaff()) {
             crossSouth = true;
         }
     }

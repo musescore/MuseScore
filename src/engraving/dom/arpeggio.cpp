@@ -30,6 +30,7 @@
 
 #include "accidental.h"
 #include "chord.h"
+#include "mscoreview.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -54,9 +55,42 @@ Arpeggio::Arpeggio(Chord* parent)
     m_stretch = 1.0;
 }
 
+Arpeggio::~Arpeggio()
+{
+    // Remove reference to this arpeggio in any chords it may have spanned
+    removeChords(track(), track() + m_span);
+}
+
 const TranslatableString& Arpeggio::arpeggioTypeName() const
 {
     return TConv::userName(m_arpeggioType);
+}
+
+void Arpeggio::findChords()
+{
+    m_maxChordPad = 0.0;
+    Chord* _chord = chord();
+    track_idx_t strack = track();
+    track_idx_t etrack = track() + (m_span - 1);
+    _chord->setSpanArpeggio(this);
+
+    for (track_idx_t track = strack; track <= etrack; track++) {
+        EngravingItem* e = _chord->segment()->element(track);
+        if (e && e->isChord()) {
+            toChord(e)->setSpanArpeggio(this);
+        }
+    }
+}
+
+void Arpeggio::removeChords(track_idx_t strack, track_idx_t etrack)
+{
+    Chord* _chord = chord();
+    for (track_idx_t track = strack; track <= etrack; track++) {
+        EngravingItem* e = _chord->segment()->element(track);
+        if (e && e->isChord() && toChord(e)->spanArpeggio() == this) {
+            toChord(e)->setSpanArpeggio(nullptr);
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -83,6 +117,13 @@ void Arpeggio::editDrag(EditData& ed)
         m_userLen1 -= d;
     } else if (ed.curGrip == Grip::END) {
         m_userLen2 += d;
+        // Increase span
+        PointF pos = PointF(chord()->canvasPos().x(), ed.pos.y());
+        EngravingItem* e = ed.view()->elementNear(pos);
+        if (e && e->isNote()) {
+            undoChangeProperty(Pid::ARPEGGIO_SPAN, std::abs(int(track() - e->track())) + 1);
+            m_userLen2 = 0;
+        }
     }
 
     renderer()->layoutItem(this);
@@ -125,10 +166,13 @@ std::vector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
         result.push_back(LineF(_chord->upNote()->canvasPos(), gripCanvasPos));
     } else if (grip == Grip::END) {
         Note* downNote = _chord->downNote();
-        track_idx_t btrack  = track() + (m_span - 1) * VOICES;
-        EngravingItem* e = _chord->segment()->element(btrack);
-        if (e && e->isChord()) {
-            downNote = toChord(e)->downNote();
+        track_idx_t btrack  = track() + (m_span - 1);
+        for (track_idx_t curTrack = btrack; curTrack >= track(); curTrack--) {
+            EngravingItem* e = _chord->segment()->element(curTrack);
+            if (e && e->isChord()) {
+                downNote = toChord(e)->downNote();
+                break;
+            }
         }
         result.push_back(LineF(downNote->canvasPos(), gripCanvasPos));
     }
@@ -171,14 +215,34 @@ bool Arpeggio::edit(EditData& ed)
         Part* part = s->part();
         size_t n = part->nstaves();
         staff_idx_t ridx = mu::indexOf(part->staves(), s);
+        track_idx_t btrack = n * VOICES;
         if (ridx != mu::nidx) {
-            if (m_span + ridx < n) {
-                ++m_span;
+            if (track() + m_span < btrack) {
+                // Loop through voices til we find a chord
+                for (track_idx_t curTrack = track() + m_span; curTrack < btrack; curTrack++) {
+                    EngravingItem* e = chord()->segment()->element(curTrack);
+                    if (e && e->isChord()) {
+                        int newSpan = curTrack - track() + 1;
+                        toChord(e)->setSpanArpeggio(this);
+                        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                        break;
+                    }
+                }
             }
         }
     } else if (ed.key == Key_Up) {
         if (m_span > 1) {
-            --m_span;
+            for (track_idx_t curTrack = track() + m_span - 1; curTrack >= track(); curTrack--) {
+                EngravingItem* e = chord()->segment()->element(curTrack);
+                if (e && e->isChord()) {
+                    int newSpan = curTrack - track();
+                    if (newSpan != 0) {
+                        toChord(e)->setSpanArpeggio(nullptr);
+                        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                    }
+                    break;
+                }
+            }
         }
     }
 
@@ -243,6 +307,11 @@ void Arpeggio::reset()
     EngravingItem::reset();
 }
 
+bool Arpeggio::crossStaff() const
+{
+    return (track() + span() - 1) / VOICES != staffIdx();
+}
+
 //
 // INSET:
 // Arpeggios have inset white space. For instance, the bracket
@@ -256,9 +325,9 @@ void Arpeggio::reset()
 //   insetTop
 //---------------------------------------------------------
 
-double Arpeggio::insetTop() const
+double Arpeggio::insetTop(Chord* c) const
 {
-    double top = chord()->upNote()->y() - chord()->upNote()->height() / 2;
+    double top = c->upNote()->y() - c->upNote()->height() / 2;
 
     // use wiggle width, not height, since it's rotated 90 degrees
     if (arpeggioType() == ArpeggioType::UP) {
@@ -274,9 +343,9 @@ double Arpeggio::insetTop() const
 //   insetBottom
 //---------------------------------------------------------
 
-double Arpeggio::insetBottom() const
+double Arpeggio::insetBottom(Chord* c) const
 {
-    double bottom = chord()->downNote()->y() + chord()->downNote()->height() / 2;
+    double bottom = c->downNote()->y() + c->downNote()->height() / 2;
 
     // use wiggle width, not height, since it's rotated 90 degrees
     if (arpeggioType() == ArpeggioType::DOWN) {
@@ -325,14 +394,24 @@ double Arpeggio::insetWidth() const
 //   insetDistance
 //---------------------------------------------------------
 
-double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag_) const
+double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag_, Chord* chord) const
 {
     if (accidentals.size() == 0) {
         return 0.0;
     }
+    if (!chord) {
+        return 0.0;
+    }
 
-    double arpeggioTop = insetTop() * mag_;
-    double arpeggioBottom = insetBottom() * mag_;
+    // We have not calculated vertical positioning of staves on the page yet, so this is a bit of a hack
+    // Only be concerned about the top or bottom of the arpeggio when the chord belongs to that stave
+    // Otherwise set to some large value
+    bool startStaff = chord->vStaffIdx() == vStaffIdx();
+    bool endStaff = chord->vStaffIdx() == (track() + m_span - 1) / VOICES;
+
+    double arpeggioTop = startStaff ? insetTop(chord) * mag_ : -10000;
+    double arpeggioBottom = endStaff ? insetBottom(chord) * mag_ : 10000;
+
     ArpeggioType type = arpeggioType();
     bool hasTopArrow = type == ArpeggioType::UP
                        || type == ArpeggioType::UP_STRAIGHT
@@ -414,6 +493,8 @@ engraving::PropertyValue Arpeggio::getProperty(Pid propertyId) const
         return userLen2();
     case Pid::PLAY:
         return m_playArpeggio;
+    case Pid::ARPEGGIO_SPAN:
+        return m_span;
     default:
         break;
     }
@@ -442,6 +523,9 @@ bool Arpeggio::setProperty(Pid propertyId, const engraving::PropertyValue& val)
     case Pid::PLAY:
         setPlayArpeggio(val.toBool());
         break;
+    case Pid::ARPEGGIO_SPAN:
+        setSpan(val.toInt());
+        break;
     default:
         if (!EngravingItem::setProperty(propertyId, val)) {
             return false;
@@ -467,6 +551,8 @@ engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
         return 1.0;
     case Pid::PLAY:
         return true;
+    case Pid::ARPEGGIO_SPAN:
+        return 1;
     default:
         break;
     }

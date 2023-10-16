@@ -1771,7 +1771,8 @@ void TRead::read(Arpeggio* a, XmlReader& e, ReadContext& ctx)
         } else if (tag == "userLen2") {
             a->setUserLen2(e.readDouble() * a->spatium());
         } else if (tag == "span") {
-            a->setSpan(e.readInt());
+            // Span now refers to number of voices spanned, not staves
+            a->setSpan((e.readInt() - 1) * VOICES + 1);
         } else if (tag == "play") {
             a->setPlayArpeggio(e.readBool());
         } else if (tag == "timeStretch") {

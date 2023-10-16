@@ -265,6 +265,7 @@ Chord::Chord(Segment* parent)
     m_hook             = 0;
     m_stemDirection    = DirectionV::AUTO;
     m_arpeggio         = 0;
+    m_spanArpeggio     = 0;
     m_tremolo          = 0;
     m_endsGlissando    = false;
     m_noteType         = NoteType::NORMAL;
@@ -309,6 +310,7 @@ Chord::Chord(const Chord& c, bool link)
     m_stemSlash     = 0;
     m_tremolo       = 0;
 
+    m_spanArpeggio   = c.m_spanArpeggio;
     m_graceIndex     = c.m_graceIndex;
     m_noStem         = c.m_noStem;
     m_playEventType  = c.m_playEventType;

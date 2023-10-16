@@ -165,8 +165,14 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     item->addLedgerLines();
 
+    // If item has an arpeggio: mark chords which are part of the arpeggio
     if (item->arpeggio()) {
+        item->arpeggio()->findChords();
         TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
+    }
+    // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
+    if (item->spanArpeggio()) {
+        Arpeggio* spanArp = item->spanArpeggio();
 
         double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
 
@@ -176,16 +182,35 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
             double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
             gapSize = arpeggioAccidentalDistance - accidentalDistance;
-            gapSize -= item->arpeggio()->insetDistance(chordAccidentals, mag_);
+            gapSize -= spanArp->insetDistance(chordAccidentals, mag_, item);
         }
 
-        double extraX = item->arpeggio()->width() + gapSize + chordX;
+        double extraX = spanArp->width() + gapSize + chordX;
 
-        double y1   = upnote->pos().y() - upnote->headHeight() * .5;
-        item->arpeggio()->setPos(-(lll + extraX), y1);
-        if (item->arpeggio()->visible()) {
-            lll += extraX;
+        // Save this to arpeggio if largest
+        item->spanArpeggio()->setMaxChordPad(std::max(item->spanArpeggio()->maxChordPad(), lll + extraX));
+
+        // If first chord in arpeggio set y
+        if (item->arpeggio() && item->arpeggio() == spanArp) {
+            double y1   = upnote->pos().y() - upnote->headHeight() * .5;
+            item->arpeggio()->mutldata()->setPosY(y1);
         }
+
+        Note* downNote = item->downNote();
+        track_idx_t btrack  = spanArp->track() + (spanArp->span() - 1);
+        EngravingItem* e = item->segment()->element(btrack);
+        if (e && e->isChord()) {
+            downNote = toChord(e)->downNote();
+        }
+
+        // If last chord in arpeggio, set x
+        if (downNote->track() == item->track()) {
+            spanArp->mutldata()->setPosX(-spanArp->maxChordPad());
+            if (spanArp->visible()) {
+                lll = spanArp->maxChordPad();
+            }
+        }
+
         // _arpeggio->layout() called in layoutArpeggio2()
 
         // handle the special case of _arpeggio->span() > 1
@@ -3591,6 +3616,11 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
         LD_CONDITION(arpeggio->ldata()->isSetShape());
     }
 
+    Arpeggio* spanArpeggio = item->spanArpeggio();
+    if (spanArpeggio) {
+        LD_CONDITION(spanArpeggio->ldata()->isSetShape());
+    }
+
     BeamSegment* beamlet = item->beamlet();
 
     if (hook && hook->addToSkyline()) {
@@ -3608,6 +3638,12 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
     if (arpeggio && arpeggio->addToSkyline()) {
         shape.add(arpeggio->shape().translate(arpeggio->pos()));
     }
+
+    if (spanArpeggio && !arpeggio && spanArpeggio->addToSkyline()) {
+        PointF spanArpPos = spanArpeggio->pos() - (item->pagePos() - spanArpeggio->chord()->pagePos());
+        shape.add(spanArpeggio->shape().translate(spanArpPos));
+    }
+
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : item->notes()) {

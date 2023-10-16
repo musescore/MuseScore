@@ -22,6 +22,8 @@
 #include "arpeggiolayout.h"
 
 #include "dom/arpeggio.h"
+#include "dom/chord.h"
+#include "dom/segment.h"
 
 #include "tlayout.h"
 
@@ -33,10 +35,11 @@ using namespace mu::engraving::rendering::dev;
 
 void ArpeggioLayout::layoutArpeggio2(Arpeggio* item, LayoutContext& ctx)
 {
-    if (!item || item->span() < 2) {
+    if (!item) {
         return;
     }
-    TLayout::layoutArpeggio(item, item->mutldata(), ctx.conf(), /*includeCrossStaffHeight = */ true);
+
+    TLayout::layoutArpeggio(item, item->mutldata(), ctx.conf(), true);
 }
 
 void ArpeggioLayout::layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx)
