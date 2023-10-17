@@ -44,24 +44,24 @@ StyledPopupView {
         root.y = elementRect.y - h / 2
     }
 
-    StringTuningsSettingsModel {
-        id: stringTuningsModel
-
-        onItemRectChanged: function(rect) {
-            updatePosition(rect)
-        }
-    }
-
-    Component.onCompleted: {
-        stringTuningsModel.init()
-    }
-
     ColumnLayout {
         id: content
 
         width: 272
 
         spacing: 12
+
+        StringTuningsSettingsModel {
+            id: stringTuningsModel
+
+            onItemRectChanged: function(rect) {
+                updatePosition(rect)
+            }
+        }
+
+        Component.onCompleted: {
+            stringTuningsModel.init()
+        }
 
         NavigationPanel {
             id: navPanel
