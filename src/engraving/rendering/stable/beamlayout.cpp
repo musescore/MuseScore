@@ -1300,6 +1300,9 @@ void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest*
     b->isBeamlet = true;
     b->isBefore = isBefore;
     cr->setBeamlet(b);
+
+    //! NOTE Movied from ChordRest::setBeamlet
+    cr->segment()->createShape(cr->vStaffIdx());
     item->beamSegments().push_back(b);
 }
 

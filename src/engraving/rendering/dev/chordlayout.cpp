@@ -35,6 +35,7 @@
 #include "dom/hook.h"
 
 #include "dom/ledgerline.h"
+#include "dom/lyrics.h"
 
 #include "dom/measure.h"
 
@@ -75,6 +76,8 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
     } else {
         layoutPitched(item, ctx);
     }
+
+    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
@@ -3447,4 +3450,38 @@ void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
             chord->startEndSlurs().endDown = true;
         }
     }
+}
+
+void ChordLayout::fillShape(const ChordRest* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    Shape shape;
+    {
+        double x1 = 1000000.0;
+        double x2 = -1000000.0;
+        for (Lyrics* l : item->lyrics()) {
+            if (!l || !l->addToSkyline()) {
+                continue;
+            }
+            double lmargin = conf.styleS(Sid::lyricsMinDistance).val() * item->spatium() * 0.5;
+            double rmargin = lmargin;
+            LyricsSyllabic syl = l->syllabic();
+            if ((syl == LyricsSyllabic::BEGIN || syl == LyricsSyllabic::MIDDLE) && conf.styleB(Sid::lyricsDashForce)) {
+                rmargin = std::max(rmargin, conf.styleMM(Sid::lyricsDashMinLength).val());
+            }
+            // for horizontal spacing we only need the lyrics width:
+            x1 = std::min(x1, l->ldata()->bbox().x() - lmargin + l->pos().x());
+            x2 = std::max(x2, l->ldata()->bbox().x() + l->ldata()->bbox().width() + rmargin + l->pos().x());
+            if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS)) {
+                x2 += item->spatium();
+            }
+            shape.addHorizontalSpacing(l, x1, x2);
+        }
+    }
+
+    if (item->isMelismaEnd()) {
+        double right = item->rightEdge();
+        shape.addHorizontalSpacing(nullptr, right, right);
+    }
+
+    ldata->setShape(shape);
 }

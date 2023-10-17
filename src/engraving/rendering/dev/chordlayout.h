@@ -26,9 +26,10 @@
 
 #include "layoutcontext.h"
 
+#include "dom/chordrest.h"
+
 namespace mu::engraving {
 class Chord;
-class ChordRest;
 class MStyle;
 class Measure;
 class Note;
@@ -78,6 +79,8 @@ public:
     static void crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx);
 
     static void checkStartEndSlurs(Chord* chord, LayoutContext& ctx);
+
+    static void fillShape(const ChordRest* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf);
 
 private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);
