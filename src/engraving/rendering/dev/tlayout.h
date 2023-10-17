@@ -50,6 +50,8 @@
 #include "../../dom/fingering.h"
 #include "../../dom/fret.h"
 
+#include "../../dom/chord.h"
+
 #include "../../dom/harppedaldiagram.h"
 #include "../../dom/harmony.h"
 #include "../../dom/hook.h"
@@ -108,7 +110,6 @@ class Chord;
 
 class Glissando;
 class GlissandoSegment;
-class GraceNotesGroup;
 class GradualTempoChangeSegment;
 class GradualTempoChange;
 
@@ -224,6 +225,7 @@ public:
     static void layoutGlissando(Glissando* item, LayoutContext& ctx);
     static void layoutGlissandoSegment(GlissandoSegment* item, LayoutContext& ctx);
     static void layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx);
+    static void layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGroup::LayoutData* ldata);
     static void layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx);
     static void layoutGradualTempoChange(GradualTempoChange* item, LayoutContext& ctx);
 
