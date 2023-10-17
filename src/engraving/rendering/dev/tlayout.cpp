@@ -5024,7 +5024,7 @@ void TLayout::layoutStringTunings(StringTunings* item, LayoutContext& ctx)
     }
 
     Segment* parentSegment = item->segment();
-    item->move(PointF(-parentSegment->x(), 0.0));
+    item->move(PointF(-parentSegment->x() + item->spatium(), 0.0));
 
     Autoplace::autoplaceSegmentElement(item, item->mutldata());
 }

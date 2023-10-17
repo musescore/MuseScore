@@ -161,7 +161,7 @@ String StringTunings::accessibleInfo() const
 
     const std::vector<instrString>& stringList = stringData->stringList();
     int numOfStrings = static_cast<int>(stringList.size());
-    for (string_idx_t i = 0; i < numOfStrings; ++i) {
+    for (int i = 0; i < numOfStrings; ++i) {
         string_idx_t index = numOfStrings - i - 1;
         if (mu::contains(m_visibleStrings, index)) {
             String pitchStr = pitch2string(stringList[index].pitch);
@@ -249,7 +249,7 @@ String StringTunings::generateText() const
     const std::vector<instrString>& stringList = stringData->stringList();
     std::vector<String> visibleStringList;
     int numOfStrings = static_cast<int>(stringList.size());
-    for (string_idx_t i = 0; i < numOfStrings; ++i) {
+    for (int i = 0; i < numOfStrings; ++i) {
         string_idx_t index = numOfStrings - i - 1;
         if (mu::contains(m_visibleStrings, index)) {
             String pitchStr = pitch2string(stringList[index].pitch);

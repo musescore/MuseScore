@@ -3197,7 +3197,16 @@ void Measure::checkTrailer()
 
 bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
 {
-    const StringData* stringData = score()->staff(staffIdx)->part()->instrument(tick())->stringData();
+    const Staff* staff = score()->staff(staffIdx);
+    if (!staff) {
+        return false;
+    }
+
+    if (staff->isLinked()) {
+        return false;
+    }
+
+    const StringData* stringData = staff->part()->instrument(tick())->stringData();
     if (!stringData || stringData->frettedStrings() == 0) {
         return false;
     }
@@ -3206,7 +3215,7 @@ bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
     bool alreadyHasStringTunings = false;
     for (const Segment& segment : m_segments) {
         for (EngravingItem* element : segment.annotations()) {
-            if (element && element->isStringTunings()) {
+            if (element && element->isStringTunings() && element->staffIdx() == staffIdx) {
                 alreadyHasStringTunings = true;
                 break;
             }
