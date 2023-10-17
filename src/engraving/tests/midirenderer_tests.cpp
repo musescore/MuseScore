@@ -82,7 +82,6 @@ static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasC
     EventsHolder events;
     CompatMidiRendererInternal::Context ctx;
 
-    ctx.synthState = mu::engraving::SynthesizerState();
     ctx.metronome = false;
     ctx.eachStringHasChannel = eachStringHasChannel;
     ctx.instrumentsHaveEffects = instrumentsHaveEffects;
@@ -97,6 +96,21 @@ static EventsHolder getNoteOnEvents(const EventsHolder& events)
     for (size_t i = 0; i < events.size(); ++i) {
         for (auto ev: events[i]) {
             if (ev.second.type() != EventType::ME_NOTEON) {
+                continue;
+            }
+            filteredEventMap[i].insert({ ev.first, ev.second });
+        }
+    }
+
+    return filteredEventMap;
+}
+
+static EventsHolder getControllerEvents(const EventsHolder& events)
+{
+    EventsHolder filteredEventMap;
+    for (size_t i = 0; i < events.size(); ++i) {
+        for (auto ev: events[i]) {
+            if (ev.second.type() != EventType::ME_CONTROLLER) {
                 continue;
             }
             filteredEventMap[i].insert({ ev.first, ev.second });
@@ -799,6 +813,23 @@ TEST_F(MidiRenderer_Tests, slideInAfterRest)
     checkEventInterval(events, 440, 458, 61, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 460, 478, 62, defVol, MidiInstrumentEffect::SLIDE);
     checkEventInterval(events, 480, 959, 63, defVol);
+}
+
+TEST_F(MidiRenderer_Tests, breathController)
+{
+    EventsHolder events = getControllerEvents(renderMidiEvents(u"breath_controller.mscx"));
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 111);
+
+    int prevBreathControllerVal = -1;
+
+    for (auto& ev : events[DEFAULT_CHANNEL]) {
+        EXPECT_EQ(ev.second.dataA(), CTRL_BREATH);
+        int breathControllerVal = ev.second.dataB();
+        EXPECT_TRUE(breathControllerVal > prevBreathControllerVal);
+        prevBreathControllerVal = breathControllerVal;
+    }
 }
 
 /*****************************************************************************

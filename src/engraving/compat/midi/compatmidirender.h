@@ -76,6 +76,7 @@ class CompatMidiRender
 {
 public:
     static void renderScore(Score* score, EventsHolder& events, const CompatMidiRendererInternal::Context& ctx, bool expandRepeats);
+    static int getControllerForSnd(Score* score, int globalSndController);
     static void createPlayEvents(const Score* score, Measure const* start = nullptr, Measure const* end = nullptr);
     static void createPlayEvents(const Score* score, Chord* chord, Chord* prevChord = nullptr, Chord* nextChord = nullptr);
 private:
