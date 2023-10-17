@@ -2619,32 +2619,30 @@ static void layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissando
     offs2 *= -1.0;
     // Look at chord shapes (but don't consider lyrics)
     Shape cr1shape = cr1->shape();
-
-    // don't consider symbols above and below noteheads
-    double yMin = cr1->upNote()->y() + cr1->upNote()->headHeight();
-    double yMax = cr1->downNote()->y();
-    mu::remove_if(cr1shape, [yMin, yMax](ShapeElement& s) {
-        if (!s.toItem || s.toItem->isLyrics()
-            || (s.toItem->isSymbol() && (s.toItem->y() < yMin || s.toItem->y() > yMax))) {
-            return true;
-        } else {
-            return false;
-        }
-    });
-    Shape cr2shape = cr2->shape();
-    double yMin2 = cr2->upNote()->y() + cr2->upNote()->headHeight();
-    double yMax2 = cr2->downNote()->y();
-    mu::remove_if(cr2shape, [yMin2, yMax2](ShapeElement& s) {
-        if (!s.toItem || (s.toItem->isSymbol() && (s.toItem->y() < yMin2 || s.toItem->y() > yMax2))) {
+    mu::remove_if(cr1shape, [](ShapeElement& s) {
+        if (!s.toItem || s.toItem->isLyrics()) {
             return true;
         } else {
             return false;
         }
     });
 
-    offs1.rx() += cr1shape.right() - anchor1->pos().x();
+    double yAbove = anchor1->ldata()->pos().y() + anchor1->ldata()->bbox().topRight().y();
+    double yBelow = yAbove + anchor1->ldata()->bbox().height();
+    offs1.rx() += cr1shape.rightMostEdgeAtHeight(yAbove, yBelow) - anchor1->pos().x();
     if (!cr2->staff()->isTabStaff(cr2->tick())) {
-        offs2.rx() -= cr2shape.left() + anchor2->pos().x();
+        double yAbove2 = anchor2->ldata()->pos().y() + anchor2->ldata()->bbox().topLeft().y();
+        double yBelow2 = yAbove2 + anchor2->ldata()->bbox().height();
+        double noteMiddle = yAbove2 + anchor2->ldata()->bbox().height() / 2;
+        if (upDown != 0) {
+            int llWidth = ctx.conf().styleS(Sid::ledgerLineWidth).val() * _spatium;
+            // Only check top/bottom half of note depending on gliss approach direction
+            // to avoid clearing acidentals the line won't collide with
+            yAbove2 = upDown == 1 ? noteMiddle - llWidth : yAbove2;
+            yBelow2 = upDown == 1 ? yBelow2 : noteMiddle + llWidth;
+        }
+
+        offs2.rx() -= anchor2->pos().x() - cr2->shape().leftMostEdgeAtHeight(yAbove2, yBelow2);
     }
     // Add note distance
     const double glissNoteDist = 0.25 * item->spatium(); // TODO: style
