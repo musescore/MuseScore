@@ -86,7 +86,7 @@ public:
 //            return false;
 //        }
 
-        switch (sh.type()) {
+        switch (m_type) {
         case Type::Fixed: return this->bbox() == sh.bbox();
         case Type::Composite: return this->m_elements == sh.m_elements;
         }

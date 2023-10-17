@@ -817,6 +817,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                             if (e->isChord()) {
                                 GraceNotesGroup& graceBefore = toChord(e)->graceNotesBefore();
                                 GraceNotesGroup& graceAfter = toChord(e)->graceNotesAfter();
+                                TLayout::layoutGraceNotesGroup2(&graceBefore, graceBefore.mutldata());
+                                TLayout::layoutGraceNotesGroup2(&graceAfter, graceAfter.mutldata());
                                 if (!graceBefore.empty()) {
                                     skyline.add(graceBefore.shape().translated(graceBefore.pos() + p));
                                 }

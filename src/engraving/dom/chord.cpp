@@ -2989,10 +2989,7 @@ void GraceNotesGroup::addToShape()
 
 Shape GraceNotesGroup::doCreateShape() const
 {
-    Shape shape;
-    for (Chord* grace : *this) {
-        shape.add(grace->shape().translate(grace->pos() - this->pos()));
-    }
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 }

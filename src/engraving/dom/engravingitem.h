@@ -543,14 +543,30 @@ public:
             const Shape& sh = m_shape.value(LD_ACCESS::CHECK);
 
             //! NOTE Temporary for debuging
+            //! Reimplementation: done
             {
                 switch (m_item->type()) {
-                case ElementType::BEAM: return sh;
+                case ElementType::BEAM:
+                case ElementType::GRACE_NOTES_GROUP:
+                    return sh;
                 default:
                     break;
                 }
             }
+
             Shape old = m_item->_internal_shape();
+
+            //! NOTE Temporary for debuging
+            //! Reimplementation: progress
+            {
+                switch (m_item->type()) {
+                case ElementType::GRACE_NOTES_GROUP:
+                    DO_ASSERT(sh.equal(old));
+                default:
+                    break;
+                }
+            }
+
             return old;
         }
 

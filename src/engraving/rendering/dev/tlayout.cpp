@@ -2756,6 +2756,20 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
     item->setPos(xPos, 0.0);
 }
 
+void TLayout::layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGroup::LayoutData* ldata)
+{
+    LD_CONDITION(ldata->isSetPos());
+
+    Shape shape(Shape::Type::Composite);
+    for (const Chord* grace : *item) {
+        LD_CONDITION(grace->ldata()->isSetShape());
+        LD_CONDITION(grace->ldata()->isSetPos());
+
+        shape.add(grace->shape().translate(grace->pos() - item->pos()));
+    }
+    ldata->setShape(shape);
+}
+
 void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx)
 {
     GradualTempoChangeSegment::LayoutData* ldata = item->mutldata();
