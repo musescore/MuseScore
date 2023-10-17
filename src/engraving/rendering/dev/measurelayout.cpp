@@ -1324,7 +1324,13 @@ void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
                 Tremolo* tremolo = c->tremolo();
                 if ((beam && (beam->cross() || beam->userModified()))
                     || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
+                    bool prevUp = c->up();
                     ChordLayout::computeUp(c, ctx); // for cross-staff beams
+                    if (c->up() != prevUp) {
+                        // Chord has changed direction, lay out again
+                        ChordLayout::layoutChords1(ctx, &s, c->vStaffIdx());
+                        s.createShape(c->vStaffIdx());
+                    }
                 }
                 if (!c->graceNotes().empty()) {
                     for (Chord* grace : c->graceNotes()) {
