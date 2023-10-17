@@ -68,16 +68,13 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
         if (barType != BarLineType::END_REPEAT) {
             m->undoChangeProperty(Pid::REPEAT_START, false);
         }
-        m = m->prevMeasure();
+        m = m->prevMeasureMM();
         if (!m || (m->system() && m->isFirstInSystem())) {
             return;
         }
         bl = const_cast<BarLine*>(m->endBarLine());
 
         if (!bl) {
-            // TODO investigate, why barline is missing,
-            // when standard measure changes to multimeasure-rest measure after inserting measure
-            // see GH #19684
             return;
         }
     }
@@ -108,11 +105,24 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
             }
             if (allStaves) {
                 // use all staves of master score; we will take care of parts in loop through linked staves below
-                m2 = bl->masterScore()->tick2measure(m2->tick());
-                if (!m2) {
-                    return;                     // should never happen
+                Score* mScore = bl->masterScore();
+                if (mScore->style().styleB(Sid::createMultiMeasureRests)) {
+                    m2 = mScore->tick2measureMM(m2->tick());
+                    if (!m2) {
+                        return;
+                    }
+                    segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
+                    m2 = m2->isMMRest() ? m2->mmRestLast() : m2;
+                    if (!m2) {
+                        return;
+                    }
+                } else {
+                    m2 = mScore->tick2measure(m2->tick());
+                    if (!m2) {
+                        return;
+                    }
+                    segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
                 }
-                segment = m2->undoGetSegment(segment->segmentType(), segment->tick());
             }
             const std::vector<EngravingItem*>& elist = allStaves ? segment->elist() : std::vector<EngravingItem*> { bl };
             for (EngravingItem* e : elist) {
@@ -137,8 +147,10 @@ static void undoChangeBarLineType(BarLine* bl, BarLineType barType, bool allStav
                     }
 
                     lmeasure->undoChangeProperty(Pid::REPEAT_END, false);
-                    if (lmeasure->nextMeasure() && (!lmeasure->nextMeasure()->system() || !lmeasure->nextMeasure()->isFirstInSystem())) {
-                        lmeasure->nextMeasure()->undoChangeProperty(Pid::REPEAT_START, false);
+
+                    Measure* nextMeasure = lmeasure->nextMeasure();
+                    if (nextMeasure && (!nextMeasure->system() || !nextMeasure->isFirstInSystem())) {
+                        nextMeasure->undoChangeProperty(Pid::REPEAT_START, false);
                     }
                     Segment* lsegment = lmeasure->undoGetSegmentR(SegmentType::EndBarLine, lmeasure->ticks());
                     BarLine* lbl = toBarLine(lsegment->element(ltrack));
