@@ -65,6 +65,7 @@ public:
     bool crossStaff() const;
     void findChords();
     void removeChords(track_idx_t strack, track_idx_t etrack);
+    void rebaseStartAnchor(int direction);
 
     double userLen1() const { return m_userLen1; }
     double userLen2() const { return m_userLen2; }

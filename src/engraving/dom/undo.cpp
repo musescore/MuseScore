@@ -36,6 +36,7 @@
 
 #include "iengravingfont.h"
 
+#include "arpeggio.h"
 #include "bend.h"
 #include "bracket.h"
 #include "chord.h"
@@ -980,6 +981,10 @@ RemoveElement::RemoveElement(EngravingItem* e)
                 if (tremolo->twoNotes()) {
                     score->undo(new RemoveElement(tremolo));
                 }
+            }
+            // Move arpeggio down to next available note
+            if (chord->arpeggio()) {
+                chord->arpeggio()->rebaseStartAnchor(-1);
             }
             for (const Note* note : chord->notes()) {
                 removeNote(note);

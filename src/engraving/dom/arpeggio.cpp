@@ -38,6 +38,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -93,6 +94,47 @@ void Arpeggio::removeChords(track_idx_t strack, track_idx_t etrack)
     }
 }
 
+void Arpeggio::rebaseStartAnchor(int direction)
+{
+    if (direction == 0) {
+        return;
+    }
+    if (direction == 1) {
+        // Move arpeggio to chord above
+        Staff* s = staff();
+        Part* part = s->part();
+        staff_idx_t topStaff = *part->staveIdxList().begin();
+        track_idx_t topTrack = topStaff * VOICES;
+        if (track() > topTrack) {
+            // Loop through voices til we find a chord
+            for (track_idx_t curTrack = track() - 1; curTrack >= topTrack; curTrack--) {
+                EngravingItem* e = chord()->segment()->element(curTrack);
+                if (e && e->isChord()) {
+                    int newSpan = m_span + track() - curTrack;
+                    if (newSpan != 0) {
+                        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                        score()->undo(new ChangeParent(this, e, e->staffIdx()));
+                        break;
+                    }
+                }
+            }
+        }
+    } else if (direction == -1) {
+        // Move arpeggio to chord below
+        for (track_idx_t curTrack = track() + 1; curTrack <= track() + m_span - 1; curTrack++) {
+            EngravingItem* e = chord()->segment()->element(curTrack);
+            if (e && e->isChord()) {
+                int newSpan = m_span + track() - curTrack;
+                if (newSpan != 0) {
+                    undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                    score()->undo(new ChangeParent(this, e, e->staffIdx()));
+                    break;
+                }
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   gripsPositions
 //---------------------------------------------------------
@@ -115,13 +157,23 @@ void Arpeggio::editDrag(EditData& ed)
     double d = ed.delta.y();
     if (ed.curGrip == Grip::START) {
         m_userLen1 -= d;
+        PointF pos = PointF(chord()->canvasPos().x(), ed.pos.y());
+        EngravingItem* e = ed.view()->elementNear(pos);
+        if (e && e->isNote()) {
+            Chord* c = toNote(e)->chord();
+            int newSpan = m_span + track() - c->track();
+            undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+            score()->undo(new ChangeParent(this, c, c->staffIdx()));
+            m_userLen1 = 0;
+        }
     } else if (ed.curGrip == Grip::END) {
         m_userLen2 += d;
         // Increase span
         PointF pos = PointF(chord()->canvasPos().x(), ed.pos.y());
         EngravingItem* e = ed.view()->elementNear(pos);
         if (e && e->isNote()) {
-            undoChangeProperty(Pid::ARPEGGIO_SPAN, std::abs(int(track() - e->track())) + 1);
+            int newSpan = std::abs(int(track() - e->track())) + 1;
+            undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
             m_userLen2 = 0;
         }
     }
@@ -163,17 +215,19 @@ std::vector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
     const PointF gripCanvasPos = gripsPositions()[static_cast<int>(grip)] + pageOffset;
 
     if (grip == Grip::START) {
-        result.push_back(LineF(_chord->upNote()->canvasPos(), gripCanvasPos));
+        Note* upNote = _chord->upNote();
+        EngravingItem* e = _chord->segment()->element(track());
+        if (e && e->isChord()) {
+            upNote = toChord(e)->upNote();
+        }
+        result.push_back(LineF(upNote->canvasPos(), gripCanvasPos));
     } else if (grip == Grip::END) {
         Note* downNote = _chord->downNote();
-        track_idx_t btrack  = track() + (m_span - 1);
-        for (track_idx_t curTrack = btrack; curTrack >= track(); curTrack--) {
-            EngravingItem* e = _chord->segment()->element(curTrack);
-            if (e && e->isChord()) {
-                downNote = toChord(e)->downNote();
-                break;
-            }
+        EngravingItem* e = _chord->segment()->element(track() + m_span - 1);
+        if (e && e->isChord()) {
+            downNote = toChord(e)->downNote();
         }
+
         result.push_back(LineF(downNote->canvasPos(), gripCanvasPos));
     }
     return result;
@@ -193,7 +247,7 @@ void Arpeggio::startEdit(EditData& ed)
 
 bool Arpeggio::isEditAllowed(EditData& ed) const
 {
-    if (ed.curGrip != Grip::END || !(ed.modifiers & ShiftModifier)) {
+    if ((ed.curGrip != Grip::END && ed.curGrip != Grip::START) || !(ed.modifiers & ShiftModifier)) {
         return false;
     }
 
@@ -210,37 +264,47 @@ bool Arpeggio::edit(EditData& ed)
         return false;
     }
 
-    if (ed.key == Key_Down) {
-        Staff* s = staff();
-        Part* part = s->part();
-        size_t n = part->nstaves();
-        staff_idx_t ridx = mu::indexOf(part->staves(), s);
-        track_idx_t btrack = n * VOICES;
-        if (ridx != mu::nidx) {
-            if (track() + m_span < btrack) {
-                // Loop through voices til we find a chord
-                for (track_idx_t curTrack = track() + m_span; curTrack < btrack; curTrack++) {
-                    EngravingItem* e = chord()->segment()->element(curTrack);
-                    if (e && e->isChord()) {
-                        int newSpan = curTrack - track() + 1;
-                        toChord(e)->setSpanArpeggio(this);
-                        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                        break;
+    if (ed.curGrip == Grip::START) {
+        if (ed.key == Key_Down) {
+            rebaseStartAnchor(-1);
+        } else if (ed.key == Key_Up) {
+            rebaseStartAnchor(1);
+        }
+    }
+
+    if (ed.curGrip == Grip::END) {
+        if (ed.key == Key_Down) {
+            Staff* s = staff();
+            Part* part = s->part();
+            size_t n = part->nstaves();
+            staff_idx_t ridx = mu::indexOf(part->staves(), s);
+            track_idx_t btrack = n * VOICES;
+            if (ridx != mu::nidx) {
+                if (track() + m_span < btrack) {
+                    // Loop through voices til we find a chord
+                    for (track_idx_t curTrack = track() + m_span; curTrack < btrack; curTrack++) {
+                        EngravingItem* e = chord()->segment()->element(curTrack);
+                        if (e && e->isChord()) {
+                            int newSpan = curTrack - track() + 1;
+                            toChord(e)->setSpanArpeggio(this);
+                            undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                            break;
+                        }
                     }
                 }
             }
-        }
-    } else if (ed.key == Key_Up) {
-        if (m_span > 1) {
-            for (track_idx_t curTrack = track() + m_span - 1; curTrack >= track(); curTrack--) {
-                EngravingItem* e = chord()->segment()->element(curTrack);
-                if (e && e->isChord()) {
-                    int newSpan = curTrack - track();
-                    if (newSpan != 0) {
-                        toChord(e)->setSpanArpeggio(nullptr);
-                        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+        } else if (ed.key == Key_Up) {
+            if (m_span > 1) {
+                for (track_idx_t curTrack = track() + m_span - 2; curTrack >= track(); curTrack--) {
+                    EngravingItem* e = chord()->segment()->element(curTrack);
+                    if (e && e->isChord()) {
+                        int newSpan = curTrack - track() + 1;
+                        if (newSpan != 0) {
+                            toChord(e)->setSpanArpeggio(nullptr);
+                            undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                        }
+                        break;
                     }
-                    break;
                 }
             }
         }

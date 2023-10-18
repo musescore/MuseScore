@@ -721,13 +721,9 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         double y = chord->upNote()->pagePos().y() - chord->upNote()->headHeight() * .5;
 
         Note* downNote = chord->downNote();
-        track_idx_t btrack = item->track() + (item->span() - 1);
-        for (track_idx_t curTrack = btrack; curTrack >= item->track(); curTrack--) {
-            EngravingItem* e = chord->segment()->element(curTrack);
-            if (e && e->isChord()) {
-                downNote = toChord(e)->downNote();
-                break;
-            }
+        EngravingItem* e = chord->segment()->element(item->track() + item->span() - 1);
+        if (e && e->isChord()) {
+            downNote = toChord(e)->downNote();
         }
         double h = downNote->pagePos().y() + downNote->headHeight() * .5 - y;
         return h;
