@@ -421,7 +421,7 @@ PropertyValue AbstractInspectorModel::valueToElementUnits(const mu::engraving::P
     P_TYPE type = mu::engraving::propertyType(pid);
     switch (type) {
     case P_TYPE::POINT: {
-        if (element->sizeIsSpatiumDependent()) {
+        if (pid == Pid::OFFSET ? element->offsetIsSpatiumDependent() : element->sizeIsSpatiumDependent()) {
             return toPoint(value) * element->spatium();
         } else {
             return toPoint(value) * mu::engraving::DPMM;
