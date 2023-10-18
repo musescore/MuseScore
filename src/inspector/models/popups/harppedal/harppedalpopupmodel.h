@@ -23,7 +23,7 @@
 #ifndef MU_INSPECTOR_HARPPEDALPOPUPMODEL_H
 #define MU_INSPECTOR_HARPPEDALPOPUPMODEL_H
 
-#include "models/popups/abstractelementpopupmodel.h"
+#include "../abstractelementpopupmodel.h"
 #include "context/iglobalcontext.h"
 #include "engraving/dom/harppedaldiagram.h"
 #include "engraving/dom/undo.h"

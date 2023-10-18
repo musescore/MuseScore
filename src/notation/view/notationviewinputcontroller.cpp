@@ -29,7 +29,6 @@
 
 #include "log.h"
 #include "commonscene/commonscenetypes.h"
-#include "inspector/iinspectorcontroller.h"
 
 using namespace mu;
 using namespace mu::notation;

@@ -23,7 +23,7 @@
 #ifndef MU_INSPECTOR_CAPOSETTINGSMODEL_H
 #define MU_INSPECTOR_CAPOSETTINGSMODEL_H
 
-#include "models/popups/abstractelementpopupmodel.h"
+#include "../abstractelementpopupmodel.h"
 
 #include <QObject>
 

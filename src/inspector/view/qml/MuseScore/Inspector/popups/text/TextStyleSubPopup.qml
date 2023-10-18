@@ -37,8 +37,6 @@ StyledPopupView {
     property int navigationOrderStart: 0
     property int navigationOrderEnd: textStyleSubSettingsNavPanel.order
 
-    height: contentHeight
-
     Column {
         width: parent.width
         spacing: 12
@@ -55,20 +53,20 @@ StyledPopupView {
         DropdownPropertyView {
             id: textStyleSection
             titleText: qsTrc("inspector", "Text style")
-            propertyItem: root.textSettingsModel ? root.textSettingsModel.textType : null
+            propertyItem: root.textSettingsModel.textType
 
             navigationPanel: textStyleSubSettingsNavPanel
             navigationRowStart: 1
 
             visible: !root.textSettingsModel.isDynamicSpecificSettings
-            height: visible ? implicitHeight : 0
+            height: implicitHeight
 
-            model: root.textSettingsModel ? root.textSettingsModel.textStyles : []
+            model: root.textSettingsModel.textStyles
         }
 
         PlacementSection {
             id: textPlacementSection
-            propertyItem: root.textSettingsModel ? root.textSettingsModel.textPlacement : null
+            propertyItem: root.textSettingsModel.textPlacement
 
             navigationPanel: textStyleSubSettingsNavPanel
             navigationRowStart: textStyleSection.navigationRowEnd + 1
