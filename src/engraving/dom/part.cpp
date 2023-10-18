@@ -412,14 +412,14 @@ const StringData* Part::stringData(const Fraction& tick) const
         return nullptr;
     }
 
-    auto it = m_stringTunings.upper_bound(tick.ticks());
-    if (it != m_stringTunings.begin()) {
-        --it;
+    const Instrument* instrument = this->instrument(tick);
+    if (!instrument) {
+        return nullptr;
     }
 
     StringTunings* stringTunings = nullptr;
-    const Instrument* instrument = this->instrument(tick);
 
+    auto it = findLessOrEqual(m_stringTunings, tick.ticks());
     if (it != m_stringTunings.end()) {
         stringTunings = it->second;
     }

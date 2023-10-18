@@ -32,14 +32,15 @@ class StringTuningsSettingsModel : public AbstractInspectorModel
 public:
     explicit StringTuningsSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
+    Q_INVOKABLE void editStrings();
+
+private:
     void createProperties() override { }
     void loadProperties() override { }
     void resetProperties() override { }
     void requestElements() override { }
 
     bool isEmpty() const override;
-
-    Q_INVOKABLE void editStrings();
 };
 }
 

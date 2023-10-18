@@ -124,7 +124,7 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
 
     StringTuningsItem* item = m_strings.at(stringIndex);
 
-    QString _stringValue = fixStringValue(stringValue);
+    QString _stringValue = convertToUnicode(stringValue);
     int value = engraving::string2pitch(_stringValue);
     if (value == -1) {
         item->valueChanged();
@@ -145,25 +145,25 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
 
 bool StringTuningsSettingsModel::canIncreaseStringValue(const QString& stringValue) const
 {
-    QString value = fixStringValue(stringValue);
+    QString value = convertToUnicode(stringValue);
     return engraving::string2pitch(value) != -1;
 }
 
 QString StringTuningsSettingsModel::increaseStringValue(const QString& stringValue)
 {
-    QString value = fixStringValue(stringValue);
+    QString value = convertToUnicode(stringValue);
     return engraving::pitch2string(engraving::string2pitch(value) + 1);
 }
 
 bool StringTuningsSettingsModel::canDecreaseStringValue(const QString& stringValue) const
 {
-    QString value = fixStringValue(stringValue);
+    QString value = convertToUnicode(stringValue);
     return engraving::string2pitch(value) != -1;
 }
 
 QString StringTuningsSettingsModel::decreaseStringValue(const QString& stringValue)
 {
-    QString value = fixStringValue(stringValue);
+    QString value = convertToUnicode(stringValue);
     return engraving::pitch2string(engraving::string2pitch(value) - 1);
 }
 
@@ -192,7 +192,7 @@ QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
         presetsList << customMap;
     }
 
-    int currentStringNumber = this->currentNumberOfStrings();
+    size_t currentStringNumber = this->currentNumberOfStrings();
 
     for (const StringTuningsInfo& stringTuning : stringTunings.at(m_itemId)) {
         if (stringTuning.number != currentStringNumber) {
@@ -264,21 +264,22 @@ QVariantList StringTuningsSettingsModel::numbersOfStrings() const
     for (const StringTuningsInfo& stringTuning : stringTunings.at(m_itemId)) {
         QVariantMap stringNumberMap;
         stringNumberMap.insert("text", QString::number(stringTuning.number) + " " + tr("strings"));
-        stringNumberMap.insert("value", stringTuning.number);
+        stringNumberMap.insert("value", static_cast<int>(stringTuning.number));
         numbersList << stringNumberMap;
     }
 
     return numbersList;
 }
 
-int StringTuningsSettingsModel::currentNumberOfStrings() const
+size_t StringTuningsSettingsModel::currentNumberOfStrings() const
 {
     return m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_STRINGS_COUNT).toInt() : 0;
 }
 
 void StringTuningsSettingsModel::setCurrentNumberOfStrings(int number)
 {
-    if (currentNumberOfStrings() == number) {
+    int currentNumber = static_cast<int>(currentNumberOfStrings());
+    if (currentNumber == number) {
         return;
     }
 
@@ -406,7 +407,7 @@ void StringTuningsSettingsModel::doSetCurrentPreset(const QString& preset)
     emit currentPresetChanged();
 }
 
-QString StringTuningsSettingsModel::fixStringValue(const QString& stringValue) const
+QString StringTuningsSettingsModel::convertToUnicode(const QString& stringValue) const
 {
     if (stringValue.isEmpty()) {
         return QString();

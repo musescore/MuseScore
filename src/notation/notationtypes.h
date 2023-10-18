@@ -687,7 +687,7 @@ struct StringTuningPreset
 
 struct StringTuningsInfo
 {
-    int number = 0;
+    size_t number = 0;
     std::vector<StringTuningPreset> presets;
 };
 

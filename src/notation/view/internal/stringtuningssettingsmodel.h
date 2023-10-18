@@ -72,7 +72,7 @@ public:
 
     QVariantList numbersOfStrings() const;
 
-    int currentNumberOfStrings() const;
+    size_t currentNumberOfStrings() const;
     void setCurrentNumberOfStrings(int number);
 
     QList<StringTuningsItem*> strings() const;
@@ -92,7 +92,7 @@ private:
 
     void doSetCurrentPreset(const QString& preset);
 
-    QString fixStringValue(const QString& stringValue) const;
+    QString convertToUnicode(const QString& stringValue) const;
 
     QList<StringTuningsItem*> m_strings;
 

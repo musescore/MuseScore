@@ -1544,8 +1544,8 @@ bool Note::acceptDrop(EditData& data) const
     bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
 
     if (type == ElementType::STRING_TUNINGS) {
-        staff_idx_t staffIdx;
-        Segment* seg;
+        staff_idx_t staffIdx = 0;
+        Segment* seg = nullptr;
         if (!score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0)) {
             return false;
         }
