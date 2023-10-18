@@ -73,6 +73,9 @@ public:
     const CloudProjectInfo& cloudInfo() const override;
     void setCloudInfo(const CloudProjectInfo& info) override;
 
+    const CloudAudioInfo& cloudAudioInfo() const override;
+    void setCloudAudioInfo(const CloudAudioInfo& audioInfo) override;
+
     bool isNewlyCreated() const override;
     void markAsNewlyCreated() override;
 
@@ -118,6 +121,7 @@ private:
     notation::IMasterNotationPtr m_masterNotation = nullptr;
     ProjectAudioSettingsPtr m_projectAudioSettings = nullptr;
     mutable CloudProjectInfo m_cloudInfo;
+    mutable CloudAudioInfo m_cloudAudioInfo;
 
     io::path_t m_path;
     async::Notification m_pathChanged;

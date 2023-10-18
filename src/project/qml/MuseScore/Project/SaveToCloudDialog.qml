@@ -30,11 +30,11 @@ import MuseScore.Cloud 1.0
 StyledDialogView {
     id: root
 
-    property bool isPublish: false
+    property bool isPublishShare: false
     property string name
     property int visibility: CloudVisibility.Private
-    property string existingOnlineScoreUrl
-    property bool replaceExistingOnlineScore: true
+    property string existingScoreOrAudioUrl
+    property bool replaceExisting: true
     property string cloudCode: ""
 
     contentWidth: contentItem.implicitWidth
@@ -57,6 +57,8 @@ StyledDialogView {
         id: contentItem
 
         property var cloudInfo: null
+        property var dialogText: null
+        property var visibilityModel: null
 
         implicitWidth: Math.max(420, contentColumn.implicitWidth)
         implicitHeight: contentColumn.implicitHeight
@@ -77,6 +79,8 @@ StyledDialogView {
                     load()
 
                     contentItem.cloudInfo = cloudsModel.cloudInfo(root.cloudCode)
+                    contentItem.dialogText = cloudsModel.dialogText(root.cloudCode, existingScoreOrAudioUrl)
+                    contentItem.visibilityModel = cloudsModel.visibilityModel(root.cloudCode)
                 }
             }
         }
@@ -88,9 +92,10 @@ StyledDialogView {
 
             StyledTextLabel {
                 id: titleLabel
-                text: root.isPublish
-                      ? qsTrc("project/save", "Publish to %1").arg(Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.cloudTitle : "")
-                      : qsTrc("project/save", "Save to cloud")
+
+                text: root.isPublishShare && Boolean(contentItem.dialogText) ? contentItem.dialogText.titleText
+                                                                             : qsTrc("project/save", "Save to cloud")
+
                 font: ui.theme.largeBodyBoldFont
                 horizontalAlignment: Text.AlignLeft
             }
@@ -145,11 +150,7 @@ StyledDialogView {
                     StyledDropdown {
                         Layout.fillWidth: true
 
-                        model: [
-                            { value: CloudVisibility.Public, text: qsTrc("project/cloud", "Public") },
-                            { value: CloudVisibility.Unlisted, text: qsTrc("project/cloud", "Unlisted") },
-                            { value: CloudVisibility.Private, text: qsTrc("project/cloud", "Private") }
-                        ]
+                        model: contentItem.visibilityModel
 
                         currentIndex: indexOfValue(root.visibility)
 
@@ -169,16 +170,17 @@ StyledDialogView {
                     orientation: ListView.Vertical
                     spacing: 8
 
-                    visible: root.isPublish && Boolean(root.existingOnlineScoreUrl)
+                    visible: root.isPublishShare && Boolean(root.existingScoreOrAudioUrl)
 
                     model: [
-                        //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online score in question
-                        { text: qsTrc("project/save", "Replace the existing <a href=\"%1\">online score</a>").arg(root.existingOnlineScoreUrl), value: true },
-                        { text: qsTrc("project/save", "Publish as new online score"), value: false }
+                        { text: Boolean(contentItem.dialogText) ? contentItem.dialogText.replaceButtonText
+                                                                : qsTrc("project/save", "Replace existing"), value: true },
+                        { text: Boolean(contentItem.dialogText) ? contentItem.dialogText.newButtonText
+                                                                : qsTrc("project/save", "Create new"), value: false }
                     ]
 
                     delegate: RoundedRadioButton {
-                        checked: modelData.value === root.replaceExistingOnlineScore
+                        checked: modelData.value === root.replaceExisting
                         text: modelData.text
 
                         navigation.name: modelData.text
@@ -186,7 +188,7 @@ StyledDialogView {
                         navigation.row: 3 + model.index
 
                         onToggled: {
-                            root.replaceExistingOnlineScore = modelData.value
+                            root.replaceExisting = modelData.value
                         }
                     }
                 }
@@ -206,7 +208,7 @@ StyledDialogView {
                     text: qsTrc("project/save", "Save to computer")
                     buttonRole: ButtonBoxModel.ApplyRole
                     buttonId: ButtonBoxModel.CustomButton + 1
-                    visible: !root.isPublish
+                    visible: !root.isPublishShare
 
                     onClicked: {
                         root.done(SaveToCloudResponse.SaveLocallyInstead)
@@ -214,7 +216,9 @@ StyledDialogView {
                 }
 
                 FlatButton {
-                    text: root.isPublish ? qsTrc("project/save", "Publish") : qsTrc("project/save", "Save")
+                    text: root.isPublishShare && Boolean(contentItem.dialogText) ? contentItem.dialogText.saveButtonText
+                                                                                 : qsTrc("project/save", "Save")
+
                     buttonRole: ButtonBoxModel.ApplyRole
                     buttonId: ButtonBoxModel.Save
                     enabled: Boolean(root.name)
@@ -224,7 +228,7 @@ StyledDialogView {
                         root.done(SaveToCloudResponse.Ok, {
                                       name: root.name,
                                       visibility: root.visibility,
-                                      replaceExistingOnlineScore: root.replaceExistingOnlineScore
+                                      replaceExisting: root.replaceExisting
                                   })
                     }
                 }

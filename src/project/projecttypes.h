@@ -94,8 +94,9 @@ struct CloudProjectInfo {
 
 struct CloudAudioInfo {
     QString name;
-
+    QUrl url;
     cloud::Visibility visibility = cloud::Visibility::Private;
+    bool replaceExisting = false;
 
     bool isValid() const
     {
@@ -304,6 +305,7 @@ struct ProjectMeta
     QDate creationDate;
 
     QString source;
+    QString audioComUrl;
     QString platform;
     QString musescoreVersion;
     int musescoreRevision = 0;
@@ -329,6 +331,7 @@ struct ProjectMeta
         equal &= partsCount == other.partsCount;
         equal &= creationDate == other.creationDate;
         equal &= source == other.source;
+        equal &= audioComUrl == other.audioComUrl;
         equal &= platform == other.platform;
         equal &= musescoreVersion == other.musescoreVersion;
         equal &= musescoreRevision == other.musescoreRevision;

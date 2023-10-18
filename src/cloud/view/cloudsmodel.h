@@ -51,6 +51,8 @@ public:
     bool userAuthorized() const;
     Q_INVOKABLE QVariant firstAuthorizedCloudInfo() const;
     Q_INVOKABLE QVariant cloudInfo(const QString& cloudCode) const;
+    Q_INVOKABLE QVariantList visibilityModel(const QString& cloudCode) const;
+    Q_INVOKABLE QVariant dialogText(const QString& cloudCode, const QString& existingScoreOrAudioUrl) const;
 
     Q_INVOKABLE void load();
     Q_INVOKABLE void createAccount(const QString& code);

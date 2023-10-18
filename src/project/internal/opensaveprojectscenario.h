@@ -54,21 +54,21 @@ public:
     bool warnBeforeSavingToExistingPubliclyVisibleCloudProject() const override;
 
     void showCloudOpenError(const Ret& ret) const override;
-    Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublish, bool alreadyAttempted) const override;
+    Ret showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublishShare, bool alreadyAttempted) const override;
     Ret showAudioCloudShareError(const Ret& ret) const override;
 
 private:
     RetVal<SaveLocationType> saveLocationType() const;
     RetVal<SaveLocationType> askSaveLocationType() const;
 
-    /// \param isPublish:
+    /// \param isPublishShare:
     ///     false -> this is part of a "Save to cloud" action
     ///     true -> this is part of a "Publish" action
-    RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const;
+    RetVal<CloudProjectInfo> doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublishShare) const;
 
-    bool warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const;
+    bool warnBeforePublishing(bool isPublishShare, cloud::Visibility visibility) const;
 
-    Ret warnCloudNotAvailableForUploading(bool isPublish) const;
+    Ret warnCloudNotAvailableForUploading(bool isPublishShare) const;
     Ret warnCloudNotAvailableForSharingAudio() const;
 };
 

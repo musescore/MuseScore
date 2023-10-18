@@ -59,6 +59,7 @@ static const QString COMPOSER_TAG("composer");
 static const QString LYRICIST_TAG("lyricist");
 static const QString POET_TAG("poet");
 static const QString SOURCE_TAG("source");
+static const QString AUDIO_COM_URL_TAG("audioComUrl");
 static const QString SOURCE_REVISION_ID_TAG("sourceRevisionId");
 static const QString COPYRIGHT_TAG("copyright");
 static const QString TRANSLATOR_TAG("translator");
@@ -78,6 +79,7 @@ static bool isStandardTag(const QString& tag)
         LYRICIST_TAG,
         POET_TAG,
         SOURCE_TAG,
+        AUDIO_COM_URL_TAG,
         COPYRIGHT_TAG,
         TRANSLATOR_TAG,
         ARRANGER_TAG,
@@ -247,6 +249,8 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     {
         m_cloudInfo.sourceUrl = masterScore->metaTags()[SOURCE_TAG].toQString();
         m_cloudInfo.revisionId = masterScore->metaTags()[SOURCE_REVISION_ID_TAG].toInt();
+
+        m_cloudAudioInfo.url = masterScore->metaTags()[AUDIO_COM_URL_TAG].toQString();
 
         if (configuration()->isLegacyCloudProject(path)) {
             m_cloudInfo.name = io::filename(path, false).toQString();
@@ -464,6 +468,17 @@ void NotationProject::setCloudInfo(const CloudProjectInfo& info)
     m_masterNotation->masterScore()->setMetaTag(SOURCE_REVISION_ID_TAG, String::number(info.revisionId));
 
     m_displayNameChanged.notify();
+}
+
+const CloudAudioInfo& NotationProject::cloudAudioInfo() const
+{
+    return m_cloudAudioInfo;
+}
+
+void NotationProject::setCloudAudioInfo(const CloudAudioInfo& audioInfo)
+{
+    m_cloudAudioInfo = audioInfo;
+    m_masterNotation->masterScore()->setMetaTag(AUDIO_COM_URL_TAG, audioInfo.url.toString());
 }
 
 mu::Ret NotationProject::save(const io::path_t& path, SaveMode saveMode)
@@ -963,6 +978,7 @@ ProjectMeta NotationProject::metaInfo() const
     meta.translator = allTags[TRANSLATOR_TAG];
     meta.arranger = allTags[ARRANGER_TAG];
     meta.source = allTags[SOURCE_TAG];
+    meta.audioComUrl = allTags[AUDIO_COM_URL_TAG];
     meta.creationDate = QDate::fromString(allTags[CREATION_DATE_TAG], Qt::ISODate);
     meta.platform = allTags[PLATFORM_TAG];
     meta.musescoreVersion = score->mscoreVersion();
@@ -999,6 +1015,7 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         { TRANSLATOR_TAG, meta.translator },
         { ARRANGER_TAG, meta.arranger },
         { SOURCE_TAG, meta.source },
+        { AUDIO_COM_URL_TAG, meta.audioComUrl },
         { PLATFORM_TAG, meta.platform },
         { CREATION_DATE_TAG, meta.creationDate.toString(Qt::ISODate) }
     };

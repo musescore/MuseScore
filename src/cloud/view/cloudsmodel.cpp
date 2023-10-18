@@ -37,6 +37,11 @@ const QString USER_NAME("userName");
 const QString USER_PROFILE_URL("userProfileUrl");
 const QString USER_AVATAR_URL("userAvatarUrl");
 const QString USER_COLLECTION_URL("userCollectionUrl");
+
+const QString DIALOG_TITLE_TEXT("titleText");
+const QString REPLACE_BUTTON_TEXT("replaceButtonText");
+const QString NEW_BUTTON_TEXT("newButtonText");
+const QString SAVE_BUTTON_TEXT("saveButtonText");
 }
 
 static QVariantMap makeCloudInfoMap(const QString& title, const AccountInfo& accountInfo)
@@ -139,6 +144,63 @@ QVariant CloudsModel::cloudInfo(const QString& cloudCode) const
     AccountInfo accountInfo = m_clouds[index]->accountInfo().val;
 
     return makeCloudInfoMap(cloudTitle, accountInfo);
+}
+
+QVariantList CloudsModel::visibilityModel(const QString& cloudCode) const
+{
+    QVariantList visibilityTypes;
+
+    QVariantMap publicVisibility;
+    publicVisibility.insert("value", int(Visibility::Public));
+    publicVisibility.insert("text", qtrc("project/save", "Public"));
+    visibilityTypes.append(publicVisibility);
+
+    QVariantMap unlistedVisibility;
+    unlistedVisibility.insert("value", int(Visibility::Unlisted));
+    unlistedVisibility.insert("text", qtrc("project/save", "Unlisted"));
+    visibilityTypes.append(unlistedVisibility);
+
+    if (cloudCode == cloud::MUSESCORE_COM_CLOUD_CODE) {
+        QVariantMap privateVisibility;
+        privateVisibility.insert("value", int(Visibility::Private));
+        privateVisibility.insert("text", qtrc("project/save", "Private"));
+        visibilityTypes.append(privateVisibility);
+    }
+
+    return visibilityTypes;
+}
+
+QVariant CloudsModel::dialogText(const QString& cloudCode, const QString& existingScoreOrAudioUrl) const
+{
+    QVariantMap dialogTextMap;
+
+    if (cloudCode == cloud::MUSESCORE_COM_CLOUD_CODE) {
+        dialogTextMap[prv::DIALOG_TITLE_TEXT] = qtrc("project/save", "Publish to MuseScore.com");
+
+        //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online score in question
+        dialogTextMap[prv::REPLACE_BUTTON_TEXT] = qtrc("project/save", "Replace the existing <a href=\"%1\">online score</a>")
+                                                  .arg(existingScoreOrAudioUrl);
+
+        dialogTextMap[prv::NEW_BUTTON_TEXT] = qtrc("project/save", "Publish as new online score");
+        dialogTextMap[prv::SAVE_BUTTON_TEXT] = qtrc("project/save", "Publish");
+
+        return dialogTextMap;
+    } else if (cloudCode == cloud::AUDIO_COM_CLOUD_CODE) {
+        dialogTextMap[prv::DIALOG_TITLE_TEXT] = qtrc("project/save", "Share on Audio.com");
+
+        //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to the online audio in question
+        dialogTextMap[prv::REPLACE_BUTTON_TEXT] = qtrc("project/save", "Replace the <a href=\"%1\">existing audio</a>")
+                                                  .arg(existingScoreOrAudioUrl);
+
+        dialogTextMap[prv::NEW_BUTTON_TEXT] = qtrc("project/save", "Upload as new audio file");
+        dialogTextMap[prv::SAVE_BUTTON_TEXT] = qtrc("project/save", "Share");
+
+        return dialogTextMap;
+    }
+
+    LOGE() << "Unknown cloud code: " + cloudCode;
+
+    return dialogTextMap;
 }
 
 void CloudsModel::load()
