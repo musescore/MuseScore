@@ -1403,7 +1403,21 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
     case ElementType::FRET_DIAGRAM:
+        e->setParent(seg);
+        e->setTrack(staffIdx * VOICES);
+        score()->undoAddElement(e);
+        return e;
+
     case ElementType::STRING_TUNINGS:
+        if (!staff->isPrimaryStaff()) {
+            staff = staff->primaryStaff();
+            if (!staff) {
+                return nullptr;
+            }
+
+            staffIdx = staff->idx();
+        }
+
         e->setParent(seg);
         e->setTrack(staffIdx * VOICES);
         score()->undoAddElement(e);
@@ -3197,13 +3211,18 @@ void Measure::checkTrailer()
 
 bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
 {
-    const Staff* staff = score()->staff(staffIdx);
+    Staff* staff = score()->staff(staffIdx);
     if (!staff) {
         return false;
     }
 
-    if (staff->isLinked()) {
-        return false;
+    if (!staff->isPrimaryStaff()) {
+        staff = staff->primaryStaff();
+        if (!staff) {
+            return false;
+        }
+
+        staffIdx = staff->idx();
     }
 
     const StringData* stringData = staff->part()->instrument(tick())->stringData();
