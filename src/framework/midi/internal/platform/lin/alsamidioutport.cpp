@@ -74,7 +74,7 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
     std::lock_guard lock(m_devicesMutex);
 
     int streams = SND_SEQ_OPEN_OUTPUT;
-    unsigned int cap = SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_READ;
+    unsigned int cap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
     unsigned int type = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
 
     std::vector<MidiDevice> ret;
