@@ -22,7 +22,8 @@
 
 #pragma once
 
-#include "models/popups/abstractelementpopupmodel.h"
+#include "../abstractelementpopupmodel.h"
+
 #include "models/text/textsettingsmodel.h"
 #include "internal/services/elementrepositoryservice.h"
 

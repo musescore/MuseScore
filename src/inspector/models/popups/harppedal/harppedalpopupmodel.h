@@ -24,11 +24,11 @@
 
 #include <QObject>
 
+#include "../abstractelementpopupmodel.h"
+
 #include "context/iglobalcontext.h"
 
 #include "engraving/dom/harppedaldiagram.h"
-
-#include "models/popups/abstractelementpopupmodel.h"
 
 namespace mu::inspector {
 class HarpPedalPopupModel : public AbstractElementPopupModel
