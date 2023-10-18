@@ -272,6 +272,25 @@ public:
     UNDO_CHANGED_OBJECTS({ m_part })
 };
 
+class AddPartToExcerpt : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, AddPartToExcerpt)
+
+    Excerpt* m_excerpt = nullptr;
+    Part* m_part = nullptr;
+    size_t m_targetPartIdx = 0;
+
+public:
+    AddPartToExcerpt(Excerpt* e, Part* p, size_t targetPartIdx);
+    void undo(EditData*) override;
+    void redo(EditData*) override;
+    void cleanup(bool undo) override;
+
+    UNDO_TYPE(CommandType::AddPartToExcerpt)
+    UNDO_NAME("AddPartToExcerpt")
+    UNDO_CHANGED_OBJECTS({ m_part })
+};
+
 class SetSoloist : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, SetSoloist)

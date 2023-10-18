@@ -1159,6 +1159,48 @@ void RemovePart::cleanup(bool undo)
 }
 
 //---------------------------------------------------------
+//   AddPartToExcerpt
+//---------------------------------------------------------
+
+AddPartToExcerpt::AddPartToExcerpt(Excerpt* e, Part* p, size_t targetPartIdx)
+    : m_excerpt(e), m_part(p), m_targetPartIdx(targetPartIdx)
+{
+    assert(m_excerpt);
+    assert(m_part);
+}
+
+void AddPartToExcerpt::undo(EditData*)
+{
+    mu::remove(m_excerpt->parts(), m_part);
+
+    if (Score* score = m_excerpt->excerptScore()) {
+        score->removePart(m_part);
+    }
+}
+
+void AddPartToExcerpt::redo(EditData*)
+{
+    std::vector<Part*>& excerptParts = m_excerpt->parts();
+    if (m_targetPartIdx < excerptParts.size()) {
+        excerptParts.insert(excerptParts.begin() + m_targetPartIdx, m_part);
+    } else {
+        excerptParts.push_back(m_part);
+    }
+
+    if (Score* score = m_excerpt->excerptScore()) {
+        score->insertPart(m_part, m_targetPartIdx);
+    }
+}
+
+void AddPartToExcerpt::cleanup(bool undo)
+{
+    if (!undo) {
+        delete m_part;
+        m_part = nullptr;
+    }
+}
+
+//---------------------------------------------------------
 //   SetSoloist
 //---------------------------------------------------------
 

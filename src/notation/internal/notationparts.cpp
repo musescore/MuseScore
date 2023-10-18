@@ -759,10 +759,10 @@ void NotationParts::doInsertPart(Part* part, size_t index)
     mu::engraving::InstrumentList instrumentsCopy = part->instruments();
     part->setInstruments({});
 
-    score()->insertPart(part, index);
-
-    if (score()->excerpt()) {
-        score()->excerpt()->parts().insert(score()->excerpt()->parts().begin() + index, part);
+    if (Excerpt* excerpt = score()->excerpt()) {
+        score()->undo(new AddPartToExcerpt(excerpt, part, index));
+    } else {
+        score()->undoInsertPart(part, index);
     }
 
     for (auto it = instrumentsCopy.cbegin(); it != instrumentsCopy.cend(); ++it) {
@@ -789,7 +789,6 @@ void NotationParts::doInsertPart(Part* part, size_t index)
         mu::engraving::Excerpt::cloneStaff2(staff, staffCopy, startTick, endTick);
     }
 
-    part->setScore(score());
     score()->remapBracketsAndBarlines();
 }
 
@@ -1048,7 +1047,11 @@ void NotationParts::insertNewParts(const PartInstrumentList& parts, const mu::en
         part->setLongName(formattedLongName);
         part->setShortName(formattedShortName);
 
-        score()->undo(new mu::engraving::InsertPart(part, partIdx));
+        if (Excerpt* excerpt = score()->excerpt()) {
+            score()->undo(new AddPartToExcerpt(excerpt, part, partIdx));
+        } else {
+            score()->undoInsertPart(part, partIdx);
+        }
         appendStaves(part, pi.instrumentTemplate, keyList);
         ++partIdx;
 
