@@ -24,8 +24,8 @@
 #include "modularity/ioc.h"
 #include "ui/iuiengine.h"
 
-#include "iinspectorcontroller.h"
 #include "internal/inspectorcontroller.h"
+
 #include "models/abstractinspectormodel.h"
 #include "models/inspectorlistmodel.h"
 #include "models/inspectormodelcreator.h"

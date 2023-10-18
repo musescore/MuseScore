@@ -23,12 +23,12 @@
 #ifndef MU_INSPECTOR_STRINGTUNINGSPOPUPMODEL_H
 #define MU_INSPECTOR_STRINGTUNINGSPOPUPMODEL_H
 
-#include "models/popups/abstractelementpopupmodel.h"
+#include <QObject>
+
+#include "../abstractelementpopupmodel.h"
 
 #include "modularity/ioc.h"
 #include "notation/iinstrumentsrepository.h"
-
-#include <QObject>
 
 namespace mu::engraving {
 class StringTunings;

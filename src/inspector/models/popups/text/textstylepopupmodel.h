@@ -23,7 +23,8 @@
 #ifndef MU_INSPECTOR_TEXTSTYLEPOPUPMODEL_H
 #define MU_INSPECTOR_TEXTSTYLEPOPUPMODEL_H
 
-#include "models/popups/abstractelementpopupmodel.h"
+#include "../abstractelementpopupmodel.h"
+
 #include "models/text/textsettingsmodel.h"
 #include "internal/services/elementrepositoryservice.h"
 
