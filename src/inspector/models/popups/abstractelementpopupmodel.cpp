@@ -32,8 +32,8 @@ static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPE
     { mu::engraving::ElementType::STRING_TUNINGS, PopupModelType::TYPE_STRING_TUNINGS },
     { mu::engraving::ElementType::SOUND_FLAG, PopupModelType::TYPE_SOUND_FLAG },
     { mu::engraving::ElementType::STAFF_TEXT, PopupModelType::TYPE_TEXT },
+    { mu::engraving::ElementType::SYSTEM_TEXT, PopupModelType::TYPE_TEXT },
     { mu::engraving::ElementType::TEXT, PopupModelType::TYPE_TEXT },
-
 };
 
 static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDENT_ELEMENT_TYPES = {
@@ -41,7 +41,8 @@ static const QHash<PopupModelType, mu::engraving::ElementTypeSet> POPUP_DEPENDEN
     { PopupModelType::TYPE_CAPO, { mu::engraving::ElementType::CAPO } },
     { PopupModelType::TYPE_STRING_TUNINGS, { mu::engraving::ElementType::STRING_TUNINGS } },
     { PopupModelType::TYPE_SOUND_FLAG, { mu::engraving::ElementType::SOUND_FLAG, mu::engraving::ElementType::STAFF_TEXT } },
-    { PopupModelType::TYPE_TEXT, { mu::engraving::ElementType::TEXT, mu::engraving::ElementType::STAFF_TEXT } },
+    { PopupModelType::TYPE_TEXT,
+      { mu::engraving::ElementType::TEXT, mu::engraving::ElementType::STAFF_TEXT, mu::engraving::ElementType::SYSTEM_TEXT } },
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)

@@ -24,7 +24,7 @@
 
 #include <QObject>
 
-#include "models/popups/abstractelementpopupmodel.h"
+#include "../abstractelementpopupmodel.h"
 
 namespace mu::engraving {
 class Capo;

@@ -28,7 +28,6 @@
 #include <QtMath>
 
 #include "commonscene/commonscenetypes.h"
-#include "inspector/iinspectorcontroller.h"
 
 #include "log.h"
 

@@ -35,7 +35,7 @@ StyledPopupView {
 
     property QtObject model: textStyleModel
 
-    // The navigation order does not match the order of the components in the file
+    //! Note: the navigation order does not match the order of the components in the file
     property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
     property int navigationOrderEnd: textStyleSettingsNavPanel.order
@@ -101,11 +101,9 @@ StyledPopupView {
                     }
 
                     return resultList
-
                 }
 
-                currentIndex: textStyleModel.textSettingsModel.fontFamily
-                                && !textStyleModel.textSettingsModel.fontFamily.isUndefined
+                currentIndex:  !textStyleModel.textSettingsModel.fontFamily.isUndefined
                                 ? indexOfValue(textStyleModel.textSettingsModel.fontFamily.value)
                                 : -1
 
@@ -157,7 +155,7 @@ StyledPopupView {
 
                         icon: modelData.iconCode
 
-                        checked: !textStyleModel.textSettingsModel.fontStyle.value.isUndefined
+                        checked: !textStyleModel.textSettingsModel.fontStyle.isUndefined
                                     && (textStyleModel.textSettingsModel.fontStyle.value & modelData.value)
 
                         onToggled: {
@@ -237,9 +235,7 @@ StyledPopupView {
 
                     Layout.preferredWidth: 60
 
-                    currentValue: textStyleModel.textSettingsModel
-                                    ? textStyleModel.textSettingsModel.fontSize.value
-                                    : null
+                    currentValue: textStyleModel.textSettingsModel.fontSize.value
 
                     measureUnitsSymbol: qsTrc("global", "pt")
 
@@ -249,9 +245,7 @@ StyledPopupView {
                     maxValue: 99
 
                     onValueEditingFinished: function(newValue) {
-                        if (textStyleModel.textSettingsModel) {
-                            textStyleModel.textSettingsModel.fontSize.value = newValue
-                        }
+                        textStyleModel.textSettingsModel.fontSize.value = newValue
                     }
                 }
 
@@ -373,9 +367,7 @@ StyledPopupView {
 
                     Layout.preferredWidth: 60
 
-                    currentValue: textStyleModel.textSettingsModel
-                                    ? textStyleModel.textSettingsModel.textLineSpacing.value
-                                    : null
+                    currentValue: textStyleModel.textSettingsModel.textLineSpacing.value
 
                     measureUnitsSymbol: qsTrc("global", "li")
 
@@ -385,9 +377,7 @@ StyledPopupView {
                     maxValue: 99
 
                     onValueEditingFinished: function(newValue) {
-                        if (textStyleModel.textSettingsModel) {
-                            textStyleModel.textSettingsModel.textLineSpacing.value = newValue
-                        }
+                        textStyleModel.textSettingsModel.textLineSpacing.value = newValue
                     }
                 }
             }
@@ -411,9 +401,7 @@ StyledPopupView {
                 visible: textStyleModel.textSettingsModel.isSpecialCharactersInsertionAvailable
 
                 onClicked: {
-                    if (textStyleModel.textSettingsModel) {
-                        textStyleModel.textSettingsModel.insertSpecialCharacters()
-                    }
+                    textStyleModel.textSettingsModel.insertSpecialCharacters()
                 }
             }
 
