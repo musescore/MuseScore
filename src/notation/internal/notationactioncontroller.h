@@ -143,6 +143,7 @@ private:
     void openEditStyleDialog(const actions::ActionData& args);
     void openPageSettingsDialog();
     void openStaffProperties();
+    void openEditStringsDialog();
     void openBreaksDialog();
     void openTransposeDialog();
     void openPartsDialog();

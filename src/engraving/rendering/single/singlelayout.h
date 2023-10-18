@@ -101,6 +101,7 @@ class Slur;
 class Spacer;
 class StaffText;
 class StaffTypeChange;
+class StringTunings;
 class Symbol;
 class SystemText;
 
@@ -208,6 +209,7 @@ public:
     static void layout(Spacer* item, const Context&);
     static void layout(StaffText* item, const Context& ctx);
     static void layout(StaffTypeChange* item, const Context& ctx);
+    static void layout(StringTunings* item, const Context& ctx);
     static void layout(Symbol* item, const Context& ctx);
     static void layout(SystemText* item, const Context& ctx);
 

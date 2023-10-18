@@ -166,6 +166,8 @@ public:
     virtual io::paths_t userScoreOrderListPaths() const = 0;
     virtual void setUserScoreOrderListPaths(const io::paths_t& paths) = 0;
 
+    virtual io::path_t stringTuningsPresetsPath() const = 0;
+
     virtual bool isSnappedToGrid(framework::Orientation gridOrientation) const = 0;
     virtual void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) = 0;
 

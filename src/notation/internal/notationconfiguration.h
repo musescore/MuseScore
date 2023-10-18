@@ -169,6 +169,8 @@ public:
     io::paths_t userScoreOrderListPaths() const override;
     void setUserScoreOrderListPaths(const io::paths_t& paths) override;
 
+    io::path_t stringTuningsPresetsPath() const override;
+
     bool isSnappedToGrid(framework::Orientation gridOrientation) const override;
     void setIsSnappedToGrid(framework::Orientation gridOrientation, bool isSnapped) override;
 

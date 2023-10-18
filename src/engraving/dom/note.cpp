@@ -1542,6 +1542,17 @@ bool Note::acceptDrop(EditData& data) const
     const Staff* st   = staff();
     bool isTablature  = st->isTabStaff(tick());
     bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
+
+    if (type == ElementType::STRING_TUNINGS) {
+        staff_idx_t staffIdx = 0;
+        Segment* seg = nullptr;
+        if (!score()->pos2measure(data.pos, &staffIdx, 0, &seg, 0)) {
+            return false;
+        }
+
+        return chord()->measure()->canAddStringTunings(staffIdx);
+    }
+
     return type == ElementType::ARTICULATION
            || type == ElementType::ORNAMENT
            || type == ElementType::FERMATA
@@ -1822,6 +1833,9 @@ EngravingItem* Note::drop(EditData& data)
     case ElementType::CHORDLINE:
         toChordLine(e)->setNote(this);
         return ch->drop(data);
+
+    case ElementType::STRING_TUNINGS:
+        return ch->measure()->drop(data);
 
     default:
         Spanner* spanner;
@@ -2451,7 +2465,7 @@ void Note::verticalDrag(EditData& ed)
     int lineOffset      = lrint(ed.moveDelta.y() / step);
 
     if (tab) {
-        const StringData* strData = staff()->part()->instrument(_tick)->stringData();
+        const StringData* strData = staff()->part()->stringData(_tick);
         int nString = ned->string + (st->upsideDown() ? -lineOffset : lineOffset);
         int nFret   = strData->fret(m_pitch, nString, staff());
 

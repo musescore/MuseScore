@@ -1715,11 +1715,12 @@ ChangeStaff::ChangeStaff(Staff* _staff)
     cutaway = staff->cutaway();
     hideSystemBarLine = staff->hideSystemBarLine();
     mergeMatchingRests = staff->mergeMatchingRests();
+    reflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
 }
 
 ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType,
                          double _userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                         bool _hideSystemBarLine, bool _mergeMatchingRests)
+                         bool _hideSystemBarLine, bool _mergeMatchingRests, bool _reflectTranspositionInLinkedTab)
 {
     staff       = _staff;
     visible     = _visible;
@@ -1730,6 +1731,7 @@ ChangeStaff::ChangeStaff(Staff* _staff, bool _visible, ClefTypeList _clefType,
     cutaway     = _cutaway;
     hideSystemBarLine  = _hideSystemBarLine;
     mergeMatchingRests = _mergeMatchingRests;
+    reflectTranspositionInLinkedTab = _reflectTranspositionInLinkedTab;
 }
 
 //---------------------------------------------------------
@@ -1746,6 +1748,7 @@ void ChangeStaff::flip(EditData*)
     bool oldCutaway     = staff->cutaway();
     bool oldHideSystemBarLine  = staff->hideSystemBarLine();
     bool oldMergeMatchingRests = staff->mergeMatchingRests();
+    bool oldReflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
 
     staff->setVisible(visible);
     staff->setDefaultClefType(clefType);
@@ -1755,6 +1758,7 @@ void ChangeStaff::flip(EditData*)
     staff->setCutaway(cutaway);
     staff->setHideSystemBarLine(hideSystemBarLine);
     staff->setMergeMatchingRests(mergeMatchingRests);
+    staff->setReflectTranspositionInLinkedTab(reflectTranspositionInLinkedTab);
 
     visible     = oldVisible;
     clefType    = oldClefType;
@@ -1764,6 +1768,7 @@ void ChangeStaff::flip(EditData*)
     cutaway     = oldCutaway;
     hideSystemBarLine  = oldHideSystemBarLine;
     mergeMatchingRests = oldMergeMatchingRests;
+    reflectTranspositionInLinkedTab = oldReflectTranspositionInLinkedTab;
 
     staff->triggerLayout();
     staff->masterScore()->rebuildMidiMapping();
@@ -3012,4 +3017,19 @@ void ChangeSingleHarpPedal::flip(EditData*)
     pos = f_pos;
     diagram->triggerLayout();
 }
+}
+
+void ChangeStringData::flip(EditData*)
+{
+    const StringData* stringData =  m_stringTunings ? m_stringTunings->stringData() : m_instrument->stringData();
+    int frets = stringData->frets();
+    std::vector<instrString> stringList = stringData->stringList();
+
+    if (m_stringTunings) {
+        m_stringTunings->setStringData(m_stringData);
+    } else {
+        m_instrument->setStringData(m_stringData);
+    }
+
+    m_stringData.set(StringData(frets, stringList));
 }

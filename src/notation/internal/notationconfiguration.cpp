@@ -738,6 +738,11 @@ void NotationConfiguration::setUserScoreOrderListPaths(const io::paths_t& paths)
     }
 }
 
+io::path_t NotationConfiguration::stringTuningsPresetsPath() const
+{
+    return globalConfiguration()->appDataPath() + "instruments/string_tunings_presets.json";
+}
+
 bool NotationConfiguration::isSnappedToGrid(framework::Orientation gridOrientation) const
 {
     switch (gridOrientation) {

@@ -479,6 +479,7 @@ struct StaffConfig
     bool showIfEmpty = false;
     bool hideSystemBarline = false;
     bool mergeMatchingRests = false;
+    bool reflectTranspositionInLinkedTab = false;
     Staff::HideMode hideMode = Staff::HideMode::AUTO;
     ClefTypeList clefTypeList;
     engraving::StaffType staffType;
@@ -494,6 +495,7 @@ struct StaffConfig
         equal &= hideMode == conf.hideMode;
         equal &= clefTypeList == conf.clefTypeList;
         equal &= staffType == conf.staffType;
+        equal &= reflectTranspositionInLinkedTab == conf.reflectTranspositionInLinkedTab;
 
         return equal;
     }
@@ -676,6 +678,20 @@ inline bool isVerticalBoxTextStyle(TextStyleType type)
 
     return mu::contains(types, type);
 }
+
+struct StringTuningPreset
+{
+    std::string name;
+    std::vector<int> value;
+};
+
+struct StringTuningsInfo
+{
+    size_t number = 0;
+    std::vector<StringTuningPreset> presets;
+};
+
+using InstrumentStringTuningsMap = std::map<std::string, std::vector<StringTuningsInfo> >;
 }
 
 #endif // MU_NOTATION_NOTATIONTYPES_H

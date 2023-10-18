@@ -78,6 +78,7 @@
 #include "engraving/dom/stafftext.h"
 #include "engraving/dom/playtechannotation.h"
 #include "engraving/dom/stafftypechange.h"
+#include "engraving/dom/stringtunings.h"
 #include "engraving/dom/systemtext.h"
 #include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
@@ -111,6 +112,7 @@ MAKE_ELEMENT(StaffText, score->dummy()->segment())
 MAKE_ELEMENT(Expression, score->dummy()->segment())
 MAKE_ELEMENT(PlayTechAnnotation, score->dummy()->segment())
 MAKE_ELEMENT(Capo, score->dummy()->segment())
+MAKE_ELEMENT(StringTunings, score->dummy()->segment())
 MAKE_ELEMENT(RehearsalMark, score->dummy()->segment())
 
 MAKE_ELEMENT(Jump, score->dummy()->measure())
@@ -1864,6 +1866,11 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     auto capo = makeElement<Capo>(gpaletteScore);
     capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
     sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
+
+    auto stringTunings = makeElement<StringTunings>(gpaletteScore);
+    stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
+    stringTunings->initTextStyleType(TextStyleType::STAFF);
+    sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(true);
 
     const char* finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {

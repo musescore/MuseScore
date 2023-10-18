@@ -860,7 +860,8 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     String family;
     draw::Font::Type fontType = draw::Font::Type::Unknown;
     if (format.fontFamily() == "ScoreText") {
-        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM) {
+        if (t->isDynamic() || t->textStyleType() == TextStyleType::OTTAVA || t->textStyleType() == TextStyleType::HARP_PEDAL_DIAGRAM
+            || t->isStringTunings()) {
             std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::MusicalSymbolFont).toStdString())->family();
             family = String::fromStdString(fontName);
             fontType = draw::Font::Type::MusicSymbol;
@@ -1036,7 +1037,14 @@ void TextBlock::layout(const TextBase* t)
             }
 
             _bbox   |= fm.tightBoundingRect(f.text).translated(f.pos);
-            _lineSpacing = std::max(_lineSpacing, fm.lineSpacing());
+            mu::draw::Font font = f.font(t);
+            if (font.type() == mu::draw::Font::Type::MusicSymbol || font.type() == mu::draw::Font::Type::MusicSymbolText) {
+                // SEMI-HACK: Music fonts can have huge linespacing because of tall symbols, so instead of using the
+                // font linespacing value we just use the height of the individual fragment with some added margin
+                _lineSpacing = std::max(_lineSpacing, 1.25 * _bbox.height());
+            } else {
+                _lineSpacing = std::max(_lineSpacing, fm.lineSpacing());
+            }
         }
     }
 

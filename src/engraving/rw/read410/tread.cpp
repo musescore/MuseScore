@@ -120,6 +120,7 @@
 #include "../../dom/spacer.h"
 #include "../../dom/stafftype.h"
 #include "../../dom/stafftypechange.h"
+#include "../../dom/stringtunings.h"
 #include "../../dom/system.h"
 #include "../../dom/textline.h"
 #include "../../dom/trill.h"
@@ -160,7 +161,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Page, PalmMute, Pedal, PlayTechAnnotation,
                                  Rasgueado, RehearsalMark, Rest,
                                  Ornament, Ottava,
-                                 Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                 Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking, StringTunings,
                                  Symbol, FSymbol, System, SystemDivider, SystemText,
                                  TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
                                  Vibrato, Volta,
@@ -3863,6 +3864,25 @@ void TRead::read(StringData* item, XmlReader& e)
     }
     if (item->isFiveStringBanjo()) {
         item->configBanjo5thString();
+    }
+}
+
+void TRead::read(StringTunings* s, XmlReader& xml, ReadContext& ctx)
+{
+    while (xml.readNextStartElement()) {
+        const AsciiStringView tag(xml.name());
+
+        if (tag == "preset") {
+            s->setPreset(xml.readText());
+        } else if (tag == "StringData") {
+            StringData sd;
+            read(&sd, xml);
+            s->setStringData(sd);
+        } else if (tag == "visibleStrings") {
+            s->setVisibleStrings(TConv::fromXml(xml.readText(), std::vector<string_idx_t>()));
+        } else if (!readProperties(static_cast<StaffTextBase*>(s), xml, ctx)) {
+            xml.unknown();
+        }
     }
 }
 

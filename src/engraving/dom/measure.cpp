@@ -1332,6 +1332,15 @@ bool Measure::acceptDrop(EditData& data) const
         viewer->setDropRectangle(staffR);
         return true;
 
+    case ElementType::STRING_TUNINGS: {
+        if (!canAddStringTunings(staffIdx)) {
+            return false;
+        }
+
+        viewer->setDropRectangle(staffR);
+        return true;
+    }
+
     case ElementType::ACTION_ICON:
         switch (toActionIcon(e)->actionType()) {
         case ActionIconType::VFRAME:
@@ -1394,6 +1403,7 @@ EngravingItem* Measure::drop(EditData& data)
     case ElementType::DYNAMIC:
     case ElementType::EXPRESSION:
     case ElementType::FRET_DIAGRAM:
+    case ElementType::STRING_TUNINGS:
         e->setParent(seg);
         e->setTrack(staffIdx * VOICES);
         score()->undoAddElement(e);
@@ -3183,6 +3193,36 @@ void Measure::checkTrailer()
             break;
         }
     }
+}
+
+bool Measure::canAddStringTunings(staff_idx_t staffIdx) const
+{
+    const Staff* staff = score()->staff(staffIdx);
+    if (!staff) {
+        return false;
+    }
+
+    if (staff->isLinked()) {
+        return false;
+    }
+
+    const StringData* stringData = staff->part()->instrument(tick())->stringData();
+    if (!stringData || stringData->frettedStrings() == 0) {
+        return false;
+    }
+
+    // already a string tunings element in this measure
+    bool alreadyHasStringTunings = false;
+    for (const Segment& segment : m_segments) {
+        for (EngravingItem* element : segment.annotations()) {
+            if (element && element->isStringTunings() && element->staffIdx() == staffIdx) {
+                alreadyHasStringTunings = true;
+                break;
+            }
+        }
+    }
+
+    return !alreadyHasStringTunings;
 }
 
 void Measure::stretchToTargetWidth(double targetWidth)

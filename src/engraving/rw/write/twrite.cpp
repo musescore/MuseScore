@@ -128,6 +128,7 @@
 #include "../../dom/stemslash.h"
 #include "../../dom/sticking.h"
 #include "../../dom/stringdata.h"
+#include "../../dom/stringtunings.h"
 #include "../../dom/symbol.h"
 #include "../../dom/bsymbol.h"
 #include "../../dom/system.h"
@@ -176,7 +177,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   Ornament, Ottava,
                                   Page, PalmMute, Pedal, PlayTechAnnotation,
                                   Rasgueado, RehearsalMark, Rest,
-                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
+                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking, StringTunings,
                                   Symbol, FSymbol, System, SystemDivider, SystemText,
                                   TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
                                   Vibrato, Volta,
@@ -2555,11 +2556,27 @@ void TWrite::write(const StringData* item, XmlWriter& xml)
     xml.tag("frets", item->frets());
     for (const instrString& strg : item->stringList()) {
         if (strg.open) {
-            xml.tag("string open=\"1\"", strg.pitch);
+            xml.tag("string", { { "open", "1" } }, strg.pitch);
         } else {
             xml.tag("string", strg.pitch);
         }
     }
+    xml.endElement();
+}
+
+void TWrite::write(const StringTunings* item, XmlWriter& xml, WriteContext& ctx)
+{
+    xml.startElement(item);
+
+    writeProperty(item, xml, Pid::STRINGTUNINGS_PRESET);
+
+    xml.tag("visibleStrings", TConv::toXml(item->visibleStrings()));
+
+    if (!item->stringData()->isNull()) {
+        write(item->stringData(), xml);
+    }
+
+    writeProperties(static_cast<const StaffTextBase*>(item), xml, ctx, true);
     xml.endElement();
 }
 
@@ -2943,6 +2960,7 @@ void TWrite::writeSegments(XmlWriter& xml, WriteContext& ctx, track_idx_t strack
                         || (et == ElementType::TRIPLET_FEEL)
                         || (et == ElementType::PLAYTECH_ANNOTATION)
                         || (et == ElementType::CAPO)
+                        || (et == ElementType::STRING_TUNINGS)
                         || (et == ElementType::JUMP)
                         || (et == ElementType::MARKER)
                         || (et == ElementType::TEMPO_TEXT)

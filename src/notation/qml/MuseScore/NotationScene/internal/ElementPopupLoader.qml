@@ -29,22 +29,20 @@ import MuseScore.NotationScene 1.0
 Item {
     id: container
 
-    width: 0
-
-    height: 0
-
     anchors.fill: parent
-    property var openedPopup: null
-    property bool isPopupOpened: Boolean(openedPopup) && openedPopup.isOpened
 
-    signal opened()
-    signal closed()
+    property var popup: loader.item
+    property bool isPopupOpened: Boolean(popup) && popup.isOpened
+
 
     property NavigationSection notationViewNavigationSection: null
     property int navigationOrderStart: 0
     property int navigationOrderEnd: Boolean(loader.item)
                                         ? loader.item.navigationOrderEnd
                                         : navigationOrderStart
+
+    signal opened()
+    signal closed()
 
     QtObject {
         id: prv
@@ -53,52 +51,47 @@ Item {
             switch (type) {
             case Notation.TYPE_HARP_DIAGRAM: return harpPedalComp
             case Notation.TYPE_CAPO: return capoComp
+            case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
             }
 
             return null
         }
 
-        function openPopup(popup) {
-            if (Boolean(popup)) {
-                openedPopup = popup
-                container.opened()
-                popup.open()
-            }
+        function loadPopup() {
+            loader.active = true
         }
 
-        function closeOpenedPopup() {
-            if (isPopupOpened) {
-                openedPopup.close()
-                resetOpenedPopup()
-            }
-        }
+        function unloadPopup() {
+            loader.sourceComponent = undefined
+            loader.active = false
 
-        function resetOpenedPopup() {
-            container.closed(false)
-            openedPopup = null
+            Qt.callLater(container.closed)
         }
     }
 
     function show(elementType, elementRect) {
-        if (isPopupOpened) {
-            prv.closeOpenedPopup()
-        }
-        opened()
+        prv.loadPopup()
+
         var popup = loader.createPopup(prv.componentByType(elementType), elementRect)
-        prv.openPopup(popup)
+        popup.open()
+
+        Qt.callLater(container.opened)
     }
 
     function close() {
-        closed()
-        prv.closeOpenedPopup()
+        if (Boolean(container.popup) && container.popup.isOpened) {
+            container.popup.close()
+        }
     }
 
     Loader {
         id: loader
 
+        active: false
+
         function createPopup(comp, elementRect) {
             loader.sourceComponent = comp
-            loader.item.parent = container
+            loader.item.parent = loader
             loader.item.updatePosition(elementRect)
 
             //! NOTE: All navigation panels in popups must be in the notation view section.
@@ -117,8 +110,7 @@ Item {
         id: harpPedalComp
         HarpPedalPopup {
             onClosed: {
-                prv.resetOpenedPopup()
-                loader.sourceComponent = null
+                prv.unloadPopup()
             }
         }
     }
@@ -127,8 +119,16 @@ Item {
         id: capoComp
         CapoPopup {
             onClosed: {
-                prv.resetOpenedPopup()
-                loader.sourceComponent = null
+                prv.unloadPopup()
+            }
+        }
+    }
+
+    Component {
+        id: stringTuningsComp
+        StringTuningsPopup {
+            onClosed: {
+                prv.unloadPopup()
             }
         }
     }

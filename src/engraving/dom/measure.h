@@ -352,6 +352,8 @@ public:
 
     void respaceSegments();
 
+    bool canAddStringTunings(staff_idx_t staffIdx) const;
+
 private:
 
     friend class Factory;

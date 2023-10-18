@@ -142,6 +142,7 @@ class StaffTypeChange;
 class Stem;
 class StemSlash;
 class StringData;
+class StringTunings;
 class System;
 class SystemDivider;
 class Symbol;
@@ -280,6 +281,7 @@ public:
     static void read(Stem* s, XmlReader& xml, ReadContext& ctx);
     static void read(StemSlash* s, XmlReader& xml, ReadContext& ctx);
     static void read(StringData* item, XmlReader& xml);
+    static void read(StringTunings* s, XmlReader& xml, ReadContext& ctx);
     static void read(System* s, XmlReader& xml, ReadContext& ctx);
     static void read(SystemDivider* d, XmlReader& xml, ReadContext& ctx);
     static void read(Symbol* sym, XmlReader& xml, ReadContext& ctx);

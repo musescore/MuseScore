@@ -100,6 +100,8 @@ private:
     ChangeMap _velocityMultiplications;         ///< cached value
     PitchList _pitchOffsets;        ///< cached value
 
+    bool m_reflectTranspositionInLinkedTab = true;
+
     friend class Factory;
     Staff(Part* parent);
     Staff(const Staff& staff);
@@ -291,6 +293,9 @@ public:
     const std::array<bool, VOICES>& visibilityVoices() const;
     bool isVoiceVisible(voice_idx_t voice) const;
     bool canDisableVoice() const;
+
+    bool reflectTranspositionInLinkedTab() const;
+    void setReflectTranspositionInLinkedTab(bool reflect);
 
 #ifndef NDEBUG
     void dumpClefs(const char* title) const;

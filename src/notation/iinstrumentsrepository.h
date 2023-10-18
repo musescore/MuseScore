@@ -42,6 +42,8 @@ public:
 
     virtual const InstrumentGenreList& genres() const = 0;
     virtual const InstrumentGroupList& groups() const = 0;
+
+    virtual const InstrumentStringTuningsMap& stringTuningsPresets() const = 0;
 };
 }
 

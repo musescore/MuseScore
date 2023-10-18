@@ -106,5 +106,6 @@
         <file>qml/MuseScore/Inspector/common/PropertyResetButton.qml</file>
         <file>qml/MuseScore/Inspector/common/PropertyToggle.qml</file>
         <file>qml/MuseScore/Inspector/parts/PartsSettings.qml</file>
+        <file>qml/MuseScore/Inspector/notation/stringtunings/StringTuningsSettings.qml</file>
     </qresource>
 </RCC>

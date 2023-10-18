@@ -44,26 +44,26 @@ StyledPopupView {
         root.y = elementRect.y - h / 2
     }
 
-    CapoSettingsModel {
-        id: capoModel
-
-        onItemRectChanged: function(rect) {
-            updatePosition(rect)
-        }
-    }
-
-    Component.onCompleted: {
-        capoModel.init()
-    }
-
     ColumnLayout {
         id: content
+
+        readonly property int columnsSpacing: 6
 
         width: 294
 
         spacing: 12
 
-        readonly property int columnsSpacing: 6
+        CapoSettingsModel {
+            id: capoModel
+
+            onItemRectChanged: function(rect) {
+                updatePosition(rect)
+            }
+        }
+
+        Component.onCompleted: {
+            capoModel.init()
+        }
 
         NavigationPanel {
             id: capoSettingsNavPanel

@@ -160,6 +160,7 @@ static const QList<mu::engraving::ElementType> TEXT_ELEMENT_TYPES = {
     mu::engraving::ElementType::TUPLET,
     mu::engraving::ElementType::PLAYTECH_ANNOTATION,
     mu::engraving::ElementType::CAPO,
+    mu::engraving::ElementType::STRING_TUNINGS,
     mu::engraving::ElementType::HARP_DIAGRAM
 };
 }

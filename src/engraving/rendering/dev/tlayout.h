@@ -142,6 +142,7 @@ class Spacer;
 class SpannerSegment;
 class StaffLines;
 class StretchedBend;
+class StringTunings;
 
 class BSymbol;
 class Symbol;
@@ -294,6 +295,7 @@ public:
     static void layoutSticking(const Sticking* item, Sticking::LayoutData* ldata);
     static void layoutStretchedBend(StretchedBend* item, LayoutContext& ctx);
     static void layoutStretched(StretchedBend* item, LayoutContext& ctx);
+    static void layoutStringTunings(StringTunings* item, LayoutContext& ctx);
 
     static void layoutSymbol(const Symbol* item, Symbol::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutFSymbol(const FSymbol* item, FSymbol::LayoutData* ldata);

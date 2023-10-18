@@ -30,14 +30,6 @@ import MuseScore.NotationScene 1.0
 StyledPopupView {
     id: root
 
-    HarpPedalPopupModel {
-        id: harpModel
-
-        onItemRectChanged: function(rect) {
-            updatePosition(rect)
-        }
-    }
-
     property QtObject model: harpModel
 
     property variant pedalState: harpModel.pedalState
@@ -105,16 +97,24 @@ StyledPopupView {
         return noteNames[string][state]
     }
 
-    Component.onCompleted: {
-        harpModel.init()
-    }
-
     GridLayout {
         id: menuItems
         rows: 5
         flow: GridLayout.TopToBottom
         columnSpacing: 10
         rowSpacing: 10
+
+        HarpPedalPopupModel {
+            id: harpModel
+
+            onItemRectChanged: function(rect) {
+                updatePosition(rect)
+            }
+        }
+
+        Component.onCompleted: {
+            harpModel.init()
+        }
 
         NavigationPanel {
             id: pedalSettingsNavPanel

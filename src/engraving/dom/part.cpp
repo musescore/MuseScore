@@ -31,11 +31,13 @@
 #include "fret.h"
 #include "harppedaldiagram.h"
 #include "instrtemplate.h"
+#include "instrchange.h"
 #include "linkedobjects.h"
 #include "masterscore.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
+#include "stringtunings.h"
 
 #include "log.h"
 
@@ -402,6 +404,48 @@ const Instrument* Part::instrumentById(const std::string& id) const
 const InstrumentList& Part::instruments() const
 {
     return _instruments;
+}
+
+const StringData* Part::stringData(const Fraction& tick) const
+{
+    if (!score()) {
+        return nullptr;
+    }
+
+    const Instrument* instrument = this->instrument(tick);
+    if (!instrument) {
+        return nullptr;
+    }
+
+    StringTunings* stringTunings = nullptr;
+
+    auto it = findLessOrEqual(m_stringTunings, tick.ticks());
+    if (it != m_stringTunings.end()) {
+        stringTunings = it->second;
+    }
+
+    if (stringTunings) {
+        //!NOTE: if there is string tunings element between current instrument and current tick,
+        //! then return string data from string tunings element
+        const Instrument* stringTuningsInstrument = this->instrument(stringTunings->tick());
+        if (instrument == stringTuningsInstrument) {
+            return stringTunings->stringData();
+        }
+    }
+
+    return instrument->stringData();
+}
+
+void Part::addStringTunings(StringTunings* stringTunings)
+{
+    m_stringTunings[stringTunings->segment()->tick().ticks()] = stringTunings;
+}
+
+void Part::removeStringTunings(StringTunings* stringTunings)
+{
+    if (m_stringTunings[stringTunings->segment()->tick().ticks()] == stringTunings) {
+        m_stringTunings.erase(stringTunings->segment()->tick().ticks());
+    }
 }
 
 //---------------------------------------------------------

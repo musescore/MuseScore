@@ -2279,6 +2279,7 @@ void Score::cmdFlip()
                    || e->isInstrumentChange()
                    || e->isPlayTechAnnotation()
                    || e->isCapo()
+                   || e->isStringTunings()
                    || e->isSticking()
                    || e->isFingering()
                    || e->isDynamic()
@@ -5956,6 +5957,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::TRIPLET_FEEL
             && et != ElementType::PLAYTECH_ANNOTATION
             && et != ElementType::CAPO
+            && et != ElementType::STRING_TUNINGS
             && et != ElementType::STICKING
             && et != ElementType::TREMOLO
             && et != ElementType::ARPEGGIO
@@ -6031,6 +6033,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                            || element->isStaffText()
                            || element->isPlayTechAnnotation()
                            || element->isCapo()
+                           || element->isStringTunings()
                            || element->isSticking()
                            || element->isFretDiagram()
                            || element->isHarmony()
@@ -6059,6 +6062,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     case ElementType::TRIPLET_FEEL:
                     case ElementType::PLAYTECH_ANNOTATION:
                     case ElementType::CAPO:
+                    case ElementType::STRING_TUNINGS:
                     case ElementType::FRET_DIAGRAM:
                     case ElementType::HARMONY:
                     case ElementType::FIGURED_BASS:
@@ -6161,6 +6165,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                      || element->isStaffText()
                      || element->isPlayTechAnnotation()
                      || element->isCapo()
+                     || element->isStringTunings()
                      || element->isSticking()
                      || element->isFretDiagram()
                      || element->isFermata()
@@ -6192,6 +6197,13 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     if (fd->harmony()) {
                         fd->harmony()->setTrack(ntrack);
                     }
+                } else if (ne->isStringTunings()) {
+                    StringTunings* stringTunings = toStringTunings(ne);
+                    const StringData* stringData = stringTunings->part()->stringData(tick);
+                    int frets = stringData->frets();
+                    std::vector<mu::engraving::instrString> stringList = stringData->stringList();
+
+                    stringTunings->setStringData(StringData(frets, stringList));
                 }
 
                 undo(new AddElement(ne));

@@ -34,6 +34,7 @@
 #include "engraving/dom/ornament.h"
 #include "engraving/dom/score.h"
 #include "engraving/dom/stafftext.h"
+#include "engraving/dom/stringtunings.h"
 #include "engraving/dom/capo.h"
 #include "engraving/types/symid.h"
 
@@ -84,11 +85,14 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
 void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScore)
 {
     bool containsCapo = false;
+    bool containsStringTunings = false;
 
     for (const PaletteCellPtr& cell : guitarPalette.cells()) {
         if (cell->element && cell->element->isCapo()) {
             containsCapo = true;
-            break;
+        }
+        if (cell->element && cell->element->isStringTunings()) {
+            containsStringTunings = true;
         }
     }
 
@@ -97,5 +101,14 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
         int defaultPosition = std::min(7, guitarPalette.cellsCount());
         guitarPalette.insertElement(defaultPosition, capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
+    }
+
+    if (!containsStringTunings) {
+        auto stringTunings = std::make_shared<StringTunings>(paletteScore->dummy()->segment());
+        stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
+        stringTunings->initTextStyleType(TextStyleType::STAFF);
+        int defaultPosition = std::min(8, guitarPalette.cellsCount());
+        guitarPalette.insertElement(defaultPosition, stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(
+            true);
     }
 }

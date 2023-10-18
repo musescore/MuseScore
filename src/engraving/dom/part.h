@@ -148,6 +148,10 @@ public:
     void removeInstrument(const Fraction&);
     const InstrumentList& instruments() const;
 
+    const StringData* stringData(const Fraction& tick) const;
+    void addStringTunings(StringTunings* stringTunings);
+    void removeStringTunings(StringTunings* stringTunings);
+
     void insertTime(const Fraction& tick, const Fraction& len);
 
     void addHarpDiagram(HarpPedalDiagram*);
@@ -204,6 +208,8 @@ private:
     int _color = 0;                  ///User specified color for helping to label parts
 
     PreferSharpFlat _preferSharpFlat = PreferSharpFlat::AUTO;
+
+    std::map<int, StringTunings*> m_stringTunings;
 };
 } // namespace mu::engraving
 #endif

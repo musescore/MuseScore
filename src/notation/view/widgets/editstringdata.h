@@ -22,8 +22,13 @@
 #ifndef MU_NOTATION_EDITSTRINGDATA_H
 #define MU_NOTATION_EDITSTRINGDATA_H
 
+#include <QDialog>
+
 #include "ui_editstringdata.h"
 #include "engraving/dom/stringdata.h"
+
+#include "modularity/ioc.h"
+#include "context/iglobalcontext.h"
 
 namespace mu::notation {
 //---------------------------------------------------------
@@ -34,9 +39,17 @@ class EditStringData : public QDialog, private Ui::EditStringDataBase
 {
     Q_OBJECT
 
+    INJECT(context::IGlobalContext, globalContext)
+
 public:
-    EditStringData(QWidget* parent, std::vector<mu::engraving::instrString>* strings, int* frets);
+    EditStringData(QWidget* parent = nullptr, const std::vector<engraving::instrString>& strings = {}, int frets = 0);
+    EditStringData(const EditStringData&);
     ~EditStringData();
+
+    static int metaTypeId();
+
+    std::vector<mu::engraving::instrString> strings() const;
+    int frets() const;
 
 protected:
     QString midiCodeToStr(int midiCode);
@@ -49,16 +62,26 @@ private slots:
     void newStringClicked();
 
 private:
+    void init();
+    void initStringsData();
+
     virtual void hideEvent(QHideEvent*) override;
     bool eventFilter(QObject* obj, QEvent* event) override;
 
     QString openColumnAccessibleText(const QTableWidgetItem* item) const;
 
-    int* _frets = nullptr;
+    INotationSelectionPtr currentNotationSelection() const;
+
+    int _frets = -1;
     bool _modified = false;
-    std::vector<mu::engraving::instrString>* _strings;           // pointer to original string list
+    std::vector<mu::engraving::instrString> _strings;           // pointer to original string list
     std::vector<mu::engraving::instrString> _stringsLoc;         // local working copy of string list
+
+    bool m_updateOnExit = false;
+    Instrument* m_instrument = nullptr;
 };
 }
+
+Q_DECLARE_METATYPE(mu::notation::EditStringData)
 
 #endif // MU_NOTATION_EDITSTRINGDATA_H

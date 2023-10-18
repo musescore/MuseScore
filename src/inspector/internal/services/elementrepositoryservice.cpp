@@ -41,6 +41,7 @@
 #include "engraving/dom/tremolo.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/volta.h"
+#include "engraving/dom/note.h"
 
 #include "log.h"
 

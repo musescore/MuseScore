@@ -82,12 +82,7 @@ void CapoSettingsModel::init()
         return;
     }
 
-    const mu::engraving::Instrument* instrument = part->instrument(m_item->tick());
-    IF_ASSERT_FAILED(instrument) {
-        return;
-    }
-
-    const mu::engraving::StringData* stringData = instrument->stringData();
+    const mu::engraving::StringData* stringData = part->stringData(m_item->tick());
     IF_ASSERT_FAILED(stringData) {
         return;
     }

@@ -119,6 +119,7 @@
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
 #include "dom/stretchedbend.h"
+#include "dom/stringtunings.h"
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
@@ -315,6 +316,8 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::STEM_SLASH:           draw(item_cast<const StemSlash*>(item), painter);
         break;
     case ElementType::STICKING:             draw(item_cast<const Sticking*>(item), painter);
+        break;
+    case ElementType::STRING_TUNINGS:       draw(item_cast<const StringTunings*>(item), painter);
         break;
     case ElementType::STRETCHED_BEND:       draw(item_cast<const StretchedBend*>(item), painter);
         break;
@@ -2694,6 +2697,47 @@ void TDraw::draw(const Sticking* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextBase(item, painter);
+}
+
+void TDraw::draw(const StringTunings* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (item->noStringVisible()) {
+        const TextBase::LayoutData* data = item->ldata();
+
+        double spatium = item->spatium();
+        double lineWidth = spatium * .15;
+
+        Pen pen(item->curColor(), lineWidth, PenStyle::SolidLine, PenCapStyle::RoundCap, PenJoinStyle::RoundJoin);
+        painter->setPen(pen);
+        painter->setBrush(Brush(item->curColor()));
+
+        mu::draw::Font f(item->font());
+        painter->setFont(f);
+
+        RectF rect = data->bbox();
+
+        double x = rect.x();
+        double y = rect.y();
+        double width = rect.width();
+        double height = rect.height();
+        double topPartHeight = height * 2 / 3;
+        double cornerRadius = 8.0;
+
+        PainterPath path;
+        path.moveTo(x, y);
+        path.arcTo(x, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 180.0, 90.0);
+        path.arcTo(x + width - 2 * cornerRadius, y + (topPartHeight - 2 * cornerRadius), 2 * cornerRadius, 2 * cornerRadius, 270, 90);
+        path.lineTo(x + width, y);
+        path.moveTo(x + width / 2, y + topPartHeight);
+        path.lineTo(x + width / 2, y + height);
+
+        painter->setBrush(BrushStyle::NoBrush);
+        painter->drawPath(path);
+    } else {
+        drawTextBase(item, painter);
+    }
 }
 
 void TDraw::draw(const Symbol* item, Painter* painter)

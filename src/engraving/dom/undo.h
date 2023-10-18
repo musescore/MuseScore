@@ -58,6 +58,8 @@
 #include "spanner.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "stringdata.h"
+#include "stringtunings.h"
 #include "synthesizerstate.h"
 #include "text.h"
 #include "tremolo.h"
@@ -696,6 +698,7 @@ class ChangeStaff : public UndoCommand
     bool cutaway = false;
     bool hideSystemBarLine = false;
     bool mergeMatchingRests = false;
+    bool reflectTranspositionInLinkedTab = false;
 
     void flip(EditData*) override;
 
@@ -703,7 +706,7 @@ public:
     ChangeStaff(Staff*);
 
     ChangeStaff(Staff*, bool _visible, ClefTypeList _clefType, double userDist, Staff::HideMode _hideMode, bool _showIfEmpty, bool _cutaway,
-                bool _hideSystemBarLine, bool _mergeRests);
+                bool _hideSystemBarLine, bool _mergeRests, bool _reflectTranspositionInLinkedTab);
 
     UNDO_TYPE(CommandType::ChangeStaff)
     UNDO_NAME("ChangeStaff")
@@ -1602,6 +1605,22 @@ public:
     void flip(EditData*) override;
     UNDO_NAME("ChangeSingleHarpPedal")
     UNDO_CHANGED_OBJECTS({ diagram });
+};
+
+class ChangeStringData : public UndoCommand
+{
+    Instrument* m_instrument = nullptr;
+    StringTunings* m_stringTunings = nullptr;
+    StringData m_stringData;
+
+public:
+    ChangeStringData(StringTunings* stringTunings, const StringData& stringData)
+        : m_stringTunings(stringTunings), m_stringData(stringData) {}
+    ChangeStringData(Instrument* instrument, const StringData& stringData)
+        : m_instrument(instrument), m_stringData(stringData) {}
+
+    void flip(EditData*) override;
+    UNDO_NAME("ChangeStringData")
 };
 } // namespace mu::engraving
 #endif

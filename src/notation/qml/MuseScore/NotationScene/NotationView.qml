@@ -148,7 +148,7 @@ FocusScope {
                     }
 
                     onHideElementPopupRequested: {
-                        popUpLoader.close()
+                        Qt.callLater(popUpLoader.close)
                     }
 
                     onViewportChanged: {

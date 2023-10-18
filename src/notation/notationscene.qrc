@@ -38,5 +38,6 @@
         <file>qml/MuseScore/NotationScene/internal/ElementPopupLoader.qml</file>
         <file>qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CapoPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml</file>
     </qresource>
 </RCC>

@@ -1262,6 +1262,7 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
+    case ElementType::STRING_TUNINGS:
     case ElementType::NOTEHEAD:
     case ElementType::TREMOLO:
     case ElementType::LAYOUT_BREAK:
@@ -1420,6 +1421,7 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::TRIPLET_FEEL:
     case ElementType::PLAYTECH_ANNOTATION:
     case ElementType::CAPO:
+    case ElementType::STRING_TUNINGS:
     case ElementType::NOTEHEAD:
     case ElementType::TREMOLO:
     case ElementType::LAYOUT_BREAK:
@@ -2677,7 +2679,7 @@ void NotationInteraction::moveStringSelection(MoveDirection d)
 {
     mu::engraving::InputState& is = score()->inputState();
     mu::engraving::Staff* staff = score()->staff(is.track() / mu::engraving::VOICES);
-    int instrStrgs = static_cast<int>(staff->part()->instrument(is.tick())->stringData()->strings());
+    int instrStrgs = static_cast<int>(staff->part()->stringData(is.tick())->strings());
     int delta = (staff->staffType(is.tick())->upsideDown() ? -1 : 1);
 
     if (MoveDirection::Up == d) {

@@ -132,6 +132,33 @@ std::vector<int> TConv::fromXml(const String& tag, const std::vector<int>& def)
     return list;
 }
 
+String TConv::toXml(const std::vector<string_idx_t>& v)
+{
+    std::vector<int> _v;
+    for (string_idx_t string : v) {
+        _v.push_back(static_cast<int>(string));
+    }
+
+    return toXml(_v);
+}
+
+std::vector<string_idx_t> TConv::fromXml(const String& tag, const std::vector<string_idx_t>& def)
+{
+    std::vector<int> _def;
+    for (string_idx_t string : def) {
+        _def.push_back(static_cast<int>(string));
+    }
+
+    std::vector<string_idx_t> v;
+    std::vector<int> _v = fromXml(tag, _def);
+
+    for (int string : _v) {
+        v.push_back(static_cast<string_idx_t>(string));
+    }
+
+    return v;
+}
+
 static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::INVALID,              "invalid",              TranslatableString("engraving", "Invalid") },
     { ElementType::BRACKET_ITEM,         "BracketItem",          TranslatableString("engraving", "Bracket") },
@@ -184,6 +211,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::SYSTEM_TEXT,          "SystemText",           TranslatableString("engraving", "System text") },
     { ElementType::PLAYTECH_ANNOTATION,  "PlayTechAnnotation",   TranslatableString("engraving", "Playing technique annotation") },
     { ElementType::CAPO,                 "Capo",                 TranslatableString("engraving", "Capo") },
+    { ElementType::STRING_TUNINGS,       "StringTunings",        TranslatableString("engraving", "String tunings") },
     { ElementType::TRIPLET_FEEL,         "TripletFeel",          TranslatableString("engraving", "Triplet feel") },
     { ElementType::REHEARSAL_MARK,       "RehearsalMark",        TranslatableString("engraving", "Rehearsal mark") },
     { ElementType::INSTRUMENT_CHANGE,    "InstrumentChange",     TranslatableString("engraving", "Instrument change") },
@@ -1043,6 +1071,7 @@ static const std::vector<Item<TextStyleType> > TEXTSTYLE_TYPES = {
     { TextStyleType::LH_GUITAR_FINGERING, "guitar_fingering_lh", TranslatableString("engraving", "LH guitar fingering") },
     { TextStyleType::RH_GUITAR_FINGERING, "guitar_fingering_rh", TranslatableString("engraving", "RH guitar fingering") },
     { TextStyleType::STRING_NUMBER,     "string_number",        TranslatableString("engraving", "String number") },
+    { TextStyleType::STRING_TUNINGS,    "string_tunings", TranslatableString("engraving", "String tunings") },
     { TextStyleType::HARP_PEDAL_DIAGRAM, "harp_pedal_diagram",  TranslatableString("engraving", "Harp pedal diagram") },
     { TextStyleType::HARP_PEDAL_TEXT_DIAGRAM, "harp_pedal_text_diagram", TranslatableString("engraving", "Harp pedal text diagram") },
 

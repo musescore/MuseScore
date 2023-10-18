@@ -743,7 +743,8 @@ void NotationParts::doSetStaffConfig(Staff* staff, const StaffConfig& config)
     }
 
     score()->undo(new mu::engraving::ChangeStaff(staff, config.visible, config.clefTypeList, config.userDistance, config.hideMode,
-                                                 config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests));
+                                                 config.showIfEmpty, config.cutaway, config.hideSystemBarline, config.mergeMatchingRests,
+                                                 config.reflectTranspositionInLinkedTab));
 
     score()->undo(new mu::engraving::ChangeStaffType(staff, config.staffType));
 }
