@@ -80,6 +80,8 @@ public:
 
     void setBeam(Beam* b);
     void setBeamlet(BeamSegment* b);
+    BeamSegment* beamlet() const { return m_beamlet; }
+
     virtual Beam* beam() const final;
     int beams() const { return m_durationType.hooks(); }
     virtual double upPos()   const = 0;

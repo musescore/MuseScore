@@ -26,10 +26,12 @@
 
 #include "layoutcontext.h"
 
-#include "dom/chordrest.h"
+#include "dom/chord.h"
+#include "dom/rest.h"
+#include "dom/measurerepeat.h"
+#include "dom/mmrest.h"
 
 namespace mu::engraving {
-class Chord;
 class MStyle;
 class Measure;
 class Note;
@@ -80,7 +82,12 @@ public:
 
     static void checkStartEndSlurs(Chord* chord, LayoutContext& ctx);
 
-    static void fillShape(const ChordRest* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void checkAndFillShape(const ChordRest* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void fillShape(const ChordRest* item, Chord::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void fillShape(const Chord* item, Chord::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void fillShape(const Rest* item, Rest::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void fillShape(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutConfiguration& conf);
+    static void fillShape(const MMRest* item, MMRest::LayoutData* ldata, const LayoutConfiguration& conf);
 
 private:
     static void layoutPitched(Chord* item, LayoutContext& ctx);
@@ -91,6 +98,8 @@ private:
     static void placeDots(const std::vector<Chord*>& chords, const std::vector<Note*>& notes);
 
     static void skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack);
+
+    static Shape chordRestShape(const ChordRest* item, const LayoutConfiguration& conf);
 };
 }
 

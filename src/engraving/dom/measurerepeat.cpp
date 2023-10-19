@@ -128,10 +128,8 @@ RectF MeasureRepeat::numberRect() const
 
 Shape MeasureRepeat::doCreateShape() const
 {
-    Shape shape;
-    shape.add(numberRect());
-    shape.add(symBbox(ldata()->symId));
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 
 //---------------------------------------------------------

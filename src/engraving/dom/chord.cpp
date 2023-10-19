@@ -2818,44 +2818,8 @@ String Chord::accessibleExtraInfo() const
 
 Shape Chord::doCreateShape() const
 {
-    Shape shape;
-    if (m_hook && m_hook->addToSkyline()) {
-        shape.add(m_hook->shape().translate(m_hook->pos()));
-    }
-    if (m_stem && m_stem->addToSkyline()) {
-        shape.add(m_stem->shape().translate(m_stem->pos()));
-    }
-    if (m_stemSlash && m_stemSlash->addToSkyline()) {
-        shape.add(m_stemSlash->shape().translate(m_stemSlash->pos()));
-    }
-    if (m_arpeggio && m_arpeggio->addToSkyline()) {
-        shape.add(m_arpeggio->shape().translate(m_arpeggio->pos()));
-    }
-//      if (_tremolo)
-//            shape.add(_tremolo->shape().translated(_tremolo->pos()));
-    for (Note* note : m_notes) {
-        shape.add(note->shape().translate(note->pos()));
-    }
-    for (EngravingItem* e : el()) {
-        if (e->addToSkyline()) {
-            shape.add(e->shape().translate(e->pos()));
-        }
-    }
-    shape.add(ChordRest::doCreateShape());      // add lyrics
-    for (LedgerLine* l = m_ledgerLines; l; l = l->next()) {
-        shape.add(l->shape().translate(l->pos()));
-    }
-    if (m_beamlet && m_stem) {
-        double xPos = m_beamlet->line.p1().x() - m_stem->ldata()->pos().x();
-        if (m_beamlet->isBefore && !m_up) {
-            xPos -= m_stem->width();
-        } else if (!m_beamlet->isBefore && m_up) {
-            xPos += m_stem->width();
-        }
-        shape.add(m_beamlet->shape().translated(PointF(-xPos, 0.0)));
-    }
-
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 
 void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue)
@@ -2992,7 +2956,7 @@ void GraceNotesGroup::addToShape()
         staff_idx_t staffIdx = grace->staffIdx();
         staff_idx_t vStaffIdx = grace->vStaffIdx();
         Shape& s = _appendedSegment->staffShape(staffIdx);
-        s.add(grace->shape().translated(grace->pos()));
+        s.add(grace->shape(LD_ACCESS::PASS).translated(grace->pos()));
         if (vStaffIdx != staffIdx) {
             // Cross-staff grace notes add their shape to both the origin and the destination staff
             Shape& s = _appendedSegment->staffShape(vStaffIdx);

@@ -42,6 +42,7 @@
 #include "types/typesconv.h"
 
 #include "rendering/dev/autoplace.h"
+#include "rendering/dev/chordlayout.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -72,6 +73,7 @@
 using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 EngravingItem* EngravingItemList::at(size_t i) const
@@ -2372,6 +2374,51 @@ EngravingItem::LayoutData* EngravingItem::mutldata()
         m_layoutData->m_item = this;
     }
     return m_layoutData;
+}
+
+Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
+{
+    const Shape& sh = m_shape.value(LD_ACCESS::CHECK);
+
+    //! NOTE Temporary for debuging
+    //! Reimplementation: done
+    {
+        switch (m_item->type()) {
+        case ElementType::BEAM:
+        case ElementType::GRACE_NOTES_GROUP:
+            return sh;
+        case ElementType::CHORD:
+        case ElementType::REST:
+        case ElementType::MEASURE_REPEAT:
+        case ElementType::MMREST: {
+            if (mode == LD_ACCESS::CHECK) {
+                //! NOTE Temporary fix
+                //! We can remove it the moment we figure out the layout order of the elements
+                LayoutContext ctx(m_item->score());
+                ChordRest::LayoutData* ldata = static_cast<ChordRest::LayoutData*>(const_cast<LayoutData*>(this));
+                ChordLayout::checkAndFillShape(toChordRest(m_item), ldata, ctx.conf());
+            }
+            return m_shape.value(LD_ACCESS::CHECK);
+        } break;
+        default:
+            break;
+        }
+    }
+
+    Shape old = m_item->_internal_shape();
+
+    //! NOTE Temporary for debuging
+    //! Reimplementation: progress
+//            {
+//                switch (m_item->type()) {
+//                case ElementType::CHORD:
+//                //DO_ASSERT(sh.equal(old));
+//                default:
+//                    break;
+//                }
+//            }
+
+    return old;
 }
 
 double EngravingItem::mag() const
