@@ -1441,7 +1441,8 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                     }
                     bool systemObject = e->systemFlag() && e->track() == 0;
                     bool alreadyCloned = bool(e->findLinkedInScore(score));
-                    bool cloneAnnotation = e->track() == srcTrack || (systemObject && !alreadyCloned);
+                    bool cloneAnnotation = !alreadyCloned && (e->track() == srcTrack || systemObject);
+
                     if (!cloneAnnotation) {
                         continue;
                     }
