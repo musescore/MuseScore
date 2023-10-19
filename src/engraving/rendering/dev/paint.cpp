@@ -143,11 +143,9 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRendere
                 painter->setClipping(false);
             }
 
-#ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
             if (!opt.isPrinting) {
                 DebugPaint::paintPageDebug(*painter, page, elements);
             }
-#endif
 
             painter->endObject(); // page
 
