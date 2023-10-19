@@ -986,6 +986,11 @@ RemoveElement::RemoveElement(EngravingItem* e)
             if (chord->arpeggio()) {
                 chord->arpeggio()->rebaseStartAnchor(-1);
             }
+            // If this chord is the end of an arpeggio, move the end of the arpeggio upwards to the next available chord
+            Arpeggio* spanArp = chord->spanArpeggio();
+            if (spanArp && chord->track() == spanArp->endTrack()) {
+                spanArp->rebaseEndAnchor(1);
+            }
             for (const Note* note : chord->notes()) {
                 removeNote(note);
             }

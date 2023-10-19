@@ -61,11 +61,13 @@ public:
 
     int span() const { return m_span; }
     void setSpan(int val) { m_span = val; }
+    track_idx_t endTrack() const { return track() + m_span - 1; }
 
     bool crossStaff() const;
     void findChords();
     void removeChords(track_idx_t strack, track_idx_t etrack);
     void rebaseStartAnchor(int direction);
+    void rebaseEndAnchor(int direction);
 
     double userLen1() const { return m_userLen1; }
     double userLen2() const { return m_userLen2; }

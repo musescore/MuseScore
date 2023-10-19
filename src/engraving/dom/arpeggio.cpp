@@ -135,6 +135,48 @@ void Arpeggio::rebaseStartAnchor(int direction)
     }
 }
 
+void Arpeggio::rebaseEndAnchor(int direction)
+{
+    if (direction == 0) {
+        return;
+    }
+    if (direction == 1) {
+        // Move end to chord above
+        for (track_idx_t curTrack = track() + m_span - 2; curTrack >= track(); curTrack--) {
+            EngravingItem* e = chord()->segment()->element(curTrack);
+            if (e && e->isChord()) {
+                int newSpan = curTrack - track() + 1;
+                if (newSpan != 0) {
+                    toChord(e)->setSpanArpeggio(nullptr);
+                    undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                }
+                break;
+            }
+        }
+    } else if (direction == -1) {
+        // Move end to chord below
+        Staff* s = staff();
+        Part* part = s->part();
+        size_t n = part->nstaves();
+        staff_idx_t ridx = mu::indexOf(part->staves(), s);
+        track_idx_t btrack = n * VOICES;
+        if (ridx != mu::nidx) {
+            if (track() + m_span < btrack) {
+                // Loop through voices til we find a chord
+                for (track_idx_t curTrack = track() + m_span; curTrack < btrack; curTrack++) {
+                    EngravingItem* e = chord()->segment()->element(curTrack);
+                    if (e && e->isChord()) {
+                        int newSpan = curTrack - track() + 1;
+                        toChord(e)->setSpanArpeggio(this);
+                        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   gripsPositions
 //---------------------------------------------------------
@@ -274,38 +316,10 @@ bool Arpeggio::edit(EditData& ed)
 
     if (ed.curGrip == Grip::END) {
         if (ed.key == Key_Down) {
-            Staff* s = staff();
-            Part* part = s->part();
-            size_t n = part->nstaves();
-            staff_idx_t ridx = mu::indexOf(part->staves(), s);
-            track_idx_t btrack = n * VOICES;
-            if (ridx != mu::nidx) {
-                if (track() + m_span < btrack) {
-                    // Loop through voices til we find a chord
-                    for (track_idx_t curTrack = track() + m_span; curTrack < btrack; curTrack++) {
-                        EngravingItem* e = chord()->segment()->element(curTrack);
-                        if (e && e->isChord()) {
-                            int newSpan = curTrack - track() + 1;
-                            toChord(e)->setSpanArpeggio(this);
-                            undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                            break;
-                        }
-                    }
-                }
-            }
+            rebaseEndAnchor(-1);
         } else if (ed.key == Key_Up) {
             if (m_span > 1) {
-                for (track_idx_t curTrack = track() + m_span - 2; curTrack >= track(); curTrack--) {
-                    EngravingItem* e = chord()->segment()->element(curTrack);
-                    if (e && e->isChord()) {
-                        int newSpan = curTrack - track() + 1;
-                        if (newSpan != 0) {
-                            toChord(e)->setSpanArpeggio(nullptr);
-                            undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                        }
-                        break;
-                    }
-                }
+                rebaseEndAnchor(1);
             }
         }
     }
@@ -471,7 +485,7 @@ double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag
     // Only be concerned about the top or bottom of the arpeggio when the chord belongs to that stave
     // Otherwise set to some large value
     bool startStaff = chord->vStaffIdx() == vStaffIdx();
-    bool endStaff = chord->vStaffIdx() == (track() + m_span - 1) / VOICES;
+    bool endStaff = chord->vStaffIdx() == endTrack() / VOICES;
 
     double arpeggioTop = startStaff ? insetTop(chord) * mag_ : -10000;
     double arpeggioBottom = endStaff ? insetBottom(chord) * mag_ : 10000;
