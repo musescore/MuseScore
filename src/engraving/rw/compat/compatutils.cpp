@@ -269,6 +269,7 @@ void CompatUtils::replaceOldWithNewOrnaments(MasterScore* score)
         newOrnament->setDirection(oldOrnament->direction());
         newOrnament->setAutoplace(oldOrnament->autoplace());
         newOrnament->setPlayArticulation(oldOrnament->playArticulation());
+        newOrnament->setVisible(oldOrnament->visible());
 
         LinkedObjects* links = oldOrnament->links();
         newOrnament->setLinks(links);
