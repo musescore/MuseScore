@@ -3299,6 +3299,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                 p->setBeginText(Pedal::PEDAL_SYMBOL);
             } else {
                 p->setBeginHookType(HookType::HOOK_90);
+                p->setBeginText(String());
             }
             p->setEndHookType(HookType::HOOK_90);
             // if (placement == "") placement = "below";  // TODO ? set default
