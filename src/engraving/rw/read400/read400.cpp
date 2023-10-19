@@ -208,6 +208,8 @@ bool Read400::readScore400(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (e.name() == "initialPartId") {
             if (score->excerpt()) {
                 score->excerpt()->setInitialPartId(ID(e.readInt()));
+            } else {
+                e.skipCurrentElement();
             }
         } else if (e.name() == "Tracklist") {
             int strack = e.intAttribute("sTrack",   -1);
