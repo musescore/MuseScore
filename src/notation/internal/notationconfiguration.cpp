@@ -262,7 +262,7 @@ const QPixmap& NotationConfiguration::backgroundWallpaper() const
     io::path_t path = backgroundWallpaperPath();
 
     static QPixmap wallpaper;
-    static io::path_t lastPath = path;
+    static io::path_t lastPath;
 
     if (path.empty()) {
         wallpaper = QPixmap();
@@ -331,7 +331,7 @@ const QPixmap& NotationConfiguration::foregroundWallpaper() const
     io::path_t path = foregroundWallpaperPath();
 
     static QPixmap wallpaper;
-    static io::path_t lastPath = path;
+    static io::path_t lastPath;
 
     if (path.empty()) {
         wallpaper = QPixmap();
