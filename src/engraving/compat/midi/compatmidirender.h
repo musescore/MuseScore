@@ -71,7 +71,6 @@
 #include "log.h"
 
 namespace mu::engraving {
-using namespace mu::engraving;
 class CompatMidiRender
 {
 public:
