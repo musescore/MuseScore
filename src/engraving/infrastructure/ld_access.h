@@ -31,7 +31,8 @@ namespace mu::engraving {
 enum class LD_ACCESS {
     CHECK = 0,          // should be correct; assert if still not
     BAD,                // known to be bad; don’t assert, we’ll fix it later
-    MAYBE_NOTINITED     // in this case it’s okay if we access it before it’s been inited
+    MAYBE_NOTINITED,    // in this case it’s okay if we access it before it’s been inited
+    PASS                // for debug
 };
 
 #ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS

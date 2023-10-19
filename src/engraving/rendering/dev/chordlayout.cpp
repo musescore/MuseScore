@@ -613,12 +613,12 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     for (size_t i = 0; i < numOfNotes; ++i) {
         layoutNote2(item->notes().at(i), ctx);
     }
-    RectF bb;
-    item->processSiblings([&bb](EngravingItem* e) { bb.unite(e->ldata()->bbox().translated(e->pos())); }, true);
-    if (item->tabDur()) {
-        bb.unite(item->tabDur()->ldata()->bbox().translated(item->tabDur()->pos()));
-    }
-    item->setbbox(bb);
+//    RectF bb;
+//    item->processSiblings([&bb](EngravingItem* e) { bb.unite(e->ldata()->bbox().translated(e->pos())); }, true);
+//    if (item->tabDur()) {
+//        bb.unite(item->tabDur()->ldata()->bbox().translated(item->tabDur()->pos()));
+//    }
+//    item->setbbox(bb);
     if (item->stemSlash()) {
         TLayout::layoutStemSlash(item->stemSlash(), item->stemSlash()->mutldata(), ctx.conf());
     }
@@ -3007,6 +3007,7 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
             PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
 
+            LayoutContext ctx(chord->score());
             Shape chordShape = chord->shape().translated(chord->pos());
             chordShape.removeInvisibles();
             if (chordShape.empty()) {
@@ -3457,7 +3458,44 @@ void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
     }
 }
 
-void ChordLayout::fillShape(const ChordRest* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf)
+void ChordLayout::checkAndFillShape(const ChordRest* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+#ifndef NDEBUG
+    Shape origin = ldata->shape(LD_ACCESS::PASS);
+#endif
+
+    fillShape(item, ldata, conf);
+
+#ifndef NDEBUG
+    Shape fixed = ldata->shape(LD_ACCESS::PASS);
+    if (!origin.equal(fixed)) {
+        LOGE() << "Shape not actual for item: " << item->typeName();
+    }
+#endif
+}
+
+void ChordLayout::fillShape(const ChordRest* item, Chord::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    switch (item->type()) {
+    case ElementType::CHORD:
+        fillShape(static_cast<const Chord*>(item), static_cast<Chord::LayoutData*>(ldata), conf);
+        break;
+    case ElementType::REST:
+        fillShape(static_cast<const Rest*>(item), static_cast<Rest::LayoutData*>(ldata), conf);
+        break;
+    case ElementType::MEASURE_REPEAT:
+        fillShape(static_cast<const MeasureRepeat*>(item), static_cast<MeasureRepeat::LayoutData*>(ldata), conf);
+        break;
+    case ElementType::MMREST:
+        fillShape(static_cast<const MMRest*>(item), static_cast<MMRest::LayoutData*>(ldata), conf);
+        break;
+    default:
+        DO_ASSERT(false);
+        break;
+    }
+}
+
+Shape ChordLayout::chordRestShape(const ChordRest* item, const LayoutConfiguration& conf)
 {
     Shape shape;
     {
@@ -3486,6 +3524,122 @@ void ChordLayout::fillShape(const ChordRest* item, ChordRest::LayoutData* ldata,
     if (item->isMelismaEnd()) {
         double right = item->rightEdge();
         shape.addHorizontalSpacing(nullptr, right, right);
+    }
+
+    return shape;
+}
+
+void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    Shape shape(Shape::Type::Composite);
+
+    Hook* hook = item->hook();
+    if (hook) {
+        LD_CONDITION(hook->ldata()->isSetShape());
+    }
+
+    Stem* stem = item->stem();
+    if (stem) {
+        LD_CONDITION(stem->ldata()->isSetShape());
+    }
+
+    StemSlash* stemSlash = item->stemSlash();
+    if (stemSlash) {
+        LD_CONDITION(stemSlash->ldata()->isSetShape());
+    }
+
+    Arpeggio* arpeggio = item->arpeggio();
+    if (arpeggio) {
+        LD_CONDITION(arpeggio->ldata()->isSetShape());
+    }
+
+    BeamSegment* beamlet = item->beamlet();
+
+    if (hook && hook->addToSkyline()) {
+        shape.add(hook->shape().translate(hook->pos()));
+    }
+
+    if (stem && stem->addToSkyline()) {
+        shape.add(stem->shape().translate(stem->pos()));
+    }
+
+    if (stemSlash && stemSlash->addToSkyline()) {
+        shape.add(stemSlash->shape().translate(stemSlash->pos()));
+    }
+
+    if (arpeggio && arpeggio->addToSkyline()) {
+        shape.add(arpeggio->shape().translate(arpeggio->pos()));
+    }
+//      if (_tremolo)
+//            shape.add(_tremolo->shape().translated(_tremolo->pos()));
+    for (Note* note : item->notes()) {
+        shape.add(note->shape().translate(note->pos()));
+    }
+
+    for (EngravingItem* e : item->el()) {
+        if (e->addToSkyline()) {
+            shape.add(e->shape().translate(e->pos()));
+        }
+    }
+
+    shape.add(chordRestShape(item, conf));      // add lyrics
+
+    for (const LedgerLine* l = item->ledgerLines(); l; l = l->next()) {
+        shape.add(l->shape().translate(l->pos()));
+    }
+
+    if (beamlet && stem) {
+        double xPos = beamlet->line.p1().x() - stem->ldata()->pos().x();
+        if (beamlet->isBefore && !item->up()) {
+            xPos -= stem->width();
+        } else if (!beamlet->isBefore && item->up()) {
+            xPos += stem->width();
+        }
+        shape.add(beamlet->shape().translated(PointF(-xPos, 0.0)));
+    }
+
+    ldata->setShape(shape);
+}
+
+void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    Shape shape(Shape::Type::Composite);
+
+    if (!item->isGap()) {
+        shape.add(chordRestShape(item, conf));
+        shape.add(item->symBbox(ldata->sym()), item);
+        for (const NoteDot* dot : item->dotList()) {
+            shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
+        }
+    }
+
+    for (const EngravingItem* e : item->el()) {
+        if (e->addToSkyline()) {
+            shape.add(e->shape().translate(e->pos()));
+        }
+    }
+
+    ldata->setShape(shape);
+}
+
+void ChordLayout::fillShape(const MeasureRepeat* item, MeasureRepeat::LayoutData* ldata, const LayoutConfiguration&)
+{
+    Shape shape(Shape::Type::Composite);
+
+    shape.add(item->numberRect());
+    shape.add(item->symBbox(ldata->symId));
+
+    ldata->setShape(shape);
+}
+
+void ChordLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    Shape shape(Shape::Type::Composite);
+
+    double vStrokeHeight = conf.styleMM(Sid::mmRestHBarVStrokeHeight);
+    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth(), vStrokeHeight));
+    if (item->numberVisible()) {
+        shape.add(item->numberRect());
     }
 
     ldata->setShape(shape);

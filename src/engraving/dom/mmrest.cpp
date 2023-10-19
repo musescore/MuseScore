@@ -140,13 +140,8 @@ bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
 
 Shape MMRest::doCreateShape() const
 {
-    Shape shape;
-    double vStrokeHeight = style().styleMM(Sid::mmRestHBarVStrokeHeight);
-    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata()->restWidth(), vStrokeHeight));
-    if (m_numberVisible) {
-        shape.add(numberRect());
-    }
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 
 //---------------------------------------------------------

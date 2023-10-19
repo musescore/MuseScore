@@ -2781,7 +2781,7 @@ void TLayout::layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGrou
         LD_CONDITION(grace->ldata()->isSetShape());
         LD_CONDITION(grace->ldata()->isSetPos());
 
-        shape.add(grace->shape().translate(grace->pos() - item->pos()));
+        shape.add(grace->shape(LD_ACCESS::PASS).translate(grace->pos() - item->pos()));
     }
     ldata->setShape(shape);
 }
@@ -3956,11 +3956,7 @@ void TLayout::layoutMeasureRepeat(const MeasureRepeat* item, MeasureRepeat::Layo
         ldata->setPos(0, std::floor(staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium() + offset);
     }
 
-    ldata->setBbox(bbox);
-
-    if (item->track() != mu::nidx && !ldata->numberSym.empty()) {
-        ldata->addBbox(item->numberRect());
-    }
+    ChordLayout::fillShape(item, ldata, ctx.conf());
 }
 
 void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const LayoutContext& ctx)
@@ -4026,20 +4022,18 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
         ldata->restSyms = restSyms;
         ldata->symsWidth = symsWidth;
 
-        double symHeight = item->symBbox(ldata->restSyms.at(0)).height();
-        ldata->setBbox(RectF((ldata->restWidth() - ldata->symsWidth) * .5, -item->spatium(), ldata->symsWidth, symHeight));
+        //double symHeight = item->symBbox(ldata->restSyms.at(0)).height();
+        //ldata->setBbox(RectF((ldata->restWidth() - ldata->symsWidth) * .5, -item->spatium(), ldata->symsWidth, symHeight));
     } else { // H-bar
-        double vStrokeHeight = ctx.conf().styleMM(Sid::mmRestHBarVStrokeHeight);
-        ldata->setBbox(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth(), vStrokeHeight));
+        //double vStrokeHeight = ctx.conf().styleMM(Sid::mmRestHBarVStrokeHeight);
+        //ldata->setBbox(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth(), vStrokeHeight));
     }
 
     // Only need to set y position here; x position is handled in MeasureLayout::layoutMeasureElements()
     const StaffType* staffType = item->staffType();
     ldata->setPos(0, (staffType->middleLine() / 2.0) * staffType->lineDistance().val() * item->spatium());
 
-    if (item->numberVisible()) {
-        ldata->addBbox(item->numberRect());
-    }
+    ChordLayout::fillShape(item, ldata, ctx.conf());
 }
 
 void TLayout::layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata)
@@ -4448,7 +4442,7 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
 
     ldata->setPosY(finalLine * lineDist * spatium);
     if (!item->shouldNotBeDrawn()) {
-        ldata->setBbox(item->symBbox(ldata->sym()));
+        ChordLayout::fillShape(item, ldata, ctx.conf());
     }
 
     auto layoutRestDots = [](const Rest* item, const LayoutConfiguration& conf, Rest::LayoutData* ldata)

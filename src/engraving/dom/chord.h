@@ -132,6 +132,7 @@ public:
     void setIsUiItem(bool val) { m_isUiItem = val; }
 
     LedgerLine* ledgerLines() { return m_ledgerLines; }
+    const LedgerLine* ledgerLines() const { return m_ledgerLines; }
     void setLedgerLine(LedgerLine* l) { m_ledgerLines = l; }
     void addLedgerLines();
 

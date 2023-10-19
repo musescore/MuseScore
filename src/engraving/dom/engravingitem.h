@@ -538,37 +538,7 @@ public:
 
         bool isSetShape() const { return m_shape.has_value(); }
         void clearShape() { m_shape.reset(); }
-        Shape shape() const
-        {
-            const Shape& sh = m_shape.value(LD_ACCESS::CHECK);
-
-            //! NOTE Temporary for debuging
-            //! Reimplementation: done
-            {
-                switch (m_item->type()) {
-                case ElementType::BEAM:
-                case ElementType::GRACE_NOTES_GROUP:
-                    return sh;
-                default:
-                    break;
-                }
-            }
-
-            Shape old = m_item->_internal_shape();
-
-            //! NOTE Temporary for debuging
-            //! Reimplementation: progress
-            {
-                switch (m_item->type()) {
-                case ElementType::GRACE_NOTES_GROUP:
-                    DO_ASSERT(sh.equal(old));
-                default:
-                    break;
-                }
-            }
-
-            return old;
-        }
+        Shape shape(LD_ACCESS mode = LD_ACCESS::CHECK) const;
 
         void setShape(const Shape& sh) { m_shape.set_value(sh); }
 
@@ -634,7 +604,7 @@ public:
     LayoutData* mutldata();
 
     virtual double mag() const;
-    Shape shape() const { return ldata()->shape(); }
+    Shape shape(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->shape(mode); }
     virtual double baseLine() const { return -height(); }
 
     mu::RectF abbox(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(pagePos()); }

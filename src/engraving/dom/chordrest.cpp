@@ -1125,36 +1125,8 @@ void ChordRest::setMelismaEnd(bool v)
 
 Shape ChordRest::doCreateShape() const
 {
-    Shape shape;
-    {
-        double x1 = 1000000.0;
-        double x2 = -1000000.0;
-        for (Lyrics* l : m_lyrics) {
-            if (!l || !l->addToSkyline()) {
-                continue;
-            }
-            double lmargin = style().styleS(Sid::lyricsMinDistance).val() * spatium() * 0.5;
-            double rmargin = lmargin;
-            LyricsSyllabic syl = l->syllabic();
-            if ((syl == LyricsSyllabic::BEGIN || syl == LyricsSyllabic::MIDDLE) && style().styleB(Sid::lyricsDashForce)) {
-                rmargin = std::max(rmargin, styleP(Sid::lyricsDashMinLength));
-            }
-            // for horizontal spacing we only need the lyrics width:
-            x1 = std::min(x1, l->ldata()->bbox().x() - lmargin + l->pos().x());
-            x2 = std::max(x2, l->ldata()->bbox().x() + l->ldata()->bbox().width() + rmargin + l->pos().x());
-            if (l->ticks() == Fraction::fromTicks(Lyrics::TEMP_MELISMA_TICKS)) {
-                x2 += spatium();
-            }
-            shape.addHorizontalSpacing(l, x1, x2);
-        }
-    }
-
-    if (isMelismaEnd()) {
-        double right = rightEdge();
-        shape.addHorizontalSpacing(nullptr, right, right);
-    }
-
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 
 //---------------------------------------------------------

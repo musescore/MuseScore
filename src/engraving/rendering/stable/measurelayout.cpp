@@ -897,7 +897,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
                             ChordLayout::layoutStem(c, ctx);
                             c->setBeamlet(nullptr); // Will be defined during beam layout
 
-                            //! NOTE Movied from ChordRest::setBeamlet
+                            //! NOTE Moved from ChordRest::setBeamlet
                             cr->segment()->createShape(cr->vStaffIdx());
                         }
                         if (drumset) {
@@ -911,7 +911,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
                     cr->mutldata()->setMag(m);
                     cr->setBeamlet(nullptr); // Will be defined during beam layout
 
-                    //! NOTE Movied from ChordRest::setBeamlet
+                    //! NOTE Moved from ChordRest::setBeamlet
                     cr->segment()->createShape(cr->vStaffIdx());
                 }
             } else if (segment.isClefType()) {

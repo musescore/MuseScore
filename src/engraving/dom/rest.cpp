@@ -28,6 +28,8 @@
 #include "containers.h"
 #include "translation.h"
 
+#include "rendering/dev/chordlayout.h"
+
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
@@ -46,6 +48,7 @@
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------
@@ -951,20 +954,8 @@ EngravingItem* Rest::prevElement()
 
 Shape Rest::doCreateShape() const
 {
-    Shape shape;
-    if (!m_gap) {
-        shape.add(ChordRest::doCreateShape());
-        shape.add(symBbox(ldata()->sym()), this);
-        for (NoteDot* dot : m_dots) {
-            shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
-        }
-    }
-    for (EngravingItem* e : el()) {
-        if (e->addToSkyline()) {
-            shape.add(e->shape().translate(e->pos()));
-        }
-    }
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 
 //---------------------------------------------------------
