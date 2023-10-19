@@ -475,6 +475,12 @@ void EngravingObject::undoChangeProperty(Pid id, const PropertyValue& v, Propert
                 toEngravingItem(this)->manageExclusionFromParts(v.toBool());
             }
         }
+    } else if (id == Pid::REPEAT_START || id == Pid::REPEAT_END) {
+        // change also coresponding mmRestMeasure
+        Measure* m = const_cast<Measure*>(toMeasure(this)->coveringMMRestOrThis());
+        if (m != this) {
+            m->undoChangeProperty(id, v);
+        }
     }
     changeProperties(this, id, v, ps);
     if (id != Pid::GENERATED) {
