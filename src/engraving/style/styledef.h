@@ -300,6 +300,7 @@ enum class Sid {
     pedalText,
     pedalHookText,
     pedalContinueText,
+    pedalContinueHookText,
     pedalEndText,
     pedalRosetteEndText,
 

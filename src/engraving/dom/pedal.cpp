@@ -94,6 +94,8 @@ Sid Pedal::getPropertyStyle(Pid pid) const
         return lineVisible() ? Sid::pedalEndText : Sid::pedalRosetteEndText;
     case Pid::BEGIN_TEXT:
         return beginHookType() == HookType::NONE ? Sid::pedalText : Sid::pedalHookText;
+    case Pid::CONTINUE_TEXT:
+        return beginHookType() == HookType::NONE ? Sid::pedalContinueText : Sid:: pedalContinueHookText;
     default:
         return TextLineBase::getPropertyStyle(pid);
     }
@@ -151,11 +153,7 @@ engraving::PropertyValue Pedal::propertyDefault(Pid propertyId) const
         return style().styleV(Sid::pedalLineStyle);
 
     case Pid::BEGIN_TEXT:
-        return style().styleV(getPropertyStyle(propertyId));
-
     case Pid::CONTINUE_TEXT:
-        return style().styleV(Sid::pedalContinueText);
-
     case Pid::END_TEXT:
         return style().styleV(getPropertyStyle(propertyId));
 

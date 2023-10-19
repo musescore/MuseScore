@@ -3454,6 +3454,7 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
         } else if (TRead::readProperty(p, tag, e, ctx, Pid::BEGIN_HOOK_TYPE)) {
             if (p->beginHookType() != HookType::NONE) {
                 p->setBeginText(String());
+                p->setContinueText(String());
             }
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();

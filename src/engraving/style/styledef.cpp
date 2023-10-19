@@ -286,6 +286,7 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::pedalText,               "pedalText",               String(u"<sym>keyboardPedalPed</sym>") },
     { Sid::pedalHookText,           "pedalHookText",           String() },
     { Sid::pedalContinueText,       "pedalContinueText",       String(u"(<sym>keyboardPedalPed</sym>)") },
+    { Sid::pedalContinueHookText,   "pedalContinueHookText",   String() },
     { Sid::pedalEndText,            "pedalEndText",            String() },
     { Sid::pedalRosetteEndText,     "pedalRosetteEndText",     String(u"<sym>keyboardPedalUp</sym>") },
 

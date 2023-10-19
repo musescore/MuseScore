@@ -2323,6 +2323,7 @@ void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPeda
     } else {
         pedal->setBeginHookType(engraving::HookType::HOOK_90);
         pedal->setBeginText(String());
+        pedal->setContinueText(String());
         pedal->setEndHookType(engraving::HookType::HOOK_90);
     }
 
