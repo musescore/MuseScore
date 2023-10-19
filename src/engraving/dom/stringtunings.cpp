@@ -275,8 +275,8 @@ String StringTunings::generateText() const
         return u"";
     }
 
-    int columnCount = 0;
-    int rowCount = 0;
+    size_t columnCount = 0;
+    size_t rowCount = 0;
 
     if (visibleStringList.size() < 4) {
         rowCount = visibleStringList.size();
@@ -287,8 +287,8 @@ String StringTunings::generateText() const
     }
 
     String result;
-    for (int i = 0; i < rowCount; ++i) {
-        for (int j = 0; j < columnCount; ++j) {
+    for (size_t i = 0; i < rowCount; ++i) {
+        for (size_t j = 0; j < columnCount; ++j) {
             size_t index = i + j * rowCount;
             if (index < visibleStringList.size()) {
                 result += visibleStringList[index];

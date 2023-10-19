@@ -72,7 +72,7 @@ public:
 
     QVariantList numbersOfStrings() const;
 
-    size_t currentNumberOfStrings() const;
+    int currentNumberOfStrings() const;
     void setCurrentNumberOfStrings(int number);
 
     QList<StringTuningsItem*> strings() const;

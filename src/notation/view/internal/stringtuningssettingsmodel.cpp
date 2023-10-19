@@ -271,14 +271,14 @@ QVariantList StringTuningsSettingsModel::numbersOfStrings() const
     return numbersList;
 }
 
-size_t StringTuningsSettingsModel::currentNumberOfStrings() const
+int StringTuningsSettingsModel::currentNumberOfStrings() const
 {
     return m_item ? engraving::toStringTunings(m_item)->getProperty(engraving::Pid::STRINGTUNINGS_STRINGS_COUNT).toInt() : 0;
 }
 
 void StringTuningsSettingsModel::setCurrentNumberOfStrings(int number)
 {
-    int currentNumber = static_cast<int>(currentNumberOfStrings());
+    int currentNumber = currentNumberOfStrings();
     if (currentNumber == number) {
         return;
     }
