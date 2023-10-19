@@ -40,7 +40,9 @@ using namespace mu::engraving::rendering::dev;
 static const mu::draw::Color DEBUG_ELTREE_SELECTED_COLOR(164, 0, 0);
 
 /// Generates a seemingly random but stable color based on a pointer address.
-/// (If we would use really random colors, the would change on every redraw.)
+/// If we would use really random colors, they would change on every redraw.
+/// Additional advantage: being able to see when an element is replaced with
+/// a different element during layout.
 static Color colorForPointer(const void* ptr)
 {
     static constexpr uint32_t rgbTotalMax = 600;
@@ -108,6 +110,11 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
 
 void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::vector<EngravingItem*>& items)
 {
+    auto options = configuration()->debuggingOptions();
+    if (!options.anyEnabled()) {
+        return;
+    }
+
     IF_ASSERT_FAILED(page) {
         return;
     }
@@ -125,8 +132,6 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
     for (const EngravingItem* item : items) {
         paintElementDebug(painter, item);
     }
-
-    auto options = configuration()->debuggingOptions();
 
     if (options.showSystemBoundingRects) {
         painter.setBrush(BrushStyle::NoBrush);

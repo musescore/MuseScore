@@ -85,6 +85,20 @@ public:
         bool showSkylines = false;
         bool showSystemBoundingRects = false;
         bool showCorruptedMeasures = true;
+
+        bool anyEnabled() const
+        {
+            return showElementBoundingRects
+                   || colorElementShapes
+                   || showSegmentShapes
+                   || colorSegmentShapes
+                   || showSkylines
+                   || showSystemBoundingRects
+#ifndef NDEBUG
+                   || showCorruptedMeasures
+#endif
+            ;
+        }
     };
 
     virtual const DebuggingOptions& debuggingOptions() const = 0;
