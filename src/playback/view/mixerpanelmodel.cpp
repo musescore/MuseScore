@@ -559,7 +559,9 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
 
     playback()->audioOutput()->masterOutputParams()
     .onResolve(this, [this, item](AudioOutputParams outParams) {
-        loadOutputParams(item, std::move(outParams));
+        if (m_masterChannelItem && item == m_masterChannelItem) {
+            loadOutputParams(item, std::move(outParams));
+        }
     })
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to get master output parameters, error code: " << errCode
@@ -567,8 +569,10 @@ MixerChannelItem* MixerPanelModel::buildMasterChannelItem()
     });
 
     playback()->audioOutput()->masterSignalChanges()
-    .onResolve(this, [item](AudioSignalChanges signalChanges) {
-        item->subscribeOnAudioSignalChanges(std::move(signalChanges));
+    .onResolve(this, [this, item](AudioSignalChanges signalChanges) {
+        if (m_masterChannelItem && item == m_masterChannelItem) {
+            item->subscribeOnAudioSignalChanges(std::move(signalChanges));
+        }
     })
     .onReject(this, [](int errCode, std::string text) {
         LOGE() << "unable to subscribe on audio signal changes from master channel, error code: " << errCode
