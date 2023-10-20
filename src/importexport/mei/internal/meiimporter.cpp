@@ -1011,7 +1011,8 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
 
         // Read the string content (first level), including <lb>
         StringList lines;
-        this->readLines(rendNode, lines);
+        size_t line = 0;
+        this->readLines(rendNode, lines, line);
 
         TextStyleType textStyle = Convert::textFromMEI(meiRend, warning);
         if (warning) {
@@ -1038,13 +1039,25 @@ bool MeiImporter::readPgHead(pugi::xml_node pgHeadNode)
  * Read the lines of a textual mixed content.
  */
 
-bool MeiImporter::readLines(pugi::xml_node parentNode, StringList& lines)
+bool MeiImporter::readLines(pugi::xml_node parentNode, StringList& lines, size_t& line)
 {
     for (pugi::xml_node child : parentNode.children()) {
         if (child.type() == pugi::node_pcdata) {
-            lines.push_back(String(child.text().as_string()));
-        } else if (!this->isNode(child, u"lb")) {
-            this->addLog("skipping child element", child);
+            // This is the first time we are adding text to the current line - push it
+            if (lines.size() <= line) {
+                lines.push_back(String(child.text().as_string()));
+            }
+            // If not, then concatenate it to the current line
+            else {
+                lines.at(line) += String(child.text().as_string());
+            }
+        } else if (this->isNode(child, u"lb")) {
+            line += 1;
+        } else {
+            // Try to reecursively read the text content of child nodes
+            // For files not written by MuseScore with additional /rend elements
+            this->addLog("unsupported child element, reading text only", child);
+            readLines(child, lines, line);
         }
     }
     return true;
@@ -2169,7 +2182,8 @@ bool MeiImporter::readDir(pugi::xml_node dirNode, Measure* measure)
     meiDir.Read(dirNode);
 
     StringList meiLines;
-    this->readLines(dirNode, meiLines);
+    size_t meiLine = 0;
+    this->readLines(dirNode, meiLines, meiLine);
 
     if (Convert::isDirWithExt(meiDir)) {
         TextLineBase* textLineBase = static_cast<TextLineBase*>(this->addSpanner(meiDir, measure, dirNode));
@@ -2211,7 +2225,8 @@ bool MeiImporter::readDynam(pugi::xml_node dynamNode, Measure* measure)
     }
 
     StringList meiLines;
-    this->readLines(dynamNode, meiLines);
+    size_t meiLine = 0;
+    this->readLines(dynamNode, meiLines, meiLine);
 
     Convert::dynamFromMEI(dynamic, meiLines, meiDynam, warning);
 
@@ -2239,7 +2254,8 @@ bool MeiImporter::readF(pugi::xml_node fNode, engraving::FiguredBass* figuredBas
     figuredBassItem->setParent(figuredBass);
 
     StringList meiLines;
-    this->readLines(fNode, meiLines);
+    size_t meiLine = 0;
+    this->readLines(fNode, meiLines, meiLine);
 
     Convert::fFromMEI(figuredBassItem, meiLines, meiF, warning);
 
@@ -2378,7 +2394,8 @@ bool MeiImporter::readHarm(pugi::xml_node harmNode, Measure* measure)
     }
 
     StringList meiLines;
-    this->readLines(harmNode, meiLines);
+    size_t meiLine = 0;
+    this->readLines(harmNode, meiLines, meiLine);
 
     Convert::harmFromMEI(harmony, meiLines, meiHarm, warning);
 
@@ -2858,13 +2875,15 @@ bool MeiImporter::buildScoreParts(pugi::xml_node scoreDefNode)
         Part* part = new Part(m_score);
 
         StringList lines;
-        this->readLines(labelNode, lines);
+        size_t line = 0;
+        this->readLines(labelNode, lines, line);
         part->setLongName(lines.join(u"\n"));
 
         pugi::xml_node labelAbbrNode = labelNode.select_node("./following-sibling::labelAbbr").node();
         if (labelAbbrNode) {
             StringList abbrLines;
-            this->readLines(labelAbbrNode, abbrLines);
+            size_t abbrLine = 0;
+            this->readLines(labelAbbrNode, abbrLines, abbrLine);
             part->setShortName(abbrLines.join(u"\n"));
         }
 

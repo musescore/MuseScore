@@ -82,7 +82,7 @@ private:
     bool readScore(pugi::xml_node root);
     bool readScoreDef(pugi::xml_node scoreDefNode, bool isInitial);
     bool readPgHead(pugi::xml_node pgHeadNode);
-    bool readLines(pugi::xml_node parentNode, StringList& lines);
+    bool readLines(pugi::xml_node parentNode, StringList& lines, size_t& line);
     bool readLinesWithSmufl(pugi::xml_node parentNode, StringList& lines);
     bool readStaffDefs(pugi::xml_node parentNode);
     bool readStaffGrps(pugi::xml_node parentNode, int& staffSpan, int column, size_t& idx);
