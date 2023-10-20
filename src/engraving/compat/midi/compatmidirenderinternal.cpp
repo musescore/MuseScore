@@ -352,6 +352,68 @@ static bool letRingShouldApply(const NoteEvent& event, const Note* note)
     return true;
 }
 
+static void renderSnd(EventsHolder& events, const Chord* chord, int noteChannel, int tickOffset, int sndController)
+{
+    Staff* staff = chord->staff();
+    ChangeMap& veloEvents = staff->velocities();
+    ChangeMap& multEvents = staff->velocityMultiplications();
+    Fraction stick = chord->tick();
+    Fraction etick = stick + chord->ticks();
+    auto changes = veloEvents.changesInRange(stick, etick);
+    auto multChanges = multEvents.changesInRange(stick, etick);
+
+    std::map<int, int> velocityMap;
+    for (auto& change : changes) {
+        int lastVal = -1;
+        int endPoint = change.second.ticks();
+        for (int t = change.first.ticks(); t <= endPoint; t++) {
+            int velo = veloEvents.val(Fraction::fromTicks(t));
+            if (velo == lastVal) {
+                continue;
+            }
+            lastVal = velo;
+
+            velocityMap[t] = velo;
+        }
+    }
+
+    double CONVERSION_FACTOR = CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+    for (auto& change : multChanges) {
+        // Ignore fix events: they are available as cached ramp starts
+        // and considering them ends up with multiplying twice effectively
+        if (change.first == change.second) {
+            continue;
+        }
+
+        int lastVal = CompatMidiRendererInternal::ARTICULATION_CONV_FACTOR;
+        int endPoint = change.second.ticks();
+        int lastVelocity = velocityMap.upper_bound(change.first.ticks())->second;
+        for (int t = change.first.ticks(); t <= endPoint; t++) {
+            int mult = multEvents.val(Fraction::fromTicks(t));
+            if (mult == lastVal || mult == CONVERSION_FACTOR) {
+                continue;
+            }
+            lastVal = mult;
+
+            double realMult = mult / CONVERSION_FACTOR;
+            if (velocityMap.find(t) != velocityMap.end()) {
+                lastVelocity = velocityMap[t];
+                velocityMap[t] *= realMult;
+            } else {
+                velocityMap[t] = lastVelocity * realMult;
+            }
+        }
+    }
+
+    for (auto point = velocityMap.cbegin(); point != velocityMap.cend(); ++point) {
+        // NOTE:JT if we ever want to use poly aftertouch instead of CC, this is where we want to
+        // be using it. Instead of ME_CONTROLLER, use ME_POLYAFTER (but duplicate for each note in chord)
+        NPlayEvent event = NPlayEvent(ME_CONTROLLER, noteChannel, sndController, std::clamp(point->second, 0, 127));
+        event.setOriginatingStaff(chord->staffIdx());
+        events[noteChannel].insert(std::make_pair(point->first + tickOffset, event));
+    }
+}
+
 //---------------------------------------------------------
 //   collectNote
 //---------------------------------------------------------
@@ -469,6 +531,10 @@ static void collectNote(EventsHolder& events, const Note* note, const CollectNot
             playParams.callAllSoundOff = noteParams.callAllSoundOff;
             playNote(events, note, playParams, pitchWheelRenderer);
         }
+    }
+
+    if (instr->singleNoteDynamics()) {
+        renderSnd(events, chord, noteChannel, noteParams.tickOffset, context.sndController);
     }
 
     // Bends

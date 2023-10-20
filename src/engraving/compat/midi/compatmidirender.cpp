@@ -8,6 +8,21 @@ void CompatMidiRender::renderScore(Score* score, EventsHolder& events, const Com
     internal.renderScore(events, ctx, expandRepeats);
 }
 
+int CompatMidiRender::getControllerForSnd(Score* score, int globalSndController)
+{
+    const int DEFAULT_CC = CTRL_BREATH;
+
+    SynthesizerState s = score->synthesizerState();
+    int method = s.method();
+    int controller = s.ccToUse();
+
+    if (method == -1) {
+        controller = (globalSndController == -1) ? DEFAULT_CC : globalSndController;
+    }
+
+    return controller;
+}
+
 void CompatMidiRender::createPlayEvents(const Score* score, Measure const* start, Measure const* const end)
 {
     if (!start) {

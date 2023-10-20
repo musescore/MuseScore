@@ -141,7 +141,7 @@ public:
 
     struct Context
     {
-        SynthesizerState synthState;
+        int sndController = CTRL_BREATH;
         bool metronome = true;
         std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
 

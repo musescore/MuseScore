@@ -234,7 +234,8 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     ctx.eachStringHasChannel = false;
     ctx.instrumentsHaveEffects = false;
     ctx.metronome = false;
-    ctx.synthState = synthState;
+    ctx.sndController = CompatMidiRender::getControllerForSnd(m_score, synthState.ccToUse());
+
     CompatMidiRender::renderScore(m_score, events, ctx, midiExpandRepeats);
 
     m_pauseMap.calculate(m_score);
