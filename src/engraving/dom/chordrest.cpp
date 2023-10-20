@@ -1267,7 +1267,7 @@ void ChordRest::undoAddAnnotation(EngravingItem* a)
 
 void ChordRest::checkStaffMoveValidity()
 {
-    if (!staff()) {
+    if (!staff() || !staff()->visible()) {
         return;
     }
     staff_idx_t idx = m_staffMove ? vStaffIdx() : staffIdx() + m_storedStaffMove;
