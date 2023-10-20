@@ -396,7 +396,10 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         item->p1().rx() = cr1->abbox().left() - noteLeft;
     }
     if (!cr2->isChord()) {
-        item->p2().rx() = cr2->abbox().right() + noteRight;
+        Shape shape = cr2->ldata()->shape();
+        auto shEl = shape.find([](const ShapeElement& i) { return i.item() && i.item()->isChordRest(); });
+        DO_ASSERT(shEl);
+        item->p2().rx() = shEl->translated(cr2->pagePos()).right() + noteRight;
     }
 
     item->setPos(0.0, 0.0);
@@ -423,8 +426,9 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     double x3 = 0.0;
     double numberWidth = 0.0;
     if (item->number()) {
-        TLayout::layoutText(item->number(), item->number()->mutldata());
-        numberWidth = item->number()->ldata()->bbox().width();
+        Text::LayoutData* numLdata = item->number()->mutldata();
+        TLayout::layoutText(item->number(), numLdata);
+        numberWidth = numLdata->bbox().width();
 
         double y3 = item->p1().y() + (item->p2().y() - item->p1().y()) * .5 - l1 * (item->isUp() ? 1.0 : -1.0);
         // for beamed tuplets, center number on beam - if they don't have a bracket
@@ -443,7 +447,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
             x3 = item->p1().x() + deltax * .5;
         }
 
-        item->number()->setPos(PointF(x3, y3) - ldata->pos());
+        numLdata->setPos(PointF(x3, y3) - ldata->pos());
     }
 
     if (item->hasBracket()) {

@@ -531,10 +531,7 @@ public:
 
         bool isSetBbox() const { return m_shape.has_value(); }
         void clearBbox() { m_shape.reset(); }
-        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const
-        {
-            return m_shape.value(mode).bbox();
-        }
+        const RectF& bbox(LD_ACCESS mode = LD_ACCESS::CHECK) const;
 
         bool isSetShape() const { return m_shape.has_value(); }
         void clearShape() { m_shape.reset(); }
