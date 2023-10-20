@@ -114,6 +114,15 @@ const RectF& Shape::bbox() const
     }
 }
 
+std::optional<ShapeElement> Shape::find(const std::function<bool(const ShapeElement&)>& func) const
+{
+    auto it = std::find_if(m_elements.begin(), m_elements.end(), func);
+    if (it == m_elements.end()) {
+        return std::nullopt;
+    }
+    return std::make_optional(*it);
+}
+
 //-------------------------------------------------------------------
 //   minVerticalDistance
 //    a is located below this shape.

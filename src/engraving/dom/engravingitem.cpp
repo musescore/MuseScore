@@ -2376,6 +2376,11 @@ EngravingItem::LayoutData* EngravingItem::mutldata()
     return m_layoutData;
 }
 
+const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
+{
+    return m_shape.value(mode).bbox();
+}
+
 Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
 {
     const Shape& sh = m_shape.value(LD_ACCESS::CHECK);

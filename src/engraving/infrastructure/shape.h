@@ -23,6 +23,9 @@
 #ifndef MU_ENGRAVING_SHAPE_H
 #define MU_ENGRAVING_SHAPE_H
 
+#include <functional>
+#include <optional>
+
 #include "draw/types/geometry.h"
 
 namespace mu::draw {
@@ -117,6 +120,8 @@ public:
     // ---
 
     const std::vector<ShapeElement>& elements() const { return m_elements; }
+
+    std::optional<ShapeElement> find(const std::function<bool(const ShapeElement&)>& func) const;
 
     void removeInvisibles();
 
