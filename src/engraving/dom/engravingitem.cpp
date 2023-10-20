@@ -2238,6 +2238,16 @@ EngravingItem* EngravingItem::findLinkedInScore(const Score* score) const
         return nullptr;
     }
 
+    // If this is a system element it may not be on the same stave, so just check if linked elements are in the score
+    if (systemFlag() && track() == 0) {
+        for (EngravingObject* linked : *links()) {
+            if (linked != this && linked->score() == score) {
+                return toEngravingItem(linked);
+            }
+        }
+        return nullptr;
+    }
+
     Staff* linkedStaffInScore = staff()->findLinkedInScore(score);
 
     if (!linkedStaffInScore) {
@@ -2258,7 +2268,6 @@ EngravingItem* EngravingItem::findLinkedInStaff(const Staff* staff) const
             return toEngravingItem(linked);
         }
     }
-
     return nullptr;
 }
 
