@@ -59,14 +59,14 @@ class VstSequencer : public audio::AbstractEventSequencer<VstEvent, PluginParamI
 public:
     void init(ParamsMapping&& mapping);
 
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateDynamicChanges(const mpe::DynamicLevelLayers& changes) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
 
     audio::gain_t currentGain() const;
 
 private:
     void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
+    void updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& dynamics);
 
     void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                              const ControllIdx controlIdx);
@@ -82,6 +82,7 @@ private:
 
     ParamsMapping m_mapping;
     mpe::PlaybackEventsMap m_eventsMap;
+    mpe::DynamicLevelLayers m_dynamicLevelLayers;
 };
 }
 

@@ -116,7 +116,7 @@ void PlaybackModel::reload()
     update(tickFrom, tickTo, trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
-        pair.second.mainStream.send(pair.second.originEvents);
+        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamicLevelLayers);
     }
 
     m_dataChanged.notify();
@@ -683,13 +683,11 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
 {
     for (const InstrumentTrackId& trackId : changedTracks) {
         auto search = m_playbackDataMap.find(trackId);
-
         if (search == m_playbackDataMap.cend()) {
             continue;
         }
 
-        search->second.dynamicLevelChanges.send(search->second.dynamicLevelLayers);
-        search->second.mainStream.send(search->second.originEvents);
+        search->second.mainStream.send(search->second.originEvents, search->second.dynamicLevelLayers);
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {

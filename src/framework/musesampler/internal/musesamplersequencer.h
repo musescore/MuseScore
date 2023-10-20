@@ -63,13 +63,10 @@ class MuseSamplerSequencer : public audio::AbstractEventSequencer<mu::mpe::NoteE
 public:
     void init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSampler sampler, ms_Track track);
 
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateDynamicChanges(const mpe::DynamicLevelLayers& changes) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) override;
 
 private:
-    void reloadTrack();
-
     void loadNoteEvents(const mpe::PlaybackEventsMap& changes);
     void loadDynamicEvents(const mpe::DynamicLevelLayers& changes);
 

@@ -85,7 +85,7 @@ void MuseSamplerSequencer::init(MuseSamplerLibHandlerPtr samplerLib, ms_MuseSamp
     m_track = std::move(track);
 }
 
-void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
+void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events)
 {
     m_offStreamEvents.clear();
 
@@ -93,7 +93,7 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& c
         m_onOffStreamFlushed();
     }
 
-    for (const auto& pair : changes) {
+    for (const auto& pair : events) {
         for (const auto& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
@@ -120,21 +120,7 @@ void MuseSamplerSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& c
     updateOffSequenceIterator();
 }
 
-void MuseSamplerSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
-{
-    m_eventsMap = changes;
-
-    reloadTrack();
-}
-
-void MuseSamplerSequencer::updateDynamicChanges(const mpe::DynamicLevelLayers& changes)
-{
-    m_dynamicLevelLayers = changes;
-
-    reloadTrack();
-}
-
-void MuseSamplerSequencer::reloadTrack()
+void MuseSamplerSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics)
 {
     IF_ASSERT_FAILED(m_samplerLib && m_sampler && m_track) {
         return;
@@ -143,8 +129,8 @@ void MuseSamplerSequencer::reloadTrack()
     m_samplerLib->clearTrack(m_sampler, m_track);
     LOGN() << "Requested to clear track";
 
-    loadNoteEvents(m_eventsMap);
-    loadDynamicEvents(m_dynamicLevelLayers);
+    loadNoteEvents(events);
+    loadDynamicEvents(dynamics);
 
     m_samplerLib->finalizeTrack(m_sampler, m_track);
     LOGN() << "Requested to finalize track";

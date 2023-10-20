@@ -37,11 +37,10 @@ void VstSequencer::init(ParamsMapping&& mapping)
 {
     m_mapping = std::move(mapping);
 
-    updateDynamicChanges(m_dynamicLevelLayers);
-    updateMainStreamEvents(m_eventsMap);
+    updateMainStreamEvents(m_eventsMap, m_dynamicLevelLayers);
 }
 
-void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events)
 {
     m_offStreamEvents.clear();
 
@@ -49,40 +48,42 @@ void VstSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
         m_onOffStreamFlushed();
     }
 
-    updatePlaybackEvents(m_offStreamEvents, changes);
+    updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
 
-void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
+void VstSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics)
 {
-    m_eventsMap = changes;
+    m_eventsMap = events;
+    m_dynamicLevelLayers = dynamics;
+
     m_mainStreamEvents.clear();
+    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
-    updatePlaybackEvents(m_mainStreamEvents, changes);
+    updatePlaybackEvents(m_mainStreamEvents, events);
     updateMainSequenceIterator();
-}
 
-void VstSequencer::updateDynamicChanges(const mpe::DynamicLevelLayers& changes)
-{
-    m_dynamicEvents.clear();
-
-    for (const auto& layer : changes) {
-        for (const auto& pair : layer.second) {
-            m_dynamicEvents[pair.first].emplace(expressionLevel(pair.second));
-        }
-    }
-
+    updateDynamicEvents(m_dynamicEvents, dynamics);
     updateDynamicChangesIterator();
 }
 
 audio::gain_t VstSequencer::currentGain() const
 {
-    mpe::dynamic_level_t currentDynamicLevel = dynamicLevel(m_playbackPosition);
-    return expressionLevel(currentDynamicLevel);
+    auto seqIt = findLessOrEqual(m_dynamicEvents, m_playbackPosition);
+    if (seqIt == m_dynamicEvents.end()) {
+        return expressionLevel(mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+    }
+
+    const EventSequence& seq = seqIt->second;
+    if (seq.empty()) {
+        return expressionLevel(mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
+    }
+
+    return std::get<audio::gain_t>(*seq.begin());
 }
 
 void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
@@ -107,6 +108,28 @@ void VstSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe
 
             appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, SUSTAIN_IDX);
         }
+    }
+}
+
+void VstSequencer::updateDynamicEvents(EventSequenceMap& destination, const mpe::DynamicLevelLayers& dynamics)
+{
+    mpe::DynamicLevelMap dynamicsMap;
+    constexpr mpe::dynamic_level_t NATURAL_LEVEL = mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+
+    for (const auto& layer : dynamics) {
+        for (const auto& pair : layer.second) {
+            auto dynamicIt = dynamicsMap.find(pair.first);
+
+            if (dynamicIt == dynamicsMap.end()) {
+                dynamicsMap.emplace(pair.first, pair.second);
+            } else if (dynamicIt->second != pair.second && pair.second != NATURAL_LEVEL) {
+                dynamicsMap.insert_or_assign(pair.first, pair.second);
+            }
+        }
+    }
+
+    for (const auto& pair : dynamicsMap) {
+        destination[pair.first].emplace(expressionLevel(pair.second));
     }
 }
 

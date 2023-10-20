@@ -618,7 +618,7 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     PlaybackData result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString());
 
     // [THEN] Updated events map will match our expectations
-    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents) {
+    result.mainStream.onReceive(this, [expectedChangedEventsCount](const PlaybackEventsMap& updatedEvents, const DynamicLevelLayers&) {
         EXPECT_EQ(updatedEvents.size(), expectedChangedEventsCount);
     });
 

@@ -39,8 +39,9 @@ struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<msecs_t, PlaybackEventList>;
-using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
-using DynamicLevelChanges = async::Channel<DynamicLevelLayers>;
+
+using MainStreamChannel = async::Channel<PlaybackEventsMap, DynamicLevelLayers>;
+using OffStreamChannel = async::Channel<PlaybackEventsMap>;
 
 struct ArrangementContext
 {
@@ -373,10 +374,9 @@ static const String GENERIC_SETUP_DATA_STRING = GENERIC_SETUP_DATA.toString();
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;
-    PlaybackEventsChanges mainStream;
-    PlaybackEventsChanges offStream;
     DynamicLevelLayers dynamicLevelLayers;
-    DynamicLevelChanges dynamicLevelChanges;
+    MainStreamChannel mainStream;
+    OffStreamChannel offStream;
 
     bool operator==(const PlaybackData& other) const
     {

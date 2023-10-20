@@ -63,16 +63,16 @@ class FluidSequencer : public AbstractEventSequencer<mu::midi::Event, mu::midi::
 public:
     void init(const mpe::PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride, bool useDynamicEvents);
 
-    void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) override;
-    void updateDynamicChanges(const mpe::DynamicLevelLayers& changes) override;
+    void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) override;
+    void updateMainStreamEvents(const mpe::PlaybackEventsMap& evetns, const mpe::DynamicLevelLayers& dynamics) override;
 
     async::Channel<midi::channel_t, midi::Program> channelAdded() const;
 
     const ChannelMap& channels() const;
 
 private:
-    void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes);
+    void updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events, bool useNoteVelocity = true);
+    void updateDynamicEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics);
 
     void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                              const int midiControlIdx);
@@ -80,8 +80,7 @@ private:
     void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                          const midi::channel_t channelIdx);
 
-    void appendDynamicEvents(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent,
-                             const mpe::DynamicLevelLayers& dynamicLayers, const midi::channel_t channelIdx);
+    void appendDynamicEvents(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::DynamicLevelLayers& dynamicLayers);
 
     midi::channel_t channel(const mpe::NoteEvent& noteEvent) const;
     midi::note_idx_t noteIndex(const mpe::pitch_level_t pitchLevel) const;
