@@ -3352,6 +3352,28 @@ QVariant Measure::propertyDefault(Pid propertyId) const
       return MeasureBase::propertyDefault(propertyId);
       }
 
+//---------------------------------------------------------
+//   undoChangeProperty
+//---------------------------------------------------------
+
+void Measure::undoChangeProperty(Pid id, const QVariant& v)
+      {
+      undoChangeProperty(id, v, propertyFlags(id));
+      }
+
+void Measure::undoChangeProperty(Pid id, const QVariant& v, PropertyFlags ps)
+      {
+      if ((getProperty(id) == v) && (propertyFlags(id) == ps))
+            return;
+      if (id == Pid::REPEAT_START || id == Pid::REPEAT_END) {
+            // change also coresponding mmRestMeasure
+            Measure* m = const_cast<Measure*>(toMeasure(this)->coveringMMRestOrThis());
+            if (m != this)
+                  m->undoChangeProperty(id, v);
+            }
+      ScoreElement::undoChangeProperty(id, v, ps);
+      }
+
 //-------------------------------------------------------------------
 //   mmRestFirst
 //    this is a multi measure rest

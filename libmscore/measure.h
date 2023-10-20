@@ -248,6 +248,9 @@ class Measure final : public MeasureBase {
       bool setProperty(Pid propertyId, const QVariant&) override;
       QVariant propertyDefault(Pid) const override;
 
+      void undoChangeProperty(Pid id, const QVariant& newValue);
+      void undoChangeProperty(Pid id, const QVariant& newValue, PropertyFlags ps) override;
+
       bool hasMMRest() const        { return _mmRest != 0; }
       bool isMMRest() const         { return _mmRestCount > 0; }
       Measure* mmRest() const       { return _mmRest;      }
