@@ -397,7 +397,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     }
     if (!cr2->isChord()) {
         Shape shape = cr2->ldata()->shape();
-        auto shEl = shape.find([](const ShapeElement& i) { return i.item() && i.item()->isChordRest(); });
+        auto shEl = shape.find_if([](const ShapeElement& i) { return i.item() && i.item()->isChordRest(); });
         DO_ASSERT(shEl);
         item->p2().rx() = shEl->translated(cr2->pagePos()).right() + noteRight;
     }
