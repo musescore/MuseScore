@@ -1268,7 +1268,18 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 } else {
                     // full measure rest or one-measure repeat, center within this measure
                     TLayout::layoutItem(e, ctx);
-                    e->mutldata()->setPosX((x2 - x1 - e->width()) * .5 + x1 - s.x() - e->ldata()->bbox().x());
+                    Shape sh = e->ldata()->shape();
+                    auto shEL = sh.find_first(ElementType::REST);
+                    //! HACK Previously, bbox of rest was used here
+                    //! Now we are using a shape, and in the shape we need to find the part related to rest
+                    //! But in some cases, the information about what the ShapeElement belongs to will disappear at the moment (item is null),
+                    //! in this case, let's just take the first element, it currently corresponds to the rest
+                    if (!shEL) {
+                        shEL = sh.get_first();
+                    }
+                    if (shEL) {
+                        e->mutldata()->setPosX((x2 - x1 - shEL->width()) * .5 + x1 - s.x() - shEL->x());
+                    }
                 }
                 s.createShape(staffIdx);            // DEBUG
             } else if (e->isRest()) {

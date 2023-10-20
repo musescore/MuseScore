@@ -28,8 +28,6 @@
 #include "containers.h"
 #include "translation.h"
 
-#include "rendering/dev/chordlayout.h"
-
 #include "actionicon.h"
 #include "articulation.h"
 #include "chord.h"
@@ -48,7 +46,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------

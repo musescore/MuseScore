@@ -28,6 +28,8 @@
 
 #include "draw/types/geometry.h"
 
+#include "engraving/types/types.h"
+
 namespace mu::draw {
 class Painter;
 }
@@ -121,7 +123,9 @@ public:
 
     const std::vector<ShapeElement>& elements() const { return m_elements; }
 
-    std::optional<ShapeElement> find(const std::function<bool(const ShapeElement&)>& func) const;
+    std::optional<ShapeElement> find_if(const std::function<bool(const ShapeElement&)>& func) const;
+    std::optional<ShapeElement> find_first(ElementType type) const;
+    std::optional<ShapeElement> get_first() const;
 
     void removeInvisibles();
 

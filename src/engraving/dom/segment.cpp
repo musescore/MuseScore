@@ -29,7 +29,6 @@
 #include "types/typesconv.h"
 
 #include "rendering/dev/tlayout.h"
-#include "rendering/dev/chordlayout.h"
 
 #include "accidental.h"
 #include "barline.h"
@@ -66,7 +65,6 @@
 
 using namespace mu;
 using namespace mu::engraving;
-using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 //---------------------------------------------------------

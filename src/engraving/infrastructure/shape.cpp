@@ -114,13 +114,32 @@ const RectF& Shape::bbox() const
     }
 }
 
-std::optional<ShapeElement> Shape::find(const std::function<bool(const ShapeElement&)>& func) const
+std::optional<ShapeElement> Shape::find_if(const std::function<bool(const ShapeElement&)>& func) const
 {
     auto it = std::find_if(m_elements.begin(), m_elements.end(), func);
     if (it == m_elements.end()) {
         return std::nullopt;
     }
     return std::make_optional(*it);
+}
+
+std::optional<ShapeElement> Shape::find_first(ElementType type) const
+{
+    for (const ShapeElement& i : m_elements) {
+        if (i.item() && i.item()->type() == type) {
+            return std::make_optional(i);
+        }
+    }
+
+    return std::nullopt;
+}
+
+std::optional<ShapeElement> Shape::get_first() const
+{
+    if (m_elements.empty()) {
+        return std::nullopt;
+    }
+    return std::make_optional(m_elements.at(0));
 }
 
 //-------------------------------------------------------------------

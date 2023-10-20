@@ -3007,7 +3007,6 @@ void ChordLayout::resolveRestVSChord(std::vector<Rest*>& rests, std::vector<Chor
             bool ignoreYOffset = (restAbove && restYOffset > 0) || (!restAbove && restYOffset < 0);
             PointF offset = ignoreYOffset ? PointF(0, restYOffset) : PointF(0, 0);
 
-            LayoutContext ctx(chord->score());
             Shape chordShape = chord->shape().translated(chord->pos());
             chordShape.removeInvisibles();
             if (chordShape.empty()) {
