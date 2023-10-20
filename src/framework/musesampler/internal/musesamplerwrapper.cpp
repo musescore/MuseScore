@@ -152,7 +152,7 @@ void MuseSamplerWrapper::flushSound()
 
     m_samplerLib->allNotesOff(m_sampler);
 
-    LOGI() << "ALL NOTES OFF";
+    LOGD() << "ALL NOTES OFF";
 }
 
 bool MuseSamplerWrapper::isValid() const

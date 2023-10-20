@@ -126,12 +126,10 @@ AudioResourceMetaList MuseSamplerResolver::resolveResources() const
 
 void MuseSamplerResolver::refresh()
 {
-    NOT_SUPPORTED;
 }
 
 void MuseSamplerResolver::clearSources()
 {
-    NOT_SUPPORTED;
 }
 
 std::string MuseSamplerResolver::version() const

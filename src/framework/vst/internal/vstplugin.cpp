@@ -98,6 +98,7 @@ void VstPlugin::load()
         }
 
         if (!m_module) {
+            LOGE() << "Unable to find vst plugin module, resourceId: " << m_resourceId;
             return;
         }
 

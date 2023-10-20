@@ -62,8 +62,6 @@ PluginModulePtr VstModulesRepository::pluginModule(const audio::AudioResourceId&
         return search->second;
     }
 
-    LOGE() << "Unable to find vst plugin module, resourceId: " << resourceId;
-
     return nullptr;
 }
 
