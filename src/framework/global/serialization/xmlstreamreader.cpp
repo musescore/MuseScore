@@ -24,8 +24,11 @@
 #include <cstring>
 
 #include "global/types/string.h"
-
-#include "../thirdparty/tinyxml/tinyxml2.h"
+#ifdef SYSTEM_TINYXML
+#include <tinyxml2.h>
+#else
+#include "thirdparty/tinyxml/tinyxml2.h"
+#endif
 
 #include "log.h"
 

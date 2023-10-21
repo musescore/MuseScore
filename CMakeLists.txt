@@ -100,6 +100,7 @@ option(MUE_COMPILE_USE_CCACHE "Try use ccache" ON)
 option(MUE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in debug" OFF)
 option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF) # Important for the maintainer of Linux distributions
 option(MUE_COMPILE_USE_SYSTEM_OPUS "Try use system opus" OFF) # Important for the maintainers of Linux distributions
+option(MUE_COMPILE_USE_SYSTEM_TINYXML "Try use system tinyxml" OFF) # Important for the maintainer of Linux distributions
 
 # === Debug ===
 option(MUE_ENABLE_LOAD_QML_FROM_SOURCE "Load qml files from source (not resource)" OFF)
