@@ -143,11 +143,9 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRendere
                 painter->setClipping(false);
             }
 
-#ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
             if (!opt.isPrinting) {
                 DebugPaint::paintPageDebug(*painter, page);
             }
-#endif
 
             painter->endObject(); // page
 
@@ -237,11 +235,7 @@ void Paint::paintItems(mu::draw::Painter& painter, const std::vector<EngravingIt
         paintItem(painter, item);
     }
 
-#ifdef MUE_ENABLE_ENGRAVING_PAINT_DEBUGGER
     if (!isPrinting) {
         DebugPaint::paintElementsDebug(painter, sortedItems);
     }
-#else
-    UNUSED(isPrinting);
-#endif
 }
