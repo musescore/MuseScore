@@ -269,10 +269,20 @@ if (MUE_ENABLE_AUDIO_EXPORT)
         )
 
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/lame lame)
+    set(MODULE_LINK
+        ${MODULE_LINK}
+        lame
+    )
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/opusenc opusenc)
+    set(MODULE_LINK
+        ${MODULE_LINK}
+        opusenc
+    )
     add_subdirectory(${PROJECT_SOURCE_DIR}/thirdparty/flac flac)
-
-    set(MODULE_LINK ${MODULE_LINK} lame opusenc flac)
+    set(MODULE_LINK
+        ${MODULE_LINK}
+        flac
+    )
 endif()
 
 if (ARCH_IS_X86_64)
