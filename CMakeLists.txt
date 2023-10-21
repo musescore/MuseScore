@@ -125,6 +125,7 @@ option(MUE_COMPILE_USE_SHARED_LIBS_IN_DEBUG "Build shared libs if possible in de
 option(MUE_COMPILE_USE_SYSTEM_FREETYPE "Try use system freetype" OFF) # Important for the maintainer of Linux distributions
 option(MUE_COMPILE_USE_SYSTEM_TINYXML "Try use system tinyxml" OFF) # Important for the maintainer of Linux distributions
 option(MUE_COMPILE_USE_SYSTEM_OPUSENC "Try use system libopusenc" OFF) # Important for the maintainer of Linux distributions
+option(MUE_COMPILE_USE_SYSTEM_FLAC "Try use system flac" OFF) # Important for the maintainer of Linux distributions
 
 # === Debug ===
 option(MUE_ENABLE_LOGGER_DEBUGLEVEL "Enable logging debug level" ON)
