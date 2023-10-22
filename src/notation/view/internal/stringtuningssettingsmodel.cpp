@@ -263,7 +263,7 @@ QVariantList StringTuningsSettingsModel::numbersOfStrings() const
 
     for (const StringTuningsInfo& stringTuning : stringTunings.at(m_itemId)) {
         QVariantMap stringNumberMap;
-        stringNumberMap.insert("text", QString::number(stringTuning.number) + " " + tr("strings"));
+        stringNumberMap.insert("text", qtrc("notation", "%n string(s)", nullptr, static_cast<int>(stringTuning.number)));
         stringNumberMap.insert("value", static_cast<int>(stringTuning.number));
         numbersList << stringNumberMap;
     }
