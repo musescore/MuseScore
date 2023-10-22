@@ -20609,14 +20609,6 @@ In addition, Mastering MuseScore features a supportive community of musicians, w
     </message>
 </context>
 <context>
-    <name>mu::notation::StringTuningsSettingsModel</name>
-    <message>
-        <location filename="../../src/notation/view/internal/stringtuningssettingsmodel.cpp" line="266"/>
-        <source>strings</source>
-        <translation type="unfinished"></translation>
-    </message>
-</context>
-<context>
     <name>musesampler</name>
     <message>
         <location filename="../../src/framework/musesampler/internal/musesampleractioncontroller.cpp" line="39"/>
