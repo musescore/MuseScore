@@ -48,6 +48,8 @@ public:
     void setSampleRate(unsigned int sampleRate) override;
     async::Notification sampleRateChanged() const override;
 
+    size_t minTrackCountForMultithreading() const override;
+
     // synthesizers
     AudioInputParams defaultAudioInputParams() const override;
 

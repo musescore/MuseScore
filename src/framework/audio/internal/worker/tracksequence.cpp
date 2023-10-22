@@ -46,6 +46,10 @@ TrackSequence::TrackSequence(const TrackSequenceId id)
     m_player = std::make_shared<SequencePlayer>(this, m_clock);
     m_audioIO = std::make_shared<SequenceIO>(this);
 
+    AudioEngine::instance()->modeChanged().onNotify(this, [this]() {
+        m_prevActiveTrackId = INVALID_TRACK_ID;
+    });
+
     mixer()->addClock(m_clock);
 }
 
@@ -85,11 +89,21 @@ RetVal2<TrackId, AudioParams> TrackSequence::addTrack(const std::string& trackNa
 
     TrackId newId = newTrackId();
 
+    auto onOffStreamReceived = [this](const TrackId trackId) {
+        if (m_prevActiveTrackId == INVALID_TRACK_ID) {
+            mixer()->setTracksToProcessWhenIdle({ trackId });
+        } else {
+            mixer()->setTracksToProcessWhenIdle({ m_prevActiveTrackId, trackId });
+        }
+
+        m_prevActiveTrackId = trackId;
+    };
+
     EventTrackPtr trackPtr = std::make_shared<EventTrack>();
     trackPtr->id = newId;
     trackPtr->name = trackName;
     trackPtr->setPlaybackData(playbackData);
-    trackPtr->inputHandler = std::make_shared<EventAudioSource>(newId, playbackData);
+    trackPtr->inputHandler = std::make_shared<EventAudioSource>(newId, playbackData, onOffStreamReceived);
     trackPtr->outputHandler = mixer()->addChannel(newId, trackPtr->inputHandler).val;
     trackPtr->setInputParams(requiredParams.in);
     trackPtr->setOutputParams(requiredParams.out);
