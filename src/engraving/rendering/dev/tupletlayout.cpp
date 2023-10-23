@@ -400,7 +400,8 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     if (item->explicitParent()->isMeasure()) {
         System* s = toMeasure(item->explicitParent())->system();
         if (s) {
-            mp.ry() += s->staff(item->vStaffIdx())->y();
+            SysStaff* tupletStaff = s->staff(item->vStaffIdx());
+            mp.ry() += tupletStaff ? tupletStaff->y() : 0.0;
         }
     }
     item->p1() -= mp;

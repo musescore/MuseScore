@@ -531,7 +531,15 @@ bool Tuplet::cross() const
 
 staff_idx_t Tuplet::vStaffIdx() const
 {
+    if (elements().empty()) {
+        return mu::nidx;
+    }
+
     const DurationElement* cr = elements().front();
+    if (!cr) {
+        return mu::nidx;
+    }
+
     while (cr->isTuplet()) {
         const Tuplet* t = toTuplet(cr);
         if (t->elements().empty()) {
