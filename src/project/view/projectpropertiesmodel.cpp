@@ -32,6 +32,7 @@ static const QString WORK_TITLE_TAG("workTitle"); //// Keep updated with notatio
 static const QString COMPOSER_TAG("composer");
 static const QString LYRICIST_TAG("lyricist");
 static const QString SOURCE_TAG("source");
+static const QString AUDIO_COM_URL_TAG("audioComFile");
 static const QString COPYRIGHT_TAG("copyright");
 static const QString TRANSLATOR_TAG("translator");
 static const QString ARRANGER_TAG("arranger");
@@ -60,7 +61,8 @@ void ProjectPropertiesModel::load()
         { LYRICIST_TAG,            qtrc("project", "Lyricist"),           m_projectMetaInfo.lyricist,                   true },
         { TRANSLATOR_TAG,          qtrc("project", "Translator"),         m_projectMetaInfo.translator,                 true },
         { PLATFORM_TAG,            qtrc("project", "Platform"),           m_projectMetaInfo.platform,                   true },
-        { SOURCE_TAG,              qtrc("project", "Source"),             m_projectMetaInfo.source,                     true }
+        { SOURCE_TAG,              qtrc("project", "Source"),             m_projectMetaInfo.source,                     true },
+        { AUDIO_COM_URL_TAG,       qtrc("project", "Audio.com URL"),      m_projectMetaInfo.audioComUrl,                true }
     };
 
     QVariantMap additionalProperties = m_projectMetaInfo.additionalTags;
@@ -216,6 +218,8 @@ void ProjectPropertiesModel::saveProperties()
             meta.platform = property.value;
         } else if (property.key == SOURCE_TAG) {
             meta.source = property.value;
+        } else if (property.key == AUDIO_COM_URL_TAG) {
+            meta.audioComUrl = property.value;
         } else {
             if (!property.name.isEmpty() && !property.value.isEmpty()) {
                 meta.additionalTags[property.name] = property.value;

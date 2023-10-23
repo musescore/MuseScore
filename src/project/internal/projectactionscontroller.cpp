@@ -784,7 +784,8 @@ void ProjectActionsController::shareAudio()
     }
 
     m_uploadingAudioProgress = audioComService()->uploadAudio(*audio.device, audio.format, cloudAudioInfo.name,
-                                                              cloudAudioInfo.visibility);
+                                                              project->cloudAudioInfo().url, cloudAudioInfo.visibility,
+                                                              cloudAudioInfo.replaceExisting);
 
     m_uploadingAudioProgress->started.onNotify(this, [this]() {
         LOGD() << "Uploading audio started";
@@ -797,7 +798,7 @@ void ProjectActionsController::shareAudio()
         }
     });
 
-    m_uploadingAudioProgress->finished.onReceive(this, [this, audio](const ProgressResult& res) {
+    m_uploadingAudioProgress->finished.onReceive(this, [this, audio, project, cloudAudioInfo](const ProgressResult& res) {
         LOGD() << "Uploading audio finished";
 
         audio.device->deleteLater();
@@ -806,7 +807,13 @@ void ProjectActionsController::shareAudio()
             LOGE() << res.ret.toString();
             onAudioUploadFailed(res.ret);
         } else {
-            onAudioSuccessfullyUploaded(res.val.toMap()["editUrl"].toQString());
+            ValMap resMap = res.val.toMap();
+            onAudioSuccessfullyUploaded(resMap["editUrl"].toQString());
+            if (!cloudAudioInfo.replaceExisting) {
+                CloudAudioInfo info = project->cloudAudioInfo();
+                info.url = QUrl(resMap["url"].toQString());
+                project->setCloudAudioInfo(info);
+            }
         }
     });
 
@@ -926,9 +933,9 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
     }
 
     if (savingPath.empty()) {
-        int scoreId = cloud::scoreIdFromSourceUrl(info.sourceUrl);
+        ID scoreId = cloud::idFromCloudUrl(info.sourceUrl);
 
-        savingPath = configuration()->cloudProjectSavingPath(scoreId);
+        savingPath = configuration()->cloudProjectSavingPath(scoreId.toUint64());
     }
 
     if (!saveProjectLocally(savingPath, saveMode)) {
@@ -1130,7 +1137,7 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
             }
 
             if (project->isCloudProject()) {
-                moveProject(project, configuration()->cloudProjectPath(cloud::scoreIdFromSourceUrl(cpinfo.sourceUrl)), true);
+                moveProject(project, configuration()->cloudProjectPath(cloud::idFromCloudUrl(cpinfo.sourceUrl).toUint64()), true);
             }
         }
 

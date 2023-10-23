@@ -52,6 +52,9 @@ public:
     virtual const CloudProjectInfo& cloudInfo() const = 0;
     virtual void setCloudInfo(const CloudProjectInfo& info) = 0;
 
+    virtual const CloudAudioInfo& cloudAudioInfo() const = 0;
+    virtual void setCloudAudioInfo(const CloudAudioInfo& audioInfo) = 0;
+
     virtual bool isNewlyCreated() const = 0;
     virtual void markAsNewlyCreated() = 0;
 

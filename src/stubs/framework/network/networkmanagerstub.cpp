@@ -43,6 +43,11 @@ mu::Ret NetworkManagerStub::put(const QUrl&, OutgoingDevice*, IncomingDevice*, c
     return make_ret(Ret::Code::NotSupported);
 }
 
+mu::Ret NetworkManagerStub::patch(const QUrl&, OutgoingDevice*, IncomingDevice*, const RequestHeaders&)
+{
+    return make_ret(Ret::Code::NotSupported);
+}
+
 mu::Ret NetworkManagerStub::del(const QUrl&, IncomingDevice*, const RequestHeaders&)
 {
     return make_ret(Ret::Code::NotSupported);

@@ -34,7 +34,7 @@ StyledDialogView {
     title: qsTrc("project/properties", "Project properties")
 
     contentWidth: 680
-    contentHeight: 460
+    contentHeight: 500
     margins: 16
 
     property int propertyNameWidth: 110

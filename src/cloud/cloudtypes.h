@@ -28,6 +28,8 @@
 #include <QString>
 #include <QUrl>
 
+#include "types/id.h"
+
 namespace mu::cloud {
 static const QString MUSESCORE_COM_CLOUD_CODE = "musescorecom";
 static const QString AUDIO_COM_CLOUD_CODE = "audiocom";
@@ -144,16 +146,16 @@ struct ScoresList {
     } meta;
 };
 
-constexpr int INVALID_SCORE_ID = 0;
+constexpr ID INVALID_ID = 0;
 
-inline int scoreIdFromSourceUrl(const QUrl& sourceUrl)
+inline ID idFromCloudUrl(const QUrl& sourceUrl)
 {
     QStringList parts = sourceUrl.toString().split("/");
     if (parts.isEmpty()) {
-        return INVALID_SCORE_ID;
+        return INVALID_ID;
     }
 
-    return parts.last().toInt();
+    return ID(parts.last());
 }
 }
 

@@ -43,6 +43,8 @@ public:
              const RequestHeaders& headers = RequestHeaders()) override;
     Ret put(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
             const RequestHeaders& headers = RequestHeaders()) override;
+    Ret patch(const QUrl& url, OutgoingDevice* outgoingData, IncomingDevice* incomingData,
+              const RequestHeaders& headers = RequestHeaders()) override;
     Ret del(const QUrl& url, IncomingDevice* incomingData, const RequestHeaders& headers = RequestHeaders()) override;
 
     framework::Progress progress() const override;
@@ -55,6 +57,7 @@ private:
         HEAD_REQUEST,
         POST_REQUEST,
         PUT_REQUEST,
+        PATCH_REQUEST,
         DELETE_REQUEST
     };
 

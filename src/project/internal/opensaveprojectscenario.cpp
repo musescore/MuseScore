@@ -187,12 +187,18 @@ RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationP
     }
 
     QString defaultName = project->displayName();
+    QUrl uploadUrl = project->cloudAudioInfo().url;
     cloud::Visibility defaultVisibility = cloud::Visibility::Public;
 
-    UriQuery query("musescore://project/shareonaudiocloud");
+    UriQuery query("musescore://project/savetocloud");
+    query.addParam("isPublishShare", Val(true));
     query.addParam("name", Val(defaultName));
     query.addParam("visibility", Val(defaultVisibility));
     query.addParam("cloudCode", Val(cloud::AUDIO_COM_CLOUD_CODE));
+
+    if (!uploadUrl.isEmpty()) {
+        query.addParam("existingScoreOrAudioUrl", Val(uploadUrl.toString()));
+    }
 
     RetVal<Val> rv = interactive()->open(query);
     if (!rv.ret) {
@@ -213,19 +219,20 @@ RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationP
     CloudAudioInfo result;
     result.name = vals["name"].toString();
     result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
+    result.replaceExisting = vals["replaceExisting"].toBool() && !uploadUrl.isEmpty();
 
     return RetVal<CloudAudioInfo>::make_ok(result);
 }
 
-RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublish) const
+RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationProjectPtr project, SaveMode mode, bool isPublishShare) const
 {
     bool isCloudAvailable = museScoreComService()->authorization()->checkCloudIsAvailable();
     if (!isCloudAvailable) {
-        return warnCloudNotAvailableForUploading(isPublish);
+        return warnCloudNotAvailableForUploading(isPublishShare);
     }
 
     Ret ret = museScoreComService()->authorization()->ensureAuthorization(
-        isPublish
+        isPublishShare
         ? trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud.")
         : trc("project/save", "Login or create a free account on musescore.com to publish this score."));
     if (!ret) {
@@ -233,7 +240,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     }
 
     QString defaultName = project->displayName();
-    cloud::Visibility defaultVisibility = isPublish ? cloud::Visibility::Public : cloud::Visibility::Private;
+    cloud::Visibility defaultVisibility = isPublishShare ? cloud::Visibility::Public : cloud::Visibility::Private;
     const CloudProjectInfo existingProjectInfo = project->cloudInfo();
 
     if (!existingProjectInfo.sourceUrl.isEmpty()) {
@@ -242,7 +249,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
         switch (scoreInfo.ret.code()) {
         case int(Ret::Code::Ok):
             defaultName = scoreInfo.val.title;
-            if (!isPublish) {
+            if (!isPublishShare) {
                 defaultVisibility = scoreInfo.val.visibility;
             }
             break;
@@ -254,7 +261,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
         case int(cloud::Err::Status500_InternalServerError):
         case int(cloud::Err::UnknownStatusCode):
         case int(cloud::Err::NetworkError):
-            return showCloudSaveError(scoreInfo.ret, project->cloudInfo(), isPublish, false);
+            return showCloudSaveError(scoreInfo.ret, project->cloudInfo(), isPublishShare, false);
 
         // It's possible the source URL is invalid or points to a score on a different user's account.
         // In this situation we shouldn't show an error.
@@ -263,10 +270,10 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     }
 
     UriQuery query("musescore://project/savetocloud");
-    query.addParam("isPublish", Val(isPublish));
+    query.addParam("isPublishShare", Val(isPublishShare));
     query.addParam("name", Val(defaultName));
     query.addParam("visibility", Val(defaultVisibility));
-    query.addParam("existingOnlineScoreUrl", Val(existingProjectInfo.sourceUrl.toString()));
+    query.addParam("existingScoreOrAudioUrl", Val(existingProjectInfo.sourceUrl.toString()));
     query.addParam("cloudCode", Val(cloud::MUSESCORE_COM_CLOUD_CODE));
 
     RetVal<Val> rv = interactive()->open(query);
@@ -288,23 +295,23 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
 
     CloudProjectInfo result;
 
-    if ((mode == SaveMode::Save || isPublish) && vals["replaceExistingOnlineScore"].toBool()) {
+    if ((mode == SaveMode::Save || isPublishShare) && vals["replaceExisting"].toBool()) {
         result = existingProjectInfo;
     }
 
     result.name = vals["name"].toString();
     result.visibility = static_cast<cloud::Visibility>(vals["visibility"].toInt());
 
-    if (!warnBeforePublishing(isPublish, result.visibility)) {
+    if (!warnBeforePublishing(isPublishShare, result.visibility)) {
         return make_ret(Ret::Code::Cancel);
     }
 
     return RetVal<CloudProjectInfo>::make_ok(result);
 }
 
-bool OpenSaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibility visibility) const
+bool OpenSaveProjectScenario::warnBeforePublishing(bool isPublishShare, cloud::Visibility visibility) const
 {
-    if (isPublish) {
+    if (isPublishShare) {
         if (!configuration()->shouldWarnBeforePublish()) {
             return true;
         }
@@ -323,7 +330,7 @@ bool OpenSaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibi
 
     IInteractive::Options options = IInteractive::Option::WithIcon | IInteractive::Option::WithDontShowAgainCheckBox;
 
-    if (isPublish) {
+    if (isPublishShare) {
         title = trc("project/save", "Publish changes online?");
         message = trc("project/save", "We will need to generate a new MP3 for web playback.");
     } else if (visibility == cloud::Visibility::Public) {
@@ -339,7 +346,7 @@ bool OpenSaveProjectScenario::warnBeforePublishing(bool isPublish, cloud::Visibi
 
     bool ok = result.standardButton() == IInteractive::Button::Ok;
     if (ok && !result.showAgain()) {
-        if (isPublish) {
+        if (isPublishShare) {
             configuration()->setShouldWarnBeforePublish(false);
         } else {
             configuration()->setShouldWarnBeforeSavingPubliclyToCloud(false);
@@ -365,9 +372,9 @@ bool OpenSaveProjectScenario::warnBeforeSavingToExistingPubliclyVisibleCloudProj
     return result.standardButton() == IInteractive::Button::Ok;
 }
 
-Ret OpenSaveProjectScenario::warnCloudNotAvailableForUploading(bool isPublish) const
+Ret OpenSaveProjectScenario::warnCloudNotAvailableForUploading(bool isPublishShare) const
 {
-    if (isPublish) {
+    if (isPublishShare) {
         interactive()->warning(trc("project/save", "Unable to connect to MuseScore.com"),
                                trc("project/save", "Please check your internet connection or try again later."));
         return make_ret(Ret::Code::Cancel);
@@ -495,15 +502,16 @@ void OpenSaveProjectScenario::showCloudOpenError(const Ret& ret) const
     interactive()->warning(title, message);
 }
 
-Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublish, bool alreadyAttempted) const
+Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProjectInfo& info, bool isPublishShare,
+                                                bool alreadyAttempted) const
 {
     std::string title;
     if (alreadyAttempted) {
-        title = isPublish
+        title = isPublishShare
                 ? trc("project/save", "Your score could not be published")
                 : trc("project/save", "Your score could not be saved to the cloud");
     } else {
-        title = isPublish
+        title = isPublishShare
                 ? trc("project/save", "Your score cannot be published")
                 : trc("project/save", "Your score cannot be saved to the cloud");
     }
@@ -520,7 +528,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
     IInteractive::ButtonData saveLocallyBtn { saveLocallyBtnCode, trc("project/save", "Save to computer") };
     IInteractive::ButtonData helpBtn { helpBtnCode, trc("project/save", "Get help") };
 
-    IInteractive::ButtonDatas buttons = (alreadyAttempted || isPublish)
+    IInteractive::ButtonDatas buttons = (alreadyAttempted || isPublishShare)
                                         ? (IInteractive::ButtonDatas { helpBtn, okBtn })
                                         : (IInteractive::ButtonDatas { helpBtn, saveLocallyBtn, okBtn });
 
@@ -534,7 +542,7 @@ Ret OpenSaveProjectScenario::showCloudSaveError(const Ret& ret, const CloudProje
         break;
     case int(cloud::Err::Status409_Conflict):
         title = trc("project/save", "There are conflicting changes in the online score");
-        if (isPublish) {
+        if (isPublishShare) {
             msg = qtrc("project/save", "You can replace the <a href=\"%1\">online score</a>, or publish this as a new score "
                                        "to avoid losing changes in the current online version.")
                   .arg(info.sourceUrl.toString())

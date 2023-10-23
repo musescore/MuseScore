@@ -48,9 +48,8 @@ public:
 
     CloudInfo cloudInfo() const override;
 
-    framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title,
-                                       Visibility visibility = Visibility::Private) override;
-
+    framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& url,
+                                       Visibility visibility = Visibility::Private, bool replaceExisting = false) override;
 private:
     ServerConfig serverConfig() const override;
 
@@ -62,12 +61,15 @@ private:
 
     Ret doUploadAudio(network::INetworkManagerPtr uploadManager, QIODevice& audioData, const QString& audioFormat);
     Ret doCreateAudio(network::INetworkManagerPtr manager, const QString& title, int size, const QString& audioFormat,
-                      Visibility visibility);
+                      const QUrl& existingUrl, Visibility visibility, bool replaceExisting);
+
+    Ret doUpdateVisibility(network::INetworkManagerPtr manager, const QUrl& url, Visibility visibility);
 
     void notifyServerAboutFailUpload(const QUrl& failUrl, const QString& token);
     void notifyServerAboutSuccessUpload(const QUrl& successUrl, const QString& token);
 
     QString m_currentUploadingAudioSlug;
+    QString m_currentUploadingAudioId;
     QJsonObject m_currentUploadingAudioInfo;
 };
 }

@@ -192,7 +192,7 @@ bool MuseScoreComService::doUpdateTokens()
 
 mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(const QUrl& sourceUrl)
 {
-    return downloadScoreInfo(scoreIdFromSourceUrl(sourceUrl));
+    return downloadScoreInfo(idFromCloudUrl(sourceUrl).toUint64());
 }
 
 mu::RetVal<ScoreInfo> MuseScoreComService::downloadScoreInfo(int scoreId)
@@ -421,11 +421,11 @@ mu::RetVal<mu::ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr upl
         return result;
     }
 
-    int scoreId = scoreIdFromSourceUrl(sourceUrl);
-    bool isScoreAlreadyUploaded = scoreId != INVALID_SCORE_ID;
+    ID scoreId = idFromCloudUrl(sourceUrl);
+    bool isScoreAlreadyUploaded = scoreId != INVALID_ID;
 
     if (isScoreAlreadyUploaded) {
-        RetVal<ScoreInfo> scoreInfo = downloadScoreInfo(scoreId);
+        RetVal<ScoreInfo> scoreInfo = downloadScoreInfo(scoreId.toUint64());
 
         if (!scoreInfo.ret) {
             if (statusCode(scoreInfo.ret) == NOT_FOUND_STATUS_CODE) {
@@ -456,7 +456,7 @@ mu::RetVal<mu::ValMap> MuseScoreComService::doUploadScore(INetworkManagerPtr upl
     if (isScoreAlreadyUploaded) {
         QHttpPart scoreIdPart;
         scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
-        scoreIdPart.setBody(QString::number(scoreId).toLatin1());
+        scoreIdPart.setBody(QString::number(scoreId.toUint64()).toLatin1());
         multiPart.append(scoreIdPart);
 
         if (revisionId) {
@@ -542,7 +542,7 @@ mu::Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadMan
 
     QHttpPart scoreIdPart;
     scoreIdPart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"score_id\""));
-    scoreIdPart.setBody(QString::number(scoreIdFromSourceUrl(sourceUrl)).toLatin1());
+    scoreIdPart.setBody(QString::number(idFromCloudUrl(sourceUrl).toUint64()).toLatin1());
     multiPart.append(scoreIdPart);
 
     QBuffer receivedData;
