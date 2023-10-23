@@ -1334,4 +1334,16 @@ String formatUniqueExcerptName(const String& baseName, const StringList& allExce
 
     return result;
 }
+
+bool isFirstSystemKeySig(const KeySig* ks)
+{
+    if (!ks) {
+        return false;
+    }
+    System* sys = ks->measure()->system();
+    if (!sys) {
+        return false;
+    }
+    return ks->tick().ticks() == sys->firstMeasure()->tick().ticks();
+}
 }

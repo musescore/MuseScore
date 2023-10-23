@@ -34,6 +34,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
+#include "system.h"
 #include "undo.h"
 #include "utils.h"
 
@@ -489,7 +490,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
             } else if (e->isKeySig() && trKeys && mode != TransposeMode::DIATONICALLY) {
                 KeySig* ks = toKeySig(e);
                 Fraction tick = segment->tick();
-                bool startKey = tick == s1->tick() && !ks->isFirstSystemKeySig();
+                bool startKey = tick == s1->tick() && !isFirstSystemKeySig(ks);
                 bool addKey = ks->isChange();
                 if ((startKey || addKey) && !ks->isAtonal()) {
                     Staff* staff = ks->staff();

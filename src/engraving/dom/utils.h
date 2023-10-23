@@ -26,6 +26,7 @@
 #include "types/types.h"
 
 #include "interval.h"
+#include "keysig.h"
 
 #include "draw/types/geometry.h"
 
@@ -92,5 +93,7 @@ extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 
 extern String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames);
+
+extern bool isFirstSystemKeySig(const KeySig* ks);
 } // namespace mu::engraving
 #endif

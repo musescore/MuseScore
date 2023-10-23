@@ -157,15 +157,6 @@ bool KeySig::isChange() const
     return staff()->currentKeyTick(keyTick) == keyTick;
 }
 
-bool KeySig::isFirstSystemKeySig()
-{
-    System* sys = measure()->system();
-    if (!sys) {
-        return false;
-    }
-    return tick().ticks() == sys->firstMeasure()->tick().ticks();
-}
-
 //---------------------------------------------------------
 //   changeKeySigEvent
 //---------------------------------------------------------
