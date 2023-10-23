@@ -76,10 +76,10 @@ static const Acc ACC_LIST[] = {
     Acc(AccidentalVal::NATURAL,  -50,   SymId::accidentalArrowDown),                       // ARROW_DOWN
 
     // Stein-Zimmermann
-    Acc(AccidentalVal::NATURAL,  -50,   SymId::accidentalQuarterToneFlatStein),   // MIRRORED_FLAT
-    Acc(AccidentalVal::NATURAL, -150,   SymId::accidentalThreeQuarterTonesFlatZimmermann),   // MIRRORED_FLAT2
-    Acc(AccidentalVal::NATURAL,   50,   SymId::accidentalQuarterToneSharpStein),         // SHARP_SLASH
-    Acc(AccidentalVal::NATURAL,  150,   SymId::accidentalThreeQuarterTonesSharpStein),   // SHARP_SLASH4
+    Acc(AccidentalVal::FLAT,      50,   SymId::accidentalQuarterToneFlatStein),            // MIRRORED_FLAT
+    Acc(AccidentalVal::FLAT,     -50,   SymId::accidentalThreeQuarterTonesFlatZimmermann), // MIRRORED_FLAT2
+    Acc(AccidentalVal::SHARP,    -50,   SymId::accidentalQuarterToneSharpStein),           // SHARP_SLASH
+    Acc(AccidentalVal::SHARP,     50,   SymId::accidentalThreeQuarterTonesSharpStein),     // SHARP_SLASH4
 
     // Arel-Ezgi-Uzdilek (AEU)
     Acc(AccidentalVal::NATURAL,    0,   SymId::accidentalBuyukMucennebFlat),    // FLAT_SLASH2
