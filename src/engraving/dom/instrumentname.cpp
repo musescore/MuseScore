@@ -83,7 +83,7 @@ void InstrumentName::setInstrumentNameType(const String& s)
     }
 }
 
-double InstrumentName::spatium() const
+double InstrumentName::largestStaffSpatium() const
 {
     if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
         return style().spatium();

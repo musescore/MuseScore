@@ -852,7 +852,7 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
     double spatiumScaling = 0.0;
 
     if (t->isInstrumentName()) {
-        spatiumScaling = toInstrumentName(t)->spatium() / SPATIUM20;
+        spatiumScaling = toInstrumentName(t)->largestStaffSpatium() / SPATIUM20;
     } else {
         spatiumScaling = t->spatium() / SPATIUM20;
     }
