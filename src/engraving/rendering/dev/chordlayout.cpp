@@ -3305,8 +3305,13 @@ void ChordLayout::crossMeasureSetup(Chord* chord, bool on, LayoutContext& ctx)
 // called after final position of note is set
 void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
 {
+    const Staff* staff = item->staff();
+    if (!staff) {
+        return;
+    }
+
     Note::LayoutData* ldata = item->mutldata();
-    const StaffType* staffType = item->staff()->staffTypeForElement(item);
+    const StaffType* staffType = staff->staffTypeForElement(item);
     // for standard staves this is done in Score::layoutChords3()
     // so that the results are available there
     bool isTabStaff = staffType && staffType->isTabStaff();
