@@ -2966,7 +2966,7 @@ void Score::padToggle(Pad p, const EditData& ed)
 {
     if (!noteEntryMode()) {
         for (ChordRest* cr : getSelectedChordRests()) {
-            if (cr->isTrillCueNote()) {
+            if (cr->isChord() && toChord(cr)->isTrillCueNote()) {
                 return;
             }
         }

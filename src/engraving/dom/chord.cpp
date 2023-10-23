@@ -2623,6 +2623,11 @@ bool Chord::preOrGraceBendSpacingExceptionInTab() const
     return bends.size() < endChord->notes().size();
 }
 
+void Chord::setIsTrillCueNote(bool v)
+{
+    m_isTrillCueNote = v;
+}
+
 //---------------------------------------------------------
 //   tremoloChordType
 //---------------------------------------------------------

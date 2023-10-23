@@ -213,6 +213,9 @@ public:
     bool isPreBendOrGraceBendStart() const;
     bool preOrGraceBendSpacingExceptionInTab() const;
 
+    bool isTrillCueNote() const { return m_isTrillCueNote; }
+    void setIsTrillCueNote(bool v);
+
     void setTrack(track_idx_t val) override;
 
     double dotPosX() const { return m_dotPosX; }
@@ -347,6 +350,8 @@ private:
     mutable GraceNotesGroup m_graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes
     mutable GraceNotesGroup m_graceNotesAfter = GraceNotesGroup(this); // will store after-chord grace notes
     size_t m_graceIndex = 0;             // if this is a grace note, index in parent list
+
+    bool m_isTrillCueNote = false;
 
     DirectionV m_stemDirection = DirectionV::AUTO;
     NoteType m_noteType = NoteType::NORMAL; // mark grace notes: acciaccatura and appoggiatura
