@@ -23,7 +23,7 @@ body:
     id: desc
     attributes:
       label: Bug description
-      description: A more detailled description of the bug
+      description: A more detailed description of the bug
       placeholder: Context for the bug that didn't fit in the title
     validations:
       required: false
