@@ -272,6 +272,7 @@ enum class ArticulationType {
     Plop,
     Scoop,
     BrassBend,
+    Multibend,
     SlideOutDown,
     SlideOutUp,
     SlideInAbove,
@@ -337,7 +338,7 @@ using ArticulationTypeSet = std::unordered_set<ArticulationType>;
 
 inline bool isSingleNoteArticulation(const ArticulationType type)
 {
-    static std::set<ArticulationType> singleNoteTypes = {
+    static const ArticulationTypeSet SINGLE_NOTE_TYPES = {
         ArticulationType::Standard, ArticulationType::Staccato, ArticulationType::Staccatissimo,
         ArticulationType::Tenuto, ArticulationType::Marcato, ArticulationType::Accent,
         ArticulationType::SoftAccent, ArticulationType::LaissezVibrer,
@@ -350,10 +351,10 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
         ArticulationType::DiamondNote, ArticulationType::Fall, ArticulationType::QuickFall,
         ArticulationType::Doit, ArticulationType::Plop, ArticulationType::Scoop,
         ArticulationType::BrassBend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
-        ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell
+        ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell,
     };
 
-    return singleNoteTypes.find(type) != singleNoteTypes.cend();
+    return SINGLE_NOTE_TYPES.find(type) != SINGLE_NOTE_TYPES.cend();
 }
 
 inline bool isMultiNoteArticulation(const ArticulationType type)
@@ -368,7 +369,8 @@ inline bool isRangedArticulation(const ArticulationType type)
     }
 
     return type == ArticulationType::Legato
-           || type == ArticulationType::Pedal;
+           || type == ArticulationType::Pedal
+           || type == ArticulationType::Multibend;
 }
 
 using dynamic_level_t = percentage_t;

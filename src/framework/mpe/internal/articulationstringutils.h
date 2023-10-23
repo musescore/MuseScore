@@ -77,6 +77,7 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::Plop, "Plop" },
     { ArticulationType::Scoop, "Scoop" },
     { ArticulationType::BrassBend, "BrassBend" },
+    { ArticulationType::Multibend, "Multibend" },
     { ArticulationType::SlideOutDown, "SlideOutDown" },
     { ArticulationType::SlideOutUp, "SlideOutUp" },
     { ArticulationType::SlideInAbove, "SlideInAbove" },

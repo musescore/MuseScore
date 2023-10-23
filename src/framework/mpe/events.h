@@ -106,7 +106,8 @@ struct NoteEvent
                        const dynamic_level_t nominalDynamicLevel,
                        const ArticulationMap& articulationsApplied,
                        const double bps,
-                       const float requiredVelocityFraction = 0.f)
+                       const float requiredVelocityFraction = 0.f,
+                       const PitchCurve& requiredPitchCurve = {})
     {
         m_arrangementCtx.nominalDuration = nominalDuration;
         m_arrangementCtx.nominalTimestamp = nominalTimestamp;
@@ -118,7 +119,7 @@ struct NoteEvent
         m_expressionCtx.articulations = articulationsApplied;
         m_expressionCtx.nominalDynamicLevel = nominalDynamicLevel;
 
-        setUp(requiredVelocityFraction);
+        setUp(requiredVelocityFraction, requiredPitchCurve);
     }
 
     const ArrangementContext& arrangementCtx() const
@@ -151,12 +152,16 @@ private:
         return static_cast<T>(static_cast<float>(v) * f);
     }
 
-    void setUp(const float requiredVelocityFraction)
+    void setUp(const float requiredVelocityFraction, const PitchCurve& requiredPitchCurve)
     {
         calculateActualDuration(m_expressionCtx.articulations);
         calculateActualTimestamp(m_expressionCtx.articulations);
 
-        calculatePitchCurve(m_expressionCtx.articulations);
+        if (requiredPitchCurve.empty()) {
+            calculatePitchCurve(m_expressionCtx.articulations);
+        } else {
+            m_pitchCtx.pitchCurve = requiredPitchCurve;
+        }
 
         calculateExpressionCurve(m_expressionCtx.articulations, requiredVelocityFraction);
     }

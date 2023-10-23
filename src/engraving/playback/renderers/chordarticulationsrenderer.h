@@ -34,9 +34,10 @@ public:
     static void doRender(const EngravingItem* item, const mpe::ArticulationType type, const RenderingContext& ctx,
                          mpe::PlaybackEventList& result);
 
+    static void renderNote(const Chord* chord, const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result);
+
 private:
     static bool renderChordArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result);
-    static void renderNoteArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result);
     static mpe::duration_t tiedNotesTotalDuration(const Note* firstNote);
 };
 }

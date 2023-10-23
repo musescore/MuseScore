@@ -168,6 +168,19 @@ inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx)
                           ctx.userVelocityFraction);
 }
 
+inline mpe::NoteEvent buildNoteEvent(NominalNoteCtx&& ctx, const mpe::PitchCurve& pitchCurve)
+{
+    return mpe::NoteEvent(ctx.timestamp,
+                          ctx.duration,
+                          static_cast<mpe::voice_layer_idx_t>(ctx.voiceIdx),
+                          ctx.pitchLevel,
+                          ctx.chordCtx.nominalDynamicLevel,
+                          ctx.chordCtx.commonArticulations,
+                          ctx.tempo.val,
+                          ctx.userVelocityFraction,
+                          pitchCurve);
+}
+
 inline mpe::NoteEvent buildNoteEvent(const Note* note, const RenderingContext& ctx)
 {
     return mpe::NoteEvent(ctx.nominalTimestamp,

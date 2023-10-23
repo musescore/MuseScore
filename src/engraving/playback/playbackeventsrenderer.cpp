@@ -35,6 +35,7 @@
 #include "utils/arrangementutils.h"
 #include "metaparsers/chordarticulationsparser.h"
 
+#include "renderers/bendsrenderer.h"
 #include "renderers/gracechordsrenderer.h"
 #include "renderers/chordarticulationsrenderer.h"
 #include "filters/chordfilter.h"
@@ -312,6 +313,11 @@ void PlaybackEventsRenderer::renderRestEvents(const Rest* rest, const int tickPo
 
 void PlaybackEventsRenderer::renderArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result) const
 {
+    if (ctx.commonArticulations.contains(mpe::ArticulationType::Multibend)) {
+        BendsRenderer::render(chord, mpe::ArticulationType::Last, ctx, result);
+        return;
+    }
+
     for (const auto& type : ctx.commonArticulations) {
         if (GraceChordsRenderer::isAbleToRender(type.first)) {
             GraceChordsRenderer::render(chord, type.first, ctx, result);
