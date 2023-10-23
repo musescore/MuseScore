@@ -56,6 +56,7 @@ private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;
 
     static bool readScore302(Score* score, XmlReader& e, read400::ReadContext& ctx);
+    static void readSlurTie302(Score* score, XmlReader& e, read400::ReadContext& ctx);
 
     static void fixInstrumentId(Instrument* instrument);
 };

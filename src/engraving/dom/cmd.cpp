@@ -2457,51 +2457,14 @@ void Score::resetAutoplace()
 
 //---------------------------------------------------------
 //   resetDefaults
-//    Resets all custom positioning stuff (except for direction). Used in score migration.
+//    Resets slur and tie positioning. Used in score migration.
 //---------------------------------------------------------
 
-void Score::resetDefaults()
+void Score::resetSlurTieDefaults()
 {
     TRACEFUNC;
 
-    // layout stretch for pre-4.0 scores will be reset
-    resetUserStretch();
-
-    // all system objects should be cleared as of now, since pre-4.0 scores don't have a <SystemObjects> tag
-    clearSystemObjectStaves();
-
     for (System* sys : systems()) {
-        for (MeasureBase* mb : sys->measures()) {
-            if (!mb->isMeasure()) {
-                continue;
-            }
-            Measure* m = toMeasure(mb);
-            for (Segment* seg = m->first(); seg; seg = seg->next()) {
-                if (seg->isChordRestType()) {
-                    for (EngravingItem* e : seg->elist()) {
-                        if (!e || !e->isChord()) {
-                            continue;
-                        }
-                        Chord* c = toChord(e);
-                        if (c->stem()) {
-                            c->stem()->undoChangeProperty(Pid::USER_LEN, Millimetre(0.0));
-                        }
-                        if (c->tremolo()) {
-                            c->tremolo()->roffset() = PointF();
-                        }
-                    }
-                }
-                for (EngravingItem* e : seg->annotations()) {
-                    if (e->isDynamic()) {
-                        Dynamic* d = toDynamic(e);
-                        if (d->xmlText().contains(u"<sym>") && !d->xmlText().contains(u"<font")) {
-                            d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
-                        }
-                        d->setSize(10.0);
-                    }
-                }
-            }
-        }
         for (SpannerSegment* spannerSegment : sys->spannerSegments()) {
             if (spannerSegment->isSlurTieSegment()) {
                 bool retainDirection = true;
@@ -2522,7 +2485,7 @@ void Score::resetDefaults()
             }
         }
     }
-    score()->doLayout();
+    doLayout();
 }
 
 //---------------------------------------------------------

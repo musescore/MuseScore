@@ -294,7 +294,7 @@ public:
 
     // methods for resetting elements for pre-4.0 score migration
     void resetAutoplace();
-    void resetDefaults();
+    void resetSlurTieDefaults();
 
     void cmdAddBracket();
     void cmdAddParentheses();

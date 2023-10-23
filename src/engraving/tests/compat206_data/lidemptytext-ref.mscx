@@ -139,7 +139,6 @@
         <excludeFromParts>0</excludeFromParts>
         </VBox>
       <Measure>
-        <stretch>0.9</stretch>
         <voice>
           <TimeSig>
             <sigN>4</sigN>

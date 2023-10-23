@@ -201,7 +201,6 @@
             <durationType>quarter</durationType>
             <Stem>
               <offset x="0.617965" y="-3.31219"/>
-              <userLen>0.2</userLen>
               </Stem>
             <Note>
               <pitch>72</pitch>

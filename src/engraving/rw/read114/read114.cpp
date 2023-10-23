@@ -2067,12 +2067,6 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 read400::TRead::readItem(el, e, ctx);
                 segment->add(el);
             }
-        } else if (tag == "stretch") {
-            double val = e.readDouble();
-            if (val < 0.0) {
-                val = 0;
-            }
-            m->setUserStretch(val);
         } else if (tag == "noOffset") {
             m->setNoOffset(e.readInt());
         } else if (tag == "measureNumberMode") {
