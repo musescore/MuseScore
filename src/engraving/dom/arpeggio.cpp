@@ -54,6 +54,8 @@ Arpeggio::Arpeggio(Chord* parent)
     m_userLen2 = 0.0;
     m_playArpeggio = true;
     m_stretch = 1.0;
+
+    parent->setSpanArpeggio(this);
 }
 
 Arpeggio::~Arpeggio()
@@ -69,11 +71,9 @@ const TranslatableString& Arpeggio::arpeggioTypeName() const
 
 void Arpeggio::findChords()
 {
-    m_maxChordPad = 0.0;
     Chord* _chord = chord();
     track_idx_t strack = track();
     track_idx_t etrack = track() + (m_span - 1);
-    _chord->setSpanArpeggio(this);
 
     for (track_idx_t track = strack; track <= etrack; track++) {
         EngravingItem* e = _chord->segment()->element(track);

@@ -73,7 +73,6 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
     if (item->notes().empty()) {
         return;
     }
-
     int gi = 0;
     for (Chord* c : item->graceNotes()) {
         // HACK: graceIndex is not well-maintained on add & remove
@@ -169,6 +168,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     // If item has an arpeggio: mark chords which are part of the arpeggio
     if (item->arpeggio()) {
         item->arpeggio()->findChords();
+        item->arpeggio()->mutldata()->setMaxChordPad(0.0);
+        item->arpeggio()->mutldata()->setMinChordX(10000);
         TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
     }
     // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
@@ -187,10 +188,13 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, chordAccidentals, mag_, item);
         }
 
-        double extraX = spanArp->width() + gapSize + chordX;
+        double extraX = spanArp->width() + gapSize;
+
+        // Track leftmost chord position, as we we always want the arpeggio to be to the left of this
+        arpldata->setMinChordX(std::min(arpldata->minChordX(), chordX));
 
         // Save this to arpeggio if largest
-        item->spanArpeggio()->setMaxChordPad(std::max(item->spanArpeggio()->maxChordPad(), lll + extraX));
+        arpldata->setMaxChordPad(std::max(arpldata->maxChordPad(), lll + extraX));
 
         // If first chord in arpeggio set y
         if (item->arpeggio() && item->arpeggio() == spanArp) {
@@ -207,9 +211,14 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
         // If last chord in arpeggio, set x
         if (downNote->track() == item->track()) {
-            spanArp->mutldata()->setPosX(-spanArp->maxChordPad());
+            // Amount to move arpeggio from it's parent chord to factor in chords further to the left
+            double arpChordX = spanArp->chord()->ldata()->pos().x();
+            double xDiff = arpChordX - arpldata->minChordX();
+
+            double offset = -(xDiff + arpldata->maxChordPad());
+            spanArp->mutldata()->setPosX(offset);
             if (spanArp->visible()) {
-                lll = spanArp->maxChordPad();
+                lll = offset;
             }
         }
 

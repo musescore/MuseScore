@@ -80,9 +80,6 @@ public:
     double Stretch() const { return m_stretch; }
     void setStretch(double val) { m_stretch = val; }
 
-    double maxChordPad() const { return m_maxChordPad; }
-    void setMaxChordPad(double val) { m_maxChordPad = val; }
-
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
@@ -99,6 +96,18 @@ public:
         double top = 0.0;
         double bottom = 0.0;
         double magS = 0.0;
+
+        double m_maxChordPad = 0.0;
+        double maxChordPad() const { return m_maxChordPad; }
+        void setMaxChordPad(double val) { m_maxChordPad = val; }
+
+        double m_chordOffset = 0.0;
+        double chordOffset() const { return m_chordOffset; }
+        void setChordOffset(double val) { LOGI() << "Set chord Offset to: " << val; m_chordOffset = val; }
+
+        double m_minChordX = 0.0;
+        double minChordX() const { return m_minChordX; }
+        void setMinChordX(double val) { m_minChordX = val; }
 
         // out
         SymIdList symbols;
@@ -121,8 +130,6 @@ private:
     ArpeggioType m_arpeggioType = ArpeggioType::NORMAL;
     double m_userLen1 = 0.0;
     double m_userLen2 = 0.0;
-
-    double m_maxChordPad = 0.0;
 
     int m_span = 1;                // how many voices the arpeggio spans
     bool m_playArpeggio = true;
