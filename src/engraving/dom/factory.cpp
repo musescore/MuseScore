@@ -49,6 +49,7 @@
 #include "fretcircle.h"
 #include "glissando.h"
 #include "gradualtempochange.h"
+#include "guitarbend.h"
 #include "hairpin.h"
 #include "harmonicmark.h"
 #include "harmony.h"
@@ -202,6 +203,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::FRET_DIAGRAM:      return new FretDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::HARP_DIAGRAM:      return new HarpPedalDiagram(parent->isSegment() ? toSegment(parent) : dummy->segment());
     case ElementType::BEND:              return new Bend(parent->isNote() ? toNote(parent) : dummy->note());
+    case ElementType::GUITAR_BEND:       return new GuitarBend(parent->isNote() ? toNote(parent) : dummy->note());
     case ElementType::STRETCHED_BEND:    return new StretchedBend(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::TREMOLOBAR:        return new TremoloBar(parent);
     case ElementType::LYRICS:            return new Lyrics(parent->isChordRest() ? toChordRest(parent) : dummy->chord());
@@ -229,6 +231,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::TEXTLINE_BASE:
     case ElementType::TEXTLINE_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::SLUR_SEGMENT:
     case ElementType::TIE_SEGMENT:
     case ElementType::STEM_SLASH:
@@ -619,6 +622,9 @@ MAKE_ITEM_IMPL(Hairpin, Segment)
 
 CREATE_ITEM_IMPL(Glissando, ElementType::GLISSANDO, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(Glissando, EngravingItem)
+
+CREATE_ITEM_IMPL(GuitarBend, ElementType::GUITAR_BEND, Note, isAccessibleEnabled)
+MAKE_ITEM_IMPL(GuitarBend, Note)
 
 CREATE_ITEM_IMPL(Jump, ElementType::JUMP, Measure, isAccessibleEnabled)
 

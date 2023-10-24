@@ -113,6 +113,8 @@ public:
     std::list<EngravingObject*> linkListForPropertyPropagation() const override;
     bool isPropertyLinkedToMaster(Pid id) const override;
 
+    bool isUserModified() const override;
+
 protected:
 
     SpannerSegment(const ElementType& type, Spanner*, System* parent, ElementFlags f = ElementFlag::ON_STAFF | ElementFlag::MOVABLE);
@@ -251,6 +253,8 @@ public:
                                                   // is added back to the spanner.
     int reuseSegments(int number);
     void fixupSegments(unsigned int targetNumber, std::function<SpannerSegment* (System*)> createSegment);
+
+    bool isUserModified() const override;
 
 protected:
 

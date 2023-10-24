@@ -50,6 +50,7 @@
 #include "factory.h"
 #include "fingering.h"
 #include "glissando.h"
+#include "guitarbend.h"
 #include "linkedobjects.h"
 #include "measure.h"
 #include "notedot.h"
@@ -1213,8 +1214,8 @@ void Note::addSpanner(Spanner* l)
     if (e && e->isNote()) {
         Note* note = toNote(e);
         note->addSpannerBack(l);
-        if (l->isGlissando()) {
-            note->chord()->setEndsGlissando(true);
+        if (l->isGlissando() || l->isGuitarBend()) {
+            note->chord()->setEndsGlissandoOrGuitarBend(true);
         }
     }
     addSpannerFor(l);
@@ -1233,7 +1234,7 @@ void Note::removeSpanner(Spanner* l)
             // abort();
         }
         if (l->isGlissando()) {
-            e->chord()->updateEndsGlissando();
+            e->chord()->updateEndsGlissandoOrGuitarBend();
         }
     }
     if (!removeSpannerFor(l)) {
@@ -1291,6 +1292,7 @@ void Note::add(EngravingItem* e)
         break;
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
+    case ElementType::GUITAR_BEND:
         addSpanner(toSpanner(e));
         break;
     default:
@@ -1351,6 +1353,7 @@ void Note::remove(EngravingItem* e)
 
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
+    case ElementType::GUITAR_BEND:
         removeSpanner(toSpanner(e));
         break;
 
@@ -1378,6 +1381,26 @@ bool Note::isNoteName() const
                || s == NoteHeadScheme::HEAD_SOLFEGE || s == NoteHeadScheme::HEAD_SOLFEGE_FIXED;
     }
     return false;
+}
+
+void Note::updateFrettingForTiesAndBends()
+{
+    Note* prevNote = nullptr;
+    if (m_tieBack) {
+        prevNote = m_tieBack->startNote();
+    } else {
+        GuitarBend* bend = bendBack();
+        if (bend) {
+            prevNote = bend->startNote();
+        }
+    }
+
+    if (!prevNote) {
+        return;
+    }
+
+    setString(prevNote->string());
+    setFret(prevNote->fret());
 }
 
 void Note::setupAfterRead(const Fraction& ctxTick, bool pasteMode)
@@ -1531,14 +1554,15 @@ bool Note::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
     ElementType type = e->type();
-    if (type == ElementType::GLISSANDO) {
+    if (type == ElementType::GLISSANDO || type == ElementType::GUITAR_BEND) {
         for (auto ee : m_spannerFor) {
-            if (ee->isGlissando()) {
+            if (ee->isGlissando() || ee->isGuitarBend()) {
                 return false;
             }
         }
         return true;
     }
+
     const Staff* st   = staff();
     bool isTablature  = st->isTabStaff(tick());
     bool tabFingering = st->staffTypeForElement(this)->showTabFingering();
@@ -1607,7 +1631,11 @@ bool Note::acceptDrop(EditData& data) const
            || (type == ElementType::FIGURED_BASS)
            || (type == ElementType::LYRICS)
            || (type == ElementType::HARP_DIAGRAM)
-           || (type != ElementType::TIE && e->isSpanner());
+           || (type != ElementType::TIE && e->isSpanner())
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::STANDARD_BEND)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::PRE_BEND)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::GRACE_NOTE_BEND)
+           || (type == ElementType::ACTION_ICON && toActionIcon(e)->actionType() == ActionIconType::SLIGHT_BEND);
 }
 
 //---------------------------------------------------------
@@ -1726,6 +1754,18 @@ EngravingItem* Note::drop(EditData& data)
         case ActionIconType::PARENTHESES:
             setHeadHasParentheses(true);
             break;
+        case ActionIconType::STANDARD_BEND:
+            score()->addGuitarBend(GuitarBendType::BEND, this);
+            break;
+        case ActionIconType::PRE_BEND:
+            score()->addGuitarBend(GuitarBendType::PRE_BEND, this);
+            break;
+        case ActionIconType::GRACE_NOTE_BEND:
+            score()->addGuitarBend(GuitarBendType::GRACE_NOTE_BEND, this);
+            break;
+        case ActionIconType::SLIGHT_BEND:
+            score()->addGuitarBend(GuitarBendType::SLIGHT_BEND, this);
+            break;
         default:
             break;
         }
@@ -1776,11 +1816,11 @@ EngravingItem* Note::drop(EditData& data)
             }
         }
 
-        // this is the glissando initial note, look for a suitable final note
-        Note* finalNote = Glissando::guessFinalNote(chord(), this);
+        Glissando* gliss = toGlissando(e);
+        EngravingItem* endEl = gliss->endElement();
+        Note* finalNote = endEl && endEl->isNote() ? toNote(endEl) : Glissando::guessFinalNote(chord(), this);
         if (finalNote) {
             // init glissando data
-            Glissando* gliss = toGlissando(e);
             gliss->setAnchor(Spanner::Anchor::NOTE);
             gliss->setStartElement(this);
             gliss->setEndElement(finalNote);
@@ -1854,7 +1894,7 @@ EngravingItem* Note::drop(EditData& data)
     return 0;
 }
 
-void Note::setHeadHasParentheses(bool hasParentheses)
+void Note::setHeadHasParentheses(bool hasParentheses, bool addToLinked)
 {
     if (hasParentheses == m_hasHeadParentheses) {
         return;
@@ -1867,14 +1907,14 @@ void Note::setHeadHasParentheses(bool hasParentheses)
             m_leftParenthesis = new Symbol(this);
             m_leftParenthesis->setSym(SymId::noteheadParenthesisLeft);
             m_leftParenthesis->setParent(this);
-            score()->undoAddElement(m_leftParenthesis);
+            score()->undoAddElement(m_leftParenthesis, addToLinked);
         }
 
         if (!m_rightParenthesis) {
             m_rightParenthesis = new Symbol(this);
             m_rightParenthesis->setSym(SymId::noteheadParenthesisRight);
             m_rightParenthesis->setParent(this);
-            score()->undoAddElement(m_rightParenthesis);
+            score()->undoAddElement(m_rightParenthesis, addToLinked);
         }
     } else {
         score()->undoRemoveElement(m_leftParenthesis);
@@ -2193,6 +2233,28 @@ EngravingItem* Note::elementBase() const
 void Note::setSmall(bool val)
 {
     m_isSmall = val;
+}
+
+GuitarBend* Note::bendFor() const
+{
+    for (Spanner* sp : m_spannerFor) {
+        if (sp->isGuitarBend()) {
+            return toGuitarBend(sp);
+        }
+    }
+
+    return nullptr;
+}
+
+GuitarBend* Note::bendBack() const
+{
+    for (Spanner* sp : m_spannerBack) {
+        if (sp->isGuitarBend()) {
+            return toGuitarBend(sp);
+        }
+    }
+
+    return nullptr;
 }
 
 //---------------------------------------------------------
@@ -3174,6 +3236,7 @@ EngravingItem* Note::nextElement()
         return chord()->nextElement();
 
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::GUITAR_BEND_SEGMENT:
         return chord()->nextElement();
 
     case ElementType::ACCIDENTAL:
@@ -3201,7 +3264,7 @@ EngravingItem* Note::nextElement()
         }
         if (!m_spannerFor.empty()) {
             for (auto i : m_spannerFor) {
-                if (i->isGlissando()) {
+                if (i->isGlissando() || i->isGuitarBend()) {
                     return i->spannerSegments().front();
                 }
             }
@@ -3244,6 +3307,7 @@ EngravingItem* Note::prevElement()
         }
         return this;
     case ElementType::GLISSANDO_SEGMENT:
+    case ElementType::GUITAR_BEND_SEGMENT:
         if (tieValid(m_tieFor)) {
             return m_tieFor->frontSegment();
         } else if (!m_el.empty()) {
@@ -3265,7 +3329,7 @@ EngravingItem* Note::lastElementBeforeSegment()
 {
     if (!m_spannerFor.empty()) {
         for (auto i : m_spannerFor) {
-            if (i->type() == ElementType::GLISSANDO) {
+            if (i->type() == ElementType::GLISSANDO || i->type() == ElementType::GUITAR_BEND) {
                 return i->spannerSegments().front();
             }
         }
@@ -3472,6 +3536,19 @@ Shape Note::doCreateShape() const
             shape.add(e->ldata()->bbox().translated(e->pos()), e);
         }
     }
+
+    if (part()->instrument()->hasStrings() && !staffType()->isTabStaff()) {
+        GuitarBend* bend = bendFor();
+        if (bend && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
+            GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());
+            // Semi-hack: the relative position of note and bend
+            // isn't fully known yet, so we use an approximation
+            double sp = spatium();
+            PointF approxRelPos(width() + 0.25 * sp, -0.25 * sp);
+            shape.add(bendSeg->shape().translated(approxRelPos));
+        }
+    }
+
     return shape;
 }
 
@@ -3518,6 +3595,28 @@ bool Note::hasSlideToNote() const
 bool Note::hasSlideFromNote() const
 {
     return m_slideFromType != SlideType::Undefined;
+}
+
+bool Note::isPreBendStart() const
+{
+    if (!isGrace()) {
+        return false;
+    }
+
+    GuitarBend* bend = bendFor();
+
+    return bend && bend->type() == GuitarBendType::PRE_BEND;
+}
+
+bool Note::isGraceBendStart() const
+{
+    if (!isGrace()) {
+        return false;
+    }
+
+    GuitarBend* bend = bendFor();
+
+    return bend && bend->type() == GuitarBendType::GRACE_NOTE_BEND;
 }
 
 mu::PointF Note::posInStaffCoordinates()

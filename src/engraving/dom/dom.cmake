@@ -121,6 +121,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/gradualtempochange.h
     ${CMAKE_CURRENT_LIST_DIR}/groups.cpp
     ${CMAKE_CURRENT_LIST_DIR}/groups.h
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbend.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbend.h
     ${CMAKE_CURRENT_LIST_DIR}/hairpin.cpp
     ${CMAKE_CURRENT_LIST_DIR}/hairpin.h
     ${CMAKE_CURRENT_LIST_DIR}/harmonicmark.cpp

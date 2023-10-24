@@ -72,6 +72,7 @@
 #include "../../dom/glissando.h"
 #include "../../dom/gradualtempochange.h"
 #include "../../dom/groups.h"
+#include "../../dom/guitarbend.h"
 
 #include "../../dom/hairpin.h"
 #include "../../dom/harmony.h"
@@ -166,7 +167,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   Chord, ChordLine, Clef, Capo,
                                   Dynamic, Expression,
                                   Fermata, FiguredBass, Fingering, FretDiagram,
-                                  Glissando, GradualTempoChange,
+                                  Glissando, GradualTempoChange, GuitarBend,
                                   Hairpin, Harmony, HarmonicMark, HarpPedalDiagram, Hook,
                                   Image, InstrumentChange,
                                   Jump,
@@ -1256,6 +1257,38 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const GuitarBend* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    xml.tag("guitarBendType", static_cast<int>(item->type()));
+    writeProperty(item, xml, Pid::BEND_SHOW_HOLD_LINE);
+    writeProperties(static_cast<const SLine*>(item), xml, ctx);
+
+    GuitarBendHold* hold = item->holdLine();
+    if (hold) {
+        xml.startElement(hold);
+        writeProperties(static_cast<const SLine*>(hold), xml, ctx);
+        xml.endElement();
+    }
+
+    xml.endElement();
+}
+
+void TWrite::writeProperties(const GuitarBendSegment* item, XmlWriter& xml, WriteContext& ctx)
+{
+    writeProperty(item, xml, Pid::BEND_VERTEX_OFF);
+
+    GuitarBendText* text = item->bendText();
+    if (text && text->isUserModified()) {
+        xml.startElement(text);
+        writeProperties(toTextBase(text), xml, ctx, false);
+        xml.endElement();
+    }
+}
+
 void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (!item->endElement()) {
@@ -1285,38 +1318,21 @@ void TWrite::writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ct
         }
         return;
     }
-    //
-    // check if user has modified the default layout
-    //
-    bool modified = false;
-    for (const SpannerSegment* seg : item->spannerSegments()) {
-        if (!seg->autoplace() || !seg->visible()
-            || (seg->propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED
-                || seg->getProperty(Pid::MIN_DISTANCE) != seg->propertyDefault(Pid::MIN_DISTANCE))
-            || (!seg->isStyled(Pid::OFFSET) && (!seg->offset().isNull() || !seg->userOff2().isNull()))) {
-            modified = true;
-            break;
-        }
-    }
-    if (!modified) {
+
+    if (!item->isUserModified()) {
         return;
     }
 
-    //
-    // write user modified layout and other segment properties
-    //
     double _spatium = item->style().spatium();
     for (const SpannerSegment* seg : item->spannerSegments()) {
         xml.startElement("Segment", seg);
         xml.tag("subtype", int(seg->spannerSegmentType()));
-        // TODO:
-        // NOSTYLE offset written in EngravingItem::writeProperties,
-        // so we probably don't need to duplicate it here
-        // see https://musescore.org/en/node/286848
-        //if (seg->propertyFlags(Pid::OFFSET) & PropertyFlags::UNSTYLED)
         xml.tagPoint("offset", seg->offset() / _spatium);
         xml.tagPoint("off2", seg->userOff2() / _spatium);
         writeProperty(seg, xml, Pid::MIN_DISTANCE);
+        if (seg->isGuitarBendSegment()) {
+            writeProperties(static_cast<const GuitarBendSegment*>(seg), xml, ctx);
+        }
         writeItemProperties(seg, xml, ctx);
         xml.endElement();
     }

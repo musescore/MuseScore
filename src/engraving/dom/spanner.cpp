@@ -402,6 +402,16 @@ bool SpannerSegment::isPropertyLinkedToMaster(Pid id) const
     return spanner()->isPropertyLinkedToMaster(id);
 }
 
+bool SpannerSegment::isUserModified() const
+{
+    bool modified = !autoplace() || !visible()
+                    || (propertyFlags(Pid::MIN_DISTANCE) == PropertyFlags::UNSTYLED
+                        || getProperty(Pid::MIN_DISTANCE) != propertyDefault(Pid::MIN_DISTANCE))
+                    || (!isStyled(Pid::OFFSET) && (!offset().isNull() || !userOff2().isNull()));
+
+    return modified;
+}
+
 //---------------------------------------------------------
 //   Spanner
 //---------------------------------------------------------
@@ -1433,6 +1443,17 @@ void Spanner::fixupSegments(unsigned int targetNumber, std::function<SpannerSegm
             pushUnusedSegment(seg);
         }
     }
+}
+
+bool Spanner::isUserModified() const
+{
+    for (SpannerSegment* seg : m_segments) {
+        if (seg->isUserModified()) {
+            return true;
+        }
+    }
+
+    return false;
 }
 
 //---------------------------------------------------------

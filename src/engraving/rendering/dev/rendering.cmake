@@ -47,6 +47,8 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/pagelayout.h
     ${CMAKE_CURRENT_LIST_DIR}/slurtielayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/slurtielayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbendlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/guitarbendlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/arpeggiolayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/arpeggiolayout.h
     ${CMAKE_CURRENT_LIST_DIR}/horizontalspacing.cpp

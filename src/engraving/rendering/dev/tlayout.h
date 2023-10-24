@@ -228,6 +228,8 @@ public:
     static void layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGroup::LayoutData* ldata);
     static void layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, LayoutContext& ctx);
     static void layoutGradualTempoChange(GradualTempoChange* item, LayoutContext& ctx);
+    static void layoutGuitarBend(GuitarBend* item, LayoutContext& ctx);
+    static void layoutGuitarBendSegment(GuitarBendSegment* item, LayoutContext& ctx);
 
     static void layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx);
     static void layoutHairpin(Hairpin* item, LayoutContext& ctx);

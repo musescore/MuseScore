@@ -43,6 +43,8 @@
 #include "drumset.h"
 #include "dynamic.h"
 #include "factory.h"
+#include "glissando.h"
+#include "guitarbend.h"
 #include "hairpin.h"
 #include "harmony.h"
 #include "key.h"
@@ -832,6 +834,126 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     undoAddElement(chord);
     select(note, SelectType::SINGLE, 0);
     return note;
+}
+
+Note* Score::addEndNoteForBend(Note* startNote)
+{
+    track_idx_t track = startNote->track();
+    Chord* startChord = startNote->chord();
+    Segment* startSegment = startChord->segment();
+
+    Segment* endSegment = startSegment->nextCR(track);
+    if (!endSegment) {
+        return nullptr;
+    }
+
+    EngravingItem* item = endSegment->elementAt(track);
+    if (!item || !item->isRest()) {
+        return nullptr;
+    }
+
+    Rest* rest = toRest(item);
+    Fraction duration = std::min(startChord->ticks(), rest->ticks());
+    NoteVal noteVal = startNote->noteVal();
+
+    endSegment = setNoteRest(endSegment, track, noteVal, duration);
+    Chord* endChord = endSegment ? toChord(endSegment->elementAt(track)) : nullptr;
+    Note* endNote = endChord ? endChord->upNote() : nullptr;
+    if (endNote) {
+        endNote->transposeDiatonic(1, true, false);
+    }
+
+    return endNote;
+}
+
+GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
+{
+    if (note->isPreBendStart()) {
+        return nullptr;
+    }
+
+    if (note->isGraceBendStart() && type != GuitarBendType::PRE_BEND) {
+        return nullptr;
+    }
+
+    Chord* chord = note->chord();
+
+    if (type == GuitarBendType::BEND) {
+        for (Spanner* sp : note->spannerFor()) {
+            if (sp->isGuitarBend() || sp->isGlissando()) {
+                return nullptr;
+            }
+        }
+
+        if (!endNote) {
+            endNote = Glissando::guessFinalNote(chord, note);
+        }
+
+        if (!endNote) {
+            endNote = addEndNoteForBend(note);
+        }
+
+        if (!endNote) {
+            return nullptr;
+        }
+    }
+
+    GuitarBend* bend = new GuitarBend(score()->dummy()->note());
+    bend->setAnchor(Spanner::Anchor::NOTE);
+    bend->setTick(chord->tick());
+    bend->setTrack(chord->track());
+
+    if (type == GuitarBendType::BEND) {
+        bend->setType(chord->isGrace() ? GuitarBendType::GRACE_NOTE_BEND : type);
+        bend->setStartElement(note);
+        bend->setTick2(endNote->tick());
+        bend->setTrack2(endNote->track());
+        bend->setEndElement(endNote);
+        bend->setParent(note);
+        GuitarBend::fixNotesFrettingForStandardBend(note, endNote);
+    } else {
+        bend->setType(type);
+        bend->setTick2(chord->tick());
+        bend->setTrack2(chord->track());
+
+        if (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND) {
+            // Create grace note
+            Note* graceNote = setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+            graceNote->transposeDiatonic(-1, true, false);
+            GuitarBend::fixNotesFrettingForGraceBend(graceNote, note);
+
+            Chord* graceChord = graceNote->chord();
+            for (EngravingObject* item : graceChord->linkList()) {
+                Chord* linkedGrace = toChord(item);
+                linkedGrace->undoChangeProperty(Pid::NO_STEM, true);
+                linkedGrace->undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
+            }
+
+            // Add bend
+            bend->setParent(graceNote);
+            bend->setStartElement(graceNote);
+            bend->setEndElement(note);
+        } else if (type == GuitarBendType::SLIGHT_BEND) {
+            bend->setParent(note);
+            bend->setStartElement(note);
+            // Slight bends don't end on another note
+            bend->setEndElement(note);
+        }
+    }
+
+    Chord* startChord = bend->startNote()->chord();
+    if (startChord->isGrace()) {
+        for (EngravingObject* item : startChord->linkList()) {
+            Chord* linkedGrace = toChord(item);
+            if (linkedGrace->staffType()->isTabStaff()) {
+                linkedGrace->undoChangeProperty(Pid::NO_STEM, true);
+                linkedGrace->undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
+            }
+        }
+    }
+
+    score()->undoAddElement(bend);
+    return bend;
 }
 
 //---------------------------------------------------------

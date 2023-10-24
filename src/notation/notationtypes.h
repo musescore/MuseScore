@@ -152,6 +152,7 @@ using InstrumentTrackIdSet = mu::engraving::InstrumentTrackIdSet;
 using voice_idx_t = mu::engraving::voice_idx_t;
 using track_idx_t = mu::engraving::track_idx_t;
 using ChangesRange = mu::engraving::ScoreChangesRange;
+using GuitarBendType = mu::engraving::GuitarBendType;
 
 static const String COMMON_GENRE_ID("common");
 

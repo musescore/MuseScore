@@ -209,6 +209,8 @@ private:
 
     static void draw(const GlissandoSegment* item, draw::Painter* painter);
     static void draw(const GradualTempoChangeSegment* item, draw::Painter* painter);
+    static void draw(const GuitarBendSegment* item, draw::Painter* painter);
+    static void draw(const GuitarBendHoldSegment* item, draw::Painter* painter);
 
     static void draw(const HairpinSegment* item, draw::Painter* painter);
     static void draw(const HarpPedalDiagram* item, draw::Painter* painter);

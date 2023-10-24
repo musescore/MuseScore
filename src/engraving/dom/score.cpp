@@ -55,6 +55,7 @@
 #include "fermata.h"
 #include "glissando.h"
 #include "gradualtempochange.h"
+#include "guitarbend.h"
 #include "harmony.h"
 #include "imageStore.h"
 #include "instrchange.h"
@@ -1616,6 +1617,22 @@ void Score::removeElement(EngravingItem* element)
         removeSpanner(spanner);
     }
     break;
+
+    case ElementType::GUITAR_BEND:
+    {
+        Note* startNote = toGuitarBend(element)->startNote();
+        if (startNote) {
+            startNote->setHeadHasParentheses(false);
+            startNote->chord()->setNoStem(false);
+            startNote->chord()->setBeamMode(BeamMode::AUTO);
+        }
+        Note* endNote = toGuitarBend(element)->endNote();
+        if (endNote) {
+            endNote->setGhost(false);
+            endNote->setVisible(true);
+        }
+        break;
+    }
 
     case ElementType::OTTAVA:
     {

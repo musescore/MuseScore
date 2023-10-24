@@ -1202,6 +1202,14 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::bendLineWidth,                 "bendLineWidth",                Spatium(0.15) },
     { Sid::bendArrowWidth,                "bendArrowWidth",               Spatium(.5) },
 
+    { Sid::guitarBendLineWidth,           "guitarBendLineWidth",          Spatium(0.15) },
+    { Sid::guitarBendHeightAboveTABStaff, "guitarBendHeightAboveTABStaff", 1.5 }, // in units of TAB lines dist
+    { Sid::guitarBendPartialBendHeight,   "guitarBendPartialBendHeight",  Spatium(1.5) },
+    { Sid::guitarBendUseFull,             "guitarBendUseFull",            false },
+    { Sid::guitarBendArrowWidth,          "guitarBendArrowWidth",         Spatium(1.0) },
+    { Sid::guitarBendArrowHeight,         "guitarBendArrowHeight",        Spatium(1.0) },
+    { Sid::useCueSizeFretForGraceBends,   "useCueSizeFretForGraceBends",  false },
+
     { Sid::headerFontFace,                "headerFontFace",               "Edwin" },
     { Sid::headerFontSize,                "headerFontSize",               11.0 },
     { Sid::headerLineSpacing,             "headerLineSpacing",            1.0 },

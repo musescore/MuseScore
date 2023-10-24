@@ -489,6 +489,13 @@ enum class TripletFeelType : char {
     SCOTTISH_16TH
 };
 
+enum class GuitarBendType {
+    BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
+};
+
 struct ScoreChangesRange {
     int tickFrom = -1;
     int tickTo = -1;

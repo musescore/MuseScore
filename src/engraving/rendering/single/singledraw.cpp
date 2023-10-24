@@ -57,6 +57,7 @@
 
 #include "dom/glissando.h"
 #include "dom/gradualtempochange.h"
+#include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
 #include "dom/harppedaldiagram.h"
@@ -195,6 +196,10 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter);
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter);
+        break;
+    case ElementType::GUITAR_BEND_SEGMENT: draw(item_cast<const GuitarBendSegment*>(item), painter);
+        break;
+    case ElementType::GUITAR_BEND_TEXT: drawTextBase(toTextBase(item), painter);
         break;
 
     case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
@@ -1719,6 +1724,12 @@ void SingleDraw::draw(const GradualTempoChangeSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+void SingleDraw::draw(const GuitarBendSegment* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+    // To be implemented
 }
 
 void SingleDraw::draw(const HairpinSegment* item, Painter* painter)

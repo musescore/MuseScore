@@ -34,6 +34,12 @@ class Factory;
 //   @@ StretchedBend
 //---------------------------------------------------------
 
+/**********************************************************
+ *    OBSOLETE CLASS
+ *    Used to import GP bends before version 4.2. Now
+ *    replaced by the GuitarBend class.
+ *********************************************************/
+
 class StretchedBend final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, StretchedBend)

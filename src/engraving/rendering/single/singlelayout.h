@@ -177,6 +177,7 @@ public:
 
     static void layout(Glissando* item, const Context& ctx);
     static void layout(GradualTempoChange* item, const Context& ctx);
+    static void layout(GuitarBend* item, const Context& ctx);
 
     static void layout(Hairpin* item, const Context& ctx);
     static void layout(HarpPedalDiagram* item, const Context& ctx);
@@ -226,6 +227,7 @@ public:
 private:
     static void layout(GlissandoSegment* item, const Context& ctx);
     static void layout(GradualTempoChangeSegment* item, const Context& ctx);
+    static void layout(GuitarBendSegment* item, const Context& ctx);
     static void layout(HairpinSegment* item, const Context& ctx);
     static void layout(LetRingSegment* item, const Context& ctx);
     static void layout(OttavaSegment* item, const Context& ctx);

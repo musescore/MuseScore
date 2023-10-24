@@ -359,6 +359,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
     case ElementType::TIE:
     case ElementType::TEXTLINE:
     case ElementType::GLISSANDO:
+    case ElementType::GUITAR_BEND:
     {
         Spanner* sp = toSpanner(info->connector());
         if (info->isStart()) {
@@ -386,8 +387,8 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
             if (sp->isTie()) {
                 item->setTieBack(toTie(sp));
             } else {
-                if (sp->isGlissando() && item->explicitParent() && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsGlissando(true);
+                if ((sp->isGlissando() || sp->isGuitarBend()) && item->explicitParent() && item->explicitParent()->isChord()) {
+                    toChord(item->explicitParent())->setEndsGlissandoOrGuitarBend(true);
                 }
                 item->addSpannerBack(sp);
             }

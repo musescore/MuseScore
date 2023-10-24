@@ -522,7 +522,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     }
 
     // allocate enough room for glissandi
-    if (item->endsGlissando()) {
+    if (item->endsGlissandoOrGuitarBend()) {
         if (!item->rtick().isZero()) {                          // if not at beginning of measure
             lll += _spatium * 0.5 + minTieLength;
         }
@@ -2909,7 +2909,7 @@ void ChordLayout::clearLineAttachPoints(Measure* measure)
  * enforce minTieLength. The true layout of ties and glissandi is done much later. */
 void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, LayoutContext& ctx)
 {
-    if (chord->endsGlissando()) {
+    if (chord->endsGlissandoOrGuitarBend()) {
         for (Note* note : chord->notes()) {
             for (Spanner* sp : note->spannerBack()) {
                 if (sp->isGlissando()) {

@@ -72,6 +72,8 @@ class FretDiagram;
 class Glissando;
 class GradualTempoChange;
 class Groups;
+class GuitarBend;
+class GuitarBendSegment;
 
 class Hairpin;
 class Harmony;
@@ -212,6 +214,7 @@ public:
     static void write(const Glissando* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const GradualTempoChange* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Groups* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const GuitarBend* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Harmony* item, XmlWriter& xml, WriteContext& ctx);
@@ -319,6 +322,7 @@ private:
     static void writeProperties(const SlurTie* item, XmlWriter& xml, WriteContext& ctx);
     static void writeSlur(const SlurTieSegment* seg, XmlWriter& xml, WriteContext& ctx, int no);
     static void writeProperties(const SLine* item, XmlWriter& xml, WriteContext& ctx);
+    static void writeProperties(const GuitarBendSegment* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const Spanner* item, XmlWriter& xml, WriteContext& ctx);
     static void writeProperties(const BSymbol* item, XmlWriter& xml, WriteContext& ctx);
 

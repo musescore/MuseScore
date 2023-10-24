@@ -51,6 +51,7 @@
 #include "dom/fret.h"
 #include "dom/glissando.h"
 #include "dom/gradualtempochange.h"
+#include "dom/guitarbend.h"
 #include "dom/hairpin.h"
 #include "dom/harppedaldiagram.h"
 #include "dom/instrchange.h"
@@ -142,6 +143,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::FSYMBOL:      layout(toFSymbol(item), ctx);
         break;
     case ElementType::GLISSANDO:    layout(toGlissando(item), ctx);
+        break;
+    case ElementType::GUITAR_BEND:  layout(toGuitarBend(item), ctx);
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE: layout(toGradualTempoChange(item), ctx);
         break;
@@ -957,6 +960,16 @@ void SingleLayout::layout(GradualTempoChangeSegment* item, const Context& ctx)
 {
     layoutTextLineBaseSegment(item, ctx);
     item->setOffset(PointF());
+}
+
+void SingleLayout::layout(GuitarBend*, const Context&)
+{
+    NOT_IMPLEMENTED;
+}
+
+void SingleLayout::layout(GuitarBendSegment*, const Context&)
+{
+    NOT_IMPLEMENTED;
 }
 
 void SingleLayout::layout(Hairpin* item, const Context& ctx)

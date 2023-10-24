@@ -43,7 +43,24 @@ Column {
         bendTypeSection.focusOnFirst()
     }
 
-    DropdownPropertyView {
+    DirectionSection {
+        id: directionSection
+
+        propertyItem: root.model ? root.model.bendDirection : null
+
+        navigationPanel: root.navigationPanel
+        navigationRowStart: root.navigationRowStart + 1
+    }
+
+    PropertyCheckBox {
+        id: showHold
+        visible: root.model ? root.model.isShowHoldLineAvailable : false
+
+        text: qsTrc("inspector", "Show hold line")
+        propertyItem: root.model ? root.model.showHoldLine : null
+    }
+
+    /*DropdownPropertyView {
         id: bendTypeSection
         titleText: qsTrc("inspector", "Bend type")
         propertyItem: root.model ? root.model.bendType : null
@@ -99,5 +116,5 @@ Column {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: bendCurve.navigationRowEnd + 1
-    }
+    }*/
 }

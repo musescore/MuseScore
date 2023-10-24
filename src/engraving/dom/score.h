@@ -412,6 +412,8 @@ public:
 
     Note* setGraceNote(Chord*,  int pitch, NoteType type, int len);
 
+    GuitarBend* addGuitarBend(GuitarBendType type, Note* note, Note* endNote = nullptr);
+
     Segment* setNoteRest(Segment*, track_idx_t track, NoteVal nval, Fraction, DirectionV stemDirection = DirectionV::AUTO,
                          bool forceAccidental = false, const std::set<SymId>& articulationIds = {}, bool rhythmic = false,
                          InputState* externalInputState = nullptr);
@@ -1015,6 +1017,8 @@ private:
     void assignIdIfNeed(Part& part) const;
 
     void updateStavesNumberForSystems();
+
+    Note* addEndNoteForBend(Note* startNote);
 
     int m_linkId = 0;
     MasterScore* m_masterScore = nullptr;
