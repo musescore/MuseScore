@@ -225,6 +225,15 @@ bool LinuxAudioDriver::pushMidiEvent(mu::midi::Event& e)
     return false;
 }
 
+std::vector<mu::midi::MidiDevice> LinuxAudioDriver::availableMidiDevices() const
+{
+    if (m_current_audioDriverState) {
+        return m_current_audioDriverState->availableMidiDevices();
+    }
+    std::vector<mu::midi::MidiDevice> x;
+    return x;
+}
+
 void LinuxAudioDriver::resume()
 {
 }

@@ -79,10 +79,12 @@ private:
 
     async::Channel<tick_t, Event > m_eventReceived;
 
+    std::shared_ptr<mu::audio::AudioModule> m_audioModule;
+
 #if defined(JACK_AUDIO)
-    std::shared_ptr<IMidiInPort> m_midiInPortJack;
+    std::unique_ptr<JackMidiInPort> m_midiInPortJack;
 #endif
-    std::shared_ptr<AlsaMidiInPort> m_midiInPortAlsa;
+    std::unique_ptr<AlsaMidiInPort> m_midiInPortAlsa;
 };
 }
 

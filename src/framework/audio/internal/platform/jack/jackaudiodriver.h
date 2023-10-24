@@ -25,6 +25,7 @@
 
 #include <jack/jack.h>
 
+#include "framework/midi/miditypes.h"
 #include "iaudiodriver.h"
 
 namespace mu::audio {
@@ -38,16 +39,14 @@ public:
     bool open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* activeSpec) override;
     void close() override;
     bool isOpened() const override;
-    //std::shared_ptr<ThreadSafeQueue<const Event>&> getAudioDriverQueue() const override;
     bool pushMidiEvent(mu::midi::Event& e) override;
 
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
+    std::vector<mu::midi::MidiDevice> availableMidiDevices() const;
 
     void* m_jackDeviceHandle = nullptr;
-
     float* m_buffer = nullptr;
-
     std::vector<jack_port_t*> m_outputPorts;
     std::vector<jack_port_t*> m_midiOutputPorts;
     ThreadSafeQueue<mu::midi::Event> m_midiQueue;

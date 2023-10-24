@@ -39,6 +39,8 @@ public:
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
+    bool supportsMIDI20Output() const override;
+    Ret sendEvent(const Event& e) override;
 
 private:
     bool deviceExists(const MidiDeviceID& deviceId) const;

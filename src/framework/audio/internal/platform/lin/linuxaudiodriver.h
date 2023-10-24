@@ -57,6 +57,7 @@ public:
 
     std::vector<unsigned int> availableOutputDeviceBufferSizes() const override;
     bool pushMidiEvent(mu::midi::Event& e) override;
+    std::vector<mu::midi::MidiDevice> availableMidiDevices() const override;
 
     void resume() override;
     void suspend() override;

@@ -32,14 +32,14 @@ using namespace mu::midi;
 
 void LinuxMidiInPort::init(std::shared_ptr<mu::audio::AudioModule> am)
 {
-    LOGI(" -- linux init --");
-    //m_alsa = std::make_shared<Linux>();
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    LOGI("-- init using audiomodule: %lx", am);
+    m_audioModule = am;
+#endif
 
-    //std::shared_ptr<mu::audio::IAudioDriver> ad = am->getDriver();
-    //LOGI("-- init got audiodriver: %lx", ad);
-    //LOGI("-- audiohandle: %lx", ad->getAudioDriverHandle());
+#if defined(JACK_AUDIO)
+    m_midiInPortJack = std::make_unique<JackMidiInPort>();
+#else
+    m_midiInPortAlsa = std::make_unique<AlsaMidiInPort>();
 #endif
 }
 
@@ -52,15 +52,17 @@ void LinuxMidiInPort::deinit()
 
 std::vector<MidiDevice> LinuxMidiInPort::availableDevices() const
 {
+// FIX: this is compile-time, change so that we call availableMidiDevices if jack is selected
+#if defined(JACK_AUDIO)
+    return m_audioModule->getDriver()->availableMidiDevices();
+#else
     std::lock_guard lock(m_devicesMutex);
-
     std::vector<MidiDevice> ret;
-
     ret.push_back({ NONE_DEVICE_ID, trc("midi", "No device") });
-
     // return concatenation of alsa + jack devices
-
+    std::shared_ptr<IMidiInPort> m_midiInPortJack;
     return ret;
+#endif
 }
 
 mu::async::Notification LinuxMidiInPort::availableDevicesChanged() const

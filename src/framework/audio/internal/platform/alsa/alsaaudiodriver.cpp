@@ -191,7 +191,13 @@ bool AlsaDriverState::isOpened() const
     return m_alsaDeviceHandle != nullptr;
 }
 
-bool AlsaDriverState::pushMidiEvent(mu::midi::Event& e)
+bool AlsaDriverState::pushMidiEvent(mu::midi::Event&)
 {
     return true; // dummy
+}
+
+std::vector<mu::midi::MidiDevice> AlsaDriverState::availableMidiDevices() const
+{
+    std::vector<mu::midi::MidiDevice> x;
+    return x; // dummy
 }
