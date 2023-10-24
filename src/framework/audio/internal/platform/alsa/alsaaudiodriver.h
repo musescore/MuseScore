@@ -37,6 +37,7 @@ public:
     void close() override;
     bool isOpened() const override;
     bool pushMidiEvent(muse::midi::Event& e) override;
+    std::vector<muse::midi::MidiDevice> availableMidiDevices() const override;
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
 

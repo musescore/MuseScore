@@ -32,13 +32,14 @@ using namespace muse::midi;
 
 void LinuxMidiInPort::init(std::shared_ptr<muse::audio::AudioModule> am)
 {
-    //m_alsa = std::make_shared<Linux>();
 #if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    LOGI("-- init using audiomodule: %lx", am);
+    m_audioModule = am;
+#endif
 
-    //std::shared_ptr<muse::audio::IAudioDriver> ad = am->getDriver();
-    //LOGI("-- init got audiodriver: %lx", ad);
-    //LOGI("-- audiohandle: %lx", ad->getAudioDriverHandle());
+#if defined(JACK_AUDIO)
+    m_midiInPortJack = std::make_unique<JackMidiInPort>();
+#else
+    m_midiInPortAlsa = std::make_unique<AlsaMidiInPort>();
 #endif
 }
 

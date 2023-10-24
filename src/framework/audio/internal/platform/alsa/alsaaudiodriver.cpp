@@ -97,7 +97,7 @@ void AlsaDriverState::alsaCleanup()
 
 std::string AlsaDriverState::name() const
 {
-    return "alsa";
+    return m_deviceId;
 }
 
 std::string AlsaDriverState::deviceName() const
@@ -194,7 +194,13 @@ bool AlsaDriverState::isOpened() const
     return m_alsaDeviceHandle != nullptr;
 }
 
-bool AlsaDriverState::pushMidiEvent(muse::midi::Event& e)
+bool AlsaDriverState::pushMidiEvent(muse::midi::Event&)
 {
     return true; // dummy
+}
+
+std::vector<muse::midi::MidiDevice> AlsaDriverState::availableMidiDevices() const
+{
+    std::vector<muse::midi::MidiDevice> x;
+    return x; // dummy
 }

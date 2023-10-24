@@ -580,3 +580,9 @@ bool OSXAudioDriver::pushMidiEvent(muse::midi::Event&)
 {
     return true; // dummy
 }
+
+std::vector<muse::midi::MidiDevice> OSXAudioDriver::availableMidiDevices() const
+{
+    std::vector<muse::midi::MidiDevice> x;
+    return x; // dummy
+}
