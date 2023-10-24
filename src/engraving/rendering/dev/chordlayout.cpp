@@ -59,6 +59,7 @@
 #include "dom/undo.h"
 #include "dom/utils.h"
 
+#include "arpeggiolayout.h"
 #include "tlayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
@@ -173,6 +174,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
     if (item->spanArpeggio()) {
         Arpeggio* spanArp = item->spanArpeggio();
+        Arpeggio::LayoutData* arpldata = spanArp->mutldata();
 
         double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
 
@@ -182,7 +184,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
             double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
             gapSize = arpeggioAccidentalDistance - accidentalDistance;
-            gapSize -= spanArp->insetDistance(chordAccidentals, mag_, item);
+            gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, chordAccidentals, mag_, item);
         }
 
         double extraX = spanArp->width() + gapSize + chordX;

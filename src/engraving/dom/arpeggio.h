@@ -74,8 +74,6 @@ public:
     void setUserLen1(double v) { m_userLen1 = v; }
     void setUserLen2(double v) { m_userLen2 = v; }
 
-    double insetDistance(std::vector<Accidental*>& accidentals, double mag_, Chord* _chord) const;
-
     bool playArpeggio() const { return m_playArpeggio; }
     void setPlayArpeggio(bool p) { m_playArpeggio = p; }
 
@@ -119,10 +117,6 @@ private:
     std::vector<mu::LineF> dragAnchorLines() const override;
     std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
-
-    double insetTop(Chord* c) const;
-    double insetBottom(Chord* c) const;
-    double insetWidth() const;
 
     ArpeggioType m_arpeggioType = ArpeggioType::NORMAL;
     double m_userLen1 = 0.0;

@@ -34,6 +34,11 @@ public:
 
     static void layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx);
     static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);
+
+    static double insetDistance(Arpeggio* item, LayoutContext& ctx, std::vector<Accidental*>& accidentals, double mag_, Chord* _chord);
+    static double insetTop(Arpeggio* item, Chord* c);
+    static double insetBottom(Arpeggio* item, Chord* c);
+    static double insetWidth(Arpeggio* item);
 };
 }
 
