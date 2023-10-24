@@ -21,6 +21,7 @@
  */
 #include "jackaudiodriver.h"
 #include <jack/midiport.h>
+#include "framework/midi/miditypes.h"
 #include "framework/midi/midierrors.h"
 
 #include <fcntl.h>
@@ -41,6 +42,10 @@
 using namespace muse::audio;
 using namespace muse::midi;
 namespace muse::audio {
+/*
+ * MIDI
+ */
+
 muse::Ret sendEvent_noteonoff(void* pb, int framePos, const muse::midi::Event& e)
 {
     unsigned char* p = jack_midi_event_reserve(pb, framePos, 3);
@@ -119,6 +124,10 @@ muse::Ret sendEvent(const Event& e, void* pb)
 
     return Ret(true);
 }
+
+/*
+ * AUDIO
+ */
 
 static int jack_process_callback(jack_nframes_t nframes, void* args)
 {
@@ -266,7 +275,6 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     }
 
     // midi
-    jack_options_t options = (jack_options_t)0;
     int portFlag = JackPortIsOutput;
     const char* portType = JACK_DEFAULT_MIDI_TYPE;
     jack_port_t* port = jack_port_register(handle, "Musescore", portType, portFlag, 0);
@@ -288,8 +296,45 @@ bool JackDriverState::isOpened() const
     return m_jackDeviceHandle != nullptr;
 }
 
+/*
+ * MIDI
+ */
+
 bool JackDriverState::pushMidiEvent(muse::midi::Event& e)
 {
     m_midiQueue.push(e);
     return true;
+}
+
+std::vector<muse::midi::MidiDevice> JackDriverState::availableMidiDevices() const
+{
+    std::vector<muse::midi::MidiDevice> ports;
+    std::vector<muse::midi::MidiDevice> ret;
+    jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
+    const char** prts = jack_get_ports(client, 0, 0, 0);
+    if (!prts) {
+        return ports;
+    }
+    int devIndex = 0;
+    for (const char** p = prts; p && *p; ++p) {
+        jack_port_t* port = jack_port_by_name(client, *p);
+        int flags = jack_port_flags(port);
+        if (!(flags & JackPortIsInput)) {
+            continue;
+        }
+        char buffer[128];
+        strncpy(buffer, *p, sizeof(buffer) - 1);
+        buffer[sizeof(buffer) - 1] = 0;
+        if (strncmp(buffer, "MuseScore", 9) == 0) {
+            continue;
+        }
+        muse::midi::MidiDevice dev;
+        dev.name = buffer;
+        dev.id = makeUniqueDeviceId(devIndex++, 0, 0);
+        ports.push_back(std::move(dev));
+    }
+
+    free(prts);
+
+    return ports;
 }
