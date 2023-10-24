@@ -85,7 +85,7 @@ AudioDeviceID LinuxAudioDriver::outputDevice() const
     if (m_current_audioDriverState != nullptr) {
         return m_current_audioDriverState->m_deviceId;
     } else {
-        LOGE("device is not opened");
+        LOGE() << "device is not opened, deviceId: " << m_deviceId;
         return m_deviceId; // FIX: should return optional type
     }
 }
@@ -270,6 +270,15 @@ bool LinuxAudioDriver::pushMidiEvent(muse::midi::Event& e)
         return true;
     }
     return false;
+}
+
+std::vector<muse::midi::MidiDevice> LinuxAudioDriver::availableMidiDevices() const
+{
+    if (m_current_audioDriverState) {
+        return m_current_audioDriverState->availableMidiDevices();
+    }
+    std::vector<muse::midi::MidiDevice> x;
+    return x;
 }
 
 void LinuxAudioDriver::resume()
