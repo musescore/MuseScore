@@ -39,11 +39,17 @@ public:
     void disconnect() override;
     bool isConnected() const override;
     MidiDeviceID deviceID() const override;
+    bool supportsMIDI20Output() const override;
+    Ret sendEvent(const Event& e) override;
 
 private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
-
-    struct Jack;
+    struct Jack {
+        void* midiIn = nullptr;
+        void* client = nullptr;
+        int port = -1;
+        int segmentSize;
+    };
     std::unique_ptr<Jack> m_jack;
     MidiDeviceID m_deviceID;
 };

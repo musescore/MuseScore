@@ -372,3 +372,9 @@ bool WasapiAudioDriver::pushMidiEvent(muse::midi::Event&)
 {
     return true;
 }
+
+std::vector<muse::midi::MidiDevice> WasapiAudioDriver::availableMidiDevices() const
+{
+    std::vector<muse::midi::MidiDevice> x;
+    return x; // dummy
+}

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+//#include "linuxmidiinport.h"
 #include "jackmidiinport.h"
 
 #include <jack/jack.h>
@@ -34,7 +35,6 @@ using namespace muse::midi;
 
 void JackMidiInPort::init()
 {
-    LOGI("---- linux JACK-midi input init ----");
     m_jack = std::make_unique<Jack>();
 }
 
@@ -45,35 +45,7 @@ void JackMidiInPort::deinit()
     }
 }
 
-std::vector<MidiDevice> JackMidiInPort::availableDevices() const
-{
-    std::vector<MidiDevice> ports;
-
-    std::vector<MidiDevice> ret;
-
-    const char** prts = jack_get_ports(m_jack->client, 0, 0, 0);
-    int devIndex = 0;
-    for (const char** p = prts; p && *p; ++p) {
-        jack_port_t* port = jack_port_by_name(m_jack->client, *p);
-        int flags = jack_port_flags(port);
-        if (!(flags & JackPortIsInput)) {
-            continue;
-        }
-        char buffer[128];
-        strncpy(buffer, *p, sizeof(buffer) - 1);
-        buffer[sizeof(buffer) - 1] = 0;
-        if (strncmp(buffer, "MuseScore", 9) == 0) {
-            continue;
-        }
-        MidiDevice dev;
-        dev.name = buffer;
-        dev.id = makeUniqueDeviceId(devIndex++, 0, 0);
-        ports.push_back(std::move(dev));
-    }
-    return ports;
-}
-
-muse::Ret JackMidiInPort::connect(const MidiDeviceID& deviceID)
+muse::Ret JackMidiInPort::connect(const MidiDeviceID&)
 {
     return muse::Ret(true);
 }
@@ -84,7 +56,6 @@ void JackMidiInPort::disconnect()
 
 bool JackMidiInPort::isConnected() const
 {
-    LOGI("---- JACK input isConnect ----");
     return m_jack && m_jack->midiIn && !m_deviceID.empty();
 }
 
@@ -95,7 +66,6 @@ MidiDeviceID JackMidiInPort::deviceID() const
 
 bool JackMidiInPort::deviceExists(const MidiDeviceID& deviceId) const
 {
-    LOGI("---- JACK-midi input deviceExists ----");
     for (const MidiDevice& device : availableDevices()) {
         if (device.id == deviceId) {
             return true;
@@ -103,4 +73,21 @@ bool JackMidiInPort::deviceExists(const MidiDeviceID& deviceId) const
     }
 
     return false;
+}
+
+bool JackMidiInPort::supportsMIDI20Output() const
+{
+    return false;
+}
+
+// dummy
+muse::Ret JackMidiInPort::sendEvent(const Event&)
+{
+    return muse::make_ok();
+}
+
+std::vector<MidiDevice> JackMidiInPort::availableDevices() const
+{
+    std::vector<MidiDevice> x;
+    return x; // dummy
 }
