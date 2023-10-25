@@ -54,8 +54,8 @@ void GuitarBendLayout::updateSegmentsAndLayout(SLine* item, LayoutContext& ctx)
         return;
     }
 
-    int segmentsNeeded = system1 == system2 ? 1 : 2;
-    int segmentCount = item->spannerSegments().size();
+    unsigned int segmentsNeeded = system1 == system2 ? 1 : 2;
+    size_t segmentCount = item->spannerSegments().size();
     if (segmentCount != segmentsNeeded) {
         item->fixupSegments(segmentsNeeded, [item](System* parent) { return item->createLineSegment(parent); });
     }
