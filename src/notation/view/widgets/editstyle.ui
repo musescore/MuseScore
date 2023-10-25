@@ -9187,7 +9187,7 @@ By default, they will be placed such as that their right end are at the same lev
          </spacer>
         </item>
         <item row="2" column="0">
-         <widget class="QGroupBox" name="groupBox">
+         <widget class="QGroupBox" name="groupBox_FretNumbers">
           <property name="title">
            <string>Tablature fret numbers</string>
           </property>
