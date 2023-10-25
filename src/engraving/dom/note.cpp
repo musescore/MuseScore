@@ -3519,6 +3519,7 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::doCreateShape() const
 {
+<<<<<<< HEAD
     RectF r(ldata()->bbox(LD_ACCESS::BAD));
 
     Shape shape(r, this);
@@ -3550,6 +3551,10 @@ Shape Note::doCreateShape() const
     }
 
     return shape;
+=======
+    UNREACHABLE;
+    return Shape();
+>>>>>>> 41c33edaf7 ([engraving] changed making shape implementation of Note)
 }
 
 //---------------------------------------------------------

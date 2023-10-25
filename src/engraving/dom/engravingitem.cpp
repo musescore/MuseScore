@@ -2409,6 +2409,8 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
             }
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
+        case ElementType::NOTE:
+            return sh;
         default:
             break;
         }

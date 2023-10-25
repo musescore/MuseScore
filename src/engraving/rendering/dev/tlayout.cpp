@@ -4098,6 +4098,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         ldata->setPos(PointF());
     }
 
+    RectF noteBBox;
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
     if (useTablature) {
         if (item->displayFret() == Note::DisplayFretOption::Hide) {
@@ -4129,12 +4130,12 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         double w = item->tabHeadWidth(tab);     // !! use _fretString
-        ldata->setBbox(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+        noteBBox = RectF(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
 
         if (item->ghost() && Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
-            ldata->setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));
+            noteBBox.setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));
         } else {
-            ldata->setWidth(w);
+            noteBBox.setWidth(w);
         }
     } else {
         if (item->deadNote()) {
@@ -4160,7 +4161,50 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         } else {
             ldata->setCachedSymNull(SymId::noSym);
         }
-        ldata->setBbox(item->symBbox(nh));
+        noteBBox = item->symBbox(nh);
+    }
+
+    // shape
+    {
+        Shape shape;
+        shape.add(noteBBox, item);
+
+        for (const NoteDot* dot : item->dots()) {
+            LD_CONDITION(dot->ldata()->isSetPos());
+            shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
+        }
+
+        Accidental* acc = item->accidental();
+        if (acc && acc->addToSkyline()) {
+            LD_CONDITION(acc->ldata()->isSetBbox());
+            LD_CONDITION(acc->ldata()->isSetPos());
+            shape.add(acc->ldata()->bbox().translated(acc->pos()), acc);
+        }
+
+        for (const EngravingItem* e : item->el()) {
+            if (e->addToSkyline()) {
+                if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
+                    continue;
+                }
+                LD_CONDITION(e->ldata()->isSetBbox());
+                LD_CONDITION(e->ldata()->isSetPos());
+                shape.add(e->ldata()->bbox().translated(e->pos()), e);
+            }
+        }
+
+        if (item->part()->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
+            GuitarBend* bend = bendFor();
+            if (bend && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
+                GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());
+                // Semi-hack: the relative position of note and bend
+                // isn't fully known yet, so we use an approximation
+                double sp = item->spatium();
+                PointF approxRelPos(noteBBox.width() + 0.25 * sp, -0.25 * sp);
+                shape.add(bendSeg->shape().translated(approxRelPos));
+            }
+        }
+
+        ldata->setShape(shape);
     }
 }
 
