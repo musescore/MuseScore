@@ -30,7 +30,7 @@ int Induction::topN = 10;
 
 
 AgentList Induction::beatInduction(const AgentParameters &params,
-                                   const EventList &events)
+                                   const BeatTracker::EventList &events)
       {
       int i, j, b, bestCount;
       bool submult;
@@ -48,8 +48,8 @@ AgentList Induction::beatInduction(const AgentParameters &params,
       std::vector<int> clusterScore;
       clusterScore.resize(maxClusterCount);
 
-      EventList::const_iterator ptr1, ptr2;
-      Event e1, e2;
+      BeatTracker::EventList::const_iterator ptr1, ptr2;
+      BeatTracker::Event e1, e2;
       ptr1 = events.begin();
 
       while (ptr1 != events.end()) {

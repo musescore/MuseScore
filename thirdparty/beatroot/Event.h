@@ -18,26 +18,28 @@
 
 #include <list>
 
-
+namespace BeatTracker
+{
 struct Event
-      {
-      double time;
-      double salience;
+{
+    double time;
+    double salience;
 
-      Event()
+    Event()
             : time(0), salience(0)
-            {}
-      Event(double t, double s)
+    {}
+    Event(double t, double s)
             : time(t), salience(s)
-            {}
+    {}
 
-      bool operator!=(const Event &e)
-            {
-            return time != e.time || salience != e.salience;
-            }
-      };
+    bool operator!=(const Event &e)
+    {
+        return time != e.time || salience != e.salience;
+    }
+};
 
 typedef std::list<Event> EventList;
+}
 
 
 #endif

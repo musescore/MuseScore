@@ -151,7 +151,7 @@ public:
 
     explicit CompatMidiRendererInternal(Score* s);
 
-    void renderScore(EventsHolder& events, const Context& ctx, bool expandRepeats);
+    void renderScore(EventsHolder& events, const Context& ctx);
 
     static const int ARTICULATION_CONV_FACTOR { 100000 };
     static bool graceNotesMerged(Chord* chord);

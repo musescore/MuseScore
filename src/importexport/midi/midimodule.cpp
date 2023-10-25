@@ -23,48 +23,58 @@
 
 #include "modularity/ioc.h"
 
+#ifdef MUE_ENABLE_MIDI_IMPORTEXPORT
 #include "project/inotationreadersregister.h"
-#include "internal/notationmidireader.h"
 #include "project/inotationwritersregister.h"
+#include "internal/notationmidireader.h"
 #include "internal/notationmidiwriter.h"
-
 #include "internal/midiconfiguration.h"
+using namespace mu::project;
+#endif
+#include "internal/midirender/midirender.h"
 
 #include "log.h"
 
-using namespace mu::iex::midi;
-using namespace mu::project;
-
-std::string MidiModule::moduleName() const
+namespace mu::iex::midi
 {
-    return "iex_midi";
-}
-
-void MidiModule::registerExports()
-{
-    m_configuration = std::make_shared<MidiConfiguration>();
-
-    modularity::ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), m_configuration);
-}
-
-void MidiModule::resolveImports()
-{
-    auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
-    if (readers) {
-        readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
+    std::string MidiModule::moduleName() const
+    {
+        return "iex_midi";
     }
 
-    auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
-    if (writers) {
-        writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>());
+    void MidiModule::registerExports()
+    {
+#ifdef MUE_ENABLE_MIDI_IMPORTEXPORT
+        m_configuration = std::make_shared<MidiConfiguration>();
+
+        modularity::ioc()->registerExport<IMidiImportExportConfiguration>(moduleName(), m_configuration);
+//        modularity::ioc()->registerExport<IMidiRenderStrategy>(moduleName());
+#endif
+        modularity::ioc()->registerExport<IMidiRender>(moduleName(), new MidiRender());
     }
+
+#ifdef MUE_ENABLE_MIDI_IMPORTEXPORT
+    void MidiModule::resolveImports()
+    {
+        auto readers = modularity::ioc()->resolve<INotationReadersRegister>(moduleName());
+        if (readers) {
+            readers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiReader>());
+        }
+
+        auto writers = modularity::ioc()->resolve<INotationWritersRegister>(moduleName());
+        if (writers) {
+            writers->reg({ "mid", "midi", "kar" }, std::make_shared<NotationMidiWriter>());
+        }
+    }
+
+    void MidiModule::onInit(const framework::IApplication::RunMode& mode)
+    {
+        if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
+            return;
+        }
+
+        m_configuration->init();
+    }
+#endif
 }
 
-void MidiModule::onInit(const framework::IApplication::RunMode& mode)
-{
-    if (mode == framework::IApplication::RunMode::AudioPluginRegistration) {
-        return;
-    }
-
-    m_configuration->init();
-}

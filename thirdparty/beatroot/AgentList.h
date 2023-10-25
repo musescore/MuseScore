@@ -72,7 +72,7 @@ class AgentList
                   /** Perform beat tracking on a list of events (onsets).
                    *  @param el The list of onsets (or events or peaks) to beat track
                    */
-      void beatTrack(const EventList &el, const AgentParameters &params)
+      void beatTrack(const BeatTracker::EventList &el, const AgentParameters &params)
             {
             beatTrack(el, params, -1.0);
             }
@@ -80,7 +80,7 @@ class AgentList
                    *  @param el The list of onsets (or events or peaks) to beat track.
                    *  @param stop Do not find beats after <code>stop</code> seconds.
                    */
-      void beatTrack(const EventList &el, const AgentParameters &params, double stop);
+      void beatTrack(const BeatTracker::EventList &el, const AgentParameters &params, double stop);
 
                   /** Finds the Agent with the highest score in the list,
                    *  or NULL if beat tracking has failed.

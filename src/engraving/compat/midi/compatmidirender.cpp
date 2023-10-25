@@ -5,7 +5,7 @@ void CompatMidiRender::renderScore(Score* score, EventsHolder& events, const Com
 {
     score->masterScore()->setExpandRepeats(expandRepeats);
     CompatMidiRendererInternal internal{ score };
-    internal.renderScore(events, ctx, expandRepeats);
+    internal.renderScore(events, ctx);
 }
 
 int CompatMidiRender::getControllerForSnd(Score* score, int globalSndController)

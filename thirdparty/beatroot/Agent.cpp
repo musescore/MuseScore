@@ -55,7 +55,7 @@ Agent *Agent::clone() const
       return a;
       }
 
-void Agent::accept(const Event &e, double err, int beats)
+void Agent::accept(const BeatTracker::Event &e, double err, int beats)
       {
       beatTime = e.time;
       events.push_back(e);
@@ -69,14 +69,14 @@ void Agent::accept(const Event &e, double err, int beats)
       phaseScore += conFactor * e.salience;
       }
 
-bool Agent::considerAsBeat(const Event &e, AgentList &a)
+bool Agent::considerAsBeat(const BeatTracker::Event &e, AgentList &a)
       {
       if (beatTime < 0) {	// first event
             accept(e, 0, 1);
             return true;
             }
       else {			// subsequent events
-            EventList::iterator last = events.end();
+            BeatTracker::EventList::iterator last = events.end();
             --last;
             if (e.time - last->time > expiryTime) {
                   phaseScore = -1.0;	// flag agent to be deleted
@@ -99,7 +99,7 @@ bool Agent::considerAsBeat(const Event &e, AgentList &a)
 
 void Agent::fillBeats(double start)
       {
-      EventList::iterator it = events.begin();
+      BeatTracker::EventList::iterator it = events.begin();
       if (it == events.end())
             return;
       double prevBeat = it->time;
@@ -109,7 +109,7 @@ void Agent::fillBeats(double start)
             double currentInterval = (nextBeat - prevBeat) / beats;
             for ( ; (nextBeat > start) && (beats > 1.5); --beats) {
                   prevBeat += currentInterval;
-                  events.insert(it, Event(prevBeat, 0));
+                  events.insert(it, BeatTracker::Event(prevBeat, 0));
                   }
             prevBeat = nextBeat;
             }

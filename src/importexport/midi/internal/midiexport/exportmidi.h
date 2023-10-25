@@ -51,7 +51,7 @@ private:
     //---------------------------------------------------
     //   PauseMap
     //    MIDI files cannot contain pauses so need to insert
-    //    extra ticks extra ticks and tempo changes instead.
+    //    extra ticks and tempo changes instead.
     //---------------------------------------------------
     class PauseMap : std::map<int, int>
     {

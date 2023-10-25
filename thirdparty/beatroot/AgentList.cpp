@@ -86,14 +86,14 @@ void AgentList::removeDuplicates()
       }
 
 
-void AgentList::beatTrack(const EventList &el,
+void AgentList::beatTrack(const BeatTracker::EventList &el,
                           const AgentParameters &params,
                           double stop)
       {
-      EventList::const_iterator ei = el.begin();
+      BeatTracker::EventList::const_iterator ei = el.begin();
       bool phaseGiven = !empty() && ((*begin())->beatTime >= 0); // if given for one, assume given for others
       while (ei != el.end()) {
-            Event ev = *ei;
+            BeatTracker::Event ev = *ei;
             ++ei;
             if ((stop > 0) && (ev.time > stop))
                   break;

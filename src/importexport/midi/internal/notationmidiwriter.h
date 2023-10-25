@@ -28,6 +28,7 @@
 #include "modularity/ioc.h"
 #include "notation/inotationconfiguration.h"
 #include "imidiconfiguration.h"
+#include "imidirender.h"
 
 namespace mu::iex::midi {
 class NotationMidiWriter : public project::INotationWriter
