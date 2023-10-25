@@ -369,7 +369,7 @@ void ScoreView::fotoContextPopup(QContextMenuEvent* ev)
                tr("Set Output Resolution"),
                tr("Set output resolution for PNG"),
                preferences.getDouble(PREF_EXPORT_PNG_RESOLUTION),
-               16.0, 2400.0, 1,
+               0.0, 5000.0, 0,
                &ok
                );
             if (ok) {
