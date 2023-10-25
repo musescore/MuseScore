@@ -2411,6 +2411,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         } break;
         case ElementType::NOTE:
         case ElementType::ORNAMENT:
+        case ElementType::TUPLET:
             return sh;
         default:
             break;

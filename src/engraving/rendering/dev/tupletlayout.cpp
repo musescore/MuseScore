@@ -502,21 +502,38 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         }
     }
 
-    // collect bounding box
-    RectF r;
-    if (item->number()) {
-        r |= item->number()->ldata()->bbox().translated(item->number()->pos());
+    // collect shape
+    {
+        Shape s;
         if (item->hasBracket()) {
-            RectF b;
-            b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketR[2].x(), item->bracketR[2].y());
-            r |= b;
+            double w = item->bracketWidth().val() * item->mag();
+
+            auto tupletRect = [](const PointF& p1, const PointF& p2, double w) {
+                RectF r;
+                double w2 = w * .5;
+                r.setCoords(std::min(p1.x(), p2.x()) - w2,
+                            std::min(p1.y(), p2.y()) - w2,
+                            std::max(p1.x(), p2.x()) + w2,
+                            std::max(p1.y(), p2.y()) + w2);
+                return r;
+            };
+
+            s.add(tupletRect(item->bracketL[0], item->bracketL[1], w));
+            s.add(tupletRect(item->bracketL[1], item->bracketL[2], w));
+            if (item->number()) {
+                s.add(tupletRect(item->bracketR[0], item->bracketR[1], w));
+                s.add(tupletRect(item->bracketR[1], item->bracketR[2], w));
+            } else {
+                s.add(tupletRect(item->bracketL[2], item->bracketL[3], w));
+            }
         }
-    } else if (item->hasBracket()) {
-        RectF b;
-        b.setCoords(item->bracketL[1].x(), item->bracketL[1].y(), item->bracketL[3].x(), item->bracketL[3].y());
-        r |= b;
+
+        if (item->number()) {
+            s.add(item->number()->ldata()->bbox().translated(item->number()->pos()));
+        }
+
+        ldata->setShape(s);
     }
-    item->setbbox(r);
 
     if (outOfStaff && !item->cross()) {
         Autoplace::autoplaceMeasureElement(item, item->mutldata(), item->isUp(), /* add to skyline */ true);

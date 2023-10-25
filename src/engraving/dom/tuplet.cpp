@@ -272,22 +272,8 @@ public:
 
 Shape Tuplet::doCreateShape() const
 {
-    Shape s;
-    if (m_hasBracket) {
-        double w = m_bracketWidth.val() * mag();
-        s.add(TupletRect(bracketL[0], bracketL[1], w));
-        s.add(TupletRect(bracketL[1], bracketL[2], w));
-        if (m_number) {
-            s.add(TupletRect(bracketR[0], bracketR[1], w));
-            s.add(TupletRect(bracketR[1], bracketR[2], w));
-        } else {
-            s.add(TupletRect(bracketL[2], bracketL[3], w));
-        }
-    }
-    if (m_number) {
-        s.add(m_number->ldata()->bbox().translated(m_number->pos()));
-    }
-    return s;
+    UNREACHABLE;
+    return Shape();
 }
 
 //---------------------------------------------------------

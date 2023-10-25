@@ -4193,7 +4193,7 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         if (item->part()->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
-            GuitarBend* bend = bendFor();
+            GuitarBend* bend = item->bendFor();
             if (bend && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
                 GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());
                 // Semi-hack: the relative position of note and bend
