@@ -80,6 +80,7 @@ public:
 
     Type type() const { return m_type; }
     bool isComposite() const { return m_type == Type::Composite; }
+    void setType(Type t) { m_type = t; }
 
     size_t size() const { return m_elements.size(); }
     bool empty() const { return m_elements.empty(); }

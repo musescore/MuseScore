@@ -390,14 +390,8 @@ void Ornament::updateCueNote()
 
 Shape Ornament::doCreateShape() const
 {
-    Shape s;
-    s.add(ldata()->bbox(), this);
-    for (Accidental* accidental : _accidentalsAboveAndBelow) {
-        if (accidental && accidental->visible()) {
-            s.add(accidental->shape().translate(accidental->pos()));
-        }
-    }
-    return s;
+    UNREACHABLE;
+    return Shape();
 }
 
 SymId Ornament::fromTrillType(TrillType trillType)

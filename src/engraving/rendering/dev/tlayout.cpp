@@ -4223,6 +4223,8 @@ void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, 
 {
     LD_CONDITION(ldata->isSetSymId());
 
+    ldata->setShape(Shape());
+
     layoutArticulation(static_cast<const Articulation*>(item), ldata);
 
     double _spatium = item->spatium();
@@ -4250,6 +4252,18 @@ void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, 
 
         accLData->setPos(-0.5 * accLData->bbox().width(), above ? (-minVertDist - vertMargin) : (minVertDist + vertMargin));
     }
+
+    Shape sh(Shape::Type::Composite);
+    sh.add(ldata->bbox(), item); // from Articulation
+    for (const Accidental* accidental : item->accidentalsAboveAndBelow()) {
+        if (accidental && accidental->visible()) {
+            LD_CONDITION(accidental->ldata()->isSetShape());
+            LD_CONDITION(accidental->ldata()->isSetPos());
+            sh.add(accidental->shape().translate(accidental->pos()));
+        }
+    }
+
+    ldata->setShape(sh);
 }
 
 void TLayout::layoutOrnamentCueNote(Ornament* item, LayoutContext& ctx)

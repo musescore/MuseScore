@@ -547,7 +547,7 @@ public:
             DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
 
             DO_ASSERT(!isShapeComposite());
-            m_shape.set_value(Shape(r, nullptr, Shape::Type::Fixed));
+            m_shape.set_value(Shape(r, m_item, Shape::Type::Fixed));
         }
 
         void setBbox(double x, double y, double w, double h) { setBbox(mu::RectF(x, y, w, h)); }
