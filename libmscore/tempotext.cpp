@@ -289,6 +289,11 @@ void TempoText::updateTempo()
       QString s = plainText();
       s.replace(",", ".");
       s.replace("<sym>space</sym>"," ");
+      s.replace("≒", "=");
+      s.replace("≈", "=");
+      s.replace("~", "=");
+      s.replace("ca.", "");
+      s.replace("approx.", "");
       for (const TempoPattern& pa : tp) {
             QRegExp re;
             if (!regexps.contains(pa.pattern)) {
