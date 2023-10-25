@@ -22,6 +22,8 @@
 
 #include "fluidsequencer.h"
 
+#include "global/interpolation.h"
+
 using namespace mu;
 using namespace mu::audio;
 using namespace mu::midi;
@@ -182,51 +184,58 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
     midi::Event event(Event::Opcode::PitchBend, Event::MessageType::ChannelVoice10);
     event.setChannel(channelIdx);
 
-    duration_t minInterval = 10000;
-    duration_t actualInterval = noteEvent.arrangementCtx().actualDuration * percentageToFactor(mpe::ONE_PERCENT * 10);
-
-    if (currentType != mpe::ArticulationType::Undefined) {
-        auto it = noteEvent.pitchCtx().pitchCurve.cbegin();
-        auto last = noteEvent.pitchCtx().pitchCurve.cend();
-
-        while (it != last) {
-            auto nextToCurrent = std::next(it);
-            if (nextToCurrent == last) {
-                timestamp_t currentPoint = timestampFrom + noteEvent.arrangementCtx().actualDuration * percentageToFactor(it->first);
-
-                event.setData(pitchBendLevel(it->second));
-                destination[currentPoint].emplace(event);
-                return;
-            }
-
-            percentage_t positionDistance = nextToCurrent->first - it->first;
-            int stepsCount = 0;
-            if (actualInterval < minInterval) {
-                stepsCount = 1;
-            } else {
-                stepsCount = actualInterval / minInterval;
-            }
-
-            float posStep = positionDistance / static_cast<float>(stepsCount);
-            float pitchStep = (nextToCurrent->second - it->second) / static_cast<float>(stepsCount);
-
-            for (int i = 0; i < stepsCount; ++i) {
-                timestamp_t currentPoint = timestampFrom + noteEvent.arrangementCtx().actualDuration
-                                           * percentageToFactor(it->first + (i * posStep));
-
-                int pitchBendVal = pitchBendLevel(it->second + (i * pitchStep));
-                event.setData(pitchBendVal);
-                destination[currentPoint].emplace(event);
-            }
-
-            it++;
-        }
-
+    if (currentType == mpe::ArticulationType::Undefined || noteEvent.pitchCtx().pitchCurve.empty()) {
+        event.setData(8192);
+        destination[timestampFrom].emplace(std::move(event));
         return;
     }
 
-    event.setData(8192);
-    destination[timestampFrom].emplace(std::move(event));
+    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
+
+    auto currIt = noteEvent.pitchCtx().pitchCurve.cbegin();
+    auto nextIt = std::next(currIt);
+    auto endIt = noteEvent.pitchCtx().pitchCurve.cend();
+
+    if (nextIt == endIt) {
+        int bendValue = pitchBendLevel(currIt->second);
+        timestamp_t time = timestampFrom + duration * percentageToFactor(currIt->first);
+        event.setData(bendValue);
+        destination[time].insert(std::move(event));
+        return;
+    }
+
+    auto makePoint = [](mpe::timestamp_t time, int value) {
+        return mu::Interpolation::Point { static_cast<double>(time), static_cast<double>(value) };
+    };
+
+    //! NOTE: Increasing this number results in fewer points being interpolated
+    const mpe::pitch_level_t POINT_WEIGHT = currentType == mpe::ArticulationType::Multibend
+                                            ? mpe::PITCH_LEVEL_STEP / 5 : mpe::PITCH_LEVEL_STEP / 2;
+
+    for (; nextIt != endIt; currIt = nextIt, nextIt = std::next(currIt)) {
+        int currBendValue = pitchBendLevel(currIt->second);
+        int nextBendValue = pitchBendLevel(nextIt->second);
+
+        timestamp_t currTime = timestampFrom + duration * percentageToFactor(currIt->first);
+        timestamp_t nextTime = timestampFrom + duration * percentageToFactor(nextIt->first);
+
+        mu::Interpolation::Point p0 = makePoint(currTime, currBendValue);
+        mu::Interpolation::Point p1 = makePoint(nextTime, currBendValue);
+        mu::Interpolation::Point p2 = makePoint(nextTime, nextBendValue);
+
+        size_t pointCount = std::abs(nextIt->second - currIt->second) / POINT_WEIGHT;
+        pointCount = std::max(pointCount, size_t(1));
+
+        std::vector<mu::Interpolation::Point> points = mu::Interpolation::quadraticBezierCurve(p0, p1, p2, pointCount);
+
+        for (const mu::Interpolation::Point& point : points) {
+            timestamp_t time = static_cast<timestamp_t>(std::round(point.x));
+            int bendValue = static_cast<int>(std::round(point.y));
+
+            event.setData(bendValue);
+            destination[time].insert(event);
+        }
+    }
 }
 
 channel_t FluidSequencer::channel(const mpe::NoteEvent& noteEvent) const
