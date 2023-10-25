@@ -2218,6 +2218,9 @@ bool Measure::isEmpty(staff_idx_t staffIdx) const
         strack = staffIdx * VOICES;
         etrack = strack + VOICES;
     }
+    if (isMeasureRepeatGroup(staffIdx)) {
+        return false;
+    }
     for (Segment* s = first(SegmentType::ChordRest); s; s = s->next(SegmentType::ChordRest)) {
         for (track_idx_t track = strack; track < etrack; ++track) {
             EngravingItem* e = s->element(track);
