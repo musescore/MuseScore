@@ -600,8 +600,10 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::staffTextPosBelow,       false, staffTextPosBelow,     resetStaffTextPosBelow },
         { StyleId::staffTextMinDistance,    false, staffTextMinDistance,  resetStaffTextMinDistance },
 
-        { StyleId::bendLineWidth,     false, bendLineWidth,     resetBendLineWidth },
-        { StyleId::bendArrowWidth,    false, bendArrowWidth,    resetBendArrowWidth },
+        { StyleId::guitarBendLineWidth,     false, bendLineWidth,     resetBendLineWidth },
+        { StyleId::guitarBendArrowWidth,    false, bendArrowWidth,    resetBendArrowWidth },
+        { StyleId::guitarBendArrowHeight,   false, bendArrowHeight,   resetBendArrowHeight },
+        { StyleId::useCueSizeFretForGraceBends, false, guitarBendCueSizedGraceFrets, 0 },
 
         /// Tablature styles
 
@@ -776,7 +778,7 @@ EditStyle::EditStyle(QWidget* parent)
     groupBox_rests->layout()->addWidget(restOffsetSelector);
 
     // ====================================================
-    // Notes (QML)
+    // BEAMS (QML)
     // ====================================================
 
     QQuickWidget* beamsPage = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
@@ -786,6 +788,19 @@ EditStyle::EditStyle(QWidget* parent)
     beamsPage->setMinimumSize(224, 280);
     beamsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBox_beams->layout()->addWidget(beamsPage);
+
+    // ====================================================
+    // BENDS (QML)
+    // ====================================================
+
+    QQuickWidget* fullBendStyleSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                           /*parent*/ fullBendStyleBoxSelector);
+    fullBendStyleSelector->setObjectName("bendStyleSelector_QQuickWidget");
+    fullBendStyleSelector->setSource(QUrl(QString::fromUtf8(
+                                              "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml")));
+    fullBendStyleSelector->setMinimumSize(224, 60);
+    fullBendStyleSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    fullBendStyleBoxSelector->layout()->addWidget(fullBendStyleSelector);
 
     // ====================================================
     // Figured Bass

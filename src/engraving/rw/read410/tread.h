@@ -77,6 +77,9 @@ class Fingering;
 class Glissando;
 class GradualTempoChange;
 class Groups;
+class GuitarBend;
+class GuitarBendSegment;
+class GuitarBendHold;
 
 class Hairpin;
 class Harmony;
@@ -220,6 +223,8 @@ public:
     static void read(Glissando* g, XmlReader& xml, ReadContext& ctx);
     static void read(GradualTempoChange* c, XmlReader& xml, ReadContext& ctx);
     static void read(Groups* g, XmlReader& xml, ReadContext& ctx);
+    static void read(GuitarBend* g, XmlReader& xml, ReadContext& ctx);
+    static void read(GuitarBendHold* h, XmlReader& xml, ReadContext& ctx);
 
     static void read(Hairpin* h, XmlReader& xml, ReadContext& ctx);
     static void read(Harmony* h, XmlReader& xml, ReadContext& ctx);
@@ -318,6 +323,8 @@ public:
     static bool readProperties(ChordRest* ch, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Clef* c, XmlReader& xml, ReadContext& ctx);
     static bool readProperties(Fermata* f, XmlReader& xml, ReadContext& ctx);
+
+    static bool readProperties(GuitarBendSegment* g, const AsciiStringView& tag, XmlReader& xml, ReadContext&);
 
     static bool readProperties(Instrument* item, XmlReader& xml, ReadContext& ctx, Part* part, bool* customDrumset);
 

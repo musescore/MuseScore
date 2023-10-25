@@ -1210,6 +1210,14 @@ enum class Sid {
     bendLineWidth,
     bendArrowWidth,
 
+    guitarBendLineWidth,
+    guitarBendHeightAboveTABStaff,
+    guitarBendPartialBendHeight,
+    guitarBendUseFull,
+    guitarBendArrowWidth,
+    guitarBendArrowHeight,
+    useCueSizeFretForGraceBends,
+
     headerFontFace,
     headerFontSize,
     headerLineSpacing,

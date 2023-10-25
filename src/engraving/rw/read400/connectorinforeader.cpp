@@ -387,7 +387,7 @@ void ConnectorInfoReader::readAddConnector(Note* item, ConnectorInfoReader* info
                 item->setTieBack(toTie(sp));
             } else {
                 if (sp->isGlissando() && item->explicitParent() && item->explicitParent()->isChord()) {
-                    toChord(item->explicitParent())->setEndsGlissando(true);
+                    toChord(item->explicitParent())->setEndsGlissandoOrGuitarBend(true);
                 }
                 item->addSpannerBack(sp);
             }

@@ -65,6 +65,7 @@
 
 #include "dom/glissando.h"
 #include "dom/gradualtempochange.h"
+#include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
 #include "dom/harppedaldiagram.h"
@@ -150,6 +151,7 @@
 #include "autoplace.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
+#include "guitarbendlayout.h"
 #include "lyricslayout.h"
 #include "slurtielayout.h"
 #include "tremololayout.h"
@@ -250,6 +252,12 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::GRADUAL_TEMPO_CHANGE: layoutGradualTempoChange(item_cast<GradualTempoChange*>(item), ctx);
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: layoutGradualTempoChangeSegment(item_cast<GradualTempoChangeSegment*>(item), ctx);
+        break;
+    case ElementType::GUITAR_BEND: layoutGuitarBend(item_cast<GuitarBend*>(item), ctx);
+        break;
+    case ElementType::GUITAR_BEND_SEGMENT: layoutGuitarBendSegment(item_cast<GuitarBendSegment*>(item), ctx);
+        break;
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT: GuitarBendLayout::layoutHoldLine(item_cast<GuitarBendHoldSegment*>(item));
         break;
     case ElementType::HAIRPIN:          layoutHairpin(item_cast<Hairpin*>(item), ctx);
         break;
@@ -2769,6 +2777,12 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
     }
     // Safety net in case the shape checks don't succeed
     xPos = std::min(xPos, -double(ctx.conf().styleMM(Sid::graceToMainNoteDist) + firstGN->notes().front()->headWidth() / 2));
+
+    // Exceptions for bends in TAB staves
+    if (firstGN->preOrGraceBendSpacingExceptionInTab()) {
+        xPos = 0.0;
+    }
+
     item->setPos(xPos, 0.0);
 }
 
@@ -2800,6 +2814,35 @@ void TLayout::layoutGradualTempoChangeSegment(GradualTempoChangeSegment* item, L
 void TLayout::layoutGradualTempoChange(GradualTempoChange* item, LayoutContext& ctx)
 {
     layoutLine(item, ctx);
+}
+
+void TLayout::layoutGuitarBend(GuitarBend* item, LayoutContext& ctx)
+{
+    item->computeBendAmount();
+
+    GuitarBendLayout::updateSegmentsAndLayout(item, ctx);
+
+    if (item->staffType()->isTabStaff()) {
+        item->updateHoldLine();
+        if (item->holdLine()) {
+            GuitarBendLayout::updateSegmentsAndLayout(item->holdLine(), ctx);
+        }
+    }
+}
+
+void TLayout::layoutGuitarBendSegment(GuitarBendSegment* item, LayoutContext& ctx)
+{
+    bool tabStaff = item->staffType()->isTabStaff();
+    if (tabStaff) {
+        GuitarBendLayout::layoutTabStaff(item, ctx);
+    } else {
+        GuitarBendLayout::layoutStandardStaff(item, ctx);
+    }
+
+    SysStaff* staff = item->system()->staff(item->staffIdx());
+    Skyline& skyline = staff->skyline();
+    SkylineLine& skylineLine = tabStaff ? skyline.north() : (item->guitarBend()->ldata()->up() ? skyline.north() : skyline.south());
+    skylineLine.add(item->shape().translated(item->pos()));
 }
 
 void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)

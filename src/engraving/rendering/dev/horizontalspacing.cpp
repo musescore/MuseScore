@@ -412,6 +412,9 @@ void HorizontalSpacing::computeNotePadding(const Note* note, const EngravingItem
                                             ? style.styleMM(Sid::MinStraightGlissandoLength)
                                             : style.styleMM(Sid::MinWigglyGlissandoLength);
                 minEndPointsDistance = minGlissandoLength;
+            } else if (laPoint1.line()->isGuitarBend()) {
+                double minBendLength = 2 * note->spatium(); // TODO: style
+                minEndPointsDistance = minBendLength;
             }
 
             double lapPadding = (laPoint1.pos().x() - note->headWidth()) + minEndPointsDistance - laPoint2.pos().x();

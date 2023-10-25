@@ -1061,7 +1061,7 @@ bool Read206::readNoteProperties206(Note* note, XmlReader& e, ReadContext& ctx)
                 note->setTieBack(toTie(sp));
             } else {
                 if (sp->isGlissando() && note->explicitParent() && note->explicitParent()->isChord()) {
-                    toChord(note->explicitParent())->setEndsGlissando(true);
+                    toChord(note->explicitParent())->setEndsGlissandoOrGuitarBend(true);
                 }
                 note->addSpannerBack(sp);
             }

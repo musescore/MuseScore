@@ -745,6 +745,7 @@ EngravingItem* Score::nextElement()
             }
             break;
         }
+        case ElementType::GUITAR_BEND_SEGMENT:
         case ElementType::GLISSANDO_SEGMENT:
         case ElementType::TIE_SEGMENT: {
             SpannerSegment* s = toSpannerSegment(e);
@@ -908,6 +909,7 @@ EngravingItem* Score::prevElement()
                 }
             }
         }
+        case ElementType::GUITAR_BEND_SEGMENT:
         case ElementType::GLISSANDO_SEGMENT:
         case ElementType::TIE_SEGMENT: {
             SpannerSegment* s = toSpannerSegment(e);

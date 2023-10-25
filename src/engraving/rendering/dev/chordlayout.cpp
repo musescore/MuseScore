@@ -32,6 +32,7 @@
 #include "dom/chord.h"
 #include "dom/fingering.h"
 #include "dom/glissando.h"
+#include "dom/guitarbend.h"
 #include "dom/hook.h"
 
 #include "dom/ledgerline.h"
@@ -71,6 +72,14 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
     if (item->notes().empty()) {
         return;
     }
+
+    int gi = 0;
+    for (Chord* c : item->graceNotes()) {
+        // HACK: graceIndex is not well-maintained on add & remove
+        // so rebuild now
+        c->setGraceIndex(gi++);
+    }
+
     if (item->onTabStaff()) {
         layoutTablature(item, ctx);
     } else {
@@ -82,11 +91,7 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
 
 void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 {
-    int gi = 0;
     for (Chord* c : item->graceNotes()) {
-        // HACK: graceIndex is not well-maintained on add & remove
-        // so rebuild now
-        c->setGraceIndex(gi++);
         layoutPitched(c, ctx);
     }
 
@@ -233,6 +238,13 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         }
     }
 
+    for (Note* note : item->notes()) {
+        GuitarBend* bend = note->bendFor();
+        if (bend && bend->type() == GuitarBendType::SLIGHT_BEND) {
+            TLayout::layoutGuitarBend(bend, ctx);
+        }
+    }
+
     // align note-based fingerings
     std::vector<Fingering*> alignNote;
     double xNote = 10000.0;
@@ -290,6 +302,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     double minY        = 1000.0;                 // just a very large value
     for (size_t i = 0; i < numOfNotes; ++i) {
         Note* note = item->notes().at(i);
+        note->updateFrettingForTiesAndBends();
         TLayout::layoutNote(note, note->mutldata());
         // set headWidth to max fret text width
         double fretWidth = note->ldata()->bbox().width();
@@ -500,7 +513,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     }
 
     // allocate enough room for glissandi
-    if (item->endsGlissando()) {
+    if (item->endsGlissandoOrGuitarBend()) {
         if (!item->rtick().isZero()) {                          // if not at beginning of measure
             lll += _spatium * 0.5 + minTieLength;
         }
@@ -636,6 +649,9 @@ void ChordLayout::layoutSpanners(Chord* item, LayoutContext& ctx)
             TLayout::layoutTie(tie, ctx);
         }
         for (Spanner* sp : n->spannerBack()) {
+            if (sp->isGuitarBend()) {
+                continue;
+            }
             TLayout::layoutSpanner(sp, ctx);
         }
     }
@@ -2923,14 +2939,13 @@ void ChordLayout::clearLineAttachPoints(Measure* measure)
  * enforce minTieLength. The true layout of ties and glissandi is done much later. */
 void ChordLayout::updateLineAttachPoints(Chord* chord, bool isFirstInMeasure, LayoutContext& ctx)
 {
-    if (chord->endsGlissando()) {
+    if (chord->endsGlissandoOrGuitarBend()) {
         for (Note* note : chord->notes()) {
             for (Spanner* sp : note->spannerBack()) {
                 if (sp->isGlissando()) {
-                    Glissando* gliss = toGlissando(sp);
-                    if (gliss->startElement() && gliss->startElement()->isNote()) {
-                        TLayout::layoutGlissando(gliss, ctx);     // line attach points are updated here
-                    }
+                    TLayout::layoutGlissando(toGlissando(sp), ctx);
+                } else if (sp->isGuitarBend()) {
+                    TLayout::layoutGuitarBend(toGuitarBend(sp), ctx);
                 }
             }
         }
@@ -3327,7 +3342,9 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
             item->chord()->measure()->system() != item->tieBack()->startNote()->chord()->measure()->system()
             || !item->el().empty()
             )) {
-        item->setFretString(String(u"(%1)").arg(item->fretString()));
+        if (!item->fretString().startsWith(u'(')) { // Hack: don't add parentheses if already added
+            item->setFretString(String(u"(%1)").arg(item->fretString()));
+        }
         double w = item->tabHeadWidth(staffType);     // !! use _fretString
         ldata->setBbox(0, staffType->fretBoxY() * item->magS(), w, staffType->fretBoxH() * item->magS());
     }

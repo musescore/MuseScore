@@ -167,9 +167,9 @@ public:
     void setTremolo(Tremolo* t, bool applyLogic = true);
 
     ChordLine* chordLine() const;
-    bool endsGlissando() const { return m_endsGlissando; }
-    void setEndsGlissando(bool val) { m_endsGlissando = val; }
-    void updateEndsGlissando();
+    bool endsGlissandoOrGuitarBend() const { return m_endsGlissando; }
+    void setEndsGlissandoOrGuitarBend(bool val) { m_endsGlissando = val; }
+    void updateEndsGlissandoOrGuitarBend();
     StemSlash* stemSlash() const { return m_stemSlash; }
     bool slash();
     void setSlash(bool flag, bool stemless);
@@ -209,6 +209,9 @@ public:
     void setNoteType(NoteType t) { m_noteType = t; }
     bool isGrace() const { return m_noteType != NoteType::NORMAL; }
     void toGraceAfter();
+
+    bool isPreBendOrGraceBendStart() const;
+    bool preOrGraceBendSpacingExceptionInTab() const;
 
     void setTrack(track_idx_t val) override;
 

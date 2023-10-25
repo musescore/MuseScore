@@ -102,6 +102,7 @@
 #include "../../dom/clef.h"
 #include "../../dom/glissando.h"
 #include "../../dom/gradualtempochange.h"
+#include "../../dom/guitarbend.h"
 #include "../../dom/line.h"
 #include "../../dom/textlinebase.h"
 #include "../../dom/groups.h"
@@ -150,7 +151,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Chord, ChordLine, Clef, Capo,
                                  Dynamic, Expression,
                                  Fermata, FiguredBass, Fingering, FretDiagram,
-                                 Glissando, GradualTempoChange,
+                                 Glissando, GradualTempoChange, GuitarBend,
                                  Hairpin, Harmony, HarmonicMark, HarpPedalDiagram, Hook,
                                  Image, InstrumentChange,
                                  Jump,
@@ -2740,6 +2741,54 @@ void TRead::read(Groups* g, XmlReader& e, ReadContext&)
     }
 }
 
+void TRead::read(GuitarBend* g, XmlReader& e, ReadContext& ctx)
+{
+    g->eraseSpannerSegments();
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag = e.name();
+        if (tag == "guitarBendType") {
+            g->setType(static_cast<GuitarBendType>(e.readInt()));
+        } else if (tag == "GuitarBendHold") {
+            GuitarBendHold* hold = new GuitarBendHold(g);
+            TRead::read(hold, e, ctx);
+            hold->setParent(g);
+            g->setHoldLine(hold);
+        } else if (TRead::readProperty(g, tag, e, ctx, Pid::BEND_SHOW_HOLD_LINE)) {
+        } else if (TRead::readStyledProperty(g, tag, e, ctx)) {
+        } else if (!TRead::readProperties(static_cast<SLine*>(g), e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(GuitarBendHold* h, XmlReader& xml, ReadContext& ctx)
+{
+    h->eraseSpannerSegments();
+
+    while (xml.readNextStartElement()) {
+        if (!TRead::readProperties(static_cast<SLine*>(h), xml, ctx)) {
+            xml.unknown();
+        }
+    }
+}
+
+bool TRead::readProperties(GuitarBendSegment* g, const AsciiStringView& tag, XmlReader& xml, ReadContext& ctx)
+{
+    if (tag == "bendVertexOffset") {
+        g->setVertexPointOff(xml.readPoint() * g->style().spatium());
+    } else if (tag == "GuitarBendText") {
+        GuitarBendText* bendText = new GuitarBendText(g);
+        bendText->setParent(g);
+        read(toTextBase(bendText), xml, ctx);
+        g->setBendText(bendText);
+    } else {
+        return false;
+    }
+
+    return true;
+}
+
 void TRead::read(Hairpin* h, XmlReader& e, ReadContext& ctx)
 {
     h->eraseSpannerSegments();
@@ -2998,13 +3047,8 @@ bool TRead::readProperties(LineSegment* l, XmlReader& e, ReadContext& ctx)
         l->setSpannerSegmentType(SpannerSegmentType(e.readInt()));
     } else if (tag == "off2") {
         l->setUserOff2(e.readPoint() * l->style().spatium());
-    }
-/*      else if (tag == "pos") {
-            setOffset(PointF());
-            e.readNext();
-            }
-      */
-    else if (!readItemProperties(l, e, ctx)) {
+    } else if (l->isGuitarBendSegment() && readProperties(static_cast<GuitarBendSegment*>(l), tag, e, ctx)) {
+    } else if (!readItemProperties(l, e, ctx)) {
         e.unknown();
         return false;
     }

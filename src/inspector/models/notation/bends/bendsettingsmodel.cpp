@@ -20,6 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 #include "bendsettingsmodel.h"
+#include "dom/guitarbend.h"
 
 #include "translation.h"
 #include "dataformatter.h"
@@ -53,11 +54,14 @@ void BendSettingsModel::createProperties()
     });
 
     m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
+
+    m_bendDirection = buildPropertyItem(mu::engraving::Pid::DIRECTION);
+    m_showHoldLine = buildPropertyItem(mu::engraving::Pid::BEND_SHOW_HOLD_LINE);
 }
 
 void BendSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::BEND);
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::GUITAR_BEND_SEGMENT);
 
     emit areSettingsAvailableChanged(areSettingsAvailable());
 }
@@ -67,6 +71,10 @@ void BendSettingsModel::loadProperties()
     loadPropertyItem(m_bendType);
     loadPropertyItem(m_bendCurve);
     loadPropertyItem(m_lineThickness, formatDoubleFunc);
+    loadPropertyItem(m_bendDirection);
+    loadPropertyItem(m_showHoldLine);
+
+    updateIsShowHoldLineAvailable();
 }
 
 void BendSettingsModel::resetProperties()
@@ -74,6 +82,8 @@ void BendSettingsModel::resetProperties()
     m_bendType->resetToDefault();
     m_bendCurve->resetToDefault();
     m_lineThickness->resetToDefault();
+    m_bendDirection->resetToDefault();
+    m_showHoldLine->resetToDefault();
 }
 
 PropertyItem* BendSettingsModel::bendType() const
@@ -91,7 +101,39 @@ bool BendSettingsModel::areSettingsAvailable() const
     return m_elementList.count() == 1; // Bend inspector doesn't support multiple selection
 }
 
+void BendSettingsModel::updateIsShowHoldLineAvailable()
+{
+    bool available = true;
+    for (EngravingItem* item : m_elementList) {
+        GuitarBendSegment* seg = toGuitarBendSegment(item);
+        if (seg->staffType() && !seg->staffType()->isTabStaff()) {
+            available = false;
+            break;
+        }
+    }
+
+    if (m_isShowHoldLineAvailable != available) {
+        m_isShowHoldLineAvailable = available;
+        emit isShowHoldLineAvailableChanged(m_isShowHoldLineAvailable);
+    }
+}
+
 PropertyItem* BendSettingsModel::bendCurve() const
 {
     return m_bendCurve;
+}
+
+PropertyItem* BendSettingsModel::bendDirection() const
+{
+    return m_bendDirection;
+}
+
+PropertyItem* BendSettingsModel::showHoldLine() const
+{
+    return m_showHoldLine;
+}
+
+bool BendSettingsModel::isShowHoldLineAvailable() const
+{
+    return m_isShowHoldLineAvailable;
 }

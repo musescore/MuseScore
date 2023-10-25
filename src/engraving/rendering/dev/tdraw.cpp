@@ -60,6 +60,7 @@
 
 #include "dom/glissando.h"
 #include "dom/gradualtempochange.h"
+#include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
 #include "dom/harppedaldiagram.h"
@@ -217,6 +218,12 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter);
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter);
+        break;
+    case ElementType::GUITAR_BEND_SEGMENT: draw(item_cast<const GuitarBendSegment*>(item), painter);
+        break;
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT: draw(item_cast<const GuitarBendHoldSegment*>(item), painter);
+        break;
+    case ElementType::GUITAR_BEND_TEXT: drawTextBase(toTextBase(item), painter);
         break;
 
     case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
@@ -1472,6 +1479,46 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
         }
     }
     painter->restore();
+}
+
+void TDraw::draw(const GuitarBendSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    Pen pen(item->curColor(item->visible()));
+    pen.setWidthF(item->lineWidth());
+    pen.setCapStyle(PenCapStyle::FlatCap);
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    painter->setPen(pen);
+
+    Brush brush;
+    brush.setStyle(BrushStyle::NoBrush);
+    painter->setBrush(brush);
+
+    painter->drawPath(item->ldata()->path());
+
+    if (item->staff()->isTabStaff(item->tick())) {
+        brush.setStyle(BrushStyle::SolidPattern);
+        brush.setColor(item->curColor());
+        painter->setBrush(brush);
+        painter->setNoPen();
+        painter->drawPolygon(item->ldata()->arrow());
+    }
+}
+
+void TDraw::draw(const GuitarBendHoldSegment* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    Pen pen(item->curColor(item->visible()));
+    pen.setWidthF(item->lineWidth());
+    double dash = item->dashLength();
+    pen.setDashPattern({ dash, dash });
+    pen.setCapStyle(PenCapStyle::FlatCap);
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    painter->setPen(pen);
+
+    painter->drawLine(PointF(), item->pos2());
 }
 
 void TDraw::draw(const StretchedBend* item, Painter* painter)

@@ -1863,7 +1863,7 @@ EngravingItem* Segment::nextElement(staff_idx_t activeStaff)
     }
     default: {
         EngravingItem* p;
-        if (e->isTieSegment() || e->isGlissandoSegment()) {
+        if (e->isTieSegment() || e->isGlissandoSegment() || e->isGuitarBendSegment()) {
             SpannerSegment* s = toSpannerSegment(e);
             Spanner* sp = s->spanner();
             p = sp->startElement();

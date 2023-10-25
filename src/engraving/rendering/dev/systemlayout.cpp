@@ -33,6 +33,7 @@
 #include "dom/chord.h"
 #include "dom/dynamic.h"
 #include "dom/factory.h"
+#include "dom/guitarbend.h"
 #include "dom/instrumentname.h"
 #include "dom/layoutbreak.h"
 #include "dom/measure.h"
@@ -514,7 +515,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     if (oldSystem && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
         // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
         // We need to restore them to the correct state.
-        SystemLayout::restoreTies(oldSystem);
+        SystemLayout::restoreTiesAndBends(oldSystem, ctx);
     }
 
     return system;
@@ -934,6 +935,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
 
     // ties
     doLayoutTies(system, sl, stick, etick);
+    // guitar bends
+    layoutGuitarBends(sl, ctx);
 
     // slurs
     std::vector<Spanner*> spanner;
@@ -1299,6 +1302,45 @@ void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const 
     }
 }
 
+void SystemLayout::layoutGuitarBends(const std::vector<Segment*>& sl, LayoutContext& ctx)
+{
+    auto doLayoutGuitarBends = [&] (Chord* chord) {
+        for (Note* note : chord->notes()) {
+            GuitarBend* bendBack = note->bendBack();
+            if (bendBack) {
+                TLayout::layoutGuitarBend(bendBack, ctx);
+            }
+
+            Note* startOfTie = note;
+            while (startOfTie->tieBack() && startOfTie->tieBack()->startNote()) {
+                startOfTie = startOfTie->tieBack()->startNote();
+            }
+            if (startOfTie != note) {
+                GuitarBend* bendBack = startOfTie->bendBack();
+                if (bendBack) {
+                    TLayout::layoutGuitarBend(bendBack, ctx);
+                }
+            }
+        }
+    };
+
+    for (Segment* seg : sl) {
+        for (EngravingItem* el : seg->elist()) {
+            if (!el || !el->isChord()) {
+                continue;
+            }
+            Chord* chord = toChord(el);
+            for (Chord* grace : chord->graceNotesBefore()) {
+                doLayoutGuitarBends(grace);
+            }
+            doLayoutGuitarBends(chord);
+            for (Chord* grace : chord->graceNotesAfter()) {
+                doLayoutGuitarBends(grace);
+            }
+        }
+    }
+}
+
 void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<Spanner*> lines, bool align)
 {
     std::vector<SpannerSegment*> segments;
@@ -1544,7 +1586,7 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
     }
 }
 
-void SystemLayout::restoreTies(System* system)
+void SystemLayout::restoreTiesAndBends(System* system, LayoutContext& ctx)
 {
     std::vector<Segment*> segList;
     for (MeasureBase* mb : system->measures()) {
@@ -1560,6 +1602,7 @@ void SystemLayout::restoreTies(System* system)
     Fraction stick = system->measures().front()->tick();
     Fraction etick = system->measures().back()->endTick();
     doLayoutTies(system, segList, stick, etick);
+    layoutGuitarBends(segList, ctx);
 }
 
 void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, double& curSysWidth, double targetSysWidth,

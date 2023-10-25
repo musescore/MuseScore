@@ -36,6 +36,12 @@ class Factory;
 //   @@ Bend
 //---------------------------------------------------------
 
+/**********************************************************
+ *    OBSOLETE CLASS
+ *    Used to represent bends before version 4.2. Now
+ *    replaced by the GuitarBend class.
+ *********************************************************/
+
 enum class BendType {
     BEND = 0,
     BEND_RELEASE,

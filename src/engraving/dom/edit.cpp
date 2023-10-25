@@ -2798,6 +2798,7 @@ void Score::deleteItem(EngravingItem* el)
     case ElementType::RASGUEADO_SEGMENT:
     case ElementType::HARMONIC_MARK_SEGMENT:
     case ElementType::PICK_SCRAPE_SEGMENT:
+    case ElementType::GUITAR_BEND_SEGMENT:
     {
         el = toSpannerSegment(el)->spanner();
         undoRemoveElement(el);
@@ -5866,6 +5867,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         || et == ElementType::NOTE
         || et == ElementType::TEXT
         || et == ElementType::GLISSANDO
+        || et == ElementType::GUITAR_BEND
         || et == ElementType::BEND
         || (et == ElementType::CHORD && toChord(element)->isGrace())
         ) {
@@ -5879,7 +5881,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 links = 0;
             }
         }
-        if (links == 0) {
+        if (links == 0 || !addToLinkedStaves) {
             undo(new AddElement(element));
             return;
         }
@@ -5889,8 +5891,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             if (e == parent) {
                 ne = element;
             } else {
-                if (element->isGlissando()) {            // and other spanners with Anchor::NOTE
-                    Note* newEnd = Spanner::endElementFromSpanner(toGlissando(element), e);
+                if (element->isGlissando() || element->isGuitarBend()) {            // and other spanners with Anchor::NOTE
+                    Note* newEnd = Spanner::endElementFromSpanner(toSpanner(element), e);
                     if (newEnd) {
                         ne = element->linkedClone();
                         toSpanner(ne)->setNoteSpan(toNote(e), newEnd);
@@ -6267,7 +6269,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     }
                 }
                 undo(new AddElement(nsp));
-            } else if (et == ElementType::GLISSANDO) {
+            } else if (et == ElementType::GLISSANDO || et == ElementType::GUITAR_BEND) {
                 undo(new AddElement(toSpanner(ne)));
             } else if (element->isTremolo() && toTremolo(element)->twoNotes()) {
                 Tremolo* tremolo = toTremolo(element);

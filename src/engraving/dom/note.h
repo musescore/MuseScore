@@ -287,6 +287,8 @@ public:
     bool play() const { return m_play; }
     void setPlay(bool val) { m_play = val; }
 
+    GuitarBend* bendFor() const;
+    GuitarBend* bendBack() const;
     Tie* tieFor() const { return m_tieFor; }
     Tie* tieBack() const { return m_tieBack; }
     void setTieFor(Tie* t) { m_tieFor = t; }
@@ -381,7 +383,7 @@ public:
     void setScore(Score* s) override;
     void setDotRelativeLine(int);
 
-    void setHeadHasParentheses(bool hasParentheses);
+    void setHeadHasParentheses(bool hasParentheses, bool addToLinked = true);
     bool headHasParentheses() const { return m_hasHeadParentheses; }
 
     static SymId noteHead(int direction, NoteHeadGroup, NoteHeadType, int tpc, Key key, NoteHeadScheme scheme);
@@ -425,6 +427,9 @@ public:
 
     bool isGrace() const { return noteType() != NoteType::NORMAL; }
 
+    bool isPreBendStart() const;
+    bool isGraceBendStart() const;
+
     void addLineAttachPoint(mu::PointF point, EngravingItem* line);
     std::vector<LineAttachPoint>& lineAttachPoints() { return m_lineAttachPoints; }
     const std::vector<LineAttachPoint>& lineAttachPoints() const { return m_lineAttachPoints; }
@@ -436,6 +441,8 @@ public:
 
     SymId noteHead() const;
     bool isNoteName() const;
+
+    void updateFrettingForTiesAndBends();
 
     struct LayoutData : public EngravingItem::LayoutData {
         SymId cachedNoteheadSym() const { return m_cachedNoteheadSym.value(); }

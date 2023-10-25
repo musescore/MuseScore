@@ -57,6 +57,11 @@ enum class ActionIconType {
 
     PARENTHESES,
     BRACKETS,
+
+    STANDARD_BEND,
+    PRE_BEND,
+    GRACE_NOTE_BEND,
+    SLIGHT_BEND,
 };
 
 //! Dummy element, used for drag&drop

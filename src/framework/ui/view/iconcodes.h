@@ -397,6 +397,13 @@ public:
         CLOUD_FILL = 0xF454,
         BRAILLE = 0xF455,
 
+        GUITAR_BEND_REGULAR = 0xF45F,
+        GUITAR_PRE_BEND = 0xF460,
+        GUITAR_GRACE_NOTE_BEND = 0xF461,
+        GUITAR_SLIGHT_BEND = 0xF462,
+        GUITAR_BEND_STYLE_1 = 0xF463,
+        GUITAR_BEND_STYLE_FULL = 0xF464,
+
         NONE = 0xFFFF
     };
 

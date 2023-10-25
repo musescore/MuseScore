@@ -50,6 +50,7 @@
 #include "engraving/dom/fingering.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/glissando.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/harppedaldiagram.h"
@@ -769,10 +770,7 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     }
 
     if (!defaultPalette) {
-        auto bend = Factory::makeBend(gpaletteScore->dummy()->note());
-        bend->points().push_back(PitchValue(0,    0, false));
-        bend->points().push_back(PitchValue(15, 100, false));
-        bend->points().push_back(PitchValue(60, 100, false));
+        auto bend = Factory::makeGuitarBend(gpaletteScore->dummy()->note());
         sp->appendElement(bend, QT_TRANSLATE_NOOP("palette", "Bend"));
 
         auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
@@ -1840,12 +1838,6 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     letRing->setLen(w);
     sp->appendElement(letRing, QT_TRANSLATE_NOOP("palette", "Let ring"), 0.8);
 
-    auto bend = Factory::makeBend(gpaletteScore->dummy()->note());
-    bend->points().push_back(PitchValue(0,    0, false));
-    bend->points().push_back(PitchValue(15, 100, false));
-    bend->points().push_back(PitchValue(60, 100, false));
-    sp->appendElement(bend, QT_TRANSLATE_NOOP("palette", "Bend"), 0.9);
-
     auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
     tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
     tb->points().push_back(PitchValue(30, -100, false));
@@ -1871,6 +1863,11 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
     stringTunings->initTextStyleType(TextStyleType::STAFF);
     sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(true);
+
+    sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend");
+    sp->appendActionIcon(ActionIconType::PRE_BEND, "pre-bend");
+    sp->appendActionIcon(ActionIconType::GRACE_NOTE_BEND, "grace-note-bend");
+    sp->appendActionIcon(ActionIconType::SLIGHT_BEND, "slight-bend");
 
     const char* finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {

@@ -358,6 +358,8 @@ private:
     void applyDropPaletteElement(mu::engraving::Score* score, mu::engraving::EngravingItem* target, mu::engraving::EngravingItem* e,
                                  Qt::KeyboardModifiers modifiers, PointF pt = PointF(), bool pasteMode = false);
 
+    void applyLineNoteToNote(engraving::Score* score, Note* note1, Note* note2, EngravingItem* line);
+
     void doAddSlur(const mu::engraving::Slur* slurTemplate = nullptr);
     void doAddSlur(ChordRest* firstChordRest, ChordRest* secondChordRest, const mu::engraving::Slur* slurTemplate);
 

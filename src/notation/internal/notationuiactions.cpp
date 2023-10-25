@@ -2306,6 +2306,34 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("notation-popup-menu",
              mu::context::UiCtxNotationFocused,
              mu::context::CTX_NOTATION_FOCUSED
+             ),
+    UiAction("standard-bend",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Standard bend"),
+             TranslatableString("action", "Standard bend"),
+             IconCode::Code::GUITAR_BEND_REGULAR
+             ),
+    UiAction("pre-bend",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Pre-bend"),
+             TranslatableString("action", "Pre-bend"),
+             IconCode::Code::GUITAR_PRE_BEND
+             ),
+    UiAction("grace-note-bend",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Grace note bend"),
+             TranslatableString("action", "Grace note bend"),
+             IconCode::Code::GUITAR_GRACE_NOTE_BEND
+             ),
+    UiAction("slight-bend",
+             mu::context::UiCtxNotationOpened,
+             mu::context::CTX_ANY,
+             TranslatableString("action", "Slight bend"),
+             TranslatableString("action", "Slight bend"),
+             IconCode::Code::GUITAR_SLIGHT_BEND
              )
 };
 

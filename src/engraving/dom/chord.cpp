@@ -35,6 +35,7 @@
 #include "chordline.h"
 #include "drumset.h"
 #include "factory.h"
+#include "guitarbend.h"
 #include "hook.h"
 #include "key.h"
 #include "ledgerline.h"
@@ -2302,7 +2303,7 @@ void Chord::setSlash(bool flag, bool stemless)
 //    end into this chord or no.
 //---------------------------------------------------------
 
-void Chord::updateEndsGlissando()
+void Chord::updateEndsGlissandoOrGuitarBend()
 {
     m_endsGlissando = false;         // assume no glissando ends here
     // scan all chord notes for glissandi ending on this chord
@@ -2357,7 +2358,11 @@ double Chord::intrinsicMag() const
         m *= style().styleD(Sid::smallNoteMag);
     }
     if (m_noteType != NoteType::NORMAL) {
-        m *= style().styleD(Sid::graceNoteMag);
+        bool tabGraceSizeException = staffType()->isTabStaff() && isPreBendOrGraceBendStart()
+                                     && !style().styleB(Sid::useCueSizeFretForGraceBends);
+        if (!tabGraceSizeException) {
+            m *= style().styleD(Sid::graceNoteMag);
+        }
     }
     return m;
 }
@@ -2551,6 +2556,73 @@ void Chord::toGraceAfter()
     }
 }
 
+bool Chord::isPreBendOrGraceBendStart() const
+{
+    if (!isGrace()) {
+        return false;
+    }
+
+    for (const Note* note : m_notes) {
+        GuitarBend* gb = note->bendFor();
+        if (gb && (gb->type() == GuitarBendType::PRE_BEND || gb->type() == GuitarBendType::GRACE_NOTE_BEND)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Chord::preOrGraceBendSpacingExceptionInTab() const
+{
+    if (!staffType()->isTabStaff() || !isGrace()) {
+        return false;
+    }
+
+    std::vector<GuitarBend*> bends;
+    for (Note* note : m_notes) {
+        GuitarBend* bendFor = note->bendFor();
+        if (bendFor) {
+            GuitarBendType bendType = bendFor->type();
+            if (bendType == GuitarBendType::PRE_BEND || bendType == GuitarBendType::GRACE_NOTE_BEND) {
+                bends.push_back(bendFor);
+                break;
+            }
+        }
+    }
+
+    if (bends.empty() || bends.size() < m_notes.size()) {
+        return false;
+    }
+
+    Chord* endChord = bends.front()->endNote()->chord();
+    if (!endChord) {
+        return false;
+    }
+
+    GuitarBendType type = bends.front()->type();
+    for (GuitarBend* gb : bends) {
+        if (gb->type() != type || (gb->endNote() && gb->endNote()->chord() != endChord)) {
+            return false;
+        }
+    }
+
+    if (type == GuitarBendType::PRE_BEND) {
+        return true;
+    }
+
+    for (Note* note : endChord->notes()) {
+        GuitarBend* bendBack = note->bendBack();
+        if (bendBack) {
+            Note* startNote = bendBack->startNote();
+            if (!startNote || startNote->chord() != this) {
+                return false;
+            }
+        }
+    }
+
+    return bends.size() < endChord->notes().size();
+}
+
 //---------------------------------------------------------
 //   tremoloChordType
 //---------------------------------------------------------
@@ -2603,6 +2675,7 @@ EngravingItem* Chord::nextElement()
         break;
     }
 
+    case ElementType::GUITAR_BEND_SEGMENT:
     case ElementType::GLISSANDO_SEGMENT:
     case ElementType::TIE_SEGMENT: {
         SpannerSegment* s = toSpannerSegment(e);

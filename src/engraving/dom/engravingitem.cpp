@@ -1300,7 +1300,11 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
     const Score* destinationScore = destinationItem->score();
     const bool isTextProperty = propertyGroup(propertyId) == PropertyGroup::TEXT;
 
-    if ((isTextProperty && isPropertyLinkedToMaster(propertyId)) || sourceScore == destinationScore) {
+    if (propertyGroup(propertyId) != PropertyGroup::TEXT && sourceScore == destinationScore) {
+        return PropertyPropagation::NONE;
+    }
+
+    if ((isTextProperty && isPropertyLinkedToMaster(propertyId))) {
         return PropertyPropagation::PROPAGATE;
     }
 

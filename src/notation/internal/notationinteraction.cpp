@@ -1577,6 +1577,11 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             return staff ? staff->staffType(is.tick())->group() == mu::engraving::StaffGroup::PERCUSSION : false;
         };
 
+        bool elementIsStandardBend = element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::STANDARD_BEND;
+        bool isLineNoteToNote = (element->isGlissando() || elementIsStandardBend)
+                                && sel.isList() && sel.elements().size() == 2
+                                && sel.elements()[0]->isNote() && sel.elements()[1]->isNote();
+
         if (isEntryDrumStaff() && element->isChord()) {
             mu::engraving::InputState& is = score->inputState();
             EngravingItem* e = nullptr;
@@ -1626,7 +1631,7 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             score->cmdToggleLayoutBreak(breakElement->layoutBreakType());
         } else if (element->isSlur() && addSingle) {
             doAddSlur(toSlur(element));
-        } else if (element->isSLine() && !element->isGlissando() && addSingle) {
+        } else if (element->isSLine() && !element->isGlissando() && !element->isGuitarBend() && addSingle) {
             mu::engraving::Segment* startSegment = cr1->segment();
             mu::engraving::Segment* endSegment = cr2->segment();
             if (element->type() == mu::engraving::ElementType::PEDAL && cr2 != cr1) {
@@ -1659,6 +1664,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
             } else {
                 applyDropPaletteElement(score, e, element, modifiers);
             }
+        } else if (isLineNoteToNote) {
+            applyLineNoteToNote(score, toNote(sel.elements()[0]), toNote(sel.elements()[1]), element);
         } else {
             for (EngravingItem* e : sel.elements()) {
                 applyDropPaletteElement(score, e, element, modifiers);
@@ -1926,6 +1933,42 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
         dropData->dropElement = nullptr;
 
         m_notifyAboutDropChanged = true;
+    }
+}
+
+void NotationInteraction::applyLineNoteToNote(Score* score, Note* note1, Note* note2, EngravingItem* line)
+{
+    mu::engraving::EditData newData(&m_scoreCallbacks);
+    mu::engraving::EditData* dropData = &newData;
+
+    Chord* chord1 = note1->chord();
+    Chord* chord2 = note2->chord();
+    bool swapNotes = chord2->tick() < chord1->tick() || chord2->graceIndex() > chord1->graceIndex()
+                     || (chord2->isGraceBefore() && chord2->parent() == chord1)
+                     || (chord1->isGraceAfter() && chord1->parent() == chord2);
+
+    if (swapNotes) {
+        std::swap(note1, note2);
+    }
+
+    if (line->isActionIcon() && toActionIcon(line)->actionType() == ActionIconType::STANDARD_BEND) {
+        score->addGuitarBend(GuitarBendType::BEND, note1, note2);
+    } else if (line->isSLine()) {
+        SLine* dropLine = ((SLine*)line->clone());
+        dropData->dropElement = dropLine;
+        if (note1->acceptDrop(*dropData)) {
+            dropLine->setEndElement(note2);
+            dropLine->styleChanged();
+
+            mu::engraving::EngravingItem* el = note1->drop(*dropData);
+            if (el && !score->inputState().noteEntryMode()) {
+                doSelect({ el }, mu::engraving::SelectType::SINGLE, 0);
+            }
+
+            dropData->dropElement = nullptr;
+
+            m_notifyAboutDropChanged = true;
+        }
     }
 }
 

@@ -39,5 +39,6 @@
         <file>qml/MuseScore/NotationScene/internal/HarpPedalPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/CapoPopup.qml</file>
         <file>qml/MuseScore/NotationScene/internal/StringTuningsPopup.qml</file>
+        <file>qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml</file>
     </qresource>
 </RCC>

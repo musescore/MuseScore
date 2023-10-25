@@ -84,6 +84,11 @@ class GlissandoSegment;
 class GraceNotesGroup;
 class GradualTempoChange;
 class GradualTempoChangeSegment;
+class GuitarBend;
+class GuitarBendSegment;
+class GuitarBendHold;
+class GuitarBendHoldSegment;
+class GuitarBendText;
 class HBox;
 class Hairpin;
 class HairpinSegment;
@@ -338,6 +343,11 @@ public:
     CONVERT(Slur,          SLUR)
     CONVERT(Glissando,     GLISSANDO)
     CONVERT(GlissandoSegment,     GLISSANDO_SEGMENT)
+    CONVERT(GuitarBend,    GUITAR_BEND)
+    CONVERT(GuitarBendSegment, GUITAR_BEND_SEGMENT)
+    CONVERT(GuitarBendHold, GUITAR_BEND_HOLD)
+    CONVERT(GuitarBendHoldSegment, GUITAR_BEND_HOLD_SEGMENT)
+    CONVERT(GuitarBendText, GUITAR_BEND_TEXT)
     CONVERT(SystemDivider, SYSTEM_DIVIDER)
     CONVERT(RehearsalMark, REHEARSAL_MARK)
     CONVERT(TripletFeel, TRIPLET_FEEL)
@@ -468,6 +478,8 @@ public:
                || isTextLineBaseSegment()
                || isTrillSegment()
                || isVibratoSegment()
+               || isGuitarBendSegment()
+               || isGuitarBendHoldSegment()
         ;
     }
 
@@ -496,7 +508,7 @@ public:
 
     bool isSLine() const
     {
-        return isTextLineBase() || isTrill() || isGlissando() || isVibrato();
+        return isTextLineBase() || isTrill() || isGlissando() || isVibrato() || isGuitarBend() || isGuitarBendHold();
     }
 
     bool isSpanner() const
@@ -699,6 +711,11 @@ CONVERT(Tie)
 CONVERT(Slur)
 CONVERT(Glissando)
 CONVERT(GlissandoSegment)
+CONVERT(GuitarBend)
+CONVERT(GuitarBendSegment)
+CONVERT(GuitarBendHold)
+CONVERT(GuitarBendHoldSegment)
+CONVERT(GuitarBendText)
 CONVERT(SystemDivider)
 CONVERT(RehearsalMark)
 CONVERT(TripletFeel)
