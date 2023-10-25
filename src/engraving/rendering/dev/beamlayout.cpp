@@ -283,6 +283,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     } else if (item->elements().size()) {
         item->setStaffIdx(item->elements().at(0)->staffIdx());
     }
+    item->setFullCross(isEntirelyMoved);
 
     item->setSlope(0.0);
 
@@ -403,7 +404,7 @@ bool BeamLayout::isTopBeam(ChordRest* cr)
     Beam* b = cr->beam();
     if (b && b->elements().front() == cr) {
         // beam already considered cross?
-        if (b->cross()) {
+        if (b->cross() || b->fullCross()) {
             return false;
         }
 
@@ -411,7 +412,7 @@ bool BeamLayout::isTopBeam(ChordRest* cr)
         // consider them so here if any elements were moved up
         for (ChordRest* cr1 : b->elements()) {
             // some element moved up?
-            if (cr1->staffMove() < 0) {
+            if (cr1->staffMove() != 0) {
                 return false;
             }
         }
@@ -434,7 +435,7 @@ bool BeamLayout::notTopBeam(ChordRest* cr)
     Beam* b = cr->beam();
     if (b && b->elements().front() == cr) {
         // beam already considered cross?
-        if (b->cross()) {
+        if (b->cross() || b->fullCross()) {
             return true;
         }
 
@@ -442,7 +443,7 @@ bool BeamLayout::notTopBeam(ChordRest* cr)
         // consider them so here if any elements were moved up
         for (ChordRest* cr1 : b->elements()) {
             // some element moved up?
-            if (cr1->staffMove() < 0) {
+            if (cr1->staffMove() != 0) {
                 return true;
             }
         }
@@ -885,6 +886,10 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     const double spatium = rest->spatium();
     static constexpr Fraction rest32nd(1, 32);
     const bool up = beam->up();
+    const BeamMode restBeamMode = rest->beamMode();
+    const bool firstRest = beam->elements().front() == rest
+                           && (restBeamMode == BeamMode::BEGIN || restBeamMode == BeamMode::BEGIN16 || restBeamMode == BeamMode::BEGIN32
+                               || restBeamMode == BeamMode::MID);
 
     double restToBeamPadding;
     if (rest->ticks() <= rest32nd) {
@@ -899,6 +904,12 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     });
 
     Shape restShape = rest->shape().translated(rest->pagePos() - rest->offset());
+    if (up && firstRest) {
+        // Pad rest shape by small amount so horizontal distance between rest and beam is more than 0
+        // A horizontal distance of 0 counts as no vertical collision
+        RectF bbox = restShape.bbox();
+        restShape.addBBox(RectF(bbox.topRight(), PointF(bbox.bottomRight().x() + 1, bbox.bottomRight().y())));
+    }
 
     double restToBeamClearance = up
                                  ? beamShape.verticalClearance(restShape)

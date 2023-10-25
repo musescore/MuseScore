@@ -290,7 +290,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                     continue;
                                 }
                                 Rest* rest = toRest(item);
-                                Beam* beam = cr->beam();
+                                Beam* beam = rest->beam();
                                 if (beam && rest->staffMove()) {
                                     BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
                                 }
