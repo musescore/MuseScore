@@ -198,28 +198,31 @@ void ProjectPropertiesModel::saveProperties()
     for (const Property& property : m_properties) {
         if (property.key == WORK_TITLE_TAG) {
             meta.title = property.value;
-        } else if (property.key == ARRANGER_TAG) {
-            meta.arranger = property.value;
+        } else if (property.key == SUBTITLE_TAG) {
+            meta.subtitle = property.value;
         } else if (property.key == COMPOSER_TAG) {
             meta.composer = property.value;
-        } else if (property.key == COPYRIGHT_TAG) {
-            meta.copyright = property.value;
-        } else if (property.key == CREATION_DATE_TAG) {
-            meta.creationDate = QDate::fromString(property.value);
+        } else if (property.key == ARRANGER_TAG) {
+            meta.arranger = property.value;
         } else if (property.key == LYRICIST_TAG) {
             meta.lyricist = property.value;
         } else if (property.key == TRANSLATOR_TAG) {
             meta.translator = property.value;
-        } else if (property.key == PLATFORM_TAG) {
-            meta.platform = property.value;
+        } else if (property.key == COPYRIGHT_TAG) {
+            meta.copyright = property.value;
+        } else if (property.key == CREATION_DATE_TAG) {
+            meta.creationDate = QDate::fromString(property.value);
         } else if (property.key == SOURCE_TAG) {
             meta.source = property.value;
         } else if (property.key == AUDIO_COM_URL_TAG) {
             meta.audioComUrl = property.value;
-        } else {
-            if (!property.name.isEmpty() && !property.value.isEmpty()) {
-                meta.additionalTags[property.name] = property.value;
-            }
+        } else if (property.key == PLATFORM_TAG) {
+            meta.platform = property.value;
+        } else if (!property.key.isEmpty()) {
+            assert(!isRepresentedInProjectMeta(property.key));
+            meta.additionalTags[property.key] = property.value;
+        } else if (!property.name.isEmpty() && !property.value.isEmpty()) {
+            meta.additionalTags[property.name] = property.value;
         }
     }
 
