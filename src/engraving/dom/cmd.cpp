@@ -1609,6 +1609,11 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
                 if (n->tieFor()) {
                     undoRemoveElement(n->tieFor());
                 }
+                for (Spanner* sp : n->spannerFor()) {
+                    if (sp->isGlissando() || sp->isGuitarBend()) {
+                        undoRemoveElement(sp);
+                    }
+                }
             }
         }
         Fraction timeStretch = cr->staff()->timeStretch(cr->tick());
