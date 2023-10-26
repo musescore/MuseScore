@@ -13,7 +13,7 @@ import zipfile
 #needs to be equal or smaller than the cron
 period = 300
 outputDir = "share/locale/"
-s3Urls = ["s3://extensions.musescore.org/4.1/languages/"]
+s3Urls = ["s3://extensions.musescore.org/4.2/languages/"]
 
 def processTsFile(prefix, langCode, data):
     print("Processing " + langCode)
