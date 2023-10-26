@@ -917,8 +917,12 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         bend->setTrack2(chord->track());
 
         if (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND) {
+            const GraceNotesGroup& gracesBefore = chord->graceNotesBefore();
+
             // Create grace note
-            Note* graceNote = setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2);
+            Note* graceNote = gracesBefore.empty()
+                              ? setGraceNote(chord, note->pitch(), NoteType::APPOGGIATURA, Constants::DIVISION / 2)
+                              : addNote(gracesBefore.back(), note->noteVal());
             graceNote->transposeDiatonic(-1, true, false);
             GuitarBend::fixNotesFrettingForGraceBend(graceNote, note);
 
