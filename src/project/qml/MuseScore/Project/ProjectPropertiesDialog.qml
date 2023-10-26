@@ -37,7 +37,10 @@ StyledDialogView {
     contentHeight: 500
     margins: 16
 
-    property int propertyNameWidth: 110
+    readonly property int propertyNameWidth: 160
+    readonly property int propertyRowHorizontalSpacing: 8
+    readonly property int propertyRowRightMargin: propertiesListView.propertyRowRightMargin
+
     property NavigationPanel navigationPanel: NavigationPanel {
         name: "ProjectPropertiesPanel"
         section: root.navigationSection
@@ -66,20 +69,16 @@ StyledDialogView {
         ProjectPropertiesView {
             id: propertiesListView
 
-            model: projectPropertiesModel
+            propertiesModel: projectPropertiesModel
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+
             propertyNameWidth: root.propertyNameWidth
+            propertyRowHorizontalSpacing: root.propertyRowHorizontalSpacing
 
             navigationPanel: root.navigationPanel
             navigationColumnStart: propertiesFileInfoPanel.navigationColumnEnd + 1
-        }
-
-        Connections {
-            target: projectPropertiesModel
-
-            function onPropertyAdded(index) {
-                propertiesListView.positionViewAtIndex(index, ListView.Contain)
-                propertiesListView.currentIndex = index
-            }
         }
 
         SeparatorLine {}
@@ -87,9 +86,16 @@ StyledDialogView {
         ProjectPropertiesFileInfoPanel {
             id: propertiesFileInfoPanel
 
-            propertyNameWidth: root.propertyNameWidth
+            propertiesModel: projectPropertiesModel
+
+            Layout.fillWidth: true
             Layout.topMargin: 4
+            Layout.rightMargin: root.propertyRowRightMargin
             Layout.bottomMargin: 8
+
+            propertyNameWidth: root.propertyNameWidth
+            propertyRowHorizontalSpacing: root.propertyRowHorizontalSpacing
+            propertyRowRightMargin: root.propertyRowRightMargin
 
             navigationPanel: root.navigationPanel
         }
