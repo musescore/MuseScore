@@ -23,6 +23,9 @@
 #include "instrumentname.h"
 
 #include "measure.h"
+#include "part.h"
+#include "staff.h"
+#include "style/style.h"
 #include "system.h"
 
 #include "log.h"
@@ -78,6 +81,28 @@ void InstrumentName::setInstrumentNameType(const String& s)
     } else {
         LOGD("InstrumentName::setSubtype: unknown <%s>", muPrintable(s));
     }
+}
+
+double InstrumentName::largestStaffSpatium() const
+{
+    if (systemFlag() || (explicitParent() && parentItem()->systemFlag())) {
+        return style().spatium();
+    }
+
+    // Get spatium for instrument names from largest staff of part,
+    // instead of staff it is attached to
+    Part* p = part();
+    if (!part()) {
+        return style().spatium();
+    }
+    double largestSpatium = 0;
+    for (Staff* s: p->staves()) {
+        double sp = s->spatium(tick());
+        if (sp > largestSpatium) {
+            largestSpatium = sp;
+        }
+    }
+    return largestSpatium;
 }
 
 //---------------------------------------------------------

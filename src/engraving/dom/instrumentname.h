@@ -64,6 +64,8 @@ public:
     SysStaff* sysStaff() const { return _sysStaff; }
     void setSysStaff(SysStaff* s) { _sysStaff = s; }
 
+    double largestStaffSpatium() const;
+
     Fraction playTick() const override;
     bool isEditable() const override { return false; }
     PropertyValue getProperty(Pid propertyId) const override;
