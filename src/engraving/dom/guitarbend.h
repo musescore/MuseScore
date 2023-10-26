@@ -60,6 +60,7 @@ public:
 
     static void fixNotesFrettingForGraceBend(Note* grace, Note* main);
     static void fixNotesFrettingForStandardBend(Note* startNote, Note* endNote);
+    static Note* createEndNote(Note* startNote);
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;

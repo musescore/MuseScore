@@ -836,36 +836,6 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
     return note;
 }
 
-Note* Score::addEndNoteForBend(Note* startNote)
-{
-    track_idx_t track = startNote->track();
-    Chord* startChord = startNote->chord();
-    Segment* startSegment = startChord->segment();
-
-    Segment* endSegment = startSegment->nextCR(track);
-    if (!endSegment) {
-        return nullptr;
-    }
-
-    EngravingItem* item = endSegment->elementAt(track);
-    if (!item || !item->isRest()) {
-        return nullptr;
-    }
-
-    Rest* rest = toRest(item);
-    Fraction duration = std::min(startChord->ticks(), rest->ticks());
-    NoteVal noteVal = startNote->noteVal();
-
-    endSegment = setNoteRest(endSegment, track, noteVal, duration);
-    Chord* endChord = endSegment ? toChord(endSegment->elementAt(track)) : nullptr;
-    Note* endNote = endChord ? endChord->upNote() : nullptr;
-    if (endNote) {
-        endNote->transposeDiatonic(1, true, false);
-    }
-
-    return endNote;
-}
-
 GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
 {
     if (note->isPreBendStart()) {
@@ -889,8 +859,18 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
             endNote = Glissando::guessFinalNote(chord, note);
         }
 
-        if (!endNote) {
-            endNote = addEndNoteForBend(note);
+        bool suitableEndNote = endNote;
+        if (endNote) {
+            for (Spanner* sp : endNote->spannerBack()) {
+                if (sp->isTie() || sp->isGlissando() || sp->isGuitarBend()) {
+                    suitableEndNote = false;
+                    break;
+                }
+            }
+        }
+
+        if (!suitableEndNote) {
+            endNote = GuitarBend::createEndNote(note);
         }
 
         if (!endNote) {

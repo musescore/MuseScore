@@ -26,6 +26,7 @@
 #include "guitarbend.h"
 #include "note.h"
 #include "part.h"
+#include "rest.h"
 #include "score.h"
 #include "staff.h"
 #include "tie.h"
@@ -154,6 +155,45 @@ void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
         int endFret = stringData->fret(endNote->pitch(), startString, curStaff);
         endNote->undoChangeProperty(Pid::FRET, endFret);
     }
+}
+
+Note* GuitarBend::createEndNote(Note* startNote)
+{
+    track_idx_t track = startNote->track();
+    Chord* startChord = startNote->chord();
+    Segment* startSegment = startChord->segment();
+
+    Segment* endSegment = startSegment->nextCR(track);
+    if (!endSegment) {
+        return nullptr;
+    }
+
+    EngravingItem* item = endSegment->elementAt(track);
+    if (!item) {
+        return nullptr;
+    }
+
+    Score* score = startNote->score();
+    NoteVal noteVal = startNote->noteVal();
+    Note* endNote = nullptr;
+
+    if (item->isRest()) {
+        Rest* rest = toRest(item);
+        Fraction duration = std::min(startChord->ticks(), rest->ticks());
+
+        endSegment = score->setNoteRest(endSegment, track, noteVal, duration);
+        Chord* endChord = endSegment ? toChord(endSegment->elementAt(track)) : nullptr;
+        endNote = endChord ? endChord->upNote() : nullptr;
+    } else { // isChord
+        Chord* chord = toChord(item);
+        endNote = score->addNote(chord, noteVal);
+    }
+
+    if (endNote) {
+        endNote->transposeDiatonic(1, true, false);
+    }
+
+    return endNote;
 }
 
 void GuitarBend::fixNotesFrettingForGraceBend(Note* grace, Note* main)
