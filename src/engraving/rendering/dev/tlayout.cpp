@@ -1266,7 +1266,9 @@ void TLayout::layoutHBox(const HBox* item, HBox::LayoutData* ldata, const Layout
 
         LD_CONDITION(parentSystem->ldata()->isSetBbox());
 
-        ldata->setPos(PointF());
+        if (!ldata->isSetPos()) {
+            ldata->setPos(PointF());
+        }
         ldata->setBbox(0.0, 0.0, item->point(item->boxWidth()), parentSystem->ldata()->bbox().height());
     } else {
         ldata->setPos(PointF());
