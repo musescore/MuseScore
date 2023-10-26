@@ -82,7 +82,6 @@ MasterScore::MasterScore(std::weak_ptr<engraving::EngravingProject> project)
     metaTags().insert({ u"arranger", u"" });
     metaTags().insert({ u"composer", u"" });
     metaTags().insert({ u"lyricist", u"" });
-    metaTags().insert({ u"poet", u"" });
     metaTags().insert({ u"translator", u"" });
     metaTags().insert({ u"source", u"" });
     metaTags().insert({ u"copyright", u"" });

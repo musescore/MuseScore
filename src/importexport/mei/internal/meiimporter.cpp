@@ -2845,7 +2845,7 @@ bool MeiImporter::buildTextFrame()
         textCreators << m_score->metaTag(u"translator");
     }
     if (!textCreators.empty()) {
-        this->addTextToTitleFrame(vBox, textCreators.join(u"\n"), TextStyleType::POET);
+        this->addTextToTitleFrame(vBox, textCreators.join(u"\n"), TextStyleType::LYRICIST);
     }
 
     if (vBox) {

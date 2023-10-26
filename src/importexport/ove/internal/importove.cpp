@@ -386,7 +386,7 @@ void OveToMScore::convertHeader()
     QList<QString> annotates = m_ove->getAnnotates();
     if (!annotates.empty() && !annotates[0].isEmpty()) {
         QString annotate = annotates[0];
-        ove::addText(vbox, m_score, annotate, TextStyleType::POET);
+        ove::addText(vbox, m_score, annotate, TextStyleType::LYRICIST);
     }
 
     QList<QString> writers = m_ove->getWriters();
@@ -398,7 +398,7 @@ void OveToMScore::convertHeader()
 
     if (writers.size() > 1) {
         QString lyricist = writers[1];
-        ove::addText(vbox, m_score, lyricist, TextStyleType::POET);
+        ove::addText(vbox, m_score, lyricist, TextStyleType::LYRICIST);
     }
 
     if (vbox) {

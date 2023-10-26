@@ -1288,7 +1288,7 @@ void convertCapella(Score* score, Capella* cap, bool capxMode)
             SimpleTextObj* to = static_cast<SimpleTextObj*>(o);
             TextStyleType tid;
             switch (to->textalign()) {
-            case 0:   tid = TextStyleType::POET;
+            case 0:   tid = TextStyleType::LYRICIST;
                 break;
             case 1:   tid = TextStyleType::TITLE;
                 break;

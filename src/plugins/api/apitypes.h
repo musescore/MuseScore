@@ -547,7 +547,7 @@ enum class Tid {
     TITLE = int(mu::engraving::TextStyleType::TITLE),
     SUBTITLE = int(mu::engraving::TextStyleType::SUBTITLE),
     COMPOSER = int(mu::engraving::TextStyleType::COMPOSER),
-    POET = int(mu::engraving::TextStyleType::POET),
+    POET = int(mu::engraving::TextStyleType::LYRICIST),
     TRANSLATOR = int(mu::engraving::TextStyleType::TRANSLATOR),
     FRAME = int(mu::engraving::TextStyleType::FRAME),
     INSTRUMENT_EXCERPT = int(mu::engraving::TextStyleType::INSTRUMENT_EXCERPT),

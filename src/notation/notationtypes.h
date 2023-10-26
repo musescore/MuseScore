@@ -673,7 +673,7 @@ inline bool isVerticalBoxTextStyle(TextStyleType type)
         TextStyleType::TITLE,
         TextStyleType::SUBTITLE,
         TextStyleType::COMPOSER,
-        TextStyleType::POET,
+        TextStyleType::LYRICIST,
         TextStyleType::INSTRUMENT_EXCERPT,
     };
 

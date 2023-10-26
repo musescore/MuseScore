@@ -1457,7 +1457,7 @@ static QString tidToCreditType(const TextStyleType tid)
     case TextStyleType::COMPOSER:
         res = "composer";
         break;
-    case TextStyleType::POET:
+    case TextStyleType::LYRICIST:
         res = "lyricist";
         break;
     case TextStyleType::SUBTITLE:

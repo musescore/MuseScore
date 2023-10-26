@@ -1055,7 +1055,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::TITLE: return &titleTextStyle;
     case TextStyleType::SUBTITLE: return &subTitleTextStyle;
     case TextStyleType::COMPOSER: return &composerTextStyle;
-    case TextStyleType::POET: return &lyricistTextStyle;
+    case TextStyleType::LYRICIST: return &lyricistTextStyle;
     case TextStyleType::TRANSLATOR: return &translatorTextStyle;
     case TextStyleType::FRAME: return &frameTextStyle;
     case TextStyleType::INSTRUMENT_EXCERPT: return &partInstrumentTextStyle;
@@ -1133,7 +1133,7 @@ static const std::vector<TextStyleType> _primaryTextStyles = {
     TextStyleType::TITLE,
     TextStyleType::SUBTITLE,
     TextStyleType::COMPOSER,
-    TextStyleType::POET,
+    TextStyleType::LYRICIST,
     TextStyleType::TRANSLATOR,
     TextStyleType::FRAME,
     TextStyleType::INSTRUMENT_EXCERPT,

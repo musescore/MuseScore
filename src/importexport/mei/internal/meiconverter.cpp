@@ -2797,7 +2797,7 @@ std::tuple<libmei::Rend, TextCell, String> Convert::textToMEI(const engraving::T
     case (engraving::TextStyleType::COMPOSER):
         cell = BottomRight;
         break;
-    case (engraving::TextStyleType::POET):
+    case (engraving::TextStyleType::LYRICIST):
         cell = BottomLeft;
         break;
     case (engraving::TextStyleType::INSTRUMENT_EXCERPT):
