@@ -47,6 +47,8 @@ class InstrumentName final : public TextBase  {
 
       System* system() const { return toSystem(parent()); }
 
+      qreal spatium() const override;
+
       Fraction playTick() const override;
       bool isEditable() const override { return false; }
       QVariant getProperty(Pid propertyId) const override;

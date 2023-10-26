@@ -209,7 +209,7 @@ class Element : public ScoreElement {
 
       virtual bool isElement() const override { return true;        }
 
-      qreal spatium() const;
+      virtual qreal spatium() const;
       std::pair<int, float>barbeat() const;
       QString accessibleBarbeat() const;
 
