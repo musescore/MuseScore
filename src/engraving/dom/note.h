@@ -445,25 +445,16 @@ public:
     void updateFrettingForTiesAndBends();
 
     struct LayoutData : public EngravingItem::LayoutData {
-        SymId cachedNoteheadSym() const { return m_cachedNoteheadSym.value(); }
-        void setCachedNoteheadSym(SymId s) { m_cachedNoteheadSym.set_value(s); }
-        SymId cachedSymNull() const { return m_cachedSymNull.value(); }
-        void setCachedSymNull(SymId s) { m_cachedSymNull.set_value(s); }
-
-        bool isSetMirror() const { return m_mirror.has_value(); }
-        bool mirror() const { return m_mirror.value(); }
-        void setMirror(bool val) { m_mirror.set_value(val); }
-
-    private:
-        ld_field<SymId> m_cachedNoteheadSym = { "Note::cachedNoteheadSym", SymId::noSym };      // use in draw to avoid recomputing at every update
-        ld_field<SymId> m_cachedSymNull = { "Note::cachedSymNull", SymId::noSym };           // additional symbol for some transparent notehead
-        ld_field<bool> m_mirror = { "Note::mirror", false };                  // True if note is mirrored at stem.
+        ld_field<bool> useTablature = { "Note::useTablature", false };
+        ld_field<SymId> cachedNoteheadSym = { "Note::cachedNoteheadSym", SymId::noSym };    // use in draw to avoid recomputing at every update
+        ld_field<SymId> cachedSymNull = { "Note::cachedSymNull", SymId::noSym };            // additional symbol for some transparent notehead
+        ld_field<bool> mirror = { "Note::mirror", false };                                  // True if note is mirrored at stem.
     };
-    DECLARE_LAYOUTDATA_METHODS(Note);
+    DECLARE_LAYOUTDATA_METHODS(Note)
 
     //! --- DEPRECATED ---
-    bool mirror() const { return ldata()->mirror(); }
-    void setMirror(bool val) { mutldata()->setMirror(val); }
+    bool mirror() const { return ldata()->mirror.value(); }
+    void setMirror(bool val) { mutldata()->mirror.set_value(val); }
     //! ------------------
 
 private:

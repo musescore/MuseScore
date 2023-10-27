@@ -3723,18 +3723,18 @@ static void layoutNote(const Note* item, const LayoutContext&, Note::LayoutData*
             nh = SymId::noteheadXBlack;
         }
 
-        ldata->setCachedNoteheadSym(nh);
+        ldata->cachedNoteheadSym.set_value(nh);
 
         if (item->isNoteName()) {
-            ldata->setCachedSymNull(SymId::noteEmptyBlack);
+            ldata->cachedSymNull.set_value(SymId::noteEmptyBlack);
             NoteHeadType ht = item->headType() == NoteHeadType::HEAD_AUTO ? item->chord()->durationType().headType() : item->headType();
             if (ht == NoteHeadType::HEAD_WHOLE) {
-                ldata->setCachedSymNull(SymId::noteEmptyWhole);
+                ldata->cachedSymNull.set_value(SymId::noteEmptyWhole);
             } else if (ht == NoteHeadType::HEAD_HALF) {
-                ldata->setCachedSymNull(SymId::noteEmptyHalf);
+                ldata->cachedSymNull.set_value(SymId::noteEmptyHalf);
             }
         } else {
-            ldata->setCachedSymNull(SymId::noSym);
+            ldata->cachedSymNull.set_value(SymId::noSym);
         }
         ldata->setBbox(item->symBbox(nh));
     }

@@ -548,10 +548,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
     }
 
     // account for centering or other adjustments (other than mirroring)
-    if (note1 && !note1->ldata()->mirror()) {
+    if (note1 && !note1->ldata()->mirror.value()) {
         sp->p1.rx() += note1->x();
     }
-    if (note2 && !note2->ldata()->mirror()) {
+    if (note2 && !note2->ldata()->mirror.value()) {
         sp->p2.rx() += note2->x();
     }
 
@@ -1213,7 +1213,7 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
 double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
 {
-    SymId symId = note->ldata()->cachedNoteheadSym();
+    SymId symId = note->ldata()->cachedNoteheadSym.value();
     PointF cutOutLeft = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNW : SmuflAnchorId::cutOutSW);
     PointF cutOutRight = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE);
 
