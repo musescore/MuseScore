@@ -89,6 +89,7 @@ SOFTWARE.
 #define NOT_SUPPORTED_USE(use) LOGW() << "Not supported!! Use:" << use
 
 #if __has_cpp_attribute(fallthrough)
+#undef FALLTHROUGH
 #define FALLTHROUGH [[fallthrough]]
 #else
 #define FALLTHROUGH (void)0
