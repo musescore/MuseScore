@@ -2389,7 +2389,7 @@ void EngravingItem::LayoutData::setBbox(const mu::RectF& r)
     DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
 
     //DO_ASSERT(!isShapeComposite());
-    m_shape.set_value(Shape(r, nullptr, Shape::Type::Fixed));
+    m_shape.set_value(Shape(r, m_item, Shape::Type::Fixed));
 }
 
 const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
@@ -2401,7 +2401,9 @@ const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
         static const RectF _dummy;
 
         switch (m_item->type()) {
-        case ElementType::NOTE: return !sh.elements().empty() ? sh.elements().at(0) : _dummy;
+        case ElementType::NOTE:
+        case ElementType::ORNAMENT:
+            return !sh.elements().empty() ? sh.elements().at(0) : _dummy;
         default:
             break;
         }
@@ -2420,6 +2422,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         switch (m_item->type()) {
         case ElementType::BEAM:
         case ElementType::GRACE_NOTES_GROUP:
+        case ElementType::ORNAMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:
