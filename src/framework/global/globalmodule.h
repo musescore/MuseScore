@@ -25,7 +25,7 @@
 #include <memory>
 #include <optional>
 
-#include "thirdparty/haw_logger/logger/logger.h"
+#include "logger.h"
 
 #include "modularity/imodulesetup.h"
 #include "modularity/ioc.h"
@@ -47,12 +47,12 @@ public:
 
     static void invokeQueuedCalls();
 
-    void setLoggerLevel(const haw::logger::Level& level);
+    void setLoggerLevel(const mu::logger::Level& level);
 
 private:
     std::shared_ptr<GlobalConfiguration> m_configuration;
 
-    std::optional<haw::logger::Level> m_loggerLevel;
+    std::optional<mu::logger::Level> m_loggerLevel;
 
     static std::shared_ptr<Invoker> s_asyncInvoker;
 };

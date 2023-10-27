@@ -19,37 +19,17 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#include "drawlogger.h"
+#ifndef MU_LOGGER_H
+#define MU_LOGGER_H
 
-#include "log.h"
+#include "thirdparty/kors_logger/src/logger.h"
+#include "thirdparty/kors_logger/src/log_base.h"
 
-using namespace mu::draw;
-
-static const std::string DRAW_OBJ_TAG("DRAW_OBJ");
-
-void DrawObjectsLogger::beginObject(const std::string& name)
-{
-    m_objects.push(name);
-    std::string gap;
-    gap.resize(m_objects.size());
-#ifdef LOG_STREAM
-    LOG_STREAM(mu::logger::Logger::DEBG, DRAW_OBJ_TAG, mu::logger::Color::None)() << "Begin: " << gap << name;
-#else
-    UNUSED(pagePos);
-#endif
+namespace mu::logger {
+using Logger = kors::logger::Logger;
+using Type = kors::logger::Type;
+using Level = kors::logger::Level;
+using Color = kors::logger::Color;
 }
 
-void DrawObjectsLogger::endObject()
-{
-    IF_ASSERT_FAILED(!m_objects.empty()) {
-        return;
-    }
-
-    std::string gap;
-    gap.resize(m_objects.size());
-#ifdef LOG_STREAM
-    LOG_STREAM(mu::logger::Logger::DEBG, DRAW_OBJ_TAG, mu::logger::Color::None)() << "End:   " << gap << m_objects.top();
-#endif
-
-    m_objects.pop();
-}
+#endif // MU_LOGGER_H

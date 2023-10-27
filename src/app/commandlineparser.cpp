@@ -197,7 +197,7 @@ void CommandLineParser::parse(int argc, char** argv)
     }
 
     if (m_parser.isSet("d")) {
-        m_options.app.loggerLevel = haw::logger::Debug;
+        m_options.app.loggerLevel = mu::logger::Level::Debug;
     }
 
     if (m_parser.isSet("D")) {

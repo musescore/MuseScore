@@ -26,7 +26,7 @@
 
 #include "log.h"
 #include "logremover.h"
-#include "thirdparty/haw_logger/logger/logdefdest.h"
+#include "thirdparty/kors_logger/src/logdefdest.h"
 #include "muversion.h"
 
 #include "internal/application.h"
@@ -78,13 +78,13 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     settings()->load();
 
     //! --- Setup logger ---
-    using namespace haw::logger;
+    using namespace kors::logger;
     Logger* logger = Logger::instance();
     logger->clearDests();
 
     //! Console
     if (mode == IApplication::RunMode::GuiApp || mu::runtime::isDebug()) {
-        logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
+        logger->addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread|15} | ${tag|15} | ${message}")));
     }
 
     io::path_t logPath = m_configuration->userAppDataPath() + "/logs";
@@ -113,7 +113,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     LogRemover::removeLogs(logPath, 7, logFileNamePattern);
 
     FileLogDest* logFile = new FileLogDest(logFilePath.toStdString(),
-                                           LogLayout("${datetime} | ${type|5} | ${thread} | ${tag|10} | ${message}"));
+                                           LogLayout("${datetime} | ${type|5} | ${thread|15} | ${tag|15} | ${message}"));
 
     logger->addDest(logFile);
 
@@ -121,21 +121,21 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         logger->setLevel(m_loggerLevel.value());
     } else {
 #ifdef MUE_ENABLE_LOGGER_DEBUGLEVEL
-        logger->setLevel(haw::logger::Debug);
+        logger->setLevel(mu::logger::Level::Debug);
 #else
-        logger->setLevel(haw::logger::Normal);
+        logger->setLevel(mu::logger::Level::Normal);
 #endif
     }
 
-    LOGI() << "log path: " << logFile->filePath();
+    LOGI() << "log path: " << logFilePath;
     LOGI() << "=== Started MuseScore " << framework::MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
 
     //! --- Setup profiler ---
     using namespace haw::profiler;
     struct MyPrinter : public Profiler::Printer
     {
-        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", "", Color::Magenta)() << str; }
-        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", "", Color::Magenta)() << str; }
+        void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", Color::Magenta)() << str; }
+        void printInfo(const std::string& str) override { LOG_STREAM(Logger::INFO, "Profiler", Color::Magenta)() << str; }
     };
 
     Profiler::Options profOpt;
@@ -166,7 +166,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
         pr->reg("userAppDataPath", m_configuration->userAppDataPath());
         pr->reg("userBackupPath", m_configuration->userBackupPath());
         pr->reg("userDataPath", m_configuration->userDataPath());
-        pr->reg("log file", logFile->filePath());
+        pr->reg("log file", logFilePath);
         pr->reg("settings file", settings()->filePath());
     }
 }
@@ -186,7 +186,7 @@ void GlobalModule::invokeQueuedCalls()
     s_asyncInvoker->invokeQueuedCalls();
 }
 
-void GlobalModule::setLoggerLevel(const haw::logger::Level& level)
+void GlobalModule::setLoggerLevel(const mu::logger::Level& level)
 {
     m_loggerLevel = level;
 }
