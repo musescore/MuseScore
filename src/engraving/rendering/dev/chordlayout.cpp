@@ -176,57 +176,62 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     if (item->spanArpeggio()) {
         Arpeggio* spanArp = item->spanArpeggio();
         Arpeggio::LayoutData* arpldata = spanArp->mutldata();
-
-        double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
-
-        double gapSize = arpeggioNoteDistance;
-
-        if (chordAccidentals.size()) {
-            double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
-            double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
-            gapSize = arpeggioAccidentalDistance - accidentalDistance;
-            gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, chordAccidentals, mag_, item);
+        const Segment* seg = spanArp->chord()->segment();
+        const Chord* endChord = toChord(seg->elementAt(spanArp->endTrack()));
+        if (!endChord) {
+            endChord = item;
         }
 
-        double extraX = spanArp->width() + gapSize;
+        // If a note is covered in the voice span but located outside the visual span of the arpeggio calculate accidental offset later
+        bool aboveStart = item->vStaffIdx() <= spanArp->vStaffIdx() && item->line() < spanArp->chord()->line();
+        bool belowEnd = item->vStaffIdx() >= endChord->vStaffIdx() && item->line() > endChord->line();
 
-        // Track leftmost chord position, as we we always want the arpeggio to be to the left of this
-        arpldata->setMinChordX(std::min(arpldata->minChordX(), chordX));
+        if (!(aboveStart || belowEnd)) {
+            double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
 
-        // Save this to arpeggio if largest
-        arpldata->setMaxChordPad(std::max(arpldata->maxChordPad(), lll + extraX));
+            double gapSize = arpeggioNoteDistance;
+            double arpChordX = std::min(chordX, 0.0);
 
-        // If first chord in arpeggio set y
-        if (item->arpeggio() && item->arpeggio() == spanArp) {
-            double y1   = upnote->pos().y() - upnote->headHeight() * .5;
-            item->arpeggio()->mutldata()->setPosY(y1);
-        }
+            if (chordAccidentals.size()) {
+                double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
+                double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
+                gapSize = arpeggioAccidentalDistance - accidentalDistance;
+                gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, mag_, item, &chordAccidentals);
+            }
 
-        Note* downNote = item->downNote();
-        track_idx_t btrack  = spanArp->track() + (spanArp->span() - 1);
-        EngravingItem* e = item->segment()->element(btrack);
-        if (e && e->isChord()) {
-            downNote = toChord(e)->downNote();
-        }
+            double extraX = spanArp->width() + gapSize;
 
-        // If last chord in arpeggio, set x
-        if (downNote->track() == item->track()) {
-            // Amount to move arpeggio from it's parent chord to factor in chords further to the left
-            double arpChordX = spanArp->chord()->ldata()->pos().x();
-            double xDiff = arpChordX - arpldata->minChordX();
+            // Track leftmost chord position, as we we always want the arpeggio to be to the left of this
+            arpldata->setMinChordX(std::min(arpldata->minChordX(), arpChordX));
 
-            double offset = -(xDiff + arpldata->maxChordPad());
-            spanArp->mutldata()->setPosX(offset);
-            if (spanArp->visible()) {
-                lll = offset;
+            // Save this to arpeggio if largest
+            arpldata->setMaxChordPad(std::max(arpldata->maxChordPad(), lll + extraX));
+            //        arpldata->setMaxChordPad(std::max(arpldata->maxChordPad(), chordLeft + extraX));
+
+            // If first chord in arpeggio set y
+            if (item->arpeggio() && item->arpeggio() == spanArp) {
+                double y1 = upnote->pos().y() - upnote->headHeight() * .5;
+                item->arpeggio()->mutldata()->setPosY(y1);
+            }
+
+            Note* downNote = item->downNote();
+            if (endChord) {
+                downNote = endChord->downNote();
+            }
+
+            // If last chord in arpeggio, set x
+            if (downNote->track() == item->track()) {
+                // Amount to move arpeggio from it's parent chord to factor in chords further to the left
+                double firstChordX = spanArp->chord()->ldata()->pos().x();
+                double xDiff = firstChordX - arpldata->minChordX();
+
+                double offset = -(xDiff + arpldata->maxChordPad());
+                spanArp->mutldata()->setPosX(offset);
+                if (spanArp->visible()) {
+                    lll = offset;
+                }
             }
         }
-
-        // _arpeggio->layout() called in layoutArpeggio2()
-
-        // handle the special case of _arpeggio->span() > 1
-        // in layoutArpeggio2() after page layout has done so we
-        // know the y position of the next staves
     }
 
     if (item->dots()) {

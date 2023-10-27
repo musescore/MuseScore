@@ -126,6 +126,7 @@ void Arpeggio::rebaseStartAnchor(int direction)
             if (e && e->isChord()) {
                 int newSpan = m_span + track() - curTrack;
                 if (newSpan != 0) {
+                    chord()->setSpanArpeggio(nullptr);
                     undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
                     score()->undo(new ChangeParent(this, e, e->staffIdx()));
                     break;

@@ -23,6 +23,7 @@
 
 #include "dom/arpeggio.h"
 #include "dom/chord.h"
+#include "dom/part.h"
 #include "dom/segment.h"
 
 #include "tlayout.h"
@@ -138,28 +139,135 @@ double ArpeggioLayout::insetWidth(Arpeggio* item)
 }
 
 //---------------------------------------------------------
+//   clearAccidentals
+//
+//   This function finds collisions with accidentals outside of an arpeggio's span
+//   Assumptions are made to deal with cross staff height, as we don't know this yet.
+//   Once a chord is found, its shape is stripped down to only accidentals which collide
+//   with the arpeggio.  The arpeggio's offset is calculated from the remaining shape
+//---------------------------------------------------------
+
+void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
+{
+    if (!item || !item->chord()) {
+        return;
+    }
+
+    const Segment* seg = item->chord()->segment();
+    const Chord* endChord = toChord(seg->elementAt(item->endTrack()));
+    if (!endChord) {
+        endChord = item->chord();
+    }
+    const Part* part = item->part();
+    const track_idx_t partStartTrack = part->startTrack();
+    const track_idx_t partEndTrack = part->endTrack();
+
+    double accidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * item->mag();
+    Shape arpShape = item->shape().translate(item->pagePos());
+    double arpX = arpShape.right();
+    double largestOverlap = 0.0;
+
+    for (track_idx_t track = partStartTrack; track < partEndTrack; ++track) {
+        EngravingItem* e = seg->element(track);
+        if (e && e->isChord()) {
+            Chord* chord = toChord(e);
+            // Only check chords the arpeggio doesn't span
+            // We already calculated the gap between chords it does span in ChordLayout::layoutPitched
+            bool aboveStart = chord->vStaffIdx() <= item->vStaffIdx() && chord->line() < item->chord()->line();
+            bool belowEnd = chord->vStaffIdx() >= endChord->vStaffIdx() && chord->line() > endChord->line();
+
+            if (chord->spanArpeggio() == item && !(aboveStart || belowEnd)) {
+                continue;
+            }
+
+            // We don't know the distance between staves, so our arpeggio's height is currently unknown if it spans staves
+            // To make sure we spot collisions with non-arpeggio accidentals, extend arpeggio upwards/downwards a large amount
+            // depending on if they are the end/start of the arpeggio respectively.
+            // This is to find collisions between chords outside the arpeggios track span, but within its "visual span"
+            Shape curArpShape = arpShape;
+            staff_idx_t staffIdx = chord->vStaffIdx();
+            if (staffIdx == item->chord()->vStaffIdx() && item->crossStaff()) {
+                // Arpeggio doesn't end on this staff, so extend downwards
+                curArpShape.addBBox(RectF(curArpShape.bbox().bottomLeft().x(), curArpShape.bbox().bottomLeft().y(),
+                                          curArpShape.bbox().width(), 10000));
+            } else if (staffIdx == endChord->vStaffIdx() && item->crossStaff()) {
+                // Arpeggio doesn't start on this staff so move to last note and extend upwards
+                curArpShape.translate(PointF(0.0, endChord->downNote()->pagePos().y() - item->pagePos().y()));
+                curArpShape.addBBox(RectF(curArpShape.bbox().topLeft().x(), curArpShape.bbox().topLeft().y() - 10000,
+                                          curArpShape.bbox().width(), 10000));
+            }
+
+            Shape chordShape = chord->shape();
+            chordShape.translate(chord->pagePos());
+            // Remove any element which isn't an accidental the arpeggio intersects
+            chordShape.remove_if([curArpShape, accidentalDistance](ShapeElement& shapeElement) {
+                if (!shapeElement.item() || !(shapeElement.item()->type() == ElementType::ACCIDENTAL)) {
+                    return true;
+                }
+                // Pad accidentals with Sid::ArpeggioAccidentalDistance either side
+                shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - accidentalDistance, shapeElement.topLeft().y()));
+                shapeElement.setWidth(shapeElement.width() + 2 * accidentalDistance);
+                return !curArpShape.intersects(shapeElement);
+            });
+
+            if (chordShape.empty()) {
+                // No collisions with accidentals
+                continue;
+            }
+
+            double chordX = -chordShape.left();
+            double diff = chordX - arpX;
+
+            if (diff != 0.0) {
+                double inset = insetDistance(item, ctx, item->mag(), chord);
+                largestOverlap = std::min(largestOverlap, diff + inset);
+            }
+        }
+    }
+    if (largestOverlap != 0.0) {
+        item->mutldata()->moveX(largestOverlap);
+    }
+}
+
+//---------------------------------------------------------
 //   insetDistance
 //---------------------------------------------------------
 
-double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, std::vector<Accidental*>& accidentals, double mag_,
-                                     Chord* chord)
+double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, double mag_, Chord* chord, std::vector<Accidental*>* accidentals)
 {
-    if (accidentals.size() == 0) {
+    if (!item || !chord) {
         return 0.0;
     }
-    if (!chord) {
-        return 0.0;
+
+    std::vector<Accidental*> _accidentals;
+    if (!accidentals) {
+        // generate list of accidentals if none provided
+        for (Note* note : chord->notes()) {
+            Accidental* accidental = note->accidental();
+            if (accidental && accidental->visible()) {
+                _accidentals.push_back(accidental);
+            }
+        }
+    } else {
+        _accidentals = *accidentals;
     }
-    if (!item) {
+
+    if (_accidentals.size() == 0) {
         return 0.0;
     }
 
     // Only be concerned about the top/bottom of an arpeggio line if this is the start/end chord
-    bool arpStartTrack = chord->track() == item->track();
-    bool arpEndTrack = chord->track() == item->endTrack();
 
-    double arpeggioTop = arpStartTrack ? insetTop(item, chord) * mag_ : -10000;
-    double arpeggioBottom = arpEndTrack ? insetBottom(item, chord) * mag_ : 10000;
+    const Segment* seg = item->chord()->segment();
+    Chord* endChord = item->chord();
+    if (EngravingItem* e = seg->element(item->endTrack())) {
+        endChord = e->isChord() ? toChord(e) : endChord;
+    }
+    bool arpStartStave = chord->vStaffIdx() == item->vStaffIdx();
+    bool arpEndStave = chord->vStaffIdx() == endChord->vStaffIdx();
+
+    double arpeggioTop = arpStartStave ? insetTop(item, item->chord()) * mag_ : -10000;
+    double arpeggioBottom = arpEndStave ? insetBottom(item, endChord) * mag_ : 10000;
 
     ArpeggioType type = item->arpeggioType();
     bool hasTopArrow = type == ArpeggioType::UP
@@ -170,7 +278,7 @@ double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, std::ve
                           || type == ArpeggioType::BRACKET;
 
     Accidental* furthestAccidental = nullptr;
-    for (auto accidental : accidentals) {
+    for (auto accidental : _accidentals) {
         if (furthestAccidental) {
             bool currentIsFurtherX = accidental->x() < furthestAccidental->x();
             bool currentIsSameX = accidental->x() == furthestAccidental->x();

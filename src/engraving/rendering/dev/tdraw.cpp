@@ -494,9 +494,9 @@ void TDraw::draw(const Arpeggio* item, draw::Painter* painter)
     case ArpeggioType::BRACKET:
     {
         double w = item->style().styleS(Sid::ArpeggioHookLen).val() * item->spatium();
-        painter->drawLine(LineF(0.0, y1, w, y1));
-        painter->drawLine(LineF(0.0, y2, w, y2));
-        painter->drawLine(LineF(0.0, y1 - lineWidth / 2, 0.0, y2 + lineWidth / 2));
+        painter->drawLine(LineF(0.0, y1 + lineWidth / 2, w, y1 + lineWidth / 2));
+        painter->drawLine(LineF(0.0, y2 - lineWidth / 2, w, y2 - lineWidth / 2));
+        painter->drawLine(LineF(0.0, y1, 0.0, y2));
     } break;
     }
     painter->restore();
