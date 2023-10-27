@@ -846,6 +846,14 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         return nullptr;
     }
 
+    if (note->bendBack() && (type == GuitarBendType::PRE_BEND || type == GuitarBendType::GRACE_NOTE_BEND)) {
+        return nullptr;
+    }
+
+    if (note->bendFor() && (type == GuitarBendType::BEND || type == GuitarBendType::SLIGHT_BEND)) {
+        return nullptr;
+    }
+
     Chord* chord = note->chord();
 
     if (type == GuitarBendType::BEND) {
