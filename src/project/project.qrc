@@ -69,5 +69,7 @@
         <file>qml/MuseScore/Project/internal/Migration/MigrationContentForPre362.qml</file>
         <file>qml/MuseScore/Project/internal/Migration/migration.png</file>
         <file>qml/MuseScore/Project/UploadProgressDialog.qml</file>
+        <file>qml/MuseScore/Project/AlsoShareAudioComDialog.qml</file>
+        <file>resources/AudioCom_Waveform.png</file>
     </qresource>
 </RCC>

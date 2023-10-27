@@ -53,7 +53,9 @@ static const Settings::Key PREFERRED_SCORE_CREATION_MODE_KEY(module_name, "proje
 static const Settings::Key MIGRATION_OPTIONS(module_name, "project/migration");
 static const Settings::Key AUTOSAVE_ENABLED_KEY(module_name, "project/autoSaveEnabled");
 static const Settings::Key AUTOSAVE_INTERVAL_KEY(module_name, "project/autoSaveInterval");
-static const Settings::Key ALWAYS_PROMPT_SHARE_AUDIO_COM_AFTER_PUBLISH(module_name, "project/promptShareAudioCom");
+static const Settings::Key ALSO_SHARE_AUDIO_COM_AFTER_PUBLISH(module_name, "project/alsoShareAudioCom");
+static const Settings::Key SHOW_ALSO_SHARE_AUDIO_COM_DIALOG(module_name, "project/showAlsoShareAudioComDialog");
+static const Settings::Key HAS_ASKED_ALSO_SHARE_AUDIO_COM(module_name, "project/hasAskedAlsoShareAudioCom");
 static const Settings::Key SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT(module_name, "project/shouldDestinationFolderBeOpenedOnExport");
 static const Settings::Key OPEN_DETAILED_PROJECT_UPLOADED_DIALOG(module_name, "project/openDetailedProjectUploadedDialog");
 static const Settings::Key HAS_ASKED_AUDIO_GENERATION_SETTINGS(module_name, "project/hasAskedAudioGenerationSettings");
@@ -98,10 +100,13 @@ void ProjectConfiguration::init()
         m_autoSaveIntervalChanged.send(val.toInt());
     });
 
-    settings()->setDefaultValue(ALWAYS_PROMPT_SHARE_AUDIO_COM_AFTER_PUBLISH, Val(false));
-    settings()->valueChanged(ALWAYS_PROMPT_SHARE_AUDIO_COM_AFTER_PUBLISH).onReceive(nullptr, [this](const Val& val) {
-        m_promptShareAudioComChanged.send(val.toBool());
+    settings()->setDefaultValue(ALSO_SHARE_AUDIO_COM_AFTER_PUBLISH, Val(true));
+    settings()->valueChanged(ALSO_SHARE_AUDIO_COM_AFTER_PUBLISH).onReceive(nullptr, [this](const Val& val) {
+        m_alsoShareAudioComChanged.send(val.toBool());
     });
+
+    settings()->setDefaultValue(SHOW_ALSO_SHARE_AUDIO_COM_DIALOG, Val(true));
+    settings()->setDefaultValue(HAS_ASKED_ALSO_SHARE_AUDIO_COM, Val(false));
 
     settings()->setDefaultValue(SHOULD_DESTINATION_FOLDER_BE_OPENED_ON_EXPORT, Val(false));
     settings()->setDefaultValue(OPEN_DETAILED_PROJECT_UPLOADED_DIALOG, Val(true));
@@ -531,19 +536,39 @@ async::Channel<int> ProjectConfiguration::autoSaveIntervalChanged() const
     return m_autoSaveIntervalChanged;
 }
 
-bool ProjectConfiguration::promptShareAudioCom() const
+bool ProjectConfiguration::alsoShareAudioCom() const
 {
-    return settings()->value(ALWAYS_PROMPT_SHARE_AUDIO_COM_AFTER_PUBLISH).toBool();
+    return settings()->value(ALSO_SHARE_AUDIO_COM_AFTER_PUBLISH).toBool();
 }
 
-void ProjectConfiguration::setPromptShareAudioCom(bool prompt)
+void ProjectConfiguration::setAlsoShareAudioCom(bool share)
 {
-    settings()->setSharedValue(ALWAYS_PROMPT_SHARE_AUDIO_COM_AFTER_PUBLISH, Val(prompt));
+    settings()->setSharedValue(ALSO_SHARE_AUDIO_COM_AFTER_PUBLISH, Val(share));
 }
 
-async::Channel<bool> ProjectConfiguration::promptShareAudioComChanged() const
+async::Channel<bool> ProjectConfiguration::alsoShareAudioComChanged() const
 {
-    return m_promptShareAudioComChanged;
+    return m_alsoShareAudioComChanged;
+}
+
+bool ProjectConfiguration::showAlsoShareAudioComDialog() const
+{
+    return settings()->value(SHOW_ALSO_SHARE_AUDIO_COM_DIALOG).toBool();
+}
+
+void ProjectConfiguration::setShowAlsoShareAudioComDialog(bool show)
+{
+    settings()->setSharedValue(SHOW_ALSO_SHARE_AUDIO_COM_DIALOG, Val(show));
+}
+
+bool ProjectConfiguration::hasAskedAlsoShareAudioCom() const
+{
+    return settings()->value(HAS_ASKED_ALSO_SHARE_AUDIO_COM).toBool();
+}
+
+void ProjectConfiguration::setHasAskedAlsoShareAudioCom(bool has)
+{
+    settings()->setSharedValue(HAS_ASKED_ALSO_SHARE_AUDIO_COM, Val(has));
 }
 
 io::path_t ProjectConfiguration::newProjectTemporaryPath() const

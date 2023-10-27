@@ -115,13 +115,6 @@ private:
     Ret canSaveProject() const;
     bool saveProject(SaveMode saveMode, SaveLocationType saveLocationType = SaveLocationType::Undefined, bool force = false);
 
-    void publish();
-    void shareAudio();
-
-    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
-    bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
-    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
-
     struct AudioFile {
         QString format;
         QIODevice* device = nullptr;
@@ -133,6 +126,16 @@ private:
             return !format.isEmpty() && device != nullptr;
         }
     };
+
+    void publish();
+    void shareAudio(const AudioFile& existingAudio);
+    void shareAudio() { shareAudio(AudioFile()); }
+
+    bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
+    bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
+    bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
+
+    void alsoShareAudioCom(const AudioFile& audio);
 
     Ret askAudioGenerationSettings() const;
     RetVal<bool> needGenerateAudio(bool isPublic) const;

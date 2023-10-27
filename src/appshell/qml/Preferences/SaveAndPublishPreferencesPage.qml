@@ -64,19 +64,17 @@ PreferencesPage {
             navigation.order: root.navigationOrderStart + 2
         }
 
-        /* TODO: https://github.com/musescore/MuseScore/issues/19115
         SeparatorLine { }
 
         PublishMuseScoreComSection {
-            promptShareAudioCom: preferencesModel.promptShareAudioCom
+            alsoShareAudioCom: preferencesModel.alsoShareAudioCom
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 3
 
-            onPromptShareAudioComChangeRequested: function(prompt) {
-                preferencesModel.promptShareAudioCom = prompt;
+            onAlsoShareAudioComChangeRequested: function(share) {
+                preferencesModel.alsoShareAudioCom = share;
             }
         }
-        */
     }
 }
