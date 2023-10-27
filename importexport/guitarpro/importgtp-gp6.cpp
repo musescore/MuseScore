@@ -1885,8 +1885,11 @@ void GuitarPro6::readBars(QDomNode* barList, Measure* measure, ClefType oldClefI
                               }
                         else if (!clefString.compare("C3"))
                               clefId = ClefType::C3;
-                        else if (!clefString.compare("C4"))
+                        else if (!clefString.compare("C4")) {
                               clefId = ClefType::C4;
+                              if (!clefString.compare("C4") && clefOctave == "8vb")
+                                  clefId = ClefType::C4_8VB;
+                              }
                         else if (!clefString.compare("Neutral"))
                               clefId = ClefType::PERC;
                         else

@@ -3752,7 +3752,7 @@ const std::array<const char*, int(SymId::lastSym)+1> Sym::symUserNames = { {
       "Bridge clef",
       "Buzz roll",
       QT_TRANSLATE_NOOP("symUserNames", "C clef"),
-      "C clef ottava bassa",
+      QT_TRANSLATE_NOOP("symUserNames", "C clef ottava bassa"),
       "C clef, arrow down",
       "C clef, arrow up",
       "C clef change",

@@ -31,7 +31,7 @@
 namespace Ms {
 
 
-// table must be in sync with enum ClefType
+// table must be in sync with enum ClefType in clef.h
 const ClefInfo ClefInfo::clefTable[] = {
 // tag    xmlName    line oCh pOff|-lines for sharps---||---lines for flats--|  symbol                           | name                                   | valid in staff group
 { "G",    "G",         2,  0, 45, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef,                    QT_TRANSLATE_NOOP("clefTable", "Treble clef"),                       StaffGroup::STANDARD  },
@@ -70,6 +70,7 @@ const ClefInfo ClefInfo::clefTable[] = {
 { "TAB4", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClef,        QT_TRANSLATE_NOOP("clefTable", "Tablature 4 lines"),                 StaffGroup::TAB       },
 { "TAB2", "TAB",       5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClefSerif,    QT_TRANSLATE_NOOP("clefTable", "Tablature Serif"),                   StaffGroup::TAB       },
 { "TAB4_SERIF", "TAB", 5,  0,  0, { 0, 3,-1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClefSerif,   QT_TRANSLATE_NOOP("clefTable", "Tablature Serif 4 lines"),           StaffGroup::TAB       },
+{ "C4_8VB", "C",       4, -1, 30, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 }, SymId::cClef8vb,                 QT_TRANSLATE_NOOP("clefTable", "Tenor clef 8va bassa"),              StaffGroup::STANDARD  },
       };
 
 //---------------------------------------------------------
@@ -170,29 +171,14 @@ void Clef::layout()
                   yoff = lineDist * 1.5;
                   break;
             case ClefType::TAB:                            // TAB clef
+            case ClefType::TAB4:                            // TAB clef 4 strings
+            case ClefType::TAB_SERIF:                           // TAB clef alternate style
+            case ClefType::TAB4_SERIF:                           // TAB clef alternate style
                   // on tablature, position clef at half the number of spaces * line distance
                   yoff = lineDist * (lines - 1) * .5;
                   stepOffset = 0; //  ignore stepOffset for TAB and pecussion clefs
                   break;
-            case ClefType::TAB4:                            // TAB clef 4 strings
-                  // on tablature, position clef at half the number of spaces * line distance
-                  yoff = lineDist * (lines - 1) * .5;
-                  stepOffset = 0;
-                  break;
-            case ClefType::TAB_SERIF:                           // TAB clef alternate style
-                  // on tablature, position clef at half the number of spaces * line distance
-                  yoff = lineDist * (lines - 1) * .5;
-                  stepOffset = 0;
-                  break;
-            case ClefType::TAB4_SERIF:                           // TAB clef alternate style
-                  // on tablature, position clef at half the number of spaces * line distance
-                  yoff = lineDist * (lines - 1) * .5;
-                  stepOffset = 0;
-                  break;
             case ClefType::PERC:                           // percussion clefs
-                  yoff = lineDist * (lines - 1) * 0.5;
-                  stepOffset = 0;
-                  break;
             case ClefType::PERC2:
                   yoff = lineDist * (lines - 1) * 0.5;
                   stepOffset = 0;

@@ -4783,8 +4783,8 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
                   line = _e.readElementText().toInt();
             else if (_e.name() == "clef-octave-change") {
                   i = _e.readElementText().toInt();
-                  if (i && !(c == "F" || c == "G"))
-                        qDebug("clef-octave-change only implemented for F and G key");  // TODO
+                  if (i && !(c == "F" || c == "G" || c == "C"))
+                        qDebug("clef-octave-change only implemented for F, G and C clef");  // TODO
                   }
             else
                   skipLogCurrElem();
@@ -4830,8 +4830,12 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
       else if (c == "C") {
             if (line == 5)
                   clef = ClefType::C5;
-            else if (line == 4)
-                  clef = ClefType::C4;
+            else if (line == 4) {
+                  if (i == -1)
+                        clef = ClefType::C4_8VB;
+                  else
+                        clef = ClefType::C4;
+                  }
             else if (line == 3)
                   clef = ClefType::C3;
             else if (line == 2)

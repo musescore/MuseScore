@@ -33,7 +33,7 @@ static const int NO_CLEF = -1000;
 //---------------------------------------------------------
 //   ClefType
 //---------------------------------------------------------
-
+// table must be in sync with enum ClefType in clef.cpp
 enum class ClefType : signed char {
       INVALID = -1,
       G = 0,
@@ -71,6 +71,9 @@ enum class ClefType : signed char {
       TAB4,
       TAB_SERIF,
       TAB4_SERIF,
+      // new clefs to be added between here
+      C4_8VB,
+      // and here in oder to not break TAB clef style
       MAX
       };
 

@@ -750,8 +750,9 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                               case ClefType::C2:     off = -7; break;
                               case ClefType::C3:     off = -7; break;
                               case ClefType::C4:     off = -7; break;
+                              case ClefType::C4_8VB: off = -14; break;
                               case ClefType::C5:     off = -7; break;
-                              case ClefType::G_1:     off = 0; break;
+                              case ClefType::G_1:    off = 0; break;
                               case ClefType::F_8VA:  off = -7; break;
                               case ClefType::F_15MA: off = 0; break;
                               default:          off = 0; qDebug("clefType %d not implemented", int(clef));
@@ -2395,6 +2396,7 @@ ClefType CapClef::clefType(Form form, ClefLine line, Oct oct)
             case int(Form::C) + (int(ClefLine::L2) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C2;
             case int(Form::C) + (int(ClefLine::L3) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C3;
             case int(Form::C) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C4;
+            case int(Form::C) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_BASSA) << 5): return ClefType::C4_8VB;
             case int(Form::C) + (int(ClefLine::L5) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::C5;
 
             case int(Form::F) + (int(ClefLine::L4) << 3) + (int(Oct::OCT_NULL) << 5):  return ClefType::F;
