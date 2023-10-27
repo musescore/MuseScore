@@ -57,6 +57,7 @@ public:
 
     bool isReleaseBend() const;
     bool isFullRelease() const;
+    bool angledPreBend() const;
 
     static void fixNotesFrettingForGraceBend(Note* grace, Note* main);
     static void fixNotesFrettingForStandardBend(Note* startNote, Note* endNote);

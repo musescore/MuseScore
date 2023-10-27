@@ -446,7 +446,8 @@ void GuitarBendLayout::layoutTabStaff(GuitarBendSegment* item, LayoutContext& ct
 
     endPos = computeEndPos(item, endNote, distAboveTab, verticalPad, arrowHeight, arrowWidth, startPos, prevEndPoint);
 
-    vertex = bend->type() == GuitarBendType::PRE_BEND ? 0.5 * (startPos + endPos) : PointF(endPos.x(), startPos.y());
+    vertex = bend->type() == GuitarBendType::PRE_BEND && !bend->angledPreBend()
+             ? 0.5 * (startPos + endPos) : PointF(endPos.x(), startPos.y());
 
     arrow = bend->isReleaseBend()
             ? arrow << PointF(0, arrowHeight) << PointF(arrowWidth * .5, 0.0) << PointF(-arrowWidth * .5, 0.0)   // arrow-down
@@ -481,7 +482,12 @@ void GuitarBendLayout::layoutTabStaff(GuitarBendSegment* item, LayoutContext& ct
     GuitarBendLayout::checkConflictWithOtherBends(item);
 
     PainterPath path;
-    path.cubicTo(PointF(0.0, 0.0), ldata->vertexPoint() + item->vertexPointOff(), item->pos2());
+    if (bend->angledPreBend()) {
+        path.lineTo(ldata->vertexPoint() + item->vertexPointOff());
+        path.lineTo(item->pos2());
+    } else {
+        path.cubicTo(PointF(0.0, 0.0), ldata->vertexPoint() + item->vertexPointOff(), item->pos2());
+    }
     ldata->setPath(path);
 
     RectF r;
@@ -507,7 +513,7 @@ PointF GuitarBendLayout::computeStartPos(GuitarBendSegment* item, Note* startNot
 
     PointF startPos;
 
-    if (bend->type() == GuitarBendType::PRE_BEND) {
+    if (bend->type() == GuitarBendType::PRE_BEND && !bend->angledPreBend()) {
         startPos = startNotePos;
         startPos += PointF(0.5 * startNote->width(), -0.5 * startNote->height() - verticalPad);
         return startPos;
@@ -549,7 +555,7 @@ PointF GuitarBendLayout::computeEndPos(GuitarBendSegment* item, Note* endNote, d
 
     PointF endPos;
 
-    if (bend->type() == GuitarBendType::PRE_BEND) {
+    if (bend->type() == GuitarBendType::PRE_BEND && !bend->angledPreBend()) {
         endPos = PointF(startPos.x(), -distAboveTab);        // TODO: style
         return endPos;
     }

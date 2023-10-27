@@ -131,6 +131,13 @@ bool GuitarBend::isFullRelease() const
     return isReleaseBend() && totBendAmountIncludingPrecedingBends() == 0;
 }
 
+bool GuitarBend::angledPreBend() const
+{
+    Note* endN = endNote();
+    Chord* endChord = endNote()->chord();
+    return type() == GuitarBendType::PRE_BEND && endN->string() > endChord->upString();
+}
+
 void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
 {
     Staff* curStaff =  startNote->staff();
