@@ -2875,6 +2875,9 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 read400::TRead::readItem(el, e, ctx);
                 segment->add(el);
             }
+        } else if (tag == "stretch") {
+            // Ignore measure stretch pre 4.0
+            e.skipCurrentElement();
         } else if (tag == "noOffset") {
             m->setNoOffset(e.readInt());
         } else if (tag == "measureNumberMode") {
