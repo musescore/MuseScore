@@ -1432,7 +1432,6 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         return;
     }
 
-    bool crossBeamFound = false;
     std::vector<Chord*> chords;
     std::vector<Note*> upStemNotes;
     std::vector<Note*> downStemNotes;
@@ -1459,9 +1458,6 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         if (e && e->isChord() && toChord(e)->vStaffIdx() == staffIdx) {
             Chord* chord = toChord(e);
             chords.push_back(chord);
-            if (chord->beam() && chord->beam()->cross()) {
-                crossBeamFound = true;
-            }
             bool hasGraceBefore = false;
             for (Chord* c : chord->graceNotes()) {
                 if (c->isGraceBefore()) {
@@ -1475,7 +1471,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 upStemNotes.insert(upStemNotes.end(), chord->notes().begin(), chord->notes().end());
                 upDots   = std::max(upDots, chord->dots());
                 maxUpMag = std::max(maxUpMag, chord->mag());
-                if (!upHooks) {
+                if (!upHooks && !chord->beam()) {
                     upHooks = chord->hook();
                 }
                 if (hasGraceBefore) {
@@ -1486,7 +1482,7 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
                 downStemNotes.insert(downStemNotes.end(), chord->notes().begin(), chord->notes().end());
                 downDots = std::max(downDots, chord->dots());
                 maxDownMag = std::max(maxDownMag, chord->mag());
-                if (!downHooks) {
+                if (!downHooks && !chord->beam()) {
                     downHooks = chord->hook();
                 }
                 if (hasGraceBefore) {
@@ -1594,14 +1590,8 @@ void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_
         if (upVoices && downVoices) {
             Note* bottomUpNote = upStemNotes.front();
             Note* topDownNote  = downStemNotes.back();
-            int separation;
-            // TODO: handle conflicts for notes on cross-staff beams
-            // for now we simply treat these as though there is no conflict
-            if (!crossBeamFound) {
-                separation = topDownNote->line() - bottomUpNote->line();
-            } else {
-                separation = 2;           // no conflict
-            }
+            int separation = topDownNote->line() - bottomUpNote->line();
+
             std::vector<Note*> overlapNotes;
             overlapNotes.reserve(8);
 
