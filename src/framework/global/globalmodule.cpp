@@ -24,9 +24,10 @@
 #include "modularity/ioc.h"
 #include "internal/globalconfiguration.h"
 
-#include "log.h"
+#include "logger.h"
 #include "logremover.h"
 #include "thirdparty/kors_logger/src/logdefdest.h"
+#include "profiler.h"
 #include "muversion.h"
 
 #include "internal/application.h"
@@ -43,6 +44,8 @@
 #include "io/internal/filesystem.h"
 
 #include "diagnostics/idiagnosticspathsregister.h"
+
+#include "log.h"
 
 using namespace mu::framework;
 using namespace mu::modularity;
@@ -78,7 +81,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     settings()->load();
 
     //! --- Setup logger ---
-    using namespace kors::logger;
+    using namespace mu::logger;
     Logger* logger = Logger::instance();
     logger->clearDests();
 
@@ -131,7 +134,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     LOGI() << "=== Started MuseScore " << framework::MUVersion::fullVersion() << ", build number " << MUSESCORE_BUILD_NUMBER << " ===";
 
     //! --- Setup profiler ---
-    using namespace haw::profiler;
+    using namespace mu::profiler;
     struct MyPrinter : public Profiler::Printer
     {
         void printDebug(const std::string& str) override { LOG_STREAM(Logger::DEBG, "Profiler", Color::Magenta)() << str; }
@@ -143,7 +146,7 @@ void GlobalModule::onPreInit(const IApplication::RunMode& mode)
     profOpt.funcsTimeEnabled = true;
     profOpt.funcsTraceEnabled = false;
     profOpt.funcsMaxThreadCount = 100;
-    profOpt.dataTopCount = 150;
+    profOpt.statTopCount = 150;
 
     Profiler* profiler = Profiler::instance();
     profiler->setup(profOpt, new MyPrinter());

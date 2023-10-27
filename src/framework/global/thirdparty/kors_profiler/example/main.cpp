@@ -72,7 +72,7 @@ public:
 
 int main(int argc, char* argv[])
 {
-    std::clog << "Hello World, I am Profiler\n";
+    std::cout << "Hello World, I am Profiler" << std::endl;
 
     Example t;
     t.example();
@@ -101,4 +101,25 @@ int main(int argc, char* argv[])
         Example::th_func                                            2.212 ms          1                 2.212 ms
 
     */
+
+    //! NOTE Custom setup
+
+    // custom printer
+    using namespace kors::profiler;
+    struct MyPrinter : public Profiler::Printer
+    {
+        void printDebug(const std::string& str) override { std::clog << str << std::endl; }
+        void printInfo(const std::string& str) override { std::clog << str << std::endl; }
+    };
+
+    // options
+    Profiler::Options profOpt;
+    profOpt.stepTimeEnabled = true;         // enable measure of steps, macros: BEGIN_STEP_TIME, STEP_TIME
+    profOpt.funcsTimeEnabled = true;        // enable measure of functions, macros: TRACEFUNC, TRACEFUNC_C
+    profOpt.funcsTraceEnabled = false;      // enable trace (output by func call), macros: TRACEFUNC, TRACEFUNC_C
+    profOpt.funcsMaxThreadCount = 100;      // max treads count
+    profOpt.statTopCount = 150;             // statistic top count
+
+    Profiler* profiler = Profiler::instance();
+    profiler->setup(profOpt, new MyPrinter());
 }

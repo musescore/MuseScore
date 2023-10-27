@@ -293,7 +293,7 @@ if (WIN_PORTABLE)
     add_definitions(-DWIN_PORTABLE)
 endif()
 
-add_definitions(-DHAW_PROFILER_ENABLED)
+add_definitions(-DKORS_PROFILER_ENABLED)
 
 if (MUE_ENABLE_LOAD_QML_FROM_SOURCE)
     add_definitions(-DMUE_ENABLE_LOAD_QML_FROM_SOURCE)

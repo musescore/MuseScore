@@ -23,13 +23,13 @@ set(MODULE global)
 include(${CMAKE_CURRENT_LIST_DIR}/modularity/modularity.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_logger/logger.cmake)
-include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/haw_profiler/src/profiler.cmake)
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler.cmake)
 
 set(MODULE_SRC
     ${MODULARITY_SRC}
     ${ASYNC_SRC}
     ${KORS_LOGGER_SRC}
-    ${HAW_PROFILER_SRC}
+    ${KORS_PROFILER_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/globaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplication.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
@@ -39,6 +39,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/logger.h
     ${CMAKE_CURRENT_LIST_DIR}/logremover.cpp
     ${CMAKE_CURRENT_LIST_DIR}/logremover.h
+    ${CMAKE_CURRENT_LIST_DIR}/profiler.h
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.cpp
     ${CMAKE_CURRENT_LIST_DIR}/dataformatter.h
     ${CMAKE_CURRENT_LIST_DIR}/muversion.cpp
