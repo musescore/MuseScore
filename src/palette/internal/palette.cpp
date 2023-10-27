@@ -149,7 +149,7 @@ PaletteCellPtr Palette::appendElement(ElementPtr element, const TranslatableStri
     return appendElement(element, name.str, mag, offset, tag);
 }
 
-PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCode code)
+PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCode code, double mag)
 {
     const ui::UiAction& action = actionsRegister()->action(code);
     QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
@@ -157,7 +157,7 @@ PaletteCellPtr Palette::appendActionIcon(ActionIconType type, actions::ActionCod
     icon->setActionType(type);
     icon->setAction(code, static_cast<char16_t>(action.iconCode));
 
-    return appendElement(icon, name);
+    return appendElement(icon, name, mag);
 }
 
 bool Palette::insertCell(size_t idx, PaletteCellPtr cell)

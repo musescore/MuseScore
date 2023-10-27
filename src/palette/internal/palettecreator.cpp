@@ -1864,10 +1864,10 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
     stringTunings->initTextStyleType(TextStyleType::STAFF);
     sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(true);
 
-    sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend");
-    sp->appendActionIcon(ActionIconType::PRE_BEND, "pre-bend");
-    sp->appendActionIcon(ActionIconType::GRACE_NOTE_BEND, "grace-note-bend");
-    sp->appendActionIcon(ActionIconType::SLIGHT_BEND, "slight-bend");
+    sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend", 1.25);
+    sp->appendActionIcon(ActionIconType::PRE_BEND, "pre-bend", 1.25);
+    sp->appendActionIcon(ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
+    sp->appendActionIcon(ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
 
     const char* finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {
