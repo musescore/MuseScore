@@ -3519,37 +3519,8 @@ void Note::setAccidentalType(AccidentalType type)
 
 Shape Note::doCreateShape() const
 {
-    RectF r(ldata()->bbox(LD_ACCESS::BAD));
-
-    Shape shape(r, this);
-    for (NoteDot* dot : m_dots) {
-        shape.add(symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
-    }
-    if (m_accidental && m_accidental->addToSkyline()) {
-        shape.add(m_accidental->ldata()->bbox().translated(m_accidental->pos()), m_accidental);
-    }
-    for (auto e : m_el) {
-        if (e->addToSkyline()) {
-            if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
-                continue;
-            }
-            shape.add(e->ldata()->bbox().translated(e->pos()), e);
-        }
-    }
-
-    if (part()->instrument()->hasStrings() && !staffType()->isTabStaff()) {
-        GuitarBend* bend = bendFor();
-        if (bend && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
-            GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());
-            // Semi-hack: the relative position of note and bend
-            // isn't fully known yet, so we use an approximation
-            double sp = spatium();
-            PointF approxRelPos(width() + 0.25 * sp, -0.25 * sp);
-            shape.add(bendSeg->shape().translated(approxRelPos));
-        }
-    }
-
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 
 //---------------------------------------------------------
