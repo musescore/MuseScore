@@ -1,3 +1,26 @@
+/*
+MIT License
+
+Copyright (c) 2020 Igor Korsukov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 #include "logger.h"
 
 #include <chrono>
@@ -5,41 +28,43 @@
 #include <algorithm>
 #include <cassert>
 #include <cstdarg>
-#include <map>
 
 #include "logdefdest.h"
-#include "helpful.h"
+#include "funcinfo.h"
 
-using namespace haw::logger;
-
-const Type Logger::ERRR("ERROR");
-const Type Logger::WARN("WARN");
-const Type Logger::INFO("INFO");
-const Type Logger::DEBG("DEBUG");
-
-static const std::map<Type, Color> TYPES_COLOR = {
-    { Logger::ERRR, Color::Red },
-    { Logger::WARN, Color::Yellow },
-    { Logger::INFO, Color::Green },
-    { Logger::DEBG, Color::None },
-};
+using namespace kors::logger;
 
 // Layout ---------------------------------
 
-static const std::string DATETIME_PATTERN("${datetime}");
-static const std::string TIME_PATTERN("${time}");
-static const std::string TYPE_PATTERN("${type}");
-static const std::string TAG_PATTERN("${tag}");
-static const std::string THREAD_PATTERN("${thread}");
-static const std::string MESSAGE_PATTERN("${message}");
+static constexpr std::string_view DATETIME_PATTERN("${datetime}");
+static constexpr std::string_view TIME_PATTERN("${time}");
+static constexpr std::string_view TYPE_PATTERN("${type}");
+static constexpr std::string_view TAG_PATTERN("${tag}");
+static constexpr std::string_view THREAD_PATTERN("${thread}");
+static constexpr std::string_view MESSAGE_PATTERN("${message}");
 
-static const char ZERO('0');
-static const char COLON(':');
-static const char DOT('.');
-static const char HYPEN('-');
-static const char T('T');
+static constexpr char ZERO('0');
+static constexpr char COLON(':');
+static constexpr char DOT('.');
+static constexpr char HYPEN('-');
+static constexpr char T('T');
+static constexpr char SPACE(' ');
 
-static const std::string MAIN_THREAD("main_thread");
+static constexpr std::string_view MAIN_THREAD("main_thread");
+
+const Type Logger::ERRR = "ERROR";
+const Type Logger::WARN = "WARN";
+const Type Logger::INFO = "INFO";
+const Type Logger::DEBG = "DEBUG";
+
+static std::string leftJustified(const std::string_view& in, size_t width)
+{
+    std::string out(in);
+    if (width > out.size()) {
+        out.resize(width, ' ');
+    }
+    return out;
+}
 
 static std::string leftJustified(const std::string& in, size_t width)
 {
@@ -69,7 +94,7 @@ DateTime DateTime::now()
     dt.time.hour = tm->tm_hour;
     dt.time.min = tm->tm_min;
     dt.time.sec = tm->tm_sec;
-    dt.time.msec = static_cast<int>(ms_d.count() - (sec * 1000LL));
+    dt.time.msec = ms_d.count() - (sec * 1000);
 
     return dt;
 }
@@ -85,9 +110,9 @@ LogLayout::~LogLayout()
 {
 }
 
-std::vector<LogLayout::Pattern> LogLayout::patterns(const std::string& format)
+std::vector<LogLayout::PatternData> LogLayout::patterns(const std::string& format)
 {
-    std::vector<std::string> ps = {
+    static const std::vector<std::string_view> ps = {
         DATETIME_PATTERN,
         TIME_PATTERN,
         TYPE_PATTERN,
@@ -96,24 +121,24 @@ std::vector<LogLayout::Pattern> LogLayout::patterns(const std::string& format)
         MESSAGE_PATTERN
     };
 
-    std::vector<LogLayout::Pattern> patterns;
-    for (const std::string& pstr : ps) {
-        Pattern p = parcePattern(format, pstr);
-        if (p.index != std::string::npos) {
+    std::vector<LogLayout::PatternData> patterns;
+    for (const std::string_view& pstr : ps) {
+        PatternData p = parcePattern(format, pstr);
+        if (p.index > -1) {
             patterns.push_back(std::move(p));
         }
     }
 
-    std::sort(patterns.begin(), patterns.end(), [](const LogLayout::Pattern& f, const LogLayout::Pattern& s) {
+    std::sort(patterns.begin(), patterns.end(), [](const LogLayout::PatternData& f, const LogLayout::PatternData& s) {
         return f.index < s.index;
     });
 
     return patterns;
 }
 
-LogLayout::Pattern LogLayout::parcePattern(const std::string& format, const std::string& pattern)
+LogLayout::PatternData LogLayout::parcePattern(const std::string& format, const std::string_view& pattern)
 {
-    Pattern p;
+    PatternData p;
     p.pattern = pattern;
 
     std::string beginPattern(pattern.substr(0, pattern.size() - 1));
@@ -163,13 +188,13 @@ std::string LogLayout::output(const LogMsg& logMsg) const
 {
     std::string str;
     str.reserve(100);
-    for (const Pattern& p : m_patterns) {
+    for (const PatternData& p : m_patterns) {
         str.append(p.beforeStr).append(formatPattern(logMsg, p));
     }
     return str;
 }
 
-std::string LogLayout::formatPattern(const LogMsg& logMsg, const Pattern& p) const
+std::string LogLayout::formatPattern(const LogMsg& logMsg, const PatternData& p) const
 {
     if (DATETIME_PATTERN == p.pattern) {
         return leftJustified(formatDateTime(logMsg.datetime), p.minWidth);
@@ -185,7 +210,7 @@ std::string LogLayout::formatPattern(const LogMsg& logMsg, const Pattern& p) con
         return leftJustified(logMsg.message, p.minWidth);
     }
 
-    return p.pattern;
+    return std::string(p.pattern);
 }
 
 std::string LogLayout::formatDateTime(const DateTime& dt) const
@@ -253,7 +278,8 @@ std::string LogLayout::formatTime(const Time& t) const
 std::string LogLayout::formatThread(const std::thread::id& thID) const
 {
     if (m_mainThread == thID) {
-        return MAIN_THREAD;
+        static const std::string MAIN_THREAD_STR(MAIN_THREAD);
+        return MAIN_THREAD_STR;
     }
     std::ostringstream ss;
     ss << thID;
@@ -280,14 +306,17 @@ LogLayout LogDest::layout() const
 }
 
 // Logger ---------------------------------
-
-Color Logger::colorForType(const Type& type)
+Logger::Logger()
 {
-    auto it = TYPES_COLOR.find(type);
-    if (it != TYPES_COLOR.end()) {
-        return it->second;
-    }
-    return Color::None;
+    setupDefault();
+}
+
+Logger::~Logger()
+{
+#ifdef KORS_LOGGER_QT_SUPPORT
+    setIsCatchQtMsg(false);
+#endif
+    clearDests();
 }
 
 Logger* Logger::instance()
@@ -296,25 +325,12 @@ Logger* Logger::instance()
     return &l;
 }
 
-Logger::Logger()
-{
-    setupDefault();
-}
-
-Logger::~Logger()
-{
-#ifdef HAW_LOGGER_QT_SUPPORT
-    setIsCatchQtMsg(false);
-#endif
-    clearDests();
-}
-
 void Logger::setupDefault()
 {
     clearDests();
-    addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread} | ${tag|10} | ${message}")));
+    addDest(new ConsoleLogDest(LogLayout("${time} | ${type|5} | ${thread|15} | ${tag|15} | ${message}")));
 
-    m_level = Normal;
+    m_level = Level::Normal;
 
     m_types.clear();
     m_types.push_back(ERRR);
@@ -322,14 +338,14 @@ void Logger::setupDefault()
     m_types.push_back(INFO);
     m_types.push_back(DEBG);
 
-#ifdef HAW_LOGGER_QT_SUPPORT
+#ifdef KORS_LOGGER_QT_SUPPORT
     setIsCatchQtMsg(true);
 #endif
 }
 
 void Logger::write(const LogMsg& logMsg)
 {
-    std::lock_guard<std::mutex> locker(m_mutex);
+    std::lock_guard locker(m_mutex);
     if (isAsseptMsg(logMsg.type)) {
         for (LogDest* dest : m_dests) {
             dest->write(logMsg);
@@ -339,7 +355,7 @@ void Logger::write(const LogMsg& logMsg)
 
 bool Logger::isAsseptMsg(const Type& type) const
 {
-    return m_level == Full || m_level == Normal || isType(type);
+    return m_level == Level::Full || m_level == Level::Normal || isType(type);
 }
 
 bool Logger::isType(const Type& type) const
@@ -400,38 +416,30 @@ void Logger::setType(const Type& type, bool enb)
     }
 }
 
-#ifdef HAW_LOGGER_QT_SUPPORT
+#ifdef KORS_LOGGER_QT_SUPPORT
 void Logger::logMsgHandler(QtMsgType type, const QMessageLogContext& ctx, const QString& s)
 {
-    if (type == QtDebugMsg && !Logger::instance()->isLevel(Debug)) {
+    if (type == QtDebugMsg && !Logger::instance()->isLevel(Level::Debug)) {
         return;
     }
 
-    static std::string Qt("Qt");
+    auto qtMsgTypeToLogType = [](QtMsgType qType) -> std::pair<Type, Color> {
+        switch (qType) {
+        case QtDebugMsg: return { DEBG, Color::None };
+        case QtWarningMsg: return { WARN, Color::Yellow };
+        case QtCriticalMsg: return { ERRR, Color::Red };
+        case QtFatalMsg: return { ERRR, Color::Red };
+        default: return { INFO, Color::Green };
+        }
+    };
 
-    std::string msg;
-    if (ctx.function) {
-        std::string sig = ctx.function;
-        msg = Helpful::methodName(sig) + ": " + s.toStdString();
-    } else {
-        msg = s.toStdString();
-    }
+    std::pair<Type, Color> t = qtMsgTypeToLogType(type);
 
-    LogMsg logMsg(qtMsgTypeToString(type), Qt, msg);
-    logMsg.color = Logger::colorForType(logMsg.type);
+    std::string_view tag = ctx.function ? funcinfo::classFuncBySig(ctx.function) : "Qt";
+
+    LogMsg logMsg(t.first, tag,  t.second, s.toStdString());
 
     Logger::instance()->write(logMsg);
-}
-
-Type Logger::qtMsgTypeToString(enum QtMsgType defType)
-{
-    switch (defType) {
-    case QtDebugMsg: return DEBG;
-    case QtWarningMsg: return WARN;
-    case QtCriticalMsg: return ERRR;
-    case QtFatalMsg: return ERRR;
-    default: return INFO;
-    }
 }
 
 void Logger::setIsCatchQtMsg(bool arg)
@@ -441,22 +449,6 @@ void Logger::setIsCatchQtMsg(bool arg)
 }
 
 #endif
-
-LogInput::LogInput(const Type& type, const std::string& tag, const std::string& funcInfo, const Color& color)
-    : m_msg(type, tag, color), m_funcInfo(funcInfo)
-{
-}
-
-LogInput::~LogInput()
-{
-    m_msg.message = m_funcInfo + m_stream.str();
-    Logger::instance()->write(m_msg);
-}
-
-Stream& LogInput::stream()
-{
-    return m_stream;
-}
 
 Stream& LogInput::stream(const char* msg, ...)
 {

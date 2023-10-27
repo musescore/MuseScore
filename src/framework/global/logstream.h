@@ -22,9 +22,9 @@
 #ifndef MU_LOGSTREAM_H
 #define MU_LOGSTREAM_H
 
-#include "thirdparty/haw_logger/logger/logstream.h"
+#include "thirdparty/kors_logger/src/logstream.h"
 namespace mu::logger {
-using Stream = haw::logger::Stream;
+using Stream = kors::logger::Stream;
 }
 
 #endif // MU_LOGSTREAM_H
