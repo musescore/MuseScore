@@ -5584,7 +5584,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 
     if (m_resetDefaults) {
         m_resetDefaults = false;
-        resetDefaults();
+        resetSlurTieDefaults();
     }
 }
 

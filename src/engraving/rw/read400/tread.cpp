@@ -576,6 +576,7 @@ bool TRead::readProperties(StaffTextBase* t, XmlReader& e, ReadContext& ctx)
 
 void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
 {
+    int mscVersion = d->score()->mscVersion();
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "subtype") {
@@ -588,11 +589,19 @@ void TRead::read(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setChangeInVelocity(e.readInt());
         } else if (tag == "veloChangeSpeed") {
             d->setVelChangeSpeed(TConv::fromXml(e.readAsciiText(), DynamicSpeed::NORMAL));
+        } else if (tag == "size" && mscVersion < 400) {
+            e.skipCurrentElement();
         } else if (readProperty(d, tag, e, ctx, Pid::AVOID_BARLINES)) {
         } else if (readProperty(d, tag, e, ctx, Pid::DYNAMICS_SIZE)) {
         } else if (readProperty(d, tag, e, ctx, Pid::CENTER_ON_NOTEHEAD)) {
         } else if (!readProperties(static_cast<TextBase*>(d), e, ctx)) {
             e.unknown();
+        }
+    }
+    if (mscVersion < 400) {
+        d->setSize(10.0);
+        if (d->xmlText().contains(u"<sym>") && !d->xmlText().contains(u"<font")) {
+            d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
         }
     }
 }
@@ -3789,7 +3798,11 @@ bool TRead::readProperties(Stem* s, XmlReader& e, ReadContext& ctx)
 {
     const AsciiStringView tag(e.name());
 
-    if (TRead::readProperty(s, tag, e, ctx, Pid::USER_LEN)) {
+    if (tag == "userLen" && s->score()->mscVersion() < 400) {
+        // Ignore stem length pre-4.0
+        e.skipCurrentElement();
+        s->setUserLength(Millimetre(0.0));
+    } else if (TRead::readProperty(s, tag, e, ctx, Pid::USER_LEN)) {
     } else if (TRead::readStyledProperty(s, tag, e, ctx)) {
     } else if (readItemProperties(s, e, ctx)) {
     } else {
@@ -4053,6 +4066,9 @@ void TRead::read(Tremolo* t, XmlReader& e, ReadContext& ctx)
                 }
             }
             t->setBeamFragment(f);
+        } else if (tag == "offset" && !t->twoNotes() && t->score()->mscVersion() < 400) {
+            e.skipCurrentElement(); // ignore single note trem offset pre 4.0
+            t->setOffset(PointF());
         } else if (TRead::readStyledProperty(t, tag, e, ctx)) {
         } else if (!readItemProperties(t, e, ctx)) {
             e.unknown();

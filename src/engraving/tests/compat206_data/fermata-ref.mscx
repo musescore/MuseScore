@@ -95,7 +95,6 @@
       </Part>
     <Staff id="1">
       <Measure>
-        <stretch>0.9</stretch>
         <voice>
           <KeySig>
             <concertKey>6</concertKey>
@@ -196,7 +195,6 @@
           </voice>
         </Measure>
       <Measure>
-        <stretch>0.9</stretch>
         <voice>
           <Fermata>
             <subtype>fermataBelow</subtype>
@@ -213,7 +211,6 @@
           </voice>
         </Measure>
       <Measure>
-        <stretch>0.9</stretch>
         <voice>
           <Beam>
             <l1>42</l1>

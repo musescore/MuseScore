@@ -1407,9 +1407,15 @@ static void readDynamic(Dynamic* d, XmlReader& e, ReadContext& ctx)
             d->setVelocity(tctx.reader().readInt());
         } else if (tag == "dynType") {
             d->setDynRange(TConv::fromXml(tctx.reader().readAsciiText(), DynamicRange::STAFF));
+        } else if (tag == "size") {
+            e.skipCurrentElement();
         } else if (!readTextProperties206(tctx.reader(), ctx, d)) {
             tctx.reader().unknown();
         }
+    }
+    d->setSize(10.0);
+    if (d->xmlText().contains(u"<sym>") && !d->xmlText().contains(u"<font")) {
+        d->setAlign(Align(AlignH::HCENTER, AlignV::BASELINE));
     }
 }
 
@@ -2869,14 +2875,9 @@ static void readMeasure206(Measure* m, int staffIdx, XmlReader& e, ReadContext& 
                 read400::TRead::readItem(el, e, ctx);
                 segment->add(el);
             }
-        }
-        //----------------------------------------------------
-        else if (tag == "stretch") {
-            double val = e.readDouble();
-            if (val < 0.0) {
-                val = 0;
-            }
-            m->setUserStretch(val);
+        } else if (tag == "stretch") {
+            // Ignore measure stretch pre 4.0
+            e.skipCurrentElement();
         } else if (tag == "noOffset") {
             m->setNoOffset(e.readInt());
         } else if (tag == "measureNumberMode") {
