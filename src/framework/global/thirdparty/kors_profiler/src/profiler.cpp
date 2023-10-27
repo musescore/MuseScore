@@ -1,23 +1,40 @@
+/*
+MIT License
+
+Copyright (c) 2020 Igor Korsukov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
 #include "profiler.h"
 
 #include <iostream>
-#include <iomanip>
 #include <algorithm>
+#include <iomanip>
 
 #include <errno.h>
 #include <stdio.h>
 
-using namespace haw::profiler;
+using namespace kors::profiler;
 
 Profiler::Options Profiler::m_options;
 
 constexpr int MAIN_THREAD_INDEX(0);
-
-Profiler* Profiler::instance()
-{
-    static Profiler p;
-    return &p;
-}
 
 Profiler::Profiler()
 {
@@ -27,6 +44,12 @@ Profiler::Profiler()
 Profiler::~Profiler()
 {
     delete m_printer;
+}
+
+Profiler* Profiler::instance()
+{
+    static Profiler p;
+    return &p;
 }
 
 void Profiler::setup(const Options& opt, Printer* printer)
@@ -165,7 +188,7 @@ void Profiler::clear()
     }
     {
         std::lock_guard<std::mutex> lock(m_funcs.mutex);
-        for (auto st : m_steps.timers) {
+        for (auto& st : m_steps.timers) {
             delete st.second;
         }
         m_steps.timers.clear();
@@ -187,7 +210,7 @@ Profiler::Data Profiler::threadsData(Data::Mode mode) const
 
     std::thread::id empty;
     for (size_t i = 0; i < funcsThreads.size(); ++i) {
-        std::thread::id th = funcsThreads[i];
+        std::thread::id th = funcsThreads.at(i);
         if (th == empty) {
             break;
         }
@@ -205,7 +228,7 @@ Profiler::Data Profiler::threadsData(Data::Mode mode) const
         Data::Thread thdata;
         thdata.thread = th;
 
-        const FuncTimers& timers = funcsTimers[i];
+        const FuncTimers& timers = funcsTimers.at(i);
         for (auto it : timers) {
             const FuncTimer* ft = it.second;
             Data::Func f(
@@ -232,13 +255,13 @@ Profiler::Data Profiler::threadsData(Data::Mode mode) const
 std::string Profiler::threadsDataString(Data::Mode mode) const
 {
     Profiler::Data data = threadsData(mode);
-    return printer()->formatData(data, mode, m_options.dataTopCount);
+    return printer()->formatData(data, mode, m_options.statTopCount);
 }
 
 void Profiler::printThreadsData(Data::Mode mode) const
 {
     Profiler::Data data = threadsData(mode);
-    printer()->printData(data, mode, m_options.dataTopCount);
+    printer()->printData(data, mode, m_options.statTopCount);
 }
 
 void Profiler::print(const std::string& str)
@@ -264,44 +287,6 @@ bool Profiler::save_file(const std::string& path, const std::string& content)
     fclose(pFile);
 
     return count > 0;
-}
-
-std::string FuncMarker::formatSig(const std::string& sig)
-{
-    static const std::string Coln("::");
-    static const std::string Spc(" ");
-    static const std::string ArgBeg("(");
-
-    std::size_t endFunc = sig.find_first_of(ArgBeg);
-    if (endFunc == std::string::npos) {
-        return sig;
-    }
-
-    std::size_t beginFunc = sig.find_last_of(Coln, endFunc);
-    if (beginFunc == std::string::npos) {
-        return sig;
-    }
-
-    std::size_t beginClassColon = sig.find_last_of(Coln, beginFunc - 2);
-    std::size_t beginClassSpace = sig.find_last_of(Spc, beginFunc - 2);
-
-    std::size_t beginClass = std::string::npos;
-    if (beginClassColon == std::string::npos) {
-        beginClass = beginClassSpace;
-    } else if (beginClassSpace == std::string::npos) {
-        beginClass = beginClassColon;
-    } else {
-        beginClass = std::max(beginClassColon, beginClassSpace);
-    }
-
-    if (beginClass == std::string::npos) {
-        beginClass = beginFunc;
-    } else {
-        beginClass += 1;
-    }
-
-    std::string str = sig.substr(beginClass, (endFunc - beginClass));
-    return str;
 }
 
 double Profiler::StepTimer::beginMs() const
@@ -373,7 +358,7 @@ using mclock = std::chrono::high_resolution_clock;
 
 void Profiler::ElapsedTimer::start()
 {
-    _start = mclock::now();
+    m_start = mclock::now();
 }
 
 void Profiler::ElapsedTimer::restart()
@@ -384,45 +369,42 @@ void Profiler::ElapsedTimer::restart()
 double Profiler::ElapsedTimer::mlsecsElapsed() const
 {
     auto end = mclock::now();
-    std::chrono::duration<double, std::milli> elapsed = end - _start;
+    std::chrono::duration<double, std::milli> elapsed = end - m_start;
 
     return elapsed.count();
 }
 
 void Profiler::ElapsedTimer::invalidate()
 {
-    _start = mclock::time_point();
+    m_start = mclock::time_point();
 }
 
 bool Profiler::ElapsedTimer::isValid() const
 {
-    const mclock::duration since_epoch = _start.time_since_epoch();
+    const mclock::duration since_epoch = m_start.time_since_epoch();
     return since_epoch.count() > 0;
 }
 
-Profiler::Printer::~Printer()
-{}
-
 void Profiler::Printer::printDebug(const std::string& str)
 {
-    std::cout << str << '\n';
+    std::cout << str << std::endl;
 }
 
 void Profiler::Printer::printInfo(const std::string& str)
 {
-    std::cout << str << '\n';
+    std::cout << str << std::endl;
 }
 
-static std::string formatDouble(double val, size_t prec)
+std::string Profiler::Printer::formatDouble(double val, size_t prec)
 {
     std::stringstream ss;
-    ss << std::fixed << std::setprecision(static_cast<int>(prec)) << val;
+    ss << std::fixed << std::setprecision(prec) << val;
     return ss.str();
 }
 
 void Profiler::Printer::printStep(const std::string& tag, double beginMs, double stepMs, const std::string& info)
 {
-    static const std::string COLN(" : ");
+    static const std::string COLON(" : ");
     static const std::string SEP("/");
     static const std::string MS(" ms: ");
 
@@ -431,7 +413,7 @@ void Profiler::Printer::printStep(const std::string& tag, double beginMs, double
 
     str
     .append(tag)
-    .append(COLN)
+    .append(COLON)
     .append(formatDouble(beginMs, 3))
     .append(SEP)
     .append(formatDouble(stepMs, 3))
@@ -480,15 +462,17 @@ void Profiler::Printer::printData(const Data& data, Data::Mode mode, int maxcoun
     printInfo(formatData(data, mode, maxcount));
 }
 
+namespace {
+struct IsLessBySum {
+    bool operator()(const Profiler::Data::Func& f, const Profiler::Data::Func& s) const
+    {
+        return f.sumtimeMs > s.sumtimeMs;
+    }
+};
+}
+
 std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int maxcount) const
 {
-    struct IsLessBySum {
-        bool operator()(const Profiler::Data::Func& f, const Profiler::Data::Func& s) const
-        {
-            return f.sumtimeMs > s.sumtimeMs;
-        }
-    };
-
     std::stringstream stream;
     stream << "\n\n";
 
@@ -543,27 +527,25 @@ std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int
     return stream.str();
 }
 
+std::string Profiler::Printer::leftJustified(const std::string& in, size_t width)
+{
+    std::string out = in;
+    if (width > out.size()) {
+        out.resize(width, ' ');
+    }
+    return out;
+}
+
+#define FORMAT(str, width) leftJustified(str, width)
+#define TITLE(str) FORMAT(std::string(str), 18)
+#define VALUE(val, unit) FORMAT(std::to_string(val) + unit, 18)
+#define VALUE_D(val, unit) FORMAT(formatDouble(val, 3) + unit, 18)
+
 void Profiler::Printer::funcsToStream(std::stringstream& stream,
                                       const std::string& title,
                                       const std::list<Data::Func>& funcs,
                                       int count) const
 {
-    auto leftJustified = [](const std::string& val, size_t width) -> std::string
-    {
-        std::string str;
-        str.resize(width, ' ');
-        size_t lenght = width < val.size() ? width : val.size();
-        for (size_t i = 0; i < lenght; ++i) {
-            str[i] = val[i];
-        }
-        return str;
-    };
-
-    #define FORMAT(str, width) leftJustified(str, width)
-    #define TITLE(str) FORMAT(std::string(str), 18)
-    #define VALUE(val, unit) FORMAT(std::to_string(val) + unit, 18)
-    #define VALUE_D(val, unit) FORMAT(formatDouble(val, 3) + unit, 18)
-
     stream << title << "\n";
     stream << FORMAT("Function", 60) << TITLE("Call time") << TITLE("Call count") << TITLE("Sum time") << "\n";
 
@@ -579,11 +561,6 @@ void Profiler::Printer::funcsToStream(std::stringstream& stream,
             break;
         }
     }
-
-    #undef FORMAT
-    #undef TITLE
-    #undef VALUE
-    #undef VALUE_D
 
     stream << "\n\n";
 }

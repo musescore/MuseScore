@@ -1,7 +1,31 @@
-#ifndef HAW_PROFILER_H
-#define HAW_PROFILER_H
+/*
+MIT License
+
+Copyright (c) 2020 Igor Korsukov
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+*/
+#ifndef KORS_PROFILER_H
+#define KORS_PROFILER_H
 
 #include <string>
+#include <string_view>
 #include <list>
 #include <vector>
 #include <set>
@@ -11,46 +35,42 @@
 #include <chrono>
 #include <sstream>
 
-#ifndef FUNC_INFO
-#if defined(_MSC_VER)
-    #define FUNC_INFO __FUNCSIG__
-#else
-    #define FUNC_INFO __PRETTY_FUNCTION__
-#endif
-#endif
+#include "funcinfo.h"
 
-#ifdef HAW_PROFILER_ENABLED
+// #define KORS_PROFILER_ENABLED
+
+#ifdef KORS_PROFILER_ENABLED
 
 #ifndef TRACEFUNC
 #define TRACEFUNC \
-    static std::string __func_info(haw::profiler::FuncMarker::formatSig(FUNC_INFO)); \
-    haw::profiler::FuncMarker __funcMarker(__func_info);
+    static std::string __func_info(CLASSFUNC); \
+    kors::profiler::FuncMarker __funcMarker(__func_info);
 #endif
 
 #ifndef TRACEFUNC_C
 #define TRACEFUNC_C(info) \
     static std::string __func_info(info); \
-    haw::profiler::FuncMarker __funcMarkerInfo(__func_info);
+    kors::profiler::FuncMarker __funcMarkerInfo(__func_info);
 #endif
 
 #ifndef BEGIN_STEP_TIME
 #define BEGIN_STEP_TIME(tag) \
-    if (haw::profiler::Profiler::options().stepTimeEnabled) \
-    { haw::profiler::Profiler::instance()->stepTime(tag, std::string("Begin"), true); }
+    if (kors::profiler::Profiler::options().stepTimeEnabled) \
+    { kors::profiler::Profiler::instance()->stepTime(tag, std::string("Begin"), true); }
 #endif
 
 #ifndef STEP_TIME
 #define STEP_TIME(tag, info) \
-    if (haw::profiler::Profiler::options().stepTimeEnabled) \
-    { haw::profiler::Profiler::instance()->stepTime(tag, info); }
+    if (kors::profiler::Profiler::options().stepTimeEnabled) \
+    { kors::profiler::Profiler::instance()->stepTime(tag, info); }
 #endif
 
 #ifndef PROFILER_CLEAR
-#define PROFILER_CLEAR haw::profiler::Profiler::instance()->clear();
+#define PROFILER_CLEAR kors::profiler::Profiler::instance()->clear();
 #endif
 
 #ifndef PROFILER_PRINT
-#define PROFILER_PRINT haw::profiler::Profiler::instance()->printThreadsData();
+#define PROFILER_PRINT kors::profiler::Profiler::instance()->printThreadsData();
 #endif
 
 #else
@@ -64,7 +84,7 @@
 
 #endif
 
-namespace haw::profiler {
+namespace kors::profiler {
 class Profiler
 {
 public:
@@ -72,12 +92,12 @@ public:
     static Profiler* instance();
 
     struct Options {
-        bool stepTimeEnabled{ true };
-        bool funcsTimeEnabled{ true };
-        bool funcsTraceEnabled{ false };
-        size_t funcsMaxThreadCount{ 100 };
-        int dataTopCount{ 150 };
         Options() {}
+        bool stepTimeEnabled = true;
+        bool funcsTimeEnabled = true;
+        bool funcsTraceEnabled = false;
+        size_t funcsMaxThreadCount = 100;
+        int statTopCount = 150;
     };
 
     struct Data {
@@ -89,8 +109,8 @@ public:
 
         struct Func {
             std::string func;
-            long callcount{ 0 };
-            double sumtimeMs{ 0. };
+            long callcount = 0;
+            double sumtimeMs = 0.0;
             Func() {}
             Func(const std::string& f, long cc, double st)
                 : func(f), callcount(cc), sumtimeMs(st) {}
@@ -106,7 +126,7 @@ public:
     };
 
     struct Printer {
-        virtual ~Printer();
+        virtual ~Printer() = default;
         virtual void printDebug(const std::string& str);
         virtual void printInfo(const std::string& str);
         virtual void printStep(const std::string& tag, double beginMs, double stepMs, const std::string& info);
@@ -116,6 +136,9 @@ public:
         virtual std::string formatData(const Data& data, Data::Mode mode, int maxcount) const;
         virtual void funcsToStream(std::stringstream& stream, const std::string& title, const std::list<Data::Func>& funcs,
                                    int count) const;
+
+        static std::string formatDouble(double val, size_t prec);
+        static std::string leftJustified(const std::string& in, size_t width);
     };
 
     struct ElapsedTimer {
@@ -126,14 +149,14 @@ public:
         bool isValid() const;
 
     private:
-        std::chrono::high_resolution_clock::time_point _start;
+        std::chrono::high_resolution_clock::time_point m_start;
     };
 
     struct FuncTimer {
         const std::string& func;
         ElapsedTimer timer;
-        long callcount;
-        double sumtimeMs;
+        long callcount = 0;
+        double sumtimeMs = 0.0;
         explicit FuncTimer(const std::string& f)
             : func(f), callcount(0), sumtimeMs(0) {}
     };
@@ -199,12 +222,12 @@ private:
 
     bool save_file(const std::string& path, const std::string& content);
 
-    Printer* m_printer{ nullptr };
+    Printer* m_printer = nullptr;
 
     StepsData m_steps;
     mutable FuncsData m_funcs;
 
-    size_t m_stackCounter{ 0 };
+    size_t m_stackCounter = 0;
 };
 
 struct FuncMarker
@@ -224,11 +247,9 @@ struct FuncMarker
         }
     }
 
-    static std::string formatSig(const std::string& sig);
-
-    Profiler::FuncTimer* timer{ nullptr };
+    Profiler::FuncTimer* timer = nullptr;
     const std::string& func;
 };
 }
 
-#endif // XTZ_PROFILER_H
+#endif // KORS_PROFILER_H

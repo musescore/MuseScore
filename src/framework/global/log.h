@@ -26,7 +26,7 @@
 #include <cstdlib>
 #include <cassert>
 
-#include "thirdparty/haw_profiler/src/profiler.h"
+#include "profiler.h"
 #include "logger.h"
 
 #undef FALLTHROUGH

@@ -19,21 +19,13 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_LOGGER_H
-#define MU_LOGGER_H
+#ifndef MU_PROFILER_H
+#define MU_PROFILER_H
 
-#include "thirdparty/kors_logger/src/logger.h"
-#include "thirdparty/kors_logger/src/logdefdest.h"
-#include "thirdparty/kors_logger/src/log_base.h"
+#include "thirdparty/kors_profiler/src/profiler.h"
 
-namespace mu::logger {
-using Logger = kors::logger::Logger;
-using Type = kors::logger::Type;
-using Level = kors::logger::Level;
-using Color = kors::logger::Color;
-using LogLayout = kors::logger::LogLayout;
-using ConsoleLogDest = kors::logger::ConsoleLogDest;
-using FileLogDest = kors::logger::FileLogDest;
+namespace mu::profiler {
+using Profiler = kors::profiler::Profiler;
 }
 
-#endif // MU_LOGGER_H
+#endif // MU_PROFILER_H
