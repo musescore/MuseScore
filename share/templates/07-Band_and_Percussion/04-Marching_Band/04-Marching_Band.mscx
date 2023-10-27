@@ -18,7 +18,7 @@
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
     <metaTag name="workTitle"></metaTag>
-    <Order id="marching-band>
+    <Order id="marching-band">
       <name>Marching Band</name>
       <instrument id="alto-saxophone">
         <family id="saxophones">Saxophones</family>
