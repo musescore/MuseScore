@@ -504,6 +504,7 @@ enum class NoteHeadGroup : signed char {
 };
 
 // P_TYPE::CLEF_TYPE
+// keep in sync with clefTable in clef.cpp, CLEF_TYPES in typesconv.cpp and CLEF_INFOS in exportxml.cpp
 enum class ClefType : signed char {
     INVALID = -1,
     G = 0,
@@ -541,6 +542,9 @@ enum class ClefType : signed char {
     TAB4,
     TAB_SERIF,
     TAB4_SERIF,
+    // new clefs to be added between here
+    C4_8VB,
+    // and here in oder to not break TAB clef style
     MAX
 };
 

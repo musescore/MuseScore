@@ -1209,6 +1209,7 @@ bool Braille::ascendingChords(ClefType clefType)
     case ClefType::TAB4_SERIF:     //TAB
         return false;
     case ClefType::C4:             //Tenor clef
+    case ClefType::C4_8VB:         //Tenor clef ottava bassa
     case ClefType::C4_F18C:        //Tenor clef (French, 18th century)
     case ClefType::C4_F20C:        //Tenor clef (French, 20th century)
     case ClefType::C5:             //Baritone clef (C clef)
@@ -2025,6 +2026,7 @@ QString Braille::brailleClef(Clef* clef)
     case ClefType::C_19C:          //C clef, H shape (19th century)
         return BRAILLE_ALTO_CLEF;
     case ClefType::C4:             //Tenor clef
+    case ClefType::C4_8VB:         //Tenor clef ottava bassa
     case ClefType::C4_F18C:        //Tenor clef (French, 18th century)
     case ClefType::C4_F20C:        //Tenor clef (French, 20th century)
         return BRAILLE_TENOR_CLEF;

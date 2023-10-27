@@ -1607,6 +1607,8 @@ void GPConverter::addClef(const GPBar* bar, int curTrack)
             }
         } else if (cl.type == GPBar::ClefType::C3) {
             return ClefType::C3;
+        } else if (cl.type == GPBar::ClefType::C4 && cl.ottavia == GPBar::OttaviaType::vb8) {
+            return ClefType::C4_8VB;
         } else if (cl.type == GPBar::ClefType::C4) {
             return ClefType::C4;
         }
