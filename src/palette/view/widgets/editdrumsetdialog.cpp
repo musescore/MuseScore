@@ -629,7 +629,7 @@ void EditDrumsetDialog::updateExample()
     note->setPos(0.0, gpaletteScore->style().spatium() * .5 * line);
     note->setHeadType(NoteHeadType::HEAD_QUARTER);
     note->setHeadGroup(nh);
-    note->mutldata()->setCachedNoteheadSym(SymNames::symIdByName(quarterCmb->currentData().toString()));
+    note->mutldata()->cachedNoteheadSym.set_value(SymNames::symIdByName(quarterCmb->currentData().toString()));
     chord->add(note);
     Stem* stem = Factory::createStem(chord.get());
     stem->setParent(chord.get());

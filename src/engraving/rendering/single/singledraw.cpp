@@ -548,7 +548,7 @@ void SingleDraw::draw(const Note* item, Painter* painter)
             item->drawSymbol(ldata->cachedSymNull(), painter);
             painter->restore();
         }
-        item->drawSymbol(ldata->cachedNoteheadSym(), painter);
+        item->drawSymbol(ldata->cachedNoteheadSym.value(), painter);
     }
 }
 

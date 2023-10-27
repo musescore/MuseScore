@@ -955,7 +955,7 @@ SymId Note::noteHead() const
                 }
             }
         } else {
-            return ldata()->cachedNoteheadSym();
+            return ldata()->cachedNoteheadSym.value();
         }
     }
 

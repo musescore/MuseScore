@@ -505,7 +505,7 @@ public:
             //m_pos.reset();
         }
 
-        virtual bool isValid() const { return m_shape.has_value(); }
+        virtual bool isValid() const { return m_shape.has_value() && m_shape.value().bbox().isValid(); }
 
         bool isSkipDraw() const { return m_isSkipDraw; }
         void setIsSkipDraw(bool val) { m_isSkipDraw = val; }
@@ -539,16 +539,7 @@ public:
 
         void setShape(const Shape& sh) { m_shape.set_value(sh); }
 
-        void setBbox(const mu::RectF& r)
-        {
-            DO_ASSERT(!std::isnan(r.x()) && !std::isinf(r.x()));
-            DO_ASSERT(!std::isnan(r.y()) && !std::isinf(r.y()));
-            DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
-            DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
-
-            DO_ASSERT(!isShapeComposite());
-            m_shape.set_value(Shape(r, nullptr, Shape::Type::Fixed));
-        }
+        void setBbox(const mu::RectF& r);
 
         void setBbox(double x, double y, double w, double h) { setBbox(mu::RectF(x, y, w, h)); }
         void addBbox(const mu::RectF& r)

@@ -43,6 +43,7 @@
 
 #include "rendering/dev/autoplace.h"
 #include "rendering/dev/chordlayout.h"
+#include "rendering/dev/tlayout.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -2380,16 +2381,40 @@ EngravingItem::LayoutData* EngravingItem::mutldata()
     return m_layoutData;
 }
 
+void EngravingItem::LayoutData::setBbox(const mu::RectF& r)
+{
+    DO_ASSERT(!std::isnan(r.x()) && !std::isinf(r.x()));
+    DO_ASSERT(!std::isnan(r.y()) && !std::isinf(r.y()));
+    DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
+    DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
+
+    //DO_ASSERT(!isShapeComposite());
+    m_shape.set_value(Shape(r, nullptr, Shape::Type::Fixed));
+}
+
 const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
 {
-    return m_shape.value(mode).bbox();
+    const Shape& sh = m_shape.value(mode);
+
+    //! NOTE Temporary
+    {
+        static const RectF _dummy;
+
+        switch (m_item->type()) {
+        case ElementType::NOTE: return !sh.elements().empty() ? sh.elements().at(0) : _dummy;
+        default:
+            break;
+        }
+    }
+
+    return sh.bbox();
 }
 
 Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
 {
     const Shape& sh = m_shape.value(LD_ACCESS::CHECK);
 
-    //! NOTE Temporary for debuging
+    //! NOTE Temporary
     //! Reimplementation: done
     {
         switch (m_item->type()) {
@@ -2409,6 +2434,12 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
             }
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
+        case ElementType::NOTE: {
+            //! NOTE Temporary fix
+            //! We can remove it the moment we figure out the layout order of the elements
+            TLayout::fillNoteShape(toNote(m_item), static_cast<Note::LayoutData*>(const_cast<LayoutData*>(this)));
+            return m_shape.value(LD_ACCESS::CHECK);
+        } break;
         default:
             break;
         }
@@ -2418,14 +2449,14 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
 
     //! NOTE Temporary for debuging
     //! Reimplementation: progress
-//            {
-//                switch (m_item->type()) {
-//                case ElementType::CHORD:
-//                //DO_ASSERT(sh.equal(old));
-//                default:
-//                    break;
-//                }
-//            }
+//    {
+//        switch (m_item->type()) {
+//        case ElementType::NOTE:
+//            DO_ASSERT(sh.equal(old));
+//        default:
+//            break;
+//        }
+//    }
 
     return old;
 }

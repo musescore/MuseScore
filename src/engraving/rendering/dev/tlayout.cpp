@@ -2315,7 +2315,8 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
             LD_CONDITION(chord->ldata()->isSetPos());
             LD_CONDITION(note->ldata()->isSetPos());
             LD_CONDITION(note->ldata()->isSetBbox());
-            LD_CONDITION(note->ldata()->isSetMirror());
+            //! NOTE A lot of spam
+            // LD_CONDITION(note->ldata()->mirror.has_value());
             if (stem) {
                 LD_CONDITION(stem->ldata()->isSetPos());
                 LD_CONDITION(stem->ldata()->isSetBbox());
@@ -2325,7 +2326,7 @@ void TLayout::layoutFingering(const Fingering* item, Fingering::LayoutData* ldat
             LD_CONDITION(chord->downNote()->ldata()->isSetBbox());
             LD_CONDITION(chord->downNote()->ldata()->isSetPos());
 
-            if (note->ldata()->mirror()) {
+            if (note->ldata()->mirror.value(LD_ACCESS::BAD)) {
                 ldata->moveX(-note->ldata()->pos().x());
             }
             ldata->moveX(headWidth * .5);
@@ -2788,7 +2789,8 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
 
 void TLayout::layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGroup::LayoutData* ldata)
 {
-    LD_CONDITION(ldata->isSetPos());
+    //! NOTE A lot of spam
+    // LD_CONDITION(ldata->isSetPos());
 
     Shape shape(Shape::Type::Composite);
     for (const Chord* grace : *item) {
@@ -4090,15 +4092,14 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 {
     LD_INDEPENDENT;
 
-    if (ldata->isValid()) {
-        return;
-    }
-
     if (!ldata->isSetPos()) {
         ldata->setPos(PointF());
     }
 
     bool useTablature = item->staff() && item->staff()->isTabStaff(item->chord()->tick());
+    ldata->useTablature.set_value(useTablature);
+
+    RectF noteBBox;
     if (useTablature) {
         if (item->displayFret() == Note::DisplayFretOption::Hide) {
             return;
@@ -4106,7 +4107,6 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
 
         const Staff* st = item->staff();
         const StaffType* tab = st->staffTypeForElement(item);
-        double mags = item->magS();
         // not complete but we need systems to be laid out to add parenthesis
         if (item->fixed()) {
             const_cast<Note*>(item)->setFretString(u"/");
@@ -4129,12 +4129,13 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
         }
 
         double w = item->tabHeadWidth(tab);     // !! use _fretString
-        ldata->setBbox(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
+        double mags = item->magS();
+        noteBBox = RectF(0, tab->fretBoxY() * mags, w, tab->fretBoxH() * mags);
 
         if (item->ghost() && Note::engravingConfiguration()->tablatureParenthesesZIndexWorkaround()) {
-            ldata->setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));
+            noteBBox.setWidth(w + item->symWidth(SymId::noteheadParenthesisLeft) + item->symWidth(SymId::noteheadParenthesisRight));
         } else {
-            ldata->setWidth(w);
+            noteBBox.setWidth(w);
         }
     } else {
         if (item->deadNote()) {
@@ -4147,21 +4148,64 @@ void TLayout::layoutNote(const Note* item, Note::LayoutData* ldata)
             nh = SymId::noteheadXBlack;
         }
 
-        ldata->setCachedNoteheadSym(nh);
+        ldata->cachedNoteheadSym.set_value(nh);
 
         if (item->isNoteName()) {
-            ldata->setCachedSymNull(SymId::noteEmptyBlack);
+            ldata->cachedSymNull.set_value(SymId::noteEmptyBlack);
             NoteHeadType ht = item->headType() == NoteHeadType::HEAD_AUTO ? item->chord()->durationType().headType() : item->headType();
             if (ht == NoteHeadType::HEAD_WHOLE) {
-                ldata->setCachedSymNull(SymId::noteEmptyWhole);
+                ldata->cachedSymNull.set_value(SymId::noteEmptyWhole);
             } else if (ht == NoteHeadType::HEAD_HALF) {
-                ldata->setCachedSymNull(SymId::noteEmptyHalf);
+                ldata->cachedSymNull.set_value(SymId::noteEmptyHalf);
             }
         } else {
-            ldata->setCachedSymNull(SymId::noSym);
+            ldata->cachedSymNull.set_value(SymId::noSym);
         }
-        ldata->setBbox(item->symBbox(nh));
+        noteBBox = item->symBbox(nh);
     }
+
+    ldata->setBbox(noteBBox);
+
+    fillNoteShape(item, ldata);
+}
+
+void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
+{
+    RectF noteBBox = ldata->bbox();
+
+    Shape shape(Shape::Type::Composite);
+    shape.add(noteBBox, item);
+
+    for (const NoteDot* dot : item->dots()) {
+        shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
+    }
+
+    Accidental* acc = item->accidental();
+    if (acc && acc->addToSkyline()) {
+        shape.add(acc->ldata()->bbox().translated(acc->pos()), acc);
+    }
+    for (auto e : item->el()) {
+        if (e->addToSkyline()) {
+            if (e->isFingering() && toFingering(e)->layoutType() != ElementType::NOTE) {
+                continue;
+            }
+            shape.add(e->ldata()->bbox().translated(e->pos()), e);
+        }
+    }
+
+    if (item->part()->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
+        GuitarBend* bend = item->bendFor();
+        if (bend && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
+            GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());
+            // Semi-hack: the relative position of note and bend
+            // isn't fully known yet, so we use an approximation
+            double sp = item->spatium();
+            PointF approxRelPos(noteBBox.width() + 0.25 * sp, -0.25 * sp);
+            shape.add(bendSeg->shape().translated(approxRelPos));
+        }
+    }
+
+    ldata->setShape(shape);
 }
 
 void TLayout::layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata)
@@ -4869,8 +4913,9 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
     const bool up = item->up();
     const double _up = up ? -1.0 : 1.0;
 
-    Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
-    LD_CONDITION(note->ldata()->isSetMirror());
+    //Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
+    //! NOTE A lot of spam
+    // LD_CONDITION(note->ldata()->mirror.has_value());
 
     double y1 = 0.0; // vertical displacement to match note attach point
     double y2 = _up * (item->length());
@@ -4901,7 +4946,7 @@ void TLayout::layoutStem(const Stem* item, Stem::LayoutData* ldata, const Layout
         } else { // non-TAB
             // move stem start to note attach point
             Note* note = up ? item->chord()->downNote() : item->chord()->upNote();
-            if ((up && !note->ldata()->mirror()) || (!up && note->ldata()->mirror())) {
+            if ((up && !note->ldata()->mirror.value(LD_ACCESS::BAD)) || (!up && note->ldata()->mirror.value(LD_ACCESS::BAD))) {
                 y1 = note->stemUpSE().y();
             } else {
                 y1 = note->stemDownNW().y();

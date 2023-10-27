@@ -77,6 +77,11 @@ public:
         return m_val.value();
     }
 
+    const T& operator()() const
+    {
+        return value();
+    }
+
     T& mut_value()
     {
         if (!m_val.has_value()) {

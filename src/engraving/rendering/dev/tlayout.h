@@ -265,6 +265,7 @@ public:
     static void layoutMMRestRange(const MMRestRange* item, MMRestRange::LayoutData* ldata);
 
     static void layoutNote(const Note* item, Note::LayoutData* ldata);
+    static void fillNoteShape(const Note* item, Note::LayoutData* ldata);
     static void layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata);
 
     static void layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf);

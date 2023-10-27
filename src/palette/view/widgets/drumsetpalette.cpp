@@ -132,7 +132,7 @@ void DrumsetPalette::updateDrumset()
             noteheadSym = note->noteHead(true, noteHead, NoteHeadType::HEAD_QUARTER);
         }
 
-        note->mutldata()->setCachedNoteheadSym(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
+        note->mutldata()->cachedNoteheadSym.set_value(noteheadSym);     // we use the cached notehead so we don't recompute it at each layout
         chord->add(note);
 
         Stem* stem = Factory::createStem(chord.get());

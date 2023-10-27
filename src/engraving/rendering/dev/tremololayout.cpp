@@ -65,7 +65,7 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
         if (!item->twoNotes()) {
             bool hasMirroredNote = false;
             for (Note* n : item->chord1()->notes()) {
-                if (n->ldata()->mirror()) {
+                if (n->ldata()->mirror.value()) {
                     hasMirroredNote = true;
                     break;
                 }
