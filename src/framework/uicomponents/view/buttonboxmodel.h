@@ -135,7 +135,7 @@ private:
         { Ok,              new LayoutButton(qtrc("uicomponents", "OK"),               Ok,              AcceptRole,      true) },
         { Save,            new LayoutButton(qtrc("uicomponents", "Save"),             Save,            ApplyRole,       true) },
         { SaveAll,         new LayoutButton(qtrc("uicomponents", "Save all"),         SaveAll,         ApplyRole,       false) },
-        { DontSave,        new LayoutButton(qtrc("uicomponents", "Don't save"),       DontSave,        DestructiveRole, false) },
+        { DontSave,        new LayoutButton(qtrc("uicomponents", "Don’t save"),       DontSave,        DestructiveRole, false) },
         { Open,            new LayoutButton(qtrc("uicomponents", "Open"),             Open,            AcceptRole,      true) },
         { Yes,             new LayoutButton(qtrc("uicomponents", "Yes"),              Yes,             AcceptRole,      true) },
         { YesToAll,        new LayoutButton(qtrc("uicomponents", "Yes to all"),       YesToAll,        AcceptRole,      false) },
