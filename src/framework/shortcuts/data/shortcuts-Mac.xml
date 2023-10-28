@@ -142,11 +142,11 @@
     </SC>
   <SC>
     <key>notation-paste-half</key>
-    <seq>Ctrl+Shift+Q</seq>
+    <seq>Meta+Shift+Q</seq>
     </SC>
   <SC>
     <key>notation-paste-double</key>
-    <seq>Ctrl+Shift+W</seq>
+    <seq>Meta+Shift+W</seq>
     </SC>
   <SC>
     <key>notation-swap</key>
