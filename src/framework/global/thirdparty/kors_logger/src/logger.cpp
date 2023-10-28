@@ -124,7 +124,7 @@ std::vector<LogLayout::PatternData> LogLayout::patterns(const std::string& forma
     std::vector<LogLayout::PatternData> patterns;
     for (const std::string_view& pstr : ps) {
         PatternData p = parcePattern(format, pstr);
-        if (p.index > -1) {
+        if (p.index != std::string::npos) {
             patterns.push_back(std::move(p));
         }
     }
