@@ -27,7 +27,6 @@
 #include "masterscore.h"
 #include "score.h"
 #include "segment.h"
-#include "system.h"
 #include "staff.h"
 #include "part.h"
 

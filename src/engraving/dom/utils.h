@@ -26,18 +26,18 @@
 #include "types/types.h"
 
 #include "interval.h"
-#include "keysig.h"
 
 #include "draw/types/geometry.h"
 
 namespace mu::engraving {
 class Chord;
+class EngravingItem;
+class KeySig;
 class Note;
 class Rest;
 class Segment;
 class System;
 class Tuplet;
-class EngravingItem;
 
 enum class Key;
 

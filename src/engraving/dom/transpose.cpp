@@ -34,7 +34,6 @@
 #include "segment.h"
 #include "staff.h"
 #include "stafftype.h"
-#include "system.h"
 #include "undo.h"
 #include "utils.h"
 
