@@ -127,7 +127,7 @@ lou_logFile(const char *fileName) {
 		logFile = NULL;
 	}
 	if (fileName == NULL || fileName[0] == 0) return;
-	if (initialLogFileName[0] == 0) strcpy(initialLogFileName, fileName);
+	if (initialLogFileName[0] == 0) strncpy(initialLogFileName, fileName, sizeof(initialLogFileName) - 1);
 	logFile = fopen(fileName, "a");
 	if (logFile == NULL && initialLogFileName[0] != 0)
 		logFile = fopen(initialLogFileName, "a");
@@ -136,6 +136,7 @@ lou_logFile(const char *fileName) {
 		logFile = stderr;
 	}
 }
+
 
 void EXPORT_CALL
 lou_logPrint(const char *format, ...) {

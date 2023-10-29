@@ -2300,7 +2300,14 @@ void inverse_mdct_slow(float *buffer, int n, vorb *f, int blocktype)
    int i,j;
    int n2 = n >> 1, nmask = (n << 2) -1;
    float *x = (float *) malloc(sizeof(*x) * n2);
-   memcpy(x, buffer, sizeof(*x) * n2);
+   if (x == NULL) {
+       // handle error
+   }
+   if (sizeof(*x) * n2 <= sizeof(buffer)) {
+       memcpy(x, buffer, sizeof(*x) * n2);
+   } else {
+       // handle error
+   }
    for (i=0; i < 4*n; ++i)
       mcos[i] = (float) cos(M_PI / 2 * i / n);
 
@@ -2311,6 +2318,8 @@ void inverse_mdct_slow(float *buffer, int n, vorb *f, int blocktype)
       buffer[i] = acc;
    }
    free(x);
+}
+
 }
 #elif 0
 // transform to use a slow dct-iv; this is STILL basically trivial,
