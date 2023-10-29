@@ -374,6 +374,87 @@ TEST_F(Engraving_PlaybackModelTests, Spanners)
 }
 
 /**
+ * @brief PlaybackModelTests_Dynamics
+ * @details Test simple dynamic markings and hairpins
+ */
+
+TEST_F(Engraving_PlaybackModelTests, Dynamics)
+{
+    // [GIVEN] Score with piano marking at the start, then crescendo to forte,
+    //         then again crescendo, followed by sudden pianissimo
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "dynamics/dynamics.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Part* part = score->parts().at(0);
+    ASSERT_TRUE(part);
+    ASSERT_EQ(part->instruments().size(), 1);
+
+    // [WHEN] The articulation profiles repository will be returning profiles
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model;
+    model.setprofilesRepository(m_repositoryMock);
+    model.load(score);
+
+    const DynamicLevelMap& dynamicLevelMap = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).dynamicLevelMap;
+
+    // [THEN] Dynamic level map matches expectations
+    EXPECT_EQ(dynamicLevelMap.size(), 51);
+
+    static constexpr dynamic_level_t piano = dynamicLevelFromType(mpe::DynamicType::p);
+    static constexpr dynamic_level_t forte = dynamicLevelFromType(mpe::DynamicType::f);
+    static constexpr dynamic_level_t fortePlusSomething = dynamicLevelFromType(mpe::DynamicType::f) + DYNAMIC_LEVEL_STEP;
+    static constexpr dynamic_level_t pianissimo = dynamicLevelFromType(mpe::DynamicType::pp);
+
+    // Start piano
+    EXPECT_EQ(dynamicLevelMap.at(0 * QUARTER_NOTE_DURATION), piano);
+
+    // Still piano at the start of the crescendo
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION), piano);
+
+    // Gradually grow to forte after that
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 1 / 24), 4312);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 2 / 24), 4375);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24), piano + (forte - piano) * 3 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 7 / 24), 4687);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 8 / 24), piano + (forte - piano) * 8 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 15 / 24), 5187);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 21 / 24), 5562);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 22 / 24), piano + (forte - piano) * 22 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(4 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 23 / 24), 5687);
+
+    // Reach forte
+    EXPECT_EQ(dynamicLevelMap.at(8 * QUARTER_NOTE_DURATION), forte);
+
+    // Still forte at the start of next crescendo
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION), forte);
+
+    // Gradually grow loader than forte after that
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 1 / 24), 5770);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 2 / 24),
+              forte + (fortePlusSomething - forte) * 2 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 3 / 24), 5812);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 7 / 24), 5895);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 15 / 24),
+              forte + (fortePlusSomething - forte) * 15 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 21 / 24),
+              forte + (fortePlusSomething - forte) * 21 / 24);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 22 / 24), 6208);
+    EXPECT_EQ(dynamicLevelMap.at(12 * QUARTER_NOTE_DURATION + (4 * QUARTER_NOTE_DURATION) * 23 / 24), 6229);
+
+    // Finally, jump to pianissimo
+    EXPECT_EQ(dynamicLevelMap.at(16 * QUARTER_NOTE_DURATION), pianissimo);
+
+    // That should be the last event
+    EXPECT_EQ(std::prev(dynamicLevelMap.cend())->first, 16 * QUARTER_NOTE_DURATION);
+}
+
+/**
  * @brief PlaybackModelTests_Pizz_To_Arco_Technique
  * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 1 measure
  *          Additionally, the first note is marked by "pizzicato" + "stacattissimo". The 3-rd note is marked by "arco"
