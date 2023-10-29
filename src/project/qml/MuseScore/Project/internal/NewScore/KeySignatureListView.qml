@@ -76,7 +76,7 @@ GridView {
             navigation.panel: root.navigationPanel
             navigation.row: root.columns === 0 ? 0 : Math.floor(model.index / root.columns)
             navigation.column: model.index - (navigation.row * root.columns)
-            navigation.accessible.name: keySignature.text
+         
 
             KeySignature {
                 id: keySignature
