@@ -2742,19 +2742,18 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
 void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes, std::vector<Note*>& bottomUpNotes,
                                      std::vector<int>& anchoredDots)
 {
-    bool hasVoices = c->measure()->hasVoices(c->vStaffIdx(), c->tick(), c->ticks());
+    Measure* measure = c->measure();
+    bool hasVoices = measure->hasVoices(c->vStaffIdx(), c->tick(), c->ticks());
     bool hasCrossNotes = c->staffMove();
-    Measure* m = c->measure();
     // Get the last track we need to check for cross staff notes.
     // Either 1 stave away from the stave we are laying out or the bottom staff of the part
-    Part* part = c->part();
-    staff_idx_t partBottomStaff = part->endTrack() / VOICES;
+    staff_idx_t partBottomStaff = c->part()->endTrack() / VOICES;
     track_idx_t lastVoice = std::min(c->vStaffIdx() + 2, partBottomStaff) * VOICES;
 
     // Get bottom staff
     if (!hasCrossNotes && partBottomStaff != c->vStaffIdx()) {
         for (size_t i = (c->vStaffIdx() + 1) * VOICES; i < lastVoice; ++i) {
-            if (Chord* voiceChord = m->findChord(c->tick(), i)) {
+            if (Chord* voiceChord = measure->findChord(c->tick(), i)) {
                 if (voiceChord->vStaffIdx() == c->vStaffIdx()) {
                     hasCrossNotes = true;
                     break;
@@ -2787,7 +2786,7 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
         size_t firstVoice = c->staffMove() ? c->track() : c->track() - c->voice();
         // Check staff below for moved chords (If staff below is available)
         for (size_t i = firstVoice; i < lastVoice; ++i) {
-            if (Chord* voiceChord = m->findChord(c->tick(), i)) {
+            if (Chord* voiceChord = measure->findChord(c->tick(), i)) {
                 // Skip chords on adjacent staves which have not been moved to this staff
                 if (voiceChord->vStaffIdx() != c->vStaffIdx()) {
                     continue;
