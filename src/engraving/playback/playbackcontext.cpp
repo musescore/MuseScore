@@ -228,25 +228,40 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
             }
         }
 
-        DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
-        DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
+        // First, check if hairpin has its own start/end dynamics in the begin/end text
+        const DynamicType dynamicTypeFrom = hairpin->dynamicTypeFrom();
+        const DynamicType dynamicTypeTo = hairpin->dynamicTypeTo();
 
-        dynamic_level_t nominalLevelFrom = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(spannerFrom + tickPositionOffset));
-        dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(spannerTo + tickPositionOffset));
+        // If it doesn't:
+        // - for the start level, use the currently-applicable level at the start tick of the hairpin
+        // - for the end level, check if there is a dynamic marking at the end of the hairpin
+        const dynamic_level_t levelFrom = dynamicLevelFromType(dynamicTypeFrom, appliableDynamicLevel(spannerFrom + tickPositionOffset));
+        const dynamic_level_t nominalLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevel(spannerTo + tickPositionOffset));
 
-        dynamic_level_t overallDynamicRange = dynamicLevelRangeByTypes(dynamicTypeFrom,
-                                                                       dynamicTypeTo,
-                                                                       nominalLevelFrom,
-                                                                       nominalLevelTo,
-                                                                       hairpin->isCrescendo());
+        // If there is an end dynamic marking, check if it matches the 'direction' of the hairpin (cresc. vs decresc.)
+        const bool isCrescendo = hairpin->isCrescendo();
+        const bool hasNominalLevelTo = nominalLevelTo != mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
+        const bool useNominalLevelTo = hasNominalLevelTo && (isCrescendo
+                                                             ? nominalLevelTo > levelFrom
+                                                             : nominalLevelTo < levelFrom);
+
+        const dynamic_level_t levelTo = useNominalLevelTo
+                                        ? nominalLevelTo
+                                        : levelFrom + (isCrescendo ? mpe::DYNAMIC_LEVEL_STEP : -mpe::DYNAMIC_LEVEL_STEP);
 
         std::map<int, int> dynamicsCurve = TConv::easingValueCurve(spannerDurationTicks,
                                                                    24 /*stepsCount*/,
-                                                                   static_cast<int>(overallDynamicRange),
+                                                                   static_cast<int>(levelTo - levelFrom),
                                                                    hairpin->veloChangeMethod());
 
         for (const auto& pair : dynamicsCurve) {
-            m_dynamicsMap.insert_or_assign(spannerFrom + pair.first + tickPositionOffset, nominalLevelFrom + pair.second);
+            m_dynamicsMap.insert_or_assign(spannerFrom + pair.first + tickPositionOffset, levelFrom + pair.second);
+        }
+
+        if (hasNominalLevelTo && !useNominalLevelTo) {
+            // If there is a dynamic at the end of the hairpin that we couldn't use because it didn't match the direction of the hairpin,
+            // insert that dynamic directly after the hairpin
+            m_dynamicsMap.insert_or_assign(spannerTo + tickPositionOffset, nominalLevelTo);
         }
     }
 }
