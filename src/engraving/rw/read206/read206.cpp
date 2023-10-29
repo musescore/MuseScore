@@ -2057,26 +2057,34 @@ static void readPedal(XmlReader& e, ReadContext& ctx, Pedal* pedal)
 
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        beginTextTag = beginTextTag || tag == "beginText";
-        continueTextTag = continueTextTag || tag == "continueText";
-        endTextTag = endTextTag || tag == "endText";
-        if (!readTextLineProperties(e, ctx, pedal)) {
+        if (readTextLineProperties(e, ctx, pedal)) {
+            beginTextTag = beginTextTag || tag == "beginText";
+            continueTextTag = continueTextTag || tag == "continueText";
+            endTextTag = endTextTag || tag == "endText";
+        } else {
             e.unknown();
         }
     }
 
-    // Set to the 206 defaults
+    // Set to the 206 defaults if no value was specified;
+    // or follow the new style setting if the specified value matches it
     if (!beginTextTag) {
         pedal->setBeginText(String());
         pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->beginText() == pedal->propertyDefault(Pid::BEGIN_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::STYLED);
     }
     if (!continueTextTag) {
         pedal->setContinueText(String());
         pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->continueText() == pedal->propertyDefault(Pid::CONTINUE_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::STYLED);
     }
     if (!endTextTag) {
         pedal->setEndText(String());
         pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+    } else if (pedal->endText() == pedal->propertyDefault(Pid::END_TEXT).value<String>()) {
+        pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::STYLED);
     }
 
     adjustPlacement(pedal);
