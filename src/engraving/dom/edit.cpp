@@ -29,6 +29,7 @@
 #include "articulation.h"
 #include "barline.h"
 #include "beam.h"
+#include "box.h"
 #include "bracket.h"
 #include "breath.h"
 #include "chord.h"
@@ -5793,11 +5794,34 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
     if (et == ElementType::LAYOUT_BREAK) {
         LayoutBreak* lb = toLayoutBreak(element);
         if (lb->layoutBreakType() == LayoutBreakType::SECTION) {
+            undo(new AddElement(lb));
             MeasureBase* m = lb->measure();
+            if (m->isBox()) {
+                // for frames, use linked frames
+                LinkedObjects* links = m->links();
+                if (links) {
+                    for (EngravingObject* lo : *links) {
+                        if (lo->isBox()) {
+                            Box* box = toBox(lo);
+                            Score* score = box->score();
+                            if (score != lb->score()) {
+                                EngravingItem* e = lb->linkedClone();
+                                e->setScore(score);
+                                e->setParent(box);
+                                undo(new AddElement(e));
+                            }
+                        }
+                    }
+                    return;
+                } else { // if thera are not linked frames, use previous measure
+                    m = m->prevMeasure();
+                    if (!m) {
+                        return;
+                    }
+                }
+            }
             for (Score* s : scoreList()) {
-                if (s == lb->score()) {
-                    undo(new AddElement(lb));
-                } else {
+                if (s != lb->score()) {
                     EngravingItem* e = lb->linkedClone();
                     e->setScore(s);
                     Measure* nm = s->tick2measure(m->tick());
