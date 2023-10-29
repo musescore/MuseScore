@@ -271,7 +271,7 @@ enum class ArticulationType {
     Doit,
     Plop,
     Scoop,
-    Bend,
+    BrassBend,
     SlideOutDown,
     SlideOutUp,
     SlideInAbove,
@@ -349,7 +349,7 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
         ArticulationType::CrossNote, ArticulationType::CircleNote, ArticulationType::TriangleNote,
         ArticulationType::DiamondNote, ArticulationType::Fall, ArticulationType::QuickFall,
         ArticulationType::Doit, ArticulationType::Plop, ArticulationType::Scoop,
-        ArticulationType::Bend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
+        ArticulationType::BrassBend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
         ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell
     };
 
