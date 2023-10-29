@@ -3436,17 +3436,11 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
     bool continueTextTag = false;
     bool endTextTag = false;
 
-    if (p->score()->mscVersion() < 420) {
-        p->setBeginText(String());
-        p->setContinueText(String());
-        p->setEndText(String());
-    }
-
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        beginTextTag = tag == "beginText" || beginTextTag;
-        continueTextTag = tag == "continueText" || continueTextTag;
-        endTextTag = tag == "endText" || endTextTag;
+        beginTextTag = beginTextTag || tag == "beginText";
+        continueTextTag = continueTextTag || tag == "continueText";
+        endTextTag = endTextTag || tag == "endText";
 
         if (readStyledProperty(p, tag, e, ctx)) {
         } else if (TRead::readProperty(p, tag, e, ctx, Pid::LINE_VISIBLE)) {
@@ -3463,12 +3457,15 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
 
     if (p->score()->mscVersion() < 420) {
         if (!beginTextTag) {
+            p->setBeginText(String());
             p->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
         }
         if (!continueTextTag) {
+            p->setContinueText(String());
             p->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
         }
         if (!endTextTag) {
+            p->setEndText(String());
             p->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
         }
     }

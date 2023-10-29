@@ -1363,10 +1363,6 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
     bool continueTextTag = false;
     bool endTextTag = false;
 
-    pedal->setBeginText(String());
-    pedal->setContinueText(String());
-    pedal->setEndText(String());
-
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "subtype") {
@@ -1424,13 +1420,17 @@ static void readPedal114(XmlReader& e, ReadContext& ctx, Pedal* pedal)
         }
     }
 
+    // Set to the 114 defaults
     if (!beginTextTag) {
+        pedal->setBeginText(String());
         pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     }
     if (!continueTextTag) {
+        pedal->setContinueText(String());
         pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     }
     if (!endTextTag) {
+        pedal->setEndText(String());
         pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     }
 }

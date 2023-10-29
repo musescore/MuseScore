@@ -2055,27 +2055,27 @@ static void readPedal(XmlReader& e, ReadContext& ctx, Pedal* pedal)
     bool continueTextTag = false;
     bool endTextTag = false;
 
-    pedal->setBeginText(String());
-    pedal->setContinueText(String());
-    pedal->setEndText(String());
-
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
-        beginTextTag = tag == "beginText" || beginTextTag;
-        continueTextTag = tag == "continueText" || continueTextTag;
-        endTextTag = tag == "endText" || endTextTag;
+        beginTextTag = beginTextTag || tag == "beginText";
+        continueTextTag = continueTextTag || tag == "continueText";
+        endTextTag = endTextTag || tag == "endText";
         if (!readTextLineProperties(e, ctx, pedal)) {
             e.unknown();
         }
     }
 
+    // Set to the 206 defaults
     if (!beginTextTag) {
+        pedal->setBeginText(String());
         pedal->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
     }
     if (!continueTextTag) {
+        pedal->setContinueText(String());
         pedal->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
     }
     if (!endTextTag) {
+        pedal->setEndText(String());
         pedal->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
     }
 
