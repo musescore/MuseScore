@@ -53,13 +53,6 @@ FocusableControl {
 
     navigation.accessible.role: MUAccessible.ListItem
     navigation.accessible.selected: isSelected
-    navigation.accessible.name: {
-        if (isSelected) {
-            return keySignature.text;
-        } else {
-            return keySignature.text + qsTr("Not Selected");
-        }
-    }
 
     background.color: normalColor
     background.opacity: root.enabled ? 1 : ui.theme.itemOpacityDisabled

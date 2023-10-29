@@ -76,7 +76,13 @@ GridView {
             navigation.panel: root.navigationPanel
             navigation.row: root.columns === 0 ? 0 : Math.floor(model.index / root.columns)
             navigation.column: model.index - (navigation.row * root.columns)
-         
+            navigation.accessible.name: {
+                if (isSelected) {
+                    return keySignature.text;
+                } else {
+                    return keySignature.text + qsTr("Not Selected");
+                }
+            }
 
             KeySignature {
                 id: keySignature
