@@ -11143,22 +11143,22 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3346"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3310"/>
         <source>Current contents of measures will be replaced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3347"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3311"/>
         <source>Continue with inserting measure repeat?</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2328"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2329"/>
         <source>Measure: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2331"/>
+        <location filename="../../src/engraving/dom/engravingitem.cpp" line="2332"/>
         <source>Beat: %1</source>
         <translation type="unfinished"></translation>
     </message>
@@ -27718,7 +27718,7 @@ failed.</source>
     </message>
     <message>
         <location filename="../../src/framework/uicomponents/view/buttonboxmodel.h" line="138"/>
-        <source>Don&apos;t save</source>
+        <source>Don’t save</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
