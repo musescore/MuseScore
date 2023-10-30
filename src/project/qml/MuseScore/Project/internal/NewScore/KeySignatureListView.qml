@@ -80,7 +80,7 @@ GridView {
                 if (isSelected) {
                     return keySignature.text;
                 } else {
-                    return keySignature.text + qsTr("Not Selected");
+                    return keySignature.text + " " + qsTrc("project/newscore", "Not selected");
                 }
             }
 
