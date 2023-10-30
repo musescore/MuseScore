@@ -2279,6 +2279,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
             {
                 // this should never happen
                 // the note is on a line and topDownNotes and bottomUpNotes are all of the lined notes
+                LOGI() << "tick: " << note->tick().toString();
                 note->setDotRelativeLine(0);
             }
         } else {
@@ -2744,24 +2745,41 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
 {
     Measure* measure = c->measure();
     bool hasVoices = measure->hasVoices(c->vStaffIdx(), c->tick(), c->ticks());
-    bool hasCrossNotes = c->staffMove();
+    bool hasUpperCrossNotes = false;
+    bool hasLowerCrossNotes = false;
+    staff_idx_t partTopStaff = c->part()->startTrack() / VOICES;
+    staff_idx_t partBottomStaff = c->part()->endTrack() / VOICES;
+    track_idx_t startVoice = c->track() - c->voice();
     // Get the last track we need to check for cross staff notes.
     // Either 1 stave away from the stave we are laying out or the bottom staff of the part
-    staff_idx_t partBottomStaff = c->part()->endTrack() / VOICES;
     track_idx_t lastVoice = std::min(c->vStaffIdx() + 2, partBottomStaff) * VOICES;
 
-    // Get bottom staff
-    if (!hasCrossNotes && partBottomStaff != c->vStaffIdx()) {
-        for (size_t i = (c->vStaffIdx() + 1) * VOICES; i < lastVoice; ++i) {
+    // Check for cross staff notes on staff above without dots
+    if (partTopStaff != c->vStaffIdx()) {
+        for (size_t i = partTopStaff * VOICES; i < (partTopStaff + 1) * VOICES; ++i) {
             if (Chord* voiceChord = measure->findChord(c->tick(), i)) {
                 if (voiceChord->vStaffIdx() == c->vStaffIdx()) {
-                    hasCrossNotes = true;
+                    hasUpperCrossNotes = true;
+                    startVoice = i;
                     break;
                 }
             }
         }
     }
-    if (!hasVoices && !hasCrossNotes) {
+
+    // Check for cross staff notes on stave below
+    if (partBottomStaff != c->vStaffIdx()) {
+        for (size_t i = (c->vStaffIdx() + 1) * VOICES; i < lastVoice; ++i) {
+            if (Chord* voiceChord = measure->findChord(c->tick(), i)) {
+                if (voiceChord->vStaffIdx() == c->vStaffIdx()) {
+                    hasLowerCrossNotes = true;
+                    break;
+                }
+            }
+        }
+    }
+
+    if (!hasVoices && !(hasUpperCrossNotes || hasLowerCrossNotes)) {
         // only this voice, so topDownNotes is just the notes in the chord
         for (Note* note : c->notes()) {
             if (note->line() & 1) {
@@ -2783,9 +2801,9 @@ void ChordLayout::getNoteListForDots(Chord* c, std::vector<Note*>& topDownNotes,
         // Get a list of notes in this staff that adjust dots from top down,
         // bottom up, and also start our locked-in dot list by adding all lines where dots are
         // guaranteed
-        size_t firstVoice = c->staffMove() ? c->track() : c->track() - c->voice();
-        // Check staff below for moved chords (If staff below is available)
-        for (size_t i = firstVoice; i < lastVoice; ++i) {
+        lastVoice = hasLowerCrossNotes ? lastVoice : (c->vStaffIdx() + 1) * VOICES;
+        // Check staves above and below for moved chords (If staff below is available)
+        for (size_t i = startVoice; i < lastVoice; ++i) {
             if (Chord* voiceChord = measure->findChord(c->tick(), i)) {
                 // Skip chords on adjacent staves which have not been moved to this staff
                 if (voiceChord->vStaffIdx() != c->vStaffIdx()) {
