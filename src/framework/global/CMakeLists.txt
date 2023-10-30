@@ -25,11 +25,14 @@ include(${CMAKE_CURRENT_LIST_DIR}/async/async.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_logger/logger.cmake)
 include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/kors_profiler/profiler.cmake)
 
+include(${CMAKE_CURRENT_LIST_DIR}/thirdparty/stduuid/stduuid/stduuid.cmake)
+
 set(MODULE_SRC
     ${MODULARITY_SRC}
     ${ASYNC_SRC}
     ${KORS_LOGGER_SRC}
     ${KORS_PROFILER_SRC}
+    ${STDUUID_SRC}
     ${CMAKE_CURRENT_LIST_DIR}/globaltypes.h
     ${CMAKE_CURRENT_LIST_DIR}/iapplication.h
     ${CMAKE_CURRENT_LIST_DIR}/iinteractive.h
@@ -74,6 +77,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/types/flags.h
     ${CMAKE_CURRENT_LIST_DIR}/types/id.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/id.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/uuid.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/types/uuid.h
+
     ${CMAKE_CURRENT_LIST_DIR}/types/val.cpp
     ${CMAKE_CURRENT_LIST_DIR}/types/val.h
     ${CMAKE_CURRENT_LIST_DIR}/types/ret.cpp
@@ -202,6 +208,7 @@ endif ()
 
 list(APPEND MODULE_INCLUDE
     ${Z_INCLUDE}
+    ${STDUUID_INCLUDE}
     )
 
 list(APPEND MODULE_LINK
