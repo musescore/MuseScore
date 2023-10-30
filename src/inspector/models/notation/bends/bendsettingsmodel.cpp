@@ -131,17 +131,22 @@ void BendSettingsModel::loadBendCurve()
         return;
     }
 
-    int bendAmount = bend->bendAmountInQuarterTones();
+    int totBendAmount = bend->totBendAmountIncludingPrecedingBends();
+    int totFulls = totBendAmount / 4;
+    int totQuarts = totBendAmount % 4;
+    int endPitch = totFulls * 100 + totQuarts * 25;
 
-    int fulls = bendAmount / 4;
-    int quarts = bendAmount % 4;
-    int pitch = std::abs(fulls * 100 + quarts * 25);
+    int localBendAmount = bend->bendAmountInQuarterTones();
+    int fulls = localBendAmount / 4;
+    int quarts = localBendAmount % 4;
+    int pitchDiff = fulls * 100 + quarts * 25;
+    int startPitch = endPitch - pitchDiff;
 
     bool isHold = this->isHold(item);
     if (isHold) {
         m_bendCurve = {
-            CurvePoint(0, pitch, true),
-            CurvePoint(MAX_TIME, pitch, {}, true)
+            CurvePoint(0, endPitch, true),
+            CurvePoint(MAX_TIME, endPitch, {}, true)
         };
 
         emit bendCurveChanged();
@@ -151,18 +156,18 @@ void BendSettingsModel::loadBendCurve()
 
     if (bend->type() == engraving::GuitarBendType::PRE_BEND) {
         m_bendCurve = { CurvePoint(0, 0, true),
-                        CurvePoint(0, pitch, true),
-                        CurvePoint(MAX_TIME, pitch, { CurvePoint::MoveDirection::Vertical }, true) };
+                        CurvePoint(0, endPitch, true),
+                        CurvePoint(MAX_TIME, endPitch, { CurvePoint::MoveDirection::Vertical }, true) };
     } else if (bend->isReleaseBend()) {
-        m_bendCurve = { CurvePoint(0, pitch, true),
-                        CurvePoint(0, pitch, { CurvePoint::MoveDirection::Horizontal }, true),
-                        CurvePoint(15, 0, { CurvePoint::MoveDirection::Both }),
-                        CurvePoint(MAX_TIME, 0, {}, true, true) };
+        m_bendCurve = { CurvePoint(0, startPitch, true),
+                        CurvePoint(0, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
+                        CurvePoint(15, endPitch, { CurvePoint::MoveDirection::Both }),
+                        CurvePoint(MAX_TIME, endPitch, {}, true, true) };
     } else {
-        m_bendCurve = { CurvePoint(0, 0, true),
-                        CurvePoint(0, 0, { CurvePoint::MoveDirection::Horizontal }, true),
-                        CurvePoint(15, pitch, { CurvePoint::MoveDirection::Both }),
-                        CurvePoint(MAX_TIME, pitch, {}, true, true) };
+        m_bendCurve = { CurvePoint(0, startPitch, true),
+                        CurvePoint(0, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
+                        CurvePoint(15, endPitch, { CurvePoint::MoveDirection::Both }),
+                        CurvePoint(MAX_TIME, endPitch, {}, true, true) };
     }
 
     emit bendCurveChanged();
@@ -251,12 +256,7 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
     int quarts = (newPitch % 100) / 25;
     int bendAmount = fulls * 4 + quarts;
 
-    int pitch = 0;
-    if (bend->isReleaseBend()) {
-        pitch = bend->startNote()->pitch() - bendAmount / 2;
-    } else {
-        pitch = bendAmount / 2 + bend->startNote()->pitch();
-    }
+    int pitch = bendAmount / 2 + bend->startNoteOfChain()->pitch();
 
     beginCommand();
     bend->setEndNotePitch(pitch);

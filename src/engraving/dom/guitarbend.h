@@ -51,6 +51,7 @@ public:
 
     Note* startNote() const;
     void setStartNotePitch(int pitch);
+    Note* startNoteOfChain() const;
 
     Note* endNote() const;
     void setEndNotePitch(int pitch);

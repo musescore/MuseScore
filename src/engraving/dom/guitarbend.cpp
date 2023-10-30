@@ -27,7 +27,9 @@
 #include "note.h"
 #include "part.h"
 #include "score.h"
+#include "staff.h"
 #include "tie.h"
+#include "utils.h"
 
 namespace mu::engraving {
 /****************************************
@@ -77,6 +79,18 @@ void GuitarBend::setStartNotePitch(int pitch)
     computeBendAmount();
 
     triggerLayout();
+}
+
+Note* GuitarBend::startNoteOfChain() const
+{
+    Note* startOfChain = startNote();
+    GuitarBend* prevBend = findPrecedingBend();
+    while (startOfChain && prevBend) {
+        startOfChain = prevBend->startNote();
+        prevBend = prevBend->findPrecedingBend();
+    }
+
+    return startOfChain;
 }
 
 Note* GuitarBend::endNote() const
