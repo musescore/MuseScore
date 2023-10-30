@@ -404,7 +404,7 @@ std::string Profiler::Printer::formatDouble(double val, size_t prec)
 
 void Profiler::Printer::printStep(const std::string& tag, double beginMs, double stepMs, const std::string& info)
 {
-    static const std::string COLON(" : ");
+    static const std::string SPACECOLONSPACE(" : ");
     static const std::string SEP("/");
     static const std::string MS(" ms: ");
 
@@ -413,7 +413,7 @@ void Profiler::Printer::printStep(const std::string& tag, double beginMs, double
 
     str
     .append(tag)
-    .append(COLON)
+    .append(SPACECOLONSPACE)
     .append(formatDouble(beginMs, 3))
     .append(SEP)
     .append(formatDouble(stepMs, 3))
