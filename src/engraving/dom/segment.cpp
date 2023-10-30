@@ -2615,10 +2615,10 @@ void Segment::stretchSegmentsToWidth(std::vector<Spring>& springs, double width)
         ++spring;
     } while (spring != springs.cend() && !(force < spring->preTension));
 
-    for (const Spring& spring : springs) {
-        if (force > spring.preTension) {
-            double newWidth = force / spring.springConst;
-            spring.segment->setWidth(newWidth + spring.segment->widthOffset());
+    for (const Spring& spring2 : springs) {
+        if (force > spring2.preTension) {
+            double newWidth = force / spring2.springConst;
+            spring2.segment->setWidth(newWidth + spring2.segment->widthOffset());
         }
     }
 }

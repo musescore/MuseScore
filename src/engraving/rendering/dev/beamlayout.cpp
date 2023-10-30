@@ -369,17 +369,17 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         item->setBeamDist(item->layoutInfo->beamDist());
     } else {
         item->setSlope(0.0);
-        Chord* startChord = nullptr;
+        Chord* startChord2 = nullptr;
         for (ChordRest* cr : chordRests) {
             if (cr->isChord()) {
-                startChord = toChord(cr);
+                startChord2 = toChord(cr);
                 break;
             }
         }
         item->layoutInfo = std::make_shared<BeamTremoloLayout>(item);
         double x1 = item->layoutInfo->chordBeamAnchorX(chordRests.front(), ChordBeamAnchorType::Start);
         double x2 = item->layoutInfo->chordBeamAnchorX(chordRests.back(), ChordBeamAnchorType::End);
-        double y = item->layoutInfo->chordBeamAnchorY(startChord);
+        double y = item->layoutInfo->chordBeamAnchorY(startChord2);
         item->startAnchor() = PointF(x1, y);
         item->endAnchor() = PointF(x2, y);
         item->layoutInfo->setAnchors(item->startAnchor(), item->endAnchor());

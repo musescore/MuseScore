@@ -441,9 +441,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             continue;
         }
         Measure* m = toMeasure(mb);
-        double oldWidth = m->width();
+        double oldWidth2 = m->width();
         MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, preStretch);
-        curSysWidth += m->width() - oldWidth;
+        curSysWidth += m->width() - oldWidth2;
     }
 
     if (curSysWidth > targetSystemWidth) {
@@ -1316,9 +1316,9 @@ void SystemLayout::layoutGuitarBends(const std::vector<Segment*>& sl, LayoutCont
                 startOfTie = startOfTie->tieBack()->startNote();
             }
             if (startOfTie != note) {
-                GuitarBend* bendBack = startOfTie->bendBack();
-                if (bendBack) {
-                    TLayout::layoutGuitarBend(bendBack, ctx);
+                GuitarBend* bendBack2 = startOfTie->bendBack();
+                if (bendBack2) {
+                    TLayout::layoutGuitarBend(bendBack2, ctx);
                 }
             }
         }
@@ -1668,10 +1668,10 @@ void SystemLayout::manageNarrowSpacing(System* system, LayoutContext& ctx, doubl
                     continue;
                 }
 
-                double squeezeFactor = ctx.state().segmentShapeSqueezeFactor();
-                double margin = segment.width() - HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, squeezeFactor);
+                double squeezeFactor2 = ctx.state().segmentShapeSqueezeFactor();
+                double margin = segment.width() - HorizontalSpacing::minHorizontalCollidingDistance(&segment, nextSeg, squeezeFactor2);
 
-                double reducedMargin = margin * (1 - std::max(squeezeFactor, squeezeLimit));
+                double reducedMargin = margin * (1 - std::max(squeezeFactor2, squeezeLimit));
                 segment.setWidth(segment.width() - reducedMargin);
             }
             m->respaceSegments();

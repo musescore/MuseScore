@@ -635,9 +635,9 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
         if (tag == "fretDiagram") {
             // Read new
             while (e.readNextStartElement()) {
-                const AsciiStringView tag(e.name());
+                const AsciiStringView tag2(e.name());
 
-                if (tag == "string") {
+                if (tag2 == "string") {
                     int no = e.intAttribute("no");
                     while (e.readNextStartElement()) {
                         const AsciiStringView t(e.name());
@@ -655,7 +655,7 @@ void TRead::read(FretDiagram* d, XmlReader& e, ReadContext& ctx)
                             e.unknown();
                         }
                     }
-                } else if (tag == "barre") {
+                } else if (tag2 == "barre") {
                     int start = e.intAttribute("start", -1);
                     int end = e.intAttribute("end", -1);
                     int fret = e.readInt();
@@ -1209,8 +1209,8 @@ void TRead::read(KeySig* s, XmlReader& e, ReadContext& ctx)
                     double accidentalGap = ctx.score()->style().styleS(Sid::keysigAccidentalDistance).val();
                     double _spatium = s->spatium();
                     // count default x position
-                    for (CustDef& cd : sig.customKeyDefs()) {
-                        prevx += s->symWidth(cd.sym) / _spatium + accidentalGap + cd.xAlt;
+                    for (CustDef& cd2 : sig.customKeyDefs()) {
+                        prevx += s->symWidth(cd2.sym) / _spatium + accidentalGap + cd2.xAlt;
                     }
                     bool flat = std::string(SymNames::nameForSymId(cd.sym).ascii()).find("Flat") != std::string::npos;
                     // if x not there, use default step

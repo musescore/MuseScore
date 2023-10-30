@@ -3032,8 +3032,8 @@ void GraceNotesGroup::addToShape()
         s.add(grace->shape(LD_ACCESS::PASS).translated(grace->pos()));
         if (vStaffIdx != staffIdx) {
             // Cross-staff grace notes add their shape to both the origin and the destination staff
-            Shape& s = _appendedSegment->staffShape(vStaffIdx);
-            s.add(grace->shape().translated(grace->pos()));
+            Shape& s2 = _appendedSegment->staffShape(vStaffIdx);
+            s2.add(grace->shape().translated(grace->pos()));
         }
     }
 }

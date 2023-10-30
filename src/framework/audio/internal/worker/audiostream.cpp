@@ -33,7 +33,14 @@
 #include "thirdparty/dr_libs/dr_flac.h"
 */
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning(push)
+#pragma warning(disable: 4456) // declaration hides previous local declaration
+#endif
 #include "thirdparty/stb/stb_vorbis.c"
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning(pop)
+#endif
 
 using namespace mu::audio;
 

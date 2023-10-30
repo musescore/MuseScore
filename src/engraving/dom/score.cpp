@@ -450,11 +450,11 @@ void Score::setUpTempoMap()
                                                                        newBps.val - currentBps.val,
                                                                        tempoChange->easingMethod());
 
-            for (const auto& pair : tempoCurve) {
-                int tick = tickPositionFrom + pair.first;
+            for (const auto& pair2 : tempoCurve) {
+                int tick2 = tickPositionFrom + pair2.first;
 
-                if (tempomap()->find(tick) == tempomap()->end()) {
-                    tempomap()->setTempo(tick, BeatsPerSecond(currentBps.val + pair.second));
+                if (tempomap()->find(tick2) == tempomap()->end()) {
+                    tempomap()->setTempo(tick2, BeatsPerSecond(currentBps.val + pair2.second));
                 }
             }
         }

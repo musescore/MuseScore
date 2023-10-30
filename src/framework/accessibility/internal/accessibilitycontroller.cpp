@@ -286,8 +286,8 @@ void AccessibilityController::stateChanged(IAccessible* aitem, State state, bool
             cancelPreviousReading();
             savePanelAccessibleName(m_lastFocused, item.item);
 
-            QAccessibleEvent ev(item.object, QAccessible::Focus);
-            sendEvent(&ev);
+            QAccessibleEvent ev2(item.object, QAccessible::Focus);
+            sendEvent(&ev2);
             m_lastFocused = item.item;
         }
     }

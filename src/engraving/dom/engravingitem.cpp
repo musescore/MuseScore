@@ -2311,8 +2311,8 @@ void EngravingItem::doInitAccessible()
         parent = parent->parentItem(false /*not explicit*/);
     }
 
-    for (EngravingItem* parent : parents) {
-        parent->setupAccessible();
+    for (EngravingItem* parent2 : parents) {
+        parent2->setupAccessible();
     }
 
     setupAccessible();

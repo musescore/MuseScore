@@ -480,11 +480,11 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
         bool collideAbove = false;
         bool collideBelow = false;
         Note* sn = tie()->startNote();
-        Chord* sc = sn->chord();
+        Chord* sc2 = sn->chord();
 
         // figure out if there are situations where a tie collides with a tie above or below it
         // in a chord
-        for (Note* note : sc->notes()) {
+        for (Note* note : sc2->notes()) {
             if (note == sn || !note->tieFor()) {
                 continue;
             }

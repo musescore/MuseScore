@@ -293,11 +293,11 @@ Fraction GuitarPro5::readBeat(const Fraction& tick, int voice, Measure* measure,
         }
 
         if (tuple) {
-            int track = staffIdx * 2 + voice;
-            Tuplet* tuplet = tuplets[track];
+            int track2 = staffIdx * 2 + voice;
+            Tuplet* tuplet = tuplets[track2];
             if ((tuplet == nullptr) || (tuplet->elementsDuration() == tuplet->baseLen().fraction() * tuplet->ratio().numerator())) {
                 tuplet = Factory::createTuplet(measure);
-                tuplets[track] = tuplet;
+                tuplets[track2] = tuplet;
                 setTuplet(tuplet, tuple);
                 tuplet->setParent(measure);
             }

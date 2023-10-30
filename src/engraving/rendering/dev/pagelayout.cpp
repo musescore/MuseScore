@@ -261,28 +261,28 @@ void PageLayout::collectPage(LayoutContext& ctx)
         }
     }
 
-    Fraction stick = Fraction(-1, 1);
+    Fraction stick2 = Fraction(-1, 1);
     for (System* s : ctx.mutState().page()->systems()) {
         for (MeasureBase* mb : s->measures()) {
             if (!mb->isMeasure()) {
                 continue;
             }
             Measure* m = toMeasure(mb);
-            if (stick == Fraction(-1, 1)) {
-                stick = m->tick();
+            if (stick2 == Fraction(-1, 1)) {
+                stick2 = m->tick();
             }
 
             for (size_t track = 0; track < ctx.dom().ntracks(); ++track) {
                 for (Segment* segment = m->first(); segment; segment = segment->next()) {
-                    EngravingItem* e = segment->element(track);
-                    if (!e) {
+                    EngravingItem* e2 = segment->element(track);
+                    if (!e2) {
                         continue;
                     }
-                    if (e->isChordRest()) {
+                    if (e2->isChordRest()) {
                         if (!ctx.dom().staff(track2staff(track))->show()) {
                             continue;
                         }
-                        ChordRest* cr = toChordRest(e);
+                        ChordRest* cr = toChordRest(e2);
                         if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
                             TLayout::layoutBeam(cr->beam(), ctx);
                         }
@@ -340,8 +340,8 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                 }
                             }
                         }
-                    } else if (e->isBarLine()) {
-                        rendering::dev::TLayout::layoutBarLine2(toBarLine(e), ctx);
+                    } else if (e2->isBarLine()) {
+                        rendering::dev::TLayout::layoutBarLine2(toBarLine(e2), ctx);
                     }
                 }
             }

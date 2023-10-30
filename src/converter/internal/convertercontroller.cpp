@@ -284,9 +284,9 @@ mu::Ret ConverterController::convertScorePartsToPngs(INotationWriterPtr writer, 
     io::path_t pngFilePath = io::dirpath(out) + "/" + io::path_t(io::completeBasename(out) + "-excerpt.png");
 
     for (size_t i = 0; i < excerpts.size(); i++) {
-        Ret ret = convertPageByPage(writer, excerpts[i], pngFilePath);
-        if (!ret) {
-            return ret;
+        Ret ret2 = convertPageByPage(writer, excerpts[i], pngFilePath);
+        if (!ret2) {
+            return ret2;
         }
     }
 
