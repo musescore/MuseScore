@@ -30,6 +30,7 @@
 #include "chord.h"
 #include "chordrest.h"
 #include "clef.h"
+#include "keysig.h"
 #include "measure.h"
 #include "note.h"
 #include "page.h"
@@ -1333,5 +1334,17 @@ String formatUniqueExcerptName(const String& baseName, const StringList& allExce
     }
 
     return result;
+}
+
+bool isFirstSystemKeySig(const KeySig* ks)
+{
+    if (!ks) {
+        return false;
+    }
+    const System* sys = ks->measure()->system();
+    if (!sys) {
+        return false;
+    }
+    return ks->tick() == sys->firstMeasure()->tick();
 }
 }

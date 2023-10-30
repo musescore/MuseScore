@@ -31,12 +31,13 @@
 
 namespace mu::engraving {
 class Chord;
+class EngravingItem;
+class KeySig;
 class Note;
 class Rest;
 class Segment;
 class System;
 class Tuplet;
-class EngravingItem;
 
 enum class Key;
 
@@ -92,5 +93,7 @@ extern void collectChordsOverlappingRests(Segment* segment, staff_idx_t staffIdx
 extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 
 extern String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames);
+
+extern bool isFirstSystemKeySig(const KeySig* ks);
 } // namespace mu::engraving
 #endif
