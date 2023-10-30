@@ -1221,11 +1221,11 @@ bool Score::rewriteMeasures(Measure* fm, const Fraction& ns, staff_idx_t staffId
 
             // skip frames
             while (!measure->isMeasure()) {
-                LayoutBreak* layoutBreak = measure->sectionBreakElement();
+                LayoutBreak* layoutBreak2 = measure->sectionBreakElement();
 
-                if (layoutBreak) {
+                if (layoutBreak2) {
                     // frame has a section break; we can stop skipping ahead
-                    sectionBreak = layoutBreak;
+                    sectionBreak = layoutBreak2;
                     break;
                 }
                 measure = measure->next();
@@ -1692,13 +1692,13 @@ void Score::regroupNotesAndRests(const Fraction& startTick, const Fraction& endT
                     Chord* nchord = toChord(chord->clone());
                     for (size_t i = 0; i < numNotes; i++) {           // strip ties from cloned chord
                         Note* n = nchord->notes()[i];
-                        if (Tie* tieFor = n->tieFor()) {
+                        if (Tie* tieFor2 = n->tieFor()) {
                             n->setTieFor(nullptr);
-                            delete tieFor;
+                            delete tieFor2;
                         }
-                        if (Tie* tieBack = n->tieBack()) {
+                        if (Tie* tieBack2 = n->tieBack()) {
                             n->setTieBack(nullptr);
-                            delete tieBack;
+                            delete tieBack2;
                         }
                     }
                     Chord* startChord = nchord;

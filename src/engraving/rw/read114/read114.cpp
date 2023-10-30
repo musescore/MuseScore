@@ -1699,17 +1699,17 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 lastTick = ctx.tick();
                 ctx.incTick(mmr->actualTicks());
             } else {
-                Segment* segment = m->getSegment(SegmentType::ChordRest, ctx.tick());
-                Rest* rest = Factory::createRest(segment);
+                Segment* segment2 = m->getSegment(SegmentType::ChordRest, ctx.tick());
+                Rest* rest = Factory::createRest(segment2);
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
                 readRest(m, rest, e, ctx);
                 if (!rest->segment()) {
-                    rest->setParent(segment);
+                    rest->setParent(segment2);
                 }
-                segment = rest->segment();
-                segment->add(rest);
+                segment2 = rest->segment();
+                segment2->add(rest);
 
                 if (!rest->ticks().isValid()) {    // hack
                     rest->setTicks(m->timesig() / timeStretch);
@@ -2159,8 +2159,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
         Fraction tupletTick = tuplet->tick();
         Fraction tupletDuration = tuplet->actualTicks() - Fraction::fromTicks(1);
         std::vector<DurationElement*> tElements = tuplet->elements();
-        for (auto& p : ctx.tuplets()) {
-            Tuplet* tuplet2 = p.second;
+        for (auto& p2 : ctx.tuplets()) {
+            Tuplet* tuplet2 = p2.second;
             if ((tuplet2->tuplet()) || (tuplet2->voice() != tuplet->voice())) {     // already a nested tuplet or in a different voice
                 continue;
             }

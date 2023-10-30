@@ -2597,13 +2597,13 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
                 }
                 // check to see if accidental can fit in slot
                 double myPd = pd * me->note->accidental()->mag();
-                bool conflict = false;
+                bool conflict2 = false;
                 if (above != -1 && me->top - aclist[above].bottom < myPd) {
-                    conflict = true;
+                    conflict2 = true;
                 } else if (below != -1 && aclist[below].top - me->bottom < myPd) {
-                    conflict = true;
+                    conflict2 = true;
                 }
-                if (!conflict) {
+                if (!conflict2) {
                     // insert into column
                     found = true;
                     me->next = above;
@@ -3149,13 +3149,13 @@ void ChordLayout::resolveRestVSRest(std::vector<Rest*>& rests, const Staff* staf
 
             double upperBound = shape1.bottom();
             double lowerBound = shape2.top();
-            int steps = 0;
+            int steps2 = 0;
             if (centerY < upperBound) {
-                steps = floor((centerY - upperBound) / lineDistance);
+                steps2 = floor((centerY - upperBound) / lineDistance);
             } else if (centerY > lowerBound) {
-                steps = ceil((centerY - lowerBound) / lineDistance);
+                steps2 = ceil((centerY - lowerBound) / lineDistance);
             }
-            double moveY = steps * lineDistance;
+            double moveY = steps2 * lineDistance;
             rest1->mutldata()->moveY(moveY);
             rest2->mutldata()->moveY(moveY);
             shape1.translate(PointF(0.0, moveY));

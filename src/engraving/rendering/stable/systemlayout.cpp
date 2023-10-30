@@ -441,9 +441,9 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
             continue;
         }
         Measure* m = toMeasure(mb);
-        double oldWidth = m->width();
+        double oldWidth2 = m->width();
         MeasureLayout::computeWidth(m, ctx, minTicks, maxTicks, preStretch);
-        curSysWidth += m->width() - oldWidth;
+        curSysWidth += m->width() - oldWidth2;
     }
 
     if (curSysWidth > targetSystemWidth) {

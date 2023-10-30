@@ -301,13 +301,13 @@ bool MeiExporter::writeScoreDef()
     std::vector<int> staffGrpEnds(m_score->staves().size(), 0);
 
     const Measure* measure = nullptr;
-    for (MeasureBase* mBase = m_score->measures()->first(); mBase != nullptr; mBase = mBase->next()) {
-        if (!measure && mBase->isMeasure()) {
+    for (MeasureBase* mBase2 = m_score->measures()->first(); mBase2 != nullptr; mBase2 = mBase2->next()) {
+        if (!measure && mBase2->isMeasure()) {
             // the first actuall measure we are going built the scoreDef from
-            measure = static_cast<const Measure*>(mBase);
+            measure = static_cast<const Measure*>(mBase2);
         }
         // Also check here if we have multiple sections in the score
-        if (mBase->sectionBreak()) {
+        if (mBase2->sectionBreak()) {
             m_hasSections = true;
             break;
         }

@@ -875,8 +875,8 @@ mu::draw::Font TextFragment::font(const TextBase* t) const
             if (t->isDynamic()) {
                 m = DYNAMICS_DEFAULT_FONT_SIZE * t->getProperty(Pid::DYNAMICS_SIZE).toDouble() * spatiumScaling;
                 if (t->style().styleB(Sid::dynamicsOverrideFont)) {
-                    std::string fontName = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
-                    family = String::fromStdString(fontName);
+                    std::string fontName2 = engravingFonts()->fontByName(t->style().styleSt(Sid::dynamicsFont).toStdString())->family();
+                    family = String::fromStdString(fontName2);
                 }
             }
             // We use a default font size of 10pt for historical reasons,

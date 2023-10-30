@@ -947,8 +947,8 @@ void CompatMidiRendererInternal::renderSpanners(EventsHolder& events, PitchWheel
         if (channels.empty()) {
             doRenderSpanners(events, s, channel, pitchWheelRenderer, MidiInstrumentEffect::NONE);
         } else {
-            for (const auto& channel : channels) {
-                doRenderSpanners(events, s, channel.second, pitchWheelRenderer, channel.first.effect);
+            for (const auto& channel2 : channels) {
+                doRenderSpanners(events, s, channel2.second, pitchWheelRenderer, channel2.first.effect);
             }
         }
     }

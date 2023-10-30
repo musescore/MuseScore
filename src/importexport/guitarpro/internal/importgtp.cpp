@@ -2761,8 +2761,8 @@ bool GuitarPro3::read(IODevice* io)
                 Lyrics* lyrics = 0;
                 if (beatBits & BEAT_LYRICS) {
                     String txt = readDelphiString();
-                    Lyrics* lyrics = Factory::createLyrics(score->dummy()->chord());
-                    lyrics->setPlainText(txt);
+                    Lyrics* lyrics2 = Factory::createLyrics(score->dummy()->chord());
+                    lyrics2->setPlainText(txt);
                 }
                 int beatEffects = 0;
 

@@ -4955,8 +4955,8 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         // if no tie added yet, convert the "tie" into "tied" and add it.
         if (note && !note->tieFor() && !tieType.isEmpty()) {
             Notation notation { "tied" };
-            const QString type { "type" };
-            notation.addAttribute(&type, &tieType);
+            const QString type2 { "type" };
+            notation.addAttribute(&type2, &tieType);
             addTie(notation, _score, note, cr->track(), _tie, _logger, &_e);
         }
     }

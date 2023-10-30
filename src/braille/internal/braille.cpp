@@ -933,12 +933,12 @@ bool Braille::convertMeasure(Measure* measure, BrailleEngravingItems* beiz)
     }
 
     for (size_t i = 0; i < nrStaves; ++i) {
-        BrailleEngravingItems measureBraille;
+        BrailleEngravingItems measureBraille2;
         BrailleEngravingItems measureLyrics;
 
-        brailleMeasureItems(&measureBraille, measure, static_cast<int>(i));
-        measureBraille.log();
-        beiz->join(&measureBraille, true, false);
+        brailleMeasureItems(&measureBraille2, measure, static_cast<int>(i));
+        measureBraille2.log();
+        beiz->join(&measureBraille2, true, false);
 
         brailleMeasureLyrics(&measureLyrics, measure, static_cast<int>(i));
         if (!measureLyrics.isEmpty()) {

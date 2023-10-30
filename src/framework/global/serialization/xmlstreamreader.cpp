@@ -185,8 +185,8 @@ void XmlStreamReader::tryParseEntity(Xml* xml)
         StringList list = val.split(' ');
         if (list.size() == 3) {
             String name = list.at(1);
-            String val = list.at(2);
-            m_entities[u'&' + name + u';'] = val.mid(1, val.size() - 2);
+            String val2 = list.at(2);
+            m_entities[u'&' + name + u';'] = val2.mid(1, val2.size() - 2);
         } else {
             LOGW() << "unknown ENTITY: " << val;
         }

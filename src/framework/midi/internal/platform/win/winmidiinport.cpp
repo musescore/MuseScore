@@ -166,17 +166,17 @@ mu::Ret WinMidiInPort::connect(const MidiDeviceID& deviceID)
         }
 
         m_win->deviceID = deviceParams.at(0);
-        MMRESULT ret = midiInOpen(&m_win->midiIn, m_win->deviceID,
-                                  reinterpret_cast<DWORD_PTR>(&process),
-                                  reinterpret_cast<DWORD_PTR>(this),
-                                  CALLBACK_FUNCTION | MIDI_IO_STATUS);
+        MMRESULT ret2 = midiInOpen(&m_win->midiIn, m_win->deviceID,
+                                   reinterpret_cast<DWORD_PTR>(&process),
+                                   reinterpret_cast<DWORD_PTR>(this),
+                                   CALLBACK_FUNCTION | MIDI_IO_STATUS);
 
-        if (ret != MMSYSERR_NOERROR) {
+        if (ret2 != MMSYSERR_NOERROR) {
             return make_ret(Err::MidiFailedConnect, "failed open port, error: " + wmidi_prv::errorString(ret));
         }
 
         m_deviceID = deviceID;
-        ret = run();
+        ret2 = run();
     } else {
         m_deviceID = deviceID;
     }

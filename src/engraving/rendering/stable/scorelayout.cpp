@@ -553,12 +553,12 @@ void ScoreLayout::layoutSegmentsWithDuration(Measure* m, const std::vector<int>&
 //            continue;
 //        }
 
-        auto [spacing, width] = computeCellWidth(current, visibleParts);
-        current->setWidth(width + spacing);
-        current->setSpacing(spacing);
-        currentXPos += spacing;
+        auto [spacing2, width2] = computeCellWidth(current, visibleParts);
+        current->setWidth(width2 + spacing2);
+        current->setSpacing(spacing2);
+        currentXPos += spacing2;
         current->mutldata()->setPosX(currentXPos);
-        currentXPos += width;
+        currentXPos += width2;
         current = current->next();
     }
 

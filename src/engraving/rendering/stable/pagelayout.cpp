@@ -329,11 +329,11 @@ void PageLayout::collectPage(LayoutContext& ctx)
                                 ChordLayout::layoutArticulations2(c, ctx, true);
 
                                 for (Note* note : c->notes()) {
-                                    for (EngravingItem* e : note->el()) {
-                                        if (!e || !e->isFingering()) {
+                                    for (EngravingItem* e2 : note->el()) {
+                                        if (!e2 || !e2->isFingering()) {
                                             continue;
                                         }
-                                        Fingering* fingering = toFingering(e);
+                                        Fingering* fingering = toFingering(e2);
                                         if (fingering->isOnCrossBeamSide()) {
                                             TLayout::layout(fingering, ctx);
                                         }
@@ -359,16 +359,16 @@ void PageLayout::collectPage(LayoutContext& ctx)
     // HACK: we relayout here cross-staff slurs because only now the information
     // about staff distances is fully available.
     for (const System* system : ctx.state().page()->systems()) {
-        long int stick = 0;
+        long int stick2 = 0;
         long int etick = 0;
         if (system->firstMeasure()) {
-            stick = system->firstMeasure()->tick().ticks();
+            stick2 = system->firstMeasure()->tick().ticks();
         }
         etick = system->endTick().ticks();
-        if (stick == 0 && etick == 0) {
+        if (stick2 == 0 && etick == 0) {
             continue;
         }
-        auto spanners = ctx.dom().spannerMap().findOverlapping(stick, etick);
+        auto spanners = ctx.dom().spannerMap().findOverlapping(stick2, etick);
         for (auto interval : spanners) {
             Spanner* sp = interval.value;
             if (!sp->isSlur()) {

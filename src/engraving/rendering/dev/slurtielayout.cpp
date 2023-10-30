@@ -701,8 +701,8 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
 
                 // in these cases, layout start of slur to stem
                 double beamWidthSp = ctx.conf().styleS(Sid::beamWidth).val() * beam1->magS();
-                double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
-                double sh = stem1->length() + (beamWidthSp / 2) + offset;
+                double offset2 = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
+                double sh = stem1->length() + (beamWidthSp / 2) + offset2;
                 if (item->up()) {
                     po.ry() = sc->stemPos().y() - sc->pagePos().y() - sh;
                 } else {
@@ -720,8 +720,8 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 TLayout::layoutTremolo(trem, ctx);
                 Note* note = item->up() ? sc->upNote() : sc->downNote();
                 double stemHeight = stem1 ? stem1->length() : defaultStemLengthStart(trem);
-                double offset = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
-                double sh = stemHeight + offset;
+                double offset2 = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
+                double sh = stemHeight + offset2;
 
                 if (item->up()) {
                     po.ry() = sc->stemPos().y() - sc->pagePos().y() - sh;
@@ -822,12 +822,12 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             } else {
                 po.ry() = item->endCR()->ldata()->bbox().top() + item->endCR()->height();
             }
-            double offset = useTablature ? 0.75 : 0.9;
-            po.ry() += ecr->intrinsicMag() * _spatium * offset * __up;
+            double offset2 = useTablature ? 0.75 : 0.9;
+            po.ry() += ecr->intrinsicMag() * _spatium * offset2 * __up;
 
             // adjustments for stem and/or beam
-            Tremolo* trem = ec ? ec->tremolo() : nullptr;
-            if (stem2 || (trem && trem->twoNotes())) {       //ec can't be null
+            Tremolo* trem2 = ec ? ec->tremolo() : nullptr;
+            if (stem2 || (trem2 && trem2->twoNotes())) {       //ec can't be null
                 Beam* beam2 = ec->beam();
                 if ((stemPos && (scr->up() == ec->up()))
                     || (beam2
@@ -836,13 +836,13 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                         && (ec->up() == item->up())
                         && sc && (sc->noteType() == NoteType::NORMAL)
                         )
-                    || (trem && trem->twoNotes() && ec->up() == item->up())
+                    || (trem2 && trem2->twoNotes() && ec->up() == item->up())
                     ) {
                     if (beam2) {
                         TLayout::layoutBeam(beam2, ctx);
                     }
-                    if (trem) {
-                        TLayout::layoutTremolo(trem, ctx);
+                    if (trem2) {
+                        TLayout::layoutTremolo(trem2, ctx);
                     }
                     // slur start was laid out to stem and start and end have same direction
                     // OR
@@ -853,9 +853,9 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                     // in these cases, layout end of slur to stem
                     double beamWidthSp = beam2 ? ctx.conf().styleS(Sid::beamWidth).val() : 0;
                     Note* note = item->up() ? sc->upNote() : sc->downNote();
-                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : defaultStemLengthEnd(trem);
-                    double offset = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
-                    double sh = stemHeight + offset;
+                    double stemHeight = stem2 ? stem2->length() + (beamWidthSp / 2) : defaultStemLengthEnd(trem2);
+                    double offset3 = std::max(beamClearance * ec->intrinsicMag(), minOffset) * _spatium;
+                    double sh = stemHeight + offset3;
 
                     if (item->up()) {
                         po.ry() = ec->stemPos().y() - ec->pagePos().y() - sh;
@@ -1445,10 +1445,10 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
     bool isSmallTie = tieLength < 2.0 * spatium && tieHeight < 0.7 * spatium;
     // For ties this small, try to fit them within a staff space before changing their arc
     if (isSmallTie) {
-        Tie* tie = tieSegment->tie();
-        bool isInside = tie->isInside();
-        bool isOuterOfChord = tie->isOuterTieOfChord(Grip::START) || tie->isOuterTieOfChord(Grip::END);
-        bool hasTiedSecondInside = tie->hasTiedSecondInside();
+        Tie* tie2 = tieSegment->tie();
+        bool isInside = tie2->isInside();
+        bool isOuterOfChord = tie2->isOuterTieOfChord(Grip::START) || tie2->isOuterTieOfChord(Grip::END);
+        bool hasTiedSecondInside = tie2->hasTiedSecondInside();
         bool hasEndPointAboveNote = abs(tieSegment->adjustmentOffset(Grip::START).x()) < 0.5 * note->width()
                                     || abs(tieSegment->adjustmentOffset(Grip::END).x()) < 0.5 * note->width();
         if (!isInside && !isOuterOfChord && !hasTiedSecondInside && !hasEndPointAboveNote) {

@@ -115,9 +115,9 @@ void CapoSettingsModel::toggleCapoForString(int stringIndex)
 
     std::vector<int> ignoredStrings;
     for (int i = 0; i < m_strings.size(); ++i) {
-        const StringItem* item = m_strings.at(i);
+        const StringItem* item2 = m_strings.at(i);
 
-        if (!item->applyCapo()) {
+        if (!item2->applyCapo()) {
             ignoredStrings.push_back(i);
         }
     }

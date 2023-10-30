@@ -507,9 +507,9 @@ std::string Profiler::Printer::formatData(const Data& data, Data::Mode mode, int
             }
 
             const Funcs& funcs = it->second.funcs;
-            Funcs::const_iterator it = funcs.cbegin(), end = funcs.cend();
-            for (; it != end; ++it) {
-                list.push_back(it->second);
+            Funcs::const_iterator it2 = funcs.cbegin(), end2 = funcs.cend();
+            for (; it2 != end2; ++it2) {
+                list.push_back(it2->second);
             }
         }
 

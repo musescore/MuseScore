@@ -1975,11 +1975,11 @@ void TLayout::layoutFermata(const Fermata* item, Fermata::LayoutData* ldata, con
     ldata->setBbox(b.translated(-0.5 * b.width(), 0.0));
 
     if (item->autoplace()) {
-        const Segment* s = item->segment();
-        const Measure* m = s->measure();
+        const Segment* s2 = item->segment();
+        const Measure* m = s2->measure();
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->ldata()->isSetPos());
-        LD_CONDITION(s->ldata()->isSetPos());
+        LD_CONDITION(s2->ldata()->isSetPos());
     }
 
     Autoplace::autoplaceSegmentElement(item, ldata);
@@ -4428,11 +4428,11 @@ void TLayout::layoutRehearsalMark(const RehearsalMark* item, RehearsalMark::Layo
     }
 
     if (item->autoplace()) {
-        const Segment* s = toSegment(item->explicitParent());
-        const Measure* m = s->measure();
+        const Segment* s2 = toSegment(item->explicitParent());
+        const Measure* m = s2->measure();
         LD_CONDITION(ldata->isSetPos());
         LD_CONDITION(m->ldata()->isSetPos());
-        LD_CONDITION(s->ldata()->isSetPos());
+        LD_CONDITION(s2->ldata()->isSetPos());
     }
 
     Autoplace::autoplaceSegmentElement(item, ldata);
