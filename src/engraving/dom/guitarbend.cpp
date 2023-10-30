@@ -69,6 +69,16 @@ Note* GuitarBend::startNote() const
     return toNote(startEl);
 }
 
+void GuitarBend::setStartNotePitch(int pitch)
+{
+    Note* note = startNote();
+    score()->undoChangePitch(note, pitch, note->tpc1(), note->tpc2());
+
+    computeBendAmount();
+
+    triggerLayout();
+}
+
 Note* GuitarBend::endNote() const
 {
     EngravingItem* endEl = endElement();
@@ -76,6 +86,16 @@ Note* GuitarBend::endNote() const
         return nullptr;
     }
     return toNote(endEl);
+}
+
+void GuitarBend::setEndNotePitch(int pitch)
+{
+    Note* note = endNote();
+    score()->undoChangePitch(note, pitch, note->tpc1(), note->tpc2());
+
+    computeBendAmount();
+
+    triggerLayout();
 }
 
 bool GuitarBend::isReleaseBend() const

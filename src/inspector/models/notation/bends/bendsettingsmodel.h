@@ -24,6 +24,8 @@
 
 #include "models/abstractinspectormodel.h"
 
+#include "types/bendtypes.h"
+
 namespace mu::inspector {
 class BendSettingsModel : public AbstractInspectorModel
 {
@@ -33,8 +35,7 @@ class BendSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * showHoldLine READ showHoldLine CONSTANT)
     Q_PROPERTY(bool isShowHoldLineAvailable READ isShowHoldLineAvailable NOTIFY isShowHoldLineAvailableChanged)
 
-    Q_PROPERTY(PropertyItem * bendType READ bendType CONSTANT)
-    Q_PROPERTY(PropertyItem * bendCurve READ bendCurve CONSTANT)
+    Q_PROPERTY(QVariantList bendCurve READ bendCurve WRITE setBendCurve NOTIFY bendCurveChanged)
     Q_PROPERTY(PropertyItem * lineThickness READ lineThickness CONSTANT)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
@@ -51,25 +52,35 @@ public:
     PropertyItem* showHoldLine() const;
     bool isShowHoldLineAvailable() const;
 
-    PropertyItem* bendType() const;
-    PropertyItem* bendCurve() const;
+    QVariantList bendCurve() const;
     PropertyItem* lineThickness() const;
 
     bool areSettingsAvailable() const;
+
+    void setBendCurve(const QVariantList& newBendCurve);
 
 signals:
     void areSettingsAvailableChanged(bool areSettingsAvailable);
     void isShowHoldLineAvailableChanged(bool isAvailable);
 
+    void bendCurveChanged();
+
 private:
     void updateIsShowHoldLineAvailable();
+
+    void loadBendCurve();
+
+    EngravingItem* item() const;
+
+    bool isHold(const EngravingItem* item) const;
+    GuitarBend* guitarBend(EngravingItem* item) const;
 
     PropertyItem* m_bendDirection = nullptr;
     PropertyItem* m_showHoldLine = nullptr;
     bool m_isShowHoldLineAvailable = false;
 
-    PropertyItem* m_bendType = nullptr;
-    PropertyItem* m_bendCurve = nullptr;
+    CurvePoints m_bendCurve;
+
     PropertyItem* m_lineThickness = nullptr;
 };
 }

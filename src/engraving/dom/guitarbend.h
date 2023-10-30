@@ -50,7 +50,11 @@ public:
     LineSegment* createLineSegment(System* parent) override;
 
     Note* startNote() const;
+    void setStartNotePitch(int pitch);
+
     Note* endNote() const;
+    void setEndNotePitch(int pitch);
+
     bool isReleaseBend() const;
     bool isFullRelease() const;
 
