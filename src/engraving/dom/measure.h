@@ -300,6 +300,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
 
+    void undoChangeProperty(Pid id, const PropertyValue& newValue);
+    void undoChangeProperty(Pid id, const PropertyValue& newValue, PropertyFlags ps) override;
+
     bool hasMMRest() const { return m_mmRest != 0; }
     bool isMMRest() const { return m_mmRestCount > 0; }
     Measure* mmRest() const { return m_mmRest; }
