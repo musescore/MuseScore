@@ -20,18 +20,24 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_INSPECTOR_COMPAT_GRIDCANVAS_H
-#define MU_INSPECTOR_COMPAT_GRIDCANVAS_H
+#ifndef MU_INSPECTOR_BENDGRIDCANVAS_H
+#define MU_INSPECTOR_BENDGRIDCANVAS_H
+
+#include <optional>
 
 #include <QPainter>
 
-#include "uicomponents/view/quickpaintedview.h"
+#include "async/asyncable.h"
+
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
-#include "engraving/types/pitchvalue.h"
 
-namespace mu::inspector::compat {
-class GridCanvas : public uicomponents::QuickPaintedView
+#include "types/bendtypes.h"
+
+#include "uicomponents/view/quickpaintedview.h"
+
+namespace mu::inspector {
+class BendGridCanvas : public uicomponents::QuickPaintedView, public async::Asyncable
 {
     Q_OBJECT
 
@@ -46,7 +52,7 @@ class GridCanvas : public uicomponents::QuickPaintedView
     Q_PROPERTY(bool shouldShowNegativeRows READ shouldShowNegativeRows WRITE setShouldShowNegativeRows NOTIFY shouldShowNegativeRowsChanged)
 
 public:
-    explicit GridCanvas(QQuickItem* parent = nullptr);
+    explicit BendGridCanvas(QQuickItem* parent = nullptr);
 
     QVariant pointList() const;
 
@@ -81,9 +87,28 @@ signals:
 
 private:
     void paint(QPainter* painter) override;
-    void mousePressEvent(QMouseEvent*) override;
 
-    mu::engraving::PitchValues m_points;
+    void mousePressEvent(QMouseEvent* event) override;
+    void mouseMoveEvent(QMouseEvent* event) override;
+    void mouseReleaseEvent(QMouseEvent* event) override;
+
+    void hoverEnterEvent(QHoverEvent* event) override;
+    void hoverMoveEvent(QHoverEvent* event) override;
+    void hoverLeaveEvent(QHoverEvent* event) override;
+
+    QRectF frameRect() const;
+    qreal columnWidth(const QRectF& frameRect) const;
+    qreal rowHeight(const QRectF& frameRect) const;
+
+    std::pair<int, int> frameCoord(const QRectF& frameRect, int x, int y) const;
+
+    void drawBackground(QPainter* painter, const QRectF& frameRect);
+    void drawCurve(QPainter* painter, const QRectF& frameRect);
+
+    std::optional<int> pointIndex(const CurvePoint& pitch, bool movable = true) const;
+    CurvePoint point(const QRectF& frameRect, int frameX, int frameY) const;
+
+    CurvePoints m_points;
 
     /// The number of rows and columns.
     /// This is in fact the number of lines that are to be drawn.
@@ -97,7 +122,10 @@ private:
 
     /// Show negative pitch values. Happens in tremoloBarCanvas.
     bool m_showNegativeRows = false;
+
+    std::optional<int> m_hoverPointIndex;
+    std::optional<int> m_currentPointIndex;
 };
 }
 
-#endif // MU_INSPECTOR_COMPAT_GRIDCANVAS_H
+#endif // MU_INSPECTOR_BENDGRIDCANVAS_H

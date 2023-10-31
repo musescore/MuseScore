@@ -36,6 +36,9 @@ struct CurvePoint
         Both
     };
 
+    // time is 0 - 60 for 0-100% of the chord duration
+    static constexpr int MAX_TIME = 60;
+
     int time = 0;
     int pitch = 0;
 

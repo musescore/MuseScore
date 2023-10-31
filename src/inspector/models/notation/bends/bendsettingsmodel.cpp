@@ -30,9 +30,9 @@
 
 using namespace mu::inspector;
 
-static constexpr int MAX_TIME = 60;
+static constexpr int ACTIVE_POINT_INDEX = 2;
 
-static QList<mu::engraving::ElementType> ELEMENTS_TYPES = {
+static std::set<mu::engraving::ElementType> ELEMENTS_TYPES = {
     engraving::ElementType::GUITAR_BEND,
     engraving::ElementType::GUITAR_BEND_SEGMENT,
     engraving::ElementType::GUITAR_BEND_HOLD,
@@ -146,7 +146,7 @@ void BendSettingsModel::loadBendCurve()
     if (isHold) {
         m_bendCurve = {
             CurvePoint(0, endPitch, true),
-            CurvePoint(MAX_TIME, endPitch, {}, true)
+            CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true)
         };
 
         emit bendCurveChanged();
@@ -157,17 +157,17 @@ void BendSettingsModel::loadBendCurve()
     if (bend->type() == engraving::GuitarBendType::PRE_BEND) {
         m_bendCurve = { CurvePoint(0, 0, true),
                         CurvePoint(0, endPitch, true),
-                        CurvePoint(MAX_TIME, endPitch, { CurvePoint::MoveDirection::Vertical }, true) };
+                        CurvePoint(CurvePoint::MAX_TIME, endPitch, { CurvePoint::MoveDirection::Vertical }, true) };
     } else if (bend->isReleaseBend()) {
         m_bendCurve = { CurvePoint(0, startPitch, true),
                         CurvePoint(0, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
                         CurvePoint(15, endPitch, { CurvePoint::MoveDirection::Both }),
-                        CurvePoint(MAX_TIME, endPitch, {}, true, true) };
+                        CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true, true) };
     } else {
         m_bendCurve = { CurvePoint(0, startPitch, true),
                         CurvePoint(0, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
                         CurvePoint(15, endPitch, { CurvePoint::MoveDirection::Both }),
-                        CurvePoint(MAX_TIME, endPitch, {}, true, true) };
+                        CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true, true) };
     }
 
     emit bendCurveChanged();
@@ -176,7 +176,7 @@ void BendSettingsModel::loadBendCurve()
 EngravingItem* BendSettingsModel::item() const
 {
     for (EngravingItem* item : m_elementList) {
-        if (ELEMENTS_TYPES.contains(item->type())) {
+        if (contains(ELEMENTS_TYPES, item->type())) {
             return item;
         }
     }
@@ -241,6 +241,10 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
         return;
     }
 
+    if (points.empty()) {
+        return;
+    }
+
     EngravingItem* item = this->item();
     if (!item) {
         return;
@@ -251,7 +255,7 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
         return;
     }
 
-    int newPitch = points[2].pitch;
+    int newPitch = points[ACTIVE_POINT_INDEX].pitch;
     int fulls = newPitch / 100;
     int quarts = (newPitch % 100) / 25;
     int bendAmount = fulls * 4 + quarts;

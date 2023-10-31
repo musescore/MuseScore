@@ -81,7 +81,7 @@ Item {
             navigationPanel: root.navigationPanel
             navigationRowStart: tremoloBarTypeSection.navigationRowEnd + 1
 
-            CompatGridCanvas {
+            GridCanvas {
                 height: 300
                 width: parent.width
 

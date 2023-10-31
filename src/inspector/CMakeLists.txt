@@ -93,10 +93,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/text/textsettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/fretcanvas.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/fretcanvas.h
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/bendgridcanvas.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/bendgridcanvas.h
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/gridcanvas.cpp
     ${CMAKE_CURRENT_LIST_DIR}/view/widgets/gridcanvas.h
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/compat/gridcanvas.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/view/widgets/compat/gridcanvas.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notationsettingsproxymodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/notationsettingsproxymodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/accidentals/accidentalsettingsmodel.cpp

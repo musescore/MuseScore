@@ -20,24 +20,18 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_INSPECTOR_GRIDCANVAS_H
-#define MU_INSPECTOR_GRIDCANVAS_H
-
-#include <optional>
+#ifndef MU_INSPECTOR_COMPAT_GRIDCANVAS_H
+#define MU_INSPECTOR_COMPAT_GRIDCANVAS_H
 
 #include <QPainter>
-
-#include "async/asyncable.h"
 
 #include "uicomponents/view/quickpaintedview.h"
 #include "modularity/ioc.h"
 #include "ui/iuiconfiguration.h"
 #include "engraving/types/pitchvalue.h"
 
-#include "types/bendtypes.h"
-
 namespace mu::inspector {
-class GridCanvas : public uicomponents::QuickPaintedView, public async::Asyncable
+class GridCanvas : public uicomponents::QuickPaintedView
 {
     Q_OBJECT
 
@@ -87,28 +81,9 @@ signals:
 
 private:
     void paint(QPainter* painter) override;
+    void mousePressEvent(QMouseEvent*) override;
 
-    void mousePressEvent(QMouseEvent* event) override;
-    void mouseMoveEvent(QMouseEvent* event) override;
-    void mouseReleaseEvent(QMouseEvent* event) override;
-
-    void hoverEnterEvent(QHoverEvent* event) override;
-    void hoverMoveEvent(QHoverEvent* event) override;
-    void hoverLeaveEvent(QHoverEvent* event) override;
-
-    QRectF frameRect() const;
-    qreal columnWidth(const QRectF& frameRect) const;
-    qreal rowHeight(const QRectF& frameRect) const;
-
-    std::pair<int, int> frameCoord(const QRectF& frameRect, int x, int y) const;
-
-    void drawBackground(QPainter* painter, const QRectF& frameRect);
-    void drawCurve(QPainter* painter, const QRectF& frameRect);
-
-    std::optional<int> pointIndex(const engraving::PitchValue& pitchValue, bool movable = true) const;
-    engraving::PitchValue pitchValue(const QRectF& frameRect, int frameX, int frameY) const;
-
-    CurvePoints m_points;
+    mu::engraving::PitchValues m_points;
 
     /// The number of rows and columns.
     /// This is in fact the number of lines that are to be drawn.
@@ -122,9 +97,6 @@ private:
 
     /// Show negative pitch values. Happens in tremoloBarCanvas.
     bool m_showNegativeRows = false;
-
-    std::optional<int> m_hoverPointIndex;
-    std::optional<int> m_currentPointIndex;
 };
 }
 

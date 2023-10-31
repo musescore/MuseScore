@@ -71,16 +71,6 @@ Note* GuitarBend::startNote() const
     return toNote(startEl);
 }
 
-void GuitarBend::setStartNotePitch(int pitch)
-{
-    Note* note = startNote();
-    score()->undoChangePitch(note, pitch, note->tpc1(), note->tpc2());
-
-    computeBendAmount();
-
-    triggerLayout();
-}
-
 Note* GuitarBend::startNoteOfChain() const
 {
     Note* startOfChain = startNote();
@@ -105,6 +95,13 @@ Note* GuitarBend::endNote() const
 void GuitarBend::setEndNotePitch(int pitch)
 {
     Note* note = endNote();
+    IF_ASSERT_FAILED(note) {
+        return;
+    }
+
+    if (note->pitch() == pitch) {
+        return;
+    }
 
     Fraction tick = note->tick();
     Staff* staff = note->staff();
