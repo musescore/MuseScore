@@ -896,6 +896,9 @@ TEST_F(Musicxml_Tests, tempoPrecision) {
 TEST_F(Musicxml_Tests, textLines) {
     mxmlMscxExportTestRef("testTextLines");
 }
+TEST_F(Musicxml_Tests, testTextOrder) {
+    mxmlImportTestRef("testTextOrder");
+}
 TEST_F(Musicxml_Tests, tieTied) {
     mxmlIoTestRef("testTieTied");
 }
