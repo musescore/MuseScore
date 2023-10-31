@@ -88,15 +88,6 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
 }
 
 //---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape VibratoSegment::doCreateShape() const
-{
-    return Shape(ldata()->bbox());
-}
-
-//---------------------------------------------------------
 //   propertyDelegate
 //---------------------------------------------------------
 
