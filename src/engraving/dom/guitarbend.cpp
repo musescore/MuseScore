@@ -496,14 +496,8 @@ void GuitarBendSegment::scanElements(void* data, void (* func)(void*, EngravingI
 
 Shape GuitarBendSegment::doCreateShape() const
 {
-    // test
-    Shape shape;
-    shape.add(ldata()->bbox(), this);
-    if (!bendText()->empty()) {
-        shape.add(bendText()->shape().translated(bendText()->pos()));
-    }
-
-    return shape;
+    UNREACHABLE;
+    return Shape();
 }
 
 bool GuitarBendSegment::isUserModified() const

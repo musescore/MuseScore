@@ -2821,6 +2821,7 @@ void TLayout::layoutGuitarBend(GuitarBend* item, LayoutContext& ctx)
 
 void TLayout::layoutGuitarBendSegment(GuitarBendSegment* item, LayoutContext& ctx)
 {
+    GuitarBendSegment::LayoutData* ldata = item->mutldata();
     bool tabStaff = item->staffType()->isTabStaff();
     if (tabStaff) {
         GuitarBendLayout::layoutTabStaff(item, ctx);
@@ -2832,6 +2833,18 @@ void TLayout::layoutGuitarBendSegment(GuitarBendSegment* item, LayoutContext& ct
     Skyline& skyline = staff->skyline();
     SkylineLine& skylineLine = tabStaff ? skyline.north() : (item->guitarBend()->ldata()->up() ? skyline.north() : skyline.south());
     skylineLine.add(item->shape().translated(item->pos()));
+
+    fillGuitarBendSegmentShape(item, ldata);
+}
+
+void TLayout::fillGuitarBendSegmentShape(const GuitarBendSegment* item, GuitarBendSegment::LayoutData* ldata)
+{
+    Shape shape;
+    shape.add(ldata->bbox(), item);
+    if (!item->bendText()->empty()) {
+        shape.add(item->bendText()->shape().translated(item->bendText()->pos()));
+    }
+    ldata->setShape(shape);
 }
 
 void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)

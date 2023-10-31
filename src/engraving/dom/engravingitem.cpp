@@ -2443,6 +2443,13 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
             TLayout::fillNoteShape(toNote(m_item), static_cast<Note::LayoutData*>(const_cast<LayoutData*>(this)));
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
+        case ElementType::GUITAR_BEND_SEGMENT: {
+            //! NOTE Temporary fix
+            //! We can remove it the moment we figure out the layout order of the elements
+            TLayout::fillGuitarBendSegmentShape(toGuitarBendSegment(m_item),
+                                                static_cast<GuitarBendSegment::LayoutData*>(const_cast<LayoutData*>(this)));
+            return m_shape.value(LD_ACCESS::CHECK);
+        } break;
         default:
             break;
         }
