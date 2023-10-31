@@ -3632,10 +3632,15 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                 || barStyle == "light-light"
                 || barStyle == "light-heavy"
                 || (barStyle == "regular" && !(loc == "left" || loc == "right"))) {
-                auto score = measure->score();
-                auto staff = score->staff(track / VOICES);
-                auto b = createBarline(score, track, type, visible, barStyle, staff->barLineSpan());
-                addBarlineToMeasure(measure, tick, std::move(b));
+                // Add barline to the first voice of every staff in the part,
+                // and span every barline except the last
+                int nstaves = _pass1.getPart(partId)->nstaves();
+                for (int i = 0; i < nstaves; ++i) {
+                    bool spanStaff = i < nstaves - 1;
+                    int currentTrack = track + (i * VOICES);
+                    auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
+                    addBarlineToMeasure(measure, tick, std::move(b));
+                }
             }
         }
     }

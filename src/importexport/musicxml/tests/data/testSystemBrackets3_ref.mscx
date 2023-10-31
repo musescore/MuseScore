@@ -585,6 +585,7 @@ Gtr.</shortName>
             </Rest>
           <BarLine>
             <subtype>end</subtype>
+            <span>1</span>
             </BarLine>
           </voice>
         </Measure>
@@ -605,6 +606,10 @@ Gtr.</shortName>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>0</span>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -646,6 +651,10 @@ Gtr.</shortName>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>0</span>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -687,6 +696,9 @@ Gtr.</shortName>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -728,6 +740,9 @@ Gtr.</shortName>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
