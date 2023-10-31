@@ -992,14 +992,25 @@ void SlurTieLayout::fixArticulations(Slur* item, PointF& pt, Chord* c, double up
 //    layout the first SpannerSegment of a slur
 //---------------------------------------------------------
 
+static bool tieSegmentShouldBeSkipped(Tie* item)
+{
+    Note* startNote = item->startNote();
+    StaffType* st = item->staff()->staffType(startNote ? startNote->tick() : Fraction(0, 1));
+    if (!st || !st->isTabStaff()) {
+        return false;
+    }
+
+    return !st->showBackTied() || (startNote && startNote->harmonic());
+}
+
 TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
 {
     // do not layout ties in tablature if not showing back-tied fret marks
-    StaffType* st = item->staff()->staffType(item->startNote() ? item->startNote()->tick() : Fraction(0, 1));
-    if (st && st->isTabStaff() && !st->showBackTied()) {
+    if (tieSegmentShouldBeSkipped(item)) {
         if (!item->segmentsEmpty()) {
             item->eraseSpannerSegments();
         }
+
         return nullptr;
     }
     //
@@ -1073,11 +1084,11 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
 TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
 {
     // do not layout ties in tablature if not showing back-tied fret marks
-    StaffType* st = item->staff()->staffType(item->startNote() ? item->startNote()->tick() : Fraction(0, 1));
-    if (st->isTabStaff() && !st->showBackTied()) {
+    if (tieSegmentShouldBeSkipped(item)) {
         if (!item->segmentsEmpty()) {
             item->eraseSpannerSegments();
         }
+
         return nullptr;
     }
 
