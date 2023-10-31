@@ -112,15 +112,8 @@ EngravingItem* HairpinSegment::drop(EditData& data)
 
 Shape HairpinSegment::doCreateShape() const
 {
-    switch (hairpin()->hairpinType()) {
-    case HairpinType::CRESC_HAIRPIN:
-    case HairpinType::DECRESC_HAIRPIN:
-        return Shape(ldata()->bbox());
-    case HairpinType::DECRESC_LINE:
-    case HairpinType::CRESC_LINE:
-    default:
-        return TextLineBaseSegment::doCreateShape();
-    }
+    UNREACHABLE;
+    return Shape();
 }
 
 //---------------------------------------------------------

@@ -55,6 +55,7 @@
 
 #include "../../dom/harppedaldiagram.h"
 #include "../../dom/harmony.h"
+#include "../../dom/hairpin.h"
 #include "../../dom/hook.h"
 
 #include "../../dom/image.h"
@@ -235,6 +236,7 @@ public:
 
     static void layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx);
     static void layoutHairpin(Hairpin* item, LayoutContext& ctx);
+    static void fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment::LayoutData* ldata);
     static void layoutHarpPedalDiagram(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata);
     static void layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext& ctx);
     static void layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, const LayoutContext& ctx);
@@ -359,6 +361,8 @@ private:
     static SpannerSegment* layoutSystemSLine(SLine* line, System* system, LayoutContext& ctx);
     static SpannerSegment* getNextLayoutSystemSegment(Spanner* spanner, System* system,
                                                       std::function<SpannerSegment* (System* parent)> createSegment);
+
+    static Shape textLineBaseSegmentShape(const TextLineBaseSegment* item);
 };
 }
 

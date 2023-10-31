@@ -3179,6 +3179,23 @@ void TLayout::layoutHairpin(Hairpin* item, LayoutContext& ctx)
     layoutTextLineBase(item, ctx);
 }
 
+void TLayout::fillHairpinSegmentShape(const HairpinSegment* item, HairpinSegment::LayoutData* ldata)
+{
+    Shape sh;
+    switch (item->hairpin()->hairpinType()) {
+    case HairpinType::CRESC_HAIRPIN:
+    case HairpinType::DECRESC_HAIRPIN:
+        sh = Shape(item->ldata()->bbox());
+        break;
+    case HairpinType::DECRESC_LINE:
+    case HairpinType::CRESC_LINE:
+    default:
+        sh = textLineBaseSegmentShape(item);
+    }
+
+    ldata->setShape(sh);
+}
+
 void TLayout::layoutHarpPedalDiagram(const HarpPedalDiagram* item, HarpPedalDiagram::LayoutData* ldata)
 {
     const_cast<HarpPedalDiagram*>(item)->updateDiagramText();
@@ -5454,6 +5471,28 @@ void TLayout::layoutBaseTextBase1(const TextBase* item, TextBase::LayoutData* ld
 void TLayout::layoutBaseTextBase1(TextBase* item, const LayoutContext&)
 {
     layoutBaseTextBase1(item, item->mutldata());
+}
+
+Shape TLayout::textLineBaseSegmentShape(const TextLineBaseSegment* item)
+{
+    Shape shape;
+    if (!item->text()->empty()) {
+        shape.add(item->text()->ldata()->bbox().translated(item->text()->pos()));
+    }
+    if (!item->endText()->empty()) {
+        shape.add(item->endText()->ldata()->bbox().translated(item->endText()->pos()));
+    }
+    double lw2 = 0.5 * item->textLineBase()->lineWidth();
+    bool isDottedLine = item->textLineBase()->lineStyle() == LineType::DOTTED;
+    if (item->twoLines()) {     // hairpins
+        shape.add(item->boundingBoxOfLine(item->points()[0], item->points()[1], lw2, isDottedLine));
+        shape.add(item->boundingBoxOfLine(item->points()[2], item->points()[3], lw2, isDottedLine));
+    } else if (item->textLineBase()->lineVisible()) {
+        for (int i = 0; i < item->npoints() - 1; ++i) {
+            shape.add(item->boundingBoxOfLine(item->points()[i], item->points()[i + 1], lw2, isDottedLine));
+        }
+    }
+    return shape;
 }
 
 void TLayout::layoutText(const Text* item, Text::LayoutData* ldata)
