@@ -70,6 +70,7 @@ private:
 
     void appendControlSwitch(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes,
                              const ControllIdx controlIdx);
+    void appendPitchBend(EventSequenceMap& destination, const mpe::NoteEvent& noteEvent, const mpe::ArticulationTypeSet& appliableTypes);
 
     VstEvent buildEvent(const Steinberg::Vst::Event::EventTypes type, const int32_t noteIdx, const float velocityFraction,
                         const float tuning) const;
@@ -79,6 +80,7 @@ private:
     float noteTuning(const mpe::NoteEvent& noteEvent, const int noteIdx) const;
     float noteVelocityFraction(const mpe::NoteEvent& noteEvent) const;
     float expressionLevel(const mpe::dynamic_level_t dynamicLevel) const;
+    float pitchBendLevel(const mpe::pitch_level_t pitchLevel) const;
 
     ParamsMapping m_mapping;
 };
