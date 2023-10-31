@@ -39,6 +39,7 @@
 #include "../../dom/chordline.h"
 #include "../../dom/clef.h"
 #include "../../dom/capo.h"
+#include "../../dom/chord.h"
 
 #include "../../dom/deadslapped.h"
 #include "../../dom/dynamic.h"
@@ -50,7 +51,7 @@
 #include "../../dom/fingering.h"
 #include "../../dom/fret.h"
 
-#include "../../dom/chord.h"
+#include "../../dom/guitarbend.h"
 
 #include "../../dom/harppedaldiagram.h"
 #include "../../dom/harmony.h"
@@ -230,6 +231,7 @@ public:
     static void layoutGradualTempoChange(GradualTempoChange* item, LayoutContext& ctx);
     static void layoutGuitarBend(GuitarBend* item, LayoutContext& ctx);
     static void layoutGuitarBendSegment(GuitarBendSegment* item, LayoutContext& ctx);
+    static void fillGuitarBendSegmentShape(const GuitarBendSegment* item, GuitarBendSegment::LayoutData* ldata);
 
     static void layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx);
     static void layoutHairpin(Hairpin* item, LayoutContext& ctx);

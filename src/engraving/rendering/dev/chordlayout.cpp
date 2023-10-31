@@ -2275,8 +2275,7 @@ void ChordLayout::placeDots(const std::vector<Chord*>& chords, const std::vector
                     }
                 }
             }
-            IF_ASSERT_FAILED(finished)
-            {
+            IF_ASSERT_FAILED(finished) {
                 // this should never happen
                 // the note is on a line and topDownNotes and bottomUpNotes are all of the lined notes
                 LOGI() << "tick: " << note->tick().toString();
@@ -3506,13 +3505,13 @@ void ChordLayout::checkStartEndSlurs(Chord* chord, LayoutContext& ctx)
 
 void ChordLayout::checkAndFillShape(const ChordRest* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-#ifndef NDEBUG
+#ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS
     Shape origin = ldata->shape(LD_ACCESS::PASS);
 #endif
 
     fillShape(item, ldata, conf);
 
-#ifndef NDEBUG
+#ifdef MUE_ENABLE_ENGRAVING_LD_ACCESS
     Shape fixed = ldata->shape(LD_ACCESS::PASS);
     if (!origin.equal(fixed)) {
         LOGE() << "Shape not actual for item: " << item->typeName();
