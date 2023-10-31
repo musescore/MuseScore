@@ -4835,7 +4835,17 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
     if (!oldElement) {
         undoAddElement(newElement);
     } else {
-        undo(new ChangeElement(oldElement, newElement));
+        const std::list<EngravingObject*> links = oldElement->linkList();
+        for (EngravingObject* obj : links) {
+            EngravingItem* item = toEngravingItem(obj);
+            if (item == oldElement) {
+                undo(new ChangeElement(oldElement, newElement));
+            } else {
+                if (item->score()) {
+                    item->score()->undo(new ChangeElement(item, newElement->linkedClone()));
+                }
+            }
+        }
     }
 }
 
