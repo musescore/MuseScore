@@ -653,6 +653,12 @@ TEST_F(Musicxml_Tests, lyricColor) {
 TEST_F(Musicxml_Tests, lyrics1) {
     mxmlIoTestRef("testLyrics1");
 }
+TEST_F(Musicxml_Tests, lyricExtension1) {
+    mxmlIoTest("testLyricExtensions");
+}
+TEST_F(Musicxml_Tests, lyricExtension2) {
+    mxmlImportTestRef("testLyricExtensions");
+}
 TEST_F(Musicxml_Tests, lyricsVoice2a) {
     mxmlIoTest("testLyricsVoice2a");
 }

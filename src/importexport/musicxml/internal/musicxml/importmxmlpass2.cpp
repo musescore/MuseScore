@@ -5708,7 +5708,9 @@ void MusicXMLParserLyric::parse()
     const auto l = lyric.release();
     _numberedLyrics[lyricNo] = l;
 
-    if (hasExtend && (extendType == "" || extendType == "start")) {
+    if (hasExtend
+        && (extendType == "" || extendType == "start")
+        && (l->syllabic() == LyricsSyllabic::SINGLE || l->syllabic() == LyricsSyllabic::END)) {
         _extendedLyrics.insert(l);
     }
 }
