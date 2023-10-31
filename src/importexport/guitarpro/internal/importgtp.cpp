@@ -3355,7 +3355,7 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io, bool experiment
             MidiArticulation(u"portato", u"", 100, 67),
             MidiArticulation(u"tenuto", u"", 100, 100),
             MidiArticulation(u"accent", u"", 120, 100),
-            MidiArticulation(u"marcato", u"", 144, 67),
+            MidiArticulation(u"marcato", u"", 144, 100),
             MidiArticulation(u"sforzato", u"", 169, 100),
         };
 

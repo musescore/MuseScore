@@ -525,7 +525,7 @@
           </Articulation>
         <Articulation name="marcato">
           <velocity>144</velocity>
-          <gateTime>67</gateTime>
+          <gateTime>100</gateTime>
           </Articulation>
         <Articulation name="sforzato">
           <velocity>169</velocity>
