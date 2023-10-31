@@ -344,7 +344,7 @@ QString checkAtEndElement(const QXmlStreamReader& e, const QString& expName)
         return "";
     }
 
-    QString res = qtrc("iex_musicxml", "expected token type and name 'EndElement %1', actual '%2 %3'")
+    QString res = qtrc("iex_musicxml", "expected token type and name ‘EndElement %1’, actual ‘%2 %3’")
                   .arg(expName)
                   .arg(e.tokenString())
                   .arg(e.name().toString());
