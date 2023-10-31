@@ -553,7 +553,7 @@
                   <item>
                    <widget class="QCheckBox" name="dontHideStavesInFirstSystem">
                     <property name="text">
-                     <string>Don't hide empty staves in first system</string>
+                     <string>Don’t hide empty staves in first system</string>
                     </property>
                    </widget>
                   </item>
@@ -6043,7 +6043,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="2" column="0" colspan="2">
             <widget class="QCheckBox" name="oneMeasureRepeatShow1">
              <property name="text">
-              <string>Show '1' on 1-measure repeats</string>
+              <string>Show ‘1’ on 1-measure repeats</string>
              </property>
             </widget>
            </item>
