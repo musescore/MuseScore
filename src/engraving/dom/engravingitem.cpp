@@ -2403,6 +2403,7 @@ const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
         switch (m_item->type()) {
         case ElementType::NOTE:
         case ElementType::ORNAMENT:
+        case ElementType::HAIRPIN_SEGMENT:
             return !sh.elements().empty() ? sh.elements().at(0) : _dummy;
         default:
             break;
@@ -2448,6 +2449,13 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
             //! We can remove it the moment we figure out the layout order of the elements
             TLayout::fillGuitarBendSegmentShape(toGuitarBendSegment(m_item),
                                                 static_cast<GuitarBendSegment::LayoutData*>(const_cast<LayoutData*>(this)));
+            return m_shape.value(LD_ACCESS::CHECK);
+        } break;
+        case ElementType::HAIRPIN_SEGMENT: {
+            //! NOTE Temporary fix
+            //! We can remove it the moment we figure out the layout order of the elements
+            TLayout::fillHairpinSegmentShape(toHairpinSegment(m_item),
+                                             static_cast<HairpinSegment::LayoutData*>(const_cast<LayoutData*>(this)));
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
         default:
