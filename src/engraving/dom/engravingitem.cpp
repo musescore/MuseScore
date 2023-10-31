@@ -1305,8 +1305,16 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
         return PropertyPropagation::NONE;
     }
 
-    if ((isTextProperty && isPropertyLinkedToMaster(propertyId))) {
-        return PropertyPropagation::PROPAGATE;
+    if (isTextProperty) {
+        if (sourceScore->isMaster() && destinationItem->isPropertyLinkedToMaster(propertyId)) {
+            // From master score - check if destination part follows master
+            return PropertyPropagation::PROPAGATE;
+        }
+
+        if (!sourceScore->isMaster() && isPropertyLinkedToMaster(propertyId)) {
+            // From part - check if source part follows master
+            return PropertyPropagation::PROPAGATE;
+        }
     }
 
     if (!sourceScore->isMaster()) {
