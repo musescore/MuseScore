@@ -97,9 +97,15 @@ public:
     MOCK_METHOD(void, setAutoSaveInterval, (int), (override));
     MOCK_METHOD(async::Channel<int>, autoSaveIntervalChanged, (), (const, override));
 
-    MOCK_METHOD(bool, promptShareAudioCom, (), (const, override));
-    MOCK_METHOD(void, setPromptShareAudioCom, (bool), (override));
-    MOCK_METHOD(async::Channel<bool>, promptShareAudioComChanged, (), (const, override));
+    MOCK_METHOD(bool, alsoShareAudioCom, (), (const, override));
+    MOCK_METHOD(void, setAlsoShareAudioCom, (bool), (override));
+    MOCK_METHOD(async::Channel<bool>, alsoShareAudioComChanged, (), (const, override));
+
+    MOCK_METHOD(bool, showAlsoShareAudioComDialog, (), (const, override));
+    MOCK_METHOD(void, setShowAlsoShareAudioComDialog, (bool), (override));
+
+    MOCK_METHOD(bool, hasAskedAlsoShareAudioCom, (), (const, override));
+    MOCK_METHOD(void, setHasAskedAlsoShareAudioCom, (bool), (override));
 
     MOCK_METHOD(io::path_t, newProjectTemporaryPath, (), (const, override));
 

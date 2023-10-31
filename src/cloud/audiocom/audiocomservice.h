@@ -50,6 +50,7 @@ public:
 
     framework::ProgressPtr uploadAudio(QIODevice& audioData, const QString& audioFormat, const QString& title, const QUrl& url,
                                        Visibility visibility = Visibility::Private, bool replaceExisting = false) override;
+
 private:
     ServerConfig serverConfig() const override;
 

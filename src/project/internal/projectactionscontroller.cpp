@@ -755,7 +755,7 @@ void ProjectActionsController::publish()
     }
 }
 
-void ProjectActionsController::shareAudio()
+void ProjectActionsController::shareAudio(const AudioFile& existingAudio)
 {
     if (m_isAudioSharing) {
         return;
@@ -778,9 +778,14 @@ void ProjectActionsController::shareAudio()
 
     CloudAudioInfo cloudAudioInfo = retVal.val;
 
-    AudioFile audio = exportMp3(project->masterNotation()->notation());
-    if (!audio.isValid()) {
-        return;
+    AudioFile audio;
+    if (existingAudio.isValid()) {
+        audio = existingAudio;
+    } else {
+        audio = exportMp3(project->masterNotation()->notation());
+        if (!audio.isValid()) {
+            return;
+        }
     }
 
     m_uploadingAudioProgress = audioComService()->uploadAudio(*audio.device, audio.format, cloudAudioInfo.name,
@@ -960,6 +965,36 @@ bool ProjectActionsController::saveProjectToCloud(CloudProjectInfo info, SaveMod
     m_numberOfSavesToCloud++;
 
     return ret;
+}
+
+void ProjectActionsController::alsoShareAudioCom(const AudioFile& audio)
+{
+    if (!configuration()->showAlsoShareAudioComDialog()) {
+        shareAudio(audio);
+        return;
+    }
+
+    QUrl audioComUrl = audioComService()->authorization()->cloudInfo().url;
+
+    UriQuery query("musescore://project/alsoshareaudiocom");
+    query.addParam("audioComUrl", Val(audioComUrl.toString()));
+    query.addParam("rememberChoice", Val(!configuration()->hasAskedAlsoShareAudioCom()));
+    RetVal<Val> rv = interactive()->open(query);
+
+    if (!rv.val.isNull()) {
+        QVariantMap vals = rv.val.toQVariant().toMap();
+        bool shareAudioCom = vals["share"].toBool();
+        bool rememberChoice = vals["remember"].toBool();
+
+        if (shareAudioCom) {
+            shareAudio(audio);
+        }
+
+        configuration()->setShowAlsoShareAudioComDialog(!rememberChoice);
+        configuration()->setAlsoShareAudioCom(shareAudioCom);
+    }
+
+    configuration()->setHasAskedAlsoShareAudioCom(true);
 }
 
 Ret ProjectActionsController::askAudioGenerationSettings() const
@@ -1145,6 +1180,10 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
             uploadAudio(audio, newSourceUrl, editUrl, isFirstSave);
         } else {
             onProjectSuccessfullyUploaded(editUrl, isFirstSave);
+
+            if (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog()) {
+                alsoShareAudioCom(audio);
+            }
         }
     });
 
@@ -1170,13 +1209,17 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
     m_uploadingAudioProgress->finished.onReceive(this, [this, audio, urlToOpen, isFirstSave](const ProgressResult& res) {
         LOGD() << "Uploading audio finished";
 
-        audio.device->deleteLater();
-
         if (!res.ret) {
             LOGE() << res.ret.toString();
         }
 
         onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
+
+        if (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog()) {
+            alsoShareAudioCom(audio);
+        }
+
+        audio.device->deleteLater();
     });
 }
 

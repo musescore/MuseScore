@@ -212,19 +212,37 @@ async::Channel<int> ProjectConfigurationStub::autoSaveIntervalChanged() const
     return ch;
 }
 
-bool ProjectConfigurationStub::promptShareAudioCom() const
+bool ProjectConfigurationStub::alsoShareAudioCom() const
 {
     return false;
 }
 
-void ProjectConfigurationStub::setPromptShareAudioCom(bool prompt)
+void ProjectConfigurationStub::setAlsoShareAudioCom(bool share)
 {
 }
 
-async::Channel<bool> ProjectConfigurationStub::promptShareAudioComChanged() const
+async::Channel<bool> ProjectConfigurationStub::alsoShareAudioComChanged() const
 {
     static async::Channel<bool> ch;
     return ch;
+}
+
+bool ProjectConfigurationStub::showAlsoShareAudioComDialog() const
+{
+    return false;
+}
+
+void ProjectConfigurationStub::setShowAlsoShareAudioComDialog(bool show)
+{
+}
+
+bool ProjectConfigurationStub::hasAskedAlsoShareAudioCom() const
+{
+    return false;
+}
+
+void ProjectConfigurationStub::setHasAskedAlsoShareAudioCom(bool has)
+{
 }
 
 io::path_t ProjectConfigurationStub::newProjectTemporaryPath() const

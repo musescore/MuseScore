@@ -88,9 +88,15 @@ public:
     void setAutoSaveInterval(int minutes) override;
     async::Channel<int> autoSaveIntervalChanged() const override;
 
-    bool promptShareAudioCom() const override;
-    void setPromptShareAudioCom(bool prompt) override;
-    async::Channel<bool> promptShareAudioComChanged() const override;
+    bool alsoShareAudioCom() const override;
+    void setAlsoShareAudioCom(bool share) override;
+    async::Channel<bool> alsoShareAudioComChanged() const override;
+
+    bool showAlsoShareAudioComDialog() const override;
+    void setShowAlsoShareAudioComDialog(bool show) override;
+
+    bool hasAskedAlsoShareAudioCom() const override;
+    void setHasAskedAlsoShareAudioCom(bool has) override;
 
     io::path_t newProjectTemporaryPath() const override;
 
