@@ -434,7 +434,7 @@ bool Score::transpose(TransposeMode mode, TransposeDirection direction, Key trKe
                   else if (e->isKeySig() && trKeys && mode != TransposeMode::DIATONICALLY) {
                         KeySig* ks = toKeySig(e);
                         Fraction tick = segment->tick();
-                        bool startKey = tick == s1->tick();
+                        bool startKey = tick == s1->tick() && !isFirstSystemKeySig(ks);
                         bool addKey = ks->isChange();
                         if ((startKey || addKey) && !ks->isCustom() && !ks->isAtonal()) {
                               Staff* staff = ks->staff();

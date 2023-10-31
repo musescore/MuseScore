@@ -15,6 +15,7 @@
 #include "page.h"
 #include "segment.h"
 #include "clef.h"
+#include "keysig.h"
 #include "utils.h"
 #include "system.h"
 #include "measure.h"
@@ -1069,6 +1070,16 @@ double yStaffDifference(const System* system1, int staffIdx1, const System* syst
       if (!staff1 || !staff2)
             return 0.0;
       return staff1->y() - staff2->y();
+      }
+
+bool isFirstSystemKeySig(const KeySig* ks)
+      {
+      if (!ks)
+            return false;
+      const System* sys = ks->measure()->system();
+      if (!sys)
+            return false;
+      return ks->tick() == sys->firstMeasure()->tick();
       }
 }
 
