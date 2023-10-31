@@ -27,7 +27,9 @@
 #include "note.h"
 #include "part.h"
 #include "score.h"
+#include "staff.h"
 #include "tie.h"
+#include "utils.h"
 
 namespace mu::engraving {
 /****************************************
@@ -69,6 +71,18 @@ Note* GuitarBend::startNote() const
     return toNote(startEl);
 }
 
+Note* GuitarBend::startNoteOfChain() const
+{
+    Note* startOfChain = startNote();
+    GuitarBend* prevBend = findPrecedingBend();
+    while (startOfChain && prevBend) {
+        startOfChain = prevBend->startNote();
+        prevBend = prevBend->findPrecedingBend();
+    }
+
+    return startOfChain;
+}
+
 Note* GuitarBend::endNote() const
 {
     EngravingItem* endEl = endElement();
@@ -76,6 +90,34 @@ Note* GuitarBend::endNote() const
         return nullptr;
     }
     return toNote(endEl);
+}
+
+void GuitarBend::setEndNotePitch(int pitch)
+{
+    Note* note = endNote();
+    IF_ASSERT_FAILED(note) {
+        return;
+    }
+
+    if (note->pitch() == pitch) {
+        return;
+    }
+
+    Fraction tick = note->tick();
+    Staff* staff = note->staff();
+
+    Key key = staff->key(tick);
+    Interval interval = staff->transpose(tick);
+    interval.flip();
+
+    int targetTpc1 = pitch2tpc(pitch, key, Prefer::NEAREST);
+    int targetTpc2 = transposeTpc(targetTpc1, interval, true);
+
+    score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+
+    computeBendAmount();
+
+    triggerLayout();
 }
 
 bool GuitarBend::isReleaseBend() const

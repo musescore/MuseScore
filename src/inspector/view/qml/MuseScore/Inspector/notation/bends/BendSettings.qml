@@ -58,39 +58,26 @@ Column {
 
         text: qsTrc("inspector", "Show hold line")
         propertyItem: root.model ? root.model.showHoldLine : null
-    }
 
-    /*DropdownPropertyView {
-        id: bendTypeSection
-        titleText: qsTrc("inspector", "Bend type")
-        propertyItem: root.model ? root.model.bendType : null
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: root.navigationRowStart + 1
-
-        model: [
-            { text: qsTrc("inspector", "Bend"), value: BendTypes.TYPE_BEND },
-            { text: qsTrc("inspector", "Bend/Release"), value: BendTypes.TYPE_BEND_RELEASE },
-            { text: qsTrc("inspector", "Bend/Release/Bend"), value: BendTypes.TYPE_BEND_RELEASE_BEND },
-            { text: qsTrc("inspector", "Prebend"), value: BendTypes.TYPE_PREBEND },
-            { text: qsTrc("inspector", "Prebend/Release"), value: BendTypes.TYPE_PREBEND_RELEASE },
-            { text: qsTrc("inspector", "Custom"), value: BendTypes.TYPE_CUSTOM }
-        ]
+        navigation.panel: root.navigationPanel
+        navigation.row: directionSection.navigationRowEnd + 1
     }
 
     InspectorPropertyView {
         id: bendCurve
         titleText: qsTrc("inspector", "Click to add or remove points")
-        propertyItem: root.model ? root.model.bendCurve : null
+
+        enabled: true
+        visible: true
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: bendTypeSection.navigationRowEnd + 1
+        navigationRowStart: showHold.navigation.row + 1
 
-        GridCanvas {
+        BendGridCanvas {
             height: 200
             width: parent.width
 
-            pointList: root.model && root.model.bendCurve.isEnabled ? root.model.bendCurve.value : undefined
+            pointList: root.model ? root.model.bendCurve : null
 
             rowCount: 13
             columnCount: 13
@@ -99,7 +86,7 @@ Column {
 
             onCanvasChanged: {
                 if (root.model) {
-                    root.model.bendCurve.value = pointList
+                    root.model.bendCurve = pointList
                 }
             }
         }
@@ -116,5 +103,5 @@ Column {
 
         navigationPanel: root.navigationPanel
         navigationRowStart: bendCurve.navigationRowEnd + 1
-    }*/
+    }
 }

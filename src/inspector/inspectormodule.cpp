@@ -32,6 +32,7 @@
 #include "models/inspectorpopupcontroller.h"
 
 #include "view/widgets/fretcanvas.h"
+#include "view/widgets/bendgridcanvas.h"
 #include "view/widgets/gridcanvas.h"
 
 #include "types/directiontypes.h"
@@ -109,8 +110,8 @@ void InspectorModule::registerUiTypes()
     qmlRegisterUncreatableType<AmbitusTypes>("MuseScore.Inspector", 1, 0, "AmbitusTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<ChordSymbolTypes>("MuseScore.Inspector", 1, 0, "ChordSymbolTypes", "Not creatable as it is an enum type");
     qmlRegisterType<FretCanvas>("MuseScore.Inspector", 1, 0, "FretCanvas");
+    qmlRegisterType<BendGridCanvas>("MuseScore.Inspector", 1, 0, "BendGridCanvas");
     qmlRegisterType<GridCanvas>("MuseScore.Inspector", 1, 0, "GridCanvas");
-    qmlRegisterUncreatableType<BendTypes>("MuseScore.Inspector", 1, 0, "BendTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TremoloBarTypes>("MuseScore.Inspector", 1, 0, "TremoloBarTypes", "Not creatable as it is an enum type");
     qmlRegisterUncreatableType<TremoloTypes>("MuseScore.Inspector", 1, 0, "TremoloTypes", "Not creatable as it is an enum type");
     qmlRegisterType<InspectorPopupController>("MuseScore.Inspector", 1, 0, "InspectorPopupController");
