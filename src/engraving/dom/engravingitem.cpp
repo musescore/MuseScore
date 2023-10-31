@@ -2458,6 +2458,15 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
                                              static_cast<HairpinSegment::LayoutData*>(const_cast<LayoutData*>(this)));
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
+        case ElementType::TRILL_SEGMENT: {
+            //! NOTE Temporary fix
+            //! We can remove it the moment we figure out the layout order of the elements
+            LayoutContext ctx(m_item->score());
+            TLayout::fillTrillSegmentShape(toTrillSegment(m_item),
+                                           static_cast<HairpinSegment::LayoutData*>(const_cast<LayoutData*>(this)),
+                                           ctx.conf());
+            return m_shape.value(LD_ACCESS::CHECK);
+        } break;
         default:
             break;
         }
