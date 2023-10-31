@@ -6037,6 +6037,18 @@ void TLayout::layoutTrillSegment(TrillSegment* item, LayoutContext& ctx)
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
+void TLayout::fillTrillSegmentShape(const TrillSegment* item, TrillSegment::LayoutData* ldata, const LayoutConfiguration& conf)
+{
+    std::shared_ptr<const IEngravingFont> font = conf.engravingFont();
+    Shape s = font->shape(item->symbols(), item->magS());
+    Accidental* accidental = item->trill()->accidental();
+    if (accidental && accidental->visible() && item->isSingleBeginType()) {
+        s.add(accidental->shape().translate(accidental->pos()));
+    }
+
+    ldata->setShape(s);
+}
+
 void TLayout::layoutTripletFeel(const TripletFeel* item, TripletFeel::LayoutData* ldata)
 {
     layoutSystemText(item, ldata);

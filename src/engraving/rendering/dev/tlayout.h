@@ -99,6 +99,7 @@
 #include "../../dom/timesig.h"
 #include "../../dom/tremolobar.h"
 #include "../../dom/tripletfeel.h"
+#include "../../dom/trill.h"
 
 #include "../../dom/ornament.h"
 
@@ -333,6 +334,7 @@ public:
     static void layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* ldata);
     static void layoutTrill(Trill* item, LayoutContext& ctx);
     static void layoutTrillSegment(TrillSegment* item, LayoutContext& ctx);
+    static void fillTrillSegmentShape(const TrillSegment* item, TrillSegment::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutTripletFeel(const TripletFeel* item, TripletFeel::LayoutData* ldata);
     static void layoutTuplet(Tuplet* item, LayoutContext& ctx);
 
