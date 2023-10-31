@@ -1393,6 +1393,9 @@ void TWrite::write(const Hairpin* item, XmlWriter& xml, WriteContext& ctx)
     writeProperty(item, xml, Pid::SINGLE_NOTE_DYNAMICS);
     writeProperty(item, xml, Pid::VELO_CHANGE_METHOD);
     writeProperty(item, xml, Pid::PLAY);
+    writeProperty(item, xml, Pid::BEGIN_TEXT_OFFSET);
+    writeProperty(item, xml, Pid::CONTINUE_TEXT_OFFSET);
+    writeProperty(item, xml, Pid::END_TEXT_OFFSET);
 
     for (const StyledProperty& spp : *item->styledProperties()) {
         if (!item->isStyled(spp.pid)) {
@@ -2162,7 +2165,10 @@ void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
     for (auto i : {
         Pid::END_HOOK_TYPE,
         Pid::LINE_VISIBLE,
-        Pid::BEGIN_HOOK_TYPE
+        Pid::BEGIN_HOOK_TYPE,
+        Pid::BEGIN_TEXT_OFFSET,
+        Pid::CONTINUE_TEXT_OFFSET,
+        Pid::END_TEXT_OFFSET
     }) {
         writeProperty(item, xml, i);
     }
