@@ -452,6 +452,9 @@ TEST_F(Musicxml_Tests, cueNotes) {
 TEST_F(Musicxml_Tests, cueNotes2) {
     mxmlMscxExportTestRef("testCueNotes2");
 }
+TEST_F(Musicxml_Tests, cueNotes3) {
+    mxmlImportTestRef("testCueNotes3");
+}
 TEST_F(Musicxml_Tests, dalSegno) {
     mxmlIoTest("testDalSegno");
 }
