@@ -2690,6 +2690,21 @@ static Fraction calcTicks(const QString& text, int divs, MxmlLogger* logger, con
     return dura;
 }
 
+//---------------------------------------------------------
+//   preventNegativeTick
+//---------------------------------------------------------
+/**
+  Prevent an offset that would result in a negative tick (set offset to -tick instead, resulting in a tick of 0)
+ */
+
+static void preventNegativeTick(const Fraction& tick, Fraction& offset, MxmlLogger* logger)
+{
+    if (tick + offset < Fraction(0, 1)) {
+        logger->logError(QString("illegal offset %1 at tick %2").arg(offset.ticks()).arg(tick.ticks()));
+        offset = -tick;
+    }
+}
+
 void MusicXMLDelayedDirectionElement::addElem()
 {
     addElemOffset(_element, _track, _placement, _measure, _tick);
@@ -2733,6 +2748,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             directionType(starts, stops);
         } else if (_e.name() == "offset") {
             _offset = calcTicks(_e.readElementText(), divisions, _logger, &_e);
+            preventNegativeTick(tick, _offset, _logger);
         } else if (_e.name() == "sound") {
             sound();
         } else if (_e.name() == "staff") {
@@ -5584,6 +5600,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
             skipLogCurrElem();
         } else if (_e.name() == "offset") {
             offset = calcTicks(_e.readElementText(), _divs, _logger, &_e);
+            preventNegativeTick(sTime, offset, _logger);
         } else if (_e.name() == "staff") {
             size_t nstaves = _pass1.getPart(partId)->nstaves();
             QString strStaff = _e.readElementText();
