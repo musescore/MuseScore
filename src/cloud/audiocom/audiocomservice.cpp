@@ -256,26 +256,6 @@ mu::Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager
 
     audioData.seek(0);
 
-    QHttpMultiPart multiPart(QHttpMultiPart::FormDataType);
-
-    QJsonObject fields = m_currentUploadingAudioInfo.value("fields").toObject();
-    for (const QString& fieldName : fields.keys()) {
-        QHttpPart part;
-        part.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant("form-data; name=\"" + fieldName + "\""));
-        part.setBody(fields[fieldName].toString().toUtf8());
-        multiPart.append(part);
-    }
-
-    QString fileField = m_currentUploadingAudioInfo.contains("field") ? m_currentUploadingAudioInfo.value("field").toString() : "file";
-
-    QHttpPart filePart;
-    filePart.setHeader(QNetworkRequest::ContentTypeHeader, audioMime(audioFormat));
-    QString contentDisposition = QString("form-data; name=\"" + fileField + "\"; filename=\"temp_%1.mp3\"").arg(generateFileNameNumber());
-    filePart.setHeader(QNetworkRequest::ContentDispositionHeader, QVariant(contentDisposition));
-
-    filePart.setBodyDevice(&audioData);
-    multiPart.append(filePart);
-
     QString token;
 
     if (m_currentUploadingAudioInfo.contains("extra")) {
@@ -287,14 +267,14 @@ mu::Ret AudioComService::doUploadAudio(network::INetworkManagerPtr uploadManager
     }
 
     RequestHeaders headers;
-    headers.rawHeaders["Accept"] = "application/json";
     headers.knownHeaders[QNetworkRequest::UserAgentHeader] = userAgent();
+    headers.knownHeaders[QNetworkRequest::ContentTypeHeader] = audioMime(audioFormat);
 
     Ret ret(true);
     QBuffer receivedData;
-    OutgoingDevice device(&multiPart);
+    OutgoingDevice device(&audioData);
 
-    ret = uploadManager->post(url, &device, &receivedData, headers);
+    ret = uploadManager->put(url, &device, &receivedData, headers);
 
     if (!ret) {
         printServerReply(receivedData);
@@ -341,6 +321,8 @@ Ret AudioComService::doCreateAudio(network::INetworkManagerPtr manager, const QS
 
     json["size"] = size;
     json["name"] = title;
+
+    json["method"] = "PUT";
 
     if (replaceExisting) {
         ret = doUpdateVisibility(manager, existingUrl, visibility);
