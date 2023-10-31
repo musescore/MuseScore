@@ -2785,7 +2785,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
             if (canAddTempoText(_score->tempomap(), tick.ticks())) {
                 _tpoSound /= 60;
                 t = Factory::createTempoText(_score->dummy()->segment());
-                t->setXmlText(_wordsText + _metroText);
+                QString rawWordsText = _wordsText;
+                rawWordsText.remove(QRegularExpression("(<.*?>)"));
+                QString sep = _metroText != "" && _wordsText != "" && rawWordsText.back() != ' ' ? " " : "";
+                t->setXmlText(_wordsText + sep + _metroText);
                 ((TempoText*)t)->setTempo(_tpoSound);
                 ((TempoText*)t)->setFollowText(true);
                 _score->setTempo(tick, _tpoSound);

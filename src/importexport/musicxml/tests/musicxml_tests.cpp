@@ -902,6 +902,12 @@ TEST_F(Musicxml_Tests, tempoOverlap) {
 TEST_F(Musicxml_Tests, tempoPrecision) {
     mxmlMscxExportTestRef("testTempoPrecision");
 }
+TEST_F(Musicxml_Tests, tempoTextSpace1) {
+    mxmlImportTestRef("testTempoTextSpace1");
+}
+TEST_F(Musicxml_Tests, tempoTextSpace2) {
+    mxmlImportTestRef("testTempoTextSpace2");
+}
 TEST_F(Musicxml_Tests, textLines) {
     mxmlMscxExportTestRef("testTextLines");
 }
