@@ -100,6 +100,7 @@
 #include "../../dom/tremolobar.h"
 #include "../../dom/tripletfeel.h"
 #include "../../dom/trill.h"
+#include "../../dom/tuplet.h"
 
 #include "../../dom/ornament.h"
 
@@ -337,6 +338,7 @@ public:
     static void fillTrillSegmentShape(const TrillSegment* item, TrillSegment::LayoutData* ldata, const LayoutConfiguration& conf);
     static void layoutTripletFeel(const TripletFeel* item, TripletFeel::LayoutData* ldata);
     static void layoutTuplet(Tuplet* item, LayoutContext& ctx);
+    static void fillTupletShape(const Tuplet* item, Tuplet::LayoutData* ldata);
 
     static void layoutVibrato(Vibrato* item, LayoutContext& ctx);
     static void layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx);
