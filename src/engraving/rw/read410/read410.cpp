@@ -79,6 +79,11 @@ Err Read410::readScore(Score* score, XmlReader& e, rw::ReadInOutData* data)
             }
         } else if (tag == "Revision") {
             e.skipCurrentElement();
+        } else if (tag == "LastEID") {
+            int val = e.readInt(nullptr);
+            if (score->isMaster()) {
+                score->masterScore()->getEID()->init(val);
+            }
         } else if (tag == "Score") {
             if (!readScore410(score, e, ctx)) {
                 if (e.error() == XmlStreamReader::CustomError) {

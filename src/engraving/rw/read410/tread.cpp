@@ -344,7 +344,10 @@ bool TRead::readItemProperties(EngravingItem* item, XmlReader& e, ReadContext& c
 {
     const AsciiStringView tag(e.name());
 
-    if (TRead::readProperty(item, tag, e, ctx, Pid::SIZE_SPATIUM_DEPENDENT)) {
+    if (tag == "eid") {
+        AsciiStringView s = e.readAsciiText();
+        item->setEID(EID::fromStdString(s));
+    } else if (TRead::readProperty(item, tag, e, ctx, Pid::SIZE_SPATIUM_DEPENDENT)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::OFFSET)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::MIN_DISTANCE)) {
     } else if (TRead::readProperty(item, tag, e, ctx, Pid::AUTOPLACE)) {

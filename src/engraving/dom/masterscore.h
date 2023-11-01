@@ -22,7 +22,8 @@
 #ifndef MU_ENGRAVING_MASTERSCORE_H
 #define MU_ENGRAVING_MASTERSCORE_H
 
-#include "infrastructure/ifileinfoprovider.h"
+#include "../infrastructure/ifileinfoprovider.h"
+#include "../infrastructure/geteid.h"
 
 #include "instrument.h"
 #include "score.h"
@@ -74,6 +75,7 @@ class MasterScore : public Score
 {
     OBJECT_ALLOCATOR(engraving, MasterScore)
 
+    GetEID m_getEID;
     UndoStack* _undoStack = nullptr;
     TimeSigMap* _sigmap;
     TempoMap* _tempomap;
@@ -134,6 +136,10 @@ public:
     std::weak_ptr<EngravingProject> project() const { return m_project; }
 
     bool isMaster() const override { return true; }
+
+    GetEID* getEID() { return &m_getEID; }
+    const GetEID* getEID() const { return &m_getEID; }
+
     bool readOnly() const override { return _readOnly; }
     void setReadOnly(bool ro) { _readOnly = ro; }
     UndoStack* undoStack() const override { return _undoStack; }

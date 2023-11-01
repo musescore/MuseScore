@@ -688,6 +688,14 @@ String EngravingObject::translatedTypeUserName() const
     return typeUserName().translated();
 }
 
+EID EngravingObject::eid() const
+{
+    if (!m_eid.isValid()) {
+        m_eid = score()->masterScore()->getEID()->newEID(m_type);
+    }
+    return m_eid;
+}
+
 //---------------------------------------------------------
 //   isSLineSegment
 //---------------------------------------------------------

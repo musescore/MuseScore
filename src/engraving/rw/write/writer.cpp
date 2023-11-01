@@ -55,6 +55,7 @@ bool Writer::writeScore(Score* score, io::IODevice* device, bool onlySelection, 
     if (!MScore::testMode) {
         xml.tag("programVersion", MUSESCORE_VERSION);
         xml.tag("programRevision", MUSESCORE_REVISION);
+        xml.tag("LastEID", score->masterScore()->getEID()->lastID());
     }
 
     compat::WriteScoreHook hook;

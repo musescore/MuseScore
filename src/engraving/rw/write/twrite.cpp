@@ -274,6 +274,10 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
+    if (!MScore::testMode) {
+        xml.tag("eid", item->eid().toUint64());
+    }
+
     bool autoplaceEnabled = item->score()->style().styleB(Sid::autoplaceEnabled);
     if (!autoplaceEnabled) {
         item->score()->style().set(Sid::autoplaceEnabled, true);
