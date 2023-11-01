@@ -120,6 +120,7 @@ private:
     void addText(TextStyleType type);
     void addImage();
     void addFiguredBass();
+    void addGuitarBend(GuitarBendType bendType);
 
     void selectAllSimilarElements();
     void selectAllSimilarElementsInStaff();

@@ -51,6 +51,7 @@
 #include "engraving/dom/elementgroup.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/figuredbass.h"
+#include "engraving/dom/guitarbend.h"
 #include "engraving/dom/image.h"
 #include "engraving/dom/instrchange.h"
 #include "engraving/dom/keysig.h"
@@ -5401,6 +5402,47 @@ void NotationInteraction::addLyricsVerse()
 
     score()->select(lyrics, SelectType::SINGLE, 0);
     startEditText(lyrics, PointF());
+}
+
+mu::Ret NotationInteraction::canAddGuitarBend() const
+{
+    static const std::set<ElementType> requiredTypes {
+        ElementType::NOTE
+    };
+
+    bool isNoteSelected = elementsSelected(requiredTypes);
+    return isNoteSelected ? make_ok() : make_ret(Err::NoteIsNotSelected);
+}
+
+void NotationInteraction::addGuitarBend(GuitarBendType bendType)
+{
+    Score* score = this->score();
+    if (!score) {
+        return;
+    }
+
+    const Selection& selection = score->selection();
+    if (selection.isNone()) {
+        return;
+    }
+
+    const std::vector<Note*>& noteList = selection.noteList();
+    if (noteList.empty()) {
+        return;
+    }
+
+    startEdit();
+
+    Note* note = noteList.front();
+    Note* endNote = noteList.back() != note ? noteList.back() : nullptr;
+
+    mu::engraving::GuitarBend* guitarBend = score->addGuitarBend(bendType, note, endNote);
+    if (guitarBend) {
+        apply();
+        select({ guitarBend });
+    } else {
+        rollback();
+    }
 }
 
 mu::engraving::Harmony* NotationInteraction::editedHarmony() const

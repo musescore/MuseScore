@@ -180,6 +180,9 @@ public:
     virtual bool needToShowAddFiguredBassErrorMessage() const = 0;
     virtual void setNeedToShowAddFiguredBassErrorMessage(bool show) = 0;
 
+    virtual bool needToShowAddGuitarBendErrorMessage() const = 0;
+    virtual void setNeedToShowAddGuitarBendErrorMessage(bool show) = 0;
+
     virtual bool needToShowMScoreError(const std::string& errorKey) const = 0;
     virtual void setNeedToShowMScoreError(const std::string& errorKey, bool show) = 0;
 
