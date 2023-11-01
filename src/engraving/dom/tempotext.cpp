@@ -256,6 +256,11 @@ void TempoText::updateTempo()
     String s = plainText();
     s.replace(u",", u".");
     s.replace(u"<sym>space</sym>", u" ");
+    s.replace(u"≒", u"=");
+    s.replace(u"≈", u"=");
+    s.replace(u"~", u"=");
+    s.replace(u"ca.", u"");
+    s.replace(u"approx.", u"");
     std::string su8 = s.toStdString();
     for (const TempoPattern& pa : tp) {
         String pattern = String::fromUtf8(pa.pattern);
