@@ -147,10 +147,6 @@ void BendGridCanvas::setPointList(QVariant points)
     emit pointListChanged(points);
 }
 
-//---------------------------------------------------------
-//   paintEvent
-//---------------------------------------------------------
-
 void BendGridCanvas::paint(QPainter* painter)
 {
     if (!(m_rows && m_columns)) {
@@ -164,10 +160,6 @@ void BendGridCanvas::paint(QPainter* painter)
     drawBackground(painter, frameRect);
     drawCurve(painter, frameRect);
 }
-
-//---------------------------------------------------------
-//   mousePressEvent
-//---------------------------------------------------------
 
 void BendGridCanvas::mousePressEvent(QMouseEvent* event)
 {
@@ -196,40 +188,72 @@ void BendGridCanvas::mouseMoveEvent(QMouseEvent* event)
     CurvePoint point = this->point(frameRect, coord.first, coord.second);
 
     int index = m_currentPointIndex.value();
+    CurvePoint& currentPoint = m_points[index];
 
-    bool canMoveHorizontally = m_points[index].canMove(CurvePoint::MoveDirection::Horizontal);
-    bool canMoveVertically = m_points[index].canMove(CurvePoint::MoveDirection::Vertical);
+    bool canMoveHorizontally = currentPoint.canMove(CurvePoint::MoveDirection::Horizontal);
+    bool canMoveVertically = currentPoint.canMove(CurvePoint::MoveDirection::Vertical);
 
     if (!canMoveHorizontally && !canMoveVertically) {
         return;
     }
 
     if (canMoveVertically) {
-        m_points[index].pitch = point.pitch;
+        bool canMove = true;
+        bool moveToTop = currentPoint.pitch < point.pitch;
 
-        bool isDashed = m_points[index].endDashed;
-        bool isNextDashed = (index + 1 < m_points.size()) && m_points[index + 1].endDashed;
-
-        if (isDashed) {
-            m_points[index - 1].pitch = point.pitch;
+        if (index - 1 >= 0) {
+            const CurvePoint& leftPoint = m_points.at(index - 1);
+            bool isLeftValid = moveToTop ? leftPoint.pitch >= currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
+            if (isLeftValid) {
+                canMove = leftPoint.generated || (moveToTop ? leftPoint.pitch > point.pitch : leftPoint.pitch < point.pitch);
+            }
         }
 
-        if (isNextDashed) {
-            m_points[index + 1].pitch = point.pitch;
+        if (!canMove) {
+            return;
+        }
+
+        if (index + 1 < m_points.size()) {
+            const CurvePoint& rightPoint = m_points.at(index + 1);
+            bool isRightValid = moveToTop ? rightPoint.pitch >= currentPoint.pitch : rightPoint.pitch <= currentPoint.pitch;
+            if (isRightValid) {
+                canMove = rightPoint.generated || (moveToTop ? rightPoint.pitch > point.pitch : rightPoint.pitch < point.pitch);
+            }
+        }
+
+        if (canMove) {
+            currentPoint.pitch = point.pitch;
+
+            bool isDashed = currentPoint.endDashed;
+            bool isNextDashed = (index + 1 < m_points.size()) && m_points.at(index + 1).endDashed;
+
+            if (isDashed) {
+                m_points[index - 1].pitch = point.pitch;
+            }
+
+            if (isNextDashed) {
+                m_points[index + 1].pitch = point.pitch;
+            }
         }
     }
 
     if (canMoveHorizontally) {
-        bool canMove = false;
-        bool moveToLeft = m_points[index].time > point.time;
+        bool canMove = true;
+        bool moveToLeft = currentPoint.time > point.time;
         if (moveToLeft) {
-            canMove = (index - 1 >= 0) && m_points[index - 1].time < point.time;
+            if (index - 1 >= 0) {
+                const CurvePoint& leftPoint = m_points.at(index - 1);
+                canMove = leftPoint.generated || leftPoint.time < point.time;
+            }
         } else {
-            canMove = (index + 1 < m_points.size()) && m_points[index + 1].time > point.time;
+            if (index + 1 < m_points.size()) {
+                const CurvePoint& rightPoint = m_points.at(index + 1);
+                canMove = rightPoint.generated || rightPoint.time > point.time;
+            }
         }
 
         if (canMove) {
-            m_points[index].time = point.time;
+            currentPoint.time = point.time;
         }
     }
 
@@ -485,12 +509,12 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
     painter->setPen(Qt::NoPen);
 
     for (int i = 0; i < m_points.size(); ++i) {
-        const CurvePoint& v = m_points[i];
-        if (!v.canMove()) {
+        const CurvePoint& point = m_points.at(i);
+        if (!point.canMove()) {
             continue;
         }
 
-        QPointF pos = getPosition(v);
+        QPointF pos = getPosition(point);
 
         bool isNotActiveButton = (!m_hoverPointIndex.has_value() || m_hoverPointIndex.value() != i)
                                  && (!m_currentPointIndex.has_value() || m_currentPointIndex.value() != i);
@@ -533,7 +557,7 @@ std::optional<int> BendGridCanvas::pointIndex(const CurvePoint& pitch, bool mova
     const int numberOfPoints = m_points.size();
 
     for (int i = 0; i < numberOfPoints; ++i) {
-        const CurvePoint& point = m_points[i];
+        const CurvePoint& point = m_points.at(i);
         if (movable != point.canMove()) {
             continue;
         }
