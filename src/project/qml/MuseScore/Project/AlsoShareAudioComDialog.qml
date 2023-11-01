@@ -125,7 +125,7 @@ StyledDialogView {
 
                 Layout.fillWidth: true
 
-                text: qsTrc("project/cloud", "Share your score's audio with millions of listeners on this free streaming platform")
+                text: qsTrc("project/cloud", "Share your score’s audio with millions of listeners on this free streaming platform")
                 font: ui.theme.bodyFont
             }
         }
