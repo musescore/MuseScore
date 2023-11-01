@@ -1547,9 +1547,9 @@ void EngravingItem::undoSetVisible(bool v)
     undoChangeProperty(Pid::VISIBLE, v);
 }
 
-void EngravingItem::undoAddElement(EngravingItem* element)
+void EngravingItem::undoAddElement(EngravingItem* element, bool addToLinkedStaves)
 {
-    score()->undoAddElement(element);
+    score()->undoAddElement(element, addToLinkedStaves);
 }
 
 //---------------------------------------------------------

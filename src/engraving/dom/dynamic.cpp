@@ -511,7 +511,7 @@ mu::RectF Dynamic::drag(EditData& ed)
         if (seg != segment() || staffIdx() != si) {
             const PointF oldOffset = offset();
             PointF pos1(canvasPos());
-            score()->undo(new ChangeParent(this, seg, si));
+            score()->undoChangeParent(this, seg, si);
             setOffset(PointF());
 
             renderer()->layoutItem(this);
