@@ -778,6 +778,14 @@ EditStyle::EditStyle(QWidget* parent)
     groupBox_rests->layout()->addWidget(restOffsetSelector);
 
     // ====================================================
+    // Measure repeats
+    // ====================================================
+
+    // Define string here instead of in the .ui file to avoid MSVC compiler warning C4125, which would
+    // be triggered by the decimal digit immediately following a non-ASCII character (curly quote).
+    oneMeasureRepeatShow1->setText(qtrc("EditStyleBase", "Show ‘1’ on 1-measure repeats"));
+
+    // ====================================================
     // BEAMS (QML)
     // ====================================================
 
