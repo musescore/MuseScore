@@ -233,6 +233,10 @@ PropertyValue GuitarBend::getProperty(Pid id) const
         return direction();
     case Pid::BEND_SHOW_HOLD_LINE:
         return static_cast<int>(showHoldLine());
+    case Pid::BEND_START_TIME_FACTOR:
+        return startTimeFactor();
+    case Pid::BEND_END_TIME_FACTOR:
+        return endTimeFactor();
     default:
         return SLine::getProperty(id);
     }
@@ -246,6 +250,12 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
         break;
     case Pid::BEND_SHOW_HOLD_LINE:
         setShowHoldLine(static_cast<GuitarBendShowHoldLine>(v.toInt()));
+        break;
+    case Pid::BEND_START_TIME_FACTOR:
+        setStartTimeFactor(v.toReal());
+        break;
+    case Pid::BEND_END_TIME_FACTOR:
+        setEndTimeFactor(v.toReal());
         break;
     default:
         return SLine::setProperty(propertyId, v);
@@ -261,6 +271,14 @@ PropertyValue GuitarBend::propertyDefault(Pid id) const
         return DirectionV::AUTO;
     case Pid::BEND_SHOW_HOLD_LINE:
         return static_cast<int>(GuitarBendShowHoldLine::AUTO);
+    case Pid::BEND_START_TIME_FACTOR:
+        return 0.f;
+    case Pid::BEND_END_TIME_FACTOR:
+        if (_type == GuitarBendType::GRACE_NOTE_BEND) {
+            return GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR;
+        }
+
+        return 1.f;
     default:
         return SLine::propertyDefault(id);
     }

@@ -1268,6 +1268,8 @@ void TWrite::write(const GuitarBend* item, XmlWriter& xml, WriteContext& ctx)
     }
     xml.startElement(item);
     xml.tag("guitarBendType", static_cast<int>(item->type()));
+    xml.tag("bendStartTimeFactor", item->startTimeFactor());
+    xml.tag("bendEndTimeFactor", item->endTimeFactor());
     writeProperty(item, xml, Pid::BEND_SHOW_HOLD_LINE);
     writeProperties(static_cast<const SLine*>(item), xml, ctx);
 

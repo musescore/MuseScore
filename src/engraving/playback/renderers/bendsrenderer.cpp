@@ -38,7 +38,7 @@ static const GuitarBend* findBend(const Note* note)
     return note ? note->bendFor() : nullptr;
 }
 
-static bool skipNote(const Note* note, const mpe::ArticulationMap& articualtionMap)
+static bool skipNote(const Note* note, const mu::mpe::ArticulationMap& articualtionMap)
 {
     if (!isNotePlayable(note, articualtionMap)) {
         return true;
@@ -57,7 +57,7 @@ static bool skipNote(const Note* note, const mpe::ArticulationMap& articualtionM
     return false;
 }
 
-const mpe::ArticulationTypeSet& BendsRenderer::supportedTypes()
+const mu::mpe::ArticulationTypeSet& BendsRenderer::supportedTypes()
 {
     static const mpe::ArticulationTypeSet types = {
         mpe::ArticulationType::Multibend,
@@ -114,8 +114,11 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
     const Note* currNote = startNote;
     mpe::PlaybackEventList bendEvents;
 
+    std::vector<const GuitarBend*> bends;
+
     while (currNote && bend) {
         RenderingContext currNoteCtx = buildRenderingContext(score, currNote, startNoteCtx);
+        bends.push_back(bend);
 
         switch (bend->type()) {
         case GuitarBendType::BEND:
@@ -137,6 +140,10 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
 
             //! NOTE: skip the grace and the principal note, GraceChordsRenderer renders them both
             bend = findBend(principalNote);
+            if (bend) {
+                bends.push_back(bend);
+            }
+
             currNote = bend ? bend->endNote() : nullptr;
             bend = findBend(currNote);
         } break;
@@ -149,7 +156,8 @@ void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, c
     }
 
     if (!bendEvents.empty()) {
-        mpe::NoteEvent event = buildBendEvent(startNote, startNoteCtx, bendEvents);
+        BendTimeFactorMap bendTimeFactorMap = buildBendTimeFactorMap(score, bends);
+        mpe::NoteEvent event = buildBendEvent(startNote, startNoteCtx, bendEvents, bendTimeFactorMap);
         result.emplace_back(std::move(event));
     }
 }
@@ -219,8 +227,30 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
     return ctx;
 }
 
-mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
-                                             const mpe::PlaybackEventList& bendNoteEvents)
+BendsRenderer::BendTimeFactorMap BendsRenderer::buildBendTimeFactorMap(const Score* score, const std::vector<const GuitarBend*>& bends)
+{
+    BendTimeFactorMap result;
+
+    for (const GuitarBend* bend : bends) {
+        float startFactor = std::clamp(bend->startTimeFactor(), 0.f, 1.f);
+        float endFactor = std::clamp(bend->endTimeFactor(), 0.f, 1.f);
+
+        const Note* endNote = bend->endNote();
+        mpe::timestamp_t endNoteTime = timestampFromTicks(score, endNote->tick().ticks());
+
+        IF_ASSERT_FAILED(RealIsEqualOrLess(startFactor, endFactor)) {
+            result.insert_or_assign(endNoteTime, BendTimeFactors { 0.f, 1.f });
+            continue;
+        }
+
+        result.insert_or_assign(endNoteTime, BendTimeFactors { startFactor, endFactor });
+    }
+
+    return result;
+}
+
+mu::mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
+                                                 const mpe::PlaybackEventList& bendNoteEvents, const BendTimeFactorMap& timeFactorMap)
 {
     NominalNoteCtx noteCtx(startNote, startNoteCtx);
 
@@ -244,22 +274,45 @@ mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const Render
         pitchOffsets.emplace_back(offsetTime, offset);
     }
 
-    mpe::PitchCurve curve = buildPitchCurve(noteCtx.timestamp, noteCtx.duration, pitchOffsets);
+    mpe::PitchCurve curve = buildPitchCurve(noteCtx.timestamp, noteCtx.duration, pitchOffsets, timeFactorMap);
     mpe::NoteEvent result = buildNoteEvent(std::move(noteCtx), curve);
 
     return result;
 }
 
-mpe::PitchCurve BendsRenderer::buildPitchCurve(mpe::timestamp_t bendStartTime, mpe::duration_t totalBendDuration,
-                                               const PitchOffsets& pitchOffsets)
+mu::mpe::PitchCurve BendsRenderer::buildPitchCurve(mpe::timestamp_t bendStartTime, mpe::duration_t totalBendDuration,
+                                                   const PitchOffsets& pitchOffsets, const BendTimeFactorMap& timeFactorMap)
 {
+    auto findFactorsAtTime = [&timeFactorMap](mpe::timestamp_t time) -> const BendTimeFactors& {
+        auto it = mu::findLessOrEqual(timeFactorMap, time);
+        if (it == timeFactorMap.end()) {
+            static const BendTimeFactors dummy;
+            return dummy;
+        }
+
+        return it->second;
+    };
+
     mpe::PitchCurve result;
     result.emplace(0, 0);
 
+    mpe::percentage_t prevNominalOffsetPrecent = 0;
+
     for (const auto& pair : pitchOffsets) {
+        const BendTimeFactors& factors = findFactorsAtTime(pair.first);
         float ratio = static_cast<float>(pair.first - bendStartTime) / totalBendDuration;
-        mpe::percentage_t percent = static_cast<mpe::percentage_t>(ratio * 100.f) * mpe::ONE_PERCENT;
-        result.insert_or_assign(percent, pair.second);
+
+        mpe::percentage_t nominalOffsetPercent = static_cast<mpe::percentage_t>(ratio * 100.f) * mpe::ONE_PERCENT;
+        mpe::percentage_t nominalPercentDiff = nominalOffsetPercent - prevNominalOffsetPrecent;
+
+        mpe::percentage_t actualOffsetStartPercent = prevNominalOffsetPrecent + nominalPercentDiff * factors.startFactor;
+        mpe::percentage_t actualOffsetEndPercent = prevNominalOffsetPrecent + nominalPercentDiff * factors.endFactor;
+
+        prevNominalOffsetPrecent = nominalOffsetPercent;
+
+        const auto& prevOffset = result.rbegin();
+        result.insert_or_assign(actualOffsetStartPercent, prevOffset->second);
+        result.insert_or_assign(actualOffsetEndPercent, pair.second);
     }
 
     return result;

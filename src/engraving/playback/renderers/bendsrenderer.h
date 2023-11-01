@@ -37,7 +37,13 @@ public:
                          mpe::PlaybackEventList& result);
 
 private:
+    struct BendTimeFactors {
+        float startFactor = 0.f;
+        float endFactor = 1.f;
+    };
+
     using PitchOffsets = std::vector<std::pair<mpe::timestamp_t, mpe::pitch_level_t> >;
+    using BendTimeFactorMap = std::map<mpe::timestamp_t, BendTimeFactors>;
 
     static void renderMultibend(const Score* score, const Note* startNote, const RenderingContext& startNoteCtx,
                                 mpe::PlaybackEventList& result);
@@ -46,10 +52,11 @@ private:
     static void renderSlightBend(const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result);
 
     static RenderingContext buildRenderingContext(const Score* score, const Note* note, const RenderingContext& initialCtx);
+    static BendTimeFactorMap buildBendTimeFactorMap(const Score* score, const std::vector<const GuitarBend*>& bends);
     static mpe::NoteEvent buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
-                                         const mpe::PlaybackEventList& bendNoteEvents);
+                                         const mpe::PlaybackEventList& bendNoteEvents, const BendTimeFactorMap& timeFactorMap);
     static mpe::PitchCurve buildPitchCurve(mpe::timestamp_t bendStartTime, mpe::duration_t totalBendDuration,
-                                           const PitchOffsets& pitchOffsets);
+                                           const PitchOffsets& pitchOffsets, const BendTimeFactorMap& timeFactorMap);
 };
 }
 

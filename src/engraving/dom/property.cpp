@@ -383,6 +383,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::BEND_CURVE,              true,  "bendCurve",             P_TYPE::PITCH_VALUES,       PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bend curve") },
     { Pid::BEND_VERTEX_OFF,         false, "bendVertexOffset",      P_TYPE::POINT,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bend vertex offset") },
     { Pid::BEND_SHOW_HOLD_LINE,     false, "bendShowHoldLine",      P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bend show hold line") },
+    { Pid::BEND_START_TIME_FACTOR,  true,  "bendStartTimeFactor",   P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bend start time factor") },
+    { Pid::BEND_END_TIME_FACTOR,    true,  "bendEndTimeFactor",     P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bend end time factor") },
 
     { Pid::TREMOLOBAR_TYPE,         true,  "tremoloBarType",        P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tremolobar type") },
     { Pid::TREMOLOBAR_CURVE,        true,  "tremoloBarCurve",       P_TYPE::PITCH_VALUES,       PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tremolobar curve") },

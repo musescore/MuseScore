@@ -39,8 +39,12 @@ class GuitarBend final : public SLine
     M_PROPERTY2(GuitarBendType, type, setType, GuitarBendType::BEND)
     M_PROPERTY2(int, bendAmountInQuarterTones, setBendAmountInQuarterTones, 4)
     M_PROPERTY2(GuitarBendShowHoldLine, showHoldLine, setShowHoldLine, GuitarBendShowHoldLine::AUTO)
+    M_PROPERTY2(float, startTimeFactor, setStartTimeFactor, 0.f)
+    M_PROPERTY2(float, endTimeFactor, setEndTimeFactor, 1.f)
 
 public:
+    static constexpr float GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR = 0.25f;
+
     GuitarBend(EngravingItem* parent);
     GuitarBend(const GuitarBend&);
     ~GuitarBend() override;

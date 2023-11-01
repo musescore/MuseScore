@@ -31,7 +31,8 @@
 using namespace mu::engraving;
 using namespace mu::inspector;
 
-static constexpr int ACTIVE_POINT_INDEX = 2;
+static constexpr int START_POINT_INDEX = 1;
+static constexpr int END_POINT_INDEX = 2;
 
 static std::set<ElementType> ELEMENTS_TYPES = {
     ElementType::GUITAR_BEND,
@@ -135,6 +136,9 @@ void BendSettingsModel::loadBendCurve()
     int pitchDiff = fulls * 100 + quarts * 25;
     int startPitch = endPitch - pitchDiff;
 
+    int starTime = bend->startTimeFactor() * CurvePoint::MAX_TIME;
+    int endTime = bend->endTimeFactor() * CurvePoint::MAX_TIME;
+
     bool isHold = this->isHold(item);
     if (isHold) {
         m_bendCurve = {
@@ -150,16 +154,16 @@ void BendSettingsModel::loadBendCurve()
     if (bend->type() == GuitarBendType::PRE_BEND) {
         m_bendCurve = { CurvePoint(0, 0, true),
                         CurvePoint(0, endPitch, true),
-                        CurvePoint(CurvePoint::MAX_TIME, endPitch, { CurvePoint::MoveDirection::Vertical }, true) };
+                        CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Vertical }, true) };
     } else if (bend->isReleaseBend()) {
         m_bendCurve = { CurvePoint(0, startPitch, true),
-                        CurvePoint(0, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
-                        CurvePoint(15, endPitch, { CurvePoint::MoveDirection::Both }),
+                        CurvePoint(starTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
+                        CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Both }),
                         CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true, true) };
     } else {
         m_bendCurve = { CurvePoint(0, startPitch, true),
-                        CurvePoint(0, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
-                        CurvePoint(15, endPitch, { CurvePoint::MoveDirection::Both }),
+                        CurvePoint(starTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
+                        CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Both }),
                         CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true, true) };
     }
 
@@ -234,7 +238,7 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
         return;
     }
 
-    if (points.empty()) {
+    if (END_POINT_INDEX >= points.size()) {
         return;
     }
 
@@ -248,16 +252,22 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
         return;
     }
 
-    int newPitch = points[ACTIVE_POINT_INDEX].pitch;
+    const CurvePoint& endTimePoint = points.at(END_POINT_INDEX);
+
+    int newPitch = endTimePoint.pitch;
     int fulls = newPitch / 100;
     int quarts = (newPitch % 100) / 25;
     int bendAmount = fulls * 4 + quarts;
 
     int pitch = bendAmount / 2 + bend->startNoteOfChain()->pitch();
 
+    float starTimeFactor = static_cast<float>(points.at(START_POINT_INDEX).time) / CurvePoint::MAX_TIME;
+    float endTimeFactor = static_cast<float>(endTimePoint.time) / CurvePoint::MAX_TIME;
+
     beginCommand();
     bend->setEndNotePitch(pitch);
-    // todo set time
+    bend->undoChangeProperty(Pid::BEND_START_TIME_FACTOR, starTimeFactor);
+    bend->undoChangeProperty(Pid::BEND_END_TIME_FACTOR, endTimeFactor);
     endCommand();
 
     updateNotation();
