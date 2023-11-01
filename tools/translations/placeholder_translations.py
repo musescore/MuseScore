@@ -26,21 +26,39 @@ parser.add_argument('--warn-only', action='store_true',
     help='exit with zero status even when translation errors are detected')
 args = parser.parse_args()
 
-exit_status = 0
+num_errors = 0
+
+# Translation errors allowed in these files:
+ignored_files = {
+    'src/notation/view/widgets/editstyle.ui',   # many straight quotes (let's not bother translators yet)
+    'src/engraving/types/symnames.cpp',         # SMuFL symbol names use straight quotes (')
+}
 
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 def tr_error(message_element, description, resolution, hint=''):
-    location = message_element.find('location')
-    filename = location.get('filename')
-    filename = os.path.relpath(os.path.join('share/locale', filename))
-    line_num = location.get('line')
-    eprint(f'Translation error at line {line_num} in file {filename}:')
+    global num_errors
+    locations = [
+        (
+            os.path.relpath(os.path.join('share/locale', location.get('filename'))).replace('\\', '/'),
+            location.get('line'),
+        )
+        for location in message_element.findall('location')
+    ]
+    locations = [ (file, line) for file, line in locations if file not in ignored_files ]
+    if not locations:
+        return False # error is ignored
+    num_errors += 1
+    eprint(f'Error in translatable string: "{message.find("source").text}"')
+    for file, line in locations:
+        eprint(f'    Location: {file}:{line}')
     eprint(f'    Problem: {description}')
     eprint(f'    Solution: {resolution}')
     if hint:
         eprint(f'    Hint: {hint}')
+    eprint()
+    return True # error
 
 superscript_numbers = '¹²³⁴⁵⁶⁷⁸⁹'
 
@@ -74,13 +92,8 @@ for source_file in glob.glob('share/locale/*_' + source_lang_ts):
         bytes = source.findall('byte')
         if bytes:
             values = ', '.join([ f"'{b.get('value')}'" for b in bytes ])
-            if len(bytes) == 1:
-                tr_error(message, f'Translated string contains illegal byte: {values}.',
-                    'Remove the illegal byte or provide it untranslated.')
-            else:
-                tr_error(message, f'Translated string contains illegal bytes: {values}.',
-                    'Remove the illegal bytes or provide them untranslated.')
-            exit_status = 1
+            tr_error(message, f'Translatable string contains illegal byte(s): {values}.',
+                'Remove the illegal bytes or provide them in a non-translatable string.')
             continue
 
         # use the source as basis for the translation
@@ -89,31 +102,46 @@ for source_file in glob.glob('share/locale/*_' + source_lang_ts):
         if not tr_txt:
             # Sadly, this test only works for empty strings in QML files. If a translated
             # string is empty in a C++ file then lupdate doesn't include it in the TS file.
-            tr_error(message, 'Translated string is empty.',
+            tr_error(message, 'Translatable string is empty.',
                 'Provide a non-empty string or use "" untranslated if it really needs to be empty.')
-            exit_status = 1
             continue
 
         tr_stripped = tr_txt.strip()
 
         if not tr_stripped:
-            tr_error(message, 'Translated string only contains whitespace characters.',
+            tr_error(message, 'Translatable string only contains whitespace characters.',
                 'Include non-whitespace characters or provide the whitepace as untranslated text.')
-            exit_status = 1
             continue
 
         if tr_txt != tr_stripped:
-            tr_error(message, 'Translated string contains leading and/or trailing whitespace.',
-                'Remove the whitepace or provide it separately as untranslated text.',
-                'Use .arg() and %1 tags if you need to insert text or numbers into a translated string.')
-            exit_status = 1
+            tr_error(message, 'Translatable string contains leading and/or trailing whitespace.',
+                'Remove the whitepace or provide it separately as non-translatable text.',
+                'Use .arg() and %1 tags if you need to insert text or numbers into a translatable string.')
+            continue
+
+        if '  ' in tr_txt:
+            tr_error(message, "Translatable string contains consecutive space characters (  ).",
+                'Use a single space character ( ), or provide the spaces as untranslated text.')
+
+        if '...' in tr_txt:
+            tr_error(message, "Translatable string contains three consecutive dot characters (...).",
+                'Use the ellipsis character (…) instead.')
+
+        if "'" in tr_txt:
+            tr_error(message, "Translatable string contains the straight single quote mark (').",
+                'Use left (‘) or right (’) curly single quote mark, or prime (′).')
+            continue
+
+        if '"' in re.sub(r'<a href="[^"]*">', '', tr_txt):
+            tr_error(message, 'Translatable string contains the straight double quote mark (").',
+                'Use left (“) or right (”) curly double quote mark, or double prime (″).')
             continue
 
         # identify QString arg() markers '%1', '%2', etc. as their
         # arguments will require separate translation
         tr_txt = re.sub(r'%([1-9]+)', r'⌜%\1⌝', tr_txt)
 
-        # identify start and end of translated string
+        # identify start and end of translatable string
         tr_txt = '«' + tr_txt + '»'
 
         if plurals:
@@ -146,10 +174,10 @@ for source_file in glob.glob('share/locale/*_' + source_lang_ts):
                 .replace('\r', '&') # use the proper escape character in &apos; and &quot;
             )
 
-if exit_status == 0:
+if num_errors == 0:
     eprint(f'{sys.argv[0]}: Success!')
 elif args.warn_only:
-    eprint(f'{sys.argv[0]}: Success! Some errors were ignored because of the --warn-only option.')
+    eprint(f'{sys.argv[0]}: Success! {num_errors} translation errors ignored due to the --warn-only option.')
 else:
-    eprint(f'{sys.argv[0]}: Failed! Translation errors were detected.')
-    raise SystemExit(exit_status)
+    eprint(f'{sys.argv[0]}: Failed! {num_errors} translation errors were detected.')
+    raise SystemExit(1)

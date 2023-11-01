@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-HERE="${BASH_SOURCE%/*}" # path to dir that contains this script
+cd "${BASH_SOURCE%/*}/../.." # go to repository root
 
 if [[ "$@" = *"-no-obsolete"* ]]; then
     echo "Note: cleaning up obsolete strings"
@@ -28,30 +28,32 @@ else
 fi
 
 LUPDATE=lupdate
-SRC_DIR=$HERE/../../src
-TS_FILE=$HERE/../../share/locale/musescore_en.ts
-ARGS="-recursive \
-    -tr-function-alias translate+=trc \
-    -tr-function-alias translate+=mtrc \
-    -tr-function-alias translate+=qtrc \
-    -tr-function-alias translate+=TranslatableString \
-    -tr-function-alias qsTranslate+=qsTrc \
-    -extensions cpp,h,mm,ui,qml,js \
-    $@"
+SRC_DIR=src
+TS_FILE=share/locale/musescore_en.ts
+ARGS=(
+    -recursive
+    -tr-function-alias translate+=trc
+    -tr-function-alias translate+=mtrc
+    -tr-function-alias translate+=qtrc
+    -tr-function-alias translate+=TranslatableString
+    -tr-function-alias qsTranslate+=qsTrc
+    -extensions cpp,h,mm,ui,qml,js
+    "$@"
+)
 
 # We only need to update one ts file per "resource", that will be sent to Transifex.
 # We get .ts files for other languages from Transifex.
 
 # musescore
 echo "MuseScore:"
-$LUPDATE $ARGS $SRC_DIR -ts $TS_FILE
+"${LUPDATE}" "${ARGS[@]}" "${SRC_DIR}" -ts "${TS_FILE}"
 
 echo ""
 
 # instruments (and templates, and score orders, currently)
-FAKE_HEADER_FILE=$HERE/../../share/instruments/instrumentsxml.h
-TS_FILE=$HERE/../../share/locale/instruments_en.ts
-ARGS="$0"
+FAKE_HEADER_FILE=share/instruments/instrumentsxml.h
+TS_FILE=share/locale/instruments_en.ts
+ARGS=("$@")
 
 echo "Instruments:"
-$LUPDATE $ARGS $FAKE_HEADER_FILE -ts $TS_FILE
+"${LUPDATE}" "${ARGS[@]}" "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
