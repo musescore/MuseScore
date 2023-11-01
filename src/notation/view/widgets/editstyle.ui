@@ -6043,7 +6043,7 @@ By default, they will be placed such as that their right end are at the same lev
            <item row="2" column="0" colspan="2">
             <widget class="QCheckBox" name="oneMeasureRepeatShow1">
              <property name="text">
-              <string>Show ‘1’ on 1-measure repeats</string>
+              <string notr="true">Show ‘\1’ on 1-measure repeats [set in edidstyle.cpp]</string>
              </property>
             </widget>
            </item>
