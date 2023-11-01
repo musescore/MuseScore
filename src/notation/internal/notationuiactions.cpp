@@ -1852,8 +1852,8 @@ const UiActionList NotationUiActions::m_actions = {
     UiAction("toggle-mmrest",
              mu::context::UiCtxNotationOpened,
              mu::context::CTX_ANY,
-             TranslatableString("action", "Toggle multimeasure rest"),
-             TranslatableString("action", "Toggle multimeasure rest")
+             TranslatableString("action", "Toggle multimeasure rests"),
+             TranslatableString("action", "Toggle multimeasure rests")
              ),
     UiAction("toggle-hide-empty",
              mu::context::UiCtxNotationOpened,
