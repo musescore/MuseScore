@@ -32,8 +32,7 @@ using namespace mu::ui;
 using namespace mu::draw;
 using namespace mu::notation;
 
-static constexpr qreal SCROLL_LIMIT_OFF_OFFSET = 0.75;
-static constexpr qreal SCROLL_LIMIT_ON_OFFSET = 0.02;
+static constexpr qreal SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR = 0.75;
 
 static void compensateFloatPart(RectF& rect)
 {
@@ -719,7 +718,7 @@ RectF AbstractNotationPaintView::scrollableAreaRect() const
 {
     TRACEFUNC;
     RectF viewport = this->viewport();
-    qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? SCROLL_LIMIT_ON_OFFSET : SCROLL_LIMIT_OFF_OFFSET;
+    qreal overscrollFactor = configuration()->isLimitCanvasScrollArea() ? 0.0 : SCROLL_LIMIT_OFF_OVERSCROLL_FACTOR;
 
     qreal overscrollX = viewport.width() * overscrollFactor;
     qreal overscrollY = viewport.height() * overscrollFactor;
