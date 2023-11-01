@@ -430,9 +430,31 @@ void Box::manageExclusionFromParts(bool exclude)
             if (score == this->score()) {
                 continue;
             }
+
             MeasureBase* newMB = next()->getInScore(score, true);
             MeasureBase* newFrame = score->insertBox(type(), newMB);
             newFrame->setExcludeFromOtherParts(false);
+
+            for (EngravingItem* item : el()) {
+                // Don't add instrument name from current part
+                if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
+                    continue;
+                }
+                newFrame->add(item->linkedClone());
+            }
+
+            if (!score->isMaster() && newFrame == score->first() && newFrame->type() == ElementType::VBOX) {
+                // Title frame - add part name
+                String partLabel = score->name();
+                if (!partLabel.empty()) {
+                    Text* txt = Factory::createText(newFrame, TextStyleType::INSTRUMENT_EXCERPT);
+                    txt->setPlainText(partLabel);
+                    newFrame->add(txt);
+
+                    score->setMetaTag(u"partName", partLabel);
+                }
+            }
+
             newFrames.push_back(newFrame);
         }
         for (MeasureBase* newFrame : newFrames) {
