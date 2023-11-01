@@ -1024,6 +1024,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         Chord* c1 = item->startNote()->chord();
         item->setTick(c1->tick());
         if (item->slurDirection() == DirectionV::AUTO) {
+            StaffType* st = item->staff()->staffType(item->startNote() ? item->startNote()->tick() : Fraction(0, 1));
             bool simpleException = st && st->isSimpleTabStaff();
             if (st && st->isSimpleTabStaff()) {
                 item->setUp(isUpVoice(c1->voice()));
