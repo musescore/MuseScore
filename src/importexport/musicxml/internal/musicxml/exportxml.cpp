@@ -2455,6 +2455,7 @@ struct MusicXmlClefInfo
     int octChng;
 };
 
+// table must be in sync with enum ClefType in types.h
 static const std::vector<MusicXmlClefInfo> CLEF_INFOS = {
     { ClefType::G,          "G", 0 },
     { ClefType::G15_MB,     "G", -2 },
@@ -2497,6 +2498,8 @@ static const std::vector<MusicXmlClefInfo> CLEF_INFOS = {
     { ClefType::TAB4,       "TAB", 0 },
     { ClefType::TAB_SERIF,  "TAB", 0 },
     { ClefType::TAB4_SERIF, "TAB", 0 },
+
+    { ClefType::C4_8VB,     "C", -1 },
 };
 
 static const MusicXmlClefInfo findClefInfoByType(const ClefType& v)

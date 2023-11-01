@@ -45,7 +45,7 @@ using namespace mu;
 using namespace mu::engraving;
 
 namespace mu::engraving {
-// table must be in sync with enum ClefType
+// table must be in sync with enum ClefType in types.h
 const ClefInfo ClefInfo::clefTable[] = {
 //                     line pOff|-lines for sharps---||---lines for flats--   |  symbol                | valid in staff group
     { ClefType::G,       2, 45, { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::gClef,            StaffGroup::STANDARD },
@@ -87,6 +87,8 @@ const ClefInfo ClefInfo::clefTable[] = {
     { ClefType::TAB4,    5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClef,        StaffGroup::TAB },
     { ClefType::TAB_SERIF, 5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::sixStringTabClefSerif,  StaffGroup::TAB },
     { ClefType::TAB4_SERIF, 5, 45,  { 0, 3, -1, 2, 5, 1, 4, 4, 1, 5, 2, 6, 3, 7 }, SymId::fourStringTabClefSerif, StaffGroup::TAB },
+
+    { ClefType::C4_8VB,  4, 30, { 6, 2, 5, 1, 4, 0, 3, 3, 0, 4, 1, 5, 2, 6 },  SymId::cClef8vb,         StaffGroup::STANDARD },
 };
 
 //---------------------------------------------------------

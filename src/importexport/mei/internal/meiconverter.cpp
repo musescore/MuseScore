@@ -597,7 +597,11 @@ engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warn
         case (1): return engraving::ClefType::C1;
         case (2): return engraving::ClefType::C2;
         case (3): return engraving::ClefType::C3;
-        case (4): return engraving::ClefType::C4;
+        case (4):
+            if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_below && meiClef.GetDis() == libmei::OCTAVE_DIS_8) {
+                return engraving::ClefType::C4_8VB;
+            }
+            return engraving::ClefType::C4;
         case (5): return engraving::ClefType::C5;
         default:
             break;
@@ -811,6 +815,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::C2):
     case (engraving::ClefType::C3):
     case (engraving::ClefType::C4):
+    case (engraving::ClefType::C4_8VB):
     case (engraving::ClefType::C5):
         meiClef.SetShape(libmei::CLEFSHAPE_C);
         break;
@@ -840,6 +845,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     case (engraving::ClefType::G8_VA):
     case (engraving::ClefType::F8_VB):
     case (engraving::ClefType::F_8VA):
+    case (engraving::ClefType::C4_8VB):
         meiClef.SetDis(libmei::OCTAVE_DIS_8);
         break;
     case (engraving::ClefType::G15_MB):
@@ -856,6 +862,7 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
     switch (clef) {
     case (engraving::ClefType::G8_VB):
     case (engraving::ClefType::F8_VB):
+    case (engraving::ClefType::C4_8VB):
     case (engraving::ClefType::G15_MB):
     case (engraving::ClefType::F15_MB):
         meiClef.SetDisPlace(libmei::STAFFREL_basic_below);

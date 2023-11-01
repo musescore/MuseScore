@@ -643,6 +643,7 @@ NoteHeadGroup TConv::fromXml(const AsciiStringView& tag, NoteHeadGroup def)
     return def;
 }
 
+// table must be in sync with enum ClefType in types.h
 static const std::vector<Item<ClefType> > CLEF_TYPES = {
     { ClefType::G,          "G",        TranslatableString("engraving/cleftype", "Treble clef") },
     { ClefType::G15_MB,     "G15mb",    TranslatableString("engraving/cleftype", "Treble clef 15ma bassa") },
@@ -681,6 +682,8 @@ static const std::vector<Item<ClefType> > CLEF_TYPES = {
     { ClefType::TAB4,       "TAB4",     TranslatableString("engraving/cleftype", "Tablature 4 lines") },
     { ClefType::TAB_SERIF,  "TAB2",     TranslatableString("engraving/cleftype", "Tablature Serif") },
     { ClefType::TAB4_SERIF, "TAB4_SERIF", TranslatableString("engraving/cleftype", "Tablature Serif 4 lines") },
+
+    { ClefType::C4_8VB,     "C4_8VB",   TranslatableString("engraving/cleftype", "Tenor clef 8va bassa") },
 };
 
 const TranslatableString& TConv::userName(ClefType v)

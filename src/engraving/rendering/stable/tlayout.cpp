@@ -1387,30 +1387,15 @@ static void layoutClef(const Clef* item, const LayoutContext&, Clef::LayoutData*
     case ClefType::C_19C:                                    // 19th C clef is like a G clef
         yoff = lineDist * 1.5;
         break;
-    case ClefType::TAB:                                    // TAB clef
+    case ClefType::TAB:                                     // TAB clef
+    case ClefType::TAB4:                                    // TAB clef 4 strings
+    case ClefType::TAB_SERIF:                               // TAB clef alternate style
+    case ClefType::TAB4_SERIF:                              // TAB clef alternate style
         // on tablature, position clef at half the number of spaces * line distance
         yoff = lineDist * (lines - 1) * .5;
         stepOffset = 0;           //  ignore stepOffset for TAB and percussion clefs
         break;
-    case ClefType::TAB4:                                    // TAB clef 4 strings
-        // on tablature, position clef at half the number of spaces * line distance
-        yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;
-        break;
-    case ClefType::TAB_SERIF:                                   // TAB clef alternate style
-        // on tablature, position clef at half the number of spaces * line distance
-        yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;
-        break;
-    case ClefType::TAB4_SERIF:                                   // TAB clef alternate style
-        // on tablature, position clef at half the number of spaces * line distance
-        yoff = lineDist * (lines - 1) * .5;
-        stepOffset = 0;
-        break;
     case ClefType::PERC:                                   // percussion clefs
-        yoff = lineDist * (lines - 1) * 0.5;
-        stepOffset = 0;
-        break;
     case ClefType::PERC2:
         yoff = lineDist * (lines - 1) * 0.5;
         stepOffset = 0;

@@ -3799,7 +3799,7 @@ constexpr const std::array<const char*, size_t(SymId::lastSym) + 1> SymNames::s_
     "Bridge clef",
     "Buzz roll",
     QT_TRANSLATE_NOOP("engraving/sym", "C clef"),
-    "C clef ottava bassa",
+    QT_TRANSLATE_NOOP("engraving/sym", "C clef ottava bassa"),
     "C clef, arrow down",
     "C clef, arrow up",
     "C clef change",
