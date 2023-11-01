@@ -6079,6 +6079,37 @@ void TLayout::layoutTuplet(Tuplet* item, LayoutContext& ctx)
     TupletLayout::layout(item, ctx);
 }
 
+void TLayout::fillTupletShape(const Tuplet* item, Tuplet::LayoutData* ldata)
+{
+    Shape s;
+    if (item->hasBracket()) {
+        auto tupletRect = [](const PointF& p1, const PointF& p2, double w) {
+            double w2 = w * .5;
+            RectF r;
+            r.setCoords(std::min(p1.x(), p2.x()) - w2,
+                        std::min(p1.y(), p2.y()) - w2,
+                        std::max(p1.x(), p2.x()) + w2,
+                        std::max(p1.y(), p2.y()) + w2);
+            return r;
+        };
+
+        double w = item->bracketWidth().val() * item->mag();
+        s.add(tupletRect(item->bracketL[0], item->bracketL[1], w));
+        s.add(tupletRect(item->bracketL[1], item->bracketL[2], w));
+        if (item->number()) {
+            s.add(tupletRect(item->bracketR[0], item->bracketR[1], w));
+            s.add(tupletRect(item->bracketR[1], item->bracketR[2], w));
+        } else {
+            s.add(tupletRect(item->bracketL[2], item->bracketL[3], w));
+        }
+    }
+    if (item->number()) {
+        s.add(item->number()->ldata()->bbox().translated(item->number()->pos()));
+    }
+
+    ldata->setShape(s);
+}
+
 void TLayout::layoutVibratoSegment(VibratoSegment* item, LayoutContext& ctx)
 {
     VibratoSegment::LayoutData* ldata = item->mutldata();

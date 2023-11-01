@@ -250,44 +250,13 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 }
 
 //---------------------------------------------------------
-//   Rect
-//    helper class
-//---------------------------------------------------------
-
-class TupletRect : public RectF
-{
-    OBJECT_ALLOCATOR(engraving, TupletRect)
-public:
-    TupletRect(const PointF& p1, const PointF& p2, double w)
-    {
-        double w2 = w * .5;
-        setCoords(std::min(p1.x(), p2.x()) - w2, std::min(p1.y(), p2.y()) - w2,  std::max(p1.x(), p2.x()) + w2, std::max(p1.y(),
-                                                                                                                         p2.y()) + w2);
-    }
-};
-
-//---------------------------------------------------------
 //   shape
 //---------------------------------------------------------
 
 Shape Tuplet::doCreateShape() const
 {
-    Shape s;
-    if (m_hasBracket) {
-        double w = m_bracketWidth.val() * mag();
-        s.add(TupletRect(bracketL[0], bracketL[1], w));
-        s.add(TupletRect(bracketL[1], bracketL[2], w));
-        if (m_number) {
-            s.add(TupletRect(bracketR[0], bracketR[1], w));
-            s.add(TupletRect(bracketR[1], bracketR[2], w));
-        } else {
-            s.add(TupletRect(bracketL[2], bracketL[3], w));
-        }
-    }
-    if (m_number) {
-        s.add(m_number->ldata()->bbox().translated(m_number->pos()));
-    }
-    return s;
+    UNREACHABLE;
+    return Shape();
 }
 
 //---------------------------------------------------------
