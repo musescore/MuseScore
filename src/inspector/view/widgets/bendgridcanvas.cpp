@@ -42,6 +42,8 @@ BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     setAcceptedMouseButtons(Qt::AllButtons);
     setAcceptHoverEvents(true);
 
+    setKeepMouseGrab(true);
+
     uiConfig()->currentThemeChanged().onNotify(this, [this]() {
         update();
     });
