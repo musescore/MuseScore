@@ -174,6 +174,7 @@ void BendGridCanvas::mousePressEvent(QMouseEvent* event)
     CurvePoint point = this->point(frameRect, coord.first, coord.second);
 
     m_currentPointIndex = this->pointIndex(point);
+    m_canvasWasChanged = false;
 }
 
 void BendGridCanvas::mouseMoveEvent(QMouseEvent* event)
@@ -189,6 +190,10 @@ void BendGridCanvas::mouseMoveEvent(QMouseEvent* event)
 
     int index = m_currentPointIndex.value();
     CurvePoint& currentPoint = m_points[index];
+
+    if (currentPoint == point) {
+        return;
+    }
 
     bool canMoveHorizontally = currentPoint.canMove(CurvePoint::MoveDirection::Horizontal);
     bool canMoveVertically = currentPoint.canMove(CurvePoint::MoveDirection::Vertical);
@@ -234,6 +239,8 @@ void BendGridCanvas::mouseMoveEvent(QMouseEvent* event)
             if (isNextDashed) {
                 m_points[index + 1].pitch = point.pitch;
             }
+
+            m_canvasWasChanged = true;
         }
     }
 
@@ -254,16 +261,22 @@ void BendGridCanvas::mouseMoveEvent(QMouseEvent* event)
 
         if (canMove) {
             currentPoint.time = point.time;
+            m_canvasWasChanged = true;
         }
     }
 
     update();
-    emit canvasChanged();
 }
 
 void BendGridCanvas::mouseReleaseEvent(QMouseEvent*)
 {
     m_currentPointIndex = std::nullopt;
+
+    if (m_canvasWasChanged) {
+        emit canvasChanged();
+    }
+
+    m_canvasWasChanged = false;
 }
 
 void BendGridCanvas::hoverEnterEvent(QHoverEvent*)
