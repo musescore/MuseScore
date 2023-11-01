@@ -125,6 +125,8 @@ private:
 
     std::optional<int> m_hoverPointIndex;
     std::optional<int> m_currentPointIndex;
+
+    bool m_canvasWasChanged = false;
 };
 }
 
