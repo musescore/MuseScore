@@ -34,6 +34,7 @@
 #include "types/types.h"
 
 #include "../infrastructure/rtti.h"
+#include "../infrastructure/eid.h"
 
 #include "modularity/ioc.h"
 #include "diagnostics/iengravingelementsprovider.h"
@@ -218,6 +219,9 @@ public:
     virtual TranslatableString typeUserName() const;
     virtual String translatedTypeUserName() const;
 
+    EID eid() const;
+    void setEID(EID id) { m_eid = id; }
+
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
     EngravingObject* explicitParent() const;
@@ -299,6 +303,7 @@ private:
     void doSetScore(Score* sc);
 
     ElementType m_type = ElementType::INVALID;
+    mutable EID m_eid;
     EngravingObject* m_parent = nullptr;
     bool m_isParentExplicitlySet = false;
     EngravingObjectList m_children;

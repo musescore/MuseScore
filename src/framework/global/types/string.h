@@ -406,6 +406,10 @@ public:
     QLatin1String toQLatin1String() const { return QLatin1String(m_data, static_cast<int>(m_size)); }
 #endif
 
+    operator std::string_view() const {
+        return std::string_view(m_data, m_size);
+    }
+
     inline bool operator ==(const AsciiStringView& s) const { return m_size == s.m_size && std::memcmp(m_data, s.m_data, m_size) == 0; }
     inline bool operator !=(const AsciiStringView& s) const { return !this->operator ==(s); }
     inline bool operator ==(const char* s) const

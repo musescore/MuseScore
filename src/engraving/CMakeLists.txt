@@ -59,6 +59,10 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/shape.h
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/skyline.cpp
     ${CMAKE_CURRENT_LIST_DIR}/infrastructure/skyline.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eid.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/eid.h
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/geteid.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/infrastructure/geteid.h
 
     ${DOM_SRC}
 
