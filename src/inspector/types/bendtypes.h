@@ -27,6 +27,20 @@
 #include <QVariantMap>
 
 namespace mu::inspector {
+class BendTypes
+{
+    Q_GADGET
+
+public:
+    enum class ShowHoldLine {
+        SHOW_HOLD_AUTO = 0,
+        SHOW_HOLD_SHOW  = 1,
+        SHOW_HOLD_HIDE = 2,
+    };
+
+    Q_ENUM(ShowHoldLine)
+};
+
 struct CurvePoint
 {
     enum class MoveDirection {

@@ -52,15 +52,20 @@ Column {
         navigationRowStart: root.navigationRowStart + 1
     }
 
-    PropertyCheckBox {
-        id: showHold
-        visible: root.model ? root.model.isShowHoldLineAvailable : false
-
-        text: qsTrc("inspector", "Show hold line")
+    FlatRadioButtonGroupPropertyView {
+        id: showHoldSection
+        titleText: qsTrc("inspector", "Hold line")
         propertyItem: root.model ? root.model.showHoldLine : null
 
-        navigation.panel: root.navigationPanel
-        navigation.row: directionSection.navigationRowEnd + 1
+        navigationName: "HoldLine"
+        navigationPanel: root.navigationPanel
+        navigationRowStart: directionSection.navigationRowEnd + 1
+
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: BendTypes.SHOW_HOLD_AUTO},
+            { text: qsTrc("inspector", "Show"), value: BendTypes.SHOW_HOLD_SHOW},
+            { text: qsTrc("inspector", "Hide"), value: BendTypes.SHOW_HOLD_HIDE},
+        ]
     }
 
     InspectorPropertyView {
@@ -71,7 +76,7 @@ Column {
         visible: true
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: showHold.navigation.row + 1
+        navigationRowStart: showHoldSection.navigation.row + 1
 
         BendGridCanvas {
             height: 200

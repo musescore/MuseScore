@@ -232,7 +232,7 @@ PropertyValue GuitarBend::getProperty(Pid id) const
     case Pid::DIRECTION:
         return direction();
     case Pid::BEND_SHOW_HOLD_LINE:
-        return showHoldLine();
+        return static_cast<int>(showHoldLine());
     default:
         return SLine::getProperty(id);
     }
@@ -245,7 +245,7 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
         setDirection(v.value<DirectionV>());
         break;
     case Pid::BEND_SHOW_HOLD_LINE:
-        setShowHoldLine(v.toBool());
+        setShowHoldLine(static_cast<GuitarBendShowHoldLine>(v.toInt()));
         break;
     default:
         return SLine::setProperty(propertyId, v);
@@ -260,7 +260,7 @@ PropertyValue GuitarBend::propertyDefault(Pid id) const
     case Pid::DIRECTION:
         return DirectionV::AUTO;
     case Pid::BEND_SHOW_HOLD_LINE:
-        return true;
+        return static_cast<int>(GuitarBendShowHoldLine::AUTO);
     default:
         return SLine::propertyDefault(id);
     }
@@ -360,11 +360,10 @@ GuitarBend* GuitarBend::findPrecedingBend() const
 
 void GuitarBend::updateHoldLine()
 {
-    bool needsHoldLine = false;
-
     Note* startOfHold = nullptr;
     Note* endOfHold = nullptr;
 
+    bool needsHoldLine = false;
     if (!isFullRelease()) {
         startOfHold = endNote();
         endOfHold = startOfHold;
@@ -373,10 +372,14 @@ void GuitarBend::updateHoldLine()
             endOfHold = endOfHold->tieFor()->endNote();
         }
 
-        needsHoldLine = endOfHold != startOfHold;
+        if (showHoldLine() == GuitarBendShowHoldLine::AUTO) {
+            needsHoldLine = endOfHold != startOfHold;
+        } else {
+            needsHoldLine = showHoldLine() == GuitarBendShowHoldLine::SHOW;
+        }
     }
 
-    if (!needsHoldLine || !showHoldLine()) {
+    if (!needsHoldLine) {
         if (m_holdLine) {
             if (!m_holdLine->segmentsEmpty()) {
                 m_holdLine->eraseSpannerSegments();
@@ -385,6 +388,18 @@ void GuitarBend::updateHoldLine()
             m_holdLine = nullptr;
         }
         return;
+    }
+
+    if (endOfHold == startOfHold) {
+        Chord* guessedEndChord = startOfHold->chord()->next();
+        if (guessedEndChord) {
+            for (Note* note : guessedEndChord->notes()) {
+                if (note->isPreBendStart()) {
+                    endOfHold = note;
+                    break;
+                }
+            }
+        }
     }
 
     if (!m_holdLine) {
