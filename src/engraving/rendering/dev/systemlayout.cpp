@@ -1321,6 +1321,11 @@ void SystemLayout::layoutGuitarBends(const std::vector<Segment*>& sl, LayoutCont
                     TLayout::layoutGuitarBend(bendBack, ctx);
                 }
             }
+
+            GuitarBend* bendFor = note->bendFor();
+            if (bendFor && bendFor->type() == GuitarBendType::SLIGHT_BEND) {
+                TLayout::layoutGuitarBend(bendFor, ctx);
+            }
         }
     };
 

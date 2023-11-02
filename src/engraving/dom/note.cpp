@@ -2249,7 +2249,10 @@ GuitarBend* Note::bendFor() const
 GuitarBend* Note::bendBack() const
 {
     for (Spanner* sp : m_spannerBack) {
-        if (sp->isGuitarBend()) {
+        // HACK: slight bend is an edge case: its end note is the same as its start note, which
+        // means that the same bend is both in m_spannerFor and in m_spannerBack. Let's make
+        // sure we don't return it as a bendBack(), but only as a bendFor().
+        if (sp->isGuitarBend() && toGuitarBend(sp)->type() != GuitarBendType::SLIGHT_BEND) {
             return toGuitarBend(sp);
         }
     }
