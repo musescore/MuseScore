@@ -28,15 +28,16 @@
 
 #include "dom/bend.h"
 
+using namespace mu::engraving;
 using namespace mu::inspector;
 
 static constexpr int ACTIVE_POINT_INDEX = 2;
 
-static std::set<mu::engraving::ElementType> ELEMENTS_TYPES = {
-    engraving::ElementType::GUITAR_BEND,
-    engraving::ElementType::GUITAR_BEND_SEGMENT,
-    engraving::ElementType::GUITAR_BEND_HOLD,
-    engraving::ElementType::GUITAR_BEND_HOLD_SEGMENT
+static std::set<ElementType> ELEMENTS_TYPES = {
+    ElementType::GUITAR_BEND,
+    ElementType::GUITAR_BEND_SEGMENT,
+    ElementType::GUITAR_BEND_HOLD,
+    ElementType::GUITAR_BEND_HOLD_SEGMENT
 };
 
 BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService* repository)
@@ -51,10 +52,10 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
 
 void BendSettingsModel::createProperties()
 {
-    m_lineThickness = buildPropertyItem(mu::engraving::Pid::LINE_WIDTH);
+    m_lineThickness = buildPropertyItem(Pid::LINE_WIDTH);
 
-    m_bendDirection = buildPropertyItem(mu::engraving::Pid::DIRECTION);
-    m_showHoldLine = buildPropertyItem(mu::engraving::Pid::BEND_SHOW_HOLD_LINE);
+    m_bendDirection = buildPropertyItem(Pid::DIRECTION);
+    m_showHoldLine = buildPropertyItem(Pid::BEND_SHOW_HOLD_LINE);
 
     loadBendCurve();
 }
@@ -63,7 +64,7 @@ void BendSettingsModel::requestElements()
 {
     m_elementList.clear();
 
-    for (engraving::ElementType type : ELEMENTS_TYPES) {
+    for (ElementType type : ELEMENTS_TYPES) {
         m_elementList << m_repository->findElementsByType(type);
     }
 
@@ -154,7 +155,7 @@ void BendSettingsModel::loadBendCurve()
         return;
     }
 
-    if (bend->type() == engraving::GuitarBendType::PRE_BEND) {
+    if (bend->type() == GuitarBendType::PRE_BEND) {
         m_bendCurve = { CurvePoint(0, 0, true),
                         CurvePoint(0, endPitch, true),
                         CurvePoint(CurvePoint::MAX_TIME, endPitch, { CurvePoint::MoveDirection::Vertical }, true) };

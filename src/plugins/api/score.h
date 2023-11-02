@@ -239,7 +239,7 @@ public:
      * PlayEvent lists.
      * \since 3.3
      */
-    Q_INVOKABLE void createPlayEvents() { CompatMidiRender::createPlayEvents(score()); }
+    Q_INVOKABLE void createPlayEvents() { mu::engraving::CompatMidiRender::createPlayEvents(score()); }
 
     /// \cond MS_INTERNAL
     QString mscoreVersion() { return score()->mscoreVersion(); }

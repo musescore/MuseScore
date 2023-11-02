@@ -24,8 +24,6 @@
 
 #include "models/abstractinspectormodel.h"
 
-using namespace mu::engraving;
-
 namespace mu::inspector {
 class PartsSettingsModel : public AbstractInspectorModel
 {
@@ -74,9 +72,9 @@ private:
     PropertyItem* m_textLinkedToMaster;
     PropertyItem* m_excludeFromOtherParts;
 
-    QList<EngravingItem*> m_elementsForPartLinkingOption;
-    QList<EngravingItem*> m_elementsForExcludeOption;
-    QList<EngravingItem*> m_elementsForTextLinkingOption;
+    QList<mu::engraving::EngravingItem*> m_elementsForPartLinkingOption;
+    QList<mu::engraving::EngravingItem*> m_elementsForExcludeOption;
+    QList<mu::engraving::EngravingItem*> m_elementsForTextLinkingOption;
 
     bool m_showPartLinkingOption = false;
     bool m_showExcludeOption = false;

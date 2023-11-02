@@ -70,10 +70,10 @@ private:
 
     void loadBendCurve();
 
-    EngravingItem* item() const;
+    mu::engraving::EngravingItem* item() const;
 
-    bool isHold(const EngravingItem* item) const;
-    GuitarBend* guitarBend(EngravingItem* item) const;
+    bool isHold(const mu::engraving::EngravingItem* item) const;
+    mu::engraving::GuitarBend* guitarBend(mu::engraving::EngravingItem* item) const;
 
     PropertyItem* m_bendDirection = nullptr;
     PropertyItem* m_showHoldLine = nullptr;
