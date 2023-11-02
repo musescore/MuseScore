@@ -240,6 +240,9 @@ public:
     virtual void addMelisma() = 0;
     virtual void addLyricsVerse() = 0;
 
+    virtual Ret canAddGuitarBend() const = 0;
+    virtual void addGuitarBend(GuitarBendType bendType) = 0;
+
     // Text navigation
     virtual void navigateToLyrics(MoveDirection direction, bool moveOnly = false) = 0;
     virtual void navigateToLyricsVerse(MoveDirection direction) = 0;

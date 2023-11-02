@@ -475,6 +475,11 @@ void NotationActionController::init()
 
     registerAction("edit-strings", &Interaction::changeEnharmonicSpelling, true);
 
+    registerAction("standard-bend", [this]() { addGuitarBend(GuitarBendType::BEND); });
+    registerAction("pre-bend",  [this]() { addGuitarBend(GuitarBendType::PRE_BEND); });
+    registerAction("grace-note-bend",  [this]() { addGuitarBend(GuitarBendType::GRACE_NOTE_BEND); });
+    registerAction("slight-bend",  [this]() { addGuitarBend(GuitarBendType::SLIGHT_BEND); });
+
     for (int i = 0; i < MAX_FRET; ++i) {
         registerAction("fret-" + std::to_string(i), [i, this]() { addFret(i); }, &Controller::isTablatureStaff);
     }
@@ -1267,6 +1272,29 @@ void NotationActionController::addFiguredBass()
     }
 
     interaction->addFiguredBass();
+}
+
+void NotationActionController::addGuitarBend(GuitarBendType bendType)
+{
+    TRACEFUNC;
+
+    auto interaction = currentNotationInteraction();
+    if (!interaction) {
+        return;
+    }
+
+    Ret ret = interaction->canAddGuitarBend();
+    if (!ret) {
+        if (configuration()->needToShowAddGuitarBendErrorMessage()) {
+            IInteractive::Result result = showErrorMessage(ret.text());
+            if (!result.showAgain()) {
+                configuration()->setNeedToShowAddGuitarBendErrorMessage(false);
+            }
+        }
+        return;
+    }
+
+    interaction->addGuitarBend(bendType);
 }
 
 void NotationActionController::selectAllSimilarElements()

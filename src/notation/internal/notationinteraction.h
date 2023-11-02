@@ -263,6 +263,9 @@ public:
     void addMelisma() override;
     void addLyricsVerse() override;
 
+    Ret canAddGuitarBend() const override;
+    void addGuitarBend(GuitarBendType bendType) override;
+
     void toggleBold() override;
     void toggleItalic() override;
     void toggleUnderline() override;

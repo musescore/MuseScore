@@ -1124,4 +1124,12 @@
     <seq>Shift+F10</seq>
     <seq>Ctrl+Shift+F10</seq>
     </SC>
+  <SC>
+    <key>standard-bend</key>
+    <seq>Alt+B</seq>
+    </SC>
+  <SC>
+    <key>grace-note-bend</key>
+    <seq>Ctrl+Alt+B</seq>
+    </SC>
   </Shortcuts>
