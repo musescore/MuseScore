@@ -96,17 +96,4 @@ Column {
             }
         }
     }
-
-    SpinBoxPropertyView {
-        titleText: qsTrc("inspector", "Line thickness")
-        propertyItem: root.model ? root.model.lineThickness : null
-
-        maxValue: 10
-        minValue: 0.1
-        step: 0.1
-        decimals: 2
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: bendCurve.navigationRowEnd + 1
-    }
 }

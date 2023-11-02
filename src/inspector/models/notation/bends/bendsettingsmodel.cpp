@@ -52,10 +52,8 @@ BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService*
 
 void BendSettingsModel::createProperties()
 {
-    m_lineThickness = buildPropertyItem(Pid::LINE_WIDTH);
-
-    m_bendDirection = buildPropertyItem(Pid::DIRECTION);
-    m_showHoldLine = buildPropertyItem(Pid::BEND_SHOW_HOLD_LINE);
+    m_bendDirection = buildPropertyItem(mu::engraving::Pid::DIRECTION);
+    m_showHoldLine = buildPropertyItem(mu::engraving::Pid::BEND_SHOW_HOLD_LINE);
 
     loadBendCurve();
 }
@@ -73,7 +71,6 @@ void BendSettingsModel::requestElements()
 
 void BendSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_lineThickness, formatDoubleFunc);
     loadPropertyItem(m_bendDirection);
     loadPropertyItem(m_showHoldLine);
 
@@ -84,14 +81,8 @@ void BendSettingsModel::loadProperties()
 
 void BendSettingsModel::resetProperties()
 {
-    m_lineThickness->resetToDefault();
     m_bendDirection->resetToDefault();
     m_showHoldLine->resetToDefault();
-}
-
-PropertyItem* BendSettingsModel::lineThickness() const
-{
-    return m_lineThickness;
 }
 
 bool BendSettingsModel::areSettingsAvailable() const
