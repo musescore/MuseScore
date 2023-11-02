@@ -238,13 +238,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         }
     }
 
-    for (Note* note : item->notes()) {
-        GuitarBend* bend = note->bendFor();
-        if (bend && bend->type() == GuitarBendType::SLIGHT_BEND) {
-            TLayout::layoutGuitarBend(bend, ctx);
-        }
-    }
-
     // align note-based fingerings
     std::vector<Fingering*> alignNote;
     double xNote = 10000.0;
