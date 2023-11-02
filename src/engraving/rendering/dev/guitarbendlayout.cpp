@@ -226,13 +226,19 @@ void GuitarBendLayout::computeUp(GuitarBend* item)
 
     Note* startN = item->startNote();
     Chord* startChord = startN->chord();
+    Note* endN = item->endNote();
+    Chord* endChord = endN->chord();
+
+    if (startChord->up() != endChord->up()) {
+        layoutData->setUp(true);
+        return;
+    }
+
     if (startChord->notes().size() == 1 && startChord->stem()) {
         layoutData->setUp(!startChord->up());
         return;
     }
 
-    Note* endN = item->endNote();
-    Chord* endChord = endN->chord();
     if (endChord->notes().size() == 1 && endChord->stem()) {
         layoutData->setUp(!endChord->up());
         return;
