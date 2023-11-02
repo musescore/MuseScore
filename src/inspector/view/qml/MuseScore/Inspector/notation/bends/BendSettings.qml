@@ -72,7 +72,7 @@ Column {
         id: bendCurve
         titleText: qsTrc("inspector", "Customize bend")
 
-        enabled: true
+        enabled: root.model ? root.model.isBendCurveEnabled : false
         visible: true
 
         navigationPanel: root.navigationPanel
@@ -81,6 +81,8 @@ Column {
         BendGridCanvas {
             height: 200
             width: parent.width
+
+            enabled: bendCurve.enabled
 
             pointList: root.model ? root.model.bendCurve : null
 

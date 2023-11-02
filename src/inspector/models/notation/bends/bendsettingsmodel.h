@@ -35,6 +35,7 @@ class BendSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * showHoldLine READ showHoldLine CONSTANT)
     Q_PROPERTY(bool isShowHoldLineAvailable READ isShowHoldLineAvailable NOTIFY isShowHoldLineAvailableChanged)
 
+    Q_PROPERTY(bool isBendCurveEnabled READ isBendCurveEnabled NOTIFY isBendCurveEnabledChanged)
     Q_PROPERTY(QVariantList bendCurve READ bendCurve WRITE setBendCurve NOTIFY bendCurveChanged)
 
     Q_PROPERTY(bool areSettingsAvailable READ areSettingsAvailable NOTIFY areSettingsAvailableChanged)
@@ -57,10 +58,13 @@ public:
 
     void setBendCurve(const QVariantList& newBendCurve);
 
+    bool isBendCurveEnabled() const;
+
 signals:
     void areSettingsAvailableChanged(bool areSettingsAvailable);
     void isShowHoldLineAvailableChanged(bool isAvailable);
 
+    void isBendCurveEnabledChanged();
     void bendCurveChanged();
 
 private:

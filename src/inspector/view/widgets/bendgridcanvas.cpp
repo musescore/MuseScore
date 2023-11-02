@@ -74,6 +74,10 @@ BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     uiConfig()->fontChanged().onNotify(this, [this]() {
         update();
     });
+
+    connect(this, &BendGridCanvas::enabledChanged, [this](){
+        update();
+    });
 }
 
 QVariant BendGridCanvas::pointList() const
@@ -181,7 +185,10 @@ void BendGridCanvas::paint(QPainter* painter)
     QRectF frameRect = this->frameRect();
 
     drawBackground(painter, frameRect);
-    drawCurve(painter, frameRect);
+
+    if (isEnabled()) {
+        drawCurve(painter, frameRect);
+    }
 }
 
 void BendGridCanvas::mousePressEvent(QMouseEvent* event)
@@ -378,7 +385,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
     const qreal columnWidth = this->columnWidth(frameRect);
 
     const ThemeInfo& currentTheme = uiConfig()->currentTheme();
-    QColor primaryLinesColor(currentTheme.codeKey == DARK_THEME_CODE ? Qt::white : Qt::black);
+    QColor primaryLinesColor(isEnabled() ? (currentTheme.codeKey == DARK_THEME_CODE ? Qt::white : Qt::black) : Qt::gray);
     QColor secondaryLinesColor(Qt::gray);
 
     painter->setRenderHint(QPainter::Antialiasing, true);

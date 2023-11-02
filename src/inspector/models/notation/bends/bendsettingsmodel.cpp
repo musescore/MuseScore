@@ -67,6 +67,7 @@ void BendSettingsModel::requestElements()
     }
 
     emit areSettingsAvailableChanged(areSettingsAvailable());
+    emit isBendCurveEnabledChanged();
 }
 
 void BendSettingsModel::loadProperties()
@@ -263,4 +264,9 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
 
     m_bendCurve = points;
     emit bendCurveChanged();
+}
+
+bool BendSettingsModel::isBendCurveEnabled() const
+{
+    return item() != nullptr;
 }
