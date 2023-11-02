@@ -31,8 +31,6 @@
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
 
-using namespace mu;
-using namespace mu::engraving;
 namespace mu::engraving {
 class EventsHolder;
 class MasterScore;
