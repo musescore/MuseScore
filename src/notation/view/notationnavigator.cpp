@@ -21,19 +21,18 @@
  */
 #include "notationnavigator.h"
 
-#include "draw/types/geometry.h"
 #include "engraving/dom/system.h"
 
 #include "log.h"
 
 using namespace mu::notation;
 
-NotationNavigatorViewRect::NotationNavigatorViewRect(QQuickItem* parent)
+NotationNavigatorCursorView::NotationNavigatorCursorView(QQuickItem* parent)
     : QQuickPaintedItem(parent)
 {
 }
 
-void NotationNavigatorViewRect::paint(QPainter* painter)
+void NotationNavigatorCursorView::paint(QPainter* painter)
 {
     TRACEFUNC;
 
@@ -45,13 +44,13 @@ void NotationNavigatorViewRect::paint(QPainter* painter)
     painter->drawRect(m_cursorRect.toQRectF());
 }
 
-void NotationNavigatorViewRect::setRect(const RectF& cursorRect)
+void NotationNavigatorCursorView::setRect(const RectF& cursorRect)
 {
     m_cursorRect = cursorRect;
 }
 
 NotationNavigator::NotationNavigator(QQuickItem* parent)
-    : AbstractNotationPaintView(parent), m_cursorRectView(new NotationNavigatorViewRect(this))
+    : AbstractNotationPaintView(parent), m_cursorRectView(new NotationNavigatorCursorView(this))
 {
     setReadonly(true);
 }

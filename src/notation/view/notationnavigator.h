@@ -37,14 +37,14 @@
 #include "abstractnotationpaintview.h"
 
 namespace mu::notation {
-class NotationNavigatorViewRect : public QQuickPaintedItem
+class NotationNavigatorCursorView : public QQuickPaintedItem
 {
     Q_OBJECT
 
     INJECT(INotationConfiguration, configuration)
 
 public:
-    NotationNavigatorViewRect(QQuickItem* parent = nullptr);
+    NotationNavigatorCursorView(QQuickItem* parent = nullptr);
 
     void setRect(const RectF& cursorRect);
 
@@ -103,7 +103,7 @@ private:
     PageList pages() const;
 
     RectF m_cursorRect;
-    NotationNavigatorViewRect* m_cursorRectView;
+    NotationNavigatorCursorView* m_cursorRectView = nullptr;
     PointF m_startMove;
 };
 }
