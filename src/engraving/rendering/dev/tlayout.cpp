@@ -6151,6 +6151,8 @@ void TLayout::layoutVoltaSegment(VoltaSegment* item, LayoutContext& ctx)
 {
     VoltaSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
+    Shape sh = textLineBaseSegmentShape(item);
+    ldata->setShape(sh);
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
