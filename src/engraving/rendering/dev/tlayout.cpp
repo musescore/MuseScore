@@ -3772,6 +3772,10 @@ void TLayout::layoutLetRingSegment(LetRingSegment* item, LayoutContext& ctx)
     ldata->setIsSkipDraw(false);
 
     layoutTextLineBaseSegment(item, ctx);
+
+    Shape sh = textLineBaseSegmentShape(item);
+    ldata->setShape(sh);
+
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
