@@ -44,6 +44,8 @@ public:
 
     Rasgueado* rasgueado() const { return (Rasgueado*)spanner(); }
 
+    Shape doCreateShape() const override;
+
     friend class Rasgueado;
 };
 

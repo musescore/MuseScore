@@ -2432,6 +2432,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::PALM_MUTE_SEGMENT:
         case ElementType::LET_RING_SEGMENT:
         case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
+        case ElementType::RASGUEADO_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:
