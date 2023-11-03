@@ -779,6 +779,9 @@ TEST_F(Musicxml_Tests, placementDefaults) {
 TEST_F(Musicxml_Tests, overlappingSpanners) {
     mxmlIoTest("testOverlappingSpanners");
 }
+TEST_F(Musicxml_Tests, partNames) {
+    mxmlImportTestRef("testPartNames");
+}
 TEST_F(Musicxml_Tests, printSpacingNo) {
     mxmlIoTestRef("testPrintSpacingNo");
 }
