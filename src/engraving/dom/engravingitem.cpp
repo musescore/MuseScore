@@ -2424,6 +2424,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::BEAM:
         case ElementType::GRACE_NOTES_GROUP:
         case ElementType::ORNAMENT:
+        case ElementType::OTTAVA_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:

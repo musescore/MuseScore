@@ -4330,6 +4330,8 @@ void TLayout::layoutOttavaSegment(OttavaSegment* item, LayoutContext& ctx)
 {
     OttavaSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
+    Shape sh = textLineBaseSegmentShape(item);
+    ldata->setShape(sh);
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
