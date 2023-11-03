@@ -2588,10 +2588,13 @@ void MuseScore::addImage(Score* score, Element* e)
          0,
          tr("Insert Image"),
          "",            // lastOpenPath,
-         tr("All Supported Files") + " (*.svg *.jpg *.jpeg *.png);;" +
+         tr("All Supported Files") + " (*.svg *.jpg *.jpeg *.png *.bmp *.tif *.tiff);;" +
          tr("Scalable Vector Graphics") + " (*.svg);;" +
          tr("JPEG") + " (*.jpg *.jpeg);;" +
-         tr("PNG Bitmap Graphic") + " (*.png)",
+         tr("PNG Bitmap Graphic") + " (*.png);;" +
+         tr("Bitmap") + " (*.bmp);;" +
+         tr("TIFF") + " (*.tif *.tiff);;" +
+         tr("All") + " (*)",
          0,
          preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS) ? QFileDialog::Options() : QFileDialog::DontUseNativeDialog
          );
@@ -2604,7 +2607,7 @@ void MuseScore::addImage(Score* score, Element* e)
 
       if (suffix == "svg")
             s->setImageType(ImageType::SVG);
-      else if (suffix == "jpg" || suffix == "jpeg" || suffix == "png")
+      else if (suffix == "jpg" || suffix == "jpeg" || suffix == "png" || suffix == "bmp"|| suffix == "tif"|| suffix == "tiff")
             s->setImageType(ImageType::RASTER);
       else
             return;
@@ -2841,7 +2844,7 @@ void WallpaperPreview::setImage(const QString& path)
 
 QString MuseScore::getWallpaper(const QString& caption)
       {
-      QString filter = tr("Images") + " (*.jpg *.jpeg *.png);;" + tr("All") + " (*)";
+      QString filter = tr("Images") + " (*.jpg *.jpeg *.png *.bmp *.tif *.tiff);;" + tr("All") + " (*)";
       QString d = mscoreGlobalShare + "/wallpaper";
 
       if (preferences.getBool(PREF_UI_APP_USENATIVEDIALOGS)) {
