@@ -64,7 +64,7 @@ static RetVal<IReaderPtr> makeReader(int version, bool ignoreVersionError)
         }
     }
 
-    if (version > 302 && MScore::testMode) {
+    if (version > 302 && MScore::testMode && MScore::useRead302InTestMode) {
         version = 302;
     }
 
