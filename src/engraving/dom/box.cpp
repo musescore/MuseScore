@@ -422,12 +422,25 @@ EngravingItem* Box::drop(EditData& data)
 
 void Box::manageExclusionFromParts(bool exclude)
 {
+    bool titleFrame = this == score()->first() && type() == ElementType::VBOX;
     if (exclude) {
-        EngravingItem::manageExclusionFromParts(exclude);
+        const std::list<EngravingObject*> links = linkList();
+        for (EngravingObject* linkedObject : links) {
+            // Only remove title frame from score
+            if (linkedObject->score() == score() || (!this->score()->isMaster() && titleFrame && !linkedObject->score()->isMaster())) {
+                continue;
+            }
+            EngravingItem* linkedItem = toEngravingItem(linkedObject);
+            if (linkedItem->selected()) {
+                linkedItem->score()->deselect(linkedItem);
+            }
+            linkedItem->score()->undoRemoveElement(linkedItem, false);
+            linkedItem->undoUnlink();
+        }
     } else {
         std::vector<MeasureBase*> newFrames;
         for (Score* score : masterScore()->scoreList()) {
-            if (score == this->score()) {
+            if (score == this->score() || (!this->score()->isMaster() && !score->isMaster())) {
                 continue;
             }
 
