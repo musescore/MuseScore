@@ -1243,10 +1243,13 @@ void NotationActionController::addImage()
         return;
     }
 
-    std::vector<std::string> filter = { trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png)",
+    std::vector<std::string> filter = { trc("notation", "All Supported Files") + " (*.svg *.jpg *.jpeg *.png *.bmp *.tif *.tiff)",
                                         trc("notation", "Scalable Vector Graphics") + " (*.svg)",
                                         trc("notation", "JPEG") + " (*.jpg *.jpeg)",
-                                        trc("notation", "PNG Bitmap Graphic") + " (*.png)" };
+                                        trc("notation", "PNG Bitmap Graphic") + " (*.png)",
+                                        trc("notation", "Bitmap") + " (*.bmp)",
+                                        trc("notation", "TIFF") + " (*.tif *.tiff)",
+                                        trc("notation", "All") + " (*)" };
 
     io::path_t path = interactive()->selectOpeningFile(qtrc("notation", "Insert Image"), "", filter);
     interaction->addImageToItem(path, item);
