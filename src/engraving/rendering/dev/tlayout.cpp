@@ -6187,6 +6187,10 @@ void TLayout::layoutWhammyBarSegment(WhammyBarSegment* item, LayoutContext& ctx)
 {
     WhammyBarSegment::LayoutData* ldata = item->mutldata();
     layoutTextLineBaseSegment(item, ctx);
+
+    Shape sh = textLineBaseSegmentShape(item);
+    ldata->setShape(sh);
+
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
