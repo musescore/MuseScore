@@ -93,6 +93,8 @@ public:
     EngravingItem* propertyDelegate(Pid) override;
 
     bool canBeExcludedFromOtherParts() const override { return true; }
+
+    Shape doCreateShape() const override;
 };
 
 //---------------------------------------------------------

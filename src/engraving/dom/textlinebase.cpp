@@ -97,6 +97,8 @@ RectF TextLineBaseSegment::boundingBoxOfLine(const PointF& p1, const PointF& p2,
 
 Shape TextLineBaseSegment::doCreateShape() const
 {
+//    UNREACHABLE;
+//    return Shape();
     Shape shape;
     if (!m_text->empty()) {
         shape.add(m_text->ldata()->bbox().translated(m_text->pos()));
