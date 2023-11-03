@@ -547,6 +547,9 @@ Ret BackendApi::doExportScoreParts(const IMasterNotationPtr masterNotation, QIOD
             meta[key] = partMetaTags[key].toQString();
         }
 
+        meta["open"] = part->isOpen();
+        meta["id"] = QString::fromStdString(part->eid().toStdString());
+
         QJsonValue partMetaObj = QJsonObject::fromVariantMap(meta);
         partsMetaList << partMetaObj;
 
