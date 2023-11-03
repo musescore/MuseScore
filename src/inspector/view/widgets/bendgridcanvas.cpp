@@ -205,6 +205,8 @@ void BendGridCanvas::mousePressEvent(QMouseEvent* event)
 
     m_currentPointIndex = this->pointIndex(point);
     m_canvasWasChanged = false;
+
+    update();
 }
 
 void BendGridCanvas::mouseMoveEvent(QMouseEvent* event)
@@ -549,7 +551,7 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
     QBrush activeBrush(color, Qt::SolidPattern);
 
     QColor hoverColor(color);
-    hoverColor.setAlpha(200);
+    hoverColor.setAlpha(150);
     QBrush hoverBrush(hoverColor, Qt::SolidPattern);
 
     painter->setPen(Qt::NoPen);
@@ -571,7 +573,7 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
 
             painter->setBrush(backgroundBrush);
             painter->drawEllipse(pos, GRIP_CENTER_RADIUS, GRIP_CENTER_RADIUS);
-        } else if (m_hoverPointIndex.has_value() && m_currentPointIndex.has_value()) { // focused
+        } else if (m_focusedPointIndex.has_value() && m_focusedPointIndex.value() == i) { // focused
             QColor fontPrimaryColor(currentTheme.values[FONT_PRIMARY_COLOR].toString());
             QBrush fontPrimaryBrush(fontPrimaryColor, Qt::SolidPattern);
             painter->setBrush(fontPrimaryBrush);
@@ -582,18 +584,21 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
 
             painter->setBrush(activeBrush);
             painter->drawEllipse(pos, GRIP_RADIUS, GRIP_RADIUS);
-        } else if (m_hoverPointIndex.has_value() && m_hoverPointIndex.value() == i) { // hover
-            painter->setBrush(activeBrush);
-            painter->drawEllipse(pos, GRIP_RADIUS, GRIP_RADIUS);
-
-            painter->setBrush(hoverBrush);
-            painter->drawEllipse(pos, GRIP_CENTER_RADIUS, GRIP_CENTER_RADIUS);
         } else if (m_currentPointIndex.has_value() && m_currentPointIndex.value() == i) { // selected
             painter->setBrush(backgroundBrush);
             painter->drawEllipse(pos, GRIP_SELECTED_RADIUS, GRIP_SELECTED_RADIUS);
 
             painter->setBrush(activeBrush);
             painter->drawEllipse(pos, GRIP_RADIUS, GRIP_RADIUS);
+        } else if (m_hoverPointIndex.has_value() && m_hoverPointIndex.value() == i) { // hover
+            painter->setBrush(activeBrush);
+            painter->drawEllipse(pos, GRIP_RADIUS, GRIP_RADIUS);
+
+            painter->setBrush(backgroundBrush);
+            painter->drawEllipse(pos, GRIP_CENTER_RADIUS, GRIP_CENTER_RADIUS);
+
+            painter->setBrush(hoverBrush);
+            painter->drawEllipse(pos, GRIP_CENTER_RADIUS, GRIP_CENTER_RADIUS);
         }
     }
 }

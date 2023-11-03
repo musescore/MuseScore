@@ -123,8 +123,9 @@ private:
     /// Show negative pitch values. Happens in tremoloBarCanvas.
     bool m_showNegativeRows = false;
 
-    std::optional<int> m_hoverPointIndex;
     std::optional<int> m_currentPointIndex;
+    std::optional<int> m_focusedPointIndex;
+    std::optional<int> m_hoverPointIndex;
 
     bool m_canvasWasChanged = false;
 };
