@@ -70,7 +70,7 @@ Column {
 
     InspectorPropertyView {
         id: bendCurve
-        titleText: qsTrc("inspector", "Click to add or remove points")
+        titleText: qsTrc("inspector", "Customize bend")
 
         enabled: true
         visible: true
