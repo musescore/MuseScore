@@ -4369,6 +4369,10 @@ void TLayout::layoutPedalSegment(PedalSegment* item, LayoutContext& ctx)
     if (item->isStyled(Pid::OFFSET)) {
         item->roffset() = item->pedal()->propertyDefault(Pid::OFFSET).value<PointF>();
     }
+
+    Shape sh = textLineBaseSegmentShape(item);
+    ldata->setShape(sh);
+
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 
