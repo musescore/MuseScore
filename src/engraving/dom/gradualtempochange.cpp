@@ -299,6 +299,12 @@ Sid GradualTempoChangeSegment::getPropertyStyle(Pid id) const
     return TextLineBaseSegment::getPropertyStyle(id);
 }
 
+Shape GradualTempoChangeSegment::doCreateShape() const
+{
+    UNREACHABLE;
+    return Shape();
+}
+
 void GradualTempoChangeSegment::endEdit(EditData& editData)
 {
     IF_ASSERT_FAILED(tempoChange()) {
