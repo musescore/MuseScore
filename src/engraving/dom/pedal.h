@@ -39,6 +39,8 @@ class PedalSegment final : public TextLineBaseSegment
 
     Sid getPropertyStyle(Pid) const override;
 
+    Shape doCreateShape() const override;
+
 public:
     PedalSegment(Pedal* sp, System* parent);
 
