@@ -54,6 +54,7 @@ public:
 private:
 
     static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
+    static void avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);

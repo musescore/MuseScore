@@ -26,6 +26,7 @@
 #include "guitarbend.h"
 #include "note.h"
 #include "part.h"
+#include "rest.h"
 #include "score.h"
 #include "staff.h"
 #include "tie.h"
@@ -130,6 +131,13 @@ bool GuitarBend::isFullRelease() const
     return isReleaseBend() && totBendAmountIncludingPrecedingBends() == 0;
 }
 
+bool GuitarBend::angledPreBend() const
+{
+    Note* endN = endNote();
+    Chord* endChord = endNote()->chord();
+    return type() == GuitarBendType::PRE_BEND && endN->string() > endChord->upString();
+}
+
 void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
 {
     Staff* curStaff =  startNote->staff();
@@ -154,6 +162,45 @@ void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
         int endFret = stringData->fret(endNote->pitch(), startString, curStaff);
         endNote->undoChangeProperty(Pid::FRET, endFret);
     }
+}
+
+Note* GuitarBend::createEndNote(Note* startNote)
+{
+    track_idx_t track = startNote->track();
+    Chord* startChord = startNote->chord();
+    Segment* startSegment = startChord->segment();
+
+    Segment* endSegment = startSegment->nextCR(track);
+    if (!endSegment) {
+        return nullptr;
+    }
+
+    EngravingItem* item = endSegment->elementAt(track);
+    if (!item) {
+        return nullptr;
+    }
+
+    Score* score = startNote->score();
+    NoteVal noteVal = startNote->noteVal();
+    Note* endNote = nullptr;
+
+    if (item->isRest()) {
+        Rest* rest = toRest(item);
+        Fraction duration = std::min(startChord->ticks(), rest->ticks());
+
+        endSegment = score->setNoteRest(endSegment, track, noteVal, duration);
+        Chord* endChord = endSegment ? toChord(endSegment->elementAt(track)) : nullptr;
+        endNote = endChord ? endChord->upNote() : nullptr;
+    } else { // isChord
+        Chord* chord = toChord(item);
+        endNote = score->addNote(chord, noteVal);
+    }
+
+    if (endNote) {
+        endNote->transposeDiatonic(1, true, false);
+    }
+
+    return endNote;
 }
 
 void GuitarBend::fixNotesFrettingForGraceBend(Note* grace, Note* main)
@@ -185,7 +232,7 @@ PropertyValue GuitarBend::getProperty(Pid id) const
     case Pid::DIRECTION:
         return direction();
     case Pid::BEND_SHOW_HOLD_LINE:
-        return showHoldLine();
+        return static_cast<int>(showHoldLine());
     default:
         return SLine::getProperty(id);
     }
@@ -198,7 +245,7 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
         setDirection(v.value<DirectionV>());
         break;
     case Pid::BEND_SHOW_HOLD_LINE:
-        setShowHoldLine(v.toBool());
+        setShowHoldLine(static_cast<GuitarBendShowHoldLine>(v.toInt()));
         break;
     default:
         return SLine::setProperty(propertyId, v);
@@ -213,7 +260,7 @@ PropertyValue GuitarBend::propertyDefault(Pid id) const
     case Pid::DIRECTION:
         return DirectionV::AUTO;
     case Pid::BEND_SHOW_HOLD_LINE:
-        return true;
+        return static_cast<int>(GuitarBendShowHoldLine::AUTO);
     default:
         return SLine::propertyDefault(id);
     }
@@ -313,11 +360,10 @@ GuitarBend* GuitarBend::findPrecedingBend() const
 
 void GuitarBend::updateHoldLine()
 {
-    bool needsHoldLine = false;
-
     Note* startOfHold = nullptr;
     Note* endOfHold = nullptr;
 
+    bool needsHoldLine = false;
     if (!isFullRelease()) {
         startOfHold = endNote();
         endOfHold = startOfHold;
@@ -326,10 +372,14 @@ void GuitarBend::updateHoldLine()
             endOfHold = endOfHold->tieFor()->endNote();
         }
 
-        needsHoldLine = endOfHold != startOfHold;
+        if (showHoldLine() == GuitarBendShowHoldLine::AUTO) {
+            needsHoldLine = endOfHold != startOfHold;
+        } else {
+            needsHoldLine = showHoldLine() == GuitarBendShowHoldLine::SHOW;
+        }
     }
 
-    if (!needsHoldLine || !showHoldLine()) {
+    if (!needsHoldLine) {
         if (m_holdLine) {
             if (!m_holdLine->segmentsEmpty()) {
                 m_holdLine->eraseSpannerSegments();
@@ -338,6 +388,18 @@ void GuitarBend::updateHoldLine()
             m_holdLine = nullptr;
         }
         return;
+    }
+
+    if (endOfHold == startOfHold) {
+        Chord* guessedEndChord = startOfHold->chord()->next();
+        if (guessedEndChord) {
+            for (Note* note : guessedEndChord->notes()) {
+                if (note->isPreBendStart()) {
+                    endOfHold = note;
+                    break;
+                }
+            }
+        }
     }
 
     if (!m_holdLine) {

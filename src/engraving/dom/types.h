@@ -496,6 +496,12 @@ enum class GuitarBendType {
     SLIGHT_BEND,
 };
 
+enum class GuitarBendShowHoldLine {
+    AUTO,
+    SHOW,
+    HIDE,
+};
+
 struct ScoreChangesRange {
     int tickFrom = -1;
     int tickTo = -1;

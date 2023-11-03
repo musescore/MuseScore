@@ -39,6 +39,7 @@
 #include "dom/tie.h"
 #include "dom/engravingitem.h"
 #include "dom/measure.h"
+#include "dom/guitarbend.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
@@ -938,6 +939,10 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         }
     }
 
+    if (item->staffType()->isTabStaff()) {
+        SlurTieLayout::avoidPreBendsOnTab(sc, ec, sp);
+    }
+
     /// adding extra space above slurs for notes in circles
     if (Slur::engravingConfiguration()->enableExperimentalFretCircle() && item->staff()->staffType()->isCommonTabStaff()) {
         auto adjustSlur = [](Chord* ch, PointF& coord, bool up) {
@@ -990,6 +995,47 @@ void SlurTieLayout::fixArticulations(Slur* item, PointF& pt, Chord* c, double up
         } else {
             pt.ry() = std::max(pt.y(), a->y() + a->height() / 2 * up + slurTipToArticVertDist);
         }
+    }
+}
+
+void SlurTieLayout::avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp)
+{
+    GuitarBend* bendOnStart = nullptr;
+    GuitarBend* bendOnEnd = nullptr;
+    if (sc) {
+        for (Note* note : sc->notes()) {
+            GuitarBend* bf = note->bendFor();
+            GuitarBend* bb = note->bendBack();
+            if (bf && !bf->segmentsEmpty() && bf->type() == GuitarBendType::PRE_BEND && !bf->angledPreBend()) {
+                bendOnStart = bf;
+            } else if (bb && !bb->segmentsEmpty() && bb->type() == GuitarBendType::PRE_BEND && !bb->angledPreBend()) {
+                bendOnStart = bb;
+            }
+            if (bendOnStart) {
+                break;
+            }
+        }
+    }
+    if (ec) {
+        for (Note* note : ec->notes()) {
+            GuitarBend* bf = note->bendFor();
+            GuitarBend* bb = note->bendBack();
+            if (bf && !bf->segmentsEmpty() && bf->type() == GuitarBendType::PRE_BEND && !bf->angledPreBend()) {
+                bendOnEnd = bf;
+            } else if (bb && !bb->segmentsEmpty() && bb->type() == GuitarBendType::PRE_BEND && !bb->angledPreBend()) {
+                bendOnEnd = bb;
+            }
+            if (bendOnEnd) {
+                break;
+            }
+        }
+    }
+
+    if (bendOnStart) {
+        sp->p1.rx() = std::max(sp->p1.rx(), bendOnStart->frontSegment()->pos().x() + 0.33 * sc->spatium());
+    }
+    if (bendOnEnd) {
+        sp->p2.rx() = std::min(sp->p2.rx(), bendOnEnd->frontSegment()->pos().x() - 0.33 * ec->spatium());
     }
 }
 

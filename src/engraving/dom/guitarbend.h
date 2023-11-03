@@ -38,7 +38,7 @@ class GuitarBend final : public SLine
     M_PROPERTY2(DirectionV, direction, setDirection, DirectionV::AUTO)
     M_PROPERTY2(GuitarBendType, type, setType, GuitarBendType::BEND)
     M_PROPERTY2(int, bendAmountInQuarterTones, setBendAmountInQuarterTones, 4)
-    M_PROPERTY2(bool, showHoldLine, setShowHoldLine, true)
+    M_PROPERTY2(GuitarBendShowHoldLine, showHoldLine, setShowHoldLine, GuitarBendShowHoldLine::AUTO)
 
 public:
     GuitarBend(EngravingItem* parent);
@@ -57,9 +57,11 @@ public:
 
     bool isReleaseBend() const;
     bool isFullRelease() const;
+    bool angledPreBend() const;
 
     static void fixNotesFrettingForGraceBend(Note* grace, Note* main);
     static void fixNotesFrettingForStandardBend(Note* startNote, Note* endNote);
+    static Note* createEndNote(Note* startNote);
 
     PropertyValue getProperty(Pid id) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;

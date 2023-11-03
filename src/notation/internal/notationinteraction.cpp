@@ -1833,6 +1833,31 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
                     applyDropPaletteElement(score, firstSegment->firstElement(staff), element, modifiers);
                 }
             }
+        } else if (element->isActionIcon()
+                   && (toActionIcon(element)->actionType() == ActionIconType::STANDARD_BEND
+                       || toActionIcon(element)->actionType() == ActionIconType::PRE_BEND
+                       || toActionIcon(element)->actionType() == ActionIconType::GRACE_NOTE_BEND
+                       || toActionIcon(element)->actionType() == ActionIconType::SLIGHT_BEND)) {
+            // Insertion of bend may alter the segment list, so collect the original list here and loop on this
+            std::vector<Segment*> segList;
+            for (Segment* seg = sel.startSegment(); seg && seg != sel.endSegment(); seg = seg->next1()) {
+                if (seg->isChordRestType()) {
+                    segList.push_back(seg);
+                }
+            }
+            track_idx_t track1 = sel.staffStart() * mu::engraving::VOICES;
+            track_idx_t track2 = sel.staffEnd() * mu::engraving::VOICES;
+            for (Segment* seg : segList) {
+                for (track_idx_t track = track1; track < track2; ++track) {
+                    EngravingItem* item = seg->elementAt(track);
+                    if (!item || !item->isChord()) {
+                        continue;
+                    }
+                    for (Note* note : toChord(item)->notes()) {
+                        applyDropPaletteElement(score, note, element, modifiers);
+                    }
+                }
+            }
         } else {
             track_idx_t track1 = sel.staffStart() * mu::engraving::VOICES;
             track_idx_t track2 = sel.staffEnd() * mu::engraving::VOICES;

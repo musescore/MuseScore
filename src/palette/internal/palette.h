@@ -117,7 +117,7 @@ public:
                                  const QPointF& offset = QPointF(), const QString& tag = "");
     PaletteCellPtr appendElement(engraving::ElementPtr element, const TranslatableString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
-    PaletteCellPtr appendActionIcon(engraving::ActionIconType type, actions::ActionCode code);
+    PaletteCellPtr appendActionIcon(engraving::ActionIconType type, actions::ActionCode code, double mag = 1.0);
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
     bool insertCells(size_t idx, std::vector<PaletteCellPtr> cells);
