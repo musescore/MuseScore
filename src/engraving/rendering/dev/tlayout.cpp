@@ -3213,6 +3213,9 @@ void TLayout::layoutHarmonicMarkSegment(HarmonicMarkSegment* item, LayoutContext
 
     layoutTextLineBaseSegment(item, ctx);
 
+    Shape sh = textLineBaseSegmentShape(item);
+    ldata->setShape(sh);
+
     Autoplace::autoplaceSpannerSegment(item, ldata, ctx.conf().spatium());
 }
 

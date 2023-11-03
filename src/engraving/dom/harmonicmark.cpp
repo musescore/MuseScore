@@ -59,6 +59,12 @@ HarmonicMarkSegment::HarmonicMarkSegment(HarmonicMark* sp, System* parent)
 {
 }
 
+Shape HarmonicMarkSegment::doCreateShape() const
+{
+    UNREACHABLE;
+    return Shape();
+}
+
 //---------------------------------------------------------
 //   HarmonicMark
 //---------------------------------------------------------
