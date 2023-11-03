@@ -31,11 +31,18 @@ EID::EID(ElementType type, uint32_t id)
 union Pack
 {
     uint64_t val;
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning(push)
+#pragma warning(disable: 4201) // nonstandard extension used: nameless struct/union
+#endif
     struct {
         uint16_t type;
         uint16_t reserved;
         uint32_t id;
     };
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning(pop)
+#endif
 };
 
 uint64_t EID::toUint64() const
