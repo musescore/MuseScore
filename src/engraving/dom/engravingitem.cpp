@@ -2430,6 +2430,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::TEXTLINE_SEGMENT:
         case ElementType::HARMONIC_MARK_SEGMENT:
         case ElementType::PALM_MUTE_SEGMENT:
+        case ElementType::LET_RING_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:
