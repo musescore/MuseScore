@@ -2427,6 +2427,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::OTTAVA_SEGMENT:
         case ElementType::VOLTA_SEGMENT:
         case ElementType::PEDAL_SEGMENT:
+        case ElementType::TEXTLINE_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:

@@ -120,6 +120,12 @@ EngravingItem* TextLineSegment::propertyDelegate(Pid pid)
     return TextLineBaseSegment::propertyDelegate(pid);
 }
 
+Shape TextLineSegment::doCreateShape() const
+{
+    UNREACHABLE;
+    return Shape();
+}
+
 //---------------------------------------------------------
 //   TextLine
 //---------------------------------------------------------
