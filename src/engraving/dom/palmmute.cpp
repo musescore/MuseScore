@@ -66,6 +66,12 @@ PalmMuteSegment::PalmMuteSegment(PalmMute* sp, System* parent)
 {
 }
 
+Shape PalmMuteSegment::doCreateShape() const
+{
+    UNREACHABLE;
+    return Shape();
+}
+
 //---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
