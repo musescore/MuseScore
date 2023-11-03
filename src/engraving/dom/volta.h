@@ -48,6 +48,8 @@ public:
     Volta* volta() const { return (Volta*)spanner(); }
 
     EngravingItem* propertyDelegate(Pid) override;
+
+    Shape doCreateShape() const override;
 };
 
 //---------------------------------------------------------
