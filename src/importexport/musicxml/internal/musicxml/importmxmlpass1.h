@@ -175,6 +175,7 @@ public:
     int octaveShift(const QString& id, const staff_idx_t staff, const Fraction f) const;
     const CreditWordsList& credits() const { return _credits; }
     bool hasBeamingInfo() const { return _hasBeamingInfo; }
+    bool isVocalStaff(const QString& id) const { return _parts[id].isVocalStaff(); }
 
 private:
     // functions

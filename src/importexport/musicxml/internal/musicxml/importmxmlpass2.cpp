@@ -901,8 +901,10 @@ static void addElemOffset(EngravingItem* el, track_idx_t track, const QString& p
         return;
     }
 
-    el->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
-    el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    if (placement != "") {
+        el->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
+        el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+    }
 
     el->setTrack(el->isTempoText() ? 0 : track);      // TempoText must be in track 0
     Segment* s = measure->getSegment(SegmentType::ChordRest, tick);
@@ -2730,6 +2732,8 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
     QString placement = _e.attributes().value("placement").toString();
     track_idx_t track = _pass1.trackForPart(partId);
+    bool isVocalStaff = _pass1.isVocalStaff(partId);
+    bool isExpressionText = false;
     //LOGD("direction track %d", track);
     QList<MusicXmlSpannerDesc> starts;
     QList<MusicXmlSpannerDesc> stops;
@@ -2797,6 +2801,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
             if (_wordsText != "" || _metroText != "") {
                 t = Factory::createStaffText(_score->dummy()->segment());
                 t->setXmlText(_wordsText + _metroText);
+                isExpressionText = _wordsText.contains("<i>") && _metroText.isEmpty();
             } else {
                 t = Factory::createRehearsalMark(_score->dummy()->segment());
                 if (!_rehearsalText.contains("<b>")) {
@@ -2819,6 +2824,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 t->setFrameType(FrameType::SQUARE);
                 t->setFrameRound(0);
             }
+
+            QString wordsPlacement = placement;
+            // Case-based defaults
+            if (wordsPlacement.isEmpty())
+                if (isVocalStaff) wordsPlacement = "above";
+                else if (isExpressionText) wordsPlacement = "below";
 
             if (placement == "" && hasTotalY())
                 placement = totalY() < 0 ? "above" : "below";
@@ -2866,8 +2877,16 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
             dyn->setVelocity(dynaValue);
         }
-//TODO:ws            if (_hasDefaultY) dyn->textStyle().setYoff(_defaultY);
-        addElemOffset(dyn, track, placement, measure, tick + _offset);
+
+        QString dynamicsPlacement = placement;
+        // Case-based defaults
+        if (dynamicsPlacement.isEmpty())
+            dynamicsPlacement = isVocalStaff ? "above" : "below";
+
+        // Add element to score later, after collecting all the others and sorting by default-y
+        // This allows default-y to be at least respected by the order of elements
+        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset);
+        delayedDirections.push_back(delayedDirection);
     }
 
     // handle the elems

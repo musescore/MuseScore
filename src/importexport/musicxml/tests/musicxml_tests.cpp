@@ -773,6 +773,9 @@ TEST_F(Musicxml_Tests, pedalChanges) {
 TEST_F(Musicxml_Tests, pedalChangesBroken) {
     mxmlImportTestRef("testPedalChangesBroken");
 }
+TEST_F(Musicxml_Tests, placementDefaults) {
+    mxmlImportTestRef("testPlacementDefaults");
+}
 TEST_F(Musicxml_Tests, overlappingSpanners) {
     mxmlIoTest("testOverlappingSpanners");
 }

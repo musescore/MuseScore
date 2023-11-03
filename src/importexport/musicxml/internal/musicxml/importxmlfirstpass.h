@@ -95,6 +95,8 @@ public:
     const LyricNumberHandler& lyricNumberHandler() const { return _lyricNumberHandler; }
     void setMaxStaff(const int staff);
     int maxStaff() const { return _maxStaff; }
+    bool isVocalStaff() const;
+    void hasLyrics(bool b) { _hasLyrics = b; }
 private:
     QString id;
     QString name;
@@ -106,6 +108,7 @@ private:
     std::vector<MusicXmlOctaveShiftList> octaveShifts;   // octave shift list for every staff
     LyricNumberHandler _lyricNumberHandler;
     int _maxStaff = 0;                        // maximum staff value found (1 based), 0 = none
+    bool _hasLyrics = false;
 };
 } // namespace Ms
 #endif

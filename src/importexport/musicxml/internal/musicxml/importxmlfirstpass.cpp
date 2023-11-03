@@ -27,6 +27,16 @@
 namespace mu::engraving {
 // TODO: move somewhere else
 
+static const std::vector<QString> vocalInstrumentNames({"Voice",
+                                                        "Soprano",
+                                                        "Mezzo-Soprano",
+                                                        "Alto",
+                                                        "Tenor",
+                                                        "Baritone",
+                                                        "Bass",
+                                                        "Women",
+                                                        "Men"});
+
 MusicXmlPart::MusicXmlPart(QString id, QString name)
     : id(id), name(name)
 {
@@ -107,6 +117,12 @@ void MusicXmlPart::calcOctaveShifts()
     for (staff_idx_t i = 0; i < MAX_STAVES; ++i) {
         octaveShifts[i].calcOctaveShiftShifts();
     }
+}
+
+bool MusicXmlPart::isVocalStaff() const
+{
+    return (std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), name) != vocalInstrumentNames.end()
+            || _hasLyrics);
 }
 
 //---------------------------------------------------------
