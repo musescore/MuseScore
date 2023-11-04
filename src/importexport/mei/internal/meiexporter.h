@@ -28,10 +28,30 @@
 #include "modularity/ioc.h"
 #include "imeiconfiguration.h"
 
+#include "meiconverter.h"
+
 #include "thirdparty/libmei/element.h"
 #include "thirdparty/libmei/shared.h"
 
 #include "thirdparty/pugixml.hpp"
+
+namespace mu::engraving {
+class Articulation;
+class Beam;
+class Chord;
+class ChordRest;
+class Clef;
+class EngravingItem;
+class Lyrics;
+class Measure;
+class Note;
+class Part;
+class Rest;
+class Score;
+class Staff;
+class Tuplet;
+class VBox;
+}
 
 namespace mu::iex::mei {
 class UIDRegister;
