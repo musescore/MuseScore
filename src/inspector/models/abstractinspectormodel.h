@@ -175,30 +175,40 @@ protected:
     using ElementList = QList<engraving::EngravingItem*>;
 
     // Internal-to-UI converters
-    using GeneralInternalToUiConverter = std::function<QVariant(const engraving::PropertyValue& propertyValue)>;
-    using ElementInternalToUiConverter = std::function<QVariant(const engraving::PropertyValue& propertyValue,
-                                                                const engraving::EngravingItem* element)>;
+    using ElementIndependent_InternalToUi_Converter = std::function<QVariant(const engraving::PropertyValue& propertyValue)>;
+    using ElementDependent_InternalToUi_Converter = std::function<QVariant(const engraving::PropertyValue& propertyValue,
+                                                                           const engraving::EngravingItem* element)>;
 
-    static ElementInternalToUiConverter defaultElementInternalToUiConverter(engraving::Pid pid);
-    static ElementInternalToUiConverter roundedDoubleElementInternalToUiConverter(engraving::Pid pid);
+    static ElementDependent_InternalToUi_Converter default_internalToUi_converter(engraving::Pid pid);
+
+    static ElementDependent_InternalToUi_Converter make_elementDependent_internalToUi_converter(
+        ElementIndependent_InternalToUi_Converter converter);
+
+    static ElementDependent_InternalToUi_Converter roundedDouble_internalToUi_converter(engraving::Pid pid);
     // ---
 
     // UI-to-internal converters
-    using GeneralUiToInternalConvertor = std::function<engraving::PropertyValue(const QVariant& value)>;
-    using ElementUiToInternalConvertor = std::function<engraving::PropertyValue(const QVariant& value,
-                                                                                const engraving::EngravingItem* element)>;
-    using StyleUiToInternalConvertor = std::function<engraving::PropertyValue(const QVariant& value)>;
+    using ElementIndependent_UiToInternal_Converter = std::function<engraving::PropertyValue(const QVariant& value)>;
+    using ElementDependent_UiToInternal_Converter = std::function<engraving::PropertyValue(const QVariant& value,
+                                                                                           const engraving::EngravingItem* element)>;
 
-    static ElementUiToInternalConvertor defaultElementUiToInternalConvertor(engraving::Pid pid);
-    static StyleUiToInternalConvertor defaultStyleUiToInternalConvertor(engraving::Pid pid);
+    static ElementDependent_UiToInternal_Converter default_element_uiToInternal_converter(engraving::Pid pid);
+    static ElementIndependent_UiToInternal_Converter default_style_uiToInternal_converter(engraving::Pid pid);
+
+    static ElementDependent_UiToInternal_Converter make_elementDependent_uiToInternal_converter(
+        ElementIndependent_UiToInternal_Converter converter);
     // ---
 
     // Callbacks
-    using SetPropertyCallback = std::function<void (engraving::Pid pid, const QVariant& newValue)>;
-    using SetStyleValueCallback = std::function<void (engraving::Sid sid, const QVariant& newValue)>;
+    using SetProperty_Callback = std::function<void (engraving::Pid pid, const QVariant& newValue)>;
+    using SetStyleValue_Callback = std::function<void (engraving::Sid sid, const QVariant& newValue)>;
 
-    SetPropertyCallback defaultSetPropertyCallback(engraving::Pid pid);
-    SetStyleValueCallback defaultSetStyleValueCallback(engraving::Pid pid);
+    SetProperty_Callback default_setProperty_callback(engraving::Pid pid);
+    SetStyleValue_Callback default_setStyleValue_callback(engraving::Pid pid);
+
+    SetProperty_Callback make_setProperty_callback(ElementIndependent_UiToInternal_Converter converter);
+    SetProperty_Callback make_setProperty_callback(ElementDependent_UiToInternal_Converter converter);
+    SetStyleValue_Callback make_setStyleValue_callback(ElementIndependent_UiToInternal_Converter converter);
     // ---
 
     static engraving::PropertyValue valueToElementUnits(const engraving::Pid& pid, const QVariant& value,
@@ -206,29 +216,27 @@ protected:
     static QVariant valueFromElementUnits(const engraving::Pid& pid, const engraving::PropertyValue& value,
                                           const engraving::EngravingItem* element);
 
-    void setProperty(engraving::Pid pid, const QVariant& newValue, ElementUiToInternalConvertor convertor);
-    void setProperty(const QList<engraving::EngravingItem*>& items, engraving::Pid pid, const QVariant& newValue,
-                     ElementUiToInternalConvertor convertor);
+    void setProperty(engraving::Pid pid, const QVariant& newValue, ElementDependent_UiToInternal_Converter converter);
+    void setProperty(const ElementList& items, engraving::Pid pid, const QVariant& newValue,
+                     ElementDependent_UiToInternal_Converter converter);
     void setProperty(engraving::Pid pid, const engraving::PropertyValue& newValue);
-    void setProperty(const QList<engraving::EngravingItem*>& items, engraving::Pid pid, const engraving::PropertyValue& newValue);
+    void setProperty(const ElementList& items, engraving::Pid pid, const engraving::PropertyValue& newValue);
 
-    void setStyleValue(engraving::Sid sid, const QVariant& newValue, StyleUiToInternalConvertor convertor);
+    void setStyleValue(engraving::Sid sid, const QVariant& newValue, ElementIndependent_UiToInternal_Converter converter);
     bool setStyleValue(engraving::Sid sid, const engraving::PropertyValue& newValue);
 
     PropertyItem* buildPropertyItem(const engraving::Pid& pid);
-    PropertyItem* buildPropertyItem(const engraving::Pid& pid, GeneralUiToInternalConvertor convertor);
-    PropertyItem* buildPropertyItem(const engraving::Pid& pid, ElementUiToInternalConvertor elementConvertor,
-                                    StyleUiToInternalConvertor styleConvertor);
-    PropertyItem* buildPropertyItem(const engraving::Pid& pid, SetPropertyCallback propertySetter,
-                                    SetStyleValueCallback styleSetter = nullptr);
+    PropertyItem* buildPropertyItem(const engraving::Pid& pid, ElementIndependent_UiToInternal_Converter converter);
+    PropertyItem* buildPropertyItem(const engraving::Pid& pid, ElementDependent_UiToInternal_Converter elementConverter,
+                                    ElementIndependent_UiToInternal_Converter styleConverter);
+    PropertyItem* buildPropertyItem(const engraving::Pid& pid, SetProperty_Callback propertySetter,
+                                    SetStyleValue_Callback styleSetter = nullptr);
 
-    void loadPropertyItem(PropertyItem* propertyItem, const QList<engraving::EngravingItem*>& items);
-    void loadPropertyItem(PropertyItem* propertyItem, GeneralInternalToUiConverter convertor);
-    void loadPropertyItem(PropertyItem* propertyItem, GeneralInternalToUiConverter convertor,
-                          const QList<engraving::EngravingItem*>& items);
-    void loadPropertyItem(PropertyItem* propertyItem, ElementInternalToUiConverter convertor = nullptr);
-    void loadPropertyItem(PropertyItem* propertyItem, ElementInternalToUiConverter convertor,
-                          const QList<engraving::EngravingItem*>& items);
+    void loadPropertyItem(PropertyItem* propertyItem, const ElementList& items);
+    void loadPropertyItem(PropertyItem* propertyItem, ElementIndependent_InternalToUi_Converter converter);
+    void loadPropertyItem(PropertyItem* propertyItem, ElementIndependent_InternalToUi_Converter converter, const ElementList& items);
+    void loadPropertyItem(PropertyItem* propertyItem, ElementDependent_InternalToUi_Converter converter = nullptr);
+    void loadPropertyItem(PropertyItem* propertyItem, ElementDependent_InternalToUi_Converter converter, const ElementList& items);
 
     bool isNotationExisting() const;
 
@@ -257,11 +265,6 @@ protected slots:
     void updateProperties();
 
 private:
-    void initPropertyItem(PropertyItem* propertyItem, std::function<void(const mu::engraving::Pid propertyId,
-                                                                         const QVariant& newValue)> onPropertyChangedCallBack = nullptr,
-                          std::function<void(const engraving::Sid styleId,
-                                             const QVariant& newValue)> onStyleChangedCallBack = nullptr);
-
     engraving::Sid styleIdByPropertyId(const engraving::Pid pid) const;
     engraving::PropertyIdSet propertyIdSetFromStyleIdSet(const engraving::StyleIdSet& styleIdSet) const;
 

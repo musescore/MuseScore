@@ -75,7 +75,7 @@ void TextSettingsModel::createProperties()
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
 
     m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(mu::engraving::Pid::FRAME_TYPE)(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FRAME_TYPE)(pid, newValue);
 
         updateFramePropertiesAvailability();
     });
@@ -119,7 +119,7 @@ void TextSettingsModel::loadProperties()
 
     m_fontSize->setIsEnabled(true);
 
-    loadPropertyItem(m_textLineSpacing, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::TEXT_LINE_SPACING));
+    loadPropertyItem(m_textLineSpacing, roundedDouble_internalToUi_converter(mu::engraving::Pid::TEXT_LINE_SPACING));
 
     loadPropertyItem(m_horizontalAlignment, [](const PropertyValue& propertyValue) -> QVariant {
         return int(propertyValue.value<Align>().horizontal);
@@ -135,8 +135,8 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_frameBorderColor);
     loadPropertyItem(m_frameFillColor);
 
-    loadPropertyItem(m_frameThickness, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::FRAME_WIDTH));
-    loadPropertyItem(m_frameMargin, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::FRAME_PADDING));
+    loadPropertyItem(m_frameThickness, roundedDouble_internalToUi_converter(mu::engraving::Pid::FRAME_WIDTH));
+    loadPropertyItem(m_frameMargin, roundedDouble_internalToUi_converter(mu::engraving::Pid::FRAME_PADDING));
     loadPropertyItem(m_frameCornerRadius);
 
     loadPropertyItem(m_textType);

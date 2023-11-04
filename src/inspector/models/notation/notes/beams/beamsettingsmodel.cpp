@@ -53,7 +53,7 @@ void BeamSettingsModel::createProperties()
     m_featheringHeightRight = buildPropertyItem(mu::engraving::Pid::GROW_RIGHT);
 
     m_isBeamHidden = buildPropertyItem(mu::engraving::Pid::VISIBLE, [this](const mu::engraving::Pid pid, const QVariant& isBeamHidden) {
-        defaultSetPropertyCallback(Pid::VISIBLE)(pid, !isBeamHidden.toBool());
+        default_setProperty_callback(Pid::VISIBLE)(pid, !isBeamHidden.toBool());
     });
 
     m_beamHeightLeft = buildPropertyItem(mu::engraving::Pid::BEAM_POS, [this](const mu::engraving::Pid, const QVariant& newValue) {
@@ -66,13 +66,13 @@ void BeamSettingsModel::createProperties()
 
     m_forceHorizontal = buildPropertyItem(mu::engraving::Pid::BEAM_NO_SLOPE,
                                           [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(Pid::BEAM_NO_SLOPE)(pid, newValue);
+        default_setProperty_callback(Pid::BEAM_NO_SLOPE)(pid, newValue);
         loadBeamHeightProperties();
     });
 
     m_customPositioned = buildPropertyItem(mu::engraving::Pid::USER_MODIFIED,
                                            [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(Pid::USER_MODIFIED)(pid, newValue);
+        default_setProperty_callback(Pid::USER_MODIFIED)(pid, newValue);
         loadBeamHeightProperties();
     });
 }
@@ -110,11 +110,11 @@ void BeamSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& prope
     }
 
     if (mu::contains(propertyIdSet, Pid::GROW_LEFT)) {
-        loadPropertyItem(m_featheringHeightLeft, roundedDoubleElementInternalToUiConverter(Pid::GROW_LEFT));
+        loadPropertyItem(m_featheringHeightLeft, roundedDouble_internalToUi_converter(Pid::GROW_LEFT));
     }
 
     if (mu::contains(propertyIdSet, Pid::GROW_RIGHT)) {
-        loadPropertyItem(m_featheringHeightRight, roundedDoubleElementInternalToUiConverter(Pid::GROW_RIGHT));
+        loadPropertyItem(m_featheringHeightRight, roundedDouble_internalToUi_converter(Pid::GROW_RIGHT));
     }
 
     loadBeamHeightProperties();

@@ -47,13 +47,13 @@ void AmbitusSettingsModel::createProperties()
     m_bottomOctave = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS4);
 
     m_topPitch = buildPropertyItem(mu::engraving::Pid::PITCH, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(mu::engraving::Pid::PITCH)(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::PITCH)(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
     m_bottomPitch = buildPropertyItem(mu::engraving::Pid::FBPARENTHESIS2, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(mu::engraving::Pid::FBPARENTHESIS2)(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FBPARENTHESIS2)(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
@@ -80,7 +80,7 @@ void AmbitusSettingsModel::loadProperties()
     loadPropertyItem(m_bottomPitch);
 
     loadPropertyItem(m_direction);
-    loadPropertyItem(m_lineThickness, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::LINE_WIDTH_SPATIUM));
+    loadPropertyItem(m_lineThickness, roundedDouble_internalToUi_converter(mu::engraving::Pid::LINE_WIDTH_SPATIUM));
 }
 
 void AmbitusSettingsModel::resetProperties()

@@ -44,22 +44,22 @@ void FretDiagramSettingsModel::createProperties()
     });
 
     m_stringsCount = buildPropertyItem(mu::engraving::Pid::FRET_STRINGS, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(mu::engraving::Pid::FRET_STRINGS)(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FRET_STRINGS)(pid, newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
     m_fretsCount = buildPropertyItem(mu::engraving::Pid::FRET_FRETS, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(mu::engraving::Pid::FRET_FRETS)(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FRET_FRETS)(pid, newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
     m_fretNumber = buildPropertyItem(mu::engraving::Pid::FRET_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(mu::engraving::Pid::FRET_OFFSET)(pid, newValue.toInt() - 1);
+        default_setProperty_callback(mu::engraving::Pid::FRET_OFFSET)(pid, newValue.toInt() - 1);
         emit fretDiagramChanged(fretDiagram());
     });
 
     m_isNutVisible = buildPropertyItem(mu::engraving::Pid::FRET_NUT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(mu::engraving::Pid::FRET_NUT)(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FRET_NUT)(pid, newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 

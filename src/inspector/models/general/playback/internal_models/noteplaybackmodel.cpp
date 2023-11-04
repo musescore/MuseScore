@@ -49,7 +49,7 @@ void NotePlaybackModel::requestElements()
 
 void NotePlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_tuning, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::TUNING));
+    loadPropertyItem(m_tuning, roundedDouble_internalToUi_converter(mu::engraving::Pid::TUNING));
     loadPropertyItem(m_velocity, [](const engraving::PropertyValue& propertyValue) {
         //! NOTE: display 64 instead of 0 in the Velocity field to avoid confusing the user
         return propertyValue.toInt() == 0 ? 64 : propertyValue.toInt();

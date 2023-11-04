@@ -165,11 +165,11 @@ void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyId
 void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
-        loadPropertyItem(m_thickness, roundedDoubleElementInternalToUiConverter(Pid::LINE_WIDTH));
+        loadPropertyItem(m_thickness, roundedDouble_internalToUi_converter(Pid::LINE_WIDTH));
     }
 
     if (mu::contains(propertyIdSet, Pid::USER_LEN)) {
-        loadPropertyItem(m_length, roundedDoubleElementInternalToUiConverter(Pid::USER_LEN));
+        loadPropertyItem(m_length, roundedDouble_internalToUi_converter(Pid::USER_LEN));
     }
 
     if (mu::contains(propertyIdSet, Pid::STEM_DIRECTION)) {

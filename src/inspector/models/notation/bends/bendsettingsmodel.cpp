@@ -74,7 +74,7 @@ void BendSettingsModel::requestElements()
 
 void BendSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_lineThickness, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::LINE_WIDTH));
+    loadPropertyItem(m_lineThickness, roundedDouble_internalToUi_converter(mu::engraving::Pid::LINE_WIDTH));
     loadPropertyItem(m_bendDirection);
     loadPropertyItem(m_showHoldLine);
 

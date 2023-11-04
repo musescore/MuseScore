@@ -48,31 +48,27 @@ void AppearanceSettingsModel::createProperties()
     m_color = buildPropertyItem(Pid::COLOR);
     m_arrangeOrder = buildPropertyItem(Pid::Z);
 
-    m_horizontalOffset = buildPropertyItem(Pid::OFFSET,
-                                           [this](engraving::Pid, const QVariant& newValue) {
-        setProperty(m_elementsForOffsetProperty, Pid::OFFSET, newValue,
-                    [](const QVariant& value, const engraving::EngravingItem* element) {
+    m_horizontalOffset = buildPropertyItem(Pid::OFFSET, [this](engraving::Pid, const QVariant& newValue) {
+        setProperty(m_elementsForOffsetProperty, Pid::OFFSET, newValue, [](const QVariant& value, const engraving::EngravingItem* element) {
             double newX = value.toDouble();
             newX *= element->offsetIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
             return PointF(newX, element->getProperty(Pid::OFFSET).value<PointF>().y());
         });
-    }, [this](engraving::Sid sid, const QVariant& value) {
+    }, make_setStyleValue_callback([this](const QVariant& value) {
         // TODO: What if m_verticalOffset->value() is invalid?
-        setStyleValue(sid, PointF(value.toDouble(), m_verticalOffset->value().toDouble()));
-    });
+        return PointF(value.toDouble(), m_verticalOffset->value().toDouble());
+    }));
 
-    m_verticalOffset = buildPropertyItem(Pid::OFFSET,
-                                         [this](engraving::Pid, const QVariant& newValue) {
-        setProperty(m_elementsForOffsetProperty, Pid::OFFSET, newValue,
-                    [](const QVariant& value, const engraving::EngravingItem* element) {
+    m_verticalOffset = buildPropertyItem(Pid::OFFSET, [this](engraving::Pid, const QVariant& newValue) {
+        setProperty(m_elementsForOffsetProperty, Pid::OFFSET, newValue, [](const QVariant& value, const engraving::EngravingItem* element) {
             double newY = value.toDouble();
             newY *= element->offsetIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
             return PointF(element->getProperty(Pid::OFFSET).value<PointF>().x(), newY);
         });
-    }, [this](engraving::Sid sid, const QVariant& value) {
+    }, make_setStyleValue_callback([this](const QVariant& value) {
         // TODO: What if m_horizontalOffset->value() is invalid?)
-        setStyleValue(sid, PointF(m_horizontalOffset->value().toDouble(), value.toDouble()));
-    });
+        return PointF(m_horizontalOffset->value().toDouble(), value.toDouble());
+    }));
 }
 
 void AppearanceSettingsModel::requestElements()
@@ -137,15 +133,15 @@ void AppearanceSettingsModel::onNotationChanged(const PropertyIdSet& changedProp
 void AppearanceSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::LEADING_SPACE)) {
-        loadPropertyItem(m_leadingSpace, roundedDoubleElementInternalToUiConverter(Pid::LEADING_SPACE));
+        loadPropertyItem(m_leadingSpace, roundedDouble_internalToUi_converter(Pid::LEADING_SPACE));
     }
 
     if (mu::contains(propertyIdSet, Pid::USER_STRETCH)) {
-        loadPropertyItem(m_measureWidth, roundedDoubleElementInternalToUiConverter(engraving::Pid::USER_STRETCH));
+        loadPropertyItem(m_measureWidth, roundedDouble_internalToUi_converter(engraving::Pid::USER_STRETCH));
     }
 
     if (mu::contains(propertyIdSet, Pid::MIN_DISTANCE)) {
-        loadPropertyItem(m_minimumDistance, roundedDoubleElementInternalToUiConverter(Pid::MIN_DISTANCE));
+        loadPropertyItem(m_minimumDistance, roundedDouble_internalToUi_converter(Pid::MIN_DISTANCE));
     }
 
     if (mu::contains(propertyIdSet, Pid::COLOR)) {

@@ -65,13 +65,13 @@ void StaffTypeSettingsModel::requestElements()
 void StaffTypeSettingsModel::loadProperties()
 {
     loadPropertyItem(m_isSmall);
-    loadPropertyItem(m_verticalOffset, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::STAFF_YOFFSET));
+    loadPropertyItem(m_verticalOffset, roundedDouble_internalToUi_converter(mu::engraving::Pid::STAFF_YOFFSET));
     loadPropertyItem(m_scale, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) -> QVariant {
-        return roundedDoubleElementInternalToUiConverter(engraving::Pid::MAG)(propertyValue, element).toDouble() * 100;
+        return roundedDouble_internalToUi_converter(engraving::Pid::MAG)(propertyValue, element).toDouble() * 100;
     });
 
     loadPropertyItem(m_lineCount);
-    loadPropertyItem(m_lineDistance, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::LINE_DISTANCE));
+    loadPropertyItem(m_lineDistance, roundedDouble_internalToUi_converter(mu::engraving::Pid::LINE_DISTANCE));
     loadPropertyItem(m_stepOffset);
     loadPropertyItem(m_isInvisible);
     loadPropertyItem(m_color);

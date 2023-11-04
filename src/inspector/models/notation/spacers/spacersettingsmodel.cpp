@@ -49,7 +49,7 @@ void SpacerSettingsModel::requestElements()
 
 void SpacerSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_spacerHeight, roundedDoubleElementInternalToUiConverter(Pid::SPACE));
+    loadPropertyItem(m_spacerHeight, roundedDouble_internalToUi_converter(Pid::SPACE));
 }
 
 void SpacerSettingsModel::resetProperties()
@@ -60,7 +60,7 @@ void SpacerSettingsModel::resetProperties()
 void SpacerSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyIdSet, const StyleIdSet&)
 {
     if (mu::contains(changedPropertyIdSet, Pid::SPACE)) {
-        loadPropertyItem(m_spacerHeight, roundedDoubleElementInternalToUiConverter(Pid::SPACE));
+        loadPropertyItem(m_spacerHeight, roundedDouble_internalToUi_converter(Pid::SPACE));
     }
 }
 

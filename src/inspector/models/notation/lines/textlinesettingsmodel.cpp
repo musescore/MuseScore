@@ -63,7 +63,7 @@ TextLineSettingsModel::TextLineSettingsModel(QObject* parent, IElementRepository
 void TextLineSettingsModel::createProperties()
 {
     auto applyPropertyValueAndUpdateAvailability = [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(pid)(pid, newValue);
+        default_setProperty_callback(pid)(pid, newValue);
         onUpdateLinePropertiesAvailability();
     };
 
@@ -403,15 +403,15 @@ void TextLineSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
-        loadPropertyItem(m_thickness, roundedDoubleElementInternalToUiConverter(Pid::LINE_WIDTH));
+        loadPropertyItem(m_thickness, roundedDouble_internalToUi_converter(Pid::LINE_WIDTH));
     }
 
     if (mu::contains(propertyIdSet, Pid::DASH_LINE_LEN)) {
-        loadPropertyItem(m_dashLineLength, roundedDoubleElementInternalToUiConverter(Pid::DASH_LINE_LEN));
+        loadPropertyItem(m_dashLineLength, roundedDouble_internalToUi_converter(Pid::DASH_LINE_LEN));
     }
 
     if (mu::contains(propertyIdSet, Pid::DASH_GAP_LEN)) {
-        loadPropertyItem(m_dashGapLength, roundedDoubleElementInternalToUiConverter(Pid::DASH_GAP_LEN));
+        loadPropertyItem(m_dashGapLength, roundedDouble_internalToUi_converter(Pid::DASH_GAP_LEN));
     }
 
     if (mu::contains(propertyIdSet, Pid::BEGIN_HOOK_TYPE)) {

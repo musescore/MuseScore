@@ -21,8 +21,6 @@
  */
 #include "arpeggioplaybackmodel.h"
 
-#include "dataformatter.h"
-
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -48,7 +46,7 @@ void ArpeggioPlaybackModel::requestElements()
 
 void ArpeggioPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_stretch, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::TIME_STRETCH));
+    loadPropertyItem(m_stretch, roundedDouble_internalToUi_converter(mu::engraving::Pid::TIME_STRETCH));
 }
 
 void ArpeggioPlaybackModel::resetProperties()

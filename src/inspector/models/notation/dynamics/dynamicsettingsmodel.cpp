@@ -47,7 +47,7 @@ void DynamicsSettingsModel::createProperties()
     m_placement = buildPropertyItem(mu::engraving::Pid::PLACEMENT);
 
     m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        defaultSetPropertyCallback(mu::engraving::Pid::FRAME_TYPE)(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FRAME_TYPE)(pid, newValue);
         updateFramePropertiesAvailability();
     });
     m_frameBorderColor = buildPropertyItem(mu::engraving::Pid::FRAME_FG_COLOR);
@@ -74,9 +74,9 @@ void DynamicsSettingsModel::loadProperties()
     loadPropertyItem(m_frameType);
     loadPropertyItem(m_frameBorderColor);
     loadPropertyItem(m_frameFillColor);
-    loadPropertyItem(m_frameThickness, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::FRAME_WIDTH));
-    loadPropertyItem(m_frameMargin, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::FRAME_PADDING));
-    loadPropertyItem(m_frameCornerRadius, roundedDoubleElementInternalToUiConverter(mu::engraving::Pid::FRAME_ROUND));
+    loadPropertyItem(m_frameThickness, roundedDouble_internalToUi_converter(mu::engraving::Pid::FRAME_WIDTH));
+    loadPropertyItem(m_frameMargin, roundedDouble_internalToUi_converter(mu::engraving::Pid::FRAME_PADDING));
+    loadPropertyItem(m_frameCornerRadius, roundedDouble_internalToUi_converter(mu::engraving::Pid::FRAME_ROUND));
 
     updateFramePropertiesAvailability();
 }
