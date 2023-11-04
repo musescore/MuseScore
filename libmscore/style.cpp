@@ -3075,6 +3075,33 @@ void MStyle::load(XmlReader& e, bool isMu4)
                         _lineStyle = Qt::SolidLine;
                   set(Sid::hairpinLineLineStyle, QVariant(_lineStyle));
                   }
+            else if (tag == "pedalLineStyle" || (isMu4 && tag == "pedalListStyle")) { // pre-4.1 typo: "pedalListStyle"
+                  int _lineStyle = Qt::SolidLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  set(Sid::pedalLineStyle, QVariant(_lineStyle));
+                  }
+            else if (isMu4 && tag == "voltaLineStyle") {
+                  int _lineStyle = Qt::SolidLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "dashed")
+                        _lineStyle = Qt::DashLine;
+                  set(Sid::ottavaLineStyle, QVariant(_lineStyle));
+                  }
+            else if (isMu4 && tag == "ottavaLineStyle") {
+                  int _lineStyle = Qt::DashLine;
+                  QString lineStyle = e.readElementText();
+                  if (lineStyle == "dotted")
+                        _lineStyle = Qt::DotLine;
+                  else if (lineStyle == "solid")
+                        _lineStyle = Qt::SolidLine;
+                  set(Sid::ottavaLineStyle, QVariant(_lineStyle));
+                  }
             else if (isMu4 && tag == "letRingLineStyle") {
                   int _lineStyle = Qt::DashLine;
                   QString lineStyle = e.readElementText();
@@ -3092,15 +3119,6 @@ void MStyle::load(XmlReader& e, bool isMu4)
                   else if (lineStyle == "solid")
                         _lineStyle = Qt::SolidLine;
                   set(Sid::palmMuteLineStyle, QVariant(_lineStyle));
-                  }
-            else if (tag == "pedalLineStyle" || (isMu4 && tag == "pedalListStyle")) { // pre-4.1 typo: "pedalListStyle"
-                  int _lineStyle = Qt::SolidLine;
-                  QString lineStyle = e.readElementText();
-                  if (lineStyle == "dotted")
-                        _lineStyle = Qt::DotLine;
-                  else if (lineStyle == "dashed")
-                        _lineStyle = Qt::DashLine;
-                  set(Sid::pedalLineStyle, QVariant(_lineStyle));
                   }
             else if (tag == "useWideBeams") // beamDistance maps to useWideBeams in 4.0 and later, default depends on font's `engravingDefaults`! Maybe better skip?
                   set(Sid::beamDistance, e.readBool() ? QVariant(1.0) : styleTypes[int(Sid::beamDistance)].defaultValue());
