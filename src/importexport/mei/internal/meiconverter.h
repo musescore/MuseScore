@@ -23,6 +23,7 @@
 #ifndef MU_IMPORTEXPORT_MEICONVERTER_H
 #define MU_IMPORTEXPORT_MEICONVERTER_H
 
+#include "engraving/dom/articulation.h"
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/timesig.h"

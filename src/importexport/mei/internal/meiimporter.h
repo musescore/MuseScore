@@ -30,6 +30,8 @@
 #include "io/ifilesystem.h"
 #include "io/path.h"
 
+#include "meiconverter.h"
+
 #include "thirdparty/libmei/cmn.h"
 #include "thirdparty/libmei/element.h"
 #include "thirdparty/libmei/shared.h"
@@ -40,6 +42,7 @@ namespace mu::engraving {
 class Chord;
 class ChordRest;
 class EngravingItem;
+class Lyrics;
 class Measure;
 class Note;
 class Part;
@@ -181,9 +184,9 @@ private:
     engraving::Note* findEndNote(pugi::xml_node controlNode);
     const std::list<engraving::ChordRest*> findPlistChordRests(pugi::xml_node controlNode);
     void clearGraceNotes();
-    bool hasLyricsToExtend(track_idx_t track, int no);
-    const std::pair<engraving::Lyrics*, engraving::ChordRest*>& getLyricsToExtend(track_idx_t track, int no);
-    void addChordtoLyricsToExtend(ChordRest* chordRest);
+    bool hasLyricsToExtend(engraving::track_idx_t track, int no);
+    const std::pair<engraving::Lyrics*, engraving::ChordRest*>& getLyricsToExtend(engraving::track_idx_t track, int no);
+    void addChordtoLyricsToExtend(engraving::ChordRest* chordRest);
     void extendLyrics(const std::pair<engraving::Lyrics*, engraving::ChordRest*>& lyricsToExtend);
     void extendLyrics();
     void setOrnamentAccid(engraving::Ornament* ornament, const Convert::OrnamStruct& ornamSt);
@@ -228,7 +231,7 @@ private:
     std::map<engraving::Arpeggio*, pugi::xml_node> m_openArpegMap;
 
     /** A map of a map for lyrics with extender that needs to be extended */
-    std::map<track_idx_t, std::map<int, std::pair<engraving::Lyrics*, engraving::ChordRest*> > > m_lyricExtenders;
+    std::map<engraving::track_idx_t, std::map<int, std::pair<engraving::Lyrics*, engraving::ChordRest*> > > m_lyricExtenders;
 
     engraving::Tuplet* m_tuplet;
     engraving::BeamMode m_beamBeginMode;

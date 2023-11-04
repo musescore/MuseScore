@@ -22,6 +22,7 @@
 
 #include "meiimporter.h"
 
+#include "engraving/dom/arpeggio.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/box.h"
@@ -33,6 +34,7 @@
 #include "engraving/dom/expression.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/fermata.h"
+#include "engraving/dom/figuredbass.h"
 #include "engraving/dom/hairpin.h"
 #include "engraving/dom/harmony.h"
 #include "engraving/dom/jump.h"
@@ -43,8 +45,10 @@
 #include "engraving/dom/marker.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/note.h"
+#include "engraving/dom/ornament.h"
 #include "engraving/dom/ottava.h"
 #include "engraving/dom/part.h"
+#include "engraving/dom/pedal.h"
 #include "engraving/dom/playtechannotation.h"
 #include "engraving/dom/rest.h"
 #include "engraving/dom/score.h"
@@ -61,9 +65,8 @@
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
-#include "meiconverter.h"
-
 #include "thirdparty/libmei/cmn.h"
+#include "thirdparty/libmei/lyrics.h"
 #include "thirdparty/libmei/shared.h"
 
 #include "thirdparty/pugixml.hpp"

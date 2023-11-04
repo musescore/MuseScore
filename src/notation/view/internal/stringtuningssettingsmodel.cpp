@@ -27,6 +27,7 @@
 
 #include "translation.h"
 
+using namespace mu;
 using namespace mu::notation;
 
 const QString customPreset()
