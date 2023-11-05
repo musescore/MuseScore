@@ -36,6 +36,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblestub.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibleiteminterface.h
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblewindowinterface.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/internal/accessiblewindowinterface.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/accessibilityconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/qaccessibleinterfaceregister.cpp
