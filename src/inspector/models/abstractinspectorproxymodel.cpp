@@ -80,13 +80,6 @@ void AbstractInspectorProxyModel::requestElements()
     }
 }
 
-void AbstractInspectorProxyModel::requestResetToDefaults()
-{
-    for (AbstractInspectorModel* model : modelList()) {
-        model->requestResetToDefaults();
-    }
-}
-
 bool AbstractInspectorProxyModel::isEmpty() const
 {
     for (const AbstractInspectorModel* model : modelList()) {

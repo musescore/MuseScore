@@ -22,7 +22,6 @@
 #include "horizontalframesettingsmodel.h"
 
 #include "translation.h"
-#include "dataformatter.h"
 
 using namespace mu::inspector;
 using namespace mu::engraving;
@@ -77,7 +76,7 @@ void HorizontalFrameSettingsModel::onNotationChanged(const PropertyIdSet& change
 void HorizontalFrameSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::BOX_WIDTH)) {
-        loadPropertyItem(m_frameWidth, formatDoubleFunc);
+        loadPropertyItem(m_frameWidth, roundedDouble_internalToUi_converter(Pid::BOX_WIDTH));
     }
 
     if (mu::contains(propertyIdSet, Pid::TOP_GAP)) {

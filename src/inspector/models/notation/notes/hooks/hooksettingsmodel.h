@@ -29,12 +29,14 @@ class HookSettingsModel : public AbstractInspectorModel
 {
     Q_OBJECT
 
-    Q_PROPERTY(PropertyItem * offset READ offset CONSTANT)
+    Q_PROPERTY(PropertyItem * horizontalOffset READ horizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * verticalOffset READ verticalOffset CONSTANT)
 
 public:
     explicit HookSettingsModel(QObject* parent, IElementRepositoryService* repository);
 
-    PropertyItem* offset() const;
+    PropertyItem* horizontalOffset() const;
+    PropertyItem* verticalOffset() const;
 
 protected:
     void createProperties() override;
@@ -43,7 +45,8 @@ protected:
     void resetProperties() override;
 
 private:
-    PointFPropertyItem* m_offset = nullptr;
+    PropertyItem* m_horizontalOffset = nullptr;
+    PropertyItem* m_verticalOffset = nullptr;
 };
 }
 

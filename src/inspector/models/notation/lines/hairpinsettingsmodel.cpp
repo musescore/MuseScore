@@ -118,10 +118,10 @@ void HairpinSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::HAIRPIN_HEIGHT)) {
-        loadPropertyItem(m_height, formatDoubleFunc);
+        loadPropertyItem(m_height, roundedDouble_internalToUi_converter(Pid::HAIRPIN_HEIGHT));
     }
 
     if (mu::contains(propertyIdSet, Pid::HAIRPIN_CONT_HEIGHT)) {
-        loadPropertyItem(m_continuousHeight, formatDoubleFunc);
+        loadPropertyItem(m_continuousHeight, roundedDouble_internalToUi_converter(Pid::HAIRPIN_CONT_HEIGHT));
     }
 }

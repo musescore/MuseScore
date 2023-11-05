@@ -22,9 +22,10 @@
 #include "bendsettingsmodel.h"
 #include "dom/guitarbend.h"
 
-#include "translation.h"
-#include "dataformatter.h"
 #include "types/bendtypes.h"
+#include "types/commontypes.h"
+
+#include "translation.h"
 
 #include "dom/bend.h"
 
@@ -73,7 +74,7 @@ void BendSettingsModel::requestElements()
 
 void BendSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_lineThickness, formatDoubleFunc);
+    loadPropertyItem(m_lineThickness, roundedDouble_internalToUi_converter(mu::engraving::Pid::LINE_WIDTH));
     loadPropertyItem(m_bendDirection);
     loadPropertyItem(m_showHoldLine);
 

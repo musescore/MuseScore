@@ -39,16 +39,16 @@ PartsSettingsModel::PartsSettingsModel(QObject* parent, IElementRepositoryServic
 void PartsSettingsModel::createProperties()
 {
     m_positionLinkedToMaster = buildPropertyItem(Pid::POSITION_LINKED_TO_MASTER, [this](const Pid, const QVariant& newValue) {
-        setPropertyValue(m_elementsForPartLinkingOption, Pid::POSITION_LINKED_TO_MASTER, newValue.toBool());
+        setProperty(m_elementsForPartLinkingOption, Pid::POSITION_LINKED_TO_MASTER, newValue.toBool());
     });
     m_appearanceLinkedToMaster = buildPropertyItem(Pid::APPEARANCE_LINKED_TO_MASTER, [this](const Pid, const QVariant& newValue) {
-        setPropertyValue(m_elementsForPartLinkingOption, Pid::APPEARANCE_LINKED_TO_MASTER, newValue.toBool());
+        setProperty(m_elementsForPartLinkingOption, Pid::APPEARANCE_LINKED_TO_MASTER, newValue.toBool());
     });
     m_textLinkedToMaster = buildPropertyItem(Pid::TEXT_LINKED_TO_MASTER, [this](const Pid, const QVariant& newValue) {
-        setPropertyValue(m_elementsForTextLinkingOption, Pid::TEXT_LINKED_TO_MASTER, newValue.toBool());
+        setProperty(m_elementsForTextLinkingOption, Pid::TEXT_LINKED_TO_MASTER, newValue.toBool());
     });
     m_excludeFromOtherParts = buildPropertyItem(Pid::EXCLUDE_FROM_OTHER_PARTS, [this](const Pid, const QVariant& newValue) {
-        setPropertyValue(m_elementsForExcludeOption, Pid::EXCLUDE_FROM_OTHER_PARTS, newValue.toBool());
+        setProperty(m_elementsForExcludeOption, Pid::EXCLUDE_FROM_OTHER_PARTS, newValue.toBool());
     });
 
     updateShowPartLinkingOption();

@@ -21,8 +21,6 @@
  */
 #include "breathplaybackmodel.h"
 
-#include "dataformatter.h"
-
 #include "translation.h"
 
 using namespace mu::inspector;
@@ -48,7 +46,7 @@ void BreathPlaybackModel::requestElements()
 
 void BreathPlaybackModel::loadProperties()
 {
-    loadPropertyItem(m_pauseTime, formatDoubleFunc);
+    loadPropertyItem(m_pauseTime, roundedDouble_internalToUi_converter(mu::engraving::Pid::PAUSE));
 }
 
 void BreathPlaybackModel::resetProperties()

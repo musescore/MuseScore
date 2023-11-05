@@ -98,7 +98,7 @@ void TupletSettingsModel::loadProperties()
     loadPropertyItem(m_directionType);
     loadPropertyItem(m_numberType);
     loadPropertyItem(m_bracketType);
-    loadPropertyItem(m_lineThickness, formatDoubleFunc);
+    loadPropertyItem(m_lineThickness, roundedDouble_internalToUi_converter(mu::engraving::Pid::LINE_WIDTH));
 }
 
 void TupletSettingsModel::resetProperties()

@@ -51,7 +51,7 @@ void SectionBreakSettingsModel::loadProperties()
 {
     loadPropertyItem(m_shouldStartWithLongInstrNames);
     loadPropertyItem(m_shouldResetBarNums);
-    loadPropertyItem(m_pauseDuration, formatDoubleFunc);
+    loadPropertyItem(m_pauseDuration, roundedDouble_internalToUi_converter(mu::engraving::Pid::PAUSE));
 }
 
 void SectionBreakSettingsModel::resetProperties()

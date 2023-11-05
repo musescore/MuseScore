@@ -68,7 +68,8 @@ Column {
     AppearanceOffsetSection {
         id: offsetSection
 
-        offset: model ? model.offset : null
+        horizontalOffset: model ? model.horizontalOffset : null
+        verticalOffset: model ? model.verticalOffset : null
         isSnappedToGrid: model ? model.isSnappedToGrid : null
         isVerticalOffsetAvailable: model ? model.isVerticalOffsetAvailable : false
 

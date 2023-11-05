@@ -25,7 +25,6 @@
 #include "qobjectdefs.h"
 
 #include "ui/view/iconcodes.h"
-#include "dataformatter.h"
 
 #include "engraving/types/types.h"
 
@@ -74,11 +73,6 @@ public:
 
     Q_ENUM(Placement)
 };
-
-inline double formatDoubleFunc(const QVariant& elementPropertyValue)
-{
-    return DataFormatter::roundDouble(elementPropertyValue.toDouble());
-}
 
 template<typename T>
 inline QVariant object(T type, QString title, ui::IconCode::Code iconCode = ui::IconCode::Code::NONE)

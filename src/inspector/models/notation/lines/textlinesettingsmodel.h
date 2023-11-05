@@ -49,13 +49,16 @@ class TextLineSettingsModel : public AbstractInspectorModel
     Q_PROPERTY(PropertyItem * placement READ placement CONSTANT)
 
     Q_PROPERTY(PropertyItem * beginningText READ beginningText CONSTANT)
-    Q_PROPERTY(PropertyItem * beginningTextOffset READ beginningTextOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningTextHorizontalOffset READ beginningTextHorizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * beginningTextVerticalOffset READ beginningTextVerticalOffset CONSTANT)
 
-    Q_PROPERTY(PropertyItem * continuousText READ continuousText CONSTANT)
-    Q_PROPERTY(PropertyItem * continuousTextOffset READ continuousTextOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * continueText READ continueText CONSTANT)
+    Q_PROPERTY(PropertyItem * continueTextHorizontalOffset READ continueTextHorizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * continueTextVerticalOffset READ continueTextVerticalOffset CONSTANT)
 
     Q_PROPERTY(PropertyItem * endText READ endText CONSTANT)
-    Q_PROPERTY(PropertyItem * endTextOffset READ endTextOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * endTextHorizontalOffset READ endTextHorizontalOffset CONSTANT)
+    Q_PROPERTY(PropertyItem * endTextVerticalOffset READ endTextVerticalOffset CONSTANT)
 
 public:
     explicit TextLineSettingsModel(QObject* parent, IElementRepositoryService* repository,
@@ -79,13 +82,16 @@ public:
     PropertyItem* placement() const;
 
     PropertyItem* beginningText() const;
-    PropertyItem* beginningTextOffset() const;
+    PropertyItem* beginningTextHorizontalOffset() const;
+    PropertyItem* beginningTextVerticalOffset() const;
 
-    PropertyItem* continuousText() const;
-    PropertyItem* continuousTextOffset() const;
+    PropertyItem* continueText() const;
+    PropertyItem* continueTextHorizontalOffset() const;
+    PropertyItem* continueTextVerticalOffset() const;
 
     PropertyItem* endText() const;
-    PropertyItem* endTextOffset() const;
+    PropertyItem* endTextHorizontalOffset() const;
+    PropertyItem* endTextVerticalOffset() const;
 
     Q_INVOKABLE QVariantList possibleStartHookTypes() const;
     Q_INVOKABLE QVariantList possibleEndHookTypes() const;
@@ -93,7 +99,7 @@ public:
 protected:
     enum TextType {
         BeginningText,
-        ContinuousText,
+        ContinueText,
         EndText
     };
 
@@ -146,13 +152,16 @@ private:
     PropertyItem* m_gapBetweenTextAndLine = nullptr;
 
     PropertyItem* m_beginningText = nullptr;
-    PointFPropertyItem* m_beginningTextOffset = nullptr;
+    PropertyItem* m_beginningTextHorizontalOffset = nullptr;
+    PropertyItem* m_beginningTextVerticalOffset = nullptr;
 
-    PropertyItem* m_continuousText = nullptr;
-    PointFPropertyItem* m_continuousTextOffset = nullptr;
+    PropertyItem* m_continueText = nullptr;
+    PropertyItem* m_continueTextHorizontalOffset = nullptr;
+    PropertyItem* m_continueTextVerticalOffset = nullptr;
 
     PropertyItem* m_endText = nullptr;
-    PointFPropertyItem* m_endTextOffset = nullptr;
+    PropertyItem* m_endTextHorizontalOffset = nullptr;
+    PropertyItem* m_endTextVerticalOffset = nullptr;
 
     QVariantList m_possibleStartHookTypes;
     QVariantList m_possibleEndHookTypes;

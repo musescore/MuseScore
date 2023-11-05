@@ -36,7 +36,23 @@ HookSettingsModel::HookSettingsModel(QObject* parent, IElementRepositoryService*
 
 void HookSettingsModel::createProperties()
 {
-    m_offset = buildPointFPropertyItem(mu::engraving::Pid::OFFSET);
+    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newX = value.toDouble();
+        newX *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(newX, element->getProperty(mu::engraving::Pid::OFFSET).value<PointF>().y());
+    }, [this](const QVariant& value) {
+        // TODO: What if m_verticalOffset->value() is invalid?
+        return PointF(value.toDouble(), m_verticalOffset->value().toDouble());
+    });
+
+    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newY = value.toDouble();
+        newY *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(element->getProperty(mu::engraving::Pid::OFFSET).value<PointF>().x(), newY);
+    }, [this](const QVariant& value) {
+        // TODO: What if m_horizontalOffset->value() is invalid?
+        return PointF(m_horizontalOffset->value().toDouble(), value.toDouble());
+    });
 }
 
 void HookSettingsModel::requestElements()
@@ -46,15 +62,31 @@ void HookSettingsModel::requestElements()
 
 void HookSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_offset);
+    loadPropertyItem(m_horizontalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+        double x = propertyValue.value<PointF>().x();
+        x /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return x;
+    });
+
+    loadPropertyItem(m_verticalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+        double y = propertyValue.value<PointF>().y();
+        y /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return y;
+    });
 }
 
 void HookSettingsModel::resetProperties()
 {
-    m_offset->resetToDefault();
+    m_horizontalOffset->resetToDefault();
+    m_verticalOffset->resetToDefault();
 }
 
-PropertyItem* HookSettingsModel::offset() const
+PropertyItem* HookSettingsModel::horizontalOffset() const
 {
-    return m_offset;
+    return m_horizontalOffset;
+}
+
+PropertyItem* HookSettingsModel::verticalOffset() const
+{
+    return m_verticalOffset;
 }

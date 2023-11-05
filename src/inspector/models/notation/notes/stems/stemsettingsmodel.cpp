@@ -47,7 +47,23 @@ void StemSettingsModel::createProperties()
         onStemDirectionChanged(static_cast<mu::engraving::DirectionV>(newValue.toInt()));
     });
 
-    m_offset = buildPointFPropertyItem(Pid::OFFSET);
+    m_horizontalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newX = value.toDouble();
+        newX *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(newX, element->getProperty(mu::engraving::Pid::OFFSET).value<PointF>().y());
+    }, [this](const QVariant& value) {
+        // TODO: What if m_verticalOffset->value() is invalid?
+        return PointF(value.toDouble(), m_verticalOffset->value().toDouble());
+    });
+
+    m_verticalOffset = buildPropertyItem(mu::engraving::Pid::OFFSET, [](const QVariant& value, const engraving::EngravingItem* element) {
+        double newY = value.toDouble();
+        newY *= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+        return PointF(element->getProperty(mu::engraving::Pid::OFFSET).value<PointF>().x(), newY);
+    }, [this](const QVariant& value) {
+        // TODO: What if m_horizontalOffset->value() is invalid?
+        return PointF(m_horizontalOffset->value().toDouble(), value.toDouble());
+    });
 }
 
 void StemSettingsModel::requestElements()
@@ -74,7 +90,8 @@ void StemSettingsModel::resetProperties()
     m_thickness->resetToDefault();
     m_length->resetToDefault();
     m_stemDirection->resetToDefault();
-    m_offset->resetToDefault();
+    m_horizontalOffset->resetToDefault();
+    m_verticalOffset->resetToDefault();
 }
 
 PropertyItem* StemSettingsModel::thickness() const
@@ -87,9 +104,14 @@ PropertyItem* StemSettingsModel::length() const
     return m_length;
 }
 
-PropertyItem* StemSettingsModel::offset() const
+PropertyItem* StemSettingsModel::horizontalOffset() const
 {
-    return m_offset;
+    return m_horizontalOffset;
+}
+
+PropertyItem* StemSettingsModel::verticalOffset() const
+{
+    return m_verticalOffset;
 }
 
 PropertyItem* StemSettingsModel::stemDirection() const
@@ -104,7 +126,7 @@ bool StemSettingsModel::useStraightNoteFlags() const
 
 void StemSettingsModel::setUseStraightNoteFlags(bool use)
 {
-    if (updateStyleValue(Sid::useStraightNoteFlags, use)) {
+    if (setStyleValue(Sid::useStraightNoteFlags, use)) {
         emit useStraightNoteFlagsChanged();
     }
 }
@@ -143,11 +165,11 @@ void StemSettingsModel::onNotationChanged(const PropertyIdSet& changedPropertyId
 void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
 {
     if (mu::contains(propertyIdSet, Pid::LINE_WIDTH)) {
-        loadPropertyItem(m_thickness, formatDoubleFunc);
+        loadPropertyItem(m_thickness, roundedDouble_internalToUi_converter(Pid::LINE_WIDTH));
     }
 
     if (mu::contains(propertyIdSet, Pid::USER_LEN)) {
-        loadPropertyItem(m_length, formatDoubleFunc);
+        loadPropertyItem(m_length, roundedDouble_internalToUi_converter(Pid::USER_LEN));
     }
 
     if (mu::contains(propertyIdSet, Pid::STEM_DIRECTION)) {
@@ -155,6 +177,16 @@ void StemSettingsModel::loadProperties(const PropertyIdSet& propertyIdSet)
     }
 
     if (mu::contains(propertyIdSet, Pid::OFFSET)) {
-        loadPropertyItem(m_offset);
+        loadPropertyItem(m_horizontalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double x = propertyValue.value<PointF>().x();
+            x /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return x;
+        });
+
+        loadPropertyItem(m_verticalOffset, [](const engraving::PropertyValue& propertyValue, const engraving::EngravingItem* element) {
+            double y = propertyValue.value<PointF>().y();
+            y /= element->sizeIsSpatiumDependent() ? element->spatium() : mu::engraving::DPMM;
+            return y;
+        });
     }
 }

@@ -43,13 +43,13 @@ void ImageSettingsModel::createProperties()
 
     m_shouldScaleToFrameSize
         = buildPropertyItem(Pid::AUTOSCALE, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        default_setProperty_callback(Pid::AUTOSCALE)(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
 
     m_height = buildPropertyItem(Pid::IMAGE_HEIGHT, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        default_setProperty_callback(Pid::IMAGE_HEIGHT)(pid, newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
             emit requestReloadPropertyItems();
@@ -57,16 +57,15 @@ void ImageSettingsModel::createProperties()
     });
 
     m_width = buildPropertyItem(Pid::IMAGE_WIDTH, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        default_setProperty_callback(Pid::IMAGE_WIDTH)(pid, newValue);
 
         if (m_isAspectRatioLocked->value().toBool()) {
             emit requestReloadPropertyItems();
         }
     });
 
-    m_isSizeInSpatiums
-        = buildPropertyItem(Pid::SIZE_IS_SPATIUM, [this](const Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+    m_isSizeInSpatiums = buildPropertyItem(Pid::SIZE_IS_SPATIUM, [this](const Pid pid, const QVariant& newValue) {
+        default_setProperty_callback(Pid::SIZE_IS_SPATIUM)(pid, newValue);
 
         emit requestReloadPropertyItems();
     });
@@ -115,16 +114,16 @@ void ImageSettingsModel::loadProperties(const mu::engraving::PropertyIdSet& prop
     }
 
     if (mu::contains(propertyIdSet, Pid::IMAGE_HEIGHT)) {
-        loadPropertyItem(m_height, formatDoubleFunc);
+        loadPropertyItem(m_height, roundedDouble_internalToUi_converter(Pid::IMAGE_HEIGHT));
     }
 
     if (mu::contains(propertyIdSet, Pid::IMAGE_WIDTH)) {
-        loadPropertyItem(m_width, formatDoubleFunc);
+        loadPropertyItem(m_width, roundedDouble_internalToUi_converter(Pid::IMAGE_WIDTH));
     }
 
     if (mu::contains(propertyIdSet, Pid::SIZE)) {
-        loadPropertyItem(m_height, formatDoubleFunc);
-        loadPropertyItem(m_width, formatDoubleFunc);
+        loadPropertyItem(m_height, roundedDouble_internalToUi_converter(Pid::IMAGE_HEIGHT));
+        loadPropertyItem(m_width, roundedDouble_internalToUi_converter(Pid::IMAGE_WIDTH));
     }
 
     if (mu::contains(propertyIdSet, Pid::LOCK_ASPECT_RATIO)) {

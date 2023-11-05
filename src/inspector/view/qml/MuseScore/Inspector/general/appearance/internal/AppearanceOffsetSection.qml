@@ -30,7 +30,8 @@ import "../../../common"
 Column {
     id: root
 
-    property alias offset: offsets.propertyItem
+    property alias horizontalOffset: offsets.horizontalOffset
+    property alias verticalOffset: offsets.verticalOffset
 
     property bool isSnappedToGrid: false
     property alias isVerticalOffsetAvailable: offsets.isVerticalOffsetAvailable

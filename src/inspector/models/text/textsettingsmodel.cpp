@@ -57,25 +57,25 @@ void TextSettingsModel::createProperties()
     m_fontSize = buildPropertyItem(mu::engraving::Pid::FONT_SIZE);
     m_textLineSpacing = buildPropertyItem(mu::engraving::Pid::TEXT_LINE_SPACING);
 
-    m_horizontalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
-    }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
-        updateStyleValue(sid, QVariantList({ newValue.toInt(), m_verticalAlignment->value().toInt() }));
-
-        emit requestReloadPropertyItems();
+    m_horizontalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [](const QVariant& value, const engraving::EngravingItem* element) {
+        return Align(AlignH( // Uncrustify, WHY this linebreak??
+                         value.toInt()), element->getProperty(Pid::ALIGN).value<Align>().vertical);
+    }, [this](const QVariant& value) {
+        // TODO: What if m_verticalAlignment->value() is invalid?
+        return Align(AlignH(value.toInt()), AlignV(m_verticalAlignment->value().toInt()));
     });
-    m_verticalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
-    }, [this](const mu::engraving::Sid sid, const QVariant& newValue) {
-        updateStyleValue(sid, QVariantList({ m_horizontalAlignment->value().toInt(), newValue.toInt() }));
 
-        emit requestReloadPropertyItems();
+    m_verticalAlignment = buildPropertyItem(mu::engraving::Pid::ALIGN, [](const QVariant& value, const engraving::EngravingItem* element) {
+        return Align(element->getProperty(Pid::ALIGN).value<Align>().horizontal, AlignV(value.toInt()));
+    }, [this](const QVariant& value) {
+        // TODO: What if m_horizontalAlignment->value() is invalid?
+        return Align(AlignH(m_horizontalAlignment->value().toInt()), AlignV(value.toInt()));
     });
 
     m_isSizeSpatiumDependent = buildPropertyItem(mu::engraving::Pid::SIZE_SPATIUM_DEPENDENT);
 
     m_frameType = buildPropertyItem(mu::engraving::Pid::FRAME_TYPE, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FRAME_TYPE)(pid, newValue);
 
         updateFramePropertiesAvailability();
     });
@@ -98,37 +98,35 @@ void TextSettingsModel::requestElements()
 
 void TextSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_fontFamily, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toString() == mu::engraving::TextBase::UNDEFINED_FONT_FAMILY
-               ? QVariant() : elementPropertyValue.toString();
+    loadPropertyItem(m_fontFamily, [](const PropertyValue& propertyValue) -> QVariant {
+        return propertyValue.value<String>() == mu::engraving::TextBase::UNDEFINED_FONT_FAMILY
+               ? QVariant() : propertyValue.value<String>().toQString();
     });
 
     m_fontFamily->setIsEnabled(true);
 
-    loadPropertyItem(m_fontStyle, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::FontStyle::Undefined)
-               ? QVariant() : elementPropertyValue.toInt();
+    loadPropertyItem(m_fontStyle, [](const PropertyValue& propertyValue) -> QVariant {
+        return propertyValue.toInt() == static_cast<int>(mu::engraving::FontStyle::Undefined)
+               ? QVariant() : propertyValue.toInt();
     });
 
     m_fontStyle->setIsEnabled(true);
 
-    loadPropertyItem(m_fontSize, [](const QVariant& elementPropertyValue) -> QVariant {
-        return RealIsEqual(elementPropertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
-               ? QVariant() : elementPropertyValue.toDouble();
+    loadPropertyItem(m_fontSize, [](const PropertyValue& propertyValue) -> QVariant {
+        return RealIsEqual(propertyValue.toDouble(), mu::engraving::TextBase::UNDEFINED_FONT_SIZE)
+               ? QVariant() : propertyValue.toDouble();
     });
 
     m_fontSize->setIsEnabled(true);
 
-    loadPropertyItem(m_textLineSpacing, formatDoubleFunc);
+    loadPropertyItem(m_textLineSpacing, roundedDouble_internalToUi_converter(mu::engraving::Pid::TEXT_LINE_SPACING));
 
-    loadPropertyItem(m_horizontalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        QVariantList list = elementPropertyValue.toList();
-        return list.size() >= 2 ? list[0] : QVariant();
+    loadPropertyItem(m_horizontalAlignment, [](const PropertyValue& propertyValue) -> QVariant {
+        return int(propertyValue.value<Align>().horizontal);
     });
 
-    loadPropertyItem(m_verticalAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        QVariantList list = elementPropertyValue.toList();
-        return list.size() >= 2 ? list[1] : QVariant();
+    loadPropertyItem(m_verticalAlignment, [](const PropertyValue& propertyValue) -> QVariant {
+        return int(propertyValue.value<Align>().vertical);
     });
 
     loadPropertyItem(m_isSizeSpatiumDependent);
@@ -137,15 +135,15 @@ void TextSettingsModel::loadProperties()
     loadPropertyItem(m_frameBorderColor);
     loadPropertyItem(m_frameFillColor);
 
-    loadPropertyItem(m_frameThickness, formatDoubleFunc);
-    loadPropertyItem(m_frameMargin, formatDoubleFunc);
-    loadPropertyItem(m_frameCornerRadius, formatDoubleFunc);
+    loadPropertyItem(m_frameThickness, roundedDouble_internalToUi_converter(mu::engraving::Pid::FRAME_WIDTH));
+    loadPropertyItem(m_frameMargin, roundedDouble_internalToUi_converter(mu::engraving::Pid::FRAME_PADDING));
+    loadPropertyItem(m_frameCornerRadius);
 
     loadPropertyItem(m_textType);
     loadPropertyItem(m_textPlacement);
-    loadPropertyItem(m_textScriptAlignment, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() == static_cast<int>(mu::engraving::VerticalAlignment::AlignUndefined)
-               ? QVariant() : elementPropertyValue.toInt();
+    loadPropertyItem(m_textScriptAlignment, [](const PropertyValue& propertyValue) -> QVariant {
+        return propertyValue.toInt() == static_cast<int>(mu::engraving::VerticalAlignment::AlignUndefined)
+               ? QVariant() : propertyValue.toInt();
     });
 
     updateFramePropertiesAvailability();

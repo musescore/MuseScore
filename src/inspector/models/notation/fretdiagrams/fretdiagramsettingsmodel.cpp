@@ -39,34 +39,27 @@ FretDiagramSettingsModel::FretDiagramSettingsModel(QObject* parent, IElementRepo
 
 void FretDiagramSettingsModel::createProperties()
 {
-    m_scale = buildPropertyItem(mu::engraving::Pid::MAG,
-                                [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue.toDouble() / 100);
-    },
-                                [this](const mu::engraving::Sid sid, const QVariant& newValue) {
-        updateStyleValue(sid, newValue.toDouble() / 100);
-        emit requestReloadPropertyItems();
+    m_scale = buildPropertyItem(mu::engraving::Pid::MAG, [](const QVariant& newValue) {
+        return newValue.toDouble() / 100;
     });
 
     m_stringsCount = buildPropertyItem(mu::engraving::Pid::FRET_STRINGS, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FRET_STRINGS)(pid, newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
     m_fretsCount = buildPropertyItem(mu::engraving::Pid::FRET_FRETS, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
+        default_setProperty_callback(mu::engraving::Pid::FRET_FRETS)(pid, newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
     m_fretNumber = buildPropertyItem(mu::engraving::Pid::FRET_OFFSET, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid,
-                               newValue.toInt() - 1);
+        default_setProperty_callback(mu::engraving::Pid::FRET_OFFSET)(pid, newValue.toInt() - 1);
         emit fretDiagramChanged(fretDiagram());
     });
 
     m_isNutVisible = buildPropertyItem(mu::engraving::Pid::FRET_NUT, [this](const mu::engraving::Pid pid, const QVariant& newValue) {
-        onPropertyValueChanged(pid, newValue);
-
+        default_setProperty_callback(mu::engraving::Pid::FRET_NUT)(pid, newValue);
         emit fretDiagramChanged(fretDiagram());
     });
 
@@ -84,14 +77,14 @@ void FretDiagramSettingsModel::requestElements()
 
 void FretDiagramSettingsModel::loadProperties()
 {
-    loadPropertyItem(m_scale, [](const QVariant& elementPropertyValue) -> QVariant {
-        return DataFormatter::roundDouble(elementPropertyValue.toDouble()) * 100;
+    loadPropertyItem(m_scale, [](const engraving::PropertyValue& propertyValue) -> QVariant {
+        return DataFormatter::roundDouble(propertyValue.toDouble()) * 100;
     });
 
     loadPropertyItem(m_stringsCount);
     loadPropertyItem(m_fretsCount);
-    loadPropertyItem(m_fretNumber, [](const QVariant& elementPropertyValue) -> QVariant {
-        return elementPropertyValue.toInt() + 1;
+    loadPropertyItem(m_fretNumber, [](const engraving::PropertyValue& propertyValue) -> QVariant {
+        return propertyValue.toInt() + 1;
     });
 
     loadPropertyItem(m_isNutVisible);
