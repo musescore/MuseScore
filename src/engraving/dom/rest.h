@@ -128,7 +128,6 @@ public:
     EngravingItem* prevElement() override;
     String accessibleInfo() const override;
     String screenReaderInfo() const override;
-    Shape doCreateShape() const override;
     void editDrag(EditData& editData) override;
 
     bool shouldNotBeDrawn() const;

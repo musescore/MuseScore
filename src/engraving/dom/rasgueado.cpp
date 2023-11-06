@@ -59,12 +59,6 @@ RasgueadoSegment::RasgueadoSegment(Rasgueado* sp, System* parent)
 {
 }
 
-Shape RasgueadoSegment::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 //---------------------------------------------------------
 //   Rasgueado
 //---------------------------------------------------------

@@ -137,8 +137,6 @@ public:
     GuitarBendText* bendText() const { return m_text; }
     void setBendText(GuitarBendText* t) { m_text = t; }
 
-    Shape doCreateShape() const override;
-
     bool isUserModified() const override;
 
     struct LayoutData : public LineSegment::LayoutData

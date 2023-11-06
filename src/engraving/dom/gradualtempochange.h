@@ -84,8 +84,6 @@ public:
     void removed() override;
     Sid getPropertyStyle(Pid id) const override;
 
-    Shape doCreateShape() const override;
-
     friend class GradualTempoChange;
 };
 }

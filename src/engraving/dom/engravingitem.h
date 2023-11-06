@@ -549,7 +549,7 @@ public:
             DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
             DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
 
-            DO_ASSERT(!isShapeComposite());
+            //DO_ASSERT(!isShapeComposite());
             mutShape().addBBox(r);
         }
 

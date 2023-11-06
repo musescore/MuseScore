@@ -44,8 +44,6 @@ public:
 
     LetRing* letRing() const { return (LetRing*)spanner(); }
 
-    Shape doCreateShape() const override;
-
     friend class LetRing;
 };
 

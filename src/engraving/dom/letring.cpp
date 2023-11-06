@@ -62,12 +62,6 @@ LetRingSegment::LetRingSegment(LetRing* sp, System* parent)
 {
 }
 
-Shape LetRingSegment::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 //---------------------------------------------------------
 //   LetRing
 //---------------------------------------------------------

@@ -772,7 +772,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     m_shapePath = toSystemCoordinates.map(m_shapePath);
 
     // Create shape for the skyline
-    m_shape.clear();
+    Shape shape;
     PointF start = pp1;
     int nbShapes  = 32;
     double minH    = abs(2 * w);
@@ -784,9 +784,11 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
             double d1 = (minH - re.height()) * .5;
             re.adjust(0.0, -d1, 0.0, d1);
         }
-        m_shape.add(re, this);
+        shape.add(re, this);
         start = point;
     }
+
+    mutldata()->setShape(shape);
 }
 
 //---------------------------------------------------------

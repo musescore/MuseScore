@@ -2884,17 +2884,6 @@ String Chord::accessibleExtraInfo() const
     return String(u"%1 %2").arg(rez, ChordRest::accessibleExtraInfo());
 }
 
-//---------------------------------------------------------
-//   shape
-//    does not contain articulations
-//---------------------------------------------------------
-
-Shape Chord::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 void Chord::undoChangeProperty(Pid id, const PropertyValue& newValue)
 {
     undoChangeProperty(id, newValue, propertyFlags(id));
@@ -3036,11 +3025,5 @@ void GraceNotesGroup::addToShape()
             s2.add(grace->shape().translated(grace->pos()));
         }
     }
-}
-
-Shape GraceNotesGroup::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
 }
 }

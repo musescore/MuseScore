@@ -250,16 +250,6 @@ bool Tuplet::calcHasBracket(const DurationElement* cr1, const DurationElement* c
 }
 
 //---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape Tuplet::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
-//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 

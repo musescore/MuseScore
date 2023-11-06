@@ -1710,5 +1710,4 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
     }
 
     item->computeBezier();
-    ldata->setBbox(item->path().boundingRect());
 }

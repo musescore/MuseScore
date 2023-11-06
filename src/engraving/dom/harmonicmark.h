@@ -44,8 +44,6 @@ public:
 
     HarmonicMark* harmonicMark() const { return (HarmonicMark*)spanner(); }
 
-    Shape doCreateShape() const override;
-
     friend class HarmonicMark;
 };
 
