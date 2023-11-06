@@ -2789,7 +2789,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
         }
     }
 
-    handleRepeats(measure, track);
+    handleRepeats(measure, track, tick + _offset);
 
     // fix for Sibelius 7.1.3 (direct export) which creates metronomes without <sound tempo="..."/>:
     // if necessary, use the value calculated by metronome()
@@ -3026,10 +3026,10 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
         } else if (_e.name() == "wedge") {
             wedge(type, n, starts, stops);
         } else if (_e.name() == "coda") {
-            _coda = true;
+            _wordsText += "<sym>coda</sym>";
             _e.skipCurrentElement();
         } else if (_e.name() == "segno") {
-            _segno = true;
+            _wordsText += "<sym>segno</sym>";
             _e.skipCurrentElement();
         } else {
             skipLogCurrElem();
@@ -3047,12 +3047,12 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
 
 void MusicXMLParserDirection::sound()
 {
-    _sndCapo = _e.attributes().value("capo").toString();
     _sndCoda = _e.attributes().value("coda").toString();
     _sndDacapo = _e.attributes().value("dacapo").toString();
     _sndDalsegno = _e.attributes().value("dalsegno").toString();
     _sndFine = _e.attributes().value("fine").toString();
     _sndSegno = _e.attributes().value("segno").toString();
+    _sndToCoda = _e.attributes().value("tocoda").toString();
     _tpoSound = _e.attributes().value("tempo").toDouble();
     _dynaVelocity = _e.attributes().value("dynamics").toString();
 
@@ -3087,42 +3087,30 @@ void MusicXMLParserDirection::dynamics()
  Do a wild-card match with known repeat texts.
  */
 
-static QString matchRepeat(const QString& lowerTxt)
+QString MusicXMLParserDirection::matchRepeat() const
 {
-    QString repeat;
-    QRegularExpression daCapo(QRegularExpression::anchoredPattern("d\\.? *c\\.?|da *capo"));
-    QRegularExpression daCapoAlFine(QRegularExpression::anchoredPattern("d\\.? *c\\.? *al *fine|da *capo *al *fine"));
-    QRegularExpression daCapoAlCoda(QRegularExpression::anchoredPattern("d\\.? *c\\.? *al *coda|da *capo *al *coda"));
-    QRegularExpression dalSegno(QRegularExpression::anchoredPattern("d\\.? *s\\.?|d[ae]l *segno"));
-    QRegularExpression dalSegnoAlFine(QRegularExpression::anchoredPattern("d\\.? *s\\.? *al *fine|d[ae]l *segno *al *fine"));
-    QRegularExpression dalSegnoAlCoda(QRegularExpression::anchoredPattern("d\\.? *s\\.? *al *coda|d[ae]l *segno *al *coda"));
-    QRegularExpression fine(QRegularExpression::anchoredPattern("fine"));
-    QRegularExpression toCoda(QRegularExpression::anchoredPattern("to *coda"));
-    if (daCapo.match(lowerTxt).hasMatch()) {
-        repeat = "daCapo";
-    }
-    if (daCapoAlFine.match(lowerTxt).hasMatch()) {
-        repeat = "daCapoAlFine";
-    }
-    if (daCapoAlCoda.match(lowerTxt).hasMatch()) {
-        repeat = "daCapoAlCoda";
-    }
-    if (dalSegno.match(lowerTxt).hasMatch()) {
-        repeat = "dalSegno";
-    }
-    if (dalSegnoAlFine.match(lowerTxt).hasMatch()) {
-        repeat = "dalSegnoAlFine";
-    }
-    if (dalSegnoAlCoda.match(lowerTxt).hasMatch()) {
-        repeat = "dalSegnoAlCoda";
-    }
-    if (fine.match(lowerTxt).hasMatch()) {
-        repeat = "fine";
-    }
-    if (toCoda.match(lowerTxt).hasMatch()) {
-        repeat = "toCoda";
-    }
-    return repeat;
+    QString plainWords = MScoreTextToMXML::toPlainText(_wordsText.toLower().simplified());
+    QRegularExpression daCapo("^(d\\.? ?|da )(c\\.?|capo)$");
+    QRegularExpression daCapoAlFine("^(d\\.? ?|da )(c\\.? ?|capo )al fine$");
+    QRegularExpression daCapoAlCoda("^(d\\.? ?|da )(c\\.? ?|capo )al coda$");
+    QRegularExpression dalSegno("^(d\\.? ?|d[ae]l )(s\\.?|segno)$");
+    QRegularExpression dalSegnoAlFine("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al fine$");
+    QRegularExpression dalSegnoAlCoda("^(d\\.? ?|d[ae]l )(s\\.?|segno\\.?) al coda$");
+    QRegularExpression fine("^fine$");
+    QRegularExpression segno("^segno( segno)?$");
+    QRegularExpression toCoda("^to coda( coda)?$");
+    QRegularExpression coda("^coda( coda)?$");
+    if (plainWords.contains(daCapo))          return "daCapo";
+    if (plainWords.contains(daCapoAlFine))    return "daCapoAlFine";
+    if (plainWords.contains(daCapoAlCoda))    return "daCapoAlCoda";
+    if (plainWords.contains(dalSegno))        return "dalSegno";
+    if (plainWords.contains(dalSegnoAlFine))  return "dalSegnoAlFine";
+    if (plainWords.contains(dalSegnoAlCoda))  return "dalSegnoAlCoda";
+    if (plainWords.contains(segno))           return "segno";
+    if (plainWords.contains(fine))            return "fine";
+    if (plainWords.contains(toCoda))          return "toCoda";
+    if (plainWords.contains(coda))            return "coda";
+    return "";
 }
 
 //---------------------------------------------------------
@@ -3192,62 +3180,33 @@ static Marker* findMarker(const QString& repeat, Score* score)
 //   handleRepeats
 //---------------------------------------------------------
 
-void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track)
+void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, const Fraction tick)
 {
     // Try to recognize the various repeats
     QString repeat = "";
-    // Easy cases first
-    if (_coda) {
-        repeat = "coda";
-    }
-    if (_segno) {
-        repeat = "segno";
-    }
-    // As sound may be missing, next do a wild-card match with known repeat texts
-    QString txt = MScoreTextToMXML::toPlainText(_wordsText.toLower());
-    if (repeat == "") {
-        repeat = matchRepeat(txt.toLower());
-    }
-    // If that did not work, try to recognize a sound attribute
-    if (repeat == "" && _sndCoda != "") {
-        repeat = "coda";
-    }
-    if (repeat == "" && _sndDacapo != "") {
-        repeat = "daCapo";
-    }
-    if (repeat == "" && _sndDalsegno != "") {
-        repeat = "dalSegno";
-    }
-    if (repeat == "" && _sndFine != "") {
-        repeat = "fine";
-    }
-    if (repeat == "" && _sndSegno != "") {
-        repeat = "segno";
-    }
-    // If a repeat was found, assume words is no longer needed
-    if (repeat != "") {
-        _wordsText = "";
-    }
-
-    /*
-     LOGD(" txt=%s repeat=%s",
-     qPrintable(txt),
-     qPrintable(repeat)
-     );
-     */
+    if (_sndCoda != "") repeat = "coda";
+    else if (_sndDacapo != "") repeat = "daCapo";
+    else if (_sndDalsegno != "") repeat = "dalSegno";
+    else if (_sndFine != "") repeat = "fine";
+    else if (_sndSegno != "") repeat = "segno";
+    else if (_sndToCoda != "") repeat = "toCoda";
+    else repeat = matchRepeat();
 
     if (repeat != "") {
-        if (Jump* jp = findJump(repeat, _score)) {
-            jp->setTrack(track);
-            //LOGD("jumpsMarkers adding jm %p meas %p",jp, measure);
-            // TODO jumpsMarkers.append(JumpMarkerDesc(jp, measure));
-            measure->add(jp);
-        }
-        if (Marker* m = findMarker(repeat, _score)) {
-            m->setTrack(track);
-            //LOGD("jumpsMarkers adding jm %p meas %p",m, measure);
-            // TODO jumpsMarkers.append(JumpMarkerDesc(m, measure));
-            measure->add(m);
+        TextBase* tb = nullptr;
+        if ((tb = findJump(repeat, _score)) || (tb = findMarker(repeat, _score))) {
+            tb->setTrack(track);
+            if (!_wordsText.isEmpty()) {
+                tb->setXmlText(_wordsText);
+                _wordsText = "";
+            }
+            else tb->setVisible(false);
+            // Some Markers and Jumps align to the right of a measure.
+            // These may be recorded in the XML as occurring at the beginning
+            // of the following measure. This fixes that.
+            if (tb->textStyleType() == TextStyleType::REPEAT_RIGHT && tick == measure->tick())
+                measure = measure->prevMeasure();
+            measure->add(tb);
         }
     }
 }
@@ -7017,7 +6976,7 @@ MusicXMLParserDirection::MusicXMLParserDirection(QXmlStreamReader& e,
                                                  MusicXMLParserPass2& pass2,
                                                  MxmlLogger* logger)
     : _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),
-    _hasDefaultY(false), _defaultY(0.0), _hasRelativeY(false), _relativeY(0.0), _coda(false), _segno(false),
+    _hasDefaultY(false), _defaultY(0.0), _hasRelativeY(false), _relativeY(0.0),
     _tpoMetro(0), _tpoSound(0), _offset(0, 1)
 {
     // nothing

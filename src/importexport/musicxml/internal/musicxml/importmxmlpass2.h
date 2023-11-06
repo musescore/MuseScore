@@ -390,19 +390,17 @@ private:
     QString _rehearsalText;
     QString _dynaVelocity;
     QString _tempo;
-    QString _sndCapo;
     QString _sndCoda;
     QString _sndDacapo;
     QString _sndDalsegno;
-    QString _sndSegno;
     QString _sndFine;
+    QString _sndSegno;
+    QString _sndToCoda;
     bool _hasDefaultY;
     qreal _defaultY;
     bool _hasRelativeY;
     qreal _relativeY;
     bool hasTotalY() { return _hasRelativeY || _hasDefaultY; }
-    bool _coda;
-    bool _segno;
     double _tpoMetro;                   // tempo according to metronome
     double _tpoSound;                   // tempo according to sound
     QList<EngravingItem*> _elems;
@@ -417,7 +415,8 @@ private:
     QString metronome(double& r);
     void sound();
     void dynamics();
-    void handleRepeats(Measure* measure, const track_idx_t track);
+    void handleRepeats(Measure* measure, const int track, const Fraction tick);
+    QString matchRepeat() const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
 };

@@ -485,6 +485,9 @@ TEST_F(Musicxml_Tests, drumset1) {
 TEST_F(Musicxml_Tests, drumset2) {
     mxmlIoTest("testDrumset2");
 }
+TEST_F(Musicxml_Tests, dsalCoda) {
+    mxmlImportTestRef("testDSalCoda");
+}
 TEST_F(Musicxml_Tests, durationLargeErrorMscx) {
     mxmlImportTestRef("testDurationLargeError");
 }
