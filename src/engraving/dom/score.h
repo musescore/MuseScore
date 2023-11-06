@@ -30,6 +30,7 @@
 
 #include <set>
 #include <memory>
+#include <optional>
 
 #include "async/channel.h"
 #include "types/ret.h"
@@ -677,7 +678,6 @@ public:
     void setTempo(const Fraction& tick, BeatsPerSecond bps);
     void removeTempo(const Fraction& tick);
     void setPause(const Fraction& tick, double seconds);
-    virtual BeatsPerSecond tempoPrimo() const;
     BeatsPerSecond tempo(const Fraction& tick) const;
 
     Text* getText(TextStyleType subtype) const;
@@ -1001,7 +1001,7 @@ private:
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
-    void rebuildTempoAndTimeSigMaps(Measure* m);
+    void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
 
     void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
                                  const SelectionFilter& filter);

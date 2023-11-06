@@ -410,7 +410,7 @@ void Score::setUpTempoMap()
         sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
     }
 
-    m_masterScore->resetTempoPrimo();
+    auto tempoPrimo = std::optional<BeatsPerSecond> {};
 
     for (MeasureBase* mb = first(); mb; mb = mb->next()) {
         if (mb->type() != ElementType::MEASURE) {
@@ -426,7 +426,7 @@ void Score::setUpTempoMap()
             m->mmRest()->moveTicks(diff);
         }
 
-        rebuildTempoAndTimeSigMaps(m);
+        rebuildTempoAndTimeSigMaps(m, tempoPrimo);
 
         tick += measureTicks;
     }
@@ -475,7 +475,7 @@ void Score::setUpTempoMap()
 ///    updates tempomap and time sig map for a measure
 //---------------------------------------------------------
 
-void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
+void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerSecond>& tempoPrimo)
 {
     if (isMaster()) {
         // Reset tempo to set correct time stretch for fermata.
@@ -542,8 +542,8 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                 } else if (e->isTempoText()) {
                     TempoText* tt = toTempoText(e);
 
-                    if (tt->isNormal() && !tt->isRelative() && !m_masterScore->tempoPrimoSet()) {
-                        m_masterScore->setTempoPrimo(tt->tempo());
+                    if (tt->isNormal() && !tt->isRelative() && !tempoPrimo) {
+                        tempoPrimo = tt->tempo();
                     } else if (tt->isRelative()) {
                         tt->updateRelative();
                     }
@@ -554,7 +554,7 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                         // when a progressive change was active
                         tempomap()->setTempo(ticks, tempomap()->tempo(ticks));
                     } else if (tt->isRestorePrimo() && tt->followText()) {
-                        tempomap()->setTempo(ticks, m_masterScore->tempoPrimo());
+                        tempomap()->setTempo(ticks, tempoPrimo ? *tempoPrimo : Constants::DEFAULT_TEMPO);
                     } else {
                         tempomap()->setTempo(ticks, tt->tempo());
                     }
@@ -5991,7 +5991,6 @@ const RepeatList& Score::repeatList()  const { return m_masterScore->repeatList(
 const RepeatList& Score::repeatList(bool expandRepeats)  const { return m_masterScore->repeatList(expandRepeats); }
 TempoMap* Score::tempomap() const { return m_masterScore->tempomap(); }
 TimeSigMap* Score::sigmap() const { return m_masterScore->sigmap(); }
-BeatsPerSecond Score::tempoPrimo() const { return m_masterScore->tempoPrimo(); }
 //QQueue<MidiInputEvent>* Score::midiInputQueue() { return _masterScore->midiInputQueue(); }
 std::list<MidiInputEvent>& Score::activeMidiPitches() { return m_masterScore->activeMidiPitches(); }
 async::Channel<ScoreChangesRange> Score::changesChannel() const { return m_masterScore->changesChannel(); }
