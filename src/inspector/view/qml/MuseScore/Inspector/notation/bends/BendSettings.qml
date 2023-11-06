@@ -43,10 +43,18 @@ Column {
         bendTypeSection.focusOnFirst()
     }
 
-    DirectionSection {
-        id: directionSection
+    PlacementSection {
+        id: placmentSection
 
         propertyItem: root.model ? root.model.bendDirection : null
+
+        //! NOTE: Bend uses the direction property,
+        // but for convenience we will display it in the placement section
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
+            { text: qsTrc("inspector", "Above"), value: DirectionTypes.VERTICAL_UP },
+            { text: qsTrc("inspector", "Below"), value: DirectionTypes.VERTICAL_DOWN }
+        ]
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
@@ -59,7 +67,7 @@ Column {
 
         navigationName: "HoldLine"
         navigationPanel: root.navigationPanel
-        navigationRowStart: directionSection.navigationRowEnd + 1
+        navigationRowStart: placementSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Auto"), value: BendTypes.SHOW_HOLD_AUTO},
