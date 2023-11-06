@@ -92,11 +92,13 @@
 #include "modularity/ioc.h"
 #include "importexport/musicxml/imusicxmlconfiguration.h"
 #include "engraving/iengravingfontsprovider.h"
+#include "engraving/rendering/dev/tlayout.h"
 
 #include "log.h"
 
 using namespace mu;
 using namespace mu::engraving;
+using namespace mu::engraving::rendering::dev;
 
 namespace mu::engraving {
 static std::shared_ptr<mu::iex::musicxml::IMusicXmlConfiguration> configuration()
@@ -2801,11 +2803,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
     // create text if any text was found
     if (isLikelyCredit(tick)) {
-        Text* t = Factory::createText(_score->dummy(), TextStyleType::SUBTITLE);
-        t->setLayoutToParentWidth(true);
-        t->setXmlText(_wordsText);
+        Text* t = Factory::createText(_score->dummy(), TextStyleType::COMPOSER);
+        t->setXmlText(_wordsText.trimmed());
         auto firstMeasure = _score->measures()->first();
         VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(_score);
+        double spatium = _score->style().styleD(Sid::spatium);
+        vbox->setBoxHeight(vbox->boxHeight() + Spatium(t->height()/spatium/2)); // add some height
         vbox->add(t);
     } else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
         TextBase* t = 0;
@@ -2972,7 +2975,7 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
            && _rehearsalText == ""
            && _metroText == ""
            && _tpoSound < 0.1
-           && _wordsText.contains(QRegularExpression("((Words|Music|Lyrics).*)+by\\s+([A-Z][a-zA-Z'’-]+\\s[A-Z][a-zA-Z'’-]+.*)+"));
+           && _wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
 }
 
 //---------------------------------------------------------

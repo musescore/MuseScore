@@ -112,7 +112,7 @@
       </Part>
     <Staff id="1">
       <VBox>
-        <height>3.5</height>
+        <height>3.78222</height>
         <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
@@ -120,7 +120,7 @@
           <text><font size="22"/>Inferred Subtitle</text>
           </Text>
         <Text>
-          <style>subtitle</style>
+          <style>composer</style>
           <text>Words and Music by Henry Ives</text>
           </Text>
         </VBox>
