@@ -166,6 +166,7 @@ public:
 
     Arpeggio* spanArpeggio() const { return m_spanArpeggio; }
     void setSpanArpeggio(Arpeggio* a) { m_spanArpeggio = a; }
+    void undoChangeSpanArpeggio(Arpeggio* a);
     Tremolo* tremolo() const { return m_tremolo; }
     void setTremolo(Tremolo* t, bool applyLogic = true);
 

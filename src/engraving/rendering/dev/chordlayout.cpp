@@ -167,9 +167,9 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     // If item has an arpeggio: mark chords which are part of the arpeggio
     if (item->arpeggio()) {
-        item->arpeggio()->findChords();
-        item->arpeggio()->mutldata()->setMaxChordPad(0.0);
-        item->arpeggio()->mutldata()->setMinChordX(10000);
+        item->arpeggio()->findAndAttachToChords();
+        item->arpeggio()->mutldata()->maxChordPad = 0.0;
+        item->arpeggio()->mutldata()->minChordX = 10000;
         TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
     }
     // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
@@ -177,14 +177,16 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         Arpeggio* spanArp = item->spanArpeggio();
         Arpeggio::LayoutData* arpldata = spanArp->mutldata();
         const Segment* seg = spanArp->chord()->segment();
-        const Chord* endChord = toChord(seg->elementAt(spanArp->endTrack()));
-        if (!endChord) {
-            endChord = item;
+        const EngravingItem* endItem = seg->elementAt(spanArp->endTrack());
+        const Chord* endChord = item;
+        if (endItem && endItem->isChord()) {
+            endChord = toChord(endItem);
         }
 
         // If a note is covered in the voice span but located outside the visual span of the arpeggio calculate accidental offset later
-        bool aboveStart = item->vStaffIdx() <= spanArp->vStaffIdx() && item->line() < spanArp->chord()->line();
-        bool belowEnd = item->vStaffIdx() >= endChord->vStaffIdx() && item->line() > endChord->line();
+        bool aboveStart
+            = std::make_pair(item->vStaffIdx(), item->downLine()) < std::make_pair(spanArp->vStaffIdx(), spanArp->chord()->upLine());
+        bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
 
         if (!(aboveStart || belowEnd)) {
             double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
@@ -196,16 +198,16 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
                 double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
                 double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
                 gapSize = arpeggioAccidentalDistance - accidentalDistance;
-                gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, mag_, item, &chordAccidentals);
+                gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, mag_, item, chordAccidentals);
             }
 
             double extraX = spanArp->width() + gapSize;
 
             // Track leftmost chord position, as we we always want the arpeggio to be to the left of this
-            arpldata->setMinChordX(std::min(arpldata->minChordX(), arpChordX));
+            arpldata->minChordX = std::min(arpldata->minChordX, arpChordX);
 
             // Save this to arpeggio if largest
-            arpldata->setMaxChordPad(std::max(arpldata->maxChordPad(), lll + extraX));
+            arpldata->maxChordPad = std::max(arpldata->maxChordPad, lll + extraX);
             //        arpldata->setMaxChordPad(std::max(arpldata->maxChordPad(), chordLeft + extraX));
 
             // If first chord in arpeggio set y
@@ -223,9 +225,9 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             if (downNote->track() == item->track()) {
                 // Amount to move arpeggio from it's parent chord to factor in chords further to the left
                 double firstChordX = spanArp->chord()->ldata()->pos().x();
-                double xDiff = firstChordX - arpldata->minChordX();
+                double xDiff = firstChordX - arpldata->minChordX;
 
-                double offset = -(xDiff + arpldata->maxChordPad());
+                double offset = -(xDiff + arpldata->maxChordPad);
                 spanArp->mutldata()->setPosX(offset);
                 if (spanArp->visible()) {
                     lll = offset;

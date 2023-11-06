@@ -842,9 +842,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
 
     case ArpeggioType::BRACKET: {
         double w  = conf.styleS(Sid::ArpeggioHookLen).val() * item->spatium();
-        double lineWidth = conf.styleS(Sid::ArpeggioLineWidth).val() * item->spatium() / 2;
-        ldata->setBbox(RectF(0.0 - lineWidth, ldata->top - lineWidth, w + lineWidth,
-                             ldata->bottom + lineWidth));
+        ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
     } break;
     }
 

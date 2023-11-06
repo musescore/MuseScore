@@ -1815,6 +1815,18 @@ Note* Chord::findNote(int pitch, int skip) const
     return 0;
 }
 
+void Chord::undoChangeSpanArpeggio(Arpeggio* a)
+{
+    const std::list<EngravingObject*> links = linkList();
+    for (EngravingObject* linkedObject : links) {
+        Chord* chord = toChord(linkedObject);
+        Score* score = chord->score();
+        if (score) {
+            score->undo(new ChangeSpanArpeggio(chord, a));
+        }
+    }
+}
+
 ChordLine* Chord::chordLine() const
 {
     for (EngravingItem* item : el()) {

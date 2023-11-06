@@ -984,14 +984,14 @@ RemoveElement::RemoveElement(EngravingItem* e)
             }
             // Move arpeggio down to next available note
             if (chord->arpeggio()) {
-                chord->arpeggio()->rebaseStartAnchor(-1);
+                chord->arpeggio()->rebaseStartAnchor(1);
             } else {
+                // If this chord is the end of an arpeggio, move the end of the arpeggio upwards to the next available chord
                 Arpeggio* spanArp = chord->spanArpeggio();
                 if (spanArp && chord->track() == spanArp->endTrack()) {
-                    spanArp->rebaseEndAnchor(1);
+                    spanArp->rebaseEndAnchor(-1);
                 }
             }
-            // If this chord is the end of an arpeggio, move the end of the arpeggio upwards to the next available chord
             for (const Note* note : chord->notes()) {
                 removeNote(note);
             }
@@ -3085,4 +3085,12 @@ void ChangeStringData::flip(EditData*)
     }
 
     m_stringData.set(StringData(frets, stringList));
+}
+
+void ChangeSpanArpeggio::flip(EditData*)
+{
+    Arpeggio* f_spanArp = m_chord->spanArpeggio();
+
+    m_chord->setSpanArpeggio(m_spanArpeggio);
+    m_spanArpeggio = f_spanArp;
 }

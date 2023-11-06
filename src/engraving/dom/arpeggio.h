@@ -64,8 +64,8 @@ public:
     track_idx_t endTrack() const { return track() + m_span - 1; }
 
     bool crossStaff() const;
-    void findChords();
-    void removeChords(track_idx_t strack, track_idx_t etrack);
+    void findAndAttachToChords();
+    void detachFromChords(track_idx_t strack, track_idx_t etrack);
     void rebaseStartAnchor(int direction);
     void rebaseEndAnchor(int direction);
 
@@ -96,18 +96,8 @@ public:
         double top = 0.0;
         double bottom = 0.0;
         double magS = 0.0;
-
-        double m_maxChordPad = 0.0;
-        double maxChordPad() const { return m_maxChordPad; }
-        void setMaxChordPad(double val) { m_maxChordPad = val; }
-
-        double m_chordOffset = 0.0;
-        double chordOffset() const { return m_chordOffset; }
-        void setChordOffset(double val) { LOGI() << "Set chord Offset to: " << val; m_chordOffset = val; }
-
-        double m_minChordX = 0.0;
-        double minChordX() const { return m_minChordX; }
-        void setMinChordX(double val) { m_minChordX = val; }
+        double maxChordPad = 0.0;
+        double minChordX = 0.0;
 
         // out
         SymIdList symbols;
@@ -126,6 +116,7 @@ private:
     std::vector<mu::LineF> dragAnchorLines() const override;
     std::vector<mu::LineF> gripAnchorLines(Grip) const override;
     void startEdit(EditData&) override;
+    void startEditDrag(EditData&) override;
 
     ArpeggioType m_arpeggioType = ArpeggioType::NORMAL;
     double m_userLen1 = 0.0;
