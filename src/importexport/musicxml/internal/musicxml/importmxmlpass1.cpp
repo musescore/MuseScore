@@ -705,7 +705,7 @@ static TextStyleType tidForCreditWords(const CreditWords* const word, std::vecto
 //   createAndAddVBoxForCreditWords
 //---------------------------------------------------------
 
-static VBox* createAndAddVBoxForCreditWords(Score* const score, const int miny = 0, const int maxy = 75)
+VBox* MusicXMLParserPass1::createAndAddVBoxForCreditWords(Score* const score, const int miny, const int maxy)
 {
     auto vbox = Factory::createVBox(score->dummy()->system());
     qreal vboxHeight = 10;                           // default height in tenths
@@ -782,7 +782,7 @@ static VBox* addCreditWords(Score* const score, const CreditWordsList& crWords,
             const auto tid = (pageNr == 1 && top) ? tidForCreditWords(w, words, pageSize.width()) : TextStyleType::DEFAULT;
             double yoffs = (maxy - w->defaultY) * score->style().spatium() / 10;
             if (!vbox) {
-                vbox = createAndAddVBoxForCreditWords(score, miny, maxy);
+                vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score, miny, maxy);
             }
             addText2(vbox, score, w->words, tid, align, yoffs);
         }
@@ -831,7 +831,7 @@ static void createDefaultHeader(Score* const score)
         strTranslator = metaTranslator;
     }
 
-    const auto vbox = createAndAddVBoxForCreditWords(score);
+    const auto vbox = MusicXMLParserPass1::createAndAddVBoxForCreditWords(score);
     vbox->setExcludeFromOtherParts(false);
     addText(vbox, score, strTitle.toHtmlEscaped(),      TextStyleType::TITLE);
     addText(vbox, score, strSubTitle.toHtmlEscaped(),   TextStyleType::SUBTITLE);

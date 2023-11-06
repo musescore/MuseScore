@@ -35,6 +35,7 @@
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/barline.h"
 #include "engraving/dom/beam.h"
+#include "engraving/dom/box.h"
 #include "engraving/dom/breath.h"
 #include "engraving/dom/chord.h"
 #include "engraving/dom/chordline.h"
@@ -83,6 +84,7 @@
 #include "importmxmllogger.h"
 #include "importmxmlnoteduration.h"
 #include "importmxmlnotepitch.h"
+#include "importmxmlpass1.h"
 #include "importmxmlpass2.h"
 #include "musicxmlfonthandler.h"
 #include "musicxmlsupport.h"
@@ -2798,8 +2800,14 @@ void MusicXMLParserDirection::direction(const QString& partId,
     //       qPrintable(_wordsText), qPrintable(_rehearsalText), qPrintable(_metroText), _tpoSound);
 
     // create text if any text was found
-
-    if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
+    if (isLikelyCredit(tick)) {
+        Text* t = Factory::createText(_score->dummy(), TextStyleType::SUBTITLE);
+        t->setLayoutToParentWidth(true);
+        t->setXmlText(_wordsText);
+        auto firstMeasure = _score->measures()->first();
+        VBox* vbox = firstMeasure->isVBox() ? toVBox(firstMeasure) : MusicXMLParserPass1::createAndAddVBoxForCreditWords(_score);
+        vbox->add(t);
+    } else if (_wordsText != "" || _rehearsalText != "" || _metroText != "") {
         TextBase* t = 0;
         if (_tpoSound > 0.1) {
             if (canAddTempoText(_score->tempomap(), tick.ticks())) {
@@ -2952,6 +2960,19 @@ void MusicXMLParserDirection::direction(const QString& partId,
             }
         }
     }
+}
+
+//---------------------------------------------------------
+//   isLikelyCredit
+//---------------------------------------------------------
+
+bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
+{
+    return (tick + _offset < Fraction(5, 1)) // Only early in the piece
+           && _rehearsalText == ""
+           && _metroText == ""
+           && _tpoSound < 0.1
+           && _wordsText.contains(QRegularExpression("((Words|Music|Lyrics).*)+by\\s+([A-Z][a-zA-Z'’-]+\\s[A-Z][a-zA-Z'’-]+.*)+"));
 }
 
 //---------------------------------------------------------

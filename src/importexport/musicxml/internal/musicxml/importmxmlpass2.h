@@ -419,6 +419,7 @@ private:
     void dynamics();
     void handleRepeats(Measure* measure, const track_idx_t track);
     void skipLogCurrElem();
+    bool isLikelyCredit(const Fraction& tick) const;
 };
 
 //---------------------------------------------------------
