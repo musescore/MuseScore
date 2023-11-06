@@ -81,12 +81,6 @@ EngravingItem* OttavaSegment::propertyDelegate(Pid pid)
     return TextLineBaseSegment::propertyDelegate(pid);
 }
 
-Shape OttavaSegment::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 //---------------------------------------------------------
 //   setOttavaType
 //---------------------------------------------------------

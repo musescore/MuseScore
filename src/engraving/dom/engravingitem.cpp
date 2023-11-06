@@ -2388,6 +2388,10 @@ void EngravingItem::LayoutData::setBbox(const mu::RectF& r)
     DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
     DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
 
+    if (m_item->type() == ElementType::SLUR_SEGMENT) {
+        return;
+    }
+
     //DO_ASSERT(!isShapeComposite());
     m_shape.set_value(Shape(r, m_item, Shape::Type::Fixed));
 }
@@ -2434,6 +2438,8 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT:
         case ElementType::RASGUEADO_SEGMENT:
         case ElementType::WHAMMY_BAR_SEGMENT:
+        case ElementType::SLUR_SEGMENT:
+            // case ElementType::TIE_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:
@@ -2489,18 +2495,6 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
     }
 
     Shape old = m_item->_internal_shape();
-
-    //! NOTE Temporary for debuging
-    //! Reimplementation: progress
-//    {
-//        switch (m_item->type()) {
-//        case ElementType::NOTE:
-//            DO_ASSERT(sh.equal(old));
-//        default:
-//            break;
-//        }
-//    }
-
     return old;
 }
 

@@ -87,12 +87,6 @@ EngravingItem* VoltaSegment::propertyDelegate(Pid pid)
     return TextLineBaseSegment::propertyDelegate(pid);
 }
 
-Shape VoltaSegment::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 //---------------------------------------------------------
 //   Volta
 //---------------------------------------------------------

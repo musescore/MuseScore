@@ -142,8 +142,6 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    Shape doCreateShape() const override;
-
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return 2; }
     Grip initialEditModeGrip() const override { return Grip::END; }

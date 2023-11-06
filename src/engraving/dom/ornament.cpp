@@ -388,12 +388,6 @@ void Ornament::updateCueNote()
     cueNote->setIsTrillCueNote(true);
 }
 
-Shape Ornament::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 SymId Ornament::fromTrillType(TrillType trillType)
 {
     switch (trillType) {

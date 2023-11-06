@@ -135,16 +135,6 @@ bool MMRest::setProperty(Pid propertyId, const PropertyValue& v)
 }
 
 //---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape MMRest::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
-//---------------------------------------------------------
 //   getPropertyStyle
 //---------------------------------------------------------
 

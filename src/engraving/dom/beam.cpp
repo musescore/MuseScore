@@ -847,12 +847,6 @@ bool Beam::hasAllRests()
     return true;
 }
 
-Shape Beam::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 //-------------------------------------------------------
 // BEAM SEGMENT CLASS
 //-------------------------------------------------------

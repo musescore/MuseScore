@@ -61,8 +61,6 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue getProperty(Pid) const override;
 
-    Shape doCreateShape() const override;
-
     String accessibleInfo() const override;
 
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection

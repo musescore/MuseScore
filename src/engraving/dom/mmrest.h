@@ -47,8 +47,6 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue getProperty(Pid) const override;
 
-    Shape doCreateShape() const override;
-
     mu::RectF numberRect() const override;
 
     mu::PointF numberPosition(const mu::RectF& numberBbox) const;

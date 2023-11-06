@@ -55,8 +55,6 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    Shape doCreateShape() const override;
-
     bool setProperty(Pid id, const PropertyValue& v) override;
 
     bool twoLines() const { return m_twoLines; }

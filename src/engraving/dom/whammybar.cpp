@@ -58,12 +58,6 @@ WhammyBarSegment::WhammyBarSegment(WhammyBar* sp, System* parent)
 {
 }
 
-Shape WhammyBarSegment::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 //---------------------------------------------------------
 //   WhammyBar
 //---------------------------------------------------------

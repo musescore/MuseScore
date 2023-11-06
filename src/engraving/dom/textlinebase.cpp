@@ -91,34 +91,6 @@ RectF TextLineBaseSegment::boundingBoxOfLine(const PointF& p1, const PointF& p2,
     return RectF(p1 - b, p1 + b).normalized().united(RectF(p2 - b, p2 + b).normalized());
 }
 
-//---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape TextLineBaseSegment::doCreateShape() const
-{
-//    UNREACHABLE;
-//    return Shape();
-    Shape shape;
-    if (!m_text->empty()) {
-        shape.add(m_text->ldata()->bbox().translated(m_text->pos()));
-    }
-    if (!m_endText->empty()) {
-        shape.add(m_endText->ldata()->bbox().translated(m_endText->pos()));
-    }
-    double lw2 = 0.5 * textLineBase()->lineWidth();
-    bool isDottedLine = textLineBase()->lineStyle() == LineType::DOTTED;
-    if (m_twoLines) {     // hairpins
-        shape.add(boundingBoxOfLine(m_points[0], m_points[1], lw2, isDottedLine));
-        shape.add(boundingBoxOfLine(m_points[2], m_points[3], lw2, isDottedLine));
-    } else if (textLineBase()->lineVisible()) {
-        for (int i = 0; i < m_npoints - 1; ++i) {
-            shape.add(boundingBoxOfLine(m_points[i], m_points[i + 1], lw2, isDottedLine));
-        }
-    }
-    return shape;
-}
-
 bool TextLineBaseSegment::setProperty(Pid id, const PropertyValue& v)
 {
     if (id == Pid::COLOR) {

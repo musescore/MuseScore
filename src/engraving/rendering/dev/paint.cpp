@@ -26,6 +26,7 @@
 #include "dom/page.h"
 #include "dom/engravingitem.h"
 
+#include "tdraw.h"
 #include "debugpaint.h"
 
 #include "log.h"
@@ -216,7 +217,7 @@ void Paint::paintItem(mu::draw::Painter& painter, const EngravingItem* item)
     PointF itemPosition(item->pagePos());
 
     painter.translate(itemPosition);
-    EngravingItem::renderer()->drawItem(item, &painter);
+    TDraw::drawItem(item, &painter);
     painter.translate(-itemPosition);
 }
 

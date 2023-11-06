@@ -79,12 +79,6 @@ Sid PedalSegment::getPropertyStyle(Pid pid) const
     return TextLineBaseSegment::getPropertyStyle(pid);
 }
 
-Shape PedalSegment::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 Sid Pedal::getPropertyStyle(Pid pid) const
 {
     switch (pid) {

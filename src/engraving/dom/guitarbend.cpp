@@ -556,12 +556,6 @@ void GuitarBendSegment::scanElements(void* data, void (* func)(void*, EngravingI
     LineSegment::scanElements(data, func, all);
 }
 
-Shape GuitarBendSegment::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
 bool GuitarBendSegment::isUserModified() const
 {
     bool modified = !vertexPointOff().isNull() || (m_text && m_text->isUserModified());

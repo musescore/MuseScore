@@ -121,16 +121,6 @@ void TrillSegment::symbolLine(SymId start, SymId fill, SymId end)
 }
 
 //---------------------------------------------------------
-//   shape
-//---------------------------------------------------------
-
-Shape TrillSegment::doCreateShape() const
-{
-    UNREACHABLE;
-    return Shape();
-}
-
-//---------------------------------------------------------
 //   scanElements
 //---------------------------------------------------------
 

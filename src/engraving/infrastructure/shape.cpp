@@ -371,9 +371,9 @@ void Shape::setBBox(const mu::RectF& r)
 
 void Shape::addBBox(const mu::RectF& r)
 {
-    IF_ASSERT_FAILED(type() == Type::Fixed) {
-        return;
-    }
+//    IF_ASSERT_FAILED(type() == Type::Fixed) {
+//        return;
+//    }
 
     if (m_elements.empty()) {
         m_elements.push_back(mu::RectF());
@@ -388,18 +388,21 @@ void Shape::addBBox(const mu::RectF& r)
 
 void Shape::add(const Shape& s)
 {
+    m_type = Type::Composite;
     m_elements.insert(m_elements.end(), s.m_elements.begin(), s.m_elements.end());
     invalidateBBox();
 }
 
 void Shape::add(const RectF& r, const EngravingItem* p)
 {
+    m_type = Type::Composite;
     m_elements.push_back(ShapeElement(r, p));
     invalidateBBox();
 }
 
 void Shape::add(const mu::RectF& r)
 {
+    m_type = Type::Composite;
     m_elements.push_back(ShapeElement(r));
     invalidateBBox();
 }

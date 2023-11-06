@@ -46,8 +46,6 @@ public:
 
     TextLine* textLine() const { return toTextLine(spanner()); }
 
-    Shape doCreateShape() const override;
-
 private:
     Sid getTextLinePos(bool above) const;
     Sid getPropertyStyle(Pid) const override;

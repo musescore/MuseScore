@@ -55,8 +55,6 @@ public:
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
-    Shape doCreateShape() const override;
-
     void remove(EngravingItem* e) override;
 
     Chord* cueNoteChord() const { return _cueNoteChord; }

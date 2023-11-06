@@ -46,8 +46,6 @@ public:
 
     PalmMute* palmMute() const { return (PalmMute*)spanner(); }
 
-    Shape doCreateShape() const override;
-
     friend class PalmMute;
 };
 
