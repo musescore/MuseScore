@@ -86,6 +86,8 @@ Column {
         navigationPanel: root.navigationPanel
         navigationRowStart: showHoldSection.navigation.row + 1
 
+        spacing: 0
+
         BendGridCanvas {
             height: 200
             width: parent.width
