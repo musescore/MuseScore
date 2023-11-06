@@ -806,6 +806,9 @@ TEST_F(Musicxml_Tests, restsNoType) {
 TEST_F(Musicxml_Tests, restsTypeWhole) {
     mxmlIoTestRef("testRestsTypeWhole");
 }
+TEST_F(Musicxml_Tests, secondVoiceMelismata) {
+    mxmlImportTestRef("testSecondVoiceMelismata");
+}
 TEST_F(Musicxml_Tests, slurTieLineStyle) {
     mxmlIoTest("testSlurTieLineStyle");
 }

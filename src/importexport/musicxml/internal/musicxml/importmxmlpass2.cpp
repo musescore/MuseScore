@@ -189,18 +189,19 @@ static Fraction lastChordTicks(const Segment* s, const track_idx_t track, const 
 //   setExtend
 //---------------------------------------------------------
 
-// set extend for lyric no in track to end at tick
+// set extend for lyric no in *staff* to end at tick
 // called when lyric (with or without "extend") or note with "extend type=stop" is found
-// note that no == -1 means all lyrics in this track
+// // note that no == -1 means all lyrics in this *track*
 
 void MusicXmlLyricsExtend::setExtend(const int no, const track_idx_t track, const Fraction& tick)
 {
     QList<Lyrics*> list;
     foreach (Lyrics* l, _lyrics) {
         EngravingItem* const el = l->parentItem();
-        if (el->type() == ElementType::CHORD) {           // TODO: rest also possible ?
+        if (el->type() == ElementType::CHORD || el->type() == ElementType::REST) {
             ChordRest* const par = static_cast<ChordRest*>(el);
-            if (par->track() == track && (no == -1 || l->no() == no)) {
+            if ((no == -1 && par->track() == track)
+                || (l->no() == no && track2staff(par->track()) == track2staff(track))) {
                 Fraction lct = lastChordTicks(l->segment(), track, tick);
                 if (lct > Fraction(0, 1)) {
                     // set lyric tick to the total length from the lyric note
