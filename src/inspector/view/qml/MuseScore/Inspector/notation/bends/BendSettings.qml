@@ -43,10 +43,18 @@ Column {
         bendTypeSection.focusOnFirst()
     }
 
-    DirectionSection {
-        id: directionSection
+    PlacementSection {
+        id: placmentSection
 
         propertyItem: root.model ? root.model.bendDirection : null
+
+        //! NOTE: Bend uses the direction property,
+        // but for convenience we will display it in the placement section
+        model: [
+            { text: qsTrc("inspector", "Auto"), value: DirectionTypes.VERTICAL_AUTO },
+            { text: qsTrc("inspector", "Above"), value: DirectionTypes.VERTICAL_UP },
+            { text: qsTrc("inspector", "Below"), value: DirectionTypes.VERTICAL_DOWN }
+        ]
 
         navigationPanel: root.navigationPanel
         navigationRowStart: root.navigationRowStart + 1
@@ -59,7 +67,7 @@ Column {
 
         navigationName: "HoldLine"
         navigationPanel: root.navigationPanel
-        navigationRowStart: directionSection.navigationRowEnd + 1
+        navigationRowStart: placementSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Auto"), value: BendTypes.SHOW_HOLD_AUTO},
@@ -70,17 +78,21 @@ Column {
 
     InspectorPropertyView {
         id: bendCurve
-        titleText: qsTrc("inspector", "Click to add or remove points")
+        titleText: qsTrc("inspector", "Customize bend")
 
-        enabled: true
+        enabled: root.model ? root.model.isBendCurveEnabled : false
         visible: true
 
         navigationPanel: root.navigationPanel
         navigationRowStart: showHoldSection.navigation.row + 1
 
+        spacing: 0
+
         BendGridCanvas {
             height: 200
             width: parent.width
+
+            enabled: bendCurve.enabled
 
             pointList: root.model ? root.model.bendCurve : null
 
@@ -95,18 +107,5 @@ Column {
                 }
             }
         }
-    }
-
-    SpinBoxPropertyView {
-        titleText: qsTrc("inspector", "Line thickness")
-        propertyItem: root.model ? root.model.lineThickness : null
-
-        maxValue: 10
-        minValue: 0.1
-        step: 0.1
-        decimals: 2
-
-        navigationPanel: root.navigationPanel
-        navigationRowStart: bendCurve.navigationRowEnd + 1
     }
 }

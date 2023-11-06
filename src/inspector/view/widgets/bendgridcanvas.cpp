@@ -36,6 +36,29 @@ static constexpr int GRIP_CENTER_RADIUS = GRIP_RADIUS - 2;
 static constexpr int GRIP_SELECTED_RADIUS = GRIP_RADIUS + 2;
 static constexpr int GRIP_FOCUS_RADIUS = GRIP_SELECTED_RADIUS + 2;
 
+static constexpr int GRID_LINE_WIDTH = 1;
+static constexpr int CURVE_LINE_WIDTH = 3;
+
+static QPointF constrainToGrid(const QRectF& frameRectWithoutBorders, const QPointF& point)
+{
+    QPointF result = point;
+    if (!frameRectWithoutBorders.contains(result)) {
+        if (result.x() < frameRectWithoutBorders.left()) {
+            result.setX(frameRectWithoutBorders.left());
+        } else if (result.x() > frameRectWithoutBorders.right()) {
+            result.setX(frameRectWithoutBorders.right());
+        }
+
+        if (result.y() < frameRectWithoutBorders.top()) {
+            result.setY(frameRectWithoutBorders.top());
+        } else if (result.y() > frameRectWithoutBorders.bottom()) {
+            result.setY(frameRectWithoutBorders.bottom());
+        }
+    }
+
+    return result;
+}
+
 BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     : uicomponents::QuickPaintedView(parent)
 {
@@ -49,6 +72,10 @@ BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     });
 
     uiConfig()->fontChanged().onNotify(this, [this]() {
+        update();
+    });
+
+    connect(this, &BendGridCanvas::enabledChanged, [this](){
         update();
     });
 }
@@ -158,7 +185,10 @@ void BendGridCanvas::paint(QPainter* painter)
     QRectF frameRect = this->frameRect();
 
     drawBackground(painter, frameRect);
-    drawCurve(painter, frameRect);
+
+    if (isEnabled()) {
+        drawCurve(painter, frameRect);
+    }
 }
 
 void BendGridCanvas::mousePressEvent(QMouseEvent* event)
@@ -175,6 +205,8 @@ void BendGridCanvas::mousePressEvent(QMouseEvent* event)
 
     m_currentPointIndex = this->pointIndex(point);
     m_canvasWasChanged = false;
+
+    update();
 }
 
 void BendGridCanvas::mouseMoveEvent(QMouseEvent* event)
@@ -355,7 +387,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
     const qreal columnWidth = this->columnWidth(frameRect);
 
     const ThemeInfo& currentTheme = uiConfig()->currentTheme();
-    QColor primaryLinesColor(currentTheme.codeKey == DARK_THEME_CODE ? Qt::white : Qt::black);
+    QColor primaryLinesColor(isEnabled() ? (currentTheme.codeKey == DARK_THEME_CODE ? Qt::white : Qt::black) : Qt::gray);
     QColor secondaryLinesColor(Qt::gray);
 
     painter->setRenderHint(QPainter::Antialiasing, true);
@@ -364,7 +396,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
     painter->fillRect(QRect(0, 0, width(), height()), backgroundColor);
 
     QPen pen = painter->pen();
-    pen.setWidth(1);
+    pen.setWidth(GRID_LINE_WIDTH);
 
     // draw vertical lines
     for (int i = 1; i < m_columns - 1; ++i) {
@@ -392,7 +424,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
         // lighter middle lines
         pen.setColor(isPrimary ? primaryLinesColor : secondaryLinesColor);
         if (m_showNegativeRows) {
-            pen.setWidth(i == (m_rows - 1) / 2 ? 3 : 1);
+            pen.setWidth(i == (m_rows - 1) / 2 ? GRID_LINE_WIDTH + 2 : GRID_LINE_WIDTH);
         }
         painter->setPen(pen);
         painter->drawLine(frameRect.left(), ypos, frameRect.right(), ypos);
@@ -447,7 +479,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
     path.addRoundedRect(frameRect, 3, 3);
 
     pen.setColor(primaryLinesColor);
-    pen.setWidth(1);
+    pen.setWidth(GRID_LINE_WIDTH);
     pen.setStyle(Qt::PenStyle::SolidLine);
     painter->setPen(pen);
 
@@ -478,23 +510,26 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
 
     QPointF lastPoint(0, 0);
     QPen pen = painter->pen();
-    pen.setWidth(3);
+    pen.setWidth(CURVE_LINE_WIDTH);
 
     QColor color(currentTheme.values[ACCENT_COLOR].toString());
     pen.setColor(color);
     painter->setPen(pen);
 
+    QRectF frameRectWithoutBorders = frameRect - QMargins(GRID_LINE_WIDTH, GRID_LINE_WIDTH, GRID_LINE_WIDTH, GRID_LINE_WIDTH);
+
     // draw line between points
     for (const CurvePoint& v : m_points) {
-        QPointF currentPoint = getPosition(v);
+        QPointF currentPoint = constrainToGrid(frameRectWithoutBorders, getPosition(v));
 
         QPainterPath path;
         path.moveTo(lastPoint);
 
         // draw line only if there is a point before the current one
         if (lastPoint.x()) {
-            QPointF c(currentPoint.x(), lastPoint.y());
-            path.quadTo(c, currentPoint);
+            QPointF point = constrainToGrid(frameRectWithoutBorders, QPointF(currentPoint.x(), lastPoint.y()));
+
+            path.quadTo(point, currentPoint);
 
             if (v.endDashed) {
                 pen.setColor(backgroundColor);
@@ -516,7 +551,7 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
     QBrush activeBrush(color, Qt::SolidPattern);
 
     QColor hoverColor(color);
-    hoverColor.setAlpha(200);
+    hoverColor.setAlpha(150);
     QBrush hoverBrush(hoverColor, Qt::SolidPattern);
 
     painter->setPen(Qt::NoPen);
@@ -538,7 +573,7 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
 
             painter->setBrush(backgroundBrush);
             painter->drawEllipse(pos, GRIP_CENTER_RADIUS, GRIP_CENTER_RADIUS);
-        } else if (m_hoverPointIndex.has_value() && m_currentPointIndex.has_value()) { // focused
+        } else if (m_focusedPointIndex.has_value() && m_focusedPointIndex.value() == i) { // focused
             QColor fontPrimaryColor(currentTheme.values[FONT_PRIMARY_COLOR].toString());
             QBrush fontPrimaryBrush(fontPrimaryColor, Qt::SolidPattern);
             painter->setBrush(fontPrimaryBrush);
@@ -549,18 +584,21 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
 
             painter->setBrush(activeBrush);
             painter->drawEllipse(pos, GRIP_RADIUS, GRIP_RADIUS);
-        } else if (m_hoverPointIndex.has_value() && m_hoverPointIndex.value() == i) { // hover
-            painter->setBrush(activeBrush);
-            painter->drawEllipse(pos, GRIP_RADIUS, GRIP_RADIUS);
-
-            painter->setBrush(hoverBrush);
-            painter->drawEllipse(pos, GRIP_CENTER_RADIUS, GRIP_CENTER_RADIUS);
         } else if (m_currentPointIndex.has_value() && m_currentPointIndex.value() == i) { // selected
             painter->setBrush(backgroundBrush);
             painter->drawEllipse(pos, GRIP_SELECTED_RADIUS, GRIP_SELECTED_RADIUS);
 
             painter->setBrush(activeBrush);
             painter->drawEllipse(pos, GRIP_RADIUS, GRIP_RADIUS);
+        } else if (m_hoverPointIndex.has_value() && m_hoverPointIndex.value() == i) { // hover
+            painter->setBrush(activeBrush);
+            painter->drawEllipse(pos, GRIP_RADIUS, GRIP_RADIUS);
+
+            painter->setBrush(backgroundBrush);
+            painter->drawEllipse(pos, GRIP_CENTER_RADIUS, GRIP_CENTER_RADIUS);
+
+            painter->setBrush(hoverBrush);
+            painter->drawEllipse(pos, GRIP_CENTER_RADIUS, GRIP_CENTER_RADIUS);
         }
     }
 }
