@@ -178,7 +178,7 @@ public:
     const std::vector<Chord*>& graceNotes() const { return m_graceNotes; }
     std::vector<Chord*>& graceNotes() { return m_graceNotes; }
 
-    GraceNotesGroup& graceNotesBefore() const;
+    GraceNotesGroup& graceNotesBefore(bool filterUnplayble = false) const;
     GraceNotesGroup& graceNotesAfter() const;
 
     size_t graceIndex() const { return m_graceIndex; }

@@ -84,6 +84,16 @@ struct LedgerLineData {
     bool accidental;
 };
 
+static bool isGraceChordPlayble(const Chord* chord)
+{
+    const std::vector<Note*>& notes = chord->notes();
+    if (notes.empty()) {
+        return false;
+    }
+
+    return !notes.front()->isPreBendStart();
+}
+
 //---------------------------------------------------------
 //   upNote
 //---------------------------------------------------------
@@ -2405,7 +2415,7 @@ Measure* Chord::measure() const
 //   graceNotesBefore
 //---------------------------------------------------------
 
-GraceNotesGroup& Chord::graceNotesBefore() const
+GraceNotesGroup& Chord::graceNotesBefore(bool filterUnplayble) const
 {
     m_graceNotesBefore.clear();
     for (Chord* c : m_graceNotes) {
@@ -2416,6 +2426,10 @@ GraceNotesGroup& Chord::graceNotesBefore() const
                 | NoteType::GRACE4
                 | NoteType::GRACE16
                 | NoteType::GRACE32)) {
+            if (filterUnplayble && !isGraceChordPlayble(c)) {
+                continue;
+            }
+
             m_graceNotesBefore.push_back(c);
         }
     }
