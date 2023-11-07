@@ -701,6 +701,11 @@ static QString text2syms(const QString& t)
             maxStringSize = string.size();
         }
     }
+
+    // Special case Dolet inference (TODO: put behind a setting or export type flag)
+    map.insert("$", SymId::segno);
+    map.insert("Ø", SymId::coda);
+
     //LOGD("text2syms map count %d maxsz %d filling time elapsed: %d ms",
     //       map.size(), maxStringSize, time.elapsed());
 

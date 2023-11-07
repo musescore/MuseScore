@@ -351,6 +351,12 @@
           </root>
         <kind text="N.C.">none</kind>
         </harmony>
+			<direction placement='above'>
+				<direction-type>
+          <segno />
+				</direction-type>
+				<staff>1</staff>
+			</direction>
       <note default-x="15.50" default-y="-30.00">
         <pitch>
           <step>G</step>
@@ -617,6 +623,12 @@
         <type>eighth</type>
         <stem>down</stem>
         </note>
+        <direction placement='above'>
+          <direction-type>
+            <words font-weight='bold'>D.$. al Coda</words>
+          </direction-type>
+          <staff>1</staff>
+        </direction>
       </measure>
     <measure number="6" width="260.09">
       <note default-x="58.59" default-y="-20.00">
@@ -809,8 +821,19 @@
         <voice>1</voice>
         <type>eighth</type>
         </note>
+			<direction placement='above'>
+				<direction-type>
+					<words font-weight='bold'>To Coda Ø</words>
+				</direction-type>
+			</direction>
       </measure>
     <measure number="9" width="235.24">
+			<direction placement='above'>
+				<direction-type>
+					<words font-weight='bold'>Ø Coda</words>
+				</direction-type>
+				<staff>1</staff>
+			</direction>
       <note default-x="16.50" default-y="-30.00">
         <pitch>
           <step>G</step>
