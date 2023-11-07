@@ -54,6 +54,7 @@
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/text.h"
 #include "engraving/dom/textbase.h"
+#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
@@ -2626,6 +2627,25 @@ std::pair<libmei::data_STEMDIRECTION, double> Convert::stemToMEI(const engraving
     }
 
     return { meiStemDir, meiStemLen };
+}
+
+libmei::data_STEMMODIFIER Convert::stemModToMEI(const engraving::Tremolo* tremolo)
+{
+    switch (tremolo->tremoloType()) {
+    case engraving::TremoloType::R8:  return libmei::STEMMODIFIER_1slash;
+        break;
+    case engraving::TremoloType::R16: return libmei::STEMMODIFIER_2slash;
+        break;
+    case engraving::TremoloType::R32: return libmei::STEMMODIFIER_3slash;
+        break;
+    case engraving::TremoloType::R64: return libmei::STEMMODIFIER_4slash;
+        break;
+    case engraving::TremoloType::BUZZ_ROLL: return libmei::STEMMODIFIER_z;
+        break;
+    default:
+        return libmei::STEMMODIFIER_NONE;
+        break;
+    }
 }
 
 void Convert::sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, ElisionType elision, bool& warning)

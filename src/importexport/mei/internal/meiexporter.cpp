@@ -61,6 +61,7 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
 
@@ -1080,6 +1081,24 @@ bool MeiExporter::writeBeam(const Beam* beam, const ChordRest* chordRest, bool& 
 }
 
 /**
+ * Write a bTrem.
+ */
+
+bool MeiExporter::writeBTrem(const Tremolo* tremolo)
+{
+    IF_ASSERT_FAILED(tremolo) {
+        return false;
+    }
+
+    m_currentNode = m_currentNode.append_child();
+    libmei::BTrem meiBTrem;
+    std::string xmlId = this->getXmlIdFor(tremolo, 'b');
+    meiBTrem.Write(m_currentNode, xmlId);
+
+    return true;
+}
+
+/**
  * Write a clef.
  */
 
@@ -1123,6 +1142,11 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
     bool closingBeamInTuplet = false;
     this->writeBeamAndTuplet(chord, closingBeam, closingTuplet, closingBeamInTuplet);
 
+    bool isBTrem = (chord->tremolo() && (chord->tremoloChordType() == TremoloChordType::TremoloSingle));
+    if (isBTrem) {
+        this->writeBTrem(chord->tremolo());
+    }
+
     bool isChord = (chord->notes().size() > 1);
     if (isChord) {
         // We need to create a <chord> before writing the notes
@@ -1149,6 +1173,12 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
     if (isChord) {
         // This is the end of the <chord> - non critical assert
         assert(isCurrentNode(libmei::Chord()));
+        m_currentNode = m_currentNode.parent();
+    }
+
+    if (isBTrem) {
+        // This is the end of the <bTrem> - non critical assert
+        assert(isCurrentNode(libmei::BTrem()));
         m_currentNode = m_currentNode.parent();
     }
 
@@ -1940,6 +1970,10 @@ bool MeiExporter::writeStemAtt(const Chord* chord, libmei::AttStems& stemsAtt)
     auto [meiStemDir, meiStemLen] = Convert::stemToMEI(chord->stemDirection(), chord->noStem());
     stemsAtt.SetStemDir(meiStemDir);
     stemsAtt.SetStemLen(meiStemLen);
+
+    if (chord->tremolo() && (chord->tremoloChordType() == TremoloChordType::TremoloSingle)) {
+        stemsAtt.SetStemMod(Convert::stemModToMEI(chord->tremolo()));
+    }
 
     return true;
 }
