@@ -392,6 +392,9 @@ TEST_F(Musicxml_Tests, barStyles2) {
 TEST_F(Musicxml_Tests, barStyles3) {
     mxmlIoTest("testBarStyles3");
 }
+TEST_F(Musicxml_Tests, bracketTypes) {
+    mxmlImportTestRef("testBracketTypes");
+}
 TEST_F(Musicxml_Tests, DISABLED_beamEnd) {
     mxmlIoTest("testBeamEnd");
 }
