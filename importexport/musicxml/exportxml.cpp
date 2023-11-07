@@ -3064,8 +3064,11 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         _xml.tagE("natural");
                         _xml.etag();
                         }
-                  else // TODO: check additional modifier (attr) for other symbols
-                        _xml.tagE(mxmlTechn);
+                  else {
+                        if (placement != "")
+                              attr += QString(" placement=\"%1\"").arg(placement);
+                        _xml.tagE(mxmlTechn + attr);
+                        }
                   }
             }
 
