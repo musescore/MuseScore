@@ -648,6 +648,8 @@ bool NotationViewInputController::needSelect(const ClickContext& ctx) const
         return !selection->range()->containsPoint(ctx.logicClickPos);
     } else if (!ctx.hitElement->selected()) {
         return true;
+    } else if (ctx.hitElement->selected() && selection->isRange()) {
+        return true;
     }
 
     return false;
