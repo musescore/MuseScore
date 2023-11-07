@@ -43,18 +43,13 @@ async::Notification BrailleConfigurationStub::intervalDirectionChanged() const
     return {};
 }
 
-QString BrailleConfigurationStub::intervalDirection() const
+BrailleIntervalDirection BrailleConfigurationStub::intervalDirection() const
 {
     return {};
 }
 
-void BrailleConfigurationStub::setIntervalDirection(const QString)
+void BrailleConfigurationStub::setIntervalDirection(const BrailleIntervalDirection)
 {
-}
-
-QStringList BrailleConfigurationStub::intervalDirectionsList() const
-{
-    return {};
 }
 
 async::Notification BrailleConfigurationStub::brailleTableChanged() const

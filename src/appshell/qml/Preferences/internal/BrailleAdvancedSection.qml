@@ -32,10 +32,10 @@ BaseSection {
     property string brailleTable: ""
 
     property var directions: null
-    property string intervalDirection: ""
+    property int intervalDirection: -1
 
     signal brailleTableChangeRequested(string table)
-    signal intervalDirectionChangeRequested(string direction)
+    signal intervalDirectionChangeRequested(int direction)
 
     ComboBoxWithTitle {
         title: qsTrc("appshell/preferences", "Braille table for lyrics:")

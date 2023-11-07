@@ -904,24 +904,21 @@ bool Braille::write(QIODevice& device)
 
 bool Braille::convertMeasure(Measure* measure, BrailleEngravingItemList* beis)
 {
-    size_t nrStaves = m_score->staves().size();
-
-    std::vector<BrailleEngravingItemList> measureBraille(nrStaves);
-    std::vector<BrailleEngravingItemList> lyrics(nrStaves + 1);
+    int nrStaves = static_cast<int>(m_score->staves().size());
 
     if (measure->hasMMRest() && m_score->style().styleB(Sid::createMultiMeasureRests)) {
         measure = measure->mmRest();
     }
 
-    for (size_t i = 0; i < nrStaves; ++i) {
+    for (int i = 0; i < nrStaves; ++i) {
         BrailleEngravingItemList measureBraille;
         BrailleEngravingItemList measureLyrics;
 
-        brailleMeasureItems(&measureBraille, measure, static_cast<int>(i));
+        brailleMeasureItems(&measureBraille, measure, i);
         //measureBraille.log();
         beis->join(&measureBraille, true, false);
 
-        brailleMeasureLyrics(&measureLyrics, measure, static_cast<int>(i));
+        brailleMeasureLyrics(&measureLyrics, measure, i);
         if (!measureLyrics.isEmpty()) {
             beis->join(&measureLyrics, true, false);
         }
@@ -1165,8 +1162,9 @@ bool Braille::hasTies(ChordRest* chordRest)
 bool Braille::ascendingChords(ClefType clefType)
 {
     // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
-    // In Treble, Soprano, Alto clefs: Write the upper most note, then rest of notes as intervals downward
-    // In Tenor, Baritone, Bass clefs: Write the lower most note, then rest of notes as intervals upward
+    // In Treble, Soprano, Alto clefs: Write the highest note, then give remaining notes as intervals downward.
+    // In Tenor, Baritone, Bass clefs: Write the lowest note, then give remaining notes as intervals upward.
+    // All intervals are relative to the original (highest or lowest) note.
     switch (clefType) {
     case ClefType::G:              //Treble clef
     case ClefType::G15_MB:         //Treble clef 15ma bassa
@@ -1776,8 +1774,9 @@ QString Braille::brailleChord(Chord* chord)
     QString hairpinBrailleBefore = brailleHairpinBefore(chord, chordHairpins);
 
     // 9.2. Direction of Intervals (in Chords). Page 75. Music Braille Code 2015
-    // In Treble, Soprano, Alto clefs: Write the upper most note, then rest of notes as intervals downward
-    // In Tenor, Baritone, Bass clefs: Write the lower most note, then rest of notes as intervals upward
+    // In Treble, Soprano, Alto clefs: Write the highest note, then give remaining notes as intervals downward.
+    // In Tenor, Baritone, Bass clefs: Write the lowest note, then give remaining notes as intervals upward.
+    // All intervals are relative to the original (highest or lowest) note.
     std::vector<Note*> notes;
     if (ascendingChords(m_context.currentClefType[chord->staffIdx()])) {
         for (auto it = chord->notes().begin(); it != chord->notes().end(); ++it) {

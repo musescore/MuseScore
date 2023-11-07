@@ -38,9 +38,8 @@ public:
     void setBraillePanelEnabled(const bool enabled) override;
 
     async::Notification intervalDirectionChanged() const override;
-    QString intervalDirection() const override;
-    void setIntervalDirection(const QString) override;
-    QStringList intervalDirectionsList() const override;
+    braille::BrailleIntervalDirection intervalDirection() const override;
+    void setIntervalDirection(const braille::BrailleIntervalDirection) override;
 
     async::Notification brailleTableChanged() const override;
     QString brailleTable() const override;

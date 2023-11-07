@@ -35,7 +35,7 @@ public:
     std::string tag;
     std::string code;
     std::string braille;
-    int cells_num;
+    int num_cells;
 };
 
 //In the table below, things added by Haipeng are indicated as this:

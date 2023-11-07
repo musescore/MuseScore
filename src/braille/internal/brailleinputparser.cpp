@@ -79,8 +79,8 @@ static int maxPatternLength(BiePattern* pattern)
 {
     int max = 0;
     for (auto code : pattern->codes) {
-        if (code->cells_num > max) {
-            max = code->cells_num;
+        if (code->num_cells > max) {
+            max = code->num_cells;
         }
     }
     return max;
@@ -92,12 +92,11 @@ BieSequencePattern::BieSequencePattern(BieSequencePatternType t, std::string seq
     patterns.clear();
     max_cell_length = 0;
 
-    int len = sequence.length();
+    size_t len = sequence.length();
     QString key = QString();
     bool mandatory = false;
     char openning = ' ';
-    int i = 0;
-    while (i < len) {
+    for (size_t i = 0; i < len; ++i) {
         char c = sequence.at(i);
         //LOGD() << i << " c=" << c << " open=" << openning;
         switch (c) {
@@ -208,7 +207,6 @@ BieSequencePattern::BieSequencePattern(BieSequencePatternType t, std::string seq
             mandatory = false;
             key = QString();
         }
-        i++;
     }
     _valid = true;
 }
@@ -235,7 +233,7 @@ bool BieSequencePattern::recognize(std::string braille)
         //LOGD() << "cursor: " << cursor;
         bool match = false;
         for (auto code : patterns[pos].codes) {
-            int len = code->cells_num;
+            int len = code->num_cells;
             if (cursor + len <= braille.length()) {
                 std::string bxt = braille.substr(cursor, len);
                 if (bxt == code->braille) {

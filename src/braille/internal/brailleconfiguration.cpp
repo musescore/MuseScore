@@ -24,6 +24,7 @@
 
 #include "settings.h"
 
+using namespace mu::braille;
 using namespace mu::framework;
 
 namespace mu::engraving {
@@ -43,7 +44,7 @@ void BrailleConfiguration::init()
     settings()->valueChanged(BRAILLE_TABLE).onReceive(this, [this](const Val&) {
         m_brailleTableChanged.notify();
     });
-    settings()->setDefaultValue(BRAILLE_INTERVAL_DIRECTION, Val("Auto"));
+    settings()->setDefaultValue(BRAILLE_INTERVAL_DIRECTION, Val(BrailleIntervalDirection::Auto));
     settings()->valueChanged(BRAILLE_INTERVAL_DIRECTION).onReceive(this, [this](const Val&) {
         m_intervalDirectionChanged.notify();
     });
@@ -69,23 +70,14 @@ async::Notification BrailleConfiguration::intervalDirectionChanged() const
     return m_intervalDirectionChanged;
 }
 
-QString BrailleConfiguration::intervalDirection() const
+BrailleIntervalDirection BrailleConfiguration::intervalDirection() const
 {
-    return settings()->value(BRAILLE_INTERVAL_DIRECTION).toQString();
+    return settings()->value(BRAILLE_INTERVAL_DIRECTION).toEnum<BrailleIntervalDirection>();
 }
 
-void BrailleConfiguration::setIntervalDirection(const QString direction)
+void BrailleConfiguration::setIntervalDirection(const BrailleIntervalDirection direction)
 {
     settings()->setSharedValue(BRAILLE_INTERVAL_DIRECTION, Val(direction));
-}
-
-QStringList BrailleConfiguration::intervalDirectionsList() const
-{
-    return {
-        "Auto",
-        "Up",
-        "Down",
-    };
 }
 
 async::Notification BrailleConfiguration::brailleTableChanged() const

@@ -73,12 +73,12 @@ public:
     ValCh<int> currentItemPositionEnd() const override;
     ValCh<std::string> keys() const override;
     ValCh<bool> enabled() const override;
-    ValCh<QString> intervalDirection() const override;
+    ValCh<braille::BrailleIntervalDirection> intervalDirection() const override;
     ValCh<int> mode() const override;
     ValCh<std::string> cursorColor() const override;
 
     void setEnabled(const bool enabled) override;
-    void setIntervalDirection(const QString direction) override;
+    void setIntervalDirection(const braille::BrailleIntervalDirection direction) override;
 
     void setCursorPosition(const int pos) override;
     void setCurrentItemPosition(const int, const int) override;
@@ -112,9 +112,8 @@ private:
     void updateTableForLyricsFromPreferences();
     io::path_t tablesDefaultDirPath() const;
 
-    IntervalDirection getIntervalDirection();
+    IntervalDirection currentIntervalDirection();
 
-    Notation* m_notation;
     Measure* current_measure = nullptr;
     EngravingItem* current_engraving_item = nullptr;
     BrailleEngravingItem* current_bei = nullptr;
@@ -128,7 +127,7 @@ private:
     ValCh<std::string> m_keys;
     ValCh<bool> m_enabled;
     ValCh<int> m_mode;
-    ValCh<QString> m_intervalDirection;
+    ValCh<braille::BrailleIntervalDirection> m_intervalDirection;
     ValCh<std::string> m_cursorColor;
 
     async::Notification m_selectionChanged;

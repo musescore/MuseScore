@@ -69,7 +69,7 @@ void NotationBraille::init()
 
     setIntervalDirection(brailleConfiguration()->intervalDirection());
     brailleConfiguration()->intervalDirectionChanged().onNotify(this, [this]() {
-        QString direction = brailleConfiguration()->intervalDirection();
+        BrailleIntervalDirection direction = brailleConfiguration()->intervalDirection();
         setIntervalDirection(direction);
     });
 
@@ -97,7 +97,7 @@ void NotationBraille::init()
             });
 
             notation()->interaction()->noteInput()->noteAdded().onNotify(this, [this]() {
-                if (currentEngravingItem() != nullptr && currentEngravingItem()->isNote()) {
+                if (currentEngravingItem() && currentEngravingItem()->isNote()) {
                     LOGD() << "Note added: " << currentEngravingItem()->accessibleInfo();
                     Note* note = toNote(currentEngravingItem());
                     brailleInput()->setOctave(note->octave());
@@ -223,7 +223,7 @@ mu::ValCh<bool> NotationBraille::enabled() const
     return m_enabled;
 }
 
-mu::ValCh<QString> NotationBraille::intervalDirection() const
+mu::ValCh<BrailleIntervalDirection> NotationBraille::intervalDirection() const
 {
     return m_intervalDirection;
 }
@@ -246,9 +246,9 @@ void NotationBraille::setEnabled(bool enabled)
     m_enabled.set(enabled);
 }
 
-void NotationBraille::setIntervalDirection(const QString direction)
+void NotationBraille::setIntervalDirection(const BrailleIntervalDirection direction)
 {
-    if (direction == m_enabled.val) {
+    if (direction == m_intervalDirection.val) {
         return;
     }
     m_intervalDirection.set(direction);
@@ -490,7 +490,7 @@ void NotationBraille::setKeys(const QString& sequence)
         LOGD() << brailleInput()->buffer();
         std::string braille = translate2Braille(brailleInput()->buffer().toStdString());
         BieRecognize(braille, brailleInput()->tupletIndicator());
-        BieSequencePatternType type = brailleInput()->parseBraille(getIntervalDirection());
+        BieSequencePatternType type = brailleInput()->parseBraille(currentIntervalDirection());
         switch (type) {
         case BieSequencePatternType::Note: {
             LOGD() << "note";
@@ -880,30 +880,28 @@ void NotationBraille::setCurrentEngravingItem(EngravingItem* e, bool select)
     }
 }
 
-IntervalDirection NotationBraille::getIntervalDirection()
+IntervalDirection NotationBraille::currentIntervalDirection()
 {
-    if (m_intervalDirection.val == "Up") {
+    switch (m_intervalDirection.val) {
+    case BrailleIntervalDirection::Up:
         return IntervalDirection::Up;
-    } else if (m_intervalDirection.val == "Down") {
+    case BrailleIntervalDirection::Down:
         return IntervalDirection::Down;
-    } else if (m_intervalDirection.val == "Auto") {
-        if (currentEngravingItem() != NULL && currentEngravingItem()->isNote()) {
-            Note* note = toNote(currentEngravingItem());
-            Staff* staff = note->staff();
-            Fraction tick = note->tick();
-            if (staff) {
-                ClefType clef = staff->clef(tick);
+    case BrailleIntervalDirection::Auto:
+        break;
+    }
+    if (EngravingItem* element = currentEngravingItem()) {
+        if (element->isNote()) {
+            Note* note = toNote(element);
+            if (Staff* staff = note->staff()) {
+                ClefType clef = staff->clef(note->tick());
                 if (clef >= ClefType::G && clef <= ClefType::C3) {
                     return IntervalDirection::Down;
-                } else {
-                    return IntervalDirection::Up;
                 }
-            } else {
-                return IntervalDirection::Down;
+                return IntervalDirection::Up;
             }
         }
     }
-
     return IntervalDirection::Down;
 }
 

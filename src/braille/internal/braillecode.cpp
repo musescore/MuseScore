@@ -34,7 +34,7 @@ braille_code::braille_code(std::string t, std::string c)
     tag = t;
     code = c;
     braille = translate2Braille(code);
-    cells_num = braille.length();
+    num_cells = static_cast<int>(braille.length());
     master_braille_code_list.push_back(this);
 }
 
@@ -47,7 +47,7 @@ braille_code::~braille_code()
 
 void braille_code::print()
 {
-    LOGD() << " Braille code " << tag << " " << code << " " << braille << " " << cells_num;
+    LOGD() << " Braille code " << tag << " " << code << " " << braille << " " << num_cells;
 }
 
 braille_code Braille_CapIndicator = braille_code("CapIndicator", "6");
@@ -880,75 +880,87 @@ std::string getBraillePattern(std::string dots)
 {
     const char* dotc = dots.c_str();
     int d = atoi(dotc);
+
     switch (d) {
+    // No dots
     case 0: return " ";
+
+    // One dot
     case 1: return "⠁";
     case 2: return "⠂";
-    case 12: return "⠃";
     case 3: return "⠄";
-    case 13: return "⠅";
-    case 23: return "⠆";
-    case 123: return "⠇";
     case 4: return "⠈";
-    case 14: return "⠉";
-    case 24: return "⠊";
-    case 124: return "⠋";
-    case 34: return "⠌";
-    case 134: return "⠍";
-    case 234: return "⠎";
-    case 1234: return "⠏";
-
     case 5: return "⠐";
-    case 15: return "⠑";
-    case 25: return "⠒";
-    case 125: return "⠓";
-    case 35: return "⠔";
-    case 135: return "⠕";
-    case 235: return "⠖";
-    case 1235: return "⠗";
-    case 45: return "⠘";
-    case 145: return "⠙";
-    case 245: return "⠚";
-    case 1245: return "⠛";
-    case 345: return "⠜";
-    case 1345: return "⠝";
-    case 2345: return "⠞";
-    case 12345: return "⠟";
-
     case 6: return "⠠";
-    case 16: return "⠡";
-    case 26: return "⠢";
-    case 126: return "⠣";
-    case 36: return "⠤";
-    case 136: return "⠥";
-    case 236: return "⠦";
-    case 1236: return "⠧";
-    case 46: return "⠨";
-    case 146: return "⠩";
-    case 246: return "⠪";
-    case 1246: return "⠫";
-    case 346: return "⠬";
-    case 1346: return "⠭";
-    case 2346: return "⠮";
-    case 12346: return "⠯";
 
+    // Two dots
+    case 12: return "⠃";
+    case 13: return "⠅";
+    case 14: return "⠉";
+    case 15: return "⠑";
+    case 16: return "⠡";
+    case 23: return "⠆";
+    case 24: return "⠊";
+    case 25: return "⠒";
+    case 26: return "⠢";
+    case 34: return "⠌";
+    case 35: return "⠔";
+    case 36: return "⠤";
+    case 45: return "⠘";
+    case 46: return "⠨";
     case 56: return "⠰";
+
+    // Three dots
+    case 123: return "⠇";
+    case 124: return "⠋";
+    case 125: return "⠓";
+    case 126: return "⠣";
+    case 134: return "⠍";
+    case 135: return "⠕";
+    case 136: return "⠥";
+    case 145: return "⠙";
+    case 146: return "⠩";
     case 156: return "⠱";
+    case 234: return "⠎";
+    case 235: return "⠖";
+    case 236: return "⠦";
+    case 245: return "⠚";
+    case 246: return "⠪";
     case 256: return "⠲";
-    case 1256: return "⠳";
+    case 345: return "⠜";
+    case 346: return "⠬";
     case 356: return "⠴";
-    case 1356: return "⠵";
-    case 2356: return "⠶";
-    case 12356: return "⠷";
     case 456: return "⠸";
+
+    // Four dots
+    case 1234: return "⠏";
+    case 1235: return "⠗";
+    case 1236: return "⠧";
+    case 1245: return "⠛";
+    case 1246: return "⠫";
+    case 1256: return "⠳";
+    case 1345: return "⠝";
+    case 1346: return "⠭";
+    case 1356: return "⠵";
     case 1456: return "⠹";
+    case 2345: return "⠞";
+    case 2346: return "⠮";
+    case 2356: return "⠶";
     case 2456: return "⠺";
-    case 12456: return "⠻";
     case 3456: return "⠼";
+
+    // Five dots
+    case 12345: return "⠟";
+    case 12346: return "⠯";
+    case 12356: return "⠷";
+    case 12456: return "⠻";
     case 13456: return "⠽";
     case 23456: return "⠾";
+
+    // Six dots
     case 123456: return "⠿";
     }
+
     return " ";
 }
 

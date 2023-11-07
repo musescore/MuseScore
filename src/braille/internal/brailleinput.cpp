@@ -132,11 +132,12 @@ std::vector<DurationType> getRestDurations(const braille_code* code)
 int getInterval(const braille_code* code)
 {
     char c = code->tag.back();
-    if (c < '2' || c > '8') {
+
+    IF_ASSERT_FAILED(c >= '2' && c <= '8') {
         return -1;
-    } else {
-        return c - '0';
     }
+
+    return c - '0';
 }
 
 bool isNoteName(const braille_code* code)
@@ -244,56 +245,52 @@ int getOctave(const braille_code* code)
     return -1;
 }
 
+// Given a note (dest) that lacks an octave mark, compute its octave relative
+// to a previous note (source) for which the octave is already known.
 int getOctaveDiff(NoteName source, NoteName dest)
-// 0: same octave, -1: prev octave, 1: next octave
 {
-    if (dest > source) {
-        int diff = (int)dest - (int)source + 1;
-        return diff >= 6 ? -1 : 0;
-    } else if (dest < source) {
-        int diff = (int)source - (int)dest + 1;
-        return diff >= 6 ? +1 : 0;
-    } else {
-        return 0;
+    // Calculate interval between notes assuming they are in the same octave.
+    int interval = abs(static_cast<int>(dest) - static_cast<int>(source));
+    ++interval; // so unison == 1
+
+    if (interval >= 6) {
+        // Impossible because notes separated by a 6th or more require octave
+        // marks. Therefore, the dest note must be in a neighboring octave.
+        // actual_interval = 8 - interval;
+        return (source > dest) ? 1 : -1; // octave above or below
     }
+
+    return 0; // same octave
 }
 
-int getOctaveDiff(IntervalDirection direction, NoteName source, int interval)
+// Given a starting note (source), and an interval and direction, compute the
+// resulting note and its octave relative to the octave of the starting note.
+std::pair<NoteName, int> applyInterval(NoteName source, int interval, IntervalDirection direction)
 {
-    int diff;
+    IF_ASSERT_FAILED(interval >= 1) {
+        return std::make_pair(source, 0);
+    }
+
+    --interval; // so unison == 0
+
+    int pitch = static_cast<int>(source);
+    int octave_diff = 0;
+
     switch (direction) {
     case IntervalDirection::Up:
-        diff = (interval + (int)source - 1) / 7;
+        pitch += interval;
+        octave_diff = pitch / 7;
         break;
     case IntervalDirection::Down:
-        int src = (int)source + 1;
-        diff = 0;
-        while (src < interval) {
-            src += 7;
-            diff--;
+        pitch -= interval;
+        while (pitch < 0) {
+            pitch += 7;
+            --octave_diff;
         }
         break;
     }
-    LOGD() << "Direction DOWN " << fromNoteName(source) << " " << (int)source << " " << interval << " diff " << diff;
-    return diff;
-}
 
-NoteName getNoteNameForInterval(IntervalDirection direction, NoteName source, int interval)
-{
-    NoteName note;
-    switch (direction) {
-    case IntervalDirection::Up:
-        note = (NoteName)(((int)source + interval - 1) % 7);
-        break;
-    case IntervalDirection::Down:
-        int src = (int)source;
-        while (src < interval) {
-            src += 7;
-        }
-        note = (NoteName)((src - interval) % 7 + 1);
-        break;
-    }
-    return note;
+    return std::make_pair(static_cast<NoteName>(pitch % 7), octave_diff);
 }
 
 BrailleInputState::BrailleInputState()
@@ -369,7 +366,6 @@ BieSequencePatternType BrailleInputState::parseBraille(IntervalDirection directi
         braille_code* code = pattern->res("note");
 
         NoteName note_name = getNoteName(code);
-        int octave_diff = getOctaveDiff(chordBaseNoteName(), note_name);
 
         setNoteName(note_name);
         setNoteDurations(getNoteDurations(code));
@@ -378,6 +374,7 @@ BieSequencePatternType BrailleInputState::parseBraille(IntervalDirection directi
         if (code != NULL) {
             setAddedOctave(getOctave(code));
         } else {
+            int octave_diff = getOctaveDiff(chordBaseNoteName(), note_name);
             setAddedOctave(chordBaseNoteOctave() + octave_diff);
         }
 
@@ -411,16 +408,15 @@ BieSequencePatternType BrailleInputState::parseBraille(IntervalDirection directi
         braille_code* code = pattern->res("interval");
         int interval = getInterval(code);
         interval = addInterval(interval);
-        int octave_diff = getOctaveDiff(direction, chordBaseNoteName(), interval);
+        std::pair<NoteName, int> applied = applyInterval(chordBaseNoteName(), interval, direction);
 
-        NoteName note_name = getNoteNameForInterval(direction, chordBaseNoteName(), interval);
-        setNoteName(note_name, false);
+        setNoteName(applied.first, false);
 
         code = pattern->res("octave");
         if (code != NULL) {
             setAddedOctave(getOctave(code));
         } else {
-            setAddedOctave(chordBaseNoteOctave() + octave_diff);
+            setAddedOctave(chordBaseNoteOctave() + applied.second);
         }
 
         code = pattern->res("accidental");

@@ -27,6 +27,7 @@
 
 #include "braillecode.h"
 #include "brailleinputparser.h"
+#include "brailletypes.h"
 
 namespace mu::engraving {
 enum class NoteGroup
@@ -39,8 +40,8 @@ enum class NoteGroup
 
 enum class IntervalDirection
 {
-    Up,
-    Down
+    Up      = static_cast<char>(braille::BrailleIntervalDirection::Up),
+    Down    = static_cast<char>(braille::BrailleIntervalDirection::Down),
 };
 
 class BrailleInputState
@@ -163,8 +164,7 @@ QString fromNoteName(notation::NoteName);
 AccidentalType getAccidentalType(const braille_code* code);
 notation::SymbolId getArticulation(const braille_code* code);
 int getOctave(const braille_code* code);
-int getOctaveDiff(notation::NoteName source, notation::NoteName dest);
-int getOctaveDiff(IntervalDirection direction, notation::NoteName source, int interval);
-notation::NoteName getNoteNameForInterval(IntervalDirection direction, notation::NoteName source, int interval);
+int getOctaveDiff(notation::NoteName source, notation::NoteName note);
+std::pair<notation::NoteName, int> applyInterval(notation::NoteName source, int interval, IntervalDirection direction);
 }
 #endif // MU_BRAILLE_BRAILLEINPUT_H

@@ -37,27 +37,27 @@ class BraillePreferencesModel : public QObject
 
     Q_PROPERTY(bool braillePanelEnabled READ braillePanelEnabled WRITE setBraillePanelEnabled NOTIFY braillePanelEnabledChanged)
     Q_PROPERTY(QString brailleTable READ brailleTable WRITE setBrailleTable NOTIFY brailleTableChanged)
-    Q_PROPERTY(QString intervalDirection READ intervalDirection WRITE setIntervalDirection NOTIFY intervalDirectionChanged)
+    Q_PROPERTY(int intervalDirection READ intervalDirection WRITE setIntervalDirection NOTIFY intervalDirectionChanged)
 
 public:
     explicit BraillePreferencesModel(QObject* parent = nullptr);
 
     bool braillePanelEnabled() const;
     QString brailleTable() const;
-    QString intervalDirection() const;
+    int intervalDirection() const;
 
     Q_INVOKABLE QStringList brailleTables() const;
-    Q_INVOKABLE QStringList intervalDirections() const;
+    Q_INVOKABLE QVariantList intervalDirections() const;
 
 public slots:
     void setBraillePanelEnabled(bool value);
     void setBrailleTable(QString table);
-    void setIntervalDirection(QString direction);
+    void setIntervalDirection(int direction);
 
 signals:
     void braillePanelEnabledChanged(bool value);
     void brailleTableChanged(QString value);
-    void intervalDirectionChanged(QString value);
+    void intervalDirectionChanged(int value);
 };
 }
 
