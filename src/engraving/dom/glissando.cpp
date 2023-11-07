@@ -59,6 +59,8 @@ static const ElementStyle glissandoElementStyle {
     { Sid::glissandoFontStyle, Pid::FONT_STYLE },
     { Sid::glissandoLineWidth, Pid::LINE_WIDTH },
     { Sid::glissandoText,      Pid::GLISS_TEXT },
+    { Sid::glissandoStyle,     Pid::GLISS_STYLE },
+    { Sid::glissandoStyleHarp, Pid::GLISS_STYLE }
 };
 
 //=========================================================
@@ -138,14 +140,6 @@ const TranslatableString& Glissando::glissandoTypeName() const
     return TConv::userName(glissandoType());
 }
 
-bool Glissando::isHarpGliss() const
-{
-    if (!staff() || !part()) {
-        return false;
-    }
-    return staff()->part()->instrumentId(tick()) == "harp";
-}
-
 //---------------------------------------------------------
 //   createLineSegment
 //---------------------------------------------------------
@@ -156,6 +150,15 @@ LineSegment* Glissando::createLineSegment(System* parent)
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
+}
+
+Sid Glissando::getPropertyStyle(Pid id) const
+{
+    if (id == Pid::GLISS_STYLE) {
+        return isHarpGliss() ? Sid::glissandoStyleHarp : Sid::glissandoStyle;
+    }
+
+    return SLine::getPropertyStyle(id);
 }
 
 void Glissando::addLineAttachPoints()
@@ -523,8 +526,15 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         setShowText(v.toBool());
         break;
     case Pid::GLISS_STYLE:
-        setGlissandoStyle(v.value<GlissandoStyle>());
+    {
+        // Make sure harp glisses can only be diatonic and chromatic
+        GlissandoStyle glissStyle = v.value<GlissandoStyle>();
+        if (isHarpGliss() && (glissStyle != GlissandoStyle::DIATONIC && glissStyle != GlissandoStyle::CHROMATIC)) {
+            glissStyle = GlissandoStyle::DIATONIC;
+        }
+        setGlissandoStyle(glissStyle);
         break;
+    }
     case Pid::GLISS_SHIFT:
         setGlissandoShift(v.toBool());
         break;
@@ -568,7 +578,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:
-        return isHarpGliss() ? GlissandoStyle::DIATONIC : GlissandoStyle::CHROMATIC;
+        return style().styleV(getPropertyStyle(propertyId));
     case Pid::GLISS_SHIFT:
         return false;
     case Pid::GLISS_EASEIN:

@@ -1782,6 +1782,26 @@ EngravingItem* Note::drop(EditData& data)
                 gliss->setGlissandoType(GlissandoType::STRAIGHT);
                 gliss->setShowText(false);
             }
+            if (staff()) {
+                String instrId = staff()->part()->instrumentId(tick());
+                // Preserve whether this gliss has its default playback style
+                bool defaultStyle = false;
+                if (gliss->isStyled(Pid::GLISS_STYLE)) {
+                    defaultStyle = true;
+                }
+                gliss->setIsHarpGliss(instrId == "harp");
+                if (defaultStyle) {
+                    gliss->resetProperty(Pid::GLISS_STYLE);
+                }
+
+                // Make sure harp glisses can only be diatonic and chromatic
+                GlissandoStyle glissStyle = gliss->glissandoStyle();
+                if (gliss->isHarpGliss()
+                    && (glissStyle != GlissandoStyle::DIATONIC
+                        && glissStyle != GlissandoStyle::CHROMATIC)) {
+                    gliss->setGlissandoStyle(GlissandoStyle::DIATONIC);
+                }
+            }
             gliss->setParent(this);
             score()->undoAddElement(e);
         } else {

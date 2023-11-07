@@ -1184,6 +1184,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::glissandoFrameBgColor,         "glissandoFrameBgColor",        PropertyValue::fromValue(Color::transparent) },
     { Sid::glissandoLineWidth,            "glissandoLineWidth",           Spatium(0.15) },
     { Sid::glissandoText,                 "glissandoText",                String(u"gliss.") },
+    { Sid::glissandoStyle,                "glissandoStyle",               GlissandoStyle::CHROMATIC },
+    { Sid::glissandoStyleHarp,            "glissandoStyleHarp",           GlissandoStyle::DIATONIC },
 
     { Sid::bendFontFace,                  "bendFontFace",                 "Edwin" },
     { Sid::bendFontSize,                  "bendFontSize",                 8.0 },

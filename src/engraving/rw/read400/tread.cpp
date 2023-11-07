@@ -2639,6 +2639,17 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     }
 
     g->setShowText(false);
+    staff_idx_t staffIdx = track2staff(ctx.track());
+    Staff* staff = ctx.score()->staff(staffIdx);
+    if (staff) {
+        String instrId = staff->part()->instrumentId(g->tick());
+        g->setIsHarpGliss(instrId == "harp");
+        LOGI() << "Is harp gliss: " << g->isHarpGliss();
+        LOGI() << "instrumentId = " << instrId;
+    }
+    g->resetProperty(Pid::GLISS_STYLE);
+
+    g->setShowText(false);
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "text") {
