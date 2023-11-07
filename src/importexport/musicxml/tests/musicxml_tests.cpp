@@ -500,6 +500,9 @@ TEST_F(Musicxml_Tests, drumset2) {
 TEST_F(Musicxml_Tests, dsalCoda) {
     mxmlImportTestRef("testDSalCoda");
 }
+TEST_F(Musicxml_Tests, dsalCodaMisplaced) {
+    mxmlImportTestRef("testDSalCodaMisplaced");
+}
 TEST_F(Musicxml_Tests, durationLargeErrorMscx) {
     mxmlImportTestRef("testDurationLargeError");
 }
