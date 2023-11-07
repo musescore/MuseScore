@@ -2258,6 +2258,16 @@ void MusicXMLParserPass2::part()
             setStaffTypePercussion(msPart, drumset);
             }
 
+      bool showPart = false;
+            for (Staff* staff : *msPart->staves()) {
+            if (!staff->invisible(Fraction(0,1))) {
+                  showPart = true;
+                  break;
+            }
+      }
+
+      msPart->setShow(showPart);
+
       addError(checkAtEndElement(_e, "part"));
       }
 
@@ -2824,6 +2834,12 @@ void MusicXMLParserPass2::staffDetails(const QString& partId)
       int staffIdx = _score->staffIdx(part) + n;
 
       StringData* t = new StringData;
+      QString visible = _e.attributes().value("print-object").toString();
+      if (visible == "no" )
+            _score->staff(staffIdx)->setInvisible(Fraction(0,1), true);
+      else if (!visible.isEmpty() && visible != "yes")
+            _logger->logError(QString("print-object should be \"yes\" or \"no\""));
+
       int staffLines = 0;
       while (_e.readNextStartElement()) {
             if (_e.name() == "staff-lines") {

@@ -6509,11 +6509,13 @@ static void writeStaffDetails(XmlWriter& xml, const Part* part)
       //       currently exported as a two staff part ...
       for (int i = 0; i < staves; i++) {
             Staff* st = part->staff(i);
-            if (st->lines(Fraction(0,1)) != 5 || st->isTabStaff(Fraction(0,1))) {
+            if (st->lines(Fraction(0,1)) != 5 || st->isTabStaff(Fraction(0,1)) || !st->show()) {
+                  QString details = "staff-details";
                   if (staves > 1)
-                        xml.stag(QString("staff-details number=\"%1\"").arg(i+1));
-                  else
-                        xml.stag("staff-details");
+                        details += QString(" number=\"%1\"").arg(i+1);
+                  if (!st->show())
+                        details += " print-object=\"no\"";
+                  xml.stag(details);
                   xml.tag("staff-lines", st->lines(Fraction(0,1)));
                   if (st->isTabStaff(Fraction(0,1)) && instrument->stringData()) {
                         QList<instrString> l = instrument->stringData()->stringList();

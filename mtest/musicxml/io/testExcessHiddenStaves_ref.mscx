@@ -55,7 +55,9 @@
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
+          <invisible>1</invisible>
           </StaffType>
+        <invisible>1</invisible>
         <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1"/>
         <barLineSpan>2</barLineSpan>
