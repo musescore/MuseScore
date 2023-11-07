@@ -419,6 +419,7 @@ private:
     QString matchRepeat() const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
+    bool isLyricBracket() const;
 };
 
 //---------------------------------------------------------

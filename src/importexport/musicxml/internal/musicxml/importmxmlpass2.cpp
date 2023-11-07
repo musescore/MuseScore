@@ -2830,7 +2830,9 @@ void MusicXMLParserDirection::direction(const QString& partId,
     //       qPrintable(_wordsText), qPrintable(_rehearsalText), qPrintable(_metroText), _tpoSound);
 
     // create text if any text was found
-    if (isLikelyCredit(tick)) {
+    if (isLyricBracket())
+        return;
+    else if (isLikelyCredit(tick)) {
         Text* t = Factory::createText(_score->dummy(), TextStyleType::COMPOSER);
         t->setXmlText(_wordsText.trimmed());
         auto firstMeasure = _score->measures()->first();
@@ -3004,6 +3006,21 @@ bool MusicXMLParserDirection::isLikelyCredit(const Fraction& tick) const
            && _metroText == ""
            && _tpoSound < 0.1
            && _wordsText.contains(QRegularExpression("^\\s*((Words|Music|Lyrics).*)*by\\s+([A-Z][a-zA-Zö'’-]+\\s[A-Z][a-zA-Zös'’-]+.*)+"));
+}
+
+//---------------------------------------------------------
+//   isLyricBracket
+//    Dolet exports lyric brackets as staff text,
+//    which we ought not render.
+//---------------------------------------------------------
+
+bool MusicXMLParserDirection::isLyricBracket() const
+{
+    return _wordsText.contains(QRegularExpression("^}|{$"))
+           && _rehearsalText == ""
+           && _metroText == ""
+           && _dynamicsList.isEmpty()
+           && _tpoSound < 0.1;
 }
 
 //---------------------------------------------------------

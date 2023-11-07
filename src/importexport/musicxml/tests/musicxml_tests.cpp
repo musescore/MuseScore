@@ -671,6 +671,9 @@ TEST_F(Musicxml_Tests, lines3) {
 TEST_F(Musicxml_Tests, lines4) {
     mxmlMscxExportTestRef("testLines4");
 }
+TEST_F(Musicxml_Tests, lyricBracket) {
+    mxmlImportTestRef("testLyricBracket");
+}
 TEST_F(Musicxml_Tests, lyricColor) {
     mxmlIoTest("testLyricColor");
 }
