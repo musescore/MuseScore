@@ -494,6 +494,32 @@ bool Tuplet::cross() const
 }
 
 //---------------------------------------------------------
+//   vStaffIdx
+///  Staff index for layout based on the first ChordRest
+//---------------------------------------------------------
+
+staff_idx_t Tuplet::vStaffIdx() const
+{
+    if (elements().empty()) {
+        return mu::nidx;
+    }
+
+    const DurationElement* cr = elements().front();
+    if (!cr) {
+        return mu::nidx;
+    }
+
+    while (cr->isTuplet()) {
+        const Tuplet* t = toTuplet(cr);
+        if (t->elements().empty()) {
+            break;
+        }
+        cr = t->elements().front();
+    }
+    return cr->vStaffIdx();
+}
+
+//---------------------------------------------------------
 //   elementsDuration
 ///  Get the sum of the element fraction in the tuplet,
 ///  even if the tuplet is not complete yet

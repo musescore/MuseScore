@@ -124,6 +124,7 @@ public:
     Fraction elementsDuration();
     void sortElements();
     bool cross() const;
+    staff_idx_t vStaffIdx() const override;
 
     const mu::PointF& p1() const { return m_p1; }
     mu::PointF& p1() { return m_p1; }
