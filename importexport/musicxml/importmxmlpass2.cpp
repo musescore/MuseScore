@@ -2868,7 +2868,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId, Measure* measure)
                   _score->staff(staffIdx)->setInvisible(Fraction(0,1), true);
                   }
             }
-      else if (visible == "yes") {
+      else if (visible == "yes" || visible == "") {
             if (measure) {
                   _score->staff(staffIdx)->setInvisible(Fraction(0,1), false);
                   measure->setStaffVisible(staffIdx, true);
