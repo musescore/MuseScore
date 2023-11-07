@@ -947,6 +947,9 @@ TEST_F(Musicxml_Tests, textLines) {
 TEST_F(Musicxml_Tests, testTextOrder) {
     mxmlImportTestRef("testTextOrder");
 }
+TEST_F(Musicxml_Tests, textQuirkInference) {
+    mxmlImportTestRef("testTextQuirkInference");
+}
 TEST_F(Musicxml_Tests, tieTied) {
     mxmlIoTestRef("testTieTied");
 }
