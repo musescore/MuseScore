@@ -36,6 +36,7 @@
 #include "models/popups/harppedal/harppedalpopupmodel.h"
 #include "models/popups/capo/caposettingsmodel.h"
 #include "models/popups/text/textstylepopupmodel.h"
+#include "models/popups/stringtunings/stringtuningspopupmodel.h"
 
 #include "view/widgets/fretcanvas.h"
 #include "view/widgets/bendgridcanvas.h"
@@ -129,6 +130,7 @@ void InspectorModule::registerUiTypes()
     qmlRegisterType<HarpPedalPopupModel>("MuseScore.Inspector", 1, 0, "HarpPedalPopupModel");
     qmlRegisterType<CapoSettingsModel>("MuseScore.Inspector", 1, 0, "CapoSettingsModel");
     qmlRegisterType<TextStylePopupModel>("MuseScore.Inspector", 1, 0, "TextStylePopupModel");
+    qmlRegisterType<StringTuningsPopupModel>("MuseScore.Inspector", 1, 0, "StringTuningsPopupModel");
 
     modularity::ioc()->resolve<ui::IUiEngine>(moduleName())->addSourceImportPath(inspector_QML_IMPORT);
 }

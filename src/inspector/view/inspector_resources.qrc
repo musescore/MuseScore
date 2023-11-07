@@ -113,5 +113,6 @@
         <file>qml/MuseScore/Inspector/popups/text/TextStylePopup.qml</file>
         <file>qml/MuseScore/Inspector/popups/text/TextStyleSubPopup.qml</file>
         <file>qml/MuseScore/Inspector/popups/text/FrameSubPopup.qml</file>
+        <file>qml/MuseScore/Inspector/popups/stringtunings/StringTuningsPopup.qml</file>
     </qresource>
 </RCC>

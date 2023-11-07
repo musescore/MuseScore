@@ -216,6 +216,8 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/models/notation/stringtunings/stringtuningssettingsmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/popups/abstractelementpopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/popups/abstractelementpopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/stringtunings/stringtuningspopupmodel.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/models/popups/stringtunings/stringtuningspopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/popups/text/textstylepopupmodel.h
     ${CMAKE_CURRENT_LIST_DIR}/models/popups/text/textstylepopupmodel.cpp
     ${CMAKE_CURRENT_LIST_DIR}/models/popups/capo/caposettingsmodel.h

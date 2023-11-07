@@ -29,6 +29,7 @@ import MuseScore.Inspector 1.0
 import "popups/harppedal/"
 import "popups/capo/"
 import "popups/text/"
+import "popups/stringtunings/"
 
 Item {
     id: container
@@ -53,7 +54,7 @@ Item {
 
         function componentByType(type) {
             switch (type) {
-            case Notation.TYPE_STRING_TUNINGS: return stringTuningsComp
+            case AbstractElementPopupModel.TYPE_STRING_TUNINGS: return stringTuningsComp
             case AbstractElementPopupModel.TYPE_HARP_DIAGRAM: return harpPedalComp
             case AbstractElementPopupModel.TYPE_CAPO: return capoComp
             case AbstractElementPopupModel.TYPE_TEXT: return textStyleComp
@@ -142,8 +143,7 @@ Item {
         id: textStyleComp
         TextStylePopup {
             onClosed: {
-                prv.resetOpenedPopup()
-                loader.sourceComponent = null
+                prv.unloadPopup()
             }
         }
     }
