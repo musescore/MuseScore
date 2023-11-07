@@ -167,6 +167,7 @@ StaffConfig NotationParts::staffConfig(const ID& staffId) const
     config.mergeMatchingRests = staff->mergeMatchingRests();
     config.hideMode = staff->hideWhenEmpty();
     config.clefTypeList = staff->defaultClefType();
+    config.reflectTranspositionInLinkedTab = staff->reflectTranspositionInLinkedTab();
 
     config.staffType = *staffType;
 
