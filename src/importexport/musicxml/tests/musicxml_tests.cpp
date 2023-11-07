@@ -398,6 +398,9 @@ TEST_F(Musicxml_Tests, bracketTypes) {
 TEST_F(Musicxml_Tests, DISABLED_beamEnd) {
     mxmlIoTest("testBeamEnd");
 }
+TEST_F(Musicxml_Tests, beamModes) {
+    mxmlImportTestRef("testBeamModes");
+}
 TEST_F(Musicxml_Tests, beams1) {
     mxmlIoTest("testBeams1");
 }
