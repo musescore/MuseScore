@@ -452,6 +452,12 @@ TEST_F(Musicxml_Tests, clefs2) {
 TEST_F(Musicxml_Tests, completeMeasureRests) {
     mxmlIoTest("testCompleteMeasureRests");
 }
+TEST_F(Musicxml_Tests, cueGraceNotes1) {
+    mxmlImportTestRef("testCueGraceNotes");
+}
+TEST_F(Musicxml_Tests, cueGraceNotes2) {
+    mxmlIoTestRef("testCueGraceNotes");
+}
 TEST_F(Musicxml_Tests, cueNotes) {
     mxmlIoTest("testCueNotes");
 }
