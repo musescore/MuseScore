@@ -108,6 +108,7 @@ Rectangle {
         hoverEnabled: false
         propagateComposedEvents: true
         enabled: tabsPanel.visible
+        cursorShape: Qt.SizeAllCursor
     }
 
     Rectangle {
