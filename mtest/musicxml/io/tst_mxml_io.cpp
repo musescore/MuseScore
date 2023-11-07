@@ -147,7 +147,6 @@ private slots:
       void hello() { mxmlIoTest("testHello"); }
       void helloReadCompr() { mxmlReadTestCompr("testHello"); }
       void helloReadWriteCompr() { mxmlReadWriteTestCompr("testHello"); }
-      void hiddenStaves() { mxmlIoTest("testHiddenStaves"); }
       void implicitMeasure1() { mxmlIoTest("testImplicitMeasure1"); }
       void incompleteTuplet() { mxmlIoTestRef("testIncompleteTuplet"); }
       void incorrectStaffNumber1() { mxmlIoTestRef("testIncorrectStaffNumber1"); }
@@ -297,6 +296,12 @@ private slots:
       void wedge3() { mxmlIoTest("testWedge3"); }
       void words1() { mxmlIoTest("testWords1"); }
       // void words2() { mxmlIoTest("testWords2"); }
+      void hiddenStaves()
+            {
+            MasterScore* score = readScore(DIR + "testHiddenStaves.xml");
+
+            QVERIFY(score->style().value(Sid::hideEmptyStaves).toBool());
+            }
       };
 
 //---------------------------------------------------------

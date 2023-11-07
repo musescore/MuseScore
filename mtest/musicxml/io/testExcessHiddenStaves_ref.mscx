@@ -16,6 +16,8 @@
       <chordSymbolAFontSize>10</chordSymbolAFontSize>
       <chordSymbolBFontSize>10</chordSymbolBFontSize>
       <nashvilleNumberFontSize>10</nashvilleNumberFontSize>
+      <hideEmptyStaves>1</hideEmptyStaves>
+      <dontHidStavesInFirstSystm>0</dontHidStavesInFirstSystm>
       <tupletFontSize>10</tupletFontSize>
       <fingeringFontSize>10</fingeringFontSize>
       <lhGuitarFingeringFontSize>10</lhGuitarFingeringFontSize>
@@ -55,9 +57,7 @@
       <Staff id="1">
         <StaffType group="pitched">
           <name>stdNormal</name>
-          <invisible>1</invisible>
           </StaffType>
-        <invisible>1</invisible>
         <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1"/>
         <barLineSpan>2</barLineSpan>
