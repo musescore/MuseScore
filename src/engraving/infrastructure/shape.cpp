@@ -356,16 +356,16 @@ double Shape::bottomDistance(const PointF& p) const
     return dist;
 }
 
-void Shape::setBBox(const mu::RectF& r)
+void Shape::setBBox(const mu::RectF& r, const EngravingItem* p)
 {
     IF_ASSERT_FAILED(type() == Type::Fixed) {
         return;
     }
 
     if (m_elements.empty()) {
-        m_elements.push_back(r);
+        m_elements.push_back(ShapeElement(r, p));
     } else {
-        m_elements[0] = r;
+        m_elements[0] = ShapeElement(r, p);
     }
 }
 

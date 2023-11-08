@@ -2388,7 +2388,7 @@ void EngravingItem::LayoutData::setBbox(const mu::RectF& r)
     DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
     DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
 
-    if (m_item->type() == ElementType::SLUR_SEGMENT) {
+    if (m_item->type() == ElementType::SLUR_SEGMENT || m_item->type() == ElementType::TIE_SEGMENT) {
         return;
     }
 
@@ -2439,7 +2439,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::RASGUEADO_SEGMENT:
         case ElementType::WHAMMY_BAR_SEGMENT:
         case ElementType::SLUR_SEGMENT:
-            // case ElementType::TIE_SEGMENT:
+        case ElementType::TIE_SEGMENT:
             return sh;
         case ElementType::CHORD:
         case ElementType::REST:
@@ -2489,13 +2489,38 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
             TLayout::fillTupletShape(toTuplet(m_item), static_cast<Tuplet::LayoutData*>(const_cast<LayoutData*>(this)));
             return m_shape.value(LD_ACCESS::CHECK);
         } break;
+        case ElementType::ACCIDENTAL: {
+            return Shape(sh.bbox(), m_item);
+        } break;
         default:
             break;
         }
     }
 
-    Shape old = m_item->_internal_shape();
-    return old;
+    //return sh;
+
+//    if (m_item->type() == ElementType::ACCIDENTAL) {
+//        Shape old = m_item->_internal_shape();
+//        return old;
+//    }
+
+    return sh;
+
+//    LOGDA() << "------------------------------------------------------------------";
+//    LOGDA() << "[old] type: " << int(old.type()) << ", count: " << old.elements().size() << ", bbox: " << old.bbox();
+//    LOGDA() << "[new] type: " << int(sh.type()) << ", count: " << sh.elements().size() << ", bbox: " << sh.bbox();
+
+//    if (!sh.equal(old)) {
+//        int k = -1;
+//    }
+
+//    RectF oldBbox = old.bbox();
+//    RectF newBbox = sh.bbox();
+//    if (oldBbox != newBbox) {
+//        int k = -1;
+//    }
+
+//    return old;
 }
 
 double EngravingItem::mag() const
