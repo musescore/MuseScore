@@ -112,7 +112,6 @@ public:
     void setSlurOffset(Grip i, const PointF& val) { m_ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return m_ups[int(i)]; }
     UP& ups(Grip i) { return m_ups[int(i)]; }
-    Shape doCreateShape() const override { return m_shape; }
 
     const mu::draw::PainterPath& path() const { return m_path; }
 
@@ -136,7 +135,6 @@ protected:
 
     mu::draw::PainterPath m_path;
     mu::draw::PainterPath m_shapePath;
-    Shape m_shape;
 };
 
 //-------------------------------------------------------------------

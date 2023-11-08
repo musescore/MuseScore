@@ -615,9 +615,6 @@ public:
     double width(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).width(); }
     void setWidth(double v) { mutldata()->setWidth(v); }
 
-    //! NOTE Temporary method, don't use it
-    Shape _internal_shape() const { return doCreateShape(); }
-
     virtual const PointF pos() const { return ldata()->pos() + m_offset; }
     virtual double x() const { return ldata()->pos().x() + m_offset.x(); }
     virtual double y() const { return ldata()->pos().y() + m_offset.y(); }
@@ -639,8 +636,6 @@ protected:
 #endif
 
     virtual LayoutData* createLayoutData() const;
-
-    virtual Shape doCreateShape() const { return Shape(ldata()->bbox(), this); }
 
     mutable int m_z = 0;
     mu::draw::Color m_color;                // element color attribute
