@@ -47,8 +47,8 @@ class ChangeEvent
 {
 public:
     ChangeEvent() {}
-    ChangeEvent(int vel)
-        : m_value(vel), m_type(ChangeEventType::FIX) {}
+    ChangeEvent(int val)
+        : m_value(val), m_type(ChangeEventType::FIX) {}
     ChangeEvent(Fraction s, Fraction e, int diff, ChangeMethod m, ChangeDirection d)
         : m_value(diff), m_type(ChangeEventType::RAMP), m_length(e - s), m_method(m), m_direction(d) {}
 
@@ -77,7 +77,6 @@ typedef std::vector<std::pair<Fraction, Fraction> > EndPointsVector;
 class ChangeMap : public std::multimap<Fraction, ChangeEvent>
 {
     OBJECT_ALLOCATOR(engraving, ChangeMap)
-
 public:
     ChangeMap() {}
     int val(Fraction tick);
@@ -92,19 +91,26 @@ public:
 private:
 
     struct ChangeMethodItem {
-        ChangeMethod method = ChangeMethod::NORMAL;
-        const char* name = nullptr;
+        ChangeMethod method;
+        const char* name;
     };
 
     static bool compareRampEvents(ChangeEvent& a, ChangeEvent& b) { return a.m_length > b.m_length; }
 
-    void cleanupStage0();
-    void cleanupStage1();
-    void cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& endPoints);
-    void cleanupStage3();
+    void sortRamps();
+    void resolveRampsCollisions();
+    void resolveFixInsideRampCollisions();
+    void adjustCollidingRampsLength(std::vector<bool>& startsInRamp, EndPointsVector& endPoints);
+    bool fixExistsOnTick(Fraction tick) const;
+    ChangeEvent fixEventForTick(Fraction tick) const;
+    void addMissingFixesAfterRamps();
+    void fillRampsCache();
 
     bool m_cleanedUp = false;
-    static const int DEFAULT_VALUE = 80;
+    static constexpr int DEFAULT_VALUE = 80;
+    static constexpr int MIN_VALUE = 1;
+    static constexpr int MAX_VALUE = 127;
+    static constexpr int STEP = 16;
 };
 } // namespace mu::engraving
 #endif

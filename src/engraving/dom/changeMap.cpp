@@ -197,11 +197,11 @@ void ChangeMap::addRamp(Fraction stick, Fraction etick, int change, ChangeMethod
 }
 
 //---------------------------------------------------------
-//   cleanupStage0
+//   sortRamps
 ///   put the ramps in size order if they start at the same point
 //---------------------------------------------------------
 
-void ChangeMap::cleanupStage0()
+void ChangeMap::sortRamps()
 {
     for (auto& tick : mu::uniqueKeys(*this)) {
         // rampEvents will contain all the ramps at this tick
@@ -228,15 +228,13 @@ void ChangeMap::cleanupStage0()
 }
 
 //---------------------------------------------------------
-//   cleanupStage1
-///   remove any ramps or fixes that are completely enclosed within other ramps
+//   resolveRampsCollisions
+///   remove any ramps that are completely enclosed within other ramps
 //---------------------------------------------------------
 
-void ChangeMap::cleanupStage1()
+void ChangeMap::resolveRampsCollisions()
 {
-    Fraction currentRampStart = Fraction(-1, 1);      // start point of ramp we're in
     Fraction currentRampEnd = Fraction(-1, 1);        // end point of ramp we're in
-    Fraction lastFix = Fraction(-1, 1);               // the position of the last fix event
     bool inRamp = false;                              // whether we're in a ramp or not
 
     // Keep a record of the endpoints
@@ -262,42 +260,30 @@ void ChangeMap::cleanupStage1()
                     // don't add to the end points
                     continue;
                 } else {
-                    currentRampStart = tick;
                     currentRampEnd = etick;
                     startsInRamp.push_back(true);
                 }
             } else {
-                currentRampStart = tick;
                 currentRampEnd = etick;
                 inRamp = true;
                 startsInRamp.push_back(false);
             }
 
             endPoints.push_back(std::make_pair(tick, etick));
-        } else if (event.m_type == ChangeEventType::FIX) {
-            if (inRamp) {
-                if (tick != currentRampStart && tick != currentRampEnd && lastFix != tick) {
-                    // delete, this event is enveloped or at the same point as another fix
-                    i = erase(i);
-                    continue;
-                }
-            }
-
-            lastFix = tick;
         }
 
         i++;
     }
 
-    cleanupStage2(startsInRamp, endPoints);
+    adjustCollidingRampsLength(startsInRamp, endPoints);
 }
 
 //---------------------------------------------------------
-//   cleanupStage2
+//   adjustCollidingRampsLength
 ///   readjust lengths of any colliding ramps
 //---------------------------------------------------------
 
-void ChangeMap::cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& endPoints)
+void ChangeMap::adjustCollidingRampsLength(std::vector<bool>& startsInRamp, EndPointsVector& endPoints)
 {
     // moveTo stores the events that need to be moved to a Fraction position
     std::map<Fraction, ChangeEvent> moveTo;
@@ -331,11 +317,111 @@ void ChangeMap::cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& 
 }
 
 //---------------------------------------------------------
-//   cleanupStage3
+//   resolveFixInsideRampCollisions
+///   if fix is inside the ramp, shorten ramp length up to this fix
+//---------------------------------------------------------
+
+void ChangeMap::resolveFixInsideRampCollisions()
+{
+    auto lastEventIt = end();
+    auto i = begin();
+    while (i != end()) {
+        ChangeEvent& event = i->second;
+        if (event.m_type == ChangeEventType::FIX && lastEventIt != end() && lastEventIt->second.m_type == ChangeEventType::RAMP) {
+            Fraction fixTick = i->first;
+            Fraction lastRampStart = lastEventIt->first;
+            Fraction lastRampEnd = lastRampStart + lastEventIt->second.m_length;
+            if (lastRampEnd > fixTick) {
+                lastEventIt->second.m_length = fixTick - lastRampStart;
+            }
+        }
+
+        lastEventIt = i;
+        i++;
+    }
+}
+
+bool ChangeMap::fixExistsOnTick(Fraction tick) const
+{
+    auto values = equal_range(tick);
+    for (auto it = values.first; it != values.second; ++it) {
+        auto& event = it->second;
+        if (event.m_type == ChangeEventType::FIX) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+ChangeEvent ChangeMap::fixEventForTick(Fraction tick) const
+{
+    auto equalValues = equal_range(tick);
+    for (auto it = equalValues.first; it != equalValues.second; ++it) {
+        auto& event = it->second;
+        if (event.m_type == ChangeEventType::FIX) {
+            return event;
+        }
+    }
+
+    if (equalValues.first == begin()) {
+        return ChangeEvent();
+    }
+
+    auto previousIt = std::prev(equalValues.first);
+    auto smallerValues = equal_range(previousIt->first);
+    for (auto it = smallerValues.first; it != smallerValues.second; ++it) {
+        auto& event = it->second;
+        if (event.m_type == ChangeEventType::FIX) {
+            return event;
+        }
+    }
+
+    return ChangeEvent();
+}
+
+void ChangeMap::addMissingFixesAfterRamps()
+{
+    auto nextDynamicVal = [](int previousFixValue, ChangeDirection rampDirection) {
+        int newVal
+            = (rampDirection
+               == ChangeDirection::INCREASING ? previousFixValue + ChangeMap::STEP : previousFixValue - ChangeMap::STEP);
+        return std::clamp(newVal, ChangeMap::MIN_VALUE, ChangeMap::MAX_VALUE);
+    };
+
+    for (auto it = begin(); it != end(); it++) {
+        auto& event = it->second;
+        if (event.m_type == ChangeEventType::RAMP && event.m_value == 0) {
+            Fraction startRampTick = it->first;
+            Fraction endRampTick = it->first + it->second.m_length;
+            ChangeEvent fixOnCurrentTick = fixEventForTick(startRampTick);
+
+            if (!fixExistsOnTick(endRampTick)) {
+                if (fixOnCurrentTick.m_type != ChangeEventType::INVALID) {
+                    int newVal = nextDynamicVal(fixOnCurrentTick.m_value, event.m_direction);
+                    insert({ endRampTick, ChangeEvent(newVal) });
+                }
+            } else {
+                ChangeEvent fixOnEndTick = fixEventForTick(endRampTick);
+                int velocityJump = fixOnEndTick.m_value - fixOnCurrentTick.m_value;
+
+                if ((event.m_direction
+                     == ChangeDirection::INCREASING && velocityJump < 0)
+                    || (event.m_direction == ChangeDirection::DECREASING && velocityJump > 0)) {
+                    int newVal = nextDynamicVal(fixOnCurrentTick.m_value, event.m_direction);
+                    event.m_value = newVal - fixOnCurrentTick.m_value;
+                }
+            }
+        }
+    }
+}
+
+//---------------------------------------------------------
+//   fillRampsCache
 ///   cache start and end values for each ramp
 //---------------------------------------------------------
 
-void ChangeMap::cleanupStage3()
+void ChangeMap::fillRampsCache()
 {
     for (auto i = begin(); i != end(); i++) {
         Fraction tick = i->first;
@@ -444,16 +530,12 @@ void ChangeMap::cleanup()
         return;
     }
 
-    // LOGD() << "Before cleanup:";
-    // dump();
-
-    cleanupStage0();
-    cleanupStage1();
-    cleanupStage3();
+    sortRamps();
+    resolveRampsCollisions();
+    resolveFixInsideRampCollisions();
+    addMissingFixesAfterRamps();
+    fillRampsCache();
     m_cleanedUp = true;
-
-    // LOGD() << "After cleanup:";
-    // dump();
 }
 
 //---------------------------------------------------------
