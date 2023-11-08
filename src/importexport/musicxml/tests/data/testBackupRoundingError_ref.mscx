@@ -711,7 +711,7 @@
               </HairPin>
             <next>
               <location>
-                <fractions>11/24</fractions>
+                <fractions>1/6</fractions>
                 </location>
               </next>
             </Spanner>
@@ -750,6 +750,13 @@
               <tpc>14</tpc>
               </Note>
             </Chord>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <fractions>-1/6</fractions>
+                </location>
+              </prev>
+            </Spanner>
           <Chord>
             <BeamMode>mid</BeamMode>
             <small>1</small>
@@ -787,19 +794,6 @@
               <tpc>20</tpc>
               </Note>
             </Chord>
-          <location>
-            <fractions>-1/4</fractions>
-            </location>
-          <Spanner type="HairPin">
-            <prev>
-              <location>
-                <fractions>-11/24</fractions>
-                </location>
-              </prev>
-            </Spanner>
-          <location>
-            <fractions>1/4</fractions>
-            </location>
           <Chord>
             <BeamMode>no</BeamMode>
             <small>1</small>
@@ -1066,7 +1060,7 @@
               </HairPin>
             <next>
               <location>
-                <fractions>1/1</fractions>
+                <fractions>1/2</fractions>
                 </location>
               </next>
             </Spanner>
@@ -1089,13 +1083,19 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>-1/2</fractions>
+            </location>
           <Spanner type="HairPin">
             <prev>
               <location>
-                <fractions>-1/1</fractions>
+                <fractions>-1/2</fractions>
                 </location>
               </prev>
             </Spanner>
+          <location>
+            <fractions>1/2</fractions>
+            </location>
           <Tuplet>
             <normalNotes>2</normalNotes>
             <actualNotes>3</actualNotes>
@@ -1755,19 +1755,19 @@
               <tpc>20</tpc>
               </Note>
             </Chord>
+          <location>
+            <fractions>-1/8</fractions>
+            </location>
+          <Spanner type="Pedal">
+            </Spanner>
+          <location>
+            <fractions>1/8</fractions>
+            </location>
           <Fermata>
             <subtype>fermataBelow</subtype>
             <placement>below</placement>
             </Fermata>
           <Spanner type="Pedal">
-            <Pedal>
-              <endHookType>1</endHookType>
-              </Pedal>
-            <next>
-              <location>
-                <fractions>1/4</fractions>
-                </location>
-              </next>
             </Spanner>
           <Chord>
             <durationType>quarter</durationType>
@@ -1797,13 +1797,6 @@
           <Fermata>
             <subtype>fermataAbove</subtype>
             </Fermata>
-          <Spanner type="Pedal">
-            <prev>
-              <location>
-                <fractions>-1/4</fractions>
-                </location>
-              </prev>
-            </Spanner>
           <Rest>
             <durationType>eighth</durationType>
             </Rest>

@@ -2952,11 +2952,11 @@ void MusicXMLParserDirection::direction(const QString& partId,
             delete desc._sp;
         } else {
             if (spdesc._isStarted) {
-                handleSpannerStop(spdesc._sp, track, tick, spanners);
+                handleSpannerStop(spdesc._sp, track, tick + _offset, spanners);
                 _pass2.clearSpanner(desc);
             } else {
                 spdesc._sp = desc._sp;
-                spdesc._tick2 = tick;
+                spdesc._tick2 = tick + _offset;
                 spdesc._track2 = track;
                 spdesc._isStopped = true;
             }
@@ -2975,12 +2975,12 @@ void MusicXMLParserDirection::direction(const QString& partId,
                 _pass2.addSpanner(desc);
                 // handleSpannerStart and handleSpannerStop must be called in order
                 // due to allocation of elements in the map
-                handleSpannerStart(desc._sp, track, placement, tick, spanners);
+                handleSpannerStart(desc._sp, track, placement, tick + _offset, spanners);
                 handleSpannerStop(spdesc._sp, spdesc._track2, spdesc._tick2, spanners);
                 _pass2.clearSpanner(desc);
             } else {
                 _pass2.addSpanner(desc);
-                handleSpannerStart(desc._sp, track, placement, tick, spanners);
+                handleSpannerStart(desc._sp, track, placement, tick + _offset, spanners);
                 spdesc._isStarted = true;
             }
         }

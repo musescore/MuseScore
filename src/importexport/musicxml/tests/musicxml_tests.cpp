@@ -1034,6 +1034,9 @@ TEST_F(Musicxml_Tests, voltaHiding1) {
 TEST_F(Musicxml_Tests, voltaHiding2) {
     mxmlIoTestRef("testVoltaHiding");
 }
+TEST_F(Musicxml_Tests, wedgeOffset) {
+    mxmlImportTestRef("testWedgeOffset");
+}
 TEST_F(Musicxml_Tests, wedge1) {
     mxmlIoTest("testWedge1");
 }
