@@ -1822,14 +1822,14 @@ void MusicXMLParserPass2::part()
     auto mxmlPart = _pass1.getMusicXmlPart(id);
     part->setPartName(mxmlPart.getName());
     if (mxmlPart.getPrintName() && !isLikelyIncorrectPartName(mxmlPart.getName())) {
-        part->setLongName(mxmlPart.getName());
+        part->setLongNameAll(mxmlPart.getName());
     } else {
-        _pass1.getPart(id)->setLongName(u"");
+        _pass1.getPart(id)->setLongNameAll("");
     }
     if (mxmlPart.getPrintAbbr()) {
-        part->setPlainShortName(mxmlPart.getAbbr());
+        part->setPlainShortNameAll(mxmlPart.getAbbr());
     } else {
-        _pass1.getPart(id)->setPlainShortName(u"");
+        _pass1.getPart(id)->setPlainShortNameAll("");
     }
     // try to prevent an empty track name
     if (part->partName() == "") {

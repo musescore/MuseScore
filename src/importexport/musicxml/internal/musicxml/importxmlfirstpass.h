@@ -85,12 +85,12 @@ public:
     void calcOctaveShifts();
     void setName(QString nm) { name = nm; }
     QString getName() const { return name; }
-    void setPrintName(bool b) { printName = b; }
-    bool getPrintName() const { return printName; }
+    void setPrintName(const bool b) { _printName = b; }
+    bool getPrintName() const { return _printName; }
     void setAbbr(QString ab) { abbr = ab; }
     QString getAbbr() const { return abbr; }
-    void setPrintAbbr(bool b) { printAbbr = b; }
-    bool getPrintAbbr() const { return printAbbr; }
+    void setPrintAbbr(const bool b) { _printAbbr = b; }
+    bool getPrintAbbr() const { return _printAbbr; }
     QMap<int, int> staffNumberToIndex() const { return _staffNumberToIndex; }
     int staffNumberToIndex(const int staffNumber) const;
     void insertStaffNumberToIndex(const int staffNumber, const int staffIndex) { _staffNumberToIndex.insert(staffNumber, staffIndex); }
@@ -103,9 +103,9 @@ public:
 private:
     QString id;
     QString name;
-    bool printName = true;
+    bool _printName = true;
     QString abbr;
-    bool printAbbr = true;
+    bool _printAbbr = false;
     QStringList measureNumbers;               // MusicXML measure number attribute
     QList<Fraction> measureDurations;         // duration in fraction for every measure
     std::vector<MusicXmlOctaveShiftList> octaveShifts;   // octave shift list for every staff

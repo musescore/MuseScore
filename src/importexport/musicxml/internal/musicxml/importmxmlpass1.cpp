@@ -2001,7 +2001,7 @@ void MusicXMLParserPass1::scorePart()
             // It is displayed by default, but can be suppressed (print-object=”no”)
             // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
             // and the formatted version in the part-name-display element
-            _parts[id].setPrintName(!(_e.attributes().value("print-object") == "no"));
+            _parts[id].setPrintName(_e.attributes().value("print-object") != "no");
             QString name = _e.readElementText();
             _parts[id].setName(name);
         } else if (_e.name() == "part-name-display") {
@@ -2012,7 +2012,7 @@ void MusicXMLParserPass1::scorePart()
             // It is displayed by default, but can be suppressed (print-object=”no”)
             // As of MusicXML 3.0, formatting is deprecated, with part-name in plain text
             // and the formatted version in the part-abbreviation-display element
-            _parts[id].setPrintAbbr(!(_e.attributes().value("print-object") == "no"));
+            _parts[id].setPrintAbbr(_e.attributes().value("print-object") != "no");
             QString name = _e.readElementText();
             _parts[id].setAbbr(name);
         } else if (_e.name() == "part-abbreviation-display") {
