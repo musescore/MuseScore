@@ -1026,6 +1026,27 @@ static bool allStaffGroupsIdentical(Part const* const p)
 }
 
 //---------------------------------------------------------
+//   isRedundantBracket
+//---------------------------------------------------------
+
+/**
+ Return true if there is already an existing bracket
+ with the same type and span.
+ This prevents double brackets, which are sometimes exported
+ by Dolet.
+ */
+
+static bool isRedundantBracket(Staff const* const staff, const BracketType bracketType, const int span)
+{
+    for (auto bracket : staff->brackets()) {
+        if (bracket->bracketType() == bracketType && bracket->bracketSpan() == span)
+            return true;
+    }
+    return false;
+}
+
+
+//---------------------------------------------------------
 //   scorePartwise
 //---------------------------------------------------------
 
@@ -1089,28 +1110,32 @@ void MusicXMLParserPass1::scorePartwise()
     const std::vector<Part*>& il = _score->parts();
     for (size_t i = 0; i < partGroupList.size(); i++) {
         MusicXmlPartGroup* pg = partGroupList[i];
-        // add part to set
-        if (pg->span == 1) {
-            partSet << il.at(pg->start);
-        }
         // determine span in staves
+        // and span all barlines except last if applicable
         size_t stavesSpan = 0;
         for (int j = 0; j < pg->span; j++) {
-            stavesSpan += il.at(pg->start + j)->nstaves();
+            Part* spannedPart = il.at(pg->start + j);
+            stavesSpan += spannedPart->nstaves();
+
+            if (pg->barlineSpan) {
+                for (auto spannedStaff : spannedPart->staves()) {
+                    if ((j == pg->span - 1) && (spannedStaff == spannedPart->staves().back()))
+                        // Very last staff of group,
+                        continue;
+                    else
+                        spannedStaff->setBarLineSpan(true);
+                }
+            }
         }
         // add bracket and set the span
         // TODO: use group-symbol default-x to determine horizontal order of brackets
         Staff* staff = il.at(pg->start)->staff(0);
-        if (pg->type != BracketType::NO_BRACKET) {
+        if (pg->type != BracketType::NO_BRACKET && !isRedundantBracket(staff, pg->type, stavesSpan)) {
             staff->setBracketType(pg->column, pg->type);
             staff->setBracketSpan(pg->column, stavesSpan);
-        }
-        if (pg->barlineSpan) {
-            // set setBarLineSpan to 1 for all staves in the part except the last staff
-            auto idx = staff->idx();
-            for (auto i2 = idx; i2 < idx + stavesSpan - 1; ++i2) {
-                _score->staff(i2)->setBarLineSpan(1);
-            }
+            // add part to set (skip implicit bracket later)
+            if (pg->span == 1)
+                partSet << il.at(pg->start);
         }
     }
 
@@ -1123,7 +1148,11 @@ void MusicXMLParserPass1::scorePartwise()
             p->staff(0)->setBracketSpan(column, p->nstaves());
             if (allStaffGroupsIdentical(p)) {
                 // span only if the same types
-                p->staff(0)->setBarLineSpan(static_cast<int>(p->nstaves()));
+                for (auto spannedStaff : p->staves()) {
+                    if (spannedStaff != p->staves().back()) { // not last staff
+                        spannedStaff->setBarLineSpan(true);
+                    }
+                }
             }
         }
     }
