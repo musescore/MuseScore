@@ -1835,12 +1835,12 @@ void MusicXMLParserPass2::part()
     if (mxmlPart.getPrintName() && !isLikelyIncorrectPartName(mxmlPart.getName())) {
         part->setLongNameAll(mxmlPart.getName());
     } else {
-        _pass1.getPart(id)->setLongNameAll("");
+        _pass1.getPart(id)->setLongNameAll(u"");
     }
     if (mxmlPart.getPrintAbbr()) {
         part->setPlainShortNameAll(mxmlPart.getAbbr());
     } else {
-        _pass1.getPart(id)->setPlainShortNameAll("");
+        _pass1.getPart(id)->setPlainShortNameAll(u"");
     }
     // try to prevent an empty track name
     if (part->partName() == "") {

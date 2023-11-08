@@ -519,7 +519,7 @@ void Part::setShortName(const String& s)
 //   setLongNameAll
 //---------------------------------------------------------
 
-void Part::setLongNameAll(const QString& s)
+void Part::setLongNameAll(const String& s)
 {
     for (auto instrument : _instruments) {
         instrument.second->setLongName(s);
@@ -530,7 +530,7 @@ void Part::setLongNameAll(const QString& s)
 //   setShortNameAll
 //---------------------------------------------------------
 
-void Part::setShortNameAll(const QString& s)
+void Part::setShortNameAll(const String& s)
 {
     for (auto instrument : _instruments) {
         instrument.second->setShortName(s);
@@ -559,7 +559,7 @@ void Part::setPlainShortName(const String& s)
 //   setPlainLongNameAll
 //---------------------------------------------------------
 
-void Part::setPlainLongNameAll(const QString& s)
+void Part::setPlainLongNameAll(const String& s)
 {
     setLongNameAll(XmlWriter::xmlString(s));
 }
@@ -568,7 +568,7 @@ void Part::setPlainLongNameAll(const QString& s)
 //   setPlainShortNameAll
 //---------------------------------------------------------
 
-void Part::setPlainShortNameAll(const QString& s)
+void Part::setPlainShortNameAll(const String& s)
 {
     setShortNameAll(XmlWriter::xmlString(s));
 }
