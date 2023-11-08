@@ -1708,7 +1708,7 @@ void TLayout::layoutCapo(const Capo* item, Capo::LayoutData* ldata, const Layout
     //! NOTE Looks like it doesn't belong here
     if (item->shouldAutomaticallyGenerateText() || item->empty()) {
         if (const Part* part = item->part()) {
-            if (const StringData* stringData = part->stringData(item->tick())) {
+            if (const StringData* stringData = part->stringData(item->tick(), item->staff()->idx())) {
                 String text = item->generateText(stringData->strings());
                 const_cast<Capo*>(item)->setXmlText(text);
             }

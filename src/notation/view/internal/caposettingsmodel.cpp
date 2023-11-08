@@ -82,7 +82,7 @@ void CapoSettingsModel::init()
         return;
     }
 
-    const mu::engraving::StringData* stringData = part->stringData(m_item->tick());
+    const mu::engraving::StringData* stringData = part->stringData(m_item->tick(), m_item->staff()->idx());
     IF_ASSERT_FAILED(stringData) {
         return;
     }

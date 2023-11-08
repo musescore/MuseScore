@@ -406,7 +406,7 @@ const InstrumentList& Part::instruments() const
     return _instruments;
 }
 
-const StringData* Part::stringData(const Fraction& tick) const
+const StringData* Part::stringData(const Fraction& tick, staff_idx_t staffIdx) const
 {
     if (!score()) {
         return nullptr;
@@ -417,11 +417,22 @@ const StringData* Part::stringData(const Fraction& tick) const
         return nullptr;
     }
 
+    bool reflectTranspositionInLinkedTab = true;
+
+    const Staff* staff = staffIdx != mu::nidx ? score()->staff(staffIdx) : nullptr;
+    if (staff && staff->isTabStaff(tick)) {
+        if (const Staff* primaryStaff = staff->primaryStaff()) {
+            reflectTranspositionInLinkedTab = primaryStaff->reflectTranspositionInLinkedTab();
+        }
+    }
+
     StringTunings* stringTunings = nullptr;
 
-    auto it = findLessOrEqual(m_stringTunings, tick.ticks());
-    if (it != m_stringTunings.end()) {
-        stringTunings = it->second;
+    if (reflectTranspositionInLinkedTab) {
+        auto it = findLessOrEqual(m_stringTunings, tick.ticks());
+        if (it != m_stringTunings.end()) {
+            stringTunings = it->second;
+        }
     }
 
     if (stringTunings) {

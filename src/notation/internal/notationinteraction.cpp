@@ -2748,7 +2748,7 @@ void NotationInteraction::moveStringSelection(MoveDirection d)
 {
     mu::engraving::InputState& is = score()->inputState();
     mu::engraving::Staff* staff = score()->staff(is.track() / mu::engraving::VOICES);
-    int instrStrgs = static_cast<int>(staff->part()->stringData(is.tick())->strings());
+    int instrStrgs = static_cast<int>(staff->part()->stringData(is.tick(), staff->idx())->strings());
     int delta = (staff->staffType(is.tick())->upsideDown() ? -1 : 1);
 
     if (MoveDirection::Up == d) {

@@ -94,7 +94,7 @@ NoteVal Score::noteValForPosition(Position pos, AccidentalType at, bool& error)
         if (m_is.rest()) {
             return nval;
         }
-        stringData = st->part()->stringData(s->tick());
+        stringData = st->part()->stringData(s->tick(), st->idx());
         line = st->staffType(tick)->visualStringToPhys(line);
         if (line < 0 || line >= static_cast<int>(stringData->strings())) {
             error = true;
@@ -432,7 +432,7 @@ Ret Score::putNote(const Position& p, bool replace)
         break;
     }
     case StaffGroup::TAB:
-        stringData = st->part()->stringData(s->tick());
+        stringData = st->part()->stringData(s->tick(), st->idx());
         m_is.setDrumNote(-1);
         break;
     case StaffGroup::STANDARD:
