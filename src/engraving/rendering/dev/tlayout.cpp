@@ -846,15 +846,13 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
     } break;
     }
 
-    if (includeCrossStaffHeight && item->crossStaff()) {
-        // Loop through staves spanned & regenerate chord shape
-        // This makes sure the arpeggio's shape is added to the shape of each chord it spans
-        Chord* chord = item->chord();
-        Segment* seg = chord->segment();
-        staff_idx_t staveSpan = (item->track() + item->span() - 1) / VOICES;
-        for (staff_idx_t staffIdx = item->staffIdx(); staffIdx <= staveSpan; staffIdx++) {
-            seg->createShape(staffIdx);
-        }
+    // Loop through staves spanned & regenerate chord shape
+    // This makes sure the arpeggio's shape is added to the shape of each chord it spans
+    Chord* chord = item->chord();
+    Segment* seg = chord->segment();
+    staff_idx_t staveSpan = (item->track() + item->span() - 1) / VOICES;
+    for (staff_idx_t staffIdx = item->staffIdx(); staffIdx <= staveSpan; staffIdx++) {
+        seg->createShape(staffIdx);
     }
 }
 
