@@ -341,13 +341,13 @@ void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
     mainStroke->level = 0;
 
     item->beamSegments().push_back(mainStroke);
-    double bboxTop = item->up()
-                     ? std::min(mainStroke->line.y1(), mainStroke->line.y2())
-                     : std::max(mainStroke->line.y1(), mainStroke->line.y2());
-    double halfWidth = ctx.conf().styleMM(Sid::beamWidth).val() / 2. * (item->up() ? -1. : 1.);
 
-    RectF bbox = RectF(mainStroke->line.x1(), bboxTop + halfWidth, mainStroke->line.x2() - mainStroke->line.x1(),
-                       std::abs(mainStroke->line.y2() - mainStroke->line.y1()) - halfWidth * 2.);
+    LineF line = mainStroke->line;
+    double halfWidth = 0.5 * ctx.conf().styleMM(Sid::beamWidth).val();
+    double bboxTop = std::min(line.y1(), line.y2()) - halfWidth;
+    double bboxBottom = std::max(line.y1(), line.y2()) + halfWidth;
+
+    RectF bbox = RectF(line.x1(), bboxTop, line.x2() - line.x1(), bboxBottom - bboxTop);
 
     PointF beamOffset = PointF(0., (item->up() ? 1 : -1) * item->spatium() * (ctx.conf().styleB(Sid::useWideBeams) ? 1. : 0.75));
     beamOffset.setY(beamOffset.y() * item->mag() * (_isGrace ? ctx.conf().styleD(Sid::graceNoteMag) : 1.));
