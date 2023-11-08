@@ -1013,13 +1013,21 @@ static void handleTupletStop(Tuplet*& tuplet, const int normalNotes)
     tuplet->setTicks(f);
     // TODO determine usefulness of following check
     int totalDuration = 0;
-    foreach (DurationElement* de, tuplet->elements()) {
+    int ticksPerNote = f.ticks() / tuplet->ratio().numerator();
+    bool ticksCorrect = true;
+    for (DurationElement* de : tuplet->elements()) {
         if (de->type() == ElementType::CHORD || de->type() == ElementType::REST) {
-            totalDuration+=de->globalTicks().ticks();
+            int globalTicks = de->globalTicks().ticks();
+            if (globalTicks != ticksPerNote)
+                ticksCorrect = false;
+            totalDuration += globalTicks;
         }
     }
-    if (!(totalDuration && normalNotes)) {
+    if (totalDuration != f.ticks()) {
         LOGD("MusicXML::import: tuplet stop but bad duration");     // TODO
+    }
+    if (!ticksCorrect) {
+        qDebug("MusicXML::import: tuplet stop but uneven note ticks"); // TODO
     }
     tuplet = 0;
 }
@@ -2256,7 +2264,7 @@ void MusicXMLParserPass2::measure(const QString& partId, const Fraction time)
             attributes(partId, measure, time + mTime);
         } else if (_e.name() == "direction") {
             MusicXMLParserDirection dir(_e, _score, _pass1, *this, _logger);
-            dir.direction(partId, measure, time + mTime, _divs, _spanners, delayedDirections);
+            dir.direction(partId, measure, time + mTime, _spanners, delayedDirections);
         } else if (_e.name() == "figured-bass") {
             FiguredBass* fb = figuredBass();
             if (fb) {
@@ -2726,25 +2734,6 @@ void MusicXMLParserPass2::measureStyle(Measure* measure)
 }
 
 //---------------------------------------------------------
-//   calcTicks
-//---------------------------------------------------------
-
-static Fraction calcTicks(const QString& text, int divs, MxmlLogger* logger, const QXmlStreamReader* const xmlreader)
-{
-    Fraction dura(0, 0);                // invalid unless set correctly
-
-    int intDura = text.toInt();
-    if (divs > 0) {
-        dura.set(intDura, 4 * divs);
-        dura.reduce();
-    } else {
-        logger->logError(QString("illegal or uninitialized divisions (%1)").arg(divs), xmlreader);
-    }
-
-    return dura;
-}
-
-//---------------------------------------------------------
 //   preventNegativeTick
 //---------------------------------------------------------
 /**
@@ -2776,7 +2765,6 @@ void MusicXMLDelayedDirectionElement::addElem()
 void MusicXMLParserDirection::direction(const QString& partId,
                                         Measure* measure,
                                         const Fraction& tick,
-                                        const int divisions,
                                         MusicXmlSpannerMap& spanners,
                                         DelayedDirectionsList& delayedDirections)
 {
@@ -2803,7 +2791,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
         if (_e.name() == "direction-type") {
             directionType(starts, stops);
         } else if (_e.name() == "offset") {
-            _offset = calcTicks(_e.readElementText(), divisions, _logger, &_e);
+            _offset = _pass1.calcTicks(_e.readElementText().toInt(), &_e);
             preventNegativeTick(tick, _offset, _logger);
         } else if (_e.name() == "sound") {
             sound();
@@ -4924,7 +4912,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     MusicXMLParserLyric lyric { _pass1.getMusicXmlPart(partId).lyricNumberHandler(), _e, _score, _logger };
     MusicXMLParserNotations notations { _e, _score, _logger };
 
-    mxmlNoteDuration mnd { _divs, _logger };
+    mxmlNoteDuration mnd { _divs, _logger, &_pass1 };
     mxmlNotePitch mnp { _logger };
 
     while (_e.readNextStartElement()) {
@@ -5373,7 +5361,7 @@ void MusicXMLParserPass2::duration(Fraction& dura)
     dura.set(0, 0);          // invalid unless set correctly
     const auto elementText = _e.readElementText();
     if (elementText.toInt() > 0) {
-        dura = calcTicks(elementText, _divs, _logger, &_e);
+        dura = _pass1.calcTicks(elementText.toInt(), &_e);
     } else {
         _logger->logError(QString("illegal duration %1").arg(dura.toString()), &_e);
     }
@@ -5757,7 +5745,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
         } else if (_e.name() == "level") {
             skipLogCurrElem();
         } else if (_e.name() == "offset") {
-            offset = calcTicks(_e.readElementText(), _divs, _logger, &_e);
+            offset = _pass1.calcTicks(_e.readElementText().toInt(), &_e);
             preventNegativeTick(sTime, offset, _logger);
         } else if (_e.name() == "staff") {
             size_t nstaves = _pass1.getPart(partId)->nstaves();
@@ -7096,7 +7084,7 @@ void MusicXMLParserNotations::tuplet()
 
 MusicXMLParserDirection::MusicXMLParserDirection(QXmlStreamReader& e,
                                                  Score* score,
-                                                 const MusicXMLParserPass1& pass1,
+                                                 MusicXMLParserPass1& pass1,
                                                  MusicXMLParserPass2& pass2,
                                                  MxmlLogger* logger)
     : _e(e), _score(score), _pass1(pass1), _pass2(pass2), _logger(logger),

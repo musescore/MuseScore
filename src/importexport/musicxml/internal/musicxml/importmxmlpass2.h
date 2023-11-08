@@ -371,15 +371,15 @@ private:
 class MusicXMLParserDirection
 {
 public:
-    MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
+    MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
                             MxmlLogger* logger);
-    void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners, DelayedDirectionsList& delayedDirections);
+    void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners, DelayedDirectionsList& delayedDirections);
     qreal totalY() const { return _defaultY + _relativeY; }
 
 private:
     QXmlStreamReader& _e;
     Score* const _score;                        // the score
-    const MusicXMLParserPass1& _pass1;          // the pass1 results
+    MusicXMLParserPass1& _pass1;                // the pass1 results
     MusicXMLParserPass2& _pass2;                // the pass2 results
     MxmlLogger* _logger;                        ///< Error logger
 

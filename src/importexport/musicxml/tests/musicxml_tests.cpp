@@ -380,6 +380,9 @@ TEST_F(Musicxml_Tests, arpGliss3) {
 TEST_F(Musicxml_Tests, articulationCombination) {
     mxmlIoTest("testArticulationCombination");
 }
+TEST_F(Musicxml_Tests, backupRoundingError) {
+    mxmlImportTestRef("testBackupRoundingError");
+}
 TEST_F(Musicxml_Tests, barlineFermatas) {
     mxmlMscxExportTestRef("testBarlineFermatas");
 }
