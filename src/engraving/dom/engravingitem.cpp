@@ -2388,10 +2388,6 @@ void EngravingItem::LayoutData::setBbox(const mu::RectF& r)
     DO_ASSERT(!std::isnan(r.width()) && !std::isinf(r.width()));
     DO_ASSERT(!std::isnan(r.height()) && !std::isinf(r.height()));
 
-    if (m_item->type() == ElementType::SLUR_SEGMENT || m_item->type() == ElementType::TIE_SEGMENT) {
-        return;
-    }
-
     //DO_ASSERT(!isShapeComposite());
     m_shape.set_value(Shape(r, m_item, Shape::Type::Fixed));
 }
@@ -2497,30 +2493,7 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         }
     }
 
-    //return sh;
-
-//    if (m_item->type() == ElementType::ACCIDENTAL) {
-//        Shape old = m_item->_internal_shape();
-//        return old;
-//    }
-
     return sh;
-
-//    LOGDA() << "------------------------------------------------------------------";
-//    LOGDA() << "[old] type: " << int(old.type()) << ", count: " << old.elements().size() << ", bbox: " << old.bbox();
-//    LOGDA() << "[new] type: " << int(sh.type()) << ", count: " << sh.elements().size() << ", bbox: " << sh.bbox();
-
-//    if (!sh.equal(old)) {
-//        int k = -1;
-//    }
-
-//    RectF oldBbox = old.bbox();
-//    RectF newBbox = sh.bbox();
-//    if (oldBbox != newBbox) {
-//        int k = -1;
-//    }
-
-//    return old;
 }
 
 double EngravingItem::mag() const

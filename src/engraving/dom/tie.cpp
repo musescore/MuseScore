@@ -280,7 +280,6 @@ void TieSegment::computeBezier(PointF shoulderOffset)
     ups(Grip::SHOULDER).p = t.map(tieShoulder);
 
     Shape shape(Shape::Type::Composite);
-    m_shape.clear();
     PointF start;
     start = t.map(start);
 
@@ -294,12 +293,10 @@ void TieSegment::computeBezier(PointF shoulderOffset)
             tieLengthInSp = (minH - re.height()) * .5;
             re.adjust(0.0, -tieLengthInSp, 0.0, tieLengthInSp);
         }
-        m_shape.add(re, this);
         shape.add(re, this);
         start = point;
     }
 
-    //setbbox(m_path.boundingRect());
     mutldata()->setShape(shape);
 }
 
@@ -779,10 +776,7 @@ void TieSegment::setAutoAdjust(const PointF& offset)
         m_shapePath.translate(diff);
 
         Shape sh = ldata()->shape();
-
-        m_shape.translate(diff);
         sh.translate(diff);
-
         mutldata()->setShape(sh);
 
         for (int i = 0; i < int(Grip::GRIPS); ++i) {

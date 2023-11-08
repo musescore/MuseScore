@@ -1386,7 +1386,6 @@ void SingleLayout::layout(Slur* item, const Context& ctx)
     s->setExtraHeight(0.0);
 
     s->computeBezier();
-    s->setbbox(s->path().boundingRect());
 
     item->setbbox(s->ldata()->bbox());
 }
