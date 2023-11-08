@@ -138,7 +138,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="start" line="yes" default-y="-65.00"/>
+          <pedal type="resume" line="yes" sign="yes" default-y="-78.93"/>
           </direction-type>
         <staff>2</staff>
         </direction>
@@ -196,7 +196,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="stop" line="yes"/>
+          <pedal type="stop" line="yes" sign="no"/>
           </direction-type>
         <staff>2</staff>
         </direction>

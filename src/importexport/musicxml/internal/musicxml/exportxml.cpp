@@ -5094,6 +5094,8 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
     _xml.startElement("direction-type");
     QString pedalType;
     QString pedalXml;
+    QString signText;
+    QString lineText = pd->lineVisible() ? " line=\"yes\"" : " line=\"no\"";
     if (pd->tick() == tick) {
         switch (pd->beginHookType()) {
         case HookType::HOOK_45:
@@ -5105,18 +5107,20 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
         default:
             pedalType = "start";
         }
+        signText = pd->beginText() == "" ? " sign=\"no\"" : " sign=\"yes\"";
     }
     else {
-        switch (pd->endHookType()) {
-        // "change" type is handled only on the beginning of pedal lines
-        case HookType::NONE:
-            pedalType = "discontinue";
-            break;
-        default:
+        if (!pd->endText().isEmpty() || pd->endHookType() == HookType::HOOK_90)
             pedalType = "stop";
-        }
+        else
+            pedalType = "discontinue";
+        // "change" type is handled only on the beginning of pedal lines
+
+        signText = pd->endText() == "" ? " sign=\"no\"" : " sign=\"yes\"";
     }
-    pedalXml = QString("pedal type=\"%1\" line=\"yes\"").arg(pedalType);
+    pedalXml = QString("pedal type=\"%1\"").arg(pedalType);
+    pedalXml += lineText;
+    pedalXml += signText;
     pedalXml += positioningAttributes(pd, pd->tick() == tick);
     _xml.tagRaw(pedalXml);
     _xml.endElement();

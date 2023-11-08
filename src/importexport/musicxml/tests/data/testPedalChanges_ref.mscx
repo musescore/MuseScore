@@ -145,7 +145,6 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
-              <beginHookType>1</beginHookType>
               </Pedal>
             <next>
               <location>
@@ -215,7 +214,6 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
-              <beginHookType>1</beginHookType>
               </Pedal>
             <next>
               <location>
@@ -291,7 +289,6 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>2</endHookType>
-              <beginHookType>1</beginHookType>
               </Pedal>
             <next>
               <location>
@@ -455,7 +452,6 @@
           <Spanner type="Pedal">
             <Pedal>
               <endHookType>1</endHookType>
-              <beginHookType>1</beginHookType>
               </Pedal>
             <next>
               <location>

@@ -477,7 +477,7 @@ TEST_F(Musicxml_Tests, dcalFine) {
     mxmlIoTest("testDCalFine");
 }
 TEST_F(Musicxml_Tests, directions1) {
-    mxmlIoTest("testDirections1");
+    mxmlIoTestRef("testDirections1");
 }
 TEST_F(Musicxml_Tests, directions2) {
     mxmlIoTest("testDirections2");
