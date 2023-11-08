@@ -371,9 +371,9 @@ private:
 class MusicXMLParserDirection
 {
 public:
-    MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
-                            MxmlLogger* logger);
-    void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners, DelayedDirectionsList& delayedDirections);
+    MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
+    void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
+                   DelayedDirectionsList& delayedDirections);
     qreal totalY() const { return _defaultY + _relativeY; }
 
 private:
@@ -431,11 +431,12 @@ private:
  before being added to the score.
  */
 
-class MusicXMLDelayedDirectionElement {
+class MusicXMLDelayedDirectionElement
+{
 public:
     MusicXMLDelayedDirectionElement(qreal totalY, EngravingItem* element, int track,
-                                    QString placement, Measure* measure, Fraction tick) :
-        _totalY(totalY),  _element(element), _track(track), _placement(placement),
+                                    QString placement, Measure* measure, Fraction tick)
+        : _totalY(totalY),  _element(element), _track(track), _placement(placement),
         _measure(measure), _tick(tick) {}
     void addElem();
     qreal totalY() const { return _totalY; }

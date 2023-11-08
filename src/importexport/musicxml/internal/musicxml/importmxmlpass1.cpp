@@ -1039,12 +1039,12 @@ static bool allStaffGroupsIdentical(Part const* const p)
 static bool isRedundantBracket(Staff const* const staff, const BracketType bracketType, const int span)
 {
     for (auto bracket : staff->brackets()) {
-        if (bracket->bracketType() == bracketType && bracket->bracketSpan() == span)
+        if (bracket->bracketType() == bracketType && bracket->bracketSpan() == span) {
             return true;
+        }
     }
     return false;
 }
-
 
 //---------------------------------------------------------
 //   scorePartwise
@@ -1119,11 +1119,12 @@ void MusicXMLParserPass1::scorePartwise()
 
             if (pg->barlineSpan) {
                 for (auto spannedStaff : spannedPart->staves()) {
-                    if ((j == pg->span - 1) && (spannedStaff == spannedPart->staves().back()))
+                    if ((j == pg->span - 1) && (spannedStaff == spannedPart->staves().back())) {
                         // Very last staff of group,
                         continue;
-                    else
+                    } else {
                         spannedStaff->setBarLineSpan(true);
+                    }
                 }
             }
         }
@@ -1134,8 +1135,9 @@ void MusicXMLParserPass1::scorePartwise()
             staff->setBracketType(pg->column, pg->type);
             staff->setBracketSpan(pg->column, stavesSpan);
             // add part to set (skip implicit bracket later)
-            if (pg->span == 1)
+            if (pg->span == 1) {
                 partSet << il.at(pg->start);
+            }
         }
     }
 
@@ -2483,8 +2485,9 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
         } else if (_e.name() == "instruments") {
             _e.skipCurrentElement();        // skip but don't log
         } else if (_e.name() == "staff-details") {
-            if (_e.attributes().value("print-object") == "no")
+            if (_e.attributes().value("print-object") == "no") {
                 hiddenStaves.emplace(_e.attributes().value("number").toInt());
+            }
             _e.skipCurrentElement();
         } else if (_e.name() == "staves") {
             staves = _e.readElementText().toInt();
@@ -2500,10 +2503,9 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
     if (staves - static_cast<int>(hiddenStaves.size()) > MAX_STAVES) {
         _logger->logError("staves exceed MAX_STAVES, even when discarding hidden staves", &_e);
         return;
-    }
-    else if (staves > MAX_STAVES
-             && static_cast<int>(hiddenStaves.size()) > 0
-             && _parts[partId].staffNumberToIndex().size() == 0) {
+    } else if (staves > MAX_STAVES
+               && static_cast<int>(hiddenStaves.size()) > 0
+               && _parts[partId].staffNumberToIndex().size() == 0) {
         _logger->logError("staves exceed MAX_STAVES, but hidden staves can be discarded", &_e);
         // Some scores have parts with many staves (~10), but most are hidden
         // When this occurs, we can discard hidden staves
@@ -2521,8 +2523,7 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
         Q_ASSERT(staffIndex == _parts[partId].staffNumberToIndex().size());
 
         setNumberOfStavesForPart(_partMap.value(partId), staves - static_cast<int>(hiddenStaves.size()));
-    }
-    else {
+    } else {
         // Otherwise, don't discard any staves
         // And set hidden staves to HideMode::AUTO
         // (MuseScore doesn't currently have a mechanism
@@ -2531,8 +2532,9 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
         setNumberOfStavesForPart(_partMap.value(partId), staves);
         for (int hiddenStaff : hiddenStaves) {
             int hiddenStaffIndex = _parts.value(partId).staffNumberToIndex(hiddenStaff);
-            if (hiddenStaffIndex >= 0)
+            if (hiddenStaffIndex >= 0) {
                 _partMap.value(partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO);
+            }
         }
     }
 }
@@ -3160,10 +3162,11 @@ int MusicXMLParserPass1::voiceToInt(const QString& voice)
 {
     bool ok;
     int voiceInt = voice.toInt(&ok);
-    if (voice == "")
+    if (voice == "") {
         voiceInt = 1;
-    else if (!ok)
+    } else if (!ok) {
         voiceInt = qHash(voice);  // Handle the rare but techincally in-spec case of a non-int voice
+    }
     return voiceInt;
 }
 
@@ -3476,24 +3479,23 @@ Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const QXmlStreamRea
         // 2. Check if within maxDiff of a seenDenominator
         if (_adjustedDurations.contains(dura)) {
             dura = _adjustedDurations.value(dura);
-        }
-        else if (dura.reduced().denominator() > 64) {
+        } else if (dura.reduced().denominator() > 64) {
             for (auto seenDenominator : _seenDenominators) {
                 int seenDenominatorTicks = Fraction(1, seenDenominator).ticks();
                 if (qAbs(dura.ticks() % seenDenominatorTicks) <= _maxDiff) {
                     Fraction roundedDura = Fraction(std::round(dura.ticks() / double(seenDenominatorTicks)), seenDenominator);
                     roundedDura.reduce();
                     _logger->logError(QString("calculated duration (%1) assumed to be a rounding error by proximity to (%2)")
-                                          .arg(dura.toString(), roundedDura.toString()));
+                                      .arg(dura.toString(), roundedDura.toString()));
                     insertAdjustedDuration(dura, roundedDura);
                     dura = roundedDura;
                     break;
                 }
             }
         }
-    }
-    else
+    } else {
         _logger->logError("illegal or uninitialized divisions", xmlReader);
+    }
     //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
 
     return dura;

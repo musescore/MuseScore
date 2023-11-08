@@ -521,8 +521,9 @@ void Part::setShortName(const String& s)
 
 void Part::setLongNameAll(const QString& s)
 {
-    for (auto instrument : _instruments)
+    for (auto instrument : _instruments) {
         instrument.second->setLongName(s);
+    }
 }
 
 //---------------------------------------------------------
@@ -531,8 +532,9 @@ void Part::setLongNameAll(const QString& s)
 
 void Part::setShortNameAll(const QString& s)
 {
-    for (auto instrument : _instruments)
+    for (auto instrument : _instruments) {
         instrument.second->setShortName(s);
+    }
 }
 
 //---------------------------------------------------------

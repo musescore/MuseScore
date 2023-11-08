@@ -27,15 +27,15 @@
 namespace mu::engraving {
 // TODO: move somewhere else
 
-static const std::vector<QString> vocalInstrumentNames({"Voice",
-                                                        "Soprano",
-                                                        "Mezzo-Soprano",
-                                                        "Alto",
-                                                        "Tenor",
-                                                        "Baritone",
-                                                        "Bass",
-                                                        "Women",
-                                                        "Men"});
+static const std::vector<QString> vocalInstrumentNames({ "Voice",
+                                                         "Soprano",
+                                                         "Mezzo-Soprano",
+                                                         "Alto",
+                                                         "Tenor",
+                                                         "Baritone",
+                                                         "Bass",
+                                                         "Women",
+                                                         "Men" });
 
 MusicXmlPart::MusicXmlPart(QString id, QString name)
     : id(id), name(name)
@@ -136,18 +136,19 @@ void MusicXmlPart::calcOctaveShifts()
 
 int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
 {
-    if (_staffNumberToIndex.size() == 0)
+    if (_staffNumberToIndex.size() == 0) {
         return staffNumber - 1;
-    else if (_staffNumberToIndex.contains(staffNumber))
-        return  _staffNumberToIndex[staffNumber];
-    else
+    } else if (_staffNumberToIndex.contains(staffNumber)) {
+        return _staffNumberToIndex[staffNumber];
+    } else {
         return -1;
+    }
 }
 
 bool MusicXmlPart::isVocalStaff() const
 {
-    return (std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), name) != vocalInstrumentNames.end()
-            || _hasLyrics);
+    return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), name) != vocalInstrumentNames.end()
+           || _hasLyrics;
 }
 
 //---------------------------------------------------------

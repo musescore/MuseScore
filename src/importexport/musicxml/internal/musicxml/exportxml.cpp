@@ -376,7 +376,7 @@ class ExportMusicXml
     int findOttava(const Ottava* tl) const;
     int findTrill(const Trill* tl) const;
     void chord(Chord* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll, bool useDrumset);
-    void rest(Rest* chord, staff_idx_t staff, const std::vector<Lyrics *>& ll);
+    void rest(Rest* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll);
     void clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes = "");
     void timesig(TimeSig* tsig);
     void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
@@ -3553,8 +3553,8 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
                 text = "backward hook";
             }
         } else if ((blp >= i && bln < i)
-                     || bmn == BeamMode::BEGIN16 && i > 1
-                     || bmn == BeamMode::BEGIN32 && i > 2) {
+                   || bmn == BeamMode::BEGIN16 && i > 1
+                   || bmn == BeamMode::BEGIN32 && i > 2) {
             text = "end";
         } else if (blp >= i && bln >= i) {
             text = "continue";
@@ -5087,8 +5087,9 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
 void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fraction& tick)
 {
     // "change" type is handled only on the beginning of pedal lines
-    if (pd->tick() != tick && pd->endHookType() == HookType::HOOK_45)
+    if (pd->tick() != tick && pd->endHookType() == HookType::HOOK_45) {
         return;
+    }
 
     directionTag(_xml, _attr, pd);
     _xml.startElement("direction-type");
@@ -5108,12 +5109,12 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
             pedalType = "start";
         }
         signText = pd->beginText() == "" ? " sign=\"no\"" : " sign=\"yes\"";
-    }
-    else {
-        if (!pd->endText().isEmpty() || pd->endHookType() == HookType::HOOK_90)
+    } else {
+        if (!pd->endText().isEmpty() || pd->endHookType() == HookType::HOOK_90) {
             pedalType = "stop";
-        else
+        } else {
             pedalType = "discontinue";
+        }
         // "change" type is handled only on the beginning of pedal lines
 
         signText = pd->endText() == "" ? " sign=\"no\"" : " sign=\"yes\"";

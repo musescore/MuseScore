@@ -163,8 +163,7 @@ public:
     void skipLogCurrElem();
     bool determineMeasureLength(QVector<Fraction>& ml) const;
     VoiceList getVoiceList(const QString id) const;
-    bool determineStaffMoveVoice(const QString& id, const int mxStaff, const int& mxVoice, int& msMove, int& msTrack,
-                                 int& msVoice) const;
+    bool determineStaffMoveVoice(const QString& id, const int mxStaff, const int& mxVoice, int& msMove, int& msTrack, int& msVoice) const;
     int voiceToInt(const QString& voice);
     track_idx_t trackForPart(const QString& id) const;
     bool hasPart(const QString& id) const;
