@@ -74,7 +74,10 @@ private:
     void loadDynamicEvents(const mpe::DynamicLevelMap& changes);
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
+    void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId);
+
     void pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const;
+    int pitchLevelToCents(const mpe::pitch_level_t pitchLevel) const;
     double dynamicLevelRatio(const mpe::dynamic_level_t level) const;
 
     ms_NoteArticulation convertArticulationType(mpe::ArticulationType articulation) const;

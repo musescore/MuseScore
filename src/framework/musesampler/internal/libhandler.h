@@ -118,6 +118,11 @@ struct MuseSamplerLibHandler
         return ms_MuseSampler_add_track_event_range_end(ms, track, voice, art);
     }
 
+    ms_Result addPitchBend(ms_MuseSampler ms, ms_Track track, ms_PitchBendInfo info)
+    {
+        return ms_MuseSampler_add_pitch_bend(ms, track, info);
+    }
+
     ms_Result startAuditionMode(ms_MuseSampler ms) { return ms_MuseSampler_start_audition_mode(ms); }
     ms_Result stopAuditionMode(ms_MuseSampler ms) { return ms_MuseSampler_stop_audition_mode(ms); }
     ms_Result startAuditionNote(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_2 evt)
@@ -206,10 +211,12 @@ struct MuseSamplerLibHandler
     std::function<bool(ms_MuseSampler ms, ms_Track track, long long timestamp, float value)> addDynamicsEvent = nullptr;
     std::function<bool(ms_MuseSampler ms, ms_Track track, long long timestamp, float value)> addPedalEvent = nullptr;
     std::function<bool(ms_MuseSampler ms, ms_Track track, int voice, long long location_us, long long duration_us, int pitch, double tempo,
-                       int offset_cents, ms_NoteArticulation articulation)> addNoteEvent = nullptr;
+                       int offset_cents, ms_NoteArticulation articulation, long long& event_id)> addNoteEvent = nullptr;
     ms_MuseSampler_is_ranged_articulation isRangedArticulation = nullptr;
     ms_MuseSampler_add_track_event_range_start addTrackEventRangeStart = nullptr;
     ms_MuseSampler_add_track_event_range_end addTrackEventRangeEnd = nullptr;
+
+    ms_MuseSampler_add_pitch_bend addPitchBend = nullptr;
 
     std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_2)> startAuditionNote = nullptr;
     ms_MuseSampler_stop_audition_note stopAuditionNote = nullptr;
@@ -236,6 +243,7 @@ private:
     ms_MuseSampler_add_track_note_event addNoteEventInternal = nullptr;
     ms_MuseSampler_add_track_note_event_2 addNoteEventInternal2 = nullptr;
     ms_MuseSampler_add_track_note_event_3 addNoteEventInternal3 = nullptr;
+    ms_MuseSampler_add_track_note_event_4 addNoteEventInternal4 = nullptr;
     ms_MuseSampler_start_audition_note startAuditionNoteInternal = nullptr;
     ms_MuseSampler_start_audition_note_2 startAuditionNoteInternal2 = nullptr;
     ms_MuseSampler_start_liveplay_note startLivePlayNoteInternal = nullptr;
@@ -283,8 +291,12 @@ public:
         }
 
         // Check versions here; define optional functions below
-        bool at_least_v_0_3 = (getVersionMajor() == 0 && getVersionMinor() >= 3) || getVersionMajor() > 0;
-        bool at_least_v_0_4 = (getVersionMajor() == 0 && getVersionMinor() >= 4) || getVersionMajor() > 0;
+        int versionMajor = getVersionMajor();
+        int versionMinor = getVersionMinor();
+
+        bool at_least_v_0_3 = (versionMajor == 0 && versionMinor >= 3) || versionMajor > 0;
+        bool at_least_v_0_4 = (versionMajor == 0 && versionMinor >= 4) || versionMajor > 0;
+        bool at_least_v_0_5 = (versionMajor == 0 && versionMinor >= 5) || versionMajor > 0;
 
         containsInstrument = (ms_contains_instrument)getLibFunc(m_lib, "ms_contains_instrument");
         getMatchingInstrumentId = (ms_get_matching_instrument_id)getLibFunc(m_lib, "ms_get_matching_instrument_id");
@@ -352,12 +364,26 @@ public:
             }
         }
 
-        if (at_least_v_0_4) {
+        if (at_least_v_0_5) {
+            if (addNoteEventInternal4 = (ms_MuseSampler_add_track_note_event_4)getLibFunc(m_lib, "ms_MuseSampler_add_track_note_event_4");
+                addNoteEventInternal4 != nullptr) {
+                addNoteEvent
+                    = [this](ms_MuseSampler ms, ms_Track track, int voice, long long location_us, long long duration_us, int pitch,
+                             double tempo, int offset_cents, ms_NoteArticulation articulation, long long& event_id) {
+                    ms_NoteEvent_3 evt{ voice, static_cast<long>(location_us), static_cast<long>(duration_us), pitch, tempo, offset_cents,
+                                        articulation };
+                    return addNoteEventInternal4(ms, track, evt, event_id) == ms_Result_OK;
+                };
+            }
+
+            addPitchBend = (ms_MuseSampler_add_pitch_bend)getLibFunc(m_lib, "ms_MuseSampler_add_pitch_bend");
+        } else if (at_least_v_0_4) {
             if (addNoteEventInternal3 = (ms_MuseSampler_add_track_note_event_3)getLibFunc(m_lib, "ms_MuseSampler_add_track_note_event_3");
                 addNoteEventInternal3 != nullptr) {
                 addNoteEvent
                     = [this](ms_MuseSampler ms, ms_Track track, int voice, long long location_us, long long duration_us, int pitch,
-                             double tempo, int offset_cents, ms_NoteArticulation articulation) {
+                             double tempo, int offset_cents, ms_NoteArticulation articulation, long long& event_id) {
+                    event_id = 0;
                     ms_NoteEvent_3 evt{ voice, location_us, duration_us, pitch, tempo, offset_cents, articulation };
                     return addNoteEventInternal3(ms, track, evt) == ms_Result_OK;
                 };
@@ -367,7 +393,8 @@ public:
                 addNoteEventInternal2 != nullptr) {
                 addNoteEvent
                     = [this](ms_MuseSampler ms, ms_Track track, int voice, long long location_us, long long duration_us, int pitch,
-                             double tempo, int offset_cents, ms_NoteArticulation articulation) {
+                             double tempo, int offset_cents, ms_NoteArticulation articulation, long long& event_id) {
+                    event_id = 0;
                     ms_NoteEvent_2 evt{ voice, static_cast<long>(location_us), static_cast<long>(duration_us), pitch, tempo, offset_cents,
                                         articulation };
                     return addNoteEventInternal2(ms, track, evt) == ms_Result_OK;
@@ -378,7 +405,8 @@ public:
                 addNoteEventInternal != nullptr) {
                 addNoteEvent
                     = [this](ms_MuseSampler ms, ms_Track track, int voice, long long location_us, long long duration_us, int pitch,
-                             double tempo, int /*offset_cents*/, ms_NoteArticulation articulation) {
+                             double tempo, int /*offset_cents*/, ms_NoteArticulation articulation, long long& event_id) {
+                    event_id = 0;
                     ms_NoteEvent evt{ voice, static_cast<long>(location_us), static_cast<long>(duration_us), pitch, tempo, articulation };
                     return addNoteEventInternal(ms, track, evt) == ms_Result_OK;
                 };
@@ -542,6 +570,8 @@ private:
                << "\n ms_MuseSampler_add_track_note_event - " << reinterpret_cast<uint64_t>(addNoteEventInternal)
                << "\n ms_MuseSampler_add_track_note_event_2 - " << reinterpret_cast<uint64_t>(addNoteEventInternal2)
                << "\n ms_MuseSampler_add_track_note_event_3 - " << reinterpret_cast<uint64_t>(addNoteEventInternal3)
+               << "\n ms_MuseSampler_add_track_note_event_4 - " << reinterpret_cast<uint64_t>(addNoteEventInternal4)
+               << "\n ms_MuseSampler_add_pitch_bend - " << reinterpret_cast<uint64_t>(addPitchBend)
                << "\n ms_MuseSampler_start_audition_note - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal)
                << "\n ms_MuseSampler_start_audition_note_2 - " << reinterpret_cast<uint64_t>(startAuditionNoteInternal2)
                << "\n ms_MuseSampler_stop_audition_note - " << reinterpret_cast<uint64_t>(stopAuditionNote)
