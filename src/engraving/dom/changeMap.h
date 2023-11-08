@@ -45,18 +45,18 @@ enum class ChangeEventType : char {
 
 class ChangeEvent
 {
-    int value { 0 };
-    ChangeEventType type { ChangeEventType::INVALID };
+    int value = 0;
+    ChangeEventType type = ChangeEventType::INVALID;
     Fraction length;
-    ChangeMethod method { ChangeMethod::NORMAL };
-    ChangeDirection direction { ChangeDirection::INCREASING };
-    int cachedStartVal   { -1 };
-    int cachedEndVal     { -1 };
+    ChangeMethod method = ChangeMethod::NORMAL;
+    ChangeDirection direction = ChangeDirection::INCREASING;
+    int cachedStartVal = -1;
+    int cachedEndVal = -1;
 
 public:
     ChangeEvent() {}
-    ChangeEvent(int vel)
-        : value(vel), type(ChangeEventType::FIX) {}
+    ChangeEvent(int val)
+        : value(val), type(ChangeEventType::FIX) {}
     ChangeEvent(Fraction s, Fraction e, int diff, ChangeMethod m, ChangeDirection d)
         : value(diff), type(ChangeEventType::RAMP), length(e - s), method(m), direction(d) {}
 
@@ -77,8 +77,12 @@ class ChangeMap : public std::multimap<Fraction, ChangeEvent>
 {
     OBJECT_ALLOCATOR(engraving, ChangeMap)
 
-    bool cleanedUp    { false };
-    static const int DEFAULT_VALUE  { 80 };
+    bool cleanedUp = false;
+
+    static constexpr int DEFAULT_VALUE = 80;
+    static constexpr int MIN_VALUE = 1;
+    static constexpr int MAX_VALUE = 127;
+    static constexpr int STEP = 16;
 
     struct ChangeMethodItem {
         ChangeMethod method;
@@ -87,10 +91,13 @@ class ChangeMap : public std::multimap<Fraction, ChangeEvent>
 
     static bool compareRampEvents(ChangeEvent& a, ChangeEvent& b) { return a.length > b.length; }
 
-    void cleanupStage0();
-    void cleanupStage1();
-    void cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& endPoints);
-    void cleanupStage3();
+    void sortRamps();
+    void clearInvalidRampsAndFixes();
+    void adjustCollidingRampsLength(std::vector<bool>& startsInRamp, EndPointsVector& endPoints);
+    bool fixExistsOnTick(Fraction tick) const;
+    ChangeEvent fixEventForTick(Fraction tick) const;
+    void addMissingFixesAfterRamps();
+    void fillRampsCache();
 
 public:
     ChangeMap() {}

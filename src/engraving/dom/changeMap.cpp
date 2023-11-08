@@ -197,11 +197,11 @@ void ChangeMap::addRamp(Fraction stick, Fraction etick, int change, ChangeMethod
 }
 
 //---------------------------------------------------------
-//   cleanupStage0
+//   sortRamps
 ///   put the ramps in size order if they start at the same point
 //---------------------------------------------------------
 
-void ChangeMap::cleanupStage0()
+void ChangeMap::sortRamps()
 {
     for (auto& tick : mu::uniqueKeys(*this)) {
         // rampEvents will contain all the ramps at this tick
@@ -228,11 +228,11 @@ void ChangeMap::cleanupStage0()
 }
 
 //---------------------------------------------------------
-//   cleanupStage1
+//   clearInvalidRampsAndFixes
 ///   remove any ramps or fixes that are completely enclosed within other ramps
 //---------------------------------------------------------
 
-void ChangeMap::cleanupStage1()
+void ChangeMap::clearInvalidRampsAndFixes()
 {
     Fraction currentRampStart = Fraction(-1, 1);      // start point of ramp we're in
     Fraction currentRampEnd = Fraction(-1, 1);        // end point of ramp we're in
@@ -289,15 +289,15 @@ void ChangeMap::cleanupStage1()
         i++;
     }
 
-    cleanupStage2(startsInRamp, endPoints);
+    adjustCollidingRampsLength(startsInRamp, endPoints);
 }
 
 //---------------------------------------------------------
-//   cleanupStage2
+//   adjustCollidingRampsLength
 ///   readjust lengths of any colliding ramps
 //---------------------------------------------------------
 
-void ChangeMap::cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& endPoints)
+void ChangeMap::adjustCollidingRampsLength(std::vector<bool>& startsInRamp, EndPointsVector& endPoints)
 {
     // moveTo stores the events that need to be moved to a Fraction position
     std::map<Fraction, ChangeEvent> moveTo;
@@ -330,12 +330,77 @@ void ChangeMap::cleanupStage2(std::vector<bool>& startsInRamp, EndPointsVector& 
     }
 }
 
+bool ChangeMap::fixExistsOnTick(Fraction tick) const
+{
+    auto values = equal_range(tick);
+    for (auto it = values.first; it != values.second; ++it) {
+        auto& event = it->second;
+        if (event.type == ChangeEventType::FIX) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+ChangeEvent ChangeMap::fixEventForTick(Fraction tick) const
+{
+    auto equalValues = equal_range(tick);
+    for (auto it = equalValues.first; it != equalValues.second; ++it) {
+        auto& event = it->second;
+        if (event.type == ChangeEventType::FIX) {
+            return event;
+        }
+    }
+
+    if (equalValues.first == begin()) {
+        return ChangeEvent();
+    }
+
+    auto previousIt = std::prev(equalValues.first);
+    auto smallerValues = equal_range(previousIt->first);
+    for (auto it = smallerValues.first; it != smallerValues.second; ++it) {
+        auto& event = it->second;
+        if (event.type == ChangeEventType::FIX) {
+            return event;
+        }
+    }
+
+    return ChangeEvent();
+}
+
+void ChangeMap::addMissingFixesAfterRamps()
+{
+    std::map<Fraction, ChangeEvent> newFixes;
+    for (auto it = begin(); it != end(); it++) {
+        auto& event = it->second;
+        if (event.type == ChangeEventType::RAMP && event.value == 0) {
+            Fraction startRampTick = it->first;
+            Fraction endRampTick = it->first + it->second.length;
+
+            if (!fixExistsOnTick(endRampTick)) {
+                ChangeEvent fixOnCurrentTick = fixEventForTick(startRampTick);
+
+                if (fixOnCurrentTick.type != ChangeEventType::INVALID) {
+                    int previousFixValue = fixOnCurrentTick.value;
+                    int newVal
+                        = (event.direction
+                           == ChangeDirection::INCREASING ? previousFixValue + ChangeMap::STEP : previousFixValue - ChangeMap::STEP);
+                    newVal = std::clamp(newVal, ChangeMap::MIN_VALUE, ChangeMap::MAX_VALUE);
+
+                    insert({ endRampTick, ChangeEvent(newVal) });
+                }
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
-//   cleanupStage3
+//   fillRampsCache
 ///   cache start and end values for each ramp
 //---------------------------------------------------------
 
-void ChangeMap::cleanupStage3()
+void ChangeMap::fillRampsCache()
 {
     for (auto i = begin(); i != end(); i++) {
         Fraction tick = i->first;
@@ -444,16 +509,11 @@ void ChangeMap::cleanup()
         return;
     }
 
-    // LOGD() << "Before cleanup:";
-    // dump();
-
-    cleanupStage0();
-    cleanupStage1();
-    cleanupStage3();
+    sortRamps();
+    clearInvalidRampsAndFixes();
+    addMissingFixesAfterRamps();
+    fillRampsCache();
     cleanedUp = true;
-
-    // LOGD() << "After cleanup:";
-    // dump();
 }
 
 //---------------------------------------------------------
