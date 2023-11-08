@@ -76,7 +76,7 @@ public:
     Shape(Type t = Type::Fixed)
         : m_type(t) {}
     Shape(const mu::RectF& r, const EngravingItem* p = nullptr, Type t = Type::Fixed)
-        : m_type(t) { add(r, p); }
+        : m_type(t) { setBBox(r, p); }
 
     Type type() const { return m_type; }
     bool isComposite() const { return m_type == Type::Composite; }
@@ -87,9 +87,9 @@ public:
 
     bool equal(const Shape& sh) const
     {
-//        if (m_type != sh.m_type) {
-//            return false;
-//        }
+        if (m_type != sh.m_type) {
+            return false;
+        }
 
         switch (m_type) {
         case Type::Fixed: return this->bbox() == sh.bbox();
@@ -100,7 +100,7 @@ public:
     }
 
     // Fixed
-    void setBBox(const mu::RectF& r);
+    void setBBox(const mu::RectF& r, const EngravingItem* p = nullptr);
     void addBBox(const mu::RectF& r);
 
     // Composite
