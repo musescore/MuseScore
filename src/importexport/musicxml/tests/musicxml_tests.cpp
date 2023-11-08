@@ -533,6 +533,9 @@ TEST_F(Musicxml_Tests, emptyVoice1) {
 TEST_F(Musicxml_Tests, excludeInvisibleElements) {
     mxmlMscxExportTestRefInvisibleElements("testExcludeInvisibleElements");
 }
+TEST_F(Musicxml_Tests, excessHiddenStaves) {
+    mxmlImportTestRef("testExcessHiddenStaves");
+}
 TEST_F(Musicxml_Tests, extendedLyrics) {
     mxmlIoTestRef("testExtendedLyrics");
 }
