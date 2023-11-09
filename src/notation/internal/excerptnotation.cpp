@@ -106,7 +106,7 @@ void ExcerptNotation::fillWithDefaultInfo()
     unlinkText(TextStyleType::TITLE);
     unlinkText(TextStyleType::SUBTITLE);
     unlinkText(TextStyleType::COMPOSER);
-    unlinkText(TextStyleType::POET);
+    unlinkText(TextStyleType::LYRICIST);
 }
 
 mu::engraving::Excerpt* ExcerptNotation::excerpt() const

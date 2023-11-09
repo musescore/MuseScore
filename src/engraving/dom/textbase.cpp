@@ -2504,7 +2504,7 @@ String TextBase::accessibleInfo() const
     case TextStyleType::TITLE:
     case TextStyleType::SUBTITLE:
     case TextStyleType::COMPOSER:
-    case TextStyleType::POET:
+    case TextStyleType::LYRICIST:
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:
@@ -2534,7 +2534,7 @@ String TextBase::screenReaderInfo() const
     case TextStyleType::TITLE:
     case TextStyleType::SUBTITLE:
     case TextStyleType::COMPOSER:
-    case TextStyleType::POET:
+    case TextStyleType::LYRICIST:
     case TextStyleType::TRANSLATOR:
     case TextStyleType::MEASURE_NUMBER:
     case TextStyleType::MMREST_RANGE:

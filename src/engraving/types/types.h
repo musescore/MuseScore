@@ -701,7 +701,7 @@ enum class TextStyleType {
     TITLE,
     SUBTITLE,
     COMPOSER,
-    POET,
+    LYRICIST,
     TRANSLATOR,
     FRAME,
     INSTRUMENT_EXCERPT,

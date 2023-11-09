@@ -631,7 +631,7 @@ static TextStyleType creditWordTypeToTid(const QString& type)
     if (type == "composer") {
         return TextStyleType::COMPOSER;
     } else if (type == "lyricist") {
-        return TextStyleType::POET;
+        return TextStyleType::LYRICIST;
     }
     /*
     else if (type == "page number")
@@ -665,7 +665,7 @@ static TextStyleType creditWordTypeGuess(const CreditWords* const word, std::vec
     // poet is in the left column
     else if (defx < pw1) {
         // found poet/lyricist
-        return TextStyleType::POET;
+        return TextStyleType::LYRICIST;
     }
     // title is in the middle column
     else {
@@ -800,7 +800,7 @@ static void createDefaultHeader(Score* const score)
     QString strTitle;
     QString strSubTitle;
     QString strComposer;
-    QString strPoet;
+    QString strLyricist;
     QString strTranslator;
 
     if (!(score->metaTag(u"movementTitle").isEmpty() && score->metaTag(u"workTitle").isEmpty())) {
@@ -816,16 +816,16 @@ static void createDefaultHeader(Score* const score)
         }
     }
     QString metaComposer = score->metaTag(u"composer");
-    QString metaPoet = score->metaTag(u"poet");
+    QString metaLyricist = score->metaTag(u"lyricist");
     QString metaTranslator = score->metaTag(u"translator");
     if (!metaComposer.isEmpty()) {
         strComposer = metaComposer;
     }
-    if (metaPoet.isEmpty()) {
-        metaPoet = score->metaTag(u"lyricist");
+    if (metaLyricist.isEmpty()) {
+        metaLyricist = score->metaTag(u"poet");
     }
-    if (!metaPoet.isEmpty()) {
-        strPoet = metaPoet;
+    if (!metaLyricist.isEmpty()) {
+        strLyricist = metaLyricist;
     }
     if (!metaTranslator.isEmpty()) {
         strTranslator = metaTranslator;
@@ -836,7 +836,7 @@ static void createDefaultHeader(Score* const score)
     addText(vbox, score, strTitle.toHtmlEscaped(),      TextStyleType::TITLE);
     addText(vbox, score, strSubTitle.toHtmlEscaped(),   TextStyleType::SUBTITLE);
     addText(vbox, score, strComposer.toHtmlEscaped(),   TextStyleType::COMPOSER);
-    addText(vbox, score, strPoet.toHtmlEscaped(),       TextStyleType::POET);
+    addText(vbox, score, strLyricist.toHtmlEscaped(),   TextStyleType::LYRICIST);
     addText(vbox, score, strTranslator.toHtmlEscaped(), TextStyleType::TRANSLATOR);
 }
 
@@ -1422,7 +1422,7 @@ static bool isTitleFrameStyle(const TextStyleType tid)
     return tid == TextStyleType::TITLE
            || tid == TextStyleType::SUBTITLE
            || tid == TextStyleType::COMPOSER
-           || tid == TextStyleType::POET;
+           || tid == TextStyleType::LYRICIST;
 }
 
 //---------------------------------------------------------

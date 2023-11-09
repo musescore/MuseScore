@@ -26,7 +26,7 @@
 
 #include "modularity/ioc.h"
 #include "types/retval.h"
-#include "project/projecttypes.h"
+#include "project/types/projecttypes.h"
 
 #include "notation.h"
 #include "../imasternotation.h"

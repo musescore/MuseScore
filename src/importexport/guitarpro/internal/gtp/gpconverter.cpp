@@ -1057,7 +1057,7 @@ void GPConverter::setUpGPScore(const GPScore* gpscore)
         m->add(s);
     }
     if (!gpscore->poet().isEmpty()) {
-        Text* s = Factory::createText(_score->dummy(), TextStyleType::POET);
+        Text* s = Factory::createText(_score->dummy(), TextStyleType::LYRICIST);
         s->setPlainText(mu::mtrc("iex_guitarpro", "Words by %1").arg(gpscore->poet()));
         m->add(s);
     }

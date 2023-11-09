@@ -48,7 +48,6 @@ endif()
 set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.h
-    ${CMAKE_CURRENT_LIST_DIR}/projecttypes.h
     ${CMAKE_CURRENT_LIST_DIR}/projecterrors.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationproject.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectcreator.h
@@ -64,6 +63,9 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/iprojectautosaver.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectrwregister.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectwriter.h
+
+    ${CMAKE_CURRENT_LIST_DIR}/types/projecttypes.h
+    ${CMAKE_CURRENT_LIST_DIR}/types/projectmeta.h
 
     ${CMAKE_CURRENT_LIST_DIR}/internal/iprojectmigrator.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/notationproject.cpp

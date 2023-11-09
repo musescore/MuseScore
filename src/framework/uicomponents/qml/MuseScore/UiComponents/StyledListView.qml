@@ -33,6 +33,9 @@ ListView {
     property int scrollBarThickness: 8
     property int scrollBarPolicy: ScrollBar.AsNeeded
 
+    /// Includes the margin at the border side; excludes the margin at the content side
+    property int visualScrollBarInset: 1.5 * scrollBarThickness
+
     clip: true
     boundsBehavior: Flickable.StopAtBounds
     maximumFlickVelocity: ui.theme.flickableMaxVelocity

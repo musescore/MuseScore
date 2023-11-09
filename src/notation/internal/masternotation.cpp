@@ -382,7 +382,7 @@ void MasterNotation::applyOptions(mu::engraving::MasterScore* score, const Score
                 setText(mu::engraving::TextStyleType::COMPOSER, composer);
             }
             if (!lyricist.isEmpty()) {
-                setText(mu::engraving::TextStyleType::POET, lyricist);
+                setText(mu::engraving::TextStyleType::LYRICIST, lyricist);
             }
         } else if (nvb) {
             delete nvb;

@@ -52,46 +52,6 @@ using namespace mu::engraving;
 using namespace mu::notation;
 using namespace mu::project;
 
-static const QString WORK_TITLE_TAG("workTitle");
-static const QString WORK_NUMBER_TAG("workNumber");
-static const QString SUBTITLE_TAG("subtitle");
-static const QString COMPOSER_TAG("composer");
-static const QString LYRICIST_TAG("lyricist");
-static const QString POET_TAG("poet");
-static const QString SOURCE_TAG("source");
-static const QString AUDIO_COM_URL_TAG("audioComUrl");
-static const QString SOURCE_REVISION_ID_TAG("sourceRevisionId");
-static const QString COPYRIGHT_TAG("copyright");
-static const QString TRANSLATOR_TAG("translator");
-static const QString ARRANGER_TAG("arranger");
-static const QString CREATION_DATE_TAG("creationDate");
-static const QString PLATFORM_TAG("platform");
-static const QString MOVEMENT_TITLE_TAG("movementTitle");
-static const QString MOVEMENT_NUMBER_TAG("movementNumber");
-
-static bool isStandardTag(const QString& tag)
-{
-    static const QSet<QString> standardTags {
-        WORK_TITLE_TAG,
-        WORK_NUMBER_TAG,
-        SUBTITLE_TAG,
-        COMPOSER_TAG,
-        LYRICIST_TAG,
-        POET_TAG,
-        SOURCE_TAG,
-        AUDIO_COM_URL_TAG,
-        COPYRIGHT_TAG,
-        TRANSLATOR_TAG,
-        ARRANGER_TAG,
-        CREATION_DATE_TAG,
-        PLATFORM_TAG,
-        MOVEMENT_NUMBER_TAG,
-        MOVEMENT_TITLE_TAG
-    };
-
-    return standardTags.contains(tag);
-}
-
 static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const ProjectCreateOptions& projectOptions)
 {
     if (!projectOptions.title.isEmpty()) {
@@ -968,34 +928,35 @@ ProjectMeta NotationProject::metaInfo() const
     mu::engraving::MasterScore* score = m_masterNotation->masterScore();
 
     ProjectMeta meta;
+    meta.filePath = m_path;
+
     auto allTags = score->metaTags();
 
     meta.title = allTags[WORK_TITLE_TAG];
     meta.subtitle = allTags[SUBTITLE_TAG];
     meta.composer = allTags[COMPOSER_TAG];
-    meta.lyricist = allTags[LYRICIST_TAG];
-    meta.copyright = allTags[COPYRIGHT_TAG];
-    meta.translator = allTags[TRANSLATOR_TAG];
     meta.arranger = allTags[ARRANGER_TAG];
+    meta.lyricist = allTags[LYRICIST_TAG];
+    meta.translator = allTags[TRANSLATOR_TAG];
+    meta.copyright = allTags[COPYRIGHT_TAG];
+    meta.creationDate = QDate::fromString(allTags[CREATION_DATE_TAG], Qt::ISODate);
+
+    meta.partsCount = score->excerpts().size();
+
     meta.source = allTags[SOURCE_TAG];
     meta.audioComUrl = allTags[AUDIO_COM_URL_TAG];
-    meta.creationDate = QDate::fromString(allTags[CREATION_DATE_TAG], Qt::ISODate);
     meta.platform = allTags[PLATFORM_TAG];
     meta.musescoreVersion = score->mscoreVersion();
     meta.musescoreRevision = score->mscoreRevision();
     meta.mscVersion = score->mscVersion();
 
     for (const String& tag : mu::keys(allTags)) {
-        if (isStandardTag(tag)) {
+        if (isRepresentedInProjectMeta(tag)) {
             continue;
         }
 
         meta.additionalTags[tag] = allTags[tag].toQString();
     }
-
-    meta.filePath = m_path;
-
-    meta.partsCount = score->excerpts().size();
 
     return meta;
 }
@@ -1010,14 +971,14 @@ void NotationProject::setMetaInfo(const ProjectMeta& meta, bool undoable)
         { WORK_TITLE_TAG, meta.title },
         { SUBTITLE_TAG, meta.subtitle },
         { COMPOSER_TAG, meta.composer },
-        { LYRICIST_TAG, meta.lyricist },
-        { COPYRIGHT_TAG, meta.copyright },
-        { TRANSLATOR_TAG, meta.translator },
         { ARRANGER_TAG, meta.arranger },
+        { LYRICIST_TAG, meta.lyricist },
+        { TRANSLATOR_TAG, meta.translator },
+        { COPYRIGHT_TAG, meta.copyright },
+        { CREATION_DATE_TAG, meta.creationDate.toString(Qt::ISODate) },
         { SOURCE_TAG, meta.source },
         { AUDIO_COM_URL_TAG, meta.audioComUrl },
         { PLATFORM_TAG, meta.platform },
-        { CREATION_DATE_TAG, meta.creationDate.toString(Qt::ISODate) }
     };
 
     for (const QString& tag : meta.additionalTags.keys()) {

@@ -27,9 +27,9 @@
 #include "io/path.h"
 #include "types/ret.h"
 
-#include "projecttypes.h"
-#include "notation/imasternotation.h"
 #include "iprojectaudiosettings.h"
+#include "notation/imasternotation.h"
+#include "types/projecttypes.h"
 
 namespace mu::project {
 class INotationProject

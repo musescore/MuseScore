@@ -360,7 +360,7 @@ void MTrack::processMeta(int tick, const MidiEvent& mm)
             ssid = TextStyleType::TRANSLATOR;
             break;
         case META_POET:
-            ssid = TextStyleType::POET;
+            ssid = TextStyleType::LYRICIST;
             break;
         case META_SUBTITLE:
             ssid = TextStyleType::SUBTITLE;

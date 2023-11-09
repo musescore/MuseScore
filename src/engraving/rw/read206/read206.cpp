@@ -263,7 +263,7 @@ void Read206::readTextStyle206(MStyle* style, XmlReader& e, ReadContext& ctx, st
         { "Title",                   TextStyleType::TITLE },
         { "Subtitle",                TextStyleType::SUBTITLE },
         { "Composer",                TextStyleType::COMPOSER },
-        { "Lyricist",                TextStyleType::POET },
+        { "Lyricist",                TextStyleType::LYRICIST },
         { "Lyrics Odd Lines",        TextStyleType::LYRICS_ODD },
         { "Lyrics Even Lines",       TextStyleType::LYRICS_EVEN },
         { "Fingering",               TextStyleType::FINGERING },

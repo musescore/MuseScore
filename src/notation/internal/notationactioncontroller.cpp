@@ -314,7 +314,7 @@ void NotationActionController::init()
     registerAction("title-text", [this]() { addText(TextStyleType::TITLE); });
     registerAction("subtitle-text", [this]() { addText(TextStyleType::SUBTITLE); });
     registerAction("composer-text", [this]() { addText(TextStyleType::COMPOSER); });
-    registerAction("poet-text", [this]() { addText(TextStyleType::POET); });
+    registerAction("poet-text", [this]() { addText(TextStyleType::LYRICIST); });
     registerAction("part-text", [this]() { addText(TextStyleType::INSTRUMENT_EXCERPT); });
     registerAction("frame-text", [this]() { addText(TextStyleType::FRAME); });
 

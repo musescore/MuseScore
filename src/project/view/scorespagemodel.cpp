@@ -26,7 +26,7 @@
 
 #include "actions/actiontypes.h"
 
-#include "projecttypes.h"
+#include "types/projecttypes.h"
 
 using namespace mu::project;
 using namespace mu::actions;

@@ -312,7 +312,7 @@ static bool readTextProperties(XmlReader& e, ReadContext& ctx, TextBase* t, Engr
             break;
         case 4:  ss = TextStyleType::COMPOSER;
             break;
-        case 5:  ss = TextStyleType::POET;
+        case 5:  ss = TextStyleType::LYRICIST;
             break;
 
         case 6:  ss = TextStyleType::LYRICS_ODD;

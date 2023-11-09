@@ -674,7 +674,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement, 
     case TextStyleType::TITLE:
     case TextStyleType::SUBTITLE:
     case TextStyleType::COMPOSER:
-    case TextStyleType::POET:
+    case TextStyleType::LYRICIST:
     case TextStyleType::INSTRUMENT_EXCERPT: {
         MeasureBase* frame = nullptr;
 
