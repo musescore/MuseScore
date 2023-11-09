@@ -169,12 +169,12 @@ bool PlaybackController::isLoaded() const
     return m_loadingTrackCount == 0;
 }
 
-bool PlaybackController::isLoopVisible() const
+bool PlaybackController::isLoopEnabled() const
 {
     return notationPlayback() ? notationPlayback()->loopBoundaries().visible : false;
 }
 
-bool PlaybackController::isPlaybackLooped() const
+bool PlaybackController::loopBoundariesSet() const
 {
     return notationPlayback() ? !notationPlayback()->loopBoundaries().isNull() : false;
 }
@@ -411,7 +411,7 @@ void PlaybackController::onSelectionChanged()
             updateMuteStates();
         }
 
-        if (!isPlaybackLooped()) {
+        if (!loopBoundariesSet()) {
             seekListSelection();
         }
 
@@ -455,7 +455,7 @@ void PlaybackController::play()
         return;
     }
 
-    if (isPlaybackLooped()) {
+    if (loopBoundariesSet() && isLoopEnabled()) {
         msecs_t startMsecs = playbackStartMsecs();
         seek(startMsecs);
     }
@@ -612,12 +612,12 @@ void PlaybackController::toggleCountIn()
 
 void PlaybackController::toggleLoopPlayback()
 {
-    if (isLoopVisible()) {
+    if (isLoopEnabled()) {
         hideLoop();
         return;
     }
 
-    if (isPlaybackLooped() && !selection()->isRange()) {
+    if (loopBoundariesSet() && !selection()->isRange()) {
         showLoop();
         return;
     }
@@ -1240,7 +1240,7 @@ void PlaybackController::updateAuxMuteStates()
 bool PlaybackController::actionChecked(const ActionCode& actionCode) const
 {
     QMap<std::string, bool> isChecked {
-        { LOOP_CODE, isLoopVisible() },
+        { LOOP_CODE, isLoopEnabled() },
         { MIDI_ON_CODE, notationConfiguration()->isMidiInputEnabled() },
         { REPEAT_CODE, notationConfiguration()->isPlayRepeatsEnabled() },
         { PLAY_CHORD_SYMBOLS_CODE, notationConfiguration()->isPlayChordSymbolsEnabled() },

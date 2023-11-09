@@ -128,8 +128,8 @@ private:
     bool isPaused() const;
     bool isLoaded() const;
 
-    bool isLoopVisible() const;
-    bool isPlaybackLooped() const;
+    bool isLoopEnabled() const;
+    bool loopBoundariesSet() const;
 
     void onNotationChanged();
 
