@@ -133,6 +133,7 @@ Glissando::Glissando(const Glissando& g)
     _showText       = g._showText;
     _playGlissando  = g._playGlissando;
     _fontStyle      = g._fontStyle;
+    m_isHarpGliss   = g.m_isHarpGliss;
 }
 
 const TranslatableString& Glissando::glissandoTypeName() const
@@ -155,7 +156,7 @@ LineSegment* Glissando::createLineSegment(System* parent)
 Sid Glissando::getPropertyStyle(Pid id) const
 {
     if (id == Pid::GLISS_STYLE) {
-        return isHarpGliss() ? Sid::glissandoStyleHarp : Sid::glissandoStyle;
+        return isHarpGliss().value_or(false) ? Sid::glissandoStyleHarp : Sid::glissandoStyle;
     }
 
     return SLine::getPropertyStyle(id);
@@ -209,7 +210,7 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
     pitchOffsets.clear();
     if (glissandoStyle == GlissandoStyle::DIATONIC) {
         // Obey harp pedal diagrams if on a harp staff
-        if (glissando->isHarpGliss()) {
+        if (glissando->isHarpGliss().value_or(false)) {
             HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
             std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
             std::vector<int> playablePitches;
@@ -529,7 +530,7 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
     {
         // Make sure harp glisses can only be diatonic and chromatic
         GlissandoStyle glissStyle = v.value<GlissandoStyle>();
-        if (isHarpGliss() && (glissStyle != GlissandoStyle::DIATONIC && glissStyle != GlissandoStyle::CHROMATIC)) {
+        if (isHarpGliss().value_or(false) && (glissStyle != GlissandoStyle::DIATONIC && glissStyle != GlissandoStyle::CHROMATIC)) {
             glissStyle = GlissandoStyle::DIATONIC;
         }
         setGlissandoStyle(glissStyle);

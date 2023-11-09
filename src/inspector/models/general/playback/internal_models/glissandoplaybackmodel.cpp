@@ -62,7 +62,7 @@ void GlissandoPlaybackModel::updateIsHarpGliss()
     bool isHarpGliss = false;
     for (const EngravingItem* element : m_elementList) {
         if (element->isGlissando()) {
-            if (toGlissando(element)->isHarpGliss()) {
+            if (toGlissando(element)->isHarpGliss().value_or(false)) {
                 isHarpGliss = true;
                 break;
             }

@@ -2523,7 +2523,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
     }
 }
 
-static void _layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissando::LayoutData* ldata)
+static void _layoutGlissando(Glissando* item, LayoutContext& ctx, Glissando::LayoutData* ldata)
 {
     double _spatium = item->spatium();
 
@@ -2534,6 +2534,32 @@ static void _layoutGlissando(const Glissando* item, LayoutContext& ctx, Glissand
         return;
     }
     ldata->setPos(0.0, 0.0);
+
+    String instrId = item->staff()->part()->instrumentId(item->tick());
+    bool harpStaff = instrId == "harp";
+    if (!item->isHarpGliss().has_value()) {
+        item->setIsHarpGliss(harpStaff);
+    } else {
+        if (harpStaff != item->isHarpGliss().value()) {
+            // Preserve whether this gliss has its default playback style
+            bool defaultStyle = false;
+            if (item->isStyled(Pid::GLISS_STYLE)) {
+                defaultStyle = true;
+            }
+            item->setIsHarpGliss(harpStaff);
+            if (defaultStyle) {
+                item->resetProperty(Pid::GLISS_STYLE);
+            }
+
+            // Make sure harp glisses can only be diatonic and chromatic
+            GlissandoStyle glissStyle = item->glissandoStyle();
+            if (item->isHarpGliss().value()
+                && (glissStyle != GlissandoStyle::DIATONIC
+                    && glissStyle != GlissandoStyle::CHROMATIC)) {
+                item->setGlissandoStyle(GlissandoStyle::DIATONIC);
+            }
+        }
+    }
 
     Note* anchor1 = toNote(item->startElement());
     Note* anchor2 = toNote(item->endElement());

@@ -2684,6 +2684,9 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
         if (tag == "text") {
             g->setShowText(true);
             TRead::readProperty(g, e, ctx, Pid::GLISS_TEXT);
+        } else if (tag == "isHarpGliss" && ctx.pasteMode()) {
+            g->setIsHarpGliss(e.readBool());
+            g->resetProperty(Pid::GLISS_STYLE);
         } else if (tag == "subtype") {
             g->setGlissandoType(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
         } else if (tag == "glissandoStyle") {

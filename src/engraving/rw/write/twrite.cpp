@@ -1244,6 +1244,10 @@ void TWrite::write(const Glissando* item, XmlWriter& xml, WriteContext& ctx)
         xml.tag("text", item->text());
     }
 
+    if (ctx.clipboardmode() && item->isHarpGliss().has_value()) {
+        xml.tagProperty("isHarpGliss", PropertyValue(item->isHarpGliss().value()));
+    }
+
     for (auto id : { Pid::GLISS_TYPE, Pid::PLAY, Pid::GLISS_STYLE, Pid::GLISS_SHIFT, Pid::GLISS_EASEIN, Pid::GLISS_EASEOUT }) {
         writeProperty(item, xml, id);
     }

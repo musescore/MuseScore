@@ -2644,8 +2644,6 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     if (staff) {
         String instrId = staff->part()->instrumentId(g->tick());
         g->setIsHarpGliss(instrId == "harp");
-        LOGI() << "Is harp gliss: " << g->isHarpGliss();
-        LOGI() << "instrumentId = " << instrId;
     }
     g->resetProperty(Pid::GLISS_STYLE);
 
