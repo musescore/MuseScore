@@ -56,6 +56,13 @@ Item {
 
         visible: parent.visible
 
+        MouseArea {
+            id: mouseArea
+            anchors.fill: parent
+            acceptedButtons: Qt.NoButton
+            cursorShape: Qt.SizeAllCursor
+        }
+
         Column {
             id: titleBarContent
 
