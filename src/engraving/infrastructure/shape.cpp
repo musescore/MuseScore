@@ -183,7 +183,7 @@ double Shape::minVerticalDistance(const Shape& a) const
 //    to the amount of overlap.
 //-------------------------------------------------------------------
 
-double Shape::verticalClearance(const Shape& a) const
+double Shape::verticalClearance(const Shape& a, double minHorizontalDistance) const
 {
     if (empty() || a.empty()) {
         return 0.0;
@@ -194,8 +194,8 @@ double Shape::verticalClearance(const Shape& a) const
         if (r2.height() <= 0.0) {
             continue;
         }
-        double bx1 = r2.left();
-        double bx2 = r2.right();
+        double bx1 = r2.left() - minHorizontalDistance;
+        double bx2 = r2.right() + minHorizontalDistance;
         for (const RectF& r1 : m_elements) {
             if (r1.height() <= 0.0) {
                 continue;

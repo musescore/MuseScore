@@ -904,15 +904,10 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     });
 
     Shape restShape = rest->shape().translated(rest->pagePos() - rest->offset());
-    if (up && firstRest) {
-        // Pad rest shape by small amount so horizontal distance between rest and beam is more than 0
-        // A horizontal distance of 0 counts as no vertical collision
-        RectF bbox = restShape.bbox();
-        restShape.addBBox(RectF(bbox.topRight(), PointF(bbox.bottomRight().x() + 1, bbox.bottomRight().y())));
-    }
+    double minBeamToRestXDist = up && firstRest ? 0.1 * spatium : 0.0;
 
     double restToBeamClearance = up
-                                 ? beamShape.verticalClearance(restShape)
+                                 ? beamShape.verticalClearance(restShape, minBeamToRestXDist)
                                  : restShape.verticalClearance(beamShape);
 
     if (restToBeamClearance > restToBeamPadding) {
