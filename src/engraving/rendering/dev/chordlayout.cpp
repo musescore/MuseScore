@@ -110,6 +110,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     double rrr    = 0.0;           // space to leave at right of chord
     double lhead  = 0.0;           // amount of notehead to left of chord origin
     Note* upnote = item->upNote();
+    Note* downnote = item->downNote();
 
     delete item->tabDur();     // no TAB? no duration symbol! (may happen when converting a TAB into PITCHED)
     item->setTabDur(nullptr);
@@ -190,8 +191,16 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
         if (!(aboveStart || belowEnd)) {
             double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
+            double arpeggioLedgerDistance = ctx.conf().styleMM(Sid::ArpeggioLedgerDistance) * mag_;
+            int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;
+            int firstLedgerAbove = -1;
 
             double gapSize = arpeggioNoteDistance;
+
+            if (downnote->line() > firstLedgerBelow || upnote->line() < firstLedgerAbove) {
+                gapSize = arpeggioLedgerDistance + ctx.conf().styleS(Sid::ledgerLineLength).val() * item->spatium();
+            }
+
             double arpChordX = std::min(chordX, 0.0);
 
             if (chordAccidentals.size()) {
@@ -208,7 +217,6 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
             // Save this to arpeggio if largest
             arpldata->maxChordPad = std::max(arpldata->maxChordPad, lll + extraX);
-            //        arpldata->setMaxChordPad(std::max(arpldata->maxChordPad(), chordLeft + extraX));
 
             // If first chord in arpeggio set y
             if (item->arpeggio() && item->arpeggio() == spanArp) {
@@ -216,13 +224,10 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
                 item->arpeggio()->mutldata()->setPosY(y1);
             }
 
-            Note* downNote = item->downNote();
-            if (endChord) {
-                downNote = endChord->downNote();
-            }
+            Note* endDownNote = endChord->downNote();
 
             // If last chord in arpeggio, set x
-            if (downNote->track() == item->track()) {
+            if (endDownNote->track() == item->track()) {
                 // Amount to move arpeggio from it's parent chord to factor in chords further to the left
                 double firstChordX = spanArp->chord()->ldata()->pos().x();
                 double xDiff = firstChordX - arpldata->minChordX;

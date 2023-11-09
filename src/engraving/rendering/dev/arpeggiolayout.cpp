@@ -146,6 +146,8 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
     const track_idx_t partEndTrack = part->endTrack();
 
     double accidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * item->mag();
+    double arpeggioLedgerDistance = ctx.conf().styleMM(Sid::ArpeggioLedgerDistance) * item->mag();
+
     Shape arpShape = item->shape().translate(item->pagePos());
     double arpX = arpShape.right();
     double largestOverlap = 0.0;
@@ -188,13 +190,19 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
         Shape chordShape = chord->shape();
         chordShape.translate(chord->pagePos());
         // Remove any element which isn't an accidental the arpeggio intersects
-        chordShape.remove_if([curArpShape, accidentalDistance](ShapeElement& shapeElement) {
-            if (!shapeElement.item() || !(shapeElement.item()->type() == ElementType::ACCIDENTAL)) {
+        chordShape.remove_if([curArpShape, accidentalDistance, arpeggioLedgerDistance](ShapeElement& shapeElement) {
+            if (!shapeElement.item()
+                || !(shapeElement.item()->type() == ElementType::ACCIDENTAL || shapeElement.item()->type() == ElementType::LEDGER_LINE)) {
                 return true;
             }
-            // Pad accidentals with Sid::ArpeggioAccidentalDistance either side
-            shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - accidentalDistance, shapeElement.topLeft().y()));
-            shapeElement.setWidth(shapeElement.width() + 2 * accidentalDistance);
+            if (shapeElement.item()->type() == ElementType::ACCIDENTAL) {
+                // Pad accidentals with Sid::ArpeggioAccidentalDistance either side
+                shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - accidentalDistance, shapeElement.topLeft().y()));
+                shapeElement.setWidth(shapeElement.width() + 2 * accidentalDistance);
+            } else if (shapeElement.item()->type() == ElementType::LEDGER_LINE) {
+                shapeElement.setTopLeft(PointF(shapeElement.topLeft().x() - arpeggioLedgerDistance, shapeElement.topLeft().y()));
+                shapeElement.setWidth(shapeElement.width() + 2 * arpeggioLedgerDistance);
+            }
             return !curArpShape.intersects(shapeElement);
         });
 
@@ -297,18 +305,8 @@ double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, double 
         return 0.0;
     }
 
-    // this cutout means the vertical lines for a ♯, ♭, and ♮ are in the same position
-    // if an accidental does not have a cutout (e.g., ♭), this value is 0
-    double accidentalCutOutX = item->symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutNW).x() * mag_;
-    double accidentalCutOutYTop = item->symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutNW).y() * mag_;
-    double accidentalCutOutYBottom = item->symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutSW).y() * mag_;
-
     double maximumInset = (ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance)
                            - ctx.conf().styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
-
-    if (accidentalCutOutX > maximumInset) {
-        accidentalCutOutX = maximumInset;
-    }
 
     RectF bbox = item->symBbox(furthestAccidental->symId());
     double center = furthestAccidental->note()->pos().y() * mag_;
@@ -316,16 +314,10 @@ double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, double 
     double bottom = center + bbox.bottom() * mag_;
     bool collidesWithTop = hasTopArrow && top <= arpeggioTop;
     bool collidesWithBottom = hasBottomArrow && bottom >= arpeggioBottom;
-    bool cutoutCollidesWithTop = collidesWithTop && top - accidentalCutOutYTop >= arpeggioTop;
-    bool cutoutCollidesWithBottom = collidesWithBottom && bottom - accidentalCutOutYBottom <= arpeggioBottom;
 
     if (collidesWithTop || collidesWithBottom) {
-        // optical adjustment for one edge case
-        if (accidentalCutOutX == 0.0 || cutoutCollidesWithTop || cutoutCollidesWithBottom) {
-            return accidentalCutOutX + maximumInset;
-        }
-        return accidentalCutOutX;
+        return maximumInset;
     }
 
-    return insetWidth(item) + accidentalCutOutX;
+    return insetWidth(item);
 }
