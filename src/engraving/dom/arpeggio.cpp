@@ -61,7 +61,16 @@ Arpeggio::Arpeggio(Chord* parent)
 Arpeggio::~Arpeggio()
 {
     // Remove reference to this arpeggio in any chords it may have spanned
-    detachFromChords(track(), track() + m_span);
+    Chord* _chord = chord();
+    if (!_chord) {
+        return;
+    }
+    for (track_idx_t _track = track(); _track <= track() + m_span; _track++) {
+        EngravingItem* e = _chord->segment()->element(_track);
+        if (e && e->isChord() && toChord(e)->spanArpeggio() == this) {
+            toChord(e)->setSpanArpeggio(nullptr);
+        }
+    }
 }
 
 const TranslatableString& Arpeggio::arpeggioTypeName() const
@@ -92,7 +101,7 @@ void Arpeggio::detachFromChords(track_idx_t strack, track_idx_t etrack)
     for (track_idx_t track = strack; track <= etrack; track++) {
         EngravingItem* e = _chord->segment()->element(track);
         if (e && e->isChord() && toChord(e)->spanArpeggio() == this) {
-            toChord(e)->setSpanArpeggio(nullptr);
+            toChord(e)->undoChangeSpanArpeggio(nullptr);
         }
     }
 }
@@ -207,8 +216,12 @@ void Arpeggio::editDrag(EditData& ed)
         m_userLen1 -= d;
         if (e && e->isNote() && e->part() == p) {
             Chord* c = toNote(e)->chord();
-            int newSpan = m_span + track() - c->track();
-            if (newSpan != m_span) {
+            int newSpan = std::max(1, m_span + int(track()) - int(c->track()));
+            if (track() != c->track()) {
+                // if new track is greater than old we have chords to unmark
+                if (track() < c->track()) {
+                    detachFromChords(track(), c->track() - 1);
+                }
                 undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
                 score()->undo(new ChangeParent(this, c, c->staffIdx()));
                 m_userLen1 = 0.0;
@@ -219,7 +232,11 @@ void Arpeggio::editDrag(EditData& ed)
         // Increase span
         if (e && e->isNote() && e->part() == p) {
             int newSpan = std::max(1, int(e->track()) - int(track()) + 1);
-            if (newSpan != m_span) {
+            if (e->track() != endTrack()) {
+                // if new endTrack is less than old we have chords to unmark
+                if (e->track() < endTrack()) {
+                    detachFromChords(e->track() + 1, endTrack());
+                }
                 undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
                 m_userLen2 = 0.0;
             }
