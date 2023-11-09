@@ -50,6 +50,7 @@ private:
     void setLineType(int newType);
 
     PropertyItem* m_lineType = nullptr;
+    bool m_rosetteHookSelected = false;
 };
 }
 

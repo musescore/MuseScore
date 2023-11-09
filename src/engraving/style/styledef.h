@@ -298,8 +298,11 @@ enum class Sid {
     pedalFrameFgColor,
     pedalFrameBgColor,
     pedalText,
+    pedalHookText,
     pedalContinueText,
+    pedalContinueHookText,
     pedalEndText,
+    pedalRosetteEndText,
 
     trillPlacement,
     trillPosAbove,

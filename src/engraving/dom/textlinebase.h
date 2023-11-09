@@ -139,6 +139,8 @@ public:
 
     static const std::array<Pid, 27>& textLineBasePropertyIds();
 
+    void reset() override;
+
 protected:
     friend class TextLineBaseSegment;
 };

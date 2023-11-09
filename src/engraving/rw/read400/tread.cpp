@@ -3354,12 +3354,41 @@ void TRead::read(Pedal* p, XmlReader& e, ReadContext& ctx)
     if (p->score()->mscVersion() < 301) {
         ctx.addSpanner(e.intAttribute("id", -1), p);
     }
+
+    bool beginTextTag = false;
+    bool continueTextTag = false;
+    bool endTextTag = false;
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
+        beginTextTag = beginTextTag || tag == "beginText";
+        continueTextTag = continueTextTag || tag == "continueText";
+        endTextTag = endTextTag || tag == "endText";
         if (readStyledProperty(p, tag, e, ctx)) {
         } else if (!readProperties(static_cast<TextLineBase*>(p), e, ctx)) {
             e.unknown();
         }
+    }
+
+    // Set to the 400 defaults if no value was specified;
+    // or follow the new style setting if the specified value matches it
+    if (!beginTextTag) {
+        p->setBeginText(String());
+        p->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::UNSTYLED);
+    } else if (p->beginText() == p->propertyDefault(Pid::BEGIN_TEXT).value<String>()) {
+        p->setPropertyFlags(Pid::BEGIN_TEXT, PropertyFlags::STYLED);
+    }
+    if (!continueTextTag) {
+        p->setContinueText(String());
+        p->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::UNSTYLED);
+    } else if (p->continueText() == p->propertyDefault(Pid::CONTINUE_TEXT).value<String>()) {
+        p->setPropertyFlags(Pid::CONTINUE_TEXT, PropertyFlags::STYLED);
+    }
+    if (!endTextTag) {
+        p->setEndText(String());
+        p->setPropertyFlags(Pid::END_TEXT, PropertyFlags::UNSTYLED);
+    } else if (p->endText() == p->propertyDefault(Pid::END_TEXT).value<String>()) {
+        p->setPropertyFlags(Pid::END_TEXT, PropertyFlags::STYLED);
     }
 }
 
