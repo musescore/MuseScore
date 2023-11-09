@@ -148,7 +148,7 @@ public:
     void removeInstrument(const Fraction&);
     const InstrumentList& instruments() const;
 
-    const StringData* stringData(const Fraction& tick) const;
+    const StringData* stringData(const Fraction& tick, staff_idx_t staffIdx) const;
     void addStringTunings(StringTunings* stringTunings);
     void removeStringTunings(StringTunings* stringTunings);
 

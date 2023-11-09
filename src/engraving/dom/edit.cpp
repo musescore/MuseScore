@@ -6201,7 +6201,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     }
                 } else if (ne->isStringTunings()) {
                     StringTunings* stringTunings = toStringTunings(ne);
-                    const StringData* stringData = stringTunings->part()->stringData(tick);
+                    const StringData* stringData = stringTunings->part()->stringData(tick, staff->idx());
                     int frets = stringData->frets();
                     std::vector<mu::engraving::instrString> stringList = stringData->stringList();
 

@@ -1854,7 +1854,7 @@ void Score::upDown(bool up, UpDownMode mode)
         break;
         case StaffGroup::TAB:
         {
-            const StringData* stringData = part->stringData(tick);
+            const StringData* stringData = part->stringData(tick, staff->idx());
             switch (mode) {
             case UpDownMode::OCTAVE:                            // move same note to next string, if possible
             {
@@ -1988,7 +1988,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 refret = true;
             }
             if (refret) {
-                const StringData* stringData = part->stringData(tick);
+                const StringData* stringData = part->stringData(tick, staff->idx());
                 stringData->fretChords(oNote->chord());
             }
         }
@@ -2124,7 +2124,7 @@ static void changeAccidental2(Note* n, int pitch, int tpc)
             // as pitch has changed, calculate new
             // string & fret
             //
-            const StringData* stringData = n->part()->stringData(n->tick());
+            const StringData* stringData = n->part()->stringData(n->tick(), st->idx());
             if (stringData) {
                 stringData->convertPitch(pitch, st, &string, &fret);
             }

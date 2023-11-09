@@ -146,7 +146,7 @@ void GuitarBend::fixNotesFrettingForStandardBend(Note* startNote, Note* endNote)
         return;
     }
 
-    const StringData* stringData = curPart->stringData(startNote->tick());
+    const StringData* stringData = curPart->stringData(startNote->tick(), curStaff->idx());
     int startFret = startNote->fret();
     int startString = startNote->string();
     if (startFret == 0) {
@@ -207,7 +207,7 @@ void GuitarBend::fixNotesFrettingForGraceBend(Note* grace, Note* main)
 {
     // The start grace-note of bend must be on the same string as the main note
     int mainString = main->string();
-    const StringData* stringData = main->part()->stringData(main->tick());
+    const StringData* stringData = main->part()->stringData(main->tick(), main->staff()->idx());
     int graceFret = stringData->fret(grace->pitch(), mainString, main->staff());
     if (graceFret > 0) {
         // There is valid fretting
