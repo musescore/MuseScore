@@ -2034,12 +2034,16 @@ void NotationInteraction::doAddSlur(const mu::engraving::Slur* slurTemplate)
                 }
             }
 
-            if (firstChordRest && (firstChordRest != secondChordRest)) {
+            bool firstCrTrill = firstChordRest && firstChordRest->isChord() && toChord(firstChordRest)->isTrillCueNote();
+            bool secondCrTrill = secondChordRest && secondChordRest->isChord() && toChord(secondChordRest)->isTrillCueNote();
+
+            if (firstChordRest && (firstChordRest != secondChordRest)
+                && !(firstCrTrill || secondCrTrill)) {
                 doAddSlur(firstChordRest, secondChordRest, slurTemplate);
             }
         }
     } else if (sel.isSingle()) {
-        if (sel.element()->isNote()) {
+        if (sel.element()->isNote() && !toNote(sel.element())->isTrillCueNote()) {
             doAddSlur(toNote(sel.element())->chord(), nullptr, slurTemplate);
         }
     } else {
@@ -2063,7 +2067,10 @@ void NotationInteraction::doAddSlur(const mu::engraving::Slur* slurTemplate)
             secondChordRest = mu::engraving::nextChordRest(firstChordRest);
         }
 
-        if (firstChordRest) {
+        bool firstCrTrill = firstChordRest && firstChordRest->isChord() && toChord(firstChordRest)->isTrillCueNote();
+        bool secondCrTrill = secondChordRest && secondChordRest->isChord() && toChord(secondChordRest)->isTrillCueNote();
+
+        if (firstChordRest && !(firstCrTrill || secondCrTrill)) {
             doAddSlur(firstChordRest, secondChordRest, slurTemplate);
         }
     }
@@ -3889,6 +3896,9 @@ void NotationInteraction::changeSelectedNotesArticulation(SymbolId articulationS
 
     std::set<Chord*> chords;
     for (Note* note: notes) {
+        if (note->isTrillCueNote()) {
+            return;
+        }
         Chord* chord = note->chord();
         if (chords.find(chord) == chords.end()) {
             chords.insert(chord);
@@ -3939,7 +3949,7 @@ void NotationInteraction::addGraceNotesToSelectedNotes(GraceNoteType type)
 bool NotationInteraction::canAddTupletToSelectedChordRests() const
 {
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
-        if (chordRest->isGrace()) {
+        if (chordRest->isGrace() || (chordRest->isChord() && toChord(chordRest)->isTrillCueNote())) {
             continue;
         }
 
@@ -3961,7 +3971,7 @@ void NotationInteraction::addTupletToSelectedChordRests(const TupletOptions& opt
     startEdit();
 
     for (ChordRest* chordRest : score()->getSelectedChordRests()) {
-        if (!chordRest->isGrace()) {
+        if (!chordRest->isGrace() && !(chordRest->isChord() && toChord(chordRest)->isTrillCueNote())) {
             Fraction ratio = options.ratio;
             if (options.autoBaseLen) {
                 ratio.setDenominator(Tuplet::computeTupletDenominator(ratio.numerator(), chordRest->ticks()));
