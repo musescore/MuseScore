@@ -413,7 +413,7 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     if (ctx.state().prevMeasure() && ctx.state().prevMeasure()->isMeasure()) {
         Measure* pm = toMeasure(ctx.mutState().prevMeasure());
         BeamLayout::breakCrossMeasureBeams(pm, ctx);
-        MeasureLayout::createEndBarLines(pm, true, ctx);
+        curSysWidth += MeasureLayout::createEndBarLines(pm, true, ctx);
     }
 
     // hide empty staves
