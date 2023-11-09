@@ -28,29 +28,31 @@ EID::EID(ElementType type, uint32_t id)
 {
 }
 
-union Pack
+struct _Data {
+    uint16_t type = 0;
+    uint16_t reserved = 0;
+    uint32_t id = 0;
+};
+
+union _Pack
 {
     uint64_t val;
-    struct {
-        uint16_t type;
-        uint16_t reserved;
-        uint32_t id;
-    };
+    _Data data;
 };
 
 uint64_t EID::toUint64() const
 {
-    Pack pack = { 0 };
-    pack.type = static_cast<uint16_t>(m_type);
-    pack.id = m_id;
+    _Pack pack = { 0 };
+    pack.data.type = static_cast<uint16_t>(m_type);
+    pack.data.id = m_id;
     return pack.val;
 }
 
 EID EID::fromUint64(uint64_t v)
 {
-    Pack pack = { 0 };
+    _Pack pack = { 0 };
     pack.val = v;
-    return EID(static_cast<ElementType>(pack.type), pack.id);
+    return EID(static_cast<ElementType>(pack.data.type), pack.data.id);
 }
 
 std::string EID::toStdString() const
