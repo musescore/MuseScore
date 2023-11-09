@@ -53,14 +53,22 @@ FocusableControl {
 
     signal visibilityChanged(bool visible)
 
+    signal dragStarted()
+    signal dropped()
+
     QtObject {
         id: prv
 
         property bool dragged: mouseArea.drag.active && mouseArea.pressed
 
         onDraggedChanged: {
-            if (dragged && styleData.isExpanded) {
-                root.treeView.collapse(styleData.index)
+            if (dragged) {
+                root.dragStarted()
+                if (styleData.isExpanded) {
+                    root.treeView.collapse(styleData.index)
+                }
+            } else {
+                root.dropped()
             }
         }
 

@@ -89,6 +89,9 @@ public:
     Q_INVOKABLE void removeSelectedRows();
     Q_INVOKABLE void toggleVisibilityOfSelectedRows(bool visible);
 
+    Q_INVOKABLE void startActiveDrag();
+    Q_INVOKABLE void endActiveDrag();
+
     Q_INVOKABLE bool moveRows(const QModelIndex& sourceParent, int sourceRow, int count, const QModelIndex& destinationParent,
                               int destinationChild) override;
 
@@ -166,6 +169,10 @@ private:
     QHash<NotationKey, QList<ID> > m_sortedPartIdList;
 
     bool m_instrumentsPanelVisible = true;
+
+    bool m_dragInProgress = false;
+    bool m_activeDragIsStave = false;
+    MoveParams m_activeDragMoveParams;
 };
 }
 

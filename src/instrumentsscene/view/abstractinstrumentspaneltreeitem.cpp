@@ -106,9 +106,15 @@ void AbstractInstrumentsPanelTreeItem::appendNewItem()
 {
 }
 
+MoveParams AbstractInstrumentsPanelTreeItem::buildMoveParams(int, int, AbstractInstrumentsPanelTreeItem*, int) const
+{
+    UNREACHABLE;
+    return MoveParams();
+}
+
 void AbstractInstrumentsPanelTreeItem::moveChildren(int sourceRow, int count,
                                                     AbstractInstrumentsPanelTreeItem* destinationParent,
-                                                    int destinationRow)
+                                                    int destinationRow, bool)
 {
     QList<AbstractInstrumentsPanelTreeItem*> childrenToMove;
     for (int i = sourceRow; i < sourceRow + count; ++i) {
