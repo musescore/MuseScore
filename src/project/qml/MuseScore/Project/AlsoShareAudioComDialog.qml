@@ -28,7 +28,6 @@ import MuseScore.UiComponents 1.0
 StyledDialogView {
     id: root
 
-    property string audioComUrl
     property bool rememberChoice
 
     contentHeight: 355
@@ -115,8 +114,7 @@ StyledDialogView {
 
                 Layout.fillWidth: true
 
-                //: The text between `<a href=\"%1\">` and `</a>` will be a clickable link to Audio.com
-                text: qsTrc("project/cloud", "Would you also like to share your music on <a href=\"%1\">Audio.com</a>?").arg(root.audioComUrl)
+                text: qsTrc("project/cloud", "Would you also like to share your music on Audio.com?")
                 font: ui.theme.largeBodyBoldFont
             }
 

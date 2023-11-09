@@ -974,10 +974,7 @@ void ProjectActionsController::alsoShareAudioCom(const AudioFile& audio)
         return;
     }
 
-    QUrl audioComUrl = audioComService()->authorization()->cloudInfo().url;
-
     UriQuery query("musescore://project/alsoshareaudiocom");
-    query.addParam("audioComUrl", Val(audioComUrl.toString()));
     query.addParam("rememberChoice", Val(!configuration()->hasAskedAlsoShareAudioCom()));
     RetVal<Val> rv = interactive()->open(query);
 
