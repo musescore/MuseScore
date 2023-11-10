@@ -363,8 +363,8 @@
     <tenutoGateTime>100</tenutoGateTime>
     <staccatoGateTime>50</staccatoGateTime>
     <slurGateTime>100</slurGateTime>
-    <ArpeggioNoteDistance>0.5</ArpeggioNoteDistance>
-    <ArpeggioAccidentalDistance>0.5</ArpeggioAccidentalDistance>
+    <ArpeggioNoteDistance>0.4</ArpeggioNoteDistance>
+    <ArpeggioAccidentalDistance>0.3</ArpeggioAccidentalDistance>
     <ArpeggioAccidentalDistanceMin>0.33</ArpeggioAccidentalDistanceMin>
     <ArpeggioLineWidth>0.18</ArpeggioLineWidth>
     <ArpeggioHookLen>0.8</ArpeggioHookLen>

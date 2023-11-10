@@ -24,6 +24,7 @@
 #include "dom/arpeggio.h"
 #include "dom/chord.h"
 #include "dom/part.h"
+#include "dom/score.h"
 #include "dom/segment.h"
 
 #include "tlayout.h"
@@ -144,9 +145,10 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
     const Part* part = item->part();
     const track_idx_t partStartTrack = part->startTrack();
     const track_idx_t partEndTrack = part->endTrack();
+    const PaddingTable paddingTable = item->score()->paddingTable();
 
-    double accidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * item->mag();
-    double arpeggioLedgerDistance = ctx.conf().styleMM(Sid::ArpeggioLedgerDistance) * item->mag();
+    double accidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * item->mag();
+    double arpeggioLedgerDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::LEDGER_LINE) * item->mag();
 
     Shape arpShape = item->shape().translate(item->pagePos());
     double arpX = arpShape.right();
@@ -265,6 +267,7 @@ double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, double 
 
     const Segment* seg = item->chord()->segment();
     Chord* endChord = item->chord();
+    const PaddingTable paddingTable = item->score()->paddingTable();
     if (EngravingItem* e = seg->element(item->endTrack())) {
         endChord = e->isChord() ? toChord(e) : endChord;
     }
@@ -305,7 +308,7 @@ double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, double 
         return 0.0;
     }
 
-    double maximumInset = (ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance)
+    double maximumInset = (paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL)
                            - ctx.conf().styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
 
     RectF bbox = item->symBbox(furthestAccidental->symId());

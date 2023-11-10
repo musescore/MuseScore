@@ -474,7 +474,6 @@ enum class Sid {
     slurGateTime,
 
     ArpeggioNoteDistance,
-    ArpeggioLedgerDistance,
     ArpeggioAccidentalDistance,
     ArpeggioAccidentalDistanceMin,
     ArpeggioLineWidth,

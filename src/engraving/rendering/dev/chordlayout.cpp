@@ -91,6 +91,7 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
 
 void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 {
+    PaddingTable paddingTable = item->score()->paddingTable();
     for (Chord* c : item->graceNotes()) {
         layoutPitched(c, ctx);
     }
@@ -190,8 +191,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
 
         if (!(aboveStart || belowEnd)) {
-            double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
-            double arpeggioLedgerDistance = ctx.conf().styleMM(Sid::ArpeggioLedgerDistance) * mag_;
+            double arpeggioNoteDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::NOTE) * mag_;
+            double arpeggioLedgerDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::LEDGER_LINE) * mag_;
             int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;
             int firstLedgerAbove = -1;
 
@@ -204,7 +205,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             double arpChordX = std::min(chordX, 0.0);
 
             if (chordAccidentals.size()) {
-                double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
+                double arpeggioAccidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * mag_;
                 double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
                 gapSize = arpeggioAccidentalDistance - accidentalDistance;
                 gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, mag_, item, chordAccidentals);
