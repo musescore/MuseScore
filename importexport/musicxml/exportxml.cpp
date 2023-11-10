@@ -4657,6 +4657,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
       // "change" type is handled only on the beginning of pedal lines
       if (pd->tick() != tick && pd->endHookType() == HookType::HOOK_45)
             return;
+
       directionTag(_xml, _attr, pd);
       _xml.stag("direction-type");
       QString pedalType;
