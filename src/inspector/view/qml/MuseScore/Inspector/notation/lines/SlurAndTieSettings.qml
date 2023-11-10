@@ -80,9 +80,9 @@ Column {
         navigationRowStart: styleSection.navigationRowEnd + 1
 
         model: [
-            { text: qsTrc("inspector", "Auto"), value: SlurTieTypes.TIE_PLACEMENT_AUTO },
-            { text: qsTrc("inspector", "Inside"), value: SlurTieTypes.TIE_PLACEMENT_INSIDE },
-            { text: qsTrc("inspector", "Outside"), value: SlurTieTypes.TIE_PLACEMENT_OUTSIDE }
+            { text: qsTrc("inspector", "Auto"), value: SlurTieTypes.TIE_PLACEMENT_AUTO, title: qsTrc("inspector", "Auto")  },
+            { iconCode: IconCode.TIE_INSIDE, value: SlurTieTypes.TIE_PLACEMENT_INSIDE, title: qsTrc("inspector", "Inside") },
+            { iconCode: IconCode.TIE_OUTSIDE, value: SlurTieTypes.TIE_PLACEMENT_OUTSIDE, title: qsTrc("inspector", "Outside")  }
         ]
     }
 }
