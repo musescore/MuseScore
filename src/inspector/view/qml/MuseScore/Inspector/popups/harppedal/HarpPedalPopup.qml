@@ -87,13 +87,13 @@ StyledPopupView {
     function getNoteName(string, state) {
 
         var noteNames = [
-                [qsTrc("notation", "D flat"), qsTrc("notation", "D natural"), qsTrc("notation", "D sharp")],
-                [qsTrc("notation", "C flat"), qsTrc("notation", "C natural"), qsTrc("notation", "C sharp")],
-                [qsTrc("notation", "B flat"), qsTrc("notation", "B natural"), qsTrc("notation", "B sharp")],
-                [qsTrc("notation", "E flat"), qsTrc("notation", "E natural"), qsTrc("notation", "E sharp")],
-                [qsTrc("notation", "F flat"), qsTrc("notation", "F natural"), qsTrc("notation", "F sharp")],
-                [qsTrc("notation", "G flat"), qsTrc("notation", "G natural"), qsTrc("notation", "G sharp")],
-                [qsTrc("notation", "A flat"), qsTrc("notation", "A natural"), qsTrc("notation", "A sharp")]
+                [qsTrc("inspector", "D flat"), qsTrc("inspector", "D natural"), qsTrc("inspector", "D sharp")],
+                [qsTrc("inspector", "C flat"), qsTrc("inspector", "C natural"), qsTrc("inspector", "C sharp")],
+                [qsTrc("inspector", "B flat"), qsTrc("inspector", "B natural"), qsTrc("inspector", "B sharp")],
+                [qsTrc("inspector", "E flat"), qsTrc("inspector", "E natural"), qsTrc("inspector", "E sharp")],
+                [qsTrc("inspector", "F flat"), qsTrc("inspector", "F natural"), qsTrc("inspector", "F sharp")],
+                [qsTrc("inspector", "G flat"), qsTrc("inspector", "G natural"), qsTrc("inspector", "G sharp")],
+                [qsTrc("inspector", "A flat"), qsTrc("inspector", "A natural"), qsTrc("inspector", "A sharp")]
         ]
 
         return noteNames[string][state]
@@ -124,7 +124,7 @@ StyledPopupView {
             direction: NavigationPanel.Vertical
             section: root.notationViewNavigationSection
             order: root.navigationOrderStart
-            accessible.name: qsTrc("notation", "Pedal settings buttons")
+            accessible.name: qsTrc("inspector", "Pedal settings buttons")
         }
 
         // Accidental symbols
@@ -144,13 +144,13 @@ StyledPopupView {
             width: parent.width
 
             model: [
-                { str: qsTrc("notation", "D"), col: 1 },
-                { str: qsTrc("notation", "C"), col: 2 },
-                { str: qsTrc("notation", "B"), col: 3 },
-                { str: qsTrc("notation", "E"), col: 5 },
-                { str: qsTrc("notation", "F"), col: 6 },
-                { str: qsTrc("notation", "G"), col: 7 },
-                { str: qsTrc("notation", "A"), col: 8 }
+                { str: qsTrc("inspector", "D"), col: 1 },
+                { str: qsTrc("inspector", "C"), col: 2 },
+                { str: qsTrc("inspector", "B"), col: 3 },
+                { str: qsTrc("inspector", "E"), col: 5 },
+                { str: qsTrc("inspector", "F"), col: 6 },
+                { str: qsTrc("inspector", "G"), col: 7 },
+                { str: qsTrc("inspector", "A"), col: 8 }
             ]
 
             StyledTextLabel {
@@ -269,7 +269,7 @@ StyledPopupView {
             section: root.notationViewNavigationSection
             direction: NavigationPanel.Horizontal
             order: pedalSettingsNavPanel.order + 1
-            accessible.name: qsTrc("notation", "Diagram type buttons")
+            accessible.name: qsTrc("inspector", "Diagram type buttons")
         }
 
         RoundedRadioButton {
@@ -284,12 +284,12 @@ StyledPopupView {
             Layout.fillWidth: true
 
             checked: model.isDiagram
-            text: qsTrc("notation", "Diagram")
+            text: qsTrc("inspector", "Diagram")
 
             navigation.name: "diagramButton"
             navigation.panel: isDiagramNavPanel
             navigation.order: 1
-            navigation.accessible.name: qsTrc("notation", "Diagram")
+            navigation.accessible.name: qsTrc("inspector", "Diagram")
 
             onToggled: {
                 model.setIsDiagram(true)
@@ -307,12 +307,12 @@ StyledPopupView {
             Layout.fillWidth: true
 
             checked: !model.isDiagram
-            text: qsTrc("notation", "Text")
+            text: qsTrc("inspector", "Text")
 
             navigation.name: "textButton"
             navigation.panel: isDiagramNavPanel
             navigation.order: 2
-            navigation.accessible.name: qsTrc("notation", "Text")
+            navigation.accessible.name: qsTrc("inspector", "Text")
 
             onToggled: {
                 model.setIsDiagram(false)
