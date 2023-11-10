@@ -3986,7 +3986,8 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
       if (type == "start") {
             SLine* sline = spdesc._isStopped ? spdesc._sp : 0;
             if ((sline && sline->isTrill()) || (!sline && isWavy)) {
-                  if (!sline) sline = new Trill(_score);
+                  if (!sline)
+                        sline = new Trill(_score);
                   auto trill = toTrill(sline);
                   trill->setTrillType(Trill::Type::PRALLPRALL_LINE);
 
@@ -3994,7 +3995,8 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
                         _logger->logError(QString("line-end not supported for line-type \"wavy\""));
                   }
             else if ((sline && sline->isTextLine()) || (!sline && !isWavy)) {
-                  if (!sline) sline = new TextLine(_score);
+                  if (!sline)
+                        sline = new TextLine(_score);
                   auto textLine = toTextLine(sline);
                   // if (placement == "") placement = "above";  // TODO ? set default
 
@@ -4024,12 +4026,14 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
       else if (type == "stop") {
             SLine* sline = spdesc._isStarted ? spdesc._sp : 0;
             if ((sline && sline->isTrill()) || (!sline && isWavy)) {
-                  if (!sline) sline = new Trill(_score);
+                  if (!sline)
+                        sline = new Trill(_score);
                   if (!lineEnd.isEmpty() && lineEnd != "none") 
                         _logger->logError(QString("line-end not supported for line-type \"wavy\""));
                   }
             else if ((sline && sline->isTextLine()) || (!sline && !isWavy)) {
-                  if (!sline) sline = new TextLine(_score);
+                  if (!sline)
+                        sline = new TextLine(_score);
                   auto textLine = toTextLine(sline);
                   textLine->setEndHookType(lineEnd != "none" ? HookType::HOOK_90 : HookType::NONE);
                   if (lineEnd == "up")
@@ -4269,8 +4273,7 @@ MusicXmlExtendedSpannerDesc& MusicXMLParserPass2::getSpanner(const MusicXmlSpann
             return _ottavas[d._nr];
       else if (d._tp == ElementType::PEDAL && 0 == d._nr)
             return _pedal;
-      else if ((d._tp == ElementType::TEXTLINE || d._tp == ElementType::TRILL)
-                && 0 <= d._nr && d._nr < MAX_NUMBER_LEVEL)
+      else if ((d._tp == ElementType::TEXTLINE || d._tp == ElementType::TRILL) && 0 <= d._nr && d._nr < MAX_NUMBER_LEVEL)
             return _brackets[d._nr];
       _logger->logError(QString("invalid number %1").arg(d._nr + 1), &_e);
       return _dummyNewMusicXmlSpannerDesc;
