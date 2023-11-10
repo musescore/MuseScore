@@ -937,7 +937,7 @@ static void addElemOffset(Element* el, int track, const QString& placement, Meas
       if (placement != "") {
             el->setPlacement(placement == "above" ? Placement::ABOVE : Placement::BELOW);
             el->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
-      }
+            }
 
 
       el->setTrack(el->isTempoText() ? 0 : track);    // TempoText must be in track 0
@@ -3241,8 +3241,10 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   QString wordsPlacement = placement();
                   // Case-based defaults
                   if (wordsPlacement.isEmpty()) {
-                        if (isVocalStaff) wordsPlacement = "above";
-                        else if (isExpressionText) wordsPlacement = "below";
+                        if (isVocalStaff)
+                              wordsPlacement = "above";
+                        else if (isExpressionText)
+                              wordsPlacement = "below";
                         }
                   
                   if (isLikelyFingering()) {
