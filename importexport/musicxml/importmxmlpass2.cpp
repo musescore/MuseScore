@@ -175,7 +175,7 @@ void MusicXmlLyricsExtend::setExtend(const int no, const int track, const Fracti
             if (el->type() == ElementType::CHORD || el->type() == ElementType::REST) {
                   ChordRest* const par = static_cast<ChordRest*>(el);
                   if ((no == -1 && par->track() == track)
-                   || (l->no() == no && track2staff(par->track()) == track2staff(track))) {
+                      || (l->no() == no && track2staff(par->track()) == track2staff(track))) {
                         Fraction lct = lastChordTicks(l->segment(), tick);
                         if (lct > Fraction(0,1)) {
                               // set lyric tick to the total length from the lyric note
