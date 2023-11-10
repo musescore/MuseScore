@@ -253,14 +253,6 @@ EditStyle::EditStyle(QWidget* parent)
     articulationKeepTogether->addButton(radioArticKeepTogether, 1);
     articulationKeepTogether->addButton(radioArticAllowSeparate, 0);
 
-    QButtonGroup* tieSingleNote = new QButtonGroup(this);
-    tieSingleNote->addButton(tieSingleNoteInside, int(TiePlacement::INSIDE));
-    tieSingleNote->addButton(tieSingleNoteOutside, int(TiePlacement::OUTSIDE));
-
-    QButtonGroup* tieChord = new QButtonGroup(this);
-    tieChord->addButton(tieChordInside, int(TiePlacement::INSIDE));
-    tieChord->addButton(tieChordOutside, int(TiePlacement::OUTSIDE));
-
     // ====================================================
     // Style widgets
     // ====================================================
@@ -438,9 +430,6 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::voltaPosAbove,           false, voltaPosAbove,           resetVoltaPosAbove },
         { StyleId::voltaHook,               false, voltaHook,               resetVoltaHook },
         { StyleId::voltaLineWidth,          false, voltaLineWidth,          resetVoltaLineWidth },
-
-        { StyleId::tiePlacementSingleNote, false, tieSingleNote, 0 },
-        { StyleId::tiePlacementChord, false, tieChord, 0 },
 
         { StyleId::ottavaPosAbove,          false, ottavaPosAbove,          resetOttavaPosAbove },
         { StyleId::ottavaPosBelow,          false, ottavaPosBelow,          resetOttavaPosBelow },
@@ -786,6 +775,32 @@ EditStyle::EditStyle(QWidget* parent)
     beamsPage->setMinimumSize(224, 280);
     beamsPage->setResizeMode(QQuickWidget::SizeRootObjectToView);
     groupBox_beams->layout()->addWidget(beamsPage);
+
+    // ====================================================
+    // BENDS (QML)
+    // ====================================================
+
+    QQuickWidget* fullBendStyleSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                           /*parent*/ fullBendStyleBoxSelector);
+    fullBendStyleSelector->setObjectName("bendStyleSelector_QQuickWidget");
+    fullBendStyleSelector->setSource(QUrl(QString::fromUtf8(
+                                              "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/FullBendStyleSelector.qml")));
+    fullBendStyleSelector->setMinimumSize(224, 60);
+    fullBendStyleSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    fullBendStyleBoxSelector->layout()->addWidget(fullBendStyleSelector);
+
+    // ====================================================
+    // TIE PLACEMENT (QML)
+    // ====================================================
+
+    QQuickWidget* tiePlacementSelector = new QQuickWidget(/*QmlEngine*/ uiEngine()->qmlEngine(),
+                                                          /*parent*/ groupBox_ties);
+    tiePlacementSelector->setObjectName("tiePlacementSelector_QQuickWidget");
+    tiePlacementSelector->setSource(QUrl(QString::fromUtf8(
+                                             "qrc:/qml/MuseScore/NotationScene/internal/EditStyle/TiePlacementSelector.qml")));
+    tiePlacementSelector->setMinimumSize(224, 120);
+    tiePlacementSelector->setResizeMode(QQuickWidget::SizeRootObjectToView);
+    groupBox_ties->layout()->addWidget(tiePlacementSelector);
 
     // ====================================================
     // Figured Bass
