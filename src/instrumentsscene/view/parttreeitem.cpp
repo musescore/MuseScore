@@ -136,14 +136,18 @@ QString PartTreeItem::instrumentId() const
     return m_instrumentId;
 }
 
-void PartTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
-                                int destinationRow)
+MoveParams PartTreeItem::buildMoveParams(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+                                         int destinationRow) const
 {
+    MoveParams moveParams;
+
     IDList stavesIds;
 
     for (int i = sourceRow; i < sourceRow + count; ++i) {
         stavesIds.push_back(childAtRow(i)->id());
     }
+
+    moveParams.childIdListToMove = stavesIds;
 
     int destinationRowLast = destinationRow;
     INotationParts::InsertMode moveMode = INotationParts::InsertMode::Before;
@@ -155,8 +159,21 @@ void PartTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPan
     }
 
     AbstractInstrumentsPanelTreeItem* destinationStaffItem = destinationParent->childAtRow(destinationRowLast);
-    notation()->parts()->moveStaves(stavesIds, destinationStaffItem->id(), moveMode);
-    AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow);
+
+    moveParams.destinationParentId = destinationStaffItem->id();
+    moveParams.insertMode = moveMode;
+
+    return moveParams;
+}
+
+void PartTreeItem::moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+                                int destinationRow, bool updateNotation)
+{
+    if (updateNotation) {
+        MoveParams moveParams = buildMoveParams(sourceRow, count, destinationParent, destinationRow);
+        notation()->parts()->moveStaves(moveParams.childIdListToMove, moveParams.destinationParentId, moveParams.insertMode);
+    }
+    AbstractInstrumentsPanelTreeItem::moveChildren(sourceRow, count, destinationParent, destinationRow, updateNotation);
 }
 
 void PartTreeItem::removeChildren(int row, int count, bool deleteChild)

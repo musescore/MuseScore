@@ -32,6 +32,12 @@
 #include "notation/iexcerptnotation.h"
 
 namespace mu::instrumentsscene {
+struct MoveParams {
+    IDList childIdListToMove;
+    ID destinationParentId;
+    notation::INotationParts::InsertMode insertMode = notation::INotationParts::InsertMode::Before;
+};
+
 class AbstractInstrumentsPanelTreeItem : public QObject
 {
     Q_OBJECT
@@ -66,7 +72,12 @@ public:
     Q_INVOKABLE virtual bool canAcceptDrop(const QVariant& item) const;
     Q_INVOKABLE virtual void appendNewItem();
 
-    virtual void moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent, int destinationRow);
+    virtual MoveParams buildMoveParams(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent,
+                                       int destinationRow) const;
+
+    virtual void moveChildren(int sourceRow, int count, AbstractInstrumentsPanelTreeItem* destinationParent, int destinationRow,
+                              bool updateNotation);
+
     virtual void removeChildren(int row, int count = 1, bool deleteChild = false);
 
     AbstractInstrumentsPanelTreeItem* parentItem() const;

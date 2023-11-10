@@ -474,11 +474,17 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
 
     int sourceFirstRow = sourceRow;
     int sourceLastRow = sourceRow + count - 1;
-    int destinationRow = (sourceLastRow > destinationChild
-                          || sourceParentItem != destinationParentItem) ? destinationChild : destinationChild + 1;
+    int destinationRow = (sourceLastRow > destinationChild || sourceParentItem != destinationParentItem)
+                         ? destinationChild : destinationChild + 1;
+
+    m_activeDragIsStave = destinationParentItem != m_rootItem;
+
+    if (m_dragInProgress) {
+        m_activeDragMoveParams = sourceParentItem->buildMoveParams(sourceRow, count, destinationParentItem, destinationRow);
+    }
 
     beginMoveRows(sourceParent, sourceFirstRow, sourceLastRow, destinationParent, destinationRow);
-    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow);
+    sourceParentItem->moveChildren(sourceFirstRow, count, destinationParentItem, destinationRow, !m_dragInProgress);
     endMoveRows();
 
     updateRearrangementAvailability();
@@ -486,6 +492,31 @@ bool InstrumentsPanelTreeModel::moveRows(const QModelIndex& sourceParent, int so
     setLoadingBlocked(false);
 
     return true;
+}
+
+void InstrumentsPanelTreeModel::startActiveDrag()
+{
+    m_dragInProgress = true;
+}
+
+void InstrumentsPanelTreeModel::endActiveDrag()
+{
+    setLoadingBlocked(true);
+
+    if (m_activeDragIsStave) {
+        m_notation->parts()->moveStaves(m_activeDragMoveParams.childIdListToMove,
+                                        m_activeDragMoveParams.destinationParentId,
+                                        m_activeDragMoveParams.insertMode);
+    } else {
+        m_notation->parts()->moveParts(m_activeDragMoveParams.childIdListToMove,
+                                       m_activeDragMoveParams.destinationParentId,
+                                       m_activeDragMoveParams.insertMode);
+    }
+
+    m_activeDragMoveParams = MoveParams();
+    m_dragInProgress = false;
+
+    setLoadingBlocked(false);
 }
 
 void InstrumentsPanelTreeModel::toggleVisibilityOfSelectedRows(bool visible)

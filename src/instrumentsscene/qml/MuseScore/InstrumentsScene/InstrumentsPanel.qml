@@ -285,6 +285,14 @@ Item {
                                 onVisibilityChanged: function(visible) {
                                     instrumentsTreeModel.toggleVisibilityOfSelectedRows(visible);
                                 }
+
+                                onDragStarted: {
+                                    instrumentsTreeModel.startActiveDrag()
+                                }
+
+                                onDropped: {
+                                    instrumentsTreeModel.endActiveDrag()
+                                }
                             }
                         }
 
