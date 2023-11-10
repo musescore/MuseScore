@@ -404,6 +404,9 @@ public:
         GUITAR_BEND_STYLE_1 = 0xF463,
         GUITAR_BEND_STYLE_FULL = 0xF464,
 
+        TIE_OUTSIDE = 0xF45D,
+        TIE_INSIDE = 0xF45E,
+
         NONE = 0xFFFF
     };
 
