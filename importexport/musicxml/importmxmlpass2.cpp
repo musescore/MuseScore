@@ -1719,10 +1719,10 @@ static void detectLayoutOverflow(Score* score, bool& hasLineOverflow, bool& hasP
             MeasureBase* lastMeasureOfPage = page->systems().back() ? page->systems().back()->lastMeasure() : 0;
 
             if (!hasPageOverflow
-             && lastMeasureOfPage
-             && !lastMeasureOfPage->pageBreak()
-             && nextPage
-             && nextPage->systems().size() < 2)
+                && lastMeasureOfPage
+                && !lastMeasureOfPage->pageBreak()
+                && nextPage
+                && nextPage->systems().size() < 2)
                   hasPageOverflow = true;
 
             for (auto sp = page->systems().begin(); sp != page->systems().end() - 1; ++sp) {
@@ -1731,10 +1731,10 @@ static void detectLayoutOverflow(Score* score, bool& hasLineOverflow, bool& hasP
                   System* system = *sp;
                   System* nextSystem = *(sp + 1);
                   if (!hasLineOverflow
-                   && system->lastMeasure()
-                   && !system->lastMeasure()->lineBreak() && !system->lastMeasure()->pageBreak()
-                   && nextSystem
-                   && nextSystem->measures().size() < 2)
+                      && system->lastMeasure()
+                      && !system->lastMeasure()->lineBreak() && !system->lastMeasure()->pageBreak()
+                      && nextSystem
+                      && nextSystem->measures().size() < 2)
                         hasLineOverflow = true;
                  }
             }
@@ -1851,12 +1851,11 @@ static bool cleanUpLayoutBreaks(Score* score, MxmlLogger* logger)
       
       // If neither fixed it, reset styles.
       if (hasLineOverflow != initialHasLineOverflow
-       || hasPageOverflow != initialHasPageOverflow)
+          || hasPageOverflow != initialHasPageOverflow)
             return true;
       else {
-            for (auto initialStyle : initialStyles) {
+            for (auto initialStyle : initialStyles)
                   score->style().set(initialStyle.first, initialStyle.second);
-                  }
             if (copyrightVBox) {
                   copyrightVBox->setAutoSizeEnabled(copyrightVBoxAutoSizeEnabledInitial);
                   copyrightVBox->setBoxHeight(copyrightVBoxBoxHeightInitial);
