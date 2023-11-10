@@ -5273,28 +5273,18 @@ static void handleDisplayStep(ChordRest* cr, int step, int octave, const Fractio
 //   handleSmallness
 //---------------------------------------------------------
 
-/**
- * Handle the distinction between small notes and a small 
- * chord, to ensure a chord with all small notes is small.
- * This also handles the fact that a small note being added
- * to a small chord should not itself be small.
- * I.e. a chord is "small until proven otherwise".
- */
-
 static void handleSmallness(bool cueOrSmall, Note* note, Chord* c)
       {
-      if (cueOrSmall) {
+      if (cueOrSmall)
             note->setSmall(!c->isSmall()); // Avoid redundant smallness
-            }
       else {
             note->setSmall(false);
             if (c->isSmall()) {
                   // What was a small chord becomes small notes in a non-small chord
                   c->setSmall(false);
-                  for (Note* otherNote : c->notes()) {
+                  for (Note* otherNote : c->notes())
                         if (note != otherNote)
                               otherNote->setSmall(true);
-                        }
                   }
             }
       }
@@ -5813,15 +5803,15 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                   }
             }
       else {
-            handleSmallness(cue || isSmall, note, c);
-            note->setPlay(!cue);          // cue notes don't play
-            note->setHeadGroup(headGroup);
-            if (noteColor != QColor::Invalid)
-                  note->setColor(noteColor);
-            setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
-            note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
-
             if (!grace) {
+                  handleSmallness(cue || isSmall, note, c);
+                  note->setPlay(!cue);          // cue notes don't play
+                  note->setHeadGroup(headGroup);
+                  if (noteColor != QColor::Invalid)
+                        note->setColor(noteColor);
+                  setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
+                  note->setVisible(hasHead && printObject); // TODO also set the stem to invisible
+
                   // regular note
                   // handle beam
                   if (!chord)
