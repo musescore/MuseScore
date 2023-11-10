@@ -3897,20 +3897,26 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
       {
       // Try to recognize the various repeats
       QString repeat = "";
-      if (_sndCoda != "") repeat = "coda";
-      else if (_sndDacapo != "") repeat = "daCapo";
-      else if (_sndDalsegno != "") repeat = "dalSegno";
-      else if (_sndFine != "") repeat = "fine";
-      else if (_sndSegno != "") repeat = "segno";
-      else if (_sndToCoda != "") repeat = "toCoda"; 
+      if (_sndCoda != "")
+            repeat = "coda";
+      else if (_sndDacapo != "")
+            repeat = "daCapo";
+      else if (_sndDalsegno != "")
+            repeat = "dalSegno";
+      else if (_sndFine != "")
+            repeat = "fine";
+      else if (_sndSegno != "")
+            repeat = "segno";
+      else if (_sndToCoda != "")
+            repeat = "toCoda";
       // As sound may be missing, next do a wild-card match with known repeat texts
-      else repeat = matchRepeat();
+      else
+            repeat = matchRepeat();
       
       // Create Jump or Marker and assign it _wordsText (invisible if no _wordsText)
       if (repeat != "") {
             TextBase* tb = nullptr;
-            if ((tb = findJump(repeat, _score)) ||
-                (tb = findMarker(repeat, _score))) {
+            if ((tb = findJump(repeat, _score)) || (tb = findMarker(repeat, _score))) {
                   tb->setTrack(track);
                   if (!_wordsText.isEmpty()) {
                         tb->setXmlText(_wordsText);
@@ -3931,13 +3937,9 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
                   // of the barline (i.e. end of mm. 29 vs. beginning of mm. 30).
                   // This fixes that.
                   bool closerToLeft = tick - measure->tick() < measure->endTick() - tick;
-                  if (tb->tid() == Tid::REPEAT_RIGHT
-                   && closerToLeft
-                   && measure->prevMeasure())
+                  if (tb->tid() == Tid::REPEAT_RIGHT && closerToLeft && measure->prevMeasure())
                         measure = measure->prevMeasure();
-                  else if (tb->tid() == Tid::REPEAT_LEFT
-                        && !closerToLeft
-                        && measure->nextMeasure())
+                  else if (tb->tid() == Tid::REPEAT_LEFT && !closerToLeft && measure->nextMeasure())
                         measure = measure->nextMeasure();
                   measure->add(tb);
                   }
