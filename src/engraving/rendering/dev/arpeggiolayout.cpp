@@ -253,7 +253,8 @@ double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, double 
 //   insetDistance
 //---------------------------------------------------------
 
-double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, double mag_, Chord* chord, std::vector<Accidental*> accidentals)
+double ArpeggioLayout::insetDistance(Arpeggio* item, LayoutContext& ctx, double mag_, Chord* chord,
+                                     const std::vector<Accidental*>& accidentals)
 {
     if (!item || !chord) {
         return 0.0;

@@ -169,9 +169,6 @@ public:
         doLayoutItem(static_cast<EngravingItem*>(item));
     }
 
-    // Layout Elements on Edit
-    virtual void layoutOnEdit(Arpeggio* item) = 0;
-
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other
     virtual void layoutTextLineBaseSegment(TextLineBaseSegment* item) = 0;

@@ -358,7 +358,7 @@ bool Arpeggio::edit(EditData& ed)
         }
     }
 
-    renderer()->layoutOnEdit(this);
+    triggerLayout();
 
     return true;
 }

@@ -112,6 +112,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     double lhead  = 0.0;           // amount of notehead to left of chord origin
     Note* upnote = item->upNote();
     Note* downnote = item->downNote();
+    Note* leftNote = nullptr;
 
     delete item->tabDur();     // no TAB? no duration symbol! (may happen when converting a TAB into PITCHED)
     item->setTabDur(nullptr);
@@ -135,6 +136,9 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         rrr      = std::max(rrr, x2);
         // track amount of space due to notehead only
         lhead    = std::max(lhead, -x1);
+        if (!leftNote || note->x() < leftNote->x()) {
+            leftNote = note;
+        }
 
         Accidental* accidental = note->accidental();
         if (accidental && accidental->visible()) {
@@ -198,7 +202,11 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
             double gapSize = arpeggioNoteDistance;
 
-            if (downnote->line() > firstLedgerBelow || upnote->line() < firstLedgerAbove) {
+            if (leftNote && RealIsNull(leftNote->x())) {
+                if (downnote->line() > firstLedgerBelow || upnote->line() < firstLedgerAbove) {
+                    gapSize = arpeggioLedgerDistance + ctx.conf().styleS(Sid::ledgerLineLength).val() * item->spatium();
+                }
+            } else if (leftNote && (leftNote->line() > firstLedgerBelow || leftNote->line() < firstLedgerAbove)) {
                 gapSize = arpeggioLedgerDistance + ctx.conf().styleS(Sid::ledgerLineLength).val() * item->spatium();
             }
 

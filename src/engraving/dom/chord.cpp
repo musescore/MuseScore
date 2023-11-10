@@ -1819,10 +1819,15 @@ void Chord::undoChangeSpanArpeggio(Arpeggio* a)
 {
     const std::list<EngravingObject*> links = linkList();
     for (EngravingObject* linkedObject : links) {
+        if (linkedObject == this) {
+            score()->undo(new ChangeSpanArpeggio(this, a));
+            continue;
+        }
         Chord* chord = toChord(linkedObject);
         Score* score = chord->score();
-        if (score) {
-            score->undo(new ChangeSpanArpeggio(chord, a));
+        EngravingItem* linkedArp = a->findLinkedInScore(score);
+        if (score && linkedArp) {
+            score->undo(new ChangeSpanArpeggio(chord, toArpeggio(linkedArp)));
         }
     }
 }

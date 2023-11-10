@@ -33,7 +33,8 @@ public:
     static void layoutArpeggio2(Arpeggio* item, LayoutContext& ctx);
 
     static double insetDistance(Arpeggio* item, LayoutContext& ctx, double mag_, Chord* _chord);
-    static double insetDistance(Arpeggio* item, LayoutContext& ctx, double mag_, Chord* _chord, const std::vector<Accidental*> accidentals);
+    static double insetDistance(Arpeggio* item, LayoutContext& ctx, double mag_, Chord* _chord,
+                                const std::vector<Accidental*>& accidentals);
     static double insetTop(Arpeggio* item, Chord* c);
     static double insetBottom(Arpeggio* item, Chord* c);
     static double insetWidth(Arpeggio* item);

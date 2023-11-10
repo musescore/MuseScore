@@ -89,15 +89,6 @@ void ScoreRenderer::layoutText1(TextBase* item, bool base)
     }
 }
 
-// ===============================================================
-// Layout Elements on Edit
-// ===============================================================
-void ScoreRenderer::layoutOnEdit(Arpeggio* item)
-{
-    LayoutContext ctx(item->score());
-    ArpeggioLayout::layoutOnEdit(item, ctx);
-}
-
 void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 {
     LayoutContext ctx(item->score());
