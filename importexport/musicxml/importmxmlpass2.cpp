@@ -2585,11 +2585,10 @@ void MusicXMLParserPass2::measure(const QString& partId,
       FiguredBassList fbl;               // List of figured bass elements under a single note
       MxmlTupletStates tupletStates;       // Tuplet state for each voice in the current part
       Tuplets tuplets;       // Current tuplet for each voice in the current part
-
+      DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
 
       // collect candidates for courtesy accidentals to work out at measure end
       QMap<Note*, int> alterMap;
-      DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
       InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
 
       while (_e.readNextStartElement()) {
@@ -2737,11 +2736,11 @@ void MusicXMLParserPass2::measure(const QString& partId,
       // Sort and add delayed directions
       delayedDirections.combineTempoText();
       std::sort(delayedDirections.begin(), delayedDirections.end(),
-            // Lambda: sort by absolute value of totalY
-            [](const MusicXMLDelayedDirectionElement* a, const MusicXMLDelayedDirectionElement* b) -> bool {
-                  return std::abs(a->totalY()) < std::abs(b->totalY());
-                  }
-            );
+                // Lambda: sort by absolute value of totalY
+                [](const MusicXMLDelayedDirectionElement* a, const MusicXMLDelayedDirectionElement* b) -> bool {
+                      return std::abs(a->totalY()) < std::abs(b->totalY());
+                      }
+                );
       for (auto direction : delayedDirections) {
             direction->addElem();
             delete direction;
