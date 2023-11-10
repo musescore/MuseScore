@@ -5340,11 +5340,11 @@ static Beam::Mode computeBeamMode(const QMap<int, QString>& beamTypes)
       {
       // Start with uniquely-handled beam modes
       if (beamTypes.value(1) == "continue"
-       && beamTypes.value(2) == "begin") 
+          && beamTypes.value(2) == "begin")
             return Beam::Mode::BEGIN32;
       else if (beamTypes.value(1) == "continue"
-            && beamTypes.value(2) == "continue"
-            && beamTypes.value(3) == "begin")
+               && beamTypes.value(2) == "continue"
+               && beamTypes.value(3) == "begin")
             return Beam::Mode::BEGIN64;
       // Generic beam modes are naive to all except the first beam
       else if (beamTypes.value(1) == "begin")

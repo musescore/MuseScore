@@ -3251,16 +3251,16 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
             // TODO: correctly handle Beam::Mode::AUTO
             // when equivalent to BEGIN32 or BEGIN64
             if ((blp < i && bln >= i)
-             || (bmc == Beam::Mode::BEGIN32 && i > 1)
-             || (bmc == Beam::Mode::BEGIN64 && i > 2))
+                || (bmc == Beam::Mode::BEGIN32 && i > 1)
+                || (bmc == Beam::Mode::BEGIN64 && i > 2))
                   text = "begin";
             else if (blp < i && bln < i) {
                   if (bln > 0) text = "forward hook";
                   else if (blp > 0) text = "backward hook";
                   }
             else if ((blp >= i && bln < i)
-                  || (bmn == Beam::Mode::BEGIN32 && i > 1)
-                  || (bmn == Beam::Mode::BEGIN64 && i > 2))
+                     || (bmn == Beam::Mode::BEGIN32 && i > 1)
+                     || (bmn == Beam::Mode::BEGIN64 && i > 2))
                   text = "end";
             else if (blp >= i && bln >= i)
                   text = "continue";
