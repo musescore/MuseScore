@@ -2578,8 +2578,8 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
             return;
             }
       else if (staves > MAX_VOICE_DESC_STAVES
-            && static_cast<int>(hiddenStaves.size()) > 0
-            && _parts[partId].staffNumberToIndex().size() == 0) {
+               && static_cast<int>(hiddenStaves.size()) > 0
+               && _parts[partId].staffNumberToIndex().size() == 0) {
             _logger->logError("staves exceed MAX_VOICE_DESC_STAVES, but hidden staves can be discarded", &_e);
             // Some scores have parts with many staves (~10), but most are hidden
             // When this occurs, we can discard hidden staves

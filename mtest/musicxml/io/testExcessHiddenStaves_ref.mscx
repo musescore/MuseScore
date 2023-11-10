@@ -148,8 +148,8 @@
       <Measure>
         <voice>
           <Clef>
-            <concertClefType>F</concertClefType>
-            <transposingClefType>F</transposingClefType>
+            <concertClefType>G</concertClefType>
+            <transposingClefType>G</transposingClefType>
             </Clef>
           <TimeSig>
             <sigN>4</sigN>
@@ -168,8 +168,8 @@
             </Rest>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>-25</l1>
-            <l2>-22</l2>
+            <l1>-3</l1>
+            <l2>1</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -202,8 +202,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>11</l1>
-            <l2>7</l2>
+            <l1>23</l1>
+            <l2>19</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -297,8 +297,8 @@
             </Rest>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>-31</l1>
-            <l2>-31</l2>
+            <l1>-7</l1>
+            <l2>-7</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -490,8 +490,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>7</l1>
-            <l2>7</l2>
+            <l1>17</l1>
+            <l2>17</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -518,8 +518,8 @@
             </Rest>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>-24</l1>
-            <l2>-24</l2>
+            <l1>0</l1>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -554,8 +554,8 @@
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>-25</l1>
-            <l2>-32</l2>
+            <l1>-1</l1>
+            <l2>-8</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -621,8 +621,8 @@
             </Rest>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>11</l1>
-            <l2>11</l2>
+            <l1>35</l1>
+            <l2>35</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -661,8 +661,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>9</l1>
-            <l2>16</l2>
+            <l1>33</l1>
+            <l2>40</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -708,8 +708,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>7</l1>
-            <l2>8</l2>
+            <l1>21</l1>
+            <l2>28</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -755,8 +755,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>17</l1>
-            <l2>11</l2>
+            <l1>41</l1>
+            <l2>35</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -822,8 +822,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>7</l1>
-            <l2>8</l2>
+            <l1>13</l1>
+            <l2>19</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -905,14 +905,18 @@
     <Staff id="2">
       <Measure>
         <voice>
+          <Clef>
+            <concertClefType>F</concertClefType>
+            <transposingClefType>F</transposingClefType>
+            </Clef>
           <TimeSig>
             <sigN>4</sigN>
             <sigD>4</sigD>
             </TimeSig>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>9</l1>
-            <l2>9</l2>
+            <l1>-8</l1>
+            <l2>-8</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -982,8 +986,8 @@
             </Chord>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>47</l1>
-            <l2>51</l2>
+            <l1>23</l1>
+            <l2>27</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1007,8 +1011,8 @@
             </Chord>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>44</l1>
-            <l2>44</l2>
+            <l1>20</l1>
+            <l2>20</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1051,8 +1055,8 @@
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>9</l1>
-            <l2>9</l2>
+            <l1>-1</l1>
+            <l2>-1</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1168,8 +1172,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>41</l1>
-            <l2>45</l2>
+            <l1>19</l1>
+            <l2>21</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1189,8 +1193,8 @@
             </Chord>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>39</l1>
-            <l2>45</l2>
+            <l1>19</l1>
+            <l2>23</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1213,8 +1217,8 @@
             </Rest>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>44</l1>
-            <l2>40</l2>
+            <l1>20</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1244,8 +1248,8 @@
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>9</l1>
-            <l2>8</l2>
+            <l1>-3</l1>
+            <l2>-7</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1346,8 +1350,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>36</l1>
-            <l2>36</l2>
+            <l1>12</l1>
+            <l2>12</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1457,8 +1461,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>37</l1>
-            <l2>41</l2>
+            <l1>15</l1>
+            <l2>17</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1505,8 +1509,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>44</l1>
-            <l2>37</l2>
+            <l1>20</l1>
+            <l2>13</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1550,8 +1554,8 @@
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>8</l1>
-            <l2>9</l2>
+            <l1>-8</l1>
+            <l2>-4</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1578,8 +1582,8 @@
             </Rest>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>37</l1>
-            <l2>41</l2>
+            <l1>15</l1>
+            <l2>17</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1642,8 +1646,8 @@
             </Chord>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>9</l1>
-            <l2>8</l2>
+            <l1>4</l1>
+            <l2>0</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1682,8 +1686,8 @@
         <voice>
           <Beam>
             <StemDirection>up</StemDirection>
-            <l1>9</l1>
-            <l2>8</l2>
+            <l1>-8</l1>
+            <l2>-12</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1718,8 +1722,8 @@
             </Chord>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>41</l1>
-            <l2>40</l2>
+            <l1>17</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
@@ -1743,8 +1747,8 @@
         <voice>
           <Beam>
             <StemDirection>down</StemDirection>
-            <l1>41</l1>
-            <l2>40</l2>
+            <l1>17</l1>
+            <l2>16</l2>
             </Beam>
           <Chord>
             <BeamMode>begin</BeamMode>
