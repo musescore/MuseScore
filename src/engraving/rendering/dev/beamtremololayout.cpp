@@ -638,7 +638,7 @@ bool BeamTremoloLayout::calculateAnchorsCross()
     int firstChordStaff = 0;
     bool allOneStaff = true;
     for (ChordRest* c : m_elements) {
-        if (!c) {
+        if (!c || !c->isChord()) {
             continue;
         }
         if (otherStaff == 0) {

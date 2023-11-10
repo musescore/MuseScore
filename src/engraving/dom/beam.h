@@ -186,6 +186,9 @@ public:
     bool cross() const { return m_cross; }
     void setCross(bool val) { m_cross = val; }
 
+    bool fullCross() const { return m_fullCross; }
+    void setFullCross(bool v) { m_fullCross = v; }
+
     int minMove() { return m_minMove; }
     void setMinMove(int val) { m_minMove = val; }
     int maxMove() { return m_maxMove; }
@@ -256,6 +259,7 @@ private:
     bool m_userModified[2]{ false };    // 0: auto/down  1: up
     bool m_isGrace = false;
     bool m_cross = false;
+    bool m_fullCross = false;
 
     double m_growLeft = 1.0;               // define "feather" beams
     double m_growRight = 1.0;
