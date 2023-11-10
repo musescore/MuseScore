@@ -72,6 +72,14 @@ bool LayoutConfiguration::isPrintingMode() const
     return score()->printing();
 }
 
+std::shared_ptr<const IEngravingFont> LayoutConfiguration::engravingFont() const
+{
+    IF_ASSERT_FAILED(score()) {
+        return nullptr;
+    }
+    return score()->engravingFont();
+}
+
 const MStyle& LayoutConfiguration::style() const
 {
     IF_ASSERT_FAILED(score()) {
@@ -98,7 +106,7 @@ int LayoutConfiguration::pageNumberOffset() const
 
 bool LayoutConfiguration::isVerticalSpreadEnabled() const
 {
-    return styleB(Sid::enableVerticalSpread) && (layoutMode() != LayoutMode::SYSTEM);
+    return styleB(Sid::enableVerticalSpread) && (viewMode() != LayoutMode::SYSTEM);
 }
 
 double LayoutConfiguration::maxSystemDistance() const

@@ -66,7 +66,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
 {
     if (!item->explicitParent()) {   // palette & clone trick
         item->setPos(PointF());
-        TLayout::layout1TextBase(item, ctx);
+        TLayout::layoutBaseTextBase1(item, ctx);
         return;
     }
 
@@ -181,7 +181,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     // Negate ChordRest offset
     double x = o.x() - cr->x();
 
-    TLayout::layout1TextBase(item, ctx);
+    TLayout::layoutBaseTextBase1(item, ctx);
 
     double centerAdjust = 0.0;
     double leftAdjust   = 0.0;

@@ -42,8 +42,12 @@ void Autoplace::autoplaceSegmentElement(const EngravingItem* item, EngravingItem
     }
 
     if (item->autoplace() && item->explicitParent()) {
-        Segment* s = toSegment(item->explicitParent());
-        Measure* m = s->measure();
+        const Segment* s = toSegment(item->explicitParent());
+        const Measure* m = s->measure();
+
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(m->ldata()->isSetPos());
+        LD_CONDITION(s->ldata()->isSetPos());
 
         double sp = item->style().spatium();
         staff_idx_t si = item->staffIdxOrNextVisible();
@@ -110,7 +114,12 @@ void Autoplace::autoplaceMeasureElement(const EngravingItem* item, EngravingItem
     }
 
     if (item->autoplace() && item->explicitParent()) {
-        Measure* m = toMeasure(item->explicitParent());
+        const Measure* m = toMeasure(item->explicitParent());
+
+        LD_CONDITION(ldata->isSetPos());
+        LD_CONDITION(ldata->isSetBbox());
+        LD_CONDITION(m->ldata()->isSetPos());
+
         staff_idx_t si = item->staffIdxOrNextVisible();
 
         // if there's no good staff for this object, obliterate it
@@ -227,6 +236,8 @@ void Autoplace::autoplaceSpannerSegment(const SpannerSegment* item, EngravingIte
 
 double Autoplace::rebaseOffset(const EngravingItem* item, EngravingItem::LayoutData* ldata, bool nox)
 {
+    LD_CONDITION(ldata->isSetPos());
+
     PointF off = item->offset();
     PointF p = ldata->autoplace.changedPos - item->pos();
     if (nox) {
@@ -351,7 +362,7 @@ void Autoplace::doAutoplace(const Articulation* item, Articulation::LayoutData* 
     if (item->autoplace() && item->explicitParent()) {
         Segment* s = item->segment();
         Measure* m = item->measure();
-        staff_idx_t si = item->staffIdx();
+        staff_idx_t si = item->vStaffIdx();
 
         double sp = item->style().spatium();
         double md = item->minDistance().val() * sp;

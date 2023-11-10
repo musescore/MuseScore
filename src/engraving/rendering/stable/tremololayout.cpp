@@ -21,6 +21,8 @@
  */
 #include "tremololayout.h"
 
+#include "global/number.h"
+
 #include "dom/chord.h"
 #include "dom/stem.h"
 #include "dom/tremolo.h"
@@ -63,7 +65,7 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
         if (!item->twoNotes()) {
             bool hasMirroredNote = false;
             for (Note* n : item->chord1()->notes()) {
-                if (n->mirror()) {
+                if (n->ldata()->mirror.value()) {
                     hasMirroredNote = true;
                     break;
                 }
@@ -90,6 +92,11 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
 void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     assert(!item->twoNotes());
+    const StaffType* staffType = item->staffType();
+
+    if (staffType && staffType->isTabStaff()) {
+        x = item->chord()->centerX();
+    }
 
     bool up = item->chord()->up();
     int upValue = up ? -1 : 1;
@@ -114,7 +121,7 @@ void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, doub
         // we need an additional offset for beams > 2 since those beams extend outwards and we don't want to adjust for that
         double beamOffset = straightFlags ? 0.75 : 0.5;
         yOffset -= beams >= 2 ? beamOffset * spatium : 0.0;
-    } else if (beams) {
+    } else if (beams && staffType && !staffType->isSimpleTabStaff()) {
         yOffset -= (beams * (ctx.conf().styleB(Sid::useWideBeams) ? 1.0 : 0.75) - 0.25) * spatium;
     }
     yOffset -= item->isBuzzRoll() && up ? 0.5 * spatium : 0.0;
@@ -190,7 +197,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
         ChordLayout::layoutStem(item->chord2(), ctx);
     }
 
-    item->layoutInfo = std::make_shared<dev::BeamTremoloLayout>(item);
+    item->layoutInfo = std::make_shared<rendering::dev::BeamTremoloLayout>(item);
     item->setStartAnchor(item->layoutInfo->chordBeamAnchor(item->chord1(), ChordBeamAnchorType::Start));
     item->setEndAnchor(item->layoutInfo->chordBeamAnchor(item->chord2(), ChordBeamAnchorType::End));
     // deal with manual adjustments here and return
@@ -297,11 +304,13 @@ void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
         return;
     }
     bool _isGrace = item->chord1()->isGrace();
-    PointF startAnchor = item->layoutInfo->startAnchor() - PointF(0., item->pagePos().y());
-    PointF endAnchor = item->layoutInfo->endAnchor() - PointF(0., item->pagePos().y());
+    const PointF pagePos = item->pagePos();
+    PointF startAnchor = item->layoutInfo->startAnchor() - PointF(0.0, pagePos.y());
+    PointF endAnchor = item->layoutInfo->endAnchor() - PointF(0.0, pagePos.y());
 
     // inset trem from stems for default style
-    double slope = (endAnchor.y() - startAnchor.y()) / (endAnchor.x() - startAnchor.x());
+    const double slope = mu::divide(endAnchor.y() - startAnchor.y(), endAnchor.x() - startAnchor.x(), 0.0);
+
     double gapSp = stemGapSp;
     if (defaultStyle || item->tremoloStyle() == TremoloStyle::TRADITIONAL_ALTERNATE) {
         // we can eat into the stemGapSp margin if the anchorpoints are sufficiently close together

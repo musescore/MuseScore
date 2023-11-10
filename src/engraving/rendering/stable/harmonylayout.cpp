@@ -50,7 +50,7 @@ void HarmonyLayout::layoutHarmonies(const std::vector<Segment*>& sl, LayoutConte
                 // in order to calculate a bbox and allocate its shape to the ChordRest.
                 // But that layout (if it happens at all) does not do autoplace,
                 // so we need the full layout here.
-                TLayout::layout(h, ctx);
+                TLayout::layoutHarmony(h, h->mutldata(), ctx);
                 Autoplace::autoplaceSegmentElement(h, h->mutldata());
             }
         }

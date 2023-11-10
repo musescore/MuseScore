@@ -41,10 +41,8 @@ class DebugPaint
     INJECT_STATIC(diagnostics::IEngravingElementsProvider, elementsProvider)
 
 public:
-    static void paintElementDebug(mu::draw::Painter& painter, const EngravingItem* element, std::shared_ptr<PaintDebugger>& debugger);
-    static void paintElementsDebug(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements);
-
-    static void paintPageDebug(mu::draw::Painter& painter, const Page* page);
+    static void paintElementDebug(mu::draw::Painter& painter, const EngravingItem* item);
+    static void paintPageDebug(mu::draw::Painter& painter, const Page* page, const std::vector<EngravingItem*>& items);
 };
 }
 

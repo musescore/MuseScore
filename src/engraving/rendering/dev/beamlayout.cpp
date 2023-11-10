@@ -99,29 +99,8 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
         }
         layout2(item, ctx, crl, st, static_cast<int>(n));
 
-//        double lw2 = item->beamWidth() / 2.0;
-
         for (const BeamSegment* bs : item->beamSegments()) {
             beamShape.add(bs->shape());
-
-//            PolygonF a(4);
-//            a[0] = PointF(bs->line.x1(), bs->line.y1());
-//            a[1] = PointF(bs->line.x2(), bs->line.y2());
-//            a[2] = PointF(bs->line.x2(), bs->line.y2());
-//            a[3] = PointF(bs->line.x1(), bs->line.y1());
-
-//            RectF pr = a.boundingRect();
-//            //! TODO In some cases (/vtest/scores/beams-19.mscz) the points of the line may be nan.
-//            //! This is a correction of the effect, we need to find the cause.
-//            {
-//                pr.setX((std::isinf(pr.x()) || std::isnan(pr.x())) ? 0.0 : pr.x());
-//                pr.setY((std::isinf(pr.y()) || std::isnan(pr.y())) ? 0.0 : pr.y());
-//                pr.setWidth((std::isinf(pr.width()) || std::isnan(pr.width())) ? 0.0 : pr.width());
-//                pr.setHeight((std::isinf(pr.height()) || std::isnan(pr.height())) ? 0.0 : pr.height());
-//            }
-
-//            RectF r(pr.adjusted(0.0, -lw2, 0.0, lw2));
-//            item->addbbox(r);
         }
     }
 
