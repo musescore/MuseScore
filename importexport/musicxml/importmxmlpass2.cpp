@@ -2447,13 +2447,11 @@ static void coerceGraceCue(Chord* mainChord, Chord* graceChord)
       if (mainChord->isSmall())
             graceChord->setSmall(true);
       bool anyPlays = false;
-      for (auto n : mainChord->notes()) {
+      for (auto n : mainChord->notes())
             anyPlays |= n->play();      
-            }
-      if (!anyPlays) {
+      if (!anyPlays)
             for (auto gn : graceChord->notes())
                   gn->setPlay(false);
-            }
       }
 
 //---------------------------------------------------------
