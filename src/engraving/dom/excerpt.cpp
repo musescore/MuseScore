@@ -348,10 +348,7 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     MeasureBase* scoreMeasure = score->first();
 
     if ((!scoreMeasure || !scoreMeasure->isVBox()) && !masterMeasure->excludeFromOtherParts()) {
-        Score::InsertMeasureOptions options;
-        options.addToAllScores = false;
-
-        score->insertMeasure(ElementType::VBOX, scoreMeasure, options);
+        score->insertBox(ElementType::VBOX, scoreMeasure);
         scoreMeasure = score->first();
     }
 

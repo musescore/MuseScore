@@ -59,7 +59,7 @@ void Score::addText(const QString& type, const QString& txt)
 {
     MeasureBase* measure = score()->first();
     if (!measure || !measure->isVBox()) {
-        score()->insertMeasure(ElementType::VBOX, measure);
+        score()->insertBox(ElementType::VBOX, measure);
         measure = score()->first();
     }
     mu::engraving::TextStyleType tid = mu::engraving::TextStyleType::DEFAULT;

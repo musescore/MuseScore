@@ -51,7 +51,7 @@ static void addTitleText(Score* score, const String& title)
 {
     MeasureBase* measure = score->first();
     if (!measure->isVBox()) {
-        score->insertMeasure(ElementType::VBOX, measure);
+        score->insertBox(ElementType::VBOX, measure);
         measure = score->first();
     }
 

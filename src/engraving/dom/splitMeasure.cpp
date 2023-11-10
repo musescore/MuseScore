@@ -115,9 +115,9 @@ void MasterScore::splitMeasure(const Fraction& tick)
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
 
-    insertMeasure(ElementType::MEASURE, nm, options);
+    insertMeasure(nm, options);
     Measure* m2 = toMeasure(nm ? nm->prev() : lastMeasure());
-    insertMeasure(ElementType::MEASURE, m2, options);
+    insertMeasure(m2, options);
     Measure* m1 = toMeasure(m2->prev());
 
     for (Score* s : scoreList()) {

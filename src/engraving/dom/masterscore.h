@@ -224,6 +224,8 @@ public:
     void splitMeasure(const Fraction&);
     void joinMeasure(const Fraction&, const Fraction&);
 
+    MeasureBase* insertMeasure(MeasureBase* beforeMeasure = nullptr, const InsertMeasureOptions& options = InsertMeasureOptions());
+
     IFileInfoProviderPtr fileInfo() const;
     void setFileInfoProvider(IFileInfoProviderPtr fileInfoProvider);
 
