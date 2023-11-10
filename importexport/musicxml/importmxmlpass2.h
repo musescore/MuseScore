@@ -292,9 +292,9 @@ private:
       void time(const QString& partId, Measure* measure, const Fraction& tick);
       void divisions();
       void transpose(const QString& partId, const Fraction& tick);
-      Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime,
-                 Fraction& missingPrev, Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac,
-                 Beams& beams, FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
+      Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev,
+                 Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beams& currBeams,
+                 FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
       void notePrintSpacingNo(Fraction& dura);
       FiguredBassItem* figure(const int idx, const bool paren);
       FiguredBass* figuredBass();

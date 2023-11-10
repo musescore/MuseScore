@@ -2613,7 +2613,8 @@ void MusicXMLParserPass2::measure(const QString& partId,
                   int alt = -10;                    // any number outside range of xml-tag "alter"
                   // note: chord and grace note handling done in note()
                   // dura > 0 iff valid rest or first note of chord found
-                  Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt, tupletStates, tuplets);
+                  Note* n = note(partId, measure, time + mTime, time + prevTime, missingPrev, dura, missingCurr, cv, gcl, gac, beams, fbl, alt,
+                                 tupletStates, tuplets);
                   if (n && !n->chord()->isGrace())
                         prevChord = n->chord();  // remember last non-grace chord
                   if (n && n->accidental() && n->accidental()->accidentalType() != AccidentalType::NONE)
@@ -2715,10 +2716,9 @@ void MusicXMLParserPass2::measure(const QString& partId,
       fillGapsInFirstVoices(measure, part);
 
       // Prevent any beams from extending into the next measure
-      for (Beam* beam : beams.values()) {
+      for (Beam* beam : beams.values())
             if (beam)
                   removeBeam(beam);
-      }
 
       // Sort and add inferred fingerings
       std::sort(inferredFingerings.begin(), inferredFingerings.end(),
