@@ -33,7 +33,7 @@ using namespace mu::inspector;
 
 const QString customPreset()
 {
-    return qtrc("notation", "Custom");
+    return qtrc("inspector", "Custom");
 }
 
 StringTuningsPopupModel::StringTuningsPopupModel(QObject* parent)
@@ -265,7 +265,7 @@ QVariantList StringTuningsPopupModel::numbersOfStrings() const
 
     for (const StringTuningsInfo& stringTuning : stringTunings.at(m_itemId)) {
         QVariantMap stringNumberMap;
-        stringNumberMap.insert("text", qtrc("notation", "%n string(s)", nullptr, static_cast<int>(stringTuning.number)));
+        stringNumberMap.insert("text", qtrc("inspector", "%n string(s)", nullptr, static_cast<int>(stringTuning.number)));
         stringNumberMap.insert("value", static_cast<int>(stringTuning.number));
         numbersList << stringNumberMap;
     }

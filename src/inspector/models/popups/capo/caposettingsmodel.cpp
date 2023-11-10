@@ -128,12 +128,12 @@ void CapoSettingsModel::toggleCapoForString(int stringIndex)
 QVariantList CapoSettingsModel::possibleCapoPlacements() const
 {
     QVariantMap above {
-        { "text", qtrc("notation", "Above") },
+        { "text", qtrc("inspector", "Above") },
         { "value", static_cast<int>(mu::engraving::PlacementV::ABOVE) }
     };
 
     QVariantMap below {
-        { "text", qtrc("notation", "Below") },
+        { "text", qtrc("inspector", "Below") },
         { "value", static_cast<int>(mu::engraving::PlacementV::BELOW) }
     };
 
