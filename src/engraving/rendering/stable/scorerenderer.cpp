@@ -33,6 +33,7 @@
 #include "layoutcontext.h"
 #include "scorelayout.h"
 #include "arpeggiolayout.h"
+#include "horizontalspacing.h"
 
 #include "paint.h"
 
@@ -81,11 +82,11 @@ void ScoreRenderer::layoutText1(TextBase* item, bool base)
 {
     LayoutContext ctx(item->score());
     if (base) {
-        TLayout::layout1TextBase(item, ctx);
+        TLayout::layoutBaseTextBase1(item, ctx);
     } else if (Harmony::classof(item)) {
-        TLayout::layout1(static_cast<Harmony*>(item), ctx);
+        TLayout::layoutHarmony(static_cast<Harmony*>(item), static_cast<Harmony*>(item)->mutldata(), ctx);
     } else {
-        TLayout::layout1TextBase(item, ctx);
+        TLayout::layoutBaseTextBase1(item, ctx);
     }
 }
 
@@ -107,7 +108,7 @@ void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)
 void ScoreRenderer::layoutBeam1(Beam* item)
 {
     LayoutContext ctx(item->score());
-    TLayout::layout1(item, ctx);
+    TLayout::layoutBeam1(item, ctx);
 }
 
 void ScoreRenderer::layoutStem(Chord* item)

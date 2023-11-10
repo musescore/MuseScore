@@ -74,7 +74,7 @@ class LayoutConfiguration
 public:
     LayoutConfiguration(IGetScoreInternal* s);
 
-    LayoutMode layoutMode() const { return options().mode; }
+    LayoutMode viewMode() const { return options().mode; }
     bool isMode(LayoutMode m) const { return options().isMode(m); }
     bool isLineMode() const { return isMode(LayoutMode::LINE); }
     bool isLinearMode() const { return options().isLinearMode(); }
@@ -89,6 +89,8 @@ public:
     bool isVerticalSpreadEnabled() const;
     double maxSystemDistance() const;
     bool isShowInstrumentNames() const;
+
+    std::shared_ptr<const IEngravingFont> engravingFont() const;
 
     const MStyle& style() const;
 
@@ -194,6 +196,7 @@ public:
     const Fraction& tick() const { return m_tick; }
     const Fraction& startTick() const { return m_startTick; }
     const Fraction& endTick() const { return m_endTick; }
+    bool isLayoutAll() const { return m_isLayoutAll; }
 
     const Page* page() const { return m_page; }
     page_idx_t pageIdx() const { return m_pageIdx; }
@@ -213,6 +216,8 @@ public:
 
     double totalBracketsWidth() const { return m_totalBracketsWidth; }
 
+    double segmentShapeSqueezeFactor() const { return m_segmentShapeSqueezeFactor; }
+
     // Mutable
     void setFirstSystem(bool val) { m_firstSystem = val; }
     void setFirstSystemIndent(bool val) { m_firstSystemIndent = val; }
@@ -221,6 +226,7 @@ public:
     void setTick(const Fraction& t) { m_tick = t; }
     void setStartTick(const Fraction& t) { m_startTick = t; }
     void setEndTick(const Fraction& t) { m_endTick = t; }
+    void setIsLayoutAll(bool v) { m_isLayoutAll = v; }
 
     Page* page() { return m_page; }
     void setPage(Page* p) { m_page = p; }
@@ -249,6 +255,8 @@ public:
 
     void setTotalBracketsWidth(double val) { m_totalBracketsWidth = val; }
 
+    void setSegmentShapeSqueezeFactor(double val) { m_segmentShapeSqueezeFactor = val; }
+
 private:
 
     bool m_firstSystem = true;
@@ -258,6 +266,7 @@ private:
     Fraction m_tick{ 0, 1 };
     Fraction m_startTick;
     Fraction m_endTick;
+    bool m_isLayoutAll = false;
 
     Page* m_page = nullptr;
     page_idx_t m_pageIdx = 0;               // index in Score->page()s
@@ -276,6 +285,8 @@ private:
     std::set<Spanner*> m_processedSpanners;
 
     bool m_rangeDone = false;
+
+    double m_segmentShapeSqueezeFactor = 1.0;
 
     // cache
     double m_totalBracketsWidth = -1.0;

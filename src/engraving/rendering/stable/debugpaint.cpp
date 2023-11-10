@@ -60,20 +60,24 @@ static Color colorForPointer(const void* ptr)
     return Color(r, g, b, 128);
 }
 
-void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingItem* item,
-                                   std::shared_ptr<PaintDebugger>& debugger)
+void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingItem* item)
 {
     // Elements tree
     bool isDiagnosticSelected = elementsProvider()->isSelected(item);
-    if (isDiagnosticSelected) {
-        // Overriding pen
-        debugger->setDebugPenColor(DEBUG_ELTREE_SELECTED_COLOR);
-    }
 
     PointF pos(item->pagePos());
     painter.translate(pos);
 
-    if (!item->ldata()->bbox().isEmpty()) {
+    RectF bbox = item->ldata()->bbox();
+
+    if (item->isType(ElementType::SEGMENT)) {
+        if (RealIsNull(bbox.height())) {
+            bbox.setHeight(10.0);
+            LOGD() << "Segment bbox height is null";
+        }
+    }
+
+    if (!bbox.isEmpty()) {
         // Draw shape
         if (configuration()->debuggingOptions().colorElementShapes
             && !item->isPage() && !item->isSystem() && !item->isStaffLines() && !item->isBox()) {
@@ -81,7 +85,7 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
             path.setFillRule(PainterPath::FillRule::WindingFill);
 
             Shape shape = item->shape();
-            for (const ShapeElement& rect : shape.elements()) {
+            for (const RectF& rect : shape.elements()) {
                 path.addRect(rect);
             }
 
@@ -97,36 +101,14 @@ void DebugPaint::paintElementDebug(mu::draw::Painter& painter, const EngravingIt
 
             painter.setPen(borderPen);
             painter.setBrush(draw::BrushStyle::NoBrush);
-            painter.drawRect(item->ldata()->bbox());
+            painter.drawRect(bbox);
         }
     }
 
     painter.translate(-pos);
-
-    debugger->restorePenColor();
 }
 
-void DebugPaint::paintElementsDebug(mu::draw::Painter& painter, const std::vector<EngravingItem*>& elements)
-{
-    // Setup debug provider
-    auto originalProvider = painter.provider();
-    std::shared_ptr<PaintDebugger> debugger = std::make_shared<PaintDebugger>(originalProvider);
-    painter.setProvider(debugger, false);
-
-    for (const EngravingItem* element : elements) {
-        if (!element->isInteractionAvailable()) {
-            continue;
-        }
-
-        paintElementDebug(painter, element, debugger);
-    }
-
-    // Restore provider
-    debugger->restorePenColor();
-    painter.setProvider(debugger->realProvider(), false);
-}
-
-void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
+void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::vector<EngravingItem*>& items)
 {
     auto options = configuration()->debuggingOptions();
     if (!options.anyEnabled()) {
@@ -146,6 +128,10 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
     double scaling = painter.worldTransform().m11() / configuration()->guiScaling();
 
     painter.save();
+
+    for (const EngravingItem* item : items) {
+        paintElementDebug(painter, item);
+    }
 
     if (options.showSystemBoundingRects) {
         painter.setBrush(BrushStyle::NoBrush);
@@ -199,7 +185,7 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page)
                         path.setFillRule(PainterPath::FillRule::WindingFill);
 
                         Shape shape = s->shapes().at(i);
-                        for (const ShapeElement& rect : shape.elements()) {
+                        for (const RectF& rect : shape.elements()) {
                             path.addRect(rect);
                         }
 

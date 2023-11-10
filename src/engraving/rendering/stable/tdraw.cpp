@@ -60,6 +60,7 @@
 
 #include "dom/glissando.h"
 #include "dom/gradualtempochange.h"
+#include "dom/guitarbend.h"
 
 #include "dom/hairpin.h"
 #include "dom/harppedaldiagram.h"
@@ -118,8 +119,8 @@
 #include "dom/stem.h"
 #include "dom/stemslash.h"
 #include "dom/sticking.h"
-#include "dom/stretchedbend.h"
 #include "dom/stringtunings.h"
+#include "dom/stretchedbend.h"
 #include "dom/symbol.h"
 #include "dom/systemdivider.h"
 #include "dom/systemtext.h"
@@ -217,6 +218,12 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::GLISSANDO_SEGMENT: draw(item_cast<const GlissandoSegment*>(item), painter);
         break;
     case ElementType::GRADUAL_TEMPO_CHANGE_SEGMENT: draw(item_cast<const GradualTempoChangeSegment*>(item), painter);
+        break;
+    case ElementType::GUITAR_BEND_SEGMENT: draw(item_cast<const GuitarBendSegment*>(item), painter);
+        break;
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT: draw(item_cast<const GuitarBendHoldSegment*>(item), painter);
+        break;
+    case ElementType::GUITAR_BEND_TEXT: drawTextBase(toTextBase(item), painter);
         break;
 
     case ElementType::HAIRPIN_SEGMENT: draw(item_cast<const HairpinSegment*>(item), painter);
@@ -988,34 +995,30 @@ void TDraw::draw(const TBox* item, draw::Painter* painter)
 void TDraw::draw(const Bracket* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
-    if (RealIsNull(item->h2())) {
-        return;
-    }
-
-    const Bracket::LayoutData* data = item->ldata();
-    IF_ASSERT_FAILED(data) {
+    const Bracket::LayoutData* ldata = item->ldata();
+    IF_ASSERT_FAILED(ldata) {
         return;
     }
 
     switch (item->bracketType()) {
     case BracketType::BRACE: {
-        if (data->braceSymbol == SymId::noSym) {
+        if (ldata->braceSymbol == SymId::noSym) {
             painter->setNoPen();
             painter->setBrush(Brush(item->curColor()));
-            painter->drawPath(data->path);
+            painter->drawPath(ldata->path);
         } else {
-            double h = 2 * item->h2();
+            double h = ldata->bracketHeight();
             double mag = h / (100 * item->magS());
             painter->setPen(item->curColor());
             painter->save();
             painter->scale(item->magx(), mag);
-            item->drawSymbol(data->braceSymbol, painter, PointF(0, 100 * item->magS()));
+            item->drawSymbol(ldata->braceSymbol, painter, PointF(0, 100 * item->magS()));
             painter->restore();
         }
     }
     break;
     case BracketType::NORMAL: {
-        double h = 2 * item->h2();
+        double h = ldata->bracketHeight();
         double spatium = item->spatium();
         double w = item->style().styleMM(Sid::bracketWidth);
         double bd = (item->style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
@@ -1030,9 +1033,9 @@ void TDraw::draw(const Bracket* item, Painter* painter)
     }
     break;
     case BracketType::SQUARE: {
-        double h = 2 * item->h2();
+        double h = ldata->bracketHeight();
         double lineW = item->style().styleMM(Sid::staffLineWidth);
-        double bracketWidth = item->width() - lineW / 2;
+        double bracketWidth = ldata->bracketWidth() - lineW / 2;
         Pen pen(item->curColor(), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, 0.0, 0.0, h));
@@ -1041,7 +1044,7 @@ void TDraw::draw(const Bracket* item, Painter* painter)
     }
     break;
     case BracketType::LINE: {
-        double h = 2 * item->h2();
+        double h = ldata->bracketHeight();
         double w = 0.67 * item->style().styleMM(Sid::bracketWidth);
         Pen pen(item->curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
@@ -1426,7 +1429,7 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
 
     Pen pen(item->curColor(item->visible(), glissando->lineColor()));
     pen.setWidthF(glissando->lineWidth());
-    pen.setCapStyle(PenCapStyle::RoundCap);
+    pen.setCapStyle(PenCapStyle::FlatCap);
     painter->setPen(pen);
 
     // rotate painter so that the line become horizontal
@@ -1476,6 +1479,46 @@ void TDraw::draw(const GlissandoSegment* item, Painter* painter)
         }
     }
     painter->restore();
+}
+
+void TDraw::draw(const GuitarBendSegment* item, Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    Pen pen(item->curColor(item->visible()));
+    pen.setWidthF(item->lineWidth());
+    pen.setCapStyle(PenCapStyle::FlatCap);
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    painter->setPen(pen);
+
+    Brush brush;
+    brush.setStyle(BrushStyle::NoBrush);
+    painter->setBrush(brush);
+
+    painter->drawPath(item->ldata()->path());
+
+    if (item->staff()->isTabStaff(item->tick())) {
+        brush.setStyle(BrushStyle::SolidPattern);
+        brush.setColor(item->curColor());
+        painter->setBrush(brush);
+        painter->setNoPen();
+        painter->drawPolygon(item->ldata()->arrow());
+    }
+}
+
+void TDraw::draw(const GuitarBendHoldSegment* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    Pen pen(item->curColor(item->visible()));
+    pen.setWidthF(item->lineWidth());
+    double dash = item->dashLength();
+    pen.setDashPattern({ dash, dash });
+    pen.setCapStyle(PenCapStyle::FlatCap);
+    pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    painter->setPen(pen);
+
+    painter->drawLine(PointF(), item->pos2());
 }
 
 void TDraw::draw(const StretchedBend* item, Painter* painter)
@@ -2087,7 +2130,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
     if (item->style().styleB(Sid::oldStyleMultiMeasureRests)
         && ldata->number <= item->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
         // draw rest symbols
-        double x = (item->width() - ldata->symsWidth) * 0.5;
+        double x = (ldata->restWidth() - ldata->symsWidth) * 0.5;
         double spacing = item->style().styleMM(Sid::mmRestOldStyleSpacing);
         for (SymId sym : ldata->restSyms) {
             double y = (sym == SymId::restWhole ? -_spatium : 0);
@@ -2110,11 +2153,11 @@ void TDraw::draw(const MMRest* item, Painter* painter)
                 && numberBox.bottom() >= -halfHBarThickness
                 && numberBox.top() <= halfHBarThickness) {
                 double gapDistance = (numberBox.width() + _spatium) * .5;
-                double midpoint = item->width() * .5;
+                double midpoint = ldata->restWidth() * .5;
                 painter->drawLine(LineF(0.0, 0.0, midpoint - gapDistance, 0.0));
-                painter->drawLine(LineF(midpoint + gapDistance, 0.0, item->width(), 0.0));
+                painter->drawLine(LineF(midpoint + gapDistance, 0.0, ldata->restWidth(), 0.0));
             } else {
-                painter->drawLine(LineF(0.0, 0.0, item->width(), 0.0));
+                painter->drawLine(LineF(0.0, 0.0, ldata->restWidth(), 0.0));
             }
         }
 
@@ -2125,7 +2168,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
             painter->setPen(pen);
             double halfVStrokeHeight = item->style().styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;
             painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
-            painter->drawLine(LineF(item->width(), -halfVStrokeHeight, item->width(), halfVStrokeHeight));
+            painter->drawLine(LineF(ldata->restWidth(), -halfVStrokeHeight, ldata->restWidth(), halfVStrokeHeight));
         }
     }
 }
@@ -2232,10 +2275,10 @@ void TDraw::draw(const Note* item, Painter* painter)
             }
         }
         // draw blank notehead to avoid staff and ledger lines
-        if (ldata->cachedSymNull() != SymId::noSym) {
+        if (ldata->cachedSymNull.value() != SymId::noSym) {
             painter->save();
             painter->setPen(config->noteBackgroundColor());
-            item->drawSymbol(ldata->cachedSymNull(), painter);
+            item->drawSymbol(ldata->cachedSymNull.value(), painter);
             painter->restore();
         }
         item->drawSymbol(ldata->cachedNoteheadSym.value(), painter);
@@ -2402,7 +2445,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
     bool up = item->computeUp();
 
     // Draw the accidental
-    SymId acc = Accidental::subtype2symbol(item->accidentalType());
+    SymId acc = Accidental::subtype2symbol(item->score()->inputState().accidentalType());
     if (acc != SymId::noSym) {
         PointF posAcc;
         posAcc.rx() -= item->symWidth(acc) + item->style().styleMM(Sid::accidentalNoteDistance) * item->mag();
@@ -2722,7 +2765,7 @@ void TDraw::draw(const StringTunings* item, draw::Painter* painter)
         double y = rect.y();
         double width = rect.width();
         double height = rect.height();
-        double topPartHeight = height * 2 / 3;
+        double topPartHeight = height * .66;
         double cornerRadius = 8.0;
 
         PainterPath path;

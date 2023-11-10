@@ -19,22 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCORELAYOUT_STABLE_H
-#define MU_ENGRAVING_SCORELAYOUT_STABLE_H
+#ifndef MU_ENGRAVING_PASSRESETLAYOUTDATA_STABLE_H
+#define MU_ENGRAVING_PASSRESETLAYOUTDATA_STABLE_H
 
-#include "types/fraction.h"
-
-namespace mu::engraving {
-class Score;
-}
+#include "passbase.h"
 
 namespace mu::engraving::rendering::stable {
-class ScoreLayout
+class PassResetLayoutData : public PassBase
 {
 public:
+    PassResetLayoutData() = default;
 
-    static void layoutRange(Score* score, const Fraction& st, const Fraction& et);
+private:
+    void doRun(Score* score, LayoutContext& ctx) override;
 };
 }
 
-#endif // MU_ENGRAVING_SCORELAYOUT_STABLE_H
+#endif // MU_ENGRAVING_PASSRESETLAYOUTDATA_STABLE_H

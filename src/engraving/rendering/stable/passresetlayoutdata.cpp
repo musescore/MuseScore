@@ -19,22 +19,35 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCORELAYOUT_STABLE_H
-#define MU_ENGRAVING_SCORELAYOUT_STABLE_H
+#include "passresetlayoutdata.h"
 
-#include "types/fraction.h"
+#include "dom/score.h"
 
-namespace mu::engraving {
-class Score;
-}
+#include "layoutcontext.h"
 
-namespace mu::engraving::rendering::stable {
-class ScoreLayout
+using namespace mu::engraving;
+using namespace mu::engraving::rendering::stable;
+
+static void resetLayoutData(EngravingItem* item)
 {
-public:
+    if (item->ldata()) {
+        item->mutldata()->reset();
+    }
 
-    static void layoutRange(Score* score, const Fraction& st, const Fraction& et);
-};
+    for (EngravingItem* ch : item->childrenItems()) {
+        resetLayoutData(ch);
+    }
 }
 
-#endif // MU_ENGRAVING_SCORELAYOUT_STABLE_H
+void PassResetLayoutData::doRun(Score* score, LayoutContext& ctx)
+{
+    if (ctx.state().isLayoutAll()) {
+        resetLayoutData(score->rootItem());
+    } else {
+        MeasureBase* m = ctx.mutState().nextMeasure();
+        while (m && m->tick() <= ctx.state().endTick()) {
+            resetLayoutData(m);
+            m = m->next();
+        }
+    }
+}

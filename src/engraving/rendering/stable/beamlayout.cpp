@@ -49,10 +49,10 @@
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;
-using namespace mu::engraving::rendering::dev;
 
 void BeamLayout::layout(Beam* item, LayoutContext& ctx)
 {
+    Beam::LayoutData* ldata = item->mutldata();
     // all of the beam layout code depends on _elements being in order by tick
     // this may not be the case if two cr's were recently swapped.
     std::sort(item->elements().begin(), item->elements().end(),
@@ -84,7 +84,9 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
         }
         crl.push_back(cr);
     }
-    item->setbbox(RectF());
+
+    Shape beamShape(Shape::Type::Composite);
+
     if (!crl.empty()) {
         SpannerSegmentType st;
         if (n == 0) {
@@ -97,23 +99,17 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
         }
         layout2(item, ctx, crl, st, static_cast<int>(n));
 
-        double lw2 = item->beamWidth() / 2.0;
-
         for (const BeamSegment* bs : item->beamSegments()) {
-            PolygonF a(4);
-            a[0] = PointF(bs->line.x1(), bs->line.y1());
-            a[1] = PointF(bs->line.x2(), bs->line.y2());
-            a[2] = PointF(bs->line.x2(), bs->line.y2());
-            a[3] = PointF(bs->line.x1(), bs->line.y1());
-            RectF r(a.boundingRect().adjusted(0.0, -lw2, 0.0, lw2));
-            item->addbbox(r);
+            beamShape.add(bs->shape());
         }
     }
+
+    ldata->setShape(beamShape);
 
     // The beam may have changed shape. one-note trems within this beam need to be layed out here
     for (ChordRest* cr : item->elements()) {
         if (cr->isChord() && toChord(cr)->tremolo() && !toChord(cr)->tremolo()->twoNotes()) {
-            TLayout::layout(toChord(cr)->tremolo(), ctx);
+            TLayout::layoutTremolo(toChord(cr)->tremolo(), ctx);
         }
     }
 }
@@ -284,7 +280,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
 
 void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
 {
-    item->layoutInfo = std::make_shared<dev::BeamTremoloLayout>(item);
+    item->layoutInfo = std::make_shared<rendering::dev::BeamTremoloLayout>(item);
     Chord* startChord = nullptr;
     Chord* endChord = nullptr;
     if (chordRests.empty()) {
@@ -321,7 +317,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
 
     int fragmentIndex = (item->beamDirection() == DirectionV::AUTO || item->beamDirection() == DirectionV::DOWN) ? 0 : 1;
     if (item->userModified()) {
-        item->layoutInfo = std::make_shared<dev::BeamTremoloLayout>(item);
+        item->layoutInfo = std::make_shared<rendering::dev::BeamTremoloLayout>(item);
         double startY = item->beamFragments()[frag]->py1[fragmentIndex];
         double endY = item->beamFragments()[frag]->py2[fragmentIndex];
         if (ctx.conf().styleB(Sid::snapCustomBeamsToGrid)) {
@@ -344,7 +340,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
     // location depends on _isBesideTabStaff
 
     if (!item->isBesideTabStaff()) {
-        item->layoutInfo = std::make_shared<dev::BeamTremoloLayout>(item);
+        item->layoutInfo = std::make_shared<rendering::dev::BeamTremoloLayout>(item);
         item->layoutInfo->calculateAnchors(chordRests, item->notes());
         item->setStartAnchor(item->layoutInfo->startAnchor());
         item->setEndAnchor(item->layoutInfo->endAnchor());
@@ -359,7 +355,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
                 break;
             }
         }
-        item->layoutInfo = std::make_shared<dev::BeamTremoloLayout>(item);
+        item->layoutInfo = std::make_shared<rendering::dev::BeamTremoloLayout>(item);
         double x1 = item->layoutInfo->chordBeamAnchorX(chordRests.front(), ChordBeamAnchorType::Start);
         double x2 = item->layoutInfo->chordBeamAnchorX(chordRests.back(), ChordBeamAnchorType::End);
         double y = item->layoutInfo->chordBeamAnchorY(startChord2);
@@ -450,7 +446,7 @@ void BeamLayout::restoreBeams(Measure* m, LayoutContext& ctx)
                 ChordRest* cr = toChordRest(e);
                 Beam* b = cr->beam();
                 if (b && !b->elements().empty() && b->elements().front() == cr) {
-                    TLayout::layout(b, ctx);
+                    TLayout::layoutBeam(b, ctx);
                     b->addSkyline(m->system()->staff(b->staffIdx())->skyline());
                 }
             }
@@ -838,7 +834,7 @@ void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
         ChordRest* cr = toChordRest(e);
         // layout beam
         if (BeamLayout::isTopBeam(cr)) {
-            TLayout::layout(cr->beam(), ctx);
+            TLayout::layoutBeam(cr->beam(), ctx);
             if (!cr->beam()->tremAnchors().empty()) {
                 // there are inset tremolos in here
                 for (ChordRest* beamCr : cr->beam()->elements()) {
@@ -847,7 +843,7 @@ void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
                     }
                     Chord* c = toChord(beamCr);
                     if (c->tremolo() && c->tremolo()->twoNotes()) {
-                        TLayout::layout(c->tremolo(), ctx);
+                        TLayout::layoutTremolo(c->tremolo(), ctx);
                     }
                 }
             }
@@ -857,7 +853,7 @@ void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
         }
         for (Chord* grace : toChord(cr)->graceNotes()) {
             if (BeamLayout::isTopBeam(grace)) {
-                TLayout::layout(grace->beam(), ctx);
+                TLayout::layoutBeam(grace->beam(), ctx);
             }
         }
     }
@@ -919,7 +915,7 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
         ChordLayout::resolveRestVSRest(rests, staff, segment, ctx, /*considerBeams*/ true);
     }
 
-    TLayout::layout(beam, ctx);
+    TLayout::layoutBeam(beam, ctx);
 }
 
 void BeamLayout::createBeamSegments(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests)
@@ -1301,6 +1297,7 @@ void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest*
     b->isBefore = isBefore;
     cr->setBeamlet(b);
 
+    ChordLayout::fillShape(cr, cr->mutldata(), ctx.conf());
     //! NOTE Moved from ChordRest::setBeamlet
     cr->segment()->createShape(cr->vStaffIdx());
     item->beamSegments().push_back(b);

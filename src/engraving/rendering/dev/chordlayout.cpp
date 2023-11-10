@@ -619,12 +619,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     for (size_t i = 0; i < numOfNotes; ++i) {
         layoutNote2(item->notes().at(i), ctx);
     }
-//    RectF bb;
-//    item->processSiblings([&bb](EngravingItem* e) { bb.unite(e->ldata()->bbox().translated(e->pos())); }, true);
-//    if (item->tabDur()) {
-//        bb.unite(item->tabDur()->ldata()->bbox().translated(item->tabDur()->pos()));
-//    }
-//    item->setbbox(bb);
+
     if (item->stemSlash()) {
         TLayout::layoutStemSlash(item->stemSlash(), item->stemSlash()->mutldata(), ctx.conf());
     }
