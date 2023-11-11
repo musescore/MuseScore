@@ -144,6 +144,7 @@ public:
     InspectorSectionType sectionType() const;
     InspectorModelType modelType() const;
 
+    static ElementKey makeKey(const mu::engraving::EngravingItem* item);
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
     static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,

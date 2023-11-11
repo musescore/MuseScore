@@ -195,20 +195,32 @@ InspectorModelType AbstractInspectorModel::modelType() const
     return m_modelType;
 }
 
+ElementKey AbstractInspectorModel::makeKey(const EngravingItem* item)
+{
+    switch (item->type()) {
+    case ElementType::TEMPO_TEXT: {
+        const auto tempoText = static_cast<const TempoText*>(item);
+        return ElementKey{ ElementType::TEMPO_TEXT, static_cast<int>(tempoText->tempoTextType()) };
+    }
+    default:
+        return ElementKey{ item->type(), item->subtype() };
+    }
+}
+
 InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
     if (elementKey.type == mu::engraving::ElementType::HAIRPIN || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
-        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::HairpinType>(elementKey.propset),
+        return HAIRPIN_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::HairpinType>(elementKey.subtype),
                                                  InspectorModelType::TYPE_UNDEFINED);
     }
 
     if (elementKey.type == mu::engraving::ElementType::LAYOUT_BREAK) {
-        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::LayoutBreakType>(elementKey.propset),
+        return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::LayoutBreakType>(elementKey.subtype),
                                                       InspectorModelType::TYPE_UNDEFINED);
     }
 
     if (elementKey.type == mu::engraving::ElementType::TEMPO_TEXT) {
-        return TEMPO_TEXT_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::TempoTextType>(elementKey.propset),
+        return TEMPO_TEXT_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::TempoTextType>(elementKey.subtype),
                                                     InspectorModelType::TYPE_UNDEFINED);
     }
 

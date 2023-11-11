@@ -52,8 +52,6 @@ public:
 
     TempoText* clone() const override { return new TempoText(*this); }
 
-    virtual int propset() const override;
-
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 

@@ -70,11 +70,6 @@ TempoText::TempoText(Segment* parent)
     _isRelative     = false;
 }
 
-int TempoText::propset() const
-{
-    return static_cast<int>(_tempoTextType);
-}
-
 void TempoText::setTempoTextType(TempoTextType ttt)
 {
     _tempoTextType = ttt;
