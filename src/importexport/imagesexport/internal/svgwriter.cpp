@@ -99,7 +99,9 @@ mu::Ret SvgWriter::write(INotationPtr notation, QIODevice& destinationDevice, co
 
     mu::engraving::MScore::pixelRatio = mu::engraving::DPI / printer.logicalDpiX();
 
-    if (!options[OptionKey::TRANSPARENT_BACKGROUND].toBool()) {
+    const bool TRANSPARENT_BACKGROUND = options.value(OptionKey::TRANSPARENT_BACKGROUND,
+                                                      Val(configuration()->exportSvgWithTransparentBackground())).toBool();
+    if (!TRANSPARENT_BACKGROUND) {
         painter.fillRect(pageRect, mu::draw::Color::WHITE);
     }
 
