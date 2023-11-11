@@ -2898,6 +2898,25 @@ void Score::deleteItem(EngravingItem* el)
     }
     break;
 
+    case ElementType::VBOX:
+    {
+        // don't remove title frames in parts, because they contain part name
+        // remove title, subtitle, ... instead, and unlink frame siblinks
+        if (el == score()->first() && score()->isMaster()) {
+            ElementList els = toMeasureBase(el)->el();
+            for (EngravingItem* e : els) {
+                deleteItem(e);
+            }
+            undoRemoveElement(el, false);
+            for (EngravingObject* linkedFrame : el->linkList()) {
+                linkedFrame->undoUnlink();
+            }
+        } else {
+            undoRemoveElement(el);
+        }
+    }
+    break;
+
     default:
         undoRemoveElement(el);
         break;
