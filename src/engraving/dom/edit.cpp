@@ -2904,8 +2904,8 @@ void Score::deleteItem(EngravingItem* el)
         // remove title, subtitle, ... instead, and unlink frame siblinks
         if (el == score()->first() && score()->isMaster()) {
             ElementList els = toMeasureBase(el)->el();
-            for (EngravingItem* e : els) {
-                deleteItem(e);
+            for (auto it = els.rbegin(); it != els.rend(); ++it) {
+                deleteItem(*it);
             }
             undoRemoveElement(el, false);
             for (EngravingObject* linkedFrame : el->linkList()) {
