@@ -466,9 +466,13 @@ private:
 };
 }
 
-inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::engraving::PropertyValue&)
+inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::engraving::PropertyValue& v)
 {
-    s << "property(not implemented log output)";
+    if (v.type() == mu::engraving::P_TYPE::FRACTION) {
+        s << v.value<mu::engraving::Fraction>().toString();
+    } else {
+        s << "property(not implemented log output)";
+    }
     return s;
 }
 
