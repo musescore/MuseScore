@@ -393,6 +393,19 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
                     m->stretchToTargetWidth(oldWidth);
                     MeasureLayout::layoutMeasureElements(m, ctx);
                     BeamLayout::restoreBeams(m, ctx);
+                    for (size_t track = 0; track < ctx.dom().ntracks(); ++track) {
+                        Segment* s = m->findFirstR(SegmentType::EndBarLine, Fraction(1, 1));
+                        EngravingItem* e = s ? s->element(track) : nullptr;
+                        if (e) {
+                            TLayout::layoutBarLine2(toBarLine(e), ctx);
+                        }
+
+                        s = m->findFirstR(SegmentType::BeginBarLine, Fraction(1, 1));
+                        e = s ? s->element(track) : nullptr;
+                        if (e) {
+                            TLayout::layoutBarLine2(toBarLine(e), ctx);
+                        }
+                    }
                     if (m == nm || !m->noBreak()) {
                         break;
                     }
