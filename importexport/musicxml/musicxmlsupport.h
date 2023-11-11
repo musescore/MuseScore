@@ -52,7 +52,7 @@ class NoteList {
 public:
       NoteList();
       void addNote(const int startTick, const int endTick, const int staff);
-      void dump(const QString& voice) const;
+      void dump(const int& voice) const;
       bool stavesOverlap(const int staff1, const int staff2) const;
       bool anyStaffOverlaps() const;
 private:
@@ -113,12 +113,12 @@ private:
 class VoiceOverlapDetector {
 public:
       VoiceOverlapDetector();
-      void addNote(const int startTick, const int endTick, const QString& voice, const int staff);
+      void addNote(const int startTick, const int endTick, const int& voice, const int staff);
       void dump() const;
       void newMeasure();
-      bool stavesOverlap(const QString& voice) const;
+      bool stavesOverlap(const int& voice) const;
 private:
-      QMap<QString, NoteList> _noteLists; ///< The notelists for all the voices
+      QMap<int, NoteList> _noteLists; ///< The notelists for all the voices
       };
 
 //---------------------------------------------------------

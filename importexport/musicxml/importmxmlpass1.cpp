@@ -74,14 +74,14 @@ static void allocateStaves(VoiceList& vcLst)
       for (int i = 0; i < vcLst.size(); ++i) {
             // find the regular voice containing the highest number of chords and rests that has not been handled yet
             int max = 0;
-            QString key;
+            int key = -1;
             for (VoiceList::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
                   if (!j.value().overlaps() && j.value().numberChordRests() > max && j.value().staff() == -1) {
                         max = j.value().numberChordRests();
                         key = j.key();
                         }
                   }
-            if (key != "") {
+            if (key > 0) {
                   int prefSt = vcLst.value(key).preferredStaff();
                   if (voicesAllocated[prefSt] < VOICES) {
                         vcLst[key].setStaff(prefSt);
@@ -101,14 +101,14 @@ static void allocateStaves(VoiceList& vcLst)
             for (int i = 0; i < vcLst.size(); ++i) {
                   // find the overlapping voice containing the highest number of chords and rests that has not been handled yet
                   int max = 0;
-                  QString key;
+                  int key = -1;
                   for (VoiceList::const_iterator j = vcLst.constBegin(); j != vcLst.constEnd(); ++j) {
                         if (j.value().overlaps() && j.value().numberChordRests(h) > max && j.value().staffAlloc(h) == -1) {
                               max = j.value().numberChordRests(h);
                               key = j.key();
                               }
                         }
-                  if (key != "") {
+                  if (key > 0) {
                         int prefSt = h;
                         if (voicesAllocated[prefSt] < VOICES) {
                               vcLst[key].setStaffAlloc(prefSt, 1);
@@ -141,7 +141,7 @@ static void allocateVoices(VoiceList& vcLst)
       // a voice is allocated on one specific staff
       for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
             int staff = i.value().staff();
-            QString key   = i.key();
+            int key   = i.key();
             if (staff >= 0) {
                   vcLst[key].setVoice(nextVoice[staff]);
                   nextVoice[staff]++;
@@ -152,7 +152,7 @@ static void allocateVoices(VoiceList& vcLst)
       for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
             for (int j = 0; j < MAX_VOICE_DESC_STAVES; ++j) {
                   int staffAlloc = i.value().staffAlloc(j);
-                  QString key   = i.key();
+                  int key        = i.key();
                   if (staffAlloc >= 0) {
                         vcLst[key].setVoice(j, nextVoice[j]);
                         nextVoice[j]++;
@@ -173,7 +173,7 @@ static void allocateVoices(VoiceList& vcLst)
 static void copyOverlapData(VoiceOverlapDetector& vod, VoiceList& vcLst)
       {
       for (VoiceList::const_iterator i = vcLst.constBegin(); i != vcLst.constEnd(); ++i) {
-            QString key = i.key();
+            int key = i.key();
             if (vod.stavesOverlap(key))
                   vcLst[key].setOverlap(true);
             }
@@ -340,7 +340,7 @@ void MusicXMLParserPass1::setDrumsetDefault(const QString& id,
  TODO: finalize
  */
 
-bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int mxStaff, const QString& mxVoice,
+bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int mxStaff, const int& mxVoice,
                                                   int& msMove, int& msTrack, int& msVoice) const
       {
       VoiceList voicelist = getVoiceList(id);
@@ -377,8 +377,8 @@ bool MusicXMLParserPass1::determineStaffMoveVoice(const QString& id, const int m
 
       //qDebug("voice mapper mapped: s=%d v=%d", s, v);
       if (s < 0 || v < 0) {
-            qDebug("too many voices (staff=%d voice='%s' -> s=%d v=%d)",
-                   mxStaff + 1, qPrintable(mxVoice), s, v);
+            qDebug("too many voices (staff=%d voice='%d' -> s=%d v=%d)",
+                   mxStaff + 1, mxVoice, s, v);
             return false;
             }
 
@@ -3262,6 +3262,25 @@ Fraction missingTupletDuration(const Fraction duration)
       }
 
 //---------------------------------------------------------
+//   voiceToInt
+//---------------------------------------------------------
+
+int MusicXMLParserPass1::voiceToInt(const QString& voice)
+      {
+      bool ok;
+      int voiceInt = voice.toInt(&ok);
+      if (voice == "")
+            voiceInt = 1;
+      else if (!ok)
+#if QT_VERSION >= QT_VERSION_CHECK(5, 10, 0)
+            voiceInt = qHash(voice);  // Handle the rare but technically in-spec case of a non-int voice
+#else //seeding with a real magic value ;-)
+            voiceInt = qHash(voice, 42);  // Handle the rare but technically in-spec case of a non-int voice
+#endif
+      return voiceInt;
+      }
+
+//---------------------------------------------------------
 //   determineTupletAction
 //---------------------------------------------------------
 
@@ -3503,13 +3522,14 @@ void MusicXMLParserPass1::note(const QString& partId,
       // store result
       if (dura.isValid() && dura > Fraction(0, 1)) {
             // count the chords
-            if (!_parts.value(partId).voicelist.contains(voice)) {
+            int voiceInt = voiceToInt(voice);
+            if (!_parts.value(partId).voicelist.contains(voiceInt)) {
                   VoiceDesc vs;
-                  _parts[partId].voicelist.insert(voice, vs);
+                  _parts[partId].voicelist.insert(voiceInt, vs);
                   }
-            _parts[partId].voicelist[voice].incrChordRests(staff);
-            // determine note length for voice overlap detection
-            vod.addNote((sTime + missingPrev).ticks(), (sTime + missingPrev + dura).ticks(), voice, staff);
+            _parts[partId].voicelist[voiceInt].incrChordRests(staff);
+            // determine note length for voiceInt overlap detection
+            vod.addNote((sTime + missingPrev).ticks(), (sTime + missingPrev + dura).ticks(), voiceInt, staff);
             }
 
       addError(checkAtEndElement(_e, "note"));

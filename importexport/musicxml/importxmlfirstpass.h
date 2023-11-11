@@ -19,7 +19,7 @@
 
 namespace Ms {
 
-typedef QMap<QString, VoiceDesc> VoiceList;
+typedef QMap<int, VoiceDesc> VoiceList;
 //using Intervals = std::map<Fraction, Interval>;
 
 class MusicXmlIntervalList : public std::map<Fraction, Interval> {
