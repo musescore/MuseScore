@@ -117,7 +117,7 @@
             <Note>
               <Events>
                 <Event>
-                  <len>900</len>
+                  <len>90000</len>
                   </Event>
                 </Events>
               <pitch>67</pitch>
@@ -128,6 +128,11 @@
             <durationType>half</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <Events>
+                <Event>
+                  <len>100000</len>
+                  </Event>
+                </Events>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -142,7 +147,7 @@
             <Note>
               <Events>
                 <Event>
-                  <len>1100</len>
+                  <len>110000</len>
                   </Event>
                 </Events>
               <pitch>71</pitch>
@@ -153,6 +158,11 @@
             <durationType>half</durationType>
             <StemDirection>down</StemDirection>
             <Note>
+              <Events>
+                <Event>
+                  <len>100000</len>
+                  </Event>
+                </Events>
               <pitch>72</pitch>
               <tpc>14</tpc>
               </Note>
@@ -167,7 +177,7 @@
             <Note>
               <Events>
                 <Event>
-                  <len>1008</len>
+                  <len>484000</len>
                   </Event>
                 </Events>
               <pitch>60</pitch>
@@ -180,7 +190,7 @@
             <Note>
               <Events>
                 <Event>
-                  <len>1006</len>
+                  <len>483000</len>
                   </Event>
                 </Events>
               <pitch>62</pitch>
@@ -191,6 +201,11 @@
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <Events>
+                <Event>
+                  <len>482000</len>
+                  </Event>
+                </Events>
               <pitch>64</pitch>
               <tpc>18</tpc>
               </Note>
@@ -199,6 +214,11 @@
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <Events>
+                <Event>
+                  <len>481000</len>
+                  </Event>
+                </Events>
               <pitch>65</pitch>
               <tpc>13</tpc>
               </Note>
@@ -211,6 +231,11 @@
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <Events>
+                <Event>
+                  <len>480000</len>
+                  </Event>
+                </Events>
               <pitch>67</pitch>
               <tpc>15</tpc>
               </Note>
@@ -219,6 +244,11 @@
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <Events>
+                <Event>
+                  <len>479000</len>
+                  </Event>
+                </Events>
               <pitch>69</pitch>
               <tpc>17</tpc>
               </Note>
@@ -227,6 +257,11 @@
             <durationType>quarter</durationType>
             <StemDirection>up</StemDirection>
             <Note>
+              <Events>
+                <Event>
+                  <len>478000</len>
+                  </Event>
+                </Events>
               <pitch>71</pitch>
               <tpc>19</tpc>
               </Note>
@@ -237,7 +272,7 @@
             <Note>
               <Events>
                 <Event>
-                  <len>993</len>
+                  <len>477000</len>
                   </Event>
                 </Events>
               <pitch>72</pitch>

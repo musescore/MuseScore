@@ -3414,7 +3414,7 @@ void MusicXMLParserPass1::note(const QString& partId,
       QString instrId;
       MxmlStartStop tupletStartStop { MxmlStartStop::NONE };
 
-      mxmlNoteDuration mnd(_divs, _logger);
+      mxmlNoteDuration mnd(_divs, _logger, this);
 
       while (_e.readNextStartElement()) {
             if (mnd.readProperties(_e)) {
@@ -3574,6 +3574,49 @@ void MusicXMLParserPass1::notePrintSpacingNo(Fraction& dura)
       }
 
 //---------------------------------------------------------
+//   calcTicks
+//---------------------------------------------------------
+
+Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const QXmlStreamReader* const xmlReader)
+      {
+      Fraction dura(0, 1);              // invalid unless set correctly
+
+      if (_divs > 0) {
+            dura.set(intTicks, 4 * _divs);
+            dura.reduce(); // prevent overflow in later Fraction operations
+
+            // Correct for previously adjusted durations
+            // This is necessary when certain tuplets are
+            // followed by a <backup> element.
+            // There are two strategies:
+            // 1. Use a lookup table of previous adjustments
+            // 2. Check if within maxDiff of a seenDenominator
+            if (_adjustedDurations.contains(dura)) {
+                  dura = _adjustedDurations.value(dura);
+                  }
+            else if (dura.reduced().denominator() > 64) {
+                  for (auto seenDenominator : _seenDenominators) {
+                        int seenDenominatorTicks = Fraction(1, seenDenominator).ticks();
+                        if (qAbs(dura.ticks() % seenDenominatorTicks) <= _maxDiff) {
+                              Fraction roundedDura = Fraction(std::round(dura.ticks() / double(seenDenominatorTicks)), seenDenominator);
+                              roundedDura.reduce();
+                              _logger->logError(QString("calculated duration (%1) assumed to be a rounding error by proximity to (%2)")
+                                                .arg(dura.toString(), roundedDura.toString()));
+                              insertAdjustedDuration(dura, roundedDura);
+                              dura = roundedDura;
+                              break;
+                              }
+                        }
+                  }
+            }
+      else
+            _logger->logError("illegal or uninitialized divisions", xmlReader);
+      //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
+
+      return dura;
+      }
+
+//---------------------------------------------------------
 //   duration
 //---------------------------------------------------------
 
@@ -3581,23 +3624,14 @@ void MusicXMLParserPass1::notePrintSpacingNo(Fraction& dura)
  Parse the /score-partwise/part/measure/note/duration node.
  */
 
-void MusicXMLParserPass1::duration(Fraction& dura)
+void MusicXMLParserPass1::duration(Fraction& dura, QXmlStreamReader& e)
       {
-      //_logger->logDebugTrace("MusicXMLParserPass1::duration", &_e);
+      Q_ASSERT(e.isStartElement() && e.name() == "duration");
+      _logger->logDebugTrace("MusicXMLParserPass1::duration", &e);
 
       dura.set(0, 0);  // invalid unless set correctly
-      int intDura = _e.readElementText().toInt();
-      if (intDura > 0) {
-            if (_divs > 0) {
-                  dura.set(intDura, 4 * _divs);
-                  dura.reduce(); // prevent overflow in later Fraction operations
-                  }
-            else
-                  _logger->logError("illegal or uninitialized divisions", &_e);
-            }
-      else
-            _logger->logError("illegal duration", &_e);
-      //qDebug("duration %s valid %d", qPrintable(dura.print()), dura.isValid());
+      int intDura = e.readElementText().toInt();
+      dura = calcTicks(intDura);
       }
 
 //---------------------------------------------------------
