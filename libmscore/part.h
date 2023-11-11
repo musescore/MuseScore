@@ -97,15 +97,15 @@ class Part final : public ScoreElement {
       void setLongNames(QList<StaffName>& s,  const Fraction& tick = { -1, 1 } );
       void setShortNames(QList<StaffName>& s, const Fraction& tick = { -1, 1 } );
 
-      void setLongNameAll(const QString& s);  // For all instruments in _instruments
-      void setShortNameAll(const QString& s); // For all instruments in _instruments
       void setLongName(const QString& s);
       void setShortName(const QString& s);
+      void setLongNameAll(const QString& s);  // For all instruments in _instruments
+      void setShortNameAll(const QString& s); // For all instruments in _instruments
 
-      void setPlainLongNameAll(const QString& s);
-      void setPlainShortNameAll(const QString& s);
       void setPlainLongName(const QString& s);
       void setPlainShortName(const QString& s);
+      void setPlainLongNameAll(const QString& s);
+      void setPlainShortNameAll(const QString& s);
 
       void setStaves(int);
 

@@ -393,6 +393,24 @@ QString Part::shortName(const Fraction& tick) const
       }
 
 //---------------------------------------------------------
+//   setLongName
+//---------------------------------------------------------
+
+void Part::setLongName(const QString& s)
+      {
+      instrument()->setLongName(s);
+      }
+
+//---------------------------------------------------------
+//   setShortName
+//---------------------------------------------------------
+
+void Part::setShortName(const QString& s)
+      {
+      instrument()->setShortName(s);
+      }
+
+//---------------------------------------------------------
 //   setLongNameAll
 //---------------------------------------------------------
 
@@ -413,21 +431,21 @@ void Part::setShortNameAll(const QString& s)
       }
 
 //---------------------------------------------------------
-//   setLongName
+//   setPlainLongName
 //---------------------------------------------------------
 
-void Part::setLongName(const QString& s)
+void Part::setPlainLongName(const QString& s)
       {
-      instrument()->setLongName(s);
+      setLongName(XmlWriter::xmlString(s));
       }
 
 //---------------------------------------------------------
-//   setShortName
+//   setPlainShortName
 //---------------------------------------------------------
 
-void Part::setShortName(const QString& s)
+void Part::setPlainShortName(const QString& s)
       {
-      instrument()->setShortName(s);
+      setShortName(XmlWriter::xmlString(s));
       }
 
 //---------------------------------------------------------
@@ -446,24 +464,6 @@ void Part::setPlainLongNameAll(const QString& s)
 void Part::setPlainShortNameAll(const QString& s)
       {
       setShortNameAll(XmlWriter::xmlString(s));
-      }
-
-//---------------------------------------------------------
-//   setPlainLongName
-//---------------------------------------------------------
-
-void Part::setPlainLongName(const QString& s)
-      {
-      setLongName(XmlWriter::xmlString(s));
-      }
-
-//---------------------------------------------------------
-//   setPlainShortName
-//---------------------------------------------------------
-
-void Part::setPlainShortName(const QString& s)
-      {
-      setShortName(XmlWriter::xmlString(s));
       }
 
 //---------------------------------------------------------
