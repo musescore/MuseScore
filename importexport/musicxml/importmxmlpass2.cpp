@@ -4150,24 +4150,27 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                   // TODO: if "change", create 0-length spanner rather than delete
                   _pass2.deleteHandledSpanner(spdesc._sp);
                   spdesc._isStarted = false;
-            }
+                  }
             auto p = spdesc._isStopped ? toPedal(spdesc._sp) : new Pedal(_score);
-            if (line == "yes") p->setLineVisible(true);
-            else p->setLineVisible(false);
+            if (line == "yes")
+                  p->setLineVisible(true);
+            else
+                  p->setLineVisible(false);
             if (!p->lineVisible() || sign == "yes") {
                   p->setBeginText("<sym>keyboardPedalPed</sym>");
                   p->setContinueText("(<sym>keyboardPedalPed</sym>)");
                   }
-            else {
+            else
                   p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
-                  }
             p->setEndHookType(HookType::NONE);
             starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
             }
       else if (type == "stop" || type == "discontinue") {
             auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score);
-            if (line == "yes") p->setLineVisible(true);
-            else if (line == "no") p->setLineVisible(false);
+            if (line == "yes")
+                  p->setLineVisible(true);
+            else if (line == "no")
+                  p->setLineVisible(false);
             if (!p->lineVisible() || sign == "yes")
                   p->setEndText("<sym>keyboardPedalUp</sym>");
             else
@@ -4180,8 +4183,10 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             if (spdesc._isStarted && !spdesc._isStopped) {
                   auto p = toPedal(spdesc._sp);
                   p->setEndHookType(HookType::HOOK_45);
-                  if (line == "yes") p->setLineVisible(true);
-                  else if (line == "no") p->setLineVisible(false);
+                  if (line == "yes")
+                        p->setLineVisible(true);
+                  else if (line == "no")
+                        p->setLineVisible(false);
                   stops.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
                   }
             else
@@ -4190,8 +4195,10 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             auto p = new Pedal(_score);
             p->setBeginHookType(HookType::HOOK_45);
             p->setEndHookType(HookType::HOOK_90);
-            if (line == "yes") p->setLineVisible(true);
-            else p->setLineVisible(false);
+            if (line == "yes")
+                  p->setLineVisible(true);
+            else
+                  p->setLineVisible(false);
             starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
             }
       else if (type == "continue") {
