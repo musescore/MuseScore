@@ -276,6 +276,7 @@ public:
     static std::pair<engraving::DirectionV, bool> stemFromMEI(const libmei::AttStems& meiStemsAtt, bool& warning);
     static std::pair<libmei::data_STEMDIRECTION, double> stemToMEI(const engraving::DirectionV direction, bool noStem);
 
+    static engraving::TremoloType stemModFromMEI(const libmei::data_STEMMODIFIER meiStemMod);
     static libmei::data_STEMMODIFIER stemModToMEI(const engraving::Tremolo* tremolo);
 
     static void sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, ElisionType elision, bool& warning);
