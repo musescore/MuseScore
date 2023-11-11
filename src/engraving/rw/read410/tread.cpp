@@ -489,10 +489,10 @@ void TRead::read(TempoText* t, XmlReader& e, ReadContext& ctx)
             t->setFollowText(e.readInt());
         } else if (tag == "type") {
             auto type = e.readAsciiText();
-            if (type == "restorePrevious") {
-                t->setTempoTextType(TempoTextType::RESTORE_PREVIOUS);
-            } else if (type == "restorePrimo") {
-                t->setTempoTextType(TempoTextType::RESTORE_PRIMO);
+            if (type == "aTempo") {
+                t->setTempoTextType(TempoTextType::A_TEMPO);
+            } else if (type == "tempoPrimo") {
+                t->setTempoTextType(TempoTextType::TEMPO_PRIMO);
             } else if (type == "normal") {
                 t->setTempoTextType(TempoTextType::NORMAL);
             } else {

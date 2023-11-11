@@ -549,11 +549,11 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerS
                     }
 
                     int ticks = tt->segment()->tick().ticks();
-                    if (tt->isRestorePrevious() && tt->followText()) {
+                    if (tt->isATempo() && tt->followText()) {
                         // this will effectively reset the tempo to the previous one
                         // when a progressive change was active
                         tempomap()->setTempo(ticks, tempomap()->tempo(ticks));
-                    } else if (tt->isRestorePrimo() && tt->followText()) {
+                    } else if (tt->isTempoPrimo() && tt->followText()) {
                         tempomap()->setTempo(ticks, tempoPrimo ? *tempoPrimo : Constants::DEFAULT_TEMPO);
                     } else {
                         tempomap()->setTempo(ticks, tt->tempo());

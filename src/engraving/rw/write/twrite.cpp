@@ -2654,11 +2654,15 @@ void TWrite::write(const TempoText* item, XmlWriter& xml, WriteContext& ctx)
     if (item->followText()) {
         xml.tag("followText", item->followText());
     }
-    if (item->isRestorePrevious()) {
-        xml.tag("type", "restorePrevious");
-    }
-    if (item->isRestorePrimo()) {
-        xml.tag("type", "restorePrimo");
+    switch (item->tempoTextType()) {
+    case TempoTextType::NORMAL:
+        break;
+    case TempoTextType::A_TEMPO:
+        xml.tag("type", "aTempo");
+        break;
+    case TempoTextType::TEMPO_PRIMO:
+        xml.tag("type", "tempoPrimo");
+        break;
     }
     writeProperties(static_cast<const TextBase*>(item), xml, ctx, true);
     xml.endElement();

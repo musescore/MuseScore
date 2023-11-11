@@ -31,8 +31,8 @@ TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryServic
     : AbstractInspectorModel(parent, repository)
 {
     Q_ASSERT(modelType == InspectorModelType::TYPE_TEMPO
-             || modelType == InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS
-             || modelType == InspectorModelType::TYPE_TEMPO_RESTORE_PRIMO
+             || modelType == InspectorModelType::TYPE_A_TEMPO
+             || modelType == InspectorModelType::TYPE_TEMPO_PRIMO
              );
 
     setModelType(modelType);
@@ -41,11 +41,11 @@ TempoSettingsModel::TempoSettingsModel(QObject* parent, IElementRepositoryServic
     case InspectorModelType::TYPE_TEMPO:
         setTitle(qtrc("inspector", "Tempo"));
         break;
-    case InspectorModelType::TYPE_TEMPO_RESTORE_PREVIOUS:
-        setTitle(qtrc("inspector", "Restore previous tempo"));
+    case InspectorModelType::TYPE_A_TEMPO:
+        setTitle(qtrc("inspector", "A tempo"));
         break;
-    case InspectorModelType::TYPE_TEMPO_RESTORE_PRIMO:
-        setTitle(qtrc("inspector", "Restore initial tempo"));
+    case InspectorModelType::TYPE_TEMPO_PRIMO:
+        setTitle(qtrc("inspector", "Tempo primo"));
         break;
     default:
         break;

@@ -30,8 +30,8 @@ namespace mu::engraving {
 enum class TempoTextType : signed char
 {
     NORMAL,
-    RESTORE_PREVIOUS,   // "a tempo"
-    RESTORE_PRIMO,      // "tempo primo"
+    A_TEMPO,
+    TEMPO_PRIMO,
 };
 
 //-------------------------------------------------------------------
@@ -70,11 +70,11 @@ public:
     bool isNormal() const { return _tempoTextType == TempoTextType::NORMAL; }
     void setNormal() { setTempoTextType(TempoTextType::NORMAL); }
 
-    bool isRestorePrevious() const { return _tempoTextType == TempoTextType::RESTORE_PREVIOUS; }
-    void setRestorePrevious() { setTempoTextType(TempoTextType::RESTORE_PREVIOUS); }
+    bool isATempo() const { return _tempoTextType == TempoTextType::A_TEMPO; }
+    void setATempo() { setTempoTextType(TempoTextType::A_TEMPO); }
 
-    bool isRestorePrimo() const { return _tempoTextType == TempoTextType::RESTORE_PRIMO; }
-    void setRestorePrimo() { setTempoTextType(TempoTextType::RESTORE_PRIMO); }
+    bool isTempoPrimo() const { return _tempoTextType == TempoTextType::TEMPO_PRIMO; }
+    void setTempoPrimo() { setTempoTextType(TempoTextType::TEMPO_PRIMO); }
 
     bool followText() const { return _followText; }
     void setFollowText(bool v) { _followText = v; }
