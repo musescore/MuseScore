@@ -238,7 +238,7 @@ private:
     engraving::BeamMode m_beamBeginMode;
     engraving::BeamMode m_graceBeamBeginMode;
     engraving::Chord* m_lastChord;
-    bool m_tremolo;
+    std::string m_tremolo;
 
     std::list<engraving::Chord*> m_graceNotes;
     GraceReading m_readingGraceNotes;
