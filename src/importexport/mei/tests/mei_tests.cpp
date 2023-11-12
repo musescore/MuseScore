@@ -127,6 +127,10 @@ TEST_F(Mei_Tests, mei_breath_01) {
     meiReadTest("breath-01");
 }
 
+TEST_F(Mei_Tests, mei_btrem_01) {
+    meiReadTest("btrem-01");
+}
+
 TEST_F(Mei_Tests, mei_chord_label_01) {
     meiReadTest("chord-label-01");
 }
