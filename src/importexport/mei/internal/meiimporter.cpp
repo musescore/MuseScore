@@ -93,7 +93,7 @@ bool MeiImporter::read(const io::path_t& path)
     m_uids->clear();
 
     m_lastMeasure = nullptr;
-    m_tremolo.clear();
+    m_tremoloId.clear();
     m_tuplet = nullptr;
     m_beamBeginMode = BeamMode::AUTO;
     m_graceBeamBeginMode = BeamMode::AUTO;
@@ -1640,11 +1640,11 @@ bool MeiImporter::readBTrem(pugi::xml_node bTremNode, Measure* measure, int trac
 
     libmei::BTrem meiBTrem;
     meiBTrem.Read(bTremNode);
-    m_tremolo = meiBTrem.m_xmlId;
+    m_tremoloId = meiBTrem.m_xmlId;
 
     success = readElements(bTremNode, measure, track, ticks);
 
-    m_tremolo.clear();
+    m_tremoloId.clear();
 
     return success;
 }
@@ -1670,9 +1670,9 @@ bool MeiImporter::readChord(pugi::xml_node chordNode, Measure* measure, int trac
     this->readStemsAtt(chord, meiChord);
     this->readArtics(chordNode, chord);
 
-    if (!m_tremolo.empty()) {
+    if (!m_tremoloId.empty()) {
         Tremolo* tremolo = Factory::createTremolo(chord);
-        m_uids->reg(tremolo, m_tremolo);
+        m_uids->reg(tremolo, m_tremoloId);
         tremolo->setTremoloType(Convert::stemModFromMEI(meiChord.GetStemMod()));
         chord->add(tremolo);
     }
@@ -1831,9 +1831,9 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
         this->readStemsAtt(chord, meiNote);
         this->readArtics(noteNode, chord);
         this->readVerses(noteNode, chord);
-        if (!m_tremolo.empty()) {
+        if (!m_tremoloId.empty()) {
             Tremolo* tremolo = Factory::createTremolo(chord);
-            m_uids->reg(tremolo, m_tremolo);
+            m_uids->reg(tremolo, m_tremoloId);
             tremolo->setTremoloType(Convert::stemModFromMEI(meiNote.GetStemMod()));
             chord->add(tremolo);
         }
