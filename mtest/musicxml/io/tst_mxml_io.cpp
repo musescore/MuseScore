@@ -128,7 +128,7 @@ private slots:
       void figuredBass2() { mxmlIoTest("testFiguredBass2"); }
       void figuredBass3() { mxmlIoTest("testFiguredBass3"); }
       void figuredBassDivisions() { mxmlIoTest("testFiguredBassDivisions"); }
-      // void formattedThings() { mxmlIoTest("testFormattedThings"); }
+      // void formattedThings() { mxmlIoTest("testFormattedThings"); } // TODO
       void fractionMinus() { mxmlIoTestRef("testFractionMinus"); }
       void fractionPlus() { mxmlIoTestRef("testFractionPlus"); }
       void fractionTicks() { mxmlIoTestRef("testFractionTicks"); }
@@ -155,7 +155,7 @@ private slots:
       void inferredCredits1() { mxmlImportTestRef("testInferredCredits1"); }
       void inferredCredits2() { mxmlImportTestRef("testInferredCredits2"); }
       void inferredDynamics() { mxmlImportTestRef("testInferredDynamics"); }
-      // void inferredFingerings() { mxmlImportTestRef("testInferredFingerings"); }
+      void inferredFingerings() { mxmlImportTestRef("testInferredFingerings"); }
       void inferredTempoText() { mxmlImportTestRef("testInferredTempoText"); }
       void inferredTransposition() { mxmlImportTestRef("testInferredTransposition"); }
       void instrumentChangeMIDIportExport() { mxmlMscxExportTestRef("testInstrumentChangeMIDIportExport"); }
@@ -183,7 +183,7 @@ private slots:
       void maxNumberLevel() { mxmlMscxExportTestRef("testMaxNumberLevel"); }
       void measureLength() { mxmlIoTestRef("testMeasureLength"); }
       void measureNumbers() { mxmlIoTest("testMeasureNumbers"); }
-      // void measureStyleSlash() { mxmlImportTestRef("testMeasureStyleSlash"); }
+      void measureStyleSlash() { mxmlImportTestRef("testMeasureStyleSlash"); }
       void midiPortExport() { mxmlMscxExportTestRef("testMidiPortExport"); }
       void multiInstrumentPart1() { mxmlIoTest("testMultiInstrumentPart1"); }
       void multiInstrumentPart2() { mxmlIoTest("testMultiInstrumentPart2"); }
@@ -227,7 +227,7 @@ private slots:
       void slurs2() { mxmlIoTest("testSlurs2"); }
       void sound1() { mxmlIoTest("testSound1"); }
       void sound2() { mxmlIoTestRef("testSound2"); }
-      // void specialCharacters() { mxmlIoTest("testSpecialCharacters"); }
+      // void specialCharacters() { mxmlIoTest("testSpecialCharacters"); } // TODO
       void staffEmptiness() { mxmlImportTestRef("testStaffEmptiness"); }
       void staffTwoKeySigs() { mxmlIoTest("testStaffTwoKeySigs"); }
       void stringData()      { mxmlIoTest("testStringData"); }
@@ -256,7 +256,7 @@ private slots:
       void tempo4() { mxmlIoTestRef("testTempo4"); }
       void tempo5() { mxmlIoTest("testTempo5"); }
       void tempo6() { mxmlIoTest("testTempo6"); }
-      // void tempoOverlap() { mxmlIoTestRef("testTempoOverlap"); } // TODO: Export of hidden tempo markings is incorrect
+      void tempoOverlap() { mxmlIoTestRef("testTempoOverlap"); } // TODO (?): Export of hidden tempo markings is incorrect
       void tempoPrecision() { mxmlMscxExportTestRef("testTempoPrecision"); }
       void tempoTextSpace1() { mxmlImportTestRef("testTempoTextSpace1"); }
       void tempoTextSpace2() { mxmlImportTestRef("testTempoTextSpace2"); }
@@ -280,7 +280,7 @@ private slots:
       void twoNoteTremoloTuplet() { mxmlIoTest("testTwoNoteTremoloTuplet"); }
       void uninitializedDivisions() { mxmlIoTestRef("testUninitializedDivisions"); }
       void unnecessaryBarlines() { mxmlImportTestRef("testUnnecessaryBarlines"); }
-      //void unterminatedTies() { mxmlImportTestRef("testUnterminatedTies"); }
+      // void unterminatedTies() { mxmlImportTestRef("testUnterminatedTies"); } // TODO
       void unusualDurations() { mxmlIoTestRef("testUnusualDurations"); }
       void virtualInstruments() { mxmlIoTestRef("testVirtualInstruments"); }
       void voiceMapper1() { mxmlIoTestRef("testVoiceMapper1"); }
@@ -296,7 +296,7 @@ private slots:
       void wedge2() { mxmlIoTest("testWedge2"); }
       void wedge3() { mxmlIoTest("testWedge3"); }
       void words1() { mxmlIoTest("testWords1"); }
-      // void words2() { mxmlIoTest("testWords2"); }
+      // void words2() { mxmlIoTest("testWords2"); } // TODO
       void hiddenStaves()
             {
             MasterScore* score = readScore(DIR + "testHiddenStaves.xml");

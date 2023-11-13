@@ -690,7 +690,7 @@ bool isLikelySubtitleText(const QString& text, const bool caseInsensitive = true
       {
       QRegularExpression::PatternOption caseOption = caseInsensitive ? QRegularExpression::CaseInsensitiveOption : QRegularExpression::NoPatternOption;
       return (text.trimmed().contains(QRegularExpression("^[Ff]rom\\s+(?!$)", caseOption))
-            || text.trimmed().contains(QRegularExpression("^Theme from\\s+(?!$)", caseOption))  
+            || text.trimmed().contains(QRegularExpression("^Theme from\\s+(?!$)", caseOption))
             || text.trimmed().contains(QRegularExpression("(((Op\\.?\\s?\\d+)|(No\\.?\\s?\\d+))\\s?)+", caseOption))
             || text.trimmed().contains(QRegularExpression("\\(.*[Ff]rom\\s.*\\)", caseOption)));
       }
@@ -832,7 +832,7 @@ void MusicXMLParserPass1::createDefaultHeader(Score* const score)
       if (!inferredStrComposer.isEmpty()) {
             strComposer = inferredStrComposer;
             _hasInferredHeaderText = true;
-            } 
+            }
       if (metaPoet.isEmpty()) metaPoet = score->metaTag("lyricist");
       if (!metaPoet.isEmpty()) strPoet = metaPoet;
       if (!metaTranslator.isEmpty()) strTranslator = metaTranslator;
@@ -1212,7 +1212,7 @@ void MusicXMLParserPass1::identification()
                   }
             else if (_e.name() == "rights") {
                   _score->setMetaTag("copyright", _e.readElementText().trimmed());
-                  bool copyrightFirstPageOnly = true; // TODO: expose as import setting 
+                  bool copyrightFirstPageOnly = true; // TODO: expose as import setting
                   if (copyrightFirstPageOnly)
                         // Somewhat temporary fix: hide footer and make copyright a text box
                         _score->setStyleValue(Sid::showFooter, false);
@@ -1747,8 +1747,8 @@ void MusicXMLParserPass1::setStyle(const QString& type, const double val)
             _score->style().set(Sid::smallNoteMag, val / 100);
       else if (type == "grace")
             _score->style().set(Sid::graceNoteMag, val / 100);
-      else if (type == "grace-cue")
-            ; // not supported
+      else if (type == "grace-cue") {
+            } // not supported
       //else if (type == "large")
       //else if (type == "beam")
       //else if (type == "hyphen")
@@ -1995,6 +1995,7 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
             _logger->logError(QString("part-group type '%1' not supported").arg(type), &_e);
       }
 
+#if 0 // not used
 //---------------------------------------------------------
 //   findInstrument
 //---------------------------------------------------------
@@ -2004,7 +2005,6 @@ void MusicXMLParserPass1::partGroup(const int scoreParts,
  and a non-empty set of channels.
  */
 
-#if 0 // not used
 static const InstrumentTemplate* findInstrument(const QString& instrSound)
       {
       const InstrumentTemplate* instr = nullptr;
@@ -2321,12 +2321,12 @@ void MusicXMLParserPass1::part()
       // determine the lyric numbers for this part
       _parts[id].lyricNumberHandler().determineLyricNos();
 
+#if 0
       // debug: print results
       //qDebug("%s", qPrintable(_parts[id].toString()));
 
       //qDebug("lyric numbers: %s", qPrintable(_parts[id].lyricNumberHandler().toString()));
 
-#if 0
       qDebug("instrument map:");
       for (auto& instr : _parts[id]._instrList) {
             qDebug("- %s '%s'", qPrintable(instr.first.print()), qPrintable(instr.second));
@@ -2352,7 +2352,6 @@ void MusicXMLParserPass1::part()
                          qPrintable(tick.print()), qPrintable(name), interval.diatonic, interval.chromatic);
                   }
             }
-#endif
 
       /*
       qDebug("voiceMapperStats: new staff");
@@ -2362,6 +2361,7 @@ void MusicXMLParserPass1::part()
                    qPrintable(i.key()), qPrintable(i.value().toString()));
             }
       */
+#endif
 
       addError(checkAtEndElement(_e, "part"));
       }
@@ -2636,7 +2636,7 @@ void MusicXMLParserPass1::attributes(const QString& partId, const Fraction cTime
             for (int hiddenStaff : hiddenStaves) {
                   int hiddenStaffIndex = _parts.value(partId).staffNumberToIndex(hiddenStaff);
                   if (hiddenStaffIndex >= 0)
-                        _partMap.value(partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO); 
+                        _partMap.value(partId)->staff(hiddenStaffIndex)->setHideWhenEmpty(Staff::HideMode::AUTO);
                   }
             }
       }

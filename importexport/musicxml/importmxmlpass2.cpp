@@ -2588,10 +2588,10 @@ void MusicXMLParserPass2::measure(const QString& partId,
       FiguredBassList fbl;               // List of figured bass elements under a single note
       MxmlTupletStates tupletStates;       // Tuplet state for each voice in the current part
       Tuplets tuplets;       // Current tuplet for each voice in the current part
-      DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
 
       // collect candidates for courtesy accidentals to work out at measure end
       QMap<Note*, int> alterMap;
+      DelayedDirectionsList delayedDirections; // Directions to be added to score *after* collecting all and sorting
       InferredFingeringsList inferredFingerings; // Directions to be reinterpreted as Fingerings
 
       while (_e.readNextStartElement()) {
@@ -3241,7 +3241,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
                   else {
                         // Add element to score later, after collecting all the others and sorting by default-y
                         // This allows default-y to be at least respected by the order of elements
-                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), t, track, wordsPlacement, measure, tick + _offset, _isBold);
+                        MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, t, track, wordsPlacement, measure, tick + _offset, _isBold);
                         delayedDirections.push_back(delayedDirection);
                         }
                   }
@@ -3288,7 +3288,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
 
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), dyn, track, dynamicsPlacement, measure, tick + _offset, _isBold);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, dyn, track, dynamicsPlacement, measure, tick + _offset, _isBold);
             delayedDirections.push_back(delayedDirection);
             }
 
@@ -3296,7 +3296,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
       for (auto elem : _elems) {
             // Add element to score later, after collecting all the others and sorting by default-y
             // This allows default-y to be at least respected by the order of elements
-            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), elem, track, placement(), measure, tick + _offset, _isBold);
+            MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(hasTotalY() ? totalY() : 100, elem, track, placement(), measure, tick + _offset, _isBold);
             delayedDirections.push_back(delayedDirection);
             }
 
@@ -6306,12 +6306,12 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       QString placement = _e.attributes().value("placement").toString();
       qreal defaultY = 0;
       qreal relativeY = 0;
-      bool hasTotalY = false;
+      //bool hasTotalY = false;
       bool tempHasY = false;
       defaultY += _e.attributes().value("default-y").toDouble(&tempHasY) * -0.1;
-      hasTotalY |= tempHasY;
+      //hasTotalY |= tempHasY;
       relativeY += _e.attributes().value("relative-y").toDouble(&tempHasY) * -0.1;
-      hasTotalY |= tempHasY;
+      //hasTotalY |= tempHasY;
 
       bool printObject = _e.attributes().value("print-object") != "no";
       //QString printFrame = _e.attributes().value("print-frame").toString();
