@@ -62,6 +62,7 @@
 #include "engraving/dom/textline.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
+#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
 
@@ -92,6 +93,7 @@ bool MeiImporter::read(const io::path_t& path)
     m_uids->clear();
 
     m_lastMeasure = nullptr;
+    m_tremoloId.clear();
     m_tuplet = nullptr;
     m_beamBeginMode = BeamMode::AUTO;
     m_graceBeamBeginMode = BeamMode::AUTO;
@@ -1525,6 +1527,8 @@ bool MeiImporter::readElements(pugi::xml_node parentNode, Measure* measure, int 
         std::string elementName = std::string(xpathNode.node().name());
         if (elementName == "beam") {
             success = success && this->readBeam(xpathNode.node(), measure, track, ticks);
+        } else if (elementName == "bTrem") {
+            success = success && this->readBTrem(xpathNode.node(), measure, track, ticks);
         } else if (elementName == "chord") {
             success = success && this->readChord(xpathNode.node(), measure, track, ticks);
         } else if (elementName == "clef" && !m_readingGraceNotes) {
@@ -1622,6 +1626,30 @@ bool MeiImporter::readBeam(pugi::xml_node beamNode, Measure* measure, int track,
 }
 
 /**
+ * Read a bTrem.
+ * Set MuseScore TremoloType.
+ */
+
+bool MeiImporter::readBTrem(pugi::xml_node bTremNode, Measure* measure, int track, int& ticks)
+{
+    IF_ASSERT_FAILED(measure) {
+        return false;
+    }
+
+    bool success = true;
+
+    libmei::BTrem meiBTrem;
+    meiBTrem.Read(bTremNode);
+    m_tremoloId = meiBTrem.m_xmlId;
+
+    success = readElements(bTremNode, measure, track, ticks);
+
+    m_tremoloId.clear();
+
+    return success;
+}
+
+/**
  * Read a chord and its content (note elements).
  */
 
@@ -1641,6 +1669,13 @@ bool MeiImporter::readChord(pugi::xml_node chordNode, Measure* measure, int trac
     Chord* chord = static_cast<Chord*>(addChordRest(chordNode, measure, track, meiChord, ticks, false));
     this->readStemsAtt(chord, meiChord);
     this->readArtics(chordNode, chord);
+
+    if (!m_tremoloId.empty()) {
+        Tremolo* tremolo = Factory::createTremolo(chord);
+        m_uids->reg(tremolo, m_tremoloId);
+        tremolo->setTremoloType(Convert::stemModFromMEI(meiChord.GetStemMod()));
+        chord->add(tremolo);
+    }
 
     pugi::xpath_node_set notes = chordNode.select_nodes(".//note");
     for (pugi::xpath_node xpathNode : notes) {
@@ -1796,6 +1831,12 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
         this->readStemsAtt(chord, meiNote);
         this->readArtics(noteNode, chord);
         this->readVerses(noteNode, chord);
+        if (!m_tremoloId.empty()) {
+            Tremolo* tremolo = Factory::createTremolo(chord);
+            m_uids->reg(tremolo, m_tremoloId);
+            tremolo->setTremoloType(Convert::stemModFromMEI(meiNote.GetStemMod()));
+            chord->add(tremolo);
+        }
     }
 
     Note* note = Factory::createNote(chord);
