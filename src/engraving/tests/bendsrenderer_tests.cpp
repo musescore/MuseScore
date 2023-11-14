@@ -116,7 +116,7 @@ private:
 
 /*!
  * @details Render a multibend with the following structure:
- * F3 -> bend -> G3 -> bend -> F3 -> bend -> G3 (pre-appoggiatura) -> grace note bend -> A3 -> hold -> A3
+ * F3 -> bend -> G3 -> bend -> F3 -> bend -> G3 (appoggiatura) -> grace note bend -> A3 -> hold -> A3 -> bend -> G3
  */
 TEST_F(Engraving_BendsRendererTests, Multibend)
 {
@@ -146,16 +146,17 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
     const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(events.front());
 
     //EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend));
-    EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, 500000);
-    EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, 2750000);
-    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, 2050);
+    EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, 500000); // starts after a quarter rest
+    EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, 3000000); // quarters: F3 + G3 + F3 + A3 + A3 + G3
+    EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, 2050); // F3
 
     PitchCurve expectedPitchCurve;
     expectedPitchCurve.emplace(0, 0); // F3
-    expectedPitchCurve.emplace(1800, 100); // F3 -> G3
-    expectedPitchCurve.emplace(3600, 0); //  G3 -> F3
-    expectedPitchCurve.emplace(5400, 100); // F3 -> G3 (pre-appoggiatura)
-    expectedPitchCurve.emplace(6300, 200); // G3 (pre-appoggiatura) -> A3
+    expectedPitchCurve.emplace(1600, 100); // F3 -> G3
+    expectedPitchCurve.emplace(3300, 0); //  G3 -> F3
+    expectedPitchCurve.emplace(5000, 100); // F3 -> G3 (appoggiatura)
+    expectedPitchCurve.emplace(5800, 200); // G3 (appoggiatura) -> A3
+    expectedPitchCurve.emplace(8300, 100); // A3 -> hold -> G3
 
     EXPECT_EQ(noteEvent.pitchCtx().pitchCurve, expectedPitchCurve);
 
