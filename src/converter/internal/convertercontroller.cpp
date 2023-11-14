@@ -43,7 +43,8 @@ static const std::string PDF_SUFFIX = "pdf";
 static const std::string PNG_SUFFIX = "png";
 static const std::string SVG_SUFFIX = "svg";
 
-mu::Ret ConverterController::batchConvert(const io::path_t& batchJobFile, const io::path_t& stylePath, bool forceMode)
+mu::Ret ConverterController::batchConvert(const io::path_t& batchJobFile, const io::path_t& stylePath, bool forceMode,
+                                          const String& soundProfile)
 {
     TRACEFUNC;
 
@@ -53,19 +54,25 @@ mu::Ret ConverterController::batchConvert(const io::path_t& batchJobFile, const 
         return batchJob.ret;
     }
 
-    Ret ret = make_ret(Ret::Code::Ok);
+    StringList errors;
+
     for (const Job& job : batchJob.val) {
-        ret = fileConvert(job.in, job.out, stylePath, forceMode);
+        Ret ret = fileConvert(job.in, job.out, stylePath, forceMode, soundProfile);
         if (!ret) {
-            LOGE() << "failed convert, err: " << ret.toString() << ", in: " << job.in << ", out: " << job.out;
-            break;
+            errors.emplace_back(String(u"failed convert, err: %1, in: %2, out: %3")
+                                .arg(String::fromStdString(ret.toString())).arg(job.in.toString()).arg(job.out.toString()));
         }
     }
 
-    return ret;
+    if (!errors.empty()) {
+        return make_ret(Err::ConvertFailed, errors.join(u"\n").toStdString());
+    }
+
+    return make_ret(Ret::Code::Ok);
 }
 
-mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode)
+mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t& out, const io::path_t& stylePath, bool forceMode,
+                                         const String& soundProfile)
 {
     TRACEFUNC;
 
@@ -85,6 +92,11 @@ mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t&
     if (!ret) {
         LOGE() << "failed load notation, err: " << ret.toString() << ", path: " << in;
         return make_ret(Err::InFileFailedLoad);
+    }
+
+    if (!soundProfile.isEmpty()) {
+        notationProject->audioSettings()->clearTrackInputParams();
+        notationProject->audioSettings()->setActiveSoundProfile(soundProfile);
     }
 
     globalContext()->setCurrentProject(notationProject);

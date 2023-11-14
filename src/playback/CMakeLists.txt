@@ -32,6 +32,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/playbackmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/iplaybackcontroller.h
     ${CMAKE_CURRENT_LIST_DIR}/iplaybackconfiguration.h
+    ${CMAKE_CURRENT_LIST_DIR}/isoundprofilesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/playbacktypes.h
 
     #internals
@@ -41,7 +42,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackuiactions.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/playbackconfiguration.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/isoundprofilesrepository.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundprofilesrepository.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/soundprofilesrepository.h
 

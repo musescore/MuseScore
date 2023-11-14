@@ -106,6 +106,16 @@ void ProjectAudioSettings::setTrackInputParams(const InstrumentTrackId& partId, 
     m_settingsChanged.notify();
 }
 
+void ProjectAudioSettings::clearTrackInputParams()
+{
+    if (m_trackInputParamsMap.empty()) {
+        return;
+    }
+
+    m_trackInputParamsMap.clear();
+    m_settingsChanged.notify();
+}
+
 AudioOutputParams ProjectAudioSettings::trackOutputParams(const InstrumentTrackId& partId) const
 {
     auto search = m_trackOutputParamsMap.find(partId);

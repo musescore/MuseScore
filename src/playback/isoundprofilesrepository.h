@@ -25,7 +25,7 @@
 
 #include "modularity/imoduleinterface.h"
 
-#include "../playbacktypes.h"
+#include "playbacktypes.h"
 
 namespace mu::playback {
 class ISoundProfilesRepository : MODULE_EXPORT_INTERFACE
@@ -38,6 +38,7 @@ public:
     virtual void refresh() = 0;
 
     virtual const SoundProfile& profile(const SoundProfileName& name) const = 0;
+    virtual bool containsProfile(const SoundProfileName& name) const = 0;
     virtual const SoundProfilesMap& availableProfiles() const = 0;
 
     virtual void addProfile(const SoundProfile& profile) = 0;
