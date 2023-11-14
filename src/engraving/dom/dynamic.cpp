@@ -566,6 +566,8 @@ PropertyValue Dynamic::getProperty(Pid propertyId) const
         return _centerOnNotehead;
     case Pid::PLAY:
         return playDynamic();
+    case Pid::APPLY_TO_ALL_VOICES:
+        return m_applyToAllVoices;
     default:
         return TextBase::getProperty(propertyId);
     }
@@ -610,6 +612,9 @@ bool Dynamic::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::PLAY:
         setPlayDynamic(v.toBool());
         break;
+    case Pid::APPLY_TO_ALL_VOICES:
+        m_applyToAllVoices = v.toBool();
+        break;
     default:
         if (!TextBase::setProperty(propertyId, v)) {
             return false;
@@ -643,6 +648,8 @@ PropertyValue Dynamic::propertyDefault(Pid id) const
         return DynamicSpeed::NORMAL;
     case Pid::PLAY:
         return true;
+    case Pid::APPLY_TO_ALL_VOICES:
+        return false;
     default:
         return TextBase::propertyDefault(id);
     }

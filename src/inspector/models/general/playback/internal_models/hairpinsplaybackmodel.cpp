@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2021 MuseScore BVBA and others
+ * Copyright (C) 2023 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,25 +19,21 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_INSPECTOR_DYNAMICTYPES_H
-#define MU_INSPECTOR_DYNAMICTYPES_H
 
-#include "qobjectdefs.h"
+#include "hairpinsplaybackmodel.h"
 
-class DynamicTypes
+#include "translation.h"
+
+using namespace mu::inspector;
+
+HairpinsPlaybackModel::HairpinsPlaybackModel(QObject* parent, IElementRepositoryService* repository)
+    : DynamicsPlaybackModel(parent, repository)
 {
-    Q_GADGET
+    setTitle(qtrc("inspector", "Hairpins"));
+    setModelType(InspectorModelType::TYPE_HAIRPIN);
+}
 
-public:
-    enum class ApplyToVoice {
-        Voice1 = 0,
-        Voice2,
-        Voice3,
-        Voice4,
-        AllVoices,
-    };
-
-    Q_ENUM(ApplyToVoice)
-};
-
-#endif // MU_INSPECTOR_DYNAMICTYPES_H
+void HairpinsPlaybackModel::requestElements()
+{
+    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::HAIRPIN);
+}

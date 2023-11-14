@@ -48,7 +48,6 @@ public:
     {
         m_mainStreamChanges.resetOnReceive(this);
         m_offStreamChanges.resetOnReceive(this);
-        m_dynamicLevelChanges.resetOnReceive(this);
     }
 
     void load(const mpe::PlaybackData& data)
@@ -57,32 +56,20 @@ public:
 
         m_mainStreamChanges = data.mainStream;
         m_offStreamChanges = data.offStream;
-        m_dynamicLevelChanges = data.dynamicLevelChanges;
 
-        m_playbackEventsMap = data.originEvents;
-        m_dynamicLevelMap = data.dynamicLevelMap;
-
-        m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& changes) {
-            updateOffStreamEvents(changes);
+        m_offStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events) {
+            updateOffStreamEvents(events);
         });
 
-        m_mainStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& changes) {
-            m_playbackEventsMap = changes;
-            updateMainStreamEvents(changes);
+        m_mainStreamChanges.onReceive(this, [this](const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) {
+            updateMainStreamEvents(events, dynamics);
         });
 
-        m_dynamicLevelChanges.onReceive(this, [this](const mpe::DynamicLevelMap& changes) {
-            m_dynamicLevelMap = changes;
-            updateDynamicChanges(changes);
-        });
-
-        updateMainStreamEvents(data.originEvents);
-        updateDynamicChanges(data.dynamicLevelMap);
+        updateMainStreamEvents(data.originEvents, data.dynamicLevelLayers);
     }
 
-    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& changes) = 0;
-    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& changes) = 0;
-    virtual void updateDynamicChanges(const mpe::DynamicLevelMap& changes) = 0;
+    virtual void updateOffStreamEvents(const mpe::PlaybackEventsMap& events) = 0;
+    virtual void updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const mpe::DynamicLevelLayers& dynamics) = 0;
 
     void setActive(const bool active)
     {
@@ -123,24 +110,6 @@ public:
         ONLY_AUDIO_WORKER_THREAD;
 
         m_onMainStreamFlushed = flushed;
-    }
-
-    mpe::dynamic_level_t dynamicLevel(const msecs_t position) const
-    {
-        if (m_dynamicLevelMap.empty()) {
-            return mpe::dynamicLevelFromType(mpe::DynamicType::Natural);
-        }
-
-        if (m_dynamicLevelMap.size() == 1) {
-            return m_dynamicLevelMap.cbegin()->second;
-        }
-
-        auto upper = m_dynamicLevelMap.upper_bound(position);
-        if (upper == m_dynamicLevelMap.cbegin()) {
-            return upper->second;
-        }
-
-        return std::prev(upper)->second;
     }
 
     EventSequence eventsToBePlayed(const msecs_t nextMsecs)
@@ -240,14 +209,10 @@ protected:
     EventSequenceMap m_offStreamEvents;
     EventSequenceMap m_dynamicEvents;
 
-    mpe::DynamicLevelMap m_dynamicLevelMap;
-    mpe::PlaybackEventsMap m_playbackEventsMap;
-
     bool m_isActive = false;
 
-    mpe::PlaybackEventsChanges m_mainStreamChanges;
-    mpe::PlaybackEventsChanges m_offStreamChanges;
-    mpe::DynamicLevelChanges m_dynamicLevelChanges;
+    mpe::MainStreamChannel m_mainStreamChanges;
+    mpe::OffStreamChannel m_offStreamChanges;
 
     OnFlushedCallback m_onOffStreamFlushed;
     OnFlushedCallback m_onMainStreamFlushed;

@@ -41,6 +41,7 @@
 #include "dom/stafftextbase.h"
 #include "dom/playtechannotation.h"
 #include "dom/capo.h"
+#include "dom/hairpin.h"
 
 #include "types/string.h"
 
@@ -85,6 +86,7 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
     if (masterScore->mscVersion() < 400) {
         replaceStaffTextWithPlayTechniqueAnnotation(masterScore);
     }
+
     if (masterScore->mscVersion() < 410) {
         reconstructTypeOfCustomDynamics(masterScore);
         replaceOldWithNewExpressions(masterScore);
@@ -95,9 +97,11 @@ void CompatUtils::doCompatibilityConversions(MasterScore* masterScore)
         resetStemLengthsForTwoNoteTrems(masterScore);
         replaceStaffTextWithCapo(masterScore);
     }
+
     if (masterScore->mscVersion() < 420) {
         addMissingInitKeyForTransposingInstrument(masterScore);
         resetFramesExclusionFromParts(masterScore);
+        applyDynamicsToAllVoices(masterScore);
     }
 }
 
@@ -665,6 +669,35 @@ void CompatUtils::resetFramesExclusionFromParts(MasterScore* masterScore)
         for (MeasureBase* measureBase = score->first(); measureBase; measureBase = measureBase->next()) {
             if (!measureBase->isMeasure()) {
                 measureBase->setExcludeFromOtherParts(false);
+            }
+        }
+    }
+}
+
+void CompatUtils::applyDynamicsToAllVoices(MasterScore* masterScore)
+{
+    TRACEFUNC;
+
+    for (const Score* score : masterScore->scoreList()) {
+        // Apply dynamics to all voices
+        for (const Measure* measure = score->firstMeasure(); measure; measure = measure->nextMeasure()) {
+            for (const Segment* segment = measure->first(); segment; segment = segment->next()) {
+                for (EngravingItem* element : segment->annotations()) {
+                    if (element && element->isDynamic()) {
+                        Dynamic* dyn = toDynamic(element);
+                        dyn->setApplyToAllVoices(true);
+                    }
+                }
+            }
+        }
+
+        // Apply hairpins to all voices
+        const SpannerMap& spannerMap = score->spannerMap();
+
+        for (auto it = spannerMap.cbegin(); it != spannerMap.cend(); ++it) {
+            if (it->second->isHairpin()) {
+                Hairpin* hairpin = toHairpin(it->second);
+                hairpin->setApplyToAllVoices(true);
             }
         }
     }

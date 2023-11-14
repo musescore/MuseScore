@@ -37,8 +37,4 @@ FlatButton {
     toolTipTitle: qsTrc("inspector", "Reset")
     transparent: true
     enabled: propertyItem.isModified
-
-    onClicked: {
-        propertyItem.resetToDefault()
-    }
 }

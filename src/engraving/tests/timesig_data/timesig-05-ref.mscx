@@ -70,6 +70,7 @@
           <Spanner type="HairPin">
             <HairPin>
               <subtype>0</subtype>
+              <applyToAllVoices>1</applyToAllVoices>
               </HairPin>
             <next>
               <location>
@@ -277,6 +278,7 @@
             <HairPin>
               <subtype>1</subtype>
               <veloChange>10</veloChange>
+              <applyToAllVoices>1</applyToAllVoices>
               </HairPin>
             <next>
               <location>
@@ -364,6 +366,7 @@
           <Dynamic>
             <subtype>p</subtype>
             <velocity>49</velocity>
+            <applyToAllVoices>1</applyToAllVoices>
             </Dynamic>
           <Chord>
             <durationType>half</durationType>

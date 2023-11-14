@@ -20,8 +20,10 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 import QtQuick 2.15
+import QtQuick.Layouts 1.15
 
 import MuseScore.UiComponents 1.0
+import MuseScore.Ui 1.0
 import MuseScore.Inspector 1.0
 
 import "../../../common"
@@ -39,73 +41,69 @@ ExpandableBlank {
 
     width: parent.width
 
-    contentItemComponent: Column {
-        id: contentLayout
+    contentItemComponent: InspectorPropertyView {
+        id: voicePropertyView
 
-        property int navigationRowEnd: changeSpeed.navigationRowEnd
+        readonly property int navigationRowEnd: applyToAllVoicesBtn.navigation.row + 1
 
         height: implicitHeight
-        width: root.width
+        width: parent.width
 
-        spacing: 12
+        titleText: qsTrc("inspector", "Apply to voice")
 
-        Item {
+        propertyItem: root.model ? root.model.applyToVoice : null
+
+        navigationName: "Apply to voice"
+        navigationPanel: root.navigation.panel
+        navigationRowStart: root.navigation.row + 1
+
+        RowLayout {
             height: childrenRect.height
             width: parent.width
 
-            SpinBoxPropertyView {
-                id: velocitySection
-                anchors.left: parent.left
-                anchors.right: parent.horizontalCenter
-                anchors.rightMargin: 2
+            spacing: 4
 
-                navigationName: "Velocity"
-                navigationPanel: root.navigation.panel
-                navigationRowStart: root.navigation.row + 1
+            FlatRadioButtonList {
+                id: voiceList
 
-                titleText: qsTrc("inspector", "Velocity")
-                propertyItem: root.model ? root.model.velocity : null
+                Layout.fillWidth: true
 
-                step: 1
-                decimals: 0
-                maxValue: 127
-                minValue: 0
+                navigationPanel: voicePropertyView.navigationPanel
+                navigationRowStart: voicePropertyView.navigationRowStart + 1
+
+                spacing: 4
+
+                currentValue: root.model.applyToVoice.value
+
+                model: [
+                    { iconCode: IconCode.VOICE_1, value: Dynamic.Voice1 },
+                    { iconCode: IconCode.VOICE_2, value: Dynamic.Voice2 },
+                    { iconCode: IconCode.VOICE_3, value: Dynamic.Voice3 },
+                    { iconCode: IconCode.VOICE_4, value: Dynamic.Voice4 },
+                ]
+
+                onToggled: function(newValue) {
+                    root.model.applyToVoice.value = newValue
+                }
             }
 
-            SpinBoxPropertyView {
-                id: velocityChangeSection
-                anchors.left: parent.horizontalCenter
-                anchors.leftMargin: 2
-                anchors.right: parent.right
+            FlatRadioButton {
+                id: applyToAllVoicesBtn
 
-                navigationName: "Velocity change"
-                navigationPanel: root.navigation.panel
-                navigationRowStart: velocitySection.navigationRowEnd + 1
+                Layout.preferredWidth: parent.width / 3
 
-                titleText: qsTrc("inspector", "Velocity change")
-                propertyItem: root.model ? root.model.velocityChange : null
+                navigation.name: "Apply to all voices"
+                navigation.panel: voicePropertyView.navigationPanel
+                navigation.row: voiceList.navigationRowEnd + 1
 
-                step: 1
-                decimals: 0
-                maxValue: 127
-                minValue: -127
+                text: qsTrc("inspector", "All")
+
+                checked: root.model.applyToVoice.value === Dynamic.AllVoices
+
+                onToggled: function(newValue) {
+                    root.model.applyToVoice.value = Dynamic.AllVoices
+                }
             }
-        }
-
-        FlatRadioButtonGroupPropertyView {
-            id: changeSpeed
-            titleText: qsTrc("inspector", "Change speed")
-            propertyItem: root.model ? root.model.velocityChangeSpeed : null
-
-            navigationName: "Change speed Menu"
-            navigationPanel: root.navigation.panel
-            navigationRowStart: velocityChangeSection.navigationRowEnd + 1
-
-            model: [
-                { text: qsTrc("inspector", "Slow", "velocity change speed"), value: Dynamic.VELOCITY_CHANGE_SPEED_SLOW },
-                { text: qsTrc("inspector", "Normal", "velocity change speed"), value: Dynamic.VELOCITY_CHANGE_SPEED_NORMAL },
-                { text: qsTrc("inspector", "Fast", "velocity change speed"), value: Dynamic.VELOCITY_CHANGE_SPEED_FAST }
-            ]
         }
     }
 }

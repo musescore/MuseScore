@@ -19,6 +19,7 @@
         <file>qml/MuseScore/Inspector/general/playback/internal/GlissandoExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/ArpeggioExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/playback/internal/GradualTempoChangeBlank.qml</file>
+        <file>qml/MuseScore/Inspector/general/playback/internal/DynamicsExpandableBlank.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/HorizontalSpacingSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/AppearanceOffsetSection.qml</file>
         <file>qml/MuseScore/Inspector/general/appearance/internal/ArrangeSection.qml</file>

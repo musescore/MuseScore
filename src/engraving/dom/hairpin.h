@@ -104,6 +104,7 @@ class Hairpin final : public TextLineBase
     bool _singleNoteDynamics;
     ChangeMethod _veloChangeMethod;
     bool _playHairpin;
+    bool m_applyToAllVoices = false;
 
     Spatium _hairpinHeight;
     Spatium _hairpinContHeight;
@@ -149,6 +150,9 @@ public:
 
     bool playHairpin() const { return _playHairpin; }
     void setPlayHairpin(bool val) { _playHairpin = val; }
+
+    bool applyToAllVoices() const { return m_applyToAllVoices; }
+    void setApplyToAllVoices(bool v) { m_applyToAllVoices = v; }
 
     bool isCrescendo() const
     {

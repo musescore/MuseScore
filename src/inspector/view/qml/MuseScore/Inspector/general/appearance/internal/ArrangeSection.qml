@@ -72,6 +72,10 @@ Column {
                 navigation.accessible.name: qsTrc("inspector", "Reset stacking order to default")
 
                 propertyItem: root.arrangeOrderProperty
+
+                onClicked: {
+                    propertyItem.resetToDefault()
+                }
             }
         }
 

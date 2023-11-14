@@ -23,6 +23,8 @@
 
 #include "inspector/models/abstractinspectormodel.h"
 #include "internal_models/noteplaybackmodel.h"
+#include "internal_models/dynamicsplaybackmodel.h"
+#include "internal_models/hairpinsplaybackmodel.h"
 #include "internal_models/arpeggioplaybackmodel.h"
 #include "internal_models/fermataplaybackmodel.h"
 #include "internal_models/breathplaybackmodel.h"
@@ -36,11 +38,13 @@ PlaybackProxyModel::PlaybackProxyModel(QObject* parent, IElementRepositoryServic
 {
     QList<AbstractInspectorModel*> models {
         new NotePlaybackModel(this, repository),
+        new DynamicsPlaybackModel(this, repository),
+        new HairpinsPlaybackModel(this, repository),
         new ArpeggioPlaybackModel(this, repository),
         new FermataPlaybackModel(this, repository),
         new BreathPlaybackModel(this, repository),
         new GlissandoPlaybackModel(this, repository),
-        new GradualTempoChangePlaybackModel(this, repository)
+        new GradualTempoChangePlaybackModel(this, repository),
     };
 
     for (AbstractInspectorModel* model : models) {

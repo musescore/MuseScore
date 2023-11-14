@@ -116,7 +116,7 @@ void PlaybackModel::reload()
     update(tickFrom, tickTo, trackFrom, trackTo);
 
     for (auto& pair : m_playbackDataMap) {
-        pair.second.mainStream.send(pair.second.originEvents);
+        pair.second.mainStream.send(pair.second.originEvents, pair.second.dynamicLevelLayers);
     }
 
     m_dataChanged.notify();
@@ -321,7 +321,7 @@ void PlaybackModel::updateContext(const InstrumentTrackId& trackId)
     ctx.update(trackId.partId, m_score);
 
     PlaybackData& trackData = m_playbackDataMap[trackId];
-    trackData.dynamicLevelMap = ctx.dynamicLevelMap(m_score);
+    trackData.dynamicLevelLayers = ctx.dynamicLevelLayers(m_score);
 }
 
 void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* segment, const std::set<staff_idx_t>& staffIdxSet,
@@ -404,7 +404,7 @@ void PlaybackModel::processSegment(const int tickPositionOffset, const Segment* 
             continue;
         }
 
-        m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(segmentStartTick + tickPositionOffset),
+        m_renderer.render(item, tickPositionOffset, ctx.appliableDynamicLevel(item->voice(), segmentStartTick + tickPositionOffset),
                           ctx.persistentArticulationType(segmentStartTick + tickPositionOffset), std::move(profile),
                           m_playbackDataMap[trackId].originEvents);
 
@@ -683,13 +683,11 @@ void PlaybackModel::notifyAboutChanges(const InstrumentTrackIdSet& oldTracks, co
 {
     for (const InstrumentTrackId& trackId : changedTracks) {
         auto search = m_playbackDataMap.find(trackId);
-
         if (search == m_playbackDataMap.cend()) {
             continue;
         }
 
-        search->second.mainStream.send(search->second.originEvents);
-        search->second.dynamicLevelChanges.send(search->second.dynamicLevelMap);
+        search->second.mainStream.send(search->second.originEvents, search->second.dynamicLevelLayers);
     }
 
     for (auto it = m_playbackDataMap.cbegin(); it != m_playbackDataMap.cend(); ++it) {

@@ -111,6 +111,9 @@ public:
     bool playDynamic() const { return m_playDynamic; }
     void setPlayDynamic(bool v) { m_playDynamic = v; }
 
+    bool applyToAllVoices() const { return m_applyToAllVoices; }
+    void setApplyToAllVoices(bool v) { m_applyToAllVoices = v; }
+
     bool acceptDrop(EditData& ed) const override;
     EngravingItem* drop(EditData& ed) override;
 
@@ -125,6 +128,7 @@ private:
     DynamicType m_dynamicType = DynamicType::OTHER;
     Expression* m_snappedExpression = nullptr;
     bool m_playDynamic = true;
+    bool m_applyToAllVoices = false;
 
     mutable mu::PointF m_dragOffset;
     int m_velocity = -1;           // associated midi velocity 0-127

@@ -37,6 +37,7 @@ namespace mu::engraving {
 bool MScore::debugMode = false;
 bool MScore::testMode = false;
 bool MScore::testWriteStyleToScore = true;
+bool MScore::useRead302InTestMode = true;
 
 // #ifndef NDEBUG
 bool MScore::noHorizontalStretch = false;

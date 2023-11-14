@@ -31,18 +31,17 @@ static constexpr mpe::pitch_level_t MIN_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(
 static constexpr note_idx_t MIN_SUPPORTED_NOTE = 12; // MIDI equivalent for C0
 static constexpr mpe::pitch_level_t MAX_SUPPORTED_PITCH_LEVEL = mpe::pitchLevel(PitchClass::C, 8);
 static constexpr note_idx_t MAX_SUPPORTED_NOTE = 108; // MIDI equivalent for C8
+static constexpr int MIN_SUPPORTED_DYNAMIC_VELOCITY = 16; // MIDI equivalent for PPP
+static constexpr int MAX_SUPPORTED_DYNAMIC_VELOCITY = 127; // MIDI equivalent for FFF
 
-void FluidSequencer::init(const PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride)
+void FluidSequencer::init(const PlaybackSetupData& setupData, const std::optional<midi::Program>& programOverride,
+                          bool useDynamicEvents)
 {
     m_channels.init(setupData, programOverride);
+    m_useDynamicEvents = useDynamicEvents;
 }
 
-int FluidSequencer::currentExpressionLevel() const
-{
-    return expressionLevel(dynamicLevel(m_playbackPosition));
-}
-
-void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes)
+void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& events)
 {
     m_offStreamEvents.clear();
 
@@ -50,35 +49,27 @@ void FluidSequencer::updateOffStreamEvents(const mpe::PlaybackEventsMap& changes
         m_onOffStreamFlushed();
     }
 
-    updatePlaybackEvents(m_offStreamEvents, changes);
+    updatePlaybackEvents(m_offStreamEvents, events);
     updateOffSequenceIterator();
 }
 
-void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& changes)
+void FluidSequencer::updateMainStreamEvents(const mpe::PlaybackEventsMap& events, const DynamicLevelLayers& dynamics)
 {
     m_mainStreamEvents.clear();
+    m_dynamicEvents.clear();
 
     if (m_onMainStreamFlushed) {
         m_onMainStreamFlushed();
     }
 
-    updatePlaybackEvents(m_mainStreamEvents, changes);
+    bool useNoteVelocity = !m_useDynamicEvents;
+    updatePlaybackEvents(m_mainStreamEvents, events, useNoteVelocity);
     updateMainSequenceIterator();
-}
 
-void FluidSequencer::updateDynamicChanges(const mpe::DynamicLevelMap& changes)
-{
-    m_dynamicEvents.clear();
-
-    for (const auto& pair : changes) {
-        midi::Event event(midi::Event::Opcode::ControlChange, Event::MessageType::ChannelVoice10);
-        event.setIndex(midi::EXPRESSION_CONTROLLER);
-        event.setData(expressionLevel(pair.second));
-
-        m_dynamicEvents[pair.first].emplace(std::move(event));
+    if (m_useDynamicEvents) {
+        updateDynamicEvents(m_dynamicEvents, events, dynamics);
+        updateDynamicChangesIterator();
     }
-
-    updateDynamicChangesIterator();
 }
 
 async::Channel<channel_t, Program> FluidSequencer::channelAdded() const
@@ -91,9 +82,9 @@ const ChannelMap& FluidSequencer::channels() const
     return m_channels;
 }
 
-void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& changes)
+void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const mpe::PlaybackEventsMap& events, bool useNoteVelocity)
 {
-    for (const auto& pair : changes) {
+    for (const auto& pair : events) {
         for (const mpe::PlaybackEvent& event : pair.second) {
             if (!std::holds_alternative<mpe::NoteEvent>(event)) {
                 continue;
@@ -106,14 +97,20 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             channel_t channelIdx = channel(noteEvent);
             note_idx_t noteIdx = noteIndex(noteEvent.pitchCtx().nominalPitchLevel);
-            velocity_t velocity = noteVelocity(noteEvent);
             tuning_t tuning = noteTuning(noteEvent, noteIdx);
 
             midi::Event noteOn(Event::Opcode::NoteOn, Event::MessageType::ChannelVoice20);
             noteOn.setChannel(channelIdx);
             noteOn.setNote(noteIdx);
-            noteOn.setVelocity(velocity);
             noteOn.setPitchNote(noteIdx, tuning);
+
+            if (useNoteVelocity) {
+                velocity_t velocity = noteVelocity(noteEvent);
+                noteOn.setVelocity(velocity);
+            } else {
+                velocity_t velocity = dynamicLevelToMidiVelocity(dynamicLevelFromType(DynamicType::Natural));
+                noteOn.setVelocity(velocity);
+            }
 
             destination[timestampFrom].emplace(std::move(noteOn));
 
@@ -126,6 +123,19 @@ void FluidSequencer::updatePlaybackEvents(EventSequenceMap& destination, const m
 
             appendControlSwitch(destination, noteEvent, PEDAL_CC_SUPPORTED_TYPES, 64);
             appendPitchBend(destination, noteEvent, BEND_SUPPORTED_TYPES, channelIdx);
+        }
+    }
+}
+
+void FluidSequencer::updateDynamicEvents(EventSequenceMap& destination, const PlaybackEventsMap& events, const DynamicLevelLayers& dynamics)
+{
+    for (const auto& pair : events) {
+        for (const mpe::PlaybackEvent& event : pair.second) {
+            if (!std::holds_alternative<mpe::NoteEvent>(event)) {
+                continue;
+            }
+
+            appendDynamicEvents(destination, std::get<mpe::NoteEvent>(event), dynamics);
         }
     }
 }
@@ -229,6 +239,58 @@ void FluidSequencer::appendPitchBend(EventSequenceMap& destination, const mpe::N
     destination[timestampFrom].emplace(std::move(event));
 }
 
+void FluidSequencer::appendDynamicEvents(EventSequenceMap& destination, const NoteEvent& noteEvent,
+                                         const mpe::DynamicLevelLayers& dynamicLayers)
+{
+    const mpe::ArrangementContext& arrangementCtx = noteEvent.arrangementCtx();
+    timestamp_t timestampFrom = arrangementCtx.actualTimestamp;
+    timestamp_t timestampTo = timestampFrom + noteEvent.arrangementCtx().actualDuration;
+
+    if (timestampTo < timestampFrom) {
+        return;
+    }
+
+    dynamic_layer_idx_t dynamicLayerIdx = makeDynamicLayerIndex(arrangementCtx.voiceLayerIndex);
+    auto dynamicLevelMapIt = dynamicLayers.find(dynamicLayerIdx);
+    if (dynamicLevelMapIt == dynamicLayers.end()) {
+        return;
+    }
+
+    const DynamicLevelMap& dynamicLevelMap = dynamicLevelMapIt->second;
+    if (dynamicLevelMap.empty()) {
+        return;
+    }
+
+    auto fromIt = findLessOrEqual(dynamicLevelMap, timestampFrom);
+    if (fromIt == dynamicLevelMap.end()) {
+        return;
+    }
+
+    auto toIt = findLessOrEqual(dynamicLevelMap, timestampTo);
+    if (toIt == dynamicLevelMap.end()) {
+        return;
+    }
+
+    midi::channel_t channelIdx = channel(noteEvent);
+
+    if (fromIt == toIt) {
+        DynamicEvent event;
+        event.channelIdx = channelIdx;
+        event.value = noteVelocity(noteEvent);
+        destination[timestampFrom].emplace(std::move(event));
+        return;
+    }
+
+    auto endIt = std::next(toIt);
+
+    for (auto it = fromIt; it != endIt; ++it) {
+        DynamicEvent event;
+        event.channelIdx = channelIdx;
+        event.value = dynamicLevelToMidiVelocity(it->second);
+        destination[it->first].emplace(std::move(event));
+    }
+}
+
 channel_t FluidSequencer::channel(const mpe::NoteEvent& noteEvent) const
 {
     return m_channels.resolveChannelForEvent(noteEvent);
@@ -260,40 +322,38 @@ tuning_t FluidSequencer::noteTuning(const mpe::NoteEvent& noteEvent, const int n
 
 velocity_t FluidSequencer::noteVelocity(const mpe::NoteEvent& noteEvent) const
 {
-    static constexpr midi::velocity_t MAX_SUPPORTED_VELOCITY = 127;
+    const mpe::ExpressionContext& expressionCtx = noteEvent.expressionCtx();
 
-    velocity_t result = RealRound(noteEvent.expressionCtx().expressionCurve.velocityFraction() * MAX_SUPPORTED_VELOCITY, 0);
+    if (expressionCtx.velocityOverride.has_value()) {
+        velocity_t velocity = RealRound(expressionCtx.velocityOverride.value() * MAX_SUPPORTED_DYNAMIC_VELOCITY, 0);
+        return std::clamp<velocity_t>(velocity, 0, MAX_SUPPORTED_DYNAMIC_VELOCITY);
+    }
 
-    return std::clamp<velocity_t>(result, 0, MAX_SUPPORTED_VELOCITY);
+    dynamic_level_t maxDynamicLevel = expressionCtx.expressionCurve.maxAmplitudeLevel();
+    return dynamicLevelToMidiVelocity(maxDynamicLevel);
 }
 
-int FluidSequencer::expressionLevel(const mpe::dynamic_level_t dynamicLevel) const
+int FluidSequencer::dynamicLevelToMidiVelocity(const mpe::dynamic_level_t dynamicLevel) const
 {
     static constexpr mpe::dynamic_level_t MIN_SUPPORTED_DYNAMICS_LEVEL = mpe::dynamicLevelFromType(DynamicType::ppp);
     static constexpr mpe::dynamic_level_t MAX_SUPPORTED_DYNAMICS_LEVEL = mpe::dynamicLevelFromType(DynamicType::fff);
-    static constexpr int MIN_SUPPORTED_VOLUME = 16; // MIDI equivalent for PPP
-    static constexpr int MAX_SUPPORTED_VOLUME = 127; // MIDI equivalent for FFF
-    static constexpr int VOLUME_STEP = 16;
+    static constexpr int VELOCITY_STEP = 16;
 
     if (dynamicLevel <= MIN_SUPPORTED_DYNAMICS_LEVEL) {
-        return MIN_SUPPORTED_VOLUME;
+        return MIN_SUPPORTED_DYNAMIC_VELOCITY;
     }
 
     if (dynamicLevel >= MAX_SUPPORTED_DYNAMICS_LEVEL) {
-        return MAX_SUPPORTED_VOLUME;
+        return MAX_SUPPORTED_DYNAMIC_VELOCITY;
     }
 
     float stepCount = ((dynamicLevel - MIN_SUPPORTED_DYNAMICS_LEVEL) / static_cast<float>(mpe::DYNAMIC_LEVEL_STEP));
 
     if (dynamicLevel == mpe::dynamicLevelFromType(DynamicType::Natural)) {
-        stepCount -= 0.5;
+        stepCount -= 0.5f;
     }
 
-    if (dynamicLevel > mpe::dynamicLevelFromType(DynamicType::Natural)) {
-        stepCount -= 1;
-    }
-
-    dynamic_level_t result = RealRound(MIN_SUPPORTED_VOLUME + (stepCount * VOLUME_STEP), 0);
+    dynamic_level_t result = RealRound(MIN_SUPPORTED_DYNAMIC_VELOCITY + (stepCount * VELOCITY_STEP), 0);
 
     return std::min(result, MAX_SUPPORTED_DYNAMICS_LEVEL);
 }

@@ -82,6 +82,7 @@
             <HairPin>
               <subtype>0</subtype>
               <veloChange>10</veloChange>
+              <applyToAllVoices>1</applyToAllVoices>
               </HairPin>
             <next>
               <location>

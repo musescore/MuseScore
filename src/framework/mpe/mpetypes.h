@@ -402,7 +402,15 @@ enum class DynamicType {
     Last
 };
 
+using dynamic_layer_idx_t = size_t;
+
 using DynamicLevelMap = std::map<timestamp_t, dynamic_level_t>;
+using DynamicLevelLayers = std::map<dynamic_layer_idx_t, DynamicLevelMap>;
+
+inline dynamic_layer_idx_t makeDynamicLayerIndex(voice_layer_idx_t voiceIdx)
+{
+    return voiceIdx;
+}
 
 inline DynamicType approximateDynamicType(const dynamic_level_t dynamicLevel)
 {

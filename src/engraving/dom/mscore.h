@@ -215,6 +215,7 @@ public:
     static bool debugMode;
     static bool testMode;
     static bool testWriteStyleToScore;
+    static bool useRead302InTestMode;
 
     static int sampleRate;
     static int mtcType;

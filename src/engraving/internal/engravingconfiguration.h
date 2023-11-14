@@ -38,7 +38,7 @@ class EngravingConfiguration : public IEngravingConfiguration, public async::Asy
     INJECT(mu::framework::IGlobalConfiguration, globalConfiguration)
     INJECT(mu::ui::IUiConfiguration, uiConfiguration)
     INJECT(mu::accessibility::IAccessibilityConfiguration, accessibilityConfiguration)
-    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration);
+    INJECT(iex::guitarpro::IGuitarProConfiguration, guitarProConfiguration)
 
 public:
     EngravingConfiguration() = default;
@@ -72,7 +72,8 @@ public:
 
     double guiScaling() const override;
 
-    draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false) const override;
+    draw::Color selectionColor(voice_idx_t voiceIndex = 0, bool itemVisible = true, bool itemIsUnlinkedFromScore = false,
+                               bool applyToAllVoices = false) const override;
     void setSelectionColor(voice_idx_t voiceIndex, draw::Color color) override;
     async::Channel<voice_idx_t, draw::Color> selectionColorChanged() const override;
 
@@ -105,6 +106,7 @@ private:
     ValNt<DebuggingOptions> m_debuggingOptions;
 
     bool m_multiVoice = false;
+    Color m_allVoicesColor;
 };
 }
 

@@ -39,8 +39,9 @@ struct RestEvent;
 using PlaybackEvent = std::variant<NoteEvent, RestEvent>;
 using PlaybackEventList = std::vector<PlaybackEvent>;
 using PlaybackEventsMap = std::map<msecs_t, PlaybackEventList>;
-using PlaybackEventsChanges = async::Channel<PlaybackEventsMap>;
-using DynamicLevelChanges = async::Channel<DynamicLevelMap>;
+
+using MainStreamChannel = async::Channel<PlaybackEventsMap, DynamicLevelLayers>;
+using OffStreamChannel = async::Channel<PlaybackEventsMap>;
 
 struct ArrangementContext
 {
@@ -79,12 +80,14 @@ struct ExpressionContext
     ArticulationMap articulations;
     dynamic_level_t nominalDynamicLevel = MIN_DYNAMIC_LEVEL;
     ExpressionCurve expressionCurve;
+    std::optional<float> velocityOverride;
 
     bool operator==(const ExpressionContext& other) const
     {
         return articulations == other.articulations
                && nominalDynamicLevel == other.nominalDynamicLevel
-               && expressionCurve == other.expressionCurve;
+               && expressionCurve == other.expressionCurve
+               && velocityOverride == velocityOverride;
     }
 };
 
@@ -206,12 +209,10 @@ private:
 
     void calculateExpressionCurve(const ArticulationMap& articulationsApplied, const float requiredVelocityFraction)
     {
-        const ExpressionPattern::DynamicOffsetMap& appliedOffsetMap = articulationsApplied.averageDynamicOffsetMap();
+        m_expressionCtx.expressionCurve = articulationsApplied.averageDynamicOffsetMap();
 
         dynamic_level_t articulationDynamicLevel = articulationsApplied.averageMaxAmplitudeLevel();
         dynamic_level_t nominalDynamicLevel = m_expressionCtx.nominalDynamicLevel;
-
-        m_expressionCtx.expressionCurve = appliedOffsetMap;
 
         constexpr dynamic_level_t naturalDynamicLevel = dynamicLevelFromType(DynamicType::Natural);
 
@@ -233,7 +234,7 @@ private:
         }
 
         if (!RealIsNull(requiredVelocityFraction)) {
-            m_expressionCtx.expressionCurve.amplifyVelocity(requiredVelocityFraction);
+            m_expressionCtx.velocityOverride = requiredVelocityFraction;
         }
     }
 
@@ -279,6 +280,7 @@ struct PlaybackSetupData
     SoundSubCategories subCategorySet;
 
     std::optional<std::string> musicXmlSoundId;
+    bool supportsSingleNoteDynamics = false;
 
     bool contains(const SoundSubCategory subcategory) const
     {
@@ -289,7 +291,8 @@ struct PlaybackSetupData
     {
         return id == other.id
                && category == other.category
-               && subCategorySet == other.subCategorySet;
+               && subCategorySet == other.subCategorySet
+               && supportsSingleNoteDynamics == other.supportsSingleNoteDynamics;
     }
 
     bool operator<(const PlaybackSetupData& other) const
@@ -371,16 +374,15 @@ static const String GENERIC_SETUP_DATA_STRING = GENERIC_SETUP_DATA.toString();
 struct PlaybackData {
     PlaybackEventsMap originEvents;
     PlaybackSetupData setupData;
-    PlaybackEventsChanges mainStream;
-    PlaybackEventsChanges offStream;
-    DynamicLevelMap dynamicLevelMap;
-    DynamicLevelChanges dynamicLevelChanges;
+    DynamicLevelLayers dynamicLevelLayers;
+    MainStreamChannel mainStream;
+    OffStreamChannel offStream;
 
     bool operator==(const PlaybackData& other) const
     {
         return originEvents == other.originEvents
                && setupData == other.setupData
-               && dynamicLevelMap == other.dynamicLevelMap;
+               && dynamicLevelLayers == other.dynamicLevelLayers;
     }
 
     bool isValid() const

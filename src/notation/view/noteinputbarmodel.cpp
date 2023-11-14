@@ -416,6 +416,10 @@ int NoteInputBarModel::resolveCurrentVoiceIndex() const
             return INVALID_VOICE;
         }
 
+        if (element->getProperty(mu::engraving::Pid::APPLY_TO_ALL_VOICES).toBool()) {
+            return INVALID_VOICE;
+        }
+
         voice = static_cast<int>(element->voice());
     }
 

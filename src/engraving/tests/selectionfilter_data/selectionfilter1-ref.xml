@@ -15,6 +15,7 @@
       <HairPin>
         <subtype>0</subtype>
         <veloChange>10</veloChange>
+        <applyToAllVoices>1</applyToAllVoices>
         <ticks_f>2/4</ticks_f>
         </HairPin>
       <next>

@@ -43,6 +43,7 @@ public:
 
         result = T::doResolve(instrument);
         result.musicXmlSoundId = std::make_optional(instrument->musicXmlId().toStdString());
+        result.supportsSingleNoteDynamics = instrument->singleNoteDynamics();
 
         return result.isValid();
     }

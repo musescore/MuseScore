@@ -125,6 +125,11 @@ struct MidiData {
     }
 };
 
+struct DynamicEvent {
+    channel_t channelIdx = 0;
+    uint8_t value = 0; // [0; 127]
+};
+
 static constexpr char NONE_DEVICE_ID[] = "-1";
 
 using MidiDeviceID = std::string;
@@ -164,5 +169,16 @@ inline std::vector<int> splitDeviceId(const MidiDeviceID& deviceId)
     return result;
 }
 }
+
+template<>
+struct std::less<mu::midi::DynamicEvent>
+{
+    bool operator()(const mu::midi::DynamicEvent& first,
+                    const mu::midi::DynamicEvent& second) const
+    {
+        return first.channelIdx < second.channelIdx
+               || first.value < second.value;
+    }
+};
 
 #endif // MU_MIDI_MIDITYPES_H
