@@ -456,3 +456,11 @@ void AbstractCloudService::openUrl(const QUrl& url)
         LOGE() << ret.toString();
     }
 }
+
+QString AbstractCloudService::logoColorForTheme(const ui::ThemeInfo& theme) const
+{
+    if (ui::isDarkTheme(theme.codeKey)) {
+        return "#FFFFFF";
+    }
+    return "#000000";
+}

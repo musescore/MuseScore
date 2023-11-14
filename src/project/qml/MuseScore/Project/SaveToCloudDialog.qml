@@ -21,6 +21,7 @@
  */
 import QtQuick 2.15
 import QtQuick.Layouts 1.15
+import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
@@ -63,41 +64,77 @@ StyledDialogView {
         implicitWidth: Math.max(420, contentColumn.implicitWidth)
         implicitHeight: contentColumn.implicitHeight
 
-        AccountAvatar {
-            id: avatar
-
-            anchors.top: parent.top
-            anchors.right: parent.right
-
-            side: 38
-            url: Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.userAvatarUrl : null
-
-            CloudsModel {
-                id: cloudsModel
-
-                Component.onCompleted: {
-                    load()
-
-                    contentItem.cloudInfo = cloudsModel.cloudInfo(root.cloudCode)
-                    contentItem.dialogText = cloudsModel.dialogText(root.cloudCode, existingScoreOrAudioUrl)
-                    contentItem.visibilityModel = cloudsModel.visibilityModel(root.cloudCode)
-                }
-            }
-        }
-
         ColumnLayout {
             id: contentColumn
+
             anchors.fill: parent
+
             spacing: 20
 
-            StyledTextLabel {
-                id: titleLabel
+            ColumnLayout {
+                id: headerColumn
 
-                text: root.isPublishShare && Boolean(contentItem.dialogText) ? contentItem.dialogText.titleText
-                                                                             : qsTrc("project/save", "Save to cloud")
+                spacing: root.isPublishShare ? 16 : 0
 
-                font: ui.theme.largeBodyBoldFont
-                horizontalAlignment: Text.AlignLeft
+                Item {
+                    id: cloudImages
+
+                    width: contentItem.width
+                    height: root.isPublishShare ? childrenRect.height : 0
+
+                    Image {
+                        id: cloudLogo
+
+                        visible: false
+
+                        anchors.verticalCenter: avatar.verticalCenter
+                        anchors.left: parent.left
+
+                        source: contentItem.cloudInfo.cloudLogoUrl
+                        sourceSize.height: 20
+                    }
+
+                    ColorOverlay {
+                        visible: root.isPublishShare
+
+                        anchors.fill: cloudLogo
+
+                        color: contentItem.cloudInfo.cloudLogoColor
+
+                        source: cloudLogo
+                    }
+
+                    AccountAvatar {
+                        id: avatar
+
+                        anchors.right: parent.right
+
+                        side: 38
+                        url: Boolean(contentItem.cloudInfo) ? contentItem.cloudInfo.userAvatarUrl : null
+
+                        CloudsModel {
+                            id: cloudsModel
+
+                            Component.onCompleted: {
+                                load()
+
+                                contentItem.cloudInfo = cloudsModel.cloudInfo(root.cloudCode)
+                                contentItem.dialogText = cloudsModel.dialogText(root.cloudCode, existingScoreOrAudioUrl)
+                                contentItem.visibilityModel = cloudsModel.visibilityModel(root.cloudCode)
+                            }
+                        }
+                    }
+                }
+
+                StyledTextLabel {
+                    id: titleLabel
+
+                    text: root.isPublishShare && Boolean(contentItem.dialogText) ? contentItem.dialogText.titleText
+                                                                                 : qsTrc("project/save", "Save to cloud")
+
+                    font: ui.theme.largeBodyBoldFont
+                    horizontalAlignment: Text.AlignLeft
+                }
             }
 
             ColumnLayout {
