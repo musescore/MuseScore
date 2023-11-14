@@ -54,6 +54,10 @@ protected:
                                              const mpe::duration_t nominalDuration,
                                              mpe::ArticulationMap& noteArticulationMap)
     {
+        if (noteArticulationMap.empty()) {
+            return;
+        }
+
         const mpe::ArticulationAppliedData& articulationData = noteArticulationMap.at(type);
 
         mpe::timestamp_t articulationOccupiedFrom = nominalTimestamp - articulationData.meta.timestamp;

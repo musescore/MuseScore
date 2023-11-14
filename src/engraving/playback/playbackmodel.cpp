@@ -506,6 +506,8 @@ bool PlaybackModel::hasToReloadTracks(const ScoreChangesRange& changesRange) con
         ElementType::HARMONY,
         ElementType::STAFF_TEXT,
         ElementType::MEASURE_REPEAT,
+        ElementType::GUITAR_BEND,
+        ElementType::GUITAR_BEND_SEGMENT,
     };
 
     for (const ElementType type : REQUIRED_TYPES) {

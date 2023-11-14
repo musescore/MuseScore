@@ -43,6 +43,7 @@ bool SpannersMetaParser::isAbleToParse(const EngravingItem* spannerItem)
         ElementType::PALM_MUTE,
         ElementType::TRILL,
         ElementType::GLISSANDO,
+        ElementType::GUITAR_BEND,
     };
 
     return SUPPORTED_TYPES.find(spannerItem->type()) != SUPPORTED_TYPES.cend();
@@ -78,6 +79,10 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         type = mpe::ArticulationType::Mute;
         break;
     }
+    case ElementType::GUITAR_BEND: {
+        type = mpe::ArticulationType::Multibend;
+        break;
+    }
     case ElementType::TRILL: {
         const Trill* trill = toTrill(spanner);
 
@@ -102,8 +107,8 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
             break;
         }
 
-        Note* startNote = toNote(glissando->startElement());
-        Note* endNote = toNote(glissando->endElement());
+        const Note* startNote = toNote(glissando->startElement());
+        const Note* endNote = toNote(glissando->endElement());
 
         if (!startNote || !endNote) {
             break;

@@ -33,7 +33,8 @@ using namespace mu::audio;
 static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kCtrlVolume,
     Steinberg::Vst::kCtrlExpression,
-    Steinberg::Vst::kCtrlSustainOnOff
+    Steinberg::Vst::kCtrlSustainOnOff,
+    Steinberg::Vst::kPitchBend,
 };
 
 VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params)

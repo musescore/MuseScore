@@ -208,6 +208,22 @@ typedef struct ms_LivePlayStopNoteEvent
     int _pitch; // MIDI pitch
 } ms_LivePlayStopNoteEvent;
 
+// Added in v0.5
+enum ms_PitchBendType
+{
+    PitchBend_Linear,
+    PitchBend_Bezier,
+};
+
+typedef struct ms_PitchBendInfo
+{
+    int64_t event_id;
+    long long _start_us; // offset from the start of the note, not absolute time
+    long long _duration_us;
+    int _offset_cents;
+    ms_PitchBendType _type;
+} ms_PitchBendInfo;
+
 typedef ms_Result (* ms_init)();
 typedef ms_Result (* ms_disable_reverb)();
 typedef int (* ms_contains_instrument)(const char* mpe_id, const char* musicxml_id);
@@ -244,6 +260,8 @@ typedef ms_Result (* ms_MuseSampler_add_track_note_event_2)(ms_MuseSampler ms, m
 // Added in 0.4
 typedef ms_Result (* ms_MuseSampler_add_track_note_event_3)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_3 evt);
 typedef ms_Result (* ms_MuseSampler_add_track_dynamics_event)(ms_MuseSampler ms, ms_Track track, ms_DynamicsEvent evt);
+// Added in 0.5
+typedef ms_Result (* ms_MuseSampler_add_track_note_event_4)(ms_MuseSampler ms, ms_Track track, ms_NoteEvent_3 evt, long long& event_id);
 // Added in 0.4
 typedef ms_Result (* ms_MuseSampler_add_track_dynamics_event_2)(ms_MuseSampler ms, ms_Track track, ms_DynamicsEvent_2 evt);
 typedef ms_Result (* ms_MuseSampler_add_track_pedal_event)(ms_MuseSampler ms, ms_Track track, ms_PedalEvent evt);
@@ -253,6 +271,9 @@ typedef ms_Result (* ms_MuseSampler_add_track_pedal_event_2)(ms_MuseSampler ms, 
 typedef int (* ms_MuseSampler_is_ranged_articulation)(ms_NoteArticulation);
 typedef ms_Result (* ms_MuseSampler_add_track_event_range_start)(ms_MuseSampler, ms_Track, int voice, ms_NoteArticulation);
 typedef ms_Result (* ms_MuseSampler_add_track_event_range_end)(ms_MuseSampler, ms_Track, int voice, ms_NoteArticulation);
+
+// Added in 0.5
+typedef ms_Result (* ms_MuseSampler_add_pitch_bend)(ms_MuseSampler ms, ms_Track track, ms_PitchBendInfo info);
 
 typedef ms_Result (* ms_MuseSampler_start_audition_note)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent evt);
 // Added in 0.3

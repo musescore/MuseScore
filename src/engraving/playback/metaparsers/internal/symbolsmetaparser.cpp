@@ -253,7 +253,7 @@ void SymbolsMetaParser::doParse(const EngravingItem* item, const RenderingContex
         types.emplace(mpe::ArticulationType::Doit);
         break;
     case SymId::brassBend:
-        types.emplace(mpe::ArticulationType::Bend);
+        types.emplace(mpe::ArticulationType::BrassBend);
         break;
     case SymId::dynamicCrescendoHairpin:
         types.emplace(mpe::ArticulationType::Crescendo);

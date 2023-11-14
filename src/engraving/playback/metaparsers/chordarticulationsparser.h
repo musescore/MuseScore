@@ -40,6 +40,7 @@ protected:
 
 private:
     static void parseSpanners(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
+    static void parseBends(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseArticulationSymbols(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseAnnotations(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);
     static void parseTremolo(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result);

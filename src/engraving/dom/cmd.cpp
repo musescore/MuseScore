@@ -933,6 +933,10 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         }
     }
 
+    if (bend->type() == GuitarBendType::GRACE_NOTE_BEND) {
+        bend->setEndTimeFactor(GuitarBend::GRACE_NOTE_BEND_DEFAULT_END_TIME_FACTOR);
+    }
+
     Chord* startChord = bend->startNote()->chord();
     if (startChord->isGrace()) {
         for (EngravingObject* item : startChord->linkList()) {
