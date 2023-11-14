@@ -686,6 +686,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
 void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
                              bool /*includeCrossStaffHeight*/)
 {
+    UNUSED(includeCrossStaffHeight);
     //! NOTE Can be edited and relayout,
     //! in this case the reset layout data has not yet been done
 //    if (ldata->isValid()) {
