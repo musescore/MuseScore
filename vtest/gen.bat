@@ -47,7 +47,7 @@ set SRC=bravura-mmrest,gonville-mmrest, ^
  voice-1,voice-2,slash-1,slash-2, ^
  system-1,system-2,system-3,system-4,system-5,system-6,system-7,system-8,system-9,system-10,system-11, ^
  hide-1,small-1,tremolo-1, ^
- staff-1,staff-2,staff-3,staff-4,layout-1,layout-2,layout-3,layout-4,layout-5,layout-6,layout-7,layout-8,layout-9,layout-10, ^
+ staff-1,staff-2,staff-3,staff-4,staffEmptiness,layout-1,layout-2,layout-3,layout-4,layout-5,layout-6,layout-7,layout-8,layout-9,layout-10, ^
  articulation-1, percussion-grace, ^
  drumset-1, drumset-2, drumset-3, drumset-4, drumset-5, drumset-6, drumset-7, drumset-8, ^
  slashed_chord-layout-12, slashed_chord-layout-7, slashed_grace-3, slashed_noteheadposition-1, ^

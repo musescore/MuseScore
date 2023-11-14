@@ -163,7 +163,6 @@
           <text>Henry Ives</text>
           </Text>
         </VBox>
-      <!-- Measure 1 -->
       <Measure>
         <voice>
           <TimeSig>
@@ -185,7 +184,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 2 -->
       <Measure>
         <voice>
           <Rest>
@@ -194,7 +192,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 3 -->
       <Measure>
         <voice>
           <Rest>
@@ -203,7 +200,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 4 -->
       <Measure>
         <voice>
           <Rest>
@@ -212,7 +208,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 5 -->
       <Measure>
         <voice>
           <Rest>
@@ -221,7 +216,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 6 -->
       <Measure>
         <voice>
           <Chord>
@@ -239,7 +233,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 7 -->
       <Measure>
         <voice>
           <Rest>
@@ -248,7 +241,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 8 -->
       <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
@@ -269,7 +261,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 9 -->
       <Measure>
         <voice>
           <StaffText>
@@ -290,7 +281,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 10 -->
       <Measure>
         <voice>
           <Rest>
@@ -299,7 +289,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 11 -->
       <Measure>
         <voice>
           <Chord>
@@ -324,7 +313,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 12 -->
       <Measure>
         <voice>
           <Rest>
@@ -333,7 +321,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 13 -->
       <Measure>
         <voice>
           <Chord>
@@ -362,7 +349,6 @@
             </Chord>
           </voice>
         </Measure>
-      <!-- Measure 14 -->
       <Measure>
         <voice>
           <Chord>
@@ -380,7 +366,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 15 -->
       <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
@@ -401,7 +386,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 16 -->
       <Measure>
         <voice>
           <Chord>
@@ -434,7 +418,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 17 -->
       <Measure>
         <voice>
           <Chord>
@@ -459,7 +442,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 18 -->
       <Measure>
         <voice>
           <Chord>
@@ -481,7 +463,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 19 -->
       <Measure>
         <voice>
           <Chord>
@@ -510,12 +491,15 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 20 -->
       <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
           </LayoutBreak>
         <voice>
+          <StaffText>
+            <minDistance>-0.595317</minDistance>
+            <text>Staff 2 hidden</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -526,10 +510,6 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
-          <StaffText>
-            <offset x="-10.8383" y="-3.22005"/>
-            <text>Staff 2 hidden</text>
-            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -546,7 +526,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 21 -->
       <Measure>
         <voice>
           <StaffText>
@@ -567,7 +546,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 22 -->
       <Measure>
         <voice>
           <Chord>
@@ -592,7 +570,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 23 -->
       <Measure>
         <voice>
           <Chord>
@@ -610,7 +587,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 24 -->
       <Measure>
         <voice>
           <Chord>
@@ -643,7 +619,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 25 -->
       <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
@@ -671,7 +646,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 26 -->
       <Measure>
         <voice>
           <Chord>
@@ -708,7 +682,6 @@
             </Chord>
           </voice>
         </Measure>
-      <!-- Measure 27 -->
       <Measure>
         <voice>
           <Chord>
@@ -741,7 +714,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 28 -->
       <Measure>
         <voice>
           <Chord>
@@ -763,7 +735,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 29 -->
       <Measure>
         <voice>
           <Chord>
@@ -792,7 +763,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 30 -->
       <Measure>
         <voice>
           <Chord>
@@ -817,8 +787,10 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 31 -->
       <Measure>
+        <LayoutBreak>
+          <subtype>line</subtype>
+          </LayoutBreak>
         <voice>
           <Rest>
             <durationType>measure</durationType>
@@ -826,9 +798,11 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 32 -->
       <Measure>
         <voice>
+          <StaffText>
+            <text>Ottava line (unhides staff 2)</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -844,7 +818,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 33 -->
       <Measure>
         <voice>
           <Rest>
@@ -853,7 +826,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 34 -->
       <Measure>
         <voice>
           <Chord>
@@ -878,7 +850,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 35 -->
       <Measure>
         <voice>
           <Rest>
@@ -887,12 +858,21 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 36 -->
       <Measure>
         <voice>
           <StaffText>
-            <text>Ottava line (unhides staff 2)</text>
+            <text>Hairpin (should not unhide <b>next</b> staff 1)</text>
             </StaffText>
+          <Spanner type="HairPin">
+            <HairPin>
+              <subtype>0</subtype>
+              </HairPin>
+            <next>
+              <location>
+                <measures>2</measures>
+                </location>
+              </next>
+            </Spanner>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -908,7 +888,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 37 -->
       <Measure>
         <LayoutBreak>
           <subtype>line</subtype>
@@ -936,7 +915,21 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 38 -->
+      <Measure>
+        <voice>
+          <Spanner type="HairPin">
+            <prev>
+              <location>
+                <measures>-2</measures>
+                </location>
+              </prev>
+            </Spanner>
+          <Rest>
+            <durationType>measure</durationType>
+            <duration>4/4</duration>
+            </Rest>
+          </voice>
+        </Measure>
       <Measure>
         <voice>
           <Rest>
@@ -945,16 +938,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 39 -->
-      <Measure>
-        <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
-          </voice>
-        </Measure>
-      <!-- Measure 40 -->
       <Measure>
         <endRepeat>2</endRepeat>
         <voice>
@@ -976,7 +959,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 41 -->
       <Measure>
         <voice>
           <Spanner type="Volta">
@@ -1013,7 +995,6 @@
         </Measure>
       </Staff>
     <Staff id="2">
-      <!-- Measure 1 -->
       <Measure>
         <voice>
           <TimeSig>
@@ -1026,7 +1007,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 2 -->
       <Measure>
         <voice>
           <Rest>
@@ -1035,7 +1015,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 3 -->
       <Measure>
         <voice>
           <Rest>
@@ -1044,7 +1023,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 4 -->
       <Measure>
         <voice>
           <Rest>
@@ -1053,7 +1031,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 5 -->
       <Measure>
         <voice>
           <Rest>
@@ -1062,7 +1039,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 6 -->
       <Measure>
         <voice>
           <Rest>
@@ -1071,7 +1047,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 7 -->
       <Measure>
         <voice>
           <Rest>
@@ -1080,7 +1055,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 8 -->
       <Measure>
         <voice>
           <Chord>
@@ -1119,7 +1093,6 @@
             </Chord>
           </voice>
         </Measure>
-      <!-- Measure 9 -->
       <Measure>
         <voice>
           <Rest>
@@ -1141,7 +1114,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 10 -->
       <Measure>
         <voice>
           <Rest>
@@ -1150,7 +1122,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 11 -->
       <Measure>
         <voice>
           <Rest>
@@ -1159,7 +1130,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 12 -->
       <Measure>
         <voice>
           <Rest>
@@ -1168,7 +1138,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 13 -->
       <Measure>
         <voice>
           <Rest>
@@ -1177,7 +1146,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 14 -->
       <Measure>
         <voice>
           <Rest>
@@ -1186,7 +1154,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 15 -->
       <Measure>
         <voice>
           <Rest>
@@ -1195,7 +1162,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 16 -->
       <Measure>
         <voice>
           <Rest>
@@ -1204,7 +1170,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 17 -->
       <Measure>
         <voice>
           <Rest>
@@ -1213,7 +1178,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 18 -->
       <Measure>
         <voice>
           <Rest>
@@ -1222,7 +1186,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 19 -->
       <Measure>
         <voice>
           <Rest>
@@ -1231,7 +1194,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 20 -->
       <Measure>
         <voice>
           <Rest>
@@ -1240,7 +1202,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 21 -->
       <Measure>
         <voice>
           <Spanner type="Pedal">
@@ -1266,7 +1227,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 22 -->
       <Measure>
         <voice>
           <Spanner type="Pedal">
@@ -1282,7 +1242,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 23 -->
       <Measure>
         <voice>
           <Rest>
@@ -1291,7 +1250,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 24 -->
       <Measure>
         <voice>
           <Rest>
@@ -1300,7 +1258,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 25 -->
       <Measure>
         <voice>
           <Rest>
@@ -1309,7 +1266,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 26 -->
       <Measure>
         <voice>
           <Rest>
@@ -1318,7 +1274,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 27 -->
       <Measure>
         <voice>
           <Rest>
@@ -1327,7 +1282,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 28 -->
       <Measure>
         <voice>
           <Rest>
@@ -1336,7 +1290,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 29 -->
       <Measure>
         <voice>
           <Rest>
@@ -1345,7 +1298,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 30 -->
       <Measure>
         <voice>
           <Rest>
@@ -1354,7 +1306,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 31 -->
       <Measure>
         <voice>
           <Spanner type="Ottava">
@@ -1382,7 +1333,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 32 -->
       <Measure>
         <voice>
           <Rest>
@@ -1391,7 +1341,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 33 -->
       <Measure>
         <voice>
           <Rest>
@@ -1400,7 +1349,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 34 -->
       <Measure>
         <voice>
           <Rest>
@@ -1409,7 +1357,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 35 -->
       <Measure>
         <voice>
           <Rest>
@@ -1418,7 +1365,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 36 -->
       <Measure>
         <voice>
           <Rest>
@@ -1427,7 +1373,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 37 -->
       <Measure>
         <voice>
           <Rest>
@@ -1436,7 +1381,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 38 -->
       <Measure>
         <voice>
           <Chord>
@@ -1469,7 +1413,6 @@
             </Chord>
           </voice>
         </Measure>
-      <!-- Measure 39 -->
       <Measure>
         <voice>
           <Spanner type="Ottava">
@@ -1513,7 +1456,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 40 -->
       <Measure>
         <voice>
           <Chord>
@@ -1543,8 +1485,7 @@
             </Chord>
           <StaffText>
             <placement>below</placement>
-            <minDistance>-999</minDistance>
-            <offset x="-11.5541" y="4.40686"/>
+            <minDistance>0.203254</minDistance>
             <text>Volta (should NOT unhide staff 1)</text>
             </StaffText>
           <Rest>
@@ -1552,7 +1493,6 @@
             </Rest>
           </voice>
         </Measure>
-      <!-- Measure 41 -->
       <Measure>
         <voice>
           <Chord>
