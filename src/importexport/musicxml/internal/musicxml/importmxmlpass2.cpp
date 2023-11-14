@@ -2484,7 +2484,7 @@ void MusicXMLParserPass2::staffDetails(const QString& partId, Measure* measure)
             // this doesn't apply to a measure, so we'll assume the entire staff has to be hidden.
             _score->staff(staffIdx)->setVisible(false);
         }
-    } else if (visible == "yes") {
+    } else if (visible == "yes" || visible == "") {
         if (measure) {
             _score->staff(staffIdx)->setVisible(true);
             measure->setStaffVisible(staffIdx, true);
