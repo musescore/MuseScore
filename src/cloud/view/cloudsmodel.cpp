@@ -37,6 +37,8 @@ const QString USER_NAME("userName");
 const QString USER_PROFILE_URL("userProfileUrl");
 const QString USER_AVATAR_URL("userAvatarUrl");
 const QString USER_COLLECTION_URL("userCollectionUrl");
+const QString CLOUD_LOGO_URL("cloudLogoUrl");
+const QString CLOUD_LOGO_COLOR("cloudLogoColor");
 
 const QString DIALOG_TITLE_TEXT("titleText");
 const QString REPLACE_BUTTON_TEXT("replaceButtonText");
@@ -143,7 +145,12 @@ QVariant CloudsModel::cloudInfo(const QString& cloudCode) const
     QString cloudTitle = m_clouds[index]->cloudInfo().title;
     AccountInfo accountInfo = m_clouds[index]->accountInfo().val;
 
-    return makeCloudInfoMap(cloudTitle, accountInfo);
+    QVariantMap cloudInfoMap = makeCloudInfoMap(cloudTitle, accountInfo);
+
+    cloudInfoMap[prv::CLOUD_LOGO_URL] = m_clouds[index]->cloudInfo().logoUrl;
+    cloudInfoMap[prv::CLOUD_LOGO_COLOR] = m_clouds[index]->cloudInfo().logoColor;
+
+    return cloudInfoMap;
 }
 
 QVariantList CloudsModel::visibilityModel(const QString& cloudCode) const

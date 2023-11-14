@@ -46,6 +46,8 @@ static const QUrl AUDIOCOM_USER_INFO_API_URL(AUDIOCOM_API_ROOT_URL + "/me");
 
 static const QUrl AUDIOCOM_UPLOAD_AUDIO_API_URL(AUDIOCOM_API_ROOT_URL + "/audio");
 
+static const QString AUDIOCOM_LOGO_URL(AUDIOCOM_CLOUD_URL + "/img/mu-app-logo.svg");
+
 static QString audioMime(const QString& audioFormat)
 {
     if (audioFormat == "mp3") {
@@ -70,7 +72,9 @@ cloud::CloudInfo AudioComService::cloudInfo() const
     return {
         AUDIO_COM_CLOUD_CODE,
         AUDIOCOM_CLOUD_TITLE,
-        AUDIOCOM_CLOUD_URL
+        AUDIOCOM_CLOUD_URL,
+        AUDIOCOM_LOGO_URL,
+        logoColorForTheme(uiConfig()->currentTheme())
     };
 }
 

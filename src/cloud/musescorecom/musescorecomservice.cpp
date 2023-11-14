@@ -54,6 +54,8 @@ static const QUrl MUSESCORECOM_SCORE_DOWNLOAD_SHARED_API_URL(MUSESCORECOM_API_RO
 static const QUrl MUSESCORECOM_UPLOAD_SCORE_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/upload");
 static const QUrl MUSESCORECOM_UPLOAD_AUDIO_API_URL(MUSESCORECOM_API_ROOT_URL + "/score/audio");
 
+static const QString MUSESCORE_TEXT_LOGO("https://musescore.org/themes/musescore_theme/logo.svg");
+
 static const QString SCORE_ID_KEY("score_id");
 static const QString EDITOR_SOURCE_KEY("editor_source");
 static const QString EDITOR_SOURCE_VALUE(QString("Musescore Editor %1").arg(MUSESCORE_VERSION));
@@ -74,7 +76,9 @@ CloudInfo MuseScoreComService::cloudInfo() const
     return {
         MUSESCORE_COM_CLOUD_CODE,
         MUSESCORECOM_CLOUD_TITLE,
-        MUSESCORECOM_CLOUD_URL
+        MUSESCORECOM_CLOUD_URL,
+        MUSESCORE_TEXT_LOGO,
+        logoColorForTheme(uiConfig()->currentTheme())
     };
 }
 
@@ -555,4 +559,14 @@ mu::Ret MuseScoreComService::doUploadAudio(network::INetworkManagerPtr uploadMan
     }
 
     return ret;
+}
+
+QString MuseScoreComService::logoColorForTheme(const ui::ThemeInfo& theme) const
+{
+    if (theme.codeKey == ui::LIGHT_THEME_CODE) {
+        return "#0065C3";
+    } else if (theme.codeKey == ui::DARK_THEME_CODE) {
+        return "#8EC9FF";
+    }
+    return AbstractCloudService::logoColorForTheme(theme);
 }

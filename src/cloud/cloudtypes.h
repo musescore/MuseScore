@@ -38,6 +38,8 @@ struct CloudInfo {
     QString code;
     QString title;
     QUrl url;
+    QString logoUrl;
+    QString logoColor;
 };
 
 struct AccountInfo {
