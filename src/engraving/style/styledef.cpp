@@ -467,8 +467,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::staccatoGateTime,        "staccatoGateTime",        PropertyValue(50) },
     { Sid::slurGateTime,            "slurGateTime",            PropertyValue(100) },
 
-    { Sid::ArpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.5) },
-    { Sid::ArpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.5) },
+    { Sid::ArpeggioNoteDistance,    "ArpeggioNoteDistance",    Spatium(.4) },
+    { Sid::ArpeggioAccidentalDistance,    "ArpeggioAccidentalDistance",    Spatium(.3) },
     { Sid::ArpeggioAccidentalDistanceMin,    "ArpeggioAccidentalDistanceMin",    Spatium(0.33) },
     { Sid::ArpeggioLineWidth,       "ArpeggioLineWidth",       Spatium(.18) },
     { Sid::ArpeggioHookLen,         "ArpeggioHookLen",         Spatium(.8) },

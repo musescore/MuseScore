@@ -6174,7 +6174,7 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
 {
     // no support for arpeggio on rest
     if (!arpeggioType.isEmpty() && cr->type() == ElementType::CHORD) {
-        std::unique_ptr<Arpeggio> arpeggio(Factory::createArpeggio(mu::engraving::toChord(cr)));
+        Arpeggio* arpeggio = Factory::createArpeggio(mu::engraving::toChord(cr));
         arpeggio->setArpeggioType(ArpeggioType::NORMAL);
         if (arpeggioType == "up") {
             arpeggio->setArpeggioType(ArpeggioType::UP);
@@ -6187,7 +6187,7 @@ static void addArpeggio(ChordRest* cr, const QString& arpeggioType,
         }
         // there can be only one
         if (!(static_cast<Chord*>(cr))->arpeggio()) {
-            cr->add(arpeggio.release());
+            cr->add(arpeggio);
         }
     }
 }

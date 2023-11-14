@@ -25,6 +25,7 @@
 
 #include "draw/types/transform.h"
 
+#include "arpeggio.h"
 #include "beam.h"
 #include "chord.h"
 #include "measure.h"
@@ -363,6 +364,12 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         }
         const EngravingItem* item = shapeEl.item();
         const EngravingItem* parent = item->parentItem();
+        // Don't remove arpeggio starting on a different voice and ending on the same voice as endCR when slur is on the outside
+        if (item->isArpeggio() && (endCR->track() == toArpeggio(item)->endTrack()) && endCR->tick() == item->tick()
+            && (!slur()->up() && toArpeggio(item)->span() > 1)) {
+            return false;
+        }
+
         // Its own startCR or items belonging to it, lyrics, fingering, ledger lines, articulation on endCR
         if (item == startCR || parent == startCR || item->isTextBase() || item->isLedgerLine()
             || (item->isArticulationFamily() && parent == endCR) || item->isBend() || item->isStretchedBend()) {
@@ -377,6 +384,10 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         if (item->vStaffIdx() == startCR->staffIdx()
             && ((!slur()->up() && item->track() > startCR->track()) // slur-down: ignore lower voices
                 || (slur()->up() && item->track() < startCR->track()))) { // slur-up: ignore higher voices
+            return true;
+        }
+        // Remove arpeggios spanning more than 1 voice starting on endCR's voice when the slur is on the inside
+        if (item->isArpeggio() && (endCR->track() != item->track() || (!slur()->up() && toArpeggio(item)->span() > 1))) {
             return true;
         }
         return false;

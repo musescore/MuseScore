@@ -48,6 +48,7 @@
 
 #include "tlayout.h"
 #include "layoutcontext.h"
+#include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "slurtielayout.h"
@@ -1070,6 +1071,9 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
             ChordLayout::updateLineAttachPoints(chord, isFirstChordInMeasure, ctx);
             for (Chord* gn : chord->graceNotes()) {
                 ChordLayout::updateLineAttachPoints(gn, false, ctx);
+            }
+            if (chord->arpeggio()) {
+                ArpeggioLayout::clearAccidentals(chord->arpeggio(), ctx);
             }
 
             ChordLayout::layoutArticulations(chord, ctx);

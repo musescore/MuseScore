@@ -1955,6 +1955,9 @@ void NotationInteraction::applyDropPaletteElement(mu::engraving::Score* score, m
 
         if (el && !score->inputState().noteEntryMode()) {
             doSelect({ el }, mu::engraving::SelectType::SINGLE, 0);
+            if (el->needStartEditingAfterSelecting()) {
+                startEditElement(el);
+            }
         }
         dropData->dropElement = nullptr;
 

@@ -28,12 +28,18 @@
 namespace mu::engraving::rendering::dev {
 class ArpeggioLayout
 {
+    static constexpr int ARBITRARY_ARPEGGIO_LENGTH = 10000;
 public:
 
     static void layoutArpeggio2(Arpeggio* item, LayoutContext& ctx);
 
-    static void layoutOnEditDrag(Arpeggio* item, LayoutContext& ctx);
-    static void layoutOnEdit(Arpeggio* item, LayoutContext& ctx);
+    static double insetDistance(const Arpeggio* item, const LayoutContext& ctx, double mag_, const Chord* _chord);
+    static double insetDistance(const Arpeggio* item, const LayoutContext& ctx, double mag_, const Chord* _chord,
+                                const std::vector<Accidental*>& accidentals);
+    static double insetTop(const Arpeggio* item, const Chord* c);
+    static double insetBottom(const Arpeggio* item, const Chord* c);
+    static double insetWidth(const Arpeggio* item);
+    static void clearAccidentals(Arpeggio* item, LayoutContext& ctx);
 };
 }
 

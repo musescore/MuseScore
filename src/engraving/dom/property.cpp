@@ -379,6 +379,8 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::TREMOLO_STYLE,           true,  "strokeStyle",           P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tremolo style") },
     { Pid::HARMONY_TYPE,            true,  "harmonyType",           P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "harmony type") },
 
+    { Pid::ARPEGGIO_SPAN,           true,  "arpeggioSpan",          P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "arpeggio span") },
+
     { Pid::BEND_TYPE,               true,  "bendType",              P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bend type") },
     { Pid::BEND_CURVE,              true,  "bendCurve",             P_TYPE::PITCH_VALUES,       PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bend curve") },
     { Pid::BEND_VERTEX_OFF,         false, "bendVertexOffset",      P_TYPE::POINT,              PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "bend vertex offset") },

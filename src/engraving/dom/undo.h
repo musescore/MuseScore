@@ -1641,5 +1641,21 @@ public:
     void flip(EditData*) override;
     UNDO_NAME("ChangeStringData")
 };
+
+class ChangeSpanArpeggio : public UndoCommand
+{
+    OBJECT_ALLOCATOR(engraving, ChangeSpanArpeggio)
+
+    Chord* m_chord = nullptr;
+    Arpeggio* m_spanArpeggio = nullptr;
+
+    void flip(EditData*) override;
+public:
+    ChangeSpanArpeggio(Chord* chord, Arpeggio* spanArp)
+        : m_chord(chord), m_spanArpeggio(spanArp) {}
+
+    UNDO_NAME("ChangeSpanArpeggio")
+    UNDO_CHANGED_OBJECTS({ m_chord })
+};
 } // namespace mu::engraving
 #endif

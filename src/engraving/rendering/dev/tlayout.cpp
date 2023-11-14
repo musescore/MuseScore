@@ -148,6 +148,7 @@
 
 #include "dom/whammybar.h"
 
+#include "arpeggiolayout.h"
 #include "autoplace.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
@@ -701,7 +702,9 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         }
     }
     ldata->setIsSkipDraw(false);
-    ldata->setPos(PointF());
+    if (!ldata->isSetPos()) {
+        ldata->setPos(PointF());
+    }
 
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -712,19 +715,16 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
     LD_CONDITION(parentChord->upNote()->ldata()->isSetPos());
     LD_CONDITION(parentChord->downNote()->ldata()->isSetPos());
 
-    auto computeHeight = [](const Arpeggio* item, bool includeCrossStaffHeight) -> double
+    auto computeHeight = [](const Arpeggio* item) -> double
     {
         Chord* chord = item->chord();
         double y = chord->upNote()->pagePos().y() - chord->upNote()->headHeight() * .5;
 
         Note* downNote = chord->downNote();
-        if (includeCrossStaffHeight) {
-            track_idx_t bottomTrack = item->track() + (item->span() - 1) * VOICES;
-            EngravingItem* element = chord->segment()->element(bottomTrack);
-            Chord* bottomChord = (element && element->isChord()) ? toChord(element) : chord;
-            downNote = bottomChord->downNote();
+        EngravingItem* e = chord->segment()->element(item->track() + item->span() - 1);
+        if (e && e->isChord()) {
+            downNote = toChord(e)->downNote();
         }
-
         double h = downNote->pagePos().y() + downNote->headHeight() * .5 - y;
         return h;
     };
@@ -796,7 +796,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         data->symbols.push_back(end);
     };
 
-    ldata->arpeggioHeight = computeHeight(item, includeCrossStaffHeight);
+    ldata->arpeggioHeight = computeHeight(item);
     ldata->top = calcTop(item, conf);
     ldata->bottom = calcBottom(item, ldata->arpeggioHeight, conf);
 
@@ -844,6 +844,15 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         double w  = conf.styleS(Sid::ArpeggioHookLen).val() * item->spatium();
         ldata->setBbox(RectF(0.0, ldata->top, w, ldata->bottom));
     } break;
+    }
+
+    // Loop through staves spanned & regenerate chord shape
+    // This makes sure the arpeggio's shape is added to the shape of each chord it spans
+    Chord* chord = item->chord();
+    Segment* seg = chord->segment();
+    staff_idx_t staveSpan = (item->track() + item->span() - 1) / VOICES;
+    for (staff_idx_t staffIdx = item->staffIdx(); staffIdx <= staveSpan; staffIdx++) {
+        seg->createShape(staffIdx);
     }
 }
 

@@ -265,6 +265,7 @@ Chord::Chord(Segment* parent)
     m_hook             = 0;
     m_stemDirection    = DirectionV::AUTO;
     m_arpeggio         = 0;
+    m_spanArpeggio     = 0;
     m_tremolo          = 0;
     m_endsGlissando    = false;
     m_noteType         = NoteType::NORMAL;
@@ -309,6 +310,7 @@ Chord::Chord(const Chord& c, bool link)
     m_stemSlash     = 0;
     m_tremolo       = 0;
 
+    m_spanArpeggio   = c.m_spanArpeggio;
     m_graceIndex     = c.m_graceIndex;
     m_noStem         = c.m_noStem;
     m_playEventType  = c.m_playEventType;
@@ -1799,6 +1801,23 @@ Note* Chord::findNote(int pitch, int skip) const
         }
     }
     return 0;
+}
+
+void Chord::undoChangeSpanArpeggio(Arpeggio* a)
+{
+    const std::list<EngravingObject*> links = linkList();
+    for (EngravingObject* linkedObject : links) {
+        if (linkedObject == this) {
+            score()->undo(new ChangeSpanArpeggio(this, a));
+            continue;
+        }
+        Chord* chord = toChord(linkedObject);
+        Score* score = chord->score();
+        EngravingItem* linkedArp = a->findLinkedInScore(score);
+        if (score && linkedArp) {
+            score->undo(new ChangeSpanArpeggio(chord, toArpeggio(linkedArp)));
+        }
+    }
 }
 
 ChordLine* Chord::chordLine() const

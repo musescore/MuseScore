@@ -176,7 +176,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
             double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
             double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
             gapSize = arpeggioAccidentalDistance - accidentalDistance;
-            gapSize -= item->arpeggio()->insetDistance(chordAccidentals, mag_);
+//            gapSize -= ArpeggioLayout::insetDistance(chordAccidentals, mag_, item);
         }
 
         double extraX = item->arpeggio()->width() + gapSize + chordX;

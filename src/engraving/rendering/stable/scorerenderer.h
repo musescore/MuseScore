@@ -43,8 +43,6 @@ public:
 
     // Temporary compatibility interface
 
-    void layoutOnEdit(Arpeggio* item) override;
-
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other
     void layoutTextLineBaseSegment(TextLineBaseSegment* item) override;

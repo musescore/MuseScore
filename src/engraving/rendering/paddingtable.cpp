@@ -51,7 +51,6 @@ void PaddingTable::createTable(const MStyle& style)
         = std::max(static_cast<double>(style.styleMM(Sid::accidentalNoteDistance)), 0.35 * spatium);
     table[ElementType::NOTE][ElementType::REST] = style.styleMM(Sid::minNoteDistance);
     table[ElementType::NOTE][ElementType::CLEF] = 1.0 * spatium;
-    table[ElementType::NOTE][ElementType::ARPEGGIO] = 0.6 * spatium;
     table[ElementType::NOTE][ElementType::BAR_LINE] = style.styleMM(Sid::noteBarDistance);
     table[ElementType::NOTE][ElementType::KEYSIG] = 0.75 * spatium;
     table[ElementType::NOTE][ElementType::TIMESIG] = 0.75 * spatium;
@@ -167,6 +166,10 @@ void PaddingTable::createTable(const MStyle& style)
     for (auto& elem: table) {
         elem[ElementType::AMBITUS] = style.styleMM(Sid::ambitusMargin);
     }
+
+    table[ElementType::ARPEGGIO][ElementType::NOTE] = style.styleMM(Sid::ArpeggioNoteDistance);
+    table[ElementType::ARPEGGIO][ElementType::LEDGER_LINE] = 0.3 * spatium;
+    table[ElementType::ARPEGGIO][ElementType::ACCIDENTAL] = style.styleMM(Sid::ArpeggioAccidentalDistance);
 
     // Breath
     table[ElementType::BREATH].fill(1.0 * spatium);

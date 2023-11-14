@@ -36,6 +36,7 @@
 
 #include "iengravingfont.h"
 
+#include "arpeggio.h"
 #include "bend.h"
 #include "bracket.h"
 #include "chord.h"
@@ -979,6 +980,16 @@ RemoveElement::RemoveElement(EngravingItem* e)
                 Tremolo* tremolo = chord->tremolo();
                 if (tremolo->twoNotes()) {
                     score->undo(new RemoveElement(tremolo));
+                }
+            }
+            // Move arpeggio down to next available note
+            if (chord->arpeggio()) {
+                chord->arpeggio()->rebaseStartAnchor(AnchorRebaseDirection::DOWN);
+            } else {
+                // If this chord is the end of an arpeggio, move the end of the arpeggio upwards to the next available chord
+                Arpeggio* spanArp = chord->spanArpeggio();
+                if (spanArp && chord->track() == spanArp->endTrack()) {
+                    spanArp->rebaseEndAnchor(AnchorRebaseDirection::UP);
                 }
             }
             for (const Note* note : chord->notes()) {
@@ -3074,4 +3085,12 @@ void ChangeStringData::flip(EditData*)
     }
 
     m_stringData.set(StringData(frets, stringList));
+}
+
+void ChangeSpanArpeggio::flip(EditData*)
+{
+    Arpeggio* f_spanArp = m_chord->spanArpeggio();
+
+    m_chord->setSpanArpeggio(m_spanArpeggio);
+    m_spanArpeggio = f_spanArp;
 }

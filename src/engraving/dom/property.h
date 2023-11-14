@@ -389,6 +389,8 @@ enum class Pid {
     TREMOLO_STYLE,
     HARMONY_TYPE,
 
+    ARPEGGIO_SPAN,
+
     BEND_TYPE,
     BEND_CURVE,
     BEND_VERTEX_OFF,

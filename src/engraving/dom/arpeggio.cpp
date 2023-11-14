@@ -30,6 +30,7 @@
 
 #include "accidental.h"
 #include "chord.h"
+#include "mscoreview.h"
 #include "note.h"
 #include "page.h"
 #include "part.h"
@@ -37,6 +38,7 @@
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -52,11 +54,132 @@ Arpeggio::Arpeggio(Chord* parent)
     m_userLen2 = 0.0;
     m_playArpeggio = true;
     m_stretch = 1.0;
+
+    parent->setSpanArpeggio(this);
+}
+
+Arpeggio::~Arpeggio()
+{
+    // Remove reference to this arpeggio in any chords it may have spanned
+    Chord* _chord = chord();
+    if (!_chord) {
+        return;
+    }
+    for (track_idx_t _track = track(); _track <= track() + m_span; _track++) {
+        EngravingItem* e = _chord->segment()->element(_track);
+        if (e && e->isChord() && toChord(e)->spanArpeggio() == this) {
+            toChord(e)->setSpanArpeggio(nullptr);
+        }
+    }
 }
 
 const TranslatableString& Arpeggio::arpeggioTypeName() const
 {
     return TConv::userName(m_arpeggioType);
+}
+
+void Arpeggio::findAndAttachToChords()
+{
+    Chord* _chord = chord();
+    track_idx_t strack = track();
+    track_idx_t etrack = track() + (m_span - 1);
+
+    for (track_idx_t track = strack; track <= etrack; track++) {
+        EngravingItem* e = _chord->segment()->element(track);
+        if (e && e->isChord()) {
+            toChord(e)->undoChangeSpanArpeggio(this);
+        }
+    }
+}
+
+void Arpeggio::detachFromChords(track_idx_t strack, track_idx_t etrack)
+{
+    Chord* _chord = chord();
+    if (!_chord) {
+        return;
+    }
+    for (track_idx_t track = strack; track <= etrack; track++) {
+        EngravingItem* e = _chord->segment()->element(track);
+        if (e && e->isChord() && toChord(e)->spanArpeggio() == this) {
+            toChord(e)->undoChangeSpanArpeggio(nullptr);
+        }
+    }
+}
+
+void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
+{
+    if (direction == AnchorRebaseDirection::UP) {
+        // Move arpeggio to chord above
+        Staff* s = staff();
+        Part* part = s->part();
+        track_idx_t topTrack = part->startTrack();
+        if (track() > topTrack) {
+            // Loop through voices til we find a chord
+            for (track_idx_t curTrack = track() - 1; curTrack >= topTrack; curTrack--) {
+                EngravingItem* e = chord()->segment()->element(curTrack);
+                if (e && e->isChord()) {
+                    int newSpan = m_span + track() - curTrack;
+                    if (newSpan != 0) {
+                        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                        score()->undo(new ChangeParent(this, e, e->staffIdx()));
+                        break;
+                    }
+                }
+            }
+        }
+    } else if (direction == AnchorRebaseDirection::DOWN) {
+        // Move arpeggio to chord below
+        for (track_idx_t curTrack = track() + 1; curTrack <= track() + m_span - 1; curTrack++) {
+            EngravingItem* e = chord()->segment()->element(curTrack);
+            if (e && e->isChord()) {
+                int newSpan = m_span + track() - curTrack;
+                if (newSpan != 0) {
+                    chord()->undoChangeSpanArpeggio(nullptr);
+                    undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                    score()->undo(new ChangeParent(this, e, e->staffIdx()));
+                    break;
+                }
+            }
+        }
+    }
+}
+
+void Arpeggio::rebaseEndAnchor(AnchorRebaseDirection direction)
+{
+    if (direction == AnchorRebaseDirection::UP) {
+        // Move end to chord above
+        for (track_idx_t curTrack = track() + m_span - 2; curTrack >= track(); curTrack--) {
+            EngravingItem* e = chord()->segment()->element(curTrack);
+            if (e && e->isChord()) {
+                int newSpan = curTrack - track() + 1;
+                if (newSpan != 0) {
+                    EngravingItem* oldEndChord = chord()->segment()->element(endTrack());
+                    if (oldEndChord && oldEndChord->isChord()) {
+                        toChord(oldEndChord)->undoChangeSpanArpeggio(nullptr);
+                    }
+                    undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                }
+                break;
+            }
+        }
+    } else if (direction == AnchorRebaseDirection::DOWN) {
+        // Move end to chord below
+        Staff* s = staff();
+        Part* part = s->part();
+        track_idx_t btrack = part->endTrack();
+        if (track() + m_span < btrack) {
+            // Loop through voices til we find a chord
+            for (track_idx_t curTrack = track() + m_span; curTrack < btrack; curTrack++) {
+                EngravingItem* e = chord()->segment()->element(curTrack);
+                if (e && e->isChord()) {
+                    int newSpan = curTrack - track() + 1;
+                    toChord(e)->undoChangeSpanArpeggio(this);
+                    undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                    break;
+                }
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
@@ -78,14 +201,43 @@ std::vector<PointF> Arpeggio::gripsPositions(const EditData&) const
 
 void Arpeggio::editDrag(EditData& ed)
 {
+    Part* p = part();
     double d = ed.delta.y();
+    PointF pos = PointF(chord()->canvasPos().x(), ed.pos.y());
+    EngravingItem* e = ed.view()->elementNear(pos);
+
     if (ed.curGrip == Grip::START) {
         m_userLen1 -= d;
+        if (e && e->isNote() && e->part() == p) {
+            Chord* c = toNote(e)->chord();
+            int newSpan = std::max(1, m_span + int(track()) - int(c->track()));
+            if (track() != c->track()) {
+                // if new track is greater than old we have chords to unmark
+                if (track() < c->track()) {
+                    detachFromChords(track(), c->track() - 1);
+                }
+                undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                score()->undo(new ChangeParent(this, c, c->staffIdx()));
+                m_userLen1 = 0.0;
+            }
+        }
     } else if (ed.curGrip == Grip::END) {
         m_userLen2 += d;
+        // Increase span
+        if (e && e->isNote() && e->part() == p) {
+            int newSpan = std::max(1, int(e->track()) - int(track()) + 1);
+            if (e->track() != endTrack()) {
+                // if new endTrack is less than old we have chords to unmark
+                if (e->track() < endTrack()) {
+                    detachFromChords(e->track() + 1, endTrack());
+                }
+                undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
+                m_userLen2 = 0.0;
+            }
+        }
     }
 
-    renderer()->layoutItem(this);
+    triggerLayout();
 }
 
 //---------------------------------------------------------
@@ -122,14 +274,19 @@ std::vector<LineF> Arpeggio::gripAnchorLines(Grip grip) const
     const PointF gripCanvasPos = gripsPositions()[static_cast<int>(grip)] + pageOffset;
 
     if (grip == Grip::START) {
-        result.push_back(LineF(_chord->upNote()->canvasPos(), gripCanvasPos));
+        Note* upNote = _chord->upNote();
+        EngravingItem* e = _chord->segment()->element(track());
+        if (e && e->isChord()) {
+            upNote = toChord(e)->upNote();
+        }
+        result.push_back(LineF(upNote->canvasPos(), gripCanvasPos));
     } else if (grip == Grip::END) {
         Note* downNote = _chord->downNote();
-        track_idx_t btrack  = track() + (m_span - 1) * VOICES;
-        EngravingItem* e = _chord->segment()->element(btrack);
+        EngravingItem* e = _chord->segment()->element(track() + m_span - 1);
         if (e && e->isChord()) {
             downNote = toChord(e)->downNote();
         }
+
         result.push_back(LineF(downNote->canvasPos(), gripCanvasPos));
     }
     return result;
@@ -147,9 +304,20 @@ void Arpeggio::startEdit(EditData& ed)
     eed->pushProperty(Pid::ARP_USER_LEN2);
 }
 
+void Arpeggio::startEditDrag(EditData& ed)
+{
+    EngravingItem::startEditDrag(ed);
+    ElementEditDataPtr eed = ed.getData(this);
+    if (!eed) {
+        return;
+    }
+    eed->pushProperty(Pid::ARP_USER_LEN1);
+    eed->pushProperty(Pid::ARP_USER_LEN2);
+}
+
 bool Arpeggio::isEditAllowed(EditData& ed) const
 {
-    if (ed.curGrip != Grip::END || !(ed.modifiers & ShiftModifier)) {
+    if ((ed.curGrip != Grip::END && ed.curGrip != Grip::START) || !(ed.modifiers & ShiftModifier)) {
         return false;
     }
 
@@ -166,23 +334,25 @@ bool Arpeggio::edit(EditData& ed)
         return false;
     }
 
-    if (ed.key == Key_Down) {
-        Staff* s = staff();
-        Part* part = s->part();
-        size_t n = part->nstaves();
-        staff_idx_t ridx = mu::indexOf(part->staves(), s);
-        if (ridx != mu::nidx) {
-            if (m_span + ridx < n) {
-                ++m_span;
-            }
-        }
-    } else if (ed.key == Key_Up) {
-        if (m_span > 1) {
-            --m_span;
+    if (ed.curGrip == Grip::START) {
+        if (ed.key == Key_Down) {
+            rebaseStartAnchor(AnchorRebaseDirection::DOWN);
+        } else if (ed.key == Key_Up) {
+            rebaseStartAnchor(AnchorRebaseDirection::UP);
         }
     }
 
-    renderer()->layoutOnEdit(this);
+    if (ed.curGrip == Grip::END) {
+        if (ed.key == Key_Down) {
+            rebaseEndAnchor(AnchorRebaseDirection::DOWN);
+        } else if (ed.key == Key_Up) {
+            if (m_span > 1) {
+                rebaseEndAnchor(AnchorRebaseDirection::UP);
+            }
+        }
+    }
+
+    triggerLayout();
 
     return true;
 }
@@ -243,158 +413,9 @@ void Arpeggio::reset()
     EngravingItem::reset();
 }
 
-//
-// INSET:
-// Arpeggios have inset white space. For instance, the bracket
-// "[" shape has whitespace inside of the "C". Symbols like
-// accidentals can fit inside this whitespace. These inset
-// functions are used to get the size of the inner dimensions
-// for this area on all arpeggios.
-//
-
-//---------------------------------------------------------
-//   insetTop
-//---------------------------------------------------------
-
-double Arpeggio::insetTop() const
+bool Arpeggio::crossStaff() const
 {
-    double top = chord()->upNote()->y() - chord()->upNote()->height() / 2;
-
-    // use wiggle width, not height, since it's rotated 90 degrees
-    if (arpeggioType() == ArpeggioType::UP) {
-        top += symBbox(SymId::wiggleArpeggiatoUpArrow).width();
-    } else if (arpeggioType() == ArpeggioType::UP_STRAIGHT) {
-        top += symBbox(SymId::arrowheadBlackUp).width();
-    }
-
-    return top;
-}
-
-//---------------------------------------------------------
-//   insetBottom
-//---------------------------------------------------------
-
-double Arpeggio::insetBottom() const
-{
-    double bottom = chord()->downNote()->y() + chord()->downNote()->height() / 2;
-
-    // use wiggle width, not height, since it's rotated 90 degrees
-    if (arpeggioType() == ArpeggioType::DOWN) {
-        bottom -= symBbox(SymId::wiggleArpeggiatoUpArrow).width();
-    } else if (arpeggioType() == ArpeggioType::DOWN_STRAIGHT) {
-        bottom -= symBbox(SymId::arrowheadBlackDown).width();
-    }
-
-    return bottom;
-}
-
-//---------------------------------------------------------
-//   insetWidth
-//---------------------------------------------------------
-
-double Arpeggio::insetWidth() const
-{
-    switch (arpeggioType()) {
-    case ArpeggioType::NORMAL:
-    {
-        return 0.0;
-    }
-
-    case ArpeggioType::UP:
-    case ArpeggioType::DOWN:
-    {
-        // use wiggle height, not width, since it's rotated 90 degrees
-        return (width() - symBbox(SymId::wiggleArpeggiatoUp).height()) / 2;
-    }
-
-    case ArpeggioType::UP_STRAIGHT:
-    case ArpeggioType::DOWN_STRAIGHT:
-    {
-        return (width() - style().styleMM(Sid::ArpeggioLineWidth)) / 2;
-    }
-
-    case ArpeggioType::BRACKET:
-    {
-        return width() - style().styleMM(Sid::ArpeggioLineWidth) / 2;
-    }
-    }
-    return 0.0;
-}
-
-//---------------------------------------------------------
-//   insetDistance
-//---------------------------------------------------------
-
-double Arpeggio::insetDistance(std::vector<Accidental*>& accidentals, double mag_) const
-{
-    if (accidentals.size() == 0) {
-        return 0.0;
-    }
-
-    double arpeggioTop = insetTop() * mag_;
-    double arpeggioBottom = insetBottom() * mag_;
-    ArpeggioType type = arpeggioType();
-    bool hasTopArrow = type == ArpeggioType::UP
-                       || type == ArpeggioType::UP_STRAIGHT
-                       || type == ArpeggioType::BRACKET;
-    bool hasBottomArrow = type == ArpeggioType::DOWN
-                          || type == ArpeggioType::DOWN_STRAIGHT
-                          || type == ArpeggioType::BRACKET;
-
-    Accidental* furthestAccidental = nullptr;
-    for (auto accidental : accidentals) {
-        if (furthestAccidental) {
-            bool currentIsFurtherX = accidental->x() < furthestAccidental->x();
-            bool currentIsSameX = accidental->x() == furthestAccidental->x();
-            auto accidentalBbox = symBbox(accidental->symId());
-            double currentTop = accidental->note()->pos().y() + accidentalBbox.top() * mag_;
-            double currentBottom = accidental->note()->pos().y() + accidentalBbox.bottom() * mag_;
-            bool collidesWithTop = currentTop <= arpeggioTop && hasTopArrow;
-            bool collidesWithBottom = currentBottom >= arpeggioBottom && hasBottomArrow;
-
-            if (currentIsFurtherX || (currentIsSameX && (collidesWithTop || collidesWithBottom))) {
-                furthestAccidental = accidental;
-            }
-        } else {
-            furthestAccidental = accidental;
-        }
-    }
-
-    IF_ASSERT_FAILED(furthestAccidental) {
-        return 0.0;
-    }
-
-    // this cutout means the vertical lines for a ♯, ♭, and ♮ are in the same position
-    // if an accidental does not have a cutout (e.g., ♭), this value is 0
-    double accidentalCutOutX = symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutNW).x() * mag_;
-    double accidentalCutOutYTop = symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutNW).y() * mag_;
-    double accidentalCutOutYBottom = symSmuflAnchor(furthestAccidental->symId(), SmuflAnchorId::cutOutSW).y() * mag_;
-
-    double maximumInset = (style().styleMM(Sid::ArpeggioAccidentalDistance)
-                           - style().styleMM(Sid::ArpeggioAccidentalDistanceMin)) * mag_;
-
-    if (accidentalCutOutX > maximumInset) {
-        accidentalCutOutX = maximumInset;
-    }
-
-    RectF bbox = symBbox(furthestAccidental->symId());
-    double center = furthestAccidental->note()->pos().y() * mag_;
-    double top = center + bbox.top() * mag_;
-    double bottom = center + bbox.bottom() * mag_;
-    bool collidesWithTop = hasTopArrow && top <= arpeggioTop;
-    bool collidesWithBottom = hasBottomArrow && bottom >= arpeggioBottom;
-    bool cutoutCollidesWithTop = collidesWithTop && top - accidentalCutOutYTop >= arpeggioTop;
-    bool cutoutCollidesWithBottom = collidesWithBottom && bottom - accidentalCutOutYBottom <= arpeggioBottom;
-
-    if (collidesWithTop || collidesWithBottom) {
-        // optical adjustment for one edge case
-        if (accidentalCutOutX == 0.0 || cutoutCollidesWithTop || cutoutCollidesWithBottom) {
-            return accidentalCutOutX + maximumInset;
-        }
-        return accidentalCutOutX;
-    }
-
-    return insetWidth() + accidentalCutOutX;
+    return (track() + span() - 1) / VOICES != staffIdx();
 }
 
 //---------------------------------------------------------
@@ -414,6 +435,8 @@ engraving::PropertyValue Arpeggio::getProperty(Pid propertyId) const
         return userLen2();
     case Pid::PLAY:
         return m_playArpeggio;
+    case Pid::ARPEGGIO_SPAN:
+        return m_span;
     default:
         break;
     }
@@ -442,6 +465,9 @@ bool Arpeggio::setProperty(Pid propertyId, const engraving::PropertyValue& val)
     case Pid::PLAY:
         setPlayArpeggio(val.toBool());
         break;
+    case Pid::ARPEGGIO_SPAN:
+        setSpan(val.toInt());
+        break;
     default:
         if (!EngravingItem::setProperty(propertyId, val)) {
             return false;
@@ -467,6 +493,8 @@ engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
         return 1.0;
     case Pid::PLAY:
         return true;
+    case Pid::ARPEGGIO_SPAN:
+        return 1;
     default:
         break;
     }

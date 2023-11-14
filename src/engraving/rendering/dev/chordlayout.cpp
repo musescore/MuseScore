@@ -59,6 +59,7 @@
 #include "dom/undo.h"
 #include "dom/utils.h"
 
+#include "arpeggiolayout.h"
 #include "tlayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
@@ -72,7 +73,6 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
     if (item->notes().empty()) {
         return;
     }
-
     int gi = 0;
     for (Chord* c : item->graceNotes()) {
         // HACK: graceIndex is not well-maintained on add & remove
@@ -110,6 +110,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     double rrr    = 0.0;           // space to leave at right of chord
     double lhead  = 0.0;           // amount of notehead to left of chord origin
     Note* upnote = item->upNote();
+    Note* downnote = item->downNote();
+    Note* leftNote = nullptr;
 
     delete item->tabDur();     // no TAB? no duration symbol! (may happen when converting a TAB into PITCHED)
     item->setTabDur(nullptr);
@@ -133,6 +135,9 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         rrr      = std::max(rrr, x2);
         // track amount of space due to notehead only
         lhead    = std::max(lhead, -x1);
+        if (!leftNote || note->x() < leftNote->x()) {
+            leftNote = note;
+        }
 
         Accidental* accidental = note->accidental();
         if (accidental && accidental->visible()) {
@@ -165,32 +170,85 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     item->addLedgerLines();
 
+    // If item has an arpeggio: mark chords which are part of the arpeggio
     if (item->arpeggio()) {
+        item->arpeggio()->findAndAttachToChords();
+        item->arpeggio()->mutldata()->maxChordPad = 0.0;
+        static constexpr int MAX_ARPEGGIO_X = 10000;
+        item->arpeggio()->mutldata()->minChordX = MAX_ARPEGGIO_X;
         TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
-
-        double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
-
-        double gapSize = arpeggioNoteDistance;
-
-        if (chordAccidentals.size()) {
-            double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
-            double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
-            gapSize = arpeggioAccidentalDistance - accidentalDistance;
-            gapSize -= item->arpeggio()->insetDistance(chordAccidentals, mag_);
+    }
+    // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
+    if (item->spanArpeggio()) {
+        Arpeggio* spanArp = item->spanArpeggio();
+        Arpeggio::LayoutData* arpldata = spanArp->mutldata();
+        const Segment* seg = spanArp->chord()->segment();
+        const EngravingItem* endItem = seg->elementAt(spanArp->endTrack());
+        const Chord* endChord = item;
+        if (endItem && endItem->isChord()) {
+            endChord = toChord(endItem);
         }
 
-        double extraX = item->arpeggio()->width() + gapSize + chordX;
+        // If a note is covered in the voice span but located outside the visual span of the arpeggio calculate accidental offset later
+        bool aboveStart
+            = std::make_pair(item->vStaffIdx(), item->downLine()) < std::make_pair(spanArp->vStaffIdx(), spanArp->chord()->upLine());
+        bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
 
-        double y1   = upnote->pos().y() - upnote->headHeight() * .5;
-        item->arpeggio()->setPos(-(lll + extraX), y1);
-        if (item->arpeggio()->visible()) {
-            lll += extraX;
+        if (!(aboveStart || belowEnd)) {
+            const PaddingTable& paddingTable = item->score()->paddingTable();
+            double arpeggioNoteDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::NOTE) * mag_;
+            double arpeggioLedgerDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::LEDGER_LINE) * mag_;
+            int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;
+            int firstLedgerAbove = -1;
+
+            double gapSize = arpeggioNoteDistance;
+
+            if (leftNote && RealIsNull(leftNote->x())) {
+                if (downnote->line() > firstLedgerBelow || upnote->line() < firstLedgerAbove) {
+                    gapSize = arpeggioLedgerDistance + ctx.conf().styleS(Sid::ledgerLineLength).val() * item->spatium();
+                }
+            } else if (leftNote && (leftNote->line() > firstLedgerBelow || leftNote->line() < firstLedgerAbove)) {
+                gapSize = arpeggioLedgerDistance + ctx.conf().styleS(Sid::ledgerLineLength).val() * item->spatium();
+            }
+
+            double arpChordX = std::min(chordX, 0.0);
+
+            if (!chordAccidentals.empty()) {
+                double arpeggioAccidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * mag_;
+                double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
+                gapSize = arpeggioAccidentalDistance - accidentalDistance;
+                gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, mag_, item, chordAccidentals);
+            }
+
+            double extraX = spanArp->width() + gapSize;
+
+            // Track leftmost chord position, as we we always want the arpeggio to be to the left of this
+            arpldata->minChordX = std::min(arpldata->minChordX, arpChordX);
+
+            // Save this to arpeggio if largest
+            arpldata->maxChordPad = std::max(arpldata->maxChordPad, lll + extraX);
+
+            // If first chord in arpeggio set y
+            if (item->arpeggio() && item->arpeggio() == spanArp) {
+                double y1 = upnote->pos().y() - upnote->headHeight() * .5;
+                item->arpeggio()->mutldata()->setPosY(y1);
+            }
+
+            Note* endDownNote = endChord->downNote();
+
+            // If last chord in arpeggio, set x
+            if (endDownNote->track() == item->track()) {
+                // Amount to move arpeggio from it's parent chord to factor in chords further to the left
+                double firstChordX = spanArp->chord()->ldata()->pos().x();
+                double xDiff = firstChordX - arpldata->minChordX;
+
+                double offset = -(xDiff + arpldata->maxChordPad);
+                spanArp->mutldata()->setPosX(offset);
+                if (spanArp->visible()) {
+                    lll = offset;
+                }
+            }
         }
-        // _arpeggio->layout() called in layoutArpeggio2()
-
-        // handle the special case of _arpeggio->span() > 1
-        // in layoutArpeggio2() after page layout has done so we
-        // know the y position of the next staves
     }
 
     if (item->dots()) {
@@ -3586,6 +3644,11 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
         LD_CONDITION(arpeggio->ldata()->isSetShape());
     }
 
+    Arpeggio* spanArpeggio = item->spanArpeggio();
+    if (spanArpeggio) {
+        LD_CONDITION(spanArpeggio->ldata()->isSetShape());
+    }
+
     BeamSegment* beamlet = item->beamlet();
 
     if (hook && hook->addToSkyline()) {
@@ -3603,6 +3666,12 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
     if (arpeggio && arpeggio->addToSkyline()) {
         shape.add(arpeggio->shape().translate(arpeggio->pos()));
     }
+
+    if (spanArpeggio && !arpeggio && spanArpeggio->addToSkyline()) {
+        PointF spanArpPos = spanArpeggio->pos() - (item->pagePos() - spanArpeggio->chord()->pagePos());
+        shape.add(spanArpeggio->shape().translate(spanArpPos));
+    }
+
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : item->notes()) {
