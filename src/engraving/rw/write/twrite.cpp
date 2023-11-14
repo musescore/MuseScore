@@ -839,16 +839,16 @@ void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, cons
         Location spannerEndLoc = Location::absolute();
         spannerEndLoc.setFrac(frac);
         spannerEndLoc.setMeasure(0);
-        spannerEndLoc.setTrack(track);
-        spannerEndLoc.setVoice(track2voice(track));
-        spannerEndLoc.setStaff(s->staffIdx());
+        spannerEndLoc.setTrack(static_cast<int>(track));
+        spannerEndLoc.setVoice(static_cast<int>(track2voice(track)));
+        spannerEndLoc.setStaff(static_cast<int>(s->staffIdx()));
 
         Location prevLoc = Location::absolute();
         prevLoc.setFrac(ctx.curTick());
         prevLoc.setMeasure(0);
-        prevLoc.setTrack(track);
-        prevLoc.setVoice(track2voice(track));
-        prevLoc.setStaff(s->staffIdx());
+        prevLoc.setTrack(static_cast<int>(track));
+        prevLoc.setVoice(static_cast<int>(track2voice(track)));
+        prevLoc.setStaff(static_cast<int>(s->staffIdx()));
 
         spannerEndLoc.toRelative(prevLoc);
         if (spannerEndLoc.frac() != Fraction(0, 1)) {

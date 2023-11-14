@@ -1051,7 +1051,7 @@ static bool allStaffGroupsIdentical(Part const* const p)
  by Dolet.
  */
 
-static bool isRedundantBracket(Staff const* const staff, const BracketType bracketType, const int span)
+static bool isRedundantBracket(Staff const* const staff, const BracketType bracketType, const size_t span)
 {
     for (auto bracket : staff->brackets()) {
         if (bracket->bracketType() == bracketType && bracket->bracketSpan() == span) {
@@ -2211,7 +2211,7 @@ static void setNumberOfStavesForPart(Part* const part, const size_t staves)
 
     size_t prevnstaves = part->nstaves();
     if (staves > part->nstaves()) {
-        part->setStaves(staves);
+        part->setStaves(static_cast<int>(staves));
         // New staves default to INSTRUMENT hide mode
         for (size_t i = prevnstaves; i < staves; ++i) {
             part->staff(i)->setHideWhenEmpty(Staff::HideMode::INSTRUMENT);
