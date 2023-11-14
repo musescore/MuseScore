@@ -77,6 +77,8 @@ public:
         TYPE_HOOK,
         TYPE_FERMATA,
         TYPE_TEMPO,
+        TYPE_A_TEMPO,
+        TYPE_TEMPO_PRIMO,
         TYPE_GLISSANDO,
         TYPE_BARLINE,
         TYPE_BREATH,
@@ -142,6 +144,7 @@ public:
     InspectorSectionType sectionType() const;
     InspectorModelType modelType() const;
 
+    static ElementKey makeKey(const mu::engraving::EngravingItem* item);
     static InspectorModelType modelTypeByElementKey(const ElementKey& elementKey);
     static QSet<InspectorModelType> modelTypesByElementKeys(const ElementKeySet& elementKeySet);
     static QSet<InspectorSectionType> sectionTypesByElementKeys(const ElementKeySet& elementKeySet, bool isRange,

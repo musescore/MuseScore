@@ -410,6 +410,8 @@ void Score::setUpTempoMap()
         sigmap()->add(0, SigEvent(fm->ticks(),  fm->timesig(), 0));
     }
 
+    auto tempoPrimo = std::optional<BeatsPerSecond> {};
+
     for (MeasureBase* mb = first(); mb; mb = mb->next()) {
         if (mb->type() != ElementType::MEASURE) {
             mb->setTick(tick);
@@ -424,7 +426,7 @@ void Score::setUpTempoMap()
             m->mmRest()->moveTicks(diff);
         }
 
-        rebuildTempoAndTimeSigMaps(m);
+        rebuildTempoAndTimeSigMaps(m, tempoPrimo);
 
         tick += measureTicks;
     }
@@ -473,7 +475,7 @@ void Score::setUpTempoMap()
 ///    updates tempomap and time sig map for a measure
 //---------------------------------------------------------
 
-void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
+void Score::rebuildTempoAndTimeSigMaps(Measure* measure, std::optional<BeatsPerSecond>& tempoPrimo)
 {
     if (isMaster()) {
         // Reset tempo to set correct time stretch for fermata.
@@ -539,10 +541,23 @@ void Score::rebuildTempoAndTimeSigMaps(Measure* measure)
                     stretch = std::max(stretch, toFermata(e)->timeStretch());
                 } else if (e->isTempoText()) {
                     TempoText* tt = toTempoText(e);
-                    if (tt->isRelative()) {
+
+                    if (tt->isNormal() && !tt->isRelative() && !tempoPrimo) {
+                        tempoPrimo = tt->tempo();
+                    } else if (tt->isRelative()) {
                         tt->updateRelative();
                     }
-                    tempomap()->setTempo(tt->segment()->tick().ticks(), tt->tempo());
+
+                    int ticks = tt->segment()->tick().ticks();
+                    if (tt->isATempo() && tt->followText()) {
+                        // this will effectively reset the tempo to the previous one
+                        // when a progressive change was active
+                        tempomap()->setTempo(ticks, tempomap()->tempo(ticks));
+                    } else if (tt->isTempoPrimo() && tt->followText()) {
+                        tempomap()->setTempo(ticks, tempoPrimo ? *tempoPrimo : Constants::DEFAULT_TEMPO);
+                    } else {
+                        tempomap()->setTempo(ticks, tt->tempo());
+                    }
                 }
             }
             if (stretch != 0.0 && stretch != 1.0) {

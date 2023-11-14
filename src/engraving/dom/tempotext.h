@@ -27,6 +27,13 @@
 #include "textbase.h"
 
 namespace mu::engraving {
+enum class TempoTextType : signed char
+{
+    NORMAL,
+    A_TEMPO,
+    TEMPO_PRIMO,
+};
+
 //-------------------------------------------------------------------
 //   @@ TempoText
 ///    Tempo marker which determines the midi tempo.
@@ -48,12 +55,24 @@ public:
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
+    TempoTextType tempoTextType() const { return _tempoTextType; }
+    void setTempoTextType(TempoTextType);
+
     BeatsPerSecond tempo() const { return _tempo; }
     double tempoBpm() const;
     void setTempo(BeatsPerSecond v);
     void undoSetTempo(double v);
     bool isRelative() { return _isRelative; }
     void setRelative(double v) { _isRelative = true; _relative = v; }
+
+    bool isNormal() const { return _tempoTextType == TempoTextType::NORMAL; }
+    void setNormal() { setTempoTextType(TempoTextType::NORMAL); }
+
+    bool isATempo() const { return _tempoTextType == TempoTextType::A_TEMPO; }
+    void setATempo() { setTempoTextType(TempoTextType::A_TEMPO); }
+
+    bool isTempoPrimo() const { return _tempoTextType == TempoTextType::TEMPO_PRIMO; }
+    void setTempoPrimo() { setTempoTextType(TempoTextType::TEMPO_PRIMO); }
 
     bool followText() const { return _followText; }
     void setFollowText(bool v) { _followText = v; }
@@ -81,6 +100,7 @@ protected:
     void updateScore();
     void updateTempo();
 
+    TempoTextType _tempoTextType;
     BeatsPerSecond _tempo;             // beats per second
     bool _followText;         // parse text to determine tempo
     double _relative;

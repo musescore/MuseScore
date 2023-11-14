@@ -24,6 +24,8 @@
 
 #include "types/texttypes.h"
 
+#include "dom/tempotext.h"
+
 #include "log.h"
 
 using namespace mu::inspector;
@@ -116,6 +118,12 @@ static QMap<mu::engraving::LayoutBreakType, InspectorModelType> LAYOUT_BREAK_ELE
     { mu::engraving::LayoutBreakType::SECTION, InspectorModelType::TYPE_SECTIONBREAK }
 };
 
+static QMap<mu::engraving::TempoTextType, InspectorModelType> TEMPO_TEXT_ELEMENT_MODEL_TYPES = {
+    { mu::engraving::TempoTextType::NORMAL, InspectorModelType::TYPE_TEMPO },
+    { mu::engraving::TempoTextType::A_TEMPO, InspectorModelType::TYPE_A_TEMPO },
+    { mu::engraving::TempoTextType::TEMPO_PRIMO, InspectorModelType::TYPE_TEMPO_PRIMO },
+};
+
 AbstractInspectorModel::AbstractInspectorModel(QObject* parent, IElementRepositoryService* repository,
                                                mu::engraving::ElementType elementType)
     : QObject(parent), m_elementType(elementType), m_updatePropertiesAllowed(true)
@@ -187,6 +195,18 @@ InspectorModelType AbstractInspectorModel::modelType() const
     return m_modelType;
 }
 
+ElementKey AbstractInspectorModel::makeKey(const EngravingItem* item)
+{
+    switch (item->type()) {
+    case ElementType::TEMPO_TEXT: {
+        const auto tempoText = static_cast<const TempoText*>(item);
+        return ElementKey{ ElementType::TEMPO_TEXT, static_cast<int>(tempoText->tempoTextType()) };
+    }
+    default:
+        return ElementKey{ item->type(), item->subtype() };
+    }
+}
+
 InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKey& elementKey)
 {
     if (elementKey.type == mu::engraving::ElementType::HAIRPIN || elementKey.type == mu::engraving::ElementType::HAIRPIN_SEGMENT) {
@@ -197,6 +217,11 @@ InspectorModelType AbstractInspectorModel::modelTypeByElementKey(const ElementKe
     if (elementKey.type == mu::engraving::ElementType::LAYOUT_BREAK) {
         return LAYOUT_BREAK_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::LayoutBreakType>(elementKey.subtype),
                                                       InspectorModelType::TYPE_UNDEFINED);
+    }
+
+    if (elementKey.type == mu::engraving::ElementType::TEMPO_TEXT) {
+        return TEMPO_TEXT_ELEMENT_MODEL_TYPES.value(static_cast<mu::engraving::TempoTextType>(elementKey.subtype),
+                                                    InspectorModelType::TYPE_UNDEFINED);
     }
 
     return NOTATION_ELEMENT_MODEL_TYPES.value(elementKey.type, InspectorModelType::TYPE_UNDEFINED);

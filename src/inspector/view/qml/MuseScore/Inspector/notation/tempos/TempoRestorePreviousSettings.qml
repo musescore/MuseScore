@@ -35,33 +35,49 @@ Column {
     property NavigationPanel navigationPanel: null
     property int navigationRowStart: 1
 
-    objectName: "TempoSettings"
+    objectName: "TempoRestorePreviousSettings"
 
     spacing: 12
 
     function focusOnFirst() {
-        followWrittenTempoCheckbox.navigation.requestActive()
+        setSpecificTempoCheckBox.navigation.requestActive()
     }
 
-    PropertyCheckBox {
-        id: followWrittenTempoCheckbox
-        text: qsTrc("inspector", "Follow written tempo")
-        propertyItem: root.model ? root.model.followText : null
+    CheckBox {
+        // Same as CheckBoxPropertyView, except that this view shows
+        // the negation of the boolean model property
 
-        navigation.name: "FollowCheckBox"
+        id: setSpecificTempoCheckBox
+        property PropertyItem followText: root.model ? root.model.followText : null
+
+        text: qsTrc("inspector", "Set specific tempo")
+
+        width: parent.width
+
+        visible: followText && followText.isVisible
+        enabled: followText && followText.isEnabled
+
+        isIndeterminate: followText && followText.isUndefined
+        checked: !isIndeterminate && followText && !Boolean(followText.value)
+        onClicked: {
+            if (followText) {
+                followText.value = checked
+            }
+        }
+        navigation.name: "SetSpecificTempoCheckBox"
         navigation.panel: root.navigationPanel
         navigation.row: root.navigationRowStart + 1
     }
 
     SpinBoxPropertyView {
-        titleText: qsTrc("inspector", "Override written tempo")
+        titleText: qsTrc("inspector", "Tempo")
         propertyItem: root.model ? root.model.tempo : null
-        enabled: root.model ? !root.model.isEmpty && !followWrittenTempoCheckbox.checked : false
+        enabled: root.model ? !root.model.isEmpty && setSpecificTempoCheckBox.checked : false
 
         measureUnitsSymbol: qsTrc("inspector", "BPM")
 
         navigationName: "Override"
         navigationPanel: root.navigationPanel
-        navigationRowStart: followWrittenTempoCheckbox.navigation.row + 1
+        navigationRowStart: setSpecificTempoCheckBox.navigation.row + 1
     }
 }

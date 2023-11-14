@@ -30,6 +30,7 @@
 
 #include <set>
 #include <memory>
+#include <optional>
 
 #include "async/channel.h"
 #include "types/ret.h"
@@ -1001,7 +1002,7 @@ private:
 
     void resetTempo();
     void resetTempoRange(const Fraction& tick1, const Fraction& tick2);
-    void rebuildTempoAndTimeSigMaps(Measure* m);
+    void rebuildTempoAndTimeSigMaps(Measure* m, std::optional<BeatsPerSecond>& tempoPrimo);
 
     void deleteSpannersFromRange(const Fraction& t1, const Fraction& t2, track_idx_t trackStart, track_idx_t trackEnd,
                                  const SelectionFilter& filter);
