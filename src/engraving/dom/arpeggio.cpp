@@ -106,12 +106,9 @@ void Arpeggio::detachFromChords(track_idx_t strack, track_idx_t etrack)
     }
 }
 
-void Arpeggio::rebaseStartAnchor(int direction)
+void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
 {
-    if (direction == 0) {
-        return;
-    }
-    if (direction == -1) {
+    if (direction == AnchorRebaseDirection::UP) {
         // Move arpeggio to chord above
         Staff* s = staff();
         Part* part = s->part();
@@ -130,7 +127,7 @@ void Arpeggio::rebaseStartAnchor(int direction)
                 }
             }
         }
-    } else if (direction == 1) {
+    } else if (direction == AnchorRebaseDirection::DOWN) {
         // Move arpeggio to chord below
         for (track_idx_t curTrack = track() + 1; curTrack <= track() + m_span - 1; curTrack++) {
             EngravingItem* e = chord()->segment()->element(curTrack);
@@ -147,12 +144,9 @@ void Arpeggio::rebaseStartAnchor(int direction)
     }
 }
 
-void Arpeggio::rebaseEndAnchor(int direction)
+void Arpeggio::rebaseEndAnchor(AnchorRebaseDirection direction)
 {
-    if (direction == 0) {
-        return;
-    }
-    if (direction == -1) {
+    if (direction == AnchorRebaseDirection::UP) {
         // Move end to chord above
         for (track_idx_t curTrack = track() + m_span - 2; curTrack >= track(); curTrack--) {
             EngravingItem* e = chord()->segment()->element(curTrack);
@@ -168,7 +162,7 @@ void Arpeggio::rebaseEndAnchor(int direction)
                 break;
             }
         }
-    } else if (direction == 1) {
+    } else if (direction == AnchorRebaseDirection::DOWN) {
         // Move end to chord below
         Staff* s = staff();
         Part* part = s->part();
@@ -342,18 +336,18 @@ bool Arpeggio::edit(EditData& ed)
 
     if (ed.curGrip == Grip::START) {
         if (ed.key == Key_Down) {
-            rebaseStartAnchor(1);
+            rebaseStartAnchor(AnchorRebaseDirection::DOWN);
         } else if (ed.key == Key_Up) {
-            rebaseStartAnchor(-1);
+            rebaseStartAnchor(AnchorRebaseDirection::UP);
         }
     }
 
     if (ed.curGrip == Grip::END) {
         if (ed.key == Key_Down) {
-            rebaseEndAnchor(1);
+            rebaseEndAnchor(AnchorRebaseDirection::DOWN);
         } else if (ed.key == Key_Up) {
             if (m_span > 1) {
-                rebaseEndAnchor(-1);
+                rebaseEndAnchor(AnchorRebaseDirection::UP);
             }
         }
     }

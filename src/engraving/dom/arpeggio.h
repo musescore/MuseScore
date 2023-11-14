@@ -33,6 +33,11 @@ class Chord;
 //   @@ Arpeggio
 //---------------------------------------------------------
 
+enum class AnchorRebaseDirection : char {
+    UP,
+    DOWN
+};
+
 class Arpeggio final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Arpeggio)
@@ -40,7 +45,7 @@ class Arpeggio final : public EngravingItem
 
 public:
 
-    ~Arpeggio();
+    ~Arpeggio() override;
     Arpeggio* clone() const override { return new Arpeggio(*this); }
 
     ArpeggioType arpeggioType() const { return m_arpeggioType; }
@@ -66,8 +71,8 @@ public:
     bool crossStaff() const;
     void findAndAttachToChords();
     void detachFromChords(track_idx_t strack, track_idx_t etrack);
-    void rebaseStartAnchor(int direction);
-    void rebaseEndAnchor(int direction);
+    void rebaseStartAnchor(AnchorRebaseDirection direction);
+    void rebaseEndAnchor(AnchorRebaseDirection direction);
 
     double userLen1() const { return m_userLen1; }
     double userLen2() const { return m_userLen2; }

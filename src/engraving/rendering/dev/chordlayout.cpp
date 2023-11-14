@@ -91,7 +91,6 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
 
 void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 {
-    PaddingTable paddingTable = item->score()->paddingTable();
     for (Chord* c : item->graceNotes()) {
         layoutPitched(c, ctx);
     }
@@ -175,7 +174,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     if (item->arpeggio()) {
         item->arpeggio()->findAndAttachToChords();
         item->arpeggio()->mutldata()->maxChordPad = 0.0;
-        item->arpeggio()->mutldata()->minChordX = 10000;
+        static constexpr int MAX_ARPEGGIO_X = 10000;
+        item->arpeggio()->mutldata()->minChordX = MAX_ARPEGGIO_X;
         TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
     }
     // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
@@ -195,6 +195,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
 
         if (!(aboveStart || belowEnd)) {
+            const PaddingTable& paddingTable = item->score()->paddingTable();
             double arpeggioNoteDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::NOTE) * mag_;
             double arpeggioLedgerDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::LEDGER_LINE) * mag_;
             int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;
@@ -212,7 +213,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
             double arpChordX = std::min(chordX, 0.0);
 
-            if (chordAccidentals.size()) {
+            if (!chordAccidentals.empty()) {
                 double arpeggioAccidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * mag_;
                 double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
                 gapSize = arpeggioAccidentalDistance - accidentalDistance;
