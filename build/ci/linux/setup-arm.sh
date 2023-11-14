@@ -134,7 +134,7 @@ DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-inst
 # Add additional ppas (Qt 5.15.2 and Cmake)
 # Poor naming of the cmake ppa, this ppa has bionic/focal/jammy dists
 add-apt-repository --yes ppa:theofficialgman/cmake-bionic
-add-apt-repository --yes ppa:theofficialgman/opt-qt-5.15.2-bionic-arm
+add-apt-repository --yes ppa:theofficialgman/opt-qt-5.15.2-focal-arm
 apt-get update
 
 # add an exception for the "detected dubious ownership in repository" (only seen inside a Docker image)
