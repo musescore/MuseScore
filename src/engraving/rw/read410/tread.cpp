@@ -2692,11 +2692,22 @@ void TRead::read(Glissando* g, XmlReader& e, ReadContext& ctx)
     }
 
     g->setShowText(false);
+    staff_idx_t staffIdx = track2staff(ctx.track());
+    Staff* staff = ctx.score()->staff(staffIdx);
+    if (staff) {
+        String instrId = staff->part()->instrumentId(g->tick());
+        g->setIsHarpGliss(instrId == "harp");
+    }
+    g->resetProperty(Pid::GLISS_STYLE);
+
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "text") {
             g->setShowText(true);
             TRead::readProperty(g, e, ctx, Pid::GLISS_TEXT);
+        } else if (tag == "isHarpGliss" && ctx.pasteMode()) {
+            g->setIsHarpGliss(e.readBool());
+            g->resetProperty(Pid::GLISS_STYLE);
         } else if (tag == "subtype") {
             g->setGlissandoType(TConv::fromXml(e.readAsciiText(), GlissandoType::STRAIGHT));
         } else if (tag == "glissandoStyle") {

@@ -183,6 +183,9 @@ bool MStyle::readProperties(XmlReader& e)
             case P_TYPE::TIE_PLACEMENT:
                 set(idx, TConv::fromXml(e.readAsciiText(), TiePlacement::AUTO));
                 break;
+            case P_TYPE::GLISS_STYLE:
+                set(idx, GlissandoStyle(e.readText().toInt()));
+                break;
             default:
                 ASSERT_X(u"unhandled type " + String::number(int(type)));
             }

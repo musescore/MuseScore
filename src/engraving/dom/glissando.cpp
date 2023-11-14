@@ -37,8 +37,10 @@ NICE-TO-HAVE TODO:
 #include "types/typesconv.h"
 
 #include "chord.h"
+#include "harppedaldiagram.h"
 #include "measure.h"
 #include "note.h"
+#include "part.h"
 #include "score.h"
 #include "segment.h"
 #include "staff.h"
@@ -57,6 +59,8 @@ static const ElementStyle glissandoElementStyle {
     { Sid::glissandoFontStyle, Pid::FONT_STYLE },
     { Sid::glissandoLineWidth, Pid::LINE_WIDTH },
     { Sid::glissandoText,      Pid::GLISS_TEXT },
+    { Sid::glissandoStyle,     Pid::GLISS_STYLE },
+    { Sid::glissandoStyleHarp, Pid::GLISS_STYLE }
 };
 
 //=========================================================
@@ -129,6 +133,7 @@ Glissando::Glissando(const Glissando& g)
     _showText       = g._showText;
     _playGlissando  = g._playGlissando;
     _fontStyle      = g._fontStyle;
+    m_isHarpGliss   = g.m_isHarpGliss;
 }
 
 const TranslatableString& Glissando::glissandoTypeName() const
@@ -146,6 +151,15 @@ LineSegment* Glissando::createLineSegment(System* parent)
     seg->setTrack(track());
     seg->setColor(color());
     return seg;
+}
+
+Sid Glissando::getPropertyStyle(Pid id) const
+{
+    if (id == Pid::GLISS_STYLE) {
+        return isHarpGliss().value_or(false) ? Sid::glissandoStyleHarp : Sid::glissandoStyle;
+    }
+
+    return SLine::getPropertyStyle(id);
 }
 
 void Glissando::addLineAttachPoints()
@@ -195,6 +209,41 @@ bool Glissando::pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffset
     int direction = pitchEnd > pitchStart ? 1 : -1;
     pitchOffsets.clear();
     if (glissandoStyle == GlissandoStyle::DIATONIC) {
+        // Obey harp pedal diagrams if on a harp staff
+        if (glissando->isHarpGliss().value_or(false)) {
+            HarpPedalDiagram* hd = spanner->part()->currentHarpDiagram(spanner->tick());
+            std::set<int> playableTpcs = hd ? hd->playableTpcs() : std::set<int>({ 14, 16, 18, 13, 15, 17, 19 });
+            std::vector<int> playablePitches;
+            for (int t : playableTpcs) {
+                playablePitches.push_back(tpc2pitch(t) % PITCH_DELTA_OCTAVE);
+            }
+
+            // Push starting note, then check for enharmonic on the next string.  If there is an enharmonic, 0 will be pushed back twice
+            pitchOffsets.push_back(0);
+            int en = noteStart->tpc() + TPC_DELTA_ENHARMONIC * -direction;
+            // Harp pedalling will only have 1 flat or sharp
+            if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
+                pitchOffsets.push_back(0);
+            }
+
+            for (int p = pitchStart + direction; p != pitchEnd; p += direction) {
+                // Count times pitch occurs in harp pedalling - this accounts for enharmonics
+                int pitchOccurrences = std::count(playablePitches.begin(), playablePitches.end(), p % PITCH_DELTA_OCTAVE);
+                if (pitchOccurrences > 0) {
+                    pitchOffsets.insert(pitchOffsets.end(), pitchOccurrences, p - pitchStart);
+                }
+            }
+
+            // Check for enharmonic at end, in correct direction
+            en = noteEnd->tpc() + TPC_DELTA_ENHARMONIC * direction;
+            if (en >= TPC_F_B && en <= TPC_B_S && playableTpcs.find(en) != playableTpcs.end()) {
+                pitchOffsets.push_back(pitchEnd - pitchStart);
+            }
+
+            return pitchOffsets.size() > 0;
+        }
+
+        // Regular diatonic mode
         int lineStart = noteStart->line();
         // scale obeying accidentals
         for (int line = lineStart, pitch = pitchStart; (direction == 1) ? (pitch < pitchEnd) : (pitch > pitchEnd); line -= direction) {
@@ -448,8 +497,15 @@ bool Glissando::setProperty(Pid propertyId, const PropertyValue& v)
         setShowText(v.toBool());
         break;
     case Pid::GLISS_STYLE:
-        setGlissandoStyle(v.value<GlissandoStyle>());
+    {
+        // Make sure harp glisses can only be diatonic and chromatic
+        GlissandoStyle glissStyle = v.value<GlissandoStyle>();
+        if (isHarpGliss().value_or(false) && (glissStyle != GlissandoStyle::DIATONIC && glissStyle != GlissandoStyle::CHROMATIC)) {
+            glissStyle = GlissandoStyle::DIATONIC;
+        }
+        setGlissandoStyle(glissStyle);
         break;
+    }
     case Pid::GLISS_SHIFT:
         setGlissandoShift(v.toBool());
         break;
@@ -493,7 +549,7 @@ PropertyValue Glissando::propertyDefault(Pid propertyId) const
     case Pid::GLISS_SHOW_TEXT:
         return true;
     case Pid::GLISS_STYLE:
-        return GlissandoStyle::CHROMATIC;
+        return style().styleV(getPropertyStyle(propertyId));
     case Pid::GLISS_SHIFT:
         return false;
     case Pid::GLISS_EASEIN:

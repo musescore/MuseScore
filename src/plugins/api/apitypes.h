@@ -425,7 +425,7 @@ enum class GlissandoStyle {
     WHITE_KEYS = int(mu::engraving::GlissandoStyle::WHITE_KEYS),
     BLACK_KEYS = int(mu::engraving::GlissandoStyle::BLACK_KEYS),
     DIATONIC = int(mu::engraving::GlissandoStyle::DIATONIC),
-    PORTAMENTO = int(mu::engraving::GlissandoStyle::PORTAMENTO),
+    PORTAMENTO = int(mu::engraving::GlissandoStyle::PORTAMENTO)
 };
 Q_ENUM_NS(GlissandoStyle);
 

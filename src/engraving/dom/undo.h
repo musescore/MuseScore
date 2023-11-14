@@ -1592,15 +1592,19 @@ public:
 
 class ChangeHarpPedalState : public UndoCommand
 {
+    OBJECT_ALLOCATOR(engraving, ChangeHarpPedalState)
     HarpPedalDiagram* diagram;
     std::array<PedalPosition, HARP_STRING_NO> pedalState;
+
+    void flip(EditData*) override;
 
 public:
     ChangeHarpPedalState(HarpPedalDiagram* _diagram, std::array<PedalPosition, HARP_STRING_NO> _pedalState)
         : diagram(_diagram), pedalState(_pedalState) {}
-    void flip(EditData*) override;
+
     UNDO_NAME("ChangeHarpPedalState")
-    UNDO_CHANGED_OBJECTS({ diagram });
+//    UNDO_CHANGED_OBJECTS({ diagram })
+    std::vector<const EngravingObject*> objectItems() const override;
 };
 
 //---------------------------------------------------------
@@ -1609,9 +1613,13 @@ public:
 
 class ChangeSingleHarpPedal : public UndoCommand
 {
+    OBJECT_ALLOCATOR(engraving, ChangeSingleHarpPedal)
+
     HarpPedalDiagram* diagram;
     HarpStringType type;
     PedalPosition pos;
+
+    void flip(EditData*) override;
 
 public:
     ChangeSingleHarpPedal(HarpPedalDiagram* _diagram, HarpStringType _type, PedalPosition _pos)
@@ -1621,9 +1629,9 @@ public:
     {
     }
 
-    void flip(EditData*) override;
     UNDO_NAME("ChangeSingleHarpPedal")
-    UNDO_CHANGED_OBJECTS({ diagram });
+//    UNDO_CHANGED_OBJECTS({ diagram });
+    std::vector<const EngravingObject*> objectItems() const override;
 };
 
 class ChangeStringData : public UndoCommand

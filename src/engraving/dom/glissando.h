@@ -76,6 +76,8 @@ class Glissando final : public SLine
     M_PROPERTY(int, easeIn, setEaseIn)
     M_PROPERTY(int, easeOut, setEaseOut)
 
+    std::optional<bool> m_isHarpGliss = std::nullopt;
+
 public:
     static constexpr double GLISS_PALETTE_WIDTH = 4.0;
     static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
@@ -88,12 +90,16 @@ public:
 
     const TranslatableString& glissandoTypeName() const;
 
+    std::optional<bool> isHarpGliss() const { return m_isHarpGliss; }
+    void setIsHarpGliss(std::optional<bool> v) { m_isHarpGliss = v; }
+
     // overridden inherited methods
     Glissando* clone() const override { return new Glissando(*this); }
 
     LineSegment* createLineSegment(System* parent) override;
 
     // property/style methods
+    Sid getPropertyStyle(Pid id) const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;

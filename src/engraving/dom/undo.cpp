@@ -3057,6 +3057,23 @@ void ChangeHarpPedalState::flip(EditData*)
     diagram->triggerLayout();
 }
 
+std::vector<const EngravingObject*> ChangeHarpPedalState::objectItems() const
+{
+    Part* part = diagram->part();
+    std::vector<const EngravingObject*> objs{ diagram };
+    if (!part) {
+        return objs;
+    }
+
+    HarpPedalDiagram* nextDiagram = part->nextHarpDiagram(diagram->tick());
+    if (nextDiagram) {
+        objs.push_back(nextDiagram);
+    } else {
+        objs.push_back(diagram->score()->lastElement());
+    }
+    return objs;
+}
+
 void ChangeSingleHarpPedal::flip(EditData*)
 {
     HarpStringType f_type = type;
@@ -3068,7 +3085,25 @@ void ChangeSingleHarpPedal::flip(EditData*)
     diagram->setPedal(type, pos);
     type = f_type;
     pos = f_pos;
+
     diagram->triggerLayout();
+}
+
+std::vector<const EngravingObject*> ChangeSingleHarpPedal::objectItems() const
+{
+    Part* part = diagram->part();
+    std::vector<const EngravingObject*> objs{ diagram };
+    if (!part) {
+        return objs;
+    }
+
+    HarpPedalDiagram* nextDiagram = part->nextHarpDiagram(diagram->tick());
+    if (nextDiagram) {
+        objs.push_back(nextDiagram);
+    } else {
+        objs.push_back(diagram->score()->lastElement());
+    }
+    return objs;
 }
 }
 

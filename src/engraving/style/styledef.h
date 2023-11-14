@@ -1195,6 +1195,8 @@ enum class Sid {
     glissandoFrameBgColor,
     glissandoLineWidth,
     glissandoText,
+    glissandoStyle,
+    glissandoStyleHarp,
 
     bendFontFace,
     bendFontSize,
