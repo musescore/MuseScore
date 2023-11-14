@@ -107,7 +107,7 @@
         <file>resources/LoadingScreen.svg</file>
         <file>qml/Preferences/BraillePreferencesPage.qml</file>
         <file>qml/Preferences/internal/BrailleSection.qml</file>
-        <file>qml/Preferences/internal/BrailleTableSection.qml</file>
+        <file>qml/Preferences/internal/BrailleAdvancedSection.qml</file>
         <file>qml/Preferences/internal/MeiSection.qml</file>
         <file>qml/Preferences/internal/PublishMuseScoreComSection.qml</file>
     </qresource>

@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #ifndef MU_BRAILLE_BRAILLECONFIGURATION_H
 #define MU_BRAILLE_BRAILLECONFIGURATION_H
 
@@ -36,15 +37,19 @@ public:
     bool braillePanelEnabled() const override;
     void setBraillePanelEnabled(const bool enabled) override;
 
+    async::Notification intervalDirectionChanged() const override;
+    braille::BrailleIntervalDirection intervalDirection() const override;
+    void setIntervalDirection(const braille::BrailleIntervalDirection) override;
+
     async::Notification brailleTableChanged() const override;
     QString brailleTable() const override;
     void setBrailleTable(const QString table) override;
-
-    QStringList brailleTableList() override;
+    QStringList brailleTableList() const override;
 
 private:
     async::Notification m_braillePanelEnabledChanged;
     async::Notification m_brailleTableChanged;
+    async::Notification m_intervalDirectionChanged;
 };
 }
 

@@ -32,11 +32,14 @@ public:
     bool braillePanelEnabled() const override;
     void setBraillePanelEnabled(const bool enabled) override;
 
+    async::Notification intervalDirectionChanged() const override;
+    BrailleIntervalDirection intervalDirection() const override;
+    void setIntervalDirection(const BrailleIntervalDirection direction) override;
+
     async::Notification brailleTableChanged() const override;
     QString brailleTable() const override;
     void setBrailleTable(const QString table) override;
-
-    QStringList brailleTableList() override;
+    QStringList brailleTableList() const override;
 };
 }
 

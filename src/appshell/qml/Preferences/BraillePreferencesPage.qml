@@ -45,17 +45,18 @@ PreferencesPage {
             navigation.order: root.navigationOrderStart + 1
 
             onBraillePanelEnabledChangeRequested: function(val) {
-                preferencesModel.braillePanelEnabled = val
-                brailleTable.enabled = val;
+                preferencesModel.braillePanelEnabled = val;
             }
         }
 
         SeparatorLine { }
 
-        BrailleTableSection {
-            id: brailleTable
-            tables: preferencesModel.tables()
+        BrailleAdvancedSection {
+            id: brailleAdvanced
+            tables: preferencesModel.brailleTables()
+            directions: preferencesModel.intervalDirections()
             brailleTable: preferencesModel.brailleTable
+            intervalDirection: preferencesModel.intervalDirection
 
             navigation.section: root.navigationSection
             navigation.order: root.navigationOrderStart + 2
@@ -63,12 +64,16 @@ PreferencesPage {
             enabled: preferencesModel.braillePanelEnabled
 
             onBrailleTableChangeRequested: function(table) {
-                preferencesModel.brailleTable = table
+                preferencesModel.brailleTable = table;
+            }
+
+            onIntervalDirectionChangeRequested: function(direction) {
+                preferencesModel.intervalDirection = direction;
             }
 
             onFocusChanged: {
                 if (activeFocus) {
-                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height))
+                    root.ensureContentVisibleRequested(Qt.rect(x, y, width, height));
                 }
             }
         }

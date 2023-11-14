@@ -19,19 +19,20 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 #include "brailleconfiguration.h"
 
 #include "settings.h"
 
-using namespace mu;
+using namespace mu::braille;
 using namespace mu::framework;
-using namespace mu::async;
 
 namespace mu::engraving {
 static const std::string module_name("braille");
 
 static const Settings::Key BRAILLE_STATUS(module_name, "score/braille/status");
 static const Settings::Key BRAILLE_TABLE(module_name, "score/braille/table");
+static const Settings::Key BRAILLE_INTERVAL_DIRECTION(module_name, "score/braille/intervalDirection");
 
 void BrailleConfiguration::init()
 {
@@ -39,9 +40,13 @@ void BrailleConfiguration::init()
     settings()->valueChanged(BRAILLE_STATUS).onReceive(this, [this](const Val&) {
         m_braillePanelEnabledChanged.notify();
     });
-    settings()->setDefaultValue(BRAILLE_TABLE, Val("default"));
+    settings()->setDefaultValue(BRAILLE_TABLE, Val("Unified English uncontracted braille [en-ueb-g1.ctb]"));
     settings()->valueChanged(BRAILLE_TABLE).onReceive(this, [this](const Val&) {
         m_brailleTableChanged.notify();
+    });
+    settings()->setDefaultValue(BRAILLE_INTERVAL_DIRECTION, Val(BrailleIntervalDirection::Auto));
+    settings()->valueChanged(BRAILLE_INTERVAL_DIRECTION).onReceive(this, [this](const Val&) {
+        m_intervalDirectionChanged.notify();
     });
 }
 
@@ -60,6 +65,21 @@ void BrailleConfiguration::setBraillePanelEnabled(const bool enabled)
     settings()->setSharedValue(BRAILLE_STATUS, Val(enabled));
 }
 
+async::Notification BrailleConfiguration::intervalDirectionChanged() const
+{
+    return m_intervalDirectionChanged;
+}
+
+BrailleIntervalDirection BrailleConfiguration::intervalDirection() const
+{
+    return settings()->value(BRAILLE_INTERVAL_DIRECTION).toEnum<BrailleIntervalDirection>();
+}
+
+void BrailleConfiguration::setIntervalDirection(const BrailleIntervalDirection direction)
+{
+    settings()->setSharedValue(BRAILLE_INTERVAL_DIRECTION, Val(direction));
+}
+
 async::Notification BrailleConfiguration::brailleTableChanged() const
 {
     return m_brailleTableChanged;
@@ -70,12 +90,12 @@ QString BrailleConfiguration::brailleTable() const
     return settings()->value(BRAILLE_TABLE).toQString();
 }
 
-void BrailleConfiguration::setBrailleTable(const QString tabl)
+void BrailleConfiguration::setBrailleTable(const QString table)
 {
-    settings()->setSharedValue(BRAILLE_TABLE, Val(tabl));
+    settings()->setSharedValue(BRAILLE_TABLE, Val(table));
 }
 
-QStringList BrailleConfiguration::brailleTableList()
+QStringList BrailleConfiguration::brailleTableList() const
 {
     return {
         "Afrikaans uncontracted braille [afr-za-g1.ctb]",

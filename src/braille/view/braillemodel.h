@@ -27,14 +27,14 @@
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
-
-#include "modularity/ioc.h"
-#include "inotationbraille.h"
-#include "ibrailleconfiguration.h"
-#include "notation/inotationconfiguration.h"
 #include "context/iglobalcontext.h"
+#include "modularity/ioc.h"
+#include "notation/inotationconfiguration.h"
 
-namespace mu::notation {
+#include "ibrailleconfiguration.h"
+#include "inotationbraille.h"
+
+namespace mu::engraving {
 class BrailleModel : public QObject, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
@@ -48,8 +48,10 @@ class BrailleModel : public QObject, public async::Asyncable, public actions::Ac
     Q_PROPERTY(int cursorPosition READ cursorPosition WRITE setCursorPosition NOTIFY cursorPositionChanged)
     Q_PROPERTY(int currentItemPositionStart READ currentItemPositionStart NOTIFY currentItemChanged)
     Q_PROPERTY(int currentItemPositionEnd READ currentItemPositionEnd NOTIFY currentItemChanged)
-    Q_PROPERTY(QString shorcut READ shortcut WRITE setShortcut NOTIFY shortcutFired)
+    Q_PROPERTY(QString keys READ keys WRITE setKeys NOTIFY keysFired)
     Q_PROPERTY(bool enabled READ enabled WRITE setEnabled NOTIFY braillePanelEnabledChanged)
+    Q_PROPERTY(int mode READ mode WRITE setMode NOTIFY brailleModeChanged)
+    Q_PROPERTY(QString cursorColor READ cursorColor NOTIFY brailleModeChanged)
 
 public:
     explicit BrailleModel(QObject* parent = nullptr);
@@ -59,26 +61,35 @@ public:
     QString brailleInfo() const;
 
     int cursorPosition() const;
-    void setCursorPosition(int pos) const;
+    void setCursorPosition(int pos);
 
     int currentItemPositionStart() const;
     int currentItemPositionEnd() const;
 
-    QString shortcut() const;
-    void setShortcut(const QString& sequence) const;
+    QString keys() const;
+    void setKeys(const QString& sequence);
 
     bool enabled() const;
-    void setEnabled(bool e) const;
+    void setEnabled(bool e);
+
+    int mode() const;
+    void setMode(int mode);
+    bool isNavigationMode();
+    bool isBrailleInputMode();
+
+    QString cursorColor() const;
 
 signals:
-    void brailleInfoChanged() const;
-    void cursorPositionChanged() const;
-    void currentItemChanged() const;
-    void shortcutFired() const;
-    void braillePanelEnabledChanged() const;
+    void brailleInfoChanged();
+    void cursorPositionChanged();
+    void currentItemChanged();
+    void keysFired();
+    void braillePanelEnabledChanged();
+    void brailleModeChanged();
+    void cursorColorChanged();
 
 private:
-    INotationPtr notation() const;
+    notation::INotationPtr notation() const;
 
     void onCurrentNotationChanged();
 
@@ -86,8 +97,9 @@ private:
     void listenChangesInnotationBraille();
     void listenCursorPositionChanges();
     void listenCurrentItemChanges();
-    void listenShortcuts();
+    void listenKeys();
     void listenBraillePanelEnabledChanges();
+    void listenBrailleModeChanges();
 };
 }
 
