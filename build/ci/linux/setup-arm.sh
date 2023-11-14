@@ -85,6 +85,11 @@ apt_packages=(
   libsndfile1-dev
   zlib1g-dev
   make
+  patch
+  coreutils
+  gawk
+  sed
+  wget
   desktop-file-utils # installs `desktop-file-validate` for appimagetool
   zsync # installs `zsyncmake` for appimagetool
   libglib2.0-dev
