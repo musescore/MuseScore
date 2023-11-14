@@ -406,6 +406,8 @@ public:
 
         TIE_OUTSIDE = 0xF45D,
         TIE_INSIDE = 0xF45E,
+        TIE_CHORD_OUTSIDE = 0xF466,
+        TIE_CHORD_INSIDE = 0xF467,
 
         NONE = 0xFFFF
     };

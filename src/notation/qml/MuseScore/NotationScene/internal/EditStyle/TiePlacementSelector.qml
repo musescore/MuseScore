@@ -70,8 +70,8 @@ Rectangle {
 
         RadioButtonGroup {
             model: [
-                { iconCode: IconCode.TIE_INSIDE, value: 1, title: qsTrc("inspector", "Inside") },
-                { iconCode: IconCode.TIE_OUTSIDE, value: 2, title: qsTrc("inspector", "Outside") }
+                { iconCode: IconCode.TIE_CHORD_INSIDE, value: 1, title: qsTrc("inspector", "Inside") },
+                { iconCode: IconCode.TIE_CHORD_OUTSIDE, value: 2, title: qsTrc("inspector", "Outside") }
             ]
 
             delegate: FlatRadioButton {
