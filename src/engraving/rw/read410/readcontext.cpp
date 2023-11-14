@@ -25,6 +25,7 @@
 #include "dom/beam.h"
 #include "dom/linkedobjects.h"
 #include "dom/score.h"
+#include "dom/trill.h"
 #include "dom/tuplet.h"
 #include "dom/undo.h"
 
@@ -528,6 +529,12 @@ void ReadContext::clearOrphanedConnectors()
         if (!conn->isTuplet()) {     // tuplets are added to score even when not finished
             if (linksWillBeDeleted) {
                 deletedLinks.insert(links);
+                if (conn->isTrill()) {
+                    EngravingItem* ornament = (EngravingItem*)toTrill(conn)->ornament();
+                    if (ornament && ornament->links()) {
+                        deletedLinks.insert(ornament->links());
+                    }
+                }
             }
 
             delete conn;
