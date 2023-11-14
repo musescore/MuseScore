@@ -182,7 +182,7 @@ static Fraction lastChordTicks(const Segment* s, const Fraction& tick)
                 }
             }
         }
-        s = s->nextCR(-1, true);
+        s = s->nextCR(mu::nidx, true);
     }
     return Fraction(0, 1);
 }
@@ -3264,7 +3264,7 @@ static Marker* findMarker(const QString& repeat, Score* score)
 //   handleRepeats
 //---------------------------------------------------------
 
-void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, const Fraction tick)
+void MusicXMLParserDirection::handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick)
 {
     // Try to recognize the various repeats
     QString repeat = "";
@@ -3318,7 +3318,8 @@ void MusicXMLParserDirection::handleRepeats(Measure* measure, const int track, c
 //    text direction "NmiCmi".
 //---------------------------------------------------------
 
-void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const int track, const Fraction tick, DelayedDirectionsList& delayedDirections)
+void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick,
+                                           DelayedDirectionsList& delayedDirections)
 {
     if (!_wordsText.contains("NmiCmi")) {
         return;
@@ -3921,10 +3922,10 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
             if (barStyle != "regular" || barlineColor.isValid() || loc == "middle") {
                 // Add barline to the first voice of every staff in the part,
                 // and span every barline except the last
-                int nstaves = _pass1.getPart(partId)->nstaves();
-                for (int i = 0; i < nstaves; ++i) {
+                staff_idx_t nstaves = _pass1.getPart(partId)->nstaves();
+                for (staff_idx_t i = 0; i < nstaves; ++i) {
                     bool spanStaff = i < nstaves - 1;
-                    int currentTrack = track + (i * VOICES);
+                    track_idx_t currentTrack = track + (i * VOICES);
                     auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
                     if (barlineColor.isValid()) {
                         b->setColor(barlineColor);

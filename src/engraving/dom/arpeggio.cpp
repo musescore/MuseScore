@@ -118,7 +118,7 @@ void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
             for (track_idx_t curTrack = track() - 1; curTrack >= topTrack; curTrack--) {
                 EngravingItem* e = chord()->segment()->element(curTrack);
                 if (e && e->isChord()) {
-                    int newSpan = m_span + track() - curTrack;
+                    track_idx_t newSpan = m_span + track() - curTrack;
                     if (newSpan != 0) {
                         undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
                         score()->undo(new ChangeParent(this, e, e->staffIdx()));
@@ -132,7 +132,7 @@ void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
         for (track_idx_t curTrack = track() + 1; curTrack <= track() + m_span - 1; curTrack++) {
             EngravingItem* e = chord()->segment()->element(curTrack);
             if (e && e->isChord()) {
-                int newSpan = m_span + track() - curTrack;
+                track_idx_t newSpan = m_span + track() - curTrack;
                 if (newSpan != 0) {
                     chord()->undoChangeSpanArpeggio(nullptr);
                     undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
@@ -151,7 +151,7 @@ void Arpeggio::rebaseEndAnchor(AnchorRebaseDirection direction)
         for (track_idx_t curTrack = track() + m_span - 2; curTrack >= track(); curTrack--) {
             EngravingItem* e = chord()->segment()->element(curTrack);
             if (e && e->isChord()) {
-                int newSpan = curTrack - track() + 1;
+                track_idx_t newSpan = curTrack - track() + 1;
                 if (newSpan != 0) {
                     EngravingItem* oldEndChord = chord()->segment()->element(endTrack());
                     if (oldEndChord && oldEndChord->isChord()) {
@@ -172,7 +172,7 @@ void Arpeggio::rebaseEndAnchor(AnchorRebaseDirection direction)
             for (track_idx_t curTrack = track() + m_span; curTrack < btrack; curTrack++) {
                 EngravingItem* e = chord()->segment()->element(curTrack);
                 if (e && e->isChord()) {
-                    int newSpan = curTrack - track() + 1;
+                    track_idx_t newSpan = curTrack - track() + 1;
                     toChord(e)->undoChangeSpanArpeggio(this);
                     undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
                     break;

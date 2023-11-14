@@ -415,8 +415,8 @@ private:
     QString metronome(double& r);
     void sound();
     void dynamics();
-    void handleRepeats(Measure* measure, const int track, const Fraction tick);
-    void handleNmiCmi(Measure* measure, const int track, const Fraction tick, DelayedDirectionsList& delayedDirections);
+    void handleRepeats(Measure* measure, const track_idx_t track, const Fraction tick);
+    void handleNmiCmi(Measure* measure, const track_idx_t track, const Fraction tick, DelayedDirectionsList& delayedDirections);
     QString matchRepeat() const;
     void skipLogCurrElem();
     bool isLikelyCredit(const Fraction& tick) const;
@@ -434,7 +434,7 @@ private:
 class MusicXMLDelayedDirectionElement
 {
 public:
-    MusicXMLDelayedDirectionElement(qreal totalY, EngravingItem* element, int track,
+    MusicXMLDelayedDirectionElement(qreal totalY, EngravingItem* element, track_idx_t track,
                                     QString placement, Measure* measure, Fraction tick)
         : _totalY(totalY),  _element(element), _track(track), _placement(placement),
         _measure(measure), _tick(tick) {}
@@ -444,7 +444,7 @@ public:
 private:
     qreal _totalY;
     EngravingItem* _element;
-    int _track;
+    track_idx_t _track;
     QString _placement;
     Measure* _measure;
     Fraction _tick;
