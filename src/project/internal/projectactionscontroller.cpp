@@ -1174,11 +1174,11 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
         }
 
         if (audio.isValid()) {
-            uploadAudio(audio, newSourceUrl, editUrl, isFirstSave);
+            uploadAudio(audio, newSourceUrl, editUrl, isFirstSave, publishMode);
         } else {
             onProjectSuccessfullyUploaded(editUrl, isFirstSave);
 
-            if (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog()) {
+            if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
                 alsoShareAudioCom(audio);
             }
         }
@@ -1189,7 +1189,8 @@ Ret ProjectActionsController::uploadProject(const CloudProjectInfo& info, const 
     return ret;
 }
 
-void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave)
+void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& sourceUrl, const QUrl& urlToOpen, bool isFirstSave,
+                                           bool publishMode)
 {
     m_uploadingAudioProgress = museScoreComService()->uploadAudio(*audio.device, audio.format, sourceUrl);
 
@@ -1203,7 +1204,7 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
         }
     });
 
-    m_uploadingAudioProgress->finished.onReceive(this, [this, audio, urlToOpen, isFirstSave](const ProgressResult& res) {
+    m_uploadingAudioProgress->finished.onReceive(this, [this, audio, urlToOpen, isFirstSave, publishMode](const ProgressResult& res) {
         LOGD() << "Uploading audio finished";
 
         if (!res.ret) {
@@ -1212,7 +1213,7 @@ void ProjectActionsController::uploadAudio(const AudioFile& audio, const QUrl& s
 
         onProjectSuccessfullyUploaded(urlToOpen, isFirstSave);
 
-        if (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog()) {
+        if (publishMode && (configuration()->alsoShareAudioCom() || configuration()->showAlsoShareAudioComDialog())) {
             alsoShareAudioCom(audio);
         }
 
