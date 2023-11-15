@@ -2774,6 +2774,32 @@ EngravingItem* Chord::prevElement()
     }
     switch (e->type()) {
     case ElementType::NOTE: {
+        if (isGrace()) {
+            ChordRest* next = prevChordRest(this);
+            if (next) {
+                return toChord(next)->notes().back();
+            }
+        }
+
+        GraceNotesGroup& graceNotesBefore = this->graceNotesBefore();
+        if (!graceNotesBefore.empty()) {
+            if (Chord* graceNotesBeforeLastChord = graceNotesBefore.back()) {
+                if (e == graceNotesBeforeLastChord->notes().back()) {
+                    break;
+                }
+
+                Note* prevNote = graceNotesBeforeLastChord->notes().back();
+                if (prevNote->isPreBendStart() || prevNote->isGraceBendStart()) {
+                    return prevNote->bendFor()->frontSegment();
+                }
+
+                ChordRest* next = prevChordRest(this);
+                if (next) {
+                    return toChord(next)->notes().back();
+                }
+            }
+        }
+
         if (e == m_notes.back()) {
             break;
         }
