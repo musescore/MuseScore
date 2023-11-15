@@ -52,7 +52,7 @@
                            <note xml:id="n912k7" dur="1" pname="d" oct="4" />
                         </layer>
                      </staff>
-                     <repeatMark xml:id="r1275fyx" type="mscore-jump-dc-al-double-coda" func="daCapo" tstamp="0.000000">D.C. al Double Coda</repeatMark>
+                     <repeatMark xml:id="r1275fyx" type="mscore-jump-dc-al-double-coda" func="daCapo" tstamp="0.000000">D.C. al Doppia Coda</repeatMark>
                   </measure>
                   <measure xml:id="m19nftig" n="3">
                      <staff xml:id="m3s1" n="1">

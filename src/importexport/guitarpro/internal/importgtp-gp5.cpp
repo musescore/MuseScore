@@ -1045,10 +1045,10 @@ bool GuitarPro5::read(IODevice* io)
                 Segment* s = measure->getSegment(SegmentType::KeySig, measure->tick());
                 StaffText* st = new StaffText(s);
                 static constexpr char text[][22] = {
-                    "fine", "Da Capo", "D.C. al Coda", "D.C. al Double Coda",
-                    "D.C. al Fine", "Da Segno", "D.S. al Coda", "D.S. al Double Coda",
-                    "D.S. al Fine", "Da Segno Segno", "D.S.S. al Coda", "D.S.S. al Double Coda",
-                    "D.S.S. al Fine", "Da Coda", "Da Double Coda"
+                    "fine", "Da Capo", "D.C. al Coda", "D.C. al Doppia Coda",
+                    "D.C. al Fine", "Da Segno", "D.S. al Coda", "D.S. al Doppia Coda",
+                    "D.S. al Fine", "Da Doppio Segno", "D.D.S. al Coda", "D.D.S. al Doppia Coda",
+                    "D.D.S. al Fine", "Da Coda", "Da Doppia Coda"
                 };
                 st->setPlainText(String::fromAscii(text[i - 4]));
                 st->setParent(s);

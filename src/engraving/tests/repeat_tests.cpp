@@ -307,7 +307,7 @@ TEST_F(Engraving_RepeatTests, repeat46) {
 }
 
 TEST_F(Engraving_RepeatTests, repeat47) {
-    // #269378 Double Coda messed up repeat rewind logic
+    // #269378 Double Coda AKA Doppia Coda messed up repeat rewind logic
     repeat("repeat47.mscx", u"1;2;3; 2; 4;5;6;7; 6; 8;9;10;11; 2; 4; 13;14;15; 9;10; 16;17;18");
 }
 

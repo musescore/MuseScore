@@ -328,7 +328,7 @@
       <Measure>
         <Jump>
           <style>repeat_right</style>
-          <text>D.C. al Double Coda</text>
+          <text>D.C. al Doppia Coda</text>
           <jumpTo>start</jumpTo>
           <playUntil>varcoda</playUntil>
           <continueAt>codab</continueAt>
@@ -359,7 +359,7 @@
       <Measure>
         <Jump>
           <style>repeat_right</style>
-          <text>D.S. al Double Coda</text>
+          <text>D.S. al Doppia Coda</text>
           <jumpTo>segno</jumpTo>
           <playUntil>varcoda</playUntil>
           <continueAt>codab</continueAt>
@@ -390,7 +390,7 @@
       <Measure>
         <Jump>
           <style>repeat_right</style>
-          <text>Dal Segno Segno</text>
+          <text>Dal Doppio Segno</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>end</playUntil>
           <continueAt></continueAt>
@@ -421,7 +421,7 @@
       <Measure>
         <Jump>
           <style>repeat_right</style>
-          <text>D.S.S. al Coda</text>
+          <text>D.D.S. al Coda</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>coda</playUntil>
           <continueAt>codab</continueAt>
@@ -444,7 +444,7 @@
       <Measure>
         <Jump>
           <style>repeat_right</style>
-          <text>D.S.S. al Double Coda</text>
+          <text>D.D.S. al Doppia Coda</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>varcoda</playUntil>
           <continueAt>codab</continueAt>
@@ -467,7 +467,7 @@
       <Measure>
         <Jump>
           <style>repeat_right</style>
-          <text>D.S.S. al Fine</text>
+          <text>D.D.S. al Fine</text>
           <jumpTo>varsegno</jumpTo>
           <playUntil>fine</playUntil>
           <continueAt></continueAt>
