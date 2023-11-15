@@ -256,10 +256,12 @@ RectF DynamicExpressionDragGroup::drag(EditData& ed)
     // in which case move the expression with it
     Segment* newSegment = dynamic->segment();
     Segment* oldSegment = toSegment(expression->explicitParent());
-    if (newSegment != oldSegment) {
+    staff_idx_t newStaff = dynamic->staffIdx();
+    staff_idx_t oldStaff = expression->staffIdx();
+
+    if (newSegment != oldSegment || newStaff != oldStaff) {
         Score* score = newSegment->score();
-        staff_idx_t staffIdx = expression->staffIdx();
-        score->undo(new ChangeParent(expression, newSegment, staffIdx));
+        score->undoChangeParent(expression, newSegment, newStaff);
     }
 
     dynamic->triggerLayout();

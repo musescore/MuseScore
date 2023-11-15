@@ -4826,6 +4826,81 @@ void Score::undoChangePageNumberOffset(int po)
     undo(new ChangePageNumberOffset(this, po));
 }
 
+void Score::undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t staffIdx)
+{
+    if (!element || !parent) {
+        return;
+    }
+
+    if (element->parentItem() == parent && staffIdx == element->staffIdx()) {
+        return;
+    }
+    Staff* originStaff = element->staff();
+    Staff* destStaff = staff(staffIdx);
+    bool recreateItemNeeded = false;
+
+    const std::list<EngravingObject*> links = element->linkList();
+    for (EngravingObject* obj : links) {
+        EngravingItem* item = toEngravingItem(obj);
+        Score* linkedScore = item->score();
+        Staff* linkedOrigin = originStaff->findLinkedInScore(linkedScore);
+        Staff* linkedDest = destStaff->findLinkedInScore(linkedScore);
+
+        if (!linkedScore) {
+            continue;
+        }
+        if (item == element) {
+            // Master score
+            undo(new ChangeParent(element, parent, staffIdx));
+        } else if (linkedOrigin && linkedDest) {
+            // Part - origin and destination staves are in this part
+            EngravingItem* linkedParent;
+            if (parent->isSegment()) {
+                // Get parent segment in linked score
+                Segment* oldSeg = toSegment(parent);
+                Measure* m = linkedScore->tick2measure(oldSeg->tick());
+                linkedParent = m->tick2segment(oldSeg->tick(), oldSeg->segmentType());
+            } else {
+                linkedParent = parent->findLinkedInScore(linkedScore);
+            }
+            linkedScore->undo(new ChangeParent(item, linkedParent, linkedScore->staffIdx(linkedDest)));
+        } else if (linkedOrigin && !linkedDest) {
+            // Part - move is to a different staff
+            // Remove original item
+            linkedScore->undoRemoveElement(item, false);
+            recreateItemNeeded = true;
+        }
+    }
+
+    if (recreateItemNeeded) {
+        // Need to create item in some parts
+        const std::list<EngravingObject*> destStaffLinks = destStaff->linkList();
+        for (EngravingObject* obj : destStaffLinks) {
+            Staff* linkedDest = toStaff(obj);
+            Score* linkedScore = linkedDest->score();
+            if (linkedDest != destStaff && !element->findLinkedInScore(linkedScore)) {
+                // Item should be in this score and isn't already
+                EngravingItem* newItem = element->linkedClone();
+                EngravingItem* linkedParent;
+
+                if (parent->isSegment()) {
+                    // Get parent segment in linked score
+                    Segment* oldSeg = toSegment(parent);
+                    Measure* m = linkedScore->tick2measure(oldSeg->tick());
+                    linkedParent = m->tick2segment(oldSeg->tick(), oldSeg->segmentType());
+                } else {
+                    linkedParent = parent->findLinkedInScore(linkedScore);
+                }
+
+                newItem->setParent(linkedParent);
+                newItem->setTrack(linkedScore->staffIdx(linkedDest) * VOICES);
+                newItem->setOffset(PointF());
+                linkedParent->undoAddElement(newItem, false);
+            }
+        }
+    }
+}
+
 //---------------------------------------------------------
 //   undoChangeElement
 //---------------------------------------------------------
@@ -4835,7 +4910,17 @@ void Score::undoChangeElement(EngravingItem* oldElement, EngravingItem* newEleme
     if (!oldElement) {
         undoAddElement(newElement);
     } else {
-        undo(new ChangeElement(oldElement, newElement));
+        const std::list<EngravingObject*> links = oldElement->linkList();
+        for (EngravingObject* obj : links) {
+            EngravingItem* item = toEngravingItem(obj);
+            if (item == oldElement) {
+                undo(new ChangeElement(oldElement, newElement));
+            } else {
+                if (item->score()) {
+                    item->score()->undo(new ChangeElement(item, newElement->linkedClone()));
+                }
+            }
+        }
     }
 }
 

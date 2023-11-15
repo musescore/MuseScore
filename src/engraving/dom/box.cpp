@@ -422,17 +422,52 @@ EngravingItem* Box::drop(EditData& data)
 
 void Box::manageExclusionFromParts(bool exclude)
 {
+    bool titleFrame = this == score()->first() && type() == ElementType::VBOX;
     if (exclude) {
-        EngravingItem::manageExclusionFromParts(exclude);
+        const std::list<EngravingObject*> links = linkList();
+        for (EngravingObject* linkedObject : links) {
+            // Only remove title frame from score
+            if (linkedObject->score() == score() || (!this->score()->isMaster() && titleFrame && !linkedObject->score()->isMaster())) {
+                continue;
+            }
+            EngravingItem* linkedItem = toEngravingItem(linkedObject);
+            if (linkedItem->selected()) {
+                linkedItem->score()->deselect(linkedItem);
+            }
+            linkedItem->score()->undoRemoveElement(linkedItem, false);
+            linkedItem->undoUnlink();
+        }
     } else {
         std::vector<MeasureBase*> newFrames;
         for (Score* score : masterScore()->scoreList()) {
-            if (score == this->score()) {
+            if (score == this->score() || (!this->score()->isMaster() && !score->isMaster())) {
                 continue;
             }
+
             MeasureBase* newMB = next()->getInScore(score, true);
             MeasureBase* newFrame = score->insertBox(type(), newMB);
             newFrame->setExcludeFromOtherParts(false);
+
+            for (EngravingItem* item : el()) {
+                // Don't add instrument name from current part
+                if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
+                    continue;
+                }
+                newFrame->add(item->linkedClone());
+            }
+
+            if (!score->isMaster() && newFrame == score->first() && newFrame->type() == ElementType::VBOX) {
+                // Title frame - add part name
+                String partLabel = score->name();
+                if (!partLabel.empty()) {
+                    Text* txt = Factory::createText(newFrame, TextStyleType::INSTRUMENT_EXCERPT);
+                    txt->setPlainText(partLabel);
+                    newFrame->add(txt);
+
+                    score->setMetaTag(u"partName", partLabel);
+                }
+            }
+
             newFrames.push_back(newFrame);
         }
         for (MeasureBase* newFrame : newFrames) {

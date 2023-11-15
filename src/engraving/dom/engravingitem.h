@@ -357,7 +357,7 @@ public:
 
     void undoSetColor(const mu::draw::Color& c);
     void undoSetVisible(bool v);
-    void undoAddElement(EngravingItem* element);
+    void undoAddElement(EngravingItem* element, bool addToLinkedStaves = true);
 
     static ElementType readType(XmlReader& node, PointF*, Fraction*);
     static EngravingItem* readMimeData(Score* score, const mu::ByteArray& data, PointF*, Fraction*);

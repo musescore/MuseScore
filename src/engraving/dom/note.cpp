@@ -2551,7 +2551,7 @@ void Note::verticalDrag(EditData& ed)
         Key cKey = staff()->concertKey(_tick);
         staff_idx_t idx = chord()->vStaffIdx();
         Interval interval = staff()->part()->instrument(_tick)->transpose();
-        int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key);
+        int newPitch = line2pitch(ned->line + lineOffset, score()->staff(idx)->clef(_tick), key) - linkedOttavaPitchOffset();
 
         if (!concertPitch()) {
             newPitch += interval.chromatic;

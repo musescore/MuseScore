@@ -408,6 +408,7 @@ public:
     void undoInsertTime(const Fraction& tick, const Fraction& len);
     void undoChangeStyleVal(Sid idx, const PropertyValue& v);
     void undoChangePageNumberOffset(int po);
+    void undoChangeParent(EngravingItem* element, EngravingItem* parent, staff_idx_t _staff);
 
     void updateInstrumentChangeTranspositions(KeySigEvent& key, Staff* staff, const Fraction& tick);
 

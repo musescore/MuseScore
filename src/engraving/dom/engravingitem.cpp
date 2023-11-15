@@ -1305,8 +1305,16 @@ PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* dest
         return PropertyPropagation::NONE;
     }
 
-    if ((isTextProperty && isPropertyLinkedToMaster(propertyId))) {
-        return PropertyPropagation::PROPAGATE;
+    if (isTextProperty) {
+        if (sourceScore->isMaster() && destinationItem->isPropertyLinkedToMaster(propertyId)) {
+            // From master score - check if destination part follows master
+            return PropertyPropagation::PROPAGATE;
+        }
+
+        if (!sourceScore->isMaster() && isPropertyLinkedToMaster(propertyId)) {
+            // From part - check if source part follows master
+            return PropertyPropagation::PROPAGATE;
+        }
     }
 
     if (!sourceScore->isMaster()) {
@@ -1539,9 +1547,9 @@ void EngravingItem::undoSetVisible(bool v)
     undoChangeProperty(Pid::VISIBLE, v);
 }
 
-void EngravingItem::undoAddElement(EngravingItem* element)
+void EngravingItem::undoAddElement(EngravingItem* element, bool addToLinkedStaves)
 {
-    score()->undoAddElement(element);
+    score()->undoAddElement(element, addToLinkedStaves);
 }
 
 //---------------------------------------------------------
