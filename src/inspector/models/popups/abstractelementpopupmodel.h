@@ -19,8 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
-#define MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
+#ifndef MU_INSPECTOR_ABSTRACTELEMENTPOPUPMODEL_H
+#define MU_INSPECTOR_ABSTRACTELEMENTPOPUPMODEL_H
 
 #include "async/asyncable.h"
 #include "actions/actionable.h"
@@ -31,7 +31,7 @@
 #include "modularity/ioc.h"
 #include <QObject>
 
-namespace mu::notation {
+namespace mu::inspector {
 class AbstractElementPopupModel : public QObject, public async::Asyncable, public actions::Actionable
 {
     Q_OBJECT
@@ -47,7 +47,8 @@ public:
         TYPE_UNDEFINED = -1,
         TYPE_HARP_DIAGRAM,
         TYPE_CAPO,
-        TYPE_STRING_TUNINGS
+        TYPE_STRING_TUNINGS,
+        TYPE_TEXT
     };
     Q_ENUM(PopupModelType)
 
@@ -77,14 +78,14 @@ protected:
     void updateNotation();
     notation::INotationPtr currentNotation() const;
 
-    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value);
-    void changeItemProperty(mu::engraving::Pid id, const PropertyValue& value, engraving::PropertyFlags flags);
+    void changeItemProperty(mu::engraving::Pid id, const engraving::PropertyValue& value);
+    void changeItemProperty(mu::engraving::Pid id, const engraving::PropertyValue& value, engraving::PropertyFlags flags);
 
-    EngravingItem* m_item = nullptr;
+    engraving::EngravingItem* m_item = nullptr;
 
 private:
-    INotationInteractionPtr interaction() const;
-    INotationSelectionPtr selection() const;
+    notation::INotationInteractionPtr interaction() const;
+    notation::INotationSelectionPtr selection() const;
 
     engraving::ElementType elementType() const;
 
@@ -95,10 +96,10 @@ private:
 };
 
 using PopupModelType = AbstractElementPopupModel::PopupModelType;
-} //namespace mu::notation
+}
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::notation::PopupModelType)
+Q_DECLARE_METATYPE(mu::inspector::PopupModelType)
 #endif
 
-#endif // MU_NOTATION_ABSTRACTELEMENTPOPUPMODEL_H
+#endif // MU_INSPECTOR_ABSTRACTELEMENTPOPUPMODEL_H

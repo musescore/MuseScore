@@ -23,12 +23,16 @@
 #include "abstractelementpopupmodel.h"
 #include "log.h"
 
+using namespace mu::inspector;
 using namespace mu::notation;
 
 static const QMap<mu::engraving::ElementType, PopupModelType> ELEMENT_POPUP_TYPES = {
     { mu::engraving::ElementType::HARP_DIAGRAM, PopupModelType::TYPE_HARP_DIAGRAM },
     { mu::engraving::ElementType::CAPO, PopupModelType::TYPE_CAPO },
     { mu::engraving::ElementType::STRING_TUNINGS, PopupModelType::TYPE_STRING_TUNINGS },
+    { mu::engraving::ElementType::STAFF_TEXT, PopupModelType::TYPE_TEXT },
+    { mu::engraving::ElementType::TEXT, PopupModelType::TYPE_TEXT },
+    { mu::engraving::ElementType::SYSTEM_TEXT, PopupModelType::TYPE_TEXT }
 };
 
 AbstractElementPopupModel::AbstractElementPopupModel(PopupModelType modelType, QObject* parent)
