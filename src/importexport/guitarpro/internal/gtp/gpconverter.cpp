@@ -1298,6 +1298,7 @@ void GPConverter::addContinuousSlideHammerOn()
     };
 
     std::unordered_map<Note*, Slur*> legatoSlides;
+    std::unordered_set<Chord*> hammerOnInChord;
     for (const auto& slide : _slideHammerOnMap) {
         Note* startNote = slide.first;
         Note* endNote = searchEndNote(startNote);
@@ -1350,7 +1351,12 @@ void GPConverter::addContinuousSlideHammerOn()
 
             // TODO-gp: implement for editing too. Now works just for import.
             if (slide.second == SlideHammerOn::HammerOn) {
-                Measure* measure = startNote->chord()->measure();
+                Chord* startChord = startNote->chord();
+                if (hammerOnInChord.find(startChord) != hammerOnInChord.end()) {
+                    continue;
+                }
+
+                Measure* measure = startChord->measure();
 
                 auto midTick = (startTick + endTick) / 2;
                 Segment* segment = measure->getSegment(SegmentType::ChordRest, midTick);
@@ -1360,6 +1366,7 @@ void GPConverter::addContinuousSlideHammerOn()
                 staffText->setPlainText(hammerText);
                 staffText->setTrack(track);
                 segment->add(staffText);
+                hammerOnInChord.insert(startChord);
             }
         }
     }
