@@ -63,6 +63,14 @@ public:
 
     bool shouldShowNegativeRows() const;
 
+    Q_INVOKABLE bool focusOnFirstPoint();
+    Q_INVOKABLE bool resetFocus();
+
+    Q_INVOKABLE bool moveFocusedPointToLeft();
+    Q_INVOKABLE bool moveFocusedPointToRight();
+    Q_INVOKABLE bool moveFocusedPointToUp();
+    Q_INVOKABLE bool moveFocusedPointToDown();
+
 public slots:
     void setPointList(QVariant pointList);
 
@@ -96,17 +104,23 @@ private:
     void hoverMoveEvent(QHoverEvent* event) override;
     void hoverLeaveEvent(QHoverEvent* event) override;
 
+    bool eventFilter(QObject* watched, QEvent* event) override;
+    bool shortcutOverride(QKeyEvent* event);
+
     QRectF frameRect() const;
     qreal columnWidth(const QRectF& frameRect) const;
     qreal rowHeight(const QRectF& frameRect) const;
 
-    std::pair<int, int> frameCoord(const QRectF& frameRect, int x, int y) const;
+    QPointF frameCoord(const QRectF& frameRect, int x, int y) const;
 
     void drawBackground(QPainter* painter, const QRectF& frameRect);
     void drawCurve(QPainter* painter, const QRectF& frameRect);
 
-    std::optional<int> pointIndex(const CurvePoint& pitch, bool movable = true) const;
+    std::optional<int> pointIndex(const CurvePoint& point, bool movable = true) const;
     CurvePoint point(const QRectF& frameRect, int frameX, int frameY) const;
+    QPointF pointCoord(const QRectF& frameRect, const CurvePoint& point) const;
+
+    bool movePoint(int pointIndex, const CurvePoint& toPoint);
 
     CurvePoints m_points;
 

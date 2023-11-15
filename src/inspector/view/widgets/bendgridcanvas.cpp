@@ -78,6 +78,8 @@ BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     connect(this, &BendGridCanvas::enabledChanged, [this](){
         update();
     });
+
+    qApp->installEventFilter(this);
 }
 
 QVariant BendGridCanvas::pointList() const
@@ -108,6 +110,154 @@ int BendGridCanvas::columnSpacing() const
 bool BendGridCanvas::shouldShowNegativeRows() const
 {
     return m_showNegativeRows;
+}
+
+bool BendGridCanvas::focusOnFirstPoint()
+{
+    if (m_focusedPointIndex.has_value()) {
+        return true;
+    }
+
+    int firstPointIndex = -1;
+    for (int i = 0; i < m_points.size(); ++i) {
+        if (m_points[i].canMove()) {
+            firstPointIndex = i;
+            break;
+        }
+    }
+
+    if (firstPointIndex == -1) {
+        return false;
+    }
+
+    m_focusedPointIndex = firstPointIndex;
+    update();
+
+    return true;
+}
+
+bool BendGridCanvas::resetFocus()
+{
+    if (!m_focusedPointIndex.has_value()) {
+        return false;
+    }
+
+    m_focusedPointIndex = std::nullopt;
+    update();
+
+    return true;
+}
+
+bool BendGridCanvas::moveFocusedPointToLeft()
+{
+    if (!m_focusedPointIndex.has_value()) {
+        return false;
+    }
+
+    int index = m_focusedPointIndex.value();
+    CurvePoint focusedPoint = m_points.at(index);
+
+    int newTime = focusedPoint.time - 1;
+    if (newTime < 0) {
+        newTime = 0;
+    }
+
+    focusedPoint.time = newTime;
+
+    if (movePoint(index, focusedPoint)) {
+        update();
+        emit canvasChanged();
+    }
+
+    return true;
+}
+
+bool BendGridCanvas::moveFocusedPointToRight()
+{
+    if (!m_focusedPointIndex.has_value()) {
+        return false;
+    }
+
+    int index = m_focusedPointIndex.value();
+    CurvePoint focusedPoint = m_points.at(index);
+
+    int newTime = focusedPoint.time + 1;
+    if (newTime > CurvePoint::MAX_TIME) {
+        newTime = CurvePoint::MAX_TIME;
+    }
+
+    if (newTime == focusedPoint.time) {
+        return true;
+    }
+
+    focusedPoint.time = newTime;
+
+    if (movePoint(index, focusedPoint)) {
+        update();
+        emit canvasChanged();
+    }
+
+    return true;
+}
+
+bool BendGridCanvas::moveFocusedPointToUp()
+{
+    if (!m_focusedPointIndex.has_value()) {
+        return false;
+    }
+
+    int index = m_focusedPointIndex.value();
+    CurvePoint focusedPoint = m_points.at(index);
+
+    QRectF frameRect = this->frameRect();
+    QPointF focusedPointCoord = pointCoord(frameRect, focusedPoint);
+
+    int rowHeight = round(this->rowHeight(frameRect));
+    focusedPointCoord.setY(focusedPointCoord.y() - rowHeight);
+
+    if (focusedPointCoord.y() < frameRect.top()) {
+        focusedPointCoord.setY(frameRect.top());
+    }
+
+    CurvePoint newPoint = this->point(frameRect, focusedPointCoord.x(), focusedPointCoord.y());
+    focusedPoint.pitch = newPoint.pitch;
+
+    if (movePoint(index, focusedPoint)) {
+        update();
+        emit canvasChanged();
+    }
+
+    return true;
+}
+
+bool BendGridCanvas::moveFocusedPointToDown()
+{
+    if (!m_focusedPointIndex.has_value()) {
+        return false;
+    }
+
+    int index = m_focusedPointIndex.value();
+    CurvePoint focusedPoint = m_points.at(index);
+
+    QRectF frameRect = this->frameRect();
+    QPointF focusedPointCoord = pointCoord(frameRect, focusedPoint);
+
+    int rowHeight = round(this->rowHeight(frameRect));
+    focusedPointCoord.setY(focusedPointCoord.y() + rowHeight);
+
+    if (focusedPointCoord.y() > frameRect.bottom()) {
+        focusedPointCoord.setY(frameRect.bottom());
+    }
+
+    CurvePoint newPoint = this->point(frameRect, focusedPointCoord.x(), focusedPointCoord.y());
+    focusedPoint.pitch = newPoint.pitch;
+
+    if (movePoint(index, focusedPoint)) {
+        update();
+        emit canvasChanged();
+    }
+
+    return true;
 }
 
 void BendGridCanvas::setRowCount(int rowCount)
@@ -200,8 +350,8 @@ void BendGridCanvas::mousePressEvent(QMouseEvent* event)
     }
 
     QRectF frameRect = this->frameRect();
-    std::pair<int, int> coord = this->frameCoord(frameRect, event->pos().x(), event->pos().y());
-    CurvePoint point = this->point(frameRect, coord.first, coord.second);
+    QPointF coord = this->frameCoord(frameRect, event->pos().x(), event->pos().y());
+    CurvePoint point = this->point(frameRect, coord.x(), coord.y());
 
     m_currentPointIndex = this->pointIndex(point);
     m_canvasWasChanged = false;
@@ -216,88 +366,14 @@ void BendGridCanvas::mouseMoveEvent(QMouseEvent* event)
     }
 
     QRectF frameRect = this->frameRect();
-    std::pair<int, qreal> coord = this->frameCoord(frameRect, event->pos().x(), event->pos().y());
+    QPointF coord = this->frameCoord(frameRect, event->pos().x(), event->pos().y());
 
-    CurvePoint point = this->point(frameRect, coord.first, coord.second);
+    CurvePoint point = this->point(frameRect, coord.x(), coord.y());
 
-    int index = m_currentPointIndex.value();
-    CurvePoint& currentPoint = m_points[index];
-
-    if (currentPoint == point) {
-        return;
+    if (movePoint(m_currentPointIndex.value(), point)) {
+        m_canvasWasChanged = true;
+        update();
     }
-
-    bool canMoveHorizontally = currentPoint.canMove(CurvePoint::MoveDirection::Horizontal);
-    bool canMoveVertically = currentPoint.canMove(CurvePoint::MoveDirection::Vertical);
-
-    if (!canMoveHorizontally && !canMoveVertically) {
-        return;
-    }
-
-    if (canMoveVertically) {
-        bool canMove = true;
-        bool moveToTop = currentPoint.pitch < point.pitch;
-
-        if (index - 1 >= 0) {
-            const CurvePoint& leftPoint = m_points.at(index - 1);
-            bool isLeftValid = moveToTop ? leftPoint.pitch >= currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
-            if (isLeftValid) {
-                canMove = leftPoint.generated || (moveToTop ? leftPoint.pitch > point.pitch : leftPoint.pitch < point.pitch);
-            }
-        }
-
-        if (!canMove) {
-            return;
-        }
-
-        if (index + 1 < m_points.size()) {
-            const CurvePoint& rightPoint = m_points.at(index + 1);
-            bool isRightValid = moveToTop ? rightPoint.pitch >= currentPoint.pitch : rightPoint.pitch <= currentPoint.pitch;
-            if (isRightValid) {
-                canMove = rightPoint.generated || (moveToTop ? rightPoint.pitch > point.pitch : rightPoint.pitch < point.pitch);
-            }
-        }
-
-        if (canMove) {
-            currentPoint.pitch = point.pitch;
-
-            bool isDashed = currentPoint.endDashed;
-            bool isNextDashed = (index + 1 < m_points.size()) && m_points.at(index + 1).endDashed;
-
-            if (isDashed) {
-                m_points[index - 1].pitch = point.pitch;
-            }
-
-            if (isNextDashed) {
-                m_points[index + 1].pitch = point.pitch;
-            }
-
-            m_canvasWasChanged = true;
-        }
-    }
-
-    if (canMoveHorizontally) {
-        bool canMove = true;
-        bool moveToLeft = currentPoint.time > point.time;
-        if (moveToLeft) {
-            if (index - 1 >= 0) {
-                const CurvePoint& leftPoint = m_points.at(index - 1);
-                canMove = leftPoint.generated || leftPoint.time < point.time;
-            }
-        } else {
-            if (index + 1 < m_points.size()) {
-                const CurvePoint& rightPoint = m_points.at(index + 1);
-                canMove = rightPoint.generated || rightPoint.time > point.time;
-            }
-        }
-
-        if (canMove) {
-            currentPoint.time = point.time;
-            m_canvasWasChanged = true;
-        }
-    }
-
-    update();
 }
 
 void BendGridCanvas::mouseReleaseEvent(QMouseEvent*)
@@ -321,8 +397,8 @@ void BendGridCanvas::hoverMoveEvent(QHoverEvent* event)
     auto oldPointIndex = m_hoverPointIndex;
 
     QRectF frameRect = this->frameRect();
-    std::pair<int, int> coord = this->frameCoord(frameRect, event->pos().x(), event->pos().y());
-    CurvePoint point = this->point(frameRect, coord.first, coord.second);
+    QPointF coord = this->frameCoord(frameRect, event->pos().x(), event->pos().y());
+    CurvePoint point = this->point(frameRect, coord.x(), coord.y());
 
     m_hoverPointIndex = this->pointIndex(point);
 
@@ -334,6 +410,50 @@ void BendGridCanvas::hoverMoveEvent(QHoverEvent* event)
 void BendGridCanvas::hoverLeaveEvent(QHoverEvent*)
 {
     m_hoverPointIndex = std::nullopt;
+}
+
+bool BendGridCanvas::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::Type::ShortcutOverride) {
+        return shortcutOverride(dynamic_cast<QKeyEvent*>(event));
+    }
+
+    return QQuickPaintedItem::eventFilter(watched, event);
+}
+
+bool BendGridCanvas::shortcutOverride(QKeyEvent* event)
+{
+    if (!m_focusedPointIndex.has_value()) {
+        return false;
+    }
+
+    if (!(event->modifiers() & Qt::KeyboardModifier::AltModifier)) {
+        return false;
+    }
+
+    int index = m_focusedPointIndex.value();
+    switch (event->key()) {
+    case Qt::Key_Left:
+        index--;
+        if (!m_points.at(index).canMove()) {
+            return false;
+        }
+        break;
+    case Qt::Key_Right:
+        index++;
+        if (!m_points.at(index).canMove()) {
+            return false;
+        }
+        break;
+    default:
+        return false;
+    }
+
+    m_focusedPointIndex = index;
+    update();
+
+    event->accept();
+    return true;
 }
 
 QRectF BendGridCanvas::frameRect() const
@@ -364,7 +484,7 @@ qreal BendGridCanvas::rowHeight(const QRectF& frameRect) const
     return frameRect.height() / (m_rows - 1);
 }
 
-std::pair<int, int> BendGridCanvas::frameCoord(const QRectF& frameRect, int x, int y) const
+QPointF BendGridCanvas::frameCoord(const QRectF& frameRect, int x, int y) const
 {
     // restrict to clickable area
     if (x > frameRect.right()) {
@@ -378,7 +498,7 @@ std::pair<int, int> BendGridCanvas::frameCoord(const QRectF& frameRect, int x, i
         y = frameRect.top();
     }
 
-    return { x - frameRect.left(), y - frameRect.top() };
+    return QPointF(x, y);
 }
 
 void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
@@ -489,24 +609,8 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
 
 void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
 {
-    const qreal rowHeight = this->rowHeight(frameRect);
     const ThemeInfo& currentTheme = uiConfig()->currentTheme();
     QColor backgroundColor(currentTheme.values[BACKGROUND_PRIMARY_COLOR].toString());
-
-    // this lambda takes as input a pitch value, and determines where what are its x and y coordinates
-    auto getPosition = [this, rowHeight, &frameRect](const CurvePoint& v) -> QPointF {
-        const qreal x = round(qreal(v.time) * (frameRect.width() / CurvePoint::MAX_TIME)) + frameRect.left();
-        qreal y = 0;
-        if (m_showNegativeRows) {                    // get the middle pos and add the top margin and half of the rows
-            y = frameRect.top() + rowHeight * (m_rows - 1) * .5;
-        } else {                    // from the bottom
-            y = frameRect.bottom();
-        }
-        // add the offset
-        y -=  (qreal(v.pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1))
-             * rowHeight;
-        return QPointF(x, y);
-    };
 
     QPointF lastPoint(0, 0);
     QPen pen = painter->pen();
@@ -520,7 +624,7 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
 
     // draw line between points
     for (const CurvePoint& v : m_points) {
-        QPointF currentPoint = constrainToGrid(frameRectWithoutBorders, getPosition(v));
+        QPointF currentPoint = constrainToGrid(frameRectWithoutBorders, pointCoord(frameRect, v));
 
         QPainterPath path;
         path.moveTo(lastPoint);
@@ -562,10 +666,11 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
             continue;
         }
 
-        QPointF pos = getPosition(point);
+        QPointF pos = pointCoord(frameRect, point);
 
         bool isNotActiveButton = (!m_hoverPointIndex.has_value() || m_hoverPointIndex.value() != i)
-                                 && (!m_currentPointIndex.has_value() || m_currentPointIndex.value() != i);
+                                 && (!m_currentPointIndex.has_value() || m_currentPointIndex.value() != i)
+                                 && (!m_focusedPointIndex.has_value() || m_focusedPointIndex.value() != i);
 
         if (isNotActiveButton) { // normal
             painter->setBrush(activeBrush);
@@ -603,18 +708,18 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
     }
 }
 
-std::optional<int> BendGridCanvas::pointIndex(const CurvePoint& pitch, bool movable) const
+std::optional<int> BendGridCanvas::pointIndex(const CurvePoint& point, bool movable) const
 {
     const int numberOfPoints = m_points.size();
 
     for (int i = 0; i < numberOfPoints; ++i) {
-        const CurvePoint& point = m_points.at(i);
-        if (movable != point.canMove()) {
+        const CurvePoint& _point = m_points.at(i);
+        if (movable != _point.canMove()) {
             continue;
         }
 
-        if (std::pow((pitch.time - point.time), 2)
-            + std::pow((pitch.pitch - point.pitch), 2) < std::pow(GRIP_CENTER_RADIUS, 2)) {
+        if (std::pow((point.time - _point.time), 2)
+            + std::pow((point.pitch - _point.pitch), 2) < std::pow(GRIP_CENTER_RADIUS, 2)) {
             return i;
         }
     }
@@ -625,10 +730,10 @@ std::optional<int> BendGridCanvas::pointIndex(const CurvePoint& pitch, bool mova
 CurvePoint BendGridCanvas::point(const QRectF& frameRect, int frameX, int frameY) const
 {
     CurvePoint point;
-    point.time = qreal(frameX) / (frameRect.width() / CurvePoint::MAX_TIME);
+    point.time = qreal(frameX - frameRect.left()) / (frameRect.width() / CurvePoint::MAX_TIME);
 
     const qreal rowHeight = this->rowHeight(frameRect);
-    int row = m_rows - 1 - round(qreal(frameY) / rowHeight);
+    int row = m_rows - 1 - round(qreal(frameY - frameRect.top()) / rowHeight);
     if (m_showNegativeRows) {
         int half = (m_rows - 1) / 2;
         if (row > half) {
@@ -641,4 +746,105 @@ CurvePoint BendGridCanvas::point(const QRectF& frameRect, int frameX, int frameY
     point.pitch = row * 100 / m_primaryRowsInterval;
 
     return point;
+}
+
+QPointF BendGridCanvas::pointCoord(const QRectF& frameRect, const CurvePoint& point) const
+{
+    const qreal rowHeight = this->rowHeight(frameRect);
+
+    const qreal x = round(qreal(point.time) * (frameRect.width() / CurvePoint::MAX_TIME)) + frameRect.left();
+    qreal y = 0;
+
+    if (m_showNegativeRows) {   // get the middle pos and add the top margin and half of the rows
+        y = frameRect.top() + rowHeight * (m_rows - 1) * .5;
+    } else {                    // from the bottom
+        y = frameRect.bottom();
+    }
+
+    // add the offset
+    y -=  (qreal(point.pitch) / (100 * (m_rows / m_primaryRowsInterval)) * (m_rows - 1))
+         * rowHeight;
+
+    return QPointF(x, y);
+}
+
+bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
+{
+    bool moved = false;
+
+    CurvePoint& currentPoint = m_points[pointIndex];
+
+    if (currentPoint == toPoint) {
+        return moved;
+    }
+
+    bool canMoveHorizontally = currentPoint.canMove(CurvePoint::MoveDirection::Horizontal);
+    bool canMoveVertically = currentPoint.canMove(CurvePoint::MoveDirection::Vertical);
+
+    if (!canMoveHorizontally && !canMoveVertically) {
+        return moved;
+    }
+
+    if (canMoveVertically) {
+        bool canMove = true;
+        bool moveToTop = currentPoint.pitch < toPoint.pitch;
+
+        if (pointIndex - 1 >= 0) {
+            const CurvePoint& leftPoint = m_points.at(pointIndex - 1);
+            bool isLeftValid = moveToTop ? leftPoint.pitch >= currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
+            if (isLeftValid) {
+                canMove = leftPoint.generated || (moveToTop ? leftPoint.pitch > toPoint.pitch : leftPoint.pitch < toPoint.pitch);
+            }
+        }
+
+        if (canMove) {
+            if (pointIndex + 1 < m_points.size()) {
+                const CurvePoint& rightPoint = m_points.at(pointIndex + 1);
+                bool isRightValid = moveToTop ? rightPoint.pitch >= currentPoint.pitch : rightPoint.pitch <= currentPoint.pitch;
+                if (isRightValid) {
+                    canMove = rightPoint.generated || (moveToTop ? rightPoint.pitch > toPoint.pitch : rightPoint.pitch < toPoint.pitch);
+                }
+            }
+
+            if (canMove) {
+                currentPoint.pitch = toPoint.pitch;
+
+                bool isDashed = currentPoint.endDashed;
+                bool isNextDashed = (pointIndex + 1 < m_points.size()) && m_points.at(pointIndex + 1).endDashed;
+
+                if (isDashed) {
+                    m_points[pointIndex - 1].pitch = toPoint.pitch;
+                }
+
+                if (isNextDashed) {
+                    m_points[pointIndex + 1].pitch = toPoint.pitch;
+                }
+
+                moved = true;
+            }
+        }
+    }
+
+    if (canMoveHorizontally) {
+        bool canMove = true;
+        bool moveToLeft = currentPoint.time > toPoint.time;
+        if (moveToLeft) {
+            if (pointIndex - 1 >= 0) {
+                const CurvePoint& leftPoint = m_points.at(pointIndex - 1);
+                canMove = leftPoint.generated || leftPoint.time < toPoint.time;
+            }
+        } else {
+            if (pointIndex + 1 < m_points.size()) {
+                const CurvePoint& rightPoint = m_points.at(pointIndex + 1);
+                canMove = rightPoint.generated || rightPoint.time > toPoint.time;
+            }
+        }
+
+        if (canMove) {
+            currentPoint.time = toPoint.time;
+            moved = true;
+        }
+    }
+
+    return moved;
 }
