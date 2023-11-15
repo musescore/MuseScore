@@ -27,15 +27,18 @@
 
 #include "modularity/ioc.h"
 #include "iprojectconfiguration.h"
+#include "iprojectfilescontroller.h"
 #include "global/iinteractive.h"
 
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
+#include "cloud/cloudqmltypes.h"
 
 namespace mu::project {
 class OpenSaveProjectScenario : public IOpenSaveProjectScenario
 {
     INJECT(IProjectConfiguration, configuration)
+    INJECT(IProjectFilesController, projectFilesController)
     INJECT(framework::IInteractive, interactive)
     INJECT(cloud::IMuseScoreComService, museScoreComService)
     INJECT(cloud::IAudioComService, audioComService)
@@ -83,19 +86,6 @@ public:
         Cloud = int(project::SaveLocationType::Cloud)
     };
     Q_ENUM(SaveLocationType);
-};
-
-class QMLSaveToCloudResponse
-{
-    Q_GADGET
-
-public:
-    enum SaveToCloudResponse {
-        Cancel,
-        Ok,
-        SaveLocallyInstead
-    };
-    Q_ENUM(SaveToCloudResponse);
 };
 }
 

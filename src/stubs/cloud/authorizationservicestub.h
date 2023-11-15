@@ -32,7 +32,7 @@ public:
     void signIn() override;
     void signOut() override;
 
-    Ret ensureAuthorization(const std::string& text = {}) override;
+    RetVal<Val> ensureAuthorization(bool publishingScore, const std::string& text = {}) override;
 
     ValCh<bool> userAuthorized() const override;
     ValCh<AccountInfo> accountInfo() const override;

@@ -29,6 +29,7 @@ StyledDialogView {
     id: root
 
     property alias text: content.text
+    property bool publishingScore: true
     property string cloudCode: ""
 
     contentWidth: content.implicitWidth
@@ -68,8 +69,12 @@ StyledDialogView {
 
         customButtons: [
             { "buttonId": ButtonBoxModel.Cancel, "text": qsTrc("global", "Cancel"), "role": ButtonBoxModel.RejectRole, "isAccent": false, "isLeftSide": false },
-            { "buttonId": ButtonBoxModel.CustomButton + 1, "text": qsTrc("cloud", "Create account"), "role": ButtonBoxModel.ApplyRole, "isAccent": false, "isLeftSide": false },
-            { "buttonId": ButtonBoxModel.CustomButton + 2, "text": qsTrc("cloud", "Login"), "role": ButtonBoxModel.ApplyRole, "isAccent": false, "isLeftSide": false }
+
+            { "buttonId": ButtonBoxModel.CustomButton + 1,
+              "text": publishingScore ? qsTrc("project/save", "Save to computer") : qsTrc("cloud", "Create account"),
+              "role": ButtonBoxModel.ApplyRole, "isAccent": false, "isLeftSide": false },
+
+            { "buttonId": ButtonBoxModel.CustomButton + 2, "text": qsTrc("cloud", "Log in"), "role": ButtonBoxModel.ApplyRole, "isAccent": false, "isLeftSide": false }
         ]
 
         onClicked: function(buttonId, showAgain) {
@@ -78,6 +83,14 @@ StyledDialogView {
                 root.hide()
                 return
             case ButtonBoxModel.CustomButton + 1:
+                if (publishingScore) {
+                    root.ret = {
+                        errcode: 0,
+                        value: SaveToCloudResponse.SaveLocallyInstead
+                    }
+                    root.hide()
+                    return
+                }
                 cloudsModel.createAccount(root.cloudCode)
                 return
             case ButtonBoxModel.CustomButton + 2:

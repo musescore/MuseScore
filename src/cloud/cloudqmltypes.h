@@ -37,6 +37,19 @@ public:
     };
     Q_ENUM(CloudVisibility);
 };
+
+class QMLSaveToCloudResponse
+{
+    Q_GADGET
+
+public:
+    enum SaveToCloudResponse {
+        Cancel,
+        Ok,
+        SaveLocallyInstead
+    };
+    Q_ENUM(SaveToCloudResponse);
+};
 }
 
 #endif // MU_CLOUD_CLOUDQMLTYPES_H

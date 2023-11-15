@@ -34,6 +34,7 @@
 #include "multiinstances/imultiinstancesprovider.h"
 #include "cloud/musescorecom/imusescorecomservice.h"
 #include "cloud/audiocom/iaudiocomservice.h"
+#include "cloud/cloudqmltypes.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
 #include "inotationreadersregister.h"
@@ -82,6 +83,7 @@ public:
     bool isProjectOpened(const io::path_t& scorePath) const override;
     bool isAnyProjectOpened() const override;
     bool saveProject(const io::path_t& path = io::path_t()) override;
+    bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save) override;
 
     const ProjectBeingDownloaded& projectBeingDownloaded() const override;
     async::Notification projectBeingDownloadedChanged() const override;
@@ -132,7 +134,6 @@ private:
     void shareAudio() { shareAudio(AudioFile()); }
 
     bool saveProjectAt(const SaveLocation& saveLocation, SaveMode saveMode = SaveMode::Save, bool force = false);
-    bool saveProjectLocally(const io::path_t& path = io::path_t(), SaveMode saveMode = SaveMode::Save);
     bool saveProjectToCloud(CloudProjectInfo info, SaveMode saveMode = SaveMode::Save);
 
     void alsoShareAudioCom(const AudioFile& audio);
