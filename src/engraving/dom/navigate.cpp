@@ -33,6 +33,7 @@
 #include "segment.h"
 #include "spanner.h"
 #include "staff.h"
+#include "guitarbend.h"
 
 using namespace mu;
 
@@ -106,6 +107,30 @@ static std::set<ElementPair, decltype(& isChild1beforeChild2)> toChildPairsSet(c
     }
 
     return children;
+}
+
+static EngravingItem* nextElementForSpannerSegment(const SpannerSegment* spannerSegment)
+{
+    Spanner* spanner = spannerSegment->spanner();
+    EngravingItem* elSt = spanner->startElement();
+    IF_ASSERT_FAILED(elSt->isNote()) {
+        return nullptr;
+    }
+
+    Note* note = toNote(elSt);
+    return note->nextElement();
+}
+
+static EngravingItem* prevElementForSpannerSegment(const SpannerSegment* spannerSegment)
+{
+    Spanner* spanner = spannerSegment->spanner();
+    EngravingItem* elSt = spanner->startElement();
+    IF_ASSERT_FAILED(elSt->isNote()) {
+        return nullptr;
+    }
+
+    Note* note = toNote(elSt);
+    return note->prevElement();
 }
 
 //---------------------------------------------------------
@@ -746,13 +771,24 @@ EngravingItem* Score::nextElement()
             break;
         }
         case ElementType::GUITAR_BEND_SEGMENT:
+        case ElementType::GUITAR_BEND_HOLD_SEGMENT: {
+            GuitarBend* bend
+                = e->isGuitarBendSegment() ? toGuitarBendSegment(e)->guitarBend() : toGuitarBendHoldSegment(e)->guitarBendHold()->
+                  guitarBend();
+            if (bend->type() != GuitarBendType::SLIGHT_BEND) {
+                return bend->endNote();
+            } else {
+                EngravingItem* next = nextElementForSpannerSegment(toSpannerSegment(e));
+                if (next) {
+                    return next;
+                }
+            }
+
+            break;
+        }
         case ElementType::GLISSANDO_SEGMENT:
         case ElementType::TIE_SEGMENT: {
-            SpannerSegment* s = toSpannerSegment(e);
-            Spanner* sp = s->spanner();
-            EngravingItem* elSt = sp->startElement();
-            Note* n = toNote(elSt);
-            EngravingItem* next =  n->nextElement();
+            EngravingItem* next = nextElementForSpannerSegment(toSpannerSegment(e));
             if (next) {
                 return next;
             } else {
@@ -910,19 +946,19 @@ EngravingItem* Score::prevElement()
             }
         }
         case ElementType::GUITAR_BEND_SEGMENT:
+        case ElementType::GUITAR_BEND_HOLD_SEGMENT: {
+            GuitarBend* bend = e->isGuitarBendSegment() ? toGuitarBendSegment(e)->guitarBend()
+                               : toGuitarBendHoldSegment(e)->guitarBendHold()->guitarBend();
+            return bend->startNote();
+        }
         case ElementType::GLISSANDO_SEGMENT:
         case ElementType::TIE_SEGMENT: {
-            SpannerSegment* s = toSpannerSegment(e);
-            Spanner* sp = s->spanner();
-            EngravingItem* elSt = sp->startElement();
-            assert(elSt->type() == ElementType::NOTE);
-            Note* n = toNote(elSt);
-            EngravingItem* prev =  n->prevElement();
+            EngravingItem* prev = prevElementForSpannerSegment(toSpannerSegment(e));
             if (prev) {
                 return prev;
-            } else {
-                break;
             }
+
+            break;
         }
         case ElementType::VBOX:
         case ElementType::HBOX:

@@ -67,6 +67,8 @@
 #include "undo.h"
 #include "utils.h"
 
+#include "navigate.h"
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #include "accessibility/accessibleroot.h"
@@ -3258,7 +3260,24 @@ EngravingItem* Note::nextElement()
         }
         return nullptr;
 
-    case ElementType::NOTE:
+    case ElementType::NOTE: {
+        if (isPreBendStart() || isGraceBendStart()) {
+            return bendFor()->frontSegment();
+        }
+
+        GraceNotesGroup& graceNotesAfter = chord()->graceNotesAfter();
+        if (!graceNotesAfter.empty()) {
+            Chord* graceNotesAfterFirstChord = graceNotesAfter.front();
+            if (graceNotesAfterFirstChord) {
+                return graceNotesAfterFirstChord->notes().front();
+            }
+        } else if (isGrace()) {
+            ChordRest* next = nextChordRest(chord());
+            if (next) {
+                return toChord(next)->notes().front();
+            }
+        }
+
         if (!m_el.empty()) {
             return m_el[0];
         }
@@ -3273,7 +3292,7 @@ EngravingItem* Note::nextElement()
             }
         }
         return nullptr;
-
+    }
     default:
         return nullptr;
     }

@@ -57,6 +57,8 @@
 #include "undo.h"
 #include "utils.h"
 
+#include "navigate.h"
+
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
 #endif
@@ -1558,6 +1560,14 @@ EngravingItem* Segment::firstElementOfSegment(Segment* s, staff_idx_t activeStaf
     for (auto i: s->elist()) {
         if (i && i->staffIdx() == activeStaff) {
             if (i->type() == ElementType::CHORD) {
+                Chord* chord = toChord(i);
+                GraceNotesGroup& graceNotesBefore = chord->graceNotesBefore();
+                if (!graceNotesBefore.empty()) {
+                    if (Chord* graceNotesBeforeFirstChord = graceNotesBefore.front()) {
+                        return graceNotesBeforeFirstChord->notes().front();
+                    }
+                }
+
                 return toChord(i)->notes().back();
             } else {
                 return i;
@@ -1652,7 +1662,16 @@ EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff
             return nullptr;
         }
         if (el->isChord()) {
-            std::vector<Note*> notes = toChord(el)->notes();
+            Chord* chord = toChord(el);
+            GraceNotesGroup& graceNotesBefore = chord->graceNotesBefore();
+            if (!graceNotesBefore.empty()) {
+                ChordRest* next = prevChordRest(chord);
+                if (next) {
+                    return toChord(next)->notes().back();
+                }
+            }
+
+            std::vector<Note*> notes = chord->notes();
             auto i = std::find(notes.begin(), notes.end(), e);
             if (i == notes.end()) {
                 continue;
@@ -1693,11 +1712,16 @@ EngravingItem* Segment::lastElementOfSegment(Segment* s, staff_idx_t activeStaff
         EngravingItem* item = *it;
         if (item && item->staffIdx() == activeStaff) {
             if (item->isChord()) {
-                const std::vector<Articulation*>& articulations = toChord(item)->articulations();
+                Chord* chord = toChord(item);
+                if (!chord->graceNotesAfter().empty()) {
+                    return chord->graceNotesAfter().back()->notes().back();
+                }
+
+                const std::vector<Articulation*>& articulations = chord->articulations();
                 if (!articulations.empty()) {
                     return articulations.back();
                 }
-                return toChord(item)->upNote();
+                return chord->upNote();
             }
             return item;
         }

@@ -35,6 +35,7 @@
 #include "types/bendtypes.h"
 
 #include "uicomponents/view/quickpaintedview.h"
+#include "ui/view/qmlaccessible.h"
 
 namespace mu::inspector {
 class BendGridCanvas : public uicomponents::QuickPaintedView, public async::Asyncable
@@ -51,8 +52,12 @@ class BendGridCanvas : public uicomponents::QuickPaintedView, public async::Asyn
     Q_PROPERTY(int columnSpacing READ columnSpacing WRITE setColumnSpacing NOTIFY columnSpacingChanged)
     Q_PROPERTY(bool shouldShowNegativeRows READ shouldShowNegativeRows WRITE setShouldShowNegativeRows NOTIFY shouldShowNegativeRowsChanged)
 
+    Q_PROPERTY(mu::ui::AccessibleItem
+               * accessibleParent READ accessibleParent WRITE setAccessibleParent NOTIFY accessibleParentChanged)
+
 public:
     explicit BendGridCanvas(QQuickItem* parent = nullptr);
+    ~BendGridCanvas() override;
 
     QVariant pointList() const;
 
@@ -62,6 +67,17 @@ public:
     int columnSpacing() const;
 
     bool shouldShowNegativeRows() const;
+
+    Q_INVOKABLE bool focusOnFirstPoint();
+    Q_INVOKABLE bool resetFocus();
+
+    Q_INVOKABLE bool moveFocusedPointToLeft();
+    Q_INVOKABLE bool moveFocusedPointToRight();
+    Q_INVOKABLE bool moveFocusedPointToUp();
+    Q_INVOKABLE bool moveFocusedPointToDown();
+
+    ui::AccessibleItem* accessibleParent() const;
+    void setAccessibleParent(ui::AccessibleItem* parent);
 
 public slots:
     void setPointList(QVariant pointList);
@@ -85,6 +101,8 @@ signals:
 
     void shouldShowNegativeRowsChanged(bool shouldShowNegativeRows);
 
+    void accessibleParentChanged();
+
 private:
     void paint(QPainter* painter) override;
 
@@ -96,19 +114,27 @@ private:
     void hoverMoveEvent(QHoverEvent* event) override;
     void hoverLeaveEvent(QHoverEvent* event) override;
 
+    bool eventFilter(QObject* watched, QEvent* event) override;
+    bool shortcutOverride(QKeyEvent* event);
+
     QRectF frameRect() const;
     qreal columnWidth(const QRectF& frameRect) const;
     qreal rowHeight(const QRectF& frameRect) const;
 
-    std::pair<int, int> frameCoord(const QRectF& frameRect, int x, int y) const;
+    QPointF frameCoord(const QRectF& frameRect, int x, int y) const;
 
     void drawBackground(QPainter* painter, const QRectF& frameRect);
     void drawCurve(QPainter* painter, const QRectF& frameRect);
 
-    std::optional<int> pointIndex(const CurvePoint& pitch, bool movable = true) const;
+    std::optional<int> pointIndex(const CurvePoint& point, bool movable = true) const;
     CurvePoint point(const QRectF& frameRect, int frameX, int frameY) const;
+    QPointF pointCoord(const QRectF& frameRect, const CurvePoint& point) const;
+
+    bool movePoint(int pointIndex, const CurvePoint& toPoint);
 
     CurvePoints m_points;
+    QList<ui::AccessibleItem*> m_pointsAccessibleItems;
+    ui::AccessibleItem* m_accessibleParent = nullptr;
 
     /// The number of rows and columns.
     /// This is in fact the number of lines that are to be drawn.

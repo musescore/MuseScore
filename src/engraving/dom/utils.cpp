@@ -1347,4 +1347,28 @@ bool isFirstSystemKeySig(const KeySig* ks)
     }
     return ks->tick() == sys->firstMeasure()->tick();
 }
+
+String bendAmountToString(int fulls, int quarts)
+{
+    String string = String::number(fulls);
+    if (fulls == 0 && quarts != 0) {
+        string = u"";
+    }
+
+    switch (quarts) {
+    case 1:
+        string += u"\u00BC";
+        break;
+    case 2:
+        string += u"\u00BD";
+        break;
+    case 3:
+        string += u"\u00BE";
+        break;
+    default:
+        break;
+    }
+
+    return string;
+}
 }

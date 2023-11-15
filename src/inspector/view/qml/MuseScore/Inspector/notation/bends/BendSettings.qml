@@ -67,7 +67,7 @@ Column {
 
         navigationName: "HoldLine"
         navigationPanel: root.navigationPanel
-        navigationRowStart: placementSection.navigationRowEnd + 1
+        navigationRowStart: placmentSection.navigationRowEnd + 1
 
         model: [
             { text: qsTrc("inspector", "Auto"), value: BendTypes.SHOW_HOLD_AUTO},
@@ -77,33 +77,107 @@ Column {
     }
 
     InspectorPropertyView {
-        id: bendCurve
+        id: bend
         titleText: qsTrc("inspector", "Customize bend")
 
         enabled: root.model ? root.model.isBendCurveEnabled : false
         visible: true
 
         navigationPanel: root.navigationPanel
-        navigationRowStart: showHoldSection.navigation.row + 1
+        navigationRowStart: showHoldSection.navigationRowEnd + 1
 
         spacing: 0
 
-        BendGridCanvas {
-            height: 200
+        Item {
             width: parent.width
+            height: bendCanvas.height
 
-            enabled: bendCurve.enabled
+            NavigationControl {
+                id: navCtrl
+                name: "BendCanvas"
+                enabled: bendCanvas.enabled && bendCanvas.visible
 
-            pointList: root.model ? root.model.bendCurve : null
+                panel: root.navigationPanel
+                row: bend.navigationRowEnd + 1
 
-            rowCount: 13
-            columnCount: 13
-            rowSpacing: 4
-            columnSpacing: 3
+                accessible.role: MUAccessible.Information
+                accessible.name: bend.titleText
 
-            onCanvasChanged: {
-                if (root.model) {
-                    root.model.bendCurve = pointList
+                onActiveChanged: {
+                    if (navCtrl.active) {
+                        bendCanvas.forceActiveFocus()
+                    } else {
+                        bendCanvas.resetFocus()
+                    }
+                }
+
+                onNavigationEvent: function(event) {
+                    if (!root.model) {
+                        return
+                    }
+
+                    var accepted = false
+                    switch(event.type) {
+                    case NavigationEvent.Trigger:
+                        accepted = bendCanvas.focusOnFirstPoint()
+
+                        if (accepted) {
+                            navCtrl.accessible.focused = false
+                        }
+
+                        break
+                    case NavigationEvent.Escape:
+                        accepted = bendCanvas.resetFocus()
+
+                        if (accepted) {
+                            navCtrl.accessible.focused = true
+                        }
+
+                        break
+                    case NavigationEvent.Left:
+                        accepted = bendCanvas.moveFocusedPointToLeft()
+                        break
+                    case NavigationEvent.Right:
+                        accepted = bendCanvas.moveFocusedPointToRight()
+                        break
+                    case NavigationEvent.Up:
+                        accepted = bendCanvas.moveFocusedPointToUp()
+                        break
+                    case NavigationEvent.Down:
+                        accepted = bendCanvas.moveFocusedPointToDown()
+                        break
+                    }
+
+                    event.accepted = accepted
+                }
+            }
+
+            NavigationFocusBorder {
+                navigationCtrl: navCtrl
+            }
+
+            BendGridCanvas {
+                id: bendCanvas
+
+                width: parent.width
+                height: 200
+
+                enabled: bend.enabled
+                focus: true
+
+                pointList: root.model ? root.model.bendCurve : null
+
+                rowCount: 13
+                columnCount: 13
+                rowSpacing: 4
+                columnSpacing: 3
+
+                accessibleParent: navCtrl.accessible
+
+                onCanvasChanged: {
+                    if (root.model) {
+                        root.model.bendCurve = pointList
+                    }
                 }
             }
         }
