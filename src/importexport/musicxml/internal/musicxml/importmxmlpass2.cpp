@@ -3949,8 +3949,9 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
     int i = 0;
     int line = -1;
 
-    QString strClefno = _e.attributes().value("number").toString();
+    const QString strClefno = _e.attributes().value("number").toString();
     const bool afterBarline = _e.attributes().value("after-barline") == "yes";
+    const bool printObject = _e.attributes().value("print-object") != "no";
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "sign") {
@@ -4065,6 +4066,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
 
     Clef* clefs = Factory::createClef(s);
     clefs->setClefType(clef);
+    clefs->setVisible(printObject);
     track_idx_t track = _pass1.trackForPart(partId) + clefno * VOICES;
     clefs->setTrack(track);
     s->add(clefs);
