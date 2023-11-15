@@ -3316,7 +3316,7 @@ void MusicXMLParserDirection::handleNmiCmi(Measure* measure, const int track, co
     ha->setTrack(track);
     MusicXMLDelayedDirectionElement* delayedDirection = new MusicXMLDelayedDirectionElement(totalY(), ha, track, "above", measure, tick);
     delayedDirections.push_back(delayedDirection);
-    _wordsText.replace("NmiCmi", "");
+    _wordsText.replace("NmiCmi", "N.C.");
 }
 
 //---------------------------------------------------------
