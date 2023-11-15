@@ -100,9 +100,14 @@ Column {
                 panel: root.navigationPanel
                 row: bend.navigationRowEnd + 1
 
+                accessible.role: MUAccessible.Information
+                accessible.name: bend.titleText
+
                 onActiveChanged: {
                     if (navCtrl.active) {
                         bendCanvas.forceActiveFocus()
+                    } else {
+                        bendCanvas.resetFocus()
                     }
                 }
 
@@ -115,9 +120,19 @@ Column {
                     switch(event.type) {
                     case NavigationEvent.Trigger:
                         accepted = bendCanvas.focusOnFirstPoint()
+
+                        if (accepted) {
+                            navCtrl.accessible.focused = false
+                        }
+
                         break
                     case NavigationEvent.Escape:
                         accepted = bendCanvas.resetFocus()
+
+                        if (accepted) {
+                            navCtrl.accessible.focused = true
+                        }
+
                         break
                     case NavigationEvent.Left:
                         accepted = bendCanvas.moveFocusedPointToLeft()
@@ -156,6 +171,8 @@ Column {
                 columnCount: 13
                 rowSpacing: 4
                 columnSpacing: 3
+
+                accessibleParent: navCtrl.accessible
 
                 onCanvasChanged: {
                     if (root.model) {

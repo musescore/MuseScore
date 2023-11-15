@@ -335,23 +335,10 @@ void GuitarBend::computeBendText()
     int fulls = quarters / 4;
     int quarts = quarters % 4;
 
-    String string;
-    if (fulls != 0) {
-        string += String::number(fulls);
-    }
+    String string = bendAmountToString(fulls, quarts);
 
-    switch (quarts) {
-    case 1:
-        string += u"\u00BC";
-        break;
-    case 2:
-        string += u"\u00BD";
-        break;
-    case 3:
-        string += u"\u00BE";
-        break;
-    default:
-        break;
+    if (string == u"0") {
+        string = u"";
     }
 
     if (string == u"1" && style().styleB(Sid::guitarBendUseFull)) {

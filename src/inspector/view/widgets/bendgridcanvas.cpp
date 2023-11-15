@@ -26,6 +26,9 @@
 
 #include <QPainterPath>
 
+#include "dom/utils.h"
+
+#include "translation.h"
 #include "log.h"
 
 using namespace mu::inspector;
@@ -59,6 +62,16 @@ static QPointF constrainToGrid(const QRectF& frameRectWithoutBorders, const QPoi
     return result;
 }
 
+QString pointAccessibleName(const CurvePoint& point)
+{
+    int fulls = point.pitch / 100;
+    int quarts = (point.pitch % 100) / 25;
+
+    QString string = mu::engraving::bendAmountToString(fulls, quarts).toQString();
+
+    return mu::qtrc("inspector", "Time: %1, value: %2").arg(QString::number(point.time), string);
+}
+
 BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     : uicomponents::QuickPaintedView(parent)
 {
@@ -80,6 +93,11 @@ BendGridCanvas::BendGridCanvas(QQuickItem* parent)
     });
 
     qApp->installEventFilter(this);
+}
+
+BendGridCanvas::~BendGridCanvas()
+{
+    DeleteAll(m_pointsAccessibleItems);
 }
 
 QVariant BendGridCanvas::pointList() const
@@ -131,6 +149,8 @@ bool BendGridCanvas::focusOnFirstPoint()
     }
 
     m_focusedPointIndex = firstPointIndex;
+    m_pointsAccessibleItems[firstPointIndex]->setState(AccessibleItem::State::Focused, true);
+
     update();
 
     return true;
@@ -142,7 +162,9 @@ bool BendGridCanvas::resetFocus()
         return false;
     }
 
+    m_pointsAccessibleItems[m_focusedPointIndex.value()]->setState(AccessibleItem::State::Focused, false);
     m_focusedPointIndex = std::nullopt;
+
     update();
 
     return true;
@@ -320,6 +342,17 @@ void BendGridCanvas::setPointList(QVariant points)
 
     m_points = newPointList;
 
+    m_pointsAccessibleItems.clear();
+    for (const CurvePoint& point : m_points) {
+        AccessibleItem* item = new AccessibleItem(this);
+        item->setName(pointAccessibleName(point));
+        item->setAccessibleParent(m_accessibleParent);
+        item->setRole(MUAccessible::Role::Information);
+        item->componentComplete();
+
+        m_pointsAccessibleItems << item;
+    }
+
     update();
     emit pointListChanged(points);
 }
@@ -449,7 +482,10 @@ bool BendGridCanvas::shortcutOverride(QKeyEvent* event)
         return false;
     }
 
+    m_pointsAccessibleItems[m_focusedPointIndex.value()]->setState(AccessibleItem::State::Focused, false);
     m_focusedPointIndex = index;
+    m_pointsAccessibleItems[index]->setState(AccessibleItem::State::Focused, true);
+
     update();
 
     event->accept();
@@ -587,7 +623,7 @@ void BendGridCanvas::drawBackground(QPainter* painter, const QRectF& frameRect)
 
         QString text = QString("%1%2")
                        .arg(intervalStr)
-                       .arg(isHalf ? "½" : "");
+                       .arg(isHalf ? "\u00BD" : "");
 
         QRect textRect(0, ypos - stringHeight / 2, frameRect.left(), stringHeight);
 
@@ -846,5 +882,30 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
         }
     }
 
+    if (moved) {
+        m_pointsAccessibleItems[pointIndex]->setName(pointAccessibleName(currentPoint));
+        m_pointsAccessibleItems[pointIndex]->accessiblePropertyChanged().send(accessibility::IAccessible::Property::Name, Val());
+    }
+
     return moved;
+}
+
+mu::ui::AccessibleItem* BendGridCanvas::accessibleParent() const
+{
+    return m_accessibleParent;
+}
+
+void BendGridCanvas::setAccessibleParent(ui::AccessibleItem* parent)
+{
+    if (m_accessibleParent == parent) {
+        return;
+    }
+
+    m_accessibleParent = parent;
+
+    for (AccessibleItem* item : m_pointsAccessibleItems) {
+        item->setAccessibleParent(m_accessibleParent);
+    }
+
+    emit accessibleParentChanged();
 }

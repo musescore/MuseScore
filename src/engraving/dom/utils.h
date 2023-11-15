@@ -95,5 +95,7 @@ extern Interval ornamentIntervalToGeneralInterval(OrnamentInterval interval);
 extern String formatUniqueExcerptName(const String& baseName, const StringList& allExcerptLowerNames);
 
 extern bool isFirstSystemKeySig(const KeySig* ks);
+
+extern String bendAmountToString(int fulls, int quarts);
 } // namespace mu::engraving
 #endif
