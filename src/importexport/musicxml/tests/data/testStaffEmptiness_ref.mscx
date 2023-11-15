@@ -42,7 +42,6 @@
     <metaTag name="lyricist"></metaTag>
     <metaTag name="movementNumber"></metaTag>
     <metaTag name="movementTitle"></metaTag>
-    <metaTag name="poet"></metaTag>
     <metaTag name="source"></metaTag>
     <metaTag name="translator"></metaTag>
     <metaTag name="workNumber"></metaTag>
@@ -122,6 +121,7 @@
     <Staff id="1">
       <VBox>
         <height>12.5</height>
+        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <offset x="0" y="-0.07525"/>
