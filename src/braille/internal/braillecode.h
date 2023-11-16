@@ -773,13 +773,5 @@ std::string getBraillePattern(std::string dots);
 std::string translate2Braille(std::string codes);
 std::string intToBrailleUpperNumbers(std::string txt, bool indicator);
 std::string intToBrailleLowerNumbers(std::string txt, bool indicator);
-
-braille_code* findBrailleCode(std::string code, bool partial_match = false);
-braille_code* findNote(const std::string braille);
-braille_code* findRest(const std::string braille);
-braille_code* findOctave(const std::string braille);
-braille_code* findAccidental(const std::string braille);
-braille_code* findFinger(const std::string braille);
-braille_code* findInterval(const std::string braille);
 }
 #endif // MU_BRAILLE_BRAILLEDOTS_H
