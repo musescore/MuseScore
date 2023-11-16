@@ -51,6 +51,7 @@
         <StaffType group="pitched">
           <name>stdNormal</name>
           </StaffType>
+        <hideWhenEmpty>3</hideWhenEmpty>
         </Staff>
       <trackName>Piano</trackName>
       <Instrument id="piano">
@@ -144,6 +145,9 @@
           <Rest>
             <durationType>eighth</durationType>
             </Rest>
+          <StaffText>
+            <text>N.C.</text>
+            </StaffText>
           <Harmony>
             <name>N.C.</name>
             </Harmony>
@@ -244,6 +248,9 @@
         </Measure>
       <Measure>
         <voice>
+          <StaffText>
+            <text>N.C.</text>
+            </StaffText>
           <Harmony>
             <name>N.C.</name>
             </Harmony>
