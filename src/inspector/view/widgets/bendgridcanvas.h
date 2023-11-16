@@ -132,11 +132,17 @@ private:
     CurvePoint point(const QRectF& frameRect, int frameX, int frameY) const;
     QPointF pointCoord(const QRectF& frameRect, const CurvePoint& point) const;
 
+    QString pointAccessibleName(const CurvePoint& point);
+    void updatePointAccessibleName(int index);
+
     bool movePoint(int pointIndex, const CurvePoint& toPoint);
+
+    void setFocusedPointIndex(int index);
 
     CurvePoints m_points;
     QList<ui::AccessibleItem*> m_pointsAccessibleItems;
     ui::AccessibleItem* m_accessibleParent = nullptr;
+    bool m_needVoicePointName = false;
 
     /// The number of rows and columns.
     /// This is in fact the number of lines that are to be drawn.
