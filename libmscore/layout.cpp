@@ -4659,8 +4659,11 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
       layoutLyrics(system);
 
-      // here are lyrics dashes and melisma
-      for (Spanner* sp : _unmanagedSpanner) {
+      // Layout lyrics dashes and melisma
+      // NOTE: loop on a *copy* of unmanagedSpanners because in some cases
+      // the underlying operation may invalidate some of the iterators.
+      std::set<Spanner*> unmanagedSpanners = _unmanagedSpanner;
+      for (Spanner* sp : unmanagedSpanners) {
             if (sp->tick() >= etick || sp->tick2() <= stick)
                   continue;
             sp->layoutSystem(system);
