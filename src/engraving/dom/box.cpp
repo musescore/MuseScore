@@ -463,7 +463,7 @@ void Box::manageExclusionFromParts(bool exclude)
         }
     } else {
         for (Score* score : masterScore()->scoreList()) {
-            if (score == this->score() || (!this->score()->isMaster() && !score->isMaster())) {
+            if (score == this->score() || (titleFrame && !this->score()->isMaster() && !score->isMaster())) {
                 continue;
             }
 
