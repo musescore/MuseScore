@@ -126,6 +126,8 @@ private:
     void drawBackground(QPainter* painter, const QRectF& frameRect);
     void drawCurve(QPainter* painter, const QRectF& frameRect);
 
+    bool isPointIndexValid(int index) const;
+
     std::optional<int> pointIndex(const CurvePoint& point, bool movable = true) const;
     CurvePoint point(const QRectF& frameRect, int frameX, int frameY) const;
     QPointF pointCoord(const QRectF& frameRect, const CurvePoint& point) const;

@@ -468,12 +468,22 @@ bool BendGridCanvas::shortcutOverride(QKeyEvent* event)
     switch (event->key()) {
     case Qt::Key_Left:
         index--;
+
+        if (!isPointIndexValid(index)) {
+            return false;
+        }
+
         if (!m_points.at(index).canMove()) {
             return false;
         }
         break;
     case Qt::Key_Right:
         index++;
+
+        if (!isPointIndexValid(index)) {
+            return false;
+        }
+
         if (!m_points.at(index).canMove()) {
             return false;
         }
