@@ -93,14 +93,10 @@ Note* GuitarBend::endNote() const
     return toNote(endEl);
 }
 
-void GuitarBend::setEndNotePitch(int pitch)
+void GuitarBend::setEndNotePitch(int pitch, int quarterOff)
 {
     Note* note = endNote();
     IF_ASSERT_FAILED(note) {
-        return;
-    }
-
-    if (note->pitch() == pitch) {
         return;
     }
 
@@ -115,6 +111,46 @@ void GuitarBend::setEndNotePitch(int pitch)
     int targetTpc2 = transposeTpc(targetTpc1, interval, true);
 
     score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
+
+    AccidentalType accidentalType = Accidental::value2subtype(tpc2alter(targetTpc1));
+    if (quarterOff == 1) {
+        switch (accidentalType) {
+        case AccidentalType::NONE:
+        case AccidentalType::NATURAL:
+            accidentalType = AccidentalType::SHARP_ARROW_DOWN;
+            break;
+        case AccidentalType::FLAT:
+            accidentalType = AccidentalType::FLAT_ARROW_UP;
+            break;
+        case AccidentalType::SHARP:
+            accidentalType = AccidentalType::SHARP_ARROW_UP;
+            break;
+        default:
+            break;
+        }
+    } else if (quarterOff == -1) {
+        switch (accidentalType) {
+        case AccidentalType::NONE:
+        case AccidentalType::NATURAL:
+            accidentalType = AccidentalType::FLAT_ARROW_UP;
+            break;
+        case AccidentalType::FLAT:
+            accidentalType = AccidentalType::FLAT_ARROW_DOWN;
+            break;
+        case AccidentalType::SHARP:
+            accidentalType = AccidentalType::SHARP_ARROW_DOWN;
+            break;
+        default:
+            break;
+        }
+    }
+
+    if (accidentalType != note->accidentalType()) {
+        for (EngravingObject* linked : note->linkList()) {
+            toNote(linked)->updateLine();
+            score()->changeAccidental(toNote(linked), accidentalType);
+        }
+    }
 
     computeBendAmount();
 
@@ -313,6 +349,8 @@ void GuitarBend::computeBendAmount()
     setBendAmountInQuarterTones(pitchDiffInQuarterTones);
 
     computeBendText();
+
+    computeIsInvalidOrNeedsWarning();
 }
 
 int GuitarBend::totBendAmountIncludingPrecedingBends() const
@@ -346,6 +384,15 @@ void GuitarBend::computeBendText()
     }
 
     mutldata()->setBendDigit(string);
+}
+
+void GuitarBend::computeIsInvalidOrNeedsWarning()
+{
+    int totBendAmount = totBendAmountIncludingPrecedingBends();
+    static constexpr int UNPLAYABLE_THRESHOLD = 14;
+    static constexpr int WARNING_THRESHOLD = 8;
+    m_isInvalid = totBendAmount < 0 || totBendAmount > UNPLAYABLE_THRESHOLD || bendAmountInQuarterTones() == 0;
+    m_isBorderlineUnplayable =  totBendAmount > WARNING_THRESHOLD && totBendAmount <= UNPLAYABLE_THRESHOLD;
 }
 
 GuitarBend* GuitarBend::findPrecedingBend() const
@@ -565,6 +612,24 @@ bool GuitarBendSegment::isUserModified() const
 {
     bool modified = !vertexPointOff().isNull() || (m_text && m_text->isUserModified());
     return modified || LineSegment::isUserModified();
+}
+
+mu::draw::Color GuitarBend::uiColor() const
+{
+    if (score()->printing() || !MScore::warnGuitarBends) {
+        return curColor();
+    }
+
+    auto engravingConfig = engravingConfiguration();
+    if (m_isInvalid) {
+        return selected() ? engravingConfig->criticalSelectedColor() : engravingConfig->criticalColor();
+    }
+
+    if (m_isBorderlineUnplayable) {
+        return selected() ? engravingConfig->warningSelectedColor() : engravingConfig->warningColor();
+    }
+
+    return curColor();
 }
 
 /****************************************

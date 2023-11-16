@@ -57,13 +57,17 @@ struct CurvePoint
     int pitch = 0;
 
     QList<MoveDirection> moveDirection;
+    bool limitMoveVerticallyByNearestPoints = true;
+
     bool endDashed = false;
 
     bool generated = false;
 
     CurvePoint() = default;
-    CurvePoint(int time, int pitch, const QList<MoveDirection>& moveDirection = {}, bool endDashed = false, bool generated = false)
-        : time(time), pitch(pitch), moveDirection(moveDirection), endDashed(endDashed), generated(generated) {}
+    CurvePoint(int time, int pitch, const QList<MoveDirection>& moveDirection = {}, bool endDashed = false, bool generated = false,
+               bool limitMoveVerticallyByNearestPoints = true)
+        : time(time), pitch(pitch), moveDirection(moveDirection), limitMoveVerticallyByNearestPoints(limitMoveVerticallyByNearestPoints),
+        endDashed(endDashed), generated(generated) {}
     CurvePoint(int time, int pitch, bool generated)
         : time(time), pitch(pitch), generated(generated) {}
 
@@ -97,6 +101,7 @@ struct CurvePoint
             directions << static_cast<int>(direction);
         }
         map["moveDirection"] = directions;
+        map["limitMoveVerticallyByNearestPoints"] = limitMoveVerticallyByNearestPoints;
 
         map["endDashed"] = endDashed;
         map["generated"] = generated;
@@ -117,6 +122,7 @@ struct CurvePoint
             directions << static_cast<MoveDirection>(var.toInt());
         }
         point.moveDirection = directions;
+        point.limitMoveVerticallyByNearestPoints = map["limitMoveVerticallyByNearestPoints"].toBool();
 
         point.endDashed = map["endDashed"].toBool();
         point.generated = map["generated"].toBool();

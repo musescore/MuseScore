@@ -57,7 +57,7 @@ public:
     Note* startNoteOfChain() const;
 
     Note* endNote() const;
-    void setEndNotePitch(int pitch);
+    void setEndNotePitch(int pitch, int quarterOff = 0);
 
     bool isReleaseBend() const;
     bool isFullRelease() const;
@@ -74,6 +74,9 @@ public:
     void computeBendAmount();
     int totBendAmountIncludingPrecedingBends() const;
     void computeBendText();
+    void computeIsInvalidOrNeedsWarning();
+    bool isInvalid() const { return m_isInvalid; }
+    bool isBorderlineUnplayable() const { return m_isBorderlineUnplayable; }
 
     GuitarBend* findPrecedingBend() const;
 
@@ -82,6 +85,8 @@ public:
     GuitarBendHold* holdLine() const { return m_holdLine; }
 
     double lineWidth() const;
+
+    mu::draw::Color uiColor() const;
 
     struct LayoutData : public SLine::LayoutData
     {
@@ -104,6 +109,8 @@ public:
 
 private:
     GuitarBendHold* m_holdLine = nullptr;
+    bool m_isInvalid = false;
+    bool m_isBorderlineUnplayable = false;
 };
 
 class GuitarBendText; // forward decl
@@ -142,6 +149,8 @@ public:
     void setBendText(GuitarBendText* t) { m_text = t; }
 
     bool isUserModified() const override;
+
+    mu::draw::Color uiColor() const { return guitarBend()->uiColor(); }
 
     struct LayoutData : public LineSegment::LayoutData
     {

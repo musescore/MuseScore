@@ -41,6 +41,20 @@ static std::set<ElementType> ELEMENTS_TYPES = {
     ElementType::GUITAR_BEND_HOLD_SEGMENT
 };
 
+static int bendAmountToCurvePitch(int amount)
+{
+    int fulls = amount / 4;
+    int quarts = amount % 4;
+    return fulls * 100 + quarts * 25;
+}
+
+static int curvePitchToBendAmount(int pitch)
+{
+    int fulls = pitch / 100;
+    int quarts = (pitch % 100) / 25;
+    return fulls * 4 + quarts;
+}
+
 BendSettingsModel::BendSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
@@ -126,14 +140,11 @@ void BendSettingsModel::loadBendCurve()
     }
 
     int totBendAmount = bend->totBendAmountIncludingPrecedingBends();
-    int totFulls = totBendAmount / 4;
-    int totQuarts = totBendAmount % 4;
-    int endPitch = totFulls * 100 + totQuarts * 25;
+    int endPitch = bendAmountToCurvePitch(totBendAmount);
 
     int localBendAmount = bend->bendAmountInQuarterTones();
-    int fulls = localBendAmount / 4;
-    int quarts = localBendAmount % 4;
-    int pitchDiff = fulls * 100 + quarts * 25;
+    int pitchDiff = bendAmountToCurvePitch(localBendAmount);
+
     int startPitch = endPitch - pitchDiff;
 
     int starTime = bend->startTimeFactor() * CurvePoint::MAX_TIME;
@@ -151,19 +162,24 @@ void BendSettingsModel::loadBendCurve()
         return;
     }
 
+    m_releaseBend = bend->isReleaseBend();
+    bool isSlightBend = bend->type() == GuitarBendType::SLIGHT_BEND;
+
     if (bend->type() == GuitarBendType::PRE_BEND) {
         m_bendCurve = { CurvePoint(0, 0, true),
                         CurvePoint(0, endPitch, true),
                         CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Vertical }, true) };
-    } else if (bend->isReleaseBend()) {
-        m_bendCurve = { CurvePoint(0, startPitch, true),
-                        CurvePoint(starTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
-                        CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Both }),
-                        CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true, true) };
+    } else if (m_releaseBend) {
+        m_bendCurve = { CurvePoint(0, startPitch - endPitch, true),
+                        CurvePoint(starTime, startPitch - endPitch, { CurvePoint::MoveDirection::Horizontal }, true),
+                        CurvePoint(endTime, 0, { CurvePoint::MoveDirection::Both }, false, false, false),
+                        CurvePoint(CurvePoint::MAX_TIME, 0, {}, true, true) };
     } else {
         m_bendCurve = { CurvePoint(0, startPitch, true),
                         CurvePoint(starTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
-                        CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Both }),
+                        CurvePoint(endTime, endPitch,
+                                   { isSlightBend ? CurvePoint::MoveDirection::Horizontal : CurvePoint::MoveDirection::Both },
+                                   false, false, startPitch == 0),
                         CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true, true) };
     }
 
@@ -254,18 +270,28 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
 
     const CurvePoint& endTimePoint = points.at(END_POINT_INDEX);
 
-    int newPitch = endTimePoint.pitch;
-    int fulls = newPitch / 100;
-    int quarts = (newPitch % 100) / 25;
-    int bendAmount = fulls * 4 + quarts;
-
+    int bendAmount = curvePitchToBendAmount(points[END_POINT_INDEX].pitch);
     int pitch = bendAmount / 2 + bend->startNoteOfChain()->pitch();
+    int quarterOff = bendAmount % 2;
+    if (pitch == bend->startNote()->pitch() && quarterOff == 1) {
+        pitch += 1;
+        quarterOff = -1;
+    }
 
     float starTimeFactor = static_cast<float>(points.at(START_POINT_INDEX).time) / CurvePoint::MAX_TIME;
     float endTimeFactor = static_cast<float>(endTimePoint.time) / CurvePoint::MAX_TIME;
 
     beginCommand();
-    bend->setEndNotePitch(pitch);
+
+    if (!m_releaseBend) {
+        bend->setEndNotePitch(pitch, quarterOff);
+    } else {
+        int oldBendAmount = curvePitchToBendAmount(m_bendCurve[START_POINT_INDEX].pitch);
+        pitch = bend->startNote()->pitch() - ((oldBendAmount - bendAmount) / 2);
+
+        bend->setEndNotePitch(pitch, quarterOff);
+    }
+
     bend->undoChangeProperty(Pid::BEND_START_TIME_FACTOR, starTimeFactor);
     bend->undoChangeProperty(Pid::BEND_END_TIME_FACTOR, endTimeFactor);
     endCommand();

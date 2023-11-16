@@ -71,6 +71,7 @@ static const Settings::Key IS_CANVAS_ORIENTATION_VERTICAL_KEY(module_name, "ui/c
 static const Settings::Key IS_LIMIT_CANVAS_SCROLL_AREA_KEY(module_name, "ui/canvas/scroll/limitScrollArea");
 
 static const Settings::Key COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE(module_name, "score/note/warnPitchRange");
+static const Settings::Key WARN_GUITAR_BENDS(module_name, "score/note/warnGuitarBends");
 static const Settings::Key REALTIME_DELAY(module_name, "io/midi/realtimeDelay");
 static const Settings::Key NOTE_DEFAULT_PLAY_DURATION(module_name, "score/note/defaultPlayDuration");
 
@@ -185,6 +186,7 @@ void NotationConfiguration::init()
     });
 
     settings()->setDefaultValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(true));
+    settings()->setDefaultValue(WARN_GUITAR_BENDS, Val(true));
     settings()->setDefaultValue(REALTIME_DELAY, Val(750));
     settings()->setDefaultValue(NOTE_DEFAULT_PLAY_DURATION, Val(500));
 
@@ -217,6 +219,7 @@ void NotationConfiguration::init()
     });
 
     mu::engraving::MScore::warnPitchRange = colorNotesOutsideOfUsablePitchRange();
+    mu::engraving::MScore::warnGuitarBends = warnGuitarBends();
     mu::engraving::MScore::defaultPlayDuration = notePlayDurationMilliseconds();
 
     mu::engraving::MScore::setHRaster(DEFAULT_GRID_SIZE_SPATIUM);
@@ -660,6 +663,17 @@ void NotationConfiguration::setColorNotesOutsideOfUsablePitchRange(bool value)
 {
     mu::engraving::MScore::warnPitchRange = value;
     settings()->setSharedValue(COLOR_NOTES_OUTSIDE_OF_USABLE_PITCH_RANGE, Val(value));
+}
+
+bool NotationConfiguration::warnGuitarBends() const
+{
+    return settings()->value(WARN_GUITAR_BENDS).toBool();
+}
+
+void NotationConfiguration::setWarnGuitarBends(bool value)
+{
+    mu::engraving::MScore::warnGuitarBends = value;
+    settings()->setSharedValue(WARN_GUITAR_BENDS, Val(value));
 }
 
 int NotationConfiguration::delayBetweenNotesInRealTimeModeMilliseconds() const
