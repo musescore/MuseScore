@@ -24,6 +24,22 @@ import QtQuick 2.15
 import MuseScore.UiComponents 1.0
 
 ExportSettingsPage {
+    id: root
+
+    CheckBox {
+        width: parent.width
+        text: qsTrc("project/export", "Transparent background")
+
+        navigation.name: "TransparentBackgroundCheckbox"
+        navigation.panel: root.navigationPanel
+        navigation.row: root.navigationOrder + 2
+
+        checked: root.model.svgTransparentBackground
+        onClicked: {
+            root.model.svgTransparentBackground = !checked
+        }
+    }
+
     StyledTextLabel {
         width: parent.width
         text: qsTrc("project/export", "Each page of the selected parts will be exported as a separate %1 file.").arg("SVG")

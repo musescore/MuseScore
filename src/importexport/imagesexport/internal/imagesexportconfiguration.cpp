@@ -31,6 +31,7 @@ using namespace mu::iex::imagesexport;
 static const Settings::Key EXPORT_PDF_DPI_RESOLUTION_KEY("iex_imagesexport", "export/pdf/dpi");
 static const Settings::Key EXPORT_PNG_DPI_RESOLUTION_KEY("iex_imagesexport", "export/png/resolution");
 static const Settings::Key EXPORT_PNG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/png/useTransparency");
+static const Settings::Key EXPORT_SVG_USE_TRANSPARENCY_KEY("iex_imagesexport", "export/svg/useTransparency");
 
 void ImagesExportConfiguration::init()
 {
@@ -76,6 +77,16 @@ bool ImagesExportConfiguration::exportPngWithTransparentBackground() const
 void ImagesExportConfiguration::setExportPngWithTransparentBackground(bool transparent)
 {
     settings()->setSharedValue(EXPORT_PNG_USE_TRANSPARENCY_KEY, Val(transparent));
+}
+
+bool ImagesExportConfiguration::exportSvgWithTransparentBackground() const
+{
+    return settings()->value(EXPORT_SVG_USE_TRANSPARENCY_KEY).toBool();
+}
+
+void ImagesExportConfiguration::setExportSvgWithTransparentBackground(bool transparent)
+{
+    settings()->setSharedValue(EXPORT_SVG_USE_TRANSPARENCY_KEY, Val(transparent));
 }
 
 int ImagesExportConfiguration::trimMarginPixelSize() const

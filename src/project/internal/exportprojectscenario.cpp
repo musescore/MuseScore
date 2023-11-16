@@ -176,7 +176,6 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
 
     INotationWriter::Options options {
         { INotationWriter::OptionKey::UNIT_TYPE, Val(unitType) },
-        { INotationWriter::OptionKey::TRANSPARENT_BACKGROUND, Val(imagesExportConfiguration()->exportPngWithTransparentBackground()) }
     };
 
     switch (unitType) {

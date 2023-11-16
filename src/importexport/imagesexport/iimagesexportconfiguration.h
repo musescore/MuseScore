@@ -49,6 +49,10 @@ public:
     virtual bool exportPngWithTransparentBackground() const = 0;
     virtual void setExportPngWithTransparentBackground(bool transparent) = 0;
 
+    // Svg
+    virtual bool exportSvgWithTransparentBackground() const = 0;
+    virtual void setExportSvgWithTransparentBackground(bool transparent) = 0;
+
     virtual int trimMarginPixelSize() const = 0;
     virtual void setTrimMarginPixelSize(std::optional<int> pixelSize) = 0;
 };

@@ -40,6 +40,9 @@ public:
     bool exportPngWithTransparentBackground() const override;
     void setExportPngWithTransparentBackground(bool transparent) override;
 
+    bool exportSvgWithTransparentBackground() const override;
+    void setExportSvgWithTransparentBackground(bool transparent) override;
+
     int trimMarginPixelSize() const override;
     void setTrimMarginPixelSize(std::optional<int> pixelSize) override;
 
