@@ -99,18 +99,18 @@ void NoteList::addNote(const int startTick, const int endTick, const int staff)
     }
 }
 
-void NoteList::dump(const QString& voice) const
+void NoteList::dump(const int& voice) const
 {
     // dump contents
     for (int i = 0; i < MAX_STAVES; ++i) {
-        printf("voice %s staff %d:", qPrintable(voice), i);
+        printf("voice %d staff %d:", voice, i);
         for (int j = 0; j < _staffNoteLists.at(i).size(); ++j) {
             printf(" %d-%d", _staffNoteLists.at(i).at(j).first, _staffNoteLists.at(i).at(j).second);
         }
         printf("\n");
     }
     // show overlap
-    printf("overlap voice %s:", qPrintable(voice));
+    printf("overlap voice %d:", voice);
     for (int i = 0; i < MAX_STAVES - 1; ++i) {
         for (int j = i + 1; j < MAX_STAVES; ++j) {
             stavesOverlap(i, j);
@@ -169,7 +169,7 @@ VoiceOverlapDetector::VoiceOverlapDetector()
     // LOGD("VoiceOverlapDetector::VoiceOverlapDetector(staves %d)", MAX_STAVES);
 }
 
-void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const QString& voice, const int staff)
+void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const int& voice, const int staff)
 {
     // if necessary, create the note list for voice
     if (!_noteLists.contains(voice)) {
@@ -181,7 +181,7 @@ void VoiceOverlapDetector::addNote(const int startTick, const int endTick, const
 void VoiceOverlapDetector::dump() const
 {
     // LOGD("VoiceOverlapDetector::dump()");
-    QMapIterator<QString, NoteList> i(_noteLists);
+    QMapIterator<int, NoteList> i(_noteLists);
     while (i.hasNext()) {
         i.next();
         i.value().dump(i.key());
@@ -194,7 +194,7 @@ void VoiceOverlapDetector::newMeasure()
     _noteLists.clear();
 }
 
-bool VoiceOverlapDetector::stavesOverlap(const QString& voice) const
+bool VoiceOverlapDetector::stavesOverlap(const int& voice) const
 {
     if (_noteLists.contains(voice)) {
         return _noteLists.value(voice).anyStaffOverlaps();

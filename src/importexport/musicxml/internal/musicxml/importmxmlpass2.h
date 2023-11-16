@@ -44,6 +44,7 @@ using FiguredBassList = QVector<FiguredBass*>;
 //      typedef QList<Chord*> GraceChordList;
 //      typedef QVector<FiguredBass*> FiguredBassList;
 using Tuplets = std::map<QString, Tuplet*>;
+using Beams = QMap<QString, Beam*>;
 
 //---------------------------------------------------------
 //   MxmlStartStop
@@ -189,7 +190,9 @@ class Glissando;
 class Pedal;
 class Trill;
 class MxmlLogger;
+class MusicXMLDelayedDirectionElement;
 
+using DelayedDirectionsList = QList<MusicXMLDelayedDirectionElement*>;
 using SlurStack = std::array<SlurDesc, MAX_NUMBER_LEVEL>;
 using TrillStack = std::array<Trill*, MAX_NUMBER_LEVEL>;
 using BracketsStack = std::array<MusicXmlExtendedSpannerDesc, MAX_NUMBER_LEVEL>;
@@ -266,6 +269,7 @@ public:
     void addSpanner(const MusicXmlSpannerDesc& desc);
     MusicXmlExtendedSpannerDesc& getSpanner(const MusicXmlSpannerDesc& desc);
     void clearSpanner(const MusicXmlSpannerDesc& desc);
+    void deleteHandledSpanner(SLine* const& spanner);
 
 private:
     void addError(const QString& error);      ///< Add an error to be shown in the GUI
@@ -289,7 +293,7 @@ private:
     void divisions();
     void transpose(const QString& partId, const Fraction& tick);
     Note* note(const QString& partId, Measure* measure, const Fraction sTime, const Fraction prevTime, Fraction& missingPrev,
-               Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beam*& beam,
+               Fraction& dura, Fraction& missingCurr, QString& currentVoice, GraceChordList& gcl, int& gac, Beams& currBeams,
                FiguredBassList& fbl, int& alt, MxmlTupletStates& tupletStates, Tuplets& tuplets);
     void notePrintSpacingNo(Fraction& dura);
     FiguredBassItem* figure(const int idx, const bool paren, FiguredBass* parent);
@@ -297,7 +301,7 @@ private:
     FretDiagram* frame();
     void harmony(const QString& partId, Measure* measure, const Fraction sTime);
     Accidental* accidental();
-    void beam(BeamMode& beamMode);
+    void beam(QMap<int, QString>& beamTypes);
     void duration(Fraction& dura);
     void forward(Fraction& dura);
     void backup(Fraction& dura);
@@ -367,14 +371,15 @@ private:
 class MusicXMLParserDirection
 {
 public:
-    MusicXMLParserDirection(QXmlStreamReader& e, Score* score, const MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2,
-                            MxmlLogger* logger);
-    void direction(const QString& partId, Measure* measure, const Fraction& tick, const int divisions, MusicXmlSpannerMap& spanners);
+    MusicXMLParserDirection(QXmlStreamReader& e, Score* score, MusicXMLParserPass1& pass1, MusicXMLParserPass2& pass2, MxmlLogger* logger);
+    void direction(const QString& partId, Measure* measure, const Fraction& tick, MusicXmlSpannerMap& spanners,
+                   DelayedDirectionsList& delayedDirections);
+    qreal totalY() const { return _defaultY + _relativeY; }
 
 private:
     QXmlStreamReader& _e;
     Score* const _score;                        // the score
-    const MusicXMLParserPass1& _pass1;          // the pass1 results
+    MusicXMLParserPass1& _pass1;                // the pass1 results
     MusicXMLParserPass2& _pass2;                // the pass2 results
     MxmlLogger* _logger;                        ///< Error logger
 
@@ -385,16 +390,17 @@ private:
     QString _rehearsalText;
     QString _dynaVelocity;
     QString _tempo;
-    QString _sndCapo;
     QString _sndCoda;
     QString _sndDacapo;
     QString _sndDalsegno;
-    QString _sndSegno;
     QString _sndFine;
+    QString _sndSegno;
+    QString _sndToCoda;
     bool _hasDefaultY;
     qreal _defaultY;
-    bool _coda;
-    bool _segno;
+    bool _hasRelativeY;
+    qreal _relativeY;
+    bool hasTotalY() { return _hasRelativeY || _hasDefaultY; }
     double _tpoMetro;                   // tempo according to metronome
     double _tpoSound;                   // tempo according to sound
     QList<EngravingItem*> _elems;
@@ -409,8 +415,39 @@ private:
     QString metronome(double& r);
     void sound();
     void dynamics();
-    void handleRepeats(Measure* measure, const track_idx_t track);
+    void handleRepeats(Measure* measure, const int track, const Fraction tick);
+    void handleNmiCmi(Measure* measure, const int track, const Fraction tick, DelayedDirectionsList& delayedDirections);
+    QString matchRepeat() const;
     void skipLogCurrElem();
+    bool isLikelyCredit(const Fraction& tick) const;
+    bool isLyricBracket() const;
+};
+
+//---------------------------------------------------------
+//   MusicXMLDelayedDirectionElement
+//---------------------------------------------------------
+/**
+ Helper class to allow Direction elements to be sorted by _totalY
+ before being added to the score.
+ */
+
+class MusicXMLDelayedDirectionElement
+{
+public:
+    MusicXMLDelayedDirectionElement(qreal totalY, EngravingItem* element, int track,
+                                    QString placement, Measure* measure, Fraction tick)
+        : _totalY(totalY),  _element(element), _track(track), _placement(placement),
+        _measure(measure), _tick(tick) {}
+    void addElem();
+    qreal totalY() const { return _totalY; }
+
+private:
+    qreal _totalY;
+    EngravingItem* _element;
+    int _track;
+    QString _placement;
+    Measure* _measure;
+    Fraction _tick;
 };
 } // namespace Ms
 #endif

@@ -73,7 +73,7 @@
         <direction-type>
           <words>To Coda</words>
           </direction-type>
-        <sound tocoda="codab"/>
+        <sound tocoda="1"/>
         </direction>
       </measure>
     <measure number="3">

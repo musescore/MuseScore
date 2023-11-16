@@ -117,7 +117,7 @@
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="1" span="2" col="1" visible="1"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="3">
         <StaffType group="pitched">
@@ -1946,6 +1946,9 @@
           <Rest>
             <durationType>quarter</durationType>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

@@ -25,6 +25,7 @@
 
 #include "engraving/dom/durationtype.h"
 #include "engraving/types/fraction.h"
+#include "importmxmlpass1.h"
 
 namespace mu::engraving {
 class MxmlLogger;
@@ -40,8 +41,8 @@ class MxmlLogger;
 class mxmlNoteDuration
 {
 public:
-    mxmlNoteDuration(int divs, MxmlLogger* logger)
-        : _divs(divs), _logger(logger) { /* nothing so far */ }
+    mxmlNoteDuration(int divs, MxmlLogger* logger, MusicXMLParserPass1* pass1)
+        : _divs(divs), _logger(logger), _pass1(pass1) { /* nothing so far */ }
     QString checkTiming(const QString& type, const bool rest, const bool grace);
     Fraction duration() const { return _dura; } // duration to use
     Fraction calculatedDuration() const { return _calcDura; }   // value calculated from note type etcetera
@@ -61,6 +62,7 @@ private:
     Fraction _dura;
     TDuration _normalType;
     Fraction _timeMod { 1, 1 };                       // default to no time modification
+    MusicXMLParserPass1* _pass1;
     MxmlLogger* _logger;                              ///< Error logger
 };
 } // namespace Ms

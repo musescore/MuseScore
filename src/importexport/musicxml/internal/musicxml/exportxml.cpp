@@ -376,7 +376,7 @@ class ExportMusicXml
     int findOttava(const Ottava* tl) const;
     int findTrill(const Trill* tl) const;
     void chord(Chord* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll, bool useDrumset);
-    void rest(Rest* chord, staff_idx_t staff);
+    void rest(Rest* chord, staff_idx_t staff, const std::vector<Lyrics*>& ll);
     void clef(staff_idx_t staff, const ClefType ct, const QString& extraAttributes = "");
     void timesig(TimeSig* tsig);
     void keysig(const KeySig* ks, ClefType ct, staff_idx_t staff = 0, bool visible = true);
@@ -3515,6 +3515,8 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
     int blp = -1;   // beam level previous chord
     int blc = -1;   // beam level current chord
     int bln = -1;   // beam level next chord
+    BeamMode bmc = BeamMode::AUTO; // beam mode current chord
+    BeamMode bmn = BeamMode::AUTO; // beam mode next chord
     // find beam level previous chord
     for (size_t i = idx - 1; blp == -1 && i != mu::nidx; --i) {
         const auto crst = elements[i];
@@ -3525,18 +3527,24 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
     // find beam level current chord
     if (cr->isChord()) {
         blc = toChord(cr)->beams();
+        bmc = toChord(cr)->beamMode();
     }
     // find beam level next chord
     for (size_t i = idx + 1; bln == -1 && i < elements.size(); ++i) {
         const auto crst = elements[i];
         if (crst->isChord()) {
             bln = toChord(crst)->beams();
+            bmn = toChord(crst)->beamMode();
         }
     }
     // find beam type and write
     for (int i = 1; i <= blc; ++i) {
         QString text;
-        if (blp < i && bln >= i) {
+        // TODO: correctly handle Beam::Mode::AUTO
+        // when equivalent to BEGIN32 or BEGIN64
+        if ((blp < i && bln >= i)
+            || bmc == BeamMode::BEGIN16 && i > 1
+            || bmc == BeamMode::BEGIN32 && i > 2) {
             text = "begin";
         } else if (blp < i && bln < i) {
             if (bln > 0) {
@@ -3544,7 +3552,9 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
             } else if (blp > 0) {
                 text = "backward hook";
             }
-        } else if (blp >= i && bln < i) {
+        } else if ((blp >= i && bln < i)
+                   || bmn == BeamMode::BEGIN16 && i > 1
+                   || bmn == BeamMode::BEGIN32 && i > 2) {
             text = "end";
         } else if (blp >= i && bln >= i) {
             text = "continue";
@@ -3788,7 +3798,7 @@ static bool isSmallNote(const Note* const note)
 
 static bool isCueNote(const Note* const note)
 {
-    return (!note->chord()->isGrace()) && isSmallNote(note) && !note->play();
+    return isSmallNote(note) && !note->play();
 }
 
 //---------------------------------------------------------
@@ -3831,6 +3841,8 @@ static void writeTypeAndDots(XmlWriter& xml, const Note* const note)
     // small notes are indicated by size=cue, but for grace and cue notes this is implicit
     if (isSmallNote(note) && !isCueNote(note) && !note->chord()->isGrace()) {
         xml.tag("type", { { "size", "cue" } }, s);
+    } else if (isSmallNote(note) && !isCueNote(note) && note->chord()->isGrace()) {
+        xml.tag("type", { { "size", "grace-cue" } }, s);
     } else {
         xml.tag("type", s);
     }
@@ -4152,7 +4164,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
  For a single-staff part, \a staff equals zero, suppressing the <staff> element.
  */
 
-void ExportMusicXml::rest(Rest* rest, staff_idx_t staff)
+void ExportMusicXml::rest(Rest* rest, staff_idx_t staff, const std::vector<Lyrics*>& ll)
 {
     static char table2[]  = "CDEFGAB";
 #ifdef DEBUG_TICK
@@ -4266,6 +4278,8 @@ void ExportMusicXml::rest(Rest* rest, staff_idx_t staff)
 
     tupletStartStop(rest, notations, _xml);
     notations.etag(_xml);
+
+    lyrics(ll, rest->track());
 
     _xml.endElement();
 }
@@ -5072,14 +5086,42 @@ void ExportMusicXml::ottava(Ottava const* const ot, staff_idx_t staff, const Fra
 
 void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fraction& tick)
 {
+    // "change" type is handled only on the beginning of pedal lines
+    if (pd->tick() != tick && pd->endHookType() == HookType::HOOK_45) {
+        return;
+    }
+
     directionTag(_xml, _attr, pd);
     _xml.startElement("direction-type");
+    QString pedalType;
     QString pedalXml;
+    QString signText;
+    QString lineText = pd->lineVisible() ? " line=\"yes\"" : " line=\"no\"";
     if (pd->tick() == tick) {
-        pedalXml = "pedal type=\"start\" line=\"yes\"";
+        switch (pd->beginHookType()) {
+        case HookType::HOOK_45:
+            pedalType = "change";
+            break;
+        case HookType::NONE:
+            pedalType = "resume";
+            break;
+        default:
+            pedalType = "start";
+        }
+        signText = pd->beginText() == "" ? " sign=\"no\"" : " sign=\"yes\"";
     } else {
-        pedalXml = "pedal type=\"stop\" line=\"yes\"";
+        if (!pd->endText().isEmpty() || pd->endHookType() == HookType::HOOK_90) {
+            pedalType = "stop";
+        } else {
+            pedalType = "discontinue";
+        }
+        // "change" type is handled only on the beginning of pedal lines
+
+        signText = pd->endText() == "" ? " sign=\"no\"" : " sign=\"yes\"";
     }
+    pedalXml = QString("pedal type=\"%1\"").arg(pedalType);
+    pedalXml += lineText;
+    pedalXml += signText;
     pedalXml += positioningAttributes(pd, pd->tick() == tick);
     _xml.tagRaw(pedalXml);
     _xml.endElement();
@@ -7067,7 +7109,8 @@ void ExportMusicXml::writeElement(EngravingItem* el, const Measure* m, staff_idx
     } else if (el->isRest()) {
         const auto r = toRest(el);
         if (!(r->isGap())) {
-            rest(r, sstaff);
+            const auto ll = r->lyrics();
+            rest(r, sstaff, ll);
         }
     } else if (el->isBarLine()) {
         const auto barln = toBarLine(el);

@@ -114,9 +114,13 @@ public:
 
     void setLongName(const String& s);
     void setShortName(const String& s);
+    void setLongNameAll(const String& s);  // For all instruments in _instruments
+    void setShortNameAll(const String& s); // For all instruments in _instruments
 
     void setPlainLongName(const String& s);
     void setPlainShortName(const String& s);
+    void setPlainLongNameAll(const String& s);
+    void setPlainShortNameAll(const String& s);
 
     void setStaves(int);
 

@@ -95,7 +95,7 @@ Vocals</longName>
         <hideWhenEmpty>3</hideWhenEmpty>
         <bracket type="0" span="6" col="0" visible="1"/>
         <bracket type="1" span="2" col="1" visible="1"/>
-        <barLineSpan>2</barLineSpan>
+        <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="3">
         <StaffType group="tablature">
@@ -354,6 +354,7 @@ Gtr. 2</shortName>
           <name>stdNormal</name>
           </StaffType>
         <hideWhenEmpty>3</hideWhenEmpty>
+        <bracket type="1" span="2" col="1" visible="1"/>
         <barLineSpan>1</barLineSpan>
         </Staff>
       <Staff id="7">
@@ -605,6 +606,10 @@ Gtr.</shortName>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>0</span>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -646,6 +651,10 @@ Gtr.</shortName>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            <span>0</span>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -687,6 +696,9 @@ Gtr.</shortName>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>
@@ -728,6 +740,9 @@ Gtr.</shortName>
             <durationType>measure</durationType>
             <duration>1/1</duration>
             </Rest>
+          <BarLine>
+            <subtype>end</subtype>
+            </BarLine>
           </voice>
         </Measure>
       </Staff>

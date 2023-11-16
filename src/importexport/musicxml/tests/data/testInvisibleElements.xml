@@ -131,7 +131,6 @@
         <voice>2</voice>
         <type>quarter</type>
         <stem>down</stem>
-        <notehead>none</notehead>
         </note>
       <barline location="right">
         <bar-style>light-heavy</bar-style>

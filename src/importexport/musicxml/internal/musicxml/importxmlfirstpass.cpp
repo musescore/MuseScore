@@ -27,6 +27,16 @@
 namespace mu::engraving {
 // TODO: move somewhere else
 
+static const std::vector<QString> vocalInstrumentNames({ "Voice",
+                                                         "Soprano",
+                                                         "Mezzo-Soprano",
+                                                         "Alto",
+                                                         "Tenor",
+                                                         "Baritone",
+                                                         "Bass",
+                                                         "Women",
+                                                         "Men" });
+
 MusicXmlPart::MusicXmlPart(QString id, QString name)
     : id(id), name(name)
 {
@@ -57,11 +67,11 @@ Fraction MusicXmlPart::measureDuration(int i) const
 QString MusicXmlPart::toString() const
 {
     auto res = QString("part id '%1' name '%2' print %3 abbr '%4' print %5 maxStaff %6\n")
-               .arg(id, name).arg(printName).arg(abbr).arg(printAbbr, _maxStaff);
+               .arg(id, name).arg(_printName).arg(abbr).arg(_printAbbr, _maxStaff);
 
     for (VoiceList::const_iterator i = voicelist.constBegin(); i != voicelist.constEnd(); ++i) {
         res += QString("voice %1 map staff data %2\n")
-               .arg(i.key() + 1, i.value().toString());
+               .arg(QString(i.key() + 1), i.value().toString());
     }
 
     for (int i = 0; i < measureNumbers.size(); ++i) {
@@ -107,6 +117,38 @@ void MusicXmlPart::calcOctaveShifts()
     for (staff_idx_t i = 0; i < MAX_STAVES; ++i) {
         octaveShifts[i].calcOctaveShiftShifts();
     }
+}
+
+//---------------------------------------------------------
+//   staffNumberToIndex
+//---------------------------------------------------------
+
+/**
+ This handles the mapping from MusicXML staff number to the index
+ in a Part's Staff list.
+ In most cases, this is a simple decrement from the 1-based staff number
+ to the 0-based index.
+ However, in some parts some MusicXML staves are discarded, and a mapping
+ must be stored from MusicXML staff number to index. When this mapping is
+ defined (i.e. size() != 0), it is used. See MusicXMLParserPass1::attributes()
+ for more information.
+ */
+
+int MusicXmlPart::staffNumberToIndex(const int staffNumber) const
+{
+    if (_staffNumberToIndex.size() == 0) {
+        return staffNumber - 1;
+    } else if (_staffNumberToIndex.contains(staffNumber)) {
+        return _staffNumberToIndex[staffNumber];
+    } else {
+        return -1;
+    }
+}
+
+bool MusicXmlPart::isVocalStaff() const
+{
+    return std::find(vocalInstrumentNames.begin(), vocalInstrumentNames.end(), name) != vocalInstrumentNames.end()
+           || _hasLyrics;
 }
 
 //---------------------------------------------------------
