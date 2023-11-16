@@ -4219,6 +4219,9 @@ void NotationInteraction::addImageToItem(const io::path_t& imagePath, EngravingI
         { "jpg", ImageType::RASTER },
         { "jpeg", ImageType::RASTER },
         { "png", ImageType::RASTER },
+        { "bmp", ImageType::RASTER },
+        { "tif", ImageType::RASTER },
+        { "tiff", ImageType::RASTER },
     };
 
     io::path_t suffix = io::suffix(imagePath);
