@@ -151,7 +151,7 @@ ScoresView {
                     width: parent.width
 
                     title: qsTrc("project", "You are not signed in")
-                    body: qsTrc("project", "Login or create a new account on <a href=\"https://musescore.com\">musescore.com</a> to view online scores.")
+                    body: qsTrc("project", "Log in or create a new account on <a href=\"https://musescore.com\">musescore.com</a> to view online scores.")
                 }
 
                 Row {

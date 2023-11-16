@@ -180,8 +180,8 @@ RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationP
         return warnCloudNotAvailableForSharingAudio();
     }
 
-    Ret ret = audioComService()->authorization()->ensureAuthorization(
-        trc("project/save", "Login or create a new account on Audio.com to share your music."));
+    std::string dialogText = trc("project/save", "Log in or create a new account on Audio.com to share your music.");
+    Ret ret = audioComService()->authorization()->ensureAuthorization(false, dialogText).ret;
     if (!ret) {
         return ret;
     }
@@ -206,7 +206,7 @@ RetVal<CloudAudioInfo> OpenSaveProjectScenario::askShareAudioLocation(INotationP
     }
 
     QVariantMap vals = rv.val.toQVariant().toMap();
-    using Response = QMLSaveToCloudResponse::SaveToCloudResponse;
+    using Response = cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
     auto response = static_cast<Response>(vals["response"].toInt());
     switch (response) {
     case Response::Cancel:
@@ -231,12 +231,26 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
         return warnCloudNotAvailableForUploading(isPublishShare);
     }
 
-    Ret ret = museScoreComService()->authorization()->ensureAuthorization(
-        isPublishShare
-        ? trc("project/save", "Login or create a free account on musescore.com to save this score to the cloud.")
-        : trc("project/save", "Login or create a free account on musescore.com to publish this score."));
-    if (!ret) {
-        return ret;
+    std::string dialogText = isPublishShare
+                             ? trc("project/save", "Log in to musescore.com to save this score to the cloud.")
+                             : trc("project/save", "Log in to musescore.com to publish this score.");
+    RetVal<Val> retVal = museScoreComService()->authorization()->ensureAuthorization(true, dialogText);
+    if (!retVal.ret) {
+        return retVal.ret;
+    }
+
+    using Response = cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
+    if (static_cast<Response>(retVal.val.toInt()) == Response::SaveLocallyInstead) {
+        RetVal<io::path_t> rv = askLocalPath(project, mode);
+        if (!rv.ret) {
+            LOGE() << rv.ret.toString();
+            return rv.ret;
+        }
+
+        projectFilesController()->saveProjectLocally(rv.val, mode);
+        configuration()->setLastUsedSaveLocationType(SaveLocationType::Local);
+
+        return make_ret(Ret::Code::Cancel);
     }
 
     QString defaultName = project->displayName();
@@ -282,7 +296,7 @@ RetVal<CloudProjectInfo> OpenSaveProjectScenario::doAskCloudLocation(INotationPr
     }
 
     QVariantMap vals = rv.val.toQVariant().toMap();
-    using Response = QMLSaveToCloudResponse::SaveToCloudResponse;
+    using Response = cloud::QMLSaveToCloudResponse::SaveToCloudResponse;
     auto response = static_cast<Response>(vals["response"].toInt());
     switch (response) {
     case Response::Cancel:

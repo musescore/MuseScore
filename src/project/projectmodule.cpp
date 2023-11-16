@@ -158,8 +158,7 @@ void ProjectModule::registerUiTypes()
 
     qmlRegisterUncreatableType<QMLSaveLocationType>("MuseScore.Project", 1, 0, "SaveLocationType",
                                                     "Not creatable as it is an enum type");
-    qmlRegisterUncreatableType<QMLSaveToCloudResponse>("MuseScore.Project", 1, 0, "SaveToCloudResponse",
-                                                       "Not creatable as it is an enum type");
+
     qmlRegisterUncreatableType<GenerateAudioTimePeriod>("MuseScore.Project", 1, 0, "GenerateAudioTimePeriodType",
                                                         "Not creatable as it is an enum type");
 

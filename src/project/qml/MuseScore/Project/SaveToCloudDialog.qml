@@ -25,7 +25,6 @@ import QtGraphicalEffects 1.15
 
 import MuseScore.Ui 1.0
 import MuseScore.UiComponents 1.0
-import MuseScore.Project 1.0
 import MuseScore.Cloud 1.0
 
 StyledDialogView {
