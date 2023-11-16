@@ -934,6 +934,11 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
                 if (e) {
                     TLayout::layoutItem(e, ctx);
                 }
+            } else if (segment.isType(SegmentType::BarLine)) {
+                EngravingItem* e = segment.element(staffIdx * VOICES);
+                if (e && e->isBarLine()) {
+                    TLayout::layoutItem(e, ctx);
+                }
             }
         }
     }
