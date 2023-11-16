@@ -5,6 +5,7 @@
 .qped
 .directory
 .idea
+.vscode/
 /builds
 /build_overrides.cmake
 build.release
