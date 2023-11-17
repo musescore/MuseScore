@@ -224,10 +224,17 @@ jobs:
       uses: styfle/cancel-workflow-action@0.11.0
       with:
         access_token: ${{ github.token }}
-    - name: Clone repository
+    - name: Clone repository (default)
       uses: actions/checkout@v4
+      if: ${{ github.event_name != 'schedule' || github.event.schedule == '0 3 */1 */1 *' }}
       with:
         fetch-depth: 3
+    - name: Clone repository (${{ env.CURRENT_RELEASE_BRANCH }})
+      uses: actions/checkout@v4
+      if: ${{ github.event_name == 'schedule' && github.event.schedule == '0 5 */1 */1 *' }}
+      with:
+        fetch-depth: 3
+        ref: ${{ env.CURRENT_RELEASE_BRANCH }}
     - name: Fetch submodules
       run: |
         git submodule update --init --recursive
