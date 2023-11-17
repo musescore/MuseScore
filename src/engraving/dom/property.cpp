@@ -220,7 +220,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::TIMESIG_TYPE,            true,  "subtype",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "subtype") },
     { Pid::SPANNER_TICK,            true,  "tick",                  P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tick") },
     { Pid::SPANNER_TICKS,           true,  "ticks",                 P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "ticks") },
-    { Pid::SPANNER_TRACK2,          false, "track2",                P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "track2") },
+    { Pid::SPANNER_TRACK2,          false, "track2",                P_TYPE::INT,                PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "track2") },
     { Pid::OFFSET2,                 false, "userOff2",              P_TYPE::POINT,              PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "offset2") },
     { Pid::BREAK_MMR,               false, "breakMultiMeasureRest", P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "breaking multimeasure rest") },
     { Pid::MMREST_NUMBER_POS,       false, "mmRestNumberPos",       P_TYPE::SPATIUM,            PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "vertical position of multimeasure rest number") },
@@ -249,7 +249,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::DURATION,                true,  0,                       P_TYPE::FRACTION,           PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "duration") },
     { Pid::DURATION_TYPE_WITH_DOTS, true,  0,                       P_TYPE::DURATION_TYPE_WITH_DOTS, PropertyGroup::APPEARANCE, DUMMY_QT_TR_NOOP("propertyName", "duration type") },
     { Pid::ACCIDENTAL_ROLE,         false, "role",                  P_TYPE::ACCIDENTAL_ROLE,    PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "role") },
-    { Pid::TRACK,                   false, 0,                       P_TYPE::SIZE_T,             PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "track") },
+    { Pid::TRACK,                   false, 0,                       P_TYPE::SIZE_T,             PropertyGroup::NONE,            DUMMY_QT_TR_NOOP("propertyName", "track") },
 
     { Pid::FRET_STRINGS,            true,  "strings",               P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "strings") },
     { Pid::FRET_FRETS,              true,  "frets",                 P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "frets") },
