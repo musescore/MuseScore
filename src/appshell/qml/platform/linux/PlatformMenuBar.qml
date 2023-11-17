@@ -25,8 +25,6 @@ import Qt.labs.platform 1.1 as PLATFORM
 import MuseScore.AppShell 1.0
 
 Item {
-    // Loading subitems on Linux causes crashes when adding menus, but it works without it
-    property bool loadSubitems: true
     readonly property bool available: menuModel.isGlobalMenuAvailable()
 
     PLATFORM.MenuBar {
@@ -45,28 +43,26 @@ Item {
             var item = items[i]
             var menu = makeMenu(item)
 
-            if (loadSubitems) {
-                for (var j in item.subitems) {
-                    var menuItem = makeMenuItem(menu, item.subitems[j])
-                    menu.addItem(menuItem)
-                }
-            }
+            menuBar.addMenu(menu)
+
+            menu.load()
 
             item.subitemsChanged.connect(function(subitems, menuId) {
                 for (var l in menuBar.menus) {
                     var menu = menuBar.menus[l]
                     if (menu.id === menuId) {
-                        menuBar.menus[l].subitems = subitems
+                        menu.subitems = subitems
+                        menu.load()
                     }
                 }
             })
-
-            menuBar.addMenu(menu)
         }
 
         menuModel.itemsChanged.connect(function() {
             for (var i in menuModel.items) {
-                menuBar.menus[i].subitems = menuModel.items[i].subitems
+                var menu = menuBar.menus[i]
+                menu.subitems = menuModel.items[i].subitems
+                menu.load()
             }
         })
     }
@@ -74,17 +70,27 @@ Item {
     function makeMenu(menuInfo) {
         var menu = menuComponent.createObject(menuBar)
 
-        menu.id = menuInfo.id
-        menu.title = menuInfo.title
-        menu.enabled = menuInfo.enabled
-        menu.subitems = menuInfo.subitems
+        setUpMenu(menu, menuInfo)
 
         return menu
     }
 
-    function makeMenuItem(parentMenu, itemInfo) {
-        var menuItem = menuItemComponent.createObject(parentMenu)
+    function setUpMenu(menu, menuInfo) {
+        menu.id = menuInfo.id
+        menu.title = menuInfo.title
+        menu.enabled = menuInfo.enabled
+        menu.subitems = menuInfo.subitems
+    }
 
+    function makeMenuItem(parentMenu, itemInfo) {
+            var menuItem = menuItemComponent.createObject(parentMenu)
+
+            setUpMenuItem(menuItem, itemInfo)
+
+            return menuItem
+    }
+
+    function setUpMenuItem(menuItem, itemInfo) {
         menuItem.id = itemInfo.id
         menuItem.text = itemInfo.title + "\t" + itemInfo.portableShortcuts
         menuItem.enabled = itemInfo.enabled
@@ -92,8 +98,6 @@ Item {
         menuItem.checkable = itemInfo.checkable
         menuItem.separator = !Boolean(itemInfo.title)
         menuItem.role = itemInfo.role
-
-        return menuItem
     }
 
     Component {
@@ -103,7 +107,7 @@ Item {
             property string id: ""
             property var subitems: []
 
-            onAboutToShow: {
+            function load() {
                 clear()
 
                 for (var i in subitems) {
@@ -111,15 +115,31 @@ Item {
                     var isMenu = Boolean(item.subitems) && item.subitems.length > 0
 
                     if (isMenu) {
-                        var subMenu = makeMenu(item)
-
-                        addMenu(subMenu)
+                        let menu = makeMenu(item)
+                        addMenu(menu)
+                        menu.load()
                     } else {
-                        var menuItem = makeMenuItem(this, item)
-
+                        let menuItem = makeMenuItem(this, item)
                         addItem(menuItem)
                     }
                 }
+            }
+
+            function update() {
+                for (var i in subitems) {
+                    let item = subitems[i]
+                    let isMenu = Boolean(item.subitems) && item.subitems.length > 0
+
+                    if (isMenu) {
+                        setUpMenu(items[i].subMenu, item)
+                    } else {
+                        setUpMenuItem(items[i], item)
+                    }
+                }
+            }
+
+            onAboutToShow: {
+                update()
             }
         }
     }
