@@ -178,7 +178,7 @@ void HarpPedalPopupModel::setDiagramPedalState(QVector<Position> pedalState)
 
     beginCommand();
     setPopupPedalState(stdPedalState);
-    m_item->score()->undo(new mu::engraving::ChangeHarpPedalState(mu::engraving::toHarpPedalDiagram(m_item), getPopupPedalState()));
+    toHarpPedalDiagram(m_item)->undoChangePedalState(getPopupPedalState());
     updateNotation();
     endCommand();
     emit pedalStateChanged(pedalState);

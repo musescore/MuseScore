@@ -81,6 +81,8 @@ public:
     String createDiagramText();
     void updateDiagramText();
 
+    void undoChangePedalState(std::array<PedalPosition, HARP_STRING_NO> _pedalState);
+
     bool isTpcPlayable(int tpc);
     const std::set<int>& playableTpcs() const { return m_playableTpcs; }
 
