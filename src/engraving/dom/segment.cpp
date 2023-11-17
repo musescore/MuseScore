@@ -1740,6 +1740,10 @@ Spanner* Segment::firstSpanner(staff_idx_t activeStaff)
     if (range.first != range.second) {  // range not empty
         for (auto i = range.first; i != range.second; ++i) {
             Spanner* s = i->second;
+            if (s->segmentsEmpty()) {
+                continue;
+            }
+
             EngravingItem* e = s->startElement();
             if (!e) {
                 continue;
@@ -1765,6 +1769,10 @@ Spanner* Segment::lastSpanner(staff_idx_t activeStaff)
     if (range.first != range.second) {  // range not empty
         for (auto i = --range.second;; --i) {
             Spanner* s = i->second;
+            if (s->segmentsEmpty()) {
+                continue;
+            }
+
             EngravingItem* e = s->startElement();
             if (!e) {
                 continue;
