@@ -75,30 +75,6 @@ inline mpe::dynamic_level_t dynamicLevelFromType(const DynamicType type,
     return defLevel;
 }
 
-inline mpe::dynamic_level_t dynamicLevelRangeByTypes(const DynamicType dynamicTypeFrom,
-                                                     const DynamicType dynamicTypeTo,
-                                                     const mpe::dynamic_level_t nominalDynamicLevelFrom,
-                                                     const mpe::dynamic_level_t nominalDynamicLevelTo, const bool isCrescendo)
-{
-    mpe::dynamic_level_t dynamicLevelFrom = 0;
-    mpe::dynamic_level_t dynamicLevelTo = 0;
-
-    dynamicLevelFrom = dynamicLevelFromType(dynamicTypeFrom, nominalDynamicLevelFrom);
-
-    mpe::dynamic_level_t defaultStep = mpe::DYNAMIC_LEVEL_STEP;
-    if (!isCrescendo) {
-        defaultStep = -mpe::DYNAMIC_LEVEL_STEP;
-    }
-
-    if (nominalDynamicLevelTo == mpe::dynamicLevelFromType(mpe::DynamicType::Natural)) {
-        dynamicLevelTo = dynamicLevelFromType(dynamicTypeTo, dynamicLevelFrom + defaultStep);
-    } else {
-        dynamicLevelTo = dynamicLevelFromType(dynamicTypeTo, nominalDynamicLevelTo);
-    }
-
-    return dynamicLevelTo - dynamicLevelFrom;
-}
-
 inline bool isOrdinaryDynamicType(const DynamicType type)
 {
     static const std::set<DynamicType> ORDINARY_DYNAMIC_TYPES = {
