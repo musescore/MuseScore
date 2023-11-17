@@ -42,6 +42,8 @@ static constexpr int GRIP_FOCUS_RADIUS = GRIP_SELECTED_RADIUS + 2;
 static constexpr int GRID_LINE_WIDTH = 1;
 static constexpr int CURVE_LINE_WIDTH = 3;
 
+static constexpr int INVALID_INDEX = -1;
+
 static QPointF constrainToGrid(const QRectF& frameRectWithoutBorders, const QPointF& point)
 {
     QPointF result = point;
@@ -60,16 +62,6 @@ static QPointF constrainToGrid(const QRectF& frameRectWithoutBorders, const QPoi
     }
 
     return result;
-}
-
-QString pointAccessibleName(const CurvePoint& point)
-{
-    int fulls = point.pitch / 100;
-    int quarts = (point.pitch % 100) / 25;
-
-    QString string = mu::engraving::bendAmountToString(fulls, quarts).toQString();
-
-    return mu::qtrc("inspector", "Time: %1, value: %2").arg(QString::number(point.time), string);
 }
 
 BendGridCanvas::BendGridCanvas(QQuickItem* parent)
@@ -136,7 +128,7 @@ bool BendGridCanvas::focusOnFirstPoint()
         return true;
     }
 
-    int firstPointIndex = -1;
+    int firstPointIndex = INVALID_INDEX;
     for (int i = 0; i < m_points.size(); ++i) {
         if (m_points[i].canMove()) {
             firstPointIndex = i;
@@ -144,12 +136,11 @@ bool BendGridCanvas::focusOnFirstPoint()
         }
     }
 
-    if (firstPointIndex == -1) {
+    if (!isPointIndexValid(firstPointIndex)) {
         return false;
     }
 
-    m_focusedPointIndex = firstPointIndex;
-    m_pointsAccessibleItems[firstPointIndex]->setState(AccessibleItem::State::Focused, true);
+    setFocusedPointIndex(firstPointIndex);
 
     update();
 
@@ -162,8 +153,7 @@ bool BendGridCanvas::resetFocus()
         return false;
     }
 
-    m_pointsAccessibleItems[m_focusedPointIndex.value()]->setState(AccessibleItem::State::Focused, false);
-    m_focusedPointIndex = std::nullopt;
+    setFocusedPointIndex(INVALID_INDEX);
 
     update();
 
@@ -468,12 +458,22 @@ bool BendGridCanvas::shortcutOverride(QKeyEvent* event)
     switch (event->key()) {
     case Qt::Key_Left:
         index--;
+
+        if (!isPointIndexValid(index)) {
+            return false;
+        }
+
         if (!m_points.at(index).canMove()) {
             return false;
         }
         break;
     case Qt::Key_Right:
         index++;
+
+        if (!isPointIndexValid(index)) {
+            return false;
+        }
+
         if (!m_points.at(index).canMove()) {
             return false;
         }
@@ -482,9 +482,7 @@ bool BendGridCanvas::shortcutOverride(QKeyEvent* event)
         return false;
     }
 
-    m_pointsAccessibleItems[m_focusedPointIndex.value()]->setState(AccessibleItem::State::Focused, false);
-    m_focusedPointIndex = index;
-    m_pointsAccessibleItems[index]->setState(AccessibleItem::State::Focused, true);
+    setFocusedPointIndex(index);
 
     update();
 
@@ -744,6 +742,11 @@ void BendGridCanvas::drawCurve(QPainter* painter, const QRectF& frameRect)
     }
 }
 
+bool BendGridCanvas::isPointIndexValid(int index) const
+{
+    return index >= 0 && index < m_points.size();
+}
+
 std::optional<int> BendGridCanvas::pointIndex(const CurvePoint& point, bool movable) const
 {
     const int numberOfPoints = m_points.size();
@@ -804,8 +807,39 @@ QPointF BendGridCanvas::pointCoord(const QRectF& frameRect, const CurvePoint& po
     return QPointF(x, y);
 }
 
+QString BendGridCanvas::pointAccessibleName(const CurvePoint& point)
+{
+    int fulls = point.pitch / 100;
+    int quarts = (point.pitch % 100) / 25;
+
+    QString pointName = m_needVoicePointName ? point.name : "";
+    QString string = mu::engraving::bendAmountToString(fulls, quarts).toQString();
+
+    return (!pointName.isEmpty() ? pointName + "; " : "")
+           + mu::qtrc("inspector", "Time: %2, value: %3").arg(QString::number(point.time), string);
+}
+
+void BendGridCanvas::updatePointAccessibleName(int index)
+{
+    if (!isPointIndexValid(index)) {
+        return;
+    }
+
+    AccessibleItem* accItem = m_pointsAccessibleItems[index];
+    if (accItem) {
+        accItem->setName(pointAccessibleName(m_points.at(index)));
+        accItem->accessiblePropertyChanged().send(accessibility::IAccessible::Property::Name, Val());
+    }
+
+    m_needVoicePointName = false;
+}
+
 bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
 {
+    if (!isPointIndexValid(pointIndex)) {
+        return false;
+    }
+
     bool moved = false;
 
     CurvePoint& currentPoint = m_points[pointIndex];
@@ -888,11 +922,29 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
     }
 
     if (moved) {
-        m_pointsAccessibleItems[pointIndex]->setName(pointAccessibleName(currentPoint));
-        m_pointsAccessibleItems[pointIndex]->accessiblePropertyChanged().send(accessibility::IAccessible::Property::Name, Val());
+        updatePointAccessibleName(pointIndex);
     }
 
     return moved;
+}
+
+void BendGridCanvas::setFocusedPointIndex(int index)
+{
+    if (m_focusedPointIndex.has_value()) {
+        m_pointsAccessibleItems[m_focusedPointIndex.value()]->setState(AccessibleItem::State::Focused, false);
+    }
+
+    bool isIndexValid = isPointIndexValid(index);
+    m_focusedPointIndex = isIndexValid ? std::make_optional(index) : std::nullopt;
+
+    if (!isIndexValid) {
+        return;
+    }
+
+    m_needVoicePointName = true;
+    updatePointAccessibleName(index);
+
+    m_pointsAccessibleItems[index]->setState(AccessibleItem::State::Focused, true);
 }
 
 mu::ui::AccessibleItem* BendGridCanvas::accessibleParent() const

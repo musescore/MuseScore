@@ -364,7 +364,7 @@ void AccessibilityController::triggerRevoicingOfChangedName(IAccessible* item)
     m_itemForRestoreFocus = item;
 
     //! NOTE: Restore the focused element after some delay(this value was found experimentally)
-    QTimer::singleShot(200, [=]() {
+    QTimer::singleShot(100, [=]() {
         if (m_lastFocused) {
             m_lastFocused->setState(State::Focused, false);
         }

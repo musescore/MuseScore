@@ -60,16 +60,17 @@ struct CurvePoint
     bool limitMoveVerticallyByNearestPoints = true;
 
     bool endDashed = false;
+    QString name;
 
     bool generated = false;
 
     CurvePoint() = default;
-    CurvePoint(int time, int pitch, const QList<MoveDirection>& moveDirection = {}, bool endDashed = false, bool generated = false,
+    CurvePoint(int time, int pitch, const QList<MoveDirection>& moveDirection = {}, bool endDashed = false, const QString& name = QString(),
                bool limitMoveVerticallyByNearestPoints = true)
-        : time(time), pitch(pitch), moveDirection(moveDirection), limitMoveVerticallyByNearestPoints(limitMoveVerticallyByNearestPoints),
-        endDashed(endDashed), generated(generated) {}
-    CurvePoint(int time, int pitch, bool generated)
-        : time(time), pitch(pitch), generated(generated) {}
+        : time(time), pitch(pitch), moveDirection(moveDirection),
+        limitMoveVerticallyByNearestPoints(limitMoveVerticallyByNearestPoints), endDashed(endDashed), name(name) {}
+    CurvePoint(int time, int pitch, bool generated, bool endDashed = false)
+        : time(time), pitch(pitch), endDashed(endDashed), generated(generated) {}
 
     bool canMove(MoveDirection direction = MoveDirection::None) const
     {
@@ -104,6 +105,7 @@ struct CurvePoint
         map["limitMoveVerticallyByNearestPoints"] = limitMoveVerticallyByNearestPoints;
 
         map["endDashed"] = endDashed;
+        map["name"] = name;
         map["generated"] = generated;
 
         return map;
@@ -125,6 +127,7 @@ struct CurvePoint
         point.limitMoveVerticallyByNearestPoints = map["limitMoveVerticallyByNearestPoints"].toBool();
 
         point.endDashed = map["endDashed"].toBool();
+        point.name = map["name"].toString();
         point.generated = map["generated"].toBool();
 
         return point;

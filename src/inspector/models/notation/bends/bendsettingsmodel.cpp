@@ -165,22 +165,25 @@ void BendSettingsModel::loadBendCurve()
     m_releaseBend = bend->isReleaseBend();
     bool isSlightBend = bend->type() == GuitarBendType::SLIGHT_BEND;
 
+    QString startPointName = qtrc("inspector", "Start point");
+    QString endPointName = qtrc("inspector", "End point");
+
     if (bend->type() == GuitarBendType::PRE_BEND) {
         m_bendCurve = { CurvePoint(0, 0, true),
                         CurvePoint(0, endPitch, true),
-                        CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Vertical }, true) };
+                        CurvePoint(endTime, endPitch, { CurvePoint::MoveDirection::Vertical }, true, endPointName) };
     } else if (m_releaseBend) {
         m_bendCurve = { CurvePoint(0, startPitch - endPitch, true),
-                        CurvePoint(starTime, startPitch - endPitch, { CurvePoint::MoveDirection::Horizontal }, true),
-                        CurvePoint(endTime, 0, { CurvePoint::MoveDirection::Both }, false, false, false),
-                        CurvePoint(CurvePoint::MAX_TIME, 0, {}, true, true) };
+                        CurvePoint(starTime, startPitch - endPitch, { CurvePoint::MoveDirection::Horizontal }, true, startPointName),
+                        CurvePoint(endTime, 0, { CurvePoint::MoveDirection::Both }, false, endPointName, false),
+                        CurvePoint(CurvePoint::MAX_TIME, 0, true, true) };
     } else {
         m_bendCurve = { CurvePoint(0, startPitch, true),
-                        CurvePoint(starTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, true),
+                        CurvePoint(starTime, startPitch, { CurvePoint::MoveDirection::Horizontal }, true, startPointName),
                         CurvePoint(endTime, endPitch,
                                    { isSlightBend ? CurvePoint::MoveDirection::Horizontal : CurvePoint::MoveDirection::Both },
-                                   false, false, startPitch == 0),
-                        CurvePoint(CurvePoint::MAX_TIME, endPitch, {}, true, true) };
+                                   false, endPointName, startPitch == 0),
+                        CurvePoint(CurvePoint::MAX_TIME, endPitch, true, true) };
     }
 
     emit bendCurveChanged();

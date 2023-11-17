@@ -126,15 +126,23 @@ private:
     void drawBackground(QPainter* painter, const QRectF& frameRect);
     void drawCurve(QPainter* painter, const QRectF& frameRect);
 
+    bool isPointIndexValid(int index) const;
+
     std::optional<int> pointIndex(const CurvePoint& point, bool movable = true) const;
     CurvePoint point(const QRectF& frameRect, int frameX, int frameY) const;
     QPointF pointCoord(const QRectF& frameRect, const CurvePoint& point) const;
 
+    QString pointAccessibleName(const CurvePoint& point);
+    void updatePointAccessibleName(int index);
+
     bool movePoint(int pointIndex, const CurvePoint& toPoint);
+
+    void setFocusedPointIndex(int index);
 
     CurvePoints m_points;
     QList<ui::AccessibleItem*> m_pointsAccessibleItems;
     ui::AccessibleItem* m_accessibleParent = nullptr;
+    bool m_needVoicePointName = false;
 
     /// The number of rows and columns.
     /// This is in fact the number of lines that are to be drawn.

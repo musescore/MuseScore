@@ -101,7 +101,7 @@ Column {
                 row: bend.navigationRowEnd + 1
 
                 accessible.role: MUAccessible.Information
-                accessible.name: bend.titleText
+                accessible.name: bend.titleText + "; " + qsTrc("inspector", "Press Enter to start editing")
 
                 onActiveChanged: {
                     if (navCtrl.active) {
