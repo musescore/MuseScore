@@ -227,6 +227,21 @@ mu::async::Notification Notation::openChanged() const
     return m_openChanged;
 }
 
+bool Notation::hasVisibleParts() const
+{
+    if (!m_parts || !m_parts->hasParts()) {
+        return false;
+    }
+
+    for (const Part* part : m_parts->partList()) {
+        if (part->show()) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
 void Notation::notifyAboutNotationChanged()
 {
     m_notationChanged.notify();

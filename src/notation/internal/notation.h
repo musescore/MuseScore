@@ -60,6 +60,8 @@ public:
     void setIsOpen(bool open) override;
     async::Notification openChanged() const override;
 
+    bool hasVisibleParts() const override;
+
     ViewMode viewMode() const override;
     void setViewMode(const ViewMode& viewMode) override;
     async::Notification viewModeChanged() const override;
