@@ -762,6 +762,7 @@ void SingleLayout::layout(Chord* item, const Context& ctx)
 {
     LayoutContext tctx(ctx.dontUseScore());
     ChordLayout::layout(item, tctx);
+    ChordLayout::layoutStem(item, tctx);
 }
 
 void SingleLayout::layout(ChordLine* item, const Context& ctx)
