@@ -84,16 +84,6 @@ struct LedgerLineData {
     bool accidental;
 };
 
-static bool isGraceChordPlayble(const Chord* chord)
-{
-    const std::vector<Note*>& notes = chord->notes();
-    if (notes.empty()) {
-        return false;
-    }
-
-    return !notes.front()->isPreBendStart();
-}
-
 //---------------------------------------------------------
 //   upNote
 //---------------------------------------------------------
@@ -1762,6 +1752,10 @@ void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
 bool Chord::isChordPlayable() const
 {
     if (!m_notes.empty()) {
+        if (m_notes.front()->isPreBendStart()) {
+            return false;
+        }
+
         return m_notes.front()->getProperty(Pid::PLAY).toBool();
     } else if (m_tremolo) {
         return m_tremolo->getProperty(Pid::PLAY).toBool();
@@ -2433,7 +2427,7 @@ GraceNotesGroup& Chord::graceNotesBefore(bool filterUnplayble) const
                 | NoteType::GRACE4
                 | NoteType::GRACE16
                 | NoteType::GRACE32)) {
-            if (filterUnplayble && !isGraceChordPlayble(c)) {
+            if (filterUnplayble && !c->isChordPlayable()) {
                 continue;
             }
 
@@ -2447,13 +2441,17 @@ GraceNotesGroup& Chord::graceNotesBefore(bool filterUnplayble) const
 //   graceNotesAfter
 //---------------------------------------------------------
 
-GraceNotesGroup& Chord::graceNotesAfter() const
+GraceNotesGroup& Chord::graceNotesAfter(bool filterUnplayble) const
 {
     m_graceNotesAfter.clear();
     for (int i = static_cast<int>(m_graceNotes.size()) - 1; i >= 0; i--) {
         Chord* c = m_graceNotes[i];
         assert(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER)) {
+            if (filterUnplayble && !c->isChordPlayable()) {
+                continue;
+            }
+
             m_graceNotesAfter.push_back(c);
         }
     }
