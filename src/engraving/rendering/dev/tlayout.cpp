@@ -4256,7 +4256,9 @@ void TLayout::fillNoteShape(const Note* item, Note::LayoutData* ldata)
         }
     }
 
-    if (item->part()->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
+    // This method is also called from SingleLayout, where `part` may be nullptr
+    Part* part = item->part();
+    if (part && part->instrument()->hasStrings() && !item->staffType()->isTabStaff()) {
         GuitarBend* bend = item->bendFor();
         if (bend && bend->type() == GuitarBendType::SLIGHT_BEND && !bend->segmentsEmpty()) {
             GuitarBendSegment* bendSeg = toGuitarBendSegment(bend->frontSegment());
