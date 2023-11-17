@@ -2393,6 +2393,15 @@ int Note::playingOctave() const
     return mu::engraving::playingOctave(ppitch(), tpc1());
 }
 
+double Note::playingTuning() const
+{
+    if (!m_accidental) {
+        return m_tuning;
+    }
+
+    return m_tuning + Accidental::subtype2centOffset(m_accidental->accidentalType());
+}
+
 //---------------------------------------------------------
 //   customizeVelocity
 //    Input is the global velocity determined by dynamic
