@@ -82,6 +82,7 @@ private:
     bool m_isShowHoldLineAvailable = false;
 
     CurvePoints m_bendCurve;
+    bool m_releaseBend = false;
 };
 }
 

@@ -1489,6 +1489,7 @@ void TDraw::draw(const GuitarBendSegment* item, Painter* painter)
     pen.setWidthF(item->lineWidth());
     pen.setCapStyle(PenCapStyle::FlatCap);
     pen.setJoinStyle(PenJoinStyle::MiterJoin);
+    pen.setColor(item->uiColor());
     painter->setPen(pen);
 
     Brush brush;
@@ -1499,7 +1500,7 @@ void TDraw::draw(const GuitarBendSegment* item, Painter* painter)
 
     if (item->staff()->isTabStaff(item->tick())) {
         brush.setStyle(BrushStyle::SolidPattern);
-        brush.setColor(item->curColor());
+        brush.setColor(item->uiColor());
         painter->setBrush(brush);
         painter->setNoPen();
         painter->drawPolygon(item->ldata()->arrow());
