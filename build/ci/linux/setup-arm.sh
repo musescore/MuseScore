@@ -89,7 +89,6 @@ apt_packages=(
   coreutils
   gawk
   sed
-  wget
   desktop-file-utils # installs `desktop-file-validate` for appimagetool
   zsync # installs `zsyncmake` for appimagetool
   libglib2.0-dev
@@ -225,6 +224,10 @@ git clone https://github.com/linuxdeploy/linuxdeploy
 cd /linuxdeploy/
 git checkout --recurse-submodules 49f4f237762395c6a37
 git submodule update --init --recursive
+
+# patch src/core/generate-excludelist.sh to use curl instead of wget which fails on armhf
+sed -i 's/wget --quiet "$url" -O -/curl "$url"/g' src/core/generate-excludelist.sh
+
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF -DUSE_SYSTEM_BOOST=ON ..
@@ -242,6 +245,10 @@ git clone https://github.com/linuxdeploy/linuxdeploy-plugin-qt
 cd /linuxdeploy-plugin-qt/
 git checkout --recurse-submodules 59b6c1f90e21ba14
 git submodule update --init --recursive
+
+# patch src/core/generate-excludelist.sh to use curl instead of wget which fails on armhf
+sed -i 's/wget --quiet "$url" -O -/curl "$url"/g' lib/linuxdeploy/src/core/generate-excludelist.sh
+
 mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF -DUSE_SYSTEM_BOOST=ON ..
@@ -359,7 +366,7 @@ if [ "$PACKARCH" == "armv7l" ]; then
   echo "Get Breakpad"
   breakpad_dir=$BUILD_TOOLS/breakpad
   if [[ ! -d "$breakpad_dir" ]]; then
-    wget -q --show-progress -O $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/armv7l/dump_syms.zip"
+    curl -o $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/armv7l/dump_syms.zip"
     7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
   fi
   echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
@@ -367,7 +374,7 @@ else
   echo "Get Breakpad"
   breakpad_dir=$BUILD_TOOLS/breakpad
   if [[ ! -d "$breakpad_dir" ]]; then
-    wget -q --show-progress -O $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/aarch64/dump_syms.zip"
+    curl -o $BUILD_TOOLS/dump_syms.7z "https://s3.amazonaws.com/utils.musescore.org/breakpad/linux/aarch64/dump_syms.zip"
     7z x -y $BUILD_TOOLS/dump_syms.7z -o"$breakpad_dir"
   fi
   echo export DUMPSYMS_BIN="$breakpad_dir/dump_syms" >> $ENV_FILE
