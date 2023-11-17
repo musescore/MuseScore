@@ -93,7 +93,7 @@ Note* GuitarBend::endNote() const
     return toNote(endEl);
 }
 
-void GuitarBend::setEndNotePitch(int pitch, int quarterOff)
+void GuitarBend::setEndNotePitch(int pitch, QuarterOffset quarterOff)
 {
     Note* note = endNote();
     IF_ASSERT_FAILED(note) {
@@ -113,7 +113,7 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterOff)
     score()->undoChangePitch(note, pitch, targetTpc1, targetTpc2);
 
     AccidentalType accidentalType = Accidental::value2subtype(tpc2alter(targetTpc1));
-    if (quarterOff == 1) {
+    if (quarterOff == QuarterOffset::QUARTER_SHARP) {
         switch (accidentalType) {
         case AccidentalType::NONE:
         case AccidentalType::NATURAL:
@@ -128,7 +128,7 @@ void GuitarBend::setEndNotePitch(int pitch, int quarterOff)
         default:
             break;
         }
-    } else if (quarterOff == -1) {
+    } else if (quarterOff == QuarterOffset::QUARTER_FLAT) {
         switch (accidentalType) {
         case AccidentalType::NONE:
         case AccidentalType::NATURAL:

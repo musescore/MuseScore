@@ -823,17 +823,21 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
 
     if (canMoveVertically) {
         bool canMove = true;
-        bool moveToTop = currentPoint.pitch < toPoint.pitch;
 
-        if (pointIndex - 1 >= 0) {
-            const CurvePoint& leftPoint = m_points.at(pointIndex - 1);
-            bool isLeftValid = moveToTop ? leftPoint.pitch >= currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
-            if (isLeftValid) {
-                canMove = leftPoint.generated || (moveToTop ? leftPoint.pitch > toPoint.pitch : leftPoint.pitch < toPoint.pitch);
+        if (currentPoint.limitMoveVerticallyByNearestPoints) {
+            bool moveToTop = currentPoint.pitch < toPoint.pitch;
+            if (pointIndex - 1 >= 0) {
+                const CurvePoint& leftPoint = m_points.at(pointIndex - 1);
+                bool isLeftValid = moveToTop ? leftPoint.pitch >= currentPoint.pitch : leftPoint.pitch <= currentPoint.pitch;
+                if (isLeftValid) {
+                    canMove = leftPoint.generated || (moveToTop ? leftPoint.pitch > toPoint.pitch : leftPoint.pitch < toPoint.pitch);
+                }
             }
-        }
 
-        if (canMove) {
+            if (!canMove) {
+                return moved;
+            }
+
             if (pointIndex + 1 < m_points.size()) {
                 const CurvePoint& rightPoint = m_points.at(pointIndex + 1);
                 bool isRightValid = moveToTop ? rightPoint.pitch >= currentPoint.pitch : rightPoint.pitch <= currentPoint.pitch;
@@ -841,28 +845,29 @@ bool BendGridCanvas::movePoint(int pointIndex, const CurvePoint& toPoint)
                     canMove = rightPoint.generated || (moveToTop ? rightPoint.pitch > toPoint.pitch : rightPoint.pitch < toPoint.pitch);
                 }
             }
+        }
 
-            if (canMove) {
-                currentPoint.pitch = toPoint.pitch;
+        if (canMove) {
+            currentPoint.pitch = toPoint.pitch;
 
-                bool isDashed = currentPoint.endDashed;
-                bool isNextDashed = (pointIndex + 1 < m_points.size()) && m_points.at(pointIndex + 1).endDashed;
+            bool isDashed = currentPoint.endDashed;
+            bool isNextDashed = (pointIndex + 1 < m_points.size()) && m_points.at(pointIndex + 1).endDashed;
 
-                if (isDashed) {
-                    m_points[pointIndex - 1].pitch = toPoint.pitch;
-                }
-
-                if (isNextDashed) {
-                    m_points[pointIndex + 1].pitch = toPoint.pitch;
-                }
-
-                moved = true;
+            if (isDashed) {
+                m_points[pointIndex - 1].pitch = toPoint.pitch;
             }
+
+            if (isNextDashed) {
+                m_points[pointIndex + 1].pitch = toPoint.pitch;
+            }
+
+            moved = true;
         }
     }
 
     if (canMoveHorizontally) {
         bool canMove = true;
+
         bool moveToLeft = currentPoint.time > toPoint.time;
         if (moveToLeft) {
             if (pointIndex - 1 >= 0) {

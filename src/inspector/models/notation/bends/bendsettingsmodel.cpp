@@ -270,12 +270,13 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
 
     const CurvePoint& endTimePoint = points.at(END_POINT_INDEX);
 
-    int bendAmount = curvePitchToBendAmount(points[END_POINT_INDEX].pitch);
+    int bendAmount = curvePitchToBendAmount(endTimePoint.pitch);
     int pitch = bendAmount / 2 + bend->startNoteOfChain()->pitch();
-    int quarterOff = bendAmount % 2;
-    if (pitch == bend->startNote()->pitch() && quarterOff == 1) {
+    QuarterOffset quarterOff = bendAmount % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+    if (pitch == bend->startNote()->pitch() && quarterOff == QuarterOffset::QUARTER_SHARP) {
+        // Because a flat second is more readable than a sharp unison
         pitch += 1;
-        quarterOff = -1;
+        quarterOff = QuarterOffset::QUARTER_FLAT;
     }
 
     float starTimeFactor = static_cast<float>(points.at(START_POINT_INDEX).time) / CurvePoint::MAX_TIME;

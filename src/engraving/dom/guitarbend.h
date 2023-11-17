@@ -30,6 +30,12 @@
 #include "types.h"
 
 namespace mu::engraving {
+enum class QuarterOffset {
+    QUARTER_FLAT,
+    NONE,
+    QUARTER_SHARP
+};
+
 class GuitarBend final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, GuitarBend)
@@ -57,7 +63,7 @@ public:
     Note* startNoteOfChain() const;
 
     Note* endNote() const;
-    void setEndNotePitch(int pitch, int quarterOff = 0);
+    void setEndNotePitch(int pitch, QuarterOffset quarterOff = QuarterOffset::NONE);
 
     bool isReleaseBend() const;
     bool isFullRelease() const;
