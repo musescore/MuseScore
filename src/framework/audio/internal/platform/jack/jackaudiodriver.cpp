@@ -23,6 +23,7 @@
 #include <jack/midiport.h>
 #include "framework/midi/miditypes.h"
 #include "framework/midi/midierrors.h"
+#include "framework/midi/imidiinport.h"
 
 #include <fcntl.h>
 #include <unistd.h>
@@ -143,7 +144,7 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
         *l++ = *sp++;
         *r++ = *sp++;
     }
-
+    jack_client_t* client = static_cast<jack_client_t*>(state->m_jackDeviceHandle);
     // if (!isConnected()) {
     //    LOGI() << "---- JACK-midi output sendEvent SORRY, not connected";
     //    return make_ret(Err::MidiNotConnected);
@@ -151,9 +152,10 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
     if (!state->m_midiOutputPorts.empty()) {
         jack_port_t* port = state->m_midiOutputPorts.front();
         if (port) {
-            int segmentSize = jack_get_buffer_size(static_cast<jack_client_t*>(state->m_jackDeviceHandle));
+            int segmentSize = jack_get_buffer_size(client);
             void* pb = jack_port_get_buffer(port, segmentSize);
             // handle midi
+            // FIX: can portBuffer be nullptr?
             muse::midi::Event e;
             while (1) {
                 if (state->m_midiQueue.pop(e)) {
@@ -170,6 +172,36 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
                 LOGW() << "no jack-midi-outport, consumed unused Event: " << e.to_string();
             } else {
                 break;
+            }
+        }
+    }
+
+    if (!state->m_midiInputPorts.empty()) {
+        jack_port_t* port = state->m_midiInputPorts.front();
+        if (port) {
+            int segmentSize = jack_get_buffer_size(client);
+            void* pb = jack_port_get_buffer(port, segmentSize);
+            if (pb) {
+                muse::midi::Event ev;
+                jack_nframes_t n = jack_midi_get_event_count(pb);
+                for (jack_nframes_t i = 0; i < n; ++i) {
+                    jack_midi_event_t event;
+                    if (jack_midi_event_get(&event, pb, i) != 0) continue;
+                    int type = event.buffer[0];
+                    uint32_t data = 0;
+                    if ((type & 0xf0) == 0x90 ||
+                        (type & 0xf0) == 0x90) {
+                        data = 0x90
+                               | (type & 0x0f)
+                               | ((event.buffer[1] & 0x7F) << 8)
+                               | ((event.buffer[2] & 0x7F) << 16);
+                        Event e = Event::fromMIDI10Package(data);
+                        e = e.toMIDI20();
+                        if (e) {
+                            state->m_eventReceived.send(static_cast<tick_t>(0), e);
+                        }
+                    }
+                }
             }
         }
     }
@@ -274,7 +306,11 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
         return false;
     }
 
-    // midi
+    // midi input
+    jack_port_t* midi_input_port = jack_port_register (handle, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
+    m_midiInputPorts.push_back(midi_input_port);
+
+    // midi output
     int portFlag = JackPortIsOutput;
     const char* portType = JACK_DEFAULT_MIDI_TYPE;
     jack_port_t* port = jack_port_register(handle, "Musescore", portType, portFlag, 0);
