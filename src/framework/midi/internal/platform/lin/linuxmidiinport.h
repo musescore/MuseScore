@@ -25,9 +25,11 @@
 #include <memory>
 #include <thread>
 
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 
 #include "framework/audio/audiomodule.h"
+#include "framework/audio/iaudiodriver.h"
 #include "imidiinport.h"
 #include "internal/midideviceslistener.h"
 
@@ -45,7 +47,7 @@ public:
     LinuxMidiInPort() = default;
     ~LinuxMidiInPort() = default;
 
-    void init(std::shared_ptr<muse::audio::AudioModule> am);
+    void init();
     void deinit();
 
     std::vector<MidiDevice> availableDevices() const override;

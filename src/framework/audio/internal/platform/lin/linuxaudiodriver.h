@@ -25,6 +25,8 @@
 
 #include "async/asyncable.h"
 
+#include "framework/midi/imidiinport.h"
+#include "framework/midi/midimodule.h"
 #include "iaudiodriver.h"
 
 #include "audiodeviceslistener.h"
@@ -32,6 +34,7 @@
 namespace muse::audio {
 class LinuxAudioDriver : public IAudioDriver, public async::Asyncable
 {
+    Inject<muse::midi::IMidiInPort> midiInPort;
 public:
     LinuxAudioDriver();
     ~LinuxAudioDriver();
