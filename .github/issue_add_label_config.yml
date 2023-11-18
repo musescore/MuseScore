@@ -1,11 +1,11 @@
 crash:
     - "Crash or freeze"
 engraving:
-    - "Engraving bug (incorrect score rendering)"
+    - "Engraving bug \\(incorrect score rendering\\)"
 "UX/interaction":
-    - "UX/Interaction bug (incorrect behaviour)"
+    - "UX/Interaction bug \\(incorrect behaviour\\)"
 UI:
-    - "UI bug (incorrect info or interface appearance)"
+    - "UI bug \\(incorrect info or interface appearance\\)"
 VST:
     - "VST bug"
 "Muse Sounds":
@@ -13,7 +13,7 @@ VST:
 playback:
     - "General playback bug"
 cloud:
-    - "Cloud issue (opening, saving, logging in/out)"
+    - "Cloud issue \\(opening, saving, logging in/out\\)"
 corruption:
     - "File corruption"
 "needs review":
