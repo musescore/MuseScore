@@ -40,6 +40,7 @@ public:
     void close() override;
     bool isOpened() const override;
     bool pushMidiEvent(muse::midi::Event& e) override;
+    void registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event>) override;
 
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
@@ -51,7 +52,7 @@ public:
     std::vector<jack_port_t*> m_midiInputPorts;
     std::vector<jack_port_t*> m_midiOutputPorts;
     ThreadSafeQueue<muse::midi::Event> m_midiQueue;
-    async::Channel<muse::midi::tick_t, muse::midi::Event > m_eventReceived;
+    async::Channel<muse::midi::tick_t, muse::midi::Event> m_eventReceived;
 
 private:
     std::string m_deviceName;
