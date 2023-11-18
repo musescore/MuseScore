@@ -26,6 +26,7 @@
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
+#include "framework/midi/midimodule.h"
 #include "internal/audioconfiguration.h"
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"
@@ -255,7 +256,7 @@ void AudioModule::setupAudioDriver(const IApplication::RunMode& mode)
     };
 
     if (mode == IApplication::RunMode::GuiApp) {
-        m_audioDriver->init();
+        m_audioDriver->init(static_cast<mu::midi::MidiModule*>(m_midiModule_ptr));
 
         IAudioDriver::Spec activeSpec;
         if (m_audioDriver->open(requiredSpec, &activeSpec)) {
@@ -295,4 +296,11 @@ void AudioModule::setupAudioWorker(const IAudioDriver::Spec& activeSpec)
     };
 
     m_audioWorker->run(workerSetup, workerLoopBody);
+}
+
+void AudioModule::preamble([[maybe_unused]] void* mm_ptr)
+{
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    m_midiModule_ptr = mm_ptr;
+#endif
 }

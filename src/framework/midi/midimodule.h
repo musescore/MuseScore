@@ -56,6 +56,7 @@ public:
     void onDeinit() override;
 
     void preamble(mu::audio::AudioModule* am);
+    mu::async::Channel<tick_t, mu::midi::Event>* getMidiInputQueue();
 
 private:
     std::shared_ptr<MidiConfiguration> m_configuration;

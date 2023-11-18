@@ -57,6 +57,7 @@ public:
     async::Notification deviceChanged() const override;
 
     async::Channel<tick_t, Event> eventReceived() const override;
+    async::Channel<tick_t, Event>* eventReceivedPtr();
 
 private:
     Ret run();

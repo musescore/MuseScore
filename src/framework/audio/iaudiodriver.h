@@ -62,7 +62,7 @@ public:
         void* userdata;               // Userdata passed to callback (ignored for NULL callbacks).
     };
 
-    virtual void init() = 0;
+    virtual void init(void* midiModule_ptr) = 0;
 
     virtual std::string name() const = 0;
     virtual bool open(const Spec& spec, Spec* activeSpec) = 0;
@@ -98,6 +98,7 @@ public:
     virtual void close() = 0;
     virtual bool isOpened() const = 0;
     virtual bool pushMidiEvent(mu::midi::Event&) = 0;
+    virtual void registerMidiInputQueue(async::Channel<mu::midi::tick_t, mu::midi::Event >*) = 0;
     virtual std::vector<mu::midi::MidiDevice> availableMidiDevices() const = 0;
 
     IAudioDriver::Spec m_spec; // current running spec

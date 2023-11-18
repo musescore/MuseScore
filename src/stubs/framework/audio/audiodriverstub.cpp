@@ -23,7 +23,7 @@
 
 using namespace mu::audio;
 
-void AudioDriverStub::init()
+void AudioDriverStub::init(void* midiModule_ptr)
 {
 }
 

@@ -37,6 +37,7 @@ public:
     void close() override;
     bool isOpened() const override;
     bool pushMidiEvent(mu::midi::Event& e) override;
+    void registerMidiInputQueue(async::Channel<mu::midi::tick_t, mu::midi::Event >*) override;
     std::vector<mu::midi::MidiDevice> availableMidiDevices() const override;
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
@@ -47,6 +48,7 @@ public:
     bool m_audioProcessingDone = false;
     pthread_t m_threadHandle = 0;
 private:
+    async::Channel<mu::midi::tick_t, mu::midi::Event >* m_eventReceived;
     std::string m_deviceName = "default";
     void alsaCleanup();
 };

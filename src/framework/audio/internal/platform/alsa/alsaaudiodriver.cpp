@@ -196,6 +196,11 @@ bool AlsaDriverState::pushMidiEvent(mu::midi::Event&)
     return true; // dummy
 }
 
+void AlsaDriverState::registerMidiInputQueue(async::Channel<mu::midi::tick_t, mu::midi::Event >* midiInputQueue)
+{
+    m_eventReceived = midiInputQueue;
+}
+
 std::vector<mu::midi::MidiDevice> AlsaDriverState::availableMidiDevices() const
 {
     std::vector<mu::midi::MidiDevice> x;

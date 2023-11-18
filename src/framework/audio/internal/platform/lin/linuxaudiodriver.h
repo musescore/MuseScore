@@ -25,6 +25,7 @@
 
 #include "async/asyncable.h"
 
+#include "framework/midi/midimodule.h"
 #include "iaudiodriver.h"
 
 #include "audiodeviceslistener.h"
@@ -36,7 +37,7 @@ public:
     LinuxAudioDriver();
     ~LinuxAudioDriver();
 
-    void init() override;
+    void init(void* midiModule_ptr) override;
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
@@ -78,6 +79,8 @@ private:
 
     struct IAudioDriver::Spec m_spec;
     std::unique_ptr<AudioDriverState> m_current_audioDriverState;
+
+    void* m_midiModule_ptr;
 };
 }
 

@@ -144,6 +144,11 @@ mu::async::Channel<tick_t, Event> LinuxMidiInPort::eventReceived() const
     return m_eventReceived;
 }
 
+mu::async::Channel<tick_t, Event>* LinuxMidiInPort::eventReceivedPtr()
+{
+    return &m_eventReceived;
+}
+
 mu::Ret LinuxMidiInPort::run()
 {
     if (!isConnected()) {

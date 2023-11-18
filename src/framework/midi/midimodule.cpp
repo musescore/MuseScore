@@ -109,3 +109,12 @@ void MidiModule::preamble(mu::audio::AudioModule* am)
     m_audioModule = std::shared_ptr<mu::audio::AudioModule>(am);
 #endif
 }
+
+mu::async::Channel<tick_t, mu::midi::Event>* MidiModule::getMidiInputQueue()
+{
+#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
+    return m_midiInPort->eventReceivedPtr();
+#else
+    return nullptr;
+#endif
+}

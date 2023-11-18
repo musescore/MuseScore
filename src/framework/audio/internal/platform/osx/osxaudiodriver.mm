@@ -59,7 +59,7 @@ OSXAudioDriver::~OSXAudioDriver()
     close();
 }
 
-void OSXAudioDriver::init()
+void OSXAudioDriver::init(void* midiModule_ptr)
 {
 }
 

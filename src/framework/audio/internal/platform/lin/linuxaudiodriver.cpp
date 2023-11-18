@@ -40,9 +40,10 @@ LinuxAudioDriver::~LinuxAudioDriver()
 {
 }
 
-void LinuxAudioDriver::init()
+void LinuxAudioDriver::init(void* mm_ptr)
 {
     LOGI(" -- init, this: %lx", this);
+    m_midiModule_ptr = mm_ptr;
     m_devicesListener.startWithCallback([this]() {
         return availableOutputDevices();
     });
@@ -59,6 +60,18 @@ std::string LinuxAudioDriver::name() const
 
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
+    /**************************************************************************/
+    // a bit lazy registering the midi-input-queue here, but midimodule isn't
+    // available at audiomodule init, because midimodule starts after audiomodule
+
+    // mu::midi::MidiModule mm = static_cast<mu::midi::MidiModule>(mm_ptr);
+    mu::midi::MidiModule* mm = static_cast<mu::midi::MidiModule*>(m_midiModule_ptr);
+    // not sure we got the identity of eventQueue (ie, passed by reference)
+#if defined(JACK_AUDIO)
+    m_current_audioDriverState->registerMidiInputQueue(mm->getMidiInputQueue());
+#endif
+    /**************************************************************************/
+
     if (!m_current_audioDriverState->open(spec, activeSpec)) {
         return false;
     }

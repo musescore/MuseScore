@@ -77,7 +77,7 @@ WasapiAudioDriver::WasapiAudioDriver()
     });
 }
 
-void WasapiAudioDriver::init()
+void WasapiAudioDriver::init(void* midiModule_ptr)
 {
 }
 

@@ -62,6 +62,8 @@ public:
     void onDeinit() override;
     void onDestroy() override;
 
+    void preamble(void* mm);
+
     #ifdef Q_OS_LINUX
     std::shared_ptr<IAudioDriver> getDriver() { return m_audioDriver; }
     #endif
@@ -85,8 +87,10 @@ private:
     std::shared_ptr<KnownAudioPluginsRegister> m_knownAudioPluginsRegister;
     std::shared_ptr<RegisterAudioPluginsScenario> m_registerAudioPluginsScenario;
 
+    void* m_midiModule_ptr;
     #ifdef Q_OS_LINUX
     std::shared_ptr<IAudioDriver> m_audioDriver;
+    // std::shared_ptr<mu::midi::MidiModule> m_midiModule;
     #endif
     #ifdef Q_OS_FREEBSD
     std::shared_ptr<IAudioDriver> m_audioDriver;

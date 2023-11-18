@@ -46,7 +46,7 @@ public:
     OSXAudioDriver();
     ~OSXAudioDriver();
 
-    void init() override;
+    void init(void* midiModule_ptr) override;
 
     std::string name() const override;
     bool open(const Spec& spec, Spec* activeSpec) override;
