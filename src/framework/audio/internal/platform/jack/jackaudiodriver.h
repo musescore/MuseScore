@@ -48,8 +48,10 @@ public:
     void* m_jackDeviceHandle = nullptr;
     float* m_buffer = nullptr;
     std::vector<jack_port_t*> m_outputPorts;
+    std::vector<jack_port_t*> m_midiInputPorts;
     std::vector<jack_port_t*> m_midiOutputPorts;
     ThreadSafeQueue<muse::midi::Event> m_midiQueue;
+    async::Channel<muse::midi::tick_t, muse::midi::Event > m_eventReceived;
 
 private:
     std::string m_deviceName;
