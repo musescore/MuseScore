@@ -30,12 +30,8 @@
 
 using namespace muse::midi;
 
-void LinuxMidiInPort::init(std::shared_ptr<muse::audio::AudioModule> am)
+void LinuxMidiInPort::init()
 {
-#if defined(Q_OS_LINUX) || defined(Q_OS_FREEBSD)
-    m_audioModule = am;
-#endif
-
 #if defined(JACK_AUDIO)
     m_midiInPortJack = std::make_unique<JackMidiInPort>();
 #else

@@ -186,11 +186,13 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
                 jack_nframes_t n = jack_midi_get_event_count(pb);
                 for (jack_nframes_t i = 0; i < n; ++i) {
                     jack_midi_event_t event;
-                    if (jack_midi_event_get(&event, pb, i) != 0) continue;
+                    if (jack_midi_event_get(&event, pb, i) != 0) {
+                        continue;
+                    }
                     int type = event.buffer[0];
                     uint32_t data = 0;
-                    if ((type & 0xf0) == 0x90 ||
-                        (type & 0xf0) == 0x90) {
+                    if ((type & 0xf0) == 0x90
+                        || (type & 0xf0) == 0x90) {
                         data = 0x90
                                | (type & 0x0f)
                                | ((event.buffer[1] & 0x7F) << 8)
@@ -198,6 +200,10 @@ static int jack_process_callback(jack_nframes_t nframes, void* args)
                         Event e = Event::fromMIDI10Package(data);
                         e = e.toMIDI20();
                         if (e) {
+                            LOGI("-- jack midi-input-port send %i,%i,%i",
+                                 event.buffer[1],
+                                 event.buffer[2],
+                                 event.buffer[0]);
                             state->m_eventReceived.send(static_cast<tick_t>(0), e);
                         }
                     }
@@ -307,7 +313,7 @@ bool JackDriverState::open(const IAudioDriver::Spec& spec, IAudioDriver::Spec* a
     }
 
     // midi input
-    jack_port_t* midi_input_port = jack_port_register (handle, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
+    jack_port_t* midi_input_port = jack_port_register(handle, "midi_in", JACK_DEFAULT_MIDI_TYPE, JackPortIsInput, 0);
     m_midiInputPorts.push_back(midi_input_port);
 
     // midi output
@@ -340,6 +346,11 @@ bool JackDriverState::pushMidiEvent(muse::midi::Event& e)
 {
     m_midiQueue.push(e);
     return true;
+}
+
+void JackDriverState::registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event > midiInputQueue)
+{
+    m_eventReceived = midiInputQueue;
 }
 
 std::vector<muse::midi::MidiDevice> JackDriverState::availableMidiDevices() const

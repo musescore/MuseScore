@@ -59,6 +59,16 @@ std::string LinuxAudioDriver::name() const
 
 bool LinuxAudioDriver::open(const Spec& spec, Spec* activeSpec)
 {
+    /**************************************************************************/
+    // a bit lazy registering the midi-input-queue here, but midimodule isn't
+    // available at audiomodule init, because midimodule starts after audiomodule
+    // not sure we got the identity of eventQueue (ie, passed by reference)
+#if defined(JACK_AUDIO)
+    muse::async::Channel<muse::midi::tick_t, muse::midi::Event> queue = midiInPort()->eventReceived();
+    m_current_audioDriverState->registerMidiInputQueue(queue);
+#endif
+    /**************************************************************************/
+
     if (!m_current_audioDriverState->open(spec, activeSpec)) {
         return false;
     }
