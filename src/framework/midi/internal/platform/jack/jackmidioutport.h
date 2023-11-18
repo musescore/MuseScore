@@ -46,7 +46,6 @@ public:
 
 private:
     bool deviceExists(const MidiDeviceID& deviceId) const;
-    std::shared_ptr<muse::audio::IAudioDriver> m_audioDriver;
     std::shared_ptr<ThreadSafeQueue<const Event> > m_midiQueue;
     struct Jack {
         void* midiOut = nullptr;

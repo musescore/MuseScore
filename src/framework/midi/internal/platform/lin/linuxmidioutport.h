@@ -24,6 +24,7 @@
 
 #include <memory>
 
+#include "modularity/ioc.h"
 #include "async/asyncable.h"
 #include "framework/audio/audiomodule.h"
 #include "midi/imidioutport.h"
@@ -38,6 +39,7 @@
 namespace muse::midi {
 class LinuxMidiOutPort : public IMidiOutPort, public async::Asyncable
 {
+    Inject<muse::audio::IAudioDriver> audioDriver;
 public:
     LinuxMidiOutPort() = default;
     ~LinuxMidiOutPort() = default;
@@ -68,8 +70,6 @@ private:
     MidiDevicesListener m_devicesListener;
 
     mutable std::mutex m_devicesMutex;
-
-    std::shared_ptr<muse::audio::AudioModule> m_audioModule;
 
     MidiPortState* m_midiOutPortCurrent;
 #if defined(JACK_AUDIO)

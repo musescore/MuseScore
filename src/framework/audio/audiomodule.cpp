@@ -24,6 +24,7 @@
 #include "ui/iuiengine.h"
 #include "global/modularity/ioc.h"
 
+#include "framework/midi/midimodule.h"
 #include "internal/audioconfiguration.h"
 #include "internal/audiosanitizer.h"
 #include "internal/audiothread.h"

@@ -33,6 +33,7 @@ using namespace muse::midi;
 
 void JackMidiOutPort::init()
 {
+    m_jack = std::make_unique<Jack>();
 }
 
 void JackMidiOutPort::deinit()
