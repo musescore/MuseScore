@@ -4213,6 +4213,8 @@ void Score::cmdSelectSection()
     }
 
     m_selection.setRange(toMeasure(sm)->first(), toMeasure(em)->last(), 0, nstaves());
+    setUpdateAll();
+    update();
 }
 
 //---------------------------------------------------------
