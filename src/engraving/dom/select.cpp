@@ -687,7 +687,12 @@ void Selection::setRange(Segment* startSegment, Segment* endSegment, staff_idx_t
     m_activeSegment = endSegment;
     m_staffStart    = staffStart;
     m_staffEnd      = staffEnd;
-    setState(SelState::RANGE);
+
+    if (m_state == SelState::RANGE) {
+        m_score->setSelectionChanged(true);
+    } else {
+        setState(SelState::RANGE);
+    }
 }
 
 //---------------------------------------------------------
@@ -702,13 +707,17 @@ void Selection::setRangeTicks(const Fraction& tick1, const Fraction& tick2, staf
 {
     assert(staffEnd > staffStart && staffEnd <= m_score->nstaves());
 
-    deselectAll();
     m_plannedTick1 = tick1;
     m_plannedTick2 = tick2;
     m_startSegment = m_endSegment = m_activeSegment = nullptr;
     m_staffStart    = staffStart;
     m_staffEnd      = staffEnd;
-    setState(SelState::RANGE);
+
+    if (m_state == SelState::RANGE) {
+        m_score->setSelectionChanged(true);
+    } else {
+        setState(SelState::RANGE);
+    }
 }
 
 //---------------------------------------------------------
