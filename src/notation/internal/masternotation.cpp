@@ -122,7 +122,7 @@ void MasterNotation::initAfterSettingScore(const MasterScore* score)
         updateExcerpts();
     });
 
-    m_notationPlayback->init(m_undoStack);
+    m_notationPlayback->init();
     initExcerptNotations(score->excerpts());
 }
 

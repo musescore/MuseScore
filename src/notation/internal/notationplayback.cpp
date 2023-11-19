@@ -62,9 +62,9 @@ mu::engraving::Score* NotationPlayback::score() const
     return m_getScore->score();
 }
 
-void NotationPlayback::init(INotationUndoStackPtr undoStack)
+void NotationPlayback::init()
 {
-    IF_ASSERT_FAILED(score() && undoStack) {
+    IF_ASSERT_FAILED(score()) {
         return;
     }
 

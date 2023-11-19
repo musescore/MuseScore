@@ -24,9 +24,7 @@
 
 #include <memory>
 
-#include "modularity/ioc.h"
-#include "types/retval.h"
-#include "project/types/projecttypes.h"
+#include "async/notification.h"
 
 #include "notation.h"
 #include "../imasternotation.h"
