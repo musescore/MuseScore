@@ -1274,8 +1274,12 @@ void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
         }
         const PropertyValue masterValue = masterElement->getProperty(propertyId);
         const PropertyFlags masterFlags = masterElement->propertyFlags(propertyId);
-        setProperty(propertyId, masterValue);
-        setPropertyFlags(propertyId, masterFlags);
+        if (getProperty(propertyId) != masterValue) {
+            setProperty(propertyId, masterValue);
+        }
+        if (propertyFlags(propertyId) != masterFlags) {
+            setPropertyFlags(propertyId, masterFlags);
+        }
     }
 }
 
