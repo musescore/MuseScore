@@ -626,12 +626,7 @@ mu::draw::Color EngravingItem::curColor(bool isVisible, Color normalColor) const
     }
 
     if (selected() || marked) {
-        bool isUnlinkedFromMaster = !(getProperty(Pid::POSITION_LINKED_TO_MASTER).toBool()
-                                      && getProperty(Pid::APPEARANCE_LINKED_TO_MASTER).toBool());
-        if (isTextBase()) {
-            isUnlinkedFromMaster = isUnlinkedFromMaster || !getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
-        }
-        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster);
+        return engravingConfiguration()->selectionColor(track() == mu::nidx ? 0 : voice(), isVisible, isUnlinkedFromMaster());
     }
 
     if (!isVisible) {
@@ -2358,6 +2353,12 @@ bool EngravingItem::isPropertyLinkedToMaster(Pid id) const
     }
 
     return true;
+}
+
+bool EngravingItem::isUnlinkedFromMaster() const
+{
+    return !(getProperty(Pid::POSITION_LINKED_TO_MASTER).toBool()
+             && getProperty(Pid::APPEARANCE_LINKED_TO_MASTER).toBool());
 }
 
 void EngravingItem::unlinkPropertyFromMaster(Pid id)
