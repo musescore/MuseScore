@@ -1091,7 +1091,7 @@ ElementType NotationViewInputController::selectionType() const
     if (auto hitElement = hitElementContext().element) {
         return hitElement->type();
     } else if (selection->isRange()) {
-        return ElementType::STAFF;
+        return ElementType::MEASURE;
     } else if (auto selectedElement = selection->element()) {
         return selectedElement->type();
     }
