@@ -47,7 +47,7 @@ extern engraving::Err importCompressedMusicXml(MasterScore*, const QString&);
 
 static const String XML_IO_DATA_DIR("data/");
 
-static const std::string MODULE_NAME("importexport");
+static const std::string MODULE_NAME("iex_musicxml");
 
 static const std::string PREF_EXPORT_MUSICXML_EXPORTBREAKS("export/musicXML/exportBreaks");
 static const std::string PREF_IMPORT_MUSICXML_IMPORTBREAKS("import/musicXML/importBreaks");
@@ -395,6 +395,9 @@ TEST_F(Musicxml_Tests, barStyles2) {
 TEST_F(Musicxml_Tests, barStyles3) {
     mxmlIoTest("testBarStyles3");
 }
+TEST_F(Musicxml_Tests, barStyles4) {
+    mxmlIoTest("testBarStyles4");
+}
 TEST_F(Musicxml_Tests, bracketTypes) {
     mxmlImportTestRef("testBracketTypes");
 }
@@ -451,6 +454,12 @@ TEST_F(Musicxml_Tests, clefs1) {
 }
 TEST_F(Musicxml_Tests, clefs2) {
     mxmlIoTest("testClefs2");
+}
+TEST_F(Musicxml_Tests, colorExport) {
+    mxmlMscxExportTestRef("testColorExport");
+}
+TEST_F(Musicxml_Tests, colors) {
+    mxmlIoTest("testColors");
 }
 TEST_F(Musicxml_Tests, completeMeasureRests) {
     mxmlIoTest("testCompleteMeasureRests");
@@ -833,6 +842,9 @@ TEST_F(Musicxml_Tests, restsTypeWhole) {
 TEST_F(Musicxml_Tests, secondVoiceMelismata) {
     mxmlImportTestRef("testSecondVoiceMelismata");
 }
+TEST_F(Musicxml_Tests, slurTieDirection) {
+    mxmlIoTest("testSlurTieDirection");
+}
 TEST_F(Musicxml_Tests, slurTieLineStyle) {
     mxmlIoTest("testSlurTieLineStyle");
 }
@@ -994,6 +1006,9 @@ TEST_F(Musicxml_Tests, tuplets7) {
 }
 TEST_F(Musicxml_Tests, tuplets8) {
     mxmlMscxExportTestRef("testTuplets8");
+}
+TEST_F(Musicxml_Tests, tuplets9) {
+    mxmlIoTest("testTuplets9");
 }
 TEST_F(Musicxml_Tests, twoNoteTremoloTuplet) {
     mxmlIoTest("testTwoNoteTremoloTuplet");

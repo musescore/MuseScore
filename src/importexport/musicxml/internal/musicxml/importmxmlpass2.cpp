@@ -134,7 +134,7 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
 //---------------------------------------------------------
 
 MusicXmlTupletDesc::MusicXmlTupletDesc()
-    : type(MxmlStartStop::NONE), placement(PlacementV::BELOW),
+    : type(MxmlStartStop::NONE), direction(DirectionV::AUTO),
     bracket(TupletBracketType::AUTO_BRACKET), shownumber(TupletNumberType::SHOW_NUMBER)
 {
     // nothing
@@ -991,7 +991,7 @@ static void handleTupletStart(const ChordRest* const cr, Tuplet*& tuplet,
     tuplet->setTick(cr->tick());
     tuplet->setBracketType(tupletDesc.bracket);
     tuplet->setNumberType(tupletDesc.shownumber);
-    // TODO type, placement, bracket
+    tuplet->setDirection(tupletDesc.direction);
     tuplet->setParent(cr->measure());
 }
 
@@ -1057,8 +1057,12 @@ static void addArticulationToChord(const Notation& notation, ChordRest* cr)
     const SymId articSym = notation.symId();
     const QString dir = notation.attribute("type");
     const QString place = notation.attribute("placement");
+    const QColor color { notation.attribute("color") };
     Articulation* na = Factory::createArticulation(cr);
     na->setSymId(articSym);
+    if (color.isValid()) {
+        na->setColor(color);
+    }
 
     if (dir == "up" || dir == "down") {
         na->setUp(dir == "up");
@@ -1091,9 +1095,13 @@ static void addFermataToChord(const Notation& notation, ChordRest* cr)
 {
     const SymId articSym = notation.symId();
     const QString direction = notation.attribute("type");
+    const QColor color { notation.attribute("color") };
     Fermata* na = Factory::createFermata(cr);
     na->setSymIdAndTimeStretch(articSym);
     na->setTrack(cr->track());
+    if (color.isValid()) {
+        na->setColor(color);
+    }
     if (!direction.isNull()) { // Only for case where XML attribute is present (isEmpty wouldn't work)
         na->setPlacement(direction == "inverted" ? PlacementV::BELOW : PlacementV::ABOVE);
     }
@@ -1146,8 +1154,12 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
         }
     }
     if (articSym != SymId::noSym) {
+        const QColor color { notation.attribute("color") };
         Articulation* na = Factory::createArticulation(cr);
         na->setSymId(articSym);
+        if (color.isValid()) {
+            na->setColor(color);
+        }
         cr->add(na);
     } else {
         LOGD("unknown ornament: name '%s' long '%s' approach '%s' departure '%s'",
@@ -1171,8 +1183,12 @@ static void addOtherOrnamentToChord(const Notation& notation, ChordRest* cr)
     sym = SymNames::symIdByName(symname);
 
     if (sym != SymId::noSym) {
+        const QColor color { notation.attribute("color") };
         Articulation* na = Factory::createArticulation(cr);
         na->setSymId(sym);
+        if (color.isValid()) {
+            na->setColor(color);
+        }
         cr->add(na);
     } else {
         LOGD("unknown ornament: name '%s': '%s'.", qPrintable(name), qPrintable(symname));
@@ -1243,13 +1259,11 @@ static NoteHeadGroup convertNotehead(QString mxmlName)
     map["diamond"] = int(NoteHeadGroup::HEAD_DIAMOND);
     map["cross"] = int(NoteHeadGroup::HEAD_PLUS);
     map["x"] = int(NoteHeadGroup::HEAD_CROSS);
-    map["circled"] = int(NoteHeadGroup::HEAD_CIRCLED);
     map["circle-x"] = int(NoteHeadGroup::HEAD_XCIRCLE);
     map["inverted triangle"] = int(NoteHeadGroup::HEAD_TRIANGLE_DOWN);
     map["slashed"] = int(NoteHeadGroup::HEAD_SLASHED1);
     map["back slashed"] = int(NoteHeadGroup::HEAD_SLASHED2);
     map["normal"] = int(NoteHeadGroup::HEAD_NORMAL);
-    map["rectangle"] = int(NoteHeadGroup::HEAD_LA);
     map["do"] = int(NoteHeadGroup::HEAD_DO);
     map["re"] = int(NoteHeadGroup::HEAD_RE);
     map["mi"] = int(NoteHeadGroup::HEAD_MI);
@@ -3375,6 +3389,10 @@ void MusicXMLParserDirection::bracket(const QString& type, const int number,
             } else if (lineType != "wavy") {
                 _logger->logError(QString("unsupported line-type: %1").arg(lineType.toString()), &_e);
             }
+            const QColor color { _e.attributes().value("color").toString() };
+            if (color.isValid()) {
+                textLine->setLineColor(color);
+            }
         }
 
         starts.append(MusicXmlSpannerDesc(sline, elementType, number));
@@ -3474,6 +3492,11 @@ void MusicXMLParserDirection::octaveShift(const QString& type, const int number,
                 o->setOttavaType(OttavaType::OTTAVA_15MB);
             }
 
+            const QColor color { _e.attributes().value("color").toString() };
+            if (color.isValid()) {
+                o->setLineColor(color);
+            }
+
             starts.append(MusicXmlSpannerDesc(o, ElementType::OTTAVA, number));
         }
     } else if (type == "stop") {
@@ -3498,6 +3521,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
     const int number { 0 };
     QStringRef line = _e.attributes().value("line");
     QString sign = _e.attributes().value("sign").toString();
+    const QColor color { _e.attributes().value("color").toString() };
 
     // We have found that many exporters omit "sign" even when one is originally present,
     // therefore we will default to "yes", even though this is technically against the spec.
@@ -3530,6 +3554,9 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
         }
         p->setEndHookType(HookType::NONE);
+        if (color.isValid()) {
+            p->setLineColor(color);
+        }
         starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
     } else if (type == "stop" || type == "discontinue") {
         auto p = spdesc._isStarted ? toPedal(spdesc._sp) : new Pedal(_score->dummy());
@@ -3568,6 +3595,9 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         } else {
             p->setLineVisible(false);
         }
+        if (color.isValid()) {
+            p->setColor(color);
+        }
         starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
     } else if (type == "continue") {
         // ignore
@@ -3597,6 +3627,10 @@ void MusicXMLParserDirection::wedge(const QString& type, const int number,
                           ? HairpinType::CRESC_HAIRPIN : HairpinType::DECRESC_HAIRPIN);
         if (niente == "yes") {
             h->setHairpinCircledTip(true);
+        }
+        const QColor color { _e.attributes().value("color").toString() };
+        if (color.isValid()) {
+            h->setLineColor(color);
         }
         starts.append(MusicXmlSpannerDesc(h, ElementType::HAIRPIN, number));
     } else if (type == "stop") {
@@ -3841,8 +3875,10 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
         loc = "right";
     }
     QString barStyle;
+    QColor barlineColor;
     QString endingNumber;
     QString endingType;
+    QColor endingColor;
     QString endingText;
     QString repeat;
     QString count;
@@ -3850,10 +3886,12 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "bar-style") {
+            barlineColor = _e.attributes().value("color").toString();
             barStyle = _e.readElementText();
         } else if (_e.name() == "ending") {
             endingNumber = _e.attributes().value("number").toString();
             endingType   = _e.attributes().value("type").toString();
+            endingColor = _e.attributes().value("color").toString();
             printEnding = _e.attributes().value("print-object").toString() != "no";
             endingText = _e.readElementText();
         } else if (_e.name() == "repeat") {
@@ -3880,15 +3918,7 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
             // combine end_repeat flag with current state initialized during measure parsing
             measure->setRepeatEnd(true);
         } else {
-            if (barStyle == ""
-                || barStyle == "tick"
-                || barStyle == "short"
-                || barStyle == "none"
-                || barStyle == "dashed"
-                || barStyle == "dotted"
-                || barStyle == "light-light"
-                || barStyle == "light-heavy"
-                || (barStyle == "regular" && !(loc == "left" || loc == "right"))) {
+            if (barStyle != "regular" || barlineColor.isValid() || loc == "middle") {
                 // Add barline to the first voice of every staff in the part,
                 // and span every barline except the last
                 int nstaves = _pass1.getPart(partId)->nstaves();
@@ -3896,13 +3926,16 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
                     bool spanStaff = i < nstaves - 1;
                     int currentTrack = track + (i * VOICES);
                     auto b = createBarline(measure->score(), currentTrack, type, visible, barStyle, spanStaff);
+                    if (barlineColor.isValid()) {
+                        b->setColor(barlineColor);
+                    }
                     addBarlineToMeasure(measure, tick, std::move(b));
                 }
             }
         }
     }
 
-    doEnding(partId, measure, endingNumber, endingType, endingText, printEnding);
+    doEnding(partId, measure, endingNumber, endingType, endingColor, endingText, printEnding);
 }
 
 //---------------------------------------------------------
@@ -3923,8 +3956,8 @@ static Volta* findRedundantVolta(const track_idx_t track, const Measure* measure
 //   doEnding
 //---------------------------------------------------------
 
-void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, const QString& number,
-                                   const QString& type, const QString& text, const bool print)
+void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, const QString& number, const QString& type, const QColor color,
+                                   const QString& text, const bool print)
 {
     if (!(number.isEmpty() && type.isEmpty())) {
         if (number.isEmpty()) {
@@ -3962,6 +3995,9 @@ void MusicXMLParserPass2::doEnding(const QString& partId, Measure* measure, cons
                     _score->addElement(volta);
                     _lastVolta = volta;
                     volta->setVisible(print);
+                    if (color.isValid()) {
+                        volta->setLineColor(color);
+                    }
                 } else if (type == "stop") {
                     if (_lastVolta) {
                         _lastVolta->setVoltaType(Volta::Type::CLOSED);
@@ -4043,8 +4079,8 @@ static void addSymToSig(KeySigEvent& sig, const QString& step, const QString& al
  Add a KeySigEvent to the score.
  */
 
-static void addKey(const KeySigEvent key, const bool printObj, Score* score, Measure* measure, const staff_idx_t staffIdx,
-                   const Fraction& tick)
+static void addKey(const KeySigEvent key, const QColor keyColor, const bool printObj, Score* score,
+                   Measure* measure, const staff_idx_t staffIdx, const Fraction& tick)
 {
     Key oldkey = score->staff(staffIdx)->key(tick);
     // TODO only if different custom key ?
@@ -4055,6 +4091,9 @@ static void addKey(const KeySigEvent key, const bool printObj, Score* score, Mea
         keysig->setTrack(staffIdx * VOICES);
         keysig->setKeySigEvent(key);
         keysig->setVisible(printObj);
+        if (keyColor.isValid()) {
+            keysig->setColor(keyColor);
+        }
         s->add(keysig);
         //currKeySig->setKeySigEvent(key);
     }
@@ -4114,7 +4153,8 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
             keyno = 0;
         }
     }
-    bool printObject = _e.attributes().value("print-object") != "no";
+    const bool printObject = _e.attributes().value("print-object") != "no";
+    const QColor keyColor { _e.attributes().value("color").toString() };
 
     // for custom keys, a single altered tone is described by
     // key-step (required),  key-alter (required) and key-accidental (optional)
@@ -4188,10 +4228,10 @@ void MusicXMLParserPass2::key(const QString& partId, Measure* measure, const Fra
     if (keyno == -1) {
         // apply key to all staves in the part
         for (staff_idx_t i = 0; i < nstaves; ++i) {
-            addKey(key, printObject, _score, measure, staffIdx + i, tick);
+            addKey(key, keyColor, printObject, _score, measure, staffIdx + i, tick);
         }
     } else if (keyno < static_cast<int>(nstaves)) {
-        addKey(key, printObject, _score, measure, staffIdx + keyno, tick);
+        addKey(key, keyColor, printObject, _score, measure, staffIdx + keyno, tick);
     }
 }
 
@@ -4215,6 +4255,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
     const QString strClefno = _e.attributes().value("number").toString();
     const bool afterBarline = _e.attributes().value("after-barline") == "yes";
     const bool printObject = _e.attributes().value("print-object") != "no";
+    const QColor clefColor { _e.attributes().value("color").toString() };
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "sign") {
@@ -4328,6 +4369,9 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
     Clef* clefs = Factory::createClef(s);
     clefs->setClefType(clef);
     clefs->setVisible(printObject);
+    if (clefColor.isValid()) {
+        clefs->setColor(clefColor);
+    }
     track_idx_t track = _pass1.trackForPart(partId) + clefno * VOICES;
     clefs->setTrack(track);
     s->add(clefs);
@@ -4421,6 +4465,7 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const Fr
     QString beatType;
     QString timeSymbol = _e.attributes().value("symbol").toString();
     bool printObject = _e.attributes().value("print-object") != "no";
+    const QColor timeColor { _e.attributes().value("color").toString() };
 
     while (_e.readNextStartElement()) {
         if (_e.name() == "beats") {
@@ -4444,6 +4489,9 @@ void MusicXMLParserPass2::time(const QString& partId, Measure* measure, const Fr
                 Segment* s = measure->getSegment(SegmentType::TimeSig, tick);
                 TimeSig* timesig = Factory::createTimeSig(s);
                 timesig->setVisible(printObject);
+                if (timeColor.isValid()) {
+                    timesig->setColor(timeColor);
+                }
                 track_idx_t track = _pass1.trackForPart(partId) + i * VOICES;
                 timesig->setTrack(track);
                 timesig->setSig(fractionTSig, st);
@@ -4691,7 +4739,7 @@ static void setNoteHead(Note* note, const QColor noteheadColor, const bool noteh
 {
     const auto score = note->score();
 
-    if (noteheadColor != QColor::Invalid) {
+    if (noteheadColor.isValid()) {
         note->setColor(noteheadColor);
     }
     if (noteheadParentheses) {
@@ -4959,8 +5007,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
     bool noStem = false;
     bool hasHead = true;
     NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
-    QColor noteColor = QColor::Invalid;
-    noteColor.setNamedColor(_e.attributes().value("color").toString());
+    const QColor noteColor { _e.attributes().value("color").toString() };
     QColor noteheadColor = QColor::Invalid;
     bool noteheadParentheses = false;
     QString noteheadFilled;
@@ -5194,7 +5241,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
                 cr->setBeamMode(BeamMode::NONE);
             }
             cr->setSmall(isSmall);
-            if (noteColor != QColor::Invalid) {
+            if (noteColor.isValid()) {
                 cr->setColor(noteColor);
             }
             cr->setVisible(printObject);
@@ -5204,7 +5251,7 @@ Note* MusicXMLParserPass2::note(const QString& partId,
         handleSmallness(cue || isSmall, note, c);
         note->setPlay(!cue);          // cue notes don't play
         note->setHeadGroup(headGroup);
-        if (noteColor != QColor::Invalid) {
+        if (noteColor.isValid()) {
             note->setColor(noteColor);
         }
         setNoteHead(note, noteheadColor, noteheadParentheses, noteheadFilled);
@@ -5482,12 +5529,14 @@ FiguredBassItem* MusicXMLParserPass2::figure(const int idx, const bool paren, Fi
             }
             _e.skipCurrentElement();
         } else if (_e.name() == "figure-number") {
+            const QColor color { _e.attributes().value("color").toString() };
             QString val = _e.readElementText();
             int iVal = val.toInt();
             // MusicXML spec states figure-number is a number
             // MuseScore can only handle single digit
             if (1 <= iVal && iVal <= 9) {
                 fgi->setDigit(iVal);
+                fgi->setColor(color);
             } else {
                 _logger->logError(QString("incorrect figure-number '%1'").arg(val), &_e);
             }
@@ -5542,7 +5591,16 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
 {
     FiguredBass* fb = Factory::createFiguredBass(_score->dummy()->segment());
 
-    bool parentheses = _e.attributes().value("parentheses") == "yes";
+    const bool parentheses = _e.attributes().value("parentheses") == "yes";
+    const bool printObject = _e.attributes().value("print-object") != "no";
+    const QString placement = _e.attributes().value("placement").toString();
+    const QColor color { _e.attributes().value("color").toString() };
+
+    fb->setVisible(printObject);
+    if (color.isValid()) {
+        fb->setColor(color);
+    }
+
     QString normalizedText;
     int idx = 0;
     while (_e.readNextStartElement()) {
@@ -5570,6 +5628,9 @@ FiguredBass* MusicXMLParserPass2::figuredBass()
     }
 
     fb->setXmlText(normalizedText);                          // this is the text to show while editing
+
+    fb->setPlacement(placement == "above" ? PlacementV::ABOVE : PlacementV::BELOW);
+    fb->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
 
     if (normalizedText.isEmpty()) {
         delete fb;
@@ -5949,8 +6010,7 @@ void MusicXMLParserLyric::parse()
 
     bool hasExtend = false;
     const auto lyricNumber = _e.attributes().value("number").toString();
-    QColor lyricColor { QColor::Invalid };
-    lyricColor.setNamedColor(_e.attributes().value("color").toString());
+    const QColor lyricColor { _e.attributes().value("color").toString() };
     QString extendType;
     QString formattedText;
 
@@ -6007,7 +6067,7 @@ void MusicXMLParserLyric::parse()
 
     //LOGD("formatted lyric '%s'", qPrintable(formattedText));
     lyric->setXmlText(formattedText);
-    if (lyricColor != QColor::Invalid) {
+    if (lyricColor.isValid()) {
         lyric->setProperty(Pid::COLOR, mu::draw::Color::fromQColor(lyricColor));
         lyric->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
@@ -6059,10 +6119,6 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
         slurNo--;
     }
     const auto slurType = notation.attribute("type");
-    auto lineType = notation.attribute("line-type");
-    if (lineType == "") {
-        lineType = "solid";
-    }
 
     const auto track = cr->track();
     auto score = cr->score();
@@ -6089,18 +6145,32 @@ static void addSlur(const Notation& notation, SlurStack& slurs, ChordRest* cr, c
             if (cr->isGrace()) {
                 newSlur->setAnchor(Spanner::Anchor::CHORD);
             }
-            if (lineType == "dotted") {
-                newSlur->setStyleType(SlurStyleType::Dotted);
-            } else if (lineType == "dashed") {
+            const auto lineType = notation.attribute("line-type");
+            if (lineType == "dashed") {
                 newSlur->setStyleType(SlurStyleType::Dashed);
+            } else if (lineType == "dotted") {
+                newSlur->setStyleType(SlurStyleType::Dotted);
+            } else if (lineType == "solid" || lineType == "") {
+                newSlur->setStyleType(SlurStyleType::Solid);
+            }
+            const QColor color { notation.attribute("color") };
+            if (color.isValid()) {
+                newSlur->setColor(color);
             }
             newSlur->setTick(Fraction::fromTicks(tick));
             newSlur->setStartElement(cr);
-            const auto pl = notation.attribute("placement");
-            if (pl == "above") {
-                newSlur->setSlurDirection(DirectionV::UP);
-            } else if (pl == "below") {
-                newSlur->setSlurDirection(DirectionV::DOWN);
+            if (configuration()->musicxmlImportLayout()) {
+                const auto orientation = notation.attribute("orientation");
+                const auto placement = notation.attribute("placement");
+                if (orientation == "over" || placement == "above") {
+                    newSlur->setSlurDirection(DirectionV::UP);
+                } else if (orientation == "under" || placement == "below") {
+                    newSlur->setSlurDirection(DirectionV::DOWN);
+                } else if (orientation == "" || placement == "") {
+                    // ignore
+                } else {
+                    logger->logError(QString("unknown slur orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
+                }
             }
             newSlur->setTrack(track);
             newSlur->setTrack2(track);
@@ -6288,7 +6358,7 @@ void MusicXMLParserNotations::ornaments()
     // note that mscore wavy line already implicitly includes a trillsym
     // so don't add an additional one
     if (trillMark && _wavyLineType != "start" && _wavyLineType != "startstop") {
-        Notation ornament { "trill-mark", "ornaments", SymId::ornamentTrill };
+        Notation ornament = Notation::notationWithAttributes("trill-mark", _e.attributes(), "ornaments", SymId::ornamentTrill);
         _notations.push_back(ornament);
     }
 }
@@ -6460,7 +6530,7 @@ static void addGlissandoSlide(const Notation& notation, Note* note,
             gliss->setTrack(track);
             gliss->setParent(note);
             if (glissandoColor.isValid()) {
-                gliss->setColor(glissandoColor);
+                gliss->setLineColor(glissandoColor);
             }
             gliss->setText(glissandoText);
             gliss->setGlissandoType(glissandoTag == 0 ? GlissandoType::STRAIGHT : GlissandoType::WAVY);
@@ -6543,6 +6613,7 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
 
     const QString& type = notation.attribute("type");
     const QString& orientation = notation.attribute("orientation");
+    const QString& placement = notation.attribute("placement");
     const QString& lineType = notation.attribute("line-type");
 
     if (type == "") {
@@ -6556,22 +6627,29 @@ static void addTie(const Notation& notation, Score* score, Note* note, const tra
         tie->setStartNote(note);
         tie->setTrack(track);
 
-        if (orientation == "over") {
-            tie->setSlurDirection(DirectionV::UP);
-        } else if (orientation == "under") {
-            tie->setSlurDirection(DirectionV::DOWN);
-        } else if (orientation == "auto") {
-            // ignore
-        } else if (orientation == "") {
-            // ignore
-        } else {
-            logger->logError(QString("unknown tied orientation: %1").arg(orientation), xmlreader);
+        const QColor color { notation.attribute("color") };
+        if (color.isValid()) {
+            tie->setColor(color);
         }
 
-        if (lineType == "dotted") {
-            tie->setStyleType(SlurStyleType::Dotted);
-        } else if (lineType == "dashed") {
+        if (configuration()->musicxmlImportLayout()) {
+            if (orientation == "over" || placement == "above") {
+                tie->setSlurDirection(DirectionV::UP);
+            } else if (orientation == "under" || placement == "below") {
+                tie->setSlurDirection(DirectionV::DOWN);
+            } else if (orientation == "" || placement == "") {
+                // ignore
+            } else {
+                logger->logError(QString("unknown tied orientation/placement: %1/%2").arg(orientation).arg(placement), xmlreader);
+            }
+        }
+
+        if (lineType == "dashed") {
             tie->setStyleType(SlurStyleType::Dashed);
+        } else if (lineType == "dotted") {
+            tie->setStyleType(SlurStyleType::Dotted);
+        } else if (lineType == "solid" || lineType == "") {
+            tie->setStyleType(SlurStyleType::Solid);
         }
         tie = nullptr;
     } else if (type == "stop") {
@@ -7084,6 +7162,8 @@ void MusicXMLParserNotations::fermata()
         notation.setSymId(SymId::fermataLongHenzeAbove);
     } else if (fermataText == "half-curve") {
         notation.setSymId(SymId::fermataShortHenzeAbove);
+    } else if (fermataText == "curlew") {
+        notation.setSymId(SymId::curlewSign);
     }
 
     if (notation.symId() != SymId::noSym) {
@@ -7105,7 +7185,7 @@ void MusicXMLParserNotations::fermata()
 void MusicXMLParserNotations::tuplet()
 {
     QString tupletType       = _e.attributes().value("type").toString();
-    // QString tupletPlacement  = _e.attributes().value("placement").toString(); not used (TODO)
+    QString tupletPlacement  = _e.attributes().value("placement").toString();
     QString tupletBracket    = _e.attributes().value("bracket").toString();
     QString tupletShowNumber = _e.attributes().value("show-number").toString();
 
@@ -7134,6 +7214,17 @@ void MusicXMLParserNotations::tuplet()
         _tupletDesc.shownumber = TupletNumberType::NO_TEXT;
     } else {
         _tupletDesc.shownumber = TupletNumberType::SHOW_NUMBER;
+    }
+
+    // set number and bracket placement
+    if (tupletPlacement == "above") {
+        _tupletDesc.direction = DirectionV::UP;
+    } else if (tupletPlacement == "below") {
+        _tupletDesc.direction = DirectionV::DOWN;
+    } else if (tupletPlacement == "") {
+        // ignore
+    } else {
+        _logger->logError(QString("unknown tuplet placement: %1").arg(tupletPlacement), &_e);
     }
 }
 

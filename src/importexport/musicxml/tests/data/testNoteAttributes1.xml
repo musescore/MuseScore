@@ -251,7 +251,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations>
-          <slur type="start" placement="below" number="1"/>
+          <slur type="start" number="1"/>
           <articulations>
             <staccato/>
             </articulations>
@@ -267,7 +267,7 @@
         <type>quarter</type>
         <stem>up</stem>
         <notations>
-          <slur type="start" placement="below" number="2"/>
+          <slur type="start" number="2"/>
           <articulations>
             <staccato/>
             </articulations>
