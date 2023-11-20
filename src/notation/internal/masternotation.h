@@ -24,9 +24,7 @@
 
 #include <memory>
 
-#include "modularity/ioc.h"
-#include "types/retval.h"
-#include "project/types/projecttypes.h"
+#include "async/notification.h"
 
 #include "notation.h"
 #include "../imasternotation.h"
@@ -76,6 +74,8 @@ private:
 
     friend class NotationCreator;
     explicit MasterNotation();
+
+    void initAfterSettingScore(const engraving::MasterScore* score);
 
     void initExcerptNotations(const std::vector<engraving::Excerpt*>& excerpts);
     void addExcerptsToMasterScore(const std::vector<engraving::Excerpt*>& excerpts);

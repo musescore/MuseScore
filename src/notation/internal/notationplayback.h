@@ -45,7 +45,7 @@ class NotationPlayback : public INotationPlayback, public async::Asyncable
 public:
     NotationPlayback(IGetScore* getScore, async::Notification notationChanged);
 
-    void init(INotationUndoStackPtr undoStack) override;
+    void init() override;
 
     const engraving::InstrumentTrackId& metronomeTrackId() const override;
     engraving::InstrumentTrackId chordSymbolsTrackId(const ID& partId) const override;
