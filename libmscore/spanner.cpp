@@ -1347,6 +1347,26 @@ void Spanner::writeSpannerStart(XmlWriter& xml, const Element* current, int trac
 void Spanner::writeSpannerEnd(XmlWriter& xml, const Element* current, int track, Fraction tick) const
       {
       Fraction frac = fraction(xml, current, tick);
+      if (frac == score()->endTick()) {
+            // Write a location tag if the spanner ends on the last tick of the score
+            Location spannerEndLoc = Location::absolute();
+            spannerEndLoc.setFrac(frac);
+            spannerEndLoc.setMeasure(0);
+            spannerEndLoc.setTrack(track);
+            spannerEndLoc.setVoice(track2voice(track));
+            spannerEndLoc.setStaff(staffIdx());
+
+            Location prevLoc = Location::absolute();
+            prevLoc.setFrac(xml.curTick());
+            prevLoc.setMeasure(0);
+            prevLoc.setTrack(track);
+            prevLoc.setVoice(track2voice(track));
+            prevLoc.setStaff(staffIdx());
+
+            spannerEndLoc.toRelative(prevLoc);
+            if (spannerEndLoc.frac() != Fraction(0, 1))
+                  spannerEndLoc.write(xml);
+            }
       SpannerWriter w(xml, current, this, track, frac, false);
       w.write();
       }
