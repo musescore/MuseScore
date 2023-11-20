@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE score-partwise PUBLIC "-//Recordare//DTD MusicXML 4.0 Partwise//EN" "http://www.musicxml.org/dtds/partwise.dtd">
 <score-partwise version="4.0">
-  <work>
-    <work-number>MuseScore testfile</work-number>
-    <work-title>Slurs</work-title>
-    </work>
   <identification>
-    <creator type="composer">Leon Vinken</creator>
     <encoding>
       <software>MuseScore 0.7.0</software>
       <encoding-date>2007-09-10</encoding-date>
@@ -19,14 +14,14 @@
     </identification>
   <part-list>
     <score-part id="P1">
-      <part-name>Staff 1</part-name>
+      <part-name></part-name>
       <score-instrument id="P1-I1">
-        <instrument-name>Staff 1</instrument-name>
+        <instrument-name></instrument-name>
         </score-instrument>
       <midi-device id="P1-I1" port="1"></midi-device>
       <midi-instrument id="P1-I1">
         <midi-channel>1</midi-channel>
-        <midi-program>1</midi-program>
+        <midi-program>74</midi-program>
         <volume>78.7402</volume>
         <pan>0</pan>
         </midi-instrument>
@@ -40,7 +35,7 @@
           <fifths>0</fifths>
           </key>
         <time>
-          <beats>2</beats>
+          <beats>4</beats>
           <beat-type>4</beat-type>
           </time>
         <clef>
@@ -56,46 +51,51 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
-          <slur type="start" number="1"/>
+          <slur type="start" orientation="under" placement="below" number="1"/>
           </notations>
         </note>
       <note>
         <pitch>
-          <step>D</step>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <notations>
+          <tied type="start" orientation="under" placement="below"/>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>C</step>
           <octave>5</octave>
           </pitch>
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <slur type="stop" number="1"/>
           </notations>
-        </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>2</voice>
-        <type>quarter</type>
-        <stem>down</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>2</voice>
-        <type>quarter</type>
-        <stem>down</stem>
         </note>
       </measure>
     <measure number="2">
@@ -107,41 +107,46 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>2</voice>
-        <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <slur type="start" number="1"/>
+          <slur type="start" orientation="over" placement="above" number="1"/>
           </notations>
         </note>
       <note>
         <pitch>
-          <step>A</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
           </pitch>
         <duration>1</duration>
-        <voice>2</voice>
+        <tie type="start"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <notations>
+          <tied type="start" orientation="over" placement="above"/>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <tie type="stop"/>
+        <voice>1</voice>
+        <type>quarter</type>
+        <stem>down</stem>
+        <notations>
+          <tied type="stop"/>
+          </notations>
+        </note>
+      <note>
+        <pitch>
+          <step>C</step>
+          <octave>5</octave>
+          </pitch>
+        <duration>1</duration>
+        <voice>1</voice>
         <type>quarter</type>
         <stem>down</stem>
         <notations>
@@ -158,95 +163,37 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <slur type="start" number="1"/>
           </notations>
         </note>
       <note>
         <pitch>
-          <step>D</step>
+          <step>C</step>
           <octave>5</octave>
           </pitch>
         <duration>1</duration>
+        <tie type="start"/>
         <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        <notations>
-          <slur type="stop" number="1"/>
-          </notations>
-        </note>
-      <backup>
-        <duration>2</duration>
-        </backup>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>2</voice>
         <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <slur type="start" number="1"/>
+          <tied type="start"/>
           </notations>
         </note>
       <note>
         <pitch>
-          <step>A</step>
-          <octave>4</octave>
+          <step>C</step>
+          <octave>5</octave>
           </pitch>
         <duration>1</duration>
-        <voice>2</voice>
+        <tie type="stop"/>
+        <voice>1</voice>
         <type>quarter</type>
         <stem>down</stem>
         <notations>
-          <slur type="stop" number="1"/>
-          </notations>
-        </note>
-      </measure>
-    <measure number="4">
-      <attributes>
-        <time>
-          <beats>4</beats>
-          <beat-type>4</beat-type>
-          </time>
-        </attributes>
-      <note>
-        <grace/>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <voice>1</voice>
-        <type>16th</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>G</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        <notations>
-          <slur type="start" number="1"/>
-          </notations>
-        </note>
-      <note>
-        <pitch>
-          <step>A</step>
-          <octave>4</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
-        <notations>
-          <slur type="stop" number="1"/>
+          <tied type="stop"/>
           </notations>
         </note>
       <note>
@@ -257,30 +204,7 @@
         <duration>1</duration>
         <voice>1</voice>
         <type>quarter</type>
-        <stem>up</stem>
-        <notations>
-          <slur type="start" number="1"/>
-          </notations>
-        </note>
-      <note>
-        <grace/>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-          </pitch>
-        <voice>1</voice>
-        <type>16th</type>
-        <stem>up</stem>
-        </note>
-      <note>
-        <pitch>
-          <step>D</step>
-          <octave>5</octave>
-          </pitch>
-        <duration>1</duration>
-        <voice>1</voice>
-        <type>quarter</type>
-        <stem>up</stem>
+        <stem>down</stem>
         <notations>
           <slur type="stop" number="1"/>
           </notations>
