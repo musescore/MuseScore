@@ -69,6 +69,9 @@ static void setupScoreMetaTags(mu::engraving::MasterScore* masterScore, const Pr
     if (!projectOptions.copyright.isEmpty()) {
         masterScore->setMetaTag(COPYRIGHT_TAG, projectOptions.copyright);
     }
+    if (!projectOptions.templatePath.empty()) {
+        masterScore->setMetaTag(CREATION_DATE_TAG, QDate::currentDate().toString(Qt::ISODate));
+    }
 }
 
 static QString scoreDefaultTitle()
