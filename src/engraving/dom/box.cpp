@@ -33,6 +33,7 @@
 #include "stafftext.h"
 #include "system.h"
 #include "text.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -422,6 +423,12 @@ EngravingItem* Box::drop(EditData& data)
 
 void Box::manageExclusionFromParts(bool exclude)
 {
+    // manage Layout Breaks - remove old ones first
+    LayoutBreak* sectionBreak = sectionBreakElement();
+    if (sectionBreak) {
+        toEngravingItem(sectionBreak)->manageExclusionFromParts(true);
+    }
+
     bool titleFrame = this == score()->first() && type() == ElementType::VBOX;
     if (exclude) {
         const std::list<EngravingObject*> links = linkList();
@@ -437,10 +444,26 @@ void Box::manageExclusionFromParts(bool exclude)
             linkedItem->score()->undoRemoveElement(linkedItem, false);
             linkedItem->undoUnlink();
         }
+
+        // manage Layout Breaks - there are no linked boxes, so add linked Line Breaks to previous measure
+        if (sectionBreak && !titleFrame) {
+            if (MeasureBase* prevMeasure = this->prevMeasure()) {
+                for (Score* score : masterScore()->scoreList()) {
+                    if (score == this->score()) {
+                        continue;
+                    }
+                    if (MeasureBase* localPrevMeasure = score->tick2measure(prevMeasure->tick())) {
+                        EngravingItem* newSectionBreak = sectionBreak->linkedClone();
+                        newSectionBreak->setScore(score);
+                        newSectionBreak->setParent(localPrevMeasure);
+                        score->undo(new AddElement(newSectionBreak));
+                    }
+                }
+            }
+        }
     } else {
-        std::vector<MeasureBase*> newFrames;
         for (Score* score : masterScore()->scoreList()) {
-            if (score == this->score() || (!this->score()->isMaster() && !score->isMaster())) {
+            if (score == this->score() || (titleFrame && !this->score()->isMaster() && !score->isMaster())) {
                 continue;
             }
 
@@ -453,6 +476,7 @@ void Box::manageExclusionFromParts(bool exclude)
                 if (item->isText() && toText(item)->textStyleType() == TextStyleType::INSTRUMENT_EXCERPT) {
                     continue;
                 }
+                // add frame items (Layout Break, Title, ...)
                 newFrame->add(item->linkedClone());
             }
 
@@ -468,9 +492,6 @@ void Box::manageExclusionFromParts(bool exclude)
                 }
             }
 
-            newFrames.push_back(newFrame);
-        }
-        for (MeasureBase* newFrame : newFrames) {
             newFrame->linkTo(this);
         }
     }

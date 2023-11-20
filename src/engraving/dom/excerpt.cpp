@@ -1032,6 +1032,15 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
 
     for (MeasureBase* mb = sourceScore->measures()->first(); mb; mb = mb->next()) {
         if (mb->excludeFromOtherParts()) {
+            // if excluded measure contains section break, add it to precedent measure in part
+            if (LayoutBreak* sectionBreak = mb->sectionBreakElement()) {
+                if (MeasureBase* prevMB = measures->last()) {
+                    EngravingItem* newSectionBreak = sectionBreak->linkedClone();
+                    newSectionBreak->setScore(dstScore);
+                    newSectionBreak->setParent(prevMB);
+                    dstScore->undo(new AddElement(newSectionBreak));
+                }
+            }
             continue;
         }
         MeasureBase* newMeasure = cloneMeasure(mb, dstScore, sourceScore, sourceStavesIndexes, trackList, tieMap);
