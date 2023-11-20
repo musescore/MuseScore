@@ -65,7 +65,7 @@ void PartsSettingsModel::requestElements()
     m_elementsForTextLinkingOption.clear();
 
     for (EngravingItem* item : m_elementList) {
-        if (!item->score()->isMaster()) {
+        if (!item->score()->isMaster() && !item->isLayoutBreak()) {
             m_elementsForPartLinkingOption.push_back(item);
         }
         if (item->canBeExcludedFromOtherParts()) {
