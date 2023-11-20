@@ -47,12 +47,13 @@ private:
 
     static void renderMultibend(const Score* score, const Note* startNote, const RenderingContext& startNoteCtx,
                                 mpe::PlaybackEventList& result);
-    static void renderGraceNote(const Note* graceNote, const Note* principalNote, const RenderingContext& ctx,
-                                mpe::PlaybackEventList& result);
-    static void renderSlightBend(const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result);
+    static void renderGraceAndPrincipalNotes(const Note* graceNote, const Note* principalNote, const RenderingContext& ctx,
+                                             mpe::PlaybackEventList& result);
+
+    static void appendBendTimeFactors(const Score* score, const GuitarBend* bend, BendTimeFactorMap& timeFactorMap);
 
     static RenderingContext buildRenderingContext(const Score* score, const Note* note, const RenderingContext& initialCtx);
-    static BendTimeFactorMap buildBendTimeFactorMap(const Score* score, const std::vector<const GuitarBend*>& bends);
+    static mpe::NoteEvent buildSlightNoteEvent(const Note* note, const RenderingContext& ctx);
     static mpe::NoteEvent buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
                                          const mpe::PlaybackEventList& bendNoteEvents, const BendTimeFactorMap& timeFactorMap);
     static mpe::PitchCurve buildPitchCurve(mpe::timestamp_t bendStartTime, mpe::duration_t totalBendDuration,

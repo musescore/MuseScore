@@ -228,6 +228,7 @@ public:
     int playingOctave() const;
     double tuning() const { return m_tuning; }
     void setTuning(double v) { m_tuning = v; }
+    double playingTuning() const;
     void undoSetTpc(int v);
     int transposition() const;
     bool fixed() const { return m_fixed; }

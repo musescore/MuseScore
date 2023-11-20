@@ -33,14 +33,9 @@
 
 using namespace mu::engraving;
 
-static const GuitarBend* findBend(const Note* note)
+static bool skipNote(const Note* note, const mu::mpe::ArticulationMap& articulationMap)
 {
-    return note ? note->bendFor() : nullptr;
-}
-
-static bool skipNote(const Note* note, const mu::mpe::ArticulationMap& articualtionMap)
-{
-    if (!isNotePlayable(note, articualtionMap)) {
+    if (!isNotePlayable(note, articulationMap)) {
         return true;
     }
 
@@ -105,65 +100,64 @@ void BendsRenderer::doRender(const EngravingItem* item, const mpe::ArticulationT
 void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, const RenderingContext& startNoteCtx,
                                     mpe::PlaybackEventList& result)
 {
-    const GuitarBend* bend = findBend(startNote);
-    if (!bend) {
+    const GuitarBend* currBend = startNote->bendFor();
+    if (!currBend) {
         ChordArticulationsRenderer::renderNote(startNote->chord(), startNote, startNoteCtx, result);
         return;
     }
 
     const Note* currNote = startNote;
     mpe::PlaybackEventList bendEvents;
+    BendTimeFactorMap bendTimeFactorMap;
 
-    std::vector<const GuitarBend*> bends;
-
-    while (currNote && bend) {
+    while (currNote) {
         RenderingContext currNoteCtx = buildRenderingContext(score, currNote, startNoteCtx);
-        bends.push_back(bend);
+        appendBendTimeFactors(score, currBend, bendTimeFactorMap);
 
-        switch (bend->type()) {
-        case GuitarBendType::BEND:
-        case GuitarBendType::PRE_BEND:
-            ChordArticulationsRenderer::renderNote(currNote->chord(), currNote, currNoteCtx, bendEvents);
-
-            currNote = bend->endNote();
-            bend = findBend(currNote);
-            break;
-        case GuitarBendType::SLIGHT_BEND:
-            renderSlightBend(currNote, currNoteCtx, bendEvents);
-
-            currNote = nullptr;
-            bend = nullptr;
-            break;
-        case GuitarBendType::GRACE_NOTE_BEND: {
-            const Note* principalNote = bend->endNote();
-            renderGraceNote(currNote, principalNote, currNoteCtx, bendEvents);
-
-            //! NOTE: skip the grace and the principal note, GraceChordsRenderer renders them both
-            bend = findBend(principalNote);
-            if (bend) {
-                bends.push_back(bend);
+        if (currNote->isGrace()) {
+            IF_ASSERT_FAILED(currBend) {
+                break;
             }
 
-            currNote = bend ? bend->endNote() : nullptr;
-            bend = findBend(currNote);
-        } break;
-        }
-    }
+            const Note* principalNote = currBend->endNote();
+            IF_ASSERT_FAILED(principalNote) {
+                break;
+            }
 
-    if (currNote) {
-        RenderingContext currNoteCtx = buildRenderingContext(score, currNote, startNoteCtx);
-        ChordArticulationsRenderer::renderNote(currNote->chord(), currNote, currNoteCtx, bendEvents);
+            renderGraceAndPrincipalNotes(currNote, principalNote, currNoteCtx, bendEvents);
+
+            // Skip the principal note, it's already been rendered
+            currNote = principalNote;
+            currBend = principalNote->bendFor();
+            appendBendTimeFactors(score, currBend, bendTimeFactorMap);
+        } else {
+            ChordArticulationsRenderer::renderNote(currNote->chord(), currNote, currNoteCtx, bendEvents);
+        }
+
+        if (currBend) {
+            if (currBend->type() == GuitarBendType::SLIGHT_BEND) {
+                bendEvents.emplace_back(buildSlightNoteEvent(currNote, currNoteCtx));
+                break;
+            }
+        }
+
+        if (currNote->tieFor()) {
+            currBend = currNote->lastTiedNote()->bendFor();
+            appendBendTimeFactors(score, currBend, bendTimeFactorMap);
+        }
+
+        currNote = currBend ? currBend->endNote() : nullptr;
+        currBend = currNote ? currNote->bendFor() : nullptr;
     }
 
     if (!bendEvents.empty()) {
-        BendTimeFactorMap bendTimeFactorMap = buildBendTimeFactorMap(score, bends);
         mpe::NoteEvent event = buildBendEvent(startNote, startNoteCtx, bendEvents, bendTimeFactorMap);
         result.emplace_back(std::move(event));
     }
 }
 
-void BendsRenderer::renderGraceNote(const Note* graceNote, const Note* principalNote, const RenderingContext& ctx,
-                                    mpe::PlaybackEventList& result)
+void BendsRenderer::renderGraceAndPrincipalNotes(const Note* graceNote, const Note* principalNote, const RenderingContext& ctx,
+                                                 mpe::PlaybackEventList& result)
 {
     IF_ASSERT_FAILED(graceNote && graceNote->isGrace() && principalNote) {
         return;
@@ -177,18 +171,23 @@ void BendsRenderer::renderGraceNote(const Note* graceNote, const Note* principal
     }
 }
 
-void BendsRenderer::renderSlightBend(const Note* note, const RenderingContext& ctx, mpe::PlaybackEventList& result)
+void BendsRenderer::appendBendTimeFactors(const Score* score, const GuitarBend* bend, BendTimeFactorMap& timeFactorMap)
 {
-    ChordArticulationsRenderer::renderNote(note->chord(), note, ctx, result);
+    if (!bend) {
+        return;
+    }
 
-    NominalNoteCtx slightNoteCtx(note, ctx);
-    mpe::timestamp_t timeOffset = slightNoteCtx.duration / 2;
+    float startFactor = std::clamp(bend->startTimeFactor(), 0.f, 1.f);
+    float endFactor = std::clamp(bend->endTimeFactor(), 0.f, 1.f);
 
-    slightNoteCtx.timestamp += timeOffset;
-    slightNoteCtx.duration -= timeOffset;
-    slightNoteCtx.pitchLevel += mpe::PITCH_LEVEL_STEP / 2;
+    const Note* endNote = bend->endNote();
+    mpe::timestamp_t endNoteTime = timestampFromTicks(score, endNote->tick().ticks());
 
-    result.emplace_back(buildNoteEvent(std::move(slightNoteCtx)));
+    IF_ASSERT_FAILED(RealIsEqualOrLess(startFactor, endFactor)) {
+        timeFactorMap.insert_or_assign(endNoteTime, BendTimeFactors { 0.f, 1.f });
+    }
+
+    timeFactorMap.insert_or_assign(endNoteTime, BendTimeFactors { startFactor, endFactor });
 }
 
 RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const Note* note, const RenderingContext& initialCtx)
@@ -227,26 +226,16 @@ RenderingContext BendsRenderer::buildRenderingContext(const Score* score, const 
     return ctx;
 }
 
-BendsRenderer::BendTimeFactorMap BendsRenderer::buildBendTimeFactorMap(const Score* score, const std::vector<const GuitarBend*>& bends)
+mu::mpe::NoteEvent BendsRenderer::buildSlightNoteEvent(const Note* note, const RenderingContext& ctx)
 {
-    BendTimeFactorMap result;
+    NominalNoteCtx slightNoteCtx(note, ctx);
+    mpe::timestamp_t timeOffset = slightNoteCtx.duration / 2;
 
-    for (const GuitarBend* bend : bends) {
-        float startFactor = std::clamp(bend->startTimeFactor(), 0.f, 1.f);
-        float endFactor = std::clamp(bend->endTimeFactor(), 0.f, 1.f);
+    slightNoteCtx.timestamp += timeOffset;
+    slightNoteCtx.duration -= timeOffset;
+    slightNoteCtx.pitchLevel += mpe::PITCH_LEVEL_STEP / 2;
 
-        const Note* endNote = bend->endNote();
-        mpe::timestamp_t endNoteTime = timestampFromTicks(score, endNote->tick().ticks());
-
-        IF_ASSERT_FAILED(RealIsEqualOrLess(startFactor, endFactor)) {
-            result.insert_or_assign(endNoteTime, BendTimeFactors { 0.f, 1.f });
-            continue;
-        }
-
-        result.insert_or_assign(endNoteTime, BendTimeFactors { startFactor, endFactor });
-    }
-
-    return result;
+    return buildNoteEvent(std::move(slightNoteCtx));
 }
 
 mu::mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const RenderingContext& startNoteCtx,
