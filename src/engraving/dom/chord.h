@@ -181,8 +181,8 @@ public:
     const std::vector<Chord*>& graceNotes() const { return m_graceNotes; }
     std::vector<Chord*>& graceNotes() { return m_graceNotes; }
 
-    GraceNotesGroup& graceNotesBefore(bool filterUnplayble = false) const;
-    GraceNotesGroup& graceNotesAfter(bool filterUnplayble = false) const;
+    GraceNotesGroup& graceNotesBefore(bool filterUnplayable = false) const;
+    GraceNotesGroup& graceNotesAfter(bool filterUnplayable = false) const;
 
     size_t graceIndex() const { return m_graceIndex; }
     void setGraceIndex(size_t val) { m_graceIndex = val; }

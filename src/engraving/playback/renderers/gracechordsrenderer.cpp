@@ -29,7 +29,7 @@
 using namespace mu::engraving;
 using namespace mu::mpe;
 
-static constexpr bool FILTER_UNPLAYBLE = true;
+static constexpr bool FILTER_UNPLAYABLE = true;
 
 const ArticulationTypeSet& GraceChordsRenderer::supportedTypes()
 {
@@ -78,7 +78,7 @@ void GraceChordsRenderer::renderGraceNote(const Note* graceNote, const Note* pri
     };
 
     if (isPlacedBeforePrincipalNote(graceNoteType)) {
-        const std::vector<Chord*>& graceChords = principalNote->chord()->graceNotesBefore(FILTER_UNPLAYBLE);
+        const std::vector<Chord*>& graceChords = principalNote->chord()->graceNotesBefore(FILTER_UNPLAYABLE);
         GraceNotesContext graceCtx = buildGraceNotesContext(graceChords, ctx, graceNoteType);
 
         renderGraceNoteEvents(graceChords, graceNoteAccepted, ctx, graceCtx, result);

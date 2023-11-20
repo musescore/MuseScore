@@ -189,7 +189,7 @@ const PlaybackData& PlaybackModel::resolveTrackPlaybackData(const ID& partId, co
 
 void PlaybackModel::triggerEventsForItems(const std::vector<const EngravingItem*>& items)
 {
-    std::vector<const EngravingItem*> playableItems = filterPlaybleItems(items);
+    std::vector<const EngravingItem*> playableItems = filterPlayableItems(items);
     if (playableItems.empty()) {
         return;
     }
@@ -778,7 +778,7 @@ const RepeatList& PlaybackModel::repeatList() const
     return m_score->repeatList();
 }
 
-std::vector<const EngravingItem*> PlaybackModel::filterPlaybleItems(const std::vector<const EngravingItem*>& items) const
+std::vector<const EngravingItem*> PlaybackModel::filterPlayableItems(const std::vector<const EngravingItem*>& items) const
 {
     std::vector<const EngravingItem*> result;
 
