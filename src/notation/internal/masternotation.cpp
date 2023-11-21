@@ -152,8 +152,11 @@ static void clearMeasures(mu::engraving::MasterScore* masterScore)
     TRACEFUNC;
 
     for (mu::engraving::Score* score : masterScore->scoreList()) {
-        mu::engraving::MeasureBaseList* measures = score->measures();
+        for (Part* part : score->parts()) {
+            part->removeNonPrimaryInstruments();
+        }
 
+        mu::engraving::MeasureBaseList* measures = score->measures();
         for (mu::engraving::MeasureBase* measure = measures->first(); measure; measure = measure->next()) {
             measure->deleteLater();
         }

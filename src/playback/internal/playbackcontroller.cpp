@@ -777,12 +777,17 @@ void PlaybackController::addTrack(const InstrumentTrackId& instrumentTrackId, co
     }
 
     const std::string primaryInstrId = part->instrument()->id().toStdString();
+    if (instrumentTrackId.instrumentId == primaryInstrId) {
+        const std::string trackName = part->partName().toStdString();
+        doAddTrack(instrumentTrackId, trackName, onFinished);
+        return;
+    }
 
-    const std::string trackName = (instrumentTrackId.instrumentId == primaryInstrId)
-                                  ? part->partName().toStdString()
-                                  : "(" + part->instrumentById(instrumentTrackId.instrumentId)->trackName().toStdString() + ")";
-
-    doAddTrack(instrumentTrackId, trackName, onFinished);
+    const Instrument* instrument = part->instrumentById(instrumentTrackId.instrumentId);
+    if (instrument != nullptr) {
+        std::string trackName = "(" + instrument->trackName().toStdString() + ")";
+        doAddTrack(instrumentTrackId, trackName, onFinished);
+    }
 }
 
 void PlaybackController::doAddTrack(const InstrumentTrackId& instrumentTrackId, const std::string& title,
