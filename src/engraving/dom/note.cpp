@@ -3273,7 +3273,10 @@ EngravingItem* Note::nextElement()
         } else if (isGrace()) {
             ChordRest* next = nextChordRest(chord());
             if (next) {
-                return toChord(next)->notes().front();
+                if (next->isChord()) {
+                    return toChord(next)->notes().front();
+                }
+                return toRest(next);
             }
         }
 

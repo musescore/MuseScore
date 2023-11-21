@@ -2796,7 +2796,10 @@ EngravingItem* Chord::prevElement()
 
                 ChordRest* next = prevChordRest(this);
                 if (next) {
-                    return toChord(next)->notes().back();
+                    if (next->isChord()) {
+                        return toChord(next)->notes().back();
+                    }
+                    return toRest(next);
                 }
             }
         }
