@@ -48,7 +48,7 @@ StyledDialogView {
             NavigationPanel {
                 id: measuresCountNavigationPanel
                 name: "MeasuresCountNavigationPanel"
-                enabled: parent && parent.enabled && parent.visible
+                enabled: content && content.enabled && content.visible
                 section: root.navigationSection
                 order: 1
                 direction: NavigationPanel.Horizontal
