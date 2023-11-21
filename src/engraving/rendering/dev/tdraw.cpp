@@ -147,6 +147,12 @@
 
 #include "infrastructure/rtti.h"
 
+// dev
+#include "dom/system.h"
+#include "dom/measure.h"
+#include "dom/segment.h"
+#include "dom/chord.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rtti;
 using namespace mu::engraving::rendering::dev;
@@ -364,6 +370,18 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
 
     case ElementType::WHAMMY_BAR_SEGMENT:   draw(item_cast<const WhammyBarSegment*>(item), painter);
+        break;
+
+    // dev
+    case ElementType::SYSTEM:               draw(item_cast<const System*>(item), painter);
+        break;
+    case ElementType::MEASURE:              draw(item_cast<const Measure*>(item), painter);
+        break;
+    case ElementType::SEGMENT:              draw(item_cast<const Segment*>(item), painter);
+        break;
+    case ElementType::CHORD:                draw(item_cast<const Chord*>(item), painter);
+        break;
+    case ElementType::GRACE_NOTES_GROUP:
         break;
     default:
         NOT_IMPLEMENTED << " type: " << item->typeName();
@@ -3072,4 +3090,33 @@ void TDraw::draw(const WhammyBarSegment* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
     drawTextLineBaseSegment(item, painter);
+}
+
+// dev
+void TDraw::draw(const System* item, draw::Painter* painter)
+{
+    UNUSED(item);
+    UNUSED(painter);
+    //painter->drawRect(item->ldata()->bbox());
+}
+
+void TDraw::draw(const Measure* item, draw::Painter* painter)
+{
+    UNUSED(item);
+    UNUSED(painter);
+    //painter->drawRect(item->ldata()->bbox());
+}
+
+void TDraw::draw(const Segment* item, draw::Painter* painter)
+{
+    UNUSED(item);
+    UNUSED(painter);
+    //painter->drawRect(item->ldata()->bbox());
+}
+
+void TDraw::draw(const Chord* item, draw::Painter* painter)
+{
+    UNUSED(item);
+    UNUSED(painter);
+    //painter->drawRect(item->ldata()->bbox());
 }
