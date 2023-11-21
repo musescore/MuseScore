@@ -86,6 +86,10 @@ AccessibleRoot* AccessibleItem::accessibleRoot() const
         return nullptr;
     }
 
+    if (m_element->isType(ElementType::ROOT_ITEM)) {
+        return dynamic_cast<AccessibleRoot*>(m_element->accessible().get());
+    }
+
     Score* score = m_element->score();
     if (!score) {
         return nullptr;
