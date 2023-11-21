@@ -2416,7 +2416,7 @@ Measure* Chord::measure() const
 //   graceNotesBefore
 //---------------------------------------------------------
 
-GraceNotesGroup& Chord::graceNotesBefore(bool filterUnplayble) const
+GraceNotesGroup& Chord::graceNotesBefore(bool filterUnplayable) const
 {
     m_graceNotesBefore.clear();
     for (Chord* c : m_graceNotes) {
@@ -2427,7 +2427,7 @@ GraceNotesGroup& Chord::graceNotesBefore(bool filterUnplayble) const
                 | NoteType::GRACE4
                 | NoteType::GRACE16
                 | NoteType::GRACE32)) {
-            if (filterUnplayble && !c->isChordPlayable()) {
+            if (filterUnplayable && !c->isChordPlayable()) {
                 continue;
             }
 
@@ -2441,14 +2441,14 @@ GraceNotesGroup& Chord::graceNotesBefore(bool filterUnplayble) const
 //   graceNotesAfter
 //---------------------------------------------------------
 
-GraceNotesGroup& Chord::graceNotesAfter(bool filterUnplayble) const
+GraceNotesGroup& Chord::graceNotesAfter(bool filterUnplayable) const
 {
     m_graceNotesAfter.clear();
     for (int i = static_cast<int>(m_graceNotes.size()) - 1; i >= 0; i--) {
         Chord* c = m_graceNotes[i];
         assert(c->noteType() != NoteType::NORMAL && c->noteType() != NoteType::INVALID);
         if (c->noteType() & (NoteType::GRACE8_AFTER | NoteType::GRACE16_AFTER | NoteType::GRACE32_AFTER)) {
-            if (filterUnplayble && !c->isChordPlayable()) {
+            if (filterUnplayable && !c->isChordPlayable()) {
                 continue;
             }
 

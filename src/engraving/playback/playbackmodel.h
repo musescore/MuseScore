@@ -133,7 +133,7 @@ private:
 
     const RepeatList& repeatList() const;
 
-    std::vector<const EngravingItem*> filterPlaybleItems(const std::vector<const EngravingItem*>& items) const;
+    std::vector<const EngravingItem*> filterPlayableItems(const std::vector<const EngravingItem*>& items) const;
 
     mpe::ArticulationsProfilePtr defaultActiculationProfile(const InstrumentTrackId& trackId) const;
 
