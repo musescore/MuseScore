@@ -150,6 +150,7 @@ public:
     void setInstrument(const Instrument&, Fraction = { -1, 1 });
     void setInstruments(const InstrumentList& instruments);
     void removeInstrument(const Fraction&);
+    void removeNonPrimaryInstruments();
     const InstrumentList& instruments() const;
 
     const StringData* stringData(const Fraction& tick, staff_idx_t staffIdx) const;

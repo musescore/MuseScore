@@ -369,6 +369,22 @@ void Part::removeInstrument(const Fraction& tick)
 }
 
 //---------------------------------------------------------
+//   removeNonPrimaryInstruments
+//---------------------------------------------------------
+
+void Part::removeNonPrimaryInstruments()
+{
+    auto it = _instruments.begin();
+    while (it != _instruments.end()) {
+        if (it->first != -1) {
+            it = _instruments.erase(it);
+            continue;
+        }
+        ++it;
+    }
+}
+
+//---------------------------------------------------------
 //   instrument
 //---------------------------------------------------------
 
