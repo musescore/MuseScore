@@ -352,13 +352,17 @@ void TextCursor::changeSelectionFormat(FormatId id, const FormatValue& val)
 
 const CharFormat TextCursor::selectedFragmentsFormat() const
 {
-    if (!_text || _text->fragmentList().empty() || (!hasSelection() && editing())) {
+    if (!_text || (!hasSelection() && editing())) {
         return _format;
     }
 
     const TextBase::LayoutData* ldata = _text->ldata();
     IF_ASSERT_FAILED(ldata) {
         return CharFormat();
+    }
+
+    if (ldata->blocks.empty()) {
+        return _format;
     }
 
     size_t startColumn = hasSelection() ? std::min(selectColumn(), _column) : 0;
