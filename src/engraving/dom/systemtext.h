@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SYSTEMTEXT_H__
-#define __SYSTEMTEXT_H__
+#ifndef MU_ENGRAVING_SYSTEMTEXT_H
+#define MU_ENGRAVING_SYSTEMTEXT_H
 
 #include "stafftextbase.h"
 

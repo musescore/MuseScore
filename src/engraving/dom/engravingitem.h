@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ELEMENT_H__
-#define __ELEMENT_H__
+#ifndef MU_ENGRAVING_ELEMENT_H
+#define MU_ENGRAVING_ELEMENT_H
 
 #include <optional>
 
@@ -389,7 +389,7 @@ public:
  */
     virtual bool mousePress(EditData&) { return false; }
 
-    mutable bool itemDiscovered      { false };       ///< helper flag for bsp
+    mutable bool itemDiscovered = false;       // helper flag for bsp
 
     void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;
 
@@ -490,7 +490,7 @@ public:
 
     struct Autoplace {
         OffsetChange offsetChanged = OffsetChange::NONE;     // set by user actions that change offset, used by autoplace
-        PointF changedPos;                // position set when changing offset
+        PointF changedPos;                                   // position set when changing offset
     };
 
     struct LayoutData {
@@ -726,11 +726,6 @@ class Compound : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Compound)
 
-    std::list<EngravingItem*> elements;
-
-protected:
-    const std::list<EngravingItem*>& getElements() const { return elements; }
-
 public:
     Compound(const ElementType& type, Score*);
     Compound(const Compound&);
@@ -741,6 +736,12 @@ public:
     virtual void setSelected(bool f);
     virtual void setVisible(bool);
     virtual void layout();
+
+protected:
+    const std::list<EngravingItem*>& getElements() const { return m_elements; }
+
+private:
+    std::list<EngravingItem*> m_elements;
 };
 
 extern bool elementLessThan(const EngravingItem* const, const EngravingItem* const);
@@ -748,7 +749,7 @@ extern void collectElements(void* data, EngravingItem* e);
 } // mu::engraving
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::ElementType);
+Q_DECLARE_METATYPE(mu::engraving::ElementType)
 #endif
 
 #endif

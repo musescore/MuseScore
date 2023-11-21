@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STAFFSTATE_H__
-#define __STAFFSTATE_H__
+#ifndef MU_ENGRAVING_STAFFSTATE_H
+#define MU_ENGRAVING_STAFFSTATE_H
 
 #include "engravingitem.h"
 #include "instrument.h"
@@ -67,7 +67,7 @@ public:
         double lw = 0.0;
         mu::draw::PainterPath path;
     };
-    DECLARE_LAYOUTDATA_METHODS(StaffState);
+    DECLARE_LAYOUTDATA_METHODS(StaffState)
 
 private:
 

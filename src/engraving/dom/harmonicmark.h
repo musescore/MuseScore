@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __HARMONICMARK_H__
-#define __HARMONICMARK_H__
+#ifndef MU_ENGRAVING_HARMONICMARK_H
+#define MU_ENGRAVING_HARMONICMARK_H
 
 #include "chordtextlinebase.h"
 

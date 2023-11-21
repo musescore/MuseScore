@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __CHORDREST_H__
-#define __CHORDREST_H__
+#ifndef MU_ENGRAVING_CHORDREST_H
+#define MU_ENGRAVING_CHORDREST_H
 
 #include <functional>
 

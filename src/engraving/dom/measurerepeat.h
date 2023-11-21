@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MEASUREREPEAT_H__
-#define __MEASUREREPEAT_H__
+#ifndef MU_ENGRAVING_MEASUREREPEAT_H
+#define MU_ENGRAVING_MEASUREREPEAT_H
 
 #include "rest.h"
 
@@ -79,14 +79,13 @@ public:
         void setNumberSym(const String& s) { numberSym = timeSigSymIdsFromString(s); }
         void clearNumberSym() { numberSym.clear(); }
     };
-    DECLARE_LAYOUTDATA_METHODS(MeasureRepeat);
+    DECLARE_LAYOUTDATA_METHODS(MeasureRepeat)
 
 private:
 
     Sid getPropertyStyle(Pid) const override;
 
     int m_numMeasures = 0;
-
     double m_numberPos = 0.0;
 };
 } // namespace mu::engraving

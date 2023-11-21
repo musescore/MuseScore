@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SYNTHESIZERSTATE_H__
-#define __SYNTHESIZERSTATE_H__
+#ifndef MU_ENGRAVING_SYNTHESIZERSTATE_H
+#define MU_ENGRAVING_SYNTHESIZERSTATE_H
 
 #include <list>
 
@@ -55,16 +55,17 @@ class SynthesizerGroup : public std::list<IdValue>
 {
     OBJECT_ALLOCATOR(engraving, SynthesizerGroup)
 
-    String _name;
-
 public:
-    const String& name() const { return _name; }
-    void setName(const String& s) { _name = s; }
+    const String& name() const { return m_name; }
+    void setName(const String& s) { m_name = s; }
 
     SynthesizerGroup()
         : std::list<IdValue>() {}
     SynthesizerGroup(const char* n, std::list<IdValue> l)
-        : std::list<IdValue>(l), _name(String::fromUtf8(n)) {}
+        : std::list<IdValue>(l), m_name(String::fromUtf8(n)) {}
+
+private:
+    String m_name;
 };
 
 //---------------------------------------------------------
@@ -74,8 +75,6 @@ public:
 class SynthesizerState : public std::list<SynthesizerGroup>
 {
     OBJECT_ALLOCATOR(engraving, SynthesizerState)
-
-    bool _isDefault        { true };
 
 public:
     SynthesizerState(std::initializer_list<SynthesizerGroup> l)
@@ -92,8 +91,12 @@ public:
     bool isDefaultSynthSoundfont();
     int ccToUse() const;
     int method() const;
-    bool isDefault() const { return _isDefault; }
-    void setIsDefault(bool val) { _isDefault = val; }
+    bool isDefault() const { return m_isDefault; }
+    void setIsDefault(bool val) { m_isDefault = val; }
+
+private:
+
+    bool m_isDefault = true;
 };
 } // namespace mu::engraving
 #endif

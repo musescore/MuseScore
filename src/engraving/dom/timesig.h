@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TIMESIG_H__
-#define __TIMESIG_H__
+#ifndef MU_ENGRAVING_TIMESIG_H
+#define MU_ENGRAVING_TIMESIG_H
 
 #include "engravingitem.h"
 
@@ -125,7 +125,7 @@ public:
         mu::PointF pointLargeLeftParen;
         mu::PointF pointLargeRightParen;
     };
-    DECLARE_LAYOUTDATA_METHODS(TimeSig);
+    DECLARE_LAYOUTDATA_METHODS(TimeSig)
 
 protected:
     void added() override;

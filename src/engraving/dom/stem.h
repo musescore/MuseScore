@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STEM_H__
-#define __STEM_H__
+#ifndef MU_ENGRAVING_STEM_H
+#define MU_ENGRAVING_STEM_H
 
 #include "engravingitem.h"
 
@@ -83,7 +83,7 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         LineF line;
     };
-    DECLARE_LAYOUTDATA_METHODS(Stem);
+    DECLARE_LAYOUTDATA_METHODS(Stem)
 
 private:
     friend class Factory;

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TREMOLO_H__
-#define __TREMOLO_H__
+#ifndef MU_ENGRAVING_TREMOLO_H
+#define MU_ENGRAVING_TREMOLO_H
 
 #include <memory>
 

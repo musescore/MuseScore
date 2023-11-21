@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_LIBMSCORE_ACTIONICON_H
-#define MU_LIBMSCORE_ACTIONICON_H
+#ifndef MU_ENGRAVING_ACTIONICON_H
+#define MU_ENGRAVING_ACTIONICON_H
 
 #include "engravingitem.h"
 
@@ -101,4 +101,4 @@ private:
 };
 }
 
-#endif // MU_LIBMSCORE_ACTIONICON_H
+#endif // MU_ENGRAVING_ACTIONICON_H

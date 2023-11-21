@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __POINT_H__
-#define __POINT_H__
+#ifndef MU_ENGRAVING_POINT_H
+#define MU_ENGRAVING_POINT_H
 
 #include <climits>
 
@@ -38,22 +38,9 @@ enum class Pid;
 
 class Location
 {
-    int _staff;
-    int _voice;
-    int _measure;
-    Fraction _frac;
-    int _graceIndex;
-    int _note;
-    bool _rel;
-
-    static int track(const EngravingItem* e);
-    static int measure(const EngravingItem* e);
-    static int graceIndex(const EngravingItem* e);
-    static int note(const EngravingItem* e);
-
 public:
     constexpr Location(int staff, int voice, int measure, Fraction frac, int graceIndex, int note, bool rel)
-        : _staff(staff), _voice(voice), _measure(measure), _frac(frac), _graceIndex(graceIndex), _note(note), _rel(rel)
+        : m_staff(staff), m_voice(voice), m_measure(measure), m_frac(frac), m_graceIndex(graceIndex), m_note(note), m_rel(rel)
     {
     }
 
@@ -67,23 +54,23 @@ public:
     void toAbsolute(const Location& ref);
     void toRelative(const Location& ref);
 
-    bool isAbsolute() const { return !_rel; }
-    bool isRelative() const { return _rel; }
+    bool isAbsolute() const { return !m_rel; }
+    bool isRelative() const { return m_rel; }
 
-    int staff() const { return _staff; }
-    void setStaff(int staff) { _staff = staff; }
-    int voice() const { return _voice; }
-    void setVoice(int voice) { _voice = voice; }
+    int staff() const { return m_staff; }
+    void setStaff(int staff) { m_staff = staff; }
+    int voice() const { return m_voice; }
+    void setVoice(int voice) { m_voice = voice; }
     int track() const;
     void setTrack(int track);
-    int measure() const { return _measure; }
-    void setMeasure(int measure) { _measure = measure; }
-    Fraction frac() const { return _frac; }
-    void setFrac(Fraction frac) { _frac = frac; }
-    int graceIndex() const { return _graceIndex; }
-    void setGraceIndex(int index) { _graceIndex = index; }
-    int note() const { return _note; }
-    void setNote(int note) { _note = note; }
+    int measure() const { return m_measure; }
+    void setMeasure(int measure) { m_measure = measure; }
+    Fraction frac() const { return m_frac; }
+    void setFrac(Fraction frac) { m_frac = frac; }
+    int graceIndex() const { return m_graceIndex; }
+    void setGraceIndex(int index) { m_graceIndex = index; }
+    int note() const { return m_note; }
+    void setNote(int note) { m_note = note; }
 
     void fillForElement(const EngravingItem* e, bool absfrac = true);
     void fillPositionForElement(const EngravingItem* e, bool absfrac = true);
@@ -93,6 +80,21 @@ public:
 
     bool operator==(const Location& other) const;
     bool operator!=(const Location& other) const { return !(*this == other); }
+
+private:
+
+    static int track(const EngravingItem* e);
+    static int measure(const EngravingItem* e);
+    static int graceIndex(const EngravingItem* e);
+    static int note(const EngravingItem* e);
+
+    int m_staff = 0;
+    int m_voice = 0;
+    int m_measure = 0;
+    Fraction m_frac;
+    int m_graceIndex = 0;
+    int m_note = 0;
+    bool m_rel = false;
 };
 } // namespace mu::engraving
 #endif

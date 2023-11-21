@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PICKSCRAPE_H__
-#define __PICKSCRAPE_H__
+#ifndef MU_ENGRAVING_PICKSCRAPE_H
+#define MU_ENGRAVING_PICKSCRAPE_H
 
 #include "chordtextlinebase.h"
 

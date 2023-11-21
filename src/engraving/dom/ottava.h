@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __OTTAVA_H__
-#define __OTTAVA_H__
+#ifndef MU_ENGRAVING_OTTAVA_H
+#define MU_ENGRAVING_OTTAVA_H
 
 #include "textlinebase.h"
 #include "property.h"
@@ -32,9 +32,9 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 struct OttavaE {
-    int offset;
-    unsigned start;
-    unsigned end;
+    int offset = 0;
+    unsigned start = 0;
+    unsigned end = 0;
 };
 
 //---------------------------------------------------------
@@ -55,9 +55,9 @@ enum class OttavaType : char {
 //---------------------------------------------------------
 
 struct OttavaDefault {
-    OttavaType type;
-    int shift;
-    const char* name;
+    OttavaType type = OttavaType::OTTAVA_8VA;
+    int shift = 0;
+    const char* name = nullptr;
 };
 
 // order is important, should be the same as OttavaType
@@ -105,16 +105,6 @@ class Ottava final : public TextLineBase
     OBJECT_ALLOCATOR(engraving, Ottava)
     DECLARE_CLASSOF(ElementType::OTTAVA)
 
-    OttavaType _ottavaType;
-    bool _numbersOnly;
-
-    void updateStyledProperties();
-    Sid getPropertyStyle(Pid) const override;
-    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
-
-protected:
-    friend class OttavaSegment;
-
 public:
     Ottava(EngravingItem* parent);
     Ottava(const Ottava&);
@@ -122,9 +112,9 @@ public:
     Ottava* clone() const override { return new Ottava(*this); }
 
     void setOttavaType(OttavaType val);
-    OttavaType ottavaType() const { return _ottavaType; }
+    OttavaType ottavaType() const { return m_ottavaType; }
 
-    bool numbersOnly() const { return _numbersOnly; }
+    bool numbersOnly() const { return m_numbersOnly; }
     void setNumbersOnly(bool val);
 
     void setPlacement(PlacementV);
@@ -138,6 +128,17 @@ public:
 
     String accessibleInfo() const override;
     static const char* ottavaTypeName(OttavaType type);
+
+private:
+
+    friend class OttavaSegment;
+
+    void updateStyledProperties();
+    Sid getPropertyStyle(Pid) const override;
+    void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
+
+    OttavaType m_ottavaType = OttavaType::OTTAVA_8VA;
+    bool m_numbersOnly = false;
 };
 } // namespace mu::engraving
 

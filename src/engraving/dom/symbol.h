@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SYMBOL_H__
-#define __SYMBOL_H__
+#ifndef MU_ENGRAVING_SYMBOL_H
+#define MU_ENGRAVING_SYMBOL_H
 
 #include <memory>
 
@@ -87,9 +87,6 @@ class FSymbol final : public BSymbol
     OBJECT_ALLOCATOR(engraving, FSymbol)
     DECLARE_CLASSOF(ElementType::FSYMBOL)
 
-    mu::draw::Font _font;
-    char32_t _code; // character code point (Unicode)
-
 public:
     FSymbol(EngravingItem* parent);
     FSymbol(const FSymbol&);
@@ -101,10 +98,14 @@ public:
 
     double baseLine() const override { return 0.0; }
     Segment* segment() const { return (Segment*)explicitParent(); }
-    const mu::draw::Font& font() const { return _font; }
-    char32_t code() const { return _code; }
+    const mu::draw::Font& font() const { return m_font; }
+    char32_t code() const { return m_code; }
     void setFont(const mu::draw::Font& f);
-    void setCode(char32_t val) { _code = val; }
+    void setCode(char32_t val) { m_code = val; }
+
+private:
+    mu::draw::Font m_font;
+    char32_t m_code = 0; // character code point (Unicode)
 };
 } // namespace mu::engraving
 #endif

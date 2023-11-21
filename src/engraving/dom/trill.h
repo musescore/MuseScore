@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TRILL_H__
-#define __TRILL_H__
+#ifndef MU_ENGRAVING_TRILL_H
+#define MU_ENGRAVING_TRILL_H
 
 #include "line.h"
 
@@ -52,8 +52,8 @@ public:
 
     void remove(EngravingItem*) override;
 
-    const SymIdList& symbols() const { return _symbols; }
-    void setSymbols(const SymIdList& s) { _symbols = s; }
+    const SymIdList& symbols() const { return m_symbols; }
+    void setSymbols(const SymIdList& s) { m_symbols = s; }
 
     void symbolLine(SymId start, SymId fill);
     void symbolLine(SymId start, SymId fill, SymId end);
@@ -61,7 +61,7 @@ public:
 private:
     Sid getPropertyStyle(Pid) const override;
 
-    SymIdList _symbols;
+    SymIdList m_symbols;
 };
 
 //---------------------------------------------------------
@@ -73,16 +73,6 @@ class Trill final : public SLine
 {
     OBJECT_ALLOCATOR(engraving, Trill)
     DECLARE_CLASSOF(ElementType::TRILL)
-
-    Sid getPropertyStyle(Pid) const override;
-
-private:
-    TrillType _trillType = TrillType::TRILL_LINE;
-    Accidental* _accidental = nullptr;
-    Chord* _cueNoteChord = nullptr;
-    OrnamentStyle _ornamentStyle = OrnamentStyle::DEFAULT;   // for use in ornaments such as trill
-    bool _playArticulation = true;
-    Ornament* _ornament = nullptr;
 
 public:
     Trill(EngravingItem* parent);
@@ -102,16 +92,16 @@ public:
     void setTrack(track_idx_t n) override;
 
     void setTrillType(TrillType tt);
-    TrillType trillType() const { return _trillType; }
-    void setOrnamentStyle(OrnamentStyle val) { _ornamentStyle = val; }
-    OrnamentStyle ornamentStyle() const { return _ornamentStyle; }
-    void setPlayArticulation(bool val) { _playArticulation = val; }
-    bool playArticulation() const { return _playArticulation; }
+    TrillType trillType() const { return m_trillType; }
+    void setOrnamentStyle(OrnamentStyle val) { m_ornamentStyle = val; }
+    OrnamentStyle ornamentStyle() const { return m_ornamentStyle; }
+    void setPlayArticulation(bool val) { m_playArticulation = val; }
+    bool playArticulation() const { return m_playArticulation; }
     String trillTypeUserName() const;
-    Accidental* accidental() const { return _accidental; }
-    void setAccidental(Accidental* a) { _accidental = a; }
-    Chord* cueNoteChord() const { return _cueNoteChord; }
-    void setCueNoteChord(Chord* c) { _cueNoteChord = c; }
+    Accidental* accidental() const { return m_accidental; }
+    void setAccidental(Accidental* a) { m_accidental = a; }
+    Chord* cueNoteChord() const { return m_cueNoteChord; }
+    void setCueNoteChord(Chord* c) { m_cueNoteChord = c; }
 
     Segment* segment() const { return (Segment*)explicitParent(); }
 
@@ -121,8 +111,19 @@ public:
 
     String accessibleInfo() const override;
 
-    Ornament* ornament() const { return _ornament; }
-    void setOrnament(Ornament* o) { _ornament = o; }
+    Ornament* ornament() const { return m_ornament; }
+    void setOrnament(Ornament* o) { m_ornament = o; }
+
+private:
+
+    Sid getPropertyStyle(Pid) const override;
+
+    TrillType m_trillType = TrillType::TRILL_LINE;
+    Accidental* m_accidental = nullptr;
+    Chord* m_cueNoteChord = nullptr;
+    OrnamentStyle m_ornamentStyle = OrnamentStyle::DEFAULT;   // for use in ornaments such as trill
+    bool m_playArticulation = true;
+    Ornament* m_ornament = nullptr;
 };
 } // namespace mu::engraving
 

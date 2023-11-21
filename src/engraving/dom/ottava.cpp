@@ -87,10 +87,10 @@ EngravingItem* OttavaSegment::propertyDelegate(Pid pid)
 
 void Ottava::setOttavaType(OttavaType val)
 {
-    if (_ottavaType == val) {
+    if (m_ottavaType == val) {
         return;
     }
-    _ottavaType = val;
+    m_ottavaType = val;
     styleChanged();
 }
 
@@ -100,7 +100,7 @@ void Ottava::setOttavaType(OttavaType val)
 
 void Ottava::setNumbersOnly(bool val)
 {
-    _numbersOnly = val;
+    m_numbersOnly = val;
 }
 
 //---------------------------------------------------------
@@ -193,7 +193,7 @@ Sid Ottava::getPropertyStyle(Pid pid) const
         Sid::ottava22MBContinueText,
     };
 
-    size_t idx = size_t(_ottavaType) * 3 + (_numbersOnly ? 0 : ss.size() / 2);
+    size_t idx = size_t(m_ottavaType) * 3 + (m_numbersOnly ? 0 : ss.size() / 2);
     switch (pid) {
     case Pid::OFFSET:
         return placeAbove() ? Sid::ottavaPosAbove : Sid::ottavaPosBelow;
@@ -225,8 +225,8 @@ Sid Ottava::getPropertyStyle(Pid pid) const
 Ottava::Ottava(EngravingItem* parent)
     : TextLineBase(ElementType::OTTAVA, parent, ElementFlag::ON_STAFF | ElementFlag::MOVABLE)
 {
-    _ottavaType  = OttavaType::OTTAVA_8VA;
-    _numbersOnly = false;
+    m_ottavaType  = OttavaType::OTTAVA_8VA;
+    m_numbersOnly = false;
     setBeginTextPlace(TextPlace::LEFT);
     setContinueTextPlace(TextPlace::LEFT);
     setEndHookType(HookType::HOOK_90);
@@ -240,8 +240,8 @@ Ottava::Ottava(EngravingItem* parent)
 Ottava::Ottava(const Ottava& o)
     : TextLineBase(o)
 {
-    setOttavaType(o._ottavaType);
-    _numbersOnly = o._numbersOnly;
+    setOttavaType(o.m_ottavaType);
+    m_numbersOnly = o.m_numbersOnly;
 }
 
 //---------------------------------------------------------
@@ -250,7 +250,7 @@ Ottava::Ottava(const Ottava& o)
 
 int Ottava::pitchShift() const
 {
-    return ottavaDefault[int(_ottavaType)].shift;
+    return ottavaDefault[int(m_ottavaType)].shift;
 }
 
 //---------------------------------------------------------
@@ -281,7 +281,7 @@ PropertyValue Ottava::getProperty(Pid propertyId) const
         return int(ottavaType());
 
     case Pid::NUMBERS_ONLY:
-        return _numbersOnly;
+        return m_numbersOnly;
 
     case Pid::END_TEXT_PLACE:                         // HACK
         return TextPlace::LEFT;
@@ -304,7 +304,7 @@ bool Ottava::setProperty(Pid propertyId, const PropertyValue& val)
         break;
 
     case Pid::NUMBERS_ONLY:
-        _numbersOnly = val.toBool();
+        m_numbersOnly = val.toBool();
         break;
 
     case Pid::SPANNER_TICKS:

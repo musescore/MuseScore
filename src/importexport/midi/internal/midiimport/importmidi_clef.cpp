@@ -439,7 +439,7 @@ bool hasGFclefs(const InstrumentTemplate* templ)
     bool hasG = false;
     bool hasF = false;
     for (staff_idx_t i = 0; i != staveCount; ++i) {
-        switch (templ->clefTypes[i]._concertClef) {
+        switch (templ->clefTypes[i].concertClef) {
         case ClefType::G:
             hasG = true;
             break;

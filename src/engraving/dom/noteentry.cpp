@@ -723,7 +723,7 @@ Ret Score::insertChordByInsertingTime(const Position& pos)
     }
 
     // remove all two-note tremolos that end on this tick
-    for (EngravingItem* e : seg->_elist) {
+    for (EngravingItem* e : seg->elist()) {
         if (!e || !e->isChord()) {
             continue;
         }

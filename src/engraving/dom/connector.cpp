@@ -37,7 +37,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction frac)
-    : _current(current), _score(current->score()), _currentLoc(Location::absolute())
+    : m_current(current), m_score(current->score()), m_currentLoc(Location::absolute())
 {
     IF_ASSERT_FAILED(current) {
         return;
@@ -48,10 +48,10 @@ ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction f
     // If the caller does not know the track number and passes -1
     // it may be corrected later.
     if (track >= 0) {
-        _currentLoc.setTrack(track);
+        m_currentLoc.setTrack(track);
     }
     if (frac >= Fraction(0, 1)) {
-        _currentLoc.setFrac(frac);
+        m_currentLoc.setFrac(frac);
     }
 }
 
@@ -60,7 +60,7 @@ ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction f
 //---------------------------------------------------------
 
 ConnectorInfo::ConnectorInfo(const Score* score, const Location& currentLocation)
-    : _score(score), _currentLoc(currentLocation)
+    : m_score(score), m_currentLoc(currentLocation)
 {}
 
 //---------------------------------------------------------
@@ -78,8 +78,8 @@ void ConnectorInfo::updateLocation(const EngravingItem* e, Location& l, bool cli
 
 void ConnectorInfo::updateCurrentInfo(bool clipboardmode)
 {
-    if (!currentUpdated() && _current) {
-        updateLocation(_current, _currentLoc, clipboardmode);
+    if (!currentUpdated() && m_current) {
+        updateLocation(m_current, m_currentLoc, clipboardmode);
     }
     setCurrentUpdated(true);
 }
@@ -93,28 +93,28 @@ bool ConnectorInfo::connect(ConnectorInfo* other)
     if (!other || (this == other)) {
         return false;
     }
-    if (_type != other->_type || _score != other->_score) {
+    if (m_type != other->m_type || m_score != other->m_score) {
         return false;
     }
-    if (hasPrevious() && _prev == nullptr
-        && other->hasNext() && other->_next == nullptr
+    if (hasPrevious() && m_prev == nullptr
+        && other->hasNext() && other->m_next == nullptr
         ) {
-        if ((_prevLoc == other->_currentLoc)
-            && (_currentLoc == other->_nextLoc)
+        if ((m_prevLoc == other->m_currentLoc)
+            && (m_currentLoc == other->m_nextLoc)
             ) {
-            _prev = other;
-            other->_next = this;
+            m_prev = other;
+            other->m_next = this;
             return true;
         }
     }
-    if (hasNext() && _next == nullptr
-        && other->hasPrevious() && other->_prev == nullptr
+    if (hasNext() && m_next == nullptr
+        && other->hasPrevious() && other->m_prev == nullptr
         ) {
-        if ((_nextLoc == other->_currentLoc)
-            && (_currentLoc == other->_prevLoc)
+        if ((m_nextLoc == other->m_currentLoc)
+            && (m_currentLoc == other->m_prevLoc)
             ) {
-            _next = other;
-            other->_prev = this;
+            m_next = other;
+            other->m_prev = this;
             return true;
         }
     }
@@ -130,8 +130,8 @@ void ConnectorInfo::forceConnect(ConnectorInfo* other)
     if (!other || (this == other)) {
         return;
     }
-    _next = other;
-    other->_prev = this;
+    m_next = other;
+    other->m_prev = this;
 }
 
 //---------------------------------------------------------
@@ -154,12 +154,12 @@ static int distance(const Location& l1, const Location& l2)
 
 int ConnectorInfo::orderedConnectionDistance(const ConnectorInfo& c1, const ConnectorInfo& c2)
 {
-    Location c1Next = c1._nextLoc;
-    c1Next.toRelative(c1._currentLoc);
-    Location c2Prev = c2._currentLoc;   // inversed order to get equal signs
-    c2Prev.toRelative(c2._prevLoc);
+    Location c1Next = c1.m_nextLoc;
+    c1Next.toRelative(c1.m_currentLoc);
+    Location c2Prev = c2.m_currentLoc;   // inversed order to get equal signs
+    c2Prev.toRelative(c2.m_prevLoc);
     if (c1Next == c2Prev) {
-        return distance(c1._nextLoc, c2._currentLoc);
+        return distance(c1.m_nextLoc, c2.m_currentLoc);
     }
     return INT_MAX;
 }
@@ -175,17 +175,17 @@ int ConnectorInfo::orderedConnectionDistance(const ConnectorInfo& c1, const Conn
 
 int ConnectorInfo::connectionDistance(const ConnectorInfo& other) const
 {
-    if (_type != other._type || _score != other._score) {
+    if (m_type != other.m_type || m_score != other.m_score) {
         return INT_MAX;
     }
     int distThisOther = INT_MAX;
     int distOtherThis = INT_MAX;
-    if (hasNext() && _next == nullptr
-        && other.hasPrevious() && other._prev == nullptr) {
+    if (hasNext() && m_next == nullptr
+        && other.hasPrevious() && other.m_prev == nullptr) {
         distThisOther = orderedConnectionDistance(*this, other);
     }
-    if (hasPrevious() && _prev == nullptr
-        && other.hasNext() && other._next == nullptr) {
+    if (hasPrevious() && m_prev == nullptr
+        && other.hasNext() && other.m_next == nullptr) {
         distOtherThis = orderedConnectionDistance(other, *this);
     }
     if (distOtherThis < distThisOther) {
@@ -201,8 +201,8 @@ int ConnectorInfo::connectionDistance(const ConnectorInfo& other) const
 ConnectorInfo* ConnectorInfo::findFirst()
 {
     ConnectorInfo* i = this;
-    while (i->_prev) {
-        i = i->_prev;
+    while (i->m_prev) {
+        i = i->m_prev;
         if (i == this) {
             LOGW("ConnectorInfo::findFirst: circular connector %p", this);
             return nullptr;
@@ -227,8 +227,8 @@ const ConnectorInfo* ConnectorInfo::findFirst() const
 ConnectorInfo* ConnectorInfo::findLast()
 {
     ConnectorInfo* i = this;
-    while (i->_next) {
-        i = i->_next;
+    while (i->m_next) {
+        i = i->m_next;
         if (i == this) {
             LOGW("ConnectorInfo::findLast: circular connector %p", this);
             return nullptr;

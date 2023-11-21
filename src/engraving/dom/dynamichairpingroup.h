@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __DYNAMICHAIRPINGROUP_H__
-#define __DYNAMICHAIRPINGROUP_H__
+#ifndef MU_ENGRAVING_DYNAMICHAIRPINGROUP_H
+#define MU_ENGRAVING_DYNAMICHAIRPINGROUP_H
 
 #include <memory>
 #include <functional>
@@ -46,7 +46,7 @@ class HairpinWithDynamicsDragGroup : public ElementGroup
 
 public:
     HairpinWithDynamicsDragGroup(Dynamic* start, HairpinSegment* hs, Dynamic* end)
-        : startDynamic(start), hairpinSegment(hs), endDynamic(end) {}
+        : m_startDynamic(start), m_hairpinSegment(hs), m_endDynamic(end) {}
 
     void startDrag(EditData&) override;
     mu::RectF drag(EditData&) override;
@@ -57,9 +57,9 @@ public:
 
 private:
 
-    Dynamic* startDynamic;
-    HairpinSegment* hairpinSegment;
-    Dynamic* endDynamic;
+    Dynamic* m_startDynamic = nullptr;
+    HairpinSegment* m_hairpinSegment = nullptr;
+    Dynamic* m_endDynamic = nullptr;
 };
 
 //-------------------------------------------------------------------
@@ -70,19 +70,20 @@ class DynamicNearHairpinsDragGroup : public ElementGroup
 {
     OBJECT_ALLOCATOR(engraving, DynamicNearHairpinsDragGroup)
 
-    Hairpin* leftHairpin;
-    Dynamic* dynamic;
-    Hairpin* rightHairpin;
-
 public:
     DynamicNearHairpinsDragGroup(Hairpin* left, Dynamic* d, Hairpin* right)
-        : leftHairpin(left), dynamic(d), rightHairpin(right) {}
+        : m_leftHairpin(left), m_dynamic(d), m_rightHairpin(right) {}
 
     void startDrag(EditData&) override;
     mu::RectF drag(EditData&) override;
     void endDrag(EditData&) override;
 
     static std::unique_ptr<ElementGroup> detectFor(Dynamic* d, std::function<bool(const EngravingItem*)> isDragged);
+
+private:
+    Hairpin* m_leftHairpin = nullptr;
+    Dynamic* m_dynamic = nullptr;
+    Hairpin* m_rightHairpin = nullptr;
 };
 
 //-------------------------------------------------------------------
@@ -95,7 +96,7 @@ class DynamicExpressionDragGroup : public ElementGroup
 
 public:
     DynamicExpressionDragGroup(Dynamic* d, Expression* e)
-        : dynamic(d), expression(e) {}
+        : m_dynamic(d), m_expression(e) {}
 
     void startDrag(EditData& ed) override;
     mu::RectF drag(EditData& ed) override;
@@ -105,8 +106,8 @@ public:
     static std::unique_ptr<ElementGroup> detectFor(Expression* e, std::function<bool(const EngravingItem*)> isDragged);
 
 private:
-    Dynamic* dynamic = nullptr;
-    Expression* expression = nullptr;
+    Dynamic* m_dynamic = nullptr;
+    Expression* m_expression = nullptr;
 };
 } // namespace mu::engraving
 

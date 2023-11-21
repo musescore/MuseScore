@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STAFFTYPE_H__
-#define __STAFFTYPE_H__
+#ifndef MU_ENGRAVING_STAFFTYPE_H
+#define MU_ENGRAVING_STAFFTYPE_H
 
 #include "draw/types/color.h"
 #include "draw/types/font.h"
@@ -190,90 +190,6 @@ class StaffType
 {
     INJECT_STATIC(IEngravingConfiguration, engravingConfiguration)
 
-    friend class TabDurationSymbol;
-
-    StaffGroup _group = StaffGroup::STANDARD;
-
-    String _xmlName;         // the name used to reference this preset in instruments.xml
-    String _name;            // user visible name
-
-    double _userMag           { 1.0 };           // allowed 0.1 - 10.0
-    Spatium _yoffset         { 0.0 };
-    bool _small              { false };
-    bool _invisible          { false };
-    mu::draw::Color _color   { engravingConfiguration()->defaultColor() };
-
-    int _lines            = 5;
-    int _stepOffset       = 0;
-    Spatium _lineDistance = Spatium(1);
-
-    bool _showBarlines    = true;
-    bool _showLedgerLines = true;
-    bool _stemless        = false;        // do not show stems
-
-    bool _genClef         = true;         // create clef at beginning of system
-    bool _genTimesig      = true;         // whether time signature is shown or not
-    bool _genKeysig       = true;         // create key signature at beginning of system
-
-    // Standard: configurable properties
-    NoteHeadScheme _noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;
-
-    // TAB: configurable properties
-    double _durationFontSize = 15.0;       // the size (in points) for the duration symbol font
-    double _durationFontUserY = 0.0;       // the vertical offset (spatium units) for the duration symb. font
-                                           // user configurable
-    double _fretFontSize  = 10.0;          // the size (in points) for the fret marks font
-    double _fretFontUserY = 0.0;           // additional vert. offset of fret marks with respect to
-                                           // the string line (spatium unit); user configurable
-    bool _genDurations = false;           // whether duration symbols are drawn or not
-    bool _linesThrough = false;           // whether lines for strings and stems may pass through fret marks or not
-    TablatureMinimStyle _minimStyle = TablatureMinimStyle::NONE;      // how to draw minim stems (stem-and-beam durations only)
-    TablatureSymbolRepeat _symRepeat = TablatureSymbolRepeat::NEVER;  // if and when to repeat the same duration symbol
-    bool _onLines      = true;            // whether fret marks are drawn on the string lines or between them
-    bool _showRests    = false;           // whether to draw rests or not
-    bool _stemsDown    = true;            // stems are drawn downward (stem-and-beam durations only)
-    bool _stemsThrough = true;            // stems are drawn through the staff rather than beside it (stem-and-beam durations only)
-    bool _upsideDown   = false;           // whether lines are drawn with highest string at top (false) or at bottom (true)
-    bool _showTabFingering   = false;           // Allow fingering in tablature staff (true) or not (false)
-    bool _useNumbers   = true;            // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
-    bool _showBackTied = true;            // whether back-tied notes are shown or not
-
-    // TAB: internally managed variables
-    // Note: values in RASTER UNITS are independent from score scaling and
-    //    must be multiplied by magS() to be used in contexts using sp units
-    mutable double _durationBoxH = 0.0;
-    double mutable _durationBoxY = 0.0;            // the height and the y rect.coord. (relative to staff top line)
-    // of a box bounding all duration symbols (raster units) internally computed:
-    // depends upon _onString and the metrics of the duration font
-    mu::draw::Font _durationFont;                  // font used to draw dur. symbols; cached for efficiency
-    size_t _durationFontIdx = 0;             // the index of current dur. font in dur. font array
-    mutable double _durationYOffset = 0.0;         // the vertical offset to draw duration symbols with respect to the
-    // string lines (raster units); internally computed: depends upon _onString and duration font
-    mutable double _durationGridYOffset = 0.0;     // the vertical offset to draw the bottom of duration grid with respect to the
-    // string lines (raster units); internally computed: depends upon _onstring and duration font
-    mutable bool _durationMetricsValid = false;     // whether duration font metrics are valid or not
-    mutable double _fretBoxH = 0.0;
-    mutable double _fretBoxY = 0.0;                // the height and the y rect.coord. (relative to staff line)
-    // of a box bounding all fret characters (raster units) internally computed:
-    // depends upon _onString, _useNumbers and the metrics of the fret font
-    mu::draw::Font _fretFont;                      // font used to draw fret marks; cached for efficiency
-    size_t _fretFontIdx = 0;                 // the index of current fret font in fret font array
-    mutable double _fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
-    // (raster units); internally computed: depends upon _onString, _useNumbers
-    // and the metrics of the fret font
-    mutable bool _fretMetricsValid = false;       // whether fret font metrics are valid or not
-    mutable double _refDPI = 0.0;                  // reference value used to last computed metrics and to see if they are still valid
-
-    // the array of configured fonts
-    static std::vector<TablatureFretFont> _fretFonts;
-    static std::vector<TablatureDurationFont> _durationFonts;
-    static std::vector<StaffType> _presets;
-
-    void  setDurationMetrics() const;
-    void  setFretMetrics() const;
-
-    static bool readConfigFile(const String& fileName);
-
 public:
     StaffType();
 
@@ -290,43 +206,43 @@ public:
 
     bool operator==(const StaffType&) const;
 
-    StaffGroup group() const { return _group; }
-    void setGroup(StaffGroup g) { _group = g; }
+    StaffGroup group() const { return m_group; }
+    void setGroup(StaffGroup g) { m_group = g; }
     StaffTypes type() const;
-    const String& name() const { return _name; }
-    const String& xmlName() const { return _xmlName; }
-    void setName(const String& val) { _name = val; }
-    void setXmlName(const String& val) { _xmlName = val; }
+    const String& name() const { return m_name; }
+    const String& xmlName() const { return m_xmlName; }
+    void setName(const String& val) { m_name = val; }
+    void setXmlName(const String& val) { m_xmlName = val; }
     String translatedGroupName() const;
 
-    void setLines(int val) { _lines = val; }
-    int lines() const { return _lines; }
+    void setLines(int val) { m_lines = val; }
+    int lines() const { return m_lines; }
     int middleLine() const;
     int bottomLine() const;
-    void setStepOffset(int v) { _stepOffset = v; }
-    int stepOffset() const { return _stepOffset; }
-    void setLineDistance(const Spatium& val) { _lineDistance = val; }
-    Spatium lineDistance() const { return _lineDistance; }
-    void setGenClef(bool val) { _genClef = val; }
-    bool genClef() const { return _genClef; }
-    void setShowBarlines(bool val) { _showBarlines = val; }
-    bool showBarlines() const { return _showBarlines; }
-    double userMag() const { return _userMag; }
-    bool isSmall() const { return _small; }
-    bool invisible() const { return _invisible; }
-    const mu::draw::Color& color() const { return _color; }
-    void setUserMag(double val) { _userMag = val; }
-    void setSmall(bool val) { _small = val; }
-    void setInvisible(bool val) { _invisible = val; }
-    void setColor(const mu::draw::Color& val) { _color = val; }
-    Spatium yoffset() const { return _yoffset; }
-    void setYoffset(Spatium val) { _yoffset = val; }
+    void setStepOffset(int v) { m_stepOffset = v; }
+    int stepOffset() const { return m_stepOffset; }
+    void setLineDistance(const Spatium& val) { m_lineDistance = val; }
+    Spatium lineDistance() const { return m_lineDistance; }
+    void setGenClef(bool val) { m_genClef = val; }
+    bool genClef() const { return m_genClef; }
+    void setShowBarlines(bool val) { m_showBarlines = val; }
+    bool showBarlines() const { return m_showBarlines; }
+    double userMag() const { return m_userMag; }
+    bool isSmall() const { return m_small; }
+    bool invisible() const { return m_invisible; }
+    const mu::draw::Color& color() const { return m_color; }
+    void setUserMag(double val) { m_userMag = val; }
+    void setSmall(bool val) { m_small = val; }
+    void setInvisible(bool val) { m_invisible = val; }
+    void setColor(const mu::draw::Color& val) { m_color = val; }
+    Spatium yoffset() const { return m_yoffset; }
+    void setYoffset(Spatium val) { m_yoffset = val; }
     double spatium(const MStyle& style) const;
 
-    void setStemless(bool val) { _stemless = val; }
-    bool stemless() const { return _stemless; }
-    bool genTimesig() const { return _genTimesig; }
-    void setGenTimesig(bool val) { _genTimesig = val; }
+    void setStemless(bool val) { m_stemless = val; }
+    bool stemless() const { return m_stemless; }
+    bool genTimesig() const { return m_genTimesig; }
+    void setGenTimesig(bool val) { m_genTimesig = val; }
     double doty1() const;
     double doty2() const;
 
@@ -335,12 +251,12 @@ public:
     static const StaffType* preset(StaffTypes idx);
     static const StaffType* presetFromXmlName(const String& xmlName);
 
-    void setGenKeysig(bool val) { _genKeysig = val; }
-    bool genKeysig() const { return _genKeysig; }
-    void setShowLedgerLines(bool val) { _showLedgerLines = val; }
-    bool showLedgerLines() const { return _showLedgerLines; }
-    void setNoteHeadScheme(NoteHeadScheme s) { _noteHeadScheme = s; }
-    NoteHeadScheme noteHeadScheme() const { return _noteHeadScheme; }
+    void setGenKeysig(bool val) { m_genKeysig = val; }
+    bool genKeysig() const { return m_genKeysig; }
+    void setShowLedgerLines(bool val) { m_showLedgerLines = val; }
+    bool showLedgerLines() const { return m_showLedgerLines; }
+    void setNoteHeadScheme(NoteHeadScheme s) { m_noteHeadScheme = s; }
+    NoteHeadScheme noteHeadScheme() const { return m_noteHeadScheme; }
 
     String fretString(int fret, int string, bool deadNote) const;     // returns a string with the text for fret
     String durationString(DurationType type, int dots) const;
@@ -357,56 +273,57 @@ public:
     double durationBoxH() const;
     double durationBoxY() const;
 
-    const mu::draw::Font& durationFont() const { return _durationFont; }
-    const String durationFontName() const { return _durationFonts[_durationFontIdx].displayName; }
-    double durationFontSize() const { return _durationFontSize; }
-    double durationFontUserY() const { return _durationFontUserY; }
-    double durationFontYOffset() const { setDurationMetrics(); return _durationYOffset + _durationFontUserY * SPATIUM20; }
-    double durationGridYOffset() const { setDurationMetrics(); return _durationGridYOffset; }
-    double fretBoxH() const { setFretMetrics(); return _fretBoxH; }
-    double fretBoxY() const { setFretMetrics(); return _fretBoxY + _fretFontUserY * SPATIUM20; }
+    const mu::draw::Font& durationFont() const { return m_durationFont; }
+    const TablatureDurationFont& tabDurationFont() const { return m_durationFonts[m_durationFontIdx]; }
+    const String& durationFontName() const { return m_durationFonts[m_durationFontIdx].displayName; }
+    double durationFontSize() const { return m_durationFontSize; }
+    double durationFontUserY() const { return m_durationFontUserY; }
+    double durationFontYOffset() const { setDurationMetrics(); return m_durationYOffset + m_durationFontUserY * SPATIUM20; }
+    double durationGridYOffset() const { setDurationMetrics(); return m_durationGridYOffset; }
+    double fretBoxH() const { setFretMetrics(); return m_fretBoxH; }
+    double fretBoxY() const { setFretMetrics(); return m_fretBoxY + m_fretFontUserY * SPATIUM20; }
 
     // 2 methods to return the size of a box masking lines under a fret mark
-    double fretMaskH() const { return _lineDistance.val() * SPATIUM20; }
-    double fretMaskY() const { return (_onLines ? -0.5 : -1.0) * _lineDistance.val() * SPATIUM20; }
+    double fretMaskH() const { return m_lineDistance.val() * SPATIUM20; }
+    double fretMaskY() const { return (m_onLines ? -0.5 : -1.0) * m_lineDistance.val() * SPATIUM20; }
 
-    const mu::draw::Font& fretFont() const { return _fretFont; }
-    const String fretFontName() const { return _fretFonts[_fretFontIdx].displayName; }
-    double fretFontSize() const { return _fretFontSize; }
-    double fretFontUserY() const { return _fretFontUserY; }
-    double fretFontYOffset() const { setFretMetrics(); return _fretYOffset + _fretFontUserY * SPATIUM20; }
-    bool  genDurations() const { return _genDurations; }
-    bool  linesThrough() const { return _linesThrough; }
-    TablatureMinimStyle minimStyle() const { return _minimStyle; }
-    TablatureSymbolRepeat symRepeat() const { return _symRepeat; }
-    bool  onLines() const { return _onLines; }
-    bool  showRests() const { return _showRests; }
-    bool  stemsDown() const { return _stemsDown; }
-    bool  stemThrough() const { return _stemsThrough; }
-    bool  upsideDown() const { return _upsideDown; }
-    bool  showTabFingering() const { return _showTabFingering; }
-    bool  useNumbers() const { return _useNumbers; }
-    bool  showBackTied() const { return _showBackTied; }
+    const mu::draw::Font& fretFont() const { return m_fretFont; }
+    const String fretFontName() const { return m_fretFonts[m_fretFontIdx].displayName; }
+    double fretFontSize() const { return m_fretFontSize; }
+    double fretFontUserY() const { return m_fretFontUserY; }
+    double fretFontYOffset() const { setFretMetrics(); return m_fretYOffset + m_fretFontUserY * SPATIUM20; }
+    bool  genDurations() const { return m_genDurations; }
+    bool  linesThrough() const { return m_linesThrough; }
+    TablatureMinimStyle minimStyle() const { return m_minimStyle; }
+    TablatureSymbolRepeat symRepeat() const { return m_symRepeat; }
+    bool  onLines() const { return m_onLines; }
+    bool  showRests() const { return m_showRests; }
+    bool  stemsDown() const { return m_stemsDown; }
+    bool  stemThrough() const { return m_stemsThrough; }
+    bool  upsideDown() const { return m_upsideDown; }
+    bool  showTabFingering() const { return m_showTabFingering; }
+    bool  useNumbers() const { return m_useNumbers; }
+    bool  showBackTied() const { return m_showBackTied; }
 
     // properties setters (setting some props invalidates metrics)
     void  setDurationFontName(const String&);
     void  setDurationFontSize(double);
-    void  setDurationFontUserY(double val) { _durationFontUserY = val; }
+    void  setDurationFontUserY(double val) { m_durationFontUserY = val; }
     void  setFretFontName(const String&);
     void  setFretFontSize(double);
-    void  setFretFontUserY(double val) { _fretFontUserY = val; }
-    void  setGenDurations(bool val) { _genDurations = val; }
-    void  setLinesThrough(bool val) { _linesThrough = val; }
-    void  setMinimStyle(TablatureMinimStyle val) { _minimStyle = val; }
-    void  setSymbolRepeat(TablatureSymbolRepeat val) { _symRepeat  = val; }
+    void  setFretFontUserY(double val) { m_fretFontUserY = val; }
+    void  setGenDurations(bool val) { m_genDurations = val; }
+    void  setLinesThrough(bool val) { m_linesThrough = val; }
+    void  setMinimStyle(TablatureMinimStyle val) { m_minimStyle = val; }
+    void  setSymbolRepeat(TablatureSymbolRepeat val) { m_symRepeat  = val; }
     void  setOnLines(bool);
-    void  setShowRests(bool val) { _showRests = val; }
-    void  setStemsDown(bool val) { _stemsDown = val; }
-    void  setStemsThrough(bool val) { _stemsThrough = val; }
-    void  setUpsideDown(bool val) { _upsideDown = val; }
-    void  setShowTabFingering(bool val) { _showTabFingering = val; }
-    void  setUseNumbers(bool val) { _useNumbers = val; _fretMetricsValid = false; }
-    void  setShowBackTied(bool val) { _showBackTied = val; }
+    void  setShowRests(bool val) { m_showRests = val; }
+    void  setStemsDown(bool val) { m_stemsDown = val; }
+    void  setStemsThrough(bool val) { m_stemsThrough = val; }
+    void  setUpsideDown(bool val) { m_upsideDown = val; }
+    void  setShowTabFingering(bool val) { m_showTabFingering = val; }
+    void  setUseNumbers(bool val) { m_useNumbers = val; m_fretMetricsValid = false; }
+    void  setShowBackTied(bool val) { m_showBackTied = val; }
 
     // utility functions for tab specially managed elements
     mu::PointF chordStemPos(const Chord*) const;
@@ -415,8 +332,8 @@ public:
     mu::PointF chordStemPosBeam(const Chord*) const;
     double   chordStemLength(const Chord*) const;
 
-    bool isTabStaff() const { return _group == StaffGroup::TAB; }
-    bool isDrumStaff() const { return _group == StaffGroup::PERCUSSION; }
+    bool isTabStaff() const { return m_group == StaffGroup::TAB; }
+    bool isDrumStaff() const { return m_group == StaffGroup::PERCUSSION; }
 
     bool isSimpleTabStaff() const;
     bool isCommonTabStaff() const;
@@ -427,7 +344,93 @@ public:
     static bool fontData(bool bDuration, size_t nIdx, String* pFamily, String* pDisplayName, double* pSize, double* pYOff);
 
     static void initStaffTypes();
-    static const std::vector<StaffType>& presets() { return _presets; }
+    static const std::vector<StaffType>& presets() { return m_presets; }
+
+private:
+
+    friend class TabDurationSymbol;
+
+    void  setDurationMetrics() const;
+    void  setFretMetrics() const;
+
+    static bool readConfigFile(const String& fileName);
+
+    StaffGroup m_group = StaffGroup::STANDARD;
+
+    String m_xmlName;         // the name used to reference this preset in instruments.xml
+    String m_name;            // user visible name
+
+    double m_userMag = 1.0;           // allowed 0.1 - 10.0
+    Spatium m_yoffset;
+    bool m_small = false;
+    bool m_invisible = false;
+    mu::draw::Color m_color = engravingConfiguration()->defaultColor();
+
+    int m_lines = 5;
+    int m_stepOffset = 0;
+    Spatium m_lineDistance = Spatium(1);
+
+    bool m_showBarlines = true;
+    bool m_showLedgerLines = true;
+    bool m_stemless = false;       // do not show stems
+
+    bool m_genClef = true;         // create clef at beginning of system
+    bool m_genTimesig = true;      // whether time signature is shown or not
+    bool m_genKeysig = true;       // create key signature at beginning of system
+
+    // Standard: configurable properties
+    NoteHeadScheme m_noteHeadScheme = NoteHeadScheme::HEAD_NORMAL;
+
+    // TAB: configurable propertiesm
+    double m_durationFontSize = 15.0;       // the size (in points) for the duration symbol font
+    double m_durationFontUserY = 0.0;       // the vertical offset (spatium units) for the duration symb. font
+    // user configurable
+    double m_fretFontSize  = 10.0;          // the size (in points) for the fret marks font
+    double m_fretFontUserY = 0.0;           // additional vert. offset of fret marks with respect to
+    // the string line (spatium unit); user configurable
+    bool m_genDurations = false;            // whether duration symbols are drawn or not
+    bool m_linesThrough = false;            // whether lines for strings and stems may pass through fret marks or not
+    TablatureMinimStyle m_minimStyle = TablatureMinimStyle::NONE;      // how to draw minim stems (stem-and-beam durations only)
+    TablatureSymbolRepeat m_symRepeat = TablatureSymbolRepeat::NEVER;  // if and when to repeat the same duration symbol
+    bool m_onLines = true;                  // whether fret marks are drawn on the string lines or between them
+    bool m_showRests = false;               // whether to draw rests or not
+    bool m_stemsDown = true;                // stems are drawn downward (stem-and-beam durations only)
+    bool m_stemsThrough = true;             // stems are drawn through the staff rather than beside it (stem-and-beam durations only)
+    bool m_upsideDown = false;              // whether lines are drawn with highest string at top (false) or at bottom (true)
+    bool m_showTabFingering = false;        // Allow fingering in tablature staff (true) or not (false)
+    bool m_useNumbers = true;               // true: use numbers ('0' - ...) for frets | false: use letters ('a' - ...)
+    bool m_showBackTied = true;             // whether back-tied notes are shown or not
+
+    // TAB: internally managed variables
+    // Note: values in RASTER UNITS are independent from score scaling and
+    //    must be multiplied by magS() to be used in contexts using sp units
+    mutable double m_durationBoxH = 0.0;
+    double mutable m_durationBoxY = 0.0;            // the height and the y rect.coord. (relative to staff top line)
+    // of a box bounding all duration symbols (raster units) internally computed:
+    // depends upon _onString and the metrics of the duration font
+    mu::draw::Font m_durationFont;                  // font used to draw dur. symbols; cached for efficiency
+    size_t m_durationFontIdx = 0;             // the index of current dur. font in dur. font array
+    mutable double m_durationYOffset = 0.0;         // the vertical offset to draw duration symbols with respect to the
+    // string lines (raster units); internally computed: depends upon _onString and duration font
+    mutable double m_durationGridYOffset = 0.0;     // the vertical offset to draw the bottom of duration grid with respect to the
+    // string lines (raster units); internally computed: depends upon _onstring and duration font
+    mutable bool m_durationMetricsValid = false;     // whether duration font metrics are valid or not
+    mutable double m_fretBoxH = 0.0;
+    mutable double m_fretBoxY = 0.0;                // the height and the y rect.coord. (relative to staff line)
+    // of a box bounding all fret characters (raster units) internally computed:
+    // depends upon _onString, _useNumbers and the metrics of the fret font
+    mu::draw::Font m_fretFont;                      // font used to draw fret marks; cached for efficiency
+    size_t m_fretFontIdx = 0;                 // the index of current fret font in fret font array
+    mutable double m_fretYOffset = 0.0;             // the vertical offset to draw fret marks with respect to the string lines;
+    // (raster units); internally computed: depends upon _onString, _useNumbers
+    // and the metrics of the fret font
+    mutable bool m_fretMetricsValid = false;       // whether fret font metrics are valid or not
+    mutable double m_refDPI = 0.0;                  // reference value used to last computed metrics and to see if they are still valid
+
+    // the array of configured fonts
+    static std::vector<TablatureFretFont> m_fretFonts;
+    static std::vector<TablatureDurationFont> m_durationFonts;
+    static std::vector<StaffType> m_presets;
 };
 
 //---------------------------------------------------------
@@ -473,7 +476,7 @@ public:
         double beamLength = 0.0;                          // if _grid==MEDIALFINAL, length of the beam toward previous grid element
         int beamLevel = 0.0;                                // if _grid==MEDIALFINAL, the number of beams
     };
-    DECLARE_LAYOUTDATA_METHODS(TabDurationSymbol);
+    DECLARE_LAYOUTDATA_METHODS(TabDurationSymbol)
 
 private:
 

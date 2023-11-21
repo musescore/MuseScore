@@ -752,7 +752,7 @@ void Read206::readPart206(Part* part, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Instrument") {
-            Instrument* i = part->_instruments.instrument(/* tick */ -1);
+            Instrument* i = part->m_instruments.instrument(/* tick */ -1);
             readInstrument206(i, part, e, ctx);
             Drumset* ds = i->drumset();
             Staff* s = part->staff(0);

@@ -174,14 +174,14 @@ void Clef::setSmall(bool val)
 void Clef::setClefType(ClefType i)
 {
     if (concertPitch()) {
-        m_clefTypes._concertClef = i;
-        if (m_clefTypes._transposingClef == ClefType::INVALID) {
-            m_clefTypes._transposingClef = i;
+        m_clefTypes.concertClef = i;
+        if (m_clefTypes.transposingClef == ClefType::INVALID) {
+            m_clefTypes.transposingClef = i;
         }
     } else {
-        m_clefTypes._transposingClef = i;
-        if (m_clefTypes._concertClef == ClefType::INVALID) {
-            m_clefTypes._concertClef = i;
+        m_clefTypes.transposingClef = i;
+        if (m_clefTypes.concertClef == ClefType::INVALID) {
+            m_clefTypes.concertClef = i;
         }
     }
 }
@@ -192,7 +192,7 @@ void Clef::setClefType(ClefType i)
 
 void Clef::setConcertClef(ClefType val)
 {
-    m_clefTypes._concertClef = val;
+    m_clefTypes.concertClef = val;
 }
 
 //---------------------------------------------------------
@@ -201,7 +201,7 @@ void Clef::setConcertClef(ClefType val)
 
 void Clef::setTransposingClef(ClefType val)
 {
-    m_clefTypes._transposingClef = val;
+    m_clefTypes.transposingClef = val;
 }
 
 //---------------------------------------------------------
@@ -211,9 +211,9 @@ void Clef::setTransposingClef(ClefType val)
 ClefType Clef::clefType() const
 {
     if (concertPitch()) {
-        return m_clefTypes._concertClef;
+        return m_clefTypes.concertClef;
     } else {
-        return m_clefTypes._transposingClef;
+        return m_clefTypes.transposingClef;
     }
 }
 
@@ -281,8 +281,8 @@ Clef* Clef::otherClef()
 PropertyValue Clef::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
-    case Pid::CLEF_TYPE_CONCERT:     return m_clefTypes._concertClef;
-    case Pid::CLEF_TYPE_TRANSPOSING: return m_clefTypes._transposingClef;
+    case Pid::CLEF_TYPE_CONCERT:     return m_clefTypes.concertClef;
+    case Pid::CLEF_TYPE_TRANSPOSING: return m_clefTypes.transposingClef;
     case Pid::SHOW_COURTESY: return showCourtesy();
     case Pid::SMALL:         return isSmall();
     case Pid::CLEF_TO_BARLINE_POS: return m_clefToBarlinePosition;

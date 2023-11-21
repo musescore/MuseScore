@@ -47,10 +47,10 @@ class DrumSet;
 
 const Drumset* InputState::drumset() const
 {
-    if (_segment == 0 || _track == mu::nidx) {
+    if (m_segment == 0 || m_track == mu::nidx) {
         return 0;
     }
-    return _segment->score()->staff(_track / VOICES)->part()->instrument(_segment->tick())->drumset();
+    return m_segment->score()->staff(m_track / VOICES)->part()->instrument(m_segment->tick())->drumset();
 }
 
 //---------------------------------------------------------
@@ -59,12 +59,12 @@ const Drumset* InputState::drumset() const
 
 StaffGroup InputState::staffGroup() const
 {
-    if (_segment == 0 || _track == mu::nidx) {
+    if (m_segment == 0 || m_track == mu::nidx) {
         return StaffGroup::STANDARD;
     }
 
-    Fraction tick = _segment->tick();
-    const Staff* staff = _segment->score()->staff(_track / VOICES);
+    Fraction tick = m_segment->tick();
+    const Staff* staff = m_segment->score()->staff(m_track / VOICES);
     StaffGroup staffGroup = staff->staffType(tick)->group();
     const Instrument* instrument = staff->part()->instrument(tick);
 
@@ -82,7 +82,7 @@ StaffGroup InputState::staffGroup() const
 
 Fraction InputState::tick() const
 {
-    return _segment ? _segment->tick() : Fraction(0, 1);
+    return m_segment ? m_segment->tick() : Fraction(0, 1);
 }
 
 //---------------------------------------------------------
@@ -92,7 +92,7 @@ Fraction InputState::tick() const
 ChordRest* InputState::cr() const
 {
     // _track could potentially be invalid, for instance after navigation through a frame
-    return _segment && _track != mu::nidx ? toChordRest(_segment->element(_track)) : 0;
+    return m_segment && m_track != mu::nidx ? toChordRest(m_segment->element(m_track)) : 0;
 }
 
 //---------------------------------------------------------
@@ -101,10 +101,10 @@ ChordRest* InputState::cr() const
 
 void InputState::setDots(int n)
 {
-    if (n && (!_duration.isValid() || _duration.isZero() || _duration.isMeasure())) {
-        _duration = DurationType::V_QUARTER;
+    if (n && (!m_duration.isValid() || m_duration.isZero() || m_duration.isMeasure())) {
+        m_duration = DurationType::V_QUARTER;
     }
-    _duration.setDots(n);
+    m_duration.setDots(n);
 }
 
 //---------------------------------------------------------
@@ -268,8 +268,8 @@ void InputState::moveInputPos(EngravingItem* e)
             Measure* m = s->measure()->mmRestFirst();
             s = m->findSegment(SegmentType::ChordRest, m->tick());
         }
-        _lastSegment = _segment;
-        _segment = s;
+        m_lastSegment = m_segment;
+        m_segment = s;
     }
 }
 
@@ -283,8 +283,8 @@ void InputState::setSegment(Segment* s)
         Measure* m = s->measure()->mmRestFirst();
         s = m->findSegment(SegmentType::ChordRest, m->tick());
     }
-    _segment = s;
-    _lastSegment = s;
+    m_segment = s;
+    m_lastSegment = s;
 }
 
 //---------------------------------------------------------
@@ -293,11 +293,11 @@ void InputState::setSegment(Segment* s)
 
 Segment* InputState::nextInputPos() const
 {
-    Measure* m = _segment->measure();
-    Segment* s = _segment->next1(SegmentType::ChordRest);
+    Measure* m = m_segment->measure();
+    Segment* s = m_segment->next1(SegmentType::ChordRest);
     for (; s; s = s->next1(SegmentType::ChordRest)) {
-        if (s->element(_track)) {
-            if (s->element(_track)->isRest() && toRest(s->element(_track))->isGap()) {
+        if (s->element(m_track)) {
+            if (s->element(m_track)->isRest() && toRest(s->element(m_track))->isGap()) {
                 m = s->measure();
             } else {
                 return s;
@@ -317,9 +317,9 @@ Segment* InputState::nextInputPos() const
 void InputState::moveToNextInputPos()
 {
     Segment* s   = nextInputPos();
-    _lastSegment = _segment;
+    m_lastSegment = m_segment;
     if (s) {
-        _segment = s;
+        m_segment = s;
     }
 }
 
@@ -329,6 +329,6 @@ void InputState::moveToNextInputPos()
 
 bool InputState::endOfScore() const
 {
-    return (_lastSegment == _segment) && !nextInputPos();
+    return (m_lastSegment == m_segment) && !nextInputPos();
 }
 }

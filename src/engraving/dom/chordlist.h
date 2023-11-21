@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __CHORDLIST_H__
-#define __CHORDLIST_H__
+#ifndef MU_ENGRAVING_CHORDLIST_H
+#define MU_ENGRAVING_CHORDLIST_H
 
 #include <map>
 
@@ -53,17 +53,18 @@ enum class HDegreeType : char {
 
 class HDegree
 {
-    int _value;
-    int _alter;         // -1, 0, 1  (b - - #)
-    HDegreeType _type;
-
 public:
-    HDegree() { _value = 0; _alter = 0; _type = HDegreeType::UNDEF; }
-    HDegree(int v, int a, HDegreeType t) { _value = v; _alter = a; _type = t; }
-    int value() const { return _value; }
-    int alter() const { return _alter; }
-    HDegreeType type() const { return _type; }
+    HDegree() = default;
+    HDegree(int v, int a, HDegreeType t) { m_value = v; m_alter = a; m_type = t; }
+    int value() const { return m_value; }
+    int alter() const { return m_alter; }
+    HDegreeType type() const { return m_type; }
     String text() const;
+
+private:
+    int m_value = 0;
+    int m_alter = 0;         // -1, 0, 1  (b - - #)
+    HDegreeType m_type = HDegreeType::UNDEF;
 };
 
 //---------------------------------------------------------
@@ -72,14 +73,9 @@ public:
 
 class HChord
 {
-    String str;
-
-protected:
-    int keys;
-
 public:
-    HChord() { keys = 0; }
-    HChord(int k) { keys = k; }
+    HChord() = default;
+    HChord(int k) { m_keys = k; }
     HChord(int a, int b, int c=-1, int d=-1, int e=-1, int f=-1, int g=-1, int h=-1, int i=-1, int k=-1, int l=-1);
     HChord(const String&);
 
@@ -87,30 +83,36 @@ public:
 
     bool contains(int key) const           // key in chord?
     {
-        return (1 << (key % 12)) & keys;
+        return (1 << (key % 12)) & m_keys;
     }
 
     HChord& operator+=(int key)
     {
-        keys |= (1 << (key % 12));
+        m_keys |= (1 << (key % 12));
         return *this;
     }
 
     HChord& operator-=(int key)
     {
-        keys &= ~(1 << (key % 12));
+        m_keys &= ~(1 << (key % 12));
         return *this;
     }
 
-    bool operator==(const HChord& o) const { return keys == o.keys; }
-    bool operator!=(const HChord& o) const { return keys != o.keys; }
+    bool operator==(const HChord& o) const { return m_keys == o.m_keys; }
+    bool operator!=(const HChord& o) const { return m_keys != o.m_keys; }
 
-    int getKeys() const { return keys; }
+    int getKeys() const { return m_keys; }
     void print() const;
 
     String name(int tpc) const;
     String voicing() const;
     void add(const std::vector<HDegree>& degreeList);
+
+protected:
+    int m_keys = 0;
+
+private:
+    String m_str;
 };
 
 //---------------------------------------------------------
@@ -158,50 +160,53 @@ public:
 class ParsedChord
 {
 public:
+    ParsedChord() = default;
+
     bool parse(const String&, const ChordList*, bool syntaxOnly = false, bool preferMinor = false);
     String fromXml(const String&, const String&, const String&, const String&, const std::list<HDegree>&, const ChordList*);
     const std::list<RenderAction>& renderList(const ChordList*);
-    bool parseable() const { return _parseable; }
-    bool understandable() const { return _understandable; }
-    const String& name() const { return _name; }
-    const String& quality() const { return _quality; }
-    const String& extension() const { return _extension; }
-    const String& modifiers() const { return _modifiers; }
-    const StringList& modifierList() const { return _modifierList; }
-    const String& xmlKind() const { return _xmlKind; }
-    const String& xmlText() const { return _xmlText; }
-    const String& xmlSymbols() const { return _xmlSymbols; }
-    const String& xmlParens() const { return _xmlParens; }
-    const StringList& xmlDegrees() const { return _xmlDegrees; }
-    int keys() const { return chord.getKeys(); }
-    const String& handle() const { return _handle; }
+    bool parseable() const { return m_parseable; }
+    bool understandable() const { return m_understandable; }
+    const String& name() const { return m_name; }
+    const String& quality() const { return m_quality; }
+    const String& extension() const { return m_extension; }
+    const String& modifiers() const { return m_modifiers; }
+    const StringList& modifierList() const { return m_modifierList; }
+    const String& xmlKind() const { return m_xmlKind; }
+    const String& xmlText() const { return m_xmlText; }
+    const String& xmlSymbols() const { return m_xmlSymbols; }
+    const String& xmlParens() const { return m_xmlParens; }
+    const StringList& xmlDegrees() const { return m_xmlDegrees; }
+    int keys() const { return m_chord.getKeys(); }
+    const String& handle() const { return m_handle; }
     operator String() const {
-        return _handle;
+        return m_handle;
     }
-    bool operator==(const ParsedChord& c) const { return this->_handle == c._handle; }
+    bool operator==(const ParsedChord& c) const { return this->m_handle == c.m_handle; }
     bool operator!=(const ParsedChord& c) const { return !(*this == c); }
-    ParsedChord();
+
 private:
-    String _name;
-    String _handle;
-    String _quality;
-    String _extension;
-    String _modifiers;
-    StringList _modifierList;
-    std::list<ChordToken> _tokenList;
-    std::list<RenderAction> _renderList;
-    String _xmlKind;
-    String _xmlText;
-    String _xmlSymbols;
-    String _xmlParens;
-    StringList _xmlDegrees;
-    StringList major, minor, diminished, augmented, lower, raise, mod1, mod2, symbols;
-    HChord chord;
-    bool _parseable;
-    bool _understandable;
     void configure(const ChordList*);
     void correctXmlText(const String& s = String());
     void addToken(String, ChordTokenClass);
+
+    String m_name;
+    String m_handle;
+    String m_quality;
+    String m_extension;
+    String m_modifiers;
+    StringList m_modifierList;
+    std::list<ChordToken> m_tokenList;
+    std::list<RenderAction> m_renderList;
+    String m_xmlKind;
+    String m_xmlText;
+    String m_xmlSymbols;
+    String m_xmlParens;
+    StringList m_xmlDegrees;
+    StringList m_major, m_minor, m_diminished, m_augmented, m_lower, m_raise, m_mod1, m_mod2, m_symbols;
+    HChord m_chord;
+    bool m_parseable = false;
+    bool m_understandable = false;
 };
 
 //---------------------------------------------------------
@@ -224,16 +229,17 @@ struct ChordDescription {
     bool generated = false;
     bool renderListGenerated = false;
     bool exportOk = false;
-    String _quality;
 
-public:
     ChordDescription() {}
     ChordDescription(int);
     ChordDescription(const String&);
-    String quality() const { return _quality; }
+    String quality() const { return m_quality; }
     void complete(ParsedChord* pc, const ChordList*);
     void read(XmlReader&);
     void write(XmlWriter&) const;
+
+private:
+    String m_quality;
 };
 
 //---------------------------------------------------------
@@ -241,12 +247,11 @@ public:
 //---------------------------------------------------------
 
 struct ChordSymbol {
-    int fontIdx;
+    int fontIdx = -1;
     String name;
     String value;
     Char code;
 
-    ChordSymbol() { fontIdx = -1; }
     bool isValid() const { return fontIdx != -1; }
 };
 
@@ -257,7 +262,7 @@ struct ChordSymbol {
 struct ChordFont {
     String family;
     String fontClass;
-    double mag;
+    double mag = 1.0;
 };
 
 //---------------------------------------------------------
@@ -270,14 +275,6 @@ class ChordList : public std::map<int, ChordDescription>
 
     INJECT(IEngravingConfiguration, configuration)
 
-    std::map<String, ChordSymbol> symbols;
-    bool _autoAdjust = false;
-    double _nmag = 1.0, _nadjust = 0.0;
-    double _emag = 1.0, _eadjust = 0.0;
-    double _mmag = 1.0, _madjust = 0.0;
-
-    bool _customChordList = false; // if true, chordlist will be saved as part of score
-
 public:
     std::list<ChordFont> fonts;
     std::list<RenderAction> renderListRoot;
@@ -286,9 +283,9 @@ public:
     std::list<ChordToken> chordTokenList;
     static int privateID;
 
-    bool autoAdjust() const { return _autoAdjust; }
-    double nominalMag() const { return _nmag; }
-    double nominalAdjust() const { return _nadjust; }
+    bool autoAdjust() const { return m_autoAdjust; }
+    double nominalMag() const { return m_nmag; }
+    double nominalAdjust() const { return m_nadjust; }
     void configureAutoAdjust(double emag = 1.0, double eadjust = 0.0, double mmag = 1.0, double madjust = 0.0);
     double position(const StringList& names, ChordTokenClass ctc) const;
 
@@ -300,10 +297,10 @@ public:
     void unload();
 
     const ChordDescription* description(int id) const;
-    ChordSymbol symbol(const String& s) const { return mu::value(symbols, s); }
+    ChordSymbol symbol(const String& s) const { return mu::value(m_symbols, s); }
 
-    void setCustomChordList(bool t) { _customChordList = t; }
-    bool customChordList() const { return _customChordList; }
+    void setCustomChordList(bool t) { m_customChordList = t; }
+    bool customChordList() const { return m_customChordList; }
 
     void checkChordList(const MStyle& style);
 
@@ -313,6 +310,14 @@ private:
 
     void read(XmlReader&);
     void write(XmlWriter& xml) const;
+
+    std::map<String, ChordSymbol> m_symbols;
+    bool m_autoAdjust = false;
+    double m_nmag = 1.0, m_nadjust = 0.0;
+    double m_emag = 1.0, m_eadjust = 0.0;
+    double m_mmag = 1.0, m_madjust = 0.0;
+
+    bool m_customChordList = false; // if true, chordlist will be saved as part of score
 };
 } // namespace mu::engraving
 #endif

@@ -46,11 +46,11 @@ static const ElementStyle sectionBreakStyle {
 LayoutBreak::LayoutBreak(MeasureBase* parent)
     : EngravingItem(ElementType::LAYOUT_BREAK, parent, ElementFlag::SYSTEM | ElementFlag::HAS_TAG)
 {
-    _pause = 0.;
-    _startWithLongNames = false;
-    _startWithMeasureOne = false;
-    _firstSystemIndentation = false;
-    _layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
+    m_pause = 0.;
+    m_startWithLongNames = false;
+    m_startWithMeasureOne = false;
+    m_firstSystemIndentation = false;
+    m_layoutBreakType = LayoutBreakType(propertyDefault(Pid::LAYOUT_BREAK).toInt());
 
     initElementStyle(&sectionBreakStyle);
 
@@ -64,12 +64,12 @@ LayoutBreak::LayoutBreak(MeasureBase* parent)
 LayoutBreak::LayoutBreak(const LayoutBreak& lb)
     : EngravingItem(lb)
 {
-    _layoutBreakType        = lb._layoutBreakType;
+    m_layoutBreakType        = lb.m_layoutBreakType;
     m_lw                      = lb.m_lw;
-    _pause                  = lb._pause;
-    _startWithLongNames     = lb._startWithLongNames;
-    _startWithMeasureOne    = lb._startWithMeasureOne;
-    _firstSystemIndentation = lb._firstSystemIndentation;
+    m_pause                  = lb.m_pause;
+    m_startWithLongNames     = lb.m_startWithLongNames;
+    m_startWithMeasureOne    = lb.m_startWithMeasureOne;
+    m_firstSystemIndentation = lb.m_firstSystemIndentation;
     init();
 }
 
@@ -155,7 +155,7 @@ void LayoutBreak::init()
 
 void LayoutBreak::setLayoutBreakType(LayoutBreakType val)
 {
-    _layoutBreakType = val;
+    m_layoutBreakType = val;
     init();
 }
 
@@ -198,15 +198,15 @@ PropertyValue LayoutBreak::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::LAYOUT_BREAK:
-        return _layoutBreakType;
+        return m_layoutBreakType;
     case Pid::PAUSE:
-        return _pause;
+        return m_pause;
     case Pid::START_WITH_LONG_NAMES:
-        return _startWithLongNames;
+        return m_startWithLongNames;
     case Pid::START_WITH_MEASURE_ONE:
-        return _startWithMeasureOne;
+        return m_startWithMeasureOne;
     case Pid::FIRST_SYSTEM_INDENTATION:
-        return _firstSystemIndentation;
+        return m_firstSystemIndentation;
     default:
         return EngravingItem::getProperty(propertyId);
     }

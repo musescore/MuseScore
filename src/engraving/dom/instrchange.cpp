@@ -55,38 +55,38 @@ InstrumentChange::InstrumentChange(EngravingItem* parent)
     : TextBase(ElementType::INSTRUMENT_CHANGE, parent, TextStyleType::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
-    _instrument = new Instrument();
+    m_instrument = new Instrument();
 }
 
 InstrumentChange::InstrumentChange(const Instrument& i, EngravingItem* parent)
     : TextBase(ElementType::INSTRUMENT_CHANGE, parent, TextStyleType::INSTRUMENT_CHANGE, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
     initElementStyle(&instrumentChangeStyle);
-    _instrument = new Instrument(i);
+    m_instrument = new Instrument(i);
 }
 
 InstrumentChange::InstrumentChange(const InstrumentChange& is)
     : TextBase(is)
 {
-    _instrument = new Instrument(*is._instrument);
-    _init = is._init;
+    m_instrument = new Instrument(*is.m_instrument);
+    m_init = is.m_init;
 }
 
 InstrumentChange::~InstrumentChange()
 {
-    delete _instrument;
+    delete m_instrument;
 }
 
 void InstrumentChange::setInstrument(const Instrument& i)
 {
-    *_instrument = i;
+    *m_instrument = i;
     //delete _instrument;
     //_instrument = new Instrument(i);
 }
 
 void InstrumentChange::setupInstrument(const Instrument* instrument)
 {
-    if (_init) {
+    if (m_init) {
         Fraction tickStart = segment()->tick();
         Part* part = staff()->part();
         Interval oldV = part->instrument(tickStart)->transpose();
@@ -96,10 +96,10 @@ void InstrumentChange::setupInstrument(const Instrument* instrument)
 
         // change the clef for each staff
         for (size_t i = 0; i < part->nstaves(); i++) {
-            ClefType oldClefType = concPitch ? part->instrument(tickStart)->clefType(i)._concertClef
-                                   : part->instrument(tickStart)->clefType(i)._transposingClef;
-            ClefType newClefType = concPitch ? instrument->clefType(i)._concertClef
-                                   : instrument->clefType(i)._transposingClef;
+            ClefType oldClefType = concPitch ? part->instrument(tickStart)->clefType(i).concertClef
+                                   : part->instrument(tickStart)->clefType(i).transposingClef;
+            ClefType newClefType = concPitch ? instrument->clefType(i).concertClef
+                                   : instrument->clefType(i).transposingClef;
             // Introduce cleff change only if the new clef *symbol* is different from the old one
             if (ClefInfo::symId(oldClefType) != ClefInfo::symId(newClefType)) {
                 // If instrument change is at the start of a measure, use the measure as the element, as this will place the instrument change before the barline.

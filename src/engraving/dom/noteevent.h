@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __NOTEEVENT_H__
-#define __NOTEEVENT_H__
+#ifndef MU_ENGRAVING_NOTEEVENT_H
+#define MU_ENGRAVING_NOTEEVENT_H
 
 #include <vector>
 #include <algorithm>

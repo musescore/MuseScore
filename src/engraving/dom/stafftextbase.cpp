@@ -46,7 +46,7 @@ StaffTextBase::StaffTextBase(const ElementType& type, Segment* parent, TextStyle
 void StaffTextBase::clear()
 {
     for (voice_idx_t voice = 0; voice < VOICES; ++voice) {
-        _channelNames[voice].clear();
+        m_channelNames[voice].clear();
     }
     clearAeolusStops();
 }

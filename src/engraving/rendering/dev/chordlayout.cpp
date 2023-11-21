@@ -2054,7 +2054,7 @@ double ChordLayout::layoutChords2(std::vector<Note*>& notes, bool up, LayoutCont
                 mirror = !mirror;
             }
         }
-        note->setMirror(mirror);
+        note->mutldata()->mirror.set_value(mirror);
         if (chord->stem()) {
             TLayout::layoutStem(chord->stem(), chord->stem()->mutldata(), ctx.conf()); // needed because mirroring can cause stem position to change
         }

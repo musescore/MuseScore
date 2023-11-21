@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TYPES_H__
-#define __TYPES_H__
+#ifndef MU_ENGRAVING_TYPES_OLD_H
+#define MU_ENGRAVING_TYPES_OLD_H
 
 #include <unordered_set>
 
@@ -528,9 +528,9 @@ struct ScoreChangesRange {
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::NoteType);
-Q_DECLARE_METATYPE(mu::engraving::PlayEventType);
-Q_DECLARE_METATYPE(mu::engraving::AccidentalType);
+Q_DECLARE_METATYPE(mu::engraving::NoteType)
+Q_DECLARE_METATYPE(mu::engraving::PlayEventType)
+Q_DECLARE_METATYPE(mu::engraving::AccidentalType)
 #endif
 
 #endif

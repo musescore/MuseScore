@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BEAM_H__
-#define __BEAM_H__
+#ifndef MU_ENGRAVING_BEAM_H
+#define MU_ENGRAVING_BEAM_H
 
 #include <memory>
 

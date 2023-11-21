@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STEMSLASH_H__
-#define __STEMSLASH_H__
+#ifndef MU_ENGRAVING_STEMSLASH_H
+#define MU_ENGRAVING_STEMSLASH_H
 
 #include "engravingitem.h"
 
@@ -50,7 +50,7 @@ public:
         mu::LineF line;
         double stemWidth = 0.0;
     };
-    DECLARE_LAYOUTDATA_METHODS(StemSlash);
+    DECLARE_LAYOUTDATA_METHODS(StemSlash)
 
 private:
 

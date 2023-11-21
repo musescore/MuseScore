@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __DURATION_H__
-#define __DURATION_H__
+#ifndef MU_ENGRAVING_DURATION_H
+#define MU_ENGRAVING_DURATION_H
 
 #include "engravingitem.h"
 #include "durationtype.h"

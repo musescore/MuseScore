@@ -990,10 +990,10 @@ FretUndoData::FretUndoData(FretDiagram* fd)
     // We need to store the old barres and markers, since predicting how
     // adding dots, markers, barres etc. will change things is too difficult.
     // Update linked fret diagrams:
-    _diagram = fd;
-    _dots = _diagram->m_dots;
-    _markers = _diagram->m_markers;
-    _barres = _diagram->m_barres;
+    m_diagram = fd;
+    m_dots = m_diagram->m_dots;
+    m_markers = m_diagram->m_markers;
+    m_barres = m_diagram->m_barres;
 }
 
 //---------------------------------------------------------
@@ -1002,15 +1002,15 @@ FretUndoData::FretUndoData(FretDiagram* fd)
 
 void FretUndoData::updateDiagram()
 {
-    if (!_diagram) {
+    if (!m_diagram) {
         ASSERT_X("Tried to undo fret diagram change without ever setting diagram!");
         return;
     }
 
     // Reset every fret diagram property of the changed diagram
     // FretUndoData is a friend of FretDiagram so has access to these private members
-    _diagram->m_barres = _barres;
-    _diagram->m_markers = _markers;
-    _diagram->m_dots = _dots;
+    m_diagram->m_barres = m_barres;
+    m_diagram->m_markers = m_markers;
+    m_diagram->m_dots = m_dots;
 }
 }

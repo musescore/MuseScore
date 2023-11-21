@@ -135,17 +135,17 @@ static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std
 void CmdState::reset()
 {
     layoutFlags         = LayoutFlag::NO_FLAGS;
-    _updateMode         = UpdateMode::DoNothing;
-    _startTick          = Fraction(-1, 1);
-    _endTick            = Fraction(-1, 1);
+    m_updateMode         = UpdateMode::DoNothing;
+    m_startTick          = Fraction(-1, 1);
+    m_endTick            = Fraction(-1, 1);
 
-    _startStaff = mu::nidx;
-    _endStaff = mu::nidx;
-    _el = nullptr;
-    _oneElement = true;
-    _mb = nullptr;
-    _oneMeasureBase = true;
-    _locked = false;
+    m_startStaff = mu::nidx;
+    m_endStaff = mu::nidx;
+    m_el = nullptr;
+    m_oneElement = true;
+    m_mb = nullptr;
+    m_oneMeasureBase = true;
+    m_locked = false;
 }
 
 //---------------------------------------------------------
@@ -154,15 +154,15 @@ void CmdState::reset()
 
 void CmdState::setTick(const Fraction& t)
 {
-    if (_locked) {
+    if (m_locked) {
         return;
     }
 
-    if (_startTick == Fraction(-1, 1) || t < _startTick) {
-        _startTick = t;
+    if (m_startTick == Fraction(-1, 1) || t < m_startTick) {
+        m_startTick = t;
     }
-    if (_endTick == Fraction(-1, 1) || t > _endTick) {
-        _endTick = t;
+    if (m_endTick == Fraction(-1, 1) || t > m_endTick) {
+        m_endTick = t;
     }
     setUpdateMode(UpdateMode::Layout);
 }
@@ -173,15 +173,15 @@ void CmdState::setTick(const Fraction& t)
 
 void CmdState::setStaff(staff_idx_t st)
 {
-    if (_locked || st == mu::nidx) {
+    if (m_locked || st == mu::nidx) {
         return;
     }
 
-    if (_startStaff == mu::nidx || st < _startStaff) {
-        _startStaff = st;
+    if (m_startStaff == mu::nidx || st < m_startStaff) {
+        m_startStaff = st;
     }
-    if (_endStaff == mu::nidx || st > _endStaff) {
-        _endStaff = st;
+    if (m_endStaff == mu::nidx || st > m_endStaff) {
+        m_endStaff = st;
     }
 }
 
@@ -191,12 +191,12 @@ void CmdState::setStaff(staff_idx_t st)
 
 void CmdState::setMeasureBase(const MeasureBase* mb)
 {
-    if (!mb || _mb == mb || _locked) {
+    if (!mb || m_mb == mb || m_locked) {
         return;
     }
 
-    _oneMeasureBase = !_mb;
-    _mb = mb;
+    m_oneMeasureBase = !m_mb;
+    m_mb = mb;
 }
 
 //---------------------------------------------------------
@@ -205,14 +205,14 @@ void CmdState::setMeasureBase(const MeasureBase* mb)
 
 void CmdState::setElement(const EngravingItem* e)
 {
-    if (!e || _el == e || _locked) {
+    if (!e || m_el == e || m_locked) {
         return;
     }
 
-    _oneElement = !_el;
-    _el = e;
+    m_oneElement = !m_el;
+    m_el = e;
 
-    if (_oneMeasureBase) {
+    if (m_oneMeasureBase) {
         setMeasureBase(e->findMeasureBase());
     }
 }
@@ -223,11 +223,11 @@ void CmdState::setElement(const EngravingItem* e)
 
 void CmdState::unsetElement(const EngravingItem* e)
 {
-    if (_el == e) {
-        _el = nullptr;
+    if (m_el == e) {
+        m_el = nullptr;
     }
-    if (_mb == e) {
-        _mb = nullptr;
+    if (m_mb == e) {
+        m_mb = nullptr;
     }
 }
 
@@ -237,11 +237,11 @@ void CmdState::unsetElement(const EngravingItem* e)
 
 const EngravingItem* CmdState::element() const
 {
-    if (_oneElement) {
-        return _el;
+    if (m_oneElement) {
+        return m_el;
     }
-    if (_oneMeasureBase) {
-        return _mb;
+    if (m_oneMeasureBase) {
+        return m_mb;
     }
     return nullptr;
 }
@@ -252,12 +252,12 @@ const EngravingItem* CmdState::element() const
 
 void CmdState::_setUpdateMode(UpdateMode m)
 {
-    _updateMode = m;
+    m_updateMode = m;
 }
 
 void CmdState::setUpdateMode(UpdateMode m)
 {
-    if (int(m) > int(_updateMode)) {
+    if (int(m) > int(m_updateMode)) {
         _setUpdateMode(m);
     }
 }
@@ -397,7 +397,7 @@ ScoreChangesRange Score::changesRange() const
 
 void CmdState::dump()
 {
-    LOGD("CmdState: mode %d %d-%d", int(_updateMode), _startTick.ticks(), _endTick.ticks());
+    LOGD("CmdState: mode %d %d-%d", int(m_updateMode), m_startTick.ticks(), m_endTick.ticks());
     // bool _excerptsChanged     { false };
     // bool _instrumentsChanged  { false };
 }
@@ -485,7 +485,7 @@ void Score::lockUpdates(bool locked)
 
 void Score::deletePostponed()
 {
-    for (EngravingObject* e : m_updateState._deleteList) {
+    for (EngravingObject* e : m_updateState.deleteList) {
         if (e->isSystem()) {
             System* s = toSystem(e);
             std::list<SpannerSegment*> spanners = s->spannerSegments();
@@ -496,8 +496,8 @@ void Score::deletePostponed()
             }
         }
     }
-    DeleteAll(m_updateState._deleteList);
-    m_updateState._deleteList.clear();
+    DeleteAll(m_updateState.deleteList);
+    m_updateState.deleteList.clear();
 }
 
 //---------------------------------------------------------

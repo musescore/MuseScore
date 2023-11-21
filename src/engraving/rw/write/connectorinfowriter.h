@@ -48,8 +48,8 @@ public:
                         Fraction = { -1, 1 });
     virtual ~ConnectorInfoWriter() = default;
 
-    ConnectorInfoWriter* prev() const { return static_cast<ConnectorInfoWriter*>(_prev); }
-    ConnectorInfoWriter* next() const { return static_cast<ConnectorInfoWriter*>(_next); }
+    ConnectorInfoWriter* prev() const { return static_cast<ConnectorInfoWriter*>(m_prev); }
+    ConnectorInfoWriter* next() const { return static_cast<ConnectorInfoWriter*>(m_next); }
 
     const EngravingItem* connector() const { return _connector; }
 

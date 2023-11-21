@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STAFF_H__
-#define __STAFF_H__
+#ifndef MU_ENGRAVING_STAFF_H
+#define MU_ENGRAVING_STAFF_H
 
 #include <map>
 #include <vector>
@@ -59,63 +59,12 @@ enum class Key;
 class Staff final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, Staff)
+
 public:
     enum class HideMode {
         AUTO, ALWAYS, NEVER, INSTRUMENT
     };
 
-private:
-    ID _id = INVALID_ID;
-    Part* _part = nullptr;
-
-    ClefList clefs;
-    ClefTypeList _defaultClefType;
-
-    KeyList _keys;
-    std::map<int, TimeSig*> timesigs;
-
-    std::vector<BracketItem*> _brackets;
-    int _barLineSpan         { false };       ///< true - span barline to next staff
-    int _barLineFrom         { 0 };          ///< line of start staff to draw the barline from (0 = staff top line, ...)
-    int _barLineTo           { 0 };          ///< line of end staff to draw the bar line to (0= staff bottom line, ...)
-
-    bool _cutaway            { false };
-    bool _showIfEmpty        { false };         ///< show this staff if system is empty and hideEmptyStaves is true
-    bool _hideSystemBarLine  { false };         // no system barline if not preceded by staff with barline
-    bool _mergeMatchingRests { false };         // merge matching rests in multiple voices
-    HideMode _hideWhenEmpty  { HideMode::AUTO };      // hide empty staves
-
-    mu::draw::Color m_color   { engravingConfiguration()->defaultColor() };
-    Millimetre _userDist     { Millimetre(0.0) };           ///< user edited extra distance
-
-    StaffTypeList _staffTypeList;
-
-    std::map<int, int> _channelList[VOICES];
-    std::map<int, SwingParameters> _swingList;
-    std::map<int, CapoParams> _capoMap;
-    bool _playbackVoice[VOICES] { true, true, true, true };
-    std::array<bool, VOICES> _visibilityVoices { true, true, true, true };
-
-    ChangeMap _velocities;           ///< cached value
-    ChangeMap _velocityMultiplications;         ///< cached value
-    PitchList _pitchOffsets;        ///< cached value
-
-    bool m_reflectTranspositionInLinkedTab = true;
-
-    friend class Factory;
-    Staff(Part* parent);
-    Staff(const Staff& staff);
-
-    void fillBrackets(size_t idx);
-    void cleanBrackets();
-
-    double staffMag(const StaffType*) const;
-
-    friend class Excerpt;
-    void setVoiceVisible(voice_idx_t voice, bool visible);
-    void updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks);
-
-public:
     Staff* clone() const override;
 
     void init(const InstrumentTemplate*, const StaffType* staffType, int);
@@ -132,8 +81,8 @@ public:
     staff_idx_t rstaff() const;
     staff_idx_t idx() const;
 
-    Part* part() const { return _part; }
-    void setPart(Part* p) { _part = p; }
+    Part* part() const { return m_part; }
+    void setPart(Part* p) { m_part = p; }
 
     BracketType bracketType(size_t idx) const;
     size_t bracketSpan(size_t idx) const;
@@ -143,15 +92,15 @@ public:
     void swapBracket(size_t oldIdx, size_t newIdx);
     void changeBracketColumn(size_t oldColumn, size_t newColumn);
     void addBracket(BracketItem*);
-    const std::vector<BracketItem*>& brackets() const { return _brackets; }
-    std::vector<BracketItem*>& brackets() { return _brackets; }
+    const std::vector<BracketItem*>& brackets() const { return m_brackets; }
+    std::vector<BracketItem*>& brackets() { return m_brackets; }
     void cleanupBrackets();
     size_t bracketLevels() const;
 
-    ClefList& clefList() { return clefs; }
+    ClefList& clefList() { return m_clefs; }
     ClefTypeList clefType(const Fraction&) const;
-    ClefTypeList defaultClefType() const { return _defaultClefType; }
-    void setDefaultClefType(const ClefTypeList& l) { _defaultClefType = l; }
+    ClefTypeList defaultClefType() const { return m_defaultClefType; }
+    void setDefaultClefType(const ClefTypeList& l) { m_defaultClefType = l; }
     ClefType clef(const Fraction&) const;
     Fraction nextClefTick(const Fraction&) const;
     Fraction currentClefTick(const Fraction&) const;
@@ -175,7 +124,7 @@ public:
 
     Interval transpose(const Fraction& tick) const;
 
-    KeyList* keyList() { return &_keys; }
+    KeyList* keyList() { return &m_keys; }
     Key key(const Fraction& tick) const { return keySigEvent(tick).key(); }
     Key concertKey(const Fraction& tick) const { return keySigEvent(tick).concertKey(); }
     KeySigEvent keySigEvent(const Fraction&) const;
@@ -187,37 +136,37 @@ public:
 
     bool show() const;
     bool stemless(const Fraction&) const;
-    bool cutaway() const { return _cutaway; }
-    void setCutaway(bool val) { _cutaway = val; }
-    bool showIfEmpty() const { return _showIfEmpty; }
-    void setShowIfEmpty(bool val) { _showIfEmpty = val; }
+    bool cutaway() const { return m_cutaway; }
+    void setCutaway(bool val) { m_cutaway = val; }
+    bool showIfEmpty() const { return m_showIfEmpty; }
+    void setShowIfEmpty(bool val) { m_showIfEmpty = val; }
 
-    bool hideSystemBarLine() const { return _hideSystemBarLine; }
-    void setHideSystemBarLine(bool val) { _hideSystemBarLine = val; }
-    HideMode hideWhenEmpty() const { return _hideWhenEmpty; }
-    void setHideWhenEmpty(HideMode v) { _hideWhenEmpty = v; }
-    bool mergeMatchingRests() const { return _mergeMatchingRests; }
-    void setMergeMatchingRests(bool val) { _mergeMatchingRests = val; }
+    bool hideSystemBarLine() const { return m_hideSystemBarLine; }
+    void setHideSystemBarLine(bool val) { m_hideSystemBarLine = val; }
+    HideMode hideWhenEmpty() const { return m_hideWhenEmpty; }
+    void setHideWhenEmpty(HideMode v) { m_hideWhenEmpty = v; }
+    bool mergeMatchingRests() const { return m_mergeMatchingRests; }
+    void setMergeMatchingRests(bool val) { m_mergeMatchingRests = val; }
 
-    int barLineSpan() const { return _barLineSpan; }
-    int barLineFrom() const { return _barLineFrom; }
-    int barLineTo() const { return _barLineTo; }
-    void setBarLineSpan(int val) { _barLineSpan = val; }
-    void setBarLineFrom(int val) { _barLineFrom = val; }
-    void setBarLineTo(int val) { _barLineTo = val; }
+    int barLineSpan() const { return m_barLineSpan; }
+    int barLineFrom() const { return m_barLineFrom; }
+    int barLineTo() const { return m_barLineTo; }
+    void setBarLineSpan(int val) { m_barLineSpan = val; }
+    void setBarLineFrom(int val) { m_barLineFrom = val; }
+    void setBarLineTo(int val) { m_barLineTo = val; }
     double staffHeight() const;
 
     int channel(const Fraction&, voice_idx_t voice) const;
 
-    void clearChannelList(voice_idx_t voice) { _channelList[voice].clear(); }
+    void clearChannelList(voice_idx_t voice) { m_channelList[voice].clear(); }
     void insertIntoChannelList(voice_idx_t voice, const Fraction& tick, int channelId)
     {
-        _channelList[voice].insert({ tick.ticks(), channelId });
+        m_channelList[voice].insert({ tick.ticks(), channelId });
     }
 
     SwingParameters swing(const Fraction&)  const;
-    void clearSwingList() { _swingList.clear(); }
-    void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { _swingList.insert({ tick.ticks(), sp }); }
+    void clearSwingList() { m_swingList.clear(); }
+    void insertIntoSwingList(const Fraction& tick, SwingParameters sp) { m_swingList.insert({ tick.ticks(), sp }); }
 
     const CapoParams& capo(const Fraction&) const;
     void insertCapoParams(const Fraction& tick, const CapoParams& params);
@@ -255,19 +204,19 @@ public:
     double spatium(const EngravingItem*) const;
     //===========
 
-    ChangeMap& velocities() { return _velocities; }
-    ChangeMap& velocityMultiplications() { return _velocityMultiplications; }
-    PitchList& pitchOffsets() { return _pitchOffsets; }
+    ChangeMap& velocities() { return m_velocities; }
+    ChangeMap& velocityMultiplications() { return m_velocityMultiplications; }
+    PitchList& pitchOffsets() { return m_pitchOffsets; }
 
-    int pitchOffset(const Fraction& tick) const { return _pitchOffsets.pitchOffset(tick.ticks()); }
+    int pitchOffset(const Fraction& tick) const { return m_pitchOffsets.pitchOffset(tick.ticks()); }
     void updateOttava();
 
     std::list<Staff*> staffList() const;
     Staff* primaryStaff() const;
     bool isPrimaryStaff() const;
 
-    Millimetre userDist() const { return _userDist; }
-    void setUserDist(Millimetre val) { _userDist = val; }
+    Millimetre userDist() const { return m_userDist; }
+    void setUserDist(Millimetre val) { m_userDist = val; }
 
     void spatiumChanged(double /*oldValue*/, double /*newValue*/) override;
     void setLocalSpatium(double oldVal, double newVal, Fraction tick);
@@ -311,6 +260,58 @@ public:
     void triggerLayout(const Fraction& tick);
 
     Staff* findLinkedInScore(const Score* score) const override;
+
+private:
+
+    friend class Factory;
+    Staff(Part* parent);
+    Staff(const Staff& staff);
+
+    void fillBrackets(size_t idx);
+    void cleanBrackets();
+
+    double staffMag(const StaffType*) const;
+
+    friend class Excerpt;
+    void setVoiceVisible(voice_idx_t voice, bool visible);
+    void updateVisibilityVoices(const Staff* masterStaff, const TracksMap& tracks);
+
+    ID m_id = INVALID_ID;
+    Part* m_part = nullptr;
+
+    ClefList m_clefs;
+    ClefTypeList m_defaultClefType;
+
+    KeyList m_keys;
+    std::map<int, TimeSig*> m_timesigs;
+
+    std::vector<BracketItem*> m_brackets;
+    int m_barLineSpan = false;          // true - span barline to next staff
+    int m_barLineFrom = 0;              // line of start staff to draw the barline from (0 = staff top line, ...)
+    int m_barLineTo = 0;                // line of end staff to draw the bar line to (0= staff bottom line, ...)
+
+    bool m_cutaway = false;
+    bool m_showIfEmpty = false;             // show this staff if system is empty and hideEmptyStaves is true
+    bool m_hideSystemBarLine = false;       // no system barline if not preceded by staff with barline
+    bool m_mergeMatchingRests = false;      // merge matching rests in multiple voices
+    HideMode m_hideWhenEmpty = HideMode::AUTO;      // hide empty staves
+
+    mu::draw::Color m_color   { engravingConfiguration()->defaultColor() };
+    Millimetre m_userDist     { Millimetre(0.0) };           ///< user edited extra distance
+
+    StaffTypeList m_staffTypeList;
+
+    std::map<int, int> m_channelList[VOICES];
+    std::map<int, SwingParameters> m_swingList;
+    std::map<int, CapoParams> m_capoMap;
+    bool m_playbackVoice[VOICES] { true, true, true, true };
+    std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
+
+    ChangeMap m_velocities;                 // cached value
+    ChangeMap m_velocityMultiplications;    // cached value
+    PitchList m_pitchOffsets;               // cached value
+
+    bool m_reflectTranspositionInLinkedTab = true;
 };
 } // namespace mu::engraving
 #endif

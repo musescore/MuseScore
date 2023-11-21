@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SPACER_H__
-#define __SPACER_H__
+#ifndef MU_ENGRAVING_SPACER_H
+#define MU_ENGRAVING_SPACER_H
 
 #include "engravingitem.h"
 #include "draw/types/painterpath.h"
@@ -47,22 +47,13 @@ class Spacer final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Spacer)
     DECLARE_CLASSOF(ElementType::SPACER)
 
-    SpacerType _spacerType;
-    Millimetre _gap;
-
-    mu::draw::PainterPath m_path;
-
-    friend class Factory;
-    Spacer(Measure* parent);
-    Spacer(const Spacer&);
-
 public:
 
     Spacer* clone() const override { return new Spacer(*this); }
     Measure* measure() const { return toMeasure(explicitParent()); }
 
-    SpacerType spacerType() const { return _spacerType; }
-    void setSpacerType(SpacerType t) { _spacerType = t; }
+    SpacerType spacerType() const { return m_spacerType; }
+    void setSpacerType(SpacerType t) { m_spacerType = t; }
 
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
@@ -70,7 +61,7 @@ public:
     void spatiumChanged(double, double) override;
 
     void setGap(Millimetre sp);
-    Millimetre gap() const { return _gap; }
+    Millimetre gap() const { return m_gap; }
 
     const draw::PainterPath& path() const { return m_path; }
 
@@ -85,6 +76,16 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     void layout0();
+
+private:
+
+    friend class Factory;
+    Spacer(Measure* parent);
+    Spacer(const Spacer&);
+
+    SpacerType m_spacerType = SpacerType::UP;
+    Millimetre m_gap;
+    mu::draw::PainterPath m_path;
 };
 } // namespace mu::engraving
 #endif

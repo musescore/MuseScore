@@ -26,17 +26,17 @@
 namespace mu::engraving {
 void SingleElementGroup::startDrag(EditData& ed)
 {
-    e->startDrag(ed);
+    m_e->startDrag(ed);
 }
 
 mu::RectF SingleElementGroup::drag(EditData& ed)
 {
-    return e->drag(ed);
+    return m_e->drag(ed);
 }
 
 void SingleElementGroup::endDrag(EditData& ed)
 {
-    e->endDrag(ed);
-    e->triggerLayout();
+    m_e->endDrag(ed);
+    m_e->triggerLayout();
 }
 } // namespace mu::engraving

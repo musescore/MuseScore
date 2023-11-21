@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __LEDGERLINE_H__
-#define __LEDGERLINE_H__
+#ifndef MU_ENGRAVING_LEDGERLINE_H
+#define MU_ENGRAVING_LEDGERLINE_H
 
 #include "engravingitem.h"
 

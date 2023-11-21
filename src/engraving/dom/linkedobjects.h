@@ -31,18 +31,20 @@ class LinkedObjects : public std::list<EngravingObject*>
 {
     OBJECT_ALLOCATOR(engraving, LinkedObjects)
 
-    int _lid;           // unique id for every linked list
-
 public:
     LinkedObjects(Score*);
     LinkedObjects(Score*, int id);
 
     void setLid(Score*, int val);
-    int lid() const { return _lid; }
+    int lid() const { return m_lid; }
 
     bool contains(const EngravingObject* o) const;
 
     EngravingObject* mainElement();
+
+private:
+
+    int m_lid = 0;               // unique id for every linked list
 };
 }
 

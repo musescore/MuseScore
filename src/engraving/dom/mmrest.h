@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MMREST_H__
-#define __MMREST_H__
+#ifndef MU_ENGRAVING_MMREST_H
+#define MU_ENGRAVING_MMREST_H
 
 #include "rest.h"
 
@@ -66,7 +66,7 @@ public:
     private:
         ld_field<double> m_restWidth = { "restWidth", 0.0 };                   // width of multimeasure rest
     };
-    DECLARE_LAYOUTDATA_METHODS(MMRest);
+    DECLARE_LAYOUTDATA_METHODS(MMRest)
 
 private:
 

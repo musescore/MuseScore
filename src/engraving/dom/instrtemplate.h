@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __INSTRTEMPLATE_H__
-#define __INSTRTEMPLATE_H__
+#ifndef MU_ENGRAVING_INSTRTEMPLATE_H
+#define MU_ENGRAVING_INSTRTEMPLATE_H
 
 #include <list>
 

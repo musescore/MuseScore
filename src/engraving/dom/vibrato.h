@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __VIBRATO_H__
-#define __VIBRATO_H__
+#ifndef MU_ENGRAVING_VIBRATO_H
+#define MU_ENGRAVING_VIBRATO_H
 
 #include "line.h"
 
@@ -46,8 +46,8 @@ public:
 
     EngravingItem* propertyDelegate(Pid) override;
 
-    const SymIdList& symbols() const { return _symbols; }
-    void setSymbols(const SymIdList& s) { _symbols = s; }
+    const SymIdList& symbols() const { return m_symbols; }
+    void setSymbols(const SymIdList& s) { m_symbols = s; }
 
     void symbolLine(SymId start, SymId fill);
     void symbolLine(SymId start, SymId fill, SymId end);
@@ -55,7 +55,7 @@ public:
 private:
     virtual Sid getPropertyStyle(Pid) const override;
 
-    SymIdList _symbols;
+    SymIdList m_symbols;
 };
 
 //---------------------------------------------------------
@@ -67,12 +67,6 @@ class Vibrato final : public SLine
     OBJECT_ALLOCATOR(engraving, Vibrato)
     DECLARE_CLASSOF(ElementType::VIBRATO)
 
-    Sid getPropertyStyle(Pid) const override;
-
-private:
-    VibratoType _vibratoType;
-    bool _playArticulation;
-
 public:
     Vibrato(EngravingItem* parent);
     ~Vibrato();
@@ -82,10 +76,10 @@ public:
     LineSegment* createLineSegment(System* parent) override;
 
     void undoSetVibratoType(VibratoType val);
-    void setVibratoType(VibratoType tt) { _vibratoType = tt; }
-    VibratoType vibratoType() const { return _vibratoType; }
-    void setPlayArticulation(bool val) { _playArticulation = val; }
-    bool playArticulation() const { return _playArticulation; }
+    void setVibratoType(VibratoType tt) { m_vibratoType = tt; }
+    VibratoType vibratoType() const { return m_vibratoType; }
+    void setPlayArticulation(bool val) { m_playArticulation = val; }
+    bool playArticulation() const { return m_playArticulation; }
     String vibratoTypeUserName() const;
 
     Segment* segment() const { return (Segment*)explicitParent(); }
@@ -94,6 +88,13 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;
     String accessibleInfo() const override;
+
+private:
+
+    Sid getPropertyStyle(Pid) const override;
+
+    VibratoType m_vibratoType = VibratoType::GUITAR_VIBRATO;
+    bool m_playArticulation = false;
 };
 } // namespace mu::engraving
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MARKER_H__
-#define __MARKER_H__
+#ifndef MU_ENGRAVING_MARKER_H
+#define MU_ENGRAVING_MARKER_H
 
 #include "textbase.h"
 
@@ -43,17 +43,17 @@ public:
     Marker(EngravingItem* parent, TextStyleType);
 
     void setMarkerType(MarkerType t);
-    MarkerType markerType() const { return _markerType; }
+    MarkerType markerType() const { return m_markerType; }
     String markerTypeUserName() const;
 
     Marker* clone() const override { return new Marker(*this); }
 
-    int subtype() const override { return int(_markerType); }
+    int subtype() const override { return int(m_markerType); }
 
     Measure* measure() const { return (Measure*)explicitParent(); }
 
-    String label() const { return _label; }
-    void setLabel(const String& s) { _label = s; }
+    String label() const { return m_label; }
+    void setLabel(const String& s) { m_label = s; }
     void undoSetLabel(const String& s);
     void undoSetMarkerType(MarkerType t);
 
@@ -70,8 +70,8 @@ public:
     void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
 
 private:
-    MarkerType _markerType;
-    String _label;                 ///< referenced from Jump() element
+    MarkerType m_markerType = MarkerType::SEGNO;
+    String m_label;                 ///< referenced from Jump() element
 };
 } // namespace mu::engraving
 

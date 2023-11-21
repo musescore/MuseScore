@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ARPEGGIO_H__
-#define __ARPEGGIO_H__
+#ifndef MU_ENGRAVING_ARPEGGIO_H
+#define MU_ENGRAVING_ARPEGGIO_H
 
 #include "engravingitem.h"
 
@@ -109,7 +109,7 @@ public:
         RectF symsBBox;
         double arpeggioHeight = -1.0;
     };
-    DECLARE_LAYOUTDATA_METHODS(Arpeggio);
+    DECLARE_LAYOUTDATA_METHODS(Arpeggio)
 
 private:
 

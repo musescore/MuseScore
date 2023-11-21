@@ -117,8 +117,8 @@ Volta::Volta(EngravingItem* parent)
 ///
 void Volta::setEndings(const std::vector<int>& l)
 {
-    _endings = l;
-    std::sort(_endings.begin(), _endings.end());
+    m_endings = l;
+    std::sort(m_endings.begin(), m_endings.end());
 }
 
 //---------------------------------------------------------
@@ -176,10 +176,10 @@ bool Volta::hasEnding(int repeat) const
 
 int Volta::firstEnding() const
 {
-    if (_endings.empty()) {
+    if (m_endings.empty()) {
         return 0;
     }
-    return _endings.front();
+    return m_endings.front();
 }
 
 //---------------------------------------------------------
@@ -188,10 +188,10 @@ int Volta::firstEnding() const
 
 int Volta::lastEnding() const
 {
-    if (_endings.empty()) {
+    if (m_endings.empty()) {
         return 0;
     }
-    return _endings.back();
+    return m_endings.back();
 }
 
 //---------------------------------------------------------

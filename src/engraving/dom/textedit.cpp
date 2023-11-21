@@ -43,7 +43,7 @@ namespace mu::engraving {
 TextEditData::~TextEditData()
 {
     if (deleteText) {
-        for (EngravingObject* se : _textBase->linkList()) {
+        for (EngravingObject* se : m_textBase->linkList()) {
             toTextBase(se)->deleteLater();
         }
     }
@@ -55,11 +55,11 @@ TextEditData::~TextEditData()
 
 TextCursor* TextEditData::cursor() const
 {
-    IF_ASSERT_FAILED(_textBase) {
+    IF_ASSERT_FAILED(m_textBase) {
         return nullptr;
     }
 
-    return _textBase->cursor();
+    return m_textBase->cursor();
 }
 
 //---------------------------------------------------------
@@ -733,9 +733,9 @@ void TextBase::movePosition(EditData& ed, TextCursor::MoveOperation op)
 
 void ChangeText::insertText(EditData* ed)
 {
-    TextCursor tc = _cursor;
-    tc.setFormat(format);                              // To undo TextCursor::updateCursorFormat()
-    tc.text()->editInsertText(&tc, s);
+    TextCursor tc = m_cursor;
+    tc.setFormat(m_format);                              // To undo TextCursor::updateCursorFormat()
+    tc.text()->editInsertText(&tc, m_s);
     if (ed) {
         TextCursor* ttc = tc.text()->cursorFromEditData(*ed);
         *ttc = tc;
@@ -748,19 +748,19 @@ void ChangeText::insertText(EditData* ed)
 
 void ChangeText::removeText(EditData* ed)
 {
-    TextCursor tc = _cursor;
-    TextBlock& l  = _cursor.curLine();
-    size_t column = _cursor.column();
-    format = *l.formatAt(static_cast<int>(column + s.size()) - 1);
+    TextCursor tc = m_cursor;
+    TextBlock& l  = m_cursor.curLine();
+    size_t column = m_cursor.column();
+    m_format = *l.formatAt(static_cast<int>(column + m_s.size()) - 1);
 
-    for (size_t n = 0; n < s.size(); ++n) {
-        l.remove(static_cast<int>(column), &_cursor);
+    for (size_t n = 0; n < m_s.size(); ++n) {
+        l.remove(static_cast<int>(column), &m_cursor);
     }
-    _cursor.text()->triggerLayout();
+    m_cursor.text()->triggerLayout();
     if (ed) {
-        *_cursor.text()->cursorFromEditData(*ed) = tc;
+        *m_cursor.text()->cursorFromEditData(*ed) = tc;
     }
-    _cursor.text()->setTextInvalid();
+    m_cursor.text()->setTextInvalid();
 }
 
 //---------------------------------------------------------
@@ -769,13 +769,13 @@ void ChangeText::removeText(EditData* ed)
 
 void SplitJoinText::join(EditData* ed)
 {
-    TextBase* t   = _cursor.text();
-    size_t line   = _cursor.row();
+    TextBase* t   = m_cursor.text();
+    size_t line   = m_cursor.row();
     t->setTextInvalid();
     t->triggerLayout();
 
     TextBase::LayoutData* ldata = t->mutldata();
-    CharFormat* charFmt = _cursor.format();         // take current format
+    CharFormat* charFmt = m_cursor.format();         // take current format
     size_t col          = ldata->textBlock(static_cast<int>(line) - 1).columns();
     int eol             = ldata->textBlock(static_cast<int>(line)).eol();
     auto fragmentsList = ldata->textBlock(static_cast<int>(line)).fragmentsWithoutEmpty();
@@ -787,42 +787,42 @@ void SplitJoinText::join(EditData* ed)
 
     ldata->blocks.erase(ldata->blocks.begin() + line);
 
-    _cursor.setRow(line - 1);
-    _cursor.curLine().setEol(eol);
-    _cursor.setColumn(col);
-    _cursor.setFormat(*charFmt);             // restore orig. format at new line
-    _cursor.clearSelection();
+    m_cursor.setRow(line - 1);
+    m_cursor.curLine().setEol(eol);
+    m_cursor.setColumn(col);
+    m_cursor.setFormat(*charFmt);             // restore orig. format at new line
+    m_cursor.clearSelection();
 
     if (ed) {
-        *t->cursorFromEditData(*ed) = _cursor;
+        *t->cursorFromEditData(*ed) = m_cursor;
     }
-    _cursor.text()->setTextInvalid();
+    m_cursor.text()->setTextInvalid();
 }
 
 void SplitJoinText::split(EditData* ed)
 {
-    TextBase* t   = _cursor.text();
-    size_t line   = _cursor.row();
-    bool eol      = _cursor.curLine().eol();
+    TextBase* t   = m_cursor.text();
+    size_t line   = m_cursor.row();
+    bool eol      = m_cursor.curLine().eol();
     t->setTextInvalid();
     t->triggerLayout();
 
     TextBase::LayoutData* ldata = t->mutldata();
-    CharFormat* charFmt = _cursor.format();           // take current format
+    CharFormat* charFmt = m_cursor.format();           // take current format
     ldata->blocks.insert(ldata->blocks.begin() + line + 1,
-                         _cursor.curLine().split(static_cast<int>(_cursor.column()), t->cursorFromEditData(*ed)));
-    _cursor.curLine().setEol(true);
+                         m_cursor.curLine().split(static_cast<int>(m_cursor.column()), t->cursorFromEditData(*ed)));
+    m_cursor.curLine().setEol(true);
 
-    _cursor.setRow(line + 1);
-    _cursor.curLine().setEol(eol);
-    _cursor.setColumn(0);
-    _cursor.setFormat(*charFmt);               // restore orig. format at new line
-    _cursor.clearSelection();
+    m_cursor.setRow(line + 1);
+    m_cursor.curLine().setEol(eol);
+    m_cursor.setColumn(0);
+    m_cursor.setFormat(*charFmt);               // restore orig. format at new line
+    m_cursor.clearSelection();
 
     if (ed) {
-        *t->cursorFromEditData(*ed) = _cursor;
+        *t->cursorFromEditData(*ed) = m_cursor;
     }
-    _cursor.text()->setTextInvalid();
+    m_cursor.text()->setTextInvalid();
 }
 
 //---------------------------------------------------------
@@ -1045,47 +1045,47 @@ void ChangeTextProperties::restoreSelection()
 ChangeTextProperties::ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags_)
     : TextEditUndoCommand(*tc)
 {
-    propertyId = propId;
-    propertyVal = propVal;
-    flags = flags_;
-    if (propertyId == Pid::FONT_STYLE) {
-        existingStyle = static_cast<FontStyle>(cursor().text()->getProperty(propId).toInt());
+    m_propertyId = propId;
+    m_propertyVal = propVal;
+    m_flags = flags_;
+    if (m_propertyId == Pid::FONT_STYLE) {
+        m_existingStyle = static_cast<FontStyle>(cursor().text()->getProperty(propId).toInt());
     }
 }
 
 void ChangeTextProperties::undo(EditData*)
 {
     cursor().text()->resetFormatting();
-    cursor().text()->setXmlText(xmlText);
+    cursor().text()->setXmlText(m_xmlText);
     restoreSelection();
     EngravingItem::renderer()->layoutText1(cursor().text());
 }
 
 void ChangeTextProperties::redo(EditData*)
 {
-    xmlText = cursor().text()->xmlText();
+    m_xmlText = cursor().text()->xmlText();
     restoreSelection();
-    cursor().text()->setPropertyFlags(propertyId, flags);
+    cursor().text()->setPropertyFlags(m_propertyId, m_flags);
 
-    if (propertyId == Pid::FONT_STYLE) {
-        FontStyle setStyle = static_cast<FontStyle>(propertyVal.toInt());
+    if (m_propertyId == Pid::FONT_STYLE) {
+        FontStyle setStyle = static_cast<FontStyle>(m_propertyVal.toInt());
         TextCursor* tc = cursor().text()->cursor();
         // user turned on bold/italic/underline/strike for text where it's not set, or turned it off for text where it is set,
         // note this logic only works because the user can only click one at a time
-        if ((setStyle& FontStyle::Bold) != (existingStyle & FontStyle::Bold)) {
+        if ((setStyle& FontStyle::Bold) != (m_existingStyle & FontStyle::Bold)) {
             tc->setFormat(FormatId::Bold, setStyle & FontStyle::Bold);
         }
-        if ((setStyle& FontStyle::Italic) != (existingStyle & FontStyle::Italic)) {
+        if ((setStyle& FontStyle::Italic) != (m_existingStyle & FontStyle::Italic)) {
             tc->setFormat(FormatId::Italic, setStyle & FontStyle::Italic);
         }
-        if ((setStyle& FontStyle::Underline) != (existingStyle & FontStyle::Underline)) {
+        if ((setStyle& FontStyle::Underline) != (m_existingStyle & FontStyle::Underline)) {
             tc->setFormat(FormatId::Underline, setStyle & FontStyle::Underline);
         }
-        if ((setStyle& FontStyle::Strike) != (existingStyle & FontStyle::Strike)) {
+        if ((setStyle& FontStyle::Strike) != (m_existingStyle & FontStyle::Strike)) {
             tc->setFormat(FormatId::Strike, setStyle & FontStyle::Strike);
         }
     } else {
-        cursor().text()->setProperty(propertyId, propertyVal);
+        cursor().text()->setProperty(m_propertyId, m_propertyVal);
     }
 }
 } // namespace mu::engraving

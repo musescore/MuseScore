@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __HARPPEDALDIAGRAM_H__
-#define __HARPPEDALDIAGRAM_H__
+#ifndef MU_ENGRAVING_HARPPEDALDIAGRAM_H
+#define MU_ENGRAVING_HARPPEDALDIAGRAM_H
 
 #include "pitchspelling.h"
 #include "textbase.h"
@@ -96,4 +96,4 @@ private:
 };
 } // namespace mu::engraving
 
-#endif // __HARPPEDALDIAGRAM_H__
+#endif // MU_ENGRAVING_HARPPEDALDIAGRAM_H

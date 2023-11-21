@@ -71,7 +71,7 @@ Jump::Jump(Measure* parent)
 {
     initElementStyle(&jumpStyle);
     setLayoutToParentWidth(true);
-    _playRepeats = false;
+    m_playRepeats = false;
 }
 
 //---------------------------------------------------------
@@ -99,7 +99,7 @@ void Jump::setJumpType(JumpType t)
 JumpType Jump::jumpType() const
 {
     for (const JumpTypeTableItem& t : jumpTypeTable) {
-        if (_jumpTo == t.jumpTo && _playUntil == t.playUntil && _continueAt == t.continueAt) {
+        if (m_jumpTo == t.jumpTo && m_playUntil == t.playUntil && m_continueAt == t.continueAt) {
             return t.type;
         }
     }

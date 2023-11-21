@@ -704,13 +704,13 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double x = -w;
 
         double bd = spatium * 0.5;
-        shape.add(RectF(x, -bd, w * 2, 2 * (item->h2() + bd)));
+        shape.add(RectF(x, -bd, w * 2, 2 * (item->ldata()->h2() + bd)));
         shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
-        shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * item->h2())));
+        shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + 2 * item->ldata()->h2())));
 
         w += item->symWidth(SymId::bracketTop);
         double y = -item->symHeight(SymId::bracketTop) - bd;
-        double h = (-y + item->h2()) * 2;
+        double h = (-y + item->ldata()->h2()) * 2;
         ldata->setBbox(x, y, w, h);
 
         ldata->setBracketWidth(ctx.style().styleMM(Sid::bracketWidth) + ctx.style().styleMM(Sid::bracketDistance));
@@ -720,7 +720,7 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double w = ctx.style().styleMM(Sid::staffLineWidth) * .5;
         double x = -w;
         double y = -w;
-        double h = (item->h2() + w) * 2;
+        double h = (item->ldata()->h2() + w) * 2;
         w += (0.5 * item->spatium() + 3 * w);
         ldata->setBbox(x, y, w, h);
         shape.add(item->ldata()->bbox());
@@ -734,7 +734,7 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
         double x = -w;
         double bd = spatium * 0.25;
         double y = -bd;
-        double h = (-y + item->h2()) * 2;
+        double h = (-y + item->ldata()->h2()) * 2;
         ldata->setBbox(x, y, w, h);
         shape.add(item->ldata()->bbox());
 

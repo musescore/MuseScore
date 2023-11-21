@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BSP_H__
-#define __BSP_H__
+#ifndef MU_ENGRAVING_BSP_H
+#define MU_ENGRAVING_BSP_H
 
 #include <list>
 
@@ -56,7 +56,7 @@ public:
         Type type;
     };
 private:
-    unsigned int depth;
+
     void initialize(const mu::RectF& rect, int depth, int index);
     void climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index = 0);
     void climbTree(BspTreeVisitor* visitor, const mu::RectF& rect, int index = 0);
@@ -65,10 +65,11 @@ private:
     void findItems(std::list<EngravingItem*>* foundItems, const mu::PointF& pos, int index);
     mu::RectF rectForIndex(int index) const;
 
-    std::vector<Node> nodes;
-    std::vector<std::list<EngravingItem*> > leaves;
-    int leafCnt;
-    mu::RectF rect;
+    unsigned int m_depth = 0;
+    std::vector<Node> m_nodes;
+    std::vector<std::list<EngravingItem*> > m_leaves;
+    int m_leafCnt = 0;
+    mu::RectF m_rect;
 
 public:
     BspTree();
@@ -82,7 +83,7 @@ public:
     std::vector<EngravingItem*> items(const mu::RectF& rect);
     std::vector<EngravingItem*> items(const mu::PointF& pos);
 
-    int leafCount() const { return leafCnt; }
+    int leafCount() const { return m_leafCnt; }
     inline int firstChildIndex(int index) const { return index * 2 + 1; }
 
     inline int parentIndex(int index) const

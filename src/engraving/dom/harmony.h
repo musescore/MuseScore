@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __HARMONY_H__
-#define __HARMONY_H__
+#ifndef MU_ENGRAVING_HARMONY_H
+#define MU_ENGRAVING_HARMONY_H
 
 #include <vector>
 
@@ -43,9 +43,9 @@ class ParsedChord;
 struct TextSegment {
     mu::draw::Font m_font;
     String text;
-    double x, y;         // Position of segments relative to each other.
-    mu::PointF offset;     // Offset for placing within the TextBase.
-    bool select;
+    double x, y = 0;         // Position of segments relative to each other.
+    mu::PointF offset;       // Offset for placing within the TextBase.
+    bool select = false;
 
     double width() const;
     mu::RectF boundingRect() const;
@@ -206,12 +206,7 @@ public:
     private:
         ld_field<double> m_harmonyHeight = { "harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
     };
-    DECLARE_LAYOUTDATA_METHODS(Harmony);
-
-    //! --- DEPRECATED ---
-    double harmonyHeight() const { return ldata()->harmonyHeight(); }
-    void setHarmonyHeight(double h) { mutldata()->setHarmonyHeight(h); }
-    //! ------------------
+    DECLARE_LAYOUTDATA_METHODS(Harmony)
 
 private:
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __DURATIONLIST_H__
-#define __DURATIONLIST_H__
+#ifndef MU_ENGRAVING_RANGE_H
+#define MU_ENGRAVING_RANGE_H
 
 #include <list>
 #include <vector>
@@ -49,24 +49,15 @@ class TrackList : public std::vector<EngravingItem*>
 {
     OBJECT_ALLOCATOR(engraving, TrackList)
 
-    Fraction _duration;
-    ScoreRange* _range = nullptr;
-    track_idx_t _track = 0;
-
-    Tuplet* writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const;
-    void append(EngravingItem*);
-    void appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet);
-    void combineTuplet(Tuplet* dst, Tuplet* src);
-
 public:
-    TrackList(ScoreRange* r) { _range = r; }
+    TrackList(ScoreRange* r) { m_range = r; }
     ~TrackList();
 
-    Fraction ticks() const { return _duration; }
-    ScoreRange* range() const { return _range; }
+    Fraction ticks() const { return m_duration; }
+    ScoreRange* range() const { return m_range; }
 
-    track_idx_t track() const { return _track; }
-    void setTrack(track_idx_t val) { _track = val; }
+    track_idx_t track() const { return m_track; }
+    void setTrack(track_idx_t val) { m_track = val; }
 
     void read(const Segment* fs, const Segment* ls);
     bool write(Score*, const Fraction&) const;
@@ -74,6 +65,17 @@ public:
     void appendGap(const Fraction&, Score* score);
     bool truncate(const Fraction&);
     void dump() const;
+
+private:
+
+    Tuplet* writeTuplet(Tuplet* parent, Tuplet* tuplet, Measure*& measure, Fraction& rest) const;
+    void append(EngravingItem*);
+    void appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet);
+    void combineTuplet(Tuplet* dst, Tuplet* src);
+
+    Fraction m_duration;
+    ScoreRange* m_range = nullptr;
+    track_idx_t m_track = 0;
 };
 
 //---------------------------------------------------------
@@ -82,7 +84,7 @@ public:
 
 struct Annotation {
     Fraction tick;
-    EngravingItem* e;
+    EngravingItem* e = nullptr;
 };
 
 //---------------------------------------------------------
@@ -91,26 +93,28 @@ struct Annotation {
 
 class ScoreRange
 {
-    std::list<TrackList*> tracks;
-    Segment* _first;
-    Segment* _last;
-
-protected:
-    std::list<Spanner*> spanner;
-    std::list<Annotation> annotations;
-
 public:
     ScoreRange() {}
     ~ScoreRange();
     void read(Segment* first, Segment* last, bool readSpanner = true);
     bool write(Score*, const Fraction&) const;
     Fraction ticks() const;
-    Segment* first() const { return _first; }
-    Segment* last() const { return _last; }
+    Segment* first() const { return m_first; }
+    Segment* last() const { return m_last; }
     void fill(const Fraction&);
     bool truncate(const Fraction&);
 
+protected:
+    std::list<Spanner*> m_spanner;
+    std::list<Annotation> m_annotations;
+
+private:
+
     friend class TrackList;
+
+    std::list<TrackList*> m_tracks;
+    Segment* m_first = nullptr;
+    Segment* m_last = nullptr;
 };
 } // namespace mu::engraving
 #endif

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __CLEF_H__
-#define __CLEF_H__
+#ifndef MU_ENGRAVING_CLEF_H
+#define MU_ENGRAVING_CLEF_H
 
 /**
  \file
@@ -41,14 +41,14 @@ static const int NO_CLEF = -1000;
 //---------------------------------------------------------
 
 struct ClefTypeList {
-    ClefType _concertClef = ClefType::G;
-    ClefType _transposingClef = ClefType::G;
+    ClefType concertClef = ClefType::G;
+    ClefType transposingClef = ClefType::G;
 
     ClefTypeList() {}
     ClefTypeList(ClefType a, ClefType b)
-        : _concertClef(a), _transposingClef(b) {}
+        : concertClef(a), transposingClef(b) {}
     ClefTypeList(ClefType a)
-        : _concertClef(a), _transposingClef(a) {}
+        : concertClef(a), transposingClef(a) {}
     bool operator==(const ClefTypeList& t) const;
     bool operator!=(const ClefTypeList& t) const;
 };
@@ -58,24 +58,22 @@ struct ClefTypeList {
 ///   Info about a clef.
 //---------------------------------------------------------
 
-class ClefInfo
+struct ClefInfo
 {
-public:
     static const ClefInfo clefTable[];
 
-    ClefType type;
-    int _line;                 ///< Line positioning on the staff
-    int _pitchOffset;          ///< Pitch offset for line 0.
-    signed char _lines[14];
-    SymId _symId;
-    StaffGroup _staffGroup;
+    ClefType m_type = ClefType::INVALID;
+    int m_line = 0;                 ///< Line positioning on the staff
+    int m_pitchOffset = 0;          ///< Pitch offset for line 0.
+    signed char m_lines[14];
+    SymId m_symId = SymId::noSym;
+    StaffGroup m_staffGroup = StaffGroup::STANDARD;
 
-public:
-    static int line(ClefType t) { return clefTable[int(t)]._line; }
-    static int pitchOffset(ClefType t) { return clefTable[int(t)]._pitchOffset; }
-    static SymId symId(ClefType t) { return clefTable[int(t)]._symId; }
-    static const signed char* lines(ClefType t) { return clefTable[int(t)]._lines; }
-    static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)]._staffGroup; }
+    static int line(ClefType t) { return clefTable[int(t)].m_line; }
+    static int pitchOffset(ClefType t) { return clefTable[int(t)].m_pitchOffset; }
+    static SymId symId(ClefType t) { return clefTable[int(t)].m_symId; }
+    static const signed char* lines(ClefType t) { return clefTable[int(t)].m_lines; }
+    static StaffGroup staffGroup(ClefType t) { return clefTable[int(t)].m_staffGroup; }
 };
 
 //---------------------------------------------------------
@@ -119,8 +117,8 @@ public:
     bool forInstrumentChange() const { return m_forInstrumentChange; }
 
     ClefTypeList clefTypeList() const { return m_clefTypes; }
-    ClefType concertClef() const { return m_clefTypes._concertClef; }
-    ClefType transposingClef() const { return m_clefTypes._transposingClef; }
+    ClefType concertClef() const { return m_clefTypes.concertClef; }
+    ClefType transposingClef() const { return m_clefTypes.transposingClef; }
     void setConcertClef(ClefType val);
     void setTransposingClef(ClefType val);
     void setClefType(const ClefTypeList& ctl) { m_clefTypes = ctl; }
@@ -151,7 +149,7 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         SymId symId = SymId::noSym;
     };
-    DECLARE_LAYOUTDATA_METHODS(Clef);
+    DECLARE_LAYOUTDATA_METHODS(Clef)
 
 private:
 

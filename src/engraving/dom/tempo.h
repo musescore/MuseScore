@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __AL_TEMPO_H__
-#define __AL_TEMPO_H__
+#ifndef MU_ENGRAVING_TEMPO_H
+#define MU_ENGRAVING_TEMPO_H
 
 #include <map>
 
@@ -45,8 +45,8 @@ DECLARE_OPERATORS_FOR_FLAGS(TempoTypes)
 struct TEvent {
     TempoTypes type;
     BeatsPerSecond tempo;       // beats per second
-    double pause;       // pause in seconds
-    double time;        // precomputed time for tick in sec
+    double pause = 0.0;       // pause in seconds
+    double time = 0.0;        // precomputed time for tick in sec
 
     TEvent();
     TEvent(const TEvent& e);
@@ -70,13 +70,6 @@ class TempoMap : public std::map<int, TEvent>
 {
     OBJECT_ALLOCATOR(engraving, TempoMap)
 
-    int _tempoSN = 0; // serial no to track tempo changes
-    BeatsPerSecond _tempo; // tempo if not using tempo list (beats per second)
-    BeatsPerSecond _tempoMultiplier;
-
-    void normalize();
-    void del(int tick);
-
 public:
     TempoMap();
     void clear();
@@ -91,7 +84,7 @@ public:
     double tick2time(int tick, double time, int* sn) const;
     int time2tick(double time, int* sn = 0) const;
     int time2tick(double time, int tick, int* sn) const;
-    int tempoSN() const { return _tempoSN; }
+    int tempoSN() const { return m_tempoSN; }
 
     void setTempo(int t, BeatsPerSecond);
     void setPause(int t, double);
@@ -99,6 +92,15 @@ public:
 
     BeatsPerSecond tempoMultiplier() const;
     bool setTempoMultiplier(BeatsPerSecond val);
+
+private:
+
+    void normalize();
+    void del(int tick);
+
+    int m_tempoSN = 0; // serial no to track tempo changes
+    BeatsPerSecond m_tempo; // tempo if not using tempo list (beats per second)
+    BeatsPerSecond m_tempoMultiplier;
 };
 } // namespace mu::engraving
 #endif

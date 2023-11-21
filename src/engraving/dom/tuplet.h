@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TUPLET_H__
-#define __TUPLET_H__
+#ifndef MU_ENGRAVING_TUPLET_H
+#define MU_ENGRAVING_TUPLET_H
 
 #include <set>
 

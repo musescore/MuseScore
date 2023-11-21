@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TIE_H__
-#define __TIE_H__
+#ifndef MU_ENGRAVING_TIE_H
+#define MU_ENGRAVING_TIE_H
 
 #include "slurtie.h"
 
@@ -35,24 +35,6 @@ class TieSegment final : public SlurTieSegment
 {
     OBJECT_ALLOCATOR(engraving, TieSegment)
     DECLARE_CLASSOF(ElementType::TIE_SEGMENT)
-
-    double m_midThickness = 0.0;
-
-    std::array<PointF, static_cast<size_t>(Grip::GRIPS)> m_adjustmentOffsets;
-
-    /*************************
-     * DEPRECATED
-     * **********************/
-    double shoulderHeightMin = 0.4;
-    double shoulderHeightMax = 1.3;
-    PointF autoAdjustOffset;
-    void setAutoAdjust(const PointF& offset);
-    void setAutoAdjust(double x, double y) { setAutoAdjust(PointF(x, y)); }
-    PointF getAutoAdjust() const { return autoAdjustOffset; }
-    /************************/
-
-protected:
-    void changeAnchor(EditData&, EngravingItem*) override;
 
 public:
     TieSegment(System* parent);
@@ -83,6 +65,26 @@ public:
     void computeMidThickness(double tieLengthInSp);
     void addLineAttachPoints();
     double midThickness() const { return m_midThickness; }
+
+protected:
+    void changeAnchor(EditData&, EngravingItem*) override;
+
+private:
+
+    double m_midThickness = 0.0;
+
+    std::array<PointF, static_cast<size_t>(Grip::GRIPS)> m_adjustmentOffsets;
+
+    /*************************
+     * DEPRECATED
+     * **********************/
+    double m_shoulderHeightMin = 0.4;
+    double m_shoulderHeightMax = 1.3;
+    PointF m_autoAdjustOffset;
+    void setAutoAdjust(const PointF& offset);
+    void setAutoAdjust(double x, double y) { setAutoAdjust(PointF(x, y)); }
+    PointF getAutoAdjust() const { return m_autoAdjustOffset; }
+    /************************/
 };
 
 //---------------------------------------------------------
@@ -94,11 +96,6 @@ class Tie final : public SlurTie
 {
     OBJECT_ALLOCATOR(engraving, Tie)
     DECLARE_CLASSOF(ElementType::TIE)
-
-    static Note* editStartNote;
-    static Note* editEndNote;
-
-    M_PROPERTY2(TiePlacement, tiePlacement, setTiePlacement, TiePlacement::AUTO)
 
 public:
     Tie(EngravingItem* parent = 0);
@@ -133,6 +130,10 @@ public:
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new TieSegment(parent); }
 
 private:
+    static Note* editStartNote;
+    static Note* editEndNote;
+
+    M_PROPERTY2(TiePlacement, tiePlacement, setTiePlacement, TiePlacement::AUTO)
 
     bool m_isInside = false;
 };

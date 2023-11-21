@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BAGPEMBELL_H__
-#define __BAGPEMBELL_H__
+#ifndef MU_ENGRAVING_BAGPEMBELL_H
+#define MU_ENGRAVING_BAGPEMBELL_H
 
 #include <vector>
 
@@ -98,7 +98,7 @@ public:
         std::map<size_t /*note index*/, NoteData> notesData;
         BeamData beamData;
     };
-    DECLARE_LAYOUTDATA_METHODS(BagpipeEmbellishment);
+    DECLARE_LAYOUTDATA_METHODS(BagpipeEmbellishment)
 
 private:
 

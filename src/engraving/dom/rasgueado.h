@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __RASGUEADO_H__
-#define __RASGUEADO_H__
+#ifndef MU_ENGRAVING_RASGUEADO_H
+#define MU_ENGRAVING_RASGUEADO_H
 
 #include "chordtextlinebase.h"
 

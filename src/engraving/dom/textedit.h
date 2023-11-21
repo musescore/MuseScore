@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TEXTEDIT_H__
-#define __TEXTEDIT_H__
+#ifndef MU_ENGRAVING_TEXTEDIT_H
+#define MU_ENGRAVING_TEXTEDIT_H
 
 #include "engravingitem.h"
 #include "undo.h"
@@ -38,10 +38,10 @@ struct TextEditData : public ElementEditData {
 public:
 
     String oldXmlText;
-    size_t startUndoIdx { 0 };
+    size_t startUndoIdx = 0;
 
     TextCursor* cursor() const;
-    TextBase* _textBase = nullptr;
+
     bool deleteText = false;
 
     String selectedText;
@@ -49,7 +49,7 @@ public:
     static constexpr const char* mimeRichTextFormat = "application/musescore/richtext";
 
     TextEditData(TextBase* t)
-        : _textBase(t) {}
+        : m_textBase(t) {}
     TextEditData(const TextEditData&) = delete;
     TextEditData& operator=(const TextEditData&) = delete;
     ~TextEditData();
@@ -57,6 +57,9 @@ public:
     virtual EditDataType type() override { return EditDataType::TextEditData; }
 
     void setDeleteText(bool val) { deleteText = val; }
+
+private:
+    TextBase* m_textBase = nullptr;
 };
 
 //---------------------------------------------------------
@@ -66,17 +69,19 @@ public:
 class TextEditUndoCommand : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, TextEditUndoCommand)
-protected:
-    TextCursor _cursor;
+
 public:
     TextEditUndoCommand(const TextCursor& tc)
-        : _cursor(tc) {}
+        : m_cursor(tc) {}
     bool isFiltered(UndoCommand::Filter f, const EngravingItem* target) const override
     {
-        return f == UndoCommand::Filter::TextEdit && _cursor.text() == target;
+        return f == UndoCommand::Filter::TextEdit && m_cursor.text() == target;
     }
 
-    TextCursor& cursor() { return _cursor; }
+    TextCursor& cursor() { return m_cursor; }
+
+protected:
+    TextCursor m_cursor;
 };
 
 //---------------------------------------------------------
@@ -87,18 +92,20 @@ class ChangeTextProperties : public TextEditUndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeTextProperties)
 
-    String xmlText;
-    Pid propertyId;
-    PropertyValue propertyVal;
-    FontStyle existingStyle;
-    PropertyFlags flags;
-
-    void restoreSelection();
-
 public:
     ChangeTextProperties(const TextCursor* tc, Pid propId, const PropertyValue& propVal, PropertyFlags flags);
     void undo(EditData*) override;
     void redo(EditData*) override;
+
+private:
+
+    void restoreSelection();
+
+    String m_xmlText;
+    Pid m_propertyId;
+    PropertyValue m_propertyVal;
+    FontStyle m_existingStyle;
+    PropertyFlags m_flags;
 };
 
 //---------------------------------------------------------
@@ -109,19 +116,21 @@ class ChangeText : public TextEditUndoCommand
 {
     OBJECT_ALLOCATOR(engraving, ChangeText)
 
-    String s;
-    CharFormat format;
+public:
+    ChangeText(const TextCursor* tc, const String& t)
+        : TextEditUndoCommand(*tc), m_s(t), m_format(*tc->format()) {}
+    virtual void undo(EditData*) override = 0;
+    virtual void redo(EditData*) override = 0;
+    const String& string() const { return m_s; }
 
 protected:
     void insertText(EditData*);
     void removeText(EditData*);
 
-public:
-    ChangeText(const TextCursor* tc, const String& t)
-        : TextEditUndoCommand(*tc), s(t), format(*tc->format()) {}
-    virtual void undo(EditData*) override = 0;
-    virtual void redo(EditData*) override = 0;
-    const String& string() const { return s; }
+private:
+
+    String m_s;
+    CharFormat m_format;
 };
 
 //---------------------------------------------------------
@@ -184,7 +193,7 @@ class SplitText : public SplitJoinText
 public:
     SplitText(const TextCursor* tc)
         : SplitJoinText(tc) {}
-    UNDO_NAME("SplitText");
+    UNDO_NAME("SplitText")
 };
 
 //---------------------------------------------------------
@@ -201,7 +210,7 @@ class JoinText : public SplitJoinText
 public:
     JoinText(const TextCursor* tc)
         : SplitJoinText(tc) {}
-    UNDO_NAME("JoinText");
+    UNDO_NAME("JoinText")
 };
 } // namespace mu::engraving
 

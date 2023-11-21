@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __CHORDLINE_H__
-#define __CHORDLINE_H__
+#ifndef MU_ENGRAVING_CHORDLINE_H
+#define MU_ENGRAVING_CHORDLINE_H
 
 #include "engravingitem.h"
 #include "draw/types/painterpath.h"
@@ -96,7 +96,7 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         draw::PainterPath path;
     };
-    DECLARE_LAYOUTDATA_METHODS(ChordLine);
+    DECLARE_LAYOUTDATA_METHODS(ChordLine)
 
 private:
 

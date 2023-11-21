@@ -49,9 +49,9 @@ static String revision;
 //---------------------------------------------------------
 
 Page::Page(RootItem* parent)
-    : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE), _no(0)
+    : EngravingItem(ElementType::PAGE, parent, ElementFlag::NOT_SELECTABLE), m_no(0)
 {
-    bspTreeValid = false;
+    m_bspTreeValid = false;
 }
 
 //---------------------------------------------------------
@@ -60,7 +60,7 @@ Page::Page(RootItem* parent)
 
 std::vector<EngravingItem*> Page::items(const RectF& rect)
 {
-    if (!bspTreeValid) {
+    if (!m_bspTreeValid) {
         doRebuildBspTree();
     }
     return bspTree.items(rect);
@@ -68,7 +68,7 @@ std::vector<EngravingItem*> Page::items(const RectF& rect)
 
 std::vector<EngravingItem*> Page::items(const mu::PointF& point)
 {
-    if (!bspTreeValid) {
+    if (!m_bspTreeValid) {
         doRebuildBspTree();
     }
     return bspTree.items(point);
@@ -81,7 +81,7 @@ std::vector<EngravingItem*> Page::items(const mu::PointF& point)
 void Page::appendSystem(System* s)
 {
     s->moveToPage(this);
-    _systems.push_back(s);
+    m_systems.push_back(s);
 }
 
 //---------------------------------------------------------
@@ -238,7 +238,7 @@ double Page::footerExtension() const
 
 void Page::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    for (System* s :_systems) {
+    for (System* s :m_systems) {
         for (MeasureBase* m : s->measures()) {
             m->scanElements(data, func, all);
         }
@@ -274,10 +274,10 @@ void Page::doRebuildBspTree()
     if (score()->linearMode()) {
         double w = 0.0;
         double h = 0.0;
-        if (!_systems.empty()) {
-            h = _systems.front()->height();
-            if (!_systems.front()->measures().empty()) {
-                MeasureBase* mb = _systems.front()->measures().back();
+        if (!m_systems.empty()) {
+            h = m_systems.front()->height();
+            if (!m_systems.front()->measures().empty()) {
+                MeasureBase* mb = m_systems.front()->measures().back();
                 w = mb->x() + mb->width();
             }
         }
@@ -288,7 +288,7 @@ void Page::doRebuildBspTree()
 
     bspTree.initialize(r, n);
     scanElements(&bspTree, &bspInsert, false);
-    bspTreeValid = true;
+    m_bspTreeValid = true;
 }
 
 //---------------------------------------------------------
@@ -333,7 +333,7 @@ String Page::replaceTextMacros(const String& s) const
             Char nc = s.at(i + 1);
             switch (nc.toAscii()) {
             case 'p': // not on first page 1
-                if (!_no) {
+                if (!m_no) {
                     break;
                 }
             // FALLTHROUGH
@@ -344,7 +344,7 @@ String Page::replaceTextMacros(const String& s) const
             // FALLTHROUGH
             case 'P': // on all pages
             {
-                int no = static_cast<int>(_no) + 1 + score()->pageNumberOffset();
+                int no = static_cast<int>(m_no) + 1 + score()->pageNumberOffset();
                 if (no > 0) {
                     d += String::number(no);
                 }
@@ -354,7 +354,7 @@ String Page::replaceTextMacros(const String& s) const
                 d += String::number(score()->npages() + score()->pageNumberOffset());
                 break;
             case 'i': // not on first page
-                if (!_no) {
+                if (!m_no) {
                     break;
                 }
             // FALLTHROUGH
@@ -395,7 +395,7 @@ String Page::replaceTextMacros(const String& s) const
                 }
                 break;
             case 'C': // only on first page
-                if (_no) {
+                if (m_no) {
                     break;
                 }
             // FALLTHROUGH
@@ -461,7 +461,7 @@ String Page::replaceTextMacros(const String& s) const
 
 bool Page::isOdd() const
 {
-    return (_no + 1 + score()->pageNumberOffset()) & 1;
+    return (m_no + 1 + score()->pageNumberOffset()) & 1;
 }
 
 //---------------------------------------------------------
@@ -557,6 +557,6 @@ RectF Page::tbbox() const
 
 Fraction Page::endTick() const
 {
-    return _systems.empty() ? Fraction(-1, 1) : _systems.back()->measures().back()->endTick();
+    return m_systems.empty() ? Fraction(-1, 1) : m_systems.back()->measures().back()->endTick();
 }
 }

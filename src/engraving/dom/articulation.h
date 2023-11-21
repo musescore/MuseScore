@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ARTICULATION_H__
-#define __ARTICULATION_H__
+#ifndef MU_ENGRAVING_ARTICULATION_H
+#define MU_ENGRAVING_ARTICULATION_H
 
 #include <set>
 
@@ -195,7 +195,7 @@ public:
         ld_field<bool> m_up = { "up", true };
         ld_field<SymId> m_symId = { "symId", SymId::noSym };
     };
-    DECLARE_LAYOUTDATA_METHODS(Articulation);
+    DECLARE_LAYOUTDATA_METHODS(Articulation)
 
     void setUp(bool val);
 

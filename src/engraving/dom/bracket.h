@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BRACKET_H__
-#define __BRACKET_H__
+#ifndef MU_ENGRAVING_BRACKET_H
+#define MU_ENGRAVING_BRACKET_H
 
 #include "engravingitem.h"
 #include "bracketItem.h"
@@ -117,11 +117,7 @@ public:
         ld_field<double> m_bracketHeight = { "bracketHeight", 0.0 };
         ld_field<double> m_bracketWidth = { "bracketWidth", 0.0 };
     };
-    DECLARE_LAYOUTDATA_METHODS(Bracket);
-
-    //! --- DEPRECATED ---
-    double h2() const { return ldata()->h2(); }
-    //! ------------------
+    DECLARE_LAYOUTDATA_METHODS(Bracket)
 
 private:
     friend class Factory;

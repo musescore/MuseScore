@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __POS_H__
-#define __POS_H__
+#ifndef MU_ENGRAVING_POS_H
+#define MU_ENGRAVING_POS_H
 
 #include "global/allocator.h"
 #include "types/string.h"
@@ -45,16 +45,6 @@ enum class TType : char {
 
 class Pos
 {
-    TType _type;
-    bool _valid;
-    mutable int sn;
-    mutable unsigned _tick;
-    mutable unsigned _frame;
-
-protected:
-    TempoMap* tempo;
-    TimeSigMap* sig;
-
 public:
     Pos();
     Pos(TempoMap*, TimeSigMap*);
@@ -63,7 +53,7 @@ public:
     Pos(TempoMap*, TimeSigMap*, unsigned, TType type = TType::TICKS);
     Pos(TempoMap*, TimeSigMap*, const String&);
 
-    void setContext(TempoMap* t, TimeSigMap* s) { tempo = t; sig = s; }
+    void setContext(TempoMap* t, TimeSigMap* s) { m_tempo = t; m_sig = s; }
     void dump(int n = 0) const;
 
     unsigned time(TType t) const { return t == TType::TICKS ? tick() : frame(); }
@@ -77,9 +67,9 @@ public:
     Pos upSnapped(int) const;
     Pos downSnapped(int) const;
 
-    void invalidSn() { sn = -1; }
+    void invalidSn() { m_sn = -1; }
 
-    TType  type() const { return _type; }
+    TType  type() const { return m_type; }
     void   setType(TType t);
 
     Pos& operator+=(const Pos& a);
@@ -104,8 +94,20 @@ public:
     void setTick(unsigned);
     void setFrame(unsigned);
 
-    bool valid() const { return _valid && tempo && sig; }
-    void setInvalid() { _valid = false; }
+    bool valid() const { return m_valid && m_tempo && m_sig; }
+    void setInvalid() { m_valid = false; }
+
+protected:
+    TempoMap* m_tempo = nullptr;
+    TimeSigMap* m_sig = nullptr;
+
+private:
+
+    TType m_type = TType::TICKS;
+    bool m_valid = false;
+    mutable int m_sn = 0;
+    mutable unsigned m_tick = 0;
+    mutable unsigned m_frame = 0;
 };
 
 //---------------------------------------------------------
@@ -115,10 +117,6 @@ public:
 class PosLen : public Pos
 {
     OBJECT_ALLOCATOR(engraving, PosLen)
-
-    mutable unsigned _lenTick;
-    mutable unsigned _lenFrame;
-    mutable int sn;
 
 public:
     PosLen(TempoMap*, TimeSigMap*);
@@ -135,6 +133,12 @@ public:
     void setPos(const Pos&);
 
     bool operator==(const PosLen& s) const;
+
+private:
+
+    mutable unsigned m_lenTick = 0;
+    mutable unsigned m_lenFrame = 0;
+    mutable int m_sn = 0;
 };
 } // namespace mu::engraving
 #endif
