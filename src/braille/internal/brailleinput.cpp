@@ -367,16 +367,19 @@ BieSequencePatternType BrailleInputState::parseBraille(IntervalDirection directi
 
         NoteName note_name = getNoteName(code);
 
-        setNoteName(note_name);
         setNoteDurations(getNoteDurations(code));
 
         code = pattern->res("octave");
         if (code != NULL) {
             setAddedOctave(getOctave(code));
-        } else {
+        } else if (chordBaseNoteOctave() != -1) {
             int octave_diff = getOctaveDiff(chordBaseNoteName(), note_name);
             setAddedOctave(chordBaseNoteOctave() + octave_diff);
+        } else {
+            setAddedOctave(-1); // unknown octave
         }
+
+        setNoteName(note_name, true); // do this after determining the octave
 
         code = pattern->res("accidental");
         if (code != NULL) {
