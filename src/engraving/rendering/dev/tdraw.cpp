@@ -3042,7 +3042,10 @@ void TDraw::draw(const Tuplet* item, Painter* painter)
         painter->translate(-pos);
     }
     if (item->hasBracket()) {
-        painter->setPen(Pen(color, item->bracketWidth().val() * item->mag()));
+        Pen pen(color, item->bracketWidth().val() * item->mag());
+        pen.setJoinStyle(PenJoinStyle::MiterJoin);
+        pen.setCapStyle(PenCapStyle::FlatCap);
+        painter->setPen(pen);
         if (!item->number()) {
             painter->drawPolyline(item->bracketL, 4);
         } else {
