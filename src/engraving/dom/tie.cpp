@@ -83,9 +83,11 @@ bool TieSegment::edit(EditData& ed)
     SlurTie* sl = tie();
 
     if (ed.key == Key_Home && !ed.modifiers) {
-        ups(ed.curGrip).off = PointF();
-        renderer()->layoutItem(sl);
-        triggerLayout();
+        if (ed.hasCurrentGrip()) {
+            ups(ed.curGrip).off = PointF();
+            renderer()->layoutItem(sl);
+            triggerLayout();
+        }
         return true;
     }
     return false;

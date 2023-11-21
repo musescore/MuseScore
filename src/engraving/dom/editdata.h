@@ -273,6 +273,7 @@ public:
     bool control(bool textEditing = false) const;
     bool shift() const { return modifiers & ShiftModifier; }
     bool isStartEndGrip() { return curGrip == Grip::START || curGrip == Grip::END; }
+    bool hasCurrentGrip() { return curGrip != Grip::NO_GRIP; }
 };
 }
 
