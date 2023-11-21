@@ -2015,6 +2015,7 @@ void SystemLayout::addBrackets(System* system, Measure* measure, LayoutContext& 
     //---------------------------------------------------
     //  layout brackets
     //---------------------------------------------------
+    SystemLayout::layoutBracketsVertical(system, ctx);
 
     system->setBracketsXPosition(measure->x());
 
