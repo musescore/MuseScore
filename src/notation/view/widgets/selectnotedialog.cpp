@@ -139,6 +139,18 @@ FilterNotesOptions SelectNoteDialog::noteOptions() const
         options.durationTicks = mu::engraving::Fraction(-1, 1);
     }
 
+    if (sameBeat->isChecked()) {
+        options.beat = m_note->beat();
+    } else {
+        options.beat = Fraction(0, 0);
+    }
+
+    if (sameMeasure->isChecked()) {
+        options.measure = m_note->findMeasure();
+    } else {
+        options.measure = nullptr;
+    }
+
     if (sameStaff->isChecked()) {
         options.staffStart = static_cast<int>(m_note->staffIdx());
         options.staffEnd = static_cast<int>(m_note->staffIdx() + 1);

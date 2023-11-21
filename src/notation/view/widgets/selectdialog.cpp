@@ -114,6 +114,18 @@ FilterElementsOptions SelectDialog::elementOptions() const
         options.durationTicks = Fraction(-1, 1);
     }
 
+    if (sameBeat->isChecked()) {
+        options.beat = m_element->beat();
+    } else {
+        options.beat = Fraction(0, 0);
+    }
+
+    if (sameMeasure->isChecked()) {
+        options.measure = m_element->findMeasure();
+    } else {
+        options.measure = nullptr;
+    }
+
     options.voice = sameVoice->isChecked() ? static_cast<int>(m_element->voice()) : -1;
     options.bySubtype = sameSubtype->isChecked();
 

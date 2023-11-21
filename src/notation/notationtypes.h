@@ -442,6 +442,8 @@ struct FilterElementsOptions
     int voice = -1;
     const mu::engraving::System* system = nullptr;
     Fraction durationTicks{ -1, 1 };
+    Fraction beat{ -1, 1 };
+    const Measure* measure = nullptr;
 
     bool bySubtype = false;
     int subtype = -1;
