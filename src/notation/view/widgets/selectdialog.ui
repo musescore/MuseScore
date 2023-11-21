@@ -29,18 +29,22 @@
       <number>9</number>
      </property>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="select">
        <property name="title">
         <string>Select</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="sameSubtype">
           <property name="text">
-           <string>Element type:</string>
+           <string>Same subtype:</string>
           </property>
-          <property name="buddy">
-           <cstring>type</cstring>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QLineEdit" name="type">
+          <property name="readOnly">
+           <bool>true</bool>
           </property>
          </widget>
         </item>
@@ -65,20 +69,6 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="sameSubtype">
-          <property name="text">
-           <string>Same subtype:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QLineEdit" name="type">
-          <property name="readOnly">
-           <bool>true</bool>
-          </property>
-         </widget>
-        </item>
         <item row="1" column="1" colspan="2">
          <widget class="QLineEdit" name="subtype">
           <property name="readOnly">
@@ -86,14 +76,38 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1" colspan="2">
+        <item row="0" column="0">
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>Element type:</string>
+          </property>
+          <property name="buddy">
+           <cstring>type</cstring>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="0">
+         <widget class="QCheckBox" name="sameBeat">
+          <property name="text">
+           <string>Same beat</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QCheckBox" name="sameMeasure">
+          <property name="text">
+           <string>Same measure</string>
+          </property>
+         </widget>
+        </item>
+        <item row="4" column="1">
          <widget class="QCheckBox" name="sameSystem">
           <property name="text">
            <string>Same system</string>
           </property>
          </widget>
         </item>
-        <item row="2" column="1">
+        <item row="3" column="1">
          <widget class="QCheckBox" name="inSelection">
           <property name="text">
            <string>In selection</string>
@@ -104,7 +118,7 @@
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="action">
        <property name="title">
         <string>Action</string>
        </property>
@@ -171,13 +185,14 @@
   <tabstop>sameSubtype</tabstop>
   <tabstop>subtype</tabstop>
   <tabstop>sameStaff</tabstop>
-  <tabstop>inSelection</tabstop>
   <tabstop>sameVoice</tabstop>
-  <tabstop>sameSystem</tabstop>
+  <tabstop>inSelection</tabstop>
   <tabstop>sameDuration</tabstop>
+  <tabstop>sameSystem</tabstop>
+  <tabstop>sameBeat</tabstop>
+  <tabstop>sameMeasure</tabstop>
   <tabstop>replace</tabstop>
   <tabstop>add</tabstop>
-  <tabstop>fromSelection</tabstop>
   <tabstop>subtract</tabstop>
  </tabstops>
  <resources/>

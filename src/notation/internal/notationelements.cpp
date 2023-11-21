@@ -206,6 +206,8 @@ ElementPattern* NotationElements::constructElementPattern(const FilterElementsOp
     pattern->voice   = elementOptions->voice;
     pattern->system  = elementOptions->system;
     pattern->durationTicks = elementOptions->durationTicks;
+    pattern->beat = elementOptions->beat;
+    pattern->measure = elementOptions->measure;
 
     return pattern;
 }
@@ -224,6 +226,8 @@ mu::engraving::NotePattern* NotationElements::constructNotePattern(const FilterN
     pattern->staffEnd = notesOptions->staffEnd;
     pattern->voice = notesOptions->voice;
     pattern->system = notesOptions->system;
+    pattern->beat = notesOptions->beat;
+    pattern->measure = notesOptions->measure;
 
     return pattern;
 }
