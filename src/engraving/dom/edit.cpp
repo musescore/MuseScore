@@ -40,6 +40,7 @@
 #include "factory.h"
 #include "fingering.h"
 #include "glissando.h"
+#include "guitarbend.h"
 #include "hairpin.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
@@ -2275,6 +2276,12 @@ void Score::cmdFlip()
             Note* note = toNote(e->explicitParent());
             DirectionV d = note->dotIsUp() ? DirectionV::DOWN : DirectionV::UP;
             note->undoChangeProperty(Pid::DOT_POSITION, PropertyValue::fromValue<DirectionV>(d));
+        } else if (e->isGuitarBendSegment()) {
+            GuitarBend* bend = toGuitarBendSegment(e)->guitarBend();
+            flipOnce(bend, [bend] {
+                DirectionV direction = bend->ldata()->up() ? DirectionV::DOWN : DirectionV::UP;
+                bend->undoChangeProperty(Pid::DIRECTION, PropertyValue::fromValue<DirectionV>(direction));
+            });
         } else if (e->isStaffText()
                    || e->isSystemText()
                    || e->isTempoText()
