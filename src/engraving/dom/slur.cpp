@@ -132,9 +132,11 @@ bool SlurSegment::edit(EditData& ed)
     Slur* sl = slur();
 
     if (ed.key == Key_Home && !ed.modifiers) {
-        ups(ed.curGrip).off = PointF();
-        renderer()->layoutItem(sl);
-        triggerLayout();
+        if (ed.hasCurrentGrip()) {
+            ups(ed.curGrip).off = PointF();
+            renderer()->layoutItem(sl);
+            triggerLayout();
+        }
         return true;
     }
 
