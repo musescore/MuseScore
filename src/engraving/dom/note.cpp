@@ -3270,14 +3270,6 @@ EngravingItem* Note::nextElement()
             if (graceNotesAfterFirstChord) {
                 return graceNotesAfterFirstChord->notes().front();
             }
-        } else if (isGrace()) {
-            ChordRest* next = nextChordRest(chord());
-            if (next) {
-                if (next->isChord()) {
-                    return toChord(next)->notes().front();
-                }
-                return toRest(next);
-            }
         }
 
         if (!m_el.empty()) {
