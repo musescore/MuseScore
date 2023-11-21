@@ -139,6 +139,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRendere
 
             std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
             paintItems(*painter, elements);
+            //DebugPaint::paintPageTree(*painter, page);
 
             if (disableClipping) {
                 painter->setClipping(false);
