@@ -1667,7 +1667,10 @@ EngravingItem* Segment::prevElementOfSegment(Segment* s, EngravingItem* e, staff
             if (!graceNotesBefore.empty()) {
                 ChordRest* next = prevChordRest(chord);
                 if (next) {
-                    return toChord(next)->notes().back();
+                    if (next->isChord()) {
+                        return toChord(next)->notes().back();
+                    }
+                    return toRest(next);
                 }
             }
 
