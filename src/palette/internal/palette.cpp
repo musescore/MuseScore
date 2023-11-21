@@ -125,6 +125,17 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const Tran
     return insertElement(idx, element, name.str, mag, offset, tag);
 }
 
+PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, actions::ActionCode code, double mag)
+{
+    const ui::UiAction& action = actionsRegister()->action(code);
+    QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
+    auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
+    icon->setActionType(type);
+    icon->setAction(code, static_cast<char16_t>(action.iconCode));
+
+    return insertElement(idx, icon, name, mag);
+}
+
 PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
 {
     if (element) {
