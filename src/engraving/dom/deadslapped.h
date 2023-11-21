@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __DEADSLAPPED_H__
-#define __DEADSLAPPED_H__
+#ifndef MU_ENGRAVING_DEADSLAPPED_H
+#define MU_ENGRAVING_DEADSLAPPED_H
 
 #include "engravingitem.h"
 
@@ -46,7 +46,7 @@ public:
         mu::draw::PainterPath path1;
         mu::draw::PainterPath path2;
     };
-    DECLARE_LAYOUTDATA_METHODS(DeadSlapped);
+    DECLARE_LAYOUTDATA_METHODS(DeadSlapped)
 
 private:
 

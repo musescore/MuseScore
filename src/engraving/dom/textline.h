@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TEXTLINE_H__
-#define __TEXTLINE_H__
+#ifndef MU_ENGRAVING_TEXTLINE_H
+#define MU_ENGRAVING_TEXTLINE_H
 
 #include "textlinebase.h"
 

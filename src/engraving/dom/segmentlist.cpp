@@ -36,8 +36,8 @@ namespace mu::engraving {
 SegmentList SegmentList::clone() const
 {
     SegmentList dl;
-    Segment* s = _first;
-    for (int i = 0; i < _size; ++i) {
+    Segment* s = m_first;
+    for (int i = 0; i < m_size; ++i) {
         Segment* ns = s->clone();
         dl.push_back(ns);
         s = s->next();
@@ -56,14 +56,14 @@ void SegmentList::check()
     int n = 0;
     Segment* f = 0;
     Segment* l = 0;
-    for (Segment* s = _first; s; s = s->next()) {
+    for (Segment* s = m_first; s; s = s->next()) {
         if (f == 0) {
             f = s;
         }
         l = s;
         ++n;
     }
-    for (Segment* s = _first; s; s = s->next()) {
+    for (Segment* s = m_first; s; s = s->next()) {
         switch (s->segmentType()) {
         case SegmentType::Invalid:
         case SegmentType::BeginBarLine:
@@ -92,10 +92,10 @@ void SegmentList::check()
             ss = ss->next();
         }
     }
-    if (f != _first) {
+    if (f != m_first) {
         ASSERT_X("SegmentList::check: bad first");
     }
-    if (l != _last) {
+    if (l != m_last) {
         ASSERT_X("SegmentList::check: bad last");
     }
     if (f && f->prev()) {
@@ -104,9 +104,9 @@ void SegmentList::check()
     if (l && l->next()) {
         ASSERT_X("SegmentList::check: last has next");
     }
-    if (n != _size) {
-        ASSERT_X(String(u"SegmentList::check: counted %1 but _size is %d2").arg(n, _size));
-        _size = n;
+    if (n != m_size) {
+        ASSERT_X(String(u"SegmentList::check: counted %1 but _size is %d2").arg(n, m_size));
+        m_size = n;
     }
 }
 
@@ -124,7 +124,7 @@ void SegmentList::insert(Segment* e, Segment* el)
     } else if (el == first()) {
         push_front(e);
     } else {
-        ++_size;
+        ++m_size;
         e->setNext(el);
         e->setPrev(el->prev());
         el->prev()->setNext(e);
@@ -142,7 +142,7 @@ void SegmentList::remove(Segment* e)
 #ifndef NDEBUG
     check();
     bool found = false;
-    for (Segment* s = _first; s; s = s->next()) {
+    for (Segment* s = m_first; s; s = s->next()) {
         if (e == s) {
             found = true;
             break;
@@ -152,19 +152,19 @@ void SegmentList::remove(Segment* e)
         ASSERT_X(String(u"segment %1 not in list").arg(String::fromAscii(e->subTypeName())));
     }
 #endif
-    --_size;
-    if (e == _first) {
-        _first = _first->next();
-        if (_first) {
-            _first->setPrev(0);
+    --m_size;
+    if (e == m_first) {
+        m_first = m_first->next();
+        if (m_first) {
+            m_first->setPrev(0);
         }
-        if (e == _last) {
-            _last = 0;
+        if (e == m_last) {
+            m_last = 0;
         }
-    } else if (e == _last) {
-        _last = _last->prev();
-        if (_last) {
-            _last->setNext(0);
+    } else if (e == m_last) {
+        m_last = m_last->prev();
+        if (m_last) {
+            m_last->setNext(0);
         }
     } else {
         e->prev()->setNext(e->next());
@@ -178,15 +178,15 @@ void SegmentList::remove(Segment* e)
 
 void SegmentList::push_back(Segment* e)
 {
-    ++_size;
+    ++m_size;
     e->setNext(0);
-    if (_last) {
-        _last->setNext(e);
+    if (m_last) {
+        m_last->setNext(e);
     } else {
-        _first = e;
+        m_first = e;
     }
-    e->setPrev(_last);
-    _last = e;
+    e->setPrev(m_last);
+    m_last = e;
     check();
 }
 
@@ -196,15 +196,15 @@ void SegmentList::push_back(Segment* e)
 
 void SegmentList::push_front(Segment* e)
 {
-    ++_size;
+    ++m_size;
     e->setPrev(0);
-    if (_first) {
-        _first->setPrev(e);
+    if (m_first) {
+        m_first->setPrev(e);
     } else {
-        _last = e;
+        m_last = e;
     }
-    e->setNext(_first);
-    _first = e;
+    e->setNext(m_first);
+    m_first = e;
     check();
 }
 
@@ -223,7 +223,7 @@ Segment* SegmentList::firstCRSegment() const
 
 Segment* SegmentList::first(SegmentType types) const
 {
-    for (Segment* s = _first; s; s = s->next()) {
+    for (Segment* s = m_first; s; s = s->next()) {
         if (s->segmentType() & types) {
             return s;
         }
@@ -237,7 +237,7 @@ Segment* SegmentList::first(SegmentType types) const
 
 Segment* SegmentList::first(ElementFlag flags) const
 {
-    for (Segment* s = _first; s; s = s->next()) {
+    for (Segment* s = m_first; s; s = s->next()) {
         if (s->flag(flags)) {
             return s;
         }
@@ -251,7 +251,7 @@ Segment* SegmentList::first(ElementFlag flags) const
 
 Segment* SegmentList::last(ElementFlag flags) const
 {
-    for (Segment* s = _last; s; s = s->prev()) {
+    for (Segment* s = m_last; s; s = s->prev()) {
         if (s->flag(flags)) {
             return s;
         }

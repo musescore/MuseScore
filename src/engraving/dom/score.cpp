@@ -1496,7 +1496,7 @@ void Score::addElement(EngravingItem* element)
         InstrumentChange* ic = toInstrumentChange(element);
         ic->part()->setInstrument(ic->instrument(), ic->segment()->tick());
         addLayoutFlags(LayoutFlag::REBUILD_MIDI_MAPPING);
-        cmdState()._instrumentsChanged = true;
+        cmdState().instrumentsChanged = true;
     }
     break;
 
@@ -1682,7 +1682,7 @@ void Score::removeElement(EngravingItem* element)
         InstrumentChange* ic = toInstrumentChange(element);
         ic->part()->removeInstrument(ic->segment()->tick());
         addLayoutFlags(LayoutFlag::REBUILD_MIDI_MAPPING);
-        cmdState()._instrumentsChanged = true;
+        cmdState().instrumentsChanged = true;
     }
     break;
 
@@ -2241,7 +2241,7 @@ void Score::splitStaff(staff_idx_t staffIdx, int splitPoint)
     undoChangeKeySig(ns, Fraction(0, 1), st->keySigEvent(Fraction(0, 1)));
 
     masterScore()->rebuildMidiMapping();
-    cmdState()._instrumentsChanged = true;
+    cmdState().instrumentsChanged = true;
     doLayout();
 
     //
@@ -6028,5 +6028,5 @@ void Score::setPos(POS pos, Fraction tick) { m_masterScore->setPos(pos, tick); }
 //    occurred during score loading.
 //---------------------------------------------------------
 
-int ScoreLoad::_loading = 0;
+int ScoreLoad::m_loading = 0;
 }

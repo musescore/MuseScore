@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __REPEATLIST_H__
-#define __REPEATLIST_H__
+#ifndef MU_ENGRAVING_REPEATLIST_H
+#define MU_ENGRAVING_REPEATLIST_H
 
 #include <set>
 #include <vector>
@@ -79,15 +79,26 @@ class RepeatList : public std::vector<RepeatSegment*>
 {
     OBJECT_ALLOCATOR(engraving, RepeatList)
 
-    Score* _score = nullptr;
-    mutable unsigned idx1, idx2;     // cached values
+public:
+    RepeatList(Score* s);
+    RepeatList(const RepeatList&) = delete;
+    RepeatList& operator=(const RepeatList&) = delete;
+    ~RepeatList();
 
-    bool _expanded = false;
-    bool _scoreChanged = true;
+    void update(bool expand);
+    void setScoreChanged() { m_scoreChanged = true; }
+    const Score* score() const { return m_score; }
 
-    std::set<std::pair<Jump const* const, int> > _jumpsTaken;     // take the jumps only once, so track them during unwind
-    std::vector<RepeatListElementList> _rlElements;   // all elements of the score that influence the RepeatList
+    int utick2tick(int tick) const;
+    int tick2utick(int tick) const;
+    int utime2utick(double secs) const;
+    double utick2utime(int) const;
+    void updateTempo();
+    int ticks() const;
 
+    std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
+
+private:
     void collectRepeatListElements();
     std::pair<std::vector<RepeatListElementList>::const_iterator, RepeatListElementList::const_iterator> findMarker(
         String label, std::vector<RepeatListElementList>::const_iterator referenceSectionIt,
@@ -99,24 +110,14 @@ class RepeatList : public std::vector<RepeatSegment*>
     void unwind();
     void flatten();
 
-public:
-    RepeatList(Score* s);
-    RepeatList(const RepeatList&) = delete;
-    RepeatList& operator=(const RepeatList&) = delete;
-    ~RepeatList();
+    Score* m_score = nullptr;
+    mutable unsigned m_idx1, m_idx2 = 0;     // cached values
 
-    void update(bool expand);
-    void setScoreChanged() { _scoreChanged = true; }
-    const Score* score() const { return _score; }
+    bool m_expanded = false;
+    bool m_scoreChanged = true;
 
-    int utick2tick(int tick) const;
-    int tick2utick(int tick) const;
-    int utime2utick(double secs) const;
-    double utick2utime(int) const;
-    void updateTempo();
-    int ticks() const;
-
-    std::vector<RepeatSegment*>::const_iterator findRepeatSegmentFromUTick(int utick) const;
+    std::set<std::pair<Jump const* const, int> > m_jumpsTaken;     // take the jumps only once, so track them during unwind
+    std::vector<RepeatListElementList> m_rlElements;               // all elements of the score that influence the RepeatList
 };
 } // namespace mu::engraving
 #endif

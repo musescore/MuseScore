@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __JUMP_H__
-#define __JUMP_H__
+#ifndef MU_ENGRAVING_JUMP_H
+#define MU_ENGRAVING_JUMP_H
 
 #include "textbase.h"
 
@@ -58,17 +58,17 @@ public:
 
     Measure* measure() const { return toMeasure(explicitParent()); }
 
-    String jumpTo() const { return _jumpTo; }
-    String playUntil() const { return _playUntil; }
-    String continueAt() const { return _continueAt; }
-    void setJumpTo(const String& s) { _jumpTo = s; }
-    void setPlayUntil(const String& s) { _playUntil = s; }
-    void setContinueAt(const String& s) { _continueAt = s; }
+    String jumpTo() const { return m_jumpTo; }
+    String playUntil() const { return m_playUntil; }
+    String continueAt() const { return m_continueAt; }
+    void setJumpTo(const String& s) { m_jumpTo = s; }
+    void setPlayUntil(const String& s) { m_playUntil = s; }
+    void setContinueAt(const String& s) { m_continueAt = s; }
     void undoSetJumpTo(const String& s);
     void undoSetPlayUntil(const String& s);
     void undoSetContinueAt(const String& s);
-    bool playRepeats() const { return _playRepeats; }
-    void setPlayRepeats(bool val) { _playRepeats = val; }
+    bool playRepeats() const { return m_playRepeats; }
+    void setPlayRepeats(bool val) { m_playRepeats = val; }
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
@@ -81,10 +81,10 @@ public:
     void setLayoutToParentWidth(bool v) { m_layoutToParentWidth = v; }
 
 private:
-    String _jumpTo;
-    String _playUntil;
-    String _continueAt;
-    bool _playRepeats;
+    String m_jumpTo;
+    String m_playUntil;
+    String m_continueAt;
+    bool m_playRepeats = false;
 };
 
 struct JumpTypeTableItem {

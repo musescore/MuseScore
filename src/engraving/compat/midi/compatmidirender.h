@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MSCORE_COMPATMIDIRENDER_HPP
-#define MSCORE_COMPATMIDIRENDER_HPP
+#ifndef MU_ENGRAVING_COMPATMIDIRENDER_H
+#define MU_ENGRAVING_COMPATMIDIRENDER_H
 
 #include <set>
 #include <cmath>
@@ -110,4 +110,4 @@ private:
 };
 }
 
-#endif //MSCORE_COMPATMIDIRENDER_HPP
+#endif //MU_ENGRAVING_COMPATMIDIRENDER_H

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __KEYSIG_H__
-#define __KEYSIG_H__
+#ifndef MU_ENGRAVING_KEYSIG_H
+#define MU_ENGRAVING_KEYSIG_H
 
 #include "key.h"
 #include "engravingitem.h"
@@ -98,7 +98,7 @@ public:
     struct LayoutData : public EngravingItem::LayoutData {
         std::vector<KeySym> keySymbols;
     };
-    DECLARE_LAYOUTDATA_METHODS(KeySig);
+    DECLARE_LAYOUTDATA_METHODS(KeySig)
 
 private:
     friend class Factory;

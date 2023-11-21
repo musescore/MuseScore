@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PAGE_H__
-#define __PAGE_H__
+#ifndef MU_ENGRAVING_PAGE_H
+#define MU_ENGRAVING_PAGE_H
 
 #include <vector>
 
@@ -48,34 +48,21 @@ class Page final : public EngravingItem
     OBJECT_ALLOCATOR(engraving, Page)
     DECLARE_CLASSOF(ElementType::PAGE)
 
-    std::vector<System*> _systems;
-    page_idx_t _no;                        // page number
-
-    BspTree bspTree;
-    bool bspTreeValid;
-
-    void doRebuildBspTree();
-
-    friend class Factory;
-    Page(RootItem* parent);
-
-    String replaceTextMacros(const String&) const;
-
 public:
     // Score Tree functions
     EngravingObject* scanParent() const override;
     EngravingObjectList scanChildren() const override;
 
     Page* clone() const override { return new Page(*this); }
-    const std::vector<System*>& systems() const { return _systems; }
-    std::vector<System*>& systems() { return _systems; }
-    System* system(int idx) { return _systems[idx]; }
-    const System* system(int idx) const { return _systems.at(idx); }
+    const std::vector<System*>& systems() const { return m_systems; }
+    std::vector<System*>& systems() { return m_systems; }
+    System* system(int idx) { return m_systems[idx]; }
+    const System* system(int idx) const { return m_systems.at(idx); }
 
     void appendSystem(System* s);
 
-    page_idx_t no() const { return _no; }
-    void setNo(page_idx_t n) { _no = n; }
+    page_idx_t no() const { return m_no; }
+    void setNo(page_idx_t n) { m_no = n; }
     bool isOdd() const;
     double tm() const;              // margins in pixel
     double bm() const;
@@ -88,7 +75,7 @@ public:
 
     std::vector<EngravingItem*> items(const mu::RectF& r);
     std::vector<EngravingItem*> items(const mu::PointF& p);
-    void invalidateBspTree() { bspTreeValid = false; }
+    void invalidateBspTree() { m_bspTreeValid = false; }
     mu::PointF pagePos() const override { return mu::PointF(); }       ///< position in page coordinates
     std::vector<EngravingItem*> elements() const;              ///< list of visible elements
     mu::RectF tbbox() const;                             // tight bounding box, excluding white space
@@ -99,6 +86,20 @@ public:
 #endif
 
     Text* layoutHeaderFooter(int area, const String& ss) const;
+
+private:
+
+    friend class Factory;
+    Page(RootItem* parent);
+
+    void doRebuildBspTree();
+    String replaceTextMacros(const String&) const;
+
+    std::vector<System*> m_systems;
+    page_idx_t m_no = 0;                        // page number
+
+    BspTree bspTree;
+    bool m_bspTreeValid = false;
 };
 } // namespace mu::engraving
 #endif

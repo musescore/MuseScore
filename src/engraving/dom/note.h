@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __NOTE_H__
-#define __NOTE_H__
+#ifndef MU_ENGRAVING_NOTE_H
+#define MU_ENGRAVING_NOTE_H
 
 /**
  \file
@@ -62,16 +62,16 @@ static constexpr int MAX_DOTS = 4;
 //--------------------------------------------------------------------------------
 class LineAttachPoint
 {
-private:
-    EngravingItem* _line = nullptr;
-    PointF _pos = PointF(0.0, 0.0);
-
 public:
     LineAttachPoint(EngravingItem* l, double x, double y)
-        : _line(l), _pos(PointF(x, y)) {}
+        : m_line(l), m_pos(PointF(x, y)) {}
 
-    const EngravingItem* line() const { return _line; }
-    const PointF pos() const { return _pos; }
+    const EngravingItem* line() const { return m_line; }
+    const PointF pos() const { return m_pos; }
+
+private:
+    EngravingItem* m_line = nullptr;
+    PointF m_pos = PointF(0.0, 0.0);
 };
 
 //---------------------------------------------------------
@@ -99,12 +99,12 @@ public:
 //---------------------------------------------------------
 
 struct NoteVal {
-    int pitch                 { -1 };
-    int tpc1                  { Tpc::TPC_INVALID };
-    int tpc2                  { Tpc::TPC_INVALID };
-    int fret                  { INVALID_FRET_INDEX };
-    int string                { INVALID_STRING_INDEX };
-    NoteHeadGroup headGroup { NoteHeadGroup::HEAD_NORMAL };
+    int pitch = -1;
+    int tpc1 = Tpc::TPC_INVALID;
+    int tpc2 = Tpc::TPC_INVALID;
+    int fret = INVALID_FRET_INDEX;
+    int string = INVALID_STRING_INDEX;
+    NoteHeadGroup headGroup = NoteHeadGroup::HEAD_NORMAL;
 
     NoteVal() {}
     NoteVal(int p)
@@ -452,11 +452,6 @@ public:
         ld_field<bool> mirror = { "Note::mirror", false };                                  // True if note is mirrored at stem.
     };
     DECLARE_LAYOUTDATA_METHODS(Note)
-
-    //! --- DEPRECATED ---
-    bool mirror() const { return ldata()->mirror.value(); }
-    void setMirror(bool val) { mutldata()->mirror.set_value(val); }
-    //! ------------------
 
 private:
 

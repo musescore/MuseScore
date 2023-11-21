@@ -861,9 +861,9 @@ Compound::Compound(const ElementType& type, Score* s)
 Compound::Compound(const Compound& c)
     : EngravingItem(c)
 {
-    elements.clear();
-    for (EngravingItem* e : c.elements) {
-        elements.push_back(e->clone());
+    m_elements.clear();
+    for (EngravingItem* e : c.m_elements) {
+        m_elements.push_back(e->clone());
     }
 }
 
@@ -873,7 +873,7 @@ Compound::Compound(const Compound& c)
 
 void Compound::draw(mu::draw::Painter* painter) const
 {
-    for (EngravingItem* e : elements) {
+    for (EngravingItem* e : m_elements) {
         PointF pt(e->pos());
         painter->translate(pt);
         renderer()->drawItem(e, painter);
@@ -893,7 +893,7 @@ void Compound::addElement(EngravingItem* e, double x, double y)
 {
     e->setPos(x, y);
     e->setParent(this);
-    elements.push_back(e);
+    m_elements.push_back(e);
 }
 
 //---------------------------------------------------------
@@ -913,7 +913,7 @@ void Compound::layout()
 void Compound::setSelected(bool f)
 {
     EngravingItem::setSelected(f);
-    for (auto i = elements.begin(); i != elements.end(); ++i) {
+    for (auto i = m_elements.begin(); i != m_elements.end(); ++i) {
         (*i)->setSelected(f);
     }
 }
@@ -925,7 +925,7 @@ void Compound::setSelected(bool f)
 void Compound::setVisible(bool f)
 {
     EngravingItem::setVisible(f);
-    for (auto i = elements.begin(); i != elements.end(); ++i) {
+    for (auto i = m_elements.begin(); i != m_elements.end(); ++i) {
         (*i)->setVisible(f);
     }
 }
@@ -936,13 +936,13 @@ void Compound::setVisible(bool f)
 
 void Compound::clear()
 {
-    for (EngravingItem* e : elements) {
+    for (EngravingItem* e : m_elements) {
         if (e->selected()) {
             score()->deselect(e);
         }
         delete e;
     }
-    elements.clear();
+    m_elements.clear();
 }
 
 //---------------------------------------------------------
@@ -1910,7 +1910,7 @@ void EngravingItem::triggerLayoutAll() const
 
 void EditData::addData(std::shared_ptr<ElementEditData> ed)
 {
-    data.push_back(ed);
+    m_data.push_back(ed);
 }
 
 //---------------------------------------------------------

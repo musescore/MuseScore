@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __DRUMSET_H__
-#define __DRUMSET_H__
+#ifndef MU_ENGRAVING_DRUMSET_H
+#define MU_ENGRAVING_DRUMSET_H
 
 #include "mscore.h"
 #include "pitchspelling.h"
@@ -75,20 +75,18 @@ static const int DRUM_INSTRUMENTS = 128;
 
 class Drumset
 {
-    DrumInstrument _drum[DRUM_INSTRUMENTS];
-
 public:
 
-    bool isValid(int pitch) const { return !_drum[pitch].name.empty(); }
-    NoteHeadGroup noteHead(int pitch) const { return _drum[pitch].notehead; }
-    SymId noteHeads(int pitch, NoteHeadType t) const { return _drum[pitch].noteheads[int(t)]; }
-    int line(int pitch) const { return _drum[pitch].line; }
-    int voice(int pitch) const { return _drum[pitch].voice; }
-    DirectionV stemDirection(int pitch) const { return _drum[pitch].stemDirection; }
-    const String& name(int pitch) const { return _drum[pitch].name; }
+    bool isValid(int pitch) const { return !m_drum[pitch].name.empty(); }
+    NoteHeadGroup noteHead(int pitch) const { return m_drum[pitch].notehead; }
+    SymId noteHeads(int pitch, NoteHeadType t) const { return m_drum[pitch].noteheads[int(t)]; }
+    int line(int pitch) const { return m_drum[pitch].line; }
+    int voice(int pitch) const { return m_drum[pitch].voice; }
+    DirectionV stemDirection(int pitch) const { return m_drum[pitch].stemDirection; }
+    const String& name(int pitch) const { return m_drum[pitch].name; }
     String translatedName(int pitch) const;
-    int shortcut(int pitch) const { return _drum[pitch].shortcut; }
-    std::list<DrumInstrumentVariant> variants(int pitch) const { return _drum[pitch].variants; }
+    int shortcut(int pitch) const { return m_drum[pitch].shortcut; }
+    std::list<DrumInstrumentVariant> variants(int pitch) const { return m_drum[pitch].variants; }
 
     void save(XmlWriter&) const;
     void load(XmlReader&);
@@ -96,9 +94,13 @@ public:
     void clear();
     int nextPitch(int) const;
     int prevPitch(int) const;
-    DrumInstrument& drum(int i) { return _drum[i]; }
-    const DrumInstrument& drum(int i) const { return _drum[i]; }
+    DrumInstrument& drum(int i) { return m_drum[i]; }
+    const DrumInstrument& drum(int i) const { return m_drum[i]; }
     DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*>& articulations, Tremolo* tremolo) const;
+
+private:
+
+    DrumInstrument m_drum[DRUM_INSTRUMENTS];
 };
 
 extern Drumset* smDrumset;

@@ -32,13 +32,13 @@ using namespace mu::engraving;
 
 LinkedObjects::LinkedObjects(Score* score)
 {
-    _lid = score->linkId();   // create new unique id
+    m_lid = score->linkId();   // create new unique id
 }
 
 LinkedObjects::LinkedObjects(Score* score, int id)
 {
-    _lid = id;
-    if (_lid != -1) {
+    m_lid = id;
+    if (m_lid != -1) {
         score->linkId(id);          // remember used id
     }
 }
@@ -49,7 +49,7 @@ LinkedObjects::LinkedObjects(Score* score, int id)
 
 void LinkedObjects::setLid(Score* score, int id)
 {
-    _lid = id;
+    m_lid = id;
     score->linkId(id);
 }
 

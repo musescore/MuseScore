@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BSYMBOL_H__
-#define __BSYMBOL_H__
+#ifndef MU_ENGRAVING_BSYMBOL_H
+#define MU_ENGRAVING_BSYMBOL_H
 
 #include <vector>
 

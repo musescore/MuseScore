@@ -322,17 +322,17 @@ Hairpin::Hairpin(Segment* parent)
     resetProperty(Pid::HAIRPIN_TYPE);
     resetProperty(Pid::LINE_VISIBLE);
 
-    _hairpinCircledTip     = false;
-    _veloChange            = 0;
-    _dynRange              = DynamicRange::PART;
-    _singleNoteDynamics    = true;
-    _veloChangeMethod      = ChangeMethod::NORMAL;
-    _playHairpin           = true;
+    m_hairpinCircledTip     = false;
+    m_veloChange            = 0;
+    m_dynRange              = DynamicRange::PART;
+    m_singleNoteDynamics    = true;
+    m_veloChangeMethod      = ChangeMethod::NORMAL;
+    m_playHairpin           = true;
 }
 
 int Hairpin::subtype() const
 {
-    return static_cast<int>(_hairpinType);
+    return static_cast<int>(m_hairpinType);
 }
 
 DynamicType Hairpin::dynamicTypeFrom() const
@@ -353,10 +353,10 @@ DynamicType Hairpin::dynamicTypeTo() const
 
 void Hairpin::setHairpinType(HairpinType val)
 {
-    if (_hairpinType == val) {
+    if (m_hairpinType == val) {
         return;
     }
-    _hairpinType = val;
+    m_hairpinType = val;
     styleChanged();
 }
 
@@ -385,23 +385,23 @@ PropertyValue Hairpin::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::HAIRPIN_CIRCLEDTIP:
-        return _hairpinCircledTip;
+        return m_hairpinCircledTip;
     case Pid::HAIRPIN_TYPE:
-        return int(_hairpinType);
+        return int(m_hairpinType);
     case Pid::VELO_CHANGE:
-        return _veloChange;
+        return m_veloChange;
     case Pid::DYNAMIC_RANGE:
-        return int(_dynRange);
+        return int(m_dynRange);
     case Pid::HAIRPIN_HEIGHT:
-        return _hairpinHeight;
+        return m_hairpinHeight;
     case Pid::HAIRPIN_CONT_HEIGHT:
-        return _hairpinContHeight;
+        return m_hairpinContHeight;
     case Pid::SINGLE_NOTE_DYNAMICS:
-        return _singleNoteDynamics;
+        return m_singleNoteDynamics;
     case Pid::VELO_CHANGE_METHOD:
-        return _veloChangeMethod;
+        return m_veloChangeMethod;
     case Pid::PLAY:
-        return _playHairpin;
+        return m_playHairpin;
     default:
         return TextLineBase::getProperty(id);
     }
@@ -415,28 +415,28 @@ bool Hairpin::setProperty(Pid id, const PropertyValue& v)
 {
     switch (id) {
     case Pid::HAIRPIN_CIRCLEDTIP:
-        _hairpinCircledTip = v.toBool();
+        m_hairpinCircledTip = v.toBool();
         break;
     case Pid::HAIRPIN_TYPE:
         setHairpinType(HairpinType(v.toInt()));
         break;
     case Pid::VELO_CHANGE:
-        _veloChange = v.toInt();
+        m_veloChange = v.toInt();
         break;
     case Pid::DYNAMIC_RANGE:
-        _dynRange = v.value<DynamicRange>();
+        m_dynRange = v.value<DynamicRange>();
         break;
     case Pid::HAIRPIN_HEIGHT:
-        _hairpinHeight = v.value<Spatium>();
+        m_hairpinHeight = v.value<Spatium>();
         break;
     case Pid::HAIRPIN_CONT_HEIGHT:
-        _hairpinContHeight = v.value<Spatium>();
+        m_hairpinContHeight = v.value<Spatium>();
         break;
     case Pid::SINGLE_NOTE_DYNAMICS:
-        _singleNoteDynamics = v.toBool();
+        m_singleNoteDynamics = v.toBool();
         break;
     case Pid::VELO_CHANGE_METHOD:
-        _veloChangeMethod = v.value<ChangeMethod>();
+        m_veloChangeMethod = v.value<ChangeMethod>();
         break;
     case Pid::PLAY:
         setPlayHairpin(v.toBool());
@@ -465,19 +465,19 @@ PropertyValue Hairpin::propertyDefault(Pid id) const
         return DynamicRange::PART;
 
     case Pid::BEGIN_TEXT:
-        if (_hairpinType == HairpinType::CRESC_LINE) {
+        if (m_hairpinType == HairpinType::CRESC_LINE) {
             return style().styleV(Sid::hairpinCrescText);
         }
-        if (_hairpinType == HairpinType::DECRESC_LINE) {
+        if (m_hairpinType == HairpinType::DECRESC_LINE) {
             return style().styleV(Sid::hairpinDecrescText);
         }
         return String();
 
     case Pid::CONTINUE_TEXT:
-        if (_hairpinType == HairpinType::CRESC_LINE) {
+        if (m_hairpinType == HairpinType::CRESC_LINE) {
             return style().styleV(Sid::hairpinCrescContText);
         }
-        if (_hairpinType == HairpinType::DECRESC_LINE) {
+        if (m_hairpinType == HairpinType::DECRESC_LINE) {
             return style().styleV(Sid::hairpinDecrescContText);
         }
         return String();

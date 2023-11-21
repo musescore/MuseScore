@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __GROUPS__
-#define __GROUPS__
+#ifndef MU_ENGRAVING_GROUPS_H
+#define MU_ENGRAVING_GROUPS_H
 
 #include "durationtype.h"
 

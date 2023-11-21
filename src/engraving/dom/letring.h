@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __LETRING_H__
-#define __LETRING_H__
+#ifndef MU_ENGRAVING_LETRING_H
+#define MU_ENGRAVING_LETRING_H
 
 #include "chordtextlinebase.h"
 

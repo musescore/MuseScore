@@ -5318,7 +5318,7 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     }
 // if on a chord with special beam mode, layout an 'English'-style duration grid
     else {
-        TablatureDurationFont font = item->tab()->_durationFonts[item->tab()->_durationFontIdx];
+        const TablatureDurationFont& font = item->tab()->tabDurationFont();
         hbb   = font.gridStemHeight * spatium;         // bbox height is stem height
         wbb   = font.gridStemWidth * spatium;          // bbox width is stem width
         xbb   = -wbb * 0.5;                             // bbox is half at left and half at right of stem centre

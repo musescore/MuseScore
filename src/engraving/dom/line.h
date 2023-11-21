@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __LINE_H__
-#define __LINE_H__
+#ifndef MU_ENGRAVING_LINE_H
+#define MU_ENGRAVING_LINE_H
 
 #include "draw/types/color.h"
 #include "spanner.h"

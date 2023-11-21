@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __REHEARSALMARK_H__
-#define __REHEARSALMARK_H__
+#ifndef MU_ENGRAVING_REHEARSALMARK_H
+#define MU_ENGRAVING_REHEARSALMARK_H
 
 #include "textbase.h"
 
@@ -50,14 +50,14 @@ public:
     PropertyValue propertyDefault(Pid id) const override;
 
     void setType(Type type);
-    Type type() const { return _type; }
+    Type type() const { return m_type; }
 
     void styleChanged() override;
 
 private:
     void applyTypeStyle();
 
-    Type _type = Type::Main;
+    Type m_type = Type::Main;
 };
 } // namespace mu::engraving
 #endif

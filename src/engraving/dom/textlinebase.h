@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TEXTLINEBASE_H__
-#define __TEXTLINEBASE_H__
+#ifndef MU_ENGRAVING_TEXTLINEBASE_H
+#define MU_ENGRAVING_TEXTLINEBASE_H
 
 #include "types/types.h"
 

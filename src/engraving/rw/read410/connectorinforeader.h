@@ -46,8 +46,8 @@ public:
     ConnectorInfoReader(XmlReader& e, ReadContext* ctx, EngravingItem* current, int track = -1);
     ConnectorInfoReader(XmlReader& e, ReadContext* ctx, Score* current, int track = -1);
 
-    ConnectorInfoReader* prev() const { return static_cast<ConnectorInfoReader*>(_prev); }
-    ConnectorInfoReader* next() const { return static_cast<ConnectorInfoReader*>(_next); }
+    ConnectorInfoReader* prev() const { return static_cast<ConnectorInfoReader*>(m_prev); }
+    ConnectorInfoReader* next() const { return static_cast<ConnectorInfoReader*>(m_next); }
 
     EngravingItem* connector();
     const EngravingItem* connector() const;

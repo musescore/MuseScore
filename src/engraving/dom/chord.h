@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __CHORD_H__
-#define __CHORD_H__
+#ifndef MU_ENGRAVING_CHORD_H
+#define MU_ENGRAVING_CHORD_H
 
 /**
  \file

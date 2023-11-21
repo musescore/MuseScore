@@ -32,14 +32,13 @@ namespace mu::engraving {
 //   UpdateState
 //---------------------------------------------------------
 
-class UpdateState
+struct UpdateState
 {
-public:
-    mu::RectF refresh;                 ///< area to update, canvas coordinates
-    bool _playNote   { false };     ///< play selected note after command
-    bool _playChord  { false };     ///< play whole chord for the selected note
-    bool _selectionChanged { false };
-    std::list<EngravingObject*> _deleteList;
+    mu::RectF refresh;           ///< area to update, canvas coordinates
+    bool playNote = false;       ///< play selected note after command
+    bool playChord = false;      ///< play whole chord for the selected note
+    bool selectionChanged = false;
+    std::list<EngravingObject*> deleteList;
 };
 
 //---------------------------------------------------------
@@ -52,48 +51,49 @@ public:
 
 class CmdState
 {
-    UpdateMode _updateMode { UpdateMode::DoNothing };
-    Fraction _startTick { -1, 1 };            // start tick for mode LayoutTick
-    Fraction _endTick   { -1, 1 };              // end tick for mode LayoutTick
-    staff_idx_t _startStaff = mu::nidx;
-    staff_idx_t _endStaff = mu::nidx;
-    const EngravingItem* _el = nullptr;
-    const MeasureBase* _mb = nullptr;
-    bool _oneElement = true;
-    bool _oneMeasureBase = true;
-
-    bool _locked = false;
-
-    void setMeasureBase(const MeasureBase* mb);
-
 public:
     LayoutFlags layoutFlags;
 
-    bool _excerptsChanged     { false };
-    bool _instrumentsChanged  { false };
+    bool excerptsChanged = false;
+    bool instrumentsChanged = false;
 
     void reset();
-    UpdateMode updateMode() const { return _updateMode; }
+    UpdateMode updateMode() const { return m_updateMode; }
     void setUpdateMode(UpdateMode m);
     void _setUpdateMode(UpdateMode m);
-    bool layoutRange() const { return _updateMode == UpdateMode::Layout; }
-    bool updateAll() const { return int(_updateMode) >= int(UpdateMode::UpdateAll); }
-    bool updateRange() const { return _updateMode == UpdateMode::Update; }
+    bool layoutRange() const { return m_updateMode == UpdateMode::Layout; }
+    bool updateAll() const { return int(m_updateMode) >= int(UpdateMode::UpdateAll); }
+    bool updateRange() const { return m_updateMode == UpdateMode::Update; }
     void setTick(const Fraction& t);
     void setStaff(staff_idx_t staff);
     void setElement(const EngravingItem* e);
     void unsetElement(const EngravingItem* e);
-    Fraction startTick() const { return _startTick; }
-    Fraction endTick() const { return _endTick; }
-    staff_idx_t startStaff() const { return _startStaff; }
-    staff_idx_t endStaff() const { return _endStaff; }
+    Fraction startTick() const { return m_startTick; }
+    Fraction endTick() const { return m_endTick; }
+    staff_idx_t startStaff() const { return m_startStaff; }
+    staff_idx_t endStaff() const { return m_endStaff; }
     const EngravingItem* element() const;
 
-    void lock() { _locked = true; }
-    void unlock() { _locked = false; }
+    void lock() { m_locked = true; }
+    void unlock() { m_locked = false; }
 #ifndef NDEBUG
     void dump();
 #endif
+
+private:
+    void setMeasureBase(const MeasureBase* mb);
+
+    UpdateMode m_updateMode = UpdateMode::DoNothing;
+    Fraction m_startTick { -1, 1 };            // start tick for mode LayoutTick
+    Fraction m_endTick   { -1, 1 };              // end tick for mode LayoutTick
+    staff_idx_t m_startStaff = mu::nidx;
+    staff_idx_t m_endStaff = mu::nidx;
+    const EngravingItem* m_el = nullptr;
+    const MeasureBase* m_mb = nullptr;
+    bool m_oneElement = true;
+    bool m_oneMeasureBase = true;
+
+    bool m_locked = false;
 };
 }
 

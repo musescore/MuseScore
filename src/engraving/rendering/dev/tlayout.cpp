@@ -684,7 +684,7 @@ void TLayout::layoutAmbitus(const Ambitus* item, Ambitus::LayoutData* ldata, con
 }
 
 void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, const LayoutConfiguration& conf,
-                             bool includeCrossStaffHeight)
+                             bool /*includeCrossStaffHeight*/)
 {
     //! NOTE Can be edited and relayout,
     //! in this case the reset layout data has not yet been done
@@ -5355,7 +5355,7 @@ void TLayout::layoutTabDurationSymbol(const TabDurationSymbol* item, TabDuration
     }
 // if on a chord with special beam mode, layout an 'English'-style duration grid
     else {
-        TablatureDurationFont font = item->tab()->_durationFonts[item->tab()->_durationFontIdx];
+        const TablatureDurationFont& font = item->tab()->tabDurationFont();
         hbb   = font.gridStemHeight * spatium;         // bbox height is stem height
         wbb   = font.gridStemWidth * spatium;          // bbox width is stem width
         xbb   = -wbb * 0.5;                             // bbox is half at left and half at right of stem centre

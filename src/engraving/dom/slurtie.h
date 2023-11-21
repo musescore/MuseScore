@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SLURTIE_H__
-#define __SLURTIE_H__
+#ifndef MU_ENGRAVING_SLURTIE_H
+#define MU_ENGRAVING_SLURTIE_H
 
 #include "spanner.h"
 

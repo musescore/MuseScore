@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TIEMAP_H__
-#define __TIEMAP_H__
+#ifndef MU_ENGRAVING_TIEMAP_H
+#define MU_ENGRAVING_TIEMAP_H
 
 #include "elementmap.h"
 

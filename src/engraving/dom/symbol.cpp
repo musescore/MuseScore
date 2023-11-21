@@ -113,15 +113,15 @@ bool Symbol::setProperty(Pid propertyId, const PropertyValue& v)
 FSymbol::FSymbol(EngravingItem* parent)
     : BSymbol(ElementType::FSYMBOL, parent)
 {
-    _code = 0;
-    _font.setNoFontMerging(true);
+    m_code = 0;
+    m_font.setNoFontMerging(true);
 }
 
 FSymbol::FSymbol(const FSymbol& s)
     : BSymbol(s)
 {
-    _font = s._font;
-    _code = s._code;
+    m_font = s.m_font;
+    m_code = s.m_code;
 }
 
 //---------------------------------------------------------
@@ -133,7 +133,7 @@ FSymbol::FSymbol(const FSymbol& s)
 
 String FSymbol::toString() const
 {
-    return String::fromUcs4(_code);
+    return String::fromUcs4(m_code);
 }
 
 //---------------------------------------------------------
@@ -154,7 +154,7 @@ String FSymbol::accessibleInfo() const
 
 void FSymbol::setFont(const mu::draw::Font& f)
 {
-    _font = f;
-    _font.setNoFontMerging(true);
+    m_font = f;
+    m_font.setNoFontMerging(true);
 }
 }

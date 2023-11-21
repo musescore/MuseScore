@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __INSTRCHANGE_H__
-#define __INSTRCHANGE_H__
+#ifndef MU_ENGRAVING_INSTRCHANGE_H
+#define MU_ENGRAVING_INSTRCHANGE_H
 
 #include "textbase.h"
 
@@ -39,9 +39,6 @@ class InstrumentChange final : public TextBase
     OBJECT_ALLOCATOR(engraving, InstrumentChange)
     DECLARE_CLASSOF(ElementType::INSTRUMENT_CHANGE)
 
-    Instrument* _instrument;    // Staff holds ownership if part of score
-    bool _init = false;   // Set if the instrument has been set by the user, as there is no other way to tell.
-
 public:
     InstrumentChange(EngravingItem* parent);
     InstrumentChange(const Instrument&, EngravingItem* parent);
@@ -50,23 +47,28 @@ public:
 
     InstrumentChange* clone() const override { return new InstrumentChange(*this); }
 
-    Instrument* instrument() const { return _instrument; }
-    void setInstrument(Instrument* i) { _instrument = i; }
-    void setInstrument(Instrument&& i) { *_instrument = i; }
+    Instrument* instrument() const { return m_instrument; }
+    void setInstrument(Instrument* i) { m_instrument = i; }
+    void setInstrument(Instrument&& i) { *m_instrument = i; }
     void setInstrument(const Instrument& i);
     void setupInstrument(const Instrument* instrument);
 
     std::vector<KeySig*> keySigs(bool all=false) const;
     std::vector<Clef*> clefs() const;
 
-    bool init() const { return _init; }
-    void setInit(bool init) { _init = init; }
+    bool init() const { return m_init; }
+    void setInit(bool init) { m_init = init; }
 
     Segment* segment() const { return toSegment(explicitParent()); }
 
     PropertyValue propertyDefault(Pid) const override;
 
     bool placeMultiple() const override { return false; }
+
+private:
+
+    Instrument* m_instrument = nullptr;     // Staff holds ownership if part of score
+    bool m_init = false;                    // Set if the instrument has been set by the user, as there is no other way to tell.
 };
 } // namespace mu::engraving
 #endif

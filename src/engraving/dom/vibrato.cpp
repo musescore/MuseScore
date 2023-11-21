@@ -53,15 +53,15 @@ void VibratoSegment::symbolLine(SymId start, SymId fill)
     double mag = magS();
     IEngravingFontPtr f = score()->engravingFont();
 
-    _symbols.clear();
-    _symbols.push_back(start);
+    m_symbols.clear();
+    m_symbols.push_back(start);
     double w1 = f->advance(start, mag);
     double w2 = f->advance(fill, mag);
     int n    = lrint((w - w1) / w2);
     for (int i = 0; i < n; ++i) {
-        _symbols.push_back(fill);
+        m_symbols.push_back(fill);
     }
-    RectF r(f->bbox(_symbols, mag));
+    RectF r(f->bbox(m_symbols, mag));
     setbbox(r);
 }
 
@@ -73,17 +73,17 @@ void VibratoSegment::symbolLine(SymId start, SymId fill, SymId end)
     double mag = magS();
     IEngravingFontPtr f = score()->engravingFont();
 
-    _symbols.clear();
-    _symbols.push_back(start);
+    m_symbols.clear();
+    m_symbols.push_back(start);
     double w1 = f->bbox(start, mag).width();
     double w2 = f->width(fill, mag);
     double w3 = f->width(end, mag);
     int n    = lrint((w - w1 - w3) / w2);
     for (int i = 0; i < n; ++i) {
-        _symbols.push_back(fill);
+        m_symbols.push_back(fill);
     }
-    _symbols.push_back(end);
-    RectF r(f->bbox(_symbols, mag));
+    m_symbols.push_back(end);
+    RectF r(f->bbox(m_symbols, mag));
     setbbox(r);
 }
 
@@ -116,7 +116,7 @@ Vibrato::Vibrato(EngravingItem* parent)
     : SLine(ElementType::VIBRATO, parent)
 {
     initElementStyle(&vibratoStyle);
-    _vibratoType = VibratoType::GUITAR_VIBRATO;
+    m_vibratoType = VibratoType::GUITAR_VIBRATO;
     setPlayArticulation(true);
 }
 

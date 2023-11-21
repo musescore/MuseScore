@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __IMAGE_CACHE_H__
-#define __IMAGE_CACHE_H__
+#ifndef MU_ENGRAVING_IMAGE_CACHE_H
+#define MU_ENGRAVING_IMAGE_CACHE_H
 
 #include <list>
 
@@ -44,28 +44,30 @@ class ImageStoreItem
 {
     INJECT(ICryptographicHash, cryptographicHash)
 
-    std::list<Image*> _references;
-    io::path_t _path;                  // original location of image
-    String _type;                  // image type (file extension)
-    mu::ByteArray _buffer;
-    mu::ByteArray _hash;               // 16 byte md4 hash of _buffer
-
 public:
     ImageStoreItem(const io::path_t& p);
     void dereference(Image*);
     void reference(Image*);
 
-    const io::path_t& path() const { return _path; }
-    mu::ByteArray& buffer() { return _buffer; }
-    const mu::ByteArray& buffer() const { return _buffer; }
-    bool loaded() const { return !_buffer.empty(); }
+    const io::path_t& path() const { return m_path; }
+    mu::ByteArray& buffer() { return m_buffer; }
+    const mu::ByteArray& buffer() const { return m_buffer; }
+    bool loaded() const { return !m_buffer.empty(); }
     void setPath(const io::path_t& val);
     bool isUsed(Score*) const;
-    bool isUsed() const { return !_references.empty(); }
+    bool isUsed() const { return !m_references.empty(); }
     void load();
     String hashName() const;
-    const mu::ByteArray& hash() const { return _hash; }
-    void set(const mu::ByteArray& b, const mu::ByteArray& h) { _buffer = b; _hash = h; }
+    const mu::ByteArray& hash() const { return m_hash; }
+    void set(const mu::ByteArray& b, const mu::ByteArray& h) { m_buffer = b; m_hash = h; }
+
+private:
+
+    std::list<Image*> m_references;
+    io::path_t m_path;                  // original location of image
+    String m_type;                      // image type (file extension)
+    mu::ByteArray m_buffer;
+    mu::ByteArray m_hash;               // 16 byte md4 hash of _buffer
 };
 
 //---------------------------------------------------------
@@ -75,9 +77,6 @@ public:
 class ImageStore
 {
     INJECT(ICryptographicHash, cryptographicHash)
-
-    typedef std::vector<ImageStoreItem*> ItemList;
-    ItemList _items;
 
 public:
     ImageStore() = default;
@@ -89,13 +88,18 @@ public:
     ImageStoreItem* add(const io::path_t& path, const mu::ByteArray&);
     void clearUnused();
 
+    typedef std::vector<ImageStoreItem*> ItemList;
     typedef ItemList::iterator iterator;
     typedef ItemList::const_iterator const_iterator;
 
-    iterator begin() { return _items.begin(); }
-    const_iterator begin() const { return _items.begin(); }
-    iterator end() { return _items.end(); }
-    const_iterator end() const { return _items.end(); }
+    iterator begin() { return m_items.begin(); }
+    const_iterator begin() const { return m_items.begin(); }
+    iterator end() { return m_items.end(); }
+    const_iterator end() const { return m_items.end(); }
+
+private:
+
+    ItemList m_items;
 };
 
 extern ImageStore imageStore;       // this is the global imageStore

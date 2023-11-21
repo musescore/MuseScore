@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ELEMENTGROUP_H__
-#define __ELEMENTGROUP_H__
+#ifndef MU_ENGRAVING_ELEMENTGROUP_H
+#define MU_ENGRAVING_ELEMENTGROUP_H
 
 #include "global/allocator.h"
 #include "draw/types/geometry.h"
@@ -73,14 +73,16 @@ class SingleElementGroup final : public ElementGroup
 {
     OBJECT_ALLOCATOR(engraving, SingleElementGroup)
 
-    EngravingItem* e;
 public:
     SingleElementGroup(EngravingItem* el)
-        : e(el) {}
+        : m_e(el) {}
 
     void startDrag(EditData& ed) override;
     mu::RectF drag(EditData& ed) override;
     void endDrag(EditData& ed) override;
+
+private:
+    EngravingItem* m_e = nullptr;
 };
 } // namespace mu::engraving
 

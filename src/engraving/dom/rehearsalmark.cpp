@@ -67,16 +67,16 @@ RehearsalMark::RehearsalMark(Segment* parent)
 
 void RehearsalMark::setType(RehearsalMark::Type type)
 {
-    if (type == _type) {
+    if (type == m_type) {
         return;
     }
-    _type = type;
+    m_type = type;
     applyTypeStyle();
 }
 
 void RehearsalMark::applyTypeStyle()
 {
-    const auto& elemStyleMap = (_type == Type::Main ? mainRehearsalMarkStyle : additionalRehearsalMarkStyle);
+    const auto& elemStyleMap = (m_type == Type::Main ? mainRehearsalMarkStyle : additionalRehearsalMarkStyle);
     for (const auto& elem : elemStyleMap) {
         if (propertyFlags(elem.pid) == PropertyFlags::STYLED) {
             setProperty(elem.pid, style().styleV(elem.sid));

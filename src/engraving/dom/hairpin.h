@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __HAIRPIN_H__
-#define __HAIRPIN_H__
+#ifndef MU_ENGRAVING_HAIRPIN_H
+#define MU_ENGRAVING_HAIRPIN_H
 
 #include "textlinebase.h"
 
@@ -97,19 +97,6 @@ class Hairpin final : public TextLineBase
     OBJECT_ALLOCATOR(engraving, Hairpin)
     DECLARE_CLASSOF(ElementType::HAIRPIN)
 
-    HairpinType _hairpinType { HairpinType::INVALID };
-    int _veloChange;
-    bool _hairpinCircledTip;
-    DynamicRange _dynRange;
-    bool _singleNoteDynamics;
-    ChangeMethod _veloChangeMethod;
-    bool _playHairpin;
-
-    Spatium _hairpinHeight;
-    Spatium _hairpinContHeight;
-
-    Sid getPropertyStyle(Pid) const override;
-
 public:
     Hairpin(Segment* parent);
 
@@ -120,44 +107,44 @@ public:
     DynamicType dynamicTypeFrom() const;
     DynamicType dynamicTypeTo() const;
 
-    HairpinType hairpinType() const { return _hairpinType; }
+    HairpinType hairpinType() const { return m_hairpinType; }
     void setHairpinType(HairpinType val);
 
     Segment* segment() const { return (Segment*)explicitParent(); }
     LineSegment* createLineSegment(System* parent) override;
 
-    bool hairpinCircledTip() const { return _hairpinCircledTip; }
-    void setHairpinCircledTip(bool val) { _hairpinCircledTip = val; }
+    bool hairpinCircledTip() const { return m_hairpinCircledTip; }
+    void setHairpinCircledTip(bool val) { m_hairpinCircledTip = val; }
 
-    int veloChange() const { return _veloChange; }
-    void setVeloChange(int v) { _veloChange = v; }
+    int veloChange() const { return m_veloChange; }
+    void setVeloChange(int v) { m_veloChange = v; }
 
-    DynamicRange dynRange() const { return _dynRange; }
-    void setDynRange(DynamicRange t) { _dynRange = t; }
+    DynamicRange dynRange() const { return m_dynRange; }
+    void setDynRange(DynamicRange t) { m_dynRange = t; }
 
-    Spatium hairpinHeight() const { return _hairpinHeight; }
-    void setHairpinHeight(Spatium val) { _hairpinHeight = val; }
+    Spatium hairpinHeight() const { return m_hairpinHeight; }
+    void setHairpinHeight(Spatium val) { m_hairpinHeight = val; }
 
-    Spatium hairpinContHeight() const { return _hairpinContHeight; }
-    void setHairpinContHeight(Spatium val) { _hairpinContHeight = val; }
+    Spatium hairpinContHeight() const { return m_hairpinContHeight; }
+    void setHairpinContHeight(Spatium val) { m_hairpinContHeight = val; }
 
-    bool singleNoteDynamics() const { return _singleNoteDynamics; }
-    void setSingleNoteDynamics(bool val) { _singleNoteDynamics = val; }
+    bool singleNoteDynamics() const { return m_singleNoteDynamics; }
+    void setSingleNoteDynamics(bool val) { m_singleNoteDynamics = val; }
 
-    ChangeMethod veloChangeMethod() const { return _veloChangeMethod; }
-    void setVeloChangeMethod(ChangeMethod val) { _veloChangeMethod = val; }
+    ChangeMethod veloChangeMethod() const { return m_veloChangeMethod; }
+    void setVeloChangeMethod(ChangeMethod val) { m_veloChangeMethod = val; }
 
-    bool playHairpin() const { return _playHairpin; }
-    void setPlayHairpin(bool val) { _playHairpin = val; }
+    bool playHairpin() const { return m_playHairpin; }
+    void setPlayHairpin(bool val) { m_playHairpin = val; }
 
     bool isCrescendo() const
     {
-        return _hairpinType == HairpinType::CRESC_HAIRPIN || _hairpinType == HairpinType::CRESC_LINE;
+        return m_hairpinType == HairpinType::CRESC_HAIRPIN || m_hairpinType == HairpinType::CRESC_LINE;
     }
 
     bool isDecrescendo() const
     {
-        return _hairpinType == HairpinType::DECRESC_HAIRPIN || _hairpinType == HairpinType::DECRESC_LINE;
+        return m_hairpinType == HairpinType::DECRESC_HAIRPIN || m_hairpinType == HairpinType::DECRESC_LINE;
     }
 
     PropertyValue getProperty(Pid id) const override;
@@ -167,13 +154,28 @@ public:
     String accessibleInfo() const override;
     bool isLineType() const
     {
-        return _hairpinType == HairpinType::CRESC_LINE || _hairpinType == HairpinType::DECRESC_LINE;
+        return m_hairpinType == HairpinType::CRESC_LINE || m_hairpinType == HairpinType::DECRESC_LINE;
     }
+
+private:
+
+    Sid getPropertyStyle(Pid) const override;
+
+    HairpinType m_hairpinType = HairpinType::INVALID;
+    int m_veloChange = 0;
+    bool m_hairpinCircledTip = false;
+    DynamicRange m_dynRange = DynamicRange::STAFF;
+    bool m_singleNoteDynamics = false;
+    ChangeMethod m_veloChangeMethod = ChangeMethod::NORMAL;
+    bool m_playHairpin = false;
+
+    Spatium m_hairpinHeight;
+    Spatium m_hairpinContHeight;
 };
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::HairpinType);
+Q_DECLARE_METATYPE(mu::engraving::HairpinType)
 #endif
 
 #endif

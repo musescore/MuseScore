@@ -41,16 +41,16 @@ namespace mu::engraving {
 Spacer::Spacer(Measure* parent)
     : EngravingItem(ElementType::SPACER, parent)
 {
-    _spacerType = SpacerType::UP;
-    _gap = 0.0;
+    m_spacerType = SpacerType::UP;
+    m_gap = 0.0;
 }
 
 Spacer::Spacer(const Spacer& s)
     : EngravingItem(s)
 {
-    _gap        = s._gap;
+    m_gap        = s.m_gap;
     m_path        = s.m_path;
-    _spacerType = s._spacerType;
+    m_spacerType = s.m_spacerType;
 }
 
 //---------------------------------------------------------
@@ -64,7 +64,7 @@ void Spacer::layout0()
     m_path    = PainterPath();
     double w = _spatium;
     double b = w * .5;
-    double h = explicitParent() ? _gap : std::min(_gap.val(), spatium() * 4.0);      // limit length for palette
+    double h = explicitParent() ? m_gap : std::min(m_gap.val(), spatium() * 4.0);      // limit length for palette
 
     switch (spacerType()) {
     case SpacerType::DOWN:
@@ -105,7 +105,7 @@ void Spacer::layout0()
 
 void Spacer::setGap(Millimetre sp)
 {
-    _gap = sp;
+    m_gap = sp;
     layout0();
 }
 
@@ -115,7 +115,7 @@ void Spacer::setGap(Millimetre sp)
 
 void Spacer::spatiumChanged(double ov, double nv)
 {
-    _gap = (_gap / ov) * nv;
+    m_gap = (m_gap / ov) * nv;
     layout0();
 }
 
@@ -140,14 +140,14 @@ void Spacer::editDrag(EditData& ed)
     switch (spacerType()) {
     case SpacerType::DOWN:
     case SpacerType::FIXED:
-        _gap += s;
+        m_gap += s;
         break;
     case SpacerType::UP:
-        _gap -= s;
+        m_gap -= s;
         break;
     }
-    if (_gap.val() < spatium() * 2.0) {
-        _gap = Millimetre(spatium() * 2);
+    if (m_gap.val() < spatium() * 2.0) {
+        m_gap = Millimetre(spatium() * 2);
     }
     layout0();
     triggerLayout();
@@ -164,7 +164,7 @@ std::vector<mu::PointF> Spacer::gripsPositions(const EditData&) const
     switch (spacerType()) {
     case SpacerType::DOWN:
     case SpacerType::FIXED:
-        p = PointF(_spatium * .5, _gap);
+        p = PointF(_spatium * .5, m_gap);
         break;
     case SpacerType::UP:
         p = PointF(_spatium * .5, 0.0);

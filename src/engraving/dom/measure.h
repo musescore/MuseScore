@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MEASURE_H__
-#define __MEASURE_H__
+#ifndef MU_ENGRAVING_MEASURE_H
+#define MU_ENGRAVING_MEASURE_H
 
 /**
  \file

@@ -53,11 +53,11 @@ const Fraction Part::MAIN_INSTRUMENT_TICK = Fraction(-1, 1);
 Part::Part(Score* s)
     : EngravingObject(ElementType::PART, s)
 {
-    _color   = DEFAULT_COLOR;
-    _show    = true;
-    _soloist = false;
-    _instruments.setInstrument(new Instrument, -1);     // default instrument
-    _preferSharpFlat = PreferSharpFlat::AUTO;
+    m_color   = DEFAULT_COLOR;
+    m_show    = true;
+    m_soloist = false;
+    m_instruments.setInstrument(new Instrument, -1);     // default instrument
+    m_preferSharpFlat = PreferSharpFlat::AUTO;
 }
 
 //---------------------------------------------------------
@@ -66,18 +66,18 @@ Part::Part(Score* s)
 
 void Part::initFromInstrTemplate(const InstrumentTemplate* t)
 {
-    _partName = !t->longNames.empty() ? t->longNames.front().name() : t->trackName;
+    m_partName = !t->longNames.empty() ? t->longNames.front().name() : t->trackName;
     setInstrument(Instrument::fromTemplate(t));
 }
 
 const ID& Part::id() const
 {
-    return _id;
+    return m_id;
 }
 
 void Part::setId(const ID& id)
 {
-    _id = id;
+    m_id = id;
 }
 
 Part* Part::clone() const
@@ -91,7 +91,7 @@ Part* Part::clone() const
 
 Staff* Part::staff(staff_idx_t idx) const
 {
-    return _staves[idx];
+    return m_staves[idx];
 }
 
 //---------------------------------------------------------
@@ -100,7 +100,7 @@ Staff* Part::staff(staff_idx_t idx) const
 
 String Part::familyId() const
 {
-    if (_instruments.empty()) {
+    if (m_instruments.empty()) {
         return String(u"");
     }
 
@@ -117,11 +117,11 @@ const Part* Part::masterPart() const
     if (score()->isMaster()) {
         return this;
     }
-    if (_staves.empty()) {
+    if (m_staves.empty()) {
         return this;
     }
 
-    Staff* st = _staves[0];
+    Staff* st = m_staves[0];
     LinkedObjects* links = st->links();
     if (!links) {
         return this;
@@ -148,19 +148,19 @@ Part* Part::masterPart()
 
 size_t Part::nstaves() const
 {
-    return _staves.size();
+    return m_staves.size();
 }
 
 const std::vector<Staff*>& Part::staves() const
 {
-    return _staves;
+    return m_staves;
 }
 
 std::set<staff_idx_t> Part::staveIdxList() const
 {
     std::set<staff_idx_t> result;
 
-    for (const Staff* stave : _staves) {
+    for (const Staff* stave : m_staves) {
         if (!stave) {
             continue;
         }
@@ -173,12 +173,12 @@ std::set<staff_idx_t> Part::staveIdxList() const
 
 void Part::appendStaff(Staff* staff)
 {
-    _staves.push_back(staff);
+    m_staves.push_back(staff);
 }
 
 void Part::clearStaves()
 {
-    _staves.clear();
+    m_staves.clear();
 }
 
 //---------------------------------------------------------
@@ -201,7 +201,7 @@ void Part::setShortNames(std::list<StaffName>& name, const Fraction& tick)
 
 void Part::setStaves(int n)
 {
-    int ns = static_cast<int>(_staves.size());
+    int ns = static_cast<int>(m_staves.size());
     if (n < ns) {
         LOGD("Part::setStaves(): remove staves not implemented!");
         return;
@@ -228,10 +228,10 @@ void Part::setStaves(int n)
 
 void Part::insertStaff(Staff* staff, staff_idx_t idx)
 {
-    if (idx >= _staves.size()) {
-        idx = _staves.size();
+    if (idx >= m_staves.size()) {
+        idx = m_staves.size();
     }
-    _staves.insert(_staves.begin() + idx, staff);
+    m_staves.insert(m_staves.begin() + idx, staff);
     staff->setPart(this);
 }
 
@@ -241,7 +241,7 @@ void Part::insertStaff(Staff* staff, staff_idx_t idx)
 
 void Part::removeStaff(Staff* staff)
 {
-    if (!mu::remove(_staves, staff)) {
+    if (!mu::remove(m_staves, staff)) {
         LOGD("Part::removeStaff: not found %p", staff);
         return;
     }
@@ -272,7 +272,7 @@ int Part::midiProgram() const
 //---------------------------------------------------------
 int Part::capoFret() const
 {
-    return _capoFret;
+    return m_capoFret;
 }
 
 //---------------------------------------------------------
@@ -280,7 +280,7 @@ int Part::capoFret() const
 //---------------------------------------------------------
 void Part::setCapoFret(int capoFret)
 {
-    _capoFret = capoFret;
+    m_capoFret = capoFret;
 }
 
 //---------------------------------------------------------
@@ -327,30 +327,30 @@ void Part::setMidiChannel(int ch, int port, const Fraction& tick)
 
 void Part::setInstrument(Instrument* i, Fraction tick)
 {
-    _instruments.setInstrument(i, tick.ticks());
+    m_instruments.setInstrument(i, tick.ticks());
 }
 
 void Part::setInstrument(Instrument* i, int tick)
 {
-    _instruments.setInstrument(i, tick);
+    m_instruments.setInstrument(i, tick);
 }
 
 void Part::setInstrument(const Instrument&& i, Fraction tick)
 {
-    _instruments.setInstrument(new Instrument(i), tick.ticks());
+    m_instruments.setInstrument(new Instrument(i), tick.ticks());
 }
 
 void Part::setInstrument(const Instrument& i, Fraction tick)
 {
-    _instruments.setInstrument(new Instrument(i), tick.ticks());
+    m_instruments.setInstrument(new Instrument(i), tick.ticks());
 }
 
 void Part::setInstruments(const InstrumentList& instruments)
 {
-    _instruments.clear();
+    m_instruments.clear();
 
     for (auto it = instruments.begin(); it != instruments.end(); ++it) {
-        _instruments.setInstrument(it->second, it->first);
+        m_instruments.setInstrument(it->second, it->first);
     }
 }
 
@@ -360,12 +360,12 @@ void Part::setInstruments(const InstrumentList& instruments)
 
 void Part::removeInstrument(const Fraction& tick)
 {
-    auto i = _instruments.find(tick.ticks());
-    if (i == _instruments.end()) {
+    auto i = m_instruments.find(tick.ticks());
+    if (i == m_instruments.end()) {
         LOGD("Part::removeInstrument: not found at tick %d", tick.ticks());
         return;
     }
-    _instruments.erase(i);
+    m_instruments.erase(i);
 }
 
 //---------------------------------------------------------
@@ -374,10 +374,10 @@ void Part::removeInstrument(const Fraction& tick)
 
 void Part::removeNonPrimaryInstruments()
 {
-    auto it = _instruments.begin();
-    while (it != _instruments.end()) {
+    auto it = m_instruments.begin();
+    while (it != m_instruments.end()) {
         if (it->first != -1) {
-            it = _instruments.erase(it);
+            it = m_instruments.erase(it);
             continue;
         }
         ++it;
@@ -390,7 +390,7 @@ void Part::removeNonPrimaryInstruments()
 
 Instrument* Part::instrument(Fraction tick)
 {
-    return _instruments.instrument(tick.ticks());
+    return m_instruments.instrument(tick.ticks());
 }
 
 //---------------------------------------------------------
@@ -399,12 +399,12 @@ Instrument* Part::instrument(Fraction tick)
 
 const Instrument* Part::instrument(Fraction tick) const
 {
-    return _instruments.instrument(tick.ticks());
+    return m_instruments.instrument(tick.ticks());
 }
 
 const Instrument* Part::instrumentById(const std::string& id) const
 {
-    for (const auto& pair: _instruments) {
+    for (const auto& pair: m_instruments) {
         if (pair.second->id().toStdString() == id) {
             return pair.second;
         }
@@ -419,7 +419,7 @@ const Instrument* Part::instrumentById(const std::string& id) const
 
 const InstrumentList& Part::instruments() const
 {
-    return _instruments;
+    return m_instruments;
 }
 
 const StringData* Part::stringData(const Fraction& tick, staff_idx_t staffIdx) const
@@ -537,7 +537,7 @@ void Part::setShortName(const String& s)
 
 void Part::setLongNameAll(const String& s)
 {
-    for (auto instrument : _instruments) {
+    for (auto instrument : m_instruments) {
         instrument.second->setLongName(s);
     }
 }
@@ -548,7 +548,7 @@ void Part::setLongNameAll(const String& s)
 
 void Part::setShortNameAll(const String& s)
 {
-    for (auto instrument : _instruments) {
+    for (auto instrument : m_instruments) {
         instrument.second->setShortName(s);
     }
 }
@@ -597,7 +597,7 @@ PropertyValue Part::getProperty(Pid id) const
 {
     switch (id) {
     case Pid::VISIBLE:
-        return PropertyValue(_show);
+        return PropertyValue(m_show);
     case Pid::USE_DRUMSET:
         return instrument()->useDrumset();
     case Pid::PREFER_SHARP_FLAT:
@@ -637,11 +637,11 @@ bool Part::setProperty(Pid id, const PropertyValue& property)
 
 track_idx_t Part::startTrack() const
 {
-    IF_ASSERT_FAILED(!_staves.empty()) {
+    IF_ASSERT_FAILED(!m_staves.empty()) {
         return mu::nidx;
     }
 
-    return _staves.front()->idx() * VOICES;
+    return m_staves.front()->idx() * VOICES;
 }
 
 //---------------------------------------------------------
@@ -650,11 +650,11 @@ track_idx_t Part::startTrack() const
 
 track_idx_t Part::endTrack() const
 {
-    IF_ASSERT_FAILED(!_staves.empty()) {
+    IF_ASSERT_FAILED(!m_staves.empty()) {
         return mu::nidx;
     }
 
-    return _staves.back()->idx() * VOICES + VOICES;
+    return m_staves.back()->idx() * VOICES + VOICES;
 }
 
 InstrumentTrackIdList Part::instrumentTrackIdList() const
@@ -662,10 +662,10 @@ InstrumentTrackIdList Part::instrumentTrackIdList() const
     InstrumentTrackIdList result;
     std::set<std::string> seen;
 
-    for (const auto& pair : _instruments) {
+    for (const auto& pair : m_instruments) {
         std::string instrId = pair.second->id().toStdString();
         if (seen.insert(instrId).second) {
-            result.push_back({ _id, instrId });
+            result.push_back({ m_id, instrId });
         }
     }
 
@@ -676,8 +676,8 @@ InstrumentTrackIdSet Part::instrumentTrackIdSet() const
 {
     InstrumentTrackIdSet result;
 
-    for (const auto& pair : _instruments) {
-        result.insert({ _id, pair.second->id().toStdString() });
+    for (const auto& pair : m_instruments) {
+        result.insert({ m_id, pair.second->id().toStdString() });
     }
 
     return result;
@@ -699,9 +699,9 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
         // remove instruments between tickpos >= tick and tickpos < (tick+len)
         // ownership goes back to class InstrumentChange()
 
-        auto si = _instruments.lower_bound(tick.ticks());
-        auto ei = _instruments.lower_bound((tick - len).ticks());
-        _instruments.erase(si, ei);
+        auto si = m_instruments.lower_bound(tick.ticks());
+        auto ei = m_instruments.lower_bound((tick - len).ticks());
+        m_instruments.erase(si, ei);
 
         // remove harp pedal diagrams between tickpo >= tick
         harpDiagrams.erase(harpDiagrams.lower_bound(tick.ticks()), harpDiagrams.lower_bound((tick - len).ticks()));
@@ -709,13 +709,13 @@ void Part::insertTime(const Fraction& tick, const Fraction& len)
 
     InstrumentList il;
 
-    for (auto i = _instruments.lower_bound(tick.ticks()); i != _instruments.end();) {
+    for (auto i = m_instruments.lower_bound(tick.ticks()); i != m_instruments.end();) {
         Instrument* instrument = i->second;
         int t = i->first;
-        _instruments.erase(i++);
+        m_instruments.erase(i++);
         il[t + len.ticks()] = instrument;
     }
-    _instruments.insert(il.begin(), il.end());
+    m_instruments.insert(il.begin(), il.end());
 
     std::map<int, HarpPedalDiagram*> hd2;
     for (auto h = harpDiagrams.lower_bound(tick.ticks()); h != harpDiagrams.end();) {
@@ -817,7 +817,7 @@ Fraction Part::currentHarpDiagramTick(const Fraction& tick) const
 
 bool Part::isVisible() const
 {
-    return _show;
+    return m_show;
 }
 
 //---------------------------------------------------------

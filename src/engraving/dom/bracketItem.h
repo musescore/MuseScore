@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __BRACKET_ITEM_H__
-#define __BRACKET_ITEM_H__
+#ifndef MU_ENGRAVING_BRACKET_ITEM_H
+#define MU_ENGRAVING_BRACKET_ITEM_H
 
 #include "engravingitem.h"
 
@@ -45,14 +45,14 @@ public:
     bool setProperty(Pid, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid id) const override;
 
-    size_t bracketSpan() const { return _bracketSpan; }
-    BracketType bracketType() const { return _bracketType; }
-    void setBracketSpan(size_t v) { _bracketSpan = v; }
-    void setBracketType(BracketType v) { _bracketType = v; }
-    Staff* staff() const { return _staff; }
-    void setStaff(Staff* s) { _staff = s; }
-    size_t column() const { return _column; }
-    void setColumn(size_t v) { _column = v; }
+    size_t bracketSpan() const { return m_bracketSpan; }
+    BracketType bracketType() const { return m_bracketType; }
+    void setBracketSpan(size_t v) { m_bracketSpan = v; }
+    void setBracketType(BracketType v) { m_bracketType = v; }
+    Staff* staff() const { return m_staff; }
+    void setStaff(Staff* s) { m_staff = s; }
+    size_t column() const { return m_column; }
+    void setColumn(size_t v) { m_column = v; }
 
 private:
 
@@ -61,10 +61,10 @@ private:
     BracketItem(EngravingItem* parent);
     BracketItem(EngravingItem* parent, BracketType a, int b);
 
-    BracketType _bracketType { BracketType::NO_BRACKET };
-    size_t _column = 0;
-    size_t _bracketSpan = 0;
-    Staff* _staff = nullptr;
+    BracketType m_bracketType = BracketType::NO_BRACKET;
+    size_t m_column = 0;
+    size_t m_bracketSpan = 0;
+    Staff* m_staff = nullptr;
 };
 }
 #endif

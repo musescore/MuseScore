@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __KEY__H__
-#define __KEY__H__
+#ifndef MU_ENGRAVING_KEY_H
+#define MU_ENGRAVING_KEY_H
 
 #include <vector>
 #include <array>
@@ -39,9 +39,9 @@ enum class AccidentalVal : signed char;
 //---------------------------------------------------------
 
 struct KeySym {
-    SymId sym;
-    int line;       // relative line position (first staffline: line == 0, first gap: line == 1, ...)
-    double xPos;    // x position in staff spatium units
+    SymId sym = SymId::noSym;
+    int line = 0;       // relative line position (first staffline: line == 0, first gap: line == 1, ...)
+    double xPos = 0.0;    // x position in staff spatium units
 };
 
 //---------------------------------------------------------
@@ -50,10 +50,10 @@ struct KeySym {
 //---------------------------------------------------------
 
 struct CustDef {
-    int degree;             // scale degree
-    SymId sym;
-    double xAlt { 0.0 };    // x position alteration in spatium units (default symbol position is based on index)
-    int octAlt { 0 };       // octave alteration
+    int degree = 0;             // scale degree
+    SymId sym = SymId::noSym;
+    double xAlt = 0.0;    // x position alteration in spatium units (default symbol position is based on index)
+    int octAlt = 0;       // octave alteration
 };
 
 //---------------------------------------------------------
@@ -111,9 +111,6 @@ static const int MAX_ACC_STATE = 75;
 
 class AccidentalState
 {
-    uint8_t state[MAX_ACC_STATE] = {};      // (0 -- 4) | TIE_CONTEXT
-    std::array<bool, MAX_ACC_STATE> m_forceRestateAccidental;
-
 public:
     AccidentalState() {}
     void init(Key key);
@@ -124,6 +121,11 @@ public:
     bool tieContext(int line) const;
     void setAccidentalVal(int line, AccidentalVal val, bool tieContext = false);
     void setForceRestateAccidental(int line, bool forceRestate);
+
+private:
+
+    uint8_t m_state[MAX_ACC_STATE] = {};      // (0 -- 4) | TIE_CONTEXT
+    std::array<bool, MAX_ACC_STATE> m_forceRestateAccidental;
 };
 
 struct Interval;

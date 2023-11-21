@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __AL_SIG_H__
-#define __AL_SIG_H__
+#ifndef MU_ENGRAVING_SIG_H
+#define MU_ENGRAVING_SIG_H
 
 #include <map>
 #include <cassert>
@@ -109,27 +109,29 @@ public:
 
 class SigEvent
 {
-    TimeSigFrac _timesig;
-    TimeSigFrac _nominal;
-    int _bar;                 ///< precomputed value
-
 public:
     constexpr SigEvent()
-        : _bar(0) {}                          ///< default SigEvent is invalid
+        : m_bar(0) {}                          ///< default SigEvent is invalid
     SigEvent(const Fraction& s, int bar = 0)
-        : _timesig(s), _nominal(s), _bar(bar) {}
+        : m_timesig(s), m_nominal(s), m_bar(bar) {}
     SigEvent(const Fraction& s, const Fraction& ss, int bar = 0)
-        : _timesig(s), _nominal(ss), _bar(bar) {}
+        : m_timesig(s), m_nominal(ss), m_bar(bar) {}
 
     bool operator==(const SigEvent& e) const;
-    bool valid() const { return _timesig.isValid(); }
-    String print() const { return _timesig.toString(); }
-    TimeSigFrac timesig() const { return _timesig; }
-    void setTimesig(const TimeSigFrac& f) { _timesig = f; }
-    TimeSigFrac nominal() const { return _nominal; }
-    void setNominal(const TimeSigFrac& f) { _nominal = f; }
-    int bar() const { return _bar; }
-    void setBar(int val) { _bar = val; }
+    bool valid() const { return m_timesig.isValid(); }
+    String print() const { return m_timesig.toString(); }
+    TimeSigFrac timesig() const { return m_timesig; }
+    void setTimesig(const TimeSigFrac& f) { m_timesig = f; }
+    TimeSigFrac nominal() const { return m_nominal; }
+    void setNominal(const TimeSigFrac& f) { m_nominal = f; }
+    int bar() const { return m_bar; }
+    void setBar(int val) { m_bar = val; }
+
+private:
+
+    TimeSigFrac m_timesig;
+    TimeSigFrac m_nominal;
+    int m_bar = 0;                 ///< precomputed value
 };
 
 //---------------------------------------------------------

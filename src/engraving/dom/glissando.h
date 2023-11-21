@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __GLISSANDO_H__
-#define __GLISSANDO_H__
+#ifndef MU_ENGRAVING_GLISSANDO_H
+#define MU_ENGRAVING_GLISSANDO_H
 
 #include "engravingitem.h"
 #include "line.h"
@@ -76,8 +76,6 @@ class Glissando final : public SLine
     M_PROPERTY(int, easeIn, setEaseIn)
     M_PROPERTY(int, easeOut, setEaseOut)
 
-    std::optional<bool> m_isHarpGliss = std::nullopt;
-
 public:
     static constexpr double GLISS_PALETTE_WIDTH = 4.0;
     static constexpr double GLISS_PALETTE_HEIGHT = 4.0;
@@ -106,6 +104,10 @@ public:
     void addLineAttachPoints();
 
     static bool pitchSteps(const Spanner* spanner, std::vector<int>& pitchOffsets);
+
+private:
+
+    std::optional<bool> m_isHarpGliss = std::nullopt;
 };
 } // namespace mu::engraving
 

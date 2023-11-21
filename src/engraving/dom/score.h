@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __SCORE_H__
-#define __SCORE_H__
+#ifndef MU_ENGRAVING_SCORE_H
+#define MU_ENGRAVING_SCORE_H
 
 /**
  \file
@@ -181,9 +181,9 @@ enum class Pad : char {
 //---------------------------------------------------------
 
 struct MidiInputEvent {
-    int pitch;
-    bool chord;
-    int velocity;
+    int pitch = 0;
+    bool chord = false;
+    int velocity = 0;
 };
 
 //---------------------------------------------------------
@@ -191,10 +191,10 @@ struct MidiInputEvent {
 //---------------------------------------------------------
 
 struct Position {
-    Segment* segment { nullptr };
+    Segment* segment = nullptr;
     staff_idx_t staffIdx = mu::nidx;
-    int line         { 0 };
-    int fret         { INVALID_FRET_INDEX };
+    int line = 0;
+    int fret = INVALID_FRET_INDEX;
     mu::PointF pos;
 };
 
@@ -504,14 +504,14 @@ public:
 
     void cmdToggleAutoplace(bool all);
 
-    bool playNote() const { return m_updateState._playNote; }
-    void setPlayNote(bool v) { m_updateState._playNote = v; }
-    bool playChord() const { return m_updateState._playChord; }
-    void setPlayChord(bool v) { m_updateState._playChord = v; }
+    bool playNote() const { return m_updateState.playNote; }
+    void setPlayNote(bool v) { m_updateState.playNote = v; }
+    bool playChord() const { return m_updateState.playChord; }
+    void setPlayChord(bool v) { m_updateState.playChord = v; }
     bool selectionEmpty() const { return m_selection.staffStart() == m_selection.staffEnd(); }
-    bool selectionChanged() const { return m_updateState._selectionChanged; }
-    void setSelectionChanged(bool val) { m_updateState._selectionChanged = val; }
-    void deleteLater(EngravingObject* e) { m_updateState._deleteList.push_back(e); }
+    bool selectionChanged() const { return m_updateState.selectionChanged; }
+    void setSelectionChanged(bool val) { m_updateState.selectionChanged = val; }
+    void deleteLater(EngravingObject* e) { m_updateState.deleteList.push_back(e); }
     void deletePostponed();
 
     void changeSelectedNotesVoice(voice_idx_t);
@@ -954,8 +954,11 @@ public:
     friend class Chord;
 
 protected:
-    int m_fileDivision = 0;   // division of current loading *.msc file
-    SynthesizerState m_synthesizerState;
+
+    friend class MasterScore;
+    Score();
+    Score(MasterScore*, bool forcePartStyle = true);
+    Score(MasterScore*, const MStyle&);
 
     // NOTE: Looks like this four are unused
     void cmdPitchUp();
@@ -963,10 +966,8 @@ protected:
     void cmdPitchUpOctave();
     void cmdPitchDownOctave();
 
-    friend class MasterScore;
-    Score();
-    Score(MasterScore*, bool forcePartStyle = true);
-    Score(MasterScore*, const MStyle&);
+    int m_fileDivision = 0;   // division of current loading *.msc file
+    SynthesizerState m_synthesizerState;
 
 private:
 
@@ -1113,12 +1114,12 @@ static inline const Score* toScore(const EngravingObject* e)
 
 class ScoreLoad
 {
-    static int _loading;
+    static int m_loading;
 
 public:
-    ScoreLoad() { ++_loading; }
-    ~ScoreLoad() { --_loading; }
-    static bool loading() { return _loading > 0; }
+    ScoreLoad() { ++m_loading; }
+    ~ScoreLoad() { --m_loading; }
+    static bool loading() { return m_loading > 0; }
 };
 
 DECLARE_OPERATORS_FOR_FLAGS(LayoutFlags)

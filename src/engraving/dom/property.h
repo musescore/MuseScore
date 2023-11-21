@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __PROPERTY_H__
-#define __PROPERTY_H__
+#ifndef MU_ENGRAVING_PROPERTY_H
+#define MU_ENGRAVING_PROPERTY_H
 
 #include "types/string.h"
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __ACCIDENTAL_H__
-#define __ACCIDENTAL_H__
+#ifndef MU_ENGRAVING_ACCIDENTAL_H
+#define MU_ENGRAVING_ACCIDENTAL_H
 
 /**
  \file
@@ -126,7 +126,7 @@ public:
 
         bool isValid() const override { return EngravingItem::LayoutData::isValid() && !syms.empty(); }
     };
-    DECLARE_LAYOUTDATA_METHODS(Accidental);
+    DECLARE_LAYOUTDATA_METHODS(Accidental)
 
 private:
 

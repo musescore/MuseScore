@@ -218,7 +218,7 @@ int TimeSigFrac::strongestSubbeatLevelInRange(int rtick1, int rtick2, int* subbe
 
 bool SigEvent::operator==(const SigEvent& e) const
 {
-    return _timesig.identical(e._timesig);
+    return m_timesig.identical(e.m_timesig);
 }
 
 //---------------------------------------------------------

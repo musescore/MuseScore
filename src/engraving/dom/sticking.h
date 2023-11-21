@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __STICKING_H__
-#define __STICKING_H__
+#ifndef MU_ENGRAVING_STICKING_H
+#define MU_ENGRAVING_STICKING_H
 
 #include "textbase.h"
 

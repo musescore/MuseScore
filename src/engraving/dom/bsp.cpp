@@ -81,9 +81,9 @@ public:
 //---------------------------------------------------------
 
 BspTree::BspTree()
-    : leafCnt(0)
+    : m_leafCnt(0)
 {
-    depth = 0;
+    m_depth = 0;
 }
 
 //---------------------------------------------------------
@@ -101,14 +101,14 @@ static inline int intmaxlog(int n)
 
 void BspTree::initialize(const RectF& rec, int n)
 {
-    depth      = intmaxlog(n);
-    this->rect = rec;
-    leafCnt    = 0;
+    m_depth      = intmaxlog(n);
+    this->m_rect = rec;
+    m_leafCnt    = 0;
 
-    nodes.resize((1 << (depth + 1)) - 1);
-    leaves.resize(1LL << depth);
-    std::fill(leaves.begin(), leaves.end(), std::list<EngravingItem*>());
-    initialize(rec, depth, 0);
+    m_nodes.resize((1 << (m_depth + 1)) - 1);
+    m_leaves.resize(1LL << m_depth);
+    std::fill(m_leaves.begin(), m_leaves.end(), std::list<EngravingItem*>());
+    initialize(rec, m_depth, 0);
 }
 
 //---------------------------------------------------------
@@ -117,9 +117,9 @@ void BspTree::initialize(const RectF& rec, int n)
 
 void BspTree::clear()
 {
-    leafCnt = 0;
-    nodes.clear();
-    leaves.clear();
+    m_leafCnt = 0;
+    m_nodes.clear();
+    m_leaves.clear();
 }
 
 //---------------------------------------------------------
@@ -188,16 +188,16 @@ std::vector<EngravingItem*> BspTree::items(const PointF& pos)
 
 String BspTree::debug(int index) const
 {
-    const Node* node = &nodes.at(index);
+    const Node* node = &m_nodes.at(index);
 
     String tmp;
     if (node->type == Node::Type::LEAF) {
         RectF rec = rectForIndex(index);
-        if (!leaves[node->leafIndex].empty()) {
+        if (!m_leaves[node->leafIndex].empty()) {
             tmp += String(u"[%1, %2, %3, %4] contains %5 items\n")
                    .arg(rec.left()).arg(rec.top())
                    .arg(rec.width()).arg(rec.height())
-                   .arg(leaves[node->leafIndex].size());
+                   .arg(m_leaves[node->leafIndex].size());
         }
     } else {
         if (node->type == Node::Type::HORIZONTAL) {
@@ -219,7 +219,7 @@ String BspTree::debug(int index) const
 
 void BspTree::initialize(const RectF& rec, int dep, int index)
 {
-    Node* node = &nodes[index];
+    Node* node = &m_nodes[index];
     if (index == 0) {
         node->type = Node::Type::HORIZONTAL;
         node->offset = rec.center().x();
@@ -246,11 +246,11 @@ void BspTree::initialize(const RectF& rec, int dep, int index)
 
         int childIndex = firstChildIndex(index);
 
-        Node* child   = &nodes[childIndex];
+        Node* child   = &m_nodes[childIndex];
         child->offset = offset1;
         child->type   = type;
 
-        child = &nodes[childIndex + 1];
+        child = &m_nodes[childIndex + 1];
         child->offset = offset2;
         child->type   = type;
 
@@ -258,7 +258,7 @@ void BspTree::initialize(const RectF& rec, int dep, int index)
         initialize(rect2, dep - 1, childIndex + 1);
     } else {
         node->type      = Node::Type::LEAF;
-        node->leafIndex = leafCnt++;
+        node->leafIndex = m_leafCnt++;
     }
 }
 
@@ -268,16 +268,16 @@ void BspTree::initialize(const RectF& rec, int dep, int index)
 
 void BspTree::climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int index)
 {
-    if (nodes.empty()) {
+    if (m_nodes.empty()) {
         return;
     }
 
-    Node* node = &nodes[index];
+    Node* node = &m_nodes[index];
     int childIndex = firstChildIndex(index);
 
     switch (node->type) {
     case Node::Type::LEAF:
-        visitor->visit(&leaves[node->leafIndex]);
+        visitor->visit(&m_leaves[node->leafIndex]);
         break;
     case Node::Type::VERTICAL:
         if (pos.x() < node->offset) {
@@ -302,16 +302,16 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const mu::PointF& pos, int inde
 
 void BspTree::climbTree(BspTreeVisitor* visitor, const mu::RectF& rec, int index)
 {
-    if (nodes.empty()) {
+    if (m_nodes.empty()) {
         return;
     }
 
-    Node* node = &nodes[index];
+    Node* node = &m_nodes[index];
     int childIndex = firstChildIndex(index);
 
     switch (node->type) {
     case Node::Type::LEAF:
-        visitor->visit(&leaves[node->leafIndex]);
+        visitor->visit(&m_leaves[node->leafIndex]);
         break;
     case Node::Type::VERTICAL:
         if (rec.left() < node->offset) {
@@ -342,12 +342,12 @@ void BspTree::climbTree(BspTreeVisitor* visitor, const mu::RectF& rec, int index
 mu::RectF BspTree::rectForIndex(int index) const
 {
     if (index <= 0) {
-        return rect;
+        return m_rect;
     }
 
     int parentIdx = parentIndex(index);
     RectF rec   = rectForIndex(parentIdx);
-    const Node* parent = &nodes.at(parentIdx);
+    const Node* parent = &m_nodes.at(parentIdx);
 
     if (parent->type == Node::Type::HORIZONTAL) {
         if (index & 1) {

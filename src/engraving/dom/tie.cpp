@@ -51,13 +51,13 @@ Note* Tie::editEndNote;
 TieSegment::TieSegment(System* parent)
     : SlurTieSegment(ElementType::TIE_SEGMENT, parent)
 {
-    autoAdjustOffset = mu::PointF();
+    m_autoAdjustOffset = mu::PointF();
 }
 
 TieSegment::TieSegment(const TieSegment& s)
     : SlurTieSegment(s)
 {
-    autoAdjustOffset = mu::PointF();
+    m_autoAdjustOffset = mu::PointF();
 }
 
 bool TieSegment::isEditAllowed(EditData& ed) const
@@ -314,7 +314,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
      *            DEPRECATED
      * use SlurTieLayout::adjustY() instead
      ****************************************/
-    autoAdjustOffset = PointF();
+    m_autoAdjustOffset = PointF();
     const StaffType* staffType = this->staffType();
     bool useTablature = staffType->isTabStaff();
     Tie* t = toTie(slurTie());
@@ -404,7 +404,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
         const double tieEndpointOffsetSp = 0.2;
         Note* sn = tie()->startNote();
         int string = sn->string();
-        shoulderHeightMax = 4 / 3; // at max ties will be 1sp tall
+        m_shoulderHeightMax = 4 / 3; // at max ties will be 1sp tall
         double newAnchor = (double)string;
         newAnchor += tieEndpointOffsetSp * (isUp ? -1 : 1);
         setAutoAdjust(PointF(0, (newAnchor - endpointYsp) * ld));
@@ -445,7 +445,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
                 // we've already adjusted the tie pretty far from the notehead, so let's just
                 // constrain the tie height to fit within a single space
                 if (endpointYsp + tieAdjustSp > 0 && endpointYsp + tieAdjustSp < lines - 1) {
-                    shoulderHeightMax = 4 * (1 - ((staffLineOffset * 2) + (tieThicknessSp / 2))) / 3;
+                    m_shoulderHeightMax = 4 * (1 - ((staffLineOffset * 2) + (tieThicknessSp / 2))) / 3;
                 }
             } else {
                 if (spansBarline(tieMidOutsideSp, tieMidInsideSp)) {
@@ -462,15 +462,15 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
                     if (isUp && newEndpoint - floor(newEndpoint + staffLineOffset) < staffLineOffset) {
                         // clamp endpoint and adjust tie height
                         newAnchor = floor(newEndpoint + staffLineOffset) + staffLineOffset;
-                        shoulderHeightMin = 4 * (staffLineOffset * 2 + (tieThicknessSp / 2)) / 3;
-                        shoulderHeightMin *= (ld / spatium()); // shoulderHeightMin and Max are in spatium units, not line distance
-                        shoulderHeightMax = shoulderHeightMin;
+                        m_shoulderHeightMin = 4 * (staffLineOffset * 2 + (tieThicknessSp / 2)) / 3;
+                        m_shoulderHeightMin *= (ld / spatium()); // shoulderHeightMin and Max are in spatium units, not line distance
+                        m_shoulderHeightMax = m_shoulderHeightMin;
                     } else if (!isUp && ceil(newEndpoint - staffLineOffset) - newEndpoint < staffLineOffset) {
                         // clamp endpoint and adjust tie height
                         newAnchor = ceil(newEndpoint - staffLineOffset) - staffLineOffset;
-                        shoulderHeightMin = 4 * (staffLineOffset * 2 + (tieThicknessSp / 2)) / 3;
-                        shoulderHeightMin *= (ld / spatium());
-                        shoulderHeightMax = shoulderHeightMin;
+                        m_shoulderHeightMin = 4 * (staffLineOffset * 2 + (tieThicknessSp / 2)) / 3;
+                        m_shoulderHeightMin *= (ld / spatium());
+                        m_shoulderHeightMax = m_shoulderHeightMin;
                     }
                     tieAdjustSp += newAnchor - newEndpoint;
                 }
@@ -497,7 +497,7 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
                 collideBelow = true;
             }
         }
-        shoulderHeightMax = 4 / 3; // at max ties will be 1sp tall
+        m_shoulderHeightMax = 4 / 3; // at max ties will be 1sp tall
 
         // ENDPOINTS ////////////////////////////////
         // Each line position in the staff has a set endpoint Y location
@@ -520,21 +520,21 @@ void TieSegment::adjustY(const PointF& p1, const PointF& p2)
             // Constrain tie height to avoid staff line collisions
             if (line & 1) {
                 // tie endpoint is right below the line, so let's adjust the height so that the top clears the line
-                shoulderHeightMin = 4 * ((staffLineOffset * 2) + (tieThicknessSp / 2)) / 3;
-                shoulderHeightMin *= (ld / spatium());
+                m_shoulderHeightMin = 4 * ((staffLineOffset * 2) + (tieThicknessSp / 2)) / 3;
+                m_shoulderHeightMin *= (ld / spatium());
             } else {
                 // avoid collisions with the next line up by constraining maximum
-                shoulderHeightMax = 4 * (1 - ((staffLineOffset * 2) + tieThicknessSp / 2)) / 3;
-                shoulderHeightMax *= (ld / spatium());
+                m_shoulderHeightMax = 4 * (1 - ((staffLineOffset * 2) + tieThicknessSp / 2)) / 3;
+                m_shoulderHeightMax *= (ld / spatium());
             }
             if ((isUp && collideBelow) || (!isUp && collideAbove)) {
-                shoulderHeightMin = 4 * ((staffLineOffset * 2) + (tieThicknessSp / 2)) / 3;
-                shoulderHeightMin *= (ld / spatium());
+                m_shoulderHeightMin = 4 * ((staffLineOffset * 2) + (tieThicknessSp / 2)) / 3;
+                m_shoulderHeightMin *= (ld / spatium());
             }
             if ((isUp && collideAbove && newAnchor > staffLineOffset)
                 || (!isUp && collideBelow && newAnchor < (lines - 1))) {
-                shoulderHeightMax = 4 * (1 - (staffLineOffset * 2) - (tieThicknessSp / 2)) / 3;
-                shoulderHeightMax *= (ld / spatium());
+                m_shoulderHeightMax = 4 * (1 - (staffLineOffset * 2) - (tieThicknessSp / 2)) / 3;
+                m_shoulderHeightMax *= (ld / spatium());
             }
         }
         setAutoAdjust(PointF(0, (newAnchor - endpointYsp) * ld));
@@ -772,7 +772,7 @@ void TieSegment::consolidateAdjustmentOffsetIntoUserOffset()
 
 void TieSegment::setAutoAdjust(const PointF& offset)
 {
-    PointF diff = offset - autoAdjustOffset;
+    PointF diff = offset - m_autoAdjustOffset;
     if (!diff.isNull()) {
         m_path.translate(diff);
         m_shapePath.translate(diff);
@@ -784,7 +784,7 @@ void TieSegment::setAutoAdjust(const PointF& offset)
         for (int i = 0; i < int(Grip::GRIPS); ++i) {
             m_ups[i].p += diff;
         }
-        autoAdjustOffset = offset;
+        m_autoAdjustOffset = offset;
     }
 }
 

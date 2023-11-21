@@ -859,11 +859,11 @@ double Harmony::baseLine() const
 
 String HDegree::text() const
 {
-    if (_type == HDegreeType::UNDEF) {
+    if (m_type == HDegreeType::UNDEF) {
         return String();
     }
     String degree;
-    switch (_type) {
+    switch (m_type) {
     case HDegreeType::UNDEF: break;
     case HDegreeType::ADD:         degree = u"add";
         break;
@@ -873,14 +873,14 @@ String HDegree::text() const
         break;
     }
 
-    switch (_alter) {
+    switch (m_alter) {
     case -1:          degree += u"b";
         break;
     case 1:           degree += u"#";
         break;
     default:          break;
     }
-    String s = String::number(_value);
+    String s = String::number(m_value);
     String ss = degree + s;
     return ss;
 }

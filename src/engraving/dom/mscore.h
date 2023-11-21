@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MSCORE_H__
-#define __MSCORE_H__
+#ifndef MU_ENGRAVING_MSCORE_H
+#define MU_ENGRAVING_MSCORE_H
 
 #include "global/containers.h"
 

@@ -1651,21 +1651,21 @@ void TWrite::write(const Instrument* item, XmlWriter& xml, WriteContext&, const 
     }
     for (size_t i = 0; i < item->cleffTypeCount(); ++i) {
         ClefTypeList ct = item->clefType(i);
-        if (ct._concertClef == ct._transposingClef) {
-            if (ct._concertClef != ClefType::G) {
+        if (ct.concertClef == ct.transposingClef) {
+            if (ct.concertClef != ClefType::G) {
                 if (i) {
-                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
+                    xml.tag("clef", { { "staff", i + 1 } }, TConv::toXml(ct.concertClef));
                 } else {
-                    xml.tag("clef", TConv::toXml(ct._concertClef));
+                    xml.tag("clef", TConv::toXml(ct.concertClef));
                 }
             }
         } else {
             if (i) {
-                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(ct._concertClef));
-                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(ct._transposingClef));
+                xml.tag("concertClef", { { "staff", i + 1 } }, TConv::toXml(ct.concertClef));
+                xml.tag("transposingClef", { { "staff", i + 1 } }, TConv::toXml(ct.transposingClef));
             } else {
-                xml.tag("concertClef", TConv::toXml(ct._concertClef));
-                xml.tag("transposingClef", TConv::toXml(ct._transposingClef));
+                xml.tag("concertClef", TConv::toXml(ct.concertClef));
+                xml.tag("transposingClef", TConv::toXml(ct.transposingClef));
             }
         }
     }
@@ -2355,13 +2355,13 @@ void TWrite::write(const Staff* item, XmlWriter& xml, WriteContext& ctx)
 
     write(item->staffType(Fraction(0, 1)), xml, ctx);
     ClefTypeList ct = item->defaultClefType();
-    if (ct._concertClef == ct._transposingClef) {
-        if (ct._concertClef != ClefType::G) {
-            xml.tag("defaultClef", TConv::toXml(ct._concertClef));
+    if (ct.concertClef == ct.transposingClef) {
+        if (ct.concertClef != ClefType::G) {
+            xml.tag("defaultClef", TConv::toXml(ct.concertClef));
         }
     } else {
-        xml.tag("defaultConcertClef", TConv::toXml(ct._concertClef));
-        xml.tag("defaultTransposingClef", TConv::toXml(ct._transposingClef));
+        xml.tag("defaultConcertClef", TConv::toXml(ct.concertClef));
+        xml.tag("defaultTransposingClef", TConv::toXml(ct.transposingClef));
     }
 
     if (item->isLinesInvisible(Fraction(0, 1))) {

@@ -55,7 +55,7 @@ Marker::Marker(EngravingItem* parent, TextStyleType tid)
     : TextBase(ElementType::MARKER, parent, tid, ElementFlag::MOVABLE | ElementFlag::ON_STAFF | ElementFlag::SYSTEM)
 {
     initElementStyle(&markerStyle);
-    _markerType = MarkerType::FINE;
+    m_markerType = MarkerType::FINE;
     setLayoutToParentWidth(true);
 }
 
@@ -65,7 +65,7 @@ Marker::Marker(EngravingItem* parent, TextStyleType tid)
 
 void Marker::setMarkerType(MarkerType t)
 {
-    _markerType = t;
+    m_markerType = t;
     const char* txt = 0;
     switch (t) {
     case MarkerType::SEGNO:
@@ -141,7 +141,7 @@ void Marker::setMarkerType(MarkerType t)
 
 String Marker::markerTypeUserName() const
 {
-    return TConv::translatedUserName(_markerType);
+    return TConv::translatedUserName(m_markerType);
 }
 
 //---------------------------------------------------------
@@ -150,7 +150,7 @@ String Marker::markerTypeUserName() const
 
 void Marker::styleChanged()
 {
-    setMarkerType(_markerType);
+    setMarkerType(m_markerType);
     TextBase::styleChanged();
 }
 

@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __FERMATA_H__
-#define __FERMATA_H__
+#ifndef MU_ENGRAVING_FERMATA_H
+#define MU_ENGRAVING_FERMATA_H
 
 #include "engravingitem.h"
 

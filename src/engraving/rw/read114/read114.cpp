@@ -31,6 +31,7 @@
 #include "infrastructure/htmlparser.h"
 
 #include "rw/compat/compatutils.h"
+#include "rw/compat/readchordlisthook.h"
 
 #include "style/defaultstyle.h"
 #include "style/style.h"
@@ -2809,7 +2810,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             read400::TRead::read(ks, e, ctx);
             delete ks;
         } else if (tag == "siglist") {
-            read400::TRead::read(masterScore->_sigmap, e, ctx);
+            read400::TRead::read(masterScore->m_sigmap, e, ctx);
         } else if (tag == "programVersion") {
             masterScore->setMscoreVersion(e.readText());
         } else if (tag == "programRevision") {
@@ -2947,7 +2948,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
             } else {
                 Excerpt* ex = new Excerpt(masterScore);
                 read400::TRead::read(ex, e, ctx);
-                masterScore->_excerpts.push_back(ex);
+                masterScore->m_excerpts.push_back(ex);
             }
         } else if (tag == "Beam") {
             Beam* beam = Factory::createBeam(masterScore->dummy()->system());
@@ -2977,7 +2978,7 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
         }
         for (auto i : s->clefList()) {
             Fraction tick   = Fraction::fromTicks(i.first);
-            ClefType clefId = i.second._concertClef;
+            ClefType clefId = i.second.concertClef;
             Measure* m      = masterScore->tick2measure(tick);
             if (!m) {
                 continue;
@@ -3171,13 +3172,13 @@ Err Read114::readScore(Score* score, XmlReader& e, ReadInOutData* out)
     // create excerpts
 
     std::vector<Excerpt*> readExcerpts;
-    readExcerpts.swap(masterScore->_excerpts);
+    readExcerpts.swap(masterScore->m_excerpts);
     for (Excerpt* excerpt : readExcerpts) {
         if (excerpt->parts().empty()) {             // ignore empty parts
             continue;
         }
         if (!excerpt->parts().empty()) {
-            masterScore->_excerpts.push_back(excerpt);
+            masterScore->m_excerpts.push_back(excerpt);
             Score* nscore = masterScore->createScore();
             ReadStyleHook::setupDefaultStyle(nscore);
             excerpt->setExcerptScore(nscore);

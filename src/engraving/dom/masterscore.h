@@ -52,78 +52,30 @@ class UndoStack;
 
 class MidiMapping
 {
-    Part* _part;
-    std::unique_ptr<InstrChannel> _articulation;
-    signed char _port;
-    signed char _channel;
-    InstrChannel* masterChannel;
-    PartChannelSettingsLink link;
+public:
+    Part* part() { return m_part; }
+    const Part* part() const { return m_part; }
+    InstrChannel* articulation() { return m_articulation.get(); }
+    const InstrChannel* articulation() const { return m_articulation.get(); }
+    signed char port() const { return m_port; }
+    signed char channel() const { return m_channel; }
+
+private:
 
     MidiMapping() = default;   // should be created only within MasterScore
     friend class MasterScore;
 
-public:
-    Part* part() { return _part; }
-    const Part* part() const { return _part; }
-    InstrChannel* articulation() { return _articulation.get(); }
-    const InstrChannel* articulation() const { return _articulation.get(); }
-    signed char port() const { return _port; }
-    signed char channel() const { return _channel; }
+    Part* m_part = nullptr;
+    std::unique_ptr<InstrChannel> m_articulation;
+    signed char m_port = 0;
+    signed char m_channel = 0;
+    InstrChannel* m_masterChannel = nullptr;
+    PartChannelSettingsLink m_link;
 };
 
 class MasterScore : public Score
 {
     OBJECT_ALLOCATOR(engraving, MasterScore)
-
-    GetEID m_getEID;
-    UndoStack* _undoStack = nullptr;
-    TimeSigMap* _sigmap;
-    TempoMap* _tempomap;
-    RepeatList* _expandedRepeatList;
-    RepeatList* _nonExpandedRepeatList;
-    bool _expandRepeats = true;
-    bool _playlistDirty = true;
-    std::vector<Excerpt*> _excerpts;
-    std::vector<PartChannelSettingsLink> _playbackSettingsLinks;
-    Score* _playbackScore = nullptr;
-    async::Channel<ScoreChangesRange> m_changesRangeChannel;
-
-    bool _readOnly = false;
-
-    CmdState _cmdState;       // modified during cmd processing
-
-    Fraction _pos[3];                      ///< 0 - current, 1 - left loop, 2 - right loop
-
-    int _midiPortCount = 0;                           // A count of ALSA midi out ports
-//    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
-    std::list<MidiInputEvent> _activeMidiPitches;     // MIDI keys currently being held down
-    std::vector<MidiMapping> _midiMapping;
-    bool isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
-                                                      // don't decrease and don't have gaps
-    double m_widthOfSegmentCell = 3;
-
-    std::weak_ptr<EngravingProject> m_project;
-
-    // FIXME: Move to EngravingProject
-    // We can't yet, because m_project is not set on every MasterScore
-    IFileInfoProviderPtr m_fileInfoProvider;
-
-    bool m_saved { false };
-
-    void reorderMidiMapping();
-    void rebuildExcerptsMidiMapping();
-    void removeDeletedMidiMapping();
-    int updateMidiMapping();
-
-    friend class EngravingProject;
-    friend class compat::ScoreAccess;
-    friend class read114::Read114;
-    friend class read400::Read400;
-
-    MasterScore(std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
-    MasterScore(const MStyle&, std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
-
-    void initParts(Excerpt*);
 
 public:
 
@@ -140,31 +92,31 @@ public:
     GetEID* getEID() { return &m_getEID; }
     const GetEID* getEID() const { return &m_getEID; }
 
-    bool readOnly() const override { return _readOnly; }
-    void setReadOnly(bool ro) { _readOnly = ro; }
-    UndoStack* undoStack() const override { return _undoStack; }
-    TimeSigMap* sigmap() const override { return _sigmap; }
-    TempoMap* tempomap() const override { return _tempomap; }
+    bool readOnly() const override { return m_readOnly; }
+    void setReadOnly(bool ro) { m_readOnly = ro; }
+    UndoStack* undoStack() const override { return m_undoStack; }
+    TimeSigMap* sigmap() const override { return m_sigmap; }
+    TempoMap* tempomap() const override { return m_tempomap; }
     async::Channel<ScoreChangesRange> changesChannel() const override { return m_changesRangeChannel; }
 
-    bool playlistDirty() const override { return _playlistDirty; }
+    bool playlistDirty() const override { return m_playlistDirty; }
     void setPlaylistDirty() override;
-    void setPlaylistClean() { _playlistDirty = false; }
+    void setPlaylistClean() { m_playlistDirty = false; }
 
     /// Always call this before calling `repeatList()`
     /// No need to set it back after use, because everyone always calls it before using `repeatList()`
     void setExpandRepeats(bool expandRepeats);
-    bool expandRepeats() const { return _expandRepeats; }
+    bool expandRepeats() const { return m_expandRepeats; }
 
     void updateRepeatListTempo();
     void updateRepeatList();
     const RepeatList& repeatList() const override;
     const RepeatList& repeatList(bool expandRepeats) const override;
 
-    std::vector<Excerpt*>& excerpts() { return _excerpts; }
-    const std::vector<Excerpt*>& excerpts() const { return _excerpts; }
+    std::vector<Excerpt*>& excerpts() { return m_excerpts; }
+    const std::vector<Excerpt*>& excerpts() const { return m_excerpts; }
     //   QQueue<MidiInputEvent>* midiInputQueue() override { return &_midiInputQueue; }
-    std::list<MidiInputEvent>& activeMidiPitches() override { return _activeMidiPitches; }
+    std::list<MidiInputEvent>& activeMidiPitches() override { return m_activeMidiPitches; }
 
     void setUpdateAll() override;
 
@@ -172,28 +124,28 @@ public:
     void setLayout(const Fraction& tick, staff_idx_t staff, const EngravingItem* e = nullptr);
     void setLayout(const Fraction& tick1, const Fraction& tick2, staff_idx_t staff1, staff_idx_t staff2, const EngravingItem* e = nullptr);
 
-    CmdState& cmdState() override { return _cmdState; }
-    const CmdState& cmdState() const override { return _cmdState; }
-    void addLayoutFlags(LayoutFlags val) override { _cmdState.layoutFlags |= val; }
-    void setInstrumentsChanged(bool val) override { _cmdState._instrumentsChanged = val; }
+    CmdState& cmdState() override { return m_cmdState; }
+    const CmdState& cmdState() const override { return m_cmdState; }
+    void addLayoutFlags(LayoutFlags val) override { m_cmdState.layoutFlags |= val; }
+    void setInstrumentsChanged(bool val) override { m_cmdState.instrumentsChanged = val; }
 
-    void setExcerptsChanged(bool val) { _cmdState._excerptsChanged = val; }
-    bool excerptsChanged() const { return _cmdState._excerptsChanged; }
-    bool instrumentsChanged() const { return _cmdState._instrumentsChanged; }
+    void setExcerptsChanged(bool val) { m_cmdState.excerptsChanged = val; }
+    bool excerptsChanged() const { return m_cmdState.excerptsChanged; }
+    bool instrumentsChanged() const { return m_cmdState.instrumentsChanged; }
 
     void setTempomap(TempoMap* tm);
 
-    int midiPortCount() const { return _midiPortCount; }
-    void setMidiPortCount(int val) { _midiPortCount = val; }
-    std::vector<MidiMapping>& midiMapping() { return _midiMapping; }
-    MidiMapping* midiMapping(int channel) { return &_midiMapping[channel]; }
+    int midiPortCount() const { return m_midiPortCount; }
+    void setMidiPortCount(int val) { m_midiPortCount = val; }
+    std::vector<MidiMapping>& midiMapping() { return m_midiMapping; }
+    MidiMapping* midiMapping(int channel) { return &m_midiMapping[channel]; }
     void addMidiMapping(InstrChannel* channel, Part* part, int midiPort, int midiChannel);
     void updateMidiMapping(InstrChannel* channel, Part* part, int midiPort, int midiChannel);
-    int midiPort(int idx) const { return _midiMapping[idx].port(); }
-    int midiChannel(int idx) const { return _midiMapping[idx].channel(); }
+    int midiPort(int idx) const { return m_midiMapping[idx].port(); }
+    int midiChannel(int idx) const { return m_midiMapping[idx].channel(); }
     void rebuildMidiMapping();
     void checkMidiMapping();
-    bool exportMidiMapping() { return !isSimpleMidiMapping; }
+    bool exportMidiMapping() { return !m_isSimpleMidiMapping; }
     int getNextFreeMidiMapping(std::set<int>& occupiedMidiChannels, unsigned int& searchMidiMappingFrom, int p = -1, int ch = -1);
     int getNextFreeDrumMidiMapping(std::set<int>& occupiedMidiChannels);
 //    void enqueueMidiEvent(MidiInputEvent ev) { _midiInputQueue.enqueue(ev); }
@@ -202,7 +154,7 @@ public:
     void updateExpressive(Synthesizer* synth, bool expressive, bool force = false);
 
     using Score::pos;
-    Fraction pos(POS pos) const { return _pos[int(pos)]; }
+    Fraction pos(POS pos) const { return m_pos[int(pos)]; }
     void setPos(POS pos, Fraction tick);
 
     void addExcerpt(Excerpt*, size_t index = mu::nidx);
@@ -214,10 +166,10 @@ public:
     void initEmptyExcerpt(Excerpt*);
 
     void setPlaybackScore(Score*);
-    Score* playbackScore() { return _playbackScore; }
-    const Score* playbackScore() const { return _playbackScore; }
-    InstrChannel* playbackChannel(const InstrChannel* c) { return _midiMapping[c->channel()].articulation(); }
-    const InstrChannel* playbackChannel(const InstrChannel* c) const { return _midiMapping[c->channel()].articulation(); }
+    Score* playbackScore() { return m_playbackScore; }
+    const Score* playbackScore() const { return m_playbackScore; }
+    InstrChannel* playbackChannel(const InstrChannel* c) { return m_midiMapping[c->channel()].articulation(); }
+    const InstrChannel* playbackChannel(const InstrChannel* c) const { return m_midiMapping[c->channel()].articulation(); }
 
     MasterScore* unrollRepeats();
 
@@ -238,6 +190,58 @@ public:
 
     void setWidthOfSegmentCell(double val) { m_widthOfSegmentCell = val; }
     double widthOfSegmentCell() const { return m_widthOfSegmentCell; }
+
+private:
+
+    void reorderMidiMapping();
+    void rebuildExcerptsMidiMapping();
+    void removeDeletedMidiMapping();
+    int updateMidiMapping();
+
+    friend class EngravingProject;
+    friend class compat::ScoreAccess;
+    friend class read114::Read114;
+    friend class read400::Read400;
+
+    MasterScore(std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
+    MasterScore(const MStyle&, std::weak_ptr<EngravingProject> project  = std::weak_ptr<EngravingProject>());
+
+    void initParts(Excerpt*);
+
+    GetEID m_getEID;
+    UndoStack* m_undoStack = nullptr;
+    TimeSigMap* m_sigmap = nullptr;
+    TempoMap* m_tempomap = nullptr;
+    RepeatList* m_expandedRepeatList = nullptr;
+    RepeatList* m_nonExpandedRepeatList = nullptr;
+    bool m_expandRepeats = true;
+    bool m_playlistDirty = true;
+    std::vector<Excerpt*> m_excerpts;
+    std::vector<PartChannelSettingsLink> m_playbackSettingsLinks;
+    Score* m_playbackScore = nullptr;
+    async::Channel<ScoreChangesRange> m_changesRangeChannel;
+
+    bool m_readOnly = false;
+
+    CmdState m_cmdState;       // modified during cmd processing
+
+    Fraction m_pos[3];                      ///< 0 - current, 1 - left loop, 2 - right loop
+
+    int m_midiPortCount = 0;                           // A count of ALSA midi out ports
+    //    QQueue<MidiInputEvent> _midiInputQueue;           // MIDI events that have yet to be processed
+    std::list<MidiInputEvent> m_activeMidiPitches;     // MIDI keys currently being held down
+    std::vector<MidiMapping> m_midiMapping;
+    bool m_isSimpleMidiMapping = false;                 // midi mapping is simple if all ports and channels
+    // don't decrease and don't have gaps
+    double m_widthOfSegmentCell = 3;
+
+    std::weak_ptr<EngravingProject> m_project;
+
+    // FIXME: Move to EngravingProject
+    // We can't yet, because m_project is not set on every MasterScore
+    IFileInfoProviderPtr m_fileInfoProvider;
+
+    bool m_saved = false;
 };
 
 extern MasterScore* gpaletteScore;

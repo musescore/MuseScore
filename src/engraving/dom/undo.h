@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __UNDO_H__
-#define __UNDO_H__
+#ifndef MU_ENGRAVING_UNDO_H
+#define MU_ENGRAVING_UNDO_H
 
 /**
  \file

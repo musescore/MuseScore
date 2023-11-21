@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __MEASURENUMBER_H__
-#define __MEASURENUMBER_H__
+#ifndef MU_ENGRAVING_MEASURENUMBER_H
+#define MU_ENGRAVING_MEASURENUMBER_H
 
 #include "measurenumberbase.h"
 

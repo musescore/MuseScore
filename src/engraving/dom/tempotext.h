@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __TEMPOTEXT_H__
-#define __TEMPOTEXT_H__
+#ifndef MU_ENGRAVING_TEMPOTEXT_H
+#define MU_ENGRAVING_TEMPOTEXT_H
 
 #include "durationtype.h"
 #include "textbase.h"
@@ -55,27 +55,27 @@ public:
     Segment* segment() const { return toSegment(explicitParent()); }
     Measure* measure() const { return toMeasure(explicitParent()->explicitParent()); }
 
-    TempoTextType tempoTextType() const { return _tempoTextType; }
+    TempoTextType tempoTextType() const { return m_tempoTextType; }
     void setTempoTextType(TempoTextType);
 
-    BeatsPerSecond tempo() const { return _tempo; }
+    BeatsPerSecond tempo() const { return m_tempo; }
     double tempoBpm() const;
     void setTempo(BeatsPerSecond v);
     void undoSetTempo(double v);
-    bool isRelative() { return _isRelative; }
-    void setRelative(double v) { _isRelative = true; _relative = v; }
+    bool isRelative() { return m_isRelative; }
+    void setRelative(double v) { m_isRelative = true; m_relative = v; }
 
-    bool isNormal() const { return _tempoTextType == TempoTextType::NORMAL; }
+    bool isNormal() const { return m_tempoTextType == TempoTextType::NORMAL; }
     void setNormal() { setTempoTextType(TempoTextType::NORMAL); }
 
-    bool isATempo() const { return _tempoTextType == TempoTextType::A_TEMPO; }
+    bool isATempo() const { return m_tempoTextType == TempoTextType::A_TEMPO; }
     void setATempo() { setTempoTextType(TempoTextType::A_TEMPO); }
 
-    bool isTempoPrimo() const { return _tempoTextType == TempoTextType::TEMPO_PRIMO; }
+    bool isTempoPrimo() const { return m_tempoTextType == TempoTextType::TEMPO_PRIMO; }
     void setTempoPrimo() { setTempoTextType(TempoTextType::TEMPO_PRIMO); }
 
-    bool followText() const { return _followText; }
-    void setFollowText(bool v) { _followText = v; }
+    bool followText() const { return m_followText; }
+    void setFollowText(bool v) { m_followText = v; }
     void undoSetFollowText(bool v);
     void updateRelative();
 
@@ -100,11 +100,11 @@ protected:
     void updateScore();
     void updateTempo();
 
-    TempoTextType _tempoTextType;
-    BeatsPerSecond _tempo;             // beats per second
-    bool _followText;         // parse text to determine tempo
-    double _relative;
-    bool _isRelative;
+    TempoTextType m_tempoTextType;
+    BeatsPerSecond m_tempo;             // beats per second
+    bool m_followText = false;          // parse text to determine tempo
+    double m_relative = 0.0;
+    bool m_isRelative = false;
 };
 } // namespace mu::engraving
 #endif

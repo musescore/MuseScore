@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __UTILS_H__
-#define __UTILS_H__
+#ifndef MU_ENGRAVING_UTILS_H
+#define MU_ENGRAVING_UTILS_H
 
 #include "types/types.h"
 

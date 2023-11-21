@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef __VOLTA_H__
-#define __VOLTA_H__
+#ifndef MU_ENGRAVING_VOLTA_H
+#define MU_ENGRAVING_VOLTA_H
 
 #include "textlinebase.h"
 
@@ -60,8 +60,6 @@ class Volta final : public TextLineBase
     OBJECT_ALLOCATOR(engraving, Volta)
     DECLARE_CLASSOF(ElementType::VOLTA)
 
-    std::vector<int> _endings;
-
 public:
     enum class Type : char {
         OPEN, CLOSED
@@ -79,8 +77,8 @@ public:
     void setChannel() const;
     void setTempo() const;
 
-    std::vector<int> endings() const { return _endings; }
-    std::vector<int>& endings() { return _endings; }
+    std::vector<int> endings() const { return m_endings; }
+    std::vector<int>& endings() { return m_endings; }
     void setEndings(const std::vector<int>& l);
     void setText(const String& s);
     String text() const;
@@ -96,11 +94,14 @@ public:
     PropertyValue propertyDefault(Pid) const override;
 
     String accessibleInfo() const override;
+
+private:
+    std::vector<int> m_endings;
 };
 } // namespace mu::engraving
 
 #ifndef NO_QT_SUPPORT
-Q_DECLARE_METATYPE(mu::engraving::Volta::Type);
+Q_DECLARE_METATYPE(mu::engraving::Volta::Type)
 #endif
 
 #endif
