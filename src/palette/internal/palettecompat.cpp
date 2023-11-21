@@ -90,6 +90,14 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
     }
 }
 
+void PaletteCompat::removeOldItemsIfNeeded(Palette& palette)
+{
+    if (palette.type() == Palette::Type::Articulation
+        || palette.type() == Palette::Type::Guitar) {
+        removeOldItems(palette);
+    }
+}
+
 void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScore)
 {
     bool containsCapo = false;
@@ -137,4 +145,22 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
         guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
     }
+}
+
+void PaletteCompat::removeOldItems(Palette& palette)
+{
+    std::vector<PaletteCellPtr> cellsToRemove;
+
+    for (const PaletteCellPtr& cell : palette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isBend()) {
+            cellsToRemove.emplace_back(cell);
+        }
+    }
+
+    palette.removeCells(cellsToRemove);
 }

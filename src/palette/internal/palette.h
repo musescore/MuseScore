@@ -122,6 +122,8 @@ public:
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
     bool insertCells(size_t idx, std::vector<PaletteCellPtr> cells);
+    bool removeCell(PaletteCellPtr cell);
+    bool removeCells(std::vector<PaletteCellPtr> cells);
 
     const std::vector<PaletteCellPtr>& cells() const { return m_cells; }
     int cellsCount() const { return int(m_cells.size()); }

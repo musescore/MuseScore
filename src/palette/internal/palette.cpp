@@ -192,6 +192,21 @@ bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
     return true;
 }
 
+bool Palette::removeCell(PaletteCellPtr cell)
+{
+    return removeCells({ cell });
+}
+
+bool Palette::removeCells(std::vector<PaletteCellPtr> cells)
+{
+    for (PaletteCellPtr& c : cells) {
+        c->setParent(nullptr);
+        m_cells.erase(std::remove(m_cells.begin(), m_cells.end(), c), m_cells.end());
+    }
+
+    return true;
+}
+
 PaletteCellPtr Palette::takeCell(size_t idx)
 {
     std::vector<PaletteCellPtr> cells = takeCells(idx, 1);
@@ -327,6 +342,7 @@ bool Palette::read(XmlReader& e, bool pasteMode)
         m_type = guessType();
     }
 
+    PaletteCompat::removeOldItemsIfNeeded(*this);
     PaletteCompat::addNewItemsIfNeeded(*this, gpaletteScore);
 
     return true;

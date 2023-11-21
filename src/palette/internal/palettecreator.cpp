@@ -764,9 +764,6 @@ PalettePtr PaletteCreator::newArticulationsPalette(bool defaultPalette)
     }
 
     if (!defaultPalette) {
-        auto bend = Factory::makeGuitarBend(gpaletteScore->dummy()->note());
-        sp->appendElement(bend, QT_TRANSLATE_NOOP("palette", "Bend"));
-
         auto tb = Factory::makeTremoloBar(gpaletteScore->dummy());
         tb->points().push_back(PitchValue(0,     0, false));       // "Dip"
         tb->points().push_back(PitchValue(30, -100, false));
