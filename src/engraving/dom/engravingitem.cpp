@@ -278,7 +278,6 @@ String EngravingItem::translatedSubtypeUserName() const
 EngravingItem* EngravingItem::linkedClone()
 {
     EngravingItem* e = clone();
-    e->setAutoplace(true);
     score()->undo(new Link(e, this));
     return e;
 }
