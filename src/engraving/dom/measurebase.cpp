@@ -130,8 +130,6 @@ void MeasureBase::add(EngravingItem* e)
             setLineBreak(false);
             setSectionBreak(true);
             setNoBreak(false);
-            //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
-            triggerLayoutAll();
             break;
         case LayoutBreakType:: NOBREAK:
             setPageBreak(false);
@@ -169,17 +167,22 @@ void MeasureBase::remove(EngravingItem* el)
         case LayoutBreakType::SECTION:
             setSectionBreak(false);
             score()->setPause(endTick(), 0);
-            triggerLayoutAll();
             break;
         case LayoutBreakType::NOBREAK:
             setNoBreak(false);
             break;
         }
     }
+
     if (!m_el.remove(el)) {
         LOGD("MeasureBase(%p)::remove(%s,%p) not found", this, el->typeName(), el);
     } else {
         el->removed();
+    }
+
+    triggerLayout();
+    if (next()) {
+        next()->triggerLayout();
     }
 }
 
@@ -445,7 +448,7 @@ bool MeasureBase::setProperty(Pid id, const PropertyValue& value)
         }
         break;
     }
-    triggerLayoutAll();
+    triggerLayout();
     score()->setPlaylistDirty();
     return true;
 }

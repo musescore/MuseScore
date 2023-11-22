@@ -128,7 +128,7 @@ void TieSegment::changeAnchor(EditData& ed, EngravingItem* element)
         score()->endCmd();
         score()->startCmd();
         ed.view()->changeEditElement(newSegment);
-        triggerLayoutAll();
+        triggerLayout();
     }
 }
 

@@ -345,7 +345,10 @@ void Lyrics::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
 
-    triggerLayoutAll();
+    triggerLayout();
+    if (m_separator) {
+        m_separator->triggerLayout();
+    }
 }
 
 //---------------------------------------------------------

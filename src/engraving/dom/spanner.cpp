@@ -175,7 +175,7 @@ bool SpannerSegment::setProperty(Pid pid, const PropertyValue& v)
     switch (pid) {
     case Pid::OFFSET2:
         m_offset2 = v.value<PointF>();
-        triggerLayoutAll();
+        triggerLayout();
         break;
     default:
         return EngravingItem::setProperty(pid, v);
@@ -1341,17 +1341,6 @@ void Spanner::triggerLayout() const
     // Spanners do not have parent even when added to a score, so can't check parent here
     const track_idx_t tr2 = effectiveTrack2();
     score()->setLayout(m_tick, m_tick + m_ticks, staffIdx(), track2staff(tr2), this);
-}
-
-void Spanner::triggerLayoutAll() const
-{
-    // Spanners do not have parent even when added to a score, so can't check parent here
-    score()->setLayoutAll(staffIdx(), this);
-
-    const track_idx_t tr2 = track2();
-    if (tr2 != mu::nidx && tr2 != track()) {
-        score()->setLayoutAll(track2staff(tr2), this);
-    }
 }
 
 //---------------------------------------------------------

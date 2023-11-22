@@ -319,7 +319,7 @@ bool Trill::setProperty(Pid propertyId, const PropertyValue& val)
         }
         break;
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 

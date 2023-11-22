@@ -208,7 +208,7 @@ bool Marker::setProperty(Pid propertyId, const PropertyValue& v)
         }
         break;
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 
