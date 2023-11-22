@@ -32,9 +32,11 @@ class PaletteCompat
 public:
     static void migrateOldPaletteItemIfNeeded(engraving::ElementPtr& element, engraving::Score* paletteScore);
     static void addNewItemsIfNeeded(Palette& palette, engraving::Score* paletteScore);
+    static void removeOldItemsIfNeeded(Palette& palette);
 
 private:
     static void addNewGuitarItems(Palette& guitarPalette, engraving::Score* paletteScore);
+    static void removeOldItems(Palette& palette);
 };
 } // namespace mu::palette
 #endif // MU_PALETTE_PALETTECOMPAT_H

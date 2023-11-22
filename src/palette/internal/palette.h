@@ -112,6 +112,7 @@ public:
                                  const QPointF& offset = QPointF(), const QString& tag = "");
     PaletteCellPtr insertElement(size_t idx, engraving::ElementPtr element, const TranslatableString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
+    PaletteCellPtr insertActionIcon(size_t idx, engraving::ActionIconType type, actions::ActionCode code, double mag = 1.0);
     // TODO: Remove QString overload
     PaletteCellPtr appendElement(engraving::ElementPtr element, const QString& name, qreal mag = 1.0,
                                  const QPointF& offset = QPointF(), const QString& tag = "");
@@ -121,6 +122,8 @@ public:
 
     bool insertCell(size_t idx, PaletteCellPtr cell);
     bool insertCells(size_t idx, std::vector<PaletteCellPtr> cells);
+    bool removeCell(PaletteCellPtr cell);
+    bool removeCells(std::vector<PaletteCellPtr> cells);
 
     const std::vector<PaletteCellPtr>& cells() const { return m_cells; }
     int cellsCount() const { return int(m_cells.size()); }

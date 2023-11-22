@@ -26,6 +26,7 @@
 
 #include "engraving/rw/compat/compatutils.h"
 
+#include "engraving/dom/actionicon.h"
 #include "engraving/dom/articulation.h"
 #include "engraving/dom/chordrest.h"
 #include "engraving/dom/engravingitem.h"
@@ -43,6 +44,13 @@
 
 using namespace mu::palette;
 using namespace mu::engraving;
+
+static const std::unordered_set<ActionIconType> BENDS_ACTION_TYPES = {
+    ActionIconType::STANDARD_BEND,
+    ActionIconType::PRE_BEND,
+    ActionIconType::GRACE_NOTE_BEND,
+    ActionIconType::SLIGHT_BEND
+};
 
 void PaletteCompat::migrateOldPaletteItemIfNeeded(ElementPtr& element, Score* paletteScore)
 {
@@ -82,17 +90,35 @@ void PaletteCompat::addNewItemsIfNeeded(Palette& palette, Score* paletteScore)
     }
 }
 
+void PaletteCompat::removeOldItemsIfNeeded(Palette& palette)
+{
+    if (palette.type() == Palette::Type::Articulation
+        || palette.type() == Palette::Type::Guitar) {
+        removeOldItems(palette);
+    }
+}
+
 void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScore)
 {
     bool containsCapo = false;
     bool containsStringTunings = false;
+    bool containsGuitarBends = false;
 
     for (const PaletteCellPtr& cell : guitarPalette.cells()) {
-        if (cell->element && cell->element->isCapo()) {
-            containsCapo = true;
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
         }
-        if (cell->element && cell->element->isStringTunings()) {
+
+        if (element->isCapo()) {
+            containsCapo = true;
+        } else if (element->isStringTunings()) {
             containsStringTunings = true;
+        } else if (element->isActionIcon()) {
+            const ActionIcon* icon = toActionIcon(element.get());
+            if (contains(BENDS_ACTION_TYPES, icon->actionType())) {
+                containsGuitarBends = true;
+            }
         }
     }
 
@@ -111,4 +137,30 @@ void PaletteCompat::addNewGuitarItems(Palette& guitarPalette, Score* paletteScor
         guitarPalette.insertElement(defaultPosition, stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(
             true);
     }
+
+    if (!containsGuitarBends) {
+        int defaultPosition = std::min(9, guitarPalette.cellsCount());
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::STANDARD_BEND, "standard-bend", 1.25);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::PRE_BEND, "pre-bend", 1.25);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
+        guitarPalette.insertActionIcon(defaultPosition, ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
+    }
+}
+
+void PaletteCompat::removeOldItems(Palette& palette)
+{
+    std::vector<PaletteCellPtr> cellsToRemove;
+
+    for (const PaletteCellPtr& cell : palette.cells()) {
+        const ElementPtr element = cell->element;
+        if (!element) {
+            continue;
+        }
+
+        if (element->isBend()) {
+            cellsToRemove.emplace_back(cell);
+        }
+    }
+
+    palette.removeCells(cellsToRemove);
 }

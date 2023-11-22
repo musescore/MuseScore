@@ -125,6 +125,17 @@ PaletteCellPtr Palette::insertElement(size_t idx, ElementPtr element, const Tran
     return insertElement(idx, element, name.str, mag, offset, tag);
 }
 
+PaletteCellPtr Palette::insertActionIcon(size_t idx, ActionIconType type, actions::ActionCode code, double mag)
+{
+    const ui::UiAction& action = actionsRegister()->action(code);
+    QString name = !action.description.isEmpty() ? action.description.qTranslated() : action.title.qTranslatedWithoutMnemonic();
+    auto icon = std::make_shared<ActionIcon>(gpaletteScore->dummy());
+    icon->setActionType(type);
+    icon->setAction(code, static_cast<char16_t>(action.iconCode));
+
+    return insertElement(idx, icon, name, mag);
+}
+
 PaletteCellPtr Palette::appendElement(ElementPtr element, const QString& name, qreal mag, const QPointF& offset, const QString& tag)
 {
     if (element) {
@@ -177,6 +188,21 @@ bool Palette::insertCells(size_t idx, std::vector<PaletteCellPtr> cells)
 
     m_cells.insert(m_cells.begin() + idx, std::make_move_iterator(cells.begin()),
                    std::make_move_iterator(cells.end()));
+
+    return true;
+}
+
+bool Palette::removeCell(PaletteCellPtr cell)
+{
+    return removeCells({ cell });
+}
+
+bool Palette::removeCells(std::vector<PaletteCellPtr> cells)
+{
+    for (PaletteCellPtr& c : cells) {
+        c->setParent(nullptr);
+        m_cells.erase(std::remove(m_cells.begin(), m_cells.end(), c), m_cells.end());
+    }
 
     return true;
 }
@@ -316,6 +342,7 @@ bool Palette::read(XmlReader& e, bool pasteMode)
         m_type = guessType();
     }
 
+    PaletteCompat::removeOldItemsIfNeeded(*this);
     PaletteCompat::addNewItemsIfNeeded(*this, gpaletteScore);
 
     return true;

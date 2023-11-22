@@ -274,7 +274,7 @@ void TWrite::writeStyledProperties(const EngravingItem* item, XmlWriter& xml)
 
 void TWrite::writeItemProperties(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!MScore::testMode) {
+    if (!MScore::testMode && !item->score()->isPaletteScore()) {
         xml.tag("eid", item->eid().toUint64());
     }
 

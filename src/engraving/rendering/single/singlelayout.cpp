@@ -683,6 +683,7 @@ void SingleLayout::layout(Bracket* item, const Context& ctx)
     Bracket::LayoutData* ldata = item->mutldata();
 
     ldata->setBracketHeight(3.5 * item->spatium() * 2);
+    ldata->braceSymbol = item->braceSymbol();
 
     Shape shape;
 
