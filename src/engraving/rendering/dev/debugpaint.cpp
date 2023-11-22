@@ -274,8 +274,8 @@ static void paintRecursive(mu::draw::Painter& painter, const EngravingItem* item
 {
     DebugPaint::paintTreeElement(painter, item);
 
-    for (const EngravingItem* item : item->childrenItems()) {
-        paintRecursive(painter, item);
+    for (const EngravingItem* eItem : item->childrenItems()) {
+        paintRecursive(painter, eItem);
     }
 }
 
