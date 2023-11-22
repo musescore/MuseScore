@@ -839,6 +839,13 @@ Note* Score::setGraceNote(Chord* ch, int pitch, NoteType type, int len)
 GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
 {
     if (note->isPreBendStart()) {
+        if (type == GuitarBendType::BEND && note->staffType()->isTabStaff()) {
+            GuitarBend* preBend = note->bendFor();
+            Note* mainNote = preBend ? preBend->endNote() : nullptr;
+            if (mainNote) {
+                return addGuitarBend(type, mainNote, nullptr);
+            }
+        }
         return nullptr;
     }
 
