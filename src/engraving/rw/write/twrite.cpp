@@ -834,6 +834,27 @@ void TWrite::writeSpannerStart(Spanner* s, XmlWriter& xml, WriteContext& ctx, co
 void TWrite::writeSpannerEnd(Spanner* s, XmlWriter& xml, WriteContext& ctx, const EngravingItem* current, track_idx_t track, Fraction tick)
 {
     Fraction frac = fraction(ctx.clipboardmode(), current, tick);
+    if (frac == s->score()->endTick()) {
+        // Write a location tag if the spanner ends on the last tick of the score
+        Location spannerEndLoc = Location::absolute();
+        spannerEndLoc.setFrac(frac);
+        spannerEndLoc.setMeasure(0);
+        spannerEndLoc.setTrack(track);
+        spannerEndLoc.setVoice(track2voice(track));
+        spannerEndLoc.setStaff(s->staffIdx());
+
+        Location prevLoc = Location::absolute();
+        prevLoc.setFrac(ctx.curTick());
+        prevLoc.setMeasure(0);
+        prevLoc.setTrack(track);
+        prevLoc.setVoice(track2voice(track));
+        prevLoc.setStaff(s->staffIdx());
+
+        spannerEndLoc.toRelative(prevLoc);
+        if (spannerEndLoc.frac() != Fraction(0, 1)) {
+            write(&spannerEndLoc, xml, ctx);
+        }
+    }
     SpannerWriter w(xml, &ctx, current, s, static_cast<int>(track), frac, false);
     w.write();
 }
