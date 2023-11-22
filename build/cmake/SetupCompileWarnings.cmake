@@ -4,6 +4,9 @@ if (MSVC)
     add_compile_options(/W4)
     add_definitions(-D_CRT_SECURE_NO_WARNINGS)
     add_compile_options(/wd4127) # disabled warning: C4127: conditional expression is constant
+    add_definitions(-D_SILENCE_STDEXT_ARR_ITERS_DEPRECATION_WARNING) # needed for VS 17.8.1 to suppress tons of C4996 warnings
+    # either the above or the below, or even both
+    #add_compile_options(/wd4996) # disabled warning: C4996, needed for VS 17.8.1 to suppress tons (some 1000) of them in VS' own code
 else()
     add_compile_options(-Wall -Wextra) #-Wconversion
 endif()
