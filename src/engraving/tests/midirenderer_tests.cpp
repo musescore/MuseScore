@@ -834,6 +834,89 @@ TEST_F(MidiRenderer_Tests, breathController)
 
 /*****************************************************************************
 
+   Hairpin + dynamic tests
+
+*****************************************************************************/
+
+TEST_F(MidiRenderer_Tests, hairpinSimple)
+{
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"hairpin_simple.mscx"));
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
+
+    checkEventInterval(events, 0, 479, 59, 49);
+    checkEventInterval(events, 480, 959, 60, 64);
+    checkEventInterval(events, 960, 1439, 62, 80);
+    checkEventInterval(events, 1440, 1919, 64, 96);
+}
+
+TEST_F(MidiRenderer_Tests, hairpinStartDynamicAway)
+{
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"hairpin_start_dynamic_away.mscx"));
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 12);
+
+    checkEventInterval(events, 0, 479, 60, 112);
+    checkEventInterval(events, 480, 959, 59, 112);
+    checkEventInterval(events, 960, 1439, 55, 112);
+    checkEventInterval(events, 1440, 1919, 52, 91);
+    checkEventInterval(events, 1920, 2399, 50, 70);
+    checkEventInterval(events, 2400, 2879, 48, 49);
+}
+
+TEST_F(MidiRenderer_Tests, hairpinEndDynamicAway)
+{
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"hairpin_end_dynamic_away.mscx"));
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 10);
+
+    checkEventInterval(events, 0, 479, 60, 112);
+    checkEventInterval(events, 480, 959, 59, 104);
+    checkEventInterval(events, 960, 1439, 55, 96);
+    checkEventInterval(events, 1440, 1919, 52, 96);
+    checkEventInterval(events, 1920, 2399, 48, 49);
+}
+
+TEST_F(MidiRenderer_Tests, hairpinDynamicJump)
+{
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"hairpin_dynamic_jump.mscx"));
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 20);
+
+    checkEventInterval(events, 0, 479, 55, 96);
+    checkEventInterval(events, 480, 959, 57, 100);
+    checkEventInterval(events, 960, 1439, 60, 104);
+    checkEventInterval(events, 1440, 1919, 62, 108);
+    checkEventInterval(events, 1920, 3839, 60, 80);
+    checkEventInterval(events, 3840, 4319, 55, 96);
+    checkEventInterval(events, 4320, 4799, 57, 92);
+    checkEventInterval(events, 4800, 5279, 60, 88);
+    checkEventInterval(events, 5280, 5759, 62, 84);
+    checkEventInterval(events, 5760, 7679, 60, 112);
+}
+
+TEST_F(MidiRenderer_Tests, hairpinDynamicInside)
+{
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"hairpin_dynamic_inside.mscx"));
+
+    EXPECT_EQ(events.size(), 1);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 14);
+
+    checkEventInterval(events, 0, 479, 60, 80);
+    checkEventInterval(events, 480, 959, 62, 85);
+    checkEventInterval(events, 960, 1439, 64, 90);
+    checkEventInterval(events, 1440, 1919, 65, 49);
+    checkEventInterval(events, 1920, 2399, 67, 49);
+    checkEventInterval(events, 2400, 2879, 69, 96);
+    checkEventInterval(events, 2880, 3359, 71, 96);
+}
+
+/*****************************************************************************
+
     DISABLED TESTS BELOW
 
 *****************************************************************************/
