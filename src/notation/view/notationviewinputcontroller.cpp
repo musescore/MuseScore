@@ -540,6 +540,21 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
         return;
     }
 
+    EngravingItem* hitElement = nullptr;
+    staff_idx_t hitStaffIndex = mu::nidx;
+
+    if (!m_readonly) {
+        m_prevHitElement = hitElementContext().element;
+
+        INotationInteraction::HitElementContext context;
+        context.element = viewInteraction()->hitElement(logicPos, hitWidth());
+        context.staff = viewInteraction()->hitStaff(logicPos);
+        viewInteraction()->setHitElementContext(context);
+
+        hitElement = context.element;
+        hitStaffIndex = context.staff ? context.staff->idx() : mu::nidx;
+    }
+
     // note enter mode
     if (m_view->isNoteEnterMode()) {
         if (button == Qt::RightButton) {
@@ -561,21 +576,6 @@ void NotationViewInputController::mousePressEvent(QMouseEvent* event)
     }
 
     m_beginPoint = logicPos;
-
-    EngravingItem* hitElement = nullptr;
-    staff_idx_t hitStaffIndex = mu::nidx;
-
-    if (!m_readonly) {
-        m_prevHitElement = hitElementContext().element;
-
-        INotationInteraction::HitElementContext context;
-        context.element = viewInteraction()->hitElement(logicPos, hitWidth());
-        context.staff = viewInteraction()->hitStaff(logicPos);
-        viewInteraction()->setHitElementContext(context);
-
-        hitElement = context.element;
-        hitStaffIndex = context.staff ? context.staff->idx() : mu::nidx;
-    }
 
     if (playbackController()->isPlaying()) {
         if (hitElement) {
