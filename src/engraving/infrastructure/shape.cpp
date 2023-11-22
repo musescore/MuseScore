@@ -101,9 +101,11 @@ void Shape::invalidateBBox()
 
 const RectF& Shape::bbox() const
 {
-    if (type() == Type::Fixed) {
+    if (m_elements.size() == 0) {
         static const RectF _dummy;
-        return m_elements.empty() ? _dummy : m_elements.at(0);
+        return _dummy;
+    } else if (m_elements.size() == 1) {
+        return m_elements.at(0);
     } else {
         if (m_bbox.isNull()) {
             for (const ShapeElement& e : m_elements) {
