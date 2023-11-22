@@ -4565,7 +4565,8 @@ void Score::undoAddElement(Element* element)
          && et != ElementType::TREMOLOBAR
          && et != ElementType::FRET_DIAGRAM
          && et != ElementType::FERMATA
-         && et != ElementType::HARMONY)
+         && et != ElementType::HARMONY
+         && et != ElementType::FIGURED_BASS)
             ) {
             undo(new AddElement(element));
             return;
@@ -4741,7 +4742,8 @@ void Score::undoAddElement(Element* element)
                      || element->isSticking()
                      || element->isFretDiagram()
                      || element->isFermata()
-                     || element->isHarmony()) {
+                     || element->isHarmony()
+                     || element->isFiguredBass()) {
                         Segment* segment = element->parent()->isFretDiagram() ? toSegment(element->parent()->parent()) : toSegment(element->parent());
                         Fraction tick    = segment->tick();
                         Measure* m       = score->tick2measure(tick);

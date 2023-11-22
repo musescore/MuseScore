@@ -1768,7 +1768,7 @@ FiguredBass* Score::addFiguredBass()
             }
 
       FiguredBass * fb;
-      bool bNew;
+      bool bNew = true;
       if (el->isNote()) {
             ChordRest * cr = toNote(el)->chord();
             fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0,1), &bNew);
