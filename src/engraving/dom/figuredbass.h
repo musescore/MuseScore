@@ -91,6 +91,7 @@ class FiguredBass;
 class FiguredBassItem final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, FiguredBassItem)
+    DECLARE_CLASSOF(ElementType::FIGURED_BASS_ITEM)
 
 public:
     enum class Modifier : char {
@@ -292,6 +293,9 @@ public:
     size_t itemsCount() const { return m_items.size(); }
     void appendItem(FiguredBassItem* item) { m_items.push_back(item); }
     const std::vector<FiguredBassItem*>& items() const { return m_items; }
+    void clearItems();
+    void addItemToLinked(FiguredBassItem* item);
+    virtual void remove(EngravingItem* item) override;
 
     // the array of configured fonts
     static const std::vector<FiguredBassFont>& FBFonts();

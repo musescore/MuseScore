@@ -30,11 +30,13 @@
 
 #include "chord.h"
 #include "factory.h"
+#include "linkedobjects.h"
 #include "measure.h"
 #include "note.h"
 #include "rest.h"
 #include "score.h"
 #include "segment.h"
+#include "undo.h"
 
 #include "log.h"
 
@@ -78,7 +80,7 @@ const Char FiguredBassItem::NORM_PARENTH_TO_CHAR[int(FiguredBassItem::Parenthesi
 { 0, '(', ')', '[', ']' };
 
 FiguredBassItem::FiguredBassItem(FiguredBass* parent, int l)
-    : EngravingItem(ElementType::INVALID, parent), m_ord(l)
+    : EngravingItem(ElementType::FIGURED_BASS_ITEM, parent), m_ord(l)
 {
     m_prefix     = m_suffix = Modifier::NONE;
     m_digit      = FBIDigitNone;
@@ -706,8 +708,7 @@ Sid FiguredBass::getPropertyStyle(Pid id) const
 
 void FiguredBass::startEdit(EditData& ed)
 {
-    DeleteAll(m_items);
-    m_items.clear();
+    clearItems();
     renderer()->layoutText1(this);   // re-layout without F.B.-specific formatting.
     TextBase::startEdit(ed);
 }
@@ -737,24 +738,20 @@ void FiguredBass::endEdit(EditData& ed)
 
     // split text into lines and create an item for each line
     StringList list = txt.split(u'\n', mu::SkipEmptyParts);
-    DeleteAll(m_items);
-    m_items.clear();
+    clearItems();
     String normalizedText;
     int idx = 0;
     for (String str : list) {
         FiguredBassItem* pItem = new FiguredBassItem(this, idx++);
         if (!pItem->parse(str)) {               // if any item fails parsing
-            DeleteAll(m_items);
-            m_items.clear();                      // clear item list
+            clearItems();
             score()->startCmd();
             triggerLayout();
             score()->endCmd();
             delete pItem;
             return;
         }
-        pItem->setTrack(track());
-        pItem->setParent(this);
-        m_items.push_back(pItem);
+        addItemToLinked(pItem);
 
         // add item normalized text
         if (!normalizedText.isEmpty()) {
@@ -764,7 +761,7 @@ void FiguredBass::endEdit(EditData& ed)
     }
     // if all items parsed and text is styled, replaced entered text with normalized text
     if (m_items.size()) {
-        setXmlText(normalizedText);
+        undoChangeProperty(Pid::TEXT, normalizedText);
     }
 
     score()->startCmd();
@@ -875,6 +872,67 @@ bool FiguredBass::setProperty(Pid propertyId, const PropertyValue& v)
 PropertyValue FiguredBass::propertyDefault(Pid id) const
 {
     return TextBase::propertyDefault(id);
+}
+
+void FiguredBass::clearItems()
+{
+    const std::list<EngravingObject*> links = linkList();
+    for (EngravingObject* linkedObject : links) {
+        if (!linkedObject || !linkedObject->isFiguredBass()) {
+            continue;
+        }
+        Score* linkedScore = linkedObject->score();
+        FiguredBass* linkedFb = toFiguredBass(linkedObject);
+        for (FiguredBassItem* fbItem : linkedFb->items()) {
+            linkedScore->undoRemoveElement(fbItem);
+        }
+        linkedFb->m_items.clear();
+    }
+}
+
+void FiguredBass::addItemToLinked(FiguredBassItem* item)
+{
+    const std::list<EngravingObject*> links = linkList();
+    for (EngravingObject* linkedObject : links) {
+        if (!linkedObject || !linkedObject->isFiguredBass()) {
+            continue;
+        }
+        Score* linkedScore = linkedObject->score();
+        if (linkedObject == this) {
+            item->setTrack(track());
+            item->setParent(this);
+            m_items.push_back(item);
+            score()->undo(new AddElement(item));
+        } else {
+            FiguredBass* linkedFb = toFiguredBass(linkedObject);
+            FiguredBassItem* itemClone = item->clone();
+
+            itemClone->linkTo(item);
+            itemClone->setTrack(linkedFb->track());
+            itemClone->setParent(linkedFb);
+            itemClone->setScore(linkedFb->score());
+            linkedFb->appendItem(itemClone);
+            linkedScore->undo(new AddElement(itemClone));
+        }
+    }
+}
+
+void FiguredBass::remove(EngravingItem* item)
+{
+    switch (item->type()) {
+    case ElementType::FIGURED_BASS_ITEM:
+    {
+        auto i = find(m_items.begin(), m_items.end(), item);
+        if (i == m_items.end()) {
+            LOGD("FiguredBass::remove(): cannot find %s", item->typeName());
+            break;
+        }
+        m_items.erase(i);
+        break;
+    }
+    default:
+        EngravingItem::remove(item);
+    }
 }
 
 //---------------------------------------------------------
@@ -1182,7 +1240,7 @@ FiguredBass* Score::addFiguredBass()
     }
 
     FiguredBass* fb;
-    bool bNew;
+    bool bNew = true;
     if (el->isNote()) {
         ChordRest* cr = toNote(el)->chord();
         fb = FiguredBass::addFiguredBassToSegment(cr->segment(), cr->staffIdx() * VOICES, Fraction(0, 1), &bNew);

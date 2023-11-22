@@ -202,6 +202,7 @@ static const std::vector<Item<ElementType> > ELEMENT_TYPES = {
     { ElementType::HOOK,                 "Hook",                 TranslatableString("engraving", "Flag") }, // internally called "Hook", but "Flag" in SMuFL, so here externally too
     { ElementType::LYRICS,               "Lyrics",               TranslatableString("engraving", "Lyrics") },
     { ElementType::FIGURED_BASS,         "FiguredBass",          TranslatableString("engraving", "Figured bass") },
+    { ElementType::FIGURED_BASS_ITEM,    "FiguredBassItem",      TranslatableString("engraving", "Figured bass item") },
     { ElementType::MARKER,               "Marker",               TranslatableString("engraving", "Marker") },
     { ElementType::JUMP,                 "Jump",                 TranslatableString("engraving", "Jump") },
     { ElementType::FINGERING,            "Fingering",            TranslatableString("engraving", "Fingering") },
