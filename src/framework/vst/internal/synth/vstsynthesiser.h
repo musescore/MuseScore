@@ -45,7 +45,8 @@ class VstSynthesiser : public audio::synth::AbstractSynthesizer
     INJECT(audio::IAudioConfiguration, config)
 
 public:
-    explicit VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params);
+    explicit VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::TrackId trackId, const audio::AudioInputParams& params);
+    ~VstSynthesiser() override;
 
     bool isValid() const override;
 
@@ -82,6 +83,8 @@ private:
     audio::samples_t m_samplesPerChannel = 0;
 
     VstSequencer m_sequencer;
+
+    audio::TrackId m_trackId = audio::INVALID_TRACK_ID;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;

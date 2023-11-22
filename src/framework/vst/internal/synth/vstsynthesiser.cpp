@@ -37,10 +37,15 @@ static const std::set<Steinberg::Vst::CtrlNumber> SUPPORTED_CONTROLLERS = {
     Steinberg::Vst::kPitchBend,
 };
 
-VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params)
-    : AbstractSynthesizer(params), m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>())
+VstSynthesiser::VstSynthesiser(VstPluginPtr&& pluginPtr, const TrackId trackId, const audio::AudioInputParams& params)
+    : AbstractSynthesizer(params), m_pluginPtr(pluginPtr), m_vstAudioClient(std::make_unique<VstAudioClient>()), m_trackId(trackId)
 {
     init();
+}
+
+VstSynthesiser::~VstSynthesiser()
+{
+    pluginsRegister()->unregisterInstrPlugin(m_trackId, m_params.resourceMeta.id);
 }
 
 Ret VstSynthesiser::init()
