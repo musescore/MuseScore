@@ -58,7 +58,7 @@ Templates TemplatesRepository::readTemplates(const io::path_t& dirPath) const
             return Templates();
         }
 
-        return readTemplates(files.val, qtrc("project", "My templates"));
+        return readTemplates(files.val, qtrc("project", "My templates"), true /*isCustom*/);
     }
 
     RetVal<ByteArray> categoriesJson = fileSystem()->readFile(categoriesJsonPath);
@@ -82,13 +82,14 @@ Templates TemplatesRepository::readTemplates(const io::path_t& dirPath) const
             paths.push_back(path);
         }
 
-        templates << readTemplates(paths, categoryTitle, dirPath);
+        templates << readTemplates(paths, categoryTitle, false /*isCustom*/, dirPath);
     }
 
     return templates;
 }
 
-Templates TemplatesRepository::readTemplates(const io::paths_t& files, const QString& category, const io::path_t& dirPath) const
+Templates TemplatesRepository::readTemplates(const io::paths_t& files, const QString& category, bool isCustom,
+                                             const io::path_t& dirPath) const
 {
     TRACEFUNC;
 
@@ -107,6 +108,7 @@ Templates TemplatesRepository::readTemplates(const io::paths_t& files, const QSt
         Template templ;
         templ.categoryTitle = category;
         templ.meta = std::move(meta.val);
+        templ.isCustom = isCustom;
 
         templates << templ;
     }

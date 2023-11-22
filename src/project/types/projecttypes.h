@@ -295,6 +295,7 @@ struct Template
 {
     QString categoryTitle;
     ProjectMeta meta;
+    bool isCustom = false;
 };
 
 using Templates = QList<Template>;

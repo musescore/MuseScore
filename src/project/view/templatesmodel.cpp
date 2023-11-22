@@ -97,7 +97,8 @@ QStringList TemplatesModel::templatesTitles() const
     QStringList titles;
 
     for (const Template& templ: m_visibleTemplates) {
-        titles << templ.meta.title;
+        QString titleToAdd = templ.isCustom ? templ.meta.fileName(false).toQString() : templ.meta.title;
+        titles << titleToAdd;
     }
 
     return titles;
