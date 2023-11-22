@@ -140,7 +140,7 @@ class FiguredBassItem final : public Element {
 
       void              setDisplayText(const QString& s)    { _displayText = s;       }
       // read / write MusicXML support
-      QString                   Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
+      QString           Modifier2MusicXML(FiguredBassItem::Modifier prefix) const;
 
    public:
       FiguredBassItem(Score * s = 0, int line = 0);
@@ -164,7 +164,7 @@ class FiguredBassItem final : public Element {
       bool              startsWithParenthesis() const;
 
       // specific API
-      const FiguredBass *    figuredBass() const      { return (FiguredBass*)(parent()); }
+      const FiguredBass*    figuredBass() const       { return (FiguredBass*)(parent()); }
       bool              parse(QString& text);
 
       // getters / setters

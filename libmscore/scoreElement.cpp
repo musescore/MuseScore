@@ -25,7 +25,7 @@ namespace Ms {
 ElementStyle const ScoreElement::emptyStyle;
 
 //
-// list has to be synchronized with ElementType enum
+// list has to be synchronized with ElementType enum in types.h
 //
 static const ElementName elementNames[] = {
       { ElementType::INVALID,              "invalid",              QT_TRANSLATE_NOOP("elementName", "Invalid") },
