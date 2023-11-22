@@ -206,7 +206,6 @@ class Spanner : public Element {
       virtual void layoutSystemsDone();
 
       virtual void triggerLayout() const override;
-      virtual void triggerLayoutAll() const override;
       virtual void add(Element*) override;
       virtual void remove(Element*) override;
       virtual void scanElements(void* data, void (*func)(void*, Element*), bool all=true) override;

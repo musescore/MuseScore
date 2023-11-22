@@ -489,7 +489,7 @@ bool Trill::setProperty(Pid propertyId, const QVariant& val)
                         return false;
                   break;
             }
-      triggerLayoutAll();
+      triggerLayout();
       return true;
       }
 

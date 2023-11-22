@@ -271,7 +271,7 @@ bool Marker::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      triggerLayoutAll();
+      triggerLayout();
       return true;
       }
 

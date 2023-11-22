@@ -1911,9 +1911,13 @@ void Element::triggerLayout() const
             score()->setLayout(tick(), staffIdx(), this);
       }
 
-//---------------------------------------------------------
+//----------------------------------------------------------------------
 //   triggerLayoutAll
-//---------------------------------------------------------
+//
+//   *************************** CAUTION *******************************
+//   This causes a layout of the entire score: extremely expensive and
+//   likely unnecessary! Consider overriding triggerLayout() instead.
+//----------------------------------------------------------------------
 
 void Element::triggerLayoutAll() const
       {

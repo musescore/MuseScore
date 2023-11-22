@@ -159,7 +159,7 @@ bool SpannerSegment::setProperty(Pid pid, const QVariant& v)
       switch (pid) {
             case Pid::OFFSET2:
                   _offset2 = v.toPointF();
-                  triggerLayoutAll();
+                  triggerLayout();
                   break;
             default:
                   return Element::setProperty(pid, v);
@@ -1117,16 +1117,6 @@ void Spanner::triggerLayout() const
       // Spanners do not have parent even when added to a score, so can't check parent here
       const int tr2 = effectiveTrack2();
       score()->setLayout(_tick, _tick + _ticks, staffIdx(), track2staff(tr2), this);
-      }
-
-void Spanner::triggerLayoutAll() const
-      {
-      // Spanners do not have parent even when added to a score, so can't check parent here
-      score()->setLayoutAll(staffIdx(), this);
-
-      const int tr2 = track2();
-      if (tr2 != -1 && tr2 != track())
-            score()->setLayoutAll(track2staff(tr2), this);
       }
 
 //---------------------------------------------------------

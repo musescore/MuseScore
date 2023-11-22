@@ -14,6 +14,7 @@
 #include "score.h"
 #include "mscore.h"
 #include "xml.h"
+#include "measurebase.h"
 
 namespace Ms {
 
@@ -290,7 +291,9 @@ bool LayoutBreak::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      triggerLayoutAll();
+      triggerLayout();
+      if (parent() && measure()->next())
+            measure()->next()->triggerLayout();
       setGenerated(false);
       return true;
       }

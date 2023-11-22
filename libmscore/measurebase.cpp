@@ -142,8 +142,6 @@ void MeasureBase::add(Element* e)
                         setLineBreak(false);
                         setSectionBreak(true);
                         setNoBreak(false);
-      //does not work with repeats: score()->tempomap()->setPause(endTick(), b->pause());
-                        triggerLayoutAll();
                         break;
                   case LayoutBreak::NOBREAK:
                         setPageBreak(false);
@@ -154,7 +152,6 @@ void MeasureBase::add(Element* e)
                   }
             if (next())
                   next()->triggerLayout();
-//            triggerLayoutAll();     // TODO
             }
       triggerLayout();
       _el.push_back(e);
@@ -179,16 +176,21 @@ void MeasureBase::remove(Element* el)
                   case LayoutBreak::SECTION:
                         setSectionBreak(false);
                         score()->setPause(endTick(), 0);
-                        triggerLayoutAll();
+                        triggerLayout();
                         break;
                   case LayoutBreak::NOBREAK:
                         setNoBreak(false);
                         break;
                   }
             }
+
       if (!_el.remove(el)) {
             qDebug("MeasureBase(%p)::remove(%s,%p) not found", this, el->name(), el);
             }
+
+      triggerLayout();
+      if (next())
+            next()->triggerLayout();
       }
 
 //---------------------------------------------------------
@@ -423,7 +425,7 @@ bool MeasureBase::setProperty(Pid id, const QVariant& value)
                         return false;
                   break;
             }
-      triggerLayoutAll();
+      triggerLayout();
       score()->setPlaylistDirty();
       return true;
       }

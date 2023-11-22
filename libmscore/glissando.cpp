@@ -706,7 +706,7 @@ bool Glissando::setProperty(Pid propertyId, const QVariant& v)
                         return false;
                   break;
             }
-      triggerLayoutAll();
+      triggerLayout();
       return true;
       }
 

@@ -130,7 +130,7 @@ void TieSegment::changeAnchor(EditData& ed, Element* element)
             score()->endCmd();
             score()->startCmd();
             ed.view->startEdit(newSegment, ed.curGrip);
-            triggerLayoutAll();
+            triggerLayout();
             }
       }
 

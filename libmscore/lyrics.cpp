@@ -507,7 +507,9 @@ Element* Lyrics::drop(EditData& data)
 void Lyrics::endEdit(EditData& ed)
       {
       TextBase::endEdit(ed);
-      triggerLayoutAll();
+      triggerLayout();
+      if (_separator)
+            _separator->triggerLayout();
       }
 
 //---------------------------------------------------------
