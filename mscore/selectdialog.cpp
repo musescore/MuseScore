@@ -108,8 +108,19 @@ void SelectDialog::setPattern(ElementPattern* p)
       else
             p->beat = Fraction(0,0);
 
-      if (sameMeasure->isChecked())
-            p->measure = e->findMeasure();
+      if (sameMeasure->isChecked()) {
+            auto m = e->findMeasure();
+            if (!m && e->isSpannerSegment()) {
+                  if (auto ss  = toSpannerSegment(e)) {
+                  if (auto s   = ss->spanner())       {
+                  if (auto se  = s->startElement())   {
+                  if (auto mse = se->findMeasure())   {
+                        m = mse;
+                        }}}}
+                  }
+            if (m)
+                  p->measure = m;
+            }
       else
             p->measure = nullptr;
 
