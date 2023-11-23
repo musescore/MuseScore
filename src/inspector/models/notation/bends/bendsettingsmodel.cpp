@@ -273,31 +273,35 @@ void BendSettingsModel::setBendCurve(const QVariantList& newBendCurve)
 
     const CurvePoint& endTimePoint = points.at(END_POINT_INDEX);
 
-    int bendAmount = curvePitchToBendAmount(endTimePoint.pitch);
-    int pitch = bendAmount / 2 + bend->startNoteOfChain()->pitch();
-    QuarterOffset quarterOff = bendAmount % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
-    if (pitch == bend->startNote()->pitch() && quarterOff == QuarterOffset::QUARTER_SHARP) {
-        // Because a flat second is more readable than a sharp unison
-        pitch += 1;
-        quarterOff = QuarterOffset::QUARTER_FLAT;
+    bool pitchChanged = endTimePoint.pitch != m_bendCurve.at(END_POINT_INDEX).pitch;
+
+    beginCommand();
+
+    if (pitchChanged) {
+        int bendAmount = curvePitchToBendAmount(endTimePoint.pitch);
+        int pitch = bendAmount / 2 + bend->startNoteOfChain()->pitch();
+        QuarterOffset quarterOff = bendAmount % 2 ? QuarterOffset::QUARTER_SHARP : QuarterOffset::NONE;
+        if (pitch == bend->startNote()->pitch() && quarterOff == QuarterOffset::QUARTER_SHARP) {
+            // Because a flat second is more readable than a sharp unison
+            pitch += 1;
+            quarterOff = QuarterOffset::QUARTER_FLAT;
+        }
+
+        if (!m_releaseBend) {
+            bend->setEndNotePitch(pitch, quarterOff);
+        } else {
+            int oldBendAmount = curvePitchToBendAmount(m_bendCurve[START_POINT_INDEX].pitch);
+            pitch = bend->startNote()->pitch() - ((oldBendAmount - bendAmount) / 2);
+
+            bend->setEndNotePitch(pitch, quarterOff);
+        }
     }
 
     float starTimeFactor = static_cast<float>(points.at(START_POINT_INDEX).time) / CurvePoint::MAX_TIME;
     float endTimeFactor = static_cast<float>(endTimePoint.time) / CurvePoint::MAX_TIME;
-
-    beginCommand();
-
-    if (!m_releaseBend) {
-        bend->setEndNotePitch(pitch, quarterOff);
-    } else {
-        int oldBendAmount = curvePitchToBendAmount(m_bendCurve[START_POINT_INDEX].pitch);
-        pitch = bend->startNote()->pitch() - ((oldBendAmount - bendAmount) / 2);
-
-        bend->setEndNotePitch(pitch, quarterOff);
-    }
-
     bend->undoChangeProperty(Pid::BEND_START_TIME_FACTOR, starTimeFactor);
     bend->undoChangeProperty(Pid::BEND_END_TIME_FACTOR, endTimeFactor);
+
     endCommand();
 
     updateNotation();

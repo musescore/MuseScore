@@ -33,6 +33,7 @@
 #include "box.h"
 #include "chord.h"
 #include "factory.h"
+#include "guitarbend.h"
 #include "harmony.h"
 #include "layoutbreak.h"
 #include "linkedobjects.h"
@@ -1515,6 +1516,25 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                 } else {
                                     LOGD("cloneStaff2: cannot find tie");
                                 }
+                            }
+                            GuitarBend* bendBack = on->bendBack();
+                            Note* newStartNote = bendBack ? toNote(bendBack->startNote()->findLinkedInStaff(dstStaff)) : nullptr;
+                            if (bendBack && newStartNote) {
+                                GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
+                                newBend->setScore(score);
+                                newBend->setStartElement(newStartNote);
+                                newBend->setEndElement(nn);
+                                newStartNote->addSpannerFor(newBend);
+                                nn->addSpannerBack(newBend);
+                            }
+                            GuitarBend* bendFor = on->bendFor();
+                            if (bendFor && bendFor->type() == GuitarBendType::SLIGHT_BEND) {
+                                // Because slight bends aren't detected as "bendBack"
+                                GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
+                                newBend->setScore(score);
+                                newBend->setStartElement(nn);
+                                newBend->setEndElement(nn);
+                                nn->addSpannerFor(newBend);
                             }
                         }
                     }

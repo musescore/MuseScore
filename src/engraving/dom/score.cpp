@@ -1644,6 +1644,9 @@ void Score::removeElement(EngravingItem* element)
         if (endNote) {
             endNote->setGhost(false);
             endNote->setVisible(true);
+            const StringData* stringData = endNote->part()->stringData(endNote->tick(), endNote->staffIdx());
+            int endFret = stringData->fret(endNote->pitch(), endNote->string(), endNote->staff());
+            endNote->undoChangeProperty(Pid::FRET, endFret);
         }
         break;
     }
