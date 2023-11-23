@@ -33,7 +33,6 @@
 
 #include "internal/vstaudioclient.h"
 #include "ivstpluginsregister.h"
-#include "ivstmodulesrepository.h"
 #include "vstsequencer.h"
 #include "vsttypes.h"
 
@@ -41,11 +40,13 @@ namespace mu::vst {
 class VstSynthesiser : public audio::synth::AbstractSynthesizer
 {
     INJECT(IVstPluginsRegister, pluginsRegister)
-    INJECT(IVstModulesRepository, modulesRepo)
     INJECT(audio::IAudioConfiguration, config)
 
 public:
-    explicit VstSynthesiser(VstPluginPtr&& pluginPtr, const audio::AudioInputParams& params);
+    explicit VstSynthesiser(const audio::TrackId trackId, const audio::AudioInputParams& params);
+    ~VstSynthesiser() override;
+
+    void init();
 
     bool isValid() const override;
 
@@ -71,7 +72,6 @@ public:
     audio::samples_t process(float* buffer, audio::samples_t samplesPerChannel) override;
 
 private:
-    Ret init();
     void toggleVolumeGain(const bool isActive);
 
     VstPluginPtr m_pluginPtr = nullptr;
@@ -82,6 +82,8 @@ private:
     audio::samples_t m_samplesPerChannel = 0;
 
     VstSequencer m_sequencer;
+
+    audio::TrackId m_trackId = audio::INVALID_TRACK_ID;
 };
 
 using VstSynthPtr = std::shared_ptr<VstSynthesiser>;
