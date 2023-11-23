@@ -240,18 +240,25 @@ InspectorModelTypeSet AbstractInspectorModel::modelTypesByElementKeys(const Elem
 
 static bool isPureDynamics(const QList<mu::engraving::EngravingItem*>& selectedElementList)
 {
-    for (EngravingItem* item : selectedElementList) {
+    if (selectedElementList.empty()) {
+        return false;
+    }
+
+    for (const EngravingItem* item : selectedElementList) {
         if (!item->isTextBase()) {
             continue;
         }
+
         if (!item->isDynamic()) {
             return false;
         }
-        Dynamic* dynamic = toDynamic(item);
+
+        const Dynamic* dynamic = toDynamic(item);
         if (dynamic->hasCustomText()) {
             return false;
         }
     }
+
     return true;
 }
 
