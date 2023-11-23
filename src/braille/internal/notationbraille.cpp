@@ -490,6 +490,39 @@ void NotationBraille::setKeys(const QString& sequence)
         LOGD() << brailleInput()->buffer();
         std::string braille = translate2Braille(brailleInput()->buffer().toStdString());
         BieRecognize(braille, brailleInput()->tupletIndicator());
+
+        NoteName prevNoteName = NoteName::C;
+        int prevNoteOctave = -1; // unknown octave
+
+        if (Segment* seg = interaction()->noteInput()->state().segment) {
+            const track_idx_t track = interaction()->noteInput()->state().currentTrack;
+            Chord* prevChord = nullptr;
+
+            for (Segment* s = seg->prev1(SegmentType::ChordRest); s; s = s->prev1(SegmentType::ChordRest)) {
+                EngravingItem* e = s->element(track);
+                if (e && e->isChord()) {
+                    prevChord = toChord(e);
+                    break;
+                }
+            }
+
+            if (prevChord) {
+                Note* rootNote = (currentIntervalDirection() == IntervalDirection::Up) ? prevChord->downNote() : prevChord->upNote();
+                String pitchName;
+                String accidental; // needed for tpc2name
+                tpc2name(rootNote->tpc(), NoteSpellingType::STANDARD, NoteCaseType::UPPER, pitchName, accidental);
+                size_t inote = String("CDEFGAB").indexOf(pitchName.at(0));
+                IF_ASSERT_FAILED(inote >= 0 && inote <= 6) {
+                } else {
+                    prevNoteName = static_cast<NoteName>(inote);
+                    prevNoteOctave = rootNote->octave();
+                }
+            }
+        }
+
+        brailleInput()->setNoteName(prevNoteName, true);
+        brailleInput()->setOctave(prevNoteOctave, true);
+
         BieSequencePatternType type = brailleInput()->parseBraille(currentIntervalDirection());
         switch (type) {
         case BieSequencePatternType::Note: {
@@ -891,15 +924,12 @@ IntervalDirection NotationBraille::currentIntervalDirection()
         break;
     }
     if (EngravingItem* element = currentEngravingItem()) {
-        if (element->isNote()) {
-            Note* note = toNote(element);
-            if (Staff* staff = note->staff()) {
-                ClefType clef = staff->clef(note->tick());
-                if (clef >= ClefType::G && clef <= ClefType::C3) {
-                    return IntervalDirection::Down;
-                }
-                return IntervalDirection::Up;
+        if (Staff* staff = element->staff()) {
+            ClefType clef = staff->clef(element->tick());
+            if (clef >= ClefType::G && clef <= ClefType::C3) {
+                return IntervalDirection::Down;
             }
+            return IntervalDirection::Up;
         }
     }
     return IntervalDirection::Down;
