@@ -296,7 +296,7 @@ bool GuitarBend::setProperty(Pid propertyId, const PropertyValue& v)
     default:
         return SLine::setProperty(propertyId, v);
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 
@@ -564,7 +564,7 @@ bool GuitarBendSegment::setProperty(Pid propertyId, const PropertyValue& v)
     default:
         return LineSegment::setProperty(propertyId, v);
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 

@@ -193,7 +193,6 @@ public:
     bool eitherEndVisible() const;
 
     virtual void triggerLayout() const override;
-    virtual void triggerLayoutAll() const override;
     virtual void add(EngravingItem*) override;
     virtual void remove(EngravingItem*) override;
     virtual void scanElements(void* data, void (* func)(void*, EngravingItem*), bool all=true) override;

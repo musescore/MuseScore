@@ -526,7 +526,7 @@ bool FiguredBassItem::setProperty(Pid propertyId, const PropertyValue& v)
     default:
         return EngravingItem::setProperty(propertyId, v);
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 

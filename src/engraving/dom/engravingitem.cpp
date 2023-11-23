@@ -1893,9 +1893,13 @@ void EngravingItem::triggerLayout() const
     }
 }
 
-//---------------------------------------------------------
+//----------------------------------------------------------------------
 //   triggerLayoutAll
-//---------------------------------------------------------
+//
+//   *************************** CAUTION *******************************
+//   This causes a layout of the entire score: extremely expensive and
+//   likely unnecessary! Consider overriding triggerLayout() instead.
+//----------------------------------------------------------------------
 
 void EngravingItem::triggerLayoutAll() const
 {

@@ -273,7 +273,7 @@ bool SlurTieSegment::setProperty(Pid propertyId, const PropertyValue& v)
     default:
         return SpannerSegment::setProperty(propertyId, v);
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 
@@ -428,7 +428,7 @@ bool SlurTie::setProperty(Pid propertyId, const PropertyValue& v)
     default:
         return Spanner::setProperty(propertyId, v);
     }
-    triggerLayoutAll();
+    triggerLayout();
     return true;
 }
 
