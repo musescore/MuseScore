@@ -121,7 +121,21 @@ FilterElementsOptions SelectDialog::elementOptions() const
     }
 
     if (sameMeasure->isChecked()) {
-        options.measure = m_element->findMeasure();
+        auto m = m_element->findMeasure();
+        if (!m && m_element->isSpannerSegment()) {
+            if (auto ss = toSpannerSegment(m_element)) {
+                if (auto s = ss->spanner()) {
+                    if (auto se = s->startElement()) {
+                        if (auto mse = se->findMeasure()) {
+                            m = mse;
+                        }
+                    }
+                }
+            }
+        }
+        if (m) {
+            options.measure = m;
+        }
     } else {
         options.measure = nullptr;
     }
