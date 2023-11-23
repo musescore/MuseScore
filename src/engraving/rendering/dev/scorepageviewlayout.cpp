@@ -141,16 +141,21 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
 
     ctx.mutState().setPrevMeasure(nullptr);
 
+    //! NOTE Reset pass need anyway
+//#ifdef MUE_ENABLE_ENGRAVING_LD_PASSES
     PassResetLayoutData resetPass;
     resetPass.run(score, ctx);
+//#endif
 
     MeasureLayout::getNextMeasure(ctx);
     ctx.mutState().setCurSystem(SystemLayout::collectSystem(ctx));
 
+#ifdef MUE_ENABLE_ENGRAVING_LD_PASSES
     if (ctx.state().isLayoutAll()) {
         PassLayoutIndependentItems independentPass;
         independentPass.run(score, ctx);
     }
+#endif
 
     doLayout(ctx);
 }
