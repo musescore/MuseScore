@@ -729,6 +729,11 @@ bool FiguredBass::isEditAllowed(EditData& ed) const
 void FiguredBass::endEdit(EditData& ed)
 {
     TextBase::endEdit(ed);
+    regenerateText();
+}
+
+void FiguredBass::regenerateText()
+{
     // as the standard text editor keeps inserting spurious HTML formatting and styles
     // retrieve and work only on the plain text
     const String txt = plainText();
@@ -866,6 +871,13 @@ PropertyValue FiguredBass::getProperty(Pid propertyId) const
 bool FiguredBass::setProperty(Pid propertyId, const PropertyValue& v)
 {
     score()->addRefresh(canvasBoundingRect());
+    if (propertyId == Pid::TEXT_LINKED_TO_MASTER) {
+        if (TextBase::setProperty(propertyId, v)) {
+            regenerateText();
+            return true;
+        }
+        return false;
+    }
     return TextBase::setProperty(propertyId, v);
 }
 
@@ -881,12 +893,20 @@ void FiguredBass::clearItems()
         if (!linkedObject || !linkedObject->isFiguredBass()) {
             continue;
         }
-        Score* linkedScore = linkedObject->score();
-        FiguredBass* linkedFb = toFiguredBass(linkedObject);
-        for (FiguredBassItem* fbItem : linkedFb->items()) {
-            linkedScore->undoRemoveElement(fbItem);
+        if (linkedObject == this) {
+            DeleteAll(m_items);
+            m_items.clear();
+        } else {
+            bool isThisTextLinked = getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
+            bool isOtherTextLinked = linkedObject->getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
+            if ((score()->isMaster() && !isOtherTextLinked)
+                || (!score()->isMaster() && !isThisTextLinked)) {
+                continue;
+            }
+            FiguredBass* linkedFb = toFiguredBass(linkedObject);
+            DeleteAll(linkedFb->m_items);
+            linkedFb->m_items.clear();
         }
-        linkedFb->m_items.clear();
     }
 }
 
@@ -904,6 +924,12 @@ void FiguredBass::addItemToLinked(FiguredBassItem* item)
             m_items.push_back(item);
             score()->undo(new AddElement(item));
         } else {
+            bool isThisTextLinked = getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
+            bool isOtherTextLinked = linkedObject->getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
+            if ((score()->isMaster() && !isOtherTextLinked)
+                || (!score()->isMaster() && !isThisTextLinked)) {
+                continue;
+            }
             FiguredBass* linkedFb = toFiguredBass(linkedObject);
             FiguredBassItem* itemClone = item->clone();
 
@@ -914,24 +940,6 @@ void FiguredBass::addItemToLinked(FiguredBassItem* item)
             linkedFb->appendItem(itemClone);
             linkedScore->undo(new AddElement(itemClone));
         }
-    }
-}
-
-void FiguredBass::remove(EngravingItem* item)
-{
-    switch (item->type()) {
-    case ElementType::FIGURED_BASS_ITEM:
-    {
-        auto i = find(m_items.begin(), m_items.end(), item);
-        if (i == m_items.end()) {
-            LOGD("FiguredBass::remove(): cannot find %s", item->typeName());
-            break;
-        }
-        m_items.erase(i);
-        break;
-    }
-    default:
-        EngravingItem::remove(item);
     }
 }
 
