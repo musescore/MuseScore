@@ -704,6 +704,12 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         if (endStaff > score->nstaves()) {
             endStaff = score->nstaves();
         }
+
+        if (score->cmdState().layoutRange()) {
+            score->cmdState().reset();
+            score->setLayout(dstTick, dstTick + tickLen, dstStaff, endStaff, dst);
+        }
+
         //check and add truly invisible rests instead of gaps
         //TODO: look if this could be done different
         Measure* dstM = score->tick2measure(dstTick);
