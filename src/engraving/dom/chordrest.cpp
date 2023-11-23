@@ -241,6 +241,7 @@ EngravingItem* ChordRest::drop(EditData& data)
     case ElementType::FRET_DIAGRAM:
     case ElementType::TREMOLOBAR:
     case ElementType::SYMBOL:
+    case ElementType::IMAGE:
         e->setTrack(track());
         e->setParent(segment());
         score()->undoAddElement(e);
@@ -355,11 +356,6 @@ EngravingItem* ChordRest::drop(EditData& data)
         }
         return e;
     }
-
-    case ElementType::IMAGE:
-        e->setParent(segment());
-        score()->undoAddElement(e);
-        return e;
 
     case ElementType::ACTION_ICON:
     {
