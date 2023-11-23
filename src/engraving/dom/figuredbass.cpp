@@ -321,7 +321,7 @@ int FiguredBassItem::parseParenthesis(String& str, int parenthIdx)
         code = Parenthesis::ROUNDCLOSED;
         break;
     case '[':
-        code =Parenthesis::SQUAREDOPEN;
+        code = Parenthesis::SQUAREDOPEN;
         break;
     case ']':
         code = Parenthesis::SQUAREDCLOSED;
