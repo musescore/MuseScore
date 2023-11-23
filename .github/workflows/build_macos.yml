@@ -3,15 +3,13 @@ name: 'Build: macOS'
 on:
   push:
     branches:
-    - master
-#    - 3.x
+    - 3.x
   pull_request:
     branches:
-    - master
-#    - 3.x
+    - 3.x
 
-#  schedule:
-#    - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
+  schedule:
+    - cron: '0 4 */1 * *' # At 04:00 on every day-of-month
   workflow_dispatch:
     inputs:
       build_mode:
@@ -37,11 +35,11 @@ on:
 
 env:
   CURRENT_RELEASE_BRANCH: 3.x
-  DEVELOPER_DIR: /Applications/Xcode_13.1.app/Contents/Developer
+  DEVELOPER_DIR: /Applications/Xcode_15.2.app/Contents/Developer
 
 jobs:
   macos:
-    runs-on: macos-12
+    runs-on: macos-13
     steps:
     - name: Cancel Previous Runs
       uses: styfle/cancel-workflow-action@0.12.1

@@ -210,8 +210,8 @@ if (APPLE)
       set (CMAKE_CXX_COMPILER_ID "Clang")
       set(CMAKE_OSX_ARCHITECTURES x86_64)
 
-      set(MACOSX_DEPLOYMENT_TARGET 10.10)
-      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.10)
+      set(MACOSX_DEPLOYMENT_TARGET 10.13)
+      set(CMAKE_OSX_DEPLOYMENT_TARGET 10.13)
 
       set(HAS_AUDIOFILE TRUE)            # Requires libsndfile
       set(MAC_APPCAST_URL "")
