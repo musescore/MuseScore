@@ -63,13 +63,14 @@ protected:
         return obj;
     }
 
-    Template buildTemplate(const QString& categoryTitle, const io::path_t& path) const
+    Template buildTemplate(const QString& categoryTitle, const io::path_t& path, bool isCustom) const
     {
         Template templ;
         templ.categoryTitle = categoryTitle;
         templ.meta.title = path.toQString();
         templ.meta.filePath = path;
         templ.meta.creationDate = QDate::currentDate();
+        templ.isCustom = isCustom;
 
         return templ;
     }
@@ -96,6 +97,7 @@ inline bool operator==(const Template& templ1, const Template& templ2)
     equals &= (templ1.meta.title == templ1.meta.title);
     equals &= (templ1.categoryTitle == templ2.categoryTitle);
     equals &= (templ1.meta.creationDate == templ2.meta.creationDate);
+    equals &= (templ1.isCustom == templ2.isCustom);
 
     return equals;
 }
@@ -164,14 +166,14 @@ TEST_F(Project_TemplatesRepositoryTest, Templates)
 
     // [GIVEN] Expected templates after reading
     Templates expectedTemplates {
-        buildTemplate("Jazz", "/path/to/standard/templates/Big_Band.mscx"),
-        buildTemplate("Jazz", "/path/to/standard/templates/Jazz_Combo.mscz"),
-        buildTemplate("Solo", "/path/to/standard/templates/Guitar.mscx"),
-        buildTemplate("Popular", "/path/to/user/templates/Rock_Band.mscz")
+        buildTemplate("Jazz", "/path/to/standard/templates/Big_Band.mscx", false /*isCustom*/),
+        buildTemplate("Jazz", "/path/to/standard/templates/Jazz_Combo.mscz", false),
+        buildTemplate("Solo", "/path/to/standard/templates/Guitar.mscx", false),
+        buildTemplate("Popular", "/path/to/user/templates/Rock_Band.mscz", false)
     };
 
     for (const io::path_t& otherTemplatePath : otherUserTemplates) {
-        expectedTemplates << buildTemplate("My templates", otherTemplatePath);
+        expectedTemplates << buildTemplate("My templates", otherTemplatePath, true /*isCustom*/);
     }
 
     for (const Template& templ : expectedTemplates) {
