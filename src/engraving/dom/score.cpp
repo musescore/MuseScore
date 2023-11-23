@@ -3603,6 +3603,7 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
 void Score::collectMatch(void* data, EngravingItem* e)
 {
     ElementPattern* p = static_cast<ElementPattern*>(data);
+    auto eMeasure = e->findMeasure();
 
     if (p->type != int(ElementType::INVALID) && p->type != int(e->type())) {
         return;
@@ -3649,8 +3650,21 @@ void Score::collectMatch(void* data, EngravingItem* e)
         }
     }
 
-    if (p->measure && (p->measure != e->findMeasure())) {
-        return;
+    if (p->measure) {
+        if (!eMeasure && e->isSpannerSegment()) {
+            if (auto ss = toSpannerSegment(e)) {
+                if (auto s = ss->spanner()) {
+                    if (auto se = s->startElement()) {
+                        if (auto mse = se->findMeasure()) {
+                            eMeasure = mse;
+                        }
+                    }
+                }
+            }
+        }
+        if (p->measure != eMeasure) {
+            return;
+        }
     }
 
     if ((p->beat.isValid()) && (p->beat != e->beat())) {
