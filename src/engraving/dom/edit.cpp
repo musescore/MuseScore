@@ -3485,7 +3485,7 @@ void Score::cmdDeleteSelection()
             if (!crSelectedAfterDeletion) {
                 if (e->isNote()) {
                     tick = toNote(e)->chord()->tick();
-                    if(toChord(findCR(tick, track))->notes().size() <= 1){
+                    if (toChord(findCR(tick, track))->notes().size() <= 1) {
                         //For single notes, select the previous note after deletion
                         tick -= Fraction(1, tick.denominator());
                     }
