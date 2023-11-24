@@ -857,12 +857,12 @@ void TLayout::layoutArticulation(const Articulation* item, Articulation::LayoutD
     ldata->setPos(PointF());
 
     //! NOTE Must already be set previously
-    LD_CONDITION(ldata->isSetSymId());
+    LD_CONDITION(ldata->symId.has_value());
 
     RectF bbox;
 
     if (item->textType() == ArticulationTextType::NO_TEXT) {
-        bbox = item->symBbox(ldata->symId());
+        bbox = item->symBbox(ldata->symId);
     } else {
         Font scaledFont(item->font());
         scaledFont.setPointSizeF(item->font().pointSizeF() * item->magS());
@@ -941,7 +941,7 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
         switch (e->type()) {
         case ElementType::ARTICULATION:
             // form Articulation layout
-            LD_CONDITION(item_cast<const Articulation*>(e)->ldata()->isSetSymId());
+            LD_CONDITION(item_cast<const Articulation*>(e)->ldata()->symId.has_value());
             break;
         case ElementType::SYMBOL:
             // not yet clear
@@ -1373,8 +1373,8 @@ void TLayout::layoutTBox(const TBox* item, FBox::LayoutData* ldata, const Layout
 
 void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    LD_CONDITION(ldata->isSetBracketHeight());
-    if (!ldata->isSetBracketHeight()) {
+    LD_CONDITION(ldata->bracketHeight.has_value());
+    if (!ldata->bracketHeight.has_value()) {
         return;
     }
 
@@ -1387,7 +1387,7 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
         if (musicalSymbolFont == "Emmentaler" || musicalSymbolFont == "Gonville") {
             ldata->braceSymbol = SymId::noSym;
             double w = conf.styleMM(Sid::akkoladeWidth);
-            double h2 = ldata->bracketHeight() * 0.5;
+            double h2 = ldata->bracketHeight * 0.5;
 
 #define XM(a) (a + 700) * w / 700
 #define YM(a) (a + 7100) * h2 / 7100
@@ -1417,16 +1417,16 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
             ldata->path = path;
             ldata->setBbox(path.boundingRect());
             ldata->shape.add(ldata->bbox());
-            ldata->setBracketWidth(w + conf.styleMM(Sid::akkoladeBarDistance));
+            ldata->bracketWidth = w + conf.styleMM(Sid::akkoladeBarDistance);
         } else {
             if (item->braceSymbol() == SymId::noSym) {
                 ldata->braceSymbol = SymId::brace;
             }
-            double h = ldata->bracketHeight();
+            double h = ldata->bracketHeight;
             double w = item->symWidth(ldata->braceSymbol) * item->magx();
             ldata->setBbox(RectF(0, 0, w, h));
             ldata->shape.add(ldata->bbox());
-            ldata->setBracketWidth(w + conf.styleMM(Sid::akkoladeBarDistance));
+            ldata->bracketWidth = w + conf.styleMM(Sid::akkoladeBarDistance);
         }
     }
     break;
@@ -1436,28 +1436,28 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
         double x = -w;
 
         double bd = (conf.styleSt(Sid::MusicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
-        ldata->shape.add(RectF(x, -bd, w * 2, 2 * (ldata->bracketHeight() * 0.5 + bd)));
+        ldata->shape.add(RectF(x, -bd, w * 2, 2 * (ldata->bracketHeight * 0.5 + bd)));
         ldata->shape.add(item->symBbox(SymId::bracketTop).translated(PointF(-w, -bd)));
-        ldata->shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + ldata->bracketHeight())));
+        ldata->shape.add(item->symBbox(SymId::bracketBottom).translated(PointF(-w, bd + ldata->bracketHeight)));
 
         w += item->symWidth(SymId::bracketTop);
         double y = -item->symHeight(SymId::bracketTop) - bd;
-        double h = (-y + ldata->bracketHeight() * 0.5) * 2;
+        double h = (-y + ldata->bracketHeight * 0.5) * 2;
         ldata->setBbox(RectF(x, y, w, h));
 
-        ldata->setBracketWidth(conf.styleMM(Sid::bracketWidth) + conf.styleMM(Sid::bracketDistance));
+        ldata->bracketWidth = conf.styleMM(Sid::bracketWidth) + conf.styleMM(Sid::bracketDistance);
     }
     break;
     case BracketType::SQUARE: {
         double w = conf.styleMM(Sid::staffLineWidth) * .5;
         double x = -w;
         double y = -w;
-        double h = (ldata->bracketHeight() * 0.5 + w) * 2;
+        double h = (ldata->bracketHeight * 0.5 + w) * 2;
         w += (.5 * item->spatium() + 3 * w);
         ldata->setBbox(RectF(x, y, w, h));
         ldata->shape.add(ldata->bbox());
 
-        ldata->setBracketWidth(conf.styleMM(Sid::staffLineWidth) / 2 + 0.5 * item->spatium());
+        ldata->bracketWidth = conf.styleMM(Sid::staffLineWidth) / 2 + 0.5 * item->spatium();
     }
     break;
     case BracketType::LINE: {
@@ -1466,11 +1466,11 @@ void TLayout::layoutBracket(const Bracket* item, Bracket::LayoutData* ldata, con
         double x = -w;
         double bd = _spatium * .25;
         double y = -bd;
-        double h = (-y + ldata->bracketHeight() * 0.5) * 2;
+        double h = (-y + ldata->bracketHeight * 0.5) * 2;
         ldata->setBbox(RectF(x, y, w, h));
         ldata->shape.add(ldata->bbox());
 
-        ldata->setBracketWidth(0.67 * conf.styleMM(Sid::bracketWidth) + conf.styleMM(Sid::bracketDistance));
+        ldata->bracketWidth = 0.67 * conf.styleMM(Sid::bracketWidth) + conf.styleMM(Sid::bracketDistance);
     }
     break;
     case BracketType::NO_BRACKET:
@@ -2463,7 +2463,7 @@ void TLayout::layoutFretDiagram(const FretDiagram* item, FretDiagram::LayoutData
         for (EngravingItem* e = pSeg->firstElementOfSegment(pSeg, idx); e; e = pSeg->nextElementOfSegment(pSeg, e, idx)) {
             if (e->isRest()) {
                 const Rest* r = toRest(e);
-                LD_CONDITION(r->ldata()->isSetSym());
+                LD_CONDITION(r->ldata()->sym.has_value());
                 noteheadWidth = item->symWidth(r->ldata()->sym());
                 break;
             } else if (e->isNote()) {
@@ -3303,7 +3303,7 @@ void TLayout::layoutHarmony(const Harmony* item, Harmony::LayoutData* ldata, con
             }
 
             ldata->setBbox(bb.translated(xx, yy));
-            ldata->setHarmonyHeight(ldata->bbox().height());
+            ldata->harmonyHeight = ldata->bbox().height();
         }
 
         if (fd) {
@@ -4058,7 +4058,7 @@ void TLayout::layoutMMRest(const MMRest* item, MMRest::LayoutData* ldata, const 
         }
     }
 
-    LD_CONDITION(ldata->isSetRestWidth());
+    LD_CONDITION(ldata->restWidth.has_value());
 
     //! NOTE This is not look like layout data, perhaps this is should be set not here
     ldata->number = item->measure()->mmRestCount();
@@ -4249,7 +4249,7 @@ void TLayout::layoutNoteDot(const NoteDot* item, NoteDot::LayoutData* ldata)
 
 void TLayout::layoutOrnament(const Ornament* item, Ornament::LayoutData* ldata, const LayoutConfiguration& conf)
 {
-    LD_CONDITION(ldata->isSetSymId());
+    LD_CONDITION(ldata->symId.has_value());
 
     ldata->setShape(Shape());
 
@@ -4581,7 +4581,7 @@ void TLayout::layoutRest(const Rest* item, Rest::LayoutData* ldata, const Layout
     int wholeRestOffset = item->computeWholeRestOffset(voiceOffset, lines);
     int finalLine = naturalLine + voiceOffset + wholeRestOffset;
 
-    ldata->setSym(item->getSymbol(item->durationType().type(), finalLine + userLine, lines));
+    ldata->sym = item->getSymbol(item->durationType().type(), finalLine + userLine, lines);
 
     ldata->setPosY(finalLine * lineDist * spatium);
     if (!item->shouldNotBeDrawn()) {

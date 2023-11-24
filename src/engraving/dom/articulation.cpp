@@ -116,7 +116,7 @@ int Articulation::subtype() const
 void Articulation::setUp(bool val)
 {
     Articulation::LayoutData* ldata = mutldata();
-    ldata->setUp(val);
+    ldata->up = val;
 
     //! NOTE member of Articulation m_symId - this is `given` data
     //! member of LayoutData m_symId - this is layout data
@@ -141,7 +141,7 @@ void Articulation::setUp(bool val)
         }
     }
 
-    ldata->setSymId(m_symId);
+    ldata->symId = m_symId;
 }
 
 //---------------------------------------------------------

@@ -3640,7 +3640,7 @@ void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata, const Lay
 
     if (!item->isGap()) {
         shape.add(chordRestShape(item, conf));
-        shape.add(item->symBbox(ldata->sym()), item);
+        shape.add(item->symBbox(ldata->sym), item);
         for (const NoteDot* dot : item->dotList()) {
             shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
         }
@@ -3670,7 +3670,7 @@ void ChordLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const
     Shape shape(Shape::Type::Composite);
 
     double vStrokeHeight = conf.styleMM(Sid::mmRestHBarVStrokeHeight);
-    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth(), vStrokeHeight));
+    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight));
     if (item->numberVisible()) {
         shape.add(item->numberRect());
     }

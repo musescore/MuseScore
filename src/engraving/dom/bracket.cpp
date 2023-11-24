@@ -154,7 +154,7 @@ void Bracket::editDrag(EditData& ed)
 {
     double bracketHeight = ldata()->bracketHeight();
     bracketHeight += ed.delta.y();
-    mutldata()->setBracketHeight(bracketHeight);
+    mutldata()->bracketHeight.set_value(bracketHeight);
 
     renderer()->layoutItem(this);
 }
@@ -191,7 +191,7 @@ void Bracket::endEditDrag(EditData&)
 
     double sy = system()->staff(staffIdx1)->y();
     double ey = system()->staff(staffIdx2)->y() + score()->staff(staffIdx2)->staffHeight();
-    mutldata()->setBracketHeight(ey - sy);
+    mutldata()->bracketHeight.set_value(ey - sy);
     bracketItem()->undoChangeProperty(Pid::BRACKET_SPAN, staffIdx2 - staffIdx1 + 1);
 }
 

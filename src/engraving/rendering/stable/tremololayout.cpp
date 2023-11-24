@@ -47,7 +47,7 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
         // palette
         if (!item->isBuzzRoll()) {
             const RectF box = item->path().boundingRect();
-            item->addbbox(RectF(box.x(), box.bottom(), box.width(), item->spatium()));
+            item->mutldata()->addBbox(RectF(box.x(), box.bottom(), box.width(), item->spatium()));
         }
         return;
     }

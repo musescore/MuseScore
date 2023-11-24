@@ -402,6 +402,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
 
 void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
 {
+    TRACEFUNC;
     if (restHeight < 0.0) {
         LOGN("restHeight < 0.0: %f\n", restHeight);
         restHeight = 0;
