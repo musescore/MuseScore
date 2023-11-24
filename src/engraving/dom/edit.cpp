@@ -3481,10 +3481,14 @@ void Score::cmdDeleteSelection()
             // get tick of element itself if that is valid
             // or of spanner or parent if that is more valid
             Fraction tick  = { -1, 1 };
-            track_idx_t track = mu::nidx;
+            track_idx_t track = e->track();
             if (!crSelectedAfterDeletion) {
                 if (e->isNote()) {
                     tick = toNote(e)->chord()->tick();
+                    if(toChord(findCR(tick, track))->notes().size() <= 1){
+                        //For single notes, select the previous note after deletion
+                        tick -= Fraction(1, tick.denominator());
+                    }
                 } else if (e->isRest() || e->isMMRest()) {
                     tick = toRest(e)->tick();
                 } else if (e->isMeasureRepeat()) { // may be attached in different measure than it appears
@@ -3513,7 +3517,6 @@ void Score::cmdDeleteSelection()
                     tick = e->parentItem()->tick();
                 }
                 //else tick < 0
-                track = e->track();
             }
 
             bool needFindCR = !crSelectedAfterDeletion && tick >= Fraction(0, 1) && track != mu::nidx;
