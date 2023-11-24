@@ -78,6 +78,7 @@ class FBox;
 class FSymbol;
 class Fermata;
 class FiguredBass;
+class FiguredBassItem;
 class Fingering;
 class FretDiagram;
 class Glissando;
@@ -424,6 +425,7 @@ public:
     CONVERT(LyricsLine,    LYRICSLINE)
     CONVERT(LyricsLineSegment, LYRICSLINE_SEGMENT)
     CONVERT(FiguredBass,   FIGURED_BASS)
+    CONVERT(FiguredBassItem, FIGURED_BASS_ITEM)
     CONVERT(StaffState,    STAFF_STATE)
     CONVERT(Arpeggio,      ARPEGGIO)
     CONVERT(Image,         IMAGE)
@@ -799,6 +801,7 @@ CONVERT(NoteHead)
 CONVERT(LyricsLine)
 CONVERT(LyricsLineSegment)
 CONVERT(FiguredBass)
+CONVERT(FiguredBassItem)
 CONVERT(StaffState)
 CONVERT(Arpeggio)
 CONVERT(Image)
