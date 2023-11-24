@@ -82,6 +82,10 @@ public:
         return value();
     }
 
+    operator T() const {
+        return value();
+    }
+
     inline T& mut_value()
     {
         if (!m_val.has_value()) {
@@ -94,6 +98,8 @@ public:
     {
         m_val = std::make_optional<T>(v);
     }
+
+    ld_field_debug& operator=(const T& v) { m_val = v; return *this; }
 
 private:
     const char* m_name = nullptr;
@@ -122,6 +128,10 @@ public:
         return value();
     }
 
+    operator T() const {
+        return value();
+    }
+
     inline T& mut_value()
     {
         return m_val;
@@ -131,6 +141,8 @@ public:
     {
         m_val = v;
     }
+
+    ld_field_prod& operator=(const T& v) { m_val = v; return *this; }
 
 private:
     T m_val;

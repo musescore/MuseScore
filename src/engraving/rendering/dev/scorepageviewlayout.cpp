@@ -43,6 +43,8 @@ using namespace mu::engraving::rendering::dev;
 
 void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick)
 {
+    TRACEFUNC;
+
     ctx.mutState().setEndTick(etick);
 
     //---------------------------------------------------

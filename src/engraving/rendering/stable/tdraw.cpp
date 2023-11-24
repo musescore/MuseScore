@@ -1007,7 +1007,7 @@ void TDraw::draw(const Bracket* item, Painter* painter)
             painter->setBrush(Brush(item->curColor()));
             painter->drawPath(ldata->path);
         } else {
-            double h = ldata->bracketHeight();
+            double h = ldata->bracketHeight;
             double mag = h / (100 * item->magS());
             painter->setPen(item->curColor());
             painter->save();
@@ -1018,7 +1018,7 @@ void TDraw::draw(const Bracket* item, Painter* painter)
     }
     break;
     case BracketType::NORMAL: {
-        double h = ldata->bracketHeight();
+        double h = ldata->bracketHeight;
         double spatium = item->spatium();
         double w = item->style().styleMM(Sid::bracketWidth);
         double bd = (item->style().styleSt(Sid::MusicalSymbolFont) == "Leland") ? spatium * .5 : spatium * .25;
@@ -1033,9 +1033,9 @@ void TDraw::draw(const Bracket* item, Painter* painter)
     }
     break;
     case BracketType::SQUARE: {
-        double h = ldata->bracketHeight();
+        double h = ldata->bracketHeight;
         double lineW = item->style().styleMM(Sid::staffLineWidth);
-        double bracketWidth = ldata->bracketWidth() - lineW / 2;
+        double bracketWidth = ldata->bracketWidth - lineW / 2;
         Pen pen(item->curColor(), lineW, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
         painter->drawLine(LineF(0.0, 0.0, 0.0, h));
@@ -1044,7 +1044,7 @@ void TDraw::draw(const Bracket* item, Painter* painter)
     }
     break;
     case BracketType::LINE: {
-        double h = ldata->bracketHeight();
+        double h = ldata->bracketHeight;
         double w = 0.67 * item->style().styleMM(Sid::bracketWidth);
         Pen pen(item->curColor(), w, PenStyle::SolidLine, PenCapStyle::FlatCap);
         painter->setPen(pen);
@@ -2130,7 +2130,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
     if (item->style().styleB(Sid::oldStyleMultiMeasureRests)
         && ldata->number <= item->style().styleI(Sid::mmRestOldStyleMaxMeasures)) {
         // draw rest symbols
-        double x = (ldata->restWidth() - ldata->symsWidth) * 0.5;
+        double x = (ldata->restWidth - ldata->symsWidth) * 0.5;
         double spacing = item->style().styleMM(Sid::mmRestOldStyleSpacing);
         for (SymId sym : ldata->restSyms) {
             double y = (sym == SymId::restWhole ? -_spatium : 0);
@@ -2153,11 +2153,11 @@ void TDraw::draw(const MMRest* item, Painter* painter)
                 && numberBox.bottom() >= -halfHBarThickness
                 && numberBox.top() <= halfHBarThickness) {
                 double gapDistance = (numberBox.width() + _spatium) * .5;
-                double midpoint = ldata->restWidth() * .5;
+                double midpoint = ldata->restWidth * .5;
                 painter->drawLine(LineF(0.0, 0.0, midpoint - gapDistance, 0.0));
-                painter->drawLine(LineF(midpoint + gapDistance, 0.0, ldata->restWidth(), 0.0));
+                painter->drawLine(LineF(midpoint + gapDistance, 0.0, ldata->restWidth, 0.0));
             } else {
-                painter->drawLine(LineF(0.0, 0.0, ldata->restWidth(), 0.0));
+                painter->drawLine(LineF(0.0, 0.0, ldata->restWidth, 0.0));
             }
         }
 
@@ -2168,7 +2168,7 @@ void TDraw::draw(const MMRest* item, Painter* painter)
             painter->setPen(pen);
             double halfVStrokeHeight = item->style().styleMM(Sid::mmRestHBarVStrokeHeight) * .5 * mag;
             painter->drawLine(LineF(0.0, -halfVStrokeHeight, 0.0, halfVStrokeHeight));
-            painter->drawLine(LineF(ldata->restWidth(), -halfVStrokeHeight, ldata->restWidth(), halfVStrokeHeight));
+            painter->drawLine(LineF(ldata->restWidth, -halfVStrokeHeight, ldata->restWidth, halfVStrokeHeight));
         }
     }
 }
@@ -2424,7 +2424,7 @@ void TDraw::draw(const Rest* item, Painter* painter)
     const Rest::LayoutData* ldata = item->ldata();
 
     painter->setPen(item->curColor());
-    item->drawSymbol(ldata->sym(), painter);
+    item->drawSymbol(ldata->sym, painter);
 }
 
 //! NOTE May be removed later (should be only single mode)

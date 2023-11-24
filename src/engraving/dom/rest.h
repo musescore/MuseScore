@@ -136,13 +136,7 @@ public:
 
     struct LayoutData : public ChordRest::LayoutData {
         std::vector<Rest*> mergedRests;     // Rests from other voices that may be merged with this
-
-        bool isSetSym() const { return m_sym.has_value(); }
-        SymId sym() const { return m_sym.value(LD_ACCESS::CHECK); }
-        void setSym(SymId v) { m_sym.set_value(v); }
-
-    private:
-        ld_field<SymId> m_sym = { "sym", SymId::restQuarter };
+        ld_field<SymId> sym = { "[Rest] sym", SymId::restQuarter };
     };
     DECLARE_LAYOUTDATA_METHODS(Rest)
 

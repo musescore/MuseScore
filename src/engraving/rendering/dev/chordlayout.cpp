@@ -1457,6 +1457,7 @@ void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, trac
 
 void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)
 {
+    TRACEFUNC;
     const Staff* staff = ctx.dom().staff(staffIdx);
     const bool isTab = staff->isTabStaff(segment->tick());
     const track_idx_t startTrack = staffIdx * VOICES;
@@ -3709,7 +3710,7 @@ void ChordLayout::fillShape(const Rest* item, Rest::LayoutData* ldata, const Lay
 
     if (!item->isGap()) {
         shape.add(chordRestShape(item, conf));
-        shape.add(item->symBbox(ldata->sym()), item);
+        shape.add(item->symBbox(ldata->sym), item);
         for (const NoteDot* dot : item->dotList()) {
             shape.add(item->symBbox(SymId::augmentationDot).translated(dot->pos()), dot);
         }
@@ -3739,7 +3740,7 @@ void ChordLayout::fillShape(const MMRest* item, MMRest::LayoutData* ldata, const
     Shape shape(Shape::Type::Composite);
 
     double vStrokeHeight = conf.styleMM(Sid::mmRestHBarVStrokeHeight);
-    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth(), vStrokeHeight));
+    shape.add(RectF(0.0, -(vStrokeHeight * .5), ldata->restWidth, vStrokeHeight));
     if (item->numberVisible()) {
         shape.add(item->numberRect());
     }

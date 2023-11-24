@@ -608,7 +608,6 @@ public:
 
     //! --- Old Interface ---
     void setbbox(const mu::RectF& r) { mutldata()->setBbox(r); }
-    void addbbox(const mu::RectF& r) { mutldata()->addBbox(r); }
     double height() const { return ldata()->bbox().height(); }
     void setHeight(double v) { mutldata()->setHeight(v); }
 

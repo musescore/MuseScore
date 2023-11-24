@@ -1918,7 +1918,7 @@ double SystemLayout::totalBracketOffset(LayoutContext& ctx)
                 Bracket* dummyBr = Factory::createBracket(ctx.mutDom().dummyParent(), /*isAccessibleEnabled=*/ false);
                 dummyBr->setBracketItem(bi);
                 dummyBr->setStaffSpan(firstStaff, lastStaff);
-                dummyBr->mutldata()->setBracketHeight(3.5 * dummyBr->spatium() * 2); // default
+                dummyBr->mutldata()->bracketHeight.set_value(3.5 * dummyBr->spatium() * 2); // default
                 TLayout::layoutBracket(dummyBr, dummyBr->mutldata(), ctx.conf());
                 for (staff_idx_t stfIdx = firstStaff; stfIdx <= lastStaff; ++stfIdx) {
                     bracketWidth[stfIdx] += dummyBr->ldata()->bracketWidth();
@@ -1956,7 +1956,7 @@ double SystemLayout::layoutBrackets(System* system, LayoutContext& ctx)
                 }
                 Bracket* b = SystemLayout::createBracket(system, ctx, bi, i, static_cast<int>(staffIdx), bl, system->firstMeasure());
                 if (b != nullptr) {
-                    b->mutldata()->setBracketHeight(3.5 * b->spatium() * 2); // dummy
+                    b->mutldata()->bracketHeight.set_value(3.5 * b->spatium() * 2); // dummy
                     TLayout::layoutBracket(b, b->mutldata(), ctx.conf());
                     bracketWidth[i] = std::max(bracketWidth[i], b->ldata()->bracketWidth());
                 }
@@ -2114,6 +2114,7 @@ Bracket* SystemLayout::createBracket(System* system, LayoutContext& ctx, Bracket
 
 void SystemLayout::layout2(System* system, LayoutContext& ctx)
 {
+    TRACEFUNC;
     Box* vb = system->vbox();
     if (vb) {
         TLayout::layoutBox(vb, vb->mutldata(), ctx);
@@ -2273,6 +2274,7 @@ void SystemLayout::layout2(System* system, LayoutContext& ctx)
 
 void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)
 {
+    TRACEFUNC;
     if (system->vbox()) {
         return;
     }
@@ -2334,7 +2336,7 @@ void SystemLayout::layoutBracketsVertical(System* system, LayoutContext& ctx)
 
         Bracket::LayoutData* bldata = b->mutldata();
         bldata->setPosY(sy);
-        bldata->setBracketHeight(ey - sy);
+        bldata->bracketHeight = ey - sy;
         TLayout::layoutBracket(b, bldata, ctx.conf());
     }
 }
@@ -2488,6 +2490,7 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
 
 double SystemLayout::minDistance(const System* top, const System* bottom, LayoutContext& ctx)
 {
+    TRACEFUNC;
     if (top->vbox() && !bottom->vbox()) {
         return std::max(double(top->vbox()->bottomGap()), bottom->minTop());
     } else if (!top->vbox() && bottom->vbox()) {
