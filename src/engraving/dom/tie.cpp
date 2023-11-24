@@ -182,13 +182,21 @@ void TieSegment::editDrag(EditData& ed)
 
 void TieSegment::computeMidThickness(double tieLengthInSp)
 {
-    m_midThickness = style().styleMM(Sid::SlurMidWidth) - style().styleMM(Sid::SlurEndWidth);
-    if (staff()) {
-        m_midThickness *= staff()->staffMag(tie()->tick());
-    }
-    static constexpr double shortTieLimit = 2;
-    if (tieLengthInSp < shortTieLimit) {
-        m_midThickness *= sqrt(tieLengthInSp / shortTieLimit);
+    const double mag = staff() ? staff()->staffMag(tie()->tick()) : 1.0;
+    const double minTieLength = mag * style().styleS(Sid::MinTieLength).val();
+    const double shortTieLimit = mag * 4.0;
+    const double minTieThickness = mag * (0.15 * spatium() - style().styleMM(Sid::SlurEndWidth));
+    const double normalThickness = mag * (style().styleMM(Sid::SlurMidWidth) - style().styleMM(Sid::SlurEndWidth));
+
+    bool invalid = RealIsEqualOrMore(minTieLength, shortTieLimit);
+
+    if (tieLengthInSp > shortTieLimit || invalid) {
+        m_midThickness = normalThickness;
+    } else {
+        const double A = 1 / (shortTieLimit - minTieLength);
+        const double B = normalThickness - minTieThickness;
+        const double C = shortTieLimit * minTieThickness - minTieLength * normalThickness;
+        m_midThickness = A * (B * tieLengthInSp + C);
     }
 }
 

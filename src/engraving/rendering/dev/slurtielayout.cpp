@@ -266,8 +266,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         Chord* sc = item->startCR()->isChord() ? toChord(item->startCR()) : nullptr;
 
         // on chord
-        if (sc && sc->notes().size() == 1) {
-            Tie* tie = sc->notes()[0]->tieFor();
+        if (sc) {
+            Tie* tie = (item->up() ? sc->upNote() : sc->downNote())->tieFor();
             PointF endPoint = PointF();
             if (tie && (tie->isInside() || tie->up() != item->up())) {
                 // there is a tie that starts on this chordrest
@@ -367,8 +367,8 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         Chord* ec = item->endCR()->isChord() ? toChord(item->endCR()) : nullptr;
 
         // on chord
-        if (ec && ec->notes().size() == 1) {
-            Tie* tie = ec->notes()[0]->tieBack();
+        if (ec) {
+            Tie* tie = (item->up() ? ec->upNote() : ec->downNote())->tieBack();
             PointF endPoint;
             if (tie && (tie->isInside() || tie->up() != item->up())) {
                 tie = nullptr;
@@ -1147,7 +1147,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
         }
     }
 
-    adjustForLedgerLines(segment, sPos);
+    adjustYforLedgerLines(segment, sPos);
 
     segment->ups(Grip::START).p = sPos.p1;
     segment->ups(Grip::END).p = sPos.p2;
@@ -1194,7 +1194,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
         adjustX(segment, sPos, Grip::END);
     }
 
-    adjustForLedgerLines(segment, sPos);
+    adjustYforLedgerLines(segment, sPos);
 
     segment->ups(Grip::START).p = sPos.p1;
     segment->ups(Grip::END).p = sPos.p2;
@@ -1262,7 +1262,16 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
     result += PointF(baseX, baseY);
 
-    const double visualInset = (inside ? 0.20 : 0.1) * spatium * leftRightSign; // TODO: style
+    double visualInsetSp = 0.0;
+    if (inside) {
+        visualInsetSp = 0.2;
+    } else if (note->hasAnotherStraightAboveOrBelow(up)) {
+        visualInsetSp = 0.45;
+    } else {
+        visualInsetSp = 0.1;
+    }
+
+    double visualInset = visualInsetSp * spatium * leftRightSign;
     const double yOffset = 0.20 * spatium * upSign; // TODO: style
 
     result += PointF(visualInset, yOffset);
@@ -1370,8 +1379,9 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
         chordSystemPos += PointF(0.0, yDiff);
     }
     Shape chordShape = chord->shape().translate(chordSystemPos);
-    chordShape.remove_if([note](ShapeElement& s) {
-        return !s.item() || (s.item() == note || s.item()->isHook() || s.item()->isLedgerLine());
+    bool ignoreDot = start && isOuterTieOfChord;
+    chordShape.remove_if([&](ShapeElement& s) {
+        return !s.item() || (s.item() == note || s.item()->isHook() || s.item()->isLedgerLine() || (s.item()->isNoteDot() && ignoreDot));
     });
 
     const double arcSideMargin = 0.3 * spatium;
@@ -1386,11 +1396,53 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
 
     resultingX = start ? std::max(resultingX, pointToClear) : std::min(resultingX, pointToClear);
 
+    adjustXforLedgerLines(tieSegment, start, chord, note, chordSystemPos, padding, resultingX);
+
     tieSegment->addAdjustmentOffset(PointF(resultingX - tiePoint.x(), 0.0), startOrEnd);
     tiePoint.setX(resultingX);
 }
 
-void SlurTieLayout::adjustForLedgerLines(TieSegment* tieSegment, SlurTiePos& sPos)
+void SlurTieLayout::adjustXforLedgerLines(TieSegment* tieSegment, bool start, Chord* chord, Note* note,
+                                          const PointF& chordSystemPos, double padding, double& resultingX)
+{
+    if (tieSegment->tie()->isInside() || !chord->ledgerLines()) {
+        return;
+    }
+
+    bool isOuterNote = note == chord->upNote() || note == chord->downNote();
+    if (isOuterNote) {
+        return;
+    }
+
+    bool ledgersAbove = false;
+    bool ledgersBelow = false;
+    for (LedgerLine* ledger = chord->ledgerLines(); ledger; ledger = ledger->next()) {
+        if (ledger->y() < 0.0) {
+            ledgersAbove = true;
+        } else {
+            ledgersBelow = true;
+        }
+        if (ledgersAbove && ledgersBelow) {
+            break;
+        }
+    }
+
+    int noteLine = note->line();
+    bool isOddLine = noteLine % 2 != 0;
+    bool isAboveStaff = noteLine <= 0;
+    bool isBelowStaff = noteLine >= 2 * (note->staff()->lines(note->tick()) - 1);
+    bool isInsideStaff = !isAboveStaff && !isBelowStaff;
+    if (isOddLine || isInsideStaff || (isAboveStaff && !ledgersAbove) || (isBelowStaff && !ledgersBelow)) {
+        return;
+    }
+
+    Shape noteShape = note->shape().translated(note->pos() + chordSystemPos);
+    double xNoteEdge = (start ? noteShape.right() : -noteShape.left()) + padding;
+
+    resultingX = start ? std::max(resultingX, xNoteEdge) : std::min(resultingX, xNoteEdge);
+}
+
+void SlurTieLayout::adjustYforLedgerLines(TieSegment* tieSegment, SlurTiePos& sPos)
 {
     Tie* tie = tieSegment->tie();
     Note* note = tieSegment->isSingleBeginType() ? tie->startNote() : tie->endNote();
@@ -1497,9 +1549,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         bool isInside = tie2->isInside();
         bool isOuterOfChord = tie2->isOuterTieOfChord(Grip::START) || tie2->isOuterTieOfChord(Grip::END);
         bool hasTiedSecondInside = tie2->hasTiedSecondInside();
-        bool hasEndPointAboveNote = abs(tieSegment->adjustmentOffset(Grip::START).x()) < 0.5 * note->width()
-                                    || abs(tieSegment->adjustmentOffset(Grip::END).x()) < 0.5 * note->width();
-        if (!isInside && !isOuterOfChord && !hasTiedSecondInside && !hasEndPointAboveNote) {
+        if (!isInside && !isOuterOfChord && !hasTiedSecondInside && !hasEndPointAboveNote(tieSegment)) {
             double currentY = tieSegment->ups(Grip::START).p.y();
             double yCorrection = -upSign * (badArcIntersectionLimit - outwardMargin);
             tieSegment->addAdjustmentOffset(PointF(0.0, yCorrection), Grip::START);
@@ -1530,6 +1580,27 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
     } else if (correctInwards) {
         tieSegment->computeBezier(PointF(0.0, arcCorrection));
     }
+}
+
+bool SlurTieLayout::hasEndPointAboveNote(TieSegment* tieSegment)
+{
+    Note* startNote = tieSegment->tie()->startNote();
+    Note* endNote = tieSegment->tie()->endNote();
+
+    if ((tieSegment->isSingleBeginType() && !startNote) || (tieSegment->isSingleEndType() && !endNote)) {
+        return false;
+    }
+
+    Chord* startChord = startNote->chord();
+    PointF startNotePos = startNote->pos() + startChord->pos() + startChord->segment()->pos() + startChord->measure()->pos();
+
+    Chord* endChord = endNote->chord();
+    PointF endNotePos = endNote->pos() + endChord->pos() + endChord->segment()->pos() + endChord->measure()->pos();
+
+    PointF tieStartPos = tieSegment->ups(Grip::START).pos();
+    PointF tieEndPos = tieSegment->ups(Grip::END).pos();
+
+    return tieStartPos.x() < startNotePos.x() + startNote->width() || tieEndPos.x() > endNotePos.x();
 }
 
 void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>& stackedTies)
@@ -1567,7 +1638,7 @@ void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>&
         double yMidPoint = 0.5 * (thisTieOuterY + nextTieInnerY);
         double halfLineDist = 0.5 * staff->lineDistance(tick) * spatium;
         int midLine = round(yMidPoint / halfLineDist);
-        bool insideStaff = midLine > 0 && midLine < 2 * (staff->lines(tick) - 1) - 1;
+        bool insideStaff = midLine >= -1 && midLine <= 2 * (staff->lines(tick) - 1) + 1;
         if (insideStaff) {
             yMidPoint = midLine * halfLineDist;
         }
