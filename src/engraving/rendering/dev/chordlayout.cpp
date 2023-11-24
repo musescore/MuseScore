@@ -3426,6 +3426,9 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
     int dots = item->chord()->dots();
     if (dots && !item->dots().empty()) {
+        if (item->chord()->slash() && !item->visible()) {
+            item->setDotsHidden(true);
+        }
         // if chords have notes with different mag, dots must still  align
         double correctMag = item->chord()->notes().size() > 1 ? item->chord()->mag() : item->mag();
         double d  = ctx.conf().point(ctx.conf().styleS(Sid::dotNoteDistance)) * correctMag;
