@@ -1132,6 +1132,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
 
     item->fixupSegments(segmentCount);
     TieSegment* segment = item->segmentAt(0);
+    segment->setTrack(item->track());
     segment->setSpannerSegmentType(sPos.system1 != sPos.system2 ? SpannerSegmentType::BEGIN : SpannerSegmentType::SINGLE);
     segment->setSystem(system);   // Needed to populate System.spannerSegments
     segment->resetAdjustmentOffset();
@@ -1182,6 +1183,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
 
     item->fixupSegments(2);
     TieSegment* segment = item->segmentAt(1);
+    segment->setTrack(item->track());
     segment->setSystem(system);
     segment->resetAdjustmentOffset();
 

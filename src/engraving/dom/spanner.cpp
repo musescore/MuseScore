@@ -430,10 +430,11 @@ Spanner::Spanner(const Spanner& s)
     m_tick         = s.m_tick;
     m_ticks        = s.m_ticks;
     m_track2       = s.m_track2;
-    if (!s.startElement() && !spannerSegments().size()) {
-        for (auto* segment : s.spannerSegments()) {
-            add(segment->clone());
-        }
+
+    for (auto* segment : s.m_segments) {
+        SpannerSegment* newSegment = toSpannerSegment(segment->clone());
+        newSegment->setParent(nullptr);
+        add(newSegment);
     }
 }
 
