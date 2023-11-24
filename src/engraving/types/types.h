@@ -107,6 +107,7 @@ enum class ElementType {
     HOOK,
     LYRICS,
     FIGURED_BASS,
+    FIGURED_BASS_ITEM,
     MARKER,
     JUMP,
     FINGERING,

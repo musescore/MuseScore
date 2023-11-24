@@ -380,6 +380,7 @@ public:
     mu::draw::FontMetrics fontMetrics() const;
 
     bool isPropertyLinkedToMaster(Pid id) const override;
+    bool isUnlinkedFromMaster() const override;
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue& v) override;
     PropertyValue propertyDefault(Pid id) const override;

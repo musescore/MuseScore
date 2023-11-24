@@ -139,8 +139,6 @@ private:
 
     void computeBoundingRect() const;
 
-    static bool hasValidCoords(PointF p);
-
     inline void maybeMoveTo()
     {
         if (m_requireMoveTo) {
@@ -163,7 +161,8 @@ private:
         return std::isfinite(c) && std::fabs(c) < 1e128;
     }
 
-    static bool hasValidCoords(RectF r);
+    static bool hasValidCoords(const PointF& p);
+    static bool hasValidCoords(const RectF& r);
 
     static RectF painterpathBezierExtrema(const Bezier& b);
 

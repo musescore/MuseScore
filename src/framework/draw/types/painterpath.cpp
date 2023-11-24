@@ -81,7 +81,11 @@ void PainterPath::cubicTo(const PointF& ctrlPt1, const PointF& ctrlPt2, const Po
 {
     if (!hasValidCoords(ctrlPt1) || !hasValidCoords(ctrlPt2) || !hasValidCoords(endPt)) {
    #ifdef MUE_ENABLE_DRAW_TRACE
-        LOGW() << "PainterPath::cubicTo: Adding point with invalid coordinates, ignoring call";
+        static int count = 0;
+        LOGW() << "[" << ++count << "] Points with invalid coordinates, ignoring it,"
+               << " point1: " << ctrlPt1
+               << " point2: " << ctrlPt2
+               << " point3: " << endPt;
    #endif
         return;
     }
@@ -383,12 +387,12 @@ void PainterPath::ensureData()
     }
 }
 
-bool PainterPath::hasValidCoords(PointF p)
+bool PainterPath::hasValidCoords(const PointF& p)
 {
     return isValidCoord(p.x()) && isValidCoord(p.y());
 }
 
-bool PainterPath::hasValidCoords(RectF r)
+bool PainterPath::hasValidCoords(const RectF& r)
 {
     return isValidCoord(r.x()) && isValidCoord(r.y()) && isValidCoord(r.width()) && isValidCoord(r.height());
 }
