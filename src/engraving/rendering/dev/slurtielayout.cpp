@@ -1765,12 +1765,12 @@ double SlurTieLayout::defaultStemLengthEnd(Tremolo* tremolo)
                                                             tremolo->chord2()->defaultStemLength()).second;
 }
 
-bool SlurTieLayout::isDirectionMixture(Chord* c1, Chord* c2, LayoutContext& ctx)
+bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx)
 {
     if (c1->track() != c2->track()) {
         return false;
     }
-    bool up = c1->up();
+    const bool up = c1->up();
     if (c2->isGrace() && c2->up() != up) {
         return true;
     }
@@ -1779,36 +1779,28 @@ bool SlurTieLayout::isDirectionMixture(Chord* c1, Chord* c2, LayoutContext& ctx)
             return true;
         }
     }
-    track_idx_t track = c1->track();
-    for (Measure* m = c1->measure(); m; m = m->nextMeasure()) {
-        for (Segment* seg = m->first(); seg; seg = seg->next(SegmentType::ChordRest)) {
-            if (!seg || seg->tick() < c1->tick() || !seg->isChordRestType()) {
-                continue;
+    const track_idx_t track = c1->track();
+    for (const Segment* seg = c1->segment(); seg && seg->tick() <= c2->tick(); seg = seg->next1(SegmentType::ChordRest)) {
+        if ((c1->isGrace() || c2->isGraceBefore()) && seg->tick() == c2->tick()) {
+            // if slur ends at a grace-note-before, we don't need to look at the main note
+            return false;
+        }
+        EngravingItem* e = seg->element(track);
+        if (!e || !e->isChord()) {
+            continue;
+        }
+        Chord* c = toChord(e);
+        const Measure* m = c->measure();
+        if (!c->staff()->isDrumStaff(c->tick()) && c1->measure()->system() != m->system()) {
+            // This chord is on a different system and may not have been laid out yet
+            for (Note* note : c->notes()) {
+                note->updateLine();     // because chord direction is based on note lines
             }
-            if (seg->tick() > c2->tick()) {
-                return false;
-            }
-            if ((c1->isGrace() || c2->isGraceBefore()) && seg->tick() >= c2->tick()) {
-                // if slur ends at a grace-note-before, we don't need to look at the main note
-                return false;
-            }
-            EngravingItem* e = seg->element(track);
-            if (!e || !e->isChord()) {
-                continue;
-            }
-            Chord* c = toChord(e);
+            ChordLayout::computeUp(c, ctx);
+        }
 
-            if (!c->staff()->isDrumStaff(c->tick()) && c1->measure()->system() != m->system()) {
-                // This chord is on a different system and may not have been laid out yet
-                for (Note* note : c->notes()) {
-                    note->updateLine(); // because chord direction is based on note lines
-                }
-                ChordLayout::computeUp(c, ctx);
-            }
-
-            if (c->up() != up) {
-                return true;
-            }
+        if (c->up() != up) {
+            return true;
         }
     }
     return false;

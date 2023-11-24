@@ -5601,6 +5601,19 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
 {
     TRACEFUNC;
 
+    Fraction start = st;
+    Fraction end = et;
+
+    auto spanners = score()->spannerMap().findOverlapping(st.ticks(), et.ticks());
+    for (auto interval : spanners) {
+        Spanner* spanner = interval.value;
+        if (!spanner->staff()->visible()) {
+            continue;
+        }
+        start = std::min(st, spanner->tick());
+        end = std::max(et, spanner->tick2());
+    }
+
     m_engravingFont = engravingFonts()->fontByName(style().value(Sid::MusicalSymbolFont).value<String>().toStdString());
     m_layoutOptions.noteHeadWidth = m_engravingFont->width(SymId::noteheadBlack, style().spatium() / SPATIUM20);
 
@@ -5614,7 +5627,7 @@ void Score::doLayoutRange(const Fraction& st, const Fraction& et)
         this->updateVelo();
     }
 
-    renderer()->layoutScore(this, st, et);
+    renderer()->layoutScore(this, start, end);
 
     if (m_resetAutoplace) {
         m_resetAutoplace = false;
