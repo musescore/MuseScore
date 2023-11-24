@@ -3422,7 +3422,14 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
         }
     }
 
-    if (propertyGroup(id) != PropertyGroup::TEXT) {
+    static const PropertyIdSet CHARACTER_SPECIFIC_PROPERTIES {
+        Pid::FONT_STYLE,
+        Pid::FONT_FACE,
+        Pid::FONT_SIZE,
+        Pid::TEXT_SCRIPT_ALIGN
+    };
+
+    if (!mu::contains(CHARACTER_SPECIFIC_PROPERTIES, id)) {
         EngravingItem::undoChangeProperty(id, v, ps);
         return;
     }
