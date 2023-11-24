@@ -1421,6 +1421,11 @@ QString EditStyle::pageCodeForElement(const EngravingItem* element)
         return "vibrato";
 
     case ElementType::BEND:
+    case ElementType::GUITAR_BEND:
+    case ElementType::GUITAR_BEND_SEGMENT:
+    case ElementType::GUITAR_BEND_HOLD:
+    case ElementType::GUITAR_BEND_HOLD_SEGMENT:
+    case ElementType::GUITAR_BEND_TEXT:
         return "bend";
 
     case ElementType::TEXTLINE:
