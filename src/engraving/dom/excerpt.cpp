@@ -1522,6 +1522,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                             if (bendBack && newStartNote) {
                                 GuitarBend* newBend = toGuitarBend(bendBack->linkedClone());
                                 newBend->setScore(score);
+                                newBend->setParent(newStartNote);
+                                newBend->setTrack(newStartNote->track());
+                                newBend->setTrack2(nn->track());
                                 newBend->setStartElement(newStartNote);
                                 newBend->setEndElement(nn);
                                 newStartNote->addSpannerFor(newBend);
@@ -1532,6 +1535,9 @@ void Excerpt::cloneStaff2(Staff* srcStaff, Staff* dstStaff, const Fraction& star
                                 // Because slight bends aren't detected as "bendBack"
                                 GuitarBend* newBend = toGuitarBend(bendFor->linkedClone());
                                 newBend->setScore(score);
+                                newBend->setParent(nn);
+                                newBend->setTrack(nn->track());
+                                newBend->setTrack2(nn->track());
                                 newBend->setStartElement(nn);
                                 newBend->setEndElement(nn);
                                 nn->addSpannerFor(newBend);
