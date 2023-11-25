@@ -29,29 +29,22 @@
       <number>9</number>
      </property>
      <item>
-      <widget class="QGroupBox" name="groupBox_2">
+      <widget class="QGroupBox" name="select">
        <property name="title">
         <string>Select</string>
        </property>
        <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="1">
-         <widget class="QLabel" name="notehead">
+        <item row="3" column="0">
+         <widget class="QCheckBox" name="sameType">
+          <property name="text">
+           <string>Same type:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="5" column="1">
+         <widget class="QLabel" name="durationTicks">
           <property name="text">
            <string/>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QCheckBox" name="sameNotehead">
-          <property name="text">
-           <string>Same notehead:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="8" column="1" colspan="2">
-         <widget class="QCheckBox" name="sameSystem">
-          <property name="text">
-           <string>Same system</string>
           </property>
          </widget>
         </item>
@@ -62,6 +55,13 @@
           </property>
          </widget>
         </item>
+        <item row="1" column="0">
+         <widget class="QCheckBox" name="samePitch">
+          <property name="text">
+           <string>Same pitch:</string>
+          </property>
+         </widget>
+        </item>
         <item row="4" column="1">
          <widget class="QLabel" name="durationType">
           <property name="text">
@@ -69,15 +69,29 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
-         <widget class="QCheckBox" name="sameDurationType">
+        <item row="7" column="0">
+         <widget class="QCheckBox" name="sameStaff">
           <property name="text">
-           <string>Same note type:</string>
+           <string>Same staff</string>
           </property>
          </widget>
         </item>
-        <item row="5" column="1">
-         <widget class="QLabel" name="durationTicks">
+        <item row="6" column="0">
+         <widget class="QCheckBox" name="sameName">
+          <property name="text">
+           <string>Same note name:</string>
+          </property>
+         </widget>
+        </item>
+        <item row="3" column="1">
+         <widget class="QLabel" name="type">
+          <property name="text">
+           <string/>
+          </property>
+         </widget>
+        </item>
+        <item row="6" column="1">
+         <widget class="QLabel" name="name">
           <property name="text">
            <string/>
           </property>
@@ -90,10 +104,10 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="0">
-         <widget class="QCheckBox" name="samePitch">
+        <item row="0" column="0">
+         <widget class="QCheckBox" name="sameNotehead">
           <property name="text">
-           <string>Same pitch:</string>
+           <string>Same notehead:</string>
           </property>
          </widget>
         </item>
@@ -111,38 +125,17 @@
           </property>
          </widget>
         </item>
-        <item row="7" column="0">
-         <widget class="QCheckBox" name="sameStaff">
-          <property name="text">
-           <string>Same staff</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="0">
-         <widget class="QCheckBox" name="sameType">
-          <property name="text">
-           <string>Same type:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLabel" name="type">
+        <item row="0" column="1">
+         <widget class="QLabel" name="notehead">
           <property name="text">
            <string/>
           </property>
          </widget>
         </item>
-        <item row="6" column="0">
-         <widget class="QCheckBox" name="sameName">
+        <item row="8" column="1" colspan="2">
+         <widget class="QCheckBox" name="sameSystem">
           <property name="text">
-           <string>Same note name:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="6" column="1">
-         <widget class="QLabel" name="name">
-          <property name="text">
-           <string/>
+           <string>Same system</string>
           </property>
          </widget>
         </item>
@@ -153,6 +146,13 @@
           </property>
          </widget>
         </item>
+        <item row="4" column="0">
+         <widget class="QCheckBox" name="sameDurationType">
+          <property name="text">
+           <string>Same note type:</string>
+          </property>
+         </widget>
+        </item>
         <item row="2" column="1">
          <widget class="QLabel" name="string">
           <property name="text">
@@ -160,11 +160,25 @@
           </property>
          </widget>
         </item>
+        <item row="9" column="0">
+         <widget class="QCheckBox" name="sameBeat">
+          <property name="text">
+           <string>Same beat</string>
+          </property>
+         </widget>
+        </item>
+        <item row="9" column="1">
+         <widget class="QCheckBox" name="sameMeasure">
+          <property name="text">
+           <string>Same measure</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
      </item>
      <item>
-      <widget class="QGroupBox" name="groupBox">
+      <widget class="QGroupBox" name="action">
        <property name="title">
         <string>Action</string>
        </property>
@@ -238,9 +252,10 @@
   <tabstop>inSelection</tabstop>
   <tabstop>sameVoice</tabstop>
   <tabstop>sameSystem</tabstop>
+  <tabstop>sameBeat</tabstop>
+  <tabstop>sameMeasure</tabstop>
   <tabstop>replace</tabstop>
   <tabstop>add</tabstop>
-  <tabstop>fromSelection</tabstop>
   <tabstop>subtract</tabstop>
  </tabstops>
  <resources/>
