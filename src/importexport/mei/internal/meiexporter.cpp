@@ -302,7 +302,7 @@ bool MeiExporter::writeScoreDef()
     const Measure* measure = nullptr;
     for (MeasureBase* mBase2 = m_score->measures()->first(); mBase2 != nullptr; mBase2 = mBase2->next()) {
         if (!measure && mBase2->isMeasure()) {
-            // the first actuall measure we are going built the scoreDef from
+            // the first actual measure we are going built the scoreDef from
             measure = static_cast<const Measure*>(mBase2);
         }
         // Also check here if we have multiple sections in the score
@@ -373,7 +373,7 @@ bool MeiExporter::writePgHead(const VBox* vBox)
     }
 
     // Each cell is now a list of pairs of Rend and the corresponding text content
-    // The text content is plain text but can be mutliple lines separated with a "\n"
+    // The text content is plain text but can be multiple lines separated with a "\n"
     for (int cell = TopLeft; cell < CellCount; cell++) {
         if (cells[cell].empty()) {
             continue;
@@ -837,7 +837,7 @@ bool MeiExporter::writeMeasure(const Measure* measure, int& measureN, bool& isFi
 
     this->addEndidToControlEvents();
 
-    // This will preprend the scoreDef
+    // This will prepend the scoreDef
     if (!isFirst) {
         this->writeScoreDefChange();
     }
@@ -1355,7 +1355,7 @@ bool MeiExporter::writeTuplet(const Tuplet* tuplet, const EngravingItem* item, b
     }
 
     if (tuplet->elements().front() == item) {
-        // recursive call for hanling nested tuplets
+        // recursive call for handling nested tuplets
         // nearly works except for closing which is happening to early (after the first note)
         // when a nested tuplet is ending at the same time as its parent
         /**
@@ -1418,8 +1418,8 @@ bool MeiExporter::writeVerse(const Lyrics* lyrics)
     Convert::textToMEI(lineBlocks, String(lyrics->plainText()));
 
     // If we have more than one line block we assume to have elision
-    // Ideally we should check that SMuFL line block do contain only an elision charachter
-    // It also means that any SMuFL special characther in the lyrics will be considered to be an elision connector
+    // Ideally we should check that SMuFL line block do contain only an elision character
+    // It also means that any SMuFL special character in the lyrics will be considered to be an elision connector
     ElisionType elision = (lineBlocks.size() > 1) ? ElisionFirst : ElisionNone;
 
     for (auto& lineBlock : lineBlocks) {
@@ -2248,7 +2248,7 @@ void MeiExporter::addNodeToOpenControlEvents(pugi::xml_node node, const Spanner*
 }
 
 /**
- * Go trough the list of control event maps and add endid when the end element has be written.
+ * Go trough the list of control event maps and add @endid when the end element has be written.
  */
 
 void MeiExporter::addEndidToControlEvents()
@@ -2290,7 +2290,7 @@ void MeiExporter::addEndidToControlEvents()
 }
 
 //---------------------------------------------------------
-// geneate XML:IDs
+// generate XML:IDs
 //---------------------------------------------------------
 
 /**
