@@ -3585,8 +3585,8 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
         // TODO: correctly handle Beam::Mode::AUTO
         // when equivalent to BEGIN32 or BEGIN64
         if ((blp < i && bln >= i)
-            || bmc == BeamMode::BEGIN16 && i > 1
-            || bmc == BeamMode::BEGIN32 && i > 2) {
+            || (bmc == BeamMode::BEGIN16 && i > 1)
+            || (bmc == BeamMode::BEGIN32 && i > 2)) {
             text = "begin";
         } else if (blp < i && bln < i) {
             if (bln > 0) {
@@ -3595,8 +3595,8 @@ static void writeBeam(XmlWriter& xml, ChordRest* const cr, Beam* const b)
                 text = "backward hook";
             }
         } else if ((blp >= i && bln < i)
-                   || bmn == BeamMode::BEGIN16 && i > 1
-                   || bmn == BeamMode::BEGIN32 && i > 2) {
+                   || (bmn == BeamMode::BEGIN16 && i > 1)
+                   || (bmn == BeamMode::BEGIN32 && i > 2)) {
             text = "end";
         } else if (blp >= i && bln >= i) {
             text = "continue";
@@ -4936,7 +4936,8 @@ static void writeHairpinText(XmlWriter& xml, const TextLineBase* const tlb, bool
             xml.startElement("direction-type");
             QString tag = "words";
             tag
-                += QString(" font-family=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_FACE : Pid::END_FONT_FACE).value<String>());
+                += QString(" font-family=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_FACE
+                                                                       : Pid::END_FONT_FACE).value<String>());
             tag += QString(" font-size=\"%1\"").arg(tlb->getProperty(isStart ? Pid::BEGIN_FONT_SIZE : Pid::END_FONT_SIZE).toReal());
             tag += fontStyleToXML(static_cast<FontStyle>(tlb->getProperty(isStart ? Pid::BEGIN_FONT_STYLE : Pid::END_FONT_STYLE).toInt()));
             tag += color2xml(tlb);
@@ -7875,7 +7876,8 @@ void ExportMusicXml::write(mu::io::IODevice* dev)
 
     _xml.setDevice(dev);
     _xml.startDocument();
-    _xml.writeDoctype(u"score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\"");
+    _xml.writeDoctype(
+        u"score-partwise PUBLIC \"-//Recordare//DTD MusicXML 4.0 Partwise//EN\" \"http://www.musicxml.org/dtds/partwise.dtd\"");
 
     _xml.startElement("score-partwise", { { "version", "4.0" } });
 
