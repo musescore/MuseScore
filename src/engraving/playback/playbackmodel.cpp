@@ -766,6 +766,26 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
         const Measure* lastMeasure = m_score->lastMeasure();
         result.tickFrom = 0;
         result.tickTo = lastMeasure ? lastMeasure->endTick().ticks() : 0;
+
+        return result;
+    }
+
+    for (const EngravingItem* item : changesRange.changedItems) {
+        if (item->isTie()) {
+            const Tie* tie = toTie(item);
+            const Note* startNote = tie->startNote();
+            const Note* endNote = tie->endNote();
+
+            IF_ASSERT_FAILED(startNote && endNote) {
+                return result;
+            }
+
+            const Note* firstTiedNote = startNote->firstTiedNote();
+            const Note* lastTiedNote = startNote->lastTiedNote();
+
+            result.tickFrom = std::min(result.tickFrom, firstTiedNote->tick().ticks());
+            result.tickTo = std::max(result.tickTo, lastTiedNote->tick().ticks());
+        }
     }
 
     return result;
