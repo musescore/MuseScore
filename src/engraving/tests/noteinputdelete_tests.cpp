@@ -71,7 +71,7 @@ TEST_F(Engraving_NoteInputDeleteTests, note)
 
     // Check all notes were deleted
     for (size_t i = 0; i < NUM_NOTES; ++i) {
-        Fraction tick = { (int)(i+1) , 4 };
+        Fraction tick = { (int)(i + 1), 4 };
         ChordRest* cr = score->findCR(tick, track);
         EXPECT_FALSE(cr);  //nullptr
     }

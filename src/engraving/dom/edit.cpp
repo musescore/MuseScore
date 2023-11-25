@@ -3584,8 +3584,7 @@ void Score::cmdDeleteSelection()
             select(noteSelectedAfterDeletion, SelectType::SINGLE);
             m_is.moveToNextInputPos();
             return;
-        }
-        else if (!crSelectedAfterDeletion) {
+        } else if (!crSelectedAfterDeletion) {
             crSelectedAfterDeletion = m_is.cr();
         }
     }
