@@ -32,6 +32,8 @@
 #include "style/styledef.h"
 
 namespace mu::engraving {
+class EngravingItem;
+
 enum class CommandType {
     Unknown = -1,
 
@@ -508,6 +510,7 @@ struct ScoreChangesRange {
     staff_idx_t staffIdxFrom = mu::nidx;
     staff_idx_t staffIdxTo = mu::nidx;
 
+    std::set<const EngravingItem*> changedItems;
     ElementTypeSet changedTypes;
     PropertyIdSet changedPropertyIdSet;
     StyleIdSet changedStyleIdSet;

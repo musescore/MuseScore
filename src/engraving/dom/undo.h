@@ -174,7 +174,7 @@ public:
 
     struct ChangesInfo {
         ElementTypeSet changedObjectTypes;
-        std::vector<const EngravingItem*> changedItems;
+        std::set<const EngravingItem*> changedItems;
         StyleIdSet changedStyleIdSet;
         PropertyIdSet changedPropertyIdSet;
     };
