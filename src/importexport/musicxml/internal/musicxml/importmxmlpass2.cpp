@@ -4351,7 +4351,7 @@ void MusicXMLParserPass2::clef(const QString& partId, Measure* measure, const Fr
     if (strClefno != "") {
         clefno = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strClefno.toInt());
     }
-    if (clefno < 0 || clefno >= int(part->nstaves())) {
+    if (clefno >= part->nstaves()) {
         // conversion error (0) or other issue, assume staff 1
         // Also for Cubase 6.5.5 which generates clef number="2" in a single staff part
         // Same fix is required in pass 1 and pass 2
