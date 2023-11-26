@@ -156,6 +156,45 @@ async::Notification Excerpt::nameChanged() const
     return m_nameChanged;
 }
 
+static inline bool isValidExcerptFileNameCharacter(char16_t c)
+{
+    return (u'a' <= c && c <= u'z')
+           || (u'A' <= c && c <= 'Z')
+           || (u'0' <= c && c <= '9')
+           || c == u'_' || c == u'-' || c == u' ';
+}
+
+static inline String escapeExcerptFileName(const String& name)
+{
+    String result;
+    result.reserve(name.size());
+
+    for (const char16_t& c : name.toStdU16String()) {
+        if (isValidExcerptFileNameCharacter(c)) {
+            result.append(c);
+        } else {
+            result.append(u'_');
+        }
+    }
+
+    return result;
+}
+
+String Excerpt::makeFileName(size_t index) const
+{
+    if (index == mu::nidx && m_masterScore) {
+        index = mu::indexOf(m_masterScore->excerpts(), this);
+    }
+
+    const String escapedName = escapeExcerptFileName(m_name);
+
+    if (index == mu::nidx) {
+        return escapedName;
+    }
+
+    return String(u"%1_%2").arg(String::number(index), escapedName);
+}
+
 bool Excerpt::containsPart(const Part* part) const
 {
     for (Part* _part : m_parts) {

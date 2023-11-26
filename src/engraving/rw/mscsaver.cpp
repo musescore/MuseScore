@@ -38,30 +38,6 @@ using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
 
-static bool isValidExcerptFileNameCharacter(char16_t c)
-{
-    return (u'a' <= c && c <= u'z')
-           || (u'A' <= c && c <= 'Z')
-           || (u'0' <= c && c <= '9')
-           || c == u'_' || c == u'-' || c == u' ';
-}
-
-static String escapeExcerptFileName(const String& name)
-{
-    String result;
-    result.reserve(name.size());
-
-    for (const char16_t& c : name.toStdU16String()) {
-        if (isValidExcerptFileNameCharacter(c)) {
-            result.append(c);
-        } else {
-            result.append(u'_');
-        }
-    }
-
-    return result;
-}
-
 bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySelection, bool doCreateThumbnail)
 {
     TRACEFUNC;
@@ -97,15 +73,17 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
     // Write Excerpts
     {
         if (!onlySelection) {
-            int excerptIndex = 0;
+            const std::vector<Excerpt*>& excerpts = score->excerpts();
 
-            for (const Excerpt* excerpt : score->excerpts()) {
+            for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
+                const Excerpt* excerpt = excerpts.at(excerptIndex);
+
                 Score* partScore = excerpt->excerptScore();
                 IF_ASSERT_FAILED(partScore && partScore != score) {
                     continue;
                 }
 
-                String excerptFileName = String(u"%1_%2").arg(String::number(excerptIndex), escapeExcerptFileName(excerpt->name()));
+                String excerptFileName = excerpt->makeFileName(excerptIndex);
 
                 // Write excerpt style
                 {
@@ -127,8 +105,6 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
 
                     mscWriter.addExcerptFile(excerptFileName, excerptData);
                 }
-
-                ++excerptIndex;
             }
         }
     }
