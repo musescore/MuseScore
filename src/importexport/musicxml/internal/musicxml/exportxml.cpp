@@ -2151,10 +2151,6 @@ void ExportMusicXml::timesig(TimeSig* tsig)
         attrs = { { "symbol", "common" } };
     } else if (st == TimeSigType::ALLA_BREVE) {
         attrs = { { "symbol", "cut" } };
-    } else if (st == TimeSigType::CUT_BACH) {
-        attrs = { { "symbol", "cut2" } };
-    } else if (st == TimeSigType::CUT_TRIPLE) {
-        attrs = { { "symbol", "cut3" } };
     }
     if (!tsig->visible()) {
         attrs.push_back({ "print-object", "no" });
