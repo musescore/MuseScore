@@ -1997,10 +1997,6 @@ void ExportMusicXml::timesig(TimeSig* tsig)
             tagName += " symbol=\"common\"";
       else if (st == TimeSigType::ALLA_BREVE)
             tagName += " symbol=\"cut\"";
-      else if (st == TimeSigType::CUT_BACH)
-            tagName += " symbol=\"cut2\"";
-      else if (st == TimeSigType::CUT_TRIPLE)
-            tagName += " symbol=\"cut3\"";
       if (!tsig->visible())
             tagName += " print-object=\"no\"";
       tagName += color2xml(tsig);
