@@ -61,6 +61,7 @@ public:
     const String& name() const;
     void setName(const String& name, bool saveAndNotify = true);
     async::Notification nameChanged() const;
+    String makeFileName(size_t index = mu::nidx) const;
 
     std::vector<Part*>& parts() { return m_parts; }
     const std::vector<Part*>& parts() const { return m_parts; }
