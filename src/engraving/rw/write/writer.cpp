@@ -108,8 +108,11 @@ void Writer::write(Score* score, XmlWriter& xml, WriteContext& ctx, bool selecti
 
     xml.startElement(score);
 
-    if (score->excerpt()) {
-        Excerpt* e = score->excerpt();
+    if (Excerpt* e = score->excerpt()) {
+        if (!e->name().empty()) {
+            xml.tag("name", e->name());
+        }
+
         const TracksMap& tracks = e->tracksMapping();
         if (!(tracks.size() == e->nstaves() * VOICES) && !tracks.empty()) {
             for (auto it = tracks.begin(); it != tracks.end(); ++it) {
