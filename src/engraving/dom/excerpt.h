@@ -59,7 +59,7 @@ public:
     void setExcerptScore(Score* s);
 
     const String& name() const;
-    void setName(const String& name);
+    void setName(const String& name, bool saveAndNotify = true);
     async::Notification nameChanged() const;
 
     std::vector<Part*>& parts() { return m_parts; }

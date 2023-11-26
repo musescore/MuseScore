@@ -127,15 +127,18 @@ const String& Excerpt::name() const
     return m_name;
 }
 
-void Excerpt::setName(const String& name)
+void Excerpt::setName(const String& name, bool saveAndNotify)
 {
     if (m_name == name) {
         return;
     }
 
     m_name = name;
-    writeNameToMetaTags();
-    m_nameChanged.notify();
+
+    if (saveAndNotify) {
+        writeNameToMetaTags();
+        m_nameChanged.notify();
+    }
 }
 
 void Excerpt::writeNameToMetaTags()
