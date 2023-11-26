@@ -4418,16 +4418,6 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
         bts = 4;
         btp = 4;
         return true;
-    } else if (beats == "2" && beatType == "2" && timeSymbol == "cut2") {
-        st = TimeSigType::CUT_BACH;
-        bts = 2;
-        btp = 2;
-        return true;
-    } else if (beats == "9" && beatType == "8" && timeSymbol == "cut3") {
-        st = TimeSigType::CUT_TRIPLE;
-        bts = 9;
-        btp = 8;
-        return true;
     } else {
         if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
             LOGD("determineTimeSig: time symbol <%s> not recognized with beats=%s and beat-type=%s",
