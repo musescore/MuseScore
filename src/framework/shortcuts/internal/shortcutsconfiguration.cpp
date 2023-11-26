@@ -29,9 +29,6 @@
 using namespace mu::shortcuts;
 using namespace mu::framework;
 
-static const mu::io::path_t SHORTCUTS_FILE_NAME("/shortcuts.xml");
-static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data" + SHORTCUTS_FILE_NAME);
-
 static const std::string MIDIMAPPINGS_FILE_NAME("/midi_mappings.xml");
 
 static const Settings::Key ADVANCE_TO_NEXT_NOTE_ON_KEY_RELEASE("shortcuts", "io/midi/advanceOnRelease");
@@ -54,14 +51,32 @@ void ShortcutsConfiguration::setCurrentKeyboardLayout(const QString& layout)
     return;
 }
 
+QString ShortcutsConfiguration::resolveShortcutsFileName() const
+{
+#if defined(Q_OS_MACOS)
+    return QString("/shortcuts-Mac.xml");
+#else
+    return QString("/shortcuts.xml");
+#endif
+}
+
+QString ShortcutsConfiguration::shortcutsFileName() const
+{
+    if (m_shortcutFileName.isEmpty())
+    {
+        m_shortcutFileName = resolveShortcutsFileName();
+    }
+    return m_shortcutFileName;
+}
+
 mu::io::path_t ShortcutsConfiguration::shortcutsUserAppDataPath() const
 {
-    return globalConfiguration()->userAppDataPath() + SHORTCUTS_FILE_NAME;
+    return globalConfiguration()->userAppDataPath() + "/shortcuts.xml";
 }
 
 mu::io::path_t ShortcutsConfiguration::shortcutsAppDataPath() const
 {
-    return SHORTCUTS_DEFAULT_FILE_PATH;
+    return ":/data" + shortcutsFileName();
 }
 
 mu::io::path_t ShortcutsConfiguration::midiMappingUserAppDataPath() const

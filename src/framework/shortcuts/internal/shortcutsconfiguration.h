@@ -38,6 +38,7 @@ public:
     QString currentKeyboardLayout() const override;
     void setCurrentKeyboardLayout(const QString& layout) override;
 
+    QString shortcutsFileName() const override;
     io::path_t shortcutsUserAppDataPath() const override;
     io::path_t shortcutsAppDataPath() const override;
 
@@ -45,6 +46,10 @@ public:
 
     bool advanceToNextNoteOnKeyRelease() const override;
     void setAdvanceToNextNoteOnKeyRelease(bool value) override;
+
+private:
+    QString resolveShortcutsFileName() const;
+    mutable QString m_shortcutFileName;
 };
 }
 
