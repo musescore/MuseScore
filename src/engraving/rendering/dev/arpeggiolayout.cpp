@@ -123,10 +123,9 @@ void ArpeggioLayout::clearAccidentals(Arpeggio* item, LayoutContext& ctx)
     }
 
     const Segment* seg = item->chord()->segment();
-    const Chord* endChord = toChord(seg->elementAt(item->endTrack()));
-    if (!endChord) {
-        endChord = item->chord();
-    }
+    const EngravingItem* endEl = seg->elementAt(item->endTrack());
+    const Chord* endChord = endEl && endEl->isChord() ? toChord(endEl) : item->chord();
+
     const Part* part = item->part();
     const track_idx_t partStartTrack = part->startTrack();
     const track_idx_t partEndTrack = part->endTrack();
