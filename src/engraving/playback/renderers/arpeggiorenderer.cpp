@@ -25,6 +25,8 @@
 #include "dom/chord.h"
 #include "dom/arpeggio.h"
 
+#include "playback/metaparsers/notearticulationsparser.h"
+
 using namespace mu::engraving;
 using namespace mu::mpe;
 
@@ -121,6 +123,8 @@ std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ch
         }
 
         NominalNoteCtx noteCtx(note, ctx);
+        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
+
         result.emplace(noteCtx.pitchLevel, std::move(noteCtx));
     }
 
