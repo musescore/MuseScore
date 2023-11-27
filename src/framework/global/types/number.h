@@ -43,7 +43,6 @@ public:
 
     inline T check_valid(T v, T def = T())
     {
-        return v;
         bool valid = !std::isnan(v) && !std::isinf(v);
         if (!valid) {
             assert(!std::isnan(v) && !std::isinf(v));
@@ -62,10 +61,16 @@ public:
         return m_val;
     }
 
+    template<typename V>
+    static T cast(V v) { return static_cast<T>(v); }
+
     inline T raw() const { return m_val; }
     inline double to_double() const { return static_cast<double>(m_val); }
     inline number_t<T> operator-() const { return number_t<T>(-m_val); }
+
     inline bool is_zero() const { return mu::is_zero(m_val); }
+    inline bool is_negative() const { return m_val < static_cast<T>(0); }
+    inline bool is_positive() const { return m_val > static_cast<T>(0); }
 
     inline bool operator ==(const number_t<T>& n) const { return mu::is_equal(m_val, n.m_val); }
     inline bool operator !=(const number_t<T>& n) const { return !mu::is_equal(m_val, n.m_val); }

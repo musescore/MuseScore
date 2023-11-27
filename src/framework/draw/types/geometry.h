@@ -52,10 +52,17 @@ inline bool isEqual(T a1, T a2)
     }
 }
 
+// coordinate (x, y)
 template<typename T>
 using coord_t = number_t<T>;
 using coord = coord_t<double>;
 using coordi = coord_t<int>;
+
+// distance (w, h)
+template<typename T>
+using dist_t = number_t<T>;
+using dist = dist_t<double>;
+using disti = dist_t<int>;
 
 // ====================================
 // Point
@@ -238,7 +245,7 @@ public:
     inline SizeX(T w, T h)
         : m_w(w), m_h(h) {}
 
-    inline bool isNull() const { return isEqual(m_w, T()) && isEqual(m_h, T()); }
+    inline bool isNull() const { return m_w.is_zero() && m_h.is_zero(); }
 
     inline T width() const { return m_w; }
     inline T height() const { return m_h; }
@@ -246,7 +253,7 @@ public:
     inline void setWidth(T w) { m_w = w; }
     inline void setHeight(T h) { m_h = h; }
 
-    inline bool operator==(const SizeX<T>& s) const { return isEqual(s.m_w, m_w) && isEqual(s.m_h, m_h); }
+    inline bool operator==(const SizeX<T>& s) const { return s.m_w == m_w && s.m_h == m_h; }
     inline bool operator!=(const SizeX<T>& s) const { return !this->operator ==(s); }
 
     inline SizeX<T> transposed() const { return SizeX<T>(m_h, m_w); }
@@ -257,8 +264,8 @@ public:
 #endif
 
 private:
-    T m_w = T();
-    T m_h = T();
+    dist m_w;
+    dist m_h;
 };
 
 template<typename T>
@@ -300,7 +307,7 @@ public:
     inline RectX(const PointX<T>& atopLeft, const SizeX<T>& asize)
         : m_x(atopLeft.x()), m_y(atopLeft.y()), m_w(asize.width()), m_h(asize.height()) {}
 
-    inline bool isNull() const { return isEqual(m_w, T()) && isEqual(m_h, T()); }
+    inline bool isNull() const { return m_w.is_zero() && m_h.is_zero(); }
     inline bool isEmpty() const { return m_w <= T() || m_h <= T(); }
     inline bool isValid() const { return m_w > T() && m_h > T(); }
 
@@ -319,7 +326,7 @@ public:
     inline PointX<T> bottomRight() const { return PointX<T>(m_x + m_w, m_y + m_h); }
     inline PointX<T> topRight() const { return PointX<T>(m_x + m_w, m_y); }
     inline PointX<T> bottomLeft() const { return PointX<T>(m_x, m_y + m_h); }
-    inline PointX<T> center() const { return PointX<T>(m_x + m_w / 2, m_y + m_h / 2); }
+    inline PointX<T> center() const { return PointX<T>(m_x + m_w / dist::cast(2), m_y + m_h / dist::cast(2)); }
 
     inline void setCoords(T xp1, T yp1, T xp2, T yp2) { m_x = xp1; m_y = yp1; m_w = xp2 - xp1; m_h = yp2 - yp1; }
     inline void setRect(double ax, double ay, double aaw, double aah) { m_x = ax; m_y = ay; m_w = aaw; m_h = aah; }
@@ -342,14 +349,14 @@ public:
 
     inline bool operator==(const RectX<T>& r) const
     {
-        return isEqual(r.m_x, m_x) && isEqual(r.m_y, m_y) && isEqual(r.m_w, m_w) && isEqual(r.m_h, m_h);
+        return r.m_x == m_x && r.m_y == m_y && r.m_w == m_w && r.m_h == m_h;
     }
 
     inline bool operator!=(const RectX<T>& r) const { return !this->operator ==(r); }
 
     inline void moveTo(double ax, double ay) { m_x = ax; m_y = ay; }
     inline void moveTo(const PointX<T>& p) { m_x = p.x(); m_y = p.y(); }
-    inline void moveCenter(const PointX<T>& p) { m_x = p.x() - m_w / 2; m_y = p.y() - m_h / 2; }
+    inline void moveCenter(const PointX<T>& p) { m_x = p.x() - m_w / dist::cast(2); m_y = p.y() - m_h / dist::cast(2); }
     inline void moveTop(double pos) { m_y = pos; }
 
     inline void translate(T dx, T dy) { m_x += dx; m_y += dy; }
@@ -391,10 +398,10 @@ public:
 #endif
 
 private:
-    T m_x = T();
-    T m_y = T();
-    T m_w = T();
-    T m_h = T();
+    coord m_x;
+    coord m_y;
+    dist m_w;
+    dist m_h;
 };
 
 template<typename T>
@@ -513,32 +520,32 @@ RectX<T> RectX<T>::united(const RectX<T>& r) const
 
     T left = m_x;
     T right = m_x;
-    if (m_w < 0) {
+    if (m_w.is_negative()) {
         left += m_w;
     } else {
         right += m_w;
     }
-    if (r.m_w < 0) {
-        left = std::min(left, r.m_x + r.m_w);
-        right = std::max(right, r.m_x);
+    if (r.m_w.is_negative()) {
+        left = std::min(left, r.m_x.raw() + r.m_w.raw());
+        right = std::max(right, r.m_x.raw());
     } else {
-        left = std::min(left, r.m_x);
-        right = std::max(right, r.m_x + r.m_w);
+        left = std::min(left, r.m_x.raw());
+        right = std::max(right, r.m_x.raw() + r.m_w.raw());
     }
 
     double top = m_y;
     double bottom = m_y;
-    if (m_h < 0) {
+    if (m_h.is_negative()) {
         top += m_h;
     } else {
         bottom += m_h;
     }
-    if (r.m_h < 0) {
-        top = std::min(top, r.m_y + r.m_h);
-        bottom = std::max(bottom, r.m_y);
+    if (r.m_h.is_negative()) {
+        top = std::min(top, r.m_y.raw() + r.m_h.raw());
+        bottom = std::max(bottom, r.m_y.raw());
     } else {
-        top = std::min(top, r.m_y);
-        bottom = std::max(bottom, r.m_y + r.m_h);
+        top = std::min(top, r.m_y.raw());
+        bottom = std::max(bottom, r.m_y.raw() + r.m_h.raw());
     }
     return RectX<T>(left, top, right - left, bottom - top);
 }
@@ -548,7 +555,7 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
 {
     T l1 = m_x;
     T r1 = m_x;
-    if (m_w < 0) {
+    if (m_w.is_negative()) {
         l1 += m_w;
     } else {
         r1 += m_w;
@@ -558,7 +565,7 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     }
     T l2 = r.m_x;
     T r2 = r.m_x;
-    if (r.m_w < 0) {
+    if (r.m_w.is_negative()) {
         l2 += r.m_w;
     } else {
         r2 += r.m_w;
@@ -571,7 +578,7 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     }
     T t1 = m_y;
     T b1 = m_y;
-    if (m_h < 0) {
+    if (m_h.is_negative()) {
         t1 += m_h;
     } else {
         b1 += m_h;
@@ -581,7 +588,7 @@ RectX<T> RectX<T>::intersected(const RectX<T>& r) const
     }
     T t2 = r.m_y;
     T b2 = r.m_y;
-    if (r.m_h < 0) {
+    if (r.m_h.is_negative()) {
         t2 += r.m_h;
     } else {
         b2 += r.m_h;
@@ -605,7 +612,7 @@ bool RectX<T>::intersects(const RectX<T>& r) const
 {
     T l1 = m_x;
     T r1 = m_x;
-    if (m_w < 0) {
+    if (m_w.is_negative()) {
         l1 += m_w;
     } else {
         r1 += m_w;
@@ -615,7 +622,7 @@ bool RectX<T>::intersects(const RectX<T>& r) const
     }
     T l2 = r.m_x;
     T r2 = r.m_x;
-    if (r.m_w < 0) {
+    if (r.m_w.is_negative()) {
         l2 += r.m_w;
     } else {
         r2 += r.m_w;
@@ -628,7 +635,7 @@ bool RectX<T>::intersects(const RectX<T>& r) const
     }
     T t1 = m_y;
     T b1 = m_y;
-    if (m_h < 0) {
+    if (m_h.is_negative()) {
         t1 += m_h;
     } else {
         b1 += m_h;
@@ -638,7 +645,7 @@ bool RectX<T>::intersects(const RectX<T>& r) const
     }
     T t2 = r.m_y;
     T b2 = r.m_y;
-    if (r.m_h < 0) {
+    if (r.m_h.is_negative()) {
         t2 += r.m_h;
     } else {
         b2 += r.m_h;
@@ -657,7 +664,7 @@ bool RectX<T>::contains(const PointX<T>& p) const
 {
     T l = m_x;
     T r = m_x;
-    if (m_w < 0) {
+    if (m_w.is_negative()) {
         l += m_w;
     } else {
         r += m_w;
@@ -670,7 +677,7 @@ bool RectX<T>::contains(const PointX<T>& p) const
     }
     T t = m_y;
     T b = m_y;
-    if (m_h < 0) {
+    if (m_h.is_negative()) {
         t += m_h;
     } else {
         b += m_h;
@@ -689,7 +696,7 @@ bool RectX<T>::contains(const RectX<T>& r) const
 {
     T l1 = m_x;
     T r1 = m_x;
-    if (m_w < 0) {
+    if (m_w.is_negative()) {
         l1 += m_w;
     } else {
         r1 += m_w;
@@ -699,7 +706,7 @@ bool RectX<T>::contains(const RectX<T>& r) const
     }
     T l2 = r.m_x;
     T r2 = r.m_x;
-    if (r.m_w < 0) {
+    if (r.m_w.is_negative()) {
         l2 += r.m_w;
     } else {
         r2 += r.m_w;
@@ -712,7 +719,7 @@ bool RectX<T>::contains(const RectX<T>& r) const
     }
     T t1 = m_y;
     T b1 = m_y;
-    if (m_h < 0) {
+    if (m_h.is_negative()) {
         t1 += m_h;
     } else {
         b1 += m_h;
@@ -722,7 +729,7 @@ bool RectX<T>::contains(const RectX<T>& r) const
     }
     T t2 = r.m_y;
     T b2 = r.m_y;
-    if (r.m_h < 0) {
+    if (r.m_h.is_negative()) {
         t2 += r.m_h;
     } else {
         b2 += r.m_h;
@@ -740,11 +747,11 @@ template<typename T>
 RectX<T> RectX<T>::normalized() const
 {
     RectX<T> r = *this;
-    if (r.m_w < 0) {
+    if (r.m_w.is_negative()) {
         r.m_x += r.m_w;
         r.m_w = -r.m_w;
     }
-    if (r.m_h < 0) {
+    if (r.m_h.is_negative()) {
         r.m_y += r.m_h;
         r.m_h = -r.m_h;
     }
