@@ -4150,7 +4150,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                   sign = "no";                        // MusicXML 2.0 compatibility
             }
       auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
-      if (type == "start" || type == "resume") {
+      if (type == "start" || type == "resume" || type == "sostenuto") {
             if (spdesc._isStarted && !spdesc._isStopped) {
                   // Previous pedal unterminated—likely an unrecorded "discontinue", so delete the line.
                   // TODO: if "change", create 0-length spanner rather than delete
@@ -4165,9 +4165,16 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             if (!p->lineVisible() || sign == "yes") {
                   p->setBeginText("<sym>keyboardPedalPed</sym>");
                   p->setContinueText("(<sym>keyboardPedalPed</sym>)");
+                  if (type == "sostenuto") {
+                        p->setBeginText("<sym>keyboardPedalSost</sym>");
+                        p->setContinueText("(<sym>keyboardPedalSost</sym>)");
+                        }
                   }
-            else
+            else {
+                  p->setBeginText("");
+                  p->setContinueText("");
                   p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
+                  }
             p->setEndHookType(HookType::NONE);
 
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
@@ -4212,6 +4219,10 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
 
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   p->setLineColor(color);
+            if (sign == "no") {
+                  p->setBeginText("");
+                  p->setContinueText("");
+                  }
             starts.append(MusicXmlSpannerDesc(p, ElementType::PEDAL, number));
             }
       else if (type == "continue") {

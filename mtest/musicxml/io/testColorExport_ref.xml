@@ -261,7 +261,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="stop" line="yes" sign="no"/>
+          <pedal type="stop" line="yes" sign="no" color="#FF85FF"/>
           </direction-type>
         </direction>
       <barline location="right">
@@ -421,7 +421,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="stop" line="yes" sign="no"/>
+          <pedal type="stop" line="yes" sign="no" color="#0433FF"/>
           </direction-type>
         </direction>
       <barline location="right">
