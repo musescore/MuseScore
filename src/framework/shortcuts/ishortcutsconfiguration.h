@@ -37,7 +37,6 @@ public:
     virtual QString currentKeyboardLayout() const = 0;
     virtual void setCurrentKeyboardLayout(const QString& layout) = 0;
 
-    virtual QString shortcutsFileName() const = 0;
     virtual io::path_t shortcutsUserAppDataPath() const = 0;
     virtual io::path_t shortcutsAppDataPath() const = 0;
 
