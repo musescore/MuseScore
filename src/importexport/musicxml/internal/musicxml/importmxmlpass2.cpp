@@ -3551,6 +3551,8 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
                 p->setBeginText(u"<sym>keyboardPedalSost</sym>");
             }
         } else {
+            p->setBeginText(u"");
+            p->setContinueText(u"");
             p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
         }
         p->setEndHookType(HookType::NONE);
