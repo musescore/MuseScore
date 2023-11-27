@@ -2364,7 +2364,7 @@ libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
 
     // @func
     if (pedal->beginText() == u"<sym>keyboardPedalSost</sym>" || pedal->beginText() == u"<sym>keyboardPedalS</sym>") {
-        meiPedal.SetFunc(libmei::pedalLog_FUNC_sostenuto);
+        meiPedal.SetFunc("sostenuto");
     }
 
     // @color
