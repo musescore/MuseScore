@@ -12,6 +12,7 @@ body:
         - Engraving bug (incorrect score rendering)
         - UX/Interaction bug (incorrect behaviour)
         - UI bug (incorrect info or interface appearance)
+        - Accessibility issue (e.g. for keyboard-only or screen reader users)
         - VST bug
         - Muse Sounds bug
         - General playback bug

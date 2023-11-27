@@ -751,6 +751,7 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
 
 void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 {
+    TRACEFUNC;
     ctx.mutState().setPrevMeasure(ctx.mutState().curMeasure());
     ctx.mutState().setCurMeasure(ctx.mutState().nextMeasure());
     if (!ctx.state().curMeasure()) {
@@ -1267,7 +1268,7 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                         w = x2 - x1 - d;
                     }
                     MMRest::LayoutData* mmrestLD = mmrest->mutldata();
-                    mmrestLD->setRestWidth(w);
+                    mmrestLD->restWidth = w;
                     TLayout::layoutMMRest(mmrest, mmrest->mutldata(), ctx);
                     mmrestLD->setPosX(headerException ? (x1 - s.x()) : (x1 - s.x() + d));
                 } else if (e->isMeasureRepeat() && !(toMeasureRepeat(e)->numMeasures() % 2)) {
@@ -2076,7 +2077,7 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                     double d = ctx.conf().styleMM(Sid::multiMeasureRestMargin);
                     double w = x2 - x1 - 2 * d;
 
-                    mmrest->mutldata()->setRestWidth(w);
+                    mmrest->mutldata()->restWidth = w;
                     TLayout::layoutMMRest(mmrest, mmrest->mutldata(), ctx);
                     e->setPos(x1 - s.x() + d, e->staff()->staffHeight() * .5);   // center vertically in measure
                     s.createShape(staffIdx);

@@ -199,12 +199,7 @@ public:
     void setIsDrawEditMode(bool val) { m_isDrawEditMode = val; }
 
     struct LayoutData : public TextBase::LayoutData {
-        bool isSetHarmonyHeight() const { return m_harmonyHeight.has_value(); }
-        double harmonyHeight() const { return m_harmonyHeight.value(LD_ACCESS::CHECK); }
-        void setHarmonyHeight(double h) { m_harmonyHeight.set_value(h); }
-
-    private:
-        ld_field<double> m_harmonyHeight = { "harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
+        ld_field<double> harmonyHeight = { "[Harmony] harmonyHeight", 0.0 };           // used for calculating the height is frame while editing.
     };
     DECLARE_LAYOUTDATA_METHODS(Harmony)
 

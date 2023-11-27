@@ -2432,7 +2432,7 @@ std::pair<libmei::Note, libmei::Accid> Convert::pitchToMEI(const engraving::Note
     int alterInt  = tpc2alterByKey(pitch.tpc2, engraving::Key::C);
 
     // @oct
-    // We need to ajusted the pitch to its transpossed value for the octave calculation
+    // We need to adjust the pitch to its transposed value for the octave calculation
     int oct = ((pitch.pitch - interval.chromatic - alterInt) / 12) - 1;
     meiNote.SetOct(oct);
 

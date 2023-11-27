@@ -20,7 +20,7 @@ jobs:
         enable-versioned-regex: 0
 
   add_to_projects:
-    if: github.event.action == 'labeled'
+    if: github.event.action == 'labeled' && github.event.issue.state == 'open'
     runs-on: ubuntu-latest
     steps:
     - name: 'Engraving'
@@ -52,7 +52,7 @@ jobs:
         labeled: VST
 
   assign:
-    if: github.event.action == 'labeled' || github.event.action == 'unlabeled'
+    if: (github.event.action == 'labeled' || github.event.action == 'unlabeled') && github.event.issue.state == 'open'
     runs-on: ubuntu-latest
     steps:
     - name: 'Set assignees on issue'

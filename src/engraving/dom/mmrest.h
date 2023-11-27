@@ -57,14 +57,9 @@ public:
         SymIdList restSyms;                 // stores symbols when using old-style rests
         double symsWidth = 0.0;             // width of symbols with spacing when using old-style
 
-        bool isSetRestWidth() const { return m_restWidth.has_value(); }
-        void setRestWidth(double v) { m_restWidth.set_value(v); }
-        double restWidth() const { return m_restWidth.value(LD_ACCESS::CHECK); }
+        ld_field<double> restWidth = { "[MMRest] restWidth", 0.0 }; // width of multimeasure rest
 
         void setNumberSym(int n) { numberSym = timeSigSymIdsFromString(String::number(n)); }
-
-    private:
-        ld_field<double> m_restWidth = { "restWidth", 0.0 };                   // width of multimeasure rest
     };
     DECLARE_LAYOUTDATA_METHODS(MMRest)
 

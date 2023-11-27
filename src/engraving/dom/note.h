@@ -446,10 +446,10 @@ public:
     void updateFrettingForTiesAndBends();
 
     struct LayoutData : public EngravingItem::LayoutData {
-        ld_field<bool> useTablature = { "Note::useTablature", false };
-        ld_field<SymId> cachedNoteheadSym = { "Note::cachedNoteheadSym", SymId::noSym };    // use in draw to avoid recomputing at every update
-        ld_field<SymId> cachedSymNull = { "Note::cachedSymNull", SymId::noSym };            // additional symbol for some transparent notehead
-        ld_field<bool> mirror = { "Note::mirror", false };                                  // True if note is mirrored at stem.
+        ld_field<bool> useTablature = { "[Note] useTablature", false };
+        ld_field<SymId> cachedNoteheadSym = { "[Note] cachedNoteheadSym", SymId::noSym };    // use in draw to avoid recomputing at every update
+        ld_field<SymId> cachedSymNull = { "[Note] cachedSymNull", SymId::noSym };            // additional symbol for some transparent notehead
+        ld_field<bool> mirror = { "[Note] mirror", false };                                  // True if note is mirrored at stem.
     };
     DECLARE_LAYOUTDATA_METHODS(Note)
 

@@ -100,22 +100,12 @@ public:
 
     struct LayoutData : public EngravingItem::LayoutData {
         SymId braceSymbol = SymId::noSym;
-
         PainterPath path;
         Shape shape;
+        ld_field<double> bracketHeight = { "[Bracket] bracketHeight", 0.0 };
+        ld_field<double> bracketWidth = { "[Bracket] bracketWidth", 0.0 };
 
-        bool isSetBracketHeight() const { return m_bracketHeight.has_value(); }
-        void setBracketHeight(double v) { m_bracketHeight.set_value(v); }
-        double bracketHeight(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bracketHeight.value(mode); }
-        double h2(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bracketHeight.value(mode) * 0.5; }
-
-        bool isSetBracketWidth() const { return m_bracketWidth.has_value(); }
-        void setBracketWidth(double v) { m_bracketWidth.set_value(v); }
-        double bracketWidth(LD_ACCESS mode = LD_ACCESS::CHECK) const { return m_bracketWidth.value(mode); }
-
-    private:
-        ld_field<double> m_bracketHeight = { "bracketHeight", 0.0 };
-        ld_field<double> m_bracketWidth = { "bracketWidth", 0.0 };
+        double h2(LD_ACCESS mode = LD_ACCESS::CHECK) const { return bracketHeight.value(mode) * 0.5; }
     };
     DECLARE_LAYOUTDATA_METHODS(Bracket)
 

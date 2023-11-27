@@ -2678,6 +2678,16 @@ bool TextBase::isPropertyLinkedToMaster(Pid id) const
     return EngravingItem::isPropertyLinkedToMaster(id);
 }
 
+bool TextBase::isUnlinkedFromMaster() const
+{
+    EngravingItem* parent = parentItem();
+    if (parent && parent->isUnlinkedFromMaster()) {
+        return true;
+    }
+
+    return !getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool() || EngravingItem::isUnlinkedFromMaster();
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
@@ -3412,7 +3422,14 @@ void TextBase::undoChangeProperty(Pid id, const PropertyValue& v, PropertyFlags 
         }
     }
 
-    if (propertyGroup(id) != PropertyGroup::TEXT) {
+    static const PropertyIdSet CHARACTER_SPECIFIC_PROPERTIES {
+        Pid::FONT_STYLE,
+        Pid::FONT_FACE,
+        Pid::FONT_SIZE,
+        Pid::TEXT_SCRIPT_ALIGN
+    };
+
+    if (!mu::contains(CHARACTER_SPECIFIC_PROPERTIES, id)) {
         EngravingItem::undoChangeProperty(id, v, ps);
         return;
     }

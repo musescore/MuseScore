@@ -32,6 +32,8 @@
 #include "dom/repeatlist.h"
 #include "dom/segment.h"
 #include "dom/tempo.h"
+#include "dom/tie.h"
+#include "dom/tremolo.h"
 
 #include "log.h"
 
@@ -766,6 +768,46 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
         const Measure* lastMeasure = m_score->lastMeasure();
         result.tickFrom = 0;
         result.tickTo = lastMeasure ? lastMeasure->endTick().ticks() : 0;
+
+        return result;
+    }
+
+    for (const EngravingItem* item : changesRange.changedItems) {
+        if (item->isNote()) {
+            const Note* note = toNote(item);
+            const Chord* chord = note->chord();
+            const Tremolo* tremolo = chord->tremolo();
+
+            if (tremolo && tremolo->twoNotes()) {
+                const Chord* startChord = tremolo->chord1();
+                const Chord* endChord = tremolo->chord2();
+
+                IF_ASSERT_FAILED(startChord && endChord) {
+                    continue;
+                }
+
+                result.tickFrom = std::min(result.tickFrom, startChord->tick().ticks());
+                result.tickTo = std::max(result.tickTo, endChord->tick().ticks());
+            }
+        } else if (item->isTie()) {
+            const Tie* tie = toTie(item);
+            const Note* startNote = tie->startNote();
+            const Note* endNote = tie->endNote();
+
+            IF_ASSERT_FAILED(startNote && endNote) {
+                continue;
+            }
+
+            const Note* firstTiedNote = startNote->firstTiedNote();
+            const Note* lastTiedNote = endNote->lastTiedNote();
+
+            IF_ASSERT_FAILED(firstTiedNote && lastTiedNote) {
+                continue;
+            }
+
+            result.tickFrom = std::min(result.tickFrom, firstTiedNote->tick().ticks());
+            result.tickTo = std::max(result.tickTo, lastTiedNote->tick().ticks());
+        }
     }
 
     return result;

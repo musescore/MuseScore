@@ -108,7 +108,7 @@ static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
     return actualMacro->changesInfo();
 }
 
-static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::vector<const EngravingItem*>& changedItems)
+static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::set<const EngravingItem*>& changedItems)
 {
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
@@ -318,6 +318,10 @@ void Score::undoRedo(bool undo, EditData* ed)
 
     ScoreChangesRange range = changesRange();
 
+    if (range.changedItems.empty()) {
+        range.changedItems = std::move(changes.changedItems);
+    }
+
     if (range.changedTypes.empty()) {
         range.changedTypes = std::move(changes.changedObjectTypes);
     }
@@ -387,7 +391,10 @@ ScoreChangesRange Score::changesRange() const
 
     return { ticksRange.first, ticksRange.second,
              cmdState.startStaff(), cmdState.endStaff(),
-             changes.changedObjectTypes, changes.changedPropertyIdSet, changes.changedStyleIdSet };
+             std::move(changes.changedItems),
+             std::move(changes.changedObjectTypes),
+             std::move(changes.changedPropertyIdSet),
+             std::move(changes.changedStyleIdSet) };
 }
 
 #ifndef NDEBUG

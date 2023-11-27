@@ -600,6 +600,7 @@ public:
     mu::RectF canvasBoundingRect(LD_ACCESS mode = LD_ACCESS::CHECK) const { return ldata()->bbox(mode).translated(canvasPos()); }
 
     virtual bool isPropertyLinkedToMaster(Pid id) const;
+    virtual bool isUnlinkedFromMaster() const;
     void unlinkPropertyFromMaster(Pid id);
     void relinkPropertiesToMaster(PropertyGroup propGroup);
     PropertyPropagation propertyPropagation(const EngravingItem* destinationItem, Pid propertyId) const;
@@ -608,7 +609,6 @@ public:
 
     //! --- Old Interface ---
     void setbbox(const mu::RectF& r) { mutldata()->setBbox(r); }
-    void addbbox(const mu::RectF& r) { mutldata()->addBbox(r); }
     double height() const { return ldata()->bbox().height(); }
     void setHeight(double v) { mutldata()->setHeight(v); }
 

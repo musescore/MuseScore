@@ -6,6 +6,8 @@ engraving:
     - "UX/Interaction bug \\(incorrect behaviour\\)"
 UI:
     - "UI bug \\(incorrect info or interface appearance\\)"
+accessibility:
+    - "Accessibility issue \\(e\\.g\\. for keyboard-only or screen reader users\\)"
 VST:
     - "VST bug"
 "Muse Sounds":
