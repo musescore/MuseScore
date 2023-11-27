@@ -168,6 +168,11 @@
             <offset x="0.142528" y="-2.31299"/>
             <text>Multibend</text>
             </StaffText>
+          <PlayTechAnnotation>
+            <playTechType>distortion</playTechType>
+            <eid>167503724594</eid>
+            <text>distort</text>
+            </PlayTechAnnotation>
           <Chord>
             <eid>25769803890</eid>
             <linkedMain/>
