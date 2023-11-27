@@ -3597,6 +3597,10 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         } else {
             p->setLineVisible(false);
         }
+        if (sign == "no") {
+            p->setBeginText(u"");
+            p->setContinueText(u"");
+        }
         if (color.isValid()) {
             p->setColor(color);
         }
