@@ -83,12 +83,19 @@ void Arpeggio::findAndAttachToChords()
     Chord* _chord = chord();
     track_idx_t strack = track();
     track_idx_t etrack = track() + (m_span - 1);
+    track_idx_t lastTrack = strack;
 
     for (track_idx_t track = strack; track <= etrack; track++) {
         EngravingItem* e = _chord->segment()->element(track);
         if (e && e->isChord()) {
             toChord(e)->undoChangeSpanArpeggio(this);
+            lastTrack = track;
         }
+    }
+
+    if (lastTrack != etrack) {
+        int newSpan = lastTrack - track() + 1;
+        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
     }
 }
 
