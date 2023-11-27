@@ -1820,7 +1820,7 @@ void Chord::undoChangeSpanArpeggio(Arpeggio* a)
         }
         Chord* chord = toChord(linkedObject);
         Score* score = chord->score();
-        EngravingItem* linkedArp = a->findLinkedInScore(score);
+        EngravingItem* linkedArp = chord->spanArpeggio();
         if (score && linkedArp) {
             score->undo(new ChangeSpanArpeggio(chord, toArpeggio(linkedArp)));
         }
