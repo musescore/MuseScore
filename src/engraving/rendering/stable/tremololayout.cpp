@@ -21,7 +21,7 @@
  */
 #include "tremololayout.h"
 
-#include "global/number.h"
+#include "global/types/number.h"
 
 #include "dom/chord.h"
 #include "dom/stem.h"
