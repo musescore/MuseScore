@@ -1198,8 +1198,8 @@ static bool readTextLineProperties114(XmlReader& e, ReadContext& ctx, TextLineBa
         ls->setOffset(PointF());            // ignore offsets
         ls->setAutoplace(true);
         tl->add(ls);
-    } else if (read400::TRead::readProperties(tl, e, ctx)) {
-        return true;
+    } else if (!read400::TRead::readProperties(tl, e, ctx)) {
+        return false;
     }
     return true;
 }
