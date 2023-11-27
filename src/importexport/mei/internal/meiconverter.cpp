@@ -2351,7 +2351,7 @@ libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
     // @dir
     meiPedal.SetDir(libmei::pedalLog_DIR_down);
 
-    bool symbol = (pedal->beginText() != "");
+    bool symbol = (!pedal->beginText().isEmpty());
     bool star = (pedal->endText() == engraving::Pedal::STAR_SYMBOL);
 
     // @form
