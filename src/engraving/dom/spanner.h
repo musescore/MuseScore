@@ -68,8 +68,8 @@ public:
     void setUserOff2(const mu::PointF& o) { m_offset2 = o; }
     void setUserXoffset2(double x) { m_offset2.setX(x); }
     void setUserYoffset2(double y) { m_offset2.setY(y); }
-    double& rUserXoffset2() { return m_offset2.rx(); }
-    double& rUserYoffset2() { return m_offset2.ry(); }
+    coord& rUserXoffset2() { return m_offset2.rx(); }
+    coord& rUserYoffset2() { return m_offset2.ry(); }
 
     void setPos2(const mu::PointF& p) { m_p2 = p; }
     //TODO: rename to spanSegPosWithUserOffset()
@@ -77,8 +77,8 @@ public:
     //TODO: rename to spanSegPos()
     const mu::PointF& ipos2() const { return m_p2; }
     mu::PointF& rpos2() { return m_p2; }
-    double& rxpos2() { return m_p2.rx(); }
-    double& rypos2() { return m_p2.ry(); }
+    coord& rxpos2() { return m_p2.rx(); }
+    coord& rypos2() { return m_p2.ry(); }
 
     bool isEditable() const override { return true; }
 

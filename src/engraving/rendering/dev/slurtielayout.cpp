@@ -1032,10 +1032,10 @@ void SlurTieLayout::avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTie
     }
 
     if (bendOnStart) {
-        sp->p1.rx() = std::max(sp->p1.rx(), bendOnStart->frontSegment()->pos().x() + 0.33 * sc->spatium());
+        sp->p1.rx() = std::max(sp->p1.x(), bendOnStart->frontSegment()->pos().x() + 0.33 * sc->spatium());
     }
     if (bendOnEnd) {
-        sp->p2.rx() = std::min(sp->p2.rx(), bendOnEnd->frontSegment()->pos().x() - 0.33 * ec->spatium());
+        sp->p2.rx() = std::min(sp->p2.x(), bendOnEnd->frontSegment()->pos().x() - 0.33 * ec->spatium());
     }
 }
 

@@ -2492,7 +2492,7 @@ void TDraw::draw(const ShadowNote* item, Painter* painter)
         }
 
         if (item->hasFlag() && up) {
-            posDot.rx() = std::max(posDot.rx(), noteheadWidth + item->symBbox(item->flagSym()).right());
+            posDot.rx() = std::max(posDot.x(), noteheadWidth + item->symBbox(item->flagSym()).right());
         }
 
         for (int i = 0; i < item->duration().dots(); i++) {

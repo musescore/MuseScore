@@ -8,13 +8,21 @@
 #include "global/logstream.h"
 
 namespace mu {
+// default
+constexpr double COMPARE_REAL_EPSILON(1000000.0);
+constexpr double COMPARE_REAL_NULL(0.000001);
+
+// use
+inline double _compare_real_epsilon(COMPARE_REAL_EPSILON);
+inline double _compare_real_null(COMPARE_REAL_NULL);
+
 template<typename T>
 inline bool is_zero(T v)
 {
     if constexpr (std::numeric_limits<T>::is_integer) {
         return v == 0;
     } else {
-        return std::abs(v) <= std::numeric_limits<T>::epsilon();
+        return std::abs(v) <= _compare_real_null;
     }
 }
 
@@ -24,7 +32,7 @@ inline bool is_equal(T v1, T v2)
     if constexpr (std::numeric_limits<T>::is_integer) {
         return v1 == v2;
     } else {
-        return std::abs(v1 - v2) * std::numeric_limits<T>::epsilon() <= std::min(std::abs(v1), std::abs(v2));
+        return std::abs(v1 - v2) * _compare_real_epsilon <= std::min(std::abs(v1), std::abs(v2));
     }
 }
 
@@ -35,11 +43,13 @@ public:
 
     inline T check_valid(T v, T def = T())
     {
+        return v;
         bool valid = !std::isnan(v) && !std::isinf(v);
         if (!valid) {
             assert(!std::isnan(v) && !std::isinf(v));
+            return def;
         }
-        return valid ? v : def;
+        return v;
     }
 
     number_t() = default;
