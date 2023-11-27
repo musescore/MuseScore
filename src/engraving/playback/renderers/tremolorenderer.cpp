@@ -25,6 +25,8 @@
 #include "dom/chord.h"
 #include "dom/tremolo.h"
 
+#include "playback/metaparsers/notearticulationsparser.h"
+
 using namespace mu::engraving;
 using namespace mu::mpe;
 
@@ -114,7 +116,9 @@ void TremoloRenderer::buildAndAppendEvents(const Chord* chord, const Articulatio
         noteCtx.duration = stepDuration;
         noteCtx.timestamp += timestampOffset;
 
+        NoteArticulationsParser::buildNoteArticulationMap(note, context, noteCtx.chordCtx.commonArticulations);
         updateArticulationBoundaries(type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
+
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     }
 }
