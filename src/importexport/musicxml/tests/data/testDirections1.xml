@@ -102,7 +102,7 @@
     <measure number="2">
       <direction placement="above">
         <direction-type>
-          <pedal type="resume" line="no" sign="yes"/>
+          <pedal type="start" line="no" sign="yes"/>
           </direction-type>
         </direction>
       <note>
@@ -132,7 +132,7 @@
         </note>
       <direction placement="below">
         <direction-type>
-          <pedal type="resume" line="no" sign="yes"/>
+          <pedal type="start" line="no" sign="yes"/>
           </direction-type>
         </direction>
       <note>
