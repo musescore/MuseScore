@@ -26,6 +26,8 @@
 
 #include "chordarticulationsrenderer.h"
 
+#include "playback/metaparsers/notearticulationsparser.h"
+
 using namespace mu::engraving;
 using namespace mu::mpe;
 
@@ -122,6 +124,7 @@ void GraceChordsRenderer::renderGraceNoteEvents(const std::vector<Chord*>& grace
             noteCtx.duration = duration;
             noteCtx.timestamp = timestamp;
 
+            NoteArticulationsParser::buildNoteArticulationMap(graceNote, ctx, noteCtx.chordCtx.commonArticulations);
             updateArticulationBoundaries(graceCtx.type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
 
             result.emplace_back(buildNoteEvent(std::move(noteCtx)));
