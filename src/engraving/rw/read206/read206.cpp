@@ -1580,11 +1580,6 @@ bool Read206::readChordRestProperties206(XmlReader& e, ReadContext& ctx, ChordRe
             } else {    // not from old score: set duration fraction from duration type
                 ch->setTicks(ch->actualDurationType().fraction());
             }
-        } else {
-            if (ctx.mscVersion() <= 114) {
-                SigEvent event = ctx.compatTimeSigMap()->timesig(ctx.tick());
-                ch->setTicks(event.timesig());
-            }
         }
     } else if (tag == "BeamMode") {
         // 206 used begin32/begin64 for beam mode
