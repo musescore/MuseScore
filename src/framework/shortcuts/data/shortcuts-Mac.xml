@@ -106,7 +106,7 @@
     </SC>
   <SC>
     <key>file-save-as</key>
-    <std>63</std>
+    <std>Ctrl+Shift+S</std>
     </SC>
   <SC>
     <key>file-close</key>
@@ -883,6 +883,30 @@
     <seq>Shift+Space</seq>
     </SC>
   <SC>
+    <key>prev-text-element</key>
+    <seq>Left</seq>
+  </SC>
+  <SC>
+    <key>next-syllable</key>
+    <seq>-</seq>
+  </SC>
+  <SC>
+    <key>add-melisma</key>
+    <seq>Shift+-</seq>
+  </SC>
+  <SC>
+    <key>next-lyric-verse</key>
+    <seq>Down</seq>
+  </SC>
+  <SC>
+    <key>prev-lyric-verse</key>
+    <seq>Up</seq>
+  </SC>
+  <SC>
+    <key>add-lyric-verse</key>
+    <seq>Return</seq>
+  </SC>
+  <SC>
     <key>toggle-visible</key>
     <seq>V</seq>
     </SC>
@@ -1089,7 +1113,7 @@
     </SC>
   <SC>
     <key>text-u</key>
-    <seq>Ctrl+u</seq>
+    <seq>Ctrl+U</seq>
     </SC>
   <SC>
     <key>startcenter</key>
