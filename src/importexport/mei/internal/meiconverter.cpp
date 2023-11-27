@@ -2336,7 +2336,7 @@ void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPeda
     } else if (meiPedal.GetFunc() == "sostenuto") {
         if (pedal->beginText() != "") {
             pedal->setBeginText(u"<sym>keyboardPedalSost</sym>");
-            pedal->setContinueText(u"<sym>(keyboardPedalSost)</sym>");
+            pedal->setContinueText(u"(<sym>keyboardPedalSost</sym>)");
         }
     }
 
