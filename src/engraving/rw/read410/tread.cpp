@@ -3082,7 +3082,6 @@ bool TRead::readProperties(LineSegment* l, XmlReader& e, ReadContext& ctx)
         l->setUserOff2(e.readPoint() * l->style().spatium());
     } else if (l->isGuitarBendSegment() && readProperties(static_cast<GuitarBendSegment*>(l), tag, e, ctx)) {
     } else if (!readItemProperties(l, e, ctx)) {
-        e.unknown();
         return false;
     }
     return true;
