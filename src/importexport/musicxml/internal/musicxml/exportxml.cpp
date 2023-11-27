@@ -5156,7 +5156,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
             pedalType = "change";
             break;
         case HookType::NONE:
-            pedalType = "resume";
+            pedalType = pd->lineVisible() ? "resume" : "start";
             break;
         default:
             pedalType = "start";
