@@ -30,6 +30,7 @@
 
 #include "global/realfn.h"
 #include "global/logstream.h"
+#include "global/types/number.h"
 
 #ifndef NO_QT_SUPPORT
 #include <QPair>
@@ -51,6 +52,11 @@ inline bool isEqual(T a1, T a2)
     }
 }
 
+template<typename T>
+using coord_t = number_t<T>;
+using coord = coord_t<double>;
+using coordi = coord_t<int>;
+
 // ====================================
 // Point
 // ====================================
@@ -62,7 +68,7 @@ public:
     inline PointX(T x, T y)
         : m_x(x), m_y(y) {}
 
-    inline bool isNull() const { return isEqual(m_x, T()) && isEqual(m_y, T()); }
+    inline bool isNull() const { return m_x.is_zero() && m_y.is_zero(); }
 
     inline void setX(T x) { m_x = x; }
     inline void setY(T y) { m_y = y; }
@@ -71,10 +77,10 @@ public:
     inline T y() const { return m_y; }
 
     //! NOTE I don't like this methods, but now it a lot of using
-    inline T& rx() { return m_x; }
-    inline T& ry() { return m_y; }
+    inline coord_t<T>& rx() { return m_x; }
+    inline coord_t<T>& ry() { return m_y; }
 
-    inline bool operator==(const PointX<T>& p) const { return isEqual(p.m_x, m_x) && isEqual(p.m_y, m_y); }
+    inline bool operator==(const PointX<T>& p) const { return p.m_x == m_x && p.m_y == m_y; }
     inline bool operator!=(const PointX<T>& p) const { return !this->operator ==(p); }
 
     inline PointX<T> operator-() const { return PointX<T>(-m_x, -m_y); }
@@ -123,8 +129,8 @@ private:
     //! NOTE We should not swap fields
     //! We should not add new fields
     //! If we really need to do this, then we need to change the implementation of QPainterProvider
-    T m_x = T();
-    T m_y = T();
+    coord_t<T> m_x;
+    coord_t<T> m_y;
 };
 
 template<typename T>
