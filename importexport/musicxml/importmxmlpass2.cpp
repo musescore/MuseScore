@@ -4969,30 +4969,19 @@ static bool determineTimeSig(const QString beats, const QString beatType, const 
       bts = 0;       // the beats (max 4 separated by "+") as integer
       btp = 0;       // beat-type as integer
       // determine if timesig is valid
-      if (beats == "2" && beatType == "2" && timeSymbol == "cut") {
+      if (timeSymbol == "cut")
             st = TimeSigType::ALLA_BREVE;
-            bts = 2;
-            btp = 2;
-            return true;
-            }
-      else if (beats == "4" && beatType == "4" && timeSymbol == "common") {
+      else if (timeSymbol == "common")
             st = TimeSigType::FOUR_FOUR;
-            bts = 4;
-            btp = 4;
-            return true;
+      else if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
+            qDebug("determineTimeSig: time symbol <%s> not recognized", qPrintable(timeSymbol)); // TODO
+            return false;
             }
-      else {
-            if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
-                  qDebug("determineTimeSig: time symbol <%s> not recognized with beats=%s and beat-type=%s",
-                         qPrintable(timeSymbol), qPrintable(beats), qPrintable(beatType)); // TODO
-                  return false;
-                  }
 
-            btp = beatType.toInt();
-            QStringList list = beats.split("+");
-            for (int i = 0; i < list.size(); i++)
-                  bts += list.at(i).toInt();
-            }
+      btp = beatType.toInt();
+      QStringList list = beats.split("+");
+      for (int i = 0; i < list.size(); i++)
+            bts += list.at(i).toInt();
 
       // determine if bts and btp are valid
       if (bts <= 0 || btp <=0) {

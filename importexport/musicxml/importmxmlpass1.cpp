@@ -2688,30 +2688,20 @@ static bool determineTimeSig(MxmlLogger* logger, const QXmlStreamReader* const x
       bts = 0;             // the beats (max 4 separated by "+") as integer
       btp = 0;             // beat-type as integer
       // determine if timesig is valid
-      if (beats == "2" && beatType == "2" && timeSymbol == "cut") {
+      if (timeSymbol == "cut")
             st = TimeSigType::ALLA_BREVE;
-            bts = 2;
-            btp = 2;
-            return true;
-            }
-      else if (beats == "4" && beatType == "4" && timeSymbol == "common") {
+      else if (timeSymbol == "common")
             st = TimeSigType::FOUR_FOUR;
-            bts = 4;
-            btp = 4;
-            return true;
+      else if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
+            logger->logError(QString("time symbol '%1' not recognized")
+                             .arg(timeSymbol), xmlreader);
+            return false;
             }
-      else {
-            if (!timeSymbol.isEmpty() && timeSymbol != "normal") {
-                  logger->logError(QString("time symbol '%1' not recognized with beats=%2 and beat-type=%3")
-                                   .arg(timeSymbol, beats, beatType), xmlreader);
-                  return false;
-                  }
 
-            btp = beatType.toInt();
-            QStringList list = beats.split("+");
-            for (int i = 0; i < list.size(); i++)
-                  bts += list.at(i).toInt();
-            }
+      btp = beatType.toInt();
+      QStringList list = beats.split("+");
+      for (int i = 0; i < list.size(); i++)
+            bts += list.at(i).toInt();
 
       // determine if bts and btp are valid
       if (bts <= 0 || btp <=0) {
