@@ -3531,7 +3531,7 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
         }
     }
     auto& spdesc = _pass2.getSpanner({ ElementType::PEDAL, number });
-    if (type == "start" || type == "resume") {
+    if (type == "start" || type == "resume" || type == "sostenuto") {
         if (spdesc._isStarted && !spdesc._isStopped) {
             // Previous pedal unterminated—likely an unrecorded "discontinue", so delete the line.
             // TODO: if "change", create 0-length spanner rather than delete
@@ -3545,8 +3545,11 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             p->setLineVisible(false);
         }
         if (!p->lineVisible() || sign == "yes") {
-            p->setBeginText(u"<sym>keyboardPedalPed</sym>");
-            p->setContinueText(u"(<sym>keyboardPedalPed</sym>)");
+            p->setBeginText(Pedal::PEDAL_SYMBOL);
+            p->setContinueText(Pedal::STAR_SYMBOL);
+            if (type == "sostenuto") {
+                p->setBeginText(u"<sym>keyboardPedalSost</sym>");
+            }
         } else {
             p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
         }
