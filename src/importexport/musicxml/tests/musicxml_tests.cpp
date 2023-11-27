@@ -807,10 +807,13 @@ TEST_F(Musicxml_Tests, numberedLyrics) {
     mxmlIoTestRef("testNumberedLyrics");
 }
 TEST_F(Musicxml_Tests, pedalChanges) {
-    mxmlImportTestRef("testPedalChanges");
+    mxmlIoTest("testPedalChanges");
 }
 TEST_F(Musicxml_Tests, pedalChangesBroken) {
     mxmlImportTestRef("testPedalChangesBroken");
+}
+TEST_F(Musicxml_Tests, pedalStyles) {
+    mxmlIoTest("testPedalStyles");
 }
 TEST_F(Musicxml_Tests, placementDefaults) {
     mxmlImportTestRef("testPlacementDefaults");
