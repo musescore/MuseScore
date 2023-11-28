@@ -30,9 +30,9 @@ using namespace mu::shortcuts;
 using namespace mu::framework;
 
 #if defined(Q_OS_MACOS)
-    static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data/shortcuts-Mac.xml");
+static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data/shortcuts-Mac.xml");
 #else
-    static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data/shortcuts.xml");
+static const mu::io::path_t SHORTCUTS_DEFAULT_FILE_PATH(":/data/shortcuts.xml");
 #endif
 
 static const std::string MIDIMAPPINGS_FILE_NAME("/midi_mappings.xml");
