@@ -438,11 +438,8 @@
               </Note>
             </Chord>
           <endTuplet/>
-          <Rest>
-            <durationType>half</durationType>
-            </Rest>
           <location>
-            <fractions>-359/720</fractions>
+            <fractions>1/720</fractions>
             </location>
           <Rest>
             <durationType>half</durationType>
