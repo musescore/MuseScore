@@ -5350,13 +5350,15 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         _xml.endElement();
     }
 
-    _xml.startElement("direction-type");
-    if (isDashes) {
-        _xml.tag("dashes", { { "type", type }, { "number", n + 1 } });
-    } else {
-        _xml.tagRaw(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
+    if (tl->lineVisible()) {
+        _xml.startElement("direction-type");
+        if (isDashes) {
+            _xml.tag("dashes", { { "type", type }, { "number", n + 1 } });
+        } else {
+            _xml.tagRaw(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
+        }
+        _xml.endElement();
     }
-    _xml.endElement();
 
     if (!tl->endText().isEmpty() && tl->tick() != tick) {
         _xml.startElement("direction-type");
