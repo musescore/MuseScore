@@ -1105,8 +1105,8 @@ static bool readTextLineProperties114(XmlReader& e, TextLineBase* tl)
             ls->setAutoplace(true);
             tl->add(ls);
             }
-      else if (tl->readProperties(e))
-            return true;
+      else if (!tl->readProperties(e))
+            return false;
       return true;
       }
 
@@ -1936,7 +1936,7 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                               j->setPlayRepeats(e.readBool());
                         else if (t == "subtype")
                               e.readInt();
-                        else if (!j->TextBase::readProperties(e))
+                        else if (!j->readProperties(e))
                               e.unknown();
                         }
                   m->add(j);
@@ -1948,12 +1948,12 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                   Marker::Type mt = Marker::Type::SEGNO;
                   while (e.readNextStartElement()) {
                         const QStringRef& t(e.name());
-                        if (t == "subtype") {
+                        if (t == "subtype" || t == "label") {
                               QString s(e.readElementText());
                               a->setLabel(s);
                               mt = a->markerType(s);
                               }
-                        else if (!a->TextBase::readProperties(e))
+                        else if (!a->readProperties(e))
                               e.unknown();
                         }
                   a->setMarkerType(mt);

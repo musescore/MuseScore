@@ -1726,12 +1726,6 @@ bool readChordRestProperties206(XmlReader& e, ChordRest* ch)
                   else  // not from old score: set duration fraction from duration type
                         ch->setTicks(ch->actualDurationType().fraction());
                   }
-            else {
-                  if (ch->score()->mscVersion() <= 114) {
-                        SigEvent event = ch->score()->sigmap()->timesig(e.tick());
-                        ch->setTicks(event.timesig());
-                        }
-                  }
             }
       else if (tag == "BeamMode") {
             QString val(e.readElementText());
@@ -2185,8 +2179,8 @@ static bool readTextLineProperties(XmlReader& e, TextLineBase* tl)
             tl->setBeginHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
       else if (tag == "endHookType")
             tl->setEndHookType(e.readInt() == 0 ? HookType::HOOK_90 : HookType::HOOK_45);
-      else if (tl->readProperties(e))
-            return true;
+      else if (!tl->readProperties(e))
+            return false;
       return true;
       }
 
