@@ -33,6 +33,8 @@
 #include "scorehorizontalviewlayout.h"
 #include "scoreverticalviewlayout.h"
 
+#include "dumplayoutdata.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -92,4 +94,6 @@ void ScoreLayout::layoutRange(Score* score, const Fraction& st, const Fraction& 
         ScoreVerticalViewLayout::layoutVerticalView(score, ctx, stick, etick);
         break;
     }
+
+    //LOGDA() << DumpLayoutData::dump(score);
 }

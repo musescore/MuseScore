@@ -2512,6 +2512,25 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
     return sh;
 }
 
+void EngravingItem::LayoutData::dump(std::stringstream& ss) const
+{
+    ss << "\n";
+    ss << m_item->typeName() << " id: " << m_item->eid().id() << "\n";
+
+    ss << "skip: " << (m_isSkipDraw ? "yes" : "no") << "\n";
+    ss << "mag: " << m_mag << "\n";
+
+    ss << "pos: ";
+    mu::engraving::dump(m_pos, ss);
+    ss << "\n";
+
+    ss << "shape: ";
+    mu::engraving::dump(m_shape, ss);
+    ss << "\n";
+
+    supDump(ss);
+}
+
 double EngravingItem::mag() const
 {
     if (!ldata()) {

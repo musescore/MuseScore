@@ -25,6 +25,8 @@
 #include <vector>
 #include <cmath>
 #include <cassert>
+#include <string>
+#include <sstream>
 
 #include "global/realfn.h"
 #include "global/logstream.h"
@@ -124,6 +126,20 @@ private:
     T m_x = T();
     T m_y = T();
 };
+
+template<typename T>
+inline void dump(const PointX<T>& p, std::stringstream& ss)
+{
+    ss << "{x: " << p.x() << ", y: " << p.y() << "}";
+}
+
+template<typename T>
+inline std::string dump(const PointX<T>& p)
+{
+    std::stringstream ss;
+    dump(p, ss);
+    return ss.str();
+}
 
 template<typename T>
 inline PointX<T> operator*(const PointX<T>& p, T c) { return PointX<T>(p.x() * c, p.y() * c); }
@@ -374,6 +390,20 @@ private:
     T m_w = T();
     T m_h = T();
 };
+
+template<typename T>
+inline void dump(const RectX<T>& r, std::stringstream& ss)
+{
+    ss << "{x: " << r.x() << ", y: " << r.y() << ", w: " << r.width() << ", h: " << r.height() << "}";
+}
+
+template<typename T>
+inline std::string dump(const RectX<T>& r)
+{
+    std::stringstream ss;
+    dump(r, ss);
+    return ss.str();
+}
 
 using RectF = RectX<double>;
 class Rect : public RectX<int>
@@ -719,14 +749,14 @@ RectX<T> RectX<T>::normalized() const
 template<typename T>
 inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::RectX<T>& r)
 {
-    s << "{x: " << r.x() << ", y: " << r.y() << ", w: " << r.width() << ", h: " << r.height() << "}";
+    s << mu::dump(r);
     return s;
 }
 
 template<typename T>
 inline mu::logger::Stream& operator<<(mu::logger::Stream& s, const mu::PointX<T>& p)
 {
-    s << "{x: " << p.x() << ", y: " << p.y() << "}";
+    s << mu::dump(p);
     return s;
 }
 

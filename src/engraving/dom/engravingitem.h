@@ -52,6 +52,16 @@
     LayoutData* createLayoutData() const override { return new Class::LayoutData(); } \
 
 namespace mu::engraving {
+template<typename T>
+inline void dump(const ld_field<T>& f, std::stringstream& ss)
+{
+    if (f.has_value()) {
+        dump(f.value(), ss);
+    } else {
+        ss << "no value";
+    }
+}
+
 class Factory;
 class XmlReader;
 
@@ -569,7 +579,12 @@ public:
 
         OffsetChange offsetChanged() const { return autoplace.offsetChanged; }
 
+        void dump(std::stringstream& ss) const;
+
     protected:
+
+        virtual void supDump(std::stringstream& ss) const { UNUSED(ss); }
+
         inline void doSetPos(double x, double y)
         {
             m_pos.mut_value().setX(x),

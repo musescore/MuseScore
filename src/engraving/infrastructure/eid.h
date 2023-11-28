@@ -36,6 +36,9 @@ public:
 
     bool isValid() const { return m_type != ElementType::INVALID && m_id != 0; }
 
+    ElementType type() const { return m_type; }
+    uint32_t id() const { return m_id; }
+
     inline bool operator ==(const EID& other) const { return m_type == other.m_type && m_id == other.m_id; }
     inline bool operator !=(const EID& other) const { return !this->operator ==(other); }
 
