@@ -4592,6 +4592,10 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
       const auto isLineType = hp->isLineType();
       int n;
       if (isLineType) {
+            if (!hp->lineVisible() && ((hp->beginText().isEmpty() && hp->tick() == tick)
+                                       || (hp->endText().isEmpty() && hp->tick() != tick)))
+                  return;
+
             n = findDashes(hp);
             if (n >= 0)
                   dashes[n] = nullptr;
@@ -4822,6 +4826,10 @@ int ExportMusicXml::findBracket(const TextLineBase* tl) const
 
 void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fraction& tick)
       {
+      if (!tl->lineVisible() && ((tl->beginText().isEmpty() && tl->tick() == tick)
+                                 || (tl->endText().isEmpty() && tl->tick() != tick)))
+            return;
+
       int n;
       // special case: a dashed line w/o hooks is written as dashes
       const auto isDashes = tl->lineStyle() == Qt::DashLine && (tl->beginHookType() == HookType::NONE) && (tl->endHookType() == HookType::NONE);
@@ -4924,12 +4932,14 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, int staff, const Fra
             _xml.etag();
             }
 
-      _xml.stag("direction-type");
-      if (isDashes)
-            _xml.tagE(QString("dashes type=\"%1\" number=\"%2\"").arg(type, QString::number(n + 1)));
-      else
-            _xml.tagE(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
-      _xml.etag();
+      if (tl->lineVisible()) {
+            _xml.stag("direction-type");
+            if (isDashes)
+                  _xml.tagE(QString("dashes type=\"%1\" number=\"%2\"").arg(type, QString::number(n + 1)));
+            else
+                  _xml.tagE(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
+            _xml.etag();
+            }
 
       if (!tl->endText().isEmpty() && tl->tick() != tick) {
             _xml.stag("direction-type");
