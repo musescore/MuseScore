@@ -39,6 +39,10 @@
             "value": [36, 41, 46, 51, 55, 60],
             "useFlats": true
           },{
+            "name": "Dropped D",
+            "value": [38, 45, 50, 55, 59, 64],
+            "useFlats": true
+          },{
             "name": "Dropped D tune down 1/2 step",
             "value": [37, 44, 49, 54, 58, 63],
             "useFlats": true
