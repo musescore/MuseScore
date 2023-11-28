@@ -1460,11 +1460,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1492,7 +1499,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Arpeggio));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1522,11 +1530,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1554,7 +1569,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioUp));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1584,11 +1600,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Down)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1616,7 +1639,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Down)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioDown));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1647,11 +1671,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1679,7 +1710,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Down)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioStraightDown));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
@@ -1710,11 +1742,18 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
 
     // [GIVEN] Expected disclosure
     int expectedSubNotesCount = 3;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+        expectedOffset* 2,
+    };
 
     std::vector<duration_t> expectedDurations = {
         QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION,
-        QUARTER_NOTE_DURATION
+        QUARTER_NOTE_DURATION - expectedOffset,
+        QUARTER_NOTE_DURATION - expectedOffset * 2
     };
 
     std::vector<pitch_level_t> expectedPitches = {
@@ -1742,7 +1781,8 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Straight_Up)
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
             EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioStraightUp));
 
-            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
 
             // [THEN] We expect that each note event will match expected pitch disclosure
