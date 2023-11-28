@@ -667,6 +667,7 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
         slur()->setBroken(true);
         return;
     }
+
     // Set up coordinate transforms
     // CAUTION: transform operations are applies in reverse order to how
     // they are added to the transformation.
@@ -687,6 +688,14 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
     double shoulderW; // expressed as fraction of slur-length
     double shoulderH;
     double d = p2.x() / _spatium;
+
+    if (d < 0) {
+        //! NOTE A negative d means that end point is before the start point.
+        //! This only exists as a temporary state when horizontal spacing hasn't yet been computed,
+        //! and it makes no sense for any of the following calculations
+        return;
+    }
+
     if (d < 2) {
         shoulderW = 0.60;
     } else if (d < 10) {

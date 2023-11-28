@@ -279,7 +279,7 @@ private:
     int m_maxMove = 0;
 
     bool m_noSlope = false;
-    double m_slope = 0.0;
+    real_t m_slope = 0.0;
 
     std::vector<int> m_notes;
     std::vector<TremAnchor> m_tremAnchors;
