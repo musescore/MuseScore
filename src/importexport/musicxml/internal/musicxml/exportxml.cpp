@@ -5159,12 +5159,12 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
             pedalType = "change";
             break;
         case HookType::NONE:
-            pedalType = "resume";
+            pedalType = pd->lineVisible() ? "resume" : "start";
             break;
         default:
             pedalType = "start";
         }
-        signText = pd->beginText() == "" ? " sign=\"no\"" : " sign=\"yes\"";
+        signText = pd->beginText().isEmpty() ? " sign=\"no\"" : " sign=\"yes\"";
     } else {
         if (!pd->endText().isEmpty() || pd->endHookType() == HookType::HOOK_90) {
             pedalType = "stop";
@@ -5173,7 +5173,7 @@ void ExportMusicXml::pedal(Pedal const* const pd, staff_idx_t staff, const Fract
         }
         // "change" type is handled only on the beginning of pedal lines
 
-        signText = pd->endText() == "" ? " sign=\"no\"" : " sign=\"yes\"";
+        signText = pd->endText().isEmpty() ? " sign=\"no\"" : " sign=\"yes\"";
     }
     pedalXml = QString("pedal type=\"%1\"").arg(pedalType);
     pedalXml += lineText;

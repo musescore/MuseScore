@@ -807,7 +807,7 @@ TEST_F(Musicxml_Tests, numberedLyrics) {
     mxmlIoTestRef("testNumberedLyrics");
 }
 TEST_F(Musicxml_Tests, pedalChanges) {
-    mxmlImportTestRef("testPedalChanges");
+    mxmlIoTest("testPedalChanges");
 }
 TEST_F(Musicxml_Tests, pedalChangesBroken) {
     mxmlImportTestRef("testPedalChangesBroken");
