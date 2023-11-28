@@ -431,6 +431,8 @@ public:
     bool isPreBendStart() const;
     bool isGraceBendStart() const;
 
+    bool hasAnotherStraightAboveOrBelow(bool above) const;
+
     void addLineAttachPoint(mu::PointF point, EngravingItem* line);
     std::vector<LineAttachPoint>& lineAttachPoints() { return m_lineAttachPoints; }
     const std::vector<LineAttachPoint>& lineAttachPoints() const { return m_lineAttachPoints; }
