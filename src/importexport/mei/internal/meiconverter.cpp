@@ -2330,8 +2330,10 @@ void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPeda
 
     // @func
     if (meiPedal.GetFunc() == "soft") {
+        // This is just for importing MEI files and will not be exported
         if (pedal->beginText() != "") {
             pedal->setBeginText(u"una corda");
+            pedal->setContinueText(u"");
         }
     } else if (meiPedal.GetFunc() == "sostenuto") {
         if (pedal->beginText() != "") {
