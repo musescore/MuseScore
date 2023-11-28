@@ -127,7 +127,20 @@ void GraceChordsRenderer::renderGraceNoteEvents(const std::vector<Chord*>& grace
             NoteArticulationsParser::buildNoteArticulationMap(graceNote, ctx, noteCtx.chordCtx.commonArticulations);
             updateArticulationBoundaries(graceCtx.type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
 
-            result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+            mpe::NoteEvent event = buildNoteEvent(std::move(noteCtx));
+
+            if (event.arrangementCtx().actualTimestamp >= 0) {
+                result.emplace_back(std::move(event));
+            } else {
+                ArrangementContext arrCtx = event.arrangementCtx();
+                arrCtx.actualDuration = arrCtx.actualDuration + arrCtx.actualTimestamp;
+                arrCtx.actualTimestamp = 0;
+
+                PitchContext pitchCtx = event.pitchCtx();
+                ExpressionContext expCtx = event.expressionCtx();
+
+                result.emplace_back(mpe::NoteEvent(std::move(arrCtx), std::move(pitchCtx), std::move(expCtx)));
+            }
         }
 
         timestamp += duration;
