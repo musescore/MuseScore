@@ -345,7 +345,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         item->layoutInfo->calculateAnchors(chordRests, item->notes());
         item->setStartAnchor(item->layoutInfo->startAnchor());
         item->setEndAnchor(item->layoutInfo->endAnchor());
-        item->setSlope((item->endAnchor().y() - item->startAnchor().y()) / (item->endAnchor().x() - item->startAnchor().x()));
+        item->setSlope(mu::divide(item->endAnchor().y() - item->startAnchor().y(), item->endAnchor().x() - item->startAnchor().x(), 0.0));
         item->setBeamDist(item->layoutInfo->beamDist());
     } else {
         item->setSlope(0.0);
