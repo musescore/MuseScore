@@ -2818,11 +2818,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
         } else if (_e.name() == "staff") {
             QString strStaff = _e.readElementText();
             staff_idx_t staff = _pass1.getMusicXmlPart(partId).staffNumberToIndex(strStaff.toInt());
-            if (staff >= 0) {
-                track += staff * VOICES;
-            } else {
-                _logger->logError(QString("invalid staff %1").arg(strStaff), &_e);
-            }
+            track += staff * VOICES;
         } else {
             skipLogCurrElem();
         }
