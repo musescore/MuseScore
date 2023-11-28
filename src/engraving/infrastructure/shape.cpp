@@ -493,22 +493,26 @@ void Shape::paint(Painter& painter) const
     }
 }
 
-#ifndef NDEBUG
-//---------------------------------------------------------
-//   dump
-//---------------------------------------------------------
-
-void Shape::dump(const char* p) const
+void mu::engraving::dump(const ShapeElement& se, std::stringstream& ss)
 {
-    LOGD("Shape dump: %p %s size %zu", this, p, size());
-    for (const ShapeElement& r : m_elements) {
-        r.dump();
+    const mu::RectF* r = &se;
+    ss << "item: " << (se.item() ? se.item()->typeName() : "no") << " rect: ";
+    mu::dump(*r, ss);
+}
+
+void mu::engraving::dump(const Shape& sh, std::stringstream& ss)
+{
+    ss << "Shape size: " << sh.size() << "\n";
+    for (const ShapeElement& r : sh.elements()) {
+        ss << "  ";
+        dump(r, ss);
+        ss << "\n";
     }
 }
 
-void ShapeElement::dump() const
+std::string mu::engraving::dump(const Shape& sh)
 {
-    LOGD("   %s: %f %f %f %f", item() ? item()->typeName() : "", x(), y(), width(), height());
+    std::stringstream ss;
+    dump(sh, ss);
+    return ss.str();
 }
-
-#endif

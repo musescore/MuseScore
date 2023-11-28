@@ -48,9 +48,6 @@ public:
         : mu::RectF(f), m_item(p) {}
     ShapeElement(const mu::RectF& f)
         : mu::RectF(f) {}
-#ifndef NDEBUG
-    void dump() const;
-#endif
 
     const EngravingItem* item() const { return m_item; }
 
@@ -154,9 +151,6 @@ public:
     bool clearsVertically(const Shape& a) const;
 
     void paint(mu::draw::Painter& painter) const;
-#ifndef NDEBUG
-    void dump(const char*) const;
-#endif
 
 private:
 
@@ -166,6 +160,10 @@ private:
     std::vector<ShapeElement> m_elements;
     mutable RectF m_bbox;   // cache
 };
+
+void dump(const ShapeElement& sh, std::stringstream& ss);
+void dump(const Shape& sh, std::stringstream& ss);
+std::string dump(const Shape& sh);
 
 //---------------------------------------------------------
 //   intersects

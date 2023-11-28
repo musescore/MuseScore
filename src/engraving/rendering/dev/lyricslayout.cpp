@@ -75,7 +75,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     //
     // parse leading verse number and/or punctuation, so we can factor it into layout separately
     //
-    bool hasNumber     = false;   // _verseNumber;
+    bool hasNumber = false;   // _verseNumber;
 
     // find:
     // 1) string of numbers and non-word characters at start of syllable
