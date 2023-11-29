@@ -2910,26 +2910,67 @@ static QString symIdToOrnam(const SymId sid)
 static QString symIdToTechn(const SymId sid)
       {
       switch (sid) {
-            case SymId::brassMuteClosed:
-                  return "stopped";
-                  break;
-            case SymId::stringsHarmonic:
-                  return "harmonic";
-                  break;
             case SymId::stringsUpBow:
                   return "up-bow";
                   break;
             case SymId::stringsDownBow:
                   return "down-bow";
                   break;
-            case SymId::pluckedSnapPizzicatoAbove:
-                  return "snap-pizzicato";
-                  break;
-            case SymId::brassMuteOpen:
-                  return "open-string";
+            case SymId::stringsHarmonic:
+                  return "harmonic";
                   break;
             case SymId::stringsThumbPosition:
+            case SymId::stringsThumbPositionTurned:
                   return "thumb-position";
+                  break;
+            case SymId::doubleTongueAbove:
+            case SymId::doubleTongueBelow:
+                  return "double-tongue";
+                  break;
+            case SymId::tripleTongueAbove:
+            case SymId::tripleTongueBelow:
+                  return "triple-tongue";
+                  break;
+            case SymId::brassMuteClosed:
+                  return "stopped";
+                  break;
+            case SymId::pluckedSnapPizzicatoAbove:
+            case SymId::pluckedSnapPizzicatoBelow:
+                  return "snap-pizzicato";
+                  break;
+            case SymId::keyboardPedalHeel1:
+            case SymId::keyboardPedalHeel2:
+            case SymId::keyboardPedalHeel3:
+                  return "heel";
+                  break;
+            case SymId::keyboardPedalToe1:
+            case SymId::keyboardPedalToe2:
+                  return "toe";
+                  break;
+            case SymId::pluckedWithFingernails:
+                  return "fingernails";
+                  break;
+            case SymId::brassBend:
+                  return "brass-bend";
+                  break;
+            case SymId::brassFlip:
+                  return "brass-flip";
+                  break;
+            case SymId::brassSmear:
+                  return "smear";
+                  break;
+            case SymId::brassMuteOpen:
+                  //return "open-string";
+                  return "open";
+                  break;
+            case SymId::brassMuteHalfClosed:
+                  return "half-muted";
+                  break;
+            case SymId::brassHarmonMuteClosed:
+                  return "harmon-mute";
+                  break;
+            case SymId::guitarGolpe:
+                  return "golpe";
                   break;
             default:
                   ; // nothing
@@ -3104,6 +3145,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                   notations.tag(_xml);
                   technical.tag(_xml);
                   mxmlTechn += color2xml(a);
+                  mxmlTechn += positioningAttributes(a);
                   if (sid == SymId::stringsHarmonic) {
                         if (placement != "")
                               attr += QString(" placement=\"%1\"").arg(placement);
