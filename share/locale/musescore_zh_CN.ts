@@ -24481,12 +24481,12 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="983"/>
         <source>Power Tab Editor files (experimental)</source>
-        <translation>Power Tab Editor文件（试验性）</translation>
+        <translation>Power Tab Editor文件（实验性）</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="984"/>
         <source>Uncompressed MuseScore folders (experimental)</source>
-        <translation>未压缩的 MuseScore 文件夹(*.mscx)</translation>
+        <translation>未压缩的 MuseScore 文件夹(*.mscx)（实验性）</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/projectactionscontroller.cpp" line="985"/>
@@ -24552,7 +24552,7 @@ failed.</source>
     <message>
         <location filename="../../src/project/internal/saveprojectscenario.cpp" line="106"/>
         <source>Uncompressed MuseScore folder (experimental)</source>
-        <translation>未压缩的MuseScore文件夹（实验）</translation>
+        <translation>未压缩的MuseScore文件夹（实验性）</translation>
     </message>
     <message>
         <location filename="../../src/project/internal/templatesrepository.cpp" line="61"/>
