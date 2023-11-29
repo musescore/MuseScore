@@ -20000,12 +20000,12 @@ Whether you are just getting started with music notation software, or are a powe
     <message>
         <location filename="../../src/framework/network/networkerrors.h" line="52"/>
         <source>The I/O device was not opened for reading</source>
-        <translation>I/O设备未打开以读取</translation>
+        <translation>用于读取的I/O设备未打开</translation>
     </message>
     <message>
         <location filename="../../src/framework/network/networkerrors.h" line="53"/>
         <source>The I/O device was not opened for writing</source>
-        <translation>I/O设备未打开以写入</translation>
+        <translation>用于写入的I/O设备未打开</translation>
     </message>
 </context>
 <context>
