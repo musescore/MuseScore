@@ -1847,6 +1847,7 @@ void Score::upDown(bool up, UpDownMode mode)
         int tpc1     = oNote->tpc1();
         int tpc2     = oNote->tpc2();
         int pitch    = oNote->pitch();
+        int pitchOffset = staff->pitchOffset(tick);
         int newTpc1  = tpc1;          // default to unchanged
         int newTpc2  = tpc2;          // default to unchanged
         int newPitch = pitch;         // default to unchanged
@@ -1883,7 +1884,7 @@ void Score::upDown(bool up, UpDownMode mode)
                     return;                                 // no next string to move to
                 }
                 string = stt->visualStringToPhys(string);
-                fret = stringData->fret(pitch, string, staff);
+                fret = stringData->fret(pitch + pitchOffset, string, staff);
                 if (fret == -1) {                            // can't have that note on that string
                     return;
                 }
@@ -1910,7 +1911,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 }
                 // update pitch and tpc's and check it matches stringData
                 upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
-                if (newPitch != stringData->getPitch(string, fret, staff) && !oNote->bendBack()) {
+                if (newPitch + pitchOffset != stringData->getPitch(string, fret, staff) && !oNote->bendBack()) {
                     // oh-oh: something went very wrong!
                     LOGD("upDown tab in-string: pitch mismatch");
                     return;
