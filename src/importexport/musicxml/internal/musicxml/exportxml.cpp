@@ -3432,6 +3432,7 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             notations.tag(_xml, a);
             technical.tag(_xml);
             mxmlTechn += color2xml(a);
+            mxmlTechn += ExportMusicXml::positioningAttributes(a);
             if (sid == SymId::stringsHarmonic) {
                 if (placement != "") {
                     attr += QString(" placement=\"%1\"").arg(placement);
