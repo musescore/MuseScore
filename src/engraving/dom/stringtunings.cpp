@@ -274,7 +274,7 @@ String StringTunings::generateText() const
                 }
             }
 
-            visibleStringList.emplace_back(String(guitarStringSymbol(i + 1) + u" \u2012 "
+            visibleStringList.emplace_back(String(guitarStringSymbol(i + 1) + u" \u2013 "
                                                   + String(pitchStr[0]).toUpper() + accidental) + u"  ");
         }
     }

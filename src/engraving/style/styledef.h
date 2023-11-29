@@ -832,6 +832,8 @@ enum class Sid {
     stringNumberOffset,
     preferSameStringForTranspose,
 
+    stringTuningsFontSize,
+
     harpPedalDiagramFontFace,
     harpPedalDiagramFontSize,
     harpPedalDiagramLineSpacing,
