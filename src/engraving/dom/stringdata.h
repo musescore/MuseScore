@@ -45,6 +45,7 @@ struct instrString {
     int pitch = 0;          // the pitch of the string
     bool open = false;          // true: string is open | false: string is fretted
     int startFret = 0;      // banjo 5th string starts on 5th fret
+    bool useFlat = false;
 
     bool operator==(const instrString& d) const { return d.pitch == pitch && d.open == open; }
 };

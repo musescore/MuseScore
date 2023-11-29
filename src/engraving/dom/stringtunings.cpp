@@ -164,9 +164,10 @@ String StringTunings::accessibleInfo() const
     for (int i = 0; i < numOfStrings; ++i) {
         string_idx_t index = numOfStrings - i - 1;
         if (mu::contains(m_visibleStrings, index)) {
-            String pitchStr = pitch2string(stringList[index].pitch);
+            const instrString str = stringList[index];
+            String pitchStr = pitch2string(str.pitch, str.useFlat);
             if (pitchStr.empty()) {
-                LOGE() << "Invalid get pitch name for " << stringList[index].pitch;
+                LOGE() << "Invalid get pitch name for " << str.pitch;
                 continue;
             }
 
@@ -252,9 +253,10 @@ String StringTunings::generateText() const
     for (int i = 0; i < numOfStrings; ++i) {
         string_idx_t index = numOfStrings - i - 1;
         if (mu::contains(m_visibleStrings, index)) {
-            String pitchStr = pitch2string(stringList[index].pitch);
+            const instrString str = stringList[index];
+            String pitchStr = pitch2string(str.pitch, str.useFlat);
             if (pitchStr.empty()) {
-                LOGE() << "Invalid get pitch name for " << stringList[index].pitch;
+                LOGE() << "Invalid get pitch name for " << str.pitch;
                 continue;
             }
 

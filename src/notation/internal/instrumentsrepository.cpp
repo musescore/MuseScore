@@ -192,9 +192,13 @@ bool InstrumentsRepository::loadStringTuningsPresets(const io::path_t& path)
                     preset.value.push_back(valueVal.toInt());
                 }
 
-                if (info.number != static_cast<int>(preset.value.size())) {
+                if (info.number != preset.value.size()) {
                     LOGE() << "Invalid preset " << preset.name;
                     continue;
+                }
+
+                if (presetObj.contains("useFlats")) {
+                    preset.useFlats = presetObj.value("useFlats").toBool();
                 }
 
                 info.presets.emplace_back(std::move(preset));

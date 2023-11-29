@@ -485,7 +485,7 @@ int quantizeLen(int len, int raster)
     return int(((float)len / raster) + 0.5) * raster;   //round to the closest multiple of raster
 }
 
-static const char16_t* vall[] = {
+static const char16_t* valSharp[] = {
     u"c",
     u"c♯",
     u"d",
@@ -499,19 +499,19 @@ static const char16_t* vall[] = {
     u"a♯",
     u"b"
 };
-static const char16_t* valu[] = {
-    u"C",
-    u"C♯",
-    u"D",
-    u"D♯",
-    u"E",
-    u"F",
-    u"F♯",
-    u"G",
-    u"G♯",
-    u"A",
-    u"A♯",
-    u"B"
+static const char16_t* valFlat[] = {
+    u"c",
+    u"d♭",
+    u"d",
+    u"e♭",
+    u"e",
+    u"f",
+    u"g♭",
+    u"g",
+    u"a♭",
+    u"a",
+    u"b♭",
+    u"b"
 };
 
 /*!
@@ -526,7 +526,7 @@ static const char16_t* valu[] = {
  * @return
  *  The string representation of the note.
  */
-String pitch2string(int v)
+String pitch2string(int v, bool useFlats)
 {
     if (v < 0 || v > 127) {
         return String(u"----");
@@ -535,7 +535,13 @@ String pitch2string(int v)
     String o;
     o = String::number(octave);
     int i = v % PITCH_DELTA_OCTAVE;
-    return (octave < 0 ? valu[i] : vall[i]) + o;
+
+    String pitchStr = useFlats ? valFlat[i] : valSharp[i];
+    if (octave < 0) {
+        pitchStr = pitchStr.toUpper();
+    }
+
+    return pitchStr + o;
 }
 
 /*!
@@ -553,7 +559,7 @@ int string2pitch(const String& s)
         return -1;
     }
 
-    String origin = s;
+    String value = s;
 
     bool negative = s.contains(u'-');
     int octave = String(s[s.size() - 1]).toInt() * (negative ? -1 : 1);
@@ -561,11 +567,12 @@ int string2pitch(const String& s)
         return -1;
     }
 
-    origin = origin.mid(0, origin.size() - (negative ? 2 : 1));
+    value = value.mid(0, value.size() - (negative ? 2 : 1));
+    value = value.toLower();
 
     int pitchIndex = -1;
     for (int i = 0; i < PITCH_DELTA_OCTAVE; ++i) {
-        if (origin.toLower() == String(octave < 0 ? valu[i] : vall[i]).toLower()) {
+        if (value == valFlat[i] || value == valSharp[i]) {
             pitchIndex = i;
             break;
         }
