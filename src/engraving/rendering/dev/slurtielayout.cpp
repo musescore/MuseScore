@@ -1263,7 +1263,7 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
     result += PointF(baseX, baseY);
 
     double visualInsetSp = 0.0;
-    if (inside) {
+    if (inside || note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
         visualInsetSp = 0.2;
     } else if (note->hasAnotherStraightAboveOrBelow(up)) {
         visualInsetSp = 0.45;
@@ -1281,6 +1281,12 @@ PointF SlurTieLayout::computeDefaultStartOrEndPoint(const Tie* tie, Grip startOr
 
 double SlurTieLayout::noteOpticalCenterForTie(const Note* note, bool up)
 {
+    if (note->headGroup() == NoteHeadGroup::HEAD_SLASH) {
+        double singleSlashWidth = note->symBbox(SymId::noteheadSlashHorizontalEnds).width();
+        double noteWidth = note->width();
+        double center = 0.20 * note->spatium() + 0.5 * (noteWidth - singleSlashWidth);
+        return up ? note->shape().right() - center : note->shape().left() + center;
+    }
     SymId symId = note->ldata()->cachedNoteheadSym.value();
     PointF cutOutLeft = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNW : SmuflAnchorId::cutOutSW);
     PointF cutOutRight = note->symSmuflAnchor(symId, up ? SmuflAnchorId::cutOutNE : SmuflAnchorId::cutOutSE);
