@@ -1228,6 +1228,7 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
     map["spiccato"]         = SymId::articStaccatissimoAbove;
     map["snap-pizzicato"]   = SymId::pluckedSnapPizzicatoAbove;
     map["schleifer"]        = SymId::ornamentPrecompSlide;
+    map["open"]             = SymId::brassMuteOpen;
     map["open-string"]      = SymId::brassMuteOpen;
     map["thumb-position"]   = SymId::stringsThumbPosition;
     map["soft-accent"]      = SymId::articSoftAccentAbove;
