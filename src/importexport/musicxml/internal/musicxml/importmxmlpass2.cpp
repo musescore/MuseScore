@@ -6259,9 +6259,16 @@ void MusicXMLParserNotations::articulations()
     while (_e.readNextStartElement()) {
         SymId id { SymId::noSym };
         if (convertArticulationToSymId(_e.name().toString(), id)) {
-            Notation artic = Notation::notationWithAttributes(_e.name().toString(),
-                                                              _e.attributes(), "articulations", id);
-            _notations.push_back(artic);
+            if (_e.name() == "detached-legato") {
+                _notations.push_back(Notation::notationWithAttributes("tenuto",
+                                                                      _e.attributes(), "articulations", SymId::articTenutoAbove));
+                _notations.push_back(Notation::notationWithAttributes("staccato",
+                                                                      _e.attributes(), "articulations", SymId::articStaccatoAbove));
+            } else {
+                Notation artic = Notation::notationWithAttributes(_e.name().toString(),
+                                                                  _e.attributes(), "articulations", id);
+                _notations.push_back(artic);
+            }
             _e.skipCurrentElement();  // skip but don't log
         } else if (_e.name() == "breath-mark") {
             auto value = _e.readElementText();
@@ -6765,35 +6772,6 @@ Notation Notation::notationWithAttributes(const QString& name, const QXmlStreamA
 }
 
 //---------------------------------------------------------
-//   mergeNotations
-//---------------------------------------------------------
-
-/**
- Helper function to merge two Notations. Used to combine articulations in combineArticulations.
- */
-
-Notation Notation::mergeNotations(const Notation& n1, const Notation& n2, const SymId& symId)
-{
-    // Sort and combine the names
-    std::vector<QString> names{ n1.name(), n2.name() };
-    std::sort(names.begin(), names.end());
-    QString name = names[0] + " " + names[1];
-
-    // Parents should match (and will both be "articulation")
-    Q_ASSERT(n1.parent() == n2.parent());
-    QString parent = n1.parent();
-
-    Notation mergedNotation{ name, parent, symId };
-    for (const auto& attr : n1.attributes()) {
-        mergedNotation.addAttribute(attr.first, attr.second);
-    }
-    for (const auto& attr : n2.attributes()) {
-        mergedNotation.addAttribute(attr.first, attr.second);
-    }
-    return mergedNotation;
-}
-
-//---------------------------------------------------------
 //   addAttribute
 //---------------------------------------------------------
 
@@ -6885,75 +6863,6 @@ void MusicXMLParserNotations::skipLogCurrElem()
 }
 
 //---------------------------------------------------------
-//   skipCombine
-//---------------------------------------------------------
-
-/**
- Helper function to hold conditions under which a potential combine should be skipped.
- */
-
-bool MusicXMLParserNotations::skipCombine(const Notation& n1, const Notation& n2)
-{
-    // at this point, if only one placement is specified, don't combine.
-    // we may revisit this in the future once we have a better idea of how we want to combine
-    // things by default.
-    bool placementsSpecifiedAndDifferent = n1.attribute("placement") != n2.attribute("placement");
-    bool upMarcatoDownOther = (n1.name() == "strong-accent" && n1.attribute("type") == "up"
-                               && n2.attribute("placement") == "below")
-                              || (n2.name() == "strong-accent" && n2.attribute("type") == "up"
-                                  && n1.attribute("placement") == "below");
-    bool downMarcatoUpOther = (n1.name() == "strong-accent" && n1.attribute("type") == "down"
-                               && n2.attribute("placement") == "above")
-                              || (n2.name() == "strong-accent" && n2.attribute("type") == "down"
-                                  && n1.attribute("placement") == "above");
-    bool slurEndpoint = _slurStart || _slurStop;
-    return placementsSpecifiedAndDifferent || upMarcatoDownOther || downMarcatoUpOther || slurEndpoint;
-}
-
-//---------------------------------------------------------
-//   combineArticulations
-//---------------------------------------------------------
-
-/**
- Combine any eligible articulations.
- i.e. accent + staccato = staccato accent
- */
-
-void MusicXMLParserNotations::combineArticulations()
-{
-    QMap<std::set<SymId>, SymId> map;       // map set of symbols to combined symbol
-    map[{ SymId::articAccentAbove, SymId::articStaccatoAbove }] = SymId::articAccentStaccatoAbove;
-    map[{ SymId::articMarcatoAbove, SymId::articStaccatoAbove }] = SymId::articMarcatoStaccatoAbove;
-    map[{ SymId::articMarcatoAbove, SymId::articTenutoAbove }] = SymId::articMarcatoTenutoAbove;
-    map[{ SymId::articAccentAbove, SymId::articTenutoAbove }] = SymId::articTenutoAccentAbove;
-    map[{ SymId::articSoftAccentAbove, SymId::articStaccatoAbove }] = SymId::articSoftAccentStaccatoAbove;
-    map[{ SymId::articSoftAccentAbove, SymId::articTenutoAbove }] = SymId::articSoftAccentTenutoAbove;
-    map[{ SymId::articSoftAccentAbove, SymId::articTenutoStaccatoAbove }] = SymId::articSoftAccentTenutoStaccatoAbove;
-
-    // Iterate through each distinct pair (backwards, to allow for deletions)
-    for (std::vector<Notation>::reverse_iterator n1 = _notations.rbegin(), n1Next = n1; n1 != _notations.rend(); n1 = n1Next) {
-        n1Next = std::next(n1);
-        if (n1->parent() != "articulations") {
-            continue;
-        }
-        for (std::vector<Notation>::reverse_iterator n2 = n1 + 1, n2Next = n1; n2 != _notations.rend(); n2 = n2Next) {
-            n2Next = std::next(n2);
-            if (n2->parent() != "articulations" || skipCombine(*n1, *n2)) {
-                continue;
-            }
-            // Combine and remove articulations if present in map
-            std::set<SymId> currentPair = { n1->symId(), n2->symId() };
-            if (map.contains(currentPair)) {
-                Notation mergedNotation = Notation::mergeNotations(*n1, *n2, map.value(currentPair));
-                n1Next = decltype(n1){ _notations.erase(std::next(n1).base()) };
-                n2Next = decltype(n2){ _notations.erase(std::next(n2).base()) };
-                _notations.push_back(mergedNotation);
-            }
-        }
-    }
-}
-
-//---------------------------------------------------------
 //   parse
 //---------------------------------------------------------
 
@@ -6999,7 +6908,6 @@ void MusicXMLParserNotations::parse()
           LOGD("%s", qPrintable(notation.print()));
           }
      */
-    combineArticulations();
 
     addError(checkAtEndElement(_e, "notations"));
 }
