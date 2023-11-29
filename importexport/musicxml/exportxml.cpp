@@ -2998,6 +2998,14 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
                         else
                               mxmlArtic += " type=\"down\"";
                         }
+                  else if (a->anchor() != ArticulationAnchor::CHORD) {
+                        if (a->anchor() == ArticulationAnchor::TOP_CHORD
+                           || a->anchor() == ArticulationAnchor::TOP_STAFF)
+                              mxmlArtic += " placement=\"above\"";
+                        else
+                              mxmlArtic += " placement=\"below\"";
+                        }
+                  mxmlArtic += color2xml(a);
 
                   notations.tag(_xml);
                   articulations.tag(_xml);

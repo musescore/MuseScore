@@ -162,7 +162,6 @@ public:
       QString text() const { return _text; }
       static Notation notationWithAttributes(const QString& name, const QXmlStreamAttributes attributes,
                                 const QString& parent = "", const SymId& symId = SymId::noSym);
-      static Notation mergeNotations(const Notation& n1, const Notation& n2, const SymId& symId = SymId::noSym);
 private:
       QString _name;
       QString _parent;
@@ -219,12 +218,10 @@ public:
       QString tremoloType() const { return _tremoloType; }
       int tremoloNr() const { return _tremoloNr; }
       bool mustStopGraceAFter() const { return _slurStop || _wavyLineStop; }
-      bool skipCombine(const Notation& n1, const Notation& n2);
 private:
       void addError(const QString& error);      ///< Add an error to be shown in the GUI
       void addNotation(const Notation& notation, ChordRest* const cr, Note* const note);
       void addTechnical(const Notation& notation, Note* note);
-      void combineArticulations();
       void harmonic();
       void articulations();
       void dynamics();
