@@ -497,7 +497,7 @@ void BarLine::calcY()
 
     int from = m_spanFrom;
     int to = m_spanTo;
-    int oneLine = staffType1->lines() <= 1;
+    bool oneLine = staffType1->lines() <= 1;
     if (oneLine && m_spanFrom == 0) {
         from = BARLINE_SPAN_1LINESTAFF_FROM;
         if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
@@ -510,7 +510,10 @@ void BarLine::calcY()
     double lineDistance = staffType1->lineDistance().val() * spatium1;
     double offset = staffType1->yoffset().val() * spatium1;
     double lineWidth = style().styleS(Sid::staffLineWidth).val() * spatium1 * .5;
-    data->y1 = offset + from * lineDistance * .5 - lineWidth;
+
+    double y1 = offset + from * lineDistance * .5 - lineWidth;
+    double y2;
+
     if (staffIdx2 != staffIdx1) {
         BarLine* barline2 = toBarLine(segment()->element(staffIdx2 * VOICES));
         double from2 = barline2 ? barline2->m_spanFrom : m_spanFrom;
@@ -518,10 +521,54 @@ void BarLine::calcY()
         const StaffType* staffType2 = staff2 ? staff2->staffType(tick) : staff1->staffType(tick);
         double spatium2 = staffType2->spatium(style());
         double lineDistance2 = staffType2->lineDistance().val() * spatium2;
-        data->y2 = measure->staffLines(staffIdx2)->y1() - startStaffY + from2 * lineDistance2 * .5;
+        y2 = measure->staffLines(staffIdx2)->y1() - startStaffY + from2 * lineDistance2 * .5;
     } else {
-        data->y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
+        y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
     }
+
+    // if stafftype change in next measure, check new staff positions
+    Fraction tickNext = tick + measure->ticks();
+    if (staff1->isStaffTypeStartFrom(tickNext)) {
+        Measure* measureNext = measure->nextMeasure();
+        System* systemNext = measureNext ? measureNext->system() : nullptr;
+        const StaffType* staffType1Next = staff1->staffType(tickNext);
+        bool oneLineNext = staffType1Next->lines() <= 1;
+        if (systemNext && systemNext == system && staffType1Next != staffType1) {
+            if (oneLine && !oneLineNext) {
+                from = m_spanFrom;
+                to = m_spanTo;
+            }
+            if (oneLineNext && m_spanFrom == 0) {
+                from = BARLINE_SPAN_1LINESTAFF_FROM;
+                if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
+                    to = BARLINE_SPAN_1LINESTAFF_TO;
+                }
+            }
+            double spatium1Next = staffType1Next->spatium(style());
+            double lineDistanceNext = staffType1Next->lineDistance().val() * spatium1Next;
+            double offsetNext = staffType1Next->yoffset().val() * spatium1Next;
+            double lineWidthNext = style().styleS(Sid::staffLineWidth).val() * spatium1Next * .5;
+
+            int y1Next = offsetNext + from * lineDistanceNext * .5 - lineWidthNext;
+
+            // change barline, only if it is not initial one
+            if (rtick().isNotZero()) {
+                if (y1Next < y1) {
+                    y1 = y1Next;
+                }
+
+                if (staffIdx2 == staffIdx1) {
+                    double y2Next = offsetNext + (staffType1Next->lines() * 2 - 2 + to) * lineDistanceNext * .5 + lineWidthNext;
+                    if (y2Next > y2) {
+                        y2 = y2Next;
+                    }
+                }
+            }
+        }
+    }
+
+    data->y1 = y1;
+    data->y2 = y2;
 }
 
 //---------------------------------------------------------
