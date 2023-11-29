@@ -154,7 +154,7 @@ void TrackList::combineTuplet(Tuplet* dst, Tuplet* src)
 //   append
 //---------------------------------------------------------
 
-void TrackList::append(EngravingItem* e)
+void TrackList::append(EngravingItem* e, std::unordered_map<EngravingItem*, std::vector<Spanner*> >& notFinishedSpanners)
 {
     if (e->isDurationElement()) {
         m_duration += toDurationElement(e)->ticks();
@@ -213,6 +213,8 @@ void TrackList::append(EngravingItem* e)
                         delete element;
                         element = 0;
                     }
+
+                    cloneNotesSpanners(toChord(e), toChord(element), notFinishedSpanners);
                 }
             }
             if (element) {
@@ -286,6 +288,7 @@ bool TrackList::truncate(const Fraction& f)
 void TrackList::read(const Segment* fs, const Segment* es)
 {
     Fraction tick = fs->tick();
+    std::unordered_map<EngravingItem*, std::vector<Spanner*> > notFinishedSpanners;
 
     const Segment* s;
     for (s = fs; s && (s != es); s = s->next1()) {
@@ -310,7 +313,7 @@ void TrackList::read(const Segment* fs, const Segment* es)
             //! This code has been added for compatibility reasons to maintain the same behavior.
             r->hack_toRestType();
             r->reset();
-            append(r);
+            append(r, notFinishedSpanners);
             tick += r->ticks();
         } else if (e->isChordRest()) {
             DurationElement* de = toDurationElement(e);
@@ -325,15 +328,15 @@ void TrackList::read(const Segment* fs, const Segment* es)
                 appendGap(gap, e->score());
                 tick += gap;
             }
-            append(de);
+            append(de, notFinishedSpanners);
             tick += de->ticks();
         } else if (e->isBarLine()) {
             BarLine* bl = toBarLine(e);
             if (bl->barLineType() != BarLineType::NORMAL) {
-                append(e);
+                append(e, notFinishedSpanners);
             }
         } else {
-            append(e);
+            append(e, notFinishedSpanners);
         }
     }
     Fraction gap = es->tick() - tick;
@@ -512,6 +515,8 @@ bool TrackList::write(Score* score, const Fraction& tick) const
     Fraction remains = m->endTick() - tick;
     Segment* segment = 0;
 
+    std::unordered_map<EngravingItem*, std::vector<Spanner*> > notFinishedSpanners;
+
     for (EngravingItem* e : *this) {
         if (e->isDurationElement()) {
             Fraction duration = toDurationElement(e)->ticks();
@@ -588,6 +593,8 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                                     note->add(tie);
                                 }
                             }
+
+                            cloneNotesSpanners(toChord(e), toChord(cr), notFinishedSpanners);
                         }
                     }
                 } else if (e->isTuplet()) {
@@ -657,6 +664,43 @@ bool TrackList::write(Score* score, const Fraction& tick) const
         }
     }
     return true;
+}
+
+void TrackList::cloneNotesSpanners(Chord* fromChord, Chord* toChord,
+                                   std::unordered_map<EngravingItem*, std::vector<Spanner*> >& notFinishedSpanners) const
+{
+    const std::vector<Note*> notes = fromChord->notes();
+    for (size_t i = 0; i < notes.size(); ++i) {
+        Note* note = notes[i];
+        Note* newNote = toChord->notes()[i];
+
+        std::vector<Spanner*> notFinishedSpannersForNote = value(notFinishedSpanners, note);
+
+        if (!notFinishedSpannersForNote.empty()) {
+            for (Spanner* spanner : notFinishedSpannersForNote) {
+                spanner->setEndElement(newNote);
+                if (spanner->isGlissando() || spanner->isGuitarBend()) {
+                    toChord->setEndsGlissandoOrGuitarBend(true);
+                }
+                newNote->addSpannerBack(spanner);
+            }
+
+            remove(notFinishedSpanners, note);
+        }
+
+        const std::vector<Spanner*> spannerFor = note->spannerFor();
+        if (!spannerFor.empty()) {
+            for (Spanner* spanner : spannerFor) {
+                Spanner* newSpanner = toSpanner(spanner->clone());
+                newSpanner->setParent(newNote);
+                newSpanner->setStartElement(newNote);
+
+                newNote->addSpannerFor(newSpanner);
+
+                notFinishedSpanners[spanner->endElement()].emplace_back(newSpanner);
+            }
+        }
+    }
 }
 
 //---------------------------------------------------------
