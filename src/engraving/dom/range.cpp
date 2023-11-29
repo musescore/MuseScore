@@ -296,7 +296,8 @@ void TrackList::read(const Segment* fs, const Segment* es)
             continue;
         }
         EngravingItem* e = s->element(m_track);
-        if (!e || e->generated()) {
+        //! NOTE: some barlines are generated, they are important to us
+        if (!e || (e->generated() && !e->isBarLine())) {
             for (EngravingItem* ee : s->annotations()) {
                 if (ee->track() == m_track) {
                     m_range->m_annotations.push_back({ s->tick(), ee->clone() });
@@ -610,6 +611,31 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                 }
             }
         } else if (e->isBarLine()) {
+            BarLine* bl = toBarLine(e);
+            Segment* seg;
+
+            if (bl->barLineType() == BarLineType::START_REPEAT) {
+                Measure* next = m->nextMeasure();
+                if (next) {
+                    next->setProperty(Pid::REPEAT_START, true);
+                }
+            } else if (bl->barLineType() == BarLineType::END_REPEAT) {
+                m->setProperty(Pid::REPEAT_END, true);
+            } else if (bl->barLineType() == BarLineType::END_START_REPEAT) {
+                m->setProperty(Pid::REPEAT_END, true);
+                Measure* next = m->nextMeasure();
+                if (next) {
+                    next->setProperty(Pid::REPEAT_START, true);
+                }
+            } else {
+                seg = m->getSegmentR(SegmentType::EndBarLine, m->ticks());
+                if (seg) {
+                    EngravingItem* ne = e->clone();
+                    ne->setScore(score);
+                    ne->setTrack(m_track);
+                    seg->add(ne);
+                }
+            }
         } else if (e->isClef()) {
             Segment* seg;
             if (remains == m->ticks() && m->tick() > Fraction(0, 1)) {
