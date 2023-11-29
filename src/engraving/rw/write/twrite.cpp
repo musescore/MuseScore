@@ -2609,11 +2609,17 @@ void TWrite::write(const StringData* item, XmlWriter& xml)
     xml.startElement("StringData");
     xml.tag("frets", item->frets());
     for (const instrString& strg : item->stringList()) {
+        XmlWriter::Attributes attrs;
+
         if (strg.open) {
-            xml.tag("string", { { "open", "1" } }, strg.pitch);
-        } else {
-            xml.tag("string", strg.pitch);
+            attrs.push_back({ "open", "1" });
         }
+
+        if (strg.useFlat) {
+            attrs.push_back({ "useFlat", "1" });
+        }
+
+        xml.tag("string", attrs, strg.pitch);
     }
     xml.endElement();
 }
