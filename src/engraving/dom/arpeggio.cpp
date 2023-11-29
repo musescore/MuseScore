@@ -62,7 +62,7 @@ Arpeggio::~Arpeggio()
 {
     // Remove reference to this arpeggio in any chords it may have spanned
     Chord* _chord = chord();
-    if (!_chord) {
+    if (!_chord || !_chord->segment()) {
         return;
     }
     for (track_idx_t _track = track(); _track <= track() + m_span; _track++) {
