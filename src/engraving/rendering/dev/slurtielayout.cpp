@@ -1524,8 +1524,6 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
 
     int closestLineToArc = round(yMidApogee / staffLineDist);
     bool isArcInsideStaff =  closestLineToArc >= 0 && closestLineToArc < staff->lines(tick);
-    Tie* tie = tieSegment->tie();
-    Note* note = tie->startNote();
     if (!isArcInsideStaff) {
         return;
     }
