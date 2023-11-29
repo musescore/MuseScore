@@ -492,12 +492,12 @@ void BarLine::calcY()
     // after skipping ones with hideSystemBarLine set
     // and accounting for staves that are shown but have invisible measures
 
-    Fraction tick        = segment()->measure()->tick();
-    const StaffType* st1 = staff1->staffType(tick);
+    Fraction tick = segment()->measure()->tick();
+    const StaffType* staffType1 = staff1->staffType(tick);
 
-    int from    = m_spanFrom;
-    int to      = m_spanTo;
-    int oneLine = st1->lines() <= 1;
+    int from = m_spanFrom;
+    int to = m_spanTo;
+    int oneLine = staffType1->lines() <= 1;
     if (oneLine && m_spanFrom == 0) {
         from = BARLINE_SPAN_1LINESTAFF_FROM;
         if (!m_spanStaff || (staffIdx1 == nstaves - 1)) {
@@ -505,16 +505,16 @@ void BarLine::calcY()
         }
     }
     SysStaff* sysStaff1  = system->staff(staffIdx1);
-    double yp = sysStaff1->y();
-    double spatium1 = st1->spatium(style());
-    double d  = st1->lineDistance().val() * spatium1;
-    double yy = measure->staffLines(staffIdx1)->y1() - yp;
-    double lw = style().styleS(Sid::staffLineWidth).val() * spatium1 * .5;
-    data->y1 = yy + from * d * .5 - lw;
+    double startStaffY = sysStaff1->y();
+    double spatium1 = staffType1->spatium(style());
+    double lineDistance = staffType1->lineDistance().val() * spatium1;
+    double offset = staffType1->yoffset().val() * spatium1;
+    double lineWidth = style().styleS(Sid::staffLineWidth).val() * spatium1 * .5;
+    data->y1 = offset + from * lineDistance * .5 - lineWidth;
     if (staffIdx2 != staffIdx1) {
-        data->y2 = measure->staffLines(staffIdx2)->y1() - yp - to * d * .5;
+        data->y2 = measure->staffLines(staffIdx2)->y1() - startStaffY - to * lineDistance * .5;
     } else {
-        data->y2 = yy + (st1->lines() * 2 - 2 + to) * d * .5 + lw;
+        data->y2 = offset + (staffType1->lines() * 2 - 2 + to) * lineDistance * .5 + lineWidth;
     }
 }
 
