@@ -107,6 +107,7 @@ class StringTuningsItem : public QObject
     Q_PROPERTY(QString number READ number NOTIFY numberChanged)
     Q_PROPERTY(int value READ value NOTIFY valueChanged)
     Q_PROPERTY(QString valueStr READ valueStr NOTIFY valueChanged)
+    Q_PROPERTY(bool useFlat READ useFlat WRITE setUseFlat NOTIFY valueChanged)
 
 public:
     explicit StringTuningsItem(QObject* parent = nullptr);
@@ -121,6 +122,9 @@ public:
     QString valueStr() const;
     void setValue(int value);
 
+    bool useFlat() const;
+    void setUseFlat(bool use);
+
 signals:
     void showChanged();
     void numberChanged();
@@ -130,6 +134,7 @@ private:
     bool m_show = false;
     QString m_number;
     int m_value = 0;
+    bool m_useFlat = false;
 };
 } //namespace mu::notation
 

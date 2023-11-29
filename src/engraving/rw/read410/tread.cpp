@@ -3971,6 +3971,7 @@ void TRead::read(StringData* item, XmlReader& e)
         } else if (tag == "string") {
             instrString strg;
             strg.open  = e.intAttribute("open", 0);
+            strg.useFlat = e.intAttribute("useFlat", 0);
             strg.pitch = e.readInt();
             item->stringList().push_back(strg);
         } else {

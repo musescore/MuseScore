@@ -686,6 +686,7 @@ struct StringTuningPreset
 {
     std::string name;
     std::vector<int> value;
+    bool useFlats = false;
 };
 
 struct StringTuningsInfo
