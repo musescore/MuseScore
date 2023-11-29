@@ -1637,15 +1637,19 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
     }
 
     // determine current number of lines and line distance
-    int lines = 0;
-    double lineDist = 0;
-    Segment* clefSeg  = item->segment();
+    int lines = 5;
+    double lineDist = 1.0;
     int stepOffset = 0;
+    double staffOffsetY = 0;
+
+    Segment* clefSeg  = item->segment();
 
     // check clef visibility and type compatibility
     if (clefSeg && item->staff()) {
         Fraction tick = clefSeg->tick();
+        Fraction tickPrev = tick - Fraction::eps();
         const StaffType* st = item->staff()->staffType(tick);
+        const StaffType* stPrev = !tickPrev.negative() ? item->staff()->staffType(tickPrev) : nullptr;
         bool show = st->genClef();            // check staff type allows clef display
         StaffGroup staffGroup = st->group();
 
@@ -1676,10 +1680,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
         lines      = st->lines();             // init values from staff type
         lineDist   = st->lineDistance().val();
         stepOffset = st->stepOffset();
-    } else {
-        lines      = 5;
-        lineDist   = 1.0;
-        stepOffset = 0;
+        staffOffsetY = st->yoffset().val() - (stPrev ? stPrev->yoffset().val() : 0);
     }
 
     double _spatium = item->spatium();
@@ -1705,7 +1706,7 @@ void TLayout::layoutClef(const Clef* item, Clef::LayoutData* ldata)
         break;
     case ClefType::PERC:                                   // percussion clefs
     case ClefType::PERC2:
-        yoff = lineDist * (lines - 1) * 0.5;
+        yoff = lineDist * (lines - 1) * 0.5 + staffOffsetY;
         stepOffset = 0;
         break;
     case ClefType::INVALID:
