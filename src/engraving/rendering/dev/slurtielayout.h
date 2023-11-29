@@ -63,8 +63,12 @@ private:
     static void correctForCrossStaff(Tie* tie, SlurTiePos& sPos);
     static void forceHorizontal(Tie* tie, SlurTiePos& sPos);
     static void adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip startOrEnd);
-    static void adjustForLedgerLines(TieSegment* tieSegment, SlurTiePos& sPos);
+    static void adjustXforLedgerLines(TieSegment* tieSegment, bool start, Chord* chord, Note* note, const PointF& chordSystemPos,
+                                      double padding, double& resultingX);
+    static void adjustYforLedgerLines(TieSegment* tieSegment, SlurTiePos& sPos);
     static void adjustY(TieSegment* tieSegment);
+    static bool hasEndPointAboveNote(TieSegment* tieSegment);
+
     static TieSegment* layoutTieWithNoEndNote(Tie* item);
 
     static double defaultStemLengthStart(Tremolo* tremolo);
