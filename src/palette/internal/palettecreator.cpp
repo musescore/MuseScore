@@ -1856,7 +1856,7 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
 
     auto stringTunings = makeElement<StringTunings>(gpaletteScore);
     stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
-    stringTunings->initTextStyleType(TextStyleType::STAFF);
+    stringTunings->initTextStyleType(TextStyleType::STRING_TUNINGS);
     sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(true);
 
     sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend", 1.25);

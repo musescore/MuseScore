@@ -214,6 +214,23 @@ const TextStyle stringNumberTextStyle { {
     { TextStylePropertyType::FrameFillColor,       Sid::stringNumberFrameBgColor,               Pid::FRAME_BG_COLOR },
 } };
 
+const TextStyle stringTuningsStyle { { // identical to staffText except for fontSize
+    { TextStylePropertyType::FontFace,             Sid::staffTextFontFace,                      Pid::FONT_FACE },
+    { TextStylePropertyType::FontSize,             Sid::stringTuningsFontSize,                  Pid::FONT_SIZE },
+    { TextStylePropertyType::LineSpacing,          Sid::staffTextLineSpacing,                   Pid::TEXT_LINE_SPACING },
+    { TextStylePropertyType::SizeSpatiumDependent, Sid::staffTextFontSpatiumDependent,          Pid::SIZE_SPATIUM_DEPENDENT },
+    { TextStylePropertyType::FontStyle,            Sid::staffTextFontStyle,                     Pid::FONT_STYLE },
+    { TextStylePropertyType::Color,                Sid::staffTextColor,                         Pid::COLOR },
+    { TextStylePropertyType::TextAlign,            Sid::staffTextAlign,                         Pid::ALIGN },
+    { TextStylePropertyType::Offset,               Sid::staffTextPosAbove,                      Pid::OFFSET },
+    { TextStylePropertyType::FrameType,            Sid::staffTextFrameType,                     Pid::FRAME_TYPE },
+    { TextStylePropertyType::FramePadding,         Sid::staffTextFramePadding,                  Pid::FRAME_PADDING },
+    { TextStylePropertyType::FrameWidth,           Sid::staffTextFrameWidth,                    Pid::FRAME_WIDTH },
+    { TextStylePropertyType::FrameRound,           Sid::staffTextFrameRound,                    Pid::FRAME_ROUND },
+    { TextStylePropertyType::FrameBorderColor,     Sid::staffTextFrameFgColor,                  Pid::FRAME_FG_COLOR },
+    { TextStylePropertyType::FrameFillColor,       Sid::staffTextFrameBgColor,                  Pid::FRAME_BG_COLOR },
+} };
+
 const TextStyle harpPedalDiagramTextStyle { {
     { TextStylePropertyType::FontFace,             Sid::harpPedalDiagramFontFace,               Pid::FONT_FACE },
     { TextStylePropertyType::FontSize,             Sid::harpPedalDiagramFontSize,               Pid::FONT_SIZE },
@@ -1093,7 +1110,7 @@ const TextStyle* textStyle(TextStyleType idx)
     case TextStyleType::LH_GUITAR_FINGERING: return &lhGuitarFingeringTextStyle;
     case TextStyleType::RH_GUITAR_FINGERING: return &rhGuitarFingeringTextStyle;
     case TextStyleType::STRING_NUMBER: return &stringNumberTextStyle;
-    case TextStyleType::STRING_TUNINGS: return &stringNumberTextStyle; // todo
+    case TextStyleType::STRING_TUNINGS: return &stringTuningsStyle; // todo
     case TextStyleType::HARP_PEDAL_DIAGRAM: return &harpPedalDiagramTextStyle;
     case TextStyleType::HARP_PEDAL_TEXT_DIAGRAM: return &harpPedalTextDiagramTextStyle;
 

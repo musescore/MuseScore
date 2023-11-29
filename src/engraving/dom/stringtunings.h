@@ -33,7 +33,7 @@ class StringTunings final : public StaffTextBase
     DECLARE_CLASSOF(ElementType::STRING_TUNINGS)
 
 public:
-    explicit StringTunings(Segment* parent, TextStyleType textStyleType = TextStyleType::STAFF);
+    explicit StringTunings(Segment* parent, TextStyleType textStyleType = TextStyleType::STRING_TUNINGS);
     StringTunings(const StringTunings& s);
 
     StringTunings* clone() const override;

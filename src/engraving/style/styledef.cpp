@@ -820,6 +820,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::stringNumberOffset,            "stringNumberOffset",            PointF(0.0, 0.0) },
     { Sid::preferSameStringForTranspose,  "preferSameStringForTranspose",  false },
 
+    { Sid::stringTuningsFontSize,         "stringTuningsFontSize",         9.0 },
+
     { Sid::harpPedalDiagramFontFace,          "harpPedalDiagramFontFace",          "Edwin" },
     { Sid::harpPedalDiagramFontSize,          "harpPedalDiagramFontSize",          10.0 },
     { Sid::harpPedalDiagramLineSpacing,       "harpPedalDiagramLineSpacing",       1.0 },
