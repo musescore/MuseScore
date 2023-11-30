@@ -37,12 +37,11 @@ inline bool is_equal(T v1, T v2)
 }
 
 template<typename T>
-class number_t
+inline T check_valid(T v, T def = T())
 {
-public:
-
-    inline T check_valid(T v, T def = T())
-    {
+    if constexpr (std::numeric_limits<T>::is_integer) {
+        return v;
+    } else {
         bool valid = !std::isnan(v) && !std::isinf(v);
         if (!valid) {
             assert(!std::isnan(v) && !std::isinf(v));
@@ -50,12 +49,18 @@ public:
         }
         return v;
     }
+}
+
+template<typename T>
+class number_t
+{
+public:
 
     number_t() = default;
     number_t(T v)
-        : m_val(check_valid(v)) {}
+        : m_val(mu::check_valid(v)) {}
 
-    number_t<T>& operator=(T v) { m_val = check_valid(v); return *this; }
+    number_t<T>& operator=(T v) { m_val = mu::check_valid(v); return *this; }
 
     inline operator T() const {
         return m_val;
@@ -92,20 +97,20 @@ public:
     inline number_t<T> operator+(T n) const { return number_t<T>(m_val + n); }
     inline number_t<T> operator-(T n) const { return number_t<T>(m_val - n); }
 
-    inline number_t<T>& operator+=(const number_t<T>& n) { m_val += check_valid(n.m_val); return *this; }
-    inline number_t<T>& operator-=(const number_t<T>& n) { m_val -= check_valid(n.m_val); return *this; }
-    inline number_t<T>& operator+=(T n) { m_val += check_valid(n); return *this; }
-    inline number_t<T>& operator-=(T n) { m_val -= check_valid(n); return *this; }
+    inline number_t<T>& operator+=(const number_t<T>& n) { m_val += mu::check_valid(n.m_val); return *this; }
+    inline number_t<T>& operator-=(const number_t<T>& n) { m_val -= mu::check_valid(n.m_val); return *this; }
+    inline number_t<T>& operator+=(T n) { m_val += mu::check_valid(n); return *this; }
+    inline number_t<T>& operator-=(T n) { m_val -= mu::check_valid(n); return *this; }
 
     inline number_t<T> operator/(const number_t<T>& n) const { return number_t<T>(m_val / n.m_val); }
     inline number_t<T> operator*(const number_t<T>& n) const { return number_t<T>(m_val * n.m_val); }
     inline number_t<T> operator/(T n) const { return number_t<T>(m_val / n); }
     inline number_t<T> operator*(T n) const { return number_t<T>(m_val * n); }
 
-    inline number_t<T>& operator/=(const number_t<T>& n) { m_val /= check_valid(n.m_val, 1); return *this; }
-    inline number_t<T>& operator*=(const number_t<T>& n) { m_val *= check_valid(n.m_val); return *this; }
-    inline number_t<T>& operator/=(T n) { m_val /= check_valid(n, 1); return *this; }
-    inline number_t<T>& operator*=(T n) { m_val *= check_valid(n); return *this; }
+    inline number_t<T>& operator/=(const number_t<T>& n) { m_val /= mu::check_valid(n.m_val, T(1)); return *this; }
+    inline number_t<T>& operator*=(const number_t<T>& n) { m_val *= mu::check_valid(n.m_val); return *this; }
+    inline number_t<T>& operator/=(T n) { m_val /= mu::check_valid(n, T(1)); return *this; }
+    inline number_t<T>& operator*=(T n) { m_val *= mu::check_valid(n); return *this; }
 
 private:
 
