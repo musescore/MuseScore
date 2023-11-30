@@ -50,32 +50,25 @@ struct ElementPattern {
     staff_idx_t staffStart = 0;
     staff_idx_t staffEnd = 0;   // exclusive
     voice_idx_t voice = 0;
-    const System* system = nullptr;
     bool subtypeValid = false;
-    Fraction durationTicks;
+    Fraction durationTicks { -1, 1 };
     Fraction beat { 0, 0 };
     const Measure* measure = nullptr;
+    const System* system = nullptr;
 };
 
 //---------------------------------------------------------
 //   NotePattern
 //---------------------------------------------------------
 
-struct NotePattern {
+struct NotePattern : ElementPattern {
     std::list<Note*> el;
     int pitch = -1;
     int string = INVALID_STRING_INDEX;
     int tpc = Tpc::TPC_INVALID;
     NoteHeadGroup notehead = NoteHeadGroup::HEAD_INVALID;
     TDuration durationType = TDuration();
-    Fraction durationTicks;
     NoteType type = NoteType::INVALID;
-    staff_idx_t staffStart;
-    staff_idx_t staffEnd;   // exclusive
-    voice_idx_t voice;
-    Fraction beat { 0, 0 };
-    const Measure* measure = nullptr;
-    const System* system = nullptr;
 };
 
 //---------------------------------------------------------
