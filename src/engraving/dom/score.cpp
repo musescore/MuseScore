@@ -3751,10 +3751,7 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
     pattern.staffStart = sameStaff ? e->staffIdx() : mu::nidx;
     pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : mu::nidx;
     pattern.voice   = mu::nidx;
-    pattern.system  = 0;
     pattern.durationTicks = Fraction(-1, 1);
-    pattern.beat    = Fraction(0, 0);
-    pattern.measure = 0;
 
     score->scanElements(&pattern, collectMatch);
 
@@ -3789,10 +3786,7 @@ void Score::selectSimilarInRange(EngravingItem* e)
     pattern.staffStart = selection().staffStart();
     pattern.staffEnd = selection().staffEnd();
     pattern.voice   = mu::nidx;
-    pattern.system  = 0;
     pattern.durationTicks = Fraction(-1, 1);
-    pattern.beat    = Fraction(0, 0);
-    pattern.measure = 0;
 
     score->scanElementsInRange(&pattern, collectMatch);
 
