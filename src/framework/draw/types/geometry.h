@@ -307,7 +307,7 @@ public:
     inline RectX(const PointX<T>& atopLeft, const SizeX<T>& asize)
         : m_x(atopLeft.x()), m_y(atopLeft.y()), m_w(asize.width()), m_h(asize.height()) {}
 
-    inline bool isNull() const { return m_w.is_zero() && m_h.is_zero(); }
+    inline bool isNull() const { return isEqual(m_w.raw(), T()) && isEqual(m_h.raw(), T()); }
     inline bool isEmpty() const { return m_w <= T() || m_h <= T(); }
     inline bool isValid() const { return m_w > T() && m_h > T(); }
 

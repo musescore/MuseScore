@@ -585,8 +585,15 @@ public:
 
         virtual void supDump(std::stringstream& ss) const { UNUSED(ss); }
 
+#ifndef NDEBUG
+        void doSetPosDebugHook(double x, double y);
+#endif
+
         inline void doSetPos(double x, double y)
         {
+#ifndef NDEBUG
+            doSetPosDebugHook(x, y);
+#endif
             m_pos.mut_value().setX(x),
             m_pos.mut_value().setY(y);
         }
