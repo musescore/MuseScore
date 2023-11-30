@@ -74,6 +74,8 @@ private:
     static double defaultStemLengthStart(Tremolo* tremolo);
     static double defaultStemLengthEnd(Tremolo* tremolo);
 
+    static bool isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx);
+
     static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
 };
 }
