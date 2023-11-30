@@ -29,6 +29,7 @@
 #include "dom/score.h"
 #include "dom/stemslash.h"
 #include "dom/staff.h"
+#include "dom/tie.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
@@ -168,7 +169,7 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
             }
             double headerTieMargin = f->style().styleMM(Sid::HeaderToLineStartDistance);
             for (Note* note : toChord(e)->notes()) {
-                bool tieOrGlissBack = note->spannerBack().size() || note->tieBack();
+                bool tieOrGlissBack = note->spannerBack().size() || (note->tieBack() && !note->tieBack()->segmentsEmpty());
                 if (!tieOrGlissBack || note->lineAttachPoints().empty()) {
                     continue;
                 }
