@@ -1216,6 +1216,7 @@ enum class Sid {
     bendArrowWidth,
 
     guitarBendLineWidth,
+    guitarBendLineWidthTab,
     guitarBendHeightAboveTABStaff,
     guitarBendPartialBendHeight,
     guitarBendUseFull,

@@ -277,8 +277,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>607</width>
-                <height>554</height>
+                <width>591</width>
+                <height>441</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_10">
@@ -873,8 +873,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>546</width>
-                <height>612</height>
+                <width>408</width>
+                <height>484</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -2253,8 +2253,8 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>709</width>
-             <height>356</height>
+             <width>685</width>
+             <height>298</height>
             </rect>
            </property>
            <layout class="QVBoxLayout" name="verticalLayout_9">
@@ -4019,8 +4019,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>320</width>
-                <height>747</height>
+                <width>239</width>
+                <height>593</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_56">
@@ -6176,8 +6176,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>480</width>
-                <height>482</height>
+                <width>363</width>
+                <height>386</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_54">
@@ -8993,125 +8993,181 @@ By default, they will be placed such as that their right end are at the same lev
           <property name="title">
            <string>Bends</string>
           </property>
-          <layout class="QGridLayout" name="gridLayout_36">
-           <item row="0" column="3">
-            <widget class="QToolButton" name="resetBendLineWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
+          <layout class="QVBoxLayout" name="verticalLayout_58">
+           <item>
+            <widget class="QGroupBox" name="groupBox">
+             <property name="title">
+              <string>Standard stave</string>
              </property>
-             <property name="accessibleName">
-              <string>Reset 'Arrow width' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
+             <layout class="QGridLayout" name="gridLayout_61">
+              <item row="0" column="3">
+               <spacer name="horizontalSpacer_64">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_171">
+                <property name="text">
+                 <string>Line thickness: </string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QDoubleSpinBox" name="bendLineWidth">
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetBendLineWidth">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
-           <item row="1" column="5">
-            <widget class="QDoubleSpinBox" name="bendArrowHeight"/>
-           </item>
-           <item row="1" column="7">
-            <spacer name="horizontalSpacer_46">
-             <property name="orientation">
-              <enum>Qt::Horizontal</enum>
+           <item>
+            <widget class="QGroupBox" name="groupBox_2">
+             <property name="title">
+              <string>Tablature</string>
              </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>40</width>
-               <height>20</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="1" column="3">
-            <widget class="QToolButton" name="resetBendArrowWidth">
-             <property name="toolTip">
-              <string>Reset to default</string>
-             </property>
-             <property name="accessibleName">
-              <string>Reset 'Line thickness' value</string>
-             </property>
-             <property name="text">
-              <string notr="true"/>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="0">
-            <widget class="QLabel" name="label_179">
-             <property name="text">
-              <string>Line thickness:</string>
-             </property>
-             <property name="buddy">
-              <cstring>bendLineWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QLabel" name="label_184">
-             <property name="text">
-              <string>Arrow width:</string>
-             </property>
-             <property name="buddy">
-              <cstring>bendArrowWidth</cstring>
-             </property>
-            </widget>
-           </item>
-           <item row="0" column="1">
-            <widget class="QDoubleSpinBox" name="bendLineWidth">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="minimum">
-              <double>0.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>10.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="4">
-            <widget class="QLabel" name="label_193">
-             <property name="text">
-              <string>Arrow height:</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="1">
-            <widget class="QDoubleSpinBox" name="bendArrowWidth">
-             <property name="keyboardTracking">
-              <bool>false</bool>
-             </property>
-             <property name="suffix">
-              <string>sp</string>
-             </property>
-             <property name="minimum">
-              <double>0.000000000000000</double>
-             </property>
-             <property name="maximum">
-              <double>10.000000000000000</double>
-             </property>
-             <property name="singleStep">
-              <double>0.100000000000000</double>
-             </property>
-             <property name="value">
-              <double>1.000000000000000</double>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="6">
-            <widget class="QToolButton" name="resetBendArrowHeight">
-             <property name="text">
-              <string>...</string>
-             </property>
+             <layout class="QGridLayout" name="gridLayout_63">
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_184">
+                <property name="text">
+                 <string>Arrow width:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>bendArrowWidth</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="2">
+               <widget class="QToolButton" name="resetBendArrowWidth">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Line thickness' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="4">
+               <widget class="QDoubleSpinBox" name="bendArrowHeight">
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="3">
+               <widget class="QLabel" name="label_193">
+                <property name="text">
+                 <string>Arrow height:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QDoubleSpinBox" name="bendArrowWidth">
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>0.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>10.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.100000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="5">
+               <widget class="QToolButton" name="resetBendArrowHeight">
+                <property name="text">
+                 <string>...</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="6">
+               <spacer name="horizontalSpacer_46">
+                <property name="orientation">
+                 <enum>Qt::Horizontal</enum>
+                </property>
+                <property name="sizeHint" stdset="0">
+                 <size>
+                  <width>40</width>
+                  <height>20</height>
+                 </size>
+                </property>
+               </spacer>
+              </item>
+              <item row="0" column="0">
+               <widget class="QLabel" name="label_179">
+                <property name="text">
+                 <string>Line thickness:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>bendLineWidthTab</cstring>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QDoubleSpinBox" name="bendLineWidthTab">
+                <property name="keyboardTracking">
+                 <bool>false</bool>
+                </property>
+                <property name="suffix">
+                 <string>sp</string>
+                </property>
+                <property name="minimum">
+                 <double>0.000000000000000</double>
+                </property>
+                <property name="maximum">
+                 <double>10.000000000000000</double>
+                </property>
+                <property name="singleStep">
+                 <double>0.010000000000000</double>
+                </property>
+                <property name="value">
+                 <double>1.000000000000000</double>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="2">
+               <widget class="QToolButton" name="resetBendLineWidthTab">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Arrow width' value</string>
+                </property>
+                <property name="text">
+                 <string notr="true"/>
+                </property>
+               </widget>
+              </item>
+             </layout>
             </widget>
            </item>
           </layout>
@@ -10287,8 +10343,8 @@ By default, they will be placed such as that their right end are at the same lev
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>507</width>
-             <height>410</height>
+             <width>380</width>
+             <height>324</height>
             </rect>
            </property>
            <layout class="QGridLayout" name="gridLayout_57">
@@ -11798,8 +11854,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>515</width>
-                <height>536</height>
+                <width>384</width>
+                <height>422</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_55">
@@ -12776,8 +12832,8 @@ By default, they will be placed such as that their right end are at the same lev
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>469</width>
-                <height>462</height>
+                <width>354</width>
+                <height>385</height>
                </rect>
               </property>
               <layout class="QVBoxLayout" name="verticalLayout_40">
@@ -14243,10 +14299,6 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetVibratoLinePosAbove</tabstop>
   <tabstop>vibratoLinePosBelow</tabstop>
   <tabstop>resetVibratoLinePosBelow</tabstop>
-  <tabstop>bendLineWidth</tabstop>
-  <tabstop>resetBendLineWidth</tabstop>
-  <tabstop>bendArrowWidth</tabstop>
-  <tabstop>resetBendArrowWidth</tabstop>
   <tabstop>textLinePlacement</tabstop>
   <tabstop>resetTextLinePlacement</tabstop>
   <tabstop>textLinePosAbove</tabstop>
