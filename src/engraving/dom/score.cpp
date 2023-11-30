@@ -3603,7 +3603,6 @@ void Score::selectRange(EngravingItem* e, staff_idx_t staffIdx)
 void Score::collectMatch(void* data, EngravingItem* e)
 {
     ElementPattern* p = static_cast<ElementPattern*>(data);
-    auto eMeasure = e->findMeasure();
 
     if (p->type != int(ElementType::INVALID) && p->type != int(e->type())) {
         return;
@@ -3651,6 +3650,7 @@ void Score::collectMatch(void* data, EngravingItem* e)
     }
 
     if (p->measure) {
+        auto eMeasure = e->findMeasure();
         if (!eMeasure && e->isSpannerSegment()) {
             if (auto ss = toSpannerSegment(e)) {
                 if (auto s = ss->spanner()) {
@@ -3753,6 +3753,8 @@ void Score::selectSimilar(EngravingItem* e, bool sameStaff)
     pattern.voice   = mu::nidx;
     pattern.system  = 0;
     pattern.durationTicks = Fraction(-1, 1);
+    pattern.beat    = Fraction(0, 0);
+    pattern.measure = 0;
 
     score->scanElements(&pattern, collectMatch);
 
@@ -3789,6 +3791,8 @@ void Score::selectSimilarInRange(EngravingItem* e)
     pattern.voice   = mu::nidx;
     pattern.system  = 0;
     pattern.durationTicks = Fraction(-1, 1);
+    pattern.beat    = Fraction(0, 0);
+    pattern.measure = 0;
 
     score->scanElementsInRange(&pattern, collectMatch);
 

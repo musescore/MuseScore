@@ -142,7 +142,7 @@ FilterNotesOptions SelectNoteDialog::noteOptions() const
     if (sameBeat->isChecked()) {
         options.beat = m_note->beat();
     } else {
-        options.beat = Fraction(0, 0);
+        options.beat = mu::engraving::Fraction(0, 0);
     }
 
     if (sameMeasure->isChecked()) {
