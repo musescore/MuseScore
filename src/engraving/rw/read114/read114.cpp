@@ -1741,16 +1741,14 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 lastTick = ctx.tick();
                 ctx.incTick(mmr->actualTicks());
             } else {
-                Segment* segment2 = m->getSegment(SegmentType::ChordRest, ctx.tick());
-                Rest* rest = Factory::createRest(segment2);
+                Rest* rest = Factory::createRest(ctx.score()->dummy()->segment());
                 rest->setDurationType(DurationType::V_MEASURE);
                 rest->setTicks(m->timesig() / timeStretch);
                 rest->setTrack(ctx.track());
                 readRest(m, rest, e, ctx);
-                if (!rest->segment()) {
-                    rest->setParent(segment2);
-                }
-                segment2 = rest->segment();
+
+                Segment* segment2 = m->getSegment(SegmentType::ChordRest, ctx.tick());
+                rest->setParent(segment2);
                 segment2->add(rest);
 
                 if (!rest->ticks().isValid()) {    // hack
