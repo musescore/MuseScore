@@ -5777,6 +5777,9 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     if (newEnd) {
                         ne = element->linkedClone();
                         toSpanner(ne)->setNoteSpan(toNote(e), newEnd);
+                        if (element->isGuitarBend() && element->staffType()->isTabStaff()) {
+                            toGuitarBend(ne)->endNote()->setVisible(true);
+                        }
                     } else {                    //couldn't find suitable start note
                         continue;
                     }

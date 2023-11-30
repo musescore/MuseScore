@@ -94,6 +94,8 @@ public:
 
     mu::draw::Color uiColor() const;
 
+    static void adaptBendsFromTabToStandardStaff(const Staff* staff);
+
     struct LayoutData : public SLine::LayoutData
     {
     public:

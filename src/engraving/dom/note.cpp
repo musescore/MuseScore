@@ -2928,6 +2928,11 @@ PropertyValue Note::propertyDefault(Pid propertyId) const
     case Pid::PITCH:
     case Pid::TPC1:
         return PropertyValue();
+    case Pid::VISIBLE:
+        if (staffType() && staffType()->isTabStaff() && bendBack()) {
+            return false;
+        }
+        return EngravingItem::propertyDefault(propertyId);
     default:
         break;
     }
