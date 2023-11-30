@@ -52,18 +52,6 @@ inline bool isEqual(T a1, T a2)
     }
 }
 
-// coordinate (x, y)
-template<typename T>
-using coord_t = number_t<T>;
-using coord = coord_t<double>;
-using coordi = coord_t<int>;
-
-// distance (w, h)
-template<typename T>
-using dist_t = number_t<T>;
-using dist = dist_t<double>;
-using disti = dist_t<int>;
-
 // ====================================
 // Point
 // ====================================
@@ -84,8 +72,8 @@ public:
     inline T y() const { return m_y; }
 
     //! NOTE I don't like this methods, but now it a lot of using
-    inline coord_t<T>& rx() { return m_x; }
-    inline coord_t<T>& ry() { return m_y; }
+    inline number_t<T>& rx() { return m_x; }
+    inline number_t<T>& ry() { return m_y; }
 
     inline bool operator==(const PointX<T>& p) const { return p.m_x == m_x && p.m_y == m_y; }
     inline bool operator!=(const PointX<T>& p) const { return !this->operator ==(p); }
@@ -136,8 +124,8 @@ private:
     //! NOTE We should not swap fields
     //! We should not add new fields
     //! If we really need to do this, then we need to change the implementation of QPainterProvider
-    coord_t<T> m_x;
-    coord_t<T> m_y;
+    number_t<T> m_x;
+    number_t<T> m_y;
 };
 
 template<typename T>
@@ -264,8 +252,8 @@ public:
 #endif
 
 private:
-    dist m_w;
-    dist m_h;
+    number_t<T> m_w;
+    number_t<T> m_h;
 };
 
 template<typename T>
@@ -326,7 +314,7 @@ public:
     inline PointX<T> bottomRight() const { return PointX<T>(m_x + m_w, m_y + m_h); }
     inline PointX<T> topRight() const { return PointX<T>(m_x + m_w, m_y); }
     inline PointX<T> bottomLeft() const { return PointX<T>(m_x, m_y + m_h); }
-    inline PointX<T> center() const { return PointX<T>(m_x + m_w / dist::cast(2), m_y + m_h / dist::cast(2)); }
+    inline PointX<T> center() const { return PointX<T>(m_x + m_w / number_t<T>::cast(2), m_y + m_h / number_t<T>::cast(2)); }
 
     inline void setCoords(T xp1, T yp1, T xp2, T yp2) { m_x = xp1; m_y = yp1; m_w = xp2 - xp1; m_h = yp2 - yp1; }
     inline void setRect(double ax, double ay, double aaw, double aah) { m_x = ax; m_y = ay; m_w = aaw; m_h = aah; }
@@ -356,7 +344,7 @@ public:
 
     inline void moveTo(double ax, double ay) { m_x = ax; m_y = ay; }
     inline void moveTo(const PointX<T>& p) { m_x = p.x(); m_y = p.y(); }
-    inline void moveCenter(const PointX<T>& p) { m_x = p.x() - m_w / dist::cast(2); m_y = p.y() - m_h / dist::cast(2); }
+    inline void moveCenter(const PointX<T>& p) { m_x = p.x() - m_w / number_t<T>::cast(2); m_y = p.y() - m_h / number_t<T>::cast(2); }
     inline void moveTop(double pos) { m_y = pos; }
 
     inline void translate(T dx, T dy) { m_x += dx; m_y += dy; }
@@ -398,10 +386,10 @@ public:
 #endif
 
 private:
-    coord m_x;
-    coord m_y;
-    dist m_w;
-    dist m_h;
+    number_t<T> m_x;
+    number_t<T> m_y;
+    number_t<T> m_w;
+    number_t<T> m_h;
 };
 
 template<typename T>

@@ -247,8 +247,8 @@ public:
     virtual void setOffset(const PointF& o) { m_offset = o; }
     void setOffset(double x, double y) { m_offset.setX(x), m_offset.setY(y); }
     PointF& roffset() { return m_offset; }
-    coord& rxoffset() { return m_offset.rx(); }
-    coord& ryoffset() { return m_offset.ry(); }
+    real_t& rxoffset() { return m_offset.rx(); }
+    real_t& ryoffset() { return m_offset.ry(); }
 
     virtual Fraction tick() const;
     virtual Fraction rtick() const;
