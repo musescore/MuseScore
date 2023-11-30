@@ -1605,18 +1605,17 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e)
                         }
                   }
             else if (tag == "Rest") {
-                  Rest* rest = new Rest(m->score());
-                  rest->setDurationType(TDuration::DurationType::V_MEASURE);
-                  rest->setTicks(m->timesig()/timeStretch);
+                  Rest* rest = new Rest(m->score(), TDuration::DurationType::V_MEASURE);
+                  rest->setTicks(m->timesig() / timeStretch);
                   rest->setTrack(e.track());
                   readRest(m, rest, e);
-                  if (!rest->segment())
-                        rest->setParent(m->getSegment(SegmentType::ChordRest, e.tick()));
-                  segment = rest->segment();
-                  segment->add(rest);
+
+                  Segment* segment2 = m->getSegment(SegmentType::ChordRest, e.tick());
+                  rest->setParent(segment2);
+                  segment2->add(rest);
 
                   if (!rest->ticks().isValid())     // hack
-                        rest->setTicks(m->timesig()/timeStretch);
+                        rest->setTicks(m->timesig() / timeStretch);
 
                   lastTick = e.tick();
                   e.incTick(rest->actualTicks());

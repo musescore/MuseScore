@@ -51,11 +51,6 @@ bool LineSegment::readProperties(XmlReader& e)
       else if (tag == "off2") {
             setUserOff2(e.readPoint() * score()->spatium());
             }
-/*      else if (tag == "pos") {
-            setOffset(QPointF());
-            e.readNext();
-            }
-      */
       else if (!SpannerSegment::readProperties(e)) {
             e.unknown();
             return false;
