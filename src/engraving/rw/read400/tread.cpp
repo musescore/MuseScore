@@ -2980,14 +2980,7 @@ bool TRead::readProperties(LineSegment* l, XmlReader& e, ReadContext& ctx)
         l->setSpannerSegmentType(SpannerSegmentType(e.readInt()));
     } else if (tag == "off2") {
         l->setUserOff2(e.readPoint() * l->style().spatium());
-    }
-/*      else if (tag == "pos") {
-            setOffset(PointF());
-            e.readNext();
-            }
-      */
-    else if (!readItemProperties(l, e, ctx)) {
-        e.unknown();
+    } else if (!readItemProperties(l, e, ctx)) {
         return false;
     }
     return true;
