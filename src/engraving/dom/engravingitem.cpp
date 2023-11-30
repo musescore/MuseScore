@@ -2512,6 +2512,15 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
     return sh;
 }
 
+#ifndef NDEBUG
+void EngravingItem::LayoutData::doSetPosDebugHook(double x, double y)
+{
+    UNUSED(x);
+    UNUSED(y);
+}
+
+#endif
+
 void EngravingItem::LayoutData::dump(std::stringstream& ss) const
 {
     ss << "\n";

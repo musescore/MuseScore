@@ -220,8 +220,8 @@ public:
     virtual TranslatableString typeUserName() const;
     virtual String translatedTypeUserName() const;
 
-    EID eid() const;
-    void setEID(EID id) { m_eid = id; }
+    inline EID eid() const { return m_eid; }
+    inline void setEID(EID id) { m_eid = id; }
 
     EngravingObject* parent() const;
     void setParent(EngravingObject* p);
