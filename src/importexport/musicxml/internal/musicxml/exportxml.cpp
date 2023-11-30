@@ -3193,9 +3193,6 @@ static QString symIdToTechn(const SymId sid)
     case SymId::stringsHarmonic:
         return "harmonic";
         break;
-    //case SymId::brassMuteOpen:
-    //    return "open-string";
-    //    break;
     case SymId::stringsThumbPosition:
     case SymId::stringsThumbPositionTurned:
         return "thumb-position";
@@ -3237,6 +3234,7 @@ static QString symIdToTechn(const SymId sid)
         return "smear";
         break;
     case SymId::brassMuteOpen:
+        // return "open-string";
         return "open";
         break;
     case SymId::brassMuteHalfClosed:
