@@ -778,7 +778,10 @@ void Chord::remove(EngravingItem* e)
     break;
 
     case ElementType::ARPEGGIO:
-        m_arpeggio = 0;
+        if (m_spanArpeggio == m_arpeggio) {
+            m_spanArpeggio = nullptr;
+        }
+        m_arpeggio = nullptr;
         break;
     case ElementType::TREMOLO:
         setTremolo(nullptr);
