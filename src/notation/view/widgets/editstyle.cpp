@@ -590,6 +590,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::staffTextMinDistance,    false, staffTextMinDistance,  resetStaffTextMinDistance },
 
         { StyleId::guitarBendLineWidth,     false, bendLineWidth,     resetBendLineWidth },
+        { StyleId::guitarBendLineWidthTab,  false, bendLineWidthTab,  resetBendLineWidthTab },
         { StyleId::guitarBendArrowWidth,    false, bendArrowWidth,    resetBendArrowWidth },
         { StyleId::guitarBendArrowHeight,   false, bendArrowHeight,   resetBendArrowHeight },
         { StyleId::useCueSizeFretForGraceBends, false, guitarBendCueSizedGraceFrets, 0 },
