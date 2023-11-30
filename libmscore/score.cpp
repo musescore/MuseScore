@@ -3315,7 +3315,6 @@ void Score::selectRange(Element* e, int staffIdx)
 void Score::collectMatch(void* data, Element* e)
       {
       ElementPattern* p = static_cast<ElementPattern*>(data);
-      auto eMeasure = e->findMeasure();
 
       if (p->type != int(e->type()))
             return;
@@ -3357,6 +3356,7 @@ void Score::collectMatch(void* data, Element* e)
             }
 
       if (p->measure) {
+            auto eMeasure = e->findMeasure();
             if (!eMeasure && e->isSpannerSegment()) {
                   if (auto ss  = toSpannerSegment(e)) {
                   if (auto s   = ss->spanner())       {
@@ -3435,9 +3435,7 @@ void Score::selectSimilar(Element* e, bool sameStaff)
             }
       pattern.staffStart = sameStaff ? e->staffIdx() : -1;
       pattern.staffEnd = sameStaff ? e->staffIdx() + 1 : -1;
-      pattern.voice   = -1;
-      pattern.system  = 0;
-      pattern.durationTicks = Fraction(-1,1);
+      pattern.voice = -1;
 
       score->scanElements(&pattern, collectMatch);
 
@@ -3468,9 +3466,7 @@ void Score::selectSimilarInRange(Element* e)
             }
       pattern.staffStart = selection().staffStart();
       pattern.staffEnd = selection().staffEnd();
-      pattern.voice   = -1;
-      pattern.system  = 0;
-      pattern.durationTicks = Fraction(-1,1);
+      pattern.voice = -1;
 
       score->scanElementsInRange(&pattern, collectMatch);
 

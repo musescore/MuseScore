@@ -118,8 +118,7 @@ void SelectDialog::setPattern(ElementPattern* p)
                         m = mse;
                         }}}}
                   }
-            if (m)
-                  p->measure = m;
+            p->measure = m;
             }
       else
             p->measure = nullptr;
