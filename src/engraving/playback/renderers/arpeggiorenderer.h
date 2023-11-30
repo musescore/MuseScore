@@ -38,7 +38,7 @@ public:
 
 private:
     static bool isDirectionUp(const mpe::ArticulationType type);
-    static mpe::msecs_t timestampOffsetStep(const RenderingContext& context);
+    static mpe::msecs_t timestampOffsetStep(const RenderingContext& context, int stepCount);
     static std::map<mpe::pitch_level_t, NominalNoteCtx> arpeggioNotes(const Chord* chord, const RenderingContext& ctx);
 };
 }
