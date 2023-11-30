@@ -3405,18 +3405,20 @@ void TRead::read(Rest* r, XmlReader& e, ReadContext& ctx)
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());
         if (tag == "Symbol") {
-            Symbol* s = new Symbol(r);
+            Segment* seg = toSegment(r->parent());
+            Symbol* s = new Symbol(seg);
             s->setTrack(r->track());
             TRead::read(s, e, ctx);
-            r->add(s);
+            seg->add(s);
         } else if (tag == "Image") {
             if (MScore::noImages) {
                 e.skipCurrentElement();
             } else {
-                Image* image = new Image(r);
+                Segment* seg = toSegment(r->parent());
+                Image* image = new Image(seg);
                 image->setTrack(r->track());
                 TRead::read(image, e, ctx);
-                r->add(image);
+                seg->add(image);
             }
         } else if (tag == "NoteDot") {
             NoteDot* dot = Factory::createNoteDot(r);
