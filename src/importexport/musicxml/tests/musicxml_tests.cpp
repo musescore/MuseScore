@@ -378,7 +378,7 @@ TEST_F(Musicxml_Tests, arpGliss3) {
     mxmlIoTest("testArpGliss3");
 }
 TEST_F(Musicxml_Tests, articulationCombination) {
-    mxmlIoTest("testArticulationCombination");
+    mxmlIoTestRef("testArticulationCombination");
 }
 TEST_F(Musicxml_Tests, backupRoundingError) {
     mxmlImportTestRef("testBackupRoundingError");
