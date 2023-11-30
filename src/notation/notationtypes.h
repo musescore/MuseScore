@@ -442,8 +442,8 @@ struct FilterElementsOptions
     int voice = -1;
     const mu::engraving::System* system = nullptr;
     Fraction durationTicks{ -1, 1 };
-    Fraction beat{ -1, 1 };
-    const Measure* measure = nullptr;
+    Fraction beat{ 0, 0 };
+    const mu::engraving::Measure* measure = nullptr;
 
     bool bySubtype = false;
     int subtype = -1;
@@ -461,7 +461,7 @@ struct FilterNotesOptions : FilterElementsOptions
     int pitch = -1;
     int string = mu::engraving::INVALID_STRING_INDEX;
     int tpc = mu::engraving::Tpc::TPC_INVALID;
-    engraving::NoteHeadGroup notehead = engraving::NoteHeadGroup::HEAD_INVALID;
+    mu::engraving::NoteHeadGroup notehead = mu::engraving::NoteHeadGroup::HEAD_INVALID;
     mu::engraving::TDuration durationType = mu::engraving::TDuration();
     mu::engraving::NoteType noteType = mu::engraving::NoteType::INVALID;
 };

@@ -197,7 +197,7 @@ mu::engraving::Score* NotationElements::score() const
 
 ElementPattern* NotationElements::constructElementPattern(const FilterElementsOptions* elementOptions) const
 {
-    ElementPattern* pattern = new ElementPattern;
+    mu::engraving::ElementPattern* pattern = new mu::engraving::ElementPattern();
     pattern->type = static_cast<int>(elementOptions->elementType);
     pattern->subtype = elementOptions->subtype;
     pattern->subtypeValid = elementOptions->bySubtype;

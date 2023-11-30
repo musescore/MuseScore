@@ -133,9 +133,7 @@ FilterElementsOptions SelectDialog::elementOptions() const
                 }
             }
         }
-        if (m) {
-            options.measure = m;
-        }
+        options.measure = m;
     } else {
         options.measure = nullptr;
     }

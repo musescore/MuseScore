@@ -50,11 +50,11 @@ struct ElementPattern {
     staff_idx_t staffStart = 0;
     staff_idx_t staffEnd = 0;   // exclusive
     voice_idx_t voice = 0;
-    const System* system = nullptr;
     bool subtypeValid = false;
     Fraction durationTicks;
     Fraction beat { 0, 0 };
     const Measure* measure = nullptr;
+    const System* system = nullptr;
 };
 
 //---------------------------------------------------------
