@@ -126,7 +126,7 @@
               </Note>
             <Arpeggio>
               <subtype>0</subtype>
-              <span>2</span>
+              <span>5</span>
               </Arpeggio>
             </Chord>
           <Chord>
@@ -145,7 +145,7 @@
               </Note>
             <Arpeggio>
               <subtype>1</subtype>
-              <span>2</span>
+              <span>5</span>
               </Arpeggio>
             </Chord>
           <Chord>
@@ -164,7 +164,7 @@
               </Note>
             <Arpeggio>
               <subtype>3</subtype>
-              <span>2</span>
+              <span>5</span>
               </Arpeggio>
             </Chord>
           <Chord>
