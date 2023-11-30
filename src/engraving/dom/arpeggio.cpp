@@ -128,7 +128,7 @@ void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
                     track_idx_t newSpan = m_span + track() - curTrack;
                     if (newSpan != 0) {
                         undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                        score()->undo(new ChangeParent(this, e, e->staffIdx()));
+                        score()->undoChangeParent(this, e, e->staffIdx());
                         break;
                     }
                 }
@@ -143,7 +143,7 @@ void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
                 if (newSpan != 0) {
                     chord()->undoChangeSpanArpeggio(nullptr);
                     undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                    score()->undo(new ChangeParent(this, e, e->staffIdx()));
+                    score()->undoChangeParent(this, e, e->staffIdx());
                     break;
                 }
             }
@@ -224,7 +224,7 @@ void Arpeggio::editDrag(EditData& ed)
                     detachFromChords(track(), c->track() - 1);
                 }
                 undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                score()->undo(new ChangeParent(this, c, c->staffIdx()));
+                score()->undoChangeParent(this, c, c->staffIdx());
                 m_userLen1 = 0.0;
             }
         }
