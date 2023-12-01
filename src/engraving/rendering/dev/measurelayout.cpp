@@ -509,15 +509,15 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
 //    multi measure rest
 //---------------------------------------------------------
 
-static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
+static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
 {
     if (m->irregular()) {
         return false;
     }
 
     int n = 0;
-    for (Segment* s = m->first(); s; s = s->next()) {
-        for (EngravingItem* e : s->annotations()) {
+    for (const Segment* s = m->first(); s; s = s->next()) {
+        for (const EngravingItem* e : s->annotations()) {
             if (!e->staff()->show()) {
                 continue;
             }
@@ -540,7 +540,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
                     restFound = true;
                 }
             }
-            for (EngravingItem* e : s->annotations()) {
+            for (const EngravingItem* e : s->annotations()) {
                 if (e->isFermata()) {
                     return false;
                 }
@@ -765,6 +765,57 @@ void MeasureLayout::moveToNextMeasure(LayoutContext& ctx)
     }
 }
 
+void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx)
+{
+    if (!currentMB->isMeasure()) {
+        return;
+    }
+
+    int mno = ctx.state().measureNo();
+    Measure* m = toMeasure(currentMB);
+
+    if (ctx.conf().styleB(Sid::createMultiMeasureRests)) {
+        Measure* nm = m;
+        Measure* lm = nm;
+        int n       = 0;
+        Fraction len;
+
+        while (validMMRestMeasure(ctx, nm)) {
+            MeasureBase* mb = ctx.conf().isShowVBox() ? nm->next() : nm->nextMeasure();
+            if (breakMultiMeasureRest(ctx, nm) && n) {
+                break;
+            }
+            if (nm != m) {
+                int measureNo = adjustMeasureNo(nm, ctx.state().measureNo());
+                ctx.mutState().setMeasureNo(measureNo);
+            }
+            ++n;
+            len += nm->ticks();
+            lm = nm;
+            if (!(mb && mb->isMeasure())) {
+                break;
+            }
+            nm = toMeasure(mb);
+        }
+
+        if (n >= ctx.conf().styleI(Sid::minEmptyMeasures)) {
+            createMMRest(ctx, m, lm, len);
+            ctx.mutState().setCurMeasure(m->mmRest());
+            ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lm->next() : lm->nextMeasure());
+        } else {
+            if (m->mmRest()) {
+                ctx.mutDom().undo(new ChangeMMRest(m, 0));
+            }
+            m->setMMRestCount(0);
+            ctx.mutState().setMeasureNo(mno);
+        }
+    } else if (m->isMMRest()) {
+        LOGD("mmrest: no %d += %d", ctx.state().measureNo(), m->mmRestCount());
+        int measureNo = ctx.state().measureNo() + m->mmRestCount() - 1;
+        ctx.mutState().setMeasureNo(measureNo);
+    }
+}
+
 void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
@@ -775,51 +826,15 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
         return;
     }
 
-    int mno = adjustMeasureNo(currentMB, ctx);
+    int measureNo = adjustMeasureNo(currentMB, ctx.state().measureNo());
+    ctx.mutState().setMeasureNo(measureNo);
 
-    if (currentMB->isMeasure()) {
-        if (ctx.conf().styleB(Sid::createMultiMeasureRests)) {
-            Measure* m = toMeasure(currentMB);
-            Measure* nm = m;
-            Measure* lm = nm;
-            int n       = 0;
-            Fraction len;
+    createMultiMeasureRestsIfNeed(currentMB, ctx);
 
-            while (validMMRestMeasure(ctx, nm)) {
-                MeasureBase* mb = ctx.conf().isShowVBox() ? nm->next() : nm->nextMeasure();
-                if (breakMultiMeasureRest(ctx, nm) && n) {
-                    break;
-                }
-                if (nm != m) {
-                    adjustMeasureNo(nm, ctx);
-                }
-                ++n;
-                len += nm->ticks();
-                lm = nm;
-                if (!(mb && mb->isMeasure())) {
-                    break;
-                }
-                nm = toMeasure(mb);
-            }
-            if (n >= ctx.conf().styleI(Sid::minEmptyMeasures)) {
-                createMMRest(ctx, m, lm, len);
-                ctx.mutState().setCurMeasure(m->mmRest());
-                ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lm->next() : lm->nextMeasure());
-            } else {
-                if (m->mmRest()) {
-                    ctx.mutDom().undo(new ChangeMMRest(m, 0));
-                }
-                m->setMMRestCount(0);
-                ctx.mutState().setMeasureNo(mno);
-            }
-        } else if (toMeasure(ctx.state().curMeasure())->isMMRest()) {
-            LOGD("mmrest: no %d += %d", ctx.state().measureNo(), toMeasure(ctx.state().curMeasure())->mmRestCount());
-            int measureNo = ctx.state().measureNo() + toMeasure(ctx.state().curMeasure())->mmRestCount() - 1;
-            ctx.mutState().setMeasureNo(measureNo);
-        }
-    }
-    if (!ctx.state().curMeasure()->isMeasure()) {
-        ctx.mutState().curMeasure()->setTick(ctx.state().tick());
+    currentMB = ctx.mutState().curMeasure();
+
+    if (!currentMB->isMeasure()) {
+        currentMB->setTick(ctx.state().tick());
         return;
     }
 
@@ -827,7 +842,8 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     //    process one measure
     //-----------------------------------------
 
-    Measure* measure = toMeasure(ctx.mutState().curMeasure());
+    Measure* measure = toMeasure(currentMB);
+
     measure->moveTicks(ctx.state().tick() - measure->tick());
 
     if (ctx.conf().isLinearMode() && (measure->tick() < ctx.state().startTick() || measure->tick() > ctx.state().endTick())) {
@@ -1054,9 +1070,8 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 //   adjustMeasureNo
 //---------------------------------------------------------
 
-int MeasureLayout::adjustMeasureNo(MeasureBase* m, LayoutContext& ctx)
+int MeasureLayout::adjustMeasureNo(MeasureBase* m, int measureNo)
 {
-    int measureNo = ctx.state().measureNo();
     measureNo += m->noOffset();
     m->setNo(measureNo);
     if (!m->irregular()) {          // don’t count measure
@@ -1067,8 +1082,6 @@ int MeasureLayout::adjustMeasureNo(MeasureBase* m, LayoutContext& ctx)
     if (layoutBreak && layoutBreak->startWithMeasureOne()) {
         measureNo = 0;
     }
-
-    ctx.mutState().setMeasureNo(measureNo);
 
     return measureNo;
 }

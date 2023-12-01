@@ -67,7 +67,7 @@ private:
 
     static void createMMRest(LayoutContext& ctx, Measure* firstMeasure, Measure* lastMeasure, const Fraction& len);
 
-    static int adjustMeasureNo(MeasureBase* m, LayoutContext& ctx);
+    static int adjustMeasureNo(MeasureBase* m, int measureNo);
 
     static void barLinesSetSpan(Segment* seg, LayoutContext& ctx);
 
@@ -81,6 +81,7 @@ private:
     //
     static void moveToNextMeasure(LayoutContext& ctx);
     static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
+    static void createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx);
 };
 }
 
