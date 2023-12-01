@@ -9,12 +9,19 @@
 
 namespace mu {
 // default
-constexpr double COMPARE_REAL_EPSILON(1000000.0);
-constexpr double COMPARE_REAL_NULL(0.000001);
+inline constexpr double COMPARE_REAL_PREC(7);
+
+inline constexpr double _pow_minus10(int prec)
+{
+    double result = 1.0;
+    for (int i = 0; i < prec; ++i) {
+        result /= 10;
+    }
+    return result;
+}
 
 // use
-inline double _compare_real_epsilon(COMPARE_REAL_EPSILON);
-inline double _compare_real_null(COMPARE_REAL_NULL);
+inline constexpr double _compare_real_epsilon = _pow_minus10(COMPARE_REAL_PREC);
 
 template<typename T>
 inline bool is_zero(T v)
@@ -22,7 +29,7 @@ inline bool is_zero(T v)
     if constexpr (std::numeric_limits<T>::is_integer) {
         return v == 0;
     } else {
-        return std::abs(v) <= _compare_real_null;
+        return std::abs(v) <= _compare_real_epsilon;
     }
 }
 
@@ -32,7 +39,7 @@ inline bool is_equal(T v1, T v2)
     if constexpr (std::numeric_limits<T>::is_integer) {
         return v1 == v2;
     } else {
-        return std::abs(v1 - v2) * _compare_real_epsilon <= std::min(std::abs(v1), std::abs(v2));
+        return std::abs(v1 - v2) <= std::max(std::abs(v1), std::abs(v2)) * _compare_real_epsilon;
     }
 }
 
