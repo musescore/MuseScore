@@ -828,6 +828,7 @@ public:
         bool createEmptyMeasures = false;
         bool moveSignaturesClef = true;
         bool needDeselectAll = true;
+        bool cloneBoxToAllParts = true;
     };
 
     MeasureBase* insertMeasure(ElementType type, MeasureBase* beforeMeasure = nullptr,
