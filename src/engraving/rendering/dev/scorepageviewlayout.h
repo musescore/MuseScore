@@ -37,6 +37,8 @@ private:
     static void prepareScore(Score* score, const LayoutContext& ctx);
 
     static void doLayout(LayoutContext& ctx);
+
+    static void layoutFinished(Score* score, LayoutContext& ctx);
 };
 }
 
