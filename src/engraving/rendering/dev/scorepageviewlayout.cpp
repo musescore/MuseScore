@@ -164,6 +164,7 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
     TRACEFUNC;
 
     initLayoutContext(score, ctx, stick, etick);
+
     prepareScore(score, ctx);
 
     //! NOTE Reset pass need anyway
@@ -171,9 +172,6 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
     PassResetLayoutData resetPass;
     resetPass.run(score, ctx);
 //#endif
-
-    MeasureLayout::getNextMeasure(ctx);
-    ctx.mutState().setCurSystem(SystemLayout::collectSystem(ctx));
 
 #ifdef MUE_ENABLE_ENGRAVING_LD_PASSES
     if (ctx.state().isLayoutAll()) {
@@ -183,10 +181,15 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
 #endif
 
     doLayout(ctx);
+
+    layoutFinished(score, ctx);
 }
 
 void ScorePageViewLayout::doLayout(LayoutContext& ctx)
 {
+    MeasureLayout::getNextMeasure(ctx);
+    ctx.mutState().setCurSystem(SystemLayout::collectSystem(ctx));
+
     const MeasureBase* lmb = nullptr;
     do {
         PageLayout::getNextPage(ctx);
@@ -209,22 +212,29 @@ void ScorePageViewLayout::doLayout(LayoutContext& ctx)
         //    it will be nullptr if this page was never laid out or if we collected a system for next page
     } while (ctx.state().curSystem() && !(ctx.state().rangeDone() && lmb == ctx.state().pageOldMeasure()));
     // && page->system(0)->measures().back()->tick() > endTick // FIXME: perhaps the first measure was meant? Or last system?
+}
 
-    if (!ctx.state().curSystem()) {
+void ScorePageViewLayout::layoutFinished(Score* score, LayoutContext& ctx)
+{
+    LayoutState& state = ctx.mutState();
+
+    if (!state.curSystem()) {
         // The end of the score. The remaining systems are not needed...
-        DeleteAll(ctx.mutState().systemList());
-        ctx.mutState().systemList().clear();
+        DeleteAll(state.systemList());
+        state.systemList().clear();
+
         // ...and the remaining pages too
-        while (ctx.dom().npages() > ctx.state().pageIdx()) {
-            Page* p = ctx.mutDom().pages().back();
-            ctx.mutDom().pages().pop_back();
+        while (score->npages() > state.pageIdx()) {
+            Page* p = score->pages().back();
+            score->pages().pop_back();
             delete p;
         }
     } else {
-        Page* p = ctx.mutState().curSystem()->page();
-        if (p && (p != ctx.state().page())) {
+        Page* p = state.curSystem()->page();
+        if (p && (p != state.page())) {
             p->invalidateBspTree();
         }
     }
-    ctx.mutDom().systems().insert(ctx.mutDom().systems().end(), ctx.state().systemList().begin(), ctx.state().systemList().end());
+
+    score->systems().insert(score->systems().end(), state.systemList().begin(), state.systemList().end());
 }
