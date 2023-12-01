@@ -77,6 +77,10 @@ private:
     static double computeMinMeasureWidth(Measure* m, LayoutContext& ctx);
 
     static void layoutPartialWidth(StaffLines* lines, LayoutContext& ctx, double w, double wPartial, bool alignLeft);
+
+    //
+    static void moveToNextMeasure(LayoutContext& ctx);
+    static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
 };
 }
 

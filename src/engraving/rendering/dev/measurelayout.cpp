@@ -751,26 +751,35 @@ static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType
     }
 }
 
-void MeasureLayout::getNextMeasure(LayoutContext& ctx)
+void MeasureLayout::moveToNextMeasure(LayoutContext& ctx)
 {
-    TRACEFUNC;
-    ctx.mutState().setPrevMeasure(ctx.mutState().curMeasure());
-    ctx.mutState().setCurMeasure(ctx.mutState().nextMeasure());
-    if (!ctx.state().curMeasure()) {
-        ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? ctx.mutDom().first() : ctx.mutDom().firstMeasure());
+    LayoutState& state = ctx.mutState();
+
+    state.setPrevMeasure(state.curMeasure());
+    state.setCurMeasure(state.nextMeasure());
+    if (!state.curMeasure()) {
+        state.setNextMeasure(ctx.conf().isShowVBox() ? ctx.mutDom().first() : ctx.mutDom().firstMeasure());
     } else {
-        MeasureBase* m = ctx.conf().isShowVBox() ? ctx.mutState().curMeasure()->next() : ctx.mutState().curMeasure()->nextMeasure();
-        ctx.mutState().setNextMeasure(m);
+        MeasureBase* m = ctx.conf().isShowVBox() ? state.curMeasure()->next() : state.curMeasure()->nextMeasure();
+        state.setNextMeasure(m);
     }
-    if (!ctx.state().curMeasure()) {
+}
+
+void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
+{
+    IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
         return;
     }
 
-    int mno = adjustMeasureNo(ctx.mutState().curMeasure(), ctx);
+    if (!currentMB) {
+        return;
+    }
 
-    if (ctx.state().curMeasure()->isMeasure()) {
+    int mno = adjustMeasureNo(currentMB, ctx);
+
+    if (currentMB->isMeasure()) {
         if (ctx.conf().styleB(Sid::createMultiMeasureRests)) {
-            Measure* m = toMeasure(ctx.mutState().curMeasure());
+            Measure* m = toMeasure(currentMB);
             Measure* nm = m;
             Measure* lm = nm;
             int n       = 0;
@@ -917,7 +926,7 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
 
                         ChordLayout::computeUp(chord, ctx);
                         ChordLayout::layoutStem(chord, ctx); // create stems needed to calculate spacing
-                                                             // stem direction can change later during beam processing
+                        // stem direction can change later during beam processing
                     }
                     cr->mutldata()->setMag(m);
                     cr->setBeamlet(nullptr); // Will be defined during beam layout
@@ -1030,6 +1039,15 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
     // Segment::visible() property, which is determined by Segment::createShapes().
 
     ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
+}
+
+void MeasureLayout::getNextMeasure(LayoutContext& ctx)
+{
+    TRACEFUNC;
+
+    moveToNextMeasure(ctx);
+
+    layoutMeasure(ctx.mutState().curMeasure(), ctx);
 }
 
 //---------------------------------------------------------
