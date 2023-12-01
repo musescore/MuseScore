@@ -53,7 +53,6 @@ static const ElementStyle hBoxStyle {
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
 {
-    setExcludeFromOtherParts(propertyDefault(Pid::EXCLUDE_FROM_OTHER_PARTS).toBool());
 }
 
 //---------------------------------------------------------
@@ -257,8 +256,6 @@ PropertyValue Box::propertyDefault(Pid id) const
     case Pid::BOTTOM_MARGIN:
         return 0.0;
     case Pid::BOX_AUTOSIZE:
-        return true;
-    case Pid::EXCLUDE_FROM_OTHER_PARTS:
         return true;
     default:
         return MeasureBase::propertyDefault(id);
@@ -468,7 +465,9 @@ void Box::manageExclusionFromParts(bool exclude)
             }
 
             MeasureBase* newMB = next()->getInScore(score, true);
-            MeasureBase* newFrame = score->insertBox(type(), newMB);
+            Score::InsertMeasureOptions options;
+            options.cloneBoxToAllParts = false;
+            MeasureBase* newFrame = score->insertBox(type(), newMB, options);
             newFrame->setExcludeFromOtherParts(false);
 
             for (EngravingItem* item : el()) {

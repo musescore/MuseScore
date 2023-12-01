@@ -4068,15 +4068,14 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
     newMeasureBase->setNext(beforeMeasure);
     newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
 
-    const bool isTitleFrame = (type == ElementType::VBOX || type == ElementType::TBOX) && !newMeasureBase->prev();
-    const bool dontCloneFrameToParts = isFrame && !isTitleFrame;
-
-    newMeasureBase->setExcludeFromOtherParts(dontCloneFrameToParts);
-
     undo(new InsertMeasures(newMeasureBase, newMeasureBase));
 
     if (options.needDeselectAll) {
         deselectAll();
+    }
+
+    if (options.cloneBoxToAllParts) {
+        newMeasureBase->manageExclusionFromParts(/*exclude =*/ false);
     }
 
     return newMeasureBase;
