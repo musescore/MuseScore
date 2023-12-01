@@ -53,6 +53,7 @@ public:
     Tuplet* topTuplet() const;
     virtual Beam* beam() const { return nullptr; }
 
+    Fraction actualTicksAt(const Fraction& tick) const;
     Fraction actualTicks() const;
 
     // Length expressed as a fraction of a whole note

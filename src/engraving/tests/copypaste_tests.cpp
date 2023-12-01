@@ -188,6 +188,11 @@ TEST_F(Engraving_CopyPasteTests, copypaste26)
     copypaste("26");    // Copy chords (#298541)
 }
 
+TEST_F(Engraving_CopyPasteTests, copypaste27)
+{
+    copypaste("27");    // Paste after local time signature (#18940)
+}
+
 //---------------------------------------------------------
 //    copy measure 2 from first staff, paste into staff 2
 //---------------------------------------------------------
