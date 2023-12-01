@@ -45,6 +45,7 @@
 #include "engravingitem.h"
 #include "excerpt.h"
 #include "fret.h"
+#include "guitarbend.h"
 #include "harmony.h"
 #include "harppedaldiagram.h"
 #include "input.h"
@@ -1839,6 +1840,7 @@ void ChangeStaffType::flip(EditData*)
     staff->setStaffType(Fraction(0, 1), staffType);
 
     bool invisibleChanged = oldStaffType.invisible() != staffType.invisible();
+    bool fromTabToStandard = oldStaffType.isTabStaff() && !staffType.isTabStaff();
 
     staffType = oldStaffType;
 
@@ -1848,6 +1850,10 @@ void ChangeStaffType::flip(EditData*)
         for (Measure* m = score->firstMeasure(); m; m = m->nextMeasure()) {
             m->staffLines(staffIdx)->setVisible(!staff->isLinesInvisible(Fraction(0, 1)));
         }
+    }
+
+    if (fromTabToStandard) {
+        GuitarBend::adaptBendsFromTabToStandardStaff(staff);
     }
 
     staff->triggerLayout();
