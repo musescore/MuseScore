@@ -4063,17 +4063,15 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
         tick = last() ? last()->endTick() : Fraction(0, 1);
     }
 
-    const bool isBeginning = tick.isZero();
-
-    const bool isTitleFrame = (type == ElementType::VBOX || type == ElementType::TBOX) && isBeginning;
-    const bool dontCloneFrameToParts = isFrame && !isTitleFrame;
-
     MeasureBase* newMeasureBase = toMeasureBase(Factory::createItem(type, dummy()));
     newMeasureBase->setTick(tick);
-    newMeasureBase->setExcludeFromOtherParts(dontCloneFrameToParts);
-
     newMeasureBase->setNext(beforeMeasure);
     newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
+
+    const bool isTitleFrame = (type == ElementType::VBOX || type == ElementType::TBOX) && !newMeasureBase->prev();
+    const bool dontCloneFrameToParts = isFrame && !isTitleFrame;
+
+    newMeasureBase->setExcludeFromOtherParts(dontCloneFrameToParts);
 
     undo(new InsertMeasures(newMeasureBase, newMeasureBase));
 
