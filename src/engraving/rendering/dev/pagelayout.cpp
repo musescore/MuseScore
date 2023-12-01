@@ -359,6 +359,23 @@ void PageLayout::collectPage(LayoutContext& ctx)
         }
     }
 
+    // If this is the last page we layout, we must also relayout the first barlines of the
+    // next page, because they may have been altered while collecting the systems.
+    MeasureBase* lastOfThisPage = ctx.mutState().page()->systems().back()->measures().back();
+    MeasureBase* firstOfNextPage = lastOfThisPage ? lastOfThisPage->next() : nullptr;
+    if (firstOfNextPage && firstOfNextPage->isMeasure() && firstOfNextPage->tick() > ctx.state().endTick()) {
+        for (Segment& segment : toMeasure(firstOfNextPage)->segments()) {
+            if (!segment.isType(SegmentType::BarLineType)) {
+                continue;
+            }
+            for (EngravingItem* item : segment.elist()) {
+                if (item && item->isBarLine()) {
+                    rendering::dev::TLayout::layoutBarLine2(toBarLine(item), ctx);
+                }
+            }
+        }
+    }
+
     if (ctx.conf().isMode(LayoutMode::SYSTEM)) {
         const System* s = ctx.state().page()->systems().back();
         double height = s ? s->pos().y() + s->height() + s->minBottom() : ctx.state().page()->tm();
