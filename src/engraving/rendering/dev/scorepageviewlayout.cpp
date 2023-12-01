@@ -41,63 +41,69 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
-void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick)
+void ScorePageViewLayout::initLayoutContext(const Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick)
 {
-    TRACEFUNC;
+    LayoutState& state = ctx.mutState();
 
-    ctx.mutState().setEndTick(etick);
+    state.setEndTick(etick);
 
-    //---------------------------------------------------
-    //    initialize layout context lc
-    //---------------------------------------------------
+    MeasureBase* m = nullptr;
+    {
+        m = score->tick2measure(stick);
+        if (m == nullptr) {
+            m = score->first();
+        }
 
-    MeasureBase* m = score->tick2measure(stick);
-    if (m == 0) {
-        m = score->first();
+        // start layout one measure earlier to handle clefs and cautionary elements
+        if (m->prevMeasureMM()) {
+            m = m->prevMeasureMM();
+        } else if (m->prev()) {
+            m = m->prev();
+        }
+
+        while (!m->isMeasure() && m->prev()) {
+            m = m->prev();
+        }
+
+        // if the first measure of the score is part of a multi measure rest
+        // m->system() will return a nullptr. We need to find the multi measure
+        // rest which replaces the measure range
+        if (!m->system() && m->isMeasure() && toMeasure(m)->hasMMRest()) {
+            LOGD("  don’t start with mmrest");
+            m = toMeasure(m)->mmRest();
+        }
     }
-    // start layout one measure earlier to handle clefs and cautionary elements
-    if (m->prevMeasureMM()) {
-        m = m->prevMeasureMM();
-    } else if (m->prev()) {
-        m = m->prev();
-    }
-    while (!m->isMeasure() && m->prev()) {
-        m = m->prev();
-    }
 
-    // if the first measure of the score is part of a multi measure rest
-    // m->system() will return a nullptr. We need to find the multi measure
-    // rest which replaces the measure range
-
-    if (!m->system() && m->isMeasure() && toMeasure(m)->hasMMRest()) {
-        LOGD("  don’t start with mmrest");
-        m = toMeasure(m)->mmRest();
-    }
-
-    if (!ctx.state().isLayoutAll() && m->system()) {
+    if (!state.isLayoutAll() && m->system()) {
         System* system = m->system();
         system_idx_t systemIndex = mu::indexOf(score->systems(), system);
-        ctx.mutState().setPage(system->page());
-        ctx.mutState().setPageIdx(score->pageIdx(ctx.state().page()));
-        if (ctx.state().pageIdx() == mu::nidx) {
-            ctx.mutState().setPageIdx(0);
-        }
-        ctx.mutState().setCurSystem(system);
-        ctx.mutState().setSystemList(mu::mid(score->systems(), systemIndex));
 
+        // set current system
+        state.setCurSystem(system);
+        state.setSystemList(mu::mid(score->systems(), systemIndex));
+
+        // set current page
+        state.setPage(system->page());
+        page_idx_t pageIdx = score->pageIdx(state.page());
+        if (pageIdx == mu::nidx) {
+            pageIdx = 0;
+        }
+        state.setPageIdx(pageIdx);
+
+        MeasureBase* nextMeasure = nullptr;
         if (systemIndex == 0) {
-            ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? score->first() : score->firstMeasure());
+            nextMeasure = ctx.conf().isShowVBox() ? score->first() : score->firstMeasure();
         } else {
-            System* prevSystem = score->systems()[systemIndex - 1];
-            ctx.mutState().setNextMeasure(prevSystem->measures().back()->next());
+            System* prevSystem = score->systems().at(systemIndex - 1);
+            nextMeasure = prevSystem->measures().back()->next();
         }
+        state.setNextMeasure(nextMeasure);
 
-        score->systems().erase(score->systems().begin() + systemIndex, score->systems().end());
-        if (!ctx.state().nextMeasure()->prevMeasure()) {
-            ctx.mutState().setMeasureNo(0);
-            ctx.mutState().setTick(Fraction(0, 1));
+        if (!state.nextMeasure()->prevMeasure()) {
+            state.setMeasureNo(0);
+            state.setTick(Fraction(0, 1));
         } else {
-            const MeasureBase* mb = ctx.state().nextMeasure()->prev();
+            const MeasureBase* mb = state.nextMeasure()->prev();
             if (mb) {
                 mb = mb->findPotentialSectionBreak();
             }
@@ -106,13 +112,25 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
             // TODO: also use mb in else clause here?
             // probably not, only actual measures have meaningful numbers
             if (layoutBreak && layoutBreak->startWithMeasureOne()) {
-                ctx.mutState().setMeasureNo(0);
+                state.setMeasureNo(0);
             } else {
-                ctx.mutState().setMeasureNo(ctx.state().nextMeasure()->prevMeasure()->no()                             // will be adjusted later with respect
-                                            + (ctx.state().nextMeasure()->prevMeasure()->irregular() ? 0 : 1)); // to the user-defined offset.
+                state.setMeasureNo(state.nextMeasure()->prevMeasure()->no()                             // will be adjusted later with respect
+                                   + (state.nextMeasure()->prevMeasure()->irregular() ? 0 : 1));          // to the user-defined offset.
             }
-            ctx.mutState().setTick(ctx.state().nextMeasure()->tick());
+            state.setTick(ctx.state().nextMeasure()->tick());
         }
+    } else {
+        state.setNextMeasure(ctx.conf().isShowVBox() ? score->first() : score->firstMeasure());
+    }
+
+    state.setPrevMeasure(nullptr);
+}
+
+void ScorePageViewLayout::prepareScore(Score* score, const LayoutContext& ctx)
+{
+    if (!ctx.state().isLayoutAll() && ctx.state().curSystem()) {
+        system_idx_t systemIndex = mu::indexOf(score->systems(), ctx.state().curSystem());
+        score->systems().erase(score->systems().begin() + systemIndex, score->systems().end());
     } else {
         for (System* s : score->systems()) {
             for (Bracket* b : s->brackets()) {
@@ -126,6 +144,7 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
             }
             s->resetExplicitParent();
         }
+
         for (MeasureBase* mb = score->first(); mb; mb = mb->next()) {
             mb->resetExplicitParent();
             if (mb->isMeasure() && toMeasure(mb)->mmRest()) {
@@ -137,11 +156,15 @@ void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const
 
         DeleteAll(score->pages());
         score->pages().clear();
-
-        ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? score->first() : score->firstMeasure());
     }
+}
 
-    ctx.mutState().setPrevMeasure(nullptr);
+void ScorePageViewLayout::layoutPageView(Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick)
+{
+    TRACEFUNC;
+
+    initLayoutContext(score, ctx, stick, etick);
+    prepareScore(score, ctx);
 
     //! NOTE Reset pass need anyway
 //#ifdef MUE_ENABLE_ENGRAVING_LD_PASSES
