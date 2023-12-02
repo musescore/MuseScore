@@ -118,6 +118,7 @@ IInteractive::ButtonData Interactive::buttonData(Button b) const
     case IInteractive::Button::Select:
     case IInteractive::Button::Clear:
     case IInteractive::Button::Done:
+    case IInteractive::Button::RestoreDefaults:
     case IInteractive::Button::CustomButton: break;
     }
 
