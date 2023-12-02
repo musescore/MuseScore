@@ -37,7 +37,7 @@ namespace mu::engraving {
 //---------------------------------------------------------
 
 ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction frac)
-    : m_current(current), m_score(current->score()), m_currentLoc(Location::absolute())
+    : m_currentLoc(Location::absolute()), m_current(current), m_score(current->score())
 {
     IF_ASSERT_FAILED(current) {
         return;
@@ -60,7 +60,7 @@ ConnectorInfo::ConnectorInfo(const EngravingItem* current, int track, Fraction f
 //---------------------------------------------------------
 
 ConnectorInfo::ConnectorInfo(const Score* score, const Location& currentLocation)
-    : m_score(score), m_currentLoc(currentLocation)
+    : m_currentLoc(currentLocation), m_score(score)
 {}
 
 //---------------------------------------------------------
