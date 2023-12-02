@@ -141,6 +141,7 @@ mu::Ret MscLoader::loadMscz(MasterScore* masterScore, const MscReader& mscReader
 
             Excerpt* ex = new Excerpt(masterScore);
             ex->setExcerptScore(partScore);
+            ex->setFileName(excerptFileName);
 
             ByteArray excerptStyleData = mscReader.readExcerptStyleFile(excerptFileName);
             Buffer excerptStyleBuf(&excerptStyleData);
