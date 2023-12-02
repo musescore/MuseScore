@@ -281,6 +281,7 @@ private slots:
       void timesig3() { mxmlIoTest("testTimesig3"); }
       void trackHandling() { mxmlIoTest("testTrackHandling"); }
       void tremolo() { mxmlIoTest("testTremolo"); }
+      void trills() { mxmlMscxExportTestRef("testTrills"); }
       void tuplets1() { mxmlIoTestRef("testTuplets1"); }
       void tuplets2() { mxmlIoTestRef("testTuplets2"); }
       void tuplets3() { mxmlIoTestRef("testTuplets3"); }

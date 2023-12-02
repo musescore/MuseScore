@@ -17,11 +17,6 @@
       <supports element="print" attribute="new-system" type="no"/>
       <supports element="stem" type="yes"/>
       </encoding>
-    <miscellaneous>
-      <miscellaneous-field name="description">
-        Note: both staccatissimo and spiccato are imported as staccatissimo.
-        </miscellaneous-field>
-      </miscellaneous>
     </identification>
   <part-list>
     <score-part id="P1">

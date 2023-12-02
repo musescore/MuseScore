@@ -2576,16 +2576,28 @@ static void writeAccidental(XmlWriter& xml, const QString& tagName, const Accide
 
 static void wavyLineStart(const Trill* tr, const int number, Notations& notations, Ornaments& ornaments, XmlWriter& xml)
       {
-      // mscore only supports wavy-line with trill-mark
       notations.tag(xml);
       ornaments.tag(xml);
-      xml.tagE("trill-mark" + color2xml(tr));
-      writeAccidental(xml, "accidental-mark", tr->accidental());
+      switch (tr->trillType()) {
+            case Trill::Type::TRILL_LINE:
+                  xml.tagE("trill-mark" + color2xml(tr));
+                  break;
+            case Trill::Type::UPPRALL_LINE:
+                  xml.tagE("other-ornament smufl=\"ornamentBottomLeftConcaveStroke\"" + color2xml(tr));
+                  break;
+            case Trill::Type::DOWNPRALL_LINE:
+                  xml.tagE("other-ornament smufl=\"ornamentLeftVerticalStroke\"" + color2xml(tr));
+                  break;
+            case Trill::Type::PRALLPRALL_LINE:
+            default:
+                  break;
+            }
       QString tagName = "wavy-line type=\"start\"";
       tagName += QString(" number=\"%1\"").arg(number + 1);
       tagName += color2xml(tr);
       tagName += positioningAttributes(tr, true);
       xml.tagE(tagName);
+      writeAccidental(xml, "accidental-mark", tr->accidental());
       }
 
 //---------------------------------------------------------
@@ -2758,8 +2770,6 @@ static std::vector<QString> symIdToArtics(const SymId sid)
 
             case SymId::articStaccatissimoAbove:
             case SymId::articStaccatissimoBelow:
-            case SymId::articStaccatissimoStrokeAbove:
-            case SymId::articStaccatissimoStrokeBelow:
             case SymId::articStaccatissimoWedgeAbove:
             case SymId::articStaccatissimoWedgeBelow:
                   return { "staccatissimo" };
@@ -2828,6 +2838,11 @@ static std::vector<QString> symIdToArtics(const SymId sid)
             case SymId::articTenutoAccentAbove:
             case SymId::articTenutoAccentBelow:
                   return { "tenuto", "accent" };
+                  break;
+
+            case SymId::articStaccatissimoStrokeAbove:
+            case SymId::articStaccatissimoStrokeBelow:
+                  return { "spiccato" };
                   break;
 
             default:
