@@ -156,6 +156,20 @@ async::Notification Excerpt::nameChanged() const
     return m_nameChanged;
 }
 
+const String& Excerpt::fileName() const
+{
+    IF_ASSERT_FAILED(!m_fileName.empty()) {
+        const_cast<Excerpt*>(this)->updateFileName();
+    }
+
+    return m_fileName;
+}
+
+void Excerpt::setFileName(const String& fileName)
+{
+    m_fileName = fileName;
+}
+
 static inline bool isValidExcerptFileNameCharacter(char16_t c)
 {
     return (u'a' <= c && c <= u'z')
@@ -180,7 +194,7 @@ static inline String escapeExcerptFileName(const String& name)
     return result;
 }
 
-String Excerpt::makeFileName(size_t index) const
+void Excerpt::updateFileName(size_t index)
 {
     if (index == mu::nidx && m_masterScore) {
         index = mu::indexOf(m_masterScore->excerpts(), this);
@@ -189,10 +203,10 @@ String Excerpt::makeFileName(size_t index) const
     const String escapedName = escapeExcerptFileName(m_name);
 
     if (index == mu::nidx) {
-        return escapedName;
+        m_fileName = escapedName;
+    } else {
+        m_fileName = String(u"%1_%2").arg(String::number(index), escapedName);
     }
-
-    return String(u"%1_%2").arg(String::number(index), escapedName);
 }
 
 bool Excerpt::containsPart(const Part* part) const

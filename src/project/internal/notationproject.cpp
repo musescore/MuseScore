@@ -226,7 +226,7 @@ mu::Ret NotationProject::doLoad(const io::path_t& path, const io::path_t& styleP
     // Load view settings (needs to be done after notations are created)
     m_masterNotation->notation()->viewState()->read(reader);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
-        excerpt->notation()->viewState()->read(reader, u"Excerpts/" + excerpt->makeFileName() + u"/");
+        excerpt->notation()->viewState()->read(reader, u"Excerpts/" + excerpt->fileName() + u"/");
     }
 
     return make_ret(Ret::Code::Ok);
@@ -712,7 +712,7 @@ mu::Ret NotationProject::writeProject(MscWriter& msczWriter, bool onlySelection,
     // Write view settings
     m_masterNotation->notation()->viewState()->write(msczWriter);
     for (IExcerptNotationPtr excerpt : m_masterNotation->excerpts()) {
-        excerpt->notation()->viewState()->write(msczWriter, u"Excerpts/" + excerpt->makeFileName() + u"/");
+        excerpt->notation()->viewState()->write(msczWriter, u"Excerpts/" + excerpt->fileName() + u"/");
     }
 
     return make_ret(Ret::Code::Ok);

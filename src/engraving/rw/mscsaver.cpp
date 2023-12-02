@@ -76,14 +76,14 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
             const std::vector<Excerpt*>& excerpts = score->excerpts();
 
             for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
-                const Excerpt* excerpt = excerpts.at(excerptIndex);
+                Excerpt* excerpt = excerpts.at(excerptIndex);
 
                 Score* partScore = excerpt->excerptScore();
                 IF_ASSERT_FAILED(partScore && partScore != score) {
                     continue;
                 }
 
-                String excerptFileName = excerpt->makeFileName(excerptIndex);
+                excerpt->updateFileName(excerptIndex);
 
                 // Write excerpt style
                 {
@@ -92,7 +92,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
                     styleStyleBuf.open(IODevice::WriteOnly);
                     partScore->style().write(&styleStyleBuf);
 
-                    mscWriter.addExcerptStyleFile(excerptFileName, excerptStyleData);
+                    mscWriter.addExcerptStyleFile(excerpt->fileName(), excerptStyleData);
                 }
 
                 // Write excerpt
@@ -103,7 +103,7 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
 
                     RWRegister::writer()->writeScore(excerpt->excerptScore(), &excerptBuf, onlySelection, &masterWriteOutData);
 
-                    mscWriter.addExcerptFile(excerptFileName, excerptData);
+                    mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
                 }
             }
         }
