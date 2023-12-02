@@ -133,9 +133,21 @@ bool StaffTypeChange::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::STEP_OFFSET:
         m_staffType->setStepOffset(v.toInt());
         break;
-    case Pid::STAFF_LINES:
-        m_staffType->setLines(v.toInt());
-        break;
+    case Pid::STAFF_LINES: {
+        int linesOld = m_staffType->lines();
+        int linesNew = v.toInt();
+        Spatium yOffset = m_staffType->yoffset();
+
+        // if change to one line staff, center by setting y offset 2
+        if (linesNew == 1 && linesOld != 1) {
+            m_staffType->setYoffset(yOffset + Spatium(2));
+        } else if (linesOld == 1 && linesNew != 1) {
+            m_staffType->setYoffset(yOffset - Spatium(2));
+        }
+
+        m_staffType->setLines(linesNew);
+    }
+    break;
     case Pid::LINE_DISTANCE:
         m_staffType->setLineDistance(v.value<Spatium>());
         break;
