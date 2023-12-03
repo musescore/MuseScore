@@ -3046,6 +3046,11 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
+        <source>Avoid barlines</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11308"/>
         <source>Snap to dynamics</source>
         <translation type="unfinished"></translation>
@@ -4163,11 +4168,6 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="11125"/>
         <source>Reset &apos;Scale&apos; value</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="11174"/>
-        <source>Avoid barlines:</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -11102,87 +11102,87 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="485"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="481"/>
         <source>Duplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="488"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="484"/>
         <source>Triplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="491"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="487"/>
         <source>Quadruplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="494"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="490"/>
         <source>Quintuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="497"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="493"/>
         <source>Sextuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="500"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="496"/>
         <source>Septuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="503"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="499"/>
         <source>Octuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="506"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="502"/>
         <source>Nonuplet</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="510"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="506"/>
         <source>%1 note tuplet</source>
         <extracomment>%1 is tuplet ratio numerator (i.e. the number of notes in the tuplet)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="520"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="516"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="415"/>
         <source>Dotted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="523"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="519"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="417"/>
         <source>Double dotted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="526"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="522"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="419"/>
         <source>Triple dotted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="529"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="525"/>
         <location filename="../../src/engraving/dom/tempotext.cpp" line="421"/>
         <source>Quadruple dotted %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1085"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1081"/>
         <source>Start and end of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3318"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3325"/>
         <source>Current contents of measures will be replaced</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/cmd.cpp" line="3319"/>
+        <location filename="../../src/engraving/dom/cmd.cpp" line="3326"/>
         <source>Continue with inserting measure repeat?</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11359,77 +11359,77 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="2998"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3036"/>
-        <location filename="../../src/engraving/dom/rest.cpp" line="753"/>
-        <location filename="../../src/engraving/dom/rest.cpp" line="765"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3003"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3041"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="747"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="759"/>
         <source>Voice: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3006"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3011"/>
         <source>(on %1‰ off %2‰)</source>
         <extracomment>Note-on and note-off times relative to note duration, expressed in thousandths (per mille)</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3012"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3041"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3017"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3046"/>
         <source>Beat slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3012"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3041"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3017"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3046"/>
         <source>Rhythm slash</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3016"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3045"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3021"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3050"/>
         <source>%1; String: %2; Fret: %3</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3022"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3027"/>
         <source>%1; Pitch: %2; Duration: %3%4%5</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3051"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3056"/>
         <source>%1 head %2</source>
         <extracomment>head as in note head. %1 is head type (circle, cross, etc.). %2 is pitch (e.g. Db4).</extracomment>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3053"/>
-        <location filename="../../src/engraving/dom/rest.cpp" line="768"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3058"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="762"/>
         <source>Cross-staff above</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3055"/>
-        <location filename="../../src/engraving/dom/rest.cpp" line="770"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3060"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="764"/>
         <source>Cross-staff below</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3059"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3064"/>
         <source>too low</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3061"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3066"/>
         <source>too high</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3063"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3068"/>
         <source>too low for amateurs</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/note.cpp" line="3065"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3070"/>
         <source>too high for amateurs</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11480,7 +11480,7 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/rest.cpp" line="754"/>
+        <location filename="../../src/engraving/dom/rest.cpp" line="748"/>
         <source>%1; Duration: %2; %3</source>
         <translation type="unfinished"></translation>
     </message>
@@ -11491,31 +11491,31 @@ Published under the &lt;a href=&quot;%1&quot;&gt;GNU General Public License vers
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1165"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1076"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1087"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3091"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3103"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1072"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1083"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3096"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3108"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2253"/>
         <source>Start of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../../src/engraving/dom/barline.cpp" line="1168"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1079"/>
-        <location filename="../../src/engraving/dom/chordrest.cpp" line="1089"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3095"/>
-        <location filename="../../src/engraving/dom/note.cpp" line="3111"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1075"/>
+        <location filename="../../src/engraving/dom/chordrest.cpp" line="1085"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3100"/>
+        <location filename="../../src/engraving/dom/note.cpp" line="3116"/>
         <location filename="../../src/engraving/dom/segment.cpp" line="2268"/>
         <source>End of %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1489"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1494"/>
         <source>Start measure: %1; Start beat: %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/spanner.cpp" line="1496"/>
+        <location filename="../../src/engraving/dom/spanner.cpp" line="1501"/>
         <source>End measure: %1; End beat: %2</source>
         <translation type="unfinished"></translation>
     </message>
@@ -13071,12 +13071,12 @@ Fret %1 on strings %2</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/stringtunings.cpp" line="173"/>
+        <location filename="../../src/engraving/dom/stringtunings.cpp" line="174"/>
         <source>String %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/engraving/dom/stringtunings.cpp" line="174"/>
+        <location filename="../../src/engraving/dom/stringtunings.cpp" line="175"/>
         <source>Value %1</source>
         <translation type="unfinished"></translation>
     </message>
