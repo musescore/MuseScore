@@ -132,6 +132,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Flute</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -268,7 +269,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute</name>
       </Score>
     </Score>
   </museScore>

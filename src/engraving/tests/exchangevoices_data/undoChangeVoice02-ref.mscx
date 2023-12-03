@@ -535,6 +535,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Piano</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -1151,7 +1152,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Piano</name>
       </Score>
     </Score>
   </museScore>

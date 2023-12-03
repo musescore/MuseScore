@@ -774,6 +774,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Alto</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1200,9 +1201,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Alto</name>
       </Score>
     <Score>
+      <name>Tenor</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1635,7 +1636,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Tenor</name>
       </Score>
     </Score>
   </museScore>
