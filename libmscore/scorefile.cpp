@@ -1052,7 +1052,7 @@ Score::FileError MasterScore::read1(XmlReader& e, bool ignoreVersionError)
             if (e.name() == "museScore") {
                   const QString& version = e.attribute("version");
                   QStringList sl = version.split('.');
-                  setMscVersion(sl[0].toInt() * 100 + sl[1].toInt());
+                  setMscVersion(sl[0].toInt() * 100 + (sl.size() > 1 ? sl[1].toInt() : 0));
 
                   if (!ignoreVersionError) {
                         if (mscVersion() > MSCVERSION)
