@@ -770,6 +770,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Alto</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -1197,9 +1198,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Alto</name>
       </Score>
     <Score>
+      <name>Tenor</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
@@ -1633,7 +1634,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Tenor</name>
       </Score>
     </Score>
   </museScore>
