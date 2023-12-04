@@ -152,6 +152,8 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::HARP_DIAGRAM: layout(toHarpPedalDiagram(item), ctx);
         break;
+    case ElementType::IMAGE:        layout(toImage(item), ctx);
+        break;
     case ElementType::INSTRUMENT_CHANGE: layout(toInstrumentChange(item), ctx);
         break;
     case ElementType::JUMP:         layout(toJump(item), ctx);
@@ -1100,6 +1102,17 @@ void SingleLayout::layout(HarpPedalDiagram* item, const Context& ctx)
 {
     item->updateDiagramText();
     layoutTextBase(item, ctx, item->mutldata());
+}
+
+void SingleLayout::layout(Image* item, const Context&)
+{
+    item->init();
+
+    SizeF imageSize = item->size();
+
+    Image::LayoutData* ldata = item->mutldata();
+    ldata->setPos(PointF());
+    ldata->setBbox(RectF(PointF(), item->size2pixel(imageSize)));
 }
 
 void SingleLayout::layout(InstrumentChange* item, const Context& ctx)
