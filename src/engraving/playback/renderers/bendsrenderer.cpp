@@ -100,13 +100,9 @@ void BendsRenderer::doRender(const EngravingItem* item, const mpe::ArticulationT
 void BendsRenderer::renderMultibend(const Score* score, const Note* startNote, const RenderingContext& startNoteCtx,
                                     mpe::PlaybackEventList& result)
 {
-    const GuitarBend* currBend = startNote->bendFor();
-    if (!currBend) {
-        ChordArticulationsRenderer::renderNote(startNote->chord(), startNote, startNoteCtx, result);
-        return;
-    }
-
     const Note* currNote = startNote;
+    const GuitarBend* currBend = currNote->bendFor();
+
     mpe::PlaybackEventList bendEvents;
     BendTimeFactorMap bendTimeFactorMap;
 
