@@ -5250,7 +5250,10 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
 {
     using namespace mu::draw;
 
-    if (tl->lineVisible() && (tl->beginText().isEmpty() || tl->endText().isEmpty())) return;
+    if (!tl->lineVisible() && ((tl->beginText().isEmpty() && tl->tick() == tick)
+                               || (tl->endText().isEmpty() && tl->tick() != tick))) {
+        return;
+    }
 
     int n;
     // special case: a dashed line w/o hooks is written as dashes
