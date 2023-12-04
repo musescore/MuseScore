@@ -34,7 +34,7 @@ template<typename To, typename From>
 bool is_classof(From* p) noexcept
 {
     using ResultType = std::remove_pointer_t<To>;
-    return ResultType::classof(p);
+    return p ? ResultType::classof(p) : false;
 }
 
 template<typename To, typename From>

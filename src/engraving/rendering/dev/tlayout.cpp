@@ -954,10 +954,12 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
             LD_CONDITION(item_cast<const Articulation*>(e)->ldata()->symId.has_value());
             break;
         case ElementType::SYMBOL:
-            // not yet clear
+            LD_INDEPENDENT;
             break;
         case ElementType::IMAGE:
-            // not yet clear
+            // will be done
+            // LD_CONDITION(parentLD->isSetBbox());
+            LD_INDEPENDENT;
             break;
         default:
             UNREACHABLE;
@@ -1018,12 +1020,14 @@ void TLayout::layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, con
                 aldata->setPos(PointF(x, topY));
             }
         } break;
-        case ElementType::SYMBOL:
-            TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
-            break;
-        case ElementType::IMAGE:
-            TLayout::layoutItem(e, const_cast<LayoutContext&>(ctx));
-            break;
+        case ElementType::SYMBOL: {
+            Symbol* sb = item_cast<Symbol*>(e);
+            TLayout::layoutSymbol(sb, sb->mutldata(), ctx);
+        } break;
+        case ElementType::IMAGE: {
+            Image* im = item_cast<Image*>(e);
+            TLayout::layoutImage(im, im->mutldata());
+        } break;
         default:
             UNREACHABLE;
         }

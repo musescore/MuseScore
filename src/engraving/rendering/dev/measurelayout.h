@@ -81,6 +81,13 @@ private:
     //
     static void moveToNextMeasure(LayoutContext& ctx);
     static void layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx);
+    static void layoutMeasureIndependentElements(const Segment& segment, track_idx_t track, const LayoutContext& ctx);
+    static void checkStaffMoveValidity(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack);
+    static void layoutChordDrumset(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                                   const LayoutConfiguration& conf);
+    static void setChordsMag(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                             const LayoutConfiguration& conf);
+    static void cmdUpdateNotes(const Measure* measure, const DomAccessor& dom);
     static void createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx);
 };
 }

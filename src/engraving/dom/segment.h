@@ -261,6 +261,7 @@ public:
     // some helper function
     ChordRest* cr(track_idx_t track) const { return toChordRest(m_elist[track]); }
     bool isType(const SegmentType t) const { return int(m_segmentType) & int(t); }
+    bool isJustType(const SegmentType t) const { return m_segmentType == t; }
     bool isBeginBarLineType() const { return m_segmentType == SegmentType::BeginBarLine; }
     bool isClefType() const { return m_segmentType == SegmentType::Clef; }
     bool isHeaderClefType() const { return m_segmentType == SegmentType::HeaderClef; }
