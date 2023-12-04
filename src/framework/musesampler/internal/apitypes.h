@@ -226,10 +226,10 @@ typedef struct ms_PitchBendInfo
 
 typedef struct ms_VibratoInfo
 {
-  int64_t event_id;
-  long long _start_us;
-  long long _duration_us;
-  int _depth_cents;
+    int64_t event_id;
+    long long _start_us;
+    long long _duration_us;
+    int _depth_cents;
 } ms_VibratoInfo;
 
 typedef ms_Result (* ms_init)();
