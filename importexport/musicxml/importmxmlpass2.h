@@ -268,6 +268,7 @@ public:
       MusicXmlExtendedSpannerDesc& getSpanner(const MusicXmlSpannerDesc& desc);
       void clearSpanner(const MusicXmlSpannerDesc& desc);
       void deleteHandledSpanner(SLine* const& spanner);
+      int divs() { return _divs; }
 
 private:
       void addError(const QString& error);      ///< Add an error to be shown in the GUI

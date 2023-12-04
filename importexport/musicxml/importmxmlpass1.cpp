@@ -3555,12 +3555,12 @@ void MusicXMLParserPass1::notePrintSpacingNo(Fraction& dura)
 //   calcTicks
 //---------------------------------------------------------
 
-Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const QXmlStreamReader* const xmlReader)
+Fraction MusicXMLParserPass1::calcTicks(const int& intTicks, const int& _divisions, const QXmlStreamReader* const xmlReader)
       {
       Fraction dura(0, 1);              // invalid unless set correctly
 
-      if (_divs > 0) {
-            dura.set(intTicks, 4 * _divs);
+      if (_divisions > 0) {
+            dura.set(intTicks, 4 * _divisions);
             dura.reduce(); // prevent overflow in later Fraction operations
 
             // Correct for previously adjusted durations

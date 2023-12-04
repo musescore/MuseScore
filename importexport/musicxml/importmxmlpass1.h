@@ -147,8 +147,8 @@ public:
       void notations(MxmlStartStop& tupletStartStop);
       void note(const QString& partId, const Fraction cTime, Fraction& missingPrev, Fraction& dura, Fraction& missingCurr, VoiceOverlapDetector& vod, MxmlTupletStates& tupletStates);
       void notePrintSpacingNo(Fraction& dura);
-      Fraction calcTicks(const int& intTicks, const QXmlStreamReader* const xmlReader);
-      Fraction calcTicks(const int& intTicks) { return calcTicks(intTicks, &_e); }
+      Fraction calcTicks(const int& intTicks, const int& _divisions, const QXmlStreamReader* const xmlReader);
+      Fraction calcTicks(const int& intTicks) { return calcTicks(intTicks, _divs, &_e); }
       void duration(Fraction& dura, QXmlStreamReader& e);
       void duration(Fraction& dura) { duration(dura, _e); }
       void forward(Fraction& dura);
