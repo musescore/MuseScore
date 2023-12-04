@@ -33,6 +33,7 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::Tenuto, ms_NoteArticulation_Tenuto },
     { mpe::ArticulationType::Marcato, ms_NoteArticulation_Marcato },
     { mpe::ArticulationType::Harmonic, ms_NoteArticulation_Harmonics },
+    { mpe::ArticulationType::PalmMute, ms_NoteArticulation_PalmMute },
     { mpe::ArticulationType::Mute, ms_NoteArticulation_Mute },
     { mpe::ArticulationType::Legato, ms_NoteArticulation_Slur },
     { mpe::ArticulationType::Trill, ms_NoteArticulation_Trill },
