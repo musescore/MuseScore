@@ -75,6 +75,7 @@ private:
 
     void addNoteEvent(const mpe::NoteEvent& noteEvent);
     void addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId);
+    void addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId);
 
     void pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const;
     int pitchLevelToCents(const mpe::pitch_level_t pitchLevel) const;
