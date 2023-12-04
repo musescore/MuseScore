@@ -282,8 +282,7 @@ typedef ms_Result (* ms_MuseSampler_add_track_event_range_end)(ms_MuseSampler, m
 
 // Added in 0.5
 typedef ms_Result (* ms_MuseSampler_add_pitch_bend)(ms_MuseSampler ms, ms_Track track, ms_PitchBendInfo info);
-typedef ms_Result (*ms_MuseSampler_add_vibrato)(ms_MuseSampler ms, ms_Track track, ms_VibratoInfo info);
-
+typedef ms_Result (* ms_MuseSampler_add_vibrato)(ms_MuseSampler ms, ms_Track track, ms_VibratoInfo info);
 
 typedef ms_Result (* ms_MuseSampler_start_audition_note)(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent evt);
 // Added in 0.3
