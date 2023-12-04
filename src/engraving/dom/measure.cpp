@@ -1881,8 +1881,41 @@ bool Measure::visible(staff_idx_t staffIdx) const
 
 bool Measure::stemless(staff_idx_t staffIdx) const
 {
-    const Staff* staff = score()->staff(staffIdx);
-    return staff->stemless(tick()) || m_mstaves[staffIdx]->stemless() || staff->staffType(tick())->stemless();
+    const Score* currentScore = score();
+    // Check if the score is valid
+    if (!currentScore) {
+        // Handle the error or log a message
+        return false;
+    }
+
+    const Staff* staff = currentScore->staff(staffIdx);
+
+    // Check if the staff is valid
+    if (!staff) {
+        // Handle the error or log a message
+        return false;
+    }
+    if (m_mstaves.size() > UINT32_MAX) {
+        return false;
+    }
+    if (staffIdx >= m_mstaves.size()) {
+        // Handle the error or log a message
+        return false; // or some appropriate value
+    }
+    // Check if the measureStaff is valid
+    if (!m_mstaves[staffIdx]) {
+        // Handle the error or log a message
+        return false;
+    }
+
+    const StaffType* staffType = staff->staffType(tick());
+
+    // Check if the staffType is valid
+    if (!staffType) {
+        // Handle the error or log a message
+        return false;
+    }
+    return staff->stemless(tick()) || m_mstaves[staffIdx]->stemless() || staffType->stemless();
 }
 
 //---------------------------------------------------------

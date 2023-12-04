@@ -211,7 +211,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
     staves->setRowCount(static_cast<int>(rows));
     staves->setColumnCount(3);
 
-    auto itemAccessibleText = [](const QTableWidgetItem* item){
+    auto itemAccessibleText = [](const QTableWidgetItem* item) {
         return item->data(ITEM_ACCESSIBLE_TITLE_ROLE).toString() + ": "
                + (item->checkState() == Qt::Checked ? qtrc("ui", "checked", "checkstate") : qtrc("ui", "unchecked", "checkstate"));
     };
@@ -238,7 +238,7 @@ void MeasurePropertiesDialog::setMeasure(mu::engraving::Measure* measure)
         staves->setItem(static_cast<int>(staffIdx), 2, item);
     }
 
-    connect(staves, &QTableWidget::itemChanged, this, [&itemAccessibleText](QTableWidgetItem* item){
+    connect(staves, &QTableWidget::itemChanged, this, [&itemAccessibleText](QTableWidgetItem* item) {
         item->setData(Qt::AccessibleTextRole, itemAccessibleText(item));
     });
 }
@@ -338,7 +338,15 @@ void MeasurePropertiesDialog::apply()
 
     if (m_measure->ticks() != len()) {
         mu::engraving::ScoreRange range;
-        range.read(m_measure->first(), m_measure->last());
+        if (m_measure->first() != NULL && m_measure->last() != NULL) {
+            range.read(m_measure->first(), m_measure->last());
+        } else {
+            // Handle the error
+            //std::cout << "null" << std::endl;
+            return;
+        }
+
+        //range.read(m_measure->first(), m_measure->last());
         m_measure->adjustToLen(len());
     }
 
