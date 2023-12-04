@@ -338,7 +338,15 @@ void MeasurePropertiesDialog::apply()
 
     if (m_measure->ticks() != len()) {
         mu::engraving::ScoreRange range;
-        range.read(m_measure->first(), m_measure->last());
+        if (m_measure->first() != NULL && m_measure->last() != NULL) {
+            range.read(m_measure->first(), m_measure->last());
+        } else {
+            // Handle the error
+            //std::cout << "null" << std::endl;
+            return;
+        }
+
+        //range.read(m_measure->first(), m_measure->last());
         m_measure->adjustToLen(len());
     }
 
