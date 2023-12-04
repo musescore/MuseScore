@@ -296,12 +296,14 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
         return;
     }
     mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
-    constexpr auto MAX_VIBRATO_DURATION_US = (int64_t)0.1*1000000;
+    // stand-in data before actual mpe support
+    constexpr auto MAX_VIBRATO_STARTOFFSET_US = (int64_t)0.1*1000000;
+    // stand-in data before actual mpe support
     constexpr int VIBRATO_DEPTH_CENTS = 13;
 
     ms_VibratoInfo vibrato;
     vibrato.event_id = noteEventId;
-    vibrato._start_us = std::min((int64_t)(duration * 0.1), MAX_VIBRATO_DURATION_US);
+    vibrato._start_us = std::min((int64_t)(duration * 0.1), MAX_VIBRATO_STARTOFFSET_US);
     vibrato._duration_us = duration;
     vibrato._depth_cents = VIBRATO_DEPTH_CENTS;
 
