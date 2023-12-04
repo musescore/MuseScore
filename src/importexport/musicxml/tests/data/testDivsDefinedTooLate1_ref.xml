@@ -45,18 +45,10 @@
           <line>2</line>
           </clef>
         </attributes>
-      <note>
-        <rest/>
-        <duration>3</duration>
-        <voice>1</voice>
-        <type>half</type>
-        <dot/>
-        </note>
       <note print-object="no">
-        <rest/>
-        <duration>1</duration>
+        <rest measure="yes"/>
+        <duration>4</duration>
         <voice>1</voice>
-        <type>quarter</type>
         </note>
       </measure>
     <measure number="2">
