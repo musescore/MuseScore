@@ -214,7 +214,7 @@ void TrackList::append(EngravingItem* e, std::unordered_map<EngravingItem*, std:
                         element = 0;
                     }
 
-                    cloneNotesSpanners(toChord(e), toChord(element), notFinishedSpanners);
+                    cloneChordSpanners(toChord(e), toChord(element), notFinishedSpanners, {});
                 }
             }
             if (element) {
@@ -587,15 +587,19 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                                 toChord(cr)->setTremolo(nullptr);
                                 delete tremoloPointer;
                             }
+
+                            std::vector<Note*> ignoredNotes;
                             for (Note* note : toChord(cr)->notes()) {
                                 if (!duration.isZero() && !note->tieFor()) {
                                     Tie* tie = Factory::createTie(note);
                                     tie->setGenerated(true);
                                     note->add(tie);
+
+                                    ignoredNotes.emplace_back(note);
                                 }
                             }
 
-                            cloneNotesSpanners(toChord(e), toChord(cr), notFinishedSpanners);
+                            cloneChordSpanners(toChord(e), toChord(cr), notFinishedSpanners, ignoredNotes);
                         }
                     }
                 } else if (e->isTuplet()) {
@@ -683,6 +687,17 @@ bool TrackList::write(Score* score, const Fraction& tick) const
             if (nn) {
                 tie->setEndNote(nn);
                 nn->setTieBack(tie);
+
+                if (!nn->spannerBack().empty()) {
+                    for (Spanner* spanner : nn->spannerBack()) {
+                        if (!spanner->isGuitarBend()) {
+                            continue;
+                        }
+
+                        n->chord()->setEndsGlissandoOrGuitarBend(true);
+                        spanner->setEndElement(n);
+                    }
+                }
             }
         }
         if (s == segment) {
@@ -692,13 +707,78 @@ bool TrackList::write(Score* score, const Fraction& tick) const
     return true;
 }
 
-void TrackList::cloneNotesSpanners(Chord* fromChord, Chord* toChord,
-                                   std::unordered_map<EngravingItem*, std::vector<Spanner*> >& notFinishedSpanners) const
+void TrackList::cloneChordSpanners(Chord* fromChord, Chord* toChord,
+                                   std::unordered_map<EngravingItem*, std::vector<Spanner*> >& notFinishedSpanners,
+                                   const std::vector<Note*>& ignoredNotes) const
 {
-    const std::vector<Note*> notes = fromChord->notes();
-    for (size_t i = 0; i < notes.size(); ++i) {
-        Note* note = notes[i];
-        Note* newNote = toChord->notes()[i];
+    std::vector<Note*> fromNotes;
+    std::vector<Note*> toNotes;
+
+    GraceNotesGroup& fromChordGraceNotesBefore = fromChord->graceNotesBefore();
+    if (!fromChordGraceNotesBefore.empty()) {
+        for (const Chord* graceNotesChord : fromChordGraceNotesBefore) {
+            mu::join(fromNotes, graceNotesChord->notes());
+        }
+    }
+
+    GraceNotesGroup& toChordGraceNotesBefore = toChord->graceNotesBefore();
+    if (!toChordGraceNotesBefore.empty()) {
+        for (const Chord* graceNotesChord : toChordGraceNotesBefore) {
+            mu::join(toNotes, graceNotesChord->notes());
+        }
+    }
+
+    cloneNotesSpanners(fromNotes, toNotes, notFinishedSpanners, ignoredNotes);
+
+    fromNotes.clear();
+    toNotes.clear();
+
+    for (Note* note : fromChord->notes()) {
+        fromNotes.emplace_back(note);
+    }
+
+    for (Note* note : toChord->notes()) {
+        toNotes.emplace_back(note);
+    }
+    cloneNotesSpanners(fromNotes, toNotes, notFinishedSpanners, ignoredNotes);
+
+    fromNotes.clear();
+    toNotes.clear();
+
+    GraceNotesGroup& fromChordGraceNotesAfter = fromChord->graceNotesAfter();
+    if (!fromChordGraceNotesAfter.empty()) {
+        for (const Chord* graceNotesChord : fromChordGraceNotesAfter) {
+            mu::join(fromNotes, graceNotesChord->notes());
+        }
+    }
+    GraceNotesGroup& toChordGraceNotesAfter = toChord->graceNotesAfter();
+    if (!toChordGraceNotesAfter.empty()) {
+        for (const Chord* graceNotesChord : toChordGraceNotesAfter) {
+            mu::join(toNotes, graceNotesChord->notes());
+        }
+    }
+
+    cloneNotesSpanners(fromNotes, toNotes, notFinishedSpanners, ignoredNotes);
+}
+
+void TrackList::cloneNotesSpanners(std::vector<Note*>& fromNotes, const std::vector<Note*>& toNotes,
+                                   std::unordered_map<EngravingItem*, std::vector<Spanner*> >& notFinishedSpanners,
+                                   const std::vector<Note*>& ignoredNotes) const
+{
+    if (fromNotes.empty() || toNotes.empty()) {
+        return;
+    }
+
+    for (size_t i = 0; i < fromNotes.size(); ++i) {
+        Note* note = fromNotes[i];
+        if (i > toNotes.size() - 1) {
+            return;
+        }
+        Note* newNote = toNotes[i];
+
+        if (contains(ignoredNotes, newNote)) {
+            continue;
+        }
 
         std::vector<Spanner*> notFinishedSpannersForNote = value(notFinishedSpanners, note);
 
@@ -706,7 +786,7 @@ void TrackList::cloneNotesSpanners(Chord* fromChord, Chord* toChord,
             for (Spanner* spanner : notFinishedSpannersForNote) {
                 spanner->setEndElement(newNote);
                 if (spanner->isGlissando() || spanner->isGuitarBend()) {
-                    toChord->setEndsGlissandoOrGuitarBend(true);
+                    newNote->chord()->setEndsGlissandoOrGuitarBend(true);
                 }
                 newNote->addSpannerBack(spanner);
             }
@@ -723,10 +803,48 @@ void TrackList::cloneNotesSpanners(Chord* fromChord, Chord* toChord,
 
                 newNote->addSpannerFor(newSpanner);
 
-                notFinishedSpanners[spanner->endElement()].emplace_back(newSpanner);
+                if (spanner->endElement() == note) {
+                    newSpanner->setEndElement(newNote);
+                    if (spanner->isGlissando() || spanner->isGuitarBend()) {
+                        newNote->chord()->setEndsGlissandoOrGuitarBend(true);
+                    }
+                    newNote->addSpannerBack(newSpanner);
+                } else {
+                    notFinishedSpanners[spanner->endElement()].emplace_back(newSpanner);
+                }
             }
         }
     }
+}
+
+std::vector<Note*> TrackList::chordNotes(Chord* chord) const
+{
+    std::vector<Note*> notes;
+
+    GraceNotesGroup& graceNotesBefore = chord->graceNotesBefore();
+
+    if (!graceNotesBefore.empty()) {
+        for (const Chord* graceNotesChord : graceNotesBefore) {
+            mu::join(notes, graceNotesChord->notes());
+        }
+    }
+
+    for (Note* note : chord->notes()) {
+        if (note->tieFor()) {
+            notes.emplace_back(note->tiedNotes().back());
+        } else {
+            notes.emplace_back(note);
+        }
+    }
+
+    GraceNotesGroup& graceNotesAfter = chord->graceNotesAfter();
+    if (!graceNotesAfter.empty()) {
+        for (const Chord* graceNotesChord : graceNotesAfter) {
+            mu::join(notes, graceNotesChord->notes());
+        }
+    }
+
+    return notes;
 }
 
 //---------------------------------------------------------

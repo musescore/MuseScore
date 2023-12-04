@@ -40,6 +40,7 @@ class Spanner;
 class ScoreRange;
 class ChordRest;
 class Chord;
+class Note;
 class Score;
 
 //---------------------------------------------------------
@@ -74,8 +75,13 @@ private:
     void appendTuplet(Tuplet* srcTuplet, Tuplet* dstTuplet);
     void combineTuplet(Tuplet* dst, Tuplet* src);
 
-    void cloneNotesSpanners(Chord* fromChord, Chord* toChord, std::unordered_map<EngravingItem*,
-                                                                                 std::vector<Spanner*> >& notFinishedSpanners) const;
+    void cloneChordSpanners(Chord* fromChord, Chord* toChord, std::unordered_map<EngravingItem*,
+                                                                                 std::vector<Spanner*> >& notFinishedSpanners,
+                            const std::vector<Note*>& ignoredNotes) const;
+    void cloneNotesSpanners(std::vector<Note*>& fromNotes, const std::vector<Note*>& toNotes, std::unordered_map<EngravingItem*,
+                                                                                                                 std::vector<Spanner*> >& notFinishedSpanners,
+                            const std::vector<Note*>& ignoredNotes) const;
+    std::vector<Note*> chordNotes(Chord* chord) const;
 
     Fraction m_duration;
     ScoreRange* m_range = nullptr;
