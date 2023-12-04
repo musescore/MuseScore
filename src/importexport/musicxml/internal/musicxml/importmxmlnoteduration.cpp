@@ -200,7 +200,7 @@ void mxmlNoteDuration::duration(QXmlStreamReader& e)
 
     _specDura.set(0, 0);          // invalid unless set correctly
     int intDura = e.readElementText().toInt();
-    _specDura = _pass1->calcTicks(intDura, &e); // Duration reading (and rounding) code consolidated to pass1
+    _specDura = _pass1->calcTicks(intDura, _divs, &e); // Duration reading (and rounding) code consolidated to pass1
 }
 
 //---------------------------------------------------------
