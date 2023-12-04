@@ -2328,6 +2328,20 @@ void Convert::pedalFromMEI(engraving::Pedal* pedal, const libmei::Pedal& meiPeda
         pedal->setEndHookType(engraving::HookType::HOOK_90);
     }
 
+    // @func
+    if (meiPedal.GetFunc() == "soft") {
+        // This is just for importing MEI files and will not be exported
+        if (pedal->beginText() != "") {
+            pedal->setBeginText(u"una corda");
+            pedal->setContinueText(u"");
+        }
+    } else if (meiPedal.GetFunc() == "sostenuto") {
+        if (pedal->beginText() != "") {
+            pedal->setBeginText(u"<sym>keyboardPedalSost</sym>");
+            pedal->setContinueText(u"(<sym>keyboardPedalSost</sym>)");
+        }
+    }
+
     // @color
     Convert::colorlineFromMEI(pedal, meiPedal);
 }
@@ -2339,7 +2353,7 @@ libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
     // @dir
     meiPedal.SetDir(libmei::pedalLog_DIR_down);
 
-    bool symbol = (pedal->beginText() == engraving::Pedal::PEDAL_SYMBOL);
+    bool symbol = (!pedal->beginText().isEmpty());
     bool star = (pedal->endText() == engraving::Pedal::STAR_SYMBOL);
 
     // @form
@@ -2349,6 +2363,11 @@ libmei::Pedal Convert::pedalToMEI(const engraving::Pedal* pedal)
         meiPedal.SetForm(libmei::PEDALSTYLE_pedline);
     } else {
         meiPedal.SetForm(libmei::PEDALSTYLE_line);
+    }
+
+    // @func
+    if (pedal->beginText() == u"<sym>keyboardPedalSost</sym>" || pedal->beginText() == u"<sym>keyboardPedalS</sym>") {
+        meiPedal.SetFunc("sostenuto");
     }
 
     // @color

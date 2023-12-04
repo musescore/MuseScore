@@ -110,9 +110,9 @@
                            <note xml:id="n1l2ndi8" dur="2" pname="e" oct="3" />
                         </layer>
                      </staff>
-                     <pedal xml:id="ppabeif" dir="down" startid="#n2hbom" form="line" endid="#n5q6lda" />
+                     <pedal xml:id="ppabeif" dir="down" startid="#n2hbom" form="line" endid="#nz3prom" />
                   </measure>
-                  <measure xml:id="m4wkmip" right="end" n="6">
+                  <measure xml:id="m4wkmip" n="6">
                      <staff xml:id="m6s1" n="1">
                         <layer xml:id="m6s1l1" n="1">
                            <mRest xml:id="m1kfd01j" />
@@ -120,7 +120,41 @@
                      </staff>
                      <staff xml:id="m6s2" n="2">
                         <layer xml:id="m6s2l1" n="1">
-                           <note xml:id="n5q6lda" dur="1" pname="c" oct="3" />
+                           <note xml:id="nq9kjgk" dur="2" pname="g" oct="3" />
+                           <note xml:id="nz3prom" dur="2" pname="e" oct="3" />
+                        </layer>
+                     </staff>
+                  </measure>
+                  <measure xml:id="m1xddgfa" n="7">
+                     <staff xml:id="m7s1" n="1">
+                        <layer xml:id="m7s1l1" n="1">
+                           <mRest xml:id="m1tijj0h" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m7s2" n="2">
+                        <layer xml:id="m7s2l1" n="1">
+                           <chord xml:id="c1355bah" dur="1">
+                              <note xml:id="n18x98u8" pname="c" oct="3" />
+                              <note xml:id="n11f0csg" pname="e" oct="3" />
+                              <note xml:id="n17f32e3" pname="g" oct="3" />
+                           </chord>
+                        </layer>
+                     </staff>
+                     <pedal xml:id="p8rxxq9" dir="down" func="sostenuto" startid="#c1355bah" form="pedstar" endid="#c1cx1uhh" />
+                  </measure>
+                  <measure xml:id="mvtnhjb" right="end" n="8">
+                     <staff xml:id="m8s1" n="1">
+                        <layer xml:id="m8s1l1" n="1">
+                           <mRest xml:id="mbahumz" />
+                        </layer>
+                     </staff>
+                     <staff xml:id="m8s2" n="2">
+                        <layer xml:id="m8s2l1" n="1">
+                           <chord xml:id="c1cx1uhh" dur="1">
+                              <note xml:id="n1x918h7" pname="c" oct="3" />
+                              <note xml:id="nm617w5" pname="e" oct="3" />
+                              <note xml:id="n17x5zeq" pname="g" oct="3" />
+                           </chord>
                         </layer>
                      </staff>
                   </measure>
