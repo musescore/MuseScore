@@ -44,6 +44,7 @@ bool SpannersMetaParser::isAbleToParse(const EngravingItem* spannerItem)
         ElementType::TRILL,
         ElementType::GLISSANDO,
         ElementType::GUITAR_BEND,
+        ElementType::VIBRATO,
     };
 
     return SUPPORTED_TYPES.find(spannerItem->type()) != SUPPORTED_TYPES.cend();
@@ -81,6 +82,10 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
     }
     case ElementType::GUITAR_BEND: {
         type = mpe::ArticulationType::Multibend;
+        break;
+    }
+    case ElementType::VIBRATO: {
+        type = mpe::ArticulationType::Vibrato;
         break;
     }
     case ElementType::TRILL: {

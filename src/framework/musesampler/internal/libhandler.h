@@ -217,6 +217,7 @@ struct MuseSamplerLibHandler
     ms_MuseSampler_add_track_event_range_end addTrackEventRangeEnd = nullptr;
 
     ms_MuseSampler_add_pitch_bend addPitchBend = nullptr;
+    ms_MuseSampler_add_vibrato addVibrato = nullptr;
 
     std::function<bool(ms_MuseSampler ms, ms_Track track, ms_AuditionStartNoteEvent_2)> startAuditionNote = nullptr;
     ms_MuseSampler_stop_audition_note stopAuditionNote = nullptr;
@@ -377,6 +378,7 @@ public:
             }
 
             addPitchBend = (ms_MuseSampler_add_pitch_bend)getLibFunc(m_lib, "ms_MuseSampler_add_pitch_bend");
+            addVibrato = (ms_MuseSampler_add_vibrato)getLibFunc(m_lib, "ms_MuseSampler_add_vibrato");
         } else if (at_least_v_0_4) {
             if (addNoteEventInternal3 = (ms_MuseSampler_add_track_note_event_3)getLibFunc(m_lib, "ms_MuseSampler_add_track_note_event_3");
                 addNoteEventInternal3 != nullptr) {
