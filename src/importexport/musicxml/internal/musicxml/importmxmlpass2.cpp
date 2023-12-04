@@ -3552,6 +3552,8 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             p->setBeginText(u"<sym>keyboardPedalPed</sym>");
             p->setContinueText(u"(<sym>keyboardPedalPed</sym>)");
         } else {
+            p->setBeginText(u"");
+            p->setContinueText(u"");
             p->setBeginHookType(type == "resume" ? HookType::NONE : HookType::HOOK_90);
         }
         p->setEndHookType(HookType::NONE);
@@ -3595,6 +3597,10 @@ void MusicXMLParserDirection::pedal(const QString& type, const int /* number */,
             p->setLineVisible(true);
         } else {
             p->setLineVisible(false);
+        }
+        if (sign == "no") {
+            p->setBeginText(u"");
+            p->setContinueText(u"");
         }
         if (color.isValid()) {
             p->setColor(color);
