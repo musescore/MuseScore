@@ -778,7 +778,10 @@ void Chord::remove(EngravingItem* e)
     break;
 
     case ElementType::ARPEGGIO:
-        m_arpeggio = 0;
+        if (m_spanArpeggio == m_arpeggio) {
+            m_spanArpeggio = nullptr;
+        }
+        m_arpeggio = nullptr;
         break;
     case ElementType::TREMOLO:
         setTremolo(nullptr);
@@ -1817,7 +1820,7 @@ void Chord::undoChangeSpanArpeggio(Arpeggio* a)
         }
         Chord* chord = toChord(linkedObject);
         Score* score = chord->score();
-        EngravingItem* linkedArp = a->findLinkedInScore(score);
+        EngravingItem* linkedArp = chord->spanArpeggio();
         if (score && linkedArp) {
             score->undo(new ChangeSpanArpeggio(chord, toArpeggio(linkedArp)));
         }

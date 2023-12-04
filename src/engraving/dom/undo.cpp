@@ -672,7 +672,7 @@ UndoMacro::ChangesInfo UndoMacro::changesInfo() const
                 continue;
             }
 
-            result.changedItems.push_back(item);
+            result.changedItems.insert(item);
         }
     }
 

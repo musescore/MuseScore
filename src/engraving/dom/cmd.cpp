@@ -108,7 +108,7 @@ static UndoMacro::ChangesInfo changesInfo(const UndoStack* stack)
     return actualMacro->changesInfo();
 }
 
-static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::vector<const EngravingItem*>& changedItems)
+static std::pair<int, int> changedTicksRange(const CmdState& cmdState, const std::set<const EngravingItem*>& changedItems)
 {
     int startTick = cmdState.startTick().ticks();
     int endTick = cmdState.endTick().ticks();
@@ -318,6 +318,10 @@ void Score::undoRedo(bool undo, EditData* ed)
 
     ScoreChangesRange range = changesRange();
 
+    if (range.changedItems.empty()) {
+        range.changedItems = std::move(changes.changedItems);
+    }
+
     if (range.changedTypes.empty()) {
         range.changedTypes = std::move(changes.changedObjectTypes);
     }
@@ -387,7 +391,10 @@ ScoreChangesRange Score::changesRange() const
 
     return { ticksRange.first, ticksRange.second,
              cmdState.startStaff(), cmdState.endStaff(),
-             changes.changedObjectTypes, changes.changedPropertyIdSet, changes.changedStyleIdSet };
+             std::move(changes.changedItems),
+             std::move(changes.changedObjectTypes),
+             std::move(changes.changedPropertyIdSet),
+             std::move(changes.changedStyleIdSet) };
 }
 
 #ifndef NDEBUG
@@ -1840,6 +1847,7 @@ void Score::upDown(bool up, UpDownMode mode)
         int tpc1     = oNote->tpc1();
         int tpc2     = oNote->tpc2();
         int pitch    = oNote->pitch();
+        int pitchOffset = staff->pitchOffset(tick);
         int newTpc1  = tpc1;          // default to unchanged
         int newTpc2  = tpc2;          // default to unchanged
         int newPitch = pitch;         // default to unchanged
@@ -1876,7 +1884,7 @@ void Score::upDown(bool up, UpDownMode mode)
                     return;                                 // no next string to move to
                 }
                 string = stt->visualStringToPhys(string);
-                fret = stringData->fret(pitch, string, staff);
+                fret = stringData->fret(pitch + pitchOffset, string, staff);
                 if (fret == -1) {                            // can't have that note on that string
                     return;
                 }
@@ -1903,7 +1911,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 }
                 // update pitch and tpc's and check it matches stringData
                 upDownChromatic(up, pitch, oNote, key, tpc1, tpc2, newPitch, newTpc1, newTpc2);
-                if (newPitch != stringData->getPitch(string, fret, staff)) {
+                if (newPitch + pitchOffset != stringData->getPitch(string, fret, staff) && !oNote->bendBack()) {
                     // oh-oh: something went very wrong!
                     LOGD("upDown tab in-string: pitch mismatch");
                     return;

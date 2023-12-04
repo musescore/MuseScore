@@ -24,28 +24,40 @@
         "presets": [
           {
             "name": "Standard",
-            "value": [40, 45, 50, 55, 59, 64]
+            "value": [40, 45, 50, 55, 59, 64],
+            "useFlats": true
           },{
             "name": "Tune down 1/2 step",
-            "value": [39, 44, 49, 54, 58, 63]
+            "value": [39, 44, 49, 54, 58, 63],
+            "useFlats": true
           },{
             "name": "Tune down 1 step",
-            "value": [38, 43, 48, 53, 57, 62]
+            "value": [38, 43, 48, 53, 57, 62],
+            "useFlats": true
           },{
             "name": "Tune down 2 step",
-            "value": [36, 41, 46, 51, 55, 60]
+            "value": [36, 41, 46, 51, 55, 60],
+            "useFlats": true
+          },{
+            "name": "Dropped D",
+            "value": [38, 45, 50, 55, 59, 64],
+            "useFlats": true
           },{
             "name": "Dropped D tune down 1/2 step",
-            "value": [37, 44, 49, 54, 58, 63]
+            "value": [37, 44, 49, 54, 58, 63],
+            "useFlats": true
           },{
             "name": "Dropped D Variant",
-            "value": [38, 45, 50, 55, 57, 64]
+            "value": [38, 45, 50, 55, 57, 64],
+            "useFlats": true
           },{
             "name": "Double Dropped D",
-            "value": [38, 45, 50, 55, 59, 62]
+            "value": [38, 45, 50, 55, 59, 62],
+            "useFlats": true
           },{
             "name": "Dropped C",
-            "value": [36, 43, 48, 53, 57, 62]
+            "value": [36, 43, 48, 53, 57, 62],
+            "useFlats": true
           },{
             "name": "Dropped E",
             "value": [40, 47, 52, 57, 61, 66]

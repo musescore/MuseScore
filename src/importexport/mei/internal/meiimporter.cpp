@@ -3112,7 +3112,7 @@ void MeiImporter::addSpannerEnds()
         // Go through the list of chord rest and check if they are on a staff below
         for (auto chordRest : plistChordRests) {
             Arpeggio* arpeggio = arpegMapEntry.first;
-            int span = static_cast<int>(chordRest->staffIdx() - arpeggio->staffIdx()) + 1;
+            int span = static_cast<int>(chordRest->track() - arpeggio->track()) + 1;
             // Adjust the span if it is currently smaller
             if (arpeggio->span() < span) {
                 arpeggio->setSpan(span);

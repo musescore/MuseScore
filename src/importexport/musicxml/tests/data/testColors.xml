@@ -72,8 +72,8 @@
         <stem>down</stem>
         <notations>
           <articulations>
-            <accent color="#FF2600"/>
             <staccato color="#FF2600"/>
+            <accent color="#FF2600"/>
             </articulations>
           <slide line-type="solid" number="1" type="stop"/>
           </notations>

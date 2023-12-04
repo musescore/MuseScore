@@ -25,6 +25,8 @@
 #include "dom/chord.h"
 #include "dom/arpeggio.h"
 
+#include "playback/metaparsers/notearticulationsparser.h"
+
 using namespace mu::engraving;
 using namespace mu::mpe;
 
@@ -44,7 +46,6 @@ void ArpeggioRenderer::doRender(const EngravingItem* item, const mpe::Articulati
                                 mpe::PlaybackEventList& result)
 {
     const Chord* chord = toChord(item);
-
     IF_ASSERT_FAILED(chord) {
         return;
     }
@@ -56,11 +57,16 @@ void ArpeggioRenderer::doRender(const EngravingItem* item, const mpe::Articulati
 
     int stepsCount = static_cast<int>(chord->notes().size());
     mpe::percentage_t percentageStep = mpe::HUNDRED_PERCENT / stepsCount;
+    msecs_t offsetStep = timestampOffsetStep(context, stepsCount);
+    double stretch = arpeggio->Stretch();
 
     auto buildEvent = [&](NominalNoteCtx& noteCtx, const int stepNumber) {
         noteCtx.chordCtx.commonArticulations.updateOccupiedRange(preferredType, stepNumber * percentageStep,
                                                                  (stepNumber + 1) * percentageStep);
-        noteCtx.timestamp += timestampOffsetStep(context) * stepNumber * arpeggio->Stretch();
+        timestamp_t offset = offsetStep * stepNumber * stretch;
+        noteCtx.timestamp += offset;
+        noteCtx.duration -= offset;
+
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
     };
 
@@ -92,28 +98,35 @@ bool ArpeggioRenderer::isDirectionUp(const mpe::ArticulationType type)
     }
 }
 
-msecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx)
+msecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx, int stepCount)
 {
-    constexpr int MINIMAL_TIMESTAMP_OFFSET_STEP = 60000;
+    constexpr int MAX_TIMESTAMP_OFFSET_STEP = 60000;
+
+    int offsetStep = ctx.nominalDuration / stepCount;
+    if (offsetStep < MAX_TIMESTAMP_OFFSET_STEP) {
+        return offsetStep;
+    }
 
     if (RealIsEqualOrMore(ctx.beatsPerSecond.val, PRESTISSIMO_BPS_BOUND)) {
-        return MINIMAL_TIMESTAMP_OFFSET_STEP * 1.5;
+        return MAX_TIMESTAMP_OFFSET_STEP * 1.5;
     }
 
     if (RealIsEqualOrMore(ctx.beatsPerSecond.val, PRESTO_BPS_BOUND)) {
-        return MINIMAL_TIMESTAMP_OFFSET_STEP * 1.25;
+        return MAX_TIMESTAMP_OFFSET_STEP * 1.25;
     }
 
     if (RealIsEqualOrMore(ctx.beatsPerSecond.val, MODERATO_BPS_BOUND)) {
-        return MINIMAL_TIMESTAMP_OFFSET_STEP;
+        return MAX_TIMESTAMP_OFFSET_STEP;
     }
 
-    return MINIMAL_TIMESTAMP_OFFSET_STEP;
+    return MAX_TIMESTAMP_OFFSET_STEP;
 }
 
 std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Chord* chord, const RenderingContext& ctx)
 {
     std::map<pitch_level_t, NominalNoteCtx> result;
+
+    const Score* score = chord->score();
 
     for (const Note* note : chord->notes()) {
         if (!isNotePlayable(note, ctx.commonArticulations)) {
@@ -121,6 +134,10 @@ std::map<pitch_level_t, NominalNoteCtx> ArpeggioRenderer::arpeggioNotes(const Ch
         }
 
         NominalNoteCtx noteCtx(note, ctx);
+        noteCtx.duration = timestampFromTicks(score, note->playTicks());
+
+        NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
+
         result.emplace(noteCtx.pitchLevel, std::move(noteCtx));
     }
 

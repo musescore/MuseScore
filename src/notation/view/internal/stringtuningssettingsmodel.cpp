@@ -88,6 +88,7 @@ void StringTuningsSettingsModel::init()
         item->setShow(contains(visibleStrings, instrStringIndex));
         item->setNumber(QString::number(i + 1));
         item->setValue(string.pitch);
+        item->setUseFlat(string.useFlat);
         item->blockSignals(false);
 
         m_strings.push_back(item);
@@ -134,6 +135,9 @@ bool StringTuningsSettingsModel::setStringValue(int stringIndex, const QString& 
 
     item->setValue(value);
 
+    bool useFlat = _stringValue.contains("♭");
+    item->setUseFlat(useFlat);
+
     beginMultiCommands();
 
     updateCurrentPreset();
@@ -153,7 +157,7 @@ bool StringTuningsSettingsModel::canIncreaseStringValue(const QString& stringVal
 QString StringTuningsSettingsModel::increaseStringValue(const QString& stringValue)
 {
     QString value = convertToUnicode(stringValue);
-    return engraving::pitch2string(engraving::string2pitch(value) + 1);
+    return engraving::pitch2string(engraving::string2pitch(value) + 1, false /* useFlats */);
 }
 
 bool StringTuningsSettingsModel::canDecreaseStringValue(const QString& stringValue) const
@@ -165,7 +169,7 @@ bool StringTuningsSettingsModel::canDecreaseStringValue(const QString& stringVal
 QString StringTuningsSettingsModel::decreaseStringValue(const QString& stringValue)
 {
     QString value = convertToUnicode(stringValue);
-    return engraving::pitch2string(engraving::string2pitch(value) - 1);
+    return engraving::pitch2string(engraving::string2pitch(value) - 1, true /* useFlats */);
 }
 
 QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
@@ -184,8 +188,9 @@ QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
         customMap.insert("text", custom);
 
         QVariantList valueList;
-        for (const StringTuningsItem* item : m_strings) {
-            valueList << item->value();
+        int numOfStrings = static_cast<int>(m_strings.size());
+        for (int i = 0; i < numOfStrings; ++i) {
+            valueList << m_strings.at(numOfStrings - i - 1)->value();
         }
 
         customMap.insert("value", valueList);
@@ -210,6 +215,7 @@ QVariantList StringTuningsSettingsModel::presets(bool withCustom) const
             }
 
             presetMap.insert("value", valueList);
+            presetMap.insert("useFlats", preset.useFlats);
 
             presetsList.push_back(presetMap);
         }
@@ -313,6 +319,7 @@ void StringTuningsSettingsModel::updateStrings()
     for (const QVariant& _preset : presets) {
         if (_preset.toMap()["text"].toString() == currentPreset) {
             QVariantList valueList = _preset.toMap()["value"].toList();
+            bool useFlats = _preset.toMap()["useFlats"].toBool();
             int numOfStrings = valueList.size();
             for (int i = 0; i < numOfStrings; ++i) {
                 int valueIndex = numOfStrings - i - 1;
@@ -322,6 +329,7 @@ void StringTuningsSettingsModel::updateStrings()
                 item->setShow(true);
                 item->setNumber(QString::number(i + 1));
                 item->setValue(valueList[valueIndex].toInt());
+                item->setUseFlat(useFlats);
                 item->blockSignals(false);
 
                 m_strings.push_back(item);
@@ -348,7 +356,9 @@ void StringTuningsSettingsModel::saveStrings()
 
     int numOfStrings = m_strings.size();
     for (int i = 0; i < numOfStrings; ++i) {
-        stringList[i].pitch = m_strings[numOfStrings - i - 1]->value();
+        const StringTuningsItem* item = m_strings.at(numOfStrings - i - 1);
+        stringList[i].pitch = item->value();
+        stringList[i].useFlat = item->useFlat();
     }
 
     beginCommand();
@@ -378,8 +388,9 @@ void StringTuningsSettingsModel::saveStringsVisibleState()
 void StringTuningsSettingsModel::updateCurrentPreset()
 {
     QVariantList currentValueList;
-    for (int i = 0; i < m_strings.size(); ++i) {
-        currentValueList << m_strings[i]->value();
+    int numOfStrings = static_cast<int>(m_strings.size());
+    for (int i = 0; i < numOfStrings; ++i) {
+        currentValueList << m_strings.at(numOfStrings - i - 1)->value();
     }
 
     const QVariantList presets = this->presets(false /*withCustom*/);
@@ -471,7 +482,7 @@ int StringTuningsItem::value() const
 
 QString StringTuningsItem::valueStr() const
 {
-    return engraving::pitch2string(m_value).toUpper();
+    return engraving::pitch2string(m_value, m_useFlat).toUpper();
 }
 
 void StringTuningsItem::setValue(int value)
@@ -481,5 +492,20 @@ void StringTuningsItem::setValue(int value)
     }
 
     m_value = value;
+    emit valueChanged();
+}
+
+bool StringTuningsItem::useFlat() const
+{
+    return m_useFlat;
+}
+
+void StringTuningsItem::setUseFlat(bool use)
+{
+    if (m_useFlat == use) {
+        return;
+    }
+
+    m_useFlat = use;
     emit valueChanged();
 }

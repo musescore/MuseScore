@@ -62,7 +62,7 @@ Arpeggio::~Arpeggio()
 {
     // Remove reference to this arpeggio in any chords it may have spanned
     Chord* _chord = chord();
-    if (!_chord) {
+    if (!_chord || !_chord->segment()) {
         return;
     }
     for (track_idx_t _track = track(); _track <= track() + m_span; _track++) {
@@ -83,12 +83,19 @@ void Arpeggio::findAndAttachToChords()
     Chord* _chord = chord();
     track_idx_t strack = track();
     track_idx_t etrack = track() + (m_span - 1);
+    track_idx_t lastTrack = strack;
 
     for (track_idx_t track = strack; track <= etrack; track++) {
         EngravingItem* e = _chord->segment()->element(track);
         if (e && e->isChord()) {
             toChord(e)->undoChangeSpanArpeggio(this);
+            lastTrack = track;
         }
+    }
+
+    if (lastTrack != etrack) {
+        int newSpan = lastTrack - track() + 1;
+        undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
     }
 }
 
@@ -121,7 +128,7 @@ void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
                     track_idx_t newSpan = m_span + track() - curTrack;
                     if (newSpan != 0) {
                         undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                        score()->undo(new ChangeParent(this, e, e->staffIdx()));
+                        score()->undoChangeParent(this, e, e->staffIdx());
                         break;
                     }
                 }
@@ -136,7 +143,7 @@ void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
                 if (newSpan != 0) {
                     chord()->undoChangeSpanArpeggio(nullptr);
                     undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                    score()->undo(new ChangeParent(this, e, e->staffIdx()));
+                    score()->undoChangeParent(this, e, e->staffIdx());
                     break;
                 }
             }
@@ -217,7 +224,7 @@ void Arpeggio::editDrag(EditData& ed)
                     detachFromChords(track(), c->track() - 1);
                 }
                 undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
-                score()->undo(new ChangeParent(this, c, c->staffIdx()));
+                score()->undoChangeParent(this, c, c->staffIdx());
                 m_userLen1 = 0.0;
             }
         }

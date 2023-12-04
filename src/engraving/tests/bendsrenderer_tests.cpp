@@ -87,7 +87,8 @@ protected:
         return pattern;
     }
 
-    RenderingContext buildCtx(const Chord* chord, ArticulationsProfilePtr profile)
+    RenderingContext buildCtx(const Chord* chord, ArticulationsProfilePtr profile,
+                              ArticulationType persistentArticulationType = ArticulationType::Standard)
     {
         int chordPosTick = chord->tick().ticks();
         int chordDurationTicks = chord->actualTicks().ticks();
@@ -103,7 +104,7 @@ protected:
                              chordDurationTicks,
                              bps,
                              timeSignatureFraction,
-                             ArticulationType::Undefined,
+                             persistentArticulationType,
                              ArticulationMap(),
                              profile);
 
@@ -130,7 +131,8 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
     profile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::Multibend, buildTestArticulationPattern());
     profile->setPattern(ArticulationType::PreAppoggiatura, buildTestArticulationPattern());
-    RenderingContext ctx = buildCtx(startChord, profile);
+    profile->setPattern(ArticulationType::Distortion, buildTestArticulationPattern());
+    RenderingContext ctx = buildCtx(startChord, profile, ArticulationType::Distortion);
 
     // [THEN] BendsRenderer can render the multibend articulation
     EXPECT_TRUE(BendsRenderer::isAbleToRender(ArticulationType::Multibend));
@@ -145,7 +147,8 @@ TEST_F(Engraving_BendsRendererTests, Multibend)
 
     const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(events.front());
 
-    //EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend));
+    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Multibend));
+    EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Distortion)); // persistent articulation applied
     EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, 500000); // starts after a quarter rest
     EXPECT_EQ(noteEvent.arrangementCtx().actualDuration, 3000000); // quarters: F3 + G3 + F3 + A3 + A3 + G3
     EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, 2050); // F3

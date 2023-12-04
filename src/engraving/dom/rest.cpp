@@ -272,12 +272,6 @@ EngravingItem* Rest::drop(EditData& data)
         }
         break;
     }
-    case ElementType::SYMBOL:
-    case ElementType::IMAGE:
-        e->setParent(this);
-        score()->undoAddElement(e);
-        return e;
-
     case ElementType::STRING_TUNINGS:
         return measure()->drop(data);
 
@@ -790,12 +784,6 @@ void Rest::add(EngravingItem* e)
         break;
     case ElementType::DEAD_SLAPPED:
         m_deadSlapped = toDeadSlapped(e);
-    // fallthrough
-    case ElementType::SYMBOL:
-    case ElementType::IMAGE:
-        addEl(e);
-        e->added();
-        break;
     default:
         ChordRest::add(e);
         break;

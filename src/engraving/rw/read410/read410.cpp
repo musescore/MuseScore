@@ -465,7 +465,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                         if (tuplet) {
                             cr->readAddTuplet(tuplet);
                         }
-                        ctx.incTick(cr->actualTicks());
+                        ctx.incTick(cr->actualTicksAt(tick));
                         if (doScale) {
                             Fraction d = cr->durationTypeTicks();
                             cr->setTicks(cr->ticks() * scale);
@@ -713,6 +713,12 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
         if (endStaff > score->nstaves()) {
             endStaff = score->nstaves();
         }
+
+        if (score->cmdState().layoutRange()) {
+            score->cmdState().reset();
+            score->setLayout(dstTick, dstTick + tickLen, dstStaff, endStaff, dst);
+        }
+
         //check and add truly invisible rests instead of gaps
         //TODO: look if this could be done different
         Measure* dstM = score->tick2measure(dstTick);

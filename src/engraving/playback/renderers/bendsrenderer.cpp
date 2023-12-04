@@ -244,6 +244,7 @@ mu::mpe::NoteEvent BendsRenderer::buildBendEvent(const Note* startNote, const Re
     NominalNoteCtx noteCtx(startNote, startNoteCtx);
 
     const mpe::NoteEvent& startNoteEvent = std::get<mpe::NoteEvent>(bendNoteEvents.front());
+    noteCtx.chordCtx.commonArticulations = startNoteEvent.expressionCtx().articulations;
     noteCtx.timestamp = startNoteEvent.arrangementCtx().actualTimestamp;
 
     PitchOffsets pitchOffsets;

@@ -118,7 +118,7 @@ void SlurTieLayout::layout(Slur* item, LayoutContext& ctx)
             item->setUp(!(item->startCR()->up()));
         }
 
-        if (c1 && c2 && Slur::isDirectionMixture(c1, c2) && (c1->noteType() == NoteType::NORMAL)) {
+        if (c1 && c2 && isDirectionMixture(c1, c2, ctx) && (c1->noteType() == NoteType::NORMAL)) {
             // slurs go above if start and end note have different stem directions,
             // but grace notes are exceptions
             item->setUp(true);
@@ -1741,11 +1741,11 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
             } else {
                 slur->setUp(true);
             }
-        } else if (chord1 && chord2 && !chord1->isGrace() && slur->isDirectionMixture(chord1, chord2)) {
+        } else if (chord1 && chord2 && !chord1->isGrace() && isDirectionMixture(chord1, chord2, ctx)) {
             // slurs go above if there are mixed direction stems between c1 and c2
             // but grace notes are exceptions
             slur->setUp(true);
-        } else if (chord1 && chord2 && chord1->isGrace() && chord2 != chord1->parent() && slur->isDirectionMixture(chord1, chord2)) {
+        } else if (chord1 && chord2 && chord1->isGrace() && chord2 != chord1->parent() && isDirectionMixture(chord1, chord2, ctx)) {
             slur->setUp(true);
         }
     }
@@ -1765,6 +1765,47 @@ double SlurTieLayout::defaultStemLengthEnd(Tremolo* tremolo)
     return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
                                                             tremolo->chord1()->defaultStemLength(),
                                                             tremolo->chord2()->defaultStemLength()).second;
+}
+
+bool SlurTieLayout::isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx)
+{
+    if (c1->track() != c2->track()) {
+        return false;
+    }
+    const bool up = c1->up();
+    if (c2->isGrace() && c2->up() != up) {
+        return true;
+    }
+    if (c1->isGraceBefore() && c2->isGraceAfter() && c1->parentItem() == c2->parentItem()) {
+        if (toChord(c1->parentItem())->stem() && toChord(c1->parentItem())->up() != up) {
+            return true;
+        }
+    }
+    const track_idx_t track = c1->track();
+    for (const Segment* seg = c1->segment(); seg && seg->tick() <= c2->tick(); seg = seg->next1(SegmentType::ChordRest)) {
+        if ((c1->isGrace() || c2->isGraceBefore()) && seg->tick() == c2->tick()) {
+            // if slur ends at a grace-note-before, we don't need to look at the main note
+            return false;
+        }
+        EngravingItem* e = seg->element(track);
+        if (!e || !e->isChord()) {
+            continue;
+        }
+        Chord* c = toChord(e);
+        const Measure* m = c->measure();
+        if (!c->staff()->isDrumStaff(c->tick()) && c1->measure()->system() != m->system()) {
+            // This chord is on a different system and may not have been laid out yet
+            for (Note* note : c->notes()) {
+                note->updateLine();     // because chord direction is based on note lines
+            }
+            ChordLayout::computeUp(c, ctx);
+        }
+
+        if (c->up() != up) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2)

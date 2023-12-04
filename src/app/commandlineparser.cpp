@@ -21,6 +21,8 @@
  */
 #include "commandlineparser.h"
 
+#include <QDir>
+
 #include "global/io/dir.h"
 #include "global/muversion.h"
 
@@ -471,7 +473,7 @@ void CommandLineParser::parse(int argc, char** argv)
     // Startup
     if (m_runMode == IApplication::RunMode::GuiApp) {
         if (!scorefiles.isEmpty()) {
-            m_options.startup.scoreUrl = QUrl::fromUserInput(scorefiles[0]);
+            m_options.startup.scoreUrl = QUrl::fromUserInput(scorefiles[0], QDir::currentPath(), QUrl::AssumeLocalFile);
         }
 
         if (m_parser.isSet("score-display-name-override")) {
