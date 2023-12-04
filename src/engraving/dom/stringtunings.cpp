@@ -51,6 +51,12 @@ StringTunings::StringTunings(Segment* parent, TextStyleType textStyleType)
 StringTunings::StringTunings(const StringTunings& s)
     : StaffTextBase(s)
 {
+    m_preset = s.m_preset;
+    m_visibleStrings = s.m_visibleStrings;
+    m_stringData = s.m_stringData;
+
+    m_noStringVisible = s.m_noStringVisible;
+    m_stringsNumber = s.m_stringsNumber;
 }
 
 StringTunings* StringTunings::clone() const
