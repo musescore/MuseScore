@@ -21,6 +21,8 @@
  */
 #include "measurelayout.h"
 
+#include "infrastructure/rtti.h"
+
 #include "dom/ambitus.h"
 #include "dom/barline.h"
 #include "dom/beam.h"
@@ -57,6 +59,7 @@
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::rtti;
 using namespace mu::engraving::rendering::dev;
 
 //---------------------------------------------------------
@@ -729,28 +732,6 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     return false;
 }
 
-//---------------------------------------------------------
-//   layoutDrumsetChord
-//---------------------------------------------------------
-
-static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, double spatium)
-{
-    for (Note* note : c->notes()) {
-        int pitch = note->pitch();
-        if (!drumset->isValid(pitch)) {
-            // LOGD("unmapped drum note %d", pitch);
-        } else if (!note->fixed()) {
-            note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
-            int line = drumset->line(pitch);
-            note->setLine(line);
-
-            int off  = st->stepOffset();
-            double ld = st->lineDistance().val();
-            note->mutldata()->setPosY((line + off * 2.0) * spatium * .5 * ld);
-        }
-    }
-}
-
 void MeasureLayout::moveToNextMeasure(LayoutContext& ctx)
 {
     LayoutState& state = ctx.mutState();
@@ -816,6 +797,204 @@ void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, Layout
     }
 }
 
+void MeasureLayout::layoutMeasureIndependentElements(const Segment& segment, track_idx_t track, const LayoutContext& ctx)
+{
+    if (segment.isJustType(SegmentType::KeySig)) {
+        KeySig* ks = toKeySig(segment.element(track));
+        if (ks) {
+            TLayout::layoutKeySig(ks, ks->mutldata(), ctx.conf());         // LD_INDEPENDENT
+        }
+    } else if (segment.isJustType(SegmentType::Clef)) {
+        Clef* cl = item_cast<Clef*>(segment.element(track));
+        if (cl) {
+            cl->setSmall(true);
+            TLayout::layoutClef(cl, cl->mutldata());         // LD_INDEPENDENT
+        }
+    } else if (segment.isType(SegmentType::HeaderClef)) {
+        Clef* cl = item_cast<Clef*>(segment.element(track));
+        if (cl) {
+            TLayout::layoutClef(cl, cl->mutldata());         // LD_INDEPENDENT
+        }
+    } else if (segment.isType(SegmentType::TimeSig)) {
+        TimeSig* ts = item_cast<TimeSig*>(segment.element(track));
+        if (ts) {
+            TLayout::layoutTimeSig(ts, ts->mutldata(), ctx);         // LD_INDEPENDENT
+        }
+    } else if (segment.isType(SegmentType::Ambitus)) {
+        Ambitus* am = item_cast<Ambitus*>(segment.element(track));
+        if (am) {
+            TLayout::layoutAmbitus(am, am->mutldata(), ctx);         // LD_INDEPENDENT
+        }
+    } else if (segment.isType(SegmentType::BarLine)) {
+        BarLine* bl = toBarLine(segment.element(track));
+        if (bl) {
+            // check conditions (see TLayout::layoutBarLine)
+            {
+                for (const EngravingItem* e : *bl->el()) {
+                    if (e->isType(ElementType::ARTICULATION)) {
+                        LD_CONDITION(item_cast<const Articulation*>(e)->ldata()->symId.has_value());
+                    }
+                }
+            }
+            TLayout::layoutBarLine(bl, bl->mutldata(), ctx);
+        }
+    }
+}
+
+void MeasureLayout::checkStaffMoveValidity(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack)
+{
+    if (!segment.isJustType(SegmentType::ChordRest)) {
+        return;
+    }
+
+    for (track_idx_t t = startTrack; t < endTrack; ++t) {
+        ChordRest* cr = toChordRest(segment.element(t));
+        if (cr) {
+            // Check if requested cross-staff is possible
+            if (cr->staffMove() || cr->storedStaffMove()) {
+                cr->checkStaffMoveValidity();
+            }
+        }
+    }
+}
+
+void MeasureLayout::setChordsMag(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                                 const LayoutConfiguration& conf)
+{
+    if (!segment.isJustType(SegmentType::ChordRest)) {
+        return;
+    }
+
+    const double staffMag = staff->staffMag(&segment);
+    const double smallNoteMag = conf.styleD(Sid::smallNoteMag);
+    const double graceNoteMag = conf.styleD(Sid::graceNoteMag);
+
+    for (track_idx_t t = startTrack; t < endTrack; ++t) {
+        ChordRest* cr = segment.cr(t);
+        if (!cr) {
+            continue;
+        }
+
+        double m = staffMag;
+        if (cr->isSmall()) {
+            m *= smallNoteMag;
+        }
+
+        if (cr->isChord()) {
+            double graceMag = m * graceNoteMag;
+            Chord* chord = toChord(cr);
+            for (Chord* c : chord->graceNotes()) {
+                c->mutldata()->setMag(graceMag);
+            }
+        }
+        cr->mutldata()->setMag(m);
+    }
+}
+
+void MeasureLayout::layoutChordDrumset(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                                       const LayoutConfiguration& conf)
+{
+    if (!segment.isJustType(SegmentType::ChordRest)) {
+        return;
+    }
+
+    const Instrument* ins = staff->part()->instrument(segment.tick());
+    if (!ins->useDrumset()) {
+        return;
+    }
+
+    const Drumset* drumset = ins->drumset();
+    IF_ASSERT_FAILED(drumset) {
+        return;
+    }
+
+    const StaffType* st = staff->staffTypeForElement(&segment);
+
+    auto layoutDrumset = [](Chord* c, const Drumset* drumset, const StaffType* st, double spatium)
+    {
+        for (Note* note : c->notes()) {
+            int pitch = note->pitch();
+            if (!drumset->isValid(pitch)) {
+                // LOGD("unmapped drum note %d", pitch);
+            } else if (!note->fixed()) {
+                note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                int line = drumset->line(pitch);
+                note->setLine(line);
+
+                int off  = st->stepOffset();
+                double ld = st->lineDistance().val();
+                note->mutldata()->setPosY((line + off * 2.0) * spatium * .5 * ld);
+            }
+        }
+    };
+
+    double spatium = conf.spatium();
+    for (track_idx_t t = startTrack; t < endTrack; ++t) {
+        Chord* chord = item_cast<Chord*>(segment.element(t));
+        if (!chord) {
+            continue;
+        }
+
+        for (Chord* c : chord->graceNotes()) {
+            layoutDrumset(c, drumset, st, spatium);
+        }
+
+        layoutDrumset(chord, drumset, st, spatium);
+    }
+}
+
+void MeasureLayout::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
+{
+    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
+        if (!staff->show()) {
+            continue;
+        }
+
+        AccidentalState as;          // list of already set accidentals for this measure
+        // initAccidentalState
+        {
+            as.init(staff->keySigEvent(measure->tick()));
+
+            // Trills may carry an accidental into this measure that requires a force-restate
+            int ticks = measure->tick().ticks();
+            auto spanners = dom.spannerMap().findOverlapping(ticks, ticks, true);
+            for (auto iter : spanners) {
+                Spanner* spanner = iter.value;
+                if (spanner->staffIdx() != staffIdx || !spanner->isTrill() || spanner->tick2() == measure->tick()) {
+                    continue;
+                }
+                Ornament* ornament = toTrill(spanner)->ornament();
+                Note* trillNote = ornament ? ornament->noteAbove() : nullptr;
+                if (trillNote && trillNote->accidental() && ornament->showAccidental() == OrnamentShowAccidental::DEFAULT) {
+                    int line = absStep(trillNote->tpc(), trillNote->epitch());
+                    as.setForceRestateAccidental(line, true);
+                }
+            }
+        }
+
+        track_idx_t track = staffIdx * VOICES;
+        track_idx_t endTrack  = track + VOICES;
+
+        for (const Segment& segment : measure->segments()) {
+            if (segment.isJustType(SegmentType::KeySig)) {
+                KeySig* ks = item_cast<KeySig*>(segment.element(track));
+                if (ks) {
+                    Fraction tick = segment.tick();
+                    as.init(staff->keySigEvent(tick));
+                }
+            } else if (segment.isJustType(SegmentType::ChordRest)) {
+                for (track_idx_t t = track; t < endTrack; ++t) {
+                    Chord* chord = item_cast<Chord*>(segment.element(t));
+                    if (chord) {
+                        chord->cmdUpdateNotes(&as);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
@@ -855,117 +1034,70 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
     }
 
     measure->connectTremolo();
+    cmdUpdateNotes(measure, ctx.dom());
 
     //
     // calculate accidentals and note lines,
     // create stem and set stem direction
     //
-    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        const Staff* staff = ctx.dom().staff(staffIdx);
+
+    const DomAccessor& dom = ctx.dom();
+    const LayoutConfiguration& conf = ctx.conf();
+
+    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
         if (!staff->show()) {
             continue;
         }
 
-        AccidentalState as;          // list of already set accidentals for this measure
-        as.init(staff->keySigEvent(measure->tick()));
+        track_idx_t startTrack = staffIdx * VOICES;
+        track_idx_t endTrack  = startTrack + VOICES;
 
-        // Trills may carry an accidental into this measure that requires a force-restate
-        int ticks = measure->tick().ticks();
-        auto spanners = ctx.dom().spannerMap().findOverlapping(ticks, ticks, true);
-        for (auto iter : spanners) {
-            Spanner* spanner = iter.value;
-            if (spanner->staffIdx() != staffIdx || !spanner->isTrill() || spanner->tick2() == measure->tick()) {
-                continue;
-            }
-            Ornament* ornament = toTrill(spanner)->ornament();
-            Note* trillNote = ornament ? ornament->noteAbove() : nullptr;
-            if (trillNote && trillNote->accidental() && ornament->showAccidental() == OrnamentShowAccidental::DEFAULT) {
-                int line = absStep(trillNote->tpc(), trillNote->epitch());
-                as.setForceRestateAccidental(line, true);
-            }
+        for (const Segment& segment : measure->segments()) {
+            layoutMeasureIndependentElements(segment, startTrack, ctx);
+
+            setChordsMag(staff, segment, startTrack, endTrack, conf);
+
+            // Check if requested cross-staff is possible
+            checkStaffMoveValidity(segment, startTrack, endTrack);
+
+            layoutChordDrumset(staff, segment, startTrack, endTrack, conf);
+        }
+    }
+
+    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
+        if (!staff->show()) {
+            continue;
         }
 
-        for (Segment& segment : measure->segments()) {
-            // TODO? maybe we do need to process it here to make it possible to enable later
-            //if (!segment.enabled())
-            //      continue;
-            Instrument* ins = staff->part()->instrument(segment.tick());
-            const Drumset* drumset = ins->useDrumset() ? ins->drumset() : nullptr;
-            if (segment.isKeySigType()) {
-                KeySig* ks = toKeySig(segment.element(staffIdx * VOICES));
-                if (!ks) {
-                    continue;
-                }
-                Fraction tick = segment.tick();
-                as.init(staff->keySigEvent(tick));
-                TLayout::layoutKeySig(ks, ks->mutldata(), ctx.conf());
-            } else if (segment.isChordRestType()) {
-                const StaffType* st = staff->staffTypeForElement(&segment);
-                track_idx_t track     = staffIdx * VOICES;
-                track_idx_t endTrack  = track + VOICES;
+        track_idx_t track = staffIdx * VOICES;
+        track_idx_t endTrack = track + VOICES;
 
+        for (Segment& segment : measure->segments()) {
+            if (segment.isJustType(SegmentType::ChordRest)) {
                 for (track_idx_t t = track; t < endTrack; ++t) {
                     ChordRest* cr = segment.cr(t);
                     if (!cr) {
                         continue;
                     }
-                    // Check if requested cross-staff is possible
-                    if (cr->staffMove() || cr->storedStaffMove()) {
-                        cr->checkStaffMoveValidity();
-                    }
-
-                    double m = staff->staffMag(&segment);
-                    if (cr->isSmall()) {
-                        m *= ctx.conf().styleD(Sid::smallNoteMag);
-                    }
 
                     if (cr->isChord()) {
                         Chord* chord = toChord(cr);
-                        chord->cmdUpdateNotes(&as);
+
                         for (Chord* c : chord->graceNotes()) {
-                            c->mutldata()->setMag(m * ctx.conf().styleD(Sid::graceNoteMag));
                             c->setTrack(t);
+
                             ChordLayout::computeUp(c, ctx);
-                            if (drumset) {
-                                layoutDrumsetChord(c, drumset, st, ctx.conf().spatium());
-                            }
                             ChordLayout::layoutStem(c, ctx);
                             c->setBeamlet(nullptr); // Will be defined during beam layout
-
-                            ChordLayout::fillShape(c, c->mutldata(), ctx.conf());
-                            //! NOTE Moved from ChordRest::setBeamlet
-                            c->segment()->createShape(c->vStaffIdx());
-                        }
-                        if (drumset) {
-                            layoutDrumsetChord(chord, drumset, st, ctx.conf().spatium());
                         }
 
                         ChordLayout::computeUp(chord, ctx);
                         ChordLayout::layoutStem(chord, ctx); // create stems needed to calculate spacing
                         // stem direction can change later during beam processing
                     }
-                    cr->mutldata()->setMag(m);
                     cr->setBeamlet(nullptr); // Will be defined during beam layout
-
-                    ChordLayout::fillShape(cr, cr->mutldata(), ctx.conf());
-                    //! NOTE Moved from ChordRest::setBeamlet
-                    cr->segment()->createShape(cr->vStaffIdx());
-                }
-            } else if (segment.isClefType()) {
-                EngravingItem* e = segment.element(staffIdx * VOICES);
-                if (e) {
-                    toClef(e)->setSmall(true);
-                    TLayout::layoutItem(e, ctx);
-                }
-            } else if (segment.isType(SegmentType::TimeSig | SegmentType::Ambitus | SegmentType::HeaderClef)) {
-                EngravingItem* e = segment.element(staffIdx * VOICES);
-                if (e) {
-                    TLayout::layoutItem(e, ctx);
-                }
-            } else if (segment.isType(SegmentType::BarLine)) {
-                EngravingItem* e = segment.element(staffIdx * VOICES);
-                if (e && e->isBarLine()) {
-                    TLayout::layoutItem(e, ctx);
                 }
             }
         }

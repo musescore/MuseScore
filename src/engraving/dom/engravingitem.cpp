@@ -2410,7 +2410,9 @@ void EngravingItem::LayoutData::setBbox(const mu::RectF& r)
 
 const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
 {
-    const Shape& sh = m_shape.value(mode);
+    //! NOTE Temporary disabled CHECK - a lot of messages
+    UNUSED(mode);
+    const Shape& sh = m_shape.value(LD_ACCESS::MAYBE_NOTINITED);
 
     //! NOTE Temporary
     {
@@ -2431,7 +2433,8 @@ const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
 
 Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
 {
-    const Shape& sh = m_shape.value(LD_ACCESS::CHECK);
+    //! NOTE Temporary disabled CHECK - a lot of messages
+    const Shape& sh = m_shape.value(LD_ACCESS::MAYBE_NOTINITED);
 
     //! NOTE Temporary
     //! Reimplementation: done
