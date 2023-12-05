@@ -3045,28 +3045,64 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notations& notations, Articulations& articulations)
       {
       if (breath && ExportMusicXml::canWrite(breath)) {
+            QString tagName;
+            QString type;
+
             notations.tag(xml);
             articulations.tag(xml);
-            if (breath->isCaesura())
-                  xml.tagE("caesura");
+            if (breath->isCaesura()) {
+                  tagName = "caesura";
+                  switch (breath->symId()) {
+                        case SymId::caesuraCurved:
+                              type = "curved";
+                              break;
+                        case SymId::caesuraShort:
+                              type = "short";
+                              break;
+                        case SymId::caesuraThick:
+                              type = "thick";
+                              break;
+                        case SymId::caesuraSingleStroke:
+                        case SymId::chantCaesura:
+                              type = "single";
+                              break;
+                        case SymId::caesura:
+                        default:
+                              ; //type = ""; // "normal" is correct too, but see below
+                        }
+                  }
             else {
-                  QString breathMarkType;
+                  tagName = "breath-mark";
                   switch (breath->symId()) {
                         case SymId::breathMarkTick:
-                              breathMarkType = "tick";
+                              type = "tick";
                               break;
                         case SymId::breathMarkUpbow:
-                              breathMarkType = "upbow";
+                              type = "upbow";
                               break;
                         case SymId::breathMarkSalzedo:
-                              breathMarkType = "salzedo";
+                              type = "salzedo";
                               break;
+                        case SymId::breathMarkComma:
                         default:
-                              breathMarkType = "comma";
+                              type = "comma";
                         }
-
-                  xml.tag("breath-mark", breathMarkType);
                   }
+            tagName += color2xml(breath);
+            if (breath->placement() == Placement::BELOW)
+                  tagName += " placement=\"below\"";
+            else/* if (preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT))*/ {
+                  // MuseScore 3.6.2 and earlier as well as all 4.x prior to 4.3 otherwise default to below on import
+                  tagName += " placement=\"above\"";
+                  }
+
+            if (breath->isCaesura() && (type.isEmpty()/* || preferences.getBool(PREF_EXPORT_MUSICXML_MU3_COMPAT)*/)) {
+                  // for backwards compatibility, as 3.6.2 and earlier can't import those special caesuras,
+                  // but reports corruption on all subsequent measures and imports them entirely empty.
+                  xml.tagE(tagName);
+                  }
+            else
+                  xml.tag(tagName, type);
             }
       }
 
