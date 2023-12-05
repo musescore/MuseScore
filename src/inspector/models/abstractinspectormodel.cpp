@@ -297,7 +297,8 @@ InspectorSectionTypeSet AbstractInspectorModel::sectionTypesByElementKeys(const 
 bool AbstractInspectorModel::showPartsSection(const QList<EngravingItem*>& selectedElementList)
 {
     for (EngravingItem* element : selectedElementList) {
-        if ((!element->score()->isMaster() && !element->isLayoutBreak()) || element->canBeExcludedFromOtherParts()) {
+        if ((!element->score()->isMaster() && !element->isLayoutBreak() && !element->isAccidental())
+            || element->canBeExcludedFromOtherParts()) {
             return true;
         }
     }
