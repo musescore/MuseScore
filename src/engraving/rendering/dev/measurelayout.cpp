@@ -995,6 +995,63 @@ void MeasureLayout::cmdUpdateNotes(const Measure* measure, const DomAccessor& do
     }
 }
 
+void MeasureLayout::createStems(const Measure* measure, LayoutContext& ctx)
+{
+    const DomAccessor& dom = ctx.dom();
+    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
+        if (!staff->show()) {
+            continue;
+        }
+
+        track_idx_t startTrack = staffIdx * VOICES;
+        track_idx_t endTrack  = startTrack + VOICES;
+
+        for (const Segment& segment : measure->segments()) {
+            if (!segment.isJustType(SegmentType::ChordRest)) {
+                continue;
+            }
+
+            for (track_idx_t t = startTrack; t < endTrack; ++t) {
+                ChordRest* cr = segment.cr(t);
+                if (!cr) {
+                    continue;
+                }
+
+                auto createStems = [](Chord* chord, LayoutContext& ctx) {
+                    if (chord->shouldHaveHook()) {
+                        if (!chord->hook()) {
+                            chord->createHook();
+                        }
+                    } else {
+                        ctx.mutDom().undoRemoveElement(chord->hook());
+                    }
+
+                    if (!chord->shouldHaveStem()) {
+                        chord->removeStem();
+                        return;
+                    }
+
+                    if (!chord->stem()) {
+                        chord->createStem();
+                    }
+                };
+
+                if (cr->isChord()) {
+                    Chord* chord = toChord(cr);
+
+                    for (Chord* c : chord->graceNotes()) {
+                        createStems(c, ctx);
+                    }
+
+                    createStems(chord, ctx);     // create stems needed to calculate spacing
+                    // stem direction can change later during beam processing
+                }
+            }
+        }
+    }
+}
+
 void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
@@ -1035,6 +1092,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 
     measure->connectTremolo();
     cmdUpdateNotes(measure, ctx.dom());
+    createStems(measure,  ctx);
 
     //
     // calculate accidentals and note lines,
@@ -1093,7 +1151,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
                         }
 
                         ChordLayout::computeUp(chord, ctx);
-                        ChordLayout::layoutStem(chord, ctx); // create stems needed to calculate spacing
+                        ChordLayout::layoutStem(chord, ctx);
                         // stem direction can change later during beam processing
                     }
                 }

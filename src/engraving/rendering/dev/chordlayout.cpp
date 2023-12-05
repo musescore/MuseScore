@@ -1139,23 +1139,17 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
 {
     // Stem needs to know hook's bbox and SMuFL anchors.
     // This is done before calcDefaultStemLength because the presence or absence of a hook affects stem length
-    if (item->shouldHaveHook()) {
-        layoutHook(item, ctx);
-    } else {
-        ctx.mutDom().undoRemoveElement(item->hook());
+    if (item->hook()) {
+        item->hook()->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
+        TLayout::layoutHook(item->hook(), item->hook()->mutldata());
     }
 
     // we should calculate default stem length for this chord even if it doesn't have a stem
     // because this length is used for tremolos or other things that attach to where the stem WOULD be
     item->setDefaultStemLength(item->calcDefaultStemLength());
 
-    if (!item->shouldHaveStem()) {
-        item->removeStem();
-        return;
-    }
-
     if (!item->stem()) {
-        item->createStem();
+        return;
     }
 
     item->stem()->mutldata()->setPosX(item->stemPosX());
@@ -1177,16 +1171,6 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
     } else if (item->stemSlash()) {
         item->remove(item->stemSlash());
     }
-}
-
-void ChordLayout::layoutHook(Chord* item, LayoutContext& ctx)
-{
-    if (!item->hook()) {
-        item->createHook();
-        computeUp(item, ctx);
-    }
-    item->hook()->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
-    TLayout::layoutHook(item->hook(), item->hook()->mutldata());
 }
 
 void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
@@ -1224,14 +1208,15 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         return;
     }
 
-    if (item->beam()) {
+    Beam* beam = item->beam();
+    if (beam) {
         bool mixedDirection = false;
         bool cross = false;
-        ChordRest* firstCr = item->beam()->elements().front();
-        ChordRest* lastCr = item->beam()->elements().back();
+        ChordRest* firstCr = beam->elements().front();
+        ChordRest* lastCr = beam->elements().back();
         Chord* firstChord = nullptr;
         Chord* lastChord = nullptr;
-        for (ChordRest* currCr : item->beam()->elements()) {
+        for (ChordRest* currCr : beam->elements()) {
             if (!currCr->isChord()) {
                 continue;
             }
@@ -1241,8 +1226,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
             lastChord = toChord(currCr);
         }
         DirectionV stemDirections = DirectionV::AUTO;
-        for (ChordRest* cr : item->beam()->elements()) {
-            if (!item->beam()->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
+        for (ChordRest* cr : beam->elements()) {
+            if (!beam->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
                 // on an unmodified beam, if all of the elements on that beam are explicitly set in one direction
                 // (or AUTO), use that as the direction. This is necessary because the beam has not been laid out yet.
                 if (stemDirections == DirectionV::AUTO) {
@@ -1253,7 +1238,7 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
             }
             if (cr->isChord() && toChord(cr)->staffMove() != 0) {
                 cross = true;
-                if (!item->beam()->userModified()) { // if the beam is user-modified _up must be decided later down
+                if (!beam->userModified()) { // if the beam is user-modified _up must be decided later down
                     int move = toChord(cr)->staffMove();
                     // we have to determine the first and last chord direction for the beam
                     // so that we can calculate the beam anchor points
@@ -1274,8 +1259,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         if (!cross) {
             if (!mixedDirection && stemDirections != DirectionV::AUTO) {
                 item->setUp(stemDirections == DirectionV::UP);
-            } else if (!item->beam()->userModified()) {
-                item->setUp(item->beam()->up());
+            } else if (!beam->userModified()) {
+                item->setUp(beam->up());
             }
         }
         if (!measure->explicitParent()) {
@@ -1285,7 +1270,7 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
             // because we don't know how far apart the staves actually are
             return;
         }
-        if (item->beam()->userModified()) {
+        if (beam->userModified()) {
             if (cross && item == firstCr) {
                 // necessary because this beam was never laid out before, so its position isn't known
                 // and the first chord would calculate wrong stem direction
@@ -1296,18 +1281,18 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
                 // is actually a possible thing
                 BeamLayout::layoutIfNeed(item->beam(), ctx);
             }
-            PointF base = item->beam()->pagePos();
+            PointF base = beam->pagePos();
             Note* baseNote = item->up() ? item->downNote() : item->upNote();
             double noteY = baseNote->pagePos().y();
             double noteX = item->stemPosX() + item->pagePos().x() - base.x();
             PointF startAnchor = PointF();
             PointF endAnchor = PointF();
-            startAnchor = BeamLayout::chordBeamAnchor(item->beam(), firstChord, ChordBeamAnchorType::Start);
-            endAnchor = BeamLayout::chordBeamAnchor(item->beam(), lastChord, ChordBeamAnchorType::End);
+            startAnchor = BeamLayout::chordBeamAnchor(beam, firstChord, ChordBeamAnchorType::Start);
+            endAnchor = BeamLayout::chordBeamAnchor(beam, lastChord, ChordBeamAnchorType::End);
 
-            if (item == item->beam()->elements().front()) {
+            if (item == beam->elements().front()) {
                 item->setUp(noteY > startAnchor.y());
-            } else if (item == item->beam()->elements().back()) {
+            } else if (item == beam->elements().back()) {
                 item->setUp(noteY > endAnchor.y());
             } else {
                 double proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
@@ -1316,14 +1301,14 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
             }
         }
 
-        TLayout::layoutBeam(item->beam(), ctx);
+        TLayout::layoutBeam(beam, ctx);
         if (cross && item->tremolo() && item->tremolo()->twoNotes() && item->tremolo()->chord1() == item
             && item->tremolo()->chord1()->beam() == item->tremolo()->chord2()->beam()) {
             // beam-infixed two-note trems have to be laid out here
             TLayout::layoutTremolo(item->tremolo(), ctx);
         }
-        if (!cross && !item->beam()->userModified()) {
-            item->setUp(item->beam()->up());
+        if (!cross && !beam->userModified()) {
+            item->setUp(beam->up());
         }
         return;
     } else if (item->tremolo() && item->tremolo()->twoNotes()) {
