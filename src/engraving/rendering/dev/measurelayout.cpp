@@ -1171,7 +1171,7 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
             }
         }
     } else if (seg) {
-        ctx.mutDom().undoRemoveElement(seg);
+        ctx.mutDom().removeElement(seg);
     }
 
     for (Segment& s : measure->segments()) {
