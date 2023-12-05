@@ -4778,15 +4778,17 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
             }
 
       directionTag(_xml, _attr, hp);
-      if (hp->tick() == tick)
+      const bool hpTick = hp->tick() == tick;
+      if (hpTick)
             writeHairpinText(_xml, hp, hp->tick() == tick);
       if (isLineType) {
             if (hp->lineVisible()) {
-                  if (hp->tick() == tick) {
+                  if (hpTick) {
                         _xml.stag("direction-type");
                         QString tag = "dashes type=\"start\"";
                         tag += QString(" number=\"%1\"").arg(n + 1);
-                        tag += positioningAttributes(hp, hp->tick() == tick);
+                        tag += color2xml(hp);
+                        tag += positioningAttributes(hp, hpTick);
                         _xml.tagE(tag);
                         _xml.etag();
                         }
@@ -4800,7 +4802,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
       else {
             _xml.stag("direction-type");
             QString tag = "wedge type=";
-            if (hp->tick() == tick) {
+            if (hpTick) {
                   if (hp->hairpinType() == HairpinType::CRESC_HAIRPIN) {
                         tag += "\"crescendo\"";
                         if (hp->hairpinCircledTip()) {
@@ -4811,6 +4813,7 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                         tag += "\"diminuendo\"";
                         }
                   tag += color2xml(hp);
+                  tag += positioningAttributes(hp, hpTick);
                   }
             else {
                   tag += "\"stop\"";
@@ -4819,11 +4822,10 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, int staff, const Fraction&
                         }
                   }
             tag += QString(" number=\"%1\"").arg(n + 1);
-            tag += positioningAttributes(hp, hp->tick() == tick);
             _xml.tagE(tag);
             _xml.etag();
             }
-      if (hp->tick() != tick)
+      if (!hpTick)
             writeHairpinText(_xml, hp, hp->tick() == tick);
       directionETag(_xml, staff);
       }
