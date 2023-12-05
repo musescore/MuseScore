@@ -88,18 +88,13 @@ public:
     virtual double downPos() const = 0;
 
     int line(bool up) const { return up ? upLine() : downLine(); }
-    int line() const { return m_up ? upLine() : downLine(); }
+    int line() const { return ldata()->up ? upLine() : downLine(); }
     virtual int upLine() const = 0;
     virtual int downLine() const = 0;
     virtual mu::PointF stemPos() const = 0;
     virtual double stemPosX() const = 0;
     virtual mu::PointF stemPosBeam() const = 0;
     virtual double rightEdge() const = 0;
-
-    void setUp(bool val) { m_up = val; }
-    bool up() const { return m_up; }
-    bool usesAutoUp() const { return m_usesAutoUp; }
-    void setUsesAutoUp(bool val) { m_usesAutoUp = val; }
 
     bool isSmall() const { return m_isSmall; }
     void setSmall(bool val) { m_isSmall = val; }
@@ -202,6 +197,16 @@ public:
     TabDurationSymbol* tabDur() const { return m_tabDur; }
     void setTabDur(TabDurationSymbol* s) { m_tabDur = s; }
 
+    struct LayoutData : public DurationElement::LayoutData {
+        ld_field<bool> up = { "[ChordRest] up", true }; // actual stem direction
+    };
+    DECLARE_LAYOUTDATA_METHODS(ChordRest)
+
+    //! DEPRECATED ------
+    void setUp(bool val) { mutldata()->up = val; }
+    bool up() const { return ldata()->up; }
+    //! -----------------
+
 protected:
 
     void addEl(EngravingItem* e) { m_el.push_back(e); }
@@ -214,8 +219,6 @@ protected:
     Beam* m_beam = nullptr;
     BeamSegment* m_beamlet = nullptr;
     BeamMode m_beamMode = BeamMode::INVALID;
-    bool m_up = false;                      // actual stem direction
-    bool m_usesAutoUp = false;
     bool m_isSmall = false;
     bool m_melismaEnd = false;
 

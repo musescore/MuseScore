@@ -674,7 +674,7 @@ PointF Rest::stemPos() const
 PointF Rest::stemPosBeam() const
 {
     PointF p(pagePos());
-    if (m_up) {
+    if (ldata()->up) {
         p.ry() += ldata()->bbox().top() + spatium() * 1.5;
     } else {
         p.ry() += ldata()->bbox().bottom() - spatium() * 1.5;
@@ -688,7 +688,7 @@ PointF Rest::stemPosBeam() const
 
 double Rest::stemPosX() const
 {
-    if (m_up) {
+    if (ldata()->up) {
         return ldata()->bbox().right();
     } else {
         return ldata()->bbox().left();

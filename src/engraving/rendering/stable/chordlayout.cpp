@@ -1133,8 +1133,6 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
 {
     assert(!item->notes().empty());
 
-    item->setUsesAutoUp(false);
-
     const StaffType* tab = item->staff() ? item->staff()->staffTypeForElement(item) : 0;
     bool isTabStaff = tab && tab->isTabStaff();
     if (isTabStaff) {
@@ -1327,7 +1325,6 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
     std::vector<int> distances = item->noteDistances();
     int direction = ChordLayout::computeAutoStemDirection(distances);
     item->setUp(direction > 0);
-    item->setUsesAutoUp(direction == 0);
 }
 
 void ChordLayout::computeUp(ChordRest* item, LayoutContext& ctx)
@@ -1336,7 +1333,6 @@ void ChordLayout::computeUp(ChordRest* item, LayoutContext& ctx)
         computeUp(static_cast<Chord*>(item), ctx);
     } else {
         // base ChordRest
-        item->setUsesAutoUp(false);
         item->setUp(true);
     }
 }
