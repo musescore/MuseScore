@@ -56,7 +56,6 @@ public:
     static void layoutArticulations3(Chord* item, Slur* s, LayoutContext& ctx);
 
     static void layoutStem(Chord* item, LayoutContext& ctx);
-    static void layoutHook(Chord* item, LayoutContext& ctx);
 
     static void computeUp(Chord* item, LayoutContext& ctx);
     static void computeUp(ChordRest* item, LayoutContext& ctx);
