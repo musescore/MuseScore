@@ -1,0 +1,2 @@
+# build_overrides.cmake
+set(ENV{QTDIR} "$ENV{HOME}/Qt/5.15.2/gcc_64") # or wherever Qt is located

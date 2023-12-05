@@ -546,7 +546,11 @@ void Segment::removeStaff(staff_idx_t staff)
 //---------------------------------------------------------
 
 void Segment::checkElement(EngravingItem* el, track_idx_t track)
-{
+{   
+    // prevent segmentation fault on out of bounds index
+    if (track >= m_elist.size()) {
+        return;
+    }
     // generated elements can be overwritten
     if (m_elist[track] && !m_elist[track]->generated()) {
         LOGD("add(%s): there is already a %s at track %zu tick %d",
@@ -566,7 +570,7 @@ void Segment::checkElement(EngravingItem* el, track_idx_t track)
 void Segment::add(EngravingItem* el)
 {
 //      LOGD("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
-
+    std::cout << "Segment::add\n";
     if (el->explicitParent() != this) {
         el->setParent(this);
     }
@@ -734,6 +738,7 @@ void Segment::add(EngravingItem* el)
 void Segment::remove(EngravingItem* el)
 {
 // LOGD("%p Segment::remove %s %p", this, el->typeName(), el);
+    std::cout << "Segment::add\n";
 
     track_idx_t track = el->track();
 
