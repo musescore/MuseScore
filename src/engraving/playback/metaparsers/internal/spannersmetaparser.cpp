@@ -77,7 +77,7 @@ void SpannersMetaParser::doParse(const EngravingItem* item, const RenderingConte
         type = mpe::ArticulationType::LaissezVibrer;
         break;
     case ElementType::PALM_MUTE: {
-        type = mpe::ArticulationType::Mute;
+        type = mpe::ArticulationType::PalmMute;
         break;
     }
     case ElementType::GUITAR_BEND: {
