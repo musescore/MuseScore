@@ -37,6 +37,7 @@
 #include "xml.h"
 #include "undo.h"
 #include "harmony.h"
+#include "log.h"
 
 namespace Ms {
 
@@ -477,6 +478,10 @@ void Segment::removeStaff(int staff)
 
 void Segment::checkElement(Element* el, int track)
       {
+      // prevent segmentation fault on out of bounds index
+      IF_ASSERT_FAILED(track < static_cast<int>(_elist.size()))
+            return;
+
       // generated elements can be overwritten
       if (_elist[track] && !_elist[track]->generated()) {
             qDebug("add(%s): there is already a %s at track %d tick %d",
