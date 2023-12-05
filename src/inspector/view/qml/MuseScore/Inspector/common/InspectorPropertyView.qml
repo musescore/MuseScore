@@ -129,7 +129,9 @@ Column {
 
                     enabled: root.isModified
 
-                    propertyItem: root.propertyItem
+                    onClicked: {
+                        root.requestResetToDefault()
+                    }
                 }
             }
 
