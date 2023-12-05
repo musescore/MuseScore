@@ -570,7 +570,6 @@ void Segment::checkElement(EngravingItem* el, track_idx_t track)
 void Segment::add(EngravingItem* el)
 {
 //      LOGD("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
-    std::cout << "Segment::add\n";
     if (el->explicitParent() != this) {
         el->setParent(this);
     }
@@ -738,7 +737,6 @@ void Segment::add(EngravingItem* el)
 void Segment::remove(EngravingItem* el)
 {
 // LOGD("%p Segment::remove %s %p", this, el->typeName(), el);
-    std::cout << "Segment::add\n";
 
     track_idx_t track = el->track();
 
