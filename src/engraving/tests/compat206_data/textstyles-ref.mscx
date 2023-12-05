@@ -225,7 +225,6 @@
         <height>7</height>
         <bottomGap>8.33333</bottomGap>
         <boxAutoSize>0</boxAutoSize>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <text>Title</text>

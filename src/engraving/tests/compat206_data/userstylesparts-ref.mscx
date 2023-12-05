@@ -228,7 +228,6 @@
         <height>36.9323</height>
         <boxAutoSize>0</boxAutoSize>
         <linkedMain/>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <linkedMain/>
           <style>user_1</style>
@@ -503,7 +502,6 @@
           <boxAutoSize>0</boxAutoSize>
           <linked>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               </linked>
@@ -740,7 +738,6 @@
               <staves>-1</staves>
               </location>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               <location>
@@ -998,7 +995,6 @@
               <staves>-2</staves>
               </location>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               <location>

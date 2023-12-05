@@ -57,7 +57,6 @@
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
         <linkedMain/>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <linkedMain/>
           <style>title</style>
@@ -1857,7 +1856,6 @@
           <boxAutoSize>0</boxAutoSize>
           <linked>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               </linked>
