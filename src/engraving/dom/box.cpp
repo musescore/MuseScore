@@ -479,6 +479,12 @@ void Box::manageExclusionFromParts(bool exclude)
                 newFrame->add(item->linkedClone());
             }
 
+            if (isTBox()) {
+                Text* thisText = toTBox(this)->text();
+                Text* newText = toText(thisText->linkedClone());
+                toTBox(newFrame)->resetText(newText);
+            }
+
             if (!score->isMaster() && newFrame == score->first() && newFrame->type() == ElementType::VBOX) {
                 // Title frame - add part name
                 String partLabel = score->name();
@@ -664,6 +670,15 @@ TBox::TBox(const TBox& tbox)
 TBox::~TBox()
 {
     delete m_text;
+}
+
+void TBox::resetText(Text* text)
+{
+    if (m_text) {
+        delete m_text;
+    }
+    m_text = text;
+    text->setParent(this);
 }
 
 //---------------------------------------------------------
