@@ -5363,11 +5363,12 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
       if (!sound.isEmpty()) {
             xml.stag(QString("direction placement=\"%1\"").arg((jp->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
-            QString positioning = positioningAttributes(jp);
+            QString attrs = color2xml(jp);
+            attrs += positioningAttributes(jp);
             if (!type.isEmpty())
-                  xml.tagE(type + positioning);
+                  xml.tagE(type + attrs);
             if (!words.isEmpty())
-                  xml.tag("words" + positioning, words);
+                  xml.tag("words" + attrs, words);
             xml.etag();
             if (!sound.isEmpty())
                   xml.tagE(QString("sound ") + sound);
@@ -5480,11 +5481,12 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
       if (!sound.isEmpty()) {
             xml.stag(QString("direction placement=\"%1\"").arg((m->placement() == Placement::BELOW ) ? "below" : "above"));
             xml.stag("direction-type");
-            QString positioning = positioningAttributes(m);
+            QString attrs = color2xml(m);
+            attrs += positioningAttributes(m);
             if (!type.isEmpty())
-                  xml.tagE(type + positioning);
+                  xml.tagE(type + attrs);
             if (!words.isEmpty())
-                  xml.tag("words" + positioning, words);
+                  xml.tag("words" + attrs, words);
             xml.etag();
             if (!sound.isEmpty())
                   xml.tagE(QString("sound ") + sound);
