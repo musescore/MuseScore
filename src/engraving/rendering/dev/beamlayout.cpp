@@ -926,8 +926,7 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
 
 void BeamLayout::createBeamSegments(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests)
 {
-    DeleteAll(item->beamSegments());
-    item->beamSegments().clear();
+    item->clearBeamSegments();
 
     bool levelHasBeam = false;
     int level = 0;
