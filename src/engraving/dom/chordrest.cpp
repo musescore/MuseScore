@@ -70,7 +70,6 @@ ChordRest::ChordRest(const ElementType& type, Segment* parent)
     m_staffMove    = 0;
     m_beam         = 0;
     m_tabDur       = 0;
-    m_up           = true;
     m_beamMode     = BeamMode::AUTO;
     m_isSmall     = false;
     m_melismaEnd   = false;
@@ -87,7 +86,6 @@ ChordRest::ChordRest(const ChordRest& cr, bool link)
                            // simply copied from another CR
 
     m_beamMode     = cr.m_beamMode;
-    m_up           = cr.m_up;
     m_isSmall     = cr.m_isSmall;
     m_melismaEnd   = cr.m_melismaEnd;
     m_crossMeasure = cr.m_crossMeasure;
@@ -604,8 +602,6 @@ void ChordRest::removeDeleteBeam(bool beamed)
 void ChordRest::computeUp()
 {
     UNREACHABLE;
-    m_usesAutoUp = false;
-    m_up = true;
 }
 
 //---------------------------------------------------------
