@@ -570,6 +570,7 @@ void Segment::checkElement(EngravingItem* el, track_idx_t track)
 void Segment::add(EngravingItem* el)
 {
 //      LOGD("%p segment %s add(%d, %d, %s)", this, subTypeName(), tick(), el->track(), el->typeName());
+
     if (el->explicitParent() != this) {
         el->setParent(this);
     }
