@@ -352,6 +352,7 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
         ArticulationType::Doit, ArticulationType::Plop, ArticulationType::Scoop,
         ArticulationType::BrassBend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
         ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell,
+        ArticulationType::Vibrato,
     };
 
     return SINGLE_NOTE_TYPES.find(type) != SINGLE_NOTE_TYPES.cend();
