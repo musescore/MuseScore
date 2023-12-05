@@ -384,7 +384,7 @@ TEST_F(Musicxml_Tests, backupRoundingError) {
     mxmlImportTestRef("testBackupRoundingError");
 }
 TEST_F(Musicxml_Tests, barlineFermatas) {
-    mxmlMscxExportTestRef("testBarlineFermatas");
+    mxmlIoTest("testBarlineFermatas");
 }
 TEST_F(Musicxml_Tests, barStyles) {
     mxmlIoTest("testBarStyles");

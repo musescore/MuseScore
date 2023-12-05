@@ -1245,6 +1245,34 @@ static bool convertArticulationToSymId(const QString& mxmlName, SymId& id)
 }
 
 //---------------------------------------------------------
+//   convertFermataToSymId
+//---------------------------------------------------------
+
+/**
+ Convert a MusicXML fermata name to a MuseScore fermata.
+ */
+
+static SymId convertFermataToSymId(const QString& mxmlName)
+{
+    QMap<QString, SymId> map; // map MusicXML fermata name to MuseScore symbol
+    map["normal"]           = SymId::fermataAbove;
+    map["angled"]           = SymId::fermataShortAbove;
+    map["square"]           = SymId::fermataLongAbove;
+    map["double-angled"]    = SymId::fermataVeryShortAbove;
+    map["double-square"]    = SymId::fermataVeryLongAbove;
+    map["double-dot"]       = SymId::fermataLongHenzeAbove;
+    map["half-curve"]       = SymId::fermataShortHenzeAbove;
+    map["curlew"]           = SymId::curlewSign;
+
+    if (map.contains(mxmlName)) {
+        return map.value(mxmlName);
+    } else {
+        LOGD("unknown fermata %s", qPrintable(mxmlName));
+    }
+    return SymId::fermataAbove;
+}
+
+//---------------------------------------------------------
 //   convertNotehead
 //---------------------------------------------------------
 
@@ -3902,6 +3930,21 @@ void MusicXMLParserPass2::barline(const QString& partId, Measure* measure, const
             endingColor = _e.attributes().value("color").toString();
             printEnding = _e.attributes().value("print-object").toString() != "no";
             endingText = _e.readElementText();
+        } else if (_e.name() == "fermata") {
+            const QColor fermataColor = _e.attributes().value("color").toString();
+            const QString fermataType = _e.attributes().value("type").toString();
+            const auto segment = measure->getSegment(SegmentType::EndBarLine, tick);
+            const track_idx_t track = _pass1.trackForPart(partId);
+            Fermata* fermata = Factory::createFermata(segment);
+            fermata->setSymId(convertFermataToSymId(_e.readElementText()));
+            fermata->setTrack(track);
+            segment->add(fermata);
+            if (fermataColor.isValid()) {
+                fermata->setColor(fermataColor);
+            }
+            if (fermataType == "inverted") {
+                fermata->setPlacement(PlacementV::BELOW);
+            }
         } else if (_e.name() == "repeat") {
             repeat = _e.attributes().value("direction").toString();
             count = _e.attributes().value("times").toString();
@@ -7040,32 +7083,11 @@ void MusicXMLParserPass2::stem(DirectionV& sd, bool& nost)
 void MusicXMLParserNotations::fermata()
 {
     Notation notation = Notation::notationWithAttributes(_e.name().toString(), _e.attributes(), "notations");
-    const auto fermataText = _e.readElementText();
+    const QString fermataText = _e.readElementText();
 
-    if (fermataText == "normal" || fermataText == "") {
-        notation.setSymId(SymId::fermataAbove);
-    } else if (fermataText == "angled") {
-        notation.setSymId(SymId::fermataShortAbove);
-    } else if (fermataText == "square") {
-        notation.setSymId(SymId::fermataLongAbove);
-    } else if (fermataText == "double-angled") {
-        notation.setSymId(SymId::fermataVeryShortAbove);
-    } else if (fermataText == "double-square") {
-        notation.setSymId(SymId::fermataVeryLongAbove);
-    } else if (fermataText == "double-dot") {
-        notation.setSymId(SymId::fermataLongHenzeAbove);
-    } else if (fermataText == "half-curve") {
-        notation.setSymId(SymId::fermataShortHenzeAbove);
-    } else if (fermataText == "curlew") {
-        notation.setSymId(SymId::curlewSign);
-    }
-
-    if (notation.symId() != SymId::noSym) {
-        notation.setText(fermataText);
-        _notations.push_back(notation);
-    } else {
-        _logger->logError(QString("unknown fermata '%1'").arg(fermataText), &_e);
-    }
+    notation.setSymId(convertFermataToSymId(fermataText));
+    notation.setText(fermataText);
+    _notations.push_back(notation);
 }
 
 //---------------------------------------------------------
@@ -7078,10 +7100,10 @@ void MusicXMLParserNotations::fermata()
 
 void MusicXMLParserNotations::tuplet()
 {
-    QString tupletType       = _e.attributes().value("type").toString();
-    QString tupletPlacement  = _e.attributes().value("placement").toString();
-    QString tupletBracket    = _e.attributes().value("bracket").toString();
-    QString tupletShowNumber = _e.attributes().value("show-number").toString();
+    const QString tupletType       = _e.attributes().value("type").toString();
+    const QString tupletPlacement  = _e.attributes().value("placement").toString();
+    const QString tupletBracket    = _e.attributes().value("bracket").toString();
+    const QString tupletShowNumber = _e.attributes().value("show-number").toString();
 
     // ignore possible children (currently not supported)
     _e.skipCurrentElement();
