@@ -3169,6 +3169,12 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
             auto mxmlOrnam = symIdToOrnam(sid);
 
             if (!mxmlOrnam.isEmpty()) {
+                  QString placement;
+
+                  if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::CHORD)
+                        placement = (a->anchor() == ArticulationAnchor::BOTTOM_STAFF || a->anchor() == ArticulationAnchor::BOTTOM_CHORD) ? "below" : "above";
+                  if (!placement.isEmpty())
+                        mxmlOrnam += QString(" placement=\"%1\"").arg(placement);
                   mxmlOrnam += color2xml(a);
 
                   notations.tag(_xml);

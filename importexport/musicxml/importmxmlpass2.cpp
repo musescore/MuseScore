@@ -1157,9 +1157,16 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
                   articSym = SymId::ornamentDownMordent;
             }
       if (articSym != SymId::noSym) {
+            const QString place = notation.attribute("placement");
             const QColor color { notation.attribute("color") };
             Articulation* na = new Articulation(cr->score());
             na->setSymId(articSym);
+            if (place == "above")
+                  na->setAnchor(ArticulationAnchor::TOP_CHORD);
+            else if (place == "below")
+                  na->setAnchor(ArticulationAnchor::BOTTOM_CHORD);
+            else
+                  na->setAnchor(ArticulationAnchor::CHORD);
             if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/)
                   na->setColor(color);
             cr->add(na);
