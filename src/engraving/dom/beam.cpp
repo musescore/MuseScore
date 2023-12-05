@@ -103,10 +103,13 @@ Beam::~Beam()
     // delete all references from chords
     //
     for (ChordRest* cr : m_elements) {
-        cr->setBeam(0);
+        cr->setBeam(nullptr);
     }
-    DeleteAll(m_beamSegments);
+
+    clearBeamSegments();
+
     DeleteAll(m_fragments);
+    m_fragments.clear();
 }
 
 //---------------------------------------------------------
@@ -845,6 +848,25 @@ bool Beam::hasAllRests()
         }
     }
     return true;
+}
+
+void Beam::clearBeamSegments()
+{
+    for (ChordRest* chordRest : m_elements) {
+        BeamSegment* chordRestBeamlet = chordRest->beamlet();
+        if (!chordRestBeamlet) {
+            continue;
+        }
+
+        for (BeamSegment* segment : m_beamSegments) {
+            if (segment == chordRestBeamlet) {
+                chordRest->setBeamlet(nullptr);
+            }
+        }
+    }
+
+    DeleteAll(m_beamSegments);
+    m_beamSegments.clear();
 }
 
 //-------------------------------------------------------

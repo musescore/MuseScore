@@ -73,6 +73,21 @@ Tremolo::Tremolo(const Tremolo& t)
     m_durationType = t.m_durationType;
 }
 
+Tremolo::~Tremolo()
+{
+    //
+    // delete all references from chords
+    //
+    if (m_chord1) {
+        m_chord1->setTremolo(nullptr);
+    }
+    if (m_chord2) {
+        m_chord2->setTremolo(nullptr);
+    }
+
+    clearBeamSegments();
+}
+
 void Tremolo::setParent(Chord* ch)
 {
     EngravingItem::setParent(ch);
@@ -661,5 +676,24 @@ void Tremolo::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
         return;
     }
     EngravingItem::scanElements(data, func, all);
+}
+
+void Tremolo::clearBeamSegments()
+{
+    BeamSegment* chord1Segment = m_chord1 ? m_chord1->beamlet() : nullptr;
+    BeamSegment* chord2Segment = m_chord2 ? m_chord2->beamlet() : nullptr;
+
+    if (chord1Segment || chord2Segment) {
+        for (BeamSegment* segment : m_beamSegments) {
+            if (chord1Segment && chord1Segment == segment) {
+                m_chord1->setBeamlet(nullptr);
+            } else if (chord2Segment && chord2Segment == segment) {
+                m_chord2->setBeamlet(nullptr);
+            }
+        }
+    }
+
+    DeleteAll(m_beamSegments);
+    m_beamSegments.clear();
 }
 }
