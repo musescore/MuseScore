@@ -4970,6 +4970,10 @@ void ExportMusicXml::hairpin(Hairpin const* const hp, staff_idx_t staff, const F
     const auto isLineType = hp->isLineType();
     int n;
     if (isLineType) {
+        if (!hp->lineVisible() && ((hp->beginText().isEmpty() && hp->tick() == tick)
+                                   || (hp->endText().isEmpty() && hp->tick() != tick))) {
+            return;
+        }
         n = findDashes(hp);
         if (n >= 0) {
             dashes[n] = nullptr;
@@ -5203,6 +5207,12 @@ int ExportMusicXml::findBracket(const TextLineBase* tl) const
 void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, const Fraction& tick)
 {
     using namespace mu::draw;
+
+    if (!tl->lineVisible() && ((tl->beginText().isEmpty() && tl->tick() == tick)
+                               || (tl->endText().isEmpty() && tl->tick() != tick))) {
+        return;
+    }
+
     int n;
     // special case: a dashed line w/o hooks is written as dashes
     const auto isDashes = tl->lineStyle() == LineType::DASHED && (tl->beginHookType() == HookType::NONE)
@@ -5304,13 +5314,15 @@ void ExportMusicXml::textLine(TextLineBase const* const tl, staff_idx_t staff, c
         _xml.endElement();
     }
 
-    _xml.startElement("direction-type");
-    if (isDashes) {
-        _xml.tag("dashes", { { "type", type }, { "number", n + 1 } });
-    } else {
-        _xml.tagRaw(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
+    if (tl->lineVisible()) {
+        _xml.startElement("direction-type");
+        if (isDashes) {
+            _xml.tag("dashes", { { "type", type }, { "number", n + 1 } });
+        } else {
+            _xml.tagRaw(QString("bracket type=\"%1\" number=\"%2\" line-end=\"%3\"%4").arg(type, QString::number(n + 1), lineEnd, rest));
+        }
+        _xml.endElement();
     }
-    _xml.endElement();
 
     if (!tl->endText().isEmpty() && tl->tick() != tick) {
         _xml.startElement("direction-type");
