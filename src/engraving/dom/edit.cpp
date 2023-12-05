@@ -6110,11 +6110,13 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     }
                 } else if (ne->isStringTunings()) {
                     StringTunings* stringTunings = toStringTunings(ne);
-                    const StringData* stringData = stringTunings->part()->stringData(tick, staff->idx());
-                    int frets = stringData->frets();
-                    std::vector<mu::engraving::instrString> stringList = stringData->stringList();
+                    if (stringTunings->stringData()->isNull()) {
+                        const StringData* stringData = stringTunings->part()->stringData(tick, staff->idx());
+                        int frets = stringData->frets();
+                        std::vector<mu::engraving::instrString> stringList = stringData->stringList();
 
-                    stringTunings->setStringData(StringData(frets, stringList));
+                        stringTunings->setStringData(StringData(frets, stringList));
+                    }
                 }
 
                 undo(new AddElement(ne));
@@ -6744,6 +6746,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
     const Fraction startTick = m1->tick();
     const Fraction endTick = m2->endTick();
     std::set<Spanner*> spannersToRemove;
+    std::set<EngravingItem*> annotationsToRemove;
 
     //
     //  handle ties which start before m1 and end in (m1-m2)
@@ -6759,6 +6762,10 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
 
         if (!s->isChordRestType()) {
             continue;
+        }
+
+        for (EngravingItem* ee : s->annotations()) {
+            annotationsToRemove.insert(ee);
         }
 
         for (track_idx_t track = 0; track < ntracks(); ++track) {
@@ -6800,6 +6807,10 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
 
     for (Spanner* s : spannersToRemove) {
         undoRemoveElement(s);
+    }
+
+    for (EngravingItem* a : annotationsToRemove) {
+        undoRemoveElement(a);
     }
 
     undo(new RemoveMeasures(m1, m2));
