@@ -660,6 +660,14 @@ void BeamLayout::createBeams(LayoutContext& ctx, Measure* measure)
                 continue;
             }
 
+            if (cr->isChord()) {
+                Chord* chord = toChord(cr);
+                for (Chord* c : chord->graceNotes()) {
+                    c->setBeamlet(nullptr); // Will be defined during beam layout
+                }
+            }
+            cr->setBeamlet(nullptr); // Will be defined during beam layout
+
             if (firstCR) {
                 firstCR = false;
                 // Handle cross-measure beams

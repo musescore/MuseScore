@@ -1090,14 +1090,12 @@ void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
 
                             ChordLayout::computeUp(c, ctx);
                             ChordLayout::layoutStem(c, ctx);
-                            c->setBeamlet(nullptr); // Will be defined during beam layout
                         }
 
                         ChordLayout::computeUp(chord, ctx);
                         ChordLayout::layoutStem(chord, ctx); // create stems needed to calculate spacing
                         // stem direction can change later during beam processing
                     }
-                    cr->setBeamlet(nullptr); // Will be defined during beam layout
                 }
             }
         }
