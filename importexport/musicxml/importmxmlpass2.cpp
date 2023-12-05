@@ -6527,8 +6527,6 @@ FretDiagram* MusicXMLParserPass2::frame(qreal& defaultY, qreal& relativeY)
 void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const Fraction sTime, DelayedDirectionsList& delayedDirections)
       {
       int track = _pass1.trackForPart(partId);
-
-
       qreal defaultY = 0;
       qreal relativeY = 0;
       bool hasTotalY = false;
@@ -6696,8 +6694,10 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
       ha->render();
 
       ha->setVisible(printObject);
-      if (color.isValid())
+      if (color.isValid()/* && preferences.getBool(PREF_IMPORT_MUSICXML_IMPORTLAYOUT)*/) {
             ha->setColor(color);
+            ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+            }
 
       // TODO-LV: do this only if ha points to a valid harmony
       // harmony = ha;
