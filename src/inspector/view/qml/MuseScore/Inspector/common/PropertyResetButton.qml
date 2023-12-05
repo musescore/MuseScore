@@ -28,17 +28,10 @@ import MuseScore.Inspector 1.0
 FlatButton {
     id: root
 
-    required property PropertyItem propertyItem
-
     width: 20
     height: width
 
     icon: IconCode.UNDO
     toolTipTitle: qsTrc("inspector", "Reset")
     transparent: true
-    enabled: propertyItem.isModified
-
-    onClicked: {
-        propertyItem.resetToDefault()
-    }
 }
