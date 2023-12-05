@@ -1918,7 +1918,6 @@ bool Measure::stemless(staff_idx_t staffIdx) const
     return staff->stemless(tick()) || m_mstaves[staffIdx]->stemless() || staffType->stemless();
 }
 
-
 //---------------------------------------------------------
 //   isFinalMeasureOfSection
 //    returns true if this measure is final actual measure of a section
