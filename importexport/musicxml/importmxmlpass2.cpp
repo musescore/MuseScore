@@ -7726,7 +7726,8 @@ void MusicXMLParserNotations::parse()
       while (_e.readNextStartElement()) {
             if (_e.name() == "arpeggiate") {
                   _arpeggioType = _e.attributes().value("direction").toString();
-                  if (_arpeggioType.isEmpty()) _arpeggioType = "none";
+                  if (_arpeggioType.isEmpty())
+                        _arpeggioType = "none";
                   _e.skipCurrentElement();  // skip but don't log
                   }
             else if (_e.name() == "articulations") {

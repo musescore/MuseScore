@@ -4934,7 +4934,8 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
                               pedalType = pd->lineVisible() ? "resume" : "start";
                               break;
                               }
-                        // FALLTHROUGH
+                        else
+                              // FALLTHROUGH
                   default:
                         pedalType = "start";
                   }
@@ -4969,7 +4970,8 @@ void ExportMusicXml::pedal(Pedal const* const pd, int staff, const Fraction& tic
 int ExportMusicXml::findBracket(const TextLineBase* tl) const
       {
       for (int i = 0; i < MAX_NUMBER_LEVEL; ++i)
-            if (brackets[i] == tl) return i;
+            if (brackets[i] == tl)
+                  return i;
       return -1;
       }
 
