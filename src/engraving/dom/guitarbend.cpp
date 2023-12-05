@@ -471,7 +471,9 @@ void GuitarBend::updateHoldLine()
 
 double GuitarBend::lineWidth() const
 {
-    return style().styleMM(Sid::guitarBendLineWidth);
+    return (staffType() && staffType()->isTabStaff())
+           ? style().styleMM(Sid::guitarBendLineWidthTab)
+           : style().styleMM(Sid::guitarBendLineWidth);
 }
 
 /****************************************
@@ -706,7 +708,7 @@ Note* GuitarBendHold::endNote() const
 
 double GuitarBendHold::lineWidth() const
 {
-    return style().styleMM(Sid::guitarBendLineWidth);
+    return style().styleMM(Sid::guitarBendLineWidthTab);
 }
 
 /****************************************
