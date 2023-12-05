@@ -1581,7 +1581,8 @@ bool NotationInteraction::applyPaletteElement(mu::engraving::EngravingItem* elem
         bool elementIsStandardBend = element->isActionIcon() && toActionIcon(element)->actionType() == ActionIconType::STANDARD_BEND;
         bool isLineNoteToNote = (element->isGlissando() || elementIsStandardBend)
                                 && sel.isList() && sel.elements().size() == 2
-                                && sel.elements()[0]->isNote() && sel.elements()[1]->isNote();
+                                && sel.elements()[0]->isNote() && sel.elements()[1]->isNote()
+                                && sel.elements()[1]->tick() != sel.elements()[0]->tick();
 
         if (isEntryDrumStaff() && element->isChord()) {
             mu::engraving::InputState& is = score->inputState();
@@ -5447,12 +5448,10 @@ void NotationInteraction::addLyricsVerse()
 
 mu::Ret NotationInteraction::canAddGuitarBend() const
 {
-    static const std::set<ElementType> requiredTypes {
-        ElementType::NOTE
-    };
+    Score* score = this->score();
+    bool canAdd = score && score->selection().noteList().size() > 0;
 
-    bool isNoteSelected = elementsSelected(requiredTypes);
-    return isNoteSelected ? make_ok() : make_ret(Err::NoteIsNotSelected);
+    return canAdd ? make_ok() : make_ret(Err::NoteIsNotSelected);
 }
 
 void NotationInteraction::addGuitarBend(GuitarBendType bendType)
@@ -5474,10 +5473,27 @@ void NotationInteraction::addGuitarBend(GuitarBendType bendType)
 
     startEdit();
 
-    Note* note = noteList.front();
-    Note* endNote = noteList.back() != note ? noteList.back() : nullptr;
+    Note* startNote = nullptr;
+    Note* endNote = nullptr;
+    bool noteToNote = false;
+    if (selection.isList() && noteList.size() == 2) {
+        startNote = noteList.front();
+        endNote = noteList.back();
+        if (endNote->tick() > startNote->tick()) {
+            noteToNote = true;
+        }
+    }
 
-    mu::engraving::GuitarBend* guitarBend = score->addGuitarBend(bendType, note, endNote);
+    mu::engraving::GuitarBend* guitarBend = nullptr;
+    if (noteToNote) {
+        guitarBend = score->addGuitarBend(bendType, startNote, endNote);
+    } else {
+        for (Note* note : noteList) {
+            // (will select the last one)
+            guitarBend = score->addGuitarBend(bendType, note, nullptr);
+        }
+    }
+
     if (guitarBend) {
         apply();
         select({ guitarBend });
