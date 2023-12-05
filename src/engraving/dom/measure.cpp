@@ -1915,8 +1915,13 @@ bool Measure::stemless(staff_idx_t staffIdx) const
         // Handle the error or log a message
         return false;
     }
+<<<<<<< HEAD
     return staff->stemless(tick()) || m_mstaves[staffIdx]->stemless() || staffType->stemless();
+=======
+    return staff->stemless(tick()) ||  m_mstaves[staffIdx]->stemless()  || staffType->stemless();
+>>>>>>> 0e3bec172b08641dddbfea02b413b7875f7a0310
 }
+
 
 //---------------------------------------------------------
 //   isFinalMeasureOfSection
