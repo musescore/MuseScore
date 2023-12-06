@@ -500,7 +500,7 @@ void GuitarBendLayout::layoutTabStaff(GuitarBendSegment* item, LayoutContext& ct
     if (RealIsNull(item->pos2().x())) {
         r = RectF(-0.5 * lineWidth, 0.0, lineWidth, arrow.front().y());
     } else {
-        r = RectF(PointF(), arrow.front());
+        r = RectF(PointF(), PointF(arrow[1].x(), arrow[0].y()));
     }
     item->mutldata()->setBbox(r.normalized());
 }
