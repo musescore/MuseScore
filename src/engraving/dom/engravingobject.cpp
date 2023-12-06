@@ -110,7 +110,11 @@ EngravingObject::~EngravingObject()
         EngravingObjectList children = m_children;
         for (EngravingObject* c : children) {
             c->m_parent = nullptr;
-            c->moveToDummy();
+            if (score()->dummy()) {
+                c->moveToDummy();
+            } else {
+                delete c;
+            }
         }
     } else {
         bool isPaletteScore = score()->isPaletteScore();

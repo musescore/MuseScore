@@ -37,7 +37,9 @@ RootItem::RootItem(Score* score)
 
 RootItem::~RootItem()
 {
-    delete m_dummy;
+    compat::DummyElement* d = m_dummy;
+    m_dummy = nullptr;
+    delete d;
 }
 
 compat::DummyElement* RootItem::dummy() const
