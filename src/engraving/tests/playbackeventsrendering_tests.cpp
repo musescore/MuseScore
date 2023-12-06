@@ -1181,6 +1181,11 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Acciaccatura)
         pitchLevel(PitchClass::F, 4),
     };
 
+    std::vector<ArticulationType> expectedArticulations = {
+        ArticulationType::Acciaccatura,
+        ArticulationType::Standard,
+    };
+
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
 
@@ -1196,9 +1201,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Acciaccatura)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
-            // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
+            // [THEN] We expect that Acciaccatura is only applied to the grace note event
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Acciaccatura));
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(expectedArticulations.at(i)));
 
             // [THEN] We expect that each sub-note has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
@@ -1257,6 +1262,14 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AcciaccaturaChord)
         pitchLevel(PitchClass::F, 4),
     };
 
+    std::vector<ArticulationType> expectedArticulations = {
+        ArticulationType::Acciaccatura,
+        ArticulationType::Acciaccatura,
+        ArticulationType::Acciaccatura,
+        ArticulationType::Acciaccatura,
+        ArticulationType::Standard,
+    };
+
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
 
@@ -1272,9 +1285,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AcciaccaturaChord)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
-            // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
+            // [THEN] We expect that Acciaccatura is only applied to the grace note events
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Acciaccatura));
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(expectedArticulations.at(i)));
 
             // [THEN] We expect that each sub-note has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
@@ -1327,6 +1340,12 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
         pitchLevel(PitchClass::F, 4),
     };
 
+    std::vector<ArticulationType> expectedArticulations = {
+        ArticulationType::Acciaccatura,
+        ArticulationType::Acciaccatura,
+        ArticulationType::Standard,
+    };
+
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::Acciaccatura, m_dummyPattern);
 
@@ -1342,9 +1361,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAcciaccatura)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
-            // [THEN] We expect that each note event has only one articulation applied - Acciaccatura
+            // [THEN] We expect that Acciaccatura is only applied to the grace note events
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::Acciaccatura));
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(expectedArticulations.at(i)));
 
             // [THEN] We expect that each sub-note has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
@@ -1395,6 +1414,12 @@ TEST_F(Engraving_PlaybackEventsRendererTests, GraceNoteWithTiedNotes)
         pitchLevel(PitchClass::G, 4),
     };
 
+    std::vector<ArticulationType> expectedArticulations = {
+        ArticulationType::PreAppoggiatura,
+        ArticulationType::Standard,
+        ArticulationType::Standard,
+    };
+
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::PreAppoggiatura, m_dummyPattern);
 
@@ -1413,9 +1438,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, GraceNoteWithTiedNotes)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
-            // [THEN] We expect that each note event has only one articulation applied - PreAppoggiatura
+            // [THEN] We expect that PreAppoggiatura is only applied to the grace note event
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PreAppoggiatura));
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(expectedArticulations.at(i)));
 
             // [THEN] We expect that each sub-note has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
@@ -1465,6 +1490,11 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
         pitchLevel(PitchClass::G, 4)
     };
 
+    std::vector<ArticulationType> expectedArticulations = {
+        ArticulationType::Standard,
+        ArticulationType::PostAppoggiatura,
+    };
+
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::PostAppoggiatura, m_dummyPattern);
 
@@ -1480,9 +1510,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_Appoggiatura_Post)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
-            // [THEN] We expect that each note event has only one articulation applied
+            // [THEN] We expect that PostAppoggiatura is only applied to the grace note event
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PostAppoggiatura));
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(expectedArticulations.at(i)));
 
             // [THEN] We expect that each sub-note has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
@@ -1541,6 +1571,14 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AppoggiaturaChord_Post)
         pitchLevel(PitchClass::F, 5),
     };
 
+    std::vector<ArticulationType> expectedArticulations = {
+        ArticulationType::Standard,
+        ArticulationType::PostAppoggiatura,
+        ArticulationType::PostAppoggiatura,
+        ArticulationType::PostAppoggiatura,
+        ArticulationType::PostAppoggiatura,
+    };
+
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::PostAppoggiatura, m_dummyPattern);
 
@@ -1556,9 +1594,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_AppoggiaturaChord_Post)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
-            // [THEN] We expect that each note event has only one articulation applied
+            // [THEN] We expect that PostAppoggiatura is only applied to the grace note events
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PostAppoggiatura));
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(expectedArticulations.at(i)));
 
             // [THEN] We expect that each sub-note has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
@@ -1611,6 +1649,12 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
         pitchLevel(PitchClass::A, 4),
     };
 
+    std::vector<ArticulationType> expectedArticulations = {
+        ArticulationType::Standard,
+        ArticulationType::PostAppoggiatura,
+        ArticulationType::PostAppoggiatura,
+    };
+
     // [GIVEN] Fulfill articulations profile with dummy patterns
     m_defaultProfile->setPattern(ArticulationType::PostAppoggiatura, m_dummyPattern);
 
@@ -1626,9 +1670,9 @@ TEST_F(Engraving_PlaybackEventsRendererTests, SingleNote_MultiAppoggiatura_Post)
         for (size_t i = 0; i < pair.second.size(); ++i) {
             const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(pair.second.at(i));
 
-            // [THEN] We expect that each note event has only one articulation applied
+            // [THEN] We expect that PostAppoggiatura is only applied to the grace note events
             EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
-            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::PostAppoggiatura));
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(expectedArticulations.at(i)));
 
             // [THEN] We expect that each sub-note has expected duration
             EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));

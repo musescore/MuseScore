@@ -198,8 +198,7 @@ RenderingContext GraceChordsRenderer::buildPrincipalNoteCtx(const Score* score, 
     principalCtx.nominalPositionStartTick = timestampToTick(score, timestamp) - ctx.positionTickOffset;
     principalCtx.nominalPositionEndTick = timestampToTick(score, timestamp + duration) - ctx.positionTickOffset;
     principalCtx.nominalDurationTicks = principalCtx.nominalPositionEndTick - principalCtx.nominalPositionStartTick;
-
-    updateArticulationBoundaries(graceCtx.type, timestamp, duration, principalCtx.commonArticulations);
+    principalCtx.commonArticulations.erase(graceCtx.type);
 
     return principalCtx;
 }
