@@ -84,9 +84,15 @@ Fraction DurationElement::globalTicks() const
 //   actualTicks
 //---------------------------------------------------------
 
+Fraction DurationElement::actualTicksAt(const Fraction& tick) const
+      {
+      // Use when tick() is unreliable, for example when pasting
+      return globalTicks() / staff()->timeStretch(tick);
+      }
+
 Fraction DurationElement::actualTicks() const
       {
-      return globalTicks() / staff()->timeStretch(tick());
+      return actualTicksAt(tick());
       }
 
 //---------------------------------------------------------

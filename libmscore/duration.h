@@ -51,6 +51,7 @@ class DurationElement : public Element {
       Tuplet* topTuplet() const;
       virtual Beam* beam() const          { return 0;         }
 
+      Fraction actualTicksAt(const Fraction& tick) const;
       Fraction actualTicks() const;
 
       //Length expressed as a fraction of a whole note

@@ -67,6 +67,7 @@ class TestCopyPaste : public QObject, public MTest
       void copypaste24() { copypaste("24"); }       // more complex non reduced tuplet
       void copypaste25() { copypaste("25"); }       // copy full measure rest
       void copypaste26() { copypaste("26"); }       // Copy chords (#298541)
+      void copypaste27() { copypaste("27"); }       // Paste after local time signature (#18940)
 
       void copypastestaff50() { copypastestaff("50"); }       // staff & slurs
 
