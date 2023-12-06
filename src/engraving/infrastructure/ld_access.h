@@ -112,7 +112,8 @@ class ld_field_prod
 {
 public:
 
-    ld_field_prod(const char*, T = T()) {}
+    ld_field_prod(const char*, T def = T())
+        : m_val(def) {}
 
     inline void reset() { m_val = T(); }
 
