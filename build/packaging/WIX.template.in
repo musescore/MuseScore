@@ -8,8 +8,8 @@
 <?define ExeName="$(var.MUSESCORE_EXECUTABLE_NAME).exe"?>
 <?define RegistryRoot="HKMU"?> <!--HKCU / HKLM-->
 
-<?if "$(var.MUSESCORE_VERSION_LABEL)" != ""?>
-<?define ProgIdSuffix="$(var.CPACK_PACKAGE_VERSION_MAJOR).$(var.MUSESCORE_VERSION_LABEL)"?>
+<?if "$(var.MUSESCORE_RELEASE_CHANNEL)" != ""?>
+<?define ProgIdSuffix="$(var.CPACK_PACKAGE_VERSION_MAJOR).$(var.MUSESCORE_RELEASE_CHANNEL)"?>
 <?else?>
 <?define ProgIdSuffix="$(var.CPACK_PACKAGE_VERSION_MAJOR)"?>
 <?endif?>
