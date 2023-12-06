@@ -8995,7 +8995,7 @@ By default, they will be placed such as that their right end are at the same lev
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_58">
            <item>
-            <widget class="QGroupBox" name="groupBox">
+            <widget class="QGroupBox" name="groupBox_bendstaff">
              <property name="title">
               <string>Standard stave</string>
              </property>
@@ -9030,7 +9030,7 @@ By default, they will be placed such as that their right end are at the same lev
               <item row="0" column="2">
                <widget class="QToolButton" name="resetBendLineWidth">
                 <property name="text">
-                 <string>...</string>
+                  <string notr="true"/>
                 </property>
                </widget>
               </item>
@@ -9038,7 +9038,7 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_2">
+            <widget class="QGroupBox" name="groupBox_tablaturebend">
              <property name="title">
               <string>Tablature</string>
              </property>
@@ -9105,7 +9105,7 @@ By default, they will be placed such as that their right end are at the same lev
               <item row="1" column="5">
                <widget class="QToolButton" name="resetBendArrowHeight">
                 <property name="text">
-                 <string>...</string>
+                  <string notr="true"/>
                 </property>
                </widget>
               </item>
