@@ -731,7 +731,7 @@ void Spanner::computeStartElement()
             m_startElement = startSegment();
         } else {
             Segment* seg = score()->tick2segmentMM(tick(), false, SegmentType::ChordRest);
-            if (!seg || seg->empty()) {
+            if (!seg || seg->empty() || !seg->element(track())) {
                 seg = score()->tick2segment(tick(), false, SegmentType::ChordRest);
             }
             m_startElement = nullptr;
