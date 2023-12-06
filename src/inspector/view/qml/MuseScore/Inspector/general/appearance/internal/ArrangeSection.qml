@@ -71,7 +71,11 @@ Column {
                 navigation.row: root.resetButtonNavigationRow
                 navigation.accessible.name: qsTrc("inspector", "Reset stacking order to default")
 
-                propertyItem: root.arrangeOrderProperty
+                enabled: root.arrangeOrderProperty.isModified
+
+                onClicked: {
+                    root.arrangeOrderProperty.resetToDefault()
+                }
             }
         }
 
