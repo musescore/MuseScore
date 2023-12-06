@@ -795,6 +795,7 @@ void CloneVoice::redo(EditData*)
 
 AddElement::AddElement(EngravingItem* e)
 {
+    DO_ASSERT_X(!e->generated(), String(u"Generated item %1 passed to AddElement").arg(String::fromAscii(e->typeName())));
     element = e;
 }
 
@@ -966,6 +967,7 @@ static void removeNote(const Note* note)
 
 RemoveElement::RemoveElement(EngravingItem* e)
 {
+    DO_ASSERT_X(!e->generated(), String(u"Generated item %1 passed to RemoveElement").arg(String::fromAscii(e->typeName())));
     element = e;
 
     Score* score = element->score();

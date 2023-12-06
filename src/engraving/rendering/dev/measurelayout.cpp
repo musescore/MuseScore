@@ -228,7 +228,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
                     eClone->setGenerated(generated);
                     eClone->setParent(mmrEndBarlineSeg);
-                    ctx.mutDom().undoAddElement(eClone);
+                    ctx.mutDom().undoAddElement(eClone);// ???
                 } else {
                     BarLine* mmrEndBarline = toBarLine(mmrEndBarlineSeg->element(staffIdx * VOICES));
                     BarLine* lastMeasureEndBarline = toBarLine(e);
@@ -316,7 +316,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);
             mmr->setParent(s);
-            ctx.mutDom().undo(new AddElement(mmr));
+            ctx.mutDom().doUndoAddElement(mmr);
         }
     }
 
@@ -367,7 +367,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
                         underlyingTimeSig->linkedClone());
                     mmrTimeSig->setParent(mmrSeg);
-                    ctx.mutDom().undo(new AddElement(mmrTimeSig));
+                    ctx.mutDom().doUndoAddElement(mmrTimeSig);
                 } else {
                     mmrTimeSig->setSig(underlyingTimeSig->sig(), underlyingTimeSig->timeSigType());
                     mmrTimeSig->setNumeratorString(underlyingTimeSig->numeratorString());
@@ -398,7 +398,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                 if (!mmrAmbitus) {
                     mmrAmbitus = underlyingAmbitus->clone();
                     mmrAmbitus->setParent(mmrSeg);
-                    ctx.mutDom().undo(new AddElement(mmrAmbitus));
+                    ctx.mutDom().doUndoAddElement(mmrAmbitus);
                 } else {
                     mmrAmbitus->initFrom(underlyingAmbitus);
                     TLayout::layoutAmbitus(mmrAmbitus, mmrAmbitus->mutldata(), ctx);
@@ -431,7 +431,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                         underlyingKeySig->linkedClone());
                     mmrKeySig->setParent(mmrSeg);
                     mmrKeySig->setGenerated(true);
-                    ctx.mutDom().undo(new AddElement(mmrKeySig));
+                    ctx.mutDom().doUndoAddElement(mmrKeySig);
                 } else {
                     if (!(mmrKeySig->keySigEvent() == underlyingKeySig->keySigEvent())) {
                         bool addKey = underlyingKeySig->isChange();
@@ -475,7 +475,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             if (!found) {
                 EngravingItem* eClone = e->linkedClone();
                 eClone->setParent(s);
-                ctx.mutDom().undo(new AddElement(eClone));
+                ctx.mutDom().doUndoAddElement(eClone);
             }
         }
 
@@ -1925,7 +1925,6 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                 //
                 keysig = Factory::createKeySig(kSegment);
                 keysig->setTrack(track);
-                keysig->setGenerated(true);
                 keysig->setParent(kSegment);
                 kSegment->add(keysig);
             }

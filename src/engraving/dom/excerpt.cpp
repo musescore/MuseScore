@@ -662,7 +662,7 @@ void Excerpt::cloneSpanner(Spanner* s, Score* score, track_idx_t dstTrack, track
         return;
     }
 
-    score->undo(new AddElement(ns));
+    score->doUndoAddElement(ns);
     ns->styleChanged();
 }
 
@@ -1039,7 +1039,7 @@ void Excerpt::cloneStaves(Score* sourceScore, Score* dstScore, const std::vector
                     EngravingItem* newSectionBreak = sectionBreak->linkedClone();
                     newSectionBreak->setScore(dstScore);
                     newSectionBreak->setParent(prevMB);
-                    dstScore->undo(new AddElement(newSectionBreak));
+                    dstScore->doUndoAddElement(newSectionBreak);
                 }
             }
             continue;
@@ -1234,7 +1234,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                             ne1->setTrack(dstTrack);
                             ne1->setParent(seg);
                             ne1->setScore(score);
-                            score->undo(new AddElement(ne1));
+                            score->doUndoAddElement(ne1);
                             continue;
                         }
                         default:

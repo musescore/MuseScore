@@ -922,7 +922,7 @@ void FiguredBass::addItemToLinked(FiguredBassItem* item)
             item->setTrack(track());
             item->setParent(this);
             m_items.push_back(item);
-            score()->undo(new AddElement(item));
+            score()->doUndoAddElement(item);
         } else {
             bool isThisTextLinked = getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
             bool isOtherTextLinked = linkedObject->getProperty(Pid::TEXT_LINKED_TO_MASTER).toBool();
@@ -938,7 +938,7 @@ void FiguredBass::addItemToLinked(FiguredBassItem* item)
             itemClone->setParent(linkedFb);
             itemClone->setScore(linkedFb->score());
             linkedFb->appendItem(itemClone);
-            linkedScore->undo(new AddElement(itemClone));
+            linkedScore->doUndoAddElement(itemClone);
         }
     }
 }
