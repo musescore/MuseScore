@@ -317,6 +317,15 @@ compat::DummyElement* DomAccessor::dummyParent() const
     return score()->dummy();
 }
 
+void DomAccessor::doUndoAddElement(EngravingItem* item)
+{
+    if (item->generated()) {
+        addElement(item);
+    } else {
+        undo(new AddElement(item));
+    }
+}
+
 void DomAccessor::undoAddElement(EngravingItem* item, bool addToLinkedStaves, bool ctrlModifier)
 {
     IF_ASSERT_FAILED(score()) {

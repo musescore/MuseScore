@@ -1539,6 +1539,15 @@ void Score::addElement(EngravingItem* element)
     element->triggerLayout();
 }
 
+void Score::doUndoAddElement(EngravingItem* element)
+{
+    if (element->generated()) {
+        addElement(element);
+    } else {
+        undo(new AddElement(element));
+    }
+}
+
 //---------------------------------------------------------
 //   removeElement
 ///   Remove \a element from its parent.

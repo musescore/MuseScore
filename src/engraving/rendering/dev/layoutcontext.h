@@ -168,6 +168,7 @@ public:
     // Create/Remove
     RootItem* rootItem() const;
     compat::DummyElement* dummyParent() const;
+    void doUndoAddElement(EngravingItem*);
     void undoAddElement(EngravingItem* item, bool addToLinkedStaves = true, bool ctrlModifier = false);
     void doUndoRemoveElement(EngravingItem* item);
     void undoRemoveElement(EngravingItem* item);

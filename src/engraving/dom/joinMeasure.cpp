@@ -159,7 +159,7 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
                             nsig->setTrack(track);
                             nsig->setParent(nextTSeg);
 
-                            score->undo(new AddElement(nsig));
+                            score->doUndoAddElement(nsig);
 
                             if (!lts) {
                                 lts = nsig;
