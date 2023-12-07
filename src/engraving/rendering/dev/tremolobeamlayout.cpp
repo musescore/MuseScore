@@ -44,7 +44,7 @@ using namespace mu::engraving::rendering::dev;
 
 constexpr std::array _maxSlopes = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
-void TremoloBeamLayout::setupLData(TremoloBeamLayout* info, EngravingItem* e)
+void TremoloBeamLayout::setupLData(Tremolo::LayoutData* info, EngravingItem* e)
 {
     IF_ASSERT_FAILED(e && e->isTremolo()) {
         return;
@@ -72,7 +72,8 @@ void TremoloBeamLayout::setupLData(TremoloBeamLayout* info, EngravingItem* e)
     info->m_isBesideTabStaff = info->m_tab && !info->m_tab->stemless() && !info->m_tab->stemThrough();
 }
 
-void TremoloBeamLayout::offsetBeamToRemoveCollisions(const TremoloBeamLayout* info, const std::vector<ChordRest*> chordRests, int& dictator,
+void TremoloBeamLayout::offsetBeamToRemoveCollisions(const Tremolo::LayoutData* info, const std::vector<ChordRest*> chordRests,
+                                                     int& dictator,
                                                      int& pointer,
                                                      const double startX, const double endX,
                                                      bool isFlat, bool isStartDictator)
@@ -136,7 +137,7 @@ void TremoloBeamLayout::offsetBeamToRemoveCollisions(const TremoloBeamLayout* in
     }
 }
 
-void TremoloBeamLayout::offsetBeamWithAnchorShortening(const TremoloBeamLayout* info, std::vector<ChordRest*> chordRests, int& dictator,
+void TremoloBeamLayout::offsetBeamWithAnchorShortening(const Tremolo::LayoutData* info, std::vector<ChordRest*> chordRests, int& dictator,
                                                        int& pointer, int staffLines,
                                                        bool isStartDictator, int stemLengthDictator)
 {
@@ -209,7 +210,7 @@ void TremoloBeamLayout::offsetBeamWithAnchorShortening(const TremoloBeamLayout* 
     pointer = newPointer;
 }
 
-void TremoloBeamLayout::extendStem(const TremoloBeamLayout* info, Chord* chord, double addition)
+void TremoloBeamLayout::extendStem(const Tremolo::LayoutData* info, Chord* chord, double addition)
 {
     PointF anchor = chordBeamAnchor(info, chord, ChordBeamAnchorType::Middle);
     double desiredY;
@@ -238,7 +239,7 @@ bool TremoloBeamLayout::isBeamInsideStaff(int yPos, int staffLines, bool allowFl
     return yPos > aboveStaff && yPos < belowStaff;
 }
 
-int TremoloBeamLayout::getOuterBeamPosOffset(const TremoloBeamLayout* info, int innerBeam, int beamCount, int staffLines)
+int TremoloBeamLayout::getOuterBeamPosOffset(const Tremolo::LayoutData* info, int innerBeam, int beamCount, int staffLines)
 {
     int spacing = (info->m_up ? -info->m_beamSpacing : info->m_beamSpacing);
     int offset = (beamCount - 1) * spacing;
@@ -290,7 +291,7 @@ bool TremoloBeamLayout::is64thBeamPositionException(const int beamSpacing, int& 
     return yPos == 2 || yPos == staffLines * 4 - 2 || yPos == staffLines * 4 - 6 || yPos == -2;
 }
 
-int TremoloBeamLayout::findValidBeamOffset(const TremoloBeamLayout* info, int outer, int beamCount, int staffLines, bool isStart,
+int TremoloBeamLayout::findValidBeamOffset(const Tremolo::LayoutData* info, int outer, int beamCount, int staffLines, bool isStart,
                                            bool isAscending, bool isFlat)
 {
     bool isBeamValid = false;
@@ -311,7 +312,7 @@ int TremoloBeamLayout::findValidBeamOffset(const TremoloBeamLayout* info, int ou
     return offset;
 }
 
-void TremoloBeamLayout::setValidBeamPositions(const TremoloBeamLayout* info, int& dictator, int& pointer, int beamCountD, int beamCountP,
+void TremoloBeamLayout::setValidBeamPositions(const Tremolo::LayoutData* info, int& dictator, int& pointer, int beamCountD, int beamCountP,
                                               int staffLines,
                                               bool isStartDictator,
                                               bool isFlat, bool isAscending)
@@ -377,7 +378,7 @@ void TremoloBeamLayout::setValidBeamPositions(const TremoloBeamLayout* info, int
     }
 }
 
-void TremoloBeamLayout::addMiddleLineSlant(const TremoloBeamLayout* info, int& dictator, int& pointer, int beamCount, int middleLine,
+void TremoloBeamLayout::addMiddleLineSlant(const Tremolo::LayoutData* info, int& dictator, int& pointer, int beamCount, int middleLine,
                                            int interval, int desiredSlant)
 {
     bool isSmall = info->m_trem->mag() < 1. || info->m_isGrace;
@@ -394,7 +395,7 @@ void TremoloBeamLayout::addMiddleLineSlant(const TremoloBeamLayout* info, int& d
     }
 }
 
-void TremoloBeamLayout::add8thSpaceSlant(TremoloBeamLayout* info, PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
+void TremoloBeamLayout::add8thSpaceSlant(Tremolo::LayoutData* info, PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
                                          int interval, int middleLine, bool isFlat)
 {
     if (beamCount != 3 || noSlope(info->m_beam) || info->m_beamSpacing != 3) {
@@ -410,7 +411,7 @@ void TremoloBeamLayout::add8thSpaceSlant(TremoloBeamLayout* info, PointF& dictat
     info->m_beamDist += 0.0625 * info->m_spatium;
 }
 
-bool TremoloBeamLayout::computeTremoloUp(const TremoloBeamLayout* info)
+bool TremoloBeamLayout::computeTremoloUp(const Tremolo::LayoutData* info)
 {
     if (!info->m_beam || !info->m_beam->cross()) {
         return info->m_trem->up();
@@ -439,7 +440,7 @@ bool TremoloBeamLayout::computeTremoloUp(const TremoloBeamLayout* info)
     }
 }
 
-int TremoloBeamLayout::strokeCount(const TremoloBeamLayout* info, ChordRest* cr)
+int TremoloBeamLayout::strokeCount(const Tremolo::LayoutData* info, ChordRest* cr)
 {
     if (cr->isRest()) {
         return cr->beams();
@@ -455,7 +456,8 @@ int TremoloBeamLayout::strokeCount(const TremoloBeamLayout* info, ChordRest* cr)
     return strokes;
 }
 
-bool TremoloBeamLayout::calculateAnchors(TremoloBeamLayout* info, const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes)
+bool TremoloBeamLayout::calculateAnchors(Tremolo::LayoutData* info, const std::vector<ChordRest*>& chordRests,
+                                         const std::vector<int>& notes)
 {
     IF_ASSERT_FAILED(info->m_trem) {
         return false;
@@ -600,7 +602,7 @@ bool TremoloBeamLayout::calculateAnchors(TremoloBeamLayout* info, const std::vec
     return true;
 }
 
-bool TremoloBeamLayout::calculateAnchorsCross(TremoloBeamLayout* info)
+bool TremoloBeamLayout::calculateAnchorsCross(Tremolo::LayoutData* info)
 {
     double spatium = info->m_trem->style().spatium();
     //int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
@@ -836,7 +838,7 @@ bool TremoloBeamLayout::noSlope(const Beam* beam)
     return beam && beam->noSlope();
 }
 
-int TremoloBeamLayout::getMiddleStaffLine(const TremoloBeamLayout* info, ChordRest* startChord, ChordRest* endChord, int staffLines)
+int TremoloBeamLayout::getMiddleStaffLine(const Tremolo::LayoutData* info, ChordRest* startChord, ChordRest* endChord, int staffLines)
 {
     bool isFullSize = RealIsEqual(info->m_trem->mag(), 1.0) && !info->m_isGrace;
     bool useWideBeams = info->m_trem->score()->style().styleB(Sid::useWideBeams);
@@ -855,7 +857,7 @@ int TremoloBeamLayout::getMiddleStaffLine(const TremoloBeamLayout* info, ChordRe
     return std::max(startMiddleLine, endMiddleLine) - 1;
 }
 
-int TremoloBeamLayout::computeDesiredSlant(const TremoloBeamLayout* info, int startNote, int endNote, int middleLine, int dictator,
+int TremoloBeamLayout::computeDesiredSlant(const Tremolo::LayoutData* info, int startNote, int endNote, int middleLine, int dictator,
                                            int pointer)
 {
     int dictatorExtension = middleLine - dictator; // we need to make sure that beams extended to the middle line
@@ -888,7 +890,7 @@ int TremoloBeamLayout::computeDesiredSlant(const TremoloBeamLayout* info, int st
     return std::min(maxSlope, _maxSlopes[interval]) * (info->m_up ? 1 : -1);
 }
 
-TremoloBeamLayout::SlopeConstraint TremoloBeamLayout::getSlopeConstraint(const TremoloBeamLayout* info, int startNote, int endNote)
+TremoloBeamLayout::SlopeConstraint TremoloBeamLayout::getSlopeConstraint(const Tremolo::LayoutData* info, int startNote, int endNote)
 {
     if (info->m_notes.empty()) {
         return SlopeConstraint::NO_CONSTRAINT;
@@ -902,7 +904,7 @@ TremoloBeamLayout::SlopeConstraint TremoloBeamLayout::getSlopeConstraint(const T
     return SlopeConstraint::NO_CONSTRAINT;
 }
 
-int TremoloBeamLayout::getMaxSlope(const TremoloBeamLayout* info)
+int TremoloBeamLayout::getMaxSlope(const Tremolo::LayoutData* info)
 {
     // for 2-indexed interval i (seconds, thirds, etc.)
     // maxSlopes[i] = max slope of beam for notes with interval i
@@ -932,7 +934,7 @@ int TremoloBeamLayout::getMaxSlope(const TremoloBeamLayout* info)
     return maxSlope;
 }
 
-int TremoloBeamLayout::getBeamCount(const TremoloBeamLayout* info, const std::vector<ChordRest*> chordRests)
+int TremoloBeamLayout::getBeamCount(const Tremolo::LayoutData* info, const std::vector<ChordRest*> chordRests)
 {
     int maxBeams = 0;
     for (ChordRest* chordRest : chordRests) {
@@ -943,7 +945,7 @@ int TremoloBeamLayout::getBeamCount(const TremoloBeamLayout* info, const std::ve
     return maxBeams;
 }
 
-double TremoloBeamLayout::chordBeamAnchorX(const TremoloBeamLayout* info, const ChordRest* cr, ChordBeamAnchorType anchorType)
+double TremoloBeamLayout::chordBeamAnchorX(const Tremolo::LayoutData* info, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
     double pagePosX = info->m_trem ? info->m_trem->pagePos().x() : info->m_beam->pagePos().x();
     double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
@@ -993,7 +995,7 @@ double TremoloBeamLayout::chordBeamAnchorX(const TremoloBeamLayout* info, const 
     return stemPosX;
 }
 
-double TremoloBeamLayout::chordBeamAnchorY(const TremoloBeamLayout* info, const ChordRest* cr)
+double TremoloBeamLayout::chordBeamAnchorY(const Tremolo::LayoutData* info, const ChordRest* cr)
 {
     if (!cr->isChord()) {
         return cr->pagePos().y();
@@ -1017,7 +1019,7 @@ double TremoloBeamLayout::chordBeamAnchorY(const TremoloBeamLayout* info, const 
     return position.y() - note->offset().y() + (chord->defaultStemLength() * upValue) - beamOffset;
 }
 
-PointF TremoloBeamLayout::chordBeamAnchor(const TremoloBeamLayout* info, const ChordRest* cr, ChordBeamAnchorType anchorType)
+PointF TremoloBeamLayout::chordBeamAnchor(const Tremolo::LayoutData* info, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
     return PointF(chordBeamAnchorX(info, cr, anchorType), chordBeamAnchorY(info, cr));
 }

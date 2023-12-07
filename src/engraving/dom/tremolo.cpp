@@ -119,18 +119,12 @@ double Tremolo::minHeight() const
 
 PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
 {
-    IF_ASSERT_FAILED(layoutInfo) {
-        return PointF();
-    }
-    return rendering::dev::TremoloBeamLayout::chordBeamAnchor(layoutInfo.get(), chord, anchorType);
+    return rendering::dev::TremoloBeamLayout::chordBeamAnchor(ldata(), chord, anchorType);
 }
 
 double Tremolo::beamWidth() const
 {
-    IF_ASSERT_FAILED(layoutInfo) {
-        return 0.0;
-    }
-    return layoutInfo->beamWidth();
+    return ldata()->beamWidth();
 }
 
 //---------------------------------------------------------
