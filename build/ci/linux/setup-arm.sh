@@ -306,7 +306,11 @@ git submodule update --init --recursive
 mkdir -p build
 cd build
 
-cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
+if [ "$PACKARCH" == "armv7l" ]; then
+  cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_FLAGS=-D_FILE_OFFSET_BITS=64 -DCMAKE_C_FLAGS=-D_FILE_OFFSET_BITS=64 .. 
+else
+  cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
+fi
 make -j"$(nproc)"
 # create the extracted appimage directory
 mkdir -p $BUILD_TOOLS/appimageupdatetool
