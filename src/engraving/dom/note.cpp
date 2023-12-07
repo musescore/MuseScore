@@ -2775,6 +2775,11 @@ PropertyValue Note::getProperty(Pid propertyId) const
         return fixed();
     case Pid::FIXED_LINE:
         return fixedLine();
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        if (chord()) {
+            return EngravingItem::getProperty(propertyId).toBool() && chord()->getProperty(propertyId).toBool();
+        }
     default:
         break;
     }
@@ -2875,6 +2880,13 @@ bool Note::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::FIXED_LINE:
         setFixedLine(v.toInt());
         break;
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        if (v.toBool() == true && chord()) {
+            // when re-linking, also re-link the parent chord
+            chord()->setProperty(propertyId, v);
+        }
+    // fall through
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
             return false;

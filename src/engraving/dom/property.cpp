@@ -83,12 +83,12 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::ARTICULATION_ANCHOR,     false, "anchor",                P_TYPE::INT,                PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "anchor") },
 
     { Pid::DIRECTION,               false, "direction",             P_TYPE::DIRECTION_V,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "direction") },
-    { Pid::STEM_DIRECTION,          false, "StemDirection",         P_TYPE::DIRECTION_V,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "stem direction") },
+    { Pid::STEM_DIRECTION,          false, "StemDirection",         P_TYPE::DIRECTION_V,        PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "stem direction") },
     { Pid::NO_STEM,                 false, "noStem",                P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "no stem") },
     { Pid::SLUR_DIRECTION,          false, "up",                    P_TYPE::DIRECTION_V,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "up") },
     { Pid::LEADING_SPACE,           false, "leadingSpace",          P_TYPE::SPATIUM,            PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "leading space") },
     { Pid::MIRROR_HEAD,             false, "mirror",                P_TYPE::DIRECTION_H,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "mirror") },
-    { Pid::HEAD_HAS_PARENTHESES,    false, "parentheses",           P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "parentheses") },
+    { Pid::HEAD_HAS_PARENTHESES,    true , "parentheses",           P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "parentheses") },
     { Pid::DOT_POSITION,            false, "dotPosition",           P_TYPE::DIRECTION_V,        PropertyGroup::POSITION,        DUMMY_QT_TR_NOOP("propertyName", "dot position") },
     { Pid::TUNING,                  false, "tuning",                P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "tuning") },
     { Pid::PAUSE,                   true,  "pause",                 P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "pause") },
@@ -229,7 +229,7 @@ static constexpr PropertyMetaData propertyList[] = {
     { Pid::MEASURE_REPEAT_NUMBER_POS, false, "measureRepeatNumberPos", P_TYPE::SPATIUM,         PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "vertical position of measure repeat number") },
     { Pid::REPEAT_COUNT,            true,  "endRepeat",             P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "end repeat") },
 
-    { Pid::USER_STRETCH,            false, "stretch",               P_TYPE::REAL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "stretch") },
+    { Pid::USER_STRETCH,            false, "stretch",               P_TYPE::REAL,               PropertyGroup::NONE      ,      DUMMY_QT_TR_NOOP("propertyName", "stretch") },
     { Pid::NO_OFFSET,               true,  "noOffset",              P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "numbering offset") },
     { Pid::IRREGULAR,               true,  "irregular",             P_TYPE::BOOL,               PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "irregular") },
     { Pid::ANCHOR,                  false, "anchor",                P_TYPE::INT,                PropertyGroup::APPEARANCE,      DUMMY_QT_TR_NOOP("propertyName", "anchor") },
