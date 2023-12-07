@@ -94,7 +94,7 @@ void Arpeggio::findAndAttachToChords()
     }
 
     if (lastTrack != etrack) {
-        int newSpan = lastTrack - track() + 1;
+        track_idx_t newSpan = lastTrack - track() + 1;
         undoChangeProperty(Pid::ARPEGGIO_SPAN, newSpan);
     }
 }
