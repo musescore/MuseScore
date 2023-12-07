@@ -1706,6 +1706,7 @@ void MeasureLayout::addSystemHeader(Measure* m, bool isFirstSystem, LayoutContex
                 //
                 keysig = Factory::createKeySig(kSegment);
                 keysig->setTrack(track);
+                keysig->setGenerated(true);
                 keysig->setParent(kSegment);
                 kSegment->add(keysig);
             }
