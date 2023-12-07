@@ -91,6 +91,7 @@ apt_packages=(
   sed
   desktop-file-utils # installs `desktop-file-validate` for appimagetool
   zsync # installs `zsyncmake` for appimagetool
+  libgpgme-dev # install for appimagetool
   libglib2.0-dev
   librsvg2-dev
   argagg-dev
@@ -225,7 +226,7 @@ cd /
 
 git clone https://github.com/linuxdeploy/linuxdeploy
 cd /linuxdeploy/
-git checkout --recurse-submodules 49f4f237762395c6a37
+git checkout --recurse-submodules 1-alpha-20231206-1
 git submodule update --init --recursive
 
 # patch src/core/generate-excludelist.sh to use curl instead of wget which fails on armhf
@@ -246,7 +247,7 @@ cd /
 
 git clone https://github.com/linuxdeploy/linuxdeploy-plugin-qt
 cd /linuxdeploy-plugin-qt/
-git checkout --recurse-submodules 59b6c1f90e21ba14
+git checkout --recurse-submodules 9a388d32b1e95d8b69e201356f050137eb6c0aa3
 git submodule update --init --recursive
 
 # patch src/core/generate-excludelist.sh to use curl instead of wget which fails on armhf
@@ -256,6 +257,7 @@ mkdir -p build
 cd build
 cmake -DBUILD_TESTING=OFF -DUSE_SYSTEM_BOOST=ON ..
 cmake --build . -j $(nproc)
+mkdir -p $BUILD_TOOLS/linuxdeploy
 mv /linuxdeploy-plugin-qt/build/bin/linuxdeploy-plugin-qt $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-qt
 $BUILD_TOOLS/linuxdeploy/linuxdeploy --list-plugins
 cd /
@@ -266,7 +268,7 @@ cd /
 
 git clone https://github.com/linuxdeploy/linuxdeploy-plugin-appimage
 cd /linuxdeploy-plugin-appimage/
-git checkout --recurse-submodules 779bd58443e8cc
+git checkout --recurse-submodules 1-alpha-20230713-1
 git submodule update --init --recursive
 mkdir -p build
 cd build
@@ -299,49 +301,10 @@ appimagetool --version
 
 git clone https://github.com/AppImageCommunity/AppImageUpdate.git
 cd AppImageUpdate
-git checkout --recurse-submodules 2.0.0-alpha-1-20220512
+git checkout --recurse-submodules 2.0.0-alpha-1-20230526
 git submodule update --init --recursive
 mkdir -p build
 cd build
-
-if [ "$PACKARCH" == "armv7l" ]; then
-  cp ../ci/libgcrypt.pc /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
-  sed -i 's|x86_64-linux-gnu|arm-linux-gnueabihf|g' /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
-  sed -i 's|x86_64-pc-linux-gnu|arm-pc-linux-gnueabihf|g' /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc
-  echo 'prefix=/usr
-exec_prefix=${prefix}
-includedir=${prefix}/include
-libdir=${prefix}/lib/arm-linux-gnueabihf
-host=arm-unknown-linux-gnueabihf
-mtcflags=
-mtlibs=
-
-Name: gpg-error
-Description: GPG Runtime
-Version: 1.27
-Cflags:
-Libs: -L${libdir} -lgpg-error
-Libs.private:
-URL: https://www.gnupg.org/software/libgpg-error/index.html' > /usr/lib/arm-linux-gnueabihf/pkgconfig/gpg-error.pc
-else
-  cp ../ci/libgcrypt.pc /usr/lib/aarch64-linux-gnu/pkgconfig/libgcrypt.pc
-  sed -i 's|x86_64|aarch64|g' /usr/lib/aarch64-linux-gnu/pkgconfig/libgcrypt.pc
-  echo 'prefix=/usr
-exec_prefix=${prefix}
-includedir=${prefix}/include
-libdir=${prefix}/lib/aarch64-linux-gnu
-host=aarch64-unknown-linux-gnu
-mtcflags=
-mtlibs=
-
-Name: gpg-error
-Description: GPG Runtime
-Version: 1.27
-Cflags:
-Libs: -L${libdir} -lgpg-error
-Libs.private:
-URL: https://www.gnupg.org/software/libgpg-error/index.html' > /usr/lib/aarch64-linux-gnu/pkgconfig/gpg-error.pc
-fi
 
 cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
 make -j"$(nproc)"
@@ -353,7 +316,6 @@ cp -v ../resources/*.xpm $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PA
 $BUILD_TOOLS/linuxdeploy/linuxdeploy -v0 --appdir $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir  --output appimage -d ../resources/appimageupdatetool.desktop -i ../resources/appimage.png
 cd $BUILD_TOOLS/appimageupdatetool
 ln -s "appimageupdatetool-${PACKARCH}.AppDir/AppRun" appimageupdatetool # symlink for convenience
-rm -rf /usr/lib/arm-linux-gnueabihf/pkgconfig/libgcrypt.pc /usr/lib/aarch64-linux-gnu/pkgconfig/libgcrypt.pc
 cd /
 $BUILD_TOOLS/appimageupdatetool/appimageupdatetool --version
 
