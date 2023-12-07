@@ -1709,6 +1709,16 @@ void Score::removeElement(EngravingItem* element)
     }
 }
 
+void Score::doUndoRemoveElement(EngravingItem* element)
+{
+    if (element->generated()) {
+        removeElement(element);
+        element->deleteLater();
+    } else {
+        undo(new RemoveElement(element));
+    }
+}
+
 bool Score::containsElement(const EngravingItem* element) const
 {
     if (!element) {

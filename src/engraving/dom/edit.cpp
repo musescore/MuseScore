@@ -1057,7 +1057,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
         auto spanners = s->spannerMap().findOverlapping(tick1.ticks(), tick2.ticks());
         for (auto i : spanners) {
             if (i.value->tick() >= tick1 && i.value->tick() < tick2) {
-                undo(new RemoveElement(i.value));
+                doUndoRemoveElement(i.value);
             }
         }
         s->undoRemoveMeasures(m1, m2, true);
@@ -3913,7 +3913,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
 {
     std::set<Segment*> segments;
     for (EngravingObject* e : cr->linkList()) {
-        undo(new RemoveElement(static_cast<EngravingItem*>(e)));
+        doUndoRemoveElement(static_cast<EngravingItem*>(e));
         if (clearSegment) {
             Segment* s = cr->segment();
             if (segments.find(s) == segments.end()) {
@@ -3923,7 +3923,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
     }
     for (Segment* s : segments) {
         if (s->empty()) {
-            undo(new RemoveElement(s));
+            doUndoRemoveElement(s);
         }
     }
     if (cr->beam()) {
@@ -3938,7 +3938,7 @@ void Score::removeChordRest(ChordRest* cr, bool clearSegment)
     if (cr->isChord()) {
         for (Spanner* spanner : toChord(cr)->startingSpanners()) {
             if (spanner->isTrill()) {
-                undo(new RemoveElement(spanner));
+                doUndoRemoveElement(spanner);
             }
         }
     }
@@ -4158,7 +4158,7 @@ void Score::checkSpanner(const Fraction& startTick, const Fraction& endTick, boo
     }
     if (removeOrphans) {
         for (auto s : sl) {       // actually remove scheduled spanners
-            undo(new RemoveElement(s));
+            doUndoRemoveElement(s);
         }
     }
     for (auto s : sl2) {      // shorten spanners that extended past end of score
@@ -5433,7 +5433,7 @@ void Score::undoRemoveStaff(Staff* staff)
 
     for (Spanner* spanner : spannersToRemove) {
         spanner->undoUnlink();
-        undo(new RemoveElement(spanner));
+        doUndoRemoveElement(spanner);
     }
 
     //
@@ -6416,7 +6416,7 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
     for (EngravingObject* ee : element->linkList()) {
         EngravingItem* e = static_cast<EngravingItem*>(ee);
         if (e == element || removeLinked) {
-            undo(new RemoveElement(e));
+            doUndoRemoveElement(e);
 
             if (e->explicitParent() && (e->explicitParent()->isSegment())) {
                 Segment* s = toSegment(e->explicitParent());
@@ -6446,7 +6446,7 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
             if (s->header() || s->trailer()) {        // probably more segment types (system header)
                 s->setEnabled(false);
             } else {
-                undo(new RemoveElement(s));
+                doUndoRemoveElement(s);
             }
         }
     }

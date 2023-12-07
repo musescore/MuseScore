@@ -460,7 +460,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             Stem* stem = Factory::createStem(item);
             stem->setParent(item);
             stem->setGenerated(true);
-            ctx.mutDom().undo(new AddElement(stem));
+            ctx.mutDom().addElement(stem);
         }
         item->stem()->setPos(tab->chordStemPos(item) * _spatium);
         if (item->hook()) {
@@ -476,15 +476,15 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         }
     } else {
         if (item->stem()) {
-            ctx.mutDom().undo(new RemoveElement(item->stem()));
+            ctx.mutDom().doUndoRemoveElement(item->stem());
             item->remove(item->stem());
         }
         if (item->hook()) {
-            ctx.mutDom().undo(new RemoveElement(item->hook()));
+            ctx.mutDom().doUndoRemoveElement(item->hook());
             item->remove(item->hook());
         }
         if (item->beam()) {
-            ctx.mutDom().undo(new RemoveElement(item->beam()));
+            ctx.mutDom().doUndoRemoveElement(item->beam());
             item->remove(item->beam());
         }
     }

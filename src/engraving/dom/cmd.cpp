@@ -1988,7 +1988,7 @@ void Score::upDown(bool up, UpDownMode mode)
                 for (EngravingObject* e : l) {
                     Note* ln = toNote(e);
                     if (ln->accidental()) {
-                        undo(new RemoveElement(ln->accidental()));
+                        doUndoRemoveElement(ln->accidental());
                     }
                 }
             }

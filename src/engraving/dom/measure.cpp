@@ -1082,7 +1082,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
             EngravingItem* el = s->element(track);
             if (el) {
                 el->undoUnlink();
-                score()->undo(new RemoveElement(el));
+                score()->doUndoRemoveElement(el);
             }
         }
 
@@ -1091,7 +1091,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
         for (EngravingItem* e : annotations) {
             if (allowRemoveWhenRemovingStaves(e, sStaff, eStaff)) {
                 e->undoUnlink();
-                score()->undo(new RemoveElement(e));
+                score()->doUndoRemoveElement(e);
             }
         }
     }
@@ -1103,7 +1103,7 @@ void Measure::cmdRemoveStaves(staff_idx_t sStaff, staff_idx_t eStaff)
 
         if (allowRemoveWhenRemovingStaves(e, sStaff, eStaff)) {
             e->undoUnlink();
-            score()->undo(new RemoveElement(e));
+            score()->doUndoRemoveElement(e);
         }
     }
 
