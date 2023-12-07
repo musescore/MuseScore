@@ -122,7 +122,7 @@ PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anch
     IF_ASSERT_FAILED(layoutInfo) {
         return PointF();
     }
-    return layoutInfo->chordBeamAnchor(chord, anchorType);
+    return rendering::dev::BeamTremoloLayout::chordBeamAnchor(layoutInfo.get(), chord, anchorType);
 }
 
 double Tremolo::beamWidth() const

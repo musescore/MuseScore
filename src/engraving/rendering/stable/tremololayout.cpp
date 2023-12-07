@@ -197,9 +197,10 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
         ChordLayout::layoutStem(item->chord2(), ctx);
     }
 
-    item->layoutInfo = std::make_shared<rendering::dev::BeamTremoloLayout>(item);
-    item->setStartAnchor(item->layoutInfo->chordBeamAnchor(item->chord1(), ChordBeamAnchorType::Start));
-    item->setEndAnchor(item->layoutInfo->chordBeamAnchor(item->chord2(), ChordBeamAnchorType::End));
+    item->layoutInfo = std::make_shared<dev::BeamTremoloLayout>();
+    dev::BeamTremoloLayout::setupLData(item->layoutInfo.get(), item);
+    item->setStartAnchor(dev::BeamTremoloLayout::chordBeamAnchor(item->layoutInfo.get(), item->chord1(), ChordBeamAnchorType::Start));
+    item->setEndAnchor(dev::BeamTremoloLayout::chordBeamAnchor(item->layoutInfo.get(), item->chord2(), ChordBeamAnchorType::End));
     // deal with manual adjustments here and return
     PropertyValue val = item->getProperty(Pid::PLACEMENT);
     if (item->userModified()) {
@@ -246,7 +247,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
 
     std::sort(notes.begin(), notes.end());
     ldata->setMag(mag);
-    item->layoutInfo->calculateAnchors(chordRests, notes);
+    dev::BeamTremoloLayout::calculateAnchors(item->layoutInfo.get(), chordRests, notes);
     item->setStartAnchor(item->layoutInfo->startAnchor());
     item->setEndAnchor(item->layoutInfo->endAnchor());
     int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
@@ -375,7 +376,7 @@ void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
                 addition += (item->lines() - 1.) * beamSpacing / 4. * item->spatium() * item->mag();
             }
             // calling extendStem with addition 0.0 still sizes the stem to the manually adjusted height of the trem.
-            item->layoutInfo->extendStem(chord, addition);
+            dev::BeamTremoloLayout::extendStem(item->layoutInfo.get(), chord, addition);
         }
     }
 }
