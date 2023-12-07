@@ -183,7 +183,7 @@ void PlaybackContext::handleSpanners(const ID partId, const Score* score, const 
         return;
     }
 
-    auto intervals = spannerMap.findOverlapping(segmentStartTick, segmentEndTick);
+    auto intervals = spannerMap.findOverlapping(segmentStartTick, segmentEndTick - 1);
     for (const auto& interval : intervals) {
         const Spanner* spanner = interval.value;
 
