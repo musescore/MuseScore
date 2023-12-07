@@ -44,13 +44,14 @@ public:
 
     static void setupLData(Beam::LayoutData* info, EngravingItem* e);
 
-    static bool calculateAnchors(Beam::LayoutData* info, const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes);
+    static bool calculateAnchors(const Beam* beam, Beam::LayoutData* ldata, const std::vector<ChordRest*>& chordRests,
+                                 const std::vector<int>& notes);
 
-    static double chordBeamAnchorX(const Beam::LayoutData* info, const ChordRest* chord, ChordBeamAnchorType anchorType);
+    static double chordBeamAnchorX(const Beam* beam, const Beam::LayoutData* ldata, const ChordRest* chord, ChordBeamAnchorType anchorType);
     static double chordBeamAnchorY(const Beam::LayoutData* info, const ChordRest* chord);
-    static PointF chordBeamAnchor(const Beam::LayoutData* info, const ChordRest* chord, ChordBeamAnchorType anchorType);
-    static int getMaxSlope(const Beam::LayoutData* info);
-    static void extendStem(const Beam::LayoutData* info, Chord* chord, double addition);
+    static PointF chordBeamAnchor(const Beam* beam, const Beam::LayoutData* ldata, const ChordRest* chord, ChordBeamAnchorType anchorType);
+    static int getMaxSlope(const Beam* beam, const Beam::LayoutData* ldata);
+    static void extendStem(const Beam* beam, const Beam::LayoutData* ldata, Chord* chord, double addition);
 
 private:
     enum class SlopeConstraint
@@ -60,29 +61,32 @@ private:
         SMALL_SLOPE,
     };
 
-    static int getMiddleStaffLine(const Beam::LayoutData* info, ChordRest* startChord, ChordRest* endChord, int staffLines);
-    static int computeDesiredSlant(const Beam::LayoutData* info, int startNote, int endNote, int middleLine, int dictator, int pointer);
+    static int getMiddleStaffLine(const Beam* beam, const Beam::LayoutData* ldata, ChordRest* startChord, ChordRest* endChord,
+                                  int staffLines);
+    static int computeDesiredSlant(const Beam* beam, const Beam::LayoutData* ldata, int startNote, int endNote, int middleLine,
+                                   int dictator, int pointer);
     static SlopeConstraint getSlopeConstraint(const Beam::LayoutData* info, int startNote, int endNote);
-    static void offsetBeamWithAnchorShortening(const Beam::LayoutData* info, std::vector<ChordRest*> chordRests, int& dictator,
-                                               int& pointer, int staffLines, bool isStartDictator, int stemLengthDictator);
+    static void offsetBeamWithAnchorShortening(const Beam* beam, const Beam::LayoutData* ldata, std::vector<ChordRest*> chordRests,
+                                               int& dictator, int& pointer, int staffLines, bool isStartDictator, int stemLengthDictator);
     static bool isValidBeamPosition(const bool isUp, int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, bool isOuter);
     static bool isBeamInsideStaff(int yPos, int staffLines, bool allowFloater);
     static int getOuterBeamPosOffset(const Beam::LayoutData* info, int innerBeam, int beamCount, int staffLines);
-    static void offsetBeamToRemoveCollisions(const Beam::LayoutData* info, std::vector<ChordRest*> chordRests, int& dictator, int& pointer,
-                                             const double startX, const double endX, bool isFlat, bool isStartDictator);
-    static int getBeamCount(const Beam::LayoutData* info, std::vector<ChordRest*> chordRests);
+    static void offsetBeamToRemoveCollisions(const Beam* beam, const Beam::LayoutData* ldata, std::vector<ChordRest*> chordRests,
+                                             int& dictator, int& pointer, const double startX, const double endX, bool isFlat,
+                                             bool isStartDictator);
+    static int getBeamCount(const std::vector<ChordRest*>& chordRests);
     static bool is64thBeamPositionException(const int beamSpacing, int& yPos, int staffLines);
     static int findValidBeamOffset(const Beam::LayoutData* info, int outer, int beamCount, int staffLines, bool isStart, bool isAscending,
                                    bool isFlat);
     static void setValidBeamPositions(const Beam::LayoutData* info, int& dictator, int& pointer, int beamCountD, int beamCountP,
                                       int staffLines, bool isStartDictator, bool isFlat, bool isAscending);
-    static void addMiddleLineSlant(const Beam::LayoutData* info, int& dictator, int& pointer, int beamCount, int middleLine, int interval,
-                                   int desiredSlant);
-    static void add8thSpaceSlant(Beam::LayoutData* info, mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount, int interval,
-                                 int middleLine, bool Flat);
+    static void addMiddleLineSlant(const Beam* beam, const Beam::LayoutData* ldata, int& dictator, int& pointer, int beamCount,
+                                   int middleLine, int interval, int desiredSlant);
+    static void add8thSpaceSlant(const Beam* beam, Beam::LayoutData* ldata, mu::PointF& dictatorAnchor, int dictator, int pointer,
+                                 int beamCount, int interval, int middleLine, bool Flat);
     static bool noSlope(const Beam* beam);
-    static int strokeCount(const Beam::LayoutData* info, ChordRest* cr);
-    static bool calculateAnchorsCross(Beam::LayoutData* info);
+    static int strokeCount(ChordRest* cr);
+    static bool calculateAnchorsCross(const Beam* beam, Beam::LayoutData* ldata);
 };
 } // namespace mu::engraving
 #endif

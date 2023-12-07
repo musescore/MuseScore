@@ -308,8 +308,8 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
     item->setBeamDist((item->beamSpacing() / 4.0) * item->spatium() * item->mag());
     item->setBeamWidth(item->point(ctx.conf().styleS(Sid::beamWidth)) * item->mag());
 
-    item->setStartAnchor(BeamBeamLayout::chordBeamAnchor(item->ldata(), startChord, ChordBeamAnchorType::Start));
-    item->setEndAnchor(BeamBeamLayout::chordBeamAnchor(item->ldata(), endChord, ChordBeamAnchorType::End));
+    item->setStartAnchor(BeamBeamLayout::chordBeamAnchor(item, item->ldata(), startChord, ChordBeamAnchorType::Start));
+    item->setEndAnchor(BeamBeamLayout::chordBeamAnchor(item, item->ldata(), endChord, ChordBeamAnchorType::End));
 
     if (item->isGrace()) {
         item->setBeamDist(item->beamDist() * ctx.conf().styleD(Sid::graceNoteMag));
@@ -342,7 +342,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
 
     if (!item->isBesideTabStaff()) {
         BeamBeamLayout::setupLData(item->mutldata(), item);
-        BeamBeamLayout::calculateAnchors(item->mutldata(), chordRests, item->notes());
+        BeamBeamLayout::calculateAnchors(item, item->mutldata(), chordRests, item->notes());
         item->setStartAnchor(item->ldata()->startAnchor());
         item->setEndAnchor(item->ldata()->endAnchor());
         item->setSlope(mu::divide(item->endAnchor().y() - item->startAnchor().y(), item->endAnchor().x() - item->startAnchor().x(), 0.0));
@@ -358,8 +358,8 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         }
 
         BeamBeamLayout::setupLData(item->mutldata(), item);
-        double x1 = BeamBeamLayout::chordBeamAnchorX(item->ldata(), chordRests.front(), ChordBeamAnchorType::Start);
-        double x2 = BeamBeamLayout::chordBeamAnchorX(item->ldata(), chordRests.back(), ChordBeamAnchorType::End);
+        double x1 = BeamBeamLayout::chordBeamAnchorX(item, item->ldata(), chordRests.front(), ChordBeamAnchorType::Start);
+        double x2 = BeamBeamLayout::chordBeamAnchorX(item, item->ldata(), chordRests.back(), ChordBeamAnchorType::End);
         double y = BeamBeamLayout::chordBeamAnchorY(item->ldata(), startChord2);
         item->startAnchor() = PointF(x1, y);
         item->endAnchor() = PointF(x2, y);
@@ -1175,8 +1175,8 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         overallUp = firstUp;
     }
 
-    const double startX = BeamBeamLayout::chordBeamAnchorX(item->ldata(), startCr, ChordBeamAnchorType::Start);
-    const double endX = BeamBeamLayout::chordBeamAnchorX(item->ldata(), endCr, ChordBeamAnchorType::End);
+    const double startX = BeamBeamLayout::chordBeamAnchorX(item, item->ldata(), startCr, ChordBeamAnchorType::Start);
+    const double endX = BeamBeamLayout::chordBeamAnchorX(item, item->ldata(), endCr, ChordBeamAnchorType::End);
 
     double startY = item->slope() * (startX - item->startAnchor().x()) + item->startAnchor().y() - item->pagePos().y();
     double endY = item->slope() * (endX - item->startAnchor().x()) + item->startAnchor().y() - item->pagePos().y();
@@ -1240,7 +1240,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         if (level > 0) {
             double grow = item->growLeft();
             if (!RealIsEqual(item->growLeft(), item->growRight())) {
-                double anchorX = BeamBeamLayout::chordBeamAnchorX(item->ldata(), chord, ChordBeamAnchorType::Middle);
+                double anchorX = BeamBeamLayout::chordBeamAnchorX(item, item->ldata(), chord, ChordBeamAnchorType::Middle);
                 double proportionAlongX = (anchorX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
                 grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
             }
@@ -1250,7 +1250,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         }
 
         if (level == 0 || !RealIsEqual(addition, 0.0)) {
-            BeamBeamLayout::extendStem(item->ldata(), chord, addition);
+            BeamBeamLayout::extendStem(item, item->ldata(), chord, addition);
         }
 
         if (chord == endCr) {
@@ -1261,7 +1261,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
 
 void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest* cr, bool isBefore, int level)
 {
-    const double startX = BeamBeamLayout::chordBeamAnchorX(item->ldata(), cr,
+    const double startX = BeamBeamLayout::chordBeamAnchorX(item, item->ldata(), cr,
                                                            isBefore
                                                            ? ChordBeamAnchorType::End
                                                            : ChordBeamAnchorType::Start);
@@ -1461,7 +1461,7 @@ bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<
                 yLast = topFirst->stemPos().y();
             }
             int desiredSlant = round((yFirst - yLast) / item->spatium());
-            int slant = std::min(std::abs(desiredSlant), BeamBeamLayout::getMaxSlope(item->ldata()));
+            int slant = std::min(std::abs(desiredSlant), BeamBeamLayout::getMaxSlope(item, item->ldata()));
             slant *= (desiredSlant < 0) ? -quarterSpace : quarterSpace;
             item->startAnchor().ry() += (slant / 2);
             item->endAnchor().ry() -= (slant / 2);
@@ -1490,7 +1490,7 @@ bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<
 
             if (!forceHoriz) {
                 int slant = startNote - endNote;
-                slant = std::min(std::abs(slant), BeamBeamLayout::getMaxSlope(item->ldata()));
+                slant = std::min(std::abs(slant), BeamBeamLayout::getMaxSlope(item, item->ldata()));
                 if ((!bottomLast && constrainTopToQuarter) || (!topLast && constrainBottomToQuarter)) {
                     slant = 1;
                 }
@@ -1524,7 +1524,7 @@ bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<
                 // if one of the slants is 0, the whole slant is zero
             } else if ((topSlant < 0 && bottomSlant < 0) || (topSlant > 0 && bottomSlant > 0)) {
                 int slant = (abs(topSlant) < abs(bottomSlant)) ? topSlant : bottomSlant;
-                slant = std::min(std::abs(slant), BeamBeamLayout::getMaxSlope(item->ldata()));
+                slant = std::min(std::abs(slant), BeamBeamLayout::getMaxSlope(item, item->ldata()));
                 double slope = slant * ((topSlant < 0) ? -quarterSpace : quarterSpace);
                 item->startAnchor().ry() += (slope / 2);
                 item->endAnchor().ry() -= (slope / 2);
@@ -1533,8 +1533,8 @@ bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<
                 // nothing needs to be done, the beam is already horizontal and placed nicely
             }
         }
-        item->startAnchor().setX(BeamBeamLayout::chordBeamAnchorX(item->ldata(), startCr, ChordBeamAnchorType::Start));
-        item->endAnchor().setX(BeamBeamLayout::chordBeamAnchorX(item->ldata(), endCr, ChordBeamAnchorType::End));
+        item->startAnchor().setX(BeamBeamLayout::chordBeamAnchorX(item, item->ldata(), startCr, ChordBeamAnchorType::Start));
+        item->endAnchor().setX(BeamBeamLayout::chordBeamAnchorX(item, item->ldata(), endCr, ChordBeamAnchorType::End));
         item->setSlope((item->endAnchor().y() - item->startAnchor().y()) / (item->endAnchor().x() - item->startAnchor().x()));
     }
     item->beamFragments()[frag]->py1[fragmentIndex] = item->startAnchor().y() - item->pagePos().y();
@@ -1545,7 +1545,7 @@ bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<
 
 PointF BeamLayout::chordBeamAnchor(const Beam* item, const ChordRest* chord, ChordBeamAnchorType anchorType)
 {
-    return BeamBeamLayout::chordBeamAnchor(item->ldata(), chord, anchorType);
+    return BeamBeamLayout::chordBeamAnchor(item, item->ldata(), chord, anchorType);
 }
 
 double BeamLayout::chordBeamAnchorY(const Beam* item, const ChordRest* chord)
