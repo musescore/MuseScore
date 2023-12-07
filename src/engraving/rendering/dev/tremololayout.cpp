@@ -247,8 +247,8 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
     std::sort(notes.begin(), notes.end());
     ldata->setMag(mag);
     TremoloBeamLayout::calculateAnchors(item->mutldata(), chordRests, notes);
-    item->setStartAnchor(item->ldata()->startAnchor());
-    item->setEndAnchor(item->ldata()->endAnchor());
+    item->setStartAnchor(item->ldata()->startAnchor);
+    item->setEndAnchor(item->ldata()->endAnchor);
     int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
     item->beamFragment().py1[idx] = item->startAnchor().y() - item->pagePos().y();
     item->beamFragment().py2[idx] = item->endAnchor().y() - item->pagePos().y();
@@ -303,8 +303,8 @@ void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
 
     bool _isGrace = item->chord1()->isGrace();
     const PointF pagePos = item->pagePos();
-    PointF startAnchor = item->ldata()->startAnchor() - PointF(0.0, pagePos.y());
-    PointF endAnchor = item->ldata()->endAnchor() - PointF(0.0, pagePos.y());
+    PointF startAnchor = item->ldata()->startAnchor - PointF(0.0, pagePos.y());
+    PointF endAnchor = item->ldata()->endAnchor - PointF(0.0, pagePos.y());
 
     // inset trem from stems for default style
     const double slope = mu::divide(endAnchor.y() - startAnchor.y(), endAnchor.x() - startAnchor.x(), 0.0);

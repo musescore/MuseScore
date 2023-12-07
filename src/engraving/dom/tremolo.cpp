@@ -124,7 +124,7 @@ PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anch
 
 double Tremolo::beamWidth() const
 {
-    return ldata()->beamWidth();
+    return ldata()->beamWidth;
 }
 
 //---------------------------------------------------------

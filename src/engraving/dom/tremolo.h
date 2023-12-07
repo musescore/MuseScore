@@ -164,30 +164,26 @@ public:
     void computeShape();
 
     struct LayoutData : public EngravingItem::LayoutData {
-        Tremolo* m_trem = nullptr;
-        Beam* m_beam = nullptr;
-        bool m_up = false;
-        Fraction m_tick = Fraction(0, 1);
-        double m_spatium = 0.;
-        PointF m_startAnchor;
-        PointF m_endAnchor;
-        double m_slope = 0.;
-        bool m_isGrace = false;
-        int m_beamSpacing = 0;
-        double m_beamDist = 0.0;
-        double m_beamWidth = 0.0;
-        std::vector<ChordRest*> m_elements;
-        std::vector<int> m_notes;
-        StaffType const* m_tab = nullptr;
-        bool m_isBesideTabStaff = false;
+        Tremolo* trem = nullptr;
+        Beam* beam = nullptr;
+        bool up = false;
+        Fraction tick = Fraction(0, 1);
+        double spatium = 0.;
+        PointF startAnchor;
+        PointF endAnchor;
+        double slope = 0.;
+        bool isGrace = false;
+        int beamSpacing = 0;
+        double beamDist = 0.0;
+        double beamWidth = 0.0;
+        std::vector<ChordRest*> elements;
+        std::vector<int> notes;
+        const StaffType* tab = nullptr;
+        bool isBesideTabStaff = false;
 
-        bool isValid() const override { return m_trem != nullptr; }
+        bool isValid() const override { return trem != nullptr; }
 
-        void setAnchors(PointF startAnchor, PointF endAnchor) { m_startAnchor = startAnchor; m_endAnchor = endAnchor; }
-        double beamDist() const { return m_beamDist; }
-        double beamWidth() const { return m_beamWidth; }
-        PointF startAnchor() const { return m_startAnchor; }
-        PointF endAnchor() const { return m_endAnchor; }
+        void setAnchors(PointF startA, PointF endA) { startAnchor = startA; endAnchor = endA; }
     };
     DECLARE_LAYOUTDATA_METHODS(Tremolo)
 

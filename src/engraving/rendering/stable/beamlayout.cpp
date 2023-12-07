@@ -342,10 +342,10 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
     if (!item->isBesideTabStaff()) {
         dev::BeamBeamLayout::setupLData(item->mutldata(), item);
         dev::BeamBeamLayout::calculateAnchors(item, item->mutldata(), chordRests, item->notes());
-        item->setStartAnchor(item->ldata()->startAnchor());
-        item->setEndAnchor(item->ldata()->endAnchor());
+        item->setStartAnchor(item->ldata()->startAnchor);
+        item->setEndAnchor(item->ldata()->endAnchor);
         item->setSlope((item->endAnchor().y() - item->startAnchor().y()) / (item->endAnchor().x() - item->startAnchor().x()));
-        item->setBeamDist(item->ldata()->beamDist());
+        item->setBeamDist(item->ldata()->beamDist);
     } else {
         item->setSlope(0.0);
         Chord* startChord2 = nullptr;
@@ -363,7 +363,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
         item->startAnchor() = PointF(x1, y);
         item->endAnchor() = PointF(x2, y);
         item->mutldata()->setAnchors(item->startAnchor(), item->endAnchor());
-        item->setBeamWidth(item->ldata()->beamWidth());
+        item->setBeamWidth(item->ldata()->beamWidth);
     }
 
     item->beamFragments()[frag]->py1[fragmentIndex] = item->startAnchor().y() - item->pagePos().y();
