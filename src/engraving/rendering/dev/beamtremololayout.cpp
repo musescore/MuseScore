@@ -53,14 +53,12 @@ void BeamTremoloLayout::setupLData(BeamTremoloLayout* info, EngravingItem* e)
 
     bool isGrace = false;
     if (e->isBeam()) {
-        info->m_beamType = BeamType::BEAM;
         info->m_beam = toBeam(e);
         info->m_up = toBeam(e)->up();
         info->m_trem = nullptr; // there can be many different trems in a beam, they will all be checked
         isGrace = info->m_beam->elements().front()->isGrace();
     } else { // e->isTremolo()
         info->m_trem = toTremolo(e);
-        info->m_beamType = BeamType::TREMOLO;
         // check to see if there is a beam happening during this trem
         // if so, it needs to be taken into account in trem placement
         if (info->m_trem->chord1()->beam() && info->m_trem->chord1()->beam() == info->m_trem->chord2()->beam()) {
@@ -455,11 +453,16 @@ int BeamTremoloLayout::strokeCount(const BeamTremoloLayout* info, ChordRest* cr)
     if (cr->isRest()) {
         return cr->beams();
     }
+
+    IF_ASSERT_FAILED(info->m_element) {
+        return 0;
+    }
+
     int strokes = 0;
     Chord* c = toChord(cr);
-    if (info->m_beamType == BeamType::TREMOLO) {
+    if (info->m_element->isTremolo()) {
         strokes = info->m_trem->lines();
-    } else if (info->m_beamType == BeamType::BEAM && c->tremolo()) {
+    } else if (info->m_element->isBeam() && c->tremolo()) {
         Tremolo* t = c->tremolo();
         if (t->twoNotes()) {
             strokes = t->lines();
@@ -471,9 +474,13 @@ int BeamTremoloLayout::strokeCount(const BeamTremoloLayout* info, ChordRest* cr)
 
 bool BeamTremoloLayout::calculateAnchors(BeamTremoloLayout* info, const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes)
 {
+    IF_ASSERT_FAILED(info->m_element) {
+        return false;
+    }
+
     info->m_startAnchor = PointF();
     info->m_endAnchor = PointF();
-    if (info->m_beamType == BeamType::TREMOLO && info->m_beam) {
+    if (info->m_element->isTremolo() && info->m_beam) {
         // this is a trem inside a beam, and we are currently calculating the anchors of the tremolo.
         // we can do this as long as the beam has been layed out first: it saves trem anchor positions
         ChordRest* cr1 = info->m_trem->chord1();
@@ -600,7 +607,7 @@ bool BeamTremoloLayout::calculateAnchors(BeamTremoloLayout* info, const std::vec
     info->m_endAnchor.setY(quarterSpace * (isStartDictator ? pointer : dictator) + info->m_element->pagePos().y());
 
     bool add8th = true;
-    if (info->m_beamType == BeamType::BEAM && toBeam(info->m_element)->userModified()) {
+    if (info->m_element->isBeam() && toBeam(info->m_element)->userModified()) {
         add8th = false;
     }
     if (!info->m_tab && add8th) {
@@ -870,7 +877,7 @@ int BeamTremoloLayout::getMiddleStaffLine(const BeamTremoloLayout* info, ChordRe
 int BeamTremoloLayout::computeDesiredSlant(const BeamTremoloLayout* info, int startNote, int endNote, int middleLine, int dictator,
                                            int pointer)
 {
-    if (info->m_beamType == BeamType::BEAM && toBeam(info->m_element)->noSlope()) {
+    if (info->m_element->isBeam() && toBeam(info->m_element)->noSlope()) {
         return 0;
     }
     int dictatorExtension = middleLine - dictator; // we need to make sure that beams extended to the middle line
@@ -912,7 +919,7 @@ SlopeConstraint BeamTremoloLayout::getSlopeConstraint(const BeamTremoloLayout* i
     // 0 to constrain to flat, 1 to constrain to 0.25, <0 for no constraint
     if (startNote == endNote) {
         return SlopeConstraint::FLAT;
-    } else if (info->m_beamType == BeamType::TREMOLO) {
+    } else if (info->m_element->isTremolo()) {
         // tremolos don't need the small slope constraint since they only have two notes
         return SlopeConstraint::NO_CONSTRAINT;
     }

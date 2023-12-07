@@ -65,15 +65,9 @@ public:
     static PointF chordBeamAnchor(const BeamTremoloLayout* info, const ChordRest* chord, ChordBeamAnchorType anchorType);
     static int getMaxSlope(const BeamTremoloLayout* info);
     static void extendStem(const BeamTremoloLayout* info, Chord* chord, double addition);
-    bool isValid() const { return !(m_beamType == BeamType::INVALID); }
+    bool isValid() const { return m_element != nullptr; }
 
 private:
-    enum class BeamType {
-        INVALID,
-        BEAM,
-        TREMOLO
-    };
-    BeamType m_beamType = BeamType::INVALID;
     EngravingItem* m_element = nullptr;
     Beam* m_beam = nullptr;
     Tremolo* m_trem = nullptr;
