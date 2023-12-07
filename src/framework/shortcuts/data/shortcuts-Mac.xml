@@ -106,7 +106,7 @@
     </SC>
   <SC>
     <key>file-save-as</key>
-    <std>Ctrl+Shift+S</std>
+    <seq>Ctrl+Shift+S</seq>
     </SC>
   <SC>
     <key>file-close</key>
@@ -552,7 +552,7 @@
     </SC>
   <SC>
     <key>insert-measures</key>
-    <seq>Shift+Del+I</seq>
+    <seq>Alt+Shift+I</seq>
     </SC>
   <SC>
     <key>duplet</key>
@@ -673,10 +673,6 @@
   <SC>
     <key>toggle-mixer</key>
     <seq>F10</seq>
-    </SC>
-  <SC>
-    <key>toggle-playpanel</key>
-    <seq>F11</seq>
     </SC>
   <SC>
     <key>toggle-timeline</key>
