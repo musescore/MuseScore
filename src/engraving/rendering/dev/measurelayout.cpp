@@ -341,7 +341,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        ctx.mutDom().undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().doUndoRemoveElement(mmrSeg);
     }
 
     //
@@ -375,7 +375,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        ctx.mutDom().undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().doUndoRemoveElement(mmrSeg);
     }
 
     //
@@ -404,7 +404,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        ctx.mutDom().undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().doUndoRemoveElement(mmrSeg);
     }
 
     //
@@ -443,7 +443,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // TODO: remove elements from mmrSeg, then delete mmrSeg
         // previously we removed the segment if not empty,
         // but this resulted in "stale" keysig in mmrest after removed from underlying measure
-        //undo(new RemoveElement(mmrSeg));
+        //doUndoRemoveElement(mmrSeg);
     }
 
     mmrMeasure->checkHeader();
@@ -493,7 +493,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             }
             // remove from mmr if no match found
             if (!found) {
-                ctx.mutDom().undo(new RemoveElement(e));
+                ctx.mutDom().doUndoRemoveElement(e);
             }
         }
     }
@@ -1153,11 +1153,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
             TLayout::layoutMeasureNumber(t, t->mutldata());
         } else {
             if (t) {
-                if (t->generated()) {
-                    ctx.mutDom().removeElement(t);
-                } else {
-                    ctx.mutDom().undo(new RemoveElement(t));
-                }
+                ctx.mutDom().doUndoRemoveElement(t);
             }
         }
     }
@@ -1171,11 +1167,7 @@ void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
             const MStaff* ms = m->mstaves().at(staffIdx);
             MMRestRange* rr = ms->mmRangeText();
             if (rr) {
-                if (rr->generated()) {
-                    ctx.mutDom().removeElement(rr);
-                } else {
-                    ctx.mutDom().undo(new RemoveElement(rr));
-                }
+                ctx.mutDom().doUndoRemoveElement(rr);
             }
         }
 

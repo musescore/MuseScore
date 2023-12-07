@@ -585,7 +585,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                         EngravingItem* pc = ps->element(staffIdx * VOICES);
                         if (pc) {
                             previousClefList.push_back(toClef(pc));
-                            undo(new RemoveElement(pc));
+                            doUndoRemoveElement(pc);
                             if (ps->empty()) {
                                 undoRemoveElement(ps);
                             }
@@ -650,7 +650,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                             ee = e;
                         }
                         if (ee) {
-                            undo(new RemoveElement(ee));
+                            doUndoRemoveElement(ee);
                             if (s->empty()) {
                                 undoRemoveElement(s);
                             }
@@ -676,7 +676,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
                     EngravingItem* pb = pbs->element(staffIdx * VOICES);
                     if (pb && !pb->generated()) {
                         previousBarLinesList.push_back(toBarLine(pb));
-                        undo(new RemoveElement(pb));
+                        doUndoRemoveElement(pb);
                         if (pbs->empty()) {
                             pbs->setEnabled(false);
                         }

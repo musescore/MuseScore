@@ -21,6 +21,7 @@
  */
 #include "layoutcontext.h"
 
+#include "dom/undo.h"
 #include "style/defaultstyle.h"
 
 #include "dom/mscoreview.h"
@@ -322,6 +323,16 @@ void DomAccessor::undoAddElement(EngravingItem* item, bool addToLinkedStaves, bo
         return;
     }
     score()->undoAddElement(item, addToLinkedStaves, ctrlModifier);
+}
+
+void DomAccessor::doUndoRemoveElement(EngravingItem* item)
+{
+    if (item->generated()) {
+        removeElement(item);
+        item->deleteLater();
+    } else {
+        undo(new RemoveElement(item));
+    }
 }
 
 void DomAccessor::undoRemoveElement(EngravingItem* item)
