@@ -135,11 +135,14 @@ DEBIAN_FRONTEND="noninteractive" TZ="Europe/London" apt-get install -y --no-inst
   "${apt_packages_runtime[@]}" \
   "${apt_packages_ffmpeg[@]}"
 
-# Add additional ppas (Qt 5.15.2 and Cmake)
+# Add additional ppas (Qt 5.15.2, Cmake, and patchelf)
 # Poor naming of the cmake ppa, this ppa has bionic/focal/jammy dists
 add-apt-repository --yes ppa:theofficialgman/cmake-bionic
 add-apt-repository --yes ppa:theofficialgman/opt-qt-5.15.2-focal-arm
+# minimum patchelf 0.12 needed for proper elf load memory alignment
+add-apt-repository --yes ppa:theofficialgman/patchelf
 apt-get update
+apt-get upgrade -y
 
 # add an exception for the "detected dubious ownership in repository" (only seen inside a Docker image)
 git config --global --add safe.directory /MuseScore
