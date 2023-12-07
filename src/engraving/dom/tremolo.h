@@ -33,6 +33,10 @@
 #include "beam.h"
 #include "chord.h"
 
+namespace mu::engraving::rendering::dev {
+class TremoloBeamLayout;
+}
+
 namespace mu::engraving {
 class Chord;
 
@@ -163,7 +167,7 @@ public:
 
     void computeShape();
 
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
+    std::shared_ptr<rendering::dev::TremoloBeamLayout> layoutInfo;
 
 private:
     friend class Factory;

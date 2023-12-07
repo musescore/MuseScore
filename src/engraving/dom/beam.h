@@ -29,7 +29,7 @@
 #include "property.h"
 
 namespace mu::engraving::rendering::dev {
-class BeamTremoloLayout;
+class BeamBeamLayout;
 }
 
 namespace mu::engraving {
@@ -233,7 +233,7 @@ public:
 
     const Chord* findChordWithCustomStemDirection() const;
 
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
+    std::shared_ptr<rendering::dev::BeamBeamLayout> layoutInfo;
 
 private:
 

@@ -29,8 +29,8 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/measurelayout.h
     ${CMAKE_CURRENT_LIST_DIR}/beamlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/beamlayout.h
-    ${CMAKE_CURRENT_LIST_DIR}/beamtremololayout.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/beamtremololayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/beambeamlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/beambeamlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/chordlayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/chordlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/tupletlayout.cpp
@@ -43,6 +43,8 @@ set(RENDERING_DEV_SRC
     ${CMAKE_CURRENT_LIST_DIR}/harmonylayout.h
     ${CMAKE_CURRENT_LIST_DIR}/tremololayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tremololayout.h
+    ${CMAKE_CURRENT_LIST_DIR}/tremolobeamlayout.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tremolobeamlayout.h
     ${CMAKE_CURRENT_LIST_DIR}/pagelayout.cpp
     ${CMAKE_CURRENT_LIST_DIR}/pagelayout.h
     ${CMAKE_CURRENT_LIST_DIR}/slurtielayout.cpp

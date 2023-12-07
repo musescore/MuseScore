@@ -31,7 +31,7 @@
 
 #include "style/style.h"
 
-#include "rendering/dev/beamtremololayout.h"
+#include "rendering/dev/tremolobeamlayout.h"
 
 #include "beam.h"
 #include "chord.h"
@@ -122,7 +122,7 @@ PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anch
     IF_ASSERT_FAILED(layoutInfo) {
         return PointF();
     }
-    return rendering::dev::BeamTremoloLayout::chordBeamAnchor(layoutInfo.get(), chord, anchorType);
+    return rendering::dev::TremoloBeamLayout::chordBeamAnchor(layoutInfo.get(), chord, anchorType);
 }
 
 double Tremolo::beamWidth() const
