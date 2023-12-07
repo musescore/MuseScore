@@ -164,8 +164,6 @@ public:
     void computeShape();
 
     struct LayoutData : public EngravingItem::LayoutData {
-        Tremolo* trem = nullptr;
-        Beam* beam = nullptr;
         bool up = false;
         Fraction tick = Fraction(0, 1);
         double spatium = 0.;
@@ -181,7 +179,9 @@ public:
         const StaffType* tab = nullptr;
         bool isBesideTabStaff = false;
 
-        bool isValid() const override { return trem != nullptr; }
+        // cache
+        Beam* beam = nullptr;
+        // ----
 
         void setAnchors(PointF startA, PointF endA) { startAnchor = startA; endAnchor = endA; }
     };

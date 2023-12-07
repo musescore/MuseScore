@@ -230,7 +230,6 @@ public:
     const Chord* findChordWithCustomStemDirection() const;
 
     struct LayoutData : public EngravingItem::LayoutData {
-        //Beam* m_beam = nullptr;
         bool up = false;
         Fraction tick = Fraction(0, 1);
         double spatium = 0.;
@@ -245,8 +244,6 @@ public:
         std::vector<int> notes;
         const StaffType* tab = nullptr;
         bool isBesideTabStaff = false;
-
-        //bool isValid() const override { return m_beam != nullptr; }
 
         void setAnchors(PointF startA, PointF endA) { startAnchor = startA; endAnchor = endA; }
     };

@@ -198,8 +198,8 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
     }
 
     dev::TremoloBeamLayout::setupLData(item->mutldata(), item);
-    item->setStartAnchor(dev::TremoloBeamLayout::chordBeamAnchor(item->ldata(), item->chord1(), ChordBeamAnchorType::Start));
-    item->setEndAnchor(dev::TremoloBeamLayout::chordBeamAnchor(item->ldata(), item->chord2(), ChordBeamAnchorType::End));
+    item->setStartAnchor(dev::TremoloBeamLayout::chordBeamAnchor(item, item->ldata(), item->chord1(), ChordBeamAnchorType::Start));
+    item->setEndAnchor(dev::TremoloBeamLayout::chordBeamAnchor(item, item->ldata(), item->chord2(), ChordBeamAnchorType::End));
     // deal with manual adjustments here and return
     PropertyValue val = item->getProperty(Pid::PLACEMENT);
     if (item->userModified()) {
@@ -246,7 +246,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
 
     std::sort(notes.begin(), notes.end());
     ldata->setMag(mag);
-    dev::TremoloBeamLayout::calculateAnchors(item->mutldata(), chordRests, notes);
+    dev::TremoloBeamLayout::calculateAnchors(item, item->mutldata(), chordRests, notes);
     item->setStartAnchor(item->ldata()->startAnchor);
     item->setEndAnchor(item->ldata()->endAnchor);
     int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
@@ -372,7 +372,7 @@ void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
                 addition += (item->lines() - 1.) * beamSpacing / 4. * item->spatium() * item->mag();
             }
             // calling extendStem with addition 0.0 still sizes the stem to the manually adjusted height of the trem.
-            dev::TremoloBeamLayout::extendStem(item->ldata(), chord, addition);
+            dev::TremoloBeamLayout::extendStem(item, item->ldata(), chord, addition);
         }
     }
 }

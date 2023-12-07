@@ -52,7 +52,6 @@ void BeamBeamLayout::setupLData(Beam::LayoutData* info, EngravingItem* e)
 
     Beam* beam = toBeam(e);
 
-    //info->m_beam = toBeam(e);
     info->up = beam->up();
 
     bool isGrace = beam->elements().front()->isGrace();
