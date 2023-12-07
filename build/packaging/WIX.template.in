@@ -3,7 +3,7 @@
 <?include "cpack_variables.wxi"?>
 
 <?define ProdName="$(var.MUSESCORE_NAME_VERSION)"?>
-<?define ShortProdName="$(var.CPACK_PACKAGE_NAME)$(var.CPACK_PACKAGE_VERSION_MAJOR)$(var.MUSESCORE_VERSION_LABEL)"?>
+<?define ShortProdName="$(var.CPACK_PACKAGE_NAME)$(var.CPACK_PACKAGE_VERSION_MAJOR)$(var.MUSESCORE_RELEASE_CHANNEL)"?>
 <?define ExeKey="$(var.ShortProdName).exe"?>
 <?define ExeName="$(var.MUSESCORE_EXECUTABLE_NAME).exe"?>
 <?define RegistryRoot="HKMU"?> <!--HKCU / HKLM-->
