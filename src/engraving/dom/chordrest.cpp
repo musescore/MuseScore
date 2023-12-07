@@ -122,8 +122,14 @@ ChordRest::~ChordRest()
     DeleteAll(m_lyrics);
     DeleteAll(m_el);
     delete m_tabDur;
-    if (m_beam && m_beam->contains(this)) {
-        delete m_beam;     // Beam destructor removes references to the deleted object
+
+    if (m_beam) {
+        mu::remove(m_beam->elements(), this);
+        m_beam = nullptr;
+    }
+
+    if (m_beamlet) {
+        m_beamlet = nullptr;
     }
 }
 

@@ -67,7 +67,7 @@ public:
     bool isBefore = false;
 
     Shape shape() const;
-    EngravingItem* parentElement;
+    EngravingItem* parentElement = nullptr;
 
     BeamSegment(EngravingItem* b)
         : parentElement(b) {}
@@ -221,6 +221,7 @@ public:
 
     const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
+    void clearBeamSegments();
 
     const StaffType* tab() const { return m_tab; }
     void setTab(const StaffType* t) { m_tab = t; }

@@ -3625,6 +3625,8 @@ mu::Ret NotationInteraction::repeatSelection()
             ChordRest* cr = toChordRest(e);
             score()->pasteStaff(xml, cr->segment(), cr->staffIdx());
             apply();
+
+            showItem(cr);
         }
     }
 
