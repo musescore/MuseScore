@@ -2906,25 +2906,6 @@ void Score::deleteItem(EngravingItem* el)
     }
     break;
 
-    case ElementType::VBOX:
-    {
-        // don't remove title frames in parts, because they contain part name
-        // remove title, subtitle, ... instead, and unlink frame siblinks
-        if (el == score()->first() && score()->isMaster()) {
-            ElementList els = toMeasureBase(el)->el();
-            for (auto it = els.rbegin(); it != els.rend(); ++it) {
-                deleteItem(*it);
-            }
-            undoRemoveElement(el, false);
-            for (EngravingObject* linkedFrame : el->linkList()) {
-                linkedFrame->undoUnlink();
-            }
-        } else {
-            undoRemoveElement(el);
-        }
-    }
-    break;
-
     default:
         undoRemoveElement(el);
         break;
@@ -4063,15 +4044,8 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
         tick = last() ? last()->endTick() : Fraction(0, 1);
     }
 
-    const bool isBeginning = tick.isZero();
-
-    const bool isTitleFrame = (type == ElementType::VBOX || type == ElementType::TBOX) && isBeginning;
-    const bool dontCloneFrameToParts = isFrame && !isTitleFrame;
-
     MeasureBase* newMeasureBase = toMeasureBase(Factory::createItem(type, dummy()));
     newMeasureBase->setTick(tick);
-    newMeasureBase->setExcludeFromOtherParts(dontCloneFrameToParts);
-
     newMeasureBase->setNext(beforeMeasure);
     newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
 
@@ -4079,6 +4053,10 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
 
     if (options.needDeselectAll) {
         deselectAll();
+    }
+
+    if (options.cloneBoxToAllParts) {
+        newMeasureBase->manageExclusionFromParts(/*exclude =*/ false);
     }
 
     return newMeasureBase;

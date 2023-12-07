@@ -35,7 +35,8 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <excludeFromParts>0</excludeFromParts>
+        <linked>
+          </linked>
         <Text>
           <style>instrument_excerpt</style>
           <text>Flute</text>
@@ -45,12 +46,13 @@
         <voice>
           <KeySig>
             <linked>
+              <indexDiff>-1</indexDiff>
               </linked>
             <concertKey>0</concertKey>
             </KeySig>
           <TimeSig>
             <linked>
-              <indexDiff>-1</indexDiff>
+              <indexDiff>-2</indexDiff>
               </linked>
             <sigN>4</sigN>
             <sigD>4</sigD>
@@ -60,7 +62,7 @@
             <velocity>80</velocity>
             <dynamicsSize>1.2</dynamicsSize>
             <linked>
-              <indexDiff>-2</indexDiff>
+              <indexDiff>-3</indexDiff>
               </linked>
             <placement>above</placement>
             <positionLinkedToMaster>0</positionLinkedToMaster>
@@ -70,12 +72,12 @@
             </Dynamic>
           <Chord>
             <linked>
-              <indexDiff>-3</indexDiff>
+              <indexDiff>-4</indexDiff>
               </linked>
             <durationType>whole</durationType>
             <Note>
               <linked>
-                <indexDiff>-4</indexDiff>
+                <indexDiff>-5</indexDiff>
                 </linked>
               <pitch>72</pitch>
               <tpc>14</tpc>

@@ -72,7 +72,6 @@
       <VBox>
         <height>10</height>
         <linkedMain/>
-        <excludeFromParts>0</excludeFromParts>
         </VBox>
       <Measure>
         <voice>
@@ -198,7 +197,6 @@
           <height>10</height>
           <linked>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>instrument_excerpt</style>
             <text>Flute</text>

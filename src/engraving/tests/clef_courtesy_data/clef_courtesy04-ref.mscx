@@ -237,7 +237,6 @@
         </Measure>
       <HBox>
         <width>5</width>
-        <excludeFromParts>0</excludeFromParts>
         </HBox>
       <Measure>
         <voice>

@@ -99,7 +99,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <text>Style Score</text>
@@ -358,7 +357,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>title</style>
             <text>Style Score</text>
@@ -554,7 +552,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>title</style>
             <text>Style Score</text>

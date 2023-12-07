@@ -425,7 +425,6 @@
       <VBox>
         <height>10</height>
         <boxAutoSize>0</boxAutoSize>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <text>barlines</text>

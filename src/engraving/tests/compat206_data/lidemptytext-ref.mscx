@@ -135,7 +135,6 @@
         <height>8</height>
         <bottomGap>13</bottomGap>
         <boxAutoSize>0</boxAutoSize>
-        <excludeFromParts>0</excludeFromParts>
         </VBox>
       <Measure>
         <voice>
@@ -304,7 +303,6 @@
           <height>8</height>
           <bottomGap>13</bottomGap>
           <boxAutoSize>0</boxAutoSize>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>instrument_excerpt</style>
             <text>Bass</text>

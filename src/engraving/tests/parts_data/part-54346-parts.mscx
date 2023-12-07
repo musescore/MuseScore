@@ -129,7 +129,9 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
+        <linkedMain/>
         <Text>
+          <linkedMain/>
           <style>title</style>
           <text>Test</text>
           </Text>
@@ -334,6 +336,21 @@
           </Instrument>
         </Part>
       <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <linked>
+            </linked>
+          <Text>
+            <linked>
+              </linked>
+            <style>title</style>
+            <text>Test</text>
+            </Text>
+          <Text>
+            <style>instrument_excerpt</style>
+            <text>B♭ Trumpet</text>
+            </Text>
+          </VBox>
         <Measure len="1/4">
           <irregular>1</irregular>
           <voice>
@@ -494,6 +511,27 @@
           </Instrument>
         </Part>
       <Staff id="1">
+        <VBox>
+          <height>10</height>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
+          <Text>
+            <linked>
+              <location>
+                <staves>-1</staves>
+                </location>
+              </linked>
+            <style>title</style>
+            <text>Test</text>
+            </Text>
+          <Text>
+            <style>instrument_excerpt</style>
+            <text>C Trumpet</text>
+            </Text>
+          </VBox>
         <Measure len="1/4">
           <irregular>1</irregular>
           <voice>

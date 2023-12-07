@@ -53,7 +53,6 @@ static const ElementStyle hBoxStyle {
 Box::Box(const ElementType& type, System* parent)
     : MeasureBase(type, parent)
 {
-    setExcludeFromOtherParts(propertyDefault(Pid::EXCLUDE_FROM_OTHER_PARTS).toBool());
 }
 
 //---------------------------------------------------------
@@ -257,8 +256,6 @@ PropertyValue Box::propertyDefault(Pid id) const
     case Pid::BOTTOM_MARGIN:
         return 0.0;
     case Pid::BOX_AUTOSIZE:
-        return true;
-    case Pid::EXCLUDE_FROM_OTHER_PARTS:
         return true;
     default:
         return MeasureBase::propertyDefault(id);
@@ -468,7 +465,9 @@ void Box::manageExclusionFromParts(bool exclude)
             }
 
             MeasureBase* newMB = next()->getInScore(score, true);
-            MeasureBase* newFrame = score->insertBox(type(), newMB);
+            Score::InsertMeasureOptions options;
+            options.cloneBoxToAllParts = false;
+            MeasureBase* newFrame = score->insertBox(type(), newMB, options);
             newFrame->setExcludeFromOtherParts(false);
 
             for (EngravingItem* item : el()) {
@@ -478,6 +477,12 @@ void Box::manageExclusionFromParts(bool exclude)
                 }
                 // add frame items (Layout Break, Title, ...)
                 newFrame->add(item->linkedClone());
+            }
+
+            if (isTBox()) {
+                Text* thisText = toTBox(this)->text();
+                Text* newText = toText(thisText->linkedClone());
+                toTBox(newFrame)->resetText(newText);
             }
 
             if (!score->isMaster() && newFrame == score->first() && newFrame->type() == ElementType::VBOX) {
@@ -665,6 +670,15 @@ TBox::TBox(const TBox& tbox)
 TBox::~TBox()
 {
     delete m_text;
+}
+
+void TBox::resetText(Text* text)
+{
+    if (m_text) {
+        delete m_text;
+    }
+    m_text = text;
+    text->setParent(this);
 }
 
 //---------------------------------------------------------

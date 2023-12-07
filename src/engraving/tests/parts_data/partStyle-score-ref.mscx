@@ -101,7 +101,6 @@
       <VBox>
         <height>10</height>
         <linkedMain/>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <linkedMain/>
           <style>title</style>
@@ -358,7 +357,6 @@
           <height>10</height>
           <linked>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               </linked>
@@ -560,7 +558,6 @@
               <staves>-1</staves>
               </location>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               <location>

@@ -33,14 +33,6 @@
         </Instrument>
       </Part>
     <Staff id="1">
-      <VBox>
-        <height>10</height>
-        <excludeFromParts>0</excludeFromParts>
-        <Text>
-          <style>instrument_excerpt</style>
-          <text>Flute</text>
-          </Text>
-        </VBox>
       <Measure>
         <voice>
           <KeySig>
@@ -106,22 +98,15 @@
             </Chord>
           </voice>
         </Measure>
-      <HBox>
-        <width>5</width>
-        <linked>
-          </linked>
-        <excludeFromParts>0</excludeFromParts>
-        </HBox>
       <Measure>
         <voice>
           <Chord>
             <linked>
-              <indexDiff>-1</indexDiff>
               </linked>
             <durationType>quarter</durationType>
             <Note>
               <linked>
-                <indexDiff>-2</indexDiff>
+                <indexDiff>-1</indexDiff>
                 </linked>
               <pitch>60</pitch>
               <tpc>14</tpc>

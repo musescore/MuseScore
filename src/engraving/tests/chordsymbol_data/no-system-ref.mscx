@@ -99,6 +99,10 @@
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <linkedMain/>
+        </VBox>
       <Measure>
         <voice>
           <Clef>
@@ -247,7 +251,8 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
+          <linked>
+            </linked>
           <Text>
             <style>instrument_excerpt</style>
             <text>Flute</text>
@@ -361,7 +366,11 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <Text>
             <style>instrument_excerpt</style>
             <text>Alto Saxophone</text>

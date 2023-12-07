@@ -91,7 +91,6 @@
       <VBox>
         <height>8.79108</height>
         <boxAutoSize>0</boxAutoSize>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <text>delete nested tuplet</text>
