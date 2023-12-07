@@ -44,7 +44,7 @@ using namespace mu::engraving::rendering::dev;
 
 constexpr std::array _maxSlopes = { 0, 1, 2, 3, 4, 5, 6, 7 };
 
-void BeamBeamLayout::setupLData(BeamBeamLayout* info, EngravingItem* e)
+void BeamBeamLayout::setupLData(Beam::LayoutData* info, EngravingItem* e)
 {
     IF_ASSERT_FAILED(e && e->isBeam()) {
         return;
@@ -65,7 +65,7 @@ void BeamBeamLayout::setupLData(BeamBeamLayout* info, EngravingItem* e)
     info->m_isBesideTabStaff = info->m_tab && !info->m_tab->stemless() && !info->m_tab->stemThrough();
 }
 
-void BeamBeamLayout::offsetBeamToRemoveCollisions(const BeamBeamLayout* info, const std::vector<ChordRest*> chordRests, int& dictator,
+void BeamBeamLayout::offsetBeamToRemoveCollisions(const Beam::LayoutData* info, const std::vector<ChordRest*> chordRests, int& dictator,
                                                   int& pointer,
                                                   const double startX, const double endX,
                                                   bool isFlat, bool isStartDictator)
@@ -129,7 +129,7 @@ void BeamBeamLayout::offsetBeamToRemoveCollisions(const BeamBeamLayout* info, co
     }
 }
 
-void BeamBeamLayout::offsetBeamWithAnchorShortening(const BeamBeamLayout* info, std::vector<ChordRest*> chordRests, int& dictator,
+void BeamBeamLayout::offsetBeamWithAnchorShortening(const Beam::LayoutData* info, std::vector<ChordRest*> chordRests, int& dictator,
                                                     int& pointer, int staffLines,
                                                     bool isStartDictator, int stemLengthDictator)
 {
@@ -202,7 +202,7 @@ void BeamBeamLayout::offsetBeamWithAnchorShortening(const BeamBeamLayout* info, 
     pointer = newPointer;
 }
 
-void BeamBeamLayout::extendStem(const BeamBeamLayout* info, Chord* chord, double addition)
+void BeamBeamLayout::extendStem(const Beam::LayoutData* info, Chord* chord, double addition)
 {
     PointF anchor = chordBeamAnchor(info, chord, ChordBeamAnchorType::Middle);
     double desiredY;
@@ -231,7 +231,7 @@ bool BeamBeamLayout::isBeamInsideStaff(int yPos, int staffLines, bool allowFloat
     return yPos > aboveStaff && yPos < belowStaff;
 }
 
-int BeamBeamLayout::getOuterBeamPosOffset(const BeamBeamLayout* info, int innerBeam, int beamCount, int staffLines)
+int BeamBeamLayout::getOuterBeamPosOffset(const Beam::LayoutData* info, int innerBeam, int beamCount, int staffLines)
 {
     int spacing = (info->m_up ? -info->m_beamSpacing : info->m_beamSpacing);
     int offset = (beamCount - 1) * spacing;
@@ -283,7 +283,7 @@ bool BeamBeamLayout::is64thBeamPositionException(const int beamSpacing, int& yPo
     return yPos == 2 || yPos == staffLines * 4 - 2 || yPos == staffLines * 4 - 6 || yPos == -2;
 }
 
-int BeamBeamLayout::findValidBeamOffset(const BeamBeamLayout* info, int outer, int beamCount, int staffLines, bool isStart,
+int BeamBeamLayout::findValidBeamOffset(const Beam::LayoutData* info, int outer, int beamCount, int staffLines, bool isStart,
                                         bool isAscending, bool isFlat)
 {
     bool isBeamValid = false;
@@ -304,7 +304,7 @@ int BeamBeamLayout::findValidBeamOffset(const BeamBeamLayout* info, int outer, i
     return offset;
 }
 
-void BeamBeamLayout::setValidBeamPositions(const BeamBeamLayout* info, int& dictator, int& pointer, int beamCountD, int beamCountP,
+void BeamBeamLayout::setValidBeamPositions(const Beam::LayoutData* info, int& dictator, int& pointer, int beamCountD, int beamCountP,
                                            int staffLines,
                                            bool isStartDictator,
                                            bool isFlat, bool isAscending)
@@ -370,7 +370,7 @@ void BeamBeamLayout::setValidBeamPositions(const BeamBeamLayout* info, int& dict
     }
 }
 
-void BeamBeamLayout::addMiddleLineSlant(const BeamBeamLayout* info, int& dictator, int& pointer, int beamCount, int middleLine,
+void BeamBeamLayout::addMiddleLineSlant(const Beam::LayoutData* info, int& dictator, int& pointer, int beamCount, int middleLine,
                                         int interval, int desiredSlant)
 {
     bool isSmall = info->m_beam->mag() < 1. || info->m_isGrace;
@@ -387,7 +387,7 @@ void BeamBeamLayout::addMiddleLineSlant(const BeamBeamLayout* info, int& dictato
     }
 }
 
-void BeamBeamLayout::add8thSpaceSlant(BeamBeamLayout* info, PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
+void BeamBeamLayout::add8thSpaceSlant(Beam::LayoutData* info, PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
                                       int interval, int middleLine, bool isFlat)
 {
     if (beamCount != 3 || noSlope(info->m_beam) || info->m_beamSpacing != 3) {
@@ -403,7 +403,7 @@ void BeamBeamLayout::add8thSpaceSlant(BeamBeamLayout* info, PointF& dictatorAnch
     info->m_beamDist += 0.0625 * info->m_spatium;
 }
 
-int BeamBeamLayout::strokeCount(const BeamBeamLayout* info, ChordRest* cr)
+int BeamBeamLayout::strokeCount(const Beam::LayoutData* info, ChordRest* cr)
 {
     if (cr->isRest()) {
         return cr->beams();
@@ -425,7 +425,7 @@ int BeamBeamLayout::strokeCount(const BeamBeamLayout* info, ChordRest* cr)
     return strokes;
 }
 
-bool BeamBeamLayout::calculateAnchors(BeamBeamLayout* info, const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes)
+bool BeamBeamLayout::calculateAnchors(Beam::LayoutData* info, const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes)
 {
     info->m_startAnchor = PointF();
     info->m_endAnchor = PointF();
@@ -550,7 +550,7 @@ bool BeamBeamLayout::calculateAnchors(BeamBeamLayout* info, const std::vector<Ch
     return true;
 }
 
-bool BeamBeamLayout::calculateAnchorsCross(BeamBeamLayout* info)
+bool BeamBeamLayout::calculateAnchorsCross(Beam::LayoutData* info)
 {
     double spatium = info->m_beam->style().spatium();
     //int fragmentIndex = (_direction == DirectionV::AUTO || _direction == DirectionV::DOWN) ? 0 : 1;
@@ -786,7 +786,7 @@ bool BeamBeamLayout::noSlope(const Beam* beam)
     return beam && beam->noSlope();
 }
 
-int BeamBeamLayout::getMiddleStaffLine(const BeamBeamLayout* info, ChordRest* startChord, ChordRest* endChord, int staffLines)
+int BeamBeamLayout::getMiddleStaffLine(const Beam::LayoutData* info, ChordRest* startChord, ChordRest* endChord, int staffLines)
 {
     bool isFullSize = RealIsEqual(info->m_beam->mag(), 1.0) && !info->m_isGrace;
     bool useWideBeams = info->m_beam->score()->style().styleB(Sid::useWideBeams);
@@ -805,7 +805,7 @@ int BeamBeamLayout::getMiddleStaffLine(const BeamBeamLayout* info, ChordRest* st
     return std::max(startMiddleLine, endMiddleLine) - 1;
 }
 
-int BeamBeamLayout::computeDesiredSlant(const BeamBeamLayout* info, int startNote, int endNote, int middleLine, int dictator,
+int BeamBeamLayout::computeDesiredSlant(const Beam::LayoutData* info, int startNote, int endNote, int middleLine, int dictator,
                                         int pointer)
 {
     if (info->m_beam->noSlope()) {
@@ -841,7 +841,7 @@ int BeamBeamLayout::computeDesiredSlant(const BeamBeamLayout* info, int startNot
     return std::min(maxSlope, _maxSlopes[interval]) * (info->m_up ? 1 : -1);
 }
 
-BeamBeamLayout::SlopeConstraint BeamBeamLayout::getSlopeConstraint(const BeamBeamLayout* info, int startNote, int endNote)
+BeamBeamLayout::SlopeConstraint BeamBeamLayout::getSlopeConstraint(const Beam::LayoutData* info, int startNote, int endNote)
 {
     if (info->m_notes.empty()) {
         return SlopeConstraint::NO_CONSTRAINT;
@@ -923,7 +923,7 @@ BeamBeamLayout::SlopeConstraint BeamBeamLayout::getSlopeConstraint(const BeamBea
     return SlopeConstraint::NO_CONSTRAINT;
 }
 
-int BeamBeamLayout::getMaxSlope(const BeamBeamLayout* info)
+int BeamBeamLayout::getMaxSlope(const Beam::LayoutData* info)
 {
     // for 2-indexed interval i (seconds, thirds, etc.)
     // maxSlopes[i] = max slope of beam for notes with interval i
@@ -953,7 +953,7 @@ int BeamBeamLayout::getMaxSlope(const BeamBeamLayout* info)
     return maxSlope;
 }
 
-int BeamBeamLayout::getBeamCount(const BeamBeamLayout* info, const std::vector<ChordRest*> chordRests)
+int BeamBeamLayout::getBeamCount(const Beam::LayoutData* info, const std::vector<ChordRest*> chordRests)
 {
     int maxBeams = 0;
     for (ChordRest* chordRest : chordRests) {
@@ -964,7 +964,7 @@ int BeamBeamLayout::getBeamCount(const BeamBeamLayout* info, const std::vector<C
     return maxBeams;
 }
 
-double BeamBeamLayout::chordBeamAnchorX(const BeamBeamLayout* info, const ChordRest* cr, ChordBeamAnchorType anchorType)
+double BeamBeamLayout::chordBeamAnchorX(const Beam::LayoutData* info, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
     double pagePosX = info->m_beam->pagePos().x();
     double stemPosX = cr->stemPosX() + cr->pagePos().x() - pagePosX;
@@ -1014,7 +1014,7 @@ double BeamBeamLayout::chordBeamAnchorX(const BeamBeamLayout* info, const ChordR
     return stemPosX;
 }
 
-double BeamBeamLayout::chordBeamAnchorY(const BeamBeamLayout* info, const ChordRest* cr)
+double BeamBeamLayout::chordBeamAnchorY(const Beam::LayoutData* info, const ChordRest* cr)
 {
     if (!cr->isChord()) {
         return cr->pagePos().y();
@@ -1038,7 +1038,7 @@ double BeamBeamLayout::chordBeamAnchorY(const BeamBeamLayout* info, const ChordR
     return position.y() - note->offset().y() + (chord->defaultStemLength() * upValue) - beamOffset;
 }
 
-PointF BeamBeamLayout::chordBeamAnchor(const BeamBeamLayout* info, const ChordRest* cr, ChordBeamAnchorType anchorType)
+PointF BeamBeamLayout::chordBeamAnchor(const Beam::LayoutData* info, const ChordRest* cr, ChordBeamAnchorType anchorType)
 {
     return PointF(chordBeamAnchorX(info, cr, anchorType), chordBeamAnchorY(info, cr));
 }

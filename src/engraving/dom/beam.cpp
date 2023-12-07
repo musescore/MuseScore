@@ -90,7 +90,6 @@ Beam::Beam(const Beam& b)
     m_cross            = b.m_cross;
     m_fullCross        = b.m_fullCross;
     m_slope            = b.m_slope;
-    layoutInfo       = b.layoutInfo;
 }
 
 //---------------------------------------------------------

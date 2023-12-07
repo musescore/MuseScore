@@ -28,10 +28,6 @@
 #include "engravingitem.h"
 #include "property.h"
 
-namespace mu::engraving::rendering::dev {
-class BeamBeamLayout;
-}
-
 namespace mu::engraving {
 class Chord;
 class ChordRest;
@@ -233,7 +229,33 @@ public:
 
     const Chord* findChordWithCustomStemDirection() const;
 
-    std::shared_ptr<rendering::dev::BeamBeamLayout> layoutInfo;
+    struct LayoutData : public EngravingItem::LayoutData {
+        Beam* m_beam = nullptr;
+        bool m_up = false;
+        Fraction m_tick = Fraction(0, 1);
+        double m_spatium = 0.;
+        PointF m_startAnchor;
+        PointF m_endAnchor;
+        double m_slope = 0.;
+        bool m_isGrace = false;
+        int m_beamSpacing = 0;
+        double m_beamDist = 0.0;
+        double m_beamWidth = 0.0;
+        std::vector<ChordRest*> m_elements;
+        std::vector<int> m_notes;
+        const StaffType* m_tab = nullptr;
+        bool m_isBesideTabStaff = false;
+
+        bool isValid() const override { return m_beam != nullptr; }
+
+        void setAnchors(PointF startAnchor, PointF endAnchor) { m_startAnchor = startAnchor; m_endAnchor = endAnchor; }
+        double beamDist() const { return m_beamDist; }
+        double beamWidth() const { return m_beamWidth; }
+        PointF startAnchor() const { return m_startAnchor; }
+        PointF endAnchor() const { return m_endAnchor; }
+    };
+
+    DECLARE_LAYOUTDATA_METHODS(Beam)
 
 private:
 
