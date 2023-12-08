@@ -20,8 +20,8 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#ifndef MU_ENGRAVING_TREMOLOONENOTE_H
-#define MU_ENGRAVING_TREMOLOONENOTE_H
+#ifndef MU_ENGRAVING_TREMOLOSINGLECHORD_H
+#define MU_ENGRAVING_TREMOLOSINGLECHORD_H
 
 #include <memory>
 
@@ -36,21 +36,17 @@
 
 namespace mu::engraving {
 class Chord;
-
-//---------------------------------------------------------
-//   @@ Tremolo
-//---------------------------------------------------------
-
-class TremoloOneNote final : public EngravingItem
+class Tremolo;
+class TremoloSingleChord final : public EngravingItem
 {
-    OBJECT_ALLOCATOR(engraving, TremoloOneNote)
-    DECLARE_CLASSOF(ElementType::TREMOLO_ONENOTE)
+    OBJECT_ALLOCATOR(engraving, TremoloSingleChord)
+    DECLARE_CLASSOF(ElementType::TREMOLO_SINGLECHORD)
 
 public:
 
-    TremoloOneNote& operator=(const TremoloOneNote&) = delete;
-    TremoloOneNote* clone() const override { return new TremoloOneNote(*this); }
-    ~TremoloOneNote() override;
+    TremoloSingleChord& operator=(const TremoloSingleChord&) = delete;
+    TremoloSingleChord* clone() const override { return new TremoloSingleChord(*this); }
+    ~TremoloSingleChord() override;
 
     Chord* chord() const { return toChord(explicitParent()); }
     void setParent(Chord* ch);
@@ -161,11 +157,14 @@ public:
 
     std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
+    Tremolo* dispatcher = nullptr;
+
 private:
     friend class Factory;
+    friend class Tremolo;
 
-    TremoloOneNote(Chord* parent);
-    TremoloOneNote(const TremoloOneNote&);
+    TremoloSingleChord(Chord* parent);
+    TremoloSingleChord(const TremoloSingleChord&);
 
     void setBeamPos(const PairF& bp);
 

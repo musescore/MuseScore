@@ -38,6 +38,7 @@
 #include "stem.h"
 #include "system.h"
 #include "stafftype.h"
+#include "tremolo.h"
 
 #include "log.h"
 
@@ -59,7 +60,7 @@ static const ElementStyle TREMOLO_STYLE {
 //---------------------------------------------------------
 
 TremoloTwoChord::TremoloTwoChord(Chord* parent)
-    : EngravingItem(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
+    : EngravingItem(ElementType::TREMOLO_TWOCHORD, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&TREMOLO_STYLE);
 }
@@ -75,14 +76,18 @@ TremoloTwoChord::TremoloTwoChord(const TremoloTwoChord& t)
 
 TremoloTwoChord::~TremoloTwoChord()
 {
+    dispatcher->m_tremoloTwoChord = nullptr;
+
     //
     // delete all references from chords
     //
     if (m_chord1) {
         m_chord1->setTremolo(nullptr);
+        m_chord1 = nullptr;
     }
     if (m_chord2) {
         m_chord2->setTremolo(nullptr);
+        m_chord2 = nullptr;
     }
 
     clearBeamSegments();

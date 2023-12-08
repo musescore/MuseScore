@@ -20,7 +20,7 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include "tremoloonenote.h"
+#include "tremolosinglechord.h"
 
 #include "draw/types/brush.h"
 #include "draw/types/pen.h"
@@ -38,6 +38,7 @@
 #include "stem.h"
 #include "system.h"
 #include "stafftype.h"
+#include "tremolo.h"
 
 #include "log.h"
 
@@ -58,13 +59,13 @@ static const ElementStyle TREMOLO_STYLE {
 //   Tremolo
 //---------------------------------------------------------
 
-TremoloOneNote::TremoloOneNote(Chord* parent)
-    : EngravingItem(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
+TremoloSingleChord::TremoloSingleChord(Chord* parent)
+    : EngravingItem(ElementType::TREMOLO_SINGLECHORD, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&TREMOLO_STYLE);
 }
 
-TremoloOneNote::TremoloOneNote(const TremoloOneNote& t)
+TremoloSingleChord::TremoloSingleChord(const TremoloSingleChord& t)
     : EngravingItem(t)
 {
     setTremoloType(t.tremoloType());
@@ -73,8 +74,10 @@ TremoloOneNote::TremoloOneNote(const TremoloOneNote& t)
     m_durationType = t.m_durationType;
 }
 
-TremoloOneNote::~TremoloOneNote()
+TremoloSingleChord::~TremoloSingleChord()
 {
+    dispatcher->m_tremoloSingleChord = nullptr;
+
     //
     // delete all references from chords
     //
@@ -88,7 +91,7 @@ TremoloOneNote::~TremoloOneNote()
     clearBeamSegments();
 }
 
-void TremoloOneNote::setParent(Chord* ch)
+void TremoloSingleChord::setParent(Chord* ch)
 {
     EngravingItem::setParent(ch);
 }
@@ -97,7 +100,7 @@ void TremoloOneNote::setParent(Chord* ch)
 //   chordMag
 //---------------------------------------------------------
 
-double TremoloOneNote::chordMag() const
+double TremoloSingleChord::chordMag() const
 {
     return explicitParent() ? toChord(explicitParent())->intrinsicMag() : 1.0;
 }
@@ -106,7 +109,7 @@ double TremoloOneNote::chordMag() const
 //   minHeight
 //---------------------------------------------------------
 
-double TremoloOneNote::minHeight() const
+double TremoloSingleChord::minHeight() const
 {
     const double sw = style().styleS(Sid::tremoloStrokeWidth).val() * chordMag();
     const double td = style().styleS(Sid::tremoloDistance).val() * chordMag();
@@ -117,7 +120,7 @@ double TremoloOneNote::minHeight() const
 //   chordBeamAnchor
 //---------------------------------------------------------
 
-PointF TremoloOneNote::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
+PointF TremoloSingleChord::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
 {
     IF_ASSERT_FAILED(layoutInfo) {
         return PointF();
@@ -125,7 +128,7 @@ PointF TremoloOneNote::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorTy
     return layoutInfo->chordBeamAnchor(chord, anchorType);
 }
 
-double TremoloOneNote::beamWidth() const
+double TremoloSingleChord::beamWidth() const
 {
     IF_ASSERT_FAILED(layoutInfo) {
         return 0.0;
@@ -137,7 +140,7 @@ double TremoloOneNote::beamWidth() const
 //   drag
 //---------------------------------------------------------
 
-RectF TremoloOneNote::drag(EditData& ed)
+RectF TremoloSingleChord::drag(EditData& ed)
 {
     if (!twoNotes()) {
         return EngravingItem::drag(ed);
@@ -167,7 +170,7 @@ RectF TremoloOneNote::drag(EditData& ed)
 //   setTremoloType
 //---------------------------------------------------------
 
-void TremoloOneNote::setTremoloType(TremoloType t)
+void TremoloSingleChord::setTremoloType(TremoloType t)
 {
     m_tremoloType = t;
     switch (tremoloType()) {
@@ -195,7 +198,7 @@ void TremoloOneNote::setTremoloType(TremoloType t)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void TremoloOneNote::spatiumChanged(double oldValue, double newValue)
+void TremoloSingleChord::spatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::spatiumChanged(oldValue, newValue);
     computeShape();
@@ -206,7 +209,7 @@ void TremoloOneNote::spatiumChanged(double oldValue, double newValue)
 //    the scale of a staff changed
 //---------------------------------------------------------
 
-void TremoloOneNote::localSpatiumChanged(double oldValue, double newValue)
+void TremoloSingleChord::localSpatiumChanged(double oldValue, double newValue)
 {
     EngravingItem::localSpatiumChanged(oldValue, newValue);
     computeShape();
@@ -217,7 +220,7 @@ void TremoloOneNote::localSpatiumChanged(double oldValue, double newValue)
 //    the scale of a staff changed
 //---------------------------------------------------------
 
-void TremoloOneNote::styleChanged()
+void TremoloSingleChord::styleChanged()
 {
     EngravingItem::styleChanged();
     computeShape();
@@ -227,7 +230,7 @@ void TremoloOneNote::styleChanged()
 //   basePath
 //---------------------------------------------------------
 
-PainterPath TremoloOneNote::basePath(double stretch) const
+PainterPath TremoloSingleChord::basePath(double stretch) const
 {
     if (isBuzzRoll()) {
         return PainterPath();
@@ -284,7 +287,7 @@ PainterPath TremoloOneNote::basePath(double stretch) const
 //   computeShape
 //---------------------------------------------------------
 
-void TremoloOneNote::computeShape()
+void TremoloSingleChord::computeShape()
 {
     if (explicitParent() && twoNotes()) {
         return;     // cannot compute shape here, should be done at layout stage
@@ -301,7 +304,7 @@ void TremoloOneNote::computeShape()
 //   reset
 //---------------------------------------------------------
 
-void TremoloOneNote::reset()
+void TremoloSingleChord::reset()
 {
     if (userModified()) {
         //undoChangeProperty(Pid::BEAM_POS, PropertyValue::fromValue(beamPos()));
@@ -316,7 +319,7 @@ void TremoloOneNote::reset()
 //   pagePos
 //---------------------------------------------------------
 
-PointF TremoloOneNote::pagePos() const
+PointF TremoloSingleChord::pagePos() const
 {
     EngravingObject* e = explicitParent();
     while (e && (!e->isSystem() && e->explicitParent())) {
@@ -334,7 +337,7 @@ PointF TremoloOneNote::pagePos() const
 //   setBeamDirection
 //---------------------------------------------------------
 
-void TremoloOneNote::setBeamDirection(DirectionV d)
+void TremoloSingleChord::setBeamDirection(DirectionV d)
 {
     if (m_direction == d) {
         return;
@@ -362,7 +365,7 @@ void TremoloOneNote::setBeamDirection(DirectionV d)
 //    Return true if tremolo is two-note cross-staff and beams between staves
 //---------------------------------------------------------
 
-bool TremoloOneNote::crossStaffBeamBetween() const
+bool TremoloSingleChord::crossStaffBeamBetween() const
 {
     if (!twoNotes()) {
         return false;
@@ -372,7 +375,7 @@ bool TremoloOneNote::crossStaffBeamBetween() const
            || ((m_chord1->staffMove() < m_chord2->staffMove()) && !m_chord1->up() && m_chord2->up());
 }
 
-void TremoloOneNote::setUserModified(DirectionV d, bool val)
+void TremoloSingleChord::setUserModified(DirectionV d, bool val)
 {
     switch (d) {
     case DirectionV::AUTO:
@@ -387,12 +390,12 @@ void TremoloOneNote::setUserModified(DirectionV d, bool val)
     }
 }
 
-TDuration TremoloOneNote::durationType() const
+TDuration TremoloSingleChord::durationType() const
 {
     return m_durationType;
 }
 
-void TremoloOneNote::setDurationType(TDuration d)
+void TremoloSingleChord::setDurationType(TDuration d)
 {
     if (m_durationType == d) {
         return;
@@ -406,7 +409,7 @@ void TremoloOneNote::setDurationType(TDuration d)
 //   tremoloLen
 //---------------------------------------------------------
 
-Fraction TremoloOneNote::tremoloLen() const
+Fraction TremoloSingleChord::tremoloLen() const
 {
     Fraction f;
     switch (lines()) {
@@ -426,7 +429,7 @@ Fraction TremoloOneNote::tremoloLen() const
 //   setBeamPos
 //---------------------------------------------------------
 
-void TremoloOneNote::setBeamPos(const PairF& bp)
+void TremoloSingleChord::setBeamPos(const PairF& bp)
 {
     int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     m_userModified[idx] = true;
@@ -441,7 +444,7 @@ void TremoloOneNote::setBeamPos(const PairF& bp)
 //   beamPos
 //---------------------------------------------------------
 
-PairF TremoloOneNote::beamPos() const
+PairF TremoloSingleChord::beamPos() const
 {
     int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     double _spatium = spatium();
@@ -452,7 +455,7 @@ PairF TremoloOneNote::beamPos() const
 //   userModified
 //---------------------------------------------------------
 
-bool TremoloOneNote::userModified() const
+bool TremoloSingleChord::userModified() const
 {
     int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     return m_userModified[idx];
@@ -462,7 +465,7 @@ bool TremoloOneNote::userModified() const
 //   setUserModified
 //---------------------------------------------------------
 
-void TremoloOneNote::setUserModified(bool val)
+void TremoloSingleChord::setUserModified(bool val)
 {
     int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     m_userModified[idx] = val;
@@ -472,7 +475,7 @@ void TremoloOneNote::setUserModified(bool val)
 //   triggerLayout
 //---------------------------------------------------------
 
-void TremoloOneNote::triggerLayout() const
+void TremoloSingleChord::triggerLayout() const
 {
     if (twoNotes() && m_chord1 && m_chord2) {
         toChordRest(m_chord1)->triggerLayout();
@@ -482,22 +485,22 @@ void TremoloOneNote::triggerLayout() const
     }
 }
 
-bool TremoloOneNote::needStartEditingAfterSelecting() const
+bool TremoloSingleChord::needStartEditingAfterSelecting() const
 {
     return twoNotes();
 }
 
-int TremoloOneNote::gripsCount() const
+int TremoloSingleChord::gripsCount() const
 {
     return twoNotes() ? 3 : 0;
 }
 
-Grip TremoloOneNote::initialEditModeGrip() const
+Grip TremoloSingleChord::initialEditModeGrip() const
 {
     return twoNotes() ? Grip::END : Grip::NO_GRIP;
 }
 
-Grip TremoloOneNote::defaultGrip() const
+Grip TremoloSingleChord::defaultGrip() const
 {
     return twoNotes() ? Grip::MIDDLE : Grip::NO_GRIP;
 }
@@ -506,7 +509,7 @@ Grip TremoloOneNote::defaultGrip() const
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<PointF> TremoloOneNote::gripsPositions(const EditData&) const
+std::vector<PointF> TremoloSingleChord::gripsPositions(const EditData&) const
 {
     int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
 
@@ -531,7 +534,7 @@ std::vector<PointF> TremoloOneNote::gripsPositions(const EditData&) const
 //   endEdit
 //---------------------------------------------------------
 
-void TremoloOneNote::endEdit(EditData& ed)
+void TremoloSingleChord::endEdit(EditData& ed)
 {
     EngravingItem::endEdit(ed);
 }
@@ -540,7 +543,7 @@ void TremoloOneNote::endEdit(EditData& ed)
 //   editDrag
 //---------------------------------------------------------
 
-void TremoloOneNote::editDrag(EditData& ed)
+void TremoloSingleChord::editDrag(EditData& ed)
 {
     int idx = (m_direction == DirectionV::AUTO || m_direction == DirectionV::DOWN) ? 0 : 1;
     double dy = ed.delta.y();
@@ -570,7 +573,7 @@ void TremoloOneNote::editDrag(EditData& ed)
 //   subtypeName
 //---------------------------------------------------------
 
-TranslatableString TremoloOneNote::subtypeUserName() const
+TranslatableString TremoloSingleChord::subtypeUserName() const
 {
     return TConv::userName(tremoloType());
 }
@@ -579,7 +582,7 @@ TranslatableString TremoloOneNote::subtypeUserName() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-String TremoloOneNote::accessibleInfo() const
+String TremoloSingleChord::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
@@ -588,7 +591,7 @@ String TremoloOneNote::accessibleInfo() const
 //   customStyleApplicable
 //---------------------------------------------------------
 
-bool TremoloOneNote::customStyleApplicable() const
+bool TremoloSingleChord::customStyleApplicable() const
 {
     return twoNotes()
            && (durationType().type() == DurationType::V_HALF)
@@ -599,7 +602,7 @@ bool TremoloOneNote::customStyleApplicable() const
 //   getProperty
 //---------------------------------------------------------
 
-PropertyValue TremoloOneNote::getProperty(Pid propertyId) const
+PropertyValue TremoloSingleChord::getProperty(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TREMOLO_TYPE:
@@ -618,7 +621,7 @@ PropertyValue TremoloOneNote::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool TremoloOneNote::setProperty(Pid propertyId, const PropertyValue& val)
+bool TremoloSingleChord::setProperty(Pid propertyId, const PropertyValue& val)
 {
     switch (propertyId) {
     case Pid::TREMOLO_TYPE:
@@ -654,7 +657,7 @@ bool TremoloOneNote::setProperty(Pid propertyId, const PropertyValue& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-PropertyValue TremoloOneNote::propertyDefault(Pid propertyId) const
+PropertyValue TremoloSingleChord::propertyDefault(Pid propertyId) const
 {
     switch (propertyId) {
     case Pid::TREMOLO_STYLE:
@@ -670,7 +673,7 @@ PropertyValue TremoloOneNote::propertyDefault(Pid propertyId) const
 //   scanElements
 //---------------------------------------------------------
 
-void TremoloOneNote::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void TremoloSingleChord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
         return;
@@ -678,7 +681,7 @@ void TremoloOneNote::scanElements(void* data, void (* func)(void*, EngravingItem
     EngravingItem::scanElements(data, func, all);
 }
 
-void TremoloOneNote::clearBeamSegments()
+void TremoloSingleChord::clearBeamSegments()
 {
     BeamSegment* chord1Segment = m_chord1 ? m_chord1->beamlet() : nullptr;
     BeamSegment* chord2Segment = m_chord2 ? m_chord2->beamlet() : nullptr;

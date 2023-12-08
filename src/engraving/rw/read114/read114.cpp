@@ -1070,10 +1070,10 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
             }
         } else if (tag == "Tremolo") {
             Tremolo* tremolo = Factory::createTremolo(chord);
+            readTremolo(tremolo, e, ctx);
             tremolo->setDurationType(chord->durationType());
             chord->setTremolo(tremolo);
             tremolo->setTrack(chord->track());
-            readTremolo(tremolo, e, ctx);
             tremolo->setParent(chord);
         } else if (Read206::readChordProperties206(e, ctx, chord)) {
         } else {

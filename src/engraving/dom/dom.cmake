@@ -342,8 +342,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/tremolo.h
     ${CMAKE_CURRENT_LIST_DIR}/tremolotwochord.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tremolotwochord.h
-    ${CMAKE_CURRENT_LIST_DIR}/tremoloonenote.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremoloonenote.h
+    ${CMAKE_CURRENT_LIST_DIR}/tremolosinglechord.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/tremolosinglechord.h
     ${CMAKE_CURRENT_LIST_DIR}/tremolobar.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tremolobar.h
     ${CMAKE_CURRENT_LIST_DIR}/trill.cpp
