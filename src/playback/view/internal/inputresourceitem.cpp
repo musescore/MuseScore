@@ -267,9 +267,12 @@ QVariantMap InputResourceItem::buildSoundFontsMenuItem(const ResourceByVendorMap
     });
 
     QVariantList soundFontItems;
+    std::string currentSoundFontId = m_currentInputParams.resourceMeta.id;
 
     for (const String& soundFont : soundFonts) {
-        bool isCurrentSoundFont = currentSoundFontName == soundFont;
+        // currentSoundFontId will be equal to soundFont in the case of "choose automatically" for older files (this is a temporary fix)
+        // See: https://github.com/musescore/MuseScore/pull/20316#issuecomment-1841326774
+        bool isCurrentSoundFont = currentSoundFontName == soundFont || currentSoundFontId == soundFont.toStdString();
 
         if (soundFont == MS_BASIC_SOUNDFONT_NAME) {
             soundFontItems << buildMsBasicMenuItem(resourcesBySoundFont[soundFont], isCurrentSoundFont, currentPreset);
