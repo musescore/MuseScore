@@ -5758,12 +5758,13 @@ static void directionJump(XmlWriter& xml, const Jump* const jp)
     if (sound != "") {
         xml.startElement("direction", { { "placement", (jp->placement() == PlacementV::BELOW) ? "below" : "above" } });
         xml.startElement("direction-type");
-        String positioning = ExportMusicXml::positioningAttributes(jp);
+        String attrs = color2xml(jp);
+        attrs += ExportMusicXml::positioningAttributes(jp);
         if (type != "") {
-            xml.tagRaw(type + positioning);
+            xml.tagRaw(type + attrs);
         }
         if (words != "") {
-            xml.tagRaw(u"words" + positioning, words);
+            xml.tagRaw(u"words" + attrs, words);
         }
         xml.endElement();
         if (sound != "") {
@@ -5887,12 +5888,13 @@ static void directionMarker(XmlWriter& xml, const Marker* const m, const std::ve
     if (sound != u"") {
         xml.startElement("direction", { { "placement", (m->placement() == PlacementV::BELOW) ? "below" : "above" } });
         xml.startElement("direction-type");
-        String positioning = ExportMusicXml::positioningAttributes(m);
-        if (type != u"") {
-            xml.tagRaw(type + positioning);
+        String attrs = color2xml(m);
+        attrs += ExportMusicXml::positioningAttributes(m);
+        if (!type.empty()) {
+            xml.tagRaw(type + attrs);
         }
-        if (words != u"") {
-            xml.tagRaw(u"words" + positioning, words);
+        if (!words.empty()) {
+            xml.tagRaw(u"words" + attrs, words);
         }
         xml.endElement();
         if (sound != u"") {
