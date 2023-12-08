@@ -65,8 +65,8 @@ inline TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const 
     return { startTimestamp, duration };
 }
 
-[[deprecated]]
-inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::DIVISION)
+inline mpe::duration_t durationFromTempoAndTicks(const double beatsPerSecond, const int durationTicks,
+                                                 const int ticksPerBeat = Constants::DIVISION)
 {
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
 
