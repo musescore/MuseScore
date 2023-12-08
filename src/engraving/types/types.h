@@ -150,7 +150,7 @@ enum class ElementType {
     STAFF_STATE,
     NOTEHEAD,
     NOTEDOT,
-    TREMOLO,
+    TREMOLO, // deprecated
     IMAGE,
     MEASURE,
     SELECTION,
@@ -201,6 +201,8 @@ enum class ElementType {
     GUITAR_BEND_HOLD,
     GUITAR_BEND_HOLD_SEGMENT,
     GUITAR_BEND_TEXT,
+    TREMOLO_TWOCHORD,
+    TREMOLO_ONENOTE,
 
     ROOT_ITEM,
     DUMMY,
