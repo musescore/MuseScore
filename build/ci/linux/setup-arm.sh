@@ -301,16 +301,12 @@ appimagetool --version
 
 git clone https://github.com/AppImageCommunity/AppImageUpdate.git
 cd AppImageUpdate
-git checkout --recurse-submodules 2.0.0-alpha-1-20230526
+git checkout --recurse-submodules 2.0.0-alpha-1-20220512
 git submodule update --init --recursive
 mkdir -p build
 cd build
 
-if [ "$PACKARCH" == "armv7l" ]; then
-  cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux -DCMAKE_CXX_FLAGS=-D_FILE_OFFSET_BITS=64 -DCMAKE_C_FLAGS=-D_FILE_OFFSET_BITS=64 .. 
-else
-  cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
-fi
+cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
 make -j"$(nproc)"
 # create the extracted appimage directory
 mkdir -p $BUILD_TOOLS/appimageupdatetool
