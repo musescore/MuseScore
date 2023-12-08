@@ -84,16 +84,9 @@ Tremolo::Tremolo(const Tremolo& t)
 
 Tremolo::~Tremolo()
 {
-    if (m_tremoloTwoChord) {
-        m_tremoloTwoChord->setParent(nullptr);
-    }
-
-    if (m_tremoloSingleChord) {
-        m_tremoloSingleChord->setParent(nullptr);
-    }
-
-    delete m_tremoloTwoChord;
-    delete m_tremoloSingleChord;
+    //! NOTE Don't need delete, will be delete dy destory score tree
+//    delete m_tremoloTwoChord;
+//    delete m_tremoloOneNote;
 }
 
 bool Tremolo::twoNotes() const
