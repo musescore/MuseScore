@@ -1170,8 +1170,16 @@ static void addMordentToChord(const Notation& notation, ChordRest* cr)
     }
     if (articSym != SymId::noSym) {
         const QColor color { notation.attribute("color") };
+        const QString place = notation.attribute("placement");
         Articulation* na = Factory::createArticulation(cr);
         na->setSymId(articSym);
+        if (place == "above") {
+            na->setAnchor(ArticulationAnchor::TOP);
+        } else if (place == "below") {
+            na->setAnchor(ArticulationAnchor::BOTTOM);
+        } else {
+            na->setAnchor(ArticulationAnchor::AUTO);
+        }
         if (color.isValid()) {
             na->setColor(color);
         }
