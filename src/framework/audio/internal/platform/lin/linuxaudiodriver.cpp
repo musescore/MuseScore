@@ -94,7 +94,7 @@ AudioDeviceID LinuxAudioDriver::outputDevice() const
     if (m_current_audioDriverState != nullptr) {
         return m_current_audioDriverState->m_deviceId;
     } else {
-        LOGE("device is not opened");
+        LOGE() << "device is not opened, deviceId: " << m_deviceId;
         return m_deviceId; // FIX: should return optional type
     }
 }

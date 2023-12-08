@@ -55,7 +55,6 @@ public:
     async::Channel<mu::midi::tick_t, mu::midi::Event >* m_eventReceived;
 
 private:
-    std::string m_deviceId;
     std::string m_deviceName;
 };
 }

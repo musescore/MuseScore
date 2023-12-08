@@ -97,7 +97,7 @@ void AlsaDriverState::alsaCleanup()
 
 std::string AlsaDriverState::name() const
 {
-    return "alsa";
+    return m_deviceId;
 }
 
 std::string AlsaDriverState::deviceName() const
