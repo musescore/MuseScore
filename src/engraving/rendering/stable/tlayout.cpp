@@ -4825,7 +4825,7 @@ void TLayout::layoutSlur(Slur* item, LayoutContext& ctx)
 
 void TLayout::layoutSpacer(Spacer* item, LayoutContext&)
 {
-    UNUSED(item);
+    item->layout0();
 }
 
 void TLayout::layoutSpanner(Spanner* item, LayoutContext& ctx)
