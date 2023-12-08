@@ -383,6 +383,7 @@ void Tremolo::reset()
 PointF Tremolo::pagePos() const
 {
     return EngravingItem::pagePos();
+
     if (twoNotes()) {
         return m_tremoloTwoChord->pagePos();
     } else {
