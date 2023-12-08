@@ -6930,8 +6930,19 @@ void MusicXMLParserNotations::articulations()
                 _breath = SymId::breathMarkComma;
             }
         } else if (_e.name() == "caesura") {
-            _breath = SymId::caesura;
-            _e.skipCurrentElement();  // skip but don't log
+            auto value = _e.readElementText();
+            if (value == "curved") {
+                _breath = SymId::caesuraCurved;
+            } else if (value == "short") {
+                _breath = SymId::caesuraShort;
+            } else if (value == "thick") {
+                _breath = SymId::caesuraThick;
+            } else if (value == "single") {
+                _breath = SymId::caesuraSingleStroke;
+            } else {
+                // Use caesura as the default symbol
+                _breath = SymId::caesura;
+            }
         } else if (_e.name() == "doit"
                    || _e.name() == "falloff"
                    || _e.name() == "plop"
