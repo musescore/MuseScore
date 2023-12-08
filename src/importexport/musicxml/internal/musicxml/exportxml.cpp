@@ -3459,6 +3459,14 @@ void ExportMusicXml::chordAttributes(Chord* chord, Notations& notations, Technic
         auto mxmlOrnam = symIdToOrnam(sid);
 
         if (mxmlOrnam != "") {
+            String placement;
+
+            if (!a->isStyled(Pid::ARTICULATION_ANCHOR) && a->anchor() != ArticulationAnchor::AUTO) {
+                placement = (a->anchor() == ArticulationAnchor::BOTTOM ? u"below" : u"above");
+            }
+            if (!placement.empty()) {
+                mxmlOrnam += String(u" placement=\"%1\"").arg(placement);
+            }
             mxmlOrnam += color2xml(a);
 
             notations.tag(m_xml, a);
