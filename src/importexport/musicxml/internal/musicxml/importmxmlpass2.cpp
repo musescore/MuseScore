@@ -6528,6 +6528,7 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     ha->setVisible(printObject);
     if (color.isValid()) {
         ha->setColor(color);
+        ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
     }
 
     // TODO-LV: do this only if ha points to a valid harmony
