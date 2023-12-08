@@ -6526,6 +6526,9 @@ void MusicXMLParserPass2::harmony(const String& partId, Measure* measure, const 
     ha->render();
 
     ha->setVisible(printObject);
+    if (placement == u"below") {
+        ha->setPlacement(PlacementV::BELOW);
+    }
     if (color.isValid()) {
         ha->setColor(color);
         ha->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
