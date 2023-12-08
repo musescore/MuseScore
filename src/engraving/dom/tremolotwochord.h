@@ -157,8 +157,11 @@ public:
 
     std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
+    Tremolo* dispatcher = nullptr;
+
 private:
     friend class Factory;
+    friend class Tremolo;
 
     TremoloTwoChord(Chord* parent);
     TremoloTwoChord(const TremoloTwoChord&);

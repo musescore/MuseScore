@@ -279,6 +279,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::ROOT_ITEM:
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
         break;
     }
 

@@ -77,6 +77,7 @@ static void isLayoutDone(void* data, EngravingItem* e)
         // another valid exception
         return;
     }
+
     // If layout of element is done it (usually?) has a valid
     // bounding box (bbox).
     if (e->visible() && !e->ldata()->bbox().isValid()) {

@@ -261,7 +261,7 @@ public:
     bool isStyled(Pid pid) const;
     PropertyValue styleValue(Pid, Sid) const;
 
-    void setPropertyFlags(Pid, PropertyFlags);
+    virtual void setPropertyFlags(Pid, PropertyFlags);
 
     virtual Sid getPropertyStyle(Pid) const;
 
