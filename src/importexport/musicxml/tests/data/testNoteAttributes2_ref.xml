@@ -569,7 +569,7 @@
         <stem>up</stem>
         <notations>
           <articulations>
-            <caesura/>
+            <caesura>normal</caesura>
             </articulations>
           </notations>
         </note>

@@ -6339,8 +6339,19 @@ void MusicXMLParserNotations::articulations()
                 _breath = SymId::breathMarkComma;
             }
         } else if (_e.name() == "caesura") {
-            _breath = SymId::caesura;
-            _e.skipCurrentElement();  // skip but don't log
+            auto value = _e.readElementText();
+            if (value == "curved") {
+                _breath = SymId::caesuraCurved;
+            } else if (value == "short") {
+                _breath = SymId::caesuraShort;
+            } else if (value == "thick") {
+                _breath = SymId::caesuraThick;
+            } else if (value == "single") {
+                _breath = SymId::caesuraSingleStroke;
+            } else {
+                // Use caesura as the default symbol
+                _breath = SymId::caesura;
+            }
         } else if (_e.name() == "doit"
                    || _e.name() == "falloff"
                    || _e.name() == "plop"
@@ -6775,6 +6786,7 @@ static void addBreath(ChordRest* cr, const Fraction& tick, SymId breath)
         // b->setTrack(trk + voice); TODO check next line
         b->setTrack(cr->track());
         b->setSymId(breath);
+        b->setPlacement(b->propertyDefault(Pid::PLACEMENT).value<PlacementV>());
         seg->add(b);
     }
 }

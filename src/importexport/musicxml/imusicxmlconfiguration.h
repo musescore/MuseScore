@@ -42,6 +42,9 @@ public:
     virtual bool musicxmlExportLayout() const = 0;
     virtual void setMusicxmlExportLayout(bool value) = 0;
 
+    virtual bool musicxmlExportMu3Compat() const = 0;
+    virtual void setMusicxmlExportMu3Compat(bool value) = 0;
+
     enum class MusicxmlExportBreaksType {
         All, Manual, No
     };
