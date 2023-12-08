@@ -3333,27 +3333,62 @@ static void writeChordLines(const Chord* const chord, XmlWriter& xml, Notations&
 static void writeBreathMark(const Breath* const breath, XmlWriter& xml, Notations& notations, Articulations& articulations)
 {
     if (breath && ExportMusicXml::canWrite(breath)) {
+        String tagName;
+        String type;
+
         notations.tag(xml, breath);
         articulations.tag(xml);
         if (breath->isCaesura()) {
-            xml.tag("caesura");
+            tagName = u"caesura";
+            switch (breath->symId()) {
+            case SymId::caesuraCurved:
+                type = u"curved";
+                break;
+            case SymId::caesuraShort:
+                type = u"short";
+                break;
+            case SymId::caesuraThick:
+                type = u"thick";
+                break;
+            case SymId::caesuraSingleStroke:
+            case SymId::chantCaesura:
+                type = u"single";
+                break;
+            case SymId::caesura:
+            default:
+                ; //type = u"normal"; // is correct too, but see below
+            }
         } else {
-            String breathMarkType;
+            tagName = u"breath-mark";
             switch (breath->symId()) {
             case SymId::breathMarkTick:
-                breathMarkType = u"tick";
+                type = u"tick";
                 break;
             case SymId::breathMarkUpbow:
-                breathMarkType = u"upbow";
+                type = u"upbow";
                 break;
             case SymId::breathMarkSalzedo:
-                breathMarkType = u"salzedo";
+                type = u"salzedo";
                 break;
+            case SymId::breathMarkComma:
             default:
-                breathMarkType = u"comma";
+                type = u"comma";
             }
+        }
+        tagName += color2xml(breath);
+        if (breath->placement() == PlacementV::BELOW) {
+            tagName += u" placement=\"below\"";
+        } else if (ExportMusicXml::configuration()->musicxmlExportMu3Compat()) {
+            // MuseScore versions prior to 4.3 otherwise default to below on import
+            tagName += u" placement=\"above\"";
+        }
 
-            xml.tag("breath-mark", breathMarkType);
+        if (breath->isCaesura() && (type.isEmpty() || ExportMusicXml::configuration()->musicxmlExportMu3Compat())) {
+            // for backwards compatibility, as 3.6.2 and earlier can't import those special caesuras,
+            // but reports corruption on all subsequent measures and imports them entirely empty.
+            xml.tagRaw(tagName);
+        } else {
+            xml.tagRaw(tagName, type);
         }
     }
 }

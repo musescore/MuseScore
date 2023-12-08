@@ -6940,8 +6940,18 @@ void MusicXMLParserNotations::articulations()
                 m_breath = SymId::breathMarkComma;
             }
         } else if (m_e.name() == "caesura") {
-            m_breath = SymId::caesura;
-            m_e.skipCurrentElement();  // skip but don't log
+            auto value = m_e.readText();
+            if (value == "curved") {
+                m_breath = SymId::caesuraCurved;
+            } else if (value == "short") {
+                m_breath = SymId::caesuraShort;
+            } else if (value == "thick") {
+                m_breath = SymId::caesuraThick;
+            } else if (value == "single") {
+                m_breath = SymId::caesuraSingleStroke;
+            } else { // Use as the default symbol
+                m_breath = SymId::caesura;
+            }
         } else if (m_e.name() == "doit"
                    || m_e.name() == "falloff"
                    || m_e.name() == "plop"
