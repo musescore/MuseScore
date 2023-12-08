@@ -39,6 +39,9 @@ public:
     bool musicxmlExportLayout() const override;
     void setMusicxmlExportLayout(bool value) override;
 
+    bool musicxmlExportMu3Compat() const override;
+    void setMusicxmlExportMu3Compat(bool value) override;
+
     MusicxmlExportBreaksType musicxmlExportBreaksType() const override;
     void setMusicxmlExportBreaksType(MusicxmlExportBreaksType breaksType) override;
 
