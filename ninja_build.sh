@@ -18,7 +18,12 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
-JOBS=4
+
+if [ $(which nproc) ]; then
+    JOBS=$(nproc --all)
+else
+    JOBS=4
+fi
 TARGET=release
 
 MUSESCORE_INSTALL_DIR=${MUSESCORE_INSTALL_DIR:-"../build.install"}
@@ -52,8 +57,16 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 if [ $SHOW_HELP -eq 1 ]; then
-	echo "TODO..."
-	exit 0
+    echo -e "Usage: ${0}\n" \
+	 "\t-t, --target <string> [default: ${TARGET}]\n" \
+	 "\t\tProvided targets: \n" \
+	 "\t\trelease, debug, relwithdebinfo, install, installrelwithdebinfo, \n" \
+	 "\t\tinstalldebug, clean, compile_commands, revision, appimage\n" \
+	 "\t-j, --jobs <number> [default: ${JOBS}]\n" \
+	 "\t\t Number of parallel compilations jobs\n" \
+	 "\t-h, --help\n"\
+	 "\t\t Show this help"
+    exit 0
 fi
 
 cmake --version
@@ -187,10 +200,10 @@ case $TARGET in
         ln -sf . usr # we installed into the root of our AppImage but some tools expect a "usr" subdirectory
         mscore="mscore${MUSESCORE_INSTALL_SUFFIX}"
         desktop="org.musescore.MuseScore${MUSESCORE_INSTALL_SUFFIX}.desktop"
-        icon="${mscore}.svg" 
+        icon="${mscore}.png"
         mani="install_manifest.txt" 
         cp "share/applications/${desktop}" "${desktop}"
-        cp "share/icons/hicolor/scalable/apps/${icon}" "${icon}" 
+        cp "share/icons/hicolor/128x128/apps/${icon}" "${icon}"
         <"$build_dir/${mani}" >"${mani}" sed -rn 's/.*(share\/)(applications|icons|man|metainfo|mime)(.*)/\1\2\3/p'
 
         ;;     
