@@ -313,7 +313,7 @@ bool WasapiAudioDriver::pushMidiEvent(mu::midi::Event&)
     return true;
 }
 
-std::vector<mu::midi::MidiDevice> WasapiAudioDriver::availableMidiDevices() const
+std::vector<mu::midi::MidiDevice> WasapiAudioDriver::availableMidiDevices(mu::midi::MidiPortDirection dir) const
 {
     std::vector<mu::midi::MidiDevice> x;
     return x; // dummy

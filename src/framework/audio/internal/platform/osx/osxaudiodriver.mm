@@ -531,7 +531,7 @@ bool OSXAudioDriver::pushMidiEvent(mu::midi::Event&)
     return true; // dummy
 }
 
-std::vector<mu::midi::MidiDevice> OSXAudioDriver::availableMidiDevices() const
+std::vector<mu::midi::MidiDevice> OSXAudioDriver::availableMidiDevices(mu::midi::MidiPortDirection dir) const
 {
     std::vector<mu::midi::MidiDevice> x;
     return x; // dummy

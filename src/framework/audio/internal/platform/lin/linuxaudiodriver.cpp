@@ -238,10 +238,10 @@ bool LinuxAudioDriver::pushMidiEvent(mu::midi::Event& e)
     return false;
 }
 
-std::vector<mu::midi::MidiDevice> LinuxAudioDriver::availableMidiDevices() const
+std::vector<mu::midi::MidiDevice> LinuxAudioDriver::availableMidiDevices(mu::midi::MidiPortDirection direction) const
 {
     if (m_current_audioDriverState) {
-        return m_current_audioDriverState->availableMidiDevices();
+        return m_current_audioDriverState->availableMidiDevices(direction);
     }
     std::vector<mu::midi::MidiDevice> x;
     return x;

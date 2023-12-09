@@ -38,7 +38,7 @@ public:
     bool isOpened() const override;
     bool pushMidiEvent(mu::midi::Event& e) override;
     void registerMidiInputQueue(async::Channel<mu::midi::tick_t, mu::midi::Event >*) override;
-    std::vector<mu::midi::MidiDevice> availableMidiDevices() const override;
+    std::vector<mu::midi::MidiDevice> availableMidiDevices(mu::midi::MidiPortDirection direction) const override;
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
 
