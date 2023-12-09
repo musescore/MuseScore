@@ -353,12 +353,12 @@ void JackDriverState::registerMidiInputQueue(async::Channel<muse::midi::tick_t, 
     m_eventReceived = midiInputQueue;
 }
 
-std::vector<muse::midi::MidiDevice> JackDriverState::availableMidiDevices() const
+std::vector<muse::midi::MidiDevice> JackDriverState::availableMidiDevices(muse::midi::MidiPortDirection direction) const
 {
     std::vector<muse::midi::MidiDevice> ports;
     std::vector<muse::midi::MidiDevice> ret;
     jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
-    const char** prts = jack_get_ports(client, 0, 0, 0);
+    const char** prts = jack_get_ports(client, 0, "midi", 0);
     if (!prts) {
         return ports;
     }
@@ -366,12 +366,20 @@ std::vector<muse::midi::MidiDevice> JackDriverState::availableMidiDevices() cons
     for (const char** p = prts; p && *p; ++p) {
         jack_port_t* port = jack_port_by_name(client, *p);
         int flags = jack_port_flags(port);
-        if (!(flags & JackPortIsInput)) {
+
+        if ((flags & JackPortIsInput)
+            && direction == muse::midi::MidiPortDirection::Output) {
             continue;
         }
+        if ((flags & JackPortIsOutput)
+            && direction == muse::midi::MidiPortDirection::Input) {
+            continue;
+        }
+
         char buffer[128];
         strncpy(buffer, *p, sizeof(buffer) - 1);
         buffer[sizeof(buffer) - 1] = 0;
+
         if (strncmp(buffer, "MuseScore", 9) == 0) {
             continue;
         }
