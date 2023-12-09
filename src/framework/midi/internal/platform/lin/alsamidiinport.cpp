@@ -76,7 +76,7 @@ MidiDeviceList AlsaMidiInPort::availableDevices() const
 
     int streams = SND_SEQ_OPEN_INPUT;
     unsigned int cap = SND_SEQ_PORT_CAP_SUBS_READ | SND_SEQ_PORT_CAP_READ;
-    unsigned int type = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
+    unsigned int type = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE | SND_SEQ_PORT_TYPE_SOFTWARE;
 
     MidiDeviceList ret;
 
