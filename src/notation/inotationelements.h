@@ -34,7 +34,7 @@ public:
 
     virtual mu::engraving::Score* msScore() const = 0;
 
-    virtual EngravingItem* search(const std::string& searchText) const = 0;
+    virtual EngravingItem* search(const QString& searchText) const = 0;
     virtual std::vector<EngravingItem*> elements(const FilterElementsOptions& elementOptions = FilterElementsOptions()) const = 0;
 
     virtual Measure* measure(const int measureIndex) const = 0;

@@ -46,7 +46,7 @@ mu::engraving::Score* NotationElements::msScore() const
     return m_getScore->score();
 }
 
-EngravingItem* NotationElements::search(const std::string& searchText) const
+EngravingItem* NotationElements::search(const QString& searchText) const
 {
     SearchCommandsParser commandsParser;
 
