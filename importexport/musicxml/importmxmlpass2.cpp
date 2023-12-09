@@ -1302,7 +1302,7 @@ static NoteHead::Group convertNotehead(QString mxmlName)
  */
 
 static void addTextToNote(int l, int c, QString txt, QString placement, QString fontWeight,
-                          qreal fontSize, QString fontStyle, QString fontFamily, Tid subType, Score* score, Note* note)
+                          qreal fontSize, QString fontStyle, QString fontFamily, QColor color, Tid subType, Score* score, Note* note)
       {
       if (note) {
             if (!txt.isEmpty()) {
@@ -1330,6 +1330,10 @@ static void addTextToNote(int l, int c, QString txt, QString placement, QString 
                   if (!placement.isEmpty()) {
                         t->setPlacement(placement == "below" ? Placement::BELOW : Placement::ABOVE);
                         t->setPropertyFlags(Pid::PLACEMENT, PropertyFlags::UNSTYLED);
+                        }
+                  if (color.isValid()) {
+                        t->setColor(color);
+                        t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
                         }
                   note->add(t);
                   }
@@ -3973,7 +3977,8 @@ void MusicXMLInferredFingering::addToNotes(std::vector<Note*>& notes) const
       Q_ASSERT(static_cast<int>(notes.size()) >= _fingerings.size());
       for (int i = 0; i < _fingerings.size(); ++i) {
             // Fingerings in reverse order
-            addTextToNote(-1, -1, _fingerings[_fingerings.size() - 1 - i], _placement, "", -1, "", "", Tid::FINGERING, notes[i]->score(), notes[i]);
+            addTextToNote(-1, -1, _fingerings[_fingerings.size() - 1 - i], _placement, "", -1, "", "",
+                        QColor(), Tid::FINGERING, notes[i]->score(), notes[i]);
             }
       }
 
@@ -7290,16 +7295,17 @@ void MusicXMLParserNotations::harmonic()
 
 void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
       {
-      QString placement = notation.attribute("placement");
-      QString fontWeight = notation.attribute("font-weight");
-      qreal fontSize = notation.attribute("font-size").toDouble();
-      QString fontStyle = notation.attribute("font-style");
-      QString fontFamily = notation.attribute("font-family");
+      const QString placement = notation.attribute("placement");
+      const QString fontWeight = notation.attribute("font-weight");
+      const qreal fontSize = notation.attribute("font-size").toDouble();
+      const QString fontStyle = notation.attribute("font-style");
+      const QString fontFamily = notation.attribute("font-family");
+      const QColor color = notation.attribute("color");
       if (notation.name() == "fingering") {
             // TODO: distinguish between keyboards (style Tid::FINGERING)
             // and (plucked) strings (style Tid::LH_GUITAR_FINGERING)
             addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                          Tid::FINGERING, _score, note);
+                          color, Tid::FINGERING, _score, note);
             }
       else if (notation.name() == "fret") {
             auto fret = notation.text().toInt();
@@ -7312,7 +7318,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
             }
       else if (notation.name() == "pluck") {
             addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                          Tid::RH_GUITAR_FINGERING, _score, note);
+                          color, Tid::RH_GUITAR_FINGERING, _score, note);
             }
       else if (notation.name() == "string") {
             if (note) {
@@ -7320,7 +7326,7 @@ void MusicXMLParserNotations::addTechnical(const Notation& notation, Note* note)
                         note->setString(notation.text().toInt() - 1);
                   else
                         addTextToNote(_e.lineNumber(), _e.columnNumber(), notation.text(), placement, fontWeight, fontSize, fontStyle, fontFamily,
-                                      Tid::STRING_NUMBER, _score, note);
+                                      color, Tid::STRING_NUMBER, _score, note);
                   }
             else
                   _logger->logError("no note for string", &_e);
