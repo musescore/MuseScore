@@ -50,7 +50,8 @@ std::vector<MidiDevice> LinuxMidiInPort::availableDevices() const
 {
 // FIX: this is compile-time, change so that we call availableMidiDevices if jack is selected
 #if defined(JACK_AUDIO)
-    return audioDriver()->availableMidiDevices();
+    // the external jack-midi-ports that are connecing to Musescore are of output type
+    return audioDriver()->availableMidiDevices(muse::midi::MidiPortDirection::Output);
 #else
     std::lock_guard lock(m_devicesMutex);
     std::vector<MidiDevice> ret;

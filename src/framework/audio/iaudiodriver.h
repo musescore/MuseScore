@@ -91,7 +91,7 @@ public:
 
     virtual std::vector<unsigned int> availableOutputDeviceSampleRates() const = 0;
     virtual bool pushMidiEvent(muse::midi::Event&) = 0;
-    virtual std::vector<muse::midi::MidiDevice> availableMidiDevices() const = 0;
+    virtual std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const = 0;
 
     virtual void resume() = 0;
     virtual void suspend() = 0;
@@ -106,7 +106,7 @@ public:
     virtual bool isOpened() const = 0;
     virtual bool pushMidiEvent(muse::midi::Event&) = 0;
     virtual void registerMidiInputQueue(async::Channel<muse::midi::tick_t, muse::midi::Event >) = 0;
-    virtual std::vector<muse::midi::MidiDevice> availableMidiDevices() const = 0;
+    virtual std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection dir) const = 0;
 
     IAudioDriver::Spec m_spec; // current running spec
     std::string m_deviceId;

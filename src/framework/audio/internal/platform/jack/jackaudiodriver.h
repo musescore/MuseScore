@@ -44,7 +44,7 @@ public:
 
     std::string deviceName() const;
     void deviceName(const std::string newDeviceName);
-    std::vector<muse::midi::MidiDevice> availableMidiDevices() const;
+    std::vector<muse::midi::MidiDevice> availableMidiDevices(muse::midi::MidiPortDirection direction) const;
 
     void* m_jackDeviceHandle = nullptr;
     float* m_buffer = nullptr;
