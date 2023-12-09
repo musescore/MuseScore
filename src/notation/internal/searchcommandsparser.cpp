@@ -68,12 +68,25 @@ SearchCommandsParser::SearchData SearchCommandsParser::parseMeasureCommand(const
 {
     SearchData data;
 
-    bool ok = false;
-    int measureIndex = searchCommand.toLower().toInt(&ok);
+    QStringList parts = searchCommand.split("-", Qt::SkipEmptyParts);
 
-    if (ok) {
-        data.elementType = ElementType::MEASURE;
-        data.value = QVariant::fromValue(measureIndex);
+    if (parts.size() == 2) {
+        bool ok1, ok2 = false;
+        int startMeasure = parts[0].toInt(&ok1);
+        int endMeasure = parts[1].toInt(&ok2);
+
+        if (ok1 && ok2 && (startMeasure <= endMeasure)) {
+            data.elementType = ElementType::MEASURE;
+            data.value = QVariant::fromValue(qMakePair(startMeasure, endMeasure));
+        }
+    } else {
+        bool ok = false;
+        int measureIndex = searchCommand.toLower().toInt(&ok);
+
+        if (ok) {
+            data.elementType = ElementType::MEASURE;
+            data.value = QVariant::fromValue(measureIndex);
+        }
     }
 
     return data;

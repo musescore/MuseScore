@@ -41,7 +41,7 @@ public:
         }
     };
 
-    static SearchData parse(const QString &searchCommand);
+    static SearchData parse(const QString& searchCommand);
 
 private:
     static SearchData parseMeasureCommand(const QString& searchCommand);
