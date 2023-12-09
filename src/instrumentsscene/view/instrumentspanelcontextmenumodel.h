@@ -44,12 +44,18 @@ public:
 
     Q_INVOKABLE void load() override;
 
+signals:
+    void expandCollapseAllRequested(bool expand);
+
 private:
-    void loadItems();
-    void buildMenu();
+    void updateMenu();
+    void loadInstrumentOrders();
+    void buildMenu(bool includeInstrumentsOrdering);
     void setInstrumentsOrder(const actions::ActionData& args);
     void updateOrderingMenu(const QString& newOrderId);
 
+    uicomponents::MenuItem* createInstrumentsOrderingItem();
+    uicomponents::MenuItem* createExpandCollapseAllItem(bool expand);
     notation::IMasterNotationPtr m_masterNotation;
     notation::ScoreOrderList m_orders;
 };

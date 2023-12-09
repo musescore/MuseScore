@@ -61,6 +61,10 @@ Item {
 
     InstrumentsPanelContextMenuModel {
         id: contextMenuModel
+
+        onExpandCollapseAllRequested: function(expand) {
+            instrumentsTreeView.expandCollapseAll(expand)
+        }
     }
 
     Component.onCompleted: {
@@ -165,6 +169,21 @@ Item {
                 backgroundVisible: false
                 headerVisible: false
                 frameVisible: false
+
+                function expandCollapseAll(expand) {
+                    for (let row = 0; row < instrumentsTreeView.model.rowCount(); row++) {
+                        const instrumentIndex = instrumentsTreeView.model.index(row, 0);
+                        const instrumentsTreeItemDelegate = instrumentsTreeView.model.data(instrumentIndex);
+                        if (instrumentsTreeItemDelegate.isExpandable){
+                            if (expand) {
+                                instrumentsTreeView.expand(instrumentIndex)
+                            } else {
+                                instrumentsTreeView.collapse(instrumentIndex)
+                            }
+                        }
+                    }
+                    flickable.returnToBounds();
+                }
 
                 property NavigationPanel navigationTreePanel : NavigationPanel {
                     name: "InstrumentsTree"
