@@ -3291,6 +3291,11 @@ void MusicXMLParserDirection::direction(const QString& partId,
                         t->setFrameRound(0);
                         }
 
+                  if (_color.isValid()) {
+                        t->setColor(_color);
+                        t->setPropertyFlags(Pid::COLOR, PropertyFlags::UNSTYLED);
+                        }
+
                   QString wordsPlacement = placement();
                   // Case-based defaults
                   if (wordsPlacement.isEmpty()) {
@@ -3473,6 +3478,8 @@ void MusicXMLParserDirection::directionType(QList<MusicXmlSpannerDesc>& starts,
                         n--;  // make zero-based
                   }
             QString type = _e.attributes().value("type").toString();
+            _color       = _e.attributes().value("color").toString();
+
             if  (_e.name() == "metronome")
                   _metroText = metronome(_tpoMetro);
             else if (_e.name() == "words") {

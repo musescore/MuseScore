@@ -392,6 +392,7 @@ private:
       MusicXMLParserPass2& _pass2;              // the pass2 results
       MxmlLogger* _logger;                      ///< Error logger
 
+      QColor _color;
       QStringList _dynamicsList;
       QString _enclosure;
       QString _wordsText;
