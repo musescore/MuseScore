@@ -52,6 +52,10 @@ class Engraving_PlaybackModelTests : public ::testing::Test, public async::Async
 protected:
     void SetUp() override
     {
+        //! NOTE: allows to read test files using their version readers
+        //! instead of using 302 (see mscloader.cpp, makeReader)
+        MScore::useRead302InTestMode = false;
+
         m_dummyPatternSegment.arrangementPattern
             = tests::createArrangementPattern(HUNDRED_PERCENT /*duration_factor*/, 0 /*timestamp_offset*/);
         m_dummyPatternSegment.pitchPattern = tests::createSimplePitchPattern(0 /*increment_pitch_diff*/);
@@ -61,6 +65,11 @@ protected:
         m_defaultProfile = std::make_shared<ArticulationsProfile>();
 
         m_repositoryMock = std::make_shared<NiceMock<ArticulationProfilesRepositoryMock> >();
+    }
+
+    void TearDown() override
+    {
+        MScore::useRead302InTestMode = true;
     }
 
     ArticulationPattern buildTestArticulationPattern() const
@@ -712,6 +721,127 @@ TEST_F(Engraving_PlaybackModelTests, SimpleRepeat_Changes_Notification)
     range.changedTypes = { ElementType::NOTE };
 
     score->changesChannel().send(range);
+}
+
+/**
+ * @brief PlaybackModelTests_TempoChangesDuringNotes
+ * @details Test that notes and other elements have the correct length when tempo changes occur during them
+ */
+TEST_F(Engraving_PlaybackModelTests, TempoChangesDuringNotes) {
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "tempo_changes_during_notes/tempo_changes_during_notes.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Part* part = score->parts().at(0);
+    ASSERT_TRUE(part);
+    ASSERT_EQ(part->instruments().size(), 1);
+
+    // [WHEN] The articulation profiles repository will be returning profiles
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    m_defaultProfile->setPattern(ArticulationType::Tremolo8th, buildTestArticulationPattern());
+    m_defaultProfile->setPattern(ArticulationType::Pedal, buildTestArticulationPattern());
+
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model;
+    model.setprofilesRepository(m_repositoryMock);
+    model.load(score);
+
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+
+    // [GIVEN] Expected events durations
+    auto quarterAtTempo = [](double tempo) { return static_cast<duration_t>(QUARTER_NOTE_DURATION / (tempo / 120.0)); };
+
+    const std::vector<duration_t> expectedDurations {
+        // Tied note of two measures long, with tempo changes in the middle of it
+        2 * quarterAtTempo(100) + 4 * quarterAtTempo(10) + 2 * quarterAtTempo(100),
+
+        // Tied note of two measures long, with ritenuto over it
+        2 * quarterAtTempo(100) + 2 * quarterAtTempo(90) + 2 * quarterAtTempo(80) + 2 * quarterAtTempo(70),
+
+        // Tied note of two measures long, with tempo changes in the middle of it, with eighth notes tremolo
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(10) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(10) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(10) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(10) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(10) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(10) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(10) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(10) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+
+        // Tied note of two measures long, with ritenuto over it, with eighth notes tremolo
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(100) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(90) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(90) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(90) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(90) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(80) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(80) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(80) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(80) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(70) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(70) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(70) * 0.5),
+        static_cast<duration_t>(quarterAtTempo(70) * 0.5),
+
+        // Same as beginning, but now with pedal
+        2 * quarterAtTempo(100) + 4 * quarterAtTempo(10) + 2 * quarterAtTempo(100),
+        2 * quarterAtTempo(100) + 2 * quarterAtTempo(90) + 2 * quarterAtTempo(80) + 2 * quarterAtTempo(70),
+    };
+
+    // Allow slight deviations because of rounding errors
+    auto approxEqual = [](duration_t lhs, duration_t rhs) {
+        if (std::abs(lhs - rhs) < 2000) {
+            return testing::AssertionSuccess();
+        } else {
+            return testing::AssertionFailure() << lhs << " vs " << rhs;
+        }
+    };
+
+    // [THEN] Events match expectations
+    size_t index = 0;
+    for (const auto& pair : result) {
+        for (const auto& event : pair.second) {
+            SCOPED_TRACE("event " + std::to_string(index) + " at timestamp " + std::to_string(pair.first));
+
+            ASSERT_TRUE(index < expectedDurations.size());
+
+            ASSERT_TRUE(std::holds_alternative<mpe::NoteEvent>(event));
+            const mpe::NoteEvent& noteEvent = std::get<mpe::NoteEvent>(event);
+
+            EXPECT_TRUE(approxEqual(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(index)));
+
+            if (index >= expectedDurations.size() - 2) { // For the last two notes
+                // [THEN] Expect Pedal to be present
+                EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+
+                const ArticulationMap::PairType& articulation = *noteEvent.expressionCtx().articulations.cbegin();
+
+                // and have same length as note
+                EXPECT_EQ(articulation.first, ArticulationType::Pedal);
+                EXPECT_TRUE(approxEqual(articulation.second.meta.timestamp, noteEvent.arrangementCtx().nominalTimestamp));
+                EXPECT_TRUE(approxEqual(articulation.second.meta.overallDuration, noteEvent.arrangementCtx().nominalDuration));
+            }
+
+            ++index;
+        }
+    }
+
+    // [THEN] Number of events matches expectations
+    ASSERT_EQ(index, expectedDurations.size());
 }
 
 /**
