@@ -3019,6 +3019,10 @@ void MusicXMLParserDirection::direction(const String& partId,
                 t->setFrameRound(0);
             }
 
+            if (m_color.isValid()) {
+                t->setColor(m_color);
+            }
+
             String wordsPlacement = m_placement;
             // Case-based defaults
             if (wordsPlacement.empty()) {
@@ -3331,6 +3335,7 @@ void MusicXMLParserDirection::directionType(std::vector<MusicXmlSpannerDesc>& st
             }
         }
         String type = m_e.attribute("type");
+        m_color = Color::fromString(m_e.asciiAttribute("color").ascii());
         if (m_e.name() == "metronome") {
             m_metroText = metronome(m_tpoMetro);
         } else if (m_e.name() == "words") {
