@@ -359,6 +359,11 @@ std::vector<mu::midi::MidiDevice> JackDriverState::availableMidiDevices(mu::midi
     std::vector<mu::midi::MidiDevice> ret;
     jack_client_t* client = static_cast<jack_client_t*>(m_jackDeviceHandle);
     const char** prts = jack_get_ports(client, 0, "midi", 0);
+
+    if (!prts) {
+        return ports;
+    }
+
     int devIndex = 0;
     for (const char** p = prts; p && *p; ++p) {
         jack_port_t* port = jack_port_by_name(client, *p);
@@ -388,5 +393,8 @@ std::vector<mu::midi::MidiDevice> JackDriverState::availableMidiDevices(mu::midi
         dev.id = makeUniqueDeviceId(devIndex++, 0, 0);
         ports.push_back(std::move(dev));
     }
+
+    free(prts);
+
     return ports;
 }
