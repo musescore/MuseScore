@@ -440,6 +440,7 @@ private:
     MusicXMLParserPass2& m_pass2;                // the pass2 results
     MxmlLogger* m_logger = nullptr;                        // Error logger
 
+    Color m_color;
     StringList m_dynamicsList;
     String m_enclosure;
     String m_wordsText;
