@@ -117,7 +117,7 @@ mv "${qt_sql_drivers_path}/libqsqlpsql.so" "${qt_sql_drivers_tmp}/libqsqlpsql.so
 
 # Semicolon-separated list of platforms to deploy in addition to `libqxcb.so`.
 # Used by linuxdeploy-plugin-qt.
-export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so;libqwayland-egl.so;libqwayland-generic.so"
+export EXTRA_PLATFORM_PLUGINS="libqoffscreen.so"
 
 # Colon-separated list of root directories containing QML files.
 # Needed for linuxdeploy-plugin-qt to scan for QML imports.
@@ -195,11 +195,6 @@ unwanted_files=(
 # additions at https://github.com/linuxdeploy/linuxdeploy-plugin-qt/issues
 additional_qt_components=(
   plugins/printsupport/libcupsprintersupport.so
-
-  # Wayland support (run with QT_QPA_PLATFORM=wayland to use)
-  plugins/wayland-decoration-client
-  plugins/wayland-graphics-integration-client
-  plugins/wayland-shell-integration
 )
 
 # ADDITIONAL LIBRARIES
