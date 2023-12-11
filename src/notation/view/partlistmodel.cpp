@@ -222,7 +222,7 @@ void PartListModel::doRemovePart(int partIndex)
 
 QString PartListModel::validatePartTitle(int partIndex, const QString& title) const
 {
-    return QString::fromStdString(doValidatePartTitle(partIndex, title.simplified()).text());
+    return QString::fromStdString(doValidatePartTitle(partIndex, title).text());
 }
 
 mu::Ret PartListModel::doValidatePartTitle(int partIndex, const QString& title) const
@@ -252,18 +252,16 @@ void PartListModel::setPartTitle(int partIndex, const QString& title)
         return;
     }
 
-    QString simplifiedTitle = title.simplified();
-
     IExcerptNotationPtr excerpt = m_excerpts[partIndex];
-    if (excerpt->name() == simplifiedTitle) {
+    if (excerpt->name() == title) {
         return;
     }
 
-    if (!doValidatePartTitle(partIndex, simplifiedTitle)) {
+    if (!doValidatePartTitle(partIndex, title)) {
         return;
     }
 
-    excerpt->setName(simplifiedTitle);
+    excerpt->setName(title);
     notifyAboutNotationChanged(partIndex);
 }
 
