@@ -94,7 +94,10 @@ ExportDialogModel::ExportDialogModel(QObject* parent)
         ExportType::makeWithSubtypes(musicXmlTypes,
                                      qtrc("project/export", "MusicXML")),
         ExportType::makeWithSuffixes({ "brf" },
-                                     qtrc("project/export", "Braille"),
+                                     //: Meaning like "measure-over-measure", but called "bar-over-bar"
+                                     //: even in US English. Not to be confused with "bar-by-bar" format.
+                                     //: See https://musescore.org/en/handbook/4/file-export#Score_formats
+                                     qtrc("project/export", "Braille (basic bar-over-bar)"),
                                      qtrc("project/export", "Braille files")),
         ExportType::makeWithSuffixes({ "mei" },
                                      qtrc("project/export", "MEI"),
