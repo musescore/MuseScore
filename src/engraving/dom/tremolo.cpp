@@ -234,13 +234,10 @@ void Tremolo::spatiumChanged(double oldValue, double newValue)
 void Tremolo::localSpatiumChanged(double oldValue, double newValue)
 {
     if (twoNotes()) {
-        return m_tremoloTwoChord->localSpatiumChanged(oldValue, newValue);
+        m_tremoloTwoChord->localSpatiumChanged(oldValue, newValue);
     } else {
-        return m_tremoloSingleChord->localSpatiumChanged(oldValue, newValue);
+        m_tremoloSingleChord->localSpatiumChanged(oldValue, newValue);
     }
-
-    EngravingItem::localSpatiumChanged(oldValue, newValue);
-    computeShape();
 }
 
 //---------------------------------------------------------
@@ -267,7 +264,8 @@ void Tremolo::styleChanged()
 PainterPath Tremolo::basePath(double stretch) const
 {
     if (twoNotes()) {
-        return m_tremoloTwoChord->basePath(stretch);
+        UNREACHABLE;
+        return PainterPath();
     } else {
         return m_tremoloSingleChord->basePath(stretch);
     }
@@ -276,7 +274,9 @@ PainterPath Tremolo::basePath(double stretch) const
 const mu::draw::PainterPath& Tremolo::path() const
 {
     if (twoNotes()) {
-        return m_tremoloTwoChord->path();
+        UNREACHABLE;
+        static mu::draw::PainterPath path;
+        return path;
     } else {
         return m_tremoloSingleChord->path();
     }
@@ -285,7 +285,7 @@ const mu::draw::PainterPath& Tremolo::path() const
 void Tremolo::setPath(const mu::draw::PainterPath& p)
 {
     if (twoNotes()) {
-        m_tremoloTwoChord->setPath(p);
+        UNREACHABLE;
     } else {
         m_tremoloSingleChord->setPath(p);
     }
@@ -359,16 +359,11 @@ void Tremolo::setEndAnchor(const mu::PointF& p)
 
 void Tremolo::computeShape()
 {
-    RectF bbox;
-    if (twoNotes()) {
-        m_tremoloTwoChord->computeShape();
-        bbox = m_tremoloTwoChord->ldata()->bbox();
-    } else {
+    if (!twoNotes()) {
         m_tremoloSingleChord->computeShape();
-        bbox = m_tremoloSingleChord->ldata()->bbox();
+        RectF bbox = m_tremoloSingleChord->ldata()->bbox();
+        setbbox(bbox);
     }
-
-    setbbox(bbox);
 }
 
 //---------------------------------------------------------
@@ -393,12 +388,6 @@ void Tremolo::reset()
 PointF Tremolo::pagePos() const
 {
     return EngravingItem::pagePos();
-
-    if (twoNotes()) {
-        return m_tremoloTwoChord->pagePos();
-    } else {
-        return m_tremoloSingleChord->pagePos();
-    }
 }
 
 TremoloStyle Tremolo::tremoloStyle() const
@@ -577,7 +566,7 @@ Chord* Tremolo::chord1() const
     if (twoNotes()) {
         return m_tremoloTwoChord->chord1();
     } else {
-        return m_tremoloSingleChord->chord1();
+        return m_tremoloSingleChord->chord();
     }
 }
 
@@ -586,7 +575,7 @@ void Tremolo::setChord1(Chord* ch)
     if (twoNotes()) {
         m_tremoloTwoChord->setChord1(ch);
     } else {
-        m_tremoloSingleChord->setChord1(ch);
+        m_tremoloSingleChord->setParent(ch);
     }
 }
 
@@ -881,11 +870,16 @@ void Tremolo::setPropertyFlags(Pid pid, PropertyFlags f)
 
 void Tremolo::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    if (twoNotes()) {
-        m_tremoloTwoChord->scanElements(data, func, all);
-    } else {
-        m_tremoloSingleChord->scanElements(data, func, all);
+    if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
+        return;
     }
+    EngravingItem::scanElements(data, func, all);
+
+//    if (twoNotes()) {
+//        m_tremoloTwoChord->scanElements(data, func, all);
+//    } else {
+//        m_tremoloSingleChord->scanElements(data, func, all);
+//    }
 }
 
 const std::vector<BeamSegment*>& Tremolo::beamSegments() const

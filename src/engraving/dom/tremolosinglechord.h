@@ -65,9 +65,6 @@ public:
     double chordMag() const;
     RectF drag(EditData&) override;
 
-    Chord* chord1() const { return m_chord1; }
-    void setChord1(Chord* ch);
-
     TDuration durationType() const;
     void setDurationType(TDuration d);
 
@@ -117,7 +114,6 @@ private:
     TremoloSingleChord(const TremoloSingleChord&);
 
     TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;
-    Chord* m_chord1 = nullptr;
     TDuration m_durationType;
     mu::draw::PainterPath m_path;
     bool m_playTremolo = true;

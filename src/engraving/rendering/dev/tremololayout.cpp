@@ -38,14 +38,15 @@ using namespace mu::engraving::rendering::dev;
 
 void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
 {
-    item->computeShape();     // set bbox
-
-    item->setPath(item->basePath());
+    if (!item->twoNotes()) {
+        item->computeShape(); // set bbox
+        item->setPath(item->basePath());
+    }
 
     item->setChord1(toChord(item->explicitParent()));
     if (!item->chord1()) {
         // palette
-        if (!item->isBuzzRoll()) {
+        if (!item->isBuzzRoll() && !item->twoNotes()) {
             const RectF box = item->path().boundingRect();
             item->mutldata()->addBbox(RectF(box.x(), box.bottom(), box.width(), item->spatium()));
         }

@@ -855,7 +855,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         if (e->isChord() && toChord(e)->tremolo()) {
                             Tremolo* t = toChord(e)->tremolo();
                             if (!t->twoNotes()) {
-                                if (t->chord() == e && t->addToSkyline()) {
+                                if (t->addToSkyline()) {
                                     skyline.add(t->shape().translate(t->pos() + e->pos() + p));
                                 }
                             } else {
