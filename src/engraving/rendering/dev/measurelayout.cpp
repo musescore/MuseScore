@@ -849,7 +849,8 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
         auto spanners = ctx.dom().spannerMap().findOverlapping(ticks, ticks, true);
         for (auto iter : spanners) {
             Spanner* spanner = iter.value;
-            if (spanner->staffIdx() != staffIdx || !spanner->isTrill() || spanner->tick2() == measure->tick()) {
+            if (spanner->staffIdx() != staffIdx || !spanner->isTrill()
+                || spanner->tick() == measure->tick() || spanner->tick2() == measure->tick()) {
                 continue;
             }
             Ornament* ornament = toTrill(spanner)->ornament();
