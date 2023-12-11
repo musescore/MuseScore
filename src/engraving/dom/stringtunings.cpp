@@ -51,6 +51,12 @@ StringTunings::StringTunings(Segment* parent, TextStyleType textStyleType)
 StringTunings::StringTunings(const StringTunings& s)
     : StaffTextBase(s)
 {
+    m_preset = s.m_preset;
+    m_visibleStrings = s.m_visibleStrings;
+    m_stringData = s.m_stringData;
+
+    m_noStringVisible = s.m_noStringVisible;
+    m_stringsNumber = s.m_stringsNumber;
 }
 
 StringTunings* StringTunings::clone() const
@@ -268,7 +274,7 @@ String StringTunings::generateText() const
                 }
             }
 
-            visibleStringList.emplace_back(String(guitarStringSymbol(i + 1) + u" \u2012 "
+            visibleStringList.emplace_back(String(guitarStringSymbol(i + 1) + u" \u2013 "
                                                   + String(pitchStr[0]).toUpper() + accidental) + u"  ");
         }
     }

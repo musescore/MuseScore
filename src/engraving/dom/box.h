@@ -198,6 +198,7 @@ public:
     ~TBox() override;
 
     Text* text() const { return m_text; }
+    void resetText(Text* text);
 
     // Score Tree functions
     EngravingObject* scanParent() const override;

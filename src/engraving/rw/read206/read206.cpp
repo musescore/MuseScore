@@ -3359,7 +3359,7 @@ bool Read206::readScore206(Score* score, XmlReader& e, ReadContext& ctx)
         } else if (tag == "name") {
             String n = e.readText();
             if (!score->isMaster()) {                 //ignore the name if it's not a child score
-                score->excerpt()->setName(n);
+                score->excerpt()->setName(n, /*saveAndNotify=*/ false);
             }
         } else if (tag == "layoutMode") {
             String s = e.readText();

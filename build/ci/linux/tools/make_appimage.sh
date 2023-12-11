@@ -2,9 +2,15 @@
 
 INSTALL_DIR="$1" # MuseScore was installed here
 APPIMAGE_NAME="$2" # name for AppImage file (created outside $INSTALL_DIR)
+PACKARCH="$3" # architecture (x86_64, aarch64, armv7l)
 
 if [ -z "$INSTALL_DIR" ]; then echo "error: not set INSTALL_DIR"; exit 1; fi
 if [ -z "$APPIMAGE_NAME" ]; then echo "error: not set APPIMAGE_NAME"; exit 1; fi
+if [ -z "$PACKARCH" ]; then 
+  PACKARCH="x86_64"
+elif [ "$PACKARCH" == "armv7l" ]; then
+  PACKARCH="armhf"
+fi
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ORIGIN_DIR=${PWD}
@@ -24,7 +30,8 @@ function download_github_release()
   else
     local -r url="https://github.com/${repo_slug}/releases/download/${release_tag}/${file}"
   fi
-  wget -q --show-progress "${url}"
+  # use curl instead of wget which fails on armhf
+  curl "${url}" -O -L
   chmod +x "${file}"
 }
 
@@ -42,7 +49,7 @@ function extract_appimage()
 function download_appimage_release()
 {
   local -r github_repo_slug="$1" binary_name="$2" tag="$3"
-  local -r appimage="${binary_name}-x86_64.AppImage"
+  local -r appimage="${binary_name}-${PACKARCH}.AppImage"
   download_github_release "${github_repo_slug}" "${tag}" "${appimage}"
   extract_appimage "${appimage}" "${binary_name}"
   # mv "${appimage}" "${binary_name}" # use this instead of the previous line for the static runtime AppImage
@@ -73,10 +80,15 @@ function download_linuxdeploy_component()
   download_appimage_release "linuxdeploy/$1" "$1" continuous
 }
 
-if [[ ! -d $BUILD_TOOLS/linuxdeploy ]]; then
-  mkdir $BUILD_TOOLS/linuxdeploy
+if [[ ! -f $BUILD_TOOLS/linuxdeploy/linuxdeploy ]]; then
+  mkdir -p $BUILD_TOOLS/linuxdeploy
   cd $BUILD_TOOLS/linuxdeploy
   download_linuxdeploy_component linuxdeploy
+  cd $ORIGIN_DIR
+fi
+if [[ ! -f $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-qt ]]; then
+  mkdir -p $BUILD_TOOLS/linuxdeploy
+  cd $BUILD_TOOLS/linuxdeploy
   download_linuxdeploy_component linuxdeploy-plugin-qt
   cd $ORIGIN_DIR
 fi

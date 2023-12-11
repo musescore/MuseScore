@@ -74,7 +74,6 @@
       <VBox>
         <height>10</height>
         <linkedMain/>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <linkedMain/>
           <style>title</style>
@@ -554,6 +553,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Piano</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -622,7 +622,6 @@
           <height>10</height>
           <linked>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               </linked>
@@ -1192,7 +1191,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Piano</name>
       </Score>
     </Score>
   </museScore>

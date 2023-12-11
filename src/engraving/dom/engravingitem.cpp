@@ -325,9 +325,6 @@ void EngravingItem::reset()
     undoResetProperty(Pid::OFFSET);
     setOffsetChanged(false);
     EngravingObject::reset();
-    // *After* having reset all other properties, also reset the linking to score
-    undoResetProperty(Pid::POSITION_LINKED_TO_MASTER);
-    undoResetProperty(Pid::APPEARANCE_LINKED_TO_MASTER);
 }
 
 //---------------------------------------------------------
@@ -1281,6 +1278,27 @@ void EngravingItem::relinkPropertiesToMaster(PropertyGroup propGroup)
             setPropertyFlags(propertyId, masterFlags);
         }
     }
+}
+
+void EngravingItem::relinkPropertyToMaster(Pid propertyId)
+{
+    assert(!score()->isMaster());
+
+    const std::list<EngravingObject*> linkedElements = linkListForPropertyPropagation();
+    EngravingObject* masterElement = nullptr;
+    for (EngravingObject* element : linkedElements) {
+        if (element->score()->isMaster()) {
+            masterElement = element;
+            break;
+        }
+    }
+
+    if (!masterElement) {
+        return;
+    }
+
+    setProperty(propertyId, masterElement->getProperty(propertyId));
+    setPropertyFlags(propertyId, masterElement->propertyFlags(propertyId));
 }
 
 PropertyPropagation EngravingItem::propertyPropagation(const EngravingItem* destinationItem, Pid propertyId) const

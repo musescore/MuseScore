@@ -723,10 +723,11 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     double mag            = (staffType->isSmall() ? ctx.conf().styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
     double _spatium       = ctx.conf().spatium() * mag;
     double _lineDist       = _spatium * staffType->lineDistance().val() / 2;
-    const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
+    const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance) * mag;
     const ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);
-    const double stemSideDistance = ctx.conf().styleMM(Sid::propertyDistanceStem);
+    const double stemSideDistance = ctx.conf().styleMM(Sid::propertyDistanceStem) * mag;
+    const double headSideDistance = ctx.conf().styleMM(Sid::propertyDistanceHead) * mag;
 
     int numCloseArtics = 0;
     bool hasStaffArticsUp = false;
@@ -845,7 +846,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = ((line & ~1) + 3) * _lineDist;
                     y -= a->height() * .5;
                 } else {
-                    y = item->downPos() + 0.5 * item->downNote()->headHeight() + ctx.conf().styleMM(Sid::propertyDistanceHead);
+                    y = item->downPos() + 0.5 * item->downNote()->headHeight() + headSideDistance;
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
@@ -900,7 +901,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = (((line + 1) & ~1) - 3) * _lineDist;
                     y += a->height() * .5;
                 } else {
-                    y = item->upPos() - 0.5 * item->downNote()->headHeight() - ctx.conf().styleMM(Sid::propertyDistanceHead);
+                    y = item->upPos() - 0.5 * item->downNote()->headHeight() - headSideDistance;
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
@@ -956,10 +957,11 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
     }
 
     double stacAccentKern = 0.2 * item->spatium();
-    double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
-    double staffDist = ctx.conf().styleMM(Sid::propertyDistance);
-    double stemDist = ctx.conf().styleMM(Sid::propertyDistanceStem);
-    double noteDist = ctx.conf().styleMM(Sid::propertyDistanceHead);
+    double mag = item->mag();
+    double minDist = ctx.conf().styleMM(Sid::articulationMinDistance) * mag;
+    double staffDist = ctx.conf().styleMM(Sid::propertyDistance) * mag;
+    double stemDist = ctx.conf().styleMM(Sid::propertyDistanceStem) * mag;
+    double noteDist = ctx.conf().styleMM(Sid::propertyDistanceHead) * mag;
 
     double chordTopY = item->upPos() - 0.5 * item->upNote()->headHeight();      // note position of highest note
     double chordBotY = item->downPos() + 0.5 * item->upNote()->headHeight();    // note position of lowest note
@@ -3426,6 +3428,9 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
     int dots = item->chord()->dots();
     if (dots && !item->dots().empty()) {
+        if (item->chord()->slash() && !item->visible()) {
+            item->setDotsHidden(true);
+        }
         // if chords have notes with different mag, dots must still  align
         double correctMag = item->chord()->notes().size() > 1 ? item->chord()->mag() : item->mag();
         double d  = ctx.conf().point(ctx.conf().styleS(Sid::dotNoteDistance)) * correctMag;

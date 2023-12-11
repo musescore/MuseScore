@@ -298,11 +298,12 @@ void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
         return;
     }
 
-    DeleteAll(item->beamSegments());
-    item->beamSegments().clear();
+    item->clearBeamSegments();
+
     if (!item->twoNotes()) {
         return;
     }
+
     bool _isGrace = item->chord1()->isGrace();
     const PointF pagePos = item->pagePos();
     PointF startAnchor = item->layoutInfo->startAnchor() - PointF(0.0, pagePos.y());

@@ -1495,7 +1495,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
 
     const double spatium = tieSegment->spatium();
     const double staffLineDist = staff->lineDistance(tick) * spatium;
-    const double staffLineThickness = tieSegment->style().styleMM(Sid::staffLineWidth);
+    const double staffLineThickness = tieSegment->style().styleMM(Sid::staffLineWidth) * staff->staffMag(tick);
 
     // 1. Check for bad end point protrusion
 

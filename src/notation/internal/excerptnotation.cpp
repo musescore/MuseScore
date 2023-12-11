@@ -134,6 +134,11 @@ mu::async::Notification ExcerptNotation::nameChanged() const
     return m_excerpt->nameChanged();
 }
 
+const mu::String& ExcerptNotation::fileName() const
+{
+    return m_excerpt->fileName();
+}
+
 INotationPtr ExcerptNotation::notation()
 {
     return shared_from_this();

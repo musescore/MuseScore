@@ -99,7 +99,6 @@
     <Staff id="1">
       <VBox>
         <height>10</height>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <text>Style Score</text>
@@ -303,6 +302,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Flute</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -358,7 +358,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>title</style>
             <text>Style Score</text>
@@ -495,9 +494,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute</name>
       </Score>
     <Score>
+      <name>Oboe</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
@@ -554,7 +553,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>title</style>
             <text>Style Score</text>
@@ -664,7 +662,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Oboe</name>
       </Score>
     </Score>
   </museScore>

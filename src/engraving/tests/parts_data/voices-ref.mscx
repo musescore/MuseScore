@@ -144,7 +144,6 @@
       <VBox>
         <height>10</height>
         <linkedMain/>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <linkedMain/>
           <style>title</style>
@@ -1063,6 +1062,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Piano</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1140,7 +1140,6 @@
           <height>10</height>
           <linked>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               </linked>
@@ -1804,9 +1803,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Piano</name>
       </Score>
     <Score>
+      <name>Trombone</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1878,7 +1877,6 @@
               <staves>-2</staves>
               </location>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               <location>
@@ -2303,9 +2301,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Trombone</name>
       </Score>
     <Score>
+      <name>Trombone</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -2377,7 +2375,6 @@
               <staves>-2</staves>
               </location>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               <location>
@@ -2802,7 +2799,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Trombone</name>
       </Score>
     </Score>
   </museScore>

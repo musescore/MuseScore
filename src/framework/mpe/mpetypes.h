@@ -246,6 +246,7 @@ enum class ArticulationType {
 
     Harmonic,
     JazzTone,
+    PalmMute,
     Mute,
     Open,
     Pizzicato,
@@ -343,7 +344,7 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
         ArticulationType::Tenuto, ArticulationType::Marcato, ArticulationType::Accent,
         ArticulationType::SoftAccent, ArticulationType::LaissezVibrer,
         ArticulationType::Subito, ArticulationType::FadeIn, ArticulationType::FadeOut,
-        ArticulationType::Harmonic, ArticulationType::Mute, ArticulationType::Open,
+        ArticulationType::Harmonic, ArticulationType::PalmMute, ArticulationType::Mute, ArticulationType::Open,
         ArticulationType::Pizzicato, ArticulationType::SnapPizzicato, ArticulationType::RandomPizzicato,
         ArticulationType::UpBow, ArticulationType::DownBow, ArticulationType::Detache,
         ArticulationType::Martele, ArticulationType::Jete, ArticulationType::GhostNote,

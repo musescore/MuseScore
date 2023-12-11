@@ -103,10 +103,13 @@ Beam::~Beam()
     // delete all references from chords
     //
     for (ChordRest* cr : m_elements) {
-        cr->setBeam(0);
+        cr->setBeam(nullptr);
     }
-    DeleteAll(m_beamSegments);
+
+    clearBeamSegments();
+
     DeleteAll(m_fragments);
+    m_fragments.clear();
 }
 
 //---------------------------------------------------------
@@ -412,7 +415,7 @@ void Beam::setBeamDirection(DirectionV d)
 
     for (ChordRest* e : elements()) {
         if (e->isChord()) {
-            toChord(e)->setStemDirection(d);
+            toChord(e)->undoChangeProperty(Pid::STEM_DIRECTION, d);
         }
     }
 }
@@ -602,6 +605,15 @@ PropertyValue Beam::getProperty(Pid propertyId) const
     case Pid::USER_MODIFIED:  return userModified();
     case Pid::BEAM_POS:       return PropertyValue::fromValue(beamPos());
     case Pid::BEAM_NO_SLOPE:  return noSlope();
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        for (ChordRest* chordRest : elements()) {
+            bool linked = chordRest->getProperty(propertyId).toBool();
+            if (!linked) {
+                return false;
+            }
+        }
+        return true;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -634,6 +646,17 @@ bool Beam::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::BEAM_NO_SLOPE:
         setNoSlope(v.toBool());
         break;
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        if (v.toBool() == true) {
+            for (ChordRest* chordRest : elements()) {
+                // when re-linking, re-link all the chords
+                chordRest->setProperty(propertyId, v);
+            }
+            resetProperty(Pid::STEM_DIRECTION);
+            break;
+        }
+    // fall through
     default:
         if (!EngravingItem::setProperty(propertyId, v)) {
             return false;
@@ -845,6 +868,25 @@ bool Beam::hasAllRests()
         }
     }
     return true;
+}
+
+void Beam::clearBeamSegments()
+{
+    for (ChordRest* chordRest : m_elements) {
+        BeamSegment* chordRestBeamlet = chordRest->beamlet();
+        if (!chordRestBeamlet) {
+            continue;
+        }
+
+        for (BeamSegment* segment : m_beamSegments) {
+            if (segment == chordRestBeamlet) {
+                chordRest->setBeamlet(nullptr);
+            }
+        }
+    }
+
+    DeleteAll(m_beamSegments);
+    m_beamSegments.clear();
 }
 
 //-------------------------------------------------------

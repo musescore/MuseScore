@@ -807,42 +807,48 @@ inline const midi::Programs& findPrograms(const mpe::PlaybackSetupData& setupDat
 
 inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupData& setupData)
 {
-    static ArticulationMapping ELECTRIC_GUITAR = {
+    static const ArticulationMapping ELECTRIC_GUITAR = {
         { mpe::ArticulationType::JazzTone, midi::Program(0, 26) },
+        { mpe::ArticulationType::PalmMute, midi::Program(0, 28) },
         { mpe::ArticulationType::Mute, midi::Program(0, 28) },
         { mpe::ArticulationType::Harmonic, midi::Program(0, 31) },
         { mpe::ArticulationType::Distortion, midi::Program(0, 30) },
         { mpe::ArticulationType::Overdrive, midi::Program(0, 29) }
     };
 
-    static ArticulationMapping ACOUSTIC_GUITAR = {
+    static const ArticulationMapping ACOUSTIC_GUITAR = {
         { mpe::ArticulationType::JazzTone, midi::Program(0, 26) },
+        { mpe::ArticulationType::PalmMute, midi::Program(0, 28) },
         { mpe::ArticulationType::Mute, midi::Program(0, 28) },
         { mpe::ArticulationType::Harmonic, midi::Program(8, 31) }
     };
 
-    static ArticulationMapping ELECTRIC_BASS_GUITAR = {
+    static const ArticulationMapping ELECTRIC_BASS_GUITAR = {
         { mpe::ArticulationType::Slap, midi::Program(0, 36) },
         { mpe::ArticulationType::Pop, midi::Program(0, 37) },
+        { mpe::ArticulationType::PalmMute, midi::Program(0, 28) },
         { mpe::ArticulationType::Mute, midi::Program(0, 28) }
     };
 
-    static ArticulationMapping ACOUSTIC_BASS_GUITAR = {
+    static const ArticulationMapping ACOUSTIC_BASS_GUITAR = {
         { mpe::ArticulationType::Slap, midi::Program(0, 36) },
         { mpe::ArticulationType::Pop, midi::Program(0, 37) },
         { mpe::ArticulationType::Pizzicato, midi::Program(0, 32) },
+        { mpe::ArticulationType::PalmMute, midi::Program(0, 32) },
         { mpe::ArticulationType::Mute, midi::Program(0, 32) }
     };
 
-    static ArticulationMapping BASIC_STRING_SECTION = {
+    static const ArticulationMapping BASIC_STRING_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(0, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(0, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(0, 45) },
         { mpe::ArticulationType::Mute, midi::Program(0, 45) }
     };
 
-    static ArticulationMapping BASIC_VIOL_SECTION = {
+    static const ArticulationMapping BASIC_VIOL_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(0, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(0, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(0, 45) },
         { mpe::ArticulationType::Mute, midi::Program(0, 45) },
         { mpe::ArticulationType::Tremolo8th, midi::Program(0, 44) },
         { mpe::ArticulationType::Tremolo16th, midi::Program(0, 44) },
@@ -850,9 +856,10 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo64th, midi::Program(0, 44) },
     };
 
-    static ArticulationMapping VIOLIN_SECTION = {
+    static const ArticulationMapping VIOLIN_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(20, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(20, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(20, 45) },
         { mpe::ArticulationType::Mute, midi::Program(20, 45) },
         { mpe::ArticulationType::Tremolo8th, midi::Program(20, 44) },
         { mpe::ArticulationType::Tremolo16th, midi::Program(20, 44) },
@@ -860,15 +867,17 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo64th, midi::Program(20, 44) },
     };
 
-    static ArticulationMapping VIOLIN = {
+    static const ArticulationMapping VIOLIN = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(20, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(20, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(20, 45) },
         { mpe::ArticulationType::Mute, midi::Program(20, 45) }
     };
 
-    static ArticulationMapping VIOLA_SECTION = {
+    static const ArticulationMapping VIOLA_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(30, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(30, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(30, 45) },
         { mpe::ArticulationType::Mute, midi::Program(30, 45) },
         { mpe::ArticulationType::Tremolo8th, midi::Program(30, 44) },
         { mpe::ArticulationType::Tremolo16th, midi::Program(30, 44) },
@@ -876,15 +885,17 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo64th, midi::Program(30, 44) },
     };
 
-    static ArticulationMapping VIOLA = {
+    static const ArticulationMapping VIOLA = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(30, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(30, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(30, 45) },
         { mpe::ArticulationType::Mute, midi::Program(30, 45) }
     };
 
-    static ArticulationMapping VIOLONCELLO_SECTION = {
+    static const ArticulationMapping VIOLONCELLO_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(40, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(40, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(40, 45) },
         { mpe::ArticulationType::Mute, midi::Program(40, 45) },
         { mpe::ArticulationType::Tremolo8th, midi::Program(40, 44) },
         { mpe::ArticulationType::Tremolo16th, midi::Program(40, 44) },
@@ -892,15 +903,17 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo64th, midi::Program(40, 44) },
     };
 
-    static ArticulationMapping VIOLONCELLO = {
+    static const ArticulationMapping VIOLONCELLO = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(40, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(40, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(40, 45) },
         { mpe::ArticulationType::Mute, midi::Program(40, 45) }
     };
 
-    static ArticulationMapping CONTRABASS_SECTION = {
+    static const ArticulationMapping CONTRABASS_SECTION = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(50, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(50, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(50, 45) },
         { mpe::ArticulationType::Mute, midi::Program(50, 45) },
         { mpe::ArticulationType::Tremolo8th, midi::Program(50, 44) },
         { mpe::ArticulationType::Tremolo16th, midi::Program(50, 44) },
@@ -908,13 +921,14 @@ inline const ArticulationMapping& articulationSounds(const mpe::PlaybackSetupDat
         { mpe::ArticulationType::Tremolo64th, midi::Program(50, 44) },
     };
 
-    static ArticulationMapping CONTRABASS = {
+    static const ArticulationMapping CONTRABASS = {
         { mpe::ArticulationType::SnapPizzicato, midi::Program(50, 45) },
         { mpe::ArticulationType::Pizzicato, midi::Program(50, 45) },
+        { mpe::ArticulationType::PalmMute, midi::Program(50, 45) },
         { mpe::ArticulationType::Mute, midi::Program(50, 45) },
     };
 
-    static ArticulationMapping WINDS = {
+    static const ArticulationMapping WINDS = {
         { mpe::ArticulationType::Mute, midi::Program(0, 59) }
     };
 

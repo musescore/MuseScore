@@ -163,7 +163,7 @@ ByteArray MscReader::readScoreFile() const
     return fileData(mscxFileName);
 }
 
-std::vector<String> MscReader::excerptNames() const
+std::vector<String> MscReader::excerptFileNames() const
 {
     if (!reader()->isContainer()) {
         NOT_SUPPORTED << " not container";
@@ -180,16 +180,16 @@ std::vector<String> MscReader::excerptNames() const
     return names;
 }
 
-ByteArray MscReader::readExcerptStyleFile(const String& name) const
+ByteArray MscReader::readExcerptStyleFile(const String& excerptFileName) const
 {
-    String fileName = name + u".mss";
-    return fileData(u"Excerpts/" + name + u"/" + fileName);
+    String fileName = excerptFileName + u".mss";
+    return fileData(u"Excerpts/" + excerptFileName + u"/" + fileName);
 }
 
-ByteArray MscReader::readExcerptFile(const String& name) const
+ByteArray MscReader::readExcerptFile(const String& excerptFileName) const
 {
-    String fileName = name + u".mscx";
-    return fileData(u"Excerpts/" + name + u"/" + fileName);
+    String fileName = excerptFileName + u".mscx";
+    return fileData(u"Excerpts/" + excerptFileName + u"/" + fileName);
 }
 
 ByteArray MscReader::readChordListFile() const

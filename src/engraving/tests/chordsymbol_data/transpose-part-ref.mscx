@@ -75,7 +75,6 @@
       <VBox>
         <height>10</height>
         <linkedMain/>
-        <excludeFromParts>0</excludeFromParts>
         </VBox>
       <Measure>
         <voice>
@@ -122,6 +121,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Flute</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -132,7 +132,6 @@
       <showUnprintable>1</showUnprintable>
       <showFrames>1</showFrames>
       <showMargins>0</showMargins>
-      <metaTag name="partName">Flute</metaTag>
       <Part id="1">
         <Staff id="1">
           <linkedTo>1</linkedTo>
@@ -191,7 +190,6 @@
           <height>10</height>
           <linked>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>instrument_excerpt</style>
             <text>Flute</text>
@@ -248,7 +246,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute</name>
       </Score>
     </Score>
   </museScore>

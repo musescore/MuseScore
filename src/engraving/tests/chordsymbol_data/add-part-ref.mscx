@@ -101,6 +101,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Classical Guitar</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -168,7 +169,6 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
           </VBox>
         <Measure>
           <voice>
@@ -208,7 +208,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Classical Guitar</name>
       </Score>
     </Score>
   </museScore>

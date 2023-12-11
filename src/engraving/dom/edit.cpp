@@ -2906,25 +2906,6 @@ void Score::deleteItem(EngravingItem* el)
     }
     break;
 
-    case ElementType::VBOX:
-    {
-        // don't remove title frames in parts, because they contain part name
-        // remove title, subtitle, ... instead, and unlink frame siblinks
-        if (el == score()->first() && score()->isMaster()) {
-            ElementList els = toMeasureBase(el)->el();
-            for (auto it = els.rbegin(); it != els.rend(); ++it) {
-                deleteItem(*it);
-            }
-            undoRemoveElement(el, false);
-            for (EngravingObject* linkedFrame : el->linkList()) {
-                linkedFrame->undoUnlink();
-            }
-        } else {
-            undoRemoveElement(el);
-        }
-    }
-    break;
-
     default:
         undoRemoveElement(el);
         break;
@@ -4063,15 +4044,8 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
         tick = last() ? last()->endTick() : Fraction(0, 1);
     }
 
-    const bool isBeginning = tick.isZero();
-
-    const bool isTitleFrame = (type == ElementType::VBOX || type == ElementType::TBOX) && isBeginning;
-    const bool dontCloneFrameToParts = isFrame && !isTitleFrame;
-
     MeasureBase* newMeasureBase = toMeasureBase(Factory::createItem(type, dummy()));
     newMeasureBase->setTick(tick);
-    newMeasureBase->setExcludeFromOtherParts(dontCloneFrameToParts);
-
     newMeasureBase->setNext(beforeMeasure);
     newMeasureBase->setPrev(beforeMeasure ? beforeMeasure->prev() : last());
 
@@ -4079,6 +4053,10 @@ MeasureBase* Score::insertBox(ElementType type, MeasureBase* beforeMeasure, cons
 
     if (options.needDeselectAll) {
         deselectAll();
+    }
+
+    if (options.cloneBoxToAllParts) {
+        newMeasureBase->manageExclusionFromParts(/*exclude =*/ false);
     }
 
     return newMeasureBase;
@@ -6110,11 +6088,13 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     }
                 } else if (ne->isStringTunings()) {
                     StringTunings* stringTunings = toStringTunings(ne);
-                    const StringData* stringData = stringTunings->part()->stringData(tick, staff->idx());
-                    int frets = stringData->frets();
-                    std::vector<mu::engraving::instrString> stringList = stringData->stringList();
+                    if (stringTunings->stringData()->isNull()) {
+                        const StringData* stringData = stringTunings->part()->stringData(tick, staff->idx());
+                        int frets = stringData->frets();
+                        std::vector<mu::engraving::instrString> stringList = stringData->stringList();
 
-                    stringTunings->setStringData(StringData(frets, stringList));
+                        stringTunings->setStringData(StringData(frets, stringList));
+                    }
                 }
 
                 undo(new AddElement(ne));
@@ -6744,6 +6724,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
     const Fraction startTick = m1->tick();
     const Fraction endTick = m2->endTick();
     std::set<Spanner*> spannersToRemove;
+    std::set<EngravingItem*> annotationsToRemove;
 
     //
     //  handle ties which start before m1 and end in (m1-m2)
@@ -6759,6 +6740,10 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
 
         if (!s->isChordRestType()) {
             continue;
+        }
+
+        for (EngravingItem* ee : s->annotations()) {
+            annotationsToRemove.insert(ee);
         }
 
         for (track_idx_t track = 0; track < ntracks(); ++track) {
@@ -6800,6 +6785,10 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
 
     for (Spanner* s : spannersToRemove) {
         undoRemoveElement(s);
+    }
+
+    for (EngravingItem* a : annotationsToRemove) {
+        undoRemoveElement(a);
     }
 
     undo(new RemoveMeasures(m1, m2));

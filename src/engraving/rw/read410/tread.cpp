@@ -1398,7 +1398,7 @@ void TRead::read(Excerpt* item, XmlReader& e, ReadContext&)
     while (e.readNextStartElement()) {
         const AsciiStringView tag = e.name();
         if (tag == "name" || tag == "title") {
-            item->setName(e.readText().trimmed());
+            item->setName(e.readText().trimmed(), /*saveAndNotify=*/ false);
         } else if (tag == "part") {
             size_t partIdx = static_cast<size_t>(e.readInt());
             if (partIdx >= pl.size()) {

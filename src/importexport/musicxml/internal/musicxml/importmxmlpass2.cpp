@@ -2811,7 +2811,7 @@ void MusicXMLParserDirection::direction(const QString& partId,
         if (_e.name() == "direction-type") {
             directionType(starts, stops);
         } else if (_e.name() == "offset") {
-            _offset = _pass1.calcTicks(_e.readElementText().toInt(), &_e);
+            _offset = _pass1.calcTicks(_e.readElementText().toInt(), _pass2.divs(), &_e);
             preventNegativeTick(tick, _offset, _logger);
         } else if (_e.name() == "sound") {
             sound();
@@ -5459,7 +5459,7 @@ void MusicXMLParserPass2::duration(Fraction& dura)
     dura.set(0, 0);          // invalid unless set correctly
     const auto elementText = _e.readElementText();
     if (elementText.toInt() > 0) {
-        dura = _pass1.calcTicks(elementText.toInt(), &_e);
+        dura = _pass1.calcTicks(elementText.toInt(), _divs, &_e);
     } else {
         _logger->logError(QString("illegal duration %1").arg(dura.toString()), &_e);
     }
@@ -5857,7 +5857,7 @@ void MusicXMLParserPass2::harmony(const QString& partId, Measure* measure, const
         } else if (_e.name() == "level") {
             skipLogCurrElem();
         } else if (_e.name() == "offset") {
-            offset = _pass1.calcTicks(_e.readElementText().toInt(), &_e);
+            offset = _pass1.calcTicks(_e.readElementText().toInt(), _divs, &_e);
             preventNegativeTick(sTime, offset, _logger);
         } else if (_e.name() == "staff") {
             size_t nstaves = _pass1.getPart(partId)->nstaves();

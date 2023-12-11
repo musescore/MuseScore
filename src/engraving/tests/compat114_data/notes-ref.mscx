@@ -69,7 +69,6 @@
         <topMargin>5</topMargin>
         <bottomMargin>5</bottomMargin>
         <boxAutoSize>0</boxAutoSize>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>title</style>
           <text>notes</text>

@@ -148,6 +148,8 @@ PropertyValue Stem::getProperty(Pid propertyId) const
         return userLength();
     case Pid::STEM_DIRECTION:
         return PropertyValue::fromValue<DirectionV>(chord()->stemDirection());
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        return chord() ? chord()->isPropertyLinkedToMaster(Pid::STEM_DIRECTION) : true;
     default:
         return EngravingItem::getProperty(propertyId);
     }
@@ -165,6 +167,11 @@ bool Stem::setProperty(Pid propertyId, const PropertyValue& v)
     case Pid::STEM_DIRECTION:
         chord()->setStemDirection(v.value<DirectionV>());
         break;
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
+        if (chord() && v.toBool() == true) {
+            chord()->relinkPropertyToMaster(Pid::STEM_DIRECTION);
+            break;
+        }
     default:
         return EngravingItem::setProperty(propertyId, v);
     }

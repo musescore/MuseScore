@@ -820,6 +820,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::stringNumberOffset,            "stringNumberOffset",            PointF(0.0, 0.0) },
     { Sid::preferSameStringForTranspose,  "preferSameStringForTranspose",  false },
 
+    { Sid::stringTuningsFontSize,         "stringTuningsFontSize",         9.0 },
+
     { Sid::harpPedalDiagramFontFace,          "harpPedalDiagramFontFace",          "Edwin" },
     { Sid::harpPedalDiagramFontSize,          "harpPedalDiagramFontSize",          10.0 },
     { Sid::harpPedalDiagramLineSpacing,       "harpPedalDiagramLineSpacing",       1.0 },
@@ -1207,7 +1209,8 @@ const std::array<StyleDef::StyleValue, size_t(Sid::STYLES)> StyleDef::styleValue
     { Sid::bendLineWidth,                 "bendLineWidth",                Spatium(0.15) },
     { Sid::bendArrowWidth,                "bendArrowWidth",               Spatium(.5) },
 
-    { Sid::guitarBendLineWidth,           "guitarBendLineWidth",          Spatium(0.15) },
+    { Sid::guitarBendLineWidth,           "guitarBendLineWidth",          Spatium(0.13) },
+    { Sid::guitarBendLineWidthTab,        "guitarBendLineWidthTab",       Spatium(0.15) },
     { Sid::guitarBendHeightAboveTABStaff, "guitarBendHeightAboveTABStaff", 1.5 }, // in units of TAB lines dist
     { Sid::guitarBendPartialBendHeight,   "guitarBendPartialBendHeight",  Spatium(1.5) },
     { Sid::guitarBendUseFull,             "guitarBendUseFull",            false },

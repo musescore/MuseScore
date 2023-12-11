@@ -99,6 +99,10 @@
         </Instrument>
       </Part>
     <Staff id="1">
+      <VBox>
+        <height>10</height>
+        <linkedMain/>
+        </VBox>
       <Measure>
         <voice>
           <Clef>
@@ -196,6 +200,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Flute</name>
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
@@ -247,7 +252,8 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
+          <linked>
+            </linked>
           <Text>
             <style>instrument_excerpt</style>
             <text>Flute</text>
@@ -302,9 +308,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute</name>
       </Score>
     <Score>
+      <name>Alto Saxophone</name>
       <Division>480</Division>
       <Style>
         <createMultiMeasureRests>1</createMultiMeasureRests>
@@ -361,7 +367,11 @@
       <Staff id="1">
         <VBox>
           <height>10</height>
-          <excludeFromParts>0</excludeFromParts>
+          <linked>
+            <location>
+              <staves>-1</staves>
+              </location>
+            </linked>
           <Text>
             <style>instrument_excerpt</style>
             <text>Alto Saxophone</text>
@@ -429,7 +439,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Alto Saxophone</name>
       </Score>
     </Score>
   </museScore>

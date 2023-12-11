@@ -185,7 +185,6 @@
         <bottomGap>0</bottomGap>
         <topMargin>3</topMargin>
         <boxAutoSize>0</boxAutoSize>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>frame</style>
           <text>îèéààéà</text>
@@ -201,7 +200,6 @@
         <topGap>10</topGap>
         <bottomGap>0</bottomGap>
         <boxAutoSize>0</boxAutoSize>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <style>frame</style>
           <text>êêàééééç*éô</text>

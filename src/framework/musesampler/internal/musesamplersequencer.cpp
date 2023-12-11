@@ -33,6 +33,7 @@ static const std::unordered_map<mpe::ArticulationType, ms_NoteArticulation> ARTI
     { mpe::ArticulationType::Tenuto, ms_NoteArticulation_Tenuto },
     { mpe::ArticulationType::Marcato, ms_NoteArticulation_Marcato },
     { mpe::ArticulationType::Harmonic, ms_NoteArticulation_Harmonics },
+    { mpe::ArticulationType::PalmMute, ms_NoteArticulation_PalmMute },
     { mpe::ArticulationType::Mute, ms_NoteArticulation_Mute },
     { mpe::ArticulationType::Legato, ms_NoteArticulation_Slur },
     { mpe::ArticulationType::Trill, ms_NoteArticulation_Trill },
@@ -251,6 +252,9 @@ void MuseSamplerSequencer::addNoteEvent(const mpe::NoteEvent& noteEvent)
     if (noteEvent.expressionCtx().articulations.contains(mpe::ArticulationType::Multibend)) {
         addPitchBends(noteEvent, noteEventId);
     }
+    if (noteEvent.expressionCtx().articulations.contains(mpe::ArticulationType::Vibrato)) {
+        addVibrato(noteEvent, noteEventId);
+    }
 }
 
 void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long long noteEventId)
@@ -284,6 +288,26 @@ void MuseSamplerSequencer::addPitchBends(const mpe::NoteEvent& noteEvent, long l
 
         m_samplerLib->addPitchBend(m_sampler, m_track, pitchBend);
     }
+}
+
+void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long noteEventId)
+{
+    if (!m_samplerLib->addVibrato) {
+        return;
+    }
+    mpe::duration_t duration = noteEvent.arrangementCtx().actualDuration;
+    // stand-in data before actual mpe support
+    constexpr auto MAX_VIBRATO_STARTOFFSET_US = (int64_t)0.1 * 1000000;
+    // stand-in data before actual mpe support
+    constexpr int VIBRATO_DEPTH_CENTS = 13;
+
+    ms_VibratoInfo vibrato;
+    vibrato.event_id = noteEventId;
+    vibrato._start_us = std::min((int64_t)(duration * 0.1), MAX_VIBRATO_STARTOFFSET_US);
+    vibrato._duration_us = duration;
+    vibrato._depth_cents = VIBRATO_DEPTH_CENTS;
+
+    m_samplerLib->addVibrato(m_sampler, m_track, vibrato);
 }
 
 void MuseSamplerSequencer::pitchAndTuning(const mpe::pitch_level_t nominalPitch, int& pitch, int& centsOffset) const

@@ -54,6 +54,7 @@ public:
 
     Tremolo& operator=(const Tremolo&) = delete;
     Tremolo* clone() const override { return new Tremolo(*this); }
+    ~Tremolo() override;
 
     Chord* chord() const { return toChord(explicitParent()); }
     void setParent(Chord* ch);
@@ -158,6 +159,7 @@ public:
 
     const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
+    void clearBeamSegments();
 
     void computeShape();
 

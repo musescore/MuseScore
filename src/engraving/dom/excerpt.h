@@ -23,8 +23,6 @@
 #ifndef MU_ENGRAVING_EXCERPT_H
 #define MU_ENGRAVING_EXCERPT_H
 
-#include <map>
-
 #include "types/fraction.h"
 #include "types/types.h"
 #include "types/string.h"
@@ -59,8 +57,15 @@ public:
     void setExcerptScore(Score* s);
 
     const String& name() const;
-    void setName(const String& name);
+    void setName(const String& name, bool saveAndNotify = true);
     async::Notification nameChanged() const;
+
+    // The name used to store this excerpt in the msc file/folder.
+    // When reading/writing, the engraving module sets this value, so that other
+    // modules can also read/write data about this excerpt using the correct name.
+    const String& fileName() const;
+    void setFileName(const String& fileName);
+    void updateFileName(size_t index = mu::nidx);
 
     std::vector<Part*>& parts() { return m_parts; }
     const std::vector<Part*>& parts() const { return m_parts; }
@@ -99,6 +104,7 @@ private:
     MasterScore* m_masterScore = nullptr;
     Score* m_excerptScore = nullptr;
     String m_name;
+    String m_fileName;
     async::Notification m_nameChanged;
     std::vector<Part*> m_parts;
     TracksMap m_tracksMapping;

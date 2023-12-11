@@ -135,7 +135,6 @@
         <height>8</height>
         <bottomGap>13</bottomGap>
         <boxAutoSize>0</boxAutoSize>
-        <excludeFromParts>0</excludeFromParts>
         </VBox>
       <Measure>
         <voice>
@@ -227,6 +226,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Bass</name>
       <Division>480</Division>
       <Style>
         <pedalPosBelow x="0" y="0"/>
@@ -304,7 +304,6 @@
           <height>8</height>
           <bottomGap>13</bottomGap>
           <boxAutoSize>0</boxAutoSize>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <style>instrument_excerpt</style>
             <text>Bass</text>
@@ -345,7 +344,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Bass</name>
       </Score>
     </Score>
   </museScore>

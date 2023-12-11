@@ -416,18 +416,18 @@ void Chord::undoUnlink()
 Chord::~Chord()
 {
     DeleteAll(m_articulations);
-    delete m_arpeggio;
+
     if (m_tremolo) {
         if (m_tremolo->chord1() == this) {
-            Tremolo* tremoloPointer = m_tremolo;       // setTremolo(0) loses reference to the current pointer
-            if (m_tremolo->chord2()) {
-                m_tremolo->chord2()->setTremolo(0);
-            }
-            delete tremoloPointer;
-        } else if (!(m_tremolo->chord1())) { // delete orphaned tremolo
-            delete m_tremolo;
+            m_tremolo->setChord1(nullptr);
+        } else if (m_tremolo->chord2() == this) {
+            m_tremolo->setChord2(nullptr);
         }
+
+        m_tremolo = nullptr;
     }
+
+    delete m_arpeggio;
     delete m_stemSlash;
     delete m_stem;
     delete m_hook;
@@ -2246,6 +2246,9 @@ void Chord::setSlash(bool flag, bool stemless)
             n->undoChangeProperty(Pid::FIXED_LINE, 0);
             n->undoChangeProperty(Pid::PLAY, true);
             n->undoChangeProperty(Pid::VISIBLE, true);
+            for (NoteDot* dot : n->dots()) {
+                dot->undoChangeProperty(Pid::VISIBLE, true);
+            }
             if (staff()->isDrumStaff(tick())) {
                 const Drumset* ds = part()->instrument(tick())->drumset();
                 int pitch = n->pitch();
@@ -2307,6 +2310,9 @@ void Chord::setSlash(bool flag, bool stemless)
         // hide all but first notehead
         if (i) {
             n->undoChangeProperty(Pid::VISIBLE, false);
+            for (NoteDot* dot : n->dots()) {
+                dot->undoChangeProperty(Pid::VISIBLE, false);
+            }
         }
     }
 }

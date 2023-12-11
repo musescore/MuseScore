@@ -228,7 +228,6 @@
         <height>36.9323</height>
         <boxAutoSize>0</boxAutoSize>
         <linkedMain/>
-        <excludeFromParts>0</excludeFromParts>
         <Text>
           <linkedMain/>
           <style>user_1</style>
@@ -379,6 +378,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Piano</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -503,7 +503,6 @@
           <boxAutoSize>0</boxAutoSize>
           <linked>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               </linked>
@@ -611,9 +610,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Piano</name>
       </Score>
     <Score>
+      <name>Flute 1</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
@@ -740,7 +739,6 @@
               <staves>-1</staves>
               </location>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               <location>
@@ -869,9 +867,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute 1</name>
       </Score>
     <Score>
+      <name>Flute 2</name>
       <initialPartId>3</initialPartId>
       <Division>480</Division>
       <Style>
@@ -998,7 +996,6 @@
               <staves>-2</staves>
               </location>
             </linked>
-          <excludeFromParts>0</excludeFromParts>
           <Text>
             <linked>
               <location>
@@ -1127,7 +1124,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute 2</name>
       </Score>
     </Score>
   </museScore>

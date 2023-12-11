@@ -53,6 +53,7 @@ static const std::unordered_map<ArticulationType, QString> ARTICULATION_TYPE_NAM
     { ArticulationType::FadeOut, "FadeOut" },
     { ArticulationType::Harmonic, "Harmonic" },
     { ArticulationType::JazzTone, "JazzTone" },
+    { ArticulationType::PalmMute, "PalmMute" },
     { ArticulationType::Mute, "Mute" },
     { ArticulationType::Open, "Open" },
     { ArticulationType::Pizzicato, "Pizzicato" },
