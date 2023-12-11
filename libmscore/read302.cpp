@@ -406,6 +406,8 @@ Score::FileError MasterScore::read302(XmlReader& e)
                   }
             else if (tag == "programRevision")
                   setMscoreRevision(e.readIntHex());
+            else if (tag == "LastEID")    // 4.2+ compatibility
+                  e.skipCurrentElement(); // skip, don't log
             else if (tag == "Score") {
                   MasterScore* score;
                   if (top) {
