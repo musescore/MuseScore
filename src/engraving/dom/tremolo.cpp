@@ -232,9 +232,9 @@ void Tremolo::spatiumChanged(double oldValue, double newValue)
 void Tremolo::localSpatiumChanged(double oldValue, double newValue)
 {
     if (twoNotes()) {
-        return m_tremoloTwoChord->localSpatiumChanged(oldValue, newValue);
+        m_tremoloTwoChord->localSpatiumChanged(oldValue, newValue);
     } else {
-        return m_tremoloSingleChord->localSpatiumChanged(oldValue, newValue);
+        m_tremoloSingleChord->localSpatiumChanged(oldValue, newValue);
     }
 
     EngravingItem::localSpatiumChanged(oldValue, newValue);
@@ -382,7 +382,6 @@ void Tremolo::reset()
 
 PointF Tremolo::pagePos() const
 {
-    return EngravingItem::pagePos();
     if (twoNotes()) {
         return m_tremoloTwoChord->pagePos();
     } else {
@@ -519,9 +518,9 @@ TDuration Tremolo::durationType() const
 void Tremolo::setDurationType(TDuration d)
 {
     if (twoNotes()) {
-        return m_tremoloTwoChord->setDurationType(d);
+        m_tremoloTwoChord->setDurationType(d);
     } else {
-        return m_tremoloSingleChord->setDurationType(d);
+        m_tremoloSingleChord->setDurationType(d);
     }
     styleChanged();
 }
