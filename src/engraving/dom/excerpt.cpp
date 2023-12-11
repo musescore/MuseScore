@@ -127,15 +127,18 @@ const String& Excerpt::name() const
     return m_name;
 }
 
-void Excerpt::setName(const String& name)
+void Excerpt::setName(const String& name, bool saveAndNotify)
 {
     if (m_name == name) {
         return;
     }
 
     m_name = name;
-    writeNameToMetaTags();
-    m_nameChanged.notify();
+
+    if (saveAndNotify) {
+        writeNameToMetaTags();
+        m_nameChanged.notify();
+    }
 }
 
 void Excerpt::writeNameToMetaTags()
@@ -151,6 +154,59 @@ void Excerpt::writeNameToMetaTags()
 async::Notification Excerpt::nameChanged() const
 {
     return m_nameChanged;
+}
+
+const String& Excerpt::fileName() const
+{
+    IF_ASSERT_FAILED(!m_fileName.empty()) {
+        const_cast<Excerpt*>(this)->updateFileName();
+    }
+
+    return m_fileName;
+}
+
+void Excerpt::setFileName(const String& fileName)
+{
+    m_fileName = fileName;
+}
+
+static inline bool isValidExcerptFileNameCharacter(char16_t c)
+{
+    return (u'a' <= c && c <= u'z')
+           || (u'A' <= c && c <= 'Z')
+           || (u'0' <= c && c <= '9')
+           || c == u'_' || c == u'-' || c == u' ';
+}
+
+static inline String escapeExcerptFileName(const String& name)
+{
+    String result;
+    result.reserve(name.size());
+
+    for (const char16_t& c : name.toStdU16String()) {
+        if (isValidExcerptFileNameCharacter(c)) {
+            result.append(c);
+        } else {
+            result.append(u'_');
+        }
+    }
+
+    return result;
+}
+
+void Excerpt::updateFileName(size_t index)
+{
+    if (index == mu::nidx && m_masterScore) {
+        index = mu::indexOf(m_masterScore->excerpts(), this);
+    }
+
+    const String escapedName = escapeExcerptFileName(m_name);
+
+    if (index == mu::nidx) {
+        m_fileName = escapedName;
+    } else {
+        m_fileName = String(u"%1_%2").arg(String::number(index), escapedName);
+    }
 }
 
 bool Excerpt::containsPart(const Part* part) const

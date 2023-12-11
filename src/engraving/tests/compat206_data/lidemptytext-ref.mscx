@@ -226,6 +226,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Bass</name>
       <Division>480</Division>
       <Style>
         <pedalPosBelow x="0" y="0"/>
@@ -343,7 +344,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Bass</name>
       </Score>
     </Score>
   </museScore>

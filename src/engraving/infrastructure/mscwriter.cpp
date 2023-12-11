@@ -160,16 +160,16 @@ void MscWriter::writeScoreFile(const ByteArray& data)
     addFileData(mainFileName(), data);
 }
 
-void MscWriter::addExcerptStyleFile(const String& name, const ByteArray& data)
+void MscWriter::addExcerptStyleFile(const String& excerptFileName, const ByteArray& data)
 {
-    String fileName = name + u".mss";
-    addFileData(u"Excerpts/" + name + u"/" + fileName, data);
+    String fileName = excerptFileName + u".mss";
+    addFileData(u"Excerpts/" + excerptFileName + u"/" + fileName, data);
 }
 
-void MscWriter::addExcerptFile(const String& name, const ByteArray& data)
+void MscWriter::addExcerptFile(const String& excerptFileName, const ByteArray& data)
 {
-    String fileName = name + u".mscx";
-    addFileData(u"Excerpts/" + name + u"/" + fileName, data);
+    String fileName = excerptFileName + u".mscx";
+    addFileData(u"Excerpts/" + excerptFileName + u"/" + fileName, data);
 }
 
 void MscWriter::writeChordListFile(const ByteArray& data)

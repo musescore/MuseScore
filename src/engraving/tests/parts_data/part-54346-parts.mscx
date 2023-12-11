@@ -271,6 +271,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>B♭ Trumpet</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -445,9 +446,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>B♭ Trumpet</name>
       </Score>
     <Score>
+      <name>C Trumpet</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -610,7 +611,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>C Trumpet</name>
       </Score>
     </Score>
   </museScore>

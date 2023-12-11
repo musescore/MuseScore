@@ -302,6 +302,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Flute</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -493,9 +494,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute</name>
       </Score>
     <Score>
+      <name>Oboe</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
@@ -661,7 +662,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Oboe</name>
       </Score>
     </Score>
   </museScore>

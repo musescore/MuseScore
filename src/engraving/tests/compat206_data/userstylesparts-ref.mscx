@@ -378,6 +378,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Piano</name>
       <initialPartId>1</initialPartId>
       <Division>480</Division>
       <Style>
@@ -609,9 +610,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Piano</name>
       </Score>
     <Score>
+      <name>Flute 1</name>
       <initialPartId>2</initialPartId>
       <Division>480</Division>
       <Style>
@@ -866,9 +867,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute 1</name>
       </Score>
     <Score>
+      <name>Flute 2</name>
       <initialPartId>3</initialPartId>
       <Division>480</Division>
       <Style>
@@ -1123,7 +1124,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Flute 2</name>
       </Score>
     </Score>
   </museScore>

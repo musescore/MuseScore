@@ -60,8 +60,8 @@ public:
 
     void writeStyleFile(const ByteArray& data);
     void writeScoreFile(const ByteArray& data);
-    void addExcerptStyleFile(const String& name, const ByteArray& data);
-    void addExcerptFile(const String& name, const ByteArray& data);
+    void addExcerptStyleFile(const String& excerptFileName, const ByteArray& data);
+    void addExcerptFile(const String& excerptFileName, const ByteArray& data);
     void writeChordListFile(const ByteArray& data);
     void writeThumbnailFile(const ByteArray& data);
     void addImageFile(const String& fileName, const ByteArray& data);

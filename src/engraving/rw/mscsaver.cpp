@@ -33,6 +33,7 @@
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::io;
 using namespace mu::engraving;
 using namespace mu::engraving::rw;
@@ -72,29 +73,37 @@ bool MscSaver::writeMscz(MasterScore* score, MscWriter& mscWriter, bool onlySele
     // Write Excerpts
     {
         if (!onlySelection) {
-            for (const Excerpt* excerpt : score->excerpts()) {
+            const std::vector<Excerpt*>& excerpts = score->excerpts();
+
+            for (size_t excerptIndex = 0; excerptIndex < excerpts.size(); ++excerptIndex) {
+                Excerpt* excerpt = excerpts.at(excerptIndex);
+
                 Score* partScore = excerpt->excerptScore();
-                if (partScore != score) {
-                    // Write excerpt style
-                    {
-                        ByteArray excerptStyleData;
-                        Buffer styleStyleBuf(&excerptStyleData);
-                        styleStyleBuf.open(IODevice::WriteOnly);
-                        partScore->style().write(&styleStyleBuf);
+                IF_ASSERT_FAILED(partScore && partScore != score) {
+                    continue;
+                }
 
-                        mscWriter.addExcerptStyleFile(excerpt->name(), excerptStyleData);
-                    }
+                excerpt->updateFileName(excerptIndex);
 
-                    // Write excerpt
-                    {
-                        ByteArray excerptData;
-                        Buffer excerptBuf(&excerptData);
-                        excerptBuf.open(IODevice::ReadWrite);
+                // Write excerpt style
+                {
+                    ByteArray excerptStyleData;
+                    Buffer styleStyleBuf(&excerptStyleData);
+                    styleStyleBuf.open(IODevice::WriteOnly);
+                    partScore->style().write(&styleStyleBuf);
 
-                        RWRegister::writer()->writeScore(excerpt->excerptScore(), &excerptBuf, onlySelection, &masterWriteOutData);
+                    mscWriter.addExcerptStyleFile(excerpt->fileName(), excerptStyleData);
+                }
 
-                        mscWriter.addExcerptFile(excerpt->name(), excerptData);
-                    }
+                // Write excerpt
+                {
+                    ByteArray excerptData;
+                    Buffer excerptBuf(&excerptData);
+                    excerptBuf.open(IODevice::ReadWrite);
+
+                    RWRegister::writer()->writeScore(excerpt->excerptScore(), &excerptBuf, onlySelection, &masterWriteOutData);
+
+                    mscWriter.addExcerptFile(excerpt->fileName(), excerptData);
                 }
             }
         }

@@ -59,9 +59,9 @@ public:
     ByteArray readStyleFile() const;
     ByteArray readScoreFile() const;
 
-    std::vector<String> excerptNames() const;
-    ByteArray readExcerptStyleFile(const String& name) const;
-    ByteArray readExcerptFile(const String& name) const;
+    std::vector<String> excerptFileNames() const;
+    ByteArray readExcerptStyleFile(const String& excerptFileName) const;
+    ByteArray readExcerptFile(const String& excerptFileName) const;
 
     ByteArray readChordListFile() const;
     ByteArray readThumbnailFile() const;

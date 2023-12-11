@@ -1062,6 +1062,7 @@
         </Measure>
       </Staff>
     <Score>
+      <name>Piano</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -1802,9 +1803,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Piano</name>
       </Score>
     <Score>
+      <name>Trombone</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -2300,9 +2301,9 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Trombone</name>
       </Score>
     <Score>
+      <name>Trombone</name>
       <Division>480</Division>
       <Style>
         <Spatium>1.74978</Spatium>
@@ -2798,7 +2799,6 @@
             </voice>
           </Measure>
         </Staff>
-      <name>Trombone</name>
       </Score>
     </Score>
   </museScore>
