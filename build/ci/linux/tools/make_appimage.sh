@@ -40,7 +40,14 @@ function extract_appimage()
   # Extract AppImage so we can run it without having to install FUSE
   local -r appimage="$1" binary_name="$2"
   local -r appdir="${appimage%.AppImage}.AppDir"
-  "./${appimage}" --appimage-extract >/dev/null # dest folder "squashfs-root"
+  # run appimage in docker container with QEMU emulation directly since binfmt fails
+  if [[ "$PACKARCH" == aarch64 ]]; then
+    /usr/bin/qemu-aarch64-static "./${appimage}" --appimage-extract >/dev/null # dest folder "squashfs-root"
+  elif [[ "$PACKARCH" == armhf ]]; then
+    /usr/bin/qemu-arm-static "./${appimage}" --appimage-extract >/dev/null # dest folder "squashfs-root"
+  else
+    "./${appimage}" --appimage-extract >/dev/null # dest folder "squashfs-root"
+  fi
   mv squashfs-root "${appdir}" # rename folder to avoid collisions
   ln -s "${appdir}/AppRun" "${binary_name}" # symlink for convenience
   rm -f "${appimage}"
@@ -64,17 +71,6 @@ fi
 export PATH="$BUILD_TOOLS/appimagetool:$PATH"
 appimagetool --version
 
-if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
-  mkdir $BUILD_TOOLS/appimageupdatetool
-  cd $BUILD_TOOLS/appimageupdatetool
-  download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
-  cd $ORIGIN_DIR
-fi
-if [[ "${UPDATE_INFORMATION}" ]]; then
-  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
-  appimageupdatetool --version
-fi
-
 function download_linuxdeploy_component()
 {
   download_appimage_release "linuxdeploy/$1" "$1" continuous
@@ -94,6 +90,42 @@ if [[ ! -f $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-qt ]]; then
 fi
 export PATH="$BUILD_TOOLS/linuxdeploy:$PATH"
 linuxdeploy --list-plugins
+
+if [[ ! -d $BUILD_TOOLS/appimageupdatetool ]]; then
+  if [[ "$PACKARCH" == aarch64 ]] || [[ "$PACKARCH" == armhf ]]; then
+    ##########################################################################
+    # Compile and install appimageupdatetool
+    ##########################################################################
+
+    git clone https://github.com/AppImageCommunity/AppImageUpdate.git
+    cd AppImageUpdate
+    git checkout --recurse-submodules 2.0.0-alpha-1-20220512
+    git submodule update --init --recursive
+    mkdir -p build
+    cd build
+
+    cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
+    make -j"$(nproc)"
+    # create the extracted appimage directory
+    mkdir -p $BUILD_TOOLS/appimageupdatetool
+    make install DESTDIR=$BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir
+    mkdir -p $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir/resources
+    cp -v ../resources/*.xpm $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir/resources/
+    $BUILD_TOOLS/linuxdeploy/linuxdeploy -v0 --appdir $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir  --output appimage -d ../resources/appimageupdatetool.desktop -i ../resources/appimage.png
+    cd $BUILD_TOOLS/appimageupdatetool
+    ln -s "appimageupdatetool-${PACKARCH}.AppDir/AppRun" appimageupdatetool # symlink for convenience
+    cd $ORIGIN_DIR
+  else
+    mkdir $BUILD_TOOLS/appimageupdatetool
+    cd $BUILD_TOOLS/appimageupdatetool
+    download_appimage_release AppImage/AppImageUpdate appimageupdatetool continuous
+    cd $ORIGIN_DIR
+  fi
+fi
+if [[ "${UPDATE_INFORMATION}" ]]; then
+  export PATH="$BUILD_TOOLS/appimageupdatetool:$PATH"
+  appimageupdatetool --version
+fi
 
 ##########################################################################
 # BUNDLE DEPENDENCIES INTO APPDIR

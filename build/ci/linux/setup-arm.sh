@@ -220,26 +220,26 @@ cmake --build . -j $(nproc)
 cmake --build . --target install
 cd /
 
-##########################################################################
-# Compile and install linuxdeploy
-##########################################################################
+# ##########################################################################
+# # Compile and install linuxdeploy
+# ##########################################################################
 
-git clone https://github.com/linuxdeploy/linuxdeploy
-cd /linuxdeploy/
-git checkout --recurse-submodules 1-alpha-20231206-1
-git submodule update --init --recursive
+# git clone https://github.com/linuxdeploy/linuxdeploy
+# cd /linuxdeploy/
+# git checkout --recurse-submodules 1-alpha-20231206-1
+# git submodule update --init --recursive
 
-# patch src/core/generate-excludelist.sh to use curl instead of wget which fails on armhf
-sed -i 's/wget --quiet "$url" -O -/curl "$url"/g' src/core/generate-excludelist.sh
+# # patch src/core/generate-excludelist.sh to use curl instead of wget which fails on armhf
+# sed -i 's/wget --quiet "$url" -O -/curl "$url"/g' src/core/generate-excludelist.sh
 
-mkdir -p build
-cd build
-cmake -DBUILD_TESTING=OFF -DUSE_SYSTEM_BOOST=ON ..
-cmake --build . -j $(nproc)
-mkdir -p $BUILD_TOOLS/linuxdeploy
-mv /linuxdeploy/build/bin/* $BUILD_TOOLS/linuxdeploy/
-$BUILD_TOOLS/linuxdeploy/linuxdeploy --version
-cd /
+# mkdir -p build
+# cd build
+# cmake -DBUILD_TESTING=OFF -DUSE_SYSTEM_BOOST=ON ..
+# cmake --build . -j $(nproc)
+# mkdir -p $BUILD_TOOLS/linuxdeploy
+# mv /linuxdeploy/build/bin/* $BUILD_TOOLS/linuxdeploy/
+# $BUILD_TOOLS/linuxdeploy/linuxdeploy --version
+# cd /
 
 ##########################################################################
 # Compile and install linuxdeploy-plugin-qt
@@ -259,65 +259,65 @@ cmake -DBUILD_TESTING=OFF -DUSE_SYSTEM_BOOST=ON ..
 cmake --build . -j $(nproc)
 mkdir -p $BUILD_TOOLS/linuxdeploy
 mv /linuxdeploy-plugin-qt/build/bin/linuxdeploy-plugin-qt $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-qt
-$BUILD_TOOLS/linuxdeploy/linuxdeploy --list-plugins
+# $BUILD_TOOLS/linuxdeploy/linuxdeploy --list-plugins
 cd /
 
-##########################################################################
-# Compile and install linuxdeploy-plugin-appimage
-##########################################################################
+# ##########################################################################
+# # Compile and install linuxdeploy-plugin-appimage
+# ##########################################################################
 
-git clone https://github.com/linuxdeploy/linuxdeploy-plugin-appimage
-cd /linuxdeploy-plugin-appimage/
-git checkout --recurse-submodules 1-alpha-20230713-1
-git submodule update --init --recursive
-mkdir -p build
-cd build
-cmake -DBUILD_TESTING=OFF ..
-cmake --build . -j $(nproc)
-mv /linuxdeploy-plugin-appimage/build/src/linuxdeploy-plugin-appimage $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-appimage
-cd /
-$BUILD_TOOLS/linuxdeploy/linuxdeploy --list-plugins
+# git clone https://github.com/linuxdeploy/linuxdeploy-plugin-appimage
+# cd /linuxdeploy-plugin-appimage/
+# git checkout --recurse-submodules 1-alpha-20230713-1
+# git submodule update --init --recursive
+# mkdir -p build
+# cd build
+# cmake -DBUILD_TESTING=OFF ..
+# cmake --build . -j $(nproc)
+# mv /linuxdeploy-plugin-appimage/build/src/linuxdeploy-plugin-appimage $BUILD_TOOLS/linuxdeploy/linuxdeploy-plugin-appimage
+# cd /
+# $BUILD_TOOLS/linuxdeploy/linuxdeploy --list-plugins
 
-##########################################################################
-# Compile and install AppImageKit
-##########################################################################
+# ##########################################################################
+# # Compile and install AppImageKit
+# ##########################################################################
 
-git clone https://github.com/AppImage/AppImageKit
-cd /AppImageKit/
-git checkout --recurse-submodules 13
-git submodule update --init --recursive
-mkdir -p build
-cd build
-cmake -DBUILD_TESTING=OFF ..
-cmake --build . -j $(nproc)
-cmake --build . --target install
-mkdir -p $BUILD_TOOLS/appimagetool
-cd /
-appimagetool --version
+# git clone https://github.com/AppImage/AppImageKit
+# cd /AppImageKit/
+# git checkout --recurse-submodules 13
+# git submodule update --init --recursive
+# mkdir -p build
+# cd build
+# cmake -DBUILD_TESTING=OFF ..
+# cmake --build . -j $(nproc)
+# cmake --build . --target install
+# mkdir -p $BUILD_TOOLS/appimagetool
+# cd /
+# appimagetool --version
 
-##########################################################################
-# Compile and install appimageupdatetool
-##########################################################################
+# ##########################################################################
+# # Compile and install appimageupdatetool
+# ##########################################################################
 
-git clone https://github.com/AppImageCommunity/AppImageUpdate.git
-cd AppImageUpdate
-git checkout --recurse-submodules 2.0.0-alpha-1-20220512
-git submodule update --init --recursive
-mkdir -p build
-cd build
+# git clone https://github.com/AppImageCommunity/AppImageUpdate.git
+# cd AppImageUpdate
+# git checkout --recurse-submodules 2.0.0-alpha-1-20220512
+# git submodule update --init --recursive
+# mkdir -p build
+# cd build
 
-cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
-make -j"$(nproc)"
-# create the extracted appimage directory
-mkdir -p $BUILD_TOOLS/appimageupdatetool
-make install DESTDIR=$BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir
-mkdir -p $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir/resources
-cp -v ../resources/*.xpm $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir/resources/
-$BUILD_TOOLS/linuxdeploy/linuxdeploy -v0 --appdir $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir  --output appimage -d ../resources/appimageupdatetool.desktop -i ../resources/appimage.png
-cd $BUILD_TOOLS/appimageupdatetool
-ln -s "appimageupdatetool-${PACKARCH}.AppDir/AppRun" appimageupdatetool # symlink for convenience
-cd /
-$BUILD_TOOLS/appimageupdatetool/appimageupdatetool --version
+# cmake -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=RelWithDebInfo -DCMAKE_SYSTEM_NAME=Linux ..
+# make -j"$(nproc)"
+# # create the extracted appimage directory
+# mkdir -p $BUILD_TOOLS/appimageupdatetool
+# make install DESTDIR=$BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir
+# mkdir -p $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir/resources
+# cp -v ../resources/*.xpm $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir/resources/
+# $BUILD_TOOLS/linuxdeploy/linuxdeploy -v0 --appdir $BUILD_TOOLS/appimageupdatetool/appimageupdatetool-${PACKARCH}.AppDir  --output appimage -d ../resources/appimageupdatetool.desktop -i ../resources/appimage.png
+# cd $BUILD_TOOLS/appimageupdatetool
+# ln -s "appimageupdatetool-${PACKARCH}.AppDir/AppRun" appimageupdatetool # symlink for convenience
+# cd /
+# $BUILD_TOOLS/appimageupdatetool/appimageupdatetool --version
 
 cd ${CURRDIR}
 
