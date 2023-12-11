@@ -56,7 +56,6 @@ TremoloSingleChord::TremoloSingleChord(const TremoloSingleChord& t)
     : EngravingItem(t)
 {
     setTremoloType(t.tremoloType());
-    m_chord1       = t.chord1();
     m_durationType = t.m_durationType;
 }
 
@@ -67,19 +66,14 @@ TremoloSingleChord::~TremoloSingleChord()
     //
     // delete all references from chords
     //
-    if (m_chord1) {
-        m_chord1->setTremolo(nullptr);
+    if (chord()) {
+        chord()->setTremolo(nullptr);
     }
 }
 
 void TremoloSingleChord::setParent(Chord* ch)
 {
     EngravingItem::setParent(ch);
-}
-
-void TremoloSingleChord::setChord1(Chord* ch)
-{
-    m_chord1 = ch;
 }
 
 double TremoloSingleChord::chordMag() const

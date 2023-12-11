@@ -104,9 +104,6 @@ public:
 
     bool crossStaffBeamBetween() const;
 
-    void spatiumChanged(double oldValue, double newValue) override;
-    void localSpatiumChanged(double oldValue, double newValue) override;
-    void styleChanged() override;
     PointF pagePos() const override;      ///< position in page coordinates
     String accessibleInfo() const override;
     void triggerLayout() const override;
@@ -138,10 +135,6 @@ public:
     void endEdit(EditData&) override;
     void editDrag(EditData&) override;
 
-    mu::draw::PainterPath basePath(double stretch = 0) const;
-    const mu::draw::PainterPath& path() const { return m_path; }
-    void setPath(const mu::draw::PainterPath& p) { m_path = p; }
-
     const mu::PointF& startAnchor() const { return m_startAnchor; }
     mu::PointF& startAnchor() { return m_startAnchor; }
     void setStartAnchor(const mu::PointF& p) { m_startAnchor = p; }
@@ -152,8 +145,6 @@ public:
     const std::vector<BeamSegment*>& beamSegments() const { return m_beamSegments; }
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
     void clearBeamSegments();
-
-    void computeShape();
 
     std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
@@ -175,7 +166,6 @@ private:
     bool m_up = true;
     bool m_userModified[2]{ false };                // 0: auto/down  1: up
     DirectionV m_direction = DirectionV::AUTO;
-    mu::draw::PainterPath m_path;
     std::vector<BeamSegment*> m_beamSegments;
     bool m_playTremolo = true;
 
