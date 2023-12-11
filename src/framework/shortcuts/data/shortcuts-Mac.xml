@@ -106,7 +106,7 @@
     </SC>
   <SC>
     <key>file-save-as</key>
-    <std>63</std>
+    <seq>Ctrl+Shift+S</seq>
     </SC>
   <SC>
     <key>file-close</key>
@@ -552,7 +552,7 @@
     </SC>
   <SC>
     <key>insert-measures</key>
-    <seq>Shift+Del+I</seq>
+    <seq>Alt+Shift+I</seq>
     </SC>
   <SC>
     <key>duplet</key>
@@ -673,10 +673,6 @@
   <SC>
     <key>toggle-mixer</key>
     <seq>F10</seq>
-    </SC>
-  <SC>
-    <key>toggle-playpanel</key>
-    <seq>F11</seq>
     </SC>
   <SC>
     <key>toggle-timeline</key>
@@ -882,6 +878,30 @@
     <key>prev-text-element</key>
     <seq>Shift+Space</seq>
     </SC>
+  <SC>
+    <key>prev-text-element</key>
+    <seq>Left</seq>
+  </SC>
+  <SC>
+    <key>next-syllable</key>
+    <seq>-</seq>
+  </SC>
+  <SC>
+    <key>add-melisma</key>
+    <seq>Shift+-</seq>
+  </SC>
+  <SC>
+    <key>next-lyric-verse</key>
+    <seq>Down</seq>
+  </SC>
+  <SC>
+    <key>prev-lyric-verse</key>
+    <seq>Up</seq>
+  </SC>
+  <SC>
+    <key>add-lyric-verse</key>
+    <seq>Return</seq>
+  </SC>
   <SC>
     <key>toggle-visible</key>
     <seq>V</seq>
@@ -1089,7 +1109,7 @@
     </SC>
   <SC>
     <key>text-u</key>
-    <seq>Ctrl+u</seq>
+    <seq>Ctrl+U</seq>
     </SC>
   <SC>
     <key>startcenter</key>
