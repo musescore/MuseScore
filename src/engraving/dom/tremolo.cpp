@@ -84,9 +84,16 @@ Tremolo::Tremolo(const Tremolo& t)
 
 Tremolo::~Tremolo()
 {
-    //! NOTE Don't need delete, will be delete dy destory score tree
-//    delete m_tremoloTwoChord;
-//    delete m_tremoloOneNote;
+    if (m_tremoloTwoChord) {
+        m_tremoloTwoChord->setParent(nullptr);
+    }
+
+    if (m_tremoloSingleChord) {
+        m_tremoloSingleChord->setParent(nullptr);
+    }
+
+    delete m_tremoloTwoChord;
+    delete m_tremoloSingleChord;
 }
 
 bool Tremolo::twoNotes() const
@@ -175,7 +182,8 @@ PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anch
     if (twoNotes()) {
         return m_tremoloTwoChord->chordBeamAnchor(chord, anchorType);
     } else {
-        return m_tremoloSingleChord->chordBeamAnchor(chord, anchorType);
+        UNREACHABLE;
+        return PointF();
     }
 }
 
@@ -184,7 +192,8 @@ double Tremolo::beamWidth() const
     if (twoNotes()) {
         return m_tremoloTwoChord->beamWidth();
     } else {
-        return m_tremoloSingleChord->beamWidth();
+        UNREACHABLE;
+        return 0;
     }
 }
 
@@ -287,7 +296,9 @@ const mu::PointF& Tremolo::startAnchor() const
     if (twoNotes()) {
         return m_tremoloTwoChord->startAnchor();
     } else {
-        return m_tremoloSingleChord->startAnchor();
+        UNREACHABLE;
+        static PointF p;
+        return p;
     }
 }
 
@@ -296,7 +307,9 @@ mu::PointF& Tremolo::startAnchor()
     if (twoNotes()) {
         return m_tremoloTwoChord->startAnchor();
     } else {
-        return m_tremoloSingleChord->startAnchor();
+        UNREACHABLE;
+        static PointF p;
+        return p;
     }
 }
 
@@ -305,7 +318,7 @@ void Tremolo::setStartAnchor(const mu::PointF& p)
     if (twoNotes()) {
         m_tremoloTwoChord->setStartAnchor(p);
     } else {
-        m_tremoloSingleChord->setStartAnchor(p);
+        UNREACHABLE;
     }
 }
 
@@ -314,7 +327,9 @@ const mu::PointF& Tremolo::endAnchor() const
     if (twoNotes()) {
         return m_tremoloTwoChord->endAnchor();
     } else {
-        return m_tremoloSingleChord->endAnchor();
+        UNREACHABLE;
+        static PointF p;
+        return p;
     }
 }
 
@@ -323,7 +338,9 @@ mu::PointF& Tremolo::endAnchor()
     if (twoNotes()) {
         return m_tremoloTwoChord->endAnchor();
     } else {
-        return m_tremoloSingleChord->endAnchor();
+        UNREACHABLE;
+        static PointF p;
+        return p;
     }
 }
 
@@ -332,7 +349,7 @@ void Tremolo::setEndAnchor(const mu::PointF& p)
     if (twoNotes()) {
         m_tremoloTwoChord->setEndAnchor(p);
     } else {
-        m_tremoloSingleChord->setEndAnchor(p);
+        UNREACHABLE;
     }
 }
 
@@ -389,7 +406,8 @@ TremoloStyle Tremolo::tremoloStyle() const
     if (twoNotes()) {
         return m_tremoloTwoChord->tremoloStyle();
     } else {
-        return m_tremoloSingleChord->tremoloStyle();
+        UNREACHABLE;
+        return TremoloStyle::DEFAULT;
     }
 }
 
@@ -398,20 +416,7 @@ void Tremolo::setTremoloStyle(TremoloStyle v)
     if (twoNotes()) {
         m_tremoloTwoChord->setTremoloStyle(v);
     } else {
-        m_tremoloSingleChord->setTremoloStyle(v);
-    }
-}
-
-//---------------------------------------------------------
-//   setBeamDirection
-//---------------------------------------------------------
-
-void Tremolo::setBeamDirection(DirectionV d)
-{
-    if (twoNotes()) {
-        m_tremoloTwoChord->setBeamDirection(d);
-    } else {
-        m_tremoloSingleChord->setBeamDirection(d);
+        UNREACHABLE;
     }
 }
 
@@ -420,7 +425,7 @@ void Tremolo::setBeamFragment(const BeamFragment& bf)
     if (twoNotes()) {
         m_tremoloTwoChord->setBeamFragment(bf);
     } else {
-        m_tremoloSingleChord->setBeamFragment(bf);
+        UNREACHABLE;
     }
 }
 
@@ -429,7 +434,9 @@ const BeamFragment& Tremolo::beamFragment() const
     if (twoNotes()) {
         return m_tremoloTwoChord->beamFragment();
     } else {
-        return m_tremoloSingleChord->beamFragment();
+        UNREACHABLE;
+        static BeamFragment f;
+        return f;
     }
 }
 
@@ -438,7 +445,9 @@ BeamFragment& Tremolo::beamFragment()
     if (twoNotes()) {
         return m_tremoloTwoChord->beamFragment();
     } else {
-        return m_tremoloSingleChord->beamFragment();
+        UNREACHABLE;
+        static BeamFragment f;
+        return f;
     }
 }
 
@@ -470,7 +479,8 @@ bool Tremolo::crossStaffBeamBetween() const
     if (twoNotes()) {
         return m_tremoloTwoChord->crossStaffBeamBetween();
     } else {
-        return m_tremoloSingleChord->crossStaffBeamBetween();
+        UNREACHABLE;
+        return false;
     }
 }
 
@@ -479,7 +489,8 @@ DirectionV Tremolo::direction() const
     if (twoNotes()) {
         return m_tremoloTwoChord->direction();
     } else {
-        return m_tremoloSingleChord->direction();
+        UNREACHABLE;
+        return DirectionV::UP;
     }
 }
 
@@ -488,7 +499,7 @@ void Tremolo::setDirection(DirectionV val)
     if (twoNotes()) {
         m_tremoloTwoChord->setDirection(val);
     } else {
-        m_tremoloSingleChord->setDirection(val);
+        UNREACHABLE;
     }
 }
 
@@ -497,7 +508,7 @@ void Tremolo::setUserModified(DirectionV d, bool val)
     if (twoNotes()) {
         m_tremoloTwoChord->setUserModified(d, val);
     } else {
-        m_tremoloSingleChord->setUserModified(d, val);
+        UNREACHABLE;
     }
 }
 
@@ -534,7 +545,8 @@ bool Tremolo::up() const
     if (twoNotes()) {
         return m_tremoloTwoChord->up();
     } else {
-        return m_tremoloSingleChord->up();
+        UNREACHABLE;
+        return false;
     }
 }
 
@@ -543,7 +555,7 @@ void Tremolo::setUp(bool up)
     if (twoNotes()) {
         m_tremoloTwoChord->setUp(up);
     } else {
-        m_tremoloSingleChord->setUp(up);
+        UNREACHABLE;
     }
 }
 
@@ -583,7 +595,8 @@ Chord* Tremolo::chord2() const
     if (twoNotes()) {
         return m_tremoloTwoChord->chord2();
     } else {
-        return m_tremoloSingleChord->chord2();
+        UNREACHABLE;
+        return nullptr;
     }
 }
 
@@ -592,7 +605,7 @@ void Tremolo::setChord2(Chord* ch)
     if (twoNotes()) {
         m_tremoloTwoChord->setChord2(ch);
     } else {
-        m_tremoloSingleChord->setChord2(ch);
+        UNREACHABLE;
     }
 }
 
@@ -601,7 +614,7 @@ void Tremolo::setChords(Chord* c1, Chord* c2)
     if (twoNotes()) {
         m_tremoloTwoChord->setChords(c1, c2);
     } else {
-        m_tremoloSingleChord->setChords(c1, c2);
+        UNREACHABLE;
     }
 }
 
@@ -614,7 +627,7 @@ void Tremolo::setBeamPos(const PairF& bp)
     if (twoNotes()) {
         m_tremoloTwoChord->setBeamPos(bp);
     } else {
-        m_tremoloSingleChord->setBeamPos(bp);
+        UNREACHABLE;
     }
 }
 
@@ -627,7 +640,8 @@ PairF Tremolo::beamPos() const
     if (twoNotes()) {
         return m_tremoloTwoChord->beamPos();
     } else {
-        return m_tremoloSingleChord->beamPos();
+        UNREACHABLE;
+        return PairF();
     }
 }
 
@@ -640,7 +654,8 @@ bool Tremolo::userModified() const
     if (twoNotes()) {
         return m_tremoloTwoChord->userModified();
     } else {
-        return m_tremoloSingleChord->userModified();
+        UNREACHABLE;
+        return false;
     }
 }
 
@@ -653,7 +668,7 @@ void Tremolo::setUserModified(bool val)
     if (twoNotes()) {
         m_tremoloTwoChord->setUserModified(val);
     } else {
-        m_tremoloSingleChord->setUserModified(val);
+        UNREACHABLE;
     }
 }
 
@@ -780,7 +795,8 @@ bool Tremolo::customStyleApplicable() const
     if (twoNotes()) {
         return m_tremoloTwoChord->customStyleApplicable();
     } else {
-        return m_tremoloSingleChord->customStyleApplicable();
+        UNREACHABLE;
+        return false;
     }
 }
 
@@ -877,7 +893,9 @@ const std::vector<BeamSegment*>& Tremolo::beamSegments() const
     if (twoNotes()) {
         return m_tremoloTwoChord->beamSegments();
     } else {
-        return m_tremoloSingleChord->beamSegments();
+        UNREACHABLE;
+        static std::vector<BeamSegment*> bs;
+        return bs;
     }
 }
 
@@ -886,7 +904,9 @@ std::vector<BeamSegment*>& Tremolo::beamSegments()
     if (twoNotes()) {
         return m_tremoloTwoChord->beamSegments();
     } else {
-        return m_tremoloSingleChord->beamSegments();
+        UNREACHABLE;
+        static std::vector<BeamSegment*> bs;
+        return bs;
     }
 }
 
@@ -895,7 +915,7 @@ void Tremolo::clearBeamSegments()
     if (twoNotes()) {
         m_tremoloTwoChord->clearBeamSegments();
     } else {
-        m_tremoloSingleChord->clearBeamSegments();
+        UNREACHABLE;
     }
 }
 
@@ -904,7 +924,8 @@ std::shared_ptr<rendering::dev::BeamTremoloLayout> Tremolo::layoutInfo()
     if (twoNotes()) {
         return m_tremoloTwoChord->layoutInfo;
     } else {
-        return m_tremoloSingleChord->layoutInfo;
+        UNREACHABLE;
+        return nullptr;
     }
 }
 
@@ -913,7 +934,7 @@ void Tremolo::setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> i
     if (twoNotes()) {
         m_tremoloTwoChord->layoutInfo = info;
     } else {
-        m_tremoloSingleChord->layoutInfo = info;
+        UNREACHABLE;
     }
 }
 }

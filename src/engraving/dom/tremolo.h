@@ -75,8 +75,6 @@ public:
     DirectionV direction() const;
     void setDirection(DirectionV val);
 
-    void setUserModified(DirectionV d, bool val);
-
     double minHeight() const;
     void reset() override;
 
@@ -101,6 +99,7 @@ public:
 
     bool userModified() const;
     void setUserModified(bool val);
+    void setUserModified(DirectionV d, bool val);
 
     Fraction tremoloLen() const;
 
@@ -121,7 +120,6 @@ public:
 
     TremoloStyle tremoloStyle() const;
     void setTremoloStyle(TremoloStyle v);
-    void setBeamDirection(DirectionV v);
     void setBeamFragment(const BeamFragment& bf);
     const BeamFragment& beamFragment() const;
     BeamFragment& beamFragment();
