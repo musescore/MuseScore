@@ -510,7 +510,15 @@ double Chord::stemPosX() const
 {
     const StaffType* staffType = this->staffType();
     if (staffType && staffType->isTabStaff()) {
-        return staffType->chordStemPosX(this) * spatium();
+        double xPos = staffType->chordStemPosX(this) * spatium();
+        if (isGraceBendEnd()) {
+            GraceNotesGroup& graceBefore = graceNotesBefore();
+            Chord* grace = graceBefore.empty() ? nullptr : graceBefore.front();
+            if (grace) {
+                xPos += grace->pos().x();
+            }
+        }
+        return xPos;
     }
     return ldata()->up ? noteHeadWidth() : 0.0;
 }
@@ -2594,6 +2602,22 @@ bool Chord::isPreBendOrGraceBendStart() const
     for (const Note* note : m_notes) {
         GuitarBend* gb = note->bendFor();
         if (gb && (gb->type() == GuitarBendType::PRE_BEND || gb->type() == GuitarBendType::GRACE_NOTE_BEND)) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+bool Chord::isGraceBendEnd() const
+{
+    if (isGrace() || m_graceNotes.empty()) {
+        return false;
+    }
+
+    for (const Note* note : m_notes) {
+        GuitarBend* bendBack = note->bendBack();
+        if (bendBack && bendBack->type() == GuitarBendType::GRACE_NOTE_BEND) {
             return true;
         }
     }
