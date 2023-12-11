@@ -2780,10 +2780,18 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
     }
 
     const Segment* appendedSeg = item->appendedSegment();
+    Chord* parentChord = toChord(item->parent());
+    Shape staffShape = appendedSeg->staffShape(parentChord->staffIdx());
+    bool isTabStaff = parentChord->staffType() && parentChord->staffType()->isTabStaff();
+    if (isTabStaff) {
+        staffShape.remove_if([](ShapeElement& el) {
+            // Ignore stems on tab staves
+            return el.item() && el.item()->isStem();
+        });
+    }
     double _shapeSpatium = HorizontalSpacing::shapeSpatium(_shape);
-    double xPos = -HorizontalSpacing::minHorizontalDistance(_shape,
-                                                            appendedSeg->staffShape(item->parent()->staffIdx()),
-                                                            _shapeSpatium);
+    double xPos = -HorizontalSpacing::minHorizontalDistance(_shape, staffShape, _shapeSpatium);
+
     // If the parent chord is cross-staff, also check against shape in the other staff and take the minimum
     if (item->parent()->staffMove() != 0) {
         double xPosCross = -HorizontalSpacing::minHorizontalDistance(_shape,
@@ -2808,6 +2816,10 @@ void TLayout::layoutGraceNotesGroup(GraceNotesGroup* item, LayoutContext& ctx)
     }
 
     item->setPos(xPos, 0.0);
+
+    if (isTabStaff) {
+        ChordLayout::layoutStem(parentChord, ctx);
+    }
 }
 
 void TLayout::layoutGraceNotesGroup2(const GraceNotesGroup* item, GraceNotesGroup::LayoutData* ldata)
