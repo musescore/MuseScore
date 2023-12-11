@@ -1520,19 +1520,27 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 Chord* c = toChord(e);
                 if (c->tremolo()) {
                     Tremolo* tr = c->tremolo();
-                    Chord* c1 = tr->chord1();
-                    Chord* c2 = tr->chord2();
-                    if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
+                    if (!tr->twoNotes()) {
                         TLayout::layoutTremolo(tr, ctx);
+                    } else {
+                        Chord* c1 = tr->chord1();
+                        Chord* c2 = tr->chord2();
+                        if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
+                            TLayout::layoutTremolo(tr, ctx);
+                        }
                     }
                 }
                 for (Chord* g : c->graceNotes()) {
                     if (g->tremolo()) {
                         Tremolo* tr = g->tremolo();
-                        Chord* c1 = tr->chord1();
-                        Chord* c2 = tr->chord2();
-                        if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
+                        if (!tr->twoNotes()) {
                             TLayout::layoutTremolo(tr, ctx);
+                        } else {
+                            Chord* c1 = tr->chord1();
+                            Chord* c2 = tr->chord2();
+                            if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
+                                TLayout::layoutTremolo(tr, ctx);
+                            }
                         }
                     }
                 }

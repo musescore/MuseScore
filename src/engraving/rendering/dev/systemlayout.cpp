@@ -854,11 +854,17 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         // add tremolo to skyline
                         if (e->isChord() && toChord(e)->tremolo()) {
                             Tremolo* t = toChord(e)->tremolo();
-                            Chord* c1 = t->chord1();
-                            Chord* c2 = t->chord2();
-                            if (!t->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
+                            if (!t->twoNotes()) {
                                 if (t->chord() == e && t->addToSkyline()) {
                                     skyline.add(t->shape().translate(t->pos() + e->pos() + p));
+                                }
+                            } else {
+                                Chord* c1 = t->chord1();
+                                Chord* c2 = t->chord2();
+                                if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
+                                    if (t->chord() == e && t->addToSkyline()) {
+                                        skyline.add(t->shape().translate(t->pos() + e->pos() + p));
+                                    }
                                 }
                             }
                         }
