@@ -6435,9 +6435,11 @@ void Score::undoRemoveElement(EngravingItem* element, bool removeLinked)
         Measure* measure = repeat->firstMeasureOfGroup();
         size_t staffIdx = repeat->staffIdx();
 
-        for (int i = 0; i < repeat->numMeasures(); ++i) {
-            undoChangeMeasureRepeatCount(measure, 0, staffIdx);
-            measure = measure->nextMeasure();
+        if (measure) {
+            for (int i = 0; i < repeat->numMeasures(); ++i) {
+                undoChangeMeasureRepeatCount(measure, 0, staffIdx);
+                measure = measure->nextMeasure();
+            }
         }
     }
 
