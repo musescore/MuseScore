@@ -731,6 +731,8 @@ bool Element::readProperties(XmlReader& e)
                         qDebug("Element::readProperties: could not link %s at staff %d", name(), mainLoc.staff() + 1);
                   }
             }
+      else if (tag == "eid")        // Mu4.2+ compatibility
+            e.skipCurrentElement(); // skip, don't log
       else if (tag == "lid") {
             if (score()->mscVersion() >= 301) {
                   e.skipCurrentElement();
