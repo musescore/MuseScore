@@ -502,7 +502,6 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
     Measure* masterMeasure = nullptr;
     Fraction ticks   = { 0, 1 };
 
-    MeasureBase* result = nullptr;
     const bool isBeginning = tick.isZero();
 
     for (Score* score : scoreList()) {
@@ -529,22 +528,20 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
             }
         }
 
-        MeasureBase* newMeasureBase = toMeasureBase(Factory::createMeasure(score->dummy()->system()));
-        newMeasureBase->setTick(tick);
+        Measure* newMeasure = Factory::createMeasure(score->dummy()->system());
+        newMeasure->setTick(tick);
 
         if (actualBeforeMeasure) {
             actualBeforeMeasure = actualBeforeMeasure->top(); // don't try to insert in front of nested frame
         }
-        newMeasureBase->setNext(actualBeforeMeasure);
-        newMeasureBase->setPrev(actualBeforeMeasure ? actualBeforeMeasure->prev() : score->last());
-        if (newMeasureBase->isMeasure()) {
-            Measure* m = toMeasure(newMeasureBase);
-            m->setTimesig(currentTimeSig);
-            m->setTicks(currentTimeSig);
-        }
-        undo(new InsertMeasures(newMeasureBase, newMeasureBase));
+        newMeasure->setNext(actualBeforeMeasure);
+        newMeasure->setPrev(actualBeforeMeasure ? actualBeforeMeasure->prev() : score->last());
 
-        Measure* newMeasure  = toMeasure(newMeasureBase); // new measure
+        newMeasure->setTimesig(currentTimeSig);
+        newMeasure->setTicks(currentTimeSig);
+
+        undo(new InsertMeasures(newMeasure, newMeasure));
+
         ticks = newMeasure->ticks();
         Measure* measureInsert = nullptr; // insert before
         if (actualBeforeMeasure) {
@@ -556,7 +553,6 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         }
 
         if (score->isMaster()) {
-            result = newMeasureBase;
             masterMeasure = newMeasure;
         }
 
@@ -750,5 +746,5 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         deselectAll();
     }
 
-    return result;
+    return masterMeasure;
 }
