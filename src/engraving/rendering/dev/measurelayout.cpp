@@ -930,7 +930,7 @@ void MeasureLayout::layoutChordDrumset(const Staff* staff, const Segment& segmen
 
     double spatium = conf.spatium();
     for (track_idx_t t = startTrack; t < endTrack; ++t) {
-        Chord* chord = item_cast<Chord*>(segment.element(t));
+        Chord* chord = item_cast<Chord*>(segment.element(t), CastMode::MAYBE_BAD); // maybe Rest
         if (!chord) {
             continue;
         }
@@ -986,7 +986,7 @@ void MeasureLayout::cmdUpdateNotes(const Measure* measure, const DomAccessor& do
                 }
             } else if (segment.isJustType(SegmentType::ChordRest)) {
                 for (track_idx_t t = track; t < endTrack; ++t) {
-                    Chord* chord = item_cast<Chord*>(segment.element(t));
+                    Chord* chord = item_cast<Chord*>(segment.element(t), CastMode::MAYBE_BAD); // maybe Rest
                     if (chord) {
                         chord->cmdUpdateNotes(&as);
                     }

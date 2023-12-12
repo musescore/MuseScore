@@ -22,6 +22,8 @@
 
 #include <QTextCodec>
 
+#include <csignal>
+
 #include "runtime.h"
 #include "log.h"
 
@@ -218,8 +220,35 @@
 
 #include <iostream>
 
+#ifndef MUE_BUILD_CRASHPAD_CLIENT
+static void crashCallback(int signum)
+{
+    const char* signame = "UNKNOWN SIGNAME";
+    const char* sigdescript = "";
+    switch (signum) {
+    case SIGILL:
+        signame = "SIGILL";
+        sigdescript = "Illegal Instruction";
+        break;
+    case SIGSEGV:
+        signame = "SIGSEGV";
+        sigdescript =  "Invalid memory reference";
+        break;
+    }
+    LOGE() << "Oops! Application crashed with signal: [" << signum << "] " << signame << "-" << sigdescript;
+    exit(EXIT_FAILURE);
+}
+
+#endif
+
 int main(int argc, char** argv)
 {
+#ifndef MUE_BUILD_CRASHPAD_CLIENT
+    signal(SIGSEGV, crashCallback);
+    signal(SIGILL, crashCallback);
+    signal(SIGFPE, crashCallback);
+#endif
+
     // Force the 8-bit text encoding to UTF-8. This is the default encoding on all supported platforms except for MSVC under Windows, which
     // would otherwise default to the local ANSI code page and cause corruption of any non-ANSI Unicode characters in command-line arguments.
     QTextCodec::setCodecForLocale(QTextCodec::codecForName("UTF-8"));
