@@ -303,7 +303,7 @@ EngravingItem* Factory::createItemByName(const AsciiStringView& name, EngravingI
     T* Factory::create##T(P * parent, bool isAccessibleEnabled) \
     { \
         EngravingItem* e = createItem(type, parent, isAccessibleEnabled); \
-        return to##T(e); \
+        return item_cast<T*>(e); \
     } \
 
 #define MAKE_ITEM_IMPL(T, P) \

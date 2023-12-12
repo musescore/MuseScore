@@ -41,13 +41,14 @@ static int run_command(const QString& name, const QStringList& args)
     QString path = ROOT_DIR + "/" + name;
 
     QProcess p;
-    p.start(path, args);
 
     QObject::connect(&p, &QProcess::readyReadStandardOutput, [&p]() {
         QByteArray ba = p.readAllStandardOutput();
         QTextStream outputText(stdout);
         outputText << QString(ba);
     });
+
+    p.start(path, args);
 
     if (!p.waitForFinished(60000 * 5)) {
         return -1;

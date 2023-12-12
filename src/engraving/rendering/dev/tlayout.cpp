@@ -429,8 +429,13 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
         break;
     case ElementType::VOLTA_SEGMENT:    layoutVoltaSegment(item_cast<VoltaSegment*>(item), ctx);
         break;
-    case ElementType::WHAMMY_BAR_SEGMENT: layoutWhammyBarSegment(item_cast<WhammyBarSegment*>(item), ctx);
-        break;
+    case ElementType::WHAMMY_BAR_SEGMENT: {
+        //! TODO Looks like a mistake, WhammyBarSegment and PickScrapeSegment have the same type
+        WhammyBarSegment* ws = item_cast<WhammyBarSegment*>(item, CastMode::BAD);
+        if (ws) {
+            layoutWhammyBarSegment(ws, ctx);
+        }
+    } break;
     default:
         LOGE() << "not found in layout types item: " << item->typeName();
         DO_ASSERT(false);
