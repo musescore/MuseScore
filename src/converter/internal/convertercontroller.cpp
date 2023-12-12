@@ -101,15 +101,25 @@ mu::Ret ConverterController::fileConvert(const io::path_t& in, const io::path_t&
 
     globalContext()->setCurrentProject(notationProject);
 
+    if (suffix == engraving::MSCZ || suffix == engraving::MSCX || suffix == engraving::MSCS) {
+        return notationProject->save(out);
+    }
+
     if (isConvertPageByPage(suffix)) {
         ret = convertPageByPage(writer, notationProject->masterNotation()->notation(), out);
+        if (!ret) {
+            LOGE() << "Failed to convert page by page, err: " << ret.toString();
+        }
     } else {
         ret = convertFullNotation(writer, notationProject->masterNotation()->notation(), out);
+        if (!ret) {
+            LOGE() << "Failed to convert full notation, err: " << ret.toString();
+        }
     }
 
     globalContext()->setCurrentProject(nullptr);
 
-    return make_ret(Ret::Code::Ok);
+    return ret;
 }
 
 mu::Ret ConverterController::convertScoreParts(const mu::io::path_t& in, const mu::io::path_t& out, const mu::io::path_t& stylePath,
