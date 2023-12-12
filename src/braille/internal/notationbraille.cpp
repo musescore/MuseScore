@@ -908,6 +908,9 @@ void NotationBraille::setCurrentEngravingItem(EngravingItem* e, bool select)
             if (play) {
                 playbackController()->playElements({ e });
             }
+            if (e->isChord()) {
+                e = toChord(e)->upNote(); // select a note rather than the chord
+            }
             interaction()->select({ e });
         }
     }
