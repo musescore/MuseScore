@@ -946,7 +946,11 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
 
     // ties
-    doLayoutTies(system, sl, stick, etick);
+    if (ctx.conf().isLinearMode()) {
+        doLayoutTiesLinear(system);
+    } else {
+        doLayoutTies(system, sl, stick, etick);
+    }
     // guitar bends
     layoutGuitarBends(sl, ctx);
 
@@ -1313,6 +1317,28 @@ void SystemLayout::doLayoutTies(System* system, std::vector<Segment*> sl, const 
                 layoutTies(ch, system, stick);
             }
             layoutTies(c, system, stick);
+        }
+    }
+}
+
+void SystemLayout::doLayoutTiesLinear(System* system)
+{
+    constexpr Fraction start = Fraction(0, 1);
+    for (Measure* measure = system->firstMeasure(); measure; measure = measure->nextMeasure()) {
+        for (Segment* segment = measure->first(); segment; segment = segment->next()) {
+            if (!segment->isChordRestType()) {
+                continue;
+            }
+            for (EngravingItem* e : segment->elist()) {
+                if (!e || !e->isChord()) {
+                    continue;
+                }
+                Chord* c = toChord(e);
+                for (Chord* ch : c->graceNotes()) {
+                    layoutTies(ch, system, start);
+                }
+                layoutTies(c, system, start);
+            }
         }
     }
 }
