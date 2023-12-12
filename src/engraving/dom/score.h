@@ -450,7 +450,9 @@ public:
     void changeAccidental(Note* oNote, AccidentalType);
 
     void addElement(EngravingItem*);
+    void doUndoAddElement(EngravingItem*);
     void removeElement(EngravingItem*);
+    void doUndoRemoveElement(EngravingItem*);
     bool containsElement(const EngravingItem*) const;
 
     Note* addPitch(NoteVal&, bool addFlag, InputState* externalInputState = nullptr);

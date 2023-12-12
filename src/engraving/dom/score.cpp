@@ -1527,6 +1527,15 @@ void Score::addElement(EngravingItem* element)
     element->triggerLayout();
 }
 
+void Score::doUndoAddElement(EngravingItem* element)
+{
+    if (element->generated()) {
+        addElement(element);
+    } else {
+        undo(new AddElement(element));
+    }
+}
+
 //---------------------------------------------------------
 //   removeElement
 ///   Remove \a element from its parent.
@@ -1706,6 +1715,16 @@ void Score::removeElement(EngravingItem* element)
 
     default:
         break;
+    }
+}
+
+void Score::doUndoRemoveElement(EngravingItem* element)
+{
+    if (element->generated()) {
+        removeElement(element);
+        element->deleteLater();
+    } else {
+        undo(new RemoveElement(element));
     }
 }
 
@@ -2671,9 +2690,10 @@ void Score::adjustKeySigs(track_idx_t sidx, track_idx_t eidx, KeyList km)
 
             Segment* s = measure->getSegment(SegmentType::KeySig, tick);
             KeySig* keysig = Factory::createKeySig(s);
+            keysig->setParent(s);
             keysig->setTrack(staffIdx * VOICES);
             keysig->setKeySigEvent(key);
-            s->add(keysig);
+            doUndoAddElement(keysig);
         }
     }
 }

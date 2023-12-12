@@ -795,6 +795,7 @@ void CloneVoice::redo(EditData*)
 
 AddElement::AddElement(EngravingItem* e)
 {
+    DO_ASSERT_X(!e->generated(), String(u"Generated item %1 passed to AddElement").arg(String::fromAscii(e->typeName())));
     element = e;
 }
 
@@ -947,16 +948,16 @@ static void removeNote(const Note* note)
 {
     Score* score = note->score();
     if (note->tieFor() && note->tieFor()->endNote()) {
-        score->undo(new RemoveElement(note->tieFor()));
+        score->doUndoRemoveElement(note->tieFor());
     }
     if (note->tieBack()) {
-        score->undo(new RemoveElement(note->tieBack()));
+        score->doUndoRemoveElement(note->tieBack());
     }
     for (Spanner* s : note->spannerBack()) {
-        score->undo(new RemoveElement(s));
+        score->doUndoRemoveElement(s);
     }
     for (Spanner* s : note->spannerFor()) {
-        score->undo(new RemoveElement(s));
+        score->doUndoRemoveElement(s);
     }
 }
 
@@ -966,13 +967,14 @@ static void removeNote(const Note* note)
 
 RemoveElement::RemoveElement(EngravingItem* e)
 {
+    DO_ASSERT_X(!e->generated(), String(u"Generated item %1 passed to RemoveElement").arg(String::fromAscii(e->typeName())));
     element = e;
 
     Score* score = element->score();
     if (element->isChordRest()) {
         ChordRest* cr = toChordRest(element);
         if (cr->tuplet() && cr->tuplet()->elements().size() <= 1) {
-            score->undo(new RemoveElement(cr->tuplet()));
+            score->doUndoRemoveElement(cr->tuplet());
         }
         if (e->isChord()) {
             Chord* chord = toChord(e);
@@ -980,7 +982,7 @@ RemoveElement::RemoveElement(EngravingItem* e)
             if (chord->tremolo()) {
                 Tremolo* tremolo = chord->tremolo();
                 if (tremolo->twoNotes()) {
-                    score->undo(new RemoveElement(tremolo));
+                    score->doUndoRemoveElement(tremolo);
                 }
             }
             // Move arpeggio down to next available note
