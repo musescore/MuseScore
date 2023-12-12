@@ -41,7 +41,32 @@ inline int timestampToTick(const Score* score, const mpe::timestamp_t timestamp)
     return score->repeatList().utime2utick(timestamp / 1000000.f);
 }
 
-inline mpe::duration_t durationFromTicks(const double beatsPerSecond, const int durationTicks, const int ticksPerBeat = Constants::DIVISION)
+inline mpe::duration_t durationFromStartAndEndTick(const Score* score, const int startTick, const int endTick)
+{
+    return timestampFromTicks(score, endTick) - timestampFromTicks(score, startTick);
+}
+
+inline mpe::duration_t durationFromStartAndTicks(const Score* score, const int startTick, const int ticks)
+{
+    return durationFromStartAndEndTick(score, startTick, startTick + ticks);
+}
+
+struct TimestampAndDuration {
+    mpe::timestamp_t timestamp = 0;
+    mpe::duration_t duration = 0;
+};
+
+inline TimestampAndDuration timestampAndDurationFromStartAndDurationTicks(const Score* score,
+                                                                          const int startTick, const int durationTicks)
+{
+    mpe::timestamp_t startTimestamp = timestampFromTicks(score, startTick);
+    mpe::duration_t duration = timestampFromTicks(score, startTick + durationTicks) - startTimestamp;
+
+    return { startTimestamp, duration };
+}
+
+inline mpe::duration_t durationFromTempoAndTicks(const double beatsPerSecond, const int durationTicks,
+                                                 const int ticksPerBeat = Constants::DIVISION)
 {
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
 

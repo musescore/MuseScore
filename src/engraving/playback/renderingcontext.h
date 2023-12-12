@@ -88,7 +88,11 @@ struct RenderingContext {
 
 inline mpe::duration_t noteNominalDuration(const Note* note, const RenderingContext& ctx)
 {
-    return durationFromTicks(ctx.beatsPerSecond.val, note->chord()->actualTicks().ticks());
+    if (!note->score()) {
+        return durationFromTempoAndTicks(ctx.beatsPerSecond.val, note->chord()->actualTicks().ticks());
+    }
+
+    return durationFromStartAndTicks(note->score(), note->tick().ticks(), note->chord()->actualTicks().ticks());
 }
 
 struct NominalNoteCtx {
