@@ -409,7 +409,7 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::TIMESIG:
         layoutTimeSig(item_cast<const TimeSig*>(item), static_cast<TimeSig::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::TREMOLO:          layoutTremolo(item_cast<Tremolo*>(item), ctx);
+    case ElementType::TREMOLO:          layoutTremolo(item_cast<TremoloDispatcher*>(item), ctx);
         break;
     case ElementType::TREMOLOBAR:
         layoutTremoloBar(item_cast<const TremoloBar*>(item), static_cast<TremoloBar::LayoutData*>(ldata));
@@ -6010,7 +6010,7 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     }
 }
 
-void TLayout::layoutTremolo(Tremolo* item, LayoutContext& ctx)
+void TLayout::layoutTremolo(TremoloDispatcher* item, LayoutContext& ctx)
 {
     TremoloLayout::layout(item, ctx);
 }

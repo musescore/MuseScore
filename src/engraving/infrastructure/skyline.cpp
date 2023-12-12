@@ -61,7 +61,7 @@ void Skyline::add(const ShapeElement& r)
         Chord* chord = toStem(item)->chord();
         if (chord) {
             Beam* beam = chord->beam();
-            Tremolo* tremolo = chord->tremolo();
+            TremoloDispatcher* tremolo = chord->tremoloDispatcher();
             bool isCross = (beam && beam->cross())
                            || (tremolo && tremolo->twoNotes() && tremolo->chord1()->staffMove() != tremolo->chord2()->staffMove());
             if (isCross) {

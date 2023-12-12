@@ -56,7 +56,7 @@ BeamTremoloLayout::BeamTremoloLayout(EngravingItem* e)
         m_trem = nullptr; // there can be many different trems in a beam, they will all be checked
         isGrace = m_beam->elements().front()->isGrace();
     } else { // e->isTremolo()
-        m_trem = toTremolo(e);
+        m_trem = item_cast<TremoloDispatcher*>(e);
         m_beamType = BeamType::TREMOLO;
         // check to see if there is a beam happening during this trem
         // if so, it needs to be taken into account in trem placement
@@ -453,8 +453,8 @@ int BeamTremoloLayout::strokeCount(ChordRest* cr) const
     Chord* c = toChord(cr);
     if (m_beamType == BeamType::TREMOLO) {
         strokes = m_trem->lines();
-    } else if (m_beamType == BeamType::BEAM && c->tremolo()) {
-        Tremolo* t = c->tremolo();
+    } else if (m_beamType == BeamType::BEAM && c->tremoloDispatcher()) {
+        TremoloDispatcher* t = c->tremoloDispatcher();
         if (t->twoNotes()) {
             strokes = t->lines();
         }

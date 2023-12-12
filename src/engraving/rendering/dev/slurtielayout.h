@@ -33,7 +33,7 @@ class System;
 class Chord;
 class TieSegment;
 class Tie;
-class Tremolo;
+class TremoloDispatcher;
 enum class Grip;
 class Note;
 }
@@ -71,8 +71,8 @@ private:
 
     static TieSegment* layoutTieWithNoEndNote(Tie* item);
 
-    static double defaultStemLengthStart(Tremolo* tremolo);
-    static double defaultStemLengthEnd(Tremolo* tremolo);
+    static double defaultStemLengthStart(TremoloDispatcher* tremolo);
+    static double defaultStemLengthEnd(TremoloDispatcher* tremolo);
 
     static bool isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx);
 

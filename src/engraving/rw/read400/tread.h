@@ -154,7 +154,7 @@ class Tie;
 class TimeSig;
 class TimeSigMap;
 class SigEvent;
-class Tremolo;
+class TremoloDispatcher;
 class TremoloBar;
 class Trill;
 class Tuplet;
@@ -289,7 +289,7 @@ public:
     static void read(Tie* t, XmlReader& xml, ReadContext& ctx);
     static void read(TimeSig* s, XmlReader& xml, ReadContext& ctx);
     static void read(TimeSigMap* item, XmlReader& xml, ReadContext& ctx);
-    static void read(Tremolo* t, XmlReader& xml, ReadContext& ctx);
+    static void read(TremoloDispatcher* t, XmlReader& xml, ReadContext& ctx);
     static void read(TremoloBar* b, XmlReader& xml, ReadContext& ctx);
     static void read(Trill* t, XmlReader& xml, ReadContext& ctx);
     static void read(Tuplet* t, XmlReader& xml, ReadContext& ctx);

@@ -479,7 +479,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             // disallow tie across barline within two-note tremolo
                             // tremolos can potentially still straddle the barline if no tie is required
                             // but these will be removed later
-                            Tremolo* t = chord->tremolo();
+                            TremoloDispatcher* t = chord->tremoloDispatcher();
                             if (t && t->twoNotes()) {
                                 if (doScale) {
                                     Fraction d = t->durationType().ticks();
@@ -528,7 +528,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     }
                                     if (crt && crt->isChord()) {
                                         Chord* chrt = toChord(crt);
-                                        Tremolo* tr = chrt->tremolo();
+                                        TremoloDispatcher* tr = chrt->tremoloDispatcher();
                                         if (tr) {
                                             tr->setChords(chrt, toChord(cr));
                                             chrt->remove(tr);

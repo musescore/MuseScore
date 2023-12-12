@@ -67,7 +67,7 @@ TremoloSingleChord::~TremoloSingleChord()
     // delete all references from chords
     //
     if (chord()) {
-        chord()->setTremolo(nullptr);
+        chord()->setTremoloDispatcher(nullptr);
     }
 }
 

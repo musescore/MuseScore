@@ -397,7 +397,7 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findTremolos() co
         if (element->isTremolo()) {
             // the tremolo section currently only has a style setting
             // so only tremolos which can have custom styles make it appear
-            if (mu::engraving::toTremolo(element)->customStyleApplicable()) {
+            if (mu::engraving::item_cast<mu::engraving::TremoloDispatcher*>(element)->customStyleApplicable()) {
                 resultList << element;
             }
         }

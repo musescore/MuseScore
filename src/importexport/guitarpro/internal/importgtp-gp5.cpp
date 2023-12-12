@@ -1164,7 +1164,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
     if (modMask2 & EFFECT_TREMOLO) {      // tremolo picking length
         int tremoloDivision = readUInt8();
         Chord* chord = note->chord();
-        Tremolo* t = Factory::createTremolo(chord);
+        TremoloDispatcher* t = Factory::createTremoloDispatcher(chord);
         if (tremoloDivision >= 1 && tremoloDivision <= 3) {
             TremoloType type = tremoloType(tremoloDivision);
             t->setTremoloType(type);
@@ -1535,7 +1535,7 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                         note->setPitch(note2->pitch());
                         true_note = note2;
                         if (m_tremolosInChords.find(chord2) != m_tremolosInChords.end()) {
-                            Tremolo* t = Factory::createTremolo(score->dummy()->chord());
+                            TremoloDispatcher* t = Factory::createTremoloDispatcher(score->dummy()->chord());
                             TremoloType type = m_tremolosInChords.at(chord2);
                             t->setTremoloType(type);
                             chord->add(t);

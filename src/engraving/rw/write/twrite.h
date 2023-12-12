@@ -156,7 +156,7 @@ class TextLine;
 class TextLineBase;
 class Tie;
 class TimeSig;
-class Tremolo;
+class TremoloDispatcher;
 class TremoloBar;
 class Trill;
 class Tuplet;
@@ -289,7 +289,7 @@ public:
     static void write(const TextLine* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Tie* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx);
-    static void write(const Tremolo* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const TremoloDispatcher* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const TremoloBar* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Trill* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Tuplet* item, XmlWriter& xml, WriteContext& ctx);

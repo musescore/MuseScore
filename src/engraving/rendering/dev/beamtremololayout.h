@@ -72,7 +72,7 @@ private:
     BeamType m_beamType = BeamType::INVALID;
     EngravingItem* m_element = nullptr;
     Beam* m_beam = nullptr;
-    Tremolo* m_trem = nullptr;
+    TremoloDispatcher* m_trem = nullptr;
     bool m_up = false;
     Fraction m_tick = Fraction(0, 1);
     double m_spatium = 0.;

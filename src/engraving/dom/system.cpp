@@ -1227,10 +1227,10 @@ bool System::hasCrossStaffOrModifiedBeams()
                     return true;
                 }
                 Chord* c = e->isChord() ? toChord(e) : nullptr;
-                if (c && c->tremolo() && c->tremolo()->twoNotes()) {
-                    Chord* c1 = c->tremolo()->chord1();
-                    Chord* c2 = c->tremolo()->chord2();
-                    if (c->tremolo()->userModified() || c1->staffMove() != c2->staffMove()) {
+                if (c && c->tremoloDispatcher() && c->tremoloDispatcher()->twoNotes()) {
+                    Chord* c1 = c->tremoloDispatcher()->chord1();
+                    Chord* c2 = c->tremoloDispatcher()->chord2();
+                    if (c->tremoloDispatcher()->userModified() || c1->staffMove() != c2->staffMove()) {
                         return true;
                     }
                 }

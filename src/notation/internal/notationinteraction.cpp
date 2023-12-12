@@ -2692,9 +2692,9 @@ void NotationInteraction::swapChordRest(MoveDirection direction)
         if (cr1 && cr2 && cr1->measure() == cr2->measure() && !cr1->tuplet() && !cr2->tuplet()
             && cr1->durationType() == cr2->durationType() && cr1->ticks() == cr2->ticks()
             // if two chords belong to different two-note tremolos, abort
-            && !(cr1->isChord() && toChord(cr1)->tremolo() && toChord(cr1)->tremolo()->twoNotes()
-                 && cr2->isChord() && toChord(cr2)->tremolo() && toChord(cr2)->tremolo()->twoNotes()
-                 && toChord(cr1)->tremolo() != toChord(cr2)->tremolo())) {
+            && !(cr1->isChord() && toChord(cr1)->tremoloDispatcher() && toChord(cr1)->tremoloDispatcher()->twoNotes()
+                 && cr2->isChord() && toChord(cr2)->tremoloDispatcher() && toChord(cr2)->tremoloDispatcher()->twoNotes()
+                 && toChord(cr1)->tremoloDispatcher() != toChord(cr2)->tremoloDispatcher())) {
             score()->undo(new mu::engraving::SwapCR(cr1, cr2));
         }
     }

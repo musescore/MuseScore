@@ -341,8 +341,8 @@ Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* 
         // Gets tie and 2 note tremolo shapes
         if (e->isChord()) {
             Chord* chord = toChord(e);
-            if (chord->tremolo() && chord->tremolo()->twoNotes()) {
-                segShape.add(chord->tremolo()->shape());
+            if (chord->tremoloDispatcher() && chord->tremoloDispatcher()->twoNotes()) {
+                segShape.add(chord->tremoloDispatcher()->shape());
             }
             for (Note* note : toChord(e)->notes()) {
                 Tie* tieFor = note->tieFor();
@@ -972,7 +972,7 @@ bool Slur::stemSideForBeam(bool start)
     }
 
     bool adjustForTrem = false;
-    Tremolo* trem = c ? c->tremolo() : nullptr;
+    TremoloDispatcher* trem = c ? c->tremoloDispatcher() : nullptr;
     adjustForTrem = trem && trem->twoNotes() && trem->up() == up();
     if (start) {
         adjustForTrem = adjustForTrem && trem->chord2() != c;
@@ -1009,7 +1009,7 @@ bool Slur::isOverBeams()
         bool hasTrem = false;
         if (cr->isChord()) {
             Chord* c = toChord(cr);
-            hasTrem = c->tremolo() && c->tremolo()->twoNotes() && c->up() == up();
+            hasTrem = c->tremoloDispatcher() && c->tremoloDispatcher()->twoNotes() && c->up() == up();
         }
         if (!(hasBeam || hasTrem)) {
             return false;

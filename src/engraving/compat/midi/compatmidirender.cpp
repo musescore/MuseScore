@@ -178,7 +178,7 @@ std::vector<NoteEventList> CompatMidiRender::renderChord(Chord* chord, Chord* pr
         CompatMidiRender::renderArpeggio(chord, ell, ontime);
         arpeggio = true;
     } else {
-        if (chord->tremolo()) {
+        if (chord->tremoloDispatcher()) {
             CompatMidiRender::renderTremolo(chord, ell, ontime, tremoloLength);
             tremolo = true;
         }
@@ -274,14 +274,14 @@ void CompatMidiRender::renderArpeggio(Chord* chord, std::vector<NoteEventList>& 
 void CompatMidiRender::renderTremolo(Chord* chord, std::vector<NoteEventList>& ell, int& ontime, double tremoloPartOfChord /* = 1.0 */)
 {
     Segment* seg = chord->segment();
-    Tremolo* tremolo = chord->tremolo();
+    TremoloDispatcher* tremolo = chord->tremoloDispatcher();
     int notes = int(chord->notes().size());
 
     // check if tremolo was rendered before for drum staff
     const Drumset* ds = CompatMidiRender::getDrumset(chord);
     if (ds) {
         for (mu::engraving::Note* n : chord->notes()) {
-            DrumInstrumentVariant div = ds->findVariant(n->pitch(), chord->articulations(), chord->tremolo());
+            DrumInstrumentVariant div = ds->findVariant(n->pitch(), chord->articulations(), chord->tremoloDispatcher());
             if (div.pitch != INVALID_PITCH && div.tremolo == tremolo->tremoloType()) {
                 return;             // already rendered
             }

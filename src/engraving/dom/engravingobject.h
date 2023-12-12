@@ -176,7 +176,7 @@ class TextLineSegment;
 class Tie;
 class TieSegment;
 class TimeSig;
-class Tremolo;
+class TremoloDispatcher;
 class TremoloBar;
 class Trill;
 class TrillSegment;
@@ -736,7 +736,6 @@ CONVERT(Capo)
 CONVERT(Ottava)
 CONVERT(LayoutBreak)
 CONVERT(Segment)
-CONVERT(Tremolo)
 CONVERT(System)
 CONVERT(Lyrics)
 CONVERT(Stem)

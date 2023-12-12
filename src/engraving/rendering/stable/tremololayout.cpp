@@ -36,7 +36,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;
 
-void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
+void TremoloLayout::layout(TremoloDispatcher* item, LayoutContext& ctx)
 {
     item->computeShape();     // set bbox
 
@@ -89,7 +89,7 @@ void TremoloLayout::layout(Tremolo* item, LayoutContext& ctx)
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutOneNoteTremolo(TremoloDispatcher* item, LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     assert(!item->twoNotes());
     const StaffType* staffType = item->staffType();
@@ -143,14 +143,14 @@ void TremoloLayout::layoutOneNoteTremolo(Tremolo* item, LayoutContext& ctx, doub
 //   layoutTwoNotesTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutTwoNotesTremolo(TremoloDispatcher* item, LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     UNUSED(x);
     UNUSED(y);
     UNUSED(h);
     UNUSED(spatium);
 
-    Tremolo::LayoutData* ldata = item->mutldata();
+    TremoloDispatcher::LayoutData* ldata = item->mutldata();
 
     // make sure both stems are in the same direction
     int up = 0;
@@ -261,7 +261,7 @@ void TremoloLayout::layoutTwoNotesTremolo(Tremolo* item, LayoutContext& ctx, dou
 //    Returns a modified pair of stem lengths of two chords
 //---------------------------------------------------------
 
-std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(Tremolo* tremolo, double stemLen1, double stemLen2)
+std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(TremoloDispatcher* tremolo, double stemLen1, double stemLen2)
 {
     const double spatium = tremolo->spatium();
     Chord* c1 = tremolo->chord1();
@@ -288,7 +288,7 @@ std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(Tremo
     return { stemLen1, stemLen2 };
 }
 
-void TremoloLayout::createBeamSegments(Tremolo* item, LayoutContext& ctx)
+void TremoloLayout::createBeamSegments(TremoloDispatcher* item, LayoutContext& ctx)
 {
     // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
     static constexpr double stemGapSp = 1.0;

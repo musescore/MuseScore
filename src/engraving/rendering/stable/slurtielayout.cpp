@@ -652,7 +652,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         double yadj;
         if (ec->beam() && ec->beam()->elements().front() != ec) {
             yadj = 0.75;
-        } else if (ec->tremolo() && ec->tremolo()->twoNotes() && ec->tremolo()->chord2() == ec) {
+        } else if (ec->tremoloDispatcher() && ec->tremoloDispatcher()->twoNotes() && ec->tremoloDispatcher()->chord2() == ec) {
             yadj = 0.75;
         } else {
             yadj = -stemSideInset;
@@ -692,7 +692,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         po.ry() += scr->intrinsicMag() * _spatium * offset * __up;
 
         // adjustments for stem and/or beam
-        Tremolo* trem = sc ? sc->tremolo() : nullptr;
+        TremoloDispatcher* trem = sc ? sc->tremoloDispatcher() : nullptr;
         if (stem1 || (trem && trem->twoNotes())) {     //sc not null
             Beam* beam1 = sc->beam();
             if (beam1 && (beam1->elements().back() != sc) && (sc->up() == item->up())) {
@@ -827,7 +827,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             po.ry() += ecr->intrinsicMag() * _spatium * offset2 * __up;
 
             // adjustments for stem and/or beam
-            Tremolo* trem2 = ec ? ec->tremolo() : nullptr;
+            TremoloDispatcher* trem2 = ec ? ec->tremoloDispatcher() : nullptr;
             if (stem2 || (trem2 && trem2->twoNotes())) {       //ec can't be null
                 Beam* beam2 = ec->beam();
                 if ((stemPos && (scr->up() == ec->up()))
@@ -1674,14 +1674,14 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
     }
 }
 
-double SlurTieLayout::defaultStemLengthStart(Tremolo* tremolo)
+double SlurTieLayout::defaultStemLengthStart(TremoloDispatcher* tremolo)
 {
     return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
                                                             tremolo->chord1()->defaultStemLength(),
                                                             tremolo->chord2()->defaultStemLength()).first;
 }
 
-double SlurTieLayout::defaultStemLengthEnd(Tremolo* tremolo)
+double SlurTieLayout::defaultStemLengthEnd(TremoloDispatcher* tremolo)
 {
     return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
                                                             tremolo->chord1()->defaultStemLength(),

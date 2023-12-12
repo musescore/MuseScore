@@ -1007,7 +1007,7 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 //   readTremolo
 //---------------------------------------------------------
 
-static void readTremolo(Tremolo* tremolo, XmlReader& e, ReadContext& ctx)
+static void readTremolo(TremoloDispatcher* tremolo, XmlReader& e, ReadContext& ctx)
 {
     enum class OldTremoloType : char {
         OLD_R8 = 0,
@@ -1069,10 +1069,10 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
                 chord->add(el);
             }
         } else if (tag == "Tremolo") {
-            Tremolo* tremolo = Factory::createTremolo(chord);
+            TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(chord);
             readTremolo(tremolo, e, ctx);
             tremolo->setDurationType(chord->durationType());
-            chord->setTremolo(tremolo);
+            chord->setTremoloDispatcher(tremolo);
             tremolo->setTrack(chord->track());
             tremolo->setParent(chord);
         } else if (Read206::readChordProperties206(e, ctx, chord)) {
@@ -1691,8 +1691,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 graceNotes.clear();
                 Fraction crticks = chord->actualTicks();
 
-                if (chord->tremolo()) {
-                    Tremolo* tremolo = chord->tremolo();
+                if (chord->tremoloDispatcher()) {
+                    TremoloDispatcher* tremolo = chord->tremoloDispatcher();
                     if (tremolo->twoNotes()) {
                         track_idx_t track = chord->track();
                         Segment* ss = 0;
@@ -1713,8 +1713,8 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                         }
                         if (pch) {
                             tremolo->setParent(pch);
-                            pch->setTremolo(tremolo);
-                            chord->setTremolo(0);
+                            pch->setTremoloDispatcher(tremolo);
+                            chord->setTremoloDispatcher(0);
                             // force duration to half
                             Fraction pts(timeStretch * pch->globalTicks());
                             pch->setTicks(pts * Fraction(1, 2));

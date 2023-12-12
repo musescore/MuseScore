@@ -35,7 +35,7 @@ bool TremoloFilter::isPlayable(const EngravingItem* item, const RenderingContext
 
     if (item->isChord()) {
         const Chord* chord = toChord(item);
-        Tremolo* tremolo = chord->tremolo();
+        TremoloDispatcher* tremolo = chord->tremoloDispatcher();
 
         if (!tremolo) {
             return true;

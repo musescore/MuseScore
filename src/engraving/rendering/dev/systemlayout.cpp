@@ -852,8 +852,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         }
 
                         // add tremolo to skyline
-                        if (e->isChord() && toChord(e)->tremolo()) {
-                            Tremolo* t = toChord(e)->tremolo();
+                        if (e->isChord() && toChord(e)->tremoloDispatcher()) {
+                            TremoloDispatcher* t = toChord(e)->tremoloDispatcher();
                             if (!t->twoNotes()) {
                                 if (t->addToSkyline()) {
                                     skyline.add(t->shape().translate(t->pos() + e->pos() + p));
@@ -1620,8 +1620,8 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
                         seg.createShape(chord->vStaffIdx());
                     }
-                } else if (chord->tremolo() && chord->tremolo()->twoNotes()) {
-                    Tremolo* t = chord->tremolo();
+                } else if (chord->tremoloDispatcher() && chord->tremoloDispatcher()->twoNotes()) {
+                    TremoloDispatcher* t = chord->tremoloDispatcher();
                     Chord* c1 = t->chord1();
                     Chord* c2 = t->chord2();
                     if (t->userModified() || (c1->staffMove() != 0 || c2->staffMove() != 0)) {

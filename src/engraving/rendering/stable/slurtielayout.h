@@ -33,7 +33,7 @@ class System;
 class Chord;
 class TieSegment;
 class Tie;
-class Tremolo;
+class TremoloDispatcher;
 enum class Grip;
 class Note;
 }
@@ -67,8 +67,8 @@ private:
     static void adjustY(TieSegment* tieSegment);
     static TieSegment* layoutTieWithNoEndNote(Tie* item);
 
-    static double defaultStemLengthStart(Tremolo* tremolo);
-    static double defaultStemLengthEnd(Tremolo* tremolo);
+    static double defaultStemLengthStart(TremoloDispatcher* tremolo);
+    static double defaultStemLengthEnd(TremoloDispatcher* tremolo);
 
     static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
 };

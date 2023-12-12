@@ -1988,7 +1988,7 @@ void Measure::connectTremolo()
             }
 
             Chord* c = toChord(e);
-            Tremolo* tremolo = c->tremolo();
+            TremoloDispatcher* tremolo = c->tremoloDispatcher();
             if (tremolo && tremolo->twoNotes()) {
                 // Ensure correct duration type for chord
                 c->setDurationType(tremolo->durationType());
@@ -2009,7 +2009,7 @@ void Measure::connectTremolo()
                         }
                         Chord* nc = toChord(element);
                         tremolo->setChords(c, nc);
-                        nc->setTremolo(tremolo);
+                        nc->setTremoloDispatcher(tremolo);
                         break;
                     }
                 }
@@ -2017,7 +2017,7 @@ void Measure::connectTremolo()
                 if (!tremolo->chord2()) {
                     // this is an invalid tremolo! a continued tremolo was started on one note without a valid next note in that measure
                     // remove the tremolo entirely
-                    c->setTremolo(nullptr);
+                    c->setTremoloDispatcher(nullptr);
                     score()->removeElement(tremolo);
                 }
             }

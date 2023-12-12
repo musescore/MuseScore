@@ -2220,7 +2220,7 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
                 Chord* startChord = toChord(startNote->parent());
                 Chord* endChord = toChord(endNote->parent());
                 if (m_tremolosInChords.find(startChord) != m_tremolosInChords.end()) {
-                    Tremolo* t = Factory::createTremolo(_score->dummy()->chord());
+                    TremoloDispatcher* t = Factory::createTremoloDispatcher(_score->dummy()->chord());
                     TremoloType type = m_tremolosInChords.at(startChord);
                     t->setTremoloType(type);
                     endChord->add(t);
@@ -2712,7 +2712,7 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    Tremolo* t = Factory::createTremolo(_score->dummy()->chord());
+    TremoloDispatcher* t = Factory::createTremoloDispatcher(_score->dummy()->chord());
     t->setTremoloType(scoreTremolo(beat->tremolo()));
     Chord* ch = toChord(cr);
     ch->add(t);

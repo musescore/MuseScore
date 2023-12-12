@@ -1671,7 +1671,7 @@ bool MeiImporter::readChord(pugi::xml_node chordNode, Measure* measure, int trac
     this->readArtics(chordNode, chord);
 
     if (!m_tremoloId.empty()) {
-        Tremolo* tremolo = Factory::createTremolo(chord);
+        TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(chord);
         m_uids->reg(tremolo, m_tremoloId);
         tremolo->setTremoloType(Convert::stemModFromMEI(meiChord.GetStemMod()));
         chord->add(tremolo);
@@ -1832,7 +1832,7 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
         this->readArtics(noteNode, chord);
         this->readVerses(noteNode, chord);
         if (!m_tremoloId.empty()) {
-            Tremolo* tremolo = Factory::createTremolo(chord);
+            TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(chord);
             m_uids->reg(tremolo, m_tremoloId);
             tremolo->setTremoloType(Convert::stemModFromMEI(meiNote.GetStemMod()));
             chord->add(tremolo);

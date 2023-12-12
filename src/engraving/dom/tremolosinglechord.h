@@ -36,7 +36,7 @@
 
 namespace mu::engraving {
 class Chord;
-class Tremolo;
+class TremoloDispatcher;
 class TremoloSingleChord final : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, TremoloSingleChord)
@@ -104,11 +104,11 @@ public:
 
     void computeShape();
 
-    Tremolo* dispatcher = nullptr;
+    TremoloDispatcher* dispatcher = nullptr;
 
 private:
     friend class Factory;
-    friend class Tremolo;
+    friend class TremoloDispatcher;
 
     TremoloSingleChord(Chord* parent);
     TremoloSingleChord(const TremoloSingleChord&);

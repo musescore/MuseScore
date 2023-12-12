@@ -1176,7 +1176,7 @@ void ExportMusicXml::calcDivMoveToTick(const Fraction& t)
 
 static bool isTwoNoteTremolo(Chord* chord)
 {
-    return chord->tremolo() && chord->tremolo()->twoNotes();
+    return chord->tremoloDispatcher() && chord->tremoloDispatcher()->twoNotes();
 }
 
 //---------------------------------------------------------
@@ -2927,7 +2927,7 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
 
 static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments& ornaments, XmlWriter& xml)
 {
-    Tremolo* tr = chord->tremolo();
+    TremoloDispatcher* tr = chord->tremoloDispatcher();
 
     if (tr && ExportMusicXml::canWrite(tr)) {
         int count = 0;

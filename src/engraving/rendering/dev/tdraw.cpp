@@ -353,7 +353,7 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
-    case ElementType::TREMOLO:              draw(item_cast<const Tremolo*>(item), painter);
+    case ElementType::TREMOLO:              draw(item_cast<const TremoloDispatcher*>(item), painter);
         break;
     case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
         break;
@@ -2982,7 +2982,7 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     }
 }
 
-void TDraw::draw(const Tremolo* item, Painter* painter)
+void TDraw::draw(const TremoloDispatcher* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 

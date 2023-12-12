@@ -2661,7 +2661,7 @@ engraving::TremoloType Convert::stemModFromMEI(const libmei::data_STEMMODIFIER m
     }
 }
 
-libmei::data_STEMMODIFIER Convert::stemModToMEI(const engraving::Tremolo* tremolo)
+libmei::data_STEMMODIFIER Convert::stemModToMEI(const engraving::TremoloDispatcher* tremolo)
 {
     switch (tremolo->tremoloType()) {
     case engraving::TremoloType::R8:  return libmei::STEMMODIFIER_1slash;
