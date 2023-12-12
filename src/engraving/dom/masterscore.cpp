@@ -498,11 +498,18 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         tick = last() ? last()->endTick() : Fraction(0, 1);
     }
 
-    const Fraction currentTimeSig = sigmap()->timesig(tick.ticks()).nominal();   // use nominal time signature of current measure
-    Measure* masterMeasure = nullptr;
-    Fraction ticks   = { 0, 1 };
-
     const bool isBeginning = tick.isZero();
+
+    // Use nominal time signature of current or previous measure, depending on whether
+    // the time sig from `beforeMeasure` will be moved to the newly created measure
+    const Fraction currentTimeSig
+        = sigmap()->timesig(!options.moveSignaturesClef && !isBeginning && beforeMeasure && beforeMeasure->prevMeasure()
+                            ? beforeMeasure->prevMeasure()->tick()
+                            : tick)
+          .nominal();
+
+    Measure* masterMeasure = nullptr;
+    Fraction ticks = { 0, 1 };
 
     for (Score* score : scoreList()) {
         MeasureBase* actualBeforeMeasure = nullptr;
