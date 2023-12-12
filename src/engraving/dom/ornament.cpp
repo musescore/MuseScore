@@ -67,12 +67,14 @@ Ornament::Ornament(const Ornament& o)
 
 Ornament::~Ornament()
 {
-    DeleteAll(m_notesAboveAndBelow);
-    DeleteAll(m_accidentalsAboveAndBelow);
+    std::fill(std::begin(m_notesAboveAndBelow), std::end(m_notesAboveAndBelow), nullptr);
+    std::fill(std::begin(m_accidentalsAboveAndBelow), std::end(m_accidentalsAboveAndBelow), nullptr);
+
     if (m_cueNoteChord && m_cueNoteChord->notes().size()) {
         m_cueNoteChord->notes().clear();
     }
-    delete m_cueNoteChord;
+
+    m_cueNoteChord = nullptr;
 }
 
 void Ornament::remove(EngravingItem* e)
