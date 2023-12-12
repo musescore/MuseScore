@@ -110,18 +110,27 @@ void ShortcutsRegister::mergeShortcuts(ShortcutList& shortcuts, const ShortcutLi
 
     ShortcutList needadd;
     for (const Shortcut& defSc : defaultShortcuts) {
+        Shortcut scForAdd = defSc;
         bool found = false;
+
         for (Shortcut& sc : shortcuts) {
             //! NOTE If user shortcut is found, set context (context should always as default)
             if (sc.action == defSc.action) {
                 sc.context = defSc.context;
                 found = true;
+            } else if (sc.context == defSc.context) {
+                for (const std::string& seq : sc.sequences) {
+                    //! NOTE If user shortcut has sequence from default shortcut, remove the sequence from default shortcut
+                    mu::remove_if(scForAdd.sequences, [&seq](const std::string& cmp){
+                        return cmp == seq;
+                    });
+                }
             }
         }
 
         //! NOTE If no default shortcut is found in user shortcuts add def
         if (!found) {
-            needadd.push_back(defSc);
+            needadd.push_back(scForAdd);
         }
     }
 
