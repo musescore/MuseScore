@@ -59,7 +59,7 @@ public:
 private:
     void paintCell(draw::Painter& painter, const RectF& rect, bool selected, bool current, qreal dpi) const;
     void paintBackground(draw::Painter& painter, const RectF& rect, bool selected, bool current) const;
-    void paintActionIcon(draw::Painter& painter, const RectF& rect, mu::engraving::EngravingItem* element) const;
+    void paintActionIcon(draw::Painter& painter, const RectF& rect, mu::engraving::EngravingItem* element, double dpi) const;
     qreal paintStaff(draw::Painter& painter, const RectF& rect, qreal spatium) const;
     void paintScoreElement(draw::Painter& painter, mu::engraving::EngravingItem* element, qreal spatium, bool alignToStaff,
                            qreal dpi) const;
