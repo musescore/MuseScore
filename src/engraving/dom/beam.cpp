@@ -898,7 +898,9 @@ Shape BeamSegment::shape() const
     Shape shape;
     PointF startPoint = line.p1();
     PointF endPoint = line.p2();
-    double _beamWidth = parentElement->isBeam() ? toBeam(parentElement)->m_beamWidth : toTremolo(parentElement)->beamWidth();
+    double _beamWidth = parentElement->isBeam()
+                        ? toBeam(parentElement)->m_beamWidth
+                        : item_cast<const TremoloDispatcher*>(parentElement)->beamWidth();
     // This is the case of right-beamlets
     if (startPoint.x() > endPoint.x()) {
         std::swap(startPoint, endPoint);

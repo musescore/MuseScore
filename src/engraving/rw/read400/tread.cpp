@@ -161,7 +161,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Ornament, Ottava,
                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
                                  Symbol, FSymbol, System, SystemDivider, SystemText,
-                                 TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
+                                 TempoText, Text, TextLine, Tie, TimeSig, TremoloDispatcher, TremoloBar, Trill, Tuplet,
                                  Vibrato, Volta,
                                  WhammyBar>;
 
@@ -2414,12 +2414,12 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         arpeggio->setParent(ch);
         ch->setArpeggio(arpeggio);
     } else if (tag == "Tremolo") {
-        Tremolo* tremolo = Factory::createTremolo(ch);
+        TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(ch);
         tremolo->setTrack(ch->track());
         TRead::read(tremolo, e, ctx);
         tremolo->setParent(ch);
         tremolo->setDurationType(ch->durationType());
-        ch->setTremolo(tremolo, false);
+        ch->setTremoloDispatcher(tremolo, false);
     } else if (tag == "tickOffset") {      // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
@@ -4071,7 +4071,7 @@ int TRead::read(SigEvent* item, XmlReader& e, int fileDivision)
     return tick;
 }
 
-void TRead::read(Tremolo* t, XmlReader& e, ReadContext& ctx)
+void TRead::read(TremoloDispatcher* t, XmlReader& e, ReadContext& ctx)
 {
     while (e.readNextStartElement()) {
         const AsciiStringView tag(e.name());

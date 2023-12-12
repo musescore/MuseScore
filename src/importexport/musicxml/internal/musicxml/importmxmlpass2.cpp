@@ -4869,7 +4869,7 @@ static void addTremolo(ChordRest* cr,
         //LOGD("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, qPrintable(tremoloType), ticks, _tremStart);
         if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
             if (tremoloType == "" || tremoloType == "single") {
-                const auto tremolo = Factory::createTremolo(mu::engraving::toChord(cr));
+                const auto tremolo = Factory::createTremoloDispatcher(mu::engraving::toChord(cr));
                 switch (tremoloNr) {
                 case 1: tremolo->setTremoloType(TremoloType::R8);
                     break;
@@ -4892,7 +4892,7 @@ static void addTremolo(ChordRest* cr,
                 }
             } else if (tremoloType == "stop") {
                 if (tremStart) {
-                    const auto tremolo = Factory::createTremolo(mu::engraving::toChord(cr));
+                    const auto tremolo = Factory::createTremoloDispatcher(mu::engraving::toChord(cr));
                     switch (tremoloNr) {
                     case 1: tremolo->setTremoloType(TremoloType::C8);
                         break;

@@ -818,7 +818,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line += 1;
                 }
                 double dist = (line * _lineDist) - stemBottom;
-                bool hasBeam = item->beam() || (item->tremolo() && item->tremolo()->twoNotes());
+                bool hasBeam = item->beam() || (item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes());
                 if (line < lines && hasBeam && dist < stemSideDistance) {
                     // beams can give stems weird unpredictable lengths, so we should enforce min
                     // distance even inside the staff
@@ -872,7 +872,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line -= 1;
                 }
                 double dist = stemTop - (line * _lineDist);
-                bool hasBeam = item->beam() || (item->tremolo() && item->tremolo()->twoNotes());
+                bool hasBeam = item->beam() || (item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes());
                 if (line > 0 && hasBeam && dist < stemSideDistance) {
                     // beams can give stems weird unpredictable lengths, so we should enforce min
                     // distance even inside the staff
@@ -1267,17 +1267,17 @@ static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
     }
 
     TLayout::layoutBeam(beam, ctx);
-    if (cross && item->tremolo() && item->tremolo()->twoNotes() && item->tremolo()->chord1() == item
-        && item->tremolo()->chord1()->beam() == item->tremolo()->chord2()->beam()) {
+    if (cross && item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes() && item->tremoloDispatcher()->chord1() == item
+        && item->tremoloDispatcher()->chord1()->beam() == item->tremoloDispatcher()->chord2()->beam()) {
         // beam-infixed two-note trems have to be laid out here
-        TLayout::layoutTremolo(item->tremolo(), ctx);
+        TLayout::layoutTremolo(item->tremoloDispatcher(), ctx);
     }
     if (!cross && !beam->userModified()) {
         item->setUp(beam->up());
     }
 }
 
-static void computeUp_TremoloTwoNotesCase(Chord* item, Tremolo* tremolo, LayoutContext& ctx)
+static void computeUp_TremoloTwoNotesCase(Chord* item, TremoloDispatcher* tremolo, LayoutContext& ctx)
 {
     Chord* c1 = tremolo->chord1();
     Chord* c2 = tremolo->chord2();
@@ -1339,7 +1339,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         }
     }
 
-    if (item->stemDirection() != DirectionV::AUTO && !item->beam() && !(item->tremolo() && item->tremolo()->twoNotes())) {
+    if (item->stemDirection() != DirectionV::AUTO && !item->beam()
+        && !(item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes())) {
         item->setUp(item->stemDirection() == DirectionV::UP);
         return;
     }
@@ -1352,8 +1353,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
     if (item->beam()) {
         computeUp_BeamCase(item, item->beam(), ctx);
         return;
-    } else if (item->tremolo() && item->tremolo()->twoNotes()) {
-        computeUp_TremoloTwoNotesCase(item, item->tremolo(), ctx);
+    } else if (item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes()) {
+        computeUp_TremoloTwoNotesCase(item, item->tremoloDispatcher(), ctx);
         return;
     }
 

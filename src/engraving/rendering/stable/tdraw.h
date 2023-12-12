@@ -150,7 +150,7 @@ class TextLineBase;
 class TextLineBaseSegment;
 class Tie;
 class TimeSig;
-class Tremolo;
+class TremoloDispatcher;
 class TremoloBar;
 class TrillSegment;
 class TripletFeel;
@@ -279,7 +279,7 @@ private:
     static void draw(const TextLineSegment* item, draw::Painter* painter);
     static void draw(const TieSegment* item, draw::Painter* painter);
     static void draw(const TimeSig* item, draw::Painter* painter);
-    static void draw(const Tremolo* item, draw::Painter* painter);
+    static void draw(const TremoloDispatcher* item, draw::Painter* painter);
     static void draw(const TremoloBar* item, draw::Painter* painter);
     static void draw(const TrillSegment* item, draw::Painter* painter);
     static void draw(const TripletFeel* item, draw::Painter* painter);

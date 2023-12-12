@@ -247,7 +247,7 @@ TEST_F(Engraving_BeamTests, flipTremoloStemDir)
 
     Measure* m1 = score->firstMeasure();
     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
-    Tremolo* t = toChord(cr)->tremolo();
+    TremoloDispatcher* t = toChord(cr)->tremoloDispatcher();
     Chord* c1 = t->chord1();
     Chord* c2 = t->chord2();
     EXPECT_TRUE(t->up() && c1->up() && c2->up());

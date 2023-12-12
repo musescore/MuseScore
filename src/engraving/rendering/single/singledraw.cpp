@@ -307,7 +307,7 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
-    case ElementType::TREMOLO:              draw(item_cast<const Tremolo*>(item), painter);
+    case ElementType::TREMOLO:              draw(item_cast<const TremoloDispatcher*>(item), painter);
         break;
     case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
         break;
@@ -2380,11 +2380,11 @@ void SingleDraw::draw(const TimeSig* item, Painter* painter)
     }
 }
 
-void SingleDraw::draw(const Tremolo* item, Painter* painter)
+void SingleDraw::draw(const TremoloDispatcher* item, Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const Tremolo::LayoutData* ldata = item->ldata();
+    const TremoloDispatcher::LayoutData* ldata = item->ldata();
 
     if (item->isBuzzRoll()) {
         painter->setPen(item->curColor());

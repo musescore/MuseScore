@@ -165,7 +165,7 @@ class TextLineBase;
 class TextLineBaseSegment;
 class Tie;
 class TimeSig;
-class Tremolo;
+class TremoloDispatcher;
 class TremoloBar;
 class TrillSegment;
 class TripletFeel;
@@ -331,7 +331,7 @@ public:
     static void layoutTextLineBaseSegment(TextLineBaseSegment* item, LayoutContext& ctx); // base class
     static void layoutTie(Tie* item, LayoutContext& ctx);
     static void layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, const LayoutContext& ctx);
-    static void layoutTremolo(Tremolo* item, LayoutContext& ctx);
+    static void layoutTremolo(TremoloDispatcher* item, LayoutContext& ctx);
     static void layoutTremoloBar(const TremoloBar* item, TremoloBar::LayoutData* ldata);
     static void layoutTrill(Trill* item, LayoutContext& ctx);
     static void layoutTrillSegment(TrillSegment* item, LayoutContext& ctx);

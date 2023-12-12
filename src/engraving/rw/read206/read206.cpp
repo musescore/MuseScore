@@ -1813,12 +1813,12 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         }
         finalNote->addSpannerBack(gliss);
     } else if (tag == "Tremolo") {
-        Tremolo* tremolo = Factory::createTremolo(ch);
+        TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(ch);
         tremolo->setTrack(ch->track());
         read400::TRead::read(tremolo, e, ctx);
         tremolo->setParent(ch);
         tremolo->setDurationType(ch->durationType());
-        ch->setTremolo(tremolo);
+        ch->setTremoloDispatcher(tremolo);
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);

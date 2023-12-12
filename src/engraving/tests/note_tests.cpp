@@ -313,7 +313,7 @@ TEST_F(Engraving_NoteTests, grace)
 
     // tremolo
     score->startCmd();
-    Tremolo* tr = Factory::createTremolo(gc);
+    TremoloDispatcher* tr = Factory::createTremoloDispatcher(gc);
     tr->setTremoloType(TremoloType::R16);
     tr->setParent(gc);
     tr->setTrack(gc->track());

@@ -82,11 +82,11 @@ TremoloTwoChord::~TremoloTwoChord()
     // delete all references from chords
     //
     if (m_chord1) {
-        m_chord1->setTremolo(nullptr);
+        m_chord1->setTremoloDispatcher(nullptr);
         m_chord1 = nullptr;
     }
     if (m_chord2) {
-        m_chord2->setTremolo(nullptr);
+        m_chord2->setTremoloDispatcher(nullptr);
         m_chord2 = nullptr;
     }
 

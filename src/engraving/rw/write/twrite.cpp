@@ -180,7 +180,7 @@ using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Art
                                   Rasgueado, RehearsalMark, Rest,
                                   Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking, StringTunings,
                                   Symbol, FSymbol, System, SystemDivider, SystemText,
-                                  TempoText, Text, TextLine, Tie, TimeSig, Tremolo, TremoloBar, Trill, Tuplet,
+                                  TempoText, Text, TextLine, Tie, TimeSig, TremoloDispatcher, TremoloBar, Trill, Tuplet,
                                   Vibrato, Volta,
                                   WhammyBar>;
 
@@ -735,8 +735,8 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     if (item->arpeggio()) {
         write(item->arpeggio(), xml, ctx);
     }
-    if (item->tremolo() && item->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
-        write(item->tremolo(), xml, ctx);
+    if (item->tremoloDispatcher() && item->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
+        write(item->tremoloDispatcher(), xml, ctx);
     }
     for (EngravingItem* e : item->el()) {
         if (e->isChordLine() && toChordLine(e)->note()) { // this is now written by Note
@@ -2764,7 +2764,7 @@ void TWrite::write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(const Tremolo* item, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const TremoloDispatcher* item, XmlWriter& xml, WriteContext& ctx)
 {
     if (!ctx.canWrite(item)) {
         return;

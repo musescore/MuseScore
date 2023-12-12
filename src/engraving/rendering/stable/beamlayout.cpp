@@ -108,8 +108,8 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
 
     // The beam may have changed shape. one-note trems within this beam need to be layed out here
     for (ChordRest* cr : item->elements()) {
-        if (cr->isChord() && toChord(cr)->tremolo() && !toChord(cr)->tremolo()->twoNotes()) {
-            TLayout::layoutTremolo(toChord(cr)->tremolo(), ctx);
+        if (cr->isChord() && toChord(cr)->tremoloDispatcher() && !toChord(cr)->tremoloDispatcher()->twoNotes()) {
+            TLayout::layoutTremolo(toChord(cr)->tremoloDispatcher(), ctx);
         }
     }
 }
@@ -842,8 +842,8 @@ void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
                         continue;
                     }
                     Chord* c = toChord(beamCr);
-                    if (c->tremolo() && c->tremolo()->twoNotes()) {
-                        TLayout::layoutTremolo(c->tremolo(), ctx);
+                    if (c->tremoloDispatcher() && c->tremoloDispatcher()->twoNotes()) {
+                        TLayout::layoutTremolo(c->tremoloDispatcher(), ctx);
                     }
                 }
             }
@@ -1544,7 +1544,7 @@ void BeamLayout::setTremAnchors(Beam* item, LayoutContext& ctx)
             continue;
         }
         Chord* c = toChord(cr);
-        Tremolo* t = c ? c->tremolo() : nullptr;
+        TremoloDispatcher* t = c ? c->tremoloDispatcher() : nullptr;
         if (t && t->twoNotes() && t->chord1() == c && t->chord2()->beam() == item) {
             // there is an inset tremolo here!
             // figure out up / down

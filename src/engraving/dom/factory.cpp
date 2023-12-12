@@ -183,7 +183,7 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
             return new NoteDot(dummy->note());
         }
     }
-    case ElementType::TREMOLO:           return new Tremolo(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::TREMOLO:           return new TremoloDispatcher(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
     case ElementType::MARKER:            return new Marker(parent);
     case ElementType::JUMP:              return new Jump(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
@@ -613,9 +613,9 @@ CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(TimeSig)
 MAKE_ITEM_IMPL(TimeSig, Segment)
 
-CREATE_ITEM_IMPL(Tremolo, ElementType::TREMOLO, Chord, isAccessibleEnabled)
-COPY_ITEM_IMPL(Tremolo)
-MAKE_ITEM_IMPL(Tremolo, Chord)
+CREATE_ITEM_IMPL(TremoloDispatcher, ElementType::TREMOLO, Chord, isAccessibleEnabled)
+COPY_ITEM_IMPL(TremoloDispatcher)
+MAKE_ITEM_IMPL(TremoloDispatcher, Chord)
 
 CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(TremoloBar, EngravingItem)

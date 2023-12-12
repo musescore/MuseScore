@@ -47,16 +47,16 @@ enum class TremoloStyle : signed char {
 
 class TremoloTwoChord;
 class TremoloSingleChord;
-class Tremolo final : public EngravingItem
+class TremoloDispatcher final : public EngravingItem
 {
-    OBJECT_ALLOCATOR(engraving, Tremolo)
+    OBJECT_ALLOCATOR(engraving, TremoloDispatcher)
     DECLARE_CLASSOF(ElementType::TREMOLO)
 
 public:
 
-    Tremolo& operator=(const Tremolo&) = delete;
-    Tremolo* clone() const override { return new Tremolo(*this); }
-    ~Tremolo() override;
+    TremoloDispatcher& operator=(const TremoloDispatcher&) = delete;
+    TremoloDispatcher* clone() const override { return new TremoloDispatcher(*this); }
+    ~TremoloDispatcher() override;
 
     void setTrack(track_idx_t val) override;
 
@@ -174,8 +174,8 @@ private:
     friend class TremoloSingleChord;
     friend class TremoloTwoChord;
 
-    Tremolo(Chord* parent);
-    Tremolo(const Tremolo&);
+    TremoloDispatcher(Chord* parent);
+    TremoloDispatcher(const TremoloDispatcher&);
 
     void setBeamPos(const PairF& bp);
 

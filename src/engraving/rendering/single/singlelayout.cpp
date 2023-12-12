@@ -80,6 +80,7 @@
 #include "dom/textline.h"
 #include "dom/textlinebase.h"
 #include "dom/timesig.h"
+#include "dom/tremolo.h"
 #include "dom/tremolobar.h"
 #include "dom/trill.h"
 #include "dom/vibrato.h"
@@ -206,7 +207,7 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
-    case ElementType::TREMOLO:      layout(toTremolo(item), ctx);
+    case ElementType::TREMOLO:      layout(item_cast<TremoloDispatcher*>(item), ctx);
         break;
     case ElementType::TREMOLOBAR:   layout(toTremoloBar(item), ctx);
         break;
@@ -1574,7 +1575,7 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
     }
 }
 
-void SingleLayout::layout(Tremolo* item, const Context& ctx)
+void SingleLayout::layout(TremoloDispatcher* item, const Context& ctx)
 {
     //! TODO
     LayoutContext tctx(ctx.dontUseScore());

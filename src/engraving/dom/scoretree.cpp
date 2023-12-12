@@ -373,8 +373,8 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(m_arpeggio);
     }
 
-    if (m_tremolo && m_tremolo->chord1() == this) {
-        children.push_back(m_tremolo);
+    if (m_tremoloDispatcher && m_tremoloDispatcher->chord1() == this) {
+        children.push_back(m_tremoloDispatcher);
     }
 
     for (Chord* chord : graceNotes()) {

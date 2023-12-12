@@ -776,7 +776,7 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
         if (item->isNote()) {
             const Note* note = toNote(item);
             const Chord* chord = note->chord();
-            const Tremolo* tremolo = chord->tremolo();
+            const TremoloDispatcher* tremolo = chord->tremoloDispatcher();
 
             if (tremolo && tremolo->twoNotes()) {
                 const Chord* startChord = tremolo->chord1();

@@ -116,7 +116,7 @@ void Stem::reset()
 bool Stem::acceptDrop(EditData& data) const
 {
     EngravingItem* e = data.dropElement;
-    if ((e->type() == ElementType::TREMOLO) && (toTremolo(e)->tremoloType() <= TremoloType::R64)) {
+    if ((e->type() == ElementType::TREMOLO) && (item_cast<TremoloDispatcher*>(e)->tremoloType() <= TremoloType::R64)) {
         return true;
     }
     return false;
@@ -129,7 +129,7 @@ EngravingItem* Stem::drop(EditData& data)
 
     switch (e->type()) {
     case ElementType::TREMOLO:
-        toTremolo(e)->setParent(ch);
+        item_cast<TremoloDispatcher*>(e)->setParent(ch);
         undoAddElement(e);
         return e;
     default:

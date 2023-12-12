@@ -175,7 +175,7 @@ void ChordArticulationsParser::parseAnnotations(const Chord* chord, const Render
 
 void ChordArticulationsParser::parseTremolo(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    const Tremolo* tremolo = chord->tremolo();
+    const TremoloDispatcher* tremolo = chord->tremoloDispatcher();
 
     if (!tremolo || !tremolo->playTremolo()) {
         return;

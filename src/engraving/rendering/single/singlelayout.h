@@ -112,7 +112,7 @@ class TextLine;
 class TextLineSegment;
 class TextLineBaseSegment;
 class TimeSig;
-class Tremolo;
+class TremoloDispatcher;
 class TremoloBar;
 class Trill;
 class TrillSegment;
@@ -219,7 +219,7 @@ public:
     static void layout(TempoText* item, const Context& ctx);
     static void layout(TextLine* item, const Context& ctx);
     static void layout(TimeSig* item, const Context& ctx);
-    static void layout(Tremolo* item, const Context& ctx);
+    static void layout(TremoloDispatcher* item, const Context& ctx);
     static void layout(TremoloBar* item, const Context& ctx);
     static void layout(Trill* item, const Context& ctx);
 

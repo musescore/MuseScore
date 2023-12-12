@@ -321,8 +321,8 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             }
                             ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                             ChordLayout::layoutSpanners(c, ctx);
-                            if (c->tremolo()) {
-                                Tremolo* t = c->tremolo();
+                            if (c->tremoloDispatcher()) {
+                                TremoloDispatcher* t = c->tremoloDispatcher();
                                 if (t->twoNotes()) {
                                     Chord* c1 = t->chord1();
                                     Chord* c2 = t->chord2();

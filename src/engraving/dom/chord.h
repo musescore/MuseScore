@@ -50,7 +50,7 @@ class NoteEventList;
 class Stem;
 class StemSlash;
 class StretchedBend;
-class Tremolo;
+class TremoloDispatcher;
 
 enum class TremoloChordType : char {
     TremoloSingle, TremoloFirstNote, TremoloSecondNote
@@ -166,8 +166,8 @@ public:
     Arpeggio* spanArpeggio() const { return m_spanArpeggio; }
     void setSpanArpeggio(Arpeggio* a) { m_spanArpeggio = a; }
     void undoChangeSpanArpeggio(Arpeggio* a);
-    Tremolo* tremolo() const { return m_tremolo; }
-    void setTremolo(Tremolo* t, bool applyLogic = true);
+    TremoloDispatcher* tremoloDispatcher() const { return m_tremoloDispatcher; }
+    void setTremoloDispatcher(TremoloDispatcher* t, bool applyLogic = true);
 
     ChordLine* chordLine() const;
     bool endsGlissandoOrGuitarBend() const { return m_endsGlissando; }
@@ -348,7 +348,7 @@ private:
 
     Arpeggio* m_arpeggio = nullptr;       // arpeggio which starts on the chord
     Arpeggio* m_spanArpeggio = nullptr;   // arpeggio which spans over this chord
-    Tremolo* m_tremolo = nullptr;
+    TremoloDispatcher* m_tremoloDispatcher = nullptr;
     bool m_endsGlissando = false;        // true if this chord is the ending point of a glissando (needed for layout)
     std::vector<Chord*> m_graceNotes;    // storage for all grace notes
     mutable GraceNotesGroup m_graceNotesBefore = GraceNotesGroup(this); // will store before-chord grace notes

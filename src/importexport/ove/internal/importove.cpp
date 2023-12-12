@@ -1823,25 +1823,25 @@ void OveToMScore::convertArticulation(
     // case ovebase::ArticulationType::Sharp_Accidental_For_Trill:
     // case ovebase::ArticulationType::Natural_Accidental_For_Trill:
     case ovebase::ArticulationType::Tremolo_Eighth: {
-        Tremolo* t = Factory::createTremolo(cr);
+        TremoloDispatcher* t = Factory::createTremoloDispatcher(cr);
         t->setTremoloType(TremoloType::R8);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Sixteenth: {
-        Tremolo* t = Factory::createTremolo(cr);
+        TremoloDispatcher* t = Factory::createTremoloDispatcher(cr);
         t->setTremoloType(TremoloType::R16);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Thirty_Second: {
-        Tremolo* t = Factory::createTremolo(cr);
+        TremoloDispatcher* t = Factory::createTremoloDispatcher(cr);
         t->setTremoloType(TremoloType::R32);
         cr->add(t);
         break;
     }
     case ovebase::ArticulationType::Tremolo_Sixty_Fourth: {
-        Tremolo* t = Factory::createTremolo(cr);
+        TremoloDispatcher* t = Factory::createTremoloDispatcher(cr);
         t->setTremoloType(TremoloType::R64);
         cr->add(t);
         break;

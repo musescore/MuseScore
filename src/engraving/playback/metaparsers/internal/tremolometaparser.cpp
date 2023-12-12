@@ -33,7 +33,7 @@ void TremoloMetaParser::doParse(const EngravingItem* item, const RenderingContex
         return;
     }
 
-    const Tremolo* tremolo = toTremolo(item);
+    const TremoloDispatcher* tremolo = item_cast<const TremoloDispatcher*>(item);
 
     if (tremolo->twoNotes()) {
         const Chord* chord2 = tremolo->chord2();

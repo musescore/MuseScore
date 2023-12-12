@@ -979,8 +979,8 @@ RemoveElement::RemoveElement(EngravingItem* e)
         if (e->isChord()) {
             Chord* chord = toChord(e);
             // remove tremolo between 2 notes
-            if (chord->tremolo()) {
-                Tremolo* tremolo = chord->tremolo();
+            if (chord->tremoloDispatcher()) {
+                TremoloDispatcher* tremolo = chord->tremoloDispatcher();
                 if (tremolo->twoNotes()) {
                     score->doUndoRemoveElement(tremolo);
                 }
@@ -2504,9 +2504,9 @@ void SwapCR::flip(EditData*)
     Segment* s2 = cr2->segment();
     track_idx_t track = cr1->track();
 
-    if (cr1->isChord() && cr2->isChord() && toChord(cr1)->tremolo()
-        && (toChord(cr1)->tremolo() == toChord(cr2)->tremolo())) {
-        Tremolo* t = toChord(cr1)->tremolo();
+    if (cr1->isChord() && cr2->isChord() && toChord(cr1)->tremoloDispatcher()
+        && (toChord(cr1)->tremoloDispatcher() == toChord(cr2)->tremoloDispatcher())) {
+        TremoloDispatcher* t = toChord(cr1)->tremoloDispatcher();
         Chord* c1 = t->chord1();
         Chord* c2 = t->chord2();
         t->setParent(toChord(c2));
@@ -2988,30 +2988,30 @@ void MoveTremolo::redo(EditData*)
     oldC2 = trem->chord2();
 
     // Move tremolo away from old chords
-    trem->chord1()->setTremolo(nullptr);
-    trem->chord2()->setTremolo(nullptr);
+    trem->chord1()->setTremoloDispatcher(nullptr);
+    trem->chord2()->setTremoloDispatcher(nullptr);
 
     // Delete old tremolo on c1 and c2, if present
-    if (c1->tremolo() && (c1->tremolo() != trem)) {
-        if (c2->tremolo() == c1->tremolo()) {
-            c2->tremolo()->setChords(c1, c2);
+    if (c1->tremoloDispatcher() && (c1->tremoloDispatcher() != trem)) {
+        if (c2->tremoloDispatcher() == c1->tremoloDispatcher()) {
+            c2->tremoloDispatcher()->setChords(c1, c2);
         } else {
-            c1->tremolo()->setChords(c1, nullptr);
+            c1->tremoloDispatcher()->setChords(c1, nullptr);
         }
-        Tremolo* oldTremolo  = c1->tremolo();
-        c1->setTremolo(nullptr);
+        TremoloDispatcher* oldTremolo  = c1->tremoloDispatcher();
+        c1->setTremoloDispatcher(nullptr);
         delete oldTremolo;
     }
-    if (c2->tremolo() && (c2->tremolo() != trem)) {
-        c2->tremolo()->setChords(nullptr, c2);
-        Tremolo* oldTremolo  = c2->tremolo();
-        c2->setTremolo(nullptr);
+    if (c2->tremoloDispatcher() && (c2->tremoloDispatcher() != trem)) {
+        c2->tremoloDispatcher()->setChords(nullptr, c2);
+        TremoloDispatcher* oldTremolo  = c2->tremoloDispatcher();
+        c2->setTremoloDispatcher(nullptr);
         delete oldTremolo;
     }
 
     // Move tremolo to new chords
-    c1->setTremolo(trem);
-    c2->setTremolo(trem);
+    c1->setTremoloDispatcher(trem);
+    c2->setTremoloDispatcher(trem);
     trem->setChords(c1, c2);
     trem->setParent(c1);
 
@@ -3029,10 +3029,10 @@ void MoveTremolo::redo(EditData*)
 void MoveTremolo::undo(EditData*)
 {
     // Move tremolo to old position
-    trem->chord1()->setTremolo(nullptr);
-    trem->chord2()->setTremolo(nullptr);
-    oldC1->setTremolo(trem);
-    oldC2->setTremolo(trem);
+    trem->chord1()->setTremoloDispatcher(nullptr);
+    trem->chord2()->setTremoloDispatcher(nullptr);
+    oldC1->setTremoloDispatcher(trem);
+    oldC2->setTremoloDispatcher(trem);
     trem->setChords(oldC1, oldC2);
     trem->setParent(oldC1);
 }

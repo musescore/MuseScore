@@ -61,13 +61,13 @@ static const ElementStyle TREMOLO_STYLE {
 //   Tremolo
 //---------------------------------------------------------
 
-Tremolo::Tremolo(Chord* parent)
+TremoloDispatcher::TremoloDispatcher(Chord* parent)
     : EngravingItem(ElementType::TREMOLO, parent, ElementFlag::MOVABLE)
 {
     //initElementStyle(&TREMOLO_STYLE);
 }
 
-Tremolo::Tremolo(const Tremolo& t)
+TremoloDispatcher::TremoloDispatcher(const TremoloDispatcher& t)
     : EngravingItem(t)
 {
     m_tremoloType = t.tremoloType();
@@ -82,7 +82,7 @@ Tremolo::Tremolo(const Tremolo& t)
     styleChanged();
 }
 
-Tremolo::~Tremolo()
+TremoloDispatcher::~TremoloDispatcher()
 {
     if (m_tremoloTwoChord) {
         m_tremoloTwoChord->setParent(nullptr);
@@ -96,13 +96,13 @@ Tremolo::~Tremolo()
     delete m_tremoloSingleChord;
 }
 
-bool Tremolo::twoNotes() const
+bool TremoloDispatcher::twoNotes() const
 {
     DO_ASSERT(m_tremoloType != TremoloType::INVALID_TREMOLO);
     return m_tremoloType >= TremoloType::C8;
 }
 
-void Tremolo::setTrack(track_idx_t val)
+void TremoloDispatcher::setTrack(track_idx_t val)
 {
     EngravingItem::setTrack(val);
 
@@ -117,7 +117,7 @@ void Tremolo::setTrack(track_idx_t val)
     }
 }
 
-void Tremolo::setTremoloType(TremoloType t)
+void TremoloDispatcher::setTremoloType(TremoloType t)
 {
     m_tremoloType = t;
 
@@ -136,7 +136,7 @@ void Tremolo::setTremoloType(TremoloType t)
     styleChanged();
 }
 
-void Tremolo::setParent(Chord* ch)
+void TremoloDispatcher::setParent(Chord* ch)
 {
     EngravingItem::setParent(ch);
 
@@ -151,7 +151,7 @@ void Tremolo::setParent(Chord* ch)
 //   chordMag
 //---------------------------------------------------------
 
-double Tremolo::chordMag() const
+double TremoloDispatcher::chordMag() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->chordMag();
@@ -164,7 +164,7 @@ double Tremolo::chordMag() const
 //   minHeight
 //---------------------------------------------------------
 
-double Tremolo::minHeight() const
+double TremoloDispatcher::minHeight() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->minHeight();
@@ -177,7 +177,7 @@ double Tremolo::minHeight() const
 //   chordBeamAnchor
 //---------------------------------------------------------
 
-PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
+PointF TremoloDispatcher::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anchorType) const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->chordBeamAnchor(chord, anchorType);
@@ -187,7 +187,7 @@ PointF Tremolo::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorType anch
     }
 }
 
-double Tremolo::beamWidth() const
+double TremoloDispatcher::beamWidth() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->beamWidth();
@@ -201,7 +201,7 @@ double Tremolo::beamWidth() const
 //   drag
 //---------------------------------------------------------
 
-RectF Tremolo::drag(EditData& ed)
+RectF TremoloDispatcher::drag(EditData& ed)
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->drag(ed);
@@ -214,7 +214,7 @@ RectF Tremolo::drag(EditData& ed)
 //   spatiumChanged
 //---------------------------------------------------------
 
-void Tremolo::spatiumChanged(double oldValue, double newValue)
+void TremoloDispatcher::spatiumChanged(double oldValue, double newValue)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->spatiumChanged(oldValue, newValue);
@@ -231,7 +231,7 @@ void Tremolo::spatiumChanged(double oldValue, double newValue)
 //    the scale of a staff changed
 //---------------------------------------------------------
 
-void Tremolo::localSpatiumChanged(double oldValue, double newValue)
+void TremoloDispatcher::localSpatiumChanged(double oldValue, double newValue)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->localSpatiumChanged(oldValue, newValue);
@@ -245,7 +245,7 @@ void Tremolo::localSpatiumChanged(double oldValue, double newValue)
 //    the scale of a staff changed
 //---------------------------------------------------------
 
-void Tremolo::styleChanged()
+void TremoloDispatcher::styleChanged()
 {
     if (twoNotes()) {
         m_tremoloTwoChord->styleChanged();
@@ -261,7 +261,7 @@ void Tremolo::styleChanged()
 //   basePath
 //---------------------------------------------------------
 
-PainterPath Tremolo::basePath(double stretch) const
+PainterPath TremoloDispatcher::basePath(double stretch) const
 {
     if (twoNotes()) {
         UNREACHABLE;
@@ -271,7 +271,7 @@ PainterPath Tremolo::basePath(double stretch) const
     }
 }
 
-const mu::draw::PainterPath& Tremolo::path() const
+const mu::draw::PainterPath& TremoloDispatcher::path() const
 {
     if (twoNotes()) {
         UNREACHABLE;
@@ -282,7 +282,7 @@ const mu::draw::PainterPath& Tremolo::path() const
     }
 }
 
-void Tremolo::setPath(const mu::draw::PainterPath& p)
+void TremoloDispatcher::setPath(const mu::draw::PainterPath& p)
 {
     if (twoNotes()) {
         UNREACHABLE;
@@ -291,7 +291,7 @@ void Tremolo::setPath(const mu::draw::PainterPath& p)
     }
 }
 
-const mu::PointF& Tremolo::startAnchor() const
+const mu::PointF& TremoloDispatcher::startAnchor() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->startAnchor();
@@ -302,7 +302,7 @@ const mu::PointF& Tremolo::startAnchor() const
     }
 }
 
-mu::PointF& Tremolo::startAnchor()
+mu::PointF& TremoloDispatcher::startAnchor()
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->startAnchor();
@@ -313,7 +313,7 @@ mu::PointF& Tremolo::startAnchor()
     }
 }
 
-void Tremolo::setStartAnchor(const mu::PointF& p)
+void TremoloDispatcher::setStartAnchor(const mu::PointF& p)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setStartAnchor(p);
@@ -322,7 +322,7 @@ void Tremolo::setStartAnchor(const mu::PointF& p)
     }
 }
 
-const mu::PointF& Tremolo::endAnchor() const
+const mu::PointF& TremoloDispatcher::endAnchor() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->endAnchor();
@@ -333,7 +333,7 @@ const mu::PointF& Tremolo::endAnchor() const
     }
 }
 
-mu::PointF& Tremolo::endAnchor()
+mu::PointF& TremoloDispatcher::endAnchor()
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->endAnchor();
@@ -344,7 +344,7 @@ mu::PointF& Tremolo::endAnchor()
     }
 }
 
-void Tremolo::setEndAnchor(const mu::PointF& p)
+void TremoloDispatcher::setEndAnchor(const mu::PointF& p)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setEndAnchor(p);
@@ -357,7 +357,7 @@ void Tremolo::setEndAnchor(const mu::PointF& p)
 //   computeShape
 //---------------------------------------------------------
 
-void Tremolo::computeShape()
+void TremoloDispatcher::computeShape()
 {
     if (!twoNotes()) {
         m_tremoloSingleChord->computeShape();
@@ -370,7 +370,7 @@ void Tremolo::computeShape()
 //   reset
 //---------------------------------------------------------
 
-void Tremolo::reset()
+void TremoloDispatcher::reset()
 {
     if (twoNotes()) {
         m_tremoloTwoChord->reset();
@@ -385,12 +385,12 @@ void Tremolo::reset()
 //   pagePos
 //---------------------------------------------------------
 
-PointF Tremolo::pagePos() const
+PointF TremoloDispatcher::pagePos() const
 {
     return EngravingItem::pagePos();
 }
 
-TremoloStyle Tremolo::tremoloStyle() const
+TremoloStyle TremoloDispatcher::tremoloStyle() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->tremoloStyle();
@@ -400,7 +400,7 @@ TremoloStyle Tremolo::tremoloStyle() const
     }
 }
 
-void Tremolo::setTremoloStyle(TremoloStyle v)
+void TremoloDispatcher::setTremoloStyle(TremoloStyle v)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setTremoloStyle(v);
@@ -409,7 +409,7 @@ void Tremolo::setTremoloStyle(TremoloStyle v)
     }
 }
 
-void Tremolo::setBeamFragment(const BeamFragment& bf)
+void TremoloDispatcher::setBeamFragment(const BeamFragment& bf)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setBeamFragment(bf);
@@ -418,7 +418,7 @@ void Tremolo::setBeamFragment(const BeamFragment& bf)
     }
 }
 
-const BeamFragment& Tremolo::beamFragment() const
+const BeamFragment& TremoloDispatcher::beamFragment() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->beamFragment();
@@ -429,7 +429,7 @@ const BeamFragment& Tremolo::beamFragment() const
     }
 }
 
-BeamFragment& Tremolo::beamFragment()
+BeamFragment& TremoloDispatcher::beamFragment()
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->beamFragment();
@@ -440,7 +440,7 @@ BeamFragment& Tremolo::beamFragment()
     }
 }
 
-bool Tremolo::playTremolo() const
+bool TremoloDispatcher::playTremolo() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->playTremolo();
@@ -449,7 +449,7 @@ bool Tremolo::playTremolo() const
     }
 }
 
-void Tremolo::setPlayTremolo(bool v)
+void TremoloDispatcher::setPlayTremolo(bool v)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setPlayTremolo(v);
@@ -463,7 +463,7 @@ void Tremolo::setPlayTremolo(bool v)
 //    Return true if tremolo is two-note cross-staff and beams between staves
 //---------------------------------------------------------
 
-bool Tremolo::crossStaffBeamBetween() const
+bool TremoloDispatcher::crossStaffBeamBetween() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->crossStaffBeamBetween();
@@ -473,7 +473,7 @@ bool Tremolo::crossStaffBeamBetween() const
     }
 }
 
-DirectionV Tremolo::direction() const
+DirectionV TremoloDispatcher::direction() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->direction();
@@ -483,7 +483,7 @@ DirectionV Tremolo::direction() const
     }
 }
 
-void Tremolo::setDirection(DirectionV val)
+void TremoloDispatcher::setDirection(DirectionV val)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setDirection(val);
@@ -492,7 +492,7 @@ void Tremolo::setDirection(DirectionV val)
     }
 }
 
-void Tremolo::setUserModified(DirectionV d, bool val)
+void TremoloDispatcher::setUserModified(DirectionV d, bool val)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setUserModified(d, val);
@@ -501,7 +501,7 @@ void Tremolo::setUserModified(DirectionV d, bool val)
     }
 }
 
-TDuration Tremolo::durationType() const
+TDuration TremoloDispatcher::durationType() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->durationType();
@@ -510,7 +510,7 @@ TDuration Tremolo::durationType() const
     }
 }
 
-void Tremolo::setDurationType(TDuration d)
+void TremoloDispatcher::setDurationType(TDuration d)
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->setDurationType(d);
@@ -520,7 +520,7 @@ void Tremolo::setDurationType(TDuration d)
     styleChanged();
 }
 
-int Tremolo::lines() const
+int TremoloDispatcher::lines() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->lines();
@@ -529,7 +529,7 @@ int Tremolo::lines() const
     }
 }
 
-bool Tremolo::up() const
+bool TremoloDispatcher::up() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->up();
@@ -539,7 +539,7 @@ bool Tremolo::up() const
     }
 }
 
-void Tremolo::setUp(bool up)
+void TremoloDispatcher::setUp(bool up)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setUp(up);
@@ -552,7 +552,7 @@ void Tremolo::setUp(bool up)
 //   tremoloLen
 //---------------------------------------------------------
 
-Fraction Tremolo::tremoloLen() const
+Fraction TremoloDispatcher::tremoloLen() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->tremoloLen();
@@ -561,7 +561,7 @@ Fraction Tremolo::tremoloLen() const
     }
 }
 
-Chord* Tremolo::chord1() const
+Chord* TremoloDispatcher::chord1() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->chord1();
@@ -570,7 +570,7 @@ Chord* Tremolo::chord1() const
     }
 }
 
-void Tremolo::setChord1(Chord* ch)
+void TremoloDispatcher::setChord1(Chord* ch)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setChord1(ch);
@@ -579,7 +579,7 @@ void Tremolo::setChord1(Chord* ch)
     }
 }
 
-Chord* Tremolo::chord2() const
+Chord* TremoloDispatcher::chord2() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->chord2();
@@ -589,7 +589,7 @@ Chord* Tremolo::chord2() const
     }
 }
 
-void Tremolo::setChord2(Chord* ch)
+void TremoloDispatcher::setChord2(Chord* ch)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setChord2(ch);
@@ -598,7 +598,7 @@ void Tremolo::setChord2(Chord* ch)
     }
 }
 
-void Tremolo::setChords(Chord* c1, Chord* c2)
+void TremoloDispatcher::setChords(Chord* c1, Chord* c2)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setChords(c1, c2);
@@ -611,7 +611,7 @@ void Tremolo::setChords(Chord* c1, Chord* c2)
 //   setBeamPos
 //---------------------------------------------------------
 
-void Tremolo::setBeamPos(const PairF& bp)
+void TremoloDispatcher::setBeamPos(const PairF& bp)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setBeamPos(bp);
@@ -624,7 +624,7 @@ void Tremolo::setBeamPos(const PairF& bp)
 //   beamPos
 //---------------------------------------------------------
 
-PairF Tremolo::beamPos() const
+PairF TremoloDispatcher::beamPos() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->beamPos();
@@ -638,7 +638,7 @@ PairF Tremolo::beamPos() const
 //   userModified
 //---------------------------------------------------------
 
-bool Tremolo::userModified() const
+bool TremoloDispatcher::userModified() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->userModified();
@@ -652,7 +652,7 @@ bool Tremolo::userModified() const
 //   setUserModified
 //---------------------------------------------------------
 
-void Tremolo::setUserModified(bool val)
+void TremoloDispatcher::setUserModified(bool val)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->setUserModified(val);
@@ -665,7 +665,7 @@ void Tremolo::setUserModified(bool val)
 //   triggerLayout
 //---------------------------------------------------------
 
-void Tremolo::triggerLayout() const
+void TremoloDispatcher::triggerLayout() const
 {
     if (twoNotes()) {
         m_tremoloTwoChord->triggerLayout();
@@ -674,7 +674,7 @@ void Tremolo::triggerLayout() const
     }
 }
 
-bool Tremolo::needStartEditingAfterSelecting() const
+bool TremoloDispatcher::needStartEditingAfterSelecting() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->needStartEditingAfterSelecting();
@@ -683,7 +683,7 @@ bool Tremolo::needStartEditingAfterSelecting() const
     }
 }
 
-int Tremolo::gripsCount() const
+int TremoloDispatcher::gripsCount() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->gripsCount();
@@ -692,7 +692,7 @@ int Tremolo::gripsCount() const
     }
 }
 
-Grip Tremolo::initialEditModeGrip() const
+Grip TremoloDispatcher::initialEditModeGrip() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->initialEditModeGrip();
@@ -701,7 +701,7 @@ Grip Tremolo::initialEditModeGrip() const
     }
 }
 
-Grip Tremolo::defaultGrip() const
+Grip TremoloDispatcher::defaultGrip() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->defaultGrip();
@@ -714,7 +714,7 @@ Grip Tremolo::defaultGrip() const
 //   gripsPositions
 //---------------------------------------------------------
 
-std::vector<PointF> Tremolo::gripsPositions(const EditData& ed) const
+std::vector<PointF> TremoloDispatcher::gripsPositions(const EditData& ed) const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->gripsPositions(ed);
@@ -727,7 +727,7 @@ std::vector<PointF> Tremolo::gripsPositions(const EditData& ed) const
 //   endEdit
 //---------------------------------------------------------
 
-void Tremolo::endEdit(EditData& ed)
+void TremoloDispatcher::endEdit(EditData& ed)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->endEdit(ed);
@@ -740,7 +740,7 @@ void Tremolo::endEdit(EditData& ed)
 //   editDrag
 //---------------------------------------------------------
 
-void Tremolo::editDrag(EditData& ed)
+void TremoloDispatcher::editDrag(EditData& ed)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->editDrag(ed);
@@ -753,7 +753,7 @@ void Tremolo::editDrag(EditData& ed)
 //   subtypeName
 //---------------------------------------------------------
 
-TranslatableString Tremolo::subtypeUserName() const
+TranslatableString TremoloDispatcher::subtypeUserName() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->subtypeUserName();
@@ -766,7 +766,7 @@ TranslatableString Tremolo::subtypeUserName() const
 //   accessibleInfo
 //---------------------------------------------------------
 
-String Tremolo::accessibleInfo() const
+String TremoloDispatcher::accessibleInfo() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->accessibleInfo();
@@ -779,7 +779,7 @@ String Tremolo::accessibleInfo() const
 //   customStyleApplicable
 //---------------------------------------------------------
 
-bool Tremolo::customStyleApplicable() const
+bool TremoloDispatcher::customStyleApplicable() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->customStyleApplicable();
@@ -793,7 +793,7 @@ bool Tremolo::customStyleApplicable() const
 //   getProperty
 //---------------------------------------------------------
 
-PropertyValue Tremolo::getProperty(Pid propertyId) const
+PropertyValue TremoloDispatcher::getProperty(Pid propertyId) const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->getProperty(propertyId);
@@ -806,7 +806,7 @@ PropertyValue Tremolo::getProperty(Pid propertyId) const
 //   setProperty
 //---------------------------------------------------------
 
-bool Tremolo::setProperty(Pid propertyId, const PropertyValue& val)
+bool TremoloDispatcher::setProperty(Pid propertyId, const PropertyValue& val)
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->setProperty(propertyId, val);
@@ -819,7 +819,7 @@ bool Tremolo::setProperty(Pid propertyId, const PropertyValue& val)
 //   propertyDefault
 //---------------------------------------------------------
 
-PropertyValue Tremolo::propertyDefault(Pid propertyId) const
+PropertyValue TremoloDispatcher::propertyDefault(Pid propertyId) const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->propertyDefault(propertyId);
@@ -828,7 +828,7 @@ PropertyValue Tremolo::propertyDefault(Pid propertyId) const
     }
 }
 
-const ElementStyle* Tremolo::styledProperties() const
+const ElementStyle* TremoloDispatcher::styledProperties() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->styledProperties();
@@ -837,7 +837,7 @@ const ElementStyle* Tremolo::styledProperties() const
     }
 }
 
-PropertyFlags* Tremolo::propertyFlagsList() const
+PropertyFlags* TremoloDispatcher::propertyFlagsList() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->propertyFlagsList();
@@ -846,7 +846,7 @@ PropertyFlags* Tremolo::propertyFlagsList() const
     }
 }
 
-PropertyFlags Tremolo::propertyFlags(Pid pid) const
+PropertyFlags TremoloDispatcher::propertyFlags(Pid pid) const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->propertyFlags(pid);
@@ -855,7 +855,7 @@ PropertyFlags Tremolo::propertyFlags(Pid pid) const
     }
 }
 
-void Tremolo::setPropertyFlags(Pid pid, PropertyFlags f)
+void TremoloDispatcher::setPropertyFlags(Pid pid, PropertyFlags f)
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->setPropertyFlags(pid, f);
@@ -868,7 +868,7 @@ void Tremolo::setPropertyFlags(Pid pid, PropertyFlags f)
 //   scanElements
 //---------------------------------------------------------
 
-void Tremolo::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
+void TremoloDispatcher::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
     if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
         return;
@@ -882,7 +882,7 @@ void Tremolo::scanElements(void* data, void (* func)(void*, EngravingItem*), boo
 //    }
 }
 
-const std::vector<BeamSegment*>& Tremolo::beamSegments() const
+const std::vector<BeamSegment*>& TremoloDispatcher::beamSegments() const
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->beamSegments();
@@ -893,7 +893,7 @@ const std::vector<BeamSegment*>& Tremolo::beamSegments() const
     }
 }
 
-std::vector<BeamSegment*>& Tremolo::beamSegments()
+std::vector<BeamSegment*>& TremoloDispatcher::beamSegments()
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->beamSegments();
@@ -904,7 +904,7 @@ std::vector<BeamSegment*>& Tremolo::beamSegments()
     }
 }
 
-void Tremolo::clearBeamSegments()
+void TremoloDispatcher::clearBeamSegments()
 {
     if (twoNotes()) {
         m_tremoloTwoChord->clearBeamSegments();
@@ -913,7 +913,7 @@ void Tremolo::clearBeamSegments()
     }
 }
 
-std::shared_ptr<rendering::dev::BeamTremoloLayout> Tremolo::layoutInfo()
+std::shared_ptr<rendering::dev::BeamTremoloLayout> TremoloDispatcher::layoutInfo()
 {
     if (twoNotes()) {
         return m_tremoloTwoChord->layoutInfo;
@@ -923,7 +923,7 @@ std::shared_ptr<rendering::dev::BeamTremoloLayout> Tremolo::layoutInfo()
     }
 }
 
-void Tremolo::setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info)
+void TremoloDispatcher::setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info)
 {
     if (twoNotes()) {
         m_tremoloTwoChord->layoutInfo = info;

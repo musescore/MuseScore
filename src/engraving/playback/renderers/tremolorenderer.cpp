@@ -49,7 +49,7 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
         return;
     }
 
-    const Tremolo* tremolo = chord->tremolo();
+    const TremoloDispatcher* tremolo = chord->tremoloDispatcher();
     IF_ASSERT_FAILED(tremolo) {
         return;
     }
@@ -100,7 +100,7 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
     }
 }
 
-int TremoloRenderer::stepDurationTicks(const Chord* chord, const Tremolo* tremolo)
+int TremoloRenderer::stepDurationTicks(const Chord* chord, const TremoloDispatcher* tremolo)
 {
     int ticks = Constants::DIVISION / (1 << (chord->beams() + tremolo->lines()));
     if (ticks <= 0) {
