@@ -54,7 +54,7 @@ static const ElementStyle pickScrapeStyle {
 };
 
 PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
-    : TextLineBaseSegment(ElementType::WHAMMY_BAR_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
+    : TextLineBaseSegment(ElementType::PICK_SCRAPE_SEGMENT, sp, parent, ElementFlag::MOVABLE | ElementFlag::ON_STAFF)
 {
 }
 
