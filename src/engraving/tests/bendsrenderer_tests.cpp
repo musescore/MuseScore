@@ -93,11 +93,13 @@ protected:
         int chordPosTick = chord->tick().ticks();
         int chordDurationTicks = chord->actualTicks().ticks();
 
+        auto tnd = timestampAndDurationFromStartAndDurationTicks(m_score, chordPosTick, chordDurationTicks);
+
         BeatsPerSecond bps = m_score->tempomap()->tempo(chordPosTick);
         TimeSigFrac timeSignatureFraction = m_score->sigmap()->timesig(chordPosTick).timesig();
 
-        RenderingContext ctx(timestampFromTicks(m_score, chordPosTick),
-                             durationFromTicks(bps.val, chordDurationTicks),
+        RenderingContext ctx(tnd.timestamp,
+                             tnd.duration,
                              5000,
                              chordPosTick,
                              0,

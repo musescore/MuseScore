@@ -112,8 +112,8 @@ void GraceChordsRenderer::renderGraceNoteEvents(const std::vector<Chord*>& grace
     timestamp_t timestamp = graceCtx.graceNotesTimestampFrom;
 
     for (const Chord* graceChord : graceChords) {
-        duration_t duration
-            = RealRound(graceCtx.durationFactor * durationFromTicks(ctx.beatsPerSecond.val, graceChord->durationTypeTicks().ticks()), 0);
+        duration_t duration = RealRound(
+            graceCtx.durationFactor * durationFromTempoAndTicks(ctx.beatsPerSecond.val, graceChord->durationTypeTicks().ticks()), 0);
 
         for (const Note* graceNote : graceChord->notes()) {
             if (!graceNoteAccepted(graceNote, ctx)) {
@@ -127,7 +127,20 @@ void GraceChordsRenderer::renderGraceNoteEvents(const std::vector<Chord*>& grace
             NoteArticulationsParser::buildNoteArticulationMap(graceNote, ctx, noteCtx.chordCtx.commonArticulations);
             updateArticulationBoundaries(graceCtx.type, noteCtx.timestamp, noteCtx.duration, noteCtx.chordCtx.commonArticulations);
 
-            result.emplace_back(buildNoteEvent(std::move(noteCtx)));
+            mpe::NoteEvent event = buildNoteEvent(std::move(noteCtx));
+
+            if (event.arrangementCtx().actualTimestamp >= 0) {
+                result.emplace_back(std::move(event));
+            } else {
+                ArrangementContext arrCtx = event.arrangementCtx();
+                arrCtx.actualDuration = arrCtx.actualDuration + arrCtx.actualTimestamp;
+                arrCtx.actualTimestamp = 0;
+
+                PitchContext pitchCtx = event.pitchCtx();
+                ExpressionContext expCtx = event.expressionCtx();
+
+                result.emplace_back(mpe::NoteEvent(std::move(arrCtx), std::move(pitchCtx), std::move(expCtx)));
+            }
         }
 
         timestamp += duration;
@@ -195,7 +208,7 @@ duration_t GraceChordsRenderer::graceNotesTotalDuration(const std::vector<Chord*
     duration_t result = 0;
 
     for (const Chord* graceChord : graceChords) {
-        result += durationFromTicks(context.beatsPerSecond.val, graceChord->durationTypeTicks().ticks());
+        result += durationFromTempoAndTicks(context.beatsPerSecond.val, graceChord->durationTypeTicks().ticks());
     }
 
     return result;
@@ -216,7 +229,7 @@ duration_t GraceChordsRenderer::graceNotesMaxAvailableDuration(const Articulatio
         }
     }
 
-    duration_t minAcciacaturaDuration = durationFromTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS / 2);
+    duration_t minAcciacaturaDuration = durationFromTempoAndTicks(ctx.beatsPerSecond.val, DEMISEMIQUAVER_TICKS / 2);
 
     return std::min(minAcciacaturaDuration * static_cast<duration_t>(graceNotesCount), halvedDuration);
 }

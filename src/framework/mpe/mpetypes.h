@@ -44,7 +44,7 @@
 
 namespace mu::mpe {
 // common
-using msecs_t = int64_t;
+using usecs_t = int64_t; // microseconds
 using percentage_t = int_fast16_t;
 constexpr percentage_t ONE_PERCENT = 100;
 constexpr percentage_t FIFTY_PERCENT = ONE_PERCENT * 50;
@@ -62,8 +62,8 @@ constexpr inline percentage_t percentageFromFactor(const float factor)
 }
 
 // Arrangement
-using timestamp_t = msecs_t;
-using duration_t = msecs_t;
+using timestamp_t = usecs_t;
+using duration_t = usecs_t;
 using duration_percentage_t = percentage_t;
 using voice_layer_idx_t = uint_fast8_t;
 
@@ -353,6 +353,7 @@ inline bool isSingleNoteArticulation(const ArticulationType type)
         ArticulationType::Doit, ArticulationType::Plop, ArticulationType::Scoop,
         ArticulationType::BrassBend, ArticulationType::SlideOutDown, ArticulationType::SlideOutUp,
         ArticulationType::SlideInAbove, ArticulationType::SlideInBelow, ArticulationType::VolumeSwell,
+        ArticulationType::Vibrato,
     };
 
     return SINGLE_NOTE_TYPES.find(type) != SINGLE_NOTE_TYPES.cend();

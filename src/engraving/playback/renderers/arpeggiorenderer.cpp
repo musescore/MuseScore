@@ -57,7 +57,7 @@ void ArpeggioRenderer::doRender(const EngravingItem* item, const mpe::Articulati
 
     int stepsCount = static_cast<int>(chord->notes().size());
     mpe::percentage_t percentageStep = mpe::HUNDRED_PERCENT / stepsCount;
-    msecs_t offsetStep = timestampOffsetStep(context, stepsCount);
+    usecs_t offsetStep = timestampOffsetStep(context, stepsCount);
     double stretch = arpeggio->Stretch();
 
     auto buildEvent = [&](NominalNoteCtx& noteCtx, const int stepNumber) {
@@ -98,7 +98,7 @@ bool ArpeggioRenderer::isDirectionUp(const mpe::ArticulationType type)
     }
 }
 
-msecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx, int stepCount)
+usecs_t ArpeggioRenderer::timestampOffsetStep(const RenderingContext& ctx, int stepCount)
 {
     constexpr int MAX_TIMESTAMP_OFFSET_STEP = 60000;
 

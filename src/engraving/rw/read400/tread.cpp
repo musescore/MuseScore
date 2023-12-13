@@ -2992,6 +2992,10 @@ bool TRead::readProperties(Lyrics* l, XmlReader& e, ReadContext& ctx)
 
     if (tag == "no") {
         l->setNo(e.readInt());
+        if (l->isEven()) {
+            l->setEven(true);
+            l->initTextStyleType(TextStyleType::LYRICS_EVEN);
+        }
     } else if (tag == "syllabic") {
         l->setSyllabic(TConv::fromXml(e.readAsciiText(), LyricsSyllabic::SINGLE));
     } else if (tag == "ticks") {          // obsolete
