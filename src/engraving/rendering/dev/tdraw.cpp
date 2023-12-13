@@ -812,7 +812,7 @@ void TDraw::draw(const BarLine* item, Painter* painter)
     break;
     }
     Segment* s = item->segment();
-    if (s && s->isEndBarLineType() && !item->score()->printing() && item->score()->showUnprintable()) {
+    if (s && s->isEndBarLineType() && !item->score()->printing()) {
         Measure* m = s->measure();
         if (m->isIrregular() && item->score()->markIrregularMeasures() && !m->isMMRest()) {
             painter->setPen(EngravingItem::engravingConfiguration()->formattingMarksColor());
