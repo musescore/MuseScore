@@ -477,18 +477,14 @@ static double findLyricsMaxY(const MStyle& style, Segment& s, staff_idx_t staffI
                     double yOff = l->offset().y();
                     PointF offset = l->pos() + cr->pos() + s.pos() + s.measure()->pos();
                     RectF r = l->ldata()->bbox().translated(offset);
-                    r.translate(0.0, -yOff);
+                    r.translate(0.0, -yOff - l->minDistance().val() * l->spatium());
                     sk.add(r.x(), r.top(), r.width());
                 }
             }
             SysStaff* ss = s.measure()->system()->staff(staffIdx);
-            for (Lyrics* l : cr->lyrics()) {
-                if (l->autoplace() && l->placeBelow()) {
-                    double y = ss->skyline().south().minDistance(sk);
-                    if (y > -lyricsMinTopDistance) {
-                        yMax = std::max(yMax, y + lyricsMinTopDistance);
-                    }
-                }
+            double y = ss->skyline().south().minDistance(sk);
+            if (y > -lyricsMinTopDistance) {
+                yMax = std::max(yMax, y + lyricsMinTopDistance);
             }
         }
     }
@@ -515,18 +511,14 @@ static double findLyricsMinY(const MStyle& style, Segment& s, staff_idx_t staffI
                 if (l->autoplace() && l->placeAbove()) {
                     double yOff = l->offset().y();
                     RectF r = l->ldata()->bbox().translated(l->pos() + cr->pos() + s.pos() + s.measure()->pos());
-                    r.translate(0.0, -yOff);
+                    r.translate(0.0, -yOff + l->minDistance().val() * l->spatium());
                     sk.add(r.x(), r.bottom(), r.width());
                 }
             }
             SysStaff* ss = s.measure()->system()->staff(staffIdx);
-            for (Lyrics* l : cr->lyrics()) {
-                if (l->autoplace() && l->placeAbove()) {
-                    double y = sk.minDistance(ss->skyline().north());
-                    if (y > -lyricsMinTopDistance) {
-                        yMin = std::min(yMin, -y - lyricsMinTopDistance);
-                    }
-                }
+            double y = sk.minDistance(ss->skyline().north());
+            if (y > -lyricsMinTopDistance) {
+                yMin = std::min(yMin, -y - lyricsMinTopDistance);
             }
         }
     }
