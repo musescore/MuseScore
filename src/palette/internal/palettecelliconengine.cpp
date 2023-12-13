@@ -73,7 +73,7 @@ void PaletteCellIconEngine::paintCell(Painter& painter, const RectF& rect, bool 
     painter.setPen(configuration()->elementsColor());
 
     if (element->isActionIcon()) {
-        paintActionIcon(painter, rect, element);
+        paintActionIcon(painter, rect, element, dpi);
         return; // never draw staff for icon elements
     }
 
@@ -103,7 +103,7 @@ void PaletteCellIconEngine::paintBackground(Painter& painter, const RectF& rect,
 
 /// Paint an icon element so that it fills a QRect, preserving aspect ratio, and
 /// leaving a small margin around the edges.
-void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect, EngravingItem* element) const
+void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect, EngravingItem* element, double dpi) const
 {
     IF_ASSERT_FAILED(element && element->isActionIcon()) {
         return;
@@ -111,8 +111,10 @@ void PaletteCellIconEngine::paintActionIcon(Painter& painter, const RectF& rect,
 
     painter.save();
 
+    double DPIscaling = (mu::engraving::DPI / mu::engraving::DPI_F) / dpi;
+
     ActionIcon* action = toActionIcon(element);
-    action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag);
+    action->setFontSize(ActionIcon::DEFAULT_FONT_SIZE * m_cell->mag * m_extraMag * DPIscaling);
 
     engravingRender()->layoutItem(action);
 

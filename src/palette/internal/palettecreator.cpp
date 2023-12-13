@@ -1852,17 +1852,17 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
 
     auto capo = makeElement<Capo>(gpaletteScore);
     capo->setXmlText(String::fromAscii(QT_TRANSLATE_NOOP("palette", "Capo")));
-    sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"))->setElementTranslated(true);
+    sp->appendElement(capo, QT_TRANSLATE_NOOP("palette", "Capo"), 0.9)->setElementTranslated(true);
 
     auto stringTunings = makeElement<StringTunings>(gpaletteScore);
     stringTunings->setXmlText(u"<sym>guitarString6</sym> - D");
     stringTunings->initTextStyleType(TextStyleType::STRING_TUNINGS);
-    sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"))->setElementTranslated(true);
+    sp->appendElement(stringTunings, QT_TRANSLATE_NOOP("palette", "String tunings"), 0.9)->setElementTranslated(true);
 
-    sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend", 1.25);
-    sp->appendActionIcon(ActionIconType::PRE_BEND, "pre-bend", 1.25);
-    sp->appendActionIcon(ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.25);
-    sp->appendActionIcon(ActionIconType::SLIGHT_BEND, "slight-bend", 1.25);
+    sp->appendActionIcon(ActionIconType::STANDARD_BEND, "standard-bend", 1.5);
+    sp->appendActionIcon(ActionIconType::PRE_BEND, "pre-bend", 1.5);
+    sp->appendActionIcon(ActionIconType::GRACE_NOTE_BEND, "grace-note-bend", 1.4);
+    sp->appendActionIcon(ActionIconType::SLIGHT_BEND, "slight-bend", 1.5);
 
     const char* finger = "pimac";
     for (unsigned i = 0; i < strlen(finger); ++i) {
