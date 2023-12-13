@@ -359,11 +359,11 @@ public:
     virtual TranslatableString subtypeUserName() const;
     virtual String translatedSubtypeUserName() const;
 
+    virtual void setColor(const mu::draw::Color& c);
     virtual mu::draw::Color color() const;
     mu::draw::Color curColor() const;
     mu::draw::Color curColor(bool isVisible) const;
     mu::draw::Color curColor(bool isVisible, mu::draw::Color normalColor) const;
-    virtual void setColor(const mu::draw::Color& c) { m_color = c; }
 
     void undoSetColor(const mu::draw::Color& c);
     void undoSetVisible(bool v);

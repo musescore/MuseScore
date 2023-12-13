@@ -912,6 +912,11 @@ enum class TremoloType : signed char {
     C8, C16, C32, C64       // two note tremolo (change)
 };
 
+inline bool isTremoloTwoChord(TremoloType type)
+{
+    return type >= TremoloType::C8;
+}
+
 enum class BracketType : signed char {
     NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
 };

@@ -81,6 +81,8 @@
 #include "dom/textline.h"
 #include "dom/timesig.h"
 #include "dom/tremolo.h"
+#include "dom/tremolotwochord.h"
+#include "dom/tremolosinglechord.h"
 #include "dom/tuplet.h"
 #include "dom/utils.h"
 #include "dom/volta.h"
@@ -1007,8 +1009,21 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 //   readTremolo
 //---------------------------------------------------------
 
-static void readTremolo(TremoloDispatcher* tremolo, XmlReader& e, ReadContext& ctx)
+struct TremoloCompat {
+    Chord* parent = nullptr;
+    TremoloSingleChord* single = nullptr;
+    TremoloTwoChord* two = nullptr;
+};
+
+static void readTremolo(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
 {
+    auto item = [](TremoloCompat& t) -> EngravingItem* {
+        if (t.two) {
+            return t.two;
+        }
+        return t.single;
+    };
+
     enum class OldTremoloType : char {
         OLD_R8 = 0,
         OLD_R16,
@@ -1017,27 +1032,37 @@ static void readTremolo(TremoloDispatcher* tremolo, XmlReader& e, ReadContext& c
         OLD_C16,
         OLD_C32
     };
+
     while (e.readNextStartElement()) {
         if (e.name() == "subtype") {
             OldTremoloType sti = OldTremoloType(e.readText().toInt());
-            TremoloType st;
+            TremoloType type = TremoloType::INVALID_TREMOLO;
             switch (sti) {
             default:
-            case OldTremoloType::OLD_R8:  st = TremoloType::R8;
+            case OldTremoloType::OLD_R8:  type = TremoloType::R8;
                 break;
-            case OldTremoloType::OLD_R16: st = TremoloType::R16;
+            case OldTremoloType::OLD_R16: type = TremoloType::R16;
                 break;
-            case OldTremoloType::OLD_R32: st = TremoloType::R32;
+            case OldTremoloType::OLD_R32: type = TremoloType::R32;
                 break;
-            case OldTremoloType::OLD_C8:  st = TremoloType::C8;
+            case OldTremoloType::OLD_C8:  type = TremoloType::C8;
                 break;
-            case OldTremoloType::OLD_C16: st = TremoloType::C16;
+            case OldTremoloType::OLD_C16: type = TremoloType::C16;
                 break;
-            case OldTremoloType::OLD_C32: st = TremoloType::C32;
+            case OldTremoloType::OLD_C32: type = TremoloType::C32;
                 break;
             }
-            tremolo->setTremoloType(st);
-        } else if (!TRead::readItemProperties(tremolo, e, ctx)) {
+
+            if (isTremoloTwoChord(type)) {
+                t.two = Factory::createTremoloTwoChord(t.parent);
+                t.two->setTrack(t.parent->track());
+                t.two->setTremoloType(type);
+            } else {
+                t.single = Factory::createTremoloSingleChord(t.parent);
+                t.single->setTrack(t.parent->track());
+                t.single->setTremoloType(type);
+            }
+        } else if (!TRead::readItemProperties(item(t), e, ctx)) {
             e.unknown();
         }
     }
@@ -1069,12 +1094,20 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
                 chord->add(el);
             }
         } else if (tag == "Tremolo") {
-            TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(chord);
-            readTremolo(tremolo, e, ctx);
-            tremolo->setDurationType(chord->durationType());
-            chord->setTremoloDispatcher(tremolo);
-            tremolo->setTrack(chord->track());
-            tremolo->setParent(chord);
+            TremoloCompat tcompat;
+            tcompat.parent = chord;
+            readTremolo(tcompat, e, ctx);
+            if (tcompat.two) {
+                tcompat.two->setParent(chord);
+                tcompat.two->setDurationType(chord->durationType());
+                chord->setTremoloDispatcher(tcompat.two->dispatcher(), false);
+            } else if (tcompat.single) {
+                tcompat.single->setParent(chord);
+                tcompat.single->setDurationType(chord->durationType());
+                chord->setTremoloDispatcher(tcompat.single->dispatcher(), false);
+            } else {
+                UNREACHABLE;
+            }
         } else if (Read206::readChordProperties206(e, ctx, chord)) {
         } else {
             e.unknown();

@@ -103,11 +103,14 @@ public:
 
     void computeShape();
 
-    TremoloDispatcher* dispatcher = nullptr;
+    void setDispatcher(TremoloDispatcher* d);
+    TremoloDispatcher* dispatcher() const;
 
 private:
     friend class Factory;
     friend class TremoloDispatcher;
+
+    mutable TremoloDispatcher* m_dispatcher = nullptr;
 
     TremoloSingleChord(Chord* parent);
     TremoloSingleChord(const TremoloSingleChord&);

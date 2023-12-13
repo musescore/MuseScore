@@ -154,11 +154,14 @@ public:
 
     std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
-    TremoloDispatcher* dispatcher = nullptr;
+    void setDispatcher(TremoloDispatcher* d);
+    TremoloDispatcher* dispatcher() const;
 
 private:
     friend class Factory;
     friend class TremoloDispatcher;
+
+    mutable TremoloDispatcher* m_dispatcher = nullptr;
 
     TremoloTwoChord(Chord* parent);
     TremoloTwoChord(const TremoloTwoChord&);
