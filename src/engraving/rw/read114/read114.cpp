@@ -1942,6 +1942,10 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 const AsciiStringView t(e.name());
                 if (t == "no") {
                     l->setNo(e.readInt());
+                    if (l->isEven()) {
+                        l->setEven(true);
+                        l->initTextStyleType(TextStyleType::LYRICS_EVEN);
+                    }
                 } else if (t == "syllabic") {
                     String val(e.readText());
                     if (val == "single") {
