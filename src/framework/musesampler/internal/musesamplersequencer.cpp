@@ -299,7 +299,7 @@ void MuseSamplerSequencer::addVibrato(const mpe::NoteEvent& noteEvent, long long
     // stand-in data before actual mpe support
     constexpr auto MAX_VIBRATO_STARTOFFSET_US = (int64_t)0.1 * 1000000;
     // stand-in data before actual mpe support
-    constexpr int VIBRATO_DEPTH_CENTS = 13;
+    constexpr int VIBRATO_DEPTH_CENTS = 23;
 
     ms_VibratoInfo vibrato;
     vibrato.event_id = noteEventId;
