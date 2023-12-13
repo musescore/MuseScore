@@ -470,6 +470,7 @@ public:
                || isTextLineSegment()
                || isOttavaSegment()
                || isPalmMuteSegment()
+               || isPickScrapeSegment()
                || isWhammyBarSegment()
                || isRasgueadoSegment()
                || isHarmonicMarkSegment()

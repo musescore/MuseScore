@@ -35,7 +35,7 @@ class PickScrape;
 class PickScrapeSegment final : public TextLineBaseSegment
 {
     OBJECT_ALLOCATOR(engraving, PickScrapeSegment)
-    DECLARE_CLASSOF(ElementType::WHAMMY_BAR_SEGMENT)
+    DECLARE_CLASSOF(ElementType::PICK_SCRAPE_SEGMENT)
 
 public:
     PickScrapeSegment(PickScrape* sp, System* parent);
