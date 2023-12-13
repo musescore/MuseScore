@@ -345,6 +345,12 @@ QVariantMap InputResourceItem::buildMsBasicMenuItem(const AudioResourceMetaList&
                 continue;
             }
 
+            // Temporary fix, see: https://github.com/musescore/MuseScore/issues/20142
+            String title = menuItem.value("title").toString();
+            if (title.contains(String("Expr."))) {
+                continue;
+            }
+
             subItems << menuItem;
 
             if (isSubItemCurrent) {
