@@ -47,6 +47,8 @@
 #include "../../dom/excerpt.h"
 
 #include "../../dom/fret.h"
+#include "../../dom/tremolosinglechord.h"
+#include "../../dom/tremolotwochord.h"
 #include "../../dom/tremolobar.h"
 #include "../../dom/sticking.h"
 #include "../../dom/systemtext.h"
@@ -2429,12 +2431,20 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         arpeggio->setParent(ch);
         ch->setArpeggio(arpeggio);
     } else if (tag == "Tremolo") {
-        TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(ch);
-        tremolo->setTrack(ch->track());
-        TRead::read(tremolo, e, ctx);
-        tremolo->setParent(ch);
-        tremolo->setDurationType(ch->durationType());
-        ch->setTremoloDispatcher(tremolo, false);
+        TremoloCompat tcompat;
+        tcompat.parent = ch;
+        TRead::read(tcompat, e, ctx);
+        if (tcompat.two) {
+            tcompat.two->setParent(ch);
+            tcompat.two->setDurationType(ch->durationType());
+            ch->setTremoloDispatcher(tcompat.two->dispatcher(), false);
+        } else if (tcompat.single) {
+            tcompat.single->setParent(ch);
+            tcompat.single->setDurationType(ch->durationType());
+            ch->setTremoloDispatcher(tcompat.single->dispatcher(), false);
+        } else {
+            UNREACHABLE;
+        }
     } else if (tag == "tickOffset") {      // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
@@ -4243,6 +4253,76 @@ void TRead::read(TremoloDispatcher* t, XmlReader& e, ReadContext& ctx)
             t->setPlayTremolo(e.readBool());
         } else if (TRead::readStyledProperty(t, tag, e, ctx)) {
         } else if (!readItemProperties(t, e, ctx)) {
+            e.unknown();
+        }
+    }
+}
+
+void TRead::read(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
+{
+    auto item = [](TremoloCompat& t) -> EngravingItem* {
+        if (t.two) {
+            return t.two;
+        }
+        return t.single;
+    };
+
+    while (e.readNextStartElement()) {
+        const AsciiStringView tag(e.name());
+        if (tag == "subtype") {
+            TremoloType type = TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO);
+            if (isTremoloTwoChord(type)) {
+                t.two = Factory::createTremoloTwoChord(t.parent);
+                t.two->setTrack(t.parent->track());
+                t.two->setTremoloType(type);
+            } else {
+                t.single = Factory::createTremoloSingleChord(t.parent);
+                t.single->setTrack(t.parent->track());
+                t.single->setTremoloType(type);
+            }
+        }
+        // Style needs special handling other than readStyledProperty()
+        // to avoid calling customStyleApplicable() in setProperty(),
+        // which cannot be called now because durationType() isn't defined yet.
+        else if (tag == "strokeStyle") {
+            if (t.two) {
+                t.two->setTremoloStyle(TremoloStyle(e.readInt()));
+                t.two->setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
+            } else {
+                UNREACHABLE;
+                e.skipCurrentElement();
+            }
+        } else if (tag == "Fragment") {
+            if (t.two) {
+                BeamFragment f = BeamFragment();
+                int idx = (t.two->direction() == DirectionV::AUTO || t.two->direction() == DirectionV::DOWN) ? 0 : 1;
+                t.two->setUserModified(t.two->direction(), true);
+                double _spatium = t.two->spatium();
+                while (e.readNextStartElement()) {
+                    const AsciiStringView tag1(e.name());
+                    if (tag1 == "y1") {
+                        f.py1[idx] = e.readDouble() * _spatium;
+                    } else if (tag1 == "y2") {
+                        f.py2[idx] = e.readDouble() * _spatium;
+                    } else {
+                        e.unknown();
+                    }
+                }
+                t.two->setBeamFragment(f);
+            } else {
+                UNREACHABLE;
+                e.skipCurrentElement();
+            }
+        } else if (tag == "play") {
+            if (t.two) {
+                t.two->setPlayTremolo(e.readBool());
+            } else if (t.single) {
+                t.single->setPlayTremolo(e.readBool());
+            } else {
+                UNREACHABLE;
+            }
+        } else if (TRead::readStyledProperty(item(t), tag, e, ctx)) {
+        } else if (!readItemProperties(item(t), e, ctx)) {
             e.unknown();
         }
     }

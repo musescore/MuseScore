@@ -583,6 +583,11 @@ Part* EngravingItem::part() const
     return s ? s->part() : 0;
 }
 
+void EngravingItem::setColor(const mu::draw::Color& c)
+{
+    m_color = c;
+}
+
 draw::Color EngravingItem::color() const
 {
     return m_color;

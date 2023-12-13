@@ -103,6 +103,8 @@
 #include "tie.h"
 #include "timesig.h"
 #include "tremolo.h"
+#include "tremolotwochord.h"
+#include "tremolosinglechord.h"
 #include "tremolobar.h"
 #include "trill.h"
 #include "tripletfeel.h"
@@ -184,6 +186,8 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
         }
     }
     case ElementType::TREMOLO:           return new TremoloDispatcher(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parent->isChord() ? toChord(parent) : dummy->chord());
+    case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());
     case ElementType::MARKER:            return new Marker(parent);
     case ElementType::JUMP:              return new Jump(parent->isMeasure() ? toMeasure(parent) : dummy->measure());
@@ -279,8 +283,6 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
     case ElementType::ROOT_ITEM:
     case ElementType::FIGURED_BASS_ITEM:
     case ElementType::DUMMY:
-    case ElementType::TREMOLO_SINGLECHORD:
-    case ElementType::TREMOLO_TWOCHORD:
         break;
     }
 
@@ -616,6 +618,10 @@ MAKE_ITEM_IMPL(TimeSig, Segment)
 CREATE_ITEM_IMPL(TremoloDispatcher, ElementType::TREMOLO, Chord, isAccessibleEnabled)
 COPY_ITEM_IMPL(TremoloDispatcher)
 MAKE_ITEM_IMPL(TremoloDispatcher, Chord)
+
+CREATE_ITEM_IMPL(TremoloTwoChord, ElementType::TREMOLO_TWOCHORD, Chord, isAccessibleEnabled)
+
+CREATE_ITEM_IMPL(TremoloSingleChord, ElementType::TREMOLO_SINGLECHORD, Chord, isAccessibleEnabled)
 
 CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(TremoloBar, EngravingItem)

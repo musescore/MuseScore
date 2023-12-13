@@ -33,6 +33,9 @@ namespace mu::engraving {
 class Instrument;
 class RootItem;
 
+class TremoloTwoChord;
+class TremoloSingleChord;
+
 class Factory
 {
 public:
@@ -197,6 +200,10 @@ public:
     static TremoloDispatcher* createTremoloDispatcher(Chord* parent, bool isAccessibleEnabled = true);
     static TremoloDispatcher* copyTremoloDispatcher(const TremoloDispatcher& src);
     static std::shared_ptr<TremoloDispatcher> makeTremoloDispatcher(Chord* parent);
+
+    static TremoloTwoChord* createTremoloTwoChord(Chord* parent, bool isAccessibleEnabled = true);
+
+    static TremoloSingleChord* createTremoloSingleChord(Chord* parent, bool isAccessibleEnabled = true);
 
     static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
     static std::shared_ptr<TremoloBar> makeTremoloBar(EngravingItem* parent);

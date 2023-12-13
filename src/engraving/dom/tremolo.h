@@ -54,6 +54,9 @@ class TremoloDispatcher final : public EngravingItem
 
 public:
 
+    TremoloDispatcher(Chord* parent);
+    TremoloDispatcher(const TremoloDispatcher&);
+
     TremoloDispatcher& operator=(const TremoloDispatcher&) = delete;
     TremoloDispatcher* clone() const override { return new TremoloDispatcher(*this); }
     ~TremoloDispatcher() override;
@@ -133,6 +136,9 @@ public:
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid propertyId) const override;
 
+    void setColor(const mu::draw::Color& c) override;
+    mu::draw::Color color() const override;
+
     const ElementStyle* styledProperties() const override;
     PropertyFlags* propertyFlagsList() const override;
     PropertyFlags propertyFlags(Pid) const override;
@@ -169,13 +175,13 @@ public:
     std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo();
     void setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info);
 
+    TremoloTwoChord* twoChord = nullptr;
+    TremoloSingleChord* singleChord = nullptr;
+
 private:
     friend class Factory;
     friend class TremoloSingleChord;
     friend class TremoloTwoChord;
-
-    TremoloDispatcher(Chord* parent);
-    TremoloDispatcher(const TremoloDispatcher&);
 
     void setParentInternal(EngravingObject* p) override;
     LayoutData* createLayoutData() const override;
@@ -185,8 +191,6 @@ private:
     void setBeamPos(const PairF& bp);
 
     TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;
-    TremoloTwoChord* m_tremoloTwoChord = nullptr;
-    TremoloSingleChord* m_tremoloSingleChord = nullptr;
 };
 } // namespace mu::engraving
 #endif

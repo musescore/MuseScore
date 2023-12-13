@@ -92,6 +92,8 @@
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/trill.h"
+#include "dom/tremolotwochord.h"
+#include "dom/tremolosinglechord.h"
 #include "dom/tuplet.h"
 #include "dom/undo.h"
 #include "dom/utils.h"
@@ -1813,12 +1815,20 @@ bool Read206::readChordProperties206(XmlReader& e, ReadContext& ctx, Chord* ch)
         }
         finalNote->addSpannerBack(gliss);
     } else if (tag == "Tremolo") {
-        TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(ch);
-        tremolo->setTrack(ch->track());
-        read400::TRead::read(tremolo, e, ctx);
-        tremolo->setParent(ch);
-        tremolo->setDurationType(ch->durationType());
-        ch->setTremoloDispatcher(tremolo);
+        read400::TRead::TremoloCompat tcompat;
+        tcompat.parent = ch;
+        read400::TRead::read(tcompat, e, ctx);
+        if (tcompat.two) {
+            tcompat.two->setParent(ch);
+            tcompat.two->setDurationType(ch->durationType());
+            ch->setTremoloDispatcher(tcompat.two->dispatcher(), false);
+        } else if (tcompat.single) {
+            tcompat.single->setParent(ch);
+            tcompat.single->setDurationType(ch->durationType());
+            ch->setTremoloDispatcher(tcompat.single->dispatcher(), false);
+        } else {
+            UNREACHABLE;
+        }
     } else if (tag == "tickOffset") {     // obsolete
     } else if (tag == "ChordLine") {
         ChordLine* cl = Factory::createChordLine(ch);
