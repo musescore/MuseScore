@@ -849,7 +849,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = item->downPos() + 0.5 * item->downNote()->headHeight() + headSideDistance;
                 }
             }
-            if (prevArticulation && (prevArticulation->up() == a->up())) {
+            if (prevArticulation && prevArticulation->visible() && (prevArticulation->up() == a->up())) {
                 int staffBottom = (staffType->lines() - 2) * 2;
                 if ((headSide && item->downLine() < staffBottom) || (!headSide && !RealIsEqualOrMore(y, (staffBottom + 1) * _lineDist))) {
                     y += _spatium;
@@ -904,7 +904,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = item->upPos() - 0.5 * item->downNote()->headHeight() - headSideDistance;
                 }
             }
-            if (prevArticulation && (prevArticulation->up() == a->up())) {
+            if (prevArticulation && prevArticulation->visible() && (prevArticulation->up() == a->up())) {
                 if ((headSide && item->upLine() > 2) || (!headSide && !RealIsEqualOrLess(y, 0.0))) {
                     y -= item->spatium();
                 } else {
