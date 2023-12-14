@@ -50,6 +50,13 @@ StyledDialogView {
         readonly property int buttonsMargin: 24
     }
 
+    onConfirmRequested: {
+        if (partsModel.hasSelection) {
+            partsModel.openSelectedParts()
+            root.hide()
+        }
+    }
+
     Component.onCompleted: {
         partsModel.load()
     }
@@ -104,7 +111,7 @@ StyledDialogView {
                 isLeftSide: true
 
                 onClicked: {
-                    root.hide()
+                    root.rejectRequested()
                 }
             }
 
@@ -127,8 +134,7 @@ StyledDialogView {
                 enabled: partsModel.hasSelection
 
                 onClicked: {
-                    partsModel.openSelectedParts()
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

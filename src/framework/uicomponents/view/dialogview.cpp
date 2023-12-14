@@ -39,6 +39,50 @@ DialogView::DialogView(QQuickItem* parent)
     setClosePolicy(NoAutoClose);
 }
 
+bool DialogView::eventFilter(QObject* watched, QEvent* event)
+{
+    if (event->type() == QEvent::ShortcutOverride) {
+        QKeyEvent* keyEvent = dynamic_cast<QKeyEvent*>(event);
+        if (!keyEvent || !shortcutOverrideIsAllowed()) {
+            return PopupView::eventFilter(watched, event);
+        }
+
+        // Both spontaneous and synthetic events will be received
+        // We intercept both, but only initiate "request" flow on one
+        switch (keyEvent->key()) {
+        case Qt::Key_Enter:
+        case Qt::Key_Return: {
+            if (event->spontaneous()) {
+                emit confirmRequested();
+            }
+            event->accept();
+            return true;
+        }
+        case Qt::Key_Escape: {
+            if (event->spontaneous() && m_closeOnEscape) {
+                emit rejectRequested();
+            }
+            event->accept();
+            return true;
+        }
+        }
+    }
+    return PopupView::eventFilter(watched, event);
+}
+
+bool DialogView::shortcutOverrideIsAllowed() const
+{
+    //! NOTE: We should only override shortcuts if the current window is active.
+    //! There are objects that do not activate focus when opened, for example Dropdowns.
+    //! Therefore, we cannot simply use the current active window inside DialogView::eventFilter.
+    //! Instead, we should ask the navigation system which window has focus:
+    if (ui::INavigationSection* section = navigationController()->activeSection()) {
+        return section->window() == qWindow();
+    }
+
+    return false;
+}
+
 bool DialogView::isDialog() const
 {
     return true;
@@ -167,4 +211,14 @@ void DialogView::reject(int code)
     }
 
     close();
+}
+
+bool DialogView::closeOnEscape()
+{
+    return m_closeOnEscape;
+}
+
+void DialogView::setCloseOnEscape(bool close)
+{
+    m_closeOnEscape = close;
 }

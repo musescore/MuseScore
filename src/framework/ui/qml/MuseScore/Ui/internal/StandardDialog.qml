@@ -59,6 +59,13 @@ StyledDialogView {
 
     margins: 16
 
+    onConfirmRequested: {
+        var accentButton = mainPanel.buttonBox.accentButton()
+        if (accentButton) {
+            accentButton.clicked(undefined)
+        }
+    }
+
     onDetailedTextChanged: {
         if (root.detailedText.length <= 0) {
             return
@@ -101,7 +108,6 @@ StyledDialogView {
                     detailsLoader.active = !detailsLoader.active
                     return
                 }
-
                 root.ret = { "errcode": 0, "value": { "buttonId": buttonId, "showAgain": showAgain }}
                 root.hide()
             }

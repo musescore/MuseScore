@@ -38,6 +38,13 @@ StyledDialogView {
 
     signal mapToEventRequested(var event)
 
+    onConfirmRequested: {
+        if (mappingField.hasText) {
+            root.mapToEventRequested(model.inputtedEvent())
+            root.close()
+        }
+    }
+
     function startEdit(action) {
         model.load(action.mappedType, action.mappedValue)
         actionNameLabel.text = action.title
@@ -121,14 +128,13 @@ StyledDialogView {
                     accentButton: true
 
                     onClicked: {
-                        root.mapToEventRequested(model.inputtedEvent())
-                        root.close()
+                        root.confirmRequested()
                     }
                 }
 
                 onStandardButtonClicked: function(buttonId) {
                     if (buttonId === ButtonBoxModel.Cancel) {
-                        root.reject()
+                        root.rejectRequested()
                     }
                 }
             }

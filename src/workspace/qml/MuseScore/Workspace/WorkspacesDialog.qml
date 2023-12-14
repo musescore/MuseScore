@@ -39,6 +39,15 @@ StyledDialogView {
         id: workspacesModel
     }
 
+    onConfirmRequested: {
+        if (!workspacesModel.apply()) {
+            return
+        }
+
+        root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
+        root.hide()
+    }
+
     Component.onCompleted: {
         workspacesModel.load()
     }
@@ -113,18 +122,13 @@ StyledDialogView {
                 accentButton: true
 
                 onClicked: {
-                    if (!workspacesModel.apply()) {
-                        return
-                    }
-
-                    root.ret = { errcode: 0, value: workspacesModel.selectedWorkspace.name }
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+                    root.rejectRequested()
                 }
             }
         }

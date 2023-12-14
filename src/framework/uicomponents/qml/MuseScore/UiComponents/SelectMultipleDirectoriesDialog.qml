@@ -47,6 +47,11 @@ StyledDialogView {
         readonly property int buttonsMargin: 24
     }
 
+    onConfirmRequested: {
+        root.ret = { errcode: 0, value: directoriesModel.directories() }
+        root.hide()
+    }
+
     Component.onCompleted: {
         directoriesModel.load(root.startDir, root.selectedDirectories)
     }
@@ -110,10 +115,9 @@ StyledDialogView {
 
             onStandardButtonClicked: function(buttonId) {
                 if (buttonId === ButtonBoxModel.Cancel) {
-                    root.reject()
+                    root.rejectRequested()
                 } else if (buttonId === ButtonBoxModel.Ok) {
-                    root.ret = { errcode: 0, value: directoriesModel.directories() }
-                    root.hide()
+                    root.confirmRequested()
                 }
             }
         }

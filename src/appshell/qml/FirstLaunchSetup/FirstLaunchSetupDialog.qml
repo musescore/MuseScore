@@ -42,6 +42,22 @@ StyledDialogView {
         id: model
     }
 
+    onConfirmRequested: {
+        if (model.canFinish) {
+            model.finish()
+            root.hide()
+            return
+        }
+
+        if (Boolean(buttons.lastPressedButton)) {
+            buttons.lastPressedButton.navigation.accessible.ignored = true
+        }
+
+        buttons.lastPressedButton = nextStepButton
+        pageLoader.item.resetFocus()
+        model.currentPageIndex++
+    }
+
     Component.onCompleted: {
         model.load()
     }
@@ -204,19 +220,7 @@ StyledDialogView {
                 }
 
                 onClicked: {
-                    if (model.canFinish) {
-                        model.finish()
-                        root.hide()
-                        return
-                    }
-
-                    if (Boolean(buttons.lastPressedButton)) {
-                        buttons.lastPressedButton.navigation.accessible.ignored = true
-                    }
-
-                    buttons.lastPressedButton = nextStepButton
-                    pageLoader.item.resetFocus()
-                    model.currentPageIndex++
+                    root.confirmRequested()
                 }
             }
         }

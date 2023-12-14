@@ -38,6 +38,15 @@ StyledDialogView {
 
     margins: 22
 
+    onConfirmRequested: {
+        root.ret = { errcode: 0, value: "install" }
+        root.hide()
+    }
+
+    onRejectRequested: {
+        root.ret = { errcode: 0, value: "remindLater" }
+    }
+
     onNavigationActivateRequested: {
         buttons.focusOnFirst()
     }
@@ -119,13 +128,11 @@ StyledDialogView {
             navigationPanel.order: 1
 
             onRemindLaterRequested: {
-                root.ret = { errcode: 0, value: "remindLater" }
-                root.hide()
+                root.rejectRequested()
             }
 
             onInstallRequested: {
-                root.ret = { errcode: 0, value: "install" }
-                root.hide()
+                root.confirmRequested()
             }
 
             onSkipRequested: {
