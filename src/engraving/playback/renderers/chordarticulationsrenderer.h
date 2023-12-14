@@ -38,7 +38,6 @@ public:
 
 private:
     static bool renderChordArticulations(const Chord* chord, const RenderingContext& ctx, mpe::PlaybackEventList& result);
-    static mpe::duration_t tiedNotesTotalDuration(const Note* firstNote, mpe::duration_t firstNoteDuration);
 };
 }
 
