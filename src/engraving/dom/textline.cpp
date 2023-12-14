@@ -251,9 +251,9 @@ engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
     switch (propertyId) {
     case Pid::PLACEMENT:
         if (systemFlag()) {
-            return style().styleV(Sid::textLinePlacement);
-        } else {
             return style().styleV(Sid::systemTextLinePlacement);
+        } else {
+            return style().styleV(Sid::textLinePlacement);
         }
     case Pid::BEGIN_TEXT:
     case Pid::CONTINUE_TEXT:
