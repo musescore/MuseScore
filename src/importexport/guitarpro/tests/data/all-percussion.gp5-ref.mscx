@@ -242,7 +242,7 @@
           </Drum>
         <Drum pitch="57">
           <head>cross</head>
-          <line>-1</line>
+          <line>-3</line>
           <voice>0</voice>
           <name>Crash Cymbal 2</name>
           <stem>1</stem>
