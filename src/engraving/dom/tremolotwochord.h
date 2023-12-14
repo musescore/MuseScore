@@ -152,7 +152,17 @@ public:
     void computeShape();
     //! -----------------
 
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
+    void setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info)
+    {
+        m_layoutInfo = info;
+    }
+
+    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo() const
+    {
+        return m_layoutInfo;
+    }
+
+    std::shared_ptr<rendering::dev::BeamTremoloLayout> m_layoutInfo;
 
     void setDispatcher(TremoloDispatcher* d);
     TremoloDispatcher* dispatcher() const;

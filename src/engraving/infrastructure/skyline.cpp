@@ -29,7 +29,7 @@
 #include "../dom/beam.h"
 #include "../dom/chord.h"
 #include "../dom/stem.h"
-#include "../dom/tremolo.h"
+#include "../dom/tremolotwochord.h"
 
 #include "shape.h"
 
@@ -61,9 +61,9 @@ void Skyline::add(const ShapeElement& r)
         Chord* chord = toStem(item)->chord();
         if (chord) {
             Beam* beam = chord->beam();
-            TremoloDispatcher* tremolo = chord->tremoloDispatcher();
+            TremoloTwoChord* tremolo = chord->tremoloTwoChord();
             bool isCross = (beam && beam->cross())
-                           || (tremolo && tremolo->twoNotes() && tremolo->chord1()->staffMove() != tremolo->chord2()->staffMove());
+                           || (tremolo && tremolo->chord1()->staffMove() != tremolo->chord2()->staffMove());
             if (isCross) {
                 std::vector<ChordRest*> elements;
                 if (beam) {

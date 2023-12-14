@@ -27,6 +27,8 @@
 
 #include "dom/beam.h"
 #include "dom/tremolo.h"
+#include "dom/tremolotwochord.h"
+#include "dom/tremolosinglechord.h"
 #include "dom/chord.h"
 #include "dom/factory.h"
 #include "dom/measure.h"
@@ -44,6 +46,7 @@
 #include "tlayout.h"
 #include "chordlayout.h"
 #include "beamtremololayout.h"
+#include "tremololayout.h"
 
 #include "log.h"
 
@@ -108,8 +111,8 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
 
     // The beam may have changed shape. one-note trems within this beam need to be layed out here
     for (ChordRest* cr : item->elements()) {
-        if (cr->isChord() && toChord(cr)->tremoloDispatcher() && !toChord(cr)->tremoloDispatcher()->twoNotes()) {
-            TLayout::layoutTremolo(toChord(cr)->tremoloDispatcher(), ctx);
+        if (cr->isChord() && toChord(cr)->tremoloSingleChord()) {
+            TremoloLayout::layout(toChord(cr)->tremoloSingleChord(), ctx);
         }
     }
 }
@@ -851,8 +854,8 @@ void BeamLayout::layoutNonCrossBeams(Segment* s, LayoutContext& ctx)
                         continue;
                     }
                     Chord* c = toChord(beamCr);
-                    if (c->tremoloDispatcher() && c->tremoloDispatcher()->twoNotes()) {
-                        TLayout::layoutTremolo(c->tremoloDispatcher(), ctx);
+                    if (c->tremoloTwoChord()) {
+                        TremoloLayout::layout(c->tremoloTwoChord(), ctx);
                     }
                 }
             }
@@ -1558,8 +1561,8 @@ void BeamLayout::setTremAnchors(Beam* item, LayoutContext& ctx)
             continue;
         }
         Chord* c = toChord(cr);
-        TremoloDispatcher* t = c ? c->tremoloDispatcher() : nullptr;
-        if (t && t->twoNotes() && t->chord1() == c && t->chord2()->beam() == item) {
+        TremoloTwoChord* t = c ? c->tremoloTwoChord() : nullptr;
+        if (t && t->chord1() == c && t->chord2()->beam() == item) {
             // there is an inset tremolo here!
             // figure out up / down
             bool tremUp = t->up();

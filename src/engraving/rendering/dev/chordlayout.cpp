@@ -56,6 +56,8 @@
 #include "dom/tie.h"
 #include "dom/slur.h"
 
+#include "dom/tremolotwochord.h"
+
 #include "dom/undo.h"
 #include "dom/utils.h"
 
@@ -63,6 +65,7 @@
 #include "tlayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
+#include "tremololayout.h"
 #include "autoplace.h"
 
 using namespace mu::engraving;
@@ -1267,24 +1270,27 @@ static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
     }
 
     TLayout::layoutBeam(beam, ctx);
-    if (cross && item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes() && item->tremoloDispatcher()->chord1() == item
-        && item->tremoloDispatcher()->chord1()->beam() == item->tremoloDispatcher()->chord2()->beam()) {
+    if (cross
+        && item->tremoloTwoChord()
+        && item->tremoloTwoChord()->chord1() == item
+        && item->tremoloTwoChord()->chord1()->beam() == item->tremoloTwoChord()->chord2()->beam()) {
         // beam-infixed two-note trems have to be laid out here
-        TLayout::layoutTremolo(item->tremoloDispatcher(), ctx);
+        TremoloLayout::layout(item->tremoloTwoChord(), ctx);
     }
+
     if (!cross && !beam->userModified()) {
         item->setUp(beam->up());
     }
 }
 
-static void computeUp_TremoloTwoNotesCase(Chord* item, TremoloDispatcher* tremolo, LayoutContext& ctx)
+static void computeUp_TremoloTwoNotesCase(Chord* item, TremoloTwoChord* tremolo, LayoutContext& ctx)
 {
     Chord* c1 = tremolo->chord1();
     Chord* c2 = tremolo->chord2();
     bool cross = c1->staffMove() != c2->staffMove();
     if (item == c1) {
         // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
-        TLayout::layoutTremolo(tremolo, ctx);
+        TremoloLayout::layout(tremolo, ctx);
     }
     Measure* measure = item->findMeasure();
     if (!cross && !tremolo->userModified()) {
@@ -1353,8 +1359,8 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
     if (item->beam()) {
         computeUp_BeamCase(item, item->beam(), ctx);
         return;
-    } else if (item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes()) {
-        computeUp_TremoloTwoNotesCase(item, item->tremoloDispatcher(), ctx);
+    } else if (item->tremoloTwoChord()) {
+        computeUp_TremoloTwoNotesCase(item, item->tremoloTwoChord(), ctx);
         return;
     }
 

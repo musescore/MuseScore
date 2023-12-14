@@ -2334,7 +2334,7 @@ int Note::ppitch() const
         if (staff && staff->isDrumStaff(tick)) {
             const Drumset* ds = staff->part()->instrument(tick)->drumset();
             if (ds) {
-                DrumInstrumentVariant div = ds->findVariant(m_pitch, ch->articulations(), ch->tremoloDispatcher());
+                DrumInstrumentVariant div = ds->findVariant(m_pitch, ch->articulations(), ch->tremoloType());
                 if (div.pitch != INVALID_PITCH) {
                     return div.pitch;
                 }

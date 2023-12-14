@@ -35,6 +35,7 @@
 #include "dom/hook.h"
 #include "dom/stem.h"
 #include "dom/tremolo.h"
+#include "dom/tremolotwochord.h"
 #include "dom/fretcircle.h"
 #include "dom/tie.h"
 #include "dom/engravingitem.h"
@@ -692,8 +693,8 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         po.ry() += scr->intrinsicMag() * _spatium * offset * __up;
 
         // adjustments for stem and/or beam
-        TremoloDispatcher* trem = sc ? sc->tremoloDispatcher() : nullptr;
-        if (stem1 || (trem && trem->twoNotes())) {     //sc not null
+        TremoloTwoChord* trem = sc ? sc->tremoloTwoChord() : nullptr;
+        if (stem1 || trem) {     //sc not null
             Beam* beam1 = sc->beam();
             if (beam1 && (beam1->elements().back() != sc) && (sc->up() == item->up())) {
                 TLayout::layoutBeam(beam1, ctx);
@@ -717,8 +718,8 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                 // force end of slur to layout to stem as well,
                 // if start and end chords have same stem direction
                 stemPos = true;
-            } else if (trem && trem->twoNotes() && trem->chord2() != sc && sc->up() == item->up()) {
-                TLayout::layoutTremolo(trem, ctx);
+            } else if (trem && trem->chord2() != sc && sc->up() == item->up()) {
+                TremoloLayout::layout(trem, ctx);
                 Note* note = item->up() ? sc->upNote() : sc->downNote();
                 double stemHeight = stem1 ? stem1->length() : defaultStemLengthStart(trem);
                 double offset2 = std::max(beamClearance * sc->intrinsicMag(), minOffset) * _spatium;
@@ -827,8 +828,8 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
             po.ry() += ecr->intrinsicMag() * _spatium * offset2 * __up;
 
             // adjustments for stem and/or beam
-            TremoloDispatcher* trem2 = ec ? ec->tremoloDispatcher() : nullptr;
-            if (stem2 || (trem2 && trem2->twoNotes())) {       //ec can't be null
+            TremoloTwoChord* trem2 = ec ? ec->tremoloTwoChord() : nullptr;
+            if (stem2 || trem2) {       //ec can't be null
                 Beam* beam2 = ec->beam();
                 if ((stemPos && (scr->up() == ec->up()))
                     || (beam2
@@ -837,13 +838,13 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
                         && (ec->up() == item->up())
                         && sc && (sc->noteType() == NoteType::NORMAL)
                         )
-                    || (trem2 && trem2->twoNotes() && ec->up() == item->up())
+                    || (trem2 && ec->up() == item->up())
                     ) {
                     if (beam2) {
                         TLayout::layoutBeam(beam2, ctx);
                     }
                     if (trem2) {
-                        TLayout::layoutTremolo(trem2, ctx);
+                        TremoloLayout::layout(trem2, ctx);
                     }
                     // slur start was laid out to stem and start and end have same direction
                     // OR
@@ -1751,14 +1752,14 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
     }
 }
 
-double SlurTieLayout::defaultStemLengthStart(TremoloDispatcher* tremolo)
+double SlurTieLayout::defaultStemLengthStart(TremoloTwoChord* tremolo)
 {
     return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
                                                             tremolo->chord1()->defaultStemLength(),
                                                             tremolo->chord2()->defaultStemLength()).first;
 }
 
-double SlurTieLayout::defaultStemLengthEnd(TremoloDispatcher* tremolo)
+double SlurTieLayout::defaultStemLengthEnd(TremoloTwoChord* tremolo)
 {
     return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
                                                             tremolo->chord1()->defaultStemLength(),

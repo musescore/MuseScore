@@ -52,6 +52,8 @@
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
 #include "dom/volta.h"
 
@@ -852,13 +854,15 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         }
 
                         // add tremolo to skyline
-                        if (e->isChord() && toChord(e)->tremoloDispatcher()) {
-                            TremoloDispatcher* t = toChord(e)->tremoloDispatcher();
-                            if (!t->twoNotes()) {
+                        if (e->isChord()) {
+                            Chord* ch = item_cast<Chord*>(e);
+                            if (ch->tremoloSingleChord()) {
+                                TremoloSingleChord* t = ch->tremoloSingleChord();
                                 if (t->addToSkyline()) {
                                     skyline.add(t->shape().translate(t->pos() + e->pos() + p));
                                 }
-                            } else {
+                            } else if (ch->tremoloTwoChord()) {
+                                TremoloTwoChord* t = ch->tremoloTwoChord();
                                 Chord* c1 = t->chord1();
                                 Chord* c2 = t->chord2();
                                 if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
@@ -1620,8 +1624,8 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
                         seg.createShape(chord->vStaffIdx());
                     }
-                } else if (chord->tremoloDispatcher() && chord->tremoloDispatcher()->twoNotes()) {
-                    TremoloDispatcher* t = chord->tremoloDispatcher();
+                } else if (chord->tremoloTwoChord()) {
+                    TremoloTwoChord* t = chord->tremoloTwoChord();
                     Chord* c1 = t->chord1();
                     Chord* c2 = t->chord2();
                     if (t->userModified() || (c1->staffMove() != 0 || c2->staffMove() != 0)) {

@@ -36,6 +36,8 @@
 #include "dom/chord.h"
 #include "dom/tuplet.h"
 #include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/part.h"
 #include "dom/box.h"
 
@@ -49,6 +51,7 @@
 #include "arpeggiolayout.h"
 #include "measurelayout.h"
 #include "horizontalspacing.h"
+#include "tremololayout.h"
 
 #include "log.h"
 
@@ -207,12 +210,14 @@ void ScoreHorizontalViewLayout::layoutLinear(LayoutContext& ctx)
                         }
                         ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                         ChordLayout::layoutSpanners(c, ctx);
-                        if (c->tremoloDispatcher()) {
-                            TremoloDispatcher* t = c->tremoloDispatcher();
+                        if (c->tremoloSingleChord()) {
+                            TremoloLayout::layout(c->tremoloSingleChord(), ctx);
+                        } else if (c->tremoloTwoChord()) {
+                            TremoloTwoChord* t = c->tremoloTwoChord();
                             Chord* c1 = t->chord1();
                             Chord* c2 = t->chord2();
-                            if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
-                                TLayout::layoutTremolo(t, ctx);
+                            if (c1 && c2 && (c1->staffMove() || c2->staffMove())) {
+                                TremoloLayout::layout(t, ctx);
                             }
                         }
                     }

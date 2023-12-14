@@ -57,6 +57,8 @@
 #include "system.h"
 #include "tie.h"
 #include "tremolo.h"
+#include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "trill.h"
 #include "tuplet.h"
 #include "undo.h"
@@ -574,9 +576,26 @@ double Chord::rightEdge() const
     return right;
 }
 
-//---------------------------------------------------------
-//   setTremolo
-//---------------------------------------------------------
+TremoloType Chord::tremoloType() const
+{
+    if (tremoloSingleChord()) {
+        return tremoloSingleChord()->tremoloType();
+    } else if (tremoloTwoChord()) {
+        return tremoloTwoChord()->tremoloType();
+    } else {
+        return TremoloType::INVALID_TREMOLO;
+    }
+}
+
+TremoloTwoChord* Chord::tremoloTwoChord() const
+{
+    return m_tremoloDispatcher ? m_tremoloDispatcher->twoChord : nullptr;
+}
+
+TremoloSingleChord* Chord::tremoloSingleChord() const
+{
+    return m_tremoloDispatcher ? m_tremoloDispatcher->singleChord : nullptr;
+}
 
 void Chord::setTremoloDispatcher(TremoloDispatcher* tr, bool applyLogic)
 {

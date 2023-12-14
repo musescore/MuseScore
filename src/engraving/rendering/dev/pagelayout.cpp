@@ -44,6 +44,8 @@
 #include "dom/system.h"
 #include "dom/systemdivider.h"
 #include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
 
 #include "tlayout.h"
@@ -321,17 +323,15 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             }
                             ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                             ChordLayout::layoutSpanners(c, ctx);
-                            if (c->tremoloDispatcher()) {
-                                TremoloDispatcher* t = c->tremoloDispatcher();
-                                if (t->twoNotes()) {
-                                    Chord* c1 = t->chord1();
-                                    Chord* c2 = t->chord2();
-                                    if (c1 && c2 && (c1->staffMove() || c2->staffMove())) {
-                                        // For cross-staff tremolo, vertical justification may have changed
-                                        // staff distances, and therefore also stem directions, so re-compute them
-                                        ChordLayout::computeUp(c1, ctx); // This will also call a tremolo layout
-                                        ChordLayout::computeUp(c2, ctx);
-                                    }
+                            if (c->tremoloTwoChord()) {
+                                TremoloTwoChord* t = c->tremoloTwoChord();
+                                Chord* c1 = t->chord1();
+                                Chord* c2 = t->chord2();
+                                if (c1 && c2 && (c1->staffMove() || c2->staffMove())) {
+                                    // For cross-staff tremolo, vertical justification may have changed
+                                    // staff distances, and therefore also stem directions, so re-compute them
+                                    ChordLayout::computeUp(c1, ctx);     // This will also call a tremolo layout
+                                    ChordLayout::computeUp(c2, ctx);
                                 }
                             }
                             // Fingering and articulations on top of cross-staff beams must be laid out here

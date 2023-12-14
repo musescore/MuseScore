@@ -70,6 +70,8 @@
 #include "tiemap.h"
 #include "timesig.h"
 #include "tremolo.h"
+#include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "tuplet.h"
 #include "tupletmap.h"
 #include "undo.h"
@@ -1988,8 +1990,8 @@ void Measure::connectTremolo()
             }
 
             Chord* c = toChord(e);
-            TremoloDispatcher* tremolo = c->tremoloDispatcher();
-            if (tremolo && tremolo->twoNotes()) {
+            TremoloTwoChord* tremolo = c->tremoloTwoChord();
+            if (tremolo) {
                 // Ensure correct duration type for chord
                 c->setDurationType(tremolo->durationType());
 
@@ -2009,7 +2011,7 @@ void Measure::connectTremolo()
                         }
                         Chord* nc = toChord(element);
                         tremolo->setChords(c, nc);
-                        nc->setTremoloDispatcher(tremolo);
+                        nc->setTremoloDispatcher(tremolo->dispatcher());
                         break;
                     }
                 }
@@ -2018,7 +2020,7 @@ void Measure::connectTremolo()
                     // this is an invalid tremolo! a continued tremolo was started on one note without a valid next note in that measure
                     // remove the tremolo entirely
                     c->setTremoloDispatcher(nullptr);
-                    score()->removeElement(tremolo);
+                    score()->removeElement(tremolo->dispatcher());
                 }
             }
         }

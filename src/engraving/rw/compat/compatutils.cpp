@@ -558,9 +558,9 @@ void CompatUtils::resetStemLengthsForTwoNoteTrems(MasterScore* masterScore)
                         continue;
                     }
                     Chord* chord = toChord(item);
-                    TremoloDispatcher* trem = chord->tremoloDispatcher();
+                    TremoloTwoChord* trem = chord->tremoloTwoChord();
                     Stem* stem = chord->stem();
-                    if (stem && trem && trem->twoNotes()) {
+                    if (stem && trem) {
                         if (stem->userLength() != Millimetre(0)) {
                             stem->setUserLength(Millimetre(0));
                         }
