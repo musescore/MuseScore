@@ -1228,6 +1228,7 @@ void Excerpt::cloneStaff(Staff* srcStaff, Staff* dstStaff, bool cloneSpanners)
                     DeleteAll(ncr->lyrics());
                     ncr->lyrics().clear();
 
+                    ncr->checkStaffMoveValidity();
                     // creating copy for iteration, cause seg->annotations() may change during loop
                     const std::vector<EngravingItem*> iterableAnnotations = seg->annotations();
 
