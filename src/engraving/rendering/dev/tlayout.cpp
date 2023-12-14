@@ -741,23 +741,10 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         case ArpeggioType::NORMAL:
         case ArpeggioType::UP:
         case ArpeggioType::DOWN: {
-            // if the top is in the staff on a space, move it up
-            // if the bottom note is on a line, the distance is 0.25 spaces
-            // if the bottom note is on a space, the distance is 0.5 spaces
-            int topNoteLine = item->chord()->upNote()->line();
-            int lines = item->staff()->lines(item->tick());
-            int bottomLine = (lines - 1) * 2;
-            if (topNoteLine <= 0 || topNoteLine % 2 == 0 || topNoteLine >= bottomLine) {
-                return top;
-            }
-            int downNoteLine = item->chord()->downNote()->line();
-            if (downNoteLine % 2 == 1 && downNoteLine < bottomLine) {
-                return top - 0.4 * item->spatium();
-            }
-            return top - 0.25 * item->spatium();
+            return top - item->spatium() / 6;
         }
         default: {
-            return top - item->spatium() / 4;
+            return top - item->spatium() / 2;
         }
         }
     };
@@ -775,7 +762,7 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         case ArpeggioType::NORMAL:
         case ArpeggioType::UP:
         case ArpeggioType::DOWN: {
-            return bottom;
+            return bottom + item->spatium() / 6;
         }
         default: {
             return bottom - top + item->spatium() / 2;
@@ -810,21 +797,27 @@ void TLayout::layoutArpeggio(const Arpeggio* item, Arpeggio::LayoutData* ldata, 
         symbolLine(font, ldata, SymId::wiggleArpeggiatoUp, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
         ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
-        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+        double diff = (ldata->symsBBox.width() - (ldata->bottom - ldata->top));
+        ldata->top -= diff / 2;
+        ldata->setBbox(RectF(0.0, ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
     } break;
 
     case ArpeggioType::UP: {
         symbolLine(font, ldata, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated -90 degrees
         ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
-        ldata->setBbox(RectF(0.0, -ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+        double diff = (ldata->symsBBox.width() - (ldata->bottom - ldata->top));
+        ldata->top -= diff / 2;
+        ldata->setBbox(RectF(0.0, ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
     } break;
 
     case ArpeggioType::DOWN: {
         symbolLine(font, ldata, SymId::wiggleArpeggiatoUpArrow, SymId::wiggleArpeggiatoUp);
         // string is rotated +90 degrees (so that UpArrow turns into a DownArrow)
         ldata->symsBBox = font->bbox(ldata->symbols, ldata->magS);
-        ldata->setBbox(RectF(0.0, ldata->symsBBox.x() + ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
+        double diff = (ldata->symsBBox.width() - (ldata->bottom - ldata->top));
+        ldata->top -= diff / 2;
+        ldata->setBbox(RectF(0.0, ldata->top, ldata->symsBBox.height(), ldata->symsBBox.width()));
     } break;
 
     case ArpeggioType::UP_STRAIGHT: {
