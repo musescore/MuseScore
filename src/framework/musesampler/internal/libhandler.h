@@ -371,8 +371,7 @@ public:
                 addNoteEvent
                     = [this](ms_MuseSampler ms, ms_Track track, int voice, long long location_us, long long duration_us, int pitch,
                              double tempo, int offset_cents, ms_NoteArticulation articulation, long long& event_id) {
-                    ms_NoteEvent_3 evt{ voice, static_cast<long>(location_us), static_cast<long>(duration_us), pitch, tempo, offset_cents,
-                                        articulation };
+                    ms_NoteEvent_3 evt{ voice, location_us, duration_us, pitch, tempo, offset_cents, articulation };
                     return addNoteEventInternal4(ms, track, evt, event_id) == ms_Result_OK;
                 };
             }
