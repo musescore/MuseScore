@@ -1661,6 +1661,75 @@ TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up)
 }
 
 /**
+ * @brief Chord_Arpeggio_TiedNotes
+ * @details In this case we're gonna render a simple piece of score with 3 measures,
+ *          which starts with the B4+D5 half chord marked by the Arpeggio Up articulation
+ *          Check that Arpeggio gets extended by tied notes
+ */
+TEST_F(Engraving_PlaybackEventsRendererTests, Chord_Arpeggio_Up_TiedNotes)
+{
+    // [GIVEN] Simple piece of score (piano, 4/4, 120 bpm, Treble Cleff)
+    Score* score = ScoreRW::readScore(PLAYBACK_EVENTS_RENDERING_DIR + "chord_arpeggio_with_tied_notes/chord_arpeggio_with_tied_notes.mscx");
+
+    Measure* firstMeasure = score->firstMeasure();
+    ASSERT_TRUE(firstMeasure);
+
+    Segment* firstSegment = firstMeasure->segments().firstCRSegment();
+    ASSERT_TRUE(firstSegment);
+
+    ChordRest* chord = firstSegment->nextChordRest(0);
+    ASSERT_TRUE(chord);
+
+    // [GIVEN] Expected disclosure
+    int expectedSubNotesCount = 2;
+    int expectedOffset = 60000;
+
+    std::vector<timestamp_t> expectedTimestamp = {
+        0,
+        expectedOffset,
+    };
+
+    std::vector<duration_t> expectedDurations = {
+        HALF_NOTE_DURATION* 3, // + 2 tied notes
+        HALF_NOTE_DURATION* 3 - expectedOffset, // + 2 tied notes
+    };
+
+    std::vector<pitch_level_t> expectedPitches = {
+        pitchLevel(PitchClass::B, 4),
+        pitchLevel(PitchClass::D, 5),
+    };
+
+    // [GIVEN] Fulfill articulations profile with dummy patterns
+    m_defaultProfile->setPattern(ArticulationType::ArpeggioUp, m_dummyPattern);
+
+    // [WHEN] Request to render a chord
+    PlaybackEventsMap result;
+    m_renderer.render(chord, dynamicLevelFromType(mu::mpe::DynamicType::Natural),
+                      ArticulationType::Standard, m_defaultProfile, result);
+
+    for (const auto& pair : result) {
+        // [THEN] We expect that rendered note events number will match expectations
+        EXPECT_EQ(pair.second.size(), expectedSubNotesCount);
+
+        for (size_t i = 0; i < pair.second.size(); ++i) {
+            const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(pair.second.at(i));
+
+            // [THEN] We expect that each note event has only one articulation applied
+            EXPECT_EQ(noteEvent.expressionCtx().articulations.size(), 1);
+            EXPECT_TRUE(noteEvent.expressionCtx().articulations.contains(ArticulationType::ArpeggioUp));
+
+            // [THEN] We expect that each sub-note has expected duration
+            // [THEN] We expect that each sub-note has expected timestamp and duration
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalTimestamp, expectedTimestamp.at(i));
+            EXPECT_EQ(noteEvent.arrangementCtx().nominalDuration, expectedDurations.at(i));
+
+            // [THEN] We expect that each note event will match expected pitch disclosure
+            EXPECT_EQ(noteEvent.pitchCtx().nominalPitchLevel, expectedPitches.at(i));
+        }
+    }
+}
+
+/**
  * @brief PlaybackEventsRendererTests_Chord_Arpeggio_Down
  * @details In this case we're gonna render a simple piece of score with a single measure,
  *          which starts with the F4+A4+C4 quarter chord marked by the Arpeggio Down articulation

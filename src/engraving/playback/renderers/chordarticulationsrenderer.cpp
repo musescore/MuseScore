@@ -126,7 +126,7 @@ void ChordArticulationsRenderer::renderNote(const Chord* chord, const Note* note
     NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
 
     if (note->tieFor()) {
-        noteCtx.duration = tiedNotesTotalDuration(note, noteCtx.duration);
+        noteCtx.duration = tiedNotesTotalDuration(note->score(), note, noteCtx.duration);
         applySwingToNoteCtx(noteCtx);
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
         return;
@@ -145,23 +145,4 @@ void ChordArticulationsRenderer::renderNote(const Chord* chord, const Note* note
     }
 
     result.emplace_back(buildNoteEvent(std::move(noteCtx)));
-}
-
-duration_t ChordArticulationsRenderer::tiedNotesTotalDuration(const Note* firstNote, duration_t firstNoteDuration)
-{
-    //! NOTE: calculate the duration from the 2nd note, since the duration of the 1st note is already known
-    const Note* secondNote = firstNote->tieFor()->endNote();
-    IF_ASSERT_FAILED(secondNote) {
-        return firstNoteDuration;
-    }
-
-    int startTick = secondNote->tick().ticks();
-
-    const Note* lastNote = firstNote->lastTiedNote();
-
-    int endTick = lastNote
-                  ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()
-                  : startTick + secondNote->chord()->actualTicks().ticks();
-
-    return firstNoteDuration + durationFromStartAndEndTick(firstNote->score(), startTick, endTick);
 }
