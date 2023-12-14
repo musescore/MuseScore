@@ -38,10 +38,9 @@ using namespace mu::engraving::rendering::dev;
 
 void TremoloLayout::layout(TremoloDispatcher* item, LayoutContext& ctx)
 {
-    if (!item->twoNotes()) {
-        item->computeShape(); // set bbox
-        item->setPath(item->basePath());
-    }
+    //! NOTE For Two Chord Tremolo path used for palette
+    item->computeShape();     // set bbox
+    item->setPath(item->basePath());
 
     item->setChord1(toChord(item->explicitParent()));
     if (!item->chord1()) {

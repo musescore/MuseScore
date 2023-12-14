@@ -139,11 +139,43 @@ void TremoloDispatcher::setTremoloType(TremoloType t)
 void TremoloDispatcher::setParent(Chord* ch)
 {
     EngravingItem::setParent(ch);
+}
+
+void TremoloDispatcher::setParentInternal(EngravingObject* p)
+{
+    EngravingItem::setParentInternal(p);
 
     if (twoNotes()) {
-        m_tremoloTwoChord->setParent(ch);
+        m_tremoloTwoChord->setParent(p);
     } else {
-        m_tremoloSingleChord->setParent(ch);
+        m_tremoloSingleChord->setParent(p);
+    }
+}
+
+EngravingItem::LayoutData* TremoloDispatcher::createLayoutData() const
+{
+    if (twoNotes()) {
+        return m_tremoloTwoChord->createLayoutData();
+    } else {
+        return m_tremoloSingleChord->createLayoutData();
+    }
+}
+
+const EngravingItem::LayoutData* TremoloDispatcher::ldataInternal() const
+{
+    if (twoNotes()) {
+        return m_tremoloTwoChord->ldataInternal();
+    } else {
+        return m_tremoloSingleChord->ldataInternal();
+    }
+}
+
+EngravingItem::LayoutData* TremoloDispatcher::mutldataInternal()
+{
+    if (twoNotes()) {
+        return m_tremoloTwoChord->mutldataInternal();
+    } else {
+        return m_tremoloSingleChord->mutldataInternal();
     }
 }
 
@@ -264,8 +296,7 @@ void TremoloDispatcher::styleChanged()
 PainterPath TremoloDispatcher::basePath(double stretch) const
 {
     if (twoNotes()) {
-        UNREACHABLE;
-        return PainterPath();
+        return m_tremoloTwoChord->basePath(stretch);
     } else {
         return m_tremoloSingleChord->basePath(stretch);
     }
@@ -274,9 +305,7 @@ PainterPath TremoloDispatcher::basePath(double stretch) const
 const mu::draw::PainterPath& TremoloDispatcher::path() const
 {
     if (twoNotes()) {
-        UNREACHABLE;
-        static mu::draw::PainterPath path;
-        return path;
+        return m_tremoloTwoChord->path();
     } else {
         return m_tremoloSingleChord->path();
     }
@@ -285,7 +314,7 @@ const mu::draw::PainterPath& TremoloDispatcher::path() const
 void TremoloDispatcher::setPath(const mu::draw::PainterPath& p)
 {
     if (twoNotes()) {
-        UNREACHABLE;
+        m_tremoloTwoChord->setPath(p);
     } else {
         m_tremoloSingleChord->setPath(p);
     }
@@ -359,10 +388,11 @@ void TremoloDispatcher::setEndAnchor(const mu::PointF& p)
 
 void TremoloDispatcher::computeShape()
 {
-    if (!twoNotes()) {
+    if (twoNotes()) {
+        //! NOTE used for palette
+        m_tremoloTwoChord->computeShape();
+    } else {
         m_tremoloSingleChord->computeShape();
-        RectF bbox = m_tremoloSingleChord->ldata()->bbox();
-        setbbox(bbox);
     }
 }
 
@@ -808,6 +838,8 @@ PropertyValue TremoloDispatcher::getProperty(Pid propertyId) const
 
 bool TremoloDispatcher::setProperty(Pid propertyId, const PropertyValue& val)
 {
+    EngravingItem::setProperty(propertyId, val);
+
     if (twoNotes()) {
         return m_tremoloTwoChord->setProperty(propertyId, val);
     } else {

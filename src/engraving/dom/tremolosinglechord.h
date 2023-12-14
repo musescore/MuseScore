@@ -49,7 +49,6 @@ public:
     ~TremoloSingleChord() override;
 
     Chord* chord() const { return toChord(explicitParent()); }
-    void setParent(Chord* ch);
 
     int subtype() const override { return static_cast<int>(m_tremoloType); }
     TranslatableString subtypeUserName() const override;
