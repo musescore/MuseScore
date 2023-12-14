@@ -166,6 +166,8 @@ public:
     bool isMarcato() const { return m_categories & ArticulationCategory::MARCATO; }
     bool isLuteFingering() { return m_categories & ArticulationCategory::LUTE_FINGERING; }
 
+    bool leaveSpaveForTie() const;
+
     bool isBasicArticulation() const;
 
     void styleChanged() override;

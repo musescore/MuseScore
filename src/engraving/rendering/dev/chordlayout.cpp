@@ -733,6 +733,8 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);
     const double stemSideDistance = ctx.conf().styleMM(Sid::propertyDistanceStem) * mag;
     const double headSideDistance = ctx.conf().styleMM(Sid::propertyDistanceHead) * mag;
+    const double tenutoAdditionalTieDistance = 0.6 * _spatium;
+    const double staccatoAdditionalTieDistance = 0.4 * _spatium;
 
     int numCloseArtics = 0;
     bool hasStaffArticsUp = false;
@@ -783,6 +785,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
         bool bottom = !a->up();      // true: articulation is below chord;  false: articulation is above chord
         TLayout::layoutItem(a, ctx);     // must be done after assigning direction, or else symId is not reliable
+        bool leaveSpaceForTie = a->leaveSpaveForTie();
 
         bool headSide = bottom == item->up();
         double y = 0.0;
@@ -848,10 +851,16 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line = std::max(line, lines - (3 + ((numCloseArtics - 1) * 2)));
                 }
                 if (line < lines - 1) {
+                    if (leaveSpaceForTie && line % 2) {
+                        line += 1;
+                    }
                     y = ((line & ~1) + 3) * _lineDist;
                     y -= a->height() * .5;
                 } else {
                     y = item->downPos() + 0.5 * item->downNote()->headHeight() + headSideDistance;
+                    if (leaveSpaceForTie) {
+                        y += a->isStaccato() ? staccatoAdditionalTieDistance : tenutoAdditionalTieDistance;
+                    }
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
@@ -903,10 +912,16 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line = std::min(line, 3 + ((numCloseArtics - 1) * 2));
                 }
                 if (line > 1) {
+                    if (leaveSpaceForTie && line % 2) {
+                        line -= 1;
+                    }
                     y = (((line + 1) & ~1) - 3) * _lineDist;
                     y += a->height() * .5;
                 } else {
                     y = item->upPos() - 0.5 * item->downNote()->headHeight() - headSideDistance;
+                    if (leaveSpaceForTie) {
+                        y -= a->isStaccato() ? staccatoAdditionalTieDistance : tenutoAdditionalTieDistance;
+                    }
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {

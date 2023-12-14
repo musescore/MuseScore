@@ -912,8 +912,6 @@ void TLayout::fillArticulationShape(const Articulation* item, Articulation::Layo
     }
 }
 
-
-
 static double barLineWidth(const BarLine* item, const MStyle& style, double dotWidth)
 {
     double w = 0.0;
