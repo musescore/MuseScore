@@ -659,6 +659,8 @@ protected:
 #endif
 
     virtual LayoutData* createLayoutData() const;
+    virtual const LayoutData* ldataInternal() const;
+    virtual LayoutData* mutldataInternal();
 
     mutable int m_z = 0;
     mu::draw::Color m_color;                // element color attribute

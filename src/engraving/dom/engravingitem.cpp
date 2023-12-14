@@ -2399,6 +2399,16 @@ EngravingItem::LayoutData* EngravingItem::createLayoutData() const
 
 const EngravingItem::LayoutData* EngravingItem::ldata() const
 {
+    return ldataInternal();
+}
+
+EngravingItem::LayoutData* EngravingItem::mutldata()
+{
+    return mutldataInternal();
+}
+
+const EngravingItem::LayoutData* EngravingItem::ldataInternal() const
+{
     if (!m_layoutData) {
         m_layoutData = createLayoutData();
         m_layoutData->m_item = this;
@@ -2406,7 +2416,7 @@ const EngravingItem::LayoutData* EngravingItem::ldata() const
     return m_layoutData;
 }
 
-EngravingItem::LayoutData* EngravingItem::mutldata()
+EngravingItem::LayoutData* EngravingItem::mutldataInternal()
 {
     if (!m_layoutData) {
         m_layoutData = createLayoutData();

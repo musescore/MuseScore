@@ -49,7 +49,6 @@ public:
     ~TremoloTwoChord() override;
 
     Chord* chord() const { return toChord(explicitParent()); }
-    void setParent(Chord* ch);
 
     int subtype() const override { return static_cast<int>(m_tremoloType); }
     TranslatableString subtypeUserName() const override;
@@ -146,6 +145,13 @@ public:
     std::vector<BeamSegment*>& beamSegments() { return m_beamSegments; }
     void clearBeamSegments();
 
+    //! NOTE for palettes
+    mu::draw::PainterPath basePath(double stretch = 0) const;
+    const mu::draw::PainterPath& path() const { return m_path; }
+    void setPath(const mu::draw::PainterPath& p) { m_path = p; }
+    void computeShape();
+    //! -----------------
+
     std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
     TremoloDispatcher* dispatcher = nullptr;
@@ -179,6 +185,9 @@ private:
     // we will want a vector of fragments similar to Beam's _beamFragments structure.
     // for now, a single fragment is sufficient
     BeamFragment m_beamFragment;
+
+    //! NOTE for palette
+    PainterPath m_path;
 };
 } // namespace mu::engraving
 #endif

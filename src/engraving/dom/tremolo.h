@@ -177,6 +177,11 @@ private:
     TremoloDispatcher(Chord* parent);
     TremoloDispatcher(const TremoloDispatcher&);
 
+    void setParentInternal(EngravingObject* p) override;
+    LayoutData* createLayoutData() const override;
+    const LayoutData* ldataInternal() const override;
+    LayoutData* mutldataInternal() override;
+
     void setBeamPos(const PairF& bp);
 
     TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;

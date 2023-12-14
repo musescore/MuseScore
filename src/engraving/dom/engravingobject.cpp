@@ -259,6 +259,11 @@ EngravingObject* EngravingObject::explicitParent() const
 
 void EngravingObject::setParent(EngravingObject* p)
 {
+    setParentInternal(p);
+}
+
+void EngravingObject::setParentInternal(EngravingObject* p)
+{
     IF_ASSERT_FAILED(this != p) {
         return;
     }

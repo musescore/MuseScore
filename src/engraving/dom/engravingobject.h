@@ -284,6 +284,7 @@ public:
     void setLinks(LinkedObjects* le);
 
 protected:
+    virtual void setParentInternal(EngravingObject* p);
     virtual int getPropertyFlagsIdx(Pid id) const;
 
     //! NOTE For compatibility reasons, hope, we will remove the need for this method.

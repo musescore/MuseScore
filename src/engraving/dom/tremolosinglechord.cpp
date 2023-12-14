@@ -71,11 +71,6 @@ TremoloSingleChord::~TremoloSingleChord()
     }
 }
 
-void TremoloSingleChord::setParent(Chord* ch)
-{
-    EngravingItem::setParent(ch);
-}
-
 double TremoloSingleChord::chordMag() const
 {
     return explicitParent() ? toChord(explicitParent())->intrinsicMag() : 1.0;

@@ -2389,7 +2389,7 @@ void SingleDraw::draw(const TremoloDispatcher* item, Painter* painter)
     if (item->isBuzzRoll()) {
         painter->setPen(item->curColor());
         item->drawSymbol(SymId::buzzRoll, painter);
-    } else if (!item->twoNotes()) {
+    } else if (!item->twoNotes() || !item->explicitParent()) {
         painter->setBrush(Brush(item->curColor()));
         painter->setNoPen();
         painter->drawPath(item->path());

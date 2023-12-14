@@ -93,11 +93,6 @@ TremoloTwoChord::~TremoloTwoChord()
     clearBeamSegments();
 }
 
-void TremoloTwoChord::setParent(Chord* ch)
-{
-    EngravingItem::setParent(ch);
-}
-
 //---------------------------------------------------------
 //   chordMag
 //---------------------------------------------------------
@@ -591,5 +586,69 @@ void TremoloTwoChord::clearBeamSegments()
 
     DeleteAll(m_beamSegments);
     m_beamSegments.clear();
+}
+
+// used for palettes
+PainterPath TremoloTwoChord::basePath(double stretch) const
+{
+    if (isBuzzRoll()) {
+        return PainterPath();
+    }
+    bool tradAlternate = twoNotes() && m_style == TremoloStyle::TRADITIONAL_ALTERNATE;
+    if (tradAlternate && RealIsEqual(stretch, 0.)) {
+        // this shape will have to be constructed after the stretch
+        // is known
+        return PainterPath();
+    }
+
+    // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
+    static constexpr double stemGapSp = 0.65;
+
+    const double sp = spatium() * chordMag();
+
+    // overall width of two-note tremolos should not be changed if chordMag() isn't 1.0
+    double w2  = sp * style().styleS(Sid::tremoloWidth).val() * .5 / (twoNotes() ? chordMag() : 1.0);
+    double lw  = sp * style().styleS(Sid::tremoloStrokeWidth).val();
+    double td  = sp * style().styleS(Sid::tremoloDistance).val();
+
+    PainterPath ppath;
+
+    // first line
+    ppath.addRect(-w2, 0.0, 2.0 * w2, lw);
+    double ty = td;
+
+    // other lines
+    for (int i = 1; i < m_lines; i++) {
+        if (tradAlternate) {
+            double stemWidth1 = m_chord1->stem()->lineWidthMag() / stretch;
+            double stemWidth2 = m_chord2->stem()->lineWidthMag() / stretch;
+            double inset = (stemGapSp * spatium()) / stretch;
+
+            ppath.addRect(-w2 + inset + stemWidth1, ty,
+                          2.0 * w2 - (inset * 2.) - (stemWidth2 + stemWidth1), lw);
+        } else {
+            ppath.addRect(-w2, ty, 2.0 * w2, lw);
+        }
+        ty += td;
+    }
+
+    if (!explicitParent() || !twoNotes()) {
+        // for the palette or for one-note tremolos
+        Transform shearTransform;
+        shearTransform.shear(0.0, -(lw / 2.0) / w2);
+        ppath = shearTransform.map(ppath);
+    }
+
+    return ppath;
+}
+
+void TremoloTwoChord::computeShape()
+{
+    if (isBuzzRoll()) {
+        setbbox(symBbox(SymId::buzzRoll));
+    } else {
+        m_path = basePath();
+        setbbox(m_path.boundingRect());
+    }
 }
 }
