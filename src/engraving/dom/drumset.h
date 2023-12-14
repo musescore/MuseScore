@@ -31,7 +31,6 @@ namespace mu::engraving {
 class XmlWriter;
 class XmlReader;
 class Articulation;
-class TremoloDispatcher;
 
 struct DrumInstrumentVariant {
     int pitch = INVALID_PITCH;
@@ -96,7 +95,7 @@ public:
     int prevPitch(int) const;
     DrumInstrument& drum(int i) { return m_drum[i]; }
     const DrumInstrument& drum(int i) const { return m_drum[i]; }
-    DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*>& articulations, TremoloDispatcher* tremolo) const;
+    DrumInstrumentVariant findVariant(int pitch, const std::vector<Articulation*>& articulations, TremoloType tremType) const;
 
 private:
 

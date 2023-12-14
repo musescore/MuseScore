@@ -36,6 +36,7 @@
 #include "stem.h"
 #include "system.h"
 #include "tie.h"
+#include "tremolotwochord.h"
 #include "undo.h"
 
 #include "log.h"
@@ -972,8 +973,8 @@ bool Slur::stemSideForBeam(bool start)
     }
 
     bool adjustForTrem = false;
-    TremoloDispatcher* trem = c ? c->tremoloDispatcher() : nullptr;
-    adjustForTrem = trem && trem->twoNotes() && trem->up() == up();
+    TremoloTwoChord* trem = c ? c->tremoloTwoChord() : nullptr;
+    adjustForTrem = trem && trem->up() == up();
     if (start) {
         adjustForTrem = adjustForTrem && trem->chord2() != c;
     } else {

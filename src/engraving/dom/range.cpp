@@ -37,6 +37,8 @@
 #include "staff.h"
 #include "tie.h"
 #include "tremolo.h"
+#include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "tuplet.h"
 #include "utils.h"
 
@@ -571,11 +573,11 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         remains  -= gd;
 
                         if (cr->isChord()) {
-                            if (!firstpart && toChord(cr)->tremoloDispatcher() && toChord(cr)->tremoloDispatcher()->twoNotes()) {               // remove partial two-note tremolo
-                                if (toChord(e)->tremoloDispatcher()->chord1() == toChord(e)) {
-                                    toChord(cr)->tremoloDispatcher()->setChords(toChord(cr), nullptr);
+                            if (!firstpart && toChord(cr)->tremoloTwoChord()) {               // remove partial two-note tremolo
+                                if (toChord(e)->tremoloTwoChord()->chord1() == toChord(e)) {
+                                    toChord(cr)->tremoloTwoChord()->setChords(toChord(cr), nullptr);
                                 } else {
-                                    toChord(cr)->tremoloDispatcher()->setChords(nullptr, toChord(cr));
+                                    toChord(cr)->tremoloTwoChord()->setChords(nullptr, toChord(cr));
                                 }
                                 TremoloDispatcher* tremoloPointer = toChord(cr)->tremoloDispatcher();
                                 toChord(cr)->setTremoloDispatcher(nullptr);

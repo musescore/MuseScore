@@ -123,7 +123,7 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
     int twoNoteTremoloFactor = 1;
     if (cr->isChord()) {
         transposeChord(toChord(cr), tick);
-        if (toChord(cr)->tremoloDispatcher() && toChord(cr)->tremoloDispatcher()->twoNotes()) {
+        if (toChord(cr)->tremoloTwoChord()) {
             twoNoteTremoloFactor = 2;
         } else if (cr->durationTypeTicks() == (cr->actualTicksAt(tick) * 2)) {
             // this could be the 2nd note of a two-note tremolo
@@ -132,8 +132,8 @@ void Score::pasteChordRest(ChordRest* cr, const Fraction& t)
             ChordRest* crt = seg->nextChordRest(cr->track(), true);
             if (crt && crt->isChord()) {
                 Chord* chrt = toChord(crt);
-                TremoloDispatcher* tr = chrt->tremoloDispatcher();
-                if (tr && tr->twoNotes()) {
+                TremoloTwoChord* tr = chrt->tremoloTwoChord();
+                if (tr) {
                     twoNoteTremoloFactor = 2;
                 }
             }

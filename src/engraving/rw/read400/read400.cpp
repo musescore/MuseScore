@@ -46,6 +46,7 @@
 #include "dom/dynamic.h"
 #include "dom/hairpin.h"
 #include "dom/figuredbass.h"
+#include "dom/tremolotwochord.h"
 
 #include "staffrw.h"
 #include "tread.h"
@@ -472,8 +473,8 @@ bool Read400::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                             // disallow tie across barline within two-note tremolo
                             // tremolos can potentially still straddle the barline if no tie is required
                             // but these will be removed later
-                            TremoloDispatcher* t = chord->tremoloDispatcher();
-                            if (t && t->twoNotes()) {
+                            TremoloTwoChord* t = chord->tremoloTwoChord();
+                            if (t) {
                                 if (doScale) {
                                     Fraction d = t->durationType().ticks();
                                     t->setDurationType(d * scale);

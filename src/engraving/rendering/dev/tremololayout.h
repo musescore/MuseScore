@@ -28,6 +28,8 @@
 
 namespace mu::engraving {
 class TremoloDispatcher;
+class TremoloTwoChord;
+class TremoloSingleChord;
 }
 
 namespace mu::engraving::rendering::dev {
@@ -36,13 +38,15 @@ class TremoloLayout
 public:
 
     static void layout(TremoloDispatcher* item, LayoutContext& ctx);
+    static void layout(TremoloTwoChord* item, LayoutContext& ctx);
+    static void layout(TremoloSingleChord* item, LayoutContext& ctx);
 
-    static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(TremoloDispatcher* tremolo, double stemLen1, double stemLen2);
+    static std::pair<double, double> extendedStemLenWithTwoNoteTremolo(TremoloTwoChord* tremolo, double stemLen1, double stemLen2);
 
-    static void createBeamSegments(TremoloDispatcher* item, LayoutContext& ctx);
+    static void createBeamSegments(TremoloTwoChord* item, LayoutContext& ctx);
 private:
-    static void layoutOneNoteTremolo(TremoloDispatcher* item, LayoutContext& ctx, double x, double y, double h, double spatium);
-    static void layoutTwoNotesTremolo(TremoloDispatcher* item, LayoutContext& ctx, double x, double y, double h, double spatium);
+    static void layoutOneNoteTremolo(TremoloSingleChord* item, LayoutContext& ctx, double x, double y, double h, double spatium);
+    static void layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& ctx, double x, double y, double h, double spatium);
 };
 }
 

@@ -40,6 +40,7 @@
 #include "staff.h"
 #include "system.h"
 #include "tremolo.h"
+#include "tremolotwochord.h"
 #include "tuplet.h"
 
 #include "log.h"
@@ -900,7 +901,7 @@ Shape BeamSegment::shape() const
     PointF endPoint = line.p2();
     double _beamWidth = parentElement->isBeam()
                         ? toBeam(parentElement)->m_beamWidth
-                        : item_cast<const TremoloDispatcher*>(parentElement)->beamWidth();
+                        : item_cast<const TremoloDispatcher*>(parentElement)->twoChord->beamWidth();
     // This is the case of right-beamlets
     if (startPoint.x() > endPoint.x()) {
         std::swap(startPoint, endPoint);

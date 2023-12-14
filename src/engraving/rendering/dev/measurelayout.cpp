@@ -44,6 +44,8 @@
 #include "dom/system.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/trill.h"
 #include "dom/undo.h"
 #include "dom/utils.h"
@@ -55,6 +57,7 @@
 #include "chordlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
+#include "tremololayout.h"
 
 #include "log.h"
 
@@ -1510,29 +1513,30 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 e->mutldata()->setPosX(0);
             } else if (e->isChord()) {
                 Chord* c = toChord(e);
-                if (c->tremoloDispatcher()) {
-                    TremoloDispatcher* tr = c->tremoloDispatcher();
-                    if (!tr->twoNotes()) {
-                        TLayout::layoutTremolo(tr, ctx);
-                    } else {
-                        Chord* c1 = tr->chord1();
-                        Chord* c2 = tr->chord2();
-                        if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
-                            TLayout::layoutTremolo(tr, ctx);
-                        }
+                if (c->tremoloSingleChord()) {
+                    TremoloLayout::layout(c->tremoloSingleChord(), ctx);
+                }
+
+                if (c->tremoloTwoChord()) {
+                    TremoloTwoChord* tr = c->tremoloTwoChord();
+                    Chord* c1 = tr->chord1();
+                    Chord* c2 = tr->chord2();
+                    if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
+                        TremoloLayout::layout(tr, ctx);
                     }
                 }
+
                 for (Chord* g : c->graceNotes()) {
-                    if (g->tremoloDispatcher()) {
-                        TremoloDispatcher* tr = g->tremoloDispatcher();
-                        if (!tr->twoNotes()) {
-                            TLayout::layoutTremolo(tr, ctx);
-                        } else {
-                            Chord* c1 = tr->chord1();
-                            Chord* c2 = tr->chord2();
-                            if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
-                                TLayout::layoutTremolo(tr, ctx);
-                            }
+                    if (g->tremoloSingleChord()) {
+                        TremoloLayout::layout(g->tremoloSingleChord(), ctx);
+                    }
+
+                    if (g->tremoloTwoChord()) {
+                        TremoloTwoChord* tr = g->tremoloTwoChord();
+                        Chord* gc1 = tr->chord1();
+                        Chord* gc2 = tr->chord2();
+                        if (gc1 && !gc1->staffMove() && gc2 && !gc2->staffMove()) {
+                            TremoloLayout::layout(tr, ctx);
                         }
                     }
                 }
@@ -1574,9 +1578,9 @@ void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
             if (e->isChord()) {
                 Chord* c = toChord(e);
                 Beam* beam = c->beam();
-                TremoloDispatcher* tremolo = c->tremoloDispatcher();
+                TremoloTwoChord* tremolo = c->tremoloTwoChord();
                 if ((beam && (beam->cross() || beam->userModified()))
-                    || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
+                    || (tremolo && tremolo->userModified())) {
                     bool prevUp = c->up();
                     ChordLayout::computeUp(c, ctx); // for cross-staff beams
                     if (c->up() != prevUp) {
@@ -2314,12 +2318,14 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                 e->mutldata()->setPosX(0);
             } else if (t == ElementType::CHORD) {
                 Chord* c = toChord(e);
-                if (c->tremoloDispatcher()) {
-                    TremoloDispatcher* tr = c->tremoloDispatcher();
+                if (c->tremoloSingleChord()) {
+                    TremoloLayout::layout(c->tremoloSingleChord(), ctx);
+                } else if (c->tremoloTwoChord()) {
+                    TremoloTwoChord* tr = c->tremoloTwoChord();
                     Chord* c1 = tr->chord1();
                     Chord* c2 = tr->chord2();
-                    if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
-                        TLayout::layoutTremolo(tr, ctx);
+                    if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
+                        TremoloLayout::layout(tr, ctx);
                     }
                 }
             } else if (t == ElementType::BAR_LINE) {

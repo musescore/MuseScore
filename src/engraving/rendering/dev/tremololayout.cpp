@@ -26,6 +26,8 @@
 #include "dom/chord.h"
 #include "dom/stem.h"
 #include "dom/tremolo.h"
+#include "dom/tremolotwochord.h"
+#include "dom/tremolosinglechord.h"
 #include "dom/note.h"
 #include "dom/staff.h"
 #include "dom/measure.h"
@@ -38,8 +40,17 @@ using namespace mu::engraving::rendering::dev;
 
 void TremoloLayout::layout(TremoloDispatcher* item, LayoutContext& ctx)
 {
+    if (item->twoNotes()) {
+        layout(item->twoChord, ctx);
+    } else {
+        layout(item->singleChord, ctx);
+    }
+}
+
+void TremoloLayout::layout(TremoloTwoChord* item, LayoutContext& ctx)
+{
     //! NOTE For Two Chord Tremolo path used for palette
-    item->computeShape();     // set bbox
+    item->computeShape();      // set bbox
     item->setPath(item->basePath());
 
     item->setChord1(toChord(item->explicitParent()));
@@ -78,20 +89,59 @@ void TremoloLayout::layout(TremoloDispatcher* item, LayoutContext& ctx)
         h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->ldata()->bbox().height()) * item->chord1()->intrinsicMag();
     }
 
-    if (item->twoNotes()) {
-        layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
-    } else {
-        layoutOneNoteTremolo(item, ctx, x, y, h, item->spatium());
+    layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
+}
+
+void TremoloLayout::layout(TremoloSingleChord* item, LayoutContext& ctx)
+{
+    item->computeShape();      // set bbox
+    item->setPath(item->basePath());
+
+    if (!item->chord()) {
+        // palette
+        if (!item->isBuzzRoll()) {
+            const RectF box = item->path().boundingRect();
+            item->mutldata()->addBbox(RectF(box.x(), box.bottom(), box.width(), item->spatium()));
+        }
+        return;
     }
+
+    Note* anchor1 = item->chord()->up() ? item->chord()->upNote() : item->chord()->downNote();
+    Stem* stem = item->chord()->stem();
+    double x, y, h;
+    if (stem) {
+        x = stem->pos().x() + stem->width() / 2 * (item->chord()->up() ? -1.0 : 1.0);
+        y = stem->pos().y();
+        h = stem->length();
+    } else {
+        // center tremolo above note
+        x = anchor1->x() + anchor1->headWidth() * 0.5;
+
+        bool hasMirroredNote = false;
+        for (Note* n : item->chord()->notes()) {
+            if (n->ldata()->mirror.value()) {
+                hasMirroredNote = true;
+                break;
+            }
+        }
+
+        if (hasMirroredNote) {
+            x = item->chord()->stemPosX();
+        }
+
+        y = anchor1->y();
+        h = (ctx.conf().styleMM(Sid::tremoloNoteSidePadding).val() + item->ldata()->bbox().height()) * item->chord()->intrinsicMag();
+    }
+
+    layoutOneNoteTremolo(item, ctx, x, y, h, item->spatium());
 }
 
 //---------------------------------------------------------
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutOneNoteTremolo(TremoloDispatcher* item, LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, LayoutContext& ctx, double x, double y, double h, double spatium)
 {
-    assert(!item->twoNotes());
     const StaffType* staffType = item->staffType();
 
     if (staffType && staffType->isTabStaff()) {
@@ -143,14 +193,14 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloDispatcher* item, LayoutContext&
 //   layoutTwoNotesTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutTwoNotesTremolo(TremoloDispatcher* item, LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     UNUSED(x);
     UNUSED(y);
     UNUSED(h);
     UNUSED(spatium);
 
-    TremoloDispatcher::LayoutData* ldata = item->mutldata();
+    TremoloTwoChord::LayoutData* ldata = item->mutldata();
 
     // make sure both stems are in the same direction
     int up = 0;
@@ -261,7 +311,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloDispatcher* item, LayoutContext
 //    Returns a modified pair of stem lengths of two chords
 //---------------------------------------------------------
 
-std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(TremoloDispatcher* tremolo, double stemLen1, double stemLen2)
+std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(TremoloTwoChord* tremolo, double stemLen1, double stemLen2)
 {
     const double spatium = tremolo->spatium();
     Chord* c1 = tremolo->chord1();
@@ -288,7 +338,7 @@ std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(Tremo
     return { stemLen1, stemLen2 };
 }
 
-void TremoloLayout::createBeamSegments(TremoloDispatcher* item, LayoutContext& ctx)
+void TremoloLayout::createBeamSegments(TremoloTwoChord* item, LayoutContext& ctx)
 {
     // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
     static constexpr double stemGapSp = 1.0;
