@@ -74,8 +74,9 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
     std::lock_guard lock(m_devicesMutex);
 
     int streams = SND_SEQ_OPEN_OUTPUT;
-    unsigned int cap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
-    unsigned int type = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
+    const unsigned int cap = SND_SEQ_PORT_CAP_SUBS_WRITE | SND_SEQ_PORT_CAP_WRITE;
+    const unsigned int type_hw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_HARDWARE;
+    const unsigned int type_sw = SND_SEQ_PORT_TYPE_PORT | SND_SEQ_PORT_TYPE_SOFTWARE;
 
     std::vector<MidiDevice> ret;
 
@@ -111,7 +112,7 @@ std::vector<MidiDevice> AlsaMidiOutPort::availableDevices() const
             uint32_t types = snd_seq_port_info_get_type(pinfo);
             uint32_t caps = snd_seq_port_info_get_capability(pinfo);
 
-            bool canConnect = ((caps & cap) == cap) && ((types & type) == type);
+            bool canConnect = ((caps & cap) == cap) && (((types & type_hw) == type_hw) || ((types & type_sw) == type_sw));
 
             if (canConnect) {
                 MidiDevice dev;
