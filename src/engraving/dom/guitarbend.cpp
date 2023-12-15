@@ -584,8 +584,9 @@ EngravingItem* GuitarBendSegment::propertyDelegate(Pid id)
 {
     switch (id) {
     case Pid::DIRECTION:
-        return guitarBend();
     case Pid::BEND_SHOW_HOLD_LINE:
+    case Pid::POSITION_LINKED_TO_MASTER:
+    case Pid::APPEARANCE_LINKED_TO_MASTER:
         return guitarBend();
     default:
         return nullptr;

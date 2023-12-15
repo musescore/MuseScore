@@ -1520,6 +1520,18 @@ void Score::addElement(EngravingItem* element)
     case ElementType::HARMONY:
         element->part()->updateHarmonyChannels(true);
         break;
+    case ElementType::GUITAR_BEND:
+    {
+        GuitarBend* bend = toGuitarBend(element);
+        if (bend->type() == GuitarBendType::GRACE_NOTE_BEND || bend->type() == GuitarBendType::PRE_BEND) {
+            Note* startNote = bend->startNote();
+            Chord* startChord = startNote ? startNote->chord() : nullptr;
+            if (startChord) {
+                startChord->setNoStem(true);
+                startChord->setBeamMode(BeamMode::NONE);
+            }
+        }
+    }
 
     default:
         break;
