@@ -133,6 +133,8 @@
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tremolobar.h"
 #include "dom/trill.h"
 #include "dom/tripletfeel.h"
@@ -353,7 +355,17 @@ void TDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
-    case ElementType::TREMOLO:              draw(item_cast<const TremoloDispatcher*>(item), painter);
+    case ElementType::TREMOLO: {
+        const TremoloDispatcher* td = item_cast<const TremoloDispatcher*>(item);
+        if (td->singleChord) {
+            draw(td->singleChord, painter);
+        } else {
+            draw(td->twoChord, painter);
+        }
+    } break;
+    case ElementType::TREMOLO_SINGLECHORD:  draw(item_cast<const TremoloSingleChord*>(item), painter);
+        break;
+    case ElementType::TREMOLO_TWOCHORD:     draw(item_cast<const TremoloTwoChord*>(item), painter);
         break;
     case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
         break;
@@ -2982,18 +2994,25 @@ void TDraw::draw(const TimeSig* item, Painter* painter)
     }
 }
 
-void TDraw::draw(const TremoloDispatcher* item, Painter* painter)
+void TDraw::draw(const TremoloSingleChord* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
     if (item->isBuzzRoll()) {
         painter->setPen(item->curColor());
         item->drawSymbol(SymId::buzzRoll, painter);
-    } else if (!item->twoNotes() || !item->explicitParent()) {
+    } else {
         painter->setBrush(Brush(item->curColor()));
         painter->setNoPen();
         painter->drawPath(item->path());
-    } else if (item->twoNotes() && !item->beamSegments().empty()) {
+    }
+}
+
+void TDraw::draw(const TremoloTwoChord* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    if (!item->beamSegments().empty()) {
         // two-note trems act like beams
 
         // make beam thickness independent of slant
