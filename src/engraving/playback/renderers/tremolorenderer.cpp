@@ -23,7 +23,8 @@
 #include "tremolorenderer.h"
 
 #include "dom/chord.h"
-#include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 
 #include "playback/metaparsers/notearticulationsparser.h"
 
@@ -44,25 +45,37 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
                                const RenderingContext& context,
                                mpe::PlaybackEventList& result)
 {
-    const Chord* chord = toChord(item);
+    const Chord* chord = item_cast<const Chord*>(item);
     IF_ASSERT_FAILED(chord) {
         return;
     }
 
-    const TremoloDispatcher* tremolo = chord->tremoloDispatcher();
-    IF_ASSERT_FAILED(tremolo) {
+    struct TremoloAdapter {
+        const TremoloSingleChord* single = nullptr;
+        const TremoloTwoChord* two = nullptr;
+
+        TremoloAdapter(const Chord* ch)
+            : single(ch->tremoloSingleChord()), two(ch->tremoloTwoChord()) {}
+
+        bool hasTremolo() const { return single != nullptr || two != nullptr; }
+
+        int lines() const { return single ? single->lines() : (two ? two->lines() : 0); }
+    };
+
+    TremoloAdapter tremolo = TremoloAdapter(chord);
+    IF_ASSERT_FAILED(tremolo.hasTremolo()) {
         return;
     }
 
     // TODO: We need a member like articulationData.overallDurationTicks (ticks rather than duration),
-    // so that we are not duplicating this calculation (see TremoloMetaParser::doParse)
+    // so that we are not duplicating this calculation (see TremoloTwoMetaParser::doParse)
     //const ArticulationAppliedData& articulationData = context.commonArticulations.at(preferredType);
     int overallDurationTicks = context.nominalDurationTicks;
-    if (tremolo->twoNotes() && tremolo->chord1() && tremolo->chord2()) {
-        overallDurationTicks = tremolo->chord1()->actualTicks().ticks() + tremolo->chord2()->actualTicks().ticks();
+    if (tremolo.two && tremolo.two->chord1() && tremolo.two->chord2()) {
+        overallDurationTicks = tremolo.two->chord1()->actualTicks().ticks() + tremolo.two->chord2()->actualTicks().ticks();
     }
 
-    const int stepDurationTicks = TremoloRenderer::stepDurationTicks(chord, tremolo);
+    const int stepDurationTicks = TremoloRenderer::stepDurationTicks(chord, tremolo.lines());
 
     if (stepDurationTicks <= 0) {
         LOGE() << "Unable to render unsupported tremolo type";
@@ -72,9 +85,9 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
     // ... and use that here
     int stepsCount = overallDurationTicks / stepDurationTicks;
 
-    if (tremolo->twoNotes()) {
-        const Chord* firstTremoloChord = tremolo->chord1();
-        const Chord* secondTremoloChord = tremolo->chord2();
+    if (tremolo.two) {
+        const Chord* firstTremoloChord = tremolo.two->chord1();
+        const Chord* secondTremoloChord = tremolo.two->chord2();
 
         IF_ASSERT_FAILED(firstTremoloChord && secondTremoloChord) {
             return;
@@ -100,9 +113,9 @@ void TremoloRenderer::doRender(const EngravingItem* item, const mpe::Articulatio
     }
 }
 
-int TremoloRenderer::stepDurationTicks(const Chord* chord, const TremoloDispatcher* tremolo)
+int TremoloRenderer::stepDurationTicks(const Chord* chord, int tremoloLines)
 {
-    int ticks = Constants::DIVISION / (1 << (chord->beams() + tremolo->lines()));
+    int ticks = Constants::DIVISION / (1 << (chord->beams() + tremoloLines));
     if (ticks <= 0) {
         return 1;
     }
