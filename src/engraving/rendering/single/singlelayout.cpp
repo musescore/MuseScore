@@ -81,6 +81,8 @@
 #include "dom/textlinebase.h"
 #include "dom/timesig.h"
 #include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tremolobar.h"
 #include "dom/trill.h"
 #include "dom/vibrato.h"
@@ -207,7 +209,17 @@ void SingleLayout::layoutItem(EngravingItem* item)
         break;
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
-    case ElementType::TREMOLO:      layout(item_cast<TremoloDispatcher*>(item), ctx);
+    case ElementType::TREMOLO: {
+        TremoloDispatcher* td = item_cast<TremoloDispatcher*>(item);
+        if (td->singleChord) {
+            layout(td->singleChord, ctx);
+        } else {
+            layout(td->twoChord, ctx);
+        }
+    } break;
+    case ElementType::TREMOLO_SINGLECHORD: layout(item_cast<TremoloSingleChord*>(item), ctx);
+        break;
+    case ElementType::TREMOLO_TWOCHORD:    layout(item_cast<TremoloTwoChord*>(item), ctx);
         break;
     case ElementType::TREMOLOBAR:   layout(toTremoloBar(item), ctx);
         break;
@@ -1575,11 +1587,16 @@ void SingleLayout::layout(TimeSig* item, const Context& ctx)
     }
 }
 
-void SingleLayout::layout(TremoloDispatcher* item, const Context& ctx)
+void SingleLayout::layout(TremoloSingleChord* item, const Context&)
 {
-    //! TODO
-    LayoutContext tctx(ctx.dontUseScore());
-    TremoloLayout::layout(item, tctx);
+    item->computeShape();      // set bbox
+    item->setPath(item->basePath());
+}
+
+void SingleLayout::layout(TremoloTwoChord* item, const Context&)
+{
+    item->computeShape();      // set bbox
+    item->setPath(item->basePath());
 }
 
 void SingleLayout::layout(TremoloBar* item, const Context&)

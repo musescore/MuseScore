@@ -121,6 +121,8 @@
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tremolobar.h"
 #include "dom/trill.h"
 #include "dom/tripletfeel.h"
@@ -307,7 +309,17 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
-    case ElementType::TREMOLO:              draw(item_cast<const TremoloDispatcher*>(item), painter);
+    case ElementType::TREMOLO: {
+        const TremoloDispatcher* td = item_cast<const TremoloDispatcher*>(item);
+        if (td->singleChord) {
+            draw(td->singleChord, painter);
+        } else {
+            draw(td->twoChord, painter);
+        }
+    } break;
+    case ElementType::TREMOLO_SINGLECHORD:  draw(item_cast<const TremoloSingleChord*>(item), painter);
+        break;
+    case ElementType::TREMOLO_TWOCHORD:     draw(item_cast<const TremoloTwoChord*>(item), painter);
         break;
     case ElementType::TREMOLOBAR:           draw(item_cast<const TremoloBar*>(item), painter);
         break;
@@ -2380,45 +2392,23 @@ void SingleDraw::draw(const TimeSig* item, Painter* painter)
     }
 }
 
-void SingleDraw::draw(const TremoloDispatcher* item, Painter* painter)
+void SingleDraw::draw(const TremoloSingleChord* item, draw::Painter* painter)
 {
     TRACE_DRAW_ITEM;
 
-    const TremoloDispatcher::LayoutData* ldata = item->ldata();
+    const TremoloSingleChord::LayoutData* ldata = item->ldata();
 
     if (item->isBuzzRoll()) {
         painter->setPen(item->curColor());
         item->drawSymbol(SymId::buzzRoll, painter);
-    } else if (!item->twoNotes() || !item->explicitParent()) {
+    } else {
         painter->setBrush(Brush(item->curColor()));
         painter->setNoPen();
         painter->drawPath(item->path());
-    } else if (item->twoNotes() && !item->beamSegments().empty()) {
-        // two-note trems act like beams
-
-        // make beam thickness independent of slant
-        // (expression can be simplified?)
-        const LineF bs = item->beamSegments().front()->line;
-        double d = (std::abs(bs.y2() - bs.y1())) / (bs.x2() - bs.x1());
-        if (item->beamSegments().size() > 1 && d > M_PI / 6.0) {
-            d = M_PI / 6.0;
-        }
-        double ww = (item->style().styleMM(Sid::beamWidth).val() / 2.0) / sin(M_PI_2 - atan(d));
-        painter->setBrush(Brush(item->curColor()));
-        painter->setNoPen();
-        for (const BeamSegment* bs1 : item->beamSegments()) {
-            painter->drawPolygon(
-                PolygonF({
-                PointF(bs1->line.x1(), bs1->line.y1() - ww),
-                PointF(bs1->line.x2(), bs1->line.y2() - ww),
-                PointF(bs1->line.x2(), bs1->line.y2() + ww),
-                PointF(bs1->line.x1(), bs1->line.y1() + ww),
-            }),
-                draw::FillRule::OddEvenFill);
-        }
     }
-    // for palette
-    if (!item->explicitParent() && !item->twoNotes()) {
+
+    // vertical line (stem)
+    {
         double x = 0.0;     // bbox().width() * .25;
         Pen pen(item->curColor(), item->point(item->style().styleS(Sid::stemWidth)));
         painter->setPen(pen);
@@ -2429,6 +2419,15 @@ void SingleDraw::draw(const TremoloDispatcher* item, Painter* painter)
             painter->drawLine(LineF(x, -sp * .5, x, item->path().boundingRect().height() + sp));
         }
     }
+}
+
+void SingleDraw::draw(const TremoloTwoChord* item, draw::Painter* painter)
+{
+    TRACE_DRAW_ITEM;
+
+    painter->setBrush(Brush(item->curColor()));
+    painter->setNoPen();
+    painter->drawPath(item->path());
 }
 
 void SingleDraw::draw(const TremoloBar* item, Painter* painter)

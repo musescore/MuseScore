@@ -138,6 +138,8 @@
 #include "dom/tie.h"
 #include "dom/timesig.h"
 #include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tremolobar.h"
 #include "dom/trill.h"
 #include "dom/tripletfeel.h"
@@ -409,7 +411,18 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::TIMESIG:
         layoutTimeSig(item_cast<const TimeSig*>(item), static_cast<TimeSig::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::TREMOLO:          layoutTremolo(item_cast<TremoloDispatcher*>(item), ctx);
+    case ElementType::TREMOLO: {
+        UNREACHABLE;
+        TremoloDispatcher* td = item_cast<TremoloDispatcher*>(item);
+        if (td->singleChord) {
+            layoutTremoloSingle(td->singleChord, ctx);
+        } else {
+            layoutTremoloTwo(td->twoChord, ctx);
+        }
+    } break;
+    case ElementType::TREMOLO_SINGLECHORD: layoutTremoloSingle(item_cast<TremoloSingleChord*>(item), ctx);
+        break;
+    case ElementType::TREMOLO_TWOCHORD:    layoutTremoloTwo(item_cast<TremoloTwoChord*>(item), ctx);
         break;
     case ElementType::TREMOLOBAR:
         layoutTremoloBar(item_cast<const TremoloBar*>(item), static_cast<TremoloBar::LayoutData*>(ldata));
@@ -6010,7 +6023,12 @@ void TLayout::layoutTimeSig(const TimeSig* item, TimeSig::LayoutData* ldata, con
     }
 }
 
-void TLayout::layoutTremolo(TremoloDispatcher* item, LayoutContext& ctx)
+void TLayout::layoutTremoloSingle(TremoloSingleChord* item, LayoutContext& ctx)
+{
+    TremoloLayout::layout(item, ctx);
+}
+
+void TLayout::layoutTremoloTwo(TremoloTwoChord* item, LayoutContext& ctx)
 {
     TremoloLayout::layout(item, ctx);
 }

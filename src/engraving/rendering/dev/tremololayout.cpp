@@ -49,19 +49,11 @@ void TremoloLayout::layout(TremoloDispatcher* item, LayoutContext& ctx)
 
 void TremoloLayout::layout(TremoloTwoChord* item, LayoutContext& ctx)
 {
-    //! NOTE For Two Chord Tremolo path used for palette
-    item->computeShape();      // set bbox
-    item->setPath(item->basePath());
-
-    item->setChord1(toChord(item->explicitParent()));
-    if (!item->chord1()) {
-        // palette
-        if (!item->isBuzzRoll() && !item->twoNotes()) {
-            const RectF box = item->path().boundingRect();
-            item->mutldata()->addBbox(RectF(box.x(), box.bottom(), box.width(), item->spatium()));
-        }
+    IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
+
+    item->setChord1(toChord(item->explicitParent()));
 
     Note* anchor1 = item->chord1()->up() ? item->chord1()->upNote() : item->chord1()->downNote();
     Stem* stem    = item->chord1()->stem();
@@ -94,17 +86,12 @@ void TremoloLayout::layout(TremoloTwoChord* item, LayoutContext& ctx)
 
 void TremoloLayout::layout(TremoloSingleChord* item, LayoutContext& ctx)
 {
-    item->computeShape();      // set bbox
-    item->setPath(item->basePath());
-
-    if (!item->chord()) {
-        // palette
-        if (!item->isBuzzRoll()) {
-            const RectF box = item->path().boundingRect();
-            item->mutldata()->addBbox(RectF(box.x(), box.bottom(), box.width(), item->spatium()));
-        }
+    IF_ASSERT_FAILED(item->explicitParent()) {
         return;
     }
+
+    item->computeShape();      // set bbox
+    item->setPath(item->basePath());
 
     Note* anchor1 = item->chord()->up() ? item->chord()->upNote() : item->chord()->downNote();
     Stem* stem = item->chord()->stem();
