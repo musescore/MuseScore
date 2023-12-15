@@ -118,6 +118,7 @@ bool WinFramelessWindowController::nativeEventFilter(const QByteArray& eventType
         return false;
     }
 
+    LOGD() << "=================== msg " << msg->message;
     switch (msg->message) {
     case WM_NCCALCSIZE: {
         return removeWindowFrame(msg, result);
