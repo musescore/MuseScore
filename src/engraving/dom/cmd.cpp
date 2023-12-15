@@ -931,8 +931,8 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
             Chord* graceChord = graceNote->chord();
             for (EngravingObject* item : graceChord->linkList()) {
                 Chord* linkedGrace = toChord(item);
-                linkedGrace->undoChangeProperty(Pid::NO_STEM, true);
-                linkedGrace->undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
+                linkedGrace->setNoStem(true);
+                linkedGrace->setBeamMode(BeamMode::NONE);
             }
 
             // Add bend
@@ -956,8 +956,8 @@ GuitarBend* Score::addGuitarBend(GuitarBendType type, Note* note, Note* endNote)
         for (EngravingObject* item : startChord->linkList()) {
             Chord* linkedGrace = toChord(item);
             if (linkedGrace->staffType()->isTabStaff()) {
-                linkedGrace->undoChangeProperty(Pid::NO_STEM, true);
-                linkedGrace->undoChangeProperty(Pid::BEAM_MODE, BeamMode::NONE);
+                linkedGrace->setNoStem(true);
+                linkedGrace->setBeamMode(BeamMode::NONE);
             }
         }
     }
