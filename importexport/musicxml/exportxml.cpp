@@ -285,6 +285,7 @@ public:
 private:
       void init();
       int _measureNo;                           // number of next regular measure
+      int _measureNoOffset;                     // measure number offset
       int _irregularMeasureNo;                  // number of next irregular measure
       int _pickupMeasureNo;                     // number of next pickup measure
       QString _cachedAttributes;                // attributes calculated by updateForMeasure()
@@ -6725,6 +6726,7 @@ MeasureNumberStateHandler::MeasureNumberStateHandler()
 void MeasureNumberStateHandler::init()
       {
       _measureNo = 1;
+      _measureNoOffset = 0;
       _irregularMeasureNo = 1;
       _pickupMeasureNo = 1;
       }
@@ -6745,8 +6747,9 @@ void MeasureNumberStateHandler::updateForMeasure(const Measure* const m)
             }
 
       // update measure numbers and cache result
+      _measureNoOffset = m->noOffset();
+      _measureNo += _measureNoOffset;
       _cachedAttributes = " number=";
-      _measureNo += m->noOffset();
       if ((_irregularMeasureNo + _measureNo) == 2 && m->irregular()) {
             _cachedAttributes += "\"0\" implicit=\"yes\"";
             _pickupMeasureNo++;
@@ -6764,7 +6767,7 @@ QString MeasureNumberStateHandler::measureNumber() const
 
 bool MeasureNumberStateHandler::isFirstActualMeasure() const
       {
-      return (_irregularMeasureNo + _measureNo + _pickupMeasureNo) == 4;
+      return (_irregularMeasureNo + (_measureNo - _measureNoOffset) + _pickupMeasureNo) == 4;
       }
 
 //---------------------------------------------------------
