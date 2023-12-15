@@ -565,7 +565,7 @@ PropertyValue TremoloTwoChord::propertyDefault(Pid propertyId) const
 
 void TremoloTwoChord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
+    if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondChord) {
         return;
     }
     EngravingItem::scanElements(data, func, all);

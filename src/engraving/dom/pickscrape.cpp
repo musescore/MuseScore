@@ -63,7 +63,7 @@ PickScrapeSegment::PickScrapeSegment(PickScrape* sp, System* parent)
 //---------------------------------------------------------
 
 PickScrape::PickScrape(EngravingItem* parent)
-    : ChordTextLineBase(ElementType::WHAMMY_BAR, parent)
+    : ChordTextLineBase(ElementType::PICK_SCRAPE, parent)
 {
     initElementStyle(&pickScrapeStyle);
     resetProperty(Pid::LINE_VISIBLE);

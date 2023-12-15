@@ -507,6 +507,7 @@ public:
                || isOttava()
                || isPalmMute()
                || isWhammyBar()
+               || isPickScrape()
                || isRasgueado()
                || isHarmonicMark()
                || isPedal()

@@ -69,8 +69,7 @@ public:
     Shape shape() const;
     EngravingItem* parentElement = nullptr;
 
-    BeamSegment(EngravingItem* b)
-        : parentElement(b) {}
+    BeamSegment(EngravingItem* b);
 };
 
 struct TremAnchor {

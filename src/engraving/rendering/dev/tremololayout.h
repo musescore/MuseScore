@@ -27,7 +27,6 @@
 #include "layoutcontext.h"
 
 namespace mu::engraving {
-class TremoloDispatcher;
 class TremoloTwoChord;
 class TremoloSingleChord;
 }
@@ -37,7 +36,6 @@ class TremoloLayout
 {
 public:
 
-    static void layout(TremoloDispatcher* item, LayoutContext& ctx);
     static void layout(TremoloTwoChord* item, LayoutContext& ctx);
     static void layout(TremoloSingleChord* item, LayoutContext& ctx);
 

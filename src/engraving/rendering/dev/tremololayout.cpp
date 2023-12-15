@@ -38,15 +38,6 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
-void TremoloLayout::layout(TremoloDispatcher* item, LayoutContext& ctx)
-{
-    if (item->twoNotes()) {
-        layout(item->twoChord, ctx);
-    } else {
-        layout(item->singleChord, ctx);
-    }
-}
-
 void TremoloLayout::layout(TremoloTwoChord* item, LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {

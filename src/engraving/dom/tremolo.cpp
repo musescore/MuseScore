@@ -551,11 +551,10 @@ TDuration TremoloDispatcher::durationType() const
 void TremoloDispatcher::setDurationType(TDuration d)
 {
     if (twoNotes()) {
-        return twoChord->setDurationType(d);
+        twoChord->setDurationType(d);
     } else {
-        return singleChord->setDurationType(d);
+        singleChord->setDurationType(d);
     }
-    styleChanged();
 }
 
 int TremoloDispatcher::lines() const
@@ -929,7 +928,7 @@ void TremoloDispatcher::setPropertyFlags(Pid pid, PropertyFlags f)
 
 void TremoloDispatcher::scanElements(void* data, void (* func)(void*, EngravingItem*), bool all)
 {
-    if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
+    if (chord() && chord()->tremoloChordType() == TremoloChordType::TremoloSecondChord) {
         return;
     }
     EngravingItem::scanElements(data, func, all);

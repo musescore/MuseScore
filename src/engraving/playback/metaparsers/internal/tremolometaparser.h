@@ -29,7 +29,7 @@ namespace mu::engraving {
 class TremoloSingleMetaParser : public MetaParserBase<TremoloSingleMetaParser>
 {
 protected:
-    friend class MetaParserBase;
+    friend MetaParserBase;
 
     static void doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
 };
@@ -37,7 +37,7 @@ protected:
 class TremoloTwoMetaParser : public MetaParserBase<TremoloTwoMetaParser>
 {
 protected:
-    friend class MetaParserBase;
+    friend MetaParserBase;
 
     static void doParse(const EngravingItem* item, const RenderingContext& ctx, mpe::ArticulationMap& result);
 };

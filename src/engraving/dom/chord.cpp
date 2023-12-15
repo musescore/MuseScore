@@ -1752,7 +1752,7 @@ void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
     if (m_arpeggio) {
         func(data, m_arpeggio);
     }
-    if (m_tremoloDispatcher && (tremoloChordType() != TremoloChordType::TremoloSecondNote)) {
+    if (m_tremoloDispatcher && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
         func(data, m_tremoloDispatcher);
     }
     const Staff* st = staff();
@@ -2032,7 +2032,7 @@ void Chord::localSpatiumChanged(double oldValue, double newValue)
     if (arpeggio()) {
         arpeggio()->localSpatiumChanged(oldValue, newValue);
     }
-    if (m_tremoloDispatcher && (tremoloChordType() != TremoloChordType::TremoloSecondNote)) {
+    if (m_tremoloDispatcher && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
         m_tremoloDispatcher->localSpatiumChanged(oldValue, newValue);
     }
     for (EngravingItem* e : articulations()) {
@@ -2709,9 +2709,9 @@ TremoloChordType Chord::tremoloChordType() const
 {
     if (m_tremoloDispatcher && m_tremoloDispatcher->twoNotes()) {
         if (m_tremoloDispatcher->chord1() == this) {
-            return TremoloChordType::TremoloFirstNote;
+            return TremoloChordType::TremoloFirstChord;
         } else if (m_tremoloDispatcher->chord2() == this) {
-            return TremoloChordType::TremoloSecondNote;
+            return TremoloChordType::TremoloSecondChord;
         } else {
             ASSERT_X(String(u"Chord::tremoloChordType(): inconsistency"));
         }

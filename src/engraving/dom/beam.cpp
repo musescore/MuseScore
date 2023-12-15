@@ -894,14 +894,20 @@ void Beam::clearBeamSegments()
 // BEAM SEGMENT CLASS
 //-------------------------------------------------------
 
+BeamSegment::BeamSegment(EngravingItem* b)
+    : parentElement(b)
+{
+    DO_ASSERT(parentElement->isType(ElementType::BEAM) || parentElement->isType(ElementType::TREMOLO_TWOCHORD));
+}
+
 Shape BeamSegment::shape() const
 {
     Shape shape;
     PointF startPoint = line.p1();
     PointF endPoint = line.p2();
     double _beamWidth = parentElement->isBeam()
-                        ? toBeam(parentElement)->m_beamWidth
-                        : item_cast<const TremoloDispatcher*>(parentElement)->twoChord->beamWidth();
+                        ? item_cast<const Beam*>(parentElement)->m_beamWidth
+                        : item_cast<const TremoloTwoChord*>(parentElement)->beamWidth();
     // This is the case of right-beamlets
     if (startPoint.x() > endPoint.x()) {
         std::swap(startPoint, endPoint);

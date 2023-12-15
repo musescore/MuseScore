@@ -2948,7 +2948,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             default: LOGD("unknown tremolo single %d", int(st));
                 break;
             }
-        } else if (chord->tremoloChordType() == TremoloChordType::TremoloFirstNote) {
+        } else if (chord->tremoloChordType() == TremoloChordType::TremoloFirstChord) {
             type = "start";
             switch (st) {
             case TremoloType::C8:  count = 1;
@@ -2962,7 +2962,7 @@ static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments
             default: LOGD("unknown tremolo double %d", int(st));
                 break;
             }
-        } else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondNote) {
+        } else if (chord->tremoloChordType() == TremoloChordType::TremoloSecondChord) {
             type = "stop";
             switch (st) {
             case TremoloType::C8:  count = 1;
