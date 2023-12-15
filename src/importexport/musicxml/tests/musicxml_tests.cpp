@@ -716,6 +716,9 @@ TEST_F(Musicxml_Tests, measureLength) {
 TEST_F(Musicxml_Tests, measureNumbers) {
     mxmlIoTest("testMeasureNumbers");
 }
+TEST_F(Musicxml_Tests, measureNumberOffset) {
+    mxmlIoTest("testMeasureNumberOffset");
+}
 TEST_F(Musicxml_Tests, measureRepeats1) {
     mxmlIoTestRef("testMeasureRepeats1");
 }
