@@ -28,6 +28,10 @@
 
 #include "dom/score.h"
 #include "dom/repeatlist.h"
+#include "dom/chord.h"
+#include "dom/note.h"
+#include "dom/tie.h"
+
 #include "types/constants.h"
 
 namespace mu::engraving {
@@ -71,6 +75,25 @@ inline mpe::duration_t durationFromTempoAndTicks(const double beatsPerSecond, co
     float beatsNumber = static_cast<float>(durationTicks) / static_cast<float>(ticksPerBeat);
 
     return (beatsNumber / beatsPerSecond) * 1000000;
+}
+
+inline mpe::duration_t tiedNotesTotalDuration(const Score* score, const Note* firstNote, mpe::duration_t firstNoteDuration)
+{
+    //! NOTE: calculate the duration from the 2nd note, since the duration of the 1st note is already known
+    const Note* secondNote = firstNote->tieFor()->endNote();
+    IF_ASSERT_FAILED(secondNote) {
+        return firstNoteDuration;
+    }
+
+    int startTick = secondNote->tick().ticks();
+
+    const Note* lastNote = firstNote->lastTiedNote();
+
+    int endTick = lastNote
+                  ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()
+                  : startTick + secondNote->chord()->actualTicks().ticks();
+
+    return firstNoteDuration + durationFromStartAndEndTick(score, startTick, endTick);
 }
 
 static constexpr int CROTCHET_TICKS = Constants::DIVISION;
