@@ -122,7 +122,7 @@ void Arpeggio::rebaseStartAnchor(AnchorRebaseDirection direction)
         track_idx_t topTrack = part->startTrack();
         if (track() > topTrack) {
             // Loop through voices til we find a chord
-            for (track_idx_t curTrack = track() - 1; curTrack >= topTrack; curTrack--) {
+            for (int curTrack = static_cast<int>(track()) - 1; curTrack >= static_cast<int>(topTrack); curTrack--) {
                 EngravingItem* e = chord()->segment()->element(curTrack);
                 if (e && e->isChord()) {
                     track_idx_t newSpan = m_span + track() - curTrack;
@@ -155,7 +155,7 @@ void Arpeggio::rebaseEndAnchor(AnchorRebaseDirection direction)
 {
     if (direction == AnchorRebaseDirection::UP) {
         // Move end to chord above
-        for (track_idx_t curTrack = track() + m_span - 2; curTrack >= track(); curTrack--) {
+        for (int curTrack = static_cast<int>(track()) + m_span - 2; curTrack >= static_cast<int>(track()); curTrack--) {
             EngravingItem* e = chord()->segment()->element(curTrack);
             if (e && e->isChord()) {
                 track_idx_t newSpan = curTrack - track() + 1;
