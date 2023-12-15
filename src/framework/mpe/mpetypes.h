@@ -769,18 +769,60 @@ struct ArticulationMap : public SharedHashMap<ArticulationType, ArticulationAppl
 
         resetData();
 
-        for (auto it = cbegin(); it != cend(); ++it) {
-            sumUpData(it);
+        ParamsSum paramsSum;
+        for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
+            paramsSum.pitchOffsetMap.insert_or_assign(static_cast<int>(i) * TEN_PERCENT, 0);
+            paramsSum.dynamicOffsetMap.insert_or_assign(static_cast<int>(i) * TEN_PERCENT, 0);
         }
 
-        calculateAverage();
+        for (auto it = cbegin(); it != cend(); ++it) {
+            const ArticulationAppliedData& appliedArticulation = it->second;
+            sumUpData(appliedArticulation, paramsSum);
+        }
+
+        calculateAverage(paramsSum);
     }
 
 private:
-    void sumUpOffsets(const ArticulationPatternSegment& segment)
+    void resetData()
     {
-        auto averageDynamicOffsetIt = m_averageDynamicOffsetMap.begin();
-        auto averagePitchOffsetIt = m_averagePitchOffsetMap.begin();
+        m_averageDurationFactor = 0;
+        m_averageTimestampOffset = 0;
+        m_averageMaxAmplitudeLevel = 0;
+        m_averageDynamicRange = 0;
+        m_averagePitchRange = 0;
+        m_averagePitchOffsetMap.clear();
+        m_averageDynamicOffsetMap.clear();
+    }
+
+    struct ParamsSum {
+        int durationFactor = 0;
+        int timestampOffset = 0;
+        int maxAmplitudeLevel = 0;
+        int pitchRange = 0;
+        int dynamicRange = 0;
+        ValuesCurve<int> pitchOffsetMap;
+        ValuesCurve<int> dynamicOffsetMap;
+    };
+
+    void sumUpData(const ArticulationAppliedData& appliedArticulation, ParamsSum& out)
+    {
+        const ArticulationPatternSegment& segment = appliedArticulation.appliedPatternSegment;
+
+        out.durationFactor += segment.arrangementPattern.durationFactor;
+        out.timestampOffset += segment.arrangementPattern.timestampOffset;
+        out.maxAmplitudeLevel += segment.expressionPattern.maxAmplitudeLevel();
+        out.pitchRange += appliedArticulation.occupiedPitchChangesRange;
+        out.dynamicRange += appliedArticulation.occupiedDynamicChangesRange;
+
+        sumUpOffsets(segment, out);
+    }
+
+    void sumUpOffsets(const ArticulationPatternSegment& segment, ParamsSum& out)
+    {
+        auto dynamicOffsetIt = out.dynamicOffsetMap.begin();
+        auto pitchOffsetIt = out.pitchOffsetMap.begin();
+
         auto segmentDynamicOffsetIt = segment.expressionPattern.dynamicOffsetMap.cbegin();
         auto segmentPitchOffsetIt = segment.pitchPattern.pitchOffsetMap.cbegin();
 
@@ -794,48 +836,21 @@ private:
         while (segmentDynamicOffsetIt != segment.expressionPattern.dynamicOffsetMap.cend()
                && segmentPitchOffsetIt != segment.pitchPattern.pitchOffsetMap.cend()) {
             if (hasMeaningDynamicOffset) {
-                averageDynamicOffsetIt->second += segmentDynamicOffsetIt->second;
+                dynamicOffsetIt->second += segmentDynamicOffsetIt->second;
             }
 
             if (hasMeaningPitchOffset) {
-                averagePitchOffsetIt->second += segmentPitchOffsetIt->second;
+                pitchOffsetIt->second += segmentPitchOffsetIt->second;
             }
 
-            ++averageDynamicOffsetIt;
-            ++averagePitchOffsetIt;
+            ++dynamicOffsetIt;
+            ++pitchOffsetIt;
             ++segmentDynamicOffsetIt;
             ++segmentPitchOffsetIt;
         }
     }
 
-    void resetData()
-    {
-        m_averageDurationFactor = 0;
-        m_averageTimestampOffset = 0;
-        m_averageMaxAmplitudeLevel = 0;
-        m_averageDynamicRange = 0;
-        m_averagePitchRange = 0;
-
-        for (size_t i = 0; i < EXPECTED_SIZE; ++i) {
-            m_averagePitchOffsetMap.insert_or_assign(static_cast<int>(i) * TEN_PERCENT, 0);
-            m_averageDynamicOffsetMap.insert_or_assign(static_cast<int>(i) * TEN_PERCENT, 0);
-        }
-    }
-
-    void sumUpData(const const_iterator segmentIt)
-    {
-        const ArticulationPatternSegment& segment = segmentIt->second.appliedPatternSegment;
-
-        m_averageDurationFactor += segment.arrangementPattern.durationFactor;
-        m_averageTimestampOffset += segment.arrangementPattern.timestampOffset;
-        m_averageMaxAmplitudeLevel += segment.expressionPattern.maxAmplitudeLevel();
-        m_averagePitchRange += segmentIt->second.occupiedPitchChangesRange;
-        m_averageDynamicRange += segmentIt->second.occupiedDynamicChangesRange;
-
-        sumUpOffsets(segment);
-    }
-
-    void calculateAverage()
+    void calculateAverage(const ParamsSum& paramsSum)
     {
         int count = static_cast<int>(size());
 
@@ -864,18 +879,18 @@ private:
             }
         }
 
-        m_averageDurationFactor /= count;
+        m_averageDurationFactor = paramsSum.durationFactor / count;
 
         if (timestampChangesCount > 0) {
-            m_averageTimestampOffset /= timestampChangesCount;
+            m_averageTimestampOffset = paramsSum.timestampOffset / timestampChangesCount;
         }
 
         if (dynamicChangesCount > 0) {
-            m_averageMaxAmplitudeLevel /= dynamicChangesCount;
-            m_averageDynamicRange /= dynamicChangesCount;
+            m_averageMaxAmplitudeLevel = paramsSum.maxAmplitudeLevel / dynamicChangesCount;
+            m_averageDynamicRange = paramsSum.dynamicRange / dynamicChangesCount;
 
-            for (auto& pair : m_averageDynamicOffsetMap) {
-                pair.second /= dynamicChangesCount;
+            for (const auto& pair : paramsSum.dynamicOffsetMap) {
+                m_averageDynamicOffsetMap.insert_or_assign(pair.first, pair.second / dynamicChangesCount);
             }
         } else if (dynamicChangesCount == 0) {
             m_averageMaxAmplitudeLevel = cbegin()->second.appliedPatternSegment.expressionPattern.maxAmplitudeLevel();
@@ -884,10 +899,10 @@ private:
         }
 
         if (pitchChangesCount > 0) {
-            m_averagePitchRange /= pitchChangesCount;
+            m_averagePitchRange = paramsSum.pitchRange / pitchChangesCount;
 
-            for (auto& pair : m_averagePitchOffsetMap) {
-                pair.second /= pitchChangesCount;
+            for (const auto& pair : paramsSum.pitchOffsetMap) {
+                m_averagePitchOffsetMap.insert_or_assign(pair.first, pair.second / pitchChangesCount);
             }
         } else if (pitchChangesCount == 0) {
             m_averagePitchRange = cbegin()->second.meta.overallPitchChangesRange;
