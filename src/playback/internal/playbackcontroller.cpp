@@ -171,7 +171,10 @@ bool PlaybackController::isLoaded() const
 
 bool PlaybackController::isLoopEnabled() const
 {
-    return notationPlayback() ? notationPlayback()->loopBoundaries().visible : false;
+    if (!notationPlayback()) {
+        return false;
+    }
+    return loopBoundariesSet() && notationPlayback()->loopBoundaries().enabled;
 }
 
 bool PlaybackController::loopBoundariesSet() const
@@ -411,7 +414,7 @@ void PlaybackController::onSelectionChanged()
             updateMuteStates();
         }
 
-        if (!loopBoundariesSet()) {
+        if (!isLoopEnabled()) {
             seekListSelection();
         }
 
@@ -455,7 +458,7 @@ void PlaybackController::play()
         return;
     }
 
-    if (loopBoundariesSet() && isLoopEnabled()) {
+    if (isLoopEnabled()) {
         msecs_t startMsecs = playbackStartMsecs();
         seek(startMsecs);
     }
@@ -511,7 +514,7 @@ msecs_t PlaybackController::playbackStartMsecs() const
     }
 
     const LoopBoundaries& loop = notationPlayback()->loopBoundaries();
-    if (loop.visible) {
+    if (loop.enabled) {
         return tickToMsecs(loop.loopInTick);
     }
 
@@ -613,12 +616,12 @@ void PlaybackController::toggleCountIn()
 void PlaybackController::toggleLoopPlayback()
 {
     if (isLoopEnabled()) {
-        hideLoop();
+        disableLoop();
         return;
     }
 
     if (loopBoundariesSet() && !selection()->isRange()) {
-        showLoop();
+        enableLoop();
         return;
     }
 
@@ -660,7 +663,7 @@ void PlaybackController::addLoopBoundaryToTick(LoopBoundaryType type, int tick)
 {
     if (notationPlayback()) {
         notationPlayback()->addLoopBoundary(type, tick);
-        showLoop();
+        enableLoop();
     }
 }
 
@@ -672,8 +675,8 @@ void PlaybackController::updateLoop()
 
     const LoopBoundaries& boundaries = notationPlayback()->loopBoundaries();
 
-    if (!boundaries.visible) {
-        hideLoop();
+    if (!boundaries.enabled) {
+        disableLoop();
         return;
     }
 
@@ -681,26 +684,26 @@ void PlaybackController::updateLoop()
     msecs_t toMsecs = tickToMsecs(boundaries.loopOutTick);
     playback()->player()->setLoop(m_currentSequenceId, fromMsesc, toMsecs);
 
-    showLoop();
+    enableLoop();
 
     notifyActionCheckedChanged(LOOP_CODE);
 }
 
-void PlaybackController::showLoop()
+void PlaybackController::enableLoop()
 {
     if (notationPlayback()) {
-        notationPlayback()->setLoopBoundariesVisible(true);
+        notationPlayback()->setLoopBoundariesEnabled(true);
     }
 }
 
-void PlaybackController::hideLoop()
+void PlaybackController::disableLoop()
 {
     IF_ASSERT_FAILED(notationPlayback() && playback()) {
         return;
     }
 
     playback()->player()->resetLoop(m_currentSequenceId);
-    notationPlayback()->setLoopBoundariesVisible(false);
+    notationPlayback()->setLoopBoundariesEnabled(false);
 
     notifyActionCheckedChanged(LOOP_CODE);
 }

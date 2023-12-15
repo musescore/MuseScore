@@ -388,8 +388,8 @@ void AbstractNotationPaintView::updateLoopMarkers()
     m_loopInMarker->move(loop.loopInTick);
     m_loopOutMarker->move(loop.loopOutTick);
 
-    m_loopInMarker->setVisible(loop.visible);
-    m_loopOutMarker->setVisible(loop.visible);
+    m_loopInMarker->setVisible(loop.enabled);
+    m_loopOutMarker->setVisible(loop.enabled);
 
     scheduleRedraw();
 }

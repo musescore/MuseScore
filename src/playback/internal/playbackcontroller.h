@@ -165,8 +165,8 @@ private:
     void addLoopBoundaryToTick(notation::LoopBoundaryType type, int tick);
     void updateLoop();
 
-    void showLoop();
-    void hideLoop();
+    void enableLoop();
+    void disableLoop();
 
     void notifyActionCheckedChanged(const actions::ActionCode& actionCode);
 
