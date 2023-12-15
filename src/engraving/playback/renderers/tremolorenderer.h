@@ -26,8 +26,6 @@
 #include "renderbase.h"
 
 namespace mu::engraving {
-class TremoloDispatcher;
-
 class TremoloRenderer : public RenderBase<TremoloRenderer>
 {
 public:
@@ -37,7 +35,7 @@ public:
                          mpe::PlaybackEventList& result);
 
 private:
-    static int stepDurationTicks(const Chord* chord, const TremoloDispatcher* tremolo);
+    static int stepDurationTicks(const Chord* chord, int tremoloLines);
     static void buildAndAppendEvents(const Chord* chord, const mpe::ArticulationType type, const int stepDurationTicks, const int startTick,
                                      const RenderingContext& context, mpe::PlaybackEventList& result);
 };

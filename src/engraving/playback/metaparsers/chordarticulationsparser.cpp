@@ -28,7 +28,8 @@
 #include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/spanner.h"
-#include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 
 #include "playback/utils/arrangementutils.h"
 #include "playback/filters/chordfilter.h"
@@ -175,13 +176,21 @@ void ChordArticulationsParser::parseAnnotations(const Chord* chord, const Render
 
 void ChordArticulationsParser::parseTremolo(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)
 {
-    const TremoloDispatcher* tremolo = chord->tremoloDispatcher();
-
-    if (!tremolo || !tremolo->playTremolo()) {
-        return;
+    // single chord
+    {
+        const TremoloSingleChord* tremoloSingle = chord->tremoloSingleChord();
+        if (tremoloSingle && tremoloSingle->playTremolo()) {
+            TremoloSingleMetaParser::parse(tremoloSingle, ctx, result);
+        }
     }
 
-    TremoloMetaParser::parse(tremolo, ctx, result);
+    // two chord
+    {
+        const TremoloTwoChord* tremoloTwo = chord->tremoloTwoChord();
+        if (tremoloTwo && tremoloTwo->playTremolo()) {
+            TremoloTwoMetaParser::parse(tremoloTwo, ctx, result);
+        }
+    }
 }
 
 void ChordArticulationsParser::parseArpeggio(const Chord* chord, const RenderingContext& ctx, mpe::ArticulationMap& result)

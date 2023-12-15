@@ -23,7 +23,8 @@
 #include "tremolofilter.h"
 
 #include "dom/chord.h"
-#include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 
 using namespace mu::engraving;
 
@@ -34,18 +35,19 @@ bool TremoloFilter::isPlayable(const EngravingItem* item, const RenderingContext
     }
 
     if (item->isChord()) {
-        const Chord* chord = toChord(item);
-        TremoloDispatcher* tremolo = chord->tremoloDispatcher();
+        const Chord* chord = item_cast<const Chord*>(item);
+        TremoloSingleChord* tremoloSingle = chord->tremoloSingleChord();
+        TremoloTwoChord* tremoloTwo = chord->tremoloTwoChord();
 
-        if (!tremolo) {
+        if (!tremoloSingle && !tremoloTwo) {
             return true;
         }
 
-        if (!tremolo->twoNotes()) {
+        if (!tremoloTwo) {
             return true;
         }
 
-        return tremolo->chord1() == chord;
+        return tremoloTwo->chord1() == chord;
     }
 
     return true;

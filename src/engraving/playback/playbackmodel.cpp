@@ -33,7 +33,7 @@
 #include "dom/segment.h"
 #include "dom/tempo.h"
 #include "dom/tie.h"
-#include "dom/tremolo.h"
+#include "dom/tremolotwochord.h"
 
 #include "log.h"
 
@@ -776,11 +776,11 @@ PlaybackModel::TickBoundaries PlaybackModel::tickBoundaries(const ScoreChangesRa
         if (item->isNote()) {
             const Note* note = toNote(item);
             const Chord* chord = note->chord();
-            const TremoloDispatcher* tremolo = chord->tremoloDispatcher();
+            const TremoloTwoChord* tremoloTwo = chord->tremoloTwoChord();
 
-            if (tremolo && tremolo->twoNotes()) {
-                const Chord* startChord = tremolo->chord1();
-                const Chord* endChord = tremolo->chord2();
+            if (tremoloTwo) {
+                const Chord* startChord = tremoloTwo->chord1();
+                const Chord* endChord = tremoloTwo->chord2();
 
                 IF_ASSERT_FAILED(startChord && endChord) {
                     continue;
