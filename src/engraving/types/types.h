@@ -917,6 +917,10 @@ inline bool isTremoloTwoChord(TremoloType type)
     return type >= TremoloType::C8;
 }
 
+enum class TremoloChordType : char {
+    TremoloSingle, TremoloFirstChord, TremoloSecondChord
+};
+
 enum class BracketType : signed char {
     NORMAL, BRACE, SQUARE, LINE, NO_BRACKET = -1
 };

@@ -769,10 +769,10 @@
                 </location>
               </prev>
             </Spanner>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
+          <Spanner type="PickScrape">
+            <PickScrape>
               <beginTextOffset x="0" y="0"/>
-              </WhammyBar>
+              </PickScrape>
             <next>
               <location>
                 <fractions>1/4</fractions>
@@ -805,7 +805,7 @@
               <dead>1</dead>
               </Note>
             </Chord>
-          <Spanner type="WhammyBar">
+          <Spanner type="PickScrape">
             <prev>
               <location>
                 <fractions>-1/4</fractions>
@@ -815,10 +815,10 @@
           <Rest>
             <durationType>eighth</durationType>
             </Rest>
-          <Spanner type="WhammyBar">
-            <WhammyBar>
+          <Spanner type="PickScrape">
+            <PickScrape>
               <beginTextOffset x="0" y="0"/>
-              </WhammyBar>
+              </PickScrape>
             <next>
               <location>
                 <fractions>1/8</fractions>
@@ -836,7 +836,7 @@
               <dead>1</dead>
               </Note>
             </Chord>
-          <Spanner type="WhammyBar">
+          <Spanner type="PickScrape">
             <prev>
               <location>
                 <fractions>-1/8</fractions>

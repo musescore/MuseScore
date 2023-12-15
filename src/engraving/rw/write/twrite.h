@@ -116,6 +116,7 @@ class Page;
 class PalmMute;
 class Part;
 class Pedal;
+class PickScrape;
 class PlayTechAnnotation;
 
 class Rasgueado;
@@ -156,7 +157,8 @@ class TextLine;
 class TextLineBase;
 class Tie;
 class TimeSig;
-class TremoloDispatcher;
+class TremoloSingleChord;
+class TremoloTwoChord;
 class TremoloBar;
 class Trill;
 class Tuplet;
@@ -257,6 +259,7 @@ public:
     static void write(const PalmMute* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Part* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Pedal* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const PickScrape* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const PlayTechAnnotation* item, XmlWriter& xml, WriteContext& ctx);
 
     static void write(const Rasgueado* item, XmlWriter& xml, WriteContext& ctx);
@@ -289,7 +292,8 @@ public:
     static void write(const TextLine* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Tie* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx);
-    static void write(const TremoloDispatcher* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const TremoloSingleChord* item, XmlWriter& xml, WriteContext& ctx);
+    static void write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const TremoloBar* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Trill* item, XmlWriter& xml, WriteContext& ctx);
     static void write(const Tuplet* item, XmlWriter& xml, WriteContext& ctx);

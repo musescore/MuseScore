@@ -54,10 +54,6 @@ class TremoloDispatcher;
 class TremoloTwoChord;
 class TremoloSingleChord;
 
-enum class TremoloChordType : char {
-    TremoloSingle, TremoloFirstNote, TremoloSecondNote
-};
-
 class GraceNotesGroup final : public std::vector<Chord*>, public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, GraceNotesGroup)

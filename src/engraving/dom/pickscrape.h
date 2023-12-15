@@ -54,7 +54,7 @@ public:
 class PickScrape final : public ChordTextLineBase
 {
     OBJECT_ALLOCATOR(engraving, PickScrape)
-    DECLARE_CLASSOF(ElementType::WHAMMY_BAR)
+    DECLARE_CLASSOF(ElementType::PICK_SCRAPE)
 
 public:
     PickScrape(EngravingItem* parent);

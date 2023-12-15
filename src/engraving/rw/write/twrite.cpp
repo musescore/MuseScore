@@ -30,128 +30,131 @@
 #include "../../infrastructure/ifileinfoprovider.h"
 #include "../../infrastructure/rtti.h"
 
-#include "../../dom/score.h"
-#include "../../dom/masterscore.h"
-#include "../../dom/factory.h"
-#include "../../dom/linkedobjects.h"
-#include "../../dom/mscore.h"
-#include "../../dom/staff.h"
-#include "../../dom/part.h"
-#include "../../dom/utils.h"
+#include "dom/score.h"
+#include "dom/masterscore.h"
+#include "dom/factory.h"
+#include "dom/linkedobjects.h"
+#include "dom/mscore.h"
+#include "dom/staff.h"
+#include "dom/part.h"
+#include "dom/utils.h"
 
-#include "../../dom/accidental.h"
-#include "../../dom/actionicon.h"
-#include "../../dom/ambitus.h"
-#include "../../dom/arpeggio.h"
-#include "../../dom/articulation.h"
-#include "../../dom/audio.h"
+#include "dom/accidental.h"
+#include "dom/actionicon.h"
+#include "dom/ambitus.h"
+#include "dom/arpeggio.h"
+#include "dom/articulation.h"
+#include "dom/audio.h"
 
-#include "../../dom/bagpembell.h"
-#include "../../dom/barline.h"
-#include "../../dom/beam.h"
-#include "../../dom/bend.h"
-#include "../../dom/stretchedbend.h"
-#include "../../dom/box.h"
-#include "../../dom/bracket.h"
-#include "../../dom/breath.h"
+#include "dom/bagpembell.h"
+#include "dom/barline.h"
+#include "dom/beam.h"
+#include "dom/bend.h"
+#include "dom/stretchedbend.h"
+#include "dom/box.h"
+#include "dom/bracket.h"
+#include "dom/breath.h"
 
-#include "../../dom/chord.h"
-#include "../../dom/chordline.h"
-#include "../../dom/chordrest.h"
-#include "../../dom/clef.h"
-#include "../../dom/capo.h"
+#include "dom/chord.h"
+#include "dom/chordline.h"
+#include "dom/chordrest.h"
+#include "dom/clef.h"
+#include "dom/capo.h"
 
-#include "../../dom/drumset.h"
-#include "../../dom/dynamic.h"
-#include "../../dom/expression.h"
-#include "../../dom/fermata.h"
-#include "../../dom/figuredbass.h"
-#include "../../dom/fingering.h"
-#include "../../dom/fret.h"
+#include "dom/drumset.h"
+#include "dom/dynamic.h"
+#include "dom/expression.h"
+#include "dom/fermata.h"
+#include "dom/figuredbass.h"
+#include "dom/fingering.h"
+#include "dom/fret.h"
 
-#include "../../dom/glissando.h"
-#include "../../dom/gradualtempochange.h"
-#include "../../dom/groups.h"
-#include "../../dom/guitarbend.h"
+#include "dom/glissando.h"
+#include "dom/gradualtempochange.h"
+#include "dom/groups.h"
+#include "dom/guitarbend.h"
 
-#include "../../dom/hairpin.h"
-#include "../../dom/harmony.h"
-#include "../../dom/harmonicmark.h"
-#include "../../dom/harppedaldiagram.h"
-#include "../../dom/hook.h"
+#include "dom/hairpin.h"
+#include "dom/harmony.h"
+#include "dom/harmonicmark.h"
+#include "dom/harppedaldiagram.h"
+#include "dom/hook.h"
 
-#include "../../dom/image.h"
-#include "../../dom/imageStore.h"
-#include "../../dom/instrument.h"
-#include "../../dom/instrchange.h"
+#include "dom/image.h"
+#include "dom/imageStore.h"
+#include "dom/instrument.h"
+#include "dom/instrchange.h"
 
-#include "../../dom/jump.h"
+#include "dom/jump.h"
 
-#include "../../dom/keysig.h"
+#include "dom/keysig.h"
 
-#include "../../dom/layoutbreak.h"
-#include "../../dom/ledgerline.h"
-#include "../../dom/letring.h"
-#include "../../dom/location.h"
-#include "../../dom/lyrics.h"
+#include "dom/layoutbreak.h"
+#include "dom/ledgerline.h"
+#include "dom/letring.h"
+#include "dom/location.h"
+#include "dom/lyrics.h"
 
-#include "../../dom/marker.h"
-#include "../../dom/measurenumber.h"
-#include "../../dom/measurerepeat.h"
-#include "../../dom/mmrest.h"
-#include "../../dom/mmrestrange.h"
+#include "dom/marker.h"
+#include "dom/measurenumber.h"
+#include "dom/measurerepeat.h"
+#include "dom/mmrest.h"
+#include "dom/mmrestrange.h"
 
-#include "../../dom/note.h"
-#include "../../dom/notedot.h"
-#include "../../dom/noteline.h"
-#include "../../dom/ornament.h"
-#include "../../dom/ottava.h"
+#include "dom/note.h"
+#include "dom/notedot.h"
+#include "dom/noteline.h"
+#include "dom/ornament.h"
+#include "dom/ottava.h"
 
-#include "../../dom/page.h"
-#include "../../dom/palmmute.h"
-#include "../../dom/part.h"
-#include "../../dom/pedal.h"
-#include "../../dom/playtechannotation.h"
+#include "dom/page.h"
+#include "dom/palmmute.h"
+#include "dom/part.h"
+#include "dom/pedal.h"
+#include "dom/pickscrape.h"
+#include "dom/playtechannotation.h"
 
-#include "../../dom/rasgueado.h"
-#include "../../dom/rehearsalmark.h"
-#include "../../dom/rest.h"
+#include "dom/rasgueado.h"
+#include "dom/rehearsalmark.h"
+#include "dom/rest.h"
 
-#include "../../dom/sig.h"
-#include "../../dom/segment.h"
-#include "../../dom/slur.h"
-#include "../../dom/spacer.h"
-#include "../../dom/staffstate.h"
-#include "../../dom/stafftext.h"
-#include "../../dom/stafftype.h"
-#include "../../dom/stafftypechange.h"
-#include "../../dom/stem.h"
-#include "../../dom/stemslash.h"
-#include "../../dom/sticking.h"
-#include "../../dom/stringdata.h"
-#include "../../dom/stringtunings.h"
-#include "../../dom/symbol.h"
-#include "../../dom/bsymbol.h"
-#include "../../dom/system.h"
-#include "../../dom/systemdivider.h"
-#include "../../dom/systemtext.h"
+#include "dom/sig.h"
+#include "dom/segment.h"
+#include "dom/slur.h"
+#include "dom/spacer.h"
+#include "dom/staffstate.h"
+#include "dom/stafftext.h"
+#include "dom/stafftype.h"
+#include "dom/stafftypechange.h"
+#include "dom/stem.h"
+#include "dom/stemslash.h"
+#include "dom/sticking.h"
+#include "dom/stringdata.h"
+#include "dom/stringtunings.h"
+#include "dom/symbol.h"
+#include "dom/bsymbol.h"
+#include "dom/system.h"
+#include "dom/systemdivider.h"
+#include "dom/systemtext.h"
 
-#include "../../dom/tempotext.h"
-#include "../../dom/text.h"
-#include "../../dom/textbase.h"
-#include "../../dom/textline.h"
-#include "../../dom/textlinebase.h"
-#include "../../dom/tie.h"
-#include "../../dom/timesig.h"
-#include "../../dom/tremolo.h"
-#include "../../dom/tremolobar.h"
-#include "../../dom/trill.h"
-#include "../../dom/tuplet.h"
+#include "dom/tempotext.h"
+#include "dom/text.h"
+#include "dom/textbase.h"
+#include "dom/textline.h"
+#include "dom/textlinebase.h"
+#include "dom/tie.h"
+#include "dom/timesig.h"
+#include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
+#include "dom/tremolobar.h"
+#include "dom/trill.h"
+#include "dom/tuplet.h"
 
-#include "../../dom/vibrato.h"
-#include "../../dom/volta.h"
+#include "dom/vibrato.h"
+#include "dom/volta.h"
 
-#include "../../dom/whammybar.h"
+#include "dom/whammybar.h"
 
 #include "../xmlwriter.h"
 #include "writecontext.h"
@@ -162,46 +165,200 @@
 using namespace mu::engraving;
 using namespace mu::engraving::write;
 
-using WriteTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Articulation,
-                                  BagpipeEmbellishment, BarLine, Beam, Bend, StretchedBend,  HBox, VBox, FBox, TBox, Bracket, Breath,
-                                  Chord, ChordLine, Clef, Capo,
-                                  Dynamic, Expression,
-                                  Fermata, FiguredBass, Fingering, FretDiagram,
-                                  Glissando, GradualTempoChange, GuitarBend,
-                                  Hairpin, Harmony, HarmonicMark, HarpPedalDiagram, Hook,
-                                  Image, InstrumentChange,
-                                  Jump,
-                                  KeySig,
-                                  LayoutBreak, LedgerLine, LetRing, Lyrics,
-                                  Marker, MeasureNumber, MeasureRepeat, MMRest, MMRestRange,
-                                  Note, NoteDot, NoteHead, NoteLine,
-                                  Ornament, Ottava,
-                                  Page, PalmMute, Pedal, PlayTechAnnotation,
-                                  Rasgueado, RehearsalMark, Rest,
-                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking, StringTunings,
-                                  Symbol, FSymbol, System, SystemDivider, SystemText,
-                                  TempoText, Text, TextLine, Tie, TimeSig, TremoloDispatcher, TremoloBar, Trill, Tuplet,
-                                  Vibrato, Volta,
-                                  WhammyBar>;
-
-class WriteVisitor : public rtti::Visitor<WriteVisitor>
-{
-public:
-    template<typename T>
-    static bool doVisit(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
-    {
-        if (T::classof(item)) {
-            TWrite::write(static_cast<const T*>(item), xml, ctx);
-            return true;
-        }
-        return false;
-    }
-};
-
 void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& ctx)
 {
-    bool found = WriteVisitor::visit(WriteTypes {}, item, xml, ctx);
-    DO_ASSERT(found);
+    switch (item->type()) {
+    case ElementType::ACCIDENTAL:   write(item_cast<const Accidental*>(item), xml, ctx);
+        break;
+    case ElementType::ACTION_ICON:  write(item_cast<const ActionIcon*>(item), xml, ctx);
+        break;
+    case ElementType::AMBITUS:      write(item_cast<const Ambitus*>(item), xml, ctx);
+        break;
+    case ElementType::ARPEGGIO:     write(item_cast<const Arpeggio*>(item), xml, ctx);
+        break;
+    case ElementType::ARTICULATION: write(item_cast<const Articulation*>(item), xml, ctx);
+        break;
+    case ElementType::BAGPIPE_EMBELLISHMENT: write(item_cast<const BagpipeEmbellishment*>(item), xml, ctx);
+        break;
+    case ElementType::BAR_LINE:     write(item_cast<const BarLine*>(item), xml, ctx);
+        break;
+    case ElementType::BEAM:         write(item_cast<const Beam*>(item), xml, ctx);
+        break;
+    case ElementType::BEND:         write(item_cast<const Bend*>(item), xml, ctx);
+        break;
+    case ElementType::STRETCHED_BEND: write(item_cast<const StretchedBend*>(item), xml, ctx);
+        break;
+    case ElementType::HBOX:         write(item_cast<const HBox*>(item), xml, ctx);
+        break;
+    case ElementType::VBOX:         write(item_cast<const VBox*>(item), xml, ctx);
+        break;
+    case ElementType::FBOX:         write(item_cast<const FBox*>(item), xml, ctx);
+        break;
+    case ElementType::TBOX:         write(item_cast<const TBox*>(item), xml, ctx);
+        break;
+    case ElementType::BRACKET:      write(item_cast<const Bracket*>(item), xml, ctx);
+        break;
+    case ElementType::BREATH:       write(item_cast<const Breath*>(item), xml, ctx);
+        break;
+    case ElementType::CHORD:        write(item_cast<const Chord*>(item), xml, ctx);
+        break;
+    case ElementType::CHORDLINE:    write(item_cast<const ChordLine*>(item), xml, ctx);
+        break;
+    case ElementType::CLEF:         write(item_cast<const Clef*>(item), xml, ctx);
+        break;
+    case ElementType::CAPO:         write(item_cast<const Capo*>(item), xml, ctx);
+        break;
+    case ElementType::DYNAMIC:      write(item_cast<const Dynamic*>(item), xml, ctx);
+        break;
+    case ElementType::EXPRESSION:   write(item_cast<const Expression*>(item), xml, ctx);
+        break;
+    case ElementType::FERMATA:      write(item_cast<const Fermata*>(item), xml, ctx);
+        break;
+    case ElementType::FIGURED_BASS: write(item_cast<const FiguredBass*>(item), xml, ctx);
+        break;
+    case ElementType::FINGERING:    write(item_cast<const Fingering*>(item), xml, ctx);
+        break;
+    case ElementType::FRET_DIAGRAM: write(item_cast<const FretDiagram*>(item), xml, ctx);
+        break;
+    case ElementType::GLISSANDO:    write(item_cast<const Glissando*>(item), xml, ctx);
+        break;
+    case ElementType::GRADUAL_TEMPO_CHANGE: write(item_cast<const GradualTempoChange*>(item), xml, ctx);
+        break;
+    case ElementType::GUITAR_BEND:  write(item_cast<const GuitarBend*>(item), xml, ctx);
+        break;
+    case ElementType::HAIRPIN:      write(item_cast<const Hairpin*>(item), xml, ctx);
+        break;
+    case ElementType::HARMONY:      write(item_cast<const Harmony*>(item), xml, ctx);
+        break;
+    case ElementType::HARMONIC_MARK: write(item_cast<const HarmonicMark*>(item), xml, ctx);
+        break;
+    case ElementType::HARP_DIAGRAM: write(item_cast<const HarpPedalDiagram*>(item), xml, ctx);
+        break;
+    case ElementType::HOOK:         write(item_cast<const Hook*>(item), xml, ctx);
+        break;
+    case ElementType::IMAGE:        write(item_cast<const Image*>(item), xml, ctx);
+        break;
+    case ElementType::INSTRUMENT_CHANGE: write(item_cast<const InstrumentChange*>(item), xml, ctx);
+        break;
+    case ElementType::JUMP:         write(item_cast<const Jump*>(item), xml, ctx);
+        break;
+    case ElementType::KEYSIG:       write(item_cast<const KeySig*>(item), xml, ctx);
+        break;
+    case ElementType::LAYOUT_BREAK: write(item_cast<const LayoutBreak*>(item), xml, ctx);
+        break;
+    case ElementType::LEDGER_LINE:  write(item_cast<const LedgerLine*>(item), xml, ctx);
+        break;
+    case ElementType::LET_RING:     write(item_cast<const LetRing*>(item), xml, ctx);
+        break;
+    case ElementType::LYRICS:       write(item_cast<const Lyrics*>(item), xml, ctx);
+        break;
+    case ElementType::MARKER:       write(item_cast<const Marker*>(item), xml, ctx);
+        break;
+    case ElementType::MEASURE_NUMBER: write(item_cast<const MeasureNumber*>(item), xml, ctx);
+        break;
+    case ElementType::MEASURE_REPEAT: write(item_cast<const MeasureRepeat*>(item), xml, ctx);
+        break;
+    case ElementType::MMREST:       write(item_cast<const MMRest*>(item), xml, ctx);
+        break;
+    case ElementType::MMREST_RANGE: write(item_cast<const MMRestRange*>(item), xml, ctx);
+        break;
+    case ElementType::NOTE:         write(item_cast<const Note*>(item), xml, ctx);
+        break;
+    case ElementType::NOTEDOT:      write(item_cast<const NoteDot*>(item), xml, ctx);
+        break;
+    case ElementType::NOTEHEAD:     write(item_cast<const NoteHead*>(item), xml, ctx);
+        break;
+    case ElementType::NOTELINE:     write(item_cast<const NoteLine*>(item), xml, ctx);
+        break;
+    case ElementType::ORNAMENT:     write(item_cast<const Ornament*>(item), xml, ctx);
+        break;
+    case ElementType::OTTAVA:       write(item_cast<const Ottava*>(item), xml, ctx);
+        break;
+    case ElementType::PAGE:         write(item_cast<const Page*>(item), xml, ctx);
+        break;
+    case ElementType::PALM_MUTE:    write(item_cast<const PalmMute*>(item), xml, ctx);
+        break;
+    case ElementType::PEDAL:        write(item_cast<const Pedal*>(item), xml, ctx);
+        break;
+    case ElementType::PICK_SCRAPE:  write(item_cast<const PickScrape*>(item), xml, ctx);
+        break;
+    case ElementType::PLAYTECH_ANNOTATION: write(item_cast<const PlayTechAnnotation*>(item), xml, ctx);
+        break;
+    case ElementType::RASGUEADO:    write(item_cast<const Rasgueado*>(item), xml, ctx);
+        break;
+    case ElementType::REHEARSAL_MARK: write(item_cast<const RehearsalMark*>(item), xml, ctx);
+        break;
+    case ElementType::REST:         write(item_cast<const Rest*>(item), xml, ctx);
+        break;
+    case ElementType::SEGMENT:      write(item_cast<const Segment*>(item), xml, ctx);
+        break;
+    case ElementType::SLUR:         write(item_cast<const Slur*>(item), xml, ctx);
+        break;
+    case ElementType::SPACER:       write(item_cast<const Spacer*>(item), xml, ctx);
+        break;
+    case ElementType::STAFF_STATE:  write(item_cast<const StaffState*>(item), xml, ctx);
+        break;
+    case ElementType::STAFF_TEXT:   write(item_cast<const StaffText*>(item), xml, ctx);
+        break;
+    case ElementType::STAFFTYPE_CHANGE: write(item_cast<const StaffTypeChange*>(item), xml, ctx);
+        break;
+    case ElementType::STEM:         write(item_cast<const Stem*>(item), xml, ctx);
+        break;
+    case ElementType::STEM_SLASH:   write(item_cast<const StemSlash*>(item), xml, ctx);
+        break;
+    case ElementType::STICKING:     write(item_cast<const Sticking*>(item), xml, ctx);
+        break;
+    case ElementType::STRING_TUNINGS: write(item_cast<const StringTunings*>(item), xml, ctx);
+        break;
+    case ElementType::SYMBOL:       write(item_cast<const Symbol*>(item), xml, ctx);
+        break;
+    case ElementType::FSYMBOL:      write(item_cast<const FSymbol*>(item), xml, ctx);
+        break;
+    case ElementType::SYSTEM:       write(item_cast<const System*>(item), xml, ctx);
+        break;
+    case ElementType::SYSTEM_DIVIDER: write(item_cast<const SystemDivider*>(item), xml, ctx);
+        break;
+    case ElementType::SYSTEM_TEXT:  write(item_cast<const SystemText*>(item), xml, ctx);
+        break;
+    case ElementType::TEMPO_TEXT:   write(item_cast<const TempoText*>(item), xml, ctx);
+        break;
+    case ElementType::TEXT:         write(item_cast<const Text*>(item), xml, ctx);
+        break;
+    case ElementType::TEXTLINE:     write(item_cast<const TextLine*>(item), xml, ctx);
+        break;
+    case ElementType::TIE:          write(item_cast<const Tie*>(item), xml, ctx);
+        break;
+    case ElementType::TIMESIG:      write(item_cast<const TimeSig*>(item), xml, ctx);
+        break;
+    case ElementType::TREMOLO: {
+        const TremoloDispatcher* td = item_cast<const TremoloDispatcher*>(item);
+        if (td->singleChord) {
+            write(td->singleChord, xml, ctx);
+        } else {
+            write(td->twoChord, xml, ctx);
+        }
+    } break;
+    case ElementType::TREMOLO_SINGLECHORD: write(item_cast<const TremoloSingleChord*>(item), xml, ctx);
+        break;
+    case ElementType::TREMOLO_TWOCHORD:    write(item_cast<const TremoloTwoChord*>(item), xml, ctx);
+        break;
+    case ElementType::TREMOLOBAR:   write(item_cast<const TremoloBar*>(item), xml, ctx);
+        break;
+    case ElementType::TRILL:        write(item_cast<const Trill*>(item), xml, ctx);
+        break;
+    case ElementType::TUPLET:       write(item_cast<const Tuplet*>(item), xml, ctx);
+        break;
+    case ElementType::VIBRATO:      write(item_cast<const Vibrato*>(item), xml, ctx);
+        break;
+    case ElementType::VOLTA:        write(item_cast<const Volta*>(item), xml, ctx);
+        break;
+    case ElementType::WHAMMY_BAR:   write(item_cast<const WhammyBar*>(item), xml, ctx);
+        break;
+    default: {
+        UNREACHABLE;
+        LOGE() << "not implemented write for type: " << item->typeName();
+    }
+    }
 }
 
 void TWrite::writeItems(const ElementList& items, XmlWriter& xml, WriteContext& ctx)
@@ -592,7 +749,8 @@ void TWrite::writeProperties(const Box* item, XmlWriter& xml, WriteContext& ctx)
 {
     for (Pid id : {
         Pid::BOX_HEIGHT, Pid::BOX_WIDTH, Pid::TOP_GAP, Pid::BOTTOM_GAP,
-        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE }) {
+        Pid::LEFT_MARGIN, Pid::RIGHT_MARGIN, Pid::TOP_MARGIN, Pid::BOTTOM_MARGIN, Pid::BOX_AUTOSIZE
+    }) {
         writeProperty(item, xml, id);
     }
     writeItemProperties(item, xml, ctx);
@@ -735,9 +893,13 @@ void TWrite::write(const Chord* item, XmlWriter& xml, WriteContext& ctx)
     if (item->arpeggio()) {
         write(item->arpeggio(), xml, ctx);
     }
-    if (item->tremoloDispatcher() && item->tremoloChordType() != TremoloChordType::TremoloSecondNote) {
-        write(item->tremoloDispatcher(), xml, ctx);
+
+    if (item->tremoloSingleChord()) {
+        write(item->tremoloSingleChord(), xml, ctx);
+    } else if (item->tremoloTwoChord() && item->tremoloChordType() != TremoloChordType::TremoloSecondChord) {
+        write(item->tremoloTwoChord(), xml, ctx);
     }
+
     for (EngravingItem* e : item->el()) {
         if (e->isChordLine() && toChordLine(e)->note()) { // this is now written by Note
             continue;
@@ -2212,6 +2374,16 @@ void TWrite::write(const Pedal* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
+void TWrite::write(const PickScrape* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item)) {
+        return;
+    }
+    xml.startElement(item);
+    writeProperties(static_cast<const TextLineBase*>(item), xml, ctx);
+    xml.endElement();
+}
+
 void TWrite::write(const PlayTechAnnotation* item, XmlWriter& xml, WriteContext& ctx)
 {
     xml.startElement(item);
@@ -2764,20 +2936,34 @@ void TWrite::write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx)
     xml.endElement();
 }
 
-void TWrite::write(const TremoloDispatcher* item, XmlWriter& xml, WriteContext& ctx)
+void TWrite::write(const TremoloSingleChord* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!ctx.canWrite(item)) {
+    if (!ctx.canWrite(item) || !ctx.canWrite(item->dispatcher())) {
         return;
     }
-    xml.startElement(item);
+
+    // for compatible reason
+    xml.startElement(TConv::toXml(ElementType::TREMOLO).ascii());
+
+    writeProperty(item, xml, Pid::TREMOLO_TYPE);
+    writeProperty(item, xml, Pid::PLAY);
+    writeItemProperties(item, xml, ctx);
+    xml.endElement();
+}
+
+void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ctx)
+{
+    if (!ctx.canWrite(item) || !ctx.canWrite(item->dispatcher())) {
+        return;
+    }
+    // for compatible reason
+    xml.startElement(TConv::toXml(ElementType::TREMOLO).ascii());
+
     writeProperty(item, xml, Pid::TREMOLO_TYPE);
     writeProperty(item, xml, Pid::TREMOLO_STYLE);
     writeProperty(item, xml, Pid::PLAY);
     writeItemProperties(item, xml, ctx);
-    if (!item->twoNotes()) {
-        xml.endElement();
-        return;
-    }
+
     // write manual adjustments to file
     int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
     if (item->userModified()) {
