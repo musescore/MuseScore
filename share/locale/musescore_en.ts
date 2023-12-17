@@ -3021,16 +3021,6 @@ By default, they will be placed such as that their right end are at the same lev
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9000"/>
-        <source>Standard stave</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9019"/>
-        <source>Line thickness: </source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9079"/>
         <source>Arrow height:</source>
         <translation type="unfinished"></translation>
@@ -3663,6 +3653,7 @@ By default, they will be placed such as that their right end are at the same lev
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="7832"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8030"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8482"/>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9019"/>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="9128"/>
         <source>Line thickness:</source>
         <translation type="unfinished"></translation>
@@ -3914,6 +3905,11 @@ By default, they will be placed such as that their right end are at the same lev
     <message>
         <location filename="../../src/notation/view/widgets/editstyle.ui" line="8198"/>
         <source>Reset &apos;Numbers only&apos; value</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/notation/view/widgets/editstyle.ui" line="9000"/>
+        <source>Standard staff</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
