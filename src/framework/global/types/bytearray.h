@@ -47,7 +47,6 @@ public:
 
     bool operator==(const ByteArray& other) const;
     bool operator!=(const ByteArray& other) const { return !operator==(other); }
-    bool operator<(const ByteArray& other) const;
 
     uint8_t* data();
     const uint8_t* constData() const;
