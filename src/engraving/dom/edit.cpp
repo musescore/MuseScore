@@ -81,6 +81,7 @@
 #include "tiemap.h"
 #include "timesig.h"
 #include "tremolo.h"
+#include "tremolotwochord.h"
 #include "trill.h"
 #include "tuplet.h"
 #include "tupletmap.h"
@@ -976,7 +977,7 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
     bool fmr = true;
 
     // Format: chord 1 tick, chord 2 tick, tremolo, track
-    std::vector<std::tuple<Fraction, Fraction, TremoloDispatcher*, track_idx_t> > tremoloChordTicks;
+    std::vector<std::tuple<Fraction, Fraction, TremoloTwoChord*, track_idx_t> > tremoloChordTicks;
 
     track_idx_t strack, etrack;
     if (staffIdx == mu::nidx) {
@@ -997,17 +998,17 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
                 ChordRest* cr = toChordRest(s->element(track));
                 if (cr && cr->isChord()) {
                     Chord* chord = toChord(cr);
-                    if (chord->tremoloDispatcher() && chord->tremoloDispatcher()->twoNotes()) {
-                        TremoloDispatcher* trem = chord->tremoloDispatcher();
+                    if (chord->tremoloTwoChord()) {
+                        TremoloTwoChord* trem = chord->tremoloTwoChord();
 
                         // Don't add same chord twice
                         if (trem->chord2() == chord) {
                             continue;
                         }
-                        auto newP
-                            = std::tuple<Fraction, Fraction, TremoloDispatcher*, track_idx_t>(cr->tick(),
-                                                                                              trem->chord2()->segment()->tick(), trem,
-                                                                                              track);
+                        auto newP = std::tuple<Fraction, Fraction, TremoloTwoChord*, track_idx_t>(
+                            cr->tick(),
+                            trem->chord2()->segment()->tick(), trem,
+                            track);
                         tremoloChordTicks.push_back(newP);
                     }
                 }
@@ -1115,8 +1116,8 @@ bool Score::rewriteMeasures(Measure* fm, Measure* lm, const Fraction& ns, staff_
     for (auto tremPair : tremoloChordTicks) {
         Fraction chord1Tick = std::get<0>(tremPair);
         Fraction chord2Tick = std::get<1>(tremPair);
-        TremoloDispatcher* trem       = std::get<2>(tremPair);
-        int track      = std::get<3>(tremPair);
+        TremoloTwoChord* trem = std::get<2>(tremPair);
+        int track = std::get<3>(tremPair);
 
         undo(new MoveTremolo(trem->score(), chord1Tick, chord2Tick, trem, track));
     }
@@ -4487,7 +4488,7 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
     TieMap tieMap;
     TupletMap tupletMap;      // tuplets cannot cross measure boundaries
     Score* score = sf->score();
-    TremoloDispatcher* tremolo = 0;
+    TremoloTwoChord* tremolo = nullptr;
 
     for (Segment* oseg = sf; oseg && oseg->tick() < lTick; oseg = oseg->next1()) {
         Segment* ns = 0;            //create segment later, on demand
@@ -4635,27 +4636,27 @@ void Score::cloneVoice(track_idx_t strack, track_idx_t dtrack, Segment* sf, cons
                         }
                     }
                     // two note tremolo
-                    if (och->tremoloDispatcher() && och->tremoloDispatcher()->twoNotes()) {
-                        if (och == och->tremoloDispatcher()->chord1()) {
+                    if (och->tremoloTwoChord()) {
+                        if (och == och->tremoloTwoChord()->chord1()) {
                             if (tremolo) {
                                 LOGD("unconnected two note tremolo");
                             }
                             if (link) {
-                                tremolo = item_cast<TremoloDispatcher*>(och->tremoloDispatcher()->linkedClone());
+                                tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->linkedClone());
                             } else {
-                                tremolo = item_cast<TremoloDispatcher*>(och->tremoloDispatcher()->clone());
+                                tremolo = item_cast<TremoloTwoChord*>(och->tremoloTwoChord()->clone());
                             }
                             tremolo->setScore(nch->score());
                             tremolo->setParent(nch);
                             tremolo->setTrack(nch->track());
-                            tremolo->setChords(nch, 0);
-                            nch->setTremoloDispatcher(tremolo);
-                        } else if (och == och->tremoloDispatcher()->chord2()) {
+                            tremolo->setChords(nch, nullptr);
+                            nch->setTremoloTwoChord(tremolo);
+                        } else if (och == och->tremoloTwoChord()->chord2()) {
                             if (!tremolo) {
                                 LOGD("first note for two note tremolo missing");
                             } else {
                                 tremolo->setChords(tremolo->chord1(), nch);
-                                nch->setTremoloDispatcher(tremolo);
+                                nch->setTremoloTwoChord(tremolo);
                             }
                         } else {
                             LOGD("inconsistent two note tremolo");

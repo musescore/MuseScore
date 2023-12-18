@@ -573,15 +573,15 @@ bool TrackList::write(Score* score, const Fraction& tick) const
                         remains  -= gd;
 
                         if (cr->isChord()) {
-                            if (!firstpart && toChord(cr)->tremoloTwoChord()) {               // remove partial two-note tremolo
+                            TremoloTwoChord* tremolo = toChord(cr)->tremoloTwoChord();
+                            if (!firstpart && tremolo) {               // remove partial two-note tremolo
                                 if (toChord(e)->tremoloTwoChord()->chord1() == toChord(e)) {
-                                    toChord(cr)->tremoloTwoChord()->setChords(toChord(cr), nullptr);
+                                    tremolo->setChords(toChord(cr), nullptr);
                                 } else {
-                                    toChord(cr)->tremoloTwoChord()->setChords(nullptr, toChord(cr));
+                                    tremolo->setChords(nullptr, toChord(cr));
                                 }
-                                TremoloDispatcher* tremoloPointer = toChord(cr)->tremoloDispatcher();
-                                toChord(cr)->setTremoloDispatcher(nullptr);
-                                delete tremoloPointer;
+                                toChord(cr)->setTremoloTwoChord(nullptr);
+                                delete tremolo;
                             }
                             for (Note* note : toChord(cr)->notes()) {
                                 if (!duration.isZero() && !note->tieFor()) {

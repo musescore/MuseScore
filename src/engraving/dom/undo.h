@@ -63,6 +63,7 @@
 #include "synthesizerstate.h"
 #include "text.h"
 #include "tremolo.h"
+#include "tremolotwochord.h"
 #include "tremolobar.h"
 
 namespace mu::engraving {
@@ -1548,20 +1549,20 @@ class MoveTremolo : public UndoCommand
 {
     OBJECT_ALLOCATOR(engraving, MoveTremolo)
 
-    Score* score { nullptr };
+    Score* score = nullptr;
     Fraction chord1Tick;
     Fraction chord2Tick;
-    TremoloDispatcher* trem { nullptr };
-    int track { 0 };
+    TremoloTwoChord* trem = nullptr;
+    int track = 0;
 
-    Chord* oldC1 { nullptr };
-    Chord* oldC2 { nullptr };
+    Chord* oldC1 = nullptr;
+    Chord* oldC2 = nullptr;
 
     void undo(EditData*) override;
     void redo(EditData*) override;
 
 public:
-    MoveTremolo(Score* s, Fraction c1, Fraction c2, TremoloDispatcher* tr, int t)
+    MoveTremolo(Score* s, Fraction c1, Fraction c2, TremoloTwoChord* tr, int t)
         : score(s), chord1Tick(c1), chord2Tick(c2), trem(tr), track(t) {}
 
     UNDO_TYPE(CommandType::MoveTremolo)

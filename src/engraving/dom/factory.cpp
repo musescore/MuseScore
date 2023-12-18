@@ -620,8 +620,10 @@ COPY_ITEM_IMPL(TremoloDispatcher)
 MAKE_ITEM_IMPL(TremoloDispatcher, Chord)
 
 CREATE_ITEM_IMPL(TremoloTwoChord, ElementType::TREMOLO_TWOCHORD, Chord, isAccessibleEnabled)
+COPY_ITEM_IMPL(TremoloTwoChord)
 
 CREATE_ITEM_IMPL(TremoloSingleChord, ElementType::TREMOLO_SINGLECHORD, Chord, isAccessibleEnabled)
+COPY_ITEM_IMPL(TremoloSingleChord)
 
 CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(TremoloBar, EngravingItem)

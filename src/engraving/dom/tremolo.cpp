@@ -154,9 +154,13 @@ void TremoloDispatcher::setParentInternal(EngravingObject* p)
     EngravingItem::setParentInternal(p);
 
     if (twoNotes()) {
-        twoChord->setParent(p);
+        if (twoChord) {
+            twoChord->setParent(p);
+        }
     } else {
-        singleChord->setParent(p);
+        if (singleChord) {
+            singleChord->setParent(p);
+        }
     }
 }
 
@@ -172,9 +176,9 @@ EngravingItem::LayoutData* TremoloDispatcher::createLayoutData() const
 const EngravingItem::LayoutData* TremoloDispatcher::ldataInternal() const
 {
     if (twoNotes()) {
-        return twoChord->ldataInternal();
+        return twoChord ? twoChord->ldataInternal() : nullptr;
     } else {
-        return singleChord->ldataInternal();
+        return singleChord ? singleChord->ldataInternal() : nullptr;
     }
 }
 
