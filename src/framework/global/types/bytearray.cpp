@@ -128,13 +128,6 @@ bool ByteArray::operator==(const ByteArray& other) const
     return std::memcmp(constData(), other.constData(), size()) == 0;
 }
 
-bool ByteArray::operator<(const ByteArray &other) const {
-    if (size() < other.size()) {
-        return true;
-    }
-    return std::memcmp(constData(), other.constData(), size()) < 0;
-}
-
 bool ByteArray::empty() const
 {
     return size() == 0;
