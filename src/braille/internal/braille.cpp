@@ -2805,11 +2805,11 @@ QString Braille::brailleTimeSig(TimeSig* timeSig)
 
 QString Braille::brailleTremolo(Chord* chord)
 {
-    if (!chord->tremoloDispatcher() || chord != chord->tremoloDispatcher()->chord1()) {
+    if (chord->tremoloChordType() == TremoloChordType::TremoloSecondChord) {
         return QString();
     }
 
-    switch (chord->tremoloDispatcher()->tremoloType()) {
+    switch (chord->tremoloType()) {
     case TremoloType::R8:  return BRAILLE_TREMOLO_8THS;
     case TremoloType::R16: return BRAILLE_TREMOLO_16THS;
     case TremoloType::R32: return BRAILLE_TREMOLO_32NDS;

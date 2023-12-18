@@ -529,7 +529,7 @@ bool Read410::pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fract
                                     }
                                     if (crt && crt->isChord()) {
                                         Chord* chrt = toChord(crt);
-                                        TremoloDispatcher* tr = chrt->tremoloDispatcher();
+                                        TremoloTwoChord* tr = chrt->tremoloTwoChord();
                                         if (tr) {
                                             tr->setChords(chrt, toChord(cr));
                                             chrt->remove(tr);
