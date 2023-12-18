@@ -882,7 +882,7 @@ SegmentType Segment::segmentType(ElementType type)
     case ElementType::BREATH:
         return SegmentType::Breath;
     default:
-        LOGD("Segment:segmentType():  bad type: <%s>", TConv::toXml(type));
+        LOGD("Segment:segmentType():  bad type: <%s>", TConv::toXml(type).ascii());
         return SegmentType::Invalid;
     }
 }

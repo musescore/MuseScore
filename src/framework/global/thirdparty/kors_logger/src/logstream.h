@@ -88,7 +88,7 @@ public:
     {
         m_ss << '[';
         for (size_t i = 0; i < t.size(); ++i) {
-            m_ss << t.at(i);
+            *this << t.at(i);
             if (i < t.size() - 1) {
                 m_ss << ',';
             }
