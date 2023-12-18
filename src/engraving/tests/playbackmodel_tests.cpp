@@ -162,6 +162,95 @@ TEST_F(Engraving_PlaybackModelTests, Two_Ending_Repeat)
 }
 
 /**
+ * @brief PlaybackModelTests_Repeat_And_Tremolo
+ * @details Checks that tremolos after a repeated section are rendered at the correct timestamp
+ */
+TEST_F(Engraving_PlaybackModelTests, Repeat_And_Tremolo)
+{
+    // [GIVEN] Simple piece of score (Flute, 4/4, 120 bpm)
+    Score* score = ScoreRW::readScore(PLAYBACK_MODEL_TEST_FILES_DIR + "repeat_and_tremolo/repeat_and_tremolo.mscx");
+
+    ASSERT_TRUE(score);
+    ASSERT_EQ(score->parts().size(), 1);
+
+    const Part* part = score->parts().at(0);
+    ASSERT_TRUE(part);
+    ASSERT_EQ(part->instruments().size(), 1);
+
+    // [WHEN] The articulation profiles repository will be returning profiles
+    m_defaultProfile->setPattern(ArticulationType::Standard, buildTestArticulationPattern());
+    m_defaultProfile->setPattern(ArticulationType::Tremolo32nd, buildTestArticulationPattern());
+
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [GIVEN] Expected amount of events per timestamp
+    const std::map<timestamp_t, std::pair<size_t /*notes*/, size_t /*rests*/> > expectedSizePerTimestamp {
+        // The first four half notes; repeated
+        { 0 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 1 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 2 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 3 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 4 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 5 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 6 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 7 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+
+        // After the repeat
+        { 8 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 9 * 2 * QUARTER_NOTE_DURATION, { 0, 1 } },
+
+        // Final three half notes
+        { 10 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 11 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 12 * 2 * QUARTER_NOTE_DURATION, { 16, 0 } },
+        { 13 * 2 * QUARTER_NOTE_DURATION, { 0, 1 } }
+    };
+
+    // [WHEN] The articulation profiles repository will be returning profiles for StringsArticulation family
+    EXPECT_CALL(*m_repositoryMock, defaultProfile(_)).WillRepeatedly(Return(m_defaultProfile));
+
+    // [WHEN] The playback model requested to be loaded
+    PlaybackModel model;
+    model.setprofilesRepository(m_repositoryMock);
+    model.load(score);
+
+    const PlaybackEventsMap& result = model.resolveTrackPlaybackData(part->id(), part->instrumentId().toStdString()).originEvents;
+
+    // [THEN] Amount of events per timestamp matches expectations
+    auto isExpectedTimestamp = [&expectedSizePerTimestamp](timestamp_t timestamp) {
+        if (mu::contains(expectedSizePerTimestamp, timestamp)) {
+            return testing::AssertionSuccess();
+        } else {
+            return testing::AssertionFailure() << "timestamp " << timestamp << " is not contained in expectedSizePerTimestamp";
+        }
+    };
+
+    size_t timestampCount = 0;
+    for (const auto& pair : result) {
+        ++timestampCount;
+
+        ASSERT_TRUE(isExpectedTimestamp(pair.first));
+
+        size_t notes = 0, rests = 0;
+        for (const PlaybackEvent& event : pair.second) {
+            if (std::holds_alternative<mpe::NoteEvent>(event)) {
+                // Check actual timestamp
+                const mu::mpe::NoteEvent& noteEvent = std::get<mu::mpe::NoteEvent>(event);
+                EXPECT_EQ(noteEvent.arrangementCtx().actualTimestamp, pair.first + notes * (2 * QUARTER_NOTE_DURATION / 16));
+
+                ++notes;
+            } else {
+                ++rests;
+            }
+        }
+
+        EXPECT_EQ(std::make_pair(notes, rests), expectedSizePerTimestamp.at(pair.first));
+    }
+
+    EXPECT_EQ(timestampCount, expectedSizePerTimestamp.size());
+}
+
+/**
  * @brief PlaybackModelTests_Da_Capo_Al_Fine
  * @details In this case we're building up a playback model of a simple score - Violin, 4/4, 120bpm, Treble Cleff, 6 measures
  *          Additionally, there is a "D.C. Al Fine" marking at the end of the 6-th measure. Measure 2 is marked by "Fine"
