@@ -5648,6 +5648,9 @@ By default, they will be placed such as that their right end are at the same lev
              <property name="text">
               <string>Vertical position of number:</string>
              </property>
+             <property name="buddy">
+              <cstring>mmRestNumberPos</cstring>
+             </property>
             </widget>
            </item>
            <item row="1" column="1">
@@ -5688,8 +5691,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="1" column="5">
             <widget class="QToolButton" name="resetMMRestNumberMaskHBar">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'Break H-bar if it collides with number' value</string>
+             </property>
              <property name="text">
-              <string notr="true">…</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5697,6 +5706,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QLabel" name="label_119">
              <property name="text">
               <string>H-bar horizontal stroke thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>mmRestHBarThickness</cstring>
              </property>
             </widget>
            </item>
@@ -5718,8 +5730,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="2" column="2">
             <widget class="QToolButton" name="resetMMRestHBarThickness">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'H-bar horizontal stroke thickness' value</string>
+             </property>
              <property name="text">
-              <string notr="true">…</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5727,6 +5745,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QLabel" name="label_103">
              <property name="text">
               <string>H-bar margin within barlines:</string>
+             </property>
+             <property name="buddy">
+              <cstring>multiMeasureRestMargin</cstring>
              </property>
             </widget>
            </item>
@@ -5755,7 +5776,7 @@ By default, they will be placed such as that their right end are at the same lev
               <string>Reset to default</string>
              </property>
              <property name="accessibleName">
-              <string>Reset 'Multimeasure rest margin' value</string>
+              <string>Reset 'H-bar margin within barlines' value</string>
              </property>
              <property name="text">
               <string notr="true"/>
@@ -5766,6 +5787,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QLabel" name="label_123">
              <property name="text">
               <string>H-bar vertical stroke thickness:</string>
+             </property>
+             <property name="buddy">
+              <cstring>mmRestHBarVStrokeThickness</cstring>
              </property>
             </widget>
            </item>
@@ -5787,8 +5811,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="2">
             <widget class="QToolButton" name="resetMMRestHBarVStrokeThickness">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'H-bar vertical stroke thickness' value</string>
+             </property>
              <property name="text">
-              <string notr="true">…</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5796,6 +5826,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QLabel" name="label_145">
              <property name="text">
               <string>H-bar vertical stroke height:</string>
+             </property>
+             <property name="buddy">
+              <cstring>mmRestHBarVStrokeHeight</cstring>
              </property>
             </widget>
            </item>
@@ -5817,8 +5850,14 @@ By default, they will be placed such as that their right end are at the same lev
            </item>
            <item row="3" column="5">
             <widget class="QToolButton" name="resetMMRestHBarVStrokeHeight">
+             <property name="toolTip">
+              <string>Reset to default</string>
+             </property>
+             <property name="accessibleName">
+              <string>Reset 'H-bar vertical stroke height' value</string>
+             </property>
              <property name="text">
-              <string notr="true">…</string>
+              <string notr="true"/>
              </property>
             </widget>
            </item>
@@ -5852,12 +5891,18 @@ By default, they will be placed such as that their right end are at the same lev
                 <property name="text">
                  <string>Maximum number of measures:</string>
                 </property>
+                <property name="buddy">
+                 <cstring>mmRestOldStyleMaxMeasures</cstring>
+                </property>
                </widget>
               </item>
               <item row="0" column="2">
                <widget class="QToolButton" name="resetMMRestOldStyleMaxMeasures">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
                 <property name="text">
-                 <string notr="true">…</string>
+                 <string notr="true"/>
                 </property>
                </widget>
               </item>
@@ -5889,12 +5934,18 @@ By default, they will be placed such as that their right end are at the same lev
                 <property name="text">
                  <string>Spacing of symbols:</string>
                 </property>
+                <property name="buddy">
+                 <cstring>mmRestOldStyleSpacing</cstring>
+                </property>
                </widget>
               </item>
               <item row="1" column="2">
                <widget class="QToolButton" name="resetMMRestOldStyleSpacing">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
                 <property name="text">
-                 <string notr="true">…</string>
+                 <string notr="true"/>
                 </property>
                </widget>
               </item>
@@ -6037,6 +6088,9 @@ By default, they will be placed such as that their right end are at the same lev
             <widget class="QLabel" name="label_148">
              <property name="text">
               <string>Number position:</string>
+             </property>
+             <property name="buddy">
+              <cstring>measureRepeatNumberPos</cstring>
              </property>
             </widget>
            </item>
@@ -8995,9 +9049,9 @@ By default, they will be placed such as that their right end are at the same lev
           </property>
           <layout class="QVBoxLayout" name="verticalLayout_58">
            <item>
-            <widget class="QGroupBox" name="groupBox_bendstaff">
+            <widget class="QGroupBox" name="groupBox_bendsStandardStaff">
              <property name="title">
-              <string>Standard stave</string>
+              <string>Standard staff</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_61">
               <item row="0" column="3">
@@ -9015,8 +9069,14 @@ By default, they will be placed such as that their right end are at the same lev
               </item>
               <item row="0" column="0">
                <widget class="QLabel" name="label_171">
+                <property name="accessibleName">
+                 <string>Line thickness on standard staves:</string>
+                </property>
                 <property name="text">
-                 <string>Line thickness: </string>
+                 <string>Line thickness:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>bendLineWidth</cstring>
                 </property>
                </widget>
               </item>
@@ -9029,8 +9089,14 @@ By default, they will be placed such as that their right end are at the same lev
               </item>
               <item row="0" column="2">
                <widget class="QToolButton" name="resetBendLineWidth">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Line thickness on standard staves' value</string>
+                </property>
                 <property name="text">
-                  <string notr="true"/>
+                 <string notr="true"/>
                 </property>
                </widget>
               </item>
@@ -9038,7 +9104,7 @@ By default, they will be placed such as that their right end are at the same lev
             </widget>
            </item>
            <item>
-            <widget class="QGroupBox" name="groupBox_tablaturebend">
+            <widget class="QGroupBox" name="groupBox_bendsTablature">
              <property name="title">
               <string>Tablature</string>
              </property>
@@ -9059,7 +9125,7 @@ By default, they will be placed such as that their right end are at the same lev
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Line thickness' value</string>
+                 <string>Reset 'Arrow width' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -9077,6 +9143,9 @@ By default, they will be placed such as that their right end are at the same lev
                <widget class="QLabel" name="label_193">
                 <property name="text">
                  <string>Arrow height:</string>
+                </property>
+                <property name="buddy">
+                 <cstring>bendArrowHeight</cstring>
                 </property>
                </widget>
               </item>
@@ -9104,8 +9173,14 @@ By default, they will be placed such as that their right end are at the same lev
               </item>
               <item row="1" column="5">
                <widget class="QToolButton" name="resetBendArrowHeight">
+                <property name="toolTip">
+                 <string>Reset to default</string>
+                </property>
+                <property name="accessibleName">
+                 <string>Reset 'Arrow height' value</string>
+                </property>
                 <property name="text">
-                  <string notr="true"/>
+                 <string notr="true"/>
                 </property>
                </widget>
               </item>
@@ -9124,6 +9199,9 @@ By default, they will be placed such as that their right end are at the same lev
               </item>
               <item row="0" column="0">
                <widget class="QLabel" name="label_179">
+                <property name="accessibleName">
+                 <string>Line thickness on tablature staves:</string>
+                </property>
                 <property name="text">
                  <string>Line thickness:</string>
                 </property>
@@ -9160,7 +9238,7 @@ By default, they will be placed such as that their right end are at the same lev
                  <string>Reset to default</string>
                 </property>
                 <property name="accessibleName">
-                 <string>Reset 'Arrow width' value</string>
+                 <string>Reset 'Line thickness on tablature staves' value</string>
                 </property>
                 <property name="text">
                  <string notr="true"/>
@@ -11157,6 +11235,9 @@ By default, they will be placed such as that their right end are at the same lev
                 <property name="text">
                  <string>Font:</string>
                 </property>
+                <property name="buddy">
+                 <cstring>dynamicsFont</cstring>
+                </property>
                </widget>
               </item>
               <item>
@@ -11277,6 +11358,9 @@ By default, they will be placed such as that their right end are at the same lev
              </property>
              <property name="margin">
               <number>0</number>
+             </property>
+             <property name="buddy">
+              <cstring>dynamicsSize</cstring>
              </property>
             </widget>
            </item>
@@ -14299,6 +14383,15 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetVibratoLinePosAbove</tabstop>
   <tabstop>vibratoLinePosBelow</tabstop>
   <tabstop>resetVibratoLinePosBelow</tabstop>
+  <tabstop>bendLineWidth</tabstop>
+  <tabstop>resetBendLineWidth</tabstop>
+  <tabstop>bendLineWidthTab</tabstop>
+  <tabstop>resetBendLineWidthTab</tabstop>
+  <tabstop>bendArrowWidth</tabstop>
+  <tabstop>resetBendArrowWidth</tabstop>
+  <tabstop>bendArrowHeight</tabstop>
+  <tabstop>resetBendArrowHeight</tabstop>
+  <tabstop>guitarBendCueSizedGraceFrets</tabstop>
   <tabstop>textLinePlacement</tabstop>
   <tabstop>resetTextLinePlacement</tabstop>
   <tabstop>textLinePosAbove</tabstop>
@@ -14321,6 +14414,11 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>resetArticStaffDist</tabstop>
   <tabstop>articulationMag</tabstop>
   <tabstop>resetArticulationMag</tabstop>
+  <tabstop>radioArticAlignStem</tabstop>
+  <tabstop>radioArticAlignNoteHead</tabstop>
+  <tabstop>radioArticAlignCenter</tabstop>
+  <tabstop>radioArticKeepTogether</tabstop>
+  <tabstop>radioArticAllowSeparate</tabstop>
   <tabstop>fermataPosAbove</tabstop>
   <tabstop>resetFermataPosAbove</tabstop>
   <tabstop>fermataPosBelow</tabstop>
@@ -14379,14 +14477,20 @@ By default, they will be placed such as that their right end are at the same lev
   <tabstop>lyricsMelismaPad</tabstop>
   <tabstop>resetLyricsMelismaPad</tabstop>
   <tabstop>resetLyricsMelismaAlign</tabstop>
+  <tabstop>dynamicsOverrideFont</tabstop>
+  <tabstop>dynamicsFont</tabstop>
+  <tabstop>avoidBarLines</tabstop>
+  <tabstop>resetAvoidBarLines</tabstop>
+  <tabstop>dynamicsSize</tabstop>
+  <tabstop>resetDynamicsSize</tabstop>
   <tabstop>dynamicsPlacement</tabstop>
   <tabstop>resetDynamicsPlacement</tabstop>
-  <tabstop>dynamicsPosAbove</tabstop>
   <tabstop>resetDynamicsPosAbove</tabstop>
-  <tabstop>dynamicsPosBelow</tabstop>
   <tabstop>resetDynamicsPosBelow</tabstop>
   <tabstop>dynamicsMinDistance</tabstop>
   <tabstop>resetDynamicsMinDistance</tabstop>
+  <tabstop>snapExpression</tabstop>
+  <tabstop>resetSnapExpression</tabstop>
   <tabstop>rehearsalMarkPlacement</tabstop>
   <tabstop>resetRehearsalMarkPlacement</tabstop>
   <tabstop>rehearsalMarkPosAbove</tabstop>
