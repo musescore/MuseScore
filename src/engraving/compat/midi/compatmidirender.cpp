@@ -181,7 +181,7 @@ std::vector<NoteEventList> CompatMidiRender::renderChord(Chord* chord, Chord* pr
         CompatMidiRender::renderArpeggio(chord, ell, ontime);
         arpeggio = true;
     } else {
-        if (chord->tremoloDispatcher()) {
+        if (chord->tremoloType() != TremoloType::INVALID_TREMOLO) {
             CompatMidiRender::renderTremolo(chord, ell, ontime, tremoloLength);
             tremolo = true;
         }

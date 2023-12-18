@@ -1593,7 +1593,7 @@ bool Chord::shouldHaveHook() const
     return shouldHaveStem()
            && durationType().hooks() > 0
            && !beam()
-           && !(tremoloDispatcher() && tremoloDispatcher()->twoNotes());
+           && !tremoloTwoChord();
 }
 
 void Chord::createStem()
@@ -2095,12 +2095,16 @@ void Chord::localSpatiumChanged(double oldValue, double newValue)
     if (m_stemSlash) {
         m_stemSlash->localSpatiumChanged(oldValue, newValue);
     }
-    if (arpeggio()) {
-        arpeggio()->localSpatiumChanged(oldValue, newValue);
+    if (m_arpeggio) {
+        m_arpeggio->localSpatiumChanged(oldValue, newValue);
     }
-    if (tremoloDispatcher() && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
-        tremoloDispatcher()->localSpatiumChanged(oldValue, newValue);
+
+    if (m_tremoloSingleChord) {
+        m_tremoloSingleChord->localSpatiumChanged(oldValue, newValue);
+    } else if (m_tremoloTwoChord && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
+        m_tremoloTwoChord->localSpatiumChanged(oldValue, newValue);
     }
+
     for (EngravingItem* e : articulations()) {
         e->localSpatiumChanged(oldValue, newValue);
     }
@@ -2442,9 +2446,14 @@ void Chord::updateEndsGlissandoOrGuitarBend()
 
 void Chord::removeMarkings(bool keepTremolo)
 {
-    if (tremoloDispatcher() && !keepTremolo) {
-        remove(tremoloDispatcher());
+    if (m_tremoloSingleChord && !keepTremolo) {
+        remove(m_tremoloSingleChord);
     }
+
+    if (m_tremoloTwoChord && !keepTremolo) {
+        remove(m_tremoloTwoChord);
+    }
+
     if (arpeggio()) {
         remove(arpeggio());
     }
@@ -2807,8 +2816,10 @@ EngravingItem* Chord::nextElement()
         if (n == m_notes.front()) {
             if (m_arpeggio) {
                 return m_arpeggio;
-            } else if (tremoloDispatcher()) {
-                return tremoloDispatcher();
+            } else if (m_tremoloTwoChord) {
+                return m_tremoloTwoChord->dispatcher();
+            } else if (m_tremoloSingleChord) {
+                return m_tremoloSingleChord->dispatcher();
             }
             break;
         }
@@ -2832,8 +2843,10 @@ EngravingItem* Chord::nextElement()
         if (n == m_notes.front()) {
             if (m_arpeggio) {
                 return m_arpeggio;
-            } else if (tremoloDispatcher()) {
-                return tremoloDispatcher();
+            } else if (m_tremoloTwoChord) {
+                return m_tremoloTwoChord->dispatcher();
+            } else if (m_tremoloSingleChord) {
+                return m_tremoloSingleChord->dispatcher();
             }
             break;
         }
@@ -2845,8 +2858,10 @@ EngravingItem* Chord::nextElement()
         break;
     }
     case ElementType::ARPEGGIO:
-        if (tremoloDispatcher()) {
-            return tremoloDispatcher();
+        if (m_tremoloTwoChord) {
+            return m_tremoloTwoChord->dispatcher();
+        } else if (m_tremoloSingleChord) {
+            return m_tremoloSingleChord->dispatcher();
         }
         break;
 
@@ -2858,8 +2873,10 @@ EngravingItem* Chord::nextElement()
         if (e == m_notes.front()) {
             if (m_arpeggio) {
                 return m_arpeggio;
-            } else if (tremoloDispatcher()) {
-                return tremoloDispatcher();
+            } else if (m_tremoloTwoChord) {
+                return m_tremoloTwoChord->dispatcher();
+            } else if (m_tremoloSingleChord) {
+                return m_tremoloSingleChord->dispatcher();
             }
             break;
         }
@@ -2946,7 +2963,16 @@ EngravingItem* Chord::prevElement()
             return m_arpeggio;
         }
     // fall through
-
+    case ElementType::TREMOLO_TWOCHORD:
+        if (m_arpeggio) {
+            return m_arpeggio;
+        }
+    // fall through
+    case ElementType::TREMOLO_SINGLECHORD:
+        if (m_arpeggio) {
+            return m_arpeggio;
+        }
+    // fall through
     case ElementType::ARPEGGIO: {
         Note* n = m_notes.front();
         EngravingItem* elN = n->lastElementBeforeSegment();
@@ -2966,8 +2992,10 @@ EngravingItem* Chord::prevElement()
 
 EngravingItem* Chord::lastElementBeforeSegment()
 {
-    if (tremoloDispatcher()) {
-        return tremoloDispatcher();
+    if (m_tremoloSingleChord) {
+        return m_tremoloSingleChord->dispatcher();
+    } else if (m_tremoloTwoChord) {
+        return m_tremoloTwoChord->dispatcher();
     } else if (m_arpeggio) {
         return m_arpeggio;
     } else {
@@ -3047,8 +3075,12 @@ String Chord::accessibleExtraInfo() const
         rez = String(u"%1 %2").arg(rez, arpeggio()->screenReaderInfo());
     }
 
-    if (tremoloDispatcher() && score()->selectionFilter().canSelect(tremoloDispatcher())) {
-        rez = String(u"%1 %2").arg(rez, tremoloDispatcher()->screenReaderInfo());
+    if (tremoloTwoChord() && score()->selectionFilter().canSelect(tremoloTwoChord())) {
+        rez = String(u"%1 %2").arg(rez, tremoloTwoChord()->screenReaderInfo());
+    }
+
+    if (tremoloSingleChord() && score()->selectionFilter().canSelect(tremoloSingleChord())) {
+        rez = String(u"%1 %2").arg(rez, tremoloSingleChord()->screenReaderInfo());
     }
 
     for (EngravingItem* e : el()) {

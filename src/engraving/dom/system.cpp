@@ -50,6 +50,7 @@
 #include "system.h"
 #include "systemdivider.h"
 #include "tremolo.h"
+#include "tremolotwochord.h"
 
 #ifndef ENGRAVING_NO_ACCESSIBILITY
 #include "accessibility/accessibleitem.h"
@@ -1227,10 +1228,11 @@ bool System::hasCrossStaffOrModifiedBeams()
                     return true;
                 }
                 Chord* c = e->isChord() ? toChord(e) : nullptr;
-                if (c && c->tremoloDispatcher() && c->tremoloDispatcher()->twoNotes()) {
-                    Chord* c1 = c->tremoloDispatcher()->chord1();
-                    Chord* c2 = c->tremoloDispatcher()->chord2();
-                    if (c->tremoloDispatcher()->userModified() || c1->staffMove() != c2->staffMove()) {
+                if (c && c->tremoloTwoChord()) {
+                    TremoloTwoChord* trem = c->tremoloTwoChord();
+                    Chord* c1 = trem->chord1();
+                    Chord* c2 = trem->chord2();
+                    if (trem->userModified() || c1->staffMove() != c2->staffMove()) {
                         return true;
                     }
                 }

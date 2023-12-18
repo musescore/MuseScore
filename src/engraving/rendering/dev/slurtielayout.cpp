@@ -653,7 +653,7 @@ void SlurTieLayout::slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx)
         double yadj;
         if (ec->beam() && ec->beam()->elements().front() != ec) {
             yadj = 0.75;
-        } else if (ec->tremoloDispatcher() && ec->tremoloDispatcher()->twoNotes() && ec->tremoloDispatcher()->chord2() == ec) {
+        } else if (ec->tremoloTwoChord() && ec->tremoloTwoChord()->chord2() == ec) {
             yadj = 0.75;
         } else {
             yadj = -stemSideInset;

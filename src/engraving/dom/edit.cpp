@@ -2215,9 +2215,9 @@ void Score::cmdFlip()
                 } else {
                     continue;
                 }
-            } else if (chord->tremoloDispatcher() && chord->tremoloDispatcher()->twoNotes()) {
+            } else if (chord->tremoloTwoChord()) {
                 if (!selection().isRange()) {
-                    e = chord->tremoloDispatcher();
+                    e = chord->tremoloTwoChord()->dispatcher();
                 } else {
                     continue;
                 }
