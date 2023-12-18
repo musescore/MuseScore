@@ -512,7 +512,8 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
         ctx.mutState().setStartWithLongNames(ctx.state().firstSystem() && layoutBreak->startWithLongNames());
     }
 
-    if (oldSystem && oldSystem->tick() >= system->endTick() && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
+    if (oldSystem && !oldSystem->measures().empty() && oldSystem->measures().front()->tick() >= system->endTick()
+        && !(oldSystem->page() && oldSystem->page() != ctx.state().page())) {
         // We may have previously processed the ties of the next system (in LayoutChords::updateLineAttachPoints()).
         // We need to restore them to the correct state.
         SystemLayout::restoreTiesAndBends(oldSystem, ctx);
