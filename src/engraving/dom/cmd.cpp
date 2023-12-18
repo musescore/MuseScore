@@ -1277,11 +1277,8 @@ Fraction Score::makeGap(Segment* segment, track_idx_t track, const Fraction& _sd
         // remove tremolo between 2 notes, if present
         if (cr->isChord()) {
             Chord* c = toChord(cr);
-            if (c->tremoloDispatcher()) {
-                TremoloDispatcher* tremolo = c->tremoloDispatcher();
-                if (tremolo->twoNotes()) {
-                    undoRemoveElement(tremolo);
-                }
+            if (c->tremoloTwoChord()) {
+                undoRemoveElement(c->tremoloTwoChord());
             }
         }
         Tuplet* ltuplet = cr->tuplet();
@@ -1625,11 +1622,8 @@ void Score::changeCRlen(ChordRest* cr, const Fraction& dstF, bool fillWithRest)
             // remove ties and tremolo between 2 notes
             //
             Chord* c = toChord(cr);
-            if (c->tremoloDispatcher()) {
-                TremoloDispatcher* tremolo = c->tremoloDispatcher();
-                if (tremolo->twoNotes()) {
-                    undoRemoveElement(tremolo);
-                }
+            if (c->tremoloTwoChord()) {
+                undoRemoveElement(c->tremoloTwoChord());
             }
             for (Note* n : c->notes()) {
                 if (n->tieFor()) {

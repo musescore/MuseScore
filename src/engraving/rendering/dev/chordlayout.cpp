@@ -821,7 +821,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line += 1;
                 }
                 double dist = (line * _lineDist) - stemBottom;
-                bool hasBeam = item->beam() || (item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes());
+                bool hasBeam = item->beam() || (item->tremoloTwoChord());
                 if (line < lines && hasBeam && dist < stemSideDistance) {
                     // beams can give stems weird unpredictable lengths, so we should enforce min
                     // distance even inside the staff
@@ -875,7 +875,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line -= 1;
                 }
                 double dist = stemTop - (line * _lineDist);
-                bool hasBeam = item->beam() || (item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes());
+                bool hasBeam = item->beam() || item->tremoloTwoChord();
                 if (line > 0 && hasBeam && dist < stemSideDistance) {
                     // beams can give stems weird unpredictable lengths, so we should enforce min
                     // distance even inside the staff
@@ -1345,8 +1345,9 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         }
     }
 
-    if (item->stemDirection() != DirectionV::AUTO && !item->beam()
-        && !(item->tremoloDispatcher() && item->tremoloDispatcher()->twoNotes())) {
+    if (item->stemDirection() != DirectionV::AUTO
+        && !item->beam()
+        && !item->tremoloTwoChord()) {
         item->setUp(item->stemDirection() == DirectionV::UP);
         return;
     }
