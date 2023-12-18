@@ -31,7 +31,7 @@ MuseScore {
     thumbnailName: "modal_tuning.png"
 
     width: 860
-    height: 722
+    height: 822
 
     property var offsetTextWidth: 40;
     property var offsetLabelAlignment: 0x02 | 0x40;
