@@ -61,13 +61,15 @@ TremoloSingleChord::TremoloSingleChord(const TremoloSingleChord& t)
 
 TremoloSingleChord::~TremoloSingleChord()
 {
-    m_dispatcher->singleChord = nullptr;
+    if (m_dispatcher) {
+        m_dispatcher->singleChord = nullptr;
+    }
 
     //
     // delete all references from chords
     //
     if (chord()) {
-        chord()->setTremoloDispatcher(nullptr);
+        chord()->setTremoloSingleChord(nullptr);
     }
 }
 

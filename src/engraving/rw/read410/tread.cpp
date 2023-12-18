@@ -2437,11 +2437,11 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         if (tcompat.two) {
             tcompat.two->setParent(ch);
             tcompat.two->setDurationType(ch->durationType());
-            ch->setTremoloDispatcher(tcompat.two->dispatcher(), false);
+            ch->setTremoloTwoChord(tcompat.two, false);
         } else if (tcompat.single) {
             tcompat.single->setParent(ch);
             tcompat.single->setDurationType(ch->durationType());
-            ch->setTremoloDispatcher(tcompat.single->dispatcher(), false);
+            ch->setTremoloSingleChord(tcompat.single);
         } else {
             UNREACHABLE;
         }

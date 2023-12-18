@@ -2988,30 +2988,30 @@ void MoveTremolo::redo(EditData*)
     oldC2 = trem->chord2();
 
     // Move tremolo away from old chords
-    trem->chord1()->setTremoloDispatcher(nullptr);
-    trem->chord2()->setTremoloDispatcher(nullptr);
+    trem->chord1()->setTremoloTwoChord(nullptr);
+    trem->chord2()->setTremoloTwoChord(nullptr);
 
     // Delete old tremolo on c1 and c2, if present
-    if (c1->tremoloDispatcher() && (c1->tremoloDispatcher() != trem)) {
-        if (c2->tremoloDispatcher() == c1->tremoloDispatcher()) {
-            c2->tremoloDispatcher()->setChords(c1, c2);
+    if (c1->tremoloTwoChord() && (c1->tremoloTwoChord() != trem)) {
+        if (c2->tremoloTwoChord() == c1->tremoloTwoChord()) {
+            c2->tremoloTwoChord()->setChords(c1, c2);
         } else {
-            c1->tremoloDispatcher()->setChords(c1, nullptr);
+            c1->tremoloTwoChord()->setChords(c1, nullptr);
         }
-        TremoloDispatcher* oldTremolo  = c1->tremoloDispatcher();
-        c1->setTremoloDispatcher(nullptr);
+        TremoloTwoChord* oldTremolo  = c1->tremoloTwoChord();
+        c1->setTremoloTwoChord(nullptr);
         delete oldTremolo;
     }
-    if (c2->tremoloDispatcher() && (c2->tremoloDispatcher() != trem)) {
-        c2->tremoloDispatcher()->setChords(nullptr, c2);
-        TremoloDispatcher* oldTremolo  = c2->tremoloDispatcher();
-        c2->setTremoloDispatcher(nullptr);
+    if (c2->tremoloTwoChord() && (c2->tremoloTwoChord() != trem)) {
+        c2->tremoloTwoChord()->setChords(nullptr, c2);
+        TremoloTwoChord* oldTremolo  = c2->tremoloTwoChord();
+        c2->setTremoloTwoChord(nullptr);
         delete oldTremolo;
     }
 
     // Move tremolo to new chords
-    c1->setTremoloDispatcher(trem);
-    c2->setTremoloDispatcher(trem);
+    c1->setTremoloTwoChord(trem);
+    c2->setTremoloTwoChord(trem);
     trem->setChords(c1, c2);
     trem->setParent(c1);
 
@@ -3029,10 +3029,10 @@ void MoveTremolo::redo(EditData*)
 void MoveTremolo::undo(EditData*)
 {
     // Move tremolo to old position
-    trem->chord1()->setTremoloDispatcher(nullptr);
-    trem->chord2()->setTremoloDispatcher(nullptr);
-    oldC1->setTremoloDispatcher(trem);
-    oldC2->setTremoloDispatcher(trem);
+    trem->chord1()->setTremoloTwoChord(nullptr);
+    trem->chord2()->setTremoloTwoChord(nullptr);
+    oldC1->setTremoloTwoChord(trem);
+    oldC2->setTremoloTwoChord(trem);
     trem->setChords(oldC1, oldC2);
     trem->setParent(oldC1);
 }

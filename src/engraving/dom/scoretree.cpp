@@ -56,6 +56,8 @@
 #include "text.h"
 #include "tie.h"
 #include "tremolo.h"
+#include "tremolosinglechord.h"
+#include "tremolotwochord.h"
 #include "trill.h"
 #include "tuplet.h"
 
@@ -373,8 +375,12 @@ EngravingObjectList Chord::scanChildren() const
         children.push_back(m_arpeggio);
     }
 
-    if (m_tremoloDispatcher && m_tremoloDispatcher->chord1() == this) {
-        children.push_back(m_tremoloDispatcher);
+    if (m_tremoloSingleChord && m_tremoloSingleChord->chord() == this) {
+        children.push_back(m_tremoloSingleChord->dispatcher());
+    }
+
+    if (m_tremoloTwoChord && m_tremoloTwoChord->chord1() == this) {
+        children.push_back(m_tremoloTwoChord->dispatcher());
     }
 
     for (Chord* chord : graceNotes()) {

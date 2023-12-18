@@ -84,12 +84,10 @@ TremoloTwoChord::~TremoloTwoChord()
     // delete all references from chords
     //
     if (m_chord1) {
-        m_chord1->setTremoloDispatcher(nullptr);
-        m_chord1 = nullptr;
+        m_chord1->setTremoloTwoChord(nullptr);
     }
     if (m_chord2) {
-        m_chord2->setTremoloDispatcher(nullptr);
-        m_chord2 = nullptr;
+        m_chord2->setTremoloTwoChord(nullptr);
     }
 
     clearBeamSegments();

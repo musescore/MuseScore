@@ -1100,11 +1100,11 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
             if (tcompat.two) {
                 tcompat.two->setParent(chord);
                 tcompat.two->setDurationType(chord->durationType());
-                chord->setTremoloDispatcher(tcompat.two->dispatcher(), false);
+                chord->setTremoloTwoChord(tcompat.two, false);
             } else if (tcompat.single) {
                 tcompat.single->setParent(chord);
                 tcompat.single->setDurationType(chord->durationType());
-                chord->setTremoloDispatcher(tcompat.single->dispatcher(), false);
+                chord->setTremoloSingleChord(tcompat.single);
             } else {
                 UNREACHABLE;
             }
@@ -1724,41 +1724,39 @@ static void readMeasure(Measure* m, int staffIdx, XmlReader& e, ReadContext& ctx
                 graceNotes.clear();
                 Fraction crticks = chord->actualTicks();
 
-                if (chord->tremoloDispatcher()) {
-                    TremoloDispatcher* tremolo = chord->tremoloDispatcher();
-                    if (tremolo->twoNotes()) {
-                        track_idx_t track = chord->track();
-                        Segment* ss = 0;
-                        for (Segment* ps = m->first(SegmentType::ChordRest); ps; ps = ps->next(SegmentType::ChordRest)) {
-                            if (ps->tick() >= ctx.tick()) {
-                                break;
-                            }
-                            if (ps->element(track)) {
-                                ss = ps;
-                            }
+                if (chord->tremoloSingleChord()) {
+                    chord->tremoloSingleChord()->setParent(chord);
+                } else if (chord->tremoloTwoChord()) {
+                    TremoloTwoChord* tremolo = chord->tremoloTwoChord();
+                    track_idx_t track = chord->track();
+                    Segment* ss = 0;
+                    for (Segment* ps = m->first(SegmentType::ChordRest); ps; ps = ps->next(SegmentType::ChordRest)) {
+                        if (ps->tick() >= ctx.tick()) {
+                            break;
                         }
-                        Chord* pch = 0;                   // previous chord
-                        if (ss) {
-                            ChordRest* cr = toChordRest(ss->element(track));
-                            if (cr && cr->type() == ElementType::CHORD) {
-                                pch = toChord(cr);
-                            }
+                        if (ps->element(track)) {
+                            ss = ps;
                         }
-                        if (pch) {
-                            tremolo->setParent(pch);
-                            pch->setTremoloDispatcher(tremolo);
-                            chord->setTremoloDispatcher(0);
-                            // force duration to half
-                            Fraction pts(timeStretch * pch->globalTicks());
-                            pch->setTicks(pts * Fraction(1, 2));
-                            chord->setTicks(crticks * Fraction(1, 2));
-                        } else {
-                            LOGD("tremolo: first note not found");
-                        }
-                        crticks = crticks * Fraction(1, 2);
-                    } else {
-                        tremolo->setParent(chord);
                     }
+                    Chord* pch = 0;                       // previous chord
+                    if (ss) {
+                        ChordRest* cr = toChordRest(ss->element(track));
+                        if (cr && cr->type() == ElementType::CHORD) {
+                            pch = toChord(cr);
+                        }
+                    }
+                    if (pch) {
+                        tremolo->setParent(pch);
+                        pch->setTremoloTwoChord(tremolo);
+                        chord->setTremoloTwoChord(nullptr);
+                        // force duration to half
+                        Fraction pts(timeStretch * pch->globalTicks());
+                        pch->setTicks(pts * Fraction(1, 2));
+                        chord->setTicks(crticks * Fraction(1, 2));
+                    } else {
+                        LOGD("tremolo: first note not found");
+                    }
+                    crticks = crticks * Fraction(1, 2);
                 }
                 lastTick = ctx.tick();
                 ctx.incTick(crticks);

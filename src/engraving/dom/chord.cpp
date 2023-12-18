@@ -268,7 +268,6 @@ Chord::Chord(Segment* parent)
     m_stemDirection    = DirectionV::AUTO;
     m_arpeggio         = 0;
     m_spanArpeggio     = 0;
-    m_tremoloDispatcher          = 0;
     m_endsGlissando    = false;
     m_noteType         = NoteType::NORMAL;
     m_stemSlash        = 0;
@@ -310,7 +309,6 @@ Chord::Chord(const Chord& c, bool link)
     m_endsGlissando = false;
     m_arpeggio      = 0;
     m_stemSlash     = 0;
-    m_tremoloDispatcher       = 0;
 
     m_spanArpeggio   = c.m_spanArpeggio;
     m_graceIndex     = c.m_graceIndex;
@@ -336,18 +334,25 @@ Chord::Chord(const Chord& c, bool link)
             score()->undo(new Link(a, const_cast<Arpeggio*>(c.m_arpeggio)));
         }
     }
-    if (c.m_tremoloDispatcher) {
-        TremoloDispatcher* t = Factory::copyTremoloDispatcher(*(c.m_tremoloDispatcher));
+
+    if (c.m_tremoloSingleChord) {
+        TremoloSingleChord* t = Factory::copyTremoloSingleChord(*(c.m_tremoloSingleChord));
         if (link) {
-            score()->undo(new Link(t, const_cast<TremoloDispatcher*>(c.m_tremoloDispatcher)));
+            score()->undo(new Link(t, const_cast<TremoloSingleChord*>(c.m_tremoloSingleChord)));
         }
-        if (c.m_tremoloDispatcher->twoNotes()) {
-            if (c.m_tremoloDispatcher->chord1() == &c) {
-                t->setChords(this, nullptr);
-            } else {
-                t->setChords(nullptr, this);
-            }
+        add(t);
+    } else if (c.m_tremoloTwoChord) {
+        TremoloTwoChord* t = Factory::copyTremoloTwoChord(*(c.m_tremoloTwoChord));
+        if (link) {
+            score()->undo(new Link(t, const_cast<TremoloTwoChord*>(c.m_tremoloTwoChord)));
         }
+
+        if (c.m_tremoloTwoChord->chord1() == &c) {
+            t->setChords(this, nullptr);
+        } else {
+            t->setChords(nullptr, this);
+        }
+
         add(t);
     }
 
@@ -400,8 +405,9 @@ void Chord::undoUnlink()
     if (m_arpeggio) {
         m_arpeggio->undoUnlink();
     }
-    if (m_tremoloDispatcher && !m_tremoloDispatcher->twoNotes()) {
-        m_tremoloDispatcher->undoUnlink();
+
+    if (tremoloSingleChord()) {
+        tremoloSingleChord()->undoUnlink();
     }
 
     for (EngravingItem* e : el()) {
@@ -419,14 +425,12 @@ Chord::~Chord()
 {
     DeleteAll(m_articulations);
 
-    if (m_tremoloDispatcher) {
-        if (m_tremoloDispatcher->chord1() == this) {
-            m_tremoloDispatcher->setChord1(nullptr);
-        } else if (m_tremoloDispatcher->chord2() == this) {
-            m_tremoloDispatcher->setChord2(nullptr);
+    if (tremoloTwoChord()) {
+        if (tremoloTwoChord()->chord1() == this) {
+            tremoloTwoChord()->setChord1(nullptr);
+        } else if (tremoloTwoChord()->chord2() == this) {
+            tremoloTwoChord()->setChord2(nullptr);
         }
-
-        m_tremoloDispatcher = nullptr;
     }
 
     delete m_arpeggio;
@@ -489,13 +493,20 @@ bool Chord::containsEqualArpeggio(const Chord* other) const
 
 bool Chord::containsEqualTremolo(const Chord* other) const
 {
-    if (m_tremoloDispatcher && other->m_tremoloDispatcher) {
-        if (m_tremoloDispatcher->tremoloType() != other->m_tremoloDispatcher->tremoloType()) {
+    if (tremoloSingleChord() && other->tremoloSingleChord()) {
+        if (tremoloSingleChord()->tremoloType() != other->tremoloSingleChord()->tremoloType()) {
             return false;
         }
     }
 
-    return !m_tremoloDispatcher && !other->m_tremoloDispatcher;
+    if (tremoloTwoChord() && other->tremoloTwoChord()) {
+        if (tremoloTwoChord()->tremoloType() != other->tremoloTwoChord()->tremoloType()) {
+            return false;
+        }
+    }
+
+    return !tremoloSingleChord() && !other->tremoloSingleChord()
+           && !tremoloTwoChord() && !other->tremoloTwoChord();
 }
 
 //---------------------------------------------------------
@@ -587,69 +598,101 @@ TremoloType Chord::tremoloType() const
     }
 }
 
+TremoloDispatcher* Chord::tremoloDispatcher() const
+{
+    if (m_tremoloTwoChord) {
+        return m_tremoloTwoChord->dispatcher();
+    } else if (m_tremoloSingleChord) {
+        return m_tremoloSingleChord->dispatcher();
+    }
+    return nullptr;
+}
+
 TremoloTwoChord* Chord::tremoloTwoChord() const
 {
-    return m_tremoloDispatcher ? m_tremoloDispatcher->twoChord : nullptr;
+    return m_tremoloTwoChord;
 }
 
 TremoloSingleChord* Chord::tremoloSingleChord() const
 {
-    return m_tremoloDispatcher ? m_tremoloDispatcher->singleChord : nullptr;
+    return m_tremoloSingleChord;
 }
 
-void Chord::setTremoloDispatcher(TremoloDispatcher* tr, bool applyLogic)
+void Chord::setTremoloTwoChord(TremoloTwoChord* tr, bool applyLogic)
 {
-    if (m_tremoloDispatcher && tr && tr == m_tremoloDispatcher) {
+    if (m_tremoloTwoChord && tr && tr == m_tremoloTwoChord) {
         return;
     }
 
-    if (m_tremoloDispatcher) {
-        if (m_tremoloDispatcher->twoNotes()) {
-            TDuration d;
-            const Fraction f = ticks();
-            if (f.numerator() > 0) {
-                d = TDuration(f);
-            } else {
-                d = m_tremoloDispatcher->durationType();
-                const int dots = d.dots();
-                d = d.shift(1);
-                d.setDots(dots);
-            }
-
-            setDurationType(d);
-            Chord* other = m_tremoloDispatcher->chord1() == this ? m_tremoloDispatcher->chord2() : m_tremoloDispatcher->chord1();
-            m_tremoloDispatcher = nullptr;
-            if (other) {
-                other->setTremoloDispatcher(nullptr);
-            }
+    if (m_tremoloTwoChord) {
+        TDuration d;
+        const Fraction f = ticks();
+        if (f.numerator() > 0) {
+            d = TDuration(f);
         } else {
-            m_tremoloDispatcher = nullptr;
+            d = m_tremoloTwoChord->durationType();
+            const int dots = d.dots();
+            d = d.shift(1);
+            d.setDots(dots);
+        }
+
+        setDurationType(d);
+        Chord* other = m_tremoloTwoChord->chord1() == this ? m_tremoloTwoChord->chord2() : m_tremoloTwoChord->chord1();
+        m_tremoloTwoChord = nullptr;
+        if (other) {
+            other->setTremoloTwoChord(nullptr);
+        }
+    }
+    m_tremoloSingleChord = nullptr;
+
+    if (tr && applyLogic) {
+        TDuration d = tr->durationType();
+        if (!d.isValid()) {
+            d = durationType();
+            const int dots = d.dots();
+            d = d.shift(-1);
+            d.setDots(dots);
+            tr->setDurationType(d);
+        }
+
+        setDurationType(d);
+        Chord* other = tr->chord1() == this ? tr->chord2() : tr->chord1();
+        m_tremoloTwoChord = tr;
+        if (other) {
+            other->setTremoloTwoChord(tr);
         }
     }
 
-    if (tr) {
-        if (applyLogic && tr->twoNotes()) {
-            TDuration d = tr->durationType();
-            if (!d.isValid()) {
-                d = durationType();
-                const int dots = d.dots();
-                d = d.shift(-1);
-                d.setDots(dots);
-                tr->setDurationType(d);
-            }
+    m_tremoloTwoChord = tr;
+}
 
-            setDurationType(d);
-            Chord* other = tr->chord1() == this ? tr->chord2() : tr->chord1();
-            m_tremoloDispatcher = tr;
-            if (other) {
-                other->setTremoloDispatcher(tr);
-            }
-        } else {
-            m_tremoloDispatcher = tr;
-        }
-    } else {
-        m_tremoloDispatcher = nullptr;
+void Chord::setTremoloSingleChord(TremoloSingleChord* tr)
+{
+    if (m_tremoloSingleChord && tr && tr == m_tremoloSingleChord) {
+        return;
     }
+
+    if (m_tremoloTwoChord) {
+        TDuration d;
+        const Fraction f = ticks();
+        if (f.numerator() > 0) {
+            d = TDuration(f);
+        } else {
+            d = m_tremoloTwoChord->durationType();
+            const int dots = d.dots();
+            d = d.shift(1);
+            d.setDots(dots);
+        }
+
+        setDurationType(d);
+        Chord* other = m_tremoloTwoChord->chord1() == this ? m_tremoloTwoChord->chord2() : m_tremoloTwoChord->chord1();
+        m_tremoloTwoChord = nullptr;
+        if (other) {
+            other->setTremoloTwoChord(nullptr);
+        }
+    }
+
+    m_tremoloSingleChord = tr;
 }
 
 //---------------------------------------------------------
@@ -705,8 +748,19 @@ void Chord::add(EngravingItem* e)
     case ElementType::ARPEGGIO:
         m_arpeggio = toArpeggio(e);
         break;
-    case ElementType::TREMOLO:
-        setTremoloDispatcher(item_cast<TremoloDispatcher*>(e));
+    case ElementType::TREMOLO: {
+        TremoloDispatcher* td = item_cast<TremoloDispatcher*>(e);
+        if (td->twoNotes()) {
+            setTremoloTwoChord(td->twoChord);
+        } else {
+            setTremoloSingleChord(td->singleChord);
+        }
+    } break;
+    case ElementType::TREMOLO_TWOCHORD:
+        setTremoloTwoChord(item_cast<TremoloTwoChord*>(e));
+        break;
+    case ElementType::TREMOLO_SINGLECHORD:
+        setTremoloSingleChord(item_cast<TremoloSingleChord*>(e));
         break;
     case ElementType::GLISSANDO:
         m_endsGlissando = true;
@@ -811,7 +865,14 @@ void Chord::remove(EngravingItem* e)
         m_arpeggio = nullptr;
         break;
     case ElementType::TREMOLO:
-        setTremoloDispatcher(nullptr);
+        setTremoloTwoChord(nullptr);
+        setTremoloSingleChord(nullptr);
+        break;
+    case ElementType::TREMOLO_TWOCHORD:
+        setTremoloTwoChord(nullptr);
+        break;
+    case ElementType::TREMOLO_SINGLECHORD:
+        setTremoloSingleChord(nullptr);
         break;
     case ElementType::GLISSANDO:
         m_endsGlissando = false;
@@ -1120,8 +1181,8 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func, bool inclu
     if (m_arpeggio) {
         func(m_arpeggio);
     }
-    if (m_tremoloDispatcher) {
-        func(m_tremoloDispatcher);
+    if (tremoloDispatcher()) {
+        func(tremoloDispatcher());
     }
     if (includeTemporarySiblings) {
         for (LedgerLine* ll = m_ledgerLines; ll; ll = ll->next()) {
@@ -1165,11 +1226,11 @@ int Chord::calcMinStemLength()
     int minStemLength = 0; // in quarter spaces
     double _spatium = spatium();
 
-    if (m_tremoloDispatcher && !m_tremoloDispatcher->twoNotes()) {
+    if (tremoloSingleChord()) {
         // buzz roll's height is actually half of the visual height,
         // so we need to multiply it by 2 to get the actual height
-        int buzzRollMultiplier = m_tremoloDispatcher->isBuzzRoll() ? 2 : 1;
-        minStemLength += ceil(m_tremoloDispatcher->minHeight() / intrinsicMag() * 4.0 * buzzRollMultiplier);
+        int buzzRollMultiplier = tremoloSingleChord()->isBuzzRoll() ? 2 : 1;
+        minStemLength += ceil(tremoloSingleChord()->minHeight() / intrinsicMag() * 4.0 * buzzRollMultiplier);
         int outSidePadding = style().styleMM(Sid::tremoloOutSidePadding).val() / _spatium * 4.0;
         int noteSidePadding = style().styleMM(Sid::tremoloNoteSidePadding).val() / _spatium * 4.0;
 
@@ -1216,9 +1277,8 @@ int Chord::calcMinStemLength()
             // minStemLength = ceil(minStemLength / 2.0) * 2;
         }
     }
-    if (m_beam || (m_tremoloDispatcher && m_tremoloDispatcher->twoNotes())) {
-        int beamCount = (m_beam ? beams() : 0)
-                        + ((m_tremoloDispatcher && m_tremoloDispatcher->twoNotes()) ? m_tremoloDispatcher->lines() : 0);
+    if (m_beam || tremoloTwoChord()) {
+        int beamCount = (m_beam ? beams() : 0) + (tremoloTwoChord() ? tremoloTwoChord()->lines() : 0);
         static const int minInnerStemLengths[4] = { 10, 9, 8, 7 };
         int innerStemLength = minInnerStemLengths[std::min(beamCount, 3)];
         int beamsHeight = beamCount * (style().styleB(Sid::useWideBeams) ? 4 : 3) - 1;
@@ -1242,7 +1302,7 @@ int Chord::stemLengthBeamAddition() const
     if (m_hook) {
         return 0;
     }
-    int beamCount = (m_beam ? beams() : 0) + ((m_tremoloDispatcher && m_tremoloDispatcher->twoNotes()) ? m_tremoloDispatcher->lines() : 0);
+    int beamCount = (m_beam ? beams() : 0) + (tremoloTwoChord() ? tremoloTwoChord()->lines() : 0);
     switch (beamCount) {
     case 0:
     case 1:
@@ -1289,7 +1349,7 @@ int Chord::maxReduction(int extensionOutsideStaff) const
     };
     int beamCount = 0;
     if (!m_hook) {
-        beamCount = m_tremoloDispatcher ? m_tremoloDispatcher->lines() + (m_beam ? beams() : 0) : beams();
+        beamCount = tremoloTwoChord() ? tremoloTwoChord()->lines() + (m_beam ? beams() : 0) : beams();
     }
     bool hasTradHook = m_hook && !style().styleB(Sid::useStraightNoteFlags);
     if (m_hook && !hasTradHook) {
@@ -1333,7 +1393,7 @@ int Chord::stemOpticalAdjustment(int stemEndPosition) const
     if (m_hook && !m_beam) {
         return 0;
     }
-    int beamCount = (m_tremoloDispatcher ? m_tremoloDispatcher->lines() : 0) + (m_beam ? beams() : 0);
+    int beamCount = (tremoloTwoChord() ? tremoloTwoChord()->lines() : 0) + (m_beam ? beams() : 0);
     if (beamCount == 0 || beamCount > 2) {
         return 0;
     }
@@ -1406,7 +1466,7 @@ double Chord::calcDefaultStemLength()
     int staffLineCount = staffItem ? staffItem->lines(tick()) : 5;
     int shortStemStart = style().styleI(Sid::shortStemStartLocation) * quarterSpacesPerLine + 1;
     bool useWideBeams = style().styleB(Sid::useWideBeams);
-    int beamCount = ((m_tremoloDispatcher && m_tremoloDispatcher->twoNotes()) ? m_tremoloDispatcher->lines() : 0) + (m_beam ? beams() : 0);
+    int beamCount = (tremoloTwoChord() ? tremoloTwoChord()->lines() : 0) + (m_beam ? beams() : 0);
     int middleLine = minStaffOverlap(ldata()->up, staffLineCount,
                                      beamCount, !!m_hook, useWideBeams ? 4 : 3,
                                      useWideBeams, !(isGrace() || isSmall()));
@@ -1752,8 +1812,8 @@ void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
     if (m_arpeggio) {
         func(data, m_arpeggio);
     }
-    if (m_tremoloDispatcher && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
-        func(data, m_tremoloDispatcher);
+    if (tremoloDispatcher() && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
+        func(data, tremoloDispatcher());
     }
     const Staff* st = staff();
     if ((st && st->showLedgerLines(tick())) || !st) {       // also for palette
@@ -1789,8 +1849,10 @@ bool Chord::isChordPlayable() const
         }
 
         return m_notes.front()->getProperty(Pid::PLAY).toBool();
-    } else if (m_tremoloDispatcher) {
-        return m_tremoloDispatcher->getProperty(Pid::PLAY).toBool();
+    } else if (tremoloTwoChord()) {
+        return tremoloTwoChord()->getProperty(Pid::PLAY).toBool();
+    } else if (tremoloSingleChord()) {
+        return tremoloSingleChord()->getProperty(Pid::PLAY).toBool();
     } else if (m_arpeggio) {
         return m_arpeggio->getProperty(Pid::PLAY).toBool();
     }
@@ -1812,8 +1874,12 @@ void Chord::setIsChordPlayable(const bool isPlayable)
         m_arpeggio->undoChangeProperty(Pid::PLAY, isPlayable);
     }
 
-    if (m_tremoloDispatcher) {
-        m_tremoloDispatcher->undoChangeProperty(Pid::PLAY, isPlayable);
+    if (tremoloTwoChord()) {
+        tremoloTwoChord()->undoChangeProperty(Pid::PLAY, isPlayable);
+    }
+
+    if (tremoloSingleChord()) {
+        tremoloSingleChord()->undoChangeProperty(Pid::PLAY, isPlayable);
     }
 
     triggerLayout();
@@ -2032,8 +2098,8 @@ void Chord::localSpatiumChanged(double oldValue, double newValue)
     if (arpeggio()) {
         arpeggio()->localSpatiumChanged(oldValue, newValue);
     }
-    if (m_tremoloDispatcher && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
-        m_tremoloDispatcher->localSpatiumChanged(oldValue, newValue);
+    if (tremoloDispatcher() && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
+        tremoloDispatcher()->localSpatiumChanged(oldValue, newValue);
     }
     for (EngravingItem* e : articulations()) {
         e->localSpatiumChanged(oldValue, newValue);
@@ -2707,10 +2773,11 @@ void Chord::setIsTrillCueNote(bool v)
 
 TremoloChordType Chord::tremoloChordType() const
 {
-    if (m_tremoloDispatcher && m_tremoloDispatcher->twoNotes()) {
-        if (m_tremoloDispatcher->chord1() == this) {
+    TremoloTwoChord* tremoloTwo = tremoloTwoChord();
+    if (tremoloTwo) {
+        if (tremoloTwo->chord1() == this) {
             return TremoloChordType::TremoloFirstChord;
-        } else if (m_tremoloDispatcher->chord2() == this) {
+        } else if (tremoloTwo->chord2() == this) {
             return TremoloChordType::TremoloSecondChord;
         } else {
             ASSERT_X(String(u"Chord::tremoloChordType(): inconsistency"));
@@ -2740,8 +2807,8 @@ EngravingItem* Chord::nextElement()
         if (n == m_notes.front()) {
             if (m_arpeggio) {
                 return m_arpeggio;
-            } else if (m_tremoloDispatcher) {
-                return m_tremoloDispatcher;
+            } else if (tremoloDispatcher()) {
+                return tremoloDispatcher();
             }
             break;
         }
@@ -2765,8 +2832,8 @@ EngravingItem* Chord::nextElement()
         if (n == m_notes.front()) {
             if (m_arpeggio) {
                 return m_arpeggio;
-            } else if (m_tremoloDispatcher) {
-                return m_tremoloDispatcher;
+            } else if (tremoloDispatcher()) {
+                return tremoloDispatcher();
             }
             break;
         }
@@ -2778,8 +2845,8 @@ EngravingItem* Chord::nextElement()
         break;
     }
     case ElementType::ARPEGGIO:
-        if (m_tremoloDispatcher) {
-            return m_tremoloDispatcher;
+        if (tremoloDispatcher()) {
+            return tremoloDispatcher();
         }
         break;
 
@@ -2791,8 +2858,8 @@ EngravingItem* Chord::nextElement()
         if (e == m_notes.front()) {
             if (m_arpeggio) {
                 return m_arpeggio;
-            } else if (m_tremoloDispatcher) {
-                return m_tremoloDispatcher;
+            } else if (tremoloDispatcher()) {
+                return tremoloDispatcher();
             }
             break;
         }
@@ -2899,8 +2966,8 @@ EngravingItem* Chord::prevElement()
 
 EngravingItem* Chord::lastElementBeforeSegment()
 {
-    if (m_tremoloDispatcher) {
-        return m_tremoloDispatcher;
+    if (tremoloDispatcher()) {
+        return tremoloDispatcher();
     } else if (m_arpeggio) {
         return m_arpeggio;
     } else {
