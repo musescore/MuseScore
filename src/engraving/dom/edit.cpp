@@ -925,6 +925,7 @@ TextBase* Score::addText(TextStyleType type, EngravingItem* destinationElement)
         tempoText->setTrack(0);
         tempoText->setXmlText(text);
         tempoText->setFollowText(true);
+        tempoText->updateTempo();
 
         textBox = tempoText;
         undoAddElement(textBox);
