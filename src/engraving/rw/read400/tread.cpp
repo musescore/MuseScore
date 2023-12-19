@@ -163,7 +163,7 @@ using ReadTypes = rtti::TypeList<Accidental, ActionIcon, Ambitus, Arpeggio, Arti
                                  Ornament, Ottava,
                                  Segment, Slur, Spacer, StaffState, StaffText, StaffTypeChange, Stem, StemSlash, Sticking,
                                  Symbol, FSymbol, System, SystemDivider, SystemText,
-                                 TempoText, Text, TextLine, Tie, TimeSig, TremoloDispatcher, TremoloBar, Trill, Tuplet,
+                                 TempoText, Text, TextLine, Tie, TimeSig, TremoloBar, Trill, Tuplet,
                                  Vibrato, Volta,
                                  WhammyBar>;
 
@@ -4083,45 +4083,6 @@ int TRead::read(SigEvent* item, XmlReader& e, int fileDivision)
     item->setTimesig(TimeSigFrac(numerator, denominator));
     item->setNominal(TimeSigFrac(numerator2, denominator2));
     return tick;
-}
-
-void TRead::read(TremoloDispatcher* t, XmlReader& e, ReadContext& ctx)
-{
-    while (e.readNextStartElement()) {
-        const AsciiStringView tag(e.name());
-        if (tag == "subtype") {
-            t->setTremoloType(TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO));
-        }
-        // Style needs special handling other than readStyledProperty()
-        // to avoid calling customStyleApplicable() in setProperty(),
-        // which cannot be called now because durationType() isn't defined yet.
-        else if (tag == "strokeStyle") {
-            t->setTremoloStyle(TremoloStyle(e.readInt()));
-            t->setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
-        } else if (tag == "Fragment") {
-            BeamFragment f = BeamFragment();
-            int idx = (t->direction() == DirectionV::AUTO || t->direction() == DirectionV::DOWN) ? 0 : 1;
-            t->setUserModified(t->direction(), true);
-            double _spatium = t->spatium();
-            while (e.readNextStartElement()) {
-                const AsciiStringView tag1(e.name());
-                if (tag1 == "y1") {
-                    f.py1[idx] = e.readDouble() * _spatium;
-                } else if (tag1 == "y2") {
-                    f.py2[idx] = e.readDouble() * _spatium;
-                } else {
-                    e.unknown();
-                }
-            }
-            t->setBeamFragment(f);
-        } else if (tag == "offset" && !t->twoNotes() && t->score()->mscVersion() < 400) {
-            e.skipCurrentElement(); // ignore single note trem offset pre 4.0
-            t->setOffset(PointF());
-        } else if (TRead::readStyledProperty(t, tag, e, ctx)) {
-        } else if (!readItemProperties(t, e, ctx)) {
-            e.unknown();
-        }
-    }
 }
 
 void TRead::read(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
