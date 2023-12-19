@@ -153,14 +153,12 @@ void TremoloDispatcher::setParentInternal(EngravingObject* p)
 {
     EngravingItem::setParentInternal(p);
 
-    if (twoNotes()) {
-        if (twoChord) {
-            twoChord->setParent(p);
-        }
-    } else {
-        if (singleChord) {
-            singleChord->setParent(p);
-        }
+    if (twoChord) {
+        twoChord->setParent(p);
+    }
+
+    if (singleChord) {
+        singleChord->setParent(p);
     }
 }
 
