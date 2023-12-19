@@ -5209,11 +5209,11 @@ static Chord* findLinkedChord(Chord* c, Staff* nstaff)
     Excerpt* se = c->score()->excerpt();
     Excerpt* de = nstaff->score()->excerpt();
     track_idx_t strack = c->track();
-    track_idx_t dtrack = nstaff->idx() * VOICES + c->voice();
 
     if (se) {
         strack = mu::key(se->tracksMapping(), strack);
     }
+    track_idx_t dtrack = nstaff->idx() * VOICES + strack % VOICES;
 
     if (de) {
         std::vector<track_idx_t> l = mu::values(de->tracksMapping(), strack);
@@ -5904,19 +5904,43 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 // TODO solve this in read302.cpp.
                 tr.push_back(strack);
             } else {
-                for (track_idx_t track : mu::values(mapping, strack)) {
+                std::vector<track_idx_t> mappedTracks = mu::values(mapping, strack);
+                if (mappedTracks.empty()) {
+                    // This is a linked staff in a part and the element has been added to a linked staff in the main score
+                    track_idx_t track = staffIdx * VOICES + (strack % VOICES);
+                    track_idx_t mappedTrack = mu::value(mapping, track, mu::nidx);
+                    mappedTrack = (mappedTrack != mu::nidx) ? mappedTrack : track;
+                    if (staff->isVoiceVisible(strack % VOICES)) {
+                        mappedTracks.push_back(mappedTrack);
+                    }
+                }
+                for (track_idx_t track : mappedTracks) {
                     // linkedPart : linked staves within same part/instrument.
                     // linkedScore: linked staves over different scores via excerpts.
                     const bool linkedPart  = linked && (staff != ostaff) && (staff->score() == ostaff->score());
                     const bool linkedScore = linked && (staff != ostaff) && (staff->score() != ostaff->score());
                     if (linkedPart && !linkedScore) {
-                        tr.push_back(staff->idx() * VOICES + mu::value(mapping, track) % VOICES);
+                        track_idx_t mappedTrack = mu::value(mapping, track, mu::nidx);
+                        if (mappedTrack == mu::nidx) {
+                            continue;
+                        }
+                        track_idx_t linkedTrack = staff->idx() * VOICES + mappedTrack % VOICES;
+                        if (!staff->isVoiceVisible(strack % VOICES)) {
+                            continue;
+                        }
+                        tr.push_back(linkedTrack);
                     } else if (!linkedPart && linkedScore) {
+                        // Staff in linked score
                         if ((track >> 2) != staffIdx) {
+                            // Element on linked staff in linked part
                             track += (staffIdx - (track >> 2)) * VOICES;
+                            if (!staff->isVoiceVisible(strack % VOICES)) {
+                                continue;
+                            }
                         }
                         tr.push_back(track);
                     } else {
+                        // Staff in part edit was performed on
                         tr.push_back(track);
                     }
                 }
@@ -5924,27 +5948,30 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
         }
 
         // Some elements in voice 1 of a staff should be copied to every track which has a linked voice in this staff
-
-        if (tr.empty() && (element->isSymbol()
-                           || element->isImage()
-                           || element->isTremoloBar()
-                           || element->isDynamic()
-                           || element->isExpression()
-                           || element->isStaffText()
-                           || element->isPlayTechAnnotation()
-                           || element->isCapo()
-                           || element->isStringTunings()
-                           || element->isSticking()
-                           || element->isFretDiagram()
-                           || element->isHarmony()
-                           || element->isHairpin()
-                           || element->isOttava()
-                           || element->isTrill()
-                           || element->isSlur()
-                           || element->isVibrato()
-                           || element->isTextLine()
-                           || element->isPedal()
-                           || element->isLyrics())) {
+        static const std::set<ElementType> VOICE1_COPY_TYPES = {
+            ElementType::SYMBOL,
+            ElementType::IMAGE,
+            ElementType::TREMOLOBAR,
+            ElementType::DYNAMIC,
+            ElementType::EXPRESSION,
+            ElementType::STAFF_TEXT,
+            ElementType::PLAYTECH_ANNOTATION,
+            ElementType::CAPO,
+            ElementType::STRING_TUNINGS,
+            ElementType::STICKING,
+            ElementType::FRET_DIAGRAM,
+            ElementType::HARMONY,
+            ElementType::HAIRPIN,
+            ElementType::OTTAVA,
+            ElementType::TRILL,
+            ElementType::SLUR,
+            ElementType::VIBRATO,
+            ElementType::TEXTLINE,
+            ElementType::PEDAL,
+            ElementType::LYRICS
+        };
+        voice_idx_t voice = track2voice(strack);
+        if (staff->isVoiceVisible(voice) && tr.empty() && mu::contains(VOICE1_COPY_TYPES, et)) {
             tr.push_back(staffIdx * VOICES);
         }
 
@@ -5977,7 +6004,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 ne = element->linkedClone();
                 ne->setScore(score);
                 ne->setSelected(false);
-                ne->setTrack(staffIdx * VOICES + element->voice());
+                ne->setTrack(ntrack);
 
                 if (ne->isFretDiagram()) {
                     FretDiagram* fd = toFretDiagram(ne);
@@ -5985,7 +6012,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                     if (fdHarmony) {
                         fdHarmony->setScore(score);
                         fdHarmony->setSelected(false);
-                        fdHarmony->setTrack(staffIdx * VOICES + element->voice());
+                        fdHarmony->setTrack(ntrack);
                     }
                 }
             }
@@ -6135,11 +6162,9 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                        || element->isPedal()) {
                 Spanner* sp   = toSpanner(element);
                 Spanner* nsp  = toSpanner(ne);
-                staff_idx_t staffIdx1 = sp->track() / VOICES;
                 track_idx_t tr2 = sp->effectiveTrack2();
-                staff_idx_t staffIdx2 = tr2 / VOICES;
-                int diff = static_cast<int>(staffIdx2 - staffIdx1);
-                nsp->setTrack2((staffIdx + diff) * VOICES + (tr2 % VOICES));
+                int diff = static_cast<int>(tr2 - sp->track());
+                nsp->setTrack2(ntrack + diff);
                 nsp->setTrack(ntrack);
 
                 // determine start/end element for slurs
@@ -6184,6 +6209,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 TremoloTwoChord* tremolo = item_cast<TremoloTwoChord*>(element);
                 ChordRest* cr1 = toChordRest(tremolo->chord1());
                 ChordRest* cr2 = toChordRest(tremolo->chord2());
+                int diff = static_cast<int>(cr2->track() - cr1->track());
                 Segment* s1    = cr1->segment();
                 Segment* s2    = cr2->segment();
                 Measure* m1    = s1->measure();
@@ -6192,8 +6218,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 Measure* nm2   = score->tick2measure(m2->tick());
                 Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
                 Segment* ns2   = nm2->findSegment(s2->segmentType(), s2->tick());
-                Chord* c1      = toChord(ns1->element(staffIdx * VOICES + cr1->voice()));
-                Chord* c2      = toChord(ns2->element(staffIdx * VOICES + cr2->voice()));
+                Chord* c1      = toChord(ns1->element(ntrack));
+                Chord* c2      = toChord(ns2->element(ntrack + diff));
                 TremoloTwoChord* ntremolo = item_cast<TremoloTwoChord*>(ne);
                 ntremolo->setChords(c1, c2);
                 ntremolo->setParent(c1);
@@ -6209,7 +6235,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 Measure* m    = s->measure();
                 Measure* nm   = score->tick2measure(m->tick());
                 Segment* ns   = nm->findSegment(s->segmentType(), s->tick());
-                Chord* c1     = toChord(ns->element(staffIdx * VOICES + cr->voice()));
+                Chord* c1     = toChord(ns->element(ntrack));
                 ne->setParent(c1);
                 doUndoAddElement(ne);
             } else if (element->isTie()) {
