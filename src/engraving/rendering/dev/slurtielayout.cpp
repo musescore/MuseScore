@@ -47,6 +47,8 @@
 #include "tremololayout.h"
 #include "../engraving/types/symnames.h"
 
+#include "draw/types/transform.h"
+
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
@@ -1076,7 +1078,7 @@ TieSegment* SlurTieLayout::layoutTieWithNoEndNote(Tie* item)
     segment->ups(Grip::START).p = sPos.p1;
     segment->ups(Grip::END).p = sPos.p2;
 
-    segment->computeBezier();
+    computeBezier(segment);
     return segment;
 }
 
@@ -1156,7 +1158,7 @@ TieSegment* SlurTieLayout::tieLayoutFor(Tie* item, System* system)
     if (segment->autoplace() && !segment->isEdited()) {
         adjustY(segment);
     } else {
-        segment->computeBezier();
+        computeBezier(segment);
     }
 
     segment->addLineAttachPoints(); // add attach points to start and end note
@@ -1203,7 +1205,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
     if (segment->autoplace() && !segment->isEdited()) {
         adjustY(segment);
     } else {
-        segment->computeBezier();
+        computeBezier(segment);
     }
 
     segment->addLineAttachPoints();
@@ -1474,7 +1476,7 @@ void SlurTieLayout::adjustYforLedgerLines(TieSegment* tieSegment, SlurTiePos& sP
         if (collision) {
             sPos.p1 += PointF(0.0, -upSign * (margin - yDiff));
             sPos.p2 += PointF(0.0, -upSign * (margin - yDiff));
-            tieSegment->computeBezier();
+            computeBezier(tieSegment);
             break;
         }
     }
@@ -1489,7 +1491,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
 
     Fraction tick = tieSegment->tick();
 
-    tieSegment->computeBezier();
+    computeBezier(tieSegment);
 
     bool up = tieSegment->tie()->up();
     int upSign = up ? -1 : 1;
@@ -1516,7 +1518,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
         tieSegment->addAdjustmentOffset(PointF(0.0, correctedY - endPointY), Grip::END);
         tieSegment->ups(Grip::START).p.setY(correctedY);
         tieSegment->ups(Grip::END).p.setY(correctedY);
-        tieSegment->computeBezier();
+        computeBezier(tieSegment);
     }
 
     // 2. Check for bad arc protrusion
@@ -1561,7 +1563,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
             tieSegment->addAdjustmentOffset(PointF(0.0, yCorrection), Grip::END);
             tieSegment->ups(Grip::START).p.setY(currentY + yCorrection);
             tieSegment->ups(Grip::END).p.setY(currentY + yCorrection);
-            tieSegment->computeBezier();
+            computeBezier(tieSegment);
             return;
         } else {
             correctOutwards = true;
@@ -1581,9 +1583,9 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
             tieSegment->ups(Grip::START).p.setY(currentY + rest);
             tieSegment->ups(Grip::END).p.setY(currentY + rest);
         }
-        tieSegment->computeBezier(PointF(0.0, -arcCorrection));
+        computeBezier(tieSegment, PointF(0.0, -arcCorrection));
     } else if (correctInwards) {
-        tieSegment->computeBezier(PointF(0.0, arcCorrection));
+        computeBezier(tieSegment, PointF(0.0, arcCorrection));
     }
 }
 
@@ -1659,8 +1661,8 @@ void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>&
         nextTie->addAdjustmentOffset(PointF(0.0, -nextShoulderOff), Grip::BEZIER1);
         nextTie->addAdjustmentOffset(PointF(0.0, -nextShoulderOff), Grip::BEZIER2);
 
-        thisTie->computeBezier(PointF(0.0, -upSign * (thisShoulderOff + thisTieYCorrection)));
-        nextTie->computeBezier(PointF(0.0, -upSign * (nextShoulderOff + nextTieYCorrection)));
+        computeBezier(thisTie, PointF(0.0, -upSign * (thisShoulderOff + thisTieYCorrection)));
+        computeBezier(nextTie, PointF(0.0, -upSign * (nextShoulderOff + nextTieYCorrection)));
     };
 
     if (upwardTies.size() >= 2) {
@@ -1750,6 +1752,108 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
     }
     break;
     }
+}
+
+void SlurTieLayout::computeBezier(TieSegment *tieSeg, PointF shoulderOffset)
+{
+    const PointF tieStart = tieSeg->ups(Grip::START).p + tieSeg->ups(Grip::START).off;
+    const PointF tieEnd = tieSeg->ups(Grip::END).p + tieSeg->ups(Grip::END).off;
+
+    PointF tieEndNormalized = tieEnd - tieStart;  // normalize to zero
+    if (RealIsNull(tieEndNormalized.x())) {
+        return;
+    }
+
+    const double tieAngle = atan(tieEndNormalized.y() / tieEndNormalized.x()); // angle required from tie start to tie end--zero if horizontal
+    mu::draw::Transform t;
+    t.rotateRadians(-tieAngle);  // rotate so that we are working with horizontal ties regardless of endpoint height difference
+    tieEndNormalized = t.map(tieEndNormalized);  // apply that rotation
+    shoulderOffset = t.map(shoulderOffset);  // also apply to shoulderOffset
+
+    const double _spatium = tieSeg->spatium();
+    double tieLengthInSp = tieEndNormalized.x() / _spatium;
+
+    const double minShoulderHeight = tieSeg->style().styleMM(Sid::tieMinShoulderHeight);
+    const double maxShoulderHeight = tieSeg->style().styleMM(Sid::tieMaxShoulderHeight);
+    double shoulderH = minShoulderHeight + _spatium * 0.3 * sqrt(abs(tieLengthInSp - 1));
+    shoulderH = std::clamp(shoulderH, minShoulderHeight, maxShoulderHeight);
+
+    shoulderH -= shoulderOffset.y();
+
+    PointF shoulderAdjustOffset = tieSeg->tie()->up() ? PointF(0.0, shoulderOffset.y()) : PointF(0.0, -shoulderOffset.y());
+    tieSeg->addAdjustmentOffset(shoulderAdjustOffset, Grip::BEZIER1);
+    tieSeg->addAdjustmentOffset(shoulderAdjustOffset, Grip::BEZIER2);
+
+    if (!tieSeg->tie()->up()) {
+        shoulderH = -shoulderH;
+    }
+
+    double shoulderW = 0.6; // TODO: style
+
+    const double tieWidth = tieEndNormalized.x();
+    const double bezier1X = (tieWidth - tieWidth * shoulderW) * .5 + shoulderOffset.x();
+    const double bezier2X = bezier1X + tieWidth * shoulderW + shoulderOffset.x();
+
+    const PointF tieDrag = PointF(tieWidth * .5, 0.0);
+
+    const PointF bezier1(bezier1X, -shoulderH);
+    const PointF bezier2(bezier2X, -shoulderH);
+
+    tieSeg->computeMidThickness(tieLengthInSp);
+
+    PointF tieThickness(0.0, tieSeg->midThickness());
+
+    const PointF bezier1Offset = t.map(tieSeg->ups(Grip::BEZIER1).off);
+    const PointF bezier2Offset = t.map(tieSeg->ups(Grip::BEZIER2).off);
+
+    //-----------------------------------calculate p6
+    const PointF bezier1Final = bezier1 + bezier1Offset;
+    const PointF bezier2Final = bezier2 + bezier2Offset;
+
+    const PointF tieShoulder = 0.5 * (bezier1Final + bezier2Final);
+    //-----------------------------------
+
+    mu::draw::PainterPath path = PainterPath();
+    path.moveTo(PointF());
+    path.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
+    if (tieSeg->tie()->styleType() == SlurStyleType::Solid) {
+        path.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
+    }
+
+    tieThickness = PointF(0.0, 3.0 * tieSeg->midThickness());
+
+    // translate back
+    t.reset();
+    t.translate(tieStart.x(), tieStart.y());
+    t.rotateRadians(tieAngle);
+    path = t.map(path);
+    tieSeg->setPath(path);
+
+    tieSeg->ups(Grip::BEZIER1).p = t.map(bezier1);
+    tieSeg->ups(Grip::BEZIER2).p = t.map(bezier2);
+    tieSeg->ups(Grip::END).p = t.map(tieEndNormalized) - tieSeg->ups(Grip::END).off;
+    tieSeg->ups(Grip::DRAG).p = t.map(tieDrag);
+    tieSeg->ups(Grip::SHOULDER).p = t.map(tieShoulder);
+
+    Shape shape(Shape::Type::Composite);
+    PointF start;
+    start = t.map(start);
+
+    double minH = std::abs(2 * tieSeg->midThickness());
+    int nbShapes = 15;
+    const CubicBezier b(tieStart, tieSeg->ups(Grip::BEZIER1).pos(), tieSeg->ups(Grip::BEZIER2).pos(), tieSeg->ups(Grip::END).pos());
+    for (int i = 1; i <= nbShapes; i++) {
+        const PointF point = b.pointAtPercent(i / float(nbShapes));
+        RectF re = RectF(start, point).normalized();
+        if (re.height() < minH) {
+            tieLengthInSp = (minH - re.height()) * .5;
+            re.adjust(0.0, -tieLengthInSp, 0.0, tieLengthInSp);
+        }
+        shape.add(re, tieSeg);
+        start = point;
+    }
+
+    tieSeg->mutldata()->setShape(shape);
 }
 
 double SlurTieLayout::defaultStemLengthStart(TremoloTwoChord* tremolo)

@@ -56,7 +56,6 @@ public:
 
     Tie* tie() const { return (Tie*)spanner(); }
 
-    void computeBezier(PointF so = PointF()) override;
     void computeMidThickness(double tieLengthInSp);
     void addLineAttachPoints();
     double midThickness() const { return m_midThickness; }

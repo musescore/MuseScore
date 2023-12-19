@@ -34,6 +34,7 @@
 #include "scorelayout.h"
 #include "arpeggiolayout.h"
 #include "horizontalspacing.h"
+#include "slurtielayout.h"
 
 #include "paint.h"
 
@@ -88,6 +89,11 @@ void ScoreRenderer::layoutText1(TextBase* item, bool base)
     } else {
         TLayout::layoutBaseTextBase1(item, ctx);
     }
+}
+
+void ScoreRenderer::computeBezier(TieSegment *tieSeg, PointF shoulderOffset)
+{
+    SlurTieLayout::computeBezier(tieSeg, shoulderOffset);
 }
 
 void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)

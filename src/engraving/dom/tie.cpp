@@ -141,7 +141,7 @@ void TieSegment::editDrag(EditData& ed)
     ups(g).off += ed.delta;
 
     if (g == Grip::START || g == Grip::END) {
-        computeBezier();
+        renderer()->computeBezier(this);
         //
         // move anchor for slurs/ties
         //
@@ -166,12 +166,12 @@ void TieSegment::editDrag(EditData& ed)
             }
         }
     } else if (g == Grip::BEZIER1 || g == Grip::BEZIER2) {
-        computeBezier();
+        renderer()->computeBezier(this);
     } else if (g == Grip::SHOULDER) {
         ups(g).off = PointF();
         ups(Grip::BEZIER1).off += ed.delta;
         ups(Grip::BEZIER2).off += ed.delta;
-        computeBezier();
+        renderer()->computeBezier(this);
     } else if (g == Grip::DRAG) {
         ups(Grip::DRAG).off = PointF();
         roffset() += ed.delta;
@@ -196,111 +196,6 @@ void TieSegment::computeMidThickness(double tieLengthInSp)
         const double C = shortTieLimit * minTieThickness - minTieLength * normalThickness;
         m_midThickness = A * (B * tieLengthInSp + C);
     }
-}
-
-//---------------------------------------------------------
-//   computeBezier
-//    compute help points of slur bezier segment
-//---------------------------------------------------------
-
-void TieSegment::computeBezier(PointF shoulderOffset)
-{
-    const PointF tieStart = ups(Grip::START).p + ups(Grip::START).off;
-    const PointF tieEnd = ups(Grip::END).p + ups(Grip::END).off;
-
-    PointF tieEndNormalized = tieEnd - tieStart;  // normalize to zero
-    if (RealIsNull(tieEndNormalized.x())) {
-        return;
-    }
-
-    const double tieAngle = atan(tieEndNormalized.y() / tieEndNormalized.x()); // angle required from tie start to tie end--zero if horizontal
-    Transform t;
-    t.rotateRadians(-tieAngle);  // rotate so that we are working with horizontal ties regardless of endpoint height difference
-    tieEndNormalized = t.map(tieEndNormalized);  // apply that rotation
-    shoulderOffset = t.map(shoulderOffset);  // also apply to shoulderOffset
-
-    const double _spatium = spatium();
-    double tieLengthInSp = tieEndNormalized.x() / _spatium;
-
-    const double minShoulderHeight = style().styleMM(Sid::tieMinShoulderHeight);
-    const double maxShoulderHeight = style().styleMM(Sid::tieMaxShoulderHeight);
-    double shoulderH = minShoulderHeight + _spatium * 0.3 * sqrt(abs(tieLengthInSp - 1));
-    shoulderH = std::clamp(shoulderH, minShoulderHeight, maxShoulderHeight);
-
-    shoulderH -= shoulderOffset.y();
-
-    PointF shoulderAdjustOffset = tie()->up() ? PointF(0.0, shoulderOffset.y()) : PointF(0.0, -shoulderOffset.y());
-    addAdjustmentOffset(shoulderAdjustOffset, Grip::BEZIER1);
-    addAdjustmentOffset(shoulderAdjustOffset, Grip::BEZIER2);
-
-    if (!tie()->up()) {
-        shoulderH = -shoulderH;
-    }
-
-    double shoulderW = 0.6; // TODO: style
-
-    const double tieWidth = tieEndNormalized.x();
-    const double bezier1X = (tieWidth - tieWidth * shoulderW) * .5 + shoulderOffset.x();
-    const double bezier2X = bezier1X + tieWidth * shoulderW + shoulderOffset.x();
-
-    const PointF tieDrag = PointF(tieWidth * .5, 0.0);
-
-    const PointF bezier1(bezier1X, -shoulderH);
-    const PointF bezier2(bezier2X, -shoulderH);
-
-    computeMidThickness(tieLengthInSp);
-
-    PointF tieThickness(0.0, m_midThickness);
-
-    const PointF bezier1Offset = t.map(ups(Grip::BEZIER1).off);
-    const PointF bezier2Offset = t.map(ups(Grip::BEZIER2).off);
-
-    //-----------------------------------calculate p6
-    const PointF bezier1Final = bezier1 + bezier1Offset;
-    const PointF bezier2Final = bezier2 + bezier2Offset;
-
-    const PointF tieShoulder = 0.5 * (bezier1Final + bezier2Final);
-    //-----------------------------------
-
-    m_path = PainterPath();
-    m_path.moveTo(PointF());
-    m_path.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
-    if (tie()->styleType() == SlurStyleType::Solid) {
-        m_path.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
-    }
-
-    tieThickness = PointF(0.0, 3.0 * m_midThickness);
-
-    // translate back
-    t.reset();
-    t.translate(tieStart.x(), tieStart.y());
-    t.rotateRadians(tieAngle);
-    m_path = t.map(m_path);
-    ups(Grip::BEZIER1).p = t.map(bezier1);
-    ups(Grip::BEZIER2).p = t.map(bezier2);
-    ups(Grip::END).p = t.map(tieEndNormalized) - ups(Grip::END).off;
-    ups(Grip::DRAG).p = t.map(tieDrag);
-    ups(Grip::SHOULDER).p = t.map(tieShoulder);
-
-    Shape shape(Shape::Type::Composite);
-    PointF start;
-    start = t.map(start);
-
-    double minH = std::abs(2 * m_midThickness);
-    int nbShapes = 15;
-    const CubicBezier b(tieStart, ups(Grip::BEZIER1).pos(), ups(Grip::BEZIER2).pos(), ups(Grip::END).pos());
-    for (int i = 1; i <= nbShapes; i++) {
-        const PointF point = b.pointAtPercent(i / float(nbShapes));
-        RectF re = RectF(start, point).normalized();
-        if (re.height() < minH) {
-            tieLengthInSp = (minH - re.height()) * .5;
-            re.adjust(0.0, -tieLengthInSp, 0.0, tieLengthInSp);
-        }
-        shape.add(re, this);
-        start = point;
-    }
-
-    mutldata()->setShape(shape);
 }
 
 void TieSegment::consolidateAdjustmentOffsetIntoUserOffset()

@@ -81,6 +81,7 @@ class Stem;
 class TextBase;
 class Text;
 class TextLineBaseSegment;
+class TieSegment;
 class TimeSig;
 }
 
@@ -182,6 +183,8 @@ public:
     {
         doDrawItem(item, p);
     }
+
+    virtual void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) = 0;
 
 private:
     // Layout Single Item

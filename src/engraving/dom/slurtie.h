@@ -113,6 +113,7 @@ public:
     UP& ups(Grip i) { return m_ups[int(i)]; }
 
     const mu::draw::PainterPath& path() const { return m_path; }
+    void setPath(const mu::draw::PainterPath& p) { m_path = p; }
 
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return int(Grip::GRIPS); }
@@ -121,7 +122,6 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
-    virtual void computeBezier(PointF so = PointF()) = 0;
 
 protected:
     SlurTieSegment(const ElementType& type, System*);
