@@ -1188,7 +1188,7 @@ TieSegment* SlurTieLayout::tieLayoutBack(Tie* item, System* system)
     segment->setSystem(system);
     segment->resetAdjustmentOffset();
 
-    segment->adjustY(sPos.p1, sPos.p2);
+    adjustY(segment);
     segment->setSpannerSegmentType(SpannerSegmentType::END);
 
     if (segment->autoplace() && !segment->isEdited()) {
