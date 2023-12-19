@@ -99,7 +99,6 @@ public:
 
     void startEditDrag(EditData& ed) override;
     void endEditDrag(EditData& ed) override;
-    void editDrag(EditData&) override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
