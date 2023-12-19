@@ -91,9 +91,14 @@ void ScoreRenderer::layoutText1(TextBase* item, bool base)
     }
 }
 
-void ScoreRenderer::computeBezier(TieSegment *tieSeg, PointF shoulderOffset)
+void ScoreRenderer::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 {
     SlurTieLayout::computeBezier(tieSeg, shoulderOffset);
+}
+
+void ScoreRenderer::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
+{
+    SlurTieLayout::computeBezier(slurSeg, shoulderOffset);
 }
 
 void ScoreRenderer::layoutTextLineBaseSegment(TextLineBaseSegment* item)

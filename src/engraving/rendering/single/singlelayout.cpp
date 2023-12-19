@@ -94,6 +94,7 @@
 #include "rendering/dev/tremololayout.h"
 #include "rendering/dev/arpeggiolayout.h"
 #include "rendering/dev/chordlayout.h"
+#include "rendering/dev/slurtielayout.h"
 
 #include "log.h"
 
@@ -1413,7 +1414,7 @@ void SingleLayout::layout(Slur* item, const Context& ctx)
     s->ups(Grip::END).p   = PointF(spatium * 6, 0);
     s->setExtraHeight(0.0);
 
-    s->computeBezier();
+    SlurTieLayout::computeBezier(s);
 
     item->setbbox(s->ldata()->bbox());
 }

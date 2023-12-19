@@ -1754,7 +1754,7 @@ void SlurTieLayout::computeUp(Slur* slur, LayoutContext& ctx)
     }
 }
 
-void SlurTieLayout::computeBezier(TieSegment *tieSeg, PointF shoulderOffset)
+void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 {
     const PointF tieStart = tieSeg->ups(Grip::START).p + tieSeg->ups(Grip::START).off;
     const PointF tieEnd = tieSeg->ups(Grip::END).p + tieSeg->ups(Grip::END).off;
@@ -1856,6 +1856,191 @@ void SlurTieLayout::computeBezier(TieSegment *tieSeg, PointF shoulderOffset)
     tieSeg->mutldata()->setShape(shape);
 }
 
+void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
+{
+    /* ************************************************
+     * LEGEND: pp1 = start point
+     *         pp2 = end point
+     *         p2 = end point (in slur coordinates)
+     *         p3 = first bezier point (in slur coord.)
+     *         p4 = second bezier point (in slur coord.)
+     *         p5 = whole slur drag point (in slur coord.)
+     *         p6 = shoulder drag point (in slur coord.)
+     * REMEMBER! ups().pos() = ups().p + ups().off
+     * ***********************************************/
+    // Avoid bad staff line intersections
+    if (slurSeg->autoplace()) {
+        slurSeg->adjustEndpoints();
+    }
+    // If end point adjustment is locked, restore the endpoints to
+    // where they were before
+    if (slurSeg->isEndPointsEdited()) {
+        slurSeg->ups(Grip::START).off += slurSeg->endPointOff1();
+        slurSeg->ups(Grip::END).off += slurSeg->endPointOff2();
+    }
+    // Get start and end points (have been calculated before)
+    PointF pp1 = slurSeg->ups(Grip::START).p + slurSeg->ups(Grip::START).off;
+    PointF pp2 = slurSeg->ups(Grip::END).p + slurSeg->ups(Grip::END).off;
+    // Keep track of the original value before it gets changed
+    PointF oldp1 = pp1;
+    PointF oldp2 = pp2;
+    // Check slur integrity
+    if (pp2 == pp1) {
+        Measure* m1 = slurSeg->slur()->startCR()->segment()->measure();
+        Measure* m2 = slurSeg->slur()->endCR()->segment()->measure();
+        LOGD("zero slur at tick %d(%d) track %zu in measure %d-%d  tick %d ticks %d",
+             m1->tick().ticks(), slurSeg->tick().ticks(), slurSeg->track(), m1->no(), m2->no(),
+             slurSeg->slur()->tick().ticks(), slurSeg->slur()->ticks().ticks());
+        slurSeg->slur()->setBroken(true);
+        return;
+    }
+
+    // Set up coordinate transforms
+    // CAUTION: transform operations are applies in reverse order to how
+    // they are added to the transformation.
+    double slurAngle = atan((pp2.y() - pp1.y()) / (pp2.x() - pp1.x()));
+    mu::draw::Transform rotate;
+    rotate.rotateRadians(-slurAngle);
+    mu::draw::Transform toSlurCoordinates;
+    toSlurCoordinates.rotateRadians(-slurAngle);
+    toSlurCoordinates.translate(-pp1.x(), -pp1.y());
+    mu::draw::Transform toSystemCoordinates = toSlurCoordinates.inverted();
+    // Transform p2 and shoulder offset
+    PointF p2 = toSlurCoordinates.map(pp2);
+    shoulderOffset = rotate.map(shoulderOffset);
+
+    // COMPUTE DEFAULT SLUR SHAPE
+    // Compute default shoulder height and width
+    double _spatium  = slurSeg->spatium();
+    double shoulderW; // expressed as fraction of slur-length
+    double shoulderH;
+    double d = p2.x() / _spatium;
+
+    if (d < 0) {
+        //! NOTE A negative d means that end point is before the start point.
+        //! This only exists as a temporary state when horizontal spacing hasn't yet been computed,
+        //! and it makes no sense for any of the following calculations
+        return;
+    }
+
+    if (d < 2) {
+        shoulderW = 0.60;
+    } else if (d < 10) {
+        shoulderW = 0.5;
+    } else if (d < 18) {
+        shoulderW = 0.6;
+    } else {
+        shoulderW = 0.7;
+    }
+    shoulderH = sqrt(d / 4) * _spatium;
+
+    static constexpr double shoulderReduction = 0.75;
+    if (slurSeg->slur()->isOverBeams()) {
+        shoulderH *= shoulderReduction;
+    }
+    shoulderH -= shoulderOffset.y();
+    if (!slurSeg->slur()->up()) {
+        shoulderH = -shoulderH;
+    }
+
+    double c    = p2.x();
+    double c1   = (c - c * shoulderW) * .5 + shoulderOffset.x();
+    double c2   = c1 + c * shoulderW + shoulderOffset.x();
+    PointF p3(c1, -shoulderH);
+    PointF p4(c2, -shoulderH);
+    // Set Bezier points default position
+    slurSeg->ups(Grip::BEZIER1).p  = toSystemCoordinates.map(p3);
+    slurSeg->ups(Grip::BEZIER2).p  = toSystemCoordinates.map(p4);
+    // Add offsets
+    p3 += shoulderOffset + rotate.map(slurSeg->ups(Grip::BEZIER1).off);
+    p4 += shoulderOffset + rotate.map(slurSeg->ups(Grip::BEZIER2).off);
+    slurSeg->ups(Grip::BEZIER1).off += rotate.inverted().map(shoulderOffset);
+    slurSeg->ups(Grip::BEZIER2).off += rotate.inverted().map(shoulderOffset);
+
+    // ADAPT SLUR SHAPE AND ENDPOINT POSITION
+    // to clear collisions with underlying items
+    if (slurSeg->autoplace()) {
+        slurSeg->avoidCollisions(pp1, p2, p3, p4, toSystemCoordinates, slurAngle);
+    }
+
+    // Re-check end points for bad staff line collisions
+    slurSeg->ups(Grip::START).p = pp1 - slurSeg->ups(Grip::START).off;
+    slurSeg->ups(Grip::END).p = toSystemCoordinates.map(p2) - slurSeg->ups(Grip::END).off;
+    slurSeg->adjustEndpoints();
+    PointF newpp1 = slurSeg->ups(Grip::START).p + slurSeg->ups(Grip::START).off;
+    PointF difference = rotate.map(newpp1 - pp1);
+    pp1 = newpp1;
+    pp2 = slurSeg->ups(Grip::END).p + slurSeg->ups(Grip::END).off;
+    p3 -= difference;
+    p4 -= difference;
+    // Keep track of how much the end points position has changed
+    if (!slurSeg->isEndPointsEdited()) {
+        slurSeg->setEndPointOff1(pp1 - oldp1);
+        slurSeg->setEndPointOff2(pp2 - oldp2);
+    } else {
+        slurSeg->setEndPointOff1(PointF());
+        slurSeg->setEndPointOff2(PointF());
+    }
+    // Recompute the transformation because pp1 and pp1 may have changed
+    toSlurCoordinates.reset();
+    toSlurCoordinates.rotateRadians(-slurAngle);
+    toSlurCoordinates.translate(-pp1.x(), -pp1.y());
+    toSystemCoordinates = toSlurCoordinates.inverted();
+    p2 = toSlurCoordinates.map(pp2);
+
+    // Calculate p5 and p6
+    PointF p5 = 0.5 * p2; // mid-point between pp1 and p2
+    PointF p6 = 0.5 * (p3 + p4); // mid-point between p3 and p4
+
+    // Update all slur points after collision avoidance
+    slurSeg->ups(Grip::BEZIER1).p  = toSystemCoordinates.map(p3) - slurSeg->ups(Grip::BEZIER1).off;
+    slurSeg->ups(Grip::BEZIER2).p  = toSystemCoordinates.map(p4) - slurSeg->ups(Grip::BEZIER2).off;
+    slurSeg->ups(Grip::DRAG).p     = toSystemCoordinates.map(p5);
+    slurSeg->ups(Grip::SHOULDER).p = toSystemCoordinates.map(p6);
+
+    // Set slur thickness
+    double w = slurSeg->style().styleMM(Sid::SlurMidWidth) - slurSeg->style().styleMM(Sid::SlurEndWidth);
+    if (slurSeg->staff()) {
+        w *= slurSeg->staff()->staffMag(slurSeg->slur()->tick());
+    }
+    if ((c2 - c1) <= _spatium) {
+        w *= .5;
+    }
+    PointF thick(0.0, w);
+
+    // Set path
+    PainterPath path = PainterPath();
+    path.moveTo(PointF());
+    path.cubicTo(p3 - thick, p4 - thick, p2);
+    if (slurSeg->slur()->styleType() == SlurStyleType::Solid) {
+        path.cubicTo(p4 + thick, p3 + thick, PointF());
+    }
+    thick = PointF(0.0, 3.0 * w);
+
+    path = toSystemCoordinates.map(path);
+    slurSeg->setPath(path);
+
+    // Create shape for the skyline
+    Shape shape;
+    PointF start = pp1;
+    int nbShapes  = 32;
+    double minH    = abs(2 * w);
+    const CubicBezier b(slurSeg->ups(Grip::START).pos(), slurSeg->ups(Grip::BEZIER1).pos(), slurSeg->ups(Grip::BEZIER2).pos(),
+                        slurSeg->ups(Grip::END).pos());
+    for (int i = 1; i <= nbShapes; i++) {
+        const PointF point = b.pointAtPercent(i / float(nbShapes));
+        RectF re     = RectF(start, point).normalized();
+        if (re.height() < minH) {
+            double d1 = (minH - re.height()) * .5;
+            re.adjust(0.0, -d1, 0.0, d1);
+        }
+        shape.add(re, slurSeg);
+        start = point;
+    }
+
+    slurSeg->mutldata()->setShape(shape);
+}
+
 double SlurTieLayout::defaultStemLengthStart(TremoloTwoChord* tremolo)
 {
     return TremoloLayout::extendedStemLenWithTwoNoteTremolo(tremolo,
@@ -1932,5 +2117,5 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
         ldata->moveY(item->staffType()->yoffset().val() * item->spatium());
     }
 
-    item->computeBezier();
+    computeBezier(item);
 }
