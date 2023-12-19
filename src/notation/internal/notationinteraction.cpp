@@ -1182,7 +1182,6 @@ void NotationInteraction::startDrop(const QByteArray& edata)
             el->setHeight(spatium * 5);
         }
         m_dropData.ed.dropElement = el;
-        m_dropData.ed.dropElement->setParent(0);
 
         rw::RWRegister::reader()->readItem(m_dropData.ed.dropElement, e);
 
