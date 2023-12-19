@@ -26,6 +26,7 @@
 #include "chord.h"
 #include "hook.h"
 #include "tremolo.h"
+#include "tremolosinglechord.h"
 
 #include "log.h"
 
@@ -115,10 +116,18 @@ void Stem::reset()
 
 bool Stem::acceptDrop(EditData& data) const
 {
-    EngravingItem* e = data.dropElement;
-    if ((e->type() == ElementType::TREMOLO) && (item_cast<TremoloDispatcher*>(e)->tremoloType() <= TremoloType::R64)) {
-        return true;
+    const EngravingItem* e = data.dropElement;
+    switch (e->type()) {
+    case ElementType::TREMOLO:
+        DEPRECATED;
+        return item_cast<const TremoloDispatcher*>(e)->tremoloType() <= TremoloType::R64;
+    case ElementType::TREMOLO_SINGLECHORD:
+        DEPRECATED;
+        return item_cast<const TremoloSingleChord*>(e)->tremoloType() <= TremoloType::R64;
+    default:
+        break;
     }
+
     return false;
 }
 

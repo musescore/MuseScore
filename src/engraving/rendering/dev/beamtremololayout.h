@@ -30,6 +30,7 @@ namespace mu::engraving {
 class Chord;
 class ChordRest;
 class Beam;
+class TremoloTwoChord;
 enum class ActionIconType;
 enum class SpannerSegmentType;
 }
@@ -72,7 +73,7 @@ private:
     BeamType m_beamType = BeamType::INVALID;
     EngravingItem* m_element = nullptr;
     Beam* m_beam = nullptr;
-    TremoloDispatcher* m_trem = nullptr;
+    TremoloTwoChord* m_trem = nullptr;
     bool m_up = false;
     Fraction m_tick = Fraction(0, 1);
     double m_spatium = 0.;
