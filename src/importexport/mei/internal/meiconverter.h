@@ -27,7 +27,7 @@
 #include "engraving/dom/accidental.h"
 #include "engraving/dom/interval.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/volta.h"
 
 #include "iengravingfontsprovider.h"
@@ -87,7 +87,7 @@ class Convert
 {
     // The fallback font is used to convert smufl codes (char32_t) to engraving::SymId
     INJECT_STATIC(engraving::IEngravingFontsProvider, engravingFonts)
-    INJECT_STATIC(engraving::IEngravingConfiguration, engravingConfiguration);
+    INJECT_STATIC(engraving::IEngravingConfiguration, engravingConfiguration)
 public:
 
     /**
@@ -277,7 +277,7 @@ public:
     static std::pair<libmei::data_STEMDIRECTION, double> stemToMEI(const engraving::DirectionV direction, bool noStem);
 
     static engraving::TremoloType stemModFromMEI(const libmei::data_STEMMODIFIER meiStemMod);
-    static libmei::data_STEMMODIFIER stemModToMEI(const engraving::TremoloDispatcher* tremolo);
+    static libmei::data_STEMMODIFIER stemModToMEI(const engraving::TremoloSingleChord* tremolo);
 
     static void sylFromMEI(engraving::Lyrics* lyrics, const libmei::Syl& meiSyl, ElisionType elision, bool& warning);
     static libmei::Syl sylToMEI(const engraving::Lyrics* lyrics, ElisionType elision);

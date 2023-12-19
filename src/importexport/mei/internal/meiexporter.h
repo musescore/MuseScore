@@ -49,7 +49,7 @@ class Part;
 class Rest;
 class Score;
 class Staff;
-class TremoloDispatcher;
+class TremoloSingleChord;
 class Tuplet;
 class VBox;
 }
@@ -105,7 +105,7 @@ private:
     bool writeBeamAndTuplet(const engraving::ChordRest* chordRest, bool& closingBeam, bool& closingTuplet, bool& closingBeamInTuplet);
     bool writeBeamAndTupletEnd(bool closingBeam, bool closingTuplet, bool closingBeamInTuplet);
     bool writeBeam(const engraving::Beam* beam, const engraving::ChordRest* chordRest, bool& closing);
-    bool writeBTrem(const engraving::TremoloDispatcher* tremolo);
+    bool writeBTrem(const engraving::TremoloSingleChord* tremolo);
     bool writeClef(const engraving::Clef* clef);
     bool writeChord(const engraving::Chord* chord, const engraving::Staff* staff);
     bool writeGraceGrp(const engraving::Chord* chord, const engraving::Staff* staff, bool isAfter = false);

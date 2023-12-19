@@ -28,7 +28,7 @@
 #include "dom/masterscore.h"
 #include "dom/measure.h"
 #include "dom/note.h"
-#include "dom/tremolo.h"
+#include "dom/tremolotwochord.h"
 
 #include "utils/scorerw.h"
 #include "utils/scorecomp.h"
@@ -247,7 +247,7 @@ TEST_F(Engraving_BeamTests, flipTremoloStemDir)
 
     Measure* m1 = score->firstMeasure();
     ChordRest* cr = toChordRest(m1->findSegment(SegmentType::ChordRest, m1->tick())->element(0));
-    TremoloDispatcher* t = toChord(cr)->tremoloDispatcher();
+    TremoloTwoChord* t = toChord(cr)->tremoloTwoChord();
     Chord* c1 = t->chord1();
     Chord* c2 = t->chord2();
     EXPECT_TRUE(t->up() && c1->up() && c2->up());

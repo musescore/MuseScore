@@ -918,7 +918,7 @@ inline bool isTremoloTwoChord(TremoloType type)
 }
 
 enum class TremoloChordType : char {
-    TremoloSingle, TremoloFirstChord, TremoloSecondChord
+    TremoloNone, TremoloSingle, TremoloFirstChord, TremoloSecondChord
 };
 
 enum class BracketType : signed char {

@@ -979,11 +979,9 @@ RemoveElement::RemoveElement(EngravingItem* e)
         if (e->isChord()) {
             Chord* chord = toChord(e);
             // remove tremolo between 2 notes
-            if (chord->tremoloDispatcher()) {
-                TremoloDispatcher* tremolo = chord->tremoloDispatcher();
-                if (tremolo->twoNotes()) {
-                    score->doUndoRemoveElement(tremolo);
-                }
+            if (chord->tremoloTwoChord()) {
+                TremoloTwoChord* tremolo = chord->tremoloTwoChord();
+                score->doUndoRemoveElement(tremolo);
             }
             // Move arpeggio down to next available note
             if (chord->arpeggio()) {
@@ -2504,9 +2502,9 @@ void SwapCR::flip(EditData*)
     Segment* s2 = cr2->segment();
     track_idx_t track = cr1->track();
 
-    if (cr1->isChord() && cr2->isChord() && toChord(cr1)->tremoloDispatcher()
-        && (toChord(cr1)->tremoloDispatcher() == toChord(cr2)->tremoloDispatcher())) {
-        TremoloDispatcher* t = toChord(cr1)->tremoloDispatcher();
+    if (cr1->isChord() && cr2->isChord() && toChord(cr1)->tremoloTwoChord()
+        && (toChord(cr1)->tremoloTwoChord() == toChord(cr2)->tremoloTwoChord())) {
+        TremoloTwoChord* t = toChord(cr1)->tremoloTwoChord();
         Chord* c1 = t->chord1();
         Chord* c2 = t->chord2();
         t->setParent(toChord(c2));
