@@ -134,7 +134,6 @@ protected:
     struct UP m_ups[int(Grip::GRIPS)];
 
     mu::draw::PainterPath m_path;
-    mu::draw::PainterPath m_shapePath;
 };
 
 //-------------------------------------------------------------------

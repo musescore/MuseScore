@@ -790,13 +790,8 @@ void SlurSegment::computeBezier(mu::PointF p6offset)
         m_path.cubicTo(p4 + thick, p3 + thick, PointF());
     }
     thick = PointF(0.0, 3.0 * w);
-    m_shapePath = PainterPath();
-    m_shapePath.moveTo(PointF());
-    m_shapePath.cubicTo(p3 - thick, p4 - thick, p2);
-    m_shapePath.cubicTo(p4 + thick, p3 + thick, PointF());
 
     m_path = toSystemCoordinates.map(m_path);
-    m_shapePath = toSystemCoordinates.map(m_shapePath);
 
     // Create shape for the skyline
     Shape shape;

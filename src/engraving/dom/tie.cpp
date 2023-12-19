@@ -272,17 +272,12 @@ void TieSegment::computeBezier(PointF shoulderOffset)
     }
 
     tieThickness = PointF(0.0, 3.0 * m_midThickness);
-    m_shapePath = PainterPath();
-    m_shapePath.moveTo(PointF());
-    m_shapePath.cubicTo(bezier1 + bezier1Offset - tieThickness, bezier2 + bezier2Offset - tieThickness, tieEndNormalized);
-    m_shapePath.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
 
     // translate back
     t.reset();
     t.translate(tieStart.x(), tieStart.y());
     t.rotateRadians(tieAngle);
     m_path = t.map(m_path);
-    m_shapePath = t.map(m_shapePath);
     ups(Grip::BEZIER1).p = t.map(bezier1);
     ups(Grip::BEZIER2).p = t.map(bezier2);
     ups(Grip::END).p = t.map(tieEndNormalized) - ups(Grip::END).off;
@@ -783,7 +778,6 @@ void TieSegment::setAutoAdjust(const PointF& offset)
     PointF diff = offset - m_autoAdjustOffset;
     if (!diff.isNull()) {
         m_path.translate(diff);
-        m_shapePath.translate(diff);
 
         Shape sh = ldata()->shape();
         sh.translate(diff);
