@@ -302,7 +302,7 @@ double Shape::bottom() const
 
 double Shape::rightMostEdgeAtHeight(double yAbove, double yBelow) const
 {
-    double edge = -100000.0;
+    double edge = -std::numeric_limits<double>::max();
     for (const ShapeElement& sh : m_elements) {
         if (sh.bottom() > yAbove && sh.top() < yBelow) {
             edge = std::max(edge, sh.right());
@@ -314,7 +314,7 @@ double Shape::rightMostEdgeAtHeight(double yAbove, double yBelow) const
 
 double Shape::leftMostEdgeAtHeight(double yAbove, double yBelow) const
 {
-    double edge = 100000.0;
+    double edge = std::numeric_limits<double>::max();
     for (const ShapeElement& sh : m_elements) {
         if (sh.bottom() > yAbove && sh.top() < yBelow) {
             edge = std::min(edge, sh.left());
