@@ -77,6 +77,8 @@ public:
     bool followText() const { return m_followText; }
     void setFollowText(bool v) { m_followText = v; }
     void undoSetFollowText(bool v);
+
+    void updateTempo();
     void updateRelative();
 
     TDuration duration() const;
@@ -98,7 +100,6 @@ protected:
     void undoChangeProperty(Pid id, const PropertyValue&, PropertyFlags ps) override;
 
     void updateScore();
-    void updateTempo();
 
     TempoTextType m_tempoTextType;
     BeatsPerSecond m_tempo;             // beats per second
