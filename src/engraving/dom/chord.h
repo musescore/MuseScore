@@ -309,9 +309,6 @@ public:
     double downPos() const override;
     double centerX() const;
 
-    // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
-    void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
-
     double calcDefaultStemLength();
 
     struct StartEndSlurs {
@@ -342,6 +339,9 @@ private:
     int stemOpticalAdjustment(int stemEndPosition) const;
     int calcMinStemLength();
     int calc4BeamsException(int stemLength) const;
+
+    // `includeTemporarySiblings`: whether items that are deleted & recreated during every layout should also be processed
+    void processSiblings(std::function<void(EngravingItem*)> func, bool includeTemporarySiblings) const;
 
     std::vector<Note*> m_notes;           // sorted to decreasing line step
     LedgerLine* m_ledgerLines = nullptr;  // single linked list

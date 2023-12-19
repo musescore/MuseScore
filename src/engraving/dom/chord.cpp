@@ -1181,8 +1181,11 @@ void Chord::processSiblings(std::function<void(EngravingItem*)> func, bool inclu
     if (m_arpeggio) {
         func(m_arpeggio);
     }
-    if (tremoloDispatcher()) {
-        func(tremoloDispatcher());
+    if (m_tremoloTwoChord) {
+        func(m_tremoloTwoChord);
+    }
+    if (m_tremoloSingleChord) {
+        func(m_tremoloSingleChord);
     }
     if (includeTemporarySiblings) {
         for (LedgerLine* ll = m_ledgerLines; ll; ll = ll->next()) {
@@ -1812,8 +1815,11 @@ void Chord::scanElements(void* data, void (* func)(void*, EngravingItem*), bool 
     if (m_arpeggio) {
         func(data, m_arpeggio);
     }
-    if (tremoloDispatcher() && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
-        func(data, tremoloDispatcher());
+    if (m_tremoloTwoChord && (tremoloChordType() != TremoloChordType::TremoloSecondChord)) {
+        func(data, m_tremoloTwoChord);
+    }
+    if (m_tremoloSingleChord) {
+        func(data, m_tremoloSingleChord);
     }
     const Staff* st = staff();
     if ((st && st->showLedgerLines(tick())) || !st) {       // also for palette
@@ -2782,17 +2788,19 @@ void Chord::setIsTrillCueNote(bool v)
 
 TremoloChordType Chord::tremoloChordType() const
 {
-    TremoloTwoChord* tremoloTwo = tremoloTwoChord();
-    if (tremoloTwo) {
-        if (tremoloTwo->chord1() == this) {
+    if (m_tremoloTwoChord) {
+        if (m_tremoloTwoChord->chord1() == this) {
             return TremoloChordType::TremoloFirstChord;
-        } else if (tremoloTwo->chord2() == this) {
+        } else if (m_tremoloTwoChord->chord2() == this) {
             return TremoloChordType::TremoloSecondChord;
         } else {
             ASSERT_X(String(u"Chord::tremoloChordType(): inconsistency"));
         }
+    } else if (m_tremoloSingleChord) {
+        return TremoloChordType::TremoloSingle;
     }
-    return TremoloChordType::TremoloSingle;
+
+    return TremoloChordType::TremoloNone;
 }
 
 //---------------------------------------------------------
@@ -2959,15 +2967,7 @@ EngravingItem* Chord::prevElement()
         return m_notes.front();
 
     case ElementType::TREMOLO:
-        if (m_arpeggio) {
-            return m_arpeggio;
-        }
-    // fall through
     case ElementType::TREMOLO_TWOCHORD:
-        if (m_arpeggio) {
-            return m_arpeggio;
-        }
-    // fall through
     case ElementType::TREMOLO_SINGLECHORD:
         if (m_arpeggio) {
             return m_arpeggio;

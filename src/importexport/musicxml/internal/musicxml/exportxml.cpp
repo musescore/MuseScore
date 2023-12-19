@@ -114,6 +114,8 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/undo.h"
@@ -1177,7 +1179,7 @@ void ExportMusicXml::calcDivMoveToTick(const Fraction& t)
 
 static bool isTwoNoteTremolo(Chord* chord)
 {
-    return chord->tremoloDispatcher() && chord->tremoloDispatcher()->twoNotes();
+    return chord->tremoloTwoChord();
 }
 
 //---------------------------------------------------------
@@ -2928,11 +2930,13 @@ void ExportMusicXml::wavyLineStartStop(const ChordRest* const cr, Notations& not
 
 static void tremoloSingleStartStop(Chord* chord, Notations& notations, Ornaments& ornaments, XmlWriter& xml)
 {
-    TremoloDispatcher* tr = chord->tremoloDispatcher();
+    TremoloType st = chord->tremoloType();
+    const EngravingItem* tr = chord->tremoloSingleChord()
+                              ? static_cast<const EngravingItem*>(chord->tremoloSingleChord())
+                              : static_cast<const EngravingItem*>(chord->tremoloTwoChord());
 
-    if (tr && ExportMusicXml::canWrite(tr)) {
+    if (st != TremoloType::INVALID_TREMOLO && ExportMusicXml::canWrite(tr)) {
         int count = 0;
-        TremoloType st = tr->tremoloType();
         QString type = "";
 
         if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {

@@ -1084,7 +1084,7 @@ bool MeiExporter::writeBeam(const Beam* beam, const ChordRest* chordRest, bool& 
  * Write a bTrem.
  */
 
-bool MeiExporter::writeBTrem(const TremoloDispatcher* tremolo)
+bool MeiExporter::writeBTrem(const TremoloSingleChord* tremolo)
 {
     IF_ASSERT_FAILED(tremolo) {
         return false;
@@ -1142,9 +1142,9 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
     bool closingBeamInTuplet = false;
     this->writeBeamAndTuplet(chord, closingBeam, closingTuplet, closingBeamInTuplet);
 
-    bool isBTrem = (chord->tremoloDispatcher() && (chord->tremoloChordType() == TremoloChordType::TremoloSingle));
+    bool isBTrem = (chord->tremoloChordType() == TremoloChordType::TremoloSingle);
     if (isBTrem) {
-        this->writeBTrem(chord->tremoloDispatcher());
+        this->writeBTrem(chord->tremoloSingleChord());
     }
 
     bool isChord = (chord->notes().size() > 1);
@@ -1971,8 +1971,8 @@ bool MeiExporter::writeStemAtt(const Chord* chord, libmei::AttStems& stemsAtt)
     stemsAtt.SetStemDir(meiStemDir);
     stemsAtt.SetStemLen(meiStemLen);
 
-    if (chord->tremoloDispatcher() && (chord->tremoloChordType() == TremoloChordType::TremoloSingle)) {
-        stemsAtt.SetStemMod(Convert::stemModToMEI(chord->tremoloDispatcher()));
+    if (chord->tremoloChordType() == TremoloChordType::TremoloSingle) {
+        stemsAtt.SetStemMod(Convert::stemModToMEI(chord->tremoloSingleChord()));
     }
 
     return true;

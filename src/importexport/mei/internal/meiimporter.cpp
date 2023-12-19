@@ -1671,10 +1671,15 @@ bool MeiImporter::readChord(pugi::xml_node chordNode, Measure* measure, int trac
     this->readArtics(chordNode, chord);
 
     if (!m_tremoloId.empty()) {
-        TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(chord);
-        m_uids->reg(tremolo, m_tremoloId);
-        tremolo->setTremoloType(Convert::stemModFromMEI(meiChord.GetStemMod()));
-        chord->add(tremolo);
+        TremoloType ttype = Convert::stemModFromMEI(meiChord.GetStemMod());
+        if (isTremoloTwoChord(ttype)) {
+            NOT_SUPPORTED;
+        } else {
+            TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(chord);
+            m_uids->reg(tremolo, m_tremoloId);
+            tremolo->setTremoloType(ttype);
+            chord->add(tremolo);
+        }
     }
 
     pugi::xpath_node_set notes = chordNode.select_nodes(".//note");
@@ -1832,10 +1837,15 @@ bool MeiImporter::readNote(pugi::xml_node noteNode, Measure* measure, int track,
         this->readArtics(noteNode, chord);
         this->readVerses(noteNode, chord);
         if (!m_tremoloId.empty()) {
-            TremoloDispatcher* tremolo = Factory::createTremoloDispatcher(chord);
-            m_uids->reg(tremolo, m_tremoloId);
-            tremolo->setTremoloType(Convert::stemModFromMEI(meiNote.GetStemMod()));
-            chord->add(tremolo);
+            TremoloType ttype = Convert::stemModFromMEI(meiNote.GetStemMod());
+            if (isTremoloTwoChord(ttype)) {
+                NOT_SUPPORTED;
+            } else {
+                TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(chord);
+                m_uids->reg(tremolo, m_tremoloId);
+                tremolo->setTremoloType(ttype);
+                chord->add(tremolo);
+            }
         }
     }
 
