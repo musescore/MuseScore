@@ -30,9 +30,7 @@
 #include "../dom/staff.h"
 #include "../dom/stem.h"
 #include "../dom/stemslash.h"
-#include "../dom/tremolo.h"
 #include "../dom/tremolotwochord.h"
-#include "../dom/tremolosinglechord.h"
 
 #include "tlayout.h"
 #include "chordlayout.h"
@@ -49,10 +47,7 @@ constexpr std::array _maxSlopes = { 0, 1, 2, 3, 4, 5, 6, 7 };
 BeamTremoloLayout::BeamTremoloLayout(EngravingItem* e)
 {
     bool isGrace = false;
-    IF_ASSERT_FAILED(e && (e->isBeam()
-                           || e->isTremolo()
-                           || e->isType(ElementType::TREMOLO_TWOCHORD)
-                           || e->isType(ElementType::TREMOLO_SINGLECHORD))) {
+    IF_ASSERT_FAILED(e && (e->isBeam() || e->isType(ElementType::TREMOLO_TWOCHORD))) {
         // right now only beams and trems are supported
         return;
     } else if (e->isBeam()) {
@@ -61,20 +56,8 @@ BeamTremoloLayout::BeamTremoloLayout(EngravingItem* e)
         m_up = toBeam(e)->up();
         m_trem = nullptr; // there can be many different trems in a beam, they will all be checked
         isGrace = m_beam->elements().front()->isGrace();
-    } else { // e->isTremolo()
-        switch (e->type()) {
-        case ElementType::TREMOLO:
-            m_trem = item_cast<TremoloDispatcher*>(e);
-            break;
-        case ElementType::TREMOLO_TWOCHORD:
-            m_trem = item_cast<TremoloTwoChord*>(e)->dispatcher();
-            break;
-        case ElementType::TREMOLO_SINGLECHORD:
-            m_trem = item_cast<TremoloSingleChord*>(e)->dispatcher();
-            break;
-        default:
-            break;
-        }
+    } else {
+        m_trem = item_cast<TremoloTwoChord*>(e);
         m_beamType = BeamType::TREMOLO;
         // check to see if there is a beam happening during this trem
         // if so, it needs to be taken into account in trem placement

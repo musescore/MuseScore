@@ -2008,34 +2008,57 @@ EngravingItem* Chord::drop(EditData& data)
         score()->undoAddElement(e);
         break;
 
-    case ElementType::TREMOLO:
-    {
-        TremoloDispatcher* t = item_cast<TremoloDispatcher*>(e);
-        if (t->twoNotes()) {
-            Segment* s = segment()->next();
-            while (s) {
-                if (s->element(track()) && s->element(track())->isChord()) {
-                    break;
-                }
-                s = s->next();
-            }
-            if (s == 0) {
-                LOGD("no segment for second note of tremolo found");
-                delete e;
-                return 0;
-            }
-            Chord* ch2 = toChord(s->element(track()));
-            if (ch2->ticks() != ticks()) {
-                LOGD("no matching chord for second note of tremolo found");
-                delete e;
-                return 0;
-            }
-            t->setChords(this, ch2);
+    case ElementType::TREMOLO: {
+        DEPRECATED;
+        TremoloDispatcher* td = item_cast<TremoloDispatcher*>(e);
+        if (td->twoNotes()) {
+            data.dropElement = td->twoChord;
+            return this->drop(data);
+        } else {
+            data.dropElement = td->singleChord;
+            return this->drop(data);
         }
+    } break;
+    case ElementType::TREMOLO_SINGLECHORD:
+        if (tremoloSingleChord()) {
+            bool sameType = (e->subtype() == tremoloSingleChord()->subtype());
+            score()->undoRemoveElement(tremoloSingleChord());
+            if (sameType) {
+                delete e;
+                return nullptr;
+            }
+        }
+        e->setParent(this);
+        e->setTrack(track());
+        score()->undoAddElement(e);
+        break;
+
+    case ElementType::TREMOLO_TWOCHORD:
+    {
+        TremoloTwoChord* t = item_cast<TremoloTwoChord*>(e);
+        Segment* s = segment()->next();
+        while (s) {
+            if (s->element(track()) && s->element(track())->isChord()) {
+                break;
+            }
+            s = s->next();
+        }
+        if (s == 0) {
+            LOGD("no segment for second note of tremolo found");
+            delete e;
+            return 0;
+        }
+        Chord* ch2 = toChord(s->element(track()));
+        if (ch2->ticks() != ticks()) {
+            LOGD("no matching chord for second note of tremolo found");
+            delete e;
+            return 0;
+        }
+        t->setChords(this, ch2);
     }
-        if (tremoloDispatcher()) {
-            bool sameType = (e->subtype() == tremoloDispatcher()->subtype());
-            score()->undoRemoveElement(tremoloDispatcher());
+        if (tremoloTwoChord()) {
+            bool sameType = (e->subtype() == tremoloTwoChord()->subtype());
+            score()->undoRemoveElement(tremoloTwoChord());
             if (sameType) {
                 delete e;
                 return 0;

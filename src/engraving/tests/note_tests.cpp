@@ -34,7 +34,7 @@
 #include "dom/note.h"
 #include "dom/pitchspelling.h"
 #include "dom/segment.h"
-#include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
 
 #include "engraving/compat/scoreaccess.h"
 #include "utils/scorerw.h"
@@ -313,7 +313,7 @@ TEST_F(Engraving_NoteTests, grace)
 
     // tremolo
     score->startCmd();
-    TremoloDispatcher* tr = Factory::createTremoloDispatcher(gc);
+    TremoloSingleChord* tr = Factory::createTremoloSingleChord(gc);
     tr->setTremoloType(TremoloType::R16);
     tr->setParent(gc);
     tr->setTrack(gc->track());
