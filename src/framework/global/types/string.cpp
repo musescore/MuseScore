@@ -222,6 +222,11 @@ void UtfCodec::utf32to8(std::u32string_view src, std::string& dst)
     }
 }
 
+bool UtfCodec::isValidUtf8(const std::string_view& src)
+{
+    return utf8::is_valid(src.begin(), src.end());
+}
+
 // ============================
 // String
 // ============================
