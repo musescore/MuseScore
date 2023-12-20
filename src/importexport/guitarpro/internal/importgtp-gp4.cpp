@@ -51,6 +51,7 @@
 #include "types/symid.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
 
 #include "log.h"
@@ -380,18 +381,21 @@ GuitarPro::ReadNoteResult GuitarPro4::readNote(int string, int staffIdx, Note* n
         if (modMask2 & EFFECT_TREMOLO) {        // tremolo picking length
             int tremoloDivision = readUInt8();
             Chord* chord = note->chord();
-            TremoloDispatcher* t = Factory::createTremoloDispatcher(chord);
+            TremoloType type = TremoloType::INVALID_TREMOLO;
             if (tremoloDivision == 1) {
-                t->setTremoloType(TremoloType::R8);
-                chord->add(t);
+                type = TremoloType::R8;
             } else if (tremoloDivision == 2) {
-                t->setTremoloType(TremoloType::R16);
-                chord->add(t);
+                type = TremoloType::R16;
             } else if (tremoloDivision == 3) {
-                t->setTremoloType(TremoloType::R32);
-                chord->add(t);
+                type = TremoloType::R32;
             } else {
                 LOGD("Unknown tremolo value");
+            }
+
+            if (type != TremoloType::INVALID_TREMOLO) {
+                TremoloSingleChord* t = Factory::createTremoloSingleChord(chord);
+                t->setTremoloType(type);
+                chord->add(t);
             }
         }
         if (modMask2 & EFFECT_SLIDE) {

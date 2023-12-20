@@ -63,6 +63,7 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/volta.h"
@@ -1163,10 +1164,11 @@ GuitarPro::ReadNoteResult GuitarPro5::readNoteEffects(Note* note)
 
     if (modMask2 & EFFECT_TREMOLO) {      // tremolo picking length
         int tremoloDivision = readUInt8();
-        Chord* chord = note->chord();
-        TremoloDispatcher* t = Factory::createTremoloDispatcher(chord);
         if (tremoloDivision >= 1 && tremoloDivision <= 3) {
             TremoloType type = tremoloType(tremoloDivision);
+            DO_ASSERT(!isTremoloTwoChord(type));
+            Chord* chord = note->chord();
+            TremoloSingleChord* t = Factory::createTremoloSingleChord(chord);
             t->setTremoloType(type);
             chord->add(t);
             m_tremolosInChords[chord] = type;
@@ -1535,8 +1537,9 @@ GuitarPro::ReadNoteResult GuitarPro5::readNote(int string, Note* note)
                         note->setPitch(note2->pitch());
                         true_note = note2;
                         if (m_tremolosInChords.find(chord2) != m_tremolosInChords.end()) {
-                            TremoloDispatcher* t = Factory::createTremoloDispatcher(score->dummy()->chord());
                             TremoloType type = m_tremolosInChords.at(chord2);
+                            DO_ASSERT(!isTremoloTwoChord(type));
+                            TremoloSingleChord* t = Factory::createTremoloSingleChord(score->dummy()->chord());
                             t->setTremoloType(type);
                             chord->add(t);
                             mu::remove(m_tremolosInChords, chord2);

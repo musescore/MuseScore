@@ -49,6 +49,7 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/tripletfeel.h"
 #include "engraving/dom/tuplet.h"
@@ -2220,8 +2221,9 @@ void GPConverter::addTie(const GPNote* gpnote, Note* note, TieMap& ties)
                 Chord* startChord = toChord(startNote->parent());
                 Chord* endChord = toChord(endNote->parent());
                 if (m_tremolosInChords.find(startChord) != m_tremolosInChords.end()) {
-                    TremoloDispatcher* t = Factory::createTremoloDispatcher(_score->dummy()->chord());
                     TremoloType type = m_tremolosInChords.at(startChord);
+                    DO_ASSERT(!isTremoloTwoChord(type));
+                    TremoloSingleChord* t = Factory::createTremoloSingleChord(_score->dummy()->chord());
                     t->setTremoloType(type);
                     endChord->add(t);
                     mu::remove(m_tremolosInChords, startChord);
@@ -2712,7 +2714,7 @@ void GPConverter::addTremolo(const GPBeat* beat, ChordRest* cr)
         }
     };
 
-    TremoloDispatcher* t = Factory::createTremoloDispatcher(_score->dummy()->chord());
+    TremoloSingleChord* t = Factory::createTremoloSingleChord(_score->dummy()->chord());
     t->setTremoloType(scoreTremolo(beat->tremolo()));
     Chord* ch = toChord(cr);
     ch->add(t);
