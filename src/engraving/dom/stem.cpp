@@ -122,7 +122,6 @@ bool Stem::acceptDrop(EditData& data) const
         DEPRECATED;
         return item_cast<const TremoloDispatcher*>(e)->tremoloType() <= TremoloType::R64;
     case ElementType::TREMOLO_SINGLECHORD:
-        DEPRECATED;
         return item_cast<const TremoloSingleChord*>(e)->tremoloType() <= TremoloType::R64;
     default:
         break;
