@@ -31,6 +31,7 @@
 #include "dom/score.h"
 #include "dom/segment.h"
 #include "dom/spanner.h"
+#include "dom/measurerepeat.h"
 
 #include "utils/arrangementutils.h"
 #include "utils/expressionutils.h"
@@ -62,11 +63,18 @@ ArticulationType PlaybackContext::persistentArticulationType(const int nominalPo
 void PlaybackContext::update(const ID partId, const Score* score)
 {
     for (const RepeatSegment* repeatSegment : score->repeatList()) {
+        std::vector<const MeasureRepeat*> measureRepeats;
         int tickPositionOffset = repeatSegment->utick - repeatSegment->tick;
 
         for (const Measure* measure : repeatSegment->measureList()) {
             for (Segment* segment = measure->first(); segment; segment = segment->next()) {
                 int segmentStartTick = segment->tick().ticks() + tickPositionOffset;
+
+                for (const EngravingItem* item : segment->elist()) {
+                    if (item && item->isMeasureRepeat()) {
+                        measureRepeats.push_back(toMeasureRepeat(item));
+                    }
+                }
 
                 handleAnnotations(partId, segment, segmentStartTick);
             }
@@ -74,6 +82,8 @@ void PlaybackContext::update(const ID partId, const Score* score)
 
         handleSpanners(partId, score, repeatSegment->tick,
                        repeatSegment->tick + repeatSegment->len(), tickPositionOffset);
+
+        handleMeasureRepeats(measureRepeats, tickPositionOffset);
     }
 }
 
@@ -291,6 +301,58 @@ void PlaybackContext::handleAnnotations(const ID partId, const Segment* segment,
     if (m_dynamicsMap.empty()) {
         m_dynamicsMap.emplace(0, mpe::dynamicLevelFromType(mpe::DynamicType::Natural));
     }
+}
+
+void PlaybackContext::handleMeasureRepeats(const std::vector<const MeasureRepeat*>& measureRepeats, const int tickPositionOffset)
+{
+    for (const MeasureRepeat* mr : measureRepeats) {
+        const Measure* currMeasure = mr->firstMeasureOfGroup();
+        if (!currMeasure) {
+            continue;
+        }
+
+        const Measure* referringMeasure = mr->referringMeasure(currMeasure);
+        if (!referringMeasure) {
+            continue;
+        }
+
+        int newDynamicsOffsetTick = mr->tick().ticks() + tickPositionOffset - referringMeasure->tick().ticks();
+
+        for (int num = 0; num < mr->numMeasures(); ++num) {
+            int startTick = referringMeasure->tick().ticks();
+            int endTick = referringMeasure->endTick().ticks();
+
+            copyDynamicsInRange(startTick, endTick, newDynamicsOffsetTick);
+
+            currMeasure = currMeasure->nextMeasure();
+            if (!currMeasure) {
+                break;
+            }
+
+            referringMeasure = mr->referringMeasure(currMeasure);
+            if (!referringMeasure) {
+                break;
+            }
+        }
+    }
+}
+
+void PlaybackContext::copyDynamicsInRange(const int rangeStartTick, const int rangeEndTick, const int newDynamicsOffsetTick)
+{
+    auto startIt = m_dynamicsMap.lower_bound(rangeStartTick);
+    if (startIt == m_dynamicsMap.end()) {
+        return;
+    }
+
+    auto endIt = m_dynamicsMap.lower_bound(rangeEndTick);
+
+    DynamicMap newDynamics;
+    for (auto it = startIt; it != endIt; ++it) {
+        int tick = it->first + newDynamicsOffsetTick;
+        newDynamics.insert_or_assign(tick, it->second);
+    }
+
+    m_dynamicsMap.merge(std::move(newDynamics));
 }
 
 void PlaybackContext::removeDynamicData(const int from, const int to)
