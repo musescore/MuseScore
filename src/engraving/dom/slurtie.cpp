@@ -169,63 +169,6 @@ void SlurTieSegment::endEditDrag(EditData& ed)
 }
 
 //---------------------------------------------------------
-//   editDrag
-//---------------------------------------------------------
-
-void SlurTieSegment::editDrag(EditData& ed)
-{
-    Grip g     = ed.curGrip;
-    ups(g).off += ed.delta;
-
-    PointF delta;
-
-    switch (g) {
-    case Grip::START:
-    case Grip::END:
-        //
-        // move anchor for slurs/ties
-        //
-        if ((g == Grip::START && isSingleBeginType()) || (g == Grip::END && isSingleEndType())) {
-            Spanner* spanner = slurTie();
-            KeyboardModifiers km = ed.modifiers;
-            EngravingItem* e = ed.view()->elementNear(ed.pos);
-            if (e && e->isNote()) {
-                Note* note = toNote(e);
-                Fraction tick = note->chord()->tick();
-                if ((g == Grip::END && tick > slurTie()->tick()) || (g == Grip::START && tick < slurTie()->tick2())) {
-                    if (km != (ShiftModifier | ControlModifier)) {
-                        Chord* c = note->chord();
-                        ed.view()->setDropTarget(note);
-                        if (c->part() == spanner->part() && c != spanner->endCR()) {
-                            changeAnchor(ed, c);
-                        }
-                    }
-                }
-            } else {
-                ed.view()->setDropTarget(0);
-            }
-        }
-        break;
-    case Grip::BEZIER1:
-        break;
-    case Grip::BEZIER2:
-        break;
-    case Grip::SHOULDER:
-        ups(g).off = PointF();
-        delta = ed.delta;
-        break;
-    case Grip::DRAG:
-        ups(g).off = PointF();
-        setOffset(offset() + ed.delta);
-        break;
-    case Grip::NO_GRIP:
-    case Grip::GRIPS:
-        break;
-    }
-    computeBezier(delta);
-}
-
-//---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
 

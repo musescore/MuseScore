@@ -1454,8 +1454,8 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                         && compare(slur1->ups(Grip::END).p.y(), slur2->ups(Grip::START).p.y())) {
                         slur1->ups(Grip::END).p.rx() -= slurCollisionHorizOffset;
                         slur2->ups(Grip::START).p.rx() += slurCollisionHorizOffset;
-                        slur1->computeBezier();
-                        slur2->computeBezier();
+                        SlurTieLayout::computeBezier(slur1);
+                        SlurTieLayout::computeBezier(slur2);
                         continue;
                     }
                 }
@@ -1476,7 +1476,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                     if (slur1->ups(Grip::END).p.x() > slurTie2->ups(Grip::END).p.x() || slurTie2->isTieSegment()) {
                         // slur1 is the "outside" slur
                         slur1->ups(Grip::START).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
-                        slur1->computeBezier();
+                        SlurTieLayout::computeBezier(slur1);
                     }
                 }
                 // END POINT
@@ -1485,7 +1485,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                     if (slur1->ups(Grip::START).p.x() < slurTie2->ups(Grip::START).p.x() || slurTie2->isTieSegment()) {
                         // slur1 is the "outside" slur
                         slur1->ups(Grip::END).p.ry() += slurCollisionVertOffset * (slur1->slur()->up() ? -1 : 1);
-                        slur1->computeBezier();
+                        SlurTieLayout::computeBezier(slur1);
                     }
                 }
             }

@@ -44,15 +44,10 @@ public:
 
     int subtype() const override { return static_cast<int>(spanner()->type()); }
 
-    void adjustY(const PointF& p1, const PointF& p2);
-    void adjustX();
-
     void addAdjustmentOffset(const PointF& offset, Grip grip) { m_adjustmentOffsets[static_cast<size_t>(grip)] += offset; }
     void resetAdjustmentOffset() { m_adjustmentOffsets.fill(PointF()); }
     PointF adjustmentOffset(Grip grip) { return m_adjustmentOffsets[static_cast<size_t>(grip)]; }
     void consolidateAdjustmentOffsetIntoUserOffset();
-
-    void finalizeSegment();
 
     bool isEdited() const;
     void editDrag(EditData&) override;
@@ -61,7 +56,6 @@ public:
 
     Tie* tie() const { return (Tie*)spanner(); }
 
-    void computeBezier(PointF so = PointF()) override;
     void computeMidThickness(double tieLengthInSp);
     void addLineAttachPoints();
     double midThickness() const { return m_midThickness; }
@@ -74,17 +68,6 @@ private:
     double m_midThickness = 0.0;
 
     std::array<PointF, static_cast<size_t>(Grip::GRIPS)> m_adjustmentOffsets;
-
-    /*************************
-     * DEPRECATED
-     * **********************/
-    double m_shoulderHeightMin = 0.4;
-    double m_shoulderHeightMax = 1.3;
-    PointF m_autoAdjustOffset;
-    void setAutoAdjust(const PointF& offset);
-    void setAutoAdjust(double x, double y) { setAutoAdjust(PointF(x, y)); }
-    PointF getAutoAdjust() const { return m_autoAdjustOffset; }
-    /************************/
 };
 
 //---------------------------------------------------------

@@ -51,6 +51,9 @@ public:
 
     static void computeUp(Slur* slur, LayoutContext& ctx);
 
+    static void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF());
+    static void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF());
+
 private:
 
     static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
