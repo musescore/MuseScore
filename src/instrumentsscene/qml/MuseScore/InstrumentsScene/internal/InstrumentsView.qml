@@ -66,6 +66,7 @@ Item {
         navigation.name: "SearchInstruments"
         navigation.panel: instrumentsView.navigation
         navigation.row: 1
+        navigation.column: 0
 
         onSearchTextChanged: {
             root.instrumentsModel.setSearchText(searchText)
@@ -93,6 +94,7 @@ Item {
             navigation.name: model.name
             navigation.panel: instrumentsView.navigation
             navigation.row: 2 + model.index
+            navigation.column: 0
             navigation.accessible.name: itemTitleLabel.text
             navigation.accessible.description: model.description
             navigation.accessible.row: model.index
@@ -126,6 +128,13 @@ Item {
 
             StyledDropdown {
                 id: traitsBox
+
+                navigation.name: "TraitsBox"
+                navigation.panel: instrumentsView.navigation
+                navigation.row: item.navigation.row
+                navigation.column: 1
+                navigation.accessible.name: itemTitleLabel.text + " " + qsTrc("instruments", "traits")
+                navigation.accessible.row: model.index
 
                 anchors.right: parent.right
                 anchors.rightMargin: 4
