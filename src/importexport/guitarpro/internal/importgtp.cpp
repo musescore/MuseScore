@@ -84,6 +84,7 @@
 #include "engraving/dom/vibrato.h"
 
 #include "log.h"
+#include "global/thirdparty/utfcpp-3.2.1/utf8.h"
 
 using namespace mu::io;
 using namespace mu::engraving;
@@ -226,12 +227,11 @@ String GuitarPro::readPascalString(int n)
     if (n - l > 0) {
         skip(n - l);
     }
-
-    try {
+    std::string_view sw{ &s[0] };
+    if (utf8::is_valid(sw)) {
         return String::fromUtf8(&s[0]);
-    } catch (...) {
-        return String::fromAscii(&s[0]);
     }
+    return String::fromAscii(&s[0]);
 }
 
 //---------------------------------------------------------
@@ -244,7 +244,11 @@ String GuitarPro::readWordPascalString()
     std::vector<char> c(l + 1);
     read(&c[0], l);
     c[l] = 0;
-    return String::fromUtf8(&c[0]);
+    std::string_view sw{ &c[0] };
+    if (utf8::is_valid(sw)) {
+        return String::fromUtf8(&c[0]);
+    }
+    return String::fromAscii(&c[0]);
 }
 
 //---------------------------------------------------------
@@ -257,7 +261,11 @@ String GuitarPro::readBytePascalString()
     std::vector<char> c(l + 1);
     read(&c[0], l);
     c[l] = 0;
-    return String::fromUtf8(&c[0]);
+    std::string_view sw{ &c[0] };
+    if (utf8::is_valid(sw)) {
+        return String::fromUtf8(&c[0]);
+    }
+    return String::fromAscii(&c[0]);
 }
 
 //---------------------------------------------------------
