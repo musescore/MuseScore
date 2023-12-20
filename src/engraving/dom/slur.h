@@ -56,7 +56,6 @@ public:
     void editDrag(EditData& ed) override;
 
     Slur* slur() const { return toSlur(spanner()); }
-    Shape getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR);
 
     const PointF& endPointOff1() const { return m_endPointOff1; }
     const PointF& endPointOff2() const { return m_endPointOff2; }

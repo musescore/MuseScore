@@ -66,6 +66,7 @@ private:
     static void adjustEndPoints(SlurSegment* slurSeg);
     static void avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p2, PointF& p3, PointF& p4,
                                 mu::draw::Transform& toSystemCoordinates, double& slurAngle);
+    static Shape getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRest* startCR, ChordRest* endCR);
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
