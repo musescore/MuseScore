@@ -58,10 +58,10 @@ protected:
     }
 };
 
-TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
+TEST_F(Engraving_PlaybackContextTests, Hairpins_Repeats)
 {
     // [GIVEN] Score with hairpins and repeats
-    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "hairpins_and_repeats.mscx");
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/hairpins_and_repeats.mscx");
 
     const std::vector<Part*>& parts = score->parts();
     ASSERT_FALSE(parts.empty());
@@ -117,6 +117,48 @@ TEST_F(Engraving_PlaybackContextTests, ParseHairpins_Repeats)
     EXPECT_EQ(actualDynamics, expectedDynamics);
 
     delete score;
+}
+
+TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
+{
+    // [GIVEN] Score with 5 measures. There is a measure repeat on the last 2 measures
+    // (so the previous 2 measures will be repeated)
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "dynamics/dynamics_and_measure_repeats.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] Context for parsing dynamics
+    PlaybackContext ctx;
+
+    // [WHEN] Parse dynamics
+    ctx.update(parts.front()->id(), score);
+
+    // [WHEN] Get the actual dynamics map
+    DynamicLevelMap actualDynamics = ctx.dynamicLevelMap(score);
+
+    // [THEN] The dynamics map matches the expectation
+    DynamicLevelMap expectedDynamics {
+        { timestampFromTicks(score, 0), dynamicLevelFromType(mpe::DynamicType::Natural) },
+
+        // 2nd measure
+        { timestampFromTicks(score, 1920), dynamicLevelFromType(mpe::DynamicType::ppp) }, // 1st quarter note
+        { timestampFromTicks(score, 3360), dynamicLevelFromType(mpe::DynamicType::p) }, // 4th quarter note
+
+        // 3rd measure
+        { timestampFromTicks(score, 4320), dynamicLevelFromType(mpe::DynamicType::mf) }, // 2nd quarter note
+        { timestampFromTicks(score, 5280), dynamicLevelFromType(mpe::DynamicType::fff) }, // 4th quarter note
+
+        // copy of 2nd measure
+        { timestampFromTicks(score, 5760), dynamicLevelFromType(mpe::DynamicType::ppp) },
+        { timestampFromTicks(score, 7200), dynamicLevelFromType(mpe::DynamicType::p) },
+
+        // copy of 3rd measure
+        { timestampFromTicks(score, 8160), dynamicLevelFromType(mpe::DynamicType::mf) },
+        { timestampFromTicks(score, 9120), dynamicLevelFromType(mpe::DynamicType::fff) },
+    };
+
+    EXPECT_EQ(actualDynamics, expectedDynamics);
 }
 
 TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
