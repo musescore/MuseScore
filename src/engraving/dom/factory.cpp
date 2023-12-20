@@ -623,9 +623,11 @@ std::shared_ptr<TremoloDispatcher> Factory::makeTremoloDispatcher(Chord* parent)
 
 CREATE_ITEM_IMPL(TremoloTwoChord, ElementType::TREMOLO_TWOCHORD, Chord, isAccessibleEnabled)
 COPY_ITEM_IMPL(TremoloTwoChord)
+MAKE_ITEM_IMPL(TremoloTwoChord, Chord)
 
 CREATE_ITEM_IMPL(TremoloSingleChord, ElementType::TREMOLO_SINGLECHORD, Chord, isAccessibleEnabled)
 COPY_ITEM_IMPL(TremoloSingleChord)
+MAKE_ITEM_IMPL(TremoloSingleChord, Chord)
 
 CREATE_ITEM_IMPL(TremoloBar, ElementType::TREMOLOBAR, EngravingItem, isAccessibleEnabled)
 MAKE_ITEM_IMPL(TremoloBar, EngravingItem)
