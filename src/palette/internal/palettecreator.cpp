@@ -80,6 +80,8 @@
 #include "engraving/dom/textline.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/vibrato.h"
@@ -636,8 +638,14 @@ PalettePtr PaletteCreator::newTremoloPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    for (int i = int(TremoloType::R8); i <= int(TremoloType::C64); ++i) {
-        auto tremolo = Factory::makeTremoloDispatcher(gpaletteScore->dummy()->chord());
+    for (int i = int(TremoloType::R8); i <= int(TremoloType::BUZZ_ROLL); ++i) {
+        auto tremolo = Factory::makeTremoloSingleChord(gpaletteScore->dummy()->chord());
+        tremolo->setTremoloType(TremoloType(i));
+        sp->appendElement(tremolo, tremolo->subtypeUserName());
+    }
+
+    for (int i = int(TremoloType::C8); i <= int(TremoloType::C64); ++i) {
+        auto tremolo = Factory::makeTremoloTwoChord(gpaletteScore->dummy()->chord());
         tremolo->setTremoloType(TremoloType(i));
         sp->appendElement(tremolo, tremolo->subtypeUserName());
     }

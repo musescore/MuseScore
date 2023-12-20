@@ -200,9 +200,11 @@ public:
     static std::shared_ptr<TremoloDispatcher> makeTremoloDispatcher(Chord* parent);
 
     static TremoloTwoChord* createTremoloTwoChord(Chord* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TremoloTwoChord> makeTremoloTwoChord(Chord* parent);
     static TremoloTwoChord* copyTremoloTwoChord(const TremoloTwoChord& src);
 
     static TremoloSingleChord* createTremoloSingleChord(Chord* parent, bool isAccessibleEnabled = true);
+    static std::shared_ptr<TremoloSingleChord> makeTremoloSingleChord(Chord* parent);
     static TremoloSingleChord* copyTremoloSingleChord(const TremoloSingleChord& src);
 
     static TremoloBar* createTremoloBar(EngravingItem* parent, bool isAccessibleEnabled = true);
