@@ -1572,6 +1572,7 @@ void BeamLayout::setTremAnchors(Beam* item, LayoutContext& ctx)
             TremAnchor tremAnchor;
             tremAnchor.chord1 = c;
             int regularBeams = c->beams(); // non-tremolo strokes
+            double scale = t->spatium() * t->mag();
 
             // find the left-side anchor
             double width = item->endAnchor().x() - item->startAnchor().x();
@@ -1579,13 +1580,13 @@ void BeamLayout::setTremAnchors(Beam* item, LayoutContext& ctx)
             double x = chordBeamAnchor(item, c, ChordBeamAnchorType::Middle).x();
             double proportionAlongX = (x - item->startAnchor().x()) / width;
             double y = item->startAnchor().y() + (proportionAlongX * height);
-            y += regularBeams * (ctx.conf().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * ctx.conf().spatium() * (tremUp ? 1. : -1.);
+            y += regularBeams * (ctx.conf().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * scale * (tremUp ? 1. : -1.);
             tremAnchor.y1 = y;
             // find the right-side anchor
             x = chordBeamAnchor(item, t->chord2(), ChordBeamAnchorType::Middle).x();
             proportionAlongX = (x - item->startAnchor().x()) / width;
             y = item->startAnchor().y() + (proportionAlongX * height);
-            y += regularBeams * (ctx.conf().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * ctx.conf().spatium() * (tremUp ? 1. : -1.);
+            y += regularBeams * (ctx.conf().styleB(Sid::useWideBeams) ? 1.0 : 0.75) * scale * (tremUp ? 1. : -1.);
             tremAnchor.y2 = y;
             item->tremAnchors().push_back(tremAnchor);
         }
