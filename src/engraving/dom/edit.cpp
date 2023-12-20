@@ -6209,7 +6209,7 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 Segment* ns2   = nm2->findSegment(s2->segmentType(), s2->tick());
                 Chord* c1      = toChord(ns1->element(staffIdx * VOICES + cr1->voice()));
                 Chord* c2      = toChord(ns2->element(staffIdx * VOICES + cr2->voice()));
-                TremoloDispatcher* ntremolo = item_cast<TremoloDispatcher*>(ne);
+                TremoloTwoChord* ntremolo = item_cast<TremoloTwoChord*>(ne);
                 ntremolo->setChords(c1, c2);
                 ntremolo->setParent(c1);
                 doUndoAddElement(ntremolo);
