@@ -2190,8 +2190,6 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
         path.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
     }
 
-    tieThickness = PointF(0.0, 3.0 * tieSeg->ldata()->midThickness());
-
     // translate back
     t.reset();
     t.translate(tieStart.x(), tieStart.y());
@@ -2369,14 +2367,8 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     slurSeg->ups(Grip::SHOULDER).p = toSystemCoordinates.map(p6);
 
     // Set slur thickness
-    double w = slurSeg->style().styleMM(Sid::SlurMidWidth) - slurSeg->style().styleMM(Sid::SlurEndWidth);
-    if (slurSeg->staff()) {
-        w *= slurSeg->staff()->staffMag(slurSeg->slur()->tick());
-    }
-    if ((c2 - c1) <= _spatium) {
-        w *= .5;
-    }
-    PointF thick(0.0, w);
+    computeMidThickness(slurSeg, p2.x() / slurSeg->spatium());
+    PointF thick(0.0, slurSeg->ldata()->midThickness());
 
     // Set path
     PainterPath path = PainterPath();
@@ -2385,7 +2377,6 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     if (slurSeg->slur()->styleType() == SlurStyleType::Solid) {
         path.cubicTo(p4 + thick, p3 + thick, PointF());
     }
-    thick = PointF(0.0, 3.0 * w);
 
     path = toSystemCoordinates.map(path);
     slurSeg->mutldata()->path.set_value(path);
@@ -2394,7 +2385,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     Shape shape;
     PointF start = pp1;
     int nbShapes  = 32;
-    double minH    = abs(2 * w);
+    double minH    = abs(2 * slurSeg->ldata()->midThickness());
     const CubicBezier b(slurSeg->ups(Grip::START).pos(), slurSeg->ups(Grip::BEZIER1).pos(), slurSeg->ups(Grip::BEZIER2).pos(),
                         slurSeg->ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {
