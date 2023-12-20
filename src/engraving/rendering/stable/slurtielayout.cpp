@@ -1834,7 +1834,7 @@ void SlurTieLayout::adjustY(TieSegment* tieSegment)
     RectF tieSegmentBBox = tieSegment->ldata()->bbox();
     double tieLength = tieSegmentBBox.width();
     double tieHeight = tieSegmentBBox.height();
-    double midThickness = tieSegment->midThickness() * 2;
+    double midThickness = tieSegment->ldata()->midThickness() * 2;
     double yOuterApogee = up ? tieSegmentBBox.top() : tieSegmentBBox.bottom();
     double yInnerApogee = yOuterApogee - midThickness * upSign;
     double yMidApogee = 0.5 * (yOuterApogee + yInnerApogee);
@@ -1924,7 +1924,7 @@ void SlurTieLayout::resolveVerticalTieCollisions(const std::vector<TieSegment*>&
 
         double thisTieOuterY = up ? thisTie->ldata()->bbox().top() : thisTie->ldata()->bbox().bottom();
         double nextTieInnerY = (up ? nextTie->ldata()->bbox().top() : nextTie->ldata()->bbox().bottom())
-                               - upSign * 2 * nextTie->midThickness();
+                               - upSign * 2 * nextTie->ldata()->midThickness();
         double clearanceMargin = 0.15 * spatium;
         bool collision = upSign * (nextTieInnerY - thisTieOuterY) < clearanceMargin;
         if (!collision) {
@@ -2092,7 +2092,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
 
     tieSeg->computeMidThickness(tieLengthInSp);
 
-    PointF tieThickness(0.0, tieSeg->midThickness());
+    PointF tieThickness(0.0, tieSeg->ldata()->midThickness());
 
     const PointF bezier1Offset = t.map(tieSeg->ups(Grip::BEZIER1).off);
     const PointF bezier2Offset = t.map(tieSeg->ups(Grip::BEZIER2).off);
@@ -2111,7 +2111,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
         path.cubicTo(bezier2 + bezier2Offset + tieThickness, bezier1 + bezier1Offset + tieThickness, PointF());
     }
 
-    tieThickness = PointF(0.0, 3.0 * tieSeg->midThickness());
+    tieThickness = PointF(0.0, 3.0 * tieSeg->ldata()->midThickness());
 
     // translate back
     t.reset();
@@ -2130,7 +2130,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     PointF start;
     start = t.map(start);
 
-    double minH = std::abs(2 * tieSeg->midThickness());
+    double minH = std::abs(2 * tieSeg->ldata()->midThickness());
     int nbShapes = 15;
     const CubicBezier b(tieStart, tieSeg->ups(Grip::BEZIER1).pos(), tieSeg->ups(Grip::BEZIER2).pos(), tieSeg->ups(Grip::END).pos());
     for (int i = 1; i <= nbShapes; i++) {

@@ -125,8 +125,12 @@ public:
         const mu::draw::PainterPath& path() const { return m_path; }
         void setPath(const mu::draw::PainterPath& p) { m_path = p; }
 
+        double midThickness() const { return m_midthickness; }
+        void setMidThickness(double v) { m_midthickness = v; }
+
     protected:
         mu::draw::PainterPath m_path;
+        double m_midthickness = 0.0;
     };
     DECLARE_LAYOUTDATA_METHODS(SlurTieSegment)
 

@@ -189,12 +189,12 @@ void TieSegment::computeMidThickness(double tieLengthInSp)
     bool invalid = RealIsEqualOrMore(minTieLength, shortTieLimit);
 
     if (tieLengthInSp > shortTieLimit || invalid) {
-        m_midThickness = normalThickness;
+        mutldata()->setMidThickness(normalThickness);
     } else {
         const double A = 1 / (shortTieLimit - minTieLength);
         const double B = normalThickness - minTieThickness;
         const double C = shortTieLimit * minTieThickness - minTieLength * normalThickness;
-        m_midThickness = A * (B * tieLengthInSp + C);
+        mutldata()->setMidThickness(A * (B * tieLengthInSp + C));
     }
 }
 
