@@ -1264,7 +1264,8 @@ bool NotationInteraction::isDropAccepted(const PointF& pos, Qt::KeyboardModifier
     case ElementType::CAPO:
     case ElementType::STRING_TUNINGS:
     case ElementType::NOTEHEAD:
-    case ElementType::TREMOLO:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
     case ElementType::LAYOUT_BREAK:
     case ElementType::MARKER:
     case ElementType::STAFF_STATE:
@@ -1423,7 +1424,8 @@ bool NotationInteraction::drop(const PointF& pos, Qt::KeyboardModifiers modifier
     case ElementType::CAPO:
     case ElementType::STRING_TUNINGS:
     case ElementType::NOTEHEAD:
-    case ElementType::TREMOLO:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
     case ElementType::LAYOUT_BREAK:
     case ElementType::MARKER:
     case ElementType::STAFF_STATE:

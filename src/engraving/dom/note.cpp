@@ -1591,7 +1591,8 @@ bool Note::acceptDrop(EditData& data) const
            || type == ElementType::ARPEGGIO
            || type == ElementType::NOTEHEAD
            || type == ElementType::NOTE
-           || type == ElementType::TREMOLO
+           || type == ElementType::TREMOLO_SINGLECHORD
+           || type == ElementType::TREMOLO_TWOCHORD
            || type == ElementType::STAFF_STATE
            || type == ElementType::INSTRUMENT_CHANGE
            || type == ElementType::IMAGE

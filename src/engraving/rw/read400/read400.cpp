@@ -1021,6 +1021,11 @@ void Read400::pasteSymbols(XmlReader& e, ChordRest* dst)
     }                                     // inner while readNextstartElement()
 }                                         // pasteSymbolList()
 
+void Read400::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
+{
+    UNREACHABLE;
+}
+
 void Read400::doReadItem(EngravingItem* item, XmlReader& xml)
 {
     ReadContext ctx(item->score());

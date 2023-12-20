@@ -3500,6 +3500,11 @@ void Read206::pasteSymbols(XmlReader&, ChordRest*)
     UNREACHABLE;
 }
 
+void Read206::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
+{
+    UNREACHABLE;
+}
+
 void Read206::doReadItem(EngravingItem*, XmlReader&)
 {
     UNREACHABLE;

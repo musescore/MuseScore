@@ -43,6 +43,14 @@ class StaffTypeChange;
 class Symbol;
 class Text;
 class Tuplet;
+
+class Chord;
+class TremoloSingleChord;
+class TremoloTwoChord;
+}
+
+namespace mu::engraving::compat {
+struct TremoloCompat;
 }
 
 namespace mu::engraving::rw {
@@ -89,6 +97,9 @@ public:
     //! (we read the elements into some structure, then inserted them)
     virtual bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) = 0;
     virtual void pasteSymbols(XmlReader& e, ChordRest* dst) = 0;
+
+    // compat
+    virtual void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) = 0;
 
 private:
     virtual void doReadItem(EngravingItem* item, XmlReader& xml) = 0;

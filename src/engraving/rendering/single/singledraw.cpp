@@ -310,6 +310,7 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
     case ElementType::TREMOLO: {
+        UNREACHABLE;
         const TremoloDispatcher* td = item_cast<const TremoloDispatcher*>(item);
         if (td->singleChord) {
             draw(td->singleChord, painter);

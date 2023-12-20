@@ -50,6 +50,7 @@
 #include "dom/figuredbass.h"
 #include "dom/tremolotwochord.h"
 
+#include "../compat/tremolocompat.h"
 #include "staffread.h"
 #include "tread.h"
 
@@ -1030,6 +1031,17 @@ void Read410::pasteSymbols(XmlReader& e, ChordRest* dst)
         }                                 // outer while readNextstartElement()
     }                                     // inner while readNextstartElement()
 }                                         // pasteSymbolList()
+
+void Read410::readTremoloCompat(compat::TremoloCompat* tc, XmlReader& xml)
+{
+    IF_ASSERT_FAILED(tc->parent) {
+        return;
+    }
+
+    ReadContext ctx(tc->parent->score());
+    ctx.setPasteMode(true);
+    TRead::read(tc, xml, ctx);
+}
 
 void Read410::doReadItem(EngravingItem* item, XmlReader& xml)
 {

@@ -168,6 +168,10 @@ class Vibrato;
 class Volta;
 }
 
+namespace mu::engraving::compat {
+struct TremoloCompat;
+}
+
 namespace mu::engraving::read410 {
 class TRead
 {
@@ -309,12 +313,7 @@ public:
     static void read(Volta* v, XmlReader& xml, ReadContext& ctx);
 
     // compat
-    struct TremoloCompat {
-        Chord* parent = nullptr;
-        TremoloSingleChord* single = nullptr;
-        TremoloTwoChord* two = nullptr;
-    };
-    static void read(TremoloCompat& t, XmlReader& xml, ReadContext& ctx);
+    static void read(compat::TremoloCompat* tc, XmlReader& xml, ReadContext& ctx);
 
     // temp compat
 

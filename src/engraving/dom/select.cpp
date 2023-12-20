@@ -163,9 +163,6 @@ bool SelectionFilter::canSelect(const EngravingItem* e) const
     if (e->isSLine()) { // NoteLine, Volta
         return isFiltered(SelectionFilterType::OTHER_LINE);
     }
-    if (e->type() == ElementType::TREMOLO) {
-        return isFiltered(SelectionFilterType::TREMOLO);
-    }
     if (e->type() == ElementType::TREMOLO_TWOCHORD) {
         return isFiltered(SelectionFilterType::TREMOLO);
     }

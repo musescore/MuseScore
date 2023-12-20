@@ -136,6 +136,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/readchordlisthook.h
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/compatutils.cpp
     ${CMAKE_CURRENT_LIST_DIR}/rw/compat/compatutils.h
+    ${CMAKE_CURRENT_LIST_DIR}/rw/compat/tremolocompat.h
 
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.cpp
     ${CMAKE_CURRENT_LIST_DIR}/compat/scoreaccess.h

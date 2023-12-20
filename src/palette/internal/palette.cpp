@@ -589,7 +589,8 @@ Palette::Type Palette::guessType() const
     case ElementType::ARPEGGIO:
     case ElementType::GLISSANDO:
         return Type::Arpeggio;
-    case ElementType::TREMOLO:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
         return Type::Tremolo;
     case ElementType::TEMPO_TEXT:
         return Type::Tempo;

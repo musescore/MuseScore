@@ -118,9 +118,6 @@ bool Stem::acceptDrop(EditData& data) const
 {
     const EngravingItem* e = data.dropElement;
     switch (e->type()) {
-    case ElementType::TREMOLO:
-        DEPRECATED;
-        return item_cast<const TremoloDispatcher*>(e)->tremoloType() <= TremoloType::R64;
     case ElementType::TREMOLO_SINGLECHORD:
         return item_cast<const TremoloSingleChord*>(e)->tremoloType() <= TremoloType::R64;
     default:
@@ -136,8 +133,8 @@ EngravingItem* Stem::drop(EditData& data)
     Chord* ch  = chord();
 
     switch (e->type()) {
-    case ElementType::TREMOLO:
-        item_cast<TremoloDispatcher*>(e)->setParent(ch);
+    case ElementType::TREMOLO_SINGLECHORD:
+        item_cast<TremoloSingleChord*>(e)->setParent(ch);
         undoAddElement(e);
         return e;
     default:

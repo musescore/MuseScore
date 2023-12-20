@@ -89,6 +89,7 @@
 
 #include "../compat/readchordlisthook.h"
 #include "../compat/readstyle.h"
+#include "../compat/tremolocompat.h"
 #include "../read206/read206.h"
 #include "../read400/tread.h"
 
@@ -1009,19 +1010,13 @@ static void readTuplet(Tuplet* tuplet, XmlReader& e, ReadContext& ctx)
 //   readTremolo
 //---------------------------------------------------------
 
-struct TremoloCompat {
-    Chord* parent = nullptr;
-    TremoloSingleChord* single = nullptr;
-    TremoloTwoChord* two = nullptr;
-};
-
-static void readTremolo(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
+static void readTremolo(compat::TremoloCompat* t, XmlReader& e, ReadContext& ctx)
 {
-    auto item = [](TremoloCompat& t) -> EngravingItem* {
-        if (t.two) {
-            return t.two;
+    auto item = [](compat::TremoloCompat* t) -> EngravingItem* {
+        if (t->two) {
+            return t->two;
         }
-        return t.single;
+        return t->single;
     };
 
     enum class OldTremoloType : char {
@@ -1054,13 +1049,13 @@ static void readTremolo(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
             }
 
             if (isTremoloTwoChord(type)) {
-                t.two = Factory::createTremoloTwoChord(t.parent);
-                t.two->setTrack(t.parent->track());
-                t.two->setTremoloType(type);
+                t->two = Factory::createTremoloTwoChord(t->parent);
+                t->two->setTrack(t->parent->track());
+                t->two->setTremoloType(type);
             } else {
-                t.single = Factory::createTremoloSingleChord(t.parent);
-                t.single->setTrack(t.parent->track());
-                t.single->setTremoloType(type);
+                t->single = Factory::createTremoloSingleChord(t->parent);
+                t->single->setTrack(t->parent->track());
+                t->single->setTremoloType(type);
             }
         } else if (!TRead::readItemProperties(item(t), e, ctx)) {
             e.unknown();
@@ -1094,9 +1089,9 @@ static void readChord(Measure* m, Chord* chord, XmlReader& e, ReadContext& ctx)
                 chord->add(el);
             }
         } else if (tag == "Tremolo") {
-            TremoloCompat tcompat;
+            compat::TremoloCompat tcompat;
             tcompat.parent = chord;
-            readTremolo(tcompat, e, ctx);
+            readTremolo(&tcompat, e, ctx);
             if (tcompat.two) {
                 tcompat.two->setParent(chord);
                 tcompat.two->setDurationType(chord->durationType());
@@ -3249,6 +3244,11 @@ bool Read114::pasteStaff(XmlReader&, Segment*, staff_idx_t, Fraction)
 }
 
 void Read114::pasteSymbols(XmlReader&, ChordRest*)
+{
+    UNREACHABLE;
+}
+
+void Read114::readTremoloCompat(compat::TremoloCompat*, XmlReader&)
 {
     UNREACHABLE;
 }

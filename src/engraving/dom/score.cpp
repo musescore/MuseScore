@@ -1507,7 +1507,8 @@ void Score::addElement(EngravingItem* element)
         break;
 
     case ElementType::NOTE:
-    case ElementType::TREMOLO:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
     case ElementType::ARPEGGIO:
@@ -1710,7 +1711,8 @@ void Score::removeElement(EngravingItem* element)
     }
     break;
 
-    case ElementType::TREMOLO:
+    case ElementType::TREMOLO_SINGLECHORD:
+    case ElementType::TREMOLO_TWOCHORD:
     case ElementType::ARTICULATION:
     case ElementType::ORNAMENT:
     case ElementType::ARPEGGIO:

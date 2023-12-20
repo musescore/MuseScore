@@ -211,6 +211,7 @@ void SingleLayout::layoutItem(EngravingItem* item)
     case ElementType::TIMESIG:      layout(toTimeSig(item), ctx);
         break;
     case ElementType::TREMOLO: {
+        UNREACHABLE;
         TremoloDispatcher* td = item_cast<TremoloDispatcher*>(item);
         if (td->singleChord) {
             layout(td->singleChord, ctx);

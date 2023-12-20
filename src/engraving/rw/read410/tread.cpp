@@ -140,6 +140,7 @@
 #include "../xmlreader.h"
 #include "../read206/read206.h"
 #include "../compat/compatutils.h"
+#include "../compat/tremolocompat.h"
 #include "readcontext.h"
 #include "connectorinforeader.h"
 
@@ -312,10 +313,11 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
     case ElementType::TIMESIG: read(item_cast<TimeSig*>(item), xml, ctx);
         break;
     case ElementType::TREMOLO: {
+        UNREACHABLE;
         TremoloDispatcher* td = item_cast<TremoloDispatcher*>(item);
-        TremoloCompat tc;
+        compat::TremoloCompat tc;
         tc.parent = item_cast<Chord*>(td->parent());
-        read(tc, xml, ctx);
+        read(&tc, xml, ctx);
         if (tc.single) {
             td->singleChord = tc.single;
             td->singleChord->setDispatcher(td);
@@ -2590,9 +2592,9 @@ bool TRead::readProperties(Chord* ch, XmlReader& e, ReadContext& ctx)
         arpeggio->setParent(ch);
         ch->setArpeggio(arpeggio);
     } else if (tag == "Tremolo") {
-        TremoloCompat tcompat;
+        compat::TremoloCompat tcompat;
         tcompat.parent = ch;
-        TRead::read(tcompat, e, ctx);
+        TRead::read(&tcompat, e, ctx);
         if (tcompat.two) {
             tcompat.two->setParent(ch);
             tcompat.two->setDurationType(ch->durationType());
@@ -4381,25 +4383,25 @@ int TRead::read(SigEvent* item, XmlReader& e, int fileDivision)
 
 void TRead::read(TremoloTwoChord* t, XmlReader& xml, ReadContext& ctx)
 {
-    TremoloCompat tc;
+    compat::TremoloCompat tc;
     tc.two = t;
-    read(tc, xml, ctx);
+    read(&tc, xml, ctx);
 }
 
 void TRead::read(TremoloSingleChord* t, XmlReader& xml, ReadContext& ctx)
 {
-    TremoloCompat tc;
+    compat::TremoloCompat tc;
     tc.single = t;
-    read(tc, xml, ctx);
+    read(&tc, xml, ctx);
 }
 
-void TRead::read(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
+void TRead::read(compat::TremoloCompat* tc, XmlReader& e, ReadContext& ctx)
 {
-    auto item = [](TremoloCompat& t) -> EngravingItem* {
-        if (t.two) {
-            return t.two;
+    auto item = [](compat::TremoloCompat* tc) -> EngravingItem* {
+        if (tc->two) {
+            return tc->two;
         }
-        return t.single;
+        return tc->single;
     };
 
     while (e.readNextStartElement()) {
@@ -4407,36 +4409,36 @@ void TRead::read(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
         if (tag == "subtype") {
             TremoloType type = TConv::fromXml(e.readAsciiText(), TremoloType::INVALID_TREMOLO);
             if (isTremoloTwoChord(type)) {
-                if (!t.two) {
-                    t.two = Factory::createTremoloTwoChord(t.parent);
-                    t.two->setTrack(t.parent->track());
+                if (!tc->two) {
+                    tc->two = Factory::createTremoloTwoChord(tc->parent);
+                    tc->two->setTrack(tc->parent->track());
                 }
-                t.two->setTremoloType(type);
+                tc->two->setTremoloType(type);
             } else {
-                if (!t.single) {
-                    t.single = Factory::createTremoloSingleChord(t.parent);
-                    t.single->setTrack(t.parent->track());
+                if (!tc->single) {
+                    tc->single = Factory::createTremoloSingleChord(tc->parent);
+                    tc->single->setTrack(tc->parent->track());
                 }
-                t.single->setTremoloType(type);
+                tc->single->setTremoloType(type);
             }
         }
         // Style needs special handling other than readStyledProperty()
         // to avoid calling customStyleApplicable() in setProperty(),
         // which cannot be called now because durationType() isn't defined yet.
         else if (tag == "strokeStyle") {
-            if (t.two) {
-                t.two->setTremoloStyle(TremoloStyle(e.readInt()));
-                t.two->setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
+            if (tc->two) {
+                tc->two->setTremoloStyle(TremoloStyle(e.readInt()));
+                tc->two->setPropertyFlags(Pid::TREMOLO_STYLE, PropertyFlags::UNSTYLED);
             } else {
                 UNREACHABLE;
                 e.skipCurrentElement();
             }
         } else if (tag == "Fragment") {
-            if (t.two) {
+            if (tc->two) {
                 BeamFragment f = BeamFragment();
-                int idx = (t.two->direction() == DirectionV::AUTO || t.two->direction() == DirectionV::DOWN) ? 0 : 1;
-                t.two->setUserModified(t.two->direction(), true);
-                double _spatium = t.two->spatium();
+                int idx = (tc->two->direction() == DirectionV::AUTO || tc->two->direction() == DirectionV::DOWN) ? 0 : 1;
+                tc->two->setUserModified(tc->two->direction(), true);
+                double _spatium = tc->two->spatium();
                 while (e.readNextStartElement()) {
                     const AsciiStringView tag1(e.name());
                     if (tag1 == "y1") {
@@ -4447,21 +4449,21 @@ void TRead::read(TremoloCompat& t, XmlReader& e, ReadContext& ctx)
                         e.unknown();
                     }
                 }
-                t.two->setBeamFragment(f);
+                tc->two->setBeamFragment(f);
             } else {
                 UNREACHABLE;
                 e.skipCurrentElement();
             }
         } else if (tag == "play") {
-            if (t.two) {
-                t.two->setPlayTremolo(e.readBool());
-            } else if (t.single) {
-                t.single->setPlayTremolo(e.readBool());
+            if (tc->two) {
+                tc->two->setPlayTremolo(e.readBool());
+            } else if (tc->single) {
+                tc->single->setPlayTremolo(e.readBool());
             } else {
                 UNREACHABLE;
             }
-        } else if (TRead::readStyledProperty(item(t), tag, e, ctx)) {
-        } else if (!readItemProperties(item(t), e, ctx)) {
+        } else if (TRead::readStyledProperty(item(tc), tag, e, ctx)) {
+        } else if (!readItemProperties(item(tc), e, ctx)) {
             e.unknown();
         }
     }
