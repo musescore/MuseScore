@@ -331,6 +331,7 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
     case ElementType::TIMESIG:      write(item_cast<const TimeSig*>(item), xml, ctx);
         break;
     case ElementType::TREMOLO: {
+        UNREACHABLE;
         const TremoloDispatcher* td = item_cast<const TremoloDispatcher*>(item);
         if (td->singleChord) {
             write(td->singleChord, xml, ctx);

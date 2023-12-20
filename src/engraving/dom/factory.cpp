@@ -615,12 +615,6 @@ CREATE_ITEM_IMPL(TimeSig, ElementType::TIMESIG, Segment, isAccessibleEnabled)
 COPY_ITEM_IMPL(TimeSig)
 MAKE_ITEM_IMPL(TimeSig, Segment)
 
-std::shared_ptr<TremoloDispatcher> Factory::makeTremoloDispatcher(Chord* parent)
-{
-    EngravingItem* e = createItem(ElementType::TREMOLO, parent);
-    return std::shared_ptr<TremoloDispatcher>(item_cast<TremoloDispatcher*>(e));
-}
-
 CREATE_ITEM_IMPL(TremoloTwoChord, ElementType::TREMOLO_TWOCHORD, Chord, isAccessibleEnabled)
 COPY_ITEM_IMPL(TremoloTwoChord)
 MAKE_ITEM_IMPL(TremoloTwoChord, Chord)

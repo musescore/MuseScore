@@ -54,9 +54,6 @@ class TremoloDispatcher final : public EngravingItem
 
 public:
 
-    TremoloDispatcher(Chord* parent);
-    TremoloDispatcher(const TremoloDispatcher&);
-
     TremoloDispatcher& operator=(const TremoloDispatcher&) = delete;
     TremoloDispatcher* clone() const override { return new TremoloDispatcher(*this); }
     ~TremoloDispatcher() override;
@@ -182,6 +179,9 @@ private:
     friend class Factory;
     friend class TremoloSingleChord;
     friend class TremoloTwoChord;
+
+    TremoloDispatcher(Chord* parent);
+    TremoloDispatcher(const TremoloDispatcher&);
 
     void setParentInternal(EngravingObject* p) override;
     LayoutData* createLayoutData() const override;

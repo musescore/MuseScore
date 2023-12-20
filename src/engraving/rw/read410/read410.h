@@ -41,6 +41,7 @@ public:
 
     bool pasteStaff(XmlReader& e, Segment* dst, staff_idx_t dstStaff, Fraction scale) override;
     void pasteSymbols(XmlReader& e, ChordRest* dst) override;
+    void readTremoloCompat(compat::TremoloCompat* item, XmlReader& xml) override;
 
 private:
     void doReadItem(EngravingItem* item, XmlReader& xml) override;

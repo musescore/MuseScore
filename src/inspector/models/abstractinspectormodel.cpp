@@ -92,7 +92,6 @@ static const QMap<mu::engraving::ElementType, InspectorModelType> NOTATION_ELEME
     { mu::engraving::ElementType::GUITAR_BEND_HOLD, InspectorModelType::TYPE_BEND },
     { mu::engraving::ElementType::GUITAR_BEND_HOLD_SEGMENT, InspectorModelType::TYPE_BEND },
     { mu::engraving::ElementType::TREMOLOBAR, InspectorModelType::TYPE_TREMOLOBAR },
-    { mu::engraving::ElementType::TREMOLO, InspectorModelType::TYPE_TREMOLO },
     { mu::engraving::ElementType::TREMOLO_SINGLECHORD, InspectorModelType::TYPE_TREMOLO },
     { mu::engraving::ElementType::TREMOLO_TWOCHORD, InspectorModelType::TYPE_TREMOLO },
     { mu::engraving::ElementType::MEASURE_REPEAT, InspectorModelType::TYPE_MEASURE_REPEAT },

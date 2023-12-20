@@ -411,15 +411,6 @@ void TLayout::layoutItem(EngravingItem* item, LayoutContext& ctx)
     case ElementType::TIMESIG:
         layoutTimeSig(item_cast<const TimeSig*>(item), static_cast<TimeSig::LayoutData*>(ldata), ctx);
         break;
-    case ElementType::TREMOLO: {
-        UNREACHABLE;
-        TremoloDispatcher* td = item_cast<TremoloDispatcher*>(item);
-        if (td->singleChord) {
-            layoutTremoloSingle(td->singleChord, ctx);
-        } else {
-            layoutTremoloTwo(td->twoChord, ctx);
-        }
-    } break;
     case ElementType::TREMOLO_SINGLECHORD: layoutTremoloSingle(item_cast<TremoloSingleChord*>(item), ctx);
         break;
     case ElementType::TREMOLO_TWOCHORD:    layoutTremoloTwo(item_cast<TremoloTwoChord*>(item), ctx);
