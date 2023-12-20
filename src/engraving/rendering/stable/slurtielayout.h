@@ -38,6 +38,10 @@ enum class Grip;
 class Note;
 }
 
+namespace mu::draw {
+class Transform;
+}
+
 namespace mu::engraving::rendering::stable {
 class SlurTieLayout
 {
@@ -60,6 +64,8 @@ private:
     static void avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
     static void adjustEndPoints(SlurSegment* slurSeg);
+    static void avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p2, PointF& p3, PointF& p4,
+                                mu::draw::Transform& toSystemCoordinates, double& slurAngle);
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);

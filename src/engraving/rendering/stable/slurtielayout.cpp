@@ -1042,6 +1042,245 @@ void SlurTieLayout::adjustEndPoints(SlurSegment* slurSeg)
     }
 }
 
+void SlurTieLayout::avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p2, PointF& p3, PointF& p4,
+                                    mu::draw::Transform& toSystemCoordinates, double& slurAngle)
+{
+    TRACEFUNC;
+    Slur* slur = slurSeg->slur();
+    ChordRest* startCR = slur->startCR();
+    ChordRest* endCR = slur->endCR();
+
+    if (!startCR || !endCR) {
+        return;
+    }
+
+    // Determine start and end segments for collision checks
+    Segment* startSeg = nullptr;
+    if (slurSeg->isSingleBeginType()) {
+        if (startCR->isChord() && toChord(startCR)->isGraceAfter()) {
+            // if this is a grace-note-after, the shape is stored the *appended* segment
+            Chord* parent = toChord(startCR->parentItem());
+            if (parent) {
+                startSeg = parent->graceNotesAfter().appendedSegment();
+            }
+        } else {
+            startSeg = startCR->segment(); // first of the slur
+        }
+    } else {
+        startSeg = slurSeg->system()->firstMeasure()->findFirstR(SegmentType::ChordRest, Fraction(0, 0)); // first of the system
+    }
+    Segment* endSeg = nullptr;
+    if (slurSeg->isSingleEndType()) {
+        if (endCR->isChord() && toChord(endCR)->isGraceAfter()) {
+            // if this is a grace-note-after, the shape is stored the *appended* segment
+            Chord* parent = toChord(endCR->parentItem());
+            if (parent) {
+                endSeg = parent->graceNotesAfter().appendedSegment();
+            }
+        } else {
+            endSeg = endCR->segment(); // last of the slur
+        }
+    } else {
+        endSeg = slurSeg->system()->lastMeasure()->last(); // last of the system
+    }
+    if (!startSeg || !endSeg) {
+        return;
+    }
+
+    // Collect all the segments shapes spanned by this slur segment in a single vector
+    std::vector<Shape> segShapes;
+    for (Segment* seg = startSeg; seg && seg->tick() <= endSeg->tick(); seg = seg->next1enabled()) {
+        if (seg->isType(SegmentType::BarLineType) || seg->isBreathType()) {
+            continue;
+        }
+        segShapes.push_back(slurSeg->getSegmentShape(seg, startCR, endCR));
+    }
+    if (segShapes.empty()) {
+        return;
+    }
+
+    // Collision clearance at the center of the slur
+    double spatium = slurSeg->spatium();
+    double slurLength = abs(p2.x() / spatium);
+    double clearance;
+    if (slurLength < 4) {
+        clearance = 0.15 * spatium;
+    } else if (slurLength < 8) {
+        clearance = 0.4 * spatium;
+    } else if (slurLength < 12) {
+        clearance = 0.6 * spatium;
+    } else {
+        clearance = 0.75 * spatium;
+    }
+    // balance: determines how much endpoint adjustment VS shape adjustment we will do.
+    // 0 = end point is fixed, only the shape can be adjusted,
+    // 1 = shape is fixed, only end the point can be adjusted.
+    // left and right side of the slur may have different balance depending on context:
+    double leftBalance, rightBalance;
+    if (slurSeg->isSingleBeginType() && !slur->stemFloated().left) {
+        if (startCR->isChord() && toChord(startCR)->stem() && startCR->up() == slur->up()) {
+            leftBalance = 0.1;
+        } else {
+            leftBalance = 0.4;
+        }
+    } else {
+        leftBalance = 0.9;
+    }
+    if (slurSeg->isSingleEndType() && !slur->stemFloated().right) {
+        if (endCR->isChord() && toChord(endCR)->stem() && endCR->up() == slur->up()) {
+            rightBalance = 0.1;
+        } else {
+            rightBalance = 0.4;
+        }
+    } else {
+        rightBalance = 0.9;
+    }
+
+    static constexpr unsigned maxIter = 30;     // Max iterations allowed
+    const double vertClearance = slur->up() ? clearance : -clearance;
+    // Optimize the slur shape and position in quarter-space steps
+    double step = slur->up() ? -0.25 * spatium : 0.25 * spatium;
+    // ...but allow long slurs to user coarser steps
+    static constexpr double longSlurLimit = 16.0; // in spaces
+    if (slurLength > longSlurLimit) {
+        step *= slurLength / longSlurLimit;
+        step = std::min(step, 1.5 * spatium);
+    }
+    // Divide slur in several rectangles to localize collisions
+    const unsigned npoints = 20;
+    std::vector<RectF> slurRects;
+    slurRects.reserve(npoints);
+
+    // Define separate collision areas (left-mid-center)
+    struct SlurCollision
+    {
+        bool left = false;
+        bool mid = false;
+        bool right = false;
+
+        void reset()
+        {
+            left = false;
+            mid = false;
+            right = false;
+        }
+    };
+    SlurCollision collision;
+
+    // CHECK FOR COLLISIONS
+    unsigned iter = 0;
+    do {
+        collision.reset();
+        // Update tranform because pp1 may change
+        toSystemCoordinates.reset();
+        toSystemCoordinates.translate(pp1.x(), pp1.y());
+        toSystemCoordinates.rotateRadians(slurAngle);
+        // Create rectangles
+        slurRects.clear();
+        CubicBezier clearanceBezier(PointF(0, 0), p3 + PointF(0.0, vertClearance), p4 + PointF(0.0, vertClearance), p2);
+        for (unsigned i = 0; i < npoints - 1; i++) {
+            PointF clearancePoint1 = clearanceBezier.pointAtPercent(double(i) / double(npoints));
+            PointF clearancePoint2 = clearanceBezier.pointAtPercent(double(i + 1) / double(npoints));
+            clearancePoint1 = toSystemCoordinates.map(clearancePoint1);
+            clearancePoint2 = toSystemCoordinates.map(clearancePoint2);
+            slurRects.push_back(RectF(clearancePoint1, clearancePoint2));
+        }
+        // Check collisions
+        for (Shape& segShape : segShapes) {
+            for (unsigned i=0; i < slurRects.size(); i++) {
+                bool leftSection = i < slurRects.size() / 3;
+                bool midSection = i >= slurRects.size() / 3 && i < 2 * slurRects.size() / 3;
+                bool rightSection = i >= 2 * slurRects.size() / 3;
+                if ((leftSection && collision.left)
+                    || (midSection && collision.mid)
+                    || (rightSection && collision.right)) {     // If a collision is already found in this section, no need to check again
+                    continue;
+                }
+                bool intersection = slur->up() ? !Shape(slurRects[i]).clearsVertically(segShape)
+                                    : !segShape.clearsVertically(slurRects[i]);
+                if (intersection) {
+                    if (leftSection) {
+                        collision.left = true;
+                    }
+                    if (midSection) {
+                        collision.mid = true;
+                    }
+                    if (rightSection) {
+                        collision.right = true;
+                    }
+                }
+            }
+        }
+        // In the even iterations, adjust the shape
+        if (iter % 2 == 0) {
+            double shapeLeftStep = (1 - leftBalance) * step;
+            double shapeRightStep = (1 - rightBalance) * step;
+            if (collision.left) {
+                // Move left Bezier point up(/down) and outwards
+                p3 += PointF(-abs(shapeLeftStep), shapeLeftStep);
+                // and a bit also the right point to compensate asymmetry
+                p4 += PointF(abs(shapeLeftStep), shapeLeftStep) / 2.0;
+            }
+            if (collision.mid) {     // Move both Bezier points up(/down)
+                p3 += PointF(0.0, (shapeLeftStep + shapeRightStep) / 2);
+                p4 += PointF(0.0, (shapeLeftStep + shapeRightStep) / 2);
+            }
+            if (collision.right) {
+                // Move right Bezier point up(/down) and outwards
+                p4 += PointF(abs(shapeRightStep), shapeRightStep);
+                // and a bit also the left point to compensate asymmetry
+                p3 += PointF(-abs(shapeRightStep), shapeRightStep) / 2.0;
+            }
+        } else if (!slurSeg->isEndPointsEdited()) {
+            // In the odd iterations, adjust the end points
+            // Slurs steeper than 45° are gently compensated
+            static constexpr double steepLimit = M_PI / 4;
+            if (collision.left || collision.mid || slurAngle < -steepLimit) {
+                double endPointLeftStep = leftBalance * step;
+                // Lift the left end point, i.e. tilt the slur around p2
+                double stepX = sin(slurAngle) * endPointLeftStep;
+                double stepY = cos(slurAngle) * endPointLeftStep;
+                PointF pp1delta = PointF(stepX, stepY);
+                pp1 += PointF(0.0, endPointLeftStep);
+                p3 += pp1delta * (p2.x() - p3.x()) / p2.x();
+                p4 += pp1delta * (p2.x() - p4.x()) / p2.x();
+                // All points are expressed with respect to pp1, so we need
+                // to subtract pp1delta to avoid the whole slur moving up
+                p2 -= pp1delta;
+                p3 -= pp1delta;
+                p4 -= pp1delta;
+            }
+            if (collision.right || collision.mid || slurAngle > steepLimit) {
+                double endPointRightStep = rightBalance * step;
+                // Lift the right end point, i.e. tilt the slur around p1
+                double stepX = sin(slurAngle) * endPointRightStep;
+                double stepY = cos(slurAngle) * endPointRightStep;
+                PointF p2delta = PointF(stepX, stepY);
+                p2 += p2delta;
+                p3 += p2delta * p3.x() / p2.x();
+                p4 += p2delta * p4.x() / p2.x();
+            }
+        }
+        // Enforce non-ugliness rules
+        // 1) Slur cannot be taller than it is wide
+        const double maxRelativeHeight = abs(p2.x());
+        p3 = slur->up() ? PointF(p3.x(), std::max(p3.y(), -maxRelativeHeight)) : PointF(p3.x(), std::min(p3.y(), maxRelativeHeight));
+        p4 = slur->up() ? PointF(p4.x(), std::max(p4.y(), -maxRelativeHeight)) : PointF(p4.x(), std::min(p4.y(), maxRelativeHeight));
+        // 2) Tangent rule: p3 and p4 cannot be further left than p1 nor further right than p2
+        PointF p3SysCoord = toSystemCoordinates.map(p3);
+        PointF p4SysCoord = toSystemCoordinates.map(p4);
+        PointF p2SysCoord = toSystemCoordinates.map(p2);
+        p3SysCoord = PointF(std::max(pp1.x(), p3SysCoord.x()), p3SysCoord.y());
+        p3SysCoord = PointF(std::min(p2SysCoord.x(), p3SysCoord.x()), p3SysCoord.y());
+        p4SysCoord = PointF(std::max(pp1.x(), p4SysCoord.x()), p4SysCoord.y());
+        p4SysCoord = PointF(std::min(p2SysCoord.x(), p4SysCoord.x()), p4SysCoord.y());
+        p3 = toSystemCoordinates.inverted().map(p3SysCoord);
+        p4 = toSystemCoordinates.inverted().map(p4SysCoord);
+
+        ++iter;
+    } while ((collision.left || collision.mid || collision.right) && iter < maxIter);
+}
+
 void SlurTieLayout::avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp)
 {
     GuitarBend* bendOnStart = nullptr;
@@ -1924,7 +2163,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     // ADAPT SLUR SHAPE AND ENDPOINT POSITION
     // to clear collisions with underlying items
     if (slurSeg->autoplace()) {
-        slurSeg->avoidCollisions(pp1, p2, p3, p4, toSystemCoordinates, slurAngle);
+        avoidCollisions(slurSeg, pp1, p2, p3, p4, toSystemCoordinates, slurAngle);
     }
 
     // Re-check end points for bad staff line collisions
