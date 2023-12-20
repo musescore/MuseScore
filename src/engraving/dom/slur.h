@@ -56,7 +56,6 @@ public:
     void editDrag(EditData& ed) override;
 
     Slur* slur() const { return toSlur(spanner()); }
-    void adjustEndpoints();
     Shape getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR);
     void avoidCollisions(PointF& pp1, PointF& p2, PointF& p3, PointF& p4, mu::draw::Transform& toSystemCoordinates, double& slurAngle);
 

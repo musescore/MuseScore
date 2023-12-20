@@ -1001,6 +1001,50 @@ void SlurTieLayout::fixArticulations(Slur* item, PointF& pt, Chord* c, double up
     }
 }
 
+void SlurTieLayout::adjustEndPoints(SlurSegment* slurSeg)
+{
+    double spatium = slurSeg->spatium();
+    double lw = (slurSeg->staffType() ? slurSeg->staffType()->lineDistance().val() : 1.0) * spatium;
+    const double staffLineMargin = 0.175 + (0.5 * slurSeg->style().styleS(Sid::staffLineWidth).val() * (spatium / lw));
+    PointF p1 = slurSeg->ups(Grip::START).p;
+    PointF p2 = slurSeg->ups(Grip::END).p;
+
+    double y1sp = p1.y() / lw;
+    double y2sp = p2.y() / lw;
+
+    // point 1
+    int lines = slurSeg->staff()->lines(slurSeg->tick());
+    auto adjustPoint = [staffLineMargin](bool up, double ysp) {
+        double y1offset = ysp - floor(ysp);
+        double adjust = 0;
+        if (up) {
+            if (y1offset < staffLineMargin) {
+                // endpoint too close to the line above
+                adjust = -(y1offset + staffLineMargin);
+            } else if (y1offset > 1 - staffLineMargin) {
+                // endpoint too close to the line below
+                adjust = -(y1offset - (1 - staffLineMargin));
+            }
+        } else {
+            if (y1offset < staffLineMargin) {
+                // endpoint too close to the line above
+                adjust = staffLineMargin - y1offset;
+            }
+            if (y1offset > 1 - staffLineMargin) {
+                // endpoint too close to the line below
+                adjust = (1 - y1offset) + staffLineMargin;
+            }
+        }
+        return adjust;
+    };
+    if (y1sp > -staffLineMargin && y1sp < (lines - 1) + staffLineMargin) {
+        slurSeg->ups(Grip::START).p.ry() += adjustPoint(slurSeg->slur()->up(), y1sp) * lw;
+    }
+    if (y2sp > -staffLineMargin && y2sp < (lines - 1) + staffLineMargin) {
+        slurSeg->ups(Grip::END).p.ry() += adjustPoint(slurSeg->slur()->up(), y2sp) * lw;
+    }
+}
+
 void SlurTieLayout::avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp)
 {
     GuitarBend* bendOnStart = nullptr;
@@ -1870,7 +1914,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
      * ***********************************************/
     // Avoid bad staff line intersections
     if (slurSeg->autoplace()) {
-        slurSeg->adjustEndpoints();
+        adjustEndPoints(slurSeg);
     }
     // If end point adjustment is locked, restore the endpoints to
     // where they were before
@@ -1966,7 +2010,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     // Re-check end points for bad staff line collisions
     slurSeg->ups(Grip::START).p = pp1 - slurSeg->ups(Grip::START).off;
     slurSeg->ups(Grip::END).p = toSystemCoordinates.map(p2) - slurSeg->ups(Grip::END).off;
-    slurSeg->adjustEndpoints();
+    adjustEndPoints(slurSeg);
     PointF newpp1 = slurSeg->ups(Grip::START).p + slurSeg->ups(Grip::START).off;
     PointF difference = rotate.map(newpp1 - pp1);
     pp1 = newpp1;

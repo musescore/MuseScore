@@ -319,53 +319,6 @@ void SlurSegment::editDrag(EditData& ed)
     }
 }
 
-//---------------------------------------------------------
-//   adjustEndpoints
-//    move endpoints so as not to collide with staff lines
-//---------------------------------------------------------
-void SlurSegment::adjustEndpoints()
-{
-    double lw = (staffType() ? staffType()->lineDistance().val() : 1.0) * spatium();
-    const double staffLineMargin = 0.175 + (0.5 * style().styleS(Sid::staffLineWidth).val() * (spatium() / lw));
-    PointF p1 = ups(Grip::START).p;
-    PointF p2 = ups(Grip::END).p;
-
-    double y1sp = p1.y() / lw;
-    double y2sp = p2.y() / lw;
-
-    // point 1
-    int lines = staff()->lines(tick());
-    auto adjustPoint = [staffLineMargin](bool up, double ysp) {
-        double y1offset = ysp - floor(ysp);
-        double adjust = 0;
-        if (up) {
-            if (y1offset < staffLineMargin) {
-                // endpoint too close to the line above
-                adjust = -(y1offset + staffLineMargin);
-            } else if (y1offset > 1 - staffLineMargin) {
-                // endpoint too close to the line below
-                adjust = -(y1offset - (1 - staffLineMargin));
-            }
-        } else {
-            if (y1offset < staffLineMargin) {
-                // endpoint too close to the line above
-                adjust = staffLineMargin - y1offset;
-            }
-            if (y1offset > 1 - staffLineMargin) {
-                // endpoint too close to the line below
-                adjust = (1 - y1offset) + staffLineMargin;
-            }
-        }
-        return adjust;
-    };
-    if (y1sp > -staffLineMargin && y1sp < (lines - 1) + staffLineMargin) {
-        ups(Grip::START).p.ry() += adjustPoint(slur()->up(), y1sp) * lw;
-    }
-    if (y2sp > -staffLineMargin && y2sp < (lines - 1) + staffLineMargin) {
-        ups(Grip::END).p.ry() += adjustPoint(slur()->up(), y2sp) * lw;
-    }
-}
-
 Shape SlurSegment::getSegmentShape(Segment* seg, ChordRest* startCR, ChordRest* endCR)
 {
     staff_idx_t startStaffIdx = startCR->staffIdx();
