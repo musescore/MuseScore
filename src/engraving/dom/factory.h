@@ -197,8 +197,6 @@ public:
     static TimeSig* copyTimeSig(const TimeSig& src);
     static std::shared_ptr<TimeSig> makeTimeSig(Segment* parent);
 
-    static TremoloDispatcher* createTremoloDispatcher(Chord* parent, bool isAccessibleEnabled = true);
-    static TremoloDispatcher* copyTremoloDispatcher(const TremoloDispatcher& src);
     static std::shared_ptr<TremoloDispatcher> makeTremoloDispatcher(Chord* parent);
 
     static TremoloTwoChord* createTremoloTwoChord(Chord* parent, bool isAccessibleEnabled = true);
