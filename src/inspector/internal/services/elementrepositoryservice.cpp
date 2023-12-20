@@ -39,6 +39,7 @@
 #include "engraving/dom/stafftype.h"
 #include "engraving/dom/stem.h"
 #include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/note.h"
@@ -90,7 +91,10 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findElementsByTyp
     case mu::engraving::ElementType::STAFF: return findStaffs();
     case mu::engraving::ElementType::LAYOUT_BREAK: return findSectionBreaks(); //Page breaks and line breaks are of type LAYOUT_BREAK, but they don't appear in the inspector for now.
     case mu::engraving::ElementType::TEXT: return findTexts();
-    case mu::engraving::ElementType::TREMOLO: return findTremolos();
+    case mu::engraving::ElementType::TREMOLO:
+    case mu::engraving::ElementType::TREMOLO_SINGLECHORD:
+    case mu::engraving::ElementType::TREMOLO_TWOCHORD:
+        return findTremolos();
     case mu::engraving::ElementType::BRACKET: return findBrackets();
     case mu::engraving::ElementType::REST: return findRests();
     case mu::engraving::ElementType::ORNAMENT: return findOrnaments();
@@ -394,10 +398,10 @@ QList<mu::engraving::EngravingItem*> ElementRepositoryService::findTremolos() co
     QList<mu::engraving::EngravingItem*> resultList;
 
     for (mu::engraving::EngravingItem* element : m_exposedElementList) {
-        if (element->isTremolo()) {
+        if (element->isType(ElementType::TREMOLO_TWOCHORD)) {
             // the tremolo section currently only has a style setting
             // so only tremolos which can have custom styles make it appear
-            if (mu::engraving::item_cast<mu::engraving::TremoloDispatcher*>(element)->customStyleApplicable()) {
+            if (mu::engraving::item_cast<mu::engraving::TremoloTwoChord*>(element)->customStyleApplicable()) {
                 resultList << element;
             }
         }

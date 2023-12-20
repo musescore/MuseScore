@@ -44,7 +44,9 @@ void TremoloSettingsModel::createProperties()
 
 void TremoloSettingsModel::requestElements()
 {
-    m_elementList = m_repository->findElementsByType(mu::engraving::ElementType::TREMOLO);
+    m_elementList.clear();
+    m_elementList << m_repository->findElementsByType(mu::engraving::ElementType::TREMOLO_SINGLECHORD);
+    m_elementList << m_repository->findElementsByType(mu::engraving::ElementType::TREMOLO_TWOCHORD);
 }
 
 void TremoloSettingsModel::loadProperties()
