@@ -2454,7 +2454,6 @@ const RectF& EngravingItem::LayoutData::bbox(LD_ACCESS mode) const
         switch (m_item->type()) {
         case ElementType::NOTE:
         case ElementType::ORNAMENT:
-        case ElementType::HAIRPIN_SEGMENT:
             return !sh.elements().empty() ? sh.elements().at(0) : _dummy;
         default:
             break;
