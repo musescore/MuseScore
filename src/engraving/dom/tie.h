@@ -56,7 +56,6 @@ public:
 
     Tie* tie() const { return (Tie*)spanner(); }
 
-    void computeMidThickness(double tieLengthInSp);
     void addLineAttachPoints();
 
 protected:

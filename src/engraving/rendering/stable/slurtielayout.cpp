@@ -2090,7 +2090,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     const PointF bezier1(bezier1X, -shoulderH);
     const PointF bezier2(bezier2X, -shoulderH);
 
-    tieSeg->computeMidThickness(tieLengthInSp);
+    computeMidThickness(tieSeg, tieLengthInSp);
 
     PointF tieThickness(0.0, tieSeg->ldata()->midThickness());
 
@@ -2369,4 +2369,24 @@ void SlurTieLayout::layoutSegment(SlurSegment* item, LayoutContext& ctx, const P
 
     computeBezier(item);
     ldata->setBbox(ldata->path().boundingRect());
+}
+
+void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp)
+{
+    const double mag = slurTieSeg->staff() ? slurTieSeg->staff()->staffMag(slurTieSeg->slurTie()->tick()) : 1.0;
+    const double minTieLength = mag * slurTieSeg->style().styleS(Sid::MinTieLength).val();
+    const double shortTieLimit = mag * 4.0;
+    const double minTieThickness = mag * (0.15 * slurTieSeg->spatium() - slurTieSeg->style().styleMM(Sid::SlurEndWidth));
+    const double normalThickness = mag * (slurTieSeg->style().styleMM(Sid::SlurMidWidth) - slurTieSeg->style().styleMM(Sid::SlurEndWidth));
+
+    bool invalid = RealIsEqualOrMore(minTieLength, shortTieLimit);
+
+    if (slurTieLengthInSp > shortTieLimit || invalid) {
+        slurTieSeg->mutldata()->setMidThickness(normalThickness);
+    } else {
+        const double A = 1 / (shortTieLimit - minTieLength);
+        const double B = normalThickness - minTieThickness;
+        const double C = shortTieLimit * minTieThickness - minTieLength * normalThickness;
+        slurTieSeg->mutldata()->setMidThickness(A * (B * slurTieLengthInSp + C));
+    }
 }

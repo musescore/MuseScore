@@ -28,6 +28,7 @@ namespace mu::engraving {
 class Slur;
 class SlurSegment;
 struct SlurTiePos;
+class SlurTieSegment;
 class SpannerSegment;
 class System;
 class Chord;
@@ -82,6 +83,8 @@ private:
     static double defaultStemLengthEnd(TremoloDispatcher* tremolo);
 
     static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
+
+    static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
 };
 }
 

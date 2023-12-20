@@ -28,6 +28,7 @@ namespace mu::engraving {
 class Slur;
 class SlurSegment;
 struct SlurTiePos;
+class SlurTieSegment;
 class SpannerSegment;
 class System;
 class Chord;
@@ -88,6 +89,8 @@ private:
     static bool isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx);
 
     static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
+
+    static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
 };
 }
 
