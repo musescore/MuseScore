@@ -76,7 +76,8 @@
 #include "engraving/dom/textline.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/dom/tremolo.h"
+#include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/trill.h"
 #include "engraving/dom/tuplet.h"
 #include "engraving/dom/utils.h"
@@ -4869,18 +4870,23 @@ static void addTremolo(ChordRest* cr,
         //LOGD("tremolo %d type '%s' ticks %d tremStart %p", tremoloNr, qPrintable(tremoloType), ticks, _tremStart);
         if (tremoloNr == 1 || tremoloNr == 2 || tremoloNr == 3 || tremoloNr == 4) {
             if (tremoloType == "" || tremoloType == "single") {
-                const auto tremolo = Factory::createTremoloDispatcher(mu::engraving::toChord(cr));
+                TremoloType type = TremoloType::INVALID_TREMOLO;
                 switch (tremoloNr) {
-                case 1: tremolo->setTremoloType(TremoloType::R8);
+                case 1: type = TremoloType::R8;
                     break;
-                case 2: tremolo->setTremoloType(TremoloType::R16);
+                case 2: type = TremoloType::R16;
                     break;
-                case 3: tremolo->setTremoloType(TremoloType::R32);
+                case 3: type = TremoloType::R32;
                     break;
-                case 4: tremolo->setTremoloType(TremoloType::R64);
+                case 4: type = TremoloType::R64;
                     break;
                 }
-                cr->add(tremolo);
+
+                if (type != TremoloType::INVALID_TREMOLO) {
+                    TremoloSingleChord* tremolo = Factory::createTremoloSingleChord(mu::engraving::toChord(cr));
+                    tremolo->setTremoloType(type);
+                    cr->add(tremolo);
+                }
             } else if (tremoloType == "start") {
                 if (tremStart) {
                     logger->logError("MusicXML::import: double tremolo start", xmlreader);
@@ -4892,26 +4898,31 @@ static void addTremolo(ChordRest* cr,
                 }
             } else if (tremoloType == "stop") {
                 if (tremStart) {
-                    const auto tremolo = Factory::createTremoloDispatcher(mu::engraving::toChord(cr));
+                    TremoloType type = TremoloType::INVALID_TREMOLO;
                     switch (tremoloNr) {
-                    case 1: tremolo->setTremoloType(TremoloType::C8);
+                    case 1: type = TremoloType::C8;
                         break;
-                    case 2: tremolo->setTremoloType(TremoloType::C16);
+                    case 2: type = TremoloType::C16;
                         break;
-                    case 3: tremolo->setTremoloType(TremoloType::C32);
+                    case 3: type = TremoloType::C32;
                         break;
-                    case 4: tremolo->setTremoloType(TremoloType::C64);
+                    case 4: type = TremoloType::C64;
                         break;
                     }
-                    tremolo->setChords(tremStart, static_cast<Chord*>(cr));
-                    // fixup chord duration and type
-                    const Fraction tremDur = cr->ticks() * Fraction(1, 2);
-                    tremolo->chord1()->setDurationType(tremDur);
-                    tremolo->chord1()->setTicks(tremDur);
-                    tremolo->chord2()->setDurationType(tremDur);
-                    tremolo->chord2()->setTicks(tremDur);
-                    // add tremolo to first chord (only)
-                    tremStart->add(tremolo);
+
+                    if (type != TremoloType::INVALID_TREMOLO) {
+                        TremoloTwoChord* tremolo = Factory::createTremoloTwoChord(mu::engraving::toChord(cr));
+                        tremolo->setTremoloType(type);
+                        tremolo->setChords(tremStart, static_cast<Chord*>(cr));
+                        // fixup chord duration and type
+                        const Fraction tremDur = cr->ticks() * Fraction(1, 2);
+                        tremolo->chord1()->setDurationType(tremDur);
+                        tremolo->chord1()->setTicks(tremDur);
+                        tremolo->chord2()->setDurationType(tremDur);
+                        tremolo->chord2()->setTicks(tremDur);
+                        // add tremolo to first chord (only)
+                        tremStart->add(tremolo);
+                    }
                     // timeMod takes into account also the factor 2 of a two-note tremolo
                     if (timeMod.isValid() && ((timeMod.denominator() % 2) == 0)) {
                         timeMod.setDenominator(timeMod.denominator() / 2);
