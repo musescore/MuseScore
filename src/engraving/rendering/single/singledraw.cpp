@@ -2191,7 +2191,7 @@ void SingleDraw::draw(const SlurSegment* item, Painter* painter)
         break;
     }
     painter->setPen(pen);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path());
 }
 
 void SingleDraw::draw(const Spacer* item, Painter* painter)
@@ -2369,7 +2369,7 @@ void SingleDraw::draw(const TieSegment* item, Painter* painter)
         break;
     }
     painter->setPen(pen);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path());
 }
 
 void SingleDraw::draw(const TimeSig* item, Painter* painter)

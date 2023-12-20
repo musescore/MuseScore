@@ -2197,7 +2197,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     t.translate(tieStart.x(), tieStart.y());
     t.rotateRadians(tieAngle);
     path = t.map(path);
-    tieSeg->setPath(path);
+    tieSeg->mutldata()->setPath(path);
 
     tieSeg->ups(Grip::BEZIER1).p = t.map(bezier1);
     tieSeg->ups(Grip::BEZIER2).p = t.map(bezier2);
@@ -2388,7 +2388,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     thick = PointF(0.0, 3.0 * w);
 
     path = toSystemCoordinates.map(path);
-    slurSeg->setPath(path);
+    slurSeg->mutldata()->setPath(path);
 
     // Create shape for the skyline
     Shape shape;

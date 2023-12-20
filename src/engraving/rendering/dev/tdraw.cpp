@@ -2595,7 +2595,7 @@ void TDraw::draw(const SlurSegment* item, Painter* painter)
         break;
     }
     painter->setPen(pen);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path());
 }
 
 void TDraw::draw(const Spacer* item, Painter* painter)
@@ -2972,7 +2972,7 @@ void TDraw::draw(const TieSegment* item, Painter* painter)
         break;
     }
     painter->setPen(pen);
-    painter->drawPath(item->path());
+    painter->drawPath(item->ldata()->path());
 }
 
 void TDraw::draw(const TimeSig* item, Painter* painter)
