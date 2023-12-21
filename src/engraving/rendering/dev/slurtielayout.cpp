@@ -2368,25 +2368,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     path = toSystemCoordinates.map(path);
     slurSeg->mutldata()->path.set_value(path);
 
-    // Create shape for the skyline
-    Shape shape;
-    PointF start = pp1;
-    int nbShapes  = 32;
-    double minH    = abs(2 * slurSeg->ldata()->midThickness());
-    const CubicBezier b(slurSeg->ups(Grip::START).pos(), slurSeg->ups(Grip::BEZIER1).pos(), slurSeg->ups(Grip::BEZIER2).pos(),
-                        slurSeg->ups(Grip::END).pos());
-    for (int i = 1; i <= nbShapes; i++) {
-        const PointF point = b.pointAtPercent(i / float(nbShapes));
-        RectF re     = RectF(start, point).normalized();
-        if (re.height() < minH) {
-            double d1 = (minH - re.height()) * .5;
-            re.adjust(0.0, -d1, 0.0, d1);
-        }
-        shape.add(re, slurSeg);
-        start = point;
-    }
-
-    slurSeg->mutldata()->setShape(shape);
+    fillShape(slurSeg, p2.x() / slurSeg->spatium());
 }
 
 double SlurTieLayout::defaultStemLengthStart(TremoloTwoChord* tremolo)
