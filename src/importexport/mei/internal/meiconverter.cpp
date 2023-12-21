@@ -568,74 +568,6 @@ int Convert::breaksecToMEI(engraving::BeamMode beamMode)
     return breaksec;
 }
 
-engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warning)
-{
-    warning = false;
-    if (meiClef.GetShape() == libmei::CLEFSHAPE_G) {
-        if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_below) {
-            switch (meiClef.GetDis()) {
-            case (libmei::OCTAVE_DIS_8): return engraving::ClefType::G8_VB;
-            case (libmei::OCTAVE_DIS_15): return engraving::ClefType::G15_MB;
-            default:
-                break;
-            }
-        } else if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_above) {
-            switch (meiClef.GetDis()) {
-            case (libmei::OCTAVE_DIS_8): return engraving::ClefType::G8_VA;
-            case (libmei::OCTAVE_DIS_15): return engraving::ClefType::G15_MA;
-            default:
-                break;
-            }
-        }
-        if (meiClef.GetLine() == 2) {
-            return engraving::ClefType::G;
-        } else if (meiClef.GetLine() == 1) {
-            return engraving::ClefType::G_1;
-        }
-    } else if (meiClef.GetShape() == libmei::CLEFSHAPE_C) {
-        switch (meiClef.GetLine()) {
-        case (1): return engraving::ClefType::C1;
-        case (2): return engraving::ClefType::C2;
-        case (3): return engraving::ClefType::C3;
-        case (4):
-            if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_below && meiClef.GetDis() == libmei::OCTAVE_DIS_8) {
-                return engraving::ClefType::C4_8VB;
-            }
-            return engraving::ClefType::C4;
-        case (5): return engraving::ClefType::C5;
-        default:
-            break;
-        }
-    } else if (meiClef.GetShape() == libmei::CLEFSHAPE_F) {
-        if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_below) {
-            switch (meiClef.GetDis()) {
-            case (libmei::OCTAVE_DIS_8): return engraving::ClefType::F8_VB;
-            case (libmei::OCTAVE_DIS_15): return engraving::ClefType::F15_MB;
-            default:
-                break;
-            }
-        } else if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_above) {
-            switch (meiClef.GetDis()) {
-            case (libmei::OCTAVE_DIS_8): return engraving::ClefType::F_8VA;
-            case (libmei::OCTAVE_DIS_15): return engraving::ClefType::F_15MA;
-            default:
-                break;
-            }
-        }
-        switch (meiClef.GetLine()) {
-        case (3): return engraving::ClefType::F_B;
-        case (4): return engraving::ClefType::F;
-        case (5): return engraving::ClefType::F_C;
-        default:
-            break;
-        }
-    } else if (meiClef.GetShape() == libmei::CLEFSHAPE_GG && meiClef.GetLine() == 2) {
-        return engraving::ClefType::G8_VB_O;
-    }
-    warning = true;
-    return engraving::ClefType::G;
-}
-
 Convert::BracketStruct Convert::bracketFromMEI(const libmei::StaffGrp& meiStaffGrp)
 {
     Convert::BracketStruct bracketSt;
@@ -796,6 +728,74 @@ libmei::Caesura Convert::caesuraToMEI(const engraving::Breath* breath)
     Convert::colorToMEI(breath, meiCaesura);
 
     return meiCaesura;
+}
+
+engraving::ClefType Convert::clefFromMEI(const libmei::Clef& meiClef, bool& warning)
+{
+    warning = false;
+    if (meiClef.GetShape() == libmei::CLEFSHAPE_G) {
+        if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_below) {
+            switch (meiClef.GetDis()) {
+            case (libmei::OCTAVE_DIS_8): return engraving::ClefType::G8_VB;
+            case (libmei::OCTAVE_DIS_15): return engraving::ClefType::G15_MB;
+            default:
+                break;
+            }
+        } else if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_above) {
+            switch (meiClef.GetDis()) {
+            case (libmei::OCTAVE_DIS_8): return engraving::ClefType::G8_VA;
+            case (libmei::OCTAVE_DIS_15): return engraving::ClefType::G15_MA;
+            default:
+                break;
+            }
+        }
+        if (meiClef.GetLine() == 2) {
+            return engraving::ClefType::G;
+        } else if (meiClef.GetLine() == 1) {
+            return engraving::ClefType::G_1;
+        }
+    } else if (meiClef.GetShape() == libmei::CLEFSHAPE_C) {
+        switch (meiClef.GetLine()) {
+        case (1): return engraving::ClefType::C1;
+        case (2): return engraving::ClefType::C2;
+        case (3): return engraving::ClefType::C3;
+        case (4):
+            if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_below && meiClef.GetDis() == libmei::OCTAVE_DIS_8) {
+                return engraving::ClefType::C4_8VB;
+            }
+            return engraving::ClefType::C4;
+        case (5): return engraving::ClefType::C5;
+        default:
+            break;
+        }
+    } else if (meiClef.GetShape() == libmei::CLEFSHAPE_F) {
+        if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_below) {
+            switch (meiClef.GetDis()) {
+            case (libmei::OCTAVE_DIS_8): return engraving::ClefType::F8_VB;
+            case (libmei::OCTAVE_DIS_15): return engraving::ClefType::F15_MB;
+            default:
+                break;
+            }
+        } else if (meiClef.GetDisPlace() == libmei::STAFFREL_basic_above) {
+            switch (meiClef.GetDis()) {
+            case (libmei::OCTAVE_DIS_8): return engraving::ClefType::F_8VA;
+            case (libmei::OCTAVE_DIS_15): return engraving::ClefType::F_15MA;
+            default:
+                break;
+            }
+        }
+        switch (meiClef.GetLine()) {
+        case (3): return engraving::ClefType::F_B;
+        case (4): return engraving::ClefType::F;
+        case (5): return engraving::ClefType::F_C;
+        default:
+            break;
+        }
+    } else if (meiClef.GetShape() == libmei::CLEFSHAPE_GG && meiClef.GetLine() == 2) {
+        return engraving::ClefType::G8_VB_O;
+    }
+    warning = true;
+    return engraving::ClefType::G;
 }
 
 libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
