@@ -30,7 +30,7 @@ using namespace mu::engraving;
 PartsSettingsModel::PartsSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
 {
-    setTitle(qtrc("inspector", "Score and part synchronisation"));
+    setTitle(qtrc("inspector", "Score and part synchronization"));
     setSectionType(InspectorSectionType::SECTION_PARTS);
 
     createProperties();

@@ -53,7 +53,7 @@ InspectorSectionView {
             StyledTextLabel {
                 width: parent.width
 
-                text: qsTrc("inspector", "Synchronise with main score")
+                text: qsTrc("inspector", "Synchronize with main score")
                 horizontalAlignment: Text.AlignLeft
             }
 
