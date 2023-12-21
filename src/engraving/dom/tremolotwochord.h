@@ -164,7 +164,6 @@ public:
 
     std::shared_ptr<rendering::dev::BeamTremoloLayout> m_layoutInfo;
 
-    void setDispatcher(TremoloDispatcher* d);
     TremoloDispatcher* dispatcher() const;
 
 private:

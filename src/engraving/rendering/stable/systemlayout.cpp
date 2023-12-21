@@ -65,6 +65,7 @@
 #include "tupletlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
+#include "gettremolodispatcher.h"
 
 #include "log.h"
 
@@ -852,8 +853,8 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                         }
 
                         // add tremolo to skyline
-                        if (e->isChord() && toChord(e)->tremoloDispatcher()) {
-                            TremoloDispatcher* t = toChord(e)->tremoloDispatcher();
+                        if (e->isChord() && tremoloDispatcher(toChord(e))) {
+                            TremoloDispatcher* t = tremoloDispatcher(toChord(e));
                             Chord* c1 = t->chord1();
                             Chord* c2 = t->chord2();
                             if (!t->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
@@ -1585,8 +1586,8 @@ void SystemLayout::updateCrossBeams(System* system, LayoutContext& ctx)
                         ChordLayout::layoutChords1(ctx, &seg, chord->vStaffIdx());
                         seg.createShape(chord->vStaffIdx());
                     }
-                } else if (chord->tremoloDispatcher() && chord->tremoloDispatcher()->twoNotes()) {
-                    TremoloDispatcher* t = chord->tremoloDispatcher();
+                } else if (tremoloDispatcher(chord) && tremoloDispatcher(chord)->twoNotes()) {
+                    TremoloDispatcher* t = tremoloDispatcher(chord);
                     Chord* c1 = t->chord1();
                     Chord* c2 = t->chord2();
                     if (t->userModified() || (c1->staffMove() != 0 || c2->staffMove() != 0)) {

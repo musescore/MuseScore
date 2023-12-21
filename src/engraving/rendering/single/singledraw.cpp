@@ -309,15 +309,6 @@ void SingleDraw::drawItem(const EngravingItem* item, draw::Painter* painter)
         break;
     case ElementType::TIMESIG:              draw(item_cast<const TimeSig*>(item), painter);
         break;
-    case ElementType::TREMOLO: {
-        UNREACHABLE;
-        const TremoloDispatcher* td = item_cast<const TremoloDispatcher*>(item);
-        if (td->singleChord) {
-            draw(td->singleChord, painter);
-        } else {
-            draw(td->twoChord, painter);
-        }
-    } break;
     case ElementType::TREMOLO_SINGLECHORD:  draw(item_cast<const TremoloSingleChord*>(item), painter);
         break;
     case ElementType::TREMOLO_TWOCHORD:     draw(item_cast<const TremoloTwoChord*>(item), painter);

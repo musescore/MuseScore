@@ -176,7 +176,6 @@ class TextLineSegment;
 class Tie;
 class TieSegment;
 class TimeSig;
-class TremoloDispatcher;
 class TremoloBar;
 class Trill;
 class TrillSegment;

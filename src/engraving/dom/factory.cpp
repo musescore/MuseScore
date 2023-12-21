@@ -185,7 +185,6 @@ EngravingItem* Factory::doCreateItem(ElementType type, EngravingItem* parent)
             return new NoteDot(dummy->note());
         }
     }
-    case ElementType::TREMOLO:           return new TremoloDispatcher(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::TREMOLO_SINGLECHORD: return new TremoloSingleChord(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::TREMOLO_TWOCHORD:  return new TremoloTwoChord(parent->isChord() ? toChord(parent) : dummy->chord());
     case ElementType::LAYOUT_BREAK:      return new LayoutBreak(parent->isMeasureBase() ? toMeasureBase(parent) : dummy->measure());

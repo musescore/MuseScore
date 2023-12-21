@@ -50,7 +50,6 @@ class NoteEventList;
 class Stem;
 class StemSlash;
 class StretchedBend;
-class TremoloDispatcher;
 class TremoloTwoChord;
 class TremoloSingleChord;
 
@@ -165,7 +164,6 @@ public:
     void setSpanArpeggio(Arpeggio* a) { m_spanArpeggio = a; }
     void undoChangeSpanArpeggio(Arpeggio* a);
 
-    TremoloDispatcher* tremoloDispatcher() const;
     TremoloType tremoloType() const;
     TremoloTwoChord* tremoloTwoChord() const;
     TremoloSingleChord* tremoloSingleChord() const;

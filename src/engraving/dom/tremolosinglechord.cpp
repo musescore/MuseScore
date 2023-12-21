@@ -400,19 +400,12 @@ void TremoloSingleChord::scanElements(void* data, void (* func)(void*, Engraving
     EngravingItem::scanElements(data, func, all);
 }
 
-void TremoloSingleChord::setDispatcher(TremoloDispatcher* d)
-{
-    DO_ASSERT(m_dispatcher == nullptr);
-    m_dispatcher = d;
-}
-
 TremoloDispatcher* TremoloSingleChord::dispatcher() const
 {
     if (!m_dispatcher) {
         m_dispatcher = new TremoloDispatcher(item_cast<Chord*>(parent()));
         m_dispatcher->singleChord = const_cast<TremoloSingleChord*>(this);
         m_dispatcher->setTrack(this->track());
-        m_dispatcher->setTremoloType(m_tremoloType);
         if (explicitParent()) {
             m_dispatcher->setParent(chord());
         }

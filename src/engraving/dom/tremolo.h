@@ -60,11 +60,10 @@ public:
 
     void setTrack(track_idx_t val) override;
 
-    void setTremoloType(TremoloType t);
-    TremoloType tremoloType() const { return m_tremoloType; }
-    int subtype() const override { return static_cast<int>(m_tremoloType); }
+    TremoloType tremoloType() const;
+    int subtype() const override { return static_cast<int>(tremoloType()); }
     TranslatableString subtypeUserName() const override;
-    bool isBuzzRoll() const { return m_tremoloType == TremoloType::BUZZ_ROLL; }
+    bool isBuzzRoll() const { return tremoloType() == TremoloType::BUZZ_ROLL; }
     bool twoNotes() const;
 
     Chord* chord() const { return toChord(explicitParent()); }
@@ -187,10 +186,6 @@ private:
     LayoutData* createLayoutData() const override;
     const LayoutData* ldataInternal() const override;
     LayoutData* mutldataInternal() override;
-
-    void setBeamPos(const PairF& bp);
-
-    TremoloType m_tremoloType = TremoloType::INVALID_TREMOLO;
 };
 } // namespace mu::engraving
 #endif

@@ -330,15 +330,6 @@ void TWrite::writeItem(const EngravingItem* item, XmlWriter& xml, WriteContext& 
         break;
     case ElementType::TIMESIG:      write(item_cast<const TimeSig*>(item), xml, ctx);
         break;
-    case ElementType::TREMOLO: {
-        UNREACHABLE;
-        const TremoloDispatcher* td = item_cast<const TremoloDispatcher*>(item);
-        if (td->singleChord) {
-            write(td->singleChord, xml, ctx);
-        } else {
-            write(td->twoChord, xml, ctx);
-        }
-    } break;
     case ElementType::TREMOLO_SINGLECHORD: write(item_cast<const TremoloSingleChord*>(item), xml, ctx);
         break;
     case ElementType::TREMOLO_TWOCHORD:    write(item_cast<const TremoloTwoChord*>(item), xml, ctx);
@@ -2939,7 +2930,7 @@ void TWrite::write(const TimeSig* item, XmlWriter& xml, WriteContext& ctx)
 
 void TWrite::write(const TremoloSingleChord* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!ctx.canWrite(item) || !ctx.canWrite(item->dispatcher())) {
+    if (!ctx.canWrite(item)) {
         return;
     }
 
@@ -2954,7 +2945,7 @@ void TWrite::write(const TremoloSingleChord* item, XmlWriter& xml, WriteContext&
 
 void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ctx)
 {
-    if (!ctx.canWrite(item) || !ctx.canWrite(item->dispatcher())) {
+    if (!ctx.canWrite(item)) {
         return;
     }
     // for compatible reason

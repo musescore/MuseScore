@@ -103,7 +103,6 @@ public:
 
     void computeShape();
 
-    void setDispatcher(TremoloDispatcher* d);
     TremoloDispatcher* dispatcher() const;
 
 private:

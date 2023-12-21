@@ -598,16 +598,6 @@ TremoloType Chord::tremoloType() const
     }
 }
 
-TremoloDispatcher* Chord::tremoloDispatcher() const
-{
-    if (m_tremoloTwoChord) {
-        return m_tremoloTwoChord->dispatcher();
-    } else if (m_tremoloSingleChord) {
-        return m_tremoloSingleChord->dispatcher();
-    }
-    return nullptr;
-}
-
 TremoloTwoChord* Chord::tremoloTwoChord() const
 {
     return m_tremoloTwoChord;
@@ -748,14 +738,6 @@ void Chord::add(EngravingItem* e)
     case ElementType::ARPEGGIO:
         m_arpeggio = toArpeggio(e);
         break;
-    case ElementType::TREMOLO: {
-        TremoloDispatcher* td = item_cast<TremoloDispatcher*>(e);
-        if (td->twoNotes()) {
-            setTremoloTwoChord(td->twoChord);
-        } else {
-            setTremoloSingleChord(td->singleChord);
-        }
-    } break;
     case ElementType::TREMOLO_TWOCHORD:
         setTremoloTwoChord(item_cast<TremoloTwoChord*>(e));
         break;
@@ -863,10 +845,6 @@ void Chord::remove(EngravingItem* e)
             m_spanArpeggio = nullptr;
         }
         m_arpeggio = nullptr;
-        break;
-    case ElementType::TREMOLO:
-        setTremoloTwoChord(nullptr);
-        setTremoloSingleChord(nullptr);
         break;
     case ElementType::TREMOLO_TWOCHORD:
         setTremoloTwoChord(nullptr);
@@ -2008,17 +1986,6 @@ EngravingItem* Chord::drop(EditData& data)
         score()->undoAddElement(e);
         break;
 
-    case ElementType::TREMOLO: {
-        DEPRECATED;
-        TremoloDispatcher* td = item_cast<TremoloDispatcher*>(e);
-        if (td->twoNotes()) {
-            data.dropElement = td->twoChord;
-            return this->drop(data);
-        } else {
-            data.dropElement = td->singleChord;
-            return this->drop(data);
-        }
-    } break;
     case ElementType::TREMOLO_SINGLECHORD:
         if (tremoloSingleChord()) {
             bool sameType = (e->subtype() == tremoloSingleChord()->subtype());
@@ -2848,9 +2815,9 @@ EngravingItem* Chord::nextElement()
             if (m_arpeggio) {
                 return m_arpeggio;
             } else if (m_tremoloTwoChord) {
-                return m_tremoloTwoChord->dispatcher();
+                return m_tremoloTwoChord;
             } else if (m_tremoloSingleChord) {
-                return m_tremoloSingleChord->dispatcher();
+                return m_tremoloSingleChord;
             }
             break;
         }
@@ -2875,9 +2842,9 @@ EngravingItem* Chord::nextElement()
             if (m_arpeggio) {
                 return m_arpeggio;
             } else if (m_tremoloTwoChord) {
-                return m_tremoloTwoChord->dispatcher();
+                return m_tremoloTwoChord;
             } else if (m_tremoloSingleChord) {
-                return m_tremoloSingleChord->dispatcher();
+                return m_tremoloSingleChord;
             }
             break;
         }
@@ -2890,9 +2857,9 @@ EngravingItem* Chord::nextElement()
     }
     case ElementType::ARPEGGIO:
         if (m_tremoloTwoChord) {
-            return m_tremoloTwoChord->dispatcher();
+            return m_tremoloTwoChord;
         } else if (m_tremoloSingleChord) {
-            return m_tremoloSingleChord->dispatcher();
+            return m_tremoloSingleChord;
         }
         break;
 
@@ -2905,9 +2872,9 @@ EngravingItem* Chord::nextElement()
             if (m_arpeggio) {
                 return m_arpeggio;
             } else if (m_tremoloTwoChord) {
-                return m_tremoloTwoChord->dispatcher();
+                return m_tremoloTwoChord;
             } else if (m_tremoloSingleChord) {
-                return m_tremoloSingleChord->dispatcher();
+                return m_tremoloSingleChord;
             }
             break;
         }
@@ -2989,7 +2956,6 @@ EngravingItem* Chord::prevElement()
     case ElementType::CHORD:
         return m_notes.front();
 
-    case ElementType::TREMOLO:
     case ElementType::TREMOLO_TWOCHORD:
     case ElementType::TREMOLO_SINGLECHORD:
         if (m_arpeggio) {
@@ -3016,9 +2982,9 @@ EngravingItem* Chord::prevElement()
 EngravingItem* Chord::lastElementBeforeSegment()
 {
     if (m_tremoloSingleChord) {
-        return m_tremoloSingleChord->dispatcher();
+        return m_tremoloSingleChord;
     } else if (m_tremoloTwoChord) {
-        return m_tremoloTwoChord->dispatcher();
+        return m_tremoloTwoChord;
     } else if (m_arpeggio) {
         return m_arpeggio;
     } else {

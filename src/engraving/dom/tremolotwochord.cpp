@@ -588,19 +588,12 @@ void TremoloTwoChord::clearBeamSegments()
     m_beamSegments.clear();
 }
 
-void TremoloTwoChord::setDispatcher(TremoloDispatcher* d)
-{
-    DO_ASSERT(m_dispatcher == nullptr);
-    m_dispatcher = d;
-}
-
 TremoloDispatcher* TremoloTwoChord::dispatcher() const
 {
     if (!m_dispatcher) {
         m_dispatcher = new TremoloDispatcher(item_cast<Chord*>(parent()));
         m_dispatcher->twoChord = const_cast<TremoloTwoChord*>(this);
         m_dispatcher->setTrack(this->track());
-        m_dispatcher->setTremoloType(m_tremoloType);
         if (explicitParent()) {
             m_dispatcher->setParent(chord());
         }

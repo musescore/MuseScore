@@ -64,7 +64,6 @@ TEST_F(Engraving_ElementTests, DISABLED_testIds)
         ElementType::INSTRUMENT_CHANGE,
         ElementType::NOTEHEAD,
         ElementType::NOTEDOT,
-        ElementType::TREMOLO,
         ElementType::LAYOUT_BREAK,
         ElementType::MARKER,
         ElementType::JUMP,

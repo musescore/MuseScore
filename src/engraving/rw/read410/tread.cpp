@@ -312,22 +312,6 @@ void TRead::readItem(EngravingItem* item, XmlReader& xml, ReadContext& ctx)
         break;
     case ElementType::TIMESIG: read(item_cast<TimeSig*>(item), xml, ctx);
         break;
-    case ElementType::TREMOLO: {
-        UNREACHABLE;
-        TremoloDispatcher* td = item_cast<TremoloDispatcher*>(item);
-        compat::TremoloCompat tc;
-        tc.parent = item_cast<Chord*>(td->parent());
-        read(&tc, xml, ctx);
-        if (tc.single) {
-            td->singleChord = tc.single;
-            td->singleChord->setDispatcher(td);
-            td->setTremoloType(td->singleChord->tremoloType());
-        } else {
-            td->twoChord = tc.two;
-            td->twoChord->setDispatcher(td);
-            td->setTremoloType(td->twoChord->tremoloType());
-        }
-    } break;
     case ElementType::TREMOLO_SINGLECHORD: read(item_cast<TremoloSingleChord*>(item), xml, ctx);
         break;
     case ElementType::TREMOLO_TWOCHORD: read(item_cast<TremoloTwoChord*>(item), xml, ctx);

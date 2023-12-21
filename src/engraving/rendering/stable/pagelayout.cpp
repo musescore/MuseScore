@@ -54,6 +54,7 @@
 #include "tupletlayout.h"
 #include "verticalgapdata.h"
 #include "arpeggiolayout.h"
+#include "gettremolodispatcher.h"
 
 #include "log.h"
 
@@ -311,8 +312,8 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             }
                             ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                             ChordLayout::layoutSpanners(c, ctx);
-                            if (c->tremoloDispatcher()) {
-                                TremoloDispatcher* t = c->tremoloDispatcher();
+                            if (tremoloDispatcher(c)) {
+                                TremoloDispatcher* t = tremoloDispatcher(c);
                                 Chord* c1 = t->chord1();
                                 Chord* c2 = t->chord2();
                                 if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
