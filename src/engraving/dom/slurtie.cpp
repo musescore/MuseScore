@@ -53,7 +53,7 @@ SlurTieSegment::SlurTieSegment(const SlurTieSegment& b)
         m_ups[i]   = b.m_ups[i];
         m_ups[i].p = PointF();
     }
-    m_path = b.m_path;
+    mutldata()->path.set_value(b.ldata()->path());
 }
 
 //---------------------------------------------------------

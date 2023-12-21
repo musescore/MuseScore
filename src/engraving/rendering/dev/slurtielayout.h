@@ -28,6 +28,7 @@ namespace mu::engraving {
 class Slur;
 class SlurSegment;
 struct SlurTiePos;
+class SlurTieSegment;
 class SpannerSegment;
 class System;
 class Chord;
@@ -36,6 +37,10 @@ class Tie;
 class TremoloTwoChord;
 enum class Grip;
 class Note;
+}
+
+namespace mu::draw {
+class Transform;
 }
 
 namespace mu::engraving::rendering::dev {
@@ -59,6 +64,10 @@ private:
     static void slurPos(Slur* item, SlurTiePos* sp, LayoutContext& ctx);
     static void avoidPreBendsOnTab(const Chord* sc, const Chord* ec, SlurTiePos* sp);
     static void fixArticulations(Slur* item, PointF& pt, Chord* c, double up, bool stemSide);
+    static void adjustEndPoints(SlurSegment* slurSeg);
+    static void avoidCollisions(SlurSegment* slurSeg, PointF& pp1, PointF& p2, PointF& p3, PointF& p4,
+                                mu::draw::Transform& toSystemCoordinates, double& slurAngle);
+    static Shape getSegmentShape(SlurSegment* slurSeg, Segment* seg, ChordRest* startCR, ChordRest* endCR);
 
     static void computeStartAndEndSystem(Tie* item, SlurTiePos& slurTiePos);
     static PointF computeDefaultStartOrEndPoint(const Tie* tie, Grip startOrEnd);
@@ -80,6 +89,8 @@ private:
     static bool isDirectionMixture(const Chord* c1, const Chord* c2, LayoutContext& ctx);
 
     static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
+
+    static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
 };
 }
 

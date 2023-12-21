@@ -56,16 +56,12 @@ public:
 
     Tie* tie() const { return (Tie*)spanner(); }
 
-    void computeMidThickness(double tieLengthInSp);
     void addLineAttachPoints();
-    double midThickness() const { return m_midThickness; }
 
 protected:
     void changeAnchor(EditData&, EngravingItem*) override;
 
 private:
-
-    double m_midThickness = 0.0;
 
     std::array<PointF, static_cast<size_t>(Grip::GRIPS)> m_adjustmentOffsets;
 };

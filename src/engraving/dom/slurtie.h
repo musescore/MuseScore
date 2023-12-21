@@ -112,9 +112,6 @@ public:
     const UP& ups(Grip i) const { return m_ups[int(i)]; }
     UP& ups(Grip i) { return m_ups[int(i)]; }
 
-    const mu::draw::PainterPath& path() const { return m_path; }
-    void setPath(const mu::draw::PainterPath& p) { m_path = p; }
-
     bool needStartEditingAfterSelecting() const override { return true; }
     int gripsCount() const override { return int(Grip::GRIPS); }
     Grip initialEditModeGrip() const override { return Grip::END; }
@@ -122,6 +119,13 @@ public:
     std::vector<PointF> gripsPositions(const EditData& = EditData()) const override;
 
     virtual void drawEditMode(mu::draw::Painter* painter, EditData& editData, double currentViewScaling) override;
+
+    struct LayoutData : public SpannerSegment::LayoutData
+    {
+        ld_field<mu::draw::PainterPath> path = "path";
+        ld_field<double> midThickness = "midThickness";
+    };
+    DECLARE_LAYOUTDATA_METHODS(SlurTieSegment)
 
 protected:
     SlurTieSegment(const ElementType& type, System*);
@@ -131,8 +135,6 @@ protected:
     std::vector<mu::LineF> gripAnchorLines(Grip grip) const override;
 
     struct UP m_ups[int(Grip::GRIPS)];
-
-    mu::draw::PainterPath m_path;
 };
 
 //-------------------------------------------------------------------
