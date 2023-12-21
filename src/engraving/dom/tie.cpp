@@ -415,6 +415,22 @@ bool Tie::setProperty(Pid propertyId, const PropertyValue& v)
     return true;
 }
 
+double Tie::scalingFactor() const
+{
+    const Note* startN = startNote();
+    const Note* endN = endNote();
+
+    if (!startN || !endN) {
+        return 1.0;
+    }
+
+    if (startN->isGrace()) {
+        return style().styleD(Sid::graceNoteMag);
+    }
+
+    return 0.5 * (startN->chord()->intrinsicMag() + endN->chord()->intrinsicMag());
+}
+
 //---------------------------------------------------------
 //   setStartNote
 //---------------------------------------------------------

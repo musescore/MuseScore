@@ -120,6 +120,8 @@ public:
     static int calcStemArrangement(EngravingItem* start, EngravingItem* end);
     static bool isDirectionMixture(Chord* c1, Chord* c2);
 
+    double scalingFactor() const override;
+
 private:
 
     friend class Factory;

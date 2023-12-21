@@ -2491,12 +2491,19 @@ void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurT
 
     bool invalid = RealIsEqualOrMore(minTieLength, shortTieLimit);
 
+    double finalThickness;
     if (slurTieLengthInSp > shortTieLimit || invalid) {
-        slurTieSeg->mutldata()->midThickness.set_value(normalThickness);
+        finalThickness = normalThickness;
     } else {
         const double A = 1 / (shortTieLimit - minTieLength);
         const double B = normalThickness - minTieThickness;
         const double C = shortTieLimit * minTieThickness - minTieLength * normalThickness;
-        slurTieSeg->mutldata()->midThickness.set_value(A * (B * slurTieLengthInSp + C));
+        finalThickness = A * (B * slurTieLengthInSp + C);
     }
+
+    double scalingFactor = slurTieSeg->slurTie()->scalingFactor();
+
+    finalThickness = std::min(finalThickness, normalThickness * scalingFactor);
+
+    slurTieSeg->mutldata()->midThickness.set_value(finalThickness);
 }

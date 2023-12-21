@@ -108,6 +108,8 @@ public:
 
     SlurTieSegment* newSlurTieSegment(System* parent) override { return new TieSegment(parent); }
 
+    double scalingFactor() const override;
+
 private:
     static Note* editStartNote;
     static Note* editEndNote;
