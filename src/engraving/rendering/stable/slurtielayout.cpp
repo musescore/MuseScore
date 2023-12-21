@@ -2118,7 +2118,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     t.translate(tieStart.x(), tieStart.y());
     t.rotateRadians(tieAngle);
     path = t.map(path);
-    tieSeg->mutldata()->setPath(path);
+    tieSeg->mutldata()->path.set_value(path);
 
     tieSeg->ups(Grip::BEZIER1).p = t.map(bezier1);
     tieSeg->ups(Grip::BEZIER2).p = t.map(bezier2);
@@ -2309,7 +2309,7 @@ void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
     thick = PointF(0.0, 3.0 * w);
 
     path = toSystemCoordinates.map(path);
-    slurSeg->mutldata()->setPath(path);
+    slurSeg->mutldata()->path.set_value(path);
 
     // Create shape for the skyline
     Shape shape;
@@ -2382,11 +2382,11 @@ void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurT
     bool invalid = RealIsEqualOrMore(minTieLength, shortTieLimit);
 
     if (slurTieLengthInSp > shortTieLimit || invalid) {
-        slurTieSeg->mutldata()->setMidThickness(normalThickness);
+        slurTieSeg->mutldata()->midThickness.set_value(normalThickness);
     } else {
         const double A = 1 / (shortTieLimit - minTieLength);
         const double B = normalThickness - minTieThickness;
         const double C = shortTieLimit * minTieThickness - minTieLength * normalThickness;
-        slurTieSeg->mutldata()->setMidThickness(A * (B * slurTieLengthInSp + C));
+        slurTieSeg->mutldata()->midThickness.set_value(A * (B * slurTieLengthInSp + C));
     }
 }
