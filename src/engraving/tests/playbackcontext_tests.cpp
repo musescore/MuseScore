@@ -161,6 +161,48 @@ TEST_F(Engraving_PlaybackContextTests, Dynamics_MeasureRepeats)
     EXPECT_EQ(actualDynamics, expectedDynamics);
 }
 
+TEST_F(Engraving_PlaybackContextTests, PlayTechniques_MeasureRepeats)
+{
+    // [GIVEN] Score with 5 measures. The 1st measure is repeated. There also is a measure repeat on the last 2 measures
+    // (so the previous 2 measures will be repeated)
+    Score* score = ScoreRW::readScore(PLAYBACK_CONTEXT_TEST_FILES_DIR + "play_techniques/play_techniques_measure_repeats.mscx");
+
+    const std::vector<Part*>& parts = score->parts();
+    ASSERT_FALSE(parts.empty());
+
+    // [GIVEN] the 1st measure is repeated
+    constexpr int repeatOffsetTick = 1920;
+
+    // [GIVEN] Context for parsing playing techniques
+    PlaybackContext ctx;
+
+    // [WHEN] Parse playing techniques
+    ctx.update(parts.front()->id(), score);
+
+    // [THEN] The articulation map matches the expectation
+    std::map<int, mpe::ArticulationType> expectedArticulations {
+        // 1st measure
+        { 0, mpe::ArticulationType::Standard },
+
+        // 2nd measure
+        { 1920 + repeatOffsetTick, mpe::ArticulationType::Mute }, // 1st quarter note
+
+        // 3rd measure
+        { 4320 + repeatOffsetTick, mpe::ArticulationType::Distortion }, // 2nd quarter note
+
+        // copy of 2nd measure
+        { 5760 + repeatOffsetTick, mpe::ArticulationType::Mute },
+
+        // copy of 3rd measure
+        { 8160 + repeatOffsetTick, mpe::ArticulationType::Distortion },
+    };
+
+    for (const auto& pair : expectedArticulations) {
+        mpe::ArticulationType actualArticulation = ctx.persistentArticulationType(pair.first);
+        EXPECT_EQ(actualArticulation, pair.second);
+    }
+}
+
 TEST_F(Engraving_PlaybackContextTests, ParseSoundFlags)
 {
     // [GIVEN] Score (piano with 2 staves) with sound flags
