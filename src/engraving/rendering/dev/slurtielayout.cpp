@@ -1386,8 +1386,13 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     }
     Shape chordShape = chord->shape().translate(chordSystemPos);
     bool ignoreDot = start && isOuterTieOfChord;
+    static const std::set<ElementType> IGNORED_TYPES = {
+        ElementType::HOOK,
+        ElementType::STEM_SLASH,
+        ElementType::LEDGER_LINE
+    };
     chordShape.remove_if([&](ShapeElement& s) {
-        return !s.item() || (s.item() == note || s.item()->isHook() || s.item()->isLedgerLine() || (s.item()->isNoteDot() && ignoreDot));
+        return !s.item() || s.item() == note || mu::contains(IGNORED_TYPES, s.item()->type()) || (s.item()->isNoteDot() && ignoreDot);
     });
 
     const double arcSideMargin = 0.3 * spatium;
