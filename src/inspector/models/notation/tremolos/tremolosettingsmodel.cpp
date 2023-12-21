@@ -25,7 +25,10 @@
 
 #include "translation.h"
 
+#include "engraving/dom/tremolotwochord.h"
+
 using namespace mu::inspector;
+using namespace mu::engraving;
 
 TremoloSettingsModel::TremoloSettingsModel(QObject* parent, IElementRepositoryService* repository)
     : AbstractInspectorModel(parent, repository)
@@ -44,9 +47,15 @@ void TremoloSettingsModel::createProperties()
 
 void TremoloSettingsModel::requestElements()
 {
+    // the tremolo section currently only has a style setting
+    // so only tremolos which can have custom styles make it appear
+
     m_elementList.clear();
-    m_elementList << m_repository->findElementsByType(mu::engraving::ElementType::TREMOLO_SINGLECHORD);
-    m_elementList << m_repository->findElementsByType(mu::engraving::ElementType::TREMOLO_TWOCHORD);
+    for (EngravingItem* it : m_repository->findElementsByType(ElementType::TREMOLO_TWOCHORD)) {
+        if (item_cast<TremoloTwoChord*>(it)->customStyleApplicable()) {
+            m_elementList << it;
+        }
+    }
 }
 
 void TremoloSettingsModel::loadProperties()
