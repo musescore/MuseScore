@@ -832,8 +832,25 @@ libmei::Clef Convert::clefToMEI(engraving::ClefType clef)
         meiClef.SetShape(libmei::CLEFSHAPE_GG);
         break;
     default:
-        LOGD() << "Unsupported clef shape";
-        meiClef.SetShape(libmei::CLEFSHAPE_F);
+        AsciiStringView glyphName = engraving::SymNames::nameForSymId(engraving::ClefInfo::symId(clef));
+        meiClef.SetGlyphName(glyphName.ascii());
+        meiClef.SetGlyphAuth(SMUFL_AUTH);
+        switch (glyphName.at(0).unicode())
+        {
+        case 'c':
+            meiClef.SetShape(libmei::CLEFSHAPE_C);
+            break;
+        case 'f':
+            meiClef.SetShape(libmei::CLEFSHAPE_F);
+            break;
+        case 'g':
+            meiClef.SetShape(libmei::CLEFSHAPE_G);
+            break;
+        default:
+            LOGD() << "Unsupported clef shape";
+            meiClef.SetShape(libmei::CLEFSHAPE_NONE);
+            break;
+        }
     }
 
     const int line = engraving::ClefInfo::line(clef);
