@@ -85,8 +85,6 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
     } else {
         layoutPitched(item, ctx);
     }
-
-    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
@@ -318,6 +316,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     for (Fingering* f : alignNote) {
         f->mutldata()->setPosX(xNote);
     }
+
+    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
@@ -681,6 +681,8 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     if (item->stemSlash()) {
         TLayout::layoutStemSlash(item->stemSlash(), item->stemSlash()->mutldata(), ctx.conf());
     }
+
+    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 //---------------------------------------------------------
