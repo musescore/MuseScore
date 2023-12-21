@@ -889,6 +889,31 @@ void TLayout::layoutArticulation(const Articulation* item, Articulation::LayoutD
     ldata->setBbox(bbox.translated(-0.5 * bbox.width(), 0.0));
 }
 
+void TLayout::fillArticulationShape(const Articulation* item, Articulation::LayoutData* ldata)
+{
+    SymId sym = item->symId();
+    if (sym == SymId::articAccentAbove || sym == SymId::articAccentBelow) {
+        RectF symBbox = item->symBbox(sym);
+        double width = symBbox.width();
+        double height = symBbox.height();
+        double thirdWidth = width / 3;
+        double thirdHeight = height / 3;
+        RectF base = RectF(0.0, 0.0, thirdWidth, height);
+        RectF center = RectF(thirdWidth, thirdHeight, thirdWidth, thirdHeight);
+        RectF tip = RectF(2 * thirdWidth, 1.25 * thirdHeight, thirdWidth, 0.5 * thirdHeight);
+        Shape shape;
+        shape.add(base, item);
+        shape.add(center, item);
+        shape.add(tip, item);
+        PointF translate(-0.5 * width, sym == SymId::articAccentAbove ? -height : 0.0);
+        ldata->setShape(shape.translate(translate));
+    } else {
+        ldata->setShape(Shape(ldata->bbox(), item));
+    }
+}
+
+
+
 static double barLineWidth(const BarLine* item, const MStyle& style, double dotWidth)
 {
     double w = 0.0;
