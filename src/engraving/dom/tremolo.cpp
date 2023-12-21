@@ -70,78 +70,42 @@ TremoloDispatcher::TremoloDispatcher(Chord* parent)
 TremoloDispatcher::TremoloDispatcher(const TremoloDispatcher& t)
     : EngravingItem(t)
 {
-    m_tremoloType = t.tremoloType();
-    if (twoNotes()) {
-        if (!twoChord) {
-            twoChord = new TremoloTwoChord(*t.twoChord);
-            twoChord->setDispatcher(this);
-        }
-    } else {
-        if (!singleChord) {
-            singleChord = new TremoloSingleChord(*t.singleChord);
-            singleChord->setDispatcher(this);
-        }
-    }
+    twoChord = t.twoChord;
+    singleChord = t.singleChord;
 
     styleChanged();
 }
 
 TremoloDispatcher::~TremoloDispatcher()
 {
-    if (twoChord) {
-        twoChord->setParent(nullptr);
-    }
-
-    if (singleChord) {
-        singleChord->setParent(nullptr);
-    }
-
-    delete twoChord;
-    delete singleChord;
 }
 
 bool TremoloDispatcher::twoNotes() const
 {
-    DO_ASSERT(m_tremoloType != TremoloType::INVALID_TREMOLO);
-    return m_tremoloType >= TremoloType::C8;
+    return twoChord != nullptr;
+}
+
+TremoloType TremoloDispatcher::tremoloType() const
+{
+    if (twoChord) {
+        return twoChord->tremoloType();
+    } else if (singleChord) {
+        return singleChord->tremoloType();
+    } else {
+        return TremoloType::INVALID_TREMOLO;
+        UNREACHABLE;
+    }
 }
 
 void TremoloDispatcher::setTrack(track_idx_t val)
 {
     EngravingItem::setTrack(val);
 
-    if (m_tremoloType == TremoloType::INVALID_TREMOLO) {
-        return;
-    }
-
     if (twoNotes()) {
         twoChord->setTrack(val);
     } else {
         singleChord->setTrack(val);
     }
-}
-
-void TremoloDispatcher::setTremoloType(TremoloType t)
-{
-    m_tremoloType = t;
-
-    if (twoNotes()) {
-        if (!twoChord) {
-            twoChord = new TremoloTwoChord(toChord(this->parent()));
-            twoChord->setDispatcher(this);
-            twoChord->setTrack(track());
-        }
-        twoChord->setTremoloType(t);
-    } else {
-        if (!singleChord) {
-            singleChord = new TremoloSingleChord(toChord(this->parent()));
-            singleChord->setDispatcher(this);
-            singleChord->setTrack(track());
-        }
-        singleChord->setTremoloType(t);
-    }
-
-    styleChanged();
 }
 
 void TremoloDispatcher::setParent(Chord* ch)
@@ -641,19 +605,6 @@ void TremoloDispatcher::setChords(Chord* c1, Chord* c2)
 {
     if (twoNotes()) {
         twoChord->setChords(c1, c2);
-    } else {
-        UNREACHABLE;
-    }
-}
-
-//---------------------------------------------------------
-//   setBeamPos
-//---------------------------------------------------------
-
-void TremoloDispatcher::setBeamPos(const PairF& bp)
-{
-    if (twoNotes()) {
-        twoChord->setBeamPos(bp);
     } else {
         UNREACHABLE;
     }

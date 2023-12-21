@@ -52,6 +52,7 @@
 #include "chordlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
+#include "gettremolodispatcher.h"
 
 #include "log.h"
 
@@ -1286,8 +1287,8 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 e->mutldata()->setPosX(0);
             } else if (e->isChord()) {
                 Chord* c = toChord(e);
-                if (c->tremoloDispatcher()) {
-                    TremoloDispatcher* tr = c->tremoloDispatcher();
+                if (tremoloDispatcher(c)) {
+                    TremoloDispatcher* tr = tremoloDispatcher(c);
                     Chord* c1 = tr->chord1();
                     Chord* c2 = tr->chord2();
                     if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
@@ -1295,8 +1296,8 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                     }
                 }
                 for (Chord* g : c->graceNotes()) {
-                    if (g->tremoloDispatcher()) {
-                        TremoloDispatcher* tr = g->tremoloDispatcher();
+                    if (tremoloDispatcher(g)) {
+                        TremoloDispatcher* tr = tremoloDispatcher(g);
                         Chord* c1 = tr->chord1();
                         Chord* c2 = tr->chord2();
                         if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
@@ -1342,7 +1343,7 @@ void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
             if (e->isChord()) {
                 Chord* c = toChord(e);
                 Beam* beam = c->beam();
-                TremoloDispatcher* tremolo = c->tremoloDispatcher();
+                TremoloDispatcher* tremolo = tremoloDispatcher(c);
                 if ((beam && (beam->cross() || beam->userModified()))
                     || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
                     bool prevUp = c->up();
@@ -2082,8 +2083,8 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                 e->mutldata()->setPosX(0);
             } else if (t == ElementType::CHORD) {
                 Chord* c = toChord(e);
-                if (c->tremoloDispatcher()) {
-                    TremoloDispatcher* tr = c->tremoloDispatcher();
+                if (tremoloDispatcher(c)) {
+                    TremoloDispatcher* tr = tremoloDispatcher(c);
                     Chord* c1 = tr->chord1();
                     Chord* c2 = tr->chord2();
                     if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {

@@ -2020,7 +2020,7 @@ void Measure::connectTremolo()
                     // this is an invalid tremolo! a continued tremolo was started on one note without a valid next note in that measure
                     // remove the tremolo entirely
                     c->setTremoloTwoChord(nullptr);
-                    score()->removeElement(tremolo->dispatcher());
+                    score()->removeElement(tremolo);
                 }
             }
         }

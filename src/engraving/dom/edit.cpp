@@ -2236,13 +2236,6 @@ void Score::cmdFlip()
                 DirectionV dir = beam->up() ? DirectionV::DOWN : DirectionV::UP;
                 beam->undoChangeProperty(Pid::STEM_DIRECTION, dir);
             });
-        } else if (e->isTremolo()) {
-            UNREACHABLE;
-            TremoloDispatcher* tremolo = item_cast<TremoloDispatcher*>(e);
-            flipOnce(tremolo, [tremolo]() {
-                DirectionV dir = tremolo->up() ? DirectionV::DOWN : DirectionV::UP;
-                tremolo->undoChangeProperty(Pid::STEM_DIRECTION, dir);
-            });
         } else if (e->isType(ElementType::TREMOLO_TWOCHORD)) {
             TremoloTwoChord* tremolo = item_cast<TremoloTwoChord*>(e);
             flipOnce(tremolo, [tremolo]() {
@@ -5856,7 +5849,8 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
             && et != ElementType::CAPO
             && et != ElementType::STRING_TUNINGS
             && et != ElementType::STICKING
-            && et != ElementType::TREMOLO
+            && et != ElementType::TREMOLO_SINGLECHORD
+            && et != ElementType::TREMOLO_TWOCHORD
             && et != ElementType::ARPEGGIO
             && et != ElementType::SYMBOL
             && et != ElementType::IMAGE
@@ -6170,31 +6164,6 @@ void Score::undoAddElement(EngravingItem* element, bool addToLinkedStaves, bool 
                 doUndoAddElement(nsp);
             } else if (et == ElementType::GLISSANDO || et == ElementType::GUITAR_BEND) {
                 doUndoAddElement(toSpanner(ne));
-            } else if (element->isTremolo() && item_cast<TremoloDispatcher*>(element)->twoNotes()) {
-                UNREACHABLE;
-                TremoloDispatcher* tremolo = item_cast<TremoloDispatcher*>(element);
-                ChordRest* cr1 = toChordRest(tremolo->chord1());
-                ChordRest* cr2 = toChordRest(tremolo->chord2());
-                Segment* s1    = cr1->segment();
-                Segment* s2    = cr2->segment();
-                Measure* m1    = s1->measure();
-                Measure* m2    = s2->measure();
-                Measure* nm1   = score->tick2measure(m1->tick());
-                Measure* nm2   = score->tick2measure(m2->tick());
-                Segment* ns1   = nm1->findSegment(s1->segmentType(), s1->tick());
-                Segment* ns2   = nm2->findSegment(s2->segmentType(), s2->tick());
-                Chord* c1      = toChord(ns1->element(staffIdx * VOICES + cr1->voice()));
-                Chord* c2      = toChord(ns2->element(staffIdx * VOICES + cr2->voice()));
-                TremoloDispatcher* ntremolo = item_cast<TremoloDispatcher*>(ne);
-                ntremolo->setChords(c1, c2);
-                ntremolo->setParent(c1);
-                doUndoAddElement(ntremolo);
-            } else if (element->isTremolo() && !item_cast<TremoloDispatcher*>(element)->twoNotes()) {
-                UNREACHABLE;
-                Chord* cr = toChord(element->explicitParent());
-                Chord* c1 = findLinkedChord(cr, score->staff(staffIdx));
-                ne->setParent(c1);
-                doUndoAddElement(ne);
             } else if (element->isType(ElementType::TREMOLO_TWOCHORD)) {
                 TremoloTwoChord* tremolo = item_cast<TremoloTwoChord*>(element);
                 ChordRest* cr1 = toChordRest(tremolo->chord1());

@@ -289,7 +289,9 @@ enum class ElementType {
     STAFF_STATE           = int(mu::engraving::ElementType::STAFF_STATE),
     NOTEHEAD              = int(mu::engraving::ElementType::NOTEHEAD),
     NOTEDOT               = int(mu::engraving::ElementType::NOTEDOT),
-    TREMOLO               = int(mu::engraving::ElementType::TREMOLO),
+    TREMOLO               = int(mu::engraving::ElementType::TREMOLO), // deprecated
+    TREMOLO_SINGLECHORD   = int(mu::engraving::ElementType::TREMOLO_SINGLECHORD),
+    TREMOLO_TWOCHORD      = int(mu::engraving::ElementType::TREMOLO_TWOCHORD),
     IMAGE                 = int(mu::engraving::ElementType::IMAGE),
     MEASURE               = int(mu::engraving::ElementType::MEASURE),
     SELECTION             = int(mu::engraving::ElementType::SELECTION),

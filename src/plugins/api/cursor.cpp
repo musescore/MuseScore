@@ -302,6 +302,8 @@ void Cursor::add(EngravingItem* wrapped)
         case ElementType::NOTE:
         case ElementType::ARPEGGIO:
         case ElementType::TREMOLO:
+        case ElementType::TREMOLO_SINGLECHORD:
+        case ElementType::TREMOLO_TWOCHORD:
         case ElementType::CHORDLINE:
         case ElementType::ARTICULATION: {
             mu::engraving::EngravingItem* curElement = currentElement();
