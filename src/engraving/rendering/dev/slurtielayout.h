@@ -91,6 +91,7 @@ private:
     static void layoutSegment(SlurSegment* item, LayoutContext& ctx, const PointF& p1, const PointF& p2);
 
     static void computeMidThickness(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
+    static void fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthInSp);
 };
 }
 

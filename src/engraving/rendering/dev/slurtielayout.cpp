@@ -2208,25 +2208,7 @@ void SlurTieLayout::computeBezier(TieSegment* tieSeg, PointF shoulderOffset)
     tieSeg->ups(Grip::DRAG).p = t.map(tieDrag);
     tieSeg->ups(Grip::SHOULDER).p = t.map(tieShoulder);
 
-    Shape shape(Shape::Type::Composite);
-    PointF start;
-    start = t.map(start);
-
-    double minH = std::abs(2 * tieSeg->ldata()->midThickness());
-    int nbShapes = 15;
-    const CubicBezier b(tieStart, tieSeg->ups(Grip::BEZIER1).pos(), tieSeg->ups(Grip::BEZIER2).pos(), tieSeg->ups(Grip::END).pos());
-    for (int i = 1; i <= nbShapes; i++) {
-        const PointF point = b.pointAtPercent(i / float(nbShapes));
-        RectF re = RectF(start, point).normalized();
-        if (re.height() < minH) {
-            tieLengthInSp = (minH - re.height()) * .5;
-            re.adjust(0.0, -tieLengthInSp, 0.0, tieLengthInSp);
-        }
-        shape.add(re, tieSeg);
-        start = point;
-    }
-
-    tieSeg->mutldata()->setShape(shape);
+    fillShape(tieSeg, tieLengthInSp);
 }
 
 void SlurTieLayout::computeBezier(SlurSegment* slurSeg, PointF shoulderOffset)
@@ -2511,4 +2493,31 @@ void SlurTieLayout::computeMidThickness(SlurTieSegment* slurTieSeg, double slurT
     finalThickness = std::min(finalThickness, normalThickness * scalingFactor);
 
     slurTieSeg->mutldata()->midThickness.set_value(finalThickness);
+}
+
+void SlurTieLayout::fillShape(SlurTieSegment* slurTieSeg, double slurTieLengthInSp)
+{
+    Shape shape(Shape::Type::Composite);
+    PointF startPoint = slurTieSeg->ups(Grip::START).pos();
+
+    double midThickness = 2 * slurTieSeg->ldata()->midThickness();
+    int nbShapes = round(5.0 * slurTieLengthInSp);
+    nbShapes = std::max(nbShapes, 20);
+    nbShapes = std::min(nbShapes, 50);
+    const CubicBezier b(startPoint, slurTieSeg->ups(Grip::BEZIER1).pos(), slurTieSeg->ups(Grip::BEZIER2).pos(),
+                        slurTieSeg->ups(Grip::END).pos());
+    for (int i = 1; i <= nbShapes; i++) {
+        double percent = pow(sin(0.5 * M_PI * (double(i) / double(nbShapes))), 2);
+        const PointF point = b.pointAtPercent(percent);
+        RectF re = RectF(startPoint, point).normalized();
+        double approxThicknessAtPercent = (1 - 2 * abs(0.5 - percent)) * midThickness;
+        if (re.height() < approxThicknessAtPercent) {
+            double adjust = (approxThicknessAtPercent - re.height()) * .5;
+            re.adjust(0.0, -adjust, 0.0, adjust);
+        }
+        shape.add(re, slurTieSeg);
+        startPoint = point;
+    }
+
+    slurTieSeg->mutldata()->setShape(shape);
 }
