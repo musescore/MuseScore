@@ -119,6 +119,7 @@ public:
     // ---
 
     const std::vector<ShapeElement>& elements() const { return m_elements; }
+    std::vector<ShapeElement>& elements() { return m_elements; }
 
     std::optional<ShapeElement> find_if(const std::function<bool(const ShapeElement&)>& func) const;
     std::optional<ShapeElement> find_first(ElementType type) const;

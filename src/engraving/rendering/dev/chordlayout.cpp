@@ -1135,19 +1135,23 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
         }
         Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos());
         Shape sShape = ss->shape().translate(ss->pos());
-        if (aShape.intersects(sShape)) {
-            double d = ctx.conf().styleS(Sid::articulationMinDistance).val() * item->spatium();
-            d += slur->up()
-                 ? std::max(aShape.minVerticalDistance(sShape), 0.0)
-                 : std::max(sShape.minVerticalDistance(aShape), 0.0);
-            d *= slur->up() ? -1 : 1;
+        double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
+        double vertClearance = a->up() ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
+        if (vertClearance < minDist) {
+            minDist += slur->up()
+                       ? std::max(aShape.minVerticalDistance(sShape), 0.0)
+                       : std::max(sShape.minVerticalDistance(aShape), 0.0);
+            minDist *= slur->up() ? -1 : 1;
             for (auto iter2 = iter; iter2 != item->articulations().end(); ++iter2) {
                 Articulation* aa = *iter2;
-                aa->mutldata()->moveY(d);
-                Shape aaShape = aa->shape().translated(aa->pos() + item->pos() + s->pos() + m->pos());
+                aa->mutldata()->moveY(minDist);
                 if (sstaff && aa->addToSkyline()) {
-                    sstaff->skyline().add(aaShape);
-                    s->staffShape(item->staffIdx()).add(aaShape);
+                    sstaff->skyline().add(aa->shape().translated(aa->pos() + item->pos() + s->pos() + m->pos()));
+                    for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
+                        if (sh.item() == aa) {
+                            sh.translate(0.0, minDist);
+                        }
+                    }
                 }
             }
         }
