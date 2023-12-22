@@ -2434,8 +2434,9 @@ void Score::deleteItem(EngravingItem* el)
                 return;
             }
         }
-        bool ic = k->segment()->next(SegmentType::ChordRest)->findAnnotation(ElementType::INSTRUMENT_CHANGE,
-                                                                             el->part()->startTrack(), el->part()->endTrack() - 1);
+        Segment* nextCrSeg = k->segment()->next1(SegmentType::ChordRest);
+        bool ic = nextCrSeg && nextCrSeg->findAnnotation(ElementType::INSTRUMENT_CHANGE,
+                                                         el->part()->startTrack(), el->part()->endTrack() - 1);
         undoRemoveElement(k);
         if (ic) {
             KeySigEvent ke = k->keySigEvent();
