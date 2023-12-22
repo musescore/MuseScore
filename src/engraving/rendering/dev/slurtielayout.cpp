@@ -304,30 +304,18 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
         }
     } else if (sst == SpannerSegmentType::END || sst == SpannerSegmentType::MIDDLE) {
         // beginning of system
-        ChordRest* firstCr = system->firstChordRest(item->track());
+        ChordRest* firstCr = system->firstChordRest(item->track2());
         double y = p1.y();
         if (firstCr && firstCr == item->endCR()) {
             constrainLeftAnchor = true;
         }
         if (firstCr && firstCr->isChord()) {
             Chord* chord = toChord(firstCr);
-            if (chord) {
-                // if both up or both down, deal with avoiding stems and beams
-                Note* upNote = chord->upNote();
-                Note* downNote = chord->downNote();
-                // account for only the stem length that is above the top note (or below the bottom note)
-                double stemLength = chord->stem() ? chord->stem()->length() - (downNote->pos().y() - upNote->pos().y()) : 0.0;
-                if (item->up()) {
-                    y = chord->upNote()->pos().y() - (chord->upNote()->height() / 2);
-                    if (chord->up() && chord->stem() && firstCr != item->endCR()) {
-                        y -= stemLength;
-                    }
-                } else {
-                    y = chord->downNote()->pos().y() + (chord->downNote()->height() / 2);
-                    if (!chord->up() && chord->stem() && firstCr != item->endCR()) {
-                        y += stemLength;
-                    }
-                }
+            Shape chordShape = chord->shape();
+            chordShape.removeTypes({ ElementType::ACCIDENTAL });
+            y = item->up() ? chordShape.top() : chordShape.bottom();
+            bool isAboveStem = chord->stem() && chord->up() == item->up();
+            if (!isAboveStem) {
                 y += continuedSlurOffsetY * (item->up() ? -1 : 1);
             }
         }
@@ -404,22 +392,11 @@ SpannerSegment* SlurTieLayout::layoutSystem(Slur* item, System* system, LayoutCo
             y += 0.25 * item->spatium() * (item->up() ? -1 : 1);
         } else if (lastCr && lastCr->isChord()) {
             Chord* chord = toChord(lastCr);
-            if (chord) {
-                Note* upNote = chord->upNote();
-                Note* downNote = chord->downNote();
-                // account for only the stem length that is above the top note (or below the bottom note)
-                double stemLength = chord->stem() ? chord->stem()->length() - (downNote->pos().y() - upNote->pos().y()) : 0.0;
-                if (item->up()) {
-                    y = chord->upNote()->pos().y() - (chord->upNote()->height() / 2);
-                    if (chord->up() && chord->stem()) {
-                        y -= stemLength;
-                    }
-                } else {
-                    y = chord->downNote()->pos().y() + (chord->downNote()->height() / 2);
-                    if (!chord->up() && chord->stem()) {
-                        y += stemLength;
-                    }
-                }
+            Shape chordShape = chord->shape();
+            chordShape.removeTypes({ ElementType::ACCIDENTAL });
+            y = item->up() ? chordShape.top() : chordShape.bottom();
+            bool isAboveStem = chord->stem() && chord->up() == item->up();
+            if (!isAboveStem) {
                 y += continuedSlurOffsetY * (item->up() ? -1 : 1);
             }
             double diff = item->up() ? y - p1.y() : p1.y() - y;
