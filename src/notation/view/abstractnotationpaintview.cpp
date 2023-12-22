@@ -272,6 +272,10 @@ void AbstractNotationPaintView::onLoadNotation(INotationPtr)
         updateLoopMarkers();
     });
 
+    m_notation->viewModeChanged().onNotify(this, [this]() {
+        updateLoopMarkers();
+    });
+
     if (isMainView()) {
         connect(this, &QQuickPaintedItem::focusChanged, this, [this](bool focused) {
             if (notation()) {
