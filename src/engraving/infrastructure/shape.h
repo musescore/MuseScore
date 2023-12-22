@@ -125,6 +125,7 @@ public:
     std::optional<ShapeElement> get_first() const;
 
     void removeInvisibles();
+    void removeTypes(const std::set<ElementType>& types);
 
     void addHorizontalSpacing(EngravingItem* item, double left, double right);
 
