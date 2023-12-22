@@ -126,7 +126,7 @@ void ChordArticulationsRenderer::renderNote(const Chord* chord, const Note* note
     NoteArticulationsParser::buildNoteArticulationMap(note, ctx, noteCtx.chordCtx.commonArticulations);
 
     if (note->tieFor()) {
-        noteCtx.duration = tiedNotesTotalDuration(note->score(), note, noteCtx.duration);
+        noteCtx.duration = tiedNotesTotalDuration(note->score(), note, noteCtx.duration, ctx.positionTickOffset);
         applySwingToNoteCtx(noteCtx);
         result.emplace_back(buildNoteEvent(std::move(noteCtx)));
         return;

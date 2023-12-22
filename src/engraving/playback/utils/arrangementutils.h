@@ -77,7 +77,8 @@ inline mpe::duration_t durationFromTempoAndTicks(const double beatsPerSecond, co
     return (beatsNumber / beatsPerSecond) * 1000000;
 }
 
-inline mpe::duration_t tiedNotesTotalDuration(const Score* score, const Note* firstNote, mpe::duration_t firstNoteDuration)
+inline mpe::duration_t tiedNotesTotalDuration(const Score* score, const Note* firstNote, mpe::duration_t firstNoteDuration,
+                                              const int tickPositionOffset)
 {
     //! NOTE: calculate the duration from the 2nd note, since the duration of the 1st note is already known
     const Note* secondNote = firstNote->tieFor()->endNote();
@@ -93,7 +94,7 @@ inline mpe::duration_t tiedNotesTotalDuration(const Score* score, const Note* fi
                   ? lastNote->tick().ticks() + lastNote->chord()->actualTicks().ticks()
                   : startTick + secondNote->chord()->actualTicks().ticks();
 
-    return firstNoteDuration + durationFromStartAndEndTick(score, startTick, endTick);
+    return firstNoteDuration + durationFromStartAndEndTick(score, startTick + tickPositionOffset, endTick + tickPositionOffset);
 }
 
 static constexpr int CROTCHET_TICKS = Constants::DIVISION;
