@@ -162,8 +162,9 @@ static void clearMeasures(mu::engraving::MasterScore* masterScore)
         }
 
         auto spanners = score->spanner();
-        for(auto spanner = spanners.begin(); spanner != spanners.end(); spanner = ++spanner)
+        for (auto spanner = spanners.begin(); spanner != spanners.end(); spanner = ++spanner) {
             score->removeSpanner(spanner->second);
+        }
 
         measures->clear();
     }
