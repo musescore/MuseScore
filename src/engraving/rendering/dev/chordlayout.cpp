@@ -739,6 +739,9 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     if (keepArticsTogether) {
         // find out how many close-to-note artics there are, and whether there is a staff-anchored artic to align to
         for (Articulation* a : item->articulations()) {
+            if (!a->visible()) {
+                continue;
+            }
             if (a->layoutCloseToNote()) {
                 ++numCloseArtics;
             } else {
@@ -759,7 +762,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     //    place tenuto and staccato
     //
 
-    Articulation* prevArticulation = nullptr;
+    Articulation* prevVisibleArticulation = nullptr;
     for (Articulation* a : item->articulations()) {
         if (item->measure()->hasVoices(a->staffIdx(), item->tick(), item->actualTicks()) && a->anchor() == ArticulationAnchor::AUTO) {
             a->setUp(item->up());         // if there are voices place articulation at stem
@@ -844,7 +847,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 int line = std::max(item->downLine(), -1);
                 bool adjustArtic = (a->up() && hasStaffArticsUp) || (!a->up() && hasStaffArticsDown);
                 if (keepArticsTogether && adjustArtic && numCloseArtics > 0) {
-                    line = std::max(line, lines - (3 + ((numCloseArtics - 1) * 2)));
+                    line = std::max(line, lines - (1 + (numCloseArtics * 2)));
                 }
                 if (line < lines - 1) {
                     y = ((line & ~1) + 3) * _lineDist;
@@ -853,12 +856,12 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = item->downPos() + 0.5 * item->downNote()->headHeight() + headSideDistance;
                 }
             }
-            if (prevArticulation && (prevArticulation->up() == a->up())) {
+            if (prevVisibleArticulation && (prevVisibleArticulation->up() == a->up())) {
                 int staffBottom = (staffType->lines() - 2) * 2;
                 if ((headSide && item->downLine() < staffBottom) || (!headSide && !RealIsEqualOrMore(y, (staffBottom + 1) * _lineDist))) {
                     y += _spatium;
                 } else {
-                    y += prevArticulation->height() + minDist;
+                    y += prevVisibleArticulation->height() + minDist;
                 }
             }
             // center symbol
@@ -899,7 +902,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                 int line = std::min(item->upLine(), lines + 1);
                 bool adjustArtic = (a->up() && hasStaffArticsUp) || (!a->up() && hasStaffArticsDown);
                 if (keepArticsTogether && adjustArtic && numCloseArtics > 0) {
-                    line = std::min(line, 3 + ((numCloseArtics - 1) * 2));
+                    line = std::min(line, 1 + (numCloseArtics * 2));
                 }
                 if (line > 1) {
                     y = (((line + 1) & ~1) - 3) * _lineDist;
@@ -908,16 +911,18 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     y = item->upPos() - 0.5 * item->downNote()->headHeight() - headSideDistance;
                 }
             }
-            if (prevArticulation && (prevArticulation->up() == a->up())) {
+            if (prevVisibleArticulation && (prevVisibleArticulation->up() == a->up())) {
                 if ((headSide && item->upLine() > 2) || (!headSide && !RealIsEqualOrLess(y, 0.0))) {
                     y -= item->spatium();
                 } else {
-                    y -= prevArticulation->height() + minDist;
+                    y -= prevVisibleArticulation->height() + minDist;
                 }
             }
         }
         a->setPos(x, y);
-        prevArticulation = a;
+        if (a->visible()) {
+            prevVisibleArticulation = a;
+        }
 //            measure()->system()->staff(a->staffIdx())->skyline().add(a->shape().translated(a->pos() + segment()->pos() + measure()->pos()));
     }
 }
