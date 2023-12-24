@@ -20390,7 +20390,7 @@ pickup measure</source>
     </message>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="56"/>
-        <source>Synchronise with main score</source>
+        <source>Synchronize with main score</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -20406,11 +20406,6 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/qml/MuseScore/Inspector/parts/PartsSettings.qml" line="111"/>
         <source>Exclude from parts</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
-        <source>Score and part synchronisation</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -20436,6 +20431,11 @@ pickup measure</source>
     <message>
         <location filename="../../src/inspector/view/widgets/bendgridcanvas.cpp" line="819"/>
         <source>Time: %2, value: %3</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../../src/inspector/models/parts/partssettingsmodel.cpp" line="33"/>
+        <source>Score and part synchronization</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
