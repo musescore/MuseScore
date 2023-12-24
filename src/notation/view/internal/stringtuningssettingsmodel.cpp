@@ -269,9 +269,12 @@ QVariantList StringTuningsSettingsModel::numbersOfStrings() const
     }
 
     for (const StringTuningsInfo& stringTuning : stringTunings.at(m_itemId)) {
+        // `lupdate` does not detect the translatable string when the static_cast is in the same line as `qtrc`
+        int number = static_cast<int>(stringTuning.number);
+
         QVariantMap stringNumberMap;
-        stringNumberMap.insert("text", qtrc("notation", "%n string(s)", nullptr, static_cast<int>(stringTuning.number)));
-        stringNumberMap.insert("value", static_cast<int>(stringTuning.number));
+        stringNumberMap.insert("text", qtrc("notation", "%n string(s)", nullptr, number));
+        stringNumberMap.insert("value", number);
         numbersList << stringNumberMap;
     }
 
