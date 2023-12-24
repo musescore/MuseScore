@@ -371,6 +371,27 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
             if (pedContText != "") {
                 set(Sid::pedalText, pedContText);
             }
+        } else if ((tag == "slurEndWidth"
+                    || tag == "slurMidWidth"
+                    || tag == "slurDottedWidth"
+                    || tag == "slurMinDistance")
+                   && m_version < 430) {
+            // Pre-4.3 scores used identical style values for slurs and ties.
+            // When opening older scores, use the same values for both.
+            double _val = e.readDouble();
+            if (tag == "slurEndWidth") {
+                set(Sid::TieEndWidth,     Spatium(_val));
+                set(Sid::SlurEndWidth,    Spatium(_val));
+            } else if (tag == "slurMidWidth") {
+                set(Sid::TieMidWidth,     Spatium(_val));
+                set(Sid::SlurMidWidth,    Spatium(_val));
+            } else if (tag == "slurDottedWidth") {
+                set(Sid::TieDottedWidth,  Spatium(_val));
+                set(Sid::SlurDottedWidth, Spatium(_val));
+            } else if (tag == "slurMinDistance") {
+                set(Sid::TieMinDistance,  Spatium(_val));
+                set(Sid::SlurMinDistance, Spatium(_val));
+            }
         } else if (!readProperties(e)) {
             e.unknown();
         }
