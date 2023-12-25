@@ -261,7 +261,7 @@ void PartListModel::setPartTitle(int partIndex, const QString& title)
         return;
     }
 
-    excerpt->setName(title);
+    excerpt->undoSetName(title);
     notifyAboutNotationChanged(partIndex);
 }
 
