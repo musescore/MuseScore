@@ -169,6 +169,9 @@ jobs:
         bash ./build/ci/macos/setup.sh  
     - name: Generate _en.ts files
       if: env.DO_BUILD == 'true'
+      env:
+        LUPDATE_ARGS: ""
+        POSTPROCESS_ARGS: "--warn-only ${{ env.DO_PLACEHOLDER_TRANSLATIONS == 'true' && '--generate-placeholder-translations' || '' }}"
       run: |
         bash ./build/ci/translation/run_lupdate.sh
     - name: Update .ts files
@@ -176,10 +179,6 @@ jobs:
       run: |
         bash ./build/ci/translation/tx_install.sh -t ${{ secrets.TRANSIFEX_API_TOKEN }} -s macos
         bash ./build/ci/translation/tx_pull.sh
-    - name: Generate placeholder.ts files
-      if: env.DO_PLACEHOLDER_TRANSLATIONS == 'true'
-      run: |
-        python3 ./tools/translations/placeholder_translations.py --warn-only
     - name: Build
       if: env.DO_BUILD == 'true'    
       run: |
