@@ -12,10 +12,10 @@
 # This enables developers to see which strings have been correctly marked for
 # translation without having to wait for a proper translation to be made.
 #
-# Steps:
+# Steps for generating placeholder translations:
 #   1. Add Qt's bin folder to $PATH
-#   2. Call run_lupdate.sh
-#   3. Run this script
+#   2. Set POSTPROCESS_ARGS to "--generate-placeholder-translations"
+#   3. Call run_lupdate.sh
 #   4. Call run_lrelease.sh
 #   5. Compile & run MuseScore
 #   6. In Preferences > General, set language to «Placeholder translations»
