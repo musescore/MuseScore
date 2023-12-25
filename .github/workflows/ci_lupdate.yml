@@ -67,7 +67,7 @@ jobs:
         sudo bash ./build/ci/translation/qt_install.sh 
     - name: Run lupdate
       run: |
-        sudo bash ./build/ci/translation/run_lupdate.sh ${{ env.LUPDATE_ARGS }}
+        sudo bash ./build/ci/translation/run_lupdate.sh
     - name: Publish to Transifex
       if: env.DO_PUBLISH == 'true'
       run: |
@@ -79,7 +79,7 @@ jobs:
       with: 
         token: ${{ secrets.GITHUB_TOKEN }}
         commit-message: "Run lupdate"
-        branch: "ci_run_lupdate"
+        branch: "${{github.ref_name && format('{0}_', github.ref_name) || ''}}ci_run_lupdate"
         add-paths: share/locale/*
         title: "Update in-repo translation source files"
         body: "Run `lupdate` with arguments `${{ env.LUPDATE_ARGS }}`"
