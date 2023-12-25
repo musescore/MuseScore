@@ -24,6 +24,7 @@
 
 #include "engraving/dom/excerpt.h"
 #include "engraving/dom/text.h"
+#include "engraving/dom/undo.h"
 
 #include "log.h"
 
@@ -127,6 +128,25 @@ void ExcerptNotation::setName(const QString& name)
     if (changed) {
         notifyAboutNotationChanged();
     }
+}
+
+void ExcerptNotation::undoSetName(const QString& name)
+{
+    if (name == this->name()) {
+        return;
+    }
+
+    if (!score()) {
+        setName(name);
+        return;
+    }
+
+    undoStack()->prepareChanges();
+
+    score()->undo(new engraving::ChangeExcerptTitle(m_excerpt, name));
+
+    undoStack()->commitChanges();
+    notifyAboutNotationChanged();
 }
 
 mu::async::Notification ExcerptNotation::nameChanged() const
