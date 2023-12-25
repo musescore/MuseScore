@@ -23,6 +23,8 @@
 # - use the LUPDATE_ARGS environment variable to specify arguments for `lupdate`
 # - use the POSTPROCESS_ARGS environment variable to specify arugments for the postprocessing script
 
+set -eo pipefail
+
 cd "${BASH_SOURCE%/*}/../.." # go to repository root
 
 if [[ "$LUPDATE_ARGS" = *"-no-obsolete"* ]]; then
@@ -48,13 +50,15 @@ DEFAULT_LUPDATE_ARGS=(
     -extensions cpp,h,mm,ui,qml,js
 )
 
+indent() { sed 's/^/    /'; }
+
 # We only need to update one ts file per "resource", that will be sent to Transifex.
 # We get .ts files for other languages from Transifex.
 
 # musescore
 echo "MuseScore:"
 echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${SRC_DIR}" -ts "${TS_FILE}"
-"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${SRC_DIR}" -ts "${TS_FILE}"
+"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${SRC_DIR}" -ts "${TS_FILE}" | indent
 
 echo ""
 
@@ -65,7 +69,7 @@ DEFAULT_LUPDATE_ARGS=()
 
 echo "Instruments:"
 echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
-"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
+"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${FAKE_HEADER_FILE}" -ts "${TS_FILE}" | indent
 
 echo ""
 
@@ -74,4 +78,4 @@ echo "Postprocessing:"
 POSTPROCESS="tools/translations/process_source_ts_files.py"
 
 echo "Running" "${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}"
-"${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}"
+"${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}" | indent
