@@ -33,10 +33,6 @@ else
     echo "Note: preserving obsolete strings (set LUPDATE_ARGS to \"-no-obsolete\" to clean them up)"
 fi
 
-if [ -z "$LUPDATE_ARGS" ]; then
-    LUPDATE_ARGS=()
-fi
-
 LUPDATE=lupdate
 SRC_DIR=src
 TS_FILE=share/locale/musescore_en.ts
@@ -57,8 +53,8 @@ indent() { sed 's/^/    /'; }
 
 # musescore
 echo "MuseScore:"
-echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${SRC_DIR}" -ts "${TS_FILE}"
-"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${SRC_DIR}" -ts "${TS_FILE}" | indent
+echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${SRC_DIR}" -ts "${TS_FILE}"
+"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${SRC_DIR}" -ts "${TS_FILE}" | indent
 
 echo ""
 
@@ -68,8 +64,8 @@ TS_FILE=share/locale/instruments_en.ts
 DEFAULT_LUPDATE_ARGS=()
 
 echo "Instruments:"
-echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
-"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" "${LUPDATE_ARGS[@]}" "${FAKE_HEADER_FILE}" -ts "${TS_FILE}" | indent
+echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
+"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${FAKE_HEADER_FILE}" -ts "${TS_FILE}" | indent
 
 echo ""
 
@@ -77,5 +73,5 @@ echo "Postprocessing:"
 
 POSTPROCESS="tools/translations/process_source_ts_files.py"
 
-echo "Running" $POSTPROCESS_LAUNCHER "${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}"
-$POSTPROCESS_LAUNCHER "${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}" | indent
+echo "Running" $POSTPROCESS_LAUNCHER "${POSTPROCESS}" ${POSTPROCESS_ARGS}
+$POSTPROCESS_LAUNCHER "${POSTPROCESS}" ${POSTPROCESS_ARGS} | indent
