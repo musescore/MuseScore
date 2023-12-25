@@ -77,5 +77,5 @@ echo "Postprocessing:"
 
 POSTPROCESS="tools/translations/process_source_ts_files.py"
 
-echo "Running" "${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}"
-"${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}" | indent
+echo "Running" $POSTPROCESS_LAUNCHER "${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}"
+$POSTPROCESS_LAUNCHER "${POSTPROCESS}" "${POSTPROCESS_ARGS[@]}" | indent
