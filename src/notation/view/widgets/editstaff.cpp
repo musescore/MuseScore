@@ -460,7 +460,16 @@ void EditStaff::initStaff()
     const EngravingItem* element = context.element;
     Staff* staff = context.staff;
 
-    if (!element) {
+    if (interaction && !element) {
+        INotationSelectionPtr selection = interaction->selection();
+        if (selection->isRange()) {
+            INotationSelectionRangePtr range = selection->range();
+            element = range->measureRange().endMeasure;
+            staff = element->score()->staff(range->endStaffIndex() - 1);
+        }
+    }
+
+    IF_ASSERT_FAILED(element) {
         return;
     }
 
@@ -479,6 +488,10 @@ void EditStaff::initStaff()
         if (measure) {
             tick = measure->tick();
         }
+    }
+
+    IF_ASSERT_FAILED(staff) {
+        return;
     }
 
     setStaff(staff, tick);
