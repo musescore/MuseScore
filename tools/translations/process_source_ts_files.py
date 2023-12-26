@@ -178,8 +178,6 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
         placeholder_translations_ts = placeholder_translations_lang + '.ts'
         placeholder_translations_file = source_file[:-len(source_ts)] + placeholder_translations_ts
 
-        eprint("Writing placeholder translations to " + placeholder_translations_file)
-
         root.set('language', placeholder_translations_lang)
 
         for message in root.findall('.//message'):
@@ -202,6 +200,9 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
                     plural.text = 'ᵗʳ' + superscript_numbers[idx] + tr_txt
             else:
                 translation.text = 'ᵗʳ' + tr_txt
+
+        eprint("Writing placeholder translations to " + placeholder_translations_file)
+        write_ts_file(placeholder_translations_file, root)
 
 if num_errors == 0:
     eprint(f'{sys.argv[0]}: Success!')
