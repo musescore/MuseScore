@@ -127,6 +127,7 @@ public:
             int32_t string = INVALID_STRING;
             staff_idx_t staffIdx = 0;
             MidiInstrumentEffect effect = MidiInstrumentEffect::NONE;
+            bool harmony = false;
 
             bool operator<(const LookupData& other) const;
         };
@@ -137,6 +138,12 @@ public:
         uint32_t getChannel(uint32_t instrumentChannel, const LookupData& lookupData);
     };
 
+    enum HarmonyChannelSetting {
+        DISABLED = -1, // harmony chords should not be played
+        DEFAULT = 0,   // harmony chords' channels are setup in default way
+        LOOKUP         // harmony chords' channels are setup in specific way
+    };
+
     struct Context
     {
         int sndController = CTRL_BREATH;
@@ -145,6 +152,8 @@ public:
 
         bool eachStringHasChannel = false; //!to better display the guitar instrument, each string has its own channel
         bool instrumentsHaveEffects = false; //!when effect is applied, new channel should be used
+
+        HarmonyChannelSetting harmonyChannelSetting = HarmonyChannelSetting::DEFAULT;
     };
 
     explicit CompatMidiRendererInternal(Score* s);
