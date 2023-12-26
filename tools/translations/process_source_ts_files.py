@@ -119,9 +119,9 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
         bytes = source.findall('byte')
         if bytes:
             values = ', '.join([ f"'{b.get('value')}'" for b in bytes ])
-            tr_error(message, f'Translatable string contains illegal byte(s): {values}.',
-                'Remove the illegal bytes or provide them in a non-translatable string.')
-            continue
+            if tr_error(message, f'Translatable string contains illegal byte(s): {values}.',
+                'Remove the illegal bytes or provide them in a non-translatable string.'):
+                continue
 
         # use the source as basis for the translation
         tr_txt = source.text
@@ -129,22 +129,21 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
         if not tr_txt:
             # Sadly, this test only works for empty strings in QML files. If a translated
             # string is empty in a C++ file then lupdate doesn't include it in the TS file.
-            tr_error(message, 'Translatable string is empty.',
-                'Provide a non-empty string or use "" untranslated if it really needs to be empty.')
-            continue
+            if tr_error(message, 'Translatable string is empty.',
+                'Provide a non-empty string or use "" untranslated if it really needs to be empty.'):
+                continue
 
         tr_stripped = tr_txt.strip()
 
         if not tr_stripped:
-            tr_error(message, 'Translatable string only contains whitespace characters.',
-                'Include non-whitespace characters or provide the whitepace as untranslated text.')
-            continue
+            if tr_error(message, 'Translatable string only contains whitespace characters.',
+                'Include non-whitespace characters or provide the whitepace as untranslated text.'):
+                continue
 
         if tr_txt != tr_stripped:
             tr_error(message, 'Translatable string contains leading and/or trailing whitespace.',
                 'Remove the whitepace or provide it separately as non-translatable text.',
                 'Use .arg() and %1 tags if you need to insert text or numbers into a translatable string.')
-            continue
 
         if '  ' in tr_txt:
             tr_error(message, "Translatable string contains consecutive space characters (  ).",
@@ -157,19 +156,16 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
         if "'" in tr_txt:
             tr_error(message, "Translatable string contains the straight single quote mark (').",
                 'Use left (‘) or right (’) curly single quote mark, or prime (′).')
-            continue
 
         if '"' in re.sub(r'<a href="[^"]*">', '', tr_txt):
             tr_error(message, 'Translatable string contains the straight double quote mark (").',
                 'Use left (“) or right (”) curly double quote mark, or double prime (″).')
-            continue
 
         if plurals:
             for idx, plural in enumerate(plurals):
                 plural.text = tr_txt
         else:
             translation.text = tr_txt
-
 
     eprint("Filling " + source_file + " with translations by copying source texts")
     write_ts_file(source_file, root)
