@@ -91,7 +91,7 @@ StyledDialogView {
             ButtonBox {
                 id: buttonBox
 
-                Layout.fillWidth: true
+                Layout.preferredWidth: implicitWidth
 
                 buttons: [ ButtonBoxModel.Cancel ]
 
