@@ -52,14 +52,14 @@ void BeamTremoloLayout::setupLData(BeamTremoloLayout* info, EngravingItem* e)
         // right now only beams and trems are supported
         return;
     } else if (e->isBeam()) {
-        m_beamType = BeamType::BEAM;
-        m_beam = toBeam(e);
-        m_up = toBeam(e)->up();
-        m_trem = nullptr; // there can be many different trems in a beam, they will all be checked
-        isGrace = m_beam->elements().front()->isGrace();
+        info->m_beamType = BeamType::BEAM;
+        info->m_beam = toBeam(e);
+        info->m_up = toBeam(e)->up();
+        info->m_trem = nullptr; // there can be many different trems in a beam, they will all be checked
+        isGrace = info->m_beam->elements().front()->isGrace();
     } else {
-        m_trem = item_cast<TremoloTwoChord*>(e);
-        m_beamType = BeamType::TREMOLO;
+        info->m_trem = item_cast<TremoloTwoChord*>(e);
+        info->m_beamType = BeamType::TREMOLO;
         // check to see if there is a beam happening during this trem
         // if so, it needs to be taken into account in trem placement
         if (info->m_trem->chord1()->beam() && info->m_trem->chord1()->beam() == info->m_trem->chord2()->beam()) {
@@ -456,9 +456,9 @@ int BeamTremoloLayout::strokeCount(const BeamTremoloLayout* info, ChordRest* cr)
     }
     int strokes = 0;
     Chord* c = toChord(cr);
-    if (m_beamType == BeamType::TREMOLO) {
-        strokes = m_trem->lines();
-    } else if (m_beamType == BeamType::BEAM && c->tremoloTwoChord()) {
+    if (info->m_beamType == BeamType::TREMOLO) {
+        strokes = info->m_trem->lines();
+    } else if (info->m_beamType == BeamType::BEAM && c->tremoloTwoChord()) {
         strokes = c->tremoloTwoChord()->lines();
     }
     strokes += info->m_beam ? cr->beams() : 0;
