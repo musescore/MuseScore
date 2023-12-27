@@ -3370,6 +3370,9 @@ static Err importScore(MasterScore* score, mu::io::IODevice* io, bool experiment
     }
 
     score->setUpTempoMap();
+    for (Part* p : score->parts()) {
+        p->updateHarmonyChannels(false);
+    }
 
     delete gp;
 

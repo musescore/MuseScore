@@ -643,14 +643,17 @@ static void collectProgramChanges(EventsHolder& events, Measure const* m, const 
 //    renderHarmony
 ///    renders chord symbols
 //---------------------------------------------------------
-static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, int tickOffset)
+static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, int tickOffset,
+                          const CompatMidiRendererInternal::Context& context)
 {
-    if (!h->isRealizable()) {
+    if (!h->isRealizable() || context.harmonyChannelSetting == CompatMidiRendererInternal::HarmonyChannelSetting::DISABLED) {
         return;
     }
+
     Staff* staff = m->score()->staff(h->track() / VOICES);
-    const InstrChannel* channel = staff->part()->harmonyChannel();
-    IF_ASSERT_FAILED(channel) {
+    const InstrChannel* instrChannel = staff->part()->harmonyChannel();
+    IF_ASSERT_FAILED(instrChannel) {
+        LOGE() << "channel for harmony isn't found for part " << staff->part()->partName();
         return;
     }
 
@@ -658,13 +661,21 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
         return;
     }
 
+    int channel = instrChannel->channel();
     int staffIdx = static_cast<int>(staff->idx());
+
+    if (context.harmonyChannelSetting == CompatMidiRendererInternal::HarmonyChannelSetting::LOOKUP) {
+        CompatMidiRendererInternal::ChannelLookup::LookupData lookupData;
+        lookupData.harmony = true;
+        channel = context.channels->getChannel(channel, lookupData);
+    }
+
     int velocity = staff->velocities().val(h->tick());
 
     RealizedHarmony r = h->getRealizedHarmony();
     std::vector<int> pitches = r.pitches();
 
-    NPlayEvent ev(ME_NOTEON, static_cast<uint8_t>(channel->channel()), 0, velocity);
+    NPlayEvent ev(ME_NOTEON, static_cast<uint8_t>(channel), 0, velocity);
     ev.setHarmony(h);
     Fraction duration = r.getActualDuration(h->tick().ticks() + tickOffset);
 
@@ -678,9 +689,9 @@ static void renderHarmony(EventsHolder& events, Measure const* m, Harmony* h, in
     for (int p : pitches) {
         ev.setPitch(p);
         ev.setVelo(velocity);
-        events[channel->channel()].insert(std::pair<int, NPlayEvent>(onTime, ev));
+        events[channel].insert(std::pair<int, NPlayEvent>(onTime, ev));
         ev.setVelo(0);
-        events[channel->channel()].insert(std::pair<int, NPlayEvent>(offTime, ev));
+        events[channel].insert(std::pair<int, NPlayEvent>(offTime, ev));
     }
 }
 
@@ -791,7 +802,7 @@ void CompatMidiRendererInternal::doCollectMeasureEvents(EventsHolder& events, Me
             if (!h || !h->play()) {
                 continue;
             }
-            renderHarmony(events, m, h, tickOffset);
+            renderHarmony(events, m, h, tickOffset, _context);
         }
 
         for (track_idx_t track = strack; track < etrack; ++track) {
@@ -1243,6 +1254,14 @@ uint32_t CompatMidiRendererInternal::ChannelLookup::getChannel(uint32_t instrume
 bool CompatMidiRendererInternal::ChannelLookup::LookupData::operator<(const CompatMidiRendererInternal::ChannelLookup::LookupData& other)
 const
 {
+    if (harmony && !other.harmony) {
+        return true;
+    }
+
+    if (!harmony && other.harmony) {
+        return false;
+    }
+
     return std::tie(string, staffIdx, effect) < std::tie(other.string, other.staffIdx, other.effect);
 }
 

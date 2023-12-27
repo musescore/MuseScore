@@ -233,6 +233,7 @@ bool ExportMidi::write(QIODevice* device, bool midiExpandRepeats, bool exportRPN
     CompatMidiRendererInternal::Context ctx;
     ctx.eachStringHasChannel = false;
     ctx.instrumentsHaveEffects = false;
+    ctx.harmonyChannelSetting = CompatMidiRendererInternal::HarmonyChannelSetting::DEFAULT;
     ctx.metronome = false;
     ctx.sndController = CompatMidiRender::getControllerForSnd(m_score, synthState.ccToUse());
 

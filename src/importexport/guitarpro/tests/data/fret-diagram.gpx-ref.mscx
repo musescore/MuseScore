@@ -73,6 +73,10 @@
           <program value="25"/>
           <controller ctrl="7" value="88"/>
           </Channel>
+        <Channel name="harmony">
+          <program value="0"/>
+          <controller ctrl="7" value="88"/>
+          </Channel>
         </Instrument>
       </Part>
     <Staff id="1">
