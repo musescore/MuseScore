@@ -1512,7 +1512,6 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
 
     switch (element->type()) {
     case ElementType::TEXT: {
-
         switch (toText(element)->textStyleType()) {
         case TextStyleType::SUBTITLE:
             return "subtitle";
