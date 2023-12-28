@@ -46,7 +46,9 @@ DEFAULT_LUPDATE_ARGS=(
     -extensions cpp,h,mm,ui,qml,js
 )
 
-indent() { sed 's/^/    /'; }
+run_indented() {
+    "$@" > >(sed 's/^/    /') 2> >(sed 's/^/    /' >&2)
+}
 
 # We only need to update one ts file per "resource", that will be sent to Transifex.
 # We get .ts files for other languages from Transifex.
@@ -54,7 +56,7 @@ indent() { sed 's/^/    /'; }
 # musescore
 echo "MuseScore:"
 echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${SRC_DIR}" -ts "${TS_FILE}"
-"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${SRC_DIR}" -ts "${TS_FILE}" | indent
+run_indented "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${SRC_DIR}" -ts "${TS_FILE}"
 
 echo ""
 
@@ -65,7 +67,7 @@ DEFAULT_LUPDATE_ARGS=()
 
 echo "Instruments:"
 echo "Running" "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
-"${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${FAKE_HEADER_FILE}" -ts "${TS_FILE}" | indent
+run_indented "${LUPDATE}" "${DEFAULT_LUPDATE_ARGS[@]}" ${LUPDATE_ARGS} "${FAKE_HEADER_FILE}" -ts "${TS_FILE}"
 
 echo ""
 
@@ -74,4 +76,4 @@ echo "Postprocessing:"
 POSTPROCESS="tools/translations/process_source_ts_files.py"
 
 echo "Running" $POSTPROCESS_LAUNCHER "${POSTPROCESS}" ${POSTPROCESS_ARGS}
-$POSTPROCESS_LAUNCHER "${POSTPROCESS}" ${POSTPROCESS_ARGS} | indent
+run_indented $POSTPROCESS_LAUNCHER "${POSTPROCESS}" ${POSTPROCESS_ARGS}
