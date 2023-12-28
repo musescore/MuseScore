@@ -50,8 +50,8 @@ public:
     // Layout Text 1
     void layoutText1(TextBase* item, bool base = false) override;
 
-    virtual void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF());
-    virtual void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF());
+    void computeBezier(TieSegment* tieSeg, PointF shoulderOffset = PointF()) override;
+    void computeBezier(SlurSegment* slurSeg, PointF shoulderOffset = PointF()) override;
 
 private:
     // Layout Single Item
