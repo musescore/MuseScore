@@ -51,7 +51,7 @@ Rectangle {
             ]
 
             delegate: FlatRadioButton {
-                width: 106
+                width: 107
                 height: 30
 
                 checked: modelData.value === tiePlacementSelector.placementSingleNotes.value
@@ -70,12 +70,13 @@ Rectangle {
 
         RadioButtonGroup {
             model: [
-                { iconCode: IconCode.TIE_CHORD_INSIDE, value: 1, title: qsTrc("inspector", "Inside") },
-                { iconCode: IconCode.TIE_CHORD_OUTSIDE, value: 2, title: qsTrc("inspector", "Outside") }
+                { iconCode: IconCode.TIE_CHORD_INSIDE,  value: 1, title: qsTrc("inspector", "Inside") },
+                { iconCode: IconCode.TIE_CHORD_OUTSIDE, value: 2, title: qsTrc("inspector", "Outside") },
+                { iconCode: IconCode.AUTO_TEXT,         value: 0, title: qsTrc("inspector", "Auto") }
             ]
 
             delegate: FlatRadioButton {
-                width: 106
+                width: 70
                 height: 30
 
                 checked: modelData.value === tiePlacementSelector.placementChords.value
