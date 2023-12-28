@@ -534,7 +534,7 @@ struct LoopBoundaries
 {
     int loopInTick = 0;
     int loopOutTick = 0;
-    bool visible = false;
+    bool enabled = false;
 
     bool isNull() const
     {
@@ -547,7 +547,7 @@ struct LoopBoundaries
 
         equals &= loopInTick == boundaries.loopInTick;
         equals &= loopOutTick == boundaries.loopOutTick;
-        equals &= visible == boundaries.visible;
+        equals &= enabled == boundaries.enabled;
 
         return equals;
     }

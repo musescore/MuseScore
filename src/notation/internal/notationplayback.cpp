@@ -153,7 +153,7 @@ void NotationPlayback::updateLoopBoundaries()
     LoopBoundaries newBoundaries;
     newBoundaries.loopInTick = score()->loopInTick().ticks();
     newBoundaries.loopOutTick = score()->loopOutTick().ticks();
-    newBoundaries.visible = m_loopBoundaries.visible;
+    newBoundaries.enabled = m_loopBoundaries.enabled;
 
     if (m_loopBoundaries != newBoundaries) {
         m_loopBoundaries = newBoundaries;
@@ -295,13 +295,13 @@ void NotationPlayback::addLoopOut(int _tick)
     score()->setLoopOutTick(tick);
 }
 
-void NotationPlayback::setLoopBoundariesVisible(bool visible)
+void NotationPlayback::setLoopBoundariesEnabled(bool enabled)
 {
-    if (m_loopBoundaries.visible == visible) {
+    if (m_loopBoundaries.enabled == enabled) {
         return;
     }
 
-    m_loopBoundaries.visible = visible;
+    m_loopBoundaries.enabled = enabled;
     m_loopBoundariesChanged.notify();
 }
 

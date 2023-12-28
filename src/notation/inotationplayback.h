@@ -68,7 +68,7 @@ public:
     };
 
     virtual void addLoopBoundary(LoopBoundaryType boundaryType, midi::tick_t tick) = 0;
-    virtual void setLoopBoundariesVisible(bool visible) = 0;
+    virtual void setLoopBoundariesEnabled(bool enabled) = 0;
     virtual const LoopBoundaries& loopBoundaries() const = 0;
     virtual async::Notification loopBoundariesChanged() const = 0;
 
