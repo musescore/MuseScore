@@ -10,32 +10,32 @@
 //  the file LICENSE.GPL
 //=============================================================================
 
-#include "config.h"
-#include "score.h"
-#include "xml.h"
-#include "element.h"
-#include "measure.h"
-#include "segment.h"
-#include "slur.h"
-#include "chordrest.h"
-#include "chord.h"
-#include "tuplet.h"
+#include "audio.h"
+#include "barline.h"
 #include "beam.h"
+#include "chordrest.h"
+#include "clef.h"
+#include "config.h"
+#include "element.h"
+#include "excerpt.h"
+#include "imageStore.h"
+#include "keysig.h"
+#include "mscore.h"
+#include "measure.h"
 #include "revisions.h"
 #include "page.h"
 #include "part.h"
-#include "staff.h"
-#include "system.h"
-#include "keysig.h"
-#include "clef.h"
-#include "text.h"
-#include "ottava.h"
-#include "volta.h"
-#include "excerpt.h"
-#include "mscore.h"
-#include "stafftype.h"
-#include "sym.h"
+#include "score.h"
 #include "scoreOrder.h"
+#include "segment.h"
+#include "sig.h"
+#include "staff.h"
+#include "stafftype.h"
+#include "system.h"
+#include "tuplet.h"
+#include "undo.h"
+#include "volta.h"
+#include "xml.h"
 
 #include "mscore/preferences.h"
 
@@ -48,11 +48,6 @@
 #include "avsomr/msmrwriter.h"
 #endif
 
-#include "sig.h"
-#include "undo.h"
-#include "imageStore.h"
-#include "audio.h"
-#include "barline.h"
 #include "thirdparty/qzip/qzipreader_p.h"
 #include "thirdparty/qzip/qzipwriter_p.h"
 #ifdef Q_OS_WIN
@@ -861,23 +856,28 @@ Score::FileError MasterScore::loadCompressedMsc(QIODevice* io, bool ignoreVersio
                   }
             }
 
-      XmlReader e(dbuf);
-      e.setDocName(masterScore()->fileInfo()->completeBaseName());
-
       QByteArray sbuf = uz.fileData("score_style.mss"); // exists in Mu4 scores only
       if (!sbuf.isEmpty() && ignoreVersionError) { // needs to be read before the actual score
             XmlReader el(sbuf);
             while (el.readNextStartElement()) {
                   if (el.name() == "museScore") {
+                        QString version = el.attribute("version");
+                        QStringList sl  = version.split('.');
+                        int mscVersion  = sl[0].toInt() * 100 + sl[1].toInt();
+
                         while (el.readNextStartElement()) {
-                              if (el.name() == "Style")
-                                    masterScore()->style().load(el, true);
-                              else
-                                    el.unknown();
+                              if (el.name() == "Style") { // should be the next element after "museScore"
+                                    masterScore()->style().load(el, mscVersion);
+                                    break; // no need to read any further
+                                    }
+                              el.unknown();
                               }
                         }
                   }
             }
+
+      XmlReader e(dbuf);
+      e.setDocName(masterScore()->fileInfo()->completeBaseName());
 
       FileError retval = read1(e, ignoreVersionError);
 

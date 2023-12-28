@@ -280,6 +280,8 @@ void Clef::read(XmlReader& e)
                   _showCourtesy = e.readInt();
             else if (tag == "forInstrumentChange")
                   _forInstrumentChange = e.readBool();
+            else if (tag == "isHeader")   // Mu4.2+ compatibility
+                  e.skipCurrentElement(); // skip, don't log
             else if (!Element::readProperties(e))
                   e.unknown();
             }

@@ -107,13 +107,13 @@ bool Score::read(XmlReader& e)
                   _showFrames = e.readInt();
             else if (tag == "showMargins")
                   _showPageborders = e.readInt();
-            else if (tag == "open") // + Mu4 compat
-                  e.skipCurrentElement(); // irgnore, even in Mu4 it doesn't seem to have any usefull meaning
+            else if (tag == "open")       // Mu4 compatibility
+                  e.skipCurrentElement(); // skip, don't log
             else if (tag == "markIrregularMeasures")
                   _markIrregularMeasures = e.readInt();
             else if (tag == "Style") {
                   qreal sp = style().value(Sid::spatium).toDouble();
-                  style().load(e);
+                  style().load(e, MSCVERSION);
                   // if (_layoutMode == LayoutMode::FLOAT || _layoutMode == LayoutMode::SYSTEM) {
                   if (_layoutMode == LayoutMode::FLOAT) {
                         // style should not change spatium in
