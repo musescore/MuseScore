@@ -1511,49 +1511,49 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
     }
 
     switch (element->type()) {
-        case ElementType::TEXT: {
-            switch (toText(element)->textStyleType()) {
-                case TextStyleType::SUBTITLE:
-                    return "subtitle";
+    case ElementType::TEXT: {
+        switch (toText(element)->textStyleType()) {
+        case TextStyleType::SUBTITLE:
+            return "subtitle";
 
-                case TextStyleType::COMPOSER:
-                    return "composer";
+        case TextStyleType::COMPOSER:
+            return "composer";
 
-                case TextStyleType::LYRICIST:
-                    return "poet";
+        case TextStyleType::LYRICIST:
+            return "poet";
 
-                case TextStyleType::TRANSLATOR:
-                    return "translator";
+        case TextStyleType::TRANSLATOR:
+            return "translator";
 
-                case TextStyleType::FRAME:
-                    return "frame";
+        case TextStyleType::FRAME:
+            return "frame";
 
-                case TextStyleType::HEADER:
-                    return "header";
+        case TextStyleType::HEADER:
+            return "header";
 
-                case TextStyleType::FOOTER:
-                    return "footer";
-
-                default: return "title";    
-            }
-        }
-
-        case ElementType::INSTRUMENT_NAME: {
-            const mu::engraving::InstrumentName* instruName = toInstrumentName(element);
-
-            IF_ASSERT_FAILED(instruName) {
-                return QString();
-            }
-
-            switch (instruName->instrumentNameType()) {
-                case InstrumentNameType::SHORT:
-                    return "instrument-name-short";
-
-                default: return "instrument-name-long";
-            }
-        }
+        case TextStyleType::FOOTER:
+            return "footer";
 
         default: return "title";
+        }
+    }
+
+    case ElementType::INSTRUMENT_NAME: {
+        const mu::engraving::InstrumentName* instruName = toInstrumentName(element);
+
+        IF_ASSERT_FAILED(instruName) {
+            return QString();
+        }
+
+        switch (instruName->instrumentNameType()) {
+        case InstrumentNameType::SHORT:
+            return "instrument-name-short";
+
+        default: return "instrument-name-long";
+        }
+    }
+
+    default: return "title";
     }
 }
 
