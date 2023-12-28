@@ -1533,14 +1533,14 @@ QString EditStyle::subPageCodeForElement(const EngravingItem* element)
             return "header";
 
         case TextStyleType::FOOTER:
-            return "footere";
+            return "footer";
 
         default: return "title";    
         }
     }
 
     case ElementType::INSTRUMENT_NAME: {
-        const mu::engraving::InstrumentName *instruName = toInstrumentName(element);
+        const mu::engraving::InstrumentName* instruName = toInstrumentName(element);
 
         IF_ASSERT_FAILED(instruName) {
             return QString();
