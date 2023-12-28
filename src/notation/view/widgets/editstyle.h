@@ -56,6 +56,7 @@ public:
     QString currentSubPageCode() const;
 
     static QString pageCodeForElement(const EngravingItem*);
+    static QString subPageCodeForElement(const EngravingItem *);
 
 public slots:
     void accept();
