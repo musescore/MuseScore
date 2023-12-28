@@ -7,7 +7,7 @@
 #include "dom/tremolosinglechord.h"
 
 namespace mu::engraving::rendering::stable {
-TremoloDispatcher* tremoloDispatcher(Chord* c)
+inline TremoloDispatcher* tremoloDispatcher(Chord* c)
 {
     if (!c) {
         return nullptr;
