@@ -23,25 +23,26 @@
 
 #include <cmath>
 
-#include "log.h"
-
 #include "engraving/dom/chordrest.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/instrument.h"
+#include "engraving/dom/linkedobjects.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/measure.h"
 #include "engraving/dom/page.h"
 #include "engraving/dom/part.h"
 #include "engraving/dom/repeatlist.h"
 #include "engraving/dom/segment.h"
+#include "engraving/dom/soundflag.h"
 #include "engraving/dom/staff.h"
-#include "engraving/dom/system.h"
+#include "engraving/dom/stafftext.h"
 #include "engraving/dom/tempo.h"
 #include "engraving/dom/tempotext.h"
-#include "engraving/dom/stafftext.h"
-#include "engraving/dom/soundflag.h"
 #include "engraving/dom/utils.h"
 
 #include "notationerrors.h"
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::notation;

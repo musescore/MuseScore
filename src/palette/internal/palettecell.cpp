@@ -24,14 +24,16 @@
 
 #include "mimedatautils.h"
 
-#include "engraving/rw/rwregister.h"
 #include "engraving/dom/actionicon.h"
 #include "engraving/dom/engravingitem.h"
+#include "engraving/dom/factory.h"
 #include "engraving/dom/fret.h"
 #include "engraving/dom/masterscore.h"
 #include "engraving/dom/textbase.h"
-#include "engraving/dom/factory.h"
+#include "engraving/dom/tremolosinglechord.h"
+#include "engraving/dom/tremolotwochord.h"
 
+#include "engraving/rw/rwregister.h"
 #include "engraving/rw/compat/tremolocompat.h"
 
 #include "view/widgets/palettewidget.h"

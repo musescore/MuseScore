@@ -29,14 +29,12 @@
 #include <QHttpMultiPart>
 
 #include "async/async.h"
-#include "containers.h"
-#include "types/translatablestring.h"
 
 #include "clouderrors.h"
-#include "network/networkerrors.h"
 
 #include "log.h"
 
+using namespace mu;
 using namespace mu::cloud;
 using namespace mu::network;
 

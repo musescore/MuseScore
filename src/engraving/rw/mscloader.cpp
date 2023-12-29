@@ -22,7 +22,6 @@
 #include "mscloader.h"
 
 #include <memory>
-#include <map>
 
 #include "global/io/buffer.h"
 #include "global/types/retval.h"

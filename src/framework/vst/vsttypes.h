@@ -40,7 +40,6 @@
 #include "pluginterfaces/vst/ivsteditcontroller.h"
 #include "pluginterfaces/vst/ivstmidicontrollers.h"
 
-#include "framework/midi/miditypes.h"
 #include "io/path.h"
 #include "log.h"
 

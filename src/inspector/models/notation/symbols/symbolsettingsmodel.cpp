@@ -97,7 +97,7 @@ PropertyItem* SymbolSettingsModel::symAngle() const
 QVariantList SymbolSettingsModel::symFonts()
 {
     if (m_symFonts.empty()) {
-        for (const IEngravingFontPtr& f : engravingFonts()->fonts()) {
+        for (const engraving::IEngravingFontPtr& f : engravingFonts()->fonts()) {
             QVariantMap style;
             style["text"] = QString::fromStdString(f->name());
             style["value"] = QString::fromStdString(f->name());

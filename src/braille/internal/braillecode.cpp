@@ -20,11 +20,12 @@
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-#include <iostream>
 #include <sstream>
 #include <vector>
 
 #include "braillecode.h"
+
+#include "log.h"
 
 namespace mu::engraving {
 std::vector<braille_code*> master_braille_code_list;

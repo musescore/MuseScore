@@ -23,8 +23,6 @@
 
 #include "async/async.h"
 #include "settings.h"
-#include "log.h"
-#include "translation.h"
 #include "themeconverter.h"
 
 #include <QScreen>
@@ -36,6 +34,8 @@
 #ifdef Q_OS_WIN
 #include <QOperatingSystemVersion>
 #endif
+
+#include "log.h"
 
 using namespace mu;
 using namespace mu::ui;

@@ -25,9 +25,6 @@
 //
 #include "capella.h"
 
-#include <assert.h>
-#include <cmath>
-
 #include <QFile>
 #include <QtMath>
 
@@ -292,7 +289,7 @@ static void processBasicDrawObj(QList<BasicDrawObj*> objects, Segment* s, int tr
                     break;
                 }
             }
-            TextBase* text = Factory::createStaffText(s);
+            StaffText* text = Factory::createStaffText(s);
             QFont f(st->font());
             text->setFamily(f.family());
             text->setItalic(f.italic());
