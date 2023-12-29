@@ -56,24 +56,20 @@ public:
     PointF startAnchor() const { return m_startAnchor; }
     PointF endAnchor() const { return m_endAnchor; }
     void setAnchors(PointF startAnchor, PointF endAnchor) { m_startAnchor = startAnchor; m_endAnchor = endAnchor; }
-
-    static void setupLData(BeamTremoloLayout* info, EngravingItem* e);
-
-    static bool calculateAnchors(BeamTremoloLayout* info, const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes);
-
-    static double chordBeamAnchorX(const BeamTremoloLayout* info, const ChordRest* chord, ChordBeamAnchorType anchorType);
-    static double chordBeamAnchorY(const BeamTremoloLayout* info, const ChordRest* chord);
-    static PointF chordBeamAnchor(const BeamTremoloLayout* info, const ChordRest* chord, ChordBeamAnchorType anchorType);
-    static int getMaxSlope(const BeamTremoloLayout* info);
-    static void extendStem(const BeamTremoloLayout* info, Chord* chord, double addition);
     bool isValid() const { return !(m_beamType == BeamType::INVALID); }
 
+    static void setupLData(BeamBase::LayoutData* ldata, EngravingItem* e);
+
+    static bool calculateAnchors(BeamBase::LayoutData* ldata, const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes);
+
+    static double chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* chord, ChordBeamAnchorType anchorType);
+    static double chordBeamAnchorY(const BeamBase::LayoutData* ldata, const ChordRest* chord);
+    static PointF chordBeamAnchor(const BeamBase::LayoutData* ldata, const ChordRest* chord, ChordBeamAnchorType anchorType);
+    static int getMaxSlope(const BeamBase::LayoutData* ldata);
+    static void extendStem(const BeamBase::LayoutData* ldata, Chord* chord, double addition);
+
 private:
-    enum class BeamType {
-        INVALID,
-        BEAM,
-        TREMOLO
-    };
+
     BeamType m_beamType = BeamType::INVALID;
     EngravingItem* m_element = nullptr;
     Beam* m_beam = nullptr;
@@ -93,30 +89,31 @@ private:
     StaffType const* m_tab = nullptr;
     bool m_isBesideTabStaff = false;
 
-    static int getMiddleStaffLine(const BeamTremoloLayout* info, ChordRest* startChord, ChordRest* endChord, int staffLines);
-    static int computeDesiredSlant(const BeamTremoloLayout* info, int startNote, int endNote, int middleLine, int dictator, int pointer);
-    static SlopeConstraint getSlopeConstraint(const BeamTremoloLayout* info, int startNote, int endNote);
-    static void offsetBeamWithAnchorShortening(const BeamTremoloLayout* info, std::vector<ChordRest*> chordRests, int& dictator,
+    static int getMiddleStaffLine(const BeamBase::LayoutData* ldata, ChordRest* startChord, ChordRest* endChord, int staffLines);
+    static int computeDesiredSlant(const BeamBase::LayoutData* ldata, int startNote, int endNote, int middleLine, int dictator,
+                                   int pointer);
+    static SlopeConstraint getSlopeConstraint(const BeamBase::LayoutData* ldata, int startNote, int endNote);
+    static void offsetBeamWithAnchorShortening(const BeamBase::LayoutData* ldata, std::vector<ChordRest*> chordRests, int& dictator,
                                                int& pointer, int staffLines, bool isStartDictator, int stemLengthDictator);
     static bool isValidBeamPosition(const bool isUp, int yPos, bool isStart, bool isAscending, bool isFlat, int staffLines, bool isOuter);
     static bool isBeamInsideStaff(int yPos, int staffLines, bool allowFloater);
-    static int getOuterBeamPosOffset(const BeamTremoloLayout* info, int innerBeam, int beamCount, int staffLines);
-    static void offsetBeamToRemoveCollisions(const BeamTremoloLayout* info, std::vector<ChordRest*> chordRests, int& dictator, int& pointer,
-                                             const double startX, const double endX, bool isFlat, bool isStartDictator);
-    static int getBeamCount(const BeamTremoloLayout* info, std::vector<ChordRest*> chordRests);
+    static int getOuterBeamPosOffset(const BeamBase::LayoutData* ldata, int innerBeam, int beamCount, int staffLines);
+    static void offsetBeamToRemoveCollisions(const BeamBase::LayoutData* ldata, std::vector<ChordRest*> chordRests, int& dictator,
+                                             int& pointer, const double startX, const double endX, bool isFlat, bool isStartDictator);
+    static int getBeamCount(const BeamBase::LayoutData* ldata, std::vector<ChordRest*> chordRests);
     static bool is64thBeamPositionException(const int beamSpacing, int& yPos, int staffLines);
-    static int findValidBeamOffset(const BeamTremoloLayout* info, int outer, int beamCount, int staffLines, bool isStart, bool isAscending,
-                                   bool isFlat);
-    static void setValidBeamPositions(const BeamTremoloLayout* info, int& dictator, int& pointer, int beamCountD, int beamCountP,
+    static int findValidBeamOffset(const BeamBase::LayoutData* ldata, int outer, int beamCount, int staffLines, bool isStart,
+                                   bool isAscending, bool isFlat);
+    static void setValidBeamPositions(const BeamBase::LayoutData* ldata, int& dictator, int& pointer, int beamCountD, int beamCountP,
                                       int staffLines, bool isStartDictator, bool isFlat, bool isAscending);
-    static void addMiddleLineSlant(const BeamTremoloLayout* info, int& dictator, int& pointer, int beamCount, int middleLine, int interval,
-                                   int desiredSlant);
-    static void add8thSpaceSlant(BeamTremoloLayout* info, mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
+    static void addMiddleLineSlant(const BeamBase::LayoutData* ldata, int& dictator, int& pointer, int beamCount, int middleLine,
+                                   int interval, int desiredSlant);
+    static void add8thSpaceSlant(BeamBase::LayoutData* ldata, mu::PointF& dictatorAnchor, int dictator, int pointer, int beamCount,
                                  int interval, int middleLine, bool Flat);
     static bool noSlope(const Beam* beam);
-    static int strokeCount(const BeamTremoloLayout* info, ChordRest* cr);
-    static bool calculateAnchorsCross(BeamTremoloLayout* info);
-    static bool computeTremoloUp(const BeamTremoloLayout* info);
+    static int strokeCount(const BeamBase::LayoutData* ldata, ChordRest* cr);
+    static bool calculateAnchorsCross(BeamBase::LayoutData* ldata);
+    static bool computeTremoloUp(const BeamBase::LayoutData* ldata);
 };
 } // namespace mu::engraving
 #endif

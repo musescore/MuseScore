@@ -225,10 +225,9 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& 
         ChordLayout::layoutStem(item->chord2(), ctx);
     }
 
-    item->setLayoutInfo(std::make_shared<BeamTremoloLayout>());
-    BeamTremoloLayout::setupLData(item->layoutInfo().get(), item);
-    item->setStartAnchor(BeamTremoloLayout::chordBeamAnchor(item->layoutInfo().get(), item->chord1(), ChordBeamAnchorType::Start));
-    item->setEndAnchor(BeamTremoloLayout::chordBeamAnchor(item->layoutInfo().get(), item->chord2(), ChordBeamAnchorType::End));
+    BeamTremoloLayout::setupLData(item->mutldata(), item);
+    item->setStartAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), item->chord1(), ChordBeamAnchorType::Start));
+    item->setEndAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), item->chord2(), ChordBeamAnchorType::End));
 
     // deal with manual adjustments here and return
     PropertyValue val = item->getProperty(Pid::PLACEMENT);
@@ -245,7 +244,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& 
         endY += item->pagePos().y();
         item->startAnchor().setY(startY);
         item->endAnchor().setY(endY);
-        item->layoutInfo()->setAnchors(item->startAnchor(), item->endAnchor());
+        item->mutldata()->setAnchors(item->startAnchor(), item->endAnchor());
 
         ChordLayout::layoutStem(item->chord1(), ctx);
         ChordLayout::layoutStem(item->chord2(), ctx);
@@ -276,9 +275,9 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& 
 
     std::sort(notes.begin(), notes.end());
     ldata->setMag(mag);
-    BeamTremoloLayout::calculateAnchors(item->layoutInfo().get(), chordRests, notes);
-    item->setStartAnchor(item->layoutInfo()->startAnchor());
-    item->setEndAnchor(item->layoutInfo()->endAnchor());
+    BeamTremoloLayout::calculateAnchors(item->mutldata(), chordRests, notes);
+    item->setStartAnchor(item->ldata()->startAnchor());
+    item->setEndAnchor(item->ldata()->endAnchor());
 
     int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
     item->beamFragment().py1[idx] = item->startAnchor().y() - item->pagePos().y();
@@ -325,10 +324,6 @@ void TremoloLayout::createBeamSegments(TremoloTwoChord* item, LayoutContext& ctx
     static constexpr double stemGapSp = 1.0;
     const bool defaultStyle = (!item->customStyleApplicable()) || (item->tremoloStyle() == TremoloStyle::DEFAULT);
 
-    IF_ASSERT_FAILED(item->layoutInfo()) {
-        return;
-    }
-
     item->clearBeamSegments();
 
     if (!item->twoNotes()) {
@@ -337,8 +332,8 @@ void TremoloLayout::createBeamSegments(TremoloTwoChord* item, LayoutContext& ctx
 
     bool _isGrace = item->chord1()->isGrace();
     const PointF pagePos = item->pagePos();
-    PointF startAnchor = item->layoutInfo()->startAnchor() - PointF(0.0, pagePos.y());
-    PointF endAnchor = item->layoutInfo()->endAnchor() - PointF(0.0, pagePos.y());
+    PointF startAnchor = item->ldata()->startAnchor() - PointF(0.0, pagePos.y());
+    PointF endAnchor = item->ldata()->endAnchor() - PointF(0.0, pagePos.y());
 
     // inset trem from stems for default style
     const double slope = mu::divide(endAnchor.y() - startAnchor.y(), endAnchor.x() - startAnchor.x(), 0.0);
@@ -406,7 +401,7 @@ void TremoloLayout::createBeamSegments(TremoloTwoChord* item, LayoutContext& ctx
                 addition += (item->lines() - 1.) * beamSpacing / 4. * item->spatium() * item->mag();
             }
             // calling extendStem with addition 0.0 still sizes the stem to the manually adjusted height of the trem.
-            BeamTremoloLayout::extendStem(item->layoutInfo().get(), chord, addition);
+            BeamTremoloLayout::extendStem(item->ldata(), chord, addition);
         }
     }
 }
