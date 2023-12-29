@@ -284,7 +284,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
 
 void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
 {
-    BeamTremoloLayout::setupLData(item->mutldata(), item);
+    BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
     Chord* startChord = nullptr;
     Chord* endChord = nullptr;
     if (chordRests.empty()) {
@@ -321,7 +321,7 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
 
     int fragmentIndex = (item->beamDirection() == DirectionV::AUTO || item->beamDirection() == DirectionV::DOWN) ? 0 : 1;
     if (item->userModified()) {
-        BeamTremoloLayout::setupLData(item->mutldata(), item);
+        BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
         double startY = item->beamFragments()[frag]->py1[fragmentIndex];
         double endY = item->beamFragments()[frag]->py2[fragmentIndex];
         if (ctx.conf().styleB(Sid::snapCustomBeamsToGrid)) {
@@ -344,12 +344,12 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
     // location depends on _isBesideTabStaff
 
     if (!item->isBesideTabStaff()) {
-        BeamTremoloLayout::setupLData(item->mutldata(), item);
-        BeamTremoloLayout::calculateAnchors(item->mutldata(), chordRests, item->notes());
-        item->setStartAnchor(item->ldata()->startAnchor());
-        item->setEndAnchor(item->ldata()->endAnchor());
+        BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
+        BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, item->notes());
+        item->setStartAnchor(item->ldata()->startAnchor);
+        item->setEndAnchor(item->ldata()->endAnchor);
         item->setSlope(mu::divide(item->endAnchor().y() - item->startAnchor().y(), item->endAnchor().x() - item->startAnchor().x(), 0.0));
-        item->setBeamDist(item->ldata()->beamDist());
+        item->setBeamDist(item->ldata()->beamDist);
     } else {
         item->setSlope(0.0);
         Chord* startChord2 = nullptr;
@@ -359,14 +359,14 @@ void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<Chord
                 break;
             }
         }
-        BeamTremoloLayout::setupLData(item->mutldata(), item);
+        BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
         double x1 = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chordRests.front(), ChordBeamAnchorType::Start);
         double x2 = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), chordRests.back(), ChordBeamAnchorType::End);
         double y = BeamTremoloLayout::chordBeamAnchorY(item->ldata(), startChord2);
         item->startAnchor() = PointF(x1, y);
         item->endAnchor() = PointF(x2, y);
         item->mutldata()->setAnchors(item->startAnchor(), item->endAnchor());
-        item->setBeamWidth(item->ldata()->beamWidth());
+        item->setBeamWidth(item->ldata()->beamWidth);
     }
 
     item->beamFragments()[frag]->py1[fragmentIndex] = item->startAnchor().y() - item->pagePos().y();
