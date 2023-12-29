@@ -420,6 +420,30 @@ bool Slur::isDirectionMixture(Chord* c1, Chord* c2)
     return false;
 }
 
+double Slur::scalingFactor() const
+{
+    Chord* startC = startElement() && startElement()->isChord() ? toChord(startElement()) : nullptr;
+    Chord* endC = endElement() && endElement()->isChord() ? toChord(endElement()) : nullptr;
+
+    if (!startC || !endC) {
+        return 1.0;
+    }
+
+    if ((startC->isGraceBefore() && startC->parent() == endC)
+        || (endC->isGraceAfter() && endC->parent() == startC)) {
+        return style().styleD(Sid::graceNoteMag);
+    }
+
+    if (startC->isGrace()) {
+        startC = toChord(startC->parent());
+    }
+    if (endC->isGrace()) {
+        endC = toChord(endC->parent());
+    }
+
+    return 0.5 * (startC->intrinsicMag() + endC->intrinsicMag());
+}
+
 //---------------------------------------------------------
 //   setTrack
 //---------------------------------------------------------

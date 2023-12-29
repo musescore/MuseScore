@@ -889,6 +889,24 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     }
 
     //-------------------------------------------------------------
+    // layout ties and guitar bends
+    //-------------------------------------------------------------
+
+    bool useRange = false;    // TODO: lineMode();
+    Fraction stick = useRange ? ctx.state().startTick() : system->measures().front()->tick();
+    Fraction etick = useRange ? ctx.state().endTick() : system->measures().back()->endTick();
+    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
+
+    // ties
+    if (ctx.conf().isLinearMode()) {
+        doLayoutTiesLinear(system);
+    } else {
+        doLayoutTies(system, sl, stick, etick);
+    }
+    // guitar bends
+    layoutGuitarBends(sl, ctx);
+
+    //-------------------------------------------------------------
     // layout articulations, fingering and stretched bends
     //-------------------------------------------------------------
 
@@ -950,20 +968,6 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     //-------------------------------------------------------------
     // layout slurs
     //-------------------------------------------------------------
-
-    bool useRange = false;    // TODO: lineMode();
-    Fraction stick = useRange ? ctx.state().startTick() : system->measures().front()->tick();
-    Fraction etick = useRange ? ctx.state().endTick() : system->measures().back()->endTick();
-    auto spanners = ctx.dom().spannerMap().findOverlapping(stick.ticks(), etick.ticks());
-
-    // ties
-    if (ctx.conf().isLinearMode()) {
-        doLayoutTiesLinear(system);
-    } else {
-        doLayoutTies(system, sl, stick, etick);
-    }
-    // guitar bends
-    layoutGuitarBends(sl, ctx);
 
     // slurs
     std::vector<Spanner*> spanner;
