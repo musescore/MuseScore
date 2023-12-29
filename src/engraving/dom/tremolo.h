@@ -168,9 +168,6 @@ public:
 
     void computeShape();
 
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo();
-    void setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info);
-
     TremoloTwoChord* twoChord = nullptr;
     TremoloSingleChord* singleChord = nullptr;
 

@@ -923,23 +923,4 @@ void TremoloDispatcher::clearBeamSegments()
         UNREACHABLE;
     }
 }
-
-std::shared_ptr<rendering::dev::BeamTremoloLayout> TremoloDispatcher::layoutInfo()
-{
-    if (twoNotes()) {
-        return twoChord->layoutInfo();
-    } else {
-        UNREACHABLE;
-        return nullptr;
-    }
-}
-
-void TremoloDispatcher::setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info)
-{
-    if (twoNotes()) {
-        twoChord->setLayoutInfo(info);
-    } else {
-        UNREACHABLE;
-    }
-}
 }

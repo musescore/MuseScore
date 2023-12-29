@@ -24,21 +24,50 @@
 
 #include "engravingitem.h"
 
-namespace mu::engraving::rendering::dev {
-class BeamTremoloLayout;
-}
-
 namespace mu::engraving {
+class Beam;
+class TremoloTwoChord;
+
+enum class BeamType {
+    INVALID,
+    BEAM,
+    TREMOLO
+};
+
 class BeamBase : public EngravingItem
 {
     OBJECT_ALLOCATOR(engraving, BeamBase)
     DECLARE_CLASSOF(ElementType::INVALID) // dummy
 public:
 
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo() const { return m_layoutInfo; }
-    void setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info) { m_layoutInfo = info; }
+    struct LayoutData : public EngravingItem::LayoutData {
+        BeamType m_beamType = BeamType::INVALID;
+        EngravingItem* m_element = nullptr;
+        Beam* m_beam = nullptr;
+        TremoloTwoChord* m_trem = nullptr;
+        bool m_up = false;
+        Fraction m_tick = Fraction(0, 1);
+        double m_spatium = 0.;
+        PointF m_startAnchor;
+        PointF m_endAnchor;
+        double m_slope = 0.;
+        bool m_isGrace = false;
+        int m_beamSpacing = 0;
+        double m_beamDist = 0.0;
+        double m_beamWidth = 0.0;
+        std::vector<ChordRest*> m_elements;
+        std::vector<int> m_notes;
+        StaffType const* m_tab = nullptr;
+        bool m_isBesideTabStaff = false;
 
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> m_layoutInfo;
+        double beamDist() const { return m_beamDist; }
+        double beamWidth() const { return m_beamWidth; }
+        PointF startAnchor() const { return m_startAnchor; }
+        PointF endAnchor() const { return m_endAnchor; }
+        void setAnchors(PointF startAnchor, PointF endAnchor) { m_startAnchor = startAnchor; m_endAnchor = endAnchor; }
+        bool isValid() const { return !(m_beamType == BeamType::INVALID); }
+    };
+    DECLARE_LAYOUTDATA_METHODS(BeamBase)
 
 protected:
     BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags flags = ElementFlag::NOTHING);

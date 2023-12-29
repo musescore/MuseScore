@@ -31,5 +31,4 @@ BeamBase::BeamBase(const ElementType& type, EngravingItem* parent, ElementFlags 
 BeamBase::BeamBase(const BeamBase& b)
     : EngravingItem(b)
 {
-    m_layoutInfo = b.m_layoutInfo;
 }

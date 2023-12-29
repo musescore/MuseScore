@@ -197,10 +197,10 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloDispatcher* item, LayoutContext
         ChordLayout::layoutStem(item->chord2(), ctx);
     }
 
-    item->setLayoutInfo(std::make_shared<rendering::dev::BeamTremoloLayout>());
-    dev::BeamTremoloLayout::setupLData(item->layoutInfo().get(), item);
-    item->setStartAnchor(dev::BeamTremoloLayout::chordBeamAnchor(item->layoutInfo().get(), item->chord1(), ChordBeamAnchorType::Start));
-    item->setEndAnchor(dev::BeamTremoloLayout::chordBeamAnchor(item->layoutInfo().get(), item->chord2(), ChordBeamAnchorType::End));
+//    item->setLayoutInfo(std::make_shared<rendering::dev::BeamTremoloLayout>());
+//    dev::BeamTremoloLayout::setupLData(item->layoutInfo().get(), item);
+//    item->setStartAnchor(dev::BeamTremoloLayout::chordBeamAnchor(item->layoutInfo().get(), item->chord1(), ChordBeamAnchorType::Start));
+//    item->setEndAnchor(dev::BeamTremoloLayout::chordBeamAnchor(item->layoutInfo().get(), item->chord2(), ChordBeamAnchorType::End));
 
     // deal with manual adjustments here and return
     PropertyValue val = item->getProperty(Pid::PLACEMENT);
@@ -217,7 +217,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloDispatcher* item, LayoutContext
         endY += item->pagePos().y();
         item->startAnchor().setY(startY);
         item->endAnchor().setY(endY);
-        item->layoutInfo()->setAnchors(item->startAnchor(), item->endAnchor());
+        // item->layoutInfo()->setAnchors(item->startAnchor(), item->endAnchor());
 
         ChordLayout::layoutStem(item->chord1(), ctx);
         ChordLayout::layoutStem(item->chord2(), ctx);
@@ -248,9 +248,9 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloDispatcher* item, LayoutContext
 
     std::sort(notes.begin(), notes.end());
     ldata->setMag(mag);
-    dev::BeamTremoloLayout::calculateAnchors(item->layoutInfo().get(), chordRests, notes);
-    item->setStartAnchor(item->layoutInfo()->startAnchor());
-    item->setEndAnchor(item->layoutInfo()->endAnchor());
+//    dev::BeamTremoloLayout::calculateAnchors(item->layoutInfo().get(), chordRests, notes);
+//    item->setStartAnchor(item->layoutInfo()->startAnchor());
+//    item->setEndAnchor(item->layoutInfo()->endAnchor());
 
     int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
     item->beamFragment().py1[idx] = item->startAnchor().y() - item->pagePos().y();
@@ -297,9 +297,9 @@ void TremoloLayout::createBeamSegments(TremoloDispatcher* item, LayoutContext& c
     static constexpr double stemGapSp = 1.0;
     const bool defaultStyle = (!item->customStyleApplicable()) || (item->tremoloStyle() == TremoloStyle::DEFAULT);
 
-    IF_ASSERT_FAILED(item->layoutInfo()) {
-        return;
-    }
+//    IF_ASSERT_FAILED(item->layoutInfo()) {
+//        return;
+//    }
 
     item->clearBeamSegments();
 
@@ -309,8 +309,8 @@ void TremoloLayout::createBeamSegments(TremoloDispatcher* item, LayoutContext& c
 
     bool _isGrace = item->chord1()->isGrace();
     const PointF pagePos = item->pagePos();
-    PointF startAnchor = item->layoutInfo()->startAnchor() - PointF(0.0, pagePos.y());
-    PointF endAnchor = item->layoutInfo()->endAnchor() - PointF(0.0, pagePos.y());
+    PointF startAnchor;// = item->layoutInfo()->startAnchor() - PointF(0.0, pagePos.y());
+    PointF endAnchor;// = item->layoutInfo()->endAnchor() - PointF(0.0, pagePos.y());
 
     // inset trem from stems for default style
     const double slope = mu::divide(endAnchor.y() - startAnchor.y(), endAnchor.x() - startAnchor.x(), 0.0);
@@ -378,7 +378,7 @@ void TremoloLayout::createBeamSegments(TremoloDispatcher* item, LayoutContext& c
                 addition += (item->lines() - 1.) * beamSpacing / 4. * item->spatium() * item->mag();
             }
             // calling extendStem with addition 0.0 still sizes the stem to the manually adjusted height of the trem.
-            dev::BeamTremoloLayout::extendStem(item->layoutInfo().get(), chord, addition);
+            // dev::BeamTremoloLayout::extendStem(item->layoutInfo().get(), chord, addition);
         }
     }
 }
