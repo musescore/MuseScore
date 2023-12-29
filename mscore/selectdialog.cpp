@@ -61,7 +61,10 @@ SelectDialog::SelectDialog(const Element* _e, QWidget* parent)
             case ElementType::ARTICULATION: // comes translated, but from a different method
                   subtype->setText(toArticulation(e)->userName());
                   break;
-            // other come translated or don't need any or are too difficult to implement
+            case ElementType::CLEF:
+                  subtype->setText(qApp->translate("clefTable", e->subtypeName().toUtf8()));
+                  break;
+            // others come translated or don't need any or are too difficult to implement
             default: subtype->setText(e->subtypeName());
             }
       sameSubtype->setEnabled(e->subtype() != -1);

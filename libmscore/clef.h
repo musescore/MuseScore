@@ -173,6 +173,9 @@ class Clef final : public Element {
       void setClefType(ClefType i);
       void setClefType(const QString& s);
 
+      int subtype() const override { return int(clefType()); }
+      QString subtypeName() const override { return QString(ClefInfo::name(clefType())); };
+
       void setForInstrumentChange(bool forInstrumentChange) { _forInstrumentChange = forInstrumentChange; }
       bool forInstrumentChange() const { return _forInstrumentChange; }
 
