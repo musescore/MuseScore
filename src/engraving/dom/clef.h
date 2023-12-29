@@ -113,6 +113,9 @@ public:
     ClefType clefType() const;
     void setClefType(ClefType i);
 
+    int subtype() const override { return int(clefType()); }
+    TranslatableString subtypeUserName() const override;
+
     void setForInstrumentChange(bool forInstrumentChange) { m_forInstrumentChange = forInstrumentChange; }
     bool forInstrumentChange() const { return m_forInstrumentChange; }
 
