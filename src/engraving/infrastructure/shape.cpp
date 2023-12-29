@@ -444,6 +444,14 @@ void Shape::removeInvisibles()
     invalidateBBox();
 }
 
+void Shape::removeTypes(const std::set<ElementType>& types)
+{
+    mu::remove_if(m_elements, [&types](ShapeElement& shapeElement) {
+        return shapeElement.item() && mu::contains(types, shapeElement.item()->type());
+    });
+    invalidateBBox();
+}
+
 //---------------------------------------------------------
 //   contains
 //---------------------------------------------------------
