@@ -196,7 +196,7 @@ PointF TremoloDispatcher::chordBeamAnchor(const ChordRest* chord, ChordBeamAncho
 double TremoloDispatcher::beamWidth() const
 {
     if (twoNotes()) {
-        return twoChord->beamWidth();
+        return twoChord->ldata()->beamWidth;
     } else {
         UNREACHABLE;
         return 0;

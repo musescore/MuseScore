@@ -85,7 +85,6 @@ public:
     }
 
     PairF beamPos() const;
-    double beamWidth() const;
 
     TDuration durationType() const;
     void setDurationType(TDuration d);

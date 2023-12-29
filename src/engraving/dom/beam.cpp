@@ -906,7 +906,7 @@ Shape BeamSegment::shape() const
     PointF endPoint = line.p2();
     double _beamWidth = parentElement->isBeam()
                         ? item_cast<const Beam*>(parentElement)->m_beamWidth
-                        : item_cast<const TremoloTwoChord*>(parentElement)->beamWidth();
+                        : item_cast<const TremoloTwoChord*>(parentElement)->ldata()->beamWidth;
     // This is the case of right-beamlets
     if (startPoint.x() > endPoint.x()) {
         std::swap(startPoint, endPoint);

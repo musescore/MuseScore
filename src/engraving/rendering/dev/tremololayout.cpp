@@ -225,7 +225,7 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& 
         ChordLayout::layoutStem(item->chord2(), ctx);
     }
 
-    BeamTremoloLayout::setupLData(item->mutldata(), item);
+    BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
     item->setStartAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), item->chord1(), ChordBeamAnchorType::Start));
     item->setEndAnchor(BeamTremoloLayout::chordBeamAnchor(item->ldata(), item->chord2(), ChordBeamAnchorType::End));
 
@@ -275,9 +275,9 @@ void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& 
 
     std::sort(notes.begin(), notes.end());
     ldata->setMag(mag);
-    BeamTremoloLayout::calculateAnchors(item->mutldata(), chordRests, notes);
-    item->setStartAnchor(item->ldata()->startAnchor());
-    item->setEndAnchor(item->ldata()->endAnchor());
+    BeamTremoloLayout::calculateAnchors(item, item->mutldata(), ctx, chordRests, notes);
+    item->setStartAnchor(item->ldata()->startAnchor);
+    item->setEndAnchor(item->ldata()->endAnchor);
 
     int idx = (item->direction() == DirectionV::AUTO || item->direction() == DirectionV::DOWN) ? 0 : 1;
     item->beamFragment().py1[idx] = item->startAnchor().y() - item->pagePos().y();
@@ -332,8 +332,8 @@ void TremoloLayout::createBeamSegments(TremoloTwoChord* item, LayoutContext& ctx
 
     bool _isGrace = item->chord1()->isGrace();
     const PointF pagePos = item->pagePos();
-    PointF startAnchor = item->ldata()->startAnchor() - PointF(0.0, pagePos.y());
-    PointF endAnchor = item->ldata()->endAnchor() - PointF(0.0, pagePos.y());
+    PointF startAnchor = item->ldata()->startAnchor - PointF(0.0, pagePos.y());
+    PointF endAnchor = item->ldata()->endAnchor - PointF(0.0, pagePos.y());
 
     // inset trem from stems for default style
     const double slope = mu::divide(endAnchor.y() - startAnchor.y(), endAnchor.x() - startAnchor.x(), 0.0);

@@ -122,11 +122,6 @@ PointF TremoloTwoChord::chordBeamAnchor(const ChordRest* chord, ChordBeamAnchorT
     return rendering::dev::BeamTremoloLayout::chordBeamAnchor(this->ldata(), chord, anchorType);
 }
 
-double TremoloTwoChord::beamWidth() const
-{
-    return ldata()->beamWidth();
-}
-
 //---------------------------------------------------------
 //   drag
 //---------------------------------------------------------
