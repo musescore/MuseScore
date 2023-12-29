@@ -37,6 +37,8 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/barline.h
     ${CMAKE_CURRENT_LIST_DIR}/beam.cpp
     ${CMAKE_CURRENT_LIST_DIR}/beam.h
+    ${CMAKE_CURRENT_LIST_DIR}/beambase.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/beambase.h
     ${CMAKE_CURRENT_LIST_DIR}/bend.cpp
     ${CMAKE_CURRENT_LIST_DIR}/bend.h
     ${CMAKE_CURRENT_LIST_DIR}/box.cpp

@@ -25,12 +25,9 @@
 
 #include <memory>
 
+#include "beambase.h"
 #include "engravingitem.h"
 #include "property.h"
-
-namespace mu::engraving::rendering::dev {
-class BeamTremoloLayout;
-}
 
 namespace mu::engraving {
 class Chord;
@@ -86,7 +83,7 @@ enum class ChordBeamAnchorType {
 //   @@ Beam
 //---------------------------------------------------------
 
-class Beam final : public EngravingItem
+class Beam final : public BeamBase
 {
     OBJECT_ALLOCATOR(engraving, Beam)
     DECLARE_CLASSOF(ElementType::BEAM)
@@ -231,8 +228,6 @@ public:
     std::vector<int>& notes() { return m_notes; }
 
     const Chord* findChordWithCustomStemDirection() const;
-
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo;
 
 private:
 

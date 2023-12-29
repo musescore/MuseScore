@@ -60,13 +60,13 @@ static const ElementStyle TREMOLO_STYLE {
 //---------------------------------------------------------
 
 TremoloTwoChord::TremoloTwoChord(Chord* parent)
-    : EngravingItem(ElementType::TREMOLO_TWOCHORD, parent, ElementFlag::MOVABLE)
+    : BeamBase(ElementType::TREMOLO_TWOCHORD, parent, ElementFlag::MOVABLE)
 {
     initElementStyle(&TREMOLO_STYLE);
 }
 
 TremoloTwoChord::TremoloTwoChord(const TremoloTwoChord& t)
-    : EngravingItem(t)
+    : BeamBase(t)
 {
     setTremoloType(t.tremoloType());
     m_chord1       = t.chord1();
