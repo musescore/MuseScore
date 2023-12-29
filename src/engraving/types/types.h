@@ -84,10 +84,11 @@ enum class ElementType {
     ARPEGGIO,
     ACCIDENTAL,
     LEDGER_LINE,
-    STEM,                     // list STEM before NOTE: notes in TAB might 'break' stems
-    NOTE,                     // and this requires stems to be drawn before notes
-    CLEF,                     // elements from CLEF to TIMESIG need to be in the order
-    KEYSIG,                   // in which they appear in a measure
+    STEM,  // list STEM before NOTE: notes in TAB might 'break' stems
+    HOOK,  // and this requires stems to be drawn before notes
+    NOTE,  // elements from CLEF to TIMESIG need to be in the order
+    CLEF,  // in which they appear in a measure
+    KEYSIG,
     AMBITUS,
     TIMESIG,
     REST,
@@ -104,7 +105,6 @@ enum class ElementType {
     EXPRESSION,
     BEAM,
     BEAM_SEGMENT,
-    HOOK,
     LYRICS,
     FIGURED_BASS,
     FIGURED_BASS_ITEM,
