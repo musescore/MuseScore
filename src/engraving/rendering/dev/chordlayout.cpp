@@ -785,7 +785,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
         bool bottom = !a->up();      // true: articulation is below chord;  false: articulation is above chord
         TLayout::layoutItem(a, ctx);     // must be done after assigning direction, or else symId is not reliable
-        bool leaveSpaceForTie = a->leaveSpaveForTie();
+        bool leaveTieSpace = leaveSpaceForTie(a);
 
         bool headSide = bottom == item->up();
         double y = 0.0;
@@ -851,14 +851,14 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line = std::max(line, lines - (3 + ((numCloseArtics - 1) * 2)));
                 }
                 if (line < lines - 1) {
-                    if (leaveSpaceForTie && line % 2) {
+                    if (leaveTieSpace && line % 2) {
                         line += 1;
                     }
                     y = ((line & ~1) + 3) * _lineDist;
                     y -= a->height() * .5;
                 } else {
                     y = item->downPos() + 0.5 * item->downNote()->headHeight() + headSideDistance;
-                    if (leaveSpaceForTie) {
+                    if (leaveTieSpace) {
                         y += a->isStaccato() ? staccatoAdditionalTieDistance : tenutoAdditionalTieDistance;
                     }
                 }
@@ -912,14 +912,14 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line = std::min(line, 3 + ((numCloseArtics - 1) * 2));
                 }
                 if (line > 1) {
-                    if (leaveSpaceForTie && line % 2) {
+                    if (leaveTieSpace && line % 2) {
                         line -= 1;
                     }
                     y = (((line + 1) & ~1) - 3) * _lineDist;
                     y += a->height() * .5;
                 } else {
                     y = item->upPos() - 0.5 * item->downNote()->headHeight() - headSideDistance;
-                    if (leaveSpaceForTie) {
+                    if (leaveTieSpace) {
                         y -= a->isStaccato() ? staccatoAdditionalTieDistance : tenutoAdditionalTieDistance;
                     }
                 }
@@ -3643,6 +3643,28 @@ Shape ChordLayout::chordRestShape(const ChordRest* item, const LayoutConfigurati
     }
 
     return shape;
+}
+
+bool ChordLayout::leaveSpaceForTie(const Articulation* item)
+{
+    if (!item->explicitParent() || !item->explicitParent()->isChord()) {
+        return false;
+    }
+
+    Chord* chord = toChord(item->chordRest());
+    bool up = item->ldata()->up;
+    Note* note = up ? chord->upNote() : chord->downNote();
+    Tie* tieFor = note->tieFor();
+    Tie* tieBack = note->tieBack();
+
+    if (!tieFor && !tieBack) {
+        return false;
+    }
+
+    bool leaveSpace = (tieFor && tieFor->up() == up && tieFor->isOuterTieOfChord(Grip::START))
+                      || (tieBack && tieBack->up() == up && tieBack->isOuterTieOfChord(Grip::END));
+
+    return leaveSpace;
 }
 
 void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf)

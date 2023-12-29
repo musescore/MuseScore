@@ -2539,10 +2539,6 @@ Shape EngravingItem::LayoutData::shape(LD_ACCESS mode) const
         case ElementType::ACCIDENTAL: {
             return Shape(sh.bbox(), m_item);
         } break;
-        case ElementType::ARTICULATION: {
-            TLayout::fillArticulationShape(toArticulation(m_item), static_cast<Articulation::LayoutData*>(const_cast<LayoutData*>(this)));
-            return m_shape.value(LD_ACCESS::CHECK);
-        } break;
         default:
             break;
         }

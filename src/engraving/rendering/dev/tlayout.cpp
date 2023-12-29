@@ -887,6 +887,8 @@ void TLayout::layoutArticulation(const Articulation* item, Articulation::LayoutD
     }
 
     ldata->setBbox(bbox.translated(-0.5 * bbox.width(), 0.0));
+
+    fillArticulationShape(item, ldata);
 }
 
 void TLayout::fillArticulationShape(const Articulation* item, Articulation::LayoutData* ldata)

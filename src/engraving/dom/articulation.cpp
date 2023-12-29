@@ -610,27 +610,6 @@ String Articulation::accessibleInfo() const
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedTypeUserName());
 }
 
-bool Articulation::leaveSpaveForTie() const
-{
-    if (!explicitParent() || !explicitParent()->isChord()) {
-        return false;
-    }
-
-    Chord* chord = toChord(chordRest());
-    Note* note = ldata()->up ? chord->upNote() : chord->downNote();
-    Tie* tieFor = note->tieFor();
-    Tie* tieBack = note->tieBack();
-
-    if (!tieFor && !tieBack) {
-        return false;
-    }
-
-    bool leaveSpace = tieFor && tieFor->up() == ldata()->up && tieFor->isOuterTieOfChord(Grip::START)
-                      || tieBack && tieBack->up() == ldata()->up && tieBack->isOuterTieOfChord(Grip::END);
-
-    return leaveSpace;
-}
-
 void Articulation::setupShowOnTabStyles()
 {
     /// staccato
