@@ -25,6 +25,7 @@
 
 #include <memory>
 
+#include "beambase.h"
 #include "engravingitem.h"
 
 #include "durationtype.h"
@@ -37,7 +38,7 @@
 namespace mu::engraving {
 class Chord;
 
-class TremoloTwoChord final : public EngravingItem
+class TremoloTwoChord final : public BeamBase
 {
     OBJECT_ALLOCATOR(engraving, TremoloTwoChord)
     DECLARE_CLASSOF(ElementType::TREMOLO_TWOCHORD)
@@ -151,18 +152,6 @@ public:
     void setPath(const mu::draw::PainterPath& p) { m_path = p; }
     void computeShape();
     //! -----------------
-
-    void setLayoutInfo(std::shared_ptr<rendering::dev::BeamTremoloLayout> info)
-    {
-        m_layoutInfo = info;
-    }
-
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> layoutInfo() const
-    {
-        return m_layoutInfo;
-    }
-
-    std::shared_ptr<rendering::dev::BeamTremoloLayout> m_layoutInfo;
 
     TremoloDispatcher* dispatcher() const;
 

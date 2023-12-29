@@ -58,7 +58,7 @@ static const ElementStyle beamStyle {
 //---------------------------------------------------------
 
 Beam::Beam(System* parent)
-    : EngravingItem(ElementType::BEAM, parent)
+    : BeamBase(ElementType::BEAM, parent)
 {
     initElementStyle(&beamStyle);
 }
@@ -68,7 +68,7 @@ Beam::Beam(System* parent)
 //---------------------------------------------------------
 
 Beam::Beam(const Beam& b)
-    : EngravingItem(b)
+    : BeamBase(b)
 {
     m_elements     = b.m_elements;
     m_id           = b.m_id;
@@ -91,7 +91,6 @@ Beam::Beam(const Beam& b)
     m_cross            = b.m_cross;
     m_fullCross        = b.m_fullCross;
     m_slope            = b.m_slope;
-    layoutInfo       = b.layoutInfo;
 }
 
 //---------------------------------------------------------
