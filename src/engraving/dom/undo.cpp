@@ -2135,39 +2135,41 @@ void InsertRemoveMeasures::insertMeasures()
     score->setLayoutAll();
 
     // move subsequent StaffTypeChanges
-    for (Staff* staff : score->staves()) {
-        Fraction tickStart = fm->tick();
-        Fraction tickEnd = lm->endTick();
+    if (moveStc) {
+        for (Staff* staff : score->staves()) {
+            Fraction tickStart = fm->tick();
+            Fraction tickEnd = lm->endTick();
 
-        // loop backwards until the insert point
-        auto stRange = staff->staffTypeRange(score->lastMeasure()->tick());
-        int moveTick = stRange.first;
+            // loop backwards until the insert point
+            auto stRange = staff->staffTypeRange(score->lastMeasure()->tick());
+            int moveTick = stRange.first;
 
-        while (moveTick >= tickStart.ticks() && moveTick > 0) {
-            Fraction tick = Fraction::fromTicks(moveTick);
-            Fraction tickNew = tick + tickEnd - tickStart;
+            while (moveTick >= tickStart.ticks() && moveTick > 0) {
+                Fraction tick = Fraction::fromTicks(moveTick);
+                Fraction tickNew = tick + tickEnd - tickStart;
 
-            // measures were inserted already so icon is at differnt place, as staffTypeChange itslef
-            Measure* measure = score->tick2measure(tickNew);
-            bool stIcon = false;
+                // measures were inserted already so icon is at differnt place, as staffTypeChange itslef
+                Measure* measure = score->tick2measure(tickNew);
+                bool stIcon = false;
 
-            staff->moveStaffType(tick, tickNew);
+                staff->moveStaffType(tick, tickNew);
 
-            for (EngravingItem* el : measure->el()) {
-                if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
-                    StaffTypeChange* stc = toStaffTypeChange(el);
-                    stc->setStaffType(staff->staffType(tickNew), false);
-                    stIcon = true;
-                    break;
+                for (EngravingItem* el : measure->el()) {
+                    if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
+                        StaffTypeChange* stc = toStaffTypeChange(el);
+                        stc->setStaffType(staff->staffType(tickNew), false);
+                        stIcon = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!stIcon) {
-                LOG_UNDO() << "StaffTypeChange icon is missing in measure " << measure->no();
-            }
+                if (!stIcon) {
+                    LOG_UNDO() << "StaffTypeChange icon is missing in measure " << measure->no();
+                }
 
-            stRange = staff->staffTypeRange(tick);
-            moveTick = stRange.first;
+                stRange = staff->staffTypeRange(tick);
+                moveTick = stRange.first;
+            }
         }
     }
 
@@ -2253,38 +2255,40 @@ void InsertRemoveMeasures::removeMeasures()
     }
 
     // move subsequent StaffTypeChanges
-    for (Staff* staff : score->staves()) {
-        Fraction tickStart = tick1;
-        Fraction tickEnd = tick2;
+    if (moveStc) {
+        for (Staff* staff : score->staves()) {
+            Fraction tickStart = tick1;
+            Fraction tickEnd = tick2;
 
-        // loop trhu, until the last one
-        auto stRange = staff->staffTypeRange(tickEnd);
-        int moveTick = stRange.first == tickEnd.ticks() ? stRange.first : stRange.second;
+            // loop trhu, until the last one
+            auto stRange = staff->staffTypeRange(tickEnd);
+            int moveTick = stRange.first == tickEnd.ticks() ? stRange.first : stRange.second;
 
-        while (moveTick != -1) {
-            Fraction tick = Fraction::fromTicks(moveTick);
-            Fraction newTick = tick + tickStart - tickEnd;
+            while (moveTick != -1) {
+                Fraction tick = Fraction::fromTicks(moveTick);
+                Fraction newTick = tick + tickStart - tickEnd;
 
-            Measure* measure = score->tick2measure(tick);
-            bool stIcon = false;
+                Measure* measure = score->tick2measure(tick);
+                bool stIcon = false;
 
-            staff->moveStaffType(tick, newTick);
+                staff->moveStaffType(tick, newTick);
 
-            for (EngravingItem* el : measure->el()) {
-                if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
-                    StaffTypeChange* stc = toStaffTypeChange(el);
-                    stc->setStaffType(staff->staffType(newTick), false);
-                    stIcon = true;
-                    break;
+                for (EngravingItem* el : measure->el()) {
+                    if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
+                        StaffTypeChange* stc = toStaffTypeChange(el);
+                        stc->setStaffType(staff->staffType(newTick), false);
+                        stIcon = true;
+                        break;
+                    }
                 }
-            }
 
-            if (!stIcon) {
-                LOG_UNDO() << "StaffTypeChange icon is missing in measure " << measure->no();
-            }
+                if (!stIcon) {
+                    LOG_UNDO() << "StaffTypeChange icon is missing in measure " << measure->no();
+                }
 
-            stRange = staff->staffTypeRange(tick);
-            moveTick = stRange.second;
+                stRange = staff->staffTypeRange(tick);
+                moveTick = stRange.second;
+            }
         }
     }
 

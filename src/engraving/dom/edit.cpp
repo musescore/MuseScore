@@ -6723,7 +6723,7 @@ void Score::undoInsertTime(const Fraction& tick, const Fraction& len)
 //   undoRemoveMeasures
 //---------------------------------------------------------
 
-void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
+void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies, bool moveStaffTypeChanges)
 {
     assert(m1 && m2);
 
@@ -6807,7 +6807,7 @@ void Score::undoRemoveMeasures(Measure* m1, Measure* m2, bool preserveTies)
         }
     }
 
-    undo(new RemoveMeasures(m1, m2));
+    undo(new RemoveMeasures(m1, m2, moveStaffTypeChanges));
 }
 
 //---------------------------------------------------------

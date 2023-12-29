@@ -114,6 +114,7 @@ void MasterScore::splitMeasure(const Fraction& tick)
     InsertMeasureOptions options;
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
+    options.moveStaffTypeChanges = false;
 
     insertMeasure(nm, options);
     Measure* m2 = toMeasure(nm ? nm->prev() : lastMeasure());
@@ -122,7 +123,7 @@ void MasterScore::splitMeasure(const Fraction& tick)
 
     for (Score* s : scoreList()) {
         Measure* m = s->tick2measure(tick);
-        s->undoRemoveMeasures(m, m, true);
+        s->undoRemoveMeasures(m, m, true, false);
     }
     undoInsertTime(measure->tick(), -measure->ticks());
 

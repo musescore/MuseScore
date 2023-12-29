@@ -102,12 +102,13 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
     InsertMeasureOptions options;
     options.createEmptyMeasures = true;
     options.moveSignaturesClef = false;
+    options.moveStaffTypeChanges = false;
     insertMeasure(next, options);
 
     for (Score* s : scoreList()) {
         Measure* sM1 = s->tick2measure(startTick);
         Measure* sM2 = s->tick2measure(m2->tick());
-        s->undoRemoveMeasures(sM1, sM2, true);
+        s->undoRemoveMeasures(sM1, sM2, true, false);
     }
 
     const Fraction newTimesig = m1->timesig();
