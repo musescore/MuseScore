@@ -87,7 +87,7 @@ def write_ts_file(target_file, root):
     # Manipulate raw XML and write to disk
     with open(target_file, 'w', newline='\n', encoding='utf-8') as f:
         memfile.seek(0)
-        f.write(next(iter(memfile)).replace("'", '"'))  # write first line (the XML declaration)
+        f.write(next(iter(memfile)).replace("'", '"').replace('UTF-8', 'utf-8'))  # write first line (the XML declaration)
         f.write('<!DOCTYPE TS>\n')
         for line in memfile:
             f.write(line
