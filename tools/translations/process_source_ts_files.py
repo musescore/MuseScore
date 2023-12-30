@@ -166,6 +166,9 @@ for source_file in glob.glob('share/locale/*_' + source_ts):
                 plural.text = tr_txt
         else:
             translation.text = tr_txt
+        
+        if translation.get('type') == 'obsolete':
+            translation.set('type', 'unfinished')
 
     eprint("Filling " + source_file + " with translations by copying source texts")
     write_ts_file(source_file, root)
