@@ -472,6 +472,7 @@ EditStyle::EditStyle(QWidget* parent)
         { StyleId::tupletBracketType,       false, tupletBracketType,       resetTupletBracketType },
         { StyleId::tupletMaxSlope,          false, tupletMaxSlope,          resetTupletMaxSlope },
         { StyleId::tupletOufOfStaff,        false, tupletOutOfStaff,        0 },
+        { StyleId::tupletUseSymbols,        false, tupletUseSymbols,        0 },
 
         { StyleId::repeatBarTips,            false, showRepeatBarTips,            resetShowRepeatBarTips },
         { StyleId::startBarlineSingle,       false, showStartBarlineSingle,       resetShowStartBarlineSingle },
@@ -973,6 +974,15 @@ EditStyle::EditStyle(QWidget* parent)
     });
     connect(textStyleFontSize, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
         textStyleValueChanged(TextStylePropertyType::FontSize, QVariant(textStyleFontSize->value()));
+    });
+
+    // musical symbols scale
+    WidgetUtils::setWidgetIcon(resetTextStyleMusicalSymbolsScale, IconCode::Code::UNDO);
+    connect(resetTextStyleMusicalSymbolsScale, &QToolButton::clicked, [=]() {
+        resetTextStyle(TextStylePropertyType::MusicalSymbolsScale);
+    });
+    connect(textStyleMusicalSymbolsScale, QOverload<double>::of(&QDoubleSpinBox::valueChanged), [=]() {
+        textStyleValueChanged(TextStylePropertyType::MusicalSymbolsScale, QVariant(textStyleMusicalSymbolsScale->value()));
     });
 
     // line spacing
@@ -2282,6 +2292,11 @@ void EditStyle::textStyleChanged(int row)
             resetTextStyleLineSpacing->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
             break;
 
+        case TextStylePropertyType::MusicalSymbolsScale:
+            textStyleMusicalSymbolsScale->setValue(styleValue(a.sid).toDouble() * 100);
+            resetTextStyleMusicalSymbolsScale->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
+            break;
+
         case TextStylePropertyType::FontStyle:
             textStyleFontStyle->setFontStyle(FontStyle(styleValue(a.sid).toInt()));
             resetTextStyleFontStyle->setEnabled(styleValue(a.sid) != defaultStyleValue(a.sid));
@@ -2352,6 +2367,10 @@ void EditStyle::textStyleChanged(int row)
     styleName->setEnabled(int(tid) >= int(TextStyleType::USER1));
     resetTextStyleName->setEnabled(styleName->text() != TConv::translatedUserName(tid));
 
+    row_textStyleMusicalSymbolsScale->setVisible(int(tid) == int(TextStyleType::TUPLET)
+                                                 || int(tid) == int(TextStyleType::OTTAVA) || int(tid) == int(TextStyleType::PEDAL)
+                                                 || int(tid) == int(TextStyleType::HARP_PEDAL_DIAGRAM));
+
     s_lastSubPageRow = row;
 }
 
@@ -2366,7 +2385,11 @@ void EditStyle::textStyleValueChanged(TextStylePropertyType type, QVariant value
 
     for (const auto& a : *ts) {
         if (a.type == type) {
-            setStyleQVariantValue(a.sid, value);
+            if (int(type) == int(TextStylePropertyType::MusicalSymbolsScale)) {
+                setStyleQVariantValue(a.sid, value.toDouble() / 100);
+            } else {
+                setStyleQVariantValue(a.sid, value);
+            }
             break;
         }
     }

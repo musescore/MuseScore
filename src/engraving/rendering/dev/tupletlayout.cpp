@@ -54,6 +54,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     //
     // create tuplet number if necessary
     //
+    const MStyle& style = ctx.conf().style();
     double _spatium = item->spatium();
     if (item->numberType() != TupletNumberType::NO_TEXT) {
         if (item->number() == nullptr) {
@@ -71,10 +72,21 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
         item->number()->setPropertyFlags(Pid::FONT_SIZE, item->propertyFlags(Pid::FONT_SIZE));
         item->number()->setPropertyFlags(Pid::FONT_STYLE, item->propertyFlags(Pid::FONT_STYLE));
         item->number()->setPropertyFlags(Pid::ALIGN, item->propertyFlags(Pid::ALIGN));
-        if (item->numberType() == TupletNumberType::SHOW_NUMBER) {
-            item->number()->setXmlText(String(u"%1").arg(item->ratio().numerator()));
+
+        String numberString = (item->numberType() == TupletNumberType::SHOW_NUMBER)
+                              ? String(u"%1").arg(item->ratio().numerator())
+                              : String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator());
+        if (style.styleB(Sid::tupletUseSymbols)) {
+            String smuflNum = String(u"");
+            for (size_t i = 0; i < numberString.size(); ++i) {
+                smuflNum.append(u"<sym>tuplet");
+                smuflNum.append(numberString.at(i).unicode());
+                smuflNum.append(u"</sym>");
+            }
+            smuflNum.replace(String(u":"), String(u"Colon"));
+            item->number()->setXmlText(smuflNum);
         } else {
-            item->number()->setXmlText(String(u"%1:%2").arg(item->ratio().numerator(), item->ratio().denominator()));
+            item->number()->setXmlText(numberString);
         }
 
         item->setIsSmall(true);
@@ -84,7 +96,7 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
                 break;
             }
         }
-        item->number()->mutldata()->setMag(item->isSmall() ? ctx.conf().styleD(Sid::smallNoteMag) : 1.0);
+        item->number()->mutldata()->setMag(item->isSmall() ? style.styleD(Sid::smallNoteMag) : 1.0);
     } else {
         if (item->number()) {
             if (item->number()->selected()) {
@@ -150,7 +162,6 @@ void TupletLayout::layout(Tuplet* item, LayoutContext& ctx)
     //
     //    calculate bracket start and end point p1 p2
     //
-    const MStyle& style = ctx.conf().style();
     double maxSlope      = style.styleD(Sid::tupletMaxSlope);
     bool outOfStaff      = style.styleB(Sid::tupletOufOfStaff);
     double vHeadDistance = style.styleMM(Sid::tupletVHeadDistance) * item->mag();

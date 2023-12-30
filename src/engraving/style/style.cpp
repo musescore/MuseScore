@@ -358,6 +358,25 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         } else if (tag == "chordlineThickness" && m_version < 410) {
             // Ignoring pre-4.1 value as it was wrong (it wasn't user-editable anyway)
             e.skipCurrentElement();
+        } else if ((tag == "pedalFontSize"
+                    || tag == "ottavaFontSize"
+                    || tag == "tupletFontSize"
+                    || tag == "harpPedalDiagramFontSize")
+                   && m_version < 430)
+            double _val = e.readDouble();
+            if (tag == "pedalFontSize") {
+                set(Sid::pedalFontSize, _val);
+                set(Sid::pedalMusicalSymbolsScale, (_val / MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE));
+            } else if (tag == "ottavaFontSize") {
+                set(Sid::ottavaFontSize, _val);
+                set(Sid::ottavaMusicalSymbolsScale, (_val / MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE));
+            } else if (tag == "tupletFontSize") {
+                set(Sid::tupletFontSize, _val);
+                set(Sid::tupletMusicalSymbolsScale, (_val / MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE));
+            } else if (tag == "harpPedalDiagramFontSize") {
+                set(Sid::harpPedalDiagramFontSize, _val);
+                set(Sid::harpPedalDiagramMusicalSymbolsScale, (_val / MUSICAL_SYMBOLS_DEFAULT_FONT_SIZE));
+            }
         } else if (!readProperties(e)) {
             e.unknown();
         }
@@ -367,6 +386,10 @@ void MStyle::read(XmlReader& e, compat::ReadChordListHook* readChordListHook)
         // This style didn't exist before version 4.2. For files older than 4.2, defaults
         // to INSIDE for compatibility. For files 4.2 and newer, defaults to OUTSIDE.
         set(Sid::tiePlacementChord, TiePlacement::INSIDE);
+    }
+    if (m_version < 430 && !MScore::testMode) {
+        //This style didn't exist before version 4.3, so using the old look.
+        set(Sid::tupletUseSymbols, false);
     }
 
     if (readChordListHook) {
