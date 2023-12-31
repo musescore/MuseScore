@@ -37,8 +37,18 @@ public:
     explicit TopLevelDialog(QWidget* parent = nullptr);
     TopLevelDialog(const TopLevelDialog& dialog);
 
+    // Owners of this dialog should call this method before performing any
+    // visibility operations like show, hide, etc. and inhibit those operations
+    // if this returns true.
+    bool shouldInhibitVisibilityEvents()
+    {
+        return m_shouldInhibitVisibilityEvents;
+    }
+
 protected:
     bool event(QEvent* e) override;
+private:
+    bool m_shouldInhibitVisibilityEvents = false;
 };
 }
 

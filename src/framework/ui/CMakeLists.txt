@@ -147,8 +147,9 @@ set(MODULE_UI
     )
 
 set(MODULE_LINK
-    accessibility
-    )
+  accessibility
+  uicomponents
+)
 
 if (OS_IS_MAC)
     find_library(AppKit NAMES AppKit)

@@ -31,6 +31,8 @@
 #include "containers.h"
 #include "log.h"
 
+#include "../../uicomponents/view/topleveldialog.h"
+
 using namespace mu;
 using namespace mu::ui;
 using namespace mu::framework;
@@ -566,6 +568,10 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     void* widgetClassPtr = QMetaType::create(widgetMetaTypeId);
     QDialog* dialog = static_cast<QDialog*>(widgetClassPtr);
+    // This is allowed to be null and is a convenience operation for the
+    // closures below to be DRY.
+    uicomponents::TopLevelDialog* topLevelDialog
+        = dynamic_cast<uicomponents::TopLevelDialog*>(dialog);
 
     if (!dialog) {
         result.ret = make_ret(Ret::Code::UnknownError);
@@ -574,14 +580,25 @@ RetVal<InteractiveProvider::OpenData> InteractiveProvider::openWidgetDialog(cons
 
     fillData(dialog, q);
 
-    dialog->installEventFilter(new WidgetDialogEventFilter(dialog,
-                                                           [this, dialog, objectId]() {
+    dialog->installEventFilter(new WidgetDialogEventFilter(
+                                   dialog,
+                                   [this, dialog, objectId, topLevelDialog]() {
+        // This check relies on this closure being invoked _before_ the
+        // dialog's event handler. See similar note in
+        // TopLevelDialog::event.
+        if (topLevelDialog != nullptr && topLevelDialog->shouldInhibitVisibilityEvents()) {
+            return;
+        }
         if (dialog) {
             onOpen(ContainerType::QWidgetDialog, objectId, dialog->window());
         }
     },
-                                                           [this, dialog, objectId]() {
+                                   [this, dialog, objectId, topLevelDialog]() {
         if (!dialog) {
+            return;
+        }
+
+        if (topLevelDialog != nullptr && topLevelDialog->shouldInhibitVisibilityEvents()) {
             return;
         }
 

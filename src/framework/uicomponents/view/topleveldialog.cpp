@@ -32,32 +32,24 @@ TopLevelDialog::TopLevelDialog(QWidget* parent)
     : QDialog(parent)
 {
     setWindowFlag(Qt::WindowContextHelpButtonHint, false);
-
-    // We want some windows to be on top of the main window.
-    // But not on top of all other applications when MuseScore isn't active.
-    // On Windows, we achieve this by setting the transient parent.
-    // On macOS, we have to use a workaround:
-    // When the application becomes active, the windows will get the StayOnTop hint.
-    // and when the application becomes inactive, the hint will be removed.
-#ifdef Q_OS_MAC
     auto updateStayOnTopHint = [this]() {
         bool stay = qApp->applicationState() == Qt::ApplicationActive;
-
-        bool wasShown = isVisible();
-        bool wasActive = isActiveWindow();
+        // Setting window flags causes dialogs with no parent to be hidden. In
+        // InteractiveProvider::openWidgetDialog we setup callbacks for dialog
+        // completion events that delete the dialog when it's done. However, QDialog
+        // interprets the hiding of dialogs as a completion event. In order to avoid
+        // deleting the dialog in this specific case, we use this member variable
+        // and then ignore the deletion event altogether below in
+        // TopLevelDialog::event.
+        m_shouldInhibitVisibilityEvents = true;
 
         setWindowFlag(Qt::WindowStaysOnTopHint, stay);
-        if (wasShown) {
-            if (!wasActive) {
-                setAttribute(Qt::WA_ShowWithoutActivating, true);
-            }
+        if (stay) {
             show();
-            setAttribute(Qt::WA_ShowWithoutActivating, false);
         }
     };
     updateStayOnTopHint();
     connect(qApp, &QApplication::applicationStateChanged, this, updateStayOnTopHint);
-#endif
 }
 
 TopLevelDialog::TopLevelDialog(const TopLevelDialog& dialog)
@@ -80,6 +72,14 @@ bool TopLevelDialog::event(QEvent* e)
                 return true;
             }
         }
+    }
+    // We need to reset the visibility event inhibition when a dialog is
+    // (re)shown so that it can be properly handled. This check relies on the
+    // functional owner of this dialog's open/hide/etc events being processed
+    // before this event() function. See similar note in
+    // InteractiveProvider::openWidgetDialog.
+    else if (e->type() == QEvent::Show) {
+        m_shouldInhibitVisibilityEvents = false;
     }
 
     return QDialog::event(e);
