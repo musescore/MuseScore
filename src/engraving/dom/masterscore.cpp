@@ -547,7 +547,7 @@ MeasureBase* MasterScore::insertMeasure(MeasureBase* beforeMeasure, const Insert
         newMeasure->setTimesig(currentTimeSig);
         newMeasure->setTicks(currentTimeSig);
 
-        undo(new InsertMeasures(newMeasure, newMeasure));
+        undo(new InsertMeasures(newMeasure, newMeasure, options.moveStaffTypeChanges));
 
         ticks = newMeasure->ticks();
         Measure* measureInsert = nullptr; // insert before

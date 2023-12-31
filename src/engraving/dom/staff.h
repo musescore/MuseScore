@@ -183,6 +183,8 @@ public:
     void removeStaffType(const Fraction&);
     void staffTypeListChanged(const Fraction&);
 
+    std::pair<int, int> staffTypeRange(const Fraction&) const;
+
     bool isPitchedStaff(const Fraction&) const;
     bool isTabStaff(const Fraction&) const;
     bool isDrumStaff(const Fraction&) const;

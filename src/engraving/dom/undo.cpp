@@ -2134,17 +2134,41 @@ void InsertRemoveMeasures::insertMeasures()
 
     score->setLayoutAll();
 
-    if (Measure* nextMeasure = lm->nextMeasure()) {
-        for (staff_idx_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            Staff* staff = score->staff(staffIdx);
-            if (staff->isStaffTypeStartFrom(fm->tick())) {
-                staff->moveStaffType(fm->tick(), nextMeasure->tick());
+    // move subsequent StaffTypeChanges
+    if (moveStc) {
+        for (Staff* staff : score->staves()) {
+            Fraction tickStart = fm->tick();
+            Fraction tickEnd = lm->endTick();
 
-                for (auto el : nextMeasure->el()) {
-                    if (el && el->isStaffTypeChange()) {
-                        toStaffTypeChange(el)->setStaffType(staff->staffType(nextMeasure->tick()), false);
+            // loop backwards until the insert point
+            auto stRange = staff->staffTypeRange(score->lastMeasure()->tick());
+            int moveTick = stRange.first;
+
+            while (moveTick >= tickStart.ticks() && moveTick > 0) {
+                Fraction tick = Fraction::fromTicks(moveTick);
+                Fraction tickNew = tick + tickEnd - tickStart;
+
+                // measures were inserted already so icon is at differnt place, as staffTypeChange itslef
+                Measure* measure = score->tick2measure(tickNew);
+                bool stIcon = false;
+
+                staff->moveStaffType(tick, tickNew);
+
+                for (EngravingItem* el : measure->el()) {
+                    if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
+                        StaffTypeChange* stc = toStaffTypeChange(el);
+                        stc->setStaffType(staff->staffType(tickNew), false);
+                        stIcon = true;
+                        break;
                     }
                 }
+
+                if (!stIcon) {
+                    LOG_UNDO() << "StaffTypeChange icon is missing in measure " << measure->no();
+                }
+
+                stRange = staff->staffTypeRange(tick);
+                moveTick = stRange.first;
             }
         }
     }
@@ -2230,17 +2254,40 @@ void InsertRemoveMeasures::removeMeasures()
         }
     }
 
-    if (Measure* nextMeasure = lm->nextMeasure()) {
-        for (size_t staffIdx = 0; staffIdx < score->nstaves(); ++staffIdx) {
-            Staff* staff = score->staff(staffIdx);
-            if (staff->isStaffTypeStartFrom(nextMeasure->tick())) {
-                staff->moveStaffType(nextMeasure->tick(), fm->tick());
+    // move subsequent StaffTypeChanges
+    if (moveStc) {
+        for (Staff* staff : score->staves()) {
+            Fraction tickStart = tick1;
+            Fraction tickEnd = tick2;
 
-                for (auto el : nextMeasure->el()) {
-                    if (el && el->isStaffTypeChange()) {
-                        toStaffTypeChange(el)->setStaffType(staff->staffType(fm->tick()), false);
+            // loop trhu, until the last one
+            auto stRange = staff->staffTypeRange(tickEnd);
+            int moveTick = stRange.first == tickEnd.ticks() ? stRange.first : stRange.second;
+
+            while (moveTick != -1) {
+                Fraction tick = Fraction::fromTicks(moveTick);
+                Fraction newTick = tick + tickStart - tickEnd;
+
+                Measure* measure = score->tick2measure(tick);
+                bool stIcon = false;
+
+                staff->moveStaffType(tick, newTick);
+
+                for (EngravingItem* el : measure->el()) {
+                    if (el && el->isStaffTypeChange() && el->track() == staff->idx() * VOICES) {
+                        StaffTypeChange* stc = toStaffTypeChange(el);
+                        stc->setStaffType(staff->staffType(newTick), false);
+                        stIcon = true;
+                        break;
                     }
                 }
+
+                if (!stIcon) {
+                    LOG_UNDO() << "StaffTypeChange icon is missing in measure " << measure->no();
+                }
+
+                stRange = staff->staffTypeRange(tick);
+                moveTick = stRange.second;
             }
         }
     }
