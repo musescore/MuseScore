@@ -186,7 +186,8 @@ private:
     bool m_isCanvasDragged = false;
     bool m_tripleClickPending = false;
 
-    PointF m_beginPoint;
+    QPointF m_physicalBeginPoint;
+    PointF m_logicalBeginPoint;
 
     mu::engraving::EngravingItem* m_prevHitElement = nullptr;
     bool m_shouldTogglePopupOnLeftClickRelease = false;
