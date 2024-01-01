@@ -371,7 +371,7 @@ void TremoloLayout::createBeamSegments(TremoloDispatcher* item, LayoutContext& c
         // by the beam layout
         int beamSpacing = ctx.conf().styleB(Sid::useWideBeams) ? 4 : 3;
         for (ChordRest* cr : { item->chord1(), item->chord2() }) {
-            Chord* chord = toChord(cr);
+            //Chord* chord = toChord(cr);
             double addition = 0.0;
             if (cr->up() != item->up() && item->lines() > 1) {
                 // need to adjust further for beams on the opposite side

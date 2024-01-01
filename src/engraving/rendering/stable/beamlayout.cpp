@@ -1312,8 +1312,8 @@ void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest*
 bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, int frag)
 {
     int fragmentIndex = (item->beamDirection() == DirectionV::AUTO || item->beamDirection() == DirectionV::DOWN) ? 0 : 1;
-    ChordRest* startCr = item->elements().front();
-    ChordRest* endCr = item->elements().back();
+    //ChordRest* startCr = item->elements().front();
+    //ChordRest* endCr = item->elements().back();
 
     const double quarterSpace = item->spatium() / 4;
     // imagine a line of beamed notes all in a row on the same staff. the first and last of those
