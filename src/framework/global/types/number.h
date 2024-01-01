@@ -154,6 +154,10 @@ inline T divide(const T& dividend, const T& divisor)
     return dividend / divisor;
 }
 
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning(push)
+#pragma warning(disable: 4723) // potential divide by 0
+#endif
 template<typename T>
 inline T divide(const T& dividend, const T& divisor, const T& def)
 {
@@ -162,6 +166,10 @@ inline T divide(const T& dividend, const T& divisor, const T& def)
     }
     return dividend / divisor;
 }
+
+#if (defined (_MSCVER) || defined (_MSC_VER))
+#pragma warning(pop)
+#endif
 
 template<typename T>
 inline number_t<T> divide(const number_t<T>& dividend, const number_t<T>& divisor, const number_t<T>& def)
