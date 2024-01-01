@@ -1232,7 +1232,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
         if (level > 0) {
             double grow = item->growLeft();
             if (!RealIsEqual(item->growLeft(), item->growRight())) {
-                double anchorX;// = dev::BeamTremoloLayout::chordBeamAnchorX(item->m_layoutInfo.get(), chord, ChordBeamAnchorType::Middle);
+                double anchorX = 0.0;// = dev::BeamTremoloLayout::chordBeamAnchorX(item->m_layoutInfo.get(), chord, ChordBeamAnchorType::Middle);
                 double proportionAlongX = (anchorX - item->startAnchor().x()) / (item->endAnchor().x() - item->startAnchor().x());
                 grow = proportionAlongX * (item->growRight() - item->growLeft()) + item->growLeft();
             }
@@ -1451,7 +1451,7 @@ bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<
                 yLast = topFirst->stemPos().y();
             }
             int desiredSlant = round((yFirst - yLast) / item->spatium());
-            int slant;// = std::min(std::abs(desiredSlant), dev::BeamTremoloLayout::getMaxSlope(item->m_layoutInfo.get()));
+            int slant = 0;// = std::min(std::abs(desiredSlant), dev::BeamTremoloLayout::getMaxSlope(item->m_layoutInfo.get()));
             slant *= (desiredSlant < 0) ? -quarterSpace : quarterSpace;
             item->startAnchor().ry() += (slant / 2);
             item->endAnchor().ry() -= (slant / 2);
