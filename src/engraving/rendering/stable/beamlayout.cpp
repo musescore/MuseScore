@@ -117,6 +117,8 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
 
 void BeamLayout::layoutIfNeed(Beam* item, LayoutContext& ctx)
 {
+    UNUSED(item);
+    UNUSED(ctx);
 //    if (!(item->m_layoutInfo && item->m_layoutInfo->isValid())) {
 //        BeamLayout::layout(item, ctx);
 //    }
@@ -1533,11 +1535,16 @@ bool BeamLayout::layout2Cross(Beam* item, LayoutContext& ctx, const std::vector<
 
 PointF BeamLayout::chordBeamAnchor(const Beam* item, const ChordRest* chord, ChordBeamAnchorType anchorType)
 {
+    UNUSED(item);
+    UNUSED(chord);
+    UNUSED(anchorType);
     return PointF();//dev::BeamTremoloLayout::chordBeamAnchor(item->m_layoutInfo.get(), chord, anchorType);
 }
 
 double BeamLayout::chordBeamAnchorY(const Beam* item, const ChordRest* chord)
 {
+    UNUSED(item);
+    UNUSED(chord);
     return 0.0;//dev::BeamTremoloLayout::chordBeamAnchorY(item->m_layoutInfo.get(), chord);
 }
 
