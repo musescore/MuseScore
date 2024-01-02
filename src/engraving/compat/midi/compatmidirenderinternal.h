@@ -147,7 +147,6 @@ public:
     struct Context
     {
         int sndController = CTRL_BREATH;
-        bool metronome = true;
         std::shared_ptr<ChannelLookup> channels = std::make_shared<ChannelLookup>();
 
         bool eachStringHasChannel = false; //!to better display the guitar instrument, each string has its own channel
@@ -170,9 +169,6 @@ private:
     void renderSpanners(EventsHolder& events, PitchWheelRenderer& pitchWheelRenderer);
     void doRenderSpanners(EventsHolder& events, Spanner* s, uint32_t channel, PitchWheelRenderer& pitchWheelRenderer,
                           MidiInstrumentEffect effect);
-
-    void renderMetronome(EventsHolder& events);
-    void renderMetronome(EventsHolder& events, Measure const* m);
 
     void collectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
                               PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords);

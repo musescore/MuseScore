@@ -82,7 +82,6 @@ static EventsHolder renderMidiEvents(const String& fileName, bool eachStringHasC
     EventsHolder events;
     CompatMidiRendererInternal::Context ctx;
 
-    ctx.metronome = false;
     ctx.eachStringHasChannel = eachStringHasChannel;
     ctx.instrumentsHaveEffects = instrumentsHaveEffects;
     CompatMidiRender::renderScore(score, events, ctx, true);
