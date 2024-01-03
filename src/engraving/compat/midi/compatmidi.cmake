@@ -19,6 +19,8 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 set(COMPAT_MIDI_SRC
+    ${CMAKE_CURRENT_LIST_DIR}/changeMap.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/changeMap.h
     ${CMAKE_CURRENT_LIST_DIR}/event.cpp
     ${CMAKE_CURRENT_LIST_DIR}/event.h
     ${CMAKE_CURRENT_LIST_DIR}/midicoreevent.h
