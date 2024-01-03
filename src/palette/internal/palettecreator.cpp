@@ -79,7 +79,6 @@
 #include "engraving/dom/tempotext.h"
 #include "engraving/dom/textline.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/tremolobar.h"

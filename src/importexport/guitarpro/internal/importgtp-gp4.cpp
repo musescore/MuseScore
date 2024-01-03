@@ -50,7 +50,6 @@
 #include "engraving/dom/stretchedbend.h"
 #include "types/symid.h"
 #include "engraving/dom/tie.h"
-#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tuplet.h"
 

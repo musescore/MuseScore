@@ -62,7 +62,7 @@
 #include "sticking.h"
 #include "stringtunings.h"
 #include "tie.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 #include "tremolosinglechord.h"
 #include "tuplet.h"

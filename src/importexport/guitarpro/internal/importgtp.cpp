@@ -78,7 +78,6 @@
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tremolobar.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/vibrato.h"

@@ -43,7 +43,6 @@
 #include "dom/staff.h"
 #include "dom/system.h"
 #include "dom/systemdivider.h"
-#include "dom/tremolo.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"

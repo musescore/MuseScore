@@ -34,7 +34,6 @@
 #include "dom/note.h"
 #include "dom/hook.h"
 #include "dom/stem.h"
-#include "dom/tremolo.h"
 #include "dom/tremolotwochord.h"
 #include "dom/fretcircle.h"
 #include "dom/tie.h"
