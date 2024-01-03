@@ -28,6 +28,8 @@
 #include "engraving/compat/scoreaccess.h"
 #include "engraving/dom/factory.h"
 #include "engraving/dom/masterscore.h"
+#include "notation/inotation.h"
+#include "project/inotationwriter.h"
 
 #include "cursor.h"
 #include "elements.h"
@@ -118,14 +120,52 @@ QQmlListProperty<Score> PluginAPI::scores()
 bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 {
     if (!s || !s->score()) {
+        LOGW("PluginAPI::writeScore: no score provided");
         return false;
     }
 
-    UNUSED(name);
-    UNUSED(ext);
+    if (s->score() != currentScore()) {
+        LOGW("PluginAPI::writeScore: only writing the selected score is currently supported");
+        return false;
+    }
 
-    NOT_IMPLEMENTED;
-    return false;
+    const notation::INotationPtr notation = context()->currentNotation();
+
+    if (!notation) {
+        LOGW("PluginAPI::writeScore: no notation found");
+        return false;
+    }
+
+    const auto unitType = determineWriterUnitType(ext.toStdString());
+
+    if (!unitType) {
+        LOGW("PluginAPI::writeScore: '%s' format is not supported", ext.toUtf8().constData());
+        return false;
+    }
+
+    const QString outPath = name.endsWith(ext) ? name : (name + '.' + ext);
+    return exportProjectScenario()->exportScores({ notation }, outPath, *unitType, /* openDestinationFolderOnExport */ false);
+}
+
+std::optional<project::INotationWriter::UnitType> PluginAPI::determineWriterUnitType(const std::string& ext) const
+{
+    const project::INotationWriterPtr writer = writers()->writer(ext);
+
+    if (!writer) {
+        return std::nullopt;
+    }
+
+    project::INotationWriter::UnitType unitType;
+
+    if (writer->supportsUnitType(project::INotationWriter::UnitType::PER_PAGE)) {
+        unitType = project::INotationWriter::UnitType::PER_PAGE;
+    } else if (writer->supportsUnitType(project::INotationWriter::UnitType::PER_PART)) {
+        unitType = project::INotationWriter::UnitType::PER_PART;
+    } else {
+        unitType = project::INotationWriter::UnitType::MULTI_PART;
+    }
+
+    return unitType;
 }
 
 //---------------------------------------------------------
@@ -140,11 +180,21 @@ bool PluginAPI::writeScore(Score* s, const QString& name, const QString& ext)
 
 Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 {
-    UNUSED(name);
-    UNUSED(noninteractive);
+    const bool hadScoreOpened = currentScore();
 
-    NOT_IMPLEMENTED;
-    return nullptr;
+    if (hadScoreOpened) {
+        LOGW("PluginAPI::readScore: will open a score in a new window");
+    }
+
+    if (noninteractive) {
+        LOGW("PluginAPI::readScore: noninteractive flag is not yet implemented");
+    }
+
+    const io::path_t path(name);
+    const project::ProjectFile file(path);
+    const Ret ret = projectFilesController()->openProject(file);
+
+    return (ret.success() && !hadScoreOpened) ? curScore() : nullptr;
 }
 
 //---------------------------------------------------------
@@ -153,9 +203,17 @@ Score* PluginAPI::readScore(const QString& name, bool noninteractive)
 
 void PluginAPI::closeScore(mu::plugins::api::Score* score)
 {
-    UNUSED(score);
+    if (!score || !score->score()) {
+        LOGW("PluginAPI::closeScore: no score provided");
+        return;
+    }
 
-    NOT_IMPLEMENTED;
+    if (score->score() != currentScore()) {
+        LOGW("PluginAPI::closeScore: only closing the selected score is currently supported");
+        return;
+    }
+
+    projectFilesController()->closeOpenedProject();
 }
 
 //---------------------------------------------------------

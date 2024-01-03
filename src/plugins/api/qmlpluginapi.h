@@ -23,6 +23,8 @@
 #ifndef __QMLPLUGINAPI_H__
 #define __QMLPLUGINAPI_H__
 
+#include <optional>
+
 #include <QFile>
 
 #include "qmlplugin.h"
@@ -34,6 +36,9 @@
 #include "engraving/dom/score.h"
 #include "engraving/dom/types.h"
 #include "engraving/types/types.h"
+#include "project/iexportprojectscenario.h"
+#include "project/inotationwritersregister.h"
+#include "project/iprojectfilescontroller.h"
 
 #include "apitypes.h"
 
@@ -77,6 +82,9 @@ class PluginAPI : public QmlPlugin
 
     INJECT(mu::actions::IActionsDispatcher, actionsDispatcher)
     INJECT(mu::context::IGlobalContext, context)
+    INJECT(mu::project::INotationWritersRegister, writers)
+    INJECT(mu::project::IExportProjectScenario, exportProjectScenario)
+    INJECT(mu::project::IProjectFilesController, projectFilesController)
 
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
@@ -290,6 +298,7 @@ public:
 
 private:
     mu::engraving::Score* currentScore() const;
+    std::optional<project::INotationWriter::UnitType> determineWriterUnitType(const std::string& ext) const;
 };
 
 #undef DECLARE_API_ENUM

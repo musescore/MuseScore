@@ -49,6 +49,7 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.cpp
     ${CMAKE_CURRENT_LIST_DIR}/projectmodule.h
     ${CMAKE_CURRENT_LIST_DIR}/projecterrors.h
+    ${CMAKE_CURRENT_LIST_DIR}/iexportprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationproject.h
     ${CMAKE_CURRENT_LIST_DIR}/iprojectcreator.h
     ${CMAKE_CURRENT_LIST_DIR}/inotationreader.h
@@ -88,7 +89,6 @@ set(MODULE_SRC
     ${CMAKE_CURRENT_LIST_DIR}/internal/projectconfiguration.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/exporttype.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/exporttype.h
-    ${CMAKE_CURRENT_LIST_DIR}/internal/iexportprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.cpp
     ${CMAKE_CURRENT_LIST_DIR}/internal/exportprojectscenario.h
     ${CMAKE_CURRENT_LIST_DIR}/internal/iopensaveprojectscenario.h

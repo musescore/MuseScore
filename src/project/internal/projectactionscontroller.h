@@ -37,10 +37,10 @@
 #include "cloud/cloudqmltypes.h"
 #include "playback/iplaybackcontroller.h"
 #include "print/iprintprovider.h"
+#include "iexportprojectscenario.h"
 #include "inotationreadersregister.h"
 #include "iopensaveprojectscenario.h"
 #include "io/ifilesystem.h"
-#include "internal/iexportprojectscenario.h"
 #include "notation/inotationconfiguration.h"
 
 #include "async/asyncable.h"

@@ -227,6 +227,9 @@ bool ExportProjectScenario::exportScores(const notation::INotationPtrList& notat
     } break;
     case INotationWriter::UnitType::MULTI_PART: {
         auto exportFunction = [writer, notations, options](IODevice& destinationDevice) {
+                if (notations.size() == 1) {
+                    return writer->write(notations.front(), destinationDevice, options);
+                }
                 return writer->writeList(notations, destinationDevice, options);
             };
 
