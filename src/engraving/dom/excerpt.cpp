@@ -53,7 +53,7 @@
 #include "textline.h"
 #include "tie.h"
 #include "tiemap.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 #include "tuplet.h"
 #include "tupletmap.h"

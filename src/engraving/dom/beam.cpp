@@ -39,7 +39,7 @@
 #include "segment.h"
 #include "staff.h"
 #include "system.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 #include "tuplet.h"
 

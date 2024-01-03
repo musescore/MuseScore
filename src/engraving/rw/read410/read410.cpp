@@ -35,7 +35,6 @@
 #include "dom/tuplet.h"
 #include "dom/chord.h"
 #include "dom/beam.h"
-#include "dom/tremolo.h"
 #include "dom/lyrics.h"
 #include "dom/note.h"
 #include "dom/measurerepeat.h"

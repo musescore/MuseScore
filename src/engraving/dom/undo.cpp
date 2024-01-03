@@ -74,7 +74,7 @@
 #include "textedit.h"
 #include "textline.h"
 #include "tie.h"
-#include "tremolo.h"
+
 #include "tremolobar.h"
 #include "tuplet.h"
 #include "utils.h"

@@ -113,7 +113,6 @@
 #include "engraving/dom/textlinebase.h"
 #include "engraving/dom/tie.h"
 #include "engraving/dom/timesig.h"
-#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/tremolotwochord.h"
 #include "engraving/dom/trill.h"

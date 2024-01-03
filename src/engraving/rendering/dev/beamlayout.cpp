@@ -26,7 +26,6 @@
 #include "containers.h"
 
 #include "dom/beam.h"
-#include "dom/tremolo.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/chord.h"

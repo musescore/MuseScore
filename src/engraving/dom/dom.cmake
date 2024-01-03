@@ -340,8 +340,6 @@ set(DOM_SRC
     ${CMAKE_CURRENT_LIST_DIR}/timesig.cpp
     ${CMAKE_CURRENT_LIST_DIR}/timesig.h
     ${CMAKE_CURRENT_LIST_DIR}/transpose.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremolo.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/tremolo.h
     ${CMAKE_CURRENT_LIST_DIR}/tremolotwochord.cpp
     ${CMAKE_CURRENT_LIST_DIR}/tremolotwochord.h
     ${CMAKE_CURRENT_LIST_DIR}/tremolosinglechord.cpp

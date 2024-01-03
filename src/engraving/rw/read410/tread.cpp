@@ -100,7 +100,6 @@
 #include "../../dom/stemslash.h"
 #include "../../dom/hook.h"
 #include "../../dom/page.h"
-#include "../../dom/tremolo.h"
 #include "../../dom/clef.h"
 #include "../../dom/glissando.h"
 #include "../../dom/gradualtempochange.h"

@@ -97,7 +97,6 @@
 #include "../../dom/stemslash.h"
 #include "../../dom/hook.h"
 #include "../../dom/page.h"
-#include "../../dom/tremolo.h"
 #include "../../dom/tremolotwochord.h"
 #include "../../dom/tremolosinglechord.h"
 #include "../../dom/clef.h"

@@ -917,6 +917,11 @@ inline bool isTremoloTwoChord(TremoloType type)
     return type >= TremoloType::C8;
 }
 
+// only applicable to minim two-note tremolo in non-TAB staves
+enum class TremoloStyle : signed char {
+    DEFAULT = 0, TRADITIONAL, TRADITIONAL_ALTERNATE
+};
+
 enum class TremoloChordType : char {
     TremoloNone, TremoloSingle, TremoloFirstChord, TremoloSecondChord
 };

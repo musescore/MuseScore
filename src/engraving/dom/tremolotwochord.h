@@ -33,7 +33,6 @@
 #include "types/types.h"
 #include "beam.h"
 #include "chord.h"
-#include "tremolo.h"
 
 namespace mu::engraving {
 class Chord;
@@ -152,13 +151,8 @@ public:
     void computeShape();
     //! -----------------
 
-    TremoloDispatcher* dispatcher() const;
-
 private:
     friend class Factory;
-    friend class TremoloDispatcher;
-
-    mutable TremoloDispatcher* m_dispatcher = nullptr;
 
     TremoloTwoChord(Chord* parent);
     TremoloTwoChord(const TremoloTwoChord&);

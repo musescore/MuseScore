@@ -74,7 +74,7 @@
 #include "system.h"
 #include "tie.h"
 #include "timesig.h"
-#include "tremolo.h"
+
 #include "tuplet.h"
 #include "types.h"
 #include "undo.h"

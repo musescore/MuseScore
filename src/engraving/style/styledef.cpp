@@ -30,7 +30,6 @@
 #include "dom/mscore.h"
 #include "dom/realizedharmony.h"
 #include "dom/textbase.h"
-#include "dom/tremolo.h"
 #include "dom/tuplet.h"
 #include "dom/types.h"
 
