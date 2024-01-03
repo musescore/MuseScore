@@ -1470,8 +1470,6 @@ void ChangeElement::flip(EditData*)
         if (!ks->generated()) {
             ks->staff()->setKey(ks->tick(), ks->keySigEvent());
         }
-    } else if (newElement->isDynamic()) {
-        newElement->score()->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     } else if (newElement->isTempoText()) {
         TempoText* t = toTempoText(oldElement);
         score->setTempo(t->segment(), t->tempo());

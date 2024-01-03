@@ -266,7 +266,6 @@ MasterScore* MasterScore::clone()
     XmlReader r(scoreData);
     MscLoader().readMasterScore(score, r, true);
 
-    score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
     return score;
 }

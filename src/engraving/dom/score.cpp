@@ -1481,14 +1481,12 @@ void Score::addElement(EngravingItem* element)
                 ss->system()->add(ss);
             }
         }
-        cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
         o->staff()->updateOttava();
         setPlaylistDirty();
     }
     break;
 
     case ElementType::DYNAMIC:
-        cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
         setPlaylistDirty();
         break;
 
@@ -1679,13 +1677,11 @@ void Score::removeElement(EngravingItem* element)
         o->triggerLayout();
         removeSpanner(o);
         o->staff()->updateOttava();
-        cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
         setPlaylistDirty();
     }
     break;
 
     case ElementType::DYNAMIC:
-        cmdState().layoutFlags |= LayoutFlag::FIX_PITCH_VELO;
         setPlaylistDirty();
         break;
 

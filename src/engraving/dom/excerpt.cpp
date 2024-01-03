@@ -430,7 +430,6 @@ void Excerpt::createExcerpt(Excerpt* excerpt)
     }
 
     // initial layout of score
-    score->addLayoutFlags(LayoutFlag::FIX_PITCH_VELO);
     score->doLayout();
 
     // handle transposing instruments

@@ -188,8 +188,8 @@ private:
 
     Score* score = nullptr;
 
-    std::unordered_map<Staff*, ChangeMap> m_velocitiesByStaff;
-    std::unordered_map<Staff*, ChangeMap> m_velocityMultiplicationsByStaff;
+    std::unordered_map<staff_idx_t, ChangeMap> m_velocitiesByStaff;
+    std::unordered_map<staff_idx_t, ChangeMap> m_velocityMultiplicationsByStaff;
 
     Context _context;
 };
