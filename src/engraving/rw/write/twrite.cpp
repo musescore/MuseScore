@@ -2933,8 +2933,12 @@ void TWrite::write(const TremoloSingleChord* item, XmlWriter& xml, WriteContext&
         return;
     }
 
-    // for compatible reason
-    xml.startElement(TConv::toXml(ElementType::TREMOLO).ascii());
+    if (ctx.clipboardmode()) {
+        xml.startElement(item);
+    } else {
+        // for compatible reason
+        xml.startElement(TConv::toXml(ElementType::TREMOLO).ascii());
+    }
 
     writeProperty(item, xml, Pid::TREMOLO_TYPE);
     writeProperty(item, xml, Pid::PLAY);
@@ -2947,8 +2951,13 @@ void TWrite::write(const TremoloTwoChord* item, XmlWriter& xml, WriteContext& ct
     if (!ctx.canWrite(item)) {
         return;
     }
-    // for compatible reason
-    xml.startElement(TConv::toXml(ElementType::TREMOLO).ascii());
+
+    if (ctx.clipboardmode()) {
+        xml.startElement(item);
+    } else {
+        // for compatible reason
+        xml.startElement(TConv::toXml(ElementType::TREMOLO).ascii());
+    }
 
     writeProperty(item, xml, Pid::TREMOLO_TYPE);
     writeProperty(item, xml, Pid::TREMOLO_STYLE);
