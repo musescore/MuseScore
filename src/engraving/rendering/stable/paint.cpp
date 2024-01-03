@@ -26,6 +26,7 @@
 #include "dom/page.h"
 #include "dom/engravingitem.h"
 
+#include "tdraw.h"
 #include "debugpaint.h"
 
 #include "log.h"
@@ -138,6 +139,7 @@ void Paint::paintScore(draw::Painter* painter, Score* score, const IScoreRendere
 
             std::vector<EngravingItem*> elements = page->items(drawRect.translated(-pagePos));
             paintItems(*painter, elements);
+            //DebugPaint::paintPageTree(*painter, page);
 
             if (disableClipping) {
                 painter->setClipping(false);
@@ -216,7 +218,7 @@ void Paint::paintItem(mu::draw::Painter& painter, const EngravingItem* item)
     PointF itemPosition(item->pagePos());
 
     painter.translate(itemPosition);
-    EngravingItem::renderer()->drawItem(item, &painter);
+    TDraw::drawItem(item, &painter);
     painter.translate(-itemPosition);
 }
 

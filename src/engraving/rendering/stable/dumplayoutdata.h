@@ -5,7 +5,7 @@
  * MuseScore
  * Music Composition & Notation
  *
- * Copyright (C) 2023 MuseScore BVBA and others
+ * Copyright (C) 2021 MuseScore BVBA and others
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 3 as
@@ -19,27 +19,23 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
-#ifndef MU_ENGRAVING_SCOREPAGEVIEWLAYOUT_STABLE_H
-#define MU_ENGRAVING_SCOREPAGEVIEWLAYOUT_STABLE_H
+#ifndef MU_ENGRAVING_DUMPLAYOUTDATA_STABLE_H
+#define MU_ENGRAVING_DUMPLAYOUTDATA_STABLE_H
 
-#include "layoutcontext.h"
+#include <string>
+
+namespace mu::engraving {
+class Score;
+}
 
 namespace mu::engraving::rendering::stable {
-class ScorePageViewLayout
+class DumpLayoutData
 {
 public:
+    DumpLayoutData();
 
-    static void layoutPageView(Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick);
-
-private:
-
-    static void initLayoutContext(const Score* score, LayoutContext& ctx, const Fraction& stick, const Fraction& etick);
-    static void prepareScore(Score* score, const LayoutContext& ctx);
-
-    static void doLayout(LayoutContext& ctx);
-
-    static void layoutFinished(Score* score, LayoutContext& ctx);
+    static std::string dump(const Score* s);
 };
 }
 
-#endif // MU_ENGRAVING_SCOREPAGEVIEWLAYOUT_STABLE_H
+#endif // MU_ENGRAVING_DUMPLAYOUTDATA_STABLE_H

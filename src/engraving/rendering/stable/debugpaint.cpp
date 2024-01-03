@@ -31,6 +31,8 @@
 #include "dom/measure.h"
 #include "dom/segment.h"
 
+#include "tdraw.h"
+
 #include "log.h"
 
 using namespace mu::draw;
@@ -251,6 +253,37 @@ void DebugPaint::paintPageDebug(Painter& painter, const Page* page, const std::v
         }
     }
 #endif
+
+    painter.restore();
+}
+
+void DebugPaint::paintTreeElement(mu::draw::Painter& painter, const EngravingItem* item)
+{
+//    if (item->ldata()->isSkipDraw()) {
+//        return;
+//    }
+    item->itemDiscovered = false;
+    PointF itemPosition(item->pagePos());
+
+    painter.translate(itemPosition);
+    TDraw::drawItem(item, &painter);
+    painter.translate(-itemPosition);
+}
+
+static void paintRecursive(mu::draw::Painter& painter, const EngravingItem* item)
+{
+    DebugPaint::paintTreeElement(painter, item);
+
+    for (const EngravingItem* eItem : item->childrenItems()) {
+        paintRecursive(painter, eItem);
+    }
+}
+
+void DebugPaint::paintPageTree(mu::draw::Painter& painter, const Page* page)
+{
+    painter.save();
+
+    paintRecursive(painter, page);
 
     painter.restore();
 }

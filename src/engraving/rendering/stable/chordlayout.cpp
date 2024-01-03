@@ -56,14 +56,17 @@
 #include "dom/tie.h"
 #include "dom/slur.h"
 
+#include "dom/tremolotwochord.h"
+
 #include "dom/undo.h"
 #include "dom/utils.h"
 
+#include "arpeggiolayout.h"
 #include "tlayout.h"
 #include "slurtielayout.h"
 #include "beamlayout.h"
+#include "tremololayout.h"
 #include "autoplace.h"
-#include "gettremolodispatcher.h"
 
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::stable;
@@ -73,7 +76,6 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
     if (item->notes().empty()) {
         return;
     }
-
     int gi = 0;
     for (Chord* c : item->graceNotes()) {
         // HACK: graceIndex is not well-maintained on add & remove
@@ -86,8 +88,6 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
     } else {
         layoutPitched(item, ctx);
     }
-
-    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
@@ -111,6 +111,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     double rrr    = 0.0;           // space to leave at right of chord
     double lhead  = 0.0;           // amount of notehead to left of chord origin
     Note* upnote = item->upNote();
+    Note* downnote = item->downNote();
+    Note* leftNote = nullptr;
 
     delete item->tabDur();     // no TAB? no duration symbol! (may happen when converting a TAB into PITCHED)
     item->setTabDur(nullptr);
@@ -134,6 +136,9 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
         rrr      = std::max(rrr, x2);
         // track amount of space due to notehead only
         lhead    = std::max(lhead, -x1);
+        if (!leftNote || note->x() < leftNote->x()) {
+            leftNote = note;
+        }
 
         Accidental* accidental = note->accidental();
         if (accidental && accidental->visible()) {
@@ -166,32 +171,85 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     item->addLedgerLines();
 
+    // If item has an arpeggio: mark chords which are part of the arpeggio
     if (item->arpeggio()) {
+        item->arpeggio()->findAndAttachToChords();
+        item->arpeggio()->mutldata()->maxChordPad = 0.0;
+        static constexpr int MAX_ARPEGGIO_X = 10000;
+        item->arpeggio()->mutldata()->minChordX = MAX_ARPEGGIO_X;
         TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
-
-        double arpeggioNoteDistance = ctx.conf().styleMM(Sid::ArpeggioNoteDistance) * mag_;
-
-        double gapSize = arpeggioNoteDistance;
-
-        if (chordAccidentals.size()) {
-            double arpeggioAccidentalDistance = ctx.conf().styleMM(Sid::ArpeggioAccidentalDistance) * mag_;
-            double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
-            gapSize = arpeggioAccidentalDistance - accidentalDistance;
-//            gapSize -= ArpeggioLayout::insetDistance(chordAccidentals, mag_, item);
+    }
+    // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
+    if (item->spanArpeggio()) {
+        Arpeggio* spanArp = item->spanArpeggio();
+        Arpeggio::LayoutData* arpldata = spanArp->mutldata();
+        const Segment* seg = spanArp->chord()->segment();
+        const EngravingItem* endItem = seg->elementAt(spanArp->endTrack());
+        const Chord* endChord = item;
+        if (endItem && endItem->isChord()) {
+            endChord = toChord(endItem);
         }
 
-        double extraX = item->arpeggio()->width() + gapSize + chordX;
+        // If a note is covered in the voice span but located outside the visual span of the arpeggio calculate accidental offset later
+        bool aboveStart
+            = std::make_pair(item->vStaffIdx(), item->downLine()) < std::make_pair(spanArp->vStaffIdx(), spanArp->chord()->upLine());
+        bool belowEnd = std::make_pair(item->vStaffIdx(), item->upLine()) > std::make_pair(endChord->vStaffIdx(), endChord->downLine());
 
-        double y1   = upnote->pos().y() - upnote->headHeight() * .5;
-        item->arpeggio()->setPos(-(lll + extraX), y1);
-        if (item->arpeggio()->visible()) {
-            lll += extraX;
+        if (!(aboveStart || belowEnd)) {
+            const PaddingTable& paddingTable = item->score()->paddingTable();
+            double arpeggioNoteDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::NOTE) * mag_;
+            double arpeggioLedgerDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::LEDGER_LINE) * mag_;
+            int firstLedgerBelow = item->staff()->lines(item->downNote()->tick()) * 2 - 1;
+            int firstLedgerAbove = -1;
+
+            double gapSize = arpeggioNoteDistance;
+
+            if (leftNote && RealIsNull(leftNote->x())) {
+                if (downnote->line() > firstLedgerBelow || upnote->line() < firstLedgerAbove) {
+                    gapSize = arpeggioLedgerDistance + ctx.conf().styleS(Sid::ledgerLineLength).val() * item->spatium();
+                }
+            } else if (leftNote && (leftNote->line() > firstLedgerBelow || leftNote->line() < firstLedgerAbove)) {
+                gapSize = arpeggioLedgerDistance + ctx.conf().styleS(Sid::ledgerLineLength).val() * item->spatium();
+            }
+
+            double arpChordX = std::min(chordX, 0.0);
+
+            if (!chordAccidentals.empty()) {
+                double arpeggioAccidentalDistance = paddingTable.at(ElementType::ARPEGGIO).at(ElementType::ACCIDENTAL) * mag_;
+                double accidentalDistance = ctx.conf().styleMM(Sid::accidentalDistance) * mag_;
+                gapSize = arpeggioAccidentalDistance - accidentalDistance;
+                gapSize -= ArpeggioLayout::insetDistance(spanArp, ctx, mag_, item, chordAccidentals);
+            }
+
+            double extraX = spanArp->width() + gapSize;
+
+            // Track leftmost chord position, as we we always want the arpeggio to be to the left of this
+            arpldata->minChordX = std::min(arpldata->minChordX, arpChordX);
+
+            // Save this to arpeggio if largest
+            arpldata->maxChordPad = std::max(arpldata->maxChordPad, lll + extraX);
+
+            // If first chord in arpeggio set y
+            if (item->arpeggio() && item->arpeggio() == spanArp) {
+                double y1 = upnote->pos().y() - upnote->headHeight() * .5;
+                item->arpeggio()->mutldata()->setPosY(y1);
+            }
+
+            Note* endDownNote = endChord->downNote();
+
+            // If last chord in arpeggio, set x
+            if (endDownNote->track() == item->track()) {
+                // Amount to move arpeggio from it's parent chord to factor in chords further to the left
+                double firstChordX = spanArp->chord()->ldata()->pos().x();
+                double xDiff = firstChordX - arpldata->minChordX;
+
+                double offset = -(xDiff + arpldata->maxChordPad);
+                spanArp->mutldata()->setPosX(offset);
+                if (spanArp->visible()) {
+                    lll = offset;
+                }
+            }
         }
-        // _arpeggio->layout() called in layoutArpeggio2()
-
-        // handle the special case of _arpeggio->span() > 1
-        // in layoutArpeggio2() after page layout has done so we
-        // know the y position of the next staves
     }
 
     if (item->dots()) {
@@ -261,6 +319,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     for (Fingering* f : alignNote) {
         f->mutldata()->setPosX(xNote);
     }
+
+    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
@@ -403,7 +463,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             Stem* stem = Factory::createStem(item);
             stem->setParent(item);
             stem->setGenerated(true);
-            ctx.mutDom().undo(new AddElement(stem));
+            ctx.mutDom().addElement(stem);
         }
         item->stem()->setPos(tab->chordStemPos(item) * _spatium);
         if (item->hook()) {
@@ -419,15 +479,15 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         }
     } else {
         if (item->stem()) {
-            ctx.mutDom().undo(new RemoveElement(item->stem()));
+            ctx.mutDom().doUndoRemoveElement(item->stem());
             item->remove(item->stem());
         }
         if (item->hook()) {
-            ctx.mutDom().undo(new RemoveElement(item->hook()));
+            ctx.mutDom().doUndoRemoveElement(item->hook());
             item->remove(item->hook());
         }
         if (item->beam()) {
-            ctx.mutDom().undo(new RemoveElement(item->beam()));
+            ctx.mutDom().doUndoRemoveElement(item->beam());
             item->remove(item->beam());
         }
     }
@@ -624,6 +684,8 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     if (item->stemSlash()) {
         TLayout::layoutStemSlash(item->stemSlash(), item->stemSlash()->mutldata(), ctx.conf());
     }
+
+    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 //---------------------------------------------------------
@@ -666,10 +728,13 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
     double mag            = (staffType->isSmall() ? ctx.conf().styleD(Sid::smallStaffMag) : 1.0) * staffType->userMag();
     double _spatium       = ctx.conf().spatium() * mag;
     double _lineDist       = _spatium * staffType->lineDistance().val() / 2;
-    const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
+    const double minDist = ctx.conf().styleMM(Sid::articulationMinDistance) * mag;
     const ArticulationStemSideAlign articulationHAlign = ctx.conf().styleV(Sid::articulationStemHAlign).value<ArticulationStemSideAlign>();
     const bool keepArticsTogether = ctx.conf().styleB(Sid::articulationKeepTogether);
-    const double stemSideDistance = ctx.conf().styleMM(Sid::propertyDistanceStem);
+    const double stemSideDistance = ctx.conf().styleMM(Sid::propertyDistanceStem) * mag;
+    const double headSideDistance = ctx.conf().styleMM(Sid::propertyDistanceHead) * mag;
+    const double tenutoAdditionalTieDistance = 0.6 * _spatium;
+    const double staccatoAdditionalTieDistance = 0.4 * _spatium;
 
     int numCloseArtics = 0;
     bool hasStaffArticsUp = false;
@@ -720,6 +785,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
 
         bool bottom = !a->up();      // true: articulation is below chord;  false: articulation is above chord
         TLayout::layoutItem(a, ctx);     // must be done after assigning direction, or else symId is not reliable
+        bool leaveTieSpace = leaveSpaceForTie(a);
 
         bool headSide = bottom == item->up();
         double y = 0.0;
@@ -760,7 +826,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line += 1;
                 }
                 double dist = (line * _lineDist) - stemBottom;
-                bool hasBeam = item->beam() || (tremoloDispatcher(item) && tremoloDispatcher(item)->twoNotes());
+                bool hasBeam = item->beam() || (item->tremoloTwoChord());
                 if (line < lines && hasBeam && dist < stemSideDistance) {
                     // beams can give stems weird unpredictable lengths, so we should enforce min
                     // distance even inside the staff
@@ -785,10 +851,16 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line = std::max(line, lines - (3 + ((numCloseArtics - 1) * 2)));
                 }
                 if (line < lines - 1) {
+                    if (leaveTieSpace && line % 2) {
+                        line += 1;
+                    }
                     y = ((line & ~1) + 3) * _lineDist;
                     y -= a->height() * .5;
                 } else {
-                    y = item->downPos() + 0.5 * item->downNote()->headHeight() + ctx.conf().styleMM(Sid::propertyDistanceHead);
+                    y = item->downPos() + 0.5 * item->downNote()->headHeight() + headSideDistance;
+                    if (leaveTieSpace) {
+                        y += a->isStaccato() ? staccatoAdditionalTieDistance : tenutoAdditionalTieDistance;
+                    }
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
@@ -814,7 +886,7 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line -= 1;
                 }
                 double dist = stemTop - (line * _lineDist);
-                bool hasBeam = item->beam() || (tremoloDispatcher(item) && tremoloDispatcher(item)->twoNotes());
+                bool hasBeam = item->beam() || item->tremoloTwoChord();
                 if (line > 0 && hasBeam && dist < stemSideDistance) {
                     // beams can give stems weird unpredictable lengths, so we should enforce min
                     // distance even inside the staff
@@ -840,10 +912,16 @@ void ChordLayout::layoutArticulations(Chord* item, LayoutContext& ctx)
                     line = std::min(line, 3 + ((numCloseArtics - 1) * 2));
                 }
                 if (line > 1) {
+                    if (leaveTieSpace && line % 2) {
+                        line -= 1;
+                    }
                     y = (((line + 1) & ~1) - 3) * _lineDist;
                     y += a->height() * .5;
                 } else {
-                    y = item->upPos() - 0.5 * item->downNote()->headHeight() - ctx.conf().styleMM(Sid::propertyDistanceHead);
+                    y = item->upPos() - 0.5 * item->downNote()->headHeight() - headSideDistance;
+                    if (leaveTieSpace) {
+                        y -= a->isStaccato() ? staccatoAdditionalTieDistance : tenutoAdditionalTieDistance;
+                    }
                 }
             }
             if (prevArticulation && (prevArticulation->up() == a->up())) {
@@ -899,10 +977,11 @@ void ChordLayout::layoutArticulations2(Chord* item, LayoutContext& ctx, bool lay
     }
 
     double stacAccentKern = 0.2 * item->spatium();
-    double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
-    double staffDist = ctx.conf().styleMM(Sid::propertyDistance);
-    double stemDist = ctx.conf().styleMM(Sid::propertyDistanceStem);
-    double noteDist = ctx.conf().styleMM(Sid::propertyDistanceHead);
+    double mag = item->mag();
+    double minDist = ctx.conf().styleMM(Sid::articulationMinDistance) * mag;
+    double staffDist = ctx.conf().styleMM(Sid::propertyDistance) * mag;
+    double stemDist = ctx.conf().styleMM(Sid::propertyDistanceStem) * mag;
+    double noteDist = ctx.conf().styleMM(Sid::propertyDistanceHead) * mag;
 
     double chordTopY = item->upPos() - 0.5 * item->upNote()->headHeight();      // note position of highest note
     double chordBotY = item->downPos() + 0.5 * item->upNote()->headHeight();    // note position of lowest note
@@ -1056,19 +1135,23 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
         }
         Shape aShape = a->shape().translate(a->pos() + item->pos() + s->pos() + m->pos());
         Shape sShape = ss->shape().translate(ss->pos());
-        if (aShape.intersects(sShape)) {
-            double d = ctx.conf().styleS(Sid::articulationMinDistance).val() * item->spatium();
-            d += slur->up()
-                 ? std::max(aShape.minVerticalDistance(sShape), 0.0)
-                 : std::max(sShape.minVerticalDistance(aShape), 0.0);
-            d *= slur->up() ? -1 : 1;
+        double minDist = ctx.conf().styleMM(Sid::articulationMinDistance);
+        double vertClearance = a->up() ? aShape.verticalClearance(sShape) : sShape.verticalClearance(aShape);
+        if (vertClearance < minDist) {
+            minDist += slur->up()
+                       ? std::max(aShape.minVerticalDistance(sShape), 0.0)
+                       : std::max(sShape.minVerticalDistance(aShape), 0.0);
+            minDist *= slur->up() ? -1 : 1;
             for (auto iter2 = iter; iter2 != item->articulations().end(); ++iter2) {
                 Articulation* aa = *iter2;
-                aa->mutldata()->moveY(d);
-                Shape aaShape = aa->shape().translated(aa->pos() + item->pos() + s->pos() + m->pos());
+                aa->mutldata()->moveY(minDist);
                 if (sstaff && aa->addToSkyline()) {
-                    sstaff->skyline().add(aaShape);
-                    s->staffShape(item->staffIdx()).add(aaShape);
+                    sstaff->skyline().add(aa->shape().translated(aa->pos() + item->pos() + s->pos() + m->pos()));
+                    for (ShapeElement& sh : s->staffShape(item->staffIdx()).elements()) {
+                        if (sh.item() == aa) {
+                            sh.translate(0.0, minDist);
+                        }
+                    }
                 }
             }
         }
@@ -1080,23 +1163,17 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
 {
     // Stem needs to know hook's bbox and SMuFL anchors.
     // This is done before calcDefaultStemLength because the presence or absence of a hook affects stem length
-    if (item->shouldHaveHook()) {
-        layoutHook(item, ctx);
-    } else {
-        ctx.mutDom().undoRemoveElement(item->hook());
+    if (item->hook()) {
+        item->hook()->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
+        TLayout::layoutHook(item->hook(), item->hook()->mutldata());
     }
 
     // we should calculate default stem length for this chord even if it doesn't have a stem
     // because this length is used for tremolos or other things that attach to where the stem WOULD be
     item->setDefaultStemLength(item->calcDefaultStemLength());
 
-    if (!item->shouldHaveStem()) {
-        item->removeStem();
-        return;
-    }
-
     if (!item->stem()) {
-        item->createStem();
+        return;
     }
 
     item->stem()->mutldata()->setPosX(item->stemPosX());
@@ -1120,14 +1197,150 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
     }
 }
 
-void ChordLayout::layoutHook(Chord* item, LayoutContext& ctx)
+static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
 {
-    if (!item->hook()) {
-        item->createHook();
-        computeUp(item, ctx);
+    bool mixedDirection = false;
+    bool cross = false;
+    ChordRest* firstCr = beam->elements().front();
+    ChordRest* lastCr = beam->elements().back();
+    Chord* firstChord = nullptr;
+    Chord* lastChord = nullptr;
+    for (ChordRest* currCr : beam->elements()) {
+        if (!currCr->isChord()) {
+            continue;
+        }
+        if (!firstChord) {
+            firstChord = toChord(currCr);
+        }
+        lastChord = toChord(currCr);
     }
-    item->hook()->setHookType(item->up() ? item->durationType().hooks() : -item->durationType().hooks());
-    TLayout::layoutHook(item->hook(), item->hook()->mutldata());
+    DirectionV stemDirections = DirectionV::AUTO;
+    for (ChordRest* cr : beam->elements()) {
+        if (!beam->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
+            // on an unmodified beam, if all of the elements on that beam are explicitly set in one direction
+            // (or AUTO), use that as the direction. This is necessary because the beam has not been laid out yet.
+            if (stemDirections == DirectionV::AUTO) {
+                stemDirections = toChord(cr)->stemDirection();
+            } else if (stemDirections != toChord(cr)->stemDirection()) {
+                mixedDirection = true;
+            }
+        }
+        if (cr->isChord() && toChord(cr)->staffMove() != 0) {
+            cross = true;
+            if (!beam->userModified()) { // if the beam is user-modified _up must be decided later down
+                int move = toChord(cr)->staffMove();
+                // we have to determine the first and last chord direction for the beam
+                // so that we can calculate the beam anchor points
+                if (move > 0) {
+                    item->setUp(item->staffMove() > 0);
+                    firstCr->setUp(firstCr->staffMove() > 0);
+                    lastCr->setUp(lastCr->staffMove() > 0);
+                } else {
+                    item->setUp(item->staffMove() >= 0);
+                    firstCr->setUp(firstCr->staffMove() >= 0);
+                    lastCr->setUp(lastCr->staffMove() >= 0);
+                }
+            }
+            break;
+        }
+    }
+    Measure* measure = item->findMeasure();
+    if (!cross) {
+        if (!mixedDirection && stemDirections != DirectionV::AUTO) {
+            item->setUp(stemDirections == DirectionV::UP);
+        } else if (!beam->userModified()) {
+            item->setUp(beam->up());
+        }
+    }
+    if (!measure->explicitParent()) {
+        // this method will be called later (from Measure::layoutCrossStaff) after the
+        // system is completely laid out.
+        // this is necessary because otherwise there's no way to deal with cross-staff beams
+        // because we don't know how far apart the staves actually are
+        return;
+    }
+    if (beam->userModified()) {
+        if (cross && item == firstCr) {
+            // necessary because this beam was never laid out before, so its position isn't known
+            // and the first chord would calculate wrong stem direction
+            TLayout::layoutBeam(item->beam(), ctx);
+        } else {
+            // otherwise we can use stale layout data; the only reason we would need to lay out here is if
+            // it's literally never been laid out before which due to the insane nature of our layout system
+            // is actually a possible thing
+            BeamLayout::layoutIfNeed(item->beam(), ctx);
+        }
+        PointF base = beam->pagePos();
+        Note* baseNote = item->up() ? item->downNote() : item->upNote();
+        double noteY = baseNote->pagePos().y();
+        double noteX = item->stemPosX() + item->pagePos().x() - base.x();
+        PointF startAnchor = PointF();
+        PointF endAnchor = PointF();
+        startAnchor = BeamLayout::chordBeamAnchor(beam, firstChord, ChordBeamAnchorType::Start);
+        endAnchor = BeamLayout::chordBeamAnchor(beam, lastChord, ChordBeamAnchorType::End);
+
+        if (item == beam->elements().front()) {
+            item->setUp(noteY > startAnchor.y());
+        } else if (item == beam->elements().back()) {
+            item->setUp(noteY > endAnchor.y());
+        } else {
+            double proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
+            double desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
+            item->setUp(noteY > desiredY);
+        }
+    }
+
+    TLayout::layoutBeam(beam, ctx);
+    if (cross
+        && item->tremoloTwoChord()
+        && item->tremoloTwoChord()->chord1() == item
+        && item->tremoloTwoChord()->chord1()->beam() == item->tremoloTwoChord()->chord2()->beam()) {
+        // beam-infixed two-note trems have to be laid out here
+        TremoloLayout::layout(item->tremoloTwoChord(), ctx);
+    }
+
+    if (!cross && !beam->userModified()) {
+        item->setUp(beam->up());
+    }
+}
+
+static void computeUp_TremoloTwoNotesCase(Chord* item, TremoloTwoChord* tremolo, LayoutContext& ctx)
+{
+    Chord* c1 = tremolo->chord1();
+    Chord* c2 = tremolo->chord2();
+    bool cross = c1->staffMove() != c2->staffMove();
+    if (item == c1) {
+        // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
+        TremoloLayout::layout(tremolo, ctx);
+    }
+    Measure* measure = item->findMeasure();
+    if (!cross && !tremolo->userModified()) {
+        item->setUp(tremolo->up());
+    }
+    if (!measure->explicitParent()) {
+        // this method will be called later (from Measure::layoutCrossStaff) after the
+        // system is completely laid out.
+        // this is necessary because otherwise there's no way to deal with cross-staff beams
+        // because we don't know how far apart the staves actually are
+        return;
+    }
+    if (tremolo->userModified()) {
+        Note* baseNote = item->up() ? item->downNote() : item->upNote();
+        double tremY = tremolo->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
+        double noteY = baseNote->pagePos().y();
+        item->setUp(noteY > tremY);
+    } else if (cross) {
+        // unmodified cross-staff trem, should be one note per staff
+        if (item->staffMove() != 0) {
+            item->setUp(item->staffMove() > 0);
+        } else {
+            int otherStaffMove = item->staffMove() == c1->staffMove() ? c2->staffMove() : c1->staffMove();
+            item->setUp(otherStaffMove < 0);
+        }
+    }
+    if (!cross && !tremolo->userModified()) {
+        item->setUp(tremolo->up());
+    }
 }
 
 void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
@@ -1153,8 +1366,9 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
         }
     }
 
-    if (item->stemDirection() != DirectionV::AUTO && !item->beam()
-        && !(tremoloDispatcher(item) && tremoloDispatcher(item)->twoNotes())) {
+    if (item->stemDirection() != DirectionV::AUTO
+        && !item->beam()
+        && !item->tremoloTwoChord()) {
         item->setUp(item->stemDirection() == DirectionV::UP);
         return;
     }
@@ -1165,143 +1379,10 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
     }
 
     if (item->beam()) {
-        bool mixedDirection = false;
-        bool cross = false;
-        ChordRest* firstCr = item->beam()->elements().front();
-        ChordRest* lastCr = item->beam()->elements().back();
-        Chord* firstChord = nullptr;
-        Chord* lastChord = nullptr;
-        for (ChordRest* currCr : item->beam()->elements()) {
-            if (!currCr->isChord()) {
-                continue;
-            }
-            if (!firstChord) {
-                firstChord = toChord(currCr);
-            }
-            lastChord = toChord(currCr);
-        }
-        DirectionV stemDirections = DirectionV::AUTO;
-        for (ChordRest* cr : item->beam()->elements()) {
-            if (!item->beam()->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
-                // on an unmodified beam, if all of the elements on that beam are explicitly set in one direction
-                // (or AUTO), use that as the direction. This is necessary because the beam has not been laid out yet.
-                if (stemDirections == DirectionV::AUTO) {
-                    stemDirections = toChord(cr)->stemDirection();
-                } else if (stemDirections != toChord(cr)->stemDirection()) {
-                    mixedDirection = true;
-                }
-            }
-            if (cr->isChord() && toChord(cr)->staffMove() != 0) {
-                cross = true;
-                if (!item->beam()->userModified()) { // if the beam is user-modified _up must be decided later down
-                    int move = toChord(cr)->staffMove();
-                    // we have to determine the first and last chord direction for the beam
-                    // so that we can calculate the beam anchor points
-                    if (move > 0) {
-                        item->setUp(item->staffMove() > 0);
-                        firstCr->setUp(firstCr->staffMove() > 0);
-                        lastCr->setUp(lastCr->staffMove() > 0);
-                    } else {
-                        item->setUp(item->staffMove() >= 0);
-                        firstCr->setUp(firstCr->staffMove() >= 0);
-                        lastCr->setUp(lastCr->staffMove() >= 0);
-                    }
-                }
-                break;
-            }
-        }
-        Measure* measure = item->findMeasure();
-        if (!cross) {
-            if (!mixedDirection && stemDirections != DirectionV::AUTO) {
-                item->setUp(stemDirections == DirectionV::UP);
-            } else if (!item->beam()->userModified()) {
-                item->setUp(item->beam()->up());
-            }
-        }
-        if (!measure->explicitParent()) {
-            // this method will be called later (from Measure::layoutCrossStaff) after the
-            // system is completely laid out.
-            // this is necessary because otherwise there's no way to deal with cross-staff beams
-            // because we don't know how far apart the staves actually are
-            return;
-        }
-        if (item->beam()->userModified()) {
-            if (cross && item == firstCr) {
-                // necessary because this beam was never laid out before, so its position isn't known
-                // and the first chord would calculate wrong stem direction
-                TLayout::layoutBeam(item->beam(), ctx);
-            } else {
-                // otherwise we can use stale layout data; the only reason we would need to lay out here is if
-                // it's literally never been laid out before which due to the insane nature of our layout system
-                // is actually a possible thing
-                BeamLayout::layoutIfNeed(item->beam(), ctx);
-            }
-            PointF base = item->beam()->pagePos();
-            Note* baseNote = item->up() ? item->downNote() : item->upNote();
-            double noteY = baseNote->pagePos().y();
-            double noteX = item->stemPosX() + item->pagePos().x() - base.x();
-            PointF startAnchor = PointF();
-            PointF endAnchor = PointF();
-            startAnchor = BeamLayout::chordBeamAnchor(item->beam(), firstChord, ChordBeamAnchorType::Start);
-            endAnchor = BeamLayout::chordBeamAnchor(item->beam(), lastChord, ChordBeamAnchorType::End);
-
-            if (item == item->beam()->elements().front()) {
-                item->setUp(noteY > startAnchor.y());
-            } else if (item == item->beam()->elements().back()) {
-                item->setUp(noteY > endAnchor.y());
-            } else {
-                double proportionAlongX = (noteX - startAnchor.x()) / (endAnchor.x() - startAnchor.x());
-                double desiredY = proportionAlongX * (endAnchor.y() - startAnchor.y()) + startAnchor.y();
-                item->setUp(noteY > desiredY);
-            }
-        }
-
-        TLayout::layoutBeam(item->beam(), ctx);
-        if (cross && tremoloDispatcher(item) && tremoloDispatcher(item)->twoNotes() && tremoloDispatcher(item)->chord1() == item
-            && tremoloDispatcher(item)->chord1()->beam() == tremoloDispatcher(item)->chord2()->beam()) {
-            // beam-infixed two-note trems have to be laid out here
-            TLayout::layoutTremolo(tremoloDispatcher(item), ctx);
-        }
-        if (!cross && !item->beam()->userModified()) {
-            item->setUp(item->beam()->up());
-        }
+        computeUp_BeamCase(item, item->beam(), ctx);
         return;
-    } else if (tremoloDispatcher(item) && tremoloDispatcher(item)->twoNotes()) {
-        Chord* c1 = tremoloDispatcher(item)->chord1();
-        Chord* c2 = tremoloDispatcher(item)->chord2();
-        bool cross = c1->staffMove() != c2->staffMove();
-        if (item == c1) {
-            // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
-            TLayout::layoutTremolo(tremoloDispatcher(item), ctx);
-        }
-        Measure* measure = item->findMeasure();
-        if (!cross && !tremoloDispatcher(item)->userModified()) {
-            item->setUp(tremoloDispatcher(item)->up());
-        }
-        if (!measure->explicitParent()) {
-            // this method will be called later (from Measure::layoutCrossStaff) after the
-            // system is completely laid out.
-            // this is necessary because otherwise there's no way to deal with cross-staff beams
-            // because we don't know how far apart the staves actually are
-            return;
-        }
-        if (tremoloDispatcher(item)->userModified()) {
-            Note* baseNote = item->up() ? item->downNote() : item->upNote();
-            double tremY = tremoloDispatcher(item)->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
-            double noteY = baseNote->pagePos().y();
-            item->setUp(noteY > tremY);
-        } else if (cross) {
-            // unmodified cross-staff trem, should be one note per staff
-            if (item->staffMove() != 0) {
-                item->setUp(item->staffMove() > 0);
-            } else {
-                int otherStaffMove = item->staffMove() == c1->staffMove() ? c2->staffMove() : c1->staffMove();
-                item->setUp(otherStaffMove < 0);
-            }
-        }
-        if (!cross && !tremoloDispatcher(item)->userModified()) {
-            item->setUp(tremoloDispatcher(item)->up());
-        }
+    } else if (item->tremoloTwoChord()) {
+        computeUp_TremoloTwoNotesCase(item, item->tremoloTwoChord(), ctx);
         return;
     }
 
@@ -1397,6 +1478,7 @@ void ChordLayout::skipAccidentals(Segment* segment, track_idx_t startTrack, trac
 
 void ChordLayout::layoutChords1(LayoutContext& ctx, Segment* segment, staff_idx_t staffIdx)
 {
+    TRACEFUNC;
     const Staff* staff = ctx.dom().staff(staffIdx);
     const bool isTab = staff->isTabStaff(segment->tick());
     const track_idx_t startTrack = staffIdx * VOICES;
@@ -3365,6 +3447,9 @@ void ChordLayout::layoutNote2(Note* item, LayoutContext& ctx)
     }
     int dots = item->chord()->dots();
     if (dots && !item->dots().empty()) {
+        if (item->chord()->slash() && !item->visible()) {
+            item->setDotsHidden(true);
+        }
         // if chords have notes with different mag, dots must still  align
         double correctMag = item->chord()->notes().size() > 1 ? item->chord()->mag() : item->mag();
         double d  = ctx.conf().point(ctx.conf().styleS(Sid::dotNoteDistance)) * correctMag;
@@ -3560,6 +3645,28 @@ Shape ChordLayout::chordRestShape(const ChordRest* item, const LayoutConfigurati
     return shape;
 }
 
+bool ChordLayout::leaveSpaceForTie(const Articulation* item)
+{
+    if (!item->explicitParent() || !item->explicitParent()->isChord()) {
+        return false;
+    }
+
+    Chord* chord = toChord(item->chordRest());
+    bool up = item->ldata()->up;
+    Note* note = up ? chord->upNote() : chord->downNote();
+    Tie* tieFor = note->tieFor();
+    Tie* tieBack = note->tieBack();
+
+    if (!tieFor && !tieBack) {
+        return false;
+    }
+
+    bool leaveSpace = (tieFor && tieFor->up() == up && tieFor->isOuterTieOfChord(Grip::START))
+                      || (tieBack && tieBack->up() == up && tieBack->isOuterTieOfChord(Grip::END));
+
+    return leaveSpace;
+}
+
 void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, const LayoutConfiguration& conf)
 {
     Shape shape(Shape::Type::Composite);
@@ -3584,6 +3691,11 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
         LD_CONDITION(arpeggio->ldata()->isSetShape());
     }
 
+    Arpeggio* spanArpeggio = item->spanArpeggio();
+    if (spanArpeggio) {
+        LD_CONDITION(spanArpeggio->ldata()->isSetShape());
+    }
+
     BeamSegment* beamlet = item->beamlet();
 
     if (hook && hook->addToSkyline()) {
@@ -3601,6 +3713,12 @@ void ChordLayout::fillShape(const Chord* item, ChordRest::LayoutData* ldata, con
     if (arpeggio && arpeggio->addToSkyline()) {
         shape.add(arpeggio->shape().translate(arpeggio->pos()));
     }
+
+    if (spanArpeggio && !arpeggio && spanArpeggio->addToSkyline()) {
+        PointF spanArpPos = spanArpeggio->pos() - (item->pagePos() - spanArpeggio->chord()->pagePos());
+        shape.add(spanArpeggio->shape().translate(spanArpPos));
+    }
+
 //      if (_tremolo)
 //            shape.add(_tremolo->shape().translated(_tremolo->pos()));
     for (Note* note : item->notes()) {
