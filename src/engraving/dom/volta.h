@@ -73,7 +73,6 @@ public:
 
     LineSegment* createLineSegment(System* parent) override;
 
-    void setVelocity() const;
     void setChannel() const;
     void setTempo() const;
 

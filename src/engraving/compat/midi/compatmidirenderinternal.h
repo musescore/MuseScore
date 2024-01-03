@@ -30,6 +30,7 @@
 #include "dom/synthesizerstate.h"
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
+#include "changeMap.h"
 
 namespace mu::engraving {
 class EventsHolder;
@@ -186,6 +187,9 @@ private:
                                        int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
 
     Score* score = nullptr;
+
+    std::unordered_map<Staff*, ChangeMap> m_velocitiesByStaff;
+    std::unordered_map<Staff*, ChangeMap> m_velocityMultiplicationsByStaff;
 
     Context _context;
 };

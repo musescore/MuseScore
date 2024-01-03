@@ -27,7 +27,6 @@
 
 #include "types/typesconv.h"
 
-#include "changeMap.h"
 #include "measure.h"
 #include "score.h"
 #include "staff.h"
@@ -260,29 +259,6 @@ PropertyValue Volta::propertyDefault(Pid propertyId) const
 
     default:
         return TextLineBase::propertyDefault(propertyId);
-    }
-}
-
-//---------------------------------------------------------
-//   setVelocity
-//---------------------------------------------------------
-
-void Volta::setVelocity() const
-{
-    Measure* startMeasure = Spanner::startMeasure();
-    Measure* endMeasure = Spanner::endMeasure();
-
-    if (startMeasure && endMeasure) {
-        if (!endMeasure->repeatEnd()) {
-            return;
-        }
-
-        Fraction startTick  = Fraction::fromTicks(startMeasure->tick().ticks() - 1);
-        Fraction endTick    = Fraction::fromTicks((endMeasure->tick() + endMeasure->ticks()).ticks() - 1);
-        Staff* st      = staff();
-        ChangeMap& velo = st->velocities();
-        auto prevVelo  = velo.val(startTick);
-        velo.addFixed(endTick, prevVelo);
     }
 }
 

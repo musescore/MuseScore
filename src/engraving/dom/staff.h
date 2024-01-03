@@ -30,7 +30,6 @@
 
 #include "draw/types/color.h"
 
-#include "changeMap.h"
 #include "cleflist.h"
 #include "groups.h"
 #include "keylist.h"
@@ -206,8 +205,6 @@ public:
     double spatium(const EngravingItem*) const;
     //===========
 
-    ChangeMap& velocities() { return m_velocities; }
-    ChangeMap& velocityMultiplications() { return m_velocityMultiplications; }
     PitchList& pitchOffsets() { return m_pitchOffsets; }
 
     int pitchOffset(const Fraction& tick) const { return m_pitchOffsets.pitchOffset(tick.ticks()); }
@@ -309,8 +306,6 @@ private:
     bool m_playbackVoice[VOICES] { true, true, true, true };
     std::array<bool, VOICES> m_visibilityVoices { true, true, true, true };
 
-    ChangeMap m_velocities;                 // cached value
-    ChangeMap m_velocityMultiplications;    // cached value
     PitchList m_pitchOffsets;               // cached value
 
     bool m_reflectTranspositionInLinkedTab = true;
