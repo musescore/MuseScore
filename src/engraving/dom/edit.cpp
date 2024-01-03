@@ -1512,12 +1512,39 @@ void Score::cmdRemoveTimeSig(TimeSig* ts)
     Score* rScore = masterScore();
     Measure* rm = rScore->tick2measure(m->tick());
     Segment* rs = rm->findSegment(SegmentType::TimeSig, s->tick());
-    if (rs) {
-        rScore->undoRemoveElement(rs);
-    }
 
     Measure* pm = m->prevMeasure();
     Fraction ns(pm ? pm->timesig() : Fraction(4, 4));
+
+    if (rs) {
+        if (ns == ts->sig()) {
+            for (staff_idx_t i = 0; i < rScore->nstaves(); ++i) {
+                TimeSig* rSig = toTimeSig(rs->element(i * VOICES));
+                if (rSig && !rSig->isLocal()) {
+                    rScore->undoRemoveElement(rSig);
+                }
+            }
+            if (!ts->sig().identical(ns)) {
+                TimeSig* nextTimeSignature = ts->staff()->nextTimeSig(tick + Fraction::fromTicks(1));
+                const Fraction lastTick = nextTimeSignature ? nextTimeSignature->segment()->tick() : Fraction(-1, 1);
+                for (Score* score : scoreList()) {
+                    Measure* firstMeasure = score->tick2measure(tick);
+                    Measure* lastMeasure = (lastTick != Fraction(-1, 1)) ? score->tick2measure(lastTick) : nullptr;
+                    for (Measure* measure = firstMeasure; measure != lastMeasure; measure = measure->nextMeasure()) {
+                        bool changeActual = measure->ticks() == measure->timesig(); // standard (not ireegular) measures
+                        measure->undoChangeProperty(Pid::TIMESIG_NOMINAL, ns);
+                        if (changeActual) {
+                            measure->undoChangeProperty(Pid::TIMESIG_ACTUAL, ns);
+                        }
+                    }
+                }
+            }
+            sigmap()->del(tick.ticks());
+            return;
+        } else {
+            rScore->undoRemoveElement(rs);
+        }
+    }
 
     if (!rScore->rewriteMeasures(rm, ns, muse::nidx)) {
         undoStack()->current()->unwind();
