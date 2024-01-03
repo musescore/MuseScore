@@ -25,7 +25,7 @@
 #include "modularity/imoduleinterface.h"
 #include "notation/inotation.h"
 #include "inotationwriter.h"
-#include "exporttype.h"
+#include "internal/exporttype.h"
 #include "types/projecttypes.h"
 
 namespace mu::project {
