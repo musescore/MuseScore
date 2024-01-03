@@ -1113,7 +1113,6 @@ static Fraction readCapVoice(Score* score, CapVoice* cvoice, int staffIdx, const
                         hp->setTrack2(track);
                         hp->setAnchor(Spanner::Anchor::SEGMENT);
                         score->addSpanner(hp);
-                        score->updateHairpin(hp);
                     }
                 }
             }
