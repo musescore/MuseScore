@@ -33,6 +33,13 @@
 #include "global/iapplication.h"
 
 #include "enums.h"
+#include "engraving/dom/score.h"
+#include "engraving/dom/types.h"
+#include "engraving/types/types.h"
+#include "project/iexportprojectscenario.h"
+#include "project/inotationwritersregister.h"
+#include "project/iprojectfilescontroller.h"
+
 #include "apitypes.h"
 #include "cursor.h"
 
@@ -85,6 +92,12 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
 {
     Q_OBJECT
 
+    INJECT(muse::actions::IActionsDispatcher, actionsDispatcher)
+    INJECT(mu::context::IGlobalContext, context)
+    INJECT(mu::project::INotationWritersRegister, writers)
+    INJECT(mu::project::IExportProjectScenario, exportProjectScenario)
+    INJECT(mu::project::IProjectFilesController, projectFilesController)
+
     /** Path where the plugin is placed in menu */
     Q_PROPERTY(QString menuPath READ menuPath WRITE setMenuPath)
     /** Title of this plugin */
@@ -125,9 +138,9 @@ class PluginAPI : public QQuickItem, public muse::extensions::apiv1::IPluginApiV
     /** List of currently open scores (read only).\n \since MuseScore 3.2 */
     Q_PROPERTY(QQmlListProperty<mu::engraving::apiv1::Score> scores READ scores)
 
-public:
-    muse::Inject<muse::actions::IActionsDispatcher> actionsDispatcher = { this };
     muse::Inject<mu::context::IGlobalContext> context = { this };
+
+public:
     muse::Inject<muse::IApplication> application = { this };
 
 public:
@@ -349,6 +362,7 @@ private:
     QString m_thumbnailName;
     QString m_categoryCode;
     muse::async::Notification m_closeRequested;
+    std::optional<project::INotationWriter::UnitType> determineWriterUnitType(const std::string& ext) const;
 };
 
 #undef DECLARE_API_ENUM
