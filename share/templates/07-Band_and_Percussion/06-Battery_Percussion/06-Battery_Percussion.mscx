@@ -69,7 +69,7 @@
         </Drum>
         <Drum pitch="55">
           <head>plus</head>
-          <line>0</line>
+          <line>-1</line>
           <voice>0</voice>
           <name>Stick Click</name>
           <stem>1</stem>
