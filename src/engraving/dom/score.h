@@ -669,7 +669,6 @@ public:
     void updateSwing();
 
     void updateCapo();
-    void updateVelo();
     void updateChannel();
 
     void cmdConcertPitchChanged(bool);
@@ -775,8 +774,6 @@ public:
 
     SynthesizerState& synthesizerState() { return m_synthesizerState; }
     void setSynthesizerState(const SynthesizerState& s);
-
-    void updateHairpin(Hairpin*);         // add/modify hairpin to pitchOffset list
 
     MasterScore* masterScore() const { return m_masterScore; }
     void setMasterScore(MasterScore* s) { m_masterScore = s; }
