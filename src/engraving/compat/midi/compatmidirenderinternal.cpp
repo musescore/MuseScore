@@ -1137,50 +1137,6 @@ static Trill* findFirstTrill(Chord* chord)
     return nullptr;
 }
 
-//---------------------------------------------------------
-//   renderMetronome
-///   add metronome tick events
-//---------------------------------------------------------
-
-void CompatMidiRendererInternal::renderMetronome(EventsHolder& events)
-{
-    Measure const* const start = score->firstMeasure();
-    Measure const* const end = score->lastMeasure();
-
-    for (Measure const* m = start; m != end; m = m->nextMeasure()) {
-        renderMetronome(events, m);
-    }
-}
-
-//---------------------------------------------------------
-//   renderMetronome
-///   add metronome tick events
-//---------------------------------------------------------
-
-void CompatMidiRendererInternal::renderMetronome(EventsHolder& events, Measure const* m)
-{
-    int msrTick         = m->tick().ticks();
-    BeatsPerSecond tempo = score->tempomap()->tempo(msrTick);
-    TimeSigFrac timeSig = score->sigmap()->timesig(msrTick).nominal();
-
-    int clickTicks      = timeSig.isBeatedCompound(tempo.val) ? timeSig.beatTicks() : timeSig.dUnitTicks();
-    int endTick         = m->endTick().ticks();
-
-    int rtick;
-
-    if (m->isAnacrusis()) {
-        int rem = m->ticks().ticks() % clickTicks;
-        msrTick += rem;
-        rtick = rem + timeSig.ticksPerMeasure() - m->ticks().ticks();
-    } else {
-        rtick = 0;
-    }
-
-    for (int tick = msrTick; tick < endTick; tick += clickTicks, rtick += clickTicks) {
-        events[0].insert(std::pair<int, NPlayEvent>(tick, NPlayEvent(timeSig.rtick2beatType(rtick))));
-    }
-}
-
 void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context& ctx, bool expandRepeats)
 {
     UNUSED(expandRepeats);
@@ -1206,11 +1162,6 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
 
     EventsHolder pitchWheelEvents = pitchWheelRender.renderPitchWheel();
     events.mergePitchWheelEvents(pitchWheelEvents);
-//    events->merge(pitchWheelEvents);
-
-    if (ctx.metronome) {
-        renderMetronome(events);
-    }
 }
 
 /* static */
