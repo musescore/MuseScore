@@ -44,6 +44,8 @@
 #include "dom/system.h"
 #include "dom/systemdivider.h"
 #include "dom/tremolo.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/tuplet.h"
 
 #include "tlayout.h"
@@ -54,7 +56,6 @@
 #include "tupletlayout.h"
 #include "verticalgapdata.h"
 #include "arpeggiolayout.h"
-#include "gettremolodispatcher.h"
 
 #include "log.h"
 
@@ -286,6 +287,16 @@ void PageLayout::collectPage(LayoutContext& ctx)
                         ChordRest* cr = toChordRest(e2);
                         if (BeamLayout::notTopBeam(cr)) {                           // layout cross staff beams
                             TLayout::layoutBeam(cr->beam(), ctx);
+                            for (EngravingItem* item : cr->beam()->elements()) {
+                                if (!item || !item->isRest()) {
+                                    continue;
+                                }
+                                Rest* rest = toRest(item);
+                                Beam* beam = rest->beam();
+                                if (beam && beam->fullCross() && rest->staffMove()) {
+                                    BeamLayout::verticalAdjustBeamedRests(rest, beam, ctx);
+                                }
+                            }
                         }
                         if (TupletLayout::notTopTuplet(cr)) {
                             // fix layout of tuplets
@@ -312,14 +323,14 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             }
                             ArpeggioLayout::layoutArpeggio2(c->arpeggio(), ctx);
                             ChordLayout::layoutSpanners(c, ctx);
-                            if (tremoloDispatcher(c)) {
-                                TremoloDispatcher* t = tremoloDispatcher(c);
+                            if (c->tremoloTwoChord()) {
+                                TremoloTwoChord* t = c->tremoloTwoChord();
                                 Chord* c1 = t->chord1();
                                 Chord* c2 = t->chord2();
-                                if (t->twoNotes() && c1 && c2 && (c1->staffMove() || c2->staffMove())) {
+                                if (c1 && c2 && (c1->staffMove() || c2->staffMove())) {
                                     // For cross-staff tremolo, vertical justification may have changed
                                     // staff distances, and therefore also stem directions, so re-compute them
-                                    ChordLayout::computeUp(c1, ctx); // This will also call a tremolo layout
+                                    ChordLayout::computeUp(c1, ctx);     // This will also call a tremolo layout
                                     ChordLayout::computeUp(c2, ctx);
                                 }
                             }
@@ -347,6 +358,23 @@ void PageLayout::collectPage(LayoutContext& ctx)
                 }
             }
             MeasureLayout::layout2(m, ctx);
+        }
+    }
+
+    // If this is the last page we layout, we must also relayout the first barlines of the
+    // next page, because they may have been altered while collecting the systems.
+    MeasureBase* lastOfThisPage = ctx.mutState().page()->systems().back()->measures().back();
+    MeasureBase* firstOfNextPage = lastOfThisPage ? lastOfThisPage->next() : nullptr;
+    if (firstOfNextPage && firstOfNextPage->isMeasure() && firstOfNextPage->tick() > ctx.state().endTick()) {
+        for (Segment& segment : toMeasure(firstOfNextPage)->segments()) {
+            if (!segment.isType(SegmentType::BarLineType)) {
+                continue;
+            }
+            for (EngravingItem* item : segment.elist()) {
+                if (item && item->isBarLine()) {
+                    TLayout::layoutBarLine2(toBarLine(item), ctx);
+                }
+            }
         }
     }
 
@@ -393,6 +421,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
 
 void PageLayout::layoutPage(LayoutContext& ctx, Page* page, double restHeight, double footerPadding)
 {
+    TRACEFUNC;
     if (restHeight < 0.0) {
         LOGN("restHeight < 0.0: %f\n", restHeight);
         restHeight = 0;

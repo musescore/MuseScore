@@ -353,7 +353,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
                             }
                         }
                     } else if (e2->isBarLine()) {
-                        rendering::dev::TLayout::layoutBarLine2(toBarLine(e2), ctx);
+                        TLayout::layoutBarLine2(toBarLine(e2), ctx);
                     }
                 }
             }
@@ -372,7 +372,7 @@ void PageLayout::collectPage(LayoutContext& ctx)
             }
             for (EngravingItem* item : segment.elist()) {
                 if (item && item->isBarLine()) {
-                    rendering::dev::TLayout::layoutBarLine2(toBarLine(item), ctx);
+                    TLayout::layoutBarLine2(toBarLine(item), ctx);
                 }
             }
         }

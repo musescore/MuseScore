@@ -1123,7 +1123,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
     for (const Segment* s : sl) {
         for (EngravingItem* e : s->annotations()) {
             if (e->isHarpPedalDiagram()) {
-                rendering::dev::TLayout::layoutItem(e, ctx);
+                TLayout::layoutItem(e, ctx);
             }
         }
     }
