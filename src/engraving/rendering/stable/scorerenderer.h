@@ -41,8 +41,6 @@ public:
     void paintScore(draw::Painter* painter, Score* score, const IScoreRenderer::PaintOptions& opt) const override;
     void paintItem(draw::Painter& painter, const EngravingItem* item) const override;
 
-    // Temporary compatibility interface
-
     //! TODO Investigation is required, probably these functions or their calls should not be.
     // Other
     void layoutTextLineBaseSegment(TextLineBaseSegment* item) override;

@@ -56,7 +56,6 @@ public:
     static void layoutArticulations3(Chord* item, Slur* s, LayoutContext& ctx);
 
     static void layoutStem(Chord* item, LayoutContext& ctx);
-    static void layoutHook(Chord* item, LayoutContext& ctx);
 
     static void computeUp(Chord* item, LayoutContext& ctx);
     static void computeUp(ChordRest* item, LayoutContext& ctx);
@@ -100,6 +99,8 @@ private:
     static void skipAccidentals(Segment* segment, track_idx_t startTrack, track_idx_t endTrack);
 
     static Shape chordRestShape(const ChordRest* item, const LayoutConfiguration& conf);
+
+    static bool leaveSpaceForTie(const Articulation* item);
 };
 }
 

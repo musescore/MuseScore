@@ -75,7 +75,7 @@ void LyricsLayout::layout(Lyrics* item, LayoutContext& ctx)
     //
     // parse leading verse number and/or punctuation, so we can factor it into layout separately
     //
-    bool hasNumber     = false;   // _verseNumber;
+    bool hasNumber = false;   // _verseNumber;
 
     // find:
     // 1) string of numbers and non-word characters at start of syllable
@@ -381,17 +381,17 @@ void LyricsLayout::layout(LyricsLineSegment* item, LayoutContext& ctx)
 
     // VERTICAL POSITION: at the base line of the syllable text
     if (!item->isEndType()) {
-        ldata->setPosY(lyr->ldata()->pos().y());
-        item->ryoffset() = lyr->offset().y();
+        ldata->setPosY(lyr->ldata()->pos().y() + lyr->chordRest()->pos().y());
+        item->ryoffset() = lyr->offset().y() + lyr->chordRest()->offset().y();
     } else {
         // use Y position of *next* syllable if there is one on same system
         Lyrics* nextLyr1 = searchNextLyrics(lyr->segment(), lyr->staffIdx(), lyr->no(), lyr->placement());
         if (nextLyr1 && nextLyr1->segment()->system() == item->system()) {
-            ldata->setPosY(nextLyr1->ldata()->pos().y());
-            item->ryoffset() = nextLyr1->offset().y();
+            ldata->setPosY(nextLyr1->ldata()->pos().y() + nextLyr1->chordRest()->pos().y());
+            item->ryoffset() = nextLyr1->offset().y() + nextLyr1->chordRest()->offset().y();
         } else {
-            ldata->setPosY(lyr->ldata()->pos().y());
-            item->ryoffset() = lyr->offset().y();
+            ldata->setPosY(lyr->ldata()->pos().y() + lyr->chordRest()->pos().y());
+            item->ryoffset() = lyr->offset().y() + lyr->chordRest()->offset().y();
         }
     }
 

@@ -21,6 +21,8 @@
  */
 #include "measurelayout.h"
 
+#include "infrastructure/rtti.h"
+
 #include "dom/ambitus.h"
 #include "dom/barline.h"
 #include "dom/beam.h"
@@ -42,21 +44,25 @@
 #include "dom/system.h"
 #include "dom/tie.h"
 #include "dom/timesig.h"
+#include "dom/tremolosinglechord.h"
+#include "dom/tremolotwochord.h"
 #include "dom/trill.h"
 #include "dom/undo.h"
 #include "dom/utils.h"
 
 #include "tlayout.h"
 #include "layoutcontext.h"
+#include "arpeggiolayout.h"
 #include "beamlayout.h"
 #include "chordlayout.h"
 #include "slurtielayout.h"
 #include "horizontalspacing.h"
-#include "gettremolodispatcher.h"
+#include "tremololayout.h"
 
 #include "log.h"
 
 using namespace mu::engraving;
+using namespace mu::engraving::rtti;
 using namespace mu::engraving::rendering::stable;
 
 //---------------------------------------------------------
@@ -137,7 +143,8 @@ static const std::unordered_set<ElementType> BREAK_TYPES {
     ElementType::PLAYTECH_ANNOTATION,
     ElementType::CAPO,
     ElementType::INSTRUMENT_CHANGE,
-    ElementType::STRING_TUNINGS
+    ElementType::STRING_TUNINGS,
+    ElementType::SYMBOL
 };
 
 static const std::unordered_set<ElementType> ALWAYS_BREAK_TYPES {
@@ -154,7 +161,8 @@ static const std::unordered_set<ElementType> CONDITIONAL_BREAK_TYPES {
     ElementType::PLAYTECH_ANNOTATION,
     ElementType::CAPO,
     ElementType::INSTRUMENT_CHANGE,
-    ElementType::STRING_TUNINGS
+    ElementType::STRING_TUNINGS,
+    ElementType::SYMBOL
 };
 
 //---------------------------------------------------------
@@ -223,7 +231,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     EngravingItem* eClone = generated ? e->clone() : e->linkedClone();
                     eClone->setGenerated(generated);
                     eClone->setParent(mmrEndBarlineSeg);
-                    ctx.mutDom().undoAddElement(eClone);
+                    ctx.mutDom().undoAddElement(eClone);// ???
                 } else {
                     BarLine* mmrEndBarline = toBarLine(mmrEndBarlineSeg->element(staffIdx * VOICES));
                     BarLine* lastMeasureEndBarline = toBarLine(e);
@@ -311,7 +319,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             mmr->setTicks(mmrMeasure->ticks());
             mmr->setTrack(track);
             mmr->setParent(s);
-            ctx.mutDom().undo(new AddElement(mmr));
+            ctx.mutDom().doUndoAddElement(mmr);
         }
     }
 
@@ -339,7 +347,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        ctx.mutDom().undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().doUndoRemoveElement(mmrSeg);
     }
 
     //
@@ -362,7 +370,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                     mmrTimeSig = underlyingTimeSig->generated() ? underlyingTimeSig->clone() : toTimeSig(
                         underlyingTimeSig->linkedClone());
                     mmrTimeSig->setParent(mmrSeg);
-                    ctx.mutDom().undo(new AddElement(mmrTimeSig));
+                    ctx.mutDom().doUndoAddElement(mmrTimeSig);
                 } else {
                     mmrTimeSig->setSig(underlyingTimeSig->sig(), underlyingTimeSig->timeSigType());
                     mmrTimeSig->setNumeratorString(underlyingTimeSig->numeratorString());
@@ -373,7 +381,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        ctx.mutDom().undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().doUndoRemoveElement(mmrSeg);
     }
 
     //
@@ -393,7 +401,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                 if (!mmrAmbitus) {
                     mmrAmbitus = underlyingAmbitus->clone();
                     mmrAmbitus->setParent(mmrSeg);
-                    ctx.mutDom().undo(new AddElement(mmrAmbitus));
+                    ctx.mutDom().doUndoAddElement(mmrAmbitus);
                 } else {
                     mmrAmbitus->initFrom(underlyingAmbitus);
                     TLayout::layoutAmbitus(mmrAmbitus, mmrAmbitus->mutldata(), ctx);
@@ -402,7 +410,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         }
     } else if (mmrSeg) {
         // TODO: remove elements from mmrSeg?
-        ctx.mutDom().undo(new RemoveElement(mmrSeg));
+        ctx.mutDom().doUndoRemoveElement(mmrSeg);
     }
 
     //
@@ -426,7 +434,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
                         underlyingKeySig->linkedClone());
                     mmrKeySig->setParent(mmrSeg);
                     mmrKeySig->setGenerated(true);
-                    ctx.mutDom().undo(new AddElement(mmrKeySig));
+                    ctx.mutDom().doUndoAddElement(mmrKeySig);
                 } else {
                     if (!(mmrKeySig->keySigEvent() == underlyingKeySig->keySigEvent())) {
                         bool addKey = underlyingKeySig->isChange();
@@ -441,7 +449,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
         // TODO: remove elements from mmrSeg, then delete mmrSeg
         // previously we removed the segment if not empty,
         // but this resulted in "stale" keysig in mmrest after removed from underlying measure
-        //undo(new RemoveElement(mmrSeg));
+        //doUndoRemoveElement(mmrSeg);
     }
 
     mmrMeasure->checkHeader();
@@ -470,7 +478,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             if (!found) {
                 EngravingItem* eClone = e->linkedClone();
                 eClone->setParent(s);
-                ctx.mutDom().undo(new AddElement(eClone));
+                ctx.mutDom().doUndoAddElement(eClone);
             }
         }
 
@@ -491,7 +499,7 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
             }
             // remove from mmr if no match found
             if (!found) {
-                ctx.mutDom().undo(new RemoveElement(e));
+                ctx.mutDom().doUndoRemoveElement(e);
             }
         }
     }
@@ -507,15 +515,15 @@ void MeasureLayout::createMMRest(LayoutContext& ctx, Measure* firstMeasure, Meas
 //    multi measure rest
 //---------------------------------------------------------
 
-static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
+static bool validMMRestMeasure(const LayoutContext& ctx, const Measure* m)
 {
     if (m->irregular()) {
         return false;
     }
 
     int n = 0;
-    for (Segment* s = m->first(); s; s = s->next()) {
-        for (EngravingItem* e : s->annotations()) {
+    for (const Segment* s = m->first(); s; s = s->next()) {
+        for (const EngravingItem* e : s->annotations()) {
             if (!e->staff()->show()) {
                 continue;
             }
@@ -538,7 +546,7 @@ static bool validMMRestMeasure(const LayoutContext& ctx, Measure* m)
                     restFound = true;
                 }
             }
-            for (EngravingItem* e : s->annotations()) {
+            for (const EngravingItem* e : s->annotations()) {
                 if (e->isFermata()) {
                     return false;
                 }
@@ -727,87 +735,346 @@ static bool breakMultiMeasureRest(const LayoutContext& ctx, Measure* m)
     return false;
 }
 
-//---------------------------------------------------------
-//   layoutDrumsetChord
-//---------------------------------------------------------
-
-static void layoutDrumsetChord(Chord* c, const Drumset* drumset, const StaffType* st, double spatium)
+void MeasureLayout::moveToNextMeasure(LayoutContext& ctx)
 {
-    for (Note* note : c->notes()) {
-        int pitch = note->pitch();
-        if (!drumset->isValid(pitch)) {
-            // LOGD("unmapped drum note %d", pitch);
-        } else if (!note->fixed()) {
-            note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
-            int line = drumset->line(pitch);
-            note->setLine(line);
+    LayoutState& state = ctx.mutState();
 
-            int off  = st->stepOffset();
-            double ld = st->lineDistance().val();
-            note->mutldata()->setPosY((line + off * 2.0) * spatium * .5 * ld);
+    state.setPrevMeasure(state.curMeasure());
+    state.setCurMeasure(state.nextMeasure());
+    if (!state.curMeasure()) {
+        state.setNextMeasure(ctx.conf().isShowVBox() ? ctx.mutDom().first() : ctx.mutDom().firstMeasure());
+    } else {
+        MeasureBase* m = ctx.conf().isShowVBox() ? state.curMeasure()->next() : state.curMeasure()->nextMeasure();
+        state.setNextMeasure(m);
+    }
+}
+
+void MeasureLayout::createMultiMeasureRestsIfNeed(MeasureBase* currentMB, LayoutContext& ctx)
+{
+    if (!currentMB->isMeasure()) {
+        return;
+    }
+
+    int mno = ctx.state().measureNo();
+    Measure* m = toMeasure(currentMB);
+
+    if (ctx.conf().styleB(Sid::createMultiMeasureRests)) {
+        Measure* nm = m;
+        Measure* lm = nm;
+        int n       = 0;
+        Fraction len;
+
+        while (validMMRestMeasure(ctx, nm)) {
+            MeasureBase* mb = ctx.conf().isShowVBox() ? nm->next() : nm->nextMeasure();
+            if (breakMultiMeasureRest(ctx, nm) && n) {
+                break;
+            }
+            if (nm != m) {
+                int measureNo = adjustMeasureNo(nm, ctx.state().measureNo());
+                ctx.mutState().setMeasureNo(measureNo);
+            }
+            ++n;
+            len += nm->ticks();
+            lm = nm;
+            if (!(mb && mb->isMeasure())) {
+                break;
+            }
+            nm = toMeasure(mb);
+        }
+
+        if (n >= ctx.conf().styleI(Sid::minEmptyMeasures)) {
+            createMMRest(ctx, m, lm, len);
+            ctx.mutState().setCurMeasure(m->mmRest());
+            ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lm->next() : lm->nextMeasure());
+        } else {
+            if (m->mmRest()) {
+                ctx.mutDom().undo(new ChangeMMRest(m, 0));
+            }
+            m->setMMRestCount(0);
+            ctx.mutState().setMeasureNo(mno);
+        }
+    } else if (m->isMMRest()) {
+        LOGD("mmrest: no %d += %d", ctx.state().measureNo(), m->mmRestCount());
+        int measureNo = ctx.state().measureNo() + m->mmRestCount() - 1;
+        ctx.mutState().setMeasureNo(measureNo);
+    }
+}
+
+void MeasureLayout::layoutMeasureIndependentElements(const Segment& segment, track_idx_t track, const LayoutContext& ctx)
+{
+    if (segment.isJustType(SegmentType::KeySig)) {
+        KeySig* ks = toKeySig(segment.element(track));
+        if (ks) {
+            TLayout::layoutKeySig(ks, ks->mutldata(), ctx.conf());         // LD_INDEPENDENT
+        }
+    } else if (segment.isJustType(SegmentType::Clef)) {
+        Clef* cl = item_cast<Clef*>(segment.element(track));
+        if (cl) {
+            cl->setSmall(true);
+            TLayout::layoutClef(cl, cl->mutldata());         // LD_INDEPENDENT
+        }
+    } else if (segment.isType(SegmentType::HeaderClef)) {
+        Clef* cl = item_cast<Clef*>(segment.element(track));
+        if (cl) {
+            TLayout::layoutClef(cl, cl->mutldata());         // LD_INDEPENDENT
+        }
+    } else if (segment.isType(SegmentType::TimeSig)) {
+        TimeSig* ts = item_cast<TimeSig*>(segment.element(track));
+        if (ts) {
+            TLayout::layoutTimeSig(ts, ts->mutldata(), ctx);         // LD_INDEPENDENT
+        }
+    } else if (segment.isType(SegmentType::Ambitus)) {
+        Ambitus* am = item_cast<Ambitus*>(segment.element(track));
+        if (am) {
+            TLayout::layoutAmbitus(am, am->mutldata(), ctx);         // LD_INDEPENDENT
+        }
+    } else if (segment.isType(SegmentType::BarLine)) {
+        BarLine* bl = toBarLine(segment.element(track));
+        if (bl) {
+            // check conditions (see TLayout::layoutBarLine)
+            {
+                for (const EngravingItem* e : *bl->el()) {
+                    if (e->isType(ElementType::ARTICULATION)) {
+                        LD_CONDITION(item_cast<const Articulation*>(e)->ldata()->symId.has_value());
+                    }
+                }
+            }
+            TLayout::layoutBarLine(bl, bl->mutldata(), ctx);
         }
     }
 }
 
-void MeasureLayout::getNextMeasure(LayoutContext& ctx)
+void MeasureLayout::checkStaffMoveValidity(const Segment& segment, track_idx_t startTrack, track_idx_t endTrack)
 {
-    ctx.mutState().setPrevMeasure(ctx.mutState().curMeasure());
-    ctx.mutState().setCurMeasure(ctx.mutState().nextMeasure());
-    if (!ctx.state().curMeasure()) {
-        ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? ctx.mutDom().first() : ctx.mutDom().firstMeasure());
-    } else {
-        MeasureBase* m = ctx.conf().isShowVBox() ? ctx.mutState().curMeasure()->next() : ctx.mutState().curMeasure()->nextMeasure();
-        ctx.mutState().setNextMeasure(m);
-    }
-    if (!ctx.state().curMeasure()) {
+    if (!segment.isJustType(SegmentType::ChordRest)) {
         return;
     }
 
-    int mno = adjustMeasureNo(ctx.mutState().curMeasure(), ctx);
-
-    if (ctx.state().curMeasure()->isMeasure()) {
-        if (ctx.conf().styleB(Sid::createMultiMeasureRests)) {
-            Measure* m = toMeasure(ctx.mutState().curMeasure());
-            Measure* nm = m;
-            Measure* lm = nm;
-            int n       = 0;
-            Fraction len;
-
-            while (validMMRestMeasure(ctx, nm)) {
-                MeasureBase* mb = ctx.conf().isShowVBox() ? nm->next() : nm->nextMeasure();
-                if (breakMultiMeasureRest(ctx, nm) && n) {
-                    break;
-                }
-                if (nm != m) {
-                    adjustMeasureNo(nm, ctx);
-                }
-                ++n;
-                len += nm->ticks();
-                lm = nm;
-                if (!(mb && mb->isMeasure())) {
-                    break;
-                }
-                nm = toMeasure(mb);
+    for (track_idx_t t = startTrack; t < endTrack; ++t) {
+        ChordRest* cr = toChordRest(segment.element(t));
+        if (cr) {
+            // Check if requested cross-staff is possible
+            if (cr->staffMove() || cr->storedStaffMove()) {
+                cr->checkStaffMoveValidity();
             }
-            if (n >= ctx.conf().styleI(Sid::minEmptyMeasures)) {
-                createMMRest(ctx, m, lm, len);
-                ctx.mutState().setCurMeasure(m->mmRest());
-                ctx.mutState().setNextMeasure(ctx.conf().isShowVBox() ? lm->next() : lm->nextMeasure());
-            } else {
-                if (m->mmRest()) {
-                    ctx.mutDom().undo(new ChangeMMRest(m, 0));
-                }
-                m->setMMRestCount(0);
-                ctx.mutState().setMeasureNo(mno);
-            }
-        } else if (toMeasure(ctx.state().curMeasure())->isMMRest()) {
-            LOGD("mmrest: no %d += %d", ctx.state().measureNo(), toMeasure(ctx.state().curMeasure())->mmRestCount());
-            int measureNo = ctx.state().measureNo() + toMeasure(ctx.state().curMeasure())->mmRestCount() - 1;
-            ctx.mutState().setMeasureNo(measureNo);
         }
     }
-    if (!ctx.state().curMeasure()->isMeasure()) {
-        ctx.mutState().curMeasure()->setTick(ctx.state().tick());
+}
+
+void MeasureLayout::setChordsMag(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                                 const LayoutConfiguration& conf)
+{
+    if (!segment.isJustType(SegmentType::ChordRest)) {
+        return;
+    }
+
+    const double staffMag = staff->staffMag(&segment);
+    const double smallNoteMag = conf.styleD(Sid::smallNoteMag);
+    const double graceNoteMag = conf.styleD(Sid::graceNoteMag);
+
+    for (track_idx_t t = startTrack; t < endTrack; ++t) {
+        ChordRest* cr = segment.cr(t);
+        if (!cr) {
+            continue;
+        }
+
+        double m = staffMag;
+        if (cr->isSmall()) {
+            m *= smallNoteMag;
+        }
+
+        if (cr->isChord()) {
+            double graceMag = m * graceNoteMag;
+            Chord* chord = toChord(cr);
+            for (Chord* c : chord->graceNotes()) {
+                c->mutldata()->setMag(graceMag);
+            }
+        }
+        cr->mutldata()->setMag(m);
+    }
+}
+
+void MeasureLayout::layoutChordDrumset(const Staff* staff, const Segment& segment, track_idx_t startTrack, track_idx_t endTrack,
+                                       const LayoutConfiguration& conf)
+{
+    if (!segment.isJustType(SegmentType::ChordRest)) {
+        return;
+    }
+
+    const Instrument* ins = staff->part()->instrument(segment.tick());
+    if (!ins->useDrumset()) {
+        return;
+    }
+
+    const Drumset* drumset = ins->drumset();
+    IF_ASSERT_FAILED(drumset) {
+        return;
+    }
+
+    const StaffType* st = staff->staffTypeForElement(&segment);
+
+    auto layoutDrumset = [](Chord* c, const Drumset* drumset, const StaffType* st, double spatium)
+    {
+        for (Note* note : c->notes()) {
+            int pitch = note->pitch();
+            if (!drumset->isValid(pitch)) {
+                // LOGD("unmapped drum note %d", pitch);
+            } else if (!note->fixed()) {
+                note->undoChangeProperty(Pid::HEAD_GROUP, int(drumset->noteHead(pitch)));
+                int line = drumset->line(pitch);
+                note->setLine(line);
+
+                int off  = st->stepOffset();
+                double ld = st->lineDistance().val();
+                note->mutldata()->setPosY((line + off * 2.0) * spatium * .5 * ld);
+            }
+        }
+    };
+
+    double spatium = conf.spatium();
+    for (track_idx_t t = startTrack; t < endTrack; ++t) {
+        Chord* chord = item_cast<Chord*>(segment.element(t), CastMode::MAYBE_BAD); // maybe Rest
+        if (!chord) {
+            continue;
+        }
+
+        for (Chord* c : chord->graceNotes()) {
+            layoutDrumset(c, drumset, st, spatium);
+        }
+
+        layoutDrumset(chord, drumset, st, spatium);
+    }
+}
+
+void MeasureLayout::cmdUpdateNotes(const Measure* measure, const DomAccessor& dom)
+{
+    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
+        if (!staff->show()) {
+            continue;
+        }
+
+        AccidentalState as;          // list of already set accidentals for this measure
+        // initAccidentalState
+        {
+            as.init(staff->keySigEvent(measure->tick()));
+
+            // Trills may carry an accidental into this measure that requires a force-restate
+            int ticks = measure->tick().ticks();
+            auto spanners = dom.spannerMap().findOverlapping(ticks, ticks, true);
+            for (auto iter : spanners) {
+                Spanner* spanner = iter.value;
+                if (spanner->staffIdx() != staffIdx || !spanner->isTrill()
+                    || spanner->tick() == measure->tick() || spanner->tick2() == measure->tick()) {
+                    continue;
+                }
+                Ornament* ornament = toTrill(spanner)->ornament();
+                Note* trillNote = ornament ? ornament->noteAbove() : nullptr;
+                if (trillNote && trillNote->accidental() && ornament->showAccidental() == OrnamentShowAccidental::DEFAULT) {
+                    int line = absStep(trillNote->tpc(), trillNote->epitch());
+                    as.setForceRestateAccidental(line, true);
+                }
+            }
+        }
+
+        track_idx_t track = staffIdx * VOICES;
+        track_idx_t endTrack  = track + VOICES;
+
+        for (const Segment& segment : measure->segments()) {
+            if (segment.isJustType(SegmentType::KeySig)) {
+                KeySig* ks = item_cast<KeySig*>(segment.element(track));
+                if (ks) {
+                    Fraction tick = segment.tick();
+                    as.init(staff->keySigEvent(tick));
+                }
+            } else if (segment.isJustType(SegmentType::ChordRest)) {
+                for (track_idx_t t = track; t < endTrack; ++t) {
+                    Chord* chord = item_cast<Chord*>(segment.element(t), CastMode::MAYBE_BAD); // maybe Rest
+                    if (chord) {
+                        chord->cmdUpdateNotes(&as);
+                    }
+                }
+            }
+        }
+    }
+}
+
+void MeasureLayout::createStems(const Measure* measure, LayoutContext& ctx)
+{
+    const DomAccessor& dom = ctx.dom();
+    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
+        if (!staff->show()) {
+            continue;
+        }
+
+        track_idx_t startTrack = staffIdx * VOICES;
+        track_idx_t endTrack  = startTrack + VOICES;
+
+        for (const Segment& segment : measure->segments()) {
+            if (!segment.isJustType(SegmentType::ChordRest)) {
+                continue;
+            }
+
+            for (track_idx_t t = startTrack; t < endTrack; ++t) {
+                ChordRest* cr = segment.cr(t);
+                if (!cr) {
+                    continue;
+                }
+
+                auto createStems = [](Chord* chord, LayoutContext& ctx) {
+                    if (chord->shouldHaveHook()) {
+                        if (!chord->hook()) {
+                            chord->createHook();
+                        }
+                    } else {
+                        ctx.mutDom().undoRemoveElement(chord->hook());
+                    }
+
+                    if (!chord->shouldHaveStem()) {
+                        chord->removeStem();
+                        return;
+                    }
+
+                    if (!chord->stem()) {
+                        chord->createStem();
+                    }
+                };
+
+                if (cr->isChord()) {
+                    Chord* chord = toChord(cr);
+
+                    for (Chord* c : chord->graceNotes()) {
+                        createStems(c, ctx);
+                    }
+
+                    createStems(chord, ctx);     // create stems needed to calculate spacing
+                    // stem direction can change later during beam processing
+                }
+            }
+        }
+    }
+}
+
+void MeasureLayout::layoutMeasure(MeasureBase* currentMB, LayoutContext& ctx)
+{
+    IF_ASSERT_FAILED(currentMB == ctx.state().curMeasure()) {
+        return;
+    }
+
+    if (!currentMB) {
+        return;
+    }
+
+    int measureNo = adjustMeasureNo(currentMB, ctx.state().measureNo());
+    ctx.mutState().setMeasureNo(measureNo);
+
+    createMultiMeasureRestsIfNeed(currentMB, ctx);
+
+    currentMB = ctx.mutState().curMeasure();
+
+    if (!currentMB->isMeasure()) {
+        currentMB->setTick(ctx.state().tick());
         return;
     }
 
@@ -815,7 +1082,8 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
     //    process one measure
     //-----------------------------------------
 
-    Measure* measure = toMeasure(ctx.mutState().curMeasure());
+    Measure* measure = toMeasure(currentMB);
+
     measure->moveTicks(ctx.state().tick() - measure->tick());
 
     if (ctx.conf().isLinearMode() && (measure->tick() < ctx.state().startTick() || measure->tick() > ctx.state().endTick())) {
@@ -827,112 +1095,69 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
     }
 
     measure->connectTremolo();
+    cmdUpdateNotes(measure, ctx.dom());
+    createStems(measure,  ctx);
 
     //
     // calculate accidentals and note lines,
     // create stem and set stem direction
     //
-    for (size_t staffIdx = 0; staffIdx < ctx.dom().nstaves(); ++staffIdx) {
-        const Staff* staff = ctx.dom().staff(staffIdx);
+
+    const DomAccessor& dom = ctx.dom();
+    const LayoutConfiguration& conf = ctx.conf();
+
+    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
         if (!staff->show()) {
             continue;
         }
 
-        AccidentalState as;          // list of already set accidentals for this measure
-        as.init(staff->keySigEvent(measure->tick()));
+        track_idx_t startTrack = staffIdx * VOICES;
+        track_idx_t endTrack  = startTrack + VOICES;
 
-        // Trills may carry an accidental into this measure that requires a force-restate
-        int ticks = measure->tick().ticks();
-        auto spanners = ctx.dom().spannerMap().findOverlapping(ticks, ticks, true);
-        for (auto iter : spanners) {
-            Spanner* spanner = iter.value;
-            if (spanner->staffIdx() != staffIdx || !spanner->isTrill() || spanner->tick2() == measure->tick()) {
-                continue;
-            }
-            Ornament* ornament = toTrill(spanner)->ornament();
-            Note* trillNote = ornament ? ornament->noteAbove() : nullptr;
-            if (trillNote && trillNote->accidental() && ornament->showAccidental() == OrnamentShowAccidental::DEFAULT) {
-                int line = absStep(trillNote->tpc(), trillNote->epitch());
-                as.setForceRestateAccidental(line, true);
-            }
+        for (const Segment& segment : measure->segments()) {
+            layoutMeasureIndependentElements(segment, startTrack, ctx);
+
+            setChordsMag(staff, segment, startTrack, endTrack, conf);
+
+            // Check if requested cross-staff is possible
+            checkStaffMoveValidity(segment, startTrack, endTrack);
+
+            layoutChordDrumset(staff, segment, startTrack, endTrack, conf);
+        }
+    }
+
+    for (size_t staffIdx = 0; staffIdx < dom.nstaves(); ++staffIdx) {
+        const Staff* staff = dom.staff(staffIdx);
+        if (!staff->show()) {
+            continue;
         }
 
-        for (Segment& segment : measure->segments()) {
-            // TODO? maybe we do need to process it here to make it possible to enable later
-            //if (!segment.enabled())
-            //      continue;
-            Instrument* ins = staff->part()->instrument(segment.tick());
-            const Drumset* drumset = ins->useDrumset() ? ins->drumset() : nullptr;
-            if (segment.isKeySigType()) {
-                KeySig* ks = toKeySig(segment.element(staffIdx * VOICES));
-                if (!ks) {
-                    continue;
-                }
-                Fraction tick = segment.tick();
-                as.init(staff->keySigEvent(tick));
-                TLayout::layoutKeySig(ks, ks->mutldata(), ctx.conf());
-            } else if (segment.isChordRestType()) {
-                const StaffType* st = staff->staffTypeForElement(&segment);
-                track_idx_t track     = staffIdx * VOICES;
-                track_idx_t endTrack  = track + VOICES;
+        track_idx_t track = staffIdx * VOICES;
+        track_idx_t endTrack = track + VOICES;
 
+        for (Segment& segment : measure->segments()) {
+            if (segment.isJustType(SegmentType::ChordRest)) {
                 for (track_idx_t t = track; t < endTrack; ++t) {
                     ChordRest* cr = segment.cr(t);
                     if (!cr) {
                         continue;
                     }
-                    // Check if requested cross-staff is possible
-                    if (cr->staffMove() || cr->storedStaffMove()) {
-                        cr->checkStaffMoveValidity();
-                    }
-
-                    double m = staff->staffMag(&segment);
-                    if (cr->isSmall()) {
-                        m *= ctx.conf().styleD(Sid::smallNoteMag);
-                    }
 
                     if (cr->isChord()) {
                         Chord* chord = toChord(cr);
-                        chord->cmdUpdateNotes(&as);
-                        for (Chord* c : chord->graceNotes()) {
-                            c->mutldata()->setMag(m * ctx.conf().styleD(Sid::graceNoteMag));
-                            c->setTrack(t);
-                            ChordLayout::computeUp(c, ctx);
-                            if (drumset) {
-                                layoutDrumsetChord(c, drumset, st, ctx.conf().spatium());
-                            }
-                            ChordLayout::layoutStem(c, ctx);
-                            c->setBeamlet(nullptr); // Will be defined during beam layout
 
-                            ChordLayout::fillShape(c, c->mutldata(), ctx.conf());
-                            //! NOTE Moved from ChordRest::setBeamlet
-                            c->segment()->createShape(c->vStaffIdx());
-                        }
-                        if (drumset) {
-                            layoutDrumsetChord(chord, drumset, st, ctx.conf().spatium());
+                        for (Chord* c : chord->graceNotes()) {
+                            c->setTrack(t);
+
+                            ChordLayout::computeUp(c, ctx);
+                            ChordLayout::layoutStem(c, ctx);
                         }
 
                         ChordLayout::computeUp(chord, ctx);
-                        ChordLayout::layoutStem(chord, ctx); // create stems needed to calculate spacing
-                                                             // stem direction can change later during beam processing
+                        ChordLayout::layoutStem(chord, ctx);
+                        // stem direction can change later during beam processing
                     }
-                    cr->mutldata()->setMag(m);
-                    cr->setBeamlet(nullptr); // Will be defined during beam layout
-
-                    ChordLayout::fillShape(cr, cr->mutldata(), ctx.conf());
-                    //! NOTE Moved from ChordRest::setBeamlet
-                    cr->segment()->createShape(cr->vStaffIdx());
-                }
-            } else if (segment.isClefType()) {
-                EngravingItem* e = segment.element(staffIdx * VOICES);
-                if (e) {
-                    toClef(e)->setSmall(true);
-                    TLayout::layoutItem(e, ctx);
-                }
-            } else if (segment.isType(SegmentType::TimeSig | SegmentType::Ambitus | SegmentType::HeaderClef)) {
-                EngravingItem* e = segment.element(staffIdx * VOICES);
-                if (e) {
-                    TLayout::layoutItem(e, ctx);
                 }
             }
         }
@@ -1024,13 +1249,21 @@ void MeasureLayout::getNextMeasure(LayoutContext& ctx)
     ctx.mutState().setTick(ctx.state().tick() + measure->ticks());
 }
 
+void MeasureLayout::getNextMeasure(LayoutContext& ctx)
+{
+    TRACEFUNC;
+
+    moveToNextMeasure(ctx);
+
+    layoutMeasure(ctx.mutState().curMeasure(), ctx);
+}
+
 //---------------------------------------------------------
 //   adjustMeasureNo
 //---------------------------------------------------------
 
-int MeasureLayout::adjustMeasureNo(MeasureBase* m, LayoutContext& ctx)
+int MeasureLayout::adjustMeasureNo(MeasureBase* m, int measureNo)
 {
-    int measureNo = ctx.state().measureNo();
     measureNo += m->noOffset();
     m->setNo(measureNo);
     if (!m->irregular()) {          // don’t count measure
@@ -1041,8 +1274,6 @@ int MeasureLayout::adjustMeasureNo(MeasureBase* m, LayoutContext& ctx)
     if (layoutBreak && layoutBreak->startWithMeasureOne()) {
         measureNo = 0;
     }
-
-    ctx.mutState().setMeasureNo(measureNo);
 
     return measureNo;
 }
@@ -1071,6 +1302,9 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
             ChordLayout::updateLineAttachPoints(chord, isFirstChordInMeasure, ctx);
             for (Chord* gn : chord->graceNotes()) {
                 ChordLayout::updateLineAttachPoints(gn, false, ctx);
+            }
+            if (chord->arpeggio()) {
+                ArpeggioLayout::clearAccidentals(chord->arpeggio(), ctx);
             }
 
             ChordLayout::layoutArticulations(chord, ctx);
@@ -1141,11 +1375,7 @@ void MeasureLayout::layoutMeasureNumber(Measure* m, LayoutContext& ctx)
             TLayout::layoutMeasureNumber(t, t->mutldata());
         } else {
             if (t) {
-                if (t->generated()) {
-                    ctx.mutDom().removeElement(t);
-                } else {
-                    ctx.mutDom().undo(new RemoveElement(t));
-                }
+                ctx.mutDom().doUndoRemoveElement(t);
             }
         }
     }
@@ -1159,11 +1389,7 @@ void MeasureLayout::layoutMMRestRange(Measure* m, LayoutContext& ctx)
             const MStaff* ms = m->mstaves().at(staffIdx);
             MMRestRange* rr = ms->mmRangeText();
             if (rr) {
-                if (rr->generated()) {
-                    ctx.mutDom().removeElement(rr);
-                } else {
-                    ctx.mutDom().undo(new RemoveElement(rr));
-                }
+                ctx.mutDom().doUndoRemoveElement(rr);
             }
         }
 
@@ -1287,21 +1513,30 @@ void MeasureLayout::layoutMeasureElements(Measure* m, LayoutContext& ctx)
                 e->mutldata()->setPosX(0);
             } else if (e->isChord()) {
                 Chord* c = toChord(e);
-                if (tremoloDispatcher(c)) {
-                    TremoloDispatcher* tr = tremoloDispatcher(c);
+                if (c->tremoloSingleChord()) {
+                    TremoloLayout::layout(c->tremoloSingleChord(), ctx);
+                }
+
+                if (c->tremoloTwoChord()) {
+                    TremoloTwoChord* tr = c->tremoloTwoChord();
                     Chord* c1 = tr->chord1();
                     Chord* c2 = tr->chord2();
-                    if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
-                        TLayout::layoutTremolo(tr, ctx);
+                    if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
+                        TremoloLayout::layout(tr, ctx);
                     }
                 }
+
                 for (Chord* g : c->graceNotes()) {
-                    if (tremoloDispatcher(g)) {
-                        TremoloDispatcher* tr = tremoloDispatcher(g);
-                        Chord* c1 = tr->chord1();
-                        Chord* c2 = tr->chord2();
-                        if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
-                            TLayout::layoutTremolo(tr, ctx);
+                    if (g->tremoloSingleChord()) {
+                        TremoloLayout::layout(g->tremoloSingleChord(), ctx);
+                    }
+
+                    if (g->tremoloTwoChord()) {
+                        TremoloTwoChord* tr = g->tremoloTwoChord();
+                        Chord* gc1 = tr->chord1();
+                        Chord* gc2 = tr->chord2();
+                        if (gc1 && !gc1->staffMove() && gc2 && !gc2->staffMove()) {
+                            TremoloLayout::layout(tr, ctx);
                         }
                     }
                 }
@@ -1343,9 +1578,9 @@ void MeasureLayout::layoutCrossStaff(MeasureBase* mb, LayoutContext& ctx)
             if (e->isChord()) {
                 Chord* c = toChord(e);
                 Beam* beam = c->beam();
-                TremoloDispatcher* tremolo = tremoloDispatcher(c);
+                TremoloTwoChord* tremolo = c->tremoloTwoChord();
                 if ((beam && (beam->cross() || beam->userModified()))
-                    || (tremolo && tremolo->twoNotes() && tremolo->userModified())) {
+                    || (tremolo && tremolo->userModified())) {
                     bool prevUp = c->up();
                     ChordLayout::computeUp(c, ctx); // for cross-staff beams
                     if (c->up() != prevUp) {
@@ -2083,12 +2318,14 @@ void MeasureLayout::stretchMeasureInPracticeMode(Measure* m, double targetWidth,
                 e->mutldata()->setPosX(0);
             } else if (t == ElementType::CHORD) {
                 Chord* c = toChord(e);
-                if (tremoloDispatcher(c)) {
-                    TremoloDispatcher* tr = tremoloDispatcher(c);
+                if (c->tremoloSingleChord()) {
+                    TremoloLayout::layout(c->tremoloSingleChord(), ctx);
+                } else if (c->tremoloTwoChord()) {
+                    TremoloTwoChord* tr = c->tremoloTwoChord();
                     Chord* c1 = tr->chord1();
                     Chord* c2 = tr->chord2();
-                    if (!tr->twoNotes() || (c1 && !c1->staffMove() && c2 && !c2->staffMove())) {
-                        TLayout::layoutTremolo(tr, ctx);
+                    if (c1 && !c1->staffMove() && c2 && !c2->staffMove()) {
+                        TremoloLayout::layout(tr, ctx);
                     }
                 }
             } else if (t == ElementType::BAR_LINE) {

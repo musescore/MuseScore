@@ -3376,7 +3376,7 @@ void ChordLayout::layoutStretchedBends(Chord* chord, LayoutContext& ctx)
 
     for (EngravingItem* item : chord->el()) {
         if (item && item->isStretchedBend()) {
-            rendering::dev::TLayout::layoutStretched(toStretchedBend(item), ctx);
+            TLayout::layoutStretched(toStretchedBend(item), ctx);
         }
     }
 }
