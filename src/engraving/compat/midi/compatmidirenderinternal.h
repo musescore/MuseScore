@@ -30,7 +30,7 @@
 #include "dom/synthesizerstate.h"
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
-#include "changeMap.h"
+#include "velocitymap.h"
 
 namespace mu::engraving {
 class EventsHolder;
@@ -188,8 +188,8 @@ private:
 
     Score* score = nullptr;
 
-    std::unordered_map<staff_idx_t, ChangeMap> m_velocitiesByStaff;
-    std::unordered_map<staff_idx_t, ChangeMap> m_velocityMultiplicationsByStaff;
+    std::unordered_map<staff_idx_t, VelocityMap> m_velocitiesByStaff;
+    std::unordered_map<staff_idx_t, VelocityMap> m_velocityMultiplicationsByStaff;
 
     Context _context;
 };
