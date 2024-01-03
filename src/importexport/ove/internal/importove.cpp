@@ -62,7 +62,6 @@
 #include "engraving/dom/text.h"
 #include "engraving/dom/timesig.h"
 #include "engraving/dom/tuplet.h"
-#include "engraving/dom/tremolo.h"
 #include "engraving/dom/tremolosinglechord.h"
 #include "engraving/dom/volta.h"
 #include "engraving/dom/chordlist.h"

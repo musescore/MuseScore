@@ -31,7 +31,6 @@
 #include "rw/xmlreader.h"
 
 #include "articulation.h"
-#include "tremolo.h"
 
 #include "log.h"
 

@@ -35,7 +35,6 @@
 #include "dom/chordrest.h"
 #include "dom/chord.h"
 #include "dom/tuplet.h"
-#include "dom/tremolo.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tremolotwochord.h"
 #include "dom/part.h"

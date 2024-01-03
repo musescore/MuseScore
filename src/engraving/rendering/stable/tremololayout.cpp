@@ -25,7 +25,6 @@
 
 #include "dom/chord.h"
 #include "dom/stem.h"
-#include "dom/tremolo.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/note.h"

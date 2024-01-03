@@ -61,7 +61,6 @@
 #include "dom/synthesizerstate.h"
 #include "dom/tempo.h"
 #include "dom/tie.h"
-#include "dom/tremolo.h"
 #include "dom/trill.h"
 #include "dom/undo.h"
 #include "dom/utils.h"

@@ -31,7 +31,6 @@
 #include "dom/excerpt.h"
 #include "dom/part.h"
 #include "dom/stem.h"
-#include "dom/tremolo.h"
 #include "dom/linkedobjects.h"
 #include "dom/measure.h"
 #include "dom/factory.h"

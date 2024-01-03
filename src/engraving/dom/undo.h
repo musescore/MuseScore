@@ -62,7 +62,7 @@
 #include "stringtunings.h"
 #include "synthesizerstate.h"
 #include "text.h"
-#include "tremolo.h"
+
 #include "tremolotwochord.h"
 #include "tremolobar.h"
 

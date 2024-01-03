@@ -36,7 +36,7 @@
 #include "slur.h"
 #include "staff.h"
 #include "tie.h"
-#include "tremolo.h"
+
 #include "tremolosinglechord.h"
 #include "tremolotwochord.h"
 #include "tuplet.h"

@@ -80,7 +80,6 @@
 #include "dom/text.h"
 #include "dom/textline.h"
 #include "dom/timesig.h"
-#include "dom/tremolo.h"
 #include "dom/tremolotwochord.h"
 #include "dom/tremolosinglechord.h"
 #include "dom/tuplet.h"
