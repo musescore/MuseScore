@@ -42,12 +42,12 @@ void SegmentLayout::layoutMeasureIndependentElements(const Segment& segment, tra
         Clef* cl = item_cast<Clef*>(segment.element(track));
         if (cl) {
             cl->setSmall(true);
-            TLayout::layoutClef(cl, cl->mutldata());         // LD_INDEPENDENT
+            TLayout::layoutClef(cl, cl->mutldata(), ctx.conf());         // LD_INDEPENDENT
         }
     } else if (segment.isType(SegmentType::HeaderClef)) {
         Clef* cl = item_cast<Clef*>(segment.element(track));
         if (cl) {
-            TLayout::layoutClef(cl, cl->mutldata());         // LD_INDEPENDENT
+            TLayout::layoutClef(cl, cl->mutldata(), ctx.conf());         // LD_INDEPENDENT
         }
     } else if (segment.isType(SegmentType::TimeSig)) {
         TimeSig* ts = item_cast<TimeSig*>(segment.element(track));

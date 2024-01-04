@@ -693,7 +693,7 @@ Segment* Measure::findFirstR(SegmentType st, const Fraction& t) const
     Segment* s;
     // search forwards
     for (s = first(); s && s->rtick() <= t; s = s->next()) {
-        if (s->segmentType() == st) {
+        if (s->segmentType() & st) {
             return s;
         }
     }
