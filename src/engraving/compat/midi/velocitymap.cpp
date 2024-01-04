@@ -135,12 +135,8 @@ int VelocityMap::interpolate(Fraction& eventTick, VelocityEvent& event, Fraction
 ///   return value at tick position.
 //---------------------------------------------------------
 
-int VelocityMap::val(Fraction tick)
+int VelocityMap::val(Fraction tick) const
 {
-    if (!m_ready) {
-        fill();
-    }
-
     auto eventIter = upper_bound(tick);
     if (eventIter == begin()) {
         return DEFAULT_VALUE;
@@ -148,9 +144,9 @@ int VelocityMap::val(Fraction tick)
 
     eventIter--;
     bool foundHairpin = false;
-    VelocityEvent& hairpinFound = eventIter->second;         // only used to init
+    VelocityEvent hairpinFound = eventIter->second;         // only used to init
     Fraction hairpinFoundStartTick = eventIter->first;
-    auto values = this->equal_range(hairpinFoundStartTick);
+    auto values = equal_range(hairpinFoundStartTick);
     for (auto it = values.first; it != values.second; ++it) {
         auto& event = it->second;
         if (event.m_type == VelocityEventType::HAIRPIN) {
@@ -179,7 +175,6 @@ int VelocityMap::val(Fraction tick)
 void VelocityMap::addDynamic(Fraction tick, int value)
 {
     insert({ tick, VelocityEvent(value) });
-    m_ready = false;
 }
 
 //---------------------------------------------------------
@@ -193,7 +188,6 @@ void VelocityMap::addHairpin(Fraction stick, Fraction etick, int change, ChangeM
     change = abs(change);
     change *= (direction == ChangeDirection::INCREASING) ? 1 : -1;
     insert({ stick, VelocityEvent(stick, etick, change, method, direction) });
-    m_ready = false;
 }
 
 //---------------------------------------------------------
@@ -522,21 +516,16 @@ void VelocityMap::fillHairpinsCache()
 }
 
 //---------------------------------------------------------
-//   fill
+//   setup
 //---------------------------------------------------------
 
-void VelocityMap::fill()
+void VelocityMap::setup()
 {
-    if (m_ready) {
-        return;
-    }
-
     sortHairpins();
     resolveHairpinCollisions();
     resolveDynamicInsideHairpinCollisions();
     addMissingDynamicsAfterHairpins();
     fillHairpinsCache();
-    m_ready = true;
 }
 
 //---------------------------------------------------------
@@ -544,12 +533,8 @@ void VelocityMap::fill()
 ///   returns a list of changes in a range, and their start and end points
 //---------------------------------------------------------
 
-std::vector<std::pair<Fraction, Fraction> > VelocityMap::changesInRange(Fraction stick, Fraction etick)
+std::vector<std::pair<Fraction, Fraction> > VelocityMap::changesInRange(Fraction stick, Fraction etick) const
 {
-    if (!m_ready) {
-        fill();
-    }
-
     std::vector<std::pair<Fraction, Fraction> > tempChanges;
 
     // Force a new event on every noteon, in case the velocity has changed

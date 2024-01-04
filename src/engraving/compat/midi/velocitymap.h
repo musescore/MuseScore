@@ -79,12 +79,12 @@ class VelocityMap : public std::multimap<Fraction, VelocityEvent>
     OBJECT_ALLOCATOR(engraving, VelocityMap)
 public:
     VelocityMap() {}
-    int val(Fraction tick);
-    std::vector<std::pair<Fraction, Fraction> > changesInRange(Fraction stick, Fraction etick);
+    int val(Fraction tick) const;
+    std::vector<std::pair<Fraction, Fraction> > changesInRange(Fraction stick, Fraction etick) const;
 
     void addDynamic(Fraction tick, int value);
     void addHairpin(Fraction stick, Fraction etick, int change, ChangeMethod method, ChangeDirection direction);
-    void fill();
+    void setup();
 
     static int interpolate(Fraction& eventTick, VelocityEvent& event, Fraction& tick);
 
@@ -106,7 +106,6 @@ private:
     void addMissingDynamicsAfterHairpins();
     void fillHairpinsCache();
 
-    bool m_ready = false;
     static constexpr int DEFAULT_VALUE = 80;
     static constexpr int MIN_VALUE = 1;
     static constexpr int MAX_VALUE = 127;

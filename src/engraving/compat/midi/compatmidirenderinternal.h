@@ -154,6 +154,8 @@ public:
         bool instrumentsHaveEffects = false; //!when effect is applied, new channel should be used
 
         HarmonyChannelSetting harmonyChannelSetting = HarmonyChannelSetting::DEFAULT;
+        std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
+        std::unordered_map<staff_idx_t, VelocityMap> velocityMultiplicationsByStaff;
     };
 
     explicit CompatMidiRendererInternal(Score* s);
@@ -175,7 +177,6 @@ private:
                               PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords);
     void doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
                                 PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords);
-    void updateScoreVelocities();
 
     struct ChordParams {
         bool letRing = false;
@@ -188,11 +189,7 @@ private:
                                        int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
 
     Score* score = nullptr;
-
-    std::unordered_map<staff_idx_t, VelocityMap> m_velocitiesByStaff;
-    std::unordered_map<staff_idx_t, VelocityMap> m_velocityMultiplicationsByStaff;
-
-    Context _context;
+    Context m_context;
 };
 } // namespace mu::engraving
 

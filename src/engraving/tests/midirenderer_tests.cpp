@@ -914,6 +914,25 @@ TEST_F(MidiRenderer_Tests, hairpinDynamicInside)
     checkEventInterval(events, 2880, 3359, 71, 96);
 }
 
+TEST_F(MidiRenderer_Tests, hairpinTwoInstruments)
+{
+    EventsHolder events = getNoteOnEvents(renderMidiEvents(u"hairpin_two_instruments.mscx"));
+
+    EXPECT_EQ(events.size(), 2);
+    EXPECT_EQ(events[DEFAULT_CHANNEL].size(), 8);
+    EXPECT_EQ(events[DEFAULT_CHANNEL + 1].size(), 8);
+
+    checkEventInterval(events, 0, 479, 60, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL);
+    checkEventInterval(events, 480, 959, 64, 84, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL);
+    checkEventInterval(events, 960, 1439, 67, 88, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL);
+    checkEventInterval(events, 1440, 1919, 72, 92, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL);
+
+    checkEventInterval(events, 0, 479, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 480, 959, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 960, 1439, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+    checkEventInterval(events, 1440, 1919, 55, 80, MidiInstrumentEffect::NONE, DEFAULT_CHANNEL + 1);
+}
+
 /*****************************************************************************
 
     DISABLED TESTS BELOW
