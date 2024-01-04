@@ -77,7 +77,6 @@ class Trill final : public SLine
 public:
     Trill(EngravingItem* parent);
     Trill(const Trill& t);
-    ~Trill();
 
     // Score Tree functions
     EngravingObject* scanParent() const override;
