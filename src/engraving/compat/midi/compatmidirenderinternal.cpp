@@ -109,8 +109,6 @@ struct VibratoParams {
 static uint32_t getChannel(const Instrument* instr, const Note* note, MidiInstrumentEffect effect,
                            const CompatMidiRendererInternal::Context& context);
 
-static void updateScoreVelocities(Score* score, std::unordered_map<staff_idx_t, VelocityMap>& velocitiesByStaff,
-                                  std::unordered_map<staff_idx_t, VelocityMap>& velocityMultiplicationsByStaff);
 static void updateHairpinVelocities(Hairpin* h, std::unordered_map<staff_idx_t, VelocityMap>& velocitiesByStaff);
 static void updateVoltaVelocities(Volta* volta, VelocityMap& veloMap);
 
@@ -1156,7 +1154,7 @@ void CompatMidiRendererInternal::renderScore(EventsHolder& events, const Context
     CompatMidiRender::createPlayEvents(score, score->firstMeasure(), nullptr);
 
     score->updateChannel();
-    updateScoreVelocities(score, m_velocitiesByStaff, m_velocityMultiplicationsByStaff);
+    updateScoreVelocities();
 
     // create note & other events
     for (const Staff* st : score->staves()) {
@@ -1281,21 +1279,19 @@ void updateHairpinVelocities(Hairpin* h, std::unordered_map<staff_idx_t, Velocit
     }
 }
 
-/* static */
-void updateScoreVelocities(Score* score, std::unordered_map<staff_idx_t, VelocityMap>& velocitiesByStaff, std::unordered_map<staff_idx_t,
-                                                                                                                             VelocityMap>& velocityMultiplicationsByStaff)
+void CompatMidiRendererInternal::updateScoreVelocities()
 {
     if (!score->firstMeasure()) {
         return;
     }
 
-    velocitiesByStaff.clear();
-    velocityMultiplicationsByStaff.clear();
+    m_velocitiesByStaff.clear();
+    m_velocityMultiplicationsByStaff.clear();
 
     for (size_t staffIdx = 0; staffIdx < score->nstaves(); staffIdx++) {
         Staff* st = score->staff(staffIdx);
-        VelocityMap& velo = velocitiesByStaff[staffIdx];
-        VelocityMap& mult = velocityMultiplicationsByStaff[staffIdx];
+        VelocityMap& velo = m_velocitiesByStaff[staffIdx];
+        VelocityMap& mult = m_velocityMultiplicationsByStaff[staffIdx];
         Part* prt = st->part();
         size_t partStaves = prt->nstaves();
         staff_idx_t partStaff = score->staffIdx(prt);
@@ -1343,7 +1339,7 @@ void updateScoreVelocities(Score* score, std::unordered_map<staff_idx_t, Velocit
                 case DynamicRange::PART:
                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
                         for (staff_idx_t i = partStaff; i < partStaff + partStaves; ++i) {
-                            VelocityMap& stVelo = velocitiesByStaff[score->staff(i)->staffIdx()];
+                            VelocityMap& stVelo = m_velocitiesByStaff[score->staff(i)->staffIdx()];
                             stVelo.addDynamic(tick, v);
                             if (change != 0) {
                                 Fraction etick = tick + d->velocityChangeLength();
@@ -1355,7 +1351,7 @@ void updateScoreVelocities(Score* score, std::unordered_map<staff_idx_t, Velocit
                     break;
                 case DynamicRange::SYSTEM:
                     for (size_t i = 0; i < score->nstaves(); ++i) {
-                        VelocityMap& stVelo = velocitiesByStaff[score->staff(i)->staffIdx()];
+                        VelocityMap& stVelo = m_velocitiesByStaff[score->staff(i)->staffIdx()];
                         stVelo.addDynamic(tick, v);
                         if (change != 0) {
                             Fraction etick = tick + d->velocityChangeLength();
@@ -1406,13 +1402,13 @@ void updateScoreVelocities(Score* score, std::unordered_map<staff_idx_t, Velocit
                 continue;
             }
 
-            updateHairpinVelocities(toHairpin(s), velocitiesByStaff);
+            updateHairpinVelocities(toHairpin(s), m_velocitiesByStaff);
         }
     }
 
     for (Staff* st : score->staves()) {
-        velocitiesByStaff[st->staffIdx()].fill();
-        velocityMultiplicationsByStaff[st->staffIdx()].fill();
+        m_velocitiesByStaff[st->staffIdx()].fill();
+        m_velocityMultiplicationsByStaff[st->staffIdx()].fill();
     }
 
     for (auto it = score->spanner().cbegin(); it != score->spanner().cend(); ++it) {
@@ -1422,7 +1418,7 @@ void updateScoreVelocities(Score* score, std::unordered_map<staff_idx_t, Velocit
         }
 
         Volta* volta = toVolta(spanner);
-        updateVoltaVelocities(volta, velocitiesByStaff[volta->staffIdx()]);
+        updateVoltaVelocities(volta, m_velocitiesByStaff[volta->staffIdx()]);
     }
 }
 
