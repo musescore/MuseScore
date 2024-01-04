@@ -715,19 +715,10 @@ int Instrument::channelIdx(const String& s) const
 }
 
 //---------------------------------------------------------
-//   updateVelocity
+//   getVelocityMultiplier
 //---------------------------------------------------------
 
-void Instrument::updateVelocity(int* velocity, int /*channelIdx*/, const String& name)
-{
-    *velocity *= getVelocityMultiplier(name);
-}
-
-//---------------------------------------------------------
-//   updateVelocity
-//---------------------------------------------------------
-
-double Instrument::getVelocityMultiplier(const String& name)
+double Instrument::getVelocityMultiplier(const String& name) const
 {
     for (const MidiArticulation& a : m_articulation) {
         if (a.name == name) {

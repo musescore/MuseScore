@@ -175,6 +175,7 @@ private:
                               PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords);
     void doCollectMeasureEvents(EventsHolder& events, Measure const* m, const Staff* sctx, int tickOffset,
                                 PitchWheelRenderer& pitchWheelRenderer, std::array<Chord*, VOICES>& prevChords);
+    void updateScoreVelocities();
 
     struct ChordParams {
         bool letRing = false;
