@@ -55,6 +55,9 @@ public:
     SpacerType spacerType() const { return m_spacerType; }
     void setSpacerType(SpacerType t) { m_spacerType = t; }
 
+    int subtype() const override { return int(m_spacerType); }
+    TranslatableString subtypeUserName() const override;
+
     bool isEditable() const override { return true; }
     void startEditDrag(EditData&) override;
     void editDrag(EditData&) override;

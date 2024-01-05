@@ -22,6 +22,8 @@
 
 #include "log.h"
 
+#include "types/typesconv.h"
+
 #include "layoutbreak.h"
 #include "measurebase.h"
 #include "score.h"
@@ -275,6 +277,15 @@ PropertyValue LayoutBreak::propertyDefault(Pid id) const
     default:
         return EngravingItem::propertyDefault(id);
     }
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString LayoutBreak::subtypeUserName() const
+{
+    return TConv::userName(layoutBreakType());
 }
 
 void LayoutBreak::added()

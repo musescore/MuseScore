@@ -48,12 +48,7 @@ SelectDialog::SelectDialog(QWidget* parent)
 
     m_element = contextItem(globalContext()->currentNotation()->interaction());
     type->setText(m_element->translatedTypeUserName().toQString());
-
-    if (m_element->type() == engraving::ElementType::ARTICULATION) {
-        subtype->setText(m_element->translatedTypeUserName().toQString());
-    } else {
-        subtype->setText(m_element->translatedSubtypeUserName().toQString());
-    }
+    subtype->setText(m_element->translatedSubtypeUserName().toQString());
 
     sameSubtype->setEnabled(m_element->subtype() != -1);
     subtype->setEnabled(m_element->subtype() != -1);
@@ -81,10 +76,6 @@ FilterElementsOptions SelectDialog::elementOptions() const
     FilterElementsOptions options;
     options.elementType = m_element->type();
     options.subtype = m_element->subtype();
-    if (m_element->isSlurSegment()) {
-        const SlurSegment* slurSegment = dynamic_cast<const SlurSegment*>(m_element);
-        options.subtype = static_cast<int>(slurSegment->spanner()->type());
-    }
 
     if (sameStaff->isChecked()) {
         options.staffStart = static_cast<int>(m_element->staffIdx());

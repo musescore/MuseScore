@@ -518,3 +518,12 @@ engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
     }
     return EngravingItem::propertyDefault(propertyId);
 }
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Arpeggio::subtypeUserName() const
+{
+    return arpeggioTypeName();
+}

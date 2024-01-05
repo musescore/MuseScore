@@ -353,12 +353,12 @@ PalettePtr PaletteCreator::newBarLinePalette(bool defaultPalette)
     if (!defaultPalette) {
         const struct {
             int from, to;
-            const char* userName;
+            muse::TranslatableString userName;
         } spans[] = {
             { BARLINE_SPAN_TICK1_FROM,  BARLINE_SPAN_TICK1_TO,  SymNames::userNameForSymId(SymId::barlineTick) },
-            { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  QT_TRANSLATE_NOOP("engraving/sym", "Tick barline 2") },  // Not in SMuFL
+            { BARLINE_SPAN_TICK2_FROM,  BARLINE_SPAN_TICK2_TO,  muse::TranslatableString("engraving/sym", "Tick barline 2") },  // Not in SMuFL
             { BARLINE_SPAN_SHORT1_FROM, BARLINE_SPAN_SHORT1_TO, SymNames::userNameForSymId(SymId::barlineShort) },
-            { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, QT_TRANSLATE_NOOP("engraving/sym", "Short barline 2") }, // Not in SMuFL
+            { BARLINE_SPAN_SHORT2_FROM, BARLINE_SPAN_SHORT2_TO, muse::TranslatableString("engraving/sym", "Short barline 2") }, // Not in SMuFL
         };
         for (auto span : spans) {
             auto b = Factory::makeBarLine(gpaletteScore->dummy()->segment());
@@ -522,44 +522,31 @@ PalettePtr PaletteCreator::newLayoutPalette()
     sp->setGridSize(42, 36);
     sp->setDrawGrid(true);
 
-    auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-    lb->setLayoutBreakType(LayoutBreakType::LINE);
-    PaletteCellPtr cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "System break"));
-    cell->mag = 1.2;
+    static std::vector<LayoutBreakType> layoutBreaks  {
+        LayoutBreakType::LINE,
+        LayoutBreakType::PAGE,
+        LayoutBreakType::SECTION,
+        LayoutBreakType::NOBREAK
+    };
+    for (LayoutBreakType layoutBreakType : layoutBreaks) {
+        auto lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
+        lb->setLayoutBreakType(layoutBreakType);
+        PaletteCellPtr cell = sp->appendElement(lb, TConv::userName(layoutBreakType));
+        cell->mag = 1.2;
+    }
 
-    lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-    lb->setLayoutBreakType(LayoutBreakType::PAGE);
-    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Page break"));
-    cell->mag = 1.2;
-
-    lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-    lb->setLayoutBreakType(LayoutBreakType::SECTION);
-    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Section break"));
-    cell->mag = 1.2;
-
-    lb = Factory::makeLayoutBreak(gpaletteScore->dummy()->measure());
-    lb->setLayoutBreakType(LayoutBreakType::NOBREAK);
-    cell = sp->appendElement(lb, QT_TRANSLATE_NOOP("palette", "Keep measures on the same system"));
-    cell->mag = 1.2;
-
-    qreal _spatium = gpaletteScore->style().spatium();
-    auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
-    spacer->setSpacerType(SpacerType::DOWN);
-    spacer->setGap(Millimetre(3 * _spatium));
-    cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer down"));
-    cell->mag = .7;
-
-    spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
-    spacer->setSpacerType(SpacerType::UP);
-    spacer->setGap(Millimetre(3 * _spatium));
-    cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer up"));
-    cell->mag = .7;
-
-    spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
-    spacer->setSpacerType(SpacerType::FIXED);
-    spacer->setGap(Millimetre(3 * _spatium));
-    cell = sp->appendElement(spacer, QT_TRANSLATE_NOOP("palette", "Staff spacer fixed down"));
-    cell->mag = .7;
+    static std::vector<SpacerType> spacers  {
+        SpacerType::DOWN,
+        SpacerType::UP,
+        SpacerType::FIXED
+    };
+    for (SpacerType spacerType : spacers) {
+        auto spacer = Factory::makeSpacer(gpaletteScore->dummy()->measure());
+        spacer->setSpacerType(spacerType);
+        spacer->setGap(Millimetre(3 * gpaletteScore->style().spatium()));
+        PaletteCellPtr cell = sp->appendElement(spacer, spacer->subtypeUserName());
+        cell->mag = .7;
+    }
 
     sp->appendActionIcon(ActionIconType::VFRAME, "insert-vbox");
     sp->appendActionIcon(ActionIconType::HFRAME, "insert-hbox");
@@ -1024,66 +1011,33 @@ PalettePtr PaletteCreator::newArpeggioPalette()
 
     //fall and doits
 
-    auto cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::FALL);
-    sp->appendElement(cl, cl->chordLineTypeName());
+    static std::vector<ChordLineType> chordLineTypes {
+        ChordLineType::FALL,
+        ChordLineType::DOIT,
+        ChordLineType::PLOP,
+        ChordLineType::SCOOP
+    };
 
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::DOIT);
-    sp->appendElement(cl, cl->chordLineTypeName());
+    for (ChordLineType chordLineType : chordLineTypes) {
+        auto cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
+        cl->setChordLineType(chordLineType);
+        sp->appendElement(cl, cl->chordLineTypeName());
+    }
 
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::PLOP);
-    sp->appendElement(cl, cl->chordLineTypeName());
+    for (ChordLineType chordLineType : chordLineTypes) {
+        auto cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
+        cl->setChordLineType(chordLineType);
+        cl->setStraight(true);
+        sp->appendElement(cl, cl->chordLineTypeName());
+    }
 
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::SCOOP);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::FALL);
-    cl->setStraight(true);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::DOIT);
-    cl->setStraight(true);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::PLOP);
-    cl->setStraight(true);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::SCOOP);
-    cl->setStraight(true);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::FALL);
-    cl->setStraight(true);
-    cl->setWavy(true);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::DOIT);
-    cl->setStraight(true);
-    cl->setWavy(true);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::PLOP);
-    cl->setStraight(true);
-    cl->setWavy(true);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
-    cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
-    cl->setChordLineType(ChordLineType::SCOOP);
-    cl->setStraight(true);
-    cl->setWavy(true);
-    sp->appendElement(cl, cl->chordLineTypeName());
-
+    for (ChordLineType chordLineType : chordLineTypes) {
+        auto cl = Factory::makeChordLine(gpaletteScore->dummy()->chord());
+        cl->setChordLineType(chordLineType);
+        cl->setStraight(true);
+        cl->setWavy(true);
+        sp->appendElement(cl, cl->chordLineTypeName());
+    }
     return sp;
 }
 
@@ -1174,18 +1128,18 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     auto slur = Factory::makeSlur(gpaletteScore->dummy());
     sp->appendElement(slur, QT_TRANSLATE_NOOP("palette", "Slur"));
 
-    std::pair<HairpinType, const char*> hairpins[] = {
-        { HairpinType::CRESC_HAIRPIN,    QT_TRANSLATE_NOOP("palette", "Crescendo hairpin") },
-        { HairpinType::DECRESC_HAIRPIN,  QT_TRANSLATE_NOOP("palette", "Diminuendo hairpin") },
-        { HairpinType::CRESC_LINE,       QT_TRANSLATE_NOOP("palette", "Crescendo line") },
-        { HairpinType::DECRESC_LINE,     QT_TRANSLATE_NOOP("palette", "Diminuendo line") }
+    static std::vector<HairpinType> hairpins {
+        HairpinType::CRESC_HAIRPIN,
+        HairpinType::DECRESC_HAIRPIN,
+        HairpinType::CRESC_LINE,
+        HairpinType::DECRESC_LINE
     };
 
-    for (std::pair<HairpinType, const char*> pair : hairpins) {
+    for (HairpinType hairpinType : hairpins) {
         auto hairpin = Factory::makeHairpin(gpaletteScore->dummy()->segment());
-        hairpin->setHairpinType(pair.first);
+        hairpin->setHairpinType(hairpinType);
         hairpin->setLen(w);
-        sp->appendElement(hairpin, pair.second);
+        sp->appendElement(hairpin, hairpin->subtypeUserName());
     }
 
     auto gabel = Factory::makeHairpin(gpaletteScore->dummy()->segment());
@@ -1235,45 +1189,25 @@ PalettePtr PaletteCreator::newLinesPalette(bool defaultPalette)
     volta->setEndings(il);
     sp->appendElement(volta, QT_TRANSLATE_NOOP("palette", "Seconda volta, open"));
 
-    auto ottava = makeElement<Ottava>(gpaletteScore);
-    ottava->setOttavaType(OttavaType::OTTAVA_8VA);
-    ottava->setLen(w);
-    ottava->styleChanged();
-    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "8va alta"));
-
-    ottava = makeElement<Ottava>(gpaletteScore);
-    ottava->setOttavaType(OttavaType::OTTAVA_8VB);
-    ottava->setLen(w);
-    ottava->setPlacement(PlacementV::BELOW);
-    ottava->styleChanged();
-    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "8va bassa"));
-
-    ottava = makeElement<Ottava>(gpaletteScore);
-    ottava->setOttavaType(OttavaType::OTTAVA_15MA);
-    ottava->setLen(w);
-    ottava->styleChanged();
-    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "15ma alta"));
-
-    if (!defaultPalette) {
-        ottava = makeElement<Ottava>(gpaletteScore);
-        ottava->setOttavaType(OttavaType::OTTAVA_15MB);
-        ottava->setLen(w);
-        ottava->setPlacement(PlacementV::BELOW);
-        ottava->styleChanged();
-        sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "15ma bassa"));
-
-        ottava = makeElement<Ottava>(gpaletteScore);
-        ottava->setOttavaType(OttavaType::OTTAVA_22MA);
+    static std::vector<OttavaType> ottavasDefault {
+        OttavaType::OTTAVA_8VA,
+        OttavaType::OTTAVA_8VB,
+        OttavaType::OTTAVA_15MA
+    };
+    static std::vector<OttavaType> ottavasMaster {
+        OttavaType::OTTAVA_8VA,
+        OttavaType::OTTAVA_8VB,
+        OttavaType::OTTAVA_15MA,
+        OttavaType::OTTAVA_15MB,
+        OttavaType::OTTAVA_22MA,
+        OttavaType::OTTAVA_22MB
+    };
+    for (OttavaType ottavaType : defaultPalette ? ottavasDefault : ottavasMaster) {
+        auto ottava = makeElement<Ottava>(gpaletteScore);
+        ottava->setOttavaType(ottavaType);
         ottava->setLen(w);
         ottava->styleChanged();
-        sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "22ma alta"));
-
-        ottava = makeElement<Ottava>(gpaletteScore);
-        ottava->setOttavaType(OttavaType::OTTAVA_22MB);
-        ottava->setPlacement(PlacementV::BELOW);
-        ottava->setLen(w);
-        ottava->styleChanged();
-        sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "22ma bassa"));
+        sp->appendElement(ottava, ottava->subtypeUserName());
     }
 
     auto pedal = makeElement<Pedal>(gpaletteScore);
@@ -1784,75 +1718,47 @@ PalettePtr PaletteCreator::newFretboardDiagramPalette()
     sp->setDrawGrid(true);
     sp->setVisible(false);
 
-    auto fret = FretDiagram::createFromString(gpaletteScore, u"X32O1O");
-    fret->setHarmony(u"C");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "C"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"X-554-");
-    fret->setHarmony(u"Cm");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Cm"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"X3231O");
-    fret->setHarmony(u"C7");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "C7"));
+    struct FretDiagramInfo {
+        String diagram;
+        String harmony;
+        muse::TranslatableString userName;
+    };
 
-    fret = FretDiagram::createFromString(gpaletteScore, u"XXO232");
-    fret->setHarmony(u"D");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "D"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"XXO231");
-    fret->setHarmony(u"Dm");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Dm"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"XXO212");
-    fret->setHarmony(u"D7");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "D7"));
+    static std::vector<FretDiagramInfo> fretboardDiagrams = {
+        { u"X32O1O", u"C",  muse::TranslatableString("palette", "C") },
+        { u"X-554-", u"Cm", muse::TranslatableString("palette", "Cm") },
+        { u"X3231O", u"C7", muse::TranslatableString("palette", "C7") },
 
-    fret = FretDiagram::createFromString(gpaletteScore, u"O221OO");
-    fret->setHarmony(u"E");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "E"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"O22OOO");
-    fret->setHarmony(u"Em");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Em"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"O2O1OO");
-    fret->setHarmony(u"E7");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "E7"));
+        { u"XXO232", u"D",  muse::TranslatableString("palette", "D") },
+        { u"XXO231", u"Dm", muse::TranslatableString("palette", "Dm") },
+        { u"XXO212", u"D7", muse::TranslatableString("palette", "D7") },
 
-    fret = FretDiagram::createFromString(gpaletteScore, u"-332--");
-    fret->setHarmony(u"F");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "F"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"-33---");
-    fret->setHarmony(u"Fm");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Fm"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"-3-2--");
-    fret->setHarmony(u"F7");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "F7"));
+        { u"O221OO", u"E",  muse::TranslatableString("palette", "E") },
+        { u"O22OOO", u"Em", muse::TranslatableString("palette", "Em") },
+        { u"O2O1OO", u"E7", muse::TranslatableString("palette", "E7") },
 
-    fret = FretDiagram::createFromString(gpaletteScore, u"32OOO3");
-    fret->setHarmony(u"G");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "G"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"-55---");
-    fret->setHarmony(u"Gm");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Gm"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"32OOO1");
-    fret->setHarmony(u"G7");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "G7"));
+        { u"-332--", u"F",  muse::TranslatableString("palette", "F") },
+        { u"-33---", u"Fm", muse::TranslatableString("palette", "Fm") },
+        { u"-3-2--", u"F7", muse::TranslatableString("palette", "F7") },
 
-    fret = FretDiagram::createFromString(gpaletteScore, u"XO222O");
-    fret->setHarmony(u"A");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "A"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"XO221O");
-    fret->setHarmony(u"Am");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Am"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"XO2O2O");
-    fret->setHarmony(u"A7");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "A7"));
+        { u"32OOO3", u"G",  muse::TranslatableString("palette", "G") },
+        { u"-55---", u"Gm", muse::TranslatableString("palette", "Gm") },
+        { u"32OOO1", u"G7", muse::TranslatableString("palette", "G7") },
 
-    fret = FretDiagram::createFromString(gpaletteScore, u"X-444-");
-    fret->setHarmony(u"B");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "B"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"X-443-");
-    fret->setHarmony(u"Bm");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "Bm"));
-    fret = FretDiagram::createFromString(gpaletteScore, u"X212O2");
-    fret->setHarmony(u"B7");
-    sp->appendElement(fret, QT_TRANSLATE_NOOP("palette/fretboarddiagram", "B7"));
+        { u"XO222O", u"A",  muse::TranslatableString("palette", "A") },
+        { u"XO221O", u"Am", muse::TranslatableString("palette", "Am") },
+        { u"XO2O2O", u"A7", muse::TranslatableString("palette", "A7") },
+
+        { u"X-444-", u"B",  muse::TranslatableString("palette", "B") },
+        { u"X-443-", u"Bm", muse::TranslatableString("palette", "Bm") },
+        { u"X212O2", u"B7", muse::TranslatableString("palette", "B7") }
+    };
+
+    for (FretDiagramInfo fretboardDiagram : fretboardDiagrams) {
+        auto fret = FretDiagram::createFromString(gpaletteScore, fretboardDiagram.diagram);
+        fret->setHarmony(fretboardDiagram.harmony);
+        sp->appendElement(fret, fretboardDiagram.userName);
+    }
 
     return sp;
 }
@@ -1948,30 +1854,25 @@ PalettePtr PaletteCreator::newGuitarPalette(bool defaultPalette)
         sp->appendElement(s, s->typeUserName());
     }
 
-    auto distort = makeElement<PlayTechAnnotation>(gpaletteScore);
-    distort->setXmlText(QT_TRANSLATE_NOOP("palette", "distort"));
-    distort->setTechniqueType(PlayingTechniqueType::Distortion);
-    sp->appendElement(distort, QT_TRANSLATE_NOOP("palette", "Distortion"), 0.8)->setElementTranslated(true);
+    struct PlayTechAnnotationInfo {
+        muse::TranslatableString xmlText;
+        PlayingTechniqueType playTechType;
+    };
 
-    auto overdrive = makeElement<PlayTechAnnotation>(gpaletteScore);
-    overdrive->setXmlText(QT_TRANSLATE_NOOP("palette", "overdrive"));
-    overdrive->setTechniqueType(PlayingTechniqueType::Overdrive);
-    sp->appendElement(overdrive, QT_TRANSLATE_NOOP("palette", "Overdrive"), 0.8)->setElementTranslated(true);
+    static std::vector<PlayTechAnnotationInfo> playTechAnnotations = {
+        { muse::TranslatableString("palette", "distort"),   PlayingTechniqueType::Distortion, },
+        { muse::TranslatableString("palette", "overdrive"), PlayingTechniqueType::Overdrive, },
+        { muse::TranslatableString("palette", "harmonics"), PlayingTechniqueType::Harmonics, },
+        { muse::TranslatableString("palette", "jazz tone"), PlayingTechniqueType::JazzTone, },
+        { muse::TranslatableString("palette", "normal"),    PlayingTechniqueType::Natural },
+    };
 
-    auto harmonics = makeElement<PlayTechAnnotation>(gpaletteScore);
-    harmonics->setXmlText(QT_TRANSLATE_NOOP("palette", "harmonics"));
-    harmonics->setTechniqueType(PlayingTechniqueType::Harmonics);
-    sp->appendElement(harmonics, QT_TRANSLATE_NOOP("palette", "Harmonics"), 0.8)->setElementTranslated(true);
-
-    auto jazzTone = makeElement<PlayTechAnnotation>(gpaletteScore);
-    jazzTone->setXmlText(QT_TRANSLATE_NOOP("palette", "jazz tone"));
-    jazzTone->setTechniqueType(PlayingTechniqueType::JazzTone);
-    sp->appendElement(jazzTone, QT_TRANSLATE_NOOP("palette", "Jazz tone"), 0.8)->setElementTranslated(true);
-
-    auto normal = makeElement<PlayTechAnnotation>(gpaletteScore);
-    normal->setXmlText(QT_TRANSLATE_NOOP("palette", "normal"));
-    normal->setTechniqueType(PlayingTechniqueType::Natural);
-    sp->appendElement(normal, QT_TRANSLATE_NOOP("palette", "Normal"), 0.8)->setElementTranslated(true);
+    for (PlayTechAnnotationInfo playTechAnnotation : playTechAnnotations) {
+        auto pta = makeElement<PlayTechAnnotation>(gpaletteScore);
+        pta->setXmlText(playTechAnnotation.xmlText.translated());
+        pta->setTechniqueType(playTechAnnotation.playTechType);
+        sp->appendElement(pta, TConv::userName(playTechAnnotation.playTechType), 0.8)->setElementTranslated(true);
+    }
 
     return sp;
 }
@@ -2049,47 +1950,28 @@ PalettePtr PaletteCreator::newPitchPalette(bool defaultPalette)
     sp->setDrawGrid(true);
     sp->setMag(0.8);
 
-    qreal w = gpaletteScore->style().spatium() * 8;
+    static std::vector<OttavaType> ottavasDefault {
+        OttavaType::OTTAVA_8VA,
+        OttavaType::OTTAVA_8VB,
+        OttavaType::OTTAVA_15MA,
+        OttavaType::OTTAVA_15MB
+    };
 
-    auto ottava = makeElement<Ottava>(gpaletteScore);
-    ottava->setOttavaType(OttavaType::OTTAVA_8VA);
-    ottava->setLen(w);
-    ottava->styleChanged();
-    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "8va alta"));
+    static std::vector<OttavaType> ottavasMaster {
+        OttavaType::OTTAVA_8VA,
+        OttavaType::OTTAVA_8VB,
+        OttavaType::OTTAVA_15MA,
+        OttavaType::OTTAVA_15MB,
+        OttavaType::OTTAVA_22MA,
+        OttavaType::OTTAVA_22MB
+    };
 
-    ottava = makeElement<Ottava>(gpaletteScore);
-    ottava->setOttavaType(OttavaType::OTTAVA_8VB);
-    ottava->setLen(w);
-    ottava->setPlacement(PlacementV::BELOW);
-    ottava->styleChanged();
-    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "8va bassa"));
-
-    ottava = makeElement<Ottava>(gpaletteScore);
-    ottava->setOttavaType(OttavaType::OTTAVA_15MA);
-    ottava->setLen(w);
-    ottava->styleChanged();
-    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "15ma alta"));
-
-    ottava = makeElement<Ottava>(gpaletteScore);
-    ottava->setOttavaType(OttavaType::OTTAVA_15MB);
-    ottava->setLen(w);
-    ottava->setPlacement(PlacementV::BELOW);
-    ottava->styleChanged();
-    sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "15ma bassa"));
-
-    if (!defaultPalette) {
-        ottava = makeElement<Ottava>(gpaletteScore);
-        ottava->setOttavaType(OttavaType::OTTAVA_22MA);
-        ottava->setLen(w);
+    for (OttavaType ottavaType : defaultPalette ? ottavasDefault : ottavasMaster) {
+        auto ottava = makeElement<Ottava>(gpaletteScore);
+        ottava->setOttavaType(ottavaType);
+        ottava->setLen(gpaletteScore->style().spatium() * 8);
         ottava->styleChanged();
-        sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "22ma alta"));
-
-        ottava = makeElement<Ottava>(gpaletteScore);
-        ottava->setOttavaType(OttavaType::OTTAVA_22MB);
-        ottava->setPlacement(PlacementV::BELOW);
-        ottava->setLen(w);
-        ottava->styleChanged();
-        sp->appendElement(ottava, QT_TRANSLATE_NOOP("palette", "22ma bassa"));
+        sp->appendElement(ottava, ottava->subtypeUserName());
     }
 
     auto a = Factory::makeAmbitus(gpaletteScore->dummy()->segment());

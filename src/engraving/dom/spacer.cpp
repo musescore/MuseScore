@@ -222,4 +222,21 @@ PropertyValue Spacer::propertyDefault(Pid id) const
         return EngravingItem::propertyDefault(id);
     }
 }
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Spacer::subtypeUserName() const
+{
+    switch (m_spacerType) {
+    case SpacerType::UP:
+        return TranslatableString("engraving/spacertype", "Staff spacer up");
+    case SpacerType::DOWN:
+        return TranslatableString("engraving/spacertype", "Staff spacer down");
+    case SpacerType::FIXED:
+        return TranslatableString("engraving/spacertype", "Staff spacer fixed down");
+    }
+    return TranslatableString::untranslatable("Unknown spacer");
+}
 }
