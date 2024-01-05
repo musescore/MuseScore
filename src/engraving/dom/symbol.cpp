@@ -78,7 +78,16 @@ AsciiStringView Symbol::symName() const
 
 String Symbol::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), String::fromUtf8(SymNames::userNameForSymId(m_sym)));
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), SymNames::userNameForSymId(m_sym).translated());
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+muse::TranslatableString Symbol::subtypeUserName() const
+{
+    return SymNames::userNameForSymId(m_sym);
 }
 
 //---------------------------------------------------------

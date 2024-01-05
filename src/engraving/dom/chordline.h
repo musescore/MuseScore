@@ -71,6 +71,9 @@ public:
 
     String accessibleInfo() const override;
 
+    int subtype() const override;
+    TranslatableString subtypeUserName() const override;
+
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;
     PropertyValue propertyDefault(Pid) const override;

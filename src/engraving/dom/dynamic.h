@@ -67,7 +67,6 @@ public:
     DynamicType dynamicType() const { return m_dynamicType; }
     int subtype() const override { return static_cast<int>(m_dynamicType); }
     TranslatableString subtypeUserName() const override;
-    String translatedSubtypeUserName() const override;
 
     double customTextOffset() const;
 

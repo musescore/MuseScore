@@ -27,13 +27,14 @@
 #include <unordered_map>
 
 #include "types/string.h"
+#include "types/translatablestring.h"
 
 #include "symid.h"
 
 namespace mu::engraving {
 struct SymNames {
     static muse::AsciiStringView nameForSymId(SymId id);
-    static const char* userNameForSymId(SymId id);
+    static const muse::TranslatableString& userNameForSymId(SymId id);
     static muse::String translatedUserNameForSymId(SymId id);
 
     static SymId symIdByName(const muse::AsciiStringView& name, SymId def = SymId::noSym);
@@ -45,7 +46,7 @@ private:
     static void loadNameToSymIdHash();
 
     static const std::array<muse::AsciiStringView, size_t(SymId::lastSym) + 1> s_symNames;
-    static const std::array<const char*, size_t(SymId::lastSym) + 1> s_symUserNames;
+    static const std::array<muse::TranslatableString, size_t(SymId::lastSym) + 1> s_symUserNames;
 
     //! Will be initialized when first used
     static std::map<muse::AsciiStringView, SymId> s_nameToSymIdHash;

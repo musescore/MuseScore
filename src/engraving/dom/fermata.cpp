@@ -78,12 +78,12 @@ int Fermata::subtype() const
 }
 
 //---------------------------------------------------------
-//   typeUserName
+//   subtypeUserName
 //---------------------------------------------------------
 
-TranslatableString Fermata::typeUserName() const
+muse::TranslatableString Fermata::subtypeUserName() const
 {
-    return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
+    return SymNames::userNameForSymId(symId());
 }
 
 //---------------------------------------------------------
@@ -306,7 +306,7 @@ FermataType Fermata::fermataType() const
 
 String Fermata::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), SymNames::translatedUserNameForSymId(symId()));
 }
 
 void Fermata::added()

@@ -28,6 +28,8 @@
 #include "chord.h"
 #include "note.h"
 
+#include "hash.h"
+
 #include "log.h"
 
 using namespace mu;
@@ -264,6 +266,16 @@ String ChordLine::accessibleInfo() const
         rez = String(u"%1: %2").arg(rez, chordLineTypeName().translated());
     }
     return rez;
+}
+
+int ChordLine::subtype() const
+{
+    return muse::hash(int(m_chordLineType) + 5, m_straight, m_wavy);
+}
+
+muse::TranslatableString ChordLine::subtypeUserName() const
+{
+    return chordLineTypeName();
 }
 
 //---------------------------------------------------------

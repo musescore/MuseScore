@@ -411,4 +411,30 @@ void SlurTie::reset()
     undoResetProperty(Pid::SLUR_DIRECTION);
     undoResetProperty(Pid::SLUR_STYLE_TYPE);
 }
+
+muse::TranslatableString SlurTie::subtypeUserName() const
+{
+    switch (m_styleType) {
+    case SlurStyleType::Solid:
+        return TranslatableString("engraving/slurstyletype", "Solid");
+    case SlurStyleType::Dotted:
+        return TranslatableString("engraving/slurstyletype", "Dotted");
+    case SlurStyleType::Dashed:
+        return TranslatableString("engraving/slurstyletype", "Dashed");
+    case SlurStyleType::WideDashed:
+        return TranslatableString("engraving/slurstyletype", "Wide dashed");
+    default:
+        return TranslatableString("engraving/slurstyletype", "Undefined");
+    }
+}
+
+int SlurTieSegment::subtype() const
+{
+    return slurTie()->subtype();
+}
+
+muse::TranslatableString SlurTieSegment::subtypeUserName() const
+{
+    return slurTie()->subtypeUserName();
+}
 }

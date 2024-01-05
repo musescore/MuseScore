@@ -49,6 +49,7 @@ public:
     Marker* clone() const override { return new Marker(*this); }
 
     int subtype() const override { return int(m_markerType); }
+    TranslatableString subtypeUserName() const override;
 
     Measure* measure() const { return (Measure*)explicitParent(); }
 
