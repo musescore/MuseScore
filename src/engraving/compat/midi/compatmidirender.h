@@ -35,7 +35,6 @@
 
 #include "dom/arpeggio.h"
 #include "dom/articulation.h"
-#include "dom/changeMap.h"
 #include "dom/chord.h"
 #include "dom/durationtype.h"
 #include "dom/dynamic.h"

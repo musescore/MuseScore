@@ -30,6 +30,7 @@
 #include "dom/synthesizerstate.h"
 #include "types/types.h"
 #include "pitchwheelrenderer.h"
+#include "velocitymap.h"
 
 namespace mu::engraving {
 class EventsHolder;
@@ -153,6 +154,8 @@ public:
         bool instrumentsHaveEffects = false; //!when effect is applied, new channel should be used
 
         HarmonyChannelSetting harmonyChannelSetting = HarmonyChannelSetting::DEFAULT;
+        std::unordered_map<staff_idx_t, VelocityMap> velocitiesByStaff;
+        std::unordered_map<staff_idx_t, VelocityMap> velocityMultiplicationsByStaff;
     };
 
     explicit CompatMidiRendererInternal(Score* s);
@@ -186,8 +189,7 @@ private:
                                        int tickOffset, PitchWheelRenderer& pitchWheelRenderer, MidiInstrumentEffect effect);
 
     Score* score = nullptr;
-
-    Context _context;
+    Context m_context;
 };
 } // namespace mu::engraving
 
