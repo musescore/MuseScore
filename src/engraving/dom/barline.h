@@ -120,6 +120,7 @@ public:
     bool isBottom() const;
 
     int subtype() const override { return int(m_barLineType); }
+    TranslatableString subtypeUserName() const override;
 
     PropertyValue getProperty(Pid propertyId) const override;
     bool setProperty(Pid propertyId, const PropertyValue&) override;

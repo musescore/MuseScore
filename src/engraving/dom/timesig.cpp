@@ -296,6 +296,26 @@ EngravingItem* TimeSig::prevSegmentElement()
 }
 
 //---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString TimeSig::subtypeUserName() const
+{
+    switch (timeSigType()) {
+    case TimeSigType::FOUR_FOUR:
+        return TranslatableString("engraving/timesig", "Common time");
+    case TimeSigType::ALLA_BREVE:
+        return TranslatableString("engraving/timesig", "Cut time");
+    case TimeSigType::CUT_BACH:
+        return TranslatableString("engraving/timesig", "Cut time (Bach)");
+    case TimeSigType::CUT_TRIPLE:
+        return TranslatableString("engraving/timesig", "Cut triple time (9/8)");
+    default:
+        return TranslatableString("engraving/timesig", "%1/%2 time").arg(numerator(), denominator());
+    }
+}
+
+//---------------------------------------------------------
 //   accessibleInfo
 //---------------------------------------------------------
 

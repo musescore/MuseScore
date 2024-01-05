@@ -22,6 +22,8 @@
 
 #include "marker.h"
 
+#include "translation.h"
+
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -267,5 +269,14 @@ EngravingItem* Marker::prevSegmentElement()
 String Marker::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), markerTypeUserName());
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Marker::subtypeUserName() const
+{
+    return TConv::userName(m_markerType);
 }
 }

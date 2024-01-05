@@ -22,6 +22,8 @@
 
 #include "jump.h"
 
+#include "translation.h"
+
 #include "types/typesconv.h"
 
 #include "measure.h"
@@ -236,5 +238,14 @@ EngravingItem* Jump::prevSegmentElement()
 String Jump::accessibleInfo() const
 {
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), this->jumpTypeUserName());
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Jump::subtypeUserName() const
+{
+    return TConv::userName(jumpType());
 }
 }

@@ -153,6 +153,7 @@ public:
     static AsciiStringView toXml(DirectionH v);
     static DirectionH fromXml(const AsciiStringView& str, DirectionH def);
 
+    static const TranslatableString& userName(LayoutBreakType v);
     static AsciiStringView toXml(LayoutBreakType v);
     static LayoutBreakType fromXml(const AsciiStringView& str, LayoutBreakType def);
 
@@ -172,6 +173,8 @@ public:
     static AsciiStringView toXml(TremoloType v);
     static TremoloType fromXml(const AsciiStringView& str, TremoloType def);
 
+    static const TranslatableString& userName(BracketType v);
+    static String translatedUserName(BracketType v);
     static AsciiStringView toXml(BracketType v);
     static BracketType fromXml(const AsciiStringView& str, BracketType def);
 
@@ -226,7 +229,7 @@ public:
     static AsciiStringView toXml(LyricsSyllabic v);
     static LyricsSyllabic fromXml(const AsciiStringView& tag, LyricsSyllabic def);
 
-    static const char* userName(Key v, bool isAtonal = false, bool isCustom = false);
+    static const TranslatableString& userName(Key v, bool isAtonal = false, bool isCustom = false);
     static String translatedUserName(Key v, bool isAtonal = false, bool isCustom = false);
 
     static AsciiStringView toXml(TiePlacement interval);

@@ -24,6 +24,8 @@
 
 #include <cmath>
 
+#include "translation.h"
+
 #include "types/typesconv.h"
 
 #include "iengravingfont.h"
@@ -337,6 +339,25 @@ PropertyValue Trill::propertyDefault(Pid propertyId) const
     default:
         return SLine::propertyDefault(propertyId);
     }
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Trill::subtypeUserName() const
+{
+    return TConv::userName(trillType());
+}
+
+TranslatableString TrillSegment::subtypeUserName() const
+{
+    return trill()->subtypeUserName();
+}
+
+int TrillSegment::subtype() const
+{
+    return trill()->subtype();
 }
 
 //---------------------------------------------------------

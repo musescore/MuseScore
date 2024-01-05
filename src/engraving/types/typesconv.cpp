@@ -1628,11 +1628,16 @@ DirectionH TConv::fromXml(const AsciiStringView& tag, DirectionH def)
 }
 
 static const std::vector<Item<LayoutBreakType> > LAYOUTBREAK_TYPES = {
-    { LayoutBreakType::LINE, "line" },
-    { LayoutBreakType::PAGE, "page" },
-    { LayoutBreakType::SECTION, "section" },
-    { LayoutBreakType::NOBREAK, "nobreak" }
+    { LayoutBreakType::LINE,    "line",    TranslatableString("engraving/layoutbreaktype", "System break") },
+    { LayoutBreakType::PAGE,    "page",    TranslatableString("engraving/layoutbreaktype", "Page break") },
+    { LayoutBreakType::SECTION, "section", TranslatableString("engraving/layoutbreaktype", "Section break") },
+    { LayoutBreakType::NOBREAK, "nobreak", TranslatableString("engraving/layoutbreaktype", "No break") }
 };
+
+const TranslatableString& TConv::userName(LayoutBreakType v)
+{
+    return findUserNameByType<LayoutBreakType>(LAYOUTBREAK_TYPES, v);
+}
 
 AsciiStringView TConv::toXml(LayoutBreakType v)
 {
@@ -1794,12 +1799,22 @@ TremoloType TConv::fromXml(const AsciiStringView& tag, TremoloType def)
 }
 
 static const std::vector<Item<BracketType> > BRACKET_TYPES = {
-    { BracketType::NORMAL, "Normal" },
-    { BracketType::BRACE, "Brace" },
-    { BracketType::SQUARE, "Square" },
-    { BracketType::LINE, "Line" },
-    { BracketType::NO_BRACKET, "NoBracket" }
+    { BracketType::NORMAL,     "Normal",    TranslatableString("engraving/brackettype", "Normal") },
+    { BracketType::BRACE,      "Brace",     TranslatableString("engraving/brackettype", "Brace") },
+    { BracketType::SQUARE,     "Square",    TranslatableString("engraving/brackettype", "Square") },
+    { BracketType::LINE,       "Line",      TranslatableString("engraving/brackettype", "Line") },
+    { BracketType::NO_BRACKET, "NoBracket", TranslatableString("engraving/brackettype", "No Bracket") }
 };
+
+const TranslatableString& TConv::userName(BracketType v)
+{
+    return findUserNameByType<BracketType>(BRACKET_TYPES, v);
+}
+
+String TConv::translatedUserName(BracketType v)
+{
+    return findUserNameByType<BracketType>(BRACKET_TYPES, v).translated();
+}
 
 AsciiStringView TConv::toXml(BracketType v)
 {
@@ -2571,27 +2586,27 @@ LyricsSyllabic TConv::fromXml(const AsciiStringView& tag, LyricsSyllabic def)
     return findTypeByXmlTag<LyricsSyllabic>(LYRICSSYLLABIC_TYPES, tag, def);
 }
 
-const std::array<const char*, 17> KEY_NAMES = { {
-    QT_TRANSLATE_NOOP("engraving", "C♭ major, A♭ minor"),
-    QT_TRANSLATE_NOOP("engraving", "G♭ major, E♭ minor"),
-    QT_TRANSLATE_NOOP("engraving", "D♭ major, B♭ minor"),
-    QT_TRANSLATE_NOOP("engraving", "A♭ major, F minor"),
-    QT_TRANSLATE_NOOP("engraving", "E♭ major, C minor"),
-    QT_TRANSLATE_NOOP("engraving", "B♭ major, G minor"),
-    QT_TRANSLATE_NOOP("engraving", "F major, D minor"),
-    QT_TRANSLATE_NOOP("engraving", "C major, A minor"),
-    QT_TRANSLATE_NOOP("engraving", "G major, E minor"),
-    QT_TRANSLATE_NOOP("engraving", "D major, B minor"),
-    QT_TRANSLATE_NOOP("engraving", "A major, F♯ minor"),
-    QT_TRANSLATE_NOOP("engraving", "E major, C♯ minor"),
-    QT_TRANSLATE_NOOP("engraving", "B major, G♯ minor"),
-    QT_TRANSLATE_NOOP("engraving", "F♯ major, D♯ minor"),
-    QT_TRANSLATE_NOOP("engraving", "C♯ major, A♯ minor"),
-    QT_TRANSLATE_NOOP("engraving", "Open/Atonal"),
-    QT_TRANSLATE_NOOP("engraving", "Custom")
+const std::array<const TranslatableString>, 17> KEY_NAMES = { {
+    TranslatableString("engraving", "C♭ major, A♭ minor"),
+    TranslatableString("engraving", "G♭ major, E♭ minor"),
+    TranslatableString("engraving", "D♭ major, B♭ minor"),
+    TranslatableString("engraving", "A♭ major, F minor"),
+    TranslatableString("engraving", "E♭ major, C minor"),
+    TranslatableString("engraving", "B♭ major, G minor"),
+    TranslatableString("engraving", "F major, D minor"),
+    TranslatableString("engraving", "C major, A minor"),
+    TranslatableString("engraving", "G major, E minor"),
+    TranslatableString("engraving", "D major, B minor"),
+    TranslatableString("engraving", "A major, F♯ minor"),
+    TranslatableString("engraving", "E major, C♯ minor"),
+    TranslatableString("engraving", "B major, G♯ minor"),
+    TranslatableString("engraving", "F♯ major, D♯ minor"),
+    TranslatableString("engraving", "C♯ major, A♯ minor"),
+    TranslatableString("engraving", "Open/Atonal"),
+    TranslatableString("engraving", "Custom")
 } };
 
-const char* TConv::userName(Key v, bool isAtonal, bool isCustom)
+const TranslatableString& TConv::userName(Key v, bool isAtonal, bool isCustom)
 {
     if (isAtonal) {
         return KEY_NAMES[15];

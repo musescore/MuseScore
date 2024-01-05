@@ -63,6 +63,9 @@ public:
 
     String accessibleInfo() const override;
 
+    int subtype() const { return int(m_numMeasures); }
+    String translatedSubtypeUserName() const;
+
     bool placeMultiple() const override { return numMeasures() == 1; }     // prevent overlapping additions with range selection
 
     mu::RectF numberRect() const override;
