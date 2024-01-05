@@ -1343,12 +1343,12 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                 case DynamicRange::PART:
                     if (dStaffIdx >= partStaff && dStaffIdx < partStaff + partStaves) {
                         for (staff_idx_t i = partStaff; i < partStaff + partStaves; ++i) {
-                            Staff* st = score->staff(i);
-                            if (!st->isPrimaryStaff()) {
+                            Staff* stp = score->staff(i);
+                            if (!stp->isPrimaryStaff()) {
                                 continue;
                             }
 
-                            VelocityMap& stVelo = context.velocitiesByStaff[st->idx()];
+                            VelocityMap& stVelo = context.velocitiesByStaff[stp->idx()];
                             stVelo.addDynamic(tick, v);
                             if (change != 0) {
                                 Fraction etick = tick + d->velocityChangeLength();
@@ -1360,8 +1360,8 @@ void fillScoreVelocities(const Score* score, CompatMidiRendererInternal::Context
                     break;
                 case DynamicRange::SYSTEM:
                     for (size_t i = 0; i < score->nstaves(); ++i) {
-                        Staff* st = score->staff(i);
-                        if (!st->isPrimaryStaff()) {
+                        Staff* sts = score->staff(i);
+                        if (!sts->isPrimaryStaff()) {
                             continue;
                         }
 
