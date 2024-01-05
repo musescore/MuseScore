@@ -264,7 +264,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <text>Hanging Slur (unhides staff 2)</text>
+            <text>Hanging Slur (should unhide staff 2)</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -340,6 +340,9 @@
               <tpc>18</tpc>
               </Note>
             </Chord>
+          <StaffText>
+            <text>Ottava (should not unhide <b>next</b> staff 2)</text>
+            </StaffText>
           <Chord>
             <durationType>quarter</durationType>
             <Note>
@@ -529,7 +532,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <text>Pedal line (unhides staff 2)</text>
+            <text>Pedal line (should unhide staff 2)</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -801,7 +804,7 @@
       <Measure>
         <voice>
           <StaffText>
-            <text>Ottava line (unhides staff 2)</text>
+            <text>Ottava line (should unhide staff 2)</text>
             </StaffText>
           <Chord>
             <durationType>quarter</durationType>
@@ -1156,14 +1159,55 @@
         </Measure>
       <Measure>
         <voice>
-          <Rest>
-            <durationType>measure</durationType>
-            <duration>4/4</duration>
-            </Rest>
+          <Spanner type="Ottava">
+            <Ottava>
+              <subtype>8va</subtype>
+              </Ottava>
+            <next>
+              <location>
+                <measures>1</measures>
+                </location>
+              </next>
+            </Spanner>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
+          <Chord>
+            <durationType>quarter</durationType>
+            <Note>
+              <pitch>47</pitch>
+              <tpc>19</tpc>
+              </Note>
+            </Chord>
           </voice>
         </Measure>
       <Measure>
         <voice>
+          <Spanner type="Ottava">
+            <prev>
+              <location>
+                <measures>-1</measures>
+                </location>
+              </prev>
+            </Spanner>
           <Rest>
             <durationType>measure</durationType>
             <duration>4/4</duration>
