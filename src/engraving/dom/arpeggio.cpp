@@ -425,6 +425,11 @@ bool Arpeggio::crossStaff() const
     return (track() + span() - 1) / VOICES != staffIdx();
 }
 
+staff_idx_t Arpeggio::vStaffIdx() const
+{
+    return chord() ? chord()->vStaffIdx() : EngravingItem::vStaffIdx();
+}
+
 //---------------------------------------------------------
 //   getProperty
 //---------------------------------------------------------
