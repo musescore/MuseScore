@@ -108,6 +108,9 @@ public:
     void move(const PointF& s) override;
     bool isEditable() const override { return true; }
 
+    int subtype() const;
+    TranslatableString subtypeUserName() const;
+
     void setSlurOffset(Grip i, const PointF& val) { m_ups[int(i)].off = val; }
     const UP& ups(Grip i) const { return m_ups[int(i)]; }
     UP& ups(Grip i) { return m_ups[int(i)]; }
@@ -166,6 +169,9 @@ public:
 
     SlurStyleType styleType() const { return m_styleType; }
     void setStyleType(SlurStyleType type) { m_styleType = type; }
+
+    int subtype() const { return int(m_styleType) + 1; }
+    TranslatableString subtypeUserName() const;
 
     virtual SlurTieSegment* newSlurTieSegment(System* parent) = 0;
 

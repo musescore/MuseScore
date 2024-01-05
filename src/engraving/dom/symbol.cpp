@@ -77,6 +77,15 @@ String Symbol::accessibleInfo() const
 }
 
 //---------------------------------------------------------
+//   translatedSubtypeUserName
+//---------------------------------------------------------
+
+String Symbol::translatedSubtypeUserName() const
+{
+    return String::fromUtf8(SymNames::userNameForSymId(m_sym));
+}
+
+//---------------------------------------------------------
 //   Symbol::getProperty
 //---------------------------------------------------------
 PropertyValue Symbol::getProperty(Pid propertyId) const

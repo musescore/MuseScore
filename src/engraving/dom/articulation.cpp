@@ -22,6 +22,8 @@
 
 #include "articulation.h"
 
+#include "translation.h"
+
 #include "style/style.h"
 #include "types/symnames.h"
 #include "types/typesconv.h"
@@ -101,6 +103,9 @@ void Articulation::setTextType(ArticulationTextType textType)
 
 int Articulation::subtype() const
 {
+    if (m_textType != ArticulationTextType::NO_TEXT) {
+        return int(m_textType);
+    }
     String s = String::fromAscii(SymNames::nameForSymId(m_symId).ascii());
     if (s.endsWith(u"Below")) {
         return int(SymNames::symIdByName(s.left(s.size() - 5) + u"Above"));
@@ -153,19 +158,23 @@ void Articulation::setUp(bool val)
 TranslatableString Articulation::typeUserName() const
 {
     if (m_textType != ArticulationTextType::NO_TEXT) {
+        return TranslatableString("engraving", "Articulation text");
+    }
+
+    return TranslatableString("engraving", "Articulation");
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Articulation::subtypeUserName() const
+{
+    if (m_textType != ArticulationTextType::NO_TEXT) {
         return TConv::userName(m_textType);
     }
 
     return TranslatableString("engraving/sym", SymNames::userNameForSymId(symId()));
-}
-
-String Articulation::translatedTypeUserName() const
-{
-    if (m_textType != ArticulationTextType::NO_TEXT) {
-        return TConv::userName(m_textType).translated();
-    }
-
-    return SymNames::translatedUserNameForSymId(symId());
 }
 
 //---------------------------------------------------------
@@ -607,7 +616,7 @@ bool Articulation::isBasicArticulation() const
 
 String Articulation::accessibleInfo() const
 {
-    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedTypeUserName());
+    return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), translatedSubtypeUserName());
 }
 
 void Articulation::setupShowOnTabStyles()

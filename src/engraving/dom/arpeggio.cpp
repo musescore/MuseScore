@@ -26,6 +26,8 @@
 
 #include "containers.h"
 
+#include "translation.h"
+
 #include "types/typesconv.h"
 
 #include "accidental.h"
@@ -517,4 +519,13 @@ engraving::PropertyValue Arpeggio::propertyDefault(Pid propertyId) const
         break;
     }
     return EngravingItem::propertyDefault(propertyId);
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Arpeggio::subtypeUserName() const
+{
+    return arpeggioTypeName();
 }

@@ -23,6 +23,8 @@
 
 #include <cmath>
 
+#include "translation.h"
+
 #include "types/typesconv.h"
 
 #include "iengravingfont.h"
@@ -149,6 +151,25 @@ LineSegment* Vibrato::createLineSegment(System* parent)
 String Vibrato::vibratoTypeUserName() const
 {
     return TConv::translatedUserName(vibratoType());
+}
+
+//---------------------------------------------------------
+//   subtypeUserName
+//---------------------------------------------------------
+
+TranslatableString Vibrato::subtypeUserName() const
+{
+    return TConv::userName(vibratoType());
+}
+
+TranslatableString VibratoSegment::subtypeUserName() const
+{
+    return vibrato()->subtypeUserName();
+}
+
+int VibratoSegment::subtype() const
+{
+    return vibrato()->subtype();
 }
 
 //---------------------------------------------------------

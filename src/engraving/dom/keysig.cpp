@@ -296,4 +296,13 @@ String KeySig::accessibleInfo() const
     String keySigType = TConv::translatedUserName(key(), isAtonal(), isCustom());
     return String(u"%1: %2").arg(EngravingItem::accessibleInfo(), keySigType);
 }
+
+//---------------------------------------------------------
+//   translatedSubtypeUserName
+//---------------------------------------------------------
+
+String KeySig::translatedSubtypeUserName() const
+{
+    return TConv::translatedUserName(key(), isAtonal(), isCustom());
+}
 }
