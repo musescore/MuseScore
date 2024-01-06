@@ -278,7 +278,7 @@ PropertyValue TextLine::propertyDefault(Pid propertyId) const
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::LEFT;
-    /*case Pid::LINE_WIDTH:
+    case Pid::LINE_WIDTH:
         if (systemFlag()) {
             return style().styleMM(Sid::systemTextLineLineWidth);
         } else {
@@ -289,7 +289,7 @@ PropertyValue TextLine::propertyDefault(Pid propertyId) const
             return style().styleV(Sid::systemTextLineLineStyle);
         } else {
             return style().styleV(Sid::textLineLineStyle);
-        }*/
+        }
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
