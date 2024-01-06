@@ -66,7 +66,13 @@ static const ElementStyle textLineStyle {
     { Sid::textLineTextAlign,                  Pid::BEGIN_TEXT_ALIGN },
     { Sid::textLineTextAlign,                  Pid::CONTINUE_TEXT_ALIGN },
     { Sid::textLineTextAlign,                  Pid::END_TEXT_ALIGN },
+    { Sid::textLineHookHeight,                 Pid::BEGIN_HOOK_HEIGHT },
+    { Sid::textLineHookHeight,                 Pid::END_HOOK_HEIGHT },
+    { Sid::textLineLineWidth,                  Pid::LINE_WIDTH },
+    { Sid::textLineDashLineLen,                Pid::DASH_LINE_LEN },
+    { Sid::textLineDashGapLen,                 Pid::DASH_GAP_LEN },
     { Sid::textLinePlacement,                  Pid::PLACEMENT },
+    { Sid::textLineLineStyle,                  Pid::LINE_STYLE },
     { Sid::textLinePosAbove,                   Pid::OFFSET },
     { Sid::textLineFontSpatiumDependent,       Pid::TEXT_SIZE_SPATIUM_DEPENDENT },
 };
@@ -89,7 +95,13 @@ static const ElementStyle systemTextLineStyle {
     { Sid::systemTextLineTextAlign,            Pid::BEGIN_TEXT_ALIGN },
     { Sid::systemTextLineTextAlign,            Pid::CONTINUE_TEXT_ALIGN },
     { Sid::systemTextLineTextAlign,            Pid::END_TEXT_ALIGN },
+    { Sid::systemTextLineHookHeight,           Pid::BEGIN_HOOK_HEIGHT },
+    { Sid::systemTextLineHookHeight,           Pid::END_HOOK_HEIGHT },
+    { Sid::systemTextLineLineWidth,            Pid::LINE_WIDTH },
+    { Sid::systemTextLineDashLineLen,          Pid::DASH_LINE_LEN },
+    { Sid::systemTextLineDashGapLen,           Pid::DASH_GAP_LEN },
     { Sid::systemTextLinePlacement,            Pid::PLACEMENT },
+    { Sid::systemTextLineLineStyle,            Pid::LINE_STYLE },
     { Sid::systemTextLinePosAbove,             Pid::OFFSET },
 };
 
@@ -129,8 +141,6 @@ TextLine::TextLine(EngravingItem* parent, bool system)
 {
     setSystemFlag(system);
 
-    initStyle();
-
     setBeginText(u"");
     setContinueText(u"");
     setEndText(u"");
@@ -145,11 +155,18 @@ TextLine::TextLine(EngravingItem* parent, bool system)
     setEndHookHeight(Spatium(1.5));
     setGapBetweenTextAndLine(Spatium(0.5));
 
-    initElementStyle(&textLineStyle);
+    initStyle();
+    /*initElementStyle(&textLineStyle);
+
+    resetProperty(Pid::LINE_WIDTH);
+    resetProperty(Pid::LINE_STYLE);
+
+    resetProperty(Pid::BEGIN_HOOK_TYPE);
+    resetProperty(Pid::END_HOOK_TYPE);
 
     resetProperty(Pid::BEGIN_TEXT_PLACE);
     resetProperty(Pid::CONTINUE_TEXT_PLACE);
-    resetProperty(Pid::END_TEXT_PLACE);
+    resetProperty(Pid::END_TEXT_PLACE);*/
 }
 
 TextLine::TextLine(const TextLine& tl)
@@ -272,9 +289,18 @@ engraving::PropertyValue TextLine::propertyDefault(Pid propertyId) const
     case Pid::CONTINUE_TEXT_PLACE:
     case Pid::END_TEXT_PLACE:
         return TextPlace::LEFT;
-    case Pid::BEGIN_HOOK_HEIGHT:
-    case Pid::END_HOOK_HEIGHT:
-        return Spatium(1.5);
+    case Pid::LINE_WIDTH:
+        if (systemFlag()) {
+            return style().styleMM(Sid::systemTextLineLineWidth);
+        } else {
+            return style().styleMM(Sid::textLineLineWidth);
+        }
+    case Pid::LINE_STYLE:
+        if (systemFlag()) {
+            return style().styleV(Sid::systemTextLineLineStyle);
+        } else {
+            return style().styleV(Sid::textLineLineStyle);
+        }
     default:
         return TextLineBase::propertyDefault(propertyId);
     }
