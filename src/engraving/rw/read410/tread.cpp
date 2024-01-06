@@ -4473,7 +4473,9 @@ void TRead::read(TextLineBase* b, XmlReader& e, ReadContext& ctx)
     }
 
     while (e.readNextStartElement()) {
-        if (!readProperties(b, e, ctx)) {
+        const AsciiStringView tag(e.name());
+        if (TRead::readStyledProperty(b, tag, e, ctx)) {
+        } else if (!readProperties(b, e, ctx)) {
             e.unknown();
         }
     }
