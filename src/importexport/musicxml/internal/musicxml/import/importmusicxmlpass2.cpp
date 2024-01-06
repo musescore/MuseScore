@@ -4923,10 +4923,13 @@ void MusicXmlParserDirection::bracket(const String& type, const int number,
 
             if (lineType == "solid") {
                 textLine->setLineStyle(LineType::SOLID);
+                textLine->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
             } else if (lineType == "dashed") {
                 textLine->setLineStyle(LineType::DASHED);
+                textLine->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
             } else if (lineType == "dotted") {
                 textLine->setLineStyle(LineType::DOTTED);
+                textLine->setPropertyFlags(Pid::LINE_STYLE, PropertyFlags::UNSTYLED);
             } else if (lineType != "wavy") {
                 m_logger->logError(String(u"unsupported line-type: %1").arg(String::fromAscii(lineType.ascii())), &m_e);
             }
