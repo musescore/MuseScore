@@ -223,7 +223,7 @@ public:
     static void fingFromMEI(engraving::Fingering* fing, const muse::StringList& meiLines, const libmei::Fing& meiFing, bool& warning);
     static libmei::Fing fingToMEI(const engraving::Fingering* fing, muse::StringList& meiLines);
 
-    static void fTremFromMEI(engraving::TremoloTwoChord* tremolo, const libmei::FTrem& meiFTrem, bool& warning);
+    static engraving::TremoloType unitdurFromMEI(const libmei::FTrem& meiFTrem, bool& warning);
     static libmei::FTrem fTremToMEI(const engraving::TremoloTwoChord* tremolo);
 
     static void glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& meiGliss, bool& warning);
