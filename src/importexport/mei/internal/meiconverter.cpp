@@ -1695,6 +1695,40 @@ libmei::Fing Convert::fingToMEI(const engraving::Fingering* fing, StringList& me
     return meiFing;
 }
 
+void Convert::fTremFromMEI(engraving::TremoloTwoChord* tremolo, const libmei::FTrem& meiFTrem, bool& warning)
+{   
+    warning = false;
+
+    // @unitdur
+    const libmei::data_DURATION unitdur = meiFTrem.GetUnitdur();
+}
+
+libmei::FTrem Convert::fTremToMEI(const engraving::TremoloTwoChord* tremolo)
+{
+    libmei::FTrem meiFTrem;
+
+    // @dur
+    const libmei::data_DURATION dur = Convert::durToMEI(tremolo->durationType().type());
+    meiFTrem.SetDur(dur);
+
+    // @unitdur
+    int unitdur = 0;
+    if (dur > libmei::DURATION_4) {
+        unitdur = dur - libmei::DURATION_4;
+    }
+    switch (tremolo->tremoloType()) {
+    case (engraving::TremoloType::C8):  unitdur += libmei::DURATION_8; break;
+    case (engraving::TremoloType::C16): unitdur += libmei::DURATION_16; break;
+    case (engraving::TremoloType::C32): unitdur += libmei::DURATION_32; break;
+    case (engraving::TremoloType::C64): unitdur += libmei::DURATION_64; break;
+    default:
+        unitdur = libmei::DURATION_NONE;
+    }
+    meiFTrem.SetUnitdur(static_cast<libmei::data_DURATION>(unitdur));
+
+    return meiFTrem;
+}
+
 void Convert::glissFromMEI(engraving::Glissando* gliss, const libmei::Gliss& meiGliss, bool& warning)
 {
     warning = false;
