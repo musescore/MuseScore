@@ -396,7 +396,13 @@ ThemeList UiConfiguration::themes() const
 QStringList UiConfiguration::possibleFontFamilies() const
 {
     QFontDatabase db;
-    return db.families();
+    QStringList allFonts = db.families();
+    QStringList smuflFonts
+        = { "Bravura", "Campania", "Edwin", "Finale Broadway", "Finale Maestro", "Gootville", "Leland", "MScore", "MuseJazz", "Petaluma" };
+    for (const QString& font : smuflFonts) {
+        allFonts.removeAll(font);
+    }
+    return allFonts;
 }
 
 QStringList UiConfiguration::possibleAccentColors() const
