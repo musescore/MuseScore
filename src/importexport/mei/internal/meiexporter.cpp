@@ -1249,6 +1249,10 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
     bool closingBeamInTuplet = false;
     this->writeBeamAndTuplet(chord, closingBeam, closingTuplet, closingBeamInTuplet);
 
+    if (chord->tremoloChordType() == TremoloChordType::TremoloFirstChord) {
+        this->writeFTrem(chord->tremoloTwoChord());
+    }
+
     bool isBTrem = (chord->tremoloChordType() == TremoloChordType::TremoloSingle);
     if (isBTrem) {
         this->writeBTrem(chord->tremoloSingleChord());
@@ -1289,11 +1293,34 @@ bool MeiExporter::writeChord(const Chord* chord, const Staff* staff)
         m_currentNode = m_currentNode.parent();
     }
 
+    if (chord->tremoloChordType() == TremoloChordType::TremoloSecondChord) {
+        // This is the end of the <fTrem> - non critical assert
+        assert(isCurrentNode(libmei::FTrem()));
+        m_currentNode = m_currentNode.parent();
+    }
+
     this->writeBeamAndTupletEnd(closingBeam, closingTuplet, closingBeamInTuplet);
 
     if (chord->graceNotes().size() > 0) {
         this->writeGraceGrp(chord, staff, true);
     }
+
+    return true;
+}
+
+/**
+ * Write a fTrem.
+ */
+
+bool MeiExporter::writeFTrem(const TremoloTwoChord* tremolo)
+{
+    IF_ASSERT_FAILED(tremolo) {
+        return false;
+    }
+
+    m_currentNode = m_currentNode.append_child();
+    libmei::FTrem meiFTrem = Convert::fTremToMEI(tremolo);
+    meiFTrem.Write(m_currentNode, this->getXmlIdFor(tremolo, 'f'));
 
     return true;
 }
