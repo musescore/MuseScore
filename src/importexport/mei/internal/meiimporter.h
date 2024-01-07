@@ -104,7 +104,7 @@ private:
     bool readArtics(pugi::xml_node parentNode, engraving::Chord* chord);
     bool readArtic(pugi::xml_node articNode, engraving::Chord* chord);
     bool readBeam(pugi::xml_node beamNode, engraving::Measure* measure, int track, int& ticks);
-    bool readBTrem(pugi::xml_node beamNode, engraving::Measure* measure, int track, int& ticks);
+    bool readBTrem(pugi::xml_node bTremNode, engraving::Measure* measure, int track, int& ticks);
     bool readClef(pugi::xml_node clefNode, engraving::Measure* measure, int track, int& ticks);
     bool readChord(pugi::xml_node chordNode, engraving::Measure* measure, int track, int& ticks);
     bool readGraceGrp(pugi::xml_node graceGrpNode, engraving::Measure* measure, int track, int& ticks);
