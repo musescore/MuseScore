@@ -873,7 +873,7 @@ void SystemLayout::layoutSystemElements(System* system, LayoutContext& ctx)
                             }
                         }
 
-                        // add beams to skline
+                        // add beams to skyline
                         if (e->isChordRest()) {
                             ChordRest* cr = toChordRest(e);
                             if (BeamLayout::isTopBeam(cr)) {
