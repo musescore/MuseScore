@@ -107,20 +107,20 @@ bool Convert::isDirWithExt(const libmei::Dir& meiDir)
 bool Convert::isMordent(const engraving::Ornament* ornament)
 {
     switch (ornament->symId()) {
-    case engraving::SymId::ornamentMordent:
-    case engraving::SymId::ornamentShortTrill:
-    case engraving::SymId::ornamentTremblement:
-    case engraving::SymId::ornamentPrallMordent:
-    case engraving::SymId::ornamentUpPrall:
-    case engraving::SymId::ornamentPrecompMordentUpperPrefix:
-    case engraving::SymId::ornamentUpMordent:
-    case engraving::SymId::ornamentDownMordent:
-    case engraving::SymId::ornamentPrallDown:
-    case engraving::SymId::ornamentPrallUp:
-    case engraving::SymId::ornamentLinePrall:
-    case engraving::SymId::ornamentPrecompSlide:
-    case engraving::SymId::ornamentTremblementCouperin:
-    case engraving::SymId::ornamentPinceCouperin:
+    case (engraving::SymId::ornamentMordent):
+    case (engraving::SymId::ornamentShortTrill):
+    case (engraving::SymId::ornamentTremblement):
+    case (engraving::SymId::ornamentPrallMordent):
+    case (engraving::SymId::ornamentUpPrall):
+    case (engraving::SymId::ornamentPrecompMordentUpperPrefix):
+    case (engraving::SymId::ornamentUpMordent):
+    case (engraving::SymId::ornamentDownMordent):
+    case (engraving::SymId::ornamentPrallDown):
+    case (engraving::SymId::ornamentPrallUp):
+    case (engraving::SymId::ornamentLinePrall):
+    case (engraving::SymId::ornamentPrecompSlide):
+    case (engraving::SymId::ornamentTremblementCouperin):
+    case (engraving::SymId::ornamentPinceCouperin):
         return true;
     default:
         return false;
@@ -130,9 +130,9 @@ bool Convert::isMordent(const engraving::Ornament* ornament)
 bool Convert::isTrill(const engraving::Ornament* ornament)
 {
     switch (ornament->symId()) {
-    case engraving::SymId::ornamentTrill:
-    case engraving::SymId::ornamentShake3:
-    case engraving::SymId::ornamentShakeMuffat1:
+    case (engraving::SymId::ornamentTrill):
+    case (engraving::SymId::ornamentShake3):
+    case (engraving::SymId::ornamentShakeMuffat1):
         return true;
     default:
         return false;
@@ -142,9 +142,9 @@ bool Convert::isTrill(const engraving::Ornament* ornament)
 bool Convert::isTurn(const engraving::Ornament* ornament)
 {
     switch (ornament->symId()) {
-    case engraving::SymId::ornamentTurnInverted:
-    case engraving::SymId::ornamentTurnSlash:
-    case engraving::SymId::ornamentTurn:
+    case (engraving::SymId::ornamentTurnInverted):
+    case (engraving::SymId::ornamentTurnSlash):
+    case (engraving::SymId::ornamentTurn):
         return true;
     default:
         return false;
@@ -2024,18 +2024,18 @@ libmei::Mordent Convert::mordentToMEI(const engraving::Ornament* ornament)
     // @form
     switch (ornament->symId()) {
     case (engraving::SymId::ornamentMordent):
-    case engraving::SymId::ornamentPrallMordent:
-    case engraving::SymId::ornamentUpMordent:
-    case engraving::SymId::ornamentDownMordent:
+    case (engraving::SymId::ornamentPrallMordent):
+    case (engraving::SymId::ornamentUpMordent):
+    case (engraving::SymId::ornamentDownMordent):
         meiMordent.SetForm(libmei::mordentLog_FORM_lower);
         break;
-    case engraving::SymId::ornamentShortTrill:
-    case engraving::SymId::ornamentTremblement:
-    case engraving::SymId::ornamentUpPrall:
-    case engraving::SymId::ornamentPrecompMordentUpperPrefix:
-    case engraving::SymId::ornamentPrallDown:
-    case engraving::SymId::ornamentPrallUp:
-    case engraving::SymId::ornamentLinePrall:
+    case (engraving::SymId::ornamentShortTrill):
+    case (engraving::SymId::ornamentTremblement):
+    case (engraving::SymId::ornamentUpPrall):
+    case (engraving::SymId::ornamentPrecompMordentUpperPrefix):
+    case (engraving::SymId::ornamentPrallDown):
+    case (engraving::SymId::ornamentPrallUp):
+    case (engraving::SymId::ornamentLinePrall):
         meiMordent.SetForm(libmei::mordentLog_FORM_upper);
         break;
     default:
@@ -2044,15 +2044,15 @@ libmei::Mordent Convert::mordentToMEI(const engraving::Ornament* ornament)
 
     // @long
     switch (ornament->symId()) {
-    case engraving::SymId::ornamentTremblement:
-    case engraving::SymId::ornamentPrallMordent:
-    case engraving::SymId::ornamentUpPrall:
-    case engraving::SymId::ornamentPrecompMordentUpperPrefix:
-    case engraving::SymId::ornamentUpMordent:
-    case engraving::SymId::ornamentDownMordent:
-    case engraving::SymId::ornamentPrallDown:
-    case engraving::SymId::ornamentPrallUp:
-    case engraving::SymId::ornamentLinePrall:
+    case (engraving::SymId::ornamentTremblement):
+    case (engraving::SymId::ornamentPrallMordent):
+    case (engraving::SymId::ornamentUpPrall):
+    case (engraving::SymId::ornamentPrecompMordentUpperPrefix):
+    case (engraving::SymId::ornamentUpMordent):
+    case (engraving::SymId::ornamentDownMordent):
+    case (engraving::SymId::ornamentPrallDown):
+    case (engraving::SymId::ornamentPrallUp):
+    case (engraving::SymId::ornamentLinePrall):
         meiMordent.SetLong(libmei::BOOLEAN_true);
         break;
     default:
@@ -2063,9 +2063,9 @@ libmei::Mordent Convert::mordentToMEI(const engraving::Ornament* ornament)
     bool smufl = true;
     switch (ornament->symId()) {
     case (engraving::SymId::ornamentMordent):
-    case engraving::SymId::ornamentShortTrill:
-    case engraving::SymId::ornamentTremblement:
-    case engraving::SymId::ornamentPrallMordent:
+    case (engraving::SymId::ornamentShortTrill):
+    case (engraving::SymId::ornamentTremblement):
+    case (engraving::SymId::ornamentPrallMordent):
         smufl = false;
         break;
     default:
@@ -2650,11 +2650,11 @@ std::pair<libmei::data_STEMDIRECTION, double> Convert::stemToMEI(const engraving
 engraving::TremoloType Convert::stemModFromMEI(const libmei::data_STEMMODIFIER meiStemMod)
 {
     switch (meiStemMod) {
-    case libmei::STEMMODIFIER_1slash:  return engraving::TremoloType::R8;
-    case libmei::STEMMODIFIER_2slash: return engraving::TremoloType::R16;
-    case libmei::STEMMODIFIER_3slash: return engraving::TremoloType::R32;
-    case libmei::STEMMODIFIER_4slash: return engraving::TremoloType::R64;
-    case libmei::STEMMODIFIER_z: return engraving::TremoloType::BUZZ_ROLL;
+    case (libmei::STEMMODIFIER_1slash):  return engraving::TremoloType::R8;
+    case (libmei::STEMMODIFIER_2slash): return engraving::TremoloType::R16;
+    case (libmei::STEMMODIFIER_3slash): return engraving::TremoloType::R32;
+    case (libmei::STEMMODIFIER_4slash): return engraving::TremoloType::R64;
+    case (libmei::STEMMODIFIER_z): return engraving::TremoloType::BUZZ_ROLL;
     default:
         return engraving::TremoloType::INVALID_TREMOLO;
     }
@@ -2663,11 +2663,11 @@ engraving::TremoloType Convert::stemModFromMEI(const libmei::data_STEMMODIFIER m
 libmei::data_STEMMODIFIER Convert::stemModToMEI(const engraving::TremoloSingleChord* tremolo)
 {
     switch (tremolo->tremoloType()) {
-    case engraving::TremoloType::R8:  return libmei::STEMMODIFIER_1slash;
-    case engraving::TremoloType::R16: return libmei::STEMMODIFIER_2slash;
-    case engraving::TremoloType::R32: return libmei::STEMMODIFIER_3slash;
-    case engraving::TremoloType::R64: return libmei::STEMMODIFIER_4slash;
-    case engraving::TremoloType::BUZZ_ROLL: return libmei::STEMMODIFIER_z;
+    case (engraving::TremoloType::R8):  return libmei::STEMMODIFIER_1slash;
+    case (engraving::TremoloType::R16): return libmei::STEMMODIFIER_2slash;
+    case (engraving::TremoloType::R32): return libmei::STEMMODIFIER_3slash;
+    case (engraving::TremoloType::R64): return libmei::STEMMODIFIER_4slash;
+    case (engraving::TremoloType::BUZZ_ROLL): return libmei::STEMMODIFIER_z;
     default:
         return libmei::STEMMODIFIER_NONE;
     }
