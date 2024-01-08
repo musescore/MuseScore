@@ -1738,7 +1738,8 @@ void SlurTieLayout::adjustX(TieSegment* tieSegment, SlurTiePos& sPos, Grip start
     static const std::set<ElementType> IGNORED_TYPES = {
         ElementType::HOOK,
         ElementType::STEM_SLASH,
-        ElementType::LEDGER_LINE
+        ElementType::LEDGER_LINE,
+        ElementType::LYRICS
     };
     chordShape.remove_if([&](ShapeElement& s) {
         return !s.item() || s.item() == note || mu::contains(IGNORED_TYPES, s.item()->type()) || (s.item()->isNoteDot() && ignoreDot);
