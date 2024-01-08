@@ -176,6 +176,10 @@ public:
     void setEndsGlissandoOrGuitarBend(bool val) { m_endsGlissando = val; }
     void updateEndsGlissandoOrGuitarBend();
     StemSlash* stemSlash() const { return m_stemSlash; }
+    bool showStemSlash() const { return m_showStemSlash; }
+    void setShowStemSlashInAdvance();
+    void requestShowStemSlash(bool show);
+    void setShowStemSlash(bool show) { m_showStemSlash = show; }
     bool slash();
     void setSlash(bool flag, bool stemless);
     void removeMarkings(bool keepTremolo = false) override;
@@ -211,7 +215,7 @@ public:
     void cmdUpdateNotes(AccidentalState*);
 
     NoteType noteType() const { return m_noteType; }
-    void setNoteType(NoteType t) { m_noteType = t; }
+    void setNoteType(NoteType t);
     bool isGrace() const { return m_noteType != NoteType::NORMAL; }
     void toGraceAfter();
 
@@ -346,7 +350,8 @@ private:
 
     Stem* m_stem = nullptr;
     Hook* m_hook = nullptr;
-    StemSlash* m_stemSlash = nullptr;     // for acciacatura
+    StemSlash* m_stemSlash = nullptr;     // for grace notes
+    bool m_showStemSlash = false;
 
     Arpeggio* m_arpeggio = nullptr;       // arpeggio which starts on the chord
     Arpeggio* m_spanArpeggio = nullptr;   // arpeggio which spans over this chord

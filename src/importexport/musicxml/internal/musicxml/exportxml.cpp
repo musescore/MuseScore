@@ -4099,7 +4099,7 @@ void ExportMusicXml::chord(Chord* chord, staff_idx_t staff, const std::vector<Ly
         m_xml.startElementRaw(noteTag);
 
         if (grace) {
-            if (note->noteType() == NoteType::ACCIACCATURA) {
+            if (note->chord()->showStemSlash()) {
                 m_xml.tag("grace", { { "slash", "yes" } });
             } else {
                 m_xml.tag("grace");
