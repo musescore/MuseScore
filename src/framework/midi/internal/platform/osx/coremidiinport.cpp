@@ -189,18 +189,47 @@ void CoreMidiInPort::initCore()
     QString portName = "MuseScore MIDI input port";
     if (__builtin_available(macOS 11.0, *)) {
         MIDIReceiveBlock receiveBlock = ^ (const MIDIEventList* eventList, void* /*srcConnRefCon*/) {
+            // For reference have a look at Table 4 on page 22f in
+            // Universal MIDI Packet (UMP) Format
+            // and MIDI 2.0 Protocol
+            // With MIDI 1.0 Protocol in UMP Format
+            //
+            // MIDI Association Document: M2-104-UM
+            // Document Version 1.1.2
+            // Draft Date 2023-10-27
+            // Published 2023-11-10
+            const uint32_t message_type_to_size_in_byte[] =  { 1,  // 0x0
+                                                               1,  // 0x1
+                                                               1,  // 0x2
+                                                               2,  // 0x3
+                                                               2,  // 0x4
+                                                               4,  // 0x5
+                                                               1,  // 0x6
+                                                               1,  // 0x7
+                                                               2,  // 0x8
+                                                               2,  // 0x9
+                                                               2,  // 0xA
+                                                               3,  // 0xB
+                                                               3,  // 0xC
+                                                               4,  // 0xD
+                                                               4,  // 0xE
+                                                               4 };// 0xF
             const MIDIEventPacket* packet = eventList->packet;
             for (UInt32 index = 0; index < eventList->numPackets; index++) {
+                LOGD() << "midi packet size " << packet->wordCount << " bytes";
                 // Handle packet
-                if (packet->wordCount != 0 && packet->wordCount <= 4) {
-                    Event e = Event::fromRawData(packet->words, packet->wordCount);
+                uint32_t pos = 0;
+                while (pos < packet->wordCount) {
+                    uint32_t most_significant_4_bit = packet->words[pos] >> 28;
+                    uint32_t message_size = message_type_to_size_in_byte[most_significant_4_bit];
+
+                    LOGD() << "midi message size " << message_size << " bytes";
+                    Event e = Event::fromRawData(&packet->words[pos], message_size);
                     if (e) {
                         m_eventReceived.send((tick_t)packet->timeStamp, e);
                     }
-                } else if (packet->wordCount > 4) {
-                    LOGW() << "unsupported midi message size " << packet->wordCount << " bytes";
+                    pos += message_size;
                 }
-
                 packet = MIDIEventPacketNext(packet);
             }
         };
