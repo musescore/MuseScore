@@ -60,6 +60,17 @@ FocusableItem {
             navigation.row: root.navigationRowStart + 1
         }
 
+        PropertyCheckBox {
+            text: qsTrc("inspector", "Show stem slash")
+            propertyItem: root.chordModel ? root.chordModel.showStemSlash : null
+            visible: root.chordModel ? root.chordModel.showStemSlashVisible : false
+            enabled: root.chordModel ? root.chordModel.showStemSlashEnabled : false
+
+            navigation.name: "Show stem slash"
+            navigation.panel: root.navigationPanel
+            navigation.row: root.navigationRowStart + 2
+        }
+
         DirectionSection {
             id: stemDirectionGroup
 
@@ -67,7 +78,7 @@ FocusableItem {
             propertyItem: root.stemModel ? root.stemModel.stemDirection : null
 
             navigationPanel: root.navigationPanel
-            navigationRowStart: root.navigationRowStart + 2
+            navigationRowStart: root.navigationRowStart + 3
         }
 
         Column {
