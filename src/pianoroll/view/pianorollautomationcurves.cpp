@@ -559,7 +559,7 @@ void PianorollAutomationCurves::paint(QPainter* p)
 
     //Special handling for dragged key
     if (m_dragging) {
-        double endTicks = end.numerator() / (double)end.denominator();
+        double endTicks = end.toDouble();
 
         double val = pixYToValue(m_lastMousePos.y(), pMin, pMax);
         double tick = pixelXToWholeNote(m_lastMousePos.x());
