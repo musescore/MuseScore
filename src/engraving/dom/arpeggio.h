@@ -69,6 +69,7 @@ public:
     track_idx_t endTrack() const { return track() + m_span - 1; }
 
     bool crossStaff() const;
+    staff_idx_t vStaffIdx() const override;
     void findAndAttachToChords();
     void detachFromChords(track_idx_t strack, track_idx_t etrack);
     void rebaseStartAnchor(AnchorRebaseDirection direction);
