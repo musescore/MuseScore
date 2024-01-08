@@ -1298,6 +1298,10 @@ void MeasureLayout::computePreSpacingItems(Measure* m, LayoutContext& ctx)
                 continue;
             }
             Chord* chord = toChord(e);
+            Staff* staff = chord->staff();
+            if (staff && !staff->show()) {
+                continue;
+            }
 
             ChordLayout::updateLineAttachPoints(chord, isFirstChordInMeasure, ctx);
             for (Chord* gn : chord->graceNotes()) {
