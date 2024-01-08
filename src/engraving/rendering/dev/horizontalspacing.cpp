@@ -109,7 +109,12 @@ double HorizontalSpacing::minHorizontalDistance(const Segment* f, const Segment*
 
     double ww = -1000000.0;          // can remain negative
     double d = 0.0;
+    Score* score = f->score();
     for (unsigned staffIdx = 0; staffIdx < f->shapes().size(); ++staffIdx) {
+        if (score->staff(staffIdx) && !score->staff(staffIdx)->show()) {
+            continue;
+        }
+
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
         d = ns ? minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor) : 0.0;
@@ -203,7 +208,12 @@ double HorizontalSpacing::minHorizontalCollidingDistance(const Segment* f, const
     }
 
     double w = -100000.0; // This can remain negative in some cases (for instance, mid-system clefs)
+    Score* score = f->score();
     for (unsigned staffIdx = 0; staffIdx < f->shapes().size(); ++staffIdx) {
+        if (score->staff(staffIdx) && !score->staff(staffIdx)->show()) {
+            continue;
+        }
+
         const Shape& fshape = f->staffShape(staffIdx);
         double sp = shapeSpatium(fshape);
         double d = minHorizontalDistance(fshape, ns->staffShape(staffIdx), sp, squeezeFactor);
