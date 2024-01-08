@@ -251,7 +251,7 @@ void MuseSamplerWrapper::updateRenderingMode(const audio::RenderMode mode)
 
 msecs_t MuseSamplerWrapper::playbackPosition() const
 {
-    return m_sequencer.playbackPosition();
+    return samplesToMsecs(m_currentPosition, m_sampleRate);
 }
 
 void MuseSamplerWrapper::setPlaybackPosition(const audio::msecs_t newPosition)
