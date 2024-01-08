@@ -4540,6 +4540,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
       std::vector<Spanner*> spanner;
       for (auto interval : spanners) {
             Spanner* sp = interval.value;
+            if (sp->staff() && !sp->staff()->show())
+                continue;
             sp->computeStartElement();
             sp->computeEndElement();
             lc.processedSpanners.insert(sp);
@@ -4619,6 +4621,8 @@ void Score::layoutSystemElements(System* system, LayoutContext& lc)
 
       for (auto interval : spanners) {
             Spanner* sp = interval.value;
+            if (sp->staff() && !sp->staff()->show())
+                continue;
             if (sp->tick() < etick && sp->tick2() > stick) {
                   if (sp->isOttava())
                         ottavas.push_back(sp);
