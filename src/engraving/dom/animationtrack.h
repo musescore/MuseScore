@@ -52,6 +52,7 @@ public:
     void removeKey(Fraction tick);
     bool isKeyAt(Fraction tick);
     int keyIndexForTick(Fraction tick);
+    float evaluate(Fraction tick);
 };
 }
 

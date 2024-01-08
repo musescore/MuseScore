@@ -22,6 +22,7 @@
 
 #include "animationtrack.h"
 #include "animationkey.h"
+#include "property.h"
 #include <algorithm>
 
 using namespace mu;
@@ -98,5 +99,33 @@ void AnimationTrack::removeKey(Fraction tick)
         _keys.erase(_keys.begin() + index);
         delete key;
     }
+}
+
+float AnimationTrack::evaluate(Fraction tick)
+{
+    int index = keyIndexForTick(tick);
+    if (index == -1) {
+        Pid id = propertyId(_propertyName);
+        double defaultValue = propertyDefaultValue(id);
+        return defaultValue;
+    }
+
+    if (index == _keys.size() - 1) {
+        AnimationKey* k0 = _keys[index];
+        return k0->value();
+    }
+
+    AnimationKey* k0 = _keys[index];
+    AnimationKey* k1 = _keys[index + 1];
+
+    Fraction t0 = k0->tick();
+    Fraction t1 = k1->tick();
+
+    double t0d = t0.toDouble();
+    double t1d = t1.toDouble();
+
+    double tmd = tick.numerator() / (double)tick.denominator();
+    double ratio = (tmd - t0d) / (t1d - t0d);
+    return (k1->value() - k0->value()) * ratio + k0->value();
 }
 }
