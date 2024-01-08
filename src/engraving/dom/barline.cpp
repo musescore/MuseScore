@@ -650,8 +650,7 @@ bool BarLine::acceptDrop(EditData& data) const
     if (type == ElementType::BAR_LINE) {
         return true;
     } else {
-        return (type == ElementType::ARTICULATION || type == ElementType::FERMATA || type == ElementType::SYMBOL
-                || type == ElementType::IMAGE)
+        return (type == ElementType::FERMATA || type == ElementType::SYMBOL || type == ElementType::IMAGE)
                && segment()
                && segment()->isEndBarLineType();
     }
