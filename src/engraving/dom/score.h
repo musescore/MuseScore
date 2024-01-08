@@ -648,7 +648,6 @@ public:
     const InputState& inputState() const { return m_is; }
     InputState& inputState() { return m_is; }
     void setInputState(const InputState& st) { m_is = st; }
-    void setInputTrack(int t) { inputState().setTrack(t); }
 
     void spatiumChanged(double oldValue, double newValue);
     void styleChanged() override;
