@@ -85,7 +85,7 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
 
     auto spanners = spannerMap().findContained(startTick.ticks(), endTick.ticks());
     for (auto i : spanners) {
-        undo(new RemoveElement(i.value));
+        doUndoRemoveElement(i.value);
     }
 
     for (auto i : spanner()) {
@@ -159,7 +159,7 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
                             nsig->setTrack(track);
                             nsig->setParent(nextTSeg);
 
-                            score->undo(new AddElement(nsig));
+                            score->doUndoAddElement(nsig);
 
                             if (!lts) {
                                 lts = nsig;
@@ -167,9 +167,9 @@ void MasterScore::joinMeasure(const Fraction& tick1, const Fraction& tick2)
                                 score->undo(new Link(lts, nsig));
                             }
                         }
-                        score->undo(new RemoveElement(timeSig));
+                        score->doUndoRemoveElement(timeSig);
                         if (tSeg->empty()) {
-                            score->undo(new RemoveElement(tSeg));
+                            score->doUndoRemoveElement(tSeg);
                         }
                     }
                 }

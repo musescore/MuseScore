@@ -85,8 +85,6 @@ void ChordLayout::layout(Chord* item, LayoutContext& ctx)
     } else {
         layoutPitched(item, ctx);
     }
-
-    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
@@ -318,6 +316,8 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     for (Fingering* f : alignNote) {
         f->mutldata()->setPosX(xNote);
     }
+
+    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
@@ -460,7 +460,7 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
             Stem* stem = Factory::createStem(item);
             stem->setParent(item);
             stem->setGenerated(true);
-            ctx.mutDom().undo(new AddElement(stem));
+            ctx.mutDom().addElement(stem);
         }
         item->stem()->setPos(tab->chordStemPos(item) * _spatium);
         if (item->hook()) {
@@ -476,15 +476,15 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
         }
     } else {
         if (item->stem()) {
-            ctx.mutDom().undo(new RemoveElement(item->stem()));
+            ctx.mutDom().doUndoRemoveElement(item->stem());
             item->remove(item->stem());
         }
         if (item->hook()) {
-            ctx.mutDom().undo(new RemoveElement(item->hook()));
+            ctx.mutDom().doUndoRemoveElement(item->hook());
             item->remove(item->hook());
         }
         if (item->beam()) {
-            ctx.mutDom().undo(new RemoveElement(item->beam()));
+            ctx.mutDom().doUndoRemoveElement(item->beam());
             item->remove(item->beam());
         }
     }
@@ -681,6 +681,8 @@ void ChordLayout::layoutTablature(Chord* item, LayoutContext& ctx)
     if (item->stemSlash()) {
         TLayout::layoutStemSlash(item->stemSlash(), item->stemSlash()->mutldata(), ctx.conf());
     }
+
+    fillShape(item, item->mutldata(), ctx.conf());
 }
 
 //---------------------------------------------------------

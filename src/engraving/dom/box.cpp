@@ -453,7 +453,7 @@ void Box::manageExclusionFromParts(bool exclude)
                         EngravingItem* newSectionBreak = sectionBreak->linkedClone();
                         newSectionBreak->setScore(score);
                         newSectionBreak->setParent(localPrevMeasure);
-                        score->undo(new AddElement(newSectionBreak));
+                        score->doUndoAddElement(newSectionBreak);
                     }
                 }
             }

@@ -1521,7 +1521,7 @@ void Chord::createStem()
     stem->setParent(this);
     stem->setGenerated(true);
     //! score()->undoAddElement calls add(), which assigns this created stem to _stem
-    score()->undoAddElement(stem);
+    score()->doUndoAddElement(stem);
 }
 
 void Chord::removeStem()
@@ -1542,7 +1542,7 @@ void Chord::createHook()
     Hook* hook = new Hook(this);
     hook->setParent(this);
     hook->setGenerated(true);
-    score()->undoAddElement(hook);
+    score()->doUndoAddElement(hook);
 }
 
 //---------------------------------------------------------
