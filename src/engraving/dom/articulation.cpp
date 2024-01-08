@@ -662,6 +662,15 @@ bool Articulation::isOnCrossBeamSide() const
     return chord->beam() && (chord->beam()->cross() || chord->staffMove() != 0) && (up() == chord->up());
 }
 
+staff_idx_t Articulation::vStaffIdx() const
+{
+    ChordRest* cr = chordRest();
+    if (!cr) {
+        return staffIdx();
+    }
+    return cr->vStaffIdx();
+}
+
 struct ArticulationGroup
 {
     SymId first;
