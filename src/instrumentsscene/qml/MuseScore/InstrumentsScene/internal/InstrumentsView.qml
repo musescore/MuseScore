@@ -134,7 +134,25 @@ Item {
                 navigation.row: item.navigation.row
                 navigation.column: 1
                 navigation.accessible.name: itemTitleLabel.text + " " + qsTrc("instruments", "traits")
-                navigation.accessible.row: model.index
+                navigation.accessible.row: itemModel.index
+
+                // Navigate to the next/previous item in the list instead of the next item in the column
+                navigation.onNavigationEvent: function(event) {
+                    var nextItem
+                    switch (event.type) {
+                    case NavigationEvent.Up:
+                        nextItem = instrumentsView.itemAtIndex(itemModel.index - 1)
+                        break
+                    case NavigationEvent.Down:
+                    case NavigationEvent.Right:
+                        nextItem = instrumentsView.itemAtIndex(itemModel.index + 1)
+                        break
+                    }
+                    if (nextItem) {
+                        nextItem.navigation.requestActive()
+                        event.accepted = true
+                    }
+                }
 
                 anchors.right: parent.right
                 anchors.rightMargin: 4

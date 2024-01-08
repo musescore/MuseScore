@@ -165,6 +165,8 @@ Item {
                 font: ui.theme.bodyBoldFont
             }
 
+            property var itemModel: model
+
             FlatButton {
                 anchors.right: parent.right
                 anchors.leftMargin: 4
@@ -180,6 +182,24 @@ Item {
                 navigation.panel: instrumentsView.navigation
                 navigation.row: 1 + model.index
                 navigation.column: 1
+
+                // Navigate to the next/previous item in the list instead of the next item in the column
+                navigation.onNavigationEvent: function(event) {
+                    var nextItem
+                    switch (event.type) {
+                    case NavigationEvent.Up:
+                        nextItem = instrumentsView.itemAtIndex(itemModel.index - 1)
+                        break
+                    case NavigationEvent.Down:
+                    case NavigationEvent.Right:
+                        nextItem = instrumentsView.itemAtIndex(itemModel.index + 1)
+                        break
+                    }
+                    if (nextItem) {
+                        nextItem.navigation.requestActive()
+                        event.accepted = true
+                    }
+                }
 
                 onClicked: {
                     model.isSoloist = !model.isSoloist
