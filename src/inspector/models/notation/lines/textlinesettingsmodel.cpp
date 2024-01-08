@@ -89,7 +89,6 @@ void TextLineSettingsModel::createProperties()
     m_dashGapLength = buildPropertyItem(Pid::DASH_GAP_LEN);
 
     m_placement = buildPropertyItem(Pid::PLACEMENT);
-    m_placement->setIsVisible(false);
 
     m_beginningText = buildPropertyItem(Pid::BEGIN_TEXT);
     m_beginningTextOffset = buildPointFPropertyItem(Pid::BEGIN_TEXT_OFFSET);
