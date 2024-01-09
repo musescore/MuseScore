@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <cfloat>
+
 #include "chordlayout.h"
 
 #include "containers.h"
@@ -172,8 +174,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
     if (item->arpeggio()) {
         item->arpeggio()->findAndAttachToChords();
         item->arpeggio()->mutldata()->maxChordPad = 0.0;
-        static constexpr int MAX_ARPEGGIO_X = 10000;
-        item->arpeggio()->mutldata()->minChordX = MAX_ARPEGGIO_X;
+        item->arpeggio()->mutldata()->minChordX = DBL_MAX;
         TLayout::layoutArpeggio(item->arpeggio(), item->arpeggio()->mutldata(), ctx.conf());
     }
     // If item is within arpeggio span, keep track of largest space needed between glissando and chord across staves
@@ -296,7 +297,7 @@ void ChordLayout::layoutPitched(Chord* item, LayoutContext& ctx)
 
     // align note-based fingerings
     std::vector<Fingering*> alignNote;
-    double xNote = 10000.0;
+    double xNote = DBL_MAX;
     for (Note* note : item->notes()) {
         bool leftFound = false;
         for (EngravingItem* e : note->el()) {
@@ -2376,7 +2377,7 @@ void ChordLayout::layoutChords3(const MStyle& style, const std::vector<Chord*>& 
     double stepDistance = sp * staff->lineDistance(tick) * .5;
     int stepOffset     = staff->staffType(tick)->stepOffset();
 
-    double lx           = 10000.0;    // leftmost notehead position
+    double lx           = DBL_MAX;    // leftmost notehead position
     double upDotPosX    = 0.0;
     double downDotPosX  = 0.0;
 
@@ -3598,8 +3599,8 @@ Shape ChordLayout::chordRestShape(const ChordRest* item, const LayoutConfigurati
 {
     Shape shape;
     {
-        double x1 = 1000000.0;
-        double x2 = -1000000.0;
+        double x1 = DBL_MAX;
+        double x2 = -DBL_MAX;
         for (Lyrics* l : item->lyrics()) {
             if (!l || !l->addToSkyline()) {
                 continue;
