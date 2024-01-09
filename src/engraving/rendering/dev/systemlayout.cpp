@@ -19,6 +19,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <cfloat>
+
 #include "systemlayout.h"
 
 #include "realfn.h"
@@ -1400,9 +1402,8 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
 
     if (align && segments.size() > 1) {
         const size_t nstaves = system->staves().size();
-        constexpr double minY = -1000000.0;
         const double defaultY = segments[0]->ldata()->pos().y();
-        std::vector<double> y(nstaves, minY);
+        std::vector<double> y(nstaves, -DBL_MAX);
 
         for (SpannerSegment* ss : segments) {
             if (ss->visible()) {
@@ -1415,7 +1416,7 @@ void SystemLayout::processLines(System* system, LayoutContext& ctx, std::vector<
                 continue;
             }
             const double staffY = y[ss->staffIdx()];
-            if (staffY > minY) {
+            if (staffY > -DBL_MAX) {
                 ss->mutldata()->setPosY(staffY);
             } else {
                 ss->mutldata()->setPosY(defaultY);

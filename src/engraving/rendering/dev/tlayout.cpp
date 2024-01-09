@@ -19,6 +19,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
+#include <cfloat>
 
 #include "tlayout.h"
 
@@ -2915,7 +2916,7 @@ void TLayout::layoutHairpinSegment(HairpinSegment* item, LayoutContext& ctx)
     const track_idx_t _trck = item->track();
     Dynamic* sd = nullptr;
     Dynamic* ed = nullptr;
-    double dymax = item->hairpin()->placeBelow() ? -10000.0 : 10000.0;
+    double dymax = item->hairpin()->placeBelow() ? -DBL_MAX : DBL_MAX;
     if (item->autoplace() && !ctx.conf().isPaletteMode()
         && item->explicitParent() // TODO: remove this line (this might happen when Ctrl+Shift+Dragging an item)
         ) {
