@@ -3971,6 +3971,8 @@ System* Score::collectSystem(LayoutContext& lc)
       bool curHeader = lc.curMeasure->header();
       bool curTrailer = lc.curMeasure->trailer();
 
+      QList<System *> brokenSystems;
+
       while (lc.curMeasure) {    // collect measure for system
             System* oldSystem = lc.curMeasure->system();
             system->appendMeasure(lc.curMeasure);
@@ -4041,6 +4043,10 @@ System* Score::collectSystem(LayoutContext& lc)
                         break;
                         }
                   }
+
+            if (oldSystem && system != oldSystem && !brokenSystems.contains(oldSystem)
+                && lc.systemList.contains(oldSystem))
+                  brokenSystems.append(oldSystem);
 
             if (lc.prevMeasure && lc.prevMeasure->isMeasure() && lc.prevMeasure->system() == system) {
                   //
@@ -4258,6 +4264,9 @@ System* Score::collectSystem(LayoutContext& lc)
             pos.rx() += ww;
             }
       system->setWidth(pos.x());
+
+      for (System *system : brokenSystems)
+            system->clear();
 
       layoutSystemElements(system, lc);
       system->layout2();   // compute staff distances
