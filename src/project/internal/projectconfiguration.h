@@ -152,6 +152,9 @@ public:
     bool showCloudIsNotAvailableWarning() const override;
     void setShowCloudIsNotAvailableWarning(bool show) override;
 
+    bool disableVersionChecking() const override;
+    void setDisableVersionChecking(bool disable) override;
+
 private:
     io::path_t appTemplatesPath() const;
     io::path_t legacyCloudProjectsPath() const;
