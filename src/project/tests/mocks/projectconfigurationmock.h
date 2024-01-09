@@ -134,6 +134,9 @@ public:
 
     MOCK_METHOD(bool, showCloudIsNotAvailableWarning, (), (const, override));
     MOCK_METHOD(void, setShowCloudIsNotAvailableWarning, (bool), (override));
+
+    MOCK_METHOD(bool, disableVersionChecking, (), (const, override));
+    MOCK_METHOD(void, setDisableVersionChecking, (bool), (override));
 };
 }
 
