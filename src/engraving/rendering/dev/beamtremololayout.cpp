@@ -470,7 +470,7 @@ int BeamTremoloLayout::strokeCount(const BeamBase::LayoutData* ldata, ChordRest*
     return strokes;
 }
 
-bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutData* ldata, LayoutContext& ctx,
+bool BeamTremoloLayout::calculateAnchors(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutContext& ctx,
                                          const std::vector<ChordRest*>& chordRests,
                                          const std::vector<int>& notes)
 {

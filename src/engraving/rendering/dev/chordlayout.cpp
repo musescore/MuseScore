@@ -1160,7 +1160,7 @@ void ChordLayout::layoutArticulations3(Chord* item, Slur* slur, LayoutContext& c
 }
 
 //! May be called again when the chord is added to or removed from a beam.
-void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
+void ChordLayout::layoutStem(Chord* item, const LayoutContext& ctx)
 {
     // Stem needs to know hook's bbox and SMuFL anchors.
     // This is done before calcDefaultStemLength because the presence or absence of a hook affects stem length
@@ -1198,36 +1198,13 @@ void ChordLayout::layoutStem(Chord* item, LayoutContext& ctx)
     }
 }
 
-static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
+static void computeUp_BeamCase(Chord* item, Beam* beam, const LayoutContext& ctx)
 {
-    bool mixedDirection = false;
-    bool cross = false;
     ChordRest* firstCr = beam->elements().front();
     ChordRest* lastCr = beam->elements().back();
-    Chord* firstChord = nullptr;
-    Chord* lastChord = nullptr;
-    for (ChordRest* currCr : beam->elements()) {
-        if (!currCr->isChord()) {
-            continue;
-        }
-        if (!firstChord) {
-            firstChord = toChord(currCr);
-        }
-        lastChord = toChord(currCr);
-    }
-    DirectionV stemDirections = DirectionV::AUTO;
-    for (ChordRest* cr : beam->elements()) {
-        if (!beam->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
-            // on an unmodified beam, if all of the elements on that beam are explicitly set in one direction
-            // (or AUTO), use that as the direction. This is necessary because the beam has not been laid out yet.
-            if (stemDirections == DirectionV::AUTO) {
-                stemDirections = toChord(cr)->stemDirection();
-            } else if (stemDirections != toChord(cr)->stemDirection()) {
-                mixedDirection = true;
-            }
-        }
+
+    for (const ChordRest* cr : beam->elements()) {
         if (cr->isChord() && toChord(cr)->staffMove() != 0) {
-            cross = true;
             if (!beam->userModified()) { // if the beam is user-modified _up must be decided later down
                 int move = toChord(cr)->staffMove();
                 // we have to determine the first and last chord direction for the beam
@@ -1245,7 +1222,26 @@ static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
             break;
         }
     }
-    Measure* measure = item->findMeasure();
+
+    bool cross = false;
+    bool mixedDirection = false;
+    DirectionV stemDirections = DirectionV::AUTO;
+    for (const ChordRest* cr : beam->elements()) {
+        if (!beam->userModified() && !mixedDirection && cr->isChord() && toChord(cr)->stemDirection() != DirectionV::AUTO) {
+            // on an unmodified beam, if all of the elements on that beam are explicitly set in one direction
+            // (or AUTO), use that as the direction. This is necessary because the beam has not been laid out yet.
+            if (stemDirections == DirectionV::AUTO) {
+                stemDirections = toChord(cr)->stemDirection();
+            } else if (stemDirections != toChord(cr)->stemDirection()) {
+                mixedDirection = true;
+            }
+        }
+
+        if (cr->isChord() && toChord(cr)->staffMove() != 0) {
+            cross = true;
+        }
+    }
+
     if (!cross) {
         if (!mixedDirection && stemDirections != DirectionV::AUTO) {
             item->setUp(stemDirections == DirectionV::UP);
@@ -1253,6 +1249,8 @@ static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
             item->setUp(beam->up());
         }
     }
+
+    const Measure* measure = item->findMeasure();
     if (!measure->explicitParent()) {
         // this method will be called later (from Measure::layoutCrossStaff) after the
         // system is completely laid out.
@@ -1260,6 +1258,7 @@ static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
         // because we don't know how far apart the staves actually are
         return;
     }
+
     if (beam->userModified()) {
         if (cross && item == firstCr) {
             // necessary because this beam was never laid out before, so its position isn't known
@@ -1277,6 +1276,17 @@ static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
         double noteX = item->stemPosX() + item->pagePos().x() - base.x();
         PointF startAnchor = PointF();
         PointF endAnchor = PointF();
+        Chord* firstChord = nullptr;
+        Chord* lastChord = nullptr;
+        for (ChordRest* currCr : beam->elements()) {
+            if (!currCr->isChord()) {
+                continue;
+            }
+            if (!firstChord) {
+                firstChord = toChord(currCr);
+            }
+            lastChord = toChord(currCr);
+        }
         startAnchor = BeamLayout::chordBeamAnchor(beam, firstChord, ChordBeamAnchorType::Start);
         endAnchor = BeamLayout::chordBeamAnchor(beam, lastChord, ChordBeamAnchorType::End);
 
@@ -1305,46 +1315,52 @@ static void computeUp_BeamCase(Chord* item, Beam* beam, LayoutContext& ctx)
     }
 }
 
-static void computeUp_TremoloTwoNotesCase(Chord* item, TremoloTwoChord* tremolo, LayoutContext& ctx)
+static bool computeUp_TremoloTwoNotesCase(const Chord* item, TremoloTwoChord* tremolo, const LayoutContext& ctx)
 {
-    Chord* c1 = tremolo->chord1();
-    Chord* c2 = tremolo->chord2();
+    const Chord* c1 = tremolo->chord1();
+    const Chord* c2 = tremolo->chord2();
     bool cross = c1->staffMove() != c2->staffMove();
     if (item == c1) {
         // we have to lay out the tremolo because it hasn't been laid out at all yet, and we need its direction
         TremoloLayout::layout(tremolo, ctx);
     }
-    Measure* measure = item->findMeasure();
+
+    const Measure* measure = item->findMeasure();
     if (!cross && !tremolo->userModified()) {
-        item->setUp(tremolo->up());
+        return tremolo->up();
     }
+
     if (!measure->explicitParent()) {
         // this method will be called later (from Measure::layoutCrossStaff) after the
         // system is completely laid out.
         // this is necessary because otherwise there's no way to deal with cross-staff beams
         // because we don't know how far apart the staves actually are
-        return;
+        return item->ldata()->up;
     }
+
     if (tremolo->userModified()) {
         Note* baseNote = item->up() ? item->downNote() : item->upNote();
         double tremY = tremolo->chordBeamAnchor(item, ChordBeamAnchorType::Middle).y();
         double noteY = baseNote->pagePos().y();
-        item->setUp(noteY > tremY);
+        return noteY > tremY;
     } else if (cross) {
         // unmodified cross-staff trem, should be one note per staff
         if (item->staffMove() != 0) {
-            item->setUp(item->staffMove() > 0);
+            return item->staffMove() > 0;
         } else {
             int otherStaffMove = item->staffMove() == c1->staffMove() ? c2->staffMove() : c1->staffMove();
-            item->setUp(otherStaffMove < 0);
+            return otherStaffMove < 0;
         }
     }
+
     if (!cross && !tremolo->userModified()) {
-        item->setUp(tremolo->up());
+        return tremolo->up();
     }
+
+    return item->ldata()->up;
 }
 
-void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
+void ChordLayout::computeUp(const Chord* item, Chord::LayoutData* ldata, const LayoutContext& ctx)
 {
     assert(!item->notes().empty());
 
@@ -1352,17 +1368,17 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
     bool isTabStaff = tab && tab->isTabStaff();
     if (isTabStaff) {
         if (tab->stemless()) {
-            item->setUp(false);
+            ldata->up = false;
             return;
         }
         if (!tab->stemThrough()) {
             bool staffHasMultipleVoices = item->measure()->hasVoices(item->staffIdx(), item->tick(), item->actualTicks());
             if (staffHasMultipleVoices) {
                 bool isTrackEven = item->track() % 2 == 0;
-                item->setUp(isTrackEven);
+                ldata->up = isTrackEven;
                 return;
             }
-            item->setUp(!tab->stemsDown());
+            ldata->up = !tab->stemsDown();
             return;
         }
     }
@@ -1370,54 +1386,55 @@ void ChordLayout::computeUp(Chord* item, LayoutContext& ctx)
     if (item->stemDirection() != DirectionV::AUTO
         && !item->beam()
         && !item->tremoloTwoChord()) {
-        item->setUp(item->stemDirection() == DirectionV::UP);
+        ldata->up = item->stemDirection() == DirectionV::UP;
         return;
     }
 
     if (item->isUiItem()) {
-        item->setUp(true);
+        ldata->up = true;
         return;
     }
 
     if (item->beam()) {
-        computeUp_BeamCase(item, item->beam(), ctx);
+        computeUp_BeamCase(const_cast<Chord*>(item), item->beam(), ctx);
         return;
     } else if (item->tremoloTwoChord()) {
-        computeUp_TremoloTwoNotesCase(item, item->tremoloTwoChord(), ctx);
+        ldata->up = computeUp_TremoloTwoNotesCase(item, item->tremoloTwoChord(), ctx);
         return;
     }
 
     bool staffHasMultipleVoices = item->measure()->hasVoices(item->staffIdx(), item->tick(), item->actualTicks());
     if (staffHasMultipleVoices) {
         bool isTrackEven = item->track() % 2 == 0;
-        item->setUp(isTrackEven);
+        ldata->up = isTrackEven;
         return;
     }
 
     bool isGraceNote = item->noteType() != NoteType::NORMAL;
     if (isGraceNote) {
-        item->setUp(true);
+        ldata->up = true;
         return;
     }
 
     bool chordIsCrossStaff = item->staffMove() != 0;
     if (chordIsCrossStaff) {
-        item->setUp(item->staffMove() > 0);
+        ldata->up = item->staffMove() > 0;
         return;
     }
 
     std::vector<int> distances = item->noteDistances();
     int direction = ChordLayout::computeAutoStemDirection(distances);
-    item->setUp(direction > 0);
+    ldata->up = direction > 0;
 }
 
 void ChordLayout::computeUp(ChordRest* item, LayoutContext& ctx)
 {
     if (item->isChord()) {
-        computeUp(static_cast<Chord*>(item), ctx);
+        Chord* ch = item_cast<Chord*>(item);
+        computeUp(ch, ch->mutldata(), ctx);
     } else {
         // base ChordRest
-        item->setUp(true);
+        item->mutldata()->up = true;
     }
 }
 

@@ -62,7 +62,7 @@ public:
 
     static void setupLData(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutContext& ctx);
 
-    static bool calculateAnchors(const BeamBase* item, BeamBase::LayoutData* ldata, LayoutContext& ctx,
+    static bool calculateAnchors(const BeamBase* item, BeamBase::LayoutData* ldata, const LayoutContext& ctx,
                                  const std::vector<ChordRest*>& chordRests, const std::vector<int>& notes);
 
     static double chordBeamAnchorX(const BeamBase::LayoutData* ldata, const ChordRest* chord, ChordBeamAnchorType anchorType);

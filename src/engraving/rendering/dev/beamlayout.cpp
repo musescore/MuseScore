@@ -52,7 +52,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
-void BeamLayout::layout(Beam* item, LayoutContext& ctx)
+void BeamLayout::layout(Beam* item, const LayoutContext& ctx)
 {
     Beam::LayoutData* ldata = item->mutldata();
     // all of the beam layout code depends on _elements being in order by tick
@@ -116,7 +116,7 @@ void BeamLayout::layout(Beam* item, LayoutContext& ctx)
     }
 }
 
-void BeamLayout::layoutIfNeed(Beam* item, LayoutContext& ctx)
+void BeamLayout::layoutIfNeed(Beam* item, const LayoutContext& ctx)
 {
     if (!item->ldata()->isValid()) {
         BeamLayout::layout(item, ctx);
@@ -281,7 +281,7 @@ void BeamLayout::layout1(Beam* item, LayoutContext& ctx)
     }
 }
 
-void BeamLayout::layout2(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
+void BeamLayout::layout2(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests, SpannerSegmentType, int frag)
 {
     BeamTremoloLayout::setupLData(item, item->mutldata(), ctx);
     Chord* startChord = nullptr;
@@ -934,7 +934,7 @@ void BeamLayout::verticalAdjustBeamedRests(Rest* rest, Beam* beam, LayoutContext
     TLayout::layoutBeam(beam, ctx);
 }
 
-void BeamLayout::createBeamSegments(Beam* item, LayoutContext& ctx, const std::vector<ChordRest*>& chordRests)
+void BeamLayout::createBeamSegments(Beam* item, const LayoutContext& ctx, const std::vector<ChordRest*>& chordRests)
 {
     item->clearBeamSegments();
 
@@ -1260,7 +1260,7 @@ void BeamLayout::createBeamSegment(Beam* item, ChordRest* startCr, ChordRest* en
     }
 }
 
-void BeamLayout::createBeamletSegment(Beam* item, LayoutContext& ctx, ChordRest* cr, bool isBefore, int level)
+void BeamLayout::createBeamletSegment(Beam* item, const LayoutContext& ctx, ChordRest* cr, bool isBefore, int level)
 {
     const double startX = BeamTremoloLayout::chordBeamAnchorX(item->ldata(), cr,
                                                               isBefore
@@ -1554,7 +1554,7 @@ double BeamLayout::chordBeamAnchorY(const Beam* item, const ChordRest* chord)
     return BeamTremoloLayout::chordBeamAnchorY(item->ldata(), chord);
 }
 
-void BeamLayout::setTremAnchors(Beam* item, LayoutContext& ctx)
+void BeamLayout::setTremAnchors(Beam* item, const LayoutContext& ctx)
 {
     item->tremAnchors().clear();
     for (ChordRest* cr : item->elements()) {
