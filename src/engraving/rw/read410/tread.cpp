@@ -1964,6 +1964,7 @@ bool TRead::readProperties(Ornament* o, XmlReader& xml, ReadContext& ctx)
     } else if (tag == "Accidental") {
         Accidental* accidental = Factory::createAccidental(o);
         TRead::read(accidental, xml, ctx);
+        accidental->setTrack(ctx.track());
         accidental->setParent(o);
         accidental->placement() == PlacementV::ABOVE ? o->setAccidentalAbove(accidental) : o->setAccidentalBelow(accidental);
     } else if (tag == "Chord") {
