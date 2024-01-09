@@ -1156,7 +1156,7 @@ void TLayout::layoutBarLine2(BarLine* item, LayoutContext& ctx)
     ldata->setBbox(bbox);
 }
 
-void TLayout::layoutBeam(Beam* item, LayoutContext& ctx)
+void TLayout::layoutBeam(Beam* item, const LayoutContext& ctx)
 {
     BeamLayout::layout(item, ctx);
 }
