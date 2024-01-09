@@ -47,10 +47,16 @@ class DrumSet;
 
 const Drumset* InputState::drumset() const
 {
-    if (m_segment == 0 || m_track == mu::nidx) {
-        return 0;
+    if (!m_segment || m_track == mu::nidx) {
+        return nullptr;
     }
-    return m_segment->score()->staff(m_track / VOICES)->part()->instrument(m_segment->tick())->drumset();
+
+    const Staff* staff = m_segment->score()->staff(m_track / VOICES);
+    if (!staff) {
+        return nullptr;
+    }
+
+    return staff->part()->instrument(m_segment->tick())->drumset();
 }
 
 //---------------------------------------------------------
@@ -59,12 +65,16 @@ const Drumset* InputState::drumset() const
 
 StaffGroup InputState::staffGroup() const
 {
-    if (m_segment == 0 || m_track == mu::nidx) {
+    if (!m_segment || m_track == mu::nidx) {
         return StaffGroup::STANDARD;
     }
 
     Fraction tick = m_segment->tick();
     const Staff* staff = m_segment->score()->staff(m_track / VOICES);
+    if (!staff) {
+        return StaffGroup::STANDARD;
+    }
+
     StaffGroup staffGroup = staff->staffType(tick)->group();
     const Instrument* instrument = staff->part()->instrument(tick);
 
@@ -105,6 +115,15 @@ void InputState::setDots(int n)
         m_duration = DurationType::V_QUARTER;
     }
     m_duration.setDots(n);
+}
+
+void InputState::setVoice(voice_idx_t v)
+{
+    if (v >= VOICES || m_track == mu::nidx) {
+        return;
+    }
+
+    setTrack((m_track / VOICES) * VOICES + v);
 }
 
 //---------------------------------------------------------
