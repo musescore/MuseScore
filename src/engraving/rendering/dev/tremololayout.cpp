@@ -37,7 +37,7 @@
 using namespace mu::engraving;
 using namespace mu::engraving::rendering::dev;
 
-void TremoloLayout::layout(TremoloTwoChord* item, LayoutContext& ctx)
+void TremoloLayout::layout(TremoloTwoChord* item, const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -74,7 +74,7 @@ void TremoloLayout::layout(TremoloTwoChord* item, LayoutContext& ctx)
     layoutTwoNotesTremolo(item, ctx, x, y, h, item->spatium());
 }
 
-void TremoloLayout::layout(TremoloSingleChord* item, LayoutContext& ctx)
+void TremoloLayout::layout(TremoloSingleChord* item, const LayoutContext& ctx)
 {
     IF_ASSERT_FAILED(item->explicitParent()) {
         return;
@@ -117,7 +117,7 @@ void TremoloLayout::layout(TremoloSingleChord* item, LayoutContext& ctx)
 //   layoutOneNoteTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     const StaffType* staffType = item->staffType();
 
@@ -170,7 +170,7 @@ void TremoloLayout::layoutOneNoteTremolo(TremoloSingleChord* item, LayoutContext
 //   layoutTwoNotesTremolo
 //---------------------------------------------------------
 
-void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, LayoutContext& ctx, double x, double y, double h, double spatium)
+void TremoloLayout::layoutTwoNotesTremolo(TremoloTwoChord* item, const LayoutContext& ctx, double x, double y, double h, double spatium)
 {
     UNUSED(x);
     UNUSED(y);
@@ -317,7 +317,7 @@ std::pair<double, double> TremoloLayout::extendedStemLenWithTwoNoteTremolo(Tremo
     return { stemLen1, stemLen2 };
 }
 
-void TremoloLayout::createBeamSegments(TremoloTwoChord* item, LayoutContext& ctx)
+void TremoloLayout::createBeamSegments(TremoloTwoChord* item, const LayoutContext& ctx)
 {
     // TODO: This should be a style setting, to replace tremoloStrokeLengthMultiplier
     static constexpr double stemGapSp = 1.0;

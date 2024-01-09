@@ -198,7 +198,7 @@ public:
 
     static void layoutBarLine(const BarLine* item, BarLine::LayoutData* ldata, const LayoutContext& ctx);
     static void layoutBarLine2(BarLine* item, LayoutContext& ctx);
-    static void layoutBeam(Beam* item, LayoutContext& ctx);
+    static void layoutBeam(Beam* item, const LayoutContext& ctx);
     static void layoutBeam1(Beam* item, LayoutContext& ctx);
     static void layoutBend(const Bend* item, Bend::LayoutData* ldata);
 
