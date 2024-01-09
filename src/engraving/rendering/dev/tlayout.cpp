@@ -1322,7 +1322,7 @@ void TLayout::layoutHBox(const HBox* item, HBox::LayoutData* ldata, const Layout
     layoutBaseBox(item, ldata, ctx);
 }
 
-void TLayout::layoutHBox2(HBox* item, LayoutContext& ctx)
+void TLayout::layoutHBox2(HBox* item, const LayoutContext& ctx)
 {
     layoutBaseBox(item, item->mutldata(), ctx);
 }

@@ -24,6 +24,7 @@
 #include "systemlayout.h"
 
 #include "realfn.h"
+#include "defer.h"
 
 #include "style/defaultstyle.h"
 
@@ -101,6 +102,12 @@ System* SystemLayout::collectSystem(LayoutContext& ctx)
     }
 
     System* system = getNextSystem(ctx);
+
+//    LOGDA() << "begin " << system;
+//    Defer([system]() {
+//        LOGDA() << "end " << system;
+//    });
+
     Fraction lcmTick = ctx.state().curMeasure()->tick();
     SystemLayout::setInstrumentNames(system, ctx, ctx.state().startWithLongNames(), lcmTick);
 
@@ -2336,15 +2343,15 @@ void SystemLayout::restoreLayout2(System* system, LayoutContext& ctx)
     SystemLayout::setMeasureHeight(system, system->systemHeight(), ctx);
 }
 
-void SystemLayout::setMeasureHeight(System* system, double height, LayoutContext& ctx)
+void SystemLayout::setMeasureHeight(System* system, double height, const LayoutContext& ctx)
 {
-    double _spatium = system->spatium();
+    double spatium = system->spatium();
     for (MeasureBase* m : system->measures()) {
         MeasureBase::LayoutData* mldata = m->mutldata();
         if (m->isMeasure()) {
             // note that the factor 2 * _spatium must be corrected for when exporting
             // system distance in MusicXML (issue #24733)
-            mldata->setBbox(0.0, -_spatium, m->width(), height + 2.0 * _spatium);
+            mldata->setBbox(0.0, -spatium, m->width(), height + 2.0 * spatium);
         } else if (m->isHBox()) {
             mldata->setBbox(0.0, 0.0, m->width(), height);
             TLayout::layoutHBox2(toHBox(m), ctx);
@@ -2537,9 +2544,13 @@ void SystemLayout::setInstrumentNames(System* system, LayoutContext& ctx, bool l
 //    bottom   - bottom system
 //---------------------------------------------------------
 
-double SystemLayout::minDistance(const System* top, const System* bottom, LayoutContext& ctx)
+double SystemLayout::minDistance(const System* top, const System* bottom, const LayoutContext& ctx)
 {
     TRACEFUNC;
+
+    const LayoutConfiguration& conf = ctx.conf();
+    const DomAccessor& dom = ctx.dom();
+
     if (top->vbox() && !bottom->vbox()) {
         return std::max(double(top->vbox()->bottomGap()), bottom->minTop());
     } else if (!top->vbox() && bottom->vbox()) {
@@ -2552,24 +2563,23 @@ double SystemLayout::minDistance(const System* top, const System* bottom, Layout
         return 0.0;
     }
 
-    double minVerticalDistance = ctx.conf().styleMM(Sid::minVerticalDistance);
-    double dist = ctx.conf().isVerticalSpreadEnabled() ? ctx.conf().styleMM(Sid::minSystemSpread) : ctx.conf().styleMM(
-        Sid::minSystemDistance);
+    double minVerticalDistance = conf.styleMM(Sid::minVerticalDistance);
+    double dist = conf.isVerticalSpreadEnabled() ? conf.styleMM(Sid::minSystemSpread) : conf.styleMM(Sid::minSystemDistance);
     size_t firstStaff = 0;
     size_t lastStaff = 0;
 
     for (firstStaff = 0; firstStaff < top->staves().size() - 1; ++firstStaff) {
-        if (ctx.dom().staff(firstStaff)->show() && bottom->staff(firstStaff)->show()) {
+        if (dom.staff(firstStaff)->show() && bottom->staff(firstStaff)->show()) {
             break;
         }
     }
     for (lastStaff = top->staves().size() - 1; lastStaff > 0; --lastStaff) {
-        if (ctx.dom().staff(lastStaff)->show() && top->staff(lastStaff)->show()) {
+        if (dom.staff(lastStaff)->show() && top->staff(lastStaff)->show()) {
             break;
         }
     }
 
-    const Staff* staff = ctx.dom().staff(firstStaff);
+    const Staff* staff = dom.staff(firstStaff);
     double userDist = staff ? staff->userDist() : 0.0;
     dist = std::max(dist, userDist);
     top->setFixedDownDistance(false);
@@ -2577,7 +2587,7 @@ double SystemLayout::minDistance(const System* top, const System* bottom, Layout
     for (const MeasureBase* mb1 : top->measures()) {
         if (mb1->isMeasure()) {
             const Measure* m = toMeasure(mb1);
-            Spacer* sp = m->vspacerDown(lastStaff);
+            const Spacer* sp = m->vspacerDown(lastStaff);
             if (sp) {
                 if (sp->spacerType() == SpacerType::FIXED) {
                     dist = sp->gap();
@@ -2593,14 +2603,14 @@ double SystemLayout::minDistance(const System* top, const System* bottom, Layout
         for (const MeasureBase* mb2 : bottom->measures()) {
             if (mb2->isMeasure()) {
                 const Measure* m = toMeasure(mb2);
-                Spacer* sp = m->vspacerUp(firstStaff);
+                const Spacer* sp = m->vspacerUp(firstStaff);
                 if (sp) {
                     dist = std::max(dist, sp->gap().val());
                 }
             }
         }
 
-        SysStaff* sysStaff = top->staff(lastStaff);
+        const SysStaff* sysStaff = top->staff(lastStaff);
         double sld = sysStaff ? sysStaff->skyline().minDistance(bottom->staff(firstStaff)->skyline()) : 0;
         sld -= sysStaff ? sysStaff->bbox().height() - minVerticalDistance : 0;
         dist = std::max(dist, sld);
